@@ -7,22 +7,30 @@ namespace Populations
 {
     public static class Population
     {
-        private static  Dictionary<Settlement, PopulationData> SettlementPops = new Dictionary<Settlement, PopulationData>();
+        private static Dictionary<Settlement, PopulationData> SettlementPops = new Dictionary<Settlement, PopulationData>();
 
         public static bool IsSettlementPopulated(Settlement settlement) => SettlementPops.ContainsKey(settlement);
-        
+
+        public static PopulationData GetPopData(Settlement settlement) => SettlementPops[settlement];
+
 
         public static void InitializeSettlementPops(Settlement settlement)
         {
             int popQuantityRef = GetDesiredTotalPop(settlement);
             Dictionary<PopType, float[]> desiredTypes = GetDesiredPopTypes(settlement);
+            List<PopulationClass> classes = new List<PopulationClass>();
 
             int nobles = (int)(popQuantityRef * MBRandom.RandomFloatRanged(desiredTypes[PopType.Nobles][0], desiredTypes[PopType.Nobles][1]));
             int craftsmen = settlement.IsTown ? (int)(popQuantityRef * MBRandom.RandomFloatRanged(desiredTypes[PopType.Nobles][0], desiredTypes[PopType.Nobles][1])) : 0;
             int serfs = (int)(popQuantityRef * MBRandom.RandomFloatRanged(desiredTypes[PopType.Serfs][0], desiredTypes[PopType.Serfs][1]));
             int slaves = (int)(popQuantityRef * MBRandom.RandomFloatRanged(desiredTypes[PopType.Slaves][0], desiredTypes[PopType.Slaves][1]));
 
-            PopulationData data = new PopulationData(nobles, craftsmen, serfs, slaves);
+            classes.Add(new PopulationClass(PopType.Nobles, nobles));
+            classes.Add(new PopulationClass(PopType.Craftsmen, craftsmen));
+            classes.Add(new PopulationClass(PopType.Serfs, serfs));
+            classes.Add(new PopulationClass(PopType.Slaves, slaves));
+
+            PopulationData data = new PopulationData(classes);
             SettlementPops.Add(settlement, data);
         }
 
@@ -40,7 +48,6 @@ namespace Populations
                 baseResult.AddFactor(serfsFactor + noblesFactor, null);
                 data.UpdatePopulation(village.Settlement, MBRandom.RandomInt((int)baseResult.BaseNumber * 3, (int)baseResult.BaseNumber * 6));
             }
-  
         }
 
         public static void UpdateSettlementPops(Settlement settlement)
@@ -99,17 +106,15 @@ namespace Populations
             else return null;
         }
 
-        class PopulationData
+        public class PopulationData
         {
-            private int NobleCount, CraftsmenCount, SerfCount, SlaveCount, TotalPop;
+            private List<PopulationClass> classes;
+            private int TotalPop;
 
-            public PopulationData(int NobleCount, int CraftsmenCount, int SerfCount, int SlaveCount)
+            public PopulationData(List<PopulationClass> classes)
             {
-                this.NobleCount = NobleCount;
-                this.CraftsmenCount = CraftsmenCount;
-                this.SerfCount = SerfCount;
-                this.SlaveCount = SlaveCount;
-                TotalPop = NobleCount + CraftsmenCount + SerfCount + SlaveCount;
+                this.classes = classes;
+                classes.ForEach(popClass => TotalPop += popClass.count);
             }
 
             public void UpdatePopulation(Settlement settlement, int pops)
@@ -129,49 +134,34 @@ namespace Populations
 
             public void UpdatePopType(PopType type, int count)
             {
-                int currentCount;
-                if (type == PopType.Nobles)
-                    currentCount = NobleCount;
-                else if (type == PopType.Craftsmen)
-                    currentCount = CraftsmenCount;
-                else if (type == PopType.Serfs)
-                    currentCount = SerfCount;
-                else currentCount = SlaveCount;
-
-                int diff = count - currentCount;
-
-                if (type == PopType.Nobles)
-                    NobleCount += diff;
-                else if (type == PopType.Craftsmen)
-                    CraftsmenCount += diff;
-                else if (type == PopType.Serfs)
-                    SerfCount += diff;
-                else SlaveCount += diff;
-
-                TotalPop += diff;
+                PopulationClass pops = classes.Find(popClass => popClass.type == type);
+                pops.count += count;
+                RefreshTotal();
             }
 
-            public int GetTypeCount(PopType type) 
+            public int GetTypeCount(PopType type) => classes.Find(popClass => popClass.type == type).count;
+
+            public float GetCurrentTypeFraction(PopType type) => GetTypeCount(type) / TotalPop;
+
+            private void RefreshTotal()
             {
-                if (type == PopType.Nobles)
-                    return NobleCount;
-                else if (type == PopType.Craftsmen)
-                    return CraftsmenCount;
-                else if (type == PopType.Serfs)
-                    return SerfCount;
-                else return SlaveCount;
-            }
-            public float GetCurrentTypeFraction(PopType type)
-            {
-                if (type == PopType.Nobles)
-                    return NobleCount / TotalPop;
-                else if (type == PopType.Craftsmen)
-                    return CraftsmenCount / TotalPop;
-                else if (type == PopType.Serfs)
-                    return SerfCount / TotalPop;
-                else return SlaveCount / TotalPop;
+                TotalPop = 0;
+                classes.ForEach(popClass => TotalPop += popClass.count);
             }
         }
+
+        public class PopulationClass 
+        {
+            public PopType type;
+            public int count;
+
+            public PopulationClass(PopType type, int count)
+            {
+                this.type = type;
+                this.count = count;
+            }
+        }
+
 
         public enum PopType
         {
