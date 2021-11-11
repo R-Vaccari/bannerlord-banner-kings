@@ -8,11 +8,10 @@ namespace Populations
     public static class Population
     {
         private static Dictionary<Settlement, PopulationData> SettlementPops = new Dictionary<Settlement, PopulationData>();
+        private static readonly float POP_GROWTH_FACTOR = 0.001f;
 
         public static bool IsSettlementPopulated(Settlement settlement) => SettlementPops.ContainsKey(settlement);
-
         public static PopulationData GetPopData(Settlement settlement) => SettlementPops[settlement];
-
 
         public static void InitializeSettlementPops(Settlement settlement)
         {
@@ -21,7 +20,7 @@ namespace Populations
             List<PopulationClass> classes = new List<PopulationClass>();
 
             int nobles = (int)(popQuantityRef * MBRandom.RandomFloatRanged(desiredTypes[PopType.Nobles][0], desiredTypes[PopType.Nobles][1]));
-            int craftsmen = settlement.IsTown ? (int)(popQuantityRef * MBRandom.RandomFloatRanged(desiredTypes[PopType.Nobles][0], desiredTypes[PopType.Nobles][1])) : 0;
+            int craftsmen = settlement.IsTown ? (int)(popQuantityRef * MBRandom.RandomFloatRanged(desiredTypes[PopType.Craftsmen][0], desiredTypes[PopType.Craftsmen][1])) : 0;
             int serfs = (int)(popQuantityRef * MBRandom.RandomFloatRanged(desiredTypes[PopType.Serfs][0], desiredTypes[PopType.Serfs][1]));
             int slaves = (int)(popQuantityRef * MBRandom.RandomFloatRanged(desiredTypes[PopType.Slaves][0], desiredTypes[PopType.Slaves][1]));
 
@@ -39,25 +38,43 @@ namespace Populations
             if (village.Settlement != null && SettlementPops.ContainsKey(village.Settlement))
             {
                 PopulationData data = SettlementPops[village.Settlement];
-                int serfCount = data.GetTypeCount(PopType.Serfs);
-                int slaveCount = data.GetTypeCount(PopType.Slaves);
-                float serfToSlaveRatio = serfCount / slaveCount;
-                float serfsFactor = data.GetTypeCount(PopType.Serfs) * (0.001f * serfToSlaveRatio);
-                float noblesFactor = data.GetTypeCount(PopType.Nobles) * 0.001f;
-
-                baseResult.AddFactor(serfsFactor + noblesFactor, null);
+                int growthFactor = GetDataGrowthFactor(data);
+                baseResult.AddFactor(growthFactor, null);
                 data.UpdatePopulation(village.Settlement, MBRandom.RandomInt((int)baseResult.BaseNumber * 3, (int)baseResult.BaseNumber * 6));
             }
         }
 
         public static void UpdateSettlementPops(Settlement settlement)
         {
-            if (!SettlementPops.ContainsKey(settlement))
-                InitializeSettlementPops(settlement);
-            else
+            
+            if (settlement != null)
             {
+                if ((settlement.IsCastle || (settlement.IsTown && settlement.Town != null) 
+                    || (settlement.IsVillage && settlement.Village !=null)) && settlement.OwnerClan != null)
+                {
+                    if (!SettlementPops.ContainsKey(settlement))
+                        InitializeSettlementPops(settlement);
+                    else
+                    {
+                        PopulationData data = SettlementPops[settlement];
+                        int growthFactor = GetDataGrowthFactor(data);
+                        data.UpdatePopulation(settlement, growthFactor);
+                    }
 
+                }
             }
+            
+        }
+
+        private static int GetDataGrowthFactor(PopulationData data)
+        {
+            int growthFactor = 0;
+            data.Classes.ForEach(popClass => {
+                if (popClass.type != PopType.Slaves)
+                    growthFactor += (int)(popClass.count * POP_GROWTH_FACTOR);
+                }
+            );
+            return growthFactor;
         }
 
         private static int GetDesiredTotalPop(Settlement settlement)
@@ -86,30 +103,30 @@ namespace Populations
                 {
                     { PopType.Nobles, new float[] {0.04f, 0.08f} },
                     { PopType.Serfs, new float[] {0.75f, 0.8f} },
-                    { PopType.Nobles, new float[] {0.15f, 0.30f} }
+                    { PopType.Slaves, new float[] {0.15f, 0.25f} }
                 };
             else if (settlement.IsVillage)
                 return new Dictionary<PopType, float[]>()
                 {
                     { PopType.Nobles, new float[] {0.01f, 0.02f} },
                     { PopType.Serfs, new float[] {0.5f, 0.7f} },
-                    { PopType.Nobles, new float[] {0.5f, 0.6f} }
+                    { PopType.Slaves, new float[] {0.4f, 0.5f} }
                 };
             else if (settlement.IsTown)
                 return new Dictionary<PopType, float[]>()
                 {
-                    { PopType.Nobles, new float[] {0.01f, 0.05f} },
-                    { PopType.Craftsmen, new float[] {0.08f, 0.12f} },
+                    { PopType.Nobles, new float[] {0.01f, 0.03f} },
+                    { PopType.Craftsmen, new float[] {0.09f, 0.12f} },
                     { PopType.Serfs, new float[] {0.4f, 0.5f} },
-                    { PopType.Nobles, new float[] {0.33f, 0.51f} }
+                    { PopType.Slaves, new float[] {0.33f, 0.45f} }
                 };
             else return null;
         }
 
         public class PopulationData
         {
-            private List<PopulationClass> classes;
-            private int TotalPop;
+            private List<PopulationClass> classes;            
+            private int totalPop;
 
             public PopulationData(List<PopulationClass> classes)
             {
@@ -117,15 +134,38 @@ namespace Populations
                 classes.ForEach(popClass => TotalPop += popClass.count);
             }
 
+            public List<PopulationClass> Classes
+            {
+                get
+                {
+                    return classes;
+                }
+                set
+                {
+                    if (value != classes)
+                        classes = value;
+                }
+            }
+
+            public int TotalPop
+            {
+                get
+                {
+                    return totalPop;
+                }
+                set
+                {
+                    if (value != totalPop)
+                        totalPop = value;
+                }
+            }
+
             public void UpdatePopulation(Settlement settlement, int pops)
             {
                 Dictionary<PopType, float[]> desiredTypes = GetDesiredPopTypes(settlement);
                 IEnumerable<PopType> types = new List<PopType>();
-                if (settlement.IsTown) types.AddItem(PopType.Craftsmen);
-                types.AddItem(PopType.Nobles);
-                types.AddItem(PopType.Serfs);
-                types.AddItem(PopType.Slaves);
-                PopType targetType = MBRandom.ChooseWeighted<PopType>(types, delegate (PopType type)
+                classes.ForEach(popClass => types.AddItem(popClass.type));
+                PopType targetType = MBRandom.ChooseWeighted(types, delegate (PopType type)
                 {
                     return MBRandom.RandomFloatRanged(desiredTypes[type][0], desiredTypes[type][1]);
                 });
@@ -141,12 +181,17 @@ namespace Populations
 
             public int GetTypeCount(PopType type) => classes.Find(popClass => popClass.type == type).count;
 
-            public float GetCurrentTypeFraction(PopType type) => GetTypeCount(type) / TotalPop;
+            public float GetCurrentTypeFraction(PopType type)
+            {
+                RefreshTotal();
+                return GetTypeCount(type) / TotalPop;
+            }
 
             private void RefreshTotal()
             {
-                TotalPop = 0;
-                classes.ForEach(popClass => TotalPop += popClass.count);
+                int pops = 0;
+                classes.ForEach(popClass => pops += popClass.count);
+                TotalPop = pops;
             }
         }
 
@@ -161,7 +206,6 @@ namespace Populations
                 this.count = count;
             }
         }
-
 
         public enum PopType
         {

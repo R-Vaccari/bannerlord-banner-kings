@@ -4,16 +4,14 @@ namespace Populations
 {
     namespace UI
     {
-        public class PopulationClassVM : ViewModel
+        public class PopulationInfoVM : ViewModel
         {
-            private string _name;
-            private int _count;
-            private string _percentage;
+            private string _name, _count, _percentage;
 
-            public PopulationClassVM(string name, int count, float percentage) 
+            public PopulationInfoVM(string name, int count, float percentage) 
             {
                 _name = name;
-                _count = count;
+                _count = count.ToString();
                 _percentage = FormatPercentage(percentage);
             }
 
@@ -22,10 +20,7 @@ namespace Populations
             [DataSourceProperty]
             public string Name
             {
-                get
-                {
-                    return _name;
-                }
+                get => _name;
                 set
                 {
                     if (value != _name)
@@ -37,12 +32,9 @@ namespace Populations
             }
 
             [DataSourceProperty]
-            public int Count
+            public string Count
             {
-                get
-                {
-                    return _count;
-                }
+                get => _count;
                 set
                 {
                     if (value != _count)
@@ -56,10 +48,7 @@ namespace Populations
             [DataSourceProperty]
             public string Percentage
             {
-                get
-                {
-                    return _percentage;
-                }
+                get => _percentage;
                 set
                 {
                     if (value != _percentage)

@@ -9,46 +9,37 @@ namespace Populations
         public class PopulationVM : ViewModel
         {
 
-            private MBBindingList<PopulationClassVM> _classes;
+            private MBBindingList<PopulationInfoVM> _popInfo;
 
             public PopulationVM(Settlement settlement)
             {
+                _popInfo = new MBBindingList<PopulationInfoVM>();
                 PopulationData data = Population.GetPopData(settlement);
-                if (data != null)
+                if (data != null && data.Classes != null)
                 {
-                    int nobles = data.GetTypeCount(PopType.Nobles);
-                    int craftsmen = data.GetTypeCount(PopType.Craftsmen);
-                    int serfs = data.GetTypeCount(PopType.Serfs);
-                    int slaves = data.GetTypeCount(PopType.Slaves);
-                    if (nobles > 0)
-                        AddClassVM(PopType.Nobles, nobles, data);
-                    if (craftsmen > 0)
-                        AddClassVM(PopType.Craftsmen, craftsmen, data);
-                    if (serfs > 0)
-                        AddClassVM(PopType.Serfs, serfs, data);
-                    if (slaves > 0)
-                        AddClassVM(PopType.Slaves, slaves, data);
-
+                    data.Classes.ForEach(popClass => PopInfo.Add(new PopulationInfoVM(
+                        popClass.type.ToString(), popClass.count, data.GetCurrentTypeFraction(popClass.type))
+                        ));
+                }
+            }
+            
+            [DataSourceProperty]
+            public MBBindingList<PopulationInfoVM> PopInfo
+            {
+                get => _popInfo;
+                set
+                {
+                    if (value != _popInfo)
+                    {
+                        _popInfo = value;
+                        base.OnPropertyChangedWithValue(value, "PopInfo");
+                    }
                 }
             }
 
-            private void AddClassVM(PopType type, int count, PopulationData data) => Classes.Add(new PopulationClassVM(type.ToString(), count, data.GetCurrentTypeFraction(type)));
-            
-            [DataSourceProperty]
-            public MBBindingList<PopulationClassVM> Classes
+            public void ExecuteClose()
             {
-                get
-                {
-                    return this._classes;
-                }
-                set
-                {
-                    if (value != this._classes)
-                    {
-                        this._classes = value;
-                        base.OnPropertyChangedWithValue(value, "Classes");
-                    }
-                }
+                UIManager.instance.CloseUI();
             }
 
         }
