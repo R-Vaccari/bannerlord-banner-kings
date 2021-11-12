@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using System;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
@@ -33,6 +34,24 @@ namespace Populations
             SettlementPops.Add(settlement, data);
         }
 
+        public static void DeductPopulation(Settlement settlement, PopType type, int count)
+        {
+            PopulationData data = SettlementPops[settlement];
+            data.UpdatePopType(type, count);
+            SettlementPops[settlement] = data;
+        }
+
+        public static bool SlaveSurplusExists(Settlement settlement)
+        {
+            PopulationData data = GetPopData(settlement);
+            int slaves = data.GetTypeCount(PopType.Slaves);
+            Dictionary<PopType, float[]> popRatios = GetDesiredPopTypes(settlement);
+            float ratio = MBRandom.RandomFloatRanged(popRatios[PopType.Slaves][0], popRatios[PopType.Slaves][1]);
+            if (slaves / data.TotalPop > ratio)
+                return true;
+            else return false;
+        }
+
         public static void GetHearthChange(Village village, ref ExplainedNumber baseResult)
         {
             if (village.Settlement != null && SettlementPops.ContainsKey(village.Settlement))
@@ -45,25 +64,20 @@ namespace Populations
         }
 
         public static void UpdateSettlementPops(Settlement settlement)
-        {
-            
-            if (settlement != null)
+        {  
+            if ((settlement.IsCastle || (settlement.IsTown && settlement.Town != null) 
+                || (settlement.IsVillage && settlement.Village !=null)) && settlement.OwnerClan != null)
             {
-                if ((settlement.IsCastle || (settlement.IsTown && settlement.Town != null) 
-                    || (settlement.IsVillage && settlement.Village !=null)) && settlement.OwnerClan != null)
+                if (!SettlementPops.ContainsKey(settlement))
+                    InitializeSettlementPops(settlement);
+                else
                 {
-                    if (!SettlementPops.ContainsKey(settlement))
-                        InitializeSettlementPops(settlement);
-                    else
-                    {
-                        PopulationData data = SettlementPops[settlement];
-                        int growthFactor = GetDataGrowthFactor(data);
-                        data.UpdatePopulation(settlement, growthFactor);
-                    }
-
+                    PopulationData data = SettlementPops[settlement];
+                    int growthFactor = GetDataGrowthFactor(data);
+                    data.UpdatePopulation(settlement, growthFactor);
+                    SettlementPops[settlement] = data;
                 }
             }
-            
         }
 
         private static int GetDataGrowthFactor(PopulationData data)
@@ -96,7 +110,7 @@ namespace Populations
             else return 0;
         }
 
-        private static Dictionary<PopType, float[]> GetDesiredPopTypes(Settlement settlement)
+        public static Dictionary<PopType, float[]> GetDesiredPopTypes(Settlement settlement)
         {
             if (settlement.IsCastle)
                 return new Dictionary<PopType, float[]>()

@@ -10,19 +10,27 @@ namespace Populations
         {
 
             private MBBindingList<PopulationInfoVM> _popInfo;
+            private Settlement settlement;
 
             public PopulationVM(Settlement settlement)
             {
+                this.settlement = settlement;
                 _popInfo = new MBBindingList<PopulationInfoVM>();
-                PopulationData data = Population.GetPopData(settlement);
+            }
+
+            public override void RefreshValues()
+            {
+                base.RefreshValues();
+                PopInfo.Clear();
+                PopulationData data = Population.GetPopData(Settlement.CurrentSettlement);
                 if (data != null && data.Classes != null)
                 {
                     data.Classes.ForEach(popClass => PopInfo.Add(new PopulationInfoVM(
-                        popClass.type.ToString(), popClass.count, data.GetCurrentTypeFraction(popClass.type))
+                        popClass.type.ToString(), popClass.count)
                         ));
                 }
             }
-            
+
             [DataSourceProperty]
             public MBBindingList<PopulationInfoVM> PopInfo
             {

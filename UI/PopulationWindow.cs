@@ -8,7 +8,7 @@ namespace Populations
 {
     namespace UI
     {
-        public class PopulationUI : MapView
+        public class PopulationWindow : MapView
         {
             private GauntletLayer layer;
             private PopulationVM datasource;
@@ -24,7 +24,7 @@ namespace Populations
                 ScreenManager.TrySetFocus(layer);
             }
 
-            public PopulationUI() => CreateLayout();
+            public PopulationWindow() => CreateLayout();
 
             public void CloseUi()
             {

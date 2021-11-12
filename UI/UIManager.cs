@@ -1,4 +1,6 @@
 ﻿
+using SandBox.View.Map;
+
 namespace Populations.UI
 {
     class UIManager
@@ -21,19 +23,23 @@ namespace Populations.UI
             }
         }
 
-        public PopulationUI populationUI;
+        public PopulationWindow populationWindow;
 
         public void InitializeReligionWindow()
-        { 
-            populationUI = new PopulationUI();
-            this.populationUI.UpdateUi();
+        {
+            if (MapScreen.Instance != null)
+            {
+                if (this.populationWindow == null) this.populationWindow = new PopulationWindow();
+                this.populationWindow.UpdateUi();
+            }
         }
 
         public void CloseUI()
         {
-            if (populationUI != null)
+            if (populationWindow != null)
             {
-                populationUI.CloseUi();
+                populationWindow.CloseUi();
+                populationWindow = null;
             }
         }
     }
