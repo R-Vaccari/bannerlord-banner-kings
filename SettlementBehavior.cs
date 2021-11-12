@@ -1,8 +1,8 @@
 ﻿using Populations.UI;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.GameMenus;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
@@ -14,7 +14,8 @@ namespace Populations.Behaviors
     {
         public override void RegisterEvents()
         {
-            CampaignEvents.DailyTickSettlementEvent.AddNonSerializedListener(this, new Action<Settlement>(DailyTick));
+            CampaignEvents.DailyTickSettlementEvent.AddNonSerializedListener(this, new Action<Settlement>(DailySettlementTick));
+            CampaignEvents.HourlyTickPartyEvent.AddNonSerializedListener(this, new Action<MobileParty>(this.HourlyTickParty));
             CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, new Action<CampaignGameStarter>(OnGameCreated));
         }
 
@@ -22,17 +23,32 @@ namespace Populations.Behaviors
         {
         }
 
-        private void DailyTick(Settlement settlement)
+        private void HourlyTickParty(MobileParty caravan)
+        {
+            if (CARAVANS.ContainsKey(caravan))
+            {
+                Settlement target = CARAVANS[caravan];
+                if (Campaign.Current.Models.MapDistanceModel.GetDistance(caravan, target) < 1f)
+                {
+                    EnterSettlementAction.ApplyForParty(caravan, target);
+                    caravan.PrisonRoster.
+                    PopulationData data = GetPopData(target);
+
+                }
+            }
+        }
+
+        private void DailySettlementTick(Settlement settlement)
         {
             if (settlement != null)
             {
-                Population.UpdateSettlementPops(settlement);
+                UpdateSettlementPops(settlement);
                 if (DecideSendSlaveCaravan(settlement))
                 {
                     Village target = null;
                     MBReadOnlyList<Village> villages = settlement.BoundVillages;
                     foreach (Village village in villages)
-                        if (village.Settlement != null && SlaveSurplusExists(village.Settlement)) 
+                        if (village.Settlement != null && IsSettlementPopulated(village.Settlement) && SlaveSurplusExists(village.Settlement)) 
                         {
                             target = village;
                             break;
@@ -57,17 +73,24 @@ namespace Populations.Behaviors
 
         private void SendSlaveCaravan(Settlement target)
         {
-            DeductPopulation(target, PopType.Slaves, 50);
+            int slaves = MBRandom.RandomInt(25, 60);
+            PopulationData data = GetPopData(target);
+            data.UpdatePopType(PopType.Slaves, slaves);
+
             MobileParty caravan = new MobileParty();
             TroopRoster guardRoster = new TroopRoster(target.Party);
-            guardRoster.AddToCounts(CharacterObject.All.FirstOrDefault(x => x.StringId == "caravan_guard_empire"), 20);
+            guardRoster.AddToCounts(CharacterObject.All.FirstOrDefault(x => x.StringId == "caravan_guard_empire"), MBRandom.RandomInt(15, 25));
             TroopRoster slaveRoster = new TroopRoster(target.Party);
-            guardRoster.AddToCounts(CharacterObject.All.FirstOrDefault(x => x.StringId == "battanian_volunteer"), 50);
+            slaveRoster.AddToCounts(CharacterObject.All.FirstOrDefault(x => x.StringId == "battanian_volunteer"), slaves);
 
+            caravan.Aggressiveness = 0f;
+            caravan.SetCustomName(new TaleWorlds.Localization.TextObject(
+                String.Format("Slave Caravan from {0}", target.Name.ToString())
+                ));
             caravan.InitializeMobileParty(guardRoster, slaveRoster, target.GatePosition, 0f);
-
             caravan.SetMoveGoToSettlement(target);
             caravan.Ai.SetAIState(AIState.VisitingVillage);
+            CARAVANS.Add(caravan, target);
         }
 
         private void OnGameCreated(CampaignGameStarter campaignGameStarter)
@@ -86,10 +109,8 @@ namespace Populations.Behaviors
             return currentSettlement.OwnerClan == Hero.MainHero.Clan && Populations.Population.IsSettlementPopulated(currentSettlement);
         }
 
-        public static void game_menu_town_manage_town_on_consequence(MenuCallbackArgs args)
-        {
-            UIManager.instance.InitializeReligionWindow();
-        }
+        public static void game_menu_town_manage_town_on_consequence(MenuCallbackArgs args) => UIManager.instance.InitializeReligionWindow();
+        
 
        
     }
