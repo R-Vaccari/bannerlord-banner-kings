@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
+using TaleWorlds.CampaignSystem.SandBox.CampaignBehaviors.AiBehaviors;
 using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade;
 
@@ -45,17 +46,8 @@ namespace Populations
             static bool Prefix(MobileParty sellerParty, TroopRoster prisoners, Settlement currentSettlement, bool applyGoldChange = true)
             {
                 if (Population.IsSettlementPopulated(currentSettlement))
-                {
-                    List<TroopRosterElement> rosters = prisoners.GetTroopRoster();
-                    int count = 0;
-                    rosters.ForEach(roster =>
-                    {
-                        if (!roster.Character.IsHero)
-                            count += roster.Number + roster.WoundedNumber;
-                    });
-
-                    Population.GetPopData(currentSettlement).UpdatePopType(Population.PopType.Slaves, count);
-                }
+                    Population.GetPopData(currentSettlement).UpdatePopType(
+                        Population.PopType.Slaves, Helpers.Helpers.GetPrisionerCount(prisoners));
 
                 return true;
             }
@@ -67,17 +59,20 @@ namespace Populations
             static bool Prefix(MobileParty sellerParty, TroopRoster prisoners, Settlement currentSettlement)
             {
                 if (Population.IsSettlementPopulated(currentSettlement))
-                {
-                    List<TroopRosterElement> rosters = prisoners.GetTroopRoster();
-                    int count = 0;
-                    rosters.ForEach(roster =>
-                    {
-                        if (!roster.Character.IsHero)
-                            count += roster.Number + roster.WoundedNumber;
-                    });
-                    
-                    Population.GetPopData(currentSettlement).UpdatePopType(Population.PopType.Slaves, count);
-                }
+                    Population.GetPopData(currentSettlement).UpdatePopType(
+                        Population.PopType.Slaves, Helpers.Helpers.GetPrisionerCount(prisoners));
+
+                return true;
+            }
+        }
+
+        [HarmonyPatch(typeof(AiPatrollingBehavior), "AiHourlyTick")]
+        class AiPatrolPatch
+        {
+            static bool Prefix(MobileParty mobileParty, PartyThinkParams p)
+            {
+                if (Population.CARAVANS.ContainsKey(mobileParty))
+                    return false;
 
                 return true;
             }
