@@ -1,8 +1,7 @@
 ﻿using HarmonyLib;
+using Models;
 using Populations.Behaviors;
 using System;
-using System.Collections.Generic;
-using System.Windows.Forms;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.SandBox.CampaignBehaviors.AiBehaviors;
@@ -23,9 +22,10 @@ namespace Populations
                 {
                     CampaignGameStarter campaignStarter = (CampaignGameStarter)gameStarter;
                     campaignStarter.AddBehavior(new SettlementBehavior());
+
+                    campaignStarter.AddModel(new ProsperityModel());
                 } catch (Exception e)
                 {
-                    MessageBox.Show(e.ToString());
                 }
             }
         }

@@ -11,8 +11,9 @@ namespace Populations
         public static readonly Dictionary<Settlement, PopulationData> POPS = new Dictionary<Settlement, PopulationData>();
         public static readonly Dictionary<MobileParty, Settlement> CARAVANS = new Dictionary<MobileParty, Settlement>();
         private static readonly float POP_GROWTH_FACTOR = 0.001f;
+        private static readonly float SLAVE_GROWTH_FACTOR = 0.0005f;
 
-       
+
         public static bool IsSettlementPopulated(Settlement settlement) => POPS.ContainsKey(settlement);
         public static PopulationData GetPopData(Settlement settlement) => POPS[settlement];
 
@@ -36,32 +37,16 @@ namespace Populations
             POPS.Add(settlement, data);
         }
 
-        public static void ChangePopulationCount(Settlement settlement, PopType type, int count)
-        {
-            PopulationData data = POPS[settlement];
-            data.UpdatePopType(type, count);
-            POPS[settlement] = data;
-        }
-
-        public static bool SlaveSurplusExists(Settlement settlement)
+        public static bool SlaveSurplusExists(Settlement settlement, bool maxSurplus = false)
         {
             PopulationData data = GetPopData(settlement);
             int slaves = data.GetTypeCount(PopType.Slaves);
             Dictionary<PopType, float[]> popRatios = GetDesiredPopTypes(settlement);
-            double ratio = MBRandom.RandomFloatRanged(popRatios[PopType.Slaves][0], popRatios[PopType.Slaves][1]);
+            double ratio;
+            if (maxSurplus) ratio = popRatios[PopType.Slaves][1];
+            else ratio = MBRandom.RandomFloatRanged(popRatios[PopType.Slaves][0], popRatios[PopType.Slaves][1]);
             double currentRatio = slaves / (double)data.TotalPop;
             return currentRatio > ratio;
-        }
-
-        public static void GetHearthChange(Village village, ref ExplainedNumber baseResult)
-        {
-            if (village.Settlement != null && POPS.ContainsKey(village.Settlement))
-            {
-                PopulationData data = POPS[village.Settlement];
-                int growthFactor = GetDataGrowthFactor(data);
-                baseResult.AddFactor(growthFactor, null);
-                data.UpdatePopulation(village.Settlement, MBRandom.RandomInt((int)baseResult.BaseNumber * 3, (int)baseResult.BaseNumber * 6), PopType.None);
-            }
         }
 
         public static void UpdateSettlementPops(Settlement settlement)
@@ -81,18 +66,19 @@ namespace Populations
             }
         }
 
-        private static int GetDataGrowthFactor(PopulationData data)
+        public static int GetDataGrowthFactor(PopulationData data)
         {
             int growthFactor = 0;
-            data.Classes.ForEach(popClass => {
+            data.Classes.ForEach(popClass =>
+            {
                 if (popClass.type != PopType.Slaves)
                     growthFactor += (int)(popClass.count * POP_GROWTH_FACTOR);
-                }
-            );
+                else growthFactor -= (int)(popClass.count * SLAVE_GROWTH_FACTOR);
+            });
             return growthFactor;
         }
 
-        private static int GetDesiredTotalPop(Settlement settlement)
+    private static int GetDesiredTotalPop(Settlement settlement)
         {
             if (settlement.IsCastle)
             {
@@ -204,7 +190,11 @@ namespace Populations
                 }
             }
 
-            public int GetTypeCount(PopType type) => classes.Find(popClass => popClass.type == type).count;
+            public int GetTypeCount(PopType type) 
+            {
+                PopulationClass targetClass = classes.Find(popClass => popClass.type == type);
+                return targetClass != null ? targetClass.count : 0;
+            }
 
             public float GetCurrentTypeFraction(PopType type)
             {
