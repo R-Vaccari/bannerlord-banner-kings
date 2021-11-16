@@ -7,10 +7,20 @@ namespace Populations
     {
         private static readonly Dictionary<Settlement, List<PolicyElement>> POLICIES = new Dictionary<Settlement, List<PolicyElement>>();
         private static readonly Dictionary<Settlement, TaxType> TAXES = new Dictionary<Settlement, TaxType>();
+
+        public static bool IsSettlementPoliciesSet(Settlement settlement) => POLICIES.ContainsKey(settlement);
         public static List<PolicyElement> GetSettlementPolicies(Settlement settlement)
         {
-            List<PolicyElement> policies = new List<PolicyElement>();
             if (!POLICIES.ContainsKey(settlement))
+                AddSettlementPolicies(settlement);
+
+            return POLICIES[settlement];
+        }
+
+        public static void AddSettlementPolicies(Settlement settlement)
+        {
+            List<PolicyElement> policies = new List<PolicyElement>();
+            if (settlement.IsTown)
             {
                 policies.Add(new PolicyElement("Allow slaves to be exported", "Slave caravans will be formed when slave population is big", true, PolicyType.EXPORT_SLAVES));
                 policies.Add(new PolicyElement("Accelerate population growth", "Population will grow faster at the cost of influence", false, PolicyType.POP_GROWTH));
@@ -20,9 +30,6 @@ namespace Populations
                 policies.Add(new PolicyElement("Exempt nobles from taxes", "Exempt nobles from taxes, making them vouch in your favor", false, PolicyType.EXEMPTION));
                 POLICIES.Add(settlement, policies);
             }
-            else policies = POLICIES[settlement];
-
-            return policies;
         }
 
         public static TaxType GetSettlementTax(Settlement settlement)

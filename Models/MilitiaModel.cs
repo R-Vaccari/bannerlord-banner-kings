@@ -1,8 +1,5 @@
 ﻿using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.SandBox.GameComponents;
-using TaleWorlds.Core;
-using TaleWorlds.Localization;
-using static Populations.Population;
 
 namespace Populations.Models
 {

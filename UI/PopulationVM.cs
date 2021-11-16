@@ -5,7 +5,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using static Populations.PolicyManager;
-using static Populations.Population;
+using static Populations.PopulationManager;
 
 namespace Populations
 {

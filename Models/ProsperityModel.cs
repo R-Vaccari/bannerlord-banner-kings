@@ -2,7 +2,7 @@
 using TaleWorlds.CampaignSystem.SandBox.GameComponents;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
-using static Populations.Population;
+using static Populations.PopulationManager;
 
 namespace Populations.Models
 {

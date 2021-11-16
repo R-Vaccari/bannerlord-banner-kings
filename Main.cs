@@ -46,9 +46,9 @@ namespace Populations
         {
             static bool Prefix(MobileParty sellerParty, TroopRoster prisoners, Settlement currentSettlement, bool applyGoldChange = true)
             {
-                if (Population.IsSettlementPopulated(currentSettlement))
-                    Population.GetPopData(currentSettlement).UpdatePopType(
-                        Population.PopType.Slaves, Helpers.Helpers.GetPrisionerCount(prisoners));
+                if (PopulationManager.IsSettlementPopulated(currentSettlement))
+                    PopulationManager.GetPopData(currentSettlement).UpdatePopType(
+                        PopulationManager.PopType.Slaves, Helpers.Helpers.GetPrisionerCount(prisoners));
 
                 return true;
             }
@@ -59,9 +59,9 @@ namespace Populations
         {
             static bool Prefix(MobileParty sellerParty, TroopRoster prisoners, Settlement currentSettlement)
             {
-                if (Population.IsSettlementPopulated(currentSettlement))
-                    Population.GetPopData(currentSettlement).UpdatePopType(
-                        Population.PopType.Slaves, Helpers.Helpers.GetPrisionerCount(prisoners));
+                if (PopulationManager.IsSettlementPopulated(currentSettlement))
+                    PopulationManager.GetPopData(currentSettlement).UpdatePopType(
+                        PopulationManager.PopType.Slaves, Helpers.Helpers.GetPrisionerCount(prisoners));
 
                 return true;
             }
@@ -72,7 +72,7 @@ namespace Populations
         {
             static bool Prefix(MobileParty mobileParty, PartyThinkParams p)
             {
-                if (Population.CARAVANS.ContainsKey(mobileParty))
+                if (PopulationManager.CARAVANS.ContainsKey(mobileParty))
                     return false;
 
                 return true;

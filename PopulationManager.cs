@@ -6,12 +6,17 @@ using TaleWorlds.Library;
 
 namespace Populations
 {
-    public static class Population
+    public static class PopulationManager
     {
         public static readonly Dictionary<Settlement, PopulationData> POPS = new Dictionary<Settlement, PopulationData>();
         public static readonly Dictionary<MobileParty, Settlement> CARAVANS = new Dictionary<MobileParty, Settlement>();
         private static readonly float POP_GROWTH_FACTOR = 0.001f;
         private static readonly float SLAVE_GROWTH_FACTOR = 0.0005f;
+
+        public static readonly float NOBLE_OUTPUT = 1f;
+        public static readonly float CRAFTSMEN_OUTPUT = 0.2f;
+        public static readonly float SERF_OUTPUT = 0.05f;
+        public static readonly float SLAVE_OUTPUT = 0.05f;
 
 
         public static bool IsSettlementPopulated(Settlement settlement) => POPS.ContainsKey(settlement);
@@ -35,6 +40,9 @@ namespace Populations
 
             PopulationData data = new PopulationData(classes);
             POPS.Add(settlement, data);
+
+            if (!PolicyManager.IsSettlementPoliciesSet(settlement))
+                PolicyManager.AddSettlementPolicies(settlement);
         }
 
         public static bool SlaveSurplusExists(Settlement settlement, bool maxSurplus = false)

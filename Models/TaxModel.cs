@@ -3,7 +3,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.SandBox.GameComponents;
 using TaleWorlds.Localization;
 using static Populations.PolicyManager;
-using static Populations.Population;
+using static Populations.PopulationManager;
 
 namespace Populations.Models
 {
@@ -21,7 +21,8 @@ namespace Populations.Models
                 if (!IsPolicyEnacted(town.Settlement, PolicyType.EXEMPTION)) nobles = data.GetTypeCount(PopType.Nobles);
                 double craftsmen = data.GetTypeCount(PopType.Nobles);
                 double serfs = data.GetTypeCount(PopType.Nobles);
-                baseResult.Add((float)(nobles * 1f + craftsmen * 0.2f + serfs * 0.05f), new TextObject("Population output"));
+                double slaves = data.GetTypeCount(PopType.Slaves);
+                baseResult.Add((float)(nobles * NOBLE_OUTPUT + craftsmen * CRAFTSMEN_OUTPUT + serfs * SERF_OUTPUT + slaves * SLAVE_OUTPUT), new TextObject("Population output"));
             }
 
             TaxType taxType = GetSettlementTax(town.Settlement);

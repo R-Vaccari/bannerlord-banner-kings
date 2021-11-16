@@ -1,4 +1,5 @@
-﻿using Populations.UI;
+﻿using Populations.Components;
+using Populations.UI;
 using System;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
@@ -6,7 +7,7 @@ using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.GameMenus;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
-using static Populations.Population;
+using static Populations.PopulationManager;
 
 namespace Populations.Behaviors
 {
@@ -117,19 +118,16 @@ namespace Populations.Behaviors
             PopulationData data = GetPopData(origin);
             int slaves = (int)((double)data.GetTypeCount(PopType.Slaves) * 0.005d);
             data.UpdatePopType(PopType.Slaves, slaves * -1);
-            
-            MobileParty caravan = MobileParty.CreateParty("slavecaravan" + origin.Name.ToString() + target.Name.ToString(), null, delegate (MobileParty mobileParty)
-            {
-                mobileParty.SetPartyUsedByQuest(false);
-            });
+
+            MobileParty caravan = PopulationPartyComponent.CreateParty("slavecaravan_", origin, target.Settlement, "Slave Caravan from {0}");
 
             caravan.AddPrisoner(CharacterObject.All.FirstOrDefault(x => x.StringId == "vlandian_recruit_new"), slaves);
 
             caravan.InitializeMobileParty(origin.Culture.EliteCaravanPartyTemplate, origin.GatePosition, 0f, 0f, -1);
             caravan.Party.Visuals.SetMapIconAsDirty();
-            caravan.SetCustomName(new TaleWorlds.Localization.TextObject(
-               String.Format("Slave Caravan from {0}", origin.Name.ToString())
-               ));
+            //caravan.SetCustomName(new TaleWorlds.Localization.TextObject(
+            //   String.Format("Slave Caravan from {0}", origin.Name.ToString())
+            //   ));
             caravan.Party.Visuals.SetMapIconAsDirty();
             caravan.SetInititave(0f, 1f, float.MaxValue);
             caravan.ShouldJoinPlayerBattles = false;
@@ -151,7 +149,7 @@ namespace Populations.Behaviors
         {
             args.optionLeaveType = GameMenuOption.LeaveType.Manage;
             Settlement currentSettlement = Settlement.CurrentSettlement;
-            return currentSettlement.OwnerClan == Hero.MainHero.Clan && Populations.Population.IsSettlementPopulated(currentSettlement);
+            return currentSettlement.OwnerClan == Hero.MainHero.Clan && Populations.PopulationManager.IsSettlementPopulated(currentSettlement);
         }
 
         public static void game_menu_town_manage_town_on_consequence(MenuCallbackArgs args) => UIManager.instance.InitializeReligionWindow();
