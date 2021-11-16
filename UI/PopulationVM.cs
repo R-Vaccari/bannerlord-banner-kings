@@ -19,24 +19,20 @@ namespace Populations
             private PopulationOptionVM _selfInvestToogle;
             private PopulationOptionVM _conscriptionToogle;
             private PopulationOptionVM _nobleExemptionToogle;
+            private PopulationOptionVM _subsidizeMilitiaToogle;
             private Settlement settlement;
 
             public PopulationVM(Settlement settlement)
             {
                 this.settlement = settlement;
                 _popInfo = new MBBindingList<PopulationInfoVM>();
-                _slaveToogle = new PopulationOptionVM();
-                _popAccelerateToogle = new PopulationOptionVM();
-                _selfInvestToogle = new PopulationOptionVM();
-                _conscriptionToogle = new PopulationOptionVM();
-                _nobleExemptionToogle = new PopulationOptionVM();
             }
 
             public override void RefreshValues()
             {
                 base.RefreshValues();
                 PopInfo.Clear();
-                PopulationData data = Population.GetPopData(Settlement.CurrentSettlement);
+                PopulationData data = GetPopData(Settlement.CurrentSettlement);
                 if (data != null && data.Classes != null)
                 {
                     data.Classes.ForEach(popClass => PopInfo.Add(new PopulationInfoVM(
@@ -70,6 +66,9 @@ namespace Populations
                                 break;
                             case PolicyType.EXEMPTION:
                                 ExemptionToogle = vm;
+                                break;
+                            case PolicyType.SUBSIDIZE_MILITIA:
+                                SubsidizeToogle = vm;
                                 break;
                         }
                     }   
@@ -145,7 +144,7 @@ namespace Populations
                     }
                 }
             }
-
+            
             [DataSourceProperty]
             public PopulationOptionVM ExemptionToogle
             {
@@ -156,6 +155,20 @@ namespace Populations
                     {
                         _nobleExemptionToogle = value;
                         base.OnPropertyChangedWithValue(value, "ExemptionToogle");
+                    }
+                }
+            }
+
+            [DataSourceProperty]
+            public PopulationOptionVM SubsidizeToogle
+            {
+                get => _subsidizeMilitiaToogle;
+                set
+                {
+                    if (value != _subsidizeMilitiaToogle)
+                    {
+                        _subsidizeMilitiaToogle = value;
+                        base.OnPropertyChangedWithValue(value, "SubsidizeToogle");
                     }
                 }
             }

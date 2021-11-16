@@ -83,7 +83,7 @@ namespace Populations.Behaviors
             if (settlement != null)
             {
                 UpdateSettlementPops(settlement);
-                if (DecideSendSlaveCaravan(settlement))
+                if (PolicyManager.IsPolicyEnacted(settlement, PolicyManager.PolicyType.EXPORT_SLAVES) && DecideSendSlaveCaravan(settlement))
                 {
                     Village target = null;
                     MBReadOnlyList<Village> villages = settlement.BoundVillages;

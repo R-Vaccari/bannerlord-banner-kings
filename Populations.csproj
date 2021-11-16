@@ -97,6 +97,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Behaviours\SettlementBehavior.cs" />
+    <Compile Include="Models\MilitiaModel.cs" />
+    <Compile Include="Models\TaxModel.cs" />
     <Compile Include="PolicyManager.cs" />
     <Compile Include="Helpers.cs" />
     <Compile Include="Models\ProsperityModel.cs" />

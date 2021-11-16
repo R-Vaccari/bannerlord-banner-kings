@@ -1,6 +1,6 @@
 ﻿using HarmonyLib;
-using Models;
 using Populations.Behaviors;
+using Populations.Models;
 using System;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
@@ -24,6 +24,7 @@ namespace Populations
                     campaignStarter.AddBehavior(new SettlementBehavior());
 
                     campaignStarter.AddModel(new ProsperityModel());
+                    campaignStarter.AddModel(new TaxModel());
                 } catch (Exception e)
                 {
                 }
