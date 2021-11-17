@@ -1,7 +1,7 @@
 ﻿using Populations.Components;
 using Populations.UI;
 using System;
-using System.Linq;
+
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.GameMenus;
@@ -28,9 +28,9 @@ namespace Populations.Behaviors
         {
             try
             {
-                if (caravan != null && CARAVANS.ContainsKey(caravan) && caravan.MapEvent == null)
+                if (caravan != null && CARAVANS.Contains(caravan) && caravan.MapEvent == null)
                 {
-                    Settlement target = CARAVANS[caravan];
+                    Settlement target = caravan.HomeSettlement;
                     if (caravan.Ai.AiState == AIState.VisitingVillage)
                     {
                         if (target != null && caravan.MapEvent == null && target.IsVillage && target.Village != null && target.Village.VillageState == Village.VillageStates.Normal)
@@ -119,21 +119,8 @@ namespace Populations.Behaviors
             int slaves = (int)((double)data.GetTypeCount(PopType.Slaves) * 0.005d);
             data.UpdatePopType(PopType.Slaves, slaves * -1);
 
-            MobileParty caravan = PopulationPartyComponent.CreateParty("slavecaravan_", origin, target.Settlement, "Slave Caravan from {0}");
-
-            caravan.AddPrisoner(CharacterObject.All.FirstOrDefault(x => x.StringId == "vlandian_recruit_new"), slaves);
-
-            caravan.InitializeMobileParty(origin.Culture.EliteCaravanPartyTemplate, origin.GatePosition, 0f, 0f, -1);
-            caravan.Party.Visuals.SetMapIconAsDirty();
-            //caravan.SetCustomName(new TaleWorlds.Localization.TextObject(
-            //   String.Format("Slave Caravan from {0}", origin.Name.ToString())
-            //   ));
-            caravan.Party.Visuals.SetMapIconAsDirty();
-            caravan.SetInititave(0f, 1f, float.MaxValue);
-            caravan.ShouldJoinPlayerBattles = false;
-            caravan.Aggressiveness = 0f;
-            caravan.SetMoveGoToSettlement(target.Settlement);
-            CARAVANS.Add(caravan, target.Settlement);
+            MobileParty caravan = PopulationPartyComponent.CreateSlaveCaravan("slavecaravan_", origin, target.Settlement, "Slave Caravan from {0}", slaves);
+            CARAVANS.Add(caravan);
         }
 
         private void OnGameCreated(CampaignGameStarter campaignGameStarter)

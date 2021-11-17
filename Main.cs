@@ -5,6 +5,7 @@ using System;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.SandBox.CampaignBehaviors.AiBehaviors;
+using TaleWorlds.CampaignSystem.SandBox.GameComponents;
 using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade;
 
@@ -25,6 +26,8 @@ namespace Populations
 
                     campaignStarter.AddModel(new ProsperityModel());
                     campaignStarter.AddModel(new TaxModel());
+                    campaignStarter.AddModel(new FoodModel());
+                    campaignStarter.AddModel(new ConstructionModel());
                 } catch (Exception e)
                 {
                 }
@@ -72,11 +75,28 @@ namespace Populations
         {
             static bool Prefix(MobileParty mobileParty, PartyThinkParams p)
             {
-                if (PopulationManager.CARAVANS.ContainsKey(mobileParty))
+                if (PopulationManager.CARAVANS.Contains(mobileParty))
                     return false;
 
                 return true;
             }
         }
+
+        /*
+        [HarmonyPatch(typeof(DefaultSettlementFoodModel), "CalculateTownFoodChangeInternal")]
+        class SettlementFoodPatch
+        {
+            static bool Prefix(ref ExplainedNumber __result, Town town, bool includeDescriptions)
+            {
+                if (PopulationManager.IsSettlementPopulated(town.Settlement))
+                {
+                    __result = new FoodModel().CalculateTownFoodChangeInternal(town, includeDescriptions);
+                    return false;
+                }
+
+                return true;
+            }
+        }
+        */
     }
 }

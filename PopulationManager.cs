@@ -2,14 +2,15 @@
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
-using TaleWorlds.Library;
 
 namespace Populations
 {
     public static class PopulationManager
     {
+
         public static readonly Dictionary<Settlement, PopulationData> POPS = new Dictionary<Settlement, PopulationData>();
-        public static readonly Dictionary<MobileParty, Settlement> CARAVANS = new Dictionary<MobileParty, Settlement>();
+        public static readonly List<MobileParty> CARAVANS = new List<MobileParty>();
+
         private static readonly float POP_GROWTH_FACTOR = 0.001f;
         private static readonly float SLAVE_GROWTH_FACTOR = 0.0005f;
 
@@ -17,6 +18,15 @@ namespace Populations
         public static readonly float CRAFTSMEN_OUTPUT = 0.2f;
         public static readonly float SERF_OUTPUT = 0.05f;
         public static readonly float SLAVE_OUTPUT = 0.05f;
+
+        public static readonly float SLAVE_LOYALTY = -0.0005f;
+        public static readonly float NOBLE_EXEMPTION_LOYALTY = 0.002f;
+        public static readonly float TAX_POLICY_LOYALTY = 0.0001f;
+
+        public static readonly float SLAVE_MINE_FOOD = -0.01f;
+        public static readonly float NOBLE_FOOD = -0.01f;
+        public static readonly float CRAFTSMEN_FOOD = -0.005f;
+        public static readonly float SERF_FOOD = 0.005f;
 
 
         public static bool IsSettlementPopulated(Settlement settlement) => POPS.ContainsKey(settlement);
@@ -86,7 +96,7 @@ namespace Populations
             return growthFactor;
         }
 
-    private static int GetDesiredTotalPop(Settlement settlement)
+        private static int GetDesiredTotalPop(Settlement settlement)
         {
             if (settlement.IsCastle)
             {
@@ -115,12 +125,29 @@ namespace Populations
                     { PopType.Slaves, new float[] {0.15f, 0.25f} }
                 };
             else if (settlement.IsVillage)
-                return new Dictionary<PopType, float[]>()
-                {
-                    { PopType.Nobles, new float[] {0.01f, 0.02f} },
-                    { PopType.Serfs, new float[] {0.5f, 0.7f} },
-                    { PopType.Slaves, new float[] {0.4f, 0.5f} }
-                };
+            {
+                if (IsVillageProducingFood(settlement.Village))
+                    return new Dictionary<PopType, float[]>()
+                    {
+                        { PopType.Nobles, new float[] {0.01f, 0.02f} },
+                        { PopType.Serfs, new float[] {0.7f, 0.8f} },
+                        { PopType.Slaves, new float[] {0.1f, 0.2f} }
+                    };
+                else if (IsVillageAMine(settlement.Village))
+                    return new Dictionary<PopType, float[]>()
+                    {
+                        { PopType.Nobles, new float[] {0.01f, 0.02f} },
+                        { PopType.Serfs, new float[] {0.3f, 0.4f} },
+                        { PopType.Slaves, new float[] {0.6f, 0.7f} }
+                    };
+                else
+                    return new Dictionary<PopType, float[]>()
+                    {
+                        { PopType.Nobles, new float[] {0.01f, 0.02f} },
+                        { PopType.Serfs, new float[] {0.5f, 0.7f} },
+                        { PopType.Slaves, new float[] {0.4f, 0.5f} }
+                    };
+            }
             else if (settlement.IsTown)
                 return new Dictionary<PopType, float[]>()
                 {
@@ -130,6 +157,19 @@ namespace Populations
                     { PopType.Slaves, new float[] {0.33f, 0.45f} }
                 };
             else return null;
+        }
+
+        public static bool IsVillageProducingFood(Village village)
+        {
+            return village.VillageType == DefaultVillageTypes.CattleRange || village.VillageType == DefaultVillageTypes.DateFarm ||
+                village.VillageType == DefaultVillageTypes.Fisherman || village.VillageType == DefaultVillageTypes.OliveTrees ||
+                village.VillageType == DefaultVillageTypes.VineYard || village.VillageType == DefaultVillageTypes.WheatFarm;
+        }
+
+        public static bool IsVillageAMine(Village village)
+        {
+            return village.VillageType == DefaultVillageTypes.SilverMine || village.VillageType == DefaultVillageTypes.IronMine ||
+                village.VillageType == DefaultVillageTypes.SaltMine || village.VillageType == DefaultVillageTypes.ClayMine;
         }
 
         public class PopulationData

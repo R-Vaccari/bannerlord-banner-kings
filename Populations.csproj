@@ -96,9 +96,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Behaviours\SaveBehaviour.cs" />
     <Compile Include="Behaviours\SettlementBehavior.cs" />
     <Compile Include="Components\PopulationPartyComponent.cs" />
+    <Compile Include="Models\ConstructionModel.cs" />
+    <Compile Include="Models\FoodModel.cs" />
     <Compile Include="Models\MilitiaModel.cs" />
+    <Compile Include="Models\LoyaltyModel.cs" />
     <Compile Include="Models\TaxModel.cs" />
     <Compile Include="PolicyManager.cs" />
     <Compile Include="Helpers.cs" />
