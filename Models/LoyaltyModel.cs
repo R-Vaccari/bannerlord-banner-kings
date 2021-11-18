@@ -17,7 +17,7 @@ namespace Populations.Models
             {
                 PopulationData data = GetPopData(town.Settlement);
                 int slaves = data.GetTypeCount(PopType.Slaves);
-                bool surplusExists = SlaveSurplusExists(town.Settlement, true);
+                bool surplusExists = PopSurplusExists(town.Settlement, PopType.Slaves, true);
                 baseResult.Add((float)slaves * SLAVE_LOYALTY * (surplusExists ? 1.2f : 1f), new TextObject("Slave population"));
 
                 if (IsPolicyEnacted(town.Settlement, PolicyType.EXEMPTION))

@@ -1,18 +1,15 @@
 ﻿using HarmonyLib;
+using Populations.Models;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 
 namespace Populations
 {
-    public static class PopulationManager
+    public class PopulationManager
     {
-
-        public static readonly Dictionary<Settlement, PopulationData> POPS = new Dictionary<Settlement, PopulationData>();
+        protected static Dictionary<Settlement, PopulationData> POPS = new Dictionary<Settlement, PopulationData>();
         public static readonly List<MobileParty> CARAVANS = new List<MobileParty>();
-
-        private static readonly float POP_GROWTH_FACTOR = 0.001f;
-        private static readonly float SLAVE_GROWTH_FACTOR = 0.0005f;
 
         public static readonly float NOBLE_OUTPUT = 1f;
         public static readonly float CRAFTSMEN_OUTPUT = 0.2f;
@@ -20,14 +17,13 @@ namespace Populations
         public static readonly float SLAVE_OUTPUT = 0.05f;
 
         public static readonly float SLAVE_LOYALTY = -0.0005f;
-        public static readonly float NOBLE_EXEMPTION_LOYALTY = 0.002f;
+        public static readonly float NOBLE_EXEMPTION_LOYALTY = 0.004f;
         public static readonly float TAX_POLICY_LOYALTY = 0.0001f;
 
         public static readonly float SLAVE_MINE_FOOD = -0.01f;
         public static readonly float NOBLE_FOOD = -0.01f;
         public static readonly float CRAFTSMEN_FOOD = -0.005f;
         public static readonly float SERF_FOOD = 0.005f;
-
 
         public static bool IsSettlementPopulated(Settlement settlement) => POPS.ContainsKey(settlement);
         public static PopulationData GetPopData(Settlement settlement) => POPS[settlement];
@@ -55,45 +51,28 @@ namespace Populations
                 PolicyManager.AddSettlementPolicies(settlement);
         }
 
-        public static bool SlaveSurplusExists(Settlement settlement, bool maxSurplus = false)
+        public static bool PopSurplusExists(Settlement settlement, PopType type, bool maxSurplus = false)
         {
             PopulationData data = GetPopData(settlement);
-            int slaves = data.GetTypeCount(PopType.Slaves);
+            int pops = data.GetTypeCount(type);
             Dictionary<PopType, float[]> popRatios = GetDesiredPopTypes(settlement);
             double ratio;
-            if (maxSurplus) ratio = popRatios[PopType.Slaves][1];
-            else ratio = MBRandom.RandomFloatRanged(popRatios[PopType.Slaves][0], popRatios[PopType.Slaves][1]);
-            double currentRatio = slaves / (double)data.TotalPop;
+            if (maxSurplus) ratio = popRatios[type][1];
+            else ratio = MBRandom.RandomFloatRanged(popRatios[type][0], popRatios[type][1]);
+            double currentRatio = (double)pops / (double)data.TotalPop;
             return currentRatio > ratio;
         }
 
         public static void UpdateSettlementPops(Settlement settlement)
-        {  
-            if ((settlement.IsCastle || (settlement.IsTown && settlement.Town != null) 
-                || (settlement.IsVillage && settlement.Village !=null)) && settlement.OwnerClan != null)
+        {
+            if ((settlement.IsCastle || (settlement.IsTown && settlement.Town != null)
+                || (settlement.IsVillage && settlement.Village != null)) && settlement.OwnerClan != null)
             {
                 if (!POPS.ContainsKey(settlement))
                     InitializeSettlementPops(settlement);
                 else
-                {
-                    PopulationData data = POPS[settlement];
-                    int growthFactor = GetDataGrowthFactor(data);
-                    data.UpdatePopulation(settlement, growthFactor, PopType.None);
-                    POPS[settlement] = data;
-                }
+                    new GrowthModel().CalculatePopulationGrowth(settlement);
             }
-        }
-
-        public static int GetDataGrowthFactor(PopulationData data)
-        {
-            int growthFactor = 0;
-            data.Classes.ForEach(popClass =>
-            {
-                if (popClass.type != PopType.Slaves)
-                    growthFactor += (int)(popClass.count * POP_GROWTH_FACTOR);
-                else growthFactor -= (int)(popClass.count * SLAVE_GROWTH_FACTOR);
-            });
-            return growthFactor;
         }
 
         private static int GetDesiredTotalPop(Settlement settlement)
@@ -110,9 +89,24 @@ namespace Populations
                 float prosperityFactor = (0.0001f * settlement.Prosperity) + 1f;
                 if (settlement.Owner != null && settlement.Owner.IsFactionLeader)
                     prosperityFactor *= 1.2f;
-                return MBRandom.RandomInt((int)(8000 * prosperityFactor), (int)(25000 * prosperityFactor));
+                if (!IsMetropolis(settlement)) return MBRandom.RandomInt((int)(8000 * prosperityFactor), (int)(15000 * prosperityFactor));
+                else return MBRandom.RandomInt((int)(20000 * prosperityFactor), (int)(25000 * prosperityFactor));
             }
             else return 0;
+        }
+
+        private static bool IsMetropolis(Settlement settlement) => settlement.Name.ToString() == "Liberartis" ||
+            settlement.Name.ToString() == "Pravend" || settlement.Name.ToString() == "Lycaron" || settlement.Name.ToString() == "Quyaz" ||
+            settlement.Name.ToString() == "Kapudere" || settlement.Name.ToString() == "Qasira" || settlement.Name.ToString() == "Epicrotea"
+            || settlement.Name.ToString() == "Argoron";
+
+        public static int GetPopCountOverLimit(Settlement settlement, PopType type)
+        {
+            Dictionary<PopType, float[]> desiredTypes = GetDesiredPopTypes(settlement);
+            PopulationData data = GetPopData(settlement);
+            int max = (int)((float)data.TotalPop * desiredTypes[type][1]);
+            int current = data.GetTypeCount(type);
+            return current - max;
         }
 
         public static Dictionary<PopType, float[]> GetDesiredPopTypes(Settlement settlement)
@@ -152,29 +146,25 @@ namespace Populations
                 return new Dictionary<PopType, float[]>()
                 {
                     { PopType.Nobles, new float[] {0.01f, 0.03f} },
-                    { PopType.Craftsmen, new float[] {0.09f, 0.12f} },
+                    { PopType.Craftsmen, new float[] {0.06f, 0.09f} },
                     { PopType.Serfs, new float[] {0.4f, 0.5f} },
-                    { PopType.Slaves, new float[] {0.33f, 0.45f} }
+                    { PopType.Slaves, new float[] {0.30f, 0.45f} }
                 };
             else return null;
         }
 
-        public static bool IsVillageProducingFood(Village village)
-        {
-            return village.VillageType == DefaultVillageTypes.CattleRange || village.VillageType == DefaultVillageTypes.DateFarm ||
+        public static bool IsVillageProducingFood(Village village) => village.VillageType == DefaultVillageTypes.CattleRange || village.VillageType == DefaultVillageTypes.DateFarm ||
                 village.VillageType == DefaultVillageTypes.Fisherman || village.VillageType == DefaultVillageTypes.OliveTrees ||
                 village.VillageType == DefaultVillageTypes.VineYard || village.VillageType == DefaultVillageTypes.WheatFarm;
-        }
 
-        public static bool IsVillageAMine(Village village)
-        {
-            return village.VillageType == DefaultVillageTypes.SilverMine || village.VillageType == DefaultVillageTypes.IronMine ||
+
+        public static bool IsVillageAMine(Village village) => village.VillageType == DefaultVillageTypes.SilverMine || village.VillageType == DefaultVillageTypes.IronMine ||
                 village.VillageType == DefaultVillageTypes.SaltMine || village.VillageType == DefaultVillageTypes.ClayMine;
-        }
+
 
         public class PopulationData
         {
-            private List<PopulationClass> classes;            
+            private List<PopulationClass> classes;
             private int totalPop;
 
             public PopulationData(List<PopulationClass> classes)
@@ -232,13 +222,13 @@ namespace Populations
                     PopulationClass pops = classes.Find(popClass => popClass.type == type);
                     if (pops == null)
                         pops = new PopulationClass(type, 0);
-                 
+
                     pops.count += count;
                     RefreshTotal();
                 }
             }
 
-            public int GetTypeCount(PopType type) 
+            public int GetTypeCount(PopType type)
             {
                 PopulationClass targetClass = classes.Find(popClass => popClass.type == type);
                 return targetClass != null ? targetClass.count : 0;
@@ -247,7 +237,7 @@ namespace Populations
             public float GetCurrentTypeFraction(PopType type)
             {
                 RefreshTotal();
-                return GetTypeCount(type) / TotalPop;
+                return (float)GetTypeCount(type) / (float)TotalPop;
             }
 
             private void RefreshTotal()
@@ -258,7 +248,7 @@ namespace Populations
             }
         }
 
-        public class PopulationClass 
+        public class PopulationClass
         {
             public PopType type;
             public int count;
@@ -277,6 +267,18 @@ namespace Populations
             Serfs,
             Slaves,
             None
+        }
+
+        public class SaveBehaviour : CampaignBehaviorBase
+        {
+            public override void RegisterEvents()
+            {
+            }
+
+            public override void SyncData(IDataStore dataStore)
+            {
+                dataStore.SyncData("pops", ref POPS);
+            }
         }
     }
 }

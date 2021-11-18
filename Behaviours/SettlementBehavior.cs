@@ -89,7 +89,7 @@ namespace Populations.Behaviors
                     Village target = null;
                     MBReadOnlyList<Village> villages = settlement.BoundVillages;
                     foreach (Village village in villages)
-                        if (village.Settlement != null && IsSettlementPopulated(village.Settlement) && !SlaveSurplusExists(village.Settlement)) 
+                        if (village.Settlement != null && IsSettlementPopulated(village.Settlement) && !PopSurplusExists(village.Settlement, PopType.Slaves)) 
                         {
                             target = village;
                             break;
@@ -106,7 +106,7 @@ namespace Populations.Behaviors
             {
                 MBReadOnlyList<Village> villages = settlement.BoundVillages;
                 if (villages != null && villages.Count > 0)
-                    if (SlaveSurplusExists(settlement))
+                    if (PopSurplusExists(settlement, PopType.Slaves))
                         return true;
             }
             return false;

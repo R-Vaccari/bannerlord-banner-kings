@@ -5,7 +5,6 @@ using System;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.SandBox.CampaignBehaviors.AiBehaviors;
-using TaleWorlds.CampaignSystem.SandBox.GameComponents;
 using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade;
 
@@ -23,11 +22,15 @@ namespace Populations
                 {
                     CampaignGameStarter campaignStarter = (CampaignGameStarter)gameStarter;
                     campaignStarter.AddBehavior(new SettlementBehavior());
+                    campaignStarter.AddBehavior(new PopulationManager.SaveBehaviour());
 
                     campaignStarter.AddModel(new ProsperityModel());
                     campaignStarter.AddModel(new TaxModel());
                     campaignStarter.AddModel(new FoodModel());
                     campaignStarter.AddModel(new ConstructionModel());
+                    campaignStarter.AddModel(new MilitiaModel());
+                    campaignStarter.AddModel(new InfluenceModel());
+                    campaignStarter.AddModel(new LoyaltyModel());
                 } catch (Exception e)
                 {
                 }

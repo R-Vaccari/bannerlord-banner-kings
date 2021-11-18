@@ -25,55 +25,55 @@ namespace Populations.Models
         public ExplainedNumber CalculateTownFoodChangeInternal(Town town, bool includeDescriptions)
 		{
 			ExplainedNumber result = new ExplainedNumber(0f, includeDescriptions, null);
+
+			// ------- Pops / Prosperity consumption ---------
 			PopulationData data = GetPopData(town.Settlement);
 			int citySerfs = data.GetTypeCount(PopType.Serfs);
 			if (!town.IsUnderSiege)
             {
 				float serfProduction = (float)citySerfs * SERF_FOOD *0.8f;
-				result.Add((float)serfProduction, new TextObject("Serfs production)", null));
+				result.Add((float)serfProduction, new TextObject("Serfs production", null));
 			} else
             {
-				float serfProduction = (float)citySerfs * SERF_FOOD * -1f;
-				result.Add((float)serfProduction, new TextObject("Serfs consumption)", null));
+				float serfConsumption = (float)citySerfs * SERF_FOOD * -1f;
+				result.Add((float)serfConsumption, new TextObject("Serfs consumption (siege)", null));
+
+				int citySlaves = data.GetTypeCount(PopType.Slaves);
+				float slaveConsumption = (float)citySlaves * SERF_FOOD * -0.5f;
+				result.Add((float)slaveConsumption, new TextObject("Slaves consumption (siege)", null));
 			}
 			
 
 			int cityNobles = data.GetTypeCount(PopType.Nobles);
 			float nobleConsumption = (float)cityNobles * NOBLE_FOOD;
-			result.Add((float)nobleConsumption, new TextObject("Nobles consumption)", null));
+			result.Add((float)nobleConsumption, new TextObject("Nobles consumption", null));
 
 			int cityCraftsmen = data.GetTypeCount(PopType.Craftsmen);
 			float craftsmenConsumption = (float)cityCraftsmen * CRAFTSMEN_FOOD;
-			result.Add((float)craftsmenConsumption, new TextObject("Craftsmen consumption)", null));
+			result.Add((float)craftsmenConsumption, new TextObject("Craftsmen consumption", null));
 
-			float num2 = -town.Owner.Settlement.Prosperity / 40f;
+			float prosperityImpact = -town.Owner.Settlement.Prosperity / 40f;
+			result.Add(prosperityImpact, new TextObject("Prosperity effect"), null);
+
 			MobileParty garrisonParty = town.GarrisonParty;
-			int num3 = (garrisonParty != null) ? garrisonParty.Party.NumberOfAllMembers : 0;
-			num3 = -num3 / 20;
-			float num4 = 0f;
-			float num5 = 0f;
+			int garrisonConsumption = (garrisonParty != null) ? garrisonParty.Party.NumberOfAllMembers : 0;
+			result.Add((float)(garrisonConsumption / 20) * -1f, new TextObject("Garrison consumption"), null);
+	
 			if (town.Governor != null)
 			{
 				if (town.IsUnderSiege)
 				{
 					if (town.Governor.GetPerkValue(DefaultPerks.Steward.Gourmet))
-					{
-						num5 += DefaultPerks.Steward.Gourmet.SecondaryBonus;
-					}
+						result.AddFactor(DefaultPerks.Steward.Gourmet.SecondaryBonus, DefaultPerks.Steward.Gourmet.Name);
+					
 					if (town.Governor.GetPerkValue(DefaultPerks.Medicine.TriageTent))
-					{
-						num4 += DefaultPerks.Medicine.TriageTent.SecondaryBonus;
-					}
+						result.AddFactor(DefaultPerks.Medicine.TriageTent.SecondaryBonus, DefaultPerks.Medicine.TriageTent.Name);
 				}
 				if (town.Governor.GetPerkValue(DefaultPerks.Steward.MasterOfWarcraft))
-				{
-					num4 += DefaultPerks.Steward.MasterOfWarcraft.SecondaryBonus;
-				}
+					result.AddFactor(DefaultPerks.Steward.MasterOfWarcraft.SecondaryBonus, DefaultPerks.Steward.MasterOfWarcraft.Name);	
 			}
-			num2 += num2 * num4;
-			num3 += (int)((float)num3 * (num4 + num5));
-			result.Add(num2, new TextObject("Prosperity effect"), null);
-			result.Add((float)num3, new TextObject("Garrison consumption"), null);
+
+			// ------- Pops consumption ---------
 			Clan ownerClan = town.Settlement.OwnerClan;
 			if (((ownerClan != null) ? ownerClan.Kingdom : null) != null && town.Settlement.OwnerClan.Kingdom.ActivePolicies.Contains(DefaultPolicies.HuntingRights))
 			{
