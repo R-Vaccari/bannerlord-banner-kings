@@ -16,10 +16,6 @@ namespace Populations
         public static readonly float SERF_OUTPUT = 0.05f;
         public static readonly float SLAVE_OUTPUT = 0.05f;
 
-        public static readonly float SLAVE_LOYALTY = -0.0005f;
-        public static readonly float NOBLE_EXEMPTION_LOYALTY = 0.004f;
-        public static readonly float TAX_POLICY_LOYALTY = 0.0001f;
-
         public static readonly float SLAVE_MINE_FOOD = -0.01f;
         public static readonly float NOBLE_FOOD = -0.01f;
         public static readonly float CRAFTSMEN_FOOD = -0.005f;
@@ -267,18 +263,6 @@ namespace Populations
             Serfs,
             Slaves,
             None
-        }
-
-        public class SaveBehaviour : CampaignBehaviorBase
-        {
-            public override void RegisterEvents()
-            {
-            }
-
-            public override void SyncData(IDataStore dataStore)
-            {
-                dataStore.SyncData("pops", ref POPS);
-            }
         }
     }
 }

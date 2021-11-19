@@ -10,10 +10,7 @@ namespace Populations.Models
     {
         public override void CalculateMilitiaSpawnRate(Settlement settlement, out float meleeTroopRate, out float rangedTroopRate)
         {
-            if (IsSettlementPopulated(settlement))
-                this.CalculateMilitiaSpawnRate(settlement, out meleeTroopRate, out rangedTroopRate);
-            else
-                base.CalculateMilitiaSpawnRate(settlement, out meleeTroopRate, out rangedTroopRate);
+            base.CalculateMilitiaSpawnRate(settlement, out meleeTroopRate, out rangedTroopRate);
         }
 
         public override ExplainedNumber CalculateMilitiaChange(Settlement settlement, bool includeDescriptions = false)

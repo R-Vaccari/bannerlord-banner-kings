@@ -98,6 +98,7 @@
   <ItemGroup>
     <Compile Include="Behaviours\SettlementBehavior.cs" />
     <Compile Include="Components\PopulationPartyComponent.cs" />
+    <Compile Include="Models\VillageProductionModel.cs" />
     <Compile Include="Models\GrowthModel.cs" />
     <Compile Include="Models\InfluenceModel.cs" />
     <Compile Include="Models\ConstructionModel.cs" />
@@ -105,10 +106,10 @@
     <Compile Include="Models\MilitiaModel.cs" />
     <Compile Include="Models\LoyaltyModel.cs" />
     <Compile Include="Models\TaxModel.cs" />
-    <Compile Include="PolicyManager.cs" />
+    <Compile Include="Managers\PolicyManager.cs" />
     <Compile Include="Helpers.cs" />
     <Compile Include="Models\ProsperityModel.cs" />
-    <Compile Include="PopulationManager.cs" />
+    <Compile Include="Managers\PopulationManager.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UI\PopulationOptionVM.cs" />

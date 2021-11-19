@@ -3,6 +3,7 @@ using TaleWorlds.CampaignSystem.SandBox.GameComponents;
 using TaleWorlds.Localization;
 using static Populations.PopulationManager;
 using static Populations.PolicyManager;
+using TaleWorlds.Core;
 
 namespace Populations.Models
 {
@@ -10,6 +11,7 @@ namespace Populations.Models
     {
         public override ExplainedNumber CalculateInfluenceChange(Clan clan, bool includeDescriptions = false)
         {
+            //InformationManager.DisplayMessage(new InformationMessage("Influence model running..."));
             ExplainedNumber baseResult = base.CalculateInfluenceChange(clan, includeDescriptions);
 
             foreach (Settlement settlement in clan.Settlements)

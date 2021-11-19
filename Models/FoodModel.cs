@@ -24,6 +24,7 @@ namespace Populations.Models
 
         public ExplainedNumber CalculateTownFoodChangeInternal(Town town, bool includeDescriptions)
 		{
+			//InformationManager.DisplayMessage(new InformationMessage("Food model running..."));
 			ExplainedNumber result = new ExplainedNumber(0f, includeDescriptions, null);
 
 			// ------- Pops / Prosperity consumption ---------

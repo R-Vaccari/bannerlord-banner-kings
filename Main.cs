@@ -22,7 +22,6 @@ namespace Populations
                 {
                     CampaignGameStarter campaignStarter = (CampaignGameStarter)gameStarter;
                     campaignStarter.AddBehavior(new SettlementBehavior());
-                    campaignStarter.AddBehavior(new PopulationManager.SaveBehaviour());
 
                     campaignStarter.AddModel(new ProsperityModel());
                     campaignStarter.AddModel(new TaxModel());
@@ -31,6 +30,8 @@ namespace Populations
                     campaignStarter.AddModel(new MilitiaModel());
                     campaignStarter.AddModel(new InfluenceModel());
                     campaignStarter.AddModel(new LoyaltyModel());
+                    campaignStarter.AddModel(new VillageProductionModel());
+
                 } catch (Exception e)
                 {
                 }
