@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Populations.UI.Items;
+using System;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
+using TaleWorlds.Core.ViewModelCollection;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using static Populations.PolicyManager;
@@ -20,6 +22,8 @@ namespace Populations
             private PopulationOptionVM _conscriptionToogle;
             private PopulationOptionVM _nobleExemptionToogle;
             private PopulationOptionVM _subsidizeMilitiaToogle;
+            private SelectorVM<MilitiaItemVM> _militiaSelector;
+            private SelectorVM<TaxItemVM> _taxSelector;
             private Settlement settlement;
 
             public PopulationVM(Settlement settlement)
@@ -71,7 +75,114 @@ namespace Populations
                                 SubsidizeToogle = vm;
                                 break;
                         }
-                    }   
+                    }
+
+                    int militiaIndex = 0;
+                    MilitiaPolicy militiaPolicy = PolicyManager.GetMilitiaPolicy(settlement);
+                    if (militiaPolicy == MilitiaPolicy.Melee)
+                        militiaIndex = 1;
+                    else if (militiaPolicy == MilitiaPolicy.Ranged)
+                        militiaIndex = 2;
+                    MilitiaSelector = new SelectorVM<MilitiaItemVM>(0, new Action<SelectorVM<MilitiaItemVM>>(this.OnMilitiaChange));
+                    MilitiaSelector.SetOnChangeAction(null);
+                    foreach (MilitiaPolicy policy in _militiaPolicies)
+                    {
+                        MilitiaItemVM item = new MilitiaItemVM(policy, true);
+                        MilitiaSelector.AddItem(item);
+                    }
+                    MilitiaSelector.SetOnChangeAction(OnMilitiaChange);
+                    MilitiaSelector.SelectedIndex = militiaIndex;
+
+
+                    int taxIndex = 0;
+                    TaxType taxPolicy = PolicyManager.GetSettlementTax(settlement);
+                    if (taxPolicy == TaxType.High)
+                        taxIndex = 1;
+                    else if (taxPolicy == TaxType.Low)
+                        taxIndex = 2;
+                    TaxSelector = new SelectorVM<TaxItemVM>(0, new Action<SelectorVM<TaxItemVM>>(this.OnTaxChange));
+                    TaxSelector.SetOnChangeAction(null);
+                    foreach (TaxType policy in _taxPolicies)
+                    {
+                        TaxItemVM item = new TaxItemVM(policy, true);
+                        TaxSelector.AddItem(item);
+                    }
+                    TaxSelector.SetOnChangeAction(OnTaxChange);
+                    TaxSelector.SelectedIndex = taxIndex;
+                }
+            }
+
+            private void OnMilitiaChange(SelectorVM<MilitiaItemVM> obj)
+            {
+                if (obj.SelectedItem != null)
+                {
+                    MilitiaItemVM selectedItem = obj.SelectedItem;
+                    PolicyManager.UpdateMilitiaPolicy(settlement, selectedItem.policy);
+                }
+            }
+
+            private void OnTaxChange(SelectorVM<TaxItemVM> obj)
+            {
+                if (obj.SelectedItem != null)
+                {
+                    TaxItemVM selectedItem = obj.SelectedItem;
+                    PolicyManager.UpdateTaxPolicy(settlement, selectedItem.policy);
+                }
+            }
+
+            private IEnumerable<TaxType> _taxPolicies
+            {
+                get
+                {
+                    yield return TaxType.Standard;
+                    yield return TaxType.High;
+                    yield return TaxType.Low;
+                    yield break;
+                }
+            }
+
+            private IEnumerable<MilitiaPolicy> _militiaPolicies
+            {
+                get
+                {
+                    yield return MilitiaPolicy.None;
+                    yield return MilitiaPolicy.Melee;
+                    yield return MilitiaPolicy.Ranged;
+                    yield break;
+                }
+            }
+
+            [DataSourceProperty]
+            public SelectorVM<TaxItemVM> TaxSelector
+            {
+                get
+                {
+                    return this._taxSelector;
+                }
+                set
+                {
+                    if (value != this._taxSelector)
+                    {
+                        this._taxSelector = value;
+                        base.OnPropertyChangedWithValue(value, "TaxSelector");
+                    }
+                }
+            }
+
+            [DataSourceProperty]
+            public SelectorVM<MilitiaItemVM> MilitiaSelector
+            {
+                get
+                {
+                    return this._militiaSelector;
+                }
+                set
+                {
+                    if (value != this._militiaSelector)
+                    {
+                        this._militiaSelector = value;
+                        base.OnPropertyChangedWithValue(value, "MilitiaSelector");
+                    }
                 }
             }
 

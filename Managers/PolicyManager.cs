@@ -7,6 +7,7 @@ namespace Populations
     {
         private static readonly Dictionary<Settlement, List<PolicyElement>> POLICIES = new Dictionary<Settlement, List<PolicyElement>>();
         private static readonly Dictionary<Settlement, TaxType> TAXES = new Dictionary<Settlement, TaxType>();
+        private static readonly Dictionary<Settlement, MilitiaPolicy> MILITIAS = new Dictionary<Settlement, MilitiaPolicy>();
 
         public static bool IsSettlementPoliciesSet(Settlement settlement) => POLICIES.ContainsKey(settlement);
         public static List<PolicyElement> GetSettlementPolicies(Settlement settlement)
@@ -32,14 +33,39 @@ namespace Populations
             }
         }
 
+        public static MilitiaPolicy GetMilitiaPolicy(Settlement settlement)
+        {
+            if (MILITIAS.ContainsKey(settlement))
+                return MILITIAS[settlement];
+            else
+            {
+                MILITIAS.Add(settlement, MilitiaPolicy.None);
+                return MilitiaPolicy.None;
+            }
+        }
+
+        public static void UpdateMilitiaPolicy(Settlement settlement, MilitiaPolicy policy)
+        {
+            if (MILITIAS.ContainsKey(settlement))
+                MILITIAS[settlement] = policy;
+            else MILITIAS.Add(settlement, policy);
+        }
+
+        public static void UpdateTaxPolicy(Settlement settlement, TaxType policy)
+        {
+            if (TAXES.ContainsKey(settlement))
+                TAXES[settlement] = policy;
+            else TAXES.Add(settlement, policy);
+        }
+
         public static TaxType GetSettlementTax(Settlement settlement)
         {
             if (TAXES.ContainsKey(settlement))
                 return TAXES[settlement];
             else
             {
-                TAXES.Add(settlement, TaxType.STANDARD);
-                return TaxType.STANDARD;
+                TAXES.Add(settlement, TaxType.Standard);
+                return TaxType.Standard;
             }
         }
 
@@ -73,6 +99,13 @@ namespace Populations
             }
         }
 
+        public enum MilitiaPolicy
+        {
+            None,
+            Melee,
+            Ranged
+        }
+
         public enum PolicyType
         {
             EXPORT_SLAVES,
@@ -85,9 +118,9 @@ namespace Populations
 
         public enum TaxType
         {
-            HIGH,
-            STANDARD,
-            LOW
+            High,
+            Standard,
+            Low
         }
     }
 }

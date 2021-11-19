@@ -68,7 +68,7 @@ namespace Populations.UI
 			return this;
 		}
 
-		// Token: 0x060001CE RID: 462 RVA: 0x0000E190 File Offset: 0x0000C390
+
 		public void OnPress()
 		{
 			bool flag = this.OnPressAction != null;

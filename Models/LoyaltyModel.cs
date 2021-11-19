@@ -32,12 +32,12 @@ namespace Populations.Models
                     baseResult.Add((float)nobles * NOBLE_EXEMPTION_LOYALTY, new TextObject("Nobles exemption policy"));
                 }
 
-                if (GetSettlementTax(town.Settlement) == TaxType.LOW)
+                if (GetSettlementTax(town.Settlement) == TaxType.Low)
                 {
                     int totalPops = data.TotalPop;
                     baseResult.Add((float)(totalPops - slaves) * TAX_POLICY_LOYALTY * -1f, new TextObject("Low tax policy"));
                 }
-                else if (GetSettlementTax(town.Settlement) == TaxType.HIGH)
+                else if (GetSettlementTax(town.Settlement) == TaxType.High)
                 {
                     int totalPops = data.TotalPop;
                     baseResult.Add((float)(totalPops - slaves) * TAX_POLICY_LOYALTY, new TextObject("High tax policy"));

@@ -26,9 +26,9 @@ namespace Populations.Models
             }
 
             TaxType taxType = GetSettlementTax(town.Settlement);
-            if (taxType == TaxType.LOW)
+            if (taxType == TaxType.Low)
                 baseResult.AddFactor(-0.15f, new TextObject("Tax policy"));
-            else if (taxType == TaxType.HIGH)
+            else if (taxType == TaxType.High)
                 baseResult.AddFactor(0.15f, new TextObject("Tax policy"));
 
             if (IsPolicyEnacted(town.Settlement, PolicyType.SELF_INVEST))
@@ -47,9 +47,9 @@ namespace Populations.Models
         {
             double baseResult;
             TaxType taxType = GetSettlementTax(village.Settlement);
-            if (taxType == TaxType.STANDARD)
+            if (taxType == TaxType.Standard)
                 baseResult = marketIncome * 0.07f;
-            else if (taxType == TaxType.HIGH)
+            else if (taxType == TaxType.High)
                 baseResult = marketIncome * 0.1f;
             else baseResult = marketIncome * 0.4f;
 
