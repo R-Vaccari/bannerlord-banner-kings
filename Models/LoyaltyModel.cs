@@ -1,7 +1,6 @@
 ﻿
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.SandBox.GameComponents;
-using TaleWorlds.Core;
 using TaleWorlds.Localization;
 using static Populations.PolicyManager;
 using static Populations.PopulationManager;
@@ -18,26 +17,26 @@ namespace Populations.Models
         {
 
             ExplainedNumber baseResult = base.CalculateLoyaltyChange(town, includeDescriptions);
-            if (IsSettlementPopulated(town.Settlement))
+            if (PopulationConfig.Instance.PopulationManager != null && PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
             {
                 //InformationManager.DisplayMessage(new InformationMessage("Loyalty model running..."));
-                PopulationData data = GetPopData(town.Settlement);
+                PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(town.Settlement);
                 int slaves = data.GetTypeCount(PopType.Slaves);
-                bool surplusExists = PopSurplusExists(town.Settlement, PopType.Slaves, true);
+                bool surplusExists = PopulationConfig.Instance.PopulationManager.PopSurplusExists(town.Settlement, PopType.Slaves, true);
                 baseResult.Add((float)slaves * SLAVE_LOYALTY * (surplusExists ? 1.2f : 1f), new TextObject("Slave population"));
 
-                if (IsPolicyEnacted(town.Settlement, PolicyType.EXEMPTION))
+                if (PopulationConfig.Instance.PolicyManager.IsPolicyEnacted(town.Settlement, PolicyType.EXEMPTION))
                 {
                     int nobles = data.GetTypeCount(PopType.Nobles);
                     baseResult.Add((float)nobles * NOBLE_EXEMPTION_LOYALTY, new TextObject("Nobles exemption policy"));
                 }
 
-                if (GetSettlementTax(town.Settlement) == TaxType.Low)
+                if (PopulationConfig.Instance.PolicyManager.GetSettlementTax(town.Settlement) == TaxType.Low)
                 {
                     int totalPops = data.TotalPop;
                     baseResult.Add((float)(totalPops - slaves) * TAX_POLICY_LOYALTY * -1f, new TextObject("Low tax policy"));
                 }
-                else if (GetSettlementTax(town.Settlement) == TaxType.High)
+                else if (PopulationConfig.Instance.PolicyManager.GetSettlementTax(town.Settlement) == TaxType.High)
                 {
                     int totalPops = data.TotalPop;
                     baseResult.Add((float)(totalPops - slaves) * TAX_POLICY_LOYALTY, new TextObject("High tax policy"));

@@ -1,7 +1,7 @@
 ﻿using Populations.Components;
 using Populations.UI;
 using System;
-
+using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.GameMenus;
@@ -22,13 +22,14 @@ namespace Populations.Behaviors
 
         public override void SyncData(IDataStore dataStore)
         {
+
         }
 
         private void HourlyTickParty(MobileParty caravan)
         {
             try
             {
-                if (caravan != null && CARAVANS.Contains(caravan) && caravan.MapEvent == null)
+                if (caravan != null && PopulationConfig.Instance.PopulationManager.IsPartyACaravan(caravan) && caravan.MapEvent == null)
                 {
                     Settlement target = caravan.HomeSettlement;
                     if (caravan.Ai.AiState == AIState.VisitingVillage)
@@ -39,10 +40,10 @@ namespace Populations.Behaviors
                             {
                                 EnterSettlementAction.ApplyForParty(caravan, target);
                                 int slaves = Helpers.Helpers.GetPrisionerCount(caravan.PrisonRoster);
-                                PopulationData data = GetPopData(target);
+                                PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(target);
                                 data.UpdatePopType(PopType.Slaves, slaves);
                                 DestroyPartyAction.Apply(null, caravan);
-                                CARAVANS.Remove(caravan);
+                                PopulationConfig.Instance.PopulationManager.RemoveCaravan(caravan);
                                 InformationManager.DisplayMessage(new InformationMessage(String.Format("{0} has received {1} slaves.",
                                     target.Name.ToString(), slaves)));
                             }
@@ -51,7 +52,7 @@ namespace Populations.Behaviors
                         else
                         {
                             DestroyPartyAction.Apply(null, caravan);
-                            CARAVANS.Remove(caravan);
+                            PopulationConfig.Instance.PopulationManager.RemoveCaravan(caravan);
                         }
 
                     } else
@@ -60,10 +61,10 @@ namespace Populations.Behaviors
                         {
                             EnterSettlementAction.ApplyForParty(caravan, target);
                             int slaves = Helpers.Helpers.GetPrisionerCount(caravan.PrisonRoster);
-                            PopulationData data = GetPopData(target);
+                            PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(target);
                             data.UpdatePopType(PopType.Slaves, slaves);
                             DestroyPartyAction.Apply(null, caravan);
-                            CARAVANS.Remove(caravan);
+                            PopulationConfig.Instance.PopulationManager.RemoveCaravan(caravan);
                             InformationManager.DisplayMessage(new InformationMessage(String.Format("{0} has received {1} slaves.",
                                 target.Name.ToString(), slaves)));
                         } else
@@ -83,13 +84,19 @@ namespace Populations.Behaviors
         {
             if (settlement != null)
             {
+
+                if (PopulationConfig.Instance.PopulationManager == null && PopulationConfig.Instance.PolicyManager == null)
+                    PopulationConfig.Instance.InitManagers(new Dictionary<Settlement, PopulationData>(), new List<MobileParty>(),
+                        new Dictionary<Settlement, List<PolicyManager.PolicyElement>>(), new Dictionary<Settlement, PolicyManager.TaxType>(),
+                        new Dictionary<Settlement, PolicyManager.MilitiaPolicy>());
+
                 UpdateSettlementPops(settlement);
-                if (PolicyManager.IsPolicyEnacted(settlement, PolicyManager.PolicyType.EXPORT_SLAVES) && DecideSendSlaveCaravan(settlement))
+                if (PopulationConfig.Instance.PolicyManager.IsPolicyEnacted(settlement, PolicyManager.PolicyType.EXPORT_SLAVES) && DecideSendSlaveCaravan(settlement))
                 {
                     Village target = null;
                     MBReadOnlyList<Village> villages = settlement.BoundVillages;
                     foreach (Village village in villages)
-                        if (village.Settlement != null && IsSettlementPopulated(village.Settlement) && !PopSurplusExists(village.Settlement, PopType.Slaves)) 
+                        if (village.Settlement != null && PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(village.Settlement) && !PopulationConfig.Instance.PopulationManager.PopSurplusExists(village.Settlement, PopType.Slaves)) 
                         {
                             target = village;
                             break;
@@ -106,7 +113,7 @@ namespace Populations.Behaviors
             {
                 MBReadOnlyList<Village> villages = settlement.BoundVillages;
                 if (villages != null && villages.Count > 0)
-                    if (PopSurplusExists(settlement, PopType.Slaves))
+                    if (PopulationConfig.Instance.PopulationManager.PopSurplusExists(settlement, PopType.Slaves))
                         return true;
             }
             return false;
@@ -115,12 +122,12 @@ namespace Populations.Behaviors
         private void SendSlaveCaravan(Village target)
         {
             Settlement origin = target.MarketTown.Settlement;
-            PopulationData data = GetPopData(origin);
+            PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(origin);
             int slaves = (int)((double)data.GetTypeCount(PopType.Slaves) * 0.005d);
             data.UpdatePopType(PopType.Slaves, slaves * -1);
 
             MobileParty caravan = PopulationPartyComponent.CreateSlaveCaravan("slavecaravan_", origin, target.Settlement, "Slave Caravan from {0}", slaves);
-            CARAVANS.Add(caravan);
+            PopulationConfig.Instance.PopulationManager.AddCaravan(caravan);
         }
 
         private void OnGameCreated(CampaignGameStarter campaignGameStarter)
@@ -136,7 +143,7 @@ namespace Populations.Behaviors
         {
             args.optionLeaveType = GameMenuOption.LeaveType.Manage;
             Settlement currentSettlement = Settlement.CurrentSettlement;
-            return currentSettlement.OwnerClan == Hero.MainHero.Clan && Populations.PopulationManager.IsSettlementPopulated(currentSettlement);
+            return currentSettlement.OwnerClan == Hero.MainHero.Clan && PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(currentSettlement);
         }
 
         public static void game_menu_town_manage_town_on_consequence(MenuCallbackArgs args) => UIManager.instance.InitializeReligionWindow();

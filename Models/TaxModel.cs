@@ -10,32 +10,37 @@ namespace Populations.Models
     class TaxModel : DefaultSettlementTaxModel
     {
 
+        public static readonly float NOBLE_OUTPUT = 1f;
+        public static readonly float CRAFTSMEN_OUTPUT = 0.2f;
+        public static readonly float SERF_OUTPUT = 0.05f;
+        public static readonly float SLAVE_OUTPUT = 0.05f;
+
         public override ExplainedNumber CalculateTownTax(Town town, bool includeDescriptions = false)
         {
             ExplainedNumber baseResult = base.CalculateTownTax(town, includeDescriptions);
 
-            if (IsSettlementPopulated(town.Settlement))
+            if (PopulationConfig.Instance.PopulationManager != null && PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
             {
-                PopulationData data = GetPopData(town.Settlement);
+                PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(town.Settlement);
                 double nobles = 0;
-                if (!IsPolicyEnacted(town.Settlement, PolicyType.EXEMPTION)) nobles = data.GetTypeCount(PopType.Nobles);
+                if (!PopulationConfig.Instance.PolicyManager.IsPolicyEnacted(town.Settlement, PolicyType.EXEMPTION)) nobles = data.GetTypeCount(PopType.Nobles);
                 double craftsmen = data.GetTypeCount(PopType.Nobles);
                 double serfs = data.GetTypeCount(PopType.Nobles);
                 double slaves = data.GetTypeCount(PopType.Slaves);
                 baseResult.Add((float)(nobles * NOBLE_OUTPUT + craftsmen * CRAFTSMEN_OUTPUT + serfs * SERF_OUTPUT + slaves * SLAVE_OUTPUT), new TextObject("Population output"));
             }
 
-            TaxType taxType = GetSettlementTax(town.Settlement);
+            TaxType taxType = PopulationConfig.Instance.PolicyManager.GetSettlementTax(town.Settlement);
             if (taxType == TaxType.Low)
                 baseResult.AddFactor(-0.15f, new TextObject("Tax policy"));
             else if (taxType == TaxType.High)
                 baseResult.AddFactor(0.15f, new TextObject("Tax policy"));
 
-            if (IsPolicyEnacted(town.Settlement, PolicyType.SELF_INVEST))
+            if (PopulationConfig.Instance.PolicyManager.IsPolicyEnacted(town.Settlement, PolicyType.SELF_INVEST))
                 if (baseResult.ResultNumber > 0)
                     baseResult.Add(baseResult.ResultNumber * -1f, new TextObject("Self-investment policy"));
 
-            if (IsPolicyEnacted(town.Settlement, PolicyType.CONSCRIPTION))
+            if (PopulationConfig.Instance.PolicyManager.IsPolicyEnacted(town.Settlement, PolicyType.CONSCRIPTION))
             {
 
             }
@@ -45,17 +50,19 @@ namespace Populations.Models
 
         public override int CalculateVillageTaxFromIncome(Village village, int marketIncome)
         {
-            double baseResult;
-            TaxType taxType = GetSettlementTax(village.Settlement);
-            if (taxType == TaxType.Standard)
-                baseResult = marketIncome * 0.07f;
-            else if (taxType == TaxType.High)
-                baseResult = marketIncome * 0.1f;
-            else baseResult = marketIncome * 0.4f;
+            double baseResult = marketIncome * 0.07;
+            if (PopulationConfig.Instance.PolicyManager != null)
+            {
+                TaxType taxType = PopulationConfig.Instance.PolicyManager.GetSettlementTax(village.Settlement);
+                 if (taxType == TaxType.High)
+                    baseResult = marketIncome * 0.1f;
+                else if (taxType == TaxType.Low) baseResult = marketIncome * 0.04f;
 
-            if (village.Settlement != null && IsPolicyEnacted(village.Settlement, PolicyType.SELF_INVEST))
-                if (baseResult > 0)
-                    baseResult *= 0f;
+                if (village.Settlement != null && PopulationConfig.Instance.PolicyManager.IsPolicyEnacted(village.Settlement, PolicyType.SELF_INVEST))
+                    if (baseResult > 0)
+                        baseResult *= 0f;
+
+            }
 
             return (int)baseResult;
         }

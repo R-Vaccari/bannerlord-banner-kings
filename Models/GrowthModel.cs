@@ -12,14 +12,14 @@ namespace Populations.Models
 
         public void CalculatePopulationGrowth(Settlement settlement)
         {
-            PopulationData data = GetPopData(settlement);
+            PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(settlement);
             int growthFactor = GetDataGrowthFactor(data);
             data.UpdatePopulation(settlement, growthFactor, PopType.None);
         }
 
         public void CalculateHearthGrowth(Village village, ref ExplainedNumber baseResult)
         {
-            PopulationData data = GetPopData(village.Settlement);
+            PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(village.Settlement);
             int growthFactor = GetDataGrowthFactor(data);
             float hearths = MBRandom.RandomFloatRanged(growthFactor / 3, growthFactor / 6);
             data.UpdatePopulation(village.Settlement, (int)MBRandom.RandomFloatRanged(hearths * 3f, hearths * 6f), PopType.None);

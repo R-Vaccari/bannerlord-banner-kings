@@ -11,6 +11,11 @@ namespace Populations.Models
     class FoodModel : DefaultSettlementFoodModel
     {
 
+		private static readonly float SLAVE_MINE_FOOD = -0.01f;
+		private static readonly float NOBLE_FOOD = -0.01f;
+		private static readonly float CRAFTSMEN_FOOD = -0.005f;
+		private static readonly float SERF_FOOD = 0.005f;
+
 		public FoodModel()
         {
 			DefaultSettlementFoodModel.FoodStocksUpperLimit = 500;
@@ -18,7 +23,7 @@ namespace Populations.Models
 
         public override ExplainedNumber CalculateTownFoodStocksChange(Town town, bool includeDescriptions = false)
         {
-			if (IsSettlementPopulated(town.Settlement)) return CalculateTownFoodChangeInternal(town, includeDescriptions);
+			if (PopulationConfig.Instance.PopulationManager != null && PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement)) return CalculateTownFoodChangeInternal(town, includeDescriptions);
 			else return base.CalculateTownFoodStocksChange(town, includeDescriptions);
         }
 
@@ -28,7 +33,7 @@ namespace Populations.Models
 			ExplainedNumber result = new ExplainedNumber(0f, includeDescriptions, null);
 
 			// ------- Pops / Prosperity consumption ---------
-			PopulationData data = GetPopData(town.Settlement);
+			PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(town.Settlement);
 			int citySerfs = data.GetTypeCount(PopType.Serfs);
 			if (!town.IsUnderSiege)
             {
@@ -131,9 +136,9 @@ namespace Populations.Models
 
 		private float CalculateVillageProduction(Village village)
         {
-			if (IsSettlementPopulated(village.Settlement))
+			if (PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(village.Settlement))
 			{
-				PopulationData data = GetPopData(village.Settlement);
+				PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(village.Settlement);
 				int serfs = data.GetTypeCount(PopType.Serfs);
 				int slaves = data.GetTypeCount(PopType.Slaves);
 				if (IsVillageProducingFood(village))

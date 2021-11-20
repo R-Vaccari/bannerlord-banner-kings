@@ -16,9 +16,9 @@ namespace Populations.Models
         public override ExplainedNumber CalculateMilitiaChange(Settlement settlement, bool includeDescriptions = false)
         {
             ExplainedNumber baseResult = base.CalculateMilitiaChange(settlement, includeDescriptions);
-            if (IsSettlementPopulated(settlement) && IsPolicyEnacted(settlement, PolicyType.CONSCRIPTION))
+            if (PopulationConfig.Instance.PopulationManager != null && PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(settlement) && PopulationConfig.Instance.PolicyManager.IsPolicyEnacted(settlement, PolicyType.CONSCRIPTION))
             {
-                PopulationData data = GetPopData(settlement);
+                PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(settlement);
                 int serfs = data.GetTypeCount(PopType.Serfs);
                 baseResult.Add((float)serfs * 0.005f, new TextObject("Conscripted serfs"));
             }
@@ -29,7 +29,7 @@ namespace Populations.Models
         public override float CalculateEliteMilitiaSpawnChance(Settlement settlement)
         {
             float baseResult = base.CalculateEliteMilitiaSpawnChance(settlement);
-            if (IsSettlementPopulated(settlement) && IsPolicyEnacted(settlement, PolicyType.SUBSIDIZE_MILITIA))
+            if (PopulationConfig.Instance.PopulationManager != null && PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(settlement) && PopulationConfig.Instance.PolicyManager.IsPolicyEnacted(settlement, PolicyType.SUBSIDIZE_MILITIA))
             {
                 if (baseResult == 0f)
                     baseResult = 0.15f;

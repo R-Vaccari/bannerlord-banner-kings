@@ -15,7 +15,7 @@ namespace Populations.Models
 
         public override ExplainedNumber CalculateDailyConstructionPower(Town town, bool includeDescriptions = false)
         {
-			if (IsSettlementPopulated(town.Settlement))
+			if (PopulationConfig.Instance.PopulationManager != null && PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
             {
 				ExplainedNumber result = new ExplainedNumber(0f, includeDescriptions, null);
 				this.CalculateDailyConstructionPowerInternal(town, ref result, includeDescriptions);
@@ -26,7 +26,7 @@ namespace Populations.Models
 
         public override int CalculateDailyConstructionPowerWithoutBoost(Town town)
         {
-			if (IsSettlementPopulated(town.Settlement))
+			if (PopulationConfig.Instance.PopulationManager != null && PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
 			{
 				ExplainedNumber result = new ExplainedNumber(0f, false, null);
 				return this.CalculateDailyConstructionPowerInternal(town, ref result, true); ;
@@ -36,9 +36,9 @@ namespace Populations.Models
 
         public override int GetBoostCost(Town town)
         {
-			if (IsSettlementPopulated(town.Settlement))
+			if (PopulationConfig.Instance.PopulationManager != null && PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
 			{
-				PopulationData data = GetPopData(town.Settlement);
+				PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(town.Settlement);
 				int craftsmen = data.GetTypeCount(PopType.Craftsmen);
 				return (int)((float)craftsmen / 2f);
 			}
@@ -47,9 +47,9 @@ namespace Populations.Models
 
         public override int GetBoostAmount(Town town)
         {
-			if (IsSettlementPopulated(town.Settlement))
+			if (PopulationConfig.Instance.PopulationManager != null && PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
 			{
-				PopulationData data = GetPopData(town.Settlement);
+				PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(town.Settlement);
 				int craftsmen = data.GetTypeCount(PopType.Craftsmen);
 				int slaves = data.GetTypeCount(PopType.Slaves);
 
@@ -62,14 +62,14 @@ namespace Populations.Models
 
 		private float GetSlaveWorkforce(Settlement settlement)
         {
-			PopulationData data = GetPopData(settlement);
+			PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(settlement);
 			int slaves = data.GetTypeCount(PopType.Slaves);
 			return (float)slaves * SLAVE_CONSTRUCTION;
 		}
 
 		private int CalculateDailyConstructionPowerInternal(Town town, ref ExplainedNumber result, bool omitBoost = false)
 		{
-			PopulationData data = GetPopData(town.Settlement);
+			PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(town.Settlement);
 			int slaves = data.GetTypeCount(PopType.Slaves);
 			result.Add(GetSlaveWorkforce(town.Settlement), new TextObject("Slave workforce"), null);
 
@@ -170,19 +170,14 @@ namespace Populations.Models
 
 		private const float HammerMultiplier = 0.01f;
 
-		// Token: 0x04000EF0 RID: 3824
 		private const int VeryLowLoyaltyValue = 25;
 
-		// Token: 0x04000EF1 RID: 3825
 		private const float MediumLoyaltyValue = 50f;
 
-		// Token: 0x04000EF2 RID: 3826
 		private const float HighLoyaltyValue = 75f;
 
-		// Token: 0x04000EF3 RID: 3827
 		private const float HighestLoyaltyValue = 100f;
 
-		// Token: 0x04000EF4 RID: 3828
 		private readonly TextObject ProductionFromMarketText = new TextObject("{=vaZDJGMx}Construction from Market", null);
 		private readonly TextObject CultureText = GameTexts.FindText("str_culture", null);
 		private readonly TextObject BoostText = new TextObject("{=!}Boost from craftsmen", null);

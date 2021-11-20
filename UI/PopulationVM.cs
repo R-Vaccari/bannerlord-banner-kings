@@ -36,20 +36,20 @@ namespace Populations
             {
                 base.RefreshValues();
                 PopInfo.Clear();
-                PopulationData data = GetPopData(Settlement.CurrentSettlement);
+                PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(Settlement.CurrentSettlement);
                 if (data != null && data.Classes != null)
                 {
                     data.Classes.ForEach(popClass => PopInfo.Add(new PopulationInfoVM(
                         popClass.type.ToString(), popClass.count)
                         ));
 
-                    List<PolicyElement> elements = PolicyManager.GetSettlementPolicies(settlement);
+                    List<PolicyElement> elements = PopulationConfig.Instance.PolicyManager.GetSettlementPolicies(settlement);
                     foreach (PolicyElement policy in elements)
                     {
                         PopulationOptionVM vm = new PopulationOptionVM()
                         .SetAsBooleanOption(policy.description, policy.isChecked, delegate (bool value)
                         {
-                            PolicyManager.UpdatePolicy(settlement, policy.type, value);
+                            PopulationConfig.Instance.PolicyManager.UpdatePolicy(settlement, policy.type, value);
                             InformationManager.DisplayMessage(new InformationMessage(
                                 String.Format("Policies update for {0}", settlement.Name.ToString()))
                             );
@@ -78,7 +78,7 @@ namespace Populations
                     }
 
                     int militiaIndex = 0;
-                    MilitiaPolicy militiaPolicy = PolicyManager.GetMilitiaPolicy(settlement);
+                    MilitiaPolicy militiaPolicy = PopulationConfig.Instance.PolicyManager.GetMilitiaPolicy(settlement);
                     if (militiaPolicy == MilitiaPolicy.Melee)
                         militiaIndex = 1;
                     else if (militiaPolicy == MilitiaPolicy.Ranged)
@@ -95,7 +95,7 @@ namespace Populations
 
 
                     int taxIndex = 0;
-                    TaxType taxPolicy = PolicyManager.GetSettlementTax(settlement);
+                    TaxType taxPolicy = PopulationConfig.Instance.PolicyManager.GetSettlementTax(settlement);
                     if (taxPolicy == TaxType.High)
                         taxIndex = 1;
                     else if (taxPolicy == TaxType.Low)
@@ -117,7 +117,7 @@ namespace Populations
                 if (obj.SelectedItem != null)
                 {
                     MilitiaItemVM selectedItem = obj.SelectedItem;
-                    PolicyManager.UpdateMilitiaPolicy(settlement, selectedItem.policy);
+                    PopulationConfig.Instance.PolicyManager.UpdateMilitiaPolicy(settlement, selectedItem.policy);
                 }
             }
 
@@ -126,7 +126,7 @@ namespace Populations
                 if (obj.SelectedItem != null)
                 {
                     TaxItemVM selectedItem = obj.SelectedItem;
-                    PolicyManager.UpdateTaxPolicy(settlement, selectedItem.policy);
+                    PopulationConfig.Instance.PolicyManager.UpdateTaxPolicy(settlement, selectedItem.policy);
                 }
             }
 
@@ -145,7 +145,7 @@ namespace Populations
             {
                 get
                 {
-                    yield return MilitiaPolicy.None;
+                    yield return MilitiaPolicy.Balanced;
                     yield return MilitiaPolicy.Melee;
                     yield return MilitiaPolicy.Ranged;
                     yield break;

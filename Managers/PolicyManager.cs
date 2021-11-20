@@ -3,22 +3,29 @@ using TaleWorlds.CampaignSystem;
 
 namespace Populations
 {
-    public static class PolicyManager
+    public class PolicyManager
     {
-        private static readonly Dictionary<Settlement, List<PolicyElement>> POLICIES = new Dictionary<Settlement, List<PolicyElement>>();
-        private static readonly Dictionary<Settlement, TaxType> TAXES = new Dictionary<Settlement, TaxType>();
-        private static readonly Dictionary<Settlement, MilitiaPolicy> MILITIAS = new Dictionary<Settlement, MilitiaPolicy>();
+        private Dictionary<Settlement, List<PolicyElement>> POLICIES = new Dictionary<Settlement, List<PolicyElement>>();
+        private Dictionary<Settlement, TaxType> TAXES = new Dictionary<Settlement, TaxType>();
+        private Dictionary<Settlement, MilitiaPolicy> MILITIAS = new Dictionary<Settlement, MilitiaPolicy>();
 
-        public static bool IsSettlementPoliciesSet(Settlement settlement) => POLICIES.ContainsKey(settlement);
-        public static List<PolicyElement> GetSettlementPolicies(Settlement settlement)
+        public PolicyManager(Dictionary<Settlement, List<PolicyElement>> POLICIES, Dictionary<Settlement, TaxType> TAXES, Dictionary<Settlement, MilitiaPolicy> MILITIAS)
+        {
+            this.POLICIES = POLICIES;
+            this.TAXES = TAXES;
+            this.MILITIAS = MILITIAS;
+        }
+
+        public bool IsSettlementPoliciesSet(Settlement settlement) => POLICIES.ContainsKey(settlement);
+        public List<PolicyElement> GetSettlementPolicies(Settlement settlement)
         {
             if (!POLICIES.ContainsKey(settlement))
-                AddSettlementPolicies(settlement);
+                InitializeSettlementPolicies(settlement);
 
             return POLICIES[settlement];
         }
 
-        public static void AddSettlementPolicies(Settlement settlement)
+        public void InitializeSettlementPolicies(Settlement settlement)
         {
             List<PolicyElement> policies = new List<PolicyElement>();
             if (settlement.IsTown)
@@ -33,32 +40,32 @@ namespace Populations
             }
         }
 
-        public static MilitiaPolicy GetMilitiaPolicy(Settlement settlement)
+        public MilitiaPolicy GetMilitiaPolicy(Settlement settlement)
         {
             if (MILITIAS.ContainsKey(settlement))
                 return MILITIAS[settlement];
             else
             {
-                MILITIAS.Add(settlement, MilitiaPolicy.None);
-                return MilitiaPolicy.None;
+                MILITIAS.Add(settlement, MilitiaPolicy.Balanced);
+                return MilitiaPolicy.Balanced;
             }
         }
 
-        public static void UpdateMilitiaPolicy(Settlement settlement, MilitiaPolicy policy)
+        public void UpdateMilitiaPolicy(Settlement settlement, MilitiaPolicy policy)
         {
             if (MILITIAS.ContainsKey(settlement))
                 MILITIAS[settlement] = policy;
             else MILITIAS.Add(settlement, policy);
         }
 
-        public static void UpdateTaxPolicy(Settlement settlement, TaxType policy)
+        public void UpdateTaxPolicy(Settlement settlement, TaxType policy)
         {
             if (TAXES.ContainsKey(settlement))
                 TAXES[settlement] = policy;
             else TAXES.Add(settlement, policy);
         }
 
-        public static TaxType GetSettlementTax(Settlement settlement)
+        public TaxType GetSettlementTax(Settlement settlement)
         {
             if (TAXES.ContainsKey(settlement))
                 return TAXES[settlement];
@@ -69,7 +76,7 @@ namespace Populations
             }
         }
 
-        public static bool IsPolicyEnacted(Settlement settlement, PolicyType policy)
+        public bool IsPolicyEnacted(Settlement settlement, PolicyType policy)
         {
             PolicyElement element = null;
             if (POLICIES.ContainsKey(settlement))
@@ -77,7 +84,7 @@ namespace Populations
             return element != null ? element.isChecked : false;
         }
 
-        public static void UpdatePolicy(Settlement settlement, PolicyType policy, bool value)
+        public void UpdatePolicy(Settlement settlement, PolicyType policy, bool value)
         {
             PolicyElement element = POLICIES[settlement].Find(x => x.type == policy);
             if (element != null)
@@ -99,9 +106,17 @@ namespace Populations
             }
         }
 
-        public enum MilitiaPolicy
+        public enum WorkforcePolicy
         {
             None,
+            Land_Expansion,
+            Martial_Law,
+            Construction
+        }
+
+        public enum MilitiaPolicy
+        {
+            Balanced,
             Melee,
             Ranged
         }

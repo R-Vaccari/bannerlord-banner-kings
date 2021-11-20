@@ -8,21 +8,25 @@ namespace Populations
 {
     public class PopulationManager
     {
-        protected static Dictionary<Settlement, PopulationData> POPS = new Dictionary<Settlement, PopulationData>();
-        public static readonly List<MobileParty> CARAVANS = new List<MobileParty>();
+        private Dictionary<Settlement, PopulationData> POPS = new Dictionary<Settlement, PopulationData>();
+        private List<MobileParty> CARAVANS = new List<MobileParty>();
 
-        public static readonly float NOBLE_OUTPUT = 1f;
-        public static readonly float CRAFTSMEN_OUTPUT = 0.2f;
-        public static readonly float SERF_OUTPUT = 0.05f;
-        public static readonly float SLAVE_OUTPUT = 0.05f;
+        public PopulationManager(Dictionary<Settlement, PopulationData> pops, List<MobileParty> caravans)
+        {
+            this.POPS = pops;
+            this.CARAVANS = caravans;
+        }
 
-        public static readonly float SLAVE_MINE_FOOD = -0.01f;
-        public static readonly float NOBLE_FOOD = -0.01f;
-        public static readonly float CRAFTSMEN_FOOD = -0.005f;
-        public static readonly float SERF_FOOD = 0.005f;
-
-        public static bool IsSettlementPopulated(Settlement settlement) => POPS.ContainsKey(settlement);
-        public static PopulationData GetPopData(Settlement settlement) => POPS[settlement];
+        public bool IsSettlementPopulated(Settlement settlement)
+        {
+            if (POPS != null) return POPS.ContainsKey(settlement);
+            else return false;
+        }
+        public PopulationData GetPopData(Settlement settlement) => POPS[settlement];
+        public void AddSettlementData(Settlement settlement, PopulationData data) => POPS.Add(settlement, data);
+        public bool IsPartyACaravan(MobileParty party) => CARAVANS.Contains(party);
+        public void AddCaravan(MobileParty party) => CARAVANS.Add(party);
+        public void RemoveCaravan(MobileParty party) => CARAVANS.Remove(party);
 
         public static void InitializeSettlementPops(Settlement settlement)
         {
@@ -41,13 +45,10 @@ namespace Populations
             classes.Add(new PopulationClass(PopType.Slaves, slaves));
 
             PopulationData data = new PopulationData(classes);
-            POPS.Add(settlement, data);
-
-            if (!PolicyManager.IsSettlementPoliciesSet(settlement))
-                PolicyManager.AddSettlementPolicies(settlement);
+            PopulationConfig.Instance.PopulationManager.AddSettlementData(settlement, data);
         }
 
-        public static bool PopSurplusExists(Settlement settlement, PopType type, bool maxSurplus = false)
+        public bool PopSurplusExists(Settlement settlement, PopType type, bool maxSurplus = false)
         {
             PopulationData data = GetPopData(settlement);
             int pops = data.GetTypeCount(type);
@@ -64,7 +65,7 @@ namespace Populations
             if ((settlement.IsCastle || (settlement.IsTown && settlement.Town != null)
                 || (settlement.IsVillage && settlement.Village != null)) && settlement.OwnerClan != null)
             {
-                if (!POPS.ContainsKey(settlement))
+                if (!PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
                     InitializeSettlementPops(settlement);
                 else
                     new GrowthModel().CalculatePopulationGrowth(settlement);
@@ -96,7 +97,7 @@ namespace Populations
             settlement.Name.ToString() == "Kapudere" || settlement.Name.ToString() == "Qasira" || settlement.Name.ToString() == "Epicrotea"
             || settlement.Name.ToString() == "Argoron";
 
-        public static int GetPopCountOverLimit(Settlement settlement, PopType type)
+        public int GetPopCountOverLimit(Settlement settlement, PopType type)
         {
             Dictionary<PopType, float[]> desiredTypes = GetDesiredPopTypes(settlement);
             PopulationData data = GetPopData(settlement);
