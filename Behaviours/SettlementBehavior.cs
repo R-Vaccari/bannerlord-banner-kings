@@ -7,6 +7,7 @@ using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.GameMenus;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
+using static Populations.PolicyManager;
 using static Populations.PopulationManager;
 
 namespace Populations.Behaviors
@@ -88,7 +89,7 @@ namespace Populations.Behaviors
                 if (PopulationConfig.Instance.PopulationManager == null && PopulationConfig.Instance.PolicyManager == null)
                     PopulationConfig.Instance.InitManagers(new Dictionary<Settlement, PopulationData>(), new List<MobileParty>(),
                         new Dictionary<Settlement, List<PolicyManager.PolicyElement>>(), new Dictionary<Settlement, PolicyManager.TaxType>(),
-                        new Dictionary<Settlement, PolicyManager.MilitiaPolicy>());
+                        new Dictionary<Settlement, PolicyManager.MilitiaPolicy>(), new Dictionary <Settlement, WorkforcePolicy>());
 
                 UpdateSettlementPops(settlement);
                 if (PopulationConfig.Instance.PolicyManager.IsPolicyEnacted(settlement, PolicyManager.PolicyType.EXPORT_SLAVES) && DecideSendSlaveCaravan(settlement))
@@ -143,7 +144,7 @@ namespace Populations.Behaviors
         {
             args.optionLeaveType = GameMenuOption.LeaveType.Manage;
             Settlement currentSettlement = Settlement.CurrentSettlement;
-            return currentSettlement.OwnerClan == Hero.MainHero.Clan && PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(currentSettlement);
+            return currentSettlement.OwnerClan == Hero.MainHero.Clan && PopulationConfig.Instance.PopulationManager != null && PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(currentSettlement);
         }
 
         public static void game_menu_town_manage_town_on_consequence(MenuCallbackArgs args) => UIManager.instance.InitializeReligionWindow();

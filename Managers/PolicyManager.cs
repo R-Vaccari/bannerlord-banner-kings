@@ -8,12 +8,15 @@ namespace Populations
         private Dictionary<Settlement, List<PolicyElement>> POLICIES = new Dictionary<Settlement, List<PolicyElement>>();
         private Dictionary<Settlement, TaxType> TAXES = new Dictionary<Settlement, TaxType>();
         private Dictionary<Settlement, MilitiaPolicy> MILITIAS = new Dictionary<Settlement, MilitiaPolicy>();
+        private Dictionary<Settlement, WorkforcePolicy> WORKFORCE = new Dictionary<Settlement, WorkforcePolicy>();
 
-        public PolicyManager(Dictionary<Settlement, List<PolicyElement>> POLICIES, Dictionary<Settlement, TaxType> TAXES, Dictionary<Settlement, MilitiaPolicy> MILITIAS)
+        public PolicyManager(Dictionary<Settlement, List<PolicyElement>> POLICIES, Dictionary<Settlement, TaxType> TAXES, 
+            Dictionary<Settlement, MilitiaPolicy> MILITIAS, Dictionary<Settlement, WorkforcePolicy> WORKFORCE)
         {
             this.POLICIES = POLICIES;
             this.TAXES = TAXES;
             this.MILITIAS = MILITIAS;
+            this.WORKFORCE = WORKFORCE;
         }
 
         public bool IsSettlementPoliciesSet(Settlement settlement) => POLICIES.ContainsKey(settlement);
@@ -76,6 +79,18 @@ namespace Populations
             }
         }
 
+
+        public WorkforcePolicy GetSettlementWork(Settlement settlement)
+        {
+            if (WORKFORCE.ContainsKey(settlement))
+                return WORKFORCE[settlement];
+            else
+            {
+                WORKFORCE.Add(settlement, WorkforcePolicy.None);
+                return WorkforcePolicy.None;
+            }
+        }
+
         public bool IsPolicyEnacted(Settlement settlement, PolicyType policy)
         {
             PolicyElement element = null;
@@ -89,6 +104,13 @@ namespace Populations
             PolicyElement element = POLICIES[settlement].Find(x => x.type == policy);
             if (element != null)
                 element.isChecked = value;
+        }
+
+        public void UpdateWorkPolicy(Settlement settlement, WorkforcePolicy policy)
+        {
+            if (WORKFORCE.ContainsKey(settlement))
+                WORKFORCE[settlement] = policy;
+            else WORKFORCE.Add(settlement, policy);
         }
 
         public class PolicyElement

@@ -114,6 +114,7 @@
     <Compile Include="Managers\PopulationManager.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UI\Items\WorkItemVM.cs" />
     <Compile Include="UI\Items\TaxItemVM.cs" />
     <Compile Include="UI\Items\MilitiaItemVM.cs" />
     <Compile Include="UI\PopulationOptionVM.cs" />

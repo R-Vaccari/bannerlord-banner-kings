@@ -22,8 +22,9 @@ namespace Populations
             private PopulationOptionVM _conscriptionToogle;
             private PopulationOptionVM _nobleExemptionToogle;
             private PopulationOptionVM _subsidizeMilitiaToogle;
-            private SelectorVM<MilitiaItemVM> _militiaSelector;
+            private SelectorVM<MilitiaItemVM> _militiaSelector; 
             private SelectorVM<TaxItemVM> _taxSelector;
+            private SelectorVM<WorkItemVM> _workSelector;
             private Settlement settlement;
 
             public PopulationVM(Settlement settlement)
@@ -50,9 +51,7 @@ namespace Populations
                         .SetAsBooleanOption(policy.description, policy.isChecked, delegate (bool value)
                         {
                             PopulationConfig.Instance.PolicyManager.UpdatePolicy(settlement, policy.type, value);
-                            InformationManager.DisplayMessage(new InformationMessage(
-                                String.Format("Policies update for {0}", settlement.Name.ToString()))
-                            );
+                           
                         }, new TextObject(policy.hint));
                         switch (policy.type)
                         {
@@ -109,6 +108,25 @@ namespace Populations
                     }
                     TaxSelector.SetOnChangeAction(OnTaxChange);
                     TaxSelector.SelectedIndex = taxIndex;
+
+
+                    int workIndex = 0;
+                    WorkforcePolicy workPolicy = PopulationConfig.Instance.PolicyManager.GetSettlementWork(settlement);
+                    if (workPolicy == WorkforcePolicy.Land_Expansion)
+                        workIndex = 1;
+                    else if (workPolicy == WorkforcePolicy.Martial_Law)
+                        workIndex = 2;
+                    else if (workPolicy == WorkforcePolicy.Construction)
+                        workIndex = 3;
+                    WorkSelector = new SelectorVM<WorkItemVM>(0, new Action<SelectorVM<WorkItemVM>>(this.OnWorkChange));
+                    WorkSelector.SetOnChangeAction(null);
+                    foreach (WorkforcePolicy policy in _workPolicies)
+                    {
+                        WorkItemVM item = new WorkItemVM(policy, true);
+                        WorkSelector.AddItem(item);
+                    }
+                    WorkSelector.SetOnChangeAction(OnWorkChange);
+                    WorkSelector.SelectedIndex = workIndex;
                 }
             }
 
@@ -127,6 +145,28 @@ namespace Populations
                 {
                     TaxItemVM selectedItem = obj.SelectedItem;
                     PopulationConfig.Instance.PolicyManager.UpdateTaxPolicy(settlement, selectedItem.policy);
+                }
+            }
+
+            private void OnWorkChange(SelectorVM<WorkItemVM> obj)
+            {
+                if (obj.SelectedItem != null)
+                {
+                    WorkItemVM selectedItem = obj.SelectedItem;
+                    PopulationConfig.Instance.PolicyManager.UpdateWorkPolicy(settlement, selectedItem.policy);
+                }
+            }
+
+
+            private IEnumerable<WorkforcePolicy> _workPolicies
+            {
+                get
+                {
+                    yield return WorkforcePolicy.None;
+                    yield return WorkforcePolicy.Land_Expansion;
+                    yield return WorkforcePolicy.Martial_Law;
+                    yield return WorkforcePolicy.Construction;
+                    yield break;
                 }
             }
 
@@ -149,6 +189,23 @@ namespace Populations
                     yield return MilitiaPolicy.Melee;
                     yield return MilitiaPolicy.Ranged;
                     yield break;
+                }
+            }
+            
+            [DataSourceProperty]
+            public SelectorVM<WorkItemVM> WorkSelector
+            {
+                get
+                {
+                    return this._workSelector;
+                }
+                set
+                {
+                    if (value != this._workSelector)
+                    {
+                        this._workSelector = value;
+                        base.OnPropertyChangedWithValue(value, "WorkSelector");
+                    }
                 }
             }
 
@@ -284,7 +341,12 @@ namespace Populations
                 }
             }
 
-            public void ExecuteClose() => UIManager.instance.CloseUI();  
+            public void ExecuteClose()
+            {
+                InformationManager.DisplayMessage(new InformationMessage(String
+                    .Format("Policies update for {0}", settlement.Name.ToString())));
+                UIManager.instance.CloseUI();
+            }
         }
     } 
 }
