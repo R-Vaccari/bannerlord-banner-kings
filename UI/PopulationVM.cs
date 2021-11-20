@@ -1,4 +1,5 @@
-﻿using Populations.UI.Items;
+﻿using Populations.Models;
+using Populations.UI.Items;
 using System;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
@@ -51,6 +52,7 @@ namespace Populations
                         .SetAsBooleanOption(policy.description, policy.isChecked, delegate (bool value)
                         {
                             PopulationConfig.Instance.PolicyManager.UpdatePolicy(settlement, policy.type, value);
+                            this.RefreshValues();
                            
                         }, new TextObject(policy.hint));
                         switch (policy.type)
@@ -227,6 +229,16 @@ namespace Populations
             }
 
             [DataSourceProperty]
+            public string AdministrativeCost
+            {
+                get
+                {
+                    float cost = new AdministrativeModel().CalculateAdministrativeCost(settlement);
+                    return (cost * 100f).ToString() + '%' ;
+                }
+            }
+
+            [DataSourceProperty]
             public SelectorVM<MilitiaItemVM> MilitiaSelector
             {
                 get
@@ -344,7 +356,7 @@ namespace Populations
             public void ExecuteClose()
             {
                 InformationManager.DisplayMessage(new InformationMessage(String
-                    .Format("Policies update for {0}", settlement.Name.ToString())));
+                    .Format("Policies updated for {0}", settlement.Name.ToString())));
                 UIManager.instance.CloseUI();
             }
         }

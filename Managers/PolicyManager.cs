@@ -39,7 +39,6 @@ namespace Populations
                 policies.Add(new PolicyElement("Conscript the lowmen", "Extensive recruitment will draft serfs into the militia, costing gold and reducing the productive workforce", false, PolicyType.CONSCRIPTION));
                 policies.Add(new PolicyElement("Subsidize the militia", "Improve militia quality by subsidizing their equipment and trainning", false, PolicyType.SUBSIDIZE_MILITIA));
                 policies.Add(new PolicyElement("Exempt nobles from taxes", "Exempt nobles from taxes, making them vouch in your favor", false, PolicyType.EXEMPTION));
-                POLICIES.Add(settlement, policies);
             } else if (settlement.IsVillage)
             {
                 policies.Add(new PolicyElement("Accelerate population growth", "Population will grow faster at the cost of influence", false, PolicyType.POP_GROWTH));
@@ -47,7 +46,7 @@ namespace Populations
                 policies.Add(new PolicyElement("Conscript the lowmen", "Extensive recruitment will draft serfs into the militia, costing gold and reducing the productive workforce", false, PolicyType.CONSCRIPTION));
                 policies.Add(new PolicyElement("Subsidize the militia", "Improve militia quality by subsidizing their equipment and trainning", false, PolicyType.SUBSIDIZE_MILITIA));
                 policies.Add(new PolicyElement("Exempt nobles from taxes", "Exempt nobles from taxes, making them vouch in your favor", false, PolicyType.EXEMPTION));
-            } else if (settlement.IsCastle)
+            } else 
             {
                 policies.Add(new PolicyElement("Allow slaves to be exported", "Slave caravans will be formed when slave population is big", true, PolicyType.EXPORT_SLAVES));
                 policies.Add(new PolicyElement("Accelerate population growth", "Population will grow faster at the cost of influence", false, PolicyType.POP_GROWTH));
@@ -56,6 +55,8 @@ namespace Populations
                 policies.Add(new PolicyElement("Subsidize the militia", "Improve militia quality by subsidizing their equipment and trainning", false, PolicyType.SUBSIDIZE_MILITIA));
                 policies.Add(new PolicyElement("Exempt nobles from taxes", "Exempt nobles from taxes, making them vouch in your favor", false, PolicyType.EXEMPTION));
             }
+
+            POLICIES.Add(settlement, policies);
         }
 
         public MilitiaPolicy GetMilitiaPolicy(Settlement settlement)

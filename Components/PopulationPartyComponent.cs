@@ -22,7 +22,7 @@ namespace Populations.Components
         {
             return MobileParty.CreateParty(id + origin.Name.ToString() + target.Name.ToString(), new PopulationPartyComponent(origin, target, nameTemplate), delegate (MobileParty mobileParty)
             {
-                mobileParty.SetPartyUsedByQuest(false);
+                mobileParty.SetPartyUsedByQuest(true);
                 mobileParty.Party.Visuals.SetMapIconAsDirty();
                 mobileParty.SetInititave(0f, 1f, float.MaxValue);
                 mobileParty.ShouldJoinPlayerBattles = false;

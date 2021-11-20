@@ -11,9 +11,9 @@ namespace Populations.Models
     {
 
         public static readonly float NOBLE_OUTPUT = 1f;
-        public static readonly float CRAFTSMEN_OUTPUT = 0.2f;
-        public static readonly float SERF_OUTPUT = 0.05f;
-        public static readonly float SLAVE_OUTPUT = 0.05f;
+        public static readonly float CRAFTSMEN_OUTPUT = 0.25f;
+        public static readonly float SERF_OUTPUT = 0.1f;
+        public static readonly float SLAVE_OUTPUT = 0.125f;
 
         public override ExplainedNumber CalculateTownTax(Town town, bool includeDescriptions = false)
         {
@@ -28,24 +28,22 @@ namespace Populations.Models
                 double serfs = data.GetTypeCount(PopType.Nobles);
                 double slaves = data.GetTypeCount(PopType.Slaves);
                 baseResult.Add((float)(nobles * NOBLE_OUTPUT + craftsmen * CRAFTSMEN_OUTPUT + serfs * SERF_OUTPUT + slaves * SLAVE_OUTPUT), new TextObject("Population output"));
+
+                TaxType taxType = PopulationConfig.Instance.PolicyManager.GetSettlementTax(town.Settlement);
+                if (taxType == TaxType.Low)
+                    baseResult.AddFactor(-0.15f, new TextObject("Tax policy"));
+                else if (taxType == TaxType.High)
+                    baseResult.AddFactor(0.15f, new TextObject("Tax policy"));
+
+                float admCost = new AdministrativeModel().CalculateAdministrativeCost(town.Settlement);
+                baseResult.AddFactor(admCost * -1f, new TextObject("Administrative costs"));
+
+                if (PopulationConfig.Instance.PolicyManager.IsPolicyEnacted(town.Settlement, PolicyType.SELF_INVEST))
+                    if (baseResult.ResultNumber > 0)
+                        baseResult.Add(baseResult.ResultNumber * -1f, new TextObject("Self-investment policy"));
             }
 
-            TaxType taxType = PopulationConfig.Instance.PolicyManager.GetSettlementTax(town.Settlement);
-            if (taxType == TaxType.Low)
-                baseResult.AddFactor(-0.15f, new TextObject("Tax policy"));
-            else if (taxType == TaxType.High)
-                baseResult.AddFactor(0.15f, new TextObject("Tax policy"));
-
-            if (PopulationConfig.Instance.PolicyManager.IsPolicyEnacted(town.Settlement, PolicyType.SELF_INVEST))
-                if (baseResult.ResultNumber > 0)
-                    baseResult.Add(baseResult.ResultNumber * -1f, new TextObject("Self-investment policy"));
-
-            if (PopulationConfig.Instance.PolicyManager.IsPolicyEnacted(town.Settlement, PolicyType.CONSCRIPTION))
-            {
-
-            }
-
-                return baseResult;
+            return baseResult;
         }
 
         public override int CalculateVillageTaxFromIncome(Village village, int marketIncome)
@@ -58,10 +56,12 @@ namespace Populations.Models
                     baseResult = marketIncome * 0.1f;
                 else if (taxType == TaxType.Low) baseResult = marketIncome * 0.04f;
 
+                float admCost = new AdministrativeModel().CalculateAdministrativeCost(village.Settlement);
+                baseResult *= admCost * -1f;
+
                 if (village.Settlement != null && PopulationConfig.Instance.PolicyManager.IsPolicyEnacted(village.Settlement, PolicyType.SELF_INVEST))
                     if (baseResult > 0)
-                        baseResult *= 0f;
-
+                        baseResult -= baseResult * -1f;
             }
 
             return (int)baseResult;

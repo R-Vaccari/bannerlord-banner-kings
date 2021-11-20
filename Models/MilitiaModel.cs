@@ -10,7 +10,20 @@ namespace Populations.Models
     {
         public override void CalculateMilitiaSpawnRate(Settlement settlement, out float meleeTroopRate, out float rangedTroopRate)
         {
-            base.CalculateMilitiaSpawnRate(settlement, out meleeTroopRate, out rangedTroopRate);
+            if (PopulationConfig.Instance.PolicyManager != null)
+            {
+                MilitiaPolicy policy = PopulationConfig.Instance.PolicyManager.GetMilitiaPolicy(settlement);
+                if (policy == MilitiaPolicy.Melee)
+                {
+                    meleeTroopRate = 0.75f;
+                    rangedTroopRate = 0.25f;
+                } else if (policy == MilitiaPolicy.Ranged)
+                {
+                    meleeTroopRate = 0.25f;
+                    rangedTroopRate = 0.75f;
+                } else base.CalculateMilitiaSpawnRate(settlement, out meleeTroopRate, out rangedTroopRate);
+            } else
+                base.CalculateMilitiaSpawnRate(settlement, out meleeTroopRate, out rangedTroopRate);
         }
 
         public override ExplainedNumber CalculateMilitiaChange(Settlement settlement, bool includeDescriptions = false)
@@ -29,12 +42,10 @@ namespace Populations.Models
         public override float CalculateEliteMilitiaSpawnChance(Settlement settlement)
         {
             float baseResult = base.CalculateEliteMilitiaSpawnChance(settlement);
-            if (PopulationConfig.Instance.PopulationManager != null && PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(settlement) && PopulationConfig.Instance.PolicyManager.IsPolicyEnacted(settlement, PolicyType.SUBSIDIZE_MILITIA))
-            {
-                if (baseResult == 0f)
-                    baseResult = 0.15f;
-                else baseResult *= 1.2f;
-            }
+            if (PopulationConfig.Instance.PopulationManager != null && PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(settlement) 
+                && PopulationConfig.Instance.PolicyManager.IsPolicyEnacted(settlement, PolicyType.SUBSIDIZE_MILITIA))
+                baseResult += 0.2f;
+            
             return baseResult;
         }
     }
