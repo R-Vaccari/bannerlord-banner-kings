@@ -79,7 +79,13 @@ namespace Populations.Models
 					result.AddFactor(DefaultPerks.Steward.MasterOfWarcraft.SecondaryBonus, DefaultPerks.Steward.MasterOfWarcraft.Name);	
 			}
 
-			// ------- Pops consumption ---------
+			if (PopulationConfig.Instance.PolicyManager.GetSettlementWork(town.Settlement) == PolicyManager.WorkforcePolicy.Martial_Law)
+            {
+				float militia = town.Militia;
+				result.Add(militia * -0.05f, new TextObject("Martial Law policy"));
+            }
+
+			// ------- Other factors ---------
 			Clan ownerClan = town.Settlement.OwnerClan;
 			if (((ownerClan != null) ? ownerClan.Kingdom : null) != null && town.Settlement.OwnerClan.Kingdom.ActivePolicies.Contains(DefaultPolicies.HuntingRights))
 			{

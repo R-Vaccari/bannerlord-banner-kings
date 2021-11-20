@@ -31,6 +31,7 @@ namespace Populations
                     campaignStarter.AddModel(new InfluenceModel());
                     campaignStarter.AddModel(new LoyaltyModel());
                     campaignStarter.AddModel(new VillageProductionModel());
+                    campaignStarter.AddModel(new SecurityModel());
 
                 } catch (Exception e)
                 {

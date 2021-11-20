@@ -44,7 +44,7 @@ namespace Populations
                         popClass.type.ToString(), popClass.count)
                         ));
 
-                    List<PolicyElement> elements = PopulationConfig.Instance.PolicyManager.GetSettlementPolicies(settlement);
+                    List<PolicyElement> elements = PopulationConfig.Instance.PolicyManager.GetDefaultDecisions(settlement);
                     foreach (PolicyElement policy in elements)
                     {
                         PopulationOptionVM vm = new PopulationOptionVM()

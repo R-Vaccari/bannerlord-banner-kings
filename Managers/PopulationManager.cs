@@ -143,9 +143,9 @@ namespace Populations
                 return new Dictionary<PopType, float[]>()
                 {
                     { PopType.Nobles, new float[] {0.01f, 0.03f} },
-                    { PopType.Craftsmen, new float[] {0.06f, 0.09f} },
-                    { PopType.Serfs, new float[] {0.4f, 0.5f} },
-                    { PopType.Slaves, new float[] {0.30f, 0.45f} }
+                    { PopType.Craftsmen, new float[] {0.06f, 0.08f} },
+                    { PopType.Serfs, new float[] {0.6f, 0.7f} },
+                    { PopType.Slaves, new float[] {0.1f, 0.2f} }
                 };
             else return null;
         }

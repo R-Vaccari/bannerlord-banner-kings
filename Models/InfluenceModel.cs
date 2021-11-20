@@ -27,7 +27,12 @@ namespace Populations.Models
                     baseResult.Add((float)nobles * 0.01f, new TextObject(string.Format("Nobles influence from {0}", settlement.Name)));
 
                     if (PopulationConfig.Instance.PolicyManager.IsPolicyEnacted(settlement, PolicyType.POP_GROWTH))
-                        baseResult.AddFactor(-0.5f, new TextObject(string.Format("Population growth policy at {0}", settlement.Name)));
+                    {
+                        if (baseResult.ResultNumber > 1)
+                            baseResult.AddFactor(-0.5f, new TextObject(string.Format("Population growth policy at {0}", settlement.Name)));
+                        else baseResult.Add(-0.5f, new TextObject(string.Format("Population growth policy at {0}", settlement.Name)));
+                    }
+                        
                 }
             }
                 

@@ -25,7 +25,7 @@ namespace Populations.UI
 
         public PopulationWindow populationWindow;
 
-        public void InitializeReligionWindow()
+        public void InitializePopulationWindow()
         {
             if (MapScreen.Instance != null)
             {

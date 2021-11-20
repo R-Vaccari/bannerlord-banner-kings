@@ -137,7 +137,15 @@ namespace Populations.Behaviors
             campaignGameStarter.AddGameMenuOption("town", "manage_population", "{=!}Manage population",
                 new GameMenuOption.OnConditionDelegate(game_menu_town_manage_town_on_condition),
                 new GameMenuOption.OnConsequenceDelegate(game_menu_town_manage_town_on_consequence), false, 5, false);
-          
+
+            campaignGameStarter.AddGameMenuOption("castle", "manage_population", "{=!}Manage population",
+               new GameMenuOption.OnConditionDelegate(game_menu_town_manage_town_on_condition),
+               new GameMenuOption.OnConsequenceDelegate(game_menu_town_manage_town_on_consequence), false, 5, false);
+
+            campaignGameStarter.AddGameMenuOption("village", "manage_population", "{=!}Manage population",
+               new GameMenuOption.OnConditionDelegate(game_menu_town_manage_town_on_condition),
+               new GameMenuOption.OnConsequenceDelegate(game_menu_town_manage_town_on_consequence), false, 5, false);
+
         }
 
         private static bool game_menu_town_manage_town_on_condition(MenuCallbackArgs args)
@@ -147,7 +155,7 @@ namespace Populations.Behaviors
             return currentSettlement.OwnerClan == Hero.MainHero.Clan && PopulationConfig.Instance.PopulationManager != null && PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(currentSettlement);
         }
 
-        public static void game_menu_town_manage_town_on_consequence(MenuCallbackArgs args) => UIManager.instance.InitializeReligionWindow();
+        public static void game_menu_town_manage_town_on_consequence(MenuCallbackArgs args) => UIManager.instance.InitializePopulationWindow();
         
 
        
