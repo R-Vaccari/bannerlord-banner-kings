@@ -7,6 +7,7 @@ using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.SandBox.CampaignBehaviors.AiBehaviors;
 using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade;
+using static Populations.PopulationManager;
 
 namespace Populations
 {
@@ -75,13 +76,21 @@ namespace Populations
             }
         }
 
-        [HarmonyPatch(typeof(AiPatrollingBehavior), "AiHourlyTick")]
-        class AiPatrolPatch
+        [HarmonyPatch(typeof(ChangeOwnerOfSettlementAction), "ApplyInternal")]
+        class ChangeOnwerPatch
         {
-            static bool Prefix(MobileParty mobileParty, PartyThinkParams p)
+            static bool Prefix(Settlement settlement, Hero newOwner, Hero capturerHero, ChangeOwnerOfSettlementAction.ChangeOwnerOfSettlementDetail detail)
             {
-                if (PopulationConfig.Instance.PopulationManager != null && PopulationConfig.Instance.PopulationManager.IsPartyACaravan(mobileParty))
-                    return false;
+                if (PopulationConfig.Instance.PopulationManager != null && PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
+                {
+                    PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(settlement);
+                    CultureObject originalOwnerCulture = settlement.Owner.Culture;
+                    if (settlement.Culture != newOwner.Culture)
+                    {
+
+                    }
+                    else data.Assimilation = 1f;
+                }
 
                 return true;
             }

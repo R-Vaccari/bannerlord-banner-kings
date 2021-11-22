@@ -8,19 +8,17 @@ namespace Populations.Components
 {
     class PopulationPartyComponent : PartyComponent
     {
-        private Settlement _origin;
         private Settlement _target;
-        private string _nameTemplate;
-        public PopulationPartyComponent(Settlement origin, Settlement target, string nameTemplate) : base()
+        private string _name;
+        public PopulationPartyComponent(Settlement target, string name) : base()
         {
-            _origin = target;
             _target = target;
-            _nameTemplate = nameTemplate;
+            _name = name;
         }
 
-        public static MobileParty CreateParty(string id, Settlement origin, Settlement target, string nameTemplate)
+        public static MobileParty CreateParty(string id, string origin, Settlement target, string name)
         {
-            return MobileParty.CreateParty(id + origin.Name.ToString() + target.Name.ToString(), new PopulationPartyComponent(origin, target, nameTemplate), delegate (MobileParty mobileParty)
+            return MobileParty.CreateParty(id + origin + target.Name.ToString(), new PopulationPartyComponent(target, String.Format(name, origin)), delegate (MobileParty mobileParty)
             {
                 mobileParty.SetPartyUsedByQuest(true);
                 mobileParty.Party.Visuals.SetMapIconAsDirty();
@@ -33,7 +31,7 @@ namespace Populations.Components
 
         public static MobileParty CreateSlaveCaravan(string id, Settlement origin, Settlement target, string nameTemplate, int slaves)
         {
-            MobileParty caravan = CreateParty(id, origin, target, nameTemplate);
+            MobileParty caravan = CreateParty(id, origin.Name.ToString(), target, nameTemplate);
             caravan.AddPrisoner(CharacterObject.All.FirstOrDefault(x => x.StringId == "vlandian_recruit_new"), slaves);
             caravan.InitializeMobileParty(origin.Culture.EliteCaravanPartyTemplate, origin.GatePosition, 0f, 0f, slaves);
             GiveMounts(ref caravan);
@@ -61,13 +59,13 @@ namespace Populations.Components
         {
             get
             {
-                return new TextObject(String.Format(_nameTemplate, HomeSettlement.Name.ToString()));
+                return new TextObject(String.Format(_name, HomeSettlement.Name.ToString()));
             }
         }
 
         public override Settlement HomeSettlement
         {
-            get => _origin;
+            get => _target;
         }
     }
 }

@@ -10,10 +10,10 @@ namespace Populations.Models
     class TaxModel : DefaultSettlementTaxModel
     {
 
-        public static readonly float NOBLE_OUTPUT = 1f;
-        public static readonly float CRAFTSMEN_OUTPUT = 0.25f;
-        public static readonly float SERF_OUTPUT = 0.1f;
-        public static readonly float SLAVE_OUTPUT = 0.125f;
+        public static readonly float NOBLE_OUTPUT = 2f;
+        public static readonly float CRAFTSMEN_OUTPUT = 0.75f;
+        public static readonly float SERF_OUTPUT = 0.2f;
+        public static readonly float SLAVE_OUTPUT = 0.3f;
 
         public override ExplainedNumber CalculateTownTax(Town town, bool includeDescriptions = false)
         {

@@ -193,7 +193,19 @@ namespace Populations
                     yield break;
                 }
             }
+
             
+            [DataSourceProperty]
+            public string Assimilation
+            {
+                get
+                {
+                    float result = new CultureModel().CalculateAssimilationChange(settlement);
+                    return (result * 100f).ToString() + '%';
+                }
+            }
+            
+
             [DataSourceProperty]
             public SelectorVM<WorkItemVM> WorkSelector
             {

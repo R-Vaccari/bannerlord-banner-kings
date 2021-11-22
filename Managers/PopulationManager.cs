@@ -35,7 +35,7 @@ namespace Populations
             List<PopulationClass> classes = new List<PopulationClass>();
 
             int nobles = (int)(popQuantityRef * MBRandom.RandomFloatRanged(desiredTypes[PopType.Nobles][0], desiredTypes[PopType.Nobles][1]));
-            int craftsmen = settlement.IsTown ? (int)(popQuantityRef * MBRandom.RandomFloatRanged(desiredTypes[PopType.Craftsmen][0], desiredTypes[PopType.Craftsmen][1])) : 0;
+            int craftsmen = !settlement.IsVillage ? (int)(popQuantityRef * MBRandom.RandomFloatRanged(desiredTypes[PopType.Craftsmen][0], desiredTypes[PopType.Craftsmen][1])) : 0;
             int serfs = (int)(popQuantityRef * MBRandom.RandomFloatRanged(desiredTypes[PopType.Serfs][0], desiredTypes[PopType.Serfs][1]));
             int slaves = (int)(popQuantityRef * MBRandom.RandomFloatRanged(desiredTypes[PopType.Slaves][0], desiredTypes[PopType.Slaves][1]));
 
@@ -44,7 +44,8 @@ namespace Populations
             classes.Add(new PopulationClass(PopType.Serfs, serfs));
             classes.Add(new PopulationClass(PopType.Slaves, slaves));
 
-            PopulationData data = new PopulationData(classes);
+            float assimilation = settlement.Culture == settlement.OwnerClan.Culture ? 1f : 0f;
+            PopulationData data = new PopulationData(classes, assimilation);
             PopulationConfig.Instance.PopulationManager.AddSettlementData(settlement, data);
         }
 
@@ -72,7 +73,9 @@ namespace Populations
             }
         }
 
-        private static int GetDesiredTotalPop(Settlement settlement)
+        public 
+
+         static int GetDesiredTotalPop(Settlement settlement)
         {
             if (settlement.IsCastle)
             {
@@ -111,9 +114,10 @@ namespace Populations
             if (settlement.IsCastle)
                 return new Dictionary<PopType, float[]>()
                 {
-                    { PopType.Nobles, new float[] {0.04f, 0.08f} },
+                    { PopType.Nobles, new float[] {0.02f, 0.06f} },
+                    { PopType.Craftsmen, new float[] {0.06f, 0.09f} },
                     { PopType.Serfs, new float[] {0.75f, 0.8f} },
-                    { PopType.Slaves, new float[] {0.15f, 0.25f} }
+                    { PopType.Slaves, new float[] {0.1f, 0.15f} }
                 };
             else if (settlement.IsVillage)
             {
@@ -163,11 +167,26 @@ namespace Populations
         {
             private List<PopulationClass> classes;
             private int totalPop;
+            private float assimilation;
 
-            public PopulationData(List<PopulationClass> classes)
+            public PopulationData(List<PopulationClass> classes, float assimilation)
             {
                 this.classes = classes;
                 classes.ForEach(popClass => TotalPop += popClass.count);
+                this.assimilation = assimilation;
+            }
+
+            public float Assimilation
+            {
+                get
+                {
+                    return assimilation;
+                }
+                set
+                {
+                    if (value != assimilation)
+                        assimilation = value;
+                }
             }
 
             public List<PopulationClass> Classes

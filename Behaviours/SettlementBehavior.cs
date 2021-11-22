@@ -92,6 +92,8 @@ namespace Populations.Behaviors
                         new Dictionary<Settlement, PolicyManager.MilitiaPolicy>(), new Dictionary <Settlement, WorkforcePolicy>());
 
                 UpdateSettlementPops(settlement);
+
+                // Send Slaves
                 if (PopulationConfig.Instance.PolicyManager.IsPolicyEnacted(settlement, PolicyManager.PolicyType.EXPORT_SLAVES) && DecideSendSlaveCaravan(settlement))
                 {
                     Village target = null;
@@ -105,11 +107,25 @@ namespace Populations.Behaviors
 
                     if (target != null) SendSlaveCaravan(target);
                 }
+
+                // Send Travellers
+                /*
+                int random = MBRandom.RandomInt(1, 100);
+                if (random == 1) 
+                {
+                    Settlement target = GetTownToTravel(settlement);
+                    bool bothPopulated = PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(target) &&
+                        PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(settlement);
+                    if (target != null && bothPopulated)
+                        SendTravellerParty(settlement, target);
+                }
+                */
             }
         }
 
         private bool DecideSendSlaveCaravan(Settlement settlement)
         {
+            
             if (settlement.IsTown && settlement.Town != null)
             {
                 MBReadOnlyList<Village> villages = settlement.BoundVillages;
@@ -118,6 +134,45 @@ namespace Populations.Behaviors
                         return true;
             }
             return false;
+        }
+
+        private Settlement GetTownToTravel(Settlement origin)
+        {
+            Kingdom kingdom = origin.OwnerClan.Kingdom;
+            if (kingdom != null)
+            {
+                List<Settlement> towns = new List<Settlement>();
+                if (towns.Count > 1)
+                {
+                    foreach (Settlement settlement in kingdom.Settlements)
+                        if (settlement.IsTown && settlement != origin)
+                            towns.Add(settlement);
+                    Settlement target = MBRandom.ChooseWeighted<Settlement>(towns, delegate
+                    {
+                        return 1f;
+                    });
+                    return target;
+                }
+            }
+
+            return null;
+        }
+
+        private void SendTravellerParty(Settlement origin, Settlement target)
+        {
+            PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(origin);
+            int random = MBRandom.RandomInt(1, 100);
+            if (random < 65)
+            {
+                int serfs = MBRandom.RandomInt(15, 50);
+                int craftsmen = MBRandom.RandomInt(2, 8);
+            } else if (random < 95)
+            {
+                int craftsmen = MBRandom.RandomInt(10, 25);
+            } else
+            {
+
+            }
         }
 
         private void SendSlaveCaravan(Village target)
