@@ -19,6 +19,12 @@ namespace Populations
             this.PolicyManager = new PolicyManager(policies, taxes, militias, workforce);
         }
 
+        public void InitManagers(PopulationManager populationManager, PolicyManager policyManager)
+        {
+            this.PopulationManager = populationManager;
+            this.PolicyManager = policyManager;
+        }
+
         public static PopulationConfig Instance
         {
             get => ConfigHolder.CONFIG;

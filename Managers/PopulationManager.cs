@@ -40,7 +40,7 @@ namespace Populations
             int slaves = (int)(popQuantityRef * MBRandom.RandomFloatRanged(desiredTypes[PopType.Slaves][0], desiredTypes[PopType.Slaves][1]));
 
             classes.Add(new PopulationClass(PopType.Nobles, nobles));
-            classes.Add(new PopulationClass(PopType.Craftsmen, craftsmen));
+            if (craftsmen > 0) classes.Add(new PopulationClass(PopType.Craftsmen, craftsmen));
             classes.Add(new PopulationClass(PopType.Serfs, serfs));
             classes.Add(new PopulationClass(PopType.Slaves, slaves));
 

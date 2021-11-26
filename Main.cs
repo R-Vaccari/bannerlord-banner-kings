@@ -85,9 +85,19 @@ namespace Populations
                 {
                     PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(settlement);
                     CultureObject originalOwnerCulture = settlement.Owner.Culture;
-                    if (settlement.Culture != newOwner.Culture)
+                    if (settlement.Culture != originalOwnerCulture)
                     {
-
+                        if (originalOwnerCulture != newOwner.Culture)
+                        {
+                            if (settlement.Culture != newOwner.Culture) //new owner is of different culture from settlement & previous owner
+                                data.Assimilation = 0f;
+                            else //same culture as settlement but different from previous owner
+                            {
+                                float result = 1f - data.Assimilation;
+                                data.Assimilation = result;
+                            }
+                        } //else do nothing, previous assimilation persists
+                            
                     }
                     else data.Assimilation = 1f;
                 }

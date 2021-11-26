@@ -48,13 +48,13 @@ namespace Populations.Models
 
         public override int CalculateVillageTaxFromIncome(Village village, int marketIncome)
         {
-            double baseResult = marketIncome * 0.07;
+            double baseResult = marketIncome * 0.7;
             if (PopulationConfig.Instance.PolicyManager != null)
             {
                 TaxType taxType = PopulationConfig.Instance.PolicyManager.GetSettlementTax(village.Settlement);
                  if (taxType == TaxType.High)
-                    baseResult = marketIncome * 0.1f;
-                else if (taxType == TaxType.Low) baseResult = marketIncome * 0.04f;
+                    baseResult = marketIncome * 1f;
+                else if (taxType == TaxType.Low) baseResult = marketIncome * 0.4f;
 
                 float admCost = new AdministrativeModel().CalculateAdministrativeCost(village.Settlement);
                 baseResult *= admCost * -1f;

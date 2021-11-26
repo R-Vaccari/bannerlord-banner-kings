@@ -14,6 +14,9 @@ namespace Populations.Behaviors
 {
     public class SettlementBehavior : CampaignBehaviorBase
     {
+
+        private PopulationManager populationManager;
+        private PolicyManager policyManager;
         public override void RegisterEvents()
         {
             CampaignEvents.DailyTickSettlementEvent.AddNonSerializedListener(this, new Action<Settlement>(DailySettlementTick));
@@ -23,7 +26,14 @@ namespace Populations.Behaviors
 
         public override void SyncData(IDataStore dataStore)
         {
+            if (dataStore.IsSaving)
+            {
+                populationManager = PopulationConfig.Instance.PopulationManager;
+                policyManager = PopulationConfig.Instance.PolicyManager;
+            }
 
+            dataStore.SyncData("pops", ref policyManager);
+            dataStore.SyncData("policies", ref policyManager);
         }
 
         private void HourlyTickParty(MobileParty caravan)
@@ -87,9 +97,15 @@ namespace Populations.Behaviors
             {
 
                 if (PopulationConfig.Instance.PopulationManager == null && PopulationConfig.Instance.PolicyManager == null)
-                    PopulationConfig.Instance.InitManagers(new Dictionary<Settlement, PopulationData>(), new List<MobileParty>(),
+                    if (populationManager == null && policyManager == null)
+                    {
+                        PopulationConfig.Instance.InitManagers(new Dictionary<Settlement, PopulationData>(), new List<MobileParty>(),
                         new Dictionary<Settlement, List<PolicyManager.PolicyElement>>(), new Dictionary<Settlement, PolicyManager.TaxType>(),
-                        new Dictionary<Settlement, PolicyManager.MilitiaPolicy>(), new Dictionary <Settlement, WorkforcePolicy>());
+                        new Dictionary<Settlement, PolicyManager.MilitiaPolicy>(), new Dictionary<Settlement, WorkforcePolicy>());
+                    } else
+                    {
+                        PopulationConfig.Instance.InitManagers(populationManager, policyManager);
+                    }
 
                 UpdateSettlementPops(settlement);
 

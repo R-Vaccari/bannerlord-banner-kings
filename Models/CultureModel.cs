@@ -1,4 +1,5 @@
-﻿using TaleWorlds.CampaignSystem;
+﻿using System;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using static Populations.PopulationManager;
 
@@ -25,7 +26,7 @@ namespace Populations.Models
                         change += (float)skill * 0.00005f;
                     }
 
-                    data.Assimilation += change;
+                    data.Assimilation = Math.Max(data.Assimilation + change, 0);
                     return data.Assimilation;
 
                 } else

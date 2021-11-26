@@ -97,6 +97,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Behaviours\SettlementBehavior.cs" />
+    <Compile Include="SaveDefiner.cs" />
     <Compile Include="Models\AdministrativeModel.cs" />
     <Compile Include="Models\SecurityModel.cs" />
     <Compile Include="PopulationConfig.cs" />
