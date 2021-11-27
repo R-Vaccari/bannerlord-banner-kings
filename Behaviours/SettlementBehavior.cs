@@ -112,6 +112,10 @@ namespace Populations.Behaviors
         {
             if (settlement != null)
             {
+                if (PopulationConfig.Instance.PopulationManager == null)
+                    PopulationConfig.Instance.InitManagers(new Dictionary<Settlement, PopulationData>(), new List<MobileParty>(),
+                    new Dictionary<Settlement, List<PolicyManager.PolicyElement>>(), new Dictionary<Settlement, PolicyManager.TaxType>(),
+                    new Dictionary<Settlement, PolicyManager.MilitiaPolicy>(), new Dictionary<Settlement, WorkforcePolicy>());
 
                 UpdateSettlementPops(settlement);
 
@@ -219,9 +223,9 @@ namespace Populations.Behaviors
                new GameMenuOption.OnConditionDelegate(game_menu_town_manage_town_on_condition),
                new GameMenuOption.OnConsequenceDelegate(game_menu_town_manage_town_on_consequence), false, 5, false);
 
-            campaignGameStarter.AddGameMenuOption("village", "manage_population", "{=!}Manage population",
-               new GameMenuOption.OnConditionDelegate(game_menu_town_manage_town_on_condition),
-               new GameMenuOption.OnConsequenceDelegate(game_menu_town_manage_town_on_consequence), false, 5, false);
+            //campaignGameStarter.AddGameMenuOption("village", "manage_population", "{=!}Manage population",
+            //   new GameMenuOption.OnConditionDelegate(game_menu_town_manage_town_on_condition),
+            //   new GameMenuOption.OnConsequenceDelegate(game_menu_town_manage_town_on_consequence), false, 5, false);
 
         }
 

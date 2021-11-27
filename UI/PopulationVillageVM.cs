@@ -14,21 +14,18 @@ namespace Populations
 {
     namespace UI
     {
-        public class PopulationVM : ViewModel
+        public class PopulationVillageVM : ViewModel
         {
             private MBBindingList<PopulationInfoVM> _popInfo;
-            private PopulationOptionVM _slaveToogle;
             private PopulationOptionVM _popAccelerateToogle;
             private PopulationOptionVM _selfInvestToogle;
-            private PopulationOptionVM _conscriptionToogle;
-            private PopulationOptionVM _nobleExemptionToogle;
             private PopulationOptionVM _subsidizeMilitiaToogle;
             private SelectorVM<MilitiaItemVM> _militiaSelector; 
             private SelectorVM<TaxItemVM> _taxSelector;
             private SelectorVM<WorkItemVM> _workSelector;
             private Settlement settlement;
 
-            public PopulationVM(Settlement settlement)
+            public PopulationVillageVM(Settlement settlement)
             {
                 this.settlement = settlement;
                 _popInfo = new MBBindingList<PopulationInfoVM>();
@@ -57,20 +54,11 @@ namespace Populations
                         }, new TextObject(policy.hint));
                         switch (policy.type)
                         {
-                            case PolicyType.EXPORT_SLAVES:
-                                SlaveToogle = vm;
-                                break;
                             case PolicyType.POP_GROWTH:
                                 AccelerateToogle = vm;
                                 break;
                             case PolicyType.SELF_INVEST:
                                 InvestToogle = vm;
-                                break;
-                            case PolicyType.CONSCRIPTION:
-                                ConscriptionToogle = vm;
-                                break;
-                            case PolicyType.EXEMPTION:
-                                ExemptionToogle = vm;
                                 break;
                             case PolicyType.SUBSIDIZE_MILITIA:
                                 SubsidizeToogle = vm;
@@ -165,8 +153,7 @@ namespace Populations
                 get
                 {
                     yield return WorkforcePolicy.None;
-                    yield return WorkforcePolicy.Martial_Law;
-                    yield return WorkforcePolicy.Construction;
+                    yield return WorkforcePolicy.Land_Expansion;
                     yield break;
                 }
             }
@@ -250,16 +237,6 @@ namespace Populations
             }
 
             [DataSourceProperty]
-            public string PopGrowth
-            {
-                get
-                {
-                    int growth = new GrowthModel().CalculatePopulationGrowth(settlement);
-                    return growth.ToString() + " (Daily)";
-                }
-            }
-
-            [DataSourceProperty]
             public SelectorVM<MilitiaItemVM> MilitiaSelector
             {
                 get
@@ -291,20 +268,6 @@ namespace Populations
             }
 
             [DataSourceProperty]
-            public PopulationOptionVM SlaveToogle
-            {
-                get => _slaveToogle;
-                set
-                {
-                    if (value != _slaveToogle)
-                    {
-                        _slaveToogle = value;
-                        base.OnPropertyChangedWithValue(value, "SlaveToogle");
-                    }
-                }
-            }
-
-            [DataSourceProperty]
             public PopulationOptionVM AccelerateToogle
             {
                 get => _popAccelerateToogle;
@@ -331,35 +294,6 @@ namespace Populations
                     }
                 }
             }
-
-            [DataSourceProperty]
-            public PopulationOptionVM ConscriptionToogle
-            {
-                get => _conscriptionToogle;
-                set
-                {
-                    if (value != _conscriptionToogle)
-                    {
-                        _conscriptionToogle = value;
-                        base.OnPropertyChangedWithValue(value, "ConscriptionToogle");
-                    }
-                }
-            }
-            
-            [DataSourceProperty]
-            public PopulationOptionVM ExemptionToogle
-            {
-                get => _nobleExemptionToogle;
-                set
-                {
-                    if (value != _nobleExemptionToogle)
-                    {
-                        _nobleExemptionToogle = value;
-                        base.OnPropertyChangedWithValue(value, "ExemptionToogle");
-                    }
-                }
-            }
-
             [DataSourceProperty]
             public PopulationOptionVM SubsidizeToogle
             {

@@ -32,7 +32,7 @@ namespace Populations.Components
         public static MobileParty CreateSlaveCaravan(string id, Settlement origin, Settlement target, string nameTemplate, int slaves)
         {
             MobileParty caravan = CreateParty(id, origin.Name.ToString(), target, nameTemplate);
-            caravan.AddPrisoner(CharacterObject.All.FirstOrDefault(x => x.StringId == "vlandian_recruit_new"), slaves);
+            caravan.AddPrisoner(CharacterObject.All.FirstOrDefault(x => x.StringId == "looter"), slaves);
             caravan.InitializeMobileParty(origin.Culture.EliteCaravanPartyTemplate, origin.GatePosition, 0f, 0f, slaves);
             GiveMounts(ref caravan);
             GiveFood(ref caravan);

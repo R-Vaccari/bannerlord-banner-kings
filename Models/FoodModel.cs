@@ -37,7 +37,7 @@ namespace Populations.Models
 			int citySerfs = data.GetTypeCount(PopType.Serfs);
 			if (!town.IsUnderSiege)
             {
-				float serfProduction = (float)citySerfs * SERF_FOOD *0.8f;
+				float serfProduction = (float)citySerfs * SERF_FOOD * 0.4f;
 				result.Add((float)serfProduction, new TextObject("Serfs production", null));
 			} else
             {
@@ -64,6 +64,9 @@ namespace Populations.Models
 			MobileParty garrisonParty = town.GarrisonParty;
 			int garrisonConsumption = (garrisonParty != null) ? garrisonParty.Party.NumberOfAllMembers : 0;
 			result.Add((float)(garrisonConsumption / 20) * -1f, new TextObject("Garrison consumption"), null);
+
+			if (PopulationConfig.Instance.PolicyManager.GetSettlementWork(town.Settlement) == PolicyManager.WorkforcePolicy.Construction)
+				result.AddFactor(-0.15f, new TextObject("Construction policy"));
 	
 			if (town.Governor != null)
 			{
@@ -145,14 +148,20 @@ namespace Populations.Models
 			if (PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(village.Settlement))
 			{
 				PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(village.Settlement);
+				float food = 0;
+				int nobles = data.GetTypeCount(PopType.Nobles);
 				int serfs = data.GetTypeCount(PopType.Serfs);
 				int slaves = data.GetTypeCount(PopType.Slaves);
 				if (IsVillageProducingFood(village))
-					return (float)(serfs + slaves) * SERF_FOOD;
+					food += (float)(serfs + slaves) * SERF_FOOD * 1.2f;
 				else if (IsVillageAMine(village))
-					return (float)serfs * SERF_FOOD + (float)slaves * SLAVE_MINE_FOOD;
+					food += (float)serfs * SERF_FOOD + (float)slaves * SLAVE_MINE_FOOD;
 				else
-					return ((float)(serfs + slaves) * SERF_FOOD) / 2f;
+					food += ((float)(serfs + slaves) * SERF_FOOD) / 2f;
+
+				food += (float)nobles * NOBLE_FOOD;
+
+				return food;
 			}
 			else return 10;
 		}

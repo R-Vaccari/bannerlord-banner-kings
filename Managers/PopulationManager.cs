@@ -84,10 +84,10 @@ namespace Populations
             if (settlement.IsCastle)
             {
                 float prosperityFactor = (0.0001f * settlement.Prosperity) + 1f;
-                return MBRandom.RandomInt((int)(400 * prosperityFactor), (int)(1200 * prosperityFactor));
+                return MBRandom.RandomInt((int)(900 * prosperityFactor), (int)(1200 * prosperityFactor));
             }
             else if (settlement.IsVillage)
-                return MBRandom.RandomInt((int)settlement.Village.Hearth * 3, (int)settlement.Village.Hearth * 6);
+                return MBRandom.RandomInt((int)settlement.Village.Hearth * 4, (int)settlement.Village.Hearth * 6);
             else if (settlement.IsTown)
             {
                 float prosperityFactor = (0.0001f * settlement.Prosperity) + 1f;
@@ -128,7 +128,7 @@ namespace Populations
                 if (IsVillageProducingFood(settlement.Village))
                     return new Dictionary<PopType, float[]>()
                     {
-                        { PopType.Nobles, new float[] {0.01f, 0.02f} },
+                        { PopType.Nobles, new float[] {0.025f, 0.045f} },
                         { PopType.Serfs, new float[] {0.7f, 0.8f} },
                         { PopType.Slaves, new float[] {0.1f, 0.2f} }
                     };

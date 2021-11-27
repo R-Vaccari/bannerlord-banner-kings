@@ -73,6 +73,9 @@ namespace Populations.Models
 			int slaves = data.GetTypeCount(PopType.Slaves);
 			result.Add(GetSlaveWorkforce(town.Settlement), new TextObject("Slave workforce"), null);
 
+			if (PopulationConfig.Instance.PolicyManager.GetSettlementWork(town.Settlement) == PolicyManager.WorkforcePolicy.Construction)
+				result.AddFactor(0.15f, new TextObject("Construction policy"));
+
 			if (!omitBoost && town.BoostBuildingProcess > 0)
 			{
 				int num = town.IsCastle ? 250 : 500;

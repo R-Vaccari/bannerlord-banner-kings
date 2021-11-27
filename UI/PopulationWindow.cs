@@ -11,14 +11,24 @@ namespace Populations
         public class PopulationWindow : MapView
         {
             private GauntletLayer layer;
-            private PopulationVM datasource;
+            private ViewModel datasource;
 
             protected override void CreateLayout()
             {
                 base.CreateLayout();
                 layer = new GauntletLayer(550, "GauntletLayer", false);
-                datasource = new PopulationVM(Settlement.CurrentSettlement);
-                layer.LoadMovie("PopulationWindow", datasource);
+                Settlement current = Settlement.CurrentSettlement;
+                if (!current.IsVillage)
+                {
+                    datasource = new PopulationVM(current);
+                    layer.LoadMovie("PopulationWindow", datasource);
+
+                } else
+                {
+                    datasource = new PopulationVillageVM(current);
+                    layer.LoadMovie("PopulationVilageWindow", datasource);
+                }
+                
                 layer.InputRestrictions.SetInputRestrictions(false, InputUsageMask.All);
                 MapScreen.Instance.AddLayer(layer);
                 ScreenManager.TrySetFocus(layer);

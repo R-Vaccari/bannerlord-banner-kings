@@ -122,6 +122,7 @@
     <Compile Include="UI\Items\MilitiaItemVM.cs" />
     <Compile Include="UI\PopulationOptionVM.cs" />
     <Compile Include="UI\Items\PopulationClassVM.cs" />
+    <Compile Include="UI\PopulationVillageVM.cs" />
     <Compile Include="UI\PopulationVM.cs" />
     <Compile Include="UI\PopulationWindow.cs" />
     <Compile Include="UI\UIManager.cs" />

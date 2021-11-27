@@ -19,14 +19,25 @@ namespace Populations.Models
                 {
                     float change = -0.005f;
 
-                    if (settlement.Town.Governor != null && settlement.Town.Governor.Culture == ownerCulture)
-                    {
-                        change += 0.005f;
-                        int skill = settlement.Town.Governor.GetSkillValue(DefaultSkills.Steward);
-                        change += (float)skill * 0.00005f;
-                    }
+                    if (!settlement.IsVillage && settlement.Town != null)
+                        if (settlement.Town.Governor != null && settlement.Town.Governor.Culture == ownerCulture)
+                        {
+                            change += 0.005f;
+                            int skill = settlement.Town.Governor.GetSkillValue(DefaultSkills.Steward);
+                            change += (float)skill * 0.00005f;
+                        }
+                    else if (settlement.IsVillage)
+                            if (settlement.Village.MarketTown.Governor != null && settlement.Village.MarketTown.Governor.Culture == ownerCulture)
+                            {
+                                change += 0.005f;
+                                int skill = settlement.Town.Governor.GetSkillValue(DefaultSkills.Steward);
+                                change += (float)skill * 0.00005f;
+                            }
 
                     data.Assimilation = Math.Max(data.Assimilation + change, 0);
+
+                    if (data.Assimilation >= 1f)
+                        settlement.Culture = ownerCulture;
                     return data.Assimilation;
 
                 } else
