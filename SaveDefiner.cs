@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.SaveSystem;
 using static Populations.PolicyManager;
 using static Populations.PopulationManager;
@@ -12,7 +9,7 @@ namespace Populations
     class SaveDefiner : SaveableTypeDefiner
     {
 
-        public SaveDefiner() : base(81818181)
+        public SaveDefiner() : base(82818189)
         {
 
         }
@@ -31,14 +28,15 @@ namespace Populations
             base.AddClassDefinition(typeof(PolicyManager), 10);
         }
 
-        protected override void DefineEnumTypes()
+        protected override void DefineContainerDefinitions()
         {
-            base.DefineEnumTypes();
-        }
-
-        protected override void DefineStructTypes()
-        {
-            base.DefineStructTypes();
+            base.ConstructContainerDefinition(typeof(List<PopulationClass>));
+            base.ConstructContainerDefinition(typeof(Dictionary<Settlement, PopulationData>));
+            base.ConstructContainerDefinition(typeof(List<PolicyElement>));
+            base.ConstructContainerDefinition(typeof(Dictionary<Settlement, List<PolicyElement>>));
+            base.ConstructContainerDefinition(typeof(Dictionary<Settlement, TaxType>));
+            base.ConstructContainerDefinition(typeof(Dictionary<Settlement, MilitiaPolicy>));
+            base.ConstructContainerDefinition(typeof(Dictionary<Settlement, WorkforcePolicy>));
         }
     }
 }

@@ -3,13 +3,17 @@ using Populations.Models;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
+using TaleWorlds.SaveSystem;
 
 namespace Populations
 {
     public class PopulationManager
     {
-        private Dictionary<Settlement, PopulationData> POPS = new Dictionary<Settlement, PopulationData>();
-        private List<MobileParty> CARAVANS = new List<MobileParty>();
+        [SaveableProperty(100)]
+        public Dictionary<Settlement, PopulationData> POPS { get; set; }
+
+        [SaveableProperty(101)]
+        public List<MobileParty> CARAVANS { get; set; }
 
         public PopulationManager(Dictionary<Settlement, PopulationData> pops, List<MobileParty> caravans)
         {
@@ -165,9 +169,14 @@ namespace Populations
 
         public class PopulationData
         {
-            private List<PopulationClass> classes;
-            private int totalPop;
-            private float assimilation;
+            [SaveableProperty(1)]
+            private List<PopulationClass> classes { get; set; }
+
+            [SaveableProperty(2)]
+            private int totalPop { get; set; }
+
+            [SaveableProperty(3)]
+            private float assimilation { get; set; }
 
             public PopulationData(List<PopulationClass> classes, float assimilation)
             {
@@ -266,8 +275,11 @@ namespace Populations
 
         public class PopulationClass
         {
-            public PopType type;
-            public int count;
+            [SaveableProperty(1)]
+            public PopType type { get; set; }
+
+            [SaveableProperty(2)]
+            public int count { get; set; }
 
             public PopulationClass(PopType type, int count)
             {

@@ -15,8 +15,8 @@ namespace Populations.Behaviors
     public class SettlementBehavior : CampaignBehaviorBase
     {
 
-        private PopulationManager populationManager;
-        private PolicyManager policyManager;
+        private PopulationManager populationManager = null;
+        private PolicyManager policyManager = null;
         public override void RegisterEvents()
         {
             CampaignEvents.DailyTickSettlementEvent.AddNonSerializedListener(this, new Action<Settlement>(DailySettlementTick));
@@ -28,12 +28,29 @@ namespace Populations.Behaviors
         {
             if (dataStore.IsSaving)
             {
-                populationManager = PopulationConfig.Instance.PopulationManager;
-                policyManager = PopulationConfig.Instance.PolicyManager;
+                if (PopulationConfig.Instance.PopulationManager != null && PopulationConfig.Instance.PolicyManager != null)
+                {
+                    populationManager = PopulationConfig.Instance.PopulationManager;
+                    policyManager = PopulationConfig.Instance.PolicyManager;
+                }  
             }
 
-            dataStore.SyncData("pops", ref policyManager);
+            dataStore.SyncData("pops", ref populationManager);
             dataStore.SyncData("policies", ref policyManager);
+
+            if (dataStore.IsLoading)
+            {
+                if (populationManager == null && policyManager == null)
+                {
+                    PopulationConfig.Instance.InitManagers(new Dictionary<Settlement, PopulationData>(), new List<MobileParty>(),
+                    new Dictionary<Settlement, List<PolicyManager.PolicyElement>>(), new Dictionary<Settlement, PolicyManager.TaxType>(),
+                    new Dictionary<Settlement, PolicyManager.MilitiaPolicy>(), new Dictionary<Settlement, WorkforcePolicy>());
+                }
+                else
+                {
+                    PopulationConfig.Instance.InitManagers(populationManager, policyManager);
+                }
+            }
         }
 
         private void HourlyTickParty(MobileParty caravan)
@@ -95,17 +112,6 @@ namespace Populations.Behaviors
         {
             if (settlement != null)
             {
-
-                if (PopulationConfig.Instance.PopulationManager == null && PopulationConfig.Instance.PolicyManager == null)
-                    if (populationManager == null && policyManager == null)
-                    {
-                        PopulationConfig.Instance.InitManagers(new Dictionary<Settlement, PopulationData>(), new List<MobileParty>(),
-                        new Dictionary<Settlement, List<PolicyManager.PolicyElement>>(), new Dictionary<Settlement, PolicyManager.TaxType>(),
-                        new Dictionary<Settlement, PolicyManager.MilitiaPolicy>(), new Dictionary<Settlement, WorkforcePolicy>());
-                    } else
-                    {
-                        PopulationConfig.Instance.InitManagers(populationManager, policyManager);
-                    }
 
                 UpdateSettlementPops(settlement);
 

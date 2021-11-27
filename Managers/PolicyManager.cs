@@ -1,14 +1,22 @@
 ﻿using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.SaveSystem;
 
 namespace Populations
 {
     public class PolicyManager
     {
-        private Dictionary<Settlement, List<PolicyElement>> POLICIES = new Dictionary<Settlement, List<PolicyElement>>();
-        private Dictionary<Settlement, TaxType> TAXES = new Dictionary<Settlement, TaxType>();
-        private Dictionary<Settlement, MilitiaPolicy> MILITIAS = new Dictionary<Settlement, MilitiaPolicy>();
-        private Dictionary<Settlement, WorkforcePolicy> WORKFORCE = new Dictionary<Settlement, WorkforcePolicy>();
+        [SaveableProperty(100)]
+        public Dictionary<Settlement, List<PolicyElement>> POLICIES { get; set; }
+
+        [SaveableProperty(101)]
+        public Dictionary<Settlement, TaxType> TAXES { get; set; }
+
+        [SaveableProperty(102)]
+        public Dictionary<Settlement, MilitiaPolicy> MILITIAS { get; set; }
+
+        [SaveableProperty(103)]
+        public Dictionary<Settlement, WorkforcePolicy> WORKFORCE { get; set; }
 
         public PolicyManager(Dictionary<Settlement, List<PolicyElement>> POLICIES, Dictionary<Settlement, TaxType> TAXES, 
             Dictionary<Settlement, MilitiaPolicy> MILITIAS, Dictionary<Settlement, WorkforcePolicy> WORKFORCE)
@@ -131,9 +139,17 @@ namespace Populations
 
         public class PolicyElement
         {
-            public string description, hint;
-            public bool isChecked;
-            public PolicyType type;
+            [SaveableProperty(1)]
+            public string description { get; set; }
+
+            [SaveableProperty(2)]
+            public string hint { get; set; }
+
+            [SaveableProperty(3)]
+            public bool isChecked { get; set; }
+
+            [SaveableProperty(4)]
+            public PolicyType type { get; set; }
 
             public PolicyElement(string description, string hint, bool isChecked, PolicyType type)
             {
