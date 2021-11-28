@@ -3,6 +3,7 @@ using Populations.Models;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
+using TaleWorlds.Library;
 using TaleWorlds.SaveSystem;
 
 namespace Populations
@@ -226,18 +227,42 @@ namespace Populations
 
             public void UpdatePopulation(Settlement settlement, int pops, PopType target)
             {
-                if (target != PopType.None)
+                if (target == PopType.None)
                 {
-                    Dictionary<PopType, float[]> desiredTypes = GetDesiredPopTypes(settlement);
-                    IEnumerable<PopType> types = new List<PopType>();
-                    classes.ForEach(popClass => types.AddItem(popClass.type));
-                    PopType targetType = MBRandom.ChooseWeighted(types, delegate (PopType type)
+                    if (settlement.Owner == Hero.MainHero)
+                        InformationManager.DisplayMessage(new InformationMessage());
+                    bool divisibleNegative = ((float)pops * -1f) > 20;
+                    if (pops > 20 || divisibleNegative)
                     {
-                        return MBRandom.RandomFloatRanged(desiredTypes[type][0], desiredTypes[type][1]);
-                    });
-                    UpdatePopType(targetType, pops);
+                        int fractions = (int)((float)pops / (divisibleNegative ? -20f : 20f));
+                        int reminder = pops % (divisibleNegative ? -20 : 20);
+                        for (int i = 0; i < fractions; i++)
+                        {
+                            SelectAndUpdatePop(settlement, divisibleNegative ? -20 : 20);
+                        }
+                        SelectAndUpdatePop(settlement, divisibleNegative ? -reminder  : reminder);
+                    }
+                    else SelectAndUpdatePop(settlement, pops);
                 }
                 else UpdatePopType(target, pops);
+            }
+
+            private void SelectAndUpdatePop(Settlement settlement, int pops)
+            {
+                Dictionary<PopType, float[]> desiredTypes = GetDesiredPopTypes(settlement);
+
+                List<PopType> typesList = new List<PopType>();
+                classes.ForEach(popClass => {
+                    if (popClass.count >= pops)
+                        typesList.Add(popClass.type);
+                });
+
+                MBReadOnlyList<PopType> types = new MBReadOnlyList<PopType>(typesList);
+                PopType targetType = MBRandom.ChooseWeighted(types, delegate (PopType type)
+                {
+                    return desiredTypes[type][0];
+                });
+                UpdatePopType(targetType, pops);
             }
 
             public void UpdatePopType(PopType type, int count)
@@ -249,6 +274,7 @@ namespace Populations
                         pops = new PopulationClass(type, 0);
 
                     pops.count += count;
+                    if (pops.count < 0) pops.count = 0;
                     RefreshTotal();
                 }
             }

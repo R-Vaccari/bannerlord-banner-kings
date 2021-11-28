@@ -254,7 +254,7 @@ namespace Populations
             {
                 get
                 {
-                    int growth = new GrowthModel().CalculatePopulationGrowth(settlement);
+                    int growth = new GrowthModel().GetPopulationGrowth(settlement, false);
                     return growth.ToString() + " (Daily)";
                 }
             }
