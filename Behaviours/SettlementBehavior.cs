@@ -72,8 +72,6 @@ namespace Populations.Behaviors
                                 data.UpdatePopType(PopType.Slaves, slaves);
                                 DestroyPartyAction.Apply(null, caravan);
                                 PopulationConfig.Instance.PopulationManager.RemoveCaravan(caravan);
-                                InformationManager.DisplayMessage(new InformationMessage(String.Format("{0} has received {1} slaves.",
-                                    target.Name.ToString(), slaves)));
                             }
                             else caravan.SetMoveGoToSettlement(target);
                         }
@@ -93,8 +91,6 @@ namespace Populations.Behaviors
                             data.UpdatePopType(PopType.Slaves, slaves);
                             DestroyPartyAction.Apply(null, caravan);
                             PopulationConfig.Instance.PopulationManager.RemoveCaravan(caravan);
-                            InformationManager.DisplayMessage(new InformationMessage(String.Format("{0} has received {1} slaves.",
-                                target.Name.ToString(), slaves)));
                         } else
                         {
                             caravan.Ai.SetAIState(AIState.VisitingVillage);

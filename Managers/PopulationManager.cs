@@ -235,7 +235,7 @@ namespace Populations
                     if (pops > 20 || divisibleNegative)
                     {
                         int fractions = (int)((float)pops / (divisibleNegative ? -20f : 20f));
-                        int reminder = pops % (divisibleNegative ? -20 : 20);
+                        int reminder = pops % 20;
                         for (int i = 0; i < fractions; i++)
                         {
                             SelectAndUpdatePop(settlement, divisibleNegative ? -20 : 20);

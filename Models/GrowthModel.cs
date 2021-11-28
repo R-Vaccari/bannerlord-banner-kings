@@ -49,8 +49,8 @@ namespace Populations.Models
                 });
             } else if (settlement.IsStarving)
             {
-                growthFactor = 0;
-                growthFactor += (int)((float)data.TotalPop * -0.01f);
+                growthFactor = -5;
+                growthFactor += (int)((float)data.TotalPop * -0.007f);
                 if (showMessage && settlement.OwnerClan.Leader == Hero.MainHero)
                     InformationManager.DisplayMessage(new InformationMessage(string.Format("Population is starving at {0}!", settlement.Name.ToString())));
             }
