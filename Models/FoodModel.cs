@@ -65,6 +65,9 @@ namespace Populations.Models
 			int garrisonConsumption = (garrisonParty != null) ? garrisonParty.Party.NumberOfAllMembers : 0;
 			result.Add((float)(garrisonConsumption / 20) * -1f, new TextObject("Garrison consumption"), null);
 
+			if (PopulationConfig.Instance.PolicyManager.IsPolicyEnacted(town.Settlement, PolicyManager.PolicyType.CONSCRIPTION))
+				result.AddFactor(-0.25f, new TextObject("Conscription policy"));
+
 			if (PopulationConfig.Instance.PolicyManager.GetSettlementWork(town.Settlement) == PolicyManager.WorkforcePolicy.Construction)
 				result.AddFactor(-0.15f, new TextObject("Construction policy"));
 	
