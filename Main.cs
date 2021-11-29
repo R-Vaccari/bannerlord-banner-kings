@@ -57,7 +57,7 @@ namespace Populations
             {
                 if (PopulationConfig.Instance.PopulationManager != null && PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(currentSettlement))
                     PopulationConfig.Instance.PopulationManager.GetPopData(currentSettlement).UpdatePopType(
-                        PopulationManager.PopType.Slaves, Helpers.Helpers.GetPrisionerCount(prisoners));
+                        PopulationManager.PopType.Slaves, Helpers.Helpers.GetRosterCount(prisoners));
 
                 return true;
             }
@@ -70,7 +70,7 @@ namespace Populations
             {
                 if (PopulationConfig.Instance.PopulationManager != null && PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(currentSettlement))
                     PopulationConfig.Instance.PopulationManager.GetPopData(currentSettlement).UpdatePopType(
-                        PopulationManager.PopType.Slaves, Helpers.Helpers.GetPrisionerCount(prisoners));
+                        PopulationManager.PopType.Slaves, Helpers.Helpers.GetRosterCount(prisoners));
 
                 return true;
             }
@@ -84,22 +84,20 @@ namespace Populations
                 if (PopulationConfig.Instance.PopulationManager != null && PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
                 {
                     PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(settlement);
+                    CultureObject settlementCulture = settlement.Culture;
                     CultureObject originalOwnerCulture = settlement.Owner.Culture;
-                    if (settlement.Culture != originalOwnerCulture)
+                    CultureObject newCulture = newOwner.Culture;
+
+                    if ((settlementCulture == originalOwnerCulture && settlementCulture != newCulture) ||
+                        (settlementCulture != originalOwnerCulture && settlementCulture != newCulture 
+                        && originalOwnerCulture != newCulture)) // previous owner as assimilated or everybody has a different culture
                     {
-                        if (originalOwnerCulture != newOwner.Culture)
-                        {
-                            if (settlement.Culture != newOwner.Culture) //new owner is of different culture from settlement & previous owner
-                                data.Assimilation = 0f;
-                            else //same culture as settlement but different from previous owner
-                            {
-                                float result = 1f - data.Assimilation;
-                                data.Assimilation = result;
-                            }
-                        } //else do nothing, previous assimilation persists
-                            
+                        data.Assimilation = 0f;
+                    } else if (originalOwnerCulture != newCulture && newCulture == settlementCulture) // new owner is same culture as settlement that was being assimilated by foreigner, invert the process
+                    { 
+                        float result = 1f - data.Assimilation;
+                        data.Assimilation = result;
                     }
-                    else data.Assimilation = 1f;
                 }
 
                 return true;

@@ -2,11 +2,13 @@
 using Populations.UI;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.GameMenus;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
+using TaleWorlds.ObjectSystem;
 using static Populations.PolicyManager;
 using static Populations.PopulationManager;
 
@@ -53,55 +55,64 @@ namespace Populations.Behaviors
             }
         }
 
-        private void HourlyTickParty(MobileParty caravan)
+        private void HourlyTickParty(MobileParty party)
         {
-            try
+            if (party != null && PopulationConfig.Instance.PopulationManager.IsPopulationParty(party) && party.MapEvent == null)
             {
-                if (caravan != null && PopulationConfig.Instance.PopulationManager.IsPartyACaravan(caravan) && caravan.MapEvent == null)
-                {
-                    Settlement target = caravan.HomeSettlement;
-                    if (caravan.Ai.AiState == AIState.VisitingVillage)
-                    {
-                        if (target != null && caravan.MapEvent == null && target.IsVillage && target.Village != null && target.Village.VillageState == Village.VillageStates.Normal)
-                        {
-                            if (Campaign.Current.Models.MapDistanceModel.GetDistance(caravan, target) <= 1.5f)
-                            {
-                                EnterSettlementAction.ApplyForParty(caravan, target);
-                                int slaves = Helpers.Helpers.GetPrisionerCount(caravan.PrisonRoster);
-                                PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(target);
-                                data.UpdatePopType(PopType.Slaves, slaves);
-                                DestroyPartyAction.Apply(null, caravan);
-                                PopulationConfig.Instance.PopulationManager.RemoveCaravan(caravan);
-                            }
-                            else caravan.SetMoveGoToSettlement(target);
-                        }
-                        else
-                        {
-                            DestroyPartyAction.Apply(null, caravan);
-                            PopulationConfig.Instance.PopulationManager.RemoveCaravan(caravan);
-                        }
+                Settlement target = party.HomeSettlement;
+                PopulationPartyComponent component = (PopulationPartyComponent)party.PartyComponent;
 
-                    } else
+                if (target != null && party.MapEvent == null)
+                {
+                    if (component.slaveCaravan)
                     {
-                        if (Campaign.Current.Models.MapDistanceModel.GetDistance(caravan, target) <= 1.5f)
+                        if (target.IsVillage && target.Village.VillageState == Village.VillageStates.Normal)
                         {
-                            EnterSettlementAction.ApplyForParty(caravan, target);
-                            int slaves = Helpers.Helpers.GetPrisionerCount(caravan.PrisonRoster);
-                            PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(target);
-                            data.UpdatePopType(PopType.Slaves, slaves);
-                            DestroyPartyAction.Apply(null, caravan);
-                            PopulationConfig.Instance.PopulationManager.RemoveCaravan(caravan);
-                        } else
-                        {
-                            caravan.Ai.SetAIState(AIState.VisitingVillage);
-                            caravan.SetMoveGoToSettlement(target);
+                            if (Campaign.Current.Models.MapDistanceModel.GetDistance(party, target) <= 1f)
+                                PartyEnterSettlement(ref party, target, component.popType, component.slaveCaravan);
+                            else PartyKeepMoving(ref party, target);
                         }
-                    } 
+                        else party.SetMoveModeHold();
+
+                    }
+                    else if (!target.IsVillage && !target.IsUnderSiege)
+                    {
+                        if (Campaign.Current.Models.MapDistanceModel.GetDistance(party, target) <= 1f)
+                            PartyEnterSettlement(ref party, target, component.popType, component.slaveCaravan);
+                        else PartyKeepMoving(ref party, target);
+                    }
+                    else party.SetMoveModeHold();
+
+                } else if (target == null)
+                {
+                    DestroyPartyAction.Apply(null, party);
+                    PopulationConfig.Instance.PopulationManager.RemoveCaravan(party);
                 }
             }
-            catch (Exception ex)
+        }
+
+        private void PartyKeepMoving(ref MobileParty party, Settlement target)
+        {
+            if (target.IsVillage) party.Ai.SetAIState(AIState.VisitingVillage);
+            else party.Ai.SetAIState(AIState.VisitingNearbyTown);
+            party.SetMoveGoToSettlement(target);
+        }
+        private void PartyEnterSettlement(ref MobileParty party, Settlement target, PopType popType, bool slaveCaravan)
+        {
+            EnterSettlementAction.ApplyForParty(party, target);
+            PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(target);
+            if (slaveCaravan)
             {
+                int slaves = Helpers.Helpers.GetRosterCount(party.PrisonRoster);
+                data.UpdatePopType(PopType.Slaves, slaves);
+            } else if (popType != PopType.None)
+            {
+                int pops = Helpers.Helpers.GetRosterCount(party.MemberRoster);
+                data.UpdatePopType(popType, pops);
             }
+            
+            DestroyPartyAction.Apply(null, party);
+            PopulationConfig.Instance.PopulationManager.RemoveCaravan(party);
         }
 
         private void DailySettlementTick(Settlement settlement)
@@ -131,17 +142,15 @@ namespace Populations.Behaviors
                 }
 
                 // Send Travellers
-                /*
                 int random = MBRandom.RandomInt(1, 100);
                 if (random == 1) 
                 {
                     Settlement target = GetTownToTravel(settlement);
-                    bool bothPopulated = PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(target) &&
-                        PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(settlement);
-                    if (target != null && bothPopulated)
-                        SendTravellerParty(settlement, target);
+                    if (target != null)
+                        if (PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(target) &&
+                         PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
+                            SendTravellerParty(settlement, target);
                 }
-                */
             }
         }
 
@@ -163,15 +172,12 @@ namespace Populations.Behaviors
             Kingdom kingdom = origin.OwnerClan.Kingdom;
             if (kingdom != null)
             {
-                List<Settlement> towns = new List<Settlement>();
-                if (towns.Count > 1)
+                if (kingdom.Settlements.Count > 1)
                 {
-                    foreach (Settlement settlement in kingdom.Settlements)
-                        if (settlement.IsTown && settlement != origin)
-                            towns.Add(settlement);
-                    Settlement target = MBRandom.ChooseWeighted<Settlement>(towns, delegate
+                    Settlement target = MBRandom.ChooseWeighted<Settlement>(kingdom.Settlements, delegate (Settlement settlement)
                     {
-                        return 1f;
+                        if (settlement.IsTown && settlement != origin) return 1f;
+                        else return 0f;
                     });
                     return target;
                 }
@@ -184,16 +190,34 @@ namespace Populations.Behaviors
         {
             PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(origin);
             int random = MBRandom.RandomInt(1, 100);
-            if (random < 65)
+            CharacterObject peasant = MBObjectManager.Instance.GetObjectTypeList<CharacterObject>().FirstOrDefault(x => x.StringId == "villager_" + origin.Culture.StringId.ToString());
+            if (peasant != null)
             {
-                int serfs = MBRandom.RandomInt(15, 50);
-                int craftsmen = MBRandom.RandomInt(2, 8);
-            } else if (random < 95)
-            {
-                int craftsmen = MBRandom.RandomInt(10, 25);
-            } else
-            {
+                PopType type;
+                int count;
+                string name;
+                count = MBRandom.RandomInt(20, 50);
+                    type = PopType.Serfs;
+                    name = "Travelling peasants from {0}";
+                if (random < 65)
+                {
+                    
+                }
+                /*
+                else if (random < 95)
+                {
+                    count = MBRandom.RandomInt(15, 30);
+                    type = PopType.Craftsmen;
+                    name = "Travelling craftsmen from {0}";
+                } else
+                {
+                    count = MBRandom.RandomInt(5, 15);
+                    type = PopType.Craftsmen;
+                    name = "Travelling nobles from {0}";
+                } */
 
+                PopulationPartyComponent.CreateTravellerParty("travellers_", origin, target, 
+                    name, count, type, peasant);
             }
         }
 
@@ -204,8 +228,8 @@ namespace Populations.Behaviors
             int slaves = (int)((double)data.GetTypeCount(PopType.Slaves) * 0.005d);
             data.UpdatePopType(PopType.Slaves, slaves * -1);
 
-            MobileParty caravan = PopulationPartyComponent.CreateSlaveCaravan("slavecaravan_", origin, target.Settlement, "Slave Caravan from {0}", slaves);
-            PopulationConfig.Instance.PopulationManager.AddCaravan(caravan);
+            PopulationPartyComponent.CreateSlaveCaravan("slavecaravan_", origin, target.Settlement, "Slave Caravan from {0}", slaves);
+            
         }
 
         private void OnGameCreated(CampaignGameStarter campaignGameStarter)

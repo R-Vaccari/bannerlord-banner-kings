@@ -3,6 +3,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.Localization;
 using System.Linq;
 using TaleWorlds.Core;
+using static Populations.PopulationManager;
 
 namespace Populations.Components
 {
@@ -10,15 +11,20 @@ namespace Populations.Components
     {
         private Settlement _target;
         private string _name;
-        public PopulationPartyComponent(Settlement target, string name) : base()
+        public bool slaveCaravan;
+        public PopType popType;
+        public PopulationPartyComponent(Settlement target, string name, bool slaveCaravan, PopType popType) : base()
         {
             _target = target;
             _name = name;
+            this.slaveCaravan = slaveCaravan;
+            this.popType = popType;
         }
 
-        public static MobileParty CreateParty(string id, string origin, Settlement target, string name)
+        private static MobileParty CreateParty(string id, string origin, bool slaveCaravan, Settlement target, string name, PopType popType)
         {
-            return MobileParty.CreateParty(id + origin + target.Name.ToString(), new PopulationPartyComponent(target, String.Format(name, origin)), delegate (MobileParty mobileParty)
+            return MobileParty.CreateParty(id + origin + target.Name.ToString(), new PopulationPartyComponent(target, String.Format(name, origin), slaveCaravan, popType),
+                delegate (MobileParty mobileParty)
             {
                 mobileParty.SetPartyUsedByQuest(true);
                 mobileParty.Party.Visuals.SetMapIconAsDirty();
@@ -29,14 +35,26 @@ namespace Populations.Components
             });
         }
 
-        public static MobileParty CreateSlaveCaravan(string id, Settlement origin, Settlement target, string nameTemplate, int slaves)
+        public static void CreateSlaveCaravan(string id, Settlement origin, Settlement target, string name, int slaves)
         {
-            MobileParty caravan = CreateParty(id, origin.Name.ToString(), target, nameTemplate);
+            MobileParty caravan = CreateParty(id, origin.Name.ToString(), true, target, name, PopType.None);
             caravan.AddPrisoner(CharacterObject.All.FirstOrDefault(x => x.StringId == "looter"), slaves);
-            caravan.InitializeMobileParty(origin.Culture.EliteCaravanPartyTemplate, origin.GatePosition, 0f, 0f, slaves);
+            caravan.InitializeMobileParty(origin.Culture.EliteCaravanPartyTemplate, origin.GatePosition, 0f, 0f, -1);
             GiveMounts(ref caravan);
             GiveFood(ref caravan);
-            return caravan;
+            PopulationConfig.Instance.PopulationManager.AddParty(caravan);
+        }
+
+        public static void CreateTravellerParty(string id, Settlement origin, Settlement target, string name, int count, PopType type, CharacterObject civilian)
+        {
+            MobileParty party = CreateParty(id, origin.Name.ToString(), false, target, name, type);
+            PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(origin);
+            data.UpdatePopType(type, count);
+            TroopRoster roster = new TroopRoster(party.Party);
+            roster.AddToCounts(civilian, count);
+            party.InitializeMobileParty(roster, new TroopRoster(party.Party), origin.GatePosition, 0f);
+            GiveFood(ref party);
+            PopulationConfig.Instance.PopulationManager.AddParty(party);
         }
 
         private static void GiveMounts(ref MobileParty party)

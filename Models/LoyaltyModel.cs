@@ -34,12 +34,12 @@ namespace Populations.Models
                 if (PopulationConfig.Instance.PolicyManager.GetSettlementTax(town.Settlement) == TaxType.Low)
                 {
                     int totalPops = data.TotalPop;
-                    baseResult.Add((float)(totalPops - slaves) * TAX_POLICY_LOYALTY * -1f, new TextObject("Low tax policy"));
+                    baseResult.Add((float)(totalPops - slaves) * TAX_POLICY_LOYALTY, new TextObject("Low tax policy"));
                 }
                 else if (PopulationConfig.Instance.PolicyManager.GetSettlementTax(town.Settlement) == TaxType.High)
                 {
                     int totalPops = data.TotalPop;
-                    baseResult.Add((float)(totalPops - slaves) * TAX_POLICY_LOYALTY, new TextObject("High tax policy"));
+                    baseResult.Add((float)(totalPops - slaves) * TAX_POLICY_LOYALTY * -1f, new TextObject("High tax policy"));
                 }
             }
 

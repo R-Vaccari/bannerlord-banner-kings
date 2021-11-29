@@ -14,12 +14,12 @@ namespace Populations
         public Dictionary<Settlement, PopulationData> POPS { get; set; }
 
         [SaveableProperty(101)]
-        public List<MobileParty> CARAVANS { get; set; }
+        public List<MobileParty> PARTIES { get; set; }
 
         public PopulationManager(Dictionary<Settlement, PopulationData> pops, List<MobileParty> caravans)
         {
             this.POPS = pops;
-            this.CARAVANS = caravans;
+            this.PARTIES = caravans;
         }
 
         public bool IsSettlementPopulated(Settlement settlement)
@@ -29,9 +29,9 @@ namespace Populations
         }
         public PopulationData GetPopData(Settlement settlement) => POPS[settlement];
         public void AddSettlementData(Settlement settlement, PopulationData data) => POPS.Add(settlement, data);
-        public bool IsPartyACaravan(MobileParty party) => CARAVANS.Contains(party);
-        public void AddCaravan(MobileParty party) => CARAVANS.Add(party);
-        public void RemoveCaravan(MobileParty party) => CARAVANS.Remove(party);
+        public bool IsPopulationParty(MobileParty party) => PARTIES.Contains(party);
+        public void AddParty(MobileParty party) => PARTIES.Add(party);
+        public void RemoveCaravan(MobileParty party) => PARTIES.Remove(party);
 
         public static void InitializeSettlementPops(Settlement settlement)
         {
