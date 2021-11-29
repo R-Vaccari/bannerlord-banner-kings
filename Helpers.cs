@@ -20,19 +20,24 @@ namespace Populations.Helpers
             return count;
         }
 
-        public static string GetCulturalClassName(PopulationClass popClass, CultureObject culture)
+        public static string GetCulturalClassName(PopType type, CultureObject culture)
         {
-            if (popClass.type == PopType.Serfs)
+            if (type == PopType.Serfs)
             {
                 if (culture.StringId == "sturgia")
                     return "Lowmen";
-            } else if (popClass.type == PopType.Slaves)
+                else if (culture.StringId == "empire")
+                    return "Servi";
+                else if (culture.StringId == "battania")
+                    return "Freemen";
+                else if (culture.StringId == "khuzait")
+                    return "Nomads";
+            } else if (type == PopType.Slaves)
             {
                 if (culture.StringId == "sturgia")
                     return "Thralls";
             }
-            return popClass.type.ToString();
+            return type.ToString();
         }
-       
     }
 }

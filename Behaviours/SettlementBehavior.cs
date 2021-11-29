@@ -142,15 +142,18 @@ namespace Populations.Behaviors
                 }
 
                 // Send Travellers
-                int random = MBRandom.RandomInt(1, 100);
-                if (random == 1) 
+                if (!settlement.IsVillage)
                 {
-                    Settlement target = GetTownToTravel(settlement);
-                    if (target != null)
-                        if (PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(target) &&
-                         PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
-                            SendTravellerParty(settlement, target);
-                }
+                    int random = MBRandom.RandomInt(1, 100);
+                    if (random == 1)
+                    {
+                        Settlement target = GetTownToTravel(settlement);
+                        if (target != null)
+                            if (PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(target) &&
+                             PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
+                                SendTravellerParty(settlement, target);
+                    }
+                } 
             }
         }
 
@@ -198,7 +201,7 @@ namespace Populations.Behaviors
                 string name;
                 count = MBRandom.RandomInt(20, 50);
                     type = PopType.Serfs;
-                    name = "Travelling peasants from {0}";
+                    name = "Travelling " + Helpers.Helpers.GetCulturalClassName(type, origin.Culture) + " from {0}";
                 if (random < 65)
                 {
                     
