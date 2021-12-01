@@ -9,7 +9,6 @@ namespace Populations.Models
 {
     class TaxModel : DefaultSettlementTaxModel
     {
-
         public static readonly float NOBLE_OUTPUT = 2f;
         public static readonly float CRAFTSMEN_OUTPUT = 0.75f;
         public static readonly float SERF_OUTPUT = 0.2f;
@@ -57,7 +56,7 @@ namespace Populations.Models
                 else if (taxType == TaxType.Low) baseResult = marketIncome * 0.4f;
 
                 float admCost = new AdministrativeModel().CalculateAdministrativeCost(village.Settlement);
-                baseResult *= admCost * -1f;
+                baseResult *= 1f - admCost;
 
                 if (village.Settlement != null && PopulationConfig.Instance.PolicyManager.IsPolicyEnacted(village.Settlement, PolicyType.SELF_INVEST))
                     if (baseResult > 0)

@@ -5,48 +5,44 @@ using static Populations.PopulationManager;
 
 namespace Populations.Models
 {
-    class CultureModel
+    class CultureModel : GameModel
     {
 
-        public float CalculateAssimilationChange(Settlement settlement)
+        public void CalculateAssimilationChange(Settlement settlement)
         {
-            CultureObject ownerCulture = settlement.OwnerClan.Culture;
+            float result = GetAssimilationChange(settlement);
             if (PopulationConfig.Instance.PopulationManager != null && PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
             {
                 PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(settlement);
+                data.Assimilation = Math.Max(data.Assimilation + result, 0);
+            }
+        }
 
-                if (settlement.Culture != ownerCulture)
-                {
-                    float change = -0.005f;
-
-                    if (!settlement.IsVillage && settlement.Town != null)
-                        if (settlement.Town.Governor != null && settlement.Town.Governor.Culture == ownerCulture)
+        public float GetAssimilationChange(Settlement settlement)
+        {
+            CultureObject ownerCulture = settlement.OwnerClan.Culture;
+ 
+            PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(settlement);
+            float change = -0.005f;
+            if (settlement.Culture != ownerCulture)
+            {
+                if (!settlement.IsVillage && settlement.Town != null)
+                    if (settlement.Town.Governor != null && settlement.Town.Governor.Culture == ownerCulture)
+                    {
+                        change += 0.005f;
+                        int skill = settlement.Town.Governor.GetSkillValue(DefaultSkills.Steward);
+                        change += (float)skill * 0.00005f;
+                    }
+                else if (settlement.IsVillage)
+                        if (settlement.Village.MarketTown.Governor != null && settlement.Village.MarketTown.Governor.Culture == ownerCulture)
                         {
                             change += 0.005f;
                             int skill = settlement.Town.Governor.GetSkillValue(DefaultSkills.Steward);
                             change += (float)skill * 0.00005f;
                         }
-                    else if (settlement.IsVillage)
-                            if (settlement.Village.MarketTown.Governor != null && settlement.Village.MarketTown.Governor.Culture == ownerCulture)
-                            {
-                                change += 0.005f;
-                                int skill = settlement.Town.Governor.GetSkillValue(DefaultSkills.Steward);
-                                change += (float)skill * 0.00005f;
-                            }
 
-                    data.Assimilation = Math.Max(data.Assimilation + change, 0);
-
-                    if (data.Assimilation >= 1f)
-                        settlement.Culture = ownerCulture;
-                    return data.Assimilation;
-
-                } else
-                {
-                    data.Assimilation = 1f;
-                    return data.Assimilation;
-                }
-            }
-            else return 1f;
+            } else change = 0f;
+            return change;
         }
     }
 }

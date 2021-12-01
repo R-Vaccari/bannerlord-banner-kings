@@ -40,7 +40,7 @@ namespace Populations.Models
 			{
 				PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(town.Settlement);
 				int craftsmen = data.GetTypeCount(PopType.Craftsmen);
-				return (int)((float)craftsmen / 2f);
+				return town.IsCastle ? (int)((float)craftsmen * 2f) : (int)((float)craftsmen / 2f);
 			}
 			else return base.GetBoostCost(town);
         }
@@ -54,7 +54,7 @@ namespace Populations.Models
 				int slaves = data.GetTypeCount(PopType.Slaves);
 
 				float proportion = (float)craftsmen / (float)slaves;
-				float finalProportion = Math.Min(proportion, 0.1f);
+				float finalProportion = Math.Min(proportion, (town.IsCastle ? 0.4f : 0.1f));
 				return (int)(GetSlaveWorkforce(town.Settlement) * (finalProportion * 10f));
 			}
 			else return base.GetBoostAmount(town);
@@ -72,6 +72,8 @@ namespace Populations.Models
 			PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(town.Settlement);
 			int slaves = data.GetTypeCount(PopType.Slaves);
 			result.Add(GetSlaveWorkforce(town.Settlement), new TextObject("Slave workforce"), null);
+
+			result.Add(3f, new TextObject("Base"), null);
 
 			if (PopulationConfig.Instance.PolicyManager.GetSettlementWork(town.Settlement) == PolicyManager.WorkforcePolicy.Construction)
 				result.AddFactor(0.15f, new TextObject("Construction policy"));
@@ -169,7 +171,7 @@ namespace Populations.Models
 			return (int)result.ResultNumber;
 		}
 
-		private const float SLAVE_CONSTRUCTION = 0.01f;
+		private const float SLAVE_CONSTRUCTION = 0.015f;
 
 		private const float HammerMultiplier = 0.01f;
 

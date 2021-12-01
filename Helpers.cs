@@ -26,8 +26,8 @@ namespace Populations.Helpers
             {
                 if (culture.StringId == "sturgia")
                     return "Lowmen";
-                else if (culture.StringId == "empire")
-                    return "Servi";
+                else if (culture.StringId == "empire" || culture.StringId == "aserai")
+                    return "Commoners";
                 else if (culture.StringId == "battania")
                     return "Freemen";
                 else if (culture.StringId == "khuzait")
@@ -36,6 +36,21 @@ namespace Populations.Helpers
             {
                 if (culture.StringId == "sturgia")
                     return "Thralls";
+                else if (culture.StringId == "aserai")
+                    return "Mameluke";
+            } else if (type == PopType.Craftsmen)
+            {
+                if (culture.StringId == "khuzait" || culture.StringId == "battania")
+                    return "Artisans";
+            }
+            else if (type == PopType.Nobles)
+            {
+                if (culture.StringId == "empire")
+                    return "Nobiles";
+                else if (culture.StringId == "sturgia")
+                    return "Knyaz";
+                else if (culture.StringId == "vlandia")
+                    return "Ealdormen";
             }
             return type.ToString();
         }

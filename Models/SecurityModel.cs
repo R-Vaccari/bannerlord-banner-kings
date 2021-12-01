@@ -11,6 +11,9 @@ namespace Populations.Models
         {
             ExplainedNumber baseResult = base.CalculateSecurityChange(town, includeDescriptions);
 
+            if (town.IsCastle)
+                baseResult.Add(0.5f, new TextObject("Castle security"));
+
             if (PopulationConfig.Instance.PolicyManager != null)
                 if (PopulationConfig.Instance.PolicyManager.GetSettlementWork(town.Settlement) == PolicyManager.WorkforcePolicy.Martial_Law)
                 {
@@ -20,5 +23,6 @@ namespace Populations.Models
 
             return baseResult;
         }
+
     }
 }

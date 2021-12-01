@@ -199,7 +199,7 @@ namespace Populations
             {
                 get
                 {
-                    float result = new CultureModel().CalculateAssimilationChange(settlement);
+                    float result = PopulationConfig.Instance.PopulationManager.GetPopData(settlement).Assimilation;
                     return (result * 100f).ToString() + '%';
                 }
             }

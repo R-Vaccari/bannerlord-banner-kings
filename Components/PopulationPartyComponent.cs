@@ -4,26 +4,38 @@ using TaleWorlds.Localization;
 using System.Linq;
 using TaleWorlds.Core;
 using static Populations.PopulationManager;
+using TaleWorlds.SaveSystem;
 
 namespace Populations.Components
 {
     class PopulationPartyComponent : PartyComponent
     {
-        private Settlement _target;
-        private string _name;
-        public bool slaveCaravan;
-        public PopType popType;
-        public PopulationPartyComponent(Settlement target, string name, bool slaveCaravan, PopType popType) : base()
+        [SaveableProperty(1)]
+        public Settlement _target { get; set; }
+
+        [SaveableProperty(2)]
+        public Settlement _origin { get; set; }
+
+        [SaveableProperty(3)]
+        public string _name { get; set; }
+
+        [SaveableProperty(4)]
+        public bool slaveCaravan { get; set; }
+
+        [SaveableProperty(5)]
+        public PopType popType { get; set; }
+        public PopulationPartyComponent(Settlement target, Settlement origin, string name, bool slaveCaravan, PopType popType) : base()
         {
             _target = target;
             _name = name;
+            _origin = origin;
             this.slaveCaravan = slaveCaravan;
             this.popType = popType;
         }
 
-        private static MobileParty CreateParty(string id, string origin, bool slaveCaravan, Settlement target, string name, PopType popType)
+        private static MobileParty CreateParty(string id, Settlement origin, bool slaveCaravan, Settlement target, string name, PopType popType)
         {
-            return MobileParty.CreateParty(id + origin + target.Name.ToString(), new PopulationPartyComponent(target, String.Format(name, origin), slaveCaravan, popType),
+            return MobileParty.CreateParty(id + origin + target.Name.ToString(), new PopulationPartyComponent(target, origin, String.Format(name, origin.Name.ToString()), slaveCaravan, popType),
                 delegate (MobileParty mobileParty)
             {
                 mobileParty.SetPartyUsedByQuest(true);
@@ -37,7 +49,7 @@ namespace Populations.Components
 
         public static void CreateSlaveCaravan(string id, Settlement origin, Settlement target, string name, int slaves)
         {
-            MobileParty caravan = CreateParty(id, origin.Name.ToString(), true, target, name, PopType.None);
+            MobileParty caravan = CreateParty(id, origin, true, target, name, PopType.None);
             caravan.AddPrisoner(CharacterObject.All.FirstOrDefault(x => x.StringId == "looter"), slaves);
             caravan.InitializeMobileParty(origin.Culture.EliteCaravanPartyTemplate, origin.GatePosition, 0f, 0f, -1);
             GiveMounts(ref caravan);
@@ -47,7 +59,7 @@ namespace Populations.Components
 
         public static void CreateTravellerParty(string id, Settlement origin, Settlement target, string name, int count, PopType type, CharacterObject civilian)
         {
-            MobileParty party = CreateParty(id, origin.Name.ToString(), false, target, name, type);
+            MobileParty party = CreateParty(id, origin, false, target, name, type);
             PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(origin);
             data.UpdatePopType(type, count);
             TroopRoster roster = new TroopRoster(party.Party);
@@ -84,6 +96,11 @@ namespace Populations.Components
         public override Settlement HomeSettlement
         {
             get => _target;
+        }
+
+        public Settlement OriginSettlement
+        {
+            get => _origin;
         }
     }
 }

@@ -37,7 +37,7 @@ namespace Populations.Models
 			int citySerfs = data.GetTypeCount(PopType.Serfs);
 			if (!town.IsUnderSiege)
             {
-				float serfProduction = (float)citySerfs * SERF_FOOD * 0.4f;
+				float serfProduction = (float)citySerfs * SERF_FOOD * (town.IsCastle ? 1f : 0.4f);
 				result.Add((float)serfProduction, new TextObject("Serfs production", null));
 			} else
             {
@@ -58,7 +58,7 @@ namespace Populations.Models
 			float craftsmenConsumption = (float)cityCraftsmen * CRAFTSMEN_FOOD;
 			result.Add((float)craftsmenConsumption, new TextObject("Craftsmen consumption", null));
 
-			float prosperityImpact = -town.Owner.Settlement.Prosperity / 40f;
+			float prosperityImpact = -town.Owner.Settlement.Prosperity / (town.IsCastle ? 100f : 40f);
 			result.Add(prosperityImpact, new TextObject("Prosperity effect"), null);
 
 			MobileParty garrisonParty = town.GarrisonParty;
@@ -156,11 +156,11 @@ namespace Populations.Models
 				int serfs = data.GetTypeCount(PopType.Serfs);
 				int slaves = data.GetTypeCount(PopType.Slaves);
 				if (IsVillageProducingFood(village))
-					food += (float)(serfs + slaves) * SERF_FOOD * 1.2f;
+					food += (float)(serfs + slaves) * SERF_FOOD * 4f;
 				else if (IsVillageAMine(village))
 					food += (float)serfs * SERF_FOOD + (float)slaves * SLAVE_MINE_FOOD;
 				else
-					food += ((float)(serfs + slaves) * SERF_FOOD) / 2f;
+					food += ((float)(serfs + slaves) * SERF_FOOD) * 1.2f;
 
 				food += (float)nobles * NOBLE_FOOD;
 

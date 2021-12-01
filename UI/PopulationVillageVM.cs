@@ -186,7 +186,7 @@ namespace Populations
             {
                 get
                 {
-                    float result = new CultureModel().CalculateAssimilationChange(settlement);
+                    float result = new CultureModel().GetAssimilationChange(settlement);
                     return (result * 100f).ToString() + '%';
                 }
             }

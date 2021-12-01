@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Populations.Components;
+using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.SaveSystem;
 using static Populations.PolicyManager;
@@ -26,6 +27,7 @@ namespace Populations
             base.AddEnumDefinition(typeof(WorkforcePolicy), 8);
             base.AddClassDefinition(typeof(PopulationManager), 9);
             base.AddClassDefinition(typeof(PolicyManager), 10);
+            base.AddClassDefinition(typeof(PopulationPartyComponent), 11);
         }
 
         protected override void DefineContainerDefinitions()
