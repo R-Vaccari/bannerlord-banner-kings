@@ -1,4 +1,6 @@
-﻿using TaleWorlds.Library;
+﻿using TaleWorlds.Core.ViewModelCollection;
+using TaleWorlds.Library;
+using TaleWorlds.Localization;
 
 namespace Populations
 {
@@ -7,11 +9,13 @@ namespace Populations
         public class PopulationInfoVM : ViewModel
         {
             private string _name, _count;
+            private HintViewModel _hint { get; set; }
 
-            public PopulationInfoVM(string name, int count) 
+            public PopulationInfoVM(string name, int count, string hintText) 
             {
                 _name = name;
                 _count = count.ToString();
+                this.Hint = new HintViewModel(new TextObject(hintText));
             }
 
 
@@ -39,6 +43,20 @@ namespace Populations
                     {
                         _count = value;
                         base.OnPropertyChangedWithValue(value, "Count");
+                    }
+                }
+            }
+
+            [DataSourceProperty]
+            public HintViewModel Hint
+            {
+                get => _hint;
+                set
+                {
+                    if (value != _hint)
+                    {
+                        _hint = value;
+                        base.OnPropertyChangedWithValue(value, "Hint");
                     }
                 }
             }

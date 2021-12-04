@@ -42,7 +42,8 @@ namespace Populations
                 if (data != null && data.Classes != null)
                 {
                     data.Classes.ForEach(popClass => PopInfo.Add(new PopulationInfoVM(
-                        Helpers.Helpers.GetCulturalClassName(popClass.type, settlement.Culture), popClass.count)
+                        Helpers.Helpers.GetCulturalClassName(popClass.type, settlement.Culture), popClass.count,
+                        Helpers.Helpers.GetClassHint(popClass.type, settlement.Culture))
                         ));
 
                     List<PolicyElement> elements = PopulationConfig.Instance.PolicyManager.GetDefaultDecisions(settlement);

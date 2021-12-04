@@ -8,9 +8,8 @@ namespace Populations.Models
 {
     class VillageProductionModel : DefaultVillageProductionCalculatorModel
     {
-        private static readonly float SERF_PRODUCTION = 0.01f;
-        private static readonly float SERF_FOOD_PRODUCTION = 0.02f;
-        private static readonly float SLAVE_PRODUCTION = 0.025f;
+        private static readonly float SERF_PRODUCTION = 0.0005f;
+        private static readonly float SLAVE_PRODUCTION = 0.00125f;
         public override float CalculateDailyProductionAmount(Village village, ItemObject item)
         {
             if (village.Settlement != null && village.VillageState == Village.VillageStates.Normal && PopulationConfig.Instance.PopulationManager != null && PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(village.Settlement))
@@ -59,7 +58,6 @@ namespace Populations.Models
 						}
 					}
 				}
-
                 return explainedNumber.ResultNumber;
             } else return base.CalculateDailyProductionAmount(village, item);
         }

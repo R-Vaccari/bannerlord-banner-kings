@@ -14,7 +14,15 @@ namespace Populations.Models
             if (PopulationConfig.Instance.PopulationManager != null && PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
             {
                 PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(settlement);
-                data.Assimilation = Math.Max(data.Assimilation + result, 0);
+                float finalResult = data.Assimilation + result;
+                if (finalResult > 1f)
+                    finalResult = 1f;
+                else if (finalResult < 0f)
+                    finalResult = 0f;
+                data.Assimilation = finalResult;
+
+                if (data.Assimilation == 1f && settlement.Owner != null)
+                    settlement.Culture = settlement.Owner.Culture;
             }
         }
 

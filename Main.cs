@@ -4,8 +4,8 @@ using Populations.Models;
 using System;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
-using TaleWorlds.CampaignSystem.SandBox.CampaignBehaviors.AiBehaviors;
 using TaleWorlds.Core;
+using TaleWorlds.Localization;
 using TaleWorlds.MountAndBlade;
 using static Populations.PopulationManager;
 
@@ -89,12 +89,13 @@ namespace Populations
                     CultureObject newCulture = newOwner.Culture;
 
                     if ((settlementCulture == originalOwnerCulture && settlementCulture != newCulture) ||
-                        (settlementCulture != originalOwnerCulture && settlementCulture != newCulture 
+                        (settlementCulture != originalOwnerCulture && settlementCulture != newCulture
                         && originalOwnerCulture != newCulture)) // previous owner as assimilated or everybody has a different culture
                     {
                         data.Assimilation = 0f;
-                    } else if (originalOwnerCulture != newCulture && newCulture == settlementCulture) // new owner is same culture as settlement that was being assimilated by foreigner, invert the process
-                    { 
+                    }
+                    else if (originalOwnerCulture != newCulture && newCulture == settlementCulture) // new owner is same culture as settlement that was being assimilated by foreigner, invert the process
+                    {
                         float result = 1f - data.Assimilation;
                         data.Assimilation = result;
                     }
@@ -104,21 +105,22 @@ namespace Populations
             }
         }
 
-        /*
-        [HarmonyPatch(typeof(DefaultSettlementFoodModel), "CalculateTownFoodChangeInternal")]
-        class SettlementFoodPatch
+        [HarmonyPatch(typeof(DefaultBuildingTypes), "InitializeAll")]
+        class InitializeBuildingsPatch
         {
-            static bool Prefix(ref ExplainedNumber __result, Town town, bool includeDescriptions)
+            static bool Prefix()
             {
-                if (PopulationManager.IsSettlementPopulated(town.Settlement))
+                Helpers.Helpers._buildingCastleRetinue.Initialize(new TextObject("{=!}Retinue Barracks", null), new TextObject("{=!}Barracks for the castle retinue, a group of elite soldiers. The retinue is added to the garrison over time, up to a limit of 20, 40 or 60 (building level).", null), new int[]
                 {
-                    __result = new FoodModel().CalculateTownFoodChangeInternal(town, includeDescriptions);
-                    return false;
-                }
+                     1000,
+                     1500,
+                     2000
+                }, BuildingLocation.Castle, new Tuple<BuildingEffectEnum, float, float, float>[]
+                {
+                }, 0);
 
                 return true;
             }
         }
-        */
     }
 }

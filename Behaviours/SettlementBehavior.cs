@@ -67,11 +67,11 @@ namespace Populations.Behaviors
                 Settlement target = party.HomeSettlement;
                 PopulationPartyComponent component = (PopulationPartyComponent)party.PartyComponent;
 
-                if (target != null && party.MapEvent == null)
+                if (target != null)
                 {
                     if (component.slaveCaravan)
                     {
-                        if (target.IsVillage && target.Village.VillageState == Village.VillageStates.Normal)
+                        if (target.IsVillage && target.Village.VillageState != Village.VillageStates.Looted && target.Village.VillageState != Village.VillageStates.BeingRaided)
                         {
                             if (Campaign.Current.Models.MapDistanceModel.GetDistance(party, target) <= 1f)
                                 PartyEnterSettlement(ref party, target, component.popType, component.slaveCaravan);
@@ -149,10 +149,10 @@ namespace Populations.Behaviors
                 }
 
                 // Send Travellers
-                if (!settlement.IsVillage)
+                if (settlement.IsTown)
                 {
                     int random = MBRandom.RandomInt(1, 100);
-                    if (random == 1)
+                    if (random <= 3)
                     {
                         Settlement target = GetTownToTravel(settlement);
                         if (target != null)
@@ -160,6 +160,25 @@ namespace Populations.Behaviors
                              PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
                                 SendTravellerParty(settlement, target);
                     }
+                }
+
+                if (settlement.IsCastle)
+                {
+                    foreach (Building castleBuilding in settlement.Town.Buildings)
+                        if (castleBuilding.BuildingType == Helpers.Helpers._buildingCastleRetinue)
+                        {
+                            MobileParty garrison = settlement.Town.GarrisonParty;
+                            List<TroopRosterElement> elements = garrison.MemberRoster.GetTroopRoster();
+                            int currentRetinue = 0;
+                            foreach (TroopRosterElement soldierElement in elements)
+                                if (Helpers.Helpers.IsRetinueTroop(soldierElement.Character, settlement.Culture))
+                                    currentRetinue += soldierElement.Number;
+
+                            int maxRetinue = castleBuilding.CurrentLevel == 1 ? 20 : (castleBuilding.CurrentLevel == 2 ? 40 : 60);
+                            if (currentRetinue < maxRetinue)
+                                if (garrison.MemberRoster.Count < garrison.Party.PartySizeLimit)
+                                    garrison.MemberRoster.AddToCounts(settlement.Culture.EliteBasicTroop, 1);
+                        }
                 }
             }
         }
@@ -188,17 +207,20 @@ namespace Populations.Behaviors
 
         private Settlement GetTownToTravel(Settlement origin)
         {
-            Kingdom kingdom = origin.OwnerClan.Kingdom;
-            if (kingdom != null)
+            if (origin.OwnerClan != null)
             {
-                if (kingdom.Settlements.Count > 1)
+                Kingdom kingdom = origin.OwnerClan.Kingdom;
+                if (kingdom != null)
                 {
-                    Settlement target = MBRandom.ChooseWeighted<Settlement>(kingdom.Settlements, delegate (Settlement settlement)
+                    if (kingdom.Settlements != null && kingdom.Settlements.Count > 1)
                     {
-                        if (settlement.IsTown && settlement != origin) return 1f;
-                        else return 0f;
-                    });
-                    return target;
+                        Settlement target = MBRandom.ChooseWeighted<Settlement>(kingdom.Settlements, delegate (Settlement settlement)
+                        {
+                            if (settlement.IsTown && settlement != origin) return 1f;
+                            else return 0f;
+                        });
+                        return target;
+                    }
                 }
             }
 
@@ -209,36 +231,34 @@ namespace Populations.Behaviors
         {
             PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(origin);
             int random = MBRandom.RandomInt(1, 100);
-            CharacterObject peasant = MBObjectManager.Instance.GetObjectTypeList<CharacterObject>().FirstOrDefault(x => x.StringId == "villager_" + origin.Culture.StringId.ToString());
-            if (peasant != null)
+            CharacterObject civilian;
+            PopType type;
+            int count;
+            string name;
+            if (random < 60)
             {
-                PopType type;
-                int count;
-                string name;
-                count = MBRandom.RandomInt(20, 50);
+                civilian = MBObjectManager.Instance.GetObjectTypeList<CharacterObject>().FirstOrDefault(x => x.StringId == "villager_" + origin.Culture.StringId.ToString());
+                count = MBRandom.RandomInt(30, 70);
                 type = PopType.Serfs;
-                name = "Travelling " + Helpers.Helpers.GetCulturalClassName(type, origin.Culture) + " from {0}";
-                /*
-                if (random < 65)
-                {
-
-                }
-                
-                else if (random < 95)
-                {
-                    count = MBRandom.RandomInt(15, 30);
-                    type = PopType.Craftsmen;
-                    name = "Travelling craftsmen from {0}";
-                } else
-                {
-                    count = MBRandom.RandomInt(5, 15);
-                    type = PopType.Craftsmen;
-                    name = "Travelling nobles from {0}";
-                } */
-
-                PopulationPartyComponent.CreateTravellerParty("travellers_", origin, target,
-                    name, count, type, peasant);
             }
+            else if (random < 90)
+            {
+                civilian = MBObjectManager.Instance.GetObjectTypeList<CharacterObject>().FirstOrDefault(x => x.StringId == "craftsman_" + origin.Culture.StringId.ToString());
+                count = MBRandom.RandomInt(15, 30);
+                type = PopType.Craftsmen;
+            } else
+            {
+                civilian = MBObjectManager.Instance.GetObjectTypeList<CharacterObject>().FirstOrDefault(x => x.StringId == "noble_" + origin.Culture.StringId.ToString());
+                count = MBRandom.RandomInt(10, 15);
+                type = PopType.Nobles;
+            }
+
+            name = "Travelling " + Helpers.Helpers.GetCulturalClassName(type, origin.Culture) + " from {0}";
+
+            if (civilian != null)
+              PopulationPartyComponent.CreateTravellerParty("travellers_", origin, target,
+                name, count, type, civilian);
+            
         }
 
         private void SendSlaveCaravan(Village target)
@@ -246,10 +266,8 @@ namespace Populations.Behaviors
             Settlement origin = target.MarketTown.Settlement;
             PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(origin);
             int slaves = (int)((double)data.GetTypeCount(PopType.Slaves) * 0.005d);
-            data.UpdatePopType(PopType.Slaves, slaves * -1);
-
+            data.UpdatePopType(PopType.Slaves, (int)((float)slaves * -1f));
             PopulationPartyComponent.CreateSlaveCaravan("slavecaravan_", origin, target.Settlement, "Slave Caravan from {0}", slaves);
-
         }
 
         private void OnGameCreated(CampaignGameStarter campaignGameStarter)
@@ -265,7 +283,19 @@ namespace Populations.Behaviors
                         if (data.Assimilation >= 1f)
                             settlement.Culture = settlement.Owner.Culture;
                     }
-            
+
+            BuildingType retinueType = MBObjectManager.Instance.GetObjectTypeList<BuildingType>().FirstOrDefault(x => x == Helpers.Helpers._buildingCastleRetinue);
+            if (retinueType == null)
+            {
+                Helpers.Helpers._buildingCastleRetinue.Initialize(new TextObject("{=!}Retinue Barracks", null), new TextObject("{=!}Barracks for the castle retinue, a group of elite soldiers. The retinue is added to the garrison over time, up to a limit of 20, 40 or 60 (building level).", null), new int[]
+                {
+                     1000,
+                     1500,
+                     2000
+                }, BuildingLocation.Castle, new Tuple<BuildingEffectEnum, float, float, float>[]
+                {
+                }, 0);
+            }
         }
 
         private void AddMenus(CampaignGameStarter campaignGameStarter)
@@ -306,7 +336,6 @@ namespace Populations.Behaviors
             starter.AddDialogLine("traveller_noble_party_start", "start", "traveller_party_greeting",
                 "Yes? Please do not interfere with our caravan.",
                 new ConversationSentence.OnConditionDelegate(this.traveller_noble_start_on_condition), null, 100, null);
-
 
 
             starter.AddPlayerLine("traveller_party_loot", "traveller_party_greeting", "close_window", 
@@ -373,7 +402,7 @@ namespace Populations.Behaviors
             if (IsTravellerParty(party))
             {
                 PopulationPartyComponent component = (PopulationPartyComponent)party.MobileParty.PartyComponent;
-                if (component.popType == PopType.Serfs)
+                if (component.popType == PopType.Craftsmen)
                     value = true;
             }
 
