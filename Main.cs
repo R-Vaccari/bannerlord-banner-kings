@@ -2,9 +2,12 @@
 using Populations.Behaviors;
 using Populations.Models;
 using System;
+using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
+using TaleWorlds.CampaignSystem.SandBox.CampaignBehaviors.VillageBehaviors;
 using TaleWorlds.Core;
+using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.MountAndBlade;
 using static Populations.PopulationManager;
@@ -122,5 +125,57 @@ namespace Populations
                 return true;
             }
         }
+
+        [HarmonyPatch(typeof(VillagerCampaignBehavior), "OnSettlementEntered")]
+        class VillagerSettlementEnterPatch
+        {
+            static bool Prefix(ref Dictionary<MobileParty, List<Settlement>>  ____previouslyChangedVillagerTargetsDueToEnemyOnWay, MobileParty mobileParty, Settlement settlement, Hero hero)
+            {
+                if (PopulationConfig.Instance.PopulationManager != null && PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
+                {
+
+                    if (mobileParty != null && mobileParty.IsActive && mobileParty.IsVillager)
+                    {
+                        ____previouslyChangedVillagerTargetsDueToEnemyOnWay[mobileParty].Clear();
+                        if (settlement.IsTown)
+                            SellGoodsForTradeAction.ApplyByVillagerTrade(settlement, mobileParty);
+                        
+                        if (settlement.IsVillage)
+                        {
+                            int num = Campaign.Current.Models.SettlementTaxModel.CalculateVillageTaxFromIncome(mobileParty.HomeSettlement.Village, mobileParty.PartyTradeGold);
+                            mobileParty.PartyTradeGold = 0;
+                            mobileParty.HomeSettlement.Village.TradeTaxAccumulated += num;
+                        }
+                        if (settlement.IsTown && settlement.Town.Governor != null && settlement.Town.Governor.GetPerkValue(DefaultPerks.Trade.DistributedGoods))
+                            settlement.Town.TradeTaxAccumulated += MathF.Round(DefaultPerks.Trade.DistributedGoods.SecondaryBonus);    
+                    }
+                    return false;
+                }
+                else return true;  
+            }
+        }
+
+
+
+        /*
+         * if (mobileParty != null && mobileParty.IsActive && mobileParty.IsVillager)
+			{
+				this._previouslyChangedVillagerTargetsDueToEnemyOnWay[mobileParty].Clear();
+				if (settlement.IsTown)
+				{
+					SellGoodsForTradeAction.ApplyByVillagerTrade(settlement, mobileParty);
+				}
+				if (settlement.IsVillage)
+				{
+					int num = Campaign.Current.Models.SettlementTaxModel.CalculateVillageTaxFromIncome(mobileParty.HomeSettlement.Village, mobileParty.PartyTradeGold);
+					mobileParty.PartyTradeGold = 0;
+					mobileParty.HomeSettlement.Village.TradeTaxAccumulated += num;
+				}
+				if (settlement.IsTown && settlement.Town.Governor != null && settlement.Town.Governor.GetPerkValue(DefaultPerks.Trade.DistributedGoods))
+				{
+					settlement.Town.TradeTaxAccumulated += MathF.Round(DefaultPerks.Trade.DistributedGoods.SecondaryBonus);
+				}
+			}
+         */
     }
 }
