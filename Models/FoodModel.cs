@@ -38,6 +38,9 @@ namespace Populations.Models
 			if (!town.IsUnderSiege)
             {
 				float serfProduction = (float)citySerfs * SERF_FOOD * (town.IsCastle ? 1f : 0.4f);
+				if (PopulationConfig.Instance.PolicyManager.GetSettlementWork(town.Settlement) == PolicyManager.WorkforcePolicy.Construction)
+					serfProduction *= 0.85f;
+					
 				result.Add((float)serfProduction, new TextObject("Serfs production", null));
 			} else
             {
@@ -67,9 +70,6 @@ namespace Populations.Models
 
 			if (PopulationConfig.Instance.PolicyManager.IsPolicyEnacted(town.Settlement, PolicyManager.PolicyType.CONSCRIPTION))
 				result.AddFactor(-0.25f, new TextObject("Conscription policy"));
-
-			if (PopulationConfig.Instance.PolicyManager.GetSettlementWork(town.Settlement) == PolicyManager.WorkforcePolicy.Construction)
-				result.AddFactor(-0.15f, new TextObject("Construction policy"));
 	
 			if (town.Governor != null)
 			{

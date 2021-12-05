@@ -129,7 +129,7 @@ namespace Populations.Components
                     itemObject = itemObject2;
 
             if (itemObject != null)
-                party.ItemRoster.Add(new ItemRosterElement(itemObject, (int)((float)party.MemberRoster.TotalManCount * 0.25f), null));
+                party.ItemRoster.Add(new ItemRosterElement(itemObject, (int)((float)party.Party.NumberOfAllMembers * 0.25f), null));
             
         }
 
@@ -139,7 +139,7 @@ namespace Populations.Components
             {
                 if (itemObject.IsFood)
                 {
-                    int num2 = MBRandom.RoundRandomized((float)party.MemberRoster.TotalManCount * 
+                    int num2 = MBRandom.RoundRandomized((float)party.Party.NumberOfAllMembers * 
                         (1f / (float)itemObject.Value) * (float)16 * MBRandom.RandomFloat * 
                         MBRandom.RandomFloat * MBRandom.RandomFloat * MBRandom.RandomFloat);
                     if (num2 > 0)
@@ -150,9 +150,9 @@ namespace Populations.Components
 
         private static void GiveItems(ref MobileParty party, PopType type)
         {
-            int partySize = party.MemberRoster.Count;
+            int partySize = party.Party.NumberOfAllMembers;
             int totalValue = 0;
-            int valueMax = party.MemberRoster.Count * (type == PopType.Serfs ? 30 : (type == PopType.Craftsmen ? 100 : 300));
+            int valueMax = partySize * (type == PopType.Serfs ? 30 : (type == PopType.Craftsmen ? 100 : 300));
 
             while (party.ItemRoster.TotalWeight < party.InventoryCapacity && totalValue < valueMax)
             {
@@ -179,13 +179,13 @@ namespace Populations.Components
                     if (type == PopType.Nobles)
                     {
                         if (item.StringId == "silver" || item.StringId == "jewelry" || item.StringId == "spice"
-                        || item.StringId == "velvet" || item.StringId == "fur") return 1f + (10f / partySize) / (float)item.Value;
+                        || item.StringId == "velvet" || item.StringId == "fur") return 1f * (10f / partySize) / (float)item.Value;
                     }
                     else if (type == PopType.Craftsmen)
                     {
                         if (item.StringId == "wool" || item.StringId == "pottery" || item.StringId == "cotton" ||
-                        item.StringId == "flax" || item.StringId == "linen" || item.StringId == "leather")
-                            return 1f / (float)item.Value * (10f / partySize);
+                        item.StringId == "flax" || item.StringId == "linen" || item.StringId == "leather" || item.StringId == "tools")
+                            return 1f * (10f / partySize) / (float)item.Value;
                     }
                     return 1f / (float)item.Value;
                 });

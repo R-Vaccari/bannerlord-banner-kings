@@ -76,7 +76,22 @@ namespace Populations.Models
 			result.Add(3f, new TextObject("Base"), null);
 
 			if (PopulationConfig.Instance.PolicyManager.GetSettlementWork(town.Settlement) == PolicyManager.WorkforcePolicy.Construction)
-				result.AddFactor(0.15f, new TextObject("Construction policy"));
+            {
+				int serfs = data.GetTypeCount(PopType.Serfs);
+				result.Add(((float)serfs * 0.15f) * SERF_CONSTRUCTION, new TextObject("Serfs from construction policy"), null);
+			}
+
+			if (town.IsCastle && town.Security >= 50)
+				if (town.GarrisonParty != null)
+                {
+					int garrisonNumber = town.GarrisonParty.Party.NumberOfAllMembers;
+					if (garrisonNumber > 0)
+					{
+						float garrisonResult = ((float)garrisonNumber * ((town.Security * 0.01f) - 0.49f)) * 0.1f;
+						result.Add(garrisonResult, new TextObject("Idle garrison"));
+					}
+				}	
+                
 
 			if (!omitBoost && town.BoostBuildingProcess > 0)
 			{
@@ -172,16 +187,7 @@ namespace Populations.Models
 		}
 
 		private const float SLAVE_CONSTRUCTION = 0.015f;
-
-		private const float HammerMultiplier = 0.01f;
-
-		private const int VeryLowLoyaltyValue = 25;
-
-		private const float MediumLoyaltyValue = 50f;
-
-		private const float HighLoyaltyValue = 75f;
-
-		private const float HighestLoyaltyValue = 100f;
+		private const float SERF_CONSTRUCTION = 0.0075f;
 
 		private readonly TextObject ProductionFromMarketText = new TextObject("{=vaZDJGMx}Construction from Market", null);
 		private readonly TextObject CultureText = GameTexts.FindText("str_culture", null);

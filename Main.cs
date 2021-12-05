@@ -115,13 +115,35 @@ namespace Populations
             {
                 Helpers.Helpers._buildingCastleRetinue.Initialize(new TextObject("{=!}Retinue Barracks", null), new TextObject("{=!}Barracks for the castle retinue, a group of elite soldiers. The retinue is added to the garrison over time, up to a limit of 20, 40 or 60 (building level).", null), new int[]
                 {
-                     1000,
-                     1500,
-                     2000
+                     800,
+                     1200,
+                     1500
                 }, BuildingLocation.Castle, new Tuple<BuildingEffectEnum, float, float, float>[]
                 {
                 }, 0);
 
+                return true;
+            }
+        }
+
+        [HarmonyPatch(typeof(Village), "DailyTick")]
+        class VillageTickPatch
+        {
+            static bool Prefix(ref Village __instance)
+            {
+                if (PopulationConfig.Instance.PopulationManager != null && PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(__instance.Settlement))
+                {
+                    int hearthLevel = __instance.GetHearthLevel();
+                    __instance.Hearth += __instance.HearthChange;
+                    if (hearthLevel != __instance.GetHearthLevel())
+                        __instance.Settlement.Party.Visuals.RefreshLevelMask(__instance.Settlement.Party);
+                    
+                    if (__instance.Hearth < 10f)
+                        __instance.Hearth = 10f;
+                    
+                    __instance.Owner.Settlement.Militia += __instance.MilitiaChange;               
+                    return false;
+                }
                 return true;
             }
         }
@@ -142,9 +164,11 @@ namespace Populations
                         
                         if (settlement.IsVillage)
                         {
-                            int num = Campaign.Current.Models.SettlementTaxModel.CalculateVillageTaxFromIncome(mobileParty.HomeSettlement.Village, mobileParty.PartyTradeGold);
+                            int tax = Campaign.Current.Models.SettlementTaxModel.CalculateVillageTaxFromIncome(mobileParty.HomeSettlement.Village, mobileParty.PartyTradeGold);
+                            float remainder = mobileParty.PartyTradeGold - tax;
+                            mobileParty.HomeSettlement.Village.ChangeGold((int)(remainder * 0.5f));
                             mobileParty.PartyTradeGold = 0;
-                            mobileParty.HomeSettlement.Village.TradeTaxAccumulated += num;
+                            mobileParty.HomeSettlement.Village.TradeTaxAccumulated += tax;
                         }
                         if (settlement.IsTown && settlement.Town.Governor != null && settlement.Town.Governor.GetPerkValue(DefaultPerks.Trade.DistributedGoods))
                             settlement.Town.TradeTaxAccumulated += MathF.Round(DefaultPerks.Trade.DistributedGoods.SecondaryBonus);    
@@ -154,28 +178,5 @@ namespace Populations
                 else return true;  
             }
         }
-
-
-
-        /*
-         * if (mobileParty != null && mobileParty.IsActive && mobileParty.IsVillager)
-			{
-				this._previouslyChangedVillagerTargetsDueToEnemyOnWay[mobileParty].Clear();
-				if (settlement.IsTown)
-				{
-					SellGoodsForTradeAction.ApplyByVillagerTrade(settlement, mobileParty);
-				}
-				if (settlement.IsVillage)
-				{
-					int num = Campaign.Current.Models.SettlementTaxModel.CalculateVillageTaxFromIncome(mobileParty.HomeSettlement.Village, mobileParty.PartyTradeGold);
-					mobileParty.PartyTradeGold = 0;
-					mobileParty.HomeSettlement.Village.TradeTaxAccumulated += num;
-				}
-				if (settlement.IsTown && settlement.Town.Governor != null && settlement.Town.Governor.GetPerkValue(DefaultPerks.Trade.DistributedGoods))
-				{
-					settlement.Town.TradeTaxAccumulated += MathF.Round(DefaultPerks.Trade.DistributedGoods.SecondaryBonus);
-				}
-			}
-         */
     }
 }

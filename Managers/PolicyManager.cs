@@ -70,6 +70,15 @@ namespace Populations
             }  
         }
 
+        private PolicyElement GetPolicyElementFromType(PolicyType type)
+        {
+            if (type == PolicyType.EXPORT_SLAVES)
+                return new PolicyElement("Allow slaves to be exported", "Slave caravans will be formed when slave population is big", true, PolicyType.EXPORT_SLAVES);
+            else if (type == PolicyType.POP_GROWTH)
+                return new PolicyElement("Accelerate population growth", "Population will grow faster at the cost of influence", false, PolicyType.POP_GROWTH);
+            else return null;
+        }
+
         public MilitiaPolicy GetMilitiaPolicy(Settlement settlement)
         {
             if (MILITIAS.ContainsKey(settlement))
@@ -129,8 +138,16 @@ namespace Populations
         public void UpdatePolicy(Settlement settlement, PolicyType policy, bool value)
         {
             PolicyElement element = POLICIES[settlement].Find(x => x.type == policy);
-            if (element != null)
-                element.isChecked = value;
+            if (element != null) element.isChecked = value;  
+            else
+            {
+                PolicyElement elementToAdd = GetPolicyElementFromType(policy);
+                if (elementToAdd != null)
+                {
+                    elementToAdd.isChecked = value;
+                    POLICIES[settlement].Add(elementToAdd);
+                }
+            }
         }
 
         public void UpdateWorkPolicy(Settlement settlement, WorkforcePolicy policy)
