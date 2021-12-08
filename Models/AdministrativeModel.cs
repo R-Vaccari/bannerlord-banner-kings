@@ -15,7 +15,10 @@ namespace Populations.Models
                 if (settlement.Town.Governor != null)
                 {
                     int skill = settlement.Town.Governor.GetSkillValue(DefaultSkills.Steward);
-                    baseResult += (float)skill * -0.05f;
+                    float effect = (float)skill * -0.0005f;
+                    if (effect > 0.20f)
+                        effect = 0.20f;
+                    baseResult += effect;
                 }
                 else baseResult += 0.05f;
             }
@@ -24,7 +27,10 @@ namespace Populations.Models
                 if (settlement.Village.MarketTown.Governor != null)
                 {
                     int skill = settlement.Village.MarketTown.Governor.GetSkillValue(DefaultSkills.Steward);
-                    baseResult += (float)skill * -0.05f;
+                    float effect = (float)skill * -0.0005f;
+                    if (effect > 0.20f)
+                        effect = 0.20f;
+                    baseResult += effect;
                 } else baseResult += 0.05f;
             }
 

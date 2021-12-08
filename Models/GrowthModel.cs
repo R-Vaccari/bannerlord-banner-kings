@@ -8,7 +8,7 @@ namespace Populations.Models
     public class GrowthModel : GameModel
     {
         private static readonly float POP_GROWTH_FACTOR = 0.005f;
-        private static readonly float SLAVE_GROWTH_FACTOR = 0.0005f;
+        private static readonly float SLAVE_GROWTH_FACTOR = 0.0015f;
 
         public void CalculatePopulationGrowth(Settlement settlement)
         {
@@ -38,15 +38,20 @@ namespace Populations.Models
         private int GetDataGrowthFactor(Settlement settlement, PopulationData data, bool boost, bool showMessage)
         {
 
-            int growthFactor = 5;
+            float growthFactor = 5;
             if (settlement.IsVillage || !settlement.IsStarving)
             {
+                int cap = settlement.IsTown ? 50000 : (settlement.IsCastle ? 8000 : 4000);
+                float filledCapacity = (float)data.TotalPop / (float)cap;
+
                 data.Classes.ForEach(popClass =>
                 {
                     if (popClass.type != PopType.Slaves)
                         growthFactor += (int)(popClass.count * POP_GROWTH_FACTOR * (boost ? 1.1f : 1f));
                     else growthFactor -= (int)(popClass.count * SLAVE_GROWTH_FACTOR);
                 });
+
+                growthFactor *= 1f - (1f * filledCapacity);
             } else if (settlement.IsStarving)
             {
                 growthFactor = -5;
@@ -54,8 +59,8 @@ namespace Populations.Models
                 if (showMessage && settlement.OwnerClan.Leader == Hero.MainHero)
                     InformationManager.DisplayMessage(new InformationMessage(string.Format("Population is starving at {0}!", settlement.Name.ToString())));
             }
-            
-            return growthFactor;
+
+            return (int)growthFactor;
         }
     }
 }

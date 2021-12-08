@@ -10,9 +10,10 @@ namespace Populations.Models
 
         public void CalculateAssimilationChange(Settlement settlement)
         {
-            float result = GetAssimilationChange(settlement);
+            
             if (PopulationConfig.Instance.PopulationManager != null && PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
             {
+                float result = GetAssimilationChange(settlement);
                 PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(settlement);
                 float finalResult = data.Assimilation + result;
                 if (finalResult > 1f)
@@ -29,9 +30,11 @@ namespace Populations.Models
         public float GetAssimilationChange(Settlement settlement)
         {
             CultureObject ownerCulture = settlement.OwnerClan.Culture;
- 
-            PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(settlement);
             float change = -0.005f;
+
+            if (!settlement.IsVillage && settlement.Town != null)
+            change += 0.005f * (1f * (settlement.Town.Security * 0.01f));
+
             if (settlement.Culture != ownerCulture)
             {
                 if (!settlement.IsVillage && settlement.Town != null)
@@ -39,14 +42,20 @@ namespace Populations.Models
                     {
                         change += 0.005f;
                         int skill = settlement.Town.Governor.GetSkillValue(DefaultSkills.Steward);
-                        change += (float)skill * 0.00005f;
+                        float effect = (float)skill * 0.00005f;
+                        if (effect > 0.015f)
+                            effect = 0.015f;
+                        change += effect;
                     }
                 else if (settlement.IsVillage)
                         if (settlement.Village.MarketTown.Governor != null && settlement.Village.MarketTown.Governor.Culture == ownerCulture)
                         {
                             change += 0.005f;
                             int skill = settlement.Town.Governor.GetSkillValue(DefaultSkills.Steward);
-                            change += (float)skill * 0.00005f;
+                            float effect = (float)skill * 0.00005f;
+                            if (effect > 0.015f)
+                                effect = 0.015f;
+                            change += effect;
                         }
 
             } else change = 0f;

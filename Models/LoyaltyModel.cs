@@ -15,15 +15,11 @@ namespace Populations.Models
     class LoyaltyModel : DefaultSettlementLoyaltyModel
     {
         private static readonly float SLAVE_LOYALTY = -0.0005f;
-        private static readonly float NOBLE_EXEMPTION_LOYALTY = 0.004f;
-        private static readonly float TAX_POLICY_LOYALTY = 0.0001f;
 		private static readonly float LOYALTY_FACTOR = 4f;
 		private static readonly float NOBLE_LOYALTY_WEIGHT = 3F;
 
 		public override ExplainedNumber CalculateLoyaltyChange(Town town, bool includeDescriptions = false)
         {
-
-            
             if (PopulationConfig.Instance.PopulationManager != null && PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
             {
 				ExplainedNumber baseResult = CalculateLoyaltyChangeInternal(town, true);
@@ -230,29 +226,15 @@ namespace Populations.Models
 			explainedNumber.Add(-1f * (town.Loyalty - 50f) * 0.1f, LoyaltyDriftText, null);
 		}
 
-
-		private const float StarvationLoyaltyEffect = -1f;
-		private const float NotableSupportsOwnerLoyaltyEffect = 0.5f;
-		private const float NotableSupportsEnemyLoyaltyEffect = -0.5f;
 		public const int SettlementLoyaltyChangeDueToSecurityThreshold = 50;
-		private const float HighSecurityLoyaltyEffect = 1f;
-		private const float LowSecurityLoyaltyEffect = -2f;
-		private const float GovernorSameCultureLoyaltyEffect = 1f;
-		private const float GovernorDifferentCultureLoyaltyEffect = -1f;
 		public const int MaximumLoyaltyInSettlement = 100;
 		public const int LoyaltyDriftMedium = 50;
-		private const float SettlementOwnerDifferentCultureLoyaltyEffect = -3f;
 		private static readonly TextObject StarvingText = GameTexts.FindText("str_starving", null);
 		private static readonly TextObject CultureText = new TextObject("{=YjoXyFDX}Owner Culture", null);
 		private static readonly TextObject NotableText = GameTexts.FindText("str_notable_relations", null);
-		private static readonly TextObject CrimeText = GameTexts.FindText("str_governor_criminal", null);
 		private static readonly TextObject ParadePerkBonus = new TextObject("{=8aior6PH}Parade perk bonus", null);
-		private static readonly TextObject GovernorText = GameTexts.FindText("str_notable_governor", null);
 		private static readonly TextObject GovernorCultureText = new TextObject("{=5Vo8dJub}Governor's Culture", null);
-		private static readonly TextObject NoGovernorText = new TextObject("{=NH5N3kP5}No governor", null);
 		private static readonly TextObject SecurityText = GameTexts.FindText("str_security", null);
-		private static readonly TextObject LoyaltyText = GameTexts.FindText("str_loyalty", null);
 		private static readonly TextObject LoyaltyDriftText = GameTexts.FindText("str_loyalty_drift", null);
-		private static readonly TextObject CorruptionText = GameTexts.FindText("str_corruption", null);
 	}
 }

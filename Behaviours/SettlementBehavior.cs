@@ -26,7 +26,8 @@ namespace Populations.Behaviors
             CampaignEvents.DailyTickSettlementEvent.AddNonSerializedListener(this, new Action<Settlement>(DailySettlementTick));
             CampaignEvents.HourlyTickPartyEvent.AddNonSerializedListener(this, new Action<MobileParty>(HourlyTickParty));
             CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, new Action<CampaignGameStarter>(OnGameCreated));
-            CampaignEvents.MobilePartyDestroyed.AddNonSerializedListener(this, new Action<MobileParty, PartyBase>(this.OnMobilePartyDestroyed));
+            CampaignEvents.MobilePartyDestroyed.AddNonSerializedListener(this, new Action<MobileParty, PartyBase>(OnMobilePartyDestroyed));
+            CampaignEvents.SettlementEntered.AddNonSerializedListener(this, new Action<MobileParty, Settlement, Hero>(OnSettlementEntered));
         }
 
         public override void SyncData(IDataStore dataStore)
@@ -62,32 +63,34 @@ namespace Populations.Behaviors
         {
 
             if (party != null && PopulationConfig.Instance.PopulationManager != null && 
-                PopulationConfig.Instance.PopulationManager.IsPopulationParty(party) && party.MapEvent == null)
+                PopulationConfig.Instance.PopulationManager.IsPopulationParty(party))
             {
-                Settlement target = party.HomeSettlement;
                 PopulationPartyComponent component = (PopulationPartyComponent)party.PartyComponent;
+                Settlement target = component._target;
 
                 if (target != null)
                 {
-                    if (component.slaveCaravan)
+                    float distance = Campaign.Current.Models.MapDistanceModel.GetDistance(party, target);
+                    if (distance <= 30f)
                     {
-                        if (target.IsVillage && target.Village.VillageState != Village.VillageStates.Looted && target.Village.VillageState != Village.VillageStates.BeingRaided)
+                        EnterSettlementAction.ApplyForParty(party, target);
+                    } else
+                    {
+                        if (target.IsVillage)
                         {
-                            if (Campaign.Current.Models.MapDistanceModel.GetDistance(party, target) <= 1f)
-                                PartyEnterSettlement(ref party, target, component.popType, component.slaveCaravan);
-                            else PartyKeepMoving(ref party, target);
+                            party.Ai.SetAIState(AIState.VisitingVillage);
+                            if (target.Village.VillageState != Village.VillageStates.Looted && target.Village.VillageState != Village.VillageStates.BeingRaided)
+                                party.SetMoveModeHold();
+                            else PartyKeepMoving(ref party, ref target);
                         }
-                        else party.SetMoveModeHold();
-
-                    }
-                    else if (!target.IsVillage && !target.IsUnderSiege)
-                    {
-                        if (Campaign.Current.Models.MapDistanceModel.GetDistance(party, target) <= 1f)
-                            PartyEnterSettlement(ref party, target, component.popType, component.slaveCaravan);
-                        else PartyKeepMoving(ref party, target);
-                    }
-                    else party.SetMoveModeHold();
-
+                        else if (!target.IsVillage)
+                        {
+                            party.Ai.SetAIState(AIState.VisitingNearbyTown);
+                            if (!target.IsUnderSiege)
+                                PartyKeepMoving(ref party, ref target);
+                            else party.SetMoveModeHold();
+                        }
+                    } 
                 }
                 else if (target == null)
                 {
@@ -95,31 +98,44 @@ namespace Populations.Behaviors
                     PopulationConfig.Instance.PopulationManager.RemoveCaravan(party);
                 }
             }
+
+            if (party.StringId.Contains("slavecaravan") && party.Party != null && party.Party.NumberOfHealthyMembers == 0)
+            {
+                DestroyPartyAction.Apply(null, party);
+                if (PopulationConfig.Instance.PopulationManager.IsPopulationParty(party))
+                    PopulationConfig.Instance.PopulationManager.RemoveCaravan(party);
+            }
         }
 
-        private void PartyKeepMoving(ref MobileParty party, Settlement target)
+        private void PartyKeepMoving(ref MobileParty party, ref Settlement target)
         {
             if (target.IsVillage) party.Ai.SetAIState(AIState.VisitingVillage);
             else party.Ai.SetAIState(AIState.VisitingNearbyTown);
             party.SetMoveGoToSettlement(target);
         }
-        private void PartyEnterSettlement(ref MobileParty party, Settlement target, PopType popType, bool slaveCaravan)
-        {
-            EnterSettlementAction.ApplyForParty(party, target);
-            PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(target);
-            if (slaveCaravan)
-            {
-                int slaves = Helpers.Helpers.GetRosterCount(party.PrisonRoster);
-                data.UpdatePopType(PopType.Slaves, slaves);
-            }
-            else if (popType != PopType.None)
-            {
-                int pops = Helpers.Helpers.GetRosterCount(party.MemberRoster);
-                data.UpdatePopType(popType, pops);
-            }
 
-            DestroyPartyAction.Apply(null, party);
-            PopulationConfig.Instance.PopulationManager.RemoveCaravan(party);
+        private void OnSettlementEntered(MobileParty party, Settlement target, Hero hero)
+        {
+            if (party != null && PopulationConfig.Instance.PopulationManager != null &&
+               PopulationConfig.Instance.PopulationManager.IsPopulationParty(party))
+            {
+                PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(target);
+                PopulationPartyComponent component = (PopulationPartyComponent)party.PartyComponent;
+
+                if (component.slaveCaravan)
+                {
+                    int slaves = Helpers.Helpers.GetRosterCount(party.PrisonRoster);
+                    data.UpdatePopType(PopType.Slaves, slaves);
+                }
+                else if (component.popType != PopType.None)
+                {
+                    int pops = Helpers.Helpers.GetRosterCount(party.MemberRoster);
+                    data.UpdatePopType(component.popType, pops);
+                }
+
+                DestroyPartyAction.Apply(null, party);
+                PopulationConfig.Instance.PopulationManager.RemoveCaravan(party);
+            }
         }
 
         private void DailySettlementTick(Settlement settlement)
@@ -152,7 +168,7 @@ namespace Populations.Behaviors
                 if (settlement.IsTown)
                 {
                     int random = MBRandom.RandomInt(1, 100);
-                    if (random <= 3)
+                    if (random <= 5)
                     {
                         Settlement target = GetTownToTravel(settlement);
                         if (target != null)
@@ -168,16 +184,19 @@ namespace Populations.Behaviors
                         if (castleBuilding.BuildingType == Helpers.Helpers._buildingCastleRetinue)
                         {
                             MobileParty garrison = settlement.Town.GarrisonParty;
-                            List<TroopRosterElement> elements = garrison.MemberRoster.GetTroopRoster();
-                            int currentRetinue = 0;
-                            foreach (TroopRosterElement soldierElement in elements)
-                                if (Helpers.Helpers.IsRetinueTroop(soldierElement.Character, settlement.Culture))
-                                    currentRetinue += soldierElement.Number;
+                            if (garrison.MemberRoster != null && garrison.MemberRoster.Count > 0)
+                            {
+                                List<TroopRosterElement> elements = garrison.MemberRoster.GetTroopRoster();
+                                int currentRetinue = 0;
+                                foreach (TroopRosterElement soldierElement in elements)
+                                    if (Helpers.Helpers.IsRetinueTroop(soldierElement.Character, settlement.Culture))
+                                        currentRetinue += soldierElement.Number;
 
-                            int maxRetinue = castleBuilding.CurrentLevel == 1 ? 20 : (castleBuilding.CurrentLevel == 2 ? 40 : 60);
-                            if (currentRetinue < maxRetinue)
-                                if (garrison.MemberRoster.Count < garrison.Party.PartySizeLimit)
-                                    garrison.MemberRoster.AddToCounts(settlement.Culture.EliteBasicTroop, 1);
+                                int maxRetinue = castleBuilding.CurrentLevel == 1 ? 20 : (castleBuilding.CurrentLevel == 2 ? 40 : 60);
+                                if (currentRetinue < maxRetinue)
+                                    if (garrison.MemberRoster.Count < garrison.Party.PartySizeLimit)
+                                        garrison.MemberRoster.AddToCounts(settlement.Culture.EliteBasicTroop, 1);
+                            }      
                         }
                 }
             }
@@ -283,19 +302,6 @@ namespace Populations.Behaviors
                         if (data.Assimilation >= 1f)
                             settlement.Culture = settlement.Owner.Culture;
                     }
-
-            BuildingType retinueType = MBObjectManager.Instance.GetObjectTypeList<BuildingType>().FirstOrDefault(x => x == Helpers.Helpers._buildingCastleRetinue);
-            if (retinueType == null)
-            {
-                Helpers.Helpers._buildingCastleRetinue.Initialize(new TextObject("{=!}Retinue Barracks", null), new TextObject("{=!}Barracks for the castle retinue, a group of elite soldiers. The retinue is added to the garrison over time, up to a limit of 20, 40 or 60 (building level).", null), new int[]
-                {
-                     1000,
-                     1500,
-                     2000
-                }, BuildingLocation.Castle, new Tuple<BuildingEffectEnum, float, float, float>[]
-                {
-                }, 0);
-            }
         }
 
         private void AddMenus(CampaignGameStarter campaignGameStarter)
