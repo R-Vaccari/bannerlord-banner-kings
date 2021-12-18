@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 using Populations.Models;
+using System;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
@@ -252,20 +253,28 @@ namespace Populations
 
             private void SelectAndUpdatePop(Settlement settlement, int pops)
             {
-                Dictionary<PopType, float[]> desiredTypes = GetDesiredPopTypes(settlement);
-
-                List<PopType> typesList = new List<PopType>();
-                classes.ForEach(popClass => {
-                    if (popClass.count >= pops)
-                        typesList.Add(popClass.type);
-                });
-
-                MBReadOnlyList<PopType> types = new MBReadOnlyList<PopType>(typesList);
-                PopType targetType = MBRandom.ChooseWeighted(types, delegate (PopType type)
+                if (pops != 0)
                 {
-                    return desiredTypes[type][0];
-                });
-                UpdatePopType(targetType, pops);
+                    Dictionary<PopType, float[]> desiredTypes = GetDesiredPopTypes(settlement);
+                    List<ValueTuple<PopType, float>> typesList = new List<ValueTuple<PopType, float>>();
+                    classes.ForEach(popClass =>
+                    {
+                        PopType type = popClass.type;
+                        if (pops < 0 && popClass.count >= pops)
+                        {
+                            bool hasExcess = GetCurrentTypeFraction(type) > desiredTypes[type][1];
+                            typesList.Add(new ValueTuple<PopType, float>(popClass.type, desiredTypes[type][0] * (hasExcess ? 2f : 1f)));
+                        }
+                        else if (pops > 0)
+                        {
+                            bool isLacking = GetCurrentTypeFraction(type) < desiredTypes[type][0];
+                            typesList.Add(new ValueTuple<PopType, float>(popClass.type, desiredTypes[type][0] * (isLacking ? 2f : 1f)));
+                        }
+                    });
+
+                    PopType targetType = MBRandom.ChooseWeighted(typesList);
+                    UpdatePopType(targetType, pops);
+                }
             }
 
             public void UpdatePopType(PopType type, int count)

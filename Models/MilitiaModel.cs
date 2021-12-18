@@ -29,14 +29,31 @@ namespace Populations.Models
         public override ExplainedNumber CalculateMilitiaChange(Settlement settlement, bool includeDescriptions = false)
         {
             ExplainedNumber baseResult = base.CalculateMilitiaChange(settlement, includeDescriptions);
-            if (PopulationConfig.Instance.PopulationManager != null && PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(settlement) && PopulationConfig.Instance.PolicyManager.IsPolicyEnacted(settlement, PolicyType.CONSCRIPTION))
+            if (PopulationConfig.Instance.PopulationManager != null && PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(settlement)
+                && settlement.Town != null)
             {
                 PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(settlement);
                 int serfs = data.GetTypeCount(PopType.Serfs);
-                baseResult.Add((float)serfs * 0.005f, new TextObject("Conscripted serfs"));
+                float maxMilitia = GetMilitiaLimit(data, settlement.IsCastle);
+                float filledCapacity = settlement.Town.Militia / maxMilitia;
+                float baseGrowth = (float)serfs * 0.0025f;
+
+                if (PopulationConfig.Instance.PolicyManager.IsPolicyEnacted(settlement, PolicyType.CONSCRIPTION))
+                    baseResult.Add(baseGrowth * (1f - 1f * filledCapacity), new TextObject("Conscription policy"));
+                else if (filledCapacity > 1f)
+                    baseResult.Add(baseGrowth * -1f * filledCapacity, new TextObject("Over supported limit"));
             }
 
             return baseResult;
+        }
+
+        public float GetMilitiaLimit(PopulationData data, bool isCastle)
+        {
+            if (isCastle)
+            {
+                return (float)data.TotalPop * 0.1f + 200f;
+            }
+            else return (float)data.TotalPop * 0.02f + 100f;
         }
 
         public override float CalculateEliteMilitiaSpawnChance(Settlement settlement)

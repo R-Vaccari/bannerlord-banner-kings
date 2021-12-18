@@ -34,11 +34,19 @@ namespace Populations.Models
                     baseResult.Add(LOYALTY_FACTOR * fraction * NOBLE_LOYALTY_WEIGHT, new TextObject("Nobles exemption policy"));
                 }
 
-                if (PopulationConfig.Instance.PolicyManager.GetSettlementTax(town.Settlement) == TaxType.Low)
-                    baseResult.AddFactor(0.2f, new TextObject("Low tax policy"));
-                else if (PopulationConfig.Instance.PolicyManager.GetSettlementTax(town.Settlement) == TaxType.High)
-                    baseResult.AddFactor(-0.2f, new TextObject("High tax policy"));
-                
+				if (PopulationConfig.Instance.PolicyManager.GetSettlementTax(town.Settlement) == TaxType.Low)
+				{
+					float fraction1 = data.GetCurrentTypeFraction(PopType.Craftsmen);
+					float fraction2 = data.GetCurrentTypeFraction(PopType.Serfs) * 0.8f;
+					baseResult.Add((fraction1 + fraction2) * LOYALTY_FACTOR, new TextObject("Low tax policy"));
+				}
+				else if (PopulationConfig.Instance.PolicyManager.GetSettlementTax(town.Settlement) == TaxType.High)
+				{
+					float fraction1 = data.GetCurrentTypeFraction(PopType.Craftsmen);
+					float fraction2 = data.GetCurrentTypeFraction(PopType.Serfs) * 0.8f;
+					baseResult.Add((fraction1 + fraction2) * LOYALTY_FACTOR * -1f, new TextObject("High tax policy"));
+				}
+
 
 				return baseResult;
             } else return base.CalculateLoyaltyChange(town, includeDescriptions); 
@@ -203,7 +211,7 @@ namespace Populations.Models
 		{
 			if (town.BuildingsInProgress.IsEmpty<Building>() && town.CurrentDefaultBuilding.BuildingType == DefaultBuildingTypes.FestivalsAndGamesDaily)
 			{
-				BuildingHelper.AddDefaultDailyBonus(town, ref explainedNumber);
+				BuildingHelper.AddDefaultDailyBonus(town, BuildingEffectEnum.LoyaltyDaily, ref explainedNumber);
 			}
 			foreach (Building building in town.Buildings)
 			{
@@ -226,9 +234,6 @@ namespace Populations.Models
 			explainedNumber.Add(-1f * (town.Loyalty - 50f) * 0.1f, LoyaltyDriftText, null);
 		}
 
-		public const int SettlementLoyaltyChangeDueToSecurityThreshold = 50;
-		public const int MaximumLoyaltyInSettlement = 100;
-		public const int LoyaltyDriftMedium = 50;
 		private static readonly TextObject StarvingText = GameTexts.FindText("str_starving", null);
 		private static readonly TextObject CultureText = new TextObject("{=YjoXyFDX}Owner Culture", null);
 		private static readonly TextObject NotableText = GameTexts.FindText("str_notable_relations", null);

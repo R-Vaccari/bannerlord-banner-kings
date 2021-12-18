@@ -60,7 +60,7 @@ namespace Populations.Components
         {
             MobileParty caravan = CreateParty(id, origin, true, false, target, name, PopType.None);
             caravan.AddPrisoner(CharacterObject.All.FirstOrDefault(x => x.StringId == "looter"), slaves);
-            caravan.InitializeMobileParty(origin.Culture.EliteCaravanPartyTemplate, origin.GatePosition, 0f, 0f, -1);
+            caravan.InitializeMobilePartyAtPosition(origin.Culture.EliteCaravanPartyTemplate, origin.GatePosition);
             GiveMounts(ref caravan);
             GiveFood(ref caravan);
             PopulationConfig.Instance.PopulationManager.AddParty(caravan);
@@ -105,7 +105,7 @@ namespace Populations.Components
 
             }
             
-            party.InitializeMobileParty(roster, new TroopRoster(party.Party), origin.GatePosition, 0f);
+            party.InitializeMobilePartyAroundPosition(roster, new TroopRoster(party.Party), origin.GatePosition, 1f);
             GivePackAnimals(ref party);
             GiveFood(ref party);
             GiveItems(ref party, type);
@@ -159,36 +159,37 @@ namespace Populations.Components
 
                 if (type == PopType.Craftsmen)
                 {
-                    List<ItemObject> list = new List<ItemObject>();
+                    List<ValueTuple<ItemObject,float>> list = new List<ValueTuple<ItemObject, float>>();
                     foreach (CraftingMaterials material in Materials)
-                        list.Add(Campaign.Current.Models.SmithingModel.GetCraftingMaterialItem(material));
-
-                    ItemObject materialItem = MBRandom.ChooseWeighted(list, delegate (ItemObject item)
                     {
-                        return item.Value * MBRandom.RandomFloat;
-                    });
+                        ItemObject item = Campaign.Current.Models.SmithingModel.GetCraftingMaterialItem(material);
+                        list.Add(new ValueTuple<ItemObject, float>(item, item.Value * MBRandom.RandomFloat));
+                    }
+                    ItemObject materialItem = MBRandom.ChooseWeighted(list);
                     totalValue += materialItem.Value;
                     party.ItemRoster.AddToCounts(materialItem, 1);
                 }
 
-                ItemObject good = MBRandom.ChooseWeighted(Items.AllTradeGoods, delegate (ItemObject item)
+                List<ValueTuple<ItemObject, float>> goods = new List<ValueTuple<ItemObject, float>>();
+                foreach (ItemObject item in Items.AllTradeGoods)
                 {
-                    if (item.IsFood) 
-                        return 0f;
-
                     if (type == PopType.Nobles)
                     {
                         if (item.StringId == "silver" || item.StringId == "jewelry" || item.StringId == "spice"
-                        || item.StringId == "velvet" || item.StringId == "fur") return 1f * (10f / partySize) / (float)item.Value;
+                        || item.StringId == "velvet" || item.StringId == "fur") 
+                            goods.Add(new ValueTuple<ItemObject, float>(item, 1f * (10f / partySize) / (float)item.Value));
                     }
                     else if (type == PopType.Craftsmen)
                     {
                         if (item.StringId == "wool" || item.StringId == "pottery" || item.StringId == "cotton" ||
                         item.StringId == "flax" || item.StringId == "linen" || item.StringId == "leather" || item.StringId == "tools")
-                            return 1f * (10f / partySize) / (float)item.Value;
+                            goods.Add(new ValueTuple<ItemObject, float>(item, 1f * (10f / partySize) / (float)item.Value));
                     }
-                    return 1f / (float)item.Value;
-                });
+                    goods.Add(new ValueTuple<ItemObject, float>(item, 1f / (float)item.Value));
+
+                }
+
+                ItemObject good = MBRandom.ChooseWeighted(goods);
                 totalValue += good.Value;
                 party.ItemRoster.AddToCounts(good, 1);
             }

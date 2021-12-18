@@ -103,7 +103,7 @@ namespace Populations.Models
 				{
 					num4 += DefaultPerks.Engineering.Clockwork.SecondaryBonus;
 				}
-				num2 += MBMath.Round((float)num2 * num4);
+				num2 += MathF.Round((float)num2 * num4);
 				result.Add((float)num2 * num3, new TextObject("Craftsmen services"), null);
 			}
 			if (town.Governor != null)
@@ -135,7 +135,7 @@ namespace Populations.Models
 					}
 				}
 			}
-			SettlementLoyaltyModel settlementLoyaltyModel = Campaign.Current.Models.SettlementLoyaltyModel;
+
 			int num5 = Enumerable.Sum<Town.SellLog>(town.SoldItems, delegate (Town.SellLog x)
 			{
 				if (x.Category.Properties != ItemCategory.Property.BonusToProduction)
@@ -148,6 +148,7 @@ namespace Populations.Models
 			{
 				result.Add(0.25f * (float)num5, this.ProductionFromMarketText, null);
 			}
+
 			BuildingType buildingType = town.BuildingsInProgress.IsEmpty<Building>() ? null : town.BuildingsInProgress.Peek().BuildingType;
 			if (Enumerable.Contains<BuildingType>(DefaultBuildingTypes.MilitaryBuildings, buildingType))
 			{
@@ -162,9 +163,9 @@ namespace Populations.Models
 			{
 				result.Add(effectOfBuildings, GameTexts.FindText("str_building_bonus", null), null);
 			}
-			if (town.OwnerClan.Leader.CharacterObject.GetFeatValue(DefaultFeats.Cultural.BattanianNegativeConstructionFeat))
+			if (town.OwnerClan.Leader.Culture.HasFeat(DefaultCulturalFeats.BattanianConstructionFeat))
 			{
-				result.AddFactor(DefaultFeats.Cultural.BattanianNegativeConstructionFeat.EffectBonus, this.CultureText);
+				result.AddFactor(DefaultCulturalFeats.BattanianConstructionFeat.EffectBonus, this.CultureText);
 			}
 			if (town.Loyalty >= 75f)
 			{
@@ -191,7 +192,6 @@ namespace Populations.Models
 
 		private readonly TextObject ProductionFromMarketText = new TextObject("{=vaZDJGMx}Construction from Market", null);
 		private readonly TextObject CultureText = GameTexts.FindText("str_culture", null);
-		private readonly TextObject BoostText = new TextObject("{=!}Boost from craftsmen", null);
 		private readonly TextObject HighLoyaltyBonusText = new TextObject("{=aSniKUJv}High Loyalty", null);
 		private readonly TextObject LowLoyaltyPenaltyText = new TextObject("{=SJ2qsRdF}Low Loyalty", null);
 		private readonly TextObject VeryLowLoyaltyPenaltyText = new TextObject("{=CcQzFnpN}Very Low Loyalty", null);

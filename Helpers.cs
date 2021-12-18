@@ -11,14 +11,19 @@ namespace Populations.Helpers
     public static class Helpers
     {
         public static BuildingType _buildingCastleRetinue = Game.Current.ObjectManager.RegisterPresumedObject<BuildingType>(new BuildingType("building_castle_retinue"));
-        public static int GetRosterCount(TroopRoster roster)
+        public static int GetRosterCount(TroopRoster roster, string filter = null)
         {
             List<TroopRosterElement> rosters = roster.GetTroopRoster();
             int count = 0;
             rosters.ForEach(rosterElement =>
             {
-                if (!rosterElement.Character.IsHero)
-                    count += rosterElement.Number + rosterElement.WoundedNumber;
+                if (filter == null)
+                {
+                    if (!rosterElement.Character.IsHero)
+                        count += rosterElement.Number + rosterElement.WoundedNumber;
+                } else if (!rosterElement.Character.IsHero && rosterElement.Character.StringId.Contains(filter))
+                        count += rosterElement.Number + rosterElement.WoundedNumber;
+
             });
             return count;
         }

@@ -111,7 +111,7 @@ namespace Populations
         [HarmonyPatch(typeof(DefaultBuildingTypes), "InitializeAll")]
         class InitializeBuildingsPatch
         {
-            static bool Prefix()
+            static void Postfix()
             {
                 Helpers.Helpers._buildingCastleRetinue.Initialize(new TextObject("{=!}Retinue Barracks", null), new TextObject("{=!}Barracks for the castle retinue, a group of elite soldiers. The retinue is added to the garrison over time, up to a limit of 20, 40 or 60 (building level).", null), new int[]
                 {
@@ -121,8 +121,6 @@ namespace Populations
                 }, BuildingLocation.Castle, new Tuple<BuildingEffectEnum, float, float, float>[]
                 {
                 }, 0);
-
-                return true;
             }
         }
 

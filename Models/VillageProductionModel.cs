@@ -49,11 +49,11 @@ namespace Populations.Models
 						CharacterObject characterObject = (leader != null) ? leader.CharacterObject : null;
 						if (characterObject != null)
 						{
-							if (characterObject.GetFeatValue(DefaultFeats.Cultural.KhuzaitAnimalProductionFeat) && (item.ItemCategory == DefaultItemCategories.Sheep || item.ItemCategory == DefaultItemCategories.Cow || item.ItemCategory == DefaultItemCategories.WarHorse || item.ItemCategory == DefaultItemCategories.Horse || item.ItemCategory == DefaultItemCategories.PackAnimal))
-								explainedNumber.AddFactor(DefaultFeats.Cultural.KhuzaitAnimalProductionFeat.EffectBonus, GameTexts.FindText("str_culture", null));
+							if (characterObject.Culture.HasFeat(DefaultCulturalFeats.KhuzaitAnimalProductionFeat) && (item.ItemCategory == DefaultItemCategories.Sheep || item.ItemCategory == DefaultItemCategories.Cow || item.ItemCategory == DefaultItemCategories.WarHorse || item.ItemCategory == DefaultItemCategories.Horse || item.ItemCategory == DefaultItemCategories.PackAnimal))
+								explainedNumber.AddFactor(DefaultCulturalFeats.KhuzaitAnimalProductionFeat.EffectBonus, GameTexts.FindText("str_culture", null));
 							
-							if (village.Bound.IsCastle && characterObject.GetFeatValue(DefaultFeats.Cultural.VlandianCastleVillageProductionFeat))
-								explainedNumber.AddFactor(DefaultFeats.Cultural.VlandianCastleVillageProductionFeat.EffectBonus, GameTexts.FindText("str_culture", null));
+							if (village.Bound.IsCastle && characterObject.Culture.HasFeat(DefaultCulturalFeats.VlandianCastleVillageProductionFeat))
+								explainedNumber.AddFactor(DefaultCulturalFeats.VlandianCastleVillageProductionFeat.EffectBonus, GameTexts.FindText("str_culture", null));
 							
 						}
 					}

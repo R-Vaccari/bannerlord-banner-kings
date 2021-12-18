@@ -8,23 +8,25 @@ using static Populations.PopulationManager;
 
 namespace Populations.Models
 {
-    class FoodModel : DefaultSettlementFoodModel
-    {
+    class FoodModel : SettlementFoodModel
+	{
 
 		private static readonly float SLAVE_MINE_FOOD = -0.01f;
 		private static readonly float NOBLE_FOOD = -0.01f;
 		private static readonly float CRAFTSMEN_FOOD = -0.005f;
 		private static readonly float SERF_FOOD = 0.005f;
 
-		public FoodModel()
-        {
-			DefaultSettlementFoodModel.FoodStocksUpperLimit = 500;
-		}
+		public override int FoodStocksUpperLimit => 500;
+        public override int NumberOfProsperityToEatOneFood => 40;
+        public override int NumberOfMenOnGarrisonToEatOneFood => 20;
+        public override int CastleFoodStockUpperLimitBonus => 150;
 
         public override ExplainedNumber CalculateTownFoodStocksChange(Town town, bool includeDescriptions = false)
         {
-			if (PopulationConfig.Instance.PopulationManager != null && PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement)) return CalculateTownFoodChangeInternal(town, includeDescriptions);
-			else return base.CalculateTownFoodStocksChange(town, includeDescriptions);
+			if (PopulationConfig.Instance.PopulationManager != null && 
+				PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement)) 
+				return CalculateTownFoodChangeInternal(town, includeDescriptions);
+			else return new DefaultSettlementFoodModel().CalculateTownFoodStocksChange(town, includeDescriptions);
         }
 
         public ExplainedNumber CalculateTownFoodChangeInternal(Town town, bool includeDescriptions)
@@ -66,7 +68,7 @@ namespace Populations.Models
 
 			MobileParty garrisonParty = town.GarrisonParty;
 			int garrisonConsumption = (garrisonParty != null) ? garrisonParty.Party.NumberOfAllMembers : 0;
-			result.Add((float)(garrisonConsumption / 20) * -1f, new TextObject("Garrison consumption"), null);
+			result.Add((float)(-garrisonConsumption / NumberOfMenOnGarrisonToEatOneFood), new TextObject("Garrison consumption"), null);
 
 			if (PopulationConfig.Instance.PolicyManager.IsPolicyEnacted(town.Settlement, PolicyManager.PolicyType.CONSCRIPTION))
 				result.AddFactor(-0.25f, new TextObject("Conscription policy"));
