@@ -11,10 +11,10 @@ namespace Populations.Models
     class FoodModel : SettlementFoodModel
 	{
 
-		private static readonly float SLAVE_MINE_FOOD = -0.01f;
+		private static readonly float SLAVE_MINE_FOOD = 0f;
 		private static readonly float NOBLE_FOOD = -0.01f;
 		private static readonly float CRAFTSMEN_FOOD = -0.005f;
-		private static readonly float SERF_FOOD = 0.005f;
+		private static readonly float SERF_FOOD = 0.006f;
 
 		public override int FoodStocksUpperLimit => 500;
         public override int NumberOfProsperityToEatOneFood => 40;

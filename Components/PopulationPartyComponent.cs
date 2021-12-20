@@ -27,24 +27,19 @@ namespace Populations.Components
         [SaveableProperty(5)]
         public PopType popType { get; set; }
 
-        [SaveableProperty(6)]
-        public bool supplyCaravan { get; set; }
 
-
-
-        public PopulationPartyComponent(Settlement target, Settlement origin, string name, bool slaveCaravan, bool supplyCaravan, PopType popType) : base()
+        public PopulationPartyComponent(Settlement target, Settlement origin, string name, bool slaveCaravan, PopType popType) : base()
         {
             _target = target;
             _name = name;
             _origin = origin;
             this.slaveCaravan = slaveCaravan;
-            this.supplyCaravan = supplyCaravan;
             this.popType = popType;
         }
 
-        private static MobileParty CreateParty(string id, Settlement origin, bool slaveCaravan, bool supplyCaravan, Settlement target, string name, PopType popType)
+        private static MobileParty CreateParty(string id, Settlement origin, bool slaveCaravan, Settlement target, string name, PopType popType)
         {
-            return MobileParty.CreateParty(id + origin + target.Name.ToString(), new PopulationPartyComponent(target, origin, String.Format(name, origin.Name.ToString()), slaveCaravan, supplyCaravan, popType),
+            return MobileParty.CreateParty(id + origin + target.Name.ToString(), new PopulationPartyComponent(target, origin, String.Format(name, origin.Name.ToString()), slaveCaravan, popType),
                 delegate (MobileParty mobileParty)
             {
                 mobileParty.SetPartyUsedByQuest(true);
@@ -58,7 +53,17 @@ namespace Populations.Components
 
         public static void CreateSlaveCaravan(string id, Settlement origin, Settlement target, string name, int slaves)
         {
-            MobileParty caravan = CreateParty(id, origin, true, false, target, name, PopType.None);
+            MobileParty caravan = CreateParty(id, origin, true, target, name, PopType.None);
+            caravan.AddPrisoner(CharacterObject.All.FirstOrDefault(x => x.StringId == "looter"), slaves);
+            caravan.InitializeMobilePartyAtPosition(origin.Culture.EliteCaravanPartyTemplate, origin.GatePosition);
+            GiveMounts(ref caravan);
+            GiveFood(ref caravan);
+            PopulationConfig.Instance.PopulationManager.AddParty(caravan);
+        }
+
+        public static void CreateMilitiaParty(string id, Settlement origin, Settlement target, string name, int slaves)
+        {
+            MobileParty caravan = CreateParty(id, origin, true, target, name, PopType.None);
             caravan.AddPrisoner(CharacterObject.All.FirstOrDefault(x => x.StringId == "looter"), slaves);
             caravan.InitializeMobilePartyAtPosition(origin.Culture.EliteCaravanPartyTemplate, origin.GatePosition);
             GiveMounts(ref caravan);
@@ -68,7 +73,7 @@ namespace Populations.Components
 
         public static void CreateTravellerParty(string id, Settlement origin, Settlement target, string name, int count, PopType type, CharacterObject civilian)
         {
-            MobileParty party = CreateParty(id, origin, false, false, target, name, type);
+            MobileParty party = CreateParty(id, origin, false, target, name, type);
             PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(origin);
             data.UpdatePopType(type, count);
             TroopRoster roster = new TroopRoster(party.Party);
@@ -114,14 +119,14 @@ namespace Populations.Components
 
         private static int GetCountToAdd(int partySize, int tier, bool ranged) => (int)((float)partySize / (float)(tier + (ranged ? 3 : 2)))  + MBRandom.RandomInt(-2, 3);
 
-        private static void GiveMounts(ref MobileParty party)
+        protected static void GiveMounts(ref MobileParty party)
         {
             int lacking = party.Party.NumberOfRegularMembers - party.Party.NumberOfMounts;
             ItemObject horse = Items.All.FirstOrDefault(x => x.StringId == "sumpter_horse");
             party.ItemRoster.AddToCounts(horse, lacking);
         }
 
-        private static void GivePackAnimals(ref MobileParty party)
+        protected static void GivePackAnimals(ref MobileParty party)
         {
             ItemObject itemObject = null;
             foreach (ItemObject itemObject2 in Items.All)
@@ -133,7 +138,7 @@ namespace Populations.Components
             
         }
 
-        private static void GiveFood(ref MobileParty party)
+        protected static void GiveFood(ref MobileParty party)
         {
             foreach (ItemObject itemObject in Items.All)
             {
@@ -148,7 +153,7 @@ namespace Populations.Components
             }
         }
 
-        private static void GiveItems(ref MobileParty party, PopType type)
+        protected static void GiveItems(ref MobileParty party, PopType type)
         {
             int partySize = party.Party.NumberOfAllMembers;
             int totalValue = 0;

@@ -70,6 +70,24 @@ namespace Populations
             }  
         }
 
+        public string GetTaxHint(TaxType policy, bool isVillage)
+        {
+
+            if (policy == TaxType.High)
+            {
+                if (isVillage) return "Yield more tax from the population, but reduce growth";
+                else return "Yield more tax from the population, at the cost of decreased loyalty";
+            }
+            else if (policy == TaxType.Low)
+            {
+                if (isVillage) return "Reduce tax burden on the population, diminishing your profit but increasing their support towards you";
+                else return "Reduce tax burden on the population, diminishing your profit but increasing their support towards you";
+            }
+            else if (policy == TaxType.Exemption)
+                return "Fully exempt notables from taxes, improving their attitude towards you";
+            else return "Standard tax of the land, with no particular repercussions";
+        }
+
         private PolicyElement GetPolicyElementFromType(PolicyType type)
         {
             if (type == PolicyType.EXPORT_SLAVES)
@@ -209,7 +227,8 @@ namespace Populations
         {
             High,
             Standard,
-            Low
+            Low,
+            Exemption
         }
     }
 }

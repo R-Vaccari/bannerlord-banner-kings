@@ -1,8 +1,10 @@
-﻿using Populations.Models;
+﻿using Populations.Components;
+using Populations.Models;
 using Populations.UI.Items;
 using System;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.Core;
 using TaleWorlds.Core.ViewModelCollection;
 using TaleWorlds.Library;
@@ -20,6 +22,7 @@ namespace Populations
             private PopulationOptionVM _popAccelerateToogle;
             private PopulationOptionVM _selfInvestToogle;
             private PopulationOptionVM _subsidizeMilitiaToogle;
+            private PopulationOptionVM _raiseMilitiaButton;
             private SelectorVM<MilitiaItemVM> _militiaSelector; 
             private SelectorVM<TaxItemVM> _taxSelector;
             private SelectorVM<WorkItemVM> _workSelector;
@@ -39,7 +42,7 @@ namespace Populations
                 if (data != null && data.Classes != null)
                 {
                     data.Classes.ForEach(popClass => PopInfo.Add(new PopulationInfoVM(
-                        Helpers.Helpers.GetCulturalClassName(popClass.type, settlement.Culture), popClass.count, 
+                        Helpers.Helpers.GetClassName(popClass.type, settlement.Culture).ToString(), popClass.count, 
                         Helpers.Helpers.GetClassHint(popClass.type, settlement.Culture))
                         ));
 
@@ -67,6 +70,17 @@ namespace Populations
                         }
                     }
 
+
+                    RaiseMilitiaButton = new PopulationOptionVM().SetAsButtonOption("Raise militia", delegate
+                    {
+                        MobileParty party = settlement.MilitiaPartyComponent.MobileParty;
+                        if (party.CurrentSettlement != null && party.CurrentSettlement == settlement)
+                        {
+                            
+                            MilitiaComponent.CreateMilitiaEscort("raisedmilitia_", settlement, settlement, "Raised Militia from {0}", Hero.MainHero.PartyBelongedTo, party);
+                        }
+                    }, new TextObject("Raise the current militia of this village."));
+
                     int militiaIndex = 0;
                     MilitiaPolicy militiaPolicy = PopulationConfig.Instance.PolicyManager.GetMilitiaPolicy(settlement);
                     if (militiaPolicy == MilitiaPolicy.Melee)
@@ -90,11 +104,13 @@ namespace Populations
                         taxIndex = 1;
                     else if (taxPolicy == TaxType.Low)
                         taxIndex = 2;
+                    else if (taxPolicy == TaxType.Exemption)
+                        taxIndex = 3;
                     TaxSelector = new SelectorVM<TaxItemVM>(0, new Action<SelectorVM<TaxItemVM>>(this.OnTaxChange));
                     TaxSelector.SetOnChangeAction(null);
                     foreach (TaxType policy in _taxPolicies)
                     {
-                        TaxItemVM item = new TaxItemVM(policy, true);
+                        TaxItemVM item = new TaxItemVM(policy, true, PopulationConfig.Instance.PolicyManager.GetTaxHint(policy, settlement.IsVillage));
                         TaxSelector.AddItem(item);
                     }
                     TaxSelector.SetOnChangeAction(OnTaxChange);
@@ -166,6 +182,7 @@ namespace Populations
                     yield return TaxType.Standard;
                     yield return TaxType.High;
                     yield return TaxType.Low;
+                    yield return TaxType.Exemption;
                     yield break;
                 }
             }
@@ -181,7 +198,17 @@ namespace Populations
                 }
             }
 
-            
+            [DataSourceProperty]
+            public string PopGrowth
+            {
+                get
+                {
+                    int growth = new GrowthModel().GetPopulationGrowth(settlement, false);
+                    return growth.ToString() + " (Daily)";
+                }
+            }
+
+
             [DataSourceProperty]
             public string Assimilation
             {
@@ -264,6 +291,21 @@ namespace Populations
                     {
                         _popInfo = value;
                         base.OnPropertyChangedWithValue(value, "PopInfo");
+                    }
+                }
+            }
+            
+
+            [DataSourceProperty]
+            public PopulationOptionVM RaiseMilitiaButton
+            {
+                get => _raiseMilitiaButton;
+                set
+                {
+                    if (value != _raiseMilitiaButton)
+                    {
+                        _raiseMilitiaButton = value;
+                        base.OnPropertyChangedWithValue(value, "RaiseMilitiaButton");
                     }
                 }
             }

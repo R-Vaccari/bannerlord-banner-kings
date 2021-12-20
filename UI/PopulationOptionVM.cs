@@ -14,6 +14,7 @@ namespace Populations.UI
 		public string _description { get; set; }
 		public bool IsDiscrete { get; set; }
 
+		[DataSourceProperty] 
 		public string ButtonName { get; set; }
 
 		public Action OnPressAction { get; set; }
@@ -61,6 +62,7 @@ namespace Populations.UI
 				this.OptionTypeID = 3;
 				this.ButtonName = buttonName;
 				this.OnPressAction = onPress;
+				this.Hint = new HintViewModel(hintText);
 			}
 			catch (Exception ex)
 			{

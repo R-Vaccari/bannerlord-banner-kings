@@ -42,7 +42,7 @@ namespace Populations
                 if (data != null && data.Classes != null)
                 {
                     data.Classes.ForEach(popClass => PopInfo.Add(new PopulationInfoVM(
-                        Helpers.Helpers.GetCulturalClassName(popClass.type, settlement.Culture), popClass.count,
+                        Helpers.Helpers.GetClassName(popClass.type, settlement.Culture).ToString(), popClass.count,
                         Helpers.Helpers.GetClassHint(popClass.type, settlement.Culture))
                         ));
 
@@ -106,7 +106,7 @@ namespace Populations
                     TaxSelector.SetOnChangeAction(null);
                     foreach (TaxType policy in _taxPolicies)
                     {
-                        TaxItemVM item = new TaxItemVM(policy, true);
+                        TaxItemVM item = new TaxItemVM(policy, true, PopulationConfig.Instance.PolicyManager.GetTaxHint(policy, settlement.IsVillage));
                         TaxSelector.AddItem(item);
                     }
                     TaxSelector.SetOnChangeAction(OnTaxChange);

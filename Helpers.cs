@@ -1,9 +1,8 @@
-﻿
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
+using TaleWorlds.Localization;
 using static Populations.PopulationManager;
 
 namespace Populations.Helpers
@@ -28,44 +27,17 @@ namespace Populations.Helpers
             return count;
         }
 
-        public static string GetCulturalClassName(PopType type, CultureObject culture)
+        public static TextObject GetClassName(PopType type, CultureObject culture)
         {
-            if (type == PopType.Serfs)
-            {
-                if (culture.StringId == "sturgia")
-                    return "Lowmen";
-                else if (culture.StringId == "empire" || culture.StringId == "aserai")
-                    return "Commoners";
-                else if (culture.StringId == "battania")
-                    return "Freemen";
-                else if (culture.StringId == "khuzait")
-                    return "Nomads";
-            } else if (type == PopType.Slaves)
-            {
-                if (culture.StringId == "sturgia")
-                    return "Thralls";
-                else if (culture.StringId == "aserai")
-                    return "Mameluke";
-            } else if (type == PopType.Craftsmen)
-            {
-                if (culture.StringId == "khuzait" || culture.StringId == "battania")
-                    return "Artisans";
-            }
-            else if (type == PopType.Nobles)
-            {
-                if (culture.StringId == "empire")
-                    return "Nobiles";
-                else if (culture.StringId == "sturgia")
-                    return "Knyaz";
-                else if (culture.StringId == "vlandia")
-                    return "Ealdormen";
-            }
-            return type.ToString();
+            string cultureModifier = '_' + culture.StringId;
+            string formatted = string.Format("pop_class_{0}{1}", type.ToString().ToLower(), cultureModifier, type.ToString());
+            
+            return GameTexts.FindText(formatted); 
         }
 
         public static string GetClassHint(PopType type, CultureObject culture)
         {
-            string name = GetCulturalClassName(type, culture);
+            string name = GetClassName(type, culture).ToString();
             string description;
             if (type == PopType.Nobles)
                 description = " represent the free, wealthy and influential members of society. They pay very high taxes and increase your influence as a lord.";
