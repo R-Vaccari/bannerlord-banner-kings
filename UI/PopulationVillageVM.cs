@@ -4,7 +4,6 @@ using Populations.UI.Items;
 using System;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.Core;
 using TaleWorlds.Core.ViewModelCollection;
 using TaleWorlds.Library;
@@ -75,23 +74,30 @@ namespace Populations
                     {
                         int serfs = data.GetTypeCount(PopType.Serfs);
                         MobileParty party = settlement.MilitiaPartyComponent.MobileParty;
-                        Hero lord = settlement.Owner;
+                        Hero lord = settlement.OwnerClan.Leader;
                         if (serfs >= party.MemberRoster.TotalManCount)
                         {
                             int cost = InfluenceCost;
                             if (cost > -1 && lord.Clan.Influence >= cost)
                             {
-                                if (party.CurrentSettlement != null && party.CurrentSettlement == settlement)
+                                MobileParty existingParty = Campaign.Current.CampaignObjectManager.Find<MobileParty>(x => x.StringId == "raisedmilitia_" + settlement);
+                                if (existingParty == null)
                                 {
-                                    MilitiaComponent.CreateMilitiaEscort("raisedmilitia_", settlement, settlement, "Raised Militia from {0}", Hero.MainHero.PartyBelongedTo, party);
-                                    if (lord == Hero.MainHero)
-                                        InformationManager.DisplayMessage(new InformationMessage(string.Format("{0} men raised as militia at {1}!", party.MemberRoster.TotalManCount, settlement.Name)));
-                                }
+                                    if (party.CurrentSettlement != null && party.CurrentSettlement == settlement)
+                                    {
+                                        int menCount = party.MemberRoster.TotalManCount;
+                                        MilitiaComponent.CreateMilitiaEscort("raisedmilitia_", settlement, settlement, "Raised Militia from {0}", Hero.MainHero.PartyBelongedTo, party);
+                                        if (lord == Hero.MainHero)
+                                            InformationManager.DisplayMessage(new InformationMessage(string.Format("{0} men raised as militia at {1}!", menCount, settlement.Name)));
+                                        lord.Clan.Influence -= cost;
+                                    }
+                                } else if (lord == Hero.MainHero)
+                                    InformationManager.DisplayMessage(new InformationMessage(string.Format("Militia already raised from {0}", settlement.Name)));
                             }
                             else if (lord == Hero.MainHero)
                                 InformationManager.DisplayMessage(new InformationMessage(string.Format("Not enough influence to raise militia at {0}", settlement.Name)));
                         } else if (lord == Hero.MainHero)
-                            InformationManager.DisplayMessage(new InformationMessage(string.Format("Not enough available men to raise militia at {0}", settlement.Name)));
+                            InformationManager.DisplayMessage(new InformationMessage(string.Format("Not enough men available to raise militia at {0}", settlement.Name)));
 
                     }, new TextObject("Raise the current militia of this village."));
 
@@ -217,7 +223,7 @@ namespace Populations
                 get
                 {
                     MobileParty party = settlement.MilitiaPartyComponent.MobileParty;
-                    Hero lord = settlement.Owner;
+                    Hero lord = settlement.OwnerClan.Leader;
                     if (party != null && lord != null && lord.PartyBelongedTo != null)
                         return new InfluenceModel().GetMilitiaInfluenceCost(party, settlement, lord);
                     else return -1;

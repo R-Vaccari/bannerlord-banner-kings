@@ -1,6 +1,7 @@
 ﻿
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
+using static Populations.PolicyManager;
 using static Populations.PopulationManager;
 
 namespace Populations.Models
@@ -30,7 +31,16 @@ namespace Populations.Models
             PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(village.Settlement);
             bool boost = PopulationConfig.Instance.PolicyManager.IsPolicyEnacted(village.Settlement, PolicyManager.PolicyType.POP_GROWTH);
             int growthFactor = GetDataGrowthFactor(village.Settlement, data, boost, false);
-            float hearths = MBRandom.RandomFloatRanged(growthFactor / 3, growthFactor / 6);
+            float taxFactor = 1f;
+            TaxType tax = PopulationConfig.Instance.PolicyManager.GetSettlementTax(village.Settlement);
+            if (tax == TaxType.High)
+                taxFactor = 0.8f;
+            else if (tax == TaxType.Low)
+                taxFactor = 1.2f;
+            else if (tax == TaxType.Exemption)
+                taxFactor = 1.25f;
+
+            float hearths = MBRandom.RandomFloatRanged(growthFactor / 3, growthFactor / 6) * taxFactor;
             data.UpdatePopulation(village.Settlement, (int)MBRandom.RandomFloatRanged(hearths * 3f, hearths * 6f), PopType.None);
             baseResult.Add(hearths, null);
         }
@@ -42,7 +52,7 @@ namespace Populations.Models
             if (settlement.IsVillage || !settlement.IsStarving)
             {
                 int cap = CalculateSettlementCap(settlement);
-                float filledCapacity = ;
+                float filledCapacity = (float)data.TotalPop / (float)cap;
 
                 data.Classes.ForEach(popClass =>
                 {

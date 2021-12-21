@@ -28,6 +28,7 @@ namespace Populations
             base.AddClassDefinition(typeof(PopulationManager), 9);
             base.AddClassDefinition(typeof(PolicyManager), 10);
             base.AddClassDefinition(typeof(PopulationPartyComponent), 11);
+            base.AddClassDefinition(typeof(MilitiaComponent), 12);
         }
 
         protected override void DefineContainerDefinitions()

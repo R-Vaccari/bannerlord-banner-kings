@@ -8,10 +8,10 @@ namespace Populations.Components
 {
     class MilitiaComponent : PopulationPartyComponent
     {
-        [SaveableProperty(1)]
+        [SaveableProperty(1001)]
         public MobileParty _escortTarget { get; set; }
 
-        [SaveableProperty(2)]
+        [SaveableProperty(1002)]
         public AiBehavior behavior { get; set; }
 
 
@@ -20,6 +20,7 @@ namespace Populations.Components
             MobileParty escortTarget) : base(target, origin, name, slaveCaravan, popType)
         {
             this._escortTarget = escortTarget;
+            this.behavior = AiBehavior.EscortParty;
         }
 
         private static MobileParty CreateParty(string id, Settlement origin, bool slaveCaravan, Settlement target, string name, PopType popType, MobileParty escortTarget)
@@ -39,8 +40,9 @@ namespace Populations.Components
 
         public static void CreateMilitiaEscort(string id, Settlement origin, Settlement target, string name, MobileParty escortTarget, MobileParty reference)
         {
-            MobileParty caravan = CreateParty(id, origin, true, target, name, PopType.None, escortTarget);
+            MobileParty caravan = CreateParty(id, origin, false, target, name, PopType.None, escortTarget);
             caravan.InitializeMobilePartyAtPosition(reference.MemberRoster, reference.PrisonRoster, origin.GatePosition);
+            caravan.SetMoveEscortParty(escortTarget);
             reference.MemberRoster.RemoveIf(roster => roster.Number > 0);
             reference.PrisonRoster.RemoveIf(roster => roster.Number > 0);
             GiveMounts(ref caravan);

@@ -111,6 +111,27 @@ namespace Populations
             }
         }
 
+        [HarmonyPatch(typeof(Town), "FoodStocksUpperLimit")]
+        class FoodStockPatch
+        {
+            static bool Prefix(ref Town __instance, ref int __result)
+            {
+                if (PopulationConfig.Instance.PopulationManager != null && PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(__instance.Settlement))
+                {
+                    PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(__instance.Settlement);
+                    int total = data.TotalPop;
+                    int result = (int)((float)total / 10f);
+
+                    __result = (int)((float)(Campaign.Current.Models.SettlementFoodModel.FoodStocksUpperLimit + 
+                        (__instance.IsCastle ? Campaign.Current.Models.SettlementFoodModel.CastleFoodStockUpperLimitBonus : 0)) +
+                        __instance.GetEffectOfBuildings(BuildingEffectEnum.Foodstock) +
+                        result); 
+                    return false;
+                }
+                else return true;
+            }
+        }
+
         [HarmonyPatch(typeof(DefaultBuildingTypes), "InitializeAll")]
         class InitializeBuildingsPatch
         {
@@ -142,9 +163,14 @@ namespace Populations
                     if (__instance.Hearth < 10f)
                         __instance.Hearth = 10f;
 
+                    __instance.Owner.Settlement.Militia += __instance.MilitiaChange;
+                    /*
                     if (PopulationConfig.Instance.PopulationManager != null 
+                        && __instance.Settlement.MilitiaPartyComponent != null
+                        && __instance.Settlement.MilitiaPartyComponent.MobileParty != null
                         && !PopulationConfig.Instance.PopulationManager.IsPopulationParty(__instance.Settlement.MilitiaPartyComponent.MobileParty))
-                        __instance.Owner.Settlement.Militia += __instance.MilitiaChange;               
+                        __instance.Owner.Settlement.Militia += __instance.MilitiaChange;    
+                    */
                     return false;
                 }
                 return true;

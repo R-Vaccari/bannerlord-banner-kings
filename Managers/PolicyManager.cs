@@ -81,7 +81,7 @@ namespace Populations
             else if (policy == TaxType.Low)
             {
                 if (isVillage) return "Reduce tax burden on the population, diminishing your profit but increasing their support towards you";
-                else return "Reduce tax burden on the population, diminishing your profit but increasing their support towards you";
+                else return "Reduce tax burden on the population, encouraging new settlers";
             }
             else if (policy == TaxType.Exemption)
                 return "Fully exempt notables from taxes, improving their attitude towards you";

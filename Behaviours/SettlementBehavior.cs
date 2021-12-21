@@ -72,7 +72,10 @@ namespace Populations.Behaviors
                 if (component is MilitiaComponent)
                 {
                     MilitiaComponent militiaComponent = (MilitiaComponent)component;
-                    party.SetMoveEscortParty(militiaComponent._escortTarget);
+                    AiBehavior behavior = militiaComponent.behavior;
+                    if (behavior == AiBehavior.EscortParty)
+                        party.SetMoveEscortParty(militiaComponent._escortTarget);
+                    else party.SetMoveGoToSettlement(militiaComponent.OriginSettlement);
                     return;
                 }
 
@@ -131,6 +134,15 @@ namespace Populations.Behaviors
                     PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(target);
                     PopulationPartyComponent component = (PopulationPartyComponent)party.PartyComponent;
 
+                    if (component is MilitiaComponent && target.IsVillage) 
+                    {
+                        foreach (TroopRosterElement element in party.MemberRoster.GetTroopRoster())
+                            target.MilitiaPartyComponent.MobileParty.MemberRoster.AddToCounts(element.Character, element.Number);
+                        if (party.PrisonRoster.TotalRegulars > 0)
+                            foreach (TroopRosterElement element in party.PrisonRoster.GetTroopRoster())
+                                if (!element.Character.IsHero) data.UpdatePopType(PopType.Slaves, element.Number);
+                    }
+
                     if (component.slaveCaravan)
                     {
                         int slaves = Helpers.Helpers.GetRosterCount(party.PrisonRoster);
@@ -183,10 +195,29 @@ namespace Populations.Behaviors
                         float filledCapacity = new GrowthModel().GetSettlementFilledCapacity(target);
                         bool growth = lord.Clan.Influence >= 300 && filledCapacity < 0.5f;
                         decisions.Add((PolicyType.POP_GROWTH, growth));
+                    } else if (target.IsVillage)
+                    {
+                        if (kingdom != null)
+                        {
+                            IEnumerable<Kingdom> enemies = FactionManager.GetEnemyKingdoms(kingdom);
+                            bool atWar = enemies.Count() > 0;
+                            decisions.Add((PolicyType.SUBSIDIZE_MILITIA, atWar));
+                        }
+
+                        float hearths = target.Village.Hearth;
+                        if (hearths < 300f)
+                            PopulationConfig.Instance.PolicyManager.UpdateTaxPolicy(target, TaxType.Low);
+                        else if (hearths < 1000f)
+                            PopulationConfig.Instance.PolicyManager.UpdateTaxPolicy(target, TaxType.Standard);
+                        else PopulationConfig.Instance.PolicyManager.UpdateTaxPolicy(target, TaxType.High);
+
+                        float filledCapacity = new GrowthModel().GetSettlementFilledCapacity(target);
+                        bool growth = lord.Clan.Influence >= 300 && filledCapacity < 0.5f;
+                        decisions.Add((PolicyType.POP_GROWTH, growth));
                     }
 
                     foreach ((PolicyType, bool) decision in decisions) 
-                        PopulationConfig.Instance.PolicyManager.UpdatePolicy(target, PolicyType.CONSCRIPTION, true);
+                        PopulationConfig.Instance.PolicyManager.UpdatePolicy(target, decision.Item1, decision.Item2);
                         
                 }  
             }
@@ -443,6 +474,24 @@ namespace Populations.Behaviors
             starter.AddDialogLine("slavecaravan_party_threat_response", "slavecaravan_threat", "close_window",
                 "One more for the mines! Lads, get the whip![rf:idle_angry][ib:aggressive]",
                 null, delegate { PlayerEncounter.Current.IsEnemy = true; }, 100, null);
+
+            starter.AddDialogLine("raised_militia_party_start", "start", "raised_militia_greeting",
+                "M'lord! We are ready to serve you.",
+                new ConversationSentence.OnConditionDelegate(this.raised_militia_start_on_condition), null, 100, null);
+
+            starter.AddPlayerLine("raised_militia_party_follow", "raised_militia_greeting", "raised_militia_order",
+               new TextObject("{=!}Follow my company.", null).ToString(),
+               new ConversationSentence.OnConditionDelegate(this.raised_militia_order_on_condition),
+               new ConversationSentence.OnConsequenceDelegate(this.raised_militia_follow_on_consequence), 100, null, null);
+
+            starter.AddPlayerLine("raised_militia_party_retreat", "raised_militia_greeting", "raised_militia_order",
+               new TextObject("{=!}You may go home.", null).ToString(),
+               new ConversationSentence.OnConditionDelegate(this.raised_militia_order_on_condition),
+               new ConversationSentence.OnConsequenceDelegate(this.raised_militia_retreat_on_consequence), 100, null, null);
+
+            starter.AddDialogLine("raised_militia_order_response", "raised_militia_order", "close_window",
+                "Aye!",
+                null, delegate { PlayerEncounter.LeaveEncounter = true; }, 100, null);
         }
 
         private bool IsTravellerParty(PartyBase party)
@@ -465,6 +514,48 @@ namespace Populations.Behaviors
                     value = true;
             }
     
+            return value;
+        }
+
+        private void raised_militia_retreat_on_consequence()
+        {
+            PartyBase party = PlayerEncounter.EncounteredParty;
+            if (IsTravellerParty(party))
+            {
+                MilitiaComponent component = (MilitiaComponent)party.MobileParty.PartyComponent;
+                component.behavior = AiBehavior.GoToSettlement;
+            }
+        }
+
+        private void raised_militia_follow_on_consequence()
+        {
+            PartyBase party = PlayerEncounter.EncounteredParty;
+            if (IsTravellerParty(party))
+            {
+                MilitiaComponent component = (MilitiaComponent)party.MobileParty.PartyComponent;
+                component.behavior = AiBehavior.EscortParty;
+            }
+        }
+
+        private bool raised_militia_start_on_condition()
+        {
+            bool value = false;
+            PartyBase party = PlayerEncounter.EncounteredParty;
+            if (IsTravellerParty(party))
+                if (party.MobileParty.PartyComponent is MilitiaComponent)
+                    value = true;
+
+            return value;
+        }
+
+        private bool raised_militia_order_on_condition()
+        {
+            bool value = false;
+            PartyBase party = PlayerEncounter.EncounteredParty;
+            if (IsTravellerParty(party))
+                if (party.MobileParty.PartyComponent is MilitiaComponent && party.Owner == Hero.MainHero)
+                    value = true;
+
             return value;
         }
 

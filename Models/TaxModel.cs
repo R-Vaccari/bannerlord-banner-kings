@@ -1,6 +1,8 @@
 ﻿
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.SandBox.GameComponents;
+using TaleWorlds.Core;
 using TaleWorlds.Localization;
 using static Populations.PolicyManager;
 using static Populations.PopulationManager;
@@ -51,16 +53,26 @@ namespace Populations.Models
             if (PopulationConfig.Instance.PolicyManager != null)
             {
                 TaxType taxType = PopulationConfig.Instance.PolicyManager.GetSettlementTax(village.Settlement);
-                 if (taxType == TaxType.High)
+                if (taxType == TaxType.High)
                     baseResult = marketIncome * 1f;
                 else if (taxType == TaxType.Low) baseResult = marketIncome * 0.4f;
+                else if (taxType == TaxType.Exemption && marketIncome > 0)
+                {
+                    baseResult = 0;
+                    int random = MBRandom.RandomInt(1, 100);
+                    if (random <= 33 && village.Settlement.Notables != null)
+                        ChangeRelationAction.ApplyPlayerRelation(village.Settlement.Notables.GetRandomElement(), 1);
+                }
 
-                float admCost = new AdministrativeModel().CalculateAdministrativeCost(village.Settlement);
-                baseResult *= 1f - admCost;
+                if (baseResult > 0)
+                {
+                    float admCost = new AdministrativeModel().CalculateAdministrativeCost(village.Settlement);
+                    baseResult *= 1f - admCost;
 
-                if (village.Settlement != null && PopulationConfig.Instance.PolicyManager.IsPolicyEnacted(village.Settlement, PolicyType.SELF_INVEST))
-                    if (baseResult > 0)
-                        baseResult -= baseResult * -1f;
+                    if (village.Settlement != null && PopulationConfig.Instance.PolicyManager.IsPolicyEnacted(village.Settlement, PolicyType.SELF_INVEST))
+                        if (baseResult > 0)
+                            baseResult -= baseResult * -1f;
+                }  
             }
 
             return (int)baseResult;
@@ -71,9 +83,7 @@ namespace Populations.Models
             return base.GetTownTaxRatio(town);
         }
 
-        public override float GetVillageTaxRatio()
-        {
-            return base.GetVillageTaxRatio();
-        }
+        public override float GetVillageTaxRatio() => base.GetVillageTaxRatio();
+        
     }
 }

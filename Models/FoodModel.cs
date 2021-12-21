@@ -160,7 +160,7 @@ namespace Populations.Models
 				if (IsVillageProducingFood(village))
 					food += (float)(serfs + slaves) * SERF_FOOD * 4f;
 				else if (IsVillageAMine(village))
-					food += (float)serfs * SERF_FOOD + (float)slaves * SLAVE_MINE_FOOD;
+					food += (float)serfs * SERF_FOOD;
 				else
 					food += ((float)(serfs + slaves) * SERF_FOOD) * 1.2f;
 

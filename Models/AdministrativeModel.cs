@@ -35,16 +35,16 @@ namespace Populations.Models
             }
 
             if (PopulationConfig.Instance.PolicyManager.GetSettlementWork(settlement) != PolicyManager.WorkforcePolicy.None)
-                baseResult += 0.05f;
+                baseResult += 0.075f;
 
             if (PopulationConfig.Instance.PolicyManager.IsPolicyEnacted(settlement, PolicyManager.PolicyType.EXPORT_SLAVES))
                 baseResult += 0.025f;
 
             if (PopulationConfig.Instance.PolicyManager.IsPolicyEnacted(settlement, PolicyManager.PolicyType.SUBSIDIZE_MILITIA))
-                baseResult += 0.05f;
+                baseResult += 0.1f;
 
             if (PopulationConfig.Instance.PolicyManager.IsPolicyEnacted(settlement, PolicyManager.PolicyType.CONSCRIPTION))
-                baseResult += 0.05f;
+                baseResult += 0.1f;
 
             return Math.Max(baseResult, 0f);
         }
