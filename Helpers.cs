@@ -29,10 +29,45 @@ namespace Populations.Helpers
 
         public static TextObject GetClassName(PopType type, CultureObject culture)
         {
+            /*
             string cultureModifier = '_' + culture.StringId;
             string formatted = string.Format("pop_class_{0}{1}", type.ToString().ToLower(), cultureModifier, type.ToString());
             
-            return GameTexts.FindText(formatted); 
+            return GameTexts.FindText(formatted); */
+            string text = type.ToString();
+            if (type == PopType.Serfs)
+            {
+                if (culture.StringId == "sturgia")
+                    text = "Lowmen";
+                else if (culture.StringId == "empire" || culture.StringId == "aserai")
+                    text = "Commoners";
+                else if (culture.StringId == "battania")
+                    text = "Freemen";
+                else if (culture.StringId == "khuzait")
+                    text = "Nomads";
+            }
+            else if (type == PopType.Slaves)
+            {
+                if (culture.StringId == "sturgia")
+                    text = "Thralls";
+                else if (culture.StringId == "aserai")
+                    text = "Mameluke";
+            }
+            else if (type == PopType.Craftsmen)
+            {
+                if (culture.StringId == "khuzait" || culture.StringId == "battania")
+                    text = "Artisans";
+            }
+            else if (type == PopType.Nobles)
+            {
+                if (culture.StringId == "empire")
+                    text = "Nobiles";
+                else if (culture.StringId == "sturgia")
+                    text = "Knyaz";
+                else if (culture.StringId == "vlandia")
+                    text = "Ealdormen";
+            }
+            return new TextObject(text);
         }
 
         public static string GetClassHint(PopType type, CultureObject culture)

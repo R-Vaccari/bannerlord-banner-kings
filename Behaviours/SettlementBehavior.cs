@@ -1,4 +1,5 @@
 ﻿using Populations.Components;
+using Populations.Models;
 using Populations.UI;
 using System;
 using System.Collections.Generic;
@@ -123,26 +124,71 @@ namespace Populations.Behaviors
 
         private void OnSettlementEntered(MobileParty party, Settlement target, Hero hero)
         {
-            if (party != null && PopulationConfig.Instance.PopulationManager != null &&
-               PopulationConfig.Instance.PopulationManager.IsPopulationParty(party))
+            if (party != null && PopulationConfig.Instance.PopulationManager != null)
             {
-                PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(target);
-                PopulationPartyComponent component = (PopulationPartyComponent)party.PartyComponent;
-
-                if (component.slaveCaravan)
+                if (PopulationConfig.Instance.PopulationManager.IsPopulationParty(party))
                 {
-                    int slaves = Helpers.Helpers.GetRosterCount(party.PrisonRoster);
-                    data.UpdatePopType(PopType.Slaves, slaves);
-                }
-                else if (component.popType != PopType.None)
-                {
-                    string filter = component.popType == PopType.Serfs ? "villager" : (component.popType == PopType.Craftsmen ? "craftsman" : "noble");
-                    int pops = Helpers.Helpers.GetRosterCount(party.MemberRoster, filter);
-                    data.UpdatePopType(component.popType, pops);
-                }
+                    PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(target);
+                    PopulationPartyComponent component = (PopulationPartyComponent)party.PartyComponent;
 
-                DestroyPartyAction.Apply(null, party);
-                PopulationConfig.Instance.PopulationManager.RemoveCaravan(party);
+                    if (component.slaveCaravan)
+                    {
+                        int slaves = Helpers.Helpers.GetRosterCount(party.PrisonRoster);
+                        data.UpdatePopType(PopType.Slaves, slaves);
+                    }
+                    else if (component.popType != PopType.None)
+                    {
+                        string filter = component.popType == PopType.Serfs ? "villager" : (component.popType == PopType.Craftsmen ? "craftsman" : "noble");
+                        int pops = Helpers.Helpers.GetRosterCount(party.MemberRoster, filter);
+                        data.UpdatePopType(component.popType, pops);
+                    }
+
+                    DestroyPartyAction.Apply(null, party);
+                    PopulationConfig.Instance.PopulationManager.RemoveCaravan(party);
+                } else if (party.LeaderHero != null && party.LeaderHero == target.Owner && party.LeaderHero != Hero.MainHero
+                    && PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(target)) // AI choices
+                {
+                    Hero lord = party.LeaderHero;
+                    Kingdom kingdom = lord.Clan.Kingdom;
+                    List<ValueTuple<PolicyType, bool>> decisions = new List<ValueTuple<PolicyType, bool>>();
+                    if (!target.IsVillage && target.Town != null)
+                    {
+                        if (kingdom != null)
+                        {
+                            IEnumerable<Kingdom> enemies = FactionManager.GetEnemyKingdoms(kingdom);
+                            bool atWar = enemies.Count() > 0;
+
+                            decisions.Add((PolicyType.CONSCRIPTION, atWar));
+                            decisions.Add((PolicyType.SUBSIDIZE_MILITIA, atWar));
+                        }
+
+                        TaxType tax = PopulationConfig.Instance.PolicyManager.GetSettlementTax(target);
+                        if (target.Town.LoyaltyChange < 0)
+                        {
+                            if (!PopulationConfig.Instance.PolicyManager.IsPolicyEnacted(target, PolicyType.EXEMPTION))
+                                decisions.Add((PolicyType.EXEMPTION, true));
+
+                            if (tax == TaxType.High)
+                                PopulationConfig.Instance.PolicyManager.UpdateTaxPolicy(target, TaxType.Standard);
+                            else if (tax == TaxType.Standard)
+                                PopulationConfig.Instance.PolicyManager.UpdateTaxPolicy(target, TaxType.Low);
+                        } else
+                        {
+                            if (tax == TaxType.Standard)
+                                PopulationConfig.Instance.PolicyManager.UpdateTaxPolicy(target, TaxType.High);
+                            else if (tax == TaxType.Low)
+                                PopulationConfig.Instance.PolicyManager.UpdateTaxPolicy(target, TaxType.Standard);
+                        }
+
+                        float filledCapacity = new GrowthModel().GetSettlementFilledCapacity(target);
+                        bool growth = lord.Clan.Influence >= 300 && filledCapacity < 0.5f;
+                        decisions.Add((PolicyType.POP_GROWTH, growth));
+                    }
+
+                    foreach ((PolicyType, bool) decision in decisions) 
+                        PopulationConfig.Instance.PolicyManager.UpdatePolicy(target, PolicyType.CONSCRIPTION, true);
+                        
+                }  
             }
         }
 

@@ -37,6 +37,8 @@ namespace Populations
                     campaignStarter.AddModel(new VillageProductionModel());
                     campaignStarter.AddModel(new SecurityModel());
                     campaignStarter.AddModel(new PartyLimitModel());
+                    campaignStarter.AddModel(new ClanIncomeModel());
+                    campaignStarter.AddModel(new EconomyModel());
 
                 } catch (Exception e)
                 {
@@ -139,8 +141,10 @@ namespace Populations
                     
                     if (__instance.Hearth < 10f)
                         __instance.Hearth = 10f;
-                    
-                    __instance.Owner.Settlement.Militia += __instance.MilitiaChange;               
+
+                    if (PopulationConfig.Instance.PopulationManager != null 
+                        && !PopulationConfig.Instance.PopulationManager.IsPopulationParty(__instance.Settlement.MilitiaPartyComponent.MobileParty))
+                        __instance.Owner.Settlement.Militia += __instance.MilitiaChange;               
                     return false;
                 }
                 return true;

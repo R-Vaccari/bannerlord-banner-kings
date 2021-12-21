@@ -10,7 +10,6 @@ namespace Populations.Models
     {
         public override ExplainedNumber CalculateInfluenceChange(Clan clan, bool includeDescriptions = false)
         {
-            //InformationManager.DisplayMessage(new InformationMessage("Influence model running..."));
             ExplainedNumber baseResult = base.CalculateInfluenceChange(clan, includeDescriptions);
 
             foreach (Settlement settlement in clan.Settlements)
@@ -37,6 +36,17 @@ namespace Populations.Models
             }
                 
             return baseResult;
+        }
+
+        public int GetMilitiaInfluenceCost(MobileParty party, Settlement settlement, Hero lord)
+        {
+            float cost = party.MemberRoster.TotalManCount;
+            float mediumRelation = 1f;
+            if (settlement.Notables != null)
+                foreach (Hero notable in settlement.Notables)
+                    mediumRelation += ((float)notable.GetRelation(lord) / 5f) * -0.01f;
+
+            return (int)(cost * mediumRelation / 2f);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using Populations.Components;
 using Populations.Models;
 using System;
 using System.Collections.Generic;
@@ -33,6 +34,16 @@ namespace Populations
         public bool IsPopulationParty(MobileParty party) => CARAVANS.Contains(party);
         public void AddParty(MobileParty party) => CARAVANS.Add(party);
         public void RemoveCaravan(MobileParty party) => CARAVANS.Remove(party);
+
+        public List<MobileParty> GetClanMilitias(Clan clan)
+        {
+            List<MobileParty> list = new List<MobileParty>();
+            foreach (MobileParty party in CARAVANS)
+                if (party.PartyComponent is MilitiaComponent && party.Owner.Clan == clan)
+                    list.Add(party);
+            
+            return list;
+        }
 
         public static void InitializeSettlementPops(Settlement settlement)
         {

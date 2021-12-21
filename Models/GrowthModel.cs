@@ -41,8 +41,8 @@ namespace Populations.Models
             float growthFactor = 5;
             if (settlement.IsVillage || !settlement.IsStarving)
             {
-                int cap = settlement.IsTown ? 50000 : (settlement.IsCastle ? 8000 : 4000);
-                float filledCapacity = (float)data.TotalPop / (float)cap;
+                int cap = CalculateSettlementCap(settlement);
+                float filledCapacity = ;
 
                 data.Classes.ForEach(popClass =>
                 {
@@ -61,6 +61,14 @@ namespace Populations.Models
             }
 
             return (int)growthFactor;
+        }
+
+        private int CalculateSettlementCap(Settlement settlement) => settlement.IsTown ? 50000 : (settlement.IsCastle ? 8000 : 4000);
+
+        public float GetSettlementFilledCapacity(Settlement settlement)
+        {
+            PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(settlement);
+            return (float)data.TotalPop / (float)CalculateSettlementCap(settlement);
         }
     }
 }

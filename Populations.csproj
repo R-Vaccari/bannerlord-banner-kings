@@ -98,6 +98,8 @@
   <ItemGroup>
     <Compile Include="Behaviours\SettlementBehavior.cs" />
     <Compile Include="Components\MilitiaComponent.cs" />
+    <Compile Include="Models\ClanFinanceModel.cs" />
+    <Compile Include="Models\EconomyModel.cs" />
     <Compile Include="Models\PartyLimitModel.cs" />
     <Compile Include="SaveDefiner.cs" />
     <Compile Include="Models\AdministrativeModel.cs" />

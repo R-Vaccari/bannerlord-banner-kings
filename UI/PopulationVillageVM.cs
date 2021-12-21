@@ -73,12 +73,26 @@ namespace Populations
 
                     RaiseMilitiaButton = new PopulationOptionVM().SetAsButtonOption("Raise militia", delegate
                     {
+                        int serfs = data.GetTypeCount(PopType.Serfs);
                         MobileParty party = settlement.MilitiaPartyComponent.MobileParty;
-                        if (party.CurrentSettlement != null && party.CurrentSettlement == settlement)
+                        Hero lord = settlement.Owner;
+                        if (serfs >= party.MemberRoster.TotalManCount)
                         {
-                            
-                            MilitiaComponent.CreateMilitiaEscort("raisedmilitia_", settlement, settlement, "Raised Militia from {0}", Hero.MainHero.PartyBelongedTo, party);
-                        }
+                            int cost = InfluenceCost;
+                            if (cost > -1 && lord.Clan.Influence >= cost)
+                            {
+                                if (party.CurrentSettlement != null && party.CurrentSettlement == settlement)
+                                {
+                                    MilitiaComponent.CreateMilitiaEscort("raisedmilitia_", settlement, settlement, "Raised Militia from {0}", Hero.MainHero.PartyBelongedTo, party);
+                                    if (lord == Hero.MainHero)
+                                        InformationManager.DisplayMessage(new InformationMessage(string.Format("{0} men raised as militia at {1}!", party.MemberRoster.TotalManCount, settlement.Name)));
+                                }
+                            }
+                            else if (lord == Hero.MainHero)
+                                InformationManager.DisplayMessage(new InformationMessage(string.Format("Not enough influence to raise militia at {0}", settlement.Name)));
+                        } else if (lord == Hero.MainHero)
+                            InformationManager.DisplayMessage(new InformationMessage(string.Format("Not enough available men to raise militia at {0}", settlement.Name)));
+
                     }, new TextObject("Raise the current militia of this village."));
 
                     int militiaIndex = 0;
@@ -196,6 +210,24 @@ namespace Populations
                     yield return MilitiaPolicy.Ranged;
                     yield break;
                 }
+            }
+
+            public int InfluenceCost
+            {
+                get
+                {
+                    MobileParty party = settlement.MilitiaPartyComponent.MobileParty;
+                    Hero lord = settlement.Owner;
+                    if (party != null && lord != null && lord.PartyBelongedTo != null)
+                        return new InfluenceModel().GetMilitiaInfluenceCost(party, settlement, lord);
+                    else return -1;
+                }
+            }
+
+            [DataSourceProperty]
+            public string InfluenceCostText
+            {
+                get => string.Format("Cost: {0} influence", InfluenceCost);
             }
 
             [DataSourceProperty]
