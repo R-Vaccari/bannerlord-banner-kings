@@ -10,7 +10,7 @@ namespace Populations.Models
 
         public void CalculateAssimilationChange(Settlement settlement)
         {
-            
+
             if (PopulationConfig.Instance.PopulationManager != null && PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
             {
                 float result = GetAssimilationChange(settlement);
@@ -23,7 +23,53 @@ namespace Populations.Models
                 data.Assimilation = finalResult;
 
                 if (data.Assimilation == 1f && settlement.Owner != null)
+                {
+                    if (settlement.IsTown)
+                    {
+                        var remainingTowns = 0;
+                        foreach (Settlement other in Campaign.Current.Settlements)
+                        {
+                            if (other.Culture == settlement.Culture)
+                            {
+                                remainingTowns++;
+                            }
+                        }
+                        if (remainingTowns == 1)
+                        {
+                            // can not convert last town in culture, or will cause CTD for companion respawns:
+                            // borrowed from https://github.com/Splintertx/ChangeSettlementCulture/blob/master/ChangeSettlementCulture/SettlementVariablesBehaviorMod.cs#L54
+                            return;
+                        }
+                    }
+
+                    // conversion
                     settlement.Culture = settlement.Owner.Culture;
+                    if (settlement.BoundVillages != null)
+                    {
+                        foreach (Village attached in settlement.BoundVillages)
+                        {
+                            if (attached.Settlement == null)
+                                continue;
+
+                            attached.Settlement.Culture = settlement.Owner.Culture;
+                            if (attached.Settlement.Notables != null)
+                            {
+                                foreach (Hero notable in attached.Settlement.Notables)
+                                {
+                                    notable.Culture = settlement.Owner.Culture;
+                                }
+                            }
+                        }
+                    }
+                    // convert any notables
+                    if (settlement.Notables != null)
+                    {
+                        foreach (Hero notable in settlement.Notables)
+                        {
+                            notable.Culture = settlement.Owner.Culture;
+                        }
+                    }
+                }
             }
         }
 
