@@ -1,8 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Xml;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
+using static Populations.Managers.TitleManager;
 using static Populations.PopulationManager;
 
 namespace Populations.Helpers
@@ -29,11 +32,8 @@ namespace Populations.Helpers
 
         public static TextObject GetClassName(PopType type, CultureObject culture)
         {
-            /*
             string cultureModifier = '_' + culture.StringId;
-            string formatted = string.Format("pop_class_{0}{1}", type.ToString().ToLower(), cultureModifier, type.ToString());
-            
-            return GameTexts.FindText(formatted); */
+            string id = string.Format("pop_class_{0}{1}", type.ToString().ToLower(), cultureModifier);
             string text = type.ToString();
             if (type == PopType.Serfs)
             {
@@ -67,7 +67,9 @@ namespace Populations.Helpers
                 else if (culture.StringId == "vlandia")
                     text = "Ealdormen";
             }
-            return new TextObject(text);
+            string finalResult = string.Format("{{={0}}}{1}", id, text);
+            return new TextObject(finalResult);
+            
         }
 
         public static string GetClassHint(PopType type, CultureObject culture)
@@ -84,6 +86,34 @@ namespace Populations.Helpers
             return name + description;
         }
 
+        public static string GetTitleHonorary(TitleType type, bool female)
+        {
+            if (type == TitleType.Kingdom)
+                return "King";
+            else if (type == TitleType.Dukedom)
+                return "Duke";
+            else if  (type == TitleType.County)
+                return "Count";
+            else if (type == TitleType.Barony)
+                return "Baron";
+            else return "Lord";
+        }
+
+        public static string GetTitlePrefix(TitleType type)
+        {
+            if (type == TitleType.Kingdom)
+                return "Kingdom";
+            else if (type == TitleType.Dukedom)
+                return "Dukedom";
+            else if (type == TitleType.County)
+                return "County";
+            else if (type == TitleType.Barony)
+                return "Barony";
+            else return "Lordship";
+        }
+
+
+
         public static bool IsRetinueTroop(CharacterObject character, CultureObject settlementCulture)
         {
             CultureObject culture = character.Culture;
@@ -98,6 +128,16 @@ namespace Populations.Helpers
                     return true;
 
             return false;
+        }
+
+        public static XmlDocument CreateDocumentFromXmlFile(string xmlPath)
+        {
+            XmlDocument xmlDocument = new XmlDocument();
+            StreamReader streamReader = new StreamReader(xmlPath);
+            string xml = streamReader.ReadToEnd();
+             xmlDocument.LoadXml(xml);
+            streamReader.Close();
+            return xmlDocument;
         }
     }
 }

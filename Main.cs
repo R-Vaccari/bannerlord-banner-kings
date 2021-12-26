@@ -2,6 +2,7 @@
 using Populations.Behaviors;
 using Populations.Models;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
@@ -10,6 +11,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.MountAndBlade;
+using static Populations.Managers.TitleManager;
 using static Populations.PopulationManager;
 
 namespace Populations
@@ -205,6 +207,33 @@ namespace Populations
                     return false;
                 }
                 else return true;  
+            }
+        }
+
+
+        [HarmonyPatch(typeof(Hero), "SetHeroEncyclopediaTextAndLinks")]
+        class HeroDescriptionPatch
+        {
+            static void Postfix(ref string __result, Hero o)
+            {
+                HashSet<FeudalTitle> titles = TitleConfig.Instance.TitleManager.GetTitles(o);
+                if (titles != null && titles.Count > 0)
+                {
+                    string desc = "";
+                    FeudalTitle current = null;
+                    List<FeudalTitle> finalList = titles.OrderBy(x => (int)x.type).ToList();
+                    foreach (FeudalTitle title in finalList)
+                    {
+                        if (current == null)
+                            desc += string.Format("{0} of {1}", Helpers.Helpers.GetTitleHonorary(title.type, false), title.shortName);
+                        else if (current.type == title.type)
+                            desc += ", " + title.shortName;
+                        else if (current.type != title.type)
+                            desc += string.Format(" and {0} of {1}", Helpers.Helpers.GetTitleHonorary(title.type, false), title.shortName);
+                        current = title;
+                    }
+                    __result = __result + Environment.NewLine + desc;
+                }
             }
         }
     }

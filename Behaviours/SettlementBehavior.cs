@@ -1,4 +1,5 @@
 ﻿using Populations.Components;
+using Populations.Managers;
 using Populations.Models;
 using Populations.UI;
 using System;
@@ -11,6 +12,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
+using static Populations.Managers.TitleManager;
 using static Populations.PolicyManager;
 using static Populations.PopulationManager;
 
@@ -26,7 +28,7 @@ namespace Populations.Behaviors
         {
             CampaignEvents.DailyTickSettlementEvent.AddNonSerializedListener(this, new Action<Settlement>(DailySettlementTick));
             CampaignEvents.HourlyTickPartyEvent.AddNonSerializedListener(this, new Action<MobileParty>(HourlyTickParty));
-            CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, new Action<CampaignGameStarter>(OnGameCreated));
+            CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, new Action<CampaignGameStarter>(OnSessionLaunched));
             CampaignEvents.MobilePartyDestroyed.AddNonSerializedListener(this, new Action<MobileParty, PartyBase>(OnMobilePartyDestroyed));
             CampaignEvents.SettlementEntered.AddNonSerializedListener(this, new Action<MobileParty, Settlement, Hero>(OnSettlementEntered));
         }
@@ -110,12 +112,13 @@ namespace Populations.Behaviors
                 }
             }
 
+            /*
             if (party.StringId.Contains("slavecaravan") && party.Party != null && party.Party.NumberOfHealthyMembers == 0)
             {
                 DestroyPartyAction.Apply(null, party);
                 if (PopulationConfig.Instance.PopulationManager.IsPopulationParty(party))
                     PopulationConfig.Instance.PopulationManager.RemoveCaravan(party);
-            }
+            }*/
         }
 
         private void PartyKeepMoving(ref MobileParty party, ref Settlement target)
@@ -195,6 +198,25 @@ namespace Populations.Behaviors
                         float filledCapacity = new GrowthModel().GetSettlementFilledCapacity(target);
                         bool growth = lord.Clan.Influence >= 300 && filledCapacity < 0.5f;
                         decisions.Add((PolicyType.POP_GROWTH, growth));
+
+                        if (target.IsCastle)
+                            foreach (Building castleBuilding in target.Town.Buildings)
+                                if (Helpers.Helpers._buildingCastleRetinue != null && castleBuilding.BuildingType == Helpers.Helpers._buildingCastleRetinue)
+                                {
+                                    MobileParty garrison = target.Town.GarrisonParty;
+                                    if (garrison.MemberRoster != null && garrison.MemberRoster.Count > 0)
+                                        foreach (TroopRosterElement soldierElement in garrison.MemberRoster.GetTroopRoster())
+                                            if (Helpers.Helpers.IsRetinueTroop(soldierElement.Character, target.Culture)
+                                                && party.MemberRoster.TotalManCount < party.Party.PartySizeLimit)
+                                            {
+                                                int available = soldierElement.Number;
+                                                int space = party.Party.PartySizeLimit - party.MemberRoster.TotalManCount;
+                                                int toBeTaken = available > space ? space : available;
+                                                party.MemberRoster.AddToCounts(soldierElement.Character, toBeTaken);
+                                                garrison.MemberRoster.RemoveTroop(soldierElement.Character, toBeTaken);
+                                            }
+                                }
+                                    
                     } else if (target.IsVillage)
                     {
                         if (kingdom != null)
@@ -374,10 +396,12 @@ namespace Populations.Behaviors
             PopulationPartyComponent.CreateSlaveCaravan("slavecaravan_", origin, target.Settlement, "Slave Caravan from {0}", slaves);
         }
 
-        private void OnGameCreated(CampaignGameStarter campaignGameStarter)
+        private void OnSessionLaunched(CampaignGameStarter campaignGameStarter)
         {
             AddDialog(campaignGameStarter);
             AddMenus(campaignGameStarter);
+
+            TitleConfig.Instance.InitManagers(new HashSet<FeudalTitle>(), new Dictionary<Hero, HashSet<FeudalTitle>>());
 
             if (PopulationConfig.Instance.PopulationManager != null)
                 foreach (Settlement settlement in Settlement.All)
