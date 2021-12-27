@@ -3,4 +3,3 @@ D:\SteamLibrary\steamapps\common\Mount & Blade II Bannerlord\Modules\Populations
 C:\Users\Rodrigo\source\repos\Populations\obj\Debug\Populations.csproj.CoreCompileInputs.cache
 C:\Users\Rodrigo\source\repos\Populations\obj\Debug\Populations.dll
 C:\Users\Rodrigo\source\repos\Populations\obj\Debug\Populations.pdb
-C:\Users\Rodrigo\source\repos\Populations\obj\Debug\Populations.csproj.CopyComplete

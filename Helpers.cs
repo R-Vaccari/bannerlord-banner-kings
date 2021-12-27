@@ -7,6 +7,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Localization;
 using static Populations.Managers.TitleManager;
 using static Populations.PopulationManager;
+using static TaleWorlds.Core.ItemCategory;
 
 namespace Populations.Helpers
 {
@@ -128,6 +129,18 @@ namespace Populations.Helpers
                     return true;
 
             return false;
+        }
+
+        public static ConsumptionType GetTradeGoodConsumptionType(ItemCategory item)
+        {
+            string id = item.StringId;
+            if (id == "silver" || id == "jewelry" || id == "spice" || id == "velvet" || id == "fur")
+                return ConsumptionType.Luxury;
+            else if (id == "wool" || id == "pottery" || id == "cotton" || id == "flax" || id == "linen" || id == "leather" || id == "tools")
+                return ConsumptionType.Industrial;
+            else if (item.Properties == Property.BonusToFoodStores)
+                return ConsumptionType.Food;
+            else return ConsumptionType.General;
         }
 
         public static XmlDocument CreateDocumentFromXmlFile(string xmlPath)

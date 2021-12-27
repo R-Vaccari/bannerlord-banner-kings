@@ -1,9 +1,8 @@
-﻿
-
-using System;
+﻿using System;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.SandBox.GameComponents;
 using TaleWorlds.Core;
+using TaleWorlds.Library;
 using static Populations.PopulationManager;
 
 namespace Populations.Models
@@ -13,31 +12,48 @@ namespace Populations.Models
 
         public override float GetDailyDemandForCategory(Town town, ItemCategory category, int extraProsperity)
         {
-            float baseResult = base.GetDailyDemandForCategory(town, category, extraProsperity);
-            if (PopulationConfig.Instance.PopulationManager != null && PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
+            if (PopulationConfig.Instance.PopulationManager != null && PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement)
+                && category.IsValid && category.StringId != "banner")
             {
                 PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(town.Settlement);
-                int nobles = data.GetTypeCount(PopType.Nobles);
-                if (nobles > 10000)
-                    baseResult = 1f;
-            }
+                float nobles = data.GetTypeCount(PopType.Nobles);
+                float craftsmen = data.GetTypeCount(PopType.Craftsmen);
+                float serfs = data.GetTypeCount(PopType.Serfs);
+                ConsumptionType type = Helpers.Helpers.GetTradeGoodConsumptionType(category);
 
-            return baseResult;
+                float prosperity = 0.5f + town.Prosperity * 0.0001f;
+                float baseResult = 0f;
+                if (type == ConsumptionType.Luxury)
+                {
+                    baseResult += nobles * 15f;
+                    baseResult += craftsmen * 3f;
+                } else if (type == ConsumptionType.Industrial)
+                {
+                    baseResult += craftsmen * 10f;
+                    baseResult += serfs * 0.1f;
+                } else
+                {
+                    baseResult += nobles * 1f;
+                    baseResult += craftsmen * 1f;
+                    baseResult += serfs * 0.12f;
+                }
+                
+                float num = MathF.Max(0f, baseResult * prosperity + extraProsperity);
+                float num2 = MathF.Max(0f, baseResult * prosperity);
+                float num3 = category.BaseDemand * num;
+                float num4 = category.LuxuryDemand * num2;
+                float result = num3 + num4;
+                if (category.BaseDemand < 1E-08f)
+                {
+                    result = num * 0.01f;
+                }
+
+                return result;
+            } else return base.GetDailyDemandForCategory(town, category, extraProsperity);
         }
 
-        public override float GetEstimatedDemandForCategory(Town town, ItemData itemData, ItemCategory category)
-        {
-            float baseResult = base.GetEstimatedDemandForCategory(town, itemData, category);
-            if (PopulationConfig.Instance.PopulationManager != null && PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
-            {
-                PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(town.Settlement);
-                int nobles = data.GetTypeCount(PopType.Nobles);
-                if (nobles > 10000)
-                    baseResult = 1f;
-            }
-               
-            return baseResult;
-        }
+        public override float GetEstimatedDemandForCategory(Town town, ItemData itemData, ItemCategory category) => 
+            this.GetDailyDemandForCategory(town, category, 1000);
 
         public override float GetDemandChangeFromValue(float purchaseValue)
         {

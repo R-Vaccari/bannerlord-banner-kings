@@ -13,6 +13,8 @@ using TaleWorlds.Localization;
 using TaleWorlds.MountAndBlade;
 using static Populations.Managers.TitleManager;
 using static Populations.PopulationManager;
+using TaleWorlds.CampaignSystem.SandBox.CampaignBehaviors;
+using System.Reflection;
 
 namespace Populations
 {
@@ -150,6 +152,7 @@ namespace Populations
             }
         }
 
+        /*
         [HarmonyPatch(typeof(Village), "DailyTick")]
         class VillageTickPatch
         {
@@ -166,18 +169,18 @@ namespace Populations
                         __instance.Hearth = 10f;
 
                     __instance.Owner.Settlement.Militia += __instance.MilitiaChange;
-                    /*
+                    
                     if (PopulationConfig.Instance.PopulationManager != null 
                         && __instance.Settlement.MilitiaPartyComponent != null
                         && __instance.Settlement.MilitiaPartyComponent.MobileParty != null
                         && !PopulationConfig.Instance.PopulationManager.IsPopulationParty(__instance.Settlement.MilitiaPartyComponent.MobileParty))
                         __instance.Owner.Settlement.Militia += __instance.MilitiaChange;    
-                    */
+                    
                     return false;
                 }
                 return true;
             }
-        }
+        }*/
 
         [HarmonyPatch(typeof(VillagerCampaignBehavior), "OnSettlementEntered")]
         class VillagerSettlementEnterPatch
@@ -234,6 +237,68 @@ namespace Populations
                     }
                     __result = __result + Environment.NewLine + desc;
                 }
+            }
+        }
+
+
+        [HarmonyPatch(typeof(ItemConsumptionBehavior), "MakeConsumption")]
+        class ItemConsumptionPatch
+        {
+            static bool Prefix(ItemConsumptionBehavior __instance, Town town, Dictionary<ItemCategory, float> categoryDemand, Dictionary<ItemCategory, int> saleLog)
+            {
+                if (PopulationConfig.Instance.PopulationManager != null && PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
+                {
+                    saleLog.Clear();
+                    TownMarketData marketData = town.MarketData;
+                    ItemRoster itemRoster = town.Owner.ItemRoster;
+                    PopulationData popData = PopulationConfig.Instance.PopulationManager.GetPopData(town.Settlement);
+                    for (int i = itemRoster.Count - 1; i >= 0; i--)
+                    {
+                        ItemRosterElement elementCopyAtIndex = itemRoster.GetElementCopyAtIndex(i);
+                        ItemObject item = elementCopyAtIndex.EquipmentElement.Item;
+                        int amount = elementCopyAtIndex.Amount;
+                        ItemCategory itemCategory = item.GetItemCategory();
+                        float demand = categoryDemand[itemCategory];
+
+                        IEnumerable<ItemConsumptionBehavior> behaviors = Campaign.Current.GetCampaignBehaviors<ItemConsumptionBehavior>();
+                        MethodInfo dynMethod = behaviors.First().GetType().GetMethod("CalculateBudget", BindingFlags.NonPublic | BindingFlags.Static);
+                        dynMethod.Invoke(__instance, new object[] { town, demand, itemCategory });
+                        float num = (float)dynMethod.Invoke(__instance, new object[] { town, demand, itemCategory });
+                        if (num > 0.01f)
+                        {
+                            int price = marketData.GetPrice(item, null, false, null);
+                            float desiredAmount = num / (float)price;
+                            if (desiredAmount > (float)amount)
+                                desiredAmount = (float)amount;
+                            
+                            int finalAmount = MBRandom.RoundRandomized(desiredAmount);
+                            ConsumptionType type = Helpers.Helpers.GetTradeGoodConsumptionType(itemCategory);
+                            if (finalAmount > amount)
+                            {
+                                finalAmount = amount;
+                                popData.UpdateSatisfaction(type, 0.025f);
+                            }
+                            else popData.UpdateSatisfaction(type, -0.025f);
+                            itemRoster.AddToCounts(elementCopyAtIndex.EquipmentElement, -finalAmount);
+                            categoryDemand[itemCategory] = num - desiredAmount * (float)price;
+                            town.ChangeGold(finalAmount * price);
+                            int num4 = 0;
+                            saleLog.TryGetValue(itemCategory, out num4);
+                            saleLog[itemCategory] = num4 + finalAmount;
+                        }
+                    }
+                    List<Town.SellLog> list = new List<Town.SellLog>();
+                    foreach (KeyValuePair<ItemCategory, int> keyValuePair in saleLog)
+                    {
+                        if (keyValuePair.Value > 0)
+                        {
+                            list.Add(new Town.SellLog(keyValuePair.Key, keyValuePair.Value));
+                        }
+                    }
+                    town.SetSoldItems(list);
+                    return false;
+                }
+                else return true;
             }
         }
     }

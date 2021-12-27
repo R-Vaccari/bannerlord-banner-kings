@@ -21,6 +21,17 @@ namespace Populations.Managers
 
         public bool IsHeroTitleHolder(Hero hero) => TITLE_HOLDERS.ContainsKey(hero);
 
+        public bool HasSuzerain(Settlement settlement)
+        {
+            FeudalTitle vassal = TITLES.FirstOrDefault(x => x.fief == settlement);
+            if (vassal != null)
+            {
+                FeudalTitle suzerain = TITLES.FirstOrDefault(x => x.vassals.Contains(vassal));
+                return suzerain != null;
+            }
+            return false;
+        }
+
         public HashSet<FeudalTitle> GetTitles(Hero hero)
         {
             if (IsHeroTitleHolder(hero)) return TITLE_HOLDERS[hero];
@@ -137,6 +148,7 @@ namespace Populations.Managers
             public Hero deFacto { get; set; }
             public TextObject name { get; set; }
             public TextObject shortName { get; set; }
+            public float dueTax { get; set; }
 
             public FeudalTitle(TitleType type, Settlement fief, HashSet<FeudalTitle> vassals, Hero deJure, Hero deFacto, string name)
             {
@@ -147,6 +159,7 @@ namespace Populations.Managers
                 this.deFacto = deFacto;
                 this.name = new TextObject(Helpers.Helpers.GetTitlePrefix(type) + " of " + name);
                 this.shortName = new TextObject(name);
+                dueTax = 0;
             }
         }
 
@@ -158,6 +171,16 @@ namespace Populations.Managers
             County,
             Barony,
             Lordship
+        }
+
+        class FeudalContract
+        {
+        }
+
+        public enum FeudalDuties
+        {
+            Taxation
+
         }
     }
 }

@@ -1,11 +1,9 @@
-﻿using HarmonyLib;
-using Populations.Components;
+﻿using Populations.Components;
 using Populations.Models;
 using System;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
-using TaleWorlds.Library;
 using TaleWorlds.SaveSystem;
 
 namespace Populations
@@ -13,10 +11,10 @@ namespace Populations
     public class PopulationManager
     {
         [SaveableProperty(100)]
-        public Dictionary<Settlement, PopulationData> POPS { get; set; }
+        private Dictionary<Settlement, PopulationData> POPS { get; set; }
 
         [SaveableProperty(101)]
-        public List<MobileParty> CARAVANS { get; set; }
+        private List<MobileParty> CARAVANS { get; set; }
 
         public PopulationManager(Dictionary<Settlement, PopulationData> pops, List<MobileParty> caravans)
         {
@@ -194,11 +192,14 @@ namespace Populations
             [SaveableProperty(3)]
             private float assimilation { get; set; }
 
+            private float[] satisfactions { get; set; }
+
             public PopulationData(List<PopulationClass> classes, float assimilation)
             {
                 this.classes = classes;
                 classes.ForEach(popClass => TotalPop += popClass.count);
                 this.assimilation = assimilation;
+                this.satisfactions = new float[] { 0.5f, 0.5f, 0.5f, 0.5f};
             }
 
             public float Assimilation
@@ -238,6 +239,12 @@ namespace Populations
                     if (value != totalPop)
                         totalPop = value;
                 }
+            }
+
+            public void UpdateSatisfaction(ConsumptionType type, float value)
+            {
+                if (this.satisfactions == null ) this.satisfactions = new float[] { 0.5f, 0.5f, 0.5f, 0.5f };
+                this.satisfactions[(int)type] += value;
             }
 
             public void UpdatePopulation(Settlement settlement, int pops, PopType target)
@@ -344,6 +351,14 @@ namespace Populations
             Serfs,
             Slaves,
             None
+        }
+
+        public enum ConsumptionType
+        {
+            Luxury,
+            Industrial,
+            General,
+            Food
         }
     }
 }
