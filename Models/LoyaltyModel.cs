@@ -113,7 +113,7 @@ namespace Populations.Models
 			if (PopulationConfig.Instance.PopulationManager != null && PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
             {
 				PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(town.Settlement);
-				float factor = data.Assimilation - 1f + (data.Assimilation * 1f);
+				float factor = data.Assimilation - 1f + data.Assimilation;
 				float result = (float)LOYALTY_FACTOR * factor;
 				explainedNumber.Add(result, new TextObject("Cultural Assimilation"));
 

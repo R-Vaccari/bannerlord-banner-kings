@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
+using TaleWorlds.Library;
 using TaleWorlds.SaveSystem;
 
 namespace Populations
@@ -87,6 +88,7 @@ namespace Populations
                 {
                     new GrowthModel().CalculatePopulationGrowth(settlement);
                     new CultureModel().CalculateAssimilationChange(settlement);
+                    new StabilityModel().CalculateStabilityChange(settlement);
                 }  
             }
         }
@@ -192,14 +194,27 @@ namespace Populations
             [SaveableProperty(3)]
             private float assimilation { get; set; }
 
-            private float[] satisfactions { get; set; }
+            [SaveableProperty(4)]
+            private float[] satisfactions { get; set; } = new float[] { 0.5f, 0.5f, 0.5f, 0.5f };
+
+            [SaveableProperty(5)]
+            private float stability { get; set; } = 0.5f;
 
             public PopulationData(List<PopulationClass> classes, float assimilation)
             {
                 this.classes = classes;
                 classes.ForEach(popClass => TotalPop += popClass.count);
                 this.assimilation = assimilation;
-                this.satisfactions = new float[] { 0.5f, 0.5f, 0.5f, 0.5f};
+            }
+
+            public float Stability
+            {
+                get => this.stability;
+                set
+                {
+                    if (value != stability)
+                        stability = value;
+                }
             }
 
             public float Assimilation
@@ -241,10 +256,16 @@ namespace Populations
                 }
             }
 
+            public float[] GetSatisfactions()
+            {
+                if (satisfactions == null) this.satisfactions = new float[] { 0.5f, 0.5f, 0.5f, 0.5f };
+                return satisfactions;
+            }
             public void UpdateSatisfaction(ConsumptionType type, float value)
             {
                 if (this.satisfactions == null ) this.satisfactions = new float[] { 0.5f, 0.5f, 0.5f, 0.5f };
-                this.satisfactions[(int)type] += value;
+                float current = this.satisfactions[(int)type];
+                this.satisfactions[(int)type] = MathF.Clamp(current + value, 0f, 1f);
             }
 
             public void UpdatePopulation(Settlement settlement, int pops, PopType target)
@@ -358,7 +379,8 @@ namespace Populations
             Luxury,
             Industrial,
             General,
-            Food
+            Food,
+            None
         }
     }
 }

@@ -183,7 +183,85 @@ namespace Populations.Models
 			});
 		}
 
-	
+		public int GetFoodEstimate(Town town, bool includeDescriptions, int maxStocks)
+		{
+			//InformationManager.DisplayMessage(new InformationMessage("Food model running..."));
+			ExplainedNumber result = new ExplainedNumber(0f, includeDescriptions, null);
+
+			// ------- Pops / Prosperity consumption ---------
+			PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(town.Settlement);
+			int citySerfs = data.GetTypeCount(PopType.Serfs);
+
+			float serfConsumption = (float)citySerfs * SERF_FOOD * -1f;
+			result.Add((float)serfConsumption, new TextObject("Serfs consumption (siege)", null));
+
+			int citySlaves = data.GetTypeCount(PopType.Slaves);
+			float slaveConsumption = (float)citySlaves * SERF_FOOD * -0.5f;
+			result.Add((float)slaveConsumption, new TextObject("Slaves consumption (siege)", null));
+			
+
+			int cityNobles = data.GetTypeCount(PopType.Nobles);
+			float nobleConsumption = (float)cityNobles * NOBLE_FOOD;
+			result.Add((float)nobleConsumption, new TextObject("Nobles consumption", null));
+
+			int cityCraftsmen = data.GetTypeCount(PopType.Craftsmen);
+			float craftsmenConsumption = (float)cityCraftsmen * CRAFTSMEN_FOOD;
+			result.Add((float)craftsmenConsumption, new TextObject("Craftsmen consumption", null));
+
+			float prosperityImpact = -town.Owner.Settlement.Prosperity / (town.IsCastle ? 100f : 40f);
+			result.Add(prosperityImpact, new TextObject("Prosperity effect"), null);
+
+			MobileParty garrisonParty = town.GarrisonParty;
+			int garrisonConsumption = (garrisonParty != null) ? garrisonParty.Party.NumberOfAllMembers : 0;
+			result.Add((float)(-garrisonConsumption / NumberOfMenOnGarrisonToEatOneFood), new TextObject("Garrison consumption"), null);
+
+			if (PopulationConfig.Instance.PolicyManager.IsPolicyEnacted(town.Settlement, PolicyManager.PolicyType.CONSCRIPTION))
+				result.AddFactor(-0.25f, new TextObject("Conscription policy"));
+
+			if (town.Governor != null)
+			{
+				if (town.IsUnderSiege)
+				{
+					if (town.Governor.GetPerkValue(DefaultPerks.Steward.Gourmet))
+						result.AddFactor(DefaultPerks.Steward.Gourmet.SecondaryBonus, DefaultPerks.Steward.Gourmet.Name);
+
+					if (town.Governor.GetPerkValue(DefaultPerks.Medicine.TriageTent))
+						result.AddFactor(DefaultPerks.Medicine.TriageTent.SecondaryBonus, DefaultPerks.Medicine.TriageTent.Name);
+				}
+				if (town.Governor.GetPerkValue(DefaultPerks.Steward.MasterOfWarcraft))
+					result.AddFactor(DefaultPerks.Steward.MasterOfWarcraft.SecondaryBonus, DefaultPerks.Steward.MasterOfWarcraft.Name);
+			}
+
+			// ------- Other factors ---------
+			Clan ownerClan = town.Settlement.OwnerClan;
+			if (((ownerClan != null) ? ownerClan.Kingdom : null) != null && town.Settlement.OwnerClan.Kingdom.ActivePolicies.Contains(DefaultPolicies.HuntingRights))
+			{
+				result.Add(2f, DefaultPolicies.HuntingRights.Name, null);
+			}
+			
+			if (town.Governor != null && town.Governor.GetPerkValue(DefaultPerks.Roguery.DirtyFighting))
+			{
+				result.Add(DefaultPerks.Roguery.DirtyFighting.SecondaryBonus, DefaultPerks.Roguery.DirtyFighting.Name, null);
+			}
+			else
+			{
+				result.Add(0f, new TextObject("Village not producing"), null);
+			}
+		IL_296:
+			foreach (Town.SellLog sellLog in town.SoldItems)
+			{
+				if (sellLog.Category.Properties == ItemCategory.Property.BonusToFoodStores)
+				{
+					result.Add((float)sellLog.Number, sellLog.Category.GetName(), null);
+				}
+			}
+			GetSettlementFoodChangeDueToIssues(town, ref result);
+
+			int finalResult = (int)((float)maxStocks / result.ResultNumber);
+			return -finalResult;
+		}
+
+
 		private static void GetSettlementFoodChangeDueToIssues(Town town, ref ExplainedNumber explainedNumber)
 		{
 			Campaign.Current.Models.IssueModel.GetIssueEffectsOfSettlement(DefaultIssueEffects.SettlementFood, town.Settlement, ref explainedNumber);

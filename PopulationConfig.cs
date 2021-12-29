@@ -13,10 +13,10 @@ namespace Populations
         public PolicyManager PolicyManager;
 
         public void InitManagers(Dictionary<Settlement, PopulationData> pops, List<MobileParty> caravans, Dictionary<Settlement, List<PolicyElement>> policies,
-            Dictionary<Settlement, TaxType> taxes, Dictionary<Settlement, MilitiaPolicy> militias, Dictionary<Settlement, WorkforcePolicy> workforce)
+            Dictionary<Settlement, TaxType> taxes, Dictionary<Settlement, MilitiaPolicy> militias, Dictionary<Settlement, WorkforcePolicy> workforce, Dictionary<Settlement, TaxType> tariffs)
         {
             this.PopulationManager = new PopulationManager(pops, caravans);
-            this.PolicyManager = new PolicyManager(policies, taxes, militias, workforce);
+            this.PolicyManager = new PolicyManager(policies, taxes, militias, workforce, tariffs);
         }
 
         public void InitManagers(PopulationManager populationManager, PolicyManager policyManager)

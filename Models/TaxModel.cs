@@ -78,9 +78,31 @@ namespace Populations.Models
             return (int)baseResult;
         }
 
+        public override float GetTownCommissionChangeBasedOnSecurity(Town town, float commission)
+        {
+            return commission;
+        }
+
         public override float GetTownTaxRatio(Town town)
         {
-            return base.GetTownTaxRatio(town);
+            float baseResult = base.GetTownTaxRatio(town);
+            if (PopulationConfig.Instance.PolicyManager != null)
+            {
+                float result = this.SettlementCommissionRateTown;
+                if (town.Settlement.OwnerClan.Kingdom != null && town.Settlement.OwnerClan.Kingdom.ActivePolicies.Contains(DefaultPolicies.CrownDuty))
+                    result += 0.05f;
+                
+                TaxType type = PopulationConfig.Instance.PolicyManager.GetSettlementTariff(town.Settlement);
+                if (type == TaxType.High)
+                    result += 0.03f;
+                else if (type == TaxType.Low)
+                    result -= 0.03f;
+                else if (type == TaxType.Exemption)
+                    result = 0f;
+
+                return result;
+            }
+            return baseResult;
         }
 
         public override float GetVillageTaxRatio() => base.GetVillageTaxRatio();

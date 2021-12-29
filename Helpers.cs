@@ -87,6 +87,17 @@ namespace Populations.Helpers
             return name + description;
         }
 
+        public static string GetConsumptionHint(ConsumptionType type)
+        {
+            if (type == ConsumptionType.Luxury)
+                return "Satisfaction over availability of products such as jewelry, velvets and fur";
+            else if (type == ConsumptionType.Industrial)
+                return "Satisfaction over availability of manufacturing products such as leather, clay and tools";
+            else if (type == ConsumptionType.General)
+                return "Satisfaction over availability of various products, including military equipment and horses";
+            else return "Satisfaction over availability of food types";
+        }
+
         public static string GetTitleHonorary(TitleType type, bool female)
         {
             if (type == TitleType.Kingdom)
@@ -141,6 +152,21 @@ namespace Populations.Helpers
             else if (item.Properties == Property.BonusToFoodStores)
                 return ConsumptionType.Food;
             else return ConsumptionType.General;
+        }
+
+        public static ConsumptionType GetTradeGoodConsumptionType(ItemObject item)
+        {
+            string id = item.StringId;
+            if (id == "silver" || id == "jewelry" || id == "spice" || id == "velvet" || id == "fur")
+                return ConsumptionType.Luxury;
+            else if (id == "wool" || id == "pottery" || id == "cotton" || id == "flax" || id == "linen" || id == "leather" || id == "tools")
+                return ConsumptionType.Industrial;
+            else if (item.IsFood)
+                return ConsumptionType.Food;
+            else if (item.IsInitialized && !item.IsBannerItem && (item.HasArmorComponent || item.HasWeaponComponent || item.IsAnimal ||
+                item.IsTradeGood || item.HasHorseComponent))
+                return ConsumptionType.General;
+            else return ConsumptionType.None;
         }
 
         public static XmlDocument CreateDocumentFromXmlFile(string xmlPath)

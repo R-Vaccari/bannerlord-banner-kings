@@ -43,6 +43,8 @@ namespace Populations
                     campaignStarter.AddModel(new PartyLimitModel());
                     campaignStarter.AddModel(new ClanIncomeModel());
                     campaignStarter.AddModel(new EconomyModel());
+                    campaignStarter.AddModel(new PriceFactorModel());
+                    campaignStarter.AddModel(new FeudalWorkshopModel());
 
                 } catch (Exception e)
                 {
@@ -240,66 +242,89 @@ namespace Populations
             }
         }
 
-
-        [HarmonyPatch(typeof(ItemConsumptionBehavior), "MakeConsumption")]
-        class ItemConsumptionPatch
+        namespace Economy
         {
-            static bool Prefix(ItemConsumptionBehavior __instance, Town town, Dictionary<ItemCategory, float> categoryDemand, Dictionary<ItemCategory, int> saleLog)
+            [HarmonyPatch(typeof(Town))]
+            class TownItemPricePatch
             {
-                if (PopulationConfig.Instance.PopulationManager != null && PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
-                {
-                    saleLog.Clear();
-                    TownMarketData marketData = town.MarketData;
-                    ItemRoster itemRoster = town.Owner.ItemRoster;
-                    PopulationData popData = PopulationConfig.Instance.PopulationManager.GetPopData(town.Settlement);
-                    for (int i = itemRoster.Count - 1; i >= 0; i--)
-                    {
-                        ItemRosterElement elementCopyAtIndex = itemRoster.GetElementCopyAtIndex(i);
-                        ItemObject item = elementCopyAtIndex.EquipmentElement.Item;
-                        int amount = elementCopyAtIndex.Amount;
-                        ItemCategory itemCategory = item.GetItemCategory();
-                        float demand = categoryDemand[itemCategory];
 
-                        IEnumerable<ItemConsumptionBehavior> behaviors = Campaign.Current.GetCampaignBehaviors<ItemConsumptionBehavior>();
-                        MethodInfo dynMethod = behaviors.First().GetType().GetMethod("CalculateBudget", BindingFlags.NonPublic | BindingFlags.Static);
-                        dynMethod.Invoke(__instance, new object[] { town, demand, itemCategory });
-                        float num = (float)dynMethod.Invoke(__instance, new object[] { town, demand, itemCategory });
-                        if (num > 0.01f)
-                        {
-                            int price = marketData.GetPrice(item, null, false, null);
-                            float desiredAmount = num / (float)price;
-                            if (desiredAmount > (float)amount)
-                                desiredAmount = (float)amount;
-                            
-                            int finalAmount = MBRandom.RoundRandomized(desiredAmount);
-                            ConsumptionType type = Helpers.Helpers.GetTradeGoodConsumptionType(itemCategory);
-                            if (finalAmount > amount)
-                            {
-                                finalAmount = amount;
-                                popData.UpdateSatisfaction(type, 0.025f);
-                            }
-                            else popData.UpdateSatisfaction(type, -0.025f);
-                            itemRoster.AddToCounts(elementCopyAtIndex.EquipmentElement, -finalAmount);
-                            categoryDemand[itemCategory] = num - desiredAmount * (float)price;
-                            town.ChangeGold(finalAmount * price);
-                            int num4 = 0;
-                            saleLog.TryGetValue(itemCategory, out num4);
-                            saleLog[itemCategory] = num4 + finalAmount;
-                        }
-                    }
-                    List<Town.SellLog> list = new List<Town.SellLog>();
-                    foreach (KeyValuePair<ItemCategory, int> keyValuePair in saleLog)
-                    {
-                        if (keyValuePair.Value > 0)
-                        {
-                            list.Add(new Town.SellLog(keyValuePair.Key, keyValuePair.Value));
-                        }
-                    }
-                    town.SetSoldItems(list);
+                [HarmonyPrefix]
+                [HarmonyPatch("GetItemPrice", new Type[] { typeof(ItemObject), typeof(MobileParty), typeof(bool) })]
+                static bool Prefix1(Town __instance, ref int __result, ItemObject item, MobileParty tradingParty = null, bool isSelling = false)
+                {
+                    __result = __instance.MarketData.GetPrice(item, tradingParty, isSelling, __instance.Settlement.Party);
                     return false;
                 }
-                else return true;
+
+                [HarmonyPrefix]
+                [HarmonyPatch("GetItemPrice", new Type[] { typeof(EquipmentElement), typeof(MobileParty), typeof(bool) })]
+                static bool Prefix2(Town __instance, ref int __result, EquipmentElement itemRosterElement, MobileParty tradingParty = null, bool isSelling = false)
+                {
+                    __result = __instance.MarketData.GetPrice(itemRosterElement, tradingParty, isSelling, __instance.Settlement.Party);
+                    return false;
+                }
             }
-        }
+
+            [HarmonyPatch(typeof(ItemConsumptionBehavior), "MakeConsumption")]
+            class ItemConsumptionPatch
+            {
+                static bool Prefix(ItemConsumptionBehavior __instance, Town town, Dictionary<ItemCategory, float> categoryDemand, Dictionary<ItemCategory, int> saleLog)
+                {
+                    if (PopulationConfig.Instance.PopulationManager != null && PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
+                    {
+                        saleLog.Clear();
+                        TownMarketData marketData = town.MarketData;
+                        ItemRoster itemRoster = town.Owner.ItemRoster;
+                        PopulationData popData = PopulationConfig.Instance.PopulationManager.GetPopData(town.Settlement);
+                        for (int i = itemRoster.Count - 1; i >= 0; i--)
+                        {
+                            ItemRosterElement elementCopyAtIndex = itemRoster.GetElementCopyAtIndex(i);
+                            ItemObject item = elementCopyAtIndex.EquipmentElement.Item;
+                            int amount = elementCopyAtIndex.Amount;
+                            ItemCategory itemCategory = item.GetItemCategory();
+                            float demand = categoryDemand[itemCategory];
+
+                            IEnumerable<ItemConsumptionBehavior> behaviors = Campaign.Current.GetCampaignBehaviors<ItemConsumptionBehavior>();
+                            MethodInfo dynMethod = behaviors.First().GetType().GetMethod("CalculateBudget", BindingFlags.NonPublic | BindingFlags.Static);
+                            dynMethod.Invoke(__instance, new object[] { town, demand, itemCategory });
+                            float num = (float)dynMethod.Invoke(__instance, new object[] { town, demand, itemCategory });
+                            if (num > 0.01f)
+                            {
+                                int price = marketData.GetPrice(item, null, false, null);
+                                float desiredAmount = num / (float)price;
+                                if (desiredAmount > (float)amount)
+                                    desiredAmount = (float)amount;
+
+                                int finalAmount = MBRandom.RoundRandomized(desiredAmount);
+                                ConsumptionType type = Helpers.Helpers.GetTradeGoodConsumptionType(item);
+                                if (finalAmount > amount)
+                                {
+                                    finalAmount = amount;
+                                    if (type != ConsumptionType.None) popData.UpdateSatisfaction(type, 0.01f);
+                                }
+                                else if (type != ConsumptionType.None) popData.UpdateSatisfaction(type, -0.001f);
+                                itemRoster.AddToCounts(elementCopyAtIndex.EquipmentElement, -finalAmount);
+                                categoryDemand[itemCategory] = num - desiredAmount * (float)price;
+                                town.ChangeGold(finalAmount * price);
+                                int num4 = 0;
+                                saleLog.TryGetValue(itemCategory, out num4);
+                                saleLog[itemCategory] = num4 + finalAmount;
+                            }
+                        }
+                        List<Town.SellLog> list = new List<Town.SellLog>();
+                        foreach (KeyValuePair<ItemCategory, int> keyValuePair in saleLog)
+                        {
+                            if (keyValuePair.Value > 0)
+                            {
+                                list.Add(new Town.SellLog(keyValuePair.Key, keyValuePair.Value));
+                            }
+                        }
+                        town.SetSoldItems(list);
+                        return false;
+                    }
+                    else return true;
+                }
+            }
+        }     
     }
 }

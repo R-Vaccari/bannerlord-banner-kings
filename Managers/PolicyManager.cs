@@ -18,13 +18,17 @@ namespace Populations
         [SaveableProperty(103)]
         public Dictionary<Settlement, WorkforcePolicy> WORKFORCE { get; set; }
 
+        [SaveableProperty(104)]
+        public Dictionary<Settlement, TaxType> TARIFFS { get; set; }
+
         public PolicyManager(Dictionary<Settlement, List<PolicyElement>> POLICIES, Dictionary<Settlement, TaxType> TAXES, 
-            Dictionary<Settlement, MilitiaPolicy> MILITIAS, Dictionary<Settlement, WorkforcePolicy> WORKFORCE)
+            Dictionary<Settlement, MilitiaPolicy> MILITIAS, Dictionary<Settlement, WorkforcePolicy> WORKFORCE, Dictionary<Settlement, TaxType> TARIFFS)
         {
             this.POLICIES = POLICIES;
             this.TAXES = TAXES;
             this.MILITIAS = MILITIAS;
             this.WORKFORCE = WORKFORCE;
+            this.TARIFFS = TARIFFS;
         }
 
         public bool IsSettlementPoliciesSet(Settlement settlement) => POLICIES.ContainsKey(settlement);
@@ -129,6 +133,25 @@ namespace Populations
             else
             {
                 TAXES.Add(settlement, TaxType.Standard);
+                return TaxType.Standard;
+            }
+        }
+
+        public void UpdateTariffPolicy(Settlement settlement, TaxType policy)
+        {
+            if (TARIFFS.ContainsKey(settlement))
+                TARIFFS[settlement] = policy;
+            else TARIFFS.Add(settlement, policy);
+        }
+
+        public TaxType GetSettlementTariff(Settlement settlement)
+        {
+            if (TARIFFS == null) TARIFFS = new Dictionary<Settlement, TaxType>();
+            if (TARIFFS.ContainsKey(settlement))
+                return TARIFFS[settlement];
+            else
+            {
+                TARIFFS.Add(settlement, TaxType.Standard);
                 return TaxType.Standard;
             }
         }

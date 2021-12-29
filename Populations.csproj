@@ -114,6 +114,9 @@
     <Compile Include="Models\ClanFinanceModel.cs" />
     <Compile Include="Models\EconomyModel.cs" />
     <Compile Include="Models\PartyLimitModel.cs" />
+    <Compile Include="Models\PriceFactorModel.cs" />
+    <Compile Include="Models\FeudalWorkshopModel.cs" />
+    <Compile Include="Models\StabilityModel.cs" />
     <Compile Include="TitleConfig.cs" />
     <Compile Include="SaveDefiner.cs" />
     <Compile Include="Models\AdministrativeModel.cs" />
@@ -135,6 +138,9 @@
     <Compile Include="Managers\PopulationManager.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UI\Items\InformationElement.cs" />
+    <Compile Include="UI\ManagementVM.cs" />
+    <Compile Include="UI\OverviewVM.cs" />
     <Compile Include="UI\Items\WorkItemVM.cs" />
     <Compile Include="UI\Items\TaxItemVM.cs" />
     <Compile Include="UI\Items\MilitiaItemVM.cs" />
