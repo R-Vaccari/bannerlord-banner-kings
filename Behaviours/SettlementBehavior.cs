@@ -52,7 +52,8 @@ namespace Populations.Behaviors
                 {
                     PopulationConfig.Instance.InitManagers(new Dictionary<Settlement, PopulationData>(), new List<MobileParty>(),
                     new Dictionary<Settlement, List<PolicyManager.PolicyElement>>(), new Dictionary<Settlement, PolicyManager.TaxType>(),
-                    new Dictionary<Settlement, PolicyManager.MilitiaPolicy>(), new Dictionary<Settlement, WorkforcePolicy>(), new Dictionary<Settlement, TaxType>());
+                    new Dictionary<Settlement, PolicyManager.MilitiaPolicy>(), new Dictionary<Settlement, WorkforcePolicy>(), new Dictionary<Settlement, TariffType>(),
+                    new Dictionary<Settlement, CriminalPolicy>());
                 }
                 else
                 {
@@ -251,7 +252,8 @@ namespace Populations.Behaviors
             if (PopulationConfig.Instance.PopulationManager == null)
                 PopulationConfig.Instance.InitManagers(new Dictionary<Settlement, PopulationData>(), new List<MobileParty>(),
                 new Dictionary<Settlement, List<PolicyManager.PolicyElement>>(), new Dictionary<Settlement, PolicyManager.TaxType>(),
-                new Dictionary<Settlement, PolicyManager.MilitiaPolicy>(), new Dictionary<Settlement, WorkforcePolicy>(), new Dictionary<Settlement, TaxType>());
+                new Dictionary<Settlement, PolicyManager.MilitiaPolicy>(), new Dictionary<Settlement, WorkforcePolicy>(), new Dictionary<Settlement, TariffType>(),
+                new Dictionary<Settlement, CriminalPolicy>());
 
             UpdateSettlementPops(settlement);
             InitializeSettlementPolicies(settlement);
@@ -427,9 +429,9 @@ namespace Populations.Behaviors
 
         private void AddMenus(CampaignGameStarter campaignGameStarter)
         {
-            campaignGameStarter.AddGameMenuOption("town", "manage_population", "{=!}Manage population",
+            campaignGameStarter.AddGameMenuOption("town", "manage_population", "{=!}Feudal management",
                 new GameMenuOption.OnConditionDelegate(game_menu_town_manage_town_on_condition),
-                new GameMenuOption.OnConsequenceDelegate(game_menu_town_manage_town_on_consequence), false, 5, false);
+                new GameMenuOption.OnConsequenceDelegate(game_menu_town_manage_town_on_consequence), false, 4, false);
 
             campaignGameStarter.AddGameMenuOption("castle", "manage_population", "{=!}Manage population",
                new GameMenuOption.OnConditionDelegate(game_menu_town_manage_town_on_condition),

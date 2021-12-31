@@ -1,4 +1,5 @@
-﻿using Populations.UI.Items;
+﻿using Populations.Models;
+using Populations.UI.Items;
 using System;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
@@ -6,13 +7,12 @@ using TaleWorlds.Core.ViewModelCollection;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using static Populations.PolicyManager;
-
+using static Populations.PopulationManager;
 
 namespace Populations.UI
 {
     public class ManagementVM : ViewModel
     {
-
         private PopulationOptionVM _slaveToogle;
         private PopulationOptionVM _popAccelerateToogle;
         private PopulationOptionVM _selfInvestToogle;
@@ -22,6 +22,9 @@ namespace Populations.UI
         private SelectorVM<MilitiaItemVM> _militiaSelector;
         private SelectorVM<TaxItemVM> _taxSelector;
         private SelectorVM<WorkItemVM> _workSelector;
+        private SelectorVM<TariffItemVM> _tariffSelector;
+        private SelectorVM<CrimeItemVM> _crimeSelector;
+        
         private Settlement _settlement;
         private bool _isSelected;
 
@@ -104,12 +107,10 @@ namespace Populations.UI
 
             int workIndex = 0;
             WorkforcePolicy workPolicy = PopulationConfig.Instance.PolicyManager.GetSettlementWork(_settlement);
-            if (workPolicy == WorkforcePolicy.Land_Expansion)
+            if (workPolicy == WorkforcePolicy.Martial_Law)
                 workIndex = 1;
-            else if (workPolicy == WorkforcePolicy.Martial_Law)
-                workIndex = 2;
             else if (workPolicy == WorkforcePolicy.Construction)
-                workIndex = 3;
+                workIndex = 2;
             WorkSelector = new SelectorVM<WorkItemVM>(0, new Action<SelectorVM<WorkItemVM>>(this.OnWorkChange));
             WorkSelector.SetOnChangeAction(null);
             foreach (WorkforcePolicy policy in _workPolicies)
@@ -119,6 +120,58 @@ namespace Populations.UI
             }
             WorkSelector.SetOnChangeAction(OnWorkChange);
             WorkSelector.SelectedIndex = workIndex;
+
+            int tariffIndex = 0;
+            TariffType tariff = PopulationConfig.Instance.PolicyManager.GetSettlementTariff(_settlement);
+            if (tariff == TariffType.Internal_Consumption)
+                tariffIndex = 1;
+            else if (tariff == TariffType.Exemption)
+                tariffIndex = 2;
+            TariffSelector = new SelectorVM<TariffItemVM>(0, new Action<SelectorVM<TariffItemVM>>(this.OnTariffChange));
+            TariffSelector.SetOnChangeAction(null);
+            foreach (TariffType policy in _tariffPolicies)
+            {
+                TariffItemVM item = new TariffItemVM(policy, true);
+                TariffSelector.AddItem(item);
+            }
+            TariffSelector.SetOnChangeAction(OnTariffChange);
+            TariffSelector.SelectedIndex = tariffIndex;
+
+            int crimeIndex = 0;
+            CriminalPolicy criminalPolicy = PopulationConfig.Instance.PolicyManager.GetCriminalPolicy(_settlement);
+            if (criminalPolicy == CriminalPolicy.Execution)
+                crimeIndex = 1;
+            else if (criminalPolicy == CriminalPolicy.Forgiveness)
+                crimeIndex = 2;
+            CrimeSelector = new SelectorVM<CrimeItemVM>(0, new Action<SelectorVM<CrimeItemVM>>(this.OnCrimeChange));
+            CrimeSelector.SetOnChangeAction(null);
+            foreach (CriminalPolicy policy in _crimePolicies)
+            {
+                CrimeItemVM item = new CrimeItemVM(policy, true);
+                CrimeSelector.AddItem(item);
+            }
+            CrimeSelector.SetOnChangeAction(OnCrimeChange);
+            CrimeSelector.SelectedIndex = crimeIndex;       
+        }
+
+        private string FormatValue(float value) => (value * 100f).ToString("0.00") + '%';
+
+        private void OnTariffChange(SelectorVM<TariffItemVM> obj)
+        {
+            if (obj.SelectedItem != null)
+            {
+                TariffItemVM selectedItem = obj.SelectedItem;
+                PopulationConfig.Instance.PolicyManager.UpdateTariffPolicy(_settlement, selectedItem.policy);
+            }
+        }
+
+        private void OnCrimeChange(SelectorVM<CrimeItemVM> obj)
+        {
+            if (obj.SelectedItem != null)
+            {
+                CrimeItemVM selectedItem = obj.SelectedItem;
+                PopulationConfig.Instance.PolicyManager.UpdateCriminalPolicy(_settlement, selectedItem.policy);
+            }
         }
 
         private void OnMilitiaChange(SelectorVM<MilitiaItemVM> obj)
@@ -148,38 +201,46 @@ namespace Populations.UI
             }
         }
 
+        [DataSourceProperty]
+        public string ManumissionButtonName
+        {
+            get => "Grant Manumission";
+        }
 
-        private IEnumerable<WorkforcePolicy> _workPolicies
+        [DataSourceProperty]
+        public HintViewModel ManumissionButtonHint
+        {
+            get => new HintViewModel(new TextObject("Concede forgiveness to slaves for their crimes and debts, making them serfs instead. The amount of freed slaves is relative to the current slave population"));
+        }
+
+        [DataSourceProperty]
+        public string AidButtonName
+        {
+            get => "Require Aid";
+        }
+
+        [DataSourceProperty]
+        public HintViewModel AidButtonHint
+        {
+            get => new HintViewModel(new TextObject("Require financial aid from local merchants and notables. The amount is relative to how much wealth the merchants currently have, as well as the influence cost and relations impact with local notables"));
+        }
+
+        public int InfluenceCost
         {
             get
             {
-                yield return WorkforcePolicy.None;
-                yield return WorkforcePolicy.Martial_Law;
-                yield return WorkforcePolicy.Construction;
-                yield break;
+                MobileParty party = _settlement.MilitiaPartyComponent.MobileParty;
+                Hero lord = _settlement.OwnerClan.Leader;
+                if (party != null && lord != null && lord.PartyBelongedTo != null)
+                    return new InfluenceModel().GetMilitiaInfluenceCost(party, _settlement, lord);
+                else return -1;
             }
         }
 
-        private IEnumerable<TaxType> _taxPolicies
+        [DataSourceProperty]
+        public string InfluenceCostText
         {
-            get
-            {
-                yield return TaxType.Standard;
-                yield return TaxType.High;
-                yield return TaxType.Low;
-                yield break;
-            }
-        }
-
-        private IEnumerable<MilitiaPolicy> _militiaPolicies
-        {
-            get
-            {
-                yield return MilitiaPolicy.Balanced;
-                yield return MilitiaPolicy.Melee;
-                yield return MilitiaPolicy.Ranged;
-                yield break;
-            }
+            get => string.Format("Cost: {0} influence", InfluenceCost);
         }
 
         [DataSourceProperty]
@@ -196,6 +257,40 @@ namespace Populations.UI
                     this._isSelected = value;
                     if (value) this.RefreshValues();
                     base.OnPropertyChangedWithValue(value, "IsSelected");
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public SelectorVM<TariffItemVM> TariffSelector
+        {
+            get
+            {
+                return this._tariffSelector;
+            }
+            set
+            {
+                if (value != this._tariffSelector)
+                {
+                    this._tariffSelector = value;
+                    base.OnPropertyChangedWithValue(value, "TariffSelector");
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public SelectorVM<CrimeItemVM> CrimeSelector
+        {
+            get
+            {
+                return this._crimeSelector;
+            }
+            set
+            {
+                if (value != this._crimeSelector)
+                {
+                    this._crimeSelector = value;
+                    base.OnPropertyChangedWithValue(value, "CrimeSelector");
                 }
             }
         }
@@ -332,6 +427,61 @@ namespace Populations.UI
                     _subsidizeMilitiaToogle = value;
                     base.OnPropertyChangedWithValue(value, "SubsidizeToogle");
                 }
+            }
+        }
+
+        private IEnumerable<WorkforcePolicy> _workPolicies
+        {
+            get
+            {
+                yield return WorkforcePolicy.None;
+                yield return WorkforcePolicy.Martial_Law;
+                yield return WorkforcePolicy.Construction;
+                yield break;
+            }
+        }
+
+        private IEnumerable<CriminalPolicy> _crimePolicies
+        {
+            get
+            {
+                yield return CriminalPolicy.Enslavement;
+                yield return CriminalPolicy.Execution;
+                yield return CriminalPolicy.Forgiveness;
+                yield break;
+            }
+        }
+
+        private IEnumerable<TaxType> _taxPolicies
+        {
+            get
+            {
+                yield return TaxType.Standard;
+                yield return TaxType.High;
+                yield return TaxType.Low;
+                yield break;
+            }
+        }
+
+        private IEnumerable<TariffType> _tariffPolicies
+        {
+            get
+            {
+                yield return TariffType.Standard;
+                yield return TariffType.Internal_Consumption;
+                yield return TariffType.Exemption;
+                yield break;
+            }
+        }
+
+        private IEnumerable<MilitiaPolicy> _militiaPolicies
+        {
+            get
+            {
+                yield return MilitiaPolicy.Balanced;
+                yield return MilitiaPolicy.Melee;
+                yield return MilitiaPolicy.Ranged;
+                yield break;
             }
         }
     }

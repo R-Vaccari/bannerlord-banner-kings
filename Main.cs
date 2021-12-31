@@ -244,6 +244,7 @@ namespace Populations
 
         namespace Economy
         {
+            // Pass on settlement party as parameter
             [HarmonyPatch(typeof(Town))]
             class TownItemPricePatch
             {
@@ -252,23 +253,68 @@ namespace Populations
                 [HarmonyPatch("GetItemPrice", new Type[] { typeof(ItemObject), typeof(MobileParty), typeof(bool) })]
                 static bool Prefix1(Town __instance, ref int __result, ItemObject item, MobileParty tradingParty = null, bool isSelling = false)
                 {
-                    __result = __instance.MarketData.GetPrice(item, tradingParty, isSelling, __instance.Settlement.Party);
+                    __result = __instance.MarketData.GetPrice(item, tradingParty, isSelling, __instance.GarrisonParty.Party);
                     return false;
                 }
 
+                
                 [HarmonyPrefix]
                 [HarmonyPatch("GetItemPrice", new Type[] { typeof(EquipmentElement), typeof(MobileParty), typeof(bool) })]
                 static bool Prefix2(Town __instance, ref int __result, EquipmentElement itemRosterElement, MobileParty tradingParty = null, bool isSelling = false)
                 {
-                    __result = __instance.MarketData.GetPrice(itemRosterElement, tradingParty, isSelling, __instance.Settlement.Party);
+                    __result = __instance.MarketData.GetPrice(itemRosterElement, tradingParty, isSelling, __instance.GarrisonParty.Party);
                     return false;
                 }
             }
 
+            // Pass on settlement party as consumer
+            [HarmonyPatch(typeof(WorkshopsCampaignBehavior), "ConsumeInput")]
+            class ConsumeInputPatch
+            {
+                static bool Prefix(ItemCategory productionInput, Town town, Workshop workshop, bool doNotEffectCapital)
+                {
+                    if (PopulationConfig.Instance.PopulationManager != null && PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
+                    {
+                        ItemRoster itemRoster = town.Owner.ItemRoster;
+                        int num = itemRoster.FindIndex((ItemObject x) => x.ItemCategory == productionInput);
+                        if (num >= 0)
+                        {
+                            ItemObject itemAtIndex = itemRoster.GetItemAtIndex(num);
+                            itemRoster.AddToCounts(itemAtIndex, -1);
+                            if (Campaign.Current.GameStarted && !doNotEffectCapital)
+                            {
+                                ItemData categoryData = town.MarketData.GetCategoryData(itemAtIndex.GetItemCategory());
+                                int itemPrice = new PriceFactorModel().GetPrice(new EquipmentElement(itemAtIndex, null, null, false), town.GarrisonParty, town.GarrisonParty.Party, false, categoryData.InStoreValue,
+                                    categoryData.Supply, categoryData.Demand);
+                                workshop.ChangeGold(-itemPrice);
+                                town.ChangeGold(itemPrice);
+                            }
+                            CampaignEventDispatcher.Instance.OnItemConsumed(itemAtIndex, town.Owner.Settlement, 1);
+                        }
+                        return false;
+                    }
+                    else return true;
+                }
+            }
+
+            // Impact prosperity
+            [HarmonyPatch(typeof(ChangeOwnerOfWorkshopAction), "ApplyInternal")]
+            class BankruptcyPatch
+            {
+                static void Postfix(Workshop workshop, Hero newOwner, WorkshopType workshopType, int capital, bool upgradable, int cost, TextObject customName, ChangeOwnerOfWorkshopAction.ChangeOwnerOfWorkshopDetail detail)
+                {
+                    Settlement settlement = workshop.Settlement;
+                    settlement.Prosperity -= 50f;
+                }
+            }
+
+
+
+            // Retain behavior of original while updating satisfaction parameters
             [HarmonyPatch(typeof(ItemConsumptionBehavior), "MakeConsumption")]
             class ItemConsumptionPatch
             {
-                static bool Prefix(ItemConsumptionBehavior __instance, Town town, Dictionary<ItemCategory, float> categoryDemand, Dictionary<ItemCategory, int> saleLog)
+                static bool Prefix(Town town, Dictionary<ItemCategory, float> categoryDemand, Dictionary<ItemCategory, int> saleLog)
                 {
                     if (PopulationConfig.Instance.PopulationManager != null && PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
                     {
@@ -286,8 +332,7 @@ namespace Populations
 
                             IEnumerable<ItemConsumptionBehavior> behaviors = Campaign.Current.GetCampaignBehaviors<ItemConsumptionBehavior>();
                             MethodInfo dynMethod = behaviors.First().GetType().GetMethod("CalculateBudget", BindingFlags.NonPublic | BindingFlags.Static);
-                            dynMethod.Invoke(__instance, new object[] { town, demand, itemCategory });
-                            float num = (float)dynMethod.Invoke(__instance, new object[] { town, demand, itemCategory });
+                            float num = (float)dynMethod.Invoke(null, new object[] { town, demand, itemCategory });
                             if (num > 0.01f)
                             {
                                 int price = marketData.GetPrice(item, null, false, null);
@@ -300,9 +345,13 @@ namespace Populations
                                 if (finalAmount > amount)
                                 {
                                     finalAmount = amount;
-                                    if (type != ConsumptionType.None) popData.UpdateSatisfaction(type, 0.01f);
+                                    if (type != ConsumptionType.None) popData.UpdateSatisfaction(type, -0.001f);
                                 }
-                                else if (type != ConsumptionType.None) popData.UpdateSatisfaction(type, -0.001f);
+                                else
+                                {
+           
+                                    if (type != ConsumptionType.None) popData.UpdateSatisfaction(type, 0.001f);
+                                }
                                 itemRoster.AddToCounts(elementCopyAtIndex.EquipmentElement, -finalAmount);
                                 categoryDemand[itemCategory] = num - desiredAmount * (float)price;
                                 town.ChangeGold(finalAmount * price);

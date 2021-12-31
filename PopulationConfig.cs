@@ -1,5 +1,4 @@
-﻿
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using static Populations.PolicyManager;
 using static Populations.PopulationManager;
@@ -13,10 +12,11 @@ namespace Populations
         public PolicyManager PolicyManager;
 
         public void InitManagers(Dictionary<Settlement, PopulationData> pops, List<MobileParty> caravans, Dictionary<Settlement, List<PolicyElement>> policies,
-            Dictionary<Settlement, TaxType> taxes, Dictionary<Settlement, MilitiaPolicy> militias, Dictionary<Settlement, WorkforcePolicy> workforce, Dictionary<Settlement, TaxType> tariffs)
+            Dictionary<Settlement, TaxType> taxes, Dictionary<Settlement, MilitiaPolicy> militias, Dictionary<Settlement, WorkforcePolicy> workforce, 
+            Dictionary<Settlement, TariffType> tariffs, Dictionary<Settlement, CriminalPolicy> criminal)
         {
             this.PopulationManager = new PopulationManager(pops, caravans);
-            this.PolicyManager = new PolicyManager(policies, taxes, militias, workforce, tariffs);
+            this.PolicyManager = new PolicyManager(policies, taxes, militias, workforce, tariffs, criminal);
         }
 
         public void InitManagers(PopulationManager populationManager, PolicyManager policyManager)
@@ -29,9 +29,6 @@ namespace Populations
         {
             get => ConfigHolder.CONFIG;
         }
-            
-
-
 
         internal struct ConfigHolder
         {

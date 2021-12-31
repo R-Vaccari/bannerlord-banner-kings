@@ -11,14 +11,7 @@ namespace Populations.UI.Items
             this.policy = policy;
             base.StringItem = policy.ToString();
             base.CanBeSelected = isAvailable;
-
-            string hint;
-            if (policy == MilitiaPolicy.Melee)
-                hint = "Focus three fourths of the militia as melee troops";
-            else if (policy == MilitiaPolicy.Ranged)
-                hint = "Focus three fourths of the militia as ranged troops";
-            else hint = "Split militia equally between ranged and melee troops";
-            base.Hint = new HintViewModel(new TaleWorlds.Localization.TextObject(hint));
+            base.Hint = new HintViewModel(new TaleWorlds.Localization.TextObject(PopulationConfig.Instance.PolicyManager.GetMilitiaHint(policy)));
         }
     }
 }

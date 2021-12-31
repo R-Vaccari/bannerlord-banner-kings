@@ -30,8 +30,10 @@ namespace Populations.Models
         public float GetAssimilationChange(Settlement settlement)
         {
             CultureObject ownerCulture = settlement.OwnerClan.Culture;
-            float change = -0.005f;
-
+            float random1 = 0.001f * MBRandom.RandomFloat;
+            float random2 = 0.001f * MBRandom.RandomFloat;
+            float change = -0.005f + random1 - random2;
+            
             if (!settlement.IsVillage && settlement.Town != null)
             change += 0.005f * (1f * (settlement.Town.Security * 0.01f));
 

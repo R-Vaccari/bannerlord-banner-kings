@@ -69,7 +69,18 @@ namespace Populations.Models
 
         public override int GetTownGoldChange(Town town)
         {
-            return base.GetTownGoldChange(town);
+            if (PopulationConfig.Instance.PopulationManager != null && PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
+                return GetMerchantIncome(town);
+            
+            else return base.GetTownGoldChange(town);
+        }
+
+        public int GetMerchantIncome(Town town)
+        {
+            PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(town.Settlement);
+            float slaves = data.GetTypeCount(PopType.Slaves);
+            float efficiency = new FeudalWorkshopModel().GetPolicyEffectToProduction(town);
+            return (int)(slaves * 0.3f * efficiency);
         }
     }
 }

@@ -19,16 +19,21 @@ namespace Populations
         public Dictionary<Settlement, WorkforcePolicy> WORKFORCE { get; set; }
 
         [SaveableProperty(104)]
-        public Dictionary<Settlement, TaxType> TARIFFS { get; set; }
+        public Dictionary<Settlement, TariffType> TARIFFS { get; set; }
+
+        [SaveableProperty(104)]
+        public Dictionary<Settlement, CriminalPolicy> CRIMINAL { get; set; }
 
         public PolicyManager(Dictionary<Settlement, List<PolicyElement>> POLICIES, Dictionary<Settlement, TaxType> TAXES, 
-            Dictionary<Settlement, MilitiaPolicy> MILITIAS, Dictionary<Settlement, WorkforcePolicy> WORKFORCE, Dictionary<Settlement, TaxType> TARIFFS)
+            Dictionary<Settlement, MilitiaPolicy> MILITIAS, Dictionary<Settlement, WorkforcePolicy> WORKFORCE, Dictionary<Settlement, TariffType> TARIFFS,
+            Dictionary<Settlement, CriminalPolicy> CRIMINAL)
         {
             this.POLICIES = POLICIES;
             this.TAXES = TAXES;
             this.MILITIAS = MILITIAS;
             this.WORKFORCE = WORKFORCE;
             this.TARIFFS = TARIFFS;
+            this.CRIMINAL = CRIMINAL;
         }
 
         public bool IsSettlementPoliciesSet(Settlement settlement) => POLICIES.ContainsKey(settlement);
@@ -74,22 +79,73 @@ namespace Populations
             }  
         }
 
+        public string GetPolicyHint(string type, int value, Settlement settlement)
+        {
+            if (type == "tax")
+                return GetTaxHint((TaxType)value, settlement.IsVillage);
+            else if (type == "crime")
+                return GetCrimeHint((CriminalPolicy)value);
+            else if (type == "tariff")
+                return GetTariffHint((TariffType)value);
+            else if (type == "workforce")
+                return GetWorkHint((WorkforcePolicy)value);
+            else return GetMilitiaHint((MilitiaPolicy)value);
+        }
+
+        public string GetMilitiaHint(MilitiaPolicy policy)
+        {
+            if (policy == MilitiaPolicy.Melee)
+                return "Focus three fourths of the militia as melee troops";
+            else if (policy == MilitiaPolicy.Ranged)
+                return "Focus three fourths of the militia as ranged troops";
+            else return "Split militia equally between ranged and melee troops";
+        }
+
         public string GetTaxHint(TaxType policy, bool isVillage)
         {
 
             if (policy == TaxType.High)
             {
-                if (isVillage) return "Yield more tax from the population, but reduce growth";
+                if (!isVillage) return "Yield more tax from the population, but reduce growth";
                 else return "Yield more tax from the population, at the cost of decreased loyalty";
             }
             else if (policy == TaxType.Low)
             {
-                if (isVillage) return "Reduce tax burden on the population, diminishing your profit but increasing their support towards you";
+                if (!isVillage) return "Reduce tax burden on the population, diminishing your profit but increasing their support towards you";
                 else return "Reduce tax burden on the population, encouraging new settlers";
             }
             else if (policy == TaxType.Exemption)
                 return "Fully exempt notables from taxes, improving their attitude towards you";
             else return "Standard tax of the land, with no particular repercussions";
+        }
+
+        public string GetCrimeHint(CriminalPolicy policy)
+        {
+            if (policy == CriminalPolicy.Enslavement)
+                return "Prisoners sold in the settlement will be enslaved and join the population. No particular repercussions";
+            else if (policy == CriminalPolicy.Execution)
+                return "Prisoners will suffer the death penalty. No ransom is paid, but the populace feels at ease knowing there are less threats in their daily lives";
+            else return "Forgive criminals and prisoners of war";
+        }
+
+        public string GetWorkHint(WorkforcePolicy policy)
+        {
+            if (policy == WorkforcePolicy.Construction)
+                return "Serfs aid in construction for a gold cost, and food production suffers a penalty";
+            else if (policy == WorkforcePolicy.Land_Expansion)
+                return "Divert slaves and serf workforces to expand the arable land, reducing their outputs while extending usable land";
+            else if (policy == WorkforcePolicy.Martial_Law)
+                return "Put the militia on active duty, increasing security but costing a food upkeep. Negatively impacts production efficiency";
+            else return "No particular policy is implemented";
+        }
+
+        public string GetTariffHint(TariffType policy)
+        {
+            if (policy == TariffType.Standard)
+                return "A tariff is paid to the lord by the settlement when items are sold. This tariff is embedded into prices, meaning tariffs make prices higher overall";
+            else if (policy == TariffType.Internal_Consumption)
+                return "The standard tariff is maintained and a discount is offered to internal consumers (workshops and population). This discount is paid for by the merchants, who won't be happy with it";
+            else return "No tariff is charged, reducing prices and possibly attracting more caravans";
         }
 
         private PolicyElement GetPolicyElementFromType(PolicyType type)
@@ -112,6 +168,18 @@ namespace Populations
             }
         }
 
+        public CriminalPolicy GetCriminalPolicy(Settlement settlement)
+        {
+            if (CRIMINAL == null) CRIMINAL = new Dictionary<Settlement, CriminalPolicy>();
+            if (CRIMINAL.ContainsKey(settlement))
+                return CRIMINAL[settlement];
+            else
+            {
+                CRIMINAL.Add(settlement, CriminalPolicy.Enslavement);
+                return CriminalPolicy.Enslavement;
+            }
+        }
+
         public void UpdateMilitiaPolicy(Settlement settlement, MilitiaPolicy policy)
         {
             if (MILITIAS.ContainsKey(settlement))
@@ -126,6 +194,13 @@ namespace Populations
             else TAXES.Add(settlement, policy);
         }
 
+        public void UpdateCriminalPolicy(Settlement settlement, CriminalPolicy policy)
+        {
+            if (CRIMINAL.ContainsKey(settlement))
+                CRIMINAL[settlement] = policy;
+            else CRIMINAL.Add(settlement, policy);
+        }
+
         public TaxType GetSettlementTax(Settlement settlement)
         {
             if (TAXES.ContainsKey(settlement))
@@ -137,22 +212,22 @@ namespace Populations
             }
         }
 
-        public void UpdateTariffPolicy(Settlement settlement, TaxType policy)
+        public void UpdateTariffPolicy(Settlement settlement, TariffType policy)
         {
             if (TARIFFS.ContainsKey(settlement))
                 TARIFFS[settlement] = policy;
             else TARIFFS.Add(settlement, policy);
         }
 
-        public TaxType GetSettlementTariff(Settlement settlement)
+        public TariffType GetSettlementTariff(Settlement settlement)
         {
-            if (TARIFFS == null) TARIFFS = new Dictionary<Settlement, TaxType>();
+            if (TARIFFS == null) TARIFFS = new Dictionary<Settlement, TariffType>();
             if (TARIFFS.ContainsKey(settlement))
                 return TARIFFS[settlement];
             else
             {
-                TARIFFS.Add(settlement, TaxType.Standard);
-                return TaxType.Standard;
+                TARIFFS.Add(settlement, TariffType.Standard);
+                return TariffType.Standard;
             }
         }
 
@@ -236,6 +311,13 @@ namespace Populations
             Ranged
         }
 
+        public enum CriminalPolicy
+        {
+            Enslavement,
+            Execution,
+            Forgiveness
+        }
+
         public enum PolicyType
         {
             EXPORT_SLAVES,
@@ -251,6 +333,13 @@ namespace Populations
             High,
             Standard,
             Low,
+            Exemption
+        }
+
+        public enum TariffType
+        {
+            Standard,
+            Internal_Consumption,
             Exemption
         }
     }

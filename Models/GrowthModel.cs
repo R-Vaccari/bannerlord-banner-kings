@@ -73,7 +73,7 @@ namespace Populations.Models
             return (int)growthFactor;
         }
 
-        private int CalculateSettlementCap(Settlement settlement) => settlement.IsTown ? 50000 : (settlement.IsCastle ? 8000 : 4000);
+        public int CalculateSettlementCap(Settlement settlement) => settlement.IsTown ? 50000 : (settlement.IsCastle ? 8000 : 4000);
 
         public float GetSettlementFilledCapacity(Settlement settlement)
         {

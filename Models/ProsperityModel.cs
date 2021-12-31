@@ -3,7 +3,9 @@ using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.SandBox.GameComponents;
 using TaleWorlds.Core;
+using TaleWorlds.Library;
 using TaleWorlds.Localization;
+using TaleWorlds.ObjectSystem;
 using static Populations.PopulationManager;
 
 namespace Populations.Models
@@ -28,23 +30,24 @@ namespace Populations.Models
 				ExplainedNumber explainedNumber = new ExplainedNumber(0f, true);
 				PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(fortification.Settlement);
                 int craftsmen = data.GetTypeCount(PopType.Craftsmen);
-                baseResult.Add((float)craftsmen * 0.0005f, new TextObject("Craftsmen output"));
+				explainedNumber.Add((float)craftsmen * 0.0005f, new TextObject("Craftsmen output"));
                 int slaves = data.GetTypeCount(PopType.Slaves);
-                baseResult.Add((float)slaves * -0.0001f, new TextObject("Slave population"));
+				explainedNumber.Add((float)slaves * -0.0001f, new TextObject("Slave population"));
 
                 if (PopulationConfig.Instance.PopulationManager.PopSurplusExists(fortification.Settlement, PopType.Slaves, true))
-                    baseResult.Add((float)slaves * -0.0003f, new TextObject("Slave surplus"));
+					explainedNumber.Add((float)slaves * -0.0003f, new TextObject("Slave surplus"));
                 
                 if (PopulationConfig.Instance.PolicyManager.IsPolicyEnacted(fortification.Settlement, PolicyManager.PolicyType.SELF_INVEST)) 
                 {
                     ExplainedNumber income = new TaxModel().CalculateTownTax(fortification);
                     float tax = income.ResultNumber;
                     if (tax > 0)
-                        baseResult.Add(tax * 0.0005f, new TextObject("Self-investment policy"));
+						explainedNumber.Add(tax * 0.0005f, new TextObject("Self-investment policy"));
                 }
 
 				float factor = data.Stability - 1f + data.Stability;
 				float stabilityImpact = (float)STABILITY_FACTOR * factor;
+				explainedNumber.Add(stabilityImpact, new TextObject("Stability impact"));
 
 				int foodLimitForBonus = (int)((float)fortification.FoodStocksUpperLimit() * 0.8f);
 				if (fortification.FoodStocks >= foodLimitForBonus)
@@ -60,9 +63,9 @@ namespace Populations.Models
 					explainedNumber.Add(starvation, FoodShortageText);
 				}
 
-				float houseCost = fortification.Prosperity < 1500f ? fortification.Prosperity / 250f - 1f : fortification.Prosperity >= 6000f 
-					? 2f - (fortification.Prosperity / 3000f) : 0f;
-				explainedNumber.Add(6f - houseCost, HousingCostsText, null);
+				float houseCost = fortification.Prosperity < 1500f ? 6f - (fortification.Prosperity / 250f - 1f) : fortification.Prosperity >= 6000f 
+					? 6f - (2f - (fortification.Prosperity / 3000f)) : 0f;
+				explainedNumber.Add(houseCost, HousingCostsText, null);
 
 				if (fortification.IsTown)
 				{
@@ -78,7 +81,27 @@ namespace Populations.Models
 					{
 						explainedNumber.Add((float)num3 * 0.1f, ProsperityFromMarketText, null);
 					}
+
+					float merchantGold = fortification.Gold;
+					float merchantEffect = merchantGold < 20000f ? (merchantGold / 10000f) - 2f : merchantGold >= 200000f ? MathF.Min((200000f * 0.000005f) - 1f, 2f) : 0f;
+					explainedNumber.Add(merchantEffect, new TextObject("Merchants wealth"));
+
+
+					if (fortification.Workshops != null)
+                    {
+						float workshopEffect = 0f;
+						foreach (Workshop shop in fortification.Workshops)
+							workshopEffect += shop.IsRunning ? 0.3f : -0.3f;
+						explainedNumber.Add(workshopEffect, new TextObject("Running workshops"));
+                    }
 				}
+
+				if (fortification.Governor != null)
+                {
+					float skill = fortification.Governor.GetSkillValue(DefaultSkills.Steward);
+					explainedNumber.Add(MathF.Min(skill * 0.001f, 1.5f), Governor);
+				}
+
 				PerkHelper.AddPerkBonusForTown(DefaultPerks.Medicine.PristineStreets, fortification, ref explainedNumber);
 				PerkHelper.AddPerkBonusForTown(DefaultPerks.Riding.Veterinary, fortification, ref explainedNumber);
 				if (PerkHelper.GetPerkValueForTown(DefaultPerks.Engineering.Apprenticeship, fortification))
@@ -128,6 +151,7 @@ namespace Populations.Models
 					
 				}
 				this.GetSettlementProsperityChangeDueToIssues(fortification.Settlement, ref explainedNumber);
+				return explainedNumber;
 			}
             return baseResult;
         }

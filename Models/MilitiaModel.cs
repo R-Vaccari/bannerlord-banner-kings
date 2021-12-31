@@ -50,18 +50,16 @@ namespace Populations.Models
         public float GetMilitiaLimit(PopulationData data, bool isCastle)
         {
             if (isCastle)
-            {
                 return (float)data.TotalPop * 0.1f + 200f;
-            }
             else return (float)data.TotalPop * 0.02f + 100f;
         }
 
         public override float CalculateEliteMilitiaSpawnChance(Settlement settlement)
         {
-            float baseResult = base.CalculateEliteMilitiaSpawnChance(settlement);
+            float baseResult = base.CalculateEliteMilitiaSpawnChance(settlement) + (settlement.IsTown ? 0.12f : 0.20f);
             if (PopulationConfig.Instance.PopulationManager != null && PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(settlement) 
                 && PopulationConfig.Instance.PolicyManager.IsPolicyEnacted(settlement, PolicyType.SUBSIDIZE_MILITIA))
-                baseResult += 0.2f;
+                baseResult += 0.12f;
             
             return baseResult;
         }

@@ -29,6 +29,8 @@ namespace Populations
             base.AddClassDefinition(typeof(PolicyManager), 10);
             base.AddClassDefinition(typeof(PopulationPartyComponent), 11);
             base.AddClassDefinition(typeof(MilitiaComponent), 12);
+            base.AddEnumDefinition(typeof(TariffType), 13);
+            base.AddEnumDefinition(typeof(CriminalPolicy), 14);
         }
 
         protected override void DefineContainerDefinitions()
@@ -40,6 +42,7 @@ namespace Populations
             base.ConstructContainerDefinition(typeof(Dictionary<Settlement, TaxType>));
             base.ConstructContainerDefinition(typeof(Dictionary<Settlement, MilitiaPolicy>));
             base.ConstructContainerDefinition(typeof(Dictionary<Settlement, WorkforcePolicy>));
+            base.ConstructContainerDefinition(typeof(Dictionary<Settlement, TariffType>));
         }
     }
 }

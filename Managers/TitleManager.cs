@@ -175,11 +175,24 @@ namespace Populations.Managers
 
         class FeudalContract
         {
+            Dictionary<FeudalDuties, int> duties { get; set; }
+            HashSet<FeudalRights> rights { get; set; }
         }
 
         public enum FeudalDuties
         {
-            Taxation
+            Ransom,
+            Taxation,
+            Auxilium
+
+        }
+
+        public enum FeudalRights
+        {
+            Absolute_Land_Rights,
+            Conquest_Rights,
+            Enfoeffement_Rights,
+            Assistance_Rights,
 
         }
     }

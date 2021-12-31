@@ -164,7 +164,7 @@ namespace Populations.Helpers
             else if (item.IsFood)
                 return ConsumptionType.Food;
             else if (item.IsInitialized && !item.IsBannerItem && (item.HasArmorComponent || item.HasWeaponComponent || item.IsAnimal ||
-                item.IsTradeGood || item.HasHorseComponent))
+                item.IsTradeGood || item.HasHorseComponent) && item.StringId != "undefined")
                 return ConsumptionType.General;
             else return ConsumptionType.None;
         }

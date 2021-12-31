@@ -54,8 +54,8 @@ namespace Populations.Models
             {
                 TaxType taxType = PopulationConfig.Instance.PolicyManager.GetSettlementTax(village.Settlement);
                 if (taxType == TaxType.High)
-                    baseResult = marketIncome * 1f;
-                else if (taxType == TaxType.Low) baseResult = marketIncome * 0.4f;
+                    baseResult = marketIncome * 9f;
+                else if (taxType == TaxType.Low) baseResult = marketIncome * 0.5f;
                 else if (taxType == TaxType.Exemption && marketIncome > 0)
                 {
                     baseResult = 0;
@@ -83,26 +83,12 @@ namespace Populations.Models
             return commission;
         }
 
-        public override float GetTownTaxRatio(Town town)
-        {
-            float baseResult = base.GetTownTaxRatio(town);
-            if (PopulationConfig.Instance.PolicyManager != null)
-            {
-                float result = this.SettlementCommissionRateTown;
-                if (town.Settlement.OwnerClan.Kingdom != null && town.Settlement.OwnerClan.Kingdom.ActivePolicies.Contains(DefaultPolicies.CrownDuty))
-                    result += 0.05f;
-                
-                TaxType type = PopulationConfig.Instance.PolicyManager.GetSettlementTariff(town.Settlement);
-                if (type == TaxType.High)
-                    result += 0.03f;
-                else if (type == TaxType.Low)
-                    result -= 0.03f;
-                else if (type == TaxType.Exemption)
-                    result = 0f;
-
-                return result;
-            }
-            return baseResult;
+        public override float GetTownTaxRatio(Town town) {
+            if (PopulationConfig.Instance.PolicyManager != null) 
+                if (PopulationConfig.Instance.PolicyManager.GetSettlementTariff(town.Settlement) == TariffType.Exemption)
+                    return 0f;
+            
+            return base.GetTownTaxRatio(town);
         }
 
         public override float GetVillageTaxRatio() => base.GetVillageTaxRatio();

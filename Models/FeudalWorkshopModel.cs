@@ -16,6 +16,9 @@ namespace Populations.Models
                 PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(town.Settlement);
                 float craftsmen = data.GetTypeCount(PopType.Craftsmen);
                 baseResult  += MathF.Min((craftsmen / 250f) * 0.020f, CRAFTSMEN_EFFECT_CAP);
+
+                if (PopulationConfig.Instance.PolicyManager.GetSettlementWork(town.Settlement) == PolicyManager.WorkforcePolicy.Martial_Law)
+                    baseResult -= 0.25f;
             }
             return baseResult;
         }

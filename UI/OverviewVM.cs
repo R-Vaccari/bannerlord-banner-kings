@@ -1,6 +1,5 @@
 ﻿using Populations.Models;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.Core.ViewModelCollection;
 using TaleWorlds.Library;
 using static Populations.PopulationManager;
 
@@ -8,17 +7,18 @@ namespace Populations.UI
 {
     public class OverviewVM : ViewModel
     {
-
         private MBBindingList<PopulationInfoVM> _popInfo;
         private MBBindingList<InformationElement> _satisfactionInfo;
         private MBBindingList<InformationElement> _statsInfo;
         private MBBindingList<InformationElement> _foodInfo;
         private MBBindingList<InformationElement> _productionInfo;
+        private MBBindingList<InformationElement> _defenseInfo;
         private Settlement _settlement;
         private bool _isSelected;
 
         public OverviewVM(Settlement _settlement, bool _isSelected)
         {
+            _defenseInfo = new MBBindingList<InformationElement>();
             _popInfo = new MBBindingList<PopulationInfoVM>();
             _satisfactionInfo = new MBBindingList<InformationElement>();
             _statsInfo = new MBBindingList<InformationElement>();
@@ -38,6 +38,7 @@ namespace Populations.UI
             StatsInfo.Clear();
             FoodInfo.Clear();
             ProductionInfo.Clear();
+            DefenseInfo.Clear();
             if (data != null && data.Classes != null)
             {
                 data.Classes.ForEach(popClass => PopInfo
@@ -53,7 +54,7 @@ namespace Populations.UI
                 }
 
                 StatsInfo.Add(new InformationElement("Stability:", FormatValue(data.Stability),
-                    "The overall stability of this settlement, affected by security, loyalty, assimilation and whether you are legally entitle to it. Stability is the basis of economic prosperity"));
+                    "The overall stability of this settlement, affected by security, loyalty, assimilation and whether you are legally entitled to the settlement. Stability is the basis of economic prosperity"));
                 StatsInfo.Add(new InformationElement("Population Growth:", new GrowthModel().GetPopulationGrowth(_settlement, true).ToString(), 
                     "The population growth of your settlement on a daily basis, distributed among the classes"));
                 StatsInfo.Add(new InformationElement("Administrative Cost:", FormatValue(new AdministrativeModel().CalculateAdministrativeCost(_settlement)),
@@ -66,12 +67,23 @@ namespace Populations.UI
                 FoodInfo.Add(new InformationElement("Estimated Holdout:", string.Format("{0} Days", new FoodModel().GetFoodEstimate(_settlement.Town, true, _settlement.Town.FoodStocksUpperLimit())),
                     "How long this settlement will take to start starving in case of a siege"));
 
+                ProductionInfo.Add(new InformationElement("Tariff:", FormatValue(new TaxModel().GetTownTaxRatio(_settlement.Town)),
+                    "Percentage of an item's value charged as tax when sold"));
+                ProductionInfo.Add(new InformationElement("Merchants' Revenue:", new EconomyModel().GetMerchantIncome(_settlement.Town).ToString(),
+                   "Daily revenue of local merchants, based on slave workforce and production efficiency"));
+                //ProductionInfo.Add(new InformationElement("Population Cap:", new GrowthModel().CalculateSettlementCap(_settlement).ToString(),
+                //    "The maximum capacity of people this settlement can naturally support"));
                 ProductionInfo.Add(new InformationElement("Production Efficiency:", FormatValue(new FeudalWorkshopModel().GetPolicyEffectToProduction(_settlement.Town)),
                     "The speed at which workshops produce goods, affected by kingdom policies and craftsmen"));
+
+                DefenseInfo.Add(new InformationElement("Militia Cap:", new MilitiaModel().GetMilitiaLimit(data, _settlement.IsCastle).ToString(),
+                    "The maximum number of militiamen this settlement can support, based on it's population"));
+                DefenseInfo.Add(new InformationElement("Militia Quality:", FormatValue(new MilitiaModel().CalculateEliteMilitiaSpawnChance(_settlement)),
+                        "Chance of militiamen being spawned as veterans instead of recruits"));
             } 
         }
 
-        private string FormatValue(float value) => (value * 100f).ToString() + '%';
+        private string FormatValue(float value) => (value * 100f).ToString("0.00") + '%';
 
         [DataSourceProperty]
         public bool IsSelected
@@ -101,6 +113,20 @@ namespace Populations.UI
                 {
                     _popInfo = value;
                     base.OnPropertyChangedWithValue(value, "PopInfo");
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public MBBindingList<InformationElement> DefenseInfo
+        {
+            get => _defenseInfo;
+            set
+            {
+                if (value != _defenseInfo)
+                {
+                    _defenseInfo = value;
+                    base.OnPropertyChangedWithValue(value, "DefenseInfo");
                 }
             }
         }
@@ -189,33 +215,6 @@ namespace Populations.UI
                 float result = PopulationConfig.Instance.PopulationManager.GetPopData(_settlement).Assimilation;
                 return (result * 100f).ToString() + '%';
             }
-        }
-
-       
-
-
-        public int InfluenceCost
-        {
-            get
-            {
-                MobileParty party = _settlement.MilitiaPartyComponent.MobileParty;
-                Hero lord = _settlement.OwnerClan.Leader;
-                if (party != null && lord != null && lord.PartyBelongedTo != null)
-                    return new InfluenceModel().GetMilitiaInfluenceCost(party, _settlement, lord);
-                else return -1;
-            }
-        }
-
-        [DataSourceProperty]
-        public string InfluenceCostText
-        {
-            get => string.Format("Cost: {0} influence", InfluenceCost);
-        }
-
-        [DataSourceProperty]
-        public string ButtonName
-        {
-            get => "Grant Manumission";
         }
     }
 }
