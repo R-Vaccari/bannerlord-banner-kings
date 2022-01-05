@@ -15,6 +15,9 @@ using static Populations.Managers.TitleManager;
 using static Populations.PopulationManager;
 using TaleWorlds.CampaignSystem.SandBox.CampaignBehaviors;
 using System.Reflection;
+using TaleWorlds.CampaignSystem.ViewModelCollection.ClanManagement.Categories;
+using TaleWorlds.CampaignSystem.ViewModelCollection;
+using SandBox;
 
 namespace Populations
 {
@@ -30,6 +33,7 @@ namespace Populations
                 {
                     CampaignGameStarter campaignStarter = (CampaignGameStarter)gameStarter;
                     campaignStarter.AddBehavior(new SettlementBehavior());
+                    campaignStarter.AddBehavior(new FeudalCompanionBehavior());
 
                     campaignStarter.AddModel(new ProsperityModel());
                     campaignStarter.AddModel(new TaxModel());
@@ -45,6 +49,7 @@ namespace Populations
                     campaignStarter.AddModel(new EconomyModel());
                     campaignStarter.AddModel(new PriceFactorModel());
                     campaignStarter.AddModel(new FeudalWorkshopModel());
+                    campaignStarter.AddModel(new FeudalClanFinanceModel());
 
                 } catch (Exception e)
                 {
@@ -184,36 +189,7 @@ namespace Populations
             }
         }*/
 
-        [HarmonyPatch(typeof(VillagerCampaignBehavior), "OnSettlementEntered")]
-        class VillagerSettlementEnterPatch
-        {
-            static bool Prefix(ref Dictionary<MobileParty, List<Settlement>>  ____previouslyChangedVillagerTargetsDueToEnemyOnWay, MobileParty mobileParty, Settlement settlement, Hero hero)
-            {
-                if (PopulationConfig.Instance.PopulationManager != null && PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
-                {
-
-                    if (mobileParty != null && mobileParty.IsActive && mobileParty.IsVillager)
-                    {
-                        ____previouslyChangedVillagerTargetsDueToEnemyOnWay[mobileParty].Clear();
-                        if (settlement.IsTown)
-                            SellGoodsForTradeAction.ApplyByVillagerTrade(settlement, mobileParty);
-                        
-                        if (settlement.IsVillage)
-                        {
-                            int tax = Campaign.Current.Models.SettlementTaxModel.CalculateVillageTaxFromIncome(mobileParty.HomeSettlement.Village, mobileParty.PartyTradeGold);
-                            float remainder = mobileParty.PartyTradeGold - tax;
-                            mobileParty.HomeSettlement.Village.ChangeGold((int)(remainder * 0.5f));
-                            mobileParty.PartyTradeGold = 0;
-                            mobileParty.HomeSettlement.Village.TradeTaxAccumulated += tax;
-                        }
-                        if (settlement.IsTown && settlement.Town.Governor != null && settlement.Town.Governor.GetPerkValue(DefaultPerks.Trade.DistributedGoods))
-                            settlement.Town.TradeTaxAccumulated += MathF.Round(DefaultPerks.Trade.DistributedGoods.SecondaryBonus);    
-                    }
-                    return false;
-                }
-                else return true;  
-            }
-        }
+      
 
 
         [HarmonyPatch(typeof(Hero), "SetHeroEncyclopediaTextAndLinks")]
@@ -221,7 +197,7 @@ namespace Populations
         {
             static void Postfix(ref string __result, Hero o)
             {
-                HashSet<FeudalTitle> titles = TitleConfig.Instance.TitleManager.GetTitles(o);
+                HashSet<FeudalTitle> titles = PopulationConfig.Instance.TitleManager.GetTitles(o);
                 if (titles != null && titles.Count > 0)
                 {
                     string desc = "";
@@ -242,8 +218,122 @@ namespace Populations
             }
         }
 
+        [HarmonyPatch(typeof(LordConversationsCampaignBehavior), "conversation_lord_give_oath_go_on_condition")]
+        class ShowContractPatch
+        {
+            static void Postfix()
+            {
+                if (PopulationConfig.Instance.TitleManager != null)
+                {
+                    PartyBase party = PlayerEncounter.EncounteredParty;
+                    PopulationConfig.Instance.TitleManager.ShowContract(party.LeaderHero, "I accept");
+                }
+            }
+        }
+
+        [HarmonyPatch(typeof(ClanPartiesVM), "ExecuteCreateNewParty")]
+        class ClanCreatePartyPatch
+        {
+            static bool Prefix(ClanPartiesVM __instance, Clan ____faction, Func<Hero, Settlement> ____getSettlementOfGovernor)
+            {
+                if (__instance.CanCreateNewParty)
+                {
+                    List<InquiryElement> list = new List<InquiryElement>();
+                    foreach (Hero hero in (from h in ____faction.Heroes
+                                           where !h.IsDisabled
+                                           select h).Union(____faction.Companions))
+                    {
+                        if ((hero.IsActive || hero.IsReleased || hero.IsFugitive) && !hero.IsChild && hero != Hero.MainHero && hero.CanLeadParty())
+                        {
+                            bool isEnabled = false;
+                            MethodInfo hintMethod = __instance.GetType().GetMethod("GetPartyLeaderAssignmentSkillsHint", BindingFlags.NonPublic | BindingFlags.Instance);
+                            string hint = (string)hintMethod.Invoke(__instance, new object[] { hero });
+                            if (hero.PartyBelongedToAsPrisoner != null)
+                                hint = new TextObject("{=vOojEcIf}You cannot assign a prisoner member as a new party leader", null).ToString();
+                            else if (hero.IsReleased)
+                                hint = new TextObject("{=OhNYkblK}This hero has just escaped from captors and will be available after some time.", null).ToString();
+                            else if (hero.PartyBelongedTo != null && hero.PartyBelongedTo.LeaderHero == hero)
+                                hint = new TextObject("{=aFYwbosi}This hero is already leading a party.", null).ToString();
+                            else if (hero.PartyBelongedTo != null && hero.PartyBelongedTo.LeaderHero != Hero.MainHero)
+                                hint = new TextObject("{=FjJi1DJb}This hero is already a part of an another party.", null).ToString();
+                            else if (____getSettlementOfGovernor(hero) != null)
+                                hint = new TextObject("{=Hz8XO8wk}Governors cannot lead a mobile party and be a governor at the same time.", null).ToString();
+                            else if (hero.HeroState == Hero.CharacterStates.Disabled)
+                                hint = new TextObject("{=slzfQzl3}This hero is lost", null).ToString();
+                            else if (hero.HeroState == Hero.CharacterStates.Fugitive)
+                                hint = new TextObject("{=dD3kRDHi}This hero is a fugitive and running from their captors. They will be available after some time.", null).ToString();
+                            else if (!PopulationConfig.Instance.TitleManager.IsHeroKnighted(hero))
+                                hint = new TextObject("A hero must be knighted and granted land before being able to raise a personal retinue. You may bestow knighthood by talking to them.", null).ToString();
+                            else isEnabled = true;
+                            
+                            list.Add(new InquiryElement(hero, hero.Name.ToString(), new ImageIdentifier(CampaignUIHelper.GetCharacterCode(hero.CharacterObject, false)), isEnabled, hint));
+                        }
+                    }
+                    if (list.Count > 0)
+                    {
+                        MethodInfo method = __instance.GetType().GetMethod("OnNewPartySelectionOver", BindingFlags.NonPublic | BindingFlags.Instance);
+                        InformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(new TextObject("{=0Q4Xo2BQ}Select the Leader of the New Party", null).ToString(),
+                            string.Empty, list, true, 1, GameTexts.FindText("str_done", null).ToString(), "", new Action<List<InquiryElement>>(delegate(List<InquiryElement> x) { method.Invoke(__instance, new object[] { x }); }), 
+                            new Action<List<InquiryElement>>(delegate (List<InquiryElement> x) { method.Invoke(__instance, new object[] { x }); }), ""), false);
+                    } else InformationManager.AddQuickInformation(new TextObject("{=qZvNIVGV}There is no one available in your clan who can lead a party right now.", null), 0, null, "");
+                }
+
+                return false;
+            }
+        }
+
+        [HarmonyPatch(typeof(Settlement))]
+        [HarmonyPatch("Owner", MethodType.Getter)]
+        class VillageOwnerPatch
+        {
+            static void Postfix(Settlement __instance, ref Hero __result)
+            {
+                if (__instance.IsVillage && PopulationConfig.Instance.TitleManager != null)
+                {
+                    FeudalTitle title = PopulationConfig.Instance.TitleManager.GetTitle(__instance);
+                    if (title != null)
+                        __result = title.deFacto;
+                }
+            }
+        }
+
+
         namespace Economy
         {
+
+
+            [HarmonyPatch(typeof(VillagerCampaignBehavior), "OnSettlementEntered")]
+            class VillagerSettlementEnterPatch
+            {
+                static bool Prefix(ref Dictionary<MobileParty, List<Settlement>> ____previouslyChangedVillagerTargetsDueToEnemyOnWay, MobileParty mobileParty, Settlement settlement, Hero hero)
+                {
+                    if (PopulationConfig.Instance.PopulationManager != null && PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
+                    {
+
+                        if (mobileParty != null && mobileParty.IsActive && mobileParty.IsVillager)
+                        {
+                            ____previouslyChangedVillagerTargetsDueToEnemyOnWay[mobileParty].Clear();
+                            if (settlement.IsTown)
+                                SellGoodsForTradeAction.ApplyByVillagerTrade(settlement, mobileParty);
+
+                            if (settlement.IsVillage)
+                            {
+                                int tax = Campaign.Current.Models.SettlementTaxModel.CalculateVillageTaxFromIncome(mobileParty.HomeSettlement.Village, mobileParty.PartyTradeGold);
+                                float remainder = mobileParty.PartyTradeGold - tax;
+                                mobileParty.HomeSettlement.Village.ChangeGold((int)(remainder * 0.5f));
+                                mobileParty.PartyTradeGold = 0;
+                                mobileParty.HomeSettlement.Village.TradeTaxAccumulated += tax;
+                            }
+                            if (settlement.IsTown && settlement.Town.Governor != null && settlement.Town.Governor.GetPerkValue(DefaultPerks.Trade.DistributedGoods))
+                                settlement.Town.TradeTaxAccumulated += MathF.Round(DefaultPerks.Trade.DistributedGoods.SecondaryBonus);
+                        }
+                        return false;
+                    }
+                    else return true;
+                }
+            }
+
+
             // Pass on settlement party as parameter
             [HarmonyPatch(typeof(Town))]
             class TownItemPricePatch
@@ -347,11 +437,8 @@ namespace Populations
                                     finalAmount = amount;
                                     if (type != ConsumptionType.None) popData.UpdateSatisfaction(type, -0.001f);
                                 }
-                                else
-                                {
-           
-                                    if (type != ConsumptionType.None) popData.UpdateSatisfaction(type, 0.001f);
-                                }
+                                else if (type != ConsumptionType.None) popData.UpdateSatisfaction(type, 0.001f);
+                                
                                 itemRoster.AddToCounts(elementCopyAtIndex.EquipmentElement, -finalAmount);
                                 categoryDemand[itemCategory] = num - desiredAmount * (float)price;
                                 town.ChangeGold(finalAmount * price);

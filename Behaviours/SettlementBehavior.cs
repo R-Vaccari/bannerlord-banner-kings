@@ -1,4 +1,5 @@
 ﻿using Populations.Components;
+using Populations.Managers;
 using Populations.Models;
 using Populations.UI;
 using System;
@@ -22,6 +23,7 @@ namespace Populations.Behaviors
 
         private PopulationManager populationManager = null;
         private PolicyManager policyManager = null;
+        private TitleManager titleManager = null;
 
         public override void RegisterEvents()
         {
@@ -53,12 +55,9 @@ namespace Populations.Behaviors
                     PopulationConfig.Instance.InitManagers(new Dictionary<Settlement, PopulationData>(), new List<MobileParty>(),
                     new Dictionary<Settlement, List<PolicyManager.PolicyElement>>(), new Dictionary<Settlement, PolicyManager.TaxType>(),
                     new Dictionary<Settlement, PolicyManager.MilitiaPolicy>(), new Dictionary<Settlement, WorkforcePolicy>(), new Dictionary<Settlement, TariffType>(),
-                    new Dictionary<Settlement, CriminalPolicy>());
+                    new Dictionary<Settlement, CriminalPolicy>(), new HashSet<FeudalTitle>(), new Dictionary<Hero, HashSet<FeudalTitle>>());
                 }
-                else
-                {
-                    PopulationConfig.Instance.InitManagers(populationManager, policyManager);
-                }
+                else PopulationConfig.Instance.InitManagers(populationManager, policyManager, titleManager);
             }
         }
 
@@ -253,7 +252,7 @@ namespace Populations.Behaviors
                 PopulationConfig.Instance.InitManagers(new Dictionary<Settlement, PopulationData>(), new List<MobileParty>(),
                 new Dictionary<Settlement, List<PolicyManager.PolicyElement>>(), new Dictionary<Settlement, PolicyManager.TaxType>(),
                 new Dictionary<Settlement, PolicyManager.MilitiaPolicy>(), new Dictionary<Settlement, WorkforcePolicy>(), new Dictionary<Settlement, TariffType>(),
-                new Dictionary<Settlement, CriminalPolicy>());
+                new Dictionary<Settlement, CriminalPolicy>(), new HashSet<FeudalTitle>(), new Dictionary<Hero, HashSet<FeudalTitle>>());
 
             UpdateSettlementPops(settlement);
             InitializeSettlementPolicies(settlement);
@@ -401,8 +400,6 @@ namespace Populations.Behaviors
         {
             AddDialog(campaignGameStarter);
             AddMenus(campaignGameStarter);
-
-            TitleConfig.Instance.InitManagers(new HashSet<FeudalTitle>(), new Dictionary<Hero, HashSet<FeudalTitle>>());
 
             if (PopulationConfig.Instance.PopulationManager != null)
                 foreach (Settlement settlement in Settlement.All)

@@ -88,10 +88,7 @@ namespace Populations.UI
         [DataSourceProperty]
         public bool IsSelected
         {
-            get
-            {
-                return this._isSelected;
-            }
+            get => this._isSelected;
             set
             {
                 if (value != this._isSelected)
