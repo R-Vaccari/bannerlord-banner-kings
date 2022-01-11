@@ -115,9 +115,11 @@
     <Compile Include="Models\ClanFinanceModel.cs" />
     <Compile Include="Models\EconomyModel.cs" />
     <Compile Include="Models\FeudalClanFinanceModel.cs" />
+    <Compile Include="Models\FeudalDiplomacyModel.cs" />
     <Compile Include="Models\PartyLimitModel.cs" />
     <Compile Include="Models\PriceFactorModel.cs" />
     <Compile Include="Models\FeudalWorkshopModel.cs" />
+    <Compile Include="Models\LegitimacyModel.cs" />
     <Compile Include="Models\StabilityModel.cs" />
     <Compile Include="SaveDefiner.cs" />
     <Compile Include="Models\AdministrativeModel.cs" />

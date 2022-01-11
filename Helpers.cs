@@ -90,12 +90,12 @@ namespace Populations.Helpers
         public static string GetConsumptionHint(ConsumptionType type)
         {
             if (type == ConsumptionType.Luxury)
-                return "Satisfaction over availability of products such as jewelry, velvets and fur";
+                return "Satisfaction over availability of products such as jewelry, velvets and fur.";
             else if (type == ConsumptionType.Industrial)
-                return "Satisfaction over availability of manufacturing products such as leather, clay and tools";
+                return "Satisfaction over availability of manufacturing products such as leather, clay and tools.";
             else if (type == ConsumptionType.General)
-                return "Satisfaction over availability of various products, including military equipment and horses";
-            else return "Satisfaction over availability of food types";
+                return "Satisfaction over availability of various products, including military equipment and horses.";
+            else return "Satisfaction over availability of food types.";
         }
 
         public static string GetTitleHonorary(TitleType type, bool female)

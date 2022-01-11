@@ -12,6 +12,7 @@ namespace Populations.Behaviors
     {
 
         private FeudalTitle titleGiven = null;
+        List<InquiryElement> lordshipsToGive = new List<InquiryElement>();
         public override void RegisterEvents()
         {
             CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, new Action<CampaignGameStarter>(OnSessionLaunched));
@@ -48,7 +49,7 @@ namespace Populations.Behaviors
                 "My lord, I would be honored.", null, null, 100, null); 
 
             starter.AddPlayerLine("companion_grant_knighthood_response_confirm", "companion_knighthood_response", "companion_knighthood_accepted", "Let us decide your fief.",
-                null , new ConversationSentence.OnConsequenceDelegate(this.companion_knighthood_accepted_on_consequence), 100, null, null);
+                new ConversationSentence.OnConditionDelegate(this.companion_knighthood_accepted_on_condition), new ConversationSentence.OnConsequenceDelegate(this.companion_knighthood_accepted_on_consequence), 100, null, null);
 
             starter.AddPlayerLine("companion_grant_knighthood_response_cancel", "companion_knighthood_response", "companion_role_pretalk", "Actualy, I would like to discuss this at a later time.",
                null, null, 100, null, null);
@@ -68,21 +69,28 @@ namespace Populations.Behaviors
             else return false;
         }
 
-        private void companion_knighthood_accepted_on_consequence()
+        private bool companion_knighthood_accepted_on_condition()
         {
-            List<InquiryElement> list = new List<InquiryElement>();
+            lordshipsToGive.Clear();
             HashSet<FeudalTitle> titles = PopulationConfig.Instance.TitleManager.GetTitles(Hero.MainHero);
             foreach (FeudalTitle title in titles)
             {
-                if (title.type != TitleType.Lordship || title.fief == null) continue;
-                list.Add(new InquiryElement(title, title.name.ToString(), new ImageIdentifier()));
+                if (title.type != TitleType.Lordship || title.fief == null || title.deJure != Hero.MainHero) continue;
+                lordshipsToGive.Add(new InquiryElement(title, title.name.ToString(), new ImageIdentifier()));
             }
-            if (list.Count > 0)
-                InformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                    "Select the fief you would like to give away", string.Empty, list, true, 1, 
+
+            if (lordshipsToGive.Count == 0)
+                InformationManager.DisplayMessage(new InformationMessage("You currently do not lawfully own a lordship that could be given away."));
+
+            return lordshipsToGive.Count >= 1;
+        }
+
+        private void companion_knighthood_accepted_on_consequence()
+        {
+            InformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
+                    "Select the fief you would like to give away", string.Empty, lordshipsToGive, true, 1, 
                     GameTexts.FindText("str_done", null).ToString(), "", new Action<List<InquiryElement>>(this.OnNewPartySelectionOver), 
                     new Action<List<InquiryElement>>(this.OnNewPartySelectionOver), ""), false);
-
         }
 
         private void OnNewPartySelectionOver(List<InquiryElement> element)

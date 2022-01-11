@@ -17,18 +17,19 @@ namespace Populations
         public void InitManagers(Dictionary<Settlement, PopulationData> pops, List<MobileParty> caravans, Dictionary<Settlement, List<PolicyElement>> policies,
             Dictionary<Settlement, TaxType> taxes, Dictionary<Settlement, MilitiaPolicy> militias, Dictionary<Settlement, WorkforcePolicy> workforce, 
             Dictionary<Settlement, TariffType> tariffs, Dictionary<Settlement, CriminalPolicy> criminal, 
-            HashSet<FeudalTitle> titles, Dictionary<Hero, HashSet<FeudalTitle>> titleHolders)
+            HashSet<FeudalTitle> titles, Dictionary<Hero, HashSet<FeudalTitle>> titleHolders, Dictionary<Kingdom, FeudalTitle> kingdoms)
         {
             this.PopulationManager = new PopulationManager(pops, caravans);
             this.PolicyManager = new PolicyManager(policies, taxes, militias, workforce, tariffs, criminal);
-            this.TitleManager = new TitleManager(titles, titleHolders);
+            this.TitleManager = new TitleManager(titles, titleHolders, kingdoms);
         }
 
         public void InitManagers(PopulationManager populationManager, PolicyManager policyManager, TitleManager titleManager)
         {
             this.PopulationManager = populationManager;
             this.PolicyManager = policyManager;
-            this.TitleManager = titleManager != null ? titleManager : new TitleManager(new HashSet<FeudalTitle>(), new Dictionary<Hero, HashSet<FeudalTitle>>());
+            this.TitleManager = titleManager != null ? titleManager : new TitleManager(new HashSet<FeudalTitle>(), new Dictionary<Hero, HashSet<FeudalTitle>>(),
+                new Dictionary<Kingdom, FeudalTitle>());
         }
 
         public static PopulationConfig Instance

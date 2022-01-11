@@ -18,6 +18,7 @@ using System.Reflection;
 using TaleWorlds.CampaignSystem.ViewModelCollection.ClanManagement.Categories;
 using TaleWorlds.CampaignSystem.ViewModelCollection;
 using SandBox;
+using TaleWorlds.ObjectSystem;
 
 namespace Populations
 {
@@ -116,6 +117,8 @@ namespace Populations
                         float result = 1f - data.Assimilation;
                         data.Assimilation = result;
                     }
+
+                    PopulationConfig.Instance.TitleManager.ApplyOwnerChange(settlement, newOwner);
                 }
 
                 return true;
@@ -301,7 +304,48 @@ namespace Populations
         namespace Economy
         {
 
+            //Mules
+            [HarmonyPatch(typeof(VillagerCampaignBehavior), "MoveItemsToVillagerParty")]
+            class VillagerMoveItemsPatch
+            {
+                static bool Prefix(Village village, MobileParty villagerParty)
+                {
+                    ItemObject mule = MBObjectManager.Instance.GetObject<ItemObject>(x => x.StringId == "mule");
+                    int muleCount = (int)((float)villagerParty.MemberRoster.TotalManCount * 0.1f);
+                    villagerParty.ItemRoster.AddToCounts(mule, muleCount);
+                    ItemRoster itemRoster = village.Settlement.ItemRoster;
+                    float num = (float)villagerParty.InventoryCapacity - villagerParty.ItemRoster.TotalWeight;
+                    for (int i = 0; i < 4; i++)
+                    {
+                        foreach (ItemRosterElement itemRosterElement in itemRoster)
+                        {
+                            ItemObject item = itemRosterElement.EquipmentElement.Item;
+                            int num2 = MBRandom.RoundRandomized((float)itemRosterElement.Amount * 0.2f);
+                            if (num2 > 0)
+                            {
+                                if (!item.HasHorseComponent && item.Weight * (float)num2 > num)
+                                {
+                                    num2 = MathF.Ceiling(num / item.Weight);
+                                    if (num2 <= 0)
+                                    {
+                                        continue;
+                                    }
+                                }
+                                if (!item.HasHorseComponent)
+                                {
+                                    num -= (float)num2 * item.Weight;
+                                }
+                                villagerParty.Party.ItemRoster.AddToCounts(itemRosterElement.EquipmentElement, num2);
+                                itemRoster.AddToCounts(itemRosterElement.EquipmentElement, -num2);
+                            }
+                        }
+                    }
+                    return false;
+                }
+             }
 
+
+            //Add gold to village and consume some of it, do not reset gold
             [HarmonyPatch(typeof(VillagerCampaignBehavior), "OnSettlementEntered")]
             class VillagerSettlementEnterPatch
             {
@@ -343,8 +387,12 @@ namespace Populations
                 [HarmonyPatch("GetItemPrice", new Type[] { typeof(ItemObject), typeof(MobileParty), typeof(bool) })]
                 static bool Prefix1(Town __instance, ref int __result, ItemObject item, MobileParty tradingParty = null, bool isSelling = false)
                 {
-                    __result = __instance.MarketData.GetPrice(item, tradingParty, isSelling, __instance.GarrisonParty.Party);
-                    return false;
+                    if (__instance.GarrisonParty != null && __instance.GarrisonParty.Party != null)
+                    {
+                        __result = __instance.MarketData.GetPrice(item, tradingParty, isSelling, __instance.GarrisonParty.Party);
+                        return false;
+                    }
+                    else return true;
                 }
 
                 
@@ -352,8 +400,12 @@ namespace Populations
                 [HarmonyPatch("GetItemPrice", new Type[] { typeof(EquipmentElement), typeof(MobileParty), typeof(bool) })]
                 static bool Prefix2(Town __instance, ref int __result, EquipmentElement itemRosterElement, MobileParty tradingParty = null, bool isSelling = false)
                 {
-                    __result = __instance.MarketData.GetPrice(itemRosterElement, tradingParty, isSelling, __instance.GarrisonParty.Party);
-                    return false;
+                    if (__instance.GarrisonParty != null && __instance.GarrisonParty.Party != null)
+                    {
+                        __result = __instance.MarketData.GetPrice(itemRosterElement, tradingParty, isSelling, __instance.GarrisonParty.Party);
+                        return false;
+                    }
+                    else return true;
                 }
             }
 

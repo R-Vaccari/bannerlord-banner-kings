@@ -55,7 +55,8 @@ namespace Populations.Behaviors
                     PopulationConfig.Instance.InitManagers(new Dictionary<Settlement, PopulationData>(), new List<MobileParty>(),
                     new Dictionary<Settlement, List<PolicyManager.PolicyElement>>(), new Dictionary<Settlement, PolicyManager.TaxType>(),
                     new Dictionary<Settlement, PolicyManager.MilitiaPolicy>(), new Dictionary<Settlement, WorkforcePolicy>(), new Dictionary<Settlement, TariffType>(),
-                    new Dictionary<Settlement, CriminalPolicy>(), new HashSet<FeudalTitle>(), new Dictionary<Hero, HashSet<FeudalTitle>>());
+                    new Dictionary<Settlement, CriminalPolicy>(), new HashSet<FeudalTitle>(), new Dictionary<Hero, HashSet<FeudalTitle>>(),
+                    new Dictionary<Kingdom, FeudalTitle>());
                 }
                 else PopulationConfig.Instance.InitManagers(populationManager, policyManager, titleManager);
             }
@@ -252,7 +253,8 @@ namespace Populations.Behaviors
                 PopulationConfig.Instance.InitManagers(new Dictionary<Settlement, PopulationData>(), new List<MobileParty>(),
                 new Dictionary<Settlement, List<PolicyManager.PolicyElement>>(), new Dictionary<Settlement, PolicyManager.TaxType>(),
                 new Dictionary<Settlement, PolicyManager.MilitiaPolicy>(), new Dictionary<Settlement, WorkforcePolicy>(), new Dictionary<Settlement, TariffType>(),
-                new Dictionary<Settlement, CriminalPolicy>(), new HashSet<FeudalTitle>(), new Dictionary<Hero, HashSet<FeudalTitle>>());
+                new Dictionary<Settlement, CriminalPolicy>(), new HashSet<FeudalTitle>(), new Dictionary<Hero, HashSet<FeudalTitle>>(),
+                new Dictionary<Kingdom, FeudalTitle>());
 
             UpdateSettlementPops(settlement);
             InitializeSettlementPolicies(settlement);
