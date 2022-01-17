@@ -15,7 +15,7 @@ namespace Populations.Models
             if (town.IsCastle)
                 baseResult.Add(0.5f, new TextObject("Castle security"));
 
-            if (PopulationConfig.Instance.PolicyManager != null)
+            if (PopulationConfig.Instance.PopulationManager != null && PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
             {
                 PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(town.Settlement);
                 float assimilation = data.Assimilation - 1f + data.Assimilation;

@@ -20,9 +20,15 @@ namespace Populations.UI
 		private MBBindingList<VassalTitleVM> _vassals;
 		private MBBindingList<InformationElement> _demesneInfo;
 		private FeudalTitle _title;
+		private FeudalTitle _duchy;
 		private (bool, string) _titleUsurpable;
 		private (bool, string) _duchyUsurpable;
 		private UsurpCosts costs;
+		private UsurpCosts duchyCosts;
+		private UsurpationModel model;
+		private bool _contractEnabled;
+		private bool _usurpEnabled;
+		private bool _usurpDuchyEnabled;
 
 		public DemesneVM(FeudalTitle title, bool isSelected)
         {
@@ -30,8 +36,14 @@ namespace Populations.UI
 			this._deJure = new HeroVM(title.deJure, false);
 			this._isSelected = isSelected;
 			this._vassals = new MBBindingList<VassalTitleVM>();
-			_demesneInfo = new MBBindingList<InformationElement>();
-			costs = PopulationConfig.Instance.TitleManager.GetUsurpationCosts(PopulationConfig.Instance.TitleManager.GetDuchy(_title), Hero.MainHero);
+			this._demesneInfo = new MBBindingList<InformationElement>();
+			this.model = new UsurpationModel();
+			this.costs = model.GetUsurpationCosts(_title, Hero.MainHero);
+			this._duchy = PopulationConfig.Instance.TitleManager.GetDuchy(_title);
+			this.duchyCosts = model.GetUsurpationCosts(_duchy, Hero.MainHero);
+			this._contractEnabled = PopulationConfig.Instance.TitleManager.IsHeroTitleHolder(Hero.MainHero) && Clan.PlayerClan.Kingdom != null;
+			this._usurpEnabled = _title.deJure != Hero.MainHero;
+			this._usurpDuchyEnabled = this._duchy.deJure != Hero.MainHero;
 			if (title.vassals != null)
 				foreach (FeudalTitle vassal in title.vassals)
 					if (vassal.fief != null) _vassals.Add(new VassalTitleVM(vassal));
@@ -39,36 +51,40 @@ namespace Populations.UI
 
 		public override void RefreshValues()
         {
-            base.RefreshValues();
+			base.RefreshValues();
+			this._contractEnabled = PopulationConfig.Instance.TitleManager.IsHeroTitleHolder(Hero.MainHero) && Clan.PlayerClan.Kingdom != null;
+			this._usurpEnabled = _title.deJure != Hero.MainHero;
+			this._usurpDuchyEnabled = this._duchy.deJure != Hero.MainHero;
 			DemesneInfo.Clear();
 			DemesneInfo.Add(new InformationElement("Legitimacy:", new LegitimacyModel().GetRuleType(_title).ToString().Replace('_', ' '), 
 				"Your legitimacy to this title and it's vassals. You are lawful when you own this title, and considered a foreigner if your culture differs from it."));
-			FeudalTitle duchy = PopulationConfig.Instance.TitleManager.GetDuchy(_title);
-			if (duchy.type == TitleType.County)
-				duchy = PopulationConfig.Instance.TitleManager.GetImmediateSuzerain(duchy);
 			DemesneInfo.Add(new InformationElement("Sovereign:", _title.sovereign.name.ToString(),
 				"The master suzerain of this title, be they a king or emperor type suzerain."));
-			DemesneInfo.Add(new InformationElement("Dukedom:", duchy.name.ToString(),
+			DemesneInfo.Add(new InformationElement("Dukedom:", _duchy.name.ToString(),
 				"The dukedom this settlement is associated with."));
-			_titleUsurpable = PopulationConfig.Instance.TitleManager.IsUsurpable(_title, Hero.MainHero);
-			_duchyUsurpable = PopulationConfig.Instance.TitleManager.IsUsurpable(duchy, Hero.MainHero);
-			costs = PopulationConfig.Instance.TitleManager.GetUsurpationCosts(PopulationConfig.Instance.TitleManager.GetDuchy(_title), Hero.MainHero);
+			_titleUsurpable = model.IsUsurpable(_title, Hero.MainHero);
+			_duchyUsurpable = model.IsUsurpable(_duchy, Hero.MainHero);
+			costs = model.GetUsurpationCosts(_title, Hero.MainHero);
+			duchyCosts = model.GetUsurpationCosts(_duchy, Hero.MainHero);
+			DeJure = new HeroVM(_title.deJure, false);
 		}
 
 		private void OnUsurpPress()
 		{
 			bool usurpable = _titleUsurpable.Item1;
 			if (usurpable)
-				PopulationConfig.Instance.TitleManager.UsurpTitle();
+				PopulationConfig.Instance.TitleManager.UsurpTitle(_title.deJure, Hero.MainHero, _title, costs);
 			else InformationManager.DisplayMessage(new InformationMessage(_titleUsurpable.Item2));
+			RefreshValues();
 		}
 
 		private void OnDuchyUsurpPress()
 		{
 			bool usurpable = _duchyUsurpable.Item1;
 			if (usurpable)
-				PopulationConfig.Instance.TitleManager.UsurpTitle();
+				PopulationConfig.Instance.TitleManager.UsurpTitle(_duchy.deJure, Hero.MainHero, _duchy, duchyCosts);
 			else InformationManager.DisplayMessage(new InformationMessage(_duchyUsurpable.Item2));
+			RefreshValues();
 		}
 
 		private void OnSuzerainPress()
@@ -118,7 +134,7 @@ namespace Populations.UI
 		[DataSourceProperty]
 		public bool IsSelected
 		{
-			get =>this._isSelected;
+			get => this._isSelected;
 			set
 			{
 				if (value != this._isSelected)
@@ -126,6 +142,51 @@ namespace Populations.UI
 					this._isSelected = value;
 					if (value) this.RefreshValues();
 					base.OnPropertyChangedWithValue(value, "IsSelected");
+				}
+			}
+		}
+
+		[DataSourceProperty]
+		public bool UsurpEnabled
+		{
+			get =>this._usurpEnabled;
+			set
+			{
+				if (value != this._usurpEnabled)
+				{
+					this._usurpEnabled = value;
+					if (value) this.RefreshValues();
+					base.OnPropertyChangedWithValue(value, "UsurpEnabled");
+				}
+			}
+		}
+
+		[DataSourceProperty]
+		public bool UsurpDuchyEnabled
+		{
+			get => this._usurpDuchyEnabled;
+			set
+			{
+				if (value != this._usurpDuchyEnabled)
+				{
+					this._usurpDuchyEnabled = value;
+					if (value) this.RefreshValues();
+					base.OnPropertyChangedWithValue(value, "UsurpDuchyEnabled");
+				}
+			}
+		}
+
+		[DataSourceProperty]
+		public bool ContractEnabled
+		{
+			get => this._contractEnabled;
+			set
+			{
+				if (value != this._contractEnabled)
+				{
+					this._contractEnabled = value;
+					if (value) this.RefreshValues();
+					base.OnPropertyChangedWithValue(value, "ContractEnabled");
 				}
 			}
 		}
@@ -178,7 +239,7 @@ namespace Populations.UI
 		{
 			get
 			{
-				UsurpCosts costs = PopulationConfig.Instance.TitleManager.GetUsurpationCosts(_title, Hero.MainHero);
+				UsurpCosts costs = model.GetUsurpationCosts(_title, Hero.MainHero);
 				StringBuilder sb = new StringBuilder("Usurp this title from it's owner, making you the lawful ruler of this settlement. Usurping from lords within your kingdom degrades your clan's reputation.");
 				sb.Append(Environment.NewLine);
 				sb.Append("Costs:");
@@ -201,11 +262,11 @@ namespace Populations.UI
 				sb.Append(Environment.NewLine);
 				sb.Append("Costs:");
 				sb.Append(Environment.NewLine);
-				sb.Append(string.Format("{0} gold.", (int)costs.gold));
+				sb.Append(string.Format("{0} gold.", (int)duchyCosts.gold));
 				sb.Append(Environment.NewLine);
-				sb.Append(string.Format("{0} influence.", (int)costs.influence));
+				sb.Append(string.Format("{0} influence.", (int)duchyCosts.influence));
 				sb.Append(Environment.NewLine);
-				sb.Append(string.Format("{0} renown.", (int)costs.renown));
+				sb.Append(string.Format("{0} renown.", (int)duchyCosts.renown));
 				return new HintViewModel(new TextObject(sb.ToString()));
 			}
 		}

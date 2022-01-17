@@ -5,6 +5,7 @@ using System.Text;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using static Populations.Managers.TitleManager;
+using TaleWorlds.CampaignSystem.Actions;
 
 namespace Populations.Behaviors
 {
@@ -16,6 +17,7 @@ namespace Populations.Behaviors
         public override void RegisterEvents()
         {
             CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, new Action<CampaignGameStarter>(OnSessionLaunched));
+            CampaignEvents.HeroKilledEvent.AddNonSerializedListener(this, new Action<Hero, Hero, KillCharacterAction.KillCharacterActionDetail, bool>(this.OnHeroKilled));
         }
 
         public override void SyncData(IDataStore dataStore)
@@ -25,6 +27,11 @@ namespace Populations.Behaviors
         private void OnSessionLaunched(CampaignGameStarter campaignGameStarter)
         {
             AddDialog(campaignGameStarter);
+        }
+
+        private void OnHeroKilled(Hero victim, Hero killer, KillCharacterAction.KillCharacterActionDetail detail, bool showNotification = true)
+        {
+        
         }
 
         private void AddDialog(CampaignGameStarter starter)

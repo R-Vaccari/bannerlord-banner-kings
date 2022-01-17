@@ -1,9 +1,12 @@
-﻿using System;
+﻿using Populations.Models;
+using Populations.UI.Information;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -68,7 +71,7 @@ namespace Populations.Managers
             FeudalTitle title = GetHighestTitle(hero);
             Kingdom kingdom1 = GetTitleFaction(title);
 
-            if (kingdom1 == null) return null;
+            if (kingdom1 == null || hero.Clan.Kingdom == null) return null;
 
             FeudalTitle suzerain = TITLES.FirstOrDefault(x => x.vassals != null && x.vassals.Count > 0 && x.vassals.Contains(title));
             if (suzerain != null)
@@ -102,85 +105,31 @@ namespace Populations.Managers
             return false;
         }
 
-        public (bool,string) IsUsurpable(FeudalTitle title, Hero hero)
-        {
-
-            bool renown = false;
-            bool gold = false;
-            bool influence = false;
-            bool type = false;
-            string explanation = "";
-            if (title.deJure != hero && title.deFacto == hero)
-            {
-                if ((int)title.type >= 3)
-                    renown = hero.Clan.Tier >= 3;
-
-                if (!renown) explanation = "Clan tier is insufficient.";
-                else
-                {
-                    UsurpCosts costs = GetUsurpationCosts(title, hero);
-                    gold = hero.Gold >= costs.gold;
-                    influence = hero.Clan.Influence >= costs.influence;
-
-                    if (gold == false || influence == false)
-                        explanation = "You do not have the required resources to obtain this title.";
-                }
-            }
-
-            if ((int)title.type >= 3)
-                type = true;
-            else if (title.vassals != null && title.vassals.Count > 0)
-            {
-                foreach (FeudalTitle vassal in title.vassals)
-                    if (vassal.deJure == hero)
-                        type = true;
-            }
-
-            if (type == false)
-                explanation = "You are required to own one of this title's vassals before usurping it.";
-
-            return (renown && influence && gold, explanation);
-        }
-
-        public void UsurpTitle(Hero oldOwner, Hero usurper, FeudalTitle title)
+        public void UsurpTitle(Hero oldOwner, Hero usurper, FeudalTitle title, UsurpCosts costs)
         {
             ExecuteOwnershipChange(oldOwner, usurper, title, true);
-        }
-
-        public UsurpCosts GetUsurpationCosts(FeudalTitle title, Hero hero)
-        {
-            bool costsRenown = title.deJure.Clan.Kingdom == hero.Clan.Kingdom;
-            float gold, influence, renown = 0f;
-            influence = GetInfluenceUsurpCost(title);
-            gold = GetGoldUsurpCost(title);
-            if (costsRenown) renown = GetRenownUsurpCost(title);
-
-            if (title.vassals != null && title.vassals.Count > 0) 
-                foreach (FeudalTitle vassal in title.vassals)
-                    if (vassal.deJure != hero)
+            int impact = new UsurpationModel().GetUsurpRelationImpact(title);
+            ChangeRelationAction.ApplyPlayerRelation(oldOwner, impact, true, true);
+            Kingdom kingdom = oldOwner.Clan.Kingdom;
+            if (kingdom != null) 
+                foreach(Clan clan in kingdom.Clans) 
+                    if (clan != oldOwner.Clan && clan.IsMapFaction && clan.IsKingdomFaction)
                     {
-                        influence += GetInfluenceUsurpCost(vassal);
-                        gold += GetGoldUsurpCost(title);
-                        if (costsRenown) renown += GetRenownUsurpCost(vassal);
+                        int random = MBRandom.RandomInt(1, 100);
+                        if (random <= 10)
+                            ChangeRelationAction.ApplyPlayerRelation(oldOwner, (int)((float)impact * 0.3f), true, true);
                     }
-            return new UsurpCosts(gold, influence, renown);
+
+            if (costs.gold > 0)
+                usurper.ChangeHeroGold((int)-costs.gold);
+            if (costs.influence > 0)
+                usurper.Clan.Influence -= costs.influence;
+            if (costs.renown > 0)
+                usurper.Clan.Renown -= costs.renown;
+            OwnershipNotification notification = new OwnershipNotification(title, new TextObject(string.Format("You are now the rightful owner to {0}", title.name)));
+            Campaign.Current.CampaignInformationManager.NewMapNoticeAdded(notification);
         }
-
-        private float GetInfluenceUsurpCost(FeudalTitle title) => 100f / (float)title.type + 2f;
-
-        private float GetRenownUsurpCost(FeudalTitle title) => 10f / (float)title.type + 2f;
-
-        private float GetGoldUsurpCost(FeudalTitle title) 
-        {
-            float gold = 1000f / (float)title.type + 3f; 
-            if (title.fief != null)
-            {
-                PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(title.fief);
-                gold += (float)data.TotalPop / 100f;
-            }
-            return gold;
-        }
-
+        
         public HashSet<FeudalTitle> GetTitles(Hero hero)
         {
             if (IsHeroTitleHolder(hero)) return TITLE_HOLDERS[hero];

@@ -51,7 +51,7 @@ namespace Populations
                     campaignStarter.AddModel(new PriceFactorModel());
                     campaignStarter.AddModel(new FeudalWorkshopModel());
                     campaignStarter.AddModel(new FeudalClanFinanceModel());
-
+                    campaignStarter.AddModel(new FeudalArmyManagementModel());
                 } catch (Exception e)
                 {
                 }
