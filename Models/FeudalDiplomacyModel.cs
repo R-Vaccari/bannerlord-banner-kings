@@ -7,7 +7,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.SandBox.GameComponents.Map;
 using TaleWorlds.Localization;
 
-namespace Populations.Models
+namespace BannerKings.Models
 {
     class FeudalDiplomacyModel : DefaultDiplomacyModel
     {

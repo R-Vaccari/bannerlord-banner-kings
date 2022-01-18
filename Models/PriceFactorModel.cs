@@ -1,9 +1,9 @@
 ﻿using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.SandBox.GameComponents;
 using TaleWorlds.Core;
-using static Populations.PolicyManager;
+using static BannerKings.Managers.PolicyManager;
 
-namespace Populations.Models
+namespace BannerKings.Models
 {
     class PriceFactorModel : DefaultTradeItemPriceFactorModel
     {
@@ -11,9 +11,9 @@ namespace Populations.Models
         {
             float baseResult = base.GetPrice(itemRosterElement, clientParty, merchant, isSelling, inStoreValue, supply, demand);
             if (clientParty != null && merchant != null && merchant.MobileParty != null && merchant.MobileParty.PartyComponent != null && merchant.MobileParty.PartyComponent.HomeSettlement != null 
-                && PopulationConfig.Instance.PopulationManager != null && PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(merchant.MobileParty.PartyComponent.HomeSettlement))
+                && BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(merchant.MobileParty.PartyComponent.HomeSettlement))
             {
-                TariffType type = PopulationConfig.Instance.PolicyManager.GetSettlementTariff(merchant.MobileParty.PartyComponent.HomeSettlement);
+                TariffType type = BannerKingsConfig.Instance.PolicyManager.GetSettlementTariff(merchant.MobileParty.PartyComponent.HomeSettlement);
                 Town town = merchant.MobileParty.PartyComponent.HomeSettlement.Town;
                 if (type != TariffType.Exemption && town != null)
                 {

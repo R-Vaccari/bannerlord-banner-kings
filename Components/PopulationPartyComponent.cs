@@ -3,12 +3,12 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.Localization;
 using System.Linq;
 using TaleWorlds.Core;
-using static Populations.PopulationManager;
+using static BannerKings.Managers.PopulationManager;
 using TaleWorlds.SaveSystem;
 using System.Collections.Generic;
 using TaleWorlds.ObjectSystem;
 
-namespace Populations.Components
+namespace BannerKings.Components
 {
     class PopulationPartyComponent : PartyComponent
     {
@@ -58,7 +58,7 @@ namespace Populations.Components
             caravan.InitializeMobilePartyAtPosition(origin.Culture.EliteCaravanPartyTemplate, origin.GatePosition);
             GiveMounts(ref caravan);
             GiveFood(ref caravan);
-            PopulationConfig.Instance.PopulationManager.AddParty(caravan);
+            BannerKingsConfig.Instance.PopulationManager.AddParty(caravan);
         }
 
         public static void CreateMilitiaParty(string id, Settlement origin, Settlement target, string name, int slaves)
@@ -68,13 +68,13 @@ namespace Populations.Components
             caravan.InitializeMobilePartyAtPosition(origin.Culture.EliteCaravanPartyTemplate, origin.GatePosition);
             GiveMounts(ref caravan);
             GiveFood(ref caravan);
-            PopulationConfig.Instance.PopulationManager.AddParty(caravan);
+            BannerKingsConfig.Instance.PopulationManager.AddParty(caravan);
         }
 
         public static void CreateTravellerParty(string id, Settlement origin, Settlement target, string name, int count, PopType type, CharacterObject civilian)
         {
             MobileParty party = CreateParty(id, origin, false, target, name, type);
-            PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(origin);
+            PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(origin);
             data.UpdatePopType(type, count);
             TroopRoster roster = new TroopRoster(party.Party);
             roster.AddToCounts(civilian, count);
@@ -114,7 +114,7 @@ namespace Populations.Components
             GivePackAnimals(ref party);
             GiveFood(ref party);
             GiveItems(ref party, type);
-            PopulationConfig.Instance.PopulationManager.AddParty(party);
+            BannerKingsConfig.Instance.PopulationManager.AddParty(party);
         }
 
         private static int GetCountToAdd(int partySize, int tier, bool ranged) => (int)((float)partySize / (float)(tier + (ranged ? 3 : 2)))  + MBRandom.RandomInt(-2, 3);

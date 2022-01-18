@@ -5,11 +5,11 @@ using System.Xml;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
-using static Populations.Managers.TitleManager;
-using static Populations.PopulationManager;
+using static BannerKings.Managers.TitleManager;
+using static BannerKings.Managers.PopulationManager;
 using static TaleWorlds.Core.ItemCategory;
 
-namespace Populations.Helpers
+namespace BannerKings.Helpers
 {
     public static class Helpers
     {

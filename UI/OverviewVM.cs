@@ -1,9 +1,9 @@
-﻿using Populations.Models;
+﻿using BannerKings.Models;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Library;
-using static Populations.PopulationManager;
+using static BannerKings.Managers.PopulationManager;
 
-namespace Populations.UI
+namespace BannerKings.UI
 {
     public class OverviewVM : ViewModel
     {
@@ -32,7 +32,7 @@ namespace Populations.UI
         public override void RefreshValues()
         {
             base.RefreshValues();
-            PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(_settlement);
+            PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(_settlement);
             PopInfo.Clear();
             SatisfactionInfo.Clear();
             StatsInfo.Clear();
@@ -209,7 +209,7 @@ namespace Populations.UI
         {
             get
             {
-                float result = PopulationConfig.Instance.PopulationManager.GetPopData(_settlement).Assimilation;
+                float result = BannerKingsConfig.Instance.PopulationManager.GetPopData(_settlement).Assimilation;
                 return (result * 100f).ToString() + '%';
             }
         }

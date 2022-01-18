@@ -1,8 +1,8 @@
 ﻿using TaleWorlds.Core;
 using TaleWorlds.Localization;
-using static Populations.Managers.TitleManager;
+using static BannerKings.Managers.TitleManager;
 
-namespace Populations.UI.Information
+namespace BannerKings.UI.Information
 {
     class OwnershipNotification : InformationData
     {

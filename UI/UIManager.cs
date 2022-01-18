@@ -1,7 +1,7 @@
 ﻿
 using SandBox.View.Map;
 
-namespace Populations.UI
+namespace BannerKings.UI
 {
     class UIManager
     {

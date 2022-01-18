@@ -7,10 +7,10 @@ using TaleWorlds.CampaignSystem.SandBox.GameComponents;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
-using static Populations.PolicyManager;
-using static Populations.PopulationManager;
+using static BannerKings.Managers.PolicyManager;
+using static BannerKings.Managers.PopulationManager;
 
-namespace Populations.Models
+namespace BannerKings.Models
 {
     class LoyaltyModel : DefaultSettlementLoyaltyModel
     {
@@ -20,27 +20,27 @@ namespace Populations.Models
 
 		public override ExplainedNumber CalculateLoyaltyChange(Town town, bool includeDescriptions = false)
         {
-            if (PopulationConfig.Instance.PopulationManager != null && PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
+            if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
             {
 				ExplainedNumber baseResult = CalculateLoyaltyChangeInternal(town, true);
-				PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(town.Settlement);
+				PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
                 int slaves = data.GetTypeCount(PopType.Slaves);
-                bool surplusExists = PopulationConfig.Instance.PopulationManager.PopSurplusExists(town.Settlement, PopType.Slaves, true);
+                bool surplusExists = BannerKingsConfig.Instance.PopulationManager.PopSurplusExists(town.Settlement, PopType.Slaves, true);
                 baseResult.Add((float)slaves * SLAVE_LOYALTY * (surplusExists ? 1.1f : 1f), new TextObject("Slave population"));
 
-                if (PopulationConfig.Instance.PolicyManager.IsPolicyEnacted(town.Settlement, PolicyType.EXEMPTION))
+                if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(town.Settlement, PolicyType.EXEMPTION))
                 {
 					float fraction = data.GetCurrentTypeFraction(PopType.Nobles);
                     baseResult.Add(LOYALTY_FACTOR * fraction * NOBLE_LOYALTY_WEIGHT, new TextObject("Nobles exemption policy"));
                 }
 
-				if (PopulationConfig.Instance.PolicyManager.GetSettlementTax(town.Settlement) == TaxType.Low)
+				if (BannerKingsConfig.Instance.PolicyManager.GetSettlementTax(town.Settlement) == TaxType.Low)
 				{
 					float fraction1 = data.GetCurrentTypeFraction(PopType.Craftsmen);
 					float fraction2 = data.GetCurrentTypeFraction(PopType.Serfs) * 0.8f;
 					baseResult.Add((fraction1 + fraction2) * LOYALTY_FACTOR, new TextObject("Low tax policy"));
 				}
-				else if (PopulationConfig.Instance.PolicyManager.GetSettlementTax(town.Settlement) == TaxType.High)
+				else if (BannerKingsConfig.Instance.PolicyManager.GetSettlementTax(town.Settlement) == TaxType.High)
 				{
 					float fraction1 = data.GetCurrentTypeFraction(PopType.Craftsmen);
 					float fraction2 = data.GetCurrentTypeFraction(PopType.Serfs) * 0.8f;
@@ -110,9 +110,9 @@ namespace Populations.Models
 
 		private void GetSettlementLoyaltyChangeDueToOwnerCulture(Town town, ref ExplainedNumber explainedNumber)
 		{
-			if (PopulationConfig.Instance.PopulationManager != null && PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
+			if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
             {
-				PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(town.Settlement);
+				PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
 				float factor = data.Assimilation - 1f + data.Assimilation;
 				float result = (float)LOYALTY_FACTOR * factor;
 				explainedNumber.Add(result, new TextObject("Cultural Assimilation"));
@@ -182,7 +182,7 @@ namespace Populations.Models
 
 		private void GetSettlementLoyaltyChangeDueToGovernorCulture(Town town, ref ExplainedNumber explainedNumber)
 		{
-			if (PopulationConfig.Instance.PopulationManager != null && PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
+			if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
 			{
 				// Ignore if populated. Governor effect is calculated in GetSettlementLoyaltyChangeDueToOwnerCulture
 			}

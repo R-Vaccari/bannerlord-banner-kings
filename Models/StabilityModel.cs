@@ -1,15 +1,15 @@
 ﻿using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
-using static Populations.PopulationManager;
+using static BannerKings.Managers.PopulationManager;
 
-namespace Populations.Models
+namespace BannerKings.Models
 {
     class StabilityModel
     {
 
         public void CalculateStabilityChange(Settlement settlement)
         {
-            PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(settlement);
+            PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
             float stability = data.Stability;
             if (settlement.Town != null)
             {
@@ -31,7 +31,7 @@ namespace Populations.Models
             }
             else if (settlement.IsVillage && settlement.Village != null)
             {
-                data.Stability = PopulationConfig.Instance.PopulationManager.GetPopData(settlement.Village.Bound).Stability;
+                data.Stability = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement.Village.Bound).Stability;
             }
         }
     }

@@ -1,9 +1,9 @@
 ﻿using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
-using static Populations.Managers.TitleManager;
-using static Populations.PopulationManager;
+using static BannerKings.Managers.TitleManager;
+using static BannerKings.Managers.PopulationManager;
 
-namespace Populations.Models
+namespace BannerKings.Models
 {
     class UsurpationModel
     {
@@ -80,7 +80,7 @@ namespace Populations.Models
             float gold = 1000f / (float)title.type + 3f;
             if (title.fief != null)
             {
-                PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(title.fief);
+                PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(title.fief);
                 gold += (float)data.TotalPop / 100f;
             }
             return gold;

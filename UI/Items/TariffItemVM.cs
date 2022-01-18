@@ -1,7 +1,7 @@
 ﻿using TaleWorlds.Core.ViewModelCollection;
-using static Populations.PolicyManager;
+using static BannerKings.Managers.PolicyManager;
 
-namespace Populations.UI.Items
+namespace BannerKings.UI.Items
 {
     public class TariffItemVM : SelectorItemVM
     {
@@ -11,7 +11,7 @@ namespace Populations.UI.Items
             this.policy = policy;
             base.StringItem = policy.ToString().Replace("_", " ");
             base.CanBeSelected = isAvailable;
-            base.Hint = new HintViewModel(new TaleWorlds.Localization.TextObject(PopulationConfig.Instance.PolicyManager.GetTariffHint(policy)));
+            base.Hint = new HintViewModel(new TaleWorlds.Localization.TextObject(BannerKingsConfig.Instance.PolicyManager.GetTariffHint(policy)));
         }
     }
 }

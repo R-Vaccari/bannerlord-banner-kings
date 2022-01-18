@@ -1,14 +1,14 @@
 ﻿using TaleWorlds.CampaignSystem;
-using static Populations.Managers.TitleManager;
+using static BannerKings.Managers.TitleManager;
 
-namespace Populations.Models
+namespace BannerKings.Models
 {
     class LegitimacyModel
     {
 
         public LegitimacyType GetRuleType(Settlement settlement, Hero hero)
         {
-            FeudalTitle title = PopulationConfig.Instance.TitleManager.GetTitle(settlement);
+            FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement);
             bool foreigner = settlement.Culture != hero.Culture;
             if (title.deJure == hero)
                 return foreigner ? LegitimacyType.Lawful_Foreigner : LegitimacyType.Lawful;

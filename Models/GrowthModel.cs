@@ -1,10 +1,11 @@
 ﻿
+using BannerKings.Managers;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
-using static Populations.PolicyManager;
-using static Populations.PopulationManager;
+using static BannerKings.Managers.PolicyManager;
+using static BannerKings.Managers.PopulationManager;
 
-namespace Populations.Models
+namespace BannerKings.Models
 {
     public class GrowthModel : GameModel
     {
@@ -13,26 +14,26 @@ namespace Populations.Models
 
         public void CalculatePopulationGrowth(Settlement settlement)
         {
-            PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(settlement);
+            PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
             int growthFactor = GetPopulationGrowth(settlement, true);
             data.UpdatePopulation(settlement, growthFactor, PopType.None);
         }
 
         public int GetPopulationGrowth(Settlement settlement, bool showMessage)
         {
-            PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(settlement);
-            bool boost = PopulationConfig.Instance.PolicyManager.IsPolicyEnacted(settlement, PolicyManager.PolicyType.POP_GROWTH);
+            PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
+            bool boost = BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(settlement, PolicyManager.PolicyType.POP_GROWTH);
             int growthFactor = GetDataGrowthFactor(settlement, data, boost, showMessage);
             return growthFactor;
         }
 
         public void CalculateHearthGrowth(Village village, ref ExplainedNumber baseResult)
         {
-            PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(village.Settlement);
-            bool boost = PopulationConfig.Instance.PolicyManager.IsPolicyEnacted(village.Settlement, PolicyManager.PolicyType.POP_GROWTH);
+            PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(village.Settlement);
+            bool boost = BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(village.Settlement, PolicyManager.PolicyType.POP_GROWTH);
             int growthFactor = GetDataGrowthFactor(village.Settlement, data, boost, false);
             float taxFactor = 1f;
-            TaxType tax = PopulationConfig.Instance.PolicyManager.GetSettlementTax(village.Settlement);
+            TaxType tax = BannerKingsConfig.Instance.PolicyManager.GetSettlementTax(village.Settlement);
             if (tax == TaxType.High)
                 taxFactor = 0.8f;
             else if (tax == TaxType.Low)
@@ -77,7 +78,7 @@ namespace Populations.Models
 
         public float GetSettlementFilledCapacity(Settlement settlement)
         {
-            PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(settlement);
+            PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
             return (float)data.TotalPop / (float)CalculateSettlementCap(settlement);
         }
     }

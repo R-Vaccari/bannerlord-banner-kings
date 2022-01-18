@@ -1,7 +1,7 @@
 ﻿using TaleWorlds.Core.ViewModelCollection;
-using static Populations.PolicyManager;
+using static BannerKings.Managers.PolicyManager;
 
-namespace Populations.UI.Items
+namespace BannerKings.UI.Items
 {
     public class MilitiaItemVM : SelectorItemVM
     {
@@ -11,7 +11,7 @@ namespace Populations.UI.Items
             this.policy = policy;
             base.StringItem = policy.ToString();
             base.CanBeSelected = isAvailable;
-            base.Hint = new HintViewModel(new TaleWorlds.Localization.TextObject(PopulationConfig.Instance.PolicyManager.GetMilitiaHint(policy)));
+            base.Hint = new HintViewModel(new TaleWorlds.Localization.TextObject(BannerKingsConfig.Instance.PolicyManager.GetMilitiaHint(policy)));
         }
     }
 }

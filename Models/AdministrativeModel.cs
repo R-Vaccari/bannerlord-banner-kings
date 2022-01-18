@@ -1,8 +1,9 @@
-﻿using System;
+﻿using BannerKings.Managers;
+using System;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 
-namespace Populations.Models
+namespace BannerKings.Models
 {
     public class AdministrativeModel
     {
@@ -34,16 +35,16 @@ namespace Populations.Models
                 } else baseResult += 0.05f;
             }
 
-            if (PopulationConfig.Instance.PolicyManager.GetSettlementWork(settlement) != PolicyManager.WorkforcePolicy.None)
+            if (BannerKingsConfig.Instance.PolicyManager.GetSettlementWork(settlement) != PolicyManager.WorkforcePolicy.None)
                 baseResult += 0.075f;
 
-            if (PopulationConfig.Instance.PolicyManager.IsPolicyEnacted(settlement, PolicyManager.PolicyType.EXPORT_SLAVES))
+            if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(settlement, PolicyManager.PolicyType.EXPORT_SLAVES))
                 baseResult += 0.025f;
 
-            if (PopulationConfig.Instance.PolicyManager.IsPolicyEnacted(settlement, PolicyManager.PolicyType.SUBSIDIZE_MILITIA))
+            if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(settlement, PolicyManager.PolicyType.SUBSIDIZE_MILITIA))
                 baseResult += 0.1f;
 
-            if (PopulationConfig.Instance.PolicyManager.IsPolicyEnacted(settlement, PolicyManager.PolicyType.CONSCRIPTION))
+            if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(settlement, PolicyManager.PolicyType.CONSCRIPTION))
                 baseResult += 0.1f;
 
             return Math.Max(baseResult, 0f);

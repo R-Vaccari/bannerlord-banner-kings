@@ -5,16 +5,16 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.SandBox.GameComponents;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
-using static Populations.Managers.TitleManager;
+using static BannerKings.Managers.TitleManager;
 
-namespace Populations.Models
+namespace BannerKings.Models
 {
     class FeudalClanFinanceModel : DefaultClanFinanceModel
     {
 
         public override ExplainedNumber CalculateClanGoldChange(Clan clan, bool includeDescriptions = false, bool applyWithdrawals = false)
         {
-			if (PopulationConfig.Instance.TitleManager != null)
+			if (BannerKingsConfig.Instance.TitleManager != null)
 			{
 				ExplainedNumber result = new ExplainedNumber(0f, true, null);
 				this.CalculateClanIncomeInternal(clan, ref result, applyWithdrawals);
@@ -26,7 +26,7 @@ namespace Populations.Models
 
         public override ExplainedNumber CalculateClanIncome(Clan clan, bool includeDescriptions = false, bool applyWithdrawals = false)
         {
-			if (PopulationConfig.Instance.TitleManager != null) {
+			if (BannerKingsConfig.Instance.TitleManager != null) {
 
 				ExplainedNumber result = new ExplainedNumber(0f, includeDescriptions, null);
 				this.CalculateClanIncomeInternal(clan, ref result, applyWithdrawals);
@@ -169,7 +169,7 @@ namespace Populations.Models
 			{
 				bool leaderOwned = true;
 				Hero owner = null;
-				FeudalTitle title = PopulationConfig.Instance.TitleManager.GetTitle(village3.Settlement);
+				FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetTitle(village3.Settlement);
 				if (title != null)
                 {
 					owner = title.deFacto;
@@ -216,7 +216,7 @@ namespace Populations.Models
 				{
 					bool leaderOwned = true;
 					Hero owner = null;
-					FeudalTitle title = PopulationConfig.Instance.TitleManager.GetTitle(village2.Settlement);
+					FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetTitle(village2.Settlement);
 					if (title != null)
 					{
 						owner = title.deJure;
@@ -235,7 +235,7 @@ namespace Populations.Models
 
 		public override ExplainedNumber CalculateClanExpenses(Clan clan, bool includeDescriptions = false, bool applyWithdrawals = false)
 		{
-			if (PopulationConfig.Instance.TitleManager != null)
+			if (BannerKingsConfig.Instance.TitleManager != null)
 			{
 				ExplainedNumber result = new ExplainedNumber(0f, includeDescriptions, null);
 				this.CalculateClanExpensesInternal(clan, ref result, applyWithdrawals);
@@ -267,14 +267,14 @@ namespace Populations.Models
 			if (clan.DebtToKingdom > 0)
 				this.AddPaymentForDebts(clan, ref goldChange, applyWithdrawals);
 
-			if (PopulationConfig.Instance.TitleManager.IsHeroTitleHolder(clan.Leader))
+			if (BannerKingsConfig.Instance.TitleManager.IsHeroTitleHolder(clan.Leader))
 				this.AddExpenseFromTaxes(clan, ref goldChange, applyWithdrawals);
 		}
 
 		private void AddExpenseFromTaxes(Clan clan, ref ExplainedNumber goldChange, bool applyWithdrawals)
 		{
-			HashSet<FeudalTitle> titles = PopulationConfig.Instance.TitleManager.GetTitles(clan.Leader);
-			FeudalTitle suzerain = PopulationConfig.Instance.TitleManager.CalculateHeroSuzerain(clan.Leader);
+			HashSet<FeudalTitle> titles = BannerKingsConfig.Instance.TitleManager.GetTitles(clan.Leader);
+			FeudalTitle suzerain = BannerKingsConfig.Instance.TitleManager.CalculateHeroSuzerain(clan.Leader);
 
 			if (titles != null && titles.Count > 0 && suzerain != null)
 				foreach (FeudalTitle title in titles)

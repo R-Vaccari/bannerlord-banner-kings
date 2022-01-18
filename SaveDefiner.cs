@@ -1,11 +1,12 @@
-﻿using Populations.Components;
+﻿using BannerKings.Components;
+using BannerKings.Managers;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.SaveSystem;
-using static Populations.PolicyManager;
-using static Populations.PopulationManager;
+using static BannerKings.Managers.PolicyManager;
+using static BannerKings.Managers.PopulationManager;
 
-namespace Populations
+namespace BannerKings
 {
     class SaveDefiner : SaveableTypeDefiner
     {

@@ -1,0 +1,7 @@
+C:\Users\Rodrigo\source\repos\Populations\obj\Debug\BannerKings.csproj.CoreCompileInputs.cache
+D:\SteamLibrary\steamapps\common\Mount & Blade II Bannerlord\Modules\Populations\bin\Win64_Shipping_Client\BannerKings.dll
+D:\SteamLibrary\steamapps\common\Mount & Blade II Bannerlord\Modules\Populations\bin\Win64_Shipping_Client\BannerKings.pdb
+C:\Users\Rodrigo\source\repos\Populations\obj\Debug\BannerKings.dll
+C:\Users\Rodrigo\source\repos\Populations\obj\Debug\BannerKings.pdb
+D:\SteamLibrary\steamapps\common\Mount & Blade II Bannerlord\Modules\BannerKings\bin\Win64_Shipping_Client\BannerKings.dll
+D:\SteamLibrary\steamapps\common\Mount & Blade II Bannerlord\Modules\BannerKings\bin\Win64_Shipping_Client\BannerKings.pdb

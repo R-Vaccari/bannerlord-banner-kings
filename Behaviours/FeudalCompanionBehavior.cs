@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using System.Text;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
-using static Populations.Managers.TitleManager;
+using static BannerKings.Managers.TitleManager;
 using TaleWorlds.CampaignSystem.Actions;
 
-namespace Populations.Behaviors
+namespace BannerKings.Behaviors
 {
     class FeudalCompanionBehavior : CampaignBehaviorBase
     {
@@ -67,19 +67,19 @@ namespace Populations.Behaviors
 
         private bool companion_grant_knighthood_on_condition()
         {
-            if (PopulationConfig.Instance.TitleManager == null) return false;
+            if (BannerKingsConfig.Instance.TitleManager == null) return false;
             Hero companion = Hero.OneToOneConversationHero;
-            FeudalTitle title = PopulationConfig.Instance.TitleManager.GetHighestTitle(Hero.MainHero);
+            FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(Hero.MainHero);
             if (companion != null && companion.Clan == Clan.PlayerClan && Hero.MainHero.Clan.Tier >= 2 &&
                 Hero.MainHero.Clan.Kingdom != null && title != null && title.type != TitleType.Lordship)
-                return !PopulationConfig.Instance.TitleManager.IsHeroKnighted(companion);
+                return !BannerKingsConfig.Instance.TitleManager.IsHeroKnighted(companion);
             else return false;
         }
 
         private bool companion_knighthood_accepted_on_condition()
         {
             lordshipsToGive.Clear();
-            HashSet<FeudalTitle> titles = PopulationConfig.Instance.TitleManager.GetTitles(Hero.MainHero);
+            HashSet<FeudalTitle> titles = BannerKingsConfig.Instance.TitleManager.GetTitles(Hero.MainHero);
             foreach (FeudalTitle title in titles)
             {
                 if (title.type != TitleType.Lordship || title.fief == null || title.deJure != Hero.MainHero) continue;
@@ -106,7 +106,7 @@ namespace Populations.Behaviors
                 return;
             
             this.titleGiven = (FeudalTitle)element[0].Identifier;
-            PopulationConfig.Instance.TitleManager.GrantLordship(this.titleGiven, Hero.MainHero, Hero.OneToOneConversationHero);
+            BannerKingsConfig.Instance.TitleManager.GrantLordship(this.titleGiven, Hero.MainHero, Hero.OneToOneConversationHero);
         }
     }
 }

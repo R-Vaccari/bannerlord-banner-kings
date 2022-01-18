@@ -1,10 +1,10 @@
 ﻿using System;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Localization;
-using static Populations.PopulationManager;
+using static BannerKings.Managers.PopulationManager;
 using TaleWorlds.SaveSystem;
 
-namespace Populations.Components
+namespace BannerKings.Components
 {
     class MilitiaComponent : PopulationPartyComponent
     {
@@ -47,7 +47,7 @@ namespace Populations.Components
             reference.PrisonRoster.RemoveIf(roster => roster.Number > 0);
             GiveMounts(ref caravan);
             GiveFood(ref caravan);
-            PopulationConfig.Instance.PopulationManager.AddParty(caravan);
+            BannerKingsConfig.Instance.PopulationManager.AddParty(caravan);
         }
        
 

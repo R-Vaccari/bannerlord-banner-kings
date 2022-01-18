@@ -1,8 +1,8 @@
-﻿using Populations.Components;
+﻿using BannerKings.Components;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.SandBox.GameComponents.Party;
 
-namespace Populations.Models
+namespace BannerKings.Models
 {
     class PartyLimitModel : DefaultPartySizeLimitModel
     {
@@ -13,7 +13,7 @@ namespace Populations.Models
         public override ExplainedNumber GetPartyMemberSizeLimit(PartyBase party, bool includeDescriptions = false)
         {
             ExplainedNumber baseResult = base.GetPartyMemberSizeLimit(party, includeDescriptions);
-            if (PopulationConfig.Instance.PopulationManager != null && PopulationConfig.Instance.PopulationManager.IsPopulationParty(party.MobileParty))
+            if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsPopulationParty(party.MobileParty))
             {
                 if (party.MobileParty.PartyComponent is PopulationPartyComponent)
                     baseResult.Add(50f);

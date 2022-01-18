@@ -1,5 +1,5 @@
-﻿using Populations.Models;
-using Populations.UI.Items;
+﻿using BannerKings.Models;
+using BannerKings.UI.Items;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,9 +9,9 @@ using TaleWorlds.Core;
 using TaleWorlds.Core.ViewModelCollection;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
-using static Populations.Managers.TitleManager;
+using static BannerKings.Managers.TitleManager;
 
-namespace Populations.UI
+namespace BannerKings.UI
 {
     public class DemesneVM : ViewModel
     {
@@ -39,9 +39,9 @@ namespace Populations.UI
 			this._demesneInfo = new MBBindingList<InformationElement>();
 			this.model = new UsurpationModel();
 			this.costs = model.GetUsurpationCosts(_title, Hero.MainHero);
-			this._duchy = PopulationConfig.Instance.TitleManager.GetDuchy(_title);
+			this._duchy = BannerKingsConfig.Instance.TitleManager.GetDuchy(_title);
 			this.duchyCosts = model.GetUsurpationCosts(_duchy, Hero.MainHero);
-			this._contractEnabled = PopulationConfig.Instance.TitleManager.IsHeroTitleHolder(Hero.MainHero) && Clan.PlayerClan.Kingdom != null;
+			this._contractEnabled = BannerKingsConfig.Instance.TitleManager.IsHeroTitleHolder(Hero.MainHero) && Clan.PlayerClan.Kingdom != null;
 			this._usurpEnabled = _title.deJure != Hero.MainHero;
 			this._usurpDuchyEnabled = this._duchy.deJure != Hero.MainHero;
 			if (title.vassals != null)
@@ -52,7 +52,7 @@ namespace Populations.UI
 		public override void RefreshValues()
         {
 			base.RefreshValues();
-			this._contractEnabled = PopulationConfig.Instance.TitleManager.IsHeroTitleHolder(Hero.MainHero) && Clan.PlayerClan.Kingdom != null;
+			this._contractEnabled = BannerKingsConfig.Instance.TitleManager.IsHeroTitleHolder(Hero.MainHero) && Clan.PlayerClan.Kingdom != null;
 			this._usurpEnabled = _title.deJure != Hero.MainHero;
 			this._usurpDuchyEnabled = this._duchy.deJure != Hero.MainHero;
 			DemesneInfo.Clear();
@@ -73,7 +73,7 @@ namespace Populations.UI
 		{
 			bool usurpable = _titleUsurpable.Item1;
 			if (usurpable)
-				PopulationConfig.Instance.TitleManager.UsurpTitle(_title.deJure, Hero.MainHero, _title, costs);
+				BannerKingsConfig.Instance.TitleManager.UsurpTitle(_title.deJure, Hero.MainHero, _title, costs);
 			else InformationManager.DisplayMessage(new InformationMessage(_titleUsurpable.Item2));
 			RefreshValues();
 		}
@@ -82,14 +82,14 @@ namespace Populations.UI
 		{
 			bool usurpable = _duchyUsurpable.Item1;
 			if (usurpable)
-				PopulationConfig.Instance.TitleManager.UsurpTitle(_duchy.deJure, Hero.MainHero, _duchy, duchyCosts);
+				BannerKingsConfig.Instance.TitleManager.UsurpTitle(_duchy.deJure, Hero.MainHero, _duchy, duchyCosts);
 			else InformationManager.DisplayMessage(new InformationMessage(_duchyUsurpable.Item2));
 			RefreshValues();
 		}
 
 		private void OnSuzerainPress()
         {
-			FeudalTitle suzerain = PopulationConfig.Instance.TitleManager.CalculateHeroSuzerain(Hero.MainHero);
+			FeudalTitle suzerain = BannerKingsConfig.Instance.TitleManager.CalculateHeroSuzerain(Hero.MainHero);
 			if (suzerain != null)
 				Campaign.Current.EncyclopediaManager.GoToLink(suzerain.deJure.EncyclopediaLink);
 			else InformationManager.DisplayMessage(new InformationMessage("You currently have no suzerain."));
@@ -98,7 +98,7 @@ namespace Populations.UI
 		private void OnVassalsPress()
         {
 			List<InquiryElement> list = new List<InquiryElement>();
-			HashSet<FeudalTitle> titles = PopulationConfig.Instance.TitleManager.GetTitles(Hero.MainHero);
+			HashSet<FeudalTitle> titles = BannerKingsConfig.Instance.TitleManager.GetTitles(Hero.MainHero);
 			foreach (FeudalTitle title in titles)
             {
 				if (title.vassals != null )
@@ -107,7 +107,7 @@ namespace Populations.UI
 						Hero deJure = vassal.deJure;
 						if (deJure != Hero.MainHero && (deJure.Clan.Kingdom == Clan.PlayerClan.Kingdom || deJure.Clan == Clan.PlayerClan))
 						{
-							FeudalTitle deJureSuzerain = PopulationConfig.Instance.TitleManager.CalculateHeroSuzerain(deJure);
+							FeudalTitle deJureSuzerain = BannerKingsConfig.Instance.TitleManager.CalculateHeroSuzerain(deJure);
 							if (deJureSuzerain != null && deJureSuzerain.deFacto == Hero.MainHero)
 								list.Add(new InquiryElement(deJure, deJure.Name.ToString(),
 									new ImageIdentifier(CampaignUIHelper.GetCharacterCode(deJure.CharacterObject, false))
@@ -127,7 +127,7 @@ namespace Populations.UI
         {
 			Kingdom kingdom = _title.fief.OwnerClan.Kingdom;
 			if (kingdom != null)
-				PopulationConfig.Instance.TitleManager.ShowContract(kingdom.Leader, "Close");
+				BannerKingsConfig.Instance.TitleManager.ShowContract(kingdom.Leader, "Close");
 			else InformationManager.DisplayMessage(new InformationMessage("Unable to open contract: no kingdom associated with this title."));
 		}
 

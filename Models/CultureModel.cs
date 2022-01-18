@@ -1,9 +1,9 @@
 ﻿using System;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
-using static Populations.PopulationManager;
+using static BannerKings.Managers.PopulationManager;
 
-namespace Populations.Models
+namespace BannerKings.Models
 {
     class CultureModel : GameModel
     {
@@ -11,10 +11,10 @@ namespace Populations.Models
         public void CalculateAssimilationChange(Settlement settlement)
         {
             
-            if (PopulationConfig.Instance.PopulationManager != null && PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
+            if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
             {
                 float result = GetAssimilationChange(settlement);
-                PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(settlement);
+                PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
                 float finalResult = data.Assimilation + result;
                 if (finalResult > 1f)
                     finalResult = 1f;

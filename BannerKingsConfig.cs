@@ -1,13 +1,13 @@
-﻿using Populations.Managers;
+﻿using BannerKings.Managers;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
-using static Populations.Managers.TitleManager;
-using static Populations.PolicyManager;
-using static Populations.PopulationManager;
+using static BannerKings.Managers.TitleManager;
+using static BannerKings.Managers.PolicyManager;
+using static BannerKings.Managers.PopulationManager;
 
-namespace Populations
+namespace BannerKings
 {
-    public class PopulationConfig
+    public class BannerKingsConfig
     {
 
         public PopulationManager PopulationManager;
@@ -32,14 +32,14 @@ namespace Populations
                 new Dictionary<Kingdom, FeudalTitle>());
         }
 
-        public static PopulationConfig Instance
+        public static BannerKingsConfig Instance
         {
             get => ConfigHolder.CONFIG;
         }
 
         internal struct ConfigHolder
         {
-             public static PopulationConfig CONFIG = new PopulationConfig();
+             public static BannerKingsConfig CONFIG = new BannerKingsConfig();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Helpers;
+﻿using BannerKings.Managers;
+using Helpers;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.SandBox.GameComponents;
@@ -6,9 +7,9 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
-using static Populations.PopulationManager;
+using static BannerKings.Managers.PopulationManager;
 
-namespace Populations.Models
+namespace BannerKings.Models
 {
     public class ProsperityModel : DefaultSettlementProsperityModel
     {
@@ -16,7 +17,7 @@ namespace Populations.Models
 		public override ExplainedNumber CalculateHearthChange(Village village, bool includeDescriptions = false)
         {
             ExplainedNumber baseResult = base.CalculateHearthChange(village);
-            if (PopulationConfig.Instance.PopulationManager != null && PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(village.Settlement))
+            if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(village.Settlement))
                 new GrowthModel().CalculateHearthGrowth(village, ref baseResult);
 
             return baseResult;
@@ -25,19 +26,19 @@ namespace Populations.Models
         public override ExplainedNumber CalculateProsperityChange(Town fortification, bool includeDescriptions = false)
         {
             ExplainedNumber baseResult = base.CalculateProsperityChange(fortification, includeDescriptions);
-            if (PopulationConfig.Instance.PopulationManager != null && PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(fortification.Settlement))
+            if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(fortification.Settlement))
             {
 				ExplainedNumber explainedNumber = new ExplainedNumber(0f, true);
-				PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(fortification.Settlement);
+				PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(fortification.Settlement);
                 int craftsmen = data.GetTypeCount(PopType.Craftsmen);
 				explainedNumber.Add((float)craftsmen * 0.0005f, new TextObject("Craftsmen output"));
                 int slaves = data.GetTypeCount(PopType.Slaves);
 				explainedNumber.Add((float)slaves * -0.0001f, new TextObject("Slave population"));
 
-                if (PopulationConfig.Instance.PopulationManager.PopSurplusExists(fortification.Settlement, PopType.Slaves, true))
+                if (BannerKingsConfig.Instance.PopulationManager.PopSurplusExists(fortification.Settlement, PopType.Slaves, true))
 					explainedNumber.Add((float)slaves * -0.0003f, new TextObject("Slave surplus"));
                 
-                if (PopulationConfig.Instance.PolicyManager.IsPolicyEnacted(fortification.Settlement, PolicyManager.PolicyType.SELF_INVEST)) 
+                if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(fortification.Settlement, PolicyManager.PolicyType.SELF_INVEST)) 
                 {
                     ExplainedNumber income = new TaxModel().CalculateTownTax(fortification);
                     float tax = income.ResultNumber;

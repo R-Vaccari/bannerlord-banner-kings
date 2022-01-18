@@ -1,7 +1,7 @@
-﻿using Populations.Components;
-using Populations.Managers;
-using Populations.Models;
-using Populations.UI;
+﻿using BannerKings.Components;
+using BannerKings.Managers;
+using BannerKings.Models;
+using BannerKings.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,11 +12,11 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
-using static Populations.Managers.TitleManager;
-using static Populations.PolicyManager;
-using static Populations.PopulationManager;
+using static BannerKings.Managers.TitleManager;
+using static BannerKings.Managers.PolicyManager;
+using static BannerKings.Managers.PopulationManager;
 
-namespace Populations.Behaviors
+namespace BannerKings.Behaviors
 {
     public class SettlementBehavior : CampaignBehaviorBase
     {
@@ -38,10 +38,10 @@ namespace Populations.Behaviors
         {
             if (dataStore.IsSaving)
             {
-                if (PopulationConfig.Instance.PopulationManager != null && PopulationConfig.Instance.PolicyManager != null)
+                if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PolicyManager != null)
                 {
-                    populationManager = PopulationConfig.Instance.PopulationManager;
-                    policyManager = PopulationConfig.Instance.PolicyManager;
+                    populationManager = BannerKingsConfig.Instance.PopulationManager;
+                    policyManager = BannerKingsConfig.Instance.PolicyManager;
                 }
             }
 
@@ -52,21 +52,21 @@ namespace Populations.Behaviors
             {
                 if (populationManager == null && policyManager == null)
                 {
-                    PopulationConfig.Instance.InitManagers(new Dictionary<Settlement, PopulationData>(), new List<MobileParty>(),
+                    BannerKingsConfig.Instance.InitManagers(new Dictionary<Settlement, PopulationData>(), new List<MobileParty>(),
                     new Dictionary<Settlement, List<PolicyManager.PolicyElement>>(), new Dictionary<Settlement, PolicyManager.TaxType>(),
                     new Dictionary<Settlement, PolicyManager.MilitiaPolicy>(), new Dictionary<Settlement, WorkforcePolicy>(), new Dictionary<Settlement, TariffType>(),
                     new Dictionary<Settlement, CriminalPolicy>(), new HashSet<FeudalTitle>(), new Dictionary<Hero, HashSet<FeudalTitle>>(),
                     new Dictionary<Kingdom, FeudalTitle>());
                 }
-                else PopulationConfig.Instance.InitManagers(populationManager, policyManager, titleManager);
+                else BannerKingsConfig.Instance.InitManagers(populationManager, policyManager, titleManager);
             }
         }
 
         private void HourlyTickParty(MobileParty party)
         {
 
-            if (party != null && PopulationConfig.Instance.PopulationManager != null && 
-                PopulationConfig.Instance.PopulationManager.IsPopulationParty(party))
+            if (party != null && BannerKingsConfig.Instance.PopulationManager != null && 
+                BannerKingsConfig.Instance.PopulationManager.IsPopulationParty(party))
             {
                 PopulationPartyComponent component = (PopulationPartyComponent)party.PartyComponent;
                 Settlement target = component._target;
@@ -108,7 +108,7 @@ namespace Populations.Behaviors
                 else if (target == null)
                 {
                     DestroyPartyAction.Apply(null, party);
-                    PopulationConfig.Instance.PopulationManager.RemoveCaravan(party);
+                    BannerKingsConfig.Instance.PopulationManager.RemoveCaravan(party);
                 }
             }
 
@@ -130,11 +130,11 @@ namespace Populations.Behaviors
 
         private void OnSettlementEntered(MobileParty party, Settlement target, Hero hero)
         {
-            if (party != null && PopulationConfig.Instance.PopulationManager != null)
+            if (party != null && BannerKingsConfig.Instance.PopulationManager != null)
             {
-                if (PopulationConfig.Instance.PopulationManager.IsPopulationParty(party))
+                if (BannerKingsConfig.Instance.PopulationManager.IsPopulationParty(party))
                 {
-                    PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(target);
+                    PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(target);
                     PopulationPartyComponent component = (PopulationPartyComponent)party.PartyComponent;
 
                     if (component is MilitiaComponent && target.IsVillage) 
@@ -159,9 +159,9 @@ namespace Populations.Behaviors
                     }
 
                     DestroyPartyAction.Apply(null, party);
-                    PopulationConfig.Instance.PopulationManager.RemoveCaravan(party);
+                    BannerKingsConfig.Instance.PopulationManager.RemoveCaravan(party);
                 } else if (party.LeaderHero != null && party.LeaderHero == target.Owner && party.LeaderHero != Hero.MainHero
-                    && PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(target)) // AI choices
+                    && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(target)) // AI choices
                 {
                     Hero lord = party.LeaderHero;
                     Kingdom kingdom = lord.Clan.Kingdom;
@@ -177,22 +177,22 @@ namespace Populations.Behaviors
                             decisions.Add((PolicyType.SUBSIDIZE_MILITIA, atWar));
                         }
 
-                        TaxType tax = PopulationConfig.Instance.PolicyManager.GetSettlementTax(target);
+                        TaxType tax = BannerKingsConfig.Instance.PolicyManager.GetSettlementTax(target);
                         if (target.Town.LoyaltyChange < 0)
                         {
-                            if (!PopulationConfig.Instance.PolicyManager.IsPolicyEnacted(target, PolicyType.EXEMPTION))
+                            if (!BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(target, PolicyType.EXEMPTION))
                                 decisions.Add((PolicyType.EXEMPTION, true));
 
                             if (tax == TaxType.High)
-                                PopulationConfig.Instance.PolicyManager.UpdateTaxPolicy(target, TaxType.Standard);
+                                BannerKingsConfig.Instance.PolicyManager.UpdateTaxPolicy(target, TaxType.Standard);
                             else if (tax == TaxType.Standard)
-                                PopulationConfig.Instance.PolicyManager.UpdateTaxPolicy(target, TaxType.Low);
+                                BannerKingsConfig.Instance.PolicyManager.UpdateTaxPolicy(target, TaxType.Low);
                         } else
                         {
                             if (tax == TaxType.Standard)
-                                PopulationConfig.Instance.PolicyManager.UpdateTaxPolicy(target, TaxType.High);
+                                BannerKingsConfig.Instance.PolicyManager.UpdateTaxPolicy(target, TaxType.High);
                             else if (tax == TaxType.Low)
-                                PopulationConfig.Instance.PolicyManager.UpdateTaxPolicy(target, TaxType.Standard);
+                                BannerKingsConfig.Instance.PolicyManager.UpdateTaxPolicy(target, TaxType.Standard);
                         }
 
                         float filledCapacity = new GrowthModel().GetSettlementFilledCapacity(target);
@@ -228,10 +228,10 @@ namespace Populations.Behaviors
 
                         float hearths = target.Village.Hearth;
                         if (hearths < 300f)
-                            PopulationConfig.Instance.PolicyManager.UpdateTaxPolicy(target, TaxType.Low);
+                            BannerKingsConfig.Instance.PolicyManager.UpdateTaxPolicy(target, TaxType.Low);
                         else if (hearths < 1000f)
-                            PopulationConfig.Instance.PolicyManager.UpdateTaxPolicy(target, TaxType.Standard);
-                        else PopulationConfig.Instance.PolicyManager.UpdateTaxPolicy(target, TaxType.High);
+                            BannerKingsConfig.Instance.PolicyManager.UpdateTaxPolicy(target, TaxType.Standard);
+                        else BannerKingsConfig.Instance.PolicyManager.UpdateTaxPolicy(target, TaxType.High);
 
                         float filledCapacity = new GrowthModel().GetSettlementFilledCapacity(target);
                         bool growth = lord.Clan.Influence >= 300 && filledCapacity < 0.5f;
@@ -239,7 +239,7 @@ namespace Populations.Behaviors
                     }
 
                     foreach ((PolicyType, bool) decision in decisions) 
-                        PopulationConfig.Instance.PolicyManager.UpdatePolicy(target, decision.Item1, decision.Item2);
+                        BannerKingsConfig.Instance.PolicyManager.UpdatePolicy(target, decision.Item1, decision.Item2);
                         
                 }  
             }
@@ -249,8 +249,8 @@ namespace Populations.Behaviors
         {
             if (settlement == null) return;
             
-            if (PopulationConfig.Instance.PopulationManager == null)
-                PopulationConfig.Instance.InitManagers(new Dictionary<Settlement, PopulationData>(), new List<MobileParty>(),
+            if (BannerKingsConfig.Instance.PopulationManager == null)
+                BannerKingsConfig.Instance.InitManagers(new Dictionary<Settlement, PopulationData>(), new List<MobileParty>(),
                 new Dictionary<Settlement, List<PolicyManager.PolicyElement>>(), new Dictionary<Settlement, PolicyManager.TaxType>(),
                 new Dictionary<Settlement, PolicyManager.MilitiaPolicy>(), new Dictionary<Settlement, WorkforcePolicy>(), new Dictionary<Settlement, TariffType>(),
                 new Dictionary<Settlement, CriminalPolicy>(), new HashSet<FeudalTitle>(), new Dictionary<Hero, HashSet<FeudalTitle>>(),
@@ -259,12 +259,12 @@ namespace Populations.Behaviors
             UpdateSettlementPops(settlement);
             InitializeSettlementPolicies(settlement);
             // Send Slaves
-            if (PopulationConfig.Instance.PolicyManager.IsPolicyEnacted(settlement, PolicyManager.PolicyType.EXPORT_SLAVES) && DecideSendSlaveCaravan(settlement))
+            if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(settlement, PolicyManager.PolicyType.EXPORT_SLAVES) && DecideSendSlaveCaravan(settlement))
             {
                 Village target = null;
                 MBReadOnlyList<Village> villages = settlement.BoundVillages;
                 foreach (Village village in villages)
-                    if (village.Settlement != null && PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(village.Settlement) && !PopulationConfig.Instance.PopulationManager.PopSurplusExists(village.Settlement, PopType.Slaves))
+                    if (village.Settlement != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(village.Settlement) && !BannerKingsConfig.Instance.PopulationManager.PopSurplusExists(village.Settlement, PopType.Slaves))
                     {
                         target = village;
                         break;
@@ -281,8 +281,8 @@ namespace Populations.Behaviors
                 {
                     Settlement target = GetTownToTravel(settlement);
                     if (target != null)
-                        if (PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(target) &&
-                            PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
+                        if (BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(target) &&
+                            BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
                             SendTravellerParty(settlement, target);
                 }
             }
@@ -312,10 +312,10 @@ namespace Populations.Behaviors
 
         private void OnMobilePartyDestroyed(MobileParty mobileParty, PartyBase destroyerParty)
         {
-            if (mobileParty != null && PopulationConfig.Instance.PopulationManager != null &&
-                PopulationConfig.Instance.PopulationManager.IsPopulationParty(mobileParty))
+            if (mobileParty != null && BannerKingsConfig.Instance.PopulationManager != null &&
+                BannerKingsConfig.Instance.PopulationManager.IsPopulationParty(mobileParty))
             {
-                PopulationConfig.Instance.PopulationManager.RemoveCaravan(mobileParty);
+                BannerKingsConfig.Instance.PopulationManager.RemoveCaravan(mobileParty);
             }
         }
 
@@ -326,7 +326,7 @@ namespace Populations.Behaviors
             {
                 MBReadOnlyList<Village> villages = settlement.BoundVillages;
                 if (villages != null && villages.Count > 0)
-                    if (PopulationConfig.Instance.PopulationManager.PopSurplusExists(settlement, PopType.Slaves))
+                    if (BannerKingsConfig.Instance.PopulationManager.PopSurplusExists(settlement, PopType.Slaves))
                         return true;
             }
             return false;
@@ -357,7 +357,7 @@ namespace Populations.Behaviors
 
         private void SendTravellerParty(Settlement origin, Settlement target)
         {
-            PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(origin);
+            PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(origin);
             int random = MBRandom.RandomInt(1, 100);
             CharacterObject civilian;
             PopType type;
@@ -392,7 +392,7 @@ namespace Populations.Behaviors
         private void SendSlaveCaravan(Village target)
         {
             Settlement origin = target.MarketTown.Settlement;
-            PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(origin);
+            PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(origin);
             int slaves = (int)((double)data.GetTypeCount(PopType.Slaves) * 0.005d);
             data.UpdatePopType(PopType.Slaves, (int)((float)slaves * -1f));
             PopulationPartyComponent.CreateSlaveCaravan("slavecaravan_", origin, target.Settlement, "Slave Caravan from {0}", slaves);
@@ -403,11 +403,11 @@ namespace Populations.Behaviors
             AddDialog(campaignGameStarter);
             AddMenus(campaignGameStarter);
 
-            if (PopulationConfig.Instance.PopulationManager != null)
+            if (BannerKingsConfig.Instance.PopulationManager != null)
                 foreach (Settlement settlement in Settlement.All)
-                    if (PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
+                    if (BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
                     {
-                        PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(settlement);
+                        PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
                         if (data.Assimilation >= 1f)
                             settlement.Culture = settlement.Owner.Culture;
                     }
@@ -445,7 +445,7 @@ namespace Populations.Behaviors
         {
             args.optionLeaveType = GameMenuOption.LeaveType.Manage;
             Settlement currentSettlement = Settlement.CurrentSettlement;
-            return currentSettlement.OwnerClan == Hero.MainHero.Clan && PopulationConfig.Instance.PopulationManager != null && PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(currentSettlement);
+            return currentSettlement.OwnerClan == Hero.MainHero.Clan && BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(currentSettlement);
         }
 
         public static void game_menu_town_manage_town_on_consequence(MenuCallbackArgs args) => UIManager.instance.InitializePopulationWindow();
@@ -522,7 +522,7 @@ namespace Populations.Behaviors
         {
             bool value = false;
             if (party != null && party.MobileParty != null)
-                if (PopulationConfig.Instance.PopulationManager.IsPopulationParty(party.MobileParty))
+                if (BannerKingsConfig.Instance.PopulationManager.IsPopulationParty(party.MobileParty))
                     value = true;
             return value;
         }

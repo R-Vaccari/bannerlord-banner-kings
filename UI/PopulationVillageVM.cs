@@ -1,6 +1,6 @@
-﻿using Populations.Components;
-using Populations.Models;
-using Populations.UI.Items;
+﻿using BannerKings.Components;
+using BannerKings.Models;
+using BannerKings.UI.Items;
 using System;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
@@ -8,10 +8,10 @@ using TaleWorlds.Core;
 using TaleWorlds.Core.ViewModelCollection;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
-using static Populations.PolicyManager;
-using static Populations.PopulationManager;
+using static BannerKings.Managers.PolicyManager;
+using static BannerKings.Managers.PopulationManager;
 
-namespace Populations
+namespace BannerKings
 {
     namespace UI
     {
@@ -37,7 +37,7 @@ namespace Populations
             {
                 base.RefreshValues();
                 PopInfo.Clear();
-                PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(Settlement.CurrentSettlement);
+                PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(Settlement.CurrentSettlement);
                 if (data != null && data.Classes != null)
                 {
                     data.Classes.ForEach(popClass => PopInfo.Add(new PopulationInfoVM(
@@ -45,13 +45,13 @@ namespace Populations
                         Helpers.Helpers.GetClassHint(popClass.type, settlement.Culture))
                         ));
 
-                    List<PolicyElement> elements = PopulationConfig.Instance.PolicyManager.GetDefaultDecisions(settlement);
+                    List<PolicyElement> elements = BannerKingsConfig.Instance.PolicyManager.GetDefaultDecisions(settlement);
                     foreach (PolicyElement policy in elements)
                     {
                         PopulationOptionVM vm = new PopulationOptionVM()
                         .SetAsBooleanOption(policy.description, policy.isChecked, delegate (bool value)
                         {
-                            PopulationConfig.Instance.PolicyManager.UpdatePolicy(settlement, policy.type, value);
+                            BannerKingsConfig.Instance.PolicyManager.UpdatePolicy(settlement, policy.type, value);
                             this.RefreshValues();
                            
                         }, new TextObject(policy.hint));
@@ -102,7 +102,7 @@ namespace Populations
                     }, new TextObject("Raise the current militia of this village."));
 
                     int militiaIndex = 0;
-                    MilitiaPolicy militiaPolicy = PopulationConfig.Instance.PolicyManager.GetMilitiaPolicy(settlement);
+                    MilitiaPolicy militiaPolicy = BannerKingsConfig.Instance.PolicyManager.GetMilitiaPolicy(settlement);
                     if (militiaPolicy == MilitiaPolicy.Melee)
                         militiaIndex = 1;
                     else if (militiaPolicy == MilitiaPolicy.Ranged)
@@ -119,7 +119,7 @@ namespace Populations
 
 
                     int taxIndex = 0;
-                    TaxType taxPolicy = PopulationConfig.Instance.PolicyManager.GetSettlementTax(settlement);
+                    TaxType taxPolicy = BannerKingsConfig.Instance.PolicyManager.GetSettlementTax(settlement);
                     if (taxPolicy == TaxType.High)
                         taxIndex = 1;
                     else if (taxPolicy == TaxType.Low)
@@ -130,7 +130,7 @@ namespace Populations
                     TaxSelector.SetOnChangeAction(null);
                     foreach (TaxType policy in _taxPolicies)
                     {
-                        TaxItemVM item = new TaxItemVM(policy, true, PopulationConfig.Instance.PolicyManager.GetTaxHint(policy, settlement.IsVillage));
+                        TaxItemVM item = new TaxItemVM(policy, true, BannerKingsConfig.Instance.PolicyManager.GetTaxHint(policy, settlement.IsVillage));
                         TaxSelector.AddItem(item);
                     }
                     TaxSelector.SetOnChangeAction(OnTaxChange);
@@ -138,7 +138,7 @@ namespace Populations
 
 
                     int workIndex = 0;
-                    WorkforcePolicy workPolicy = PopulationConfig.Instance.PolicyManager.GetSettlementWork(settlement);
+                    WorkforcePolicy workPolicy = BannerKingsConfig.Instance.PolicyManager.GetSettlementWork(settlement);
                     if (workPolicy == WorkforcePolicy.Land_Expansion)
                         workIndex = 1;
                     else if (workPolicy == WorkforcePolicy.Martial_Law)
@@ -162,7 +162,7 @@ namespace Populations
                 if (obj.SelectedItem != null)
                 {
                     MilitiaItemVM selectedItem = obj.SelectedItem;
-                    PopulationConfig.Instance.PolicyManager.UpdateMilitiaPolicy(settlement, selectedItem.policy);
+                    BannerKingsConfig.Instance.PolicyManager.UpdateMilitiaPolicy(settlement, selectedItem.policy);
                 }
             }
 
@@ -171,7 +171,7 @@ namespace Populations
                 if (obj.SelectedItem != null)
                 {
                     TaxItemVM selectedItem = obj.SelectedItem;
-                    PopulationConfig.Instance.PolicyManager.UpdateTaxPolicy(settlement, selectedItem.policy);
+                    BannerKingsConfig.Instance.PolicyManager.UpdateTaxPolicy(settlement, selectedItem.policy);
                 }
             }
 
@@ -180,7 +180,7 @@ namespace Populations
                 if (obj.SelectedItem != null)
                 {
                     WorkItemVM selectedItem = obj.SelectedItem;
-                    PopulationConfig.Instance.PolicyManager.UpdateWorkPolicy(settlement, selectedItem.policy);
+                    BannerKingsConfig.Instance.PolicyManager.UpdateWorkPolicy(settlement, selectedItem.policy);
                 }
             }
 

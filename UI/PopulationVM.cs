@@ -3,7 +3,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 
-namespace Populations
+namespace BannerKings
 {
     namespace UI
     {
@@ -22,7 +22,7 @@ namespace Populations
                 this._settlement = _settlement;
                 overviewVM = new OverviewVM(_settlement, true);
                 managementVM = new ManagementVM(_settlement, false);
-                demesneVM = new DemesneVM(PopulationConfig.Instance.TitleManager.GetTitle(_settlement), false);
+                demesneVM = new DemesneVM(BannerKingsConfig.Instance.TitleManager.GetTitle(_settlement), false);
             }
 
             public override void RefreshValues()

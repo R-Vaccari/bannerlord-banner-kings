@@ -3,19 +3,19 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.SandBox.GameComponents;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
-using static Populations.PopulationManager;
+using static BannerKings.Managers.PopulationManager;
 
-namespace Populations.Models
+namespace BannerKings.Models
 {
     class EconomyModel : DefaultSettlementEconomyModel
     {
 
         public override float GetDailyDemandForCategory(Town town, ItemCategory category, int extraProsperity)
         {
-            if (PopulationConfig.Instance.PopulationManager != null && PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement)
+            if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement)
                 && category.IsValid && category.StringId != "banner")
             {
-                PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(town.Settlement);
+                PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
                 float nobles = data.GetTypeCount(PopType.Nobles);
                 float craftsmen = data.GetTypeCount(PopType.Craftsmen);
                 float serfs = data.GetTypeCount(PopType.Serfs);
@@ -69,7 +69,7 @@ namespace Populations.Models
 
         public override int GetTownGoldChange(Town town)
         {
-            if (PopulationConfig.Instance.PopulationManager != null && PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
+            if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
                 return GetMerchantIncome(town);
             
             else return base.GetTownGoldChange(town);
@@ -77,7 +77,7 @@ namespace Populations.Models
 
         public int GetMerchantIncome(Town town)
         {
-            PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(town.Settlement);
+            PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
             float slaves = data.GetTypeCount(PopType.Slaves);
             float efficiency = new FeudalWorkshopModel().GetPolicyEffectToProduction(town);
             return (int)(slaves * 0.3f * efficiency);

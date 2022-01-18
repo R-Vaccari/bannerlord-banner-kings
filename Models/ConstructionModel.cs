@@ -1,4 +1,5 @@
-﻿using Helpers;
+﻿using BannerKings.Managers;
+using Helpers;
 using System;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
@@ -6,16 +7,16 @@ using TaleWorlds.CampaignSystem.SandBox.GameComponents;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
-using static Populations.PopulationManager;
+using static BannerKings.Managers.PopulationManager;
 
-namespace Populations.Models
+namespace BannerKings.Models
 {
     class ConstructionModel : DefaultBuildingConstructionModel
     {
 
         public override ExplainedNumber CalculateDailyConstructionPower(Town town, bool includeDescriptions = false)
         {
-			if (PopulationConfig.Instance.PopulationManager != null && PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
+			if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
             {
 				ExplainedNumber result = new ExplainedNumber(0f, includeDescriptions, null);
 				this.CalculateDailyConstructionPowerInternal(town, ref result, includeDescriptions);
@@ -26,7 +27,7 @@ namespace Populations.Models
 
         public override int CalculateDailyConstructionPowerWithoutBoost(Town town)
         {
-			if (PopulationConfig.Instance.PopulationManager != null && PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
+			if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
 			{
 				ExplainedNumber result = new ExplainedNumber(0f, false, null);
 				return this.CalculateDailyConstructionPowerInternal(town, ref result, true); ;
@@ -36,9 +37,9 @@ namespace Populations.Models
 
         public override int GetBoostCost(Town town)
         {
-			if (PopulationConfig.Instance.PopulationManager != null && PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
+			if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
 			{
-				PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(town.Settlement);
+				PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
 				int craftsmen = data.GetTypeCount(PopType.Craftsmen);
 				return town.IsCastle ? (int)((float)craftsmen * 2f) : (int)((float)craftsmen / 2f);
 			}
@@ -47,9 +48,9 @@ namespace Populations.Models
 
         public override int GetBoostAmount(Town town)
         {
-			if (PopulationConfig.Instance.PopulationManager != null && PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
+			if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
 			{
-				PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(town.Settlement);
+				PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
 				int craftsmen = data.GetTypeCount(PopType.Craftsmen);
 				int slaves = data.GetTypeCount(PopType.Slaves);
 
@@ -62,20 +63,20 @@ namespace Populations.Models
 
 		private float GetSlaveWorkforce(Settlement settlement)
         {
-			PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(settlement);
+			PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
 			int slaves = data.GetTypeCount(PopType.Slaves);
 			return (float)slaves * SLAVE_CONSTRUCTION;
 		}
 
 		private int CalculateDailyConstructionPowerInternal(Town town, ref ExplainedNumber result, bool omitBoost = false)
 		{
-			PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(town.Settlement);
+			PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
 			int slaves = data.GetTypeCount(PopType.Slaves);
 			result.Add(GetSlaveWorkforce(town.Settlement), new TextObject("Slave workforce"), null);
 
 			result.Add(3f, new TextObject("Base"), null);
 
-			if (PopulationConfig.Instance.PolicyManager.GetSettlementWork(town.Settlement) == PolicyManager.WorkforcePolicy.Construction)
+			if (BannerKingsConfig.Instance.PolicyManager.GetSettlementWork(town.Settlement) == PolicyManager.WorkforcePolicy.Construction)
             {
 				int serfs = data.GetTypeCount(PopType.Serfs);
 				result.Add(((float)serfs * 0.15f) * SERF_CONSTRUCTION, new TextObject("Serfs from construction policy"), null);

@@ -1,10 +1,11 @@
-﻿using TaleWorlds.CampaignSystem;
+﻿using BannerKings.Managers;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.SandBox.GameComponents.Map;
 using TaleWorlds.Localization;
-using static Populations.PolicyManager;
-using static Populations.PopulationManager;
+using static BannerKings.Managers.PolicyManager;
+using static BannerKings.Managers.PopulationManager;
 
-namespace Populations.Models
+namespace BannerKings.Models
 {
     class SecurityModel : DefaultSettlementSecurityModel
     {
@@ -15,19 +16,19 @@ namespace Populations.Models
             if (town.IsCastle)
                 baseResult.Add(0.5f, new TextObject("Castle security"));
 
-            if (PopulationConfig.Instance.PopulationManager != null && PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
+            if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
             {
-                PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(town.Settlement);
+                PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
                 float assimilation = data.Assimilation - 1f + data.Assimilation;
                 baseResult.Add(assimilation, new TextObject("Cultural Assimilation"));
 
-                if (PopulationConfig.Instance.PolicyManager.GetSettlementWork(town.Settlement) == PolicyManager.WorkforcePolicy.Martial_Law)
+                if (BannerKingsConfig.Instance.PolicyManager.GetSettlementWork(town.Settlement) == PolicyManager.WorkforcePolicy.Martial_Law)
                 {
                     float militia = town.Militia;
                     baseResult.Add(militia * 0.01f, new TextObject("Martial Law policy"));
                 }
 
-                CriminalPolicy criminal = PopulationConfig.Instance.PolicyManager.GetCriminalPolicy(town.Settlement);
+                CriminalPolicy criminal = BannerKingsConfig.Instance.PolicyManager.GetCriminalPolicy(town.Settlement);
                 if (criminal == CriminalPolicy.Execution)
                     baseResult.Add(0.5f, new TextObject("Criminal policy"));
                 else if (criminal == CriminalPolicy.Forgiveness)

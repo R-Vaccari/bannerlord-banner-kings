@@ -1,12 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using BannerKings.Managers;
+using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.SandBox.GameComponents;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
-using static Populations.PopulationManager;
+using static BannerKings.Managers.PopulationManager;
 
-namespace Populations.Models
+namespace BannerKings.Models
 {
     class FoodModel : SettlementFoodModel
 	{
@@ -23,8 +24,8 @@ namespace Populations.Models
 
         public override ExplainedNumber CalculateTownFoodStocksChange(Town town, bool includeDescriptions = false)
         {
-			if (PopulationConfig.Instance.PopulationManager != null && 
-				PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement)) 
+			if (BannerKingsConfig.Instance.PopulationManager != null && 
+				BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement)) 
 				return CalculateTownFoodChangeInternal(town, includeDescriptions);
 			else return new DefaultSettlementFoodModel().CalculateTownFoodStocksChange(town, includeDescriptions);
         }
@@ -35,12 +36,12 @@ namespace Populations.Models
 			ExplainedNumber result = new ExplainedNumber(0f, includeDescriptions, null);
 
 			// ------- Pops / Prosperity consumption ---------
-			PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(town.Settlement);
+			PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
 			int citySerfs = data.GetTypeCount(PopType.Serfs);
 			if (!town.IsUnderSiege)
             {
 				float serfProduction = (float)citySerfs * SERF_FOOD * (town.IsCastle ? 1f : 0.4f);
-				if (PopulationConfig.Instance.PolicyManager.GetSettlementWork(town.Settlement) == PolicyManager.WorkforcePolicy.Construction)
+				if (BannerKingsConfig.Instance.PolicyManager.GetSettlementWork(town.Settlement) == PolicyManager.WorkforcePolicy.Construction)
 					serfProduction *= 0.85f;
 					
 				result.Add((float)serfProduction, new TextObject("Serfs production", null));
@@ -73,7 +74,7 @@ namespace Populations.Models
 			int prisoners = town.Settlement.Party.NumberOfPrisoners;
 			result.Add((float)(-prisoners / (NumberOfMenOnGarrisonToEatOneFood * 2)), new TextObject("Prisoner rations"), null);
 
-			if (PopulationConfig.Instance.PolicyManager.IsPolicyEnacted(town.Settlement, PolicyManager.PolicyType.CONSCRIPTION))
+			if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(town.Settlement, PolicyManager.PolicyType.CONSCRIPTION))
 				result.AddFactor(-0.25f, new TextObject("Conscription policy"));
 	
 			if (town.Governor != null)
@@ -90,7 +91,7 @@ namespace Populations.Models
 					result.AddFactor(DefaultPerks.Steward.MasterOfWarcraft.SecondaryBonus, DefaultPerks.Steward.MasterOfWarcraft.Name);	
 			}
 
-			if (PopulationConfig.Instance.PolicyManager.GetSettlementWork(town.Settlement) == PolicyManager.WorkforcePolicy.Martial_Law)
+			if (BannerKingsConfig.Instance.PolicyManager.GetSettlementWork(town.Settlement) == PolicyManager.WorkforcePolicy.Martial_Law)
             {
 				float militia = town.Militia;
 				result.Add(militia * -0.05f, new TextObject("Martial Law policy"));
@@ -153,9 +154,9 @@ namespace Populations.Models
 
 		private float CalculateVillageProduction(Village village)
         {
-			if (PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(village.Settlement))
+			if (BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(village.Settlement))
 			{
-				PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(village.Settlement);
+				PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(village.Settlement);
 				float food = 0;
 				int nobles = data.GetTypeCount(PopType.Nobles);
 				int serfs = data.GetTypeCount(PopType.Serfs);
@@ -192,7 +193,7 @@ namespace Populations.Models
 			ExplainedNumber result = new ExplainedNumber(0f, includeDescriptions, null);
 
 			// ------- Pops / Prosperity consumption ---------
-			PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(town.Settlement);
+			PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
 			int citySerfs = data.GetTypeCount(PopType.Serfs);
 
 			float serfConsumption = (float)citySerfs * SERF_FOOD * -1f;
@@ -218,7 +219,7 @@ namespace Populations.Models
 			int garrisonConsumption = (garrisonParty != null) ? garrisonParty.Party.NumberOfAllMembers : 0;
 			result.Add((float)(-garrisonConsumption / NumberOfMenOnGarrisonToEatOneFood), new TextObject("Garrison consumption"), null);
 
-			if (PopulationConfig.Instance.PolicyManager.IsPolicyEnacted(town.Settlement, PolicyManager.PolicyType.CONSCRIPTION))
+			if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(town.Settlement, PolicyManager.PolicyType.CONSCRIPTION))
 				result.AddFactor(-0.25f, new TextObject("Conscription policy"));
 
 			if (town.Governor != null)

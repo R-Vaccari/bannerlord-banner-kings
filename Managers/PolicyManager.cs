@@ -2,7 +2,7 @@
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.SaveSystem;
 
-namespace Populations
+namespace BannerKings.Managers
 {
     public class PolicyManager
     {
@@ -47,7 +47,7 @@ namespace Populations
 
         public static void InitializeSettlementPolicies(Settlement settlement)
         {
-            if (!PopulationConfig.Instance.PolicyManager.POLICIES.ContainsKey(settlement))
+            if (!BannerKingsConfig.Instance.PolicyManager.POLICIES.ContainsKey(settlement))
             {
                 List<PolicyElement> policies = new List<PolicyElement>();
                 if (settlement.IsTown)
@@ -75,7 +75,7 @@ namespace Populations
                     policies.Add(new PolicyElement("Exempt nobles from taxes", "Exempt nobles from taxes, making them vouch in your favor", false, PolicyType.EXEMPTION));
                 }
 
-                PopulationConfig.Instance.PolicyManager.POLICIES.Add(settlement, policies);
+                BannerKingsConfig.Instance.PolicyManager.POLICIES.Add(settlement, policies);
             }  
         }
 

@@ -4,7 +4,7 @@ using TaleWorlds.Engine.GauntletUI;
 using TaleWorlds.Engine.Screens;
 using TaleWorlds.Library;
 
-namespace Populations
+namespace BannerKings
 {
     namespace UI
     {

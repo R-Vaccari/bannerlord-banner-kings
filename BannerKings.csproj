@@ -7,8 +7,8 @@
     <ProjectGuid>{65517072-806E-4646-AFC7-427B9BFA40DA}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Populations</RootNamespace>
-    <AssemblyName>Populations</AssemblyName>
+    <RootNamespace>BannerKings</RootNamespace>
+    <AssemblyName>BannerKings</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -17,7 +17,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>D:\SteamLibrary\steamapps\common\Mount &amp; Blade II Bannerlord\Modules\Populations\bin\Win64_Shipping_Client\</OutputPath>
+    <OutputPath>D:\SteamLibrary\steamapps\common\Mount &amp; Blade II Bannerlord\Modules\BannerKings\bin\Win64_Shipping_Client\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -126,7 +126,7 @@
     <Compile Include="SaveDefiner.cs" />
     <Compile Include="Models\AdministrativeModel.cs" />
     <Compile Include="Models\SecurityModel.cs" />
-    <Compile Include="PopulationConfig.cs" />
+    <Compile Include="BannerKingsConfig.cs" />
     <Compile Include="Components\PopulationPartyComponent.cs" />
     <Compile Include="Models\CultureModel.cs" />
     <Compile Include="Models\VillageProductionModel.cs" />

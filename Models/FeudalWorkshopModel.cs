@@ -1,9 +1,10 @@
-﻿using TaleWorlds.CampaignSystem;
+﻿using BannerKings.Managers;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.SandBox.GameComponents;
 using TaleWorlds.Library;
-using static Populations.PopulationManager;
+using static BannerKings.Managers.PopulationManager;
 
-namespace Populations.Models
+namespace BannerKings.Models
 {
     class FeudalWorkshopModel : DefaultWorkshopModel
     {
@@ -11,13 +12,13 @@ namespace Populations.Models
         public override float GetPolicyEffectToProduction(Town town)
         {
             float baseResult = base.GetPolicyEffectToProduction(town);
-            if (PopulationConfig.Instance.PopulationManager != null && PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
+            if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
             {
-                PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(town.Settlement);
+                PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
                 float craftsmen = data.GetTypeCount(PopType.Craftsmen);
                 baseResult  += MathF.Min((craftsmen / 250f) * 0.020f, CRAFTSMEN_EFFECT_CAP);
 
-                if (PopulationConfig.Instance.PolicyManager.GetSettlementWork(town.Settlement) == PolicyManager.WorkforcePolicy.Martial_Law)
+                if (BannerKingsConfig.Instance.PolicyManager.GetSettlementWork(town.Settlement) == PolicyManager.WorkforcePolicy.Martial_Law)
                     baseResult -= 0.25f;
             }
             return baseResult;

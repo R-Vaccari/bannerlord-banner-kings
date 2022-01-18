@@ -1,10 +1,10 @@
 ﻿using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.SandBox.GameComponents;
 using TaleWorlds.Localization;
-using static Populations.PopulationManager;
-using static Populations.PolicyManager;
+using static BannerKings.Managers.PopulationManager;
+using static BannerKings.Managers.PolicyManager;
 
-namespace Populations.Models
+namespace BannerKings.Models
 {
     class InfluenceModel : DefaultClanPoliticsModel
     {
@@ -14,18 +14,18 @@ namespace Populations.Models
 
             foreach (Settlement settlement in clan.Settlements)
             {
-                if (PopulationConfig.Instance.PopulationManager != null && PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
+                if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
                 {
-                    PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(settlement);
+                    PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
                     int nobles = data.GetTypeCount(PopType.Nobles);
-                    if (PopulationConfig.Instance.PopulationManager.PopSurplusExists(settlement, PopType.Nobles, true))
+                    if (BannerKingsConfig.Instance.PopulationManager.PopSurplusExists(settlement, PopType.Nobles, true))
                     {
-                        int extra = PopulationConfig.Instance.PopulationManager.GetPopCountOverLimit(settlement, PopType.Nobles);
+                        int extra = BannerKingsConfig.Instance.PopulationManager.GetPopCountOverLimit(settlement, PopType.Nobles);
                         baseResult.Add(((float)extra * -2f) * 0.01f, new TextObject(string.Format("Excess noble population at {0}", settlement.Name)));
                     }
                     baseResult.Add((float)nobles * 0.01f, new TextObject(string.Format("Nobles influence from {0}", settlement.Name)));
 
-                    if (PopulationConfig.Instance.PolicyManager.IsPolicyEnacted(settlement, PolicyType.POP_GROWTH))
+                    if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(settlement, PolicyType.POP_GROWTH))
                     {
                         if (baseResult.ResultNumber > 1)
                             baseResult.AddFactor(-0.5f, new TextObject(string.Format("Population growth policy at {0}", settlement.Name)));

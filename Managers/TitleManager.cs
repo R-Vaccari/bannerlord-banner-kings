@@ -1,5 +1,5 @@
-﻿using Populations.Models;
-using Populations.UI.Information;
+﻿using BannerKings.Models;
+using BannerKings.UI.Information;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,9 +10,8 @@ using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
-using static Populations.PopulationManager;
 
-namespace Populations.Managers
+namespace BannerKings.Managers
 {
     public class TitleManager
     {
@@ -189,7 +188,7 @@ namespace Populations.Managers
 
         public void InitializeTitles()
         {
-            XmlDocument doc = Helpers.Helpers.CreateDocumentFromXmlFile(BasePath.Name + "Modules/Populations/ModuleData/titles.xml");
+            XmlDocument doc = Helpers.Helpers.CreateDocumentFromXmlFile(BasePath.Name + "Modules/BannerKings/ModuleData/titles.xml");
             XmlNode titlesNode = doc.ChildNodes[1].ChildNodes[0];
             bool autoGenerate = bool.Parse(titlesNode.Attributes["autoGenerate"].Value);
  
@@ -288,8 +287,8 @@ namespace Populations.Managers
 
         public void ShowContract(Hero lord, string buttonString)
         {
-            FeudalTitle title = PopulationConfig.Instance.TitleManager.GetHighestTitle(lord);
-            string description = PopulationConfig.Instance.TitleManager.GetContractText(title);
+            FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(lord);
+            string description = BannerKingsConfig.Instance.TitleManager.GetContractText(title);
             InformationManager.ShowInquiry(new InquiryData(string.Format("Enfoeffement Contract for {0}", title.name),
                 description, true, false, buttonString, "", null, null), false);
         }

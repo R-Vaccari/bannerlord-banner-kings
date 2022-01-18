@@ -1,8 +1,8 @@
 ﻿using TaleWorlds.CampaignSystem.ViewModelCollection.Encyclopedia.EncyclopediaItems;
 using TaleWorlds.Library;
-using static Populations.Managers.TitleManager;
+using static BannerKings.Managers.TitleManager;
 
-namespace Populations.UI.Items
+namespace BannerKings.UI.Items
 {
     public class VassalTitleVM : EncyclopediaSettlementVM
     {

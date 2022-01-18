@@ -2,9 +2,9 @@
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.SandBox.GameComponents.Map;
 using TaleWorlds.Core;
-using static Populations.PopulationManager;
+using static BannerKings.Managers.PopulationManager;
 
-namespace Populations.Models
+namespace BannerKings.Models
 {
     class VillageProductionModel : DefaultVillageProductionCalculatorModel
     {
@@ -12,10 +12,10 @@ namespace Populations.Models
         private static readonly float SLAVE_PRODUCTION = 0.00125f;
         public override float CalculateDailyProductionAmount(Village village, ItemObject item)
         {
-            if (village.Settlement != null && village.VillageState == Village.VillageStates.Normal && PopulationConfig.Instance.PopulationManager != null && PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(village.Settlement))
+            if (village.Settlement != null && village.VillageState == Village.VillageStates.Normal && BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(village.Settlement))
             {
                 ExplainedNumber explainedNumber = new ExplainedNumber(0f, false, null);
-                PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(village.Settlement);
+                PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(village.Settlement);
                 int serfs = data.GetTypeCount(PopType.Serfs);
                 int slaves = data.GetTypeCount(PopType.Slaves);
 

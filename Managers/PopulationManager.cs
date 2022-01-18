@@ -1,5 +1,5 @@
-﻿using Populations.Components;
-using Populations.Models;
+﻿using BannerKings.Components;
+using BannerKings.Models;
 using System;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
@@ -7,7 +7,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.SaveSystem;
 
-namespace Populations
+namespace BannerKings.Managers
 {
     public class PopulationManager
     {
@@ -62,7 +62,7 @@ namespace Populations
 
             float assimilation = settlement.Culture == settlement.OwnerClan.Culture ? 1f : 0f;
             PopulationData data = new PopulationData(classes, assimilation);
-            PopulationConfig.Instance.PopulationManager.AddSettlementData(settlement, data);
+            BannerKingsConfig.Instance.PopulationManager.AddSettlementData(settlement, data);
         }
 
         public bool PopSurplusExists(Settlement settlement, PopType type, bool maxSurplus = false)
@@ -82,7 +82,7 @@ namespace Populations
             if ((settlement.IsCastle || (settlement.IsTown && settlement.Town != null)
                 || (settlement.IsVillage && settlement.Village != null)) && settlement.OwnerClan != null)
             {
-                if (!PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
+                if (!BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
                     InitializeSettlementPops(settlement);
                 else
                 {

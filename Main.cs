@@ -1,6 +1,6 @@
 ﻿using HarmonyLib;
-using Populations.Behaviors;
-using Populations.Models;
+using BannerKings.Behaviors;
+using BannerKings.Models;
 using System;
 using System.Linq;
 using System.Collections.Generic;
@@ -11,16 +11,17 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.MountAndBlade;
-using static Populations.Managers.TitleManager;
-using static Populations.PopulationManager;
+using static BannerKings.Managers.TitleManager;
+using static BannerKings.Managers.PopulationManager;
 using TaleWorlds.CampaignSystem.SandBox.CampaignBehaviors;
 using System.Reflection;
 using TaleWorlds.CampaignSystem.ViewModelCollection.ClanManagement.Categories;
 using TaleWorlds.CampaignSystem.ViewModelCollection;
 using SandBox;
 using TaleWorlds.ObjectSystem;
+using BannerKings.Managers;
 
-namespace Populations
+namespace BannerKings
 {
     public class Main : MBSubModuleBase
     {
@@ -73,8 +74,8 @@ namespace Populations
         {
             static bool Prefix(MobileParty sellerParty, TroopRoster prisoners, Settlement currentSettlement, bool applyGoldChange = true)
             {
-                if (PopulationConfig.Instance.PopulationManager != null && PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(currentSettlement))
-                    PopulationConfig.Instance.PopulationManager.GetPopData(currentSettlement).UpdatePopType(
+                if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(currentSettlement))
+                    BannerKingsConfig.Instance.PopulationManager.GetPopData(currentSettlement).UpdatePopType(
                         PopulationManager.PopType.Slaves, Helpers.Helpers.GetRosterCount(prisoners));
 
                 return true;
@@ -86,8 +87,8 @@ namespace Populations
         {
             static bool Prefix(MobileParty sellerParty, TroopRoster prisoners, Settlement currentSettlement)
             {
-                if (PopulationConfig.Instance.PopulationManager != null && PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(currentSettlement))
-                    PopulationConfig.Instance.PopulationManager.GetPopData(currentSettlement).UpdatePopType(
+                if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(currentSettlement))
+                    BannerKingsConfig.Instance.PopulationManager.GetPopData(currentSettlement).UpdatePopType(
                         PopulationManager.PopType.Slaves, Helpers.Helpers.GetRosterCount(prisoners));
 
                 return true;
@@ -99,9 +100,9 @@ namespace Populations
         {
             static bool Prefix(Settlement settlement, Hero newOwner, Hero capturerHero, ChangeOwnerOfSettlementAction.ChangeOwnerOfSettlementDetail detail)
             {
-                if (PopulationConfig.Instance.PopulationManager != null && PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
+                if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
                 {
-                    PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(settlement);
+                    PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
                     CultureObject settlementCulture = settlement.Culture;
                     CultureObject originalOwnerCulture = settlement.Owner.Culture;
                     CultureObject newCulture = newOwner.Culture;
@@ -118,7 +119,7 @@ namespace Populations
                         data.Assimilation = result;
                     }
 
-                    PopulationConfig.Instance.TitleManager.ApplyOwnerChange(settlement, newOwner);
+                    BannerKingsConfig.Instance.TitleManager.ApplyOwnerChange(settlement, newOwner);
                 }
 
                 return true;
@@ -130,9 +131,9 @@ namespace Populations
         {
             static bool Prefix(ref Town __instance, ref int __result)
             {
-                if (PopulationConfig.Instance.PopulationManager != null && PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(__instance.Settlement))
+                if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(__instance.Settlement))
                 {
-                    PopulationData data = PopulationConfig.Instance.PopulationManager.GetPopData(__instance.Settlement);
+                    PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(__instance.Settlement);
                     int total = data.TotalPop;
                     int result = (int)((float)total / 10f);
 
@@ -200,7 +201,7 @@ namespace Populations
         {
             static void Postfix(ref string __result, Hero o)
             {
-                HashSet<FeudalTitle> titles = PopulationConfig.Instance.TitleManager.GetTitles(o);
+                HashSet<FeudalTitle> titles = BannerKingsConfig.Instance.TitleManager.GetTitles(o);
                 if (titles != null && titles.Count > 0)
                 {
                     string desc = "";
@@ -226,10 +227,10 @@ namespace Populations
         {
             static void Postfix()
             {
-                if (PopulationConfig.Instance.TitleManager != null)
+                if (BannerKingsConfig.Instance.TitleManager != null)
                 {
                     PartyBase party = PlayerEncounter.EncounteredParty;
-                    PopulationConfig.Instance.TitleManager.ShowContract(party.LeaderHero, "I accept");
+                    BannerKingsConfig.Instance.TitleManager.ShowContract(party.LeaderHero, "I accept");
                 }
             }
         }
@@ -265,7 +266,7 @@ namespace Populations
                                 hint = new TextObject("{=slzfQzl3}This hero is lost", null).ToString();
                             else if (hero.HeroState == Hero.CharacterStates.Fugitive)
                                 hint = new TextObject("{=dD3kRDHi}This hero is a fugitive and running from their captors. They will be available after some time.", null).ToString();
-                            else if (!PopulationConfig.Instance.TitleManager.IsHeroKnighted(hero))
+                            else if (!BannerKingsConfig.Instance.TitleManager.IsHeroKnighted(hero))
                                 hint = new TextObject("A hero must be knighted and granted land before being able to raise a personal retinue. You may bestow knighthood by talking to them.", null).ToString();
                             else isEnabled = true;
                             
@@ -291,9 +292,9 @@ namespace Populations
         {
             static void Postfix(Settlement __instance, ref Hero __result)
             {
-                if (__instance.IsVillage && PopulationConfig.Instance.TitleManager != null)
+                if (__instance.IsVillage && BannerKingsConfig.Instance.TitleManager != null)
                 {
-                    FeudalTitle title = PopulationConfig.Instance.TitleManager.GetTitle(__instance);
+                    FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetTitle(__instance);
                     if (title != null)
                         __result = title.deFacto;
                 }
@@ -351,7 +352,7 @@ namespace Populations
             {
                 static bool Prefix(ref Dictionary<MobileParty, List<Settlement>> ____previouslyChangedVillagerTargetsDueToEnemyOnWay, MobileParty mobileParty, Settlement settlement, Hero hero)
                 {
-                    if (PopulationConfig.Instance.PopulationManager != null && PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
+                    if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
                     {
 
                         if (mobileParty != null && mobileParty.IsActive && mobileParty.IsVillager)
@@ -415,7 +416,7 @@ namespace Populations
             {
                 static bool Prefix(ItemCategory productionInput, Town town, Workshop workshop, bool doNotEffectCapital)
                 {
-                    if (PopulationConfig.Instance.PopulationManager != null && PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
+                    if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
                     {
                         ItemRoster itemRoster = town.Owner.ItemRoster;
                         int num = itemRoster.FindIndex((ItemObject x) => x.ItemCategory == productionInput);
@@ -458,12 +459,12 @@ namespace Populations
             {
                 static bool Prefix(Town town, Dictionary<ItemCategory, float> categoryDemand, Dictionary<ItemCategory, int> saleLog)
                 {
-                    if (PopulationConfig.Instance.PopulationManager != null && PopulationConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
+                    if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
                     {
                         saleLog.Clear();
                         TownMarketData marketData = town.MarketData;
                         ItemRoster itemRoster = town.Owner.ItemRoster;
-                        PopulationData popData = PopulationConfig.Instance.PopulationManager.GetPopData(town.Settlement);
+                        PopulationData popData = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
                         for (int i = itemRoster.Count - 1; i >= 0; i--)
                         {
                             ItemRosterElement elementCopyAtIndex = itemRoster.GetElementCopyAtIndex(i);

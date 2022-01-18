@@ -1,7 +1,7 @@
 ﻿using TaleWorlds.Core.ViewModelCollection;
-using static Populations.PolicyManager;
+using static BannerKings.Managers.PolicyManager;
 
-namespace Populations.UI.Items
+namespace BannerKings.UI.Items
 {
     public class TaxItemVM : SelectorItemVM
     {

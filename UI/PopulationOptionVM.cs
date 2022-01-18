@@ -3,7 +3,7 @@ using TaleWorlds.Core.ViewModelCollection;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace Populations.UI
+namespace BannerKings.UI
 {
 	// Token: 0x02000020 RID: 32
 	public class PopulationOptionVM : ViewModel
