@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<base xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" type="string">
+    
+	
+	<titles autoGenerate="true">  
+
+		<kingdom faction="Vlandia" contract="feudal" deJure="lord_4_1">
+			<duchy name="Sargotha" deJure="lord_4_1">
+				<county settlement="Sargot"  deJure="lord_4_1">
+					<barony settlement="Talivel Castle" deJure="lord_4_1"/>
+				</county>
+				<county settlement="Charas"  deJure="lord_4_16">
+					<barony settlement="Usanc Castle" deJure="lord_V11_l"/>
+				</county>
+			</duchy>
+			<duchy name="Biscanend" deJure="lord_4_6">
+				<county settlement="Jaculan"  deJure="lord_4_6"/>
+				<county settlement="Galend"  deJure="lord_4_1">
+					<barony settlement="Hongard Castle" deJure="lord_4_27"/>
+				</county>
+			</duchy>
+			<duchy name="Paravenon" deJure="lord_4_3">
+				<county settlement="Pravend"  deJure="lord_4_3">
+					<barony settlement="Drapand Castle" deJure="lord_4_3"/>
+				</county>
+				<county settlement="Ocs Hall"  deJure="lord_4_23">
+					<barony settlement="Verecsand Castle" deJure="lord_4_23"/>
+				</county>
+			</duchy>
+			<duchy name="Eborend" deJure="lord_4_22">
+				<county settlement="Rovalt"  deJure="lord_4_22">
+					<barony settlement="Ormanfard Castle" deJure="lord_4_28"/>
+					<barony settlement="Caleus Castle" deJure="lord_4_22"/>
+				</county>
+				<county settlement="Ostican"  deJure="lord_4_24">
+					<barony settlement="Tirby Castle" deJure="lord_4_21"/>
+				</county>
+			</duchy>
+		</kingdom>
+		
+		<kingdom faction="Battania" contract="tribal" deJure="lord_5_1">
+			<duchy name="Ardus Dunnath" deJure="lord_5_1">
+				<county settlement="Pen Cannoc"  deJure="lord_5_16">
+					<barony settlement="Ab Comer Castle" deJure="lord_B8_l"/>
+					<barony settlement="Llanoc Hen Castle" deJure="lord_5_15"/>
+				</county>
+				<county settlement="Marunath"  deJure="lord_5_1">
+					<barony settlement="Rhemtoil Castle" deJure="lord_5_1"/>
+				</county>
+			</duchy>
+			<duchy name="Cadd Lenthu" deJure="lord_5_3">
+				<county settlement="Dunglanys"  deJure="lord_5_3">
+					<barony settlement="Aster Castle" deJure="lord_5_3"/>
+				</county>
+				<county settlement="Car Banseth"  deJure="lord_5_5">
+					<barony settlement="Druimmor Castle" deJure="lord_5_17"/>
+					<barony settlement="Pendraic Castle" deJure="lord_5_5"/>
+				</county>
+			</duchy>
+			<duchy name="Ardus Lendh" deJure="lord_5_14">
+				<county settlement="Seonon"  deJure="lord_5_14">
+					<barony settlement="Aster Castle" deJure="lord_5_14"/>
+				</county>
+			</duchy>
+		</kingdom>
+		
+		<kingdom faction="Sturgia" contract="tribal" deJure="lord_2_1">
+			<duchy name="Kachyar" deJure="lord_5_1">
+				<county settlement="Revyl" deJure="lord_2_17">
+					<barony settlement="Ustokol Castle" deJure="lord_2_17"/>
+					<barony settlement="Nevyansk Castle" deJure="lord_2_1"/>
+				</county>
+				<county settlement="Varcheg"  deJure="lord_2_1">
+					<barony settlement="Kranirog Castle" deJure="lord_S9_l"/>
+				</county>
+			</duchy>
+			<duchy name="Chertyg" deJure="lord_2_16">
+				<county settlement="Varnovapol"  deJure="lord_2_16">
+					<barony settlement="Vladiv Castle" deJure="lord_2_16"/>
+				</county>
+				<county settlement="Sibir" deJure="lord_2_18">
+				</county>
+			</duchy>
+			<duchy name="Iltan" deJure="lord_2_5">
+				<county settlement="Tyal"  deJure="lord_2_5">
+					<barony settlement="Urikskala Castle" deJure="lord_2_5"/>
+					<barony settlement="Dinar Castle" deJure="lord_2_5"/>
+				</county>
+			</duchy>
+		</kingdom>
+		
+    </titles>
+	
+	
+</base>
