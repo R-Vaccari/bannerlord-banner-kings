@@ -1,0 +1,1260 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<NPCCharacters>
+
+
+	<NPCCharacter id="craftsman_empire"
+                default_group="Infantry"
+                level="1"
+                name="{=!}Empire Craftsman"
+                occupation="Villager"
+                culture="Culture.empire"
+                skill_template="SkillSet.infantry_heavyinfantry_level1_template_skills">
+    <face>
+      <!--face_key value="0009013000000000000000000000000000000000000000000000000000000000000a00050000000000000000000000000000000000000000fffffffffc880000" max_value="001cffffc000390ffff88affaa9efffffffffffffff7ffffffff9ffffffffffa0007effff7ffffff000000000000000000000000000000000000000001509181" /-->
+      <BodyProperties version="4"
+                      age="25.57"
+                      weight="0.3164"
+                      build="0.2485"
+                      key="00052008000000010070030000001603003300110010200000000001010000000144501304010000000000000000000000000000000000000000000010880000" />
+      <BodyPropertiesMax version="4"
+                         age="69.94"
+                         weight="0.9923"
+                         build="0.7052"
+                         key="0010F80FC000370FFFFFEFEFFEEFFF7EEEFFFFFFFEF7EFFEFFFFFFFFFEFFFFFF07CBF0780CFFFFEF000000000000000000000000000000000000000061809105" />
+    </face>
+    <skills></skills>
+    <Equipments>
+      <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.imperial_axe_t3" />
+        <equipment slot="Head" id="Item.merchants_hat" />
+	    <equipment slot="Cape" id="Item.a_battania_cloak_a" />
+	    <equipment slot="Body" id="Item.AO_imperial_scouts_tunic" />
+	    <equipment slot="Leg" id="Item.leather_shoes" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+	  	<equipment slot="Item0" id="Item.tzkurion_axe_t3" />
+	    <equipment slot="Body" id="Item.sleeveless_padded_coat" />
+	    <equipment slot="Leg" id="Item.wrapped_shoes" />
+		<equipment slot="Gloves" id="Item.leather_gloves" />
+		<equipment slot="Head" id="Item.AR_roman_hat_b" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.sturgia_axe_3_t3" />
+	    <equipment slot="Head" id="Item.leather_cap" />
+        <equipment slot="Body" id="Item.imperial_padded_cloth" />
+	    <equipment slot="Leg" id="Item.wrapped_shoes" />
+		<equipment slot="Gloves" id="Item.leather_gloves" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.light_mace_t3" />
+        <equipment slot="Head" id="Item.merchants_hat" />
+        <equipment slot="Body" id="Item.padded_cloth_with_strips" />
+	    <equipment slot="Leg" id="Item.fine_town_boots" />
+		<equipment slot="Gloves" id="Item.padded_vambrace" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.empire_mace_1_t2" />
+        <equipment slot="Head" id="Item.open_padded_coif" />
+	    <equipment slot="Cape" id="Item.scarf" />
+	    <equipment slot="Body" id="Item.AO_imperial_scouts_tunic" />
+	    <equipment slot="Leg" id="Item.leather_shoes" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.empire_sword_3_t3" />
+	    <equipment slot="Cape" id="Item.wrapped_scarf" />
+	    <equipment slot="Body" id="Item.leather_apron" />
+	    <equipment slot="Leg" id="Item.strapped_leather_boots" />
+      </EquipmentRoster>
+    </Equipments>
+  </NPCCharacter>
+  
+  <NPCCharacter id="noble_empire"
+                default_group="Cavalry"
+                level="1"
+                name="{=!}Empire Nobile"
+                occupation="Villager"
+                culture="Culture.empire"
+                skill_template="SkillSet.infantry_heavyinfantry_level1_template_skills">
+    <face>
+      <!--face_key value="0009013000000000000000000000000000000000000000000000000000000000000a00050000000000000000000000000000000000000000fffffffffc880000" max_value="001cffffc000390ffff88affaa9efffffffffffffff7ffffffff9ffffffffffa0007effff7ffffff000000000000000000000000000000000000000001509181" /-->
+      <BodyProperties version="4"
+                      age="40.57"
+                      weight="0.3164"
+                      build="0.2485"
+                      key="00052008000000010070030000001603003300110010200000000001010000000144501304010000000000000000000000000000000000000000000010880000" />
+      <BodyPropertiesMax version="4"
+                         age="72.94"
+                         weight="0.9923"
+                         build="0.7052"
+                         key="0010F80FC000370FFFFFEFEFFEEFFF7EEEFFFFFFFEF7EFFEFFFFFFFFFEFFFFFF07CBF0780CFFFFEF000000000000000000000000000000000000000061809105" />
+    </face>
+    <skills>
+      <skill id="Athletics"
+             value="60" />
+      <skill id="Riding"
+             value="110" />
+      <skill id="OneHanded"
+             value="120" />
+      <skill id="TwoHanded"
+             value="60" />
+      <skill id="Polearm"
+             value="60" />
+      <skill id="Bow"
+             value="40" />
+      <skill id="Crossbow"
+             value="50" />
+    </skills>
+    <Equipments>
+      <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.empire_sword_4_t4" />
+        <equipment slot="Head" id="Item.ao_crown_b" />
+	    <equipment slot="Body" id="Item.imperial_robes" />
+	    <equipment slot="Gloves" id="Item.ao_imperial_decorated_bracers" />
+	    <equipment slot="Leg" id="Item.decorated_imperial_boots" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+	  	<equipment slot="Item0" id="Item.empire_sword_4_t4" />
+	    <equipment slot="Body" id="Item.fine_town_tunic" />
+	    <equipment slot="Leg" id="Item.decorated_imperial_boots" />
+		<equipment slot="Gloves" id="Item.ao_imperial_decorated_bracers" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.empire_sword_4_t4" />
+	    <equipment slot="Head" id="Item.AR_roman_hat_a" />
+        <equipment slot="Body" id="Item.fine_town_tunic" />
+	    <equipment slot="Leg" id="Item.folded_town_boots" />
+		<equipment slot="Gloves" id="Item.decorated_imperial_boots" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.empire_sword_5_t4" />
+        <equipment slot="Head" id="Item.AR_roman_hat_a" />
+        <equipment slot="Body" id="Item.tied_cloth_tunic" />
+	    <equipment slot="Leg" id="Item.folded_town_boots" />
+		<equipment slot="Cape" id="Item.scarf" />
+		<equipment slot="Gloves" id="Item.padded_vambrace" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.empire_sword_5_t4" />
+        <equipment slot="Head" id="Item.AR_roman_hat_a" />
+	    <equipment slot="Cape" id="Item.scarf" />
+	    <equipment slot="Body" id="Item.imperial_robes" />
+	    <equipment slot="Leg" id="Item.fine_town_boots" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+		<equipment slot="Head" id="Item.empire_sword_5_t4" />
+	    <equipment slot="Item0" id="Item.empire_mace_3_t4" />
+	    <equipment slot="Cape" id="Item.ao_imperial_noblemans_sash" />
+	    <equipment slot="Body" id="Item.fine_town_tunic" />
+	    <equipment slot="Leg" id="Item.fine_town_boots" />
+      </EquipmentRoster>
+	  <EquipmentRoster>
+	  	<equipment slot="Item0" id="Item.empire_mace_2_t4" />
+	    <equipment slot="Body" id="Item.imperial_robes" />
+	    <equipment slot="Leg" id="Item.fine_town_boots" />
+		<equipment slot="Gloves" id="Item.ao_imperial_decorated_bracers" />
+      </EquipmentRoster>
+	  <equipment slot="Horse" id="Item.t2_empire_horse" />
+	  <equipment slot="HorseHarness" id="Item.imperial_riding_harness" />
+    </Equipments>
+  </NPCCharacter>
+
+  
+  <NPCCharacter id="craftsman_vlandia"
+                default_group="Infantry"
+                level="1"
+                name="{=!}Vlandia Craftsman"
+                occupation="Villager"
+                culture="Culture.vlandia"
+                skill_template="SkillSet.infantry_heavyinfantry_level1_template_skills">
+    <face>
+      <!--face_key value="0009013000000000000000000000000000000000000000000000000000000000000a00050000000000000000000000000000000000000000fffffffffc880000" max_value="001cffffc000390ffff88affaa9efffffffffffffff7ffffffff9ffffffffffa0007effff7ffffff000000000000000000000000000000000000000001509181" /-->
+      <BodyProperties version="4"
+                      age="24.29"
+                      weight="0.162"
+                      build="0.3657"
+                      key="00000007800000800160000000114151100471100000100021111101800101000055200305111101000000000000000000000000000000000000000000A00000" />
+      <BodyPropertiesMax version="4"
+                         age="67.62"
+                         weight="0.733"
+                         build="0.6651"
+                         key="0013C80E40003406EF8FFFFFEEEEFEFDEFFE8EEFEEE6EEEDEDFFEEEE8EFEFFFE07BAB0780BEFEEEF000000000000000000000000000000000000000067789105" />
+    </face>
+    <skills></skills>
+    <Equipments>
+	
+	
+	
+	
+      <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.morningstar_mace_t3" />
+        <equipment slot="Head" id="Item.leather_cap" />
+	    <equipment slot="Gloves" id="Item.padded_vambrace" />
+	    <equipment slot="Body" id="Item.sleeveless_padded_coat" />
+	    <equipment slot="Leg" id="Item.fine_town_boots" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+	  	<equipment slot="Item0" id="Item.tzkurion_axe_t3" />
+	    <equipment slot="Body" id="Item.sleeveless_padded_coat" />
+	    <equipment slot="Leg" id="Item.wrapped_shoes" />
+		<equipment slot="Gloves" id="Item.leather_gloves" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.sturgia_axe_3_t3" />
+	    <equipment slot="Head" id="Item.leather_cap" />
+        <equipment slot="Body" id="Item.leather_coat_over_cloth" />
+	    <equipment slot="Leg" id="Item.folded_town_boots" />
+		<equipment slot="Gloves" id="Item.leather_gloves" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.light_mace_t3" />
+        <equipment slot="Head" id="Item.imperial_leather_coif" />
+        <equipment slot="Body" id="Item.layered_leather_tunic" />
+	    <equipment slot="Leg" id="Item.folded_town_boots" />
+		<equipment slot="Cape" id="Item.green_hood" />
+		<equipment slot="Gloves" id="Item.padded_vambrace" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.empire_mace_1_t2" />
+        <equipment slot="Head" id="Item.open_padded_coif" />
+	    <equipment slot="Cape" id="Item.hood" />
+	    <equipment slot="Body" id="Item.nordic_sloven" />
+	    <equipment slot="Leg" id="Item.leather_shoes" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+		<equipment slot="Head" id="Item.laced_coif" />
+	    <equipment slot="Item0" id="Item.empire_sword_3_t3" />
+	    <equipment slot="Cape" id="Item.wrapped_scarf" />
+	    <equipment slot="Body" id="Item.leather_apron" />
+	    <equipment slot="Leg" id="Item.strapped_leather_boots" />
+      </EquipmentRoster>
+	  <EquipmentRoster>
+	  	<equipment slot="Item0" id="Item.tzkurion_axe_t3" />
+	    <equipment slot="Body" id="Item.leather_coat" />
+	    <equipment slot="Leg" id="Item.strapped_leather_boots" />
+		<equipment slot="Gloves" id="Item.leather_gloves" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.sturgia_axe_3_t3" />
+	    <equipment slot="Head" id="Item.leather_cap" />
+        <equipment slot="Body" id="Item.long_hemp_tunic" />
+	    <equipment slot="Leg" id="Item.fine_town_boots" />
+      </EquipmentRoster>
+	  <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.sturgia_axe_3_t3" />
+	    <equipment slot="Head" id="Item.leather_cap" />
+        <equipment slot="Body" id="Item.padded_leather_shirt" />
+	    <equipment slot="Leg" id="Item.fine_town_boots" />
+      </EquipmentRoster>
+	  <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.empire_mace_1_t2" />
+	    <equipment slot="Cape" id="Item.hood" />
+	    <equipment slot="Body" id="Item.aketon" />
+	    <equipment slot="Leg" id="Item.leather_shoes" />
+      </EquipmentRoster>
+	  <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.sturgia_axe_3_t3" />
+	    <equipment slot="Head" id="Item.leather_cap" />
+        <equipment slot="Body" id="Item.woven_leather_vest" />
+	    <equipment slot="Leg" id="Item.fine_town_boots" />
+      </EquipmentRoster>
+    </Equipments>
+  </NPCCharacter>
+  
+  <NPCCharacter id="noble_vlandia"
+                default_group="Cavalry"
+                level="1"
+                name="{=!}Vlandia Noble"
+                occupation="Villager"
+                culture="Culture.vlandia"
+                skill_template="SkillSet.infantry_heavyinfantry_level1_template_skills">
+    <face>
+      <!--face_key value="0009013000000000000000000000000000000000000000000000000000000000000a00050000000000000000000000000000000000000000fffffffffc880000" max_value="001cffffc000390ffff88affaa9efffffffffffffff7ffffffff9ffffffffffa0007effff7ffffff000000000000000000000000000000000000000001509181" /-->
+      <BodyProperties version="4"
+                      age="35.29"
+                      weight="0.162"
+                      build="0.3657"
+                      key="00000007800000800160000000114151100471100000100021111101800101000055200305111101000000000000000000000000000000000000000000A00000" />
+      <BodyPropertiesMax version="4"
+                         age="72.62"
+                         weight="0.733"
+                         build="0.6651"
+                         key="0013C80E40003406EF8FFFFFEEEEFEFDEFFE8EEFEEE6EEEDEDFFEEEE8EFEFFFE07BAB0780BEFEEEF000000000000000000000000000000000000000067789105" />
+    </face>
+    <skills>
+      <skill id="Athletics"
+             value="60" />
+      <skill id="Riding"
+             value="110" />
+      <skill id="OneHanded"
+             value="120" />
+      <skill id="TwoHanded"
+             value="60" />
+      <skill id="Polearm"
+             value="60" />
+      <skill id="Bow"
+             value="40" />
+      <skill id="Crossbow"
+             value="50" />
+    </skills>
+    <Equipments>
+      <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.vlandia_sword_3_t4" />
+	    <equipment slot="Gloves" id="Item.ao_imperial_decorated_bracers" />
+	    <equipment slot="Body" id="Item.fine_town_tunic" />
+	    <equipment slot="Leg" id="Item.fine_town_boots" />
+		<equipment slot="Cape" id="Item.ao_imperial_noblemans_sash" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+	  	<equipment slot="Item0" id="Item.vlandia_sword_3_t4" />
+	    <equipment slot="Body" id="Item.fine_town_tunic" />
+	    <equipment slot="Leg" id="Item.fine_town_boots" />
+		<equipment slot="Gloves" id="Item.ao_imperial_decorated_bracers" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.vlandia_sword_4_t4" />
+        <equipment slot="Body" id="Item.fine_town_tunic" />
+	    <equipment slot="Leg" id="Item.folded_town_boots" />
+		<equipment slot="Gloves" id="Item.leather_gloves" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.vlandia_sword_4_t4" />
+        <equipment slot="Body" id="Item.tied_cloth_tunic" />
+	    <equipment slot="Leg" id="Item.folded_town_boots" />
+		<equipment slot="Cape" id="Item.green_hood" />
+		<equipment slot="Gloves" id="Item.padded_vambrace" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.vlandia_sword_3_t4" />
+        <equipment slot="Head" id="Item.ao_angevin_crown" />
+	    <equipment slot="Cape" id="Item.hood" />
+	    <equipment slot="Body" id="Item.nordic_sloven" />
+	    <equipment slot="Leg" id="Item.decorated_imperial_boots" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+		<equipment slot="Head" id="Item.ao_angevin_crown" />
+	    <equipment slot="Item0" id="Item.empire_mace_3_t4" />
+	    <equipment slot="Cape" id="Item.ao_imperial_noblemans_sash" />
+	    <equipment slot="Body" id="Item.leather_tunic" />
+	    <equipment slot="Leg" id="Item.decorated_imperial_boots" />
+      </EquipmentRoster>
+	  <EquipmentRoster>
+	  	<equipment slot="Item0" id="Item.vlandia_mace_2_t4" />
+	    <equipment slot="Body" id="Item.layered_leather_tunic" />
+	    <equipment slot="Leg" id="Item.fine_town_boots" />
+		<equipment slot="Gloves" id="Item.ao_imperial_decorated_bracers" />
+      </EquipmentRoster>
+	  <equipment slot="Horse" id="Item.t2_vlandia_horse" />
+	  <equipment slot="HorseHarness" id="Item.light_harness" />
+    </Equipments>
+  </NPCCharacter>
+  
+  <NPCCharacter id="craftsman_sturgia"
+                default_group="Infantry"
+                level="1"
+                name="{=!}Sturgia Craftsman"
+                occupation="Villager"
+                culture="Culture.sturgia"
+                skill_template="SkillSet.infantry_heavyinfantry_level1_template_skills">
+    <face>
+      <!--face_key value="0009013000000000000000000000000000000000000000000000000000000000000a00050000000000000000000000000000000000000000fffffffffc880000" max_value="001cffffc000390ffff88affaa9efffffffffffffff7ffffffff9ffffffffffa0007effff7ffffff000000000000000000000000000000000000000001509181" /-->
+      <BodyProperties version="4"
+                      age="40.03"
+                      weight="0.1867"
+                      build="0.2423"
+                      key="00000400000002412110000001211010010411111010002221111001301101000064300306112000000000000000000000000000000000000000000000D00000" />
+      <BodyPropertiesMax version="4"
+                         age="78.04"
+                         weight="0.9336"
+                         build="0.9244"
+                         key="0008F00C40003690FEFEEFFEBBBFFFFFFFFFFF979EF8FFFEFFFFFFEFFFEFFFFE08EEE0890EFFFFFF000000000000000000000000000000000000000077C89105" />
+    </face>
+    <skills></skills>
+    <Equipments>
+      <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.sturgia_axe_3_t3" />
+        <equipment slot="Head" id="Item.northern_fur_cap" />
+	    <equipment slot="Cape" id="Item.scarf" />
+	    <equipment slot="Body" id="Item.northern_leather_vest" />
+	    <equipment slot="Gloves" id="Item.studded_leather_vambraces" />
+	    <equipment slot="Leg" id="Item.leather_boots" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+	  	<equipment slot="Item0" id="Item.woodland_axe_t3" />
+	    <equipment slot="Body" id="Item.northern_leather_vest" />
+	    <equipment slot="Leg" id="Item.leather_boots" />
+		<equipment slot="Gloves" id="Item.studded_leather_vambraces" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.woodland_axe_t3" />
+	    <equipment slot="Head" id="Item.nordic_leather_cap" />
+        <equipment slot="Body" id="Item.fur_trimmed_tunic" />
+	    <equipment slot="Leg" id="Item.leather_boots" />
+		<equipment slot="Gloves" id="Item.studded_leather_vambraces" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.sturgia_axe_3_t3" />
+        <equipment slot="Head" id="Item.northern_fur_cap" />
+        <equipment slot="Body" id="Item.fur_trimmed_short_tunic" />
+	    <equipment slot="Leg" id="Item.leather_boots" />
+		<equipment slot="Cape" id="Item.bearskin" />
+		<equipment slot="Gloves" id="Item.studded_leather_vambraces" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.sturgia_axe_3_t3" />
+        <equipment slot="Head" id="Item.nordic_fur_cap" />
+	    <equipment slot="Cape" id="Item.battania_civil_cape" />
+	    <equipment slot="Body" id="Item.roughcloth_shortcoat" />
+	    <equipment slot="Leg" id="Item.folded_town_boots" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+		<equipment slot="Head" id="Item.nordic_fur_cap" />
+	    <equipment slot="Item0" id="Item.sturgia_sword_2_t3" />
+	    <equipment slot="Cape" id="Item.hood" />
+	    <equipment slot="Body" id="Item.cloth_tunic" />
+	    <equipment slot="Leg" id="Item.folded_town_boots" />
+      </EquipmentRoster>
+	  <EquipmentRoster>
+	  	<equipment slot="Item0" id="Item.sturgia_sword_2_t3" />
+	    <equipment slot="Body" id="Item.heavy_nordic_coat" />
+	    <equipment slot="Leg" id="Item.folded_town_boots" />
+		<equipment slot="Gloves" id="Item.leather_gloves" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.sturgia_sword_2_t3" />
+        <equipment slot="Body" id="Item.nordic_sloven_leather" />
+	    <equipment slot="Leg" id="Item.folded_town_boots" />
+		<equipment slot="Gloves" id="Item.leather_gloves" />
+      </EquipmentRoster>
+	  <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.sturgia_sword_3_t3" />
+        <equipment slot="Body" id="Item.northern_tunic" />
+	    <equipment slot="Leg" id="Item.turndown_leather_boots" />
+		<equipment slot="Gloves" id="Item.leather_gloves" />
+		<equipment slot="Cape" id="Item.battania_civil_cloak" />
+      </EquipmentRoster>
+	  <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.sturgia_sword_3_t3" /> 
+	    <equipment slot="Body" id="Item.nordic_tunic" />
+	    <equipment slot="Leg" id="Item.turndown_leather_boots" />
+		<equipment slot="Cape" id="Item.wolf_shoulder" />
+      </EquipmentRoster>
+	  <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.sturgia_sword_3_t3" />
+        <equipment slot="Body" id="Item.nordic_padded_cloth" />
+	    <equipment slot="Leg" id="Item.turndown_leather_boots" />
+      </EquipmentRoster>
+    </Equipments>
+  </NPCCharacter>
+
+  
+  <NPCCharacter id="noble_sturgia"
+                default_group="Cavalry"
+                level="1"
+                name="{=!}Sturgia Noble"
+                occupation="Villager"
+                culture="Culture.sturgia"
+                skill_template="SkillSet.infantry_heavyinfantry_level1_template_skills">
+    <face>
+      <!--face_key value="0009013000000000000000000000000000000000000000000000000000000000000a00050000000000000000000000000000000000000000fffffffffc880000" max_value="001cffffc000390ffff88affaa9efffffffffffffff7ffffffff9ffffffffffa0007effff7ffffff000000000000000000000000000000000000000001509181" /-->
+      <BodyProperties version="4"
+                      age="40.03"
+                      weight="0.1867"
+                      build="0.2423"
+                      key="00000400000002412110000001211010010411111010002221111001301101000064300306112000000000000000000000000000000000000000000000D00000" />
+      <BodyPropertiesMax version="4"
+                         age="78.04"
+                         weight="0.9336"
+                         build="0.9244"
+                         key="0008F00C40003690FEFEEFFEBBBFFFFFFFFFFF979EF8FFFEFFFFFFEFFFEFFFFE08EEE0890EFFFFFF000000000000000000000000000000000000000077C89105" />
+    </face>
+    <skills>
+      <skill id="Athletics"
+             value="60" />
+      <skill id="Riding"
+             value="110" />
+      <skill id="OneHanded"
+             value="120" />
+      <skill id="TwoHanded"
+             value="60" />
+      <skill id="Polearm"
+             value="60" />
+      <skill id="Bow"
+             value="40" />
+      <skill id="Crossbow"
+             value="50" />
+    </skills>
+    <Equipments>
+      <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.sturgia_sword_5_t4" />
+        <equipment slot="Cape" id="Item.AR_fur_cape_d" />
+	    <equipment slot="Body" id="Item.decorated_short_tunic" />
+	    <equipment slot="Gloves" id="Item.northern_brass_bracers" />
+	    <equipment slot="Leg" id="Item.fine_town_boots" />
+		<equipment slot="Head" id="Item.nordic_leather_cap" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+	  	<equipment slot="Item0" id="Item.sturgia_sword_5_t4" />
+	    <equipment slot="Body" id="Item.decorated_short_tunic" />
+	    <equipment slot="Leg" id="Item.fine_town_boots" />
+		<equipment slot="Gloves" id="Item.northern_brass_bracers" />
+		<equipment slot="Cape" id="Item.TV_wolf_pelt_b" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.sturgia_sword_5_t4" />
+	    <equipment slot="Head" id="Item.nordic_leather_cap" />
+        <equipment slot="Body" id="Item.decorated_short_tunic" />
+	    <equipment slot="Leg" id="Item.folded_town_boots" />
+		<equipment slot="Gloves" id="Item.leather_gloves" />
+		<equipment slot="Cape" id="Item.wolf_shoulder" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.sturgia_sword_4_t4" />
+        <equipment slot="Head" id="Item.northern_fur_cap" />
+        <equipment slot="Body" id="Item.northern_tunic" />
+	    <equipment slot="Leg" id="Item.folded_town_boots" />
+		<equipment slot="Cape" id="Item.armored_bearskin" />
+		<equipment slot="Gloves" id="Item.northern_brass_bracers" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.sturgia_sword_4_t4" />
+	    <equipment slot="Cape" id="Item.battania_civil_cape" />
+	    <equipment slot="Body" id="Item.nordic_sloven" />
+	    <equipment slot="Leg" id="Item.decorated_imperial_boots" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+		<equipment slot="Head" id="Item.northern_fur_cap" />
+	    <equipment slot="Item0" id="Item.sturgia_axe_5_t5" />
+	    <equipment slot="Cape" id="Item.bearskin" />
+	    <equipment slot="Body" id="Item.merchants_fur_coat" />
+	    <equipment slot="Leg" id="Item.decorated_imperial_boots" />
+      </EquipmentRoster>
+	  <EquipmentRoster>
+	  	<equipment slot="Item0" id="Item.sturgia_axe_5_t5" />
+	    <equipment slot="Body" id="Item.merchants_fur_coat" />
+	    <equipment slot="Leg" id="Item.fine_town_boots" />
+		<equipment slot="Gloves" id="Item.AR_sturgia_gloves_c" />
+		<equipment slot="Cape" id="Item.rough_bearskin" />
+      </EquipmentRoster>
+	  <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.sturgia_sword_5_t4" />
+	    <equipment slot="Body" id="Item.decorated_short_tunic" />
+	    <equipment slot="Gloves" id="Item.AR_sturgia_gloves_c" />
+	    <equipment slot="Leg" id="Item.fine_town_boots" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+	  	<equipment slot="Item0" id="Item.sturgia_sword_5_t4" />
+	    <equipment slot="Body" id="Item.sturgia_light_tunic" />
+	    <equipment slot="Leg" id="Item.fine_town_boots" />
+		<equipment slot="Gloves" id="Item.AR_sturgia_gloves_c" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.sturgia_sword_5_t4" />
+	    <equipment slot="Head" id="Item.nordic_fur_cap" />
+        <equipment slot="Body" id="Item.northern_tunic" />
+	    <equipment slot="Leg" id="Item.folded_town_boots" />
+		<equipment slot="Gloves" id="Item.leather_gloves" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.sturgia_sword_4_t4" />
+        <equipment slot="Head" id="Item.nordic_fur_cap" />
+        <equipment slot="Body" id="Item.northern_leather_vest" />
+	    <equipment slot="Leg" id="Item.folded_town_boots" />
+		<equipment slot="Gloves" id="Item.northern_brass_bracers" />
+      </EquipmentRoster>
+	  <equipment slot="Horse" id="Item.t2_sturgia_horse" />
+	  <equipment slot="HorseHarness" id="Item.northern_noble_harness" />
+    </Equipments>
+  </NPCCharacter>
+  
+  <NPCCharacter id="craftsman_battania"
+                default_group="Infantry"
+                level="1"
+                name="{=!}Battania Craftsman"
+                occupation="Villager"
+                culture="Culture.battania"
+                skill_template="SkillSet.infantry_heavyinfantry_level1_template_skills">
+    <face>
+      <!--face_key value="0009013000000000000000000000000000000000000000000000000000000000000a00050000000000000000000000000000000000000000fffffffffc880000" max_value="001cffffc000390ffff88affaa9efffffffffffffff7ffffffff9ffffffffffa0007effff7ffffff000000000000000000000000000000000000000001509181" /-->
+      <BodyProperties version="4"
+                      age="40.29"
+                      weight="0.162"
+                      build="0.3657"
+                      key="00000004000002C00160000000116151100771100000100021111101800101000055200305111101000000000000000000000000000000000000000000A00000" />
+      <BodyPropertiesMax version="4"
+                         age="74.57"
+                         weight="0.9954"
+                         build="0.9645"
+                         key="0008C80A400035D4FF9FEEFFFFEEEEFEF9FF8EFFEFF7FFFFFEEFEFEE97FEFFEE08FEF0890FEEEFEE000000000000000000000000000000000000000001F89105" />
+    </face>
+    <skills></skills>
+    <Equipments>
+      <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.woodland_axe_t3" />
+        <equipment slot="Cape" id="Item.battania_cloak_b" />
+	    <equipment slot="Body" id="Item.battania_light_armor_b" />
+	    <equipment slot="Gloves" id="Item.highland_gloves" />
+	    <equipment slot="Leg" id="Item.TV_battania_boots_c" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+	  	<equipment slot="Item0" id="Item.woodland_axe_t3" />
+	    <equipment slot="Body" id="Item.battania_light_armor_b" />
+	    <equipment slot="Leg" id="Item.TV_battania_boots_b" />
+		<equipment slot="Gloves" id="Item.highland_gloves" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.woodland_axe_t3" />
+	    <equipment slot="Head" id="Item.thinhide_coif" />
+        <equipment slot="Body" id="Item.battania_light_armor_b" />
+	    <equipment slot="Leg" id="Item.TV_battania_boots_a" />
+		<equipment slot="Gloves" id="Item.highland_gloves" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.sturgia_axe_3_t3" />
+        <equipment slot="Head" id="Item.thinhide_coif" />
+        <equipment slot="Body" id="Item.fur_waistcoat_over_tunic" />
+	    <equipment slot="Leg" id="Item.folded_town_boots" />
+		<equipment slot="Cape" id="Item.battania_scarf_a" />
+		<equipment slot="Gloves" id="Item.highland_gloves" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.sturgia_axe_3_t3" />
+        <equipment slot="Head" id="Item.battania_fur_helmet" />
+	    <equipment slot="Cape" id="Item.battania_civil_cape" />
+	    <equipment slot="Body" id="Item.AR_battania_armor_g" />
+	    <equipment slot="Leg" id="Item.folded_town_boots" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+		<equipment slot="Head" id="Item.battania_fur_helmet" />
+	    <equipment slot="Item0" id="Item.battania_sword_2_t3" />
+	    <equipment slot="Cape" id="Item.a_battania_cloak_a" />
+	    <equipment slot="Body" id="Item.AR_battania_armor_g" />
+	    <equipment slot="Leg" id="Item.folded_town_boots" />
+      </EquipmentRoster>
+	  <EquipmentRoster>
+	  	<equipment slot="Item0" id="Item.battania_sword_2_t3" />
+	    <equipment slot="Body" id="Item.leather_coat" />
+	    <equipment slot="Leg" id="Item.TV_battania_boots_d" />
+		<equipment slot="Gloves" id="Item.leather_gloves" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.battania_sword_2_t3" />
+	    <equipment slot="Head" id="Item.leather_cap" />
+        <equipment slot="Body" id="Item.fur_skirt_with_tunic" />
+	    <equipment slot="Leg" id="Item.TV_battania_boots_a" />
+      </EquipmentRoster>
+	  <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.battania_sword_3_t3" />
+	    <equipment slot="Head" id="Item.battania_fur_cap" />
+        <equipment slot="Body" id="Item.ao_battanian_leather_tunic_with_kilt" />
+	    <equipment slot="Leg" id="Item.TV_battania_boots_b" />
+      </EquipmentRoster>
+	  <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.battania_sword_3_t3" />
+	    <equipment slot="Body" id="Item.ao_battanian_gambeson_with_kilt" />
+	    <equipment slot="Leg" id="Item.TV_battania_boots_c" />
+		<equipment slot="Cape" id="Item.TV_wolf_pelt_d" />
+      </EquipmentRoster>
+	  <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.battania_sword_3_t3" />
+	    <equipment slot="Head" id="Item.battania_fur_cap" />
+        <equipment slot="Body" id="Item.ao_battanian_cloth_tunic_with_kilt" />
+	    <equipment slot="Leg" id="Item.TV_battania_boots_d" />
+		<equipment slot="Cape" id="Item.battania_civil_cloak" />
+      </EquipmentRoster>
+    </Equipments>
+  </NPCCharacter>
+  
+  
+  <NPCCharacter id="noble_battania"
+                default_group="Infantry"
+                level="1"
+                name="{=!}Battania Noble"
+                occupation="Villager"
+                culture="Culture.battania"
+                skill_template="SkillSet.infantry_heavyinfantry_level1_template_skills">
+    <face>
+      <!--face_key value="0009013000000000000000000000000000000000000000000000000000000000000a00050000000000000000000000000000000000000000fffffffffc880000" max_value="001cffffc000390ffff88affaa9efffffffffffffff7ffffffff9ffffffffffa0007effff7ffffff000000000000000000000000000000000000000001509181" /-->
+      <BodyProperties version="4"
+                      age="40.29"
+                      weight="0.162"
+                      build="0.3657"
+                      key="00000004000002C00160000000116151100771100000100021111101800101000055200305111101000000000000000000000000000000000000000000A00000" />
+      <BodyPropertiesMax version="4"
+                         age="74.57"
+                         weight="0.9954"
+                         build="0.9645"
+                         key="0008C80A400035D4FF9FEEFFFFEEEEFEF9FF8EFFEFF7FFFFFEEFEFEE97FEFFEE08FEF0890FEEEFEE000000000000000000000000000000000000000001F89105" />
+    </face>
+    <skills>
+      <skill id="Athletics"
+             value="60" />
+      <skill id="Riding"
+             value="110" />
+      <skill id="OneHanded"
+             value="120" />
+      <skill id="TwoHanded"
+             value="60" />
+      <skill id="Polearm"
+             value="60" />
+      <skill id="Bow"
+             value="40" />
+      <skill id="Crossbow"
+             value="50" />
+    </skills>
+    <Equipments>
+      <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.sturgia_sword_5_t4" />
+        <equipment slot="Cape" id="Item.tv_battania_cloak_b" />
+	    <equipment slot="Body" id="Item.battania_civil_c" />
+	    <equipment slot="Gloves" id="Item.TV_battania_gloves_b" />
+	    <equipment slot="Leg" id="Item.TV_battania_boots_n" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+	  	<equipment slot="Item0" id="Item.sturgia_sword_5_t4" />
+	    <equipment slot="Body" id="Item.battania_civil_c" />
+	    <equipment slot="Leg" id="Item.TV_battania_boots_k" />
+		<equipment slot="Gloves" id="Item.TV_battania_gloves_b" />
+		<equipment slot="Cape" id="Item.TV_wolf_pelt_a" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.sturgia_sword_5_t4" />
+        <equipment slot="Body" id="Item.battania_civil_c" />
+	    <equipment slot="Leg" id="Item.TV_battania_boots_l" />
+		<equipment slot="Gloves" id="Item.highland_gloves" />
+		<equipment slot="Cape" id="Item.AR_fur_cape_d" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.sturgia_sword_4_t4" />
+        <equipment slot="Body" id="Item.khuzait_civil_coat" />
+	    <equipment slot="Leg" id="Item.TV_battania_boots_m" />
+		<equipment slot="Cape" id="Item.armored_bearskin" />
+		<equipment slot="Gloves" id="Item.highland_gloves" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.sturgia_sword_4_t4" />
+	    <equipment slot="Cape" id="Item.battania_civil_cape" />
+	    <equipment slot="Body" id="Item.khuzait_civil_coat" />
+	    <equipment slot="Leg" id="Item.TV_battania_boots_c" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.sturgia_axe_5_t5" />
+	    <equipment slot="Cape" id="Item.bearskin" />
+	    <equipment slot="Body" id="Item.merchants_fur_coat" />
+	    <equipment slot="Leg" id="Item.TV_battania_boots_a" />
+      </EquipmentRoster>
+	  <EquipmentRoster>
+	  	<equipment slot="Item0" id="Item.sturgia_axe_5_t5" />
+	    <equipment slot="Body" id="Item.merchants_fur_coat" />
+	    <equipment slot="Leg" id="Item.TV_battania_boots_b" />
+		<equipment slot="Gloves" id="Item.battania_noble_bracers" />
+		<equipment slot="Cape" id="Item.rough_bearskin" />
+      </EquipmentRoster>
+	  <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.sturgia_sword_5_t4" />
+	    <equipment slot="Body" id="Item.decorated_short_tunic" />
+	    <equipment slot="Gloves" id="Item.battania_noble_bracers" />
+	    <equipment slot="Leg" id="Item.TV_battania_boots_d" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+	  	<equipment slot="Item0" id="Item.sturgia_sword_5_t4" />
+	    <equipment slot="Body" id="Item.sturgia_light_tunic" />
+	    <equipment slot="Leg" id="Item.TV_battania_boots_c" />
+		<equipment slot="Gloves" id="Item.AR_brass_scale_gloves" />
+		<equipment slot="Cape" id="Item.tv_battania_cloak_f" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.sturgia_sword_5_t4" />
+        <equipment slot="Body" id="Item.battanian_scale_armor_b" />
+	    <equipment slot="Leg" id="Item.TV_battania_boots_b" />
+		<equipment slot="Gloves" id="Item.AR_brass_scale_gloves" />
+		<equipment slot="Cape" id="Item.ao_battanian_medallion" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.sturgia_sword_4_t4" />
+        <equipment slot="Head" id="Item.battanian_crown" />
+        <equipment slot="Body" id="Item.AR_battania_armor_g" />
+	    <equipment slot="Leg" id="Item.TV_battania_boots_a" />
+		<equipment slot="Gloves" id="Item.AR_brass_scale_gloves" />
+		<equipment slot="Cape" id="Item.ao_caladogs_medallion" />
+      </EquipmentRoster>
+	  <EquipmentRoster>
+	  	<equipment slot="Item0" id="Item.sturgia_sword_5_t4" />
+	    <equipment slot="Body" id="Item.battania_light_armor_b" />
+	    <equipment slot="Leg" id="Item.TV_battania_boots_k" />
+		<equipment slot="Gloves" id="Item.TV_battania_gloves_b" />
+		<equipment slot="Cape" id="Item.tv_battania_cloak_g" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.sturgia_sword_5_t4" />
+	    <equipment slot="Head" id="Item.battania_crown" />
+        <equipment slot="Body" id="Item.battania_light_armor_b" />
+	    <equipment slot="Leg" id="Item.TV_battania_boots_l" />
+		<equipment slot="Gloves" id="Item.TV_battania_gloves_b" />
+		<equipment slot="Cape" id="Item.battania_cloak_furr" />
+      </EquipmentRoster>
+    </Equipments>
+  </NPCCharacter>
+  
+   <NPCCharacter id="craftsman_khuzait"
+                default_group="Cavalry"
+                level="1"
+                name="{=!}Khuzait Craftsman"
+                occupation="Villager"
+                culture="Culture.khuzait"
+                skill_template="SkillSet.infantry_heavyinfantry_level1_template_skills">
+    <face>
+      <!--face_key value="0009013000000000000000000000000000000000000000000000000000000000000a00050000000000000000000000000000000000000000fffffffffc880000" max_value="001cffffc000390ffff88affaa9efffffffffffffff7ffffffff9ffffffffffa0007effff7ffffff000000000000000000000000000000000000000001509181" /-->
+      <BodyProperties version="4"
+                      age="22.49"
+                      weight="0.0417"
+                      build="0.0324"
+                      key="000DC40D800005C6507011122CB700080603060883A8010100000000800001000000100300001000000000000000000000000000000000000000000006000000" />
+      <BodyPropertiesMax version="4"
+                         age="66.85"
+                         weight="0.9182"
+                         build="0.5231"
+                         key="001EFC0FC00038D4FFFBCEFEEFFE9E6FEFFEFFEFFEEFEFFFEFFEEFFF898EFEFA0698E06809FFFFFF000000000000000000000000000000000000000079209100" />
+    </face>
+    <skills></skills>
+    <Equipments>
+      <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.light_mace_t3" />
+        <equipment slot="Head" id="Item.eastern_cap" />
+	    <equipment slot="Cape" id="Item.battania_civil_cape" />
+	    <equipment slot="Body" id="Item.ao_durkhan_leather_lamellar" />
+	    <equipment slot="Gloves" id="Item.highland_gloves" />
+	    <equipment slot="Leg" id="Item.eastern_splint_boots" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+	  	<equipment slot="Item0" id="Item.light_mace_t3" />
+	    <equipment slot="Body" id="Item.ao_durkhan_leather_lamellar" />
+	    <equipment slot="Leg" id="Item.TV_battania_boots_b" />
+		<equipment slot="Gloves" id="Item.highland_gloves" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.light_mace_t3" />
+	    <equipment slot="Head" id="Item.AR_khuzait_helmet_a" />
+        <equipment slot="Body" id="Item.ao_durkhan_leather_lamellar" />
+	    <equipment slot="Leg" id="Item.TV_battania_boots_a" />
+		<equipment slot="Gloves" id="Item.highland_gloves" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.sturgia_axe_3_t3" />
+        <equipment slot="Head" id="Item.AR_khuzait_helmet_a" />
+        <equipment slot="Body" id="Item.fur_skirt_with_tunic" />
+	    <equipment slot="Leg" id="Item.folded_town_boots" />
+		<equipment slot="Cape" id="Item.battania_scarf_a" />
+		<equipment slot="Gloves" id="Item.highland_gloves" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.sturgia_axe_3_t3" />
+        <equipment slot="Head" id="Item.fur_hood" />
+	    <equipment slot="Cape" id="Item.battania_civil_cape" />
+	    <equipment slot="Body" id="Item.fur_coat_over_tunic" />
+	    <equipment slot="Leg" id="Item.folded_town_boots" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+		<equipment slot="Head" id="Item.fur_hat" />
+	    <equipment slot="Item0" id="Item.khuzait_sword_2_t3" />
+	    <equipment slot="Cape" id="Item.a_battania_cloak_a" />
+	    <equipment slot="Body" id="Item.fur_armor_with_strap" />
+	    <equipment slot="Leg" id="Item.folded_town_boots" />
+      </EquipmentRoster>
+	  <EquipmentRoster>
+	  	<equipment slot="Item0" id="Item.khuzait_sword_2_t3" />
+	    <equipment slot="Body" id="Item.steppe_armor" />
+	    <equipment slot="Leg" id="Item.TV_battania_boots_d" />
+		<equipment slot="Gloves" id="Item.leather_gloves" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.light_mace_t3" />
+	    <equipment slot="Head" id="Item.nomad_cap" />
+        <equipment slot="Body" id="Item.steppe_armor" />
+	    <equipment slot="Leg" id="Item.TV_battania_boots_a" />
+      </EquipmentRoster>
+	  <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.khuzait_sword_3_t3" />
+	    <equipment slot="Head" id="Item.eastern_cap" />
+        <equipment slot="Body" id="Item.steppe_robe" />
+	    <equipment slot="Leg" id="Item.TV_battania_boots_b" />
+      </EquipmentRoster>
+	  <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.light_mace_t3" />
+	    <equipment slot="Body" id="Item.ao_khuzait_leather_vest" />
+	    <equipment slot="Leg" id="Item.TV_battania_boots_c" />
+		<equipment slot="Cape" id="Item.TV_wolf_pelt_d" />
+      </EquipmentRoster>
+	  <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.khuzait_sword_3_t3" />
+	    <equipment slot="Head" id="Item.fur_hat" />
+        <equipment slot="Body" id="Item.ao_khuzait_leather_vest" />
+	    <equipment slot="Leg" id="Item.TV_battania_boots_d" />
+		<equipment slot="Cape" id="Item.battania_civil_cloak" />
+      </EquipmentRoster>
+	  <equipment slot="Horse" id="Item.khuzait_horse" />
+	  <equipment slot="HorseHarness" id="Item.steppe_harness" />
+    </Equipments>
+  </NPCCharacter>
+  
+  
+  <NPCCharacter id="noble_khuzait"
+                default_group="Cavalry"
+                level="1"
+                name="{=!}Khuzait Noble"
+                occupation="Villager"
+                culture="Culture.khuzait"
+                skill_template="SkillSet.infantry_heavyinfantry_level1_template_skills">
+    <face>
+      <!--face_key value="0009013000000000000000000000000000000000000000000000000000000000000a00050000000000000000000000000000000000000000fffffffffc880000" max_value="001cffffc000390ffff88affaa9efffffffffffffff7ffffffff9ffffffffffa0007effff7ffffff000000000000000000000000000000000000000001509181" /-->
+      <BodyProperties version="4"
+                      age="40.49"
+                      weight="0.0417"
+                      build="0.0324"
+                      key="000DC40D800005C6507011122CB700080603060883A8010100000000800001000000100300001000000000000000000000000000000000000000000006000000" />
+      <BodyPropertiesMax version="4"
+                         age="66.85"
+                         weight="0.9182"
+                         build="0.5231"
+                         key="001EFC0FC00038D4FFFBCEFEEFFE9E6FEFFEFFEFFEEFEFFFEFFEEFFF898EFEFA0698E06809FFFFFF000000000000000000000000000000000000000079209100" />
+    </face>
+    <skills>
+      <skill id="Athletics"
+             value="60" />
+      <skill id="Riding"
+             value="110" />
+      <skill id="OneHanded"
+             value="120" />
+      <skill id="TwoHanded"
+             value="60" />
+      <skill id="Polearm"
+             value="60" />
+      <skill id="Bow"
+             value="40" />
+      <skill id="Crossbow"
+             value="50" />
+    </skills>
+    <Equipments>
+      <EquipmentRoster >
+	    <equipment slot="Item0" id="Item.khuzait_sword_4_t4" />
+        <equipment slot="Head" id="Item.decorated_nomad_cap" />
+	    <equipment slot="Cape" id="Item.ao_durkhan_tassled_necklace" />
+	    <equipment slot="Body" id="Item.khuzait_civil_coat" />
+	    <equipment slot="Leg" id="Item.ao_durkhan_tassled_boots" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+	  	<equipment slot="Item0" id="Item.khuzait_sword_4_t4" />
+	    <equipment slot="Body" id="Item.khuzait_civil_coat" />
+	    <equipment slot="Leg" id="Item.ao_durkhan_tassled_boots" />
+		<equipment slot="Gloves" id="Item.highland_gloves" />
+		<equipment slot="Cape" id="Item.TV_wolf_pelt_a" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.khuzait_sword_4_t4" />
+        <equipment slot="Body" id="Item.khuzait_civil_coat" />
+	    <equipment slot="Leg" id="Item.ao_durkhan_tassled_boots" />
+		<equipment slot="Gloves" id="Item.highland_gloves" />
+		<equipment slot="Cape" id="Item.TV_wolf_pelt_d" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.khuzait_sword_4_t4" />
+        <equipment slot="Body" id="Item.khuzait_civil_coat" />
+	    <equipment slot="Leg" id="Item.ao_durkhan_tassled_boots" />
+		<equipment slot="Cape" id="Item.bearskin" />
+		<equipment slot="Gloves" id="Item.highland_gloves" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.khuzait_sword_5_t4" />
+	    <equipment slot="Cape" id="Item.battania_civil_cape" />
+	    <equipment slot="Body" id="Item.khuzait_civil_coat" />
+	    <equipment slot="Leg" id="Item.ao_durkhan_tassled_boots" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.khuzait_sword_5_t4" />
+	    <equipment slot="Cape" id="Item.ao_durkhan_tassled_necklace" />
+	    <equipment slot="Body" id="Item.merchants_fur_coat" />
+	    <equipment slot="Leg" id="Item.folded_town_boots" />
+      </EquipmentRoster>
+	  <EquipmentRoster>
+	  	<equipment slot="Item0" id="Item.khuzait_sword_5_t4" />
+	    <equipment slot="Body" id="Item.merchants_fur_coat" />
+	    <equipment slot="Leg" id="Item.folded_town_boots" />
+		<equipment slot="Gloves" id="Item.highland_gloves" />
+		<equipment slot="Cape" id="Item.armored_bearskin" />
+      </EquipmentRoster>
+	  <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.khuzait_sword_5_t4" />
+		<equipment slot="Head" id="Item.fur_hat" />
+	    <equipment slot="Body" id="Item.khuzait_belt_leather" />
+	    <equipment slot="Gloves" id="Item.highland_gloves" />
+	    <equipment slot="Leg" id="Item.folded_town_boots" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+	  	<equipment slot="Item0" id="Item.eastern_steel_mace_t4" />
+		<equipment slot="Head" id="Item.fur_hat" />
+	    <equipment slot="Body" id="Item.khuzait_belt_leather" />
+	    <equipment slot="Leg" id="Item.folded_town_boots" />
+		<equipment slot="Gloves" id="Item.studded_leather_vambraces" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.eastern_steel_mace_t4" />
+		<equipment slot="Head" id="Item.nomad_padded_hood" />
+        <equipment slot="Body" id="Item.khuzait_belt_leather" />
+	    <equipment slot="Leg" id="Item.khuzait_curved_boots" />
+		<equipment slot="Gloves" id="Item.studded_leather_vambraces" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.eastern_steel_mace_t4" />
+        <equipment slot="Head" id="Item.nomad_cap" />
+        <equipment slot="Body" id="Item.khuzait_civil_coat_b" />
+	    <equipment slot="Leg" id="Item.khuzait_curved_boots" />
+		<equipment slot="Gloves" id="Item.studded_leather_vambraces" />
+      </EquipmentRoster>
+	  <EquipmentRoster>
+	  	<equipment slot="Item0" id="Item.khuzait_mace_3_t4" />
+		<equipment slot="Head" id="Item.AR_khuzait_helmet_p" />
+	    <equipment slot="Body" id="Item.khuzait_civil_coat_b" />
+	    <equipment slot="Leg" id="Item.khuzait_curved_boots" />
+		<equipment slot="Gloves" id="Item.studded_leather_vambraces" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.khuzait_mace_3_t4" />
+	    <equipment slot="Head" id="Item.decorated_nomad_cap" />
+        <equipment slot="Body" id="Item.khuzait_civil_coat_b" />
+	    <equipment slot="Leg" id="Item.khuzait_curved_boots" />
+		<equipment slot="Gloves" id="Item.studded_leather_vambraces" />
+      </EquipmentRoster>
+	  <equipment slot="Horse" id="Item.t2_khuzait_horse" />
+	  <equipment slot="HorseHarness" id="Item.steppe_fur_harness" />
+    </Equipments>
+  </NPCCharacter>
+
+  
+  
+  <NPCCharacter id="craftsman_aserai"
+                default_group="Infantry"
+                level="1"
+                name="{=!}Aserai Craftsman"
+                occupation="Villager"
+                culture="Culture.aserai"
+                skill_template="SkillSet.infantry_heavyinfantry_level1_template_skills">
+    <face>
+      <!--face_key value="0009013000000000000000000000000000000000000000000000000000000000000a00050000000000000000000000000000000000000000fffffffffc880000" max_value="001cffffc000390ffff88affaa9efffffffffffffff7ffffffff9ffffffffffa0007effff7ffffff000000000000000000000000000000000000000001509181" /-->
+      <BodyProperties version="4"
+                      age="22.69"
+                      weight="0.304"
+                      build="0.3225"
+                      key="001EA40C400000000100110121111110053000001111000000000001480101330125501302100000000000000000000000000000000000000000000000401000" />
+      <BodyPropertiesMax version="4"
+                         age="71.09"
+                         weight="0.5725"
+                         build="0.7299"
+                         key="0034FC0FC0003A5ADFEEEFEFEEEEFFFFEFF8FFEEFF88FFFFFFFFFFEF8EFEFFFE07BB90780BEEEFFF00000000000000000000000000000000000000006F809105" />
+    </face>
+    <skills></skills>
+    <Equipments>
+      <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.broad_ild_sword_t3" />
+        <equipment slot="Head" id="Item.aserai_civil_hscarf_a" />
+	    <equipment slot="Cape" id="Item.wrapped_scarf" />
+	    <equipment slot="Body" id="Item.aserai_civil_b" />
+	    <equipment slot="Leg" id="Item.wrapped_shoes" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+	  	<equipment slot="Item0" id="Item.broad_ild_sword_t3" />
+	    <equipment slot="Body" id="Item.aserai_civil_b" />
+	    <equipment slot="Leg" id="Item.wrapped_shoes" />
+		<equipment slot="Gloves" id="Item.highland_gloves" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.light_mace_t3" />
+	    <equipment slot="Head" id="Item.aserai_civil_c_head" />
+        <equipment slot="Body" id="Item.thick_sleeved_robe" />
+	    <equipment slot="Leg" id="Item.wrapped_shoes" />
+		<equipment slot="Gloves" id="Item.highland_gloves" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.sturgia_axe_3_t3" />
+        <equipment slot="Head" id="Item.woven_turban" />
+        <equipment slot="Body" id="Item.fur_skirt_with_tunic" />
+	    <equipment slot="Leg" id="Item.wrapped_shoes" />
+		<equipment slot="Cape" id="Item.scarf" />
+		<equipment slot="Gloves" id="Item.highland_gloves" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.sturgia_axe_3_t3" />
+        <equipment slot="Head" id="Item.aserai_civil_e_hscarf" />
+	    <equipment slot="Cape" id="Item.wrapped_scarf" />
+	    <equipment slot="Body" id="Item.fur_coat_over_tunic" />
+	    <equipment slot="Leg" id="Item.folded_town_boots" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+		<equipment slot="Head" id="Item.aserai_civil_hscarf_b" />
+	    <equipment slot="Item0" id="Item.light_mace_t3" />
+	    <equipment slot="Cape" id="Item.desert_leather_shoulderpad" />
+	    <equipment slot="Body" id="Item.fur_armor_with_strap" />
+	    <equipment slot="Leg" id="Item.folded_town_boots" />
+      </EquipmentRoster>
+	  <EquipmentRoster>
+	  	<equipment slot="Item0" id="Item.light_mace_t3" />
+	    <equipment slot="Body" id="Item.aserai_civil_d" />
+	    <equipment slot="Leg" id="Item.folded_town_boots" />
+		<equipment slot="Gloves" id="Item.leather_gloves" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.light_mace_t3" />
+	    <equipment slot="Head" id="Item.desert_cap" />
+        <equipment slot="Body" id="Item.aserai_civil_c" />
+	    <equipment slot="Leg" id="Item.southern_moccasins" />
+      </EquipmentRoster>
+	  <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.aserai_sword_3_t3" />
+	    <equipment slot="Head" id="Item.desert_cap" />
+        <equipment slot="Body" id="Item.layered_robe" />
+	    <equipment slot="Leg" id="Item.southern_moccasins" />
+      </EquipmentRoster>
+	  <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.aserai_sword_3_t3" />
+	    <equipment slot="Body" id="Item.layered_robe" />
+	    <equipment slot="Leg" id="Item.southern_moccasins" />
+		<equipment slot="Cape" id="Item.desert_fabric_shoulderpad" />
+      </EquipmentRoster>
+	  <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.aserai_sword_3_t3" />
+	    <equipment slot="Head" id="Item.wrapped_desert_cap" />
+        <equipment slot="Body" id="Item.desert_robe" />
+	    <equipment slot="Leg" id="Item.southern_moccasins" />
+		<equipment slot="Cape" id="Item.desert_fabric_shoulderpad" />
+      </EquipmentRoster>
+    </Equipments>
+  </NPCCharacter>
+  
+  
+  <NPCCharacter id="noble_aserai"
+                default_group="Cavalry"
+                level="1"
+                name="{=!}Aserai Noble"
+                occupation="Villager"
+                culture="Culture.aserai"
+                skill_template="SkillSet.infantry_heavyinfantry_level1_template_skills">
+    <face>
+      <!--face_key value="0009013000000000000000000000000000000000000000000000000000000000000a00050000000000000000000000000000000000000000fffffffffc880000" max_value="001cffffc000390ffff88affaa9efffffffffffffff7ffffffff9ffffffffffa0007effff7ffffff000000000000000000000000000000000000000001509181" /-->
+      <BodyProperties version="4"
+                      age="40.69"
+                      weight="0.304"
+                      build="0.3225"
+                      key="001EA40C400000000100110121111110053000001111000000000001480101330125501302100000000000000000000000000000000000000000000000401000" />
+      <BodyPropertiesMax version="4"
+                         age="71.09"
+                         weight="0.5725"
+                         build="0.7299"
+                         key="0034FC0FC0003A5ADFEEEFEFEEEEFFFFEFF8FFEEFF88FFFFFFFFFFEF8EFEFFFE07BB90780BEEEFFF00000000000000000000000000000000000000006F809105" />
+    </face>
+    <skills>
+      <skill id="Athletics"
+             value="60" />
+      <skill id="Riding"
+             value="110" />
+      <skill id="OneHanded"
+             value="120" />
+      <skill id="TwoHanded"
+             value="60" />
+      <skill id="Polearm"
+             value="60" />
+      <skill id="Bow"
+             value="40" />
+      <skill id="Crossbow"
+             value="50" />
+    </skills>
+    <Equipments>
+      <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.aserai_sword_5_t4" />
+        <equipment slot="Head" id="Item.aserai_civil_d_hscarf" />
+		<equipment slot="Cape" id="Item.AR_aserai_scarf_a" />
+	    <equipment slot="Body" id="Item.aserai_civil_a" />
+		<equipment slot="Leg" id="Item.TV_moccasins_b" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+	  	<equipment slot="Item0" id="Item.aserai_sword_5_t4" />
+	    <equipment slot="Body" id="Item.aserai_civil_a" />
+	    <equipment slot="Leg" id="Item.TV_moccasins_b" />
+		<equipment slot="Gloves" id="Item.highland_gloves" />
+		<equipment slot="Cape" id="Item.AR_aserai_scarf_a" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.aserai_sword_5_t4" />
+        <equipment slot="Body" id="Item.aserai_civil_a" />
+	    <equipment slot="Leg" id="Item.TV_moccasins_b" />
+		<equipment slot="Gloves" id="Item.highland_gloves" />
+		<equipment slot="Cape" id="Item.wrapped_scarf" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.aserai_sword_5_t4" />
+        <equipment slot="Body" id="Item.aserai_civil_a" />
+	    <equipment slot="Leg" id="Item.TV_moccasins_b" />
+		<equipment slot="Gloves" id="Item.highland_gloves" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.aserai_sword_6_t4" />
+	    <equipment slot="Cape" id="Item.desert_fabric_shoulderpad" />
+	    <equipment slot="Body" id="Item.tassled_southern_robes" />
+	    <equipment slot="Leg" id="Item.TV_moccasins_b" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.aserai_sword_6_t4" />
+	    <equipment slot="Body" id="Item.tassled_southern_robes" />
+	    <equipment slot="Leg" id="Item.TV_moccasins_b" />
+      </EquipmentRoster>
+	  <EquipmentRoster>
+	  	<equipment slot="Item0" id="Item.aserai_sword_6_t4" />
+	    <equipment slot="Body" id="Item.aserai_civil_e" />
+	    <equipment slot="Leg" id="Item.folded_town_boots" />
+		<equipment slot="Gloves" id="Item.highland_gloves" />
+		<equipment slot="Cape" id="Item.scarf" />
+      </EquipmentRoster>
+	  <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.shishpar_mace_t4" />
+		<equipment slot="Head" id="Item.aserai_civil_c_head" />
+	    <equipment slot="Body" id="Item.aserai_civil_e" />
+	    <equipment slot="Gloves" id="Item.highland_gloves" />
+	    <equipment slot="Leg" id="Item.folded_town_boots" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+	  	<equipment slot="Item0" id="Item.aserai_sword_4_t4" />
+		<equipment slot="Head" id="Item.aserai_civil_c_head" />
+	    <equipment slot="Body" id="Item.aserai_civil_d" />
+	    <equipment slot="Leg" id="Item.folded_town_boots" />
+		<equipment slot="Gloves" id="Item.studded_leather_vambraces" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.aserai_sword_4_t4" />
+		<equipment slot="Head" id="Item.aserai_civil_d_hscarf" />
+        <equipment slot="Body" id="Item.aserai_civil_d" />
+	    <equipment slot="Leg" id="Item.southern_moccasins" />
+		<equipment slot="Gloves" id="Item.studded_leather_vambraces" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.shishpar_mace_t4" />
+        <equipment slot="Head" id="Item.desert_cap" />
+        <equipment slot="Body" id="Item.aserai_civil_c" />
+	    <equipment slot="Leg" id="Item.southern_moccasins" />
+		<equipment slot="Gloves" id="Item.studded_leather_vambraces" />
+      </EquipmentRoster>
+	  <EquipmentRoster>
+	  	<equipment slot="Item0" id="Item.aserai_mace_4_t4" />
+		<equipment slot="Head" id="Item.aserai_civil_e_hscarf" />
+	    <equipment slot="Body" id="Item.aserai_civil_c" />
+	    <equipment slot="Leg" id="Item.southern_moccasins" />
+		<equipment slot="Gloves" id="Item.studded_leather_vambraces" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+	    <equipment slot="Item0" id="Item.aserai_mace_4_t4" />
+	    <equipment slot="Head" id="Item.aserai_civil_e_hscarf" />
+        <equipment slot="Body" id="Item.aserai_civil_c" />
+	    <equipment slot="Leg" id="Item.southern_moccasins" />
+		<equipment slot="Gloves" id="Item.studded_leather_vambraces" />
+      </EquipmentRoster>
+	  <equipment slot="Horse" id="Item.t2_aserai_horse" />
+	  <equipment slot="HorseHarness" id="Item.desert_cloth_harness" />
+    </Equipments>
+  </NPCCharacter>
+</NPCCharacters>
