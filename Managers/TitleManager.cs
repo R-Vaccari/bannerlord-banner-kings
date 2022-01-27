@@ -125,8 +125,8 @@ namespace BannerKings.Managers
                 usurper.Clan.Influence -= costs.influence;
             if (costs.renown > 0)
                 usurper.Clan.Renown -= costs.renown;
-            OwnershipNotification notification = new OwnershipNotification(title, new TextObject(string.Format("You are now the rightful owner to {0}", title.name)));
-            Campaign.Current.CampaignInformationManager.NewMapNoticeAdded(notification);
+            //OwnershipNotification notification = new OwnershipNotification(title, new TextObject(string.Format("You are now the rightful owner to {0}", title.name)));
+            //Campaign.Current.CampaignInformationManager.NewMapNoticeAdded(notification);
         }
         
         public HashSet<FeudalTitle> GetTitles(Hero hero)
@@ -278,11 +278,11 @@ namespace BannerKings.Managers
             FeudalTitle title = TITLES.FirstOrDefault(x => x.fief == settlement);
             if (title == null) return;
 
-            title.deFacto = newOwner;
+            ExecuteOwnershipChange(settlement.Owner, newOwner, title, false);
             if (!settlement.IsVillage && settlement.BoundVillages != null && settlement.BoundVillages.Count > 0 && title.vassals != null &&
                 title.vassals.Count > 0)
                 foreach (FeudalTitle lordship in title.vassals.Where(y => y.type == TitleType.Lordship))
-                        lordship.deFacto = newOwner;
+                    ExecuteOwnershipChange(settlement.Owner, newOwner, title, false);
         }
 
         public void ShowContract(Hero lord, string buttonString)
@@ -532,6 +532,11 @@ namespace BannerKings.Managers
             Lawful_Foreigner,
             Unlawful,
             Unlawful_Foreigner
+        }
+
+        public enum SuccessionType
+        {
+
         }
     }
 }
