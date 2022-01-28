@@ -20,8 +20,8 @@ using TaleWorlds.CampaignSystem.ViewModelCollection;
 using SandBox;
 using TaleWorlds.ObjectSystem;
 using BannerKings.Managers;
-using TaleWorlds.SaveSystem.Definition;
-using BannerKings.UI.Information;
+using TaleWorlds.CampaignSystem.CharacterDevelopment.Managers;
+using BannerKings.Managers.Helpers;
 
 namespace BannerKings
 {
@@ -63,7 +63,7 @@ namespace BannerKings
 
         protected override void OnSubModuleLoad()
         {
-            new Harmony("Populations").PatchAll();
+            new Harmony("BannerKings").PatchAll();
             base.OnSubModuleLoad();
         }
     }
@@ -326,8 +326,163 @@ namespace BannerKings
             }
         }
 
+        namespace Government
+        {
 
-        namespace Economy
+            [HarmonyPatch(typeof(KillCharacterAction), "ApplyInternal")]
+            class KillCharacterActionPatch
+            {
+                static bool Prefix(Hero victim, Hero killer, KillCharacterAction.KillCharacterActionDetail actionDetail, bool showNotification, bool isForced = false)
+                {
+                    if (!victim.CanDie(actionDetail) && !isForced)
+                        return false;
+                    
+                    if (!victim.IsAlive)
+                    {
+                        Debug.FailedAssert("Victim: " + victim.Name + " is already dead!", "C:\\Develop\\mb3\\Source\\Bannerlord\\TaleWorlds.CampaignSystem\\Actions\\KillCharacterAction.cs", "ApplyInternal", 35);
+                        return false;
+                    }
+                    if (victim.IsNotable)
+                    {
+                        IssueBase issue = victim.Issue;
+                        if (((issue != null) ? issue.IssueQuest : null) != null)
+                            Debug.FailedAssert("Trying to kill a notable that has quest!", "C:\\Develop\\mb3\\Source\\Bannerlord\\TaleWorlds.CampaignSystem\\Actions\\KillCharacterAction.cs", "ApplyInternal", 42);
+                        
+                    }
+                    MobileParty partyBelongedTo = victim.PartyBelongedTo;
+                    if (((partyBelongedTo != null) ? partyBelongedTo.MapEvent : null) == null)
+                    {
+                        MobileParty partyBelongedTo2 = victim.PartyBelongedTo;
+                        if (((partyBelongedTo2 != null) ? partyBelongedTo2.SiegeEvent : null) == null)
+                            goto IL_E2;
+                        
+                    }
+                    if (victim.DeathMark == KillCharacterAction.KillCharacterActionDetail.None)
+                    {
+                        victim.AddDeathMark(killer, actionDetail);
+                        return false;
+                    }
+                IL_E2:
+                    CampaignEventDispatcher.Instance.OnBeforeHeroKilled(victim, killer, actionDetail, showNotification);
+                    if (victim.IsHumanPlayerCharacter && victim.DeathMark == KillCharacterAction.KillCharacterActionDetail.None && actionDetail == KillCharacterAction.KillCharacterActionDetail.DiedInBattle)
+                    {
+                        victim.MakeWounded(killer, actionDetail);
+                        return false;
+                    }
+                    if (victim.IsHumanPlayerCharacter && !isForced)
+                    {
+                        victim.MakeWounded(killer, actionDetail);
+                        CampaignEventDispatcher.Instance.OnBeforeMainCharacterDied();
+                        return false;
+                    }
+
+                    ///////// SUCCESSION CHANGES //////////
+
+                    victim.EncyclopediaText = (TextObject)Type.GetType("TaleWorlds.CampaignSystem.Actions.KillCharacterAction, TaleWorlds.CampaignSystem").GetMethod("CreateObituary", BindingFlags.Static | BindingFlags.NonPublic).Invoke(null, new object[] { victim, actionDetail });
+                    if (victim.Clan != null && (victim.Clan.Leader == victim || victim == Hero.MainHero))
+                    {
+                        Kingdom kingdom = victim.Clan.Kingdom;
+                        FeudalTitle title = null;
+                        if (BannerKingsConfig.Instance.TitleManager != null && BannerKingsConfig.Instance.TitleManager.IsHeroTitleHolder(victim))
+                        {
+                            if (kingdom != null) title = BannerKingsConfig.Instance.TitleManager.GetHighestTitleWithinFaction(victim, victim.Clan.Kingdom);
+                            else title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(victim);
+                        }
+
+                        if (victim != Hero.MainHero && victim.Clan.Heroes.Any((Hero x) => !x.IsChild && x != victim && x.IsAlive && (x.IsNoble || x.IsMinorFactionHero)))
+                            InheritanceHelper.ApplyInheritance(title, victim);
+
+                        if (kingdom != null)
+                        {
+                            if (victim.Clan.Kingdom.RulingClan == victim.Clan)
+                            {
+                                List<Clan> list = (from t in victim.Clan.Kingdom.Clans
+                                                   where !t.IsEliminated && t.Leader != victim && !t.IsUnderMercenaryService
+                                                   select t).ToList<Clan>();
+
+                                if (list.IsEmpty<Clan>())
+                                    DestroyKingdomAction.Apply(victim.Clan.Kingdom);
+                                else SuccessionHelper.ApplySuccession(title, list, victim, kingdom);
+                            }
+                        }     
+                    }
+
+                    ///////// SUCCESSION CHANGES //////////
+
+
+                    if (victim.PartyBelongedTo != null && (victim.PartyBelongedTo.LeaderHero == victim || victim == Hero.MainHero))
+                    {
+                        if (victim.PartyBelongedTo.Army != null)
+                        {
+                            if (victim.PartyBelongedTo.Army.LeaderParty == victim.PartyBelongedTo)
+                                victim.PartyBelongedTo.Army.DisperseArmy(Army.ArmyDispersionReason.ArmyLeaderIsDead);
+                            
+                            else  victim.PartyBelongedTo.Army = null;
+                            
+                        }
+                        if (victim.PartyBelongedTo != MobileParty.MainParty)
+                        {
+                            victim.PartyBelongedTo.SetMoveModeHold();
+                            if (victim.Clan != null && victim.Clan.IsRebelClan)
+                                DestroyPartyAction.Apply(null, victim.PartyBelongedTo);
+                            
+                        }
+                    }
+                    Type.GetType("TaleWorlds.CampaignSystem.Actions.KillCharacterAction, TaleWorlds.CampaignSystem").GetMethod("MakeDead", BindingFlags.Static | BindingFlags.NonPublic).Invoke(null, new object[] { victim, true });
+                    if (victim.GovernorOf != null)
+                        ChangeGovernorAction.ApplyByGiveUpCurrent(victim);
+                    
+                    if (actionDetail == KillCharacterAction.KillCharacterActionDetail.Executed && killer == Hero.MainHero && victim.Clan != null && !victim.Clan.IsNeutralClan)
+                    {
+                        if (victim.GetTraitLevel(DefaultTraits.Honor) >= 0)
+                            TraitLevelingHelper.OnLordExecuted();
+                        
+                        foreach (Clan clan in Clan.All)
+                        {
+                            if (!clan.IsEliminated && !clan.IsBanditFaction && clan != Clan.PlayerClan && clan != CampaignData.NeutralFaction)
+                            {
+                                bool affectRelatives;
+                                int relationChangeForExecutingHero = Campaign.Current.Models.ExecutionRelationModel.GetRelationChangeForExecutingHero(victim, clan.Leader, out affectRelatives);
+                                if (relationChangeForExecutingHero != 0)
+                                    ChangeRelationAction.ApplyPlayerRelation(clan.Leader, relationChangeForExecutingHero, affectRelatives, true);
+                                
+                            }
+                        }
+                    }
+                    if (victim.Clan != null && !victim.Clan.IsEliminated && !victim.Clan.IsBanditFaction && !victim.Clan.IsNeutralClan && (victim.Clan.Leader == victim || victim.Clan.Leader == null))
+                        DestroyClanAction.Apply(victim.Clan);
+                    
+                    CampaignEventDispatcher.Instance.OnHeroKilled(victim, killer, actionDetail, showNotification);
+                    if (victim.Spouse != null)
+                        victim.Spouse = null;
+                    
+                    if (victim.CompanionOf != null)
+                        RemoveCompanionAction.ApplyByDeath(victim.CompanionOf, victim);
+                    
+                    if (victim.CurrentSettlement != null)
+                    {
+                        if (victim.CurrentSettlement == Settlement.CurrentSettlement)
+                        {
+                            LocationComplex locationComplex = LocationComplex.Current;
+                            if (locationComplex != null)
+                                locationComplex.RemoveCharacterIfExists(victim);
+                            
+                        }
+                        if (victim.StayingInSettlement != null)
+                            victim.StayingInSettlement = null;
+                        
+                    }
+                    return false;
+                }
+            }
+
+
+
+
+        }
+
+
+            namespace Economy
         {
 
             //Mules

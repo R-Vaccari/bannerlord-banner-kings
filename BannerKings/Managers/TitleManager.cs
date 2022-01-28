@@ -1,5 +1,5 @@
 ﻿using BannerKings.Models;
-using BannerKings.UI.Information;
+using BannerKings.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -62,7 +62,11 @@ namespace BannerKings.Managers
         private void RemoveFromTitleHolder(Hero hero, FeudalTitle title)
         {
             if (TITLE_HOLDERS.ContainsKey(hero) && TITLE_HOLDERS[hero].Contains(title))
+            {
                 TITLE_HOLDERS[hero].Remove(title);
+                if (TITLE_HOLDERS[hero].Count == 0)
+                    TITLE_HOLDERS.Remove(hero);
+            }
         }
 
         public FeudalTitle CalculateHeroSuzerain(Hero hero)  
@@ -102,6 +106,20 @@ namespace BannerKings.Managers
                 return suzerain != null;
             }
             return false;
+        }
+
+        public void InheritTitles(Hero oldOwner, Hero heir)
+        {
+            if (IsHeroTitleHolder(oldOwner))
+            {
+                HashSet<FeudalTitle> set = GetTitles(oldOwner);
+                HashSet<FeudalTitle> titles = new HashSet<FeudalTitle>(set);
+                foreach (FeudalTitle title in titles)
+                {
+                    if (title.deJure == oldOwner) ExecuteOwnershipChange(oldOwner, heir, title, true);
+                    if (title.deFacto == oldOwner) ExecuteOwnershipChange(oldOwner, heir, title, false);
+                }
+            }
         }
 
         public void UsurpTitle(Hero oldOwner, Hero usurper, FeudalTitle title, UsurpCosts costs)
@@ -188,7 +206,7 @@ namespace BannerKings.Managers
 
         public void InitializeTitles()
         {
-            XmlDocument doc = Helpers.Helpers.CreateDocumentFromXmlFile(BasePath.Name + "Modules/BannerKings/ModuleData/titles.xml");
+            XmlDocument doc = BannerKings.Helpers.Helpers.CreateDocumentFromXmlFile(BasePath.Name + "Modules/BannerKings/ModuleData/titles.xml");
             XmlNode titlesNode = doc.ChildNodes[1].ChildNodes[0];
             bool autoGenerate = bool.Parse(titlesNode.Attributes["autoGenerate"].Value);
  
@@ -377,7 +395,8 @@ namespace BannerKings.Managers
                 }, new HashSet<FeudalRights>() {
                     FeudalRights.Assistance_Rights,
                     FeudalRights.Army_Compensation_Rights
-                });
+                }, GovernmentType.Imperial, SuccessionType.Imperial,
+                InheritanceType.Primogeniture, GenderLaw.Agnatic);
             else if (type == "tribal")
                 return new FeudalContract(new Dictionary<FeudalDuties, float>() {
                     { FeudalDuties.Taxation, 0.125f },
@@ -385,14 +404,16 @@ namespace BannerKings.Managers
                 }, new HashSet<FeudalRights>() {
                     FeudalRights.Conquest_Rights,
                     FeudalRights.Absolute_Land_Rights
-                });
+                }, GovernmentType.Tribal, SuccessionType.Elective_Monarchy,
+                InheritanceType.Seniority, GenderLaw.Agnatic);
             else return new FeudalContract(new Dictionary<FeudalDuties, float>() {
                     { FeudalDuties.Ransom, 0.20f },
                     { FeudalDuties.Auxilium, 0.4f }
                 }, new HashSet<FeudalRights>() {
                     FeudalRights.Absolute_Land_Rights,
                     FeudalRights.Enfoeffement_Rights
-                });
+                }, GovernmentType.Feudal, SuccessionType.Hereditary_Monarchy,
+                InheritanceType.Primogeniture, GenderLaw.Agnatic);
         }
 
         private FeudalTitle CreateKingdom(Hero deJure, Kingdom faction, TitleType type, HashSet<FeudalTitle> vassals, FeudalContract contract)
@@ -450,7 +471,7 @@ namespace BannerKings.Managers
                 this.vassals = vassals;
                 this.deJure = deJure;
                 this.deFacto = deFacto;
-                this.name = new TextObject(Helpers.Helpers.GetTitlePrefix(type) + " of " + name);
+                this.name = new TextObject(BannerKings.Helpers.Helpers.GetTitlePrefix(type) + " of " + name);
                 this.shortName = new TextObject(name);
                 this.contract = contract;
                 dueTax = 0;
@@ -493,11 +514,20 @@ namespace BannerKings.Managers
         {
             public Dictionary<FeudalDuties, float> duties { get; private set; }
             public HashSet<FeudalRights> rights { get; private set; }
+            public GovernmentType government { get; private set; }
+            public SuccessionType succession { get; private set; }
+            public InheritanceType inheritance { get; private set; }
+            public GenderLaw genderLaw { get; private set; }
 
-            public FeudalContract(Dictionary<FeudalDuties, float> duties, HashSet<FeudalRights> rights)
+            public FeudalContract(Dictionary<FeudalDuties, float> duties, HashSet<FeudalRights> rights, GovernmentType government,
+                SuccessionType succession, InheritanceType inheritance, GenderLaw genderLaw)
             {
                 this.duties = duties;
                 this.rights = rights;
+                this.government = government;
+                this.succession = succession;
+                this.inheritance = inheritance;
+                this.genderLaw = genderLaw;
             }
         }
 
@@ -536,7 +566,31 @@ namespace BannerKings.Managers
 
         public enum SuccessionType
         {
+            Hereditary_Monarchy,
+            Elective_Monarchy,
+            Imperial,
+            Republic
+        }
 
+        public enum InheritanceType
+        {
+            Primogeniture,
+            Ultimogeniture,
+            Seniority
+        }
+
+        public enum GenderLaw
+        {
+            Agnatic,
+            Cognatic
+        }
+
+        public enum GovernmentType
+        {
+            Feudal,
+            Tribal,
+            Imperial,
+            Republic
         }
     }
 }

@@ -1,6 +1,5 @@
 using System;
 
-namespace Bannerlord.HousingSystem;
 
 public class GenericSingleton<T> : IDisposable where T : class, new()
 {
