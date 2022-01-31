@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
@@ -95,6 +94,12 @@ namespace BannerKings.Managers.Helpers
                 ChangeClanLeaderAction.ApplyWithSelectedNewLeader(victim.Clan, heir);
                 BannerKingsConfig.Instance.TitleManager.InheritTitles(victim, heir);
             }
+        }
+
+        public static void ApplyImperialInheritance(Hero victim, Hero heir)
+        {
+            ChangeClanLeaderAction.ApplyWithSelectedNewLeader(victim.Clan, heir);
+            BannerKingsConfig.Instance.TitleManager.InheritTitles(victim, heir);
         }
     }
 }
