@@ -195,16 +195,18 @@ namespace BannerKings.Managers
             private float assimilation { get; set; }
 
             [SaveableProperty(4)]
-            private float[] satisfactions { get; set; } = new float[] { 0.5f, 0.5f, 0.5f, 0.5f };
+            private float[] satisfactions { get; set; }
 
             [SaveableProperty(5)]
-            private float stability { get; set; } = 0.5f;
+            private float stability { get; set; }
 
             public PopulationData(List<PopulationClass> classes, float assimilation)
             {
                 this.classes = classes;
                 classes.ForEach(popClass => TotalPop += popClass.count);
                 this.assimilation = assimilation;
+                this.satisfactions = new float[] { 0.5f, 0.5f, 0.5f, 0.5f };
+                this.stability = 0.5f;
             }
 
             public float Stability
@@ -219,10 +221,7 @@ namespace BannerKings.Managers
 
             public float Assimilation
             {
-                get
-                {
-                    return assimilation;
-                }
+                get => assimilation;          
                 set
                 {
                     if (value != assimilation)
@@ -232,10 +231,7 @@ namespace BannerKings.Managers
 
             public List<PopulationClass> Classes
             {
-                get
-                {
-                    return classes;
-                }
+                get => classes;           
                 set
                 {
                     if (value != classes)
@@ -245,10 +241,7 @@ namespace BannerKings.Managers
 
             public int TotalPop
             {
-                get
-                {
-                    return totalPop;
-                }
+                get => totalPop;
                 set
                 {
                     if (value != totalPop)
@@ -263,7 +256,7 @@ namespace BannerKings.Managers
             }
             public void UpdateSatisfaction(ConsumptionType type, float value)
             {
-                if (this.satisfactions == null ) this.satisfactions = new float[] { 0.5f, 0.5f, 0.5f, 0.5f };
+                if (this.satisfactions == null) this.satisfactions = new float[] { 0.5f, 0.5f, 0.5f, 0.5f };
                 float current = this.satisfactions[(int)type];
                 this.satisfactions[(int)type] = MathF.Clamp(current + value, 0f, 1f);
             }

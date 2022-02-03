@@ -178,6 +178,13 @@ namespace BannerKings.Managers
             else return null;
         }
 
+        public FeudalTitle GetSovereignTitle(Kingdom faction)
+        {
+            if (KINGDOMS.ContainsKey(faction))
+                return KINGDOMS[faction];
+            else return null;
+        }
+
         public HashSet<FeudalTitle> GetVassals(TitleType threshold, Hero lord)
         {
             HashSet<FeudalTitle> allTitles = TITLE_HOLDERS[lord];
@@ -200,6 +207,28 @@ namespace BannerKings.Managers
                 faction = KINGDOMS.FirstOrDefault(x => x.Value == title).Key;
 
             return faction;
+        }
+
+        public IEnumerable<SuccessionType> GetValidSuccessions(GovernmentType government)
+        {
+            if (government == GovernmentType.Feudal)
+            {
+                yield return SuccessionType.Hereditary_Monarchy;
+                yield return SuccessionType.Elective_Monarchy;
+                yield break;
+            } else if (government == GovernmentType.Imperial)
+            {
+                yield return SuccessionType.Imperial;
+                yield break;
+            } else if (government == GovernmentType.Republic)
+            {
+                yield return SuccessionType.Republic;
+                yield break;
+            } else
+            {
+                yield return SuccessionType.Elective_Monarchy;
+                yield break;
+            }   
         }
 
 
@@ -405,6 +434,15 @@ namespace BannerKings.Managers
                     FeudalRights.Absolute_Land_Rights
                 }, GovernmentType.Tribal, SuccessionType.Elective_Monarchy,
                 InheritanceType.Seniority, GenderLaw.Agnatic);
+            else if (type == "republic")
+                return new FeudalContract(new Dictionary<FeudalDuties, float>() {
+                    { FeudalDuties.Ransom, 0.10f },
+                    { FeudalDuties.Taxation, 0.4f }
+                }, new HashSet<FeudalRights>() {
+                    FeudalRights.Assistance_Rights,
+                    FeudalRights.Army_Compensation_Rights
+                }, GovernmentType.Republic, SuccessionType.Republic,
+                InheritanceType.Primogeniture, GenderLaw.Cognatic);
             else return new FeudalContract(new Dictionary<FeudalDuties, float>() {
                     { FeudalDuties.Ransom, 0.20f },
                     { FeudalDuties.Auxilium, 0.4f }

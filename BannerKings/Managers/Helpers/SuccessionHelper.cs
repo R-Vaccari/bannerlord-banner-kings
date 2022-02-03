@@ -51,6 +51,11 @@ namespace BannerKings.Managers.Helpers
             else ApplyVanillaSuccession(list, victim, kingdom);
         }
 
+        private static void ApplyRepublicSuccession(List<Clan> list, Hero victim, Kingdom kingdom)
+        {
+            kingdom.AddDecision(new RepublicElectionDecision(victim.Clan), true);
+        }
+
         private static void ApplyImperialSuccession(List<Clan> list, Hero victim, Kingdom kingdom)
         {
             Hero heir = GetImperialHeir(list, victim);

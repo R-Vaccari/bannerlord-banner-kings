@@ -22,6 +22,7 @@ using TaleWorlds.ObjectSystem;
 using BannerKings.Managers;
 using TaleWorlds.CampaignSystem.CharacterDevelopment.Managers;
 using BannerKings.Managers.Helpers;
+using TaleWorlds.CampaignSystem.Election;
 
 namespace BannerKings
 {
@@ -336,7 +337,7 @@ namespace BannerKings
                 {
                     if (!victim.CanDie(actionDetail) && !isForced)
                         return false;
-                    
+
                     if (!victim.IsAlive)
                     {
                         Debug.FailedAssert("Victim: " + victim.Name + " is already dead!", "C:\\Develop\\mb3\\Source\\Bannerlord\\TaleWorlds.CampaignSystem\\Actions\\KillCharacterAction.cs", "ApplyInternal", 35);
@@ -347,7 +348,7 @@ namespace BannerKings
                         IssueBase issue = victim.Issue;
                         if (((issue != null) ? issue.IssueQuest : null) != null)
                             Debug.FailedAssert("Trying to kill a notable that has quest!", "C:\\Develop\\mb3\\Source\\Bannerlord\\TaleWorlds.CampaignSystem\\Actions\\KillCharacterAction.cs", "ApplyInternal", 42);
-                        
+
                     }
                     MobileParty partyBelongedTo = victim.PartyBelongedTo;
                     if (((partyBelongedTo != null) ? partyBelongedTo.MapEvent : null) == null)
@@ -355,7 +356,7 @@ namespace BannerKings
                         MobileParty partyBelongedTo2 = victim.PartyBelongedTo;
                         if (((partyBelongedTo2 != null) ? partyBelongedTo2.SiegeEvent : null) == null)
                             goto IL_E2;
-                        
+
                     }
                     if (victim.DeathMark == KillCharacterAction.KillCharacterActionDetail.None)
                     {
@@ -404,7 +405,7 @@ namespace BannerKings
                                     DestroyKingdomAction.Apply(victim.Clan.Kingdom);
                                 else SuccessionHelper.ApplySuccession(title, list, victim, kingdom);
                             }
-                        }     
+                        }
                     }
 
                     ///////// SUCCESSION CHANGES //////////
@@ -416,27 +417,27 @@ namespace BannerKings
                         {
                             if (victim.PartyBelongedTo.Army.LeaderParty == victim.PartyBelongedTo)
                                 victim.PartyBelongedTo.Army.DisperseArmy(Army.ArmyDispersionReason.ArmyLeaderIsDead);
-                            
-                            else  victim.PartyBelongedTo.Army = null;
-                            
+
+                            else victim.PartyBelongedTo.Army = null;
+
                         }
                         if (victim.PartyBelongedTo != MobileParty.MainParty)
                         {
                             victim.PartyBelongedTo.SetMoveModeHold();
                             if (victim.Clan != null && victim.Clan.IsRebelClan)
                                 DestroyPartyAction.Apply(null, victim.PartyBelongedTo);
-                            
+
                         }
                     }
                     Type.GetType("TaleWorlds.CampaignSystem.Actions.KillCharacterAction, TaleWorlds.CampaignSystem").GetMethod("MakeDead", BindingFlags.Static | BindingFlags.NonPublic).Invoke(null, new object[] { victim, true });
                     if (victim.GovernorOf != null)
                         ChangeGovernorAction.ApplyByGiveUpCurrent(victim);
-                    
+
                     if (actionDetail == KillCharacterAction.KillCharacterActionDetail.Executed && killer == Hero.MainHero && victim.Clan != null && !victim.Clan.IsNeutralClan)
                     {
                         if (victim.GetTraitLevel(DefaultTraits.Honor) >= 0)
                             TraitLevelingHelper.OnLordExecuted();
-                        
+
                         foreach (Clan clan in Clan.All)
                         {
                             if (!clan.IsEliminated && !clan.IsBanditFaction && clan != Clan.PlayerClan && clan != CampaignData.NeutralFaction)
@@ -445,20 +446,20 @@ namespace BannerKings
                                 int relationChangeForExecutingHero = Campaign.Current.Models.ExecutionRelationModel.GetRelationChangeForExecutingHero(victim, clan.Leader, out affectRelatives);
                                 if (relationChangeForExecutingHero != 0)
                                     ChangeRelationAction.ApplyPlayerRelation(clan.Leader, relationChangeForExecutingHero, affectRelatives, true);
-                                
+
                             }
                         }
                     }
                     if (victim.Clan != null && !victim.Clan.IsEliminated && !victim.Clan.IsBanditFaction && !victim.Clan.IsNeutralClan && (victim.Clan.Leader == victim || victim.Clan.Leader == null))
                         DestroyClanAction.Apply(victim.Clan);
-                    
+
                     CampaignEventDispatcher.Instance.OnHeroKilled(victim, killer, actionDetail, showNotification);
                     if (victim.Spouse != null)
                         victim.Spouse = null;
-                    
+
                     if (victim.CompanionOf != null)
                         RemoveCompanionAction.ApplyByDeath(victim.CompanionOf, victim);
-                    
+
                     if (victim.CurrentSettlement != null)
                     {
                         if (victim.CurrentSettlement == Settlement.CurrentSettlement)
@@ -466,23 +467,62 @@ namespace BannerKings
                             LocationComplex locationComplex = LocationComplex.Current;
                             if (locationComplex != null)
                                 locationComplex.RemoveCharacterIfExists(victim);
-                            
+
                         }
                         if (victim.StayingInSettlement != null)
                             victim.StayingInSettlement = null;
-                        
+
                     }
                     return false;
                 }
             }
 
+            /*
+            [HarmonyPatch(typeof(KingdomElection), "Setup")]
+            class VillagerMoveItemsPatch
+            {
+                static bool Prefix(KingSelectionKingdomDecision __instance, KingdomDecision ____decision, ref List<DecisionOutcome> ____possibleOutcomes,
+                    ref List<Supporter> ____supporters, ref Clan ____chooser, ref bool ____hasPlayerVoted, ref bool ___IsCancelled)
+                {
+                    FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(__instance.Kingdom);
+                    if (title != null)
+                    {
+                        SuccessionType succession = title.contract.succession;
+                        if (succession == SuccessionType.Republic)
+                        {
+                            List<DecisionOutcome> initialCandidates = ____decision.DetermineInitialCandidates().ToList<DecisionOutcome>();
+                            ____possibleOutcomes = ____decision.NarrowDownCandidates(initialCandidates, 3);
+                            ____supporters = ____decision.DetermineSupporters().ToList<Supporter>();
+                            ____chooser = ____decision.DetermineChooser();
+                            ____decision.DetermineSponsors(____possibleOutcomes);
+                            ____hasPlayerVoted = false;
+                            ___IsCancelled = false;
+                            foreach (DecisionOutcome decisionOutcome in ____possibleOutcomes)
+                            {
+                                var method = __instance.GetType().GetMethod("DetermineInitialSupport", BindingFlags.NonPublic | BindingFlags.Instance);
+                                decisionOutcome.GetType().GetProperty("InitialSupport", BindingFlags.Public | BindingFlags.Instance)
+                                    .SetValue(decisionOutcome, method.Invoke(__instance, new object[] { decisionOutcome }));
+                            }
+                            float num = ____possibleOutcomes.Sum((DecisionOutcome x) => x.InitialSupport);
+                            foreach (DecisionOutcome decisionOutcome2 in ____possibleOutcomes)
+                            {
+                                decisionOutcome2.GetType().GetProperty("Likelihood", BindingFlags.Public | BindingFlags.Instance)
+                                    .SetValue(decisionOutcome2, ((num == 0f) ? 0f : (decisionOutcome2.InitialSupport / num)));
+                            }
+                            return false;
+                        } 
+                    }
+
+                    return true;
+                }
 
 
-
+            }
+            */
         }
 
 
-            namespace Economy
+        namespace Economy
         {
 
             //Mules
