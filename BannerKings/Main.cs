@@ -22,7 +22,7 @@ using TaleWorlds.ObjectSystem;
 using BannerKings.Managers;
 using TaleWorlds.CampaignSystem.CharacterDevelopment.Managers;
 using BannerKings.Managers.Helpers;
-using TaleWorlds.CampaignSystem.Election;
+using BannerKings.Populations;
 
 namespace BannerKings
 {
