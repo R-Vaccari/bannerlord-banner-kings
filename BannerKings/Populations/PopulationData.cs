@@ -213,4 +213,11 @@ namespace BannerKings.Populations
         private int capital;
 
     }
+
+    public enum GuildType
+    {
+        Merchant_Guild,
+        Masonry_Guild,
+
+    }
 }
