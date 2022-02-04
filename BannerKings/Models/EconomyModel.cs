@@ -1,14 +1,19 @@
-﻿using System;
+﻿using BannerKings.Managers;
+using BannerKings.Populations;
+using System;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.SandBox.GameComponents;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
+using TaleWorlds.Localization;
 using static BannerKings.Managers.PopulationManager;
+using static BannerKings.Managers.TitleManager;
 
 namespace BannerKings.Models
 {
-    class EconomyModel : DefaultSettlementEconomyModel
+    class EconomyModel : DefaultSettlementEconomyModel, IEconomyModel
     {
+        private static readonly float CRAFTSMEN_EFFECT_CAP = 0.4f;
 
         public override float GetDailyDemandForCategory(Town town, ItemCategory category, int extraProsperity)
         {
@@ -81,6 +86,45 @@ namespace BannerKings.Models
             float slaves = data.GetTypeCount(PopType.Slaves);
             float efficiency = new FeudalWorkshopModel().GetPolicyEffectToProduction(town);
             return (int)(slaves * 0.3f * efficiency);
+        }
+
+        public ExplainedNumber CalculateEffect(Settlement settlement)
+        {
+            ExplainedNumber result = new ExplainedNumber(10f);
+
+            FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetSovereignFromSettlement(settlement);
+            if (title != null)
+            {
+                GovernmentType government = title.contract.government;
+                if (government == GovernmentType.Republic)
+                    result.Add(40f, new TextObject("Government"));
+                else if (government == GovernmentType.Feudal)
+                    result.Add(20f, new TextObject("Government"));
+                else if (government == GovernmentType.Tribal)
+                    result.Add(10f, new TextObject("Government"));
+                else if (government == GovernmentType.Imperial)
+                    result.Add(5f, new TextObject("Government"));
+            }
+
+            return result;
+        }
+
+        public ExplainedNumber CalculateProductionEfficiency(Settlement settlement)
+        {
+            ExplainedNumber result = new ExplainedNumber(new DefaultWorkshopModel().GetPolicyEffectToProduction(settlement.Town));
+            PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
+            float craftsmen = data.GetTypeCount(PopType.Craftsmen);
+            result.Add(MathF.Min((craftsmen / 250f) * 0.020f, CRAFTSMEN_EFFECT_CAP), new TextObject("Craftsmen"));
+
+            if (BannerKingsConfig.Instance.PolicyManager.GetSettlementWork(settlement) == PolicyManager.WorkforcePolicy.Martial_Law)
+                result.Add(-0.30f, new TextObject("Martial Law policy"));
+
+            return result;
+        }
+
+        public ExplainedNumber CalculateProductionQuality(Settlement settlement)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -1,10 +1,10 @@
-﻿using TaleWorlds.CampaignSystem;
+﻿using BannerKings.Populations;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
-using static BannerKings.Managers.PopulationManager;
 
 namespace BannerKings.Models
 {
-    class StabilityModel
+    class StabilityModel : GameModel
     {
 
         public void CalculateStabilityChange(Settlement settlement)

@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.SaveSystem;
 using static BannerKings.Managers.PopulationManager;
+using BannerKings.Models;
 
 namespace BannerKings.Populations
 {
@@ -185,18 +187,130 @@ namespace BannerKings.Populations
 
     public class CultureData
     {
+        private HashSet<CultureDataClass> cultures;
+        private Hero settlementOwner;
 
+        public CultureObject DominantCulture
+        {
+            get
+            {
+                CultureObject culture = null;
+                CultureObject ownerCulture = settlementOwner.Culture;
+                float ownerShare = 0f;
+                float share = 0f;
+                foreach (CultureDataClass data in this.cultures)
+                {
+                    if (data.Assimilation >= share)
+                    {
+                        culture = data.Culture;
+                        share = data.Assimilation;
+                        if (data.Culture == ownerCulture)
+                            ownerShare = data.Assimilation;
+                    }
+                }
+
+                return share == ownerShare ? ownerCulture : (share > ownerShare ? culture : ownerCulture);
+            }
+        }
+
+        public void AddCulture(CultureObject culture, float acceptance)
+        {
+            this.cultures.Add(new CultureDataClass(culture, 0f, acceptance));
+        }
+
+        public float GetAssimilation(CultureObject culture)
+        {
+            CultureDataClass data = this.cultures.FirstOrDefault(x => x.Culture == culture);
+            return data != null ? data.Assimilation : 0f;
+        }
+
+        public float GetAcceptance(CultureObject culture)
+        {
+            CultureDataClass data = this.cultures.FirstOrDefault(x => x.Culture == culture);
+            return data != null ? data.Acceptance : 0f;
+        }
+    }
+
+    public class CultureDataClass
+    {
+        private CultureObject culture { get; set; }
+        private float assimilation { get; set; }
+        private float acceptance { get; set; }
+
+        public CultureDataClass(CultureObject culture, float assimilation, float acceptance)
+        {
+            this.culture = culture;
+            this.assimilation = assimilation;
+            this.acceptance = acceptance;
+        }
+
+        internal float Assimilation
+        {
+            get => assimilation;
+            set
+            {
+                assimilation = MBMath.ClampFloat(value, 0f, 1f);
+            }
+        }
+
+        internal float Acceptance
+        {
+            get => acceptance;
+            set
+            {
+                acceptance = MBMath.ClampFloat(value, 0f, 1f);
+            }
+        }
+
+        internal CultureObject Culture => culture;
     }
 
     public class EconomicData
     {
-        private float productionEfficiency;
-        private float productionQuality;
-        private float mercantilism;
+        private Settlement settlement;
         private Guild guild;
 
+        public EconomicData(Settlement settlement,
+            Guild guild = null)
+        {
+            this.settlement = settlement;
+            this.guild = guild;
+        }
 
+        public ExplainedNumber AdministrativeCost => BannerKingsConfig.Instance.Models
+            .First(x => x.GetType() == typeof(AdministrativeModel)).CalculateEffect(settlement);
+        public float MerchantRevenue => settlement.Town != null ? new EconomyModel().GetMerchantIncome(settlement.Town) : 0f;
+        public ExplainedNumber Mercantilism
+        {
+            get
+            {
+                EconomyModel model = (EconomyModel)BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(IEconomyModel));
+                return model.CalculateEffect(settlement);
+            }
+        }
+        public ExplainedNumber ProductionEfficiency
+        {
+            get
+            {
+                EconomyModel model = (EconomyModel)BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(IEconomyModel));
+                return model.CalculateProductionEfficiency(settlement);
+            }
+        }
+        public ExplainedNumber ProductionQuality
+        {
+            get
+            {
+                EconomyModel model = (EconomyModel)BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(IEconomyModel));
+                return model.CalculateProductionQuality(settlement);
+            }
+        }
     }
+
+    public class MilitaryData
+    {
+        private int manpower;
+    }
+
 
     public class LandData
     {

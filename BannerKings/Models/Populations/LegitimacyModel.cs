@@ -1,9 +1,10 @@
 ﻿using TaleWorlds.CampaignSystem;
+using TaleWorlds.Core;
 using static BannerKings.Managers.TitleManager;
 
 namespace BannerKings.Models
 {
-    class LegitimacyModel
+    class LegitimacyModel : GameModel
     {
 
         public LegitimacyType GetRuleType(Settlement settlement, Hero hero)

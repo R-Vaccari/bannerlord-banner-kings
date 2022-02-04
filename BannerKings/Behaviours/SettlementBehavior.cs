@@ -15,6 +15,9 @@ using TaleWorlds.ObjectSystem;
 using static BannerKings.Managers.TitleManager;
 using static BannerKings.Managers.PolicyManager;
 using static BannerKings.Managers.PopulationManager;
+using HarmonyLib;
+using BannerKings.Populations;
+using TaleWorlds.CampaignSystem.SandBox.CampaignBehaviors;
 
 namespace BannerKings.Behaviors
 {
@@ -658,6 +661,103 @@ namespace BannerKings.Behaviors
             }
 
             return value;
+        }
+
+    }
+
+    namespace Patches
+    {
+        [HarmonyPatch(typeof(SellPrisonersAction), "ApplyForAllPrisoners")]
+        class ApplyAllPrisionersPatch
+        {
+            static bool Prefix(MobileParty sellerParty, TroopRoster prisoners, Settlement currentSettlement, bool applyGoldChange = true)
+            {
+                if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(currentSettlement))
+                    BannerKingsConfig.Instance.PopulationManager.GetPopData(currentSettlement).UpdatePopType(
+                        PopulationManager.PopType.Slaves, Helpers.Helpers.GetRosterCount(prisoners));
+                return true;
+            }
+        }
+
+        [HarmonyPatch(typeof(SellPrisonersAction), "ApplyForSelectedPrisoners")]
+        class ApplySelectedPrisionersPatch
+        {
+            static bool Prefix(MobileParty sellerParty, TroopRoster prisoners, Settlement currentSettlement)
+            {
+                if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(currentSettlement))
+                    BannerKingsConfig.Instance.PopulationManager.GetPopData(currentSettlement).UpdatePopType(
+                        PopulationManager.PopType.Slaves, Helpers.Helpers.GetRosterCount(prisoners));
+
+                return true;
+            }
+        }
+
+        [HarmonyPatch(typeof(ChangeOwnerOfSettlementAction), "ApplyInternal")]
+        class ChangeOnwerPatch
+        {
+            static bool Prefix(Settlement settlement, Hero newOwner, Hero capturerHero, ChangeOwnerOfSettlementAction.ChangeOwnerOfSettlementDetail detail)
+            {
+                if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
+                {
+                    PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
+                    CultureObject settlementCulture = settlement.Culture;
+                    CultureObject originalOwnerCulture = settlement.Owner.Culture;
+                    CultureObject newCulture = newOwner.Culture;
+
+                    if ((settlementCulture == originalOwnerCulture && settlementCulture != newCulture) ||
+                        (settlementCulture != originalOwnerCulture && settlementCulture != newCulture
+                        && originalOwnerCulture != newCulture)) // previous owner as assimilated or everybody has a different culture
+                    {
+                        data.Assimilation = 0f;
+                    }
+                    else if (originalOwnerCulture != newCulture && newCulture == settlementCulture) // new owner is same culture as settlement that was being assimilated by foreigner, invert the process
+                    {
+                        float result = 1f - data.Assimilation;
+                        data.Assimilation = result;
+                    }
+
+                    BannerKingsConfig.Instance.TitleManager.ApplyOwnerChange(settlement, newOwner);
+                }
+
+                return true;
+            }
+        }
+
+        [HarmonyPatch(typeof(Town), "FoodStocksUpperLimit")]
+        class FoodStockPatch
+        {
+            static bool Prefix(ref Town __instance, ref int __result)
+            {
+                if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(__instance.Settlement))
+                {
+                    PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(__instance.Settlement);
+                    int total = data.TotalPop;
+                    int result = (int)((float)total / 10f);
+
+                    __result = (int)((float)(Campaign.Current.Models.SettlementFoodModel.FoodStocksUpperLimit +
+                        (__instance.IsCastle ? Campaign.Current.Models.SettlementFoodModel.CastleFoodStockUpperLimitBonus : 0)) +
+                        __instance.GetEffectOfBuildings(BuildingEffectEnum.Foodstock) +
+                        result);
+                    return false;
+                }
+                else return true;
+            }
+        }
+
+        [HarmonyPatch(typeof(DefaultBuildingTypes), "InitializeAll")]
+        class InitializeBuildingsPatch
+        {
+            static void Postfix()
+            {
+                Helpers.Helpers._buildingCastleRetinue.Initialize(new TextObject("{=!}Retinue Barracks", null), new TextObject("{=!}Barracks for the castle retinue, a group of elite soldiers. The retinue is added to the garrison over time, up to a limit of 20, 40 or 60 (building level).", null), new int[]
+                {
+                     800,
+                     1200,
+                     1500
+                }, BuildingLocation.Castle, new Tuple<BuildingEffectEnum, float, float, float>[]
+                {
+                }, 0);
+            }
         }
     }
 }

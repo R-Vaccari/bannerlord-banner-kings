@@ -86,7 +86,7 @@ namespace BannerKings.Managers
                 else
                 {
                     new GrowthModel().CalculatePopulationGrowth(settlement);
-                    new CultureModel().CalculateAssimilationChange(settlement);
+                    new BKCultureAssimilationModel().CalculateAssimilationChange(settlement);
                     new StabilityModel().CalculateStabilityChange(settlement);
                 }  
             }

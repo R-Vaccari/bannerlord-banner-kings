@@ -185,6 +185,26 @@ namespace BannerKings.Managers
             else return null;
         }
 
+        public Kingdom GetFactionFromSettlement(Settlement settlement)
+        {
+            FeudalTitle title = TITLES.FirstOrDefault(x => x.fief != null && x.fief == settlement);
+            if (title != null)
+            {
+                Kingdom faction = KINGDOMS.FirstOrDefault(x => x.Value == title.sovereign).Key;
+                return faction;
+            }
+            return null;
+        }
+
+        public FeudalTitle GetSovereignFromSettlement(Settlement settlement)
+        {
+            FeudalTitle title = TITLES.FirstOrDefault(x => x.fief != null && x.fief == settlement);
+            if (title != null)
+                return title.sovereign;
+            
+            return null;
+        }
+
         public HashSet<FeudalTitle> GetVassals(TitleType threshold, Hero lord)
         {
             HashSet<FeudalTitle> allTitles = TITLE_HOLDERS[lord];
@@ -523,6 +543,27 @@ namespace BannerKings.Managers
             }
         }
 
+        public class FeudalContract
+        {
+            public Dictionary<FeudalDuties, float> duties { get; private set; }
+            public HashSet<FeudalRights> rights { get; private set; }
+            public GovernmentType government { get; private set; }
+            public SuccessionType succession { get; private set; }
+            public InheritanceType inheritance { get; private set; }
+            public GenderLaw genderLaw { get; private set; }
+
+            public FeudalContract(Dictionary<FeudalDuties, float> duties, HashSet<FeudalRights> rights, GovernmentType government,
+                SuccessionType succession, InheritanceType inheritance, GenderLaw genderLaw)
+            {
+                this.duties = duties;
+                this.rights = rights;
+                this.government = government;
+                this.succession = succession;
+                this.inheritance = inheritance;
+                this.genderLaw = genderLaw;
+            }
+        }
+
         public enum TitleType
         {
             Empire,
@@ -544,27 +585,6 @@ namespace BannerKings.Managers
                 this.gold = gold;
                 this.influence = influence;
                 this.renown = renown;
-            }
-        }
-
-        public class FeudalContract
-        {
-            public Dictionary<FeudalDuties, float> duties { get; private set; }
-            public HashSet<FeudalRights> rights { get; private set; }
-            public GovernmentType government { get; private set; }
-            public SuccessionType succession { get; private set; }
-            public InheritanceType inheritance { get; private set; }
-            public GenderLaw genderLaw { get; private set; }
-
-            public FeudalContract(Dictionary<FeudalDuties, float> duties, HashSet<FeudalRights> rights, GovernmentType government,
-                SuccessionType succession, InheritanceType inheritance, GenderLaw genderLaw)
-            {
-                this.duties = duties;
-                this.rights = rights;
-                this.government = government;
-                this.succession = succession;
-                this.inheritance = inheritance;
-                this.genderLaw = genderLaw;
             }
         }
 

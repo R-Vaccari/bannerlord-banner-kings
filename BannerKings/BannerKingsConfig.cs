@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using static BannerKings.Managers.TitleManager;
 using static BannerKings.Managers.PolicyManager;
-using static BannerKings.Managers.PopulationManager;
+using BannerKings.Populations;
+using TaleWorlds.Core;
+using BannerKings.Models;
 
 namespace BannerKings
 {
@@ -13,6 +15,7 @@ namespace BannerKings
         public PopulationManager PopulationManager;
         public PolicyManager PolicyManager;
         public TitleManager TitleManager;
+        public HashSet<IBannerKingsModel> Models = new HashSet<IBannerKingsModel>();
 
         public void InitManagers(Dictionary<Settlement, PopulationData> pops, List<MobileParty> caravans, Dictionary<Settlement, List<PolicyElement>> policies,
             Dictionary<Settlement, TaxType> taxes, Dictionary<Settlement, MilitiaPolicy> militias, Dictionary<Settlement, WorkforcePolicy> workforce, 
@@ -22,6 +25,7 @@ namespace BannerKings
             this.PopulationManager = new PopulationManager(pops, caravans);
             this.PolicyManager = new PolicyManager(policies, taxes, militias, workforce, tariffs, criminal);
             this.TitleManager = new TitleManager(titles, titleHolders, kingdoms);
+            this.InitModels();
         }
 
         public void InitManagers(PopulationManager populationManager, PolicyManager policyManager, TitleManager titleManager)
@@ -30,6 +34,15 @@ namespace BannerKings
             this.PolicyManager = policyManager;
             this.TitleManager = titleManager != null ? titleManager : new TitleManager(new HashSet<FeudalTitle>(), new Dictionary<Hero, HashSet<FeudalTitle>>(),
                 new Dictionary<Kingdom, FeudalTitle>());
+            this.InitModels();
+        }
+
+        private void InitModels()
+        {
+            this.Models.Add(new BKCultureAssimilationModel());
+            this.Models.Add(new AdministrativeModel());
+            this.Models.Add(new LegitimacyModel());
+            this.Models.Add(new UsurpationModel());
         }
 
         public static BannerKingsConfig Instance

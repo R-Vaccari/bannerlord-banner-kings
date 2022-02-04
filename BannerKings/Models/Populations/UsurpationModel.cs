@@ -1,11 +1,11 @@
-﻿using TaleWorlds.CampaignSystem;
+﻿using BannerKings.Populations;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using static BannerKings.Managers.TitleManager;
-using static BannerKings.Managers.PopulationManager;
 
 namespace BannerKings.Models
 {
-    class UsurpationModel
+    class UsurpationModel : GameModel
     {
 
         public UsurpCosts GetUsurpationCosts(FeudalTitle title, Hero hero)

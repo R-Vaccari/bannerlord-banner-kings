@@ -6,6 +6,13 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using static BannerKings.Managers.TitleManager;
 using TaleWorlds.CampaignSystem.Actions;
+using HarmonyLib;
+using TaleWorlds.Localization;
+using System.Reflection;
+using TaleWorlds.CampaignSystem.ViewModelCollection;
+using TaleWorlds.CampaignSystem.ViewModelCollection.ClanManagement.Categories;
+using SandBox;
+using System.Linq;
 
 namespace BannerKings.Behaviors
 {
@@ -108,6 +115,116 @@ namespace BannerKings.Behaviors
             
             this.titleGiven = (FeudalTitle)element[0].Identifier;
             BannerKingsConfig.Instance.TitleManager.GrantLordship(this.titleGiven, Hero.MainHero, Hero.OneToOneConversationHero);
+        }
+    }
+
+    namespace Patches
+    {
+
+        [HarmonyPatch(typeof(Hero), "SetHeroEncyclopediaTextAndLinks")]
+        class HeroDescriptionPatch
+        {
+            static void Postfix(ref string __result, Hero o)
+            {
+                HashSet<FeudalTitle> titles = BannerKingsConfig.Instance.TitleManager.GetTitles(o);
+                if (titles != null && titles.Count > 0)
+                {
+                    string desc = "";
+                    FeudalTitle current = null;
+                    List<FeudalTitle> finalList = titles.OrderBy(x => (int)x.type).ToList();
+                    foreach (FeudalTitle title in finalList)
+                    {
+                        if (current == null)
+                            desc += string.Format("{0} of {1}", Helpers.Helpers.GetTitleHonorary(title.type, false), title.shortName);
+                        else if (current.type == title.type)
+                            desc += ", " + title.shortName;
+                        else if (current.type != title.type)
+                            desc += string.Format(" and {0} of {1}", Helpers.Helpers.GetTitleHonorary(title.type, false), title.shortName);
+                        current = title;
+                    }
+                    __result = __result + Environment.NewLine + desc;
+                }
+            }
+        }
+
+        [HarmonyPatch(typeof(LordConversationsCampaignBehavior), "conversation_lord_give_oath_go_on_condition")]
+        class ShowContractPatch
+        {
+            static void Postfix()
+            {
+                if (BannerKingsConfig.Instance.TitleManager != null)
+                {
+                    PartyBase party = PlayerEncounter.EncounteredParty;
+                    BannerKingsConfig.Instance.TitleManager.ShowContract(party.LeaderHero, "I accept");
+                }
+            }
+        }
+
+        [HarmonyPatch(typeof(ClanPartiesVM), "ExecuteCreateNewParty")]
+        class ClanCreatePartyPatch
+        {
+            static bool Prefix(ClanPartiesVM __instance, Clan ____faction, Func<Hero, Settlement> ____getSettlementOfGovernor)
+            {
+                if (__instance.CanCreateNewParty)
+                {
+                    List<InquiryElement> list = new List<InquiryElement>();
+                    foreach (Hero hero in (from h in ____faction.Heroes
+                                           where !h.IsDisabled
+                                           select h).Union(____faction.Companions))
+                    {
+                        if ((hero.IsActive || hero.IsReleased || hero.IsFugitive) && !hero.IsChild && hero != Hero.MainHero && hero.CanLeadParty())
+                        {
+                            bool isEnabled = false;
+                            MethodInfo hintMethod = __instance.GetType().GetMethod("GetPartyLeaderAssignmentSkillsHint", BindingFlags.NonPublic | BindingFlags.Instance);
+                            string hint = (string)hintMethod.Invoke(__instance, new object[] { hero });
+                            if (hero.PartyBelongedToAsPrisoner != null)
+                                hint = new TextObject("{=vOojEcIf}You cannot assign a prisoner member as a new party leader", null).ToString();
+                            else if (hero.IsReleased)
+                                hint = new TextObject("{=OhNYkblK}This hero has just escaped from captors and will be available after some time.", null).ToString();
+                            else if (hero.PartyBelongedTo != null && hero.PartyBelongedTo.LeaderHero == hero)
+                                hint = new TextObject("{=aFYwbosi}This hero is already leading a party.", null).ToString();
+                            else if (hero.PartyBelongedTo != null && hero.PartyBelongedTo.LeaderHero != Hero.MainHero)
+                                hint = new TextObject("{=FjJi1DJb}This hero is already a part of an another party.", null).ToString();
+                            else if (____getSettlementOfGovernor(hero) != null)
+                                hint = new TextObject("{=Hz8XO8wk}Governors cannot lead a mobile party and be a governor at the same time.", null).ToString();
+                            else if (hero.HeroState == Hero.CharacterStates.Disabled)
+                                hint = new TextObject("{=slzfQzl3}This hero is lost", null).ToString();
+                            else if (hero.HeroState == Hero.CharacterStates.Fugitive)
+                                hint = new TextObject("{=dD3kRDHi}This hero is a fugitive and running from their captors. They will be available after some time.", null).ToString();
+                            else if (!BannerKingsConfig.Instance.TitleManager.IsHeroKnighted(hero))
+                                hint = new TextObject("A hero must be knighted and granted land before being able to raise a personal retinue. You may bestow knighthood by talking to them.", null).ToString();
+                            else isEnabled = true;
+
+                            list.Add(new InquiryElement(hero, hero.Name.ToString(), new ImageIdentifier(CampaignUIHelper.GetCharacterCode(hero.CharacterObject, false)), isEnabled, hint));
+                        }
+                    }
+                    if (list.Count > 0)
+                    {
+                        MethodInfo method = __instance.GetType().GetMethod("OnNewPartySelectionOver", BindingFlags.NonPublic | BindingFlags.Instance);
+                        InformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(new TextObject("{=0Q4Xo2BQ}Select the Leader of the New Party", null).ToString(),
+                            string.Empty, list, true, 1, GameTexts.FindText("str_done", null).ToString(), "", new Action<List<InquiryElement>>(delegate (List<InquiryElement> x) { method.Invoke(__instance, new object[] { x }); }),
+                            new Action<List<InquiryElement>>(delegate (List<InquiryElement> x) { method.Invoke(__instance, new object[] { x }); }), ""), false);
+                    }
+                    else InformationManager.AddQuickInformation(new TextObject("{=qZvNIVGV}There is no one available in your clan who can lead a party right now.", null), 0, null, "");
+                }
+
+                return false;
+            }
+        }
+
+        [HarmonyPatch(typeof(Settlement))]
+        [HarmonyPatch("Owner", MethodType.Getter)]
+        class VillageOwnerPatch
+        {
+            static void Postfix(Settlement __instance, ref Hero __result)
+            {
+                if (__instance.IsVillage && BannerKingsConfig.Instance.TitleManager != null)
+                {
+                    FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetTitle(__instance);
+                    if (title != null)
+                        __result = title.deFacto;
+                }
+            }
         }
     }
 }

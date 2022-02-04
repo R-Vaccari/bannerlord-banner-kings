@@ -252,7 +252,7 @@ namespace BannerKings
             {
                 get
                 {
-                    float result = new CultureModel().GetAssimilationChange(settlement);
+                    float result = new BKCultureAssimilationModel().GetAssimilationChange(settlement);
                     return (result * 100f).ToString() + '%';
                 }
             }
