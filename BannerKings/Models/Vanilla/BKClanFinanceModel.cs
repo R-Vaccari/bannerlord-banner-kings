@@ -9,7 +9,7 @@ using static BannerKings.Managers.TitleManager;
 
 namespace BannerKings.Models
 {
-    class FeudalClanFinanceModel : DefaultClanFinanceModel
+    class BKClanFinanceModel : DefaultClanFinanceModel
     {
 
         public override ExplainedNumber CalculateClanGoldChange(Clan clan, bool includeDescriptions = false, bool applyWithdrawals = false)

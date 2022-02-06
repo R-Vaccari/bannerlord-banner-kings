@@ -232,7 +232,7 @@ namespace BannerKings.UI
                 MobileParty party = _settlement.MilitiaPartyComponent.MobileParty;
                 Hero lord = _settlement.OwnerClan.Leader;
                 if (party != null && lord != null && lord.PartyBelongedTo != null)
-                    return new InfluenceModel().GetMilitiaInfluenceCost(party, _settlement, lord);
+                    return new BKInfluenceModel().GetMilitiaInfluenceCost(party, _settlement, lord);
                 else return -1;
             }
         }

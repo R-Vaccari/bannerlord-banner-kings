@@ -3,10 +3,11 @@ using TaleWorlds.CampaignSystem.SandBox.GameComponents;
 using TaleWorlds.Localization;
 using static BannerKings.Managers.PopulationManager;
 using static BannerKings.Managers.PolicyManager;
+using BannerKings.Populations;
 
 namespace BannerKings.Models
 {
-    public class MilitiaModel : DefaultSettlementMilitiaModel
+    public class BKMilitiaModel : DefaultSettlementMilitiaModel
     {
         public override void CalculateMilitiaSpawnRate(Settlement settlement, out float meleeTroopRate, out float rangedTroopRate)
         {

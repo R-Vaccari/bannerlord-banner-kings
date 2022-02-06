@@ -60,7 +60,7 @@ namespace BannerKings.Managers
             classes.Add(new PopulationClass(PopType.Slaves, slaves));
 
             float assimilation = settlement.Culture == settlement.OwnerClan.Culture ? 1f : 0f;
-            PopulationData data = new PopulationData(classes, assimilation);
+            PopulationData data = new PopulationData(classes, settlement, assimilation);
             BannerKingsConfig.Instance.PopulationManager.AddSettlementData(settlement, data);
         }
 
@@ -85,9 +85,8 @@ namespace BannerKings.Managers
                     InitializeSettlementPops(settlement);
                 else
                 {
-                    new GrowthModel().CalculatePopulationGrowth(settlement);
-                    new BKCultureAssimilationModel().CalculateAssimilationChange(settlement);
-                    new StabilityModel().CalculateStabilityChange(settlement);
+                    PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
+                    data.Update(null);
                 }  
             }
         }

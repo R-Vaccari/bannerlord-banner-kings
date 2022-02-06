@@ -7,6 +7,7 @@ using static BannerKings.Managers.PopulationManager;
 using TaleWorlds.SaveSystem;
 using System.Collections.Generic;
 using TaleWorlds.ObjectSystem;
+using BannerKings.Populations;
 
 namespace BannerKings.Components
 {

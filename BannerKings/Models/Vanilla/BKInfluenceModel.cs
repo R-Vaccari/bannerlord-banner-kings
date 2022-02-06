@@ -3,10 +3,11 @@ using TaleWorlds.CampaignSystem.SandBox.GameComponents;
 using TaleWorlds.Localization;
 using static BannerKings.Managers.PopulationManager;
 using static BannerKings.Managers.PolicyManager;
+using BannerKings.Populations;
 
 namespace BannerKings.Models
 {
-    class InfluenceModel : DefaultClanPoliticsModel
+    class BKInfluenceModel : DefaultClanPoliticsModel
     {
         public override ExplainedNumber CalculateInfluenceChange(Clan clan, bool includeDescriptions = false)
         {

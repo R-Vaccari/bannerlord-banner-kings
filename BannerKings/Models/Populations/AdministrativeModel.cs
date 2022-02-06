@@ -51,7 +51,8 @@ namespace BannerKings.Models
             return Math.Max(baseResult, 0f);
         }
 
-        public override ExplainedNumber CalculateEffect(Settlement settlement)
+       
+        public ExplainedNumber CalculateEffect(Settlement settlement)
         {
             ExplainedNumber baseResult = new ExplainedNumber(0.075f, true);
             baseResult.LimitMin(0f);
@@ -66,7 +67,7 @@ namespace BannerKings.Models
                 baseResult.Add(effect, new TextObject("Governor stewardship"));
             }
             else baseResult.Add(0.05f, new TextObject("Absence of governor"));
-            
+
 
             if (BannerKingsConfig.Instance.PolicyManager.GetSettlementWork(settlement) != PolicyManager.WorkforcePolicy.None)
                 baseResult.Add(0.075f, new TextObject(""));

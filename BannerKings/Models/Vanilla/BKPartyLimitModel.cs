@@ -4,7 +4,7 @@ using TaleWorlds.CampaignSystem.SandBox.GameComponents.Party;
 
 namespace BannerKings.Models
 {
-    class PartyLimitModel : DefaultPartySizeLimitModel
+    class BKPartyLimitModel : DefaultPartySizeLimitModel
     {
         public override int GetAssumedPartySizeForLordParty(Hero leaderHero, IFaction partyMapFaction, Clan actualClan) =>
             base.GetAssumedPartySizeForLordParty(leaderHero, partyMapFaction, actualClan);

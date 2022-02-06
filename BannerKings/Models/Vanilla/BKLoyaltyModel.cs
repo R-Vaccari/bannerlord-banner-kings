@@ -13,7 +13,7 @@ using static BannerKings.Managers.PopulationManager;
 
 namespace BannerKings.Models
 {
-    class LoyaltyModel : DefaultSettlementLoyaltyModel
+    class BKLoyaltyModel : DefaultSettlementLoyaltyModel
     {
         private static readonly float SLAVE_LOYALTY = -0.0005f;
 		private static readonly float LOYALTY_FACTOR = 4f;
@@ -114,7 +114,8 @@ namespace BannerKings.Models
 			if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
             {
 				PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
-				float factor = data.Assimilation - 1f + data.Assimilation;
+				float assim = data.CultureData.GetAssimilation(town.Owner.Culture);
+				float factor = assim - 1f + assim;
 				float result = (float)LOYALTY_FACTOR * factor;
 				explainedNumber.Add(result, new TextObject("Cultural Assimilation"));
 

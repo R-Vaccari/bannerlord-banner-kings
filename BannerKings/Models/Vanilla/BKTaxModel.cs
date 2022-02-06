@@ -1,4 +1,5 @@
 ﻿
+using BannerKings.Populations;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.SandBox.GameComponents;
@@ -9,7 +10,7 @@ using static BannerKings.Managers.PopulationManager;
 
 namespace BannerKings.Models
 {
-    class TaxModel : DefaultSettlementTaxModel
+    class BKTaxModel : DefaultSettlementTaxModel
     {
         public static readonly float NOBLE_OUTPUT = 2f;
         public static readonly float CRAFTSMEN_OUTPUT = 0.75f;

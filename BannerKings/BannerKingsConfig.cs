@@ -40,9 +40,12 @@ namespace BannerKings
         private void InitModels()
         {
             this.Models.Add(new BKCultureAssimilationModel());
+            this.Models.Add(new BKCultureAcceptanceModel());
             this.Models.Add(new AdministrativeModel());
-            this.Models.Add(new LegitimacyModel());
-            this.Models.Add(new UsurpationModel());
+            this.Models.Add(new BKLegitimacyModel());
+            this.Models.Add(new BKUsurpationModel());
+            this.Models.Add(new BKStabilityModel());
+            this.Models.Add(new BKGrowthModel());
         }
 
         public static BannerKingsConfig Instance

@@ -1,5 +1,6 @@
 ﻿using BannerKings.Components;
 using BannerKings.Models;
+using BannerKings.Populations;
 using BannerKings.UI.Items;
 using System;
 using System.Collections.Generic;
@@ -26,6 +27,7 @@ namespace BannerKings
             private SelectorVM<TaxItemVM> _taxSelector;
             private SelectorVM<WorkItemVM> _workSelector;
             private Settlement settlement;
+            private PopulationData data;
 
             public PopulationVillageVM(Settlement settlement)
             {
@@ -38,6 +40,7 @@ namespace BannerKings
                 base.RefreshValues();
                 PopInfo.Clear();
                 PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(Settlement.CurrentSettlement);
+                this.data = data;
                 if (data != null && data.Classes != null)
                 {
                     data.Classes.ForEach(popClass => PopInfo.Add(new PopulationInfoVM(
@@ -225,7 +228,7 @@ namespace BannerKings
                     MobileParty party = settlement.MilitiaPartyComponent.MobileParty;
                     Hero lord = settlement.OwnerClan.Leader;
                     if (party != null && lord != null && lord.PartyBelongedTo != null)
-                        return new InfluenceModel().GetMilitiaInfluenceCost(party, settlement, lord);
+                        return new BKInfluenceModel().GetMilitiaInfluenceCost(party, settlement, lord);
                     else return -1;
                 }
             }
@@ -241,7 +244,7 @@ namespace BannerKings
             {
                 get
                 {
-                    int growth = new GrowthModel().GetPopulationGrowth(settlement, false);
+                    int growth = (int)new BKGrowthModel().CalculateEffect(settlement, data).ResultNumber;
                     return growth.ToString() + " (Daily)";
                 }
             }
@@ -252,7 +255,7 @@ namespace BannerKings
             {
                 get
                 {
-                    float result = new BKCultureAssimilationModel().GetAssimilationChange(settlement);
+                    float result = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement).CultureData.GetAssimilation(Hero.MainHero.Culture);
                     return (result * 100f).ToString() + '%';
                 }
             }

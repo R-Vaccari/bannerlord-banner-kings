@@ -1,5 +1,6 @@
 ﻿using BannerKings.Components;
 using BannerKings.Managers;
+using BannerKings.Populations;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.SaveSystem;
@@ -20,6 +21,10 @@ namespace BannerKings
         {
             base.AddEnumDefinition(typeof(PopType), 1);
             base.AddClassDefinition(typeof(PopulationClass), 2);
+            base.AddClassDefinition(typeof(MilitaryData), 2);
+            base.AddClassDefinition(typeof(CultureData), 2);
+            base.AddClassDefinition(typeof(EconomicData), 2);
+            base.AddClassDefinition(typeof(LandData), 2);
             base.AddClassDefinition(typeof(PopulationData), 3);
             base.AddEnumDefinition(typeof(PolicyType), 4);
             base.AddClassDefinition(typeof(PolicyElement), 5);

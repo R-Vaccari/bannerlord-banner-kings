@@ -1,11 +1,21 @@
 ﻿using TaleWorlds.CampaignSystem;
-using TaleWorlds.Core;
 using static BannerKings.Managers.TitleManager;
 
 namespace BannerKings.Models
 {
-    class LegitimacyModel : GameModel
+    class BKLegitimacyModel : IBannerKingsModel
     {
+        public ExplainedNumber CalculateEffect(Settlement settlement)
+        {
+            ExplainedNumber result = new ExplainedNumber();
+            FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement);
+            bool foreigner = settlement.Culture != settlement.Owner.Culture;
+            if (title.deJure == settlement.Owner)
+                result.Add((float)(foreigner ? LegitimacyType.Lawful_Foreigner : LegitimacyType.Lawful));
+            else result.Add((float)(foreigner ? LegitimacyType.Unlawful_Foreigner : LegitimacyType.Unlawful));
+
+            return result;
+        }
 
         public LegitimacyType GetRuleType(Settlement settlement, Hero hero)
         {

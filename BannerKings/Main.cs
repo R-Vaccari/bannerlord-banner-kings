@@ -36,21 +36,21 @@ namespace BannerKings
                     campaignStarter.AddBehavior(new SettlementBehavior());
                     campaignStarter.AddBehavior(new FeudalCompanionBehavior());
 
-                    campaignStarter.AddModel(new ProsperityModel());
-                    campaignStarter.AddModel(new TaxModel());
-                    campaignStarter.AddModel(new FoodModel());
-                    campaignStarter.AddModel(new ConstructionModel());
-                    campaignStarter.AddModel(new MilitiaModel());
-                    campaignStarter.AddModel(new InfluenceModel());
-                    campaignStarter.AddModel(new LoyaltyModel());
-                    campaignStarter.AddModel(new VillageProductionModel());
-                    campaignStarter.AddModel(new SecurityModel());
-                    campaignStarter.AddModel(new PartyLimitModel());
-                    campaignStarter.AddModel(new EconomyModel());
-                    campaignStarter.AddModel(new PriceFactorModel());
-                    campaignStarter.AddModel(new FeudalWorkshopModel());
-                    campaignStarter.AddModel(new FeudalClanFinanceModel());
-                    campaignStarter.AddModel(new FeudalArmyManagementModel());
+                    campaignStarter.AddModel(new BKProsperityModel());
+                    campaignStarter.AddModel(new BKTaxModel());
+                    campaignStarter.AddModel(new BKFoodModel());
+                    campaignStarter.AddModel(new BKConstructionModel());
+                    campaignStarter.AddModel(new BKMilitiaModel());
+                    campaignStarter.AddModel(new BKInfluenceModel());
+                    campaignStarter.AddModel(new BKLoyaltyModel());
+                    campaignStarter.AddModel(new BKVillageProductionModel());
+                    campaignStarter.AddModel(new BKSecurityModel());
+                    campaignStarter.AddModel(new BKPartyLimitModel());
+                    campaignStarter.AddModel(new BKEconomyModel());
+                    campaignStarter.AddModel(new BKPriceFactorModel());
+                    campaignStarter.AddModel(new BKWorkshopModel());
+                    campaignStarter.AddModel(new BKClanFinanceModel());
+                    campaignStarter.AddModel(new BKArmyManagementModel());
                 } catch (Exception e)
                 {
                 }
@@ -319,6 +319,17 @@ namespace BannerKings
         namespace Economy
         {
 
+            [HarmonyPatch(typeof(DefaultItemCategories), "InitializeAll")]
+            class InitializeCategoriesPatch
+            {
+                private static ItemCategory _itemCategoryBread;
+                static void Postfix(Village village, MobileParty villagerParty)
+                {
+                    _itemCategoryBread = Game.Current.ObjectManager.RegisterPresumedObject<ItemCategory>(new ItemCategory("bread"));
+                    _itemCategoryBread.InitializeObject(true, 50, 20, ItemCategory.Property.BonusToFoodStores, null, 0f, false, true);
+                }
+            }
+
             //Mules
             [HarmonyPatch(typeof(VillagerCampaignBehavior), "MoveItemsToVillagerParty")]
             class VillagerMoveItemsPatch
@@ -441,7 +452,7 @@ namespace BannerKings
                             if (Campaign.Current.GameStarted && !doNotEffectCapital)
                             {
                                 ItemData categoryData = town.MarketData.GetCategoryData(itemAtIndex.GetItemCategory());
-                                int itemPrice = new PriceFactorModel().GetPrice(new EquipmentElement(itemAtIndex, null, null, false), town.GarrisonParty, town.GarrisonParty.Party, false, categoryData.InStoreValue,
+                                int itemPrice = new BKPriceFactorModel().GetPrice(new EquipmentElement(itemAtIndex, null, null, false), town.GarrisonParty, town.GarrisonParty.Party, false, categoryData.InStoreValue,
                                     categoryData.Supply, categoryData.Demand);
                                 workshop.ChangeGold(-itemPrice);
                                 town.ChangeGold(itemPrice);
@@ -502,9 +513,9 @@ namespace BannerKings
                                 if (finalAmount > amount)
                                 {
                                     finalAmount = amount;
-                                    if (type != ConsumptionType.None) popData.UpdateSatisfaction(type, -0.001f);
+                                    if (type != ConsumptionType.None) popData.EconomicData.UpdateSatisfaction(type, -0.001f);
                                 }
-                                else if (type != ConsumptionType.None) popData.UpdateSatisfaction(type, 0.001f);
+                                else if (type != ConsumptionType.None) popData.EconomicData.UpdateSatisfaction(type, 0.001f);
                                 
                                 itemRoster.AddToCounts(elementCopyAtIndex.EquipmentElement, -finalAmount);
                                 categoryDemand[itemCategory] = num - desiredAmount * (float)price;

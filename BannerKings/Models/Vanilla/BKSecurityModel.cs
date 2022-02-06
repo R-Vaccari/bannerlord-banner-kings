@@ -1,13 +1,13 @@
 ﻿using BannerKings.Managers;
+using BannerKings.Populations;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.SandBox.GameComponents.Map;
 using TaleWorlds.Localization;
 using static BannerKings.Managers.PolicyManager;
-using static BannerKings.Managers.PopulationManager;
 
 namespace BannerKings.Models
 {
-    class SecurityModel : DefaultSettlementSecurityModel
+    class BKSecurityModel : DefaultSettlementSecurityModel
     {
         public override ExplainedNumber CalculateSecurityChange(Town town, bool includeDescriptions = false)
         {
@@ -19,7 +19,8 @@ namespace BannerKings.Models
             if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
             {
                 PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
-                float assimilation = data.Assimilation - 1f + data.Assimilation;
+                float assim = data.CultureData.GetAssimilation(town.Owner.Culture);
+                float assimilation = assim - 1f + assim;
                 baseResult.Add(assimilation, new TextObject("Cultural Assimilation"));
 
                 if (BannerKingsConfig.Instance.PolicyManager.GetSettlementWork(town.Settlement) == PolicyManager.WorkforcePolicy.Martial_Law)

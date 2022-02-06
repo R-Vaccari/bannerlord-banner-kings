@@ -1,4 +1,5 @@
 ﻿using BannerKings.Managers;
+using BannerKings.Populations;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
@@ -9,7 +10,7 @@ using static BannerKings.Managers.PopulationManager;
 
 namespace BannerKings.Models
 {
-    class FoodModel : SettlementFoodModel
+    class BKFoodModel : SettlementFoodModel
 	{
 
 		private static readonly float SLAVE_MINE_FOOD = 0f;

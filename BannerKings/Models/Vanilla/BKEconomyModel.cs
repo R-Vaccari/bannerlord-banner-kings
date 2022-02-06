@@ -11,7 +11,7 @@ using static BannerKings.Managers.TitleManager;
 
 namespace BannerKings.Models
 {
-    class EconomyModel : DefaultSettlementEconomyModel, IEconomyModel
+    class BKEconomyModel : DefaultSettlementEconomyModel, IEconomyModel
     {
         private static readonly float CRAFTSMEN_EFFECT_CAP = 0.4f;
 
@@ -84,7 +84,7 @@ namespace BannerKings.Models
         {
             PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
             float slaves = data.GetTypeCount(PopType.Slaves);
-            float efficiency = new FeudalWorkshopModel().GetPolicyEffectToProduction(town);
+            float efficiency = new BKWorkshopModel().GetPolicyEffectToProduction(town);
             return (int)(slaves * 0.3f * efficiency);
         }
 

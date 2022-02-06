@@ -1,4 +1,5 @@
 ﻿using BannerKings.Models;
+using BannerKings.Populations;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Library;
 using static BannerKings.Managers.PopulationManager;
@@ -15,6 +16,7 @@ namespace BannerKings.UI
         private MBBindingList<InformationElement> _defenseInfo;
         private Settlement _settlement;
         private bool _isSelected;
+        private PopulationData data;
 
         public OverviewVM(Settlement _settlement, bool _isSelected)
         {
@@ -33,6 +35,7 @@ namespace BannerKings.UI
         {
             base.RefreshValues();
             PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(_settlement);
+            this.data = data;
             PopInfo.Clear();
             SatisfactionInfo.Clear();
             StatsInfo.Clear();
@@ -47,7 +50,7 @@ namespace BannerKings.UI
 
                 for (int i = 0; i < 4; i++)
                 {
-                    float value = data.GetSatisfactions()[i];
+                    float value = data.EconomicData.Satisfactions[i];
                     ConsumptionType type = (ConsumptionType)i;
                     string desc = type.ToString() + " Goods:";
                     SatisfactionInfo.Add(new InformationElement(desc, FormatValue(value), Helpers.Helpers.GetConsumptionHint(type)));
@@ -55,30 +58,30 @@ namespace BannerKings.UI
 
                 StatsInfo.Add(new InformationElement("Stability:", FormatValue(data.Stability),
                     "The overall stability of this settlement, affected by security, loyalty, assimilation and whether you are legally entitled to the settlement. Stability is the basis of economic prosperity"));
-                StatsInfo.Add(new InformationElement("Population Growth:", new GrowthModel().GetPopulationGrowth(_settlement, true).ToString(), 
+                StatsInfo.Add(new InformationElement("Population Growth:", new BKGrowthModel().CalculateEffect(_settlement, data).ResultNumber.ToString(), 
                     "The population growth of your settlement on a daily basis, distributed among the classes"));
                 StatsInfo.Add(new InformationElement("Administrative Cost:", FormatValue(new AdministrativeModel().CalculateAdministrativeCost(_settlement)),
                     "Costs associated with the settlement administration, including those of active policies and decisions, deducted on tax revenue"));
-                StatsInfo.Add(new InformationElement("Cultural Assimilation:", FormatValue(data.Assimilation),
+                StatsInfo.Add(new InformationElement("Cultural Assimilation:", FormatValue(data.CultureData.GetAssimilation(Hero.MainHero.Culture)),
                     "Percentage of the population that shares culture with you. Assimilating foreign settlements requires a competent governor that shares your culture"));
 
                 FoodInfo.Add(new InformationElement("Storage Limit:", _settlement.Town.FoodStocksUpperLimit().ToString(), 
                     "The amount of food this settlement is capable of storing"));
-                FoodInfo.Add(new InformationElement("Estimated Holdout:", string.Format("{0} Days", new FoodModel().GetFoodEstimate(_settlement.Town, true, _settlement.Town.FoodStocksUpperLimit())),
+                FoodInfo.Add(new InformationElement("Estimated Holdout:", string.Format("{0} Days", new BKFoodModel().GetFoodEstimate(_settlement.Town, true, _settlement.Town.FoodStocksUpperLimit())),
                     "How long this settlement will take to start starving in case of a siege"));
 
-                ProductionInfo.Add(new InformationElement("Tariff:", FormatValue(new TaxModel().GetTownTaxRatio(_settlement.Town)),
+                ProductionInfo.Add(new InformationElement("Tariff:", FormatValue(new BKTaxModel().GetTownTaxRatio(_settlement.Town)),
                     "Percentage of an item's value charged as tax when sold"));
-                ProductionInfo.Add(new InformationElement("Merchants' Revenue:", new EconomyModel().GetMerchantIncome(_settlement.Town).ToString(),
+                ProductionInfo.Add(new InformationElement("Merchants' Revenue:", new BKEconomyModel().GetMerchantIncome(_settlement.Town).ToString(),
                    "Daily revenue of local merchants, based on slave workforce and production efficiency"));
                 //ProductionInfo.Add(new InformationElement("Population Cap:", new GrowthModel().CalculateSettlementCap(_settlement).ToString(),
                 //    "The maximum capacity of people this settlement can naturally support"));
-                ProductionInfo.Add(new InformationElement("Production Efficiency:", FormatValue(new FeudalWorkshopModel().GetPolicyEffectToProduction(_settlement.Town)),
+                ProductionInfo.Add(new InformationElement("Production Efficiency:", FormatValue(new BKWorkshopModel().GetPolicyEffectToProduction(_settlement.Town)),
                     "The speed at which workshops produce goods, affected by kingdom policies and craftsmen"));
 
-                DefenseInfo.Add(new InformationElement("Militia Cap:", new MilitiaModel().GetMilitiaLimit(data, _settlement.IsCastle).ToString(),
+                DefenseInfo.Add(new InformationElement("Militia Cap:", new BKMilitiaModel().GetMilitiaLimit(data, _settlement.IsCastle).ToString(),
                     "The maximum number of militiamen this settlement can support, based on it's population"));
-                DefenseInfo.Add(new InformationElement("Militia Quality:", FormatValue(new MilitiaModel().CalculateEliteMilitiaSpawnChance(_settlement)),
+                DefenseInfo.Add(new InformationElement("Militia Quality:", FormatValue(new BKMilitiaModel().CalculateEliteMilitiaSpawnChance(_settlement)),
                         "Chance of militiamen being spawned as veterans instead of recruits"));
             } 
         }
@@ -199,7 +202,7 @@ namespace BannerKings.UI
         {
             get
             {
-                int growth = new GrowthModel().GetPopulationGrowth(_settlement, false);
+                int growth = (int)new BKGrowthModel().CalculateEffect(_settlement, data).ResultNumber;
                 return growth.ToString() + " (Daily)";
             }
         }
@@ -209,7 +212,7 @@ namespace BannerKings.UI
         {
             get
             {
-                float result = BannerKingsConfig.Instance.PopulationManager.GetPopData(_settlement).Assimilation;
+                float result = BannerKingsConfig.Instance.PopulationManager.GetPopData(_settlement).CultureData.GetAssimilation(Hero.MainHero.Culture);
                 return (result * 100f).ToString() + '%';
             }
         }

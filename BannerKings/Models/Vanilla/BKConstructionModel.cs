@@ -1,4 +1,5 @@
 ﻿using BannerKings.Managers;
+using BannerKings.Populations;
 using Helpers;
 using System;
 using System.Linq;
@@ -11,7 +12,7 @@ using static BannerKings.Managers.PopulationManager;
 
 namespace BannerKings.Models
 {
-    class ConstructionModel : DefaultBuildingConstructionModel
+    class BKConstructionModel : DefaultBuildingConstructionModel
     {
 
         public override ExplainedNumber CalculateDailyConstructionPower(Town town, bool includeDescriptions = false)

@@ -25,7 +25,7 @@ namespace BannerKings.UI
 		private (bool, string) _duchyUsurpable;
 		private UsurpCosts costs;
 		private UsurpCosts duchyCosts;
-		private UsurpationModel model;
+		private BKUsurpationModel model;
 		private bool _contractEnabled;
 		private bool _usurpEnabled;
 		private bool _usurpDuchyEnabled;
@@ -37,7 +37,7 @@ namespace BannerKings.UI
 			this._isSelected = isSelected;
 			this._vassals = new MBBindingList<VassalTitleVM>();
 			this._demesneInfo = new MBBindingList<InformationElement>();
-			this.model = new UsurpationModel();
+			this.model = new BKUsurpationModel();
 			this.costs = model.GetUsurpationCosts(_title, Hero.MainHero);
 			this._duchy = BannerKingsConfig.Instance.TitleManager.GetDuchy(_title);
 			this.duchyCosts = model.GetUsurpationCosts(_duchy, Hero.MainHero);
@@ -56,7 +56,7 @@ namespace BannerKings.UI
 			this._usurpEnabled = _title.deJure != Hero.MainHero;
 			this._usurpDuchyEnabled = this._duchy.deJure != Hero.MainHero;
 			DemesneInfo.Clear();
-			DemesneInfo.Add(new InformationElement("Legitimacy:", new LegitimacyModel().GetRuleType(_title).ToString().Replace('_', ' '), 
+			DemesneInfo.Add(new InformationElement("Legitimacy:", new BKLegitimacyModel().GetRuleType(_title).ToString().Replace('_', ' '), 
 				"Your legitimacy to this title and it's vassals. You are lawful when you own this title, and considered a foreigner if your culture differs from it."));
 			DemesneInfo.Add(new InformationElement("Sovereign:", _title.sovereign.name.ToString(),
 				"The master suzerain of this title, be they a king or emperor type suzerain."));

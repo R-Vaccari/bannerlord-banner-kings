@@ -1,4 +1,5 @@
-﻿using Helpers;
+﻿using BannerKings.Populations;
+using Helpers;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.SandBox.GameComponents.Map;
 using TaleWorlds.Core;
@@ -6,7 +7,7 @@ using static BannerKings.Managers.PopulationManager;
 
 namespace BannerKings.Models
 {
-    class VillageProductionModel : DefaultVillageProductionCalculatorModel
+    class BKVillageProductionModel : DefaultVillageProductionCalculatorModel
     {
         private static readonly float SERF_PRODUCTION = 0.0005f;
         private static readonly float SLAVE_PRODUCTION = 0.00125f;

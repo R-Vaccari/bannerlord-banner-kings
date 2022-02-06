@@ -9,7 +9,7 @@ using TaleWorlds.Localization;
 
 namespace BannerKings.Models
 {
-    class FeudalDiplomacyModel : DefaultDiplomacyModel
+    class BKDiplomacyModel : DefaultDiplomacyModel
     {
 
         public override float GetScoreOfDeclaringWar(IFaction factionDeclaresWar, IFaction factionDeclaredWar, IFaction evaluatingClan, out TextObject warReason)

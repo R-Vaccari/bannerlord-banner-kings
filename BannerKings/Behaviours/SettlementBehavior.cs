@@ -198,7 +198,7 @@ namespace BannerKings.Behaviors
                                 BannerKingsConfig.Instance.PolicyManager.UpdateTaxPolicy(target, TaxType.Standard);
                         }
 
-                        float filledCapacity = new GrowthModel().GetSettlementFilledCapacity(target);
+                        float filledCapacity = new BKGrowthModel().GetSettlementFilledCapacity(target);
                         bool growth = lord.Clan.Influence >= 300 && filledCapacity < 0.5f;
                         decisions.Add((PolicyType.POP_GROWTH, growth));
 
@@ -236,7 +236,7 @@ namespace BannerKings.Behaviors
                             BannerKingsConfig.Instance.PolicyManager.UpdateTaxPolicy(target, TaxType.Standard);
                         else BannerKingsConfig.Instance.PolicyManager.UpdateTaxPolicy(target, TaxType.High);
 
-                        float filledCapacity = new GrowthModel().GetSettlementFilledCapacity(target);
+                        float filledCapacity = new BKGrowthModel().GetSettlementFilledCapacity(target);
                         bool growth = lord.Clan.Influence >= 300 && filledCapacity < 0.5f;
                         decisions.Add((PolicyType.POP_GROWTH, growth));
                     }
@@ -411,8 +411,7 @@ namespace BannerKings.Behaviors
                     if (BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
                     {
                         PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
-                        if (data.Assimilation >= 1f)
-                            settlement.Culture = settlement.Owner.Culture;
+                        settlement.Culture = data.CultureData.DominantCulture;
                     }
 
             BuildingType retinueType = MBObjectManager.Instance.GetObjectTypeList<BuildingType>().FirstOrDefault(x => x == Helpers.Helpers._buildingCastleRetinue);
@@ -699,22 +698,25 @@ namespace BannerKings.Behaviors
             {
                 if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
                 {
-                    PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
-                    CultureObject settlementCulture = settlement.Culture;
-                    CultureObject originalOwnerCulture = settlement.Owner.Culture;
-                    CultureObject newCulture = newOwner.Culture;
+                    /*
+                   PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
+                   CultureObject settlementCulture = settlement.Culture;
+                   CultureObject originalOwnerCulture = settlement.Owner.Culture;
+                   CultureObject newCulture = newOwner.Culture;
 
-                    if ((settlementCulture == originalOwnerCulture && settlementCulture != newCulture) ||
-                        (settlementCulture != originalOwnerCulture && settlementCulture != newCulture
-                        && originalOwnerCulture != newCulture)) // previous owner as assimilated or everybody has a different culture
-                    {
-                        data.Assimilation = 0f;
-                    }
-                    else if (originalOwnerCulture != newCulture && newCulture == settlementCulture) // new owner is same culture as settlement that was being assimilated by foreigner, invert the process
-                    {
-                        float result = 1f - data.Assimilation;
-                        data.Assimilation = result;
-                    }
+
+
+                   if ((settlementCulture == originalOwnerCulture && settlementCulture != newCulture) ||
+                       (settlementCulture != originalOwnerCulture && settlementCulture != newCulture
+                       && originalOwnerCulture != newCulture)) // previous owner as assimilated or everybody has a different culture
+                   {
+                       data.Assimilation = 0f;
+                   }
+                   else if (originalOwnerCulture != newCulture && newCulture == settlementCulture) // new owner is same culture as settlement that was being assimilated by foreigner, invert the process
+                   {
+                       float result = 1f - data.Assimilation;
+                       data.Assimilation = result;
+                   } */
 
                     BannerKingsConfig.Instance.TitleManager.ApplyOwnerChange(settlement, newOwner);
                 }

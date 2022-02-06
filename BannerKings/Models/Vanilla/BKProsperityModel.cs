@@ -1,4 +1,5 @@
 ﻿using BannerKings.Managers;
+using BannerKings.Populations;
 using Helpers;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
@@ -11,14 +12,14 @@ using static BannerKings.Managers.PopulationManager;
 
 namespace BannerKings.Models
 {
-    public class ProsperityModel : DefaultSettlementProsperityModel
+    public class BKProsperityModel : DefaultSettlementProsperityModel
     {
 		private static readonly float STABILITY_FACTOR = 5f;
 		public override ExplainedNumber CalculateHearthChange(Village village, bool includeDescriptions = false)
         {
             ExplainedNumber baseResult = base.CalculateHearthChange(village);
             if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(village.Settlement))
-                new GrowthModel().CalculateHearthGrowth(village, ref baseResult);
+                new BKGrowthModel().CalculateHearthGrowth(village, ref baseResult);
 
             return baseResult;
         }
@@ -40,7 +41,7 @@ namespace BannerKings.Models
                 
                 if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(fortification.Settlement, PolicyManager.PolicyType.SELF_INVEST)) 
                 {
-                    ExplainedNumber income = new TaxModel().CalculateTownTax(fortification);
+                    ExplainedNumber income = new BKTaxModel().CalculateTownTax(fortification);
                     float tax = income.ResultNumber;
                     if (tax > 0)
 						explainedNumber.Add(tax * 0.0005f, new TextObject("Self-investment policy"));

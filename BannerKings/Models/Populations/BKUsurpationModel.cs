@@ -5,7 +5,7 @@ using static BannerKings.Managers.TitleManager;
 
 namespace BannerKings.Models
 {
-    class UsurpationModel : GameModel
+    class BKUsurpationModel : IBannerKingsModel
     {
 
         public UsurpCosts GetUsurpationCosts(FeudalTitle title, Hero hero)
@@ -104,5 +104,9 @@ namespace BannerKings.Models
             return -result;
         }
 
+        public ExplainedNumber CalculateEffect(Settlement settlement)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

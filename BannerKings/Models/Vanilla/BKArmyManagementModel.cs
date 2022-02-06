@@ -4,7 +4,7 @@ using static BannerKings.Managers.TitleManager;
 
 namespace BannerKings.Models
 {
-    class FeudalArmyManagementModel : DefaultArmyManagementCalculationModel
+    class BKArmyManagementModel : DefaultArmyManagementCalculationModel
     {
         public override int CalculatePartyInfluenceCost(MobileParty armyLeaderParty, MobileParty party)
         {

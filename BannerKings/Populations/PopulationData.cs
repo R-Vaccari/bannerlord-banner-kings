@@ -7,34 +7,64 @@ using TaleWorlds.Library;
 using TaleWorlds.SaveSystem;
 using static BannerKings.Managers.PopulationManager;
 using BannerKings.Models;
+using BannerKings.Models.Vanilla;
 
 namespace BannerKings.Populations
 {
-    public class PopulationData
+    public class PopulationData : BannerKingsData
     {
         [SaveableProperty(1)]
         private List<PopulationClass> classes { get; set; }
-
         [SaveableProperty(2)]
-        private int totalPop { get; set; }
-
-        [SaveableProperty(3)]
-        private float assimilation { get; set; }
-
-        [SaveableProperty(4)]
-        private float[] satisfactions { get; set; }
-
-        [SaveableProperty(5)]
         private float stability { get; set; }
+        [SaveableProperty(3)]
+        private Settlement settlement { get; set; }
+        [SaveableProperty(4)]
+        private EconomicData economicData { get; set; }
+        [SaveableProperty(5)]
+        private CultureData cultureData { get; set; }
+        [SaveableProperty(6)]
+        private MilitaryData militaryData { get; set; }
+        [SaveableProperty(7)]
+        private LandData landData { get; set; }
 
-        public PopulationData(List<PopulationClass> classes, float assimilation)
+        public PopulationData(List<PopulationClass> classes, Settlement settlement, float assimilation, HashSet<CultureDataClass> cultures = null, Guild guild = null)
         {
             this.classes = classes;
-            classes.ForEach(popClass => TotalPop += popClass.count);
-            this.assimilation = assimilation;
-            this.satisfactions = new float[] { 0.5f, 0.5f, 0.5f, 0.5f };
             this.stability = 0.5f;
+            this.settlement = settlement;
+            this.economicData = new EconomicData(settlement, guild);
+
+            if (cultures == null)
+            {
+                CultureDataClass cultureData = new CultureDataClass(settlement.Culture, 1f, 1f);
+                cultures = new HashSet<CultureDataClass>();
+                cultures.Add(cultureData);
+            }
+            this.cultureData = new CultureData(settlement.Owner, cultures);
+            float total = TotalPop;
+            float nobles = classes.First(x => x.type == PopType.Nobles).count;
+            this.militaryData = new MilitaryData(settlement, (int)(total * 0.04f), (int)(nobles * 0.08f));
+            this.landData = new LandData();
         }
+
+        public CultureData CultureData => this.cultureData;
+        public MilitaryData MilitaryData => this.militaryData;
+        public LandData LandData => this.landData;
+        public EconomicData EconomicData => this.economicData;
+
+
+        public int TotalPop {
+            get
+            {
+                int total = 0;
+                classes.ForEach(popClass => total += popClass.count);
+                return total;
+            }   
+        }
+
+        public Settlement Settlement => this.settlement;
+        public ExplainedNumber Growth => BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(BKGrowthModel)).CalculateEffect(this.settlement);
 
         public float Stability
         {
@@ -46,16 +76,6 @@ namespace BannerKings.Populations
             }
         }
 
-        public float Assimilation
-        {
-            get => assimilation;
-            set
-            {
-                if (value != assimilation)
-                    assimilation = value;
-            }
-        }
-
         public List<PopulationClass> Classes
         {
             get => classes;
@@ -64,28 +84,6 @@ namespace BannerKings.Populations
                 if (value != classes)
                     classes = value;
             }
-        }
-
-        public int TotalPop
-        {
-            get => totalPop;
-            set
-            {
-                if (value != totalPop)
-                    totalPop = value;
-            }
-        }
-
-        public float[] GetSatisfactions()
-        {
-            if (satisfactions == null) this.satisfactions = new float[] { 0.5f, 0.5f, 0.5f, 0.5f };
-            return satisfactions;
-        }
-        public void UpdateSatisfaction(ConsumptionType type, float value)
-        {
-            if (this.satisfactions == null) this.satisfactions = new float[] { 0.5f, 0.5f, 0.5f, 0.5f };
-            float current = this.satisfactions[(int)type];
-            this.satisfactions[(int)type] = MathF.Clamp(current + value, 0f, 1f);
         }
 
         public void UpdatePopulation(Settlement settlement, int pops, PopType target)
@@ -146,7 +144,6 @@ namespace BannerKings.Populations
 
                 pops.count += count;
                 if (pops.count < 0) pops.count = 0;
-                RefreshTotal();
             }
         }
 
@@ -156,17 +153,17 @@ namespace BannerKings.Populations
             return targetClass != null ? targetClass.count : 0;
         }
 
-        public float GetCurrentTypeFraction(PopType type)
-        {
-            RefreshTotal();
-            return (float)GetTypeCount(type) / (float)TotalPop;
-        }
+        public float GetCurrentTypeFraction(PopType type) => (float)GetTypeCount(type) / (float)TotalPop;
 
-        private void RefreshTotal()
+        internal override void Update(PopulationData data)
         {
-            int pops = 0;
-            classes.ForEach(popClass => pops += popClass.count);
-            TotalPop = pops;
+            BKGrowthModel model = (BKGrowthModel)BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(BKGrowthModel));
+            int growthFactor = (int)model.CalculateEffect(this.settlement, this).ResultNumber;
+            this.UpdatePopulation(settlement, growthFactor, PopType.None);
+            economicData.Update(this);
+            cultureData.Update(this);
+            militaryData.Update(this);
+            landData.Update(this);
         }
     }
 
@@ -185,10 +182,16 @@ namespace BannerKings.Populations
         }
     }
 
-    public class CultureData
+    public class CultureData : BannerKingsData
     {
         private HashSet<CultureDataClass> cultures;
         private Hero settlementOwner;
+
+        public CultureData(Hero settlementOwner, HashSet<CultureDataClass> cultures)
+        {
+            this.settlementOwner = settlementOwner;
+            this.cultures = cultures;
+        }
 
         public CultureObject DominantCulture
         {
@@ -213,9 +216,35 @@ namespace BannerKings.Populations
             }
         }
 
+        public bool IsCulturePresent(CultureObject culture)
+        {
+            CultureDataClass data = this.cultures.FirstOrDefault(x => x.Culture == settlementOwner.Culture);
+            return data != null;
+        }
+
+        public Hero SettlementOwner
+        {
+            get => this.settlementOwner;
+            set
+            {
+                this.settlementOwner = value;
+                if (this.IsCulturePresent(settlementOwner.Culture))
+                    this.AddCulture(settlementOwner.Culture, 0f);
+            }
+        }
+
         public void AddCulture(CultureObject culture, float acceptance)
         {
-            this.cultures.Add(new CultureDataClass(culture, 0f, acceptance));
+            CultureDataClass dataClass = null;
+            foreach (CultureDataClass data in this.cultures)
+                if (data.Culture == culture)
+                {
+                    dataClass = data;
+                    break;
+                }
+
+            if (dataClass == null) this.cultures.Add(new CultureDataClass(culture, 0f, acceptance));
+            else dataClass.Acceptance = acceptance;
         }
 
         public float GetAssimilation(CultureObject culture)
@@ -228,6 +257,23 @@ namespace BannerKings.Populations
         {
             CultureDataClass data = this.cultures.FirstOrDefault(x => x.Culture == culture);
             return data != null ? data.Acceptance : 0f;
+        }
+
+        internal override void Update(PopulationData data)
+        {
+            BKCultureAssimilationModel assimModel = (BKCultureAssimilationModel)BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(BKCultureAssimilationModel));
+            BKCultureAcceptanceModel accModel = (BKCultureAcceptanceModel)BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(BKCultureAcceptanceModel));
+            HashSet<CultureDataClass> toDelete = new HashSet<CultureDataClass>();
+            foreach (CultureDataClass cultureData in this.cultures)
+            {
+                cultureData.Acceptance += accModel.CalculateEffect(data.Settlement, cultureData).ResultNumber;
+                cultureData.Assimilation += accModel.CalculateEffect(data.Settlement, cultureData).ResultNumber;
+                if (cultureData.Culture != settlementOwner.Culture && cultureData.Assimilation == 0f)
+                    toDelete.Add(cultureData);
+            }
+
+            foreach (CultureDataClass cultureData in toDelete)
+                this.cultures.Remove(cultureData);
         }
     }
 
@@ -265,26 +311,41 @@ namespace BannerKings.Populations
         internal CultureObject Culture => culture;
     }
 
-    public class EconomicData
+    public class EconomicData : BannerKingsData
     {
-        private Settlement settlement;
-        private Guild guild;
+        private Settlement settlement { get; set; }
+        private Guild guild { get; set; }
+        private float[] satisfactions { get; set; }
 
         public EconomicData(Settlement settlement,
             Guild guild = null)
         {
             this.settlement = settlement;
             this.guild = guild;
+            this.satisfactions = new float[] { 0.5f, 0.5f, 0.5f,0.5f };
+        }
+
+        public float[] Satisfactions => this.satisfactions;
+
+        public void UpdateSatisfaction(ConsumptionType type, float value)
+        {
+            float current = this.satisfactions[(int)type];
+            this.satisfactions[(int)type] = MathF.Clamp(current + value, 0f, 1f);
+        }
+
+        internal override void Update(PopulationData data)
+        {
+            throw new NotImplementedException();
         }
 
         public ExplainedNumber AdministrativeCost => BannerKingsConfig.Instance.Models
             .First(x => x.GetType() == typeof(AdministrativeModel)).CalculateEffect(settlement);
-        public float MerchantRevenue => settlement.Town != null ? new EconomyModel().GetMerchantIncome(settlement.Town) : 0f;
+        public float MerchantRevenue => settlement.Town != null ? new BKEconomyModel().GetMerchantIncome(settlement.Town) : 0f;
         public ExplainedNumber Mercantilism
         {
             get
             {
-                EconomyModel model = (EconomyModel)BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(IEconomyModel));
+                BKEconomyModel model = (BKEconomyModel)BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(IEconomyModel));
                 return model.CalculateEffect(settlement);
             }
         }
@@ -292,7 +353,7 @@ namespace BannerKings.Populations
         {
             get
             {
-                EconomyModel model = (EconomyModel)BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(IEconomyModel));
+                BKEconomyModel model = (BKEconomyModel)BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(IEconomyModel));
                 return model.CalculateProductionEfficiency(settlement);
             }
         }
@@ -300,25 +361,73 @@ namespace BannerKings.Populations
         {
             get
             {
-                EconomyModel model = (EconomyModel)BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(IEconomyModel));
+                BKEconomyModel model = (BKEconomyModel)BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(IEconomyModel));
                 return model.CalculateProductionQuality(settlement);
             }
         }
     }
 
-    public class MilitaryData
+    public class MilitaryData : BannerKingsData
     {
-        private int manpower;
+        private Settlement settlement;
+        private int peasantManpower;
+        private int nobleManpower;
+
+        public MilitaryData(Settlement settlement, int peasantManpower, int nobleManpower)
+        {
+            this.settlement = settlement;
+            this.peasantManpower = peasantManpower;
+            this.nobleManpower = nobleManpower;
+        }
+
+        public int Manpower => peasantManpower + nobleManpower;
+        public int PeasantManpower => peasantManpower;
+        public int NobleManpower => nobleManpower;
+        public ExplainedNumber DraftEfficiency => this.settlement.IsTown ? new BKVolunteerModel().GetDraftEfficiency(settlement.Notables[0], 2, settlement) 
+            : new ExplainedNumber(0f, true, new TaleWorlds.Localization.TextObject("Not a town"));
+        public ExplainedNumber Militarism => this.settlement.IsTown ? new BKVolunteerModel().GetMilitarism(settlement)
+            : new ExplainedNumber(0f, true, new TaleWorlds.Localization.TextObject("Not a town"));
+
+        internal override void Update(PopulationData data)
+        {
+            BKVolunteerModel model = new BKVolunteerModel();
+            float serfMilitarism = model.GetClassMilitarism(PopType.Serfs);
+            float serfs = data.GetTypeCount(PopType.Serfs);
+
+            float craftsmanMilitarism = model.GetClassMilitarism(PopType.Craftsmen);
+            float craftsmen = data.GetTypeCount(PopType.Craftsmen);
+            int peasantCap = (int)((serfs * serfMilitarism) + (craftsmen * craftsmanMilitarism));
+
+            int growth = (int)data.Growth.ResultNumber;
+            int peasantChange = (int)(growth * serfMilitarism);
+
+            if (peasantManpower > peasantCap)
+                this.peasantManpower = (int)((float)this.peasantManpower * -0.05f); // Change later
+            else if (peasantManpower < peasantCap)
+                this.peasantManpower = (int)((float)this.peasantManpower * 0.05f);
+
+            float nobleMilitarism = model.GetClassMilitarism(PopType.Nobles);
+            float nobles = data.GetTypeCount(PopType.Nobles);
+            int nobleCap = (int)(nobles * nobleMilitarism);
+            if (nobleManpower > nobleCap)
+                this.nobleManpower = (int)((float)this.nobleManpower * -0.05f);
+            else if (nobleManpower < nobleCap)
+                this.nobleManpower = (int)((float)this.nobleManpower * 0.05f);
+        }
     }
 
 
-    public class LandData
+    public class LandData : BannerKingsData
     {
         private float acres;
-        private float arable;
+        private float farmland;
         private float pasture;
-        private float meadow;
-        private float woods;
+        private float woodland;
+
+        internal override void Update(PopulationData data)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public class Guild
