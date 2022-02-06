@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BannerKings.Populations;
+using System;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
@@ -12,17 +13,21 @@ namespace BannerKings
             private OverviewVM overviewVM;
             private ManagementVM managementVM;
             private DemesneVM demesneVM;
+            private MilitaryVM militaryVM;
             private Settlement _settlement;
             private bool _isOverviewSelected;
             private bool _isManagementSelected;
             private bool _isDemesneSelected;
+            private bool _isMilitarySelected;
 
             public PopulationVM(Settlement _settlement)
             {
                 this._settlement = _settlement;
+                PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(_settlement);
                 overviewVM = new OverviewVM(_settlement, true);
                 managementVM = new ManagementVM(_settlement, false);
                 demesneVM = new DemesneVM(BannerKingsConfig.Instance.TitleManager.GetTitle(_settlement), false);
+                militaryVM = new MilitaryVM(data, _settlement, false);
             }
 
             public override void RefreshValues()
@@ -38,6 +43,8 @@ namespace BannerKings
                 this.IsOverviewSelected = false;
                 this.IsManagementSelected = false;
                 this.IsDemesneSelected = false;
+                this.IsMilitarySelected = false;
+                this.Military.IsSelected = false;
                 if (index == 0)
                 {
                     this.OverView.IsSelected = true;
@@ -53,7 +60,12 @@ namespace BannerKings
                     this.Demesne.IsSelected = true;
                     this.IsDemesneSelected = true;
                 }
-                    
+                else if (index == 3)
+                {
+                    this.Military.IsSelected = true;
+                    this.IsMilitarySelected = true;
+                }
+
                 RefreshValues();
             }
 
@@ -100,6 +112,20 @@ namespace BannerKings
             }
 
             [DataSourceProperty]
+            public MilitaryVM Military
+            {
+                get => this.militaryVM;
+                set
+                {
+                    if (value != this.militaryVM)
+                    {
+                        this.militaryVM = value;
+                        base.OnPropertyChangedWithValue(value, "Military");
+                    }
+                }
+            }
+
+            [DataSourceProperty]
             public bool IsOverviewSelected
             {
                 get => this._isOverviewSelected;
@@ -137,6 +163,20 @@ namespace BannerKings
                     {
                         this._isManagementSelected = value;
                         base.OnPropertyChangedWithValue(value, "IsManagementSelected");
+                    }
+                }
+            }
+
+            [DataSourceProperty]
+            public bool IsMilitarySelected
+            {
+                get => this._isMilitarySelected;
+                set
+                {
+                    if (value != this._isMilitarySelected)
+                    {
+                        this._isMilitarySelected = value;
+                        base.OnPropertyChangedWithValue(value, "IsMilitarySelected");
                     }
                 }
             }
