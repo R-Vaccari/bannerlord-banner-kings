@@ -21,22 +21,22 @@ namespace BannerKings
         {
             base.AddEnumDefinition(typeof(PopType), 1);
             base.AddClassDefinition(typeof(PopulationClass), 2);
-            base.AddClassDefinition(typeof(MilitaryData), 2);
-            base.AddClassDefinition(typeof(CultureData), 2);
-            base.AddClassDefinition(typeof(EconomicData), 2);
-            base.AddClassDefinition(typeof(LandData), 2);
-            base.AddClassDefinition(typeof(PopulationData), 3);
-            base.AddEnumDefinition(typeof(PolicyType), 4);
-            base.AddClassDefinition(typeof(PolicyElement), 5);
-            base.AddEnumDefinition(typeof(TaxType), 6);
-            base.AddEnumDefinition(typeof(MilitiaPolicy), 7);
-            base.AddEnumDefinition(typeof(WorkforcePolicy), 8);
-            base.AddClassDefinition(typeof(PopulationManager), 9);
-            base.AddClassDefinition(typeof(PolicyManager), 10);
-            base.AddClassDefinition(typeof(PopulationPartyComponent), 11);
-            base.AddClassDefinition(typeof(MilitiaComponent), 12);
-            base.AddEnumDefinition(typeof(TariffType), 13);
-            base.AddEnumDefinition(typeof(CriminalPolicy), 14);
+            base.AddClassDefinition(typeof(MilitaryData), 3);
+            base.AddClassDefinition(typeof(CultureData), 4);
+            base.AddClassDefinition(typeof(EconomicData), 5);
+            base.AddClassDefinition(typeof(LandData), 6);
+            base.AddClassDefinition(typeof(PopulationData), 7);
+            base.AddEnumDefinition(typeof(PolicyType), 8);
+            base.AddClassDefinition(typeof(PolicyElement), 9);
+            base.AddEnumDefinition(typeof(TaxType), 10);
+            base.AddEnumDefinition(typeof(MilitiaPolicy), 11);
+            base.AddEnumDefinition(typeof(WorkforcePolicy), 12);
+            base.AddClassDefinition(typeof(PopulationManager), 13);
+            base.AddClassDefinition(typeof(PolicyManager), 14);
+            base.AddClassDefinition(typeof(PopulationPartyComponent), 15);
+            base.AddClassDefinition(typeof(MilitiaComponent), 16);
+            base.AddEnumDefinition(typeof(TariffType), 17);
+            base.AddEnumDefinition(typeof(CriminalPolicy), 18);
         }
 
         protected override void DefineContainerDefinitions()

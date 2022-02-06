@@ -46,6 +46,7 @@ namespace BannerKings
             this.Models.Add(new BKUsurpationModel());
             this.Models.Add(new BKStabilityModel());
             this.Models.Add(new BKGrowthModel());
+            this.Models.Add(new BKEconomyModel());
         }
 
         public static BannerKingsConfig Instance

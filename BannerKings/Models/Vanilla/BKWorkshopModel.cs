@@ -11,7 +11,7 @@ namespace BannerKings.Models
         {
             if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
             {
-                BKEconomyModel model = (BKEconomyModel)BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(IEconomyModel));
+                BKEconomyModel model = (BKEconomyModel)BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(BKEconomyModel));
                 return model.CalculateProductionEfficiency(town.Settlement).ResultNumber;
             } else return base.GetPolicyEffectToProduction(town); 
            

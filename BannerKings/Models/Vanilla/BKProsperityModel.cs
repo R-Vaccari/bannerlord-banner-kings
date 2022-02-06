@@ -18,8 +18,8 @@ namespace BannerKings.Models
 		public override ExplainedNumber CalculateHearthChange(Village village, bool includeDescriptions = false)
         {
             ExplainedNumber baseResult = base.CalculateHearthChange(village);
-            if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(village.Settlement))
-                new BKGrowthModel().CalculateHearthGrowth(village, ref baseResult);
+            //if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(village.Settlement))
+               // new BKGrowthModel().CalculateHearthGrowth(village, ref baseResult);
 
             return baseResult;
         }

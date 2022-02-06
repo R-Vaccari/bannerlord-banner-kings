@@ -323,7 +323,7 @@ namespace BannerKings
             class InitializeCategoriesPatch
             {
                 private static ItemCategory _itemCategoryBread;
-                static void Postfix(Village village, MobileParty villagerParty)
+                static void Postfix()
                 {
                     _itemCategoryBread = Game.Current.ObjectManager.RegisterPresumedObject<ItemCategory>(new ItemCategory("bread"));
                     _itemCategoryBread.InitializeObject(true, 50, 20, ItemCategory.Property.BonusToFoodStores, null, 0f, false, true);

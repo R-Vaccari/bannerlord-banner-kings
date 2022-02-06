@@ -60,11 +60,20 @@ namespace BannerKings.Populations
                 int total = 0;
                 classes.ForEach(popClass => total += popClass.count);
                 return total;
-            }   
+            }
         }
 
         public Settlement Settlement => this.settlement;
-        public ExplainedNumber Growth => BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(BKGrowthModel)).CalculateEffect(this.settlement);
+        public ExplainedNumber Growth
+        {
+            get
+            {
+                BKGrowthModel model = (BKGrowthModel)BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(BKGrowthModel));
+                return model.CalculateEffect(this.settlement, this);
+            }
+        }
+            
+    
 
         public float Stability
         {
@@ -266,8 +275,8 @@ namespace BannerKings.Populations
             HashSet<CultureDataClass> toDelete = new HashSet<CultureDataClass>();
             foreach (CultureDataClass cultureData in this.cultures)
             {
-                cultureData.Acceptance += accModel.CalculateEffect(data.Settlement, cultureData).ResultNumber;
-                cultureData.Assimilation += accModel.CalculateEffect(data.Settlement, cultureData).ResultNumber;
+                //cultureData.Acceptance += accModel.CalculateEffect(data.Settlement, cultureData).ResultNumber;
+                cultureData.Assimilation += assimModel.CalculateEffect(data.Settlement, cultureData).ResultNumber;
                 if (cultureData.Culture != settlementOwner.Culture && cultureData.Assimilation == 0f)
                     toDelete.Add(cultureData);
             }
@@ -335,7 +344,7 @@ namespace BannerKings.Populations
 
         internal override void Update(PopulationData data)
         {
-            throw new NotImplementedException();
+            
         }
 
         public ExplainedNumber AdministrativeCost => BannerKingsConfig.Instance.Models
@@ -426,7 +435,7 @@ namespace BannerKings.Populations
 
         internal override void Update(PopulationData data)
         {
-            throw new NotImplementedException();
+           
         }
     }
 

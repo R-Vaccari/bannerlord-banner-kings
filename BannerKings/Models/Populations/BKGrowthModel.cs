@@ -16,6 +16,7 @@ namespace BannerKings.Models
 
         public void CalculateHearthGrowth(Village village, ref ExplainedNumber baseResult)
         {
+            /*
             PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(village.Settlement);
             bool boost = BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(village.Settlement, PolicyManager.PolicyType.POP_GROWTH);
             int growthFactor = GetDataGrowthFactor(village.Settlement, data, boost, false);
@@ -31,34 +32,7 @@ namespace BannerKings.Models
             float hearths = MBRandom.RandomFloatRanged(growthFactor / 3, growthFactor / 6) * taxFactor;
             data.UpdatePopulation(village.Settlement, (int)MBRandom.RandomFloatRanged(hearths * 3f, hearths * 6f), PopType.None);
             baseResult.Add(hearths, null);
-        }
-
-        private int GetDataGrowthFactor(Settlement settlement, PopulationData data, bool boost, bool showMessage)
-        {
-
-            float growthFactor = 5;
-            if (settlement.IsVillage || !settlement.IsStarving)
-            {
-                int cap = CalculateSettlementCap(settlement);
-                float filledCapacity = (float)data.TotalPop / (float)cap;
-
-                data.Classes.ForEach(popClass =>
-                {
-                    if (popClass.type != PopType.Slaves)
-                        growthFactor += (int)(popClass.count * POP_GROWTH_FACTOR * (boost ? 1.1f : 1f));
-                    else growthFactor -= (int)(popClass.count * SLAVE_GROWTH_FACTOR);
-                });
-
-                growthFactor *= 1f - (1f * filledCapacity);
-            } else if (settlement.IsStarving)
-            {
-                growthFactor = -5;
-                growthFactor += (int)((float)data.TotalPop * -0.007f);
-                if (showMessage && settlement.OwnerClan.Leader == Hero.MainHero)
-                    InformationManager.DisplayMessage(new InformationMessage(string.Format("Population is starving at {0}!", settlement.Name.ToString())));
-            }
-
-            return (int)growthFactor;
+            */
         }
 
         public int CalculateSettlementCap(Settlement settlement) => settlement.IsTown ? 50000 : (settlement.IsCastle ? 8000 : 4000);
