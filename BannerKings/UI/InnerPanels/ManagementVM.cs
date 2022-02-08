@@ -81,6 +81,7 @@ namespace BannerKings.UI
             MilitiaSelector.SetOnChangeAction(null);
             foreach (MilitiaPolicy policy in _militiaPolicies)
             {
+
                 MilitiaItemVM item = new MilitiaItemVM(policy, true);
                 MilitiaSelector.AddItem(item);
             }

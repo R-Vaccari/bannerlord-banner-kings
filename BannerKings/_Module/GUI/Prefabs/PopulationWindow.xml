@@ -23,21 +23,27 @@
 						<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" MarginTop="20" MarginLeft="15" HorizontalAlignment="Center" VerticalAlignment="Top" LayoutImp.LayoutMethod="HorizontalLeftToRight">
 						  <Children>
 						  
-							<ButtonWidget DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="170" SuggestedHeight="60" MarginRight="10" MarginLeft="10"  Brush="Header.Tab.Center" Command.Click="SetSelectedCategory" CommandParameter.Click="0" IsSelected="@IsOverviewSelected" UpdateChildrenStates="true">
+							<ButtonWidget DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="130" SuggestedHeight="60" MarginRight="10" MarginLeft="10"  Brush="Header.Tab.Center" Command.Click="SetSelectedCategory" CommandParameter.Click="0" IsSelected="@IsOverviewSelected" UpdateChildrenStates="true">
 							  <Children>
 								<TextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginTop="3" Brush="Clan.TabControl.Text" Text="Overview" />
 							  </Children>
 							</ButtonWidget>
 							
-							<ButtonWidget DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="170" SuggestedHeight="60" MarginRight="10" MarginLeft="10"  Brush="Header.Tab.Center" Command.Click="SetSelectedCategory" CommandParameter.Click="1" IsSelected="@IsManagementSelected" UpdateChildrenStates="true">
+							<ButtonWidget DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="130" SuggestedHeight="60" MarginRight="10" MarginLeft="10"  Brush="Header.Tab.Center" Command.Click="SetSelectedCategory" CommandParameter.Click="1" IsSelected="@IsManagementSelected" UpdateChildrenStates="true">
 							  <Children>
 								<TextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginTop="3" Brush="Clan.TabControl.Text" Text="Management" />
 							  </Children>
 							</ButtonWidget>
 							
-							<ButtonWidget DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="170" SuggestedHeight="60" MarginRight="10" MarginLeft="10"  Brush="Header.Tab.Center" Command.Click="SetSelectedCategory" CommandParameter.Click="2" IsSelected="@IsDemesneSelected" UpdateChildrenStates="true">
+							<ButtonWidget DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="130" SuggestedHeight="60" MarginRight="10" MarginLeft="10"  Brush="Header.Tab.Center" Command.Click="SetSelectedCategory" CommandParameter.Click="2" IsSelected="@IsDemesneSelected" UpdateChildrenStates="true">
 							  <Children>
 								<TextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginTop="3" Brush="Clan.TabControl.Text" Text="Demesne" />
+							  </Children>
+							</ButtonWidget>
+							
+							<ButtonWidget DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="130" SuggestedHeight="60" MarginRight="10" MarginLeft="10"  Brush="Header.Tab.Center" Command.Click="SetSelectedCategory" CommandParameter.Click="3" IsSelected="@IsMilitarySelected" UpdateChildrenStates="true">
+							  <Children>
+								<TextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginTop="3" Brush="Clan.TabControl.Text" Text="Military" />
 							  </Children>
 							</ButtonWidget>
 							
@@ -51,6 +57,7 @@
 					<OverviewPanel DataSource="{OverView}" IsVisible="true" />
 					<ManagementPanel DataSource="{Management}" IsVisible="false" />
 					<DemesnePanel DataSource="{Demesne}" IsVisible="false" />
+					<MilitaryPanel DataSource="{Military}" IsVisible="false" />
 				  </Children>
 				</Widget>
 			  </Children>

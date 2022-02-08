@@ -1,4 +1,8 @@
-﻿using BannerKings.Populations;
+﻿using BannerKings.Managers.Policies;
+using BannerKings.Populations;
+using BannerKings.UI.Items;
+using System;
+using TaleWorlds.Core.ViewModelCollection;
 using TaleWorlds.Library;
 
 namespace BannerKings.UI
@@ -16,6 +20,21 @@ namespace BannerKings.UI
         }
 
         protected string FormatValue(float value) => (value * 100f).ToString("0.00") + '%';
+
+        protected SelectorVM<BKItemVM> GetSelector(BannerKingsPolicy policy, Action<SelectorVM<BKItemVM>> action)
+        {
+            SelectorVM<BKItemVM> selector = new SelectorVM<BKItemVM>(0, new Action<SelectorVM<BKItemVM>>(action));
+            selector.SetOnChangeAction(null);
+            foreach (Enum enumValue in policy.GetPolicies())
+            {
+                BKItemVM item = new BKItemVM(enumValue, true, policy.GetHint());
+                selector.AddItem(item);
+            }
+
+            selector.SetOnChangeAction(action);
+            selector.SelectedIndex = policy.selected;
+            return selector;
+        }
 
         [DataSourceProperty]
         public bool IsSelected

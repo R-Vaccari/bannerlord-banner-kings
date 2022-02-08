@@ -240,14 +240,13 @@ namespace BannerKings.Models
 			// ------- Other factors ---------
 			Clan ownerClan = town.Settlement.OwnerClan;
 			if (((ownerClan != null) ? ownerClan.Kingdom : null) != null && town.Settlement.OwnerClan.Kingdom.ActivePolicies.Contains(DefaultPolicies.HuntingRights))
-			{
 				result.Add(2f, DefaultPolicies.HuntingRights.Name, null);
-			}
+			
 			
 			if (town.Governor != null && town.Governor.GetPerkValue(DefaultPerks.Roguery.DirtyFighting))
-			{
+			
 				result.Add(DefaultPerks.Roguery.DirtyFighting.SecondaryBonus, DefaultPerks.Roguery.DirtyFighting.Name, null);
-			}
+			
 			else
 			{
 				result.Add(0f, new TextObject("Village not producing"), null);

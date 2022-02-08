@@ -24,6 +24,9 @@ namespace BannerKings.Managers
         [SaveableProperty(104)]
         public Dictionary<Settlement, CriminalPolicy> CRIMINAL { get; set; }
 
+        [SaveableProperty(105)]
+        public Dictionary<Settlement, GarrisonPolicy> GARRISON { get; set; }
+
         public PolicyManager(Dictionary<Settlement, List<PolicyElement>> POLICIES, Dictionary<Settlement, TaxType> TAXES, 
             Dictionary<Settlement, MilitiaPolicy> MILITIAS, Dictionary<Settlement, WorkforcePolicy> WORKFORCE, Dictionary<Settlement, TariffType> TARIFFS,
             Dictionary<Settlement, CriminalPolicy> CRIMINAL)
@@ -34,6 +37,7 @@ namespace BannerKings.Managers
             this.WORKFORCE = WORKFORCE;
             this.TARIFFS = TARIFFS;
             this.CRIMINAL = CRIMINAL;
+            this.GARRISON = new Dictionary<Settlement, GarrisonPolicy>();
         }
 
         public bool IsSettlementPoliciesSet(Settlement settlement) => POLICIES.ContainsKey(settlement);
@@ -212,6 +216,33 @@ namespace BannerKings.Managers
             }
         }
 
+        public void UpdateGarrisonPolicy(Settlement settlement, GarrisonPolicy policy)
+        {
+            if (GARRISON.ContainsKey(settlement))
+                GARRISON[settlement] = policy;
+            else GARRISON.Add(settlement, policy);
+        }
+
+        public GarrisonPolicy GetGarrisonPolicy(Settlement settlement)
+        {
+            if (GARRISON.ContainsKey(settlement))
+                return GARRISON[settlement];
+            else
+            {
+                GARRISON.Add(settlement, GarrisonPolicy.Standard);
+                return GarrisonPolicy.Standard;
+            }
+        }
+
+        public string GetGarrisonHint(GarrisonPolicy policy)
+        {
+            if (policy == GarrisonPolicy.Enlist_Locals)
+                return "Focus three fourths of the militia as melee troops";
+            else if (policy == GarrisonPolicy.Enlist_Mercenaries)
+                return "Focus three fourths of the militia as ranged troops";
+            else return "Split militia equally between ranged and melee troops";
+        }
+
         public void UpdateTariffPolicy(Settlement settlement, TariffType policy)
         {
             if (TARIFFS.ContainsKey(settlement))
@@ -341,6 +372,19 @@ namespace BannerKings.Managers
             Standard,
             Internal_Consumption,
             Exemption
+        }
+
+        public enum GarrisonPolicy
+        {
+            Standard,
+            Enlist_Locals,
+            Enlist_Mercenaries
+        }
+
+        public enum DraftPolicy
+        {
+            Standard,
+            Enlistment
         }
     }
 }

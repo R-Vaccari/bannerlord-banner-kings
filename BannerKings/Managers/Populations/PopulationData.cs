@@ -381,12 +381,14 @@ namespace BannerKings.Populations
         private Settlement settlement;
         private int peasantManpower;
         private int nobleManpower;
+        private List<SiegeEngineType> engines;
 
         public MilitaryData(Settlement settlement, int peasantManpower, int nobleManpower)
         {
             this.settlement = settlement;
             this.peasantManpower = peasantManpower;
             this.nobleManpower = nobleManpower;
+            this.engines = new List<SiegeEngineType>();
         }
 
         public int Manpower => peasantManpower + nobleManpower;
@@ -396,6 +398,14 @@ namespace BannerKings.Populations
             : new ExplainedNumber(0f, true, new TaleWorlds.Localization.TextObject("Not a town"));
         public ExplainedNumber Militarism => this.settlement.IsTown ? new BKVolunteerModel().GetMilitarism(settlement)
             : new ExplainedNumber(0f, true, new TaleWorlds.Localization.TextObject("Not a town"));
+
+        public int Holdout => new BKFoodModel().GetFoodEstimate(settlement.Town, true, settlement.Town.FoodStocksUpperLimit());
+
+        public IEnumerable<SiegeEngineType> Engines => this.engines;
+
+        public int Ballistae => new BKSiegeEventModel().GetPrebuiltSiegeEnginesOfSettlement(settlement).Count(x => x == DefaultSiegeEngineTypes.Ballista);
+        public int Catapultae => new BKSiegeEventModel().GetPrebuiltSiegeEnginesOfSettlement(settlement).Count(x => x == DefaultSiegeEngineTypes.Catapult);
+        public int Trebuchets => new BKSiegeEventModel().GetPrebuiltSiegeEnginesOfSettlement(settlement).Count(x => x == DefaultSiegeEngineTypes.Trebuchet);
 
         internal override void Update(PopulationData data)
         {

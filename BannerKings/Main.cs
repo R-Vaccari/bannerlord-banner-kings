@@ -19,6 +19,7 @@ using TaleWorlds.ObjectSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment.Managers;
 using BannerKings.Managers.Helpers;
 using BannerKings.Populations;
+using BannerKings.Models.Vanilla;
 
 namespace BannerKings
 {
@@ -51,6 +52,7 @@ namespace BannerKings
                     campaignStarter.AddModel(new BKWorkshopModel());
                     campaignStarter.AddModel(new BKClanFinanceModel());
                     campaignStarter.AddModel(new BKArmyManagementModel());
+                    campaignStarter.AddModel(new BKSiegeEventModel());
                 } catch (Exception e)
                 {
                 }
