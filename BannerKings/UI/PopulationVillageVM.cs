@@ -48,8 +48,8 @@ namespace BannerKings
                         Helpers.Helpers.GetClassHint(popClass.type, settlement.Culture))
                         ));
 
-                    List<PolicyElement> elements = BannerKingsConfig.Instance.PolicyManager.GetDefaultDecisions(settlement);
-                    foreach (PolicyElement policy in elements)
+                    List<DecisionsElement> elements = BannerKingsConfig.Instance.PolicyManager.GetDefaultDecisions(settlement);
+                    foreach (DecisionsElement policy in elements)
                     {
                         PopulationOptionVM vm = new PopulationOptionVM()
                         .SetAsBooleanOption(policy.description, policy.isChecked, delegate (bool value)

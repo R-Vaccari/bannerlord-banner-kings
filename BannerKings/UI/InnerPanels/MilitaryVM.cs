@@ -22,7 +22,7 @@ namespace BannerKings.UI
         private SelectorVM<BKItemVM> garrisonSelector;
         private PopulationOptionVM _conscriptionToogle;
         private PopulationOptionVM _subsidizeMilitiaToogle;
-        private GarrisonPolicyItem garrisonItem;
+        private BKGarrisonPolicy garrisonItem;
         private Settlement settlement;
 
         public MilitaryVM(PopulationData data, Settlement _settlement, bool selected) : base(data, selected)
@@ -90,12 +90,12 @@ namespace BannerKings.UI
             MilitiaSelector.SelectedIndex = militiaIndex;
 
             GarrisonPolicy policyElement = BannerKingsConfig.Instance.PolicyManager.GetGarrisonPolicy(settlement);
-            garrisonItem = new GarrisonPolicyItem(policyElement, settlement);
+            garrisonItem = new BKGarrisonPolicy(policyElement, settlement);
             GarrisonSelector = base.GetSelector(garrisonItem, new Action<SelectorVM<BKItemVM>>(this.garrisonItem.OnChange));
 
 
-            List<PolicyElement> elements = BannerKingsConfig.Instance.PolicyManager.GetDefaultDecisions(settlement);
-            foreach (PolicyElement policy in elements)
+            List<DecisionsElement> elements = BannerKingsConfig.Instance.PolicyManager.GetDefaultDecisions(settlement);
+            foreach (DecisionsElement policy in elements)
             {
                 PopulationOptionVM vm = new PopulationOptionVM()
                 .SetAsBooleanOption(policy.description, policy.isChecked, delegate (bool value)

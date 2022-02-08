@@ -27,7 +27,7 @@ namespace BannerKings
             base.AddClassDefinition(typeof(LandData), 6);
             base.AddClassDefinition(typeof(PopulationData), 7);
             base.AddEnumDefinition(typeof(PolicyType), 8);
-            base.AddClassDefinition(typeof(PolicyElement), 9);
+            base.AddClassDefinition(typeof(DecisionsElement), 9);
             base.AddEnumDefinition(typeof(TaxType), 10);
             base.AddEnumDefinition(typeof(MilitiaPolicy), 11);
             base.AddEnumDefinition(typeof(WorkforcePolicy), 12);
@@ -43,8 +43,8 @@ namespace BannerKings
         {
             base.ConstructContainerDefinition(typeof(List<PopulationClass>));
             base.ConstructContainerDefinition(typeof(Dictionary<Settlement, PopulationData>));
-            base.ConstructContainerDefinition(typeof(List<PolicyElement>));
-            base.ConstructContainerDefinition(typeof(Dictionary<Settlement, List<PolicyElement>>));
+            base.ConstructContainerDefinition(typeof(List<DecisionsElement>));
+            base.ConstructContainerDefinition(typeof(Dictionary<Settlement, List<DecisionsElement>>));
             base.ConstructContainerDefinition(typeof(Dictionary<Settlement, TaxType>));
             base.ConstructContainerDefinition(typeof(Dictionary<Settlement, MilitiaPolicy>));
             base.ConstructContainerDefinition(typeof(Dictionary<Settlement, WorkforcePolicy>));

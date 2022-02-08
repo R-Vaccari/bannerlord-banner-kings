@@ -38,8 +38,8 @@ namespace BannerKings.UI
         public override void RefreshValues()
         {
             base.RefreshValues();
-            List<PolicyElement> elements = BannerKingsConfig.Instance.PolicyManager.GetDefaultDecisions(_settlement);
-            foreach (PolicyElement policy in elements)
+            List<DecisionsElement> elements = BannerKingsConfig.Instance.PolicyManager.GetDefaultDecisions(_settlement);
+            foreach (DecisionsElement policy in elements)
             {
                 PopulationOptionVM vm = new PopulationOptionVM()
                 .SetAsBooleanOption(policy.description, policy.isChecked, delegate (bool value)

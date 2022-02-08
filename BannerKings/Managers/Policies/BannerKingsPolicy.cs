@@ -10,10 +10,12 @@ namespace BannerKings.Managers.Policies
     {
         public Settlement settlement;
         public int selected;
-        public BannerKingsPolicy(Settlement settlement, int selected)
+        public string Identifier { get; private set; }
+        public BannerKingsPolicy(Settlement settlement, int selected, string identifier)
         {
             this.settlement = settlement;
             this.selected = selected;
+            this.Identifier = identifier;
         }
         public abstract string GetHint();
 

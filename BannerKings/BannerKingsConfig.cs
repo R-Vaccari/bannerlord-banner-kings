@@ -17,7 +17,7 @@ namespace BannerKings
         public TitleManager TitleManager;
         public HashSet<IBannerKingsModel> Models = new HashSet<IBannerKingsModel>();
 
-        public void InitManagers(Dictionary<Settlement, PopulationData> pops, List<MobileParty> caravans, Dictionary<Settlement, List<PolicyElement>> policies,
+        public void InitManagers(Dictionary<Settlement, PopulationData> pops, List<MobileParty> caravans, Dictionary<Settlement, List<DecisionsElement>> policies,
             Dictionary<Settlement, TaxType> taxes, Dictionary<Settlement, MilitiaPolicy> militias, Dictionary<Settlement, WorkforcePolicy> workforce, 
             Dictionary<Settlement, TariffType> tariffs, Dictionary<Settlement, CriminalPolicy> criminal, 
             HashSet<FeudalTitle> titles, Dictionary<Hero, HashSet<FeudalTitle>> titleHolders, Dictionary<Kingdom, FeudalTitle> kingdoms)

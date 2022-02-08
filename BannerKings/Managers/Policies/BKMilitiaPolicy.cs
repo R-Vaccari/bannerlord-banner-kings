@@ -7,19 +7,19 @@ using static BannerKings.Managers.PolicyManager;
 
 namespace BannerKings.Managers.Policies
 {
-    class GarrisonPolicyItem : BannerKingsPolicy
+    class BKMilitiaPolicy : BannerKingsPolicy
     {
 
-        GarrisonPolicy policy;
-        public GarrisonPolicyItem(GarrisonPolicy policy, Settlement settlement) : base(settlement, (int)policy)
+        MilitiaPolicy policy;
+        public BKMilitiaPolicy(MilitiaPolicy policy, Settlement settlement) : base(settlement, (int)policy, "militia")
         {
             this.policy = policy;
         }
         public override string GetHint()
         {
-            if (policy == GarrisonPolicy.Enlist_Locals)
+            if (policy == MilitiaPolicy.Melee)
                 return "";
-            else if (policy == GarrisonPolicy.Enlist_Locals)
+            else if (policy == MilitiaPolicy.Ranged)
                 return "";
             else return "";
         }
@@ -29,16 +29,22 @@ namespace BannerKings.Managers.Policies
             if (obj.SelectedItem != null)
             {
                 BKItemVM vm = obj.GetCurrentItem();
-                this.policy = (GarrisonPolicy)vm.value;
-                BannerKingsConfig.Instance.PolicyManager.UpdateGarrisonPolicy(settlement, this.policy);
+                this.policy = (MilitiaPolicy)vm.value;
+                BannerKingsConfig.Instance.PolicyManager.UpdateSettlementPolicy(settlement, this);
             }
         }
 
+        public enum MilitiaPolicy
+        {
+            Balanced,
+            Melee,
+            Ranged
+        }
         public override IEnumerable<Enum> GetPolicies()
         {
-            yield return GarrisonPolicy.Standard;
-            yield return GarrisonPolicy.Enlist_Locals;
-            yield return GarrisonPolicy.Enlist_Mercenaries;
+            yield return MilitiaPolicy.Balanced;
+            yield return MilitiaPolicy.Melee;
+            yield return MilitiaPolicy.Ranged;
             yield break;
         }
     }
