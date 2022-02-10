@@ -8,6 +8,7 @@ using TaleWorlds.CampaignSystem.SandBox.GameComponents;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
+using static BannerKings.Managers.Policies.BKWorkforcePolicy;
 using static BannerKings.Managers.PopulationManager;
 
 namespace BannerKings.Models
@@ -77,7 +78,7 @@ namespace BannerKings.Models
 
 			result.Add(3f, new TextObject("Base"), null);
 
-			if (BannerKingsConfig.Instance.PolicyManager.GetSettlementWork(town.Settlement) == PolicyManager.WorkforcePolicy.Construction)
+			if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(town.Settlement, "workforce", (int)WorkforcePolicy.Construction))
             {
 				int serfs = data.GetTypeCount(PopType.Serfs);
 				result.Add(((float)serfs * 0.15f) * SERF_CONSTRUCTION, new TextObject("Serfs from construction policy"), null);

@@ -8,6 +8,7 @@ using TaleWorlds.CampaignSystem.SandBox.GameComponents;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
+using static BannerKings.Managers.Policies.BKTaxPolicy;
 using static BannerKings.Managers.PolicyManager;
 using static BannerKings.Managers.PopulationManager;
 
@@ -29,19 +30,19 @@ namespace BannerKings.Models
                 bool surplusExists = BannerKingsConfig.Instance.PopulationManager.PopSurplusExists(town.Settlement, PopType.Slaves, true);
                 baseResult.Add((float)slaves * SLAVE_LOYALTY * (surplusExists ? 1.1f : 1f), new TextObject("Slave population"));
 
-                if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(town.Settlement, PolicyType.EXEMPTION))
+                if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(town.Settlement, PolicyType.EXEMPTION))
                 {
 					float fraction = data.GetCurrentTypeFraction(PopType.Nobles);
                     baseResult.Add(LOYALTY_FACTOR * fraction * NOBLE_LOYALTY_WEIGHT, new TextObject("Nobles exemption policy"));
                 }
 
-				if (BannerKingsConfig.Instance.PolicyManager.GetSettlementTax(town.Settlement) == TaxType.Low)
+				if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(town.Settlement, "tax", (int)TaxType.Low))
 				{
 					float fraction1 = data.GetCurrentTypeFraction(PopType.Craftsmen);
 					float fraction2 = data.GetCurrentTypeFraction(PopType.Serfs) * 0.8f;
 					baseResult.Add((fraction1 + fraction2) * LOYALTY_FACTOR, new TextObject("Low tax policy"));
 				}
-				else if (BannerKingsConfig.Instance.PolicyManager.GetSettlementTax(town.Settlement) == TaxType.High)
+				else if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(town.Settlement, "tax", (int)TaxType.High))
 				{
 					float fraction1 = data.GetCurrentTypeFraction(PopType.Craftsmen);
 					float fraction2 = data.GetCurrentTypeFraction(PopType.Serfs) * 0.8f;

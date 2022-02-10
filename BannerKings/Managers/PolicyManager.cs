@@ -64,6 +64,12 @@ namespace BannerKings.Managers
             }  
         }
 
+        public bool IsPolicyEnacted(Settlement settlement, string policyType, int value)
+        {
+            BannerKingsPolicy policy = this.GetPolicy(settlement, policyType);
+            return policy.selected == value;
+        }
+
         public BannerKingsPolicy GetPolicy(Settlement settlement, string policyType)
         {
             BannerKingsPolicy result = null;
@@ -91,6 +97,14 @@ namespace BannerKings.Managers
                 return new BKGarrisonPolicy(GarrisonPolicy.Standard, settlement);
             else if (policyType == "militia")
                 return new BKMilitiaPolicy(MilitiaPolicy.Balanced, settlement);
+            if (policyType == "tax")
+                return new BKTaxPolicy(BKTaxPolicy.TaxType.Standard, settlement);
+            else if (policyType == "tariff")
+                return new BKTariffPolicy(BKTariffPolicy.TariffType.Standard, settlement);
+            if (policyType == "workforce")
+                return new BKWorkforcePolicy(BKWorkforcePolicy.WorkforcePolicy.None, settlement);
+            else if (policyType == "draft")
+                return new BKDraftPolicy(BKDraftPolicy.DraftPolicy.Standard, settlement);
             else return new BKCriminalPolicy(CriminalPolicy.Enslavement, settlement);
         }
 
@@ -114,62 +128,6 @@ namespace BannerKings.Managers
             }
         }
 
-        /*
-        public string GetMilitiaHint(MilitiaPolicy policy)
-        {
-            if (policy == MilitiaPolicy.Melee)
-                return "Focus three fourths of the militia as melee troops";
-            else if (policy == MilitiaPolicy.Ranged)
-                return "Focus three fourths of the militia as ranged troops";
-            else return "Split militia equally between ranged and melee troops";
-        }
-
-        public string GetTaxHint(TaxType policy, bool isVillage)
-        {
-
-            if (policy == TaxType.High)
-            {
-                if (!isVillage) return "Yield more tax from the population, but reduce growth";
-                else return "Yield more tax from the population, at the cost of decreased loyalty";
-            }
-            else if (policy == TaxType.Low)
-            {
-                if (!isVillage) return "Reduce tax burden on the population, diminishing your profit but increasing their support towards you";
-                else return "Reduce tax burden on the population, encouraging new settlers";
-            }
-            else if (policy == TaxType.Exemption)
-                return "Fully exempt notables from taxes, improving their attitude towards you";
-            else return "Standard tax of the land, with no particular repercussions";
-        }
-
-        public string GetCrimeHint(CriminalPolicy policy)
-        {
-            if (policy == CriminalPolicy.Enslavement)
-                return "Prisoners sold in the settlement will be enslaved and join the population. No particular repercussions";
-            else if (policy == CriminalPolicy.Execution)
-                return "Prisoners will suffer the death penalty. No ransom is paid, but the populace feels at ease knowing there are less threats in their daily lives";
-            else return "Forgive criminals and prisoners of war";
-        }
-
-        public string GetWorkHint(WorkforcePolicy policy)
-        {
-            if (policy == WorkforcePolicy.Construction)
-                return "Serfs aid in construction for a gold cost, and food production suffers a penalty";
-            else if (policy == WorkforcePolicy.Land_Expansion)
-                return "Divert slaves and serf workforces to expand the arable land, reducing their outputs while extending usable land";
-            else if (policy == WorkforcePolicy.Martial_Law)
-                return "Put the militia on active duty, increasing security but costing a food upkeep. Negatively impacts production efficiency";
-            else return "No particular policy is implemented";
-        }
-
-        public string GetTariffHint(TariffType policy)
-        {
-            if (policy == TariffType.Standard)
-                return "A tariff is paid to the lord by the settlement when items are sold. This tariff is embedded into prices, meaning tariffs make prices higher overall";
-            else if (policy == TariffType.Internal_Consumption)
-                return "The standard tariff is maintained and a discount is offered to internal consumers (workshops and population). This discount is paid for by the merchants, who won't be happy with it";
-            else return "No tariff is charged, reducing prices and possibly attracting more caravans";
-        } */
 
         private DecisionsElement GetPolicyElementFromType(PolicyType type)
         {
@@ -180,7 +138,7 @@ namespace BannerKings.Managers
             else return null;
         }
 
-        public bool IsPolicyEnacted(Settlement settlement, PolicyType policy)
+        public bool IsDecisionEnacted(Settlement settlement, PolicyType policy)
         {
             DecisionsElement element = null;
             if (DECISIONS.ContainsKey(settlement))
@@ -226,14 +184,6 @@ namespace BannerKings.Managers
             }
         }
 
-        public enum WorkforcePolicy
-        {
-            None,
-            Land_Expansion,
-            Martial_Law,
-            Construction
-        }
-
         public enum PolicyType
         {
             EXPORT_SLAVES,
@@ -242,27 +192,6 @@ namespace BannerKings.Managers
             CONSCRIPTION,
             EXEMPTION,
             SUBSIDIZE_MILITIA
-        }
-
-        public enum TaxType
-        {
-            High,
-            Standard,
-            Low,
-            Exemption
-        }
-
-        public enum TariffType
-        {
-            Standard,
-            Internal_Consumption,
-            Exemption
-        }
-
-        public enum DraftPolicy
-        {
-            Standard,
-            Enlistment
         }
     }
 }

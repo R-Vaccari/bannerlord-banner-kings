@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
-using TaleWorlds.Core.ViewModelCollection;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using static BannerKings.Managers.PolicyManager;
@@ -23,9 +22,6 @@ namespace BannerKings
             private PopulationOptionVM _selfInvestToogle;
             private PopulationOptionVM _subsidizeMilitiaToogle;
             private PopulationOptionVM _raiseMilitiaButton;
-            private SelectorVM<MilitiaItemVM> _militiaSelector; 
-            private SelectorVM<TaxItemVM> _taxSelector;
-            private SelectorVM<WorkItemVM> _workSelector;
             private Settlement settlement;
             private PopulationData data;
 
@@ -104,122 +100,11 @@ namespace BannerKings
 
                     }, new TextObject("Raise the current militia of this village."));
 
-                    int militiaIndex = 0;
-                    MilitiaPolicy militiaPolicy = BannerKingsConfig.Instance.PolicyManager.GetMilitiaPolicy(settlement);
-                    if (militiaPolicy == MilitiaPolicy.Melee)
-                        militiaIndex = 1;
-                    else if (militiaPolicy == MilitiaPolicy.Ranged)
-                        militiaIndex = 2;
-                    MilitiaSelector = new SelectorVM<MilitiaItemVM>(0, new Action<SelectorVM<MilitiaItemVM>>(this.OnMilitiaChange));
-                    MilitiaSelector.SetOnChangeAction(null);
-                    foreach (MilitiaPolicy policy in _militiaPolicies)
-                    {
-                        MilitiaItemVM item = new MilitiaItemVM(policy, true);
-                        MilitiaSelector.AddItem(item);
-                    }
-                    MilitiaSelector.SetOnChangeAction(OnMilitiaChange);
-                    MilitiaSelector.SelectedIndex = militiaIndex;
-
-
-                    int taxIndex = 0;
-                    TaxType taxPolicy = BannerKingsConfig.Instance.PolicyManager.GetSettlementTax(settlement);
-                    if (taxPolicy == TaxType.High)
-                        taxIndex = 1;
-                    else if (taxPolicy == TaxType.Low)
-                        taxIndex = 2;
-                    else if (taxPolicy == TaxType.Exemption)
-                        taxIndex = 3;
-                    TaxSelector = new SelectorVM<TaxItemVM>(0, new Action<SelectorVM<TaxItemVM>>(this.OnTaxChange));
-                    TaxSelector.SetOnChangeAction(null);
-                    foreach (TaxType policy in _taxPolicies)
-                    {
-                        TaxItemVM item = new TaxItemVM(policy, true, BannerKingsConfig.Instance.PolicyManager.GetTaxHint(policy, settlement.IsVillage));
-                        TaxSelector.AddItem(item);
-                    }
-                    TaxSelector.SetOnChangeAction(OnTaxChange);
-                    TaxSelector.SelectedIndex = taxIndex;
-
-
-                    int workIndex = 0;
-                    WorkforcePolicy workPolicy = BannerKingsConfig.Instance.PolicyManager.GetSettlementWork(settlement);
-                    if (workPolicy == WorkforcePolicy.Land_Expansion)
-                        workIndex = 1;
-                    else if (workPolicy == WorkforcePolicy.Martial_Law)
-                        workIndex = 2;
-                    else if (workPolicy == WorkforcePolicy.Construction)
-                        workIndex = 3;
-                    WorkSelector = new SelectorVM<WorkItemVM>(0, new Action<SelectorVM<WorkItemVM>>(this.OnWorkChange));
-                    WorkSelector.SetOnChangeAction(null);
-                    foreach (WorkforcePolicy policy in _workPolicies)
-                    {
-                        WorkItemVM item = new WorkItemVM(policy, true);
-                        WorkSelector.AddItem(item);
-                    }
-                    WorkSelector.SetOnChangeAction(OnWorkChange);
-                    WorkSelector.SelectedIndex = workIndex;
+   
                 }
             }
 
-            private void OnMilitiaChange(SelectorVM<MilitiaItemVM> obj)
-            {
-                if (obj.SelectedItem != null)
-                {
-                    MilitiaItemVM selectedItem = obj.SelectedItem;
-                    BannerKingsConfig.Instance.PolicyManager.UpdateMilitiaPolicy(settlement, selectedItem.policy);
-                }
-            }
-
-            private void OnTaxChange(SelectorVM<TaxItemVM> obj)
-            {
-                if (obj.SelectedItem != null)
-                {
-                    TaxItemVM selectedItem = obj.SelectedItem;
-                    BannerKingsConfig.Instance.PolicyManager.UpdateTaxPolicy(settlement, selectedItem.policy);
-                }
-            }
-
-            private void OnWorkChange(SelectorVM<WorkItemVM> obj)
-            {
-                if (obj.SelectedItem != null)
-                {
-                    WorkItemVM selectedItem = obj.SelectedItem;
-                    BannerKingsConfig.Instance.PolicyManager.UpdateWorkPolicy(settlement, selectedItem.policy);
-                }
-            }
-
-
-            private IEnumerable<WorkforcePolicy> _workPolicies
-            {
-                get
-                {
-                    yield return WorkforcePolicy.None;
-                    yield return WorkforcePolicy.Land_Expansion;
-                    yield break;
-                }
-            }
-
-            private IEnumerable<TaxType> _taxPolicies
-            {
-                get
-                {
-                    yield return TaxType.Standard;
-                    yield return TaxType.High;
-                    yield return TaxType.Low;
-                    yield return TaxType.Exemption;
-                    yield break;
-                }
-            }
-
-            private IEnumerable<MilitiaPolicy> _militiaPolicies
-            {
-                get
-                {
-                    yield return MilitiaPolicy.Balanced;
-                    yield return MilitiaPolicy.Melee;
-                    yield return MilitiaPolicy.Ranged;
-                    yield break;
-                }
-            }
+  
 
             public int InfluenceCost
             {
@@ -259,41 +144,8 @@ namespace BannerKings
                     return (result * 100f).ToString() + '%';
                 }
             }
-            
 
-            [DataSourceProperty]
-            public SelectorVM<WorkItemVM> WorkSelector
-            {
-                get
-                {
-                    return this._workSelector;
-                }
-                set
-                {
-                    if (value != this._workSelector)
-                    {
-                        this._workSelector = value;
-                        base.OnPropertyChangedWithValue(value, "WorkSelector");
-                    }
-                }
-            }
-
-            [DataSourceProperty]
-            public SelectorVM<TaxItemVM> TaxSelector
-            {
-                get
-                {
-                    return this._taxSelector;
-                }
-                set
-                {
-                    if (value != this._taxSelector)
-                    {
-                        this._taxSelector = value;
-                        base.OnPropertyChangedWithValue(value, "TaxSelector");
-                    }
-                }
-            }
+    
 
             [DataSourceProperty]
             public string AdministrativeCost
@@ -305,22 +157,7 @@ namespace BannerKings
                 }
             }
 
-            [DataSourceProperty]
-            public SelectorVM<MilitiaItemVM> MilitiaSelector
-            {
-                get
-                {
-                    return this._militiaSelector;
-                }
-                set
-                {
-                    if (value != this._militiaSelector)
-                    {
-                        this._militiaSelector = value;
-                        base.OnPropertyChangedWithValue(value, "MilitiaSelector");
-                    }
-                }
-            }
+
 
             [DataSourceProperty]
             public MBBindingList<PopulationInfoVM> PopInfo

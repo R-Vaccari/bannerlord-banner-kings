@@ -10,18 +10,18 @@ namespace BannerKings.Managers.Policies
     class BKMilitiaPolicy : BannerKingsPolicy
     {
 
-        MilitiaPolicy policy;
+        public MilitiaPolicy Policy { get; private set; }
         public BKMilitiaPolicy(MilitiaPolicy policy, Settlement settlement) : base(settlement, (int)policy, "militia")
         {
-            this.policy = policy;
+            this.Policy = policy;
         }
         public override string GetHint()
         {
-            if (policy == MilitiaPolicy.Melee)
-                return "";
-            else if (policy == MilitiaPolicy.Ranged)
-                return "";
-            else return "";
+            if (Policy == MilitiaPolicy.Melee)
+                return "Focus three fourths of the militia as melee troops";
+            else if (Policy == MilitiaPolicy.Ranged)
+                return "Focus three fourths of the militia as ranged troops";
+            else return "Split militia equally between ranged and melee troops";
         }
 
         public override void OnChange(SelectorVM<BKItemVM> obj)
@@ -29,7 +29,8 @@ namespace BannerKings.Managers.Policies
             if (obj.SelectedItem != null)
             {
                 BKItemVM vm = obj.GetCurrentItem();
-                this.policy = (MilitiaPolicy)vm.value;
+                this.Policy = (MilitiaPolicy)vm.value;
+                base.selected = vm.value;
                 BannerKingsConfig.Instance.PolicyManager.UpdateSettlementPolicy(settlement, this);
             }
         }

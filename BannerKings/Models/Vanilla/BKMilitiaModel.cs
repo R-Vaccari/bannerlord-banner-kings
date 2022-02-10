@@ -4,6 +4,8 @@ using TaleWorlds.Localization;
 using static BannerKings.Managers.PopulationManager;
 using static BannerKings.Managers.PolicyManager;
 using BannerKings.Populations;
+using static BannerKings.Managers.Policies.BKMilitiaPolicy;
+using BannerKings.Managers.Policies;
 
 namespace BannerKings.Models
 {
@@ -13,7 +15,7 @@ namespace BannerKings.Models
         {
             if (BannerKingsConfig.Instance.PolicyManager != null)
             {
-                MilitiaPolicy policy = BannerKingsConfig.Instance.PolicyManager.GetMilitiaPolicy(settlement);
+                MilitiaPolicy policy = ((BKMilitiaPolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(settlement, "militia")).Policy;
                 if (policy == MilitiaPolicy.Melee)
                 {
                     meleeTroopRate = 0.75f;
@@ -39,7 +41,7 @@ namespace BannerKings.Models
                 float filledCapacity = settlement.Town.Militia / maxMilitia;
                 float baseGrowth = (float)serfs * 0.0025f;
 
-                if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(settlement, PolicyType.CONSCRIPTION))
+                if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(settlement, PolicyType.CONSCRIPTION))
                     baseResult.Add(baseGrowth * (1f - 1f * filledCapacity), new TextObject("Conscription policy"));
                 else if (filledCapacity > 1f)
                     baseResult.Add(baseGrowth * -1f * filledCapacity, new TextObject("Over supported limit"));
@@ -59,7 +61,7 @@ namespace BannerKings.Models
         {
             float baseResult = base.CalculateEliteMilitiaSpawnChance(settlement) + (settlement.IsTown ? 0.12f : 0.20f);
             if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement) 
-                && BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(settlement, PolicyType.SUBSIDIZE_MILITIA))
+                && BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(settlement, PolicyType.SUBSIDIZE_MILITIA))
                 baseResult += 0.12f;
             
             return baseResult;

@@ -1,8 +1,11 @@
 ﻿using BannerKings.Managers;
+using BannerKings.Managers.Policies;
 using BannerKings.Populations;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.SandBox.GameComponents.Map;
 using TaleWorlds.Localization;
+using static BannerKings.Managers.Policies.BKCriminalPolicy;
+using static BannerKings.Managers.Policies.BKWorkforcePolicy;
 using static BannerKings.Managers.PolicyManager;
 
 namespace BannerKings.Models
@@ -23,13 +26,13 @@ namespace BannerKings.Models
                 float assimilation = assim - 1f + assim;
                 baseResult.Add(assimilation, new TextObject("Cultural Assimilation"));
 
-                if (BannerKingsConfig.Instance.PolicyManager.GetSettlementWork(town.Settlement) == PolicyManager.WorkforcePolicy.Martial_Law)
+                if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(town.Settlement, "workforce", (int)WorkforcePolicy.Construction))
                 {
                     float militia = town.Militia;
                     baseResult.Add(militia * 0.01f, new TextObject("Martial Law policy"));
                 }
 
-                CriminalPolicy criminal = BannerKingsConfig.Instance.PolicyManager.GetCriminalPolicy(town.Settlement);
+                CriminalPolicy criminal = ((BKCriminalPolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(town.Settlement, "criminal")).Policy;
                 if (criminal == CriminalPolicy.Execution)
                     baseResult.Add(0.5f, new TextObject("Criminal policy"));
                 else if (criminal == CriminalPolicy.Forgiveness)

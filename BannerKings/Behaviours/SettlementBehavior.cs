@@ -18,6 +18,7 @@ using static BannerKings.Managers.PopulationManager;
 using HarmonyLib;
 using BannerKings.Populations;
 using TaleWorlds.CampaignSystem.SandBox.CampaignBehaviors;
+using BannerKings.Managers.Policies;
 
 namespace BannerKings.Behaviors
 {
@@ -56,9 +57,8 @@ namespace BannerKings.Behaviors
                 if (populationManager == null && policyManager == null)
                 {
                     BannerKingsConfig.Instance.InitManagers(new Dictionary<Settlement, PopulationData>(), new List<MobileParty>(),
-                    new Dictionary<Settlement, List<PolicyManager.DecisionsElement>>(), new Dictionary<Settlement, PolicyManager.TaxType>(),
-                    new Dictionary<Settlement, PolicyManager.MilitiaPolicy>(), new Dictionary<Settlement, WorkforcePolicy>(), new Dictionary<Settlement, TariffType>(),
-                    new Dictionary<Settlement, CriminalPolicy>(), new HashSet<FeudalTitle>(), new Dictionary<Hero, HashSet<FeudalTitle>>(),
+                    new Dictionary<Settlement, List<PolicyManager.DecisionsElement>>(), new Dictionary<Settlement, HashSet<BannerKingsPolicy>>(), 
+                    new HashSet<FeudalTitle>(), new Dictionary<Hero, HashSet<FeudalTitle>>(),
                     new Dictionary<Kingdom, FeudalTitle>());
                 }
                 else BannerKingsConfig.Instance.InitManagers(populationManager, policyManager, titleManager);
@@ -180,6 +180,7 @@ namespace BannerKings.Behaviors
                             decisions.Add((PolicyType.SUBSIDIZE_MILITIA, atWar));
                         }
 
+                        /*
                         TaxType tax = BannerKingsConfig.Instance.PolicyManager.GetSettlementTax(target);
                         if (target.Town.LoyaltyChange < 0)
                         {
@@ -197,7 +198,7 @@ namespace BannerKings.Behaviors
                             else if (tax == TaxType.Low)
                                 BannerKingsConfig.Instance.PolicyManager.UpdateTaxPolicy(target, TaxType.Standard);
                         }
-
+                        */
                         float filledCapacity = new BKGrowthModel().GetSettlementFilledCapacity(target);
                         bool growth = lord.Clan.Influence >= 300 && filledCapacity < 0.5f;
                         decisions.Add((PolicyType.POP_GROWTH, growth));
@@ -228,13 +229,14 @@ namespace BannerKings.Behaviors
                             bool atWar = enemies.Count() > 0;
                             decisions.Add((PolicyType.SUBSIDIZE_MILITIA, atWar));
                         }
-
+                        /*
                         float hearths = target.Village.Hearth;
                         if (hearths < 300f)
                             BannerKingsConfig.Instance.PolicyManager.UpdateTaxPolicy(target, TaxType.Low);
                         else if (hearths < 1000f)
                             BannerKingsConfig.Instance.PolicyManager.UpdateTaxPolicy(target, TaxType.Standard);
                         else BannerKingsConfig.Instance.PolicyManager.UpdateTaxPolicy(target, TaxType.High);
+                        */
 
                         float filledCapacity = new BKGrowthModel().GetSettlementFilledCapacity(target);
                         bool growth = lord.Clan.Influence >= 300 && filledCapacity < 0.5f;
@@ -254,15 +256,14 @@ namespace BannerKings.Behaviors
             
             if (BannerKingsConfig.Instance.PopulationManager == null)
                 BannerKingsConfig.Instance.InitManagers(new Dictionary<Settlement, PopulationData>(), new List<MobileParty>(),
-                new Dictionary<Settlement, List<PolicyManager.DecisionsElement>>(), new Dictionary<Settlement, PolicyManager.TaxType>(),
-                new Dictionary<Settlement, PolicyManager.MilitiaPolicy>(), new Dictionary<Settlement, WorkforcePolicy>(), new Dictionary<Settlement, TariffType>(),
-                new Dictionary<Settlement, CriminalPolicy>(), new HashSet<FeudalTitle>(), new Dictionary<Hero, HashSet<FeudalTitle>>(),
+                new Dictionary<Settlement, List<PolicyManager.DecisionsElement>>(), new Dictionary<Settlement, HashSet<BannerKingsPolicy>>(), 
+                new HashSet<FeudalTitle>(), new Dictionary<Hero, HashSet<FeudalTitle>>(),
                 new Dictionary<Kingdom, FeudalTitle>());
 
             UpdateSettlementPops(settlement);
             InitializeSettlementPolicies(settlement);
             // Send Slaves
-            if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(settlement, PolicyManager.PolicyType.EXPORT_SLAVES) && DecideSendSlaveCaravan(settlement))
+            if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(settlement, PolicyManager.PolicyType.EXPORT_SLAVES) && DecideSendSlaveCaravan(settlement))
             {
                 Village target = null;
                 MBReadOnlyList<Village> villages = settlement.BoundVillages;

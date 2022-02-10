@@ -4,6 +4,11 @@ using BannerKings.Populations;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.SaveSystem;
+using static BannerKings.Managers.Policies.BKCriminalPolicy;
+using static BannerKings.Managers.Policies.BKMilitiaPolicy;
+using static BannerKings.Managers.Policies.BKTariffPolicy;
+using static BannerKings.Managers.Policies.BKTaxPolicy;
+using static BannerKings.Managers.Policies.BKWorkforcePolicy;
 using static BannerKings.Managers.PolicyManager;
 using static BannerKings.Managers.PopulationManager;
 
@@ -45,10 +50,6 @@ namespace BannerKings
             base.ConstructContainerDefinition(typeof(Dictionary<Settlement, PopulationData>));
             base.ConstructContainerDefinition(typeof(List<DecisionsElement>));
             base.ConstructContainerDefinition(typeof(Dictionary<Settlement, List<DecisionsElement>>));
-            base.ConstructContainerDefinition(typeof(Dictionary<Settlement, TaxType>));
-            base.ConstructContainerDefinition(typeof(Dictionary<Settlement, MilitiaPolicy>));
-            base.ConstructContainerDefinition(typeof(Dictionary<Settlement, WorkforcePolicy>));
-            base.ConstructContainerDefinition(typeof(Dictionary<Settlement, TariffType>));
         }
     }
 }

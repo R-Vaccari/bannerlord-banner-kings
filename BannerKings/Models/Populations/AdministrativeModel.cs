@@ -1,4 +1,5 @@
 ﻿using BannerKings.Managers;
+using BannerKings.Managers.Policies;
 using System;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
@@ -36,16 +37,17 @@ namespace BannerKings.Models
                 } else baseResult += 0.05f;
             }
 
-            if (BannerKingsConfig.Instance.PolicyManager.GetSettlementWork(settlement) != PolicyManager.WorkforcePolicy.None)
+            BKWorkforcePolicy work = (BKWorkforcePolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(settlement, "workforce");
+            if (work.Policy != BKWorkforcePolicy.WorkforcePolicy.None)
                 baseResult += 0.075f;
 
-            if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(settlement, PolicyManager.PolicyType.EXPORT_SLAVES))
+            if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(settlement, PolicyManager.PolicyType.EXPORT_SLAVES))
                 baseResult += 0.025f;
 
-            if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(settlement, PolicyManager.PolicyType.SUBSIDIZE_MILITIA))
+            if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(settlement, PolicyManager.PolicyType.SUBSIDIZE_MILITIA))
                 baseResult += 0.1f;
 
-            if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(settlement, PolicyManager.PolicyType.CONSCRIPTION))
+            if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(settlement, PolicyManager.PolicyType.CONSCRIPTION))
                 baseResult += 0.1f;
 
             return Math.Max(baseResult, 0f);
@@ -69,16 +71,17 @@ namespace BannerKings.Models
             else baseResult.Add(0.05f, new TextObject("Absence of governor"));
 
 
-            if (BannerKingsConfig.Instance.PolicyManager.GetSettlementWork(settlement) != PolicyManager.WorkforcePolicy.None)
+            BKWorkforcePolicy work = (BKWorkforcePolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(settlement, "workforce");
+            if (work.Policy != BKWorkforcePolicy.WorkforcePolicy.None)
                 baseResult.Add(0.075f, new TextObject(""));
 
-            if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(settlement, PolicyManager.PolicyType.EXPORT_SLAVES))
+            if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(settlement, PolicyManager.PolicyType.EXPORT_SLAVES))
                 baseResult.Add(0.025f, new TextObject(""));
 
-            if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(settlement, PolicyManager.PolicyType.SUBSIDIZE_MILITIA))
+            if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(settlement, PolicyManager.PolicyType.SUBSIDIZE_MILITIA))
                 baseResult.Add(0.1f, new TextObject(""));
 
-            if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(settlement, PolicyManager.PolicyType.CONSCRIPTION))
+            if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(settlement, PolicyManager.PolicyType.CONSCRIPTION))
                 baseResult.Add(0.1f, new TextObject(""));
 
             return baseResult;

@@ -18,11 +18,12 @@ namespace BannerKings.UI
         private MBBindingList<InformationElement> defenseInfo;
         private MBBindingList<InformationElement> manpowerInfo;
         private MBBindingList<InformationElement> siegeInfo;
-        private SelectorVM<MilitiaItemVM> militiaSelector;
-        private SelectorVM<BKItemVM> garrisonSelector;
+        private SelectorVM<BKItemVM> militiaSelector, garrisonSelector, draftSelector;
         private PopulationOptionVM _conscriptionToogle;
         private PopulationOptionVM _subsidizeMilitiaToogle;
         private BKGarrisonPolicy garrisonItem;
+        private BKMilitiaPolicy militiaItem;
+        private BKDraftPolicy draftItem;
         private Settlement settlement;
 
         public MilitaryVM(PopulationData data, Settlement _settlement, bool selected) : base(data, selected)
@@ -72,26 +73,14 @@ namespace BannerKings.UI
             SiegeInfo.Add(new InformationElement("Engines:",  sb.ToString(),
                 "How long this settlement will take to start starving in case of a siege"));
 
-            int militiaIndex = 0;
-            MilitiaPolicy militiaPolicy = BannerKingsConfig.Instance.PolicyManager.GetMilitiaPolicy(settlement);
-            if (militiaPolicy == MilitiaPolicy.Melee)
-                militiaIndex = 1;
-            else if (militiaPolicy == MilitiaPolicy.Ranged)
-                militiaIndex = 2;
-            MilitiaSelector = new SelectorVM<MilitiaItemVM>(0, new Action<SelectorVM<MilitiaItemVM>>(this.OnMilitiaChange));
-            MilitiaSelector.SetOnChangeAction(null);
-            foreach (MilitiaPolicy policy in militiaPolicies)
-            {
+            militiaItem = (BKMilitiaPolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(settlement, "militia");
+            MilitiaSelector = base.GetSelector(militiaItem, new Action<SelectorVM<BKItemVM>>(this.militiaItem.OnChange));
 
-                MilitiaItemVM item = new MilitiaItemVM(policy, true);
-                MilitiaSelector.AddItem(item);
-            }
-            MilitiaSelector.SetOnChangeAction(OnMilitiaChange);
-            MilitiaSelector.SelectedIndex = militiaIndex;
-
-            GarrisonPolicy policyElement = BannerKingsConfig.Instance.PolicyManager.GetGarrisonPolicy(settlement);
-            garrisonItem = new BKGarrisonPolicy(policyElement, settlement);
+            garrisonItem = (BKGarrisonPolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(settlement, "garrison"); 
             GarrisonSelector = base.GetSelector(garrisonItem, new Action<SelectorVM<BKItemVM>>(this.garrisonItem.OnChange));
+
+            draftItem = (BKDraftPolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(settlement, "draft");
+            DraftSelector = base.GetSelector(draftItem, new Action<SelectorVM<BKItemVM>>(this.draftItem.OnChange));
 
 
             List<DecisionsElement> elements = BannerKingsConfig.Instance.PolicyManager.GetDefaultDecisions(settlement);
@@ -116,34 +105,20 @@ namespace BannerKings.UI
             }
         }
 
-        private void OnMilitiaChange(SelectorVM<MilitiaItemVM> obj)
-        {
-            if (obj.SelectedItem != null)
-            {
-                MilitiaItemVM selectedItem = obj.SelectedItem;
-                BannerKingsConfig.Instance.PolicyManager.UpdateMilitiaPolicy(settlement, selectedItem.policy);
-            }
-        }
-
-        private IEnumerable<MilitiaPolicy> militiaPolicies
+        [DataSourceProperty]
+        public SelectorVM<BKItemVM> DraftSelector
         {
             get
             {
-                yield return MilitiaPolicy.Balanced;
-                yield return MilitiaPolicy.Melee;
-                yield return MilitiaPolicy.Ranged;
-                yield break;
+                return this.draftSelector;
             }
-        }
-
-        private IEnumerable<GarrisonPolicy> garrisonPolicies
-        {
-            get
+            set
             {
-                yield return GarrisonPolicy.Standard;
-                yield return GarrisonPolicy.Enlist_Locals;
-                yield return GarrisonPolicy.Enlist_Mercenaries;
-                yield break;
+                if (value != this.draftSelector)
+                {
+                    this.draftSelector = value;
+                    base.OnPropertyChangedWithValue(value, "DraftSelector");
+                }
             }
         }
 
@@ -165,7 +140,7 @@ namespace BannerKings.UI
         }
 
         [DataSourceProperty]
-        public SelectorVM<MilitiaItemVM> MilitiaSelector
+        public SelectorVM<BKItemVM> MilitiaSelector
         {
             get
             {

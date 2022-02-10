@@ -6,6 +6,7 @@ using TaleWorlds.CampaignSystem.SandBox.GameComponents;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
+using static BannerKings.Managers.Policies.BKWorkforcePolicy;
 using static BannerKings.Managers.PopulationManager;
 using static BannerKings.Managers.TitleManager;
 
@@ -116,7 +117,7 @@ namespace BannerKings.Models
             float craftsmen = data.GetTypeCount(PopType.Craftsmen);
             result.Add(MathF.Min((craftsmen / 250f) * 0.020f, CRAFTSMEN_EFFECT_CAP), new TextObject("Craftsmen"));
 
-            if (BannerKingsConfig.Instance.PolicyManager.GetSettlementWork(settlement) == PolicyManager.WorkforcePolicy.Martial_Law)
+            if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(settlement, "workforce", (int)WorkforcePolicy.Martial_Law))
                 result.Add(-0.30f, new TextObject("Martial Law policy"));
 
             return result;

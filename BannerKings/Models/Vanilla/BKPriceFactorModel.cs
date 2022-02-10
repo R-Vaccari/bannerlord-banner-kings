@@ -1,6 +1,8 @@
-﻿using TaleWorlds.CampaignSystem;
+﻿using BannerKings.Managers.Policies;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.SandBox.GameComponents;
 using TaleWorlds.Core;
+using static BannerKings.Managers.Policies.BKTariffPolicy;
 using static BannerKings.Managers.PolicyManager;
 
 namespace BannerKings.Models
@@ -14,7 +16,7 @@ namespace BannerKings.Models
                 && BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(merchant.MobileParty.PartyComponent.HomeSettlement))
             {
                 Settlement settlement = merchant.MobileParty.PartyComponent.HomeSettlement;
-                TariffType type = BannerKingsConfig.Instance.PolicyManager.GetSettlementTariff(settlement);
+                TariffType type = ((BKTariffPolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(settlement, "tariff")).Policy;
                 Town town = settlement.Town;
                 if (type != TariffType.Exemption && town != null)
                 {

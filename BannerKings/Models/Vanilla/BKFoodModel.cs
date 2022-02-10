@@ -6,6 +6,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.SandBox.GameComponents;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
+using static BannerKings.Managers.Policies.BKWorkforcePolicy;
 using static BannerKings.Managers.PopulationManager;
 
 namespace BannerKings.Models
@@ -42,8 +43,7 @@ namespace BannerKings.Models
 			if (!town.IsUnderSiege)
             {
 				float serfProduction = (float)citySerfs * SERF_FOOD * (town.IsCastle ? 1f : 0.4f);
-				if (BannerKingsConfig.Instance.PolicyManager.GetSettlementWork(town.Settlement) == PolicyManager.WorkforcePolicy.Construction)
-					serfProduction *= 0.85f;
+
 					
 				result.Add((float)serfProduction, new TextObject("Serfs production", null));
 			} else
@@ -75,7 +75,7 @@ namespace BannerKings.Models
 			int prisoners = town.Settlement.Party.NumberOfPrisoners;
 			result.Add((float)(-prisoners / (NumberOfMenOnGarrisonToEatOneFood * 2)), new TextObject("Prisoner rations"), null);
 
-			if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(town.Settlement, PolicyManager.PolicyType.CONSCRIPTION))
+			if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(town.Settlement, PolicyManager.PolicyType.CONSCRIPTION))
 				result.AddFactor(-0.25f, new TextObject("Conscription policy"));
 	
 			if (town.Governor != null)
@@ -92,7 +92,7 @@ namespace BannerKings.Models
 					result.AddFactor(DefaultPerks.Steward.MasterOfWarcraft.SecondaryBonus, DefaultPerks.Steward.MasterOfWarcraft.Name);	
 			}
 
-			if (BannerKingsConfig.Instance.PolicyManager.GetSettlementWork(town.Settlement) == PolicyManager.WorkforcePolicy.Martial_Law)
+			if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(town.Settlement, "workforce", (int)WorkforcePolicy.Martial_Law))
             {
 				float militia = town.Militia;
 				result.Add(militia * -0.05f, new TextObject("Martial Law policy"));
@@ -220,7 +220,7 @@ namespace BannerKings.Models
 			int garrisonConsumption = (garrisonParty != null) ? garrisonParty.Party.NumberOfAllMembers : 0;
 			result.Add((float)(-garrisonConsumption / NumberOfMenOnGarrisonToEatOneFood), new TextObject("Garrison consumption"), null);
 
-			if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(town.Settlement, PolicyManager.PolicyType.CONSCRIPTION))
+			if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(town.Settlement, PolicyManager.PolicyType.CONSCRIPTION))
 				result.AddFactor(-0.25f, new TextObject("Conscription policy"));
 
 			if (town.Governor != null)

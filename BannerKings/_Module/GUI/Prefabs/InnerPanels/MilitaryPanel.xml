@@ -113,7 +113,12 @@
 					
 				<RichTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" HorizontalAlignment="Center" SuggestedHeight="5" Brush="TownManagement.Project.Name.Text" Text="Militia policy" MarginTop="25"/>
 				<ClanPartyRoleDropdown DataSource="{MilitiaSelector}" MarginTop="10" HorizontalAlignment="Center"/>
+				
+				<RichTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" HorizontalAlignment="Center" SuggestedHeight="5" Brush="TownManagement.Project.Name.Text" Text="Garrison policy" MarginTop="25"/>
 				<ClanPartyRoleDropdown DataSource="{GarrisonSelector}" MarginTop="10" HorizontalAlignment="Center"/>
+				
+				<RichTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" HorizontalAlignment="Center" SuggestedHeight="5" Brush="TownManagement.Project.Name.Text" Text="Drafting policy" MarginTop="25"/>
+				<ClanPartyRoleDropdown DataSource="{DraftSelector}" MarginTop="10" HorizontalAlignment="Center"/>
 			  </Children>
 			</ListPanel>
           </Children>

@@ -3,25 +3,21 @@ using System;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core.ViewModelCollection;
-using static BannerKings.Managers.PolicyManager;
 
 namespace BannerKings.Managers.Policies
 {
-    class BKGarrisonPolicy : BannerKingsPolicy
+    class BKDraftPolicy : BannerKingsPolicy
     {
 
-        GarrisonPolicy policy;
-        public BKGarrisonPolicy(GarrisonPolicy policy, Settlement settlement) : base(settlement, (int)policy, "garrison")
+        DraftPolicy policy;
+        public BKDraftPolicy(DraftPolicy policy, Settlement settlement) : base(settlement, (int)policy, "draft")
         {
             this.policy = policy;
         }
+
         public override string GetHint()
         {
-            if (policy == GarrisonPolicy.Enlist_Locals)
-                return "";
-            else if (policy == GarrisonPolicy.Enlist_Locals)
-                return "";
-            else return "";
+            return "No particular policy is implemented";
         }
 
         public override void OnChange(SelectorVM<BKItemVM> obj)
@@ -29,24 +25,24 @@ namespace BannerKings.Managers.Policies
             if (obj.SelectedItem != null)
             {
                 BKItemVM vm = obj.GetCurrentItem();
-                this.policy = (GarrisonPolicy)vm.value;
+                this.policy = (DraftPolicy)vm.value;
                 base.selected = vm.value;
                 BannerKingsConfig.Instance.PolicyManager.UpdateSettlementPolicy(settlement, this);
             }
         }
 
-        public enum GarrisonPolicy
+        public enum DraftPolicy
         {
             Standard,
-            Enlist_Locals,
-            Enlist_Mercenaries
+            Enlistment,
+            Lax
         }
 
         public override IEnumerable<Enum> GetPolicies()
         {
-            yield return GarrisonPolicy.Standard;
-            yield return GarrisonPolicy.Enlist_Locals;
-            yield return GarrisonPolicy.Enlist_Mercenaries;
+            yield return DraftPolicy.Standard;
+            yield return DraftPolicy.Enlistment;
+            yield return DraftPolicy.Lax;
             yield break;
         }
     }

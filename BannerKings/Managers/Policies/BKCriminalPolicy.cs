@@ -10,18 +10,18 @@ namespace BannerKings.Managers.Policies
     class BKCriminalPolicy : BannerKingsPolicy
     {
 
-        CriminalPolicy policy;
+        public CriminalPolicy Policy { get; private set; }
         public BKCriminalPolicy(CriminalPolicy policy, Settlement settlement) : base(settlement, (int)policy, "criminal")
         {
-            this.policy = policy;
+            this.Policy = policy;
         }
         public override string GetHint()
         {
-            if (policy == CriminalPolicy.Execution)
-                return "";
-            else if (policy == CriminalPolicy.Forgiveness)
-                return "";
-            else return "";
+            if (Policy == CriminalPolicy.Enslavement)
+                return "Prisoners sold in the settlement will be enslaved and join the population. No particular repercussions";
+            else if (Policy == CriminalPolicy.Execution)
+                return "Prisoners will suffer the death penalty. No ransom is paid, but the populace feels at ease knowing there are less threats in their daily lives";
+            else return "Forgive criminals and prisoners of war";
         }
 
         public override void OnChange(SelectorVM<BKItemVM> obj)
@@ -29,7 +29,8 @@ namespace BannerKings.Managers.Policies
             if (obj.SelectedItem != null)
             {
                 BKItemVM vm = obj.GetCurrentItem();
-                this.policy = (CriminalPolicy)vm.value;
+                this.Policy = (CriminalPolicy)vm.value;
+                base.selected = vm.value;
                 BannerKingsConfig.Instance.PolicyManager.UpdateSettlementPolicy(settlement, this);
             }
         }
@@ -43,9 +44,9 @@ namespace BannerKings.Managers.Policies
 
         public override IEnumerable<Enum> GetPolicies()
         {
-            yield return MilitiaPolicy.Balanced;
-            yield return MilitiaPolicy.Melee;
-            yield return MilitiaPolicy.Ranged;
+            yield return CriminalPolicy.Enslavement;
+            yield return CriminalPolicy.Execution;
+            yield return CriminalPolicy.Forgiveness;
             yield break;
         }
     }

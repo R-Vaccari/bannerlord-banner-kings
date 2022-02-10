@@ -6,6 +6,7 @@ using static BannerKings.Managers.PolicyManager;
 using BannerKings.Populations;
 using TaleWorlds.Core;
 using BannerKings.Models;
+using BannerKings.Managers.Policies;
 
 namespace BannerKings
 {
@@ -17,13 +18,13 @@ namespace BannerKings
         public TitleManager TitleManager;
         public HashSet<IBannerKingsModel> Models = new HashSet<IBannerKingsModel>();
 
-        public void InitManagers(Dictionary<Settlement, PopulationData> pops, List<MobileParty> caravans, Dictionary<Settlement, List<DecisionsElement>> policies,
-            Dictionary<Settlement, TaxType> taxes, Dictionary<Settlement, MilitiaPolicy> militias, Dictionary<Settlement, WorkforcePolicy> workforce, 
-            Dictionary<Settlement, TariffType> tariffs, Dictionary<Settlement, CriminalPolicy> criminal, 
+        public void InitManagers(Dictionary<Settlement, PopulationData> pops, List<MobileParty> caravans, Dictionary<Settlement, 
+            List<DecisionsElement>> DECISIONS, Dictionary<Settlement, 
+            HashSet<BannerKingsPolicy>> POLICIES, 
             HashSet<FeudalTitle> titles, Dictionary<Hero, HashSet<FeudalTitle>> titleHolders, Dictionary<Kingdom, FeudalTitle> kingdoms)
         {
             this.PopulationManager = new PopulationManager(pops, caravans);
-            this.PolicyManager = new PolicyManager(policies, taxes, militias, workforce, tariffs, criminal);
+            this.PolicyManager = new PolicyManager(DECISIONS, POLICIES);
             this.TitleManager = new TitleManager(titles, titleHolders, kingdoms);
             this.InitModels();
         }
