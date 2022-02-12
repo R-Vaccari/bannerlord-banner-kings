@@ -27,8 +27,7 @@ namespace BannerKings.Models
             if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
             {
                 PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
-                double nobles = 0;
-                if (!BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(town.Settlement, PolicyType.EXEMPTION)) nobles = data.GetTypeCount(PopType.Nobles);
+                double nobles = data.GetTypeCount(PopType.Nobles);
                 double craftsmen = data.GetTypeCount(PopType.Nobles);
                 double serfs = data.GetTypeCount(PopType.Nobles);
                 double slaves = data.GetTypeCount(PopType.Slaves);
@@ -42,10 +41,6 @@ namespace BannerKings.Models
 
                 float admCost = new AdministrativeModel().CalculateAdministrativeCost(town.Settlement);
                 baseResult.AddFactor(admCost * -1f, new TextObject("Administrative costs"));
-
-                if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(town.Settlement, PolicyType.SELF_INVEST))
-                    if (baseResult.ResultNumber > 0)
-                        baseResult.Add(baseResult.ResultNumber * -1f, new TextObject("Self-investment policy"));
             }
 
             return baseResult;
@@ -72,10 +67,6 @@ namespace BannerKings.Models
                 {
                     float admCost = new AdministrativeModel().CalculateAdministrativeCost(village.Settlement);
                     baseResult *= 1f - admCost;
-
-                    if (village.Settlement != null && BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(village.Settlement, PolicyType.SELF_INVEST))
-                        if (baseResult > 0)
-                            baseResult -= baseResult * -1f;
                 }  
             }
 

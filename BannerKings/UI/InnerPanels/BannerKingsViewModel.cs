@@ -32,7 +32,7 @@ namespace BannerKings.UI
             }
 
             selector.SetOnChangeAction(action);
-            selector.SelectedIndex = policy.selected;
+            selector.SelectedIndex = policy.Selected;
             return selector;
         }
 

@@ -48,13 +48,7 @@ namespace BannerKings.UI
                 .Add(new PopulationInfoVM(Helpers.Helpers.GetClassName(popClass.type, _settlement.Culture).ToString(), popClass.count,
                     Helpers.Helpers.GetClassHint(popClass.type, _settlement.Culture))));
 
-                for (int i = 0; i < 4; i++)
-                {
-                    float value = data.EconomicData.Satisfactions[i];
-                    ConsumptionType type = (ConsumptionType)i;
-                    string desc = type.ToString() + " Goods:";
-                    SatisfactionInfo.Add(new InformationElement(desc, FormatValue(value), Helpers.Helpers.GetConsumptionHint(type)));
-                }
+              
 
                 StatsInfo.Add(new InformationElement("Stability:", FormatValue(data.Stability),
                     "The overall stability of this settlement, affected by security, loyalty, assimilation and whether you are legally entitled to the settlement. Stability is the basis of economic prosperity"));
@@ -70,14 +64,10 @@ namespace BannerKings.UI
                 FoodInfo.Add(new InformationElement("Estimated Holdout:", string.Format("{0} Days", new BKFoodModel().GetFoodEstimate(_settlement.Town, true, _settlement.Town.FoodStocksUpperLimit())),
                     "How long this settlement will take to start starving in case of a siege"));
 
-                ProductionInfo.Add(new InformationElement("Tariff:", FormatValue(new BKTaxModel().GetTownTaxRatio(_settlement.Town)),
-                    "Percentage of an item's value charged as tax when sold"));
-                ProductionInfo.Add(new InformationElement("Merchants' Revenue:", new BKEconomyModel().GetMerchantIncome(_settlement.Town).ToString(),
-                   "Daily revenue of local merchants, based on slave workforce and production efficiency"));
+               
                 //ProductionInfo.Add(new InformationElement("Population Cap:", new GrowthModel().CalculateSettlementCap(_settlement).ToString(),
                 //    "The maximum capacity of people this settlement can naturally support"));
-                ProductionInfo.Add(new InformationElement("Production Efficiency:", FormatValue(new BKWorkshopModel().GetPolicyEffectToProduction(_settlement.Town)),
-                    "The speed at which workshops produce goods, affected by kingdom policies and craftsmen"));
+
 
                 DefenseInfo.Add(new InformationElement("Militia Cap:", new BKMilitiaModel().GetMilitiaLimit(data, _settlement.IsCastle).ToString(),
                     "The maximum number of militiamen this settlement can support, based on it's population"));

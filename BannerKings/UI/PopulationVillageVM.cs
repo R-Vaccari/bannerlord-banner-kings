@@ -44,31 +44,6 @@ namespace BannerKings
                         Helpers.Helpers.GetClassHint(popClass.type, settlement.Culture))
                         ));
 
-                    List<DecisionsElement> elements = BannerKingsConfig.Instance.PolicyManager.GetDefaultDecisions(settlement);
-                    foreach (DecisionsElement policy in elements)
-                    {
-                        PopulationOptionVM vm = new PopulationOptionVM()
-                        .SetAsBooleanOption(policy.description, policy.isChecked, delegate (bool value)
-                        {
-                            BannerKingsConfig.Instance.PolicyManager.UpdatePolicy(settlement, policy.type, value);
-                            this.RefreshValues();
-                           
-                        }, new TextObject(policy.hint));
-                        switch (policy.type)
-                        {
-                            case PolicyType.POP_GROWTH:
-                                AccelerateToogle = vm;
-                                break;
-                            case PolicyType.SELF_INVEST:
-                                InvestToogle = vm;
-                                break;
-                            case PolicyType.SUBSIDIZE_MILITIA:
-                                SubsidizeToogle = vm;
-                                break;
-                        }
-                    }
-
-
                     RaiseMilitiaButton = new PopulationOptionVM().SetAsButtonOption("Raise militia", delegate
                     {
                         int serfs = data.GetTypeCount(PopType.Serfs);

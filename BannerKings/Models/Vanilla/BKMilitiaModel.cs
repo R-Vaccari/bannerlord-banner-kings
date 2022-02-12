@@ -41,7 +41,7 @@ namespace BannerKings.Models
                 float filledCapacity = settlement.Town.Militia / maxMilitia;
                 float baseGrowth = (float)serfs * 0.0025f;
 
-                if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(settlement, PolicyType.CONSCRIPTION))
+                if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(settlement, "decision_militia_encourage"))
                     baseResult.Add(baseGrowth * (1f - 1f * filledCapacity), new TextObject("Conscription policy"));
                 else if (filledCapacity > 1f)
                     baseResult.Add(baseGrowth * -1f * filledCapacity, new TextObject("Over supported limit"));
@@ -61,7 +61,7 @@ namespace BannerKings.Models
         {
             float baseResult = base.CalculateEliteMilitiaSpawnChance(settlement) + (settlement.IsTown ? 0.12f : 0.20f);
             if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement) 
-                && BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(settlement, PolicyType.SUBSIDIZE_MILITIA))
+                && BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(settlement, "decision_militia_subsidize"))
                 baseResult += 0.12f;
             
             return baseResult;

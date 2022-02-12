@@ -9,8 +9,10 @@ namespace BannerKings.Managers.Policies
     class BKDraftPolicy : BannerKingsPolicy
     {
 
+        public override string GetIdentifier() => "draft";
+
         DraftPolicy policy;
-        public BKDraftPolicy(DraftPolicy policy, Settlement settlement) : base(settlement, (int)policy, "draft")
+        public BKDraftPolicy(DraftPolicy policy, Settlement settlement) : base(settlement, (int)policy)
         {
             this.policy = policy;
         }
@@ -26,8 +28,8 @@ namespace BannerKings.Managers.Policies
             {
                 BKItemVM vm = obj.GetCurrentItem();
                 this.policy = (DraftPolicy)vm.value;
-                base.selected = vm.value;
-                BannerKingsConfig.Instance.PolicyManager.UpdateSettlementPolicy(settlement, this);
+                base.Selected = vm.value;
+                BannerKingsConfig.Instance.PolicyManager.UpdateSettlementPolicy(Settlement, this);
             }
         }
 

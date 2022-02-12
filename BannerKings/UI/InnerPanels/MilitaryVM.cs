@@ -1,4 +1,5 @@
-﻿using BannerKings.Managers.Policies;
+﻿using BannerKings.Managers.Decisions;
+using BannerKings.Managers.Policies;
 using BannerKings.Models;
 using BannerKings.Populations;
 using BannerKings.UI.Items;
@@ -19,8 +20,7 @@ namespace BannerKings.UI
         private MBBindingList<InformationElement> manpowerInfo;
         private MBBindingList<InformationElement> siegeInfo;
         private SelectorVM<BKItemVM> militiaSelector, garrisonSelector, draftSelector;
-        private PopulationOptionVM _conscriptionToogle;
-        private PopulationOptionVM _subsidizeMilitiaToogle;
+        private PopulationOptionVM _conscriptionToogle, _subsidizeMilitiaToogle, draftingToogle;
         private BKGarrisonPolicy garrisonItem;
         private BKMilitiaPolicy militiaItem;
         private BKDraftPolicy draftItem;
@@ -82,24 +82,26 @@ namespace BannerKings.UI
             draftItem = (BKDraftPolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(settlement, "draft");
             DraftSelector = base.GetSelector(draftItem, new Action<SelectorVM<BKItemVM>>(this.draftItem.OnChange));
 
-
-            List<DecisionsElement> elements = BannerKingsConfig.Instance.PolicyManager.GetDefaultDecisions(settlement);
-            foreach (DecisionsElement policy in elements)
+            HashSet<BannerKingsDecision> decisions = BannerKingsConfig.Instance.PolicyManager.GetDefaultDecisions(settlement);
+            foreach (BannerKingsDecision decision in decisions)
             {
                 PopulationOptionVM vm = new PopulationOptionVM()
-                .SetAsBooleanOption(policy.description, policy.isChecked, delegate (bool value)
+                .SetAsBooleanOption(decision.GetName(), decision.Enabled, delegate (bool value)
                 {
-                    BannerKingsConfig.Instance.PolicyManager.UpdatePolicy(settlement, policy.type, value);
+                    decision.OnChange(value);
                     this.RefreshValues();
 
-                }, new TextObject(policy.hint));
-                switch (policy.type)
+                }, new TextObject(decision.GetHint()));
+                switch (decision.GetIdentifier())
                 {
-                    case PolicyType.CONSCRIPTION:
-                        ConscriptionToogle = vm;
+                    case "decision_militia_encourage":
+                        _conscriptionToogle = vm;
                         break;
-                    case PolicyType.SUBSIDIZE_MILITIA:
-                        SubsidizeToogle = vm;
+                    case "decision_militia_subsidize":
+                        _subsidizeMilitiaToogle = vm;
+                        break;
+                    case "decision_drafting_encourage":
+                        draftingToogle = vm;
                         break;
                 }
             }
@@ -166,6 +168,20 @@ namespace BannerKings.UI
                 {
                     _subsidizeMilitiaToogle = value;
                     base.OnPropertyChangedWithValue(value, "SubsidizeToogle");
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public PopulationOptionVM DraftingToogle
+        {
+            get => draftingToogle;
+            set
+            {
+                if (value != draftingToogle)
+                {
+                    draftingToogle = value;
+                    base.OnPropertyChangedWithValue(value, "DraftingToogle");
                 }
             }
         }

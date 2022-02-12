@@ -29,9 +29,9 @@
 							  </Children>
 							</ButtonWidget>
 							
-							<ButtonWidget DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="130" SuggestedHeight="60" MarginRight="10" MarginLeft="10"  Brush="Header.Tab.Center" Command.Click="SetSelectedCategory" CommandParameter.Click="1" IsSelected="@IsManagementSelected" UpdateChildrenStates="true">
+							<ButtonWidget DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="130" SuggestedHeight="60" MarginRight="10" MarginLeft="10"  Brush="Header.Tab.Center" Command.Click="SetSelectedCategory" CommandParameter.Click="1" IsSelected="@IsEconomySelected" UpdateChildrenStates="true">
 							  <Children>
-								<TextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginTop="3" Brush="Clan.TabControl.Text" Text="Management" />
+								<TextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginTop="3" Brush="Clan.TabControl.Text" Text="Economy" />
 							  </Children>
 							</ButtonWidget>
 							
@@ -55,7 +55,7 @@
 				<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" DoNotAcceptEvents="true">
 				  <Children>
 					<OverviewPanel DataSource="{OverView}" IsVisible="true" />
-					<ManagementPanel DataSource="{Management}" IsVisible="false" />
+					<EconomyPanel DataSource="{Economy}" IsVisible="false" />
 					<DemesnePanel DataSource="{Demesne}" IsVisible="false" />
 					<MilitaryPanel DataSource="{Military}" IsVisible="false" />
 				  </Children>

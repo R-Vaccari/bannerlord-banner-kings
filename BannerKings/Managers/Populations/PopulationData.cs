@@ -326,13 +326,29 @@ namespace BannerKings.Populations
         private Guild guild { get; set; }
         private float[] satisfactions { get; set; }
 
+        private Dictionary<Hero, float> slaveOwners { get; set; }
+
         public EconomicData(Settlement settlement,
             Guild guild = null)
         {
             this.settlement = settlement;
             this.guild = guild;
             this.satisfactions = new float[] { 0.5f, 0.5f, 0.5f,0.5f };
+            this.slaveOwners = new Dictionary<Hero, float>();
         }
+
+        public float GetSlaveShare(Hero hero)
+        {
+            if (this.slaveOwners.ContainsKey(hero))
+                return this.slaveOwners[hero];
+            else return 0f;
+        }
+
+        public float Corruption => 1f;
+
+        public float Tariff => new BKTaxModel().GetTownTaxRatio(settlement.Town);
+
+        public float StateSlaves => this.GetSlaveShare(this.settlement.Owner);
 
         public float[] Satisfactions => this.satisfactions;
 
@@ -354,7 +370,7 @@ namespace BannerKings.Populations
         {
             get
             {
-                BKEconomyModel model = (BKEconomyModel)BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(IEconomyModel));
+                BKEconomyModel model = (BKEconomyModel)BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(BKEconomyModel));
                 return model.CalculateEffect(settlement);
             }
         }
@@ -362,7 +378,7 @@ namespace BannerKings.Populations
         {
             get
             {
-                BKEconomyModel model = (BKEconomyModel)BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(IEconomyModel));
+                BKEconomyModel model = (BKEconomyModel)BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(BKEconomyModel));
                 return model.CalculateProductionEfficiency(settlement);
             }
         }
@@ -370,7 +386,7 @@ namespace BannerKings.Populations
         {
             get
             {
-                BKEconomyModel model = (BKEconomyModel)BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(IEconomyModel));
+                BKEconomyModel model = (BKEconomyModel)BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(BKEconomyModel));
                 return model.CalculateProductionQuality(settlement);
             }
         }

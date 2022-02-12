@@ -38,14 +38,6 @@ namespace BannerKings.Models
 
                 if (BannerKingsConfig.Instance.PopulationManager.PopSurplusExists(fortification.Settlement, PopType.Slaves, true))
 					explainedNumber.Add((float)slaves * -0.0003f, new TextObject("Slave surplus"));
-                
-                if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(fortification.Settlement, PolicyManager.PolicyType.SELF_INVEST)) 
-                {
-                    ExplainedNumber income = new BKTaxModel().CalculateTownTax(fortification);
-                    float tax = income.ResultNumber;
-                    if (tax > 0)
-						explainedNumber.Add(tax * 0.0005f, new TextObject("Self-investment policy"));
-                }
 
 				float factor = data.Stability - 1f + data.Stability;
 				float stabilityImpact = (float)STABILITY_FACTOR * factor;

@@ -1,5 +1,7 @@
 ﻿using BannerKings.Components;
 using BannerKings.Managers;
+using BannerKings.Managers.Decisions;
+using BannerKings.Managers.Policies;
 using BannerKings.Populations;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
@@ -9,7 +11,6 @@ using static BannerKings.Managers.Policies.BKMilitiaPolicy;
 using static BannerKings.Managers.Policies.BKTariffPolicy;
 using static BannerKings.Managers.Policies.BKTaxPolicy;
 using static BannerKings.Managers.Policies.BKWorkforcePolicy;
-using static BannerKings.Managers.PolicyManager;
 using static BannerKings.Managers.PopulationManager;
 
 namespace BannerKings
@@ -31,8 +32,8 @@ namespace BannerKings
             base.AddClassDefinition(typeof(EconomicData), 5);
             base.AddClassDefinition(typeof(LandData), 6);
             base.AddClassDefinition(typeof(PopulationData), 7);
-            base.AddEnumDefinition(typeof(PolicyType), 8);
-            base.AddClassDefinition(typeof(DecisionsElement), 9);
+            base.AddClassDefinition(typeof(BannerKingsDecision), 8);
+            base.AddClassDefinition(typeof(BannerKingsPolicy), 9);
             base.AddEnumDefinition(typeof(TaxType), 10);
             base.AddEnumDefinition(typeof(MilitiaPolicy), 11);
             base.AddEnumDefinition(typeof(WorkforcePolicy), 12);
@@ -48,8 +49,10 @@ namespace BannerKings
         {
             base.ConstructContainerDefinition(typeof(List<PopulationClass>));
             base.ConstructContainerDefinition(typeof(Dictionary<Settlement, PopulationData>));
-            base.ConstructContainerDefinition(typeof(List<DecisionsElement>));
-            base.ConstructContainerDefinition(typeof(Dictionary<Settlement, List<DecisionsElement>>));
+            base.ConstructContainerDefinition(typeof(List<BannerKingsDecision>));
+            base.ConstructContainerDefinition(typeof(List<BannerKingsPolicy>));
+            base.ConstructContainerDefinition(typeof(Dictionary<Settlement, List<BannerKingsPolicy>>));
+            base.ConstructContainerDefinition(typeof(Dictionary<Settlement, List<BannerKingsDecision>>));
         }
     }
 }

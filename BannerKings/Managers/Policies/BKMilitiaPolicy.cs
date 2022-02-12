@@ -9,9 +9,9 @@ namespace BannerKings.Managers.Policies
 {
     class BKMilitiaPolicy : BannerKingsPolicy
     {
-
+        public override string GetIdentifier() => "militia";
         public MilitiaPolicy Policy { get; private set; }
-        public BKMilitiaPolicy(MilitiaPolicy policy, Settlement settlement) : base(settlement, (int)policy, "militia")
+        public BKMilitiaPolicy(MilitiaPolicy policy, Settlement settlement) : base(settlement, (int)policy)
         {
             this.Policy = policy;
         }
@@ -30,8 +30,8 @@ namespace BannerKings.Managers.Policies
             {
                 BKItemVM vm = obj.GetCurrentItem();
                 this.Policy = (MilitiaPolicy)vm.value;
-                base.selected = vm.value;
-                BannerKingsConfig.Instance.PolicyManager.UpdateSettlementPolicy(settlement, this);
+                base.Selected = vm.value;
+                BannerKingsConfig.Instance.PolicyManager.UpdateSettlementPolicy(Settlement, this);
             }
         }
 

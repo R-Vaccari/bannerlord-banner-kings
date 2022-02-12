@@ -125,7 +125,7 @@ namespace BannerKings.Models
 
         public ExplainedNumber CalculateProductionQuality(Settlement settlement)
         {
-            throw new NotImplementedException();
+            return new ExplainedNumber(1f);
         }
     }
 }

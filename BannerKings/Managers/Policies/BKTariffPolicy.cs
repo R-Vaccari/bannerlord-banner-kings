@@ -8,9 +8,9 @@ namespace BannerKings.Managers.Policies
 {
     class BKTariffPolicy : BannerKingsPolicy
     {
-
+        public override string GetIdentifier() => "tariff";
         public TariffType Policy { get; private set; }
-        public BKTariffPolicy(TariffType policy, Settlement settlement) : base(settlement, (int)policy, "tariff")
+        public BKTariffPolicy(TariffType policy, Settlement settlement) : base(settlement, (int)policy)
         {
             this.Policy = policy;
         }
@@ -30,8 +30,8 @@ namespace BannerKings.Managers.Policies
             {
                 BKItemVM vm = obj.GetCurrentItem();
                 this.Policy = (TariffType)vm.value;
-                base.selected = vm.value;
-                BannerKingsConfig.Instance.PolicyManager.UpdateSettlementPolicy(settlement, this);
+                base.Selected = vm.value;
+                BannerKingsConfig.Instance.PolicyManager.UpdateSettlementPolicy(Settlement, this);
             }
         }
 

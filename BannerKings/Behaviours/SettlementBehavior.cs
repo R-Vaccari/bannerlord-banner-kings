@@ -1,6 +1,5 @@
 ﻿using BannerKings.Components;
 using BannerKings.Managers;
-using BannerKings.Models;
 using BannerKings.UI;
 using System;
 using System.Collections.Generic;
@@ -13,12 +12,11 @@ using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
 using static BannerKings.Managers.TitleManager;
-using static BannerKings.Managers.PolicyManager;
 using static BannerKings.Managers.PopulationManager;
 using HarmonyLib;
 using BannerKings.Populations;
-using TaleWorlds.CampaignSystem.SandBox.CampaignBehaviors;
 using BannerKings.Managers.Policies;
+using BannerKings.Managers.Decisions;
 
 namespace BannerKings.Behaviors
 {
@@ -57,7 +55,7 @@ namespace BannerKings.Behaviors
                 if (populationManager == null && policyManager == null)
                 {
                     BannerKingsConfig.Instance.InitManagers(new Dictionary<Settlement, PopulationData>(), new List<MobileParty>(),
-                    new Dictionary<Settlement, List<PolicyManager.DecisionsElement>>(), new Dictionary<Settlement, HashSet<BannerKingsPolicy>>(), 
+                    new Dictionary<Settlement, HashSet<BannerKingsDecision>>(), new Dictionary<Settlement, HashSet<BannerKingsPolicy>>(), 
                     new HashSet<FeudalTitle>(), new Dictionary<Hero, HashSet<FeudalTitle>>(),
                     new Dictionary<Kingdom, FeudalTitle>());
                 }
@@ -166,87 +164,88 @@ namespace BannerKings.Behaviors
                 } else if (party.LeaderHero != null && party.LeaderHero == target.Owner && party.LeaderHero != Hero.MainHero
                     && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(target)) // AI choices
                 {
-                    Hero lord = party.LeaderHero;
-                    Kingdom kingdom = lord.Clan.Kingdom;
-                    List<ValueTuple<PolicyType, bool>> decisions = new List<ValueTuple<PolicyType, bool>>();
-                    if (!target.IsVillage && target.Town != null)
-                    {
-                        if (kingdom != null)
-                        {
-                            IEnumerable<Kingdom> enemies = FactionManager.GetEnemyKingdoms(kingdom);
-                            bool atWar = enemies.Count() > 0;
+                    /*
+                   Hero lord = party.LeaderHero;
+                   Kingdom kingdom = lord.Clan.Kingdom;
+                   List<ValueTuple<PolicyType, bool>> decisions = new List<ValueTuple<PolicyType, bool>>();
+                   if (!target.IsVillage && target.Town != null)
+                   {
+                       if (kingdom != null)
+                       {
+                           IEnumerable<Kingdom> enemies = FactionManager.GetEnemyKingdoms(kingdom);
+                           bool atWar = enemies.Count() > 0;
 
-                            decisions.Add((PolicyType.CONSCRIPTION, atWar));
-                            decisions.Add((PolicyType.SUBSIDIZE_MILITIA, atWar));
-                        }
+                           decisions.Add((PolicyType.CONSCRIPTION, atWar));
+                           decisions.Add((PolicyType.SUBSIDIZE_MILITIA, atWar));
+                       }
 
-                        /*
-                        TaxType tax = BannerKingsConfig.Instance.PolicyManager.GetSettlementTax(target);
-                        if (target.Town.LoyaltyChange < 0)
-                        {
-                            if (!BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(target, PolicyType.EXEMPTION))
-                                decisions.Add((PolicyType.EXEMPTION, true));
 
-                            if (tax == TaxType.High)
-                                BannerKingsConfig.Instance.PolicyManager.UpdateTaxPolicy(target, TaxType.Standard);
-                            else if (tax == TaxType.Standard)
-                                BannerKingsConfig.Instance.PolicyManager.UpdateTaxPolicy(target, TaxType.Low);
-                        } else
-                        {
-                            if (tax == TaxType.Standard)
-                                BannerKingsConfig.Instance.PolicyManager.UpdateTaxPolicy(target, TaxType.High);
-                            else if (tax == TaxType.Low)
-                                BannerKingsConfig.Instance.PolicyManager.UpdateTaxPolicy(target, TaxType.Standard);
-                        }
-                        */
-                        float filledCapacity = new BKGrowthModel().GetSettlementFilledCapacity(target);
-                        bool growth = lord.Clan.Influence >= 300 && filledCapacity < 0.5f;
-                        decisions.Add((PolicyType.POP_GROWTH, growth));
+                       TaxType tax = BannerKingsConfig.Instance.PolicyManager.GetSettlementTax(target);
+                       if (target.Town.LoyaltyChange < 0)
+                       {
+                           if (!BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(target, PolicyType.EXEMPTION))
+                               decisions.Add((PolicyType.EXEMPTION, true));
 
-                        if (target.IsCastle)
-                            foreach (Building castleBuilding in target.Town.Buildings)
-                                if (Helpers.Helpers._buildingCastleRetinue != null && castleBuilding.BuildingType == Helpers.Helpers._buildingCastleRetinue)
-                                {
-                                    MobileParty garrison = target.Town.GarrisonParty;
-                                    if (garrison.MemberRoster != null && garrison.MemberRoster.Count > 0)
-                                        foreach (TroopRosterElement soldierElement in garrison.MemberRoster.GetTroopRoster())
-                                            if (Helpers.Helpers.IsRetinueTroop(soldierElement.Character, target.Culture)
-                                                && party.MemberRoster.TotalManCount < party.Party.PartySizeLimit)
-                                            {
-                                                int available = soldierElement.Number;
-                                                int space = party.Party.PartySizeLimit - party.MemberRoster.TotalManCount;
-                                                int toBeTaken = available > space ? space : available;
-                                                party.MemberRoster.AddToCounts(soldierElement.Character, toBeTaken);
-                                                garrison.MemberRoster.RemoveTroop(soldierElement.Character, toBeTaken);
-                                            }
-                                }
-                                    
-                    } else if (target.IsVillage)
-                    {
-                        if (kingdom != null)
-                        {
-                            IEnumerable<Kingdom> enemies = FactionManager.GetEnemyKingdoms(kingdom);
-                            bool atWar = enemies.Count() > 0;
-                            decisions.Add((PolicyType.SUBSIDIZE_MILITIA, atWar));
-                        }
-                        /*
-                        float hearths = target.Village.Hearth;
-                        if (hearths < 300f)
-                            BannerKingsConfig.Instance.PolicyManager.UpdateTaxPolicy(target, TaxType.Low);
-                        else if (hearths < 1000f)
-                            BannerKingsConfig.Instance.PolicyManager.UpdateTaxPolicy(target, TaxType.Standard);
-                        else BannerKingsConfig.Instance.PolicyManager.UpdateTaxPolicy(target, TaxType.High);
-                        */
+                           if (tax == TaxType.High)
+                               BannerKingsConfig.Instance.PolicyManager.UpdateTaxPolicy(target, TaxType.Standard);
+                           else if (tax == TaxType.Standard)
+                               BannerKingsConfig.Instance.PolicyManager.UpdateTaxPolicy(target, TaxType.Low);
+                       } else
+                       {
+                           if (tax == TaxType.Standard)
+                               BannerKingsConfig.Instance.PolicyManager.UpdateTaxPolicy(target, TaxType.High);
+                           else if (tax == TaxType.Low)
+                               BannerKingsConfig.Instance.PolicyManager.UpdateTaxPolicy(target, TaxType.Standard);
+                       }
 
-                        float filledCapacity = new BKGrowthModel().GetSettlementFilledCapacity(target);
-                        bool growth = lord.Clan.Influence >= 300 && filledCapacity < 0.5f;
-                        decisions.Add((PolicyType.POP_GROWTH, growth));
-                    }
+                       float filledCapacity = new BKGrowthModel().GetSettlementFilledCapacity(target);
+                       bool growth = lord.Clan.Influence >= 300 && filledCapacity < 0.5f;
+                       decisions.Add((PolicyType.POP_GROWTH, growth));
 
-                    foreach ((PolicyType, bool) decision in decisions) 
-                        BannerKingsConfig.Instance.PolicyManager.UpdatePolicy(target, decision.Item1, decision.Item2);
-                        
-                }  
+                       if (target.IsCastle)
+                           foreach (Building castleBuilding in target.Town.Buildings)
+                               if (Helpers.Helpers._buildingCastleRetinue != null && castleBuilding.BuildingType == Helpers.Helpers._buildingCastleRetinue)
+                               {
+                                   MobileParty garrison = target.Town.GarrisonParty;
+                                   if (garrison.MemberRoster != null && garrison.MemberRoster.Count > 0)
+                                       foreach (TroopRosterElement soldierElement in garrison.MemberRoster.GetTroopRoster())
+                                           if (Helpers.Helpers.IsRetinueTroop(soldierElement.Character, target.Culture)
+                                               && party.MemberRoster.TotalManCount < party.Party.PartySizeLimit)
+                                           {
+                                               int available = soldierElement.Number;
+                                               int space = party.Party.PartySizeLimit - party.MemberRoster.TotalManCount;
+                                               int toBeTaken = available > space ? space : available;
+                                               party.MemberRoster.AddToCounts(soldierElement.Character, toBeTaken);
+                                               garrison.MemberRoster.RemoveTroop(soldierElement.Character, toBeTaken);
+                                           }
+                               }
+
+                   } else if (target.IsVillage)
+                   {
+                       if (kingdom != null)
+                       {
+                           IEnumerable<Kingdom> enemies = FactionManager.GetEnemyKingdoms(kingdom);
+                           bool atWar = enemies.Count() > 0;
+                           decisions.Add((PolicyType.SUBSIDIZE_MILITIA, atWar));
+                       }
+
+                       float hearths = target.Village.Hearth;
+                       if (hearths < 300f)
+                           BannerKingsConfig.Instance.PolicyManager.UpdateTaxPolicy(target, TaxType.Low);
+                       else if (hearths < 1000f)
+                           BannerKingsConfig.Instance.PolicyManager.UpdateTaxPolicy(target, TaxType.Standard);
+                       else BannerKingsConfig.Instance.PolicyManager.UpdateTaxPolicy(target, TaxType.High);
+
+
+                       float filledCapacity = new BKGrowthModel().GetSettlementFilledCapacity(target);
+                       bool growth = lord.Clan.Influence >= 300 && filledCapacity < 0.5f;
+                       decisions.Add((PolicyType.POP_GROWTH, growth));
+                   }
+
+                   foreach ((PolicyType, bool) decision in decisions) 
+                       BannerKingsConfig.Instance.PolicyManager.UpdateSettlementDecision(target, decision.Item1, decision.Item2);
+                         */
+                }
             }
         }
 
@@ -256,14 +255,14 @@ namespace BannerKings.Behaviors
             
             if (BannerKingsConfig.Instance.PopulationManager == null)
                 BannerKingsConfig.Instance.InitManagers(new Dictionary<Settlement, PopulationData>(), new List<MobileParty>(),
-                new Dictionary<Settlement, List<PolicyManager.DecisionsElement>>(), new Dictionary<Settlement, HashSet<BannerKingsPolicy>>(), 
+                new Dictionary<Settlement, HashSet<BannerKingsDecision>>(), new Dictionary<Settlement, HashSet<BannerKingsPolicy>>(), 
                 new HashSet<FeudalTitle>(), new Dictionary<Hero, HashSet<FeudalTitle>>(),
                 new Dictionary<Kingdom, FeudalTitle>());
 
             UpdateSettlementPops(settlement);
-            InitializeSettlementPolicies(settlement);
+            BannerKingsConfig.Instance.PolicyManager.InitializeSettlement(settlement);
             // Send Slaves
-            if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(settlement, PolicyManager.PolicyType.EXPORT_SLAVES) && DecideSendSlaveCaravan(settlement))
+            if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(settlement, "decision_slaves_export") && DecideSendSlaveCaravan(settlement))
             {
                 Village target = null;
                 MBReadOnlyList<Village> villages = settlement.BoundVillages;

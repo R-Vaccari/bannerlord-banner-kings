@@ -30,12 +30,6 @@ namespace BannerKings.Models
                 bool surplusExists = BannerKingsConfig.Instance.PopulationManager.PopSurplusExists(town.Settlement, PopType.Slaves, true);
                 baseResult.Add((float)slaves * SLAVE_LOYALTY * (surplusExists ? 1.1f : 1f), new TextObject("Slave population"));
 
-                if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(town.Settlement, PolicyType.EXEMPTION))
-                {
-					float fraction = data.GetCurrentTypeFraction(PopType.Nobles);
-                    baseResult.Add(LOYALTY_FACTOR * fraction * NOBLE_LOYALTY_WEIGHT, new TextObject("Nobles exemption policy"));
-                }
-
 				if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(town.Settlement, "tax", (int)TaxType.Low))
 				{
 					float fraction1 = data.GetCurrentTypeFraction(PopType.Craftsmen);

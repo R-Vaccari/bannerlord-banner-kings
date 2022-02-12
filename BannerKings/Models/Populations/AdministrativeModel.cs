@@ -41,14 +41,8 @@ namespace BannerKings.Models
             if (work.Policy != BKWorkforcePolicy.WorkforcePolicy.None)
                 baseResult += 0.075f;
 
-            if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(settlement, PolicyManager.PolicyType.EXPORT_SLAVES))
-                baseResult += 0.025f;
-
-            if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(settlement, PolicyManager.PolicyType.SUBSIDIZE_MILITIA))
-                baseResult += 0.1f;
-
-            if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(settlement, PolicyManager.PolicyType.CONSCRIPTION))
-                baseResult += 0.1f;
+            float decisions = BannerKingsConfig.Instance.PolicyManager.GetActiveDecisionsNumber(settlement);
+            baseResult += (0.05f * decisions);
 
             return Math.Max(baseResult, 0f);
         }
@@ -75,14 +69,8 @@ namespace BannerKings.Models
             if (work.Policy != BKWorkforcePolicy.WorkforcePolicy.None)
                 baseResult.Add(0.075f, new TextObject(""));
 
-            if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(settlement, PolicyManager.PolicyType.EXPORT_SLAVES))
-                baseResult.Add(0.025f, new TextObject(""));
-
-            if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(settlement, PolicyManager.PolicyType.SUBSIDIZE_MILITIA))
-                baseResult.Add(0.1f, new TextObject(""));
-
-            if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(settlement, PolicyManager.PolicyType.CONSCRIPTION))
-                baseResult.Add(0.1f, new TextObject(""));
+            float decisions = BannerKingsConfig.Instance.PolicyManager.GetActiveDecisionsNumber(settlement);
+            baseResult.Add(0.05f * decisions, new TextObject("{=!} Active decisions"));
 
             return baseResult;
         }

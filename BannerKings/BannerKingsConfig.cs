@@ -7,6 +7,7 @@ using BannerKings.Populations;
 using TaleWorlds.Core;
 using BannerKings.Models;
 using BannerKings.Managers.Policies;
+using BannerKings.Managers.Decisions;
 
 namespace BannerKings
 {
@@ -18,8 +19,8 @@ namespace BannerKings
         public TitleManager TitleManager;
         public HashSet<IBannerKingsModel> Models = new HashSet<IBannerKingsModel>();
 
-        public void InitManagers(Dictionary<Settlement, PopulationData> pops, List<MobileParty> caravans, Dictionary<Settlement, 
-            List<DecisionsElement>> DECISIONS, Dictionary<Settlement, 
+        public void InitManagers(Dictionary<Settlement, PopulationData> pops, List<MobileParty> caravans, Dictionary<Settlement,
+            HashSet<BannerKingsDecision>> DECISIONS, Dictionary<Settlement, 
             HashSet<BannerKingsPolicy>> POLICIES, 
             HashSet<FeudalTitle> titles, Dictionary<Hero, HashSet<FeudalTitle>> titleHolders, Dictionary<Kingdom, FeudalTitle> kingdoms)
         {

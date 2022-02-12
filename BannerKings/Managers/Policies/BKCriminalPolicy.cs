@@ -11,7 +11,7 @@ namespace BannerKings.Managers.Policies
     {
 
         public CriminalPolicy Policy { get; private set; }
-        public BKCriminalPolicy(CriminalPolicy policy, Settlement settlement) : base(settlement, (int)policy, "criminal")
+        public BKCriminalPolicy(CriminalPolicy policy, Settlement settlement) : base(settlement, (int)policy)
         {
             this.Policy = policy;
         }
@@ -30,8 +30,8 @@ namespace BannerKings.Managers.Policies
             {
                 BKItemVM vm = obj.GetCurrentItem();
                 this.Policy = (CriminalPolicy)vm.value;
-                base.selected = vm.value;
-                BannerKingsConfig.Instance.PolicyManager.UpdateSettlementPolicy(settlement, this);
+                base.Selected = vm.value;
+                BannerKingsConfig.Instance.PolicyManager.UpdateSettlementPolicy(Settlement, this);
             }
         }
 
@@ -49,5 +49,7 @@ namespace BannerKings.Managers.Policies
             yield return CriminalPolicy.Forgiveness;
             yield break;
         }
+
+        public override string GetIdentifier() => "criminal";
     }
 }

@@ -75,7 +75,7 @@ namespace BannerKings.Models
 			int prisoners = town.Settlement.Party.NumberOfPrisoners;
 			result.Add((float)(-prisoners / (NumberOfMenOnGarrisonToEatOneFood * 2)), new TextObject("Prisoner rations"), null);
 
-			if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(town.Settlement, PolicyManager.PolicyType.CONSCRIPTION))
+			if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(town.Settlement, "decision_militia_encourage"))
 				result.AddFactor(-0.25f, new TextObject("Conscription policy"));
 	
 			if (town.Governor != null)
@@ -220,7 +220,7 @@ namespace BannerKings.Models
 			int garrisonConsumption = (garrisonParty != null) ? garrisonParty.Party.NumberOfAllMembers : 0;
 			result.Add((float)(-garrisonConsumption / NumberOfMenOnGarrisonToEatOneFood), new TextObject("Garrison consumption"), null);
 
-			if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(town.Settlement, PolicyManager.PolicyType.CONSCRIPTION))
+			if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(town.Settlement, "decision_militia_encourage"))
 				result.AddFactor(-0.25f, new TextObject("Conscription policy"));
 
 			if (town.Governor != null)

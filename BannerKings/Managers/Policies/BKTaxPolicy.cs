@@ -8,9 +8,9 @@ namespace BannerKings.Managers.Policies
 {
     class BKTaxPolicy : BannerKingsPolicy
     {
-
+        public override string GetIdentifier() => "tax";
         public TaxType Policy { get; private set; }
-        public BKTaxPolicy(TaxType policy, Settlement settlement) : base(settlement, (int)policy, "tax")
+        public BKTaxPolicy(TaxType policy, Settlement settlement) : base(settlement, (int)policy)
         {
             this.Policy = policy;
         }
@@ -19,12 +19,12 @@ namespace BannerKings.Managers.Policies
         {
             if (Policy == TaxType.High)
             {
-                if (!settlement.IsVillage) return "Yield more tax from the population, at the cost of decreased loyalty";
+                if (!Settlement.IsVillage) return "Yield more tax from the population, at the cost of decreased loyalty";
                 else return "Yield more tax from the population, but reduce growth"; 
             }
             else if (Policy == TaxType.Low)
             {
-                if (!settlement.IsVillage) return "Reduce tax burden on the population, diminishing your profit but increasing their support towards you";
+                if (!Settlement.IsVillage) return "Reduce tax burden on the population, diminishing your profit but increasing their support towards you";
                 else return "Reduce tax burden on the population, encouraging new settlers";
             }
             else if (Policy == TaxType.Exemption)
@@ -38,8 +38,8 @@ namespace BannerKings.Managers.Policies
             {
                 BKItemVM vm = obj.GetCurrentItem();
                 this.Policy = (TaxType)vm.value;
-                base.selected = vm.value;
-                BannerKingsConfig.Instance.PolicyManager.UpdateSettlementPolicy(settlement, this);
+                base.Selected = vm.value;
+                BannerKingsConfig.Instance.PolicyManager.UpdateSettlementPolicy(Settlement, this);
             }
         }
         public enum TaxType
@@ -55,7 +55,7 @@ namespace BannerKings.Managers.Policies
             yield return TaxType.Standard;
             yield return TaxType.High;
             yield return TaxType.Low;
-            if (settlement.IsVillage) yield return TaxType.Exemption;
+            if (Settlement.IsVillage) yield return TaxType.Exemption;
             yield break;
         }
     }

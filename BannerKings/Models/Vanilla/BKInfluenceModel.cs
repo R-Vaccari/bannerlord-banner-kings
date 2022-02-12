@@ -25,13 +25,6 @@ namespace BannerKings.Models
                         baseResult.Add(((float)extra * -2f) * 0.01f, new TextObject(string.Format("Excess noble population at {0}", settlement.Name)));
                     }
                     baseResult.Add((float)nobles * 0.01f, new TextObject(string.Format("Nobles influence from {0}", settlement.Name)));
-
-                    if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(settlement, PolicyType.POP_GROWTH))
-                    {
-                        if (baseResult.ResultNumber > 1)
-                            baseResult.AddFactor(-0.5f, new TextObject(string.Format("Population growth policy at {0}", settlement.Name)));
-                        else baseResult.Add(-0.5f, new TextObject(string.Format("Population growth policy at {0}", settlement.Name)));
-                    }
                         
                 }
             }

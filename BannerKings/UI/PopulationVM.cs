@@ -11,12 +11,12 @@ namespace BannerKings
         public class PopulationVM : ViewModel
         {
             private OverviewVM overviewVM;
-            private ManagementVM managementVM;
+            private EconomyVM economyVM;
             private DemesneVM demesneVM;
             private MilitaryVM militaryVM;
             private Settlement _settlement;
             private bool _isOverviewSelected;
-            private bool _isManagementSelected;
+            private bool _isEconomySelected;
             private bool _isDemesneSelected;
             private bool _isMilitarySelected;
 
@@ -25,7 +25,7 @@ namespace BannerKings
                 this._settlement = _settlement;
                 PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(_settlement);
                 overviewVM = new OverviewVM(_settlement, true);
-                managementVM = new ManagementVM(_settlement, false);
+                economyVM = new EconomyVM(data, _settlement, false);
                 demesneVM = new DemesneVM(BannerKingsConfig.Instance.TitleManager.GetTitle(_settlement), false);
                 militaryVM = new MilitaryVM(data, _settlement, false);
             }
@@ -38,10 +38,10 @@ namespace BannerKings
             public void SetSelectedCategory(int index)
             {
                 this.OverView.IsSelected = false;
-                this.Management.IsSelected = false;
+                this.Economy.IsSelected = false;
                 this.Demesne.IsSelected = false;
                 this.IsOverviewSelected = false;
-                this.IsManagementSelected = false;
+                this.IsEconomySelected = false;
                 this.IsDemesneSelected = false;
                 this.IsMilitarySelected = false;
                 this.Military.IsSelected = false;
@@ -52,8 +52,8 @@ namespace BannerKings
                 }
                 else if (index == 1)
                 {
-                    this.Management.IsSelected = true;
-                    this.IsManagementSelected = true;
+                    this.Economy.IsSelected = true;
+                    this.IsEconomySelected = true;
                 }   
                 else if (index == 2)
                 {
@@ -84,15 +84,15 @@ namespace BannerKings
             }
 
             [DataSourceProperty]
-            public ManagementVM Management
+            public EconomyVM Economy
             {
-                get => this.managementVM;
+                get => this.economyVM;
                 set
                 {
-                    if (value != this.managementVM)
+                    if (value != this.economyVM)
                     {
-                        this.managementVM = value;
-                        base.OnPropertyChangedWithValue(value, "Management");
+                        this.economyVM = value;
+                        base.OnPropertyChangedWithValue(value, "Economy");
                     }
                 }
             }
@@ -154,15 +154,15 @@ namespace BannerKings
             }
 
             [DataSourceProperty]
-            public bool IsManagementSelected
+            public bool IsEconomySelected
             {
-                get => this._isManagementSelected;
+                get => this._isEconomySelected;
                 set
                 {
-                    if (value != this._isManagementSelected)
+                    if (value != this._isEconomySelected)
                     {
-                        this._isManagementSelected = value;
-                        base.OnPropertyChangedWithValue(value, "IsManagementSelected");
+                        this._isEconomySelected = value;
+                        base.OnPropertyChangedWithValue(value, "IsEconomySelected");
                     }
                 }
             }

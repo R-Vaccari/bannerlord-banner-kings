@@ -10,7 +10,7 @@ namespace BannerKings.Managers.Policies
     {
 
         public WorkforcePolicy Policy { get; private set; }
-        public BKWorkforcePolicy(WorkforcePolicy policy, Settlement settlement) : base(settlement, (int)policy, "workforce")
+        public BKWorkforcePolicy(WorkforcePolicy policy, Settlement settlement) : base(settlement, (int)policy)
         {
             this.Policy = policy;
         }
@@ -32,8 +32,8 @@ namespace BannerKings.Managers.Policies
             {
                 BKItemVM vm = obj.GetCurrentItem();
                 this.Policy = (WorkforcePolicy)vm.value;
-                base.selected = vm.value;
-                BannerKingsConfig.Instance.PolicyManager.UpdateSettlementPolicy(settlement, this);
+                base.Selected = vm.value;
+                BannerKingsConfig.Instance.PolicyManager.UpdateSettlementPolicy(Settlement, this);
             }
         }
         public enum WorkforcePolicy
@@ -52,5 +52,7 @@ namespace BannerKings.Managers.Policies
             yield return WorkforcePolicy.Construction;
             yield break;
         }
+
+        public override string GetIdentifier() => "workforce";
     }
 }

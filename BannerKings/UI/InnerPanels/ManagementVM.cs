@@ -1,4 +1,5 @@
-﻿using BannerKings.Models;
+﻿using BannerKings.Managers.Decisions;
+using BannerKings.Models;
 using BannerKings.UI.Items;
 using System;
 using System.Collections.Generic;
@@ -33,35 +34,20 @@ namespace BannerKings.UI
         public override void RefreshValues()
         {
             base.RefreshValues();
-            List<DecisionsElement> elements = BannerKingsConfig.Instance.PolicyManager.GetDefaultDecisions(_settlement);
-            foreach (DecisionsElement policy in elements)
+            HashSet<BannerKingsDecision> decisions = BannerKingsConfig.Instance.PolicyManager.GetDefaultDecisions(_settlement);
+            foreach (BannerKingsDecision decision in decisions)
             {
                 PopulationOptionVM vm = new PopulationOptionVM()
-                .SetAsBooleanOption(policy.description, policy.isChecked, delegate (bool value)
+                .SetAsBooleanOption(decision.GetName(), decision.Enabled, delegate (bool value)
                 {
-                    BannerKingsConfig.Instance.PolicyManager.UpdatePolicy(_settlement, policy.type, value);
+                    decision.OnChange(value);
                     this.RefreshValues();
 
-                }, new TextObject(policy.hint));
-                switch (policy.type)
+                }, new TextObject(decision.GetHint()));
+                switch (decision.GetIdentifier())
                 {
-                    case PolicyType.EXPORT_SLAVES:
+                    case "":
                         SlaveToogle = vm;
-                        break;
-                    case PolicyType.POP_GROWTH:
-                        AccelerateToogle = vm;
-                        break;
-                    case PolicyType.SELF_INVEST:
-                        InvestToogle = vm;
-                        break;
-                    case PolicyType.CONSCRIPTION:
-                        ConscriptionToogle = vm;
-                        break;
-                    case PolicyType.EXEMPTION:
-                        ExemptionToogle = vm;
-                        break;
-                    case PolicyType.SUBSIDIZE_MILITIA:
-                        SubsidizeToogle = vm;
                         break;
                 }
             } 
