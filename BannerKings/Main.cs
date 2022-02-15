@@ -53,6 +53,7 @@ namespace BannerKings
                     campaignStarter.AddModel(new BKClanFinanceModel());
                     campaignStarter.AddModel(new BKArmyManagementModel());
                     campaignStarter.AddModel(new BKSiegeEventModel());
+                    campaignStarter.AddModel(new BKTournamentModel());
                 } catch (Exception e)
                 {
                 }

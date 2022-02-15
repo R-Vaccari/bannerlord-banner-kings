@@ -51,38 +51,21 @@
 						</Children>
 					</ListPanel>
 				
-					<GridWidget DataSource="{DefenseInfo}" WidthSizePolicy="CoverChildren" HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" DefaultCellWidth="150" DefaultCellHeight="30" MarginRight="60" ColumnCount="1" MarginTop="10">
+					<GridWidget DataSource="{StatsInfo}" WidthSizePolicy="CoverChildren" HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" DefaultCellWidth="150" DefaultCellHeight="30" MarginRight="85" ColumnCount="1" MarginTop="25">
 					  <ItemTemplate>
 						<InformationElement/>
 					  </ItemTemplate>
 					</GridWidget>
-					
-					<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" StackLayout.LayoutMethod="HorizontalLeftToRight" MarginBottom="15" MarginTop="30" MarginLeft="25" MarginRight="25" DoNotAcceptEvents="true">
-						<Children>
-						<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" MarginLeft="5" MarginRight="5" SuggestedHeight="7"  VerticalAlignment="Bottom" PositionYOffset="7" Sprite="SPGeneral\TownManagement\horizontal_divider" />
-						<RichTextWidget DoNotAcceptEvents="true" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="OverlayPopup.ButtonText" Brush.FontSize="20" Text="Consumptions"/>
-						<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" MarginLeft="5" MarginRight="5" SuggestedHeight="7" VerticalAlignment="Bottom" PositionYOffset="7" Sprite="SPGeneral\TownManagement\horizontal_divider" />
-						</Children>
-					</ListPanel>
-										
-					<GridWidget DataSource="{SatisfactionInfo}" WidthSizePolicy="CoverChildren" HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" DefaultCellWidth="150" DefaultCellHeight="30" MarginRight="60" ColumnCount="1" MarginTop="10">
-					  <ItemTemplate>
-						<InformationElement/>
-					  </ItemTemplate>
-					</GridWidget>	
+
 				</Children>
 			</ListPanel>
 							
 			<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" StackLayout.LayoutMethod="VerticalBottomToTop" MaxHeight="645" >
 				<Children>
 					
-					<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" HorizontalAlignment="Center" SuggestedHeight="20" Brush="Popup.Title.Text" Text="Stats" MarginTop="10"/>
+					<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" HorizontalAlignment="Center" SuggestedHeight="20" Brush="Popup.Title.Text" Text="Cultures" MarginTop="10"/>
 					
-					<GridWidget DataSource="{StatsInfo}" WidthSizePolicy="CoverChildren" HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" DefaultCellWidth="150" DefaultCellHeight="30" MarginRight="85" ColumnCount="1" MarginTop="25">
-					  <ItemTemplate>
-						<InformationElement/>
-					  </ItemTemplate>
-					</GridWidget>
+					
 					
 					<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" StackLayout.LayoutMethod="HorizontalLeftToRight" MarginBottom="15" MarginTop="25" MarginLeft="25" MarginRight="25" DoNotAcceptEvents="true">
 						<Children>
@@ -92,25 +75,6 @@
 						</Children>
 					</ListPanel>
 				
-					<GridWidget DataSource="{FoodInfo}" WidthSizePolicy="CoverChildren" HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" DefaultCellWidth="150" DefaultCellHeight="30" MarginRight="85" ColumnCount="1" MarginTop="10">
-					  <ItemTemplate>
-						<InformationElement/>
-					  </ItemTemplate>
-					</GridWidget>
-					
-					<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" StackLayout.LayoutMethod="HorizontalLeftToRight" MarginBottom="15" MarginTop="30" MarginLeft="25" MarginRight="25" DoNotAcceptEvents="true">
-						<Children>
-						<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="7" MarginLeft="5" MarginRight="5" VerticalAlignment="Bottom" PositionYOffset="7" Sprite="SPGeneral\TownManagement\horizontal_divider" />
-						<RichTextWidget DoNotAcceptEvents="true" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="OverlayPopup.ButtonText" Brush.FontSize="20" Text="Economy"/>
-						<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="7" MarginLeft="5" MarginRight="5" VerticalAlignment="Bottom" PositionYOffset="7" Sprite="SPGeneral\TownManagement\horizontal_divider" />
-						</Children>
-					</ListPanel>
-					
-					<GridWidget DataSource="{ProductionInfo}" WidthSizePolicy="CoverChildren" HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" DefaultCellWidth="150" DefaultCellHeight="30" MarginRight="85" ColumnCount="1" MarginTop="10">
-					  <ItemTemplate>
-						<InformationElement/>
-					  </ItemTemplate>
-					</GridWidget>
 					
 			  </Children>
 			</ListPanel>

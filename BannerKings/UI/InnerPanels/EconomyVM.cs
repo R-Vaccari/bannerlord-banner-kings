@@ -3,8 +3,8 @@ using BannerKings.Managers.Policies;
 using BannerKings.Populations;
 using BannerKings.UI.Items;
 using System;
-using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.Core;
 using TaleWorlds.Core.ViewModelCollection;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -20,6 +20,7 @@ namespace BannerKings.UI
         private BKTaxPolicy taxItem;
         private BKDraftPolicy draftItem;
         private Settlement settlement;
+        private ItemRoster roster;
 
         public EconomyVM(PopulationData data, Settlement _settlement, bool selected) : base(data, selected)
         {
@@ -91,6 +92,31 @@ namespace BannerKings.UI
                         break;
                 }
             }*/
+        }
+
+        private void OnTournamentPress()
+        {
+            TournamentData tournament = new TournamentData(this.settlement.Town);
+            data.TournamentData = tournament;
+            this.roster = tournament.Roster;
+            InventoryManager.OpenScreenAsStash(tournament.Roster);
+            RefreshValues();
+        }
+
+        [DataSourceProperty]
+        public HintViewModel TournamentHint => new HintViewModel(new TextObject("{=!}Sponsor a torunament in this town. As the main sponsor, you have to pay 5000 coins for the tournament costs, as well as " +
+            "provide an adequate prize. Sponsoring games improves population loyalty towards you, and valuable prizes provide renown to your name."));
+
+        [DataSourceProperty]
+        public bool TournamentAvailable 
+        {
+            get 
+            {
+                if (this.settlement.Town != null)
+                    return !this.settlement.Town.HasTournament;
+                
+                return false;
+            }
         }
 
         [DataSourceProperty]
@@ -184,6 +210,19 @@ namespace BannerKings.UI
                     base.OnPropertyChangedWithValue(value, "SiegeInfo");
                 }
             }
+        }
+
+        public override void OnFinalize()
+        {
+            base.OnFinalize();
+            if (this.roster != null)
+            {
+                ITournamentManager tournamentManager = Campaign.Current.TournamentManager;
+                tournamentManager.AddTournament(Campaign.Current.Models.TournamentModel.CreateTournament(this.settlement.Town));
+                InformationManager.DisplayMessage(new InformationMessage(String
+                    .Format("Tournament started with prize: {0}", this.data.TournamentData.Prize.Name)));
+            }
+                
         }
     }
 }

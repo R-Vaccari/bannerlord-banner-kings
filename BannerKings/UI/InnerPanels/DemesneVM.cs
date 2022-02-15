@@ -69,6 +69,8 @@ namespace BannerKings.UI
 			DeJure = new HeroVM(_title.deJure, false);
 		}
 
+
+
 		private void OnUsurpPress()
 		{
 			bool usurpable = _titleUsurpable.Item1;

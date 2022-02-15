@@ -34,9 +34,7 @@
           <Children>
 			<ListPanel WidthSizePolicy="Fixed" HeightSizePolicy="StretchToParent" SuggestedWidth="290" StackLayout.LayoutMethod="VerticalBottomToTop" DoNotAcceptEvents="true">
 				<Children>
-				
-					<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" HorizontalAlignment="Center" SuggestedHeight="20" Brush="Popup.Title.Text" Text="Classes" MarginTop="10"/>
-            	
+
 					<GridWidget DataSource="{ManpowerInfo}" WidthSizePolicy="CoverChildren" HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" DefaultCellWidth="150" DefaultCellHeight="30" MarginRight="60" ColumnCount="1" MarginTop="20">
 					  <ItemTemplate>
 						<InformationElement/>
@@ -77,8 +75,6 @@
 			<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" StackLayout.LayoutMethod="VerticalBottomToTop" MaxHeight="645" >
 			  <Children>
 					
-				<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" HorizontalAlignment="Center" SuggestedHeight="20" Brush="Popup.Title.Text" Text="Management" MarginTop="10"/>
-				
 				<ListPanel WidthSizePolicy="Fixed" HeightSizePolicy="CoverChildren" SuggestedWidth="320" StackLayout.LayoutMethod="HorizontalLeftToRight" MaxHeight="645" MarginTop="20">
 					<Children>
 						<Widget DataSource="{ConscriptionToogle}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" VerticalAlignment="Center" UpdateChildrenStates="true" MarginTop="5" MarginBottom="5" MarginLeft="20" MarginRight="20" >

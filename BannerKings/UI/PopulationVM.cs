@@ -185,6 +185,8 @@ namespace BannerKings
             {
                 InformationManager.DisplayMessage(new InformationMessage(String
                     .Format("Policies updated for {0}", _settlement.Name.ToString())));
+                this.militaryVM.OnFinalize();
+                this.economyVM.OnFinalize();
                 UIManager.instance.CloseUI();
             }
         }

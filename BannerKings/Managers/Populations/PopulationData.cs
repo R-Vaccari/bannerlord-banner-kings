@@ -27,6 +27,8 @@ namespace BannerKings.Populations
         private MilitaryData militaryData { get; set; }
         [SaveableProperty(7)]
         private LandData landData { get; set; }
+        [SaveableProperty(8)]
+        private TournamentData tournamentData { get; set; }
 
         public PopulationData(List<PopulationClass> classes, Settlement settlement, float assimilation, HashSet<CultureDataClass> cultures = null, Guild guild = null)
         {
@@ -52,7 +54,14 @@ namespace BannerKings.Populations
         public MilitaryData MilitaryData => this.militaryData;
         public LandData LandData => this.landData;
         public EconomicData EconomicData => this.economicData;
-
+        public TournamentData TournamentData
+        {
+            get => this.tournamentData;
+            set
+            {
+                this.tournamentData = value;
+            }
+        }
 
         public int TotalPop {
             get
@@ -72,8 +81,6 @@ namespace BannerKings.Populations
                 return model.CalculateEffect(this.settlement, this);
             }
         }
-            
-    
 
         public float Stability
         {
@@ -462,6 +469,53 @@ namespace BannerKings.Populations
         internal override void Update(PopulationData data)
         {
            
+        }
+    }
+
+    public class TournamentData : BannerKingsData
+    {
+        private Town town;
+        private ItemRoster roster;
+        private ItemObject prize;
+        private bool active;
+
+        public TournamentData(Town town)
+        {
+            this.town = town;
+            this.roster = new ItemRoster();
+        }
+
+        public ItemRoster Roster => this.roster;
+        public ItemObject Prize
+        {
+            get
+            {
+                if (this.prize == null)
+                {
+                    List<ItemObject> items = new List<ItemObject>();
+                    foreach (ItemRosterElement element in this.roster)
+                    {
+                        EquipmentElement equipment = element.EquipmentElement;
+                        ItemObject item = equipment.Item;
+                        if (item != null)
+                            if (item.IsMountable || item.HasWeaponComponent || item.HasArmorComponent)
+                                items.Add(item);
+                    }
+
+                    if (items.Count > 0)
+                    {
+                        items.Sort((x, y) => x.Value.CompareTo(y.Value));
+                        this.prize = items[0];
+                    }
+                }
+                
+                return this.prize;
+            }
+        }
+
+        internal override void Update(PopulationData data)
+        {
+            
         }
     }
 

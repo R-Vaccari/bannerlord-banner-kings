@@ -21,7 +21,12 @@ namespace BannerKings.Managers
         {
             get
             {
-                yield return "";
+                yield return "decision_drafting_encourage";
+                yield return "decision_militia_encourage";
+                yield return "decision_slaves_export";
+                yield return "decision_patrol_send";
+                yield return "decision_scout_send";
+                yield return "decision_militia_subsidize";
                 yield break;
             }
         }
@@ -48,7 +53,13 @@ namespace BannerKings.Managers
         {
             get
             {
-                yield return "";
+                yield return "criminal";
+                yield return "garrison";
+                yield return "draft";
+                yield return "militia";
+                yield return "tax";
+                yield return "tariff";
+                yield return "workforce";
                 yield break;
             }
         }
