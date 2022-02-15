@@ -1,4 +1,5 @@
 ﻿using BannerKings.Models;
+using BannerKings.Models.Populations;
 using BannerKings.Populations;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Library;
@@ -8,25 +9,21 @@ namespace BannerKings.UI
 {
     public class OverviewVM : ViewModel
     {
-        private MBBindingList<PopulationInfoVM> _popInfo;
-        private MBBindingList<InformationElement> _satisfactionInfo;
-        private MBBindingList<InformationElement> _statsInfo;
-        private MBBindingList<InformationElement> _foodInfo;
-        private MBBindingList<InformationElement> _productionInfo;
-        private MBBindingList<InformationElement> _defenseInfo;
-        private Settlement _settlement;
+        private MBBindingList<PopulationInfoVM> classesList;
+        private MBBindingList<CultureElementVM> culturesList;
+        private MBBindingList<InformationElement> cultureInfo;
+        private MBBindingList<InformationElement> statsInfo;
+        private Settlement settlement;
         private bool _isSelected;
         private PopulationData data;
 
         public OverviewVM(Settlement _settlement, bool _isSelected)
         {
-            _defenseInfo = new MBBindingList<InformationElement>();
-            _popInfo = new MBBindingList<PopulationInfoVM>();
-            _satisfactionInfo = new MBBindingList<InformationElement>();
-            _statsInfo = new MBBindingList<InformationElement>();
-            _foodInfo = new MBBindingList<InformationElement>();
-            _productionInfo = new MBBindingList<InformationElement>();
-            this._settlement = _settlement;
+            classesList = new MBBindingList<PopulationInfoVM>();
+            culturesList = new MBBindingList<CultureElementVM>();
+            cultureInfo = new MBBindingList<InformationElement>();
+            statsInfo = new MBBindingList<InformationElement>();
+            this.settlement = _settlement;
             this._isSelected = _isSelected;
             this.RefreshValues();
         }
@@ -34,45 +31,36 @@ namespace BannerKings.UI
         public override void RefreshValues()
         {
             base.RefreshValues();
-            PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(_settlement);
+            PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
             this.data = data;
-            PopInfo.Clear();
-            SatisfactionInfo.Clear();
+            PopList.Clear();
+            CultureInfo.Clear();
             StatsInfo.Clear();
-            FoodInfo.Clear();
-            ProductionInfo.Clear();
-            DefenseInfo.Clear();
             if (data != null && data.Classes != null)
             {
-                data.Classes.ForEach(popClass => PopInfo
-                .Add(new PopulationInfoVM(Helpers.Helpers.GetClassName(popClass.type, _settlement.Culture).ToString(), popClass.count,
-                    Helpers.Helpers.GetClassHint(popClass.type, _settlement.Culture))));
+                data.Classes.ForEach(popClass => PopList
+                    .Add(new PopulationInfoVM(Helpers.Helpers.GetClassName(popClass.type, settlement.Culture).ToString(), popClass.count,
+                        Helpers.Helpers.GetClassHint(popClass.type, settlement.Culture))));
 
-              
+                data.CultureData.Cultures.ForEach(culture => CultureList
+                    .Add(new CultureElementVM(data, culture)));
 
                 StatsInfo.Add(new InformationElement("Stability:", FormatValue(data.Stability),
                     "The overall stability of this settlement, affected by security, loyalty, assimilation and whether you are legally entitled to the settlement. Stability is the basis of economic prosperity"));
-                StatsInfo.Add(new InformationElement("Population Growth:", new BKGrowthModel().CalculateEffect(_settlement, data).ResultNumber.ToString(), 
+                StatsInfo.Add(new InformationElement("Total Population:", data.TotalPop.ToString(),
+                    "Number of people present in this settlement and surrounding regions"));
+                StatsInfo.Add(new InformationElement("Population Growth:", new BKGrowthModel().CalculateEffect(settlement, data).ResultNumber.ToString(), 
                     "The population growth of your settlement on a daily basis, distributed among the classes"));
-                StatsInfo.Add(new InformationElement("Administrative Cost:", FormatValue(new AdministrativeModel().CalculateAdministrativeCost(_settlement)),
-                    "Costs associated with the settlement administration, including those of active policies and decisions, deducted on tax revenue"));
-                StatsInfo.Add(new InformationElement("Cultural Assimilation:", FormatValue(data.CultureData.GetAssimilation(Hero.MainHero.Culture)),
+
+                CultureInfo.Add(new InformationElement("Foreigner Ratio:", FormatValue(new BKForeignerModel().CalculateEffect(settlement).ResultNumber),
+                    "Foreigners of all kinds are naturally attracted to economically booming towns. This represents a share of the population that is impervious to assimilation"));
+                CultureInfo.Add(new InformationElement("Dominant Culture:", data.CultureData.DominantCulture.Name.ToString(),
+                    "The most assimilated culture in this settlement"));
+                CultureInfo.Add(new InformationElement("Cultural Acceptance:", FormatValue(data.CultureData.GetAssimilation(Hero.MainHero.Culture)),
+                    "How accepted your culture is towards the general populace. A culture first needs to be accepted to be assimilated into"));
+                CultureInfo.Add(new InformationElement("Cultural Assimilation:", FormatValue(data.CultureData.GetAssimilation(Hero.MainHero.Culture)),
                     "Percentage of the population that shares culture with you. Assimilating foreign settlements requires a competent governor that shares your culture"));
 
-                FoodInfo.Add(new InformationElement("Storage Limit:", _settlement.Town.FoodStocksUpperLimit().ToString(), 
-                    "The amount of food this settlement is capable of storing"));
-                FoodInfo.Add(new InformationElement("Estimated Holdout:", string.Format("{0} Days", new BKFoodModel().GetFoodEstimate(_settlement.Town, true, _settlement.Town.FoodStocksUpperLimit())),
-                    "How long this settlement will take to start starving in case of a siege"));
-
-               
-                //ProductionInfo.Add(new InformationElement("Population Cap:", new GrowthModel().CalculateSettlementCap(_settlement).ToString(),
-                //    "The maximum capacity of people this settlement can naturally support"));
-
-
-                DefenseInfo.Add(new InformationElement("Militia Cap:", new BKMilitiaModel().GetMilitiaLimit(data, _settlement.IsCastle).ToString(),
-                    "The maximum number of militiamen this settlement can support, based on it's population"));
-                DefenseInfo.Add(new InformationElement("Militia Quality:", FormatValue(new BKMilitiaModel().CalculateEliteMilitiaSpawnChance(_settlement)),
-                        "Chance of militiamen being spawned as veterans instead of recruits"));
             } 
         }
 
@@ -94,71 +82,43 @@ namespace BannerKings.UI
         }
 
         [DataSourceProperty]
-        public MBBindingList<PopulationInfoVM> PopInfo
+        public MBBindingList<CultureElementVM> CultureList
         {
-            get => _popInfo;
+            get => culturesList;
             set
             {
-                if (value != _popInfo)
+                if (value != culturesList)
                 {
-                    _popInfo = value;
-                    base.OnPropertyChangedWithValue(value, "PopInfo");
+                    culturesList = value;
+                    base.OnPropertyChangedWithValue(value, "CultureList");
                 }
             }
         }
 
         [DataSourceProperty]
-        public MBBindingList<InformationElement> DefenseInfo
+        public MBBindingList<PopulationInfoVM> PopList
         {
-            get => _defenseInfo;
+            get => classesList;
             set
             {
-                if (value != _defenseInfo)
+                if (value != classesList)
                 {
-                    _defenseInfo = value;
-                    base.OnPropertyChangedWithValue(value, "DefenseInfo");
+                    classesList = value;
+                    base.OnPropertyChangedWithValue(value, "PopList");
                 }
             }
         }
 
         [DataSourceProperty]
-        public MBBindingList<InformationElement> ProductionInfo
+        public MBBindingList<InformationElement> CultureInfo
         {
-            get => _productionInfo;
+            get => cultureInfo;
             set
             {
-                if (value != _productionInfo)
+                if (value != cultureInfo)
                 {
-                    _productionInfo = value;
-                    base.OnPropertyChangedWithValue(value, "ProductionInfo");
-                }
-            }
-        }
-
-        [DataSourceProperty]
-        public MBBindingList<InformationElement> FoodInfo
-        {
-            get => _foodInfo;
-            set
-            {
-                if (value != _foodInfo)
-                {
-                    _foodInfo = value;
-                    base.OnPropertyChangedWithValue(value, "FoodInfo");
-                }
-            }
-        }
-
-        [DataSourceProperty]
-        public MBBindingList<InformationElement> SatisfactionInfo
-        {
-            get => _satisfactionInfo;
-            set
-            {
-                if (value != _satisfactionInfo)
-                {
-                    _satisfactionInfo = value;
-                    base.OnPropertyChangedWithValue(value, "SatisfactionInfo");
+                    cultureInfo = value;
+                    base.OnPropertyChangedWithValue(value, "CultureInfo");
                 }
             }
         }
@@ -166,12 +126,12 @@ namespace BannerKings.UI
         [DataSourceProperty]
         public MBBindingList<InformationElement> StatsInfo
         {
-            get => _statsInfo;
+            get => statsInfo;
             set
             {
-                if (value != _statsInfo)
+                if (value != statsInfo)
                 {
-                    _statsInfo = value;
+                    statsInfo = value;
                     base.OnPropertyChangedWithValue(value, "StatsInfo");
                 }
             }
@@ -182,7 +142,7 @@ namespace BannerKings.UI
         {
             get
             {
-                float cost = new AdministrativeModel().CalculateAdministrativeCost(_settlement);
+                float cost = new AdministrativeModel().CalculateAdministrativeCost(settlement);
                 return FormatValue(cost);
             }
         }
@@ -192,7 +152,7 @@ namespace BannerKings.UI
         {
             get
             {
-                int growth = (int)new BKGrowthModel().CalculateEffect(_settlement, data).ResultNumber;
+                int growth = (int)new BKGrowthModel().CalculateEffect(settlement, data).ResultNumber;
                 return growth.ToString() + " (Daily)";
             }
         }
@@ -202,7 +162,7 @@ namespace BannerKings.UI
         {
             get
             {
-                float result = BannerKingsConfig.Instance.PopulationManager.GetPopData(_settlement).CultureData.GetAssimilation(Hero.MainHero.Culture);
+                float result = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement).CultureData.GetAssimilation(Hero.MainHero.Culture);
                 return (result * 100f).ToString() + '%';
             }
         }

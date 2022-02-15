@@ -8,6 +8,7 @@ using TaleWorlds.SaveSystem;
 using static BannerKings.Managers.PopulationManager;
 using BannerKings.Models;
 using BannerKings.Models.Vanilla;
+using BannerKings.Models.Populations;
 
 namespace BannerKings.Populations
 {
@@ -30,7 +31,7 @@ namespace BannerKings.Populations
         [SaveableProperty(8)]
         private TournamentData tournamentData { get; set; }
 
-        public PopulationData(List<PopulationClass> classes, Settlement settlement, float assimilation, HashSet<CultureDataClass> cultures = null, Guild guild = null)
+        public PopulationData(List<PopulationClass> classes, Settlement settlement, float assimilation, List<CultureDataClass> cultures = null, Guild guild = null)
         {
             this.classes = classes;
             this.stability = 0.5f;
@@ -40,7 +41,7 @@ namespace BannerKings.Populations
             if (cultures == null)
             {
                 CultureDataClass cultureData = new CultureDataClass(settlement.Culture, 1f, 1f);
-                cultures = new HashSet<CultureDataClass>();
+                cultures = new List<CultureDataClass>();
                 cultures.Add(cultureData);
             }
             this.cultureData = new CultureData(settlement.Owner, cultures);
@@ -62,6 +63,8 @@ namespace BannerKings.Populations
                 this.tournamentData = value;
             }
         }
+
+        public ExplainedNumber Foreigner => new BKForeignerModel().CalculateEffect(this.settlement);
 
         public int TotalPop {
             get
@@ -200,14 +203,16 @@ namespace BannerKings.Populations
 
     public class CultureData : BannerKingsData
     {
-        private HashSet<CultureDataClass> cultures;
+        private List<CultureDataClass> cultures;
         private Hero settlementOwner;
 
-        public CultureData(Hero settlementOwner, HashSet<CultureDataClass> cultures)
+        public CultureData(Hero settlementOwner, List<CultureDataClass> cultures)
         {
             this.settlementOwner = settlementOwner;
             this.cultures = cultures;
         }
+
+        public List<CultureDataClass> Cultures => this.cultures;
 
         public CultureObject DominantCulture
         {
@@ -234,7 +239,7 @@ namespace BannerKings.Populations
 
         public bool IsCulturePresent(CultureObject culture)
         {
-            CultureDataClass data = this.cultures.FirstOrDefault(x => x.Culture == settlementOwner.Culture);
+            CultureDataClass data = this.cultures.FirstOrDefault(x => x.Culture == culture);
             return data != null;
         }
 
@@ -282,7 +287,7 @@ namespace BannerKings.Populations
             HashSet<CultureDataClass> toDelete = new HashSet<CultureDataClass>();
             foreach (CultureDataClass cultureData in this.cultures)
             {
-                //cultureData.Acceptance += accModel.CalculateEffect(data.Settlement, cultureData).ResultNumber;
+                cultureData.Acceptance += accModel.CalculateEffect(data.Settlement, cultureData).ResultNumber;
                 cultureData.Assimilation += assimModel.CalculateEffect(data.Settlement, cultureData).ResultNumber;
                 if (cultureData.Culture != settlementOwner.Culture && cultureData.Assimilation == 0f)
                     toDelete.Add(cultureData);
@@ -373,6 +378,14 @@ namespace BannerKings.Populations
         public ExplainedNumber AdministrativeCost => BannerKingsConfig.Instance.Models
             .First(x => x.GetType() == typeof(AdministrativeModel)).CalculateEffect(settlement);
         public float MerchantRevenue => settlement.Town != null ? new BKEconomyModel().GetMerchantIncome(settlement.Town) : 0f;
+        public ExplainedNumber CaravanAttraction
+        {
+            get
+            {
+                BKCaravanAttractionModel model = (BKCaravanAttractionModel)BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(BKCaravanAttractionModel));
+                return model.CalculateEffect(settlement);
+            }
+        }
         public ExplainedNumber Mercantilism
         {
             get
@@ -483,6 +496,16 @@ namespace BannerKings.Populations
         {
             this.town = town;
             this.roster = new ItemRoster();
+            this.active = true;
+        }
+
+        public bool Active
+        {
+            get => this.active;
+            set
+            {
+                this.active = value;
+            }
         }
 
         public ItemRoster Roster => this.roster;

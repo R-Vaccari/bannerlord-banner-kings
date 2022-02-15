@@ -20,7 +20,7 @@ using BannerKings.Managers.Decisions;
 
 namespace BannerKings.Behaviors
 {
-    public class SettlementBehavior : CampaignBehaviorBase
+    public class BKSettlementBehavior : CampaignBehaviorBase
     {
 
         private PopulationManager populationManager = null;

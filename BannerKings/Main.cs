@@ -20,6 +20,7 @@ using TaleWorlds.CampaignSystem.CharacterDevelopment.Managers;
 using BannerKings.Managers.Helpers;
 using BannerKings.Populations;
 using BannerKings.Models.Vanilla;
+using BannerKings.Behaviours;
 
 namespace BannerKings
 {
@@ -34,8 +35,9 @@ namespace BannerKings
                 try
                 {
                     CampaignGameStarter campaignStarter = (CampaignGameStarter)gameStarter;
-                    campaignStarter.AddBehavior(new SettlementBehavior());
-                    campaignStarter.AddBehavior(new FeudalCompanionBehavior());
+                    campaignStarter.AddBehavior(new BKSettlementBehavior());
+                    campaignStarter.AddBehavior(new BKCompanionBehavior());
+                    campaignStarter.AddBehavior(new BKTournamentBehavior());
 
                     campaignStarter.AddModel(new BKProsperityModel());
                     campaignStarter.AddModel(new BKTaxModel());
@@ -174,8 +176,6 @@ namespace BannerKings
                         return false;
                     }
 
-                    ///////// SUCCESSION CHANGES //////////
-
                     victim.EncyclopediaText = (TextObject)Type.GetType("TaleWorlds.CampaignSystem.Actions.KillCharacterAction, TaleWorlds.CampaignSystem").GetMethod("CreateObituary", BindingFlags.Static | BindingFlags.NonPublic).Invoke(null, new object[] { victim, actionDetail });
                     if (victim.Clan != null && (victim.Clan.Leader == victim || victim == Hero.MainHero))
                     {
@@ -204,9 +204,6 @@ namespace BannerKings
                             }
                         }
                     }
-
-                    ///////// SUCCESSION CHANGES //////////
-
 
                     if (victim.PartyBelongedTo != null && (victim.PartyBelongedTo.LeaderHero == victim || victim == Hero.MainHero))
                     {
@@ -321,6 +318,21 @@ namespace BannerKings
 
         namespace Economy
         {
+
+            
+
+            [HarmonyPatch(typeof(CaravansCampaignBehavior), "GetTradeScoreForTown")]
+            class GetTradeScoreForTownPatch
+            {
+                static void Postfix(ref float __result, MobileParty caravanParty, Town town, CampaignTime lastHomeVisitTimeOfCaravan, 
+                    float caravanFullness, bool distanceCut)
+                {
+                    if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
+                    {
+                        PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
+                    }
+                }
+            }
 
             [HarmonyPatch(typeof(DefaultItemCategories), "InitializeAll")]
             class InitializeCategoriesPatch

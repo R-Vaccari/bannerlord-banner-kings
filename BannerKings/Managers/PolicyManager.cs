@@ -27,6 +27,7 @@ namespace BannerKings.Managers
                 yield return "decision_patrol_send";
                 yield return "decision_scout_send";
                 yield return "decision_militia_subsidize";
+                yield return "decision_tariff_exempt";
                 yield break;
             }
         }
@@ -58,7 +59,6 @@ namespace BannerKings.Managers
                 yield return "draft";
                 yield return "militia";
                 yield return "tax";
-                yield return "tariff";
                 yield return "workforce";
                 yield break;
             }
@@ -158,8 +158,10 @@ namespace BannerKings.Managers
                 return new BKSubsidizeMilitiaDecision(settlement, false);
             else if (policyType == "decision_militia_encourage")
                 return new BKEncourageMilitiaDecision(settlement, false);
-            else if(policyType == "decision_drafting_encourage")
+            else if (policyType == "decision_drafting_encourage")
                 return new BKEncourageDraftingDecision(settlement, false);
+            else if (policyType == "decision_tariff_exempt")
+                return new BKExemptTariffDecision(settlement, false);
             else
                 return new BKExportSlavesDecision(settlement, true);
 

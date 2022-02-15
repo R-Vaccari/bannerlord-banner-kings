@@ -3,6 +3,7 @@ using BannerKings.Managers.Policies;
 using BannerKings.Populations;
 using BannerKings.UI.Items;
 using System;
+using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Core.ViewModelCollection;
@@ -15,10 +16,10 @@ namespace BannerKings.UI
     public class EconomyVM : BannerKingsViewModel
     {
         private MBBindingList<InformationElement> productionInfo, revenueInfo, satisfactionInfo;
-        private SelectorVM<BKItemVM> militiaSelector, garrisonSelector, draftSelector;
-        private BKTariffPolicy tariffItem;
+        private SelectorVM<BKItemVM> taxSelector, criminalSelector;
+        private PopulationOptionVM exportToogle, tariffToogle;
         private BKTaxPolicy taxItem;
-        private BKDraftPolicy draftItem;
+        private BKCriminalPolicy criminalItem;
         private Settlement settlement;
         private ItemRoster roster;
 
@@ -53,6 +54,8 @@ namespace BannerKings.UI
             RevenueInfo.Add(new InformationElement("Mercantilism:", FormatValue(data.EconomicData.Tariff),
                   "Represents how economicaly free craftsmen, tradesmen and guilds are. Increased mercantilism reduces the tax revenue of these, but allows them to" +
                   " accumulate wealth or contribute more to overall prosperity"));
+            RevenueInfo.Add(new InformationElement("Caravan Attractiveness:", FormatValue(data.EconomicData.CaravanAttraction.ResultNumber),
+                  "How attractive this town is for caravans. Likelihood of caravan visits are dictated mainly by prices, and attractiveness is a factor added on top of that"));
             RevenueInfo.Add(new InformationElement("Corruption:", FormatValue(data.EconomicData.Corruption),
                   "Tax being diverted for private purposes as opposed to being paid to you"));
             RevenueInfo.Add(new InformationElement("Administrative Cost:", FormatValue(data.EconomicData.AdministrativeCost.ResultNumber),
@@ -69,13 +72,12 @@ namespace BannerKings.UI
             taxItem = (BKTaxPolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(settlement, "tax");
             TaxSelector = base.GetSelector(taxItem, new Action<SelectorVM<BKItemVM>>(this.taxItem.OnChange));
 
-            tariffItem = (BKTariffPolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(settlement, "tariff"); 
-            TariffSelector = base.GetSelector(tariffItem, new Action<SelectorVM<BKItemVM>>(this.tariffItem.OnChange));
+            criminalItem = (BKCriminalPolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(settlement, "criminal");
+            CriminalSelector = base.GetSelector(criminalItem, new Action<SelectorVM<BKItemVM>>(this.criminalItem.OnChange));
 
-            draftItem = (BKDraftPolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(settlement, "draft");
-            DraftSelector = base.GetSelector(draftItem, new Action<SelectorVM<BKItemVM>>(this.draftItem.OnChange));
+            //tariffItem = (BKTariffPolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(settlement, "tariff"); 
+            //TariffSelector = base.GetSelector(tariffItem, new Action<SelectorVM<BKItemVM>>(this.tariffItem.OnChange));
 
-            /*
             HashSet<BannerKingsDecision> decisions = BannerKingsConfig.Instance.PolicyManager.GetDefaultDecisions(settlement);
             foreach (BannerKingsDecision decision in decisions)
             {
@@ -88,10 +90,14 @@ namespace BannerKings.UI
                 }, new TextObject(decision.GetHint()));
                 switch (decision.GetIdentifier())
                 {
-                    case "":
+                    case "decision_slaves_export":
+                        exportToogle = vm;
+                        break;
+                    case "decision_tariff_exempt":
+                        tariffToogle = vm;
                         break;
                 }
-            }*/
+            }
         }
 
         private void OnTournamentPress()
@@ -104,7 +110,7 @@ namespace BannerKings.UI
         }
 
         [DataSourceProperty]
-        public HintViewModel TournamentHint => new HintViewModel(new TextObject("{=!}Sponsor a torunament in this town. As the main sponsor, you have to pay 5000 coins for the tournament costs, as well as " +
+        public HintViewModel TournamentHint => new HintViewModel(new TextObject("{=!}Sponsor a tournament in this town. As the main sponsor, you have to pay 5000 coins for the tournament costs, as well as " +
             "provide an adequate prize. Sponsoring games improves population loyalty towards you, and valuable prizes provide renown to your name."));
 
         [DataSourceProperty]
@@ -113,30 +119,58 @@ namespace BannerKings.UI
             get 
             {
                 if (this.settlement.Town != null)
-                    return !this.settlement.Town.HasTournament;
+                    return !this.settlement.Town.HasTournament && Hero.MainHero.Gold >= 5000;
                 
                 return false;
             }
         }
 
         [DataSourceProperty]
-        public SelectorVM<BKItemVM> DraftSelector
+        public PopulationOptionVM ExportToogle
         {
-            get
-            {
-                return this.draftSelector;
-            }
+            get => exportToogle;
             set
             {
-                if (value != this.draftSelector)
+                if (value != exportToogle)
                 {
-                    this.draftSelector = value;
-                    base.OnPropertyChangedWithValue(value, "DraftSelector");
+                    exportToogle = value;
+                    base.OnPropertyChangedWithValue(value, "ExportToogle");
                 }
             }
         }
 
         [DataSourceProperty]
+        public PopulationOptionVM TariffToogle
+        {
+            get => tariffToogle;
+            set
+            {
+                if (value != tariffToogle)
+                {
+                    tariffToogle = value;
+                    base.OnPropertyChangedWithValue(value, "TariffToogle");
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public SelectorVM<BKItemVM> CriminalSelector
+        {
+            get
+            {
+                return this.criminalSelector;
+            }
+            set
+            {
+                if (value != this.criminalSelector)
+                {
+                    this.criminalSelector = value;
+                    base.OnPropertyChangedWithValue(value, "CriminalSelector");
+                }
+            }
+        }
+
+       /* [DataSourceProperty]
         public SelectorVM<BKItemVM> TariffSelector
         {
             get
@@ -151,21 +185,21 @@ namespace BannerKings.UI
                     base.OnPropertyChangedWithValue(value, "GarrisonSelector");
                 }
             }
-        }
+        } */
 
         [DataSourceProperty]
         public SelectorVM<BKItemVM> TaxSelector
         {
             get
             {
-                return this.militiaSelector;
+                return this.taxSelector;
             }
             set
             {
-                if (value != this.militiaSelector)
+                if (value != this.taxSelector)
                 {
-                    this.militiaSelector = value;
-                    base.OnPropertyChangedWithValue(value, "MilitiaSelector");
+                    this.taxSelector = value;
+                    base.OnPropertyChangedWithValue(value, "TaxSelector");
                 }
             }
         }
@@ -219,10 +253,10 @@ namespace BannerKings.UI
             {
                 ITournamentManager tournamentManager = Campaign.Current.TournamentManager;
                 tournamentManager.AddTournament(Campaign.Current.Models.TournamentModel.CreateTournament(this.settlement.Town));
+                Hero.MainHero.ChangeHeroGold(-5000);
                 InformationManager.DisplayMessage(new InformationMessage(String
-                    .Format("Tournament started with prize: {0}", this.data.TournamentData.Prize.Name)));
-            }
-                
+                    .Format("Tournament started with prize: {0}", this.data.TournamentData.Prize.Name), "event:/ui/notification/coins_negative"));
+            }     
         }
     }
 }

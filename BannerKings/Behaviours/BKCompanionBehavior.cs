@@ -16,7 +16,7 @@ using System.Linq;
 
 namespace BannerKings.Behaviors
 {
-    class FeudalCompanionBehavior : CampaignBehaviorBase
+    class BKCompanionBehavior : CampaignBehaviorBase
     {
 
         private FeudalTitle titleGiven = null;

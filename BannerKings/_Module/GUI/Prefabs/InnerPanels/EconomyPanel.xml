@@ -74,10 +74,9 @@
 			<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" StackLayout.LayoutMethod="VerticalBottomToTop" MaxHeight="645" >
 			  <Children>
 									
-					
-				<Widget DataSource="{ConscriptionToogle}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" VerticalAlignment="Center" UpdateChildrenStates="true" MarginTop="5" MarginBottom="5" MarginLeft="20" MarginRight="20" >
+				<ListPanel WidthSizePolicy="Fixed" HeightSizePolicy="CoverChildren" SuggestedWidth="320" StackLayout.LayoutMethod="HorizontalLeftToRight" MaxHeight="645" MarginTop="20">
 					<Children>
-						<ListPanel WidthSizePolicy="Fixed" HeightSizePolicy="CoverChildren" SuggestedWidth="320" StackLayout.LayoutMethod="HorizontalLeftToRight" MaxHeight="645" MarginTop="20">
+						<Widget DataSource="{ExportToogle}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" VerticalAlignment="Center" UpdateChildrenStates="true" MarginTop="5" MarginBottom="5" MarginLeft="20" MarginRight="20" >
 							<Children>
 								<HintWidget DataSource="{Hint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" />	
 								<RichTextWidget DoNotAcceptEvents="true" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" SuggestedHeight="40" MarginRight="80" HorizontalAlignment="Left" VerticalAlignment="Center" Brush="Encyclopedia.SubPage.Info.Text" Brush.FontSize="20" Text="@Description" />
@@ -87,34 +86,31 @@
 									</Children>
 								</ButtonWidget>
 							</Children>
-						</ListPanel>
+						</Widget>
 					</Children>
-				</Widget>
-						
-					
-					
-				<Widget DataSource="{SubsidizeToogle}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" VerticalAlignment="Center" UpdateChildrenStates="true" MarginTop="5" MarginBottom="5" MarginLeft="20" MarginRight="20" >
+				</ListPanel>
+				
+				<ListPanel WidthSizePolicy="Fixed" HeightSizePolicy="CoverChildren" SuggestedWidth="320" StackLayout.LayoutMethod="HorizontalLeftToRight" MaxHeight="645" MarginTop="20">
 					<Children>
-						<ListPanel WidthSizePolicy="Fixed" HeightSizePolicy="CoverChildren" SuggestedWidth="320" StackLayout.LayoutMethod="HorizontalLeftToRight" MaxHeight="645" >
+						<Widget DataSource="{TariffToogle}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" VerticalAlignment="Center" UpdateChildrenStates="true" MarginTop="5" MarginBottom="5" MarginLeft="20" MarginRight="20" >
 							<Children>
 								<HintWidget DataSource="{Hint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" />	
 								<RichTextWidget DoNotAcceptEvents="true" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" SuggestedHeight="40" MarginRight="80" HorizontalAlignment="Left" VerticalAlignment="Center" Brush="Encyclopedia.SubPage.Info.Text" Brush.FontSize="20" Text="@Description" />
 								<ButtonWidget  DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="30" SuggestedHeight="30" MarginLeft="35" Brush="SPOptions.Checkbox.Empty.Button" ButtonType="Toggle" IsSelected="@OptionValueAsBoolean" ToggleIndicator="ToggleIndicator" UpdateChildrenStates="true" HorizontalAlignment="Right" VerticalAlignment="Center">
 									<Children>
-										<ImageWidget Id="ToggleIndicator" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Brush="SPOptions.Checkbox.Full.Button"  />
+										<ImageWidget Id="ToggleIndicator" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Brush="SPOptions.Checkbox.Full.Button" />
 									</Children>
 								</ButtonWidget>
 							</Children>
-						</ListPanel>
+						</Widget>
 					</Children>
-				</Widget>
-			
-					
+				</ListPanel>
+				
 				<RichTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" HorizontalAlignment="Center" SuggestedHeight="5" Brush="TownManagement.Project.Name.Text" Text="Tax policy" MarginTop="25"/>
 				<ClanPartyRoleDropdown DataSource="{TaxSelector}" MarginTop="10" HorizontalAlignment="Center"/>
 				
-				<RichTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" HorizontalAlignment="Center" SuggestedHeight="5" Brush="TownManagement.Project.Name.Text" Text="Tariff policy" MarginTop="25"/>
-				<ClanPartyRoleDropdown DataSource="{TariffSelector}" MarginTop="10" HorizontalAlignment="Center"/>
+				<RichTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" HorizontalAlignment="Center" SuggestedHeight="5" Brush="TownManagement.Project.Name.Text" Text="Criminal policy" MarginTop="25"/>
+				<ClanPartyRoleDropdown DataSource="{CriminalSelector}" MarginTop="10" HorizontalAlignment="Center"/>
 				
 				<ButtonWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedHeight="48" SuggestedWidth="200" MarginTop="10" HorizontalAlignment="Center" VerticalAlignment="Top" Brush="ButtonBrush2" Command.Click="OnTournamentPress" IsEnabled="@TournamentAvailable">
 					<Children>  

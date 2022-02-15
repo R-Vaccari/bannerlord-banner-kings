@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using static BannerKings.Managers.TitleManager;
-using static BannerKings.Managers.PolicyManager;
 using BannerKings.Populations;
-using TaleWorlds.Core;
 using BannerKings.Models;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Decisions;
+using BannerKings.Models.Populations;
 
 namespace BannerKings
 {
@@ -49,6 +48,7 @@ namespace BannerKings
             this.Models.Add(new BKStabilityModel());
             this.Models.Add(new BKGrowthModel());
             this.Models.Add(new BKEconomyModel());
+            this.Models.Add(new BKCaravanAttractionModel());
         }
 
         public static BannerKingsConfig Instance
