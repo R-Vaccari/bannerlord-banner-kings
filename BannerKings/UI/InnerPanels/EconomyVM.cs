@@ -100,6 +100,27 @@ namespace BannerKings.UI
             }
         }
 
+        private void OnGuildPress()
+        {
+
+            RefreshValues();
+        }
+
+        [DataSourceProperty]
+        public HintViewModel GuildHint => new HintViewModel(new TextObject("{=!}Take actions and check status of local guild, if any is present"));
+
+        [DataSourceProperty]
+        public bool GuildAvailable
+        {
+            get
+            {
+                if (this.settlement.Town != null)
+                    return data.EconomicData.Guild != null;
+
+                return false;
+            }
+        }
+
         private void OnTournamentPress()
         {
             TournamentData tournament = new TournamentData(this.settlement.Town);
@@ -249,7 +270,7 @@ namespace BannerKings.UI
         public override void OnFinalize()
         {
             base.OnFinalize();
-            if (this.roster != null)
+            if (this.roster != null && !this.roster.IsEmpty())
             {
                 ITournamentManager tournamentManager = Campaign.Current.TournamentManager;
                 tournamentManager.AddTournament(Campaign.Current.Models.TournamentModel.CreateTournament(this.settlement.Town));

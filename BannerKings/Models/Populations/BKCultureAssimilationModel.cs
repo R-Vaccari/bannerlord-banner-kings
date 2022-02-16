@@ -68,6 +68,10 @@ namespace BannerKings.Models
                             result.Add(effect, new TextObject("Governor effect"));
                         }
                     }
+                    else if (data.Assimilation < 1f - popData.Foreigner.ResultNumber)
+                    {
+                        result.Add(-0.005f, new TextObject("Over limit"));
+                    }
                     else return result;
                 }
                 else

@@ -1,19 +1,15 @@
 ﻿using BannerKings.Components;
-using BannerKings.Models;
 using BannerKings.Populations;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
-using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Managers
 {
     public class PopulationManager
     {
-        [SaveableProperty(100)]
         private Dictionary<Settlement, PopulationData> POPS { get; set; }
 
-        [SaveableProperty(101)]
         private List<MobileParty> CARAVANS { get; set; }
 
         public PopulationManager(Dictionary<Settlement, PopulationData> pops, List<MobileParty> caravans)

@@ -9,6 +9,7 @@ using static BannerKings.Managers.PopulationManager;
 using BannerKings.Models;
 using BannerKings.Models.Vanilla;
 using BannerKings.Models.Populations;
+using TaleWorlds.ObjectSystem;
 
 namespace BannerKings.Populations
 {
@@ -285,16 +286,43 @@ namespace BannerKings.Populations
             BKCultureAssimilationModel assimModel = (BKCultureAssimilationModel)BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(BKCultureAssimilationModel));
             BKCultureAcceptanceModel accModel = (BKCultureAcceptanceModel)BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(BKCultureAcceptanceModel));
             HashSet<CultureDataClass> toDelete = new HashSet<CultureDataClass>();
+
+            float foreignerShare = 0f;
             foreach (CultureDataClass cultureData in this.cultures)
             {
                 cultureData.Acceptance += accModel.CalculateEffect(data.Settlement, cultureData).ResultNumber;
                 cultureData.Assimilation += assimModel.CalculateEffect(data.Settlement, cultureData).ResultNumber;
                 if (cultureData.Culture != settlementOwner.Culture && cultureData.Assimilation == 0f)
                     toDelete.Add(cultureData);
+
+                if (cultureData.Culture != settlementOwner.Culture && cultureData.Culture != data.Settlement.Culture)
+                    foreignerShare += cultureData.Assimilation;
             }
 
-            foreach (CultureDataClass cultureData in toDelete)
+            if (toDelete.Count > 0)
+                foreach (CultureDataClass cultureData in toDelete)
                 this.cultures.Remove(cultureData);
+
+            float foreignerTarget = data.Foreigner.ResultNumber;
+            float diff = foreignerTarget - foreignerShare;
+            if (foreignerShare < foreignerTarget)
+            {
+                float random = MBRandom.RandomFloatRanged(diff);
+                CultureObject randomForeign = MBObjectManager.Instance.GetObjectTypeList<CultureObject>()
+                    .GetRandomElementWithPredicate(x => x != settlementOwner.Culture && x != data.Settlement.Culture && !x.IsBandit);
+                if (randomForeign != null)
+                {
+                    this.cultures.Add(new CultureDataClass(randomForeign, random, random));
+                    foreach (CultureDataClass cultureData in this.cultures)
+                        if (cultureData.Culture == this.DominantCulture)
+                        {
+                            cultureData.Assimilation -= random;
+                            break;
+                        }
+                }
+                    
+            }
+
         }
     }
 
@@ -355,6 +383,8 @@ namespace BannerKings.Populations
                 return this.slaveOwners[hero];
             else return 0f;
         }
+
+        public Guild Guild => this.guild;
 
         public float Corruption => 1f;
 

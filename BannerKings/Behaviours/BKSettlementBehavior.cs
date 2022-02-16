@@ -38,6 +38,7 @@ namespace BannerKings.Behaviors
 
         public override void SyncData(IDataStore dataStore)
         {
+            /*
             if (dataStore.IsSaving)
             {
                 if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PolicyManager != null)
@@ -60,7 +61,7 @@ namespace BannerKings.Behaviors
                     new Dictionary<Kingdom, FeudalTitle>());
                 }
                 else BannerKingsConfig.Instance.InitManagers(populationManager, policyManager, titleManager);
-            }
+            }*/
         }
 
         private void HourlyTickParty(MobileParty party)

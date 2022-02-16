@@ -20,14 +20,14 @@ namespace BannerKings
             private bool _isDemesneSelected;
             private bool _isMilitarySelected;
 
-            public PopulationVM(Settlement _settlement)
+            public PopulationVM(Settlement settlement)
             {
-                this._settlement = _settlement;
-                PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(_settlement);
-                overviewVM = new OverviewVM(_settlement, true);
-                economyVM = new EconomyVM(data, _settlement, false);
-                demesneVM = new DemesneVM(BannerKingsConfig.Instance.TitleManager.GetTitle(_settlement), false);
-                militaryVM = new MilitaryVM(data, _settlement, false);
+                this._settlement = settlement;
+                PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
+                overviewVM = new OverviewVM(data, settlement, true);
+                economyVM = new EconomyVM(data, settlement, false);
+                demesneVM = new DemesneVM(BannerKingsConfig.Instance.TitleManager.GetTitle(settlement), false);
+                militaryVM = new MilitaryVM(data, settlement, false);
             }
 
             public override void RefreshValues()

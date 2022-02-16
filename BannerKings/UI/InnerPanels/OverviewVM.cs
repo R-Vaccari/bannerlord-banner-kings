@@ -1,23 +1,27 @@
-﻿using BannerKings.Models;
+﻿using BannerKings.Managers.Decisions;
+using BannerKings.Models;
 using BannerKings.Models.Populations;
 using BannerKings.Populations;
+using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Library;
+using TaleWorlds.Localization;
 using static BannerKings.Managers.PopulationManager;
 
 namespace BannerKings.UI
 {
-    public class OverviewVM : ViewModel
+    public class OverviewVM : BannerKingsViewModel
     {
         private MBBindingList<PopulationInfoVM> classesList;
         private MBBindingList<CultureElementVM> culturesList;
         private MBBindingList<InformationElement> cultureInfo;
         private MBBindingList<InformationElement> statsInfo;
+        private PopulationOptionVM foreignerToogle;
         private Settlement settlement;
         private bool _isSelected;
         private PopulationData data;
 
-        public OverviewVM(Settlement _settlement, bool _isSelected)
+        public OverviewVM(PopulationData data, Settlement _settlement, bool _isSelected) : base(data, true)
         {
             classesList = new MBBindingList<PopulationInfoVM>();
             culturesList = new MBBindingList<CultureElementVM>();
@@ -34,6 +38,7 @@ namespace BannerKings.UI
             PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
             this.data = data;
             PopList.Clear();
+            CultureList.Clear();
             CultureInfo.Clear();
             StatsInfo.Clear();
             if (data != null && data.Classes != null)
@@ -51,9 +56,9 @@ namespace BannerKings.UI
                     "Number of people present in this settlement and surrounding regions"));
                 StatsInfo.Add(new InformationElement("Population Growth:", new BKGrowthModel().CalculateEffect(settlement, data).ResultNumber.ToString(), 
                     "The population growth of your settlement on a daily basis, distributed among the classes"));
+                StatsInfo.Add(new InformationElement("Foreigner Ratio:", FormatValue(new BKForeignerModel().CalculateEffect(settlement).ResultNumber),
+                    "Higher prosperity leads to higher foreigner attraction, who in turn increase caravan attractiveness. However, these foreigners refuse to be assimilated, thus more foreigners lead to a less stable settlement"));
 
-                CultureInfo.Add(new InformationElement("Foreigner Ratio:", FormatValue(new BKForeignerModel().CalculateEffect(settlement).ResultNumber),
-                    "Foreigners of all kinds are naturally attracted to economically booming towns. This represents a share of the population that is impervious to assimilation"));
                 CultureInfo.Add(new InformationElement("Dominant Culture:", data.CultureData.DominantCulture.Name.ToString(),
                     "The most assimilated culture in this settlement"));
                 CultureInfo.Add(new InformationElement("Cultural Acceptance:", FormatValue(data.CultureData.GetAssimilation(Hero.MainHero.Culture)),
@@ -61,22 +66,36 @@ namespace BannerKings.UI
                 CultureInfo.Add(new InformationElement("Cultural Assimilation:", FormatValue(data.CultureData.GetAssimilation(Hero.MainHero.Culture)),
                     "Percentage of the population that shares culture with you. Assimilating foreign settlements requires a competent governor that shares your culture"));
 
+                HashSet<BannerKingsDecision> decisions = BannerKingsConfig.Instance.PolicyManager.GetDefaultDecisions(settlement);
+                foreach (BannerKingsDecision decision in decisions)
+                {
+                    PopulationOptionVM vm = new PopulationOptionVM()
+                    .SetAsBooleanOption(decision.GetName(), decision.Enabled, delegate (bool value)
+                    {
+                        decision.OnChange(value);
+                        this.RefreshValues();
+
+                    }, new TextObject(decision.GetHint()));
+                    switch (decision.GetIdentifier())
+                    {
+                        case "decision_foreigner_ban":
+                            foreignerToogle = vm;
+                            break;
+                    }
+                }
             } 
         }
 
-        private string FormatValue(float value) => (value * 100f).ToString("0.00") + '%';
-
         [DataSourceProperty]
-        public bool IsSelected
+        public PopulationOptionVM ForeignerToogle
         {
-            get => this._isSelected;
+            get => foreignerToogle;
             set
             {
-                if (value != this._isSelected)
+                if (value != foreignerToogle)
                 {
-                    this._isSelected = value;
-                    if (value) this.RefreshValues();
-                    base.OnPropertyChangedWithValue(value, "IsSelected");
+                    foreignerToogle = value;
+                    base.OnPropertyChangedWithValue(value, "ForeignerToogle");
                 }
             }
         }

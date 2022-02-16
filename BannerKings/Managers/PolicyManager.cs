@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.SaveSystem;
 using static BannerKings.Managers.Policies.BKGarrisonPolicy;
 using static BannerKings.Managers.Policies.BKMilitiaPolicy;
 using static BannerKings.Managers.Policies.BKCriminalPolicy;
@@ -12,9 +11,7 @@ namespace BannerKings.Managers
 {
     public class PolicyManager
     {
-  
         private Dictionary<Settlement, HashSet<BannerKingsDecision>> SettlementDecisions { get; set; }
-
         private Dictionary<Settlement, HashSet<BannerKingsPolicy>> SettlementPolicies { get; set; }
 
         private IEnumerable<string> TownDecisions
@@ -28,6 +25,7 @@ namespace BannerKings.Managers
                 yield return "decision_scout_send";
                 yield return "decision_militia_subsidize";
                 yield return "decision_tariff_exempt";
+                yield return "decision_foreigner_ban";
                 yield break;
             }
         }
@@ -162,6 +160,8 @@ namespace BannerKings.Managers
                 return new BKEncourageDraftingDecision(settlement, false);
             else if (policyType == "decision_tariff_exempt")
                 return new BKExemptTariffDecision(settlement, false);
+            else if (policyType == "decision_foreigner_ban")
+                return new BKBanForeignersDecision(settlement, false);
             else
                 return new BKExportSlavesDecision(settlement, true);
 
