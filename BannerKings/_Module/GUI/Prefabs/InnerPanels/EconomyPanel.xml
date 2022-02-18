@@ -112,10 +112,17 @@
 				<RichTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" HorizontalAlignment="Center" SuggestedHeight="5" Brush="TownManagement.Project.Name.Text" Text="Criminal policy" MarginTop="25"/>
 				<ClanPartyRoleDropdown DataSource="{CriminalSelector}" MarginTop="10" HorizontalAlignment="Center"/>
 				
-				<ButtonWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedHeight="48" SuggestedWidth="200" MarginTop="10" HorizontalAlignment="Center" VerticalAlignment="Top" Brush="ButtonBrush2" Command.Click="OnTournamentPress" IsEnabled="@TournamentAvailable">
+				<ButtonWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedHeight="48" SuggestedWidth="200" MarginTop="20" HorizontalAlignment="Center" VerticalAlignment="Top" Brush="ButtonBrush2" Command.Click="OnTournamentPress" IsEnabled="@TournamentAvailable">
 					<Children>  
 						<HintWidget DataSource="{TournamentHint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" />	
 						<RichTextWidget DoNotAcceptEvents="true" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="OverlayPopup.ButtonText" Brush.FontSize="20" Text="Tournament"/>
+					</Children>
+				</ButtonWidget> 
+				
+				<ButtonWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedHeight="48" SuggestedWidth="200" MarginTop="20" HorizontalAlignment="Center" VerticalAlignment="Top" Brush="ButtonBrush2" Command.Click="OnGuildPress" IsEnabled="@GuildAvailable">
+					<Children>  
+						<HintWidget DataSource="{GuildHint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" />	
+						<RichTextWidget DoNotAcceptEvents="true" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="OverlayPopup.ButtonText" Brush.FontSize="20" Text="Guild"/>
 					</Children>
 				</ButtonWidget> 
 				

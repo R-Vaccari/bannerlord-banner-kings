@@ -57,10 +57,10 @@
 					
 					<ListPanel WidthSizePolicy="Fixed" HeightSizePolicy="CoverChildren" SuggestedWidth="320" StackLayout.LayoutMethod="HorizontalLeftToRight" MaxHeight="645" MarginTop="20">
 						<Children>
-							<Widget DataSource="{ForeignerToogle}" WidthSizePolicy="Fixed" SuggestedWidth="220" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" UpdateChildrenStates="true" MarginTop="5" MarginBottom="5" MarginLeft="50" >
+							<Widget DataSource="{ForeignerToogle}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" VerticalAlignment="Center" UpdateChildrenStates="true" MarginTop="5" MarginBottom="5" MarginLeft="20" MarginRight="20" >
 								<Children>
 									<HintWidget DataSource="{Hint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" />	
-									<RichTextWidget DoNotAcceptEvents="true" WidthSizePolicy="Fixed" HeightSizePolicy="CoverChildren" SuggestedWidth="200" SuggestedHeight="40" MarginRight="80" HorizontalAlignment="Left" VerticalAlignment="Center" Brush="Encyclopedia.SubPage.Info.Text" Brush.FontSize="20" Text="@Description" />
+									<RichTextWidget DoNotAcceptEvents="true" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" SuggestedHeight="40" MarginRight="80" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="Encyclopedia.SubPage.Info.Text" Brush.FontSize="20" Text="@Description" />
 									<ButtonWidget  DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="30" SuggestedHeight="30" MarginLeft="35" Brush="SPOptions.Checkbox.Empty.Button" ButtonType="Toggle" IsSelected="@OptionValueAsBoolean" ToggleIndicator="ToggleIndicator" UpdateChildrenStates="true" HorizontalAlignment="Right" VerticalAlignment="Center">
 										<Children>
 											<ImageWidget Id="ToggleIndicator" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Brush="SPOptions.Checkbox.Full.Button" />

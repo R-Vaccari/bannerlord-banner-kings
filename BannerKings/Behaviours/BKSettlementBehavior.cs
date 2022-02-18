@@ -17,6 +17,7 @@ using HarmonyLib;
 using BannerKings.Populations;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Decisions;
+using BannerKings.Managers.Institutions;
 
 namespace BannerKings.Behaviors
 {
@@ -312,6 +313,16 @@ namespace BannerKings.Behaviors
                         }
                     }
             }
+
+            if (settlement.IsTown)
+            {
+                PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
+                Guild guild = data.EconomicData.Guild;
+                if (guild != null)
+                {
+
+                }
+            }
         }
 
         private void OnMobilePartyDestroyed(MobileParty mobileParty, PartyBase destroyerParty)
@@ -435,6 +446,10 @@ namespace BannerKings.Behaviors
                 new GameMenuOption.OnConditionDelegate(game_menu_town_manage_town_on_condition),
                 new GameMenuOption.OnConsequenceDelegate(game_menu_town_manage_town_on_consequence), false, 4, false);
 
+            campaignGameStarter.AddGameMenuOption("town", "manage_guild", "{=!}Guild management",
+                new GameMenuOption.OnConditionDelegate(game_menu_town_manage_guild_on_condition),
+                new GameMenuOption.OnConsequenceDelegate(game_menu_town_manage_guild_on_consequence), false, 5, false);
+
             campaignGameStarter.AddGameMenuOption("castle", "manage_population", "{=!}Manage population",
                new GameMenuOption.OnConditionDelegate(game_menu_town_manage_town_on_condition),
                new GameMenuOption.OnConsequenceDelegate(game_menu_town_manage_town_on_consequence), false, 3, false);
@@ -451,7 +466,16 @@ namespace BannerKings.Behaviors
             return currentSettlement.OwnerClan == Hero.MainHero.Clan && BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(currentSettlement);
         }
 
+        private static bool game_menu_town_manage_guild_on_condition(MenuCallbackArgs args)
+        {
+            args.optionLeaveType = GameMenuOption.LeaveType.Manage;
+            Settlement currentSettlement = Settlement.CurrentSettlement;
+            return currentSettlement.OwnerClan == Hero.MainHero.Clan && BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(currentSettlement)
+                && BannerKingsConfig.Instance.PopulationManager.GetPopData(currentSettlement).EconomicData.Guild != null ;
+        }
+
         public static void game_menu_town_manage_town_on_consequence(MenuCallbackArgs args) => UIManager.instance.InitializePopulationWindow();
+        public static void game_menu_town_manage_guild_on_consequence(MenuCallbackArgs args) => UIManager.instance.InitializeGuildWindow();
 
         private void AddDialog(CampaignGameStarter starter)
         {

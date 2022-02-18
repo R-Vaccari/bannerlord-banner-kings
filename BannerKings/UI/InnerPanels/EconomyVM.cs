@@ -102,8 +102,7 @@ namespace BannerKings.UI
 
         private void OnGuildPress()
         {
-
-            RefreshValues();
+            UIManager.instance.InitializeGuildWindow();
         }
 
         [DataSourceProperty]

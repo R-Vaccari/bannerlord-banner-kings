@@ -10,6 +10,7 @@ using BannerKings.Models;
 using BannerKings.Models.Vanilla;
 using BannerKings.Models.Populations;
 using TaleWorlds.ObjectSystem;
+using BannerKings.Managers.Institutions;
 
 namespace BannerKings.Populations
 {
@@ -372,7 +373,7 @@ namespace BannerKings.Populations
             Guild guild = null)
         {
             this.settlement = settlement;
-            this.guild = guild;
+            this.guild = new Guild(settlement);
             this.satisfactions = new float[] { 0.5f, 0.5f, 0.5f,0.5f };
             this.slaveOwners = new Dictionary<Hero, float>();
         }
@@ -570,13 +571,6 @@ namespace BannerKings.Populations
         {
             
         }
-    }
-
-    public class Guild
-    {
-        private Hero guildMaster;
-        private int capital;
-
     }
 
     public enum GuildType

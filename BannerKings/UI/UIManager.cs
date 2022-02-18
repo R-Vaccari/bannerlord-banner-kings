@@ -24,6 +24,7 @@ namespace BannerKings.UI
         }
 
         public PopulationWindow populationWindow;
+        public GuildWindow guildWindow;
 
         public void InitializePopulationWindow()
         {
@@ -34,12 +35,31 @@ namespace BannerKings.UI
             }
         }
 
+        public void InitializeGuildWindow()
+        {
+            this.CloseUI();
+            if (MapScreen.Instance != null)
+            {
+                if (this.guildWindow == null) this.guildWindow = new GuildWindow();
+                this.guildWindow.UpdateUi();
+            }
+        }
+
         public void CloseUI()
         {
             if (populationWindow != null)
             {
                 populationWindow.CloseUi();
                 populationWindow = null;
+            }
+        }
+
+        public void CloseGuildUI()
+        {
+            if (guildWindow != null)
+            {
+                guildWindow.CloseUi();
+                guildWindow = null;
             }
         }
     }
