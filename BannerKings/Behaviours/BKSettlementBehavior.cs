@@ -442,13 +442,29 @@ namespace BannerKings.Behaviors
 
         private void AddMenus(CampaignGameStarter campaignGameStarter)
         {
-            campaignGameStarter.AddGameMenuOption("town", "manage_population", "{=!}Feudal management",
-                new GameMenuOption.OnConditionDelegate(game_menu_town_manage_town_on_condition),
-                new GameMenuOption.OnConsequenceDelegate(game_menu_town_manage_town_on_consequence), false, 4, false);
 
-            campaignGameStarter.AddGameMenuOption("town", "manage_guild", "{=!}Guild management",
+            campaignGameStarter.AddGameMenu("bannerkings", "Banner Kings", new OnInitDelegate(game_menu_bannerkings_on_init));
+
+            campaignGameStarter.AddGameMenuOption("town", "bannerkings", "{=!}Banner Kings",
+                new GameMenuOption.OnConditionDelegate(game_menu_town_manage_town_on_condition),
+                delegate
+                {
+                    GameMenu.SwitchToMenu("bannerkings");
+                }, false, 4, false);
+
+            campaignGameStarter.AddGameMenuOption("bannerkings", "manage_population", "{=!}Feudal management",
+                new GameMenuOption.OnConditionDelegate(game_menu_town_manage_town_on_condition),
+                new GameMenuOption.OnConsequenceDelegate(game_menu_town_manage_town_on_consequence), false, -1, false);
+
+            campaignGameStarter.AddGameMenuOption("bannerkings", "manage_guild", "{=!}Guild management",
                 new GameMenuOption.OnConditionDelegate(game_menu_town_manage_guild_on_condition),
-                new GameMenuOption.OnConsequenceDelegate(game_menu_town_manage_guild_on_consequence), false, 5, false);
+                new GameMenuOption.OnConsequenceDelegate(game_menu_town_manage_guild_on_consequence), false, -1, false);
+
+            campaignGameStarter.AddGameMenuOption("bannerkings", "bannerkings_back", "{=3sRdGQou}Leave", 
+                new GameMenuOption.OnConditionDelegate(game_menu_town_manage_town_on_condition), delegate (MenuCallbackArgs x)
+            {
+                GameMenu.SwitchToMenu("town");
+            }, true, -1, false);
 
             campaignGameStarter.AddGameMenuOption("castle", "manage_population", "{=!}Manage population",
                new GameMenuOption.OnConditionDelegate(game_menu_town_manage_town_on_condition),
@@ -457,6 +473,11 @@ namespace BannerKings.Behaviors
             campaignGameStarter.AddGameMenuOption("village", "manage_population", "{=!}Manage population",
                new GameMenuOption.OnConditionDelegate(game_menu_town_manage_town_on_condition),
                new GameMenuOption.OnConsequenceDelegate(game_menu_town_manage_town_on_consequence), false, 5, false);
+        }
+
+        public static void game_menu_bannerkings_on_init(MenuCallbackArgs args)
+        {
+            args.MenuTitle = new TextObject("{=!}Banner Kings");
         }
 
         private static bool game_menu_town_manage_town_on_condition(MenuCallbackArgs args)
@@ -474,8 +495,9 @@ namespace BannerKings.Behaviors
                 && BannerKingsConfig.Instance.PopulationManager.GetPopData(currentSettlement).EconomicData.Guild != null ;
         }
 
-        public static void game_menu_town_manage_town_on_consequence(MenuCallbackArgs args) => UIManager.instance.InitializePopulationWindow();
-        public static void game_menu_town_manage_guild_on_consequence(MenuCallbackArgs args) => UIManager.instance.InitializeGuildWindow();
+        public static void game_menu_town_manage_town_on_consequence(MenuCallbackArgs args) => UIManager.Instance.ShowWindow("population");
+
+        public static void game_menu_town_manage_guild_on_consequence(MenuCallbackArgs args) => UIManager.Instance.ShowWindow("guild");
 
         private void AddDialog(CampaignGameStarter starter)
         {

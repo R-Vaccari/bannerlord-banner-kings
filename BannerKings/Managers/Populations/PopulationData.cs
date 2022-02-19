@@ -11,6 +11,7 @@ using BannerKings.Models.Vanilla;
 using BannerKings.Models.Populations;
 using TaleWorlds.ObjectSystem;
 using BannerKings.Managers.Institutions;
+using BannerKings.Managers.Populations.Villages;
 
 namespace BannerKings.Populations
 {
@@ -373,7 +374,7 @@ namespace BannerKings.Populations
             Guild guild = null)
         {
             this.settlement = settlement;
-            this.guild = new Guild(settlement);
+            this.guild = new Guild(settlement, Managers.Institutions.GuildType.Merchants, null);
             this.satisfactions = new float[] { 0.5f, 0.5f, 0.5f,0.5f };
             this.slaveOwners = new Dictionary<Hero, float>();
         }
@@ -502,6 +503,27 @@ namespace BannerKings.Populations
         }
     }
 
+    public class VillageData : BannerKingsData
+    {
+        Village village;
+        List<VillageBuilding> buildings;
+
+        public VillageData(Village village)
+        {
+            this.village = village;
+            this.buildings = new List<VillageBuilding>();
+            foreach (BuildingType type in DefaultVillageBuildings.VillageBuildings)
+                this.buildings.Add(new VillageBuilding(type, village.MarketTown, village));
+        }
+
+        public Village Village => this.village;
+        public List<VillageBuilding> Buildings => this.buildings;
+
+        internal override void Update(PopulationData data)
+        {
+        }
+    }
+
 
     public class LandData : BannerKingsData
     {
@@ -571,12 +593,5 @@ namespace BannerKings.Populations
         {
             
         }
-    }
-
-    public enum GuildType
-    {
-        Merchant_Guild,
-        Masonry_Guild,
-
     }
 }

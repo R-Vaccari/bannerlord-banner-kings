@@ -6,24 +6,23 @@ using TaleWorlds.Library;
 
 namespace BannerKings
 {
-    namespace UI
+    namespace UI.Panels
     {
-        public class PopulationVM : ViewModel
+        public class PopulationVM : BannerKingsViewModel
         {
             private OverviewVM overviewVM;
             private EconomyVM economyVM;
             private DemesneVM demesneVM;
             private MilitaryVM militaryVM;
-            private Settlement _settlement;
+            private Settlement settlement;
             private bool _isOverviewSelected;
             private bool _isEconomySelected;
             private bool _isDemesneSelected;
             private bool _isMilitarySelected;
 
-            public PopulationVM(Settlement settlement)
+            public PopulationVM(PopulationData data) : base(data, true)
             {
-                this._settlement = settlement;
-                PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
+                this.settlement = data.Settlement;
                 overviewVM = new OverviewVM(data, settlement, true);
                 economyVM = new EconomyVM(data, settlement, false);
                 demesneVM = new DemesneVM(BannerKingsConfig.Instance.TitleManager.GetTitle(settlement), false);
@@ -184,10 +183,10 @@ namespace BannerKings
             public void ExecuteClose()
             {
                 InformationManager.DisplayMessage(new InformationMessage(String
-                    .Format("Policies updated for {0}", _settlement.Name.ToString())));
+                    .Format("Policies updated for {0}", settlement.Name.ToString())));
                 this.militaryVM.OnFinalize();
                 this.economyVM.OnFinalize();
-                UIManager.instance.CloseUI();
+                UIManager.Instance.CloseUI();
             }
         }
     } 

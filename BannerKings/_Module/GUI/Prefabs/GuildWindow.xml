@@ -17,10 +17,10 @@
 			<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent"  DoNotAcceptEvents="true">
 			  <Children>
 			  
-			    <RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" HorizontalAlignment="Center" SuggestedHeight="16" Brush="Clan.Leader.Text" Text="Merchant Guild" MarginTop="5"/>
+			    <RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" HorizontalAlignment="Center" SuggestedHeight="16" Brush="Clan.Leader.Text" Text="Merchants Guild" MarginTop="20"/>
 
 			  
-				<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" StackLayout.LayoutMethod="HorizontalLeftToRight" DoNotAcceptEvents="true">
+				<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" StackLayout.LayoutMethod="HorizontalLeftToRight" MarginTop="50" DoNotAcceptEvents="true">
 				  <Children>
 					<ListPanel WidthSizePolicy="Fixed" HeightSizePolicy="StretchToParent" SuggestedWidth="290" StackLayout.LayoutMethod="VerticalBottomToTop" DoNotAcceptEvents="true">
 						<Children>
@@ -40,7 +40,7 @@
 								</Children>
 							</Widget>
 							
-							<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" HorizontalAlignment="Center" SuggestedHeight="13" Brush="Clan.Leader.Text" Text="@GuildMasterName" MarginRight="30"  MarginTop="5"/>
+							<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" HorizontalAlignment="Center" SuggestedHeight="10" Brush="Clan.Leader.Text" Text="@GuildMasterName" MarginRight="30"  MarginTop="15"/>
 
 													
 							<GridWidget DataSource="{GuildInfo}" WidthSizePolicy="CoverChildren" HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" DefaultCellWidth="150" DefaultCellHeight="30" MarginRight="100" ColumnCount="1" MarginTop="10">

@@ -100,11 +100,6 @@ namespace BannerKings.UI
             }
         }
 
-        private void OnGuildPress()
-        {
-            UIManager.instance.InitializeGuildWindow();
-        }
-
         [DataSourceProperty]
         public HintViewModel GuildHint => new HintViewModel(new TextObject("{=!}Take actions and check status of local guild, if any is present"));
 

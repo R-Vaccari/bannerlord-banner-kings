@@ -1,65 +1,45 @@
 ﻿
+using BannerKings.UI.Windows;
 using SandBox.View.Map;
 
 namespace BannerKings.UI
 {
     class UIManager
     {
-        private static UIManager _instance;
+        private static UIManager instance;
 
-        public static UIManager instance
+        public static UIManager Instance
         {
             get
             {
-                if (_instance == null)
-                {
-                    _instance = new UIManager();
-                }
-                return _instance;
+                if (instance == null)
+                    instance = new UIManager();
+                return instance;
             }
             set
             {
-                _instance = value;
+                instance = value;
             }
         }
 
-        public PopulationWindow populationWindow;
-        public GuildWindow guildWindow;
+        private BannerKingsMapView mapView;
 
-        public void InitializePopulationWindow()
+        public void ShowWindow(string id)
         {
             if (MapScreen.Instance != null)
             {
-                if (this.populationWindow == null) this.populationWindow = new PopulationWindow();
-                this.populationWindow.UpdateUi();
-            }
-        }
-
-        public void InitializeGuildWindow()
-        {
-            this.CloseUI();
-            if (MapScreen.Instance != null)
-            {
-                if (this.guildWindow == null) this.guildWindow = new GuildWindow();
-                this.guildWindow.UpdateUi();
+                if (this.mapView == null) this.mapView = new BannerKingsMapView(id);
+                else if (this.mapView.id != id) this.mapView = new BannerKingsMapView(id);
+                this.mapView.Refresh();
             }
         }
 
         public void CloseUI()
         {
-            if (populationWindow != null)
+            if (mapView != null)
             {
-                populationWindow.CloseUi();
-                populationWindow = null;
-            }
-        }
-
-        public void CloseGuildUI()
-        {
-            if (guildWindow != null)
-            {
-                guildWindow.CloseUi();
-                guildWindow = null;
+                mapView.Close();
+                mapView = null;
             }
         }
     }

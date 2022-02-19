@@ -208,7 +208,7 @@ namespace BannerKings
             {
                 InformationManager.DisplayMessage(new InformationMessage(String
                     .Format("Policies updated for {0}", settlement.Name.ToString())));
-                UIManager.instance.CloseUI();
+                UIManager.Instance.CloseUI();
             }
         }
     } 

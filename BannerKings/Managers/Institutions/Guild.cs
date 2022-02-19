@@ -13,7 +13,7 @@ namespace BannerKings.Managers.Institutions
         private GuildType type;
         private List<Hero> members;
         private int capital;
-        private Guild(Settlement settlement, GuildType type, IEnumerable<ValueTuple<ItemObject, float>> productions) : base(settlement)
+        public Guild(Settlement settlement, GuildType type, IEnumerable<ValueTuple<ItemObject, float>> productions) : base(settlement)
         {
             this.capital = 10000;
             this.leader = this.GenerateLeader();
@@ -22,10 +22,7 @@ namespace BannerKings.Managers.Institutions
             this.productions = productions;
         }
 
-        public static Guild CreateMerchantGuild(Settlement settlement)
-        {
-
-        }
+    
 
         public int Capital => this.capital;
         public MBReadOnlyList<Hero> Members => new MBReadOnlyList<Hero>(this.members);

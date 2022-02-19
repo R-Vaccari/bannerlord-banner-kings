@@ -23,7 +23,7 @@ namespace BannerKings.UI.Panels
 			GuildInfo.Add(new InformationElement("Capital:", this.guild.Capital.ToString(),
 				"This guild's financial resources"));
 			GuildInfo.Add(new InformationElement("Influence:", this.guild.Influence.ToString(),
-				"Soft power this guild has, allowing them to call in favors and demands"));
+				"Soft power this guild has, allowing them to call in favors and make demands"));
 		}
 
         [DataSourceProperty]
@@ -46,9 +46,7 @@ namespace BannerKings.UI.Panels
 			}
 		}
 
-		public void ExecuteClose()
-		{
-			UIManager.instance.CloseGuildUI();
-		}
+		public void ExecuteClose() => UIManager.Instance.CloseUI();
+		
 	}
 }
