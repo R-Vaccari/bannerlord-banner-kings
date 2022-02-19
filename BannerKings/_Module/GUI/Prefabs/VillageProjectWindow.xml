@@ -1,0 +1,61 @@
+<Prefab>
+  <Variables>
+  </Variables>
+  <Constants>
+    <Constant Name="Popup.CloseButton.Width" BrushLayer="Default" BrushName="Popup.CloseButton" BrushValueType="Width" />
+    <Constant Name="Popup.CloseButton.Height" BrushLayer="Default" BrushName="Popup.CloseButton" BrushValueType="Height" />
+  </Constants>
+  <Parameters>
+  </Parameters>
+  <VisualDefinitions>
+  </VisualDefinitions>
+  <Window>
+    <Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" IsActive="true">
+      <Children>
+        <Widget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="700" SuggestedHeight="600" HorizontalAlignment="Center" VerticalAlignment="Center" Sprite="BlankWhiteSquare_9" Color="#39291eFF">
+          <Children>
+			<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent"  DoNotAcceptEvents="true">
+			  <Children>
+			  
+			    <RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" HorizontalAlignment="Center" SuggestedHeight="16" Brush="Clan.Leader.Text" Text="@Title" MarginTop="40"/>
+			  
+				<ListPanel DataSource="{Projects}" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" StackLayout.LayoutMethod="VerticalBottomToTop" MarginTop="50" DoNotAcceptEvents="true">
+				  <Children>
+				  
+				  
+				   <ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" StackLayout.LayoutMethod="HorizontalLeftToRight" MarginBottom="15" MarginTop="30" MarginLeft="25" MarginRight="25" DoNotAcceptEvents="true">
+						<Children>
+						<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="7" MarginLeft="5" MarginRight="5" VerticalAlignment="Bottom" PositionYOffset="7" Sprite="SPGeneral\TownManagement\horizontal_divider" />
+						<RichTextWidget DoNotAcceptEvents="true" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="OverlayPopup.ButtonText" Brush.FontSize="20" Text="Available Projects"/>
+						<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="7" MarginLeft="5" MarginRight="5" VerticalAlignment="Bottom" PositionYOffset="7" Sprite="SPGeneral\TownManagement\horizontal_divider" />
+						</Children>
+					</ListPanel>
+
+					<GridWidget DataSource="{AvailableProjects}" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" DefaultCellWidth="140" DefaultCellHeight="145" ColumnCount="6" LayoutImp.VerticalLayoutMethod="TopToBottom">
+					  <ItemTemplate>
+						<ButtonWidget DoNotPassEventsToChildren="true" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" PositionYOffset="-5" Command.Click="ExecuteSetAsActiveDevelopment" Command.HoverBegin="ExecuteSetAsCurrent" Command.HoverEnd="ExecuteResetCurrent" IsSelected="@IsDefault" UpdateChildrenStates="true">
+						  <Children>
+							<DailyDefaultItem WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="110" SuggestedHeight="110" HorizontalAlignment="Center" VerticalAlignment="Top" Parameter.UseSmallVisual="true" />
+						  </Children>
+						</ButtonWidget>
+					  </ItemTemplate>
+					</GridWidget>
+	
+				  </Children>
+				</ListPanel>
+			  </Children>
+			</Widget>
+
+            <Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="125" Sprite="StdAssets\Popup\canvas_gradient" IsEnabled="false" VerticalFlip="true"/>
+			<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="475" Sprite="StdAssets\Popup\canvas_gradient" IsEnabled="false" MarginTop="125" />
+			
+            <!--Frame Border-->
+            <Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Sprite="frame_9" ExtendLeft="18" ExtendTop="18" ExtendRight="18" ExtendBottom="18" IsEnabled="false" />
+          </Children>
+        </Widget>
+
+        <ButtonWidget Id="CloseButton" Command.Click="ExecuteClose" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="!Popup.CloseButton.Width" SuggestedHeight="!Popup.CloseButton.Height" HorizontalAlignment="Center" VerticalAlignment="Center" MarginLeft="700" MarginBottom="600" Brush="Popup.CloseButton" IsVisible="true" />
+      </Children>
+    </Widget>
+  </Window>
+</Prefab>

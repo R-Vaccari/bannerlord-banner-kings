@@ -8,6 +8,7 @@ using BannerKings.Managers.Policies;
 using BannerKings.Managers.Decisions;
 using BannerKings.Models.Populations;
 using TaleWorlds.Library;
+using BannerKings.Managers.Populations.Villages;
 
 namespace BannerKings
 {
@@ -25,6 +26,7 @@ namespace BannerKings
             HashSet<BannerKingsPolicy>> POLICIES, 
             HashSet<FeudalTitle> titles, Dictionary<Hero, HashSet<FeudalTitle>> titleHolders, Dictionary<Kingdom, FeudalTitle> kingdoms)
         {
+            DefaultVillageBuildings.Instance.Init();
             this.PopulationManager = new PopulationManager(pops, caravans);
             this.PolicyManager = new PolicyManager(DECISIONS, POLICIES);
             this.TitleManager = new TitleManager(titles, titleHolders, kingdoms);

@@ -18,6 +18,7 @@ namespace BannerKings.UI.Windows
         public BannerKingsMapView(string id)
         {
             this.id = id;
+            this.CreateLayout();
         }
 
         protected override void CreateLayout()
@@ -39,9 +40,10 @@ namespace BannerKings.UI.Windows
             if (id == "population")
                 return (new PopulationVM(data), "PopulationWindow");
             else if (id == "guild")
-                return (new GuildVM(data), "PopulationWindow");
-            else
+                return (new GuildVM(data), "GuildWindow");
+            else if (id == "vilage_project")
                 return (new VillageProjectVM(data), "VillageProjectWindow");
+            else return (new PopulationVM(data), "PopulationWindow");
         }
 
         public void Close() => MapScreen.Instance.RemoveLayer(layer);

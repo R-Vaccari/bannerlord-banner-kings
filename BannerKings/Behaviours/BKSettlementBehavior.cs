@@ -473,6 +473,10 @@ namespace BannerKings.Behaviors
             campaignGameStarter.AddGameMenuOption("village", "manage_population", "{=!}Manage population",
                new GameMenuOption.OnConditionDelegate(game_menu_town_manage_town_on_condition),
                new GameMenuOption.OnConsequenceDelegate(game_menu_town_manage_town_on_consequence), false, 5, false);
+
+            campaignGameStarter.AddGameMenuOption("village", "manage_projects", "{=!}Village Projects",
+               new GameMenuOption.OnConditionDelegate(game_menu_town_manage_town_on_condition),
+               new GameMenuOption.OnConsequenceDelegate(game_menu_village_manage_projects_on_consequence), false, 4, false);
         }
 
         public static void game_menu_bannerkings_on_init(MenuCallbackArgs args)
@@ -498,6 +502,8 @@ namespace BannerKings.Behaviors
         public static void game_menu_town_manage_town_on_consequence(MenuCallbackArgs args) => UIManager.Instance.ShowWindow("population");
 
         public static void game_menu_town_manage_guild_on_consequence(MenuCallbackArgs args) => UIManager.Instance.ShowWindow("guild");
+
+        public static void game_menu_village_manage_projects_on_consequence(MenuCallbackArgs args) => UIManager.Instance.ShowWindow("vilage_project");
 
         private void AddDialog(CampaignGameStarter starter)
         {

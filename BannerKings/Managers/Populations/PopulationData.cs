@@ -33,6 +33,7 @@ namespace BannerKings.Populations
         private LandData landData { get; set; }
         [SaveableProperty(8)]
         private TournamentData tournamentData { get; set; }
+        private VillageData villageData { get; set; }
 
         public PopulationData(List<PopulationClass> classes, Settlement settlement, float assimilation, List<CultureDataClass> cultures = null, Guild guild = null)
         {
@@ -52,6 +53,9 @@ namespace BannerKings.Populations
             float nobles = classes.First(x => x.type == PopType.Nobles).count;
             this.militaryData = new MilitaryData(settlement, (int)(total * 0.04f), (int)(nobles * 0.08f));
             this.landData = new LandData();
+
+            if (settlement.Village != null)
+                this.villageData = new VillageData(settlement.Village);
         }
 
         public CultureData CultureData => this.cultureData;
@@ -66,6 +70,7 @@ namespace BannerKings.Populations
                 this.tournamentData = value;
             }
         }
+        public VillageData VillageData => this.villageData;
 
         public ExplainedNumber Foreigner => new BKForeignerModel().CalculateEffect(this.settlement);
 
