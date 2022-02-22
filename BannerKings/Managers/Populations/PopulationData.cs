@@ -191,6 +191,8 @@ namespace BannerKings.Populations
             cultureData.Update(this);
             militaryData.Update(this);
             landData.Update(this);
+            villageData.Update(this);
+            tournamentData.Update(this);
         }
     }
 
@@ -512,20 +514,75 @@ namespace BannerKings.Populations
     {
         Village village;
         List<VillageBuilding> buildings;
+        VillageBuilding current;
+        VillageBuilding currentDefault;
+        Queue<Building> inProgress;
 
         public VillageData(Village village)
         {
             this.village = village;
             this.buildings = new List<VillageBuilding>();
-            foreach (BuildingType type in DefaultVillageBuildings.VillageBuildings)
+            foreach (BuildingType type in DefaultVillageBuildings.VillageBuildings(village))
                 this.buildings.Add(new VillageBuilding(type, village.MarketTown, village));
+            this.inProgress = new Queue<Building>();
         }
 
         public Village Village => this.village;
         public List<VillageBuilding> Buildings => this.buildings;
+        public VillageBuilding CurrentBuilding
+        {
+            get
+            {
+                if (this.current == null)
+                    this.current = this.buildings.GetRandomElementWithPredicate(x => x.BuildingType.BuildingLocation != BuildingLocation.Daily);
+
+                return this.current;
+            }
+            set => this.current = value;
+        }
+
+        public VillageBuilding CurrentDefault
+        {
+            get
+            {
+                if (this.currentDefault == null)
+                    this.currentDefault = this.buildings.FirstOrDefault(x => x.BuildingType.StringId == "bannerkings_daily_production");
+
+                return this.currentDefault;
+            }
+            set => this.currentDefault = value;
+        }
+
+        public Queue<Building> BuildingsInProgress
+        {
+            get => this.inProgress;
+            set => this.inProgress = value;
+        }
+
+        public float Construction => new BKConstructionModel().CalculateVillageConstruction(this.village.Settlement).ResultNumber;
 
         internal override void Update(PopulationData data)
         {
+
+            VillageBuilding current = this.CurrentBuilding;
+            if (current != null && this.BuildingsInProgress.Peek().BuildingType.StringId == current.BuildingType.StringId)
+            {
+                current.BuildingProgress += this.Construction;
+                if ((float)current.GetConstructionCost() <= current.BuildingProgress)
+                {
+                    if (current.CurrentLevel < 3)
+                        current.LevelUp();
+                    
+                    if (current.CurrentLevel == 3)
+                        current.BuildingProgress = (float)current.GetConstructionCost();
+                    
+                    this.BuildingsInProgress.Dequeue();
+                }
+            }
+
+            if (this.BuildingsInProgress.Peek() != null && this.BuildingsInProgress.Peek().CurrentLevel == 3)
+                this.BuildingsInProgress.Dequeue();
+            
         }
     }
 
@@ -596,7 +653,8 @@ namespace BannerKings.Populations
 
         internal override void Update(PopulationData data)
         {
-            
+            if (!data.Settlement.Town.HasTournament)
+                this.active = false;
         }
     }
 }

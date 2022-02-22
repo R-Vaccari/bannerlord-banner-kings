@@ -1,5 +1,4 @@
-﻿using BannerKings.Managers;
-using BannerKings.Populations;
+﻿using BannerKings.Populations;
 using Helpers;
 using System;
 using System.Linq;
@@ -15,6 +14,18 @@ namespace BannerKings.Models
 {
     class BKConstructionModel : DefaultBuildingConstructionModel
     {
+		public ExplainedNumber CalculateVillageConstruction(Settlement settlement)
+        {
+			ExplainedNumber result = new ExplainedNumber(0f, true, null);
+			PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
+			int serfs = data.GetTypeCount(PopType.Serfs);
+			result.Add((float)serfs  * SERF_CONSTRUCTION, new TextObject("Serfs"), null);
+
+			int slaves = data.GetTypeCount(PopType.Slaves);
+			result.Add((float)slaves * SLAVE_CONSTRUCTION, new TextObject("Slaves"), null);
+
+			return result;
+		}
 
         public override ExplainedNumber CalculateDailyConstructionPower(Town town, bool includeDescriptions = false)
         {
@@ -103,9 +114,8 @@ namespace BannerKings.Models
 				float num3 = Math.Min(1f, (float)town.BoostBuildingProcess / (float)num);
 				float num4 = 0f;
 				if (town.IsTown && town.Governor != null && town.Governor.GetPerkValue(DefaultPerks.Engineering.Clockwork))
-				{
 					num4 += DefaultPerks.Engineering.Clockwork.SecondaryBonus;
-				}
+				
 				num2 += MathF.Round((float)num2 * num4);
 				result.Add((float)num2 * num3, new TextObject("Craftsmen services"), null);
 			}
@@ -124,52 +134,48 @@ namespace BannerKings.Models
 				if (((currentSettlement2 != null) ? currentSettlement2.Town : null) == town && !town.BuildingsInProgress.IsEmpty<Building>())
 				{
 					if (town.IsCastle && town.Governor.GetPerkValue(DefaultPerks.Engineering.MilitaryPlanner))
-					{
 						result.AddFactor(DefaultPerks.Engineering.MilitaryPlanner.SecondaryBonus, DefaultPerks.Engineering.MilitaryPlanner.Name);
-					}
+					
 					else if (town.IsTown && town.Governor.GetPerkValue(DefaultPerks.Engineering.Carpenters))
-					{
 						result.AddFactor(DefaultPerks.Engineering.Carpenters.SecondaryBonus, DefaultPerks.Engineering.Carpenters.Name);
-					}
+					
 					Building building = town.BuildingsInProgress.Peek();
-					if ((building.BuildingType == DefaultBuildingTypes.Fortifications || building.BuildingType == DefaultBuildingTypes.CastleBarracks || building.BuildingType == DefaultBuildingTypes.CastleMilitiaBarracks || building.BuildingType == DefaultBuildingTypes.SettlementGarrisonBarracks || building.BuildingType == DefaultBuildingTypes.SettlementMilitiaBarracks || building.BuildingType == DefaultBuildingTypes.SettlementAquaducts) && town.Governor.GetPerkValue(DefaultPerks.Engineering.Stonecutters))
-					{
+					if ((building.BuildingType == DefaultBuildingTypes.Fortifications || 
+						building.BuildingType == DefaultBuildingTypes.CastleBarracks || building.BuildingType == DefaultBuildingTypes.CastleMilitiaBarracks || 
+						building.BuildingType == DefaultBuildingTypes.SettlementGarrisonBarracks || 
+						building.BuildingType == DefaultBuildingTypes.SettlementMilitiaBarracks || 
+						building.BuildingType == DefaultBuildingTypes.SettlementAquaducts) && town.Governor.GetPerkValue(DefaultPerks.Engineering.Stonecutters))
 						result.AddFactor(DefaultPerks.Engineering.Stonecutters.PrimaryBonus, DefaultPerks.Engineering.Stonecutters.Name);
-					}
+					
 				}
 			}
 
 			int num5 = Enumerable.Sum<Town.SellLog>(town.SoldItems, delegate (Town.SellLog x)
 			{
 				if (x.Category.Properties != ItemCategory.Property.BonusToProduction)
-				{
 					return 0;
-				}
+				
 				return x.Number;
 			});
 			if (num5 > 0)
-			{
 				result.Add(0.25f * (float)num5, this.ProductionFromMarketText, null);
-			}
+			
 
 			BuildingType buildingType = town.BuildingsInProgress.IsEmpty<Building>() ? null : town.BuildingsInProgress.Peek().BuildingType;
 			if (Enumerable.Contains<BuildingType>(DefaultBuildingTypes.MilitaryBuildings, buildingType))
-			{
+
 				PerkHelper.AddPerkBonusForTown(DefaultPerks.TwoHanded.Confidence, town, ref result);
-			}
+			
 			if (buildingType == DefaultBuildingTypes.SettlementMarketplace || buildingType == DefaultBuildingTypes.SettlementAquaducts || buildingType == DefaultBuildingTypes.SettlementLimeKilns)
-			{
 				PerkHelper.AddPerkBonusForTown(DefaultPerks.Trade.SelfMadeMan, town, ref result);
-			}
+			
 			float effectOfBuildings = town.GetEffectOfBuildings(BuildingEffectEnum.Construction);
 			if (effectOfBuildings > 0f)
-			{
 				result.Add(effectOfBuildings, GameTexts.FindText("str_building_bonus", null), null);
-			}
+			
 			if (town.OwnerClan.Leader.Culture.HasFeat(DefaultCulturalFeats.BattanianConstructionFeat))
-			{
 				result.AddFactor(DefaultCulturalFeats.BattanianConstructionFeat.EffectBonus, this.CultureText);
-			}
+			
 			if (town.Loyalty >= 75f)
 			{
 				float num6 = MBMath.Map(town.Loyalty, 75f, 100f, 0f, 20f);
@@ -183,9 +189,8 @@ namespace BannerKings.Models
 				result.Add(-num8, this.LowLoyaltyPenaltyText, null);
 			}
 			else if (town.Loyalty <= 25f)
-			{
 				result.Add(-result.ResultNumber, this.VeryLowLoyaltyPenaltyText, null);
-			}
+			
 			result.LimitMin(0f);
 			return (int)result.ResultNumber;
 		}
