@@ -191,8 +191,8 @@ namespace BannerKings.Populations
             cultureData.Update(this);
             militaryData.Update(this);
             landData.Update(this);
-            villageData.Update(this);
-            tournamentData.Update(this);
+            if (villageData != null) villageData.Update(this);
+            if (tournamentData != null) tournamentData.Update(this);
         }
     }
 
@@ -527,6 +527,13 @@ namespace BannerKings.Populations
             this.inProgress = new Queue<Building>();
         }
 
+        public int GetBuildingLevel(BuildingType type)
+        {
+            Building building = this.buildings.FirstOrDefault(x => x.BuildingType == type);
+            if (building != null) return building.CurrentLevel;
+            return 0;
+        }
+
         public Village Village => this.village;
         public List<VillageBuilding> Buildings => this.buildings;
         public VillageBuilding CurrentBuilding
@@ -559,30 +566,28 @@ namespace BannerKings.Populations
             set => this.inProgress = value;
         }
 
+        public bool IsCurrentlyBuilding => this.BuildingsInProgress.Count() > 0;
         public float Construction => new BKConstructionModel().CalculateVillageConstruction(this.village.Settlement).ResultNumber;
 
         internal override void Update(PopulationData data)
         {
 
             VillageBuilding current = this.CurrentBuilding;
-            if (current != null && this.BuildingsInProgress.Peek().BuildingType.StringId == current.BuildingType.StringId)
-            {
-                current.BuildingProgress += this.Construction;
-                if ((float)current.GetConstructionCost() <= current.BuildingProgress)
+            if (current != null && this.BuildingsInProgress.Count() > 0)
+                if (this.BuildingsInProgress.Peek().BuildingType.StringId == current.BuildingType.StringId)
                 {
-                    if (current.CurrentLevel < 3)
-                        current.LevelUp();
+                    current.BuildingProgress += this.Construction;
+                    if ((float)current.GetConstructionCost() <= current.BuildingProgress)
+                    {
+                        if (current.CurrentLevel < 3)
+                            current.LevelUp();
                     
-                    if (current.CurrentLevel == 3)
-                        current.BuildingProgress = (float)current.GetConstructionCost();
+                        if (current.CurrentLevel == 3)
+                            current.BuildingProgress = (float)current.GetConstructionCost();
                     
-                    this.BuildingsInProgress.Dequeue();
-                }
-            }
-
-            if (this.BuildingsInProgress.Peek() != null && this.BuildingsInProgress.Peek().CurrentLevel == 3)
-                this.BuildingsInProgress.Dequeue();
-            
+                        this.BuildingsInProgress.Dequeue();
+                    }
+                } 
         }
     }
 

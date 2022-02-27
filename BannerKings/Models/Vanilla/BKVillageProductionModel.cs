@@ -1,8 +1,12 @@
-﻿using BannerKings.Populations;
+﻿using BannerKings.Managers.Populations.Villages;
+using BannerKings.Populations;
+using BannerKings.Utils;
 using Helpers;
+using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.SandBox.GameComponents.Map;
 using TaleWorlds.Core;
+using TaleWorlds.Localization;
 using static BannerKings.Managers.PopulationManager;
 
 namespace BannerKings.Models
@@ -17,10 +21,16 @@ namespace BannerKings.Models
             {
                 ExplainedNumber explainedNumber = new ExplainedNumber(0f, false, null);
                 PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(village.Settlement);
+				VillageData villageData = data.VillageData;
                 int serfs = data.GetTypeCount(PopType.Serfs);
                 int slaves = data.GetTypeCount(PopType.Slaves);
 
-				foreach (System.ValueTuple<ItemObject, float> valueTuple in village.VillageType.Productions)
+				bool building = villageData.IsCurrentlyBuilding;
+				bool production = !building && villageData.CurrentDefault.BuildingType == DefaultVillageBuildings.Instance.DailyProduction;
+				explainedNumber.AddFactor(production ? 0.15f : -0.25f);
+
+				List<(ItemObject, float)> productions = VillageHelper.GetProductions(villageData);
+				foreach (System.ValueTuple<ItemObject, float> valueTuple in productions)
 				{
 					ItemObject item2 = valueTuple.Item1;
 					float num = valueTuple.Item2;
@@ -34,7 +44,8 @@ namespace BannerKings.Models
 						if (item.ItemCategory == DefaultItemCategories.Grain || item.ItemCategory == DefaultItemCategories.Olives || item.ItemCategory == DefaultItemCategories.Fish || item.ItemCategory == DefaultItemCategories.DateFruit)
 							PerkHelper.AddPerkBonusForTown(DefaultPerks.Trade.GranaryAccountant, village.TradeBound.Town, ref explainedNumber);
 						
-						else if (item.ItemCategory == DefaultItemCategories.Clay || item.ItemCategory == DefaultItemCategories.Iron || item.ItemCategory == DefaultItemCategories.Cotton || item.ItemCategory == DefaultItemCategories.Silver)
+						else if (item.ItemCategory == DefaultItemCategories.Clay || item.ItemCategory == DefaultItemCategories.Iron 
+							|| item.ItemCategory == DefaultItemCategories.Cotton || item.ItemCategory == DefaultItemCategories.Silver)
 							PerkHelper.AddPerkBonusForTown(DefaultPerks.Trade.TradeyardForeman, village.TradeBound.Town, ref explainedNumber);
 						
 						if (item.IsTradeGood)
@@ -44,10 +55,41 @@ namespace BannerKings.Models
 							PerkHelper.AddPerkBonusForTown(DefaultPerks.Riding.Breeder, village.TradeBound.Town, ref explainedNumber);
 						
 						if (item.IsAnimal)
+                        {
 							PerkHelper.AddPerkBonusForTown(DefaultPerks.Medicine.PerfectHealth, village.TradeBound.Town, ref explainedNumber);
-						
+							int animalHousing = villageData.GetBuildingLevel(DefaultVillageBuildings.Instance.AnimalHousing);
+							if (animalHousing > 0)
+								explainedNumber.AddFactor(0.05f * animalHousing);
+						} else if (item.ItemCategory == DefaultItemCategories.Clay || item.ItemCategory == DefaultItemCategories.Iron || item.ItemCategory == DefaultItemCategories.Silver
+							|| item.ItemCategory == DefaultItemCategories.Salt)
+						{
+							int mining = villageData.GetBuildingLevel(DefaultVillageBuildings.Instance.Mining);
+							if (mining > 0)
+								explainedNumber.AddFactor(0.05f * mining);
+						} else if (item.ItemCategory == DefaultItemCategories.Wood)
+                        {
+							int sawmill = villageData.GetBuildingLevel(DefaultVillageBuildings.Instance.Sawmill);
+							if (sawmill > 0)
+								explainedNumber.AddFactor(0.05f * sawmill);
+						}
+						else if (item.ItemCategory == DefaultItemCategories.Fish)
+						{
+							int fishing = villageData.GetBuildingLevel(DefaultVillageBuildings.Instance.FishFarm);
+							if (fishing > 0)
+								explainedNumber.AddFactor(0.05f * fishing);
+						}
+						else if (item.ItemCategory == DefaultItemCategories.Grain || item.ItemCategory == DefaultItemCategories.DateFruit ||
+							item.ItemCategory == DefaultItemCategories.Grape || item.ItemCategory == DefaultItemCategories.Olives ||
+							item.ItemCategory == DefaultItemCategories.Flax)
+						{
+							int farming = villageData.GetBuildingLevel(DefaultVillageBuildings.Instance.Farming);
+							if (farming > 0)
+								explainedNumber.AddFactor(0.05f * farming);
+						}
+
+
 						Hero leader = village.Settlement.OwnerClan.Leader;
-						CharacterObject characterObject = (leader != null) ? leader.CharacterObject : null;
+						CharacterObject characterObject = leader.CharacterObject;
 						if (characterObject != null)
 						{
 							if (characterObject.Culture.HasFeat(DefaultCulturalFeats.KhuzaitAnimalProductionFeat) && (item.ItemCategory == DefaultItemCategories.Sheep || item.ItemCategory == DefaultItemCategories.Cow || item.ItemCategory == DefaultItemCategories.WarHorse || item.ItemCategory == DefaultItemCategories.Horse || item.ItemCategory == DefaultItemCategories.PackAnimal))
@@ -59,7 +101,11 @@ namespace BannerKings.Models
 						}
 					}
 				}
-                return explainedNumber.ResultNumber;
+
+				float eff = data.EconomicData.ProductionEfficiency.ResultNumber - 1f;
+				explainedNumber.AddFactor(eff);
+
+				return explainedNumber.ResultNumber;
             } else return base.CalculateDailyProductionAmount(village, item);
         }
     }

@@ -25,7 +25,7 @@ namespace BannerKings.Models
                 Hero governor = settlement.IsVillage ? settlement.Village.TradeBound.Town.Governor : settlement.Town.Governor;
                 if (governor != null)
                 {
-                    int skill = settlement.Town.Governor.GetSkillValue(DefaultSkills.Steward);
+                    int skill = governor.GetSkillValue(DefaultSkills.Steward);
                     float effect = (float)skill * 0.00005f;
                     if (effect > 0.015f)
                         effect = 0.015f;
@@ -61,7 +61,7 @@ namespace BannerKings.Models
                         Hero governor = settlement.IsVillage ? settlement.Village.TradeBound.Town.Governor : settlement.Town.Governor;
                         if (governor != null)
                         {
-                            int skill = settlement.Town.Governor.GetSkillValue(DefaultSkills.Steward);
+                            int skill = governor.GetSkillValue(DefaultSkills.Steward);
                             float effect = (float)skill * 0.00005f;
                             if (effect > 0.015f)
                                 effect = 0.015f;

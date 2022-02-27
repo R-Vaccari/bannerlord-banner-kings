@@ -5,7 +5,6 @@ using BannerKings.UI.Windows;
 using HarmonyLib;
 using SandBox.View.Map;
 using System;
-using System.Linq;
 using System.Reflection;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.ViewModelCollection.GameMenu;

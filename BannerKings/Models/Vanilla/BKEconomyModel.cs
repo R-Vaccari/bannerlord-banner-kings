@@ -112,7 +112,9 @@ namespace BannerKings.Models
 
         public ExplainedNumber CalculateProductionEfficiency(Settlement settlement)
         {
-            ExplainedNumber result = new ExplainedNumber(new DefaultWorkshopModel().GetPolicyEffectToProduction(settlement.Town));
+            ExplainedNumber result = new ExplainedNumber();
+            if (!settlement.IsVillage) result.Add(new DefaultWorkshopModel().GetPolicyEffectToProduction(settlement.Town));
+            else result.Add(0.7f);
             PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
             float craftsmen = data.GetTypeCount(PopType.Craftsmen);
             result.Add(MathF.Min((craftsmen / 250f) * 0.020f, CRAFTSMEN_EFFECT_CAP), new TextObject("Craftsmen"));

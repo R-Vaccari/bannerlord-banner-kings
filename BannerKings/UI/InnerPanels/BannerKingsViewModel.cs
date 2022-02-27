@@ -20,7 +20,7 @@ namespace BannerKings.UI
         }
 
         protected string FormatValue(float value) => (value * 100f).ToString("0.00") + '%';
-
+        protected string FormatDays(float value) => (value).ToString("0");
         protected SelectorVM<BKItemVM> GetSelector(BannerKingsPolicy policy, Action<SelectorVM<BKItemVM>> action)
         {
             SelectorVM<BKItemVM> selector = new SelectorVM<BKItemVM>(0, new Action<SelectorVM<BKItemVM>>(action));

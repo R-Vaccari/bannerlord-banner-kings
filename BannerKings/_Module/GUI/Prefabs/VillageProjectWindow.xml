@@ -17,11 +17,22 @@
 			<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" >
 			  <Children>
 			  
-			    <RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" HorizontalAlignment="Center" SuggestedHeight="16" Brush="Clan.Leader.Text" Text="@Title" MarginTop="40"/>
+			    <RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" HorizontalAlignment="Center" SuggestedHeight="32" Brush="Clan.Leader.Text" Text="@Title" MarginTop="20"/>
+				
+				<GridWidget DataSource="{ConstructionInfo}" WidthSizePolicy="CoverChildren" HorizontalAlignment="Left" HeightSizePolicy="CoverChildren" DefaultCellWidth="150" DefaultCellHeight="30"  ColumnCount="1" MarginTop="80">
+				  <ItemTemplate>
+					<InformationElement/>
+				  </ItemTemplate>
+				</GridWidget>
+				
+				<GridWidget DataSource="{ProductionInfo}" WidthSizePolicy="CoverChildren" HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" DefaultCellWidth="150" DefaultCellHeight="30"  ColumnCount="1" MarginTop="80">
+				  <ItemTemplate>
+					<InformationElement/>
+				  </ItemTemplate>
+				</GridWidget>
 			  
 				<ListPanel DataSource="{Projects}" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" StackLayout.LayoutMethod="VerticalBottomToTop" MarginTop="200" >
 				  <Children>
-				  
 				  
 				   <ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" StackLayout.LayoutMethod="HorizontalLeftToRight" MarginBottom="15" MarginTop="30" MarginLeft="25" MarginRight="25" DoNotAcceptEvents="true">
 						<Children>

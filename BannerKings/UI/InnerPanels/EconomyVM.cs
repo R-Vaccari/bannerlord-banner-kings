@@ -228,7 +228,7 @@ namespace BannerKings.UI
                 if (value != productionInfo)
                 {
                     productionInfo = value;
-                    base.OnPropertyChangedWithValue(value, "DefenseInfo");
+                    base.OnPropertyChangedWithValue(value, "ProductionInfo");
                 }
             }
         }
@@ -242,7 +242,7 @@ namespace BannerKings.UI
                 if (value != revenueInfo)
                 {
                     revenueInfo = value;
-                    base.OnPropertyChangedWithValue(value, "ManpowerInfo");
+                    base.OnPropertyChangedWithValue(value, "RevenueInfo");
                 }
             }
         }
@@ -256,7 +256,7 @@ namespace BannerKings.UI
                 if (value != satisfactionInfo)
                 {
                     satisfactionInfo = value;
-                    base.OnPropertyChangedWithValue(value, "SiegeInfo");
+                    base.OnPropertyChangedWithValue(value, "SatisfactionInfo");
                 }
             }
         }

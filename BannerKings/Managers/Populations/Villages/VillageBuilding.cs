@@ -12,7 +12,6 @@ namespace BannerKings.Managers.Populations.Villages
             this.village = village;
         }
 
-
         public Village Village => this.village;
     }
 }

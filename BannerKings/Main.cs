@@ -21,7 +21,7 @@ using BannerKings.Managers.Helpers;
 using BannerKings.Populations;
 using BannerKings.Models.Vanilla;
 using BannerKings.Behaviours;
-using BannerKings.Managers.Populations.Villages;
+using BannerKings.Utils;
 
 namespace BannerKings
 {
@@ -57,6 +57,7 @@ namespace BannerKings
                     campaignStarter.AddModel(new BKArmyManagementModel());
                     campaignStarter.AddModel(new BKSiegeEventModel());
                     campaignStarter.AddModel(new BKTournamentModel());
+                    campaignStarter.AddModel(new BKRaidModel());
                 } catch (Exception e)
                 {
                 }
@@ -302,6 +303,7 @@ namespace BannerKings
                     if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
                     {
                         PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
+                        __result *= data.EconomicData.CaravanAttraction.ResultNumber;
                     }
                 }
             }
@@ -430,6 +432,7 @@ namespace BannerKings
                 {
                     if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
                     {
+                        PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
                         ItemRoster itemRoster = town.Owner.ItemRoster;
                         int num = itemRoster.FindIndex((ItemObject x) => x.ItemCategory == productionInput);
                         if (num >= 0)
@@ -439,10 +442,11 @@ namespace BannerKings
                             if (Campaign.Current.GameStarted && !doNotEffectCapital)
                             {
                                 ItemData categoryData = town.MarketData.GetCategoryData(itemAtIndex.GetItemCategory());
-                                int itemPrice = new BKPriceFactorModel().GetPrice(new EquipmentElement(itemAtIndex, null, null, false), town.GarrisonParty, town.GarrisonParty.Party, false, categoryData.InStoreValue,
+                                float itemPrice = new BKPriceFactorModel().GetPrice(new EquipmentElement(itemAtIndex, null, null, false), town.GarrisonParty, town.GarrisonParty.Party, false, categoryData.InStoreValue,
                                     categoryData.Supply, categoryData.Demand);
-                                workshop.ChangeGold(-itemPrice);
-                                town.ChangeGold(itemPrice);
+                                int finalPrice = (int)(itemPrice * (data.EconomicData.ProductionQuality.ResultNumber - 1f));
+                                workshop.ChangeGold(-finalPrice);
+                                town.ChangeGold(finalPrice);
                             }
                             CampaignEventDispatcher.Instance.OnItemConsumed(itemAtIndex, town.Owner.Settlement, 1);
                         }
@@ -463,6 +467,38 @@ namespace BannerKings
                 }
             }
 
+            // Added productions
+            [HarmonyPatch(typeof(VillageGoodProductionCampaignBehavior), "TickGoodProduction")]
+            class TickGoodProductionPatch
+            {
+                static bool Prefix(Village village, bool initialProductionForTowns)
+                {
+
+                    if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(village.Settlement))
+                    {
+
+                        List<(ItemObject, float)> productions = VillageHelper.GetProductions(BannerKingsConfig.Instance.PopulationManager.GetPopData(village.Settlement).VillageData);
+                        foreach (ValueTuple<ItemObject, float> valueTuple in productions)
+                        {
+                            ItemObject item = valueTuple.Item1;
+                            int num = MBRandom.RoundRandomized(Campaign.Current.Models.VillageProductionCalculatorModel.CalculateDailyProductionAmount(village, valueTuple.Item1));
+                            if (num > 0)
+                            {
+                                if (!initialProductionForTowns)
+                                {
+                                    village.Owner.ItemRoster.AddToCounts(item, num);
+                                    CampaignEventDispatcher.Instance.OnItemProduced(item, village.Owner.Settlement, num);
+                                }
+                                else
+                                    village.TradeBound.ItemRoster.AddToCounts(item, num);
+
+                            }
+                        }
+                        return false;
+                    }
+                    else return true; 
+                }
+            }
 
 
             // Retain behavior of original while updating satisfaction parameters
