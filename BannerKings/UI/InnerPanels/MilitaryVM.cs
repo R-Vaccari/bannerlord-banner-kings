@@ -10,7 +10,6 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core.ViewModelCollection;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
-using static BannerKings.Managers.PolicyManager;
 
 namespace BannerKings.UI
 {
@@ -42,7 +41,7 @@ namespace BannerKings.UI
             DefenseInfo.Clear();
             ManpowerInfo.Clear();
             SiegeInfo.Clear();
-            DefenseInfo.Add(new InformationElement("Militia Cap:", new BKMilitiaModel().GetMilitiaLimit(data, settlement.IsCastle).ToString(),
+            DefenseInfo.Add(new InformationElement("Militia Cap:", new BKMilitiaModel().GetMilitiaLimit(data, settlement).ToString(),
                 "The maximum number of militiamen this settlement can support, based on it's population"));
             DefenseInfo.Add(new InformationElement("Militia Quality:", FormatValue(new BKMilitiaModel().CalculateEliteMilitiaSpawnChance(settlement)),
                     "Chance of militiamen being spawned as veterans instead of recruits"));

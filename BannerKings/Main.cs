@@ -28,6 +28,7 @@ namespace BannerKings
     public class Main : MBSubModuleBase
     {
         public static Harmony patcher = new Harmony("Patcher");
+        //private readonly UIExtender xtender = new UIExtender("BannerKings");
 
         protected override void OnGameStart(Game game, IGameStarter gameStarter)
         {
@@ -62,6 +63,9 @@ namespace BannerKings
                 {
                 }
             }
+
+            //xtender.Register(typeof(Main).Assembly);
+            //xtender.Enable();
         }
 
         protected override void OnSubModuleLoad()

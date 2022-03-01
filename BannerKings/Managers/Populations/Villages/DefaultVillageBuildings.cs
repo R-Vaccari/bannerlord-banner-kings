@@ -65,7 +65,7 @@ namespace BannerKings.Managers.Populations.Villages
 
             this.trainning = new BuildingType("bannerkings_trainning");
             this.trainning.Initialize(new TextObject("{=!}Trainning Grounds", null), 
-                new TextObject("{=!}Stablish a zone dedicated for trainning, as well as it's required equipments, where locals can train basic military arts. Increases militia size (8%, 16%, 24%).", null), new int[]
+                new TextObject("{=!}Stablish a zone dedicated for trainning, as well as it's required equipments, where locals can train basic military arts. Increases militia production (0.2, 0.5, 1.0).", null), new int[]
             {
                 1500,
                 2400,

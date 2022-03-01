@@ -50,5 +50,7 @@ namespace BannerKings.UI
                 }
             }
         }
+
+        public void ExecuteClose() => UIManager.Instance.CloseUI();
     }
 }

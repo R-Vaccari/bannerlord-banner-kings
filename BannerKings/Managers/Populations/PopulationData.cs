@@ -52,7 +52,7 @@ namespace BannerKings.Populations
             float total = TotalPop;
             float nobles = classes.First(x => x.type == PopType.Nobles).count;
             this.militaryData = new MilitaryData(settlement, (int)(total * 0.04f), (int)(nobles * 0.08f));
-            this.landData = new LandData();
+            this.landData = new LandData(this);
 
             if (settlement.Village != null)
                 this.villageData = new VillageData(settlement.Village);
@@ -594,14 +594,93 @@ namespace BannerKings.Populations
 
     public class LandData : BannerKingsData
     {
+        private PopulationData data;
         private float acres;
         private float farmland;
         private float pasture;
         private float woodland;
+        private float fertility;
+        private float terrainDifficulty;
+        TerrainType terrainType;
+
+        public LandData(PopulationData data)
+        {
+            this.data = data;
+            this.terrainType = Campaign.Current.MapSceneWrapper.GetTerrainTypeAtPosition(data.Settlement.Position2D);
+            this.Init(data.TotalPop);
+        }
+
+        private void Init(int totalPops)
+        {
+            float farmRatio = 0f;
+            float pastureRatio = 0f;
+            float woodRatio = 0f;
+            if (this.terrainType == TerrainType.Desert)
+            {
+                this.fertility = 0.5f;
+                this.terrainDifficulty = 1.4f;
+                farmRatio = 0.9f;
+                pastureRatio = 0.08f;
+                woodRatio = 0.02f;
+            }
+            else if (this.terrainType == TerrainType.Steppe)
+            {
+                this.fertility = 0.75f;
+                this.terrainDifficulty = 1f;
+                farmRatio = 0.45f;
+                pastureRatio = 0.5f;
+                woodRatio = 0.05f;
+            }
+            else if (this.terrainType == TerrainType.Mountain)
+            {
+                this.fertility = 0.7f;
+                this.terrainDifficulty = 2f;
+                farmRatio = 0.5f;
+                pastureRatio = 0.35f;
+                woodRatio = 0.15f;
+            }
+            else if (this.terrainType == TerrainType.Canyon)
+            {
+                this.fertility = 0.5f;
+                this.terrainDifficulty = 2f;
+                farmRatio = 0.9f;
+                pastureRatio = 0.08f;
+                woodRatio = 0.02f;
+            }
+            else if (this.terrainType == TerrainType.Forest)
+            {
+                this.fertility = 0.5f;
+                this.terrainDifficulty = 2f;
+                farmRatio = 0.45f;
+                pastureRatio = 0.15f;
+                woodRatio = 0.40f;
+            } else
+            {
+                this.fertility = 1f;
+                this.terrainDifficulty = 1f;
+                farmRatio = 0.7f;
+                pastureRatio = 0.22f;
+                woodRatio = 0.08f;
+            }
+        }
+
+        public int AvailableWorkForce
+        {
+            get
+            {
+                float serfs = this.data.GetTypeCount(PopType.Serfs) * 0.5f;
+                float slaves = this.data.GetTypeCount(PopType.Slaves);
+                return (int)(serfs + slaves);
+            }
+        }
+
+        public float Farmland => this.farmland;
+        public float Pastureland => this.pasture;
+        public float Woodland => this.woodland;
 
         internal override void Update(PopulationData data)
         {
-           
+            
         }
     }
 

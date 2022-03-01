@@ -43,6 +43,8 @@ namespace BannerKings.UI.Windows
                 return (new GuildVM(data), "GuildWindow");
             else if (id == "vilage_project")
                 return (new VillageProjectVM(data), "VillageProjectWindow");
+            else if (id == "court")
+                return (new CourtVM(data), "CourtWindow");
             else return (new PopulationVM(data), "PopulationWindow");
         }
 

@@ -9,6 +9,7 @@ using BannerKings.Managers.Decisions;
 using BannerKings.Models.Populations;
 using TaleWorlds.Library;
 using BannerKings.Managers.Populations.Villages;
+using BannerKings.Managers.Court;
 
 namespace BannerKings
 {
@@ -18,27 +19,31 @@ namespace BannerKings
         public PopulationManager PopulationManager;
         public PolicyManager PolicyManager;
         public TitleManager TitleManager;
+        public CourtManager CourtManager;
         public HashSet<IBannerKingsModel> Models = new HashSet<IBannerKingsModel>();
         public MBReadOnlyList<BuildingType> VillageBuildings { get; set; }
 
         public void InitManagers(Dictionary<Settlement, PopulationData> pops, List<MobileParty> caravans, Dictionary<Settlement,
             HashSet<BannerKingsDecision>> DECISIONS, Dictionary<Settlement, 
             HashSet<BannerKingsPolicy>> POLICIES, 
-            HashSet<FeudalTitle> titles, Dictionary<Hero, HashSet<FeudalTitle>> titleHolders, Dictionary<Kingdom, FeudalTitle> kingdoms)
+            HashSet<FeudalTitle> titles, Dictionary<Hero, HashSet<FeudalTitle>> titleHolders, Dictionary<Kingdom, FeudalTitle> kingdoms,
+            Dictionary<Hero, Council> COUNCILS)
         {
             DefaultVillageBuildings.Instance.Init();
             this.PopulationManager = new PopulationManager(pops, caravans);
             this.PolicyManager = new PolicyManager(DECISIONS, POLICIES);
             this.TitleManager = new TitleManager(titles, titleHolders, kingdoms);
+            this.CourtManager = new CourtManager(COUNCILS);
             this.InitModels();
         }
 
-        public void InitManagers(PopulationManager populationManager, PolicyManager policyManager, TitleManager titleManager)
+        public void InitManagers(PopulationManager populationManager, PolicyManager policyManager, TitleManager titleManager, CourtManager court)
         {
             this.PopulationManager = populationManager;
             this.PolicyManager = policyManager;
             this.TitleManager = titleManager != null ? titleManager : new TitleManager(new HashSet<FeudalTitle>(), new Dictionary<Hero, HashSet<FeudalTitle>>(),
                 new Dictionary<Kingdom, FeudalTitle>());
+            this.CourtManager = court;
             this.InitModels();
         }
 

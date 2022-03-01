@@ -216,6 +216,18 @@ namespace BannerKings.Managers
             return vassals;
         }
 
+        public HashSet<FeudalTitle> GetVassals(Hero lord)
+        {
+            TitleType threshold = this.GetHighestTitle(lord).type + 1;
+            HashSet<FeudalTitle> allTitles = TITLE_HOLDERS[lord];
+            HashSet<FeudalTitle> vassals = new HashSet<FeudalTitle>();
+            foreach (FeudalTitle title in allTitles)
+                if (title.deFacto.MapFaction == lord.MapFaction && (title.deFacto == title.deJure || title.deJure.MapFaction == lord.MapFaction)
+                    && (int)title.type <= (int)threshold)
+                    vassals.Add(title);
+            return vassals;
+        }
+
 
         public Kingdom GetTitleFaction(FeudalTitle title)
         {

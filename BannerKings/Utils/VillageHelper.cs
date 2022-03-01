@@ -2,6 +2,7 @@
 using BannerKings.Populations;
 using System;
 using System.Collections.Generic;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 
 namespace BannerKings.Utils
@@ -27,6 +28,12 @@ namespace BannerKings.Utils
                 
 
             return productions;
+        }
+
+        public static void AddBuildingEffect(ExplainedNumber result, VillageData data, BuildingType type)
+        {
+            int level = data.GetBuildingLevel(type);
+
         }
 
     }

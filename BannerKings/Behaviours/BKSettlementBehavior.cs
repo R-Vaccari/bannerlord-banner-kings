@@ -18,6 +18,7 @@ using BannerKings.Populations;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Decisions;
 using BannerKings.Managers.Institutions;
+using BannerKings.Managers.Court;
 
 namespace BannerKings.Behaviors
 {
@@ -259,7 +260,7 @@ namespace BannerKings.Behaviors
                 BannerKingsConfig.Instance.InitManagers(new Dictionary<Settlement, PopulationData>(), new List<MobileParty>(),
                 new Dictionary<Settlement, HashSet<BannerKingsDecision>>(), new Dictionary<Settlement, HashSet<BannerKingsPolicy>>(), 
                 new HashSet<FeudalTitle>(), new Dictionary<Hero, HashSet<FeudalTitle>>(),
-                new Dictionary<Kingdom, FeudalTitle>());
+                new Dictionary<Kingdom, FeudalTitle>(), new Dictionary<Hero, Council>());
 
             UpdateSettlementPops(settlement);
             BannerKingsConfig.Instance.PolicyManager.InitializeSettlement(settlement);
@@ -456,6 +457,10 @@ namespace BannerKings.Behaviors
                 new GameMenuOption.OnConditionDelegate(game_menu_town_manage_town_on_condition),
                 new GameMenuOption.OnConsequenceDelegate(game_menu_town_manage_town_on_consequence), false, -1, false);
 
+            campaignGameStarter.AddGameMenuOption("bannerkings", "manage_court", "{=!}Noble Court",
+               new GameMenuOption.OnConditionDelegate(game_menu_town_manage_town_on_condition),
+               new GameMenuOption.OnConsequenceDelegate(game_menu_town_court_on_consequence), false, -1, false);
+
             campaignGameStarter.AddGameMenuOption("bannerkings", "manage_guild", "{=!}Guild management",
                 new GameMenuOption.OnConditionDelegate(game_menu_town_manage_guild_on_condition),
                 new GameMenuOption.OnConsequenceDelegate(game_menu_town_manage_guild_on_consequence), false, -1, false);
@@ -498,6 +503,8 @@ namespace BannerKings.Behaviors
             return currentSettlement.OwnerClan == Hero.MainHero.Clan && BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(currentSettlement)
                 && BannerKingsConfig.Instance.PopulationManager.GetPopData(currentSettlement).EconomicData.Guild != null ;
         }
+
+        public static void game_menu_town_court_on_consequence(MenuCallbackArgs args) => UIManager.Instance.ShowWindow("court");
 
         public static void game_menu_town_manage_town_on_consequence(MenuCallbackArgs args) => UIManager.Instance.ShowWindow("population");
 
