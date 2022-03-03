@@ -197,7 +197,7 @@ namespace BannerKings.Managers.Populations.Villages
 
             this.blacksmith = new BuildingType("bannerkings_blacksmith");
             this.blacksmith.Initialize(new TextObject("{=!}Smith", null), 
-                new TextObject("{=!}Stablish a local blacksmith, supplying the village with metal products. Adds tools and ingots to production.", null), new int[]
+                new TextObject("{=!}Stablish a local blacksmith, supplying the village with metal products. Adds tools to production.", null), new int[]
             {
                 1000,
                 1800,

@@ -6,6 +6,7 @@ using BannerKings.Populations;
 using static BannerKings.Managers.Policies.BKMilitiaPolicy;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Populations.Villages;
+using BannerKings.Managers.Court;
 
 namespace BannerKings.Models
 {
@@ -52,6 +53,8 @@ namespace BannerKings.Models
                     if (trainning > 0)
                         baseResult.Add(trainning == 1 ? 0.2f : (trainning == 2 ? 0.5f : 1f), new TextObject("{=BkTiRPT4}Training Fields"));
                 }
+
+                BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref baseResult, settlement.OwnerClan.Leader, CouncilPosition.Marshall, 1f, false);
             }
 
             return baseResult;

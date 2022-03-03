@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.Localization;
 
 namespace BannerKings.Managers
 {
@@ -12,6 +13,17 @@ namespace BannerKings.Managers
         public CourtManager(Dictionary<Hero, Council> councils)
         {
             this.COUNCILS = councils;
+        }
+
+        public void ApplyCouncilEffect(ref ExplainedNumber result, Hero settlementOwner, CouncilPosition position, float maxEffect, bool factor)
+        {
+            Council council = this.GetCouncil(settlementOwner);
+            float competence = council.GetCompetence(position);
+            if (competence != 0f)
+            {
+                if (!factor) result.Add(maxEffect * competence, new TextObject("{=!}Council Effect"));
+                else result.AddFactor(maxEffect * competence, new TextObject("{=!}Council Effect"));
+            }
         }
 
         public Council GetCouncil(Hero hero)

@@ -466,6 +466,12 @@ namespace BannerKings.Populations
             this.engines = new List<SiegeEngineType>();
         }
 
+        public void DeduceManpower(int quantity, bool noble)
+        {
+            if (noble) this.nobleManpower -= quantity;
+            else this.peasantManpower -= quantity;
+        }
+
         public int Manpower => peasantManpower + nobleManpower;
         public int PeasantManpower => peasantManpower;
         public int NobleManpower => nobleManpower;

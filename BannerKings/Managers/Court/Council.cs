@@ -43,6 +43,19 @@ namespace BannerKings.Managers.Court
             return member;  
         }
 
+        public float GetCompetence(Hero hero)
+        {
+            float competence = 0f;
+            foreach (CouncilMember member in this.members)
+                if (member.Member == hero)
+                {
+                    competence = member.Competence;
+                    break;
+                }
+
+            return competence;
+        }
+
         public float GetCompetence(Hero hero, CouncilPosition position)
         {
             float competence = 0f;
@@ -54,12 +67,22 @@ namespace BannerKings.Managers.Court
                     found = true;
                     break;
                 }
-                    
 
             if (!found)
                 competence = new CouncilMember(hero, position).Competence;
-            
+            return competence;
+        }
 
+
+        public float GetCompetence(CouncilPosition position)
+        {
+            float competence = 0f;
+            foreach (CouncilMember member in this.members)
+                if (member.Position == position)
+                {
+                    competence = member.Competence;
+                    break;
+                }
             return competence;
         }
 

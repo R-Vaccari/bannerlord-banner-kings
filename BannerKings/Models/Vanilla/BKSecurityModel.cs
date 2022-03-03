@@ -1,4 +1,5 @@
 ﻿using BannerKings.Managers;
+using BannerKings.Managers.Court;
 using BannerKings.Managers.Policies;
 using BannerKings.Populations;
 using TaleWorlds.CampaignSystem;
@@ -37,6 +38,8 @@ namespace BannerKings.Models
                     baseResult.Add(0.5f, new TextObject("Criminal policy"));
                 else if (criminal == CriminalPolicy.Forgiveness)
                     baseResult.Add(1f, new TextObject("Criminal policy"));
+
+                BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref baseResult, town.OwnerClan.Leader, CouncilPosition.Spymaster, 1f, false);
             }
 
             this.GetHideoutBonus(town, ref baseResult);

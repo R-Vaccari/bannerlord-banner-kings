@@ -1,4 +1,5 @@
 ﻿
+using BannerKings.Managers.Court;
 using BannerKings.Populations;
 using Helpers;
 using System;
@@ -43,7 +44,7 @@ namespace BannerKings.Models
 					baseResult.Add((fraction1 + fraction2) * LOYALTY_FACTOR * -1f, new TextObject("High tax policy"));
 				}
 
-
+				BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref baseResult, town.OwnerClan.Leader, CouncilPosition.Chancellor, 1f, false);
 				return baseResult;
             } else return base.CalculateLoyaltyChange(town, includeDescriptions); 
         }
@@ -63,6 +64,8 @@ namespace BannerKings.Models
 			this.GetSettlementLoyaltyChangeDueToNotableRelations(town, ref result);
 			this.GetSettlementLoyaltyChangeDueToGovernorPerks(town, ref result);
 			this.GetSettlementLoyaltyChangeDueToLoyaltyDrift(town, ref result);
+
+
 			return result;
 		}
 

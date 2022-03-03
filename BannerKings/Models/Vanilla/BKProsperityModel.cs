@@ -1,4 +1,5 @@
 ﻿using BannerKings.Managers;
+using BannerKings.Managers.Court;
 using BannerKings.Populations;
 using Helpers;
 using System.Linq;
@@ -7,7 +8,6 @@ using TaleWorlds.CampaignSystem.SandBox.GameComponents;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
-using TaleWorlds.ObjectSystem;
 using static BannerKings.Managers.PopulationManager;
 
 namespace BannerKings.Models
@@ -66,9 +66,8 @@ namespace BannerKings.Models
 					int num3 = fortification.SoldItems.Sum(delegate (Town.SellLog x)
 					{
 						if (x.Category.Properties != ItemCategory.Property.BonusToProsperity)
-						{
 							return 0;
-						}
+						
 						return x.Number;
 					});
 					if (num3 > 0)
@@ -104,13 +103,11 @@ namespace BannerKings.Models
 					foreach (Building building in from x in fortification.Buildings
 												  where !x.BuildingType.IsDefaultProject && x.CurrentLevel > 0
 												  select x)
-					{
 						num4 += DefaultPerks.Engineering.Apprenticeship.SecondaryBonus;
-					}
+					
 					if (num4 > 0f && explainedNumber.ResultNumber > 0f)
-					{
 						explainedNumber.AddFactor(num4, DefaultPerks.Engineering.Apprenticeship.Name);
-					}
+					
 				}
 				if (fortification.BuildingsInProgress.IsEmpty<Building>())
 					BuildingHelper.AddDefaultDailyBonus(fortification, BuildingEffectEnum.ProsperityDaily, ref explainedNumber);
@@ -145,6 +142,8 @@ namespace BannerKings.Models
 					
 				}
 				this.GetSettlementProsperityChangeDueToIssues(fortification.Settlement, ref explainedNumber);
+
+				BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref baseResult, fortification.OwnerClan.Leader, CouncilPosition.Steward, 1f, false);
 				return explainedNumber;
 			}
             return baseResult;
@@ -155,14 +154,9 @@ namespace BannerKings.Models
 			Campaign.Current.Models.IssueModel.GetIssueEffectsOfSettlement(DefaultIssueEffects.SettlementProsperity, settlement, ref result);
 		}
 
-		private static readonly TextObject LoyaltyText = GameTexts.FindText("str_loyalty", null);
 		private static readonly TextObject FoodShortageText = new TextObject("{=qTFKvGSg}Food Shortage", null);
 		private static readonly TextObject ProsperityFromMarketText = new TextObject("{=RNT5hMVb}Goods From Market", null);
-		private static readonly TextObject SurplusFoodText = GameTexts.FindText("str_surplus_food", null);
-		private static readonly TextObject EmpireProsperityBonus = new TextObject("{=3Ditaq1M}Empire Prosperity Bonus", null);
 		private static readonly TextObject Governor = new TextObject("{=Fa2nKXxI}Governor", null);
-		private static readonly TextObject NewBornText = new TextObject("{=RVas571P}New Born", null);
-		private static readonly TextObject RaidedText = new TextObject("{=RVas572P}Raided", null);
 		private static readonly TextObject HousingCostsText = new TextObject("{=ByRAgJy4}Housing Costs", null);
 	}
 }

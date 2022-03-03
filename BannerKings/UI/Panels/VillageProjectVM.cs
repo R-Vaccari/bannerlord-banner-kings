@@ -10,7 +10,6 @@ using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using BannerKings.Models;
 using System.Text;
-using BannerKings.Utils;
 
 namespace BannerKings.UI.Panels
 {
@@ -50,7 +49,7 @@ namespace BannerKings.UI.Panels
 			BKVillageProductionModel model = new BKVillageProductionModel();
 			float productionQuantity = 0f;
 			StringBuilder sb = new StringBuilder();
-			foreach ((ItemObject, float) production in VillageHelper.GetProductions(villageData))
+			foreach ((ItemObject, float) production in BannerKingsConfig.Instance.PopulationManager.GetProductions(villageData))
             {
 				sb.Append(production.Item1.Name.ToString() + ", ");
 				productionQuantity += model.CalculateDailyProductionAmount(villageData.Village, production.Item1);

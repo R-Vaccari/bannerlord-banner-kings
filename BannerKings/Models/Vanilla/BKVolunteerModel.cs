@@ -6,6 +6,7 @@ using System.Linq;
 using Helpers;
 using TaleWorlds.Localization;
 using static BannerKings.Managers.PopulationManager;
+using BannerKings.Managers.Court;
 
 namespace BannerKings.Models.Vanilla
 {
@@ -56,7 +57,8 @@ namespace BannerKings.Models.Vanilla
             if (hero.VolunteerTypes[index] != null && hero.VolunteerTypes[index].IsMounted && 
                 PerkHelper.GetPerkValueForTown(DefaultPerks.Riding.CavalryTactics, settlement.IsTown ? settlement.Town : settlement.Village.TradeBound.Town))
                 explainedNumber.AddFactor(DefaultPerks.Riding.CavalryTactics.PrimaryBonus * 0.01f, DefaultPerks.Riding.CavalryTactics.PrimaryDescription);
-            
+
+            BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref explainedNumber, settlement.OwnerClan.Leader, CouncilPosition.Marshall, 0.25f, true);
             return explainedNumber;
         }
 
@@ -69,6 +71,7 @@ namespace BannerKings.Models.Vanilla
 
             explainedNumber.Add((serfMilitarism + craftsmenMilitarism + nobleMilitarism) / 3f, new TextObject("Base"));
 
+            BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref explainedNumber, settlement.OwnerClan.Leader, CouncilPosition.Marshall, 0.03f, false);
             return explainedNumber;
         }
 

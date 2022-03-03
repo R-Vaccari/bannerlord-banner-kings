@@ -1,12 +1,10 @@
 ﻿using BannerKings.Managers.Populations.Villages;
 using BannerKings.Populations;
-using BannerKings.Utils;
 using Helpers;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.SandBox.GameComponents.Map;
 using TaleWorlds.Core;
-using TaleWorlds.Localization;
 using static BannerKings.Managers.PopulationManager;
 
 namespace BannerKings.Models
@@ -29,7 +27,7 @@ namespace BannerKings.Models
 				bool production = !building && villageData.CurrentDefault.BuildingType == DefaultVillageBuildings.Instance.DailyProduction;
 				explainedNumber.AddFactor(production ? 0.15f : -0.25f);
 
-				List<(ItemObject, float)> productions = VillageHelper.GetProductions(villageData);
+				List<(ItemObject, float)> productions = BannerKingsConfig.Instance.PopulationManager.GetProductions(villageData);
 				foreach (System.ValueTuple<ItemObject, float> valueTuple in productions)
 				{
 					ItemObject item2 = valueTuple.Item1;

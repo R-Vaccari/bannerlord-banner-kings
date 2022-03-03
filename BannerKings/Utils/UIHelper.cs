@@ -42,24 +42,24 @@ namespace BannerKings.Utils
 			List<ValueTuple<string, string>> lines = new List<ValueTuple<string, string>>();
 			if (position == CouncilPosition.Marshall)
             {
-				lines.Add(("Militia", FormatDailyValue(1.5f * competence)));
+				lines.Add(("Militia", FormatDailyValue(1f * competence)));
 				lines.Add(("Militarism", FormatValue(3f * competence)));
 				lines.Add(("Draft Efficiency", FormatValue(25 * competence)));
 			} else if (position == CouncilPosition.Steward) 
 			{
-				lines.Add(("Prosperity", FormatDailyValue(1.5f * competence)));
+				lines.Add(("Prosperity", FormatDailyValue(1f * competence)));
 				lines.Add(("Production Efficiency", FormatValue(15f * competence)));
 				lines.Add(("Caravan Attractiveness", FormatValue(15f * competence)));
 			}
 			else if (position == CouncilPosition.Chancellor)
 			{
-				lines.Add(("Loyalty", FormatDailyValue(1.5f * competence)));
+				lines.Add(("Loyalty", FormatDailyValue(1f * competence)));
 				lines.Add(("Vassals Limit", FormatDailyValue((int)(4f * competence))));
 				lines.Add(("Disagreement Impact", FormatValueNegative(30f * competence)));
 			}
 			else if (position == CouncilPosition.Spymaster)
 			{
-				lines.Add(("Security", FormatDailyValue(1.5f * competence)));
+				lines.Add(("Security", FormatDailyValue(1f * competence)));
 				lines.Add(("Crime Rating", FormatValue(5f * competence)));
 				lines.Add(("Settle Issues", FormatValue(3f * competence)));
 			}
