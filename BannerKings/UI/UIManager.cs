@@ -5,10 +5,15 @@ using BannerKings.UI.Windows;
 using HarmonyLib;
 using SandBox.View.Map;
 using System;
+using System.Linq;
 using System.Reflection;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.ViewModelCollection.GameMenu;
 using TaleWorlds.CampaignSystem.ViewModelCollection.GameMenu.TownManagement;
+using TaleWorlds.Core;
+using TaleWorlds.Library;
+using TaleWorlds.Localization;
 
 namespace BannerKings.UI
 {
@@ -87,8 +92,44 @@ namespace BannerKings.UI
             }
         }
 
+        
+
+        [HarmonyPatch(typeof(RecruitmentVM), "OnDone")]
+        class RecruitmentOnDonePatch
+        {
+            static bool Prefix(RecruitmentVM __instance)
+            {
+                Settlement settlement = Settlement.CurrentSettlement;
+                if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
+                {
+                    PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
+                    MethodInfo refresh = __instance.GetType().GetMethod("RefreshPartyProperties", BindingFlags.Instance | BindingFlags.NonPublic);
+                    refresh.Invoke(__instance, null);
+                    int num = __instance.TroopsInCart.Sum((RecruitVolunteerTroopVM t) => t.Cost);
+ 
+                    foreach (RecruitVolunteerTroopVM recruitVolunteerTroopVM in __instance.TroopsInCart)
+                    {
+                        recruitVolunteerTroopVM.Owner.OwnerHero.VolunteerTypes[recruitVolunteerTroopVM.Index] = null;
+                        MobileParty.MainParty.MemberRoster.AddToCounts(recruitVolunteerTroopVM.Character, 1, false, 0, 0, true, -1);
+                        CampaignEventDispatcher.Instance.OnUnitRecruited(recruitVolunteerTroopVM.Character, 1);
+                        data.MilitaryData.DeduceManpower(data, 1, recruitVolunteerTroopVM.Character);
+                        GiveGoldAction.ApplyBetweenCharacters(Hero.MainHero, recruitVolunteerTroopVM.Owner.OwnerHero, recruitVolunteerTroopVM.Cost, true);
+                    }
+                    
+                    if (num > 0)
+                    {
+                        MBTextManager.SetTextVariable("GOLD_AMOUNT", MathF.Abs(num));
+                        InformationManager.DisplayMessage(new InformationMessage(GameTexts.FindText("str_gold_removed_with_icon", null).ToString(), "event:/ui/notification/coins_negative"));
+                    }
+                    __instance.Deactivate();
+                    return false;
+                }
+                return false;
+            }
+        }
+
         [HarmonyPatch(typeof(SettlementProjectVM), "RefreshValues")]
-        class SettlementProjectVMPRefreshatch
+        class SettlementProjectVMPRefreshPatch
         {
             static bool Prefix()
             {

@@ -68,6 +68,7 @@
 						</Children>
 					</ListPanel>
 					
+					<!--
 					<GridWidget DataSource="{Vassals}" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" SuggestedWidth="350" SuggestedHeight="350" HorizontalAlignment="Left" MarginTop="5" DefaultCellWidth="100" DefaultCellHeight="140" ColumnCount="7" MarginLeft="20" MarginBottom="50">
 					  <ItemTemplate>
 						<ButtonWidget DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="90" SuggestedHeight="90" Brush="Encyclopedia.SubPage.Element" Command.Click="ExecuteLink">
@@ -78,11 +79,19 @@
 						  </Children>
 						</ButtonWidget>
 					  </ItemTemplate>
-					</GridWidget>
+					</GridWidget> -->
 
 				</Children>
 			</ListPanel>
-							
+			
+			
+			<GridWidget DataSource="{LandInfo}" WidthSizePolicy="CoverChildren" HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" DefaultCellWidth="150" DefaultCellHeight="30" MarginRight="85" ColumnCount="1" MarginTop="10">
+			  <ItemTemplate>
+				<InformationElement/>
+			  </ItemTemplate>
+			</GridWidget>
+				
+			<!--				
 			<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" StackLayout.LayoutMethod="VerticalBottomToTop" MaxHeight="645" >
 			  <Children>
 
@@ -122,7 +131,7 @@
 					</ButtonWidget> 
 					
 			  </Children>
-			</ListPanel>
+			</ListPanel> -->
           </Children>
         </ListPanel>
       </Children>

@@ -31,6 +31,11 @@ namespace BannerKings.Models.Vanilla
             return false;
         }
 
+        public override CharacterObject GetBasicVolunteer(Hero sellerHero)
+        {
+            return base.GetBasicVolunteer(sellerHero);
+        }
+
         public override float GetDailyVolunteerProductionProbability(Hero hero, int index, Settlement settlement)
         {
             if (BannerKingsConfig.Instance.PopulationManager != null)
@@ -79,15 +84,15 @@ namespace BannerKings.Models.Vanilla
         {
             if (type == PopType.Serfs)
             {
-                return 0.08f;
+                return 0.1f;
             }
             else if (type == PopType.Craftsmen)
             {
-                return 0.01f;
+                return 0.03f;
             }
             else if (type == PopType.Nobles)
             {
-                return 0.1f;
+                return 0.12f;
             }
             else return 0;
         }

@@ -119,7 +119,7 @@ namespace BannerKings.Managers
             if (settlement.IsCastle)
             {
                 float prosperityFactor = (0.0001f * settlement.Prosperity) + 1f;
-                return MBRandom.RandomInt((int)(900 * prosperityFactor), (int)(1200 * prosperityFactor));
+                return MBRandom.RandomInt((int)(2000 * prosperityFactor), (int)(3000 * prosperityFactor));
             }
             else if (settlement.IsVillage)
                 return MBRandom.RandomInt((int)settlement.Village.Hearth * 4, (int)settlement.Village.Hearth * 6);
@@ -153,8 +153,8 @@ namespace BannerKings.Managers
             if (settlement.IsCastle)
                 return new Dictionary<PopType, float[]>()
                 {
-                    { PopType.Nobles, new float[] {0.02f, 0.06f} },
-                    { PopType.Craftsmen, new float[] {0.06f, 0.09f} },
+                    { PopType.Nobles, new float[] {0.07f, 0.09f} },
+                    { PopType.Craftsmen, new float[] {0.03f, 0.05f} },
                     { PopType.Serfs, new float[] {0.75f, 0.8f} },
                     { PopType.Slaves, new float[] {0.1f, 0.15f} }
                 };

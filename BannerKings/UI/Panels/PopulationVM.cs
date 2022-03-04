@@ -25,7 +25,7 @@ namespace BannerKings
                 this.settlement = data.Settlement;
                 overviewVM = new OverviewVM(data, settlement, true);
                 economyVM = new EconomyVM(data, settlement, false);
-                demesneVM = new DemesneVM(BannerKingsConfig.Instance.TitleManager.GetTitle(settlement), false);
+                demesneVM = new DemesneVM(data, BannerKingsConfig.Instance.TitleManager.GetTitle(settlement), false);
                 militaryVM = new MilitaryVM(data, settlement, false);
             }
 

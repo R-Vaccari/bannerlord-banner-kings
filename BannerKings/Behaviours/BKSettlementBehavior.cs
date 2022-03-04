@@ -11,14 +11,10 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
-using static BannerKings.Managers.TitleManager;
 using static BannerKings.Managers.PopulationManager;
 using HarmonyLib;
 using BannerKings.Populations;
-using BannerKings.Managers.Policies;
-using BannerKings.Managers.Decisions;
 using BannerKings.Managers.Institutions;
-using BannerKings.Managers.Court;
 
 namespace BannerKings.Behaviors
 {
@@ -257,10 +253,7 @@ namespace BannerKings.Behaviors
             if (settlement == null) return;
             
             if (BannerKingsConfig.Instance.PopulationManager == null)
-                BannerKingsConfig.Instance.InitManagers(new Dictionary<Settlement, PopulationData>(), new List<MobileParty>(),
-                new Dictionary<Settlement, HashSet<BannerKingsDecision>>(), new Dictionary<Settlement, HashSet<BannerKingsPolicy>>(), 
-                new HashSet<FeudalTitle>(), new Dictionary<Hero, HashSet<FeudalTitle>>(),
-                new Dictionary<Kingdom, FeudalTitle>(), new Dictionary<Hero, Council>());
+                BannerKingsConfig.Instance.InitManagers();
 
             UpdateSettlementPops(settlement);
             BannerKingsConfig.Instance.PolicyManager.InitializeSettlement(settlement);
@@ -420,12 +413,18 @@ namespace BannerKings.Behaviors
             AddMenus(campaignGameStarter);
 
             if (BannerKingsConfig.Instance.PopulationManager != null)
+            {
                 foreach (Settlement settlement in Settlement.All)
                     if (BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
                     {
                         PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
                         settlement.Culture = data.CultureData.DominantCulture;
                     }
+            }
+            
+            if (BannerKingsConfig.Instance.PolicyManager == null || BannerKingsConfig.Instance.TitleManager == null)
+                BannerKingsConfig.Instance.InitManagers();
+                
 
             BuildingType retinueType = MBObjectManager.Instance.GetObjectTypeList<BuildingType>().FirstOrDefault(x => x == Helpers.Helpers._buildingCastleRetinue);
             if (retinueType == null)
@@ -475,6 +474,11 @@ namespace BannerKings.Behaviors
                new GameMenuOption.OnConditionDelegate(game_menu_town_manage_town_on_condition),
                new GameMenuOption.OnConsequenceDelegate(game_menu_town_manage_town_on_consequence), false, 3, false);
 
+            campaignGameStarter.AddGameMenuOption("castle", "castle_recruit_volunteers", "{=E31IJyqs}Recruit troops",
+               new GameMenuOption.OnConditionDelegate(game_menu_castle_recruit_troops_on_condition),
+               delegate (MenuCallbackArgs args) { args.MenuContext.OpenRecruitVolunteers(); },
+               false, 4, false);
+
             campaignGameStarter.AddGameMenuOption("village", "manage_population", "{=!}Manage population",
                new GameMenuOption.OnConditionDelegate(game_menu_town_manage_town_on_condition),
                new GameMenuOption.OnConsequenceDelegate(game_menu_town_manage_town_on_consequence), false, 5, false);
@@ -482,6 +486,12 @@ namespace BannerKings.Behaviors
             campaignGameStarter.AddGameMenuOption("village", "manage_projects", "{=!}Village Projects",
                new GameMenuOption.OnConditionDelegate(game_menu_town_manage_town_on_condition),
                new GameMenuOption.OnConsequenceDelegate(game_menu_village_manage_projects_on_consequence), false, 4, false);
+        }
+
+        private static bool game_menu_castle_recruit_troops_on_condition(MenuCallbackArgs args)
+        {
+            args.optionLeaveType = GameMenuOption.LeaveType.Recruit;
+            return Settlement.CurrentSettlement.IsCastle && Settlement.CurrentSettlement.Notables.Count > 0;
         }
 
         public static void game_menu_bannerkings_on_init(MenuCallbackArgs args)

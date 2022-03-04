@@ -39,6 +39,7 @@ namespace BannerKings
                     campaignStarter.AddBehavior(new BKSettlementBehavior());
                     campaignStarter.AddBehavior(new BKCompanionBehavior());
                     campaignStarter.AddBehavior(new BKTournamentBehavior());
+                    campaignStarter.AddBehavior(new BKCastleCharactersBehavior());
 
                     campaignStarter.AddModel(new BKProsperityModel());
                     campaignStarter.AddModel(new BKTaxModel());
@@ -59,6 +60,7 @@ namespace BannerKings
                     campaignStarter.AddModel(new BKTournamentModel());
                     campaignStarter.AddModel(new BKRaidModel());
                     campaignStarter.AddModel(new BKVolunteerModel());
+                    campaignStarter.AddModel(new BKNotableModel());
                 } catch (Exception e)
                 {
                 }
@@ -114,7 +116,7 @@ namespace BannerKings
                     if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
                     {
                         PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
-                        data.MilitaryData.DeduceManpower(number, Helpers.Helpers.IsRetinueTroop(troop, settlement.Culture));
+                        data.MilitaryData.DeduceManpower(data, number, troop);
                     }
                 }
             }
@@ -552,6 +554,17 @@ namespace BannerKings
                                 float desiredAmount = num / (float)price;
                                 if (desiredAmount > (float)amount)
                                     desiredAmount = (float)amount;
+
+
+                                if (town.Settlement.IsStarving)
+                                {
+                                    float requiredFood = town.FoodChange;
+                                    if (amount > requiredFood)
+                                        desiredAmount += requiredFood + 1f;
+                                    else if (amount == requiredFood)
+                                        desiredAmount = requiredFood;
+                                    else desiredAmount += amount;
+                                }
 
                                 int finalAmount = MBRandom.RoundRandomized(desiredAmount);
                                 ConsumptionType type = Helpers.Helpers.GetTradeGoodConsumptionType(item);

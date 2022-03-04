@@ -466,10 +466,32 @@ namespace BannerKings.Populations
             this.engines = new List<SiegeEngineType>();
         }
 
-        public void DeduceManpower(int quantity, bool noble)
+        public void DeduceManpower(PopulationData data, int quantity, CharacterObject troop)
         {
-            if (noble) this.nobleManpower -= quantity;
-            else this.peasantManpower -= quantity;
+            int tier = troop.Tier;
+            bool noble = Helpers.Helpers.IsRetinueTroop(troop, settlement.Culture);
+            if (noble)
+            {
+                if (this.nobleManpower >= quantity) this.nobleManpower -= quantity;
+                else this.nobleManpower = 0;
+                data.UpdatePopType(PopType.Nobles, -quantity);
+            }
+            else
+            {
+                if (tier >= 3 && data.GetTypeCount(PopType.Craftsmen) > quantity)
+                {
+                    List<ValueTuple<PopType, float>> list = new List<(PopType, float)>();
+                    float mil1 = new BKVolunteerModel().GetClassMilitarism(PopType.Craftsmen);
+                    float mil2 = new BKVolunteerModel().GetClassMilitarism(PopType.Craftsmen);
+                    PopType type = MBRandom.ChooseWeighted(list);
+                    data.UpdatePopType(type, -quantity);
+                } else
+                {
+                    data.UpdatePopType(PopType.Serfs, -quantity);
+                }
+                if (this.peasantManpower >= quantity) this.peasantManpower -= quantity;
+                else this.peasantManpower = 0;
+            }
         }
 
         public int Manpower => peasantManpower + nobleManpower;
@@ -601,7 +623,6 @@ namespace BannerKings.Populations
     public class LandData : BannerKingsData
     {
         private PopulationData data;
-        private float acres;
         private float farmland;
         private float pasture;
         private float woodland;
@@ -668,6 +689,11 @@ namespace BannerKings.Populations
                 pastureRatio = 0.22f;
                 woodRatio = 0.08f;
             }
+
+            float acres = this.data.Settlement.IsVillage ? (float)totalPops * MBRandom.RandomFloatRanged(3.5f, 4.5f) : (float)totalPops * MBRandom.RandomFloatRanged(2.5f, 3.0f);
+            this.farmland = acres * farmRatio;
+            this.pasture = acres * pastureRatio;
+            this.woodland = acres * woodRatio;
         }
 
         public int AvailableWorkForce
@@ -675,14 +701,28 @@ namespace BannerKings.Populations
             get
             {
                 float serfs = this.data.GetTypeCount(PopType.Serfs) * 0.5f;
-                float slaves = this.data.GetTypeCount(PopType.Slaves);
+                float slaves = this.data.GetTypeCount(PopType.Slaves) * 0.5f;
                 return (int)(serfs + slaves);
             }
         }
 
+        public float WorkforceSaturation
+        {
+            get
+            {
+                float available = this.AvailableWorkForce;
+                float farms = this.farmland / 4f;
+                float pasture = this.pasture / 8f;
+                return available / (farms + pasture);
+            }
+        }
+
+        public float Acreage => this.farmland + this.pasture + this.woodland;
         public float Farmland => this.farmland;
         public float Pastureland => this.pasture;
         public float Woodland => this.woodland;
+        public float Fertility => this.fertility;
+        public float Difficulty => this.terrainDifficulty;
 
         internal override void Update(PopulationData data)
         {

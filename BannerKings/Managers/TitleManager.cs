@@ -338,9 +338,12 @@ namespace BannerKings.Managers
             if (autoGenerate) 
                 foreach (Settlement settlement in Settlement.All)
                 {
-                    if (settlement.IsVillage) return;
-                    else if ((settlement.IsTown || settlement.IsCastle) && !IsSettlementPresent(settlement))
-                        CreateLandedTitle(settlement, settlement.Owner, settlement.IsTown ? TitleType.County : TitleType.Barony, GenerateContract("feudal"), null);
+                    if (settlement.IsVillage) continue;
+                    else {
+                        bool present = IsSettlementPresent(settlement);
+                        if (!present && settlement.OwnerClan != null && settlement.OwnerClan.Leader != null) 
+                            CreateLandedTitle(settlement, settlement.Owner, settlement.IsTown ? TitleType.County : TitleType.Barony, GenerateContract("feudal"), null);
+                    }
                 }         
         }
 

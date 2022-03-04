@@ -5,6 +5,7 @@ using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.SandBox.GameComponents;
 using TaleWorlds.Core;
+using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using static BannerKings.Managers.Policies.BKWorkforcePolicy;
 using static BannerKings.Managers.PopulationManager;
@@ -13,11 +14,9 @@ namespace BannerKings.Models
 {
     class BKFoodModel : SettlementFoodModel
 	{
-
-		private static readonly float SLAVE_MINE_FOOD = 0f;
-		private static readonly float NOBLE_FOOD = -0.01f;
-		private static readonly float CRAFTSMEN_FOOD = -0.005f;
-		private static readonly float SERF_FOOD = 0.006f;
+		private static readonly float NOBLE_FOOD = -0.1f;
+		private static readonly float CRAFTSMEN_FOOD = -0.05f;
+		private static readonly float SERF_FOOD = 0.03f;
 
 		public override int FoodStocksUpperLimit => 500;
         public override int NumberOfProsperityToEatOneFood => 40;
@@ -39,34 +38,12 @@ namespace BannerKings.Models
 
 			// ------- Pops / Prosperity consumption ---------
 			PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
-			int citySerfs = data.GetTypeCount(PopType.Serfs);
-			if (!town.IsUnderSiege)
-            {
-				float serfProduction = (float)citySerfs * SERF_FOOD * (town.IsCastle ? 1f : 0.4f);
 
-					
-				result.Add((float)serfProduction, new TextObject("Serfs production", null));
-			} else
-            {
-				float serfConsumption = (float)citySerfs * SERF_FOOD * -1f;
-				result.Add((float)serfConsumption, new TextObject("Serfs consumption (siege)", null));
+			result.Add(this.GetPopulationFoodConsumption(data).ResultNumber, new TextObject("{=!}Population Consumption"));
+			result.Add(this.GetPopulationFoodProduction(data).ResultNumber, new TextObject("{=!}Population Production"));
 
-				int citySlaves = data.GetTypeCount(PopType.Slaves);
-				float slaveConsumption = (float)citySlaves * SERF_FOOD * -0.5f;
-				result.Add((float)slaveConsumption, new TextObject("Slaves consumption (siege)", null));
-			}
-			
-
-			int cityNobles = data.GetTypeCount(PopType.Nobles);
-			float nobleConsumption = (float)cityNobles * NOBLE_FOOD;
-			result.Add((float)nobleConsumption, new TextObject("Nobles consumption", null));
-
-			int cityCraftsmen = data.GetTypeCount(PopType.Craftsmen);
-			float craftsmenConsumption = (float)cityCraftsmen * CRAFTSMEN_FOOD;
-			result.Add((float)craftsmenConsumption, new TextObject("Craftsmen consumption", null));
-
-			float prosperityImpact = -town.Owner.Settlement.Prosperity / (town.IsCastle ? 100f : 40f);
-			result.Add(prosperityImpact, new TextObject("Prosperity effect"), null);
+			//float prosperityImpact = -town.Owner.Settlement.Prosperity / (town.IsCastle ? 400f : 120f);
+			//result.Add(prosperityImpact, new TextObject("Prosperity effect"), null);
 
 			MobileParty garrisonParty = town.GarrisonParty;
 			int garrisonConsumption = (garrisonParty != null) ? garrisonParty.Party.NumberOfAllMembers : 0;
@@ -101,12 +78,11 @@ namespace BannerKings.Models
 			// ------- Other factors ---------
 			Clan ownerClan = town.Settlement.OwnerClan;
 			if (((ownerClan != null) ? ownerClan.Kingdom : null) != null && town.Settlement.OwnerClan.Kingdom.ActivePolicies.Contains(DefaultPolicies.HuntingRights))
-			{
 				result.Add(2f, DefaultPolicies.HuntingRights.Name, null);
-			}
+			
 			if (!town.Owner.Settlement.IsUnderSiege)
 			{
-				foreach (Village village in town.Owner.Settlement.BoundVillages)
+				/*foreach (Village village in town.Owner.Settlement.BoundVillages)
 				{
 					if (village.VillageState == Village.VillageStates.Normal)
 					{
@@ -118,7 +94,7 @@ namespace BannerKings.Models
 						int num6 = 0;
 						result.Add((float)num6, village.Name, null);
 					}
-				}
+				} */
 				using (List<Building>.Enumerator enumerator2 = town.Buildings.GetEnumerator())
 				{
 					while (enumerator2.MoveNext())
@@ -126,29 +102,20 @@ namespace BannerKings.Models
 						Building building = enumerator2.Current;
 						float buildingEffectAmount = building.GetBuildingEffectAmount(BuildingEffectEnum.FoodProduction);
 						if (buildingEffectAmount > 0f)
-						{
 							result.Add(buildingEffectAmount, building.Name, null);
-						}
+						
 					}
 					goto IL_296;
 				}
 			}
 			if (town.Governor != null && town.Governor.GetPerkValue(DefaultPerks.Roguery.DirtyFighting))
-			{
 				result.Add(DefaultPerks.Roguery.DirtyFighting.SecondaryBonus, DefaultPerks.Roguery.DirtyFighting.Name, null);
-			}
-			else
-			{
-				result.Add(0f, new TextObject("Village not producing"), null);
-			}
+			
 			IL_296:
 			foreach (Town.SellLog sellLog in town.SoldItems)
-			{
 				if (sellLog.Category.Properties == ItemCategory.Property.BonusToFoodStores)
-				{
 					result.Add((float)sellLog.Number, sellLog.Category.GetName(), null);
-				}
-			}
+
 			GetSettlementFoodChangeDueToIssues(town, ref result);
 			return result;
 		}
@@ -190,20 +157,21 @@ namespace BannerKings.Models
 
 		public int GetFoodEstimate(Town town, bool includeDescriptions, int maxStocks)
 		{
-			//InformationManager.DisplayMessage(new InformationMessage("Food model running..."));
-			ExplainedNumber result = new ExplainedNumber(0f, includeDescriptions, null);
+			ExplainedNumber result = this.CalculateTownFoodChangeInternal(town, includeDescriptions);
+			int finalResult = (int)((float)maxStocks / result.ResultNumber);
+			return -finalResult;
+		}
 
-			// ------- Pops / Prosperity consumption ---------
-			PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
+		public ExplainedNumber GetPopulationFoodConsumption(PopulationData data)
+        {
+			ExplainedNumber result = new ExplainedNumber();
 			int citySerfs = data.GetTypeCount(PopType.Serfs);
-
 			float serfConsumption = (float)citySerfs * SERF_FOOD * -1f;
-			result.Add((float)serfConsumption, new TextObject("Serfs consumption (siege)", null));
+			result.Add((float)serfConsumption, new TextObject("Serfs consumption", null));
 
 			int citySlaves = data.GetTypeCount(PopType.Slaves);
 			float slaveConsumption = (float)citySlaves * SERF_FOOD * -0.5f;
-			result.Add((float)slaveConsumption, new TextObject("Slaves consumption (siege)", null));
-			
+			result.Add((float)slaveConsumption, new TextObject("Slaves consumption", null));
 
 			int cityNobles = data.GetTypeCount(PopType.Nobles);
 			float nobleConsumption = (float)cityNobles * NOBLE_FOOD;
@@ -213,58 +181,22 @@ namespace BannerKings.Models
 			float craftsmenConsumption = (float)cityCraftsmen * CRAFTSMEN_FOOD;
 			result.Add((float)craftsmenConsumption, new TextObject("Craftsmen consumption", null));
 
-			float prosperityImpact = -town.Owner.Settlement.Prosperity / (town.IsCastle ? 100f : 40f);
-			result.Add(prosperityImpact, new TextObject("Prosperity effect"), null);
-
-			MobileParty garrisonParty = town.GarrisonParty;
-			int garrisonConsumption = (garrisonParty != null) ? garrisonParty.Party.NumberOfAllMembers : 0;
-			result.Add((float)(-garrisonConsumption / NumberOfMenOnGarrisonToEatOneFood), new TextObject("Garrison consumption"), null);
-
-			if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(town.Settlement, "decision_militia_encourage"))
-				result.AddFactor(-0.25f, new TextObject("Conscription policy"));
-
-			if (town.Governor != null)
-			{
-				if (town.IsUnderSiege)
-				{
-					if (town.Governor.GetPerkValue(DefaultPerks.Steward.Gourmet))
-						result.AddFactor(DefaultPerks.Steward.Gourmet.SecondaryBonus, DefaultPerks.Steward.Gourmet.Name);
-
-					if (town.Governor.GetPerkValue(DefaultPerks.Medicine.TriageTent))
-						result.AddFactor(DefaultPerks.Medicine.TriageTent.SecondaryBonus, DefaultPerks.Medicine.TriageTent.Name);
-				}
-				if (town.Governor.GetPerkValue(DefaultPerks.Steward.MasterOfWarcraft))
-					result.AddFactor(DefaultPerks.Steward.MasterOfWarcraft.SecondaryBonus, DefaultPerks.Steward.MasterOfWarcraft.Name);
-			}
-
-			// ------- Other factors ---------
-			Clan ownerClan = town.Settlement.OwnerClan;
-			if (((ownerClan != null) ? ownerClan.Kingdom : null) != null && town.Settlement.OwnerClan.Kingdom.ActivePolicies.Contains(DefaultPolicies.HuntingRights))
-				result.Add(2f, DefaultPolicies.HuntingRights.Name, null);
-			
-			
-			if (town.Governor != null && town.Governor.GetPerkValue(DefaultPerks.Roguery.DirtyFighting))
-			
-				result.Add(DefaultPerks.Roguery.DirtyFighting.SecondaryBonus, DefaultPerks.Roguery.DirtyFighting.Name, null);
-			
-			else
-			{
-				result.Add(0f, new TextObject("Village not producing"), null);
-			}
-		IL_296:
-			foreach (Town.SellLog sellLog in town.SoldItems)
-			{
-				if (sellLog.Category.Properties == ItemCategory.Property.BonusToFoodStores)
-				{
-					result.Add((float)sellLog.Number, sellLog.Category.GetName(), null);
-				}
-			}
-			GetSettlementFoodChangeDueToIssues(town, ref result);
-
-			int finalResult = (int)((float)maxStocks / result.ResultNumber);
-			return -finalResult;
+			return result;
 		}
 
+		public ExplainedNumber GetPopulationFoodProduction(PopulationData data)
+        {
+			ExplainedNumber result = new ExplainedNumber();
+			LandData landData = data.LandData;
+			result.Add(landData.Farmland * 0.018f, new TextObject("{=!}Farmlands"));
+			result.Add(landData.Pastureland * 0.005f, new TextObject("{=!}Pasturelands"));
+			result.Add(landData.Woodland * 0.001f, new TextObject("{=!}Woodlands"));
+			float fertility = landData.Fertility - 1f;
+			if (fertility != 0f) result.AddFactor(fertility, new TextObject("{=!}Fertility"));
+			float saturation = MBMath.ClampFloat(landData.WorkforceSaturation, 0f, 1f) - 1f;
+			if (saturation != 0f) result.AddFactor(saturation, new TextObject("{=!}Workforce Saturation"));
+			return result;
+		}
 
 		private static void GetSettlementFoodChangeDueToIssues(Town town, ref ExplainedNumber explainedNumber)
 		{

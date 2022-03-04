@@ -1,4 +1,5 @@
 ﻿using BannerKings.Models;
+using BannerKings.Populations;
 using BannerKings.UI.Items;
 using System;
 using System.Collections.Generic;
@@ -13,14 +14,13 @@ using static BannerKings.Managers.TitleManager;
 
 namespace BannerKings.UI
 {
-    public class DemesneVM : ViewModel
+    public class DemesneVM : BannerKingsViewModel
     {
-		private HeroVM _deJure;
-		private bool _isSelected;
+		private HeroVM deJure;
 		private MBBindingList<VassalTitleVM> _vassals;
-		private MBBindingList<InformationElement> _demesneInfo;
-		private FeudalTitle _title;
-		private FeudalTitle _duchy;
+		private MBBindingList<InformationElement> demesneInfo, landInfo;
+		private FeudalTitle title;
+		private FeudalTitle duchy;
 		private (bool, string) _titleUsurpable;
 		private (bool, string) _duchyUsurpable;
 		private UsurpCosts costs;
@@ -30,47 +30,64 @@ namespace BannerKings.UI
 		private bool _usurpEnabled;
 		private bool _usurpDuchyEnabled;
 
-		public DemesneVM(FeudalTitle title, bool isSelected)
+		public DemesneVM(PopulationData data, FeudalTitle title, bool isSelected) : base(data, isSelected)
         {
-			this._title = title;
-			this._deJure = new HeroVM(title.deJure, false);
-			this._isSelected = isSelected;
+			this.title = title;
+			this.deJure = new HeroVM(title.deJure, false);
 			this._vassals = new MBBindingList<VassalTitleVM>();
-			this._demesneInfo = new MBBindingList<InformationElement>();
+			this.demesneInfo = new MBBindingList<InformationElement>();
+			this.landInfo = new MBBindingList<InformationElement>();
+			this.duchy = BannerKingsConfig.Instance.TitleManager.GetDuchy(this.title);
+			/*
 			this.model = new BKUsurpationModel();
 			this.costs = model.GetUsurpationCosts(_title, Hero.MainHero);
-			this._duchy = BannerKingsConfig.Instance.TitleManager.GetDuchy(_title);
+			
 			this.duchyCosts = model.GetUsurpationCosts(_duchy, Hero.MainHero);
 			this._contractEnabled = BannerKingsConfig.Instance.TitleManager.IsHeroTitleHolder(Hero.MainHero) && Clan.PlayerClan.Kingdom != null;
 			this._usurpEnabled = _title.deJure != Hero.MainHero;
 			this._usurpDuchyEnabled = this._duchy.deJure != Hero.MainHero;
 			if (title.vassals != null)
 				foreach (FeudalTitle vassal in title.vassals)
-					if (vassal.fief != null) _vassals.Add(new VassalTitleVM(vassal));
+					if (vassal.fief != null) _vassals.Add(new VassalTitleVM(vassal)); */
 		}
 
 		public override void RefreshValues()
         {
 			base.RefreshValues();
-			this._contractEnabled = BannerKingsConfig.Instance.TitleManager.IsHeroTitleHolder(Hero.MainHero) && Clan.PlayerClan.Kingdom != null;
-			this._usurpEnabled = _title.deJure != Hero.MainHero;
-			this._usurpDuchyEnabled = this._duchy.deJure != Hero.MainHero;
+			LandData landData = base.data.LandData;
 			DemesneInfo.Clear();
-			DemesneInfo.Add(new InformationElement("Legitimacy:", new BKLegitimacyModel().GetRuleType(_title).ToString().Replace('_', ' '), 
+			LandInfo.Clear();
+			DemesneInfo.Add(new InformationElement("Legitimacy:", new BKLegitimacyModel().GetRuleType(title).ToString().Replace('_', ' '), 
 				"Your legitimacy to this title and it's vassals. You are lawful when you own this title, and considered a foreigner if your culture differs from it."));
-			DemesneInfo.Add(new InformationElement("Sovereign:", _title.sovereign.name.ToString(),
+			if (title.sovereign != null) DemesneInfo.Add(new InformationElement("Sovereign:", title.sovereign.name.ToString(),
 				"The master suzerain of this title, be they a king or emperor type suzerain."));
-			DemesneInfo.Add(new InformationElement("Dukedom:", _duchy.name.ToString(),
+			if (duchy != null) DemesneInfo.Add(new InformationElement("Dukedom:", duchy.name.ToString(),
 				"The dukedom this settlement is associated with."));
-			_titleUsurpable = model.IsUsurpable(_title, Hero.MainHero);
-			_duchyUsurpable = model.IsUsurpable(_duchy, Hero.MainHero);
-			costs = model.GetUsurpationCosts(_title, Hero.MainHero);
-			duchyCosts = model.GetUsurpationCosts(_duchy, Hero.MainHero);
-			DeJure = new HeroVM(_title.deJure, false);
+
+			LandInfo.Add(new InformationElement("Acreage:", landData.Acreage.ToString(),
+				"Current quantity of usable acres in this region"));
+			LandInfo.Add(new InformationElement("Farmland:", landData.Farmland.ToString(),
+				"Acres in this region used as farmland, the main source of food in most places"));
+			LandInfo.Add(new InformationElement("Pastureland:", landData.Pastureland.ToString(),
+				"Acres in this region used as pastureland, to raise cattle and other animals. These output meat and animal products such as butter and cheese"));
+			LandInfo.Add(new InformationElement("Woodland:", landData.Woodland.ToString(),
+				"Acres in this region used as woodland, kept for hunting, foraging of berries and materials like wood"));
+
+			LandInfo.Add(new InformationElement("Fertility:", base.FormatValue(landData.Fertility),
+				"How fertile the region is. This depends solely on the local terrain type - harsher environments like deserts are less fertile than plains and grassy hills"));
+			LandInfo.Add(new InformationElement("Terrain Difficulty:", base.FormatValue(landData.Difficulty),
+				"Represents how difficult it is to create new usable acres. Like fertility, depends on terrain, but is not strictly correlated to it"));
+
+			LandInfo.Add(new InformationElement("Available Workforce:", landData.AvailableWorkForce.ToString(),
+				"The amount of productive workers in this region, able to work the land"));
+			LandInfo.Add(new InformationElement("Workforce Saturation:", base.FormatValue(landData.WorkforceSaturation),
+				"Represents how many workers there are in correlation to the amount needed to fully utilize the acreage. Saturation over 100% indicates more workers than the land needs, while under 100% means not all acres are producing output"));
+
+			DeJure = new HeroVM(title.deJure, false);
 		}
 
 
-
+		/*
 		private void OnUsurpPress()
 		{
 			bool usurpable = _titleUsurpable.Item1;
@@ -131,64 +148,19 @@ namespace BannerKings.UI
 			if (kingdom != null)
 				BannerKingsConfig.Instance.TitleManager.ShowContract(kingdom.Leader, "Close");
 			else InformationManager.DisplayMessage(new InformationMessage("Unable to open contract: no kingdom associated with this title."));
-		}
+		} */
+
 
 		[DataSourceProperty]
-		public bool IsSelected
+		public MBBindingList<InformationElement> LandInfo
 		{
-			get => this._isSelected;
+			get => landInfo;
 			set
 			{
-				if (value != this._isSelected)
+				if (value != landInfo)
 				{
-					this._isSelected = value;
-					if (value) this.RefreshValues();
-					base.OnPropertyChangedWithValue(value, "IsSelected");
-				}
-			}
-		}
-
-		[DataSourceProperty]
-		public bool UsurpEnabled
-		{
-			get =>this._usurpEnabled;
-			set
-			{
-				if (value != this._usurpEnabled)
-				{
-					this._usurpEnabled = value;
-					if (value) this.RefreshValues();
-					base.OnPropertyChangedWithValue(value, "UsurpEnabled");
-				}
-			}
-		}
-
-		[DataSourceProperty]
-		public bool UsurpDuchyEnabled
-		{
-			get => this._usurpDuchyEnabled;
-			set
-			{
-				if (value != this._usurpDuchyEnabled)
-				{
-					this._usurpDuchyEnabled = value;
-					if (value) this.RefreshValues();
-					base.OnPropertyChangedWithValue(value, "UsurpDuchyEnabled");
-				}
-			}
-		}
-
-		[DataSourceProperty]
-		public bool ContractEnabled
-		{
-			get => this._contractEnabled;
-			set
-			{
-				if (value != this._contractEnabled)
-				{
-					this._contractEnabled = value;
-					if (value) this.RefreshValues();
-					base.OnPropertyChangedWithValue(value, "ContractEnabled");
+					landInfo = value;
+					base.OnPropertyChangedWithValue(value, "LandInfo");
 				}
 			}
 		}
@@ -196,12 +168,12 @@ namespace BannerKings.UI
 		[DataSourceProperty]
 		public MBBindingList<InformationElement> DemesneInfo
 		{
-			get => _demesneInfo;
+			get => demesneInfo;
 			set
 			{
-				if (value != _demesneInfo)
+				if (value != demesneInfo)
 				{
-					_demesneInfo = value;
+					demesneInfo = value;
 					base.OnPropertyChangedWithValue(value, "DemesneInfo");
 				}
 			}
@@ -211,17 +183,18 @@ namespace BannerKings.UI
 		[DataSourceProperty]
 		public HeroVM DeJure
 		{
-			get => this._deJure;
+			get => this.deJure;
 			set
 			{
-				if (value != this._deJure)
+				if (value != this.deJure)
 				{
-					this._deJure = value;
+					this.deJure = value;
 					base.OnPropertyChangedWithValue(value, "DeJure");
 				}
 			}
 		}
 
+		/*
 		[DataSourceProperty]
 		public MBBindingList<VassalTitleVM> Vassals
 		{
@@ -271,6 +244,6 @@ namespace BannerKings.UI
 				sb.Append(string.Format("{0} renown.", (int)duchyCosts.renown));
 				return new HintViewModel(new TextObject(sb.ToString()));
 			}
-		}
+		}*/
 	}
 }
