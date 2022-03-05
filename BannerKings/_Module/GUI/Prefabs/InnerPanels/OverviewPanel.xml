@@ -32,7 +32,7 @@
       <Children>
         <ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" StackLayout.LayoutMethod="HorizontalLeftToRight" DoNotAcceptEvents="true">
           <Children>
-			<ListPanel WidthSizePolicy="Fixed" HeightSizePolicy="StretchToParent" SuggestedWidth="290" StackLayout.LayoutMethod="VerticalBottomToTop" DoNotAcceptEvents="true">
+			<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" SuggestedWidth="290" StackLayout.LayoutMethod="VerticalBottomToTop" DoNotAcceptEvents="true">
 				<Children>
 					
 					<GridWidget Id="ClassesList" DataSource="{PopList}" WidthSizePolicy="CoverChildren" HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" DefaultCellWidth="100" DefaultCellHeight="25" MarginRight="80" ColumnCount="1" MarginTop="40">
@@ -49,7 +49,7 @@
 						</Children>
 					</ListPanel>
 				
-					<GridWidget DataSource="{StatsInfo}" WidthSizePolicy="CoverChildren" HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" DefaultCellWidth="150" DefaultCellHeight="30" MarginRight="85" ColumnCount="1" MarginTop="25">
+					<GridWidget DataSource="{StatsInfo}" WidthSizePolicy="CoverChildren" HorizontalAlignment="Left" MarginLeft="50" HeightSizePolicy="CoverChildren" DefaultCellWidth="150" DefaultCellHeight="30" ColumnCount="1" MarginTop="25">
 					  <ItemTemplate>
 						<InformationElement/>
 					  </ItemTemplate>

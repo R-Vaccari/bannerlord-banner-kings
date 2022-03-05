@@ -481,8 +481,10 @@ namespace BannerKings.Populations
                 if (tier >= 3 && data.GetTypeCount(PopType.Craftsmen) > quantity)
                 {
                     List<ValueTuple<PopType, float>> list = new List<(PopType, float)>();
-                    float mil1 = new BKVolunteerModel().GetClassMilitarism(PopType.Craftsmen);
-                    float mil2 = new BKVolunteerModel().GetClassMilitarism(PopType.Craftsmen);
+                    float mil1 = data.GetCurrentTypeFraction(PopType.Craftsmen);
+                    list.Add(new(PopType.Craftsmen, mil1));
+                    float mil2 = data.GetCurrentTypeFraction(PopType.Serfs);
+                    list.Add(new(PopType.Serfs, mil2));
                     PopType type = MBRandom.ChooseWeighted(list);
                     data.UpdatePopType(type, -quantity);
                 } else
@@ -497,9 +499,9 @@ namespace BannerKings.Populations
         public int Manpower => peasantManpower + nobleManpower;
         public int PeasantManpower => peasantManpower;
         public int NobleManpower => nobleManpower;
-        public ExplainedNumber DraftEfficiency => this.settlement.IsTown ? new BKVolunteerModel().GetDraftEfficiency(settlement.Notables[0], 2, settlement) 
+        public ExplainedNumber DraftEfficiency => this.settlement.IsTown || this.settlement.IsCastle ? new BKVolunteerModel().GetDraftEfficiency(settlement.Notables[0], 2, settlement) 
             : new ExplainedNumber(0f, true, new TaleWorlds.Localization.TextObject("Not a town"));
-        public ExplainedNumber Militarism => this.settlement.IsTown ? new BKVolunteerModel().GetMilitarism(settlement)
+        public ExplainedNumber Militarism => this.settlement.IsTown || this.settlement.IsCastle ? new BKVolunteerModel().GetMilitarism(settlement)
             : new ExplainedNumber(0f, true, new TaleWorlds.Localization.TextObject("Not a town"));
 
         public int Holdout => new BKFoodModel().GetFoodEstimate(settlement.Town, true, settlement.Town.FoodStocksUpperLimit());
@@ -519,22 +521,20 @@ namespace BannerKings.Populations
             float craftsmanMilitarism = model.GetClassMilitarism(PopType.Craftsmen);
             float craftsmen = data.GetTypeCount(PopType.Craftsmen);
             int peasantCap = (int)((serfs * serfMilitarism) + (craftsmen * craftsmanMilitarism));
-
-            int growth = (int)data.Growth.ResultNumber;
-            int peasantChange = (int)(growth * serfMilitarism);
-
+            int peasantGrowth = (int)(data.Growth.ResultNumber * (serfMilitarism) + craftsmanMilitarism);
             if (peasantManpower > peasantCap)
-                this.peasantManpower = (int)((float)this.peasantManpower * -0.05f); // Change later
+                this.peasantManpower += (int)((float)peasantGrowth * -1f); // Change later
             else if (peasantManpower < peasantCap)
-                this.peasantManpower = (int)((float)this.peasantManpower * 0.05f);
+                this.peasantManpower += peasantGrowth;
 
             float nobleMilitarism = model.GetClassMilitarism(PopType.Nobles);
             float nobles = data.GetTypeCount(PopType.Nobles);
             int nobleCap = (int)(nobles * nobleMilitarism);
+            int nobleGrowth = (int)(data.Growth.ResultNumber * nobleMilitarism);
             if (nobleManpower > nobleCap)
-                this.nobleManpower = (int)((float)this.nobleManpower * -0.05f);
+                this.nobleManpower += (int)((float)nobleGrowth * -1f);
             else if (nobleManpower < nobleCap)
-                this.nobleManpower = (int)((float)this.nobleManpower * 0.05f);
+                this.nobleManpower += nobleGrowth;
         }
     }
 
@@ -629,11 +629,13 @@ namespace BannerKings.Populations
         private float fertility;
         private float terrainDifficulty;
         TerrainType terrainType;
+        private float[] composition;
 
         public LandData(PopulationData data)
         {
             this.data = data;
             this.terrainType = Campaign.Current.MapSceneWrapper.GetTerrainTypeAtPosition(data.Settlement.Position2D);
+            this.composition = new float[3];
             this.Init(data.TotalPop);
         }
 
@@ -689,7 +691,9 @@ namespace BannerKings.Populations
                 pastureRatio = 0.22f;
                 woodRatio = 0.08f;
             }
-
+            this.composition[0] = farmRatio;
+            this.composition[1] = pastureRatio;
+            this.composition[2] = woodRatio;
             float acres = this.data.Settlement.IsVillage ? (float)totalPops * MBRandom.RandomFloatRanged(3.5f, 4.5f) : (float)totalPops * MBRandom.RandomFloatRanged(2.5f, 3.0f);
             this.farmland = acres * farmRatio;
             this.pasture = acres * pastureRatio;
@@ -726,7 +730,43 @@ namespace BannerKings.Populations
 
         internal override void Update(PopulationData data)
         {
-            
+            if (this.WorkforceSaturation > 1f)
+            {
+                List<(int, float)> list = new List<(int, float)>();
+                list.Add(new(0, this.composition[0]));
+                list.Add(new(1, this.composition[1]));
+                list.Add(new(2, this.composition[2]));
+                int choosen = MBRandom.ChooseWeighted(list);
+
+                float construction = this.data.Settlement.IsVillage ? this.data.VillageData.Construction : 
+                    new BKConstructionModel().CalculateDailyConstructionPower(this.data.Settlement.Town).ResultNumber;
+                float progress = 15f / construction;
+
+                if (this.data.Settlement.IsVillage)
+                {
+                    VillageData villageData = data.VillageData;
+                    if (!villageData.IsCurrentlyBuilding)
+                    {
+                        BuildingType type = villageData.CurrentDefault.BuildingType;
+                        if (type != DefaultVillageBuildings.Instance.DailyProduction)
+                        {
+                            if (type == DefaultVillageBuildings.Instance.DailyFarm)
+                                choosen = 0;
+                            else if (type == DefaultVillageBuildings.Instance.DailyPasture)
+                                choosen = 1;
+                            else choosen = 2;
+                        }
+
+                        progress *= 1.25f;
+                    }
+                }
+
+                if (choosen == 0)
+                    this.farmland += progress;
+                else if (choosen == 1)
+                    this.pasture += progress;
+                else this.woodland += progress;
+            }
         }
     }
 

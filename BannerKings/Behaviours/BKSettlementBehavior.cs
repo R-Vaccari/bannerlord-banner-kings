@@ -445,39 +445,75 @@ namespace BannerKings.Behaviors
 
             campaignGameStarter.AddGameMenu("bannerkings", "Banner Kings", new OnInitDelegate(game_menu_bannerkings_on_init));
 
-            campaignGameStarter.AddGameMenuOption("town", "bannerkings", "{=!}Banner Kings",
-                new GameMenuOption.OnConditionDelegate(game_menu_town_manage_town_on_condition),
+            campaignGameStarter.AddGameMenuOption("town", "bannerkings_submenu", "{=!}Banner Kings",
+                delegate (MenuCallbackArgs x)
+                {
+                    x.optionLeaveType = GameMenuOption.LeaveType.Submenu;
+                    return BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(Settlement.CurrentSettlement);
+                },
                 delegate
                 {
                     GameMenu.SwitchToMenu("bannerkings");
                 }, false, 4, false);
 
-            campaignGameStarter.AddGameMenuOption("bannerkings", "manage_population", "{=!}Feudal management",
+            campaignGameStarter.AddGameMenuOption("bannerkings", "manage_demesne", "{=!}Demesne management",
                 new GameMenuOption.OnConditionDelegate(game_menu_town_manage_town_on_condition),
                 new GameMenuOption.OnConsequenceDelegate(game_menu_town_manage_town_on_consequence), false, -1, false);
 
             campaignGameStarter.AddGameMenuOption("bannerkings", "manage_court", "{=!}Noble Court",
-               new GameMenuOption.OnConditionDelegate(game_menu_town_manage_town_on_condition),
+               new GameMenuOption.OnConditionDelegate(game_menu_court_on_condition),
                new GameMenuOption.OnConsequenceDelegate(game_menu_town_court_on_consequence), false, -1, false);
 
-            campaignGameStarter.AddGameMenuOption("bannerkings", "manage_guild", "{=!}Guild management",
-                new GameMenuOption.OnConditionDelegate(game_menu_town_manage_guild_on_condition),
-                new GameMenuOption.OnConsequenceDelegate(game_menu_town_manage_guild_on_consequence), false, -1, false);
+            //campaignGameStarter.AddGameMenuOption("bannerkings_keep", "manage_guild", "{=!}Guild management",
+            //    new GameMenuOption.OnConditionDelegate(game_menu_town_manage_guild_on_condition),
+            //    new GameMenuOption.OnConsequenceDelegate(game_menu_town_manage_guild_on_consequence), false, -1, false);
 
-            campaignGameStarter.AddGameMenuOption("bannerkings", "bannerkings_back", "{=3sRdGQou}Leave", 
-                new GameMenuOption.OnConditionDelegate(game_menu_town_manage_town_on_condition), delegate (MenuCallbackArgs x)
-            {
-                GameMenu.SwitchToMenu("town");
-            }, true, -1, false);
+            campaignGameStarter.AddGameMenuOption("bannerkings", "bannerkings_leave", "{=3sRdGQou}Leave",
+                delegate (MenuCallbackArgs x)
+                {
+                    x.optionLeaveType = GameMenuOption.LeaveType.Leave;
+                    return true;
+                }, delegate (MenuCallbackArgs x)
+                {
+                    GameMenu.SwitchToMenu("town");
+                }, true, -1, false);
 
-            campaignGameStarter.AddGameMenuOption("castle", "manage_population", "{=!}Manage population",
+            campaignGameStarter.AddGameMenu("bannerkings_castle", "Banner Kings", new OnInitDelegate(game_menu_bannerkings_on_init));
+
+            campaignGameStarter.AddGameMenuOption("castle", "bannerkings_castle_submenu", "{=!}Banner Kings",
+                delegate (MenuCallbackArgs x)
+                {
+                    x.optionLeaveType = GameMenuOption.LeaveType.Submenu;
+                    return BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(Settlement.CurrentSettlement);
+                },
+                delegate
+                {
+                    GameMenu.SwitchToMenu("bannerkings_castle");
+                }, false, 4, false);
+
+            campaignGameStarter.AddGameMenuOption("bannerkings_castle", "manage_castle_demesne", "{=!}Demesne management",
                new GameMenuOption.OnConditionDelegate(game_menu_town_manage_town_on_condition),
                new GameMenuOption.OnConsequenceDelegate(game_menu_town_manage_town_on_consequence), false, 3, false);
 
-            campaignGameStarter.AddGameMenuOption("castle", "castle_recruit_volunteers", "{=E31IJyqs}Recruit troops",
+            campaignGameStarter.AddGameMenuOption("bannerkings_castle", "manage_castle_court", "{=!}Noble Court",
+               new GameMenuOption.OnConditionDelegate(game_menu_court_on_condition),
+               new GameMenuOption.OnConsequenceDelegate(game_menu_town_court_on_consequence), false, -1, false);
+
+            campaignGameStarter.AddGameMenuOption("bannerkings_castle", "castle_recruit_volunteers", "{=E31IJyqs}Recruit troops",
                new GameMenuOption.OnConditionDelegate(game_menu_castle_recruit_troops_on_condition),
                delegate (MenuCallbackArgs args) { args.MenuContext.OpenRecruitVolunteers(); },
                false, 4, false);
+
+
+            campaignGameStarter.AddGameMenuOption("bannerkings_castle", "bannerkings_leave", "{=3sRdGQou}Leave",
+              delegate (MenuCallbackArgs x)
+              {
+                  x.optionLeaveType = GameMenuOption.LeaveType.Leave;
+                  return true;
+              }, delegate (MenuCallbackArgs x)
+               {
+                   GameMenu.SwitchToMenu("castle");
+               }, true, -1, false);
 
             campaignGameStarter.AddGameMenuOption("village", "manage_population", "{=!}Manage population",
                new GameMenuOption.OnConditionDelegate(game_menu_town_manage_town_on_condition),
@@ -491,7 +527,9 @@ namespace BannerKings.Behaviors
         private static bool game_menu_castle_recruit_troops_on_condition(MenuCallbackArgs args)
         {
             args.optionLeaveType = GameMenuOption.LeaveType.Recruit;
-            return Settlement.CurrentSettlement.IsCastle && Settlement.CurrentSettlement.Notables.Count > 0;
+            Kingdom kingdom = Clan.PlayerClan.Kingdom;
+            return Settlement.CurrentSettlement.IsCastle && Settlement.CurrentSettlement.Notables.Count > 0 && 
+                (Settlement.CurrentSettlement.OwnerClan == Clan.PlayerClan || kingdom == Settlement.CurrentSettlement.OwnerClan.Kingdom);
         }
 
         public static void game_menu_bannerkings_on_init(MenuCallbackArgs args)
@@ -499,11 +537,23 @@ namespace BannerKings.Behaviors
             args.MenuTitle = new TextObject("{=!}Banner Kings");
         }
 
+        private static bool game_menu_castle_manage_castle_on_condition(MenuCallbackArgs args)
+        {
+            args.optionLeaveType = GameMenuOption.LeaveType.Submenu;
+            return Settlement.CurrentSettlement.OwnerClan == Clan.PlayerClan;
+        }
+
+        private static bool game_menu_court_on_condition(MenuCallbackArgs args)
+        {
+            args.optionLeaveType = GameMenuOption.LeaveType.Conversation;
+            Settlement currentSettlement = Settlement.CurrentSettlement;
+            return currentSettlement.OwnerClan == Hero.MainHero.Clan;
+        }
+
         private static bool game_menu_town_manage_town_on_condition(MenuCallbackArgs args)
         {
             args.optionLeaveType = GameMenuOption.LeaveType.Manage;
-            Settlement currentSettlement = Settlement.CurrentSettlement;
-            return currentSettlement.OwnerClan == Hero.MainHero.Clan && BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(currentSettlement);
+            return Settlement.CurrentSettlement.OwnerClan == Hero.MainHero.Clan;
         }
 
         private static bool game_menu_town_manage_guild_on_condition(MenuCallbackArgs args)

@@ -32,10 +32,10 @@
       <Children>
         <ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" StackLayout.LayoutMethod="HorizontalLeftToRight" DoNotAcceptEvents="true">
           <Children>
-			<ListPanel WidthSizePolicy="Fixed" HeightSizePolicy="StretchToParent" SuggestedWidth="290" StackLayout.LayoutMethod="VerticalBottomToTop" DoNotAcceptEvents="true">
+			<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" StackLayout.LayoutMethod="VerticalBottomToTop" DoNotAcceptEvents="true">
 				<Children>
 				
-					<GridWidget DataSource="{RevenueInfo}" WidthSizePolicy="CoverChildren" HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" DefaultCellWidth="150" DefaultCellHeight="30" MarginRight="85" ColumnCount="1" MarginTop="5">
+					<GridWidget DataSource="{RevenueInfo}" WidthSizePolicy="CoverChildren" HorizontalAlignment="Left" MarginLeft="50" HeightSizePolicy="CoverChildren" DefaultCellWidth="150" DefaultCellHeight="30" ColumnCount="1" MarginTop="5">
 					  <ItemTemplate>
 						<InformationElement/>
 					  </ItemTemplate>
@@ -49,7 +49,7 @@
 						</Children>
 					</ListPanel>
 					
-					<GridWidget DataSource="{ProductionInfo}" WidthSizePolicy="CoverChildren" HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" DefaultCellWidth="150" DefaultCellHeight="30" MarginRight="85" ColumnCount="1" MarginTop="10">
+					<GridWidget DataSource="{ProductionInfo}" WidthSizePolicy="CoverChildren" HorizontalAlignment="Left" MarginLeft="50"  HeightSizePolicy="CoverChildren" DefaultCellWidth="150" DefaultCellHeight="30" ColumnCount="1" MarginTop="10">
 					  <ItemTemplate>
 						<InformationElement/>
 					  </ItemTemplate>
@@ -63,7 +63,7 @@
 						</Children>
 					</ListPanel>
 					
-					<GridWidget DataSource="{SatisfactionInfo}" WidthSizePolicy="CoverChildren" HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" DefaultCellWidth="150" DefaultCellHeight="30" MarginRight="85" ColumnCount="1" MarginTop="10">
+					<GridWidget DataSource="{SatisfactionInfo}" WidthSizePolicy="CoverChildren" HorizontalAlignment="Left" MarginLeft="50"  HeightSizePolicy="CoverChildren" DefaultCellWidth="150" DefaultCellHeight="30" ColumnCount="1" MarginTop="10">
 					  <ItemTemplate>
 						<InformationElement/>
 					  </ItemTemplate>

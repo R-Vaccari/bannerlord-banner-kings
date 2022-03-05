@@ -32,10 +32,8 @@
       <Children>
         <ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" StackLayout.LayoutMethod="HorizontalLeftToRight" DoNotAcceptEvents="true">
           <Children>
-			<ListPanel WidthSizePolicy="Fixed" HeightSizePolicy="StretchToParent" SuggestedWidth="290" StackLayout.LayoutMethod="VerticalBottomToTop" DoNotAcceptEvents="true">
+			<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" StackLayout.LayoutMethod="VerticalBottomToTop" DoNotAcceptEvents="true">
 				<Children>
-				
-					<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" HorizontalAlignment="Center" SuggestedHeight="16" Brush="Clan.Leader.Text" Text="Lawful Owner" MarginRight="30"  MarginTop="5"/>
 				
 					<Widget WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" SuggestedHeight="110" MarginTop="20" MarginRight="30" HorizontalAlignment="Center" Sprite="StdAssets\top_header">
 						<Children>
@@ -52,8 +50,6 @@
 						</Children>
 					</Widget>
 				
-					<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" HorizontalAlignment="Center" SuggestedHeight="16" Brush="Clan.Leader.Text" Text="Legal Info" MarginRight="30"  MarginTop="15"/>
-					
 					<GridWidget DataSource="{DemesneInfo}" WidthSizePolicy="CoverChildren" HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" DefaultCellWidth="150" DefaultCellHeight="30" MarginRight="100" ColumnCount="1" MarginTop="10">
 					  <ItemTemplate>
 						<InformationElement/>
@@ -85,7 +81,7 @@
 			</ListPanel>
 			
 			
-			<GridWidget DataSource="{LandInfo}" WidthSizePolicy="CoverChildren" HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" DefaultCellWidth="150" DefaultCellHeight="30" MarginRight="85" ColumnCount="1" MarginTop="10">
+			<GridWidget DataSource="{LandInfo}" WidthSizePolicy="StretchToParent" HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" DefaultCellWidth="150" DefaultCellHeight="30" MarginLeft="20" ColumnCount="1" MarginTop="10">
 			  <ItemTemplate>
 				<InformationElement/>
 			  </ItemTemplate>

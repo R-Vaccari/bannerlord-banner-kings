@@ -46,25 +46,30 @@ namespace BannerKings.Models.Vanilla
 
         public ExplainedNumber GetDraftEfficiency(Hero hero, int index, Settlement settlement)
         {
-            float num = 0.7f;
-            int num2 = 0;
-            foreach (Town town in hero.CurrentSettlement.MapFaction.Fiefs)
-                num2 += (town.IsTown ? (((town.Settlement.Prosperity < 3000f) ? 1 : ((town.Settlement.Prosperity < 6000f) ? 2 : 3)) + town.Villages.Count<Village>()) : town.Villages.Count<Village>());
-            
-            float num3 = (num2 < 46) ? ((float)num2 / 46f * ((float)num2 / 46f)) : 1f;
-            num += ((hero.CurrentSettlement != null && num3 < 1f) ? ((1f - num3) * 0.2f) : 0f);
-            float baseNumber = 0.75f * MathF.Clamp(MathF.Pow(num, (float)(index + 1)), 0f, 1f);
-            ExplainedNumber explainedNumber = new ExplainedNumber(baseNumber, true, null);
-            Clan clan = hero.Clan;
-            if (((clan != null) ? clan.Kingdom : null) != null && hero.Clan.Kingdom.ActivePolicies.Contains(DefaultPolicies.Cantons))
-                explainedNumber.AddFactor(0.2f, new TextObject("Cantons kingdom policy"));
-            
-            if (hero.VolunteerTypes[index] != null && hero.VolunteerTypes[index].IsMounted && 
-                PerkHelper.GetPerkValueForTown(DefaultPerks.Riding.CavalryTactics, settlement.IsTown ? settlement.Town : settlement.Village.TradeBound.Town))
-                explainedNumber.AddFactor(DefaultPerks.Riding.CavalryTactics.PrimaryBonus * 0.01f, DefaultPerks.Riding.CavalryTactics.PrimaryDescription);
+            if (hero != null)
+            {
+                float num = 0.7f;
+                int num2 = 0;
+                foreach (Town town in hero.CurrentSettlement.MapFaction.Fiefs)
+                    num2 += (town.IsTown ? (((town.Settlement.Prosperity < 3000f) ? 1 : ((town.Settlement.Prosperity < 6000f) ? 2 : 3)) + town.Villages.Count<Village>()) : town.Villages.Count<Village>());
 
-            BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref explainedNumber, settlement.OwnerClan.Leader, CouncilPosition.Marshall, 0.25f, true);
-            return explainedNumber;
+                float num3 = (num2 < 46) ? ((float)num2 / 46f * ((float)num2 / 46f)) : 1f;
+                num += ((hero.CurrentSettlement != null && num3 < 1f) ? ((1f - num3) * 0.2f) : 0f);
+                float baseNumber = 0.75f * MathF.Clamp(MathF.Pow(num, (float)(index + 1)), 0f, 1f);
+                ExplainedNumber explainedNumber = new ExplainedNumber(baseNumber, true, null);
+                Clan clan = hero.Clan;
+                if (((clan != null) ? clan.Kingdom : null) != null && hero.Clan.Kingdom.ActivePolicies.Contains(DefaultPolicies.Cantons))
+                    explainedNumber.AddFactor(0.2f, new TextObject("Cantons kingdom policy"));
+
+                if (hero.VolunteerTypes != null)
+                    if (hero.VolunteerTypes[index] != null && hero.VolunteerTypes[index].IsMounted &&
+                        PerkHelper.GetPerkValueForTown(DefaultPerks.Riding.CavalryTactics, settlement.IsVillage ? settlement.Village.TradeBound.Town : settlement.Town))
+                        explainedNumber.AddFactor(DefaultPerks.Riding.CavalryTactics.PrimaryBonus * 0.01f, DefaultPerks.Riding.CavalryTactics.PrimaryDescription);
+
+                BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref explainedNumber, settlement.OwnerClan.Leader, CouncilPosition.Marshall, 0.25f, true);
+                return explainedNumber;
+            }
+            return new ExplainedNumber(0f);
         }
 
         public ExplainedNumber GetMilitarism(Settlement settlement)
