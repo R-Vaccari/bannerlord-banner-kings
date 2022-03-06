@@ -7,6 +7,7 @@ using Helpers;
 using TaleWorlds.Localization;
 using static BannerKings.Managers.PopulationManager;
 using BannerKings.Managers.Court;
+using TaleWorlds.Core;
 
 namespace BannerKings.Models.Vanilla
 {
@@ -33,6 +34,17 @@ namespace BannerKings.Models.Vanilla
 
         public override CharacterObject GetBasicVolunteer(Hero sellerHero)
         {
+            Settlement settlement = sellerHero.CurrentSettlement;
+            if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
+            {
+                PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
+                float power = sellerHero.Power;
+                float chance = settlement.IsTown ? power * 0.03f : power * 0.05f;
+                float random = MBRandom.RandomFloatRanged(1f, 100f);
+                if (data.MilitaryData.NobleManpower > 0 && chance >= random)
+                    return sellerHero.Culture.EliteBasicTroop;
+                else return sellerHero.Culture.BasicTroop;
+            }
             return base.GetBasicVolunteer(sellerHero);
         }
 
