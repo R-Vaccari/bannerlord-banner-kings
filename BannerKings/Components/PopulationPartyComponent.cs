@@ -62,16 +62,6 @@ namespace BannerKings.Components
             BannerKingsConfig.Instance.PopulationManager.AddParty(caravan);
         }
 
-        public static void CreateMilitiaParty(string id, Settlement origin, Settlement target, string name, int slaves)
-        {
-            MobileParty caravan = CreateParty(id, origin, true, target, name, PopType.None);
-            caravan.AddPrisoner(CharacterObject.All.FirstOrDefault(x => x.StringId == "looter"), slaves);
-            caravan.InitializeMobilePartyAtPosition(origin.Culture.EliteCaravanPartyTemplate, origin.GatePosition);
-            GiveMounts(ref caravan);
-            GiveFood(ref caravan);
-            BannerKingsConfig.Instance.PopulationManager.AddParty(caravan);
-        }
-
         public static void CreateTravellerParty(string id, Settlement origin, Settlement target, string name, int count, PopType type, CharacterObject civilian)
         {
             MobileParty party = CreateParty(id, origin, false, target, name, type);

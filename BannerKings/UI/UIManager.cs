@@ -1,19 +1,23 @@
 ﻿
+using BannerKings.Managers.Helpers;
 using BannerKings.Managers.Populations.Villages;
 using BannerKings.Populations;
 using BannerKings.UI.Windows;
 using HarmonyLib;
 using SandBox.View.Map;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.ViewModelCollection.GameMenu;
 using TaleWorlds.CampaignSystem.ViewModelCollection.GameMenu.TownManagement;
+using TaleWorlds.CampaignSystem.ViewModelCollection.KingdomManagement.KingdomDecision;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
+using static BannerKings.Managers.TitleManager;
 
 namespace BannerKings.UI
 {
@@ -59,6 +63,43 @@ namespace BannerKings.UI
 
     namespace Patches
     {
+
+        [HarmonyPatch(typeof(KingdomPoliciesVM), "RefreshPolicyList")]
+        class RefreshPolicyListPatch
+        {
+            private static KingdomPoliciesVM instance;
+            static void Postfix(KingdomPoliciesVM __instance)
+            {
+                if (BannerKingsConfig.Instance.TitleManager == null) return;
+                instance = __instance;
+
+                FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(Hero.MainHero.MapFaction as Kingdom);
+                MethodInfo active = __instance.GetType().GetMethod("IsPolicyActive", BindingFlags.Instance | BindingFlags.NonPublic);
+                MethodInfo select = __instance.GetType().GetMethod("OnPolicySelect", BindingFlags.Instance | BindingFlags.NonPublic);
+
+                List<PolicyObject> list = PolicyHelper.GetForbiddenGovernmentPolicies(title.contract.government);
+                __instance.OtherPolicies.Clear();
+                foreach (PolicyObject policy2 in from p in PolicyObject.All
+                            where !(bool)active.Invoke(__instance, new object[] { p }) && !list.Contains(p)
+                            select p)
+                {
+                    __instance.OtherPolicies.Add(new KingdomPolicyItemVM(policy2,
+                        new Action<KingdomPolicyItemVM>(delegate (KingdomPolicyItemVM x) { select.Invoke(__instance, new object[] { x }); }),
+                        new Func<PolicyObject, bool>(IsPolicyActive)));
+                }
+            }
+
+            static bool IsPolicyActive(PolicyObject policy)
+            {
+                MethodInfo active = instance.GetType().GetMethod("IsPolicyActive", BindingFlags.Instance | BindingFlags.NonPublic);
+                return (bool)active.Invoke(instance, new object[] { policy });
+            }
+
+        }
+        
+
+
+
         [HarmonyPatch(typeof(SettlementProjectVM))]
         internal class CharacterCreationCultureStagePatch
         {

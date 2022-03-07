@@ -46,7 +46,7 @@ namespace BannerKings.Managers.Helpers
             if (heir != null)
             {
                 ChangeClanLeaderAction.ApplyWithSelectedNewLeader(victim.Clan, heir);
-                BannerKingsConfig.Instance.TitleManager.InheritTitles(victim, heir);
+                BannerKingsConfig.Instance.TitleManager.InheritAllTitles(victim, heir);
             }
         }
 
@@ -69,7 +69,7 @@ namespace BannerKings.Managers.Helpers
             if (heir != null)
             {
                 ChangeClanLeaderAction.ApplyWithSelectedNewLeader(victim.Clan, heir);
-                BannerKingsConfig.Instance.TitleManager.InheritTitles(victim, heir);
+                BannerKingsConfig.Instance.TitleManager.InheritAllTitles(victim, heir);
             }
         }
 
@@ -92,14 +92,14 @@ namespace BannerKings.Managers.Helpers
             if (heir != null)
             {
                 ChangeClanLeaderAction.ApplyWithSelectedNewLeader(victim.Clan, heir);
-                BannerKingsConfig.Instance.TitleManager.InheritTitles(victim, heir);
+                BannerKingsConfig.Instance.TitleManager.InheritAllTitles(victim, heir);
             }
         }
 
         public static void ApplyImperialInheritance(Hero victim, Hero heir)
         {
             ChangeClanLeaderAction.ApplyWithSelectedNewLeader(victim.Clan, heir);
-            BannerKingsConfig.Instance.TitleManager.InheritTitles(victim, heir);
+            BannerKingsConfig.Instance.TitleManager.InheritAllTitles(victim, heir);
         }
     }
 }

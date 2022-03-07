@@ -30,6 +30,31 @@ namespace BannerKings.Managers.Helpers
             
         }
 
+        public static IEnumerable<SuccessionType> GetValidSuccessions(GovernmentType government)
+        {
+            if (government == GovernmentType.Feudal)
+            {
+                yield return SuccessionType.Hereditary_Monarchy;
+                yield return SuccessionType.Elective_Monarchy;
+                yield break;
+            }
+            else if (government == GovernmentType.Imperial)
+            {
+                yield return SuccessionType.Imperial;
+                yield break;
+            }
+            else if (government == GovernmentType.Republic)
+            {
+                yield return SuccessionType.Republic;
+                yield break;
+            }
+            else
+            {
+                yield return SuccessionType.Elective_Monarchy;
+                yield break;
+            }
+        }
+
         private static void ApplyVanillaSuccession(List<Clan> list, Hero victim, Kingdom kingdom)
         {
             if (list.Count > 1)

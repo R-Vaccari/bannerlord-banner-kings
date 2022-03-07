@@ -40,7 +40,7 @@ namespace BannerKings.Managers
             else title.deFacto = newOwner;
 
             bool stillPresent = title.deFacto == oldOwner || title.deJure == oldOwner;
-            AddTitleHolder(newOwner, title);
+            if (newOwner != null) AddTitleHolder(newOwner, title);
             if (!stillPresent) RemoveFromTitleHolder(oldOwner, title);
         }
 
@@ -107,7 +107,13 @@ namespace BannerKings.Managers
             return false;
         }
 
-        public void InheritTitles(Hero oldOwner, Hero heir)
+        public bool HasSuzerain(FeudalTitle vassal)
+        {
+            FeudalTitle suzerain = TITLES.FirstOrDefault(x => x.vassals.Contains(vassal));
+            return suzerain != null;
+        }
+
+        public void InheritAllTitles(Hero oldOwner, Hero heir)
         {
             if (IsHeroTitleHolder(oldOwner))
             {
@@ -118,6 +124,15 @@ namespace BannerKings.Managers
                     if (title.deJure == oldOwner) ExecuteOwnershipChange(oldOwner, heir, title, true);
                     if (title.deFacto == oldOwner) ExecuteOwnershipChange(oldOwner, heir, title, false);
                 }
+            }
+        }
+
+        public void InheritTitle(Hero oldOwner, Hero heir, FeudalTitle title)
+        {
+            if (IsHeroTitleHolder(oldOwner))
+            {
+                if (title.deJure == oldOwner) ExecuteOwnershipChange(oldOwner, heir, title, true);
+                if (title.deFacto == oldOwner) ExecuteOwnershipChange(oldOwner, heir, title, false);  
             }
         }
 
@@ -152,6 +167,16 @@ namespace BannerKings.Managers
             else return null;
         }
 
+        public List<FeudalTitle> GetAllDeJure(Clan clan)
+        {
+            List<FeudalTitle> list = new List<FeudalTitle>();
+            foreach (Hero hero in clan.Heroes)
+                if (IsHeroTitleHolder(hero))
+                    foreach (FeudalTitle title in TITLE_HOLDERS[hero])
+                        if (title.deJure == hero) list.Add(title);
+
+            return list;
+        }
         public FeudalTitle GetHighestTitle(Hero hero)
         {
             if (IsHeroTitleHolder(hero))
@@ -240,29 +265,6 @@ namespace BannerKings.Managers
 
             return faction;
         }
-
-        public IEnumerable<SuccessionType> GetValidSuccessions(GovernmentType government)
-        {
-            if (government == GovernmentType.Feudal)
-            {
-                yield return SuccessionType.Hereditary_Monarchy;
-                yield return SuccessionType.Elective_Monarchy;
-                yield break;
-            } else if (government == GovernmentType.Imperial)
-            {
-                yield return SuccessionType.Imperial;
-                yield break;
-            } else if (government == GovernmentType.Republic)
-            {
-                yield return SuccessionType.Republic;
-                yield break;
-            } else
-            {
-                yield return SuccessionType.Elective_Monarchy;
-                yield break;
-            }   
-        }
-
 
         public void InitializeTitles()
         {
@@ -365,6 +367,15 @@ namespace BannerKings.Managers
                 foreach (FeudalTitle lordship in title.vassals.Where(y => y.type == TitleType.Lordship))
                     ExecuteOwnershipChange(settlement.Owner, newOwner, title, false);
         }
+
+
+        public void DeactivateTitle(FeudalTitle title)
+        {
+            ExecuteOwnershipChange(title.deJure, null, title, true);
+            ExecuteOwnershipChange(title.deFacto, null, title, false);
+        }
+
+        public void DeactivateDeJure(FeudalTitle title) => ExecuteOwnershipChange(title.deJure, null, title, true);
 
         public void ShowContract(Hero lord, string buttonString)
         {
@@ -548,6 +559,8 @@ namespace BannerKings.Managers
                 this.contract = contract;
                 dueTax = 0;
             }
+
+            public bool Active => this.deJure != null || this.deFacto != null;
 
             public void SetSovereign(FeudalTitle sovereign)
             {

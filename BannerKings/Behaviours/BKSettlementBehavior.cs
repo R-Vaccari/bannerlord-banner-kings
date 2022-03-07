@@ -32,10 +32,7 @@ namespace BannerKings.Behaviors
         public override void RegisterEvents()
         {
             CampaignEvents.DailyTickSettlementEvent.AddNonSerializedListener(this, new Action<Settlement>(DailySettlementTick));
-            CampaignEvents.HourlyTickPartyEvent.AddNonSerializedListener(this, new Action<MobileParty>(HourlyTickParty));
             CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, new Action<CampaignGameStarter>(OnSessionLaunched));
-            CampaignEvents.MobilePartyDestroyed.AddNonSerializedListener(this, new Action<MobileParty, PartyBase>(OnMobilePartyDestroyed));
-            CampaignEvents.SettlementEntered.AddNonSerializedListener(this, new Action<MobileParty, Settlement, Hero>(OnSettlementEntered));
         }
 
         public override void SyncData(IDataStore dataStore)
@@ -66,105 +63,14 @@ namespace BannerKings.Behaviors
             }*/
         }
 
-        private void HourlyTickParty(MobileParty party)
-        {
+        
 
-            if (party != null && BannerKingsConfig.Instance.PopulationManager != null && 
-                BannerKingsConfig.Instance.PopulationManager.IsPopulationParty(party))
-            {
-                PopulationPartyComponent component = (PopulationPartyComponent)party.PartyComponent;
-                Settlement target = component._target;
-
-                if (component is MilitiaComponent)
-                {
-                    MilitiaComponent militiaComponent = (MilitiaComponent)component;
-                    AiBehavior behavior = militiaComponent.behavior;
-                    if (behavior == AiBehavior.EscortParty)
-                        party.SetMoveEscortParty(militiaComponent._escortTarget);
-                    else party.SetMoveGoToSettlement(militiaComponent.OriginSettlement);
-                    return;
-                }
-
-                if (target != null)
-                {
-                    float distance = Campaign.Current.Models.MapDistanceModel.GetDistance(party, target);
-                    if (distance <= 30f)
-                    {
-                        EnterSettlementAction.ApplyForParty(party, target);
-                    } else
-                    {
-                        if (target.IsVillage)
-                        {
-                            party.Ai.SetAIState(AIState.VisitingVillage);
-                            if (target.Village.VillageState != Village.VillageStates.Looted && target.Village.VillageState != Village.VillageStates.BeingRaided)
-                                party.SetMoveModeHold();
-                            else PartyKeepMoving(ref party, ref target);
-                        }
-                        else if (!target.IsVillage)
-                        {
-                            party.Ai.SetAIState(AIState.VisitingNearbyTown);
-                            if (!target.IsUnderSiege)
-                                PartyKeepMoving(ref party, ref target);
-                            else party.SetMoveModeHold();
-                        }
-                    } 
-                }
-                else if (target == null)
-                {
-                    DestroyPartyAction.Apply(null, party);
-                    BannerKingsConfig.Instance.PopulationManager.RemoveCaravan(party);
-                }
-            }
-
-            /*
-            if (party.StringId.Contains("slavecaravan") && party.Party != null && party.Party.NumberOfHealthyMembers == 0)
-            {
-                DestroyPartyAction.Apply(null, party);
-                if (PopulationConfig.Instance.PopulationManager.IsPopulationParty(party))
-                    PopulationConfig.Instance.PopulationManager.RemoveCaravan(party);
-            }*/
-        }
-
-        private void PartyKeepMoving(ref MobileParty party, ref Settlement target)
-        {
-            if (target.IsVillage) party.Ai.SetAIState(AIState.VisitingVillage);
-            else party.Ai.SetAIState(AIState.VisitingNearbyTown);
-            party.SetMoveGoToSettlement(target);
-        }
-
+      
         private void OnSettlementEntered(MobileParty party, Settlement target, Hero hero)
         {
             if (party != null && BannerKingsConfig.Instance.PopulationManager != null)
             {
-                if (BannerKingsConfig.Instance.PopulationManager.IsPopulationParty(party))
-                {
-                    PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(target);
-                    PopulationPartyComponent component = (PopulationPartyComponent)party.PartyComponent;
-
-                    if (component is MilitiaComponent && target.IsVillage) 
-                    {
-                        foreach (TroopRosterElement element in party.MemberRoster.GetTroopRoster())
-                            target.MilitiaPartyComponent.MobileParty.MemberRoster.AddToCounts(element.Character, element.Number);
-                        if (party.PrisonRoster.TotalRegulars > 0)
-                            foreach (TroopRosterElement element in party.PrisonRoster.GetTroopRoster())
-                                if (!element.Character.IsHero) data.UpdatePopType(PopType.Slaves, element.Number);
-                    }
-
-                    if (component.slaveCaravan)
-                    {
-                        int slaves = Helpers.Helpers.GetRosterCount(party.PrisonRoster);
-                        data.UpdatePopType(PopType.Slaves, slaves);
-                    }
-                    else if (component.popType != PopType.None)
-                    {
-                        string filter = component.popType == PopType.Serfs ? "villager" : (component.popType == PopType.Craftsmen ? "craftsman" : "noble");
-                        int pops = Helpers.Helpers.GetRosterCount(party.MemberRoster, filter);
-                        data.UpdatePopType(component.popType, pops);
-                    }
-
-                    DestroyPartyAction.Apply(null, party);
-                    BannerKingsConfig.Instance.PopulationManager.RemoveCaravan(party);
-                } else if (party.LeaderHero != null && party.LeaderHero == target.Owner && party.LeaderHero != Hero.MainHero
+                if (party.LeaderHero != null && party.LeaderHero == target.Owner && party.LeaderHero != Hero.MainHero
                     && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(target)) // AI choices
                 {
                     /*
@@ -261,56 +167,34 @@ namespace BannerKings.Behaviors
 
             UpdateSettlementPops(settlement);
             BannerKingsConfig.Instance.PolicyManager.InitializeSettlement(settlement);
-            // Send Slaves
-            if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(settlement, "decision_slaves_export") && DecideSendSlaveCaravan(settlement))
-            {
-                Village target = null;
-                MBReadOnlyList<Village> villages = settlement.BoundVillages;
-                foreach (Village village in villages)
-                    if (village.Settlement != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(village.Settlement) && !BannerKingsConfig.Instance.PopulationManager.PopSurplusExists(village.Settlement, PopType.Slaves))
-                    {
-                        target = village;
-                        break;
-                    }
 
-                if (target != null) SendSlaveCaravan(target);
-            }
-
-            // Send Travellers
-            if (settlement.IsTown)
+            if (settlement.IsCastle)
             {
-                int random = MBRandom.RandomInt(1, 100);
-                if (random <= 5)
+                SetNotables(settlement);
+                UpdateVolunteers(settlement);
+                if (settlement.Town != null && settlement.Town.GarrisonParty != null)
                 {
-                    Settlement target = GetTownToTravel(settlement);
-                    if (target != null)
-                        if (BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(target) &&
-                            BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
-                            SendTravellerParty(settlement, target);
+                    foreach (Building castleBuilding in settlement.Town.Buildings)
+                        if (Helpers.Helpers._buildingCastleRetinue != null && castleBuilding.BuildingType == Helpers.Helpers._buildingCastleRetinue)
+                        {
+                            MobileParty garrison = settlement.Town.GarrisonParty;
+                            if (garrison.MemberRoster != null && garrison.MemberRoster.Count > 0)
+                            {
+                                List<TroopRosterElement> elements = garrison.MemberRoster.GetTroopRoster();
+                                int currentRetinue = 0;
+                                foreach (TroopRosterElement soldierElement in elements)
+                                    if (Helpers.Helpers.IsRetinueTroop(soldierElement.Character, settlement.Culture))
+                                        currentRetinue += soldierElement.Number;
+
+                                int maxRetinue = castleBuilding.CurrentLevel == 1 ? 20 : (castleBuilding.CurrentLevel == 2 ? 40 : 60);
+                                if (currentRetinue < maxRetinue)
+                                    if (garrison.MemberRoster.Count < garrison.Party.PartySizeLimit)
+                                        garrison.MemberRoster.AddToCounts(settlement.Culture.EliteBasicTroop, 1);
+                            }
+                        }
                 }
             }
-
-            if (settlement.IsCastle && settlement.Town != null && settlement.Town.GarrisonParty != null)
-            {
-                foreach (Building castleBuilding in settlement.Town.Buildings)
-                    if (Helpers.Helpers._buildingCastleRetinue != null && castleBuilding.BuildingType == Helpers.Helpers._buildingCastleRetinue)
-                    {
-                        MobileParty garrison = settlement.Town.GarrisonParty;
-                        if (garrison.MemberRoster != null && garrison.MemberRoster.Count > 0)
-                        {
-                            List<TroopRosterElement> elements = garrison.MemberRoster.GetTroopRoster();
-                            int currentRetinue = 0;
-                            foreach (TroopRosterElement soldierElement in elements)
-                                if (Helpers.Helpers.IsRetinueTroop(soldierElement.Character, settlement.Culture))
-                                    currentRetinue += soldierElement.Number;
-
-                            int maxRetinue = castleBuilding.CurrentLevel == 1 ? 20 : (castleBuilding.CurrentLevel == 2 ? 40 : 60);
-                            if (currentRetinue < maxRetinue)
-                                if (garrison.MemberRoster.Count < garrison.Party.PartySizeLimit)
-                                    garrison.MemberRoster.AddToCounts(settlement.Culture.EliteBasicTroop, 1);
-                        }
-                    }
-            }
+           
 
             if (settlement.IsTown)
             {
@@ -323,93 +207,110 @@ namespace BannerKings.Behaviors
             }
         }
 
-        private void OnMobilePartyDestroyed(MobileParty mobileParty, PartyBase destroyerParty)
+        private void SetNotables(Settlement settlement)
         {
-            if (mobileParty != null && BannerKingsConfig.Instance.PopulationManager != null &&
-                BannerKingsConfig.Instance.PopulationManager.IsPopulationParty(mobileParty))
-            {
-                BannerKingsConfig.Instance.PopulationManager.RemoveCaravan(mobileParty);
-            }
-        }
+            int desiredAmont = 0;
+            List<Occupation> list = new List<Occupation> { Occupation.RuralNotable, Occupation.Headman };
+            foreach (Occupation occ in list)
+                desiredAmont += Campaign.Current.Models.NotableSpawnModel.GetTargetNotableCountForSettlement(settlement, occ);
 
-        private bool DecideSendSlaveCaravan(Settlement settlement)
-        {
-
-            if (settlement.IsTown && settlement.Town != null)
+            float randomFloat = MBRandom.RandomFloat;
+            int count = settlement.Notables.Count;
+            float num2 = settlement.Notables.Any<Hero>() ? ((float)(desiredAmont - settlement.Notables.Count) / (float)desiredAmont) : 1f;
+            num2 *= MathF.Pow(num2, 0.36f);
+            if (randomFloat <= num2)
             {
-                MBReadOnlyList<Village> villages = settlement.BoundVillages;
-                if (villages != null && villages.Count > 0)
-                    if (BannerKingsConfig.Instance.PopulationManager.PopSurplusExists(settlement, PopType.Slaves))
-                        return true;
-            }
-            return false;
-        }
-
-        private Settlement GetTownToTravel(Settlement origin)
-        {
-            if (origin.OwnerClan != null)
-            {
-                Kingdom kingdom = origin.OwnerClan.Kingdom;
-                if (kingdom != null)
+                List<Occupation> list2 = new List<Occupation>();
+                foreach (Occupation occupation2 in list)
                 {
-                    if (kingdom.Settlements != null && kingdom.Settlements.Count > 1)
+                    int num3 = 0;
+                    using (List<Hero>.Enumerator enumerator2 = settlement.Notables.GetEnumerator())
                     {
-                        List<ValueTuple<Settlement, float>> list = new List<ValueTuple<Settlement, float>>();
-                        foreach (Settlement settlement in kingdom.Settlements)
-                            if (settlement.IsTown && settlement != origin)
-                                list.Add(new ValueTuple<Settlement,float>(settlement, 1f));
-                        
-                        Settlement target = MBRandom.ChooseWeighted<Settlement>(list);
-                        return target;
+                        while (enumerator2.MoveNext())
+                            if (enumerator2.Current.CharacterObject.Occupation == occupation2)
+                                num3++;
+                    }
+                    int targetNotableCountForSettlement = Campaign.Current.Models.NotableSpawnModel.GetTargetNotableCountForSettlement(settlement, occupation2);
+                    if (num3 < targetNotableCountForSettlement)
+                        list2.Add(occupation2);
+
+                }
+                if (list2.Count > 0)
+                    EnterSettlementAction.ApplyForCharacterOnly(HeroCreator.CreateHeroAtOccupation(list2.GetRandomElement<Occupation>(), settlement), settlement);
+
+            }
+        }
+
+        private void UpdateVolunteers(Settlement settlement)
+        {
+            foreach (Hero hero in settlement.Notables)
+            {
+                if (hero.CanHaveRecruits)
+                {
+                    bool flag = false;
+                    CharacterObject basicVolunteer = Campaign.Current.Models.VolunteerProductionModel.GetBasicVolunteer(hero);
+                    for (int i = 0; i < 6; i++)
+                    {
+                        if (MBRandom.RandomFloat < Campaign.Current.Models.VolunteerProductionModel.GetDailyVolunteerProductionProbability(hero, i, settlement))
+                        {
+                            CharacterObject characterObject = hero.VolunteerTypes[i];
+                            if (characterObject == null)
+                            {
+                                hero.VolunteerTypes[i] = basicVolunteer;
+                                flag = true;
+                            }
+                            else
+                            {
+                                float num = 40000f / (MathF.Max(50f, hero.Power) * MathF.Max(50f, hero.Power));
+                                int tier = characterObject.Tier;
+                                if (MBRandom.RandomInt((int)MathF.Max(2f, (float)tier * num)) == 0 && characterObject.UpgradeTargets.Length != 0 && characterObject.Tier <= 3)
+                                {
+                                    hero.VolunteerTypes[i] = characterObject.UpgradeTargets[MBRandom.RandomInt(characterObject.UpgradeTargets.Length)];
+                                    flag = true;
+                                }
+                            }
+                        }
+                    }
+                    if (flag)
+                    {
+                        CharacterObject[] volunteerTypes = hero.VolunteerTypes;
+                        for (int j = 1; j < 6; j++)
+                        {
+                            CharacterObject characterObject2 = volunteerTypes[j];
+                            if (characterObject2 != null)
+                            {
+                                int num2 = 0;
+                                int num3 = j - 1;
+                                CharacterObject characterObject3 = volunteerTypes[num3];
+                                while (num3 >= 0 && (characterObject3 == null || (float)characterObject2.Level + (characterObject2.IsMounted ? 0.5f : 0f) < (float)characterObject3.Level + (characterObject3.IsMounted ? 0.5f : 0f)))
+                                {
+                                    if (characterObject3 == null)
+                                    {
+                                        num3--;
+                                        num2++;
+                                        if (num3 >= 0)
+                                            characterObject3 = volunteerTypes[num3];
+                                        
+                                    }
+                                    else
+                                    {
+                                        volunteerTypes[num3 + 1 + num2] = characterObject3;
+                                        num3--;
+                                        num2 = 0;
+                                        if (num3 >= 0)
+                                            characterObject3 = volunteerTypes[num3];
+                                        
+                                    }
+                                }
+                                volunteerTypes[num3 + 1 + num2] = characterObject2;
+                            }
+                        }
                     }
                 }
             }
-
-            return null;
         }
 
-        private void SendTravellerParty(Settlement origin, Settlement target)
-        {
-            PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(origin);
-            int random = MBRandom.RandomInt(1, 100);
-            CharacterObject civilian;
-            PopType type;
-            int count;
-            string name;
-            if (random < 60)
-            {
-                civilian = MBObjectManager.Instance.GetObjectTypeList<CharacterObject>().FirstOrDefault(x => x.StringId == "villager_" + origin.Culture.StringId.ToString());
-                count = MBRandom.RandomInt(30, 70);
-                type = PopType.Serfs;
-            }
-            else if (random < 90)
-            {
-                civilian = MBObjectManager.Instance.GetObjectTypeList<CharacterObject>().FirstOrDefault(x => x.StringId == "craftsman_" + origin.Culture.StringId.ToString());
-                count = MBRandom.RandomInt(15, 30);
-                type = PopType.Craftsmen;
-            } else
-            {
-                civilian = MBObjectManager.Instance.GetObjectTypeList<CharacterObject>().FirstOrDefault(x => x.StringId == "noble_" + origin.Culture.StringId.ToString());
-                count = MBRandom.RandomInt(10, 15);
-                type = PopType.Nobles;
-            }
-
-            name = "Travelling " + Helpers.Helpers.GetClassName(type, origin.Culture).ToString() + " from {0}";
-
-            if (civilian != null)
-              PopulationPartyComponent.CreateTravellerParty("travellers_", origin, target,
-                name, count, type, civilian);
-            
-        }
-
-        private void SendSlaveCaravan(Village target)
-        {
-            Settlement origin = target.MarketTown.Settlement;
-            PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(origin);
-            int slaves = (int)((double)data.GetTypeCount(PopType.Slaves) * 0.005d);
-            data.UpdatePopType(PopType.Slaves, (int)((float)slaves * -1f));
-            PopulationPartyComponent.CreateSlaveCaravan("slavecaravan_", origin, target.Settlement, "Slave Caravan from {0}", slaves);
-        }
+        
 
         private void OnSessionLaunched(CampaignGameStarter campaignGameStarter)
         {
@@ -1154,39 +1055,6 @@ namespace BannerKings.Behaviors
             }
         }
 
-        [HarmonyPatch(typeof(ChangeOwnerOfSettlementAction), "ApplyInternal")]
-        class ChangeOnwerPatch
-        {
-            static bool Prefix(Settlement settlement, Hero newOwner, Hero capturerHero, ChangeOwnerOfSettlementAction.ChangeOwnerOfSettlementDetail detail)
-            {
-                if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
-                {
-                    /*
-                   PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
-                   CultureObject settlementCulture = settlement.Culture;
-                   CultureObject originalOwnerCulture = settlement.Owner.Culture;
-                   CultureObject newCulture = newOwner.Culture;
-
-
-
-                   if ((settlementCulture == originalOwnerCulture && settlementCulture != newCulture) ||
-                       (settlementCulture != originalOwnerCulture && settlementCulture != newCulture
-                       && originalOwnerCulture != newCulture)) // previous owner as assimilated or everybody has a different culture
-                   {
-                       data.Assimilation = 0f;
-                   }
-                   else if (originalOwnerCulture != newCulture && newCulture == settlementCulture) // new owner is same culture as settlement that was being assimilated by foreigner, invert the process
-                   {
-                       float result = 1f - data.Assimilation;
-                       data.Assimilation = result;
-                   } */
-
-                    BannerKingsConfig.Instance.TitleManager.ApplyOwnerChange(settlement, newOwner);
-                }
-
-                return true;
-            }
-        }
 
         [HarmonyPatch(typeof(Town), "FoodStocksUpperLimit")]
         class FoodStockPatch

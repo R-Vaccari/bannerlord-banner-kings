@@ -21,6 +21,7 @@ using BannerKings.Managers.Helpers;
 using BannerKings.Populations;
 using BannerKings.Models.Vanilla;
 using BannerKings.Behaviours;
+using TaleWorlds.CampaignSystem.Election;
 
 namespace BannerKings
 {
@@ -39,7 +40,8 @@ namespace BannerKings
                     campaignStarter.AddBehavior(new BKSettlementBehavior());
                     campaignStarter.AddBehavior(new BKCompanionBehavior());
                     campaignStarter.AddBehavior(new BKTournamentBehavior());
-                    campaignStarter.AddBehavior(new BKCastleCharactersBehavior());
+                    campaignStarter.AddBehavior(new BKRepublicBehavior());
+                    campaignStarter.AddBehavior(new BKPartyBehavior());
 
                     campaignStarter.AddModel(new BKProsperityModel());
                     campaignStarter.AddModel(new BKTaxModel());
@@ -125,6 +127,25 @@ namespace BannerKings
 
         namespace Government
         {
+
+
+            [HarmonyPatch(typeof(KingdomPolicyDecision), "IsAllowed")]
+            class PolicyIsAllowedPatch
+            {
+                static bool Prefix(ref bool __result, KingdomPolicyDecision __instance)
+                {
+                    if (BannerKingsConfig.Instance.TitleManager != null)
+                    {
+                        FeudalTitle sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(__instance.Kingdom);
+                        if (sovereign != null)
+                        {
+                            __result = !PolicyHelper.GetForbiddenGovernmentPolicies(sovereign.contract.government).Contains(__instance.Policy);
+                            return false;
+                        }
+                    }
+                    return true;
+                }
+            }
 
             [HarmonyPatch(typeof(KillCharacterAction), "ApplyInternal")]
             class KillCharacterActionPatch
