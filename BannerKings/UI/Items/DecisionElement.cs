@@ -6,7 +6,7 @@ using TaleWorlds.Localization;
 namespace BannerKings.UI
 {
 	// Token: 0x02000020 RID: 32
-	public class PopulationOptionVM : ViewModel
+	public class DecisionElement : ViewModel
 	{
 		public int OptionTypeID { get; set; }
 		private HintViewModel _hint { get; set; }
@@ -39,7 +39,7 @@ namespace BannerKings.UI
 		}
 
 
-		public PopulationOptionVM SetAsBooleanOption(string desc, bool initialValue, Action<bool> onChange, TextObject hintText)
+		public DecisionElement SetAsBooleanOption(string desc, bool initialValue, Action<bool> onChange, TextObject hintText)
 		{
 			try
 			{
@@ -55,7 +55,7 @@ namespace BannerKings.UI
 			return this;
 		}
 
-		public PopulationOptionVM SetAsButtonOption(string buttonName, Action onPress, TextObject hintText = null)
+		public DecisionElement SetAsButtonOption(string buttonName, Action onPress, TextObject hintText = null)
 		{
 			try
 			{
@@ -81,7 +81,7 @@ namespace BannerKings.UI
 		}
 
 		// Token: 0x060001CF RID: 463 RVA: 0x0000E1BC File Offset: 0x0000C3BC
-		public PopulationOptionVM SetAsTitle(string title, TextObject hintText = null)
+		public DecisionElement SetAsTitle(string title, TextObject hintText = null)
 		{
 			this.OptionTypeID = 0;
 			this.Description = title;

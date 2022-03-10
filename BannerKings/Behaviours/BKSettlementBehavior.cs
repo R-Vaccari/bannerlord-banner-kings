@@ -16,6 +16,8 @@ using HarmonyLib;
 using BannerKings.Populations;
 using BannerKings.Managers.Institutions;
 using TaleWorlds.CampaignSystem.Overlay;
+using TaleWorlds.CampaignSystem.SandBox.CampaignBehaviors;
+using BannerKings.Managers.Policies;
 
 namespace BannerKings.Behaviors
 {
@@ -358,7 +360,7 @@ namespace BannerKings.Behaviors
                 new OnInitDelegate(MenuWaitInit), 
                 new OnConditionDelegate(MenuGuardActionPeasantCondition), 
                 new OnConsequenceDelegate(MenuActionConsequenceWithGold), 
-                new OnTickDelegate(TickWaitGuard), GameMenu.MenuAndOptionType.WaitMenuShowProgressAndHoursOption, GameOverlays.MenuOverlayType.SettlementWithBoth, 8f, GameMenu.MenuFlags.None, null);
+                new OnTickDelegate(TickWaitGuard), GameMenu.MenuAndOptionType.WaitMenuShowProgressAndHoursOption, GameOverlays.MenuOverlayType.SettlementWithBoth, 4f, GameMenu.MenuFlags.None, null);
 
             campaignGameStarter.AddGameMenuOption("bannerkings_wait_guard", "wait_leave", "{=3sRdGQou}Leave", 
                 delegate (MenuCallbackArgs args) {
@@ -370,8 +372,6 @@ namespace BannerKings.Behaviors
                     PlayerEncounter.Current.IsPlayerWaiting = false;
                     this.SwitchToMenuIfThereIsAnInterrupt(args.MenuContext.GameMenu.StringId);
                 }, true, -1, false);
-
-
 
             campaignGameStarter.AddWaitGameMenu("bannerkings_wait_train_guards", "{=!}You are trainning the guards in {CURRENT_SETTLEMENT}.",
                 new OnInitDelegate(MenuWaitInit),
@@ -393,9 +393,9 @@ namespace BannerKings.Behaviors
 
             campaignGameStarter.AddWaitGameMenu("bannerkings_wait_hunt", "{=!}You are hunting in the region of {CURRENT_SETTLEMENT}. Game quantity in this region is {HUNTING_GAME}.",
                 new OnInitDelegate(MenuWaitInit),
-                new OnConditionDelegate(MenuHuntingActionCondition),
+                new OnConditionDelegate(MenuHuntingActionCondition), 
                 new OnConsequenceDelegate(MenuActionHuntingConsequence),
-                new OnTickDelegate(TickWaitHunt), GameMenu.MenuAndOptionType.WaitMenuShowProgressAndHoursOption, GameOverlays.MenuOverlayType.SettlementWithBoth, 8f, GameMenu.MenuFlags.None, null);
+                new OnTickDelegate(TickWaitHunt), GameMenu.MenuAndOptionType.WaitMenuShowProgressAndHoursOption, GameOverlays.MenuOverlayType.SettlementWithBoth, 4f, GameMenu.MenuFlags.None, null);
 
             campaignGameStarter.AddGameMenuOption("bannerkings_wait_hunt", "wait_leave", "{=3sRdGQou}Leave",
                 delegate (MenuCallbackArgs args) {
@@ -408,7 +408,30 @@ namespace BannerKings.Behaviors
                     this.SwitchToMenuIfThereIsAnInterrupt(args.MenuContext.GameMenu.StringId);
                 }, true, -1, false);
 
+            campaignGameStarter.AddWaitGameMenu("bannerkings_wait_meet_nobility", "{=!}You are meeting with the high society of {CURRENT_SETTLEMENT}.",
+                new OnInitDelegate(MenuWaitInit),
+                new OnConditionDelegate(MenuMeetNobilityActionCondition),
+                new OnConsequenceDelegate(MenuActionMeetNobilityConsequence),
+                new OnTickDelegate(TickWaitMeetNobility), GameMenu.MenuAndOptionType.WaitMenuShowProgressAndHoursOption, GameOverlays.MenuOverlayType.SettlementWithBoth, 8f, GameMenu.MenuFlags.None, null);
+
+            campaignGameStarter.AddGameMenuOption("bannerkings_wait_meet_nobility", "wait_leave", "{=3sRdGQou}Leave",
+                delegate (MenuCallbackArgs args) {
+                    args.optionLeaveType = GameMenuOption.LeaveType.Leave;
+                    return true;
+                },
+                delegate (MenuCallbackArgs args)
+                {
+                    PlayerEncounter.Current.IsPlayerWaiting = false;
+                    this.SwitchToMenuIfThereIsAnInterrupt(args.MenuContext.GameMenu.StringId);
+                }, true, -1, false);
+
             // ------- ACTIONS --------
+
+            campaignGameStarter.AddGameMenuOption("bannerkings_actions", "action_meet_nobility", "{=!}Meet nobility",
+                new GameMenuOption.OnConditionDelegate(MenuMeetNobilityActionCondition), delegate (MenuCallbackArgs x)
+                {
+                    GameMenu.SwitchToMenu("bannerkings_wait_meet_nobility");
+                }, false, -1, false);
 
             campaignGameStarter.AddGameMenuOption("bannerkings_actions", "action_guard", "{=!}Serve as guard", 
                 new GameMenuOption.OnConditionDelegate(MenuGuardActionPeasantCondition), delegate (MenuCallbackArgs x)
@@ -476,7 +499,8 @@ namespace BannerKings.Behaviors
                     return true;
                 }, delegate (MenuCallbackArgs x)
                 {
-                    GameMenu.ExitToLast();
+                    string menu = Settlement.CurrentSettlement.IsVillage ? "village" : (Settlement.CurrentSettlement.IsCastle ? "castle" : "town");
+                    GameMenu.SwitchToMenu(menu);
                 }, true, -1, false);
 
             //campaignGameStarter.AddGameMenuOption("bannerkings_keep", "manage_guild", "{=!}Guild management",
@@ -506,13 +530,21 @@ namespace BannerKings.Behaviors
 
             // ------- VILLAGE --------
 
-            campaignGameStarter.AddGameMenuOption("village", "manage_population", "{=!}Manage population",
-               new GameMenuOption.OnConditionDelegate(MenuSettlementManageCondition),
-               new GameMenuOption.OnConsequenceDelegate(MenuSettlementManageConsequence), false, 5, false);
 
-            campaignGameStarter.AddGameMenuOption("village", "manage_projects", "{=!}Village Projects",
-               new GameMenuOption.OnConditionDelegate(MenuSettlementManageCondition),
-               new GameMenuOption.OnConsequenceDelegate(MenuVillageProjectsConsequence), false, 4, false);
+            campaignGameStarter.AddGameMenuOption("village", "bannerkings_village_submenu", "{=!}Banner Kings",
+                delegate (MenuCallbackArgs x)
+                {
+                    x.optionLeaveType = GameMenuOption.LeaveType.Submenu;
+                    return BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(Settlement.CurrentSettlement);
+                },
+                delegate
+                {
+                    GameMenu.SwitchToMenu("bannerkings");
+                }, false, 2, false);
+
+            campaignGameStarter.AddGameMenuOption("bannerkings", "manage_projects", "{=!}Village Projects",
+               new GameMenuOption.OnConditionDelegate(MenuVillageBuildingCondition),
+               new GameMenuOption.OnConsequenceDelegate(MenuVillageProjectsConsequence), false, -1, false);
         }
 
 
@@ -628,7 +660,7 @@ namespace BannerKings.Behaviors
                 if (args.MenuContext.GameMenu.Progress != progress)
                 {
                     float chance = woodland * 0.001f;
-                    float random = MBRandom.RandomFloat;
+                    float random = MBRandom.RandomFloatRanged(1f, 100f);
                     if (random <= chance)
                     {
                         actionHuntGame += 1;
@@ -643,6 +675,32 @@ namespace BannerKings.Behaviors
                         InformationManager.DisplayMessage(
                             new InformationMessage(
                                 new TextObject("{=!}You have have caught an animal and improved your {SKILL} skill while hunting.").ToString()));
+                    }
+                }
+            }
+        }
+
+        private static void TickWaitMeetNobility(MenuCallbackArgs args, CampaignTime dt)
+        {
+            float progress = args.MenuContext.GameMenu.Progress;
+            int diff = (int)actionStart.ElapsedHoursUntilNow;
+            if (diff > 0)
+            {
+                args.MenuContext.GameMenu.SetProgressOfWaitingInMenu(diff * 0.250f);
+                if (args.MenuContext.GameMenu.Progress != progress)
+                {
+                    float chance = ((float)Hero.MainHero.GetSkillValue(DefaultSkills.Charm) * 0.05f) + 15f;
+                    float random = MBRandom.RandomFloatRanged(1f, 100f);
+                    if (random <= chance)
+                    {
+                        float influence = MBRandom.RandomFloatRanged(0.1f, 0.5f);
+                        GainKingdomInfluenceAction.ApplyForDefault(Hero.MainHero, influence);
+                        GameTexts.SetVariable("INFLUENCE", influence);
+                        GameTexts.SetVariable("SKILL", DefaultSkills.Charm.Name);
+                        Hero.MainHero.AddSkillXp(DefaultSkills.Charm, MBRandom.RandomFloatRanged(10f, 25f));
+                        InformationManager.DisplayMessage(
+                            new InformationMessage(
+                                new TextObject("{=!}You have have improved your {SKILL} skill and gained {INFLUENCE} influence while meeting with nobles.").ToString()));
                     }
                 }
             }
@@ -707,6 +765,24 @@ namespace BannerKings.Behaviors
             return IsPeasant() && !IsWounded() && !criminal && leadership >= 50 && combat >= 160;
         }
 
+        private static bool MenuMeetNobilityActionCondition(MenuCallbackArgs args)
+        {
+            args.optionLeaveType = GameMenuOption.LeaveType.Conversation;
+            MBTextManager.SetTextVariable("CURRENT_SETTLEMENT", Settlement.CurrentSettlement.EncyclopediaLinkWithName, false);
+            bool criminal = false;
+            bool inFaction = Clan.PlayerClan.Kingdom != null;
+            bool renown = Clan.PlayerClan.Tier >= 2;
+            Clan clan = Settlement.CurrentSettlement.OwnerClan;
+            if (clan != null)
+            {
+                Kingdom kingdom = clan.Kingdom;
+                if (kingdom != null)
+                    criminal = kingdom.MainHeroCrimeRating > 0;
+                
+            }
+            return !IsWounded() && !criminal && (inFaction || renown);
+        }
+
         private static bool MenuHuntingActionCondition(MenuCallbackArgs args)
         {
             args.optionLeaveType = GameMenuOption.LeaveType.Continue;
@@ -736,15 +812,21 @@ namespace BannerKings.Behaviors
 
         private static bool MenuCourtCondition(MenuCallbackArgs args)
         {
-            args.optionLeaveType = GameMenuOption.LeaveType.Conversation;
+            args.optionLeaveType = GameMenuOption.LeaveType.RansomAndBribe;
             Settlement currentSettlement = Settlement.CurrentSettlement;
-            return currentSettlement.OwnerClan == Hero.MainHero.Clan;
+            return currentSettlement.OwnerClan == Hero.MainHero.Clan && !currentSettlement.IsVillage;
         }
 
         private static bool MenuSettlementManageCondition(MenuCallbackArgs args)
         {
             args.optionLeaveType = GameMenuOption.LeaveType.Manage;
             return Settlement.CurrentSettlement.OwnerClan == Hero.MainHero.Clan;
+        }
+
+        private static bool MenuVillageBuildingCondition(MenuCallbackArgs args)
+        {
+            args.optionLeaveType = GameMenuOption.LeaveType.Manage;
+            return Settlement.CurrentSettlement.OwnerClan == Hero.MainHero.Clan && Settlement.CurrentSettlement.IsVillage;
         }
 
         private static bool MenuGuildManageCondition(MenuCallbackArgs args)
@@ -756,6 +838,14 @@ namespace BannerKings.Behaviors
         }
 
         // -------- CONSEQUENCES ----------
+
+        private static void MenuActionMeetNobilityConsequence(MenuCallbackArgs args)
+        {
+            PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(Settlement.CurrentSettlement);
+            args.MenuContext.GameMenu.EndWait();
+            args.MenuContext.GameMenu.SetProgressOfWaitingInMenu(0f);
+            GameMenu.SwitchToMenu("bannerkings");
+        }
 
         private static void MenuActionHuntingConsequence(MenuCallbackArgs args)
         {
@@ -1030,14 +1120,53 @@ namespace BannerKings.Behaviors
 
     namespace Patches
     {
+
+        [HarmonyPatch(typeof(CaravansCampaignBehavior), "SpawnCaravan")]
+        class SpawnCaravanPatch
+        {
+            static bool Prefix(Hero hero, bool initialSpawn = false)
+            {
+                if (hero.CurrentSettlement != null && hero.CurrentSettlement.IsTown)
+                    return true;
+                
+                return false;
+            }
+        }
+
+
         [HarmonyPatch(typeof(SellPrisonersAction), "ApplyForAllPrisoners")]
         class ApplyAllPrisionersPatch
         {
             static bool Prefix(MobileParty sellerParty, TroopRoster prisoners, Settlement currentSettlement, bool applyGoldChange = true)
             {
                 if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(currentSettlement))
-                    BannerKingsConfig.Instance.PopulationManager.GetPopData(currentSettlement).UpdatePopType(
-                        PopulationManager.PopType.Slaves, Helpers.Helpers.GetRosterCount(prisoners));
+                {
+                    BKCriminalPolicy policy = (BKCriminalPolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(currentSettlement, "criminal");
+                    if (policy.Policy == BKCriminalPolicy.CriminalPolicy.Enslavement)
+                        BannerKingsConfig.Instance.PopulationManager.GetPopData(currentSettlement)
+                            .UpdatePopType(PopType.Slaves, Helpers.Helpers.GetRosterCount(prisoners));
+                    else if (policy.Policy == BKCriminalPolicy.CriminalPolicy.Forgiveness)
+                    {
+                        Dictionary<CultureObject, int> dic = new Dictionary<CultureObject, int>();
+                        foreach (TroopRosterElement element in prisoners.GetTroopRoster())
+                        {
+                            CultureObject culture = element.Character.Culture;
+                            if (dic.ContainsKey(culture))
+                                dic[culture] += element.Number;
+                            else dic.Add(culture, element.Number);
+                        }
+
+                        foreach (KeyValuePair<CultureObject, int> pair in dic)
+                        {
+                            Settlement random = Settlement.All.GetRandomElementWithPredicate(x => x.Culture == pair.Key);
+                            if (random != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(currentSettlement))
+                                BannerKingsConfig.Instance.PopulationManager.GetPopData(random)
+                                    .UpdatePopType(PopType.Serfs, pair.Value);
+                        }
+                    }
+                    else return false;
+                }
+                    
                 return true;
             }
         }
@@ -1048,8 +1177,32 @@ namespace BannerKings.Behaviors
             static bool Prefix(MobileParty sellerParty, TroopRoster prisoners, Settlement currentSettlement)
             {
                 if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(currentSettlement))
-                    BannerKingsConfig.Instance.PopulationManager.GetPopData(currentSettlement).UpdatePopType(
-                        PopulationManager.PopType.Slaves, Helpers.Helpers.GetRosterCount(prisoners));
+                {
+                    BKCriminalPolicy policy = (BKCriminalPolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(currentSettlement, "criminal");
+                    if (policy.Policy == BKCriminalPolicy.CriminalPolicy.Enslavement)
+                        BannerKingsConfig.Instance.PopulationManager.GetPopData(currentSettlement)
+                            .UpdatePopType(PopType.Slaves, Helpers.Helpers.GetRosterCount(prisoners));
+                    else if (policy.Policy == BKCriminalPolicy.CriminalPolicy.Forgiveness)
+                    {
+                        Dictionary<CultureObject, int> dic = new Dictionary<CultureObject, int>();
+                        foreach (TroopRosterElement element in prisoners.GetTroopRoster())
+                        {
+                            CultureObject culture = element.Character.Culture;
+                            if (dic.ContainsKey(culture))
+                                dic[culture] += element.Number;
+                            else dic.Add(culture, element.Number);
+                        }
+
+                        foreach (KeyValuePair<CultureObject, int> pair in dic)
+                        {
+                            Settlement random = Settlement.All.GetRandomElementWithPredicate(x => x.Culture == pair.Key);
+                            if (random != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(currentSettlement))
+                                BannerKingsConfig.Instance.PopulationManager.GetPopData(random)
+                                    .UpdatePopType(PopType.Serfs, pair.Value);
+                        }
+                    }
+                    else return false;
+                }
 
                 return true;
             }

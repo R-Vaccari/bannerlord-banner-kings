@@ -32,10 +32,10 @@
       <Children>
         <ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" StackLayout.LayoutMethod="HorizontalLeftToRight" DoNotAcceptEvents="true">
           <Children>
-			<ListPanel WidthSizePolicy="Fixed" HeightSizePolicy="StretchToParent" SuggestedWidth="290" StackLayout.LayoutMethod="VerticalBottomToTop" DoNotAcceptEvents="true">
+			<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" StackLayout.LayoutMethod="VerticalBottomToTop" DoNotAcceptEvents="true" MarginTop="35">
 				<Children>
 
-					<GridWidget DataSource="{ManpowerInfo}" WidthSizePolicy="CoverChildren" HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" DefaultCellWidth="150" DefaultCellHeight="30" MarginRight="60" ColumnCount="1" MarginTop="20">
+					<GridWidget DataSource="{ManpowerInfo}" WidthSizePolicy="CoverChildren" HorizontalAlignment="Left" MarginLeft="50" HeightSizePolicy="CoverChildren" DefaultCellWidth="150" DefaultCellHeight="30" ColumnCount="1" >
 					  <ItemTemplate>
 						<InformationElement/>
 					  </ItemTemplate>
@@ -49,7 +49,7 @@
 						</Children>
 					</ListPanel>
 					
-					<GridWidget DataSource="{DefenseInfo}" WidthSizePolicy="CoverChildren" HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" DefaultCellWidth="150" DefaultCellHeight="30" MarginRight="60" ColumnCount="1" MarginTop="10">
+					<GridWidget DataSource="{DefenseInfo}" WidthSizePolicy="CoverChildren" HorizontalAlignment="Left" MarginLeft="50" HeightSizePolicy="CoverChildren" DefaultCellWidth="150" DefaultCellHeight="30" ColumnCount="1" MarginTop="10">
 					  <ItemTemplate>
 						<InformationElement/>
 					  </ItemTemplate>
@@ -63,7 +63,7 @@
 						</Children>
 					</ListPanel>
 					
-					<GridWidget DataSource="{SiegeInfo}" WidthSizePolicy="CoverChildren" HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" DefaultCellWidth="150" DefaultCellHeight="30" MarginRight="85" ColumnCount="1" MarginTop="10">
+					<GridWidget DataSource="{SiegeInfo}" WidthSizePolicy="CoverChildren" HorizontalAlignment="Left" MarginLeft="50" HeightSizePolicy="CoverChildren" DefaultCellWidth="150" DefaultCellHeight="30" ColumnCount="1" MarginTop="10">
 					  <ItemTemplate>
 						<InformationElement/>
 					  </ItemTemplate>
@@ -72,7 +72,7 @@
 
 				</Children>
 			</ListPanel>				
-			<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" StackLayout.LayoutMethod="VerticalBottomToTop" MaxHeight="645" >
+			<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" StackLayout.LayoutMethod="VerticalBottomToTop" MarginTop="35">
 			  <Children>
 					
 				<ListPanel WidthSizePolicy="Fixed" HeightSizePolicy="CoverChildren" SuggestedWidth="320" StackLayout.LayoutMethod="HorizontalLeftToRight" MaxHeight="645" MarginTop="20">

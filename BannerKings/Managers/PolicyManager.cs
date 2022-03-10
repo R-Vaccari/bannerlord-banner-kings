@@ -26,6 +26,8 @@ namespace BannerKings.Managers
                 yield return "decision_militia_subsidize";
                 yield return "decision_tariff_exempt";
                 yield return "decision_foreigner_ban";
+                yield return "decision_slaves_tax";
+                yield return "decision_mercantilism";
                 yield break;
             }
         }
@@ -162,6 +164,10 @@ namespace BannerKings.Managers
                 return new BKExemptTariffDecision(settlement, false);
             else if (policyType == "decision_foreigner_ban")
                 return new BKBanForeignersDecision(settlement, false);
+            else if (policyType == "decision_slaves_tax")
+                return new BKTaxSlavesDecision(settlement, false);
+            else if (policyType == "decision_mercantilism")
+                return new BKEncourageMercantilism(settlement, false);
             else
                 return new BKExportSlavesDecision(settlement, true);
 

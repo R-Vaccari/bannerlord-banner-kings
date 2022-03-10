@@ -63,6 +63,8 @@ namespace BannerKings
                     campaignStarter.AddModel(new BKRaidModel());
                     campaignStarter.AddModel(new BKVolunteerModel());
                     campaignStarter.AddModel(new BKNotableModel());
+                    campaignStarter.AddModel(new BKGarrisonModel());
+                    campaignStarter.AddModel(new BKRandomModel());
                 } catch (Exception e)
                 {
                 }

@@ -1,5 +1,6 @@
 ﻿
 using BannerKings.Managers.Court;
+using BannerKings.Managers.Policies;
 using BannerKings.Populations;
 using Helpers;
 using System;
@@ -31,17 +32,25 @@ namespace BannerKings.Models
                 bool surplusExists = BannerKingsConfig.Instance.PopulationManager.PopSurplusExists(town.Settlement, PopType.Slaves, true);
                 baseResult.Add((float)slaves * SLAVE_LOYALTY * (surplusExists ? 1.1f : 1f), new TextObject("Slave population"));
 
-				if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(town.Settlement, "tax", (int)TaxType.Low))
+				TaxType tax = (BannerKingsConfig.Instance.PolicyManager.GetPolicy(town.Settlement, "tax") as BKTaxPolicy).Policy;
+				if (tax == TaxType.Low)
 				{
 					float fraction1 = data.GetCurrentTypeFraction(PopType.Craftsmen);
 					float fraction2 = data.GetCurrentTypeFraction(PopType.Serfs) * 0.8f;
 					baseResult.Add((fraction1 + fraction2) * LOYALTY_FACTOR, new TextObject("Low tax policy"));
 				}
-				else if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(town.Settlement, "tax", (int)TaxType.High))
+				else if (tax == TaxType.High)
 				{
 					float fraction1 = data.GetCurrentTypeFraction(PopType.Craftsmen);
 					float fraction2 = data.GetCurrentTypeFraction(PopType.Serfs) * 0.8f;
 					baseResult.Add((fraction1 + fraction2) * LOYALTY_FACTOR * -1f, new TextObject("High tax policy"));
+				}
+
+				if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(town.Settlement, "decision_mercantilism"))
+				{
+					float factor = tax == TaxType.Low ? 1.5f : (tax == TaxType.Standard ? 2f : 2.5f);
+					float privateSlaves = 1f - data.EconomicData.StateSlaves;
+					baseResult.Add(privateSlaves * -factor, new TextObject("Tax private slaves decision"));
 				}
 
 				BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref baseResult, town.OwnerClan.Leader, CouncilPosition.Chancellor, 1f, false);
@@ -64,8 +73,6 @@ namespace BannerKings.Models
 			this.GetSettlementLoyaltyChangeDueToNotableRelations(town, ref result);
 			this.GetSettlementLoyaltyChangeDueToGovernorPerks(town, ref result);
 			this.GetSettlementLoyaltyChangeDueToLoyaltyDrift(town, ref result);
-
-
 			return result;
 		}
 
@@ -88,23 +95,17 @@ namespace BannerKings.Models
 		{
 			float num = 0f;
 			foreach (Hero hero in town.Settlement.Notables)
-			{
 				if (hero.SupporterOf != null)
 				{
 					if (hero.SupporterOf == town.Settlement.OwnerClan)
-					{
 						num += 0.5f;
-					}
 					else if (town.Settlement.OwnerClan.IsAtWarWith(hero.SupporterOf))
-					{
 						num += -0.5f;
-					}
 				}
-			}
+			
 			if (num > 0f)
-			{
 				explainedNumber.Add(num, NotableText, null);
-			}
+			
 		}
 
 		private void GetSettlementLoyaltyChangeDueToOwnerCulture(Town town, ref ExplainedNumber explainedNumber)
@@ -134,49 +135,37 @@ namespace BannerKings.Models
 				if (kingdom.ActivePolicies.Contains(DefaultPolicies.Citizenship))
 				{
 					if (town.Settlement.OwnerClan.Culture == kingdom.RulingClan.Culture)
-					{
 						explainedNumber.Add(0.5f, DefaultPolicies.Citizenship.Name, null);
-					}
+					
 					else
-					{
 						explainedNumber.Add(-0.5f, DefaultPolicies.Citizenship.Name, null);
-					}
+					
 				}
 				if (kingdom.ActivePolicies.Contains(DefaultPolicies.HuntingRights))
-				{
 					explainedNumber.Add(-0.2f, DefaultPolicies.HuntingRights.Name, null);
-				}
+				
 				if (kingdom.ActivePolicies.Contains(DefaultPolicies.GrazingRights))
-				{
 					explainedNumber.Add(0.5f, DefaultPolicies.GrazingRights.Name, null);
-				}
+				
 				if (kingdom.ActivePolicies.Contains(DefaultPolicies.TrialByJury))
-				{
 					explainedNumber.Add(0.5f, DefaultPolicies.TrialByJury.Name, null);
-				}
+				
 				if (kingdom.ActivePolicies.Contains(DefaultPolicies.ImperialTowns))
 				{
 					if (kingdom.RulingClan == town.Settlement.OwnerClan)
-					{
 						explainedNumber.Add(1f, DefaultPolicies.ImperialTowns.Name, null);
-					}
+					
 					else
-					{
 						explainedNumber.Add(-0.3f, DefaultPolicies.ImperialTowns.Name, null);
-					}
 				}
 				if (kingdom.ActivePolicies.Contains(DefaultPolicies.ForgivenessOfDebts))
-				{
 					explainedNumber.Add(2f, DefaultPolicies.ForgivenessOfDebts.Name, null);
-				}
+				
 				if (kingdom.ActivePolicies.Contains(DefaultPolicies.TribunesOfThePeople))
-				{
 					explainedNumber.Add(1f, DefaultPolicies.TribunesOfThePeople.Name, null);
-				}
+				
 				if (kingdom.ActivePolicies.Contains(DefaultPolicies.DebasementOfTheCurrency))
-				{
 					explainedNumber.Add(-1f, DefaultPolicies.DebasementOfTheCurrency.Name, null);
-				}
 			}
 		}
 
@@ -187,9 +176,8 @@ namespace BannerKings.Models
 				// Ignore if populated. Governor effect is calculated in GetSettlementLoyaltyChangeDueToOwnerCulture
 			}
 			else if (town.Governor != null) 
-			{
 				explainedNumber.Add((town.Governor.Culture == town.Culture) ? 1f : -1f, GovernorCultureText, null);
-			}
+			
 		}
 
 		private void GetSettlementLoyaltyChangeDueToFoodStocks(Town town, ref ExplainedNumber explainedNumber)
@@ -210,16 +198,14 @@ namespace BannerKings.Models
 		private void GetSettlementLoyaltyChangeDueToProjects(Town town, ref ExplainedNumber explainedNumber)
 		{
 			if (town.BuildingsInProgress.IsEmpty<Building>() && town.CurrentDefaultBuilding.BuildingType == DefaultBuildingTypes.FestivalsAndGamesDaily)
-			{
 				BuildingHelper.AddDefaultDailyBonus(town, BuildingEffectEnum.LoyaltyDaily, ref explainedNumber);
-			}
+			
 			foreach (Building building in town.Buildings)
 			{
 				float buildingEffectAmount = building.GetBuildingEffectAmount(BuildingEffectEnum.Loyalty);
 				if (!building.BuildingType.IsDefaultProject && buildingEffectAmount > 0f)
-				{
 					explainedNumber.Add(buildingEffectAmount, building.Name, null);
-				}
+				
 			}
 		}
 

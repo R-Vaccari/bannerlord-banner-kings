@@ -25,7 +25,7 @@ namespace BannerKings.Models
 
 				bool building = villageData.IsCurrentlyBuilding;
 				bool production = !building && villageData.CurrentDefault.BuildingType == DefaultVillageBuildings.Instance.DailyProduction;
-				explainedNumber.AddFactor(production ? 0.15f : -0.25f);
+				explainedNumber.AddFactor(production ? 0.15f : -0.20f);
 
 				List<(ItemObject, float)> productions = BannerKingsConfig.Instance.PopulationManager.GetProductions(villageData);
 				foreach (System.ValueTuple<ItemObject, float> valueTuple in productions)
@@ -51,39 +51,27 @@ namespace BannerKings.Models
 						
 						if (PerkHelper.GetPerkValueForTown(DefaultPerks.Riding.Breeder, village.TradeBound.Town))
 							PerkHelper.AddPerkBonusForTown(DefaultPerks.Riding.Breeder, village.TradeBound.Town, ref explainedNumber);
-						
+
+						BuildingType buildingType = null;
 						if (item.IsAnimal)
                         {
 							PerkHelper.AddPerkBonusForTown(DefaultPerks.Medicine.PerfectHealth, village.TradeBound.Town, ref explainedNumber);
-							int animalHousing = villageData.GetBuildingLevel(DefaultVillageBuildings.Instance.AnimalHousing);
-							if (animalHousing > 0)
-								explainedNumber.AddFactor(0.05f * animalHousing);
+							buildingType = DefaultVillageBuildings.Instance.AnimalHousing;
 						} else if (item.ItemCategory == DefaultItemCategories.Clay || item.ItemCategory == DefaultItemCategories.Iron || item.ItemCategory == DefaultItemCategories.Silver
 							|| item.ItemCategory == DefaultItemCategories.Salt)
-						{
-							int mining = villageData.GetBuildingLevel(DefaultVillageBuildings.Instance.Mining);
-							if (mining > 0)
-								explainedNumber.AddFactor(0.05f * mining);
-						} else if (item.ItemCategory == DefaultItemCategories.Wood)
-                        {
-							int sawmill = villageData.GetBuildingLevel(DefaultVillageBuildings.Instance.Sawmill);
-							if (sawmill > 0)
-								explainedNumber.AddFactor(0.05f * sawmill);
-						}
+							buildingType = DefaultVillageBuildings.Instance.Mining;
+						else if (item.ItemCategory == DefaultItemCategories.Wood)
+							buildingType = DefaultVillageBuildings.Instance.Sawmill;
+						
 						else if (item.ItemCategory == DefaultItemCategories.Fish)
-						{
-							int fishing = villageData.GetBuildingLevel(DefaultVillageBuildings.Instance.FishFarm);
-							if (fishing > 0)
-								explainedNumber.AddFactor(0.05f * fishing);
-						}
+							buildingType = DefaultVillageBuildings.Instance.FishFarm;
+						
 						else if (item.ItemCategory == DefaultItemCategories.Grain || item.ItemCategory == DefaultItemCategories.DateFruit ||
-							item.ItemCategory == DefaultItemCategories.Grape || item.ItemCategory == DefaultItemCategories.Olives ||
-							item.ItemCategory == DefaultItemCategories.Flax)
-						{
-							int farming = villageData.GetBuildingLevel(DefaultVillageBuildings.Instance.Farming);
-							if (farming > 0)
-								explainedNumber.AddFactor(0.05f * farming);
-						}
+							item.ItemCategory == DefaultItemCategories.Grape || item.ItemCategory == DefaultItemCategories.Olives || item.ItemCategory == DefaultItemCategories.Flax)
+							buildingType = DefaultVillageBuildings.Instance.Farming;
+
+						if (buildingType != null)
+							BannerKingsConfig.Instance.PopulationManager.ApplyProductionBuildingEffect(ref explainedNumber, buildingType, villageData);
 
 
 						Hero leader = village.Settlement.OwnerClan.Leader;

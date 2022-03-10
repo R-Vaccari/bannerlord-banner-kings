@@ -14,12 +14,12 @@ namespace BannerKings.UI
 {
     public class ManagementVM : ViewModel
     {
-        private PopulationOptionVM _slaveToogle;
-        private PopulationOptionVM _popAccelerateToogle;
-        private PopulationOptionVM _selfInvestToogle;
-        private PopulationOptionVM _conscriptionToogle;
-        private PopulationOptionVM _nobleExemptionToogle;
-        private PopulationOptionVM _subsidizeMilitiaToogle;
+        private DecisionElement _slaveToogle;
+        private DecisionElement _popAccelerateToogle;
+        private DecisionElement _selfInvestToogle;
+        private DecisionElement _conscriptionToogle;
+        private DecisionElement _nobleExemptionToogle;
+        private DecisionElement _subsidizeMilitiaToogle;
         
         private Settlement _settlement;
         private bool _isSelected;
@@ -37,7 +37,7 @@ namespace BannerKings.UI
             HashSet<BannerKingsDecision> decisions = BannerKingsConfig.Instance.PolicyManager.GetDefaultDecisions(_settlement);
             foreach (BannerKingsDecision decision in decisions)
             {
-                PopulationOptionVM vm = new PopulationOptionVM()
+                DecisionElement vm = new DecisionElement()
                 .SetAsBooleanOption(decision.GetName(), decision.Enabled, delegate (bool value)
                 {
                     decision.OnChange(value);
@@ -116,7 +116,7 @@ namespace BannerKings.UI
 
 
         [DataSourceProperty]
-        public PopulationOptionVM SlaveToogle
+        public DecisionElement SlaveToogle
         {
             get => _slaveToogle;
             set
@@ -130,7 +130,7 @@ namespace BannerKings.UI
         }
 
         [DataSourceProperty]
-        public PopulationOptionVM AccelerateToogle
+        public DecisionElement AccelerateToogle
         {
             get => _popAccelerateToogle;
             set
@@ -144,7 +144,7 @@ namespace BannerKings.UI
         }
 
         [DataSourceProperty]
-        public PopulationOptionVM InvestToogle
+        public DecisionElement InvestToogle
         {
             get => _selfInvestToogle;
             set
@@ -158,7 +158,7 @@ namespace BannerKings.UI
         }
 
         [DataSourceProperty]
-        public PopulationOptionVM ConscriptionToogle
+        public DecisionElement ConscriptionToogle
         {
             get => _conscriptionToogle;
             set
@@ -172,7 +172,7 @@ namespace BannerKings.UI
         }
 
         [DataSourceProperty]
-        public PopulationOptionVM ExemptionToogle
+        public DecisionElement ExemptionToogle
         {
             get => _nobleExemptionToogle;
             set
@@ -186,7 +186,7 @@ namespace BannerKings.UI
         }
 
         [DataSourceProperty]
-        public PopulationOptionVM SubsidizeToogle
+        public DecisionElement SubsidizeToogle
         {
             get => _subsidizeMilitiaToogle;
             set

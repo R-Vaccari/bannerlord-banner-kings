@@ -32,9 +32,15 @@ namespace BannerKings.UI
             }
 
             selector.SetOnChangeAction(action);
-            selector.SelectedIndex = policy.Selected;
             return selector;
         }
+
+        [DataSourceProperty]
+        public bool HasTown => !this.IsVillage;
+
+        [DataSourceProperty]
+        public bool IsVillage => this.data.Settlement.IsVillage;
+        
 
         [DataSourceProperty]
         public bool IsSelected

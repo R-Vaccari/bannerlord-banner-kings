@@ -19,7 +19,7 @@ namespace BannerKings.UI
         private MBBindingList<InformationElement> manpowerInfo;
         private MBBindingList<InformationElement> siegeInfo;
         private SelectorVM<BKItemVM> militiaSelector, garrisonSelector, draftSelector;
-        private PopulationOptionVM _conscriptionToogle, _subsidizeMilitiaToogle, draftingToogle;
+        private DecisionElement _conscriptionToogle, _subsidizeMilitiaToogle, draftingToogle;
         private BKGarrisonPolicy garrisonItem;
         private BKMilitiaPolicy militiaItem;
         private BKDraftPolicy draftItem;
@@ -87,7 +87,7 @@ namespace BannerKings.UI
             HashSet<BannerKingsDecision> decisions = BannerKingsConfig.Instance.PolicyManager.GetDefaultDecisions(settlement);
             foreach (BannerKingsDecision decision in decisions)
             {
-                PopulationOptionVM vm = new PopulationOptionVM()
+                DecisionElement vm = new DecisionElement()
                 .SetAsBooleanOption(decision.GetName(), decision.Enabled, delegate (bool value)
                 {
                     decision.OnChange(value);
@@ -161,7 +161,7 @@ namespace BannerKings.UI
         }
 
         [DataSourceProperty]
-        public PopulationOptionVM SubsidizeToogle
+        public DecisionElement SubsidizeToogle
         {
             get => _subsidizeMilitiaToogle;
             set
@@ -175,7 +175,7 @@ namespace BannerKings.UI
         }
 
         [DataSourceProperty]
-        public PopulationOptionVM DraftingToogle
+        public DecisionElement DraftingToogle
         {
             get => draftingToogle;
             set
@@ -189,7 +189,7 @@ namespace BannerKings.UI
         }
 
         [DataSourceProperty]
-        public PopulationOptionVM ConscriptionToogle
+        public DecisionElement ConscriptionToogle
         {
             get => _conscriptionToogle;
             set

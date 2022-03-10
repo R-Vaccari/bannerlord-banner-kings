@@ -374,8 +374,7 @@ namespace BannerKings.Populations
         private Settlement settlement { get; set; }
         private Guild guild { get; set; }
         private float[] satisfactions { get; set; }
-
-        private Dictionary<Hero, float> slaveOwners { get; set; }
+        private float stateSlaves { get; set; }
 
         public EconomicData(Settlement settlement,
             Guild guild = null)
@@ -383,15 +382,9 @@ namespace BannerKings.Populations
             this.settlement = settlement;
             this.guild = new Guild(settlement, Managers.Institutions.GuildType.Merchants, null);
             this.satisfactions = new float[] { 0.5f, 0.5f, 0.5f,0.5f };
-            this.slaveOwners = new Dictionary<Hero, float>();
+            this.stateSlaves = MBRandom.RandomFloatRanged(0.4f, 0.6f);
         }
 
-        public float GetSlaveShare(Hero hero)
-        {
-            if (this.slaveOwners.ContainsKey(hero))
-                return this.slaveOwners[hero];
-            else return 0f;
-        }
 
         public Guild Guild => this.guild;
 
@@ -399,7 +392,7 @@ namespace BannerKings.Populations
 
         public float Tariff => new BKTaxModel().GetTownTaxRatio(settlement.Town);
 
-        public float StateSlaves => this.GetSlaveShare(this.settlement.Owner);
+        public float StateSlaves => this.stateSlaves;
 
         public float[] Satisfactions => this.satisfactions;
 
@@ -699,6 +692,8 @@ namespace BannerKings.Populations
             this.pasture = acres * pastureRatio;
             this.woodland = acres * woodRatio;
         }
+
+        public TerrainType Terrain => this.terrainType;
 
         public int AvailableWorkForce
         {

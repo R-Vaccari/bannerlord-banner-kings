@@ -1,4 +1,5 @@
 ﻿using BannerKings.Managers;
+using BannerKings.Managers.Policies;
 using BannerKings.Populations;
 using System;
 using TaleWorlds.CampaignSystem;
@@ -6,6 +7,7 @@ using TaleWorlds.CampaignSystem.SandBox.GameComponents;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
+using static BannerKings.Managers.Policies.BKTaxPolicy;
 using static BannerKings.Managers.Policies.BKWorkforcePolicy;
 using static BannerKings.Managers.PopulationManager;
 using static BannerKings.Managers.TitleManager;
@@ -85,27 +87,41 @@ namespace BannerKings.Models
         {
             PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
             float slaves = data.GetTypeCount(PopType.Slaves);
-            float efficiency = new BKWorkshopModel().GetPolicyEffectToProduction(town);
-            return (int)(slaves * 0.3f * efficiency);
+            float privateSlaves = slaves * (1f - data.EconomicData.StateSlaves);
+            float tax = 1f;
+            if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(town.Settlement, "decision_slaves_tax")) 
+            {
+                TaxType taxtype = (BannerKingsConfig.Instance.PolicyManager.GetPolicy(town.Settlement, "tax") as BKTaxPolicy).Policy;
+                if (taxtype == TaxType.Standard)
+                    tax = 0.7f;
+                else if (taxtype == TaxType.High)
+                    tax = 0.65f;
+                else tax = 0.85f;
+            }
+            float efficiency = data.EconomicData.ProductionEfficiency.ResultNumber;
+            return (int)(privateSlaves * tax * efficiency);
         }
 
         public ExplainedNumber CalculateEffect(Settlement settlement)
         {
-            ExplainedNumber result = new ExplainedNumber(10f);
+            ExplainedNumber result = new ExplainedNumber(0.1f);
 
             FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetSovereignFromSettlement(settlement);
             if (title != null)
             {
                 GovernmentType government = title.contract.government;
                 if (government == GovernmentType.Republic)
-                    result.Add(40f, new TextObject("Government"));
+                    result.Add(0.4f, new TextObject("Government"));
                 else if (government == GovernmentType.Feudal)
-                    result.Add(20f, new TextObject("Government"));
+                    result.Add(0.2f, new TextObject("Government"));
                 else if (government == GovernmentType.Tribal)
-                    result.Add(10f, new TextObject("Government"));
+                    result.Add(0.1f, new TextObject("Government"));
                 else if (government == GovernmentType.Imperial)
-                    result.Add(5f, new TextObject("Government"));
+                    result.Add(0.05f, new TextObject("Government"));
             }
+
+            if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(settlement, "decision_mercantilism"))
+                result.Add(0.1f, new TextObject("{=!}Encourage mercantilism decision"));
 
             return result;
         }
@@ -121,6 +137,9 @@ namespace BannerKings.Models
 
             if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(settlement, "workforce", (int)WorkforcePolicy.Martial_Law))
                 result.Add(-0.30f, new TextObject("Martial Law policy"));
+
+            float mercantilism = data.EconomicData.Mercantilism.ResultNumber;
+            result.Add(0.25f * mercantilism, new TextObject("Mercantilism"));
 
             return result;
         }

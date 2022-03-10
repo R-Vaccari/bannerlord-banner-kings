@@ -16,7 +16,7 @@ namespace BannerKings.UI
         private MBBindingList<CultureElementVM> culturesList;
         private MBBindingList<InformationElement> cultureInfo;
         private MBBindingList<InformationElement> statsInfo;
-        private PopulationOptionVM foreignerToogle;
+        private DecisionElement foreignerToogle;
         private Settlement settlement;
         private bool _isSelected;
         private PopulationData data;
@@ -69,7 +69,7 @@ namespace BannerKings.UI
                 HashSet<BannerKingsDecision> decisions = BannerKingsConfig.Instance.PolicyManager.GetDefaultDecisions(settlement);
                 foreach (BannerKingsDecision decision in decisions)
                 {
-                    PopulationOptionVM vm = new PopulationOptionVM()
+                    DecisionElement vm = new DecisionElement()
                     .SetAsBooleanOption(decision.GetName(), decision.Enabled, delegate (bool value)
                     {
                         decision.OnChange(value);
@@ -87,7 +87,7 @@ namespace BannerKings.UI
         }
 
         [DataSourceProperty]
-        public PopulationOptionVM ForeignerToogle
+        public DecisionElement ForeignerToogle
         {
             get => foreignerToogle;
             set

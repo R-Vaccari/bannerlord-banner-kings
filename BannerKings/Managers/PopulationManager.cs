@@ -64,6 +64,12 @@ namespace BannerKings.Managers
             return productions;
         }
 
+        public void ApplyProductionBuildingEffect(ref ExplainedNumber explainedNumber, BuildingType type, VillageData data)
+        {
+            int level = data.GetBuildingLevel(type);
+            if (level > 0) explainedNumber.AddFactor(level * 0.05f);
+        }
+
         public static void InitializeSettlementPops(Settlement settlement)
         {
             int popQuantityRef = GetDesiredTotalPop(settlement);

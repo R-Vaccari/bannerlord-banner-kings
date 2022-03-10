@@ -18,7 +18,7 @@ namespace BannerKings.UI
     {
 		private HeroVM deJure;
 		private MBBindingList<VassalTitleVM> _vassals;
-		private MBBindingList<InformationElement> demesneInfo, landInfo;
+		private MBBindingList<InformationElement> demesneInfo, landInfo, terrainInfo, workforceInfo, governmentInfo;
 		private FeudalTitle title;
 		private FeudalTitle duchy;
 		private (bool, string) _titleUsurpable;
@@ -36,7 +36,10 @@ namespace BannerKings.UI
 			this.deJure = new HeroVM(title.deJure, false);
 			this._vassals = new MBBindingList<VassalTitleVM>();
 			this.demesneInfo = new MBBindingList<InformationElement>();
+			this.governmentInfo = new MBBindingList<InformationElement>();
 			this.landInfo = new MBBindingList<InformationElement>();
+			this.terrainInfo = new MBBindingList<InformationElement>();
+			this.workforceInfo = new MBBindingList<InformationElement>();
 			this.duchy = BannerKingsConfig.Instance.TitleManager.GetDuchy(this.title);
 			/*
 			this.model = new BKUsurpationModel();
@@ -57,6 +60,9 @@ namespace BannerKings.UI
 			LandData landData = base.data.LandData;
 			DemesneInfo.Clear();
 			LandInfo.Clear();
+			TerrainInfo.Clear();
+			WorkforceInfo.Clear();
+			GovernmentInfo.Clear();
 			DemesneInfo.Add(new InformationElement("Legitimacy:", new BKLegitimacyModel().GetRuleType(title).ToString().Replace('_', ' '), 
 				"Your legitimacy to this title and it's vassals. You are lawful when you own this title, and considered a foreigner if your culture differs from it."));
 			if (title.sovereign != null) DemesneInfo.Add(new InformationElement("Sovereign:", title.sovereign.name.ToString(),
@@ -64,23 +70,34 @@ namespace BannerKings.UI
 			if (duchy != null) DemesneInfo.Add(new InformationElement("Dukedom:", duchy.name.ToString(),
 				"The dukedom this settlement is associated with."));
 
-			LandInfo.Add(new InformationElement("Acreage:", landData.Acreage.ToString(),
+			GovernmentInfo.Add(new InformationElement("Government Type:", title.contract.government.ToString(),
+				"The dukedom this settlement is associated with."));
+			GovernmentInfo.Add(new InformationElement("Succession Type:", title.contract.succession.ToString().Replace("_", " "),
+				"The dukedom this settlement is associated with."));
+			GovernmentInfo.Add(new InformationElement("Inheritance Type:", title.contract.inheritance.ToString(),
+				"The dukedom this settlement is associated with."));
+			GovernmentInfo.Add(new InformationElement("Gender Law:", title.contract.genderLaw.ToString(),
+				"The dukedom this settlement is associated with."));
+
+			LandInfo.Add(new InformationElement("Acreage:", landData.Acreage.ToString() + " acres",
 				"Current quantity of usable acres in this region"));
-			LandInfo.Add(new InformationElement("Farmland:", landData.Farmland.ToString(),
+			LandInfo.Add(new InformationElement("Farmland:", landData.Farmland.ToString() + " acres",
 				"Acres in this region used as farmland, the main source of food in most places"));
-			LandInfo.Add(new InformationElement("Pastureland:", landData.Pastureland.ToString(),
+			LandInfo.Add(new InformationElement("Pastureland:", landData.Pastureland.ToString() + " acres",
 				"Acres in this region used as pastureland, to raise cattle and other animals. These output meat and animal products such as butter and cheese"));
-			LandInfo.Add(new InformationElement("Woodland:", landData.Woodland.ToString(),
+			LandInfo.Add(new InformationElement("Woodland:", landData.Woodland.ToString() + " acres",
 				"Acres in this region used as woodland, kept for hunting, foraging of berries and materials like wood"));
 
-			LandInfo.Add(new InformationElement("Fertility:", base.FormatValue(landData.Fertility),
+			TerrainInfo.Add(new InformationElement("Type:", landData.Terrain.ToString(),
+				"The local terrain type. Dictates fertility and terrain difficulty."));
+			TerrainInfo.Add(new InformationElement("Fertility:", base.FormatValue(landData.Fertility),
 				"How fertile the region is. This depends solely on the local terrain type - harsher environments like deserts are less fertile than plains and grassy hills"));
-			LandInfo.Add(new InformationElement("Terrain Difficulty:", base.FormatValue(landData.Difficulty),
+			TerrainInfo.Add(new InformationElement("Terrain Difficulty:", base.FormatValue(landData.Difficulty),
 				"Represents how difficult it is to create new usable acres. Like fertility, depends on terrain, but is not strictly correlated to it"));
 
-			LandInfo.Add(new InformationElement("Available Workforce:", landData.AvailableWorkForce.ToString(),
+			WorkforceInfo.Add(new InformationElement("Available Workforce:", landData.AvailableWorkForce.ToString(),
 				"The amount of productive workers in this region, able to work the land"));
-			LandInfo.Add(new InformationElement("Workforce Saturation:", base.FormatValue(landData.WorkforceSaturation),
+			WorkforceInfo.Add(new InformationElement("Workforce Saturation:", base.FormatValue(landData.WorkforceSaturation),
 				"Represents how many workers there are in correlation to the amount needed to fully utilize the acreage. Saturation over 100% indicates more workers than the land needs, while under 100% means not all acres are producing output"));
 
 			DeJure = new HeroVM(title.deJure, false);
@@ -161,6 +178,48 @@ namespace BannerKings.UI
 				{
 					landInfo = value;
 					base.OnPropertyChangedWithValue(value, "LandInfo");
+				}
+			}
+		}
+
+		[DataSourceProperty]
+		public MBBindingList<InformationElement> TerrainInfo
+		{
+			get => terrainInfo;
+			set
+			{
+				if (value != terrainInfo)
+				{
+					terrainInfo = value;
+					base.OnPropertyChangedWithValue(value, "TerrainInfo");
+				}
+			}
+		}
+
+		[DataSourceProperty]
+		public MBBindingList<InformationElement> WorkforceInfo
+		{
+			get => workforceInfo;
+			set
+			{
+				if (value != workforceInfo)
+				{
+					workforceInfo = value;
+					base.OnPropertyChangedWithValue(value, "WorkforceInfo");
+				}
+			}
+		}
+
+		[DataSourceProperty]
+		public MBBindingList<InformationElement> GovernmentInfo
+		{
+			get => governmentInfo;
+			set
+			{
+				if (value != governmentInfo)
+				{
+					governmentInfo = value;
+					base.OnPropertyChangedWithValue(value, "GovernmentInfo");
 				}
 			}
 		}

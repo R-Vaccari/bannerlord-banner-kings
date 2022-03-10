@@ -18,10 +18,10 @@ namespace BannerKings
         public class PopulationVillageVM : ViewModel
         {
             private MBBindingList<PopulationInfoVM> _popInfo;
-            private PopulationOptionVM _popAccelerateToogle;
-            private PopulationOptionVM _selfInvestToogle;
-            private PopulationOptionVM _subsidizeMilitiaToogle;
-            private PopulationOptionVM _raiseMilitiaButton;
+            private DecisionElement _popAccelerateToogle;
+            private DecisionElement _selfInvestToogle;
+            private DecisionElement _subsidizeMilitiaToogle;
+            private DecisionElement _raiseMilitiaButton;
             private Settlement settlement;
             private PopulationData data;
 
@@ -44,7 +44,7 @@ namespace BannerKings
                         Helpers.Helpers.GetClassHint(popClass.type, settlement.Culture))
                         ));
 
-                    RaiseMilitiaButton = new PopulationOptionVM().SetAsButtonOption("Raise militia", delegate
+                    RaiseMilitiaButton = new DecisionElement().SetAsButtonOption("Raise militia", delegate
                     {
                         int serfs = data.GetTypeCount(PopType.Serfs);
                         MobileParty party = settlement.MilitiaPartyComponent.MobileParty;
@@ -150,7 +150,7 @@ namespace BannerKings
             
 
             [DataSourceProperty]
-            public PopulationOptionVM RaiseMilitiaButton
+            public DecisionElement RaiseMilitiaButton
             {
                 get => _raiseMilitiaButton;
                 set
@@ -164,7 +164,7 @@ namespace BannerKings
             }
 
             [DataSourceProperty]
-            public PopulationOptionVM AccelerateToogle
+            public DecisionElement AccelerateToogle
             {
                 get => _popAccelerateToogle;
                 set
@@ -178,7 +178,7 @@ namespace BannerKings
             }
 
             [DataSourceProperty]
-            public PopulationOptionVM InvestToogle
+            public DecisionElement InvestToogle
             {
                 get => _selfInvestToogle;
                 set
@@ -191,7 +191,7 @@ namespace BannerKings
                 }
             }
             [DataSourceProperty]
-            public PopulationOptionVM SubsidizeToogle
+            public DecisionElement SubsidizeToogle
             {
                 get => _subsidizeMilitiaToogle;
                 set

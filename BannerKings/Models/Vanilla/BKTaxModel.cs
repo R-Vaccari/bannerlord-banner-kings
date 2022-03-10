@@ -26,11 +26,12 @@ namespace BannerKings.Models
 
             if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
             {
+                bool taxSlaves = BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(town.Settlement, "decision_slaves_tax");
                 PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
                 double nobles = data.GetTypeCount(PopType.Nobles);
                 double craftsmen = data.GetTypeCount(PopType.Nobles);
                 double serfs = data.GetTypeCount(PopType.Nobles);
-                double slaves = data.GetTypeCount(PopType.Slaves);
+                double slaves = data.GetTypeCount(PopType.Slaves) * (taxSlaves ? 1f : 1f - data.EconomicData.StateSlaves);
                 baseResult.Add((float)(nobles * NOBLE_OUTPUT + craftsmen * CRAFTSMEN_OUTPUT + serfs * SERF_OUTPUT + slaves * SLAVE_OUTPUT), new TextObject("Population output"));
 
                 TaxType taxType = ((BKTaxPolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(town.Settlement, "tax")).Policy;
@@ -80,7 +81,7 @@ namespace BannerKings.Models
 
         public override float GetTownTaxRatio(Town town) {
             if (BannerKingsConfig.Instance.PolicyManager != null)
-                if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(town.Settlement, "tariff", (int)TariffType.Exemption))
+                if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(town.Settlement, "decision_tariff_exempt"))
                     return 0f;
             
             return base.GetTownTaxRatio(town);

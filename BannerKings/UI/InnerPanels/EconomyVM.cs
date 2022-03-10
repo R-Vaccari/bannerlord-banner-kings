@@ -3,6 +3,7 @@ using BannerKings.Managers.Policies;
 using BannerKings.Populations;
 using BannerKings.UI.Items;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
@@ -17,7 +18,7 @@ namespace BannerKings.UI
     {
         private MBBindingList<InformationElement> productionInfo, revenueInfo, satisfactionInfo;
         private SelectorVM<BKItemVM> taxSelector, criminalSelector;
-        private PopulationOptionVM exportToogle, tariffToogle;
+        private DecisionElement exportToogle, tariffToogle, slaveTaxToogle, mercantilismToogle;
         private BKTaxPolicy taxItem;
         private BKCriminalPolicy criminalItem;
         private Settlement settlement;
@@ -35,7 +36,6 @@ namespace BannerKings.UI
         public override void RefreshValues()
         {
             base.RefreshValues();
-
             ProductionInfo.Clear();
             RevenueInfo.Clear();
             SatisfactionInfo.Clear();
@@ -48,71 +48,73 @@ namespace BannerKings.UI
                "How many raw goods are required for manufacturing. Higher quality means that output is produced with less input"));
             ProductionInfo.Add(new InformationElement("Production Efficiency:", FormatValue(data.EconomicData.ProductionEfficiency.ResultNumber),
                "The speed at which workshops produce goods, affected by kingdom policies and craftsmen"));
-            
-            RevenueInfo.Add(new InformationElement("Tariff:", FormatValue(data.EconomicData.Tariff),
-                  "Percentage of an item's value charged as tax when sold"));
-            RevenueInfo.Add(new InformationElement("Mercantilism:", FormatValue(data.EconomicData.Tariff),
-                  "Represents how economicaly free craftsmen, tradesmen and guilds are. Increased mercantilism reduces the tax revenue of these, but allows them to" +
-                  " accumulate wealth or contribute more to overall prosperity"));
-            RevenueInfo.Add(new InformationElement("Caravan Attractiveness:", FormatValue(data.EconomicData.CaravanAttraction.ResultNumber),
-                  "How attractive this town is for caravans. Likelihood of caravan visits are dictated mainly by prices, and attractiveness is a factor added on top of that"));
-            RevenueInfo.Add(new InformationElement("Corruption:", FormatValue(data.EconomicData.Corruption),
-                  "Tax being diverted for private purposes as opposed to being paid to you"));
+
+            if (!base.IsVillage)
+            {
+                RevenueInfo.Add(new InformationElement("Tariff:", FormatValue(data.EconomicData.Tariff),
+                "Percentage of an item's value charged as tax when sold"));
+                RevenueInfo.Add(new InformationElement("Mercantilism:", FormatValue(data.EconomicData.Mercantilism.ResultNumber),
+                      "Represents how economicaly free craftsmen, tradesmen and guilds are. Increased mercantilism reduces the tax revenue of these, but allows them to" +
+                      " accumulate wealth or contribute more to overall prosperity"));
+                RevenueInfo.Add(new InformationElement("Caravan Attractiveness:", FormatValue(data.EconomicData.CaravanAttraction.ResultNumber),
+                      "How attractive this town is for caravans. Likelihood of caravan visits are dictated mainly by prices, and attractiveness is a factor added on top of that"));
+
+                for (int i = 0; i < 4; i++)
+                {
+                    float value = data.EconomicData.Satisfactions[i];
+                    ConsumptionType type = (ConsumptionType)i;
+                    string desc = type.ToString() + " Goods:";
+                    SatisfactionInfo.Add(new InformationElement(desc, FormatValue(value), Helpers.Helpers.GetConsumptionHint(type)));
+                }
+
+                criminalItem = (BKCriminalPolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(settlement, "criminal");
+                CriminalSelector = base.GetSelector(criminalItem, new Action<SelectorVM<BKItemVM>>(this.criminalItem.OnChange));
+                CriminalSelector.SelectedIndex = criminalItem.Selected;
+            }
+
             RevenueInfo.Add(new InformationElement("Administrative Cost:", FormatValue(data.EconomicData.AdministrativeCost.ResultNumber),
                     "Costs associated with the settlement administration, including those of active policies and decisions, deducted on tax revenue"));
 
-            for (int i = 0; i < 4; i++)
-            {
-                float value = data.EconomicData.Satisfactions[i];
-                ConsumptionType type = (ConsumptionType)i;
-                string desc = type.ToString() + " Goods:";
-                SatisfactionInfo.Add(new InformationElement(desc, FormatValue(value), Helpers.Helpers.GetConsumptionHint(type)));
-            }
-
             taxItem = (BKTaxPolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(settlement, "tax");
             TaxSelector = base.GetSelector(taxItem, new Action<SelectorVM<BKItemVM>>(this.taxItem.OnChange));
-
-            criminalItem = (BKCriminalPolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(settlement, "criminal");
-            CriminalSelector = base.GetSelector(criminalItem, new Action<SelectorVM<BKItemVM>>(this.criminalItem.OnChange));
-
-            //tariffItem = (BKTariffPolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(settlement, "tariff"); 
-            //TariffSelector = base.GetSelector(tariffItem, new Action<SelectorVM<BKItemVM>>(this.tariffItem.OnChange));
+            TaxSelector.SelectedIndex = taxItem.Selected;
 
             HashSet<BannerKingsDecision> decisions = BannerKingsConfig.Instance.PolicyManager.GetDefaultDecisions(settlement);
-            foreach (BannerKingsDecision decision in decisions)
-            {
-                PopulationOptionVM vm = new PopulationOptionVM()
-                .SetAsBooleanOption(decision.GetName(), decision.Enabled, delegate (bool value)
+            BannerKingsDecision slaveDecision = decisions.FirstOrDefault(x => x.GetIdentifier() == "decision_slaves_export");
+            BannerKingsDecision tariffDecision = decisions.FirstOrDefault(x => x.GetIdentifier() == "decision_tariff_exempt");
+            BannerKingsDecision slaveTaxDecision = decisions.FirstOrDefault(x => x.GetIdentifier() == "decision_slaves_tax");
+            BannerKingsDecision mercantilismDecision = decisions.FirstOrDefault(x => x.GetIdentifier() == "decision_mercantilism");
+            exportToogle = new DecisionElement()
+                .SetAsBooleanOption(slaveDecision.GetName(), slaveDecision.Enabled, delegate (bool value)
                 {
-                    decision.OnChange(value);
+                    slaveDecision.OnChange(value);
                     this.RefreshValues();
 
-                }, new TextObject(decision.GetHint()));
-                switch (decision.GetIdentifier())
+                }, new TextObject(slaveDecision.GetHint()));
+
+            tariffToogle = new DecisionElement()
+                .SetAsBooleanOption(tariffDecision.GetName(), tariffDecision.Enabled, delegate (bool value)
                 {
-                    case "decision_slaves_export":
-                        exportToogle = vm;
-                        break;
-                    case "decision_tariff_exempt":
-                        tariffToogle = vm;
-                        break;
-                }
-            }
-        }
+                    tariffDecision.OnChange(value);
+                    this.RefreshValues();
 
-        [DataSourceProperty]
-        public HintViewModel GuildHint => new HintViewModel(new TextObject("{=!}Take actions and check status of local guild, if any is present"));
+                }, new TextObject(slaveDecision.GetHint()));
 
-        [DataSourceProperty]
-        public bool GuildAvailable
-        {
-            get
-            {
-                if (this.settlement.Town != null)
-                    return data.EconomicData.Guild != null;
+            slaveTaxToogle = new DecisionElement()
+                .SetAsBooleanOption(slaveTaxDecision.GetName(), slaveTaxDecision.Enabled, delegate (bool value)
+                {
+                    slaveTaxDecision.OnChange(value);
+                    this.RefreshValues();
 
-                return false;
-            }
+                }, new TextObject(slaveTaxDecision.GetHint()));
+
+            mercantilismToogle = new DecisionElement()
+                .SetAsBooleanOption(mercantilismDecision.GetName(), mercantilismDecision.Enabled, delegate (bool value)
+                {
+                    mercantilismDecision.OnChange(value);
+                    this.RefreshValues();
+
+                }, new TextObject(mercantilismDecision.GetHint()));
         }
 
         private void OnTournamentPress()
@@ -141,7 +143,7 @@ namespace BannerKings.UI
         }
 
         [DataSourceProperty]
-        public PopulationOptionVM ExportToogle
+        public DecisionElement ExportToogle
         {
             get => exportToogle;
             set
@@ -155,7 +157,7 @@ namespace BannerKings.UI
         }
 
         [DataSourceProperty]
-        public PopulationOptionVM TariffToogle
+        public DecisionElement TariffToogle
         {
             get => tariffToogle;
             set
@@ -169,12 +171,37 @@ namespace BannerKings.UI
         }
 
         [DataSourceProperty]
+        public DecisionElement SlaveTaxToogle
+        {
+            get => slaveTaxToogle;
+            set
+            {
+                if (value != slaveTaxToogle)
+                {
+                    slaveTaxToogle = value;
+                    base.OnPropertyChangedWithValue(value, "SlaveTaxToogle");
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public DecisionElement MercantilismToogle
+        {
+            get => mercantilismToogle;
+            set
+            {
+                if (value != mercantilismToogle)
+                {
+                    mercantilismToogle = value;
+                    base.OnPropertyChangedWithValue(value, "MercantilismToogle");
+                }
+            }
+        }
+
+        [DataSourceProperty]
         public SelectorVM<BKItemVM> CriminalSelector
         {
-            get
-            {
-                return this.criminalSelector;
-            }
+            get => this.criminalSelector;
             set
             {
                 if (value != this.criminalSelector)
@@ -185,30 +212,10 @@ namespace BannerKings.UI
             }
         }
 
-       /* [DataSourceProperty]
-        public SelectorVM<BKItemVM> TariffSelector
-        {
-            get
-            {
-                return this.garrisonSelector;
-            }
-            set
-            {
-                if (value != this.garrisonSelector)
-                {
-                    this.garrisonSelector = value;
-                    base.OnPropertyChangedWithValue(value, "GarrisonSelector");
-                }
-            }
-        } */
-
         [DataSourceProperty]
         public SelectorVM<BKItemVM> TaxSelector
         {
-            get
-            {
-                return this.taxSelector;
-            }
+            get => this.taxSelector;
             set
             {
                 if (value != this.taxSelector)
