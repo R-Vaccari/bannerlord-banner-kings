@@ -65,7 +65,7 @@
 		</kingdom>
 		
 		<kingdom faction="Sturgia" contract="tribal" deJure="lord_2_1">
-			<duchy name="Kachyar" deJure="lord_5_1">
+			<duchy name="Kachyar" deJure="lord_2_1">
 				<county settlement="Revyl" deJure="lord_2_17">
 					<barony settlement="Ustokol Castle" deJure="lord_2_17"/>
 					<barony settlement="Nevyansk Castle" deJure="lord_2_1"/>

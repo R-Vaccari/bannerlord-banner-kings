@@ -8,18 +8,20 @@ namespace BannerKings.Managers.Policies
 {
     class BKDraftPolicy : BannerKingsPolicy
     {
-
         public override string GetIdentifier() => "draft";
-
-        DraftPolicy policy;
+        public DraftPolicy Policy { get; private set; }
         public BKDraftPolicy(DraftPolicy policy, Settlement settlement) : base(settlement, (int)policy)
         {
-            this.policy = policy;
+            this.Policy = policy;
         }
 
         public override string GetHint()
         {
-            return "No particular policy is implemented";
+            if (Policy == DraftPolicy.Conscription)
+                return "Extend conscription of the populace, replenishing recruitment slots faster. Increases adm. costs.";
+            else if (Policy == DraftPolicy.Demobilization)
+                return "Slow down conscription of new recruits. Decreases adm. costs.";
+            return "Standard drafting policy, no particular effect.";
         }
 
         public override void OnChange(SelectorVM<BKItemVM> obj)
@@ -27,7 +29,7 @@ namespace BannerKings.Managers.Policies
             if (obj.SelectedItem != null)
             {
                 BKItemVM vm = obj.GetCurrentItem();
-                this.policy = (DraftPolicy)vm.value;
+                this.Policy = (DraftPolicy)vm.value;
                 base.Selected = vm.value;
                 BannerKingsConfig.Instance.PolicyManager.UpdateSettlementPolicy(Settlement, this);
             }
@@ -36,15 +38,15 @@ namespace BannerKings.Managers.Policies
         public enum DraftPolicy
         {
             Standard,
-            Enlistment,
-            Lax
+            Conscription,
+            Demobilization
         }
 
         public override IEnumerable<Enum> GetPolicies()
         {
             yield return DraftPolicy.Standard;
-            yield return DraftPolicy.Enlistment;
-            yield return DraftPolicy.Lax;
+            yield return DraftPolicy.Conscription;
+            yield return DraftPolicy.Demobilization;
             yield break;
         }
     }

@@ -273,7 +273,7 @@ namespace BannerKings.Models
 
 		private void AddExpenseFromTaxes(Clan clan, ref ExplainedNumber goldChange, bool applyWithdrawals)
 		{
-			HashSet<FeudalTitle> titles = BannerKingsConfig.Instance.TitleManager.GetTitles(clan.Leader);
+			List<FeudalTitle> titles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(clan.Leader);
 			FeudalTitle suzerain = BannerKingsConfig.Instance.TitleManager.CalculateHeroSuzerain(clan.Leader);
 
 			if (titles != null && titles.Count > 0 && suzerain != null)

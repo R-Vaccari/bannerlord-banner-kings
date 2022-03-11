@@ -1,6 +1,5 @@
 ﻿using BannerKings.Managers.Court;
 using System;
-using System.Linq;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.ViewModelCollection.GameMenu.TownManagement;
@@ -46,7 +45,7 @@ namespace BannerKings.UI.Items
 
             if (BannerKingsConfig.Instance.TitleManager.IsHeroTitleHolder(Hero.MainHero))
             {
-                HashSet<FeudalTitle> vassals = BannerKingsConfig.Instance.TitleManager.GetVassals(Hero.MainHero);
+                List<FeudalTitle> vassals = BannerKingsConfig.Instance.TitleManager.GetVassals(Hero.MainHero);
                 if (vassals != null && vassals.Count > 0)
                     foreach (FeudalTitle vassal in vassals)
                         if (!council.IsMember(vassal.deJure))

@@ -5,6 +5,7 @@ using BannerKings.Populations;
 using BannerKings.UI.Items;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core.ViewModelCollection;
@@ -19,7 +20,7 @@ namespace BannerKings.UI
         private MBBindingList<InformationElement> manpowerInfo;
         private MBBindingList<InformationElement> siegeInfo;
         private SelectorVM<BKItemVM> militiaSelector, garrisonSelector, draftSelector;
-        private DecisionElement _conscriptionToogle, _subsidizeMilitiaToogle, draftingToogle;
+        private DecisionElement conscriptionToogle, subsidizeToogle, rationToogle;
         private BKGarrisonPolicy garrisonItem;
         private BKMilitiaPolicy militiaItem;
         private BKDraftPolicy draftItem;
@@ -64,9 +65,9 @@ namespace BannerKings.UI
 
             StringBuilder sb = new StringBuilder();
             sb.Append(base.data.MilitaryData.Catapultae);
-            sb.Append(" ,");
+            sb.Append(", ");
             sb.Append(base.data.MilitaryData.Catapultae);
-            sb.Append(" ,");
+            sb.Append(", ");
             sb.Append(base.data.MilitaryData.Trebuchets);
             sb.Append(" (Ballis., Catap., Treb.)");
             SiegeInfo.Add(new InformationElement("Engines:",  sb.ToString(),
@@ -75,38 +76,47 @@ namespace BannerKings.UI
             militiaItem = (BKMilitiaPolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(settlement, "militia");
             MilitiaSelector = base.GetSelector(militiaItem, new Action<SelectorVM<BKItemVM>>(this.militiaItem.OnChange));
             MilitiaSelector.SelectedIndex = militiaItem.Selected;
+            MilitiaSelector.SetOnChangeAction(this.militiaItem.OnChange);
 
             garrisonItem = (BKGarrisonPolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(settlement, "garrison"); 
             GarrisonSelector = base.GetSelector(garrisonItem, new Action<SelectorVM<BKItemVM>>(this.garrisonItem.OnChange));
             GarrisonSelector.SelectedIndex = garrisonItem.Selected;
+            GarrisonSelector.SetOnChangeAction(this.garrisonItem.OnChange);
 
             draftItem = (BKDraftPolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(settlement, "draft");
             DraftSelector = base.GetSelector(draftItem, new Action<SelectorVM<BKItemVM>>(this.draftItem.OnChange));
             DraftSelector.SelectedIndex = draftItem.Selected;
+            DraftSelector.SetOnChangeAction(this.draftItem.OnChange);
 
             HashSet<BannerKingsDecision> decisions = BannerKingsConfig.Instance.PolicyManager.GetDefaultDecisions(settlement);
-            foreach (BannerKingsDecision decision in decisions)
-            {
-                DecisionElement vm = new DecisionElement()
-                .SetAsBooleanOption(decision.GetName(), decision.Enabled, delegate (bool value)
+            BannerKingsDecision conscriptionDecision = decisions.FirstOrDefault(x => x.GetIdentifier() == "decision_militia_encourage");
+            BannerKingsDecision subsidizeDecision = decisions.FirstOrDefault(x => x.GetIdentifier() == "decision_militia_subsidize");
+            BannerKingsDecision rationDecision = decisions.FirstOrDefault(x => x.GetIdentifier() == "decision_ration");
+
+            conscriptionToogle = new DecisionElement()
+                .SetAsBooleanOption(conscriptionDecision.GetName(), conscriptionDecision.Enabled, delegate (bool value)
                 {
-                    decision.OnChange(value);
+                    conscriptionDecision.OnChange(value);
                     this.RefreshValues();
 
-                }, new TextObject(decision.GetHint()));
-                switch (decision.GetIdentifier())
+                }, new TextObject(conscriptionDecision.GetHint()));
+
+            subsidizeToogle = new DecisionElement()
+                .SetAsBooleanOption(subsidizeDecision.GetName(), subsidizeDecision.Enabled, delegate (bool value)
                 {
-                    case "decision_militia_encourage":
-                        _conscriptionToogle = vm;
-                        break;
-                    case "decision_militia_subsidize":
-                        _subsidizeMilitiaToogle = vm;
-                        break;
-                    case "decision_drafting_encourage":
-                        draftingToogle = vm;
-                        break;
-                }
-            }
+                    subsidizeDecision.OnChange(value);
+                    this.RefreshValues();
+
+                }, new TextObject(subsidizeDecision.GetHint()));
+
+            rationToogle = new DecisionElement()
+                .SetAsBooleanOption(rationDecision.GetName(), rationDecision.Enabled, delegate (bool value)
+                {
+                    rationDecision.OnChange(value);
+                    this.RefreshValues();
+
+                }, new TextObject(rationDecision.GetHint()));
+
         }
 
         [DataSourceProperty]
@@ -163,27 +173,27 @@ namespace BannerKings.UI
         [DataSourceProperty]
         public DecisionElement SubsidizeToogle
         {
-            get => _subsidizeMilitiaToogle;
+            get => subsidizeToogle;
             set
             {
-                if (value != _subsidizeMilitiaToogle)
+                if (value != subsidizeToogle)
                 {
-                    _subsidizeMilitiaToogle = value;
+                    subsidizeToogle = value;
                     base.OnPropertyChangedWithValue(value, "SubsidizeToogle");
                 }
             }
         }
 
         [DataSourceProperty]
-        public DecisionElement DraftingToogle
+        public DecisionElement RationToogle
         {
-            get => draftingToogle;
+            get => rationToogle;
             set
             {
-                if (value != draftingToogle)
+                if (value != rationToogle)
                 {
-                    draftingToogle = value;
-                    base.OnPropertyChangedWithValue(value, "DraftingToogle");
+                    rationToogle = value;
+                    base.OnPropertyChangedWithValue(value, "RationToogle");
                 }
             }
         }
@@ -191,12 +201,12 @@ namespace BannerKings.UI
         [DataSourceProperty]
         public DecisionElement ConscriptionToogle
         {
-            get => _conscriptionToogle;
+            get => conscriptionToogle;
             set
             {
-                if (value != _conscriptionToogle)
+                if (value != conscriptionToogle)
                 {
-                    _conscriptionToogle = value;
+                    conscriptionToogle = value;
                     base.OnPropertyChangedWithValue(value, "ConscriptionToogle");
                 }
             }

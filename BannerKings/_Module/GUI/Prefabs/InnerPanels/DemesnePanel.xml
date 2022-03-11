@@ -46,7 +46,7 @@
 							  </Children>
 							</ButtonWidget>
 							
-							<Widget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="180" SuggestedHeight="140" Sprite="frame_9" HorizontalAlignment="Center" VerticalAlignment="Center" ExtendLeft="10"  ExtendRight="10" ExtendBottom="0" IsEnabled="false" />
+							<Widget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="168" SuggestedHeight="140" Sprite="frame_9" HorizontalAlignment="Center" VerticalAlignment="Center" ExtendLeft="10"  ExtendRight="10" ExtendTop="5" IsEnabled="false" />
 						</Children>
 					</Widget>
 				

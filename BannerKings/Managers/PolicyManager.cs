@@ -18,7 +18,7 @@ namespace BannerKings.Managers
         {
             get
             {
-                yield return "decision_drafting_encourage";
+                yield return "decision_ration";
                 yield return "decision_militia_encourage";
                 yield return "decision_slaves_export";
                 yield return "decision_patrol_send";
@@ -158,8 +158,8 @@ namespace BannerKings.Managers
                 return new BKSubsidizeMilitiaDecision(settlement, false);
             else if (policyType == "decision_militia_encourage")
                 return new BKEncourageMilitiaDecision(settlement, false);
-            else if (policyType == "decision_drafting_encourage")
-                return new BKEncourageDraftingDecision(settlement, false);
+            else if (policyType == "decision_ration")
+                return new BKRationDecision(settlement, false);
             else if (policyType == "decision_tariff_exempt")
                 return new BKExemptTariffDecision(settlement, false);
             else if (policyType == "decision_foreigner_ban")

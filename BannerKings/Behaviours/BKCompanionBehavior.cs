@@ -87,7 +87,7 @@ namespace BannerKings.Behaviors
         private bool companion_knighthood_accepted_on_condition()
         {
             lordshipsToGive.Clear();
-            HashSet<FeudalTitle> titles = BannerKingsConfig.Instance.TitleManager.GetTitles(Hero.MainHero);
+            List<FeudalTitle> titles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(Hero.MainHero);
             foreach (FeudalTitle title in titles)
             {
                 if (title.type != TitleType.Lordship || title.fief == null || title.deJure != Hero.MainHero) continue;
@@ -126,7 +126,7 @@ namespace BannerKings.Behaviors
         {
             static void Postfix(ref string __result, Hero o)
             {
-                HashSet<FeudalTitle> titles = BannerKingsConfig.Instance.TitleManager.GetTitles(o);
+                List<FeudalTitle> titles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(o);
                 if (titles != null && titles.Count > 0)
                 {
                     string desc = "";

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BannerKings.Managers.Kingdoms;
+using System;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Election;
 using static BannerKings.Managers.TitleManager;

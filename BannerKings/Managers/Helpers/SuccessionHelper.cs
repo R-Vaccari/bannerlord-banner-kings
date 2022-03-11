@@ -1,9 +1,9 @@
-﻿using System;
+﻿using BannerKings.Managers.Kingdoms;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.Election;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 using static BannerKings.Managers.TitleManager;
@@ -60,7 +60,7 @@ namespace BannerKings.Managers.Helpers
             if (list.Count > 1)
             {
                 Clan clanToExclude = (victim.Clan.Leader == victim || victim.Clan.Leader == null) ? victim.Clan : null;
-                kingdom.AddDecision(new KingSelectionKingdomDecision(victim.Clan, clanToExclude), true);
+                kingdom.AddDecision(new BKKingElectionDecision(victim.Clan, clanToExclude), true);
             }
             else if (list.Count == 1)
                 Type.GetType("TaleWorlds.CampaignSystem.Actions.ChangeRulingClanAction, TaleWorlds.CampaignSystem")
@@ -74,11 +74,6 @@ namespace BannerKings.Managers.Helpers
                 Type.GetType("TaleWorlds.CampaignSystem.Actions.ChangeRulingClanAction, TaleWorlds.CampaignSystem")
                     .GetMethod("Apply", BindingFlags.Public | BindingFlags.Static).Invoke(null, new object[] { kingdom, clan });
             else ApplyVanillaSuccession(list, victim, kingdom);
-        }
-
-        private static void ApplyRepublicSuccession(List<Clan> list, Hero victim, Kingdom kingdom)
-        {
-            kingdom.AddDecision(new RepublicElectionDecision(victim.Clan), true);
         }
 
         private static void ApplyImperialSuccession(List<Clan> list, Hero victim, Kingdom kingdom)
@@ -109,9 +104,7 @@ namespace BannerKings.Managers.Helpers
             Hero heir = MBRandom.ChooseWeighted(candidates);
             if (heir != null)
             {
-                if (heir.Clan == victim.Clan)
-                    InheritanceHelper.ApplyImperialInheritance(victim, heir);
-
+                InheritanceHelper.ApplyImperialInheritance(victim, heir);
                 if (Clan.PlayerClan.Kingdom != null && Clan.PlayerClan.Kingdom == victim.Clan.Kingdom)
                     InformationManager.AddQuickInformation(new TextObject(heir.Name.ToString() + " was appointed Emperor."));
             }

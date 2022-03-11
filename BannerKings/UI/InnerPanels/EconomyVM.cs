@@ -70,6 +70,7 @@ namespace BannerKings.UI
                 criminalItem = (BKCriminalPolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(settlement, "criminal");
                 CriminalSelector = base.GetSelector(criminalItem, new Action<SelectorVM<BKItemVM>>(this.criminalItem.OnChange));
                 CriminalSelector.SelectedIndex = criminalItem.Selected;
+                CriminalSelector.SetOnChangeAction(this.criminalItem.OnChange);
             }
 
             RevenueInfo.Add(new InformationElement("Administrative Cost:", FormatValue(data.EconomicData.AdministrativeCost.ResultNumber),
@@ -78,6 +79,7 @@ namespace BannerKings.UI
             taxItem = (BKTaxPolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(settlement, "tax");
             TaxSelector = base.GetSelector(taxItem, new Action<SelectorVM<BKItemVM>>(this.taxItem.OnChange));
             TaxSelector.SelectedIndex = taxItem.Selected;
+            TaxSelector.SetOnChangeAction(this.taxItem.OnChange);
 
             HashSet<BannerKingsDecision> decisions = BannerKingsConfig.Instance.PolicyManager.GetDefaultDecisions(settlement);
             BannerKingsDecision slaveDecision = decisions.FirstOrDefault(x => x.GetIdentifier() == "decision_slaves_export");

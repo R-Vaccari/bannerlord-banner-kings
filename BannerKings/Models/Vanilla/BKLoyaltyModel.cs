@@ -3,7 +3,6 @@ using BannerKings.Managers.Court;
 using BannerKings.Managers.Policies;
 using BannerKings.Populations;
 using Helpers;
-using System;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.SandBox.GameComponents;
@@ -11,7 +10,6 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using static BannerKings.Managers.Policies.BKTaxPolicy;
-using static BannerKings.Managers.PolicyManager;
 using static BannerKings.Managers.PopulationManager;
 
 namespace BannerKings.Models
@@ -46,12 +44,15 @@ namespace BannerKings.Models
 					baseResult.Add((fraction1 + fraction2) * LOYALTY_FACTOR * -1f, new TextObject("High tax policy"));
 				}
 
-				if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(town.Settlement, "decision_mercantilism"))
+				if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(town.Settlement, "decision_slaves_tax"))
 				{
 					float factor = tax == TaxType.Low ? 1.5f : (tax == TaxType.Standard ? 2f : 2.5f);
 					float privateSlaves = 1f - data.EconomicData.StateSlaves;
 					baseResult.Add(privateSlaves * -factor, new TextObject("Tax private slaves decision"));
 				}
+
+				if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(town.Settlement, "decision_ration"))
+					baseResult.Add(town.IsUnderSiege ? -2f : -4f, new TextObject("{=!}Enforce rations decision"));
 
 				BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref baseResult, town.OwnerClan.Leader, CouncilPosition.Chancellor, 1f, false);
 				return baseResult;

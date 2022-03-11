@@ -181,6 +181,9 @@ namespace BannerKings.Models
 			float craftsmenConsumption = (float)cityCraftsmen * CRAFTSMEN_FOOD;
 			result.Add((float)craftsmenConsumption, new TextObject("Craftsmen consumption", null));
 
+			if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(data.Settlement, "decision_ration"))
+				result.AddFactor(-0.4f, new TextObject("{=!}Enforce rations decision"));
+
 			return result;
 		}
 

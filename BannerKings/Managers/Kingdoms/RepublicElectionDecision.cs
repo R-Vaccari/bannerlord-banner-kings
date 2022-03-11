@@ -6,7 +6,7 @@ using TaleWorlds.Localization;
 using TaleWorlds.Library;
 using TaleWorlds.Core;
 
-namespace BannerKings
+namespace BannerKings.Managers.Kingdoms
 {
     public class RepublicElectionDecision : KingSelectionKingdomDecision
     {

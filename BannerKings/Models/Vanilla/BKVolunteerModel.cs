@@ -8,6 +8,8 @@ using TaleWorlds.Localization;
 using static BannerKings.Managers.PopulationManager;
 using BannerKings.Managers.Court;
 using TaleWorlds.Core;
+using BannerKings.Managers.Policies;
+using static BannerKings.Managers.Policies.BKDraftPolicy;
 
 namespace BannerKings.Models.Vanilla
 {
@@ -79,6 +81,12 @@ namespace BannerKings.Models.Vanilla
                         explainedNumber.AddFactor(DefaultPerks.Riding.CavalryTactics.PrimaryBonus * 0.01f, DefaultPerks.Riding.CavalryTactics.PrimaryDescription);
 
                 BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref explainedNumber, settlement.OwnerClan.Leader, CouncilPosition.Marshall, 0.25f, true);
+                DraftPolicy draftPolicy = ((BKDraftPolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(settlement, "draft")).Policy;
+                if (draftPolicy == DraftPolicy.Conscription)
+                    explainedNumber.Add(0.15f, new TextObject("{=!}Draft policy"));
+                else if (draftPolicy == DraftPolicy.Demobilization)
+                    explainedNumber.Add(-0.15f, new TextObject("{=!}Draft policy"));
+
                 return explainedNumber;
             }
             return new ExplainedNumber(0f);

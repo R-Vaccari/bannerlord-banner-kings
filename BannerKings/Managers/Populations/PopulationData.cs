@@ -187,6 +187,7 @@ namespace BannerKings.Populations
             BKGrowthModel model = (BKGrowthModel)BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(BKGrowthModel));
             int growthFactor = (int)model.CalculateEffect(this.settlement, this).ResultNumber;
             this.UpdatePopulation(settlement, growthFactor, PopType.None);
+            this.Stability += BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(BKStabilityModel)).CalculateEffect(settlement).ResultNumber;
             economicData.Update(this);
             cultureData.Update(this);
             militaryData.Update(this);
@@ -492,8 +493,7 @@ namespace BannerKings.Populations
         public int Manpower => peasantManpower + nobleManpower;
         public int PeasantManpower => peasantManpower;
         public int NobleManpower => nobleManpower;
-        public ExplainedNumber DraftEfficiency => this.settlement.IsTown || this.settlement.IsCastle ? new BKVolunteerModel().GetDraftEfficiency(settlement.Notables[0], 2, settlement) 
-            : new ExplainedNumber(0f, true, new TaleWorlds.Localization.TextObject("Not a town"));
+        public ExplainedNumber DraftEfficiency => new BKVolunteerModel().GetDraftEfficiency(settlement.Notables[0], 2, settlement);
         public ExplainedNumber Militarism => this.settlement.IsTown || this.settlement.IsCastle ? new BKVolunteerModel().GetMilitarism(settlement)
             : new ExplainedNumber(0f, true, new TaleWorlds.Localization.TextObject("Not a town"));
 

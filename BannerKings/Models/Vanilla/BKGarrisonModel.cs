@@ -9,9 +9,9 @@ namespace BannerKings.Models.Vanilla
     public class BKGarrisonModel : DefaultSettlementGarrisonModel
     {
 
-        public override ExplainedNumber CalculateGarrisonChangeAutoRecruitment(Settlement settlement, bool includeDescriptions = false)
+        public override ExplainedNumber CalculateGarrisonChange(Settlement settlement, bool includeDescriptions = false)
         {
-            ExplainedNumber baseResult = base.CalculateGarrisonChangeAutoRecruitment(settlement, includeDescriptions);
+            ExplainedNumber baseResult = base.CalculateGarrisonChange(settlement, includeDescriptions);
             if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
             {
                 GarrisonPolicy garrison = ((BKGarrisonPolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(settlement, "garrison")).Policy;
@@ -22,6 +22,7 @@ namespace BannerKings.Models.Vanilla
             }
 
             return baseResult;
+
         }
     }
 }

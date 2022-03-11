@@ -31,7 +31,7 @@ namespace BannerKings.UI
                 selector.AddItem(item);
             }
 
-            selector.SetOnChangeAction(action);
+            
             return selector;
         }
 

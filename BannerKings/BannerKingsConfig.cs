@@ -29,7 +29,7 @@ namespace BannerKings
             this.PopulationManager = new PopulationManager(new Dictionary<Settlement, PopulationData>(), new List<MobileParty>());
             this.PolicyManager = new PolicyManager(new Dictionary<Settlement, HashSet<BannerKingsDecision>>(), new Dictionary<Settlement,
             HashSet<BannerKingsPolicy>>());
-            this.TitleManager = new TitleManager(new HashSet<FeudalTitle>(), new Dictionary<Hero, HashSet<FeudalTitle>>(), new Dictionary<Kingdom, FeudalTitle>());
+            this.TitleManager = new TitleManager(new Dictionary<FeudalTitle, (Hero, Hero)>(), new Dictionary<Hero, List<FeudalTitle>>(), new Dictionary<Kingdom, FeudalTitle>());
             this.CourtManager = new CourtManager(new Dictionary<Hero, Council>());
             this.InitModels();
         }
@@ -38,7 +38,7 @@ namespace BannerKings
         {
             this.PopulationManager = populationManager;
             this.PolicyManager = policyManager;
-            this.TitleManager = titleManager != null ? titleManager : new TitleManager(new HashSet<FeudalTitle>(), new Dictionary<Hero, HashSet<FeudalTitle>>(),
+            this.TitleManager = titleManager != null ? titleManager : new TitleManager(new Dictionary<FeudalTitle, (Hero, Hero)>(), new Dictionary<Hero, List<FeudalTitle>>(),
                 new Dictionary<Kingdom, FeudalTitle>());
             this.CourtManager = court;
             this.InitModels();
