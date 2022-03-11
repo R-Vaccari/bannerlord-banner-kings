@@ -65,10 +65,7 @@ namespace BannerKings.Populations
         public TournamentData TournamentData
         {
             get => this.tournamentData;
-            set
-            {
-                this.tournamentData = value;
-            }
+            set => this.tournamentData = value;
         }
         public VillageData VillageData => this.villageData;
 
@@ -161,13 +158,20 @@ namespace BannerKings.Populations
             }
         }
 
-        public void UpdatePopType(PopType type, int count)
+        public void UpdatePopType(PopType type, int count, bool estateSlave = false)
         {
             if (type != PopType.None)
             {
                 PopulationClass pops = classes.Find(popClass => popClass.type == type);
                 if (pops == null)
                     pops = new PopulationClass(type, 0);
+
+                if (type == PopType.Slaves)
+                {
+                    float currentTotal = pops.count;
+                    float toAdd = count;
+                    float proportion = toAdd / currentTotal;
+                }
 
                 pops.count += count;
                 if (pops.count < 0) pops.count = 0;

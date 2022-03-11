@@ -479,6 +479,10 @@ namespace BannerKings.Behaviors
                 new GameMenuOption.OnConditionDelegate(MenuSettlementManageCondition),
                 new GameMenuOption.OnConsequenceDelegate(MenuSettlementManageConsequence), false, -1, false);
 
+            campaignGameStarter.AddGameMenuOption("bannerkings", "manage_titles", "{=!}Titles",
+               new GameMenuOption.OnConditionDelegate(MenuCourtCondition),
+               new GameMenuOption.OnConsequenceDelegate(MenuTitlesConsequence), false, -1, false);
+
             campaignGameStarter.AddGameMenuOption("bannerkings", "manage_court", "{=!}Noble Court",
                new GameMenuOption.OnConditionDelegate(MenuCourtCondition),
                new GameMenuOption.OnConsequenceDelegate(MenuCourtConsequence), false, -1, false);
@@ -876,6 +880,8 @@ namespace BannerKings.Behaviors
         private static void MenuGuildManageConsequence(MenuCallbackArgs args) => UIManager.Instance.ShowWindow("guild");
 
         private static void MenuVillageProjectsConsequence(MenuCallbackArgs args) => UIManager.Instance.ShowWindow("vilage_project");
+
+        private static void MenuTitlesConsequence(MenuCallbackArgs args) => UIManager.Instance.ShowWindow("titles");
 
         // -------- MENUS ----------
 

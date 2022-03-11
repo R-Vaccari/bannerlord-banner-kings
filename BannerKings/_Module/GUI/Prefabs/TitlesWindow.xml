@@ -1,0 +1,33 @@
+<Prefab>
+  <Variables>
+  </Variables>
+  <Constants>
+    <Constant Name="Popup.CloseButton.Width" BrushLayer="Default" BrushName="Popup.CloseButton" BrushValueType="Width" />
+    <Constant Name="Popup.CloseButton.Height" BrushLayer="Default" BrushName="Popup.CloseButton" BrushValueType="Height" />
+  </Constants>
+  <Parameters>
+  </Parameters>
+  <VisualDefinitions>
+  </VisualDefinitions>
+  <Window>
+    <Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" IsActive="true">
+      <Children>
+        <Widget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="1045" SuggestedHeight="700" HorizontalAlignment="Center" VerticalAlignment="Center" Sprite="BlankWhiteSquare_9" Color="#39291eFF">
+          <Children>
+			  
+			
+			<Widget DataSource="{Tree}" HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" WidthSizePolicy="CoverChildren" MarginTop="10" MarginBottom="65">
+			  <Children>
+				<TitleElement Id="InnerPanel" HorizontalAlignment="Center" DoNotAcceptEvents="true"/>
+			  </Children>
+			</Widget>
+			
+            <Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Sprite="frame_9" ExtendLeft="18" ExtendTop="18" ExtendRight="18" ExtendBottom="18" IsEnabled="false" />
+          </Children>
+        </Widget>
+
+        <ButtonWidget Id="CloseButton" Command.Click="ExecuteClose" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="!Popup.CloseButton.Width" SuggestedHeight="!Popup.CloseButton.Height" HorizontalAlignment="Center" VerticalAlignment="Center" MarginLeft="1045" MarginBottom="700" Brush="Popup.CloseButton" IsVisible="true" />
+      </Children>
+    </Widget>
+  </Window>
+</Prefab>
