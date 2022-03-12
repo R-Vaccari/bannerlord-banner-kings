@@ -3,6 +3,7 @@ using TaleWorlds.CampaignSystem;
 using System.Linq;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
+using static BannerKings.Managers.TitleManager;
 
 namespace BannerKings.Managers.Court
 {
@@ -19,6 +20,40 @@ namespace BannerKings.Managers.Court
             this.members.Add(new CouncilMember(chancellor, CouncilPosition.Chancellor));
             this.members.Add(new CouncilMember(steward, CouncilPosition.Steward));
             this.members.Add(new CouncilMember(spymaster, CouncilPosition.Spymaster));
+        }
+
+        public List<Hero> GetCourtMembers()
+        {
+            List<Hero> heroes = new List<Hero>();
+
+            MBReadOnlyList<Hero> members = Clan.PlayerClan.Heroes;
+            if (members != null && members.Count > 0)
+                foreach (Hero member in members)
+                    if (member != Hero.MainHero)
+                        heroes.Add(member);
+
+            if (BannerKingsConfig.Instance.TitleManager.IsHeroTitleHolder(Hero.MainHero))
+            {
+                List<FeudalTitle> vassals = BannerKingsConfig.Instance.TitleManager.GetVassals(Hero.MainHero);
+                if (vassals != null && vassals.Count > 0)
+                    foreach (FeudalTitle vassal in vassals)
+                        heroes.Add(vassal.deJure);
+            }
+
+            MBReadOnlyList<Town> towns = this.lord.Clan.Fiefs;
+            if (towns != null && towns.Count > 0)
+            {
+                foreach (Town town in towns)
+                {
+                    MBReadOnlyList<Hero> notables = town.Settlement.Notables;
+                    if (notables != null && notables.Count > 0)
+                        foreach (Hero notable in notables)
+                            heroes.Add(notable);
+                                
+                }
+            }
+
+            return heroes;
         }
 
         public List<Hero> GetMembers()

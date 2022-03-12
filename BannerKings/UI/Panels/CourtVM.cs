@@ -3,10 +3,10 @@ using BannerKings.Populations;
 using BannerKings.UI.Items;
 using BannerKings.Utils;
 using System;
+using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.ViewModelCollection;
 using TaleWorlds.Core;
-using TaleWorlds.Core.ViewModelCollection;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
@@ -22,13 +22,19 @@ namespace BannerKings.UI.Panels
 		private HeroVM chancellor;
 		private HeroVM spymaster;
 		private string admCost;
+		private MBBindingList<CouncilMemberVM> courtMembers;
 
 		public CourtVM(PopulationData data) : base(data, true)
         {
 			GameTexts.SetVariable("PLAYER_NAME", Hero.MainHero.Name);
 			this.council = BannerKingsConfig.Instance.CourtManager.GetCouncil(Hero.MainHero);
 			councilPosition = CouncilPosition.Marshall;
-			CouncilMemberSelection = new CouncilVM(new Action<Hero>(this.SetCouncilMember), this.council, councilPosition);	
+			this.courtMembers = new MBBindingList<CouncilMemberVM>();
+			List<Hero> heroes = council.GetCourtMembers();
+			foreach (Hero hero in heroes)
+				this.courtMembers.Add(new CouncilMemberVM(hero, null,
+									councilPosition, council.GetCompetence(hero, councilPosition)));
+			CouncilMemberSelection = new CouncilVM(new Action<Hero>(this.SetCouncilMember), this.council, councilPosition, heroes);	
 		}
 
         public override void RefreshValues()
@@ -98,7 +104,21 @@ namespace BannerKings.UI.Panels
 		[DataSourceProperty]
 		public string AdministrativeCosts => admCost;
 
-        [DataSourceProperty]
+		[DataSourceProperty]
+		public MBBindingList<CouncilMemberVM> CourtMembers
+		{
+			get => this.courtMembers;
+			set
+			{
+				if (value != this.courtMembers)
+				{
+					this.courtMembers = value;
+					base.OnPropertyChangedWithValue(value, "CourtMembers");
+				}
+			}
+		}
+
+		[DataSourceProperty]
 		public CouncilVM CouncilMemberSelection
 		{
 			get => this.governorSelection;

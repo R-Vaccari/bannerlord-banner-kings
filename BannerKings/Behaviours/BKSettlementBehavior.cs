@@ -479,8 +479,8 @@ namespace BannerKings.Behaviors
                 new GameMenuOption.OnConditionDelegate(MenuSettlementManageCondition),
                 new GameMenuOption.OnConsequenceDelegate(MenuSettlementManageConsequence), false, -1, false);
 
-            campaignGameStarter.AddGameMenuOption("bannerkings", "manage_titles", "{=!}Titles",
-               new GameMenuOption.OnConditionDelegate(MenuCourtCondition),
+            campaignGameStarter.AddGameMenuOption("bannerkings", "manage_titles", "{=!}Demesne hierarchy",
+               new GameMenuOption.OnConditionDelegate(MenuTitlesCondition),
                new GameMenuOption.OnConsequenceDelegate(MenuTitlesConsequence), false, -1, false);
 
             campaignGameStarter.AddGameMenuOption("bannerkings", "manage_court", "{=!}Noble Court",
@@ -775,7 +775,6 @@ namespace BannerKings.Behaviors
             MBTextManager.SetTextVariable("CURRENT_SETTLEMENT", Settlement.CurrentSettlement.EncyclopediaLinkWithName, false);
             bool criminal = false;
             bool inFaction = Clan.PlayerClan.Kingdom != null;
-            bool renown = Clan.PlayerClan.Tier >= 2;
             Clan clan = Settlement.CurrentSettlement.OwnerClan;
             if (clan != null)
             {
@@ -784,7 +783,7 @@ namespace BannerKings.Behaviors
                     criminal = kingdom.MainHeroCrimeRating > 0;
                 
             }
-            return !IsWounded() && !criminal && (inFaction || renown);
+            return !IsWounded() && !criminal && inFaction;
         }
 
         private static bool MenuHuntingActionCondition(MenuCallbackArgs args)
@@ -817,6 +816,13 @@ namespace BannerKings.Behaviors
         private static bool MenuCourtCondition(MenuCallbackArgs args)
         {
             args.optionLeaveType = GameMenuOption.LeaveType.RansomAndBribe;
+            Settlement currentSettlement = Settlement.CurrentSettlement;
+            return currentSettlement.OwnerClan == Hero.MainHero.Clan && !currentSettlement.IsVillage;
+        }
+
+        private static bool MenuTitlesCondition(MenuCallbackArgs args)
+        {
+            args.optionLeaveType = GameMenuOption.LeaveType.Surrender;
             Settlement currentSettlement = Settlement.CurrentSettlement;
             return currentSettlement.OwnerClan == Hero.MainHero.Clan && !currentSettlement.IsVillage;
         }
