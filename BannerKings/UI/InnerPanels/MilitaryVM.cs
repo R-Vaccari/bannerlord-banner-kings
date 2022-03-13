@@ -43,9 +43,9 @@ namespace BannerKings.UI
             ManpowerInfo.Clear();
             SiegeInfo.Clear();
             DefenseInfo.Add(new InformationElement("Militia Cap:", new BKMilitiaModel().GetMilitiaLimit(data, settlement).ToString(),
-                "The maximum number of militiamen this settlement can support, based on it's population"));
+                    "The maximum number of militiamen this settlement can support, based on it's population."));
             DefenseInfo.Add(new InformationElement("Militia Quality:", FormatValue(new BKMilitiaModel().CalculateEliteMilitiaSpawnChance(settlement)),
-                    "Chance of militiamen being spawned as veterans instead of recruits"));
+                    "Chance of militiamen being spawned as veterans instead of recruits."));
 
             ManpowerInfo.Add(new InformationElement("Manpower:", base.data.MilitaryData.Manpower.ToString(),
                     "Manpower"));
@@ -58,40 +58,54 @@ namespace BannerKings.UI
             ManpowerInfo.Add(new InformationElement("Draft Efficiency:", base.FormatValue(base.data.MilitaryData.DraftEfficiency.ResultNumber),
                    "Manpower"));
 
-            SiegeInfo.Add(new InformationElement("Storage Limit:", settlement.Town.FoodStocksUpperLimit().ToString(),
-                    "The amount of food this settlement is capable of storing"));
-            SiegeInfo.Add(new InformationElement("Estimated Holdout:", string.Format("{0} Days", base.data.MilitaryData.Holdout),
-                "How long this settlement will take to start starving in case of a siege"));
+            HashSet<BannerKingsDecision> decisions = BannerKingsConfig.Instance.PolicyManager.GetDefaultDecisions(settlement);
+            if (base.HasTown)
+            {
+                SiegeInfo.Add(new InformationElement("Storage Limit:", settlement.Town.FoodStocksUpperLimit().ToString(),
+                    "The amount of food this settlement is capable of storing."));
+                SiegeInfo.Add(new InformationElement("Estimated Holdout:", string.Format("{0} Days", base.data.MilitaryData.Holdout),
+                    "How long this settlement will take to start starving in case of a siege."));
 
-            StringBuilder sb = new StringBuilder();
-            sb.Append(base.data.MilitaryData.Catapultae);
-            sb.Append(", ");
-            sb.Append(base.data.MilitaryData.Catapultae);
-            sb.Append(", ");
-            sb.Append(base.data.MilitaryData.Trebuchets);
-            sb.Append(" (Ballis., Catap., Treb.)");
-            SiegeInfo.Add(new InformationElement("Engines:",  sb.ToString(),
-                "How long this settlement will take to start starving in case of a siege"));
+                StringBuilder sb = new StringBuilder();
+                sb.Append(base.data.MilitaryData.Catapultae);
+                sb.Append(", ");
+                sb.Append(base.data.MilitaryData.Catapultae);
+                sb.Append(", ");
+                sb.Append(base.data.MilitaryData.Trebuchets);
+                sb.Append(" (Ballis., Catap., Treb.)");
+                SiegeInfo.Add(new InformationElement("Engines:", sb.ToString(),
+                    "Pre-built siege engines to defend the walls, in case of siege."));
+
+                garrisonItem = (BKGarrisonPolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(settlement, "garrison");
+                GarrisonSelector = base.GetSelector(garrisonItem, new Action<SelectorVM<BKItemVM>>(this.garrisonItem.OnChange));
+                GarrisonSelector.SelectedIndex = garrisonItem.Selected;
+                GarrisonSelector.SetOnChangeAction(this.garrisonItem.OnChange);
+
+                
+
+                BannerKingsDecision rationDecision = decisions.FirstOrDefault(x => x.GetIdentifier() == "decision_ration");
+
+                rationToogle = new DecisionElement()
+                .SetAsBooleanOption(rationDecision.GetName(), rationDecision.Enabled, delegate (bool value)
+                {
+                    rationDecision.OnChange(value);
+                    this.RefreshValues();
+
+                }, new TextObject(rationDecision.GetHint()));
+            }
 
             militiaItem = (BKMilitiaPolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(settlement, "militia");
             MilitiaSelector = base.GetSelector(militiaItem, new Action<SelectorVM<BKItemVM>>(this.militiaItem.OnChange));
             MilitiaSelector.SelectedIndex = militiaItem.Selected;
             MilitiaSelector.SetOnChangeAction(this.militiaItem.OnChange);
 
-            garrisonItem = (BKGarrisonPolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(settlement, "garrison"); 
-            GarrisonSelector = base.GetSelector(garrisonItem, new Action<SelectorVM<BKItemVM>>(this.garrisonItem.OnChange));
-            GarrisonSelector.SelectedIndex = garrisonItem.Selected;
-            GarrisonSelector.SetOnChangeAction(this.garrisonItem.OnChange);
-
             draftItem = (BKDraftPolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(settlement, "draft");
             DraftSelector = base.GetSelector(draftItem, new Action<SelectorVM<BKItemVM>>(this.draftItem.OnChange));
             DraftSelector.SelectedIndex = draftItem.Selected;
             DraftSelector.SetOnChangeAction(this.draftItem.OnChange);
 
-            HashSet<BannerKingsDecision> decisions = BannerKingsConfig.Instance.PolicyManager.GetDefaultDecisions(settlement);
             BannerKingsDecision conscriptionDecision = decisions.FirstOrDefault(x => x.GetIdentifier() == "decision_militia_encourage");
-            BannerKingsDecision subsidizeDecision = decisions.FirstOrDefault(x => x.GetIdentifier() == "decision_militia_subsidize");
-            BannerKingsDecision rationDecision = decisions.FirstOrDefault(x => x.GetIdentifier() == "decision_ration");
+            BannerKingsDecision subsidizeDecision = decisions.FirstOrDefault(x => x.GetIdentifier() == "decision_militia_subsidize");  
 
             conscriptionToogle = new DecisionElement()
                 .SetAsBooleanOption(conscriptionDecision.GetName(), conscriptionDecision.Enabled, delegate (bool value)
@@ -109,13 +123,7 @@ namespace BannerKings.UI
 
                 }, new TextObject(subsidizeDecision.GetHint()));
 
-            rationToogle = new DecisionElement()
-                .SetAsBooleanOption(rationDecision.GetName(), rationDecision.Enabled, delegate (bool value)
-                {
-                    rationDecision.OnChange(value);
-                    this.RefreshValues();
-
-                }, new TextObject(rationDecision.GetHint()));
+            
 
         }
 

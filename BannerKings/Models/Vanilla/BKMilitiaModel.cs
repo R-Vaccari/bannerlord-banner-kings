@@ -65,7 +65,7 @@ namespace BannerKings.Models
             if (settlement.IsCastle)
                 return (float)data.TotalPop * 0.1f + 200f;
             else if (settlement.IsVillage)
-                return (float)data.TotalPop * 0.1f + 20f;
+                return (float)data.TotalPop * 0.05f + 20f;
             else return (float)data.TotalPop * 0.02f + 100f;
         }
 

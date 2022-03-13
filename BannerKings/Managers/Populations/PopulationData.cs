@@ -498,8 +498,7 @@ namespace BannerKings.Populations
         public int PeasantManpower => peasantManpower;
         public int NobleManpower => nobleManpower;
         public ExplainedNumber DraftEfficiency => new BKVolunteerModel().GetDraftEfficiency(settlement.Notables[0], 2, settlement);
-        public ExplainedNumber Militarism => this.settlement.IsTown || this.settlement.IsCastle ? new BKVolunteerModel().GetMilitarism(settlement)
-            : new ExplainedNumber(0f, true, new TaleWorlds.Localization.TextObject("Not a town"));
+        public ExplainedNumber Militarism => new BKVolunteerModel().GetMilitarism(settlement);
 
         public int Holdout => new BKFoodModel().GetFoodEstimate(settlement.Town, true, settlement.Town.FoodStocksUpperLimit());
 
@@ -691,7 +690,7 @@ namespace BannerKings.Populations
             this.composition[0] = farmRatio;
             this.composition[1] = pastureRatio;
             this.composition[2] = woodRatio;
-            float acres = this.data.Settlement.IsVillage ? (float)totalPops * MBRandom.RandomFloatRanged(3.5f, 4.5f) : (float)totalPops * MBRandom.RandomFloatRanged(2.5f, 3.0f);
+            float acres = this.data.Settlement.IsVillage ? (float)totalPops * MBRandom.RandomFloatRanged(3f, 3.5f) : (float)totalPops * MBRandom.RandomFloatRanged(2.5f, 3.0f);
             this.farmland = acres * farmRatio;
             this.pasture = acres * pastureRatio;
             this.woodland = acres * woodRatio;

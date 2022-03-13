@@ -55,7 +55,7 @@
 					  </ItemTemplate>
 					</GridWidget>
 					
-					<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" StackLayout.LayoutMethod="HorizontalLeftToRight" MarginBottom="15" MarginTop="25" MarginLeft="25" MarginRight="25" DoNotAcceptEvents="true">
+					<ListPanel WidthSizePolicy="StretchToParent" IsVisible="@HasTown" HeightSizePolicy="Fixed" StackLayout.LayoutMethod="HorizontalLeftToRight" MarginBottom="15" MarginTop="25" MarginLeft="25" MarginRight="25" DoNotAcceptEvents="true">
 						<Children>
 							<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="7" MarginLeft="5" MarginRight="5" VerticalAlignment="Bottom" PositionYOffset="7" Sprite="SPGeneral\TownManagement\horizontal_divider" />
 							<RichTextWidget DoNotAcceptEvents="true" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="OverlayPopup.ButtonText" Brush.FontSize="20" Text="Satisfactions"/>
@@ -63,7 +63,7 @@
 						</Children>
 					</ListPanel>
 					
-					<GridWidget DataSource="{SatisfactionInfo}" WidthSizePolicy="CoverChildren" HorizontalAlignment="Left" MarginLeft="50"  HeightSizePolicy="CoverChildren" DefaultCellWidth="150" DefaultCellHeight="30" ColumnCount="1" MarginTop="10">
+					<GridWidget DataSource="{SatisfactionInfo}" IsVisible="@HasTown" WidthSizePolicy="CoverChildren" HorizontalAlignment="Left" MarginLeft="50"  HeightSizePolicy="CoverChildren" DefaultCellWidth="150" DefaultCellHeight="30" ColumnCount="1" MarginTop="10">
 					  <ItemTemplate>
 						<InformationElement/>
 					  </ItemTemplate>
@@ -74,7 +74,7 @@
 			<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" StackLayout.LayoutMethod="VerticalBottomToTop" MarginTop="35" >
 			  <Children>
 									
-				<ListPanel WidthSizePolicy="Fixed" HeightSizePolicy="CoverChildren" SuggestedWidth="320" StackLayout.LayoutMethod="HorizontalLeftToRight" MarginTop="20">
+				<ListPanel WidthSizePolicy="Fixed" IsVisible="@HasTown" HeightSizePolicy="CoverChildren" SuggestedWidth="320" StackLayout.LayoutMethod="HorizontalLeftToRight" MarginTop="20">
 					<Children>
 						<Widget DataSource="{ExportToogle}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" VerticalAlignment="Center" UpdateChildrenStates="true" MarginLeft="20" >
 							<Children>
@@ -90,7 +90,7 @@
 					</Children>
 				</ListPanel>
 				
-				<ListPanel WidthSizePolicy="Fixed" HeightSizePolicy="CoverChildren" SuggestedWidth="320" StackLayout.LayoutMethod="HorizontalLeftToRight" MarginTop="10">
+				<ListPanel WidthSizePolicy="Fixed" IsVisible="@HasTown" HeightSizePolicy="CoverChildren" SuggestedWidth="320" StackLayout.LayoutMethod="HorizontalLeftToRight" MarginTop="10">
 					<Children>
 						<Widget DataSource="{SlaveTaxToogle}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" VerticalAlignment="Center" UpdateChildrenStates="true" MarginLeft="20" >
 							<Children>
@@ -106,7 +106,7 @@
 					</Children>
 				</ListPanel>
 				
-				<ListPanel WidthSizePolicy="Fixed" HeightSizePolicy="CoverChildren" SuggestedWidth="320" StackLayout.LayoutMethod="HorizontalLeftToRight" MarginTop="10">
+				<ListPanel WidthSizePolicy="Fixed" IsVisible="@HasTown" HeightSizePolicy="CoverChildren" SuggestedWidth="320" StackLayout.LayoutMethod="HorizontalLeftToRight" MarginTop="10">
 					<Children>
 						<Widget DataSource="{MercantilismToogle}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" VerticalAlignment="Center" UpdateChildrenStates="true" MarginLeft="20" >
 							<Children>
@@ -122,7 +122,7 @@
 					</Children>
 				</ListPanel>
 				
-				<ListPanel WidthSizePolicy="Fixed" HeightSizePolicy="CoverChildren" SuggestedWidth="320" StackLayout.LayoutMethod="HorizontalLeftToRight" MarginTop="10">
+				<ListPanel WidthSizePolicy="Fixed" IsVisible="@HasTown" HeightSizePolicy="CoverChildren" SuggestedWidth="320" StackLayout.LayoutMethod="HorizontalLeftToRight" MarginTop="10">
 					<Children>
 						<Widget DataSource="{TariffToogle}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" VerticalAlignment="Center" UpdateChildrenStates="true" MarginLeft="20" >
 							<Children>
@@ -141,10 +141,10 @@
 				<RichTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" HorizontalAlignment="Center" SuggestedHeight="5" Brush="TownManagement.Project.Name.Text" Text="Tax policy" MarginTop="25"/>
 				<ClanPartyRoleDropdown DataSource="{TaxSelector}" MarginTop="10" HorizontalAlignment="Center"/>
 				
-				<RichTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" HorizontalAlignment="Center" SuggestedHeight="5" Brush="TownManagement.Project.Name.Text" Text="Criminal policy" MarginTop="25"/>
-				<ClanPartyRoleDropdown DataSource="{CriminalSelector}" MarginTop="10" HorizontalAlignment="Center"/>
+				<RichTextWidget WidthSizePolicy="CoverChildren" IsVisible="@HasTown" HeightSizePolicy="Fixed" HorizontalAlignment="Center" SuggestedHeight="5" Brush="TownManagement.Project.Name.Text" Text="Criminal policy" MarginTop="25"/>
+				<ClanPartyRoleDropdown DataSource="{CriminalSelector}" IsVisible="@HasTown" MarginTop="10" HorizontalAlignment="Center"/>
 				
-				<ButtonWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedHeight="48" SuggestedWidth="200" MarginTop="20" HorizontalAlignment="Center" VerticalAlignment="Top" Brush="ButtonBrush2" Command.Click="OnTournamentPress" IsEnabled="@TournamentAvailable">
+				<ButtonWidget WidthSizePolicy="Fixed" IsVisible="@HasTown" HeightSizePolicy="Fixed" SuggestedHeight="48" SuggestedWidth="200" MarginTop="20" HorizontalAlignment="Center" VerticalAlignment="Top" Brush="ButtonBrush2" Command.Click="OnTournamentPress" IsEnabled="@TournamentAvailable">
 					<Children>  
 						<HintWidget DataSource="{TournamentHint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" />	
 						<RichTextWidget DoNotAcceptEvents="true" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="OverlayPopup.ButtonText" Brush.FontSize="20" Text="Tournament"/>

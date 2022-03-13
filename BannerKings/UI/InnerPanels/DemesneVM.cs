@@ -1,15 +1,8 @@
 ﻿using BannerKings.Models;
 using BannerKings.Populations;
 using BannerKings.UI.Items;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.ViewModelCollection;
-using TaleWorlds.Core;
-using TaleWorlds.Core.ViewModelCollection;
 using TaleWorlds.Library;
-using TaleWorlds.Localization;
 using static BannerKings.Managers.TitleManager;
 
 namespace BannerKings.UI

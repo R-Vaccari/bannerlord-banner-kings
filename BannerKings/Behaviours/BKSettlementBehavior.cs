@@ -548,7 +548,7 @@ namespace BannerKings.Behaviors
 
             campaignGameStarter.AddGameMenuOption("bannerkings", "manage_projects", "{=!}Village Projects",
                new GameMenuOption.OnConditionDelegate(MenuVillageBuildingCondition),
-               new GameMenuOption.OnConsequenceDelegate(MenuVillageProjectsConsequence), false, -1, false);
+               new GameMenuOption.OnConsequenceDelegate(MenuVillageProjectsConsequence), false, 2, false);
         }
 
 

@@ -15,6 +15,7 @@ namespace BannerKings.UI.Panels
     class CourtVM : BannerKingsViewModel
     {
 		private CouncilVM governorSelection;
+		private MBBindingList<InformationElement> courtInfo;
 		private Council council;
 		private CouncilPosition councilPosition;
 		private HeroVM marshall;
@@ -27,6 +28,7 @@ namespace BannerKings.UI.Panels
 		public CourtVM(PopulationData data) : base(data, true)
         {
 			GameTexts.SetVariable("PLAYER_NAME", Hero.MainHero.Name);
+			this.courtInfo = new MBBindingList<InformationElement>();
 			this.council = BannerKingsConfig.Instance.CourtManager.GetCouncil(Hero.MainHero);
 			councilPosition = CouncilPosition.Marshall;
 			this.courtMembers = new MBBindingList<CouncilMemberVM>();
@@ -40,12 +42,14 @@ namespace BannerKings.UI.Panels
         public override void RefreshValues()
         {
             base.RefreshValues();
+			this.CourtInfo.Clear();
 			this.CouncilMemberSelection.RefreshValues();
 			this.Marshall = new HeroVM(council.Marshall);
 			this.Steward = new HeroVM(council.Steward);
 			this.Chancellor = new HeroVM(council.Chancellor);
 			this.Spymaster = new HeroVM(council.Spymaster);
-			admCost = base.FormatValue(council.AdministrativeCosts);
+			CourtInfo.Add(new InformationElement("Administrative costs:", base.FormatValue(council.AdministrativeCosts),
+				"Costs associated with payment of council members, deducted on all your fiefs' revenues."));
 
 		}
 
@@ -99,10 +103,21 @@ namespace BannerKings.UI.Panels
 		}
 
 		[DataSourceProperty]
-		public string Title => new TextObject("{=!}Council of {PLAYER_NAME}").ToString();
+		public MBBindingList<InformationElement> CourtInfo
+		{
+			get => courtInfo;
+			set
+			{
+				if (value != courtInfo)
+				{
+					courtInfo = value;
+					base.OnPropertyChangedWithValue(value, "CourtInfo");
+				}
+			}
+		}
 
 		[DataSourceProperty]
-		public string AdministrativeCosts => admCost;
+		public string Title => new TextObject("{=!}Council of {PLAYER_NAME}").ToString();
 
 		[DataSourceProperty]
 		public MBBindingList<CouncilMemberVM> CourtMembers

@@ -169,21 +169,21 @@ namespace BannerKings.Managers
                 if (IsVillageProducingFood(settlement.Village))
                     return new Dictionary<PopType, float[]>()
                     {
-                        { PopType.Nobles, new float[] {0.025f, 0.045f} },
+                        { PopType.Nobles, new float[] {0.035f, 0.055f} },
                         { PopType.Serfs, new float[] {0.7f, 0.8f} },
                         { PopType.Slaves, new float[] {0.1f, 0.2f} }
                     };
                 else if (IsVillageAMine(settlement.Village))
                     return new Dictionary<PopType, float[]>()
                     {
-                        { PopType.Nobles, new float[] {0.01f, 0.02f} },
+                        { PopType.Nobles, new float[] {0.02f, 0.04f} },
                         { PopType.Serfs, new float[] {0.3f, 0.4f} },
                         { PopType.Slaves, new float[] {0.6f, 0.7f} }
                     };
                 else
                     return new Dictionary<PopType, float[]>()
                     {
-                        { PopType.Nobles, new float[] {0.01f, 0.02f} },
+                        { PopType.Nobles, new float[] {0.025f, 0.045f} },
                         { PopType.Serfs, new float[] {0.5f, 0.7f} },
                         { PopType.Slaves, new float[] {0.4f, 0.5f} }
                     };

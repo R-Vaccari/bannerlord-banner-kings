@@ -36,7 +36,16 @@ namespace BannerKings.Managers
         {
             get
             {
-                yield return "";
+                yield return "decision_ration";
+                yield return "decision_militia_encourage";
+                yield return "decision_slaves_export";
+                yield return "decision_patrol_send";
+                yield return "decision_scout_send";
+                yield return "decision_militia_subsidize";
+                yield return "decision_tariff_exempt";
+                yield return "decision_foreigner_ban";
+                yield return "decision_slaves_tax";
+                yield return "decision_mercantilism";
                 yield break;
             }
         }
@@ -45,7 +54,8 @@ namespace BannerKings.Managers
         {
             get
             {
-                yield return "";
+                yield return "decision_militia_encourage";
+                yield return "decision_militia_subsidize";
                 yield break;
             }
         }

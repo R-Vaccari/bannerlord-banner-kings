@@ -269,13 +269,19 @@ namespace BannerKings.Managers
 
         public List<FeudalTitle> GetVassals(Hero lord)
         {
-            TitleType threshold = this.GetHighestTitle(lord).type + 1;
-            List<FeudalTitle> allTitles = GetAllDeJure(lord);
             List<FeudalTitle> vassals = new List<FeudalTitle>();
-            foreach (FeudalTitle title in allTitles)
-                if (title.deFacto.MapFaction == lord.MapFaction && (title.deFacto == title.deJure || title.deJure.MapFaction == lord.MapFaction)
-                    && (int)title.type <= (int)threshold)
-                    vassals.Add(title);
+            FeudalTitle highest = this.GetHighestTitle(lord);
+            if (highest != null) 
+            {
+                TitleType threshold = this.GetHighestTitle(lord).type + 1;
+                List<FeudalTitle> allTitles = GetAllDeJure(lord);
+
+                foreach (FeudalTitle title in allTitles)
+                    if (title.deFacto.MapFaction == lord.MapFaction && (title.deFacto == title.deJure || title.deJure.MapFaction == lord.MapFaction)
+                        && (int)title.type >= (int)threshold)
+                        vassals.Add(title);
+            }
+            
             return vassals;
         }
 
