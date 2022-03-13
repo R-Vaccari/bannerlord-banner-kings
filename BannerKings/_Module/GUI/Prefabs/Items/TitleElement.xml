@@ -15,18 +15,16 @@
         <ListPanel Id="ButtonContainer" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" StackLayout.LayoutMethod="VerticalBottomToTop" HorizontalAlignment="Center">
           <Children>
 
-        <ButtonWidget DataSource="{Title}" Command.Click="ExecuteLink" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedHeight="89" SuggestedWidth="123" HorizontalAlignment="Center" Brush="Encyclopedia.SubPage.Element">
+        <ButtonWidget DataSource="{Title}" Command.Click="ExecuteLink" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedHeight="89" SuggestedWidth="123" HorizontalAlignment="Center" Brush="Encyclopedia.SubPage.Element" >
           <Children>
-
-            <!--Element Image-->
             <ImageIdentifierWidget Id="ElementImage" DataSource="{ImageIdentifier}" DoNotAcceptEvents="true" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" ImageId="@Id" AdditionalArgs="@AdditionalArgs" ImageTypeCode="@ImageTypeCode" HorizontalAlignment="Center" MarginRight="3" MarginLeft="3" MarginBottom="3" MarginTop="3"/>
-            <HintWidget DoNotAcceptEvents="true" HeightSizePolicy ="StretchToParent" WidthSizePolicy="StretchToParent" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint"/>
+            <HintWidget DataSource="{Hint}" DoNotAcceptEvents="true" HeightSizePolicy ="StretchToParent" WidthSizePolicy="StretchToParent" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint"/>
             <Widget DoNotAcceptEvents="true" HeightSizePolicy ="StretchToParent" WidthSizePolicy="StretchToParent" Sprite="SelectionBorder@2x_9" IsVisible="@IsActiveUnit"/>
-            </Children>
+          </Children>
         </ButtonWidget>
     
             <!--Element Name-->
-            <TextWidget DataSource="{Title}" DoNotAcceptEvents="true" WidthSizePolicy="Fixed" HeightSizePolicy="CoverChildren" SuggestedWidth="140" MinHeight="45" VerticalAlignment="Center" Brush="Encyclopedia.SubPage.Element.Name.Text" Brush.FontSize="16" Text="@NameText"/>
+            <TextWidget DataSource="{Title}" DoNotAcceptEvents="true" WidthSizePolicy="Fixed" HeightSizePolicy="CoverChildren" SuggestedWidth="140" MinHeight="45" VerticalAlignment="Center" Brush="Encyclopedia.SubPage.Element.Name.Text" Brush.FontSize="18" Text="@NameText"/>
           </Children>
         </ListPanel>
 

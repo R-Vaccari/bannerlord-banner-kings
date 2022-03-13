@@ -29,7 +29,7 @@ namespace BannerKings.Managers.Court
             MBReadOnlyList<Hero> members = Clan.PlayerClan.Heroes;
             if (members != null && members.Count > 0)
                 foreach (Hero member in members)
-                    if (member != Hero.MainHero)
+                    if (member != Hero.MainHero && member.IsAlive)
                         heroes.Add(member);
 
             if (BannerKingsConfig.Instance.TitleManager.IsHeroTitleHolder(Hero.MainHero))
@@ -76,19 +76,6 @@ namespace BannerKings.Managers.Court
                 }
                     
             return member;  
-        }
-
-        public float GetCompetence(Hero hero)
-        {
-            float competence = 0f;
-            foreach (CouncilMember member in this.members)
-                if (member.Member == hero)
-                {
-                    competence = member.Competence;
-                    break;
-                }
-
-            return competence;
         }
 
         public float GetCompetence(Hero hero, CouncilPosition position)

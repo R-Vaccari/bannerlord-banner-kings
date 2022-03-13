@@ -1,17 +1,78 @@
 ﻿using BannerKings.Managers.Court;
 using Helpers;
 using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Core.ViewModelCollection;
 using TaleWorlds.Localization;
+using static BannerKings.Managers.TitleManager;
 
 namespace BannerKings.Utils
 {
     public static class UIHelper
     {
+
+		public static List<TooltipProperty> GetHeroCourtTooltip(Hero hero)
+		{
+			List<TooltipProperty> list = new List<TooltipProperty>
+			{
+				new TooltipProperty("", hero.Name.ToString(), 0, false, TooltipProperty.TooltipPropertyFlags.Title)
+			};
+			MBTextManager.SetTextVariable("LEFT", GameTexts.FindText("str_tooltip_label_relation", null), false);
+			string definition = GameTexts.FindText("str_LEFT_ONLY", null).ToString();
+			list.Add(new TooltipProperty(definition, ((int)hero.GetRelationWithPlayer()).ToString(), 0, false, TooltipProperty.TooltipPropertyFlags.None));
+			MBTextManager.SetTextVariable("LEFT", GameTexts.FindText("str_tooltip_label_type", null), false);
+			string definition2 = GameTexts.FindText("str_LEFT_ONLY", null).ToString();
+			list.Add(new TooltipProperty(definition2, GetCorrelation(hero), 0, false, TooltipProperty.TooltipPropertyFlags.None));
+			list.Add(new TooltipProperty(new TextObject("{=jaaQijQs}Age").ToString(), hero.Age.ToString(), 0, false, TooltipProperty.TooltipPropertyFlags.None));
+
+			if (hero.CurrentSettlement != null)
+				list.Add(new TooltipProperty(new TextObject("{=!}Settlement").ToString(), hero.CurrentSettlement.Name.ToString(), 0, false, TooltipProperty.TooltipPropertyFlags.None));
+
+			List<FeudalTitle> titles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(hero);
+			if (titles.Count > 0)
+            {
+				TooltipAddEmptyLine(list, false);
+				list.Add(new TooltipProperty(new TextObject("{=!}Titles", null).ToString(), " ", 0, false, TooltipProperty.TooltipPropertyFlags.None));
+				TooltipAddSeperator(list, false);
+				foreach (FeudalTitle title in titles)
+					list.Add(new TooltipProperty(title.name.ToString(), GetOwnership(hero, title), 0, false, TooltipProperty.TooltipPropertyFlags.None));
+			}
+
+			return list;
+		}
+
+		private static string GetOwnership(Hero hero, FeudalTitle title)
+        {
+			string ownership = "";
+			if (title.deJure == hero && title.deFacto == hero)
+				ownership = "Full ownership";
+			else if (title.deJure == hero)
+				ownership = "De Jure ownership";
+			else ownership = "De Facto ownership";
+
+			return ownership;
+        }
+
+		private static string GetCorrelation(Hero hero)
+        {
+			string correlation = "";
+			Clan playerClan = Clan.PlayerClan;
+			Hero main = Hero.MainHero;
+			if (hero.IsNotable)
+				correlation = "Notable";
+			else if (playerClan.Companions.Contains(hero) && BannerKingsConfig.Instance.TitleManager.IsHeroKnighted(hero))
+				correlation = "Knight";
+			else if (playerClan.Heroes.Contains(hero) && hero.Father == main || hero.Mother == main || hero.Siblings.Contains(main)
+				|| hero.Spouse == main || hero.Children.Contains(main))
+				correlation = "Family";
+			else if (BannerKingsConfig.Instance.TitleManager.IsHeroTitleHolder(hero))
+				correlation = "Vassal Lord";
+
+			return correlation;
+        }
 
 		public static List<TooltipProperty> GetHeroGovernorEffectsTooltip(Hero hero, CouncilPosition position, float competence)
 		{

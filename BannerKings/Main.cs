@@ -42,6 +42,7 @@ namespace BannerKings
                     campaignStarter.AddBehavior(new BKTournamentBehavior());
                     campaignStarter.AddBehavior(new BKRepublicBehavior());
                     campaignStarter.AddBehavior(new BKPartyBehavior());
+                    campaignStarter.AddBehavior(new BKClanBehavior());
 
                     campaignStarter.AddModel(new BKProsperityModel());
                     campaignStarter.AddModel(new BKTaxModel());
@@ -65,6 +66,7 @@ namespace BannerKings
                     campaignStarter.AddModel(new BKNotableModel());
                     campaignStarter.AddModel(new BKGarrisonModel());
                     campaignStarter.AddModel(new BKRansomModel());
+                    campaignStarter.AddModel(new BKClanTierModel());
                 } catch (Exception e)
                 {
                 }
