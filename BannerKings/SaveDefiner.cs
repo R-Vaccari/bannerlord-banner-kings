@@ -2,6 +2,8 @@
 using BannerKings.Managers;
 using BannerKings.Managers.Decisions;
 using BannerKings.Managers.Policies;
+using BannerKings.Managers.Populations;
+using BannerKings.Managers.Populations.Villages;
 using BannerKings.Populations;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
@@ -43,11 +45,17 @@ namespace BannerKings
             base.AddClassDefinition(typeof(MilitiaComponent), 16);
             base.AddEnumDefinition(typeof(TariffType), 17);
             base.AddEnumDefinition(typeof(CriminalPolicy), 18);
+            base.AddClassDefinition(typeof(TournamentData), 19);
+            base.AddClassDefinition(typeof(VillageData), 20); 
+            base.AddClassDefinition(typeof(VillageBuilding), 21);
+            base.AddClassDefinition(typeof(CultureDataClass), 22);
         }
 
         protected override void DefineContainerDefinitions()
         {
             base.ConstructContainerDefinition(typeof(List<PopulationClass>));
+            base.ConstructContainerDefinition(typeof(List<VillageBuilding>));
+            base.ConstructContainerDefinition(typeof(List<CultureDataClass>));
             base.ConstructContainerDefinition(typeof(Dictionary<Settlement, PopulationData>));
             base.ConstructContainerDefinition(typeof(List<BannerKingsDecision>));
             base.ConstructContainerDefinition(typeof(List<BannerKingsPolicy>));

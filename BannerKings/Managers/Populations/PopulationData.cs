@@ -12,6 +12,7 @@ using BannerKings.Models.Populations;
 using TaleWorlds.ObjectSystem;
 using BannerKings.Managers.Institutions;
 using BannerKings.Managers.Populations.Villages;
+using BannerKings.Managers.Populations;
 
 namespace BannerKings.Populations
 {
@@ -19,21 +20,32 @@ namespace BannerKings.Populations
     {
         [SaveableProperty(1)]
         private List<PopulationClass> classes { get; set; }
+
         [SaveableProperty(2)]
         private float stability { get; set; }
+
         [SaveableProperty(3)]
         private Settlement settlement { get; set; }
+
         [SaveableProperty(4)]
-        private EconomicData economicData { get; set; }
-        [SaveableProperty(5)]
         private CultureData cultureData { get; set; }
-        [SaveableProperty(6)]
-        private MilitaryData militaryData { get; set; }
-        [SaveableProperty(7)]
-        private LandData landData { get; set; }
-        [SaveableProperty(8)]
-        private TournamentData tournamentData { get; set; }
+
+        [SaveableProperty(5)]
         private VillageData villageData { get; set; }
+
+        [SaveableProperty(6)]
+        private LandData landData { get; set; }
+
+        [SaveableProperty(7)]
+        private MilitaryData militaryData { get; set; }
+
+        [SaveableProperty(8)]
+        private EconomicData economicData { get; set; }
+
+        [SaveableProperty(9)]
+        private TournamentData tournamentData { get; set; }
+
+        
 
         public PopulationData(List<PopulationClass> classes, Settlement settlement, float assimilation, List<CultureDataClass> cultures = null, Guild guild = null)
         {
@@ -218,8 +230,11 @@ namespace BannerKings.Populations
 
     public class CultureData : BannerKingsData
     {
-        private List<CultureDataClass> cultures;
-        private Hero settlementOwner;
+        [SaveableProperty(1)]
+        private List<CultureDataClass> cultures { get; set; }
+
+        [SaveableProperty(2)]
+        private Hero settlementOwner { get; set; }
 
         public CultureData(Hero settlementOwner, List<CultureDataClass> cultures)
         {
@@ -342,8 +357,13 @@ namespace BannerKings.Populations
 
     public class CultureDataClass
     {
+        [SaveableProperty(1)]
         private CultureObject culture { get; set; }
+
+        [SaveableProperty(2)]
         private float assimilation { get; set; }
+
+        [SaveableProperty(3)]
         private float acceptance { get; set; }
 
         public CultureDataClass(CultureObject culture, float assimilation, float acceptance)
@@ -374,173 +394,26 @@ namespace BannerKings.Populations
         internal CultureObject Culture => culture;
     }
 
-    public class EconomicData : BannerKingsData
-    {
-        private Settlement settlement { get; set; }
-        private Guild guild { get; set; }
-        private float[] satisfactions { get; set; }
-        private float stateSlaves { get; set; }
+    
 
-        public EconomicData(Settlement settlement,
-            Guild guild = null)
-        {
-            this.settlement = settlement;
-            this.guild = new Guild(settlement, Managers.Institutions.GuildType.Merchants, null);
-            this.satisfactions = new float[] { 0.5f, 0.5f, 0.5f,0.5f };
-            this.stateSlaves = MBRandom.RandomFloatRanged(0.4f, 0.6f);
-        }
-
-
-        public Guild Guild => this.guild;
-
-        public float Corruption => 1f;
-
-        public float Tariff => new BKTaxModel().GetTownTaxRatio(settlement.Town);
-
-        public float StateSlaves => this.stateSlaves;
-
-        public float[] Satisfactions => this.satisfactions;
-
-        public void UpdateSatisfaction(ConsumptionType type, float value)
-        {
-            float current = this.satisfactions[(int)type];
-            this.satisfactions[(int)type] = MathF.Clamp(current + value, 0f, 1f);
-        }
-
-        internal override void Update(PopulationData data)
-        {
-            
-        }
-
-        public ExplainedNumber AdministrativeCost => BannerKingsConfig.Instance.Models
-            .First(x => x.GetType() == typeof(BKAdministrativeModel)).CalculateEffect(settlement);
-        public float MerchantRevenue => settlement.Town != null ? new BKEconomyModel().GetMerchantIncome(settlement.Town) : 0f;
-        public ExplainedNumber CaravanAttraction
-        {
-            get
-            {
-                BKCaravanAttractionModel model = (BKCaravanAttractionModel)BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(BKCaravanAttractionModel));
-                return model.CalculateEffect(settlement);
-            }
-        }
-        public ExplainedNumber Mercantilism
-        {
-            get
-            {
-                BKEconomyModel model = (BKEconomyModel)BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(BKEconomyModel));
-                return model.CalculateEffect(settlement);
-            }
-        }
-        public ExplainedNumber ProductionEfficiency
-        {
-            get
-            {
-                BKEconomyModel model = (BKEconomyModel)BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(BKEconomyModel));
-                return model.CalculateProductionEfficiency(settlement);
-            }
-        }
-        public ExplainedNumber ProductionQuality
-        {
-            get
-            {
-                BKEconomyModel model = (BKEconomyModel)BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(BKEconomyModel));
-                return model.CalculateProductionQuality(settlement);
-            }
-        }
-    }
-
-    public class MilitaryData : BannerKingsData
-    {
-        private Settlement settlement;
-        private int peasantManpower;
-        private int nobleManpower;
-        private List<SiegeEngineType> engines;
-
-        public MilitaryData(Settlement settlement, int peasantManpower, int nobleManpower)
-        {
-            this.settlement = settlement;
-            this.peasantManpower = peasantManpower;
-            this.nobleManpower = nobleManpower;
-            this.engines = new List<SiegeEngineType>();
-        }
-
-        public void DeduceManpower(PopulationData data, int quantity, CharacterObject troop)
-        {
-            int tier = troop.Tier;
-            bool noble = Helpers.Helpers.IsRetinueTroop(troop, settlement.Culture);
-            if (noble)
-            {
-                if (this.nobleManpower >= quantity) this.nobleManpower -= quantity;
-                else this.nobleManpower = 0;
-                data.UpdatePopType(PopType.Nobles, -quantity);
-            }
-            else
-            {
-                if (tier >= 3 && data.GetTypeCount(PopType.Craftsmen) > quantity)
-                {
-                    List<ValueTuple<PopType, float>> list = new List<(PopType, float)>();
-                    float mil1 = data.GetCurrentTypeFraction(PopType.Craftsmen);
-                    list.Add(new(PopType.Craftsmen, mil1));
-                    float mil2 = data.GetCurrentTypeFraction(PopType.Serfs);
-                    list.Add(new(PopType.Serfs, mil2));
-                    PopType type = MBRandom.ChooseWeighted(list);
-                    data.UpdatePopType(type, -quantity);
-                } else
-                {
-                    data.UpdatePopType(PopType.Serfs, -quantity);
-                }
-                if (this.peasantManpower >= quantity) this.peasantManpower -= quantity;
-                else this.peasantManpower = 0;
-            }
-        }
-
-        public int Manpower => peasantManpower + nobleManpower;
-        public int PeasantManpower => peasantManpower;
-        public int NobleManpower => nobleManpower;
-        public ExplainedNumber DraftEfficiency => new BKVolunteerModel().GetDraftEfficiency(settlement.Notables[0], 2, settlement);
-        public ExplainedNumber Militarism => new BKVolunteerModel().GetMilitarism(settlement);
-
-        public int Holdout => new BKFoodModel().GetFoodEstimate(settlement, settlement.Town.FoodStocksUpperLimit());
-
-        public IEnumerable<SiegeEngineType> Engines => this.engines;
-
-        public int Ballistae => new BKSiegeEventModel().GetPrebuiltSiegeEnginesOfSettlement(settlement).Count(x => x == DefaultSiegeEngineTypes.Ballista);
-        public int Catapultae => new BKSiegeEventModel().GetPrebuiltSiegeEnginesOfSettlement(settlement).Count(x => x == DefaultSiegeEngineTypes.Catapult);
-        public int Trebuchets => new BKSiegeEventModel().GetPrebuiltSiegeEnginesOfSettlement(settlement).Count(x => x == DefaultSiegeEngineTypes.Trebuchet);
-
-        internal override void Update(PopulationData data)
-        {
-            BKVolunteerModel model = new BKVolunteerModel();
-            float serfMilitarism = model.GetClassMilitarism(PopType.Serfs);
-            float serfs = data.GetTypeCount(PopType.Serfs);
-
-            float craftsmanMilitarism = model.GetClassMilitarism(PopType.Craftsmen);
-            float craftsmen = data.GetTypeCount(PopType.Craftsmen);
-            int peasantCap = (int)((serfs * serfMilitarism) + (craftsmen * craftsmanMilitarism));
-            int peasantGrowth = (int)(data.Growth.ResultNumber * (serfMilitarism) + craftsmanMilitarism);
-            if (peasantManpower > peasantCap)
-                this.peasantManpower += (int)((float)peasantGrowth * -1f); // Change later
-            else if (peasantManpower < peasantCap)
-                this.peasantManpower += peasantGrowth;
-
-            float nobleMilitarism = model.GetClassMilitarism(PopType.Nobles);
-            float nobles = data.GetTypeCount(PopType.Nobles);
-            int nobleCap = (int)(nobles * nobleMilitarism);
-            int nobleGrowth = (int)(data.Growth.ResultNumber * nobleMilitarism);
-            if (nobleManpower > nobleCap)
-                this.nobleManpower += (int)((float)nobleGrowth * -1f);
-            else if (nobleManpower < nobleCap)
-                this.nobleManpower += nobleGrowth;
-        }
-    }
+   
 
     public class VillageData : BannerKingsData
     {
-        Village village;
-        List<VillageBuilding> buildings;
-        VillageBuilding current;
-        VillageBuilding currentDefault;
-        Queue<Building> inProgress;
+        [SaveableProperty(1)]
+        Village village { get; set; }
+
+        [SaveableProperty(2)]
+        List<VillageBuilding> buildings { get; set; }
+
+        [SaveableProperty(3)]
+        VillageBuilding current { get; set; }
+
+        [SaveableProperty(4)]
+        VillageBuilding currentDefault { get; set; }
+
+        [SaveableProperty(5)]
+        Queue<Building> inProgress { get; set; }
 
         public VillageData(Village village)
         {
@@ -618,19 +491,30 @@ namespace BannerKings.Populations
 
     public class LandData : BannerKingsData
     {
-        private PopulationData data;
-        private float farmland;
-        private float pasture;
-        private float woodland;
-        private float fertility;
-        private float terrainDifficulty;
-        TerrainType terrainType;
-        private float[] composition;
+        [SaveableProperty(1)]
+        private PopulationData data { get; set; }
+
+        [SaveableProperty(2)]
+        private float farmland { get; set; }
+
+        [SaveableProperty(3)]
+        private float pasture { get; set; }
+
+        [SaveableProperty(4)]
+        private float woodland { get; set; }
+
+        [SaveableProperty(5)]
+        private float fertility { get; set; }
+
+        [SaveableProperty(6)]
+        private float terrainDifficulty  { get; set; }
+
+        [SaveableProperty(7)]
+        private float[] composition { get; set; }
 
         public LandData(PopulationData data)
         {
             this.data = data;
-            this.terrainType = Campaign.Current.MapSceneWrapper.GetTerrainTypeAtPosition(data.Settlement.Position2D);
             this.composition = new float[3];
             this.Init(data.TotalPop);
         }
@@ -640,7 +524,7 @@ namespace BannerKings.Populations
             float farmRatio = 0f;
             float pastureRatio = 0f;
             float woodRatio = 0f;
-            if (this.terrainType == TerrainType.Desert)
+            if (this.Terrain == TerrainType.Desert)
             {
                 this.fertility = 0.5f;
                 this.terrainDifficulty = 1.4f;
@@ -648,7 +532,7 @@ namespace BannerKings.Populations
                 pastureRatio = 0.08f;
                 woodRatio = 0.02f;
             }
-            else if (this.terrainType == TerrainType.Steppe)
+            else if (this.Terrain == TerrainType.Steppe)
             {
                 this.fertility = 0.75f;
                 this.terrainDifficulty = 1f;
@@ -656,7 +540,7 @@ namespace BannerKings.Populations
                 pastureRatio = 0.5f;
                 woodRatio = 0.05f;
             }
-            else if (this.terrainType == TerrainType.Mountain)
+            else if (this.Terrain == TerrainType.Mountain)
             {
                 this.fertility = 0.7f;
                 this.terrainDifficulty = 2f;
@@ -664,7 +548,7 @@ namespace BannerKings.Populations
                 pastureRatio = 0.35f;
                 woodRatio = 0.15f;
             }
-            else if (this.terrainType == TerrainType.Canyon)
+            else if (this.Terrain == TerrainType.Canyon)
             {
                 this.fertility = 0.5f;
                 this.terrainDifficulty = 2f;
@@ -672,7 +556,7 @@ namespace BannerKings.Populations
                 pastureRatio = 0.08f;
                 woodRatio = 0.02f;
             }
-            else if (this.terrainType == TerrainType.Forest)
+            else if (this.Terrain == TerrainType.Forest)
             {
                 this.fertility = 0.5f;
                 this.terrainDifficulty = 2f;
@@ -696,7 +580,7 @@ namespace BannerKings.Populations
             this.woodland = acres * woodRatio;
         }
 
-        public TerrainType Terrain => this.terrainType;
+        public TerrainType Terrain => Campaign.Current.MapSceneWrapper.GetTerrainTypeAtPosition(data.Settlement.Position2D);
 
         public int AvailableWorkForce
         {
@@ -771,9 +655,15 @@ namespace BannerKings.Populations
     public class TournamentData : BannerKingsData
     {
         private Town town;
-        private ItemRoster roster;
-        private ItemObject prize;
-        private bool active;
+
+        [SaveableProperty(1)]
+        private ItemRoster roster { get; set; }
+
+        [SaveableProperty(2)]
+        private ItemObject prize { get; set; }
+
+        [SaveableProperty(3)]
+        private bool active { get; set; }
 
         public TournamentData(Town town)
         {

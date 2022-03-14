@@ -39,30 +39,25 @@ namespace BannerKings.Behaviors
 
         public override void SyncData(IDataStore dataStore)
         {
-            /*
+            
             if (dataStore.IsSaving)
             {
                 if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PolicyManager != null)
                 {
                     populationManager = BannerKingsConfig.Instance.PopulationManager;
-                    policyManager = BannerKingsConfig.Instance.PolicyManager;
                 }
             }
 
-            dataStore.SyncData("pops", ref populationManager);
-            dataStore.SyncData("policies", ref policyManager);
+            dataStore.SyncData("bannerkings-populations", ref populationManager);
 
             if (dataStore.IsLoading)
             {
                 if (populationManager == null && policyManager == null)
-                {
-                    BannerKingsConfig.Instance.InitManagers(new Dictionary<Settlement, PopulationData>(), new List<MobileParty>(),
-                    new Dictionary<Settlement, HashSet<BannerKingsDecision>>(), new Dictionary<Settlement, HashSet<BannerKingsPolicy>>(), 
-                    new HashSet<FeudalTitle>(), new Dictionary<Hero, HashSet<FeudalTitle>>(),
-                    new Dictionary<Kingdom, FeudalTitle>());
-                }
-                else BannerKingsConfig.Instance.InitManagers(populationManager, policyManager, titleManager);
-            }*/
+                    BannerKingsConfig.Instance.InitManagers();
+                
+                else BannerKingsConfig.Instance.InitManagers(populationManager, new PolicyManager(new Dictionary<Settlement, List<Managers.Decisions.BannerKingsDecision>>(), new Dictionary<Settlement, List<BannerKingsPolicy>>()), 
+                    null, new CourtManager(new Dictionary<Clan, Managers.Court.CouncilData>()));
+            }
         }
 
         
