@@ -14,10 +14,10 @@ namespace BannerKings.Managers
 {
     public class TitleManager
     {
-        private Dictionary<FeudalTitle, (Hero, Hero)> TITLES { get; set; }
+        private Dictionary<FeudalTitle, Hero> TITLES { get; set; }
         public Dictionary<Kingdom, FeudalTitle> KINGDOMS { get; set; }
 
-        public TitleManager(Dictionary<FeudalTitle, (Hero, Hero)> titles, Dictionary<Hero, List<FeudalTitle>> titleHolders, Dictionary<Kingdom, FeudalTitle> kingdoms)
+        public TitleManager(Dictionary<FeudalTitle, Hero> titles, Dictionary<Hero, List<FeudalTitle>> titleHolders, Dictionary<Kingdom, FeudalTitle> kingdoms)
         {
             this.TITLES = titles;
             this.KINGDOMS = kingdoms;
@@ -27,8 +27,8 @@ namespace BannerKings.Managers
         public bool IsHeroTitleHolder(Hero hero)
         {
             FeudalTitle result = null;
-            foreach (KeyValuePair<FeudalTitle, (Hero, Hero)> pair in TITLES)
-                if (pair.Value.Item1 == hero || pair.Value.Item2 == hero)
+            foreach (KeyValuePair<FeudalTitle, Hero> pair in TITLES)
+                if (pair.Key.deFacto == hero || pair.Key.deJure == hero)
                 {
                     result = pair.Key;
                     break;
@@ -39,7 +39,7 @@ namespace BannerKings.Managers
         public FeudalTitle GetTitle(Settlement settlement)
         {
             FeudalTitle result = null;
-            foreach (KeyValuePair<FeudalTitle, (Hero, Hero)> pair in TITLES)
+            foreach (KeyValuePair<FeudalTitle, Hero> pair in TITLES)
                 if (pair.Key.fief == settlement)
                 {
                     result = pair.Key;
@@ -54,7 +54,7 @@ namespace BannerKings.Managers
         public FeudalTitle GetImmediateSuzerain(FeudalTitle target)
         {
             FeudalTitle result = null;
-            foreach (KeyValuePair<FeudalTitle, (Hero, Hero)> pair in TITLES)
+            foreach (KeyValuePair<FeudalTitle, Hero> pair in TITLES)
                     if (pair.Key.vassals != null && pair.Key.vassals.Contains(target))
                     {
                         result = pair.Key;
@@ -68,18 +68,13 @@ namespace BannerKings.Managers
         {
             if (TITLES.ContainsKey(title))
             {
-                ValueTuple<Hero, Hero> tuple = TITLES[title];
+                Hero hero = TITLES[title];
                 if (deJure)
                 {
                     title.deJure = newOwner;
-                    tuple.Item1 = newOwner;
+                    TITLES[title] = newOwner;
                 }
-                else
-                {
-                    title.deFacto = newOwner;
-                    tuple.Item2 = newOwner;
-                }
-                TITLES[title] = tuple;
+                else title.deFacto = newOwner;
             }
         }
 
@@ -87,7 +82,7 @@ namespace BannerKings.Managers
         {
             List<FeudalTitle> keys = TITLES.Keys.ToList();
             if (!keys.Contains(title))
-                TITLES.Add(title, new (title.deJure, title.deFacto));
+                TITLES.Add(title, title.deJure);
         }
 
 
@@ -188,8 +183,8 @@ namespace BannerKings.Managers
         public List<FeudalTitle> GetAllDeJure(Hero hero)
         {
             List<FeudalTitle> list = new List<FeudalTitle>();
-            foreach (KeyValuePair<FeudalTitle, (Hero, Hero)> pair in TITLES)
-                if (pair.Value.Item1 == hero)
+            foreach (KeyValuePair<FeudalTitle, Hero> pair in TITLES)
+                if (pair.Value == hero)
                     list.Add(pair.Key);
             return list;
         }
@@ -311,7 +306,7 @@ namespace BannerKings.Managers
                 HashSet<FeudalTitle> vassalsKingdom = new HashSet<FeudalTitle>();
                 string factionName = kingdom.Attributes["faction"].Value;
                 string deJureNameKingdom = kingdom.Attributes["deJure"].Value;
-                Hero deJureKingdom = Hero.AllAliveHeroes.FirstOrDefault(x => x.StringId == deJureNameKingdom);
+                Hero deJureKingdom = GetDeJure(deJureNameKingdom, null);
                 Kingdom faction = Kingdom.All.FirstOrDefault(x => x.Name.ToString() == factionName);
                 string contractType = kingdom.Attributes["contract"].Value;
                 FeudalContract contract = GenerateContract(contractType);
@@ -326,7 +321,7 @@ namespace BannerKings.Managers
                         HashSet<FeudalTitle> vassalsDuchy = new HashSet<FeudalTitle>();
                         string dukedomName = duchy.Attributes["name"].Value;
                         string deJureNameDuchy = duchy.Attributes["deJure"].Value;
-                        Hero deJureDuchy = Hero.AllAliveHeroes.FirstOrDefault(x => x.StringId == deJureNameDuchy);
+                        Hero deJureDuchy = GetDeJure(deJureNameDuchy, null);
 
                         if (duchy.ChildNodes != null)
                             foreach (XmlNode county in duchy.ChildNodes)
@@ -336,7 +331,7 @@ namespace BannerKings.Managers
                                 string settlementNameCounty = county.Attributes["settlement"].Value;
                                 string deJureNameCounty = county.Attributes["deJure"].Value;
                                 Settlement settlementCounty = Settlement.All.FirstOrDefault(x => x.Name.ToString() == settlementNameCounty);
-                                Hero deJureCounty = Hero.AllAliveHeroes.FirstOrDefault(x => x.StringId == deJureNameCounty);
+                                Hero deJureCounty = GetDeJure(deJureNameCounty, settlementCounty);
                                 HashSet<FeudalTitle> vassalsCounty = new HashSet<FeudalTitle>();
 
                                 if (county.ChildNodes != null)
@@ -347,7 +342,7 @@ namespace BannerKings.Managers
                                         string settlementNameBarony = barony.Attributes["settlement"].Value;
                                         string deJureIdBarony = barony.Attributes["deJure"].Value;
                                         Settlement settlementBarony = Settlement.All.FirstOrDefault(x => x.Name.ToString() == settlementNameBarony);
-                                        Hero deJureBarony = Hero.AllAliveHeroes.FirstOrDefault(x => x.StringId == deJureIdBarony);
+                                        Hero deJureBarony = GetDeJure(deJureIdBarony, settlementBarony);
                                         if (settlementBarony != null)
                                             vassalsCounty.Add(CreateLandedTitle(settlementBarony, deJureBarony, TitleType.Barony, contract));
                                     }
@@ -378,6 +373,28 @@ namespace BannerKings.Managers
                             CreateLandedTitle(settlement, settlement.Owner, settlement.IsTown ? TitleType.County : TitleType.Barony, GenerateContract("feudal"), null);
                     }
                 }         
+        }
+
+        private Hero GetDeJure(string heroId, Settlement settlement)
+        {
+            Hero target = Hero.AllAliveHeroes.FirstOrDefault(x => x.StringId == heroId);
+            if (target == null)
+            {
+                Hero hero1Dead = Hero.DeadOrDisabledHeroes.FirstOrDefault(x => x.StringId == heroId);
+                if (hero1Dead != null)
+                {
+                    Clan clan = hero1Dead.Clan;
+                    if (!clan.IsEliminated)
+                        target = clan.Leader;
+                    else if (clan.Kingdom != null)
+                        target = clan.Kingdom.Leader;
+                }
+            }
+
+            if (target == null && settlement != null)
+                target = settlement.Owner;
+
+            return target;
         }
 
         public void GrantLordship(FeudalTitle title, Hero giver, Hero receiver)

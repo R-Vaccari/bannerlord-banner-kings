@@ -27,10 +27,10 @@ namespace BannerKings
         {
             DefaultVillageBuildings.Instance.Init();
             this.PopulationManager = new PopulationManager(new Dictionary<Settlement, PopulationData>(), new List<MobileParty>());
-            this.PolicyManager = new PolicyManager(new Dictionary<Settlement, HashSet<BannerKingsDecision>>(), new Dictionary<Settlement,
-            HashSet<BannerKingsPolicy>>());
-            this.TitleManager = new TitleManager(new Dictionary<FeudalTitle, (Hero, Hero)>(), new Dictionary<Hero, List<FeudalTitle>>(), new Dictionary<Kingdom, FeudalTitle>());
-            this.CourtManager = new CourtManager(new Dictionary<Hero, Council>());
+            this.PolicyManager = new PolicyManager(new Dictionary<Settlement, List<BannerKingsDecision>>(), new Dictionary<Settlement,
+            List<BannerKingsPolicy>>());
+            this.TitleManager = new TitleManager(new Dictionary<FeudalTitle, Hero>(), new Dictionary<Hero, List<FeudalTitle>>(), new Dictionary<Kingdom, FeudalTitle>());
+            this.CourtManager = new CourtManager(new Dictionary<Clan, CouncilData>());
             this.InitModels();
         }
 
@@ -38,7 +38,7 @@ namespace BannerKings
         {
             this.PopulationManager = populationManager;
             this.PolicyManager = policyManager;
-            this.TitleManager = titleManager != null ? titleManager : new TitleManager(new Dictionary<FeudalTitle, (Hero, Hero)>(), new Dictionary<Hero, List<FeudalTitle>>(),
+            this.TitleManager = titleManager != null ? titleManager : new TitleManager(new Dictionary<FeudalTitle, Hero>(), new Dictionary<Hero, List<FeudalTitle>>(),
                 new Dictionary<Kingdom, FeudalTitle>());
             this.CourtManager = court;
             this.InitModels();
@@ -48,7 +48,7 @@ namespace BannerKings
         {
             this.Models.Add(new BKCultureAssimilationModel());
             this.Models.Add(new BKCultureAcceptanceModel());
-            this.Models.Add(new AdministrativeModel());
+            this.Models.Add(new BKAdministrativeModel());
             this.Models.Add(new BKLegitimacyModel());
             this.Models.Add(new BKUsurpationModel());
             this.Models.Add(new BKStabilityModel());

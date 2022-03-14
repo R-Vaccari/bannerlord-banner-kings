@@ -11,8 +11,8 @@ namespace BannerKings.Managers
 {
     public class PolicyManager
     {
-        private Dictionary<Settlement, HashSet<BannerKingsDecision>> SettlementDecisions { get; set; }
-        private Dictionary<Settlement, HashSet<BannerKingsPolicy>> SettlementPolicies { get; set; }
+        private Dictionary<Settlement, List<BannerKingsDecision>> SettlementDecisions { get; set; }
+        private Dictionary<Settlement, List<BannerKingsPolicy>> SettlementPolicies { get; set; }
 
         private IEnumerable<string> TownDecisions
         {
@@ -21,11 +21,8 @@ namespace BannerKings.Managers
                 yield return "decision_ration";
                 yield return "decision_militia_encourage";
                 yield return "decision_slaves_export";
-                yield return "decision_patrol_send";
-                yield return "decision_scout_send";
                 yield return "decision_militia_subsidize";
                 yield return "decision_tariff_exempt";
-                yield return "decision_foreigner_ban";
                 yield return "decision_slaves_tax";
                 yield return "decision_mercantilism";
                 yield break;
@@ -39,11 +36,8 @@ namespace BannerKings.Managers
                 yield return "decision_ration";
                 yield return "decision_militia_encourage";
                 yield return "decision_slaves_export";
-                yield return "decision_patrol_send";
-                yield return "decision_scout_send";
                 yield return "decision_militia_subsidize";
                 yield return "decision_tariff_exempt";
-                yield return "decision_foreigner_ban";
                 yield return "decision_slaves_tax";
                 yield return "decision_mercantilism";
                 yield break;
@@ -74,7 +68,7 @@ namespace BannerKings.Managers
             }
         }
 
-        public PolicyManager(Dictionary<Settlement, HashSet<BannerKingsDecision>> DECISIONS, Dictionary<Settlement, HashSet<BannerKingsPolicy>> POLICIES)
+        public PolicyManager(Dictionary<Settlement, List<BannerKingsDecision>> DECISIONS, Dictionary<Settlement, List<BannerKingsPolicy>> POLICIES)
         {
             this.SettlementDecisions = DECISIONS;
             this.SettlementPolicies = POLICIES;
@@ -89,7 +83,7 @@ namespace BannerKings.Managers
         }
 
         public bool IsSettlementPoliciesSet(Settlement settlement) => SettlementDecisions.ContainsKey(settlement);
-        public HashSet<BannerKingsDecision> GetDefaultDecisions(Settlement settlement)
+        public List<BannerKingsDecision> GetDefaultDecisions(Settlement settlement)
         {
             if (!SettlementDecisions.ContainsKey(settlement))
                 InitializeDecisions(settlement);
@@ -99,7 +93,7 @@ namespace BannerKings.Managers
 
         private void InitializeDecisions(Settlement settlement)
         {
-            HashSet<BannerKingsDecision> decisions = new HashSet<BannerKingsDecision>();
+            List<BannerKingsDecision> decisions = new List<BannerKingsDecision>();
             if (settlement.IsVillage)
             {
                 foreach (string id in VillageDecisions)
@@ -118,7 +112,7 @@ namespace BannerKings.Managers
 
         private void InitializePolicies(Settlement settlement)
         {
-            HashSet<BannerKingsPolicy> policies = new HashSet<BannerKingsPolicy>();
+            List<BannerKingsPolicy> policies = new List<BannerKingsPolicy>();
 
             foreach (string id in Policies)
                 policies.Add(this.GeneratePolicy(settlement, id));
@@ -126,12 +120,20 @@ namespace BannerKings.Managers
             this.SettlementPolicies.Add(settlement, policies);
         }
 
-        public int GetActiveDecisionsNumber(Settlement settlement)
+        public int GetActiveCostlyDecisionsNumber(Settlement settlement)
         {
             if (this.SettlementDecisions.ContainsKey(settlement))
             {
-                HashSet<BannerKingsDecision> decisions = this.SettlementDecisions[settlement];
-                return decisions.Count(x => x.Enabled);
+                int i = 0;
+                foreach (BannerKingsDecision decision in this.SettlementDecisions[settlement])
+                    if (decision.Enabled)
+                    {
+                        string id = decision.GetIdentifier();
+                        if (id != "decision_mercantilism" && id != "decision_slaves_tax" && id != "decision_tariff_exempt")
+                            i += 1;
+                    }
+
+                return i;
             }
             return 0;
         }
@@ -146,13 +148,13 @@ namespace BannerKings.Managers
             BannerKingsPolicy result = null;
             if (SettlementPolicies.ContainsKey(settlement))
             {
-                HashSet<BannerKingsPolicy> policies = SettlementPolicies[settlement];
+                List<BannerKingsPolicy> policies = SettlementPolicies[settlement];
                 BannerKingsPolicy policy = policies.FirstOrDefault(x => x.GetIdentifier() == policyType);
                 if (policy != null) result = policy;
             } else
             {
                 result = GeneratePolicy(settlement, policyType);
-                HashSet<BannerKingsPolicy> set = new HashSet<BannerKingsPolicy>();
+                List<BannerKingsPolicy> set = new List<BannerKingsPolicy>();
                 set.Add(result);
                 SettlementPolicies.Add(settlement, set);
             }
@@ -202,19 +204,19 @@ namespace BannerKings.Managers
 
         private void AddSettlementPolicy(Settlement settlement)
         {
-            SettlementPolicies.Add(settlement, new HashSet<BannerKingsPolicy>());
+            SettlementPolicies.Add(settlement, new List<BannerKingsPolicy>());
         }
 
         private void AddSettlementDecision(Settlement settlement)
         {
-            SettlementDecisions.Add(settlement, new HashSet<BannerKingsDecision>());
+            SettlementDecisions.Add(settlement, new List<BannerKingsDecision>());
         }
 
         public void UpdateSettlementPolicy(Settlement settlement, BannerKingsPolicy policy)
         {
             if (SettlementPolicies.ContainsKey(settlement))
             {
-                HashSet<BannerKingsPolicy> policies = SettlementPolicies[settlement];
+                List<BannerKingsPolicy> policies = SettlementPolicies[settlement];
                 BannerKingsPolicy target = policies.FirstOrDefault(x => x.GetIdentifier() == policy.GetIdentifier());
                 if (target != null) policies.Remove(target);
                 policies.Add(policy);
@@ -237,7 +239,7 @@ namespace BannerKings.Managers
         {
             if (SettlementDecisions.ContainsKey(settlement))
             {
-                HashSet<BannerKingsDecision> policies = SettlementDecisions[settlement];
+                List<BannerKingsDecision> policies = SettlementDecisions[settlement];
                 BannerKingsDecision target = policies.FirstOrDefault(x => x.GetIdentifier() == decision.GetIdentifier());
                 if (target != null) policies.Remove(target);
                 policies.Add(decision);

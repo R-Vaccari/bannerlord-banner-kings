@@ -413,7 +413,7 @@ namespace BannerKings.Populations
         }
 
         public ExplainedNumber AdministrativeCost => BannerKingsConfig.Instance.Models
-            .First(x => x.GetType() == typeof(AdministrativeModel)).CalculateEffect(settlement);
+            .First(x => x.GetType() == typeof(BKAdministrativeModel)).CalculateEffect(settlement);
         public float MerchantRevenue => settlement.Town != null ? new BKEconomyModel().GetMerchantIncome(settlement.Town) : 0f;
         public ExplainedNumber CaravanAttraction
         {
@@ -500,7 +500,7 @@ namespace BannerKings.Populations
         public ExplainedNumber DraftEfficiency => new BKVolunteerModel().GetDraftEfficiency(settlement.Notables[0], 2, settlement);
         public ExplainedNumber Militarism => new BKVolunteerModel().GetMilitarism(settlement);
 
-        public int Holdout => new BKFoodModel().GetFoodEstimate(settlement.Town, true, settlement.Town.FoodStocksUpperLimit());
+        public int Holdout => new BKFoodModel().GetFoodEstimate(settlement, settlement.Town.FoodStocksUpperLimit());
 
         public IEnumerable<SiegeEngineType> Engines => this.engines;
 

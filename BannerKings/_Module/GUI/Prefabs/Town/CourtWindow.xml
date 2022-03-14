@@ -21,7 +21,7 @@
 			  
 			<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" Brush="Clan.Leader.Text"  Brush.FontSize="40" Text="@Title" MarginTop="20"/>
 			
-			<GridWidget DataSource="{CourtInfo}" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren"  HorizontalAlignment="Left" MarginTop="80" MarginLeft="60" DefaultCellWidth="150" DefaultCellHeight="30" ColumnCount="1">
+			<GridWidget DataSource="{CourtInfo}" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren"  HorizontalAlignment="Left" MarginTop="70" MarginLeft="60" DefaultCellWidth="150" DefaultCellHeight="30" ColumnCount="1">
 			  <ItemTemplate>
 				<InformationElement/>
 			  </ItemTemplate>

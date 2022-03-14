@@ -155,11 +155,12 @@ namespace BannerKings.Models
 			});
 		}
 
-		public int GetFoodEstimate(Town town, bool includeDescriptions, int maxStocks)
+		public int GetFoodEstimate(Settlement settlement, int maxStocks)
 		{
-			ExplainedNumber result = this.CalculateTownFoodChangeInternal(town, includeDescriptions);
-			int finalResult = (int)((float)maxStocks / result.ResultNumber);
-			return -finalResult;
+			PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
+			ExplainedNumber result = this.GetPopulationFoodConsumption(data);
+			int finalResult = (int)((float)maxStocks / (result.ResultNumber * -1f));
+			return finalResult;
 		}
 
 		public ExplainedNumber GetPopulationFoodConsumption(PopulationData data)

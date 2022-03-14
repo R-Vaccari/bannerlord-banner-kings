@@ -1,4 +1,5 @@
-﻿using BannerKings.Managers.Decisions;
+﻿using BannerKings.Components;
+using BannerKings.Managers.Decisions;
 using BannerKings.Managers.Policies;
 using BannerKings.Models;
 using BannerKings.Populations;
@@ -8,9 +9,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.Core;
 using TaleWorlds.Core.ViewModelCollection;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
+using static BannerKings.Managers.PopulationManager;
 
 namespace BannerKings.UI
 {
@@ -25,6 +28,7 @@ namespace BannerKings.UI
         private BKMilitiaPolicy militiaItem;
         private BKDraftPolicy draftItem;
         private Settlement settlement;
+        private DecisionElement raiseMilitiaButton;
 
         public MilitaryVM(PopulationData data, Settlement _settlement, bool selected) : base(data, selected)
         {
@@ -58,7 +62,7 @@ namespace BannerKings.UI
             ManpowerInfo.Add(new InformationElement("Draft Efficiency:", base.FormatValue(base.data.MilitaryData.DraftEfficiency.ResultNumber),
                    "Manpower"));
 
-            HashSet<BannerKingsDecision> decisions = BannerKingsConfig.Instance.PolicyManager.GetDefaultDecisions(settlement);
+            List<BannerKingsDecision> decisions = BannerKingsConfig.Instance.PolicyManager.GetDefaultDecisions(settlement);
             if (base.HasTown)
             {
                 SiegeInfo.Add(new InformationElement("Storage Limit:", settlement.Town.FoodStocksUpperLimit().ToString(),
@@ -93,6 +97,38 @@ namespace BannerKings.UI
 
                 }, new TextObject(rationDecision.GetHint()));
             }
+            else
+            {
+                RaiseMilitiaButton = new DecisionElement().SetAsButtonOption("Raise militia", delegate
+                {
+                    int serfs = data.GetTypeCount(PopType.Serfs);
+                    MobileParty party = settlement.MilitiaPartyComponent.MobileParty;
+                    Hero lord = settlement.OwnerClan.Leader;
+                    if (serfs >= party.MemberRoster.TotalManCount)
+                    {
+
+                        MobileParty existingParty = Campaign.Current.CampaignObjectManager.Find<MobileParty>(x => x.StringId == "raisedmilitia_" + settlement);
+                        if (existingParty == null)
+                        {
+                            if (party.CurrentSettlement != null && party.CurrentSettlement == settlement)
+                            {
+                                int menCount = party.MemberRoster.TotalManCount;
+                                MilitiaComponent.CreateMilitiaEscort("raisedmilitia_", settlement, settlement, "Raised Militia from {0}", Hero.MainHero.PartyBelongedTo, party);
+                                if (lord == Hero.MainHero)
+                                    InformationManager.DisplayMessage(new InformationMessage(string.Format("{0} men raised as militia at {1}!", menCount, settlement.Name)));
+                            }
+                        }
+                        else if (lord == Hero.MainHero)
+                            InformationManager.DisplayMessage(new InformationMessage(string.Format("Militia already raised from {0}", settlement.Name)));
+
+                        else if (lord == Hero.MainHero)
+                            InformationManager.DisplayMessage(new InformationMessage(string.Format("Not enough influence to raise militia at {0}", settlement.Name)));
+                    }
+                    else if (lord == Hero.MainHero)
+                        InformationManager.DisplayMessage(new InformationMessage(string.Format("Not enough men available to raise militia at {0}", settlement.Name)));
+
+                }, new TextObject("Raise the current militia of this village."));
+            }
 
             militiaItem = (BKMilitiaPolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(settlement, "militia");
             MilitiaSelector = base.GetSelector(militiaItem, new Action<SelectorVM<BKItemVM>>(this.militiaItem.OnChange));
@@ -123,8 +159,20 @@ namespace BannerKings.UI
 
                 }, new TextObject(subsidizeDecision.GetHint()));
 
-            
+        }
 
+        [DataSourceProperty]
+        public DecisionElement RaiseMilitiaButton
+        {
+            get => raiseMilitiaButton;
+            set
+            {
+                if (value != raiseMilitiaButton)
+                {
+                    raiseMilitiaButton = value;
+                    base.OnPropertyChangedWithValue(value, "RaiseMilitiaButton");
+                }
+            }
         }
 
         [DataSourceProperty]

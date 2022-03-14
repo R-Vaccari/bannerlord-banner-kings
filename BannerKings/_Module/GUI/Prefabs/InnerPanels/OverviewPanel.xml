@@ -55,7 +55,7 @@
 					  </ItemTemplate>
 					</GridWidget>
 					
-					<ListPanel WidthSizePolicy="Fixed" HeightSizePolicy="CoverChildren" SuggestedWidth="320" StackLayout.LayoutMethod="HorizontalLeftToRight" MaxHeight="645" MarginTop="20">
+					<!--<ListPanel WidthSizePolicy="Fixed" HeightSizePolicy="CoverChildren" SuggestedWidth="320" StackLayout.LayoutMethod="HorizontalLeftToRight" MaxHeight="645" MarginTop="20">
 						<Children>
 							<Widget DataSource="{ForeignerToogle}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" VerticalAlignment="Center" UpdateChildrenStates="true" MarginTop="5" MarginBottom="5" MarginLeft="20" MarginRight="20" >
 								<Children>
@@ -69,7 +69,7 @@
 								</Children>
 							</Widget>
 						</Children>
-					</ListPanel>
+					</ListPanel> -->
 
 				</Children>
 			</ListPanel>

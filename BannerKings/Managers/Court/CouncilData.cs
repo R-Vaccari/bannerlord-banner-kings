@@ -4,22 +4,32 @@ using System.Linq;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using static BannerKings.Managers.TitleManager;
+using BannerKings.Populations;
 
 namespace BannerKings.Managers.Court
 {
-    public class Council
+    public class CouncilData : BannerKingsData
     {
-        private Hero lord;
+        private Clan clan;
         private List<CouncilMember> members;
 
-        public Council(Hero lord, Hero marshall = null, Hero chancellor = null, Hero steward = null, Hero spymaster = null)
+        public CouncilData(Clan clan, Hero marshall = null, Hero chancellor = null, Hero steward = null, Hero spymaster = null)
         {
-            this.lord = lord;
+            this.clan = clan;
             this.members = new List<CouncilMember>();
             this.members.Add(new CouncilMember(marshall, CouncilPosition.Marshall));
             this.members.Add(new CouncilMember(chancellor, CouncilPosition.Chancellor));
             this.members.Add(new CouncilMember(steward, CouncilPosition.Steward));
             this.members.Add(new CouncilMember(spymaster, CouncilPosition.Spymaster));
+        }
+
+        internal override void Update(PopulationData data)
+        {
+            foreach (CouncilMember member in this.members)
+            {
+                if (member.Member != null && member.Member.IsDead)
+                    member.Member = null;
+            }
         }
 
         public List<Hero> GetCourtMembers()
@@ -40,7 +50,7 @@ namespace BannerKings.Managers.Court
                         heroes.Add(vassal.deJure);
             }
 
-            MBReadOnlyList<Town> towns = this.lord.Clan.Fiefs;
+            MBReadOnlyList<Town> towns = this.clan.Fiefs;
             if (towns != null && towns.Count > 0)
             {
                 foreach (Town town in towns)

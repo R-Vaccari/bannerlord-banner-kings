@@ -16,7 +16,7 @@ namespace BannerKings.UI.Panels
     {
 		private CouncilVM governorSelection;
 		private MBBindingList<InformationElement> courtInfo;
-		private Council council;
+		private CouncilData council;
 		private CouncilPosition councilPosition;
 		private HeroVM marshall;
 		private HeroVM steward;

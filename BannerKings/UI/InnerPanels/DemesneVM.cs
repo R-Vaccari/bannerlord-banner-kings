@@ -1,7 +1,10 @@
-﻿using BannerKings.Models;
+﻿using BannerKings.Managers.Policies;
+using BannerKings.Models;
 using BannerKings.Populations;
 using BannerKings.UI.Items;
+using System;
 using TaleWorlds.CampaignSystem.ViewModelCollection;
+using TaleWorlds.Core.ViewModelCollection;
 using TaleWorlds.Library;
 using static BannerKings.Managers.TitleManager;
 
@@ -22,6 +25,8 @@ namespace BannerKings.UI
 		private bool _contractEnabled;
 		private bool _usurpEnabled;
 		private bool _usurpDuchyEnabled;
+		private SelectorVM<BKItemVM> workforceVM;
+		private BKWorkforcePolicy workforceItem;
 
 		public DemesneVM(PopulationData data, FeudalTitle title, bool isSelected) : base(data, isSelected)
         {
@@ -93,9 +98,30 @@ namespace BannerKings.UI
 			WorkforceInfo.Add(new InformationElement("Workforce Saturation:", base.FormatValue(landData.WorkforceSaturation),
 				"Represents how many workers there are in correlation to the amount needed to fully utilize the acreage. Saturation over 100% indicates more workers than the land needs, while under 100% means not all acres are producing output"));
 
+			if (base.HasTown)
+			{
+				workforceItem = (BKWorkforcePolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(data.Settlement, "workforce");
+				WorkforceSelector = base.GetSelector(workforceItem, new Action<SelectorVM<BKItemVM>>(this.workforceItem.OnChange));
+				WorkforceSelector.SelectedIndex = workforceItem.Selected;
+				WorkforceSelector.SetOnChangeAction(this.workforceItem.OnChange);
+			}
+
 			DeJure = new HeroVM(title.deJure, false);
 		}
 
+		[DataSourceProperty]
+		public SelectorVM<BKItemVM> WorkforceSelector
+		{
+			get => this.workforceVM;
+			set
+			{
+				if (value != this.workforceVM)
+				{
+					this.workforceVM = value;
+					base.OnPropertyChangedWithValue(value, "WorkforceSelector");
+				}
+			}
+		}
 
 		/*
 		private void OnUsurpPress()

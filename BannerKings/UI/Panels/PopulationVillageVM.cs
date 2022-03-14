@@ -127,7 +127,7 @@ namespace BannerKings
             {
                 get
                 {
-                    float cost = new AdministrativeModel().CalculateAdministrativeCost(settlement);
+                    float cost = new BKAdministrativeModel().CalculateEffect(settlement).ResultNumber;
                     return (cost * 100f).ToString() + '%' ;
                 }
             }

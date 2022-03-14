@@ -66,7 +66,7 @@ namespace BannerKings.UI
                 CultureInfo.Add(new InformationElement("Cultural Assimilation:", FormatValue(data.CultureData.GetAssimilation(Hero.MainHero.Culture)),
                     "Percentage of the population that shares culture with you. Assimilating foreign settlements requires a competent governor that shares your culture"));
 
-                HashSet<BannerKingsDecision> decisions = BannerKingsConfig.Instance.PolicyManager.GetDefaultDecisions(settlement);
+                List<BannerKingsDecision> decisions = BannerKingsConfig.Instance.PolicyManager.GetDefaultDecisions(settlement);
                 foreach (BannerKingsDecision decision in decisions)
                 {
                     DecisionElement vm = new DecisionElement()
@@ -153,36 +153,6 @@ namespace BannerKings.UI
                     statsInfo = value;
                     base.OnPropertyChangedWithValue(value, "StatsInfo");
                 }
-            }
-        }
-
-        [DataSourceProperty]
-        public string AdministrativeCost
-        {
-            get
-            {
-                float cost = new AdministrativeModel().CalculateAdministrativeCost(settlement);
-                return FormatValue(cost);
-            }
-        }
-
-        [DataSourceProperty]
-        public string PopGrowth
-        {
-            get
-            {
-                int growth = (int)new BKGrowthModel().CalculateEffect(settlement, data).ResultNumber;
-                return growth.ToString() + " (Daily)";
-            }
-        }
-
-        [DataSourceProperty]
-        public string Assimilation
-        {
-            get
-            {
-                float result = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement).CultureData.GetAssimilation(Hero.MainHero.Culture);
-                return (result * 100f).ToString() + '%';
             }
         }
     }

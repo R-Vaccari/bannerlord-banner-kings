@@ -89,45 +89,54 @@
 			<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" VerticalAlignment="Center" StackLayout.LayoutMethod="VerticalBottomToTop" DoNotAcceptEvents="true" MarginTop="35">
 				<Children>
 				
-				<GridWidget DataSource="{LandInfo}" WidthSizePolicy="StretchToParent" HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" DefaultCellWidth="150" DefaultCellHeight="30" MarginLeft="20" ColumnCount="1" >
-				  <ItemTemplate>
-					<InformationElement/>
-				  </ItemTemplate>
-				</GridWidget>
-				
-				<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" StackLayout.LayoutMethod="HorizontalLeftToRight" MarginBottom="15" MarginTop="30" MarginLeft="25" MarginRight="25" DoNotAcceptEvents="true">
-					<Children>
-						<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="7" MarginLeft="5" MarginRight="5" VerticalAlignment="Bottom" PositionYOffset="7" Sprite="SPGeneral\TownManagement\horizontal_divider" />
-						<RichTextWidget DoNotAcceptEvents="true" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="OverlayPopup.ButtonText" Brush.FontSize="20" Text="Terrain"/>
-						<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="7" MarginLeft="5" MarginRight="5" VerticalAlignment="Bottom" PositionYOffset="7" Sprite="SPGeneral\TownManagement\horizontal_divider" />
-					</Children>
-				</ListPanel>
-				
-				<GridWidget DataSource="{TerrainInfo}" WidthSizePolicy="StretchToParent" HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" DefaultCellWidth="150" DefaultCellHeight="30" MarginLeft="20" ColumnCount="1" MarginTop="10">
-				  <ItemTemplate>
-					<InformationElement/>
-				  </ItemTemplate>
-				</GridWidget>
-				
-				<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" StackLayout.LayoutMethod="HorizontalLeftToRight" MarginBottom="15" MarginTop="30" MarginLeft="25" MarginRight="25" DoNotAcceptEvents="true">
-					<Children>
-						<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="7" MarginLeft="5" MarginRight="5" VerticalAlignment="Bottom" PositionYOffset="7" Sprite="SPGeneral\TownManagement\horizontal_divider" />
-						<RichTextWidget DoNotAcceptEvents="true" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="OverlayPopup.ButtonText" Brush.FontSize="20" Text="Workforce"/>
-						<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="7" MarginLeft="5" MarginRight="5" VerticalAlignment="Bottom" PositionYOffset="7" Sprite="SPGeneral\TownManagement\horizontal_divider" />
-					</Children>
-				</ListPanel>
-				
-				<GridWidget DataSource="{WorkforceInfo}" WidthSizePolicy="StretchToParent" HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" DefaultCellWidth="150" DefaultCellHeight="30" MarginLeft="20" ColumnCount="1" MarginTop="10">
-				  <ItemTemplate>
-					<InformationElement/>
-				  </ItemTemplate>
-				</GridWidget>
-				
+					<GridWidget DataSource="{LandInfo}" WidthSizePolicy="StretchToParent" HorizontalAlignment="Left" MarginLeft="50" HeightSizePolicy="CoverChildren" DefaultCellWidth="150" DefaultCellHeight="30" ColumnCount="1" >
+					  <ItemTemplate>
+						<InformationElement/>
+					  </ItemTemplate>
+					</GridWidget>
+					
+					<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" StackLayout.LayoutMethod="HorizontalLeftToRight" MarginBottom="15" MarginTop="30" MarginLeft="25" MarginRight="25" DoNotAcceptEvents="true">
+						<Children>
+							<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="7" MarginLeft="5" MarginRight="5" VerticalAlignment="Bottom" PositionYOffset="7" Sprite="SPGeneral\TownManagement\horizontal_divider" />
+							<RichTextWidget DoNotAcceptEvents="true" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="OverlayPopup.ButtonText" Brush.FontSize="20" Text="Terrain"/>
+							<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="7" MarginLeft="5" MarginRight="5" VerticalAlignment="Bottom" PositionYOffset="7" Sprite="SPGeneral\TownManagement\horizontal_divider" />
+						</Children>
+					</ListPanel>
+					
+					<GridWidget DataSource="{TerrainInfo}" WidthSizePolicy="StretchToParent" HorizontalAlignment="Left" MarginLeft="50" HeightSizePolicy="CoverChildren" DefaultCellWidth="150" DefaultCellHeight="30" ColumnCount="1" MarginTop="10">
+					  <ItemTemplate>
+						<InformationElement/>
+					  </ItemTemplate>
+					</GridWidget>
+					
+					<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" StackLayout.LayoutMethod="HorizontalLeftToRight" MarginBottom="15" MarginTop="30" MarginLeft="25" MarginRight="25" DoNotAcceptEvents="true">
+						<Children>
+							<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="7" MarginLeft="5" MarginRight="5" VerticalAlignment="Bottom" PositionYOffset="7" Sprite="SPGeneral\TownManagement\horizontal_divider" />
+							<RichTextWidget DoNotAcceptEvents="true" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="OverlayPopup.ButtonText" Brush.FontSize="20" Text="Workforce"/>
+							<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="7" MarginLeft="5" MarginRight="5" VerticalAlignment="Bottom" PositionYOffset="7" Sprite="SPGeneral\TownManagement\horizontal_divider" />
+						</Children>
+					</ListPanel>
+					
+					<GridWidget DataSource="{WorkforceInfo}" WidthSizePolicy="StretchToParent" HorizontalAlignment="Left" MarginLeft="50" HeightSizePolicy="CoverChildren" DefaultCellWidth="150" DefaultCellHeight="30" ColumnCount="1" MarginTop="10">
+					  <ItemTemplate>
+						<InformationElement/>
+					  </ItemTemplate>
+					</GridWidget>
+					
+					<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" IsHidden="@IsVillage" >
+						<Children>
+							<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" StackLayout.LayoutMethod="VerticalBottomToTop">
+								<Children>
+									<RichTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" HorizontalAlignment="Center" SuggestedHeight="5" Brush="TownManagement.Project.Name.Text" Text="Workforce policy" MarginTop="25"/>
+									<ClanPartyRoleDropdown DataSource="{WorkforceSelector}" MarginTop="10" HorizontalAlignment="Center" />
+								</Children>
+							</ListPanel>
+						</Children>
+					</Widget>
+	
 				</Children>
 			</ListPanel>
 			
-			
-				
 			<!--				
 			<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" StackLayout.LayoutMethod="VerticalBottomToTop" MaxHeight="645" >
 			  <Children>

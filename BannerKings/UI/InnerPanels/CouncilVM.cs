@@ -11,11 +11,11 @@ namespace BannerKings.UI.Items
     public class CouncilVM : SettlementGovernorSelectionVM
     {
         private Action<Hero> onDone;
-        private Council council;
+        private CouncilData council;
         private List<Hero> courtMembers;
         public CouncilPosition Position { get; set; }
 
-        public CouncilVM(Action<Hero> onDone, Council council, CouncilPosition position, List<Hero> courtMembers) : base(null, onDone)
+        public CouncilVM(Action<Hero> onDone, CouncilData council, CouncilPosition position, List<Hero> courtMembers) : base(null, onDone)
         {
             this.onDone = onDone;
             this.council = council;

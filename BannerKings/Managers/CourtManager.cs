@@ -8,16 +8,16 @@ namespace BannerKings.Managers
 {
     public class CourtManager
     {
-        private Dictionary<Hero, Council> COUNCILS { get; set; }
+        private Dictionary<Clan, CouncilData> COUNCILS { get; set; }
 
-        public CourtManager(Dictionary<Hero, Council> councils)
+        public CourtManager(Dictionary<Clan, CouncilData> councils)
         {
             this.COUNCILS = councils;
         }
 
         public void ApplyCouncilEffect(ref ExplainedNumber result, Hero settlementOwner, CouncilPosition position, float maxEffect, bool factor)
         {
-            Council council = this.GetCouncil(settlementOwner);
+            CouncilData council = this.GetCouncil(settlementOwner);
             float competence = council.GetCompetence(position);
             if (competence != 0f)
             {
@@ -26,16 +26,35 @@ namespace BannerKings.Managers
             }
         }
 
-        public Council GetCouncil(Hero hero)
+        public CouncilData GetCouncil(Hero hero)
         {
-            if (this.COUNCILS.ContainsKey(hero))
-                return this.COUNCILS[hero];
+            Clan clan = hero.Clan;
+            if (this.COUNCILS.ContainsKey(clan))
+                return this.COUNCILS[clan];
             else
             {
-                Council council = new Council(hero);
-                this.COUNCILS.Add(hero, council);
+                CouncilData council = new CouncilData(clan);
+                this.COUNCILS.Add(clan, council);
                 return council;
             }
+        }
+
+        public CouncilData GetCouncil(Clan clan)
+        {
+            if (this.COUNCILS.ContainsKey(clan))
+                return this.COUNCILS[clan];
+            else
+            {
+                CouncilData council = new CouncilData(clan);
+                this.COUNCILS.Add(clan, council);
+                return council;
+            }
+        }
+
+        public void UpdateCouncil(Clan clan)
+        {
+            CouncilData data = this.GetCouncil(clan.Leader);
+            data.Update(null);
         }
     }
 }

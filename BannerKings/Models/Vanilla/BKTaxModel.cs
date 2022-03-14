@@ -29,7 +29,7 @@ namespace BannerKings.Models
                 bool taxSlaves = BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(town.Settlement, "decision_slaves_tax");
                 PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
                 double nobles = data.GetTypeCount(PopType.Nobles);
-                double craftsmen = data.GetTypeCount(PopType.Nobles);
+                double craftsmen = data.GetTypeCount(PopType.Nobles) * (1f - data.EconomicData.Mercantilism.ResultNumber);
                 double serfs = data.GetTypeCount(PopType.Nobles);
                 double slaves = data.GetTypeCount(PopType.Slaves) * (taxSlaves ? 1f : 1f - data.EconomicData.StateSlaves);
                 baseResult.Add((float)(nobles * NOBLE_OUTPUT + craftsmen * CRAFTSMEN_OUTPUT + serfs * SERF_OUTPUT + slaves * SLAVE_OUTPUT), new TextObject("Population output"));
@@ -40,7 +40,7 @@ namespace BannerKings.Models
                 else if (taxType == TaxType.High)
                     baseResult.AddFactor(0.15f, new TextObject("Tax policy"));
 
-                float admCost = new AdministrativeModel().CalculateAdministrativeCost(town.Settlement);
+                float admCost = new BKAdministrativeModel().CalculateEffect(town.Settlement).ResultNumber;
                 baseResult.AddFactor(admCost * -1f, new TextObject("Administrative costs"));
             }
 
@@ -66,7 +66,7 @@ namespace BannerKings.Models
 
                 if (baseResult > 0)
                 {
-                    float admCost = new AdministrativeModel().CalculateAdministrativeCost(village.Settlement);
+                    float admCost = new BKAdministrativeModel().CalculateEffect(village.Settlement).ResultNumber;
                     baseResult *= 1f - admCost;
                 }  
             }
