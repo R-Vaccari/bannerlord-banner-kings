@@ -12,32 +12,39 @@ namespace BannerKings.Managers
     public class PopulationManager
     {
         [SaveableProperty(1)]
-        private Dictionary<Settlement, PopulationData> POPS { get; set; }
+        private Dictionary<Settlement, PopulationData> Populations { get; set; }
 
         [SaveableProperty(2)]
-        private List<MobileParty> CARAVANS { get; set; }
+        private List<MobileParty> Caravans { get; set; }
 
         public PopulationManager(Dictionary<Settlement, PopulationData> pops, List<MobileParty> caravans)
         {
-            this.POPS = pops;
-            this.CARAVANS = caravans;
+            this.Populations = pops;
+            this.Caravans = caravans;
         }
 
         public bool IsSettlementPopulated(Settlement settlement)
         {
-            if (POPS != null) return POPS.ContainsKey(settlement);
+            if (Populations != null) return Populations.ContainsKey(settlement);
             else return false;
         }
-        public PopulationData GetPopData(Settlement settlement) => POPS[settlement];
-        public void AddSettlementData(Settlement settlement, PopulationData data) => POPS.Add(settlement, data);
-        public bool IsPopulationParty(MobileParty party) => CARAVANS.Contains(party);
-        public void AddParty(MobileParty party) => CARAVANS.Add(party);
-        public void RemoveCaravan(MobileParty party) => CARAVANS.Remove(party);
+
+        public PopulationData GetPopData(Settlement settlement) 
+        {
+            if (Populations.ContainsKey(settlement)) return Populations[settlement];
+            InitializeSettlementPops(settlement);
+            return Populations[settlement];
+        }
+
+        public void AddSettlementData(Settlement settlement, PopulationData data) => Populations.Add(settlement, data);
+        public bool IsPopulationParty(MobileParty party) => Caravans.Contains(party);
+        public void AddParty(MobileParty party) => Caravans.Add(party);
+        public void RemoveCaravan(MobileParty party) => Caravans.Remove(party);
 
         public List<MobileParty> GetClanMilitias(Clan clan)
         {
             List<MobileParty> list = new List<MobileParty>();
-            foreach (MobileParty party in CARAVANS)
+            foreach (MobileParty party in Caravans)
                 if (party.PartyComponent is MilitiaComponent && party.Owner.Clan == clan)
                     list.Add(party);
             

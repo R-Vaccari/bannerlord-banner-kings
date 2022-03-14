@@ -1,18 +1,19 @@
 ﻿using BannerKings.Managers.Court;
 using System.Collections.Generic;
-using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Localization;
+using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Managers
 {
     public class CourtManager
     {
-        private Dictionary<Clan, CouncilData> COUNCILS { get; set; }
+        [SaveableProperty(1)]
+        private Dictionary<Clan, CouncilData> Councils { get; set; }
 
         public CourtManager(Dictionary<Clan, CouncilData> councils)
         {
-            this.COUNCILS = councils;
+            this.Councils = councils;
         }
 
         public void ApplyCouncilEffect(ref ExplainedNumber result, Hero settlementOwner, CouncilPosition position, float maxEffect, bool factor)
@@ -29,24 +30,24 @@ namespace BannerKings.Managers
         public CouncilData GetCouncil(Hero hero)
         {
             Clan clan = hero.Clan;
-            if (this.COUNCILS.ContainsKey(clan))
-                return this.COUNCILS[clan];
+            if (this.Councils.ContainsKey(clan))
+                return this.Councils[clan];
             else
             {
                 CouncilData council = new CouncilData(clan);
-                this.COUNCILS.Add(clan, council);
+                this.Councils.Add(clan, council);
                 return council;
             }
         }
 
         public CouncilData GetCouncil(Clan clan)
         {
-            if (this.COUNCILS.ContainsKey(clan))
-                return this.COUNCILS[clan];
+            if (this.Councils.ContainsKey(clan))
+                return this.Councils[clan];
             else
             {
                 CouncilData council = new CouncilData(clan);
-                this.COUNCILS.Add(clan, council);
+                this.Councils.Add(clan, council);
                 return council;
             }
         }

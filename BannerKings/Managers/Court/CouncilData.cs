@@ -5,13 +5,17 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using static BannerKings.Managers.TitleManager;
 using BannerKings.Populations;
+using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Managers.Court
 {
     public class CouncilData : BannerKingsData
     {
-        private Clan clan;
-        private List<CouncilMember> members;
+        [SaveableProperty(1)]
+        private Clan clan { get; set; }
+
+        [SaveableProperty(2)]
+        private List<CouncilMember> members { get; set; }
 
         public CouncilData(Clan clan, Hero marshall = null, Hero chancellor = null, Hero steward = null, Hero spymaster = null)
         {
@@ -154,8 +158,11 @@ namespace BannerKings.Managers.Court
 
     public class CouncilMember
     {
-        private Hero member;
-        private CouncilPosition position;
+        [SaveableProperty(1)]
+        private Hero member { get; set; }
+
+        [SaveableProperty(2)]
+        private CouncilPosition position { get; set; }
 
         public CouncilMember(Hero member, CouncilPosition position)
         {
@@ -214,5 +221,4 @@ namespace BannerKings.Managers.Court
         Steward,
         Spymaster
     }
-
 }

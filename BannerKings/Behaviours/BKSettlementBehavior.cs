@@ -27,6 +27,7 @@ namespace BannerKings.Behaviors
         private PopulationManager populationManager = null;
         private PolicyManager policyManager = null;
         private TitleManager titleManager = null;
+        private CourtManager courtManager = null;
         private static float actionGold = 0f;
         private static int actionHuntGame = 0;
         private static CampaignTime actionStart = CampaignTime.Now;
@@ -45,18 +46,22 @@ namespace BannerKings.Behaviors
                 if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PolicyManager != null)
                 {
                     populationManager = BannerKingsConfig.Instance.PopulationManager;
+                    titleManager = BannerKingsConfig.Instance.TitleManager;
+                    courtManager = BannerKingsConfig.Instance.CourtManager;
                 }
             }
 
             dataStore.SyncData("bannerkings-populations", ref populationManager);
+            dataStore.SyncData("bannerkings-titles", ref titleManager);
+            dataStore.SyncData("bannerkings-courts", ref courtManager);
 
             if (dataStore.IsLoading)
             {
                 if (populationManager == null && policyManager == null)
                     BannerKingsConfig.Instance.InitManagers();
                 
-                else BannerKingsConfig.Instance.InitManagers(populationManager, new PolicyManager(new Dictionary<Settlement, List<Managers.Decisions.BannerKingsDecision>>(), new Dictionary<Settlement, List<BannerKingsPolicy>>()), 
-                    null, new CourtManager(new Dictionary<Clan, Managers.Court.CouncilData>()));
+                else BannerKingsConfig.Instance.InitManagers(populationManager, new PolicyManager(new Dictionary<Settlement, List<Managers.Decisions.BannerKingsDecision>>(), new Dictionary<Settlement, List<BannerKingsPolicy>>()),
+                    titleManager, courtManager);
             }
         }
 

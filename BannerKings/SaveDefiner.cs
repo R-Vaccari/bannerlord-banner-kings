@@ -1,5 +1,6 @@
 ﻿using BannerKings.Components;
 using BannerKings.Managers;
+using BannerKings.Managers.Court;
 using BannerKings.Managers.Decisions;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Populations;
@@ -14,6 +15,7 @@ using static BannerKings.Managers.Policies.BKTariffPolicy;
 using static BannerKings.Managers.Policies.BKTaxPolicy;
 using static BannerKings.Managers.Policies.BKWorkforcePolicy;
 using static BannerKings.Managers.PopulationManager;
+using static BannerKings.Managers.TitleManager;
 
 namespace BannerKings
 {
@@ -49,6 +51,20 @@ namespace BannerKings
             base.AddClassDefinition(typeof(VillageData), 20); 
             base.AddClassDefinition(typeof(VillageBuilding), 21);
             base.AddClassDefinition(typeof(CultureDataClass), 22);
+            base.AddClassDefinition(typeof(FeudalTitle), 23); 
+            base.AddClassDefinition(typeof(FeudalContract), 24);
+            base.AddEnumDefinition(typeof(TitleType), 25);
+            base.AddEnumDefinition(typeof(FeudalDuties), 26);
+            base.AddEnumDefinition(typeof(FeudalRights), 27);
+            base.AddEnumDefinition(typeof(GovernmentType), 28);
+            base.AddEnumDefinition(typeof(SuccessionType), 29);
+            base.AddEnumDefinition(typeof(InheritanceType), 30);
+            base.AddEnumDefinition(typeof(GenderLaw), 31);
+            base.AddClassDefinition(typeof(TitleManager), 32);
+            base.AddEnumDefinition(typeof(CouncilPosition), 33);
+            base.AddClassDefinition(typeof(CouncilMember), 34);
+            base.AddClassDefinition(typeof(CouncilData), 35);
+            base.AddClassDefinition(typeof(CourtManager), 36);
         }
 
         protected override void DefineContainerDefinitions()
@@ -61,6 +77,14 @@ namespace BannerKings
             base.ConstructContainerDefinition(typeof(List<BannerKingsPolicy>));
             base.ConstructContainerDefinition(typeof(Dictionary<Settlement, List<BannerKingsPolicy>>));
             base.ConstructContainerDefinition(typeof(Dictionary<Settlement, List<BannerKingsDecision>>));
+            base.ConstructContainerDefinition(typeof(Dictionary<FeudalTitle, Hero>));
+            base.ConstructContainerDefinition(typeof(Dictionary<Kingdom, FeudalTitle>));
+            base.ConstructContainerDefinition(typeof(List<FeudalTitle>));
+            base.ConstructContainerDefinition(typeof(Dictionary<FeudalDuties, float>));
+            base.ConstructContainerDefinition(typeof(List<FeudalRights>));
+            base.ConstructContainerDefinition(typeof(Dictionary<Clan, CouncilData>));
+            base.ConstructContainerDefinition(typeof(List<CouncilMember>));
+
         }
     }
 }
