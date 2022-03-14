@@ -3,12 +3,15 @@ using System;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core.ViewModelCollection;
+using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Managers.Policies
 {
     class BKDraftPolicy : BannerKingsPolicy
     {
         public override string GetIdentifier() => "draft";
+
+        [SaveableProperty(3)]
         public DraftPolicy Policy { get; private set; }
         public BKDraftPolicy(DraftPolicy policy, Settlement settlement) : base(settlement, (int)policy)
         {

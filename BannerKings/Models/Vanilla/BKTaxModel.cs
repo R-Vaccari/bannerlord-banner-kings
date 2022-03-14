@@ -6,7 +6,6 @@ using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.SandBox.GameComponents;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
-using static BannerKings.Managers.Policies.BKTariffPolicy;
 using static BannerKings.Managers.Policies.BKTaxPolicy;
 using static BannerKings.Managers.PolicyManager;
 using static BannerKings.Managers.PopulationManager;

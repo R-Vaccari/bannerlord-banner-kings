@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core.ViewModelCollection;
+using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Managers.Policies
 {
@@ -10,6 +11,7 @@ namespace BannerKings.Managers.Policies
     {
         public override string GetIdentifier() => "garrison";
 
+        [SaveableProperty(3)]
         public GarrisonPolicy Policy { get; private set; }
         public BKGarrisonPolicy(GarrisonPolicy policy, Settlement settlement) : base(settlement, (int)policy)
         {

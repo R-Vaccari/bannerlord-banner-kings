@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core.ViewModelCollection;
+using TaleWorlds.SaveSystem;
 using static BannerKings.Managers.PolicyManager;
 
 namespace BannerKings.Managers.Policies
@@ -10,6 +11,8 @@ namespace BannerKings.Managers.Policies
     class BKMilitiaPolicy : BannerKingsPolicy
     {
         public override string GetIdentifier() => "militia";
+
+        [SaveableProperty(3)]
         public MilitiaPolicy Policy { get; private set; }
         public BKMilitiaPolicy(MilitiaPolicy policy, Settlement settlement) : base(settlement, (int)policy)
         {

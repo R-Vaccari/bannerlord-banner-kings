@@ -3,13 +3,13 @@ using System;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core.ViewModelCollection;
-using static BannerKings.Managers.PolicyManager;
+using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Managers.Policies
 {
     class BKCriminalPolicy : BannerKingsPolicy
     {
-
+        [SaveableProperty(3)]
         public CriminalPolicy Policy { get; private set; }
         public BKCriminalPolicy(CriminalPolicy policy, Settlement settlement) : base(settlement, (int)policy)
         {

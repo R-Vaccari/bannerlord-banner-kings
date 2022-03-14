@@ -46,6 +46,7 @@ namespace BannerKings.Behaviors
                 if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PolicyManager != null)
                 {
                     populationManager = BannerKingsConfig.Instance.PopulationManager;
+                    policyManager = BannerKingsConfig.Instance.PolicyManager;
                     titleManager = BannerKingsConfig.Instance.TitleManager;
                     courtManager = BannerKingsConfig.Instance.CourtManager;
                 }
@@ -54,18 +55,17 @@ namespace BannerKings.Behaviors
             dataStore.SyncData("bannerkings-populations", ref populationManager);
             dataStore.SyncData("bannerkings-titles", ref titleManager);
             dataStore.SyncData("bannerkings-courts", ref courtManager);
+            dataStore.SyncData("bannerkings-policies", ref policyManager);
 
             if (dataStore.IsLoading)
             {
-                if (populationManager == null && policyManager == null)
+                if (populationManager == null)
                     BannerKingsConfig.Instance.InitManagers();
                 
-                else BannerKingsConfig.Instance.InitManagers(populationManager, new PolicyManager(new Dictionary<Settlement, List<Managers.Decisions.BannerKingsDecision>>(), new Dictionary<Settlement, List<BannerKingsPolicy>>()),
+                else BannerKingsConfig.Instance.InitManagers(populationManager, policyManager,
                     titleManager, courtManager);
             }
         }
-
-        
 
       
         private void OnSettlementEntered(MobileParty party, Settlement target, Hero hero)

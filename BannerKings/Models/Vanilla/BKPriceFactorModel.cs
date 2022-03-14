@@ -2,7 +2,6 @@
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.SandBox.GameComponents;
 using TaleWorlds.Core;
-using static BannerKings.Managers.Policies.BKTariffPolicy;
 using static BannerKings.Managers.PolicyManager;
 
 namespace BannerKings.Models
@@ -16,17 +15,6 @@ namespace BannerKings.Models
                 && BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(merchant.MobileParty.PartyComponent.HomeSettlement))
             {
                 Settlement settlement = merchant.MobileParty.PartyComponent.HomeSettlement;
-                TariffType type = ((BKTariffPolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(settlement, "tariff")).Policy;
-                Town town = settlement.Town;
-                if (type != TariffType.Exemption && town != null)
-                {
-                    float commission = new BKTaxModel().GetTownTaxRatio(town);
-                    baseResult *= 1f + commission;
-                }  
-                if (type == TariffType.Internal_Consumption)
-                    if (clientParty != null && merchant.MobileParty == clientParty && isSelling)
-                        baseResult *= 0.66f;
-
                 if (itemRosterElement.Item.IsFood)
                     if (settlement.Town.FoodChange < 0)
                         baseResult *= 1.5f;

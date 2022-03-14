@@ -3,12 +3,15 @@ using System;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core.ViewModelCollection;
+using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Managers.Policies
 {
     class BKTaxPolicy : BannerKingsPolicy
     {
         public override string GetIdentifier() => "tax";
+
+        [SaveableProperty(3)]
         public TaxType Policy { get; private set; }
         public BKTaxPolicy(TaxType policy, Settlement settlement) : base(settlement, (int)policy)
         {

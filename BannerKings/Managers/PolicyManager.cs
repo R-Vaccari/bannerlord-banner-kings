@@ -6,12 +6,16 @@ using static BannerKings.Managers.Policies.BKGarrisonPolicy;
 using static BannerKings.Managers.Policies.BKMilitiaPolicy;
 using static BannerKings.Managers.Policies.BKCriminalPolicy;
 using BannerKings.Managers.Decisions;
+using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Managers
 {
     public class PolicyManager
     {
+        [SaveableProperty(1)]
         private Dictionary<Settlement, List<BannerKingsDecision>> SettlementDecisions { get; set; }
+
+        [SaveableProperty(2)]
         private Dictionary<Settlement, List<BannerKingsPolicy>> SettlementPolicies { get; set; }
 
         private IEnumerable<string> TownDecisions
@@ -193,8 +197,6 @@ namespace BannerKings.Managers
                 return new BKMilitiaPolicy(MilitiaPolicy.Balanced, settlement);
             if (policyType == "tax")
                 return new BKTaxPolicy(BKTaxPolicy.TaxType.Standard, settlement);
-            else if (policyType == "tariff")
-                return new BKTariffPolicy(BKTariffPolicy.TariffType.Standard, settlement);
             if (policyType == "workforce")
                 return new BKWorkforcePolicy(BKWorkforcePolicy.WorkforcePolicy.None, settlement);
             else if (policyType == "draft")
