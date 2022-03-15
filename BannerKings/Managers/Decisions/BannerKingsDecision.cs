@@ -9,7 +9,7 @@ namespace BannerKings.Managers.Decisions
         public Settlement Settlement { get; private set; }
 
         [SaveableProperty(2)]
-        public bool Enabled { get; protected set; }
+        public bool Enabled { get; set; }
 
         public BannerKingsDecision(Settlement settlement, bool enabled)
         {

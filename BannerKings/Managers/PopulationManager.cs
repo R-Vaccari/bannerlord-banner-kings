@@ -39,7 +39,11 @@ namespace BannerKings.Managers
         public void AddSettlementData(Settlement settlement, PopulationData data) => Populations.Add(settlement, data);
         public bool IsPopulationParty(MobileParty party) => Caravans.Contains(party);
         public void AddParty(MobileParty party) => Caravans.Add(party);
-        public void RemoveCaravan(MobileParty party) => Caravans.Remove(party);
+        public void RemoveCaravan(MobileParty party)
+        {
+            if (Caravans.Contains(party))
+                Caravans.Remove(party);
+        }
 
         public List<MobileParty> GetClanMilitias(Clan clan)
         {

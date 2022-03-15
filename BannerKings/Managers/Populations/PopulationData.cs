@@ -7,7 +7,6 @@ using TaleWorlds.Library;
 using TaleWorlds.SaveSystem;
 using static BannerKings.Managers.PopulationManager;
 using BannerKings.Models;
-using BannerKings.Models.Vanilla;
 using BannerKings.Models.Populations;
 using TaleWorlds.ObjectSystem;
 using BannerKings.Managers.Institutions;
@@ -313,6 +312,7 @@ namespace BannerKings.Populations
 
         internal override void Update(PopulationData data)
         {
+            this.settlementOwner = data.Settlement.Owner;
             BKCultureAssimilationModel assimModel = (BKCultureAssimilationModel)BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(BKCultureAssimilationModel));
             BKCultureAcceptanceModel accModel = (BKCultureAcceptanceModel)BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(BKCultureAcceptanceModel));
             HashSet<CultureDataClass> toDelete = new HashSet<CultureDataClass>();
@@ -322,7 +322,7 @@ namespace BannerKings.Populations
             {
                 cultureData.Acceptance += accModel.CalculateEffect(data.Settlement, cultureData).ResultNumber;
                 cultureData.Assimilation += assimModel.CalculateEffect(data.Settlement, cultureData).ResultNumber;
-                if (cultureData.Culture != settlementOwner.Culture && cultureData.Assimilation == 0f)
+                if (cultureData.Culture != settlementOwner.Culture && cultureData.Assimilation > 0.01)
                     toDelete.Add(cultureData);
 
                 if (cultureData.Culture != settlementOwner.Culture && cultureData.Culture != data.Settlement.Culture)
@@ -353,6 +353,12 @@ namespace BannerKings.Populations
                         }
                 }     
             }
+
+            CultureObject dominant = this.DominantCulture;
+            data.Settlement.Culture = dominant;
+            if (data.Settlement.Notables != null && data.Settlement.Notables.Count > 0)
+                foreach (Hero notable in data.Settlement.Notables)
+                    notable.Culture = dominant;
         }
     }
 

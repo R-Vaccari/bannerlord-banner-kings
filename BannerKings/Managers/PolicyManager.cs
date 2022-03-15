@@ -223,10 +223,8 @@ namespace BannerKings.Managers
                 if (target != null) policies.Remove(target);
                 policies.Add(policy);
             }
-            else
-            {
-                AddSettlementPolicy(settlement);
-            }
+            else AddSettlementPolicy(settlement);
+            
         }
 
         public bool IsDecisionEnacted(Settlement settlement, string type)
@@ -246,10 +244,7 @@ namespace BannerKings.Managers
                 if (target != null) policies.Remove(target);
                 policies.Add(decision);
             }
-            else
-            {
-                AddSettlementPolicy(settlement);
-            }
+            else AddSettlementPolicy(settlement);
         }
     }
 }

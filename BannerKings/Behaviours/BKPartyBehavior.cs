@@ -3,8 +3,6 @@ using BannerKings.Populations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.Core;
@@ -46,7 +44,7 @@ namespace BannerKings.Behaviours
                 if (target != null)
                 {
                     float distance = Campaign.Current.Models.MapDistanceModel.GetDistance(party, target);
-                    if (distance <= 30f)
+                    if (distance <= 10f)
                         EnterSettlementAction.ApplyForParty(party, target);
                     
                     else
@@ -56,13 +54,20 @@ namespace BannerKings.Behaviours
                             party.Ai.SetAIState(AIState.VisitingVillage);
                             if (target.Village.VillageState == Village.VillageStates.Looted || target.Village.VillageState == Village.VillageStates.BeingRaided)
                                 party.SetMoveModeHold();
-                            else PartyKeepMoving(ref party, ref target);
+                            else 
+                            {
+                                party.Ai.SetAIState(AIState.VisitingVillage);
+                                party.SetMoveGoToSettlement(target);
+                            }
                         }
                         else if (!target.IsVillage)
                         {
                             party.Ai.SetAIState(AIState.VisitingNearbyTown);
                             if (!target.IsUnderSiege)
-                                PartyKeepMoving(ref party, ref target);
+                            {
+                                party.Ai.SetAIState(AIState.VisitingNearbyTown);
+                                party.SetMoveGoToSettlement(target);
+                            }
                             else party.SetMoveModeHold();
                         }
                     }
@@ -81,13 +86,6 @@ namespace BannerKings.Behaviours
                 if (PopulationConfig.Instance.PopulationManager.IsPopulationParty(party))
                     PopulationConfig.Instance.PopulationManager.RemoveCaravan(party);
             }*/
-        }
-
-        private void PartyKeepMoving(ref MobileParty party, ref Settlement target)
-        {
-            if (target.IsVillage) party.Ai.SetAIState(AIState.VisitingVillage);
-            else party.Ai.SetAIState(AIState.VisitingNearbyTown);
-            party.SetMoveGoToSettlement(target);
         }
 
         private void DailySettlementTick(Settlement settlement)

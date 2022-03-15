@@ -2,6 +2,7 @@
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
+using System.Linq;
 
 namespace BannerKings.Models
 {
@@ -48,12 +49,15 @@ namespace BannerKings.Models
             {
                 if (dataCulture == ownerCulture)
                 {
+                    float acceptance = data.Acceptance;
+
                     if (data.Assimilation < 1f - popData.Foreigner.ResultNumber)
                     {
                         result.Add(-0.005f, new TextObject("Natural resistance"));
                         float random1 = 0.001f * MBRandom.RandomFloat;
                         float random2 = 0.001f * MBRandom.RandomFloat;
                         result.Add(random1 - random2, new TextObject("Random factors"));
+                        result.Add(0.005f * acceptance, new TextObject("Cultural acceptance"));
 
                         if (!settlement.IsVillage && settlement.Town != null)
                             result.Add(0.005f * (1f * (settlement.Town.Security * 0.01f)), new TextObject("Security effect"));
