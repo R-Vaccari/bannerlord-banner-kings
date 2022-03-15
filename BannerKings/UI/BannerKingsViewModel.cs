@@ -25,10 +25,12 @@ namespace BannerKings.UI
         {
             SelectorVM<BKItemVM> selector = new SelectorVM<BKItemVM>(0, new Action<SelectorVM<BKItemVM>>(action));
             selector.SetOnChangeAction(null);
+            int i = 0;
             foreach (Enum enumValue in policy.GetPolicies())
             {
-                BKItemVM item = new BKItemVM(enumValue, true, policy.GetHint());
+                BKItemVM item = new BKItemVM(enumValue, true, policy.GetHint(i));
                 selector.AddItem(item);
+                i++;
             }
 
             

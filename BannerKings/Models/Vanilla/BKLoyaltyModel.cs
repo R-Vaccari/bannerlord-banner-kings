@@ -9,6 +9,7 @@ using TaleWorlds.CampaignSystem.SandBox.GameComponents;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
+using static BannerKings.Managers.Policies.BKCriminalPolicy;
 using static BannerKings.Managers.Policies.BKTaxPolicy;
 using static BannerKings.Managers.PopulationManager;
 
@@ -16,9 +17,8 @@ namespace BannerKings.Models
 {
     class BKLoyaltyModel : DefaultSettlementLoyaltyModel
     {
-        private static readonly float SLAVE_LOYALTY = -0.0005f;
+        private static readonly float SLAVE_LOYALTY = -0.00035f;
 		private static readonly float LOYALTY_FACTOR = 4f;
-		private static readonly float NOBLE_LOYALTY_WEIGHT = 3F;
 
 		public override ExplainedNumber CalculateLoyaltyChange(Town town, bool includeDescriptions = false)
         {
@@ -50,6 +50,25 @@ namespace BannerKings.Models
 					float privateSlaves = 1f - data.EconomicData.StateSlaves;
 					baseResult.Add(privateSlaves * -factor, new TextObject("Tax private slaves decision"));
 				}
+
+				CriminalPolicy crime = (BannerKingsConfig.Instance.PolicyManager.GetPolicy(town.Settlement, "criminal") as BKCriminalPolicy).Policy;
+				if (crime == CriminalPolicy.Execution) 
+				{
+					float value = 0f;
+					if (data.CultureData.DominantCulture == town.Owner.Culture)
+						value = 0.3f;
+					else value = -0.3f;
+					baseResult.Add(value, new TextObject("{=!}Criminal policy"));
+				} else if (crime == CriminalPolicy.Forgiveness)
+                {
+					float value = 0f;
+					if (data.CultureData.DominantCulture != town.Owner.Culture)
+						value = 0.3f;
+					else value = -0.3f;
+					baseResult.Add(value, new TextObject("{=!}Criminal policy"));
+				}
+					
+					
 
 				if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(town.Settlement, "decision_ration"))
 					baseResult.Add(town.IsUnderSiege ? -2f : -4f, new TextObject("{=!}Enforce rations decision"));

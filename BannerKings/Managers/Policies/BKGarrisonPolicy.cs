@@ -17,11 +17,11 @@ namespace BannerKings.Managers.Policies
         {
             this.Policy = policy;
         }
-        public override string GetHint()
+        public override string GetHint(int value)
         {
-            if (Policy == GarrisonPolicy.Dischargement)
-                return "Discharge a garrison member on a daily basis from duty. Slows down garrison trainning. Decreases adm. costs.";
-            else if (Policy == GarrisonPolicy.Enlistment)
+            if (value == (int)GarrisonPolicy.Dischargement)
+                return "Discharge a garrison member on a daily basis from duty. Slows down garrison trainning.";
+            else if (value == (int)GarrisonPolicy.Enlistment)
                 return "Increase the quantity of auto recruited garrison soldiers, as well as provide more trainning. Increases adm. costs.";
             else return "Standard garrison policy, no particular effect.";
         }

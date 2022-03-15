@@ -18,6 +18,7 @@ using BannerKings.Managers.Institutions;
 using TaleWorlds.CampaignSystem.Overlay;
 using TaleWorlds.CampaignSystem.SandBox.CampaignBehaviors;
 using BannerKings.Managers.Policies;
+using BannerKings.Managers.Populations.Villages;
 
 namespace BannerKings.Behaviors
 {
@@ -43,13 +44,10 @@ namespace BannerKings.Behaviors
             
             if (dataStore.IsSaving)
             {
-                if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PolicyManager != null)
-                {
-                    populationManager = BannerKingsConfig.Instance.PopulationManager;
-                    policyManager = BannerKingsConfig.Instance.PolicyManager;
-                    titleManager = BannerKingsConfig.Instance.TitleManager;
-                    courtManager = BannerKingsConfig.Instance.CourtManager;
-                }
+                populationManager = BannerKingsConfig.Instance.PopulationManager;
+                policyManager = BannerKingsConfig.Instance.PolicyManager;
+                titleManager = BannerKingsConfig.Instance.TitleManager;
+                courtManager = BannerKingsConfig.Instance.CourtManager;   
             }
 
             dataStore.SyncData("bannerkings-populations", ref populationManager);
@@ -195,17 +193,19 @@ namespace BannerKings.Behaviors
                             }
                         }
                 }
-            }
-           
-
-            if (settlement.IsTown)
+            } else 
             {
-                PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
-                Guild guild = data.EconomicData.Guild;
-                if (guild != null)
+                if (settlement.IsVillage)
                 {
-
-                }
+                    PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
+                    VillageData villageData = data.VillageData;
+                    if (villageData != null)
+                    {
+                        float trainning = villageData.GetBuildingLevel(DefaultVillageBuildings.Instance.Manor);
+                        if (trainning > 0)
+                            baseResult.Add(trainning == 1 ? 0.2f : (trainning == 2 ? 0.5f : 1f), new TextObject("{=BkTiRPT4}Training Fields"));
+                    }
+                } 
             }
         }
 
@@ -1230,7 +1230,7 @@ namespace BannerKings.Behaviors
                 {
                     PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(__instance.Settlement);
                     int total = data.TotalPop;
-                    int result = (int)((float)total / 10f);
+                    int result = (int)((float)total / 6.5f);
 
                     __result = (int)((float)(Campaign.Current.Models.SettlementFoodModel.FoodStocksUpperLimit +
                         (__instance.IsCastle ? Campaign.Current.Models.SettlementFoodModel.CastleFoodStockUpperLimitBonus : 0)) +

@@ -18,13 +18,13 @@ namespace BannerKings.Managers.Policies
         {
             this.Policy = policy;
         }
-        public override string GetHint()
+        public override string GetHint(int value)
         {
-            if (Policy == MilitiaPolicy.Melee)
-                return "Focus three fourths of the militia as melee troops";
-            else if (Policy == MilitiaPolicy.Ranged)
-                return "Focus three fourths of the militia as ranged troops";
-            else return "Split militia equally between ranged and melee troops";
+            if (value == (int)MilitiaPolicy.Melee)
+                return "Focus three fourths of the militia as melee troops.";
+            else if (value == (int)MilitiaPolicy.Ranged)
+                return "Focus three fourths of the militia as ranged troops.";
+            else return "Split militia equally between ranged and melee troops.";
         }
 
         public override void OnChange(SelectorVM<BKItemVM> obj)

@@ -40,8 +40,8 @@ namespace BannerKings.Managers.Populations.Villages
         public void Init()
         {
             this.manor = new BuildingType("bannerkings_manor");
-            this.manor.Initialize(new TextObject("{=!}Manor", null), 
-                new TextObject("{=!}Manor house, the lord's home and center of the village. A manor house allows the housing of a small retinue in the village (15, 30, 45 men).", null), new int[]
+            this.manor.Initialize(new TextObject("{=!}Manor"), 
+                new TextObject("{=!}Manor house, the lord's home and center of the village. A manor house allows the housing of a small retinue in the village (15, 30, 45 men). Increases influence from nobles (15%, 30%, 50%)."), new int[]
             {
                 4000,
                 6000,
@@ -49,11 +49,11 @@ namespace BannerKings.Managers.Populations.Villages
             }, BuildingLocation.Settlement, new Tuple<BuildingEffectEnum, float, float, float>[]
             {
    
-            }, 1);
+            }, 0);
 
             this.palisade = new BuildingType("bannerkings_palisade");
-            this.palisade.Initialize(new TextObject("{=!}Palisade", null), 
-                new TextObject("{=!}A set of wooden stakes placed around the village like a wall. Reduces raiding speed (12%, 24%, 36%).", null), new int[]
+            this.palisade.Initialize(new TextObject("{=!}Palisade"), 
+                new TextObject("{=!}A set of wooden stakes placed around the village like a wall. Reduces raiding speed (12%, 24%, 36%)."), new int[]
             {
                 3000,
                 5000,
@@ -61,11 +61,11 @@ namespace BannerKings.Managers.Populations.Villages
             }, BuildingLocation.Settlement, new Tuple<BuildingEffectEnum, float, float, float>[]
             {
 
-            }, 1);
+            }, 0);
 
             this.trainning = new BuildingType("bannerkings_trainning");
-            this.trainning.Initialize(new TextObject("{=!}Trainning Grounds", null), 
-                new TextObject("{=!}Stablish a zone dedicated for trainning, as well as it's required equipments, where locals can train basic military arts. Increases militia production (0.2, 0.5, 1.0).", null), new int[]
+            this.trainning.Initialize(new TextObject("{=!}Trainning Grounds"), 
+                new TextObject("{=!}Stablish a zone dedicated for trainning, as well as it's required equipments, where locals can train basic military arts. Increases militia production (0.2, 0.5, 1.0)."), new int[]
             {
                 1500,
                 2400,
@@ -73,11 +73,11 @@ namespace BannerKings.Managers.Populations.Villages
             }, BuildingLocation.Settlement, new Tuple<BuildingEffectEnum, float, float, float>[]
             {
 
-            }, 1);
+            }, 0);
 
             this.warehouse = new BuildingType("bannerkings_warehouse");
-            this.warehouse.Initialize(new TextObject("{=!}Arms Warehouse", null), 
-                new TextObject("{=!}Construct a warehouse dedicated to keep military equipment as well as provide their maintenance. Improves militia quality (4%, 8%, 12%).", null), new int[]
+            this.warehouse.Initialize(new TextObject("{=!}Arms Warehouse"), 
+                new TextObject("{=!}Construct a warehouse dedicated to keep military equipment as well as provide their maintenance. Improves militia quality (4%, 8%, 12%)."), new int[]
             {
                 2000,
                 3000,
@@ -85,11 +85,11 @@ namespace BannerKings.Managers.Populations.Villages
             }, BuildingLocation.Settlement, new Tuple<BuildingEffectEnum, float, float, float>[]
             {
 
-            }, 1);
+            }, 0);
 
             this.courier = new BuildingType("bannerkings_courier");
-            this.courier.Initialize(new TextObject("{=!}Courier Post", null), 
-                new TextObject("{=!}Set up a dedicate courier post that will inform you of any relevant activity in and around your demesne. Enables information messages regardless of your distance.", null), new int[]
+            this.courier.Initialize(new TextObject("{=!}Courier Post"), 
+                new TextObject("{=!}Set up a dedicate courier post that will inform you of any relevant activity in and around your demesne. Enables information messages regardless of your distance."), new int[]
             {
                 1000,
                 1800,
@@ -97,11 +97,11 @@ namespace BannerKings.Managers.Populations.Villages
             }, BuildingLocation.Settlement, new Tuple<BuildingEffectEnum, float, float, float>[]
             {
    
-            }, 1);
+            }, 0);
 
             this.bakery = new BuildingType("bannerkings_bakery");
-            this.bakery.Initialize(new TextObject("{=!}Bakery", null), 
-                new TextObject("{=!}Supply tools and space for a local bakery, allowing serfs to turn wheat into bread. Adds bread as production good.", null), new int[]
+            this.bakery.Initialize(new TextObject("{=!}Bakery"), 
+                new TextObject("{=!}Supply tools and space for a local bakery, allowing serfs to turn wheat into bread. Adds bread as production good."), new int[]
             {
                 1000,
                 1800,
@@ -109,11 +109,11 @@ namespace BannerKings.Managers.Populations.Villages
             }, BuildingLocation.Settlement, new Tuple<BuildingEffectEnum, float, float, float>[]
             {
   
-            }, 1);
+            }, 0);
 
             this.mining = new BuildingType("bannerkings_mining");
-            this.mining.Initialize(new TextObject("{=!}Mining Infrastructure", null), 
-                new TextObject("{=!}Build mining equipment and infrastructure to improve working conditions in local mines. Increases ore production (5%, 10%, 15%).", null), new int[]
+            this.mining.Initialize(new TextObject("{=!}Mining Infrastructure"), 
+                new TextObject("{=!}Build mining equipment and infrastructure to improve working conditions in local mines. Increases ore production (5%, 10%, 15%)."), new int[]
             {
                 1500,
                 2400,
@@ -121,11 +121,11 @@ namespace BannerKings.Managers.Populations.Villages
             }, BuildingLocation.Settlement, new Tuple<BuildingEffectEnum, float, float, float>[]
             {
  
-            }, 1);
+            }, 0);
 
             this.animalHousing = new BuildingType("bannerkings_animal_housing");
-            this.animalHousing.Initialize(new TextObject("{=!}Animal Housing", null), 
-                new TextObject("{=!}Invest on infrastructure for animal housing and grazing, yielding more from your pasture lands. Increases live animals production (5%, 10%, 15%).", null), new int[]
+            this.animalHousing.Initialize(new TextObject("{=!}Animal Housing"), 
+                new TextObject("{=!}Invest on infrastructure for animal housing and grazing, yielding more from your pasture lands. Increases live animals production (5%, 10%, 15%)."), new int[]
             {
                 1500,
                 2400,
@@ -133,11 +133,11 @@ namespace BannerKings.Managers.Populations.Villages
             }, BuildingLocation.Settlement, new Tuple<BuildingEffectEnum, float, float, float>[]
             {
   
-            }, 1);
+            }, 0);
 
             this.farming = new BuildingType("bannerkings_farming");
-            this.farming.Initialize(new TextObject("{=!}Farming Infrastructure", null), 
-                new TextObject("{=!}Provide farming equipment and stablish systems to maximise land productivity. Increases farm goods production (5%, 10%, 15%).", null), new int[]
+            this.farming.Initialize(new TextObject("{=!}Farming Infrastructure"), 
+                new TextObject("{=!}Provide farming equipment and stablish systems to maximise land productivity. Increases farm goods production (5%, 10%, 15%)."), new int[]
             {
                 1500,
                 2400,
@@ -145,11 +145,11 @@ namespace BannerKings.Managers.Populations.Villages
             }, BuildingLocation.Settlement, new Tuple<BuildingEffectEnum, float, float, float>[]
             {
     
-            }, 1);
+            }, 0);
 
             this.sawmill = new BuildingType("bannerkings_sawmill");
-            this.sawmill.Initialize(new TextObject("{=!}Sawmill", null), 
-                new TextObject("{=!}Build a sawmill, improving the speed and quality of log cutting into usable hardwood. Increases hardwood production (5%, 10%, 15%).", null), new int[]
+            this.sawmill.Initialize(new TextObject("{=!}Sawmill"), 
+                new TextObject("{=!}Build a sawmill, improving the speed and quality of log cutting into usable hardwood. Increases hardwood production (5%, 10%, 15%)."), new int[]
             {
                 1500,
                 2400,
@@ -157,11 +157,11 @@ namespace BannerKings.Managers.Populations.Villages
             }, BuildingLocation.Settlement, new Tuple<BuildingEffectEnum, float, float, float>[]
             {
 
-            }, 1);
+            }, 0);
 
             this.butter = new BuildingType("bannerkings_butter");
-            this.butter.Initialize(new TextObject("{=!}Butter Mill", null), 
-                new TextObject("{=!}Construct specialized buildings for churning local cattle milk into butter, a highly sought after food amongst lords.", null), new int[]
+            this.butter.Initialize(new TextObject("{=!}Butter Mill"), 
+                new TextObject("{=!}Construct specialized buildings for churning local cattle milk into butter, a highly sought after food amongst lords."), new int[]
             {
                 1000,
                 1800,
@@ -169,11 +169,11 @@ namespace BannerKings.Managers.Populations.Villages
             }, BuildingLocation.Settlement, new Tuple<BuildingEffectEnum, float, float, float>[]
             {
    
-            }, 1);
+            }, 0);
 
             this.tannery = new BuildingType("bannerkings_tannery");
-            this.tannery.Initialize(new TextObject("{=!}Fur Tannery", null), 
-                new TextObject("{=!}Construct specialized buildings for tanning hides, turning these into leather. Adds leather to production.", null), new int[]
+            this.tannery.Initialize(new TextObject("{=!}Fur Tannery"), 
+                new TextObject("{=!}Construct specialized buildings for tanning hides, turning these into leather. Adds leather to production."), new int[]
             {
                 1500,
                 2400,
@@ -181,11 +181,11 @@ namespace BannerKings.Managers.Populations.Villages
             }, BuildingLocation.Settlement, new Tuple<BuildingEffectEnum, float, float, float>[]
             {
     
-            }, 1);
+            }, 0);
 
             this.fishing = new BuildingType("bannerkings_fishing");
-            this.fishing.Initialize(new TextObject("{=!}Fish Farm", null), 
-                new TextObject("{=!}Build controlled fish growing zones, supplying extra fish to the village. Increases fish production (5%, 10%, 15%).", null), new int[]
+            this.fishing.Initialize(new TextObject("{=!}Fish Farm"), 
+                new TextObject("{=!}Build controlled fish growing zones, supplying extra fish to the village. Increases fish production (5%, 10%, 15%)."), new int[]
             {
                 1500,
                 2400,
@@ -193,11 +193,11 @@ namespace BannerKings.Managers.Populations.Villages
             }, BuildingLocation.Settlement, new Tuple<BuildingEffectEnum, float, float, float>[]
             {
            
-            }, 1);
+            }, 0);
 
             this.blacksmith = new BuildingType("bannerkings_blacksmith");
-            this.blacksmith.Initialize(new TextObject("{=!}Smith", null), 
-                new TextObject("{=!}Stablish a local blacksmith, supplying the village with metal products. Adds tools to production.", null), new int[]
+            this.blacksmith.Initialize(new TextObject("{=!}Smith"), 
+                new TextObject("{=!}Stablish a local blacksmith, supplying the village with metal products. Adds tools to production."), new int[]
             {
                 1000,
                 1800,
@@ -205,7 +205,7 @@ namespace BannerKings.Managers.Populations.Villages
             }, BuildingLocation.Settlement, new Tuple<BuildingEffectEnum, float, float, float>[]
             {
            
-            }, 1);
+            }, 0);
 
 
             this.dailyProduction = new BuildingType("bannerkings_daily_production");
@@ -240,7 +240,6 @@ namespace BannerKings.Managers.Populations.Villages
             yield return Instance.Palisade;
             yield return Instance.TrainningGrounds;
             yield return Instance.Warehouse;
-            yield return Instance.Courier;
             yield return Instance.DailyProduction;
             yield return Instance.DailyFarm;
             yield return Instance.DailyPasture;
@@ -261,10 +260,6 @@ namespace BannerKings.Managers.Populations.Villages
                 yield return Instance.FishFarm;
             else yield return Instance.Tannery;
 
-            if (type == DefaultVillageTypes.WheatFarm)
-                yield return Instance.Bakery;
-            if (type == DefaultVillageTypes.CattleRange)
-                yield return Instance.Butter;
             if (type == DefaultVillageTypes.IronMine)
                 yield return Instance.Blacksmith;
             yield break;

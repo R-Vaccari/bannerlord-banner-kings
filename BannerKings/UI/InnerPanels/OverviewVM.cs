@@ -51,20 +51,20 @@ namespace BannerKings.UI
                     .Add(new CultureElementVM(data, culture)));
 
                 StatsInfo.Add(new InformationElement("Stability:", FormatValue(data.Stability),
-                    "The overall stability of this settlement, affected by security, loyalty, assimilation and whether you are legally entitled to the settlement. Stability is the basis of economic prosperity"));
+                    "The overall stability of this settlement, affected by security, loyalty, assimilation and whether you are legally entitled to the settlement. Stability is the basis of economic prosperity."));
                 StatsInfo.Add(new InformationElement("Total Population:", data.TotalPop.ToString(),
-                    "Number of people present in this settlement and surrounding regions"));
+                    "Number of people present in this settlement and surrounding regions."));
                 StatsInfo.Add(new InformationElement("Population Growth:", new BKGrowthModel().CalculateEffect(settlement, data).ResultNumber.ToString(), 
-                    "The population growth of your settlement on a daily basis, distributed among the classes"));
+                    "The population growth of your settlement on a daily basis, distributed among the classes."));
                 StatsInfo.Add(new InformationElement("Foreigner Ratio:", FormatValue(new BKForeignerModel().CalculateEffect(settlement).ResultNumber),
-                    "Higher prosperity leads to higher foreigner attraction, who in turn increase caravan attractiveness. However, these foreigners refuse to be assimilated, thus more foreigners lead to a less stable settlement"));
+                    "Merchant and freemen foreigners that refuse to be assimilated, but have a living in this settlement."));
 
                 CultureInfo.Add(new InformationElement("Dominant Culture:", data.CultureData.DominantCulture.Name.ToString(),
-                    "The most assimilated culture in this settlement"));
-                CultureInfo.Add(new InformationElement("Cultural Acceptance:", FormatValue(data.CultureData.GetAssimilation(Hero.MainHero.Culture)),
-                    "How accepted your culture is towards the general populace. A culture first needs to be accepted to be assimilated into"));
+                    "The most assimilated culture in this settlement, and considered the legal culture."));
+                CultureInfo.Add(new InformationElement("Cultural Acceptance:", FormatValue(data.CultureData.GetAcceptance(Hero.MainHero.Culture)),
+                    "How accepted your culture is towards the general populace. A culture first needs to be accepted to be assimilated into."));
                 CultureInfo.Add(new InformationElement("Cultural Assimilation:", FormatValue(data.CultureData.GetAssimilation(Hero.MainHero.Culture)),
-                    "Percentage of the population that shares culture with you. Assimilating foreign settlements requires a competent governor that shares your culture"));
+                    "Percentage of the population that shares culture with you. Assimilating foreign settlements requires a competent governor that shares your culture."));
 
                 List<BannerKingsDecision> decisions = BannerKingsConfig.Instance.PolicyManager.GetDefaultDecisions(settlement);
                 foreach (BannerKingsDecision decision in decisions)

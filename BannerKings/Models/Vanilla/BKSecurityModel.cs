@@ -27,9 +27,9 @@ namespace BannerKings.Models
                 float assimilation = assim - 1f + assim;
                 baseResult.Add(assimilation, new TextObject("Cultural Assimilation"));
 
-                if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(town.Settlement, "workforce", (int)WorkforcePolicy.Construction))
+                if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(town.Settlement, "workforce", (int)WorkforcePolicy.Martial_Law))
                 {
-                    float militia = town.Militia;
+                    float militia = town.Militia / 2;
                     baseResult.Add(militia * 0.01f, new TextObject("Martial Law policy"));
                 }
 

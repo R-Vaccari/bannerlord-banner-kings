@@ -4,6 +4,7 @@ using BannerKings.Populations;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
+using static BannerKings.Managers.Policies.BKDraftPolicy;
 using static BannerKings.Managers.PolicyManager;
 using static BannerKings.Managers.PopulationManager;
 
@@ -72,6 +73,11 @@ namespace BannerKings.Models
                 if (settlement.OwnerClan.Leader == Hero.MainHero)
                     InformationManager.DisplayMessage(new InformationMessage(string.Format("Population is starving at {0}!", settlement.Name.ToString())));
             }
+
+            if (!settlement.IsVillage)
+                if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(settlement, "draft", (int)DraftPolicy.Demobilization))
+                    result.AddFactor(0.05f, new TextObject("Draft policy"));
+            
 
             return result;
         }

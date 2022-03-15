@@ -77,7 +77,8 @@ namespace BannerKings.Models
 		private float GetSlaveWorkforce(Settlement settlement)
         {
 			PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
-			int slaves = data.GetTypeCount(PopType.Slaves);
+			bool construction = BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(data.Settlement, "workforce", (int)WorkforcePolicy.Construction);
+			int slaves = (int)((float)data.GetTypeCount(PopType.Slaves) * data.EconomicData.StateSlaves * (construction ? 1f : 0.5f));
 			return (float)slaves * SLAVE_CONSTRUCTION;
 		}
 

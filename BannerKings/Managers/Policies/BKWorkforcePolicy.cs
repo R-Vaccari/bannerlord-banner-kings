@@ -17,15 +17,15 @@ namespace BannerKings.Managers.Policies
             this.Policy = policy;
         }
 
-        public override string GetHint()
+        public override string GetHint(int value)
         {
-            if (Policy == WorkforcePolicy.Construction)
-                return "Serfs aid in construction for a gold cost, and food production suffers a penalty";
-            else if (Policy == WorkforcePolicy.Land_Expansion)
-                return "Divert slaves and serf workforces to expand the arable land, reducing their outputs while extending usable land";
-            else if (Policy == WorkforcePolicy.Martial_Law)
-                return "Put the militia on active duty, increasing security but costing a food upkeep. Negatively impacts production efficiency";
-            else return "No particular policy is implemented";
+            if (value == (int)WorkforcePolicy.Construction)
+                return "Put all state slaves to work in construction, doubling their amount (standard amount is 50% of them). These slaves will be deducted from workforce. Increases adm. costs.";
+            else if (value == (int)WorkforcePolicy.Land_Expansion)
+                return "Divert a share of slaves and serfs to work on creating new usable acres. Every day progress will be made into new acres, the choosen type depends on the terrain. These laborers will be deducted from workforce. Increases adm. costs.";
+            else if (value == (int)WorkforcePolicy.Martial_Law)
+                return "Put half the militia on active duty, increasing security. These militiamen will be deducted from serf workforce. Decreases production efficiency. Increases adm. costs.";
+            else return "No particular policy is implemented. No administrative costs.";
         }
 
         public override void OnChange(SelectorVM<BKItemVM> obj)

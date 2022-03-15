@@ -138,7 +138,10 @@ namespace BannerKings.UI
             draftItem = (BKDraftPolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(settlement, "draft");
             DraftSelector = base.GetSelector(draftItem, new Action<SelectorVM<BKItemVM>>(this.draftItem.OnChange));
             DraftSelector.SelectedIndex = draftItem.Selected;
-            DraftSelector.SetOnChangeAction(this.draftItem.OnChange);
+            DraftSelector.SetOnChangeAction(delegate (SelectorVM<BKItemVM> obj) {
+                this.draftItem.OnChange(obj);
+                this.RefreshValues();
+                });
 
             BannerKingsDecision conscriptionDecision = decisions.FirstOrDefault(x => x.GetIdentifier() == "decision_militia_encourage");
             BannerKingsDecision subsidizeDecision = decisions.FirstOrDefault(x => x.GetIdentifier() == "decision_militia_subsidize");  

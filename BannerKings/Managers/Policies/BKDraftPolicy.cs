@@ -18,12 +18,12 @@ namespace BannerKings.Managers.Policies
             this.Policy = policy;
         }
 
-        public override string GetHint()
+        public override string GetHint(int value)
         {
-            if (Policy == DraftPolicy.Conscription)
+            if (value == (int)DraftPolicy.Conscription)
                 return "Extend conscription of the populace, replenishing recruitment slots faster. Increases adm. costs.";
-            else if (Policy == DraftPolicy.Demobilization)
-                return "Slow down conscription of new recruits. Decreases adm. costs.";
+            else if (value == (int)DraftPolicy.Demobilization)
+                return "Slow down conscription of new recruits. Slight boost to population growth.";
             return "Standard drafting policy, no particular effect.";
         }
 

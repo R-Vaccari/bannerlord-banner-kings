@@ -18,19 +18,19 @@ namespace BannerKings.Managers.Policies
             this.Policy = policy;
         }
 
-        public override string GetHint()
+        public override string GetHint(int value)
         {
-            if (Policy == TaxType.High)
+            if (value == (int)TaxType.High)
             {
-                if (!Settlement.IsVillage) return "Yield more tax from the population, at the cost of decreased loyalty";
-                else return "Yield more tax from the population, but reduce growth"; 
+                if (!Settlement.IsVillage) return "Yield more tax from the population, at the cost of decreased loyalty.";
+                else return "Yield more tax from the population, but reduce growth."; 
             }
-            else if (Policy == TaxType.Low)
+            else if (value == (int)TaxType.Low)
             {
-                if (!Settlement.IsVillage) return "Reduce tax burden on the population, diminishing your profit but increasing their support towards you";
-                else return "Reduce tax burden on the population, encouraging new settlers";
+                if (!Settlement.IsVillage) return "Reduce tax burden on the population, diminishing your profit but increasing their support towards you.";
+                else return "Reduce tax burden on the population, encouraging new settlers.";
             }
-            else if (Policy == TaxType.Exemption)
+            else if (value == (int)TaxType.Exemption)
                 return "Fully exempt notables from taxes, improving their attitude towards you";
             else return "Standard tax of the land, with no particular repercussions";
         }

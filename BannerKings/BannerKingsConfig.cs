@@ -36,6 +36,7 @@ namespace BannerKings
 
         public void InitManagers(PopulationManager populationManager, PolicyManager policyManager, TitleManager titleManager, CourtManager court)
         {
+            DefaultVillageBuildings.Instance.Init();
             this.PopulationManager = populationManager;
             this.PolicyManager = policyManager;
             this.TitleManager = titleManager != null ? titleManager : new TitleManager(new Dictionary<FeudalTitle, Hero>(), new Dictionary<Hero, List<FeudalTitle>>(),

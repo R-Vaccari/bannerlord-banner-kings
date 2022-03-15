@@ -4,6 +4,7 @@ using TaleWorlds.Localization;
 using static BannerKings.Managers.PopulationManager;
 using static BannerKings.Managers.PolicyManager;
 using BannerKings.Populations;
+using BannerKings.Managers.Populations.Villages;
 
 namespace BannerKings.Models
 {
@@ -25,22 +26,18 @@ namespace BannerKings.Models
                         baseResult.Add(((float)extra * -2f) * 0.01f, new TextObject(string.Format("Excess noble population at {0}", settlement.Name)));
                     }
                     baseResult.Add((float)nobles * 0.01f, new TextObject(string.Format("Nobles influence from {0}", settlement.Name)));
-                        
+
+                    VillageData villageData = data.VillageData;
+                    if (villageData != null)
+                    {
+                        float manor = villageData.GetBuildingLevel(DefaultVillageBuildings.Instance.TrainningGrounds);
+                        if (manor > 0)
+                            baseResult.AddFactor(manor == 3 ? 0.5f : manor * 0.15f, new TextObject("{=!}Manor"));
+                    }
                 }
             }
                 
             return baseResult;
-        }
-
-        public int GetMilitiaInfluenceCost(MobileParty party, Settlement settlement, Hero lord)
-        {
-            float cost = party.MemberRoster.TotalManCount;
-            float mediumRelation = 1f;
-            if (settlement.Notables != null)
-                foreach (Hero notable in settlement.Notables)
-                    mediumRelation += ((float)notable.GetRelation(lord) / 5f) * -0.01f;
-
-            return (int)(cost * mediumRelation / 2f);
         }
     }
 }

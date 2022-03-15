@@ -13,6 +13,7 @@ using TaleWorlds.ObjectSystem;
 using BannerKings.Managers.Institutions;
 using BannerKings.Managers.Populations.Villages;
 using BannerKings.Managers.Populations;
+using static BannerKings.Managers.Policies.BKWorkforcePolicy;
 
 namespace BannerKings.Populations
 {
@@ -337,8 +338,10 @@ namespace BannerKings.Populations
             if (foreignerShare < foreignerTarget)
             {
                 float random = MBRandom.RandomFloatRanged(diff);
+                IEnumerable<CultureObject> presentCultures = from cultureClass in this.cultures select cultureClass.Culture;
                 CultureObject randomForeign = MBObjectManager.Instance.GetObjectTypeList<CultureObject>()
-                    .GetRandomElementWithPredicate(x => x != settlementOwner.Culture && x != data.Settlement.Culture && !x.IsBandit);
+                    .GetRandomElementWithPredicate(x => x != settlementOwner.Culture && x != data.Settlement.Culture && !x.IsBandit
+                    && !presentCultures.Contains(x));
                 if (randomForeign != null)
                 {
                     this.cultures.Add(new CultureDataClass(randomForeign, random, random));
@@ -348,10 +351,8 @@ namespace BannerKings.Populations
                             cultureData.Assimilation -= random;
                             break;
                         }
-                }
-                    
+                }     
             }
-
         }
     }
 
@@ -393,10 +394,6 @@ namespace BannerKings.Populations
 
         internal CultureObject Culture => culture;
     }
-
-    
-
-   
 
     public class VillageData : BannerKingsData
     {
@@ -587,8 +584,30 @@ namespace BannerKings.Populations
             get
             {
                 float serfs = this.data.GetTypeCount(PopType.Serfs) * 0.5f;
-                float slaves = this.data.GetTypeCount(PopType.Slaves) * 0.5f;
-                return (int)(serfs + slaves);
+                float slaves = this.data.GetTypeCount(PopType.Slaves);
+
+                Town town = this.data.Settlement.Town;
+                if (town != null && town.BuildingsInProgress.Count > 0)
+                    slaves -= slaves * this.data.EconomicData.StateSlaves * 0.5f;
+
+                if (!this.data.Settlement.IsVillage)
+                {
+                    if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(this.data.Settlement, "workforce", (int)WorkforcePolicy.Martial_Law))
+                    {
+                        float militia = this.data.Settlement.Town.Militia / 2;
+                        serfs -= militia / 2f;
+                    } else if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(this.data.Settlement, "workforce", (int)WorkforcePolicy.Land_Expansion))
+                    {
+                        serfs *= 0.8f;
+                        slaves *= 0.8f;
+                    }
+                    else if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(this.data.Settlement, "workforce", (int)WorkforcePolicy.Construction))
+                    {
+                        serfs *= 0.85f;
+                        slaves -= slaves * this.data.EconomicData.StateSlaves * 0.5f;
+                    }
+                }
+                return Math.Max((int)(serfs + slaves), 0);
             }
         }
 
@@ -612,6 +631,40 @@ namespace BannerKings.Populations
 
         internal override void Update(PopulationData data)
         {
+            if (this.data.Settlement.IsVillage)
+            {
+                VillageData villageData = data.VillageData;
+                float construction = this.data.VillageData.Construction;
+                float progress = 15f / construction;
+                BuildingType type = villageData.CurrentDefault.BuildingType;
+                if (type != DefaultVillageBuildings.Instance.DailyProduction)
+                {
+                    if (type == DefaultVillageBuildings.Instance.DailyFarm)
+                        this.farmland += progress;
+                    else if (type == DefaultVillageBuildings.Instance.DailyPasture)
+                        this.pasture += progress;
+                    else this.woodland += progress;
+                }
+            } else if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(this.data.Settlement, "workforce", (int)WorkforcePolicy.Land_Expansion))
+            {
+                float laborers = (float)this.AvailableWorkForce * 0.2f;
+                float construction = laborers * 0.010f;
+                float progress = 15f / construction;
+
+                List<(int, float)> list = new List<(int, float)>();
+                list.Add(new(0, this.composition[0]));
+                list.Add(new(1, this.composition[1]));
+                list.Add(new(2, this.composition[2]));
+                int choosen = MBRandom.ChooseWeighted(list);
+
+                if (choosen == 0)
+                    this.farmland += progress;
+                else if (choosen == 1)
+                    this.pasture += progress;
+                else this.woodland += progress;
+            }
+
+
             if (this.WorkforceSaturation > 1f)
             {
                 List<(int, float)> list = new List<(int, float)>();
@@ -622,26 +675,8 @@ namespace BannerKings.Populations
 
                 float construction = this.data.Settlement.IsVillage ? this.data.VillageData.Construction : 
                     new BKConstructionModel().CalculateDailyConstructionPower(this.data.Settlement.Town).ResultNumber;
+                construction *= 0.8f;
                 float progress = 15f / construction;
-
-                if (this.data.Settlement.IsVillage)
-                {
-                    VillageData villageData = data.VillageData;
-                    if (!villageData.IsCurrentlyBuilding)
-                    {
-                        BuildingType type = villageData.CurrentDefault.BuildingType;
-                        if (type != DefaultVillageBuildings.Instance.DailyProduction)
-                        {
-                            if (type == DefaultVillageBuildings.Instance.DailyFarm)
-                                choosen = 0;
-                            else if (type == DefaultVillageBuildings.Instance.DailyPasture)
-                                choosen = 1;
-                            else choosen = 2;
-                        }
-
-                        progress *= 1.25f;
-                    }
-                }
 
                 if (choosen == 0)
                     this.farmland += progress;

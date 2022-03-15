@@ -20,7 +20,7 @@ namespace BannerKings.Managers.Policies
             this.Settlement = settlement;
             this.Selected = selected;
         }
-        public abstract string GetHint();
+        public abstract string GetHint(int value);
         public abstract string GetIdentifier();
         public abstract void OnChange(SelectorVM<BKItemVM> obj);
         public abstract IEnumerable<Enum> GetPolicies();
