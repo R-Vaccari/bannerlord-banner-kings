@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Items>
+    
+	
+	<Item id="bread"
+        name="{=!}Bread{@Plural}loathes of bread{\@}"
+        mesh="merchandise_cheese_b"
+        item_category="bread"
+        IsFood="true"
+        value="25"
+        weight="10"
+        Type="Goods">
+    <ItemComponent>
+      <Trade morale_bonus="1" />
+    </ItemComponent>
+    <Flags Civilian="true" />
+    <Flags />
+  </Item>
+
+</Items>

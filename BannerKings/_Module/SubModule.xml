@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+  <Name value="$modulename$" />
+  <Id value="$modulename$" />
+  <Version value="v$version$" />
+  <DefaultModule value="false"/>
+  <SingleplayerModule value="true"/>
+  <MultiplayerModule value="false"/>
+  <Official value="false"/>
+  <DependedModules>
+    <DependedModule Id="Bannerlord.Harmony" DependentVersion="v2.1.1.65"/>
+    <DependedModule Id="Native" DependentVersion="e1.6.1"/>
+    <DependedModule Id="SandBoxCore" DependentVersion="e1.6.1"/>
+    <DependedModule Id="Sandbox" DependentVersion="e1.6.1"/>
+    <DependedModule Id="StoryMode" DependentVersion="e1.6.1"/>
+  </DependedModules>
+  <SubModules>
+    <SubModule>
+      <Name value="$modulename$" />
+      <DLLName value="$modulename$.dll" />
+      <SubModuleClassType value="$modulename$.Main" />
+      <Tags>
+        <Tag key="DedicatedServerType" value="none" />
+        <Tag key="IsNoRenderModeElement" value="false" />
+      </Tags>
+    </SubModule>
+  </SubModules>
+  <Xmls>
+    <XmlNode>
+      <XmlName path="civillians" id="NPCCharacters"/>
+      <IncludedGameTypes>
+        <GameType value="Campaign"/>
+        <GameType value="CampaignStoryMode"/>
+        <GameType value="CustomGame"/>
+      </IncludedGameTypes>
+    </XmlNode>
+    <XmlNode>
+      <XmlName path="partyTemplates" id="partyTemplates"/>
+      <IncludedGameTypes>
+        <GameType value="Campaign"/>
+        <GameType value="CampaignStoryMode"/>
+        <GameType value="CustomGame"/>
+      </IncludedGameTypes>
+    </XmlNode>
+  </Xmls>
+</Module>

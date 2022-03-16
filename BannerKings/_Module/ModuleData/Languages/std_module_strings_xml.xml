@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<base xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" type="string">
+	<tags>
+		<tag language="English" />
+	</tags>
+	<strings>
+		<string id="pop_class_nobles" text="Nobles" />
+		<string id="pop_class_craftsmen" text="Craftsmen" />
+		<string id="pop_class_serfs" text="Serfs" />
+		<string id="pop_class_slaves" text="Slaves" />
+		
+		<string id="pop_class_serfs_sturgia" text="Lowmen" />
+		<string id="pop_class_serfs_empire" text="Commoners" />
+		<string id="pop_class_serfs_aserai" text="Commoners" />
+		<string id="pop_class_serfs_battania" text="Freemen" />
+		<string id="pop_class_serfs_khuzait" text="Nomads" />
+		<string id="pop_class_serfs_vlandia" text="Serfs" />
+		
+		<string id="pop_class_slaves_sturgia" text="Thralls" />
+		<string id="pop_class_slaves_aserai" text="Mameluke" />
+		<string id="pop_class_slaves_vlandia" text="Slaves" />
+		<string id="pop_class_slaves_battania" text="Slaves" />
+		<string id="pop_class_slaves_empire" text="Slaves" />
+		<string id="pop_class_slaves_khuzait" text="Slaves" />
+		
+		<string id="pop_class_craftsmen_battania" text="Artisans" />
+		<string id="pop_class_craftsmen_khuzait" text="Artisans" />
+		<string id="pop_class_craftsmen_vlandia" text="Craftsmen" />
+		<string id="pop_class_craftsmen_empire" text="Craftsmen" />
+		<string id="pop_class_craftsmen_sturgia" text="Craftsmen" />
+		<string id="pop_class_craftsmen_aserai" text="Craftsmen" />
+		
+		<string id="pop_class_nobles_empire" text="Nobiles" />
+		<string id="pop_class_nobles_sturgia" text="Knyaz" />
+		<string id="pop_class_nobles_vlandia" text="Ealdormen" />
+		<string id="pop_class_nobles_battania" text="Nobles" />
+		<string id="pop_class_nobles_aserai" text="Nobles" />
+		<string id="pop_class_nobles_khuzait" text="Nobles" />
+		
+	</strings>
+</base>

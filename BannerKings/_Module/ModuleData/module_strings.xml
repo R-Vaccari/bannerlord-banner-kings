@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<base xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" type="string">
+	<strings>
+		<string id="str_pop_class_nobles" text="{=pop_class_nobles}Nobles" />
+		<string id="str_pop_class_craftsmen" text="{=pop_class_craftsmen}Craftsmen" />
+		<string id="str_pop_class_serfs" text="{=pop_class_serfs}Serfs" />
+		<string id="str_pop_class_slaves" text="{=pop_class_slaves}Slaves" />
+		
+		<string id="str_pop_class_serfs_sturgia" text="{=pop_class_serfs_sturgia}Lowmen" />
+		<string id="str_pop_class_serfs_empire" text="{=pop_class_serfs_empire}Commoners" />
+		<string id="str_pop_class_serfs_aserai" text="{=pop_class_serfs_aserai}Commoners" />
+		<string id="str_pop_class_serfs_battania" text="{=pop_class_serfs_battania}Freemen" />
+		<string id="str_pop_class_serfs_khuzait" text="{=pop_class_serfs_khuzait}Nomads" />
+		<string id="str_pop_class_serfs_vlandia" text="{=pop_class_serfs_vlandia}Serfs" />
+		
+		<string id="str_pop_class_slaves_sturgia" text="{=pop_class_slaves_sturgia}hralls" />
+		<string id="str_pop_class_slaves_aserai" text="{=pop_class_slaves_aserai}Mameluke" />
+		<string id="str_pop_class_slaves_vlandia" text="{=pop_class_slaves_vlandia}Slaves" />
+		<string id="str_pop_class_slaves_battania" text="{=pop_class_slaves_battania}Slaves" />
+		<string id="str_pop_class_slaves_empire" text="{=pop_class_slaves_empire}Slaves" />
+		<string id="str_pop_class_slaves_khuzait" text="{=pop_class_slaves_khuzait}Slaves" />
+		
+		<string id="str_pop_class_craftsmen_battania" text="{=pop_class_craftsmen_battania}Artisans" />
+		<string id="str_pop_class_craftsmen_khuzait" text="{=pop_class_craftsmen_khuzait}Artisans" />
+		<string id="str_pop_class_craftsmen_vlandia" text="{=pop_class_craftsmen_vlandia}Craftsmen" />
+		<string id="str_pop_class_craftsmen_empire" text="{=pop_class_craftsmen_empire}Craftsmen" />
+		<string id="str_pop_class_craftsmen_sturgia" text="{=pop_class_craftsmen_sturgia}Craftsmen" />
+		<string id="str_pop_class_craftsmen_aserai" text="{=pop_class_craftsmen_aserai}Craftsmen" />
+		
+		<string id="str_pop_class_nobles_empire" text="{=pop_class_nobles_empire}Nobiles" />
+		<string id="str_pop_class_nobles_sturgia" text="{=}pop_class_nobles_sturgiaKnyaz" />
+		<string id="str_pop_class_nobles_vlandia" text="{pop_class_nobles_vlandia=}Ealdormen" />
+		<string id="str_pop_class_nobles_battania" text="{=pop_class_nobles_battania}Nobles" />
+		<string id="str_pop_class_nobles_aserai" text="{=pop_class_nobles_aserai}Nobles" />
+		<string id="str_pop_class_nobles_khuzait" text="{=pop_class_nobles_khuzait}Nobles" />
+		
+		
+		
+		<string id="str_feudalism_contract_header" text="{=feudalism_contract_header}Enfoeffement Contract for {0}" />
+		<string id="str_feudalism_contract_paragraph" text="{=str_feudalism_contract_paragraph}You, {0}, formally accept to be henceforth bound to the {1}, fulfill your duties as well as uphold your rights," +
+                " what can not be undone by means other than abdication of all rights and lands associated with the contract, treachery, or death." />
+		<string id="str_feudalism_contract_duties" text="{=feudalism_contract_duties}Duties" />
+		<string id="str_feudalism_contract_rights" text="{=feudalism_contract_rights}Rights" />
+		
+		
+	</strings>
+</base>
