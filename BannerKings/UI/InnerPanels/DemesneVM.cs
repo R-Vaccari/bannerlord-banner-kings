@@ -3,9 +3,13 @@ using BannerKings.Models;
 using BannerKings.Populations;
 using BannerKings.UI.Items;
 using System;
+using System.Text;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.ViewModelCollection;
+using TaleWorlds.Core;
 using TaleWorlds.Core.ViewModelCollection;
 using TaleWorlds.Library;
+using TaleWorlds.Localization;
 using static BannerKings.Managers.TitleManager;
 
 namespace BannerKings.UI
@@ -17,13 +21,12 @@ namespace BannerKings.UI
 		private MBBindingList<InformationElement> demesneInfo, landInfo, terrainInfo, workforceInfo, governmentInfo;
 		private FeudalTitle title;
 		private FeudalTitle duchy;
-		private (bool, string) _titleUsurpable;
+		private (bool, string) isTitleUsurpable;
 		private (bool, string) _duchyUsurpable;
 		private UsurpCosts costs;
 		private UsurpCosts duchyCosts;
 		private BKUsurpationModel model;
 		private bool _contractEnabled;
-		private bool _usurpEnabled;
 		private bool _usurpDuchyEnabled;
 		private SelectorVM<BKItemVM> workforceVM;
 		private BKWorkforcePolicy workforceItem;
@@ -39,13 +42,17 @@ namespace BannerKings.UI
 			this.terrainInfo = new MBBindingList<InformationElement>();
 			this.workforceInfo = new MBBindingList<InformationElement>();
 			this.duchy = BannerKingsConfig.Instance.TitleManager.GetDuchy(this.title);
-			/*
+
 			this.model = new BKUsurpationModel();
-			this.costs = model.GetUsurpationCosts(_title, Hero.MainHero);
+			this.costs = model.GetUsurpationCosts(title, Hero.MainHero);
+			this._contractEnabled = BannerKingsConfig.Instance.TitleManager.IsHeroTitleHolder(Hero.MainHero) && Clan.PlayerClan.Kingdom != null;
+			this.isTitleUsurpable = model.IsUsurpable(title, Hero.MainHero);
+			/*
+			
+			
 			
 			this.duchyCosts = model.GetUsurpationCosts(_duchy, Hero.MainHero);
-			this._contractEnabled = BannerKingsConfig.Instance.TitleManager.IsHeroTitleHolder(Hero.MainHero) && Clan.PlayerClan.Kingdom != null;
-			this._usurpEnabled = _title.deJure != Hero.MainHero;
+			
 			this._usurpDuchyEnabled = this._duchy.deJure != Hero.MainHero;
 			if (title.vassals != null)
 				foreach (FeudalTitle vassal in title.vassals)
@@ -107,6 +114,8 @@ namespace BannerKings.UI
 			}
 
 			DeJure = new HeroVM(title.deJure, false);
+
+			this.isTitleUsurpable = model.IsUsurpable(title, Hero.MainHero);
 		}
 
 		[DataSourceProperty]
@@ -123,16 +132,36 @@ namespace BannerKings.UI
 			}
 		}
 
-		/*
+		
 		private void OnUsurpPress()
 		{
-			bool usurpable = _titleUsurpable.Item1;
+			bool usurpable = isTitleUsurpable.Item1;
 			if (usurpable)
-				BannerKingsConfig.Instance.TitleManager.UsurpTitle(_title.deJure, Hero.MainHero, _title, costs);
-			else InformationManager.DisplayMessage(new InformationMessage(_titleUsurpable.Item2));
+				BannerKingsConfig.Instance.TitleManager.UsurpTitle(title.deJure, Hero.MainHero, title, costs);
+			else InformationManager.DisplayMessage(new InformationMessage(isTitleUsurpable.Item2));
 			RefreshValues();
 		}
 
+		[DataSourceProperty]
+		public HintViewModel UsurpHint
+		{
+			get
+			{
+				UsurpCosts costs = model.GetUsurpationCosts(title, Hero.MainHero);
+				StringBuilder sb = new StringBuilder("Usurp this title from it's owner, making you the lawful ruler of this settlement. Usurping from lords within your kingdom degrades your clan's reputation.");
+				sb.Append(Environment.NewLine);
+				sb.Append("Costs:");
+				sb.Append(Environment.NewLine);
+				sb.Append(string.Format("{0} gold.", (int)costs.gold));
+				sb.Append(Environment.NewLine);
+				sb.Append(string.Format("{0} influence.", (int)costs.influence));
+				sb.Append(Environment.NewLine);
+				sb.Append(string.Format("{0} renown.", (int)costs.renown));
+				return new HintViewModel(new TextObject(sb.ToString()));
+			}
+		}
+
+		/*
 		private void OnDuchyUsurpPress()
 		{
 			bool usurpable = _duchyUsurpable.Item1;
@@ -287,24 +316,7 @@ namespace BannerKings.UI
 			}
 		}
 
-		[DataSourceProperty]
-		public HintViewModel UsurpHint
-		{
-			get
-			{
-				UsurpCosts costs = model.GetUsurpationCosts(_title, Hero.MainHero);
-				StringBuilder sb = new StringBuilder("Usurp this title from it's owner, making you the lawful ruler of this settlement. Usurping from lords within your kingdom degrades your clan's reputation.");
-				sb.Append(Environment.NewLine);
-				sb.Append("Costs:");
-				sb.Append(Environment.NewLine);
-				sb.Append(string.Format("{0} gold.", (int)costs.gold));
-				sb.Append(Environment.NewLine);
-				sb.Append(string.Format("{0} influence.", (int)costs.influence));
-				sb.Append(Environment.NewLine);
-				sb.Append(string.Format("{0} renown.", (int)costs.renown));
-				return new HintViewModel(new TextObject(sb.ToString()));
-			}
-		}
+		
 
 		[DataSourceProperty]
 		public HintViewModel UsurpDuchyHint
