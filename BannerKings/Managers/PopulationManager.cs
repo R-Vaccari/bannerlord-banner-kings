@@ -1,47 +1,87 @@
 ﻿using BannerKings.Components;
-using BannerKings.Models;
+using BannerKings.Managers.Populations.Villages;
+using BannerKings.Populations;
 using System;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
-using TaleWorlds.Library;
 using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Managers
 {
     public class PopulationManager
     {
-        [SaveableProperty(100)]
-        private Dictionary<Settlement, PopulationData> POPS { get; set; }
+        [SaveableProperty(1)]
+        private Dictionary<Settlement, PopulationData> Populations { get; set; }
 
-        [SaveableProperty(101)]
-        private List<MobileParty> CARAVANS { get; set; }
+        [SaveableProperty(2)]
+        private List<MobileParty> Caravans { get; set; }
 
         public PopulationManager(Dictionary<Settlement, PopulationData> pops, List<MobileParty> caravans)
         {
-            this.POPS = pops;
-            this.CARAVANS = caravans;
+            this.Populations = pops;
+            this.Caravans = caravans;
         }
 
         public bool IsSettlementPopulated(Settlement settlement)
         {
-            if (POPS != null) return POPS.ContainsKey(settlement);
+            if (Populations != null) return Populations.ContainsKey(settlement);
             else return false;
         }
-        public PopulationData GetPopData(Settlement settlement) => POPS[settlement];
-        public void AddSettlementData(Settlement settlement, PopulationData data) => POPS.Add(settlement, data);
-        public bool IsPopulationParty(MobileParty party) => CARAVANS.Contains(party);
-        public void AddParty(MobileParty party) => CARAVANS.Add(party);
-        public void RemoveCaravan(MobileParty party) => CARAVANS.Remove(party);
+
+        public PopulationData GetPopData(Settlement settlement) 
+        {
+            if (Populations.ContainsKey(settlement)) return Populations[settlement];
+            InitializeSettlementPops(settlement);
+            return Populations[settlement];
+        }
+
+        public void AddSettlementData(Settlement settlement, PopulationData data) => Populations.Add(settlement, data);
+        public bool IsPopulationParty(MobileParty party) => Caravans.Contains(party);
+        public void AddParty(MobileParty party) => Caravans.Add(party);
+        public void RemoveCaravan(MobileParty party)
+        {
+            if (Caravans.Contains(party))
+                Caravans.Remove(party);
+        }
 
         public List<MobileParty> GetClanMilitias(Clan clan)
         {
             List<MobileParty> list = new List<MobileParty>();
-            foreach (MobileParty party in CARAVANS)
+            foreach (MobileParty party in Caravans)
                 if (party.PartyComponent is MilitiaComponent && party.Owner.Clan == clan)
                     list.Add(party);
             
             return list;
+        }
+
+        public List<(ItemObject, float)> GetProductions(VillageData villageData)
+        {
+            List<(ItemObject, float)> productions = new List<(ItemObject, float)>(villageData.Village.VillageType.Productions);
+
+            float tannery = villageData.GetBuildingLevel(DefaultVillageBuildings.Instance.Tannery);
+            if (tannery > 0)
+            {
+                /*ItemObject randomItem = this.GetRandomItem(production.Outputs[i].Item1, town);
+                if (randomItem != null)
+                {
+                    list.Add(new ValueTuple<ItemObject, int>(randomItem, item));
+                    num3 += town.GetItemPrice(randomItem, null, true) * item;
+                } WorkshopCampaignBehavior for reference how to add arms to production    */
+                productions.Add(new ValueTuple<ItemObject, float>(Game.Current.ObjectManager.GetObject<ItemObject>("leather"), tannery * 0.5f));
+            }
+
+            float smith = villageData.GetBuildingLevel(DefaultVillageBuildings.Instance.Blacksmith);
+            if (smith > 0)
+                productions.Add(new ValueTuple<ItemObject, float>(Game.Current.ObjectManager.GetObject<ItemObject>("tools"), smith * 0.5f));
+
+            return productions;
+        }
+
+        public void ApplyProductionBuildingEffect(ref ExplainedNumber explainedNumber, BuildingType type, VillageData data)
+        {
+            int level = data.GetBuildingLevel(type);
+            if (level > 0) explainedNumber.AddFactor(level * 0.05f);
         }
 
         public static void InitializeSettlementPops(Settlement settlement)
@@ -61,7 +101,7 @@ namespace BannerKings.Managers
             classes.Add(new PopulationClass(PopType.Slaves, slaves));
 
             float assimilation = settlement.Culture == settlement.OwnerClan.Culture ? 1f : 0f;
-            PopulationData data = new PopulationData(classes, assimilation);
+            PopulationData data = new PopulationData(classes, settlement, assimilation);
             BannerKingsConfig.Instance.PopulationManager.AddSettlementData(settlement, data);
         }
 
@@ -86,9 +126,8 @@ namespace BannerKings.Managers
                     InitializeSettlementPops(settlement);
                 else
                 {
-                    new GrowthModel().CalculatePopulationGrowth(settlement);
-                    new CultureModel().CalculateAssimilationChange(settlement);
-                    new StabilityModel().CalculateStabilityChange(settlement);
+                    PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
+                    data.Update(null);
                 }  
             }
         }
@@ -100,7 +139,7 @@ namespace BannerKings.Managers
             if (settlement.IsCastle)
             {
                 float prosperityFactor = (0.0001f * settlement.Prosperity) + 1f;
-                return MBRandom.RandomInt((int)(900 * prosperityFactor), (int)(1200 * prosperityFactor));
+                return MBRandom.RandomInt((int)(2000 * prosperityFactor), (int)(3000 * prosperityFactor));
             }
             else if (settlement.IsVillage)
                 return MBRandom.RandomInt((int)settlement.Village.Hearth * 4, (int)settlement.Village.Hearth * 6);
@@ -134,8 +173,8 @@ namespace BannerKings.Managers
             if (settlement.IsCastle)
                 return new Dictionary<PopType, float[]>()
                 {
-                    { PopType.Nobles, new float[] {0.02f, 0.06f} },
-                    { PopType.Craftsmen, new float[] {0.06f, 0.09f} },
+                    { PopType.Nobles, new float[] {0.07f, 0.09f} },
+                    { PopType.Craftsmen, new float[] {0.03f, 0.05f} },
                     { PopType.Serfs, new float[] {0.75f, 0.8f} },
                     { PopType.Slaves, new float[] {0.1f, 0.15f} }
                 };
@@ -144,21 +183,21 @@ namespace BannerKings.Managers
                 if (IsVillageProducingFood(settlement.Village))
                     return new Dictionary<PopType, float[]>()
                     {
-                        { PopType.Nobles, new float[] {0.025f, 0.045f} },
+                        { PopType.Nobles, new float[] {0.035f, 0.055f} },
                         { PopType.Serfs, new float[] {0.7f, 0.8f} },
                         { PopType.Slaves, new float[] {0.1f, 0.2f} }
                     };
                 else if (IsVillageAMine(settlement.Village))
                     return new Dictionary<PopType, float[]>()
                     {
-                        { PopType.Nobles, new float[] {0.01f, 0.02f} },
+                        { PopType.Nobles, new float[] {0.02f, 0.04f} },
                         { PopType.Serfs, new float[] {0.3f, 0.4f} },
                         { PopType.Slaves, new float[] {0.6f, 0.7f} }
                     };
                 else
                     return new Dictionary<PopType, float[]>()
                     {
-                        { PopType.Nobles, new float[] {0.01f, 0.02f} },
+                        { PopType.Nobles, new float[] {0.025f, 0.045f} },
                         { PopType.Serfs, new float[] {0.5f, 0.7f} },
                         { PopType.Slaves, new float[] {0.4f, 0.5f} }
                     };
@@ -181,182 +220,6 @@ namespace BannerKings.Managers
 
         public static bool IsVillageAMine(Village village) => village.VillageType == DefaultVillageTypes.SilverMine || village.VillageType == DefaultVillageTypes.IronMine ||
                 village.VillageType == DefaultVillageTypes.SaltMine || village.VillageType == DefaultVillageTypes.ClayMine;
-
-
-        public class PopulationData
-        {
-            [SaveableProperty(1)]
-            private List<PopulationClass> classes { get; set; }
-
-            [SaveableProperty(2)]
-            private int totalPop { get; set; }
-
-            [SaveableProperty(3)]
-            private float assimilation { get; set; }
-
-            [SaveableProperty(4)]
-            private float[] satisfactions { get; set; }
-
-            [SaveableProperty(5)]
-            private float stability { get; set; }
-
-            public PopulationData(List<PopulationClass> classes, float assimilation)
-            {
-                this.classes = classes;
-                classes.ForEach(popClass => TotalPop += popClass.count);
-                this.assimilation = assimilation;
-                this.satisfactions = new float[] { 0.5f, 0.5f, 0.5f, 0.5f };
-                this.stability = 0.5f;
-            }
-
-            public float Stability
-            {
-                get => this.stability;
-                set
-                {
-                    if (value != stability)
-                        stability = value;
-                }
-            }
-
-            public float Assimilation
-            {
-                get => assimilation;          
-                set
-                {
-                    if (value != assimilation)
-                        assimilation = value;
-                }
-            }
-
-            public List<PopulationClass> Classes
-            {
-                get => classes;           
-                set
-                {
-                    if (value != classes)
-                        classes = value;
-                }
-            }
-
-            public int TotalPop
-            {
-                get => totalPop;
-                set
-                {
-                    if (value != totalPop)
-                        totalPop = value;
-                }
-            }
-
-            public float[] GetSatisfactions()
-            {
-                if (satisfactions == null) this.satisfactions = new float[] { 0.5f, 0.5f, 0.5f, 0.5f };
-                return satisfactions;
-            }
-            public void UpdateSatisfaction(ConsumptionType type, float value)
-            {
-                if (this.satisfactions == null) this.satisfactions = new float[] { 0.5f, 0.5f, 0.5f, 0.5f };
-                float current = this.satisfactions[(int)type];
-                this.satisfactions[(int)type] = MathF.Clamp(current + value, 0f, 1f);
-            }
-
-            public void UpdatePopulation(Settlement settlement, int pops, PopType target)
-            {
-                if (target == PopType.None)
-                {
-                    if (settlement.Owner == Hero.MainHero)
-                        InformationManager.DisplayMessage(new InformationMessage());
-                    bool divisibleNegative = ((float)pops * -1f) > 20;
-                    if (pops > 20 || divisibleNegative)
-                    {
-                        int fractions = (int)((float)pops / (divisibleNegative ? -20f : 20f));
-                        int reminder = pops % 20;
-                        for (int i = 0; i < fractions; i++)
-                        {
-                            SelectAndUpdatePop(settlement, divisibleNegative ? -20 : 20);
-                        }
-                        SelectAndUpdatePop(settlement, divisibleNegative ? -reminder  : reminder);
-                    }
-                    else SelectAndUpdatePop(settlement, pops);
-                }
-                else UpdatePopType(target, pops);
-            }
-
-            private void SelectAndUpdatePop(Settlement settlement, int pops)
-            {
-                if (pops != 0)
-                {
-                    Dictionary<PopType, float[]> desiredTypes = GetDesiredPopTypes(settlement);
-                    List<ValueTuple<PopType, float>> typesList = new List<ValueTuple<PopType, float>>();
-                    classes.ForEach(popClass =>
-                    {
-                        PopType type = popClass.type;
-                        if (pops < 0 && popClass.count >= pops)
-                        {
-                            bool hasExcess = GetCurrentTypeFraction(type) > desiredTypes[type][1];
-                            typesList.Add(new ValueTuple<PopType, float>(popClass.type, desiredTypes[type][0] * (hasExcess ? 2f : 1f)));
-                        }
-                        else if (pops > 0)
-                        {
-                            bool isLacking = GetCurrentTypeFraction(type) < desiredTypes[type][0];
-                            typesList.Add(new ValueTuple<PopType, float>(popClass.type, desiredTypes[type][0] * (isLacking ? 2f : 1f)));
-                        }
-                    });
-
-                    PopType targetType = MBRandom.ChooseWeighted(typesList);
-                    UpdatePopType(targetType, pops);
-                }
-            }
-
-            public void UpdatePopType(PopType type, int count)
-            {
-                if (type != PopType.None)
-                {
-                    PopulationClass pops = classes.Find(popClass => popClass.type == type);
-                    if (pops == null)
-                        pops = new PopulationClass(type, 0);
-
-                    pops.count += count;
-                    if (pops.count < 0) pops.count = 0;
-                    RefreshTotal();
-                }
-            }
-
-            public int GetTypeCount(PopType type)
-            {
-                PopulationClass targetClass = classes.Find(popClass => popClass.type == type);
-                return targetClass != null ? targetClass.count : 0;
-            }
-
-            public float GetCurrentTypeFraction(PopType type)
-            {
-                RefreshTotal();
-                return (float)GetTypeCount(type) / (float)TotalPop;
-            }
-
-            private void RefreshTotal()
-            {
-                int pops = 0;
-                classes.ForEach(popClass => pops += popClass.count);
-                TotalPop = pops;
-            }
-        }
-
-        public class PopulationClass
-        {
-            [SaveableProperty(1)]
-            public PopType type { get; set; }
-
-            [SaveableProperty(2)]
-            public int count { get; set; }
-
-            public PopulationClass(PopType type, int count)
-            {
-                this.type = type;
-                this.count = count;
-            }
-        }
 
         public enum PopType
         {

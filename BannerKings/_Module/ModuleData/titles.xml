@@ -65,7 +65,7 @@
 		</kingdom>
 		
 		<kingdom faction="Sturgia" contract="tribal" deJure="lord_2_1">
-			<duchy name="Kachyar" deJure="lord_5_1">
+			<duchy name="Kachyar" deJure="lord_2_1">
 				<county settlement="Revyl" deJure="lord_2_17">
 					<barony settlement="Ustokol Castle" deJure="lord_2_17"/>
 					<barony settlement="Nevyansk Castle" deJure="lord_2_1"/>
@@ -89,7 +89,163 @@
 			</duchy>
 		</kingdom>
 		
+		
+		<kingdom faction="Northern Empire" contract="republic" deJure="lord_1_1">
+			<duchy name="Lakonia" deJure="lord_1_3">
+				<county settlement="Epicrotea" deJure="lord_1_3">
+					<barony settlement="Mecalovea Castle" deJure="lord_1_1"/>
+					<barony settlement="Ataconia Castle" deJure="lord_1_3"/>
+				</county>
+				<county settlement="Diathma" deJure="lord_1_1">
+					<barony settlement="Rhesos Castle" deJure="lord_NE9_l"/>
+				</county>
+			</duchy>
+			<duchy name="Nevys" deJure="lord_1_1">
+				<county settlement="Saneopa" deJure="lord_1_5">
+					<barony settlement="Varagos Castle" deJure="lord_1_5"/>
+				</county>
+				<county settlement="Argoron" deJure="lord_1_1">
+					<barony settlement="Atrion Castle" deJure="lord_1_1"/>
+				</county>
+			</duchy>
+			<duchy name="Myzead" deJure="lord_1_64">
+				<county settlement="Myzea" deJure="lord_1_50">
+					<barony settlement="Gaos Castle" deJure="lord_1_5"/>
+				</county>
+				<county settlement="Amprela" deJure="lord_1_64">
+					<barony settlement="Lochana Castle" deJure="lord_1_51"/>
+					<barony settlement="Epinosa Castle" deJure="lord_1_58"/>
+				</county>
+			</duchy>
+		</kingdom>
+		
+		<kingdom faction="Western Empire" contract="imperial" deJure="lord_1_7">
+			<duchy name="Gavys" deJure="lord_1_9">
+				<county settlement="Ortysia" deJure="lord_1_9">
+					<barony settlement="Garontor Castle" deJure="lord_1_9"/>
+					<barony settlement="Thractorae Castle" deJure="lord_1_11"/>
+				</county>
+				<county settlement="Lageta" deJure="lord_1_11">
+					<barony settlement="Hertogea Castle" deJure="lord_1_71"/>
+				</county>
+			</duchy>
+			<duchy name="Perassica" deJure="lord_1_7">
+				<county settlement="Jalmarys" deJure="lord_1_7">
+					<barony settlement="Oristocorys Castle" deJure="lord_WE9_l"/>
+				</county>
+				<county settlement="Zeonica" deJure="lord_1_7">
+					<barony settlement="Onica Castle" deJure="lord_1_7"/>
+				</county>
+			</duchy>
+			<duchy name="Aria" deJure="lord_1_40">
+				<county settlement="Rhotae" deJure="lord_1_45">
+					<barony settlement="Gersegos Castle" deJure="lord_1_52"/>
+				</county>
+				<county settlement="Amitatys" deJure="lord_1_40">
+					<barony settlement="Thorios Castle" deJure="lord_1_40"/>
+				</county>
+			</duchy>
+		</kingdom>
+		
+		<kingdom faction="Southern Empire" contract="imperial" deJure="lord_1_14">
+			<duchy name="Ornia" deJure="lord_1_14">
+				<county settlement="Lycaron" deJure="lord_1_14">
+					<barony settlement="Sestadaim Castle" deJure="lord_1_14"/>
+				</county>
+				<county settlement="Poros" deJure="lord_1_15"/>
+			</duchy>
+			<duchy name="Sethys" deJure="lord_1_54">
+				<county settlement="Phycaon" deJure="lord_1_54">
+					<barony settlement="Chanopsis Castle" deJure="lord_1_14"/>
+				</county>
+				<county settlement="Vostrum" deJure="lord_1_30">
+					<barony settlement="Morenia Castle" deJure="lord_1_72"/>
+				</county>
+			</duchy>
+			<duchy name="Calsea" deJure="lord_1_17">
+				<county settlement="Danustica" deJure="lord_1_17">
+					<barony settlement="Lavenia Castle" deJure="lord_1_17"/>
+					<barony settlement="Odryssa Castle" deJure="lord_1_17"/>
+				</county>
+				<county settlement="Onira" deJure="lord_1_14">
+					<barony settlement="Corenia Castle" deJure="lord_1_63"/>
+				</county>
+			</duchy>
+			<duchy name="Tanaesis" deJure="lord_1_63">
+				<county settlement="Syronea" deJure="lord_1_63">
+					<barony settlement="Melion Castle" deJure="lord_1_55"/>
+					<barony settlement="Jogurys Castle" deJure="lord_SE9_l"/>
+				</county>
+			</duchy>
+		</kingdom>
+		
+		
+		<kingdom faction="Aserai" contract="feudal" deJure="lord_3_1">
+			<duchy name="1" deJure="lord_3_1">
+				<county settlement="Quyaz" deJure="lord_3_1">
+					<barony settlement="Tubilis Castle" deJure="lord_3_1"/>
+				</county>
+				<county settlement="Sanala" deJure="lord_3_1">
+					<barony settlement="Uqba Castle" deJure="lord_3_19"/>
+					<barony settlement="Ain Baliq Castle" deJure="lord_3_19"/>
+				</county>
+			</duchy>
+			<duchy name="2" deJure="lord_3_16">
+				<county settlement="Askar" deJure="lord_3_17">
+					<barony settlement="Barihal Castle" deJure="lord_A9_l"/>
+				</county>
+				<county settlement="Iyakis" deJure="lord_3_16">
+					<barony settlement="Jamayeh Castle" deJure="lord_3_16"/>
+				</county>
+			</duchy>
+			<duchy name="2" deJure="lord_3_5">
+				<county settlement="Qasira" deJure="lord_3_18">
+					<barony settlement="Medeni Castle" deJure="lord_3_3"/>
+				</county>
+				<county settlement="Hubyar" deJure="lord_3_5">
+					<barony settlement="Sahel Castle" deJure="lord_3_5"/>
+				</county>
+			</duchy>
+			<duchy name="2" deJure="lord_3_3">
+				<county settlement="Razih" deJure="lord_3_3">
+					<barony settlement="Tamnuh Castle" deJure="lord_3_22"/>
+				</county>
+				<county settlement="Husn Fulq" deJure="lord_3_3">
+					<barony settlement="Shibal Zumr Castle" deJure="lord_3_5"/>
+				</county>
+			</duchy>
+		</kingdom>
+		
+		<kingdom faction="Khuzait" contract="tribal" deJure="lord_6_1">
+			<duchy name="1" deJure="lord_6_17">
+				<county settlement="Odokh" deJure="lord_6_17">
+					<barony settlement="Simira Castle" deJure="lord_6_19"/>
+				</county>
+				<county settlement="Akkalat" deJure="lord_6_16">
+					<barony settlement="Erzenur Castle" deJure="lord_K9_l"/>
+				</county>
+			</duchy>
+			<duchy name="1" deJure="lord_6_1">
+				<county settlement="Chaikand" deJure="lord_6_1">
+					<barony settlement="Usek Castle" deJure="lord_6_5"/>
+				</county>
+				<county settlement="Makeb" deJure="lord_6_1">
+					<barony settlement="Tepes Castle" deJure="lord_6_1"/>
+				</county>
+			</duchy>
+			<duchy name="1" deJure="lord_6_5">
+				<county settlement="Ortongard" deJure="lord_6_5">
+					<barony settlement="Hakkun Castle" deJure="lord_6_20"/>
+					<barony settlement="Khimli Castle" deJure="lord_6_19"/>
+				</county>
+			</duchy>
+			<duchy name="1" deJure="lord_6_4">
+				<county settlement="Baltakhand" deJure="lord_6_4">
+					<barony settlement="Kaysar Castle" deJure="lord_6_18"/>
+					<barony settlement="Dinar Castle" deJure="lord_6_18"/>
+				</county>
+			</duchy>
+		</kingdom>
+		
     </titles>
-	
-	
 </base>

@@ -7,6 +7,7 @@ using static BannerKings.Managers.PopulationManager;
 using TaleWorlds.SaveSystem;
 using System.Collections.Generic;
 using TaleWorlds.ObjectSystem;
+using BannerKings.Populations;
 
 namespace BannerKings.Components
 {
@@ -52,16 +53,6 @@ namespace BannerKings.Components
         }
 
         public static void CreateSlaveCaravan(string id, Settlement origin, Settlement target, string name, int slaves)
-        {
-            MobileParty caravan = CreateParty(id, origin, true, target, name, PopType.None);
-            caravan.AddPrisoner(CharacterObject.All.FirstOrDefault(x => x.StringId == "looter"), slaves);
-            caravan.InitializeMobilePartyAtPosition(origin.Culture.EliteCaravanPartyTemplate, origin.GatePosition);
-            GiveMounts(ref caravan);
-            GiveFood(ref caravan);
-            BannerKingsConfig.Instance.PopulationManager.AddParty(caravan);
-        }
-
-        public static void CreateMilitiaParty(string id, Settlement origin, Settlement target, string name, int slaves)
         {
             MobileParty caravan = CreateParty(id, origin, true, target, name, PopType.None);
             caravan.AddPrisoner(CharacterObject.All.FirstOrDefault(x => x.StringId == "looter"), slaves);

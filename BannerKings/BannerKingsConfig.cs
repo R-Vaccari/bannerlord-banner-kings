@@ -2,8 +2,14 @@
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using static BannerKings.Managers.TitleManager;
-using static BannerKings.Managers.PolicyManager;
-using static BannerKings.Managers.PopulationManager;
+using BannerKings.Populations;
+using BannerKings.Models;
+using BannerKings.Managers.Policies;
+using BannerKings.Managers.Decisions;
+using BannerKings.Models.Populations;
+using TaleWorlds.Library;
+using BannerKings.Managers.Populations.Villages;
+using BannerKings.Managers.Court;
 
 namespace BannerKings
 {
@@ -13,23 +19,43 @@ namespace BannerKings
         public PopulationManager PopulationManager;
         public PolicyManager PolicyManager;
         public TitleManager TitleManager;
+        public CourtManager CourtManager;
+        public HashSet<IBannerKingsModel> Models = new HashSet<IBannerKingsModel>();
+        public MBReadOnlyList<BuildingType> VillageBuildings { get; set; }
 
-        public void InitManagers(Dictionary<Settlement, PopulationData> pops, List<MobileParty> caravans, Dictionary<Settlement, List<PolicyElement>> policies,
-            Dictionary<Settlement, TaxType> taxes, Dictionary<Settlement, MilitiaPolicy> militias, Dictionary<Settlement, WorkforcePolicy> workforce, 
-            Dictionary<Settlement, TariffType> tariffs, Dictionary<Settlement, CriminalPolicy> criminal, 
-            HashSet<FeudalTitle> titles, Dictionary<Hero, HashSet<FeudalTitle>> titleHolders, Dictionary<Kingdom, FeudalTitle> kingdoms)
+        public void InitManagers()
         {
-            this.PopulationManager = new PopulationManager(pops, caravans);
-            this.PolicyManager = new PolicyManager(policies, taxes, militias, workforce, tariffs, criminal);
-            this.TitleManager = new TitleManager(titles, titleHolders, kingdoms);
+            DefaultVillageBuildings.Instance.Init();
+            this.PopulationManager = new PopulationManager(new Dictionary<Settlement, PopulationData>(), new List<MobileParty>());
+            this.PolicyManager = new PolicyManager(new Dictionary<Settlement, List<BannerKingsDecision>>(), new Dictionary<Settlement,
+            List<BannerKingsPolicy>>());
+            this.TitleManager = new TitleManager(new Dictionary<FeudalTitle, Hero>(), new Dictionary<Hero, List<FeudalTitle>>(), new Dictionary<Kingdom, FeudalTitle>());
+            this.CourtManager = new CourtManager(new Dictionary<Clan, CouncilData>());
+            this.InitModels();
         }
 
-        public void InitManagers(PopulationManager populationManager, PolicyManager policyManager, TitleManager titleManager)
+        public void InitManagers(PopulationManager populationManager, PolicyManager policyManager, TitleManager titleManager, CourtManager court)
         {
+            DefaultVillageBuildings.Instance.Init();
             this.PopulationManager = populationManager;
             this.PolicyManager = policyManager;
-            this.TitleManager = titleManager != null ? titleManager : new TitleManager(new HashSet<FeudalTitle>(), new Dictionary<Hero, HashSet<FeudalTitle>>(),
+            this.TitleManager = titleManager != null ? titleManager : new TitleManager(new Dictionary<FeudalTitle, Hero>(), new Dictionary<Hero, List<FeudalTitle>>(),
                 new Dictionary<Kingdom, FeudalTitle>());
+            this.CourtManager = court;
+            this.InitModels();
+        }
+
+        private void InitModels()
+        {
+            this.Models.Add(new BKCultureAssimilationModel());
+            this.Models.Add(new BKCultureAcceptanceModel());
+            this.Models.Add(new BKAdministrativeModel());
+            this.Models.Add(new BKLegitimacyModel());
+            this.Models.Add(new BKUsurpationModel());
+            this.Models.Add(new BKStabilityModel());
+            this.Models.Add(new BKGrowthModel());
+            this.Models.Add(new BKEconomyModel());
+            this.Models.Add(new BKCaravanAttractionModel());
         }
 
         public static BannerKingsConfig Instance

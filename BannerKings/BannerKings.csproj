@@ -5,10 +5,10 @@
     <TargetFramework>net472</TargetFramework>
     <Platforms>x64</Platforms>
     <LangVersion>9.0</LangVersion>
-    <Nullable>disable</Nullable>
+    <Nullable>enable</Nullable>
     <ModuleName>$(MSBuildProjectName)</ModuleName>
     <GameFolder>$(BANNERLORD_GAME_DIR)</GameFolder>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
     <Configurations>Debug;Release</Configurations>
     <AssemblyName>BannerKings</AssemblyName>
     <RootNamespace>BannerKings</RootNamespace>
@@ -25,10 +25,11 @@
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <WarningsAsErrors />
     <WarningLevel>4</WarningLevel>
-    <DefineConstants>DEBUG;;RELEASE;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;RELEASE</DefineConstants>
     <Optimize>false</Optimize>
     <DebugType>full</DebugType>
     <DebugSymbols>true</DebugSymbols>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
 
   <ItemGroup>
@@ -288,6 +289,7 @@
       <HintPath>D:\SteamLibrary\steamapps\common\Mount &amp; Blade II Bannerlord\bin\Win64_Shipping_Client\TaleWorlds.SaveSystem.dll</HintPath>
       <Private>false</Private>
     </Reference>
+	
   </ItemGroup>
 
   <ItemGroup>
@@ -303,6 +305,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+	<PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0"> <ExcludeAssets>Build</ExcludeAssets></PackageReference>
   </ItemGroup>
 
   <ItemGroup>
@@ -327,10 +330,6 @@
       <Private>false</Private>
     </Reference>
   </ItemGroup>
-
-  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="if exist &quot;$(TargetPath).locked&quot; del &quot;$(TargetPath).locked&quot;&#xD;&#xA;if exist &quot;$(TargetPath)&quot; if not exist &quot;$(TargetPath).locked&quot; move &quot;$(TargetPath)&quot; &quot;$(TargetPath).locked&quot;" />
-  </Target>
 
   <ItemGroup>
     <Reference Update="System">

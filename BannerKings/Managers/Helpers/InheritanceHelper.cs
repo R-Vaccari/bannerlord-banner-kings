@@ -14,12 +14,12 @@ namespace BannerKings.Managers.Helpers
             Clan clan = victim.Clan;
             if (title != null)
             {
-                List<Hero> candidates = new List<Hero>();
-                foreach (Hero x in clan.Heroes)
-                    if (!x.IsChild && x != victim && x.IsAlive && (x.IsNoble || x.IsMinorFactionHero))
-                        candidates.Add(x);
-
+                List<Hero> candidates = GetCandidates(victim.Clan, victim);
+                SuccessionType succession = title.contract.succession;
                 InheritanceType inheritance = title.contract.inheritance;
+
+                if (succession == SuccessionType.Imperial)
+                    return;
                 if (inheritance == InheritanceType.Primogeniture)
                     ApplyPrimogeniture(title, victim, candidates);
                 else if (inheritance == InheritanceType.Ultimogeniture)
@@ -30,23 +30,32 @@ namespace BannerKings.Managers.Helpers
                 ChangeClanLeaderAction.ApplyWithoutSelectedNewLeader(clan);
         }
 
+        private static List<Hero> GetCandidates(Clan clan, Hero victim)
+        {
+            List<Hero> candidates = new List<Hero>();
+            foreach (Hero x in clan.Heroes)
+                if (!x.IsChild && x != victim && x.IsAlive && (x.IsNoble || x.IsMinorFactionHero))
+                    candidates.Add(x);
+            return candidates;
+        }
+
         private static void ApplySeniority(FeudalTitle title, Hero victim, List<Hero> candidates)
         {
             GenderLaw genderLaw = title.contract.genderLaw;
             Hero heir;
-            List<Hero> orderedList = candidates.OrderBy((Hero hero) => hero.Age).ToList();
+            candidates.Sort((Hero x, Hero y) => y.Age.CompareTo(x.Age));
             if (genderLaw == GenderLaw.Agnatic)
             {
-                heir = orderedList.FirstOrDefault(x => !x.IsFemale);
-                if (heir == null) heir = orderedList.FirstOrDefault();
+                heir = candidates.FirstOrDefault(x => !x.IsFemale);
+                if (heir == null) heir = candidates.FirstOrDefault();
             }
             else
-                heir = orderedList.FirstOrDefault();
+                heir = candidates.FirstOrDefault();
 
             if (heir != null)
             {
                 ChangeClanLeaderAction.ApplyWithSelectedNewLeader(victim.Clan, heir);
-                BannerKingsConfig.Instance.TitleManager.InheritTitles(victim, heir);
+                BannerKingsConfig.Instance.TitleManager.InheritAllTitles(victim, heir);
             }
         }
 
@@ -57,11 +66,11 @@ namespace BannerKings.Managers.Helpers
             candidates.Sort((Hero x, Hero y) => y.Age.CompareTo(x.Age));
             if (genderLaw == GenderLaw.Agnatic)
             {
-                heir = candidates.FirstOrDefault(x => !x.IsFemale && (x.Father == victim || x.Mother == victim || x.Spouse == victim || x.Siblings.Contains(victim)));
-                if (heir == null) heir = candidates.FirstOrDefault(x => x.Father == victim || x.Mother == victim || x.Spouse == victim || x.Siblings.Contains(victim));
+                heir = candidates.FirstOrDefault(x => !x.IsFemale && IsFamily(victim, x));
+                if (heir == null) heir = candidates.FirstOrDefault(x => IsFamily(victim, x));
             }
             else
-                heir = candidates.FirstOrDefault(x => x.Father == victim || x.Mother == victim || x.Spouse == victim || x.Siblings.Contains(victim));
+                heir = candidates.FirstOrDefault(x => IsFamily(victim, x));
 
             if (heir == null && candidates.Count > 0)
                 heir = candidates[0];
@@ -69,7 +78,7 @@ namespace BannerKings.Managers.Helpers
             if (heir != null)
             {
                 ChangeClanLeaderAction.ApplyWithSelectedNewLeader(victim.Clan, heir);
-                BannerKingsConfig.Instance.TitleManager.InheritTitles(victim, heir);
+                BannerKingsConfig.Instance.TitleManager.InheritAllTitles(victim, heir);
             }
         }
 
@@ -80,11 +89,11 @@ namespace BannerKings.Managers.Helpers
             candidates.Sort((Hero x, Hero y) => x.Age.CompareTo(y.Age));
             if (genderLaw == GenderLaw.Agnatic)
             {
-                heir = candidates.FirstOrDefault(x => !x.IsFemale && (x.Father == victim || x.Mother == victim || x.Spouse == victim || x.Siblings.Contains(victim)));
-                if (heir == null) heir = candidates.FirstOrDefault(x => x.Father == victim || x.Mother == victim || x.Spouse == victim || x.Siblings.Contains(victim));
+                heir = candidates.FirstOrDefault(x => !x.IsFemale && IsFamily(victim, x));
+                if (heir == null) heir = candidates.FirstOrDefault(x => IsFamily(victim, x));
             }
             else
-                heir = candidates.FirstOrDefault(x => x.Father == victim || x.Mother == victim || x.Spouse == victim || x.Siblings.Contains(victim));
+                heir = candidates.FirstOrDefault(x => IsFamily(victim, x));
 
             if (heir == null && candidates.Count > 0)
                 heir = candidates[0];
@@ -92,14 +101,33 @@ namespace BannerKings.Managers.Helpers
             if (heir != null)
             {
                 ChangeClanLeaderAction.ApplyWithSelectedNewLeader(victim.Clan, heir);
-                BannerKingsConfig.Instance.TitleManager.InheritTitles(victim, heir);
+                BannerKingsConfig.Instance.TitleManager.InheritAllTitles(victim, heir);
             }
         }
 
+        private static bool IsFamily(Hero victim, Hero x) => x.Father == victim || x.Mother == victim || x.Spouse == victim || x.Siblings.Contains(victim);
+
         public static void ApplyImperialInheritance(Hero victim, Hero heir)
         {
-            ChangeClanLeaderAction.ApplyWithSelectedNewLeader(victim.Clan, heir);
-            BannerKingsConfig.Instance.TitleManager.InheritTitles(victim, heir);
+            if (victim.Clan == heir.Clan)
+            {
+                BannerKingsConfig.Instance.TitleManager.InheritAllTitles(victim, heir);
+                ChangeClanLeaderAction.ApplyWithSelectedNewLeader(victim.Clan, heir);
+            }      
+            else
+            {
+                FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetHighestTitleWithinFaction(victim, victim.Clan.Kingdom);
+                if (title.sovereign == null) BannerKingsConfig.Instance.TitleManager.InheritTitle(victim, heir, title);
+                List<Hero> candidates = GetCandidates(victim.Clan, victim);
+                InheritanceType inheritance = title.contract.inheritance;
+                FeudalTitle remainingTitle = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(victim);
+                if (remainingTitle != null)
+                    if (inheritance == InheritanceType.Primogeniture)
+                            ApplyPrimogeniture(remainingTitle, victim, candidates);
+                        else if (inheritance == InheritanceType.Ultimogeniture)
+                            ApplyUltimogeniture(remainingTitle, victim, candidates);
+                        else ApplySeniority(remainingTitle, victim, candidates);
+            }
         }
     }
 }
