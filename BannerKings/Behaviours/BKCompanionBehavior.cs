@@ -78,8 +78,9 @@ namespace BannerKings.Behaviors
             if (BannerKingsConfig.Instance.TitleManager == null) return false;
             Hero companion = Hero.OneToOneConversationHero;
             FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(Hero.MainHero);
-            if (companion != null && companion.Clan == Clan.PlayerClan && Hero.MainHero.Clan.Tier >= 2 &&
-                Hero.MainHero.Clan.Kingdom != null && title != null && title.type != TitleType.Lordship)
+            if (companion != null && companion.Clan == Clan.PlayerClan && Clan.PlayerClan.Tier >= 2 &&
+                Clan.PlayerClan.Influence >= 150 && Hero.MainHero.Clan.Kingdom != null 
+                && title != null && title.type != TitleType.Lordship && Hero.MainHero.Gold >= 5000)
                 return !BannerKingsConfig.Instance.TitleManager.IsHeroKnighted(companion);
             else return false;
         }
@@ -115,6 +116,8 @@ namespace BannerKings.Behaviors
             
             this.titleGiven = (FeudalTitle)element[0].Identifier;
             BannerKingsConfig.Instance.TitleManager.GrantLordship(this.titleGiven, Hero.MainHero, Hero.OneToOneConversationHero);
+            GainKingdomInfluenceAction.ApplyForDefault(Hero.MainHero, -150f);
+            GiveGoldAction.ApplyBetweenCharacters(Hero.MainHero, Hero.OneToOneConversationHero, 5000);
         }
     }
 
@@ -212,6 +215,7 @@ namespace BannerKings.Behaviors
             }
         }
 
+        /*
         [HarmonyPatch(typeof(Settlement))]
         [HarmonyPatch("Owner", MethodType.Getter)]
         class VillageOwnerPatch
@@ -225,6 +229,6 @@ namespace BannerKings.Behaviors
                         __result = title.deFacto;
                 }
             }
-        }
+        } */
     }
 }

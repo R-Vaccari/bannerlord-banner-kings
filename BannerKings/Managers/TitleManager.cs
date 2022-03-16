@@ -159,6 +159,12 @@ namespace BannerKings.Managers
         public void UsurpTitle(Hero oldOwner, Hero usurper, FeudalTitle title, UsurpCosts costs)
         {
             ExecuteOwnershipChange(oldOwner, usurper, title, true);
+            if (title.type == TitleType.Barony || title.type == TitleType.County)
+                if (title.vassals != null)
+                    foreach (FeudalTitle vassal in title.vassals)
+                        if (vassal.type == TitleType.Lordship)
+                            ExecuteOwnershipChange(oldOwner, usurper, vassal, true);
+
             int impact = new BKUsurpationModel().GetUsurpRelationImpact(title);
             ChangeRelationAction.ApplyPlayerRelation(oldOwner, impact, true, true);
             Kingdom kingdom = oldOwner.Clan.Kingdom;

@@ -17,7 +17,9 @@ namespace BannerKings.Models
                 Settlement settlement = merchant.MobileParty.PartyComponent.HomeSettlement;
                 if (itemRosterElement.Item.IsFood)
                     if (settlement.Town.FoodChange < 0)
-                        baseResult *= 1.5f;
+                        baseResult *= 1.3f;
+
+
 
             }
                 

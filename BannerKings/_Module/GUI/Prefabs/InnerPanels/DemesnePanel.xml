@@ -70,6 +70,13 @@
 					  </ItemTemplate>
 					</GridWidget>
 					
+					<ButtonWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedHeight="48" SuggestedWidth="200" MarginTop="15" HorizontalAlignment="Center" VerticalAlignment="Top" Brush="ButtonBrush2" Command.Click="OnUsurpPress" >
+						<Children>  
+							<HintWidget DataSource="{UsurpHint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" />	
+							<RichTextWidget DoNotAcceptEvents="true" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="OverlayPopup.ButtonText" Brush.FontSize="20" Text="Usurp Title"/>
+						</Children>
+					</ButtonWidget> 
+					
 					<!--
 					<GridWidget DataSource="{Vassals}" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" SuggestedWidth="350" SuggestedHeight="350" HorizontalAlignment="Left" MarginTop="5" DefaultCellWidth="100" DefaultCellHeight="140" ColumnCount="7" MarginLeft="20" MarginBottom="50">
 					  <ItemTemplate>
@@ -141,12 +148,7 @@
 			<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" StackLayout.LayoutMethod="VerticalBottomToTop" MaxHeight="645" >
 			  <Children>
 
-					<ButtonWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedHeight="48" SuggestedWidth="200" MarginTop="15" HorizontalAlignment="Center" VerticalAlignment="Top" Brush="ButtonBrush2" Command.Click="OnUsurpPress" IsEnabled="@UsurpEnabled">
-						<Children>  
-							<HintWidget DataSource="{UsurpHint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" />	
-							<RichTextWidget DoNotAcceptEvents="true" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="OverlayPopup.ButtonText" Brush.FontSize="20" Text="Usurp Title"/>
-						</Children>
-					</ButtonWidget> 
+					
 					
 					<ButtonWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedHeight="48" SuggestedWidth="200" MarginTop="10" HorizontalAlignment="Center" VerticalAlignment="Top" Brush="ButtonBrush2" Command.Click="OnDuchyUsurpPress" IsEnabled="@UsurpDuchyEnabled">
 						<Children>  

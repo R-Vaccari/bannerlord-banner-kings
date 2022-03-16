@@ -69,12 +69,6 @@ namespace BannerKings.Models
 					result.AddFactor(DefaultPerks.Steward.MasterOfWarcraft.SecondaryBonus, DefaultPerks.Steward.MasterOfWarcraft.Name);	
 			}
 
-			if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(town.Settlement, "workforce", (int)WorkforcePolicy.Martial_Law))
-            {
-				float militia = town.Militia;
-				result.Add(militia * -0.05f, new TextObject("Martial Law policy"));
-            }
-
 			// ------- Other factors ---------
 			Clan ownerClan = town.Settlement.OwnerClan;
 			if (((ownerClan != null) ? ownerClan.Kingdom : null) != null && town.Settlement.OwnerClan.Kingdom.ActivePolicies.Contains(DefaultPolicies.HuntingRights))
