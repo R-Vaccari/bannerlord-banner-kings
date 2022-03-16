@@ -77,6 +77,8 @@ namespace BannerKings.UI
                 MethodInfo active = __instance.GetType().GetMethod("IsPolicyActive", BindingFlags.Instance | BindingFlags.NonPublic);
                 MethodInfo select = __instance.GetType().GetMethod("OnPolicySelect", BindingFlags.Instance | BindingFlags.NonPublic);
 
+
+                if (title.contract == null) return;
                 List<PolicyObject> list = PolicyHelper.GetForbiddenGovernmentPolicies(title.contract.government);
                 __instance.OtherPolicies.Clear();
                 foreach (PolicyObject policy2 in from p in PolicyObject.All
