@@ -642,6 +642,15 @@ namespace BannerKings.Behaviors
 
                     float random = MBRandom.RandomFloat;
                     float injury = 0.1f;
+
+                    if (settlement.Town == null)
+                    {
+                        InformationManager.DisplayMessage(
+                            new InformationMessage(
+                                new TextObject("{=!}Not a town!").ToString()));
+                        Hero.MainHero.HitPoints -= MBRandom.RandomInt(3, 10);
+                        return;
+                    }
                     injury -= settlement.Town.Security * 0.001f;
                     if (random <= injury)
                     {
@@ -817,7 +826,7 @@ namespace BannerKings.Behaviors
                     criminal = kingdom.MainHeroCrimeRating > 0;
             }
             //Clan.PlayerClan.Kingdom == null && MobileParty.MainParty.MemberRoster.TotalManCount == 1
-            return IsPeasant() && !IsWounded() && !criminal;
+            return IsPeasant() && !IsWounded() && !criminal && !Settlement.CurrentSettlement.IsVillage;
         }
 
         private static bool MenuTrainGuardActionPeasantCondition(MenuCallbackArgs args)
