@@ -27,6 +27,13 @@ namespace BannerKings.Managers
             }
         }
 
+        public int GetCouncilEffectInteger(Hero settlementOwner, CouncilPosition position, float maxEffect)
+        {
+            CouncilData council = this.GetCouncil(settlementOwner);
+            float competence = council.GetCompetence(position);
+            return (int)(maxEffect * competence);
+        }
+
         public CouncilData GetCouncil(Hero hero)
         {
             Clan clan = hero.Clan;
