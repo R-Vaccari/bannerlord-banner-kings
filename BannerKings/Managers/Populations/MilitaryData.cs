@@ -67,7 +67,18 @@ namespace BannerKings.Managers.Populations
         public int Manpower => peasantManpower + nobleManpower;
         public int PeasantManpower => peasantManpower;
         public int NobleManpower => nobleManpower;
-        public ExplainedNumber DraftEfficiency => new BKVolunteerModel().GetDraftEfficiency(settlement.Notables[0], 2, settlement);
+        public ExplainedNumber DraftEfficiency
+        {
+            get
+            {
+                ExplainedNumber number = new ExplainedNumber(0.5f);
+                if (settlement.Notables != null && settlement.Notables.Count > 0)
+                    number = new BKVolunteerModel().GetDraftEfficiency(settlement.Notables[0], 2, settlement);
+
+                return number;
+            }
+        }
+            
         public ExplainedNumber Militarism => new BKVolunteerModel().GetMilitarism(settlement);
 
         public int Holdout => new BKFoodModel().GetFoodEstimate(settlement, settlement.Town.FoodStocksUpperLimit());

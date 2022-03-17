@@ -126,6 +126,35 @@ namespace BannerKings
                     }
                 }
             }
+
+
+            [HarmonyPatch(typeof(Settlement), "AddTroopToMilitiaParty")]
+            class AddTroopToMilitiaPartyPatch
+            {
+                static bool Prefix(Settlement __instance, MobileParty militaParty, CharacterObject militiaTroop, CharacterObject eliteMilitiaTroop, float troopRatio, ref int numberToAddRemaining)
+                {
+
+                    if (numberToAddRemaining > 0)
+                    {
+                        int num = MBRandom.RoundRandomized(troopRatio * (float)numberToAddRemaining);
+                        float num2 = Campaign.Current.Models.SettlementMilitiaModel.CalculateEliteMilitiaSpawnChance(__instance);
+                        for (int i = 0; i < num; i++)
+                        {
+                            if (MBRandom.RandomFloat < num2)
+                            {
+                                militaParty.MemberRoster.AddToCounts(eliteMilitiaTroop, 1, false, 0, 0, true, -1);
+                            }
+                            else
+                            {
+                                militaParty.MemberRoster.AddToCounts(militiaTroop, 1, false, 0, 0, true, -1);
+                            }
+                        }
+                        numberToAddRemaining -= num;
+                    }
+
+                    return false;
+                }
+            }
         }
 
 

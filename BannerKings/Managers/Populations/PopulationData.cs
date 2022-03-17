@@ -263,7 +263,7 @@ namespace BannerKings.Populations
                     }
                 }
 
-                return share == ownerShare ? ownerCulture : (share > ownerShare ? culture : ownerCulture);
+                return share > ownerShare ? culture : ownerCulture;
             }
         }
 
@@ -355,10 +355,14 @@ namespace BannerKings.Populations
             }
 
             CultureObject dominant = this.DominantCulture;
-            data.Settlement.Culture = dominant;
-            if (data.Settlement.Notables != null && data.Settlement.Notables.Count > 0)
-                foreach (Hero notable in data.Settlement.Notables)
-                    notable.Culture = dominant;
+            if (dominant.BasicTroop != null && dominant.MilitiaSpearman != null)
+            {
+                data.Settlement.Culture = dominant;
+                if (data.Settlement.Notables != null && data.Settlement.Notables.Count > 0)
+                    foreach (Hero notable in data.Settlement.Notables)
+                        notable.Culture = dominant;
+            }
+            
         }
     }
 

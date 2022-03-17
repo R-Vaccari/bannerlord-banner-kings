@@ -221,7 +221,7 @@ namespace BannerKings.UI
                     __instance.Deactivate();
                     return false;
                 }
-                return false;
+                return true;
             }
         }
 
