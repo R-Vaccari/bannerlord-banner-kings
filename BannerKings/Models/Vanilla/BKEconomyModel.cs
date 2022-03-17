@@ -1,4 +1,5 @@
 ﻿using BannerKings.Managers;
+using BannerKings.Managers.Court;
 using BannerKings.Managers.Policies;
 using BannerKings.Populations;
 using System;
@@ -140,6 +141,8 @@ namespace BannerKings.Models
 
             float mercantilism = data.EconomicData.Mercantilism.ResultNumber;
             result.Add(0.25f * mercantilism, new TextObject("Mercantilism"));
+
+            BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref result, settlement.OwnerClan.Leader, CouncilPosition.Steward, 0.15f, true);
 
             return result;
         }

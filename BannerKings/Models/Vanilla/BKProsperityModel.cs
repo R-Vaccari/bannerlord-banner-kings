@@ -143,7 +143,7 @@ namespace BannerKings.Models
 				}
 				this.GetSettlementProsperityChangeDueToIssues(fortification.Settlement, ref explainedNumber);
 
-				BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref baseResult, fortification.OwnerClan.Leader, CouncilPosition.Steward, 1f, false);
+				BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref explainedNumber, fortification.OwnerClan.Leader, CouncilPosition.Steward, 1f, false);
 				return explainedNumber;
 			}
             return baseResult;

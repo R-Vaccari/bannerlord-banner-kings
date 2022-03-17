@@ -438,7 +438,7 @@ namespace BannerKings.Behaviors
                 new OnInitDelegate(MenuWaitInit), 
                 new OnConditionDelegate(MenuGuardActionPeasantCondition), 
                 new OnConsequenceDelegate(MenuActionConsequenceWithGold), 
-                new OnTickDelegate(TickWaitGuard), GameMenu.MenuAndOptionType.WaitMenuShowProgressAndHoursOption, GameOverlays.MenuOverlayType.SettlementWithBoth, 4f, GameMenu.MenuFlags.None, null);
+                new OnTickDelegate(TickWaitGuard), GameMenu.MenuAndOptionType.WaitMenuShowProgressAndHoursOption, GameOverlays.MenuOverlayType.SettlementWithBoth, 8f, GameMenu.MenuFlags.None, null);
 
             campaignGameStarter.AddGameMenuOption("bannerkings_wait_guard", "wait_leave", "{=3sRdGQou}Leave", 
                 delegate (MenuCallbackArgs args) {
@@ -473,7 +473,7 @@ namespace BannerKings.Behaviors
                 new OnInitDelegate(MenuWaitInit),
                 new OnConditionDelegate(MenuHuntingActionCondition), 
                 new OnConsequenceDelegate(MenuActionHuntingConsequence),
-                new OnTickDelegate(TickWaitHunt), GameMenu.MenuAndOptionType.WaitMenuShowProgressAndHoursOption, GameOverlays.MenuOverlayType.SettlementWithBoth, 4f, GameMenu.MenuFlags.None, null);
+                new OnTickDelegate(TickWaitHunt), GameMenu.MenuAndOptionType.WaitMenuShowProgressAndHoursOption, GameOverlays.MenuOverlayType.SettlementWithBoth, 8f, GameMenu.MenuFlags.None, null);
 
             campaignGameStarter.AddGameMenuOption("bannerkings_wait_hunt", "wait_leave", "{=3sRdGQou}Leave",
                 delegate (MenuCallbackArgs args) {
@@ -490,7 +490,7 @@ namespace BannerKings.Behaviors
                 new OnInitDelegate(MenuWaitInit),
                 new OnConditionDelegate(MenuMeetNobilityActionCondition),
                 new OnConsequenceDelegate(MenuActionMeetNobilityConsequence),
-                new OnTickDelegate(TickWaitMeetNobility), GameMenu.MenuAndOptionType.WaitMenuShowProgressAndHoursOption, GameOverlays.MenuOverlayType.SettlementWithBoth, 8f, GameMenu.MenuFlags.None, null);
+                new OnTickDelegate(TickWaitMeetNobility), GameMenu.MenuAndOptionType.WaitMenuShowProgressAndHoursOption, GameOverlays.MenuOverlayType.SettlementWithBoth, 4f, GameMenu.MenuFlags.None, null);
 
             campaignGameStarter.AddGameMenuOption("bannerkings_wait_meet_nobility", "wait_leave", "{=3sRdGQou}Leave",
                 delegate (MenuCallbackArgs args) {
