@@ -443,25 +443,33 @@ namespace BannerKings.Managers
         public FeudalTitle GetDuchy(FeudalTitle title)
         {
             IEnumerable<FeudalTitle> duchies = Titles.Keys.Where(x => x.type == TitleType.Dukedom && x.sovereign != null && x.sovereign == title.sovereign);
-            FeudalTitle result = null;
-            foreach (FeudalTitle duchy in duchies)
-                if (duchy.vassals.Contains(title))
-                    result = duchy;
 
-            if (result == null)
-                foreach (FeudalTitle duchy in duchies)
-                    foreach (FeudalTitle county in duchy.vassals)
-                        if (county.vassals.Contains(title))
-                            result = duchy;
+            FeudalTitle suzerain1 = this.GetImmediateSuzerain(title);
+            if (suzerain1 != null)
+            {
+                if (suzerain1.type == TitleType.Dukedom)
+                    return suzerain1;
+                else
+                {
+                    FeudalTitle suzerain2 = this.GetImmediateSuzerain(suzerain1);
+                    if (suzerain2 != null)
+                    {
+                        if (suzerain2.type == TitleType.Dukedom)
+                            return suzerain2;
+                        else
+                        {
+                            FeudalTitle suzerain3 = this.GetImmediateSuzerain(suzerain2);
+                            if (suzerain3 != null)
+                            {
+                                if (suzerain3.type == TitleType.Dukedom)
+                                    return suzerain3;
+                            }
+                        }
+                    }
+                }
+            }
 
-            if (result == null)
-                foreach (FeudalTitle duchy in duchies)
-                    foreach (FeudalTitle county in duchy.vassals)
-                        foreach (FeudalTitle barony in county.vassals)
-                            if (barony.vassals.Contains(title))
-                                result = duchy;
-
-            return result;
+            return null;
         }
 
         public string GetContractText(FeudalTitle title)
