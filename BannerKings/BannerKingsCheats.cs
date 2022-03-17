@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BannerKings.Behaviors;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
@@ -23,7 +24,9 @@ namespace BannerKings
 				BannerKingsConfig.Instance.PopulationManager.RemoveCaravan(party);
 				DestroyPartyAction.Apply(null, party);
 				count++;
-			}	
+			}
+
+			BKSettlementBehavior.wipeData = true;
 				
 			return string.Format("{0} parties destroyed.", count);
 		}

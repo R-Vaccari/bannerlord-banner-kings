@@ -98,7 +98,61 @@ namespace BannerKings.UI
             }
 
         }
-        
+
+        /*
+         * [HarmonyPatch(typeof(SettlementProjectVM))]
+        internal class CharacterCreationCultureStagePatch
+        {
+            [HarmonyPrefix]
+            [HarmonyPatch("Building", MethodType.Setter)]
+            internal static bool SetterPrefix(SettlementProjectVM __instance, Building value)
+            {
+                FieldInfo _building = __instance.GetType().GetField("_building", BindingFlags.Instance | BindingFlags.NonPublic);
+                _building.SetValue(__instance, value);
+                __instance.Name = ((value != null) ? value.Name.ToString() : "");
+                __instance.Explanation = ((value != null) ? value.Explanation.ToString() : "");
+                string code = ((value != null) ? value.BuildingType.StringId.ToLower() : "");
+                if (code == "bannerkings_palisade")
+                    code = "building_fortifications";
+                else if (code == "bannerkings_trainning")
+                    code = "building_settlement_militia_barracks";
+                else if (code == "bannerkings_manor")
+                    code = "building_castle_castallans_office";
+                else if (code == "bannerkings_bakery" || code == "bannerkings_butter" || code == "bannerkings_daily_pasture")
+                    code = "building_settlement_granary";
+                else if (code == "bannerkings_mining")
+                    code = "building_siege_workshop";
+                else if (code == "bannerkings_farming" || code == "bannerkings_daily_farm")
+                    code = "building_settlement_lime_kilns";
+                else if (code == "bannerkings_sawmill" || code == "bannerkings_tannery" || code == "bannerkings_blacksmith")
+                    code = "building_castle_workshops";
+                else if (code == "bannerkings_daily_woods" || code == "bannerkings_fishing")
+                    code = "building_irrigation";
+                else if (code == "bannerkings_warehouse")
+                    code = "building_settlement_garrison_barracks";
+                else if (code == "bannerkings_courier")
+                    code = "building_castle_lime_kilns";
+
+                int constructionCost = __instance.Building.GetConstructionCost();
+                TextObject textObject;
+                if (constructionCost > 0)
+                {
+                    textObject = new TextObject("{=tAwRIPiy}Construction Cost: {COST}", null);
+                    textObject.SetTextVariable("COST", constructionCost);
+                }
+                else
+                {
+                    textObject = TextObject.Empty;
+                }
+                __instance.ProductionCostText = ((value != null) ? textObject.ToString() : "");
+                __instance.CurrentPositiveEffectText = ((value != null) ? value.GetBonusExplanation().ToString() : "");
+
+                __instance.VisualCode = code;
+
+                return false;
+            }
+        }
+         */
 
 
 
@@ -193,6 +247,52 @@ namespace BannerKings.UI
             }
         }
 
+        [HarmonyPatch(typeof(SettlementProjectSelectionVM), "OnCurrentProjectSelection")]
+        class OnCurrentProjectSelectionPatch
+        {
+            static bool Prefix(SettlementProjectSelectionVM __instance, SettlementProjectVM selectedItem, bool isSetAsActiveDevelopment)
+            {
+                if (!selectedItem.IsDaily)
+                {
+                    if (isSetAsActiveDevelopment)
+                    {
+                        __instance.LocalDevelopmentList.Clear();
+                        __instance.LocalDevelopmentList.Add(selectedItem.Building);
+                    }
+                    else if (__instance.LocalDevelopmentList.Exists((Building d) => d == selectedItem.Building))
+                    {
+                        __instance.LocalDevelopmentList.Remove(selectedItem.Building);
+                    }
+                    else
+                    {
+                        __instance.LocalDevelopmentList.Add(selectedItem.Building);
+                    }
+                }
+                else
+                {
+                    __instance.CurrentDailyDefault.IsDefault = false;
+                    __instance.CurrentDailyDefault = (selectedItem as SettlementDailyProjectVM);
+                    (selectedItem as SettlementDailyProjectVM).IsDefault = true;
+                }
+                MethodInfo refresh = __instance.GetType().GetMethod("RefreshDevelopmentsQueueIndex", BindingFlags.Instance | BindingFlags.NonPublic);
+                refresh.Invoke(__instance, null);
+                if (__instance.LocalDevelopmentList.Count == 0)
+                {
+                    __instance.CurrentSelectedProject = __instance.CurrentDailyDefault;
+                }
+                else if (selectedItem != __instance.CurrentSelectedProject)
+                {
+                    __instance.CurrentSelectedProject = selectedItem;
+                }
+                FieldInfo fi = __instance.GetType().GetField("_onAnyChangeInQueue", BindingFlags.Instance | BindingFlags.NonPublic);
+                Action onAnyChangeInQueue = (Action)fi.GetValue(__instance);
+                if (onAnyChangeInQueue != null)
+                    onAnyChangeInQueue.Invoke();
+
+                return false;
+            }
+        }
+
         [HarmonyPatch(typeof(SettlementProjectSelectionVM), "Refresh")]
         class ProjectSelectionRefreshPatch
         {
@@ -208,6 +308,30 @@ namespace BannerKings.UI
                         MethodInfo selection = __instance.GetType().GetMethod("OnCurrentProjectSelection", BindingFlags.Instance | BindingFlags.NonPublic);
                         MethodInfo set = __instance.GetType().GetMethod("OnCurrentProjectSet", BindingFlags.Instance | BindingFlags.NonPublic);
                         MethodInfo reset = __instance.GetType().GetMethod("OnResetCurrentProject", BindingFlags.Instance | BindingFlags.NonPublic);
+
+                        List<VillageBuilding> buildings = new List<VillageBuilding>(villageData.Buildings);
+                        List<VillageBuilding> toAdd = new List<VillageBuilding>();
+                        foreach (Building building in buildings)
+                        {
+                            if (building.BuildingType.Explanation == null || building.BuildingType.Name == null)
+                            {
+                                string id = building.BuildingType.StringId;
+                                BuildingType type = DefaultVillageBuildings.Instance.All().FirstOrDefault(x => x.StringId == id);
+                                if (type != null)
+                                    toAdd.Add(new VillageBuilding(type, villageData.Village.MarketTown, villageData.Village, 
+                                        building.BuildingProgress, building.CurrentLevel));
+                            }
+                        }
+
+                        if (toAdd.Count > 0)
+                        {
+                            villageData.Buildings.Clear();
+                            foreach (VillageBuilding building in toAdd)
+                                villageData.Buildings.Add(building);
+                        }
+                        
+
+
                         foreach (VillageBuilding building in villageData.Buildings)
                         {
                             BuildingLocation location = building.BuildingType.BuildingLocation;
@@ -216,7 +340,7 @@ namespace BannerKings.UI
                                 SettlementBuildingProjectVM vm = new SettlementBuildingProjectVM(
                                 new Action<SettlementProjectVM, bool>(delegate (SettlementProjectVM x, bool y) { selection.Invoke(__instance, new object[] { x, y }); }),
                                 new Action<SettlementProjectVM>(delegate (SettlementProjectVM x) { set.Invoke(__instance, new object[] { x }); }),
-                                new Action(delegate { reset.Invoke(__instance, null); }),
+                                new Action(delegate {  }),
                                 building
                             );
                                 __instance.AvailableProjects.Add(vm);
@@ -236,6 +360,10 @@ namespace BannerKings.UI
                                     __instance.CurrentDailyDefault.IsDefault = true;
                                     settlementDailyProjectVM.IsDefault = true;
                                 }
+
+                                if (building.BuildingType.Explanation != null && __instance.CurrentDailyDefault == null ||
+                                    __instance.CurrentDailyDefault.Building == null)
+                                    __instance.CurrentDailyDefault = settlementDailyProjectVM;
                             }
                         }
 

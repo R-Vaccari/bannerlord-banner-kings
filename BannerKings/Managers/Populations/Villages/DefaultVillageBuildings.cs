@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.Core;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Populations.Villages
@@ -51,6 +52,7 @@ namespace BannerKings.Managers.Populations.Villages
    
             }, 0);
 
+
             this.palisade = new BuildingType("bannerkings_palisade");
             this.palisade.Initialize(new TextObject("{=!}Palisade"), 
                 new TextObject("{=!}A set of wooden stakes placed around the village like a wall. Reduces raiding speed (12%, 24%, 36%)."), new int[]
@@ -87,6 +89,8 @@ namespace BannerKings.Managers.Populations.Villages
 
             }, 0);
 
+            Game.Current.ObjectManager.RegisterPresumedObject<BuildingType>(new BuildingType("bannerkings_warehouse"));
+
             this.courier = new BuildingType("bannerkings_courier");
             this.courier.Initialize(new TextObject("{=!}Courier Post"), 
                 new TextObject("{=!}Set up a dedicate courier post that will inform you of any relevant activity in and around your demesne. Enables information messages regardless of your distance."), new int[]
@@ -98,6 +102,8 @@ namespace BannerKings.Managers.Populations.Villages
             {
    
             }, 0);
+
+            
 
             this.bakery = new BuildingType("bannerkings_bakery");
             this.bakery.Initialize(new TextObject("{=!}Bakery"), 
@@ -123,6 +129,7 @@ namespace BannerKings.Managers.Populations.Villages
  
             }, 0);
 
+
             this.animalHousing = new BuildingType("bannerkings_animal_housing");
             this.animalHousing.Initialize(new TextObject("{=!}Animal Housing"), 
                 new TextObject("{=!}Invest on infrastructure for animal housing and grazing, yielding more from your pasture lands. Increases live animals production (5%, 10%, 15%)."), new int[]
@@ -134,6 +141,7 @@ namespace BannerKings.Managers.Populations.Villages
             {
   
             }, 0);
+
 
             this.farming = new BuildingType("bannerkings_farming");
             this.farming.Initialize(new TextObject("{=!}Farming Infrastructure"), 
@@ -147,6 +155,8 @@ namespace BannerKings.Managers.Populations.Villages
     
             }, 0);
 
+
+
             this.sawmill = new BuildingType("bannerkings_sawmill");
             this.sawmill.Initialize(new TextObject("{=!}Sawmill"), 
                 new TextObject("{=!}Build a sawmill, improving the speed and quality of log cutting into usable hardwood. Increases hardwood production (5%, 10%, 15%)."), new int[]
@@ -158,6 +168,7 @@ namespace BannerKings.Managers.Populations.Villages
             {
 
             }, 0);
+
 
             this.butter = new BuildingType("bannerkings_butter");
             this.butter.Initialize(new TextObject("{=!}Butter Mill"), 
@@ -214,6 +225,7 @@ namespace BannerKings.Managers.Populations.Villages
 
             }, 0);
 
+
             this.dailyFarm = new BuildingType("bannerkings_daily_farm");
             this.dailyFarm.Initialize(new TextObject("{=!}Farmland", null), new TextObject("{=!}Focus efforts on creating new arable acres, used for farming purposes. More farming acres increase output of farming goods.", null), new int[3], BuildingLocation.Daily, new Tuple<BuildingEffectEnum, float, float, float>[]
             {
@@ -232,6 +244,27 @@ namespace BannerKings.Managers.Populations.Villages
 
             }, 0);
         }
+
+        public IEnumerable<BuildingType> All()
+        {
+            yield return Instance.Manor;
+            yield return Instance.Palisade;
+            yield return Instance.TrainningGrounds;
+            yield return Instance.Warehouse;
+            yield return Instance.DailyProduction;
+            yield return Instance.DailyFarm;
+            yield return Instance.DailyPasture;
+            yield return Instance.DailyWoods;
+            yield return Instance.Farming;
+            yield return Instance.Mining;
+            yield return Instance.AnimalHousing;
+            yield return Instance.Sawmill;
+            yield return Instance.FishFarm;
+            yield return Instance.Tannery;
+            yield return Instance.Blacksmith;
+            yield break;
+        }
+
 
         public static IEnumerable<BuildingType> VillageBuildings(Village village)
         {

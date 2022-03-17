@@ -8,8 +8,8 @@ using TaleWorlds.Core;
 
 namespace BannerKings.Managers.Kingdoms
 {
-    public class RepublicElectionDecision : KingSelectionKingdomDecision
-    {
+    public class RepublicElectionDecision : BKKingElectionDecision
+	{
 		protected Clan toExclude;
 		public override TextObject GetChooseTitle()
 		{

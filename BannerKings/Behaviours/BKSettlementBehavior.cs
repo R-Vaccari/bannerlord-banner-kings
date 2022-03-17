@@ -34,6 +34,7 @@ namespace BannerKings.Behaviors
         private static float actionGold = 0f;
         private static int actionHuntGame = 0;
         private static CampaignTime actionStart = CampaignTime.Now;
+        public static bool wipeData = false;
 
         public override void RegisterEvents()
         {
@@ -50,6 +51,14 @@ namespace BannerKings.Behaviors
                 policyManager = BannerKingsConfig.Instance.PolicyManager;
                 titleManager = BannerKingsConfig.Instance.TitleManager;
                 courtManager = BannerKingsConfig.Instance.CourtManager;   
+            }
+
+            if (wipeData)
+            {
+                populationManager = new PopulationManager(new Dictionary<Settlement, PopulationData>(), new List<MobileParty>());
+                policyManager = new PolicyManager(new Dictionary<Settlement, List<BannerKingsDecision>>(), new Dictionary<Settlement, List<BannerKingsPolicy>>());
+                titleManager = new TitleManager(new Dictionary<TitleManager.FeudalTitle, Hero>(), new Dictionary<Hero, List<TitleManager.FeudalTitle>>(), new Dictionary<Kingdom, TitleManager.FeudalTitle>());
+                courtManager = new CourtManager(new Dictionary<Clan, Managers.Court.CouncilData>());
             }
 
             dataStore.SyncData("bannerkings-populations", ref populationManager);
@@ -805,6 +814,18 @@ namespace BannerKings.Behaviors
 
         private static bool IsWounded() => ((float)Hero.MainHero.HitPoints / (float)Hero.MainHero.MaxHitPoints) <= 0.4f;
 
+        private static bool IsCriminal(Clan ownerClan)
+        {
+            bool criminal = false;
+            if (ownerClan != null)
+            {
+                Kingdom kingdom = ownerClan.Kingdom;
+                if (kingdom != null)
+                    criminal = kingdom.MainHeroCrimeRating > 0;
+            }
+            return criminal;
+        }
+
         private static bool MenuWaitActionPeasantCondition(MenuCallbackArgs args)
         {
             args.optionLeaveType = GameMenuOption.LeaveType.Wait;
@@ -818,50 +839,27 @@ namespace BannerKings.Behaviors
             args.optionLeaveType = GameMenuOption.LeaveType.Recruit;
             MBTextManager.SetTextVariable("CURRENT_SETTLEMENT", Settlement.CurrentSettlement.EncyclopediaLinkWithName, false);
             bool criminal = false;
-            Clan clan = Settlement.CurrentSettlement.OwnerClan;
-            if (clan != null)
-            {
-                Kingdom kingdom = clan.Kingdom;
-                if (kingdom != null)
-                    criminal = kingdom.MainHeroCrimeRating > 0;
-            }
+            
             //Clan.PlayerClan.Kingdom == null && MobileParty.MainParty.MemberRoster.TotalManCount == 1
-            return IsPeasant() && !IsWounded() && !criminal && !Settlement.CurrentSettlement.IsVillage;
+            return IsPeasant() && !IsWounded() && !IsCriminal(Settlement.CurrentSettlement.OwnerClan) && !Settlement.CurrentSettlement.IsVillage;
         }
 
         private static bool MenuTrainGuardActionPeasantCondition(MenuCallbackArgs args)
         {
             args.optionLeaveType = GameMenuOption.LeaveType.OrderTroopsToAttack;
             MBTextManager.SetTextVariable("CURRENT_SETTLEMENT", Settlement.CurrentSettlement.EncyclopediaLinkWithName, false);
-            bool criminal = false;
-            Clan clan = Settlement.CurrentSettlement.OwnerClan;
-            if (clan != null)
-            {
-                Kingdom kingdom = clan.Kingdom;
-                if (kingdom != null)
-                    criminal = kingdom.MainHeroCrimeRating > 0;
-            }
             int leadership = Hero.MainHero.GetSkillValue(DefaultSkills.Leadership);
             int combat = Hero.MainHero.GetSkillValue(DefaultSkills.OneHanded) + Hero.MainHero.GetSkillValue(DefaultSkills.Polearm) +
                 Hero.MainHero.GetSkillValue(DefaultSkills.Bow) + Hero.MainHero.GetSkillValue(DefaultSkills.Crossbow);
-            return IsPeasant() && !IsWounded() && !criminal && leadership >= 50 && combat >= 160;
+            return IsPeasant() && !IsWounded() && !IsCriminal(Settlement.CurrentSettlement.OwnerClan) && leadership >= 50 && combat >= 160;
         }
 
         private static bool MenuMeetNobilityActionCondition(MenuCallbackArgs args)
         {
             args.optionLeaveType = GameMenuOption.LeaveType.Conversation;
             MBTextManager.SetTextVariable("CURRENT_SETTLEMENT", Settlement.CurrentSettlement.EncyclopediaLinkWithName, false);
-            bool criminal = false;
             bool inFaction = Clan.PlayerClan.Kingdom != null;
-            Clan clan = Settlement.CurrentSettlement.OwnerClan;
-            if (clan != null)
-            {
-                Kingdom kingdom = clan.Kingdom;
-                if (kingdom != null)
-                    criminal = kingdom.MainHeroCrimeRating > 0;
-                
-            }
-            return !IsWounded() && !criminal && inFaction;
+            return !IsWounded() && !IsCriminal(Settlement.CurrentSettlement.OwnerClan) && inFaction;
         }
 
         private static bool MenuHuntingActionCondition(MenuCallbackArgs args)

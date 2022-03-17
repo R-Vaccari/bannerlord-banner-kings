@@ -70,7 +70,7 @@ namespace BannerKings.UI.Panels
             {
 				villageData.BuildingsInProgress.Clear();
 				List<Building> localDevelopmentList = this.Projects.LocalDevelopmentList;
-				Building building = this.Projects.CurrentDailyDefault.Building;
+				Building? building = this.Projects.CurrentDailyDefault?.Building;
 				if (localDevelopmentList != null && localDevelopmentList.Count > 0)
                 {
 					foreach (VillageBuilding building2 in localDevelopmentList)
@@ -80,6 +80,7 @@ namespace BannerKings.UI.Panels
 					villageData.CurrentBuilding = villageData.Buildings
 						.FirstOrDefault(x => x.BuildingType.StringId == localDevelopmentList[0].BuildingType.StringId);
 
+					if (building != null)
 					villageData.CurrentDefault = villageData.Buildings
 						.FirstOrDefault(x => x.BuildingType.StringId == building.BuildingType.StringId);
 				}
