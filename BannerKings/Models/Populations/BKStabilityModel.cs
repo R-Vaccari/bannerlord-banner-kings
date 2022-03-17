@@ -64,6 +64,10 @@ namespace BannerKings.Models
                     legitimacy = -5f;
                 else legitimacy = -10f;
 
+                GovernmentType government = BannerKingsConfig.Instance.TitleManager.GetSettlementGovernment(settlement);
+                if (government == GovernmentType.Feudal)
+                    result.Add(0.05f, new TextObject("{=!}Government"));
+
                 result.Add(legitimacy, new TextObject("Legitimacy"));
             }
             return result;

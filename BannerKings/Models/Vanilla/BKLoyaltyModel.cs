@@ -12,6 +12,7 @@ using TaleWorlds.Localization;
 using static BannerKings.Managers.Policies.BKCriminalPolicy;
 using static BannerKings.Managers.Policies.BKTaxPolicy;
 using static BannerKings.Managers.PopulationManager;
+using static BannerKings.Managers.TitleManager;
 
 namespace BannerKings.Models
 {
@@ -72,6 +73,10 @@ namespace BannerKings.Models
 
 				if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(town.Settlement, "decision_ration"))
 					baseResult.Add(town.IsUnderSiege ? -2f : -4f, new TextObject("{=!}Enforce rations decision"));
+
+				GovernmentType government = BannerKingsConfig.Instance.TitleManager.GetSettlementGovernment(town.Settlement);
+				if (government == GovernmentType.Republic)
+					baseResult.Add(1f, new TextObject("{=!}Government"));
 
 				BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref baseResult, town.OwnerClan.Leader, CouncilPosition.Chancellor, 1f, false);
 				return baseResult;

@@ -7,6 +7,7 @@ using static BannerKings.Managers.Policies.BKMilitiaPolicy;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Populations.Villages;
 using BannerKings.Managers.Court;
+using static BannerKings.Managers.TitleManager;
 
 namespace BannerKings.Models
 {
@@ -77,6 +78,10 @@ namespace BannerKings.Models
                 PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
                 if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(settlement, "decision_militia_subsidize"))
                     baseResult += 0.12f;
+
+                GovernmentType government = BannerKingsConfig.Instance.TitleManager.GetSettlementGovernment(settlement);
+                if (government == GovernmentType.Tribal)
+                    baseResult += 0.08f;
 
                 VillageData villageData = data.VillageData;
                 if (villageData != null)

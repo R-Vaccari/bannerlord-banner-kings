@@ -7,7 +7,7 @@ using TaleWorlds.CampaignSystem.SandBox.GameComponents.Map;
 using TaleWorlds.Localization;
 using static BannerKings.Managers.Policies.BKCriminalPolicy;
 using static BannerKings.Managers.Policies.BKWorkforcePolicy;
-using static BannerKings.Managers.PolicyManager;
+using static BannerKings.Managers.TitleManager;
 
 namespace BannerKings.Models
 {
@@ -38,6 +38,10 @@ namespace BannerKings.Models
                     baseResult.Add(0.5f, new TextObject("Criminal policy"));
                 else if (criminal == CriminalPolicy.Forgiveness)
                     baseResult.Add(1f, new TextObject("Criminal policy"));
+
+                GovernmentType government = BannerKingsConfig.Instance.TitleManager.GetSettlementGovernment(town.Settlement);
+                if (government == GovernmentType.Imperial)
+                    baseResult.Add(1f, new TextObject("{=!}Government"));
 
                 BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref baseResult, town.OwnerClan.Leader, CouncilPosition.Spymaster, 1f, false);
             }

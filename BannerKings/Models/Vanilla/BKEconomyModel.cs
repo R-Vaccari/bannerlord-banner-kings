@@ -142,6 +142,10 @@ namespace BannerKings.Models
             float mercantilism = data.EconomicData.Mercantilism.ResultNumber;
             result.Add(0.25f * mercantilism, new TextObject("Mercantilism"));
 
+            GovernmentType government = BannerKingsConfig.Instance.TitleManager.GetSettlementGovernment(settlement);
+            if (government == GovernmentType.Feudal)
+                result.AddFactor(0.15f, new TextObject("{=!}Government"));
+
             BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref result, settlement.OwnerClan.Leader, CouncilPosition.Steward, 0.15f, true);
 
             return result;

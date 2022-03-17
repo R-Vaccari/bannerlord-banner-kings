@@ -52,6 +52,18 @@ namespace BannerKings.Managers
                 
             return result;
         }
+
+        public GovernmentType GetSettlementGovernment(Settlement settlement)
+        {
+            GovernmentType type = GovernmentType.Feudal;
+            FeudalTitle title = this.GetTitle(settlement);
+            if (title != null)
+                if (title.contract != null)
+                    type = title.contract.government;
+
+            return type;
+        }
+
         public bool IsHeroKnighted(Hero hero) => hero.IsNoble && IsHeroTitleHolder(hero);
         public FeudalTitle GetImmediateSuzerain(FeudalTitle target)
         {

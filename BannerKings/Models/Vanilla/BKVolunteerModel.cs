@@ -10,6 +10,7 @@ using BannerKings.Managers.Court;
 using TaleWorlds.Core;
 using BannerKings.Managers.Policies;
 using static BannerKings.Managers.Policies.BKDraftPolicy;
+using static BannerKings.Managers.TitleManager;
 
 namespace BannerKings.Models.Vanilla
 {
@@ -86,6 +87,10 @@ namespace BannerKings.Models.Vanilla
                     explainedNumber.Add(0.15f, new TextObject("{=!}Draft policy"));
                 else if (draftPolicy == DraftPolicy.Demobilization)
                     explainedNumber.Add(-0.15f, new TextObject("{=!}Draft policy"));
+
+                GovernmentType government = BannerKingsConfig.Instance.TitleManager.GetSettlementGovernment(settlement);
+                if (government == GovernmentType.Tribal)
+                    explainedNumber.AddFactor(0.2f, new TextObject("{=!}Government"));
 
                 return explainedNumber;
             }
