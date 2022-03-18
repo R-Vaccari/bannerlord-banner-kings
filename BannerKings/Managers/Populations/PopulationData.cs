@@ -254,7 +254,7 @@ namespace BannerKings.Populations
                 float share = 0f;
                 foreach (CultureDataClass data in this.cultures)
                 {
-                    if (data.Assimilation >= share)
+                    if (data.Assimilation >= share && data.Culture.MilitiaSpearman != null)
                     {
                         culture = data.Culture;
                         share = data.Assimilation;

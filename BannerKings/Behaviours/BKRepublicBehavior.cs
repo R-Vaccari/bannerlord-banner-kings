@@ -10,7 +10,7 @@ namespace BannerKings.Behaviours
     {
         public override void RegisterEvents()
         {
-            CampaignEvents.DailyTickSettlementEvent.AddNonSerializedListener(this, new Action<Settlement>(DailySettlementTick));
+            CampaignEvents.DailyTickEvent.AddNonSerializedListener(this, new Action(DailyTick));
         }
 
         public override void SyncData(IDataStore dataStore)
@@ -18,39 +18,35 @@ namespace BannerKings.Behaviours
         }
 
 
-        private void DailySettlementTick(Settlement settlement)
+        private void DailyTick()
         {
-
-            if (settlement.OwnerClan == null || BannerKingsConfig.Instance.TitleManager == null) return;
 
             CampaignTime now = CampaignTime.Now;
             int day = now.GetDayOfYear;
+            if (day != 1) return;
 
-            if (day == 1)
+            foreach (Kingdom kingdom in Kingdom.All)
             {
-                Kingdom kingdom = settlement.OwnerClan.Kingdom;
-                if (kingdom != null)
+                FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
+                if (title == null || title.contract == null) return;
+  
+                GovernmentType government = title.contract.government;
+                if (government == GovernmentType.Republic)
                 {
-                    FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
-                    if (title != null)
-                    {
-                        GovernmentType government = title.contract.government;
-                        if (government == GovernmentType.Republic)
+                    bool inElection = false;
+                    foreach (KingdomDecision decision in kingdom.UnresolvedDecisions)
+                        if (decision is RepublicElectionDecision)
                         {
-                            bool inElection = false;
-                            foreach (KingdomDecision decision in kingdom.UnresolvedDecisions)
-                                if (decision is RepublicElectionDecision)
-                                {
-                                    inElection = true;
-                                    break;
-                                }
+                            inElection = true;
+                            break;
+                        }
                                     
-                            if (!inElection)
-                                kingdom.AddDecision(new RepublicElectionDecision(kingdom.RulingClan, kingdom.RulingClan), true);
-                        }     
-                    }
-                }
-            }      
+                    if (!inElection)
+                        kingdom.AddDecision(new RepublicElectionDecision(kingdom.RulingClan, kingdom.RulingClan), true);
+                }     
+                
+            }
+                 
         }
     }
 }
