@@ -99,6 +99,7 @@ namespace BannerKings.Managers.Populations
             float craftsmen = data.GetTypeCount(PopType.Craftsmen);
             int peasantCap = (int)((serfs * serfMilitarism) + (craftsmen * craftsmanMilitarism));
             int peasantGrowth = (int)(data.Growth.ResultNumber * (serfMilitarism) + craftsmanMilitarism);
+            if (peasantGrowth == 0) peasantGrowth++;
             if (peasantManpower > peasantCap)
                 this.peasantManpower += (int)((float)peasantGrowth * -1f); // Change later
             else if (peasantManpower < peasantCap)
@@ -108,6 +109,7 @@ namespace BannerKings.Managers.Populations
             float nobles = data.GetTypeCount(PopType.Nobles);
             int nobleCap = (int)(nobles * nobleMilitarism);
             int nobleGrowth = (int)(data.Growth.ResultNumber * nobleMilitarism);
+            if (nobleGrowth == 0) nobleGrowth++;
             if (nobleManpower > nobleCap)
                 this.nobleManpower += (int)((float)nobleGrowth * -1f);
             else if (nobleManpower < nobleCap)

@@ -74,6 +74,8 @@ namespace BannerKings.UI
                 instance = __instance;
 
                 FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(Hero.MainHero.MapFaction as Kingdom);
+                if (title == null || title.contract == null) return;
+
                 MethodInfo active = __instance.GetType().GetMethod("IsPolicyActive", BindingFlags.Instance | BindingFlags.NonPublic);
                 MethodInfo select = __instance.GetType().GetMethod("OnPolicySelect", BindingFlags.Instance | BindingFlags.NonPublic);
 
