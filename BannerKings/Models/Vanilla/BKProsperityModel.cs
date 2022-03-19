@@ -1,6 +1,7 @@
 ﻿using BannerKings.Managers;
 using BannerKings.Managers.Court;
 using BannerKings.Populations;
+using CalradiaExpandedKingdoms.Models;
 using Helpers;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
@@ -12,8 +13,8 @@ using static BannerKings.Managers.PopulationManager;
 
 namespace BannerKings.Models
 {
-    public class BKProsperityModel : DefaultSettlementProsperityModel
-    {
+    public class BKProsperityModel : CEKSettlementProsperityModel
+	{
 		private static readonly float STABILITY_FACTOR = 5f;
 		public override ExplainedNumber CalculateHearthChange(Village village, bool includeDescriptions = false)
         {
@@ -142,6 +143,25 @@ namespace BannerKings.Models
 					
 				}
 				this.GetSettlementProsperityChangeDueToIssues(fortification.Settlement, ref explainedNumber);
+
+				if (fortification.OwnerClan != null)
+				{
+					if (fortification.OwnerClan.Leader != null)
+					{
+						if (fortification.OwnerClan.Leader.Culture.HasFeat(CalradiaExpandedKingdoms.Feats.CEKFeats.AseraiPositiveFeatThree))
+							explainedNumber.Add(CalradiaExpandedKingdoms.Feats.CEKFeats.AseraiPositiveFeatThree.EffectBonus, GameTexts.FindText("str_culture", null));
+						
+						if (fortification.OwnerClan.Leader.Culture.HasFeat(CalradiaExpandedKingdoms.Feats.CEKFeats.RhodokPositiveFeatTwo))
+							explainedNumber.Add(0.5f, GameTexts.FindText("str_culture", null));
+						
+						if (fortification.OwnerClan.Leader.Culture.HasFeat(CalradiaExpandedKingdoms.Feats.CEKFeats.VlandianPositiveFeatFour))
+							explainedNumber.Add(0.5f, GameTexts.FindText("str_culture", null));
+						
+						if (fortification.OwnerClan.Leader.Culture.HasFeat(CalradiaExpandedKingdoms.Feats.CEKFeats.ApolssalianPositiveFeatThree))
+							if (fortification.Culture == fortification.OwnerClan.Leader.Culture)
+								explainedNumber.Add(0.5f, GameTexts.FindText("str_culture", null));					
+					}
+				}
 
 				BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref explainedNumber, fortification.OwnerClan.Leader, CouncilPosition.Steward, 1f, false);
 				return explainedNumber;

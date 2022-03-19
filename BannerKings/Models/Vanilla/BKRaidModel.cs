@@ -27,6 +27,10 @@ namespace BannerKings.Models.Vanilla
                         result *= (1f - (0.12f * palisade));
                 }
 
+            if (attackerSide.LeaderParty.LeaderHero != null)
+                if (attackerSide.LeaderParty.LeaderHero.Culture.HasFeat(CalradiaExpandedKingdoms.Feats.CEKFeats.NordlingPositiveFeatOne))
+                    result *= CalradiaExpandedKingdoms.Feats.CEKFeats.NordlingPositiveFeatOne.EffectBonus;
+
             return result;
         }
     }

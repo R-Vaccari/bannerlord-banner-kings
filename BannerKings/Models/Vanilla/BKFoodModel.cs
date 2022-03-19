@@ -110,6 +110,18 @@ namespace BannerKings.Models
 				if (sellLog.Category.Properties == ItemCategory.Property.BonusToFoodStores)
 					result.Add((float)sellLog.Number, sellLog.Category.GetName(), null);
 
+			if (town.OwnerClan != null)
+			{
+				if (town.OwnerClan.Leader != null)
+				{
+					if (town.OwnerClan.Leader.Culture.HasFeat(CalradiaExpandedKingdoms.Feats.CEKFeats.VagirPositiveFeatFour))
+						result.Add(1f, GameTexts.FindText("str_culture", null));
+					
+					if (town.OwnerClan.Leader.Culture.HasFeat(CalradiaExpandedKingdoms.Feats.CEKFeats.RepublicPositiveFeatFour))
+						result.Add(CalradiaExpandedKingdoms.Feats.CEKFeats.RepublicPositiveFeatFour.EffectBonus, GameTexts.FindText("str_culture", null));
+				}
+			}
+
 			GetSettlementFoodChangeDueToIssues(town, ref result);
 			return result;
 		}

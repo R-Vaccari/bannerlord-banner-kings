@@ -2,10 +2,10 @@
 using BannerKings.Managers.Court;
 using BannerKings.Managers.Policies;
 using BannerKings.Populations;
+using CalradiaExpandedKingdoms.Models;
 using Helpers;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.SandBox.GameComponents;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -16,8 +16,8 @@ using static BannerKings.Managers.TitleManager;
 
 namespace BannerKings.Models
 {
-    class BKLoyaltyModel : DefaultSettlementLoyaltyModel
-    {
+    class BKLoyaltyModel : CEKSettlementLoyaltyModel
+	{
         private static readonly float SLAVE_LOYALTY = -0.00035f;
 		private static readonly float LOYALTY_FACTOR = 4f;
 
@@ -68,8 +68,7 @@ namespace BannerKings.Models
 					else value = -0.3f;
 					baseResult.Add(value, new TextObject("{=!}Criminal policy"));
 				}
-					
-					
+
 
 				if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(town.Settlement, "decision_ration"))
 					baseResult.Add(town.IsUnderSiege ? -2f : -4f, new TextObject("{=!}Enforce rations decision"));
@@ -146,8 +145,31 @@ namespace BannerKings.Models
 				if (town.Governor != null)
 					explainedNumber.Add(result * ((town.Governor.Culture == town.Culture) ? 0.1f : -0.1f), GovernorCultureText);
 
+				if (town.OwnerClan.Leader.Culture.HasFeat(CalradiaExpandedKingdoms.Feats.CEKFeats.AseraiNegativeFeatTwo))
+					explainedNumber.Add(CalradiaExpandedKingdoms.Feats.CEKFeats.AseraiNegativeFeatTwo.EffectBonus, GameTexts.FindText("str_culture", null));
 
-				} else if (town.Settlement.OwnerClan.Culture != town.Settlement.Culture) // vanilla behavior
+				if (town.OwnerClan.Leader.Culture.HasFeat(CalradiaExpandedKingdoms.Feats.CEKFeats.LyrionNegativeFeatTwo))
+					explainedNumber.Add(CalradiaExpandedKingdoms.Feats.CEKFeats.LyrionNegativeFeatTwo.EffectBonus, GameTexts.FindText("str_culture", null));
+
+
+				if (town.OwnerClan.Leader.Culture.HasFeat(CalradiaExpandedKingdoms.Feats.CEKFeats.ApolssalianNegativeFeatOne))
+					if (town.Culture != town.OwnerClan.Culture)
+						explainedNumber.Add(CalradiaExpandedKingdoms.Feats.CEKFeats.ApolssalianNegativeFeatOne.EffectBonus, GameTexts.FindText("str_culture", null));
+
+				if (town.Governor != null)
+				{
+					if (town.Governor.Culture != town.Culture && town.OwnerClan.Leader.Culture.HasFeat(CalradiaExpandedKingdoms.Feats.CEKFeats.EmpirePositiveFeatFour))
+						explainedNumber.Add(1f, GameTexts.FindText("str_culture", null));
+
+					if (town.Governor.Culture != town.Culture && town.OwnerClan.Leader.Culture.HasFeat(CalradiaExpandedKingdoms.Feats.CEKFeats.VagirPositiveFeatOne))
+						explainedNumber.Add(1f, GameTexts.FindText("str_culture", null));
+
+					if (town.Governor.Culture != town.Culture && town.OwnerClan.Leader.Culture.HasFeat(CalradiaExpandedKingdoms.Feats.CEKFeats.PaleicianPositiveFeatFour))
+						explainedNumber.Add(1f, GameTexts.FindText("str_culture", null));
+				}
+
+
+			} else if (town.Settlement.OwnerClan.Culture != town.Settlement.Culture) // vanilla behavior
 				explainedNumber.Add(-3f, CultureText, null);
 			
 		}

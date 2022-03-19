@@ -289,6 +289,10 @@
       <HintPath>D:\SteamLibrary\steamapps\common\Mount &amp; Blade II Bannerlord\bin\Win64_Shipping_Client\TaleWorlds.SaveSystem.dll</HintPath>
       <Private>false</Private>
     </Reference>
+	<Reference Include="D:\SteamLibrary\steamapps\common\Mount &amp; Blade II Bannerlord\Modules\CalradiaExpandedKingdoms\bin\Win64_Shipping_Client\CalradiaExpandedKingdoms.dll">
+      <HintPath>D:\SteamLibrary\steamapps\common\Mount &amp; Blade II Bannerlord\Modules\CalradiaExpandedKingdoms\bin\Win64_Shipping_Client\CalradiaExpandedKingdoms.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
 	
   </ItemGroup>
 
@@ -330,6 +334,7 @@
       <Private>false</Private>
     </Reference>
   </ItemGroup>
+  
 
   <ItemGroup>
     <Reference Update="System">

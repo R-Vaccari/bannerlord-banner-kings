@@ -1,9 +1,9 @@
 ﻿using BannerKings.Populations;
+using CalradiaExpandedKingdoms.Models;
 using Helpers;
 using System;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.SandBox.GameComponents;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -12,8 +12,8 @@ using static BannerKings.Managers.PopulationManager;
 
 namespace BannerKings.Models
 {
-    class BKConstructionModel : DefaultBuildingConstructionModel
-    {
+    class BKConstructionModel : CEKBuildingConstructionModel
+	{
 		public ExplainedNumber CalculateVillageConstruction(Settlement settlement)
         {
 			ExplainedNumber result = new ExplainedNumber(0f, true, null);
@@ -191,7 +191,23 @@ namespace BannerKings.Models
 			}
 			else if (town.Loyalty <= 25f)
 				result.Add(-result.ResultNumber, this.VeryLowLoyaltyPenaltyText, null);
+
+			if (town.OwnerClan.Leader.Culture.HasFeat(CalradiaExpandedKingdoms.Feats.CEKFeats.EmpirePositiveFeatThree))
+				result.AddFactor(CalradiaExpandedKingdoms.Feats.CEKFeats.EmpirePositiveFeatThree.EffectBonus, CultureText);
 			
+			if (town.OwnerClan.Leader.Culture.HasFeat(CalradiaExpandedKingdoms.Feats.CEKFeats.RepublicPositiveFeatOne))
+				result.AddFactor(CalradiaExpandedKingdoms.Feats.CEKFeats.RepublicPositiveFeatOne.EffectBonus, CultureText);
+			
+			if (town.OwnerClan.Leader.Culture.HasFeat(CalradiaExpandedKingdoms.Feats.CEKFeats.PaleicianPositiveFeatTwo))
+				result.AddFactor(CalradiaExpandedKingdoms.Feats.CEKFeats.PaleicianPositiveFeatTwo.EffectBonus, CultureText);
+			
+			if (town.OwnerClan.Leader.Culture.HasFeat(CalradiaExpandedKingdoms.Feats.CEKFeats.KhergitPositiveFeatTwo))
+				result.AddFactor(CalradiaExpandedKingdoms.Feats.CEKFeats.KhergitPositiveFeatTwo.EffectBonus, CultureText);
+			
+			if (town.OwnerClan.Leader.Culture.HasFeat(CalradiaExpandedKingdoms.Feats.CEKFeats.LyrionNegativeFeatOne))
+				result.AddFactor(CalradiaExpandedKingdoms.Feats.CEKFeats.LyrionNegativeFeatOne.EffectBonus, CultureText);
+			
+
 			result.LimitMin(0f);
 			return (int)result.ResultNumber;
 		}

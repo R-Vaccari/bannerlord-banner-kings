@@ -1,9 +1,8 @@
-﻿using BannerKings.Managers;
-using BannerKings.Managers.Court;
+﻿using BannerKings.Managers.Court;
 using BannerKings.Managers.Policies;
 using BannerKings.Populations;
+using CalradiaExpandedKingdoms.Models;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.SandBox.GameComponents.Map;
 using TaleWorlds.Localization;
 using static BannerKings.Managers.Policies.BKCriminalPolicy;
 using static BannerKings.Managers.Policies.BKWorkforcePolicy;
@@ -11,7 +10,7 @@ using static BannerKings.Managers.TitleManager;
 
 namespace BannerKings.Models
 {
-    class BKSecurityModel : DefaultSettlementSecurityModel
+    class BKSecurityModel : CEKSettlementSecurityModel
     {
         public override ExplainedNumber CalculateSecurityChange(Town town, bool includeDescriptions = false)
         {

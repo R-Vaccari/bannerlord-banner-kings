@@ -1,6 +1,7 @@
 ﻿using BannerKings.Components;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.SandBox.GameComponents.Party;
+using TaleWorlds.Core;
 
 namespace BannerKings.Models
 {
@@ -13,6 +14,14 @@ namespace BannerKings.Models
         public override ExplainedNumber GetPartyMemberSizeLimit(PartyBase party, bool includeDescriptions = false)
         {
             ExplainedNumber baseResult = base.GetPartyMemberSizeLimit(party, includeDescriptions);
+
+            if (!party.IsMobile || party.MobileParty.IsGarrison)
+                return baseResult;
+
+            if (party.MobileParty.PartyComponent.Leader != null)
+                if (party.MobileParty.PartyComponent.Leader.Culture.HasFeat(CalradiaExpandedKingdoms.Feats.CEKFeats.ApolssalianPositiveFeatFour))
+                    baseResult.Add(CalradiaExpandedKingdoms.Feats.CEKFeats.ApolssalianPositiveFeatFour.EffectBonus, GameTexts.FindText("str_culture", null));
+
             if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsPopulationParty(party.MobileParty))
             {
                 if (party.MobileParty.PartyComponent is PopulationPartyComponent)

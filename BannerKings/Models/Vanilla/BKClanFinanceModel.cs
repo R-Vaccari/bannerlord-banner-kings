@@ -88,8 +88,13 @@ namespace BannerKings.Models
 
         public override int CalculateOwnerIncomeFromCaravan(MobileParty caravan)
         {
-            return base.CalculateOwnerIncomeFromCaravan(caravan);
-        }
+			int result = base.CalculateOwnerIncomeFromCaravan(caravan);
+			if (caravan.Owner != null)
+				if (caravan.Owner.Culture.HasFeat(CalradiaExpandedKingdoms.Feats.CEKFeats.LyrionPositiveFeatFour))
+					result = (int)(result * 1.1f);
+
+			return result;
+		}
 
 		private void AddTownTaxes(Clan clan, ref ExplainedNumber goldChange, bool applyWithdrawals)
         {
@@ -143,6 +148,21 @@ namespace BannerKings.Models
 			MethodInfo baseMethod = model.GetType().GetMethod("CalculateHeroIncomeFromWorkshops", BindingFlags.NonPublic | BindingFlags.Instance);
 			baseMethod.Invoke(model, array);
 			goldChange = (ExplainedNumber)array[1];
+
+			if (hero != null)
+			{
+				if (hero.Culture.HasFeat(CalradiaExpandedKingdoms.Feats.CEKFeats.RhodokPositiveFeatTwo))
+					goldChange.AddFactor(CalradiaExpandedKingdoms.Feats.CEKFeats.RhodokPositiveFeatTwo.EffectBonus);
+				
+				if (hero.Culture.HasFeat(CalradiaExpandedKingdoms.Feats.CEKFeats.RepublicNegativeFeatOne))
+					goldChange.AddFactor(CalradiaExpandedKingdoms.Feats.CEKFeats.RepublicNegativeFeatOne.EffectBonus);
+				
+				if (hero.Culture.HasFeat(CalradiaExpandedKingdoms.Feats.CEKFeats.SturgiaPositiveFeatFour))
+					goldChange.AddFactor(CalradiaExpandedKingdoms.Feats.CEKFeats.SturgiaPositiveFeatFour.EffectBonus);
+				
+				if (hero.Culture.HasFeat(CalradiaExpandedKingdoms.Feats.CEKFeats.SturgiaPositiveFeatFour))
+					goldChange.AddFactor(CalradiaExpandedKingdoms.Feats.CEKFeats.VlandianPositiveFeatFour.EffectBonus);	
+			}
 		}
 
 		private void AddMercenaryIncome(Clan clan, ref ExplainedNumber goldChange, bool applyWithdrawals)
