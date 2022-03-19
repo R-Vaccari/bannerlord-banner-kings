@@ -191,6 +191,9 @@ namespace BannerKings.Models
 			if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(data.Settlement, "decision_ration"))
 				result.AddFactor(-0.4f, new TextObject("{=!}Enforce rations decision"));
 
+			if (data.Settlement.IsCastle)
+				result.AddFactor(-0.1f, new TextObject("{=!}Castle rations"));
+
 			return result;
 		}
 

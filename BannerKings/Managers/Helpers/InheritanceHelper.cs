@@ -18,8 +18,13 @@ namespace BannerKings.Managers.Helpers
                 SuccessionType succession = title.contract.succession;
                 InheritanceType inheritance = title.contract.inheritance;
 
-                if (succession == SuccessionType.Imperial)
-                    return;
+                Kingdom kingdom = clan.Kingdom;
+                if (kingdom != null)
+                {
+                    if (succession == SuccessionType.Imperial && clan == kingdom.RulingClan)
+                        return;
+                }
+                
                 if (inheritance == InheritanceType.Primogeniture)
                     ApplyPrimogeniture(title, victim, candidates);
                 else if (inheritance == InheritanceType.Ultimogeniture)

@@ -68,8 +68,15 @@ namespace BannerKings.UI
 			TerrainInfo.Clear();
 			WorkforceInfo.Clear();
 			GovernmentInfo.Clear();
-			DemesneInfo.Add(new InformationElement("Legitimacy:", new BKLegitimacyModel().GetRuleType(title).ToString().Replace('_', ' '), 
-				"Your legitimacy to this title and it's vassals. You are lawful when you own this title, and considered a foreigner if your culture differs from it."));
+
+			float legitimacyType = new BKLegitimacyModel().CalculateEffect(base.data.Settlement).ResultNumber;
+			if (legitimacyType != 0f)
+            {
+				LegitimacyType legitimacy = (LegitimacyType)legitimacyType;
+				DemesneInfo.Add(new InformationElement("Legitimacy:", legitimacy.ToString().Replace('_', ' '),
+					"Your legitimacy to this title and it's vassals. You are lawful when you own this title, and considered a foreigner if your culture differs from it."));
+			}
+			
 			if (title.sovereign != null) DemesneInfo.Add(new InformationElement("Sovereign:", title.sovereign.name.ToString(),
 				"The master suzerain of this title, be they a king or emperor type suzerain."));
 			if (duchy != null) DemesneInfo.Add(new InformationElement("Dukedom:", duchy.name.ToString(),

@@ -79,11 +79,11 @@ namespace BannerKings.UI.Panels
 
 					villageData.CurrentBuilding = villageData.Buildings
 						.FirstOrDefault(x => x.BuildingType.StringId == localDevelopmentList[0].BuildingType.StringId);
-
-					if (building != null)
-					villageData.CurrentDefault = villageData.Buildings
-						.FirstOrDefault(x => x.BuildingType.StringId == building.BuildingType.StringId);
 				}
+
+				if (building != null && building.BuildingType.BuildingLocation == BuildingLocation.Daily)
+						villageData.CurrentDefault = villageData.Buildings
+							.FirstOrDefault(x => x.BuildingType.StringId == building.BuildingType.StringId);
 			}
 		}
 

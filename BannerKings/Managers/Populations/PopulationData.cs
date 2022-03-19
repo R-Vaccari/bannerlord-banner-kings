@@ -439,13 +439,54 @@ namespace BannerKings.Populations
         }
 
         public Village Village => this.village;
-        public List<VillageBuilding> Buildings => this.buildings;
+        public List<VillageBuilding> Buildings
+        {
+            get
+            {
+                List<VillageBuilding> buildings = new List<VillageBuilding>(this.buildings);
+                List<VillageBuilding> toAdd = new List<VillageBuilding>();
+                foreach (VillageBuilding b in buildings)
+                {
+                    if (b.Explanation == null)
+                    {
+                        string id = b.BuildingType.StringId;
+                        BuildingType type = DefaultVillageBuildings.Instance.All()
+                            .FirstOrDefault(x => x.StringId == id);
+                        if (type != null)
+                            toAdd.Add(new VillageBuilding(type, this.Village.MarketTown, this.Village,
+                                this.current.BuildingProgress, this.current.CurrentLevel));
+                    }  
+                }
+
+                if (toAdd.Count > 0)
+                {
+                    this.buildings.Clear();
+                    foreach (VillageBuilding b in toAdd)
+                        this.buildings.Add(b);
+                }
+
+
+                return this.buildings;
+            }
+        }
         public VillageBuilding CurrentBuilding
         {
             get
             {
                 if (this.current == null)
                     this.current = this.buildings.GetRandomElementWithPredicate(x => x.BuildingType.BuildingLocation != BuildingLocation.Daily);
+
+                if (this.current.BuildingType.Explanation == null)
+                {
+                    string id = this.current.BuildingType.StringId;
+                    BuildingType type = DefaultVillageBuildings.Instance.All()
+                        .FirstOrDefault(x => x.StringId == this.current.BuildingType.StringId);
+                    if (type == null) type = DefaultVillageBuildings.Instance.All().FirstOrDefault(x => x.BuildingLocation != BuildingLocation.Daily);
+                    VillageBuilding newCurrent = new VillageBuilding(type,
+                        this.Village.MarketTown, this.Village,
+                        this.current.BuildingProgress, this.current.CurrentLevel);
+                    this.current = newCurrent;
+                }
 
                 return this.current;
             }
@@ -458,6 +499,18 @@ namespace BannerKings.Populations
             {
                 if (this.currentDefault == null)
                     this.currentDefault = this.buildings.FirstOrDefault(x => x.BuildingType.StringId == "bannerkings_daily_production");
+
+                if (this.currentDefault.BuildingType.Explanation == null)
+                {
+                    string id = this.currentDefault.BuildingType.StringId;
+                    BuildingType type = DefaultVillageBuildings.Instance.All()
+                        .FirstOrDefault(x => x.StringId == this.currentDefault.BuildingType.StringId);
+                    if (type == null) type = DefaultVillageBuildings.Instance.All().FirstOrDefault(x => x.BuildingLocation == BuildingLocation.Daily);
+                    VillageBuilding newCurrent = new VillageBuilding(type,
+                        this.Village.MarketTown, this.Village,
+                        this.currentDefault.BuildingProgress, this.currentDefault.CurrentLevel);
+                    this.currentDefault = newCurrent;
+                }
 
                 return this.currentDefault;
             }
@@ -476,6 +529,8 @@ namespace BannerKings.Populations
         internal override void Update(PopulationData data)
         {
 
+            
+
             VillageBuilding current = this.CurrentBuilding;
             if (current != null && this.BuildingsInProgress.Count() > 0)
                 if (this.BuildingsInProgress.Peek().BuildingType.StringId == current.BuildingType.StringId)
@@ -493,6 +548,7 @@ namespace BannerKings.Populations
                     }
                 } 
         }
+
     }
 
 

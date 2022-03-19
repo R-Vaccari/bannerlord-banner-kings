@@ -312,27 +312,6 @@ namespace BannerKings.UI
                         MethodInfo reset = __instance.GetType().GetMethod("OnResetCurrentProject", BindingFlags.Instance | BindingFlags.NonPublic);
 
                         List<VillageBuilding> buildings = new List<VillageBuilding>(villageData.Buildings);
-                        List<VillageBuilding> toAdd = new List<VillageBuilding>();
-                        foreach (Building building in buildings)
-                        {
-                            if (building.BuildingType.Explanation == null || building.BuildingType.Name == null)
-                            {
-                                string id = building.BuildingType.StringId;
-                                BuildingType type = DefaultVillageBuildings.Instance.All().FirstOrDefault(x => x.StringId == id);
-                                if (type != null)
-                                    toAdd.Add(new VillageBuilding(type, villageData.Village.MarketTown, villageData.Village, 
-                                        building.BuildingProgress, building.CurrentLevel));
-                            }
-                        }
-
-                        if (toAdd.Count > 0)
-                        {
-                            villageData.Buildings.Clear();
-                            foreach (VillageBuilding building in toAdd)
-                                villageData.Buildings.Add(building);
-                        }
-                        
-
 
                         foreach (VillageBuilding building in villageData.Buildings)
                         {
@@ -342,21 +321,25 @@ namespace BannerKings.UI
                                 SettlementBuildingProjectVM vm = new SettlementBuildingProjectVM(
                                 new Action<SettlementProjectVM, bool>(delegate (SettlementProjectVM x, bool y) { selection.Invoke(__instance, new object[] { x, y }); }),
                                 new Action<SettlementProjectVM>(delegate (SettlementProjectVM x) { set.Invoke(__instance, new object[] { x }); }),
-                                new Action(delegate {  }),
+                                new Action(delegate {
+                                    __instance.CurrentSelectedProject = (__instance.LocalDevelopmentList.Count > 0) ?
+                                    __instance.AvailableProjects.First((SettlementBuildingProjectVM p) => p.Building.BuildingType.StringId == __instance.LocalDevelopmentList[0].BuildingType.StringId) : __instance.CurrentDailyDefault;
+                                }),
                                 building
                             );
                                 __instance.AvailableProjects.Add(vm);
-                                if (building == villageData.CurrentBuilding)
+                                if (building.BuildingType.StringId == villageData.CurrentBuilding.BuildingType.StringId)
                                     __instance.CurrentSelectedProject = vm;
                             } else
                             {
                                 SettlementDailyProjectVM settlementDailyProjectVM = new SettlementDailyProjectVM(
                                 new Action<SettlementProjectVM, bool>(delegate (SettlementProjectVM x, bool y) { selection.Invoke(__instance, new object[] { x, y }); }),
                                 new Action<SettlementProjectVM>(delegate (SettlementProjectVM x) { set.Invoke(__instance, new object[] { x }); }),
-                                new Action(delegate { reset.Invoke(__instance, null); }),
+                                new Action(delegate {   __instance.CurrentSelectedProject = (__instance.LocalDevelopmentList.Count > 0) ?
+                                    __instance.AvailableProjects.First((SettlementBuildingProjectVM p) => p.Building.BuildingType.StringId == __instance.LocalDevelopmentList[0].BuildingType.StringId) : __instance.CurrentDailyDefault; }),
                                 building);
                                 __instance.DailyDefaultList.Add(settlementDailyProjectVM);
-                                if (building == villageData.CurrentDefault)
+                                if (building.BuildingType.StringId == villageData.CurrentDefault.BuildingType.StringId)
                                 {
                                     __instance.CurrentDailyDefault = settlementDailyProjectVM;
                                     __instance.CurrentDailyDefault.IsDefault = true;
