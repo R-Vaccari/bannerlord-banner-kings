@@ -36,9 +36,17 @@ namespace BannerKings.Behaviours
                 FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetTitle(village);
                 if (clanTitles.Count == 0 || title == null || !clanTitles.Contains(title) || title.deJure != clan.Leader) return;
 
+                CharacterObject template;
                 GenderLaw genderLaw = title.contract.genderLaw;
-                CharacterObject template = genderLaw == GenderLaw.Agnatic ? clan.Culture.NotableAndWandererTemplates.FirstOrDefault(x => x.Occupation == Occupation.Wanderer && !x.IsFemale) : 
-                    clan.Culture.NotableAndWandererTemplates.FirstOrDefault(x => x.Occupation == Occupation.Wanderer);
+                if (genderLaw == GenderLaw.Agnatic)
+                    template = (from e in clan.Culture.NotableAndWandererTemplates
+                                where e.Occupation == Occupation.Wanderer && !e.IsFemale
+                                select e).GetRandomElementInefficiently();
+
+                else template = (from e in clan.Culture.NotableAndWandererTemplates
+                                 where e.Occupation == Occupation.Wanderer
+                                 select e).GetRandomElementInefficiently();
+
                 if (template == null) return;
 
                 Settlement settlement = clan.Settlements.FirstOrDefault();
@@ -63,6 +71,9 @@ namespace BannerKings.Behaviours
                     BannerKingsConfig.Instance.TitleManager.GrantLordship(title, title.deJure, hero);
                     bool mainParty = hero.PartyBelongedTo == MobileParty.MainParty;
                     MobilePartyHelper.CreateNewClanMobileParty(hero, clan, out mainParty);
+                    WarPartyComponent component = clan.WarPartyComponents.FirstOrDefault(x => x.Leader == hero);
+                    if (component != null)
+                        EnterSettlementAction.ApplyForParty(component.MobileParty, settlement);
                 }    
             }
         }
