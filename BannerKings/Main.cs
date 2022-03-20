@@ -491,7 +491,8 @@ namespace BannerKings
                             if (Campaign.Current.GameStarted && !doNotEffectCapital)
                             {
                                 ItemData categoryData = town.MarketData.GetCategoryData(itemAtIndex.GetItemCategory());
-                                float itemPrice = new BKPriceFactorModel().GetPrice(new EquipmentElement(itemAtIndex, null, null, false), town.GarrisonParty, town.GarrisonParty.Party, false, categoryData.InStoreValue,
+                                float itemPrice = new BKPriceFactorModel().GetPrice(new EquipmentElement(itemAtIndex, null, null, false), town.GarrisonParty, 
+                                    town.GarrisonParty != null ? town.GarrisonParty.Party : null, false, categoryData.InStoreValue,
                                     categoryData.Supply, categoryData.Demand);
                                 int finalPrice = (int)(itemPrice * (data.EconomicData.ProductionQuality.ResultNumber - 1f));
                                 workshop.ChangeGold(-finalPrice);

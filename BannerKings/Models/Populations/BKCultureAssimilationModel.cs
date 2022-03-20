@@ -71,11 +71,13 @@ namespace BannerKings.Models
                                 effect = 0.015f;
                             result.Add(effect, new TextObject("Governor effect"));
                         }
+
+                        if (dataCulture == popData.CultureData.DominantCulture)
+                            result.Add(0.005f);
                     }
                     else if (data.Assimilation < 1f - popData.Foreigner.ResultNumber)
-                    {
                         result.Add(-0.005f, new TextObject("Over limit"));
-                    }
+                    
                     else return result;
                 }
                 else
