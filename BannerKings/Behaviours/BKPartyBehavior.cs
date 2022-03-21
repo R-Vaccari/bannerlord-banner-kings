@@ -12,7 +12,7 @@ using static BannerKings.Managers.PopulationManager;
 
 namespace BannerKings.Behaviours
 {
-    class BKPartyBehavior : CampaignBehaviorBase
+    public class BKPartyBehavior : CampaignBehaviorBase
     {
         public override void RegisterEvents()
         {

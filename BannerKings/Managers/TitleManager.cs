@@ -21,6 +21,7 @@ namespace BannerKings.Managers
         [SaveableProperty(2)]
         public Dictionary<Kingdom, FeudalTitle> Kingdoms { get; set; }
 
+
         public TitleManager(Dictionary<FeudalTitle, Hero> titles, Dictionary<Hero, List<FeudalTitle>> titleHolders, Dictionary<Kingdom, FeudalTitle> kingdoms)
         {
             this.Titles = titles;
