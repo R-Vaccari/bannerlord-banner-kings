@@ -199,7 +199,37 @@ namespace BannerKings.Managers
             //OwnershipNotification notification = new OwnershipNotification(title, new TextObject(string.Format("You are now the rightful owner to {0}", title.name)));
             //Campaign.Current.CampaignInformationManager.NewMapNoticeAdded(notification);
         }
-        
+
+        public void GiveLordshipOnKingdomJoin(Kingdom newKingdom, Clan clan)
+        {
+            List<FeudalTitle> clanTitles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(clan);
+            if (clanTitles.Count > 0) return;
+
+            FeudalTitle sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(newKingdom);
+            if (sovereign == null || sovereign.contract == null) return;
+
+            if (!sovereign.contract.rights.Contains(FeudalRights.Enfoeffement_Rights)) return;
+
+            List<FeudalTitle> titles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(newKingdom.Leader);
+            if (titles.Count == 0) return;
+
+            List<FeudalTitle> lordships = titles.FindAll(x => x.type == TitleType.Lordship);
+            if (lordships.Count == 0) return;
+
+            FeudalTitle lordship = (from l in lordships where l.fief != null select l into x orderby x.fief.Village.Hearth select x).FirstOrDefault<FeudalTitle>();
+            if (lordship != null)
+            {
+                BannerKingsConfig.Instance.TitleManager.GrantLordship(lordship, newKingdom.Leader, clan.Leader);
+                if (clan == Clan.PlayerClan)
+                {
+                    GameTexts.SetVariable("FIEF", lordship.name);
+                    GameTexts.SetVariable("SOVEREIGN", sovereign.name);
+                    InformationManager.ShowInquiry(new InquiryData("Enfoeffement Right", new TextObject("You have been generously granted the {FIEF} as part of your vassal rights to the {SOVEREIGN}.").ToString(),
+                    true, false, GameTexts.FindText("str_done").ToString(), null, null, null), false);
+                }
+            }
+        }
+
         public List<FeudalTitle> GetAllDeJure(Hero hero)
         {
             List<FeudalTitle> list = new List<FeudalTitle>();
@@ -447,10 +477,18 @@ namespace BannerKings.Managers
 
         public void ShowContract(Hero lord, string buttonString)
         {
-            FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(lord);
-            string description = BannerKingsConfig.Instance.TitleManager.GetContractText(title);
-            InformationManager.ShowInquiry(new InquiryData(string.Format("Enfoeffement Contract for {0}", title.name),
-                description, true, false, buttonString, "", null, null), false);
+            Kingdom kingdom = lord.Clan.Kingdom;
+            if (kingdom == null) return;
+            
+            FeudalTitle sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
+            if (sovereign == null || sovereign.contract == null) return;
+            
+            string description = BannerKingsConfig.Instance.TitleManager.GetContractText(sovereign);
+            InformationManager.ShowInquiry(new InquiryData(string.Format("Enfoeffement Contract for {0}", sovereign.name),
+                description, true, false, buttonString, "", delegate
+                {
+                    BannerKingsConfig.Instance.TitleManager.GiveLordshipOnKingdomJoin(kingdom, Clan.PlayerClan);
+                }, null), false);
         }
 
         public FeudalTitle GetDuchy(FeudalTitle title)
@@ -497,8 +535,7 @@ namespace BannerKings.Managers
             sb.Append(Environment.NewLine);
             foreach (KeyValuePair<FeudalDuties, float> duty in contract.duties)
             {
-                if (duty.Key != FeudalDuties.Auxilium) sb.Append(string.Format(this.GetDutyString(duty.Key), duty.Value));
-                else sb.Append(this.GetDutyString(duty.Key));
+                sb.Append(this.GetDutyString(duty.Key, duty.Value));
                 sb.Append(Environment.NewLine);
             }
             sb.Append(Environment.NewLine);
@@ -515,13 +552,17 @@ namespace BannerKings.Managers
             return sb.ToString();
         }
 
-        private string GetDutyString(FeudalDuties duty)
+        private string GetDutyString(FeudalDuties duty, float factor)
         {
+            GameTexts.SetVariable("DUTY_FACTOR", (factor * 100f).ToString("0") + '%');
+            string text = null;
             if (duty == FeudalDuties.Taxation)
-                return "You are due {0} of your fief's income to your suzerain.";
+                text = "You are due {DUTY_FACTOR} of your fiefs' income to your suzerain.";
             else if (duty == FeudalDuties.Auxilium)
-                return "You are obliged to militarily participate in armies.";
-            else return "You are obliged to contribute to {0} of your suzerain's ransom.";
+                text = "You are obliged to militarily participate in armies, for {DUTY_FACTOR} of their durations.";
+            else text = "You are obliged to contribute to {DUTY_FACTOR} of your suzerain's ransom.";
+
+            return new TextObject(text).ToString();
         }
 
         private string GetRightString(FeudalRights right)
@@ -531,7 +572,7 @@ namespace BannerKings.Managers
             else if (right == FeudalRights.Enfoeffement_Rights)
                 return "You are entitled to be granted land in case you have none, whenever possible.";
             else if (right == FeudalRights.Conquest_Rights)
-                return "You are entitle to the ownership of any lands you conquered by yourself.";
+                return "You are entitled to the ownership of any lands you conquered by yourself.";
             else return "";
         }
 
@@ -662,6 +703,14 @@ namespace BannerKings.Managers
                 this.shortName = new TextObject(name);
                 this.contract = contract;
                 dueTax = 0;
+            }
+
+            public Hero DeFacto
+            {
+                get
+                {
+                    return this.deFacto;
+                }
             }
 
             public bool Active => this.deJure != null || this.deFacto != null;

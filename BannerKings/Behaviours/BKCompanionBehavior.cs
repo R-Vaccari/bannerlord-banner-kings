@@ -157,8 +157,11 @@ namespace BannerKings.Behaviors
             {
                 if (BannerKingsConfig.Instance.TitleManager != null)
                 {
+                    Hero lord = null;
                     PartyBase party = PlayerEncounter.EncounteredParty;
-                    BannerKingsConfig.Instance.TitleManager.ShowContract(party.LeaderHero, "I accept");
+                    if (party != null) lord = party.LeaderHero;
+                    if (lord == null) lord = Hero.OneToOneConversationHero;
+                    BannerKingsConfig.Instance.TitleManager.ShowContract(lord, "I Accept");
                 }
             }
         }
