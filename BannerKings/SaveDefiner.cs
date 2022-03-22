@@ -2,6 +2,7 @@
 using BannerKings.Managers;
 using BannerKings.Managers.Court;
 using BannerKings.Managers.Decisions;
+using BannerKings.Managers.Duties;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Villages;
@@ -80,6 +81,9 @@ namespace BannerKings
             base.AddClassDefinition(typeof(BKSubsidizeMilitiaDecision), 48);
             base.AddClassDefinition(typeof(BKExemptTariffDecision), 49);
             base.AddClassDefinition(typeof(BKEncourageMercantilism), 50);
+            base.AddClassDefinition(typeof(BannerKingsDuty), 51);
+            base.AddClassDefinition(typeof(AuxiliumDuty), 52);
+            base.AddClassDefinition(typeof(RansomDuty), 53);    
         }
 
         protected override void DefineContainerDefinitions()

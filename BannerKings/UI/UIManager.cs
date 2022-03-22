@@ -64,6 +64,30 @@ namespace BannerKings.UI
     namespace Patches
     {
 
+
+        [HarmonyPatch(typeof(Hero))]
+        internal class HeroNamePatch
+        {
+            [HarmonyPostfix]
+            [HarmonyPatch("Name", MethodType.Getter)]
+            internal static void GetterPostfix(Hero __instance, ref TextObject __result)
+            {
+                if (__instance.IsNoble && BannerKingsConfig.Instance.TitleManager != null)
+                {
+                    FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(__instance);
+                    if (title != null)
+                    {
+                        TextObject name = (TextObject)__instance.GetType()
+                            .GetField("_name", BindingFlags.Instance | BindingFlags.NonPublic)
+                            .GetValue(__instance);
+                        __result = new TextObject(name + ", " + 
+                            string.Format("{0} of {1}", Helpers.Helpers.GetTitleHonorary(title.type, false), title.shortName));
+                    }     
+                }
+            }
+        }
+
+
         [HarmonyPatch(typeof(KingdomPoliciesVM), "RefreshPolicyList")]
         class RefreshPolicyListPatch
         {

@@ -10,7 +10,7 @@ namespace BannerKings.Behaviours
 {
     public class BKArmyBehavior : CampaignBehaviorBase
     {
-        public static AuxiliumDuty PlayerArmyDuty { get; set; }
+        public static AuxiliumDuty playerArmyDuty;
 
         public override void RegisterEvents()
         {
@@ -22,6 +22,7 @@ namespace BannerKings.Behaviours
 
         public override void SyncData(IDataStore dataStore)
         {
+            dataStore.SyncData("bannerkings-military-duty", ref playerArmyDuty);
         }
 
         public void OnPartyJoinedArmyEvent(MobileParty party)
@@ -41,14 +42,14 @@ namespace BannerKings.Behaviours
 
             MobileParty leaderParty = army.LeaderParty;
             Kingdom playerKingdom = Clan.PlayerClan.Kingdom;
-            if (playerKingdom == null || playerKingdom != army.Kingdom || PlayerArmyDuty == null ||
+            if (playerKingdom == null || playerKingdom != army.Kingdom || playerArmyDuty == null ||
                 BannerKingsConfig.Instance.TitleManager == null || leaderParty == MobileParty.MainParty)
                 return;
 
-            if (army.LeaderParty == PlayerArmyDuty.Party || army.Parties.Contains(PlayerArmyDuty.Party))
+            if (army.LeaderParty == playerArmyDuty.Party || army.Parties.Contains(playerArmyDuty.Party))
             {
-                PlayerArmyDuty.Finish();
-                PlayerArmyDuty = null;
+                playerArmyDuty.Finish();
+                playerArmyDuty = null;
             }   
         }
 
@@ -68,6 +69,10 @@ namespace BannerKings.Behaviours
 
         private void EvaluateSummonPlayer(FeudalTitle playerTitle, Army army, MobileParty joinningParty = null)
         {
+            FeudalContract contract = playerTitle.contract;
+            if (contract == null || !contract.duties.ContainsKey(FeudalDuties.Auxilium)) return;
+            float completion = contract.duties[FeudalDuties.Auxilium];
+
             FeudalTitle suzerain = BannerKingsConfig.Instance.TitleManager.GetImmediateSuzerain(playerTitle);
             if (suzerain == null) return;
             if (Hero.MainHero.IsPrisoner) return;
@@ -81,7 +86,7 @@ namespace BannerKings.Behaviours
                     string.Format("Your suzerain, {0}, has summoned you to fulfill your oath of military aid. You have {1} to join {2}, currently close to {3}.", 
                     suzerainParty.LeaderHero.Name.ToString(), days, army.Name, settlement.Name),
                     true, false, "Understood", null, null, null), false);
-                BKArmyBehavior.PlayerArmyDuty = new Managers.Duties.AuxiliumDuty(CampaignTime.DaysFromNow(days), suzerainParty);
+                BKArmyBehavior.playerArmyDuty = new Managers.Duties.AuxiliumDuty(CampaignTime.DaysFromNow(days), suzerainParty, completion);
             }
         }
 
@@ -106,17 +111,17 @@ namespace BannerKings.Behaviours
                 mobileParty.IsBandit || !mobileParty.MapFaction.IsKingdomFaction)
                 return;
 
-            if (PlayerArmyDuty == null || mobileParty != PlayerArmyDuty.Party) return;
+            if (playerArmyDuty == null || mobileParty != playerArmyDuty.Party) return;
 
             Army army = mobileParty.Army;
             if (army == null)
             {
-                PlayerArmyDuty.Finish();
-                PlayerArmyDuty = null;
+                playerArmyDuty.Finish();
+                playerArmyDuty = null;
                 return;
             }
 
-            PlayerArmyDuty.Tick();
+            playerArmyDuty.Tick();
         }
     }
 }
