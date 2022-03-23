@@ -42,7 +42,7 @@ namespace BannerKings.Managers.Duties
             }
 
             InformationManager.ShowInquiry(new InquiryData("Duty of Military Aid", result,
-                    true, false, GameTexts.FindText("str_done").ToString(), null, null, null), false);
+                    true, false, GameTexts.FindText("str_done").ToString(), null, null, null), true);
         }
 
         public override void Tick()

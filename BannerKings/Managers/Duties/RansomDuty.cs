@@ -32,7 +32,7 @@ namespace BannerKings.Managers.Duties
 
             BKRansomBehavior.playerRansomDuty = null;
             InformationManager.ShowInquiry(new InquiryData("Duty of Ransom Aid", result,
-                    true, false, GameTexts.FindText("str_done").ToString(), null, null, null), false);
+                    true, false, GameTexts.FindText("str_done").ToString(), null, null, null), true);
         }
 
         public override void Tick()

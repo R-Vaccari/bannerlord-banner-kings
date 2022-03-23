@@ -21,6 +21,7 @@ using BannerKings.Managers.Policies;
 using BannerKings.Managers.Populations.Villages;
 using static BannerKings.Managers.Policies.BKTaxPolicy;
 using BannerKings.Managers.Decisions;
+using static BannerKings.Managers.TitleManager;
 
 namespace BannerKings.Behaviors
 {
@@ -55,10 +56,10 @@ namespace BannerKings.Behaviors
 
             if (wipeData)
             {
-                populationManager = new PopulationManager(new Dictionary<Settlement, PopulationData>(), new List<MobileParty>());
-                policyManager = new PolicyManager(new Dictionary<Settlement, List<BannerKingsDecision>>(), new Dictionary<Settlement, List<BannerKingsPolicy>>());
-                titleManager = new TitleManager(new Dictionary<TitleManager.FeudalTitle, Hero>(), new Dictionary<Hero, List<TitleManager.FeudalTitle>>(), new Dictionary<Kingdom, TitleManager.FeudalTitle>());
-                courtManager = new CourtManager(new Dictionary<Clan, Managers.Court.CouncilData>());
+                populationManager = null;
+                policyManager = null;
+                titleManager = null;
+                courtManager = null;
             }
 
             dataStore.SyncData("bannerkings-populations", ref populationManager);
@@ -1218,6 +1219,28 @@ namespace BannerKings.Behaviors
                     return true;
                 
                 return false;
+            }
+        }
+
+        [HarmonyPatch(typeof(Settlement))]
+        internal class SettlementOwnerClanPatch
+        {
+            [HarmonyPostfix]
+            [HarmonyPatch("OwnerClan", MethodType.Getter)]
+            internal static void GetterPostfix(Settlement __instance, ref Clan __result)
+            {
+                if (__instance.IsVillage && BannerKingsConfig.Instance.TitleManager != null)
+                {
+                    FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetTitle(__instance);
+                    Clan boundClan = __instance.Village.Bound.OwnerClan;
+                    __result = boundClan;
+                    if (title != null && !boundClan.Heroes.Contains(title.deJure))
+                    {
+                        Kingdom deJuresKingdom = title.deJure.Clan.Kingdom;
+                        if (deJuresKingdom == boundClan.Kingdom)
+                            __result = title.deJure.Clan;
+                    }
+                }
             }
         }
 

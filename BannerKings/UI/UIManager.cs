@@ -1,5 +1,4 @@
-﻿
-using BannerKings.Managers.Helpers;
+﻿using BannerKings.Managers.Helpers;
 using BannerKings.Managers.Populations.Villages;
 using BannerKings.Populations;
 using BannerKings.UI.Windows;

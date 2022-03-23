@@ -57,11 +57,12 @@ namespace BannerKings.Models
 			this.AddIncomeFromTownProjects(clan, ref goldChange, applyWithdrawals);
 			if (!clan.IsUnderMercenaryService)
 				this.AddIncomeFromTribute(clan, ref goldChange, applyWithdrawals);
-			
-			if (clan.Gold < 30000 && clan.Kingdom != null && clan.Leader != Hero.MainHero && !clan.IsUnderMercenaryService)
-			{
-				this.AddIncomeFromKingdomBudget(clan, ref goldChange, applyWithdrawals);
-			}
+
+			FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
+			if (title != null && title.contract != null && title.contract.rights.Contains(FeudalRights.Assistance_Rights))
+				if ((clan.Gold < 30000 || clan.Fiefs.Count == 0) && !clan.IsUnderMercenaryService)
+					this.AddIncomeFromKingdomBudget(clan, ref goldChange, applyWithdrawals);
+				
 			Hero leader = clan.Leader;
 			if (leader != null && leader.GetPerkValue(DefaultPerks.Trade.SpringOfGold))
 			{
