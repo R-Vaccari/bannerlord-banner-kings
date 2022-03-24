@@ -22,6 +22,8 @@ namespace BannerKings.Behaviours
 
         public override void SyncData(IDataStore dataStore)
         {
+            if (BannerKingsConfig.Instance.wipeData)
+                playerArmyDuty = null;
             dataStore.SyncData("bannerkings-military-duty", ref playerArmyDuty);
         }
 

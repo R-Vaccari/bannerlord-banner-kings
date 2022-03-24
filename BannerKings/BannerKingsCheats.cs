@@ -25,7 +25,7 @@ namespace BannerKings
 				count++;
 			}
 
-			BKSettlementBehavior.wipeData = true;
+			BannerKingsConfig.Instance.wipeData = true;
 				
 			return string.Format("{0} parties destroyed.", count);
 		}

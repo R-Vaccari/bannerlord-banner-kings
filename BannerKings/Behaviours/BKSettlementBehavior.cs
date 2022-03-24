@@ -35,7 +35,6 @@ namespace BannerKings.Behaviors
         private static float actionGold = 0f;
         private static int actionHuntGame = 0;
         private static CampaignTime actionStart = CampaignTime.Now;
-        public static bool wipeData = false;
 
         public override void RegisterEvents()
         {
@@ -54,7 +53,7 @@ namespace BannerKings.Behaviors
                 courtManager = BannerKingsConfig.Instance.CourtManager;   
             }
 
-            if (wipeData)
+            if (BannerKingsConfig.Instance.wipeData)
             {
                 populationManager = null;
                 policyManager = null;

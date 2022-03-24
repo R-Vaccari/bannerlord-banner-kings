@@ -18,6 +18,8 @@ namespace BannerKings.Behaviours
 
         public override void SyncData(IDataStore dataStore)
         {
+            if (BannerKingsConfig.Instance.wipeData)
+                playerRansomDuty = null;
             dataStore.SyncData("bannerkings-ransom-duty", ref playerRansomDuty);
         }
 

@@ -82,9 +82,12 @@ namespace BannerKings.Behaviours
         private void OnOwnerChanged(Settlement settlement, bool openToClaim, Hero newOwner, Hero oldOwner, Hero capturerHero, 
             ChangeOwnerOfSettlementAction.ChangeOwnerOfSettlementDetail detail)
         {
-            if (BannerKingsConfig.Instance.TitleManager == null || settlement.Town.IsOwnerUnassigned) return;
-            BannerKingsConfig.Instance.TitleManager.ApplyOwnerChange(settlement, newOwner);
+            if (BannerKingsConfig.Instance.TitleManager == null) return;
 
+            if (settlement.Town != null && settlement.Town.IsOwnerUnassigned &&
+                detail != ChangeOwnerOfSettlementAction.ChangeOwnerOfSettlementDetail.ByLeaveFaction) return;
+
+            BannerKingsConfig.Instance.TitleManager.ApplyOwnerChange(settlement, newOwner);
             Kingdom kingdom = newOwner.Clan.Kingdom;
             if (kingdom == null) return;
 
