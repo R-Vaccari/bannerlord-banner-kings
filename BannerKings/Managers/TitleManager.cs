@@ -485,10 +485,7 @@ namespace BannerKings.Managers
             
             string description = BannerKingsConfig.Instance.TitleManager.GetContractText(sovereign);
             InformationManager.ShowInquiry(new InquiryData(string.Format("Enfoeffement Contract for {0}", sovereign.name),
-                description, true, false, buttonString, "", delegate
-                {
-                    BannerKingsConfig.Instance.TitleManager.GiveLordshipOnKingdomJoin(kingdom, Clan.PlayerClan);
-                }, null), false);
+                description, true, false, buttonString, "", null, null), false);
         }
 
         public FeudalTitle GetDuchy(FeudalTitle title)

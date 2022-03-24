@@ -1250,7 +1250,7 @@ namespace BannerKings.Behaviors
         {
             static bool Prefix(MobileParty sellerParty, TroopRoster prisoners, Settlement currentSettlement, bool applyGoldChange = true)
             {
-                if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(currentSettlement))
+                if (currentSettlement != null && (currentSettlement.IsCastle || currentSettlement.IsTown) &&BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(currentSettlement))
                 {
                     BKCriminalPolicy policy = (BKCriminalPolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(currentSettlement, "criminal");
                     if (policy.Policy == BKCriminalPolicy.CriminalPolicy.Enslavement)
@@ -1287,7 +1287,7 @@ namespace BannerKings.Behaviors
         {
             static bool Prefix(MobileParty sellerParty, TroopRoster prisoners, Settlement currentSettlement)
             {
-                if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(currentSettlement))
+                if (currentSettlement != null && (currentSettlement.IsCastle || currentSettlement.IsTown) & BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(currentSettlement))
                 {
                     BKCriminalPolicy policy = (BKCriminalPolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(currentSettlement, "criminal");
                     if (policy.Policy == BKCriminalPolicy.CriminalPolicy.Enslavement)

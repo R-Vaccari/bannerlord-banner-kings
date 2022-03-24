@@ -58,7 +58,7 @@ namespace BannerKings.Models
 			if (!clan.IsUnderMercenaryService)
 				this.AddIncomeFromTribute(clan, ref goldChange, applyWithdrawals);
 
-			FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
+			FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(clan.Leader);
 			if (title != null && title.contract != null && title.contract.rights.Contains(FeudalRights.Assistance_Rights))
 				if ((clan.Gold < 30000 || clan.Fiefs.Count == 0) && !clan.IsUnderMercenaryService)
 					this.AddIncomeFromKingdomBudget(clan, ref goldChange, applyWithdrawals);

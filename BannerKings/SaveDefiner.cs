@@ -5,6 +5,7 @@ using BannerKings.Managers.Decisions;
 using BannerKings.Managers.Duties;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Populations;
+using BannerKings.Managers.Populations.Tournament;
 using BannerKings.Managers.Populations.Villages;
 using BannerKings.Populations;
 using System.Collections.Generic;
@@ -83,7 +84,8 @@ namespace BannerKings
             base.AddClassDefinition(typeof(BKEncourageMercantilism), 50);
             base.AddClassDefinition(typeof(BannerKingsDuty), 51);
             base.AddClassDefinition(typeof(AuxiliumDuty), 52);
-            base.AddClassDefinition(typeof(RansomDuty), 53);    
+            base.AddClassDefinition(typeof(RansomDuty), 53);
+            base.AddClassDefinition(typeof(BannerKingsTournament), 54);
         }
 
         protected override void DefineContainerDefinitions()

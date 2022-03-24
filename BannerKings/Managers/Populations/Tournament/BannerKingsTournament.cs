@@ -2,12 +2,13 @@
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.SandBox.Source.TournamentGames;
 using TaleWorlds.Core;
+using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Managers.Populations.Tournament
 {
     public class BannerKingsTournament : FightTournamentGame
     {
-
+        [SaveableField(100)]
         private TournamentData data;
 
         public BannerKingsTournament(Town town, TournamentData data) : base(town)
