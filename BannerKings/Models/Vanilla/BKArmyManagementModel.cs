@@ -1,5 +1,9 @@
-﻿using TaleWorlds.CampaignSystem;
+﻿using BannerKings.Behaviours;
+using System.Collections.Generic;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.SandBox.GameComponents.Map;
+using TaleWorlds.Core;
+using TaleWorlds.Library;
 using static BannerKings.Managers.TitleManager;
 
 namespace BannerKings.Models
@@ -19,13 +23,16 @@ namespace BannerKings.Models
                         BannerKingsConfig.Instance.TitleManager.IsHeroTitleHolder(summonedLeader))
                     {
                         FeudalTitle leaderTitle = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(leader);
-                        TitleType rank = leaderTitle.type;
-
                         FeudalTitle summonedLeaderTitle = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(summonedLeader);
-                        TitleType summonedRank = summonedLeaderTitle.type;
 
-                        float factor = 1f + (0.3f * (rank - summonedRank));
-                        result *= factor;
+                        if (leaderTitle != null && summonedLeaderTitle != null)
+                        {
+                            TitleType rank = leaderTitle.type;
+                            TitleType summonedRank = summonedLeaderTitle.type;
+
+                            float factor = 1f + (0.25f * (rank - summonedRank));
+                            result *= factor;
+                        }
                     }
                 }
             }

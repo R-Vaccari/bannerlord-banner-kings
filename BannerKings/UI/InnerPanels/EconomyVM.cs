@@ -159,7 +159,7 @@ namespace BannerKings.UI
         {
             get 
             {
-                if (this.settlement.Town != null)
+                if (this.settlement.IsTown)
                     return !this.settlement.Town.HasTournament && Hero.MainHero.Gold >= 5000;
                 
                 return false;

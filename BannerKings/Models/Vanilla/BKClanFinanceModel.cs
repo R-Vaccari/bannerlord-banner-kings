@@ -57,11 +57,12 @@ namespace BannerKings.Models
 			this.AddIncomeFromTownProjects(clan, ref goldChange, applyWithdrawals);
 			if (!clan.IsUnderMercenaryService)
 				this.AddIncomeFromTribute(clan, ref goldChange, applyWithdrawals);
-			
-			if (clan.Gold < 30000 && clan.Kingdom != null && clan.Leader != Hero.MainHero && !clan.IsUnderMercenaryService)
-			{
-				this.AddIncomeFromKingdomBudget(clan, ref goldChange, applyWithdrawals);
-			}
+
+			FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(clan.Leader);
+			if (title != null && title.contract != null && title.contract.rights.Contains(FeudalRights.Assistance_Rights))
+				if ((clan.Gold < 30000 || clan.Fiefs.Count == 0) && !clan.IsUnderMercenaryService)
+					this.AddIncomeFromKingdomBudget(clan, ref goldChange, applyWithdrawals);
+				
 			Hero leader = clan.Leader;
 			if (leader != null && leader.GetPerkValue(DefaultPerks.Trade.SpringOfGold))
 			{
@@ -165,71 +166,84 @@ namespace BannerKings.Models
 
 		private void AddVillagesIncome(Clan clan, ref ExplainedNumber goldChange, bool applyWithdrawals)
 		{
-			foreach (Village village3 in clan.Villages)
+			List<FeudalTitle> titles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(clan);
+			List<FeudalTitle> lordships = titles.FindAll(x => x.type == TitleType.Lordship);
+			foreach (Village village in clan.Villages)
 			{
-				bool leaderOwned = true;
-				Hero owner = null;
-				FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetTitle(village3.Settlement);
+				FeudalTitle title = lordships.FirstOrDefault(x => x.fief.Village == village);
+				if (title == null) title = BannerKingsConfig.Instance.TitleManager.GetTitle(village.Settlement);
+				int result = this.CalculateVillageIncome(ref goldChange, village, clan, applyWithdrawals);
+				
 				if (title != null)
                 {
-					owner = title.deFacto;
-					if (title.deFacto != clan.Leader)
-						leaderOwned = false;
+					Hero deJure = title.deJure;
+					bool knightOwned = title.deJure != clan.Leader && title.deJure.Clan == clan;
+					if (knightOwned)
+					{
+						deJure.Gold += result;
+						continue;
+					}
+					else if (deJure.Clan.Kingdom == clan.Kingdom)
+						continue;
 				}
 
-				int num = (village3.VillageState == Village.VillageStates.Looted || village3.VillageState == Village.VillageStates.BeingRaided) ? 0 : ((int)((float)village3.TradeTaxAccumulated / this.RevenueSmoothenFraction()));
-				int num2 = num;
-				if (clan.Kingdom != null && clan.Kingdom.RulingClan != clan && clan.Kingdom.ActivePolicies.Contains(DefaultPolicies.LandTax))
-                {
-					if (leaderOwned) goldChange.Add((float)(-(float)num) * 0.05f, DefaultPolicies.LandTax.Name, null);
-					else owner.Gold += (int)((-(float)num) * 0.05f);
-				}
-					
-				
-				if (village3.Bound.Town != null && village3.Bound.Town.Governor != null && village3.Bound.Town.Governor.GetPerkValue(DefaultPerks.Scouting.ForestKin))
-					num += MathF.Round((float)num * DefaultPerks.Scouting.ForestKin.SecondaryBonus * 0.01f);
-				
-				Settlement bound = village3.Bound;
-				bool flag;
-				if (bound == null)
-					flag = (null != null);
-				
-				else
-				{
-					Town town = bound.Town;
-					flag = (((town != null) ? town.Governor : null) != null);
-				}
-				if (flag && village3.Bound.Town.Governor.GetPerkValue(DefaultPerks.Steward.Logistician))
-					num += MathF.Round((float)num * DefaultPerks.Steward.Logistician.SecondaryBonus * 0.01f);
-				
-				if (applyWithdrawals)
-					village3.TradeTaxAccumulated -= num2;
-
-				if (leaderOwned) goldChange.Add((float)num, _villageIncomeStr, village3.Name);
-				else owner.Gold += num;
+				goldChange.Add((float)result, _villageIncomeStr, village.Name);
 			}
+
+			foreach (FeudalTitle lordship in lordships)
+            {
+				Village village = lordship.fief.Village;
+				if (clan.Villages.Contains(village)) continue;
+
+				Clan ownerClan = village.Settlement.OwnerClan;
+				if (ownerClan.Kingdom == clan.Kingdom)
+                {
+					int result = this.CalculateVillageIncome(ref goldChange, village, clan, applyWithdrawals);
+					bool leaderOwned = lordship.deJure == clan.Leader;
+					if (!leaderOwned)
+                    {
+						Hero deJure = lordship.deJure;
+						deJure.Gold += result;
+					} else goldChange.Add((float)result, _villageIncomeStr, village.Name);
+				}
+            }
+		}
+
+		private int CalculateVillageIncome(ref ExplainedNumber goldChange, Village village, Clan clan, bool applyWithdrawals)
+        {
+			int total = (village.VillageState == Village.VillageStates.Looted || village.VillageState == Village.VillageStates.BeingRaided) ? 0 : ((int)((float)village.TradeTaxAccumulated / this.RevenueSmoothenFraction()));
+			int num2 = total;
+			if (clan.Kingdom != null && clan.Kingdom.RulingClan != clan && clan.Kingdom.ActivePolicies.Contains(DefaultPolicies.LandTax))
+				total += (int)((-(float)total) * 0.05f);
+
+			if (village.Bound.Town != null && village.Bound.Town.Governor != null && village.Bound.Town.Governor.GetPerkValue(DefaultPerks.Scouting.ForestKin))
+				total += MathF.Round((float)total * DefaultPerks.Scouting.ForestKin.SecondaryBonus * 0.01f);
+
+			Settlement bound = village.Bound;
+			bool flag;
+			if (bound == null)
+				flag = (null != null);
+			else
+			{
+				Town town = bound.Town;
+				flag = (((town != null) ? town.Governor : null) != null);
+			}
+			if (flag && village.Bound.Town.Governor.GetPerkValue(DefaultPerks.Steward.Logistician))
+				total += MathF.Round((float)total * DefaultPerks.Steward.Logistician.SecondaryBonus * 0.01f);
+
+			if (applyWithdrawals)
+				village.TradeTaxAccumulated -= num2;
+
 			if (clan.Kingdom != null && clan.Kingdom.RulingClan == clan && clan.Kingdom.ActivePolicies.Contains(DefaultPolicies.LandTax))
 			{
-				float num3 = 0f;
-				IEnumerable<Village> villages = clan.Kingdom.Villages;
-				foreach (Village village2 in villages.Where((Village village) => !village.IsOwnerUnassigned && village.Settlement.OwnerClan != clan))
+				if (!village.IsOwnerUnassigned && village.Settlement.OwnerClan != clan) 
 				{
-					bool leaderOwned = true;
-					Hero owner = null;
-					FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetTitle(village2.Settlement);
-					if (title != null)
-					{
-						owner = title.deJure;
-						if (title.deJure != clan.Leader)
-							leaderOwned = false;
-					}
-
-					int num4 = (village2.VillageState == Village.VillageStates.Looted || village2.VillageState == Village.VillageStates.BeingRaided) ? 0 : ((int)((float)village2.TradeTaxAccumulated / this.RevenueSmoothenFraction()));
-					if (leaderOwned) num3 += (float)num4 * 0.05f;
-					else owner.Gold += (int)((float)num4 * 0.05f);
+					int policyTotal = (village.VillageState == Village.VillageStates.Looted || village.VillageState == Village.VillageStates.BeingRaided) ? 0 : ((int)((float)village.TradeTaxAccumulated / this.RevenueSmoothenFraction()));
+					total += (int)((float)policyTotal * 0.05f);
 				}
-				goldChange.Add(num3, DefaultPolicies.LandTax.Name, null);
 			}
+
+			return total;
 		}
 
 

@@ -1,5 +1,4 @@
 ﻿using BannerKings.Behaviors;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
@@ -11,7 +10,7 @@ namespace BannerKings
     public static class BannerKingsCheats
     {
 
-		[CommandLineFunctionality.CommandLineArgumentFunction("destroy_parties", "bannerkings")]
+		[CommandLineFunctionality.CommandLineArgumentFunction("wipe_data", "bannerkings")]
 		public static string GetLordsInsideSettlement(List<string> strings)
 		{
 			IEnumerable<MobileParty> parties = from party in MobileParty.All where party.StringId.Contains("raisedmilitia_") ||
@@ -26,7 +25,7 @@ namespace BannerKings
 				count++;
 			}
 
-			BKSettlementBehavior.wipeData = true;
+			BannerKingsConfig.Instance.wipeData = true;
 				
 			return string.Format("{0} parties destroyed.", count);
 		}
