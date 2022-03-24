@@ -21,6 +21,7 @@ namespace BannerKings
         public TitleManager TitleManager;
         public CourtManager CourtManager;
         public HashSet<IBannerKingsModel> Models = new HashSet<IBannerKingsModel>();
+        public bool wipeData = false;
         public MBReadOnlyList<BuildingType> VillageBuildings { get; set; }
 
         public void InitManagers()

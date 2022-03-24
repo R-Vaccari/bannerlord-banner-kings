@@ -21,6 +21,7 @@ using BannerKings.Managers.Policies;
 using BannerKings.Managers.Populations.Villages;
 using static BannerKings.Managers.Policies.BKTaxPolicy;
 using BannerKings.Managers.Decisions;
+using static BannerKings.Managers.TitleManager;
 
 namespace BannerKings.Behaviors
 {
@@ -34,7 +35,6 @@ namespace BannerKings.Behaviors
         private static float actionGold = 0f;
         private static int actionHuntGame = 0;
         private static CampaignTime actionStart = CampaignTime.Now;
-        public static bool wipeData = false;
 
         public override void RegisterEvents()
         {
@@ -53,12 +53,12 @@ namespace BannerKings.Behaviors
                 courtManager = BannerKingsConfig.Instance.CourtManager;   
             }
 
-            if (wipeData)
+            if (BannerKingsConfig.Instance.wipeData)
             {
-                populationManager = new PopulationManager(new Dictionary<Settlement, PopulationData>(), new List<MobileParty>());
-                policyManager = new PolicyManager(new Dictionary<Settlement, List<BannerKingsDecision>>(), new Dictionary<Settlement, List<BannerKingsPolicy>>());
-                titleManager = new TitleManager(new Dictionary<TitleManager.FeudalTitle, Hero>(), new Dictionary<Hero, List<TitleManager.FeudalTitle>>(), new Dictionary<Kingdom, TitleManager.FeudalTitle>());
-                courtManager = new CourtManager(new Dictionary<Clan, Managers.Court.CouncilData>());
+                populationManager = null;
+                policyManager = null;
+                titleManager = null;
+                courtManager = null;
             }
 
             dataStore.SyncData("bannerkings-populations", ref populationManager);
@@ -1221,13 +1221,35 @@ namespace BannerKings.Behaviors
             }
         }
 
+        [HarmonyPatch(typeof(Settlement))]
+        internal class SettlementOwnerClanPatch
+        {
+            [HarmonyPostfix]
+            [HarmonyPatch("OwnerClan", MethodType.Getter)]
+            internal static void GetterPostfix(Settlement __instance, ref Clan __result)
+            {
+                if (__instance.IsVillage && BannerKingsConfig.Instance.TitleManager != null)
+                {
+                    FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetTitle(__instance);
+                    Clan boundClan = __instance.Village.Bound.OwnerClan;
+                    __result = boundClan;
+                    if (title != null && !boundClan.Heroes.Contains(title.deJure))
+                    {
+                        Kingdom deJuresKingdom = title.deJure.Clan.Kingdom;
+                        if (deJuresKingdom == boundClan.Kingdom)
+                            __result = title.deJure.Clan;
+                    }
+                }
+            }
+        }
+
 
         [HarmonyPatch(typeof(SellPrisonersAction), "ApplyForAllPrisoners")]
         class ApplyAllPrisionersPatch
         {
             static bool Prefix(MobileParty sellerParty, TroopRoster prisoners, Settlement currentSettlement, bool applyGoldChange = true)
             {
-                if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(currentSettlement))
+                if (currentSettlement != null && (currentSettlement.IsCastle || currentSettlement.IsTown) &&BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(currentSettlement))
                 {
                     BKCriminalPolicy policy = (BKCriminalPolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(currentSettlement, "criminal");
                     if (policy.Policy == BKCriminalPolicy.CriminalPolicy.Enslavement)
@@ -1264,7 +1286,7 @@ namespace BannerKings.Behaviors
         {
             static bool Prefix(MobileParty sellerParty, TroopRoster prisoners, Settlement currentSettlement)
             {
-                if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(currentSettlement))
+                if (currentSettlement != null && (currentSettlement.IsCastle || currentSettlement.IsTown) & BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(currentSettlement))
                 {
                     BKCriminalPolicy policy = (BKCriminalPolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(currentSettlement, "criminal");
                     if (policy.Policy == BKCriminalPolicy.CriminalPolicy.Enslavement)

@@ -43,6 +43,9 @@ namespace BannerKings
                     campaignStarter.AddBehavior(new BKRepublicBehavior());
                     campaignStarter.AddBehavior(new BKPartyBehavior());
                     campaignStarter.AddBehavior(new BKClanBehavior());
+                    campaignStarter.AddBehavior(new BKArmyBehavior());
+                    campaignStarter.AddBehavior(new BKRansomBehavior());
+                    campaignStarter.AddBehavior(new BKTitleBehavior());
 
                     campaignStarter.AddModel(new BKProsperityModel());
                     campaignStarter.AddModel(new BKTaxModel());
@@ -58,7 +61,7 @@ namespace BannerKings
                     campaignStarter.AddModel(new BKPriceFactorModel());
                     campaignStarter.AddModel(new BKWorkshopModel());
                     campaignStarter.AddModel(new BKClanFinanceModel());
-                    //campaignStarter.AddModel(new BKArmyManagementModel());
+                    campaignStarter.AddModel(new BKArmyManagementModel());
                     campaignStarter.AddModel(new BKSiegeEventModel());
                     campaignStarter.AddModel(new BKTournamentModel());
                     campaignStarter.AddModel(new BKRaidModel());
@@ -491,7 +494,8 @@ namespace BannerKings
                             if (Campaign.Current.GameStarted && !doNotEffectCapital)
                             {
                                 ItemData categoryData = town.MarketData.GetCategoryData(itemAtIndex.GetItemCategory());
-                                float itemPrice = new BKPriceFactorModel().GetPrice(new EquipmentElement(itemAtIndex, null, null, false), town.GarrisonParty, town.GarrisonParty.Party, false, categoryData.InStoreValue,
+                                float itemPrice = new BKPriceFactorModel().GetPrice(new EquipmentElement(itemAtIndex, null, null, false), town.GarrisonParty, 
+                                    town.GarrisonParty != null ? town.GarrisonParty.Party : null, false, categoryData.InStoreValue,
                                     categoryData.Supply, categoryData.Demand);
                                 int finalPrice = (int)(itemPrice * (data.EconomicData.ProductionQuality.ResultNumber - 1f));
                                 workshop.ChangeGold(-finalPrice);
