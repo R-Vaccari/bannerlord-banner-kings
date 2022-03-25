@@ -138,17 +138,44 @@ namespace BannerKings.Helpers
                         title = new TextObject("{=!}Wali");
                     else title = new TextObject("{=!}Mawlaa");
                 }
+                else if (culture.StringId == "khuzait")
+                {
+                    if (type == TitleType.Kingdom)
+                        title = new TextObject("{=!}Khagan");
+                    else if (type == TitleType.Dukedom)
+                        title = new TextObject("{=!}Baghatur");
+                    else if (type == TitleType.County)
+                        title = new TextObject("{=!}Khan");
+                    else if (type == TitleType.Barony)
+                        title = new TextObject("{=!}Bey");
+                    else title = new TextObject("{=!}Erxem");
+                }
+                else if (culture.StringId == "sturgia")
+                {
+                    if (type == TitleType.Kingdom)
+                        title = new TextObject("{=!}Velikiy Knyaz");
+                    else if (type == TitleType.Dukedom)
+                        title = new TextObject("{=!}Knyaz");
+                    else if (type == TitleType.County)
+                        title = new TextObject("{=!}Boyar");
+                    else if (type == TitleType.Barony)
+                        title = new TextObject("{=!}Voivode");
+                    else title = new TextObject("{=!}Gospodin");
+                }
             }
 
-            if (type == TitleType.Kingdom)
-                title = new TextObject("{=!}King");
-            else if (type == TitleType.Dukedom)
-                title = new TextObject("{=!}Duke");
-            else if  (type == TitleType.County)
-                title = new TextObject("{=!}Count");
-            else if (type == TitleType.Barony)
-                title = new TextObject("{=!}Baron");
-            title = new TextObject("{=!}Lord");
+            if (title == null)
+            {
+                if (type == TitleType.Kingdom)
+                    title = new TextObject("{=!}King");
+                else if (type == TitleType.Dukedom)
+                    title = new TextObject("{=!}Duke");
+                else if (type == TitleType.County)
+                    title = new TextObject("{=!}Count");
+                else if (type == TitleType.Barony)
+                    title = new TextObject("{=!}Baron");
+                else title = new TextObject("{=!}Lord");
+            }
 
             return title.ToString();
         }

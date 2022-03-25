@@ -73,14 +73,16 @@ namespace BannerKings.UI
             {
                 if (__instance.IsNoble && BannerKingsConfig.Instance.TitleManager != null)
                 {
+                    Kingdom kingdom = __instance.Clan != null ? __instance.Clan.Kingdom : null;
                     FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(__instance);
                     if (title != null)
                     {
+                        string honorary = Helpers.Helpers.GetTitleHonorary(title.type, false, kingdom != null ? kingdom.Culture : __instance.Culture);
                         TextObject name = (TextObject)__instance.GetType()
                             .GetField("_name", BindingFlags.Instance | BindingFlags.NonPublic)
                             .GetValue(__instance);
                         __result = new TextObject(name + ", " + 
-                            string.Format("{0} of {1}", Helpers.Helpers.GetTitleHonorary(title.type, false), title.shortName));
+                            string.Format("{0} of {1}", honorary, title.shortName));
                     }     
                 }
             }
