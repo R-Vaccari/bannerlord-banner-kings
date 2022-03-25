@@ -25,7 +25,6 @@ namespace BannerKings.Behaviors
         {
             CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, new Action<CampaignGameStarter>(OnSessionLaunched));
             CampaignEvents.HeroKilledEvent.AddNonSerializedListener(this, new Action<Hero, Hero, KillCharacterAction.KillCharacterActionDetail, bool>(this.OnHeroKilled));
-           
         }
 
         public override void SyncData(IDataStore dataStore)
@@ -56,9 +55,9 @@ namespace BannerKings.Behaviors
             knighthoodSb.Append("As a knight, they are capable of raising a personal retinue and are obliged to fulfill their duties.");
 
             starter.AddPlayerLine("companion_grant_knighthood", "companion_role", "companion_knighthood_question", "Would you like to serve me as my knight?", 
-                new ConversationSentence.OnConditionDelegate(this.companion_grant_knighthood_on_condition), delegate {
+                new ConversationSentence.OnConditionDelegate(this.GrantKnighthoodOnCondition), delegate {
                     InformationManager.ShowInquiry(new InquiryData("Bestowing Knighthood", knighthoodSb.ToString(), true, false, "Understood", null, null, null), false);
-                }, 100, null, null);
+                }, 100, new ConversationSentence.OnClickableConditionDelegate(GrantKnighthoodOnClickable), null);
 
             starter.AddDialogLine("companion_grant_knighthood_response", "companion_knighthood_question", "companion_knighthood_response",
                 "My lord, I would be honored.", null, null, 100, null); 
@@ -73,16 +72,11 @@ namespace BannerKings.Behaviors
                 null, null, 100, null, null);
         }
 
-        private bool companion_grant_knighthood_on_condition()
+        private bool GrantKnighthoodOnCondition()
         {
             if (BannerKingsConfig.Instance.TitleManager == null) return false;
             Hero companion = Hero.OneToOneConversationHero;
-            FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(Hero.MainHero);
-            if (companion != null && companion.Clan == Clan.PlayerClan && Clan.PlayerClan.Tier >= 2 &&
-                Clan.PlayerClan.Influence >= 150 && Hero.MainHero.Clan.Kingdom != null 
-                && title != null && title.type != TitleType.Lordship && Hero.MainHero.Gold >= 5000)
-                return !BannerKingsConfig.Instance.TitleManager.IsHeroKnighted(companion);
-            else return false;
+            return companion != null && companion.Clan == Clan.PlayerClan && BannerKingsConfig.Instance.TitleManager.Knighthood;
         }
 
         private bool companion_knighthood_accepted_on_condition()
@@ -99,6 +93,53 @@ namespace BannerKings.Behaviors
                 InformationManager.DisplayMessage(new InformationMessage("You currently do not lawfully own a lordship that could be given away."));
 
             return lordshipsToGive.Count >= 1;
+        }
+
+        public bool GrantKnighthoodOnClickable(out TextObject hintText)
+        {
+            Hero companion = Hero.OneToOneConversationHero;
+            FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(Hero.MainHero);
+
+            int tier = Clan.PlayerClan.Tier;
+            if (tier < 2)
+            {
+                hintText = new TextObject("{=!}Your Clan Tier needs to be at least {TIER}.", null);
+                hintText.SetTextVariable("TIER", 2);
+                return false;
+            }
+
+            Kingdom kingdom = Clan.PlayerClan.Kingdom;
+            if (kingdom == null)
+            {
+                hintText = new TextObject("{=!}Before bestowing knighthood, you need to be formally part of a kingdom.", null);
+                return false;
+            }
+
+            List<FeudalTitle> titles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(Hero.MainHero);
+            if (titles.Count == 0)
+            {
+                hintText = new TextObject("{=!}You do not legally own any title.", null);
+                return false;
+            }
+
+            List<FeudalTitle> lordships = titles.FindAll(x => x.type == TitleType.Lordship);
+            if (lordships.Count == 0)
+            {
+                hintText = new TextObject("{=!}You do not legally own any lordship that could be given to land a new vassal.", null);
+                return false;
+            }
+
+            if (Clan.PlayerClan.Influence < 150)
+            {
+                hintText = new TextObject("{=!}Bestowing knighthood requires {INFLUENCE} influence to legitimize your new vassal.", null);
+                hintText.SetTextVariable("INFLUENCE", 150);
+                return false;
+            }
+
+            hintText = new TextObject("{=!}Bestowing knighthood requires {GOLD} gold to give your vassal financial security.", null);
+            hintText.SetTextVariable("GOLD", 5000);
+
+            return Hero.MainHero.Gold < 5000;
         }
 
         private void companion_knighthood_accepted_on_consequence()
@@ -171,6 +212,8 @@ namespace BannerKings.Behaviors
         {
             static bool Prefix(ClanPartiesVM __instance, Clan ____faction, Func<Hero, Settlement> ____getSettlementOfGovernor)
             {
+                if (!BannerKingsConfig.Instance.TitleManager.Knighthood) return true;
+
                 if (__instance.CanCreateNewParty)
                 {
                     List<InquiryElement> list = new List<InquiryElement>();

@@ -21,11 +21,15 @@ namespace BannerKings.Managers
         [SaveableProperty(2)]
         public Dictionary<Kingdom, FeudalTitle> Kingdoms { get; set; }
 
+        [SaveableProperty(3)]
+        public bool Knighthood { get; set; } = true;
+
 
         public TitleManager(Dictionary<FeudalTitle, Hero> titles, Dictionary<Hero, List<FeudalTitle>> titleHolders, Dictionary<Kingdom, FeudalTitle> kingdoms)
         {
             this.Titles = titles;
             this.Kingdoms = kingdoms;
+            this.Knighthood = true;
             InitializeTitles();
         }
 
@@ -250,7 +254,7 @@ namespace BannerKings.Managers
         }
         public FeudalTitle GetHighestTitle(Hero hero)
         {
-            if (IsHeroTitleHolder(hero))
+            if (hero != null && IsHeroTitleHolder(hero))
             {
                 FeudalTitle highestTitle = null;
                 foreach (FeudalTitle title in GetAllDeJure(hero))
