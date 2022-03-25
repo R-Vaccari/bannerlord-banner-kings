@@ -28,6 +28,11 @@ namespace BannerKings.Behaviours
             
         }
 
+        public void OnDailySettlementTick(Settlement settlement)
+        {
+
+        }
+
         public void OnDailyTickClan(Clan clan)
         {
             if (BannerKingsConfig.Instance.TitleManager == null || clan.Kingdom == null || clan.IsUnderMercenaryService ||
@@ -113,8 +118,7 @@ namespace BannerKings.Behaviours
                         }
                       
                 }  
-                    
-                if (title.contract.rights.Contains(FeudalRights.Conquest_Rights))
+                else if (title.contract.rights.Contains(FeudalRights.Conquest_Rights))
                 {
                     List<KingdomDecision> decisions = kingdom.UnresolvedDecisions.ToList();
                     KingdomDecision decision = decisions.FirstOrDefault(x => x is SettlementClaimantDecision && (x as SettlementClaimantDecision).Settlement == settlement);
@@ -123,9 +127,12 @@ namespace BannerKings.Behaviours
 
                     MobileParty party = settlement.LastAttackerParty;
                     Army army = party.Army;
-                    if (army != null)
+                    if (army != null && settlement.Town != null)
                     {
-                        List<Clan> clans = (List<Clan>)(from p in army.Parties select p.ActualClan);
+                        List<Clan> clans = new List<Clan>();
+                        foreach (MobileParty clanParty in army.Parties)
+                            clans.Add(clanParty.ActualClan);
+                        settlement.Town.IsOwnerUnassigned = true;
                         kingdom.AddDecision(new BKSettlementClaimantDecision(kingdom.RulingClan, settlement, capturerHero, null, clans, true), true);
                         if (clans.Contains(Clan.PlayerClan))
                         {
