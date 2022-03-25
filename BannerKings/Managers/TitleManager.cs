@@ -267,7 +267,7 @@ namespace BannerKings.Managers
 
         public FeudalTitle GetHighestTitleWithinFaction(Hero hero, Kingdom faction)
         {
-            if (IsHeroTitleHolder(hero))
+            if (hero != null && faction != null  && IsHeroTitleHolder(hero))
             {
                 FeudalTitle highestTitle = null;
                 foreach (FeudalTitle title in GetAllDeJure(hero))
@@ -280,20 +280,9 @@ namespace BannerKings.Managers
 
         public FeudalTitle GetSovereignTitle(Kingdom faction)
         {
-            if (Kingdoms.ContainsKey(faction))
+            if (faction != null && Kingdoms.ContainsKey(faction))
                 return Kingdoms[faction];
             else return null;
-        }
-
-        public Kingdom GetFactionFromSettlement(Settlement settlement)
-        {
-            FeudalTitle title = GetTitle(settlement);
-            if (title != null)
-            {
-                Kingdom faction = Kingdoms.FirstOrDefault(x => x.Value == title.sovereign).Key;
-                return faction;
-            }
-            return null;
         }
 
         public FeudalTitle GetSovereignFromSettlement(Settlement settlement)
