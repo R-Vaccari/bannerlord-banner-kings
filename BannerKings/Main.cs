@@ -476,39 +476,6 @@ namespace BannerKings
                 }
             }
 
-            // Pass on settlement party as consumer
-            [HarmonyPatch(typeof(WorkshopsCampaignBehavior), "ConsumeInput")]
-            class ConsumeInputPatch
-            {
-                static bool Prefix(ItemCategory productionInput, Town town, Workshop workshop, bool doNotEffectCapital)
-                {
-                    if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
-                    {
-                        PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
-                        ItemRoster itemRoster = town.Owner.ItemRoster;
-                        int num = itemRoster.FindIndex((ItemObject x) => x.ItemCategory == productionInput);
-                        if (num >= 0)
-                        {
-                            ItemObject itemAtIndex = itemRoster.GetItemAtIndex(num);
-                            itemRoster.AddToCounts(itemAtIndex, -1);
-                            if (Campaign.Current.GameStarted && !doNotEffectCapital)
-                            {
-                                ItemData categoryData = town.MarketData.GetCategoryData(itemAtIndex.GetItemCategory());
-                                float itemPrice = new BKPriceFactorModel().GetPrice(new EquipmentElement(itemAtIndex, null, null, false), town.GarrisonParty, 
-                                    town.GarrisonParty != null ? town.GarrisonParty.Party : null, false, categoryData.InStoreValue,
-                                    categoryData.Supply, categoryData.Demand);
-                                int finalPrice = (int)(itemPrice * (data.EconomicData.ProductionQuality.ResultNumber - 1f));
-                                workshop.ChangeGold(-finalPrice);
-                                town.ChangeGold(finalPrice);
-                            }
-                            CampaignEventDispatcher.Instance.OnItemConsumed(itemAtIndex, town.Owner.Settlement, 1);
-                        }
-                        return false;
-                    }
-                    else return true;
-                }
-            }
-
             // Impact prosperity
             [HarmonyPatch(typeof(ChangeOwnerOfWorkshopAction), "ApplyInternal")]
             class BankruptcyPatch
@@ -585,7 +552,7 @@ namespace BannerKings
                                     desiredAmount = (float)amount;
 
 
-                                if (town.Settlement.IsStarving)
+                                if (town.FoodStocks <= (float)town.FoodStocksUpperLimit() * 0.1f)
                                 {
                                     float requiredFood = town.FoodChange;
                                     if (amount > requiredFood)

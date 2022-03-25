@@ -26,7 +26,7 @@ namespace BannerKings.Behaviours
         private void OnHeroPrisonerReleased(Hero released, PartyBase releasedFrom, IFaction capturer, EndCaptivityDetail detail)
         {
             Kingdom playerKingdom = Clan.PlayerClan.Kingdom;
-            Kingdom releasedKingdom = released.Clan.Kingdom;
+            Kingdom releasedKingdom = released.Clan != null ? released.Clan.Kingdom : null;
             if (detail != EndCaptivityDetail.Ransom || playerKingdom == null || releasedKingdom == null || 
                 playerKingdom != releasedKingdom || BannerKingsConfig.Instance.TitleManager == null) return;
 

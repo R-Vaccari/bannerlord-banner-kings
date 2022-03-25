@@ -11,7 +11,7 @@ namespace BannerKings
     {
 
 		[CommandLineFunctionality.CommandLineArgumentFunction("wipe_data", "bannerkings")]
-		public static string GetLordsInsideSettlement(List<string> strings)
+		public static string WipeSaveData(List<string> strings)
 		{
 			IEnumerable<MobileParty> parties = from party in MobileParty.All where party.StringId.Contains("raisedmilitia_") ||
 											   party.StringId.Contains("slavecaravan_") || party.StringId.Contains("travellers_")
@@ -28,6 +28,22 @@ namespace BannerKings
 			BannerKingsConfig.Instance.wipeData = true;
 				
 			return string.Format("{0} parties destroyed.", count);
+		}
+
+		[CommandLineFunctionality.CommandLineArgumentFunction("disable_knighthood", "bannerkings")]
+		public static string DisableKnighthood(List<string> strings)
+		{
+			BannerKingsConfig.Instance.TitleManager.Knighthood = false;
+
+			return "Knighthood requirements for player companions disabled.";
+		}
+
+		[CommandLineFunctionality.CommandLineArgumentFunction("enable_knighthood", "bannerkings")]
+		public static string EnableKnighthood(List<string> strings)
+		{
+			BannerKingsConfig.Instance.TitleManager.Knighthood = true;
+
+			return "Knighthood requirements for player companions enabled.";
 		}
 	}
 }

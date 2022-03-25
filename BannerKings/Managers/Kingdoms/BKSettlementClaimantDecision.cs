@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Election;
+using TaleWorlds.Library;
 
 namespace BannerKings.Managers.Kingdoms
 {
@@ -26,6 +27,6 @@ namespace BannerKings.Managers.Kingdoms
                 return list;
             }
             return base.DetermineInitialCandidates();
-        }
+        }     
     }
 }
