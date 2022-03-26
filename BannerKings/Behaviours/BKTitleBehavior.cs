@@ -10,8 +10,6 @@ using static BannerKings.Managers.TitleManager;
 using static TaleWorlds.CampaignSystem.Actions.ChangeKingdomAction;
 using TaleWorlds.CampaignSystem.Election;
 using BannerKings.Managers.Kingdoms;
-using HarmonyLib;
-using SandBox.CampaignBehaviors;
 
 namespace BannerKings.Behaviours
 {
@@ -53,23 +51,24 @@ namespace BannerKings.Behaviours
                     kingdom.RemoveDecision(vanillaDecision);
 
                 MobileParty party = settlement.LastAttackerParty;
+                if (party == null) return;
+
                 Army army = party.Army;
-                if (army != null && settlement.Town != null)
+                if (army == null) return;
+                
+                List<Clan> clans = new List<Clan>();
+                foreach (MobileParty clanParty in army.Parties)
+                    if (!clans.Contains(clanParty.ActualClan))
+                        clans.Add(clanParty.ActualClan);
+                kingdom.AddDecision(new BKSettlementClaimantDecision(kingdom.RulingClan, settlement, settlement.LastAttackerParty.LeaderHero, null, clans, true), true); ;
+                if (clans.Contains(Clan.PlayerClan))
                 {
-                    List<Clan> clans = new List<Clan>();
-                    foreach (MobileParty clanParty in army.Parties)
-                        if (!clans.Contains(clanParty.ActualClan))
-                            clans.Add(clanParty.ActualClan);
-                    kingdom.AddDecision(new BKSettlementClaimantDecision(kingdom.RulingClan, settlement, settlement.LastAttackerParty.LeaderHero, null, clans, true), true); ;
-                    if (clans.Contains(Clan.PlayerClan))
-                    {
-                        GameTexts.SetVariable("ARMY", army.Name);
-                        GameTexts.SetVariable("SETTLEMENT", settlement.Name);
-                        InformationManager.ShowInquiry(new InquiryData(new TextObject("Conquest Right - Election").ToString(),
-                            new TextObject("By contract law, you and the participants of {ARMY} will compete in election for the ownership of {SETTLEMENT}.").ToString(),
-                            true, false, GameTexts.FindText("str_done").ToString(), null, null, null), true);
-                    }
-                }
+                    GameTexts.SetVariable("ARMY", army.Name);
+                    GameTexts.SetVariable("SETTLEMENT", settlement.Name);
+                    InformationManager.ShowInquiry(new InquiryData(new TextObject("Conquest Right - Election").ToString(),
+                        new TextObject("By contract law, you and the participants of {ARMY} will compete in election for the ownership of {SETTLEMENT}.").ToString(),
+                        true, false, GameTexts.FindText("str_done").ToString(), null, null, null), true);
+                }           
             } 
         }
 
