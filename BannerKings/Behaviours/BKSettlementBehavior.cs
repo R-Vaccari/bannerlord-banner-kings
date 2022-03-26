@@ -1221,29 +1221,6 @@ namespace BannerKings.Behaviors
             }
         }
 
-        [HarmonyPatch(typeof(Settlement))]
-        internal class SettlementOwnerClanPatch
-        {
-            [HarmonyPostfix]
-            [HarmonyPatch("OwnerClan", MethodType.Getter)]
-            internal static void GetterPostfix(Settlement __instance, ref Clan __result)
-            {
-                if (__instance.IsVillage && BannerKingsConfig.Instance.TitleManager != null)
-                {
-                    FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetTitle(__instance);
-                    Clan boundClan = __instance.Village.Bound.OwnerClan;
-                    __result = boundClan;
-                    if (title != null && !boundClan.Heroes.Contains(title.deJure))
-                    {
-                        Kingdom deJuresKingdom = title.deJure.Clan.Kingdom;
-                        if (deJuresKingdom == boundClan.Kingdom)
-                            __result = title.deJure.Clan;
-                    }
-                }
-            }
-        }
-
-
         [HarmonyPatch(typeof(SellPrisonersAction), "ApplyForAllPrisoners")]
         class ApplyAllPrisionersPatch
         {

@@ -41,7 +41,7 @@ namespace BannerKings.Managers
                 string cause = "Exception in Banner Kings GetPopData method. ";
                 string objInfo = null;
                 if (settlement != null)
-                    objInfo = string.Format("Name [{0}], Id [{1}], Culture [{2}].", settlement.Name,, settlement.StringId, settlement.Culture);
+                    objInfo = string.Format("Name [{0}], Id [{1}], Culture [{2}].", settlement.Name, settlement.StringId, settlement.Culture);
                 else objInfo = "Null settlement.";
 
                 throw new BannerKingsException(cause + objInfo, ex);

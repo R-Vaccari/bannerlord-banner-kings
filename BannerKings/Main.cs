@@ -276,6 +276,7 @@ namespace BannerKings
         namespace Economy
         {
 
+
             [HarmonyPatch(typeof(DefaultClanFinanceModel), "AddIncomeFromKingdomBudget")]
             class AddIncomeFromKingdomBudgetPatch
             {
@@ -297,12 +298,14 @@ namespace BannerKings
                 {
                     if (BannerKingsConfig.Instance.TitleManager != null)
                     {
-                        List<FeudalTitle> titles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(clan);
-                        List<FeudalTitle> lordships = titles.FindAll(x => x.type == TitleType.Lordship);
+                        List<FeudalTitle> lordships = BannerKingsConfig.Instance.TitleManager
+                            .GetAllDeJure(clan)
+                            .FindAll(x => x.type == TitleType.Lordship);
                         foreach (Village village in clan.Villages)
                         {
                             FeudalTitle title = lordships.FirstOrDefault(x => x.fief.Village == village);
                             if (title == null) title = BannerKingsConfig.Instance.TitleManager.GetTitle(village.Settlement);
+                            else lordships.Remove(title);
                             int result = CalculateVillageIncome(ref goldChange, village, clan, applyWithdrawals);
 
                             if (title != null)
@@ -324,8 +327,6 @@ namespace BannerKings
                         foreach (FeudalTitle lordship in lordships)
                         {
                             Village village = lordship.fief.Village;
-                            if (clan.Villages.Contains(village)) continue;
-
                             Clan ownerClan = village.Settlement.OwnerClan;
                             if (ownerClan.Kingdom == clan.Kingdom)
                             {
@@ -349,7 +350,9 @@ namespace BannerKings
                     int total = (village.VillageState == Village.VillageStates.Looted || village.VillageState == Village.VillageStates.BeingRaided) ? 0 : ((int)((float)village.TradeTaxAccumulated / 5f));
                     int num2 = total;
                     if (clan.Kingdom != null && clan.Kingdom.RulingClan != clan && clan.Kingdom.ActivePolicies.Contains(DefaultPolicies.LandTax))
+                    {
                         total += (int)((-(float)total) * 0.05f);
+                    }     
 
                     if (village.Bound.Town != null && village.Bound.Town.Governor != null && village.Bound.Town.Governor.GetPerkValue(DefaultPerks.Scouting.ForestKin))
                         total += MathF.Round((float)total * DefaultPerks.Scouting.ForestKin.SecondaryBonus * 0.01f);

@@ -49,15 +49,7 @@ namespace BannerKings.Managers
         {
             try
             {
-                FeudalTitle result = null;
-                foreach (KeyValuePair<FeudalTitle, Hero> pair in Titles)
-                    if (pair.Key.fief == settlement)
-                    {
-                        result = pair.Key;
-                        break;
-                    }
-
-                return result;
+                return Titles.Keys.ToList().Find(x => x.fief == settlement);
             }
             catch (Exception ex)
             {
@@ -260,8 +252,7 @@ namespace BannerKings.Managers
         {
             List<FeudalTitle> list = new List<FeudalTitle>();
             foreach (Hero hero in clan.Heroes)
-                foreach (FeudalTitle title in GetAllDeJure(hero))
-                    list.Add(title);
+                    list.AddRange(GetAllDeJure(hero));
 
             return list;
         }
