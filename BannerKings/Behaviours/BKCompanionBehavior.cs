@@ -63,7 +63,7 @@ namespace BannerKings.Behaviors
                 "My lord, I would be honored.", null, null, 100, null); 
 
             starter.AddPlayerLine("companion_grant_knighthood_response_confirm", "companion_knighthood_response", "companion_knighthood_accepted", "Let us decide your fief.",
-                new ConversationSentence.OnConditionDelegate(this.companion_knighthood_accepted_on_condition), new ConversationSentence.OnConsequenceDelegate(this.companion_knighthood_accepted_on_consequence), 100, null, null);
+                new ConversationSentence.OnConditionDelegate(this.companion_knighthood_accepted_on_condition), new ConversationSentence.OnConsequenceDelegate(this.GrantKnighthoodOnConsequence), 100, null, null);
 
             starter.AddPlayerLine("companion_grant_knighthood_response_cancel", "companion_knighthood_response", "companion_role_pretalk", "Actualy, I would like to discuss this at a later time.",
                null, null, 100, null, null);
@@ -139,10 +139,10 @@ namespace BannerKings.Behaviors
             hintText = new TextObject("{=!}Bestowing knighthood requires {GOLD} gold to give your vassal financial security.", null);
             hintText.SetTextVariable("GOLD", 5000);
 
-            return Hero.MainHero.Gold < 5000;
+            return Hero.MainHero.Gold >= 5000;
         }
 
-        private void companion_knighthood_accepted_on_consequence()
+        private void GrantKnighthoodOnConsequence()
         {
             InformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                     "Select the fief you would like to give away", string.Empty, lordshipsToGive, true, 1, 

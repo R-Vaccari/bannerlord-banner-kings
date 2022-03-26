@@ -47,15 +47,20 @@ namespace BannerKings.Managers
         }
         public FeudalTitle GetTitle(Settlement settlement)
         {
-            FeudalTitle result = null;
-            foreach (KeyValuePair<FeudalTitle, Hero> pair in Titles)
-                if (pair.Key.fief == settlement)
-                {
-                    result = pair.Key;
-                    break;
-                }
-                
-            return result;
+            try
+            {
+                return Titles.Keys.ToList().Find(x => x.fief == settlement);
+            }
+            catch (Exception ex)
+            {
+                string cause = "Exception in Banner Kings GetTitle method. ";
+                string objInfo = null;
+                if (settlement != null)
+                    objInfo = string.Format("Name [{0}], Id [{1}], Culture [{2}].", settlement.Name, settlement.StringId, settlement.Culture);
+                else objInfo = "Null settlement.";
+
+                throw new BannerKingsException(cause + objInfo, ex);
+            }
         }
 
         public GovernmentType GetSettlementGovernment(Settlement settlement)
@@ -247,8 +252,7 @@ namespace BannerKings.Managers
         {
             List<FeudalTitle> list = new List<FeudalTitle>();
             foreach (Hero hero in clan.Heroes)
-                foreach (FeudalTitle title in GetAllDeJure(hero))
-                    list.Add(title);
+                    list.AddRange(GetAllDeJure(hero));
 
             return list;
         }
@@ -280,9 +284,22 @@ namespace BannerKings.Managers
 
         public FeudalTitle GetSovereignTitle(Kingdom faction)
         {
-            if (faction != null && Kingdoms.ContainsKey(faction))
-                return Kingdoms[faction];
-            else return null;
+            try
+            {
+                if (faction != null && Kingdoms.ContainsKey(faction))
+                    return Kingdoms[faction];
+                else return null;
+            }
+            catch (Exception ex)
+            {
+                string cause = "Exception in Banner Kings GetSovereignTitle method. ";
+                string objInfo = null;
+                if (faction != null)
+                    objInfo = string.Format("Name [{0}], Id [{1}], Culture [{2}].", faction.Name, faction.StringId, faction.Culture);
+                else objInfo = "Null faction.";
+
+                throw new BannerKingsException(cause + objInfo, ex);
+            }
         }
 
         public FeudalTitle GetSovereignFromSettlement(Settlement settlement)

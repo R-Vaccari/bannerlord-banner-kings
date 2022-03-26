@@ -104,11 +104,14 @@ namespace BannerKings.Models
 			}
 			if (town.Governor != null && town.Governor.GetPerkValue(DefaultPerks.Roguery.DirtyFighting))
 				result.Add(DefaultPerks.Roguery.DirtyFighting.SecondaryBonus, DefaultPerks.Roguery.DirtyFighting.Name, null);
-			
+
 			IL_296:
+			int marketConsumption = 0;
 			foreach (Town.SellLog sellLog in town.SoldItems)
 				if (sellLog.Category.Properties == ItemCategory.Property.BonusToFoodStores)
-					result.Add((float)sellLog.Number, sellLog.Category.GetName(), null);
+					marketConsumption += sellLog.Number;
+
+			result.Add((float)marketConsumption, new TextObject("{=!}Market consumption"), null);
 
 			if (town.OwnerClan != null)
 			{

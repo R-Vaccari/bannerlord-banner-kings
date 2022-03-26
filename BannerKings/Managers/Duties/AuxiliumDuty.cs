@@ -26,12 +26,12 @@ namespace BannerKings.Managers.Duties
 
         public override void Finish()
         {
-            float proportion = (float)ArmyHours / (float)RunnedHours;
+            float proportion = MathF.Clamp((float)ArmyHours / (float)RunnedHours, 0f, 1f);
             string result = null;
             if (proportion < base.Completion)
             {
                 Clan.PlayerClan.Renown -= 50f * (1f - proportion);
-                ChangeRelationAction.ApplyPlayerRelation(this.Party.LeaderHero, (int)((float)MBRandom.RandomInt(-5, -12) * (1f - proportion)), false, false);
+                ChangeRelationAction.ApplyPlayerRelation(this.Party.LeaderHero, (int)((float)MBRandom.RandomInt(-12, -5) * (1f - proportion)), false, false);
                 result = string.Format("You have failed to fulfill your duty if military assistance to {0}. As a result, your clan's reputation has suffered, and your liege is unsatisfied.", this.Party.LeaderHero.Name);
             } else
             {
