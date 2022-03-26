@@ -31,9 +31,22 @@ namespace BannerKings.Managers
 
         public PopulationData GetPopData(Settlement settlement) 
         {
-            if (Populations.ContainsKey(settlement)) return Populations[settlement];
-            InitializeSettlementPops(settlement);
-            return Populations[settlement];
+            try
+            {
+                if (Populations.ContainsKey(settlement)) return Populations[settlement];
+                InitializeSettlementPops(settlement);
+                return Populations[settlement];
+            } catch (Exception ex)
+            {
+                string cause = "Exception in Banner Kings GetPopData method. ";
+                string objInfo = null;
+                if (settlement != null)
+                    objInfo = string.Format("Name [{0}], Id [{1}], Culture [{2}].", settlement.Name,, settlement.StringId, settlement.Culture);
+                else objInfo = "Null settlement.";
+
+                throw new BannerKingsException(cause + objInfo, ex);
+            }
+            return null;
         }
 
         public void AddSettlementData(Settlement settlement, PopulationData data) => Populations.Add(settlement, data);

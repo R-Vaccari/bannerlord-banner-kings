@@ -1260,7 +1260,9 @@ namespace BannerKings.Behaviors
                         Dictionary<CultureObject, int> dic = new Dictionary<CultureObject, int>();
                         foreach (TroopRosterElement element in prisoners.GetTroopRoster())
                         {
+                            if (element.Character.Occupation == Occupation.Bandit) continue;
                             CultureObject culture = element.Character.Culture;
+                            if (culture == null) continue;
                             if (dic.ContainsKey(culture))
                                 dic[culture] += element.Number;
                             else dic.Add(culture, element.Number);
@@ -1297,7 +1299,9 @@ namespace BannerKings.Behaviors
                         Dictionary<CultureObject, int> dic = new Dictionary<CultureObject, int>();
                         foreach (TroopRosterElement element in prisoners.GetTroopRoster())
                         {
+                            if (element.Character.Occupation == Occupation.Bandit) continue;
                             CultureObject culture = element.Character.Culture;
+                            if (culture == null) continue;
                             if (dic.ContainsKey(culture))
                                 dic[culture] += element.Number;
                             else dic.Add(culture, element.Number);
