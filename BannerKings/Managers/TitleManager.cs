@@ -69,7 +69,7 @@ namespace BannerKings.Managers
             FeudalTitle title = this.GetTitle(settlement);
             if (title != null)
                 if (title.contract != null)
-                    type = title.contract.government;
+                    type = title.contract.Government;
 
             return type;
         }
@@ -217,7 +217,7 @@ namespace BannerKings.Managers
             FeudalTitle sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(newKingdom);
             if (sovereign == null || sovereign.contract == null) return;
 
-            if (!sovereign.contract.rights.Contains(FeudalRights.Enfoeffement_Rights)) return;
+            if (!sovereign.contract.Rights.Contains(FeudalRights.Enfoeffement_Rights)) return;
 
             List<FeudalTitle> titles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(newKingdom.Leader);
             if (titles.Count == 0) return;
@@ -540,7 +540,7 @@ namespace BannerKings.Managers
             sb.Append(Environment.NewLine);
             sb.Append("Duties");
             sb.Append(Environment.NewLine);
-            foreach (KeyValuePair<FeudalDuties, float> duty in contract.duties)
+            foreach (KeyValuePair<FeudalDuties, float> duty in contract.Duties)
             {
                 sb.Append(this.GetDutyString(duty.Key, duty.Value));
                 sb.Append(Environment.NewLine);
@@ -550,7 +550,7 @@ namespace BannerKings.Managers
             sb.Append(Environment.NewLine);
             sb.Append("Rights");
             sb.Append(Environment.NewLine);
-            foreach (FeudalRights right in contract.rights)
+            foreach (FeudalRights right in contract.Rights)
             {
                 sb.Append(GetRightString(right));
                 sb.Append(Environment.NewLine);
@@ -687,7 +687,7 @@ namespace BannerKings.Managers
             public FeudalTitle sovereign { get; private set; }
 
             [SaveableProperty(10)]
-            public FeudalContract contract { get; private set;  }
+            public FeudalContract contract { get; private set; }
 
             public override bool Equals(object obj)
             {
@@ -729,38 +729,59 @@ namespace BannerKings.Managers
                     foreach (FeudalTitle vassal in this.vassals)
                         vassal.SetSovereign(sovereign);
             }
+
+            public void ChangeContract(GovernmentType government)
+            {
+                this.contract.ChangeGovernment(government);
+                if (this.vassals != null && this.vassals.Count > 0)
+                    foreach (FeudalTitle vassal in this.vassals)
+                        vassal.ChangeContract(government);
+            }
+
+            public void ChangeContract(SuccessionType succession)
+            {
+                this.contract.ChangeSuccession(succession);
+                if (this.vassals != null && this.vassals.Count > 0)
+                    foreach (FeudalTitle vassal in this.vassals)
+                        vassal.ChangeContract(succession);
+            }
         }
 
         public class FeudalContract
         {
             [SaveableProperty(1)]
-            public Dictionary<FeudalDuties, float> duties { get; private set; }
+            public Dictionary<FeudalDuties, float> Duties { get; private set; }
 
             [SaveableProperty(2)]
-            public List<FeudalRights> rights { get; private set; }
+            public List<FeudalRights> Rights { get; private set; }
 
             [SaveableProperty(3)]
-            public GovernmentType government { get; private set; }
+            public GovernmentType Government { get; private set; }
 
             [SaveableProperty(4)]
-            public SuccessionType succession { get; private set; }
+            public SuccessionType Succession { get; private set; }
 
             [SaveableProperty(5)]
-            public InheritanceType inheritance { get; private set; }
+            public InheritanceType Inheritance { get; private set; }
 
             [SaveableProperty(6)]
-            public GenderLaw genderLaw { get; private set; }
+            public GenderLaw GenderLaw { get; private set; }
 
             public FeudalContract(Dictionary<FeudalDuties, float> duties, List<FeudalRights> rights, GovernmentType government,
                 SuccessionType succession, InheritanceType inheritance, GenderLaw genderLaw)
             {
-                this.duties = duties;
-                this.rights = rights;
-                this.government = government;
-                this.succession = succession;
-                this.inheritance = inheritance;
-                this.genderLaw = genderLaw;
+                this.Duties = duties;
+                this.Rights = rights;
+                this.Government = government;
+                this.Succession = succession;
+                this.Inheritance = inheritance;
+                this.GenderLaw = genderLaw;
             }
+
+            public void ChangeGovernment(GovernmentType governmentType) => this.Government = governmentType;
+            public void ChangeSuccession(SuccessionType successionType) => this.Succession = successionType;
+            public void ChangeInheritance(InheritanceType inheritanceType) => this.Inheritance = inheritanceType;
+            public void ChangeGenderLaw(GenderLaw genderLaw) => this.GenderLaw = genderLaw;
         }
 
         public enum TitleType

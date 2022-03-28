@@ -106,7 +106,7 @@ namespace BannerKings.UI
 
 
                 if (title.contract == null) return;
-                List<PolicyObject> list = PolicyHelper.GetForbiddenGovernmentPolicies(title.contract.government);
+                List<PolicyObject> list = PolicyHelper.GetForbiddenGovernmentPolicies(title.contract.Government);
                 __instance.OtherPolicies.Clear();
                 foreach (PolicyObject policy2 in from p in PolicyObject.All
                             where !(bool)active.Invoke(__instance, new object[] { p }) && !list.Contains(p)

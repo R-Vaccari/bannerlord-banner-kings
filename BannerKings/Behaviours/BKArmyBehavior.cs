@@ -72,8 +72,8 @@ namespace BannerKings.Behaviours
         private void EvaluateSummonPlayer(FeudalTitle playerTitle, Army army, MobileParty joinningParty = null)
         {
             FeudalContract contract = playerTitle.contract;
-            if (contract == null || !contract.duties.ContainsKey(FeudalDuties.Auxilium)) return;
-            float completion = contract.duties[FeudalDuties.Auxilium];
+            if (contract == null || !contract.Duties.ContainsKey(FeudalDuties.Auxilium)) return;
+            float completion = contract.Duties[FeudalDuties.Auxilium];
 
             FeudalTitle suzerain = BannerKingsConfig.Instance.TitleManager.GetImmediateSuzerain(playerTitle);
             if (suzerain == null) return;

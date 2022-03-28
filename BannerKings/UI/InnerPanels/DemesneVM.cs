@@ -1,4 +1,5 @@
 ﻿using BannerKings.Managers.Kingdoms;
+using BannerKings.Managers.Kingdoms.Contract;
 using BannerKings.Managers.Policies;
 using BannerKings.Models;
 using BannerKings.Populations;
@@ -86,13 +87,13 @@ namespace BannerKings.UI
 				if (duchy != null) DemesneInfo.Add(new InformationElement("Dukedom:", duchy.name.ToString(),
 					"The dukedom this settlement is associated with."));
 
-				GovernmentInfo.Add(new InformationElement("Government Type:", title.contract.government.ToString(),
+				GovernmentInfo.Add(new InformationElement("Government Type:", title.contract.Government.ToString(),
 					"The dukedom this settlement is associated with."));
-				GovernmentInfo.Add(new InformationElement("Succession Type:", title.contract.succession.ToString().Replace("_", " "),
+				GovernmentInfo.Add(new InformationElement("Succession Type:", title.contract.Succession.ToString().Replace("_", " "),
 					"The dukedom this settlement is associated with."));
-				GovernmentInfo.Add(new InformationElement("Inheritance Type:", title.contract.inheritance.ToString(),
+				GovernmentInfo.Add(new InformationElement("Inheritance Type:", title.contract.Inheritance.ToString(),
 					"The dukedom this settlement is associated with."));
-				GovernmentInfo.Add(new InformationElement("Gender Law:", title.contract.genderLaw.ToString(),
+				GovernmentInfo.Add(new InformationElement("Gender Law:", title.contract.GenderLaw.ToString(),
 					"The dukedom this settlement is associated with."));
 
 				DeJure = new HeroVM(title.deJure, false);
@@ -150,7 +151,7 @@ namespace BannerKings.UI
 			if (title != null)
             {
 				Kingdom kingdom = this.data.Settlement.OwnerClan.Kingdom;
-				kingdom.AddDecision(new BKContractDecision(this.data.Settlement.OwnerClan, GovernmentType.Imperial, this.title));
+				kingdom.AddDecision(new BKGovernmentDecision(this.data.Settlement.OwnerClan, GovernmentType.Imperial, BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom)));
 			}
 		}
 

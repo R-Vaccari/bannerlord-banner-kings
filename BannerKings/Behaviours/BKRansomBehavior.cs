@@ -37,9 +37,9 @@ namespace BannerKings.Behaviours
             if (suzerain == null || released != suzerain.deJure) return;
 
             FeudalContract contract = playerTitle.contract;
-            if (contract == null || !contract.duties.ContainsKey(FeudalDuties.Ransom)) return;
+            if (contract == null || !contract.Duties.ContainsKey(FeudalDuties.Ransom)) return;
 
-            float completion = contract.duties[FeudalDuties.Ransom];
+            float completion = contract.Duties[FeudalDuties.Ransom];
             float ransom = Campaign.Current.Models.RansomValueCalculationModel.PrisonerRansomValue(released.CharacterObject, null);
             playerRansomDuty = new RansomDuty(CampaignTime.DaysFromNow(2), released, ransom * completion);
         }

@@ -180,17 +180,68 @@ namespace BannerKings.Helpers
             return title.ToString();
         }
 
-        public static string GetTitlePrefix(TitleType type)
+        public static string GetGovernmentString(GovernmentType type, CultureObject culture = null)
         {
-            if (type == TitleType.Kingdom)
-                return "Kingdom";
-            else if (type == TitleType.Dukedom)
-                return "Dukedom";
-            else if (type == TitleType.County)
-                return "County";
-            else if (type == TitleType.Barony)
-                return "Barony";
-            else return "Lordship";
+            TextObject title = null;
+
+            if (culture != null)
+            {
+                if (culture.StringId == "sturgia")
+                {
+                    if (type == GovernmentType.Tribal)
+                        title = new TextObject("{=!}Grand-Principality");
+                }
+            }
+
+            if (title == null)
+            {
+                if (type == GovernmentType.Feudal)
+                    title = new TextObject("{=!}Kingdom");
+                else if (type == GovernmentType.Tribal)
+                    title = new TextObject("{=!}High Kingship");
+                else if (type == GovernmentType.Imperial)
+                    title = new TextObject("{=!}Empire");
+                else title = new TextObject("{=!}Republic");
+            }
+
+            return title.ToString();
+        }
+
+        public static string GetTitlePrefix(TitleType type, CultureObject culture = null)
+        {
+            TextObject title = null;
+
+            if (culture != null)
+            {
+                if (culture.StringId == "sturgia")
+                {
+                    if (type == TitleType.Kingdom)
+                        title = new TextObject("{=!}Grand-Principality");
+                    else if (type == TitleType.Dukedom)
+                        title = new TextObject("{=!}Principality");
+                    else if (type == TitleType.County)
+                        title = new TextObject("{=!}Boyardom");
+                    else if (type == TitleType.Barony)
+                        title = new TextObject("{=!}Voivodeship");
+                    else title = new TextObject("{=!}Gospodin");
+                }
+            }
+
+            if (title == null)
+            {
+                if (type == TitleType.Kingdom)
+                    title = new TextObject("{=!}Kingdom");
+                else if (type == TitleType.Dukedom)
+                    title = new TextObject("{=!}Dukedom");
+                else if (type == TitleType.County)
+                    title = new TextObject("{=!}KiCountyngdom");
+                else if (type == TitleType.Barony)
+                    title = new TextObject("{=!}Barony");
+                else title = new TextObject("{=!}Lordship");
+            }
+            
+
+            return title.ToString();
         }
 
 

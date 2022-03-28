@@ -30,7 +30,7 @@ namespace BannerKings.Behaviours
                 FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
                 if (title == null || title.contract == null) return;
   
-                GovernmentType government = title.contract.government;
+                GovernmentType government = title.contract.Government;
                 if (government == GovernmentType.Republic)
                 {
                     bool inElection = false;

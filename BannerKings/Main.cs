@@ -121,7 +121,7 @@ namespace BannerKings
                         FeudalTitle sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(__instance.Kingdom);
                         if (sovereign != null)
                         {
-                            __result = !PolicyHelper.GetForbiddenGovernmentPolicies(sovereign.contract.government).Contains(__instance.Policy);
+                            __result = !PolicyHelper.GetForbiddenGovernmentPolicies(sovereign.contract.Government).Contains(__instance.Policy);
                             return false;
                         }
                     }
@@ -285,7 +285,7 @@ namespace BannerKings
                     if (BannerKingsConfig.Instance.TitleManager != null)
                     {
                         FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(clan.Leader);
-                        return title != null && title.contract != null && title.contract.rights.Contains(FeudalRights.Assistance_Rights);
+                        return title != null && title.contract != null && title.contract.Rights.Contains(FeudalRights.Assistance_Rights);
                     }
                     return true;
                 }

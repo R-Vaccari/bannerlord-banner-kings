@@ -110,7 +110,7 @@ namespace BannerKings.Models
             FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetSovereignFromSettlement(settlement);
             if (title != null)
             {
-                GovernmentType government = title.contract.government;
+                GovernmentType government = title.contract.Government;
                 if (government == GovernmentType.Republic)
                     result.Add(0.4f, new TextObject("Government"));
                 else if (government == GovernmentType.Feudal)

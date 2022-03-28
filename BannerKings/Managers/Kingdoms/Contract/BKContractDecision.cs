@@ -8,11 +8,11 @@ namespace BannerKings.Managers.Kingdoms.Contract
 {
     public class BKContractDecision : KingdomDecision
     {
-        private FeudalTitle title;
+        protected FeudalTitle Title { get; set; }
 
         public BKContractDecision(Clan proposerClan, FeudalTitle title) : base(proposerClan)
         {
-            this.title = title;
+            this.Title = title;
         }
 
         public override void ApplyChosenOutcome(DecisionOutcome chosenOutcome)
@@ -93,7 +93,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
 
         public override bool IsAllowed()
         {
-            return this.title != null && this.title.contract != null;
+            return this.Title != null && this.Title.contract != null;
         }
     }
 }

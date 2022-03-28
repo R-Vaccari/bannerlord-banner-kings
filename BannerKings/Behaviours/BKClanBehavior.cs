@@ -37,7 +37,7 @@ namespace BannerKings.Behaviours
                 if (clanTitles.Count == 0 || title == null || !clanTitles.Contains(title) || title.deJure != clan.Leader) return;
 
                 CharacterObject template;
-                GenderLaw genderLaw = title.contract.genderLaw;
+                GenderLaw genderLaw = title.contract.GenderLaw;
                 if (genderLaw == GenderLaw.Agnatic)
                     template = (from e in clan.Culture.NotableAndWandererTemplates
                                 where e.Occupation == Occupation.Wanderer && !e.IsFemale
