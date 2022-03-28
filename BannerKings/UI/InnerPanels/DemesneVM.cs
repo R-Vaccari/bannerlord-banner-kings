@@ -1,4 +1,5 @@
-﻿using BannerKings.Managers.Policies;
+﻿using BannerKings.Managers.Kingdoms;
+using BannerKings.Managers.Policies;
 using BannerKings.Models;
 using BannerKings.Populations;
 using BannerKings.UI.Items;
@@ -148,11 +149,8 @@ namespace BannerKings.UI
 		{
 			if (title != null)
             {
-				bool usurpable = isTitleUsurpable.Item1;
-				if (usurpable)
-					BannerKingsConfig.Instance.TitleManager.UsurpTitle(title.deJure, Hero.MainHero, title, costs);
-				else InformationManager.DisplayMessage(new InformationMessage(isTitleUsurpable.Item2));
-				RefreshValues();
+				Kingdom kingdom = this.data.Settlement.OwnerClan.Kingdom;
+				kingdom.AddDecision(new BKContractDecision(this.data.Settlement.OwnerClan, GovernmentType.Imperial, this.title));
 			}
 		}
 
