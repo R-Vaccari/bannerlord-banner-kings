@@ -108,7 +108,7 @@ namespace BannerKings.Populations
             set
             {
                 if (value != stability)
-                    stability = value;
+                    stability = MBMath.ClampFloat(value, 0f, 1f);
             }
         }
 
@@ -150,13 +150,25 @@ namespace BannerKings.Populations
             {
                 Dictionary<PopType, float[]> desiredTypes = GetDesiredPopTypes(settlement);
                 List<ValueTuple<PopType, float>> typesList = new List<ValueTuple<PopType, float>>();
+
+                
+                if (pops < 0)
+                {
+                    PopulationClass slaveClass = classes.FirstOrDefault(x => x.type == PopType.Slaves);
+                    if (slaveClass != null && slaveClass.count > 0)
+                    {
+                        UpdatePopType(PopType.Slaves, pops);
+                        return;
+                    }     
+                }
+
                 classes.ForEach(popClass =>
                 {
                     PopType type = popClass.type;
                     if (pops < 0 && popClass.count >= pops)
                     {
                         bool hasExcess = GetCurrentTypeFraction(type) > desiredTypes[type][1];
-                        typesList.Add(new ValueTuple<PopType, float>(popClass.type, desiredTypes[type][0] * (hasExcess ? 2f : 1f)));
+                        typesList.Add(new ValueTuple<PopType, float>(popClass.type, (float)popClass.type * 5f + desiredTypes[type][0] * (hasExcess ? 2f : 1f)));
                     }
                     else if (pops > 0)
                     {
@@ -750,6 +762,14 @@ namespace BannerKings.Populations
                     this.pasture += progress;
                 else this.woodland += progress;
             }
+
+            float farmland = this.farmland;
+            float pastureland = this.pasture;
+            float woodland = this.woodland;
+
+            this.farmland = MBMath.ClampFloat(farmland, 0f, 100000f);
+            this.pasture = MBMath.ClampFloat(pastureland, 0f, 50000f);
+            this.woodland = MBMath.ClampFloat(woodland, 0f, 50000f);
         }
     }
 
