@@ -11,21 +11,34 @@
   <Window>
     <EncyclopediaUnitTreeNodeItemWidget HeightSizePolicy ="CoverChildren" WidthSizePolicy="CoverChildren" MarginLeft="10" MarginRight="10" ButtonContainer="ButtonContainer" ChildContainer="ChildContainer" LineContainer="LineContainer" LineBrush="Encyclopedia.CharacterTree.Line">
       <Children>
-
-        <ListPanel Id="ButtonContainer" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" StackLayout.LayoutMethod="VerticalBottomToTop" HorizontalAlignment="Center">
+	  
+	    <ListPanel DataSource="{Title}"  WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" StackLayout.LayoutMethod="HorizontalLeftToRight" HorizontalAlignment="Center">
           <Children>
+			<ListPanel Id="ButtonContainer" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" StackLayout.LayoutMethod="VerticalBottomToTop" HorizontalAlignment="Center">
+			  <Children>
 
-        <ButtonWidget DataSource="{Title}" Command.Click="ExecuteLink" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedHeight="89" SuggestedWidth="123" HorizontalAlignment="Center" Brush="Encyclopedia.SubPage.Element" >
-          <Children>
-            <ImageIdentifierWidget Id="ElementImage" DataSource="{ImageIdentifier}" DoNotAcceptEvents="true" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" ImageId="@Id" AdditionalArgs="@AdditionalArgs" ImageTypeCode="@ImageTypeCode" HorizontalAlignment="Center" MarginRight="3" MarginLeft="3" MarginBottom="3" MarginTop="3"/>
-            <HintWidget DataSource="{Hint}" DoNotAcceptEvents="true" HeightSizePolicy ="StretchToParent" WidthSizePolicy="StretchToParent" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint"/>
-            <Widget DoNotAcceptEvents="true" HeightSizePolicy ="StretchToParent" WidthSizePolicy="StretchToParent" Sprite="SelectionBorder@2x_9" IsVisible="@IsActiveUnit"/>
-          </Children>
-        </ButtonWidget>
-    
-            <!--Element Name-->
-            <TextWidget DataSource="{Title}" DoNotAcceptEvents="true" WidthSizePolicy="Fixed" HeightSizePolicy="CoverChildren" SuggestedWidth="140" MinHeight="45" VerticalAlignment="Center" Brush="Encyclopedia.SubPage.Element.Name.Text" Brush.FontSize="18" Text="@NameText"/>
-          </Children>
+				<ButtonWidget  Command.Click="ExecuteLink" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedHeight="89" SuggestedWidth="123" HorizontalAlignment="Center" Brush="Encyclopedia.SubPage.Element" >
+				  <Children>
+					<ImageIdentifierWidget Id="ElementImage" DataSource="{ImageIdentifier}" DoNotAcceptEvents="true" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" ImageId="@Id" AdditionalArgs="@AdditionalArgs" ImageTypeCode="@ImageTypeCode" HorizontalAlignment="Center" MarginRight="3" MarginLeft="3" MarginBottom="3" MarginTop="3"/>
+					<HintWidget DataSource="{Hint}" DoNotAcceptEvents="true" HeightSizePolicy ="StretchToParent" WidthSizePolicy="StretchToParent" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint"/>
+					<Widget DoNotAcceptEvents="true" HeightSizePolicy ="StretchToParent" WidthSizePolicy="StretchToParent" Sprite="SelectionBorder@2x_9" IsVisible="@IsActiveUnit"/>
+				  </Children>
+				</ButtonWidget>
+		
+				<TextWidget DoNotAcceptEvents="true" WidthSizePolicy="Fixed" HeightSizePolicy="CoverChildren" SuggestedWidth="140" MinHeight="45" VerticalAlignment="Center" Brush="Encyclopedia.SubPage.Element.Name.Text" Brush.FontSize="18" Text="@NameText"/>
+
+              </Children>
+            </ListPanel>
+			
+			<ButtonWidget IsVisible="@ShowUsurp" DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="120" SuggestedHeight="40" Brush="Header.Tab.Center" Command.Click="OnUsurpPress" UpdateChildrenStates="true">
+			  <Children>
+				<HintWidget DataSource="{UsurpHint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" />	
+				<TextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginTop="3" Brush="Clan.TabControl.Text" Text="Usurp" />
+			  </Children>
+			</ButtonWidget>
+			
+			
+		  </Children>
         </ListPanel>
 
         <Widget Id="LineContainer" DoNotAcceptEvents="true" DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" SuggestedWidth="0" HeightSizePolicy="Fixed" SuggestedHeight="!Encyclopedia.CharacterTree.Line.Height" HorizontalAlignment="Center" MarginTop="134" Sprite="BlankWhiteSquare_9" AlphaFactor="0.5">

@@ -716,9 +716,41 @@ namespace BannerKings.Managers
             {
                 get
                 {
-                    return this.deFacto;
+                    if (this.fief != null)
+                    {
+                        return this.fief.Owner;
+                    } else
+                    {
+                        Dictionary<Hero, int> contestors = new Dictionary<Hero, int>();
+                        foreach (FeudalTitle title in this.vassals)
+                        {
+                            Hero vassal = title.DeFacto;
+                            if (contestors.ContainsKey(vassal))
+                                contestors[vassal] += 1;
+                            else contestors.Add(vassal, 1);
+                        }
+
+                        int deJureCount = contestors.ContainsKey(this.deJure) ? contestors[this.deJure] : 0;
+                        int highestCount = contestors.Values.Max();
+                        List<Hero> highestCountHeroes = contestors.Keys.ToList().FindAll(x => contestors[x] == highestCount);
+                        if (highestCountHeroes.Contains(this.deJure))
+                            return this.deJure;
+                        else
+                        {
+                            Hero selected = highestCountHeroes[0];
+                            if (highestCountHeroes.Count > 1)
+                                foreach (Hero competitor in highestCountHeroes)
+                                    if (competitor != selected && competitor.Clan.Tier > selected.Clan.Tier ||
+                                        competitor.Clan.Influence > selected.Clan.Influence)
+                                        selected = competitor;
+
+                            return selected;
+
+                        }
+                    }
                 }
             }
+
 
             public bool Active => this.deJure != null || this.deFacto != null;
 

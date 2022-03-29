@@ -291,8 +291,12 @@ namespace BannerKings.Populations
             set
             {
                 this.settlementOwner = value;
-                if (this.IsCulturePresent(settlementOwner.Culture))
-                    this.AddCulture(settlementOwner.Culture, 0f);
+                if (!this.IsCulturePresent(settlementOwner.Culture) && this.settlementOwner == Hero.MainHero)
+                {
+                    if (this.settlementOwner.Culture == this.DominantCulture)
+                        this.AddCulture(settlementOwner.Culture, 1f, 1f);
+                    else this.AddCulture(settlementOwner.Culture, 0f);
+                }
             }
         }
 
@@ -310,6 +314,24 @@ namespace BannerKings.Populations
             else dataClass.Acceptance = acceptance;
         }
 
+        public void AddCulture(CultureObject culture, float acceptance, float assim)
+        {
+            CultureDataClass dataClass = null;
+            foreach (CultureDataClass data in this.cultures)
+                if (data.Culture == culture)
+                {
+                    dataClass = data;
+                    break;
+                }
+
+            if (dataClass == null) this.cultures.Add(new CultureDataClass(culture, assim, acceptance));
+            else
+            {
+                dataClass.Acceptance = acceptance;
+                dataClass.Assimilation = assim;
+            }
+        }
+
         public float GetAssimilation(CultureObject culture)
         {
             CultureDataClass data = this.cultures.FirstOrDefault(x => x.Culture == culture);
@@ -324,7 +346,7 @@ namespace BannerKings.Populations
 
         internal override void Update(PopulationData data)
         {
-            this.settlementOwner = data.Settlement.Owner;
+            this.SettlementOwner = data.Settlement.Owner;
             BKCultureAssimilationModel assimModel = (BKCultureAssimilationModel)BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(BKCultureAssimilationModel));
             BKCultureAcceptanceModel accModel = (BKCultureAcceptanceModel)BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(BKCultureAcceptanceModel));
             HashSet<CultureDataClass> toDelete = new HashSet<CultureDataClass>();

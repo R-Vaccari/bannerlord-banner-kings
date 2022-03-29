@@ -19,17 +19,10 @@ namespace BannerKings.UI
     public class DemesneVM : BannerKingsViewModel
     {
 		private HeroVM deJure;
-		private MBBindingList<VassalTitleVM> _vassals;
 		private MBBindingList<InformationElement> demesneInfo, landInfo, terrainInfo, workforceInfo, governmentInfo;
 		private FeudalTitle title;
 		private FeudalTitle duchy;
-		private (bool, string) isTitleUsurpable;
-		private (bool, string) _duchyUsurpable;
-		private UsurpCosts costs;
-		private UsurpCosts duchyCosts;
-		private BKUsurpationModel model;
 		private bool _contractEnabled;
-		private bool _usurpDuchyEnabled;
 		private SelectorVM<BKItemVM> workforceVM;
 		private BKWorkforcePolicy workforceItem;
 
@@ -39,11 +32,8 @@ namespace BannerKings.UI
 			if (title != null)
             {
 				this.deJure = new HeroVM(title.deJure, false);
-				this.model = new BKUsurpationModel();
-				this.costs = model.GetUsurpationCosts(title, Hero.MainHero);
 				this.duchy = BannerKingsConfig.Instance.TitleManager.GetDuchy(this.title);
 				this._contractEnabled = BannerKingsConfig.Instance.TitleManager.IsHeroTitleHolder(Hero.MainHero) && Clan.PlayerClan.Kingdom != null;
-				this.isTitleUsurpable = model.IsUsurpable(title, Hero.MainHero);
 			}
 
 			this.demesneInfo = new MBBindingList<InformationElement>();
@@ -97,7 +87,6 @@ namespace BannerKings.UI
 					"The dukedom this settlement is associated with."));
 
 				DeJure = new HeroVM(title.deJure, false);
-				this.isTitleUsurpable = model.IsUsurpable(title, Hero.MainHero);
 			}
 			
 
@@ -151,30 +140,8 @@ namespace BannerKings.UI
 			if (title != null)
             {
 				Kingdom kingdom = this.data.Settlement.OwnerClan.Kingdom;
-				kingdom.AddDecision(new BKGovernmentDecision(this.data.Settlement.OwnerClan, GovernmentType.Imperial, BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom)));
-			}
-		}
-
-		[DataSourceProperty]
-		public HintViewModel UsurpHint
-		{
-			get
-			{
-				if (title != null)
-                {
-					UsurpCosts costs = model.GetUsurpationCosts(title, Hero.MainHero);
-					StringBuilder sb = new StringBuilder("Usurp this title from it's owner, making you the lawful ruler of this settlement. Usurping from lords within your kingdom degrades your clan's reputation.");
-					sb.Append(Environment.NewLine);
-					sb.Append("Costs:");
-					sb.Append(Environment.NewLine);
-					sb.Append(string.Format("{0} gold.", (int)costs.gold));
-					sb.Append(Environment.NewLine);
-					sb.Append(string.Format("{0} influence.", (int)costs.influence));
-					sb.Append(Environment.NewLine);
-					sb.Append(string.Format("{0} renown.", (int)costs.renown));
-					return new HintViewModel(new TextObject(sb.ToString()));
-				}
-				return new HintViewModel(new TextObject("{=!}No title identified for this settlement."));
+				if (kingdom != null)
+					kingdom.AddDecision(new BKGovernmentDecision(this.data.Settlement.OwnerClan, GovernmentType.Imperial, this.title));
 			}
 		}
 
@@ -319,19 +286,6 @@ namespace BannerKings.UI
 		}
 
 		/*
-		[DataSourceProperty]
-		public MBBindingList<VassalTitleVM> Vassals
-		{
-			get => this._vassals;
-			set
-			{
-				if (value != this._vassals)
-				{
-					this._vassals = value;
-					base.OnPropertyChanged("Vassals");
-				}
-			}
-		}
 
 		
 
