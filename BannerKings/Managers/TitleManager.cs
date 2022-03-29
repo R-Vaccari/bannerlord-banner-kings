@@ -92,7 +92,6 @@ namespace BannerKings.Managers
         {
             if (Titles.ContainsKey(title))
             {
-                Hero hero = Titles[title];
                 if (deJure)
                 {
                     title.deJure = newOwner;
@@ -178,7 +177,7 @@ namespace BannerKings.Managers
             }
         }
 
-        public void UsurpTitle(Hero oldOwner, Hero usurper, FeudalTitle title, UsurpCosts costs)
+        public void UsurpTitle(Hero oldOwner, Hero usurper, FeudalTitle title, UsurpData costs)
         {
             ExecuteOwnershipChange(oldOwner, usurper, title, true);
             if (title.type == TitleType.Barony || title.type == TitleType.County)
@@ -187,7 +186,7 @@ namespace BannerKings.Managers
                         if (vassal.type == TitleType.Lordship)
                             ExecuteOwnershipChange(oldOwner, usurper, vassal, true);
 
-            int impact = new BKUsurpationModel().GetUsurpRelationImpact(title);
+            int impact = new BKTitleModel().GetUsurpRelationImpact(title);
             ChangeRelationAction.ApplyPlayerRelation(oldOwner, impact, true, true);
             Kingdom kingdom = oldOwner.Clan.Kingdom;
             if (kingdom != null) 
@@ -199,12 +198,12 @@ namespace BannerKings.Managers
                             ChangeRelationAction.ApplyPlayerRelation(oldOwner, (int)((float)impact * 0.3f), true, true);
                     }
 
-            if (costs.gold > 0)
-                usurper.ChangeHeroGold((int)-costs.gold);
-            if (costs.influence > 0)
-                usurper.Clan.Influence -= costs.influence;
-            if (costs.renown > 0)
-                usurper.Clan.Renown -= costs.renown;
+            if (costs.Gold > 0)
+                usurper.ChangeHeroGold((int)-costs.Gold);
+            if (costs.Influence > 0)
+                usurper.Clan.Influence -= costs.Influence;
+            if (costs.Renown > 0)
+                usurper.Clan.Renown -= costs.Renown;
             //OwnershipNotification notification = new OwnershipNotification(title, new TextObject(string.Format("You are now the rightful owner to {0}", title.name)));
             //Campaign.Current.CampaignInformationManager.NewMapNoticeAdded(notification);
         }
@@ -826,17 +825,26 @@ namespace BannerKings.Managers
             Lordship
         }
 
-        public class UsurpCosts
+        public class UsurpData
         {
-            public float gold { get; private set; }
-            public float influence { get; private set; }
-            public float renown { get; private set; }
+            public bool Usurpable { get; set; }
+            public TextObject Reason { get; set; }
+            public float Gold { get; set; }
+            public float Influence { get; set; }
+            public float Renown { get; set; }
 
-            public UsurpCosts(float gold, float influence, float renown)
+            public UsurpData()
             {
-                this.gold = gold;
-                this.influence = influence;
-                this.renown = renown;
+
+            }
+
+            public UsurpData(bool usurp, TextObject reason, float gold, float influence, float renown)
+            {
+                this.Usurpable = usurp;
+                this.Reason = reason;
+                this.Gold = gold;
+                this.Influence = influence;
+                this.Renown = renown;
             }
         }
 

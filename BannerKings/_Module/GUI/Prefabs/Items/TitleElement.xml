@@ -30,13 +30,18 @@
               </Children>
             </ListPanel>
 			
-			<ButtonWidget IsVisible="@ShowUsurp" DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="120" SuggestedHeight="40" Brush="Header.Tab.Center" Command.Click="OnUsurpPress" UpdateChildrenStates="true">
-			  <Children>
-				<HintWidget DataSource="{UsurpHint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" />	
-				<TextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginTop="3" Brush="Clan.TabControl.Text" Text="Usurp" />
-			  </Children>
-			</ButtonWidget>
-			
+			<GridWidget DataSource="{Decisions}" WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" SuggestedHeight="100" MarginLeft="15" HorizontalAlignment="Center" DefaultCellWidth="140" DefaultCellHeight="40" ColumnCount="1">
+			  <ItemTemplate>
+			  
+				<ButtonWidget IsVisible="@Show" IsEnabled="@Enabled" DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="120" SuggestedHeight="40" Brush="ButtonBrush2" Command.Click="OnPress" UpdateChildrenStates="true">
+				  <Children>
+					<HintWidget DataSource="{Hint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" />	
+					<TextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginTop="3" Brush="Clan.TabControl.Text" Text="@ButtonName" />
+				  </Children>
+				</ButtonWidget>
+				
+			  </ItemTemplate>
+			</GridWidget>
 			
 		  </Children>
         </ListPanel>

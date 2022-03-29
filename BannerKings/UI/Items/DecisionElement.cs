@@ -9,9 +9,8 @@ namespace BannerKings.UI
 	public class DecisionElement : ViewModel
 	{
 		public int OptionTypeID { get; set; }
-		private HintViewModel _hint { get; set; }
-
-		public string _description { get; set; }
+		private HintViewModel hint { get; set; }
+		public string description { get; set; }
 		public bool IsDiscrete { get; set; }
 
 		[DataSourceProperty] 
@@ -19,21 +18,21 @@ namespace BannerKings.UI
 
 		public Action OnPressAction { get; set; }
 
+		private bool booleanValue = false;
+		private Action<bool> booleanAction;
+		public bool show, enabled;
 
 		public bool OptionValueAsBoolean
 		{
-			get
-			{
-				return this._optionBooleanValue;
-			}
+			get => this.booleanValue;
 			set
 			{
-				bool flag = value != this._optionBooleanValue;
+				bool flag = value != this.booleanValue;
 				if (flag)
 				{
-					this._optionBooleanValue = value;
+					this.booleanValue = value;
 					base.OnPropertyChanged("OptionValueAsBoolean");
-					this._onBooleanChangeAction(value);
+					this.booleanAction(value);
 				}
 			}
 		}
@@ -41,46 +40,33 @@ namespace BannerKings.UI
 
 		public DecisionElement SetAsBooleanOption(string desc, bool initialValue, Action<bool> onChange, TextObject hintText)
 		{
-			try
-			{
-				this.Hint = new HintViewModel(hintText);
-				this.OptionTypeID = 1;
-				this.Description = desc;
-				this._optionBooleanValue = initialValue;
-				this._onBooleanChangeAction = onChange;
-			}
-			catch (Exception ex)
-			{
-			}
+			this.Hint = new HintViewModel(hintText);
+			this.OptionTypeID = 1;
+			this.Description = desc;
+			this.booleanValue = initialValue;
+			this.booleanAction = onChange;
+			this.Show = true;
+			this.Enabled = true;
 			return this;
 		}
 
 		public DecisionElement SetAsButtonOption(string buttonName, Action onPress, TextObject hintText = null)
 		{
-			try
-			{
-				this.OptionTypeID = 3;
-				this.ButtonName = buttonName;
-				this.OnPressAction = onPress;
-				this.Hint = new HintViewModel(hintText);
-			}
-			catch (Exception ex)
-			{
-			}
+			this.OptionTypeID = 3;
+			this.ButtonName = buttonName;
+			this.OnPressAction = onPress;
+			this.Hint = new HintViewModel(hintText);
+			this.Show = true;
+			this.Enabled = true;
 			return this;
 		}
 
-
+		 
 		public void OnPress()
 		{
-			bool flag = this.OnPressAction != null;
-			if (flag)
-			{
-				this.OnPressAction();
-			}
+			if (this.OnPressAction != null) this.OnPressAction();
 		}
 
-		// Token: 0x060001CF RID: 463 RVA: 0x0000E1BC File Offset: 0x0000C3BC
 		public DecisionElement SetAsTitle(string title, TextObject hintText = null)
 		{
 			this.OptionTypeID = 0;
@@ -88,19 +74,46 @@ namespace BannerKings.UI
 			return this;
 		}
 
-		private bool _optionBooleanValue = false;
-		private Action<bool> _onBooleanChangeAction;
+		
 
 		[DataSourceProperty]
 		public HintViewModel Hint
 		{
-			get => _hint;
+			get => hint;
 			set
 			{
-				if (value != _hint)
+				if (value != hint)
 				{
-					_hint = value;
+					hint = value;
 					base.OnPropertyChangedWithValue(value, "Hint");
+				}
+			}
+		}
+
+		[DataSourceProperty]
+		public bool Enabled
+		{
+			get => enabled;
+			set
+			{
+				if (value != enabled)
+				{
+					enabled = value;
+					base.OnPropertyChangedWithValue(value, "Enabled");
+				}
+			}
+		}
+
+		[DataSourceProperty]
+		public bool Show
+		{
+			get => show;
+			set
+			{
+				if (value != show)
+				{
+					show = value;
+					base.OnPropertyChangedWithValue(value, "Show");
 				}
 			}
 		}
@@ -108,12 +121,12 @@ namespace BannerKings.UI
 		[DataSourceProperty]
 		public string Description
 		{
-			get => _description;
+			get => description;
 			set
 			{
-				if (value != _description)
+				if (value != description)
 				{
-					_description = value;
+					description = value;
 					base.OnPropertyChangedWithValue(value, "Description");
 				}
 			}

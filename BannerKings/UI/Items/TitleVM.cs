@@ -16,36 +16,54 @@ namespace BannerKings.UI.Items
     {
 		private FeudalTitle title;
 		private ImageIdentifierVM imageIdentifier;
+		private MBBindingList<DecisionElement> decisions;
 		private BasicTooltipViewModel hint;
-		private UsurpCosts costs;
-		private (bool, string) canUsurp;
-		private bool showUsurp;
 
 		public TitleVM(FeudalTitle title)
 		{
-			if (title != null)
-			{
-				CharacterCode characterCode = CharacterCode.CreateFrom(title.deJure.CharacterObject);
-				this.ImageIdentifier = new ImageIdentifierVM(characterCode);
-				this.title = title;
-			}
-			this.Hint = new BasicTooltipViewModel(() => UIHelper.GetHeroCourtTooltip(title.deJure));
+			this.title = title;
+			this.decisions = new MBBindingList<DecisionElement>();
 			this.RefreshValues();
 		}
 
 		public override void RefreshValues()
 		{
 			base.RefreshValues();
-			this.ShowUsurp = EvaluateShowUsurp();
-			BKUsurpationModel model = (BannerKingsConfig.Instance.Models.First(x => x is BKUsurpationModel) as BKUsurpationModel);
-			this.canUsurp = model.IsUsurpable(title, Hero.MainHero);
-			this.costs = model.GetUsurpationCosts(title, Hero.MainHero);
+			this.Decisions.Clear();
+			UsurpData usurpData = (BannerKingsConfig.Instance.Models.First(x => x is BKTitleModel) as BKTitleModel)
+				.IsUsurpable(title, Hero.MainHero);
+
+			if (title != null)
+			{
+				CharacterCode characterCode = CharacterCode.CreateFrom(title.deJure.CharacterObject);
+				this.ImageIdentifier = new ImageIdentifierVM(characterCode);
+				this.Hint = new BasicTooltipViewModel(() => UIHelper.GetHeroCourtTooltip(title.deJure, usurpData));
+			}
+
+			if (EvaluateShowUsurp())
+            {
+
+				TextObject sb = new TextObject("{=!}Usurp this title from it's owner, making you the lawful ruler of this settlement. Usurping from lords within your kingdom degrades your clan's reputation.");
+				DecisionElement usurpButton = new DecisionElement().SetAsButtonOption(new TextObject("{=!}Usurp").ToString(),
+					delegate 
+					{
+						if (usurpData.Usurpable)
+                        {
+							BannerKingsConfig.Instance.TitleManager.UsurpTitle(title.deJure, Hero.MainHero, title, usurpData);
+							RefreshValues();
+						}	
+					},
+					new TextObject(sb.ToString()));
+				usurpButton.Enabled = usurpData.Usurpable;
+				this.Decisions.Add(usurpButton);
+			}
+			
 		}
 
 		private bool EvaluateShowUsurp()
         {
 			if (title.deJure == Hero.MainHero) return false;
-			else if (title.deFacto == Hero.MainHero) return true;
+			else if (title.DeFacto == Hero.MainHero) return true;
 			else
             {
 				bool result = false;
@@ -67,31 +85,20 @@ namespace BannerKings.UI.Items
 			
 		}
 
-		private void OnUsurpPress()
-		{
-			if (title != null)
-			{
-				bool usurpable = canUsurp.Item1;
-				if (usurpable)
-					BannerKingsConfig.Instance.TitleManager.UsurpTitle(title.deJure, Hero.MainHero, title, costs);
-				else InformationManager.DisplayMessage(new InformationMessage(canUsurp.Item2));
-				RefreshValues();
-			}
-		}
-
 		[DataSourceProperty]
-		public bool ShowUsurp
+		public MBBindingList<DecisionElement> Decisions
 		{
-			get => this.showUsurp;
+			get => this.decisions;
 			set
 			{
-				if (value != this.showUsurp)
+				if (value != this.decisions)
 				{
-					this.showUsurp = value;
-					base.OnPropertyChangedWithValue(value, "ShowUsurp");
+					this.decisions = value;
+					base.OnPropertyChangedWithValue(value, "Decisions");
 				}
 			}
 		}
+
 
 		[DataSourceProperty]
 		public BasicTooltipViewModel Hint
@@ -106,30 +113,6 @@ namespace BannerKings.UI.Items
 				}
 			}
 		}
-
-		[DataSourceProperty]
-		public HintViewModel UsurpHint
-		{
-			get
-			{
-				if (title != null)
-				{
-					UsurpCosts costs = this.costs;
-					StringBuilder sb = new StringBuilder("Usurp this title from it's owner, making you the lawful ruler of this settlement. Usurping from lords within your kingdom degrades your clan's reputation.");
-					sb.Append(Environment.NewLine);
-					sb.Append("Costs:");
-					sb.Append(Environment.NewLine);
-					sb.Append(string.Format("{0} gold.", (int)costs.gold));
-					sb.Append(Environment.NewLine);
-					sb.Append(string.Format("{0} influence.", (int)costs.influence));
-					sb.Append(Environment.NewLine);
-					sb.Append(string.Format("{0} renown.", (int)costs.renown));
-					return new HintViewModel(new TextObject(sb.ToString()));
-				}
-				return new HintViewModel(new TextObject("{=!}No title identified for this settlement."));
-			}
-		}
-
 
 		[DataSourceProperty]
 		public ImageIdentifierVM ImageIdentifier

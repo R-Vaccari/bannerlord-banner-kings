@@ -14,7 +14,7 @@ namespace BannerKings.Utils
     public static class UIHelper
     {
 
-		public static List<TooltipProperty> GetHeroCourtTooltip(Hero hero)
+		public static List<TooltipProperty> GetHeroCourtTooltip(Hero hero, UsurpData usurp = null)
 		{
 			List<TooltipProperty> list = new List<TooltipProperty>
 			{
@@ -39,6 +39,17 @@ namespace BannerKings.Utils
 				TooltipAddSeperator(list, false);
 				foreach (FeudalTitle title in titles)
 					list.Add(new TooltipProperty(title.name.ToString(), GetOwnership(hero, title), 0, false, TooltipProperty.TooltipPropertyFlags.None));
+			}
+
+			if (usurp != null && !usurp.Usurpable)
+			{
+				TooltipAddEmptyLine(list, false);
+				list.Add(new TooltipProperty(new TextObject("{=!}Usurp", null).ToString(), " ", 0, false, TooltipProperty.TooltipPropertyFlags.None));
+				TooltipAddSeperator(list, false);
+				list.Add(new TooltipProperty(new TextObject("{=!}Reason").ToString(), usurp.Reason.ToString(), 0, false, TooltipProperty.TooltipPropertyFlags.None));
+				list.Add(new TooltipProperty(new TextObject("{=!}Gold").ToString(), usurp.Gold.ToString("0.0"), 0, false, TooltipProperty.TooltipPropertyFlags.None));
+				list.Add(new TooltipProperty(new TextObject("{=!}Influence").ToString(), usurp.Influence.ToString("0.0"), 0, false, TooltipProperty.TooltipPropertyFlags.None));
+				list.Add(new TooltipProperty(new TextObject("{=!}Renown").ToString(), usurp.Renown.ToString("0.0"), 0, false, TooltipProperty.TooltipPropertyFlags.None));
 			}
 
 			return list;
