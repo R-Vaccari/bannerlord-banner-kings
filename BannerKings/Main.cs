@@ -591,13 +591,11 @@ namespace BannerKings
                                     desiredAmount = (float)amount;
 
 
-                                if (town.FoodStocks <= (float)town.FoodStocksUpperLimit() * 0.1f)
+                                if (item.IsFood && town.FoodStocks <= (float)town.FoodStocksUpperLimit() * 0.1f)
                                 {
-                                    float requiredFood = town.FoodChange;
+                                    float requiredFood = town.FoodChange * -1f;
                                     if (amount > requiredFood)
                                         desiredAmount += requiredFood + 1f;
-                                    else if (amount == requiredFood)
-                                        desiredAmount = requiredFood;
                                     else desiredAmount += amount;
                                 }
 
@@ -606,7 +604,7 @@ namespace BannerKings
                                 if (finalAmount > amount)
                                 {
                                     finalAmount = amount;
-                                    if (type != ConsumptionType.None) popData.EconomicData.UpdateSatisfaction(type, -0.001f);
+                                    if (type != ConsumptionType.None) popData.EconomicData.UpdateSatisfaction(type, -0.0015f);
                                 }
                                 else if (type != ConsumptionType.None) popData.EconomicData.UpdateSatisfaction(type, 0.001f);
                                 
@@ -620,18 +618,15 @@ namespace BannerKings
                         }
                         List<Town.SellLog> list = new List<Town.SellLog>();
                         foreach (KeyValuePair<ItemCategory, int> keyValuePair in saleLog)
-                        {
                             if (keyValuePair.Value > 0)
-                            {
                                 list.Add(new Town.SellLog(keyValuePair.Key, keyValuePair.Value));
-                            }
-                        }
+ 
                         town.SetSoldItems(list);
                         return false;
                     }
                     else return true;
                 }
-            }
+            } 
         }     
     }
 }

@@ -14,7 +14,7 @@ namespace BannerKings.Utils
     public static class UIHelper
     {
 
-		public static List<TooltipProperty> GetHeroCourtTooltip(Hero hero, UsurpData usurp = null)
+		public static List<TooltipProperty> GetHeroCourtTooltip(Hero hero, UsurpData usurp = null, List<Hero> claimants = null)
 		{
 			List<TooltipProperty> list = new List<TooltipProperty>
 			{
@@ -46,10 +46,28 @@ namespace BannerKings.Utils
 				TooltipAddEmptyLine(list, false);
 				list.Add(new TooltipProperty(new TextObject("{=!}Usurp", null).ToString(), " ", 0, false, TooltipProperty.TooltipPropertyFlags.None));
 				TooltipAddSeperator(list, false);
+				TextObject gold = new TextObject("{=!}{GOLD} coins.");
+				gold.SetTextVariable("GOLD", usurp.Gold.ToString("0.0"));
+
+				TextObject influence = new TextObject("{=!}{INFLUENCE} influence.");
+				influence.SetTextVariable("INFLUENCE", usurp.Influence.ToString("0.0"));
+
+				TextObject renown = new TextObject("{=!}{RENOWN} renown.");
+				renown.SetTextVariable("RENOWN", usurp.Renown.ToString("0.0"));
+
 				list.Add(new TooltipProperty(new TextObject("{=!}Reason").ToString(), usurp.Reason.ToString(), 0, false, TooltipProperty.TooltipPropertyFlags.None));
-				list.Add(new TooltipProperty(new TextObject("{=!}Gold").ToString(), usurp.Gold.ToString("0.0"), 0, false, TooltipProperty.TooltipPropertyFlags.None));
-				list.Add(new TooltipProperty(new TextObject("{=!}Influence").ToString(), usurp.Influence.ToString("0.0"), 0, false, TooltipProperty.TooltipPropertyFlags.None));
-				list.Add(new TooltipProperty(new TextObject("{=!}Renown").ToString(), usurp.Renown.ToString("0.0"), 0, false, TooltipProperty.TooltipPropertyFlags.None));
+				list.Add(new TooltipProperty(new TextObject("{=!}Gold").ToString(), gold.ToString(), 0, false, TooltipProperty.TooltipPropertyFlags.None));
+				list.Add(new TooltipProperty(new TextObject("{=!}Influence").ToString(), influence.ToString(), 0, false, TooltipProperty.TooltipPropertyFlags.None));
+				list.Add(new TooltipProperty(new TextObject("{=!}Renown").ToString(), renown.ToString(), 0, false, TooltipProperty.TooltipPropertyFlags.None));
+			}
+
+			if (claimants != null && claimants.Count > 0)
+			{
+				TooltipAddEmptyLine(list, false);
+				list.Add(new TooltipProperty(new TextObject("{=!}Claimants", null).ToString(), " ", 0, false, TooltipProperty.TooltipPropertyFlags.None));
+				TooltipAddSeperator(list, false);
+				foreach (Hero claimant in claimants)
+					list.Add(new TooltipProperty(claimant.Name.ToString(), new TextObject("").ToString(), 0, false, TooltipProperty.TooltipPropertyFlags.None));
 			}
 
 			return list;

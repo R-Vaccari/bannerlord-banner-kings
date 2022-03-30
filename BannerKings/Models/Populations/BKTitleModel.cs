@@ -1,4 +1,5 @@
 ﻿using BannerKings.Populations;
+using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
@@ -64,25 +65,40 @@ namespace BannerKings.Models
                 return usurpData;
             }
 
-
             usurpData.Usurpable = false;
-            TextObject reasonText = new TextObject("{=!}You have no claim to this title ({REASON}).");
-
-            if (title.fief != null) reasonText.SetTextVariable("REASON", "Not de facto owner");
-            else reasonText.SetTextVariable("REASON", "Not owner of 51% or more of vassals.");
-            usurpData.Reason = reasonText;
-
+            usurpData.Reason = new TextObject("{=!}No rightful claim.");
 
             return usurpData;
         }
 
-        private float GetInfluenceUsurpCost(FeudalTitle title) => 100f / (float)title.type + 2f;
+        public List<Hero> GetClaimants(FeudalTitle title)
+        {
+            List<Hero> claimants = new List<Hero>();
+            Hero deFacto = title.DeFacto;
+            if (deFacto != title.deJure)
+            {
+                if (title.fief == null)
+                {
+                    if (BannerKingsConfig.Instance.TitleManager.IsHeroTitleHolder(deFacto))
+                        claimants.Add(deFacto);
+                }
+                else claimants.Add(deFacto);
+            }
+            if (title.sovereign != null && title.sovereign.deJure != title.deJure) claimants.Add(title.sovereign.deJure);
+            if (title.vassals != null && title.vassals.Count > 0)
+                foreach (FeudalTitle vassal in title.vassals)
+                    if (vassal.deJure != title.deJure)
+                        claimants.Add(vassal.deJure);
+            return claimants;
+        }
 
-        private float GetRenownUsurpCost(FeudalTitle title) => 10f / (float)title.type + 2f;
+        private float GetInfluenceUsurpCost(FeudalTitle title) => 500f / (float)title.type + 1f;
+
+        private float GetRenownUsurpCost(FeudalTitle title) => 100f / (float)title.type + 1f;
 
         private float GetGoldUsurpCost(FeudalTitle title)
         {
-            float gold = 1000f / (float)title.type + 3f;
+            float gold = 100000f / (float)title.type + 1f;
             if (title.fief != null)
             {
                 PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(title.fief);

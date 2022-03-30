@@ -9,6 +9,7 @@ using BannerKings.Models;
 using System.Text;
 using System;
 using TaleWorlds.Localization;
+using System.Collections.Generic;
 
 namespace BannerKings.UI.Items
 {
@@ -30,34 +31,36 @@ namespace BannerKings.UI.Items
 		{
 			base.RefreshValues();
 			this.Decisions.Clear();
-			UsurpData usurpData = (BannerKingsConfig.Instance.Models.First(x => x is BKTitleModel) as BKTitleModel)
-				.IsUsurpable(title, Hero.MainHero);
+			
 
 			if (title != null)
 			{
+				BKTitleModel model = (BannerKingsConfig.Instance.Models.First(x => x is BKTitleModel) as BKTitleModel);
+				UsurpData usurpData = model.IsUsurpable(title, Hero.MainHero);
+				List<Hero> claimants = model.GetClaimants(title);
+
 				CharacterCode characterCode = CharacterCode.CreateFrom(title.deJure.CharacterObject);
 				this.ImageIdentifier = new ImageIdentifierVM(characterCode);
-				this.Hint = new BasicTooltipViewModel(() => UIHelper.GetHeroCourtTooltip(title.deJure, usurpData));
-			}
+				this.Hint = new BasicTooltipViewModel(() => UIHelper.GetHeroCourtTooltip(title.deJure, usurpData, claimants));
+				
+				if (claimants.Contains(Hero.MainHero))
+				{
 
-			if (EvaluateShowUsurp())
-            {
-
-				TextObject sb = new TextObject("{=!}Usurp this title from it's owner, making you the lawful ruler of this settlement. Usurping from lords within your kingdom degrades your clan's reputation.");
-				DecisionElement usurpButton = new DecisionElement().SetAsButtonOption(new TextObject("{=!}Usurp").ToString(),
-					delegate 
-					{
-						if (usurpData.Usurpable)
-                        {
-							BannerKingsConfig.Instance.TitleManager.UsurpTitle(title.deJure, Hero.MainHero, title, usurpData);
-							RefreshValues();
-						}	
-					},
-					new TextObject(sb.ToString()));
-				usurpButton.Enabled = usurpData.Usurpable;
-				this.Decisions.Add(usurpButton);
+					TextObject sb = new TextObject("{=!}Usurp this title from it's owner, making you the lawful ruler of this settlement. Usurping from lords within your kingdom degrades your clan's reputation.");
+					DecisionElement usurpButton = new DecisionElement().SetAsButtonOption(new TextObject("{=!}Usurp").ToString(),
+						delegate 
+						{
+							if (usurpData.Usurpable)
+							{
+								BannerKingsConfig.Instance.TitleManager.UsurpTitle(title.deJure, Hero.MainHero, title, usurpData);
+								RefreshValues();
+							}	
+						},
+						new TextObject(sb.ToString()));
+					usurpButton.Enabled = usurpData.Usurpable;
+					this.Decisions.Add(usurpButton);
+				}
 			}
-			
 		}
 
 		private bool EvaluateShowUsurp()
