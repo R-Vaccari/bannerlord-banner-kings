@@ -751,17 +751,20 @@ namespace BannerKings.Populations
                 float construction = laborers * 0.010f;
                 float progress = 15f / construction;
 
-                List<(int, float)> list = new List<(int, float)>();
-                list.Add(new(0, this.composition[0]));
-                list.Add(new(1, this.composition[1]));
-                list.Add(new(2, this.composition[2]));
-                int choosen = MBRandom.ChooseWeighted(list);
+                if (progress > 0f)
+                {
+                    List<(int, float)> list = new List<(int, float)>();
+                    list.Add(new(0, this.composition[0]));
+                    list.Add(new(1, this.composition[1]));
+                    list.Add(new(2, this.composition[2]));
+                    int choosen = MBRandom.ChooseWeighted(list);
 
-                if (choosen == 0)
-                    this.farmland += progress;
-                else if (choosen == 1)
-                    this.pasture += progress;
-                else this.woodland += progress;
+                    if (choosen == 0)
+                        this.farmland += progress;
+                    else if (choosen == 1)
+                        this.pasture += progress;
+                    else this.woodland += progress;
+                }
             }
 
 
