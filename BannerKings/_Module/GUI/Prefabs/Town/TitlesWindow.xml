@@ -14,54 +14,92 @@
       <Children>
         <Widget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="1500" SuggestedHeight="1000" HorizontalAlignment="Center" VerticalAlignment="Center" Sprite="BlankWhiteSquare_9" Color="#39291eFF">
           <Children>
-			<EncyclopediaTroopScrollablePanel Id="RightSideScrollablePanel" HeightSizePolicy ="StretchToParent" WidthSizePolicy="StretchToParent" InnerPanel="RightSideRect\InnerPanel" ClipRect="RightSideRect" VerticalAlignment="Center" HorizontalAlignment="Center" HorizontalScrollbar="..\RightSideHorizontalScrollbar" VerticalScrollbar="..\RightSideVerticalScrollbar" PanWithMouseEnabled="true" AutoHideScrollBars="true" MarginTop="50" MarginBottom="85" >
-			  <Children>
 
-				<!--Right Side Character Clan, Friends, Enemies-->
-				<Widget Id="RightSideRect" HeightSizePolicy ="StretchToParent" WidthSizePolicy="StretchToParent" HorizontalAlignment="Center" DoNotAcceptEvents="true" ClipContents="true" MarginLeft="25" MarginRight="25" MarginBottom="-85">
-				  <Children>
-
-					<Widget Id="InnerPanel" HeightSizePolicy="CoverChildren" WidthSizePolicy="CoverChildren" HorizontalAlignment="Center" IsHidden="@HasErrors" >
-					  <Children>
-						
-						<!--Center Side-->
-						<Widget DataSource="{Tree}" HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" WidthSizePolicy="CoverChildren" MarginTop="10" MarginBottom="65">
-						  <Children>
-
-							<TitleElement Id="InnerPanel" HorizontalAlignment="Center" DoNotAcceptEvents="true"/>
-
-						  </Children>
-						</Widget>
-						
-					  </Children>
-					</Widget>
-					
-				  </Children>
-				</Widget>
-
-			  </Children>
-			</EncyclopediaTroopScrollablePanel>
-
-
-			<Widget HeightSizePolicy ="Fixed" WidthSizePolicy="StretchToParent" SuggestedHeight="158" Sprite="StdAssets\scroll_hide" VerticalAlignment="Bottom" IsEnabled="false"/>
-			
-			<ScrollbarWidget HeightSizePolicy ="StretchToParent" WidthSizePolicy="Fixed" Id="RightSideVerticalScrollbar" SuggestedWidth="30" MinValue="0" MaxValue="100" MarginRight="10" MarginBottom="70" MarginTop="0" AlignmentAxis="Vertical" HorizontalAlignment="Right" VerticalAlignment="Center" Handle="ScrollbarHandle" UpdateChildrenStates="true" >
-			  <Children>
-				<Widget Id="ScrollbarBed" WidthSizePolicy="Fixed" HeightSizePolicy="StretchToParent" SuggestedWidth="4" HorizontalAlignment="Center"  Sprite="SPGeneral\SPRecruitment\slider_thin_bed_vertical" />
-				<ImageWidget Id="ScrollbarHandle" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" MinHeight="153" SuggestedWidth="30" SuggestedHeight="150" HorizontalAlignment="Center" Brush="Encyclopedia.Scroll.Handle.Vertical" />
-			  </Children>
-			</ScrollbarWidget>
-			
-			<ScrollbarWidget HeightSizePolicy ="Fixed" WidthSizePolicy="StretchToParent" Id="RightSideHorizontalScrollbar" SuggestedHeight="8" MinValue="0" MaxValue="100" MarginLeft="40" MarginRight="55" MarginBottom="65" AlignmentAxis="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom" Handle="ScrollbarHandle" UpdateChildrenStates="true" >
-			  <Children>
-				<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="4" VerticalAlignment="Center" Sprite="SPGeneral\SPRecruitment\slider_thin_bed_horizontal" />
-				<ImageWidget Id="ScrollbarHandle" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" MinWidth="153" SuggestedHeight="30" SuggestedWidth="150" VerticalAlignment="Center" Brush="Encyclopedia.Scroll.Handle.Horizontal" />
-			  </Children>
-			</ScrollbarWidget>
-			
 			<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="625" Sprite="StdAssets\Popup\canvas_gradient" IsEnabled="false" VerticalFlip="true"/>
 			<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="625" Sprite="StdAssets\Popup\canvas_gradient" IsEnabled="false" MarginTop="625" />
 			
+
+			<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" StackLayout.LayoutMethod="HorizontalLeftToRight" HorizontalAlignment="Center">
+			  <Children>
+			  
+			  <Widget WidthSizePolicy="Fixed" HeightSizePolicy="StretchToParent" SuggestedWidth="300" HorizontalAlignment="Left">
+			    <Children>
+				 
+				    <Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="700" Sprite="StdAssets\Popup\canvas_gradient" IsEnabled="false" VerticalFlip="true"/>
+					<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="300" Sprite="StdAssets\Popup\canvas_gradient" IsEnabled="false" MarginTop="700" />
+
+					<ListPanel WidthSizePolicy="Fixed" HeightSizePolicy="StretchToParent" SuggestedWidth="300" MarginTop="10" StackLayout.LayoutMethod="VerticalBottomToTop">
+					  <Children>
+					  
+						<MaskedTextureWidget DataSource="{Banner}" ImageId="@Id" AdditionalArgs="@AdditionalArgs" ImageTypeCode="@ImageTypeCode" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="243" SuggestedHeight="398" HorizontalAlignment="Center" Brush="Encyclopedia.Faction.Banner" OverlayTextureScale="1.5"/>
+						<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" MarginLeft="50" MarginRight="50" Brush="Encyclopedia.SubPage.Title.Text" Brush.TextHorizontalAlignment="Center" Text="@Name" />
+						
+						<GridWidget DataSource="{Decisions}" WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="100" MarginLeft="20" MarginRight="20" HorizontalAlignment="Center" DefaultCellWidth="140" DefaultCellHeight="40" ColumnCount="1">
+						  <ItemTemplate>
+						  
+							<ButtonWidget IsVisible="@Show" IsEnabled="@Enabled" DoNotPassEventsToChildren="true" WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="40" Brush="ButtonBrush2" Command.Click="OnPress" UpdateChildrenStates="true">
+							  <Children>
+								<HintWidget DataSource="{Hint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" />	
+								<TextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginTop="3" Brush="Clan.TabControl.Text" Text="@ButtonName" />
+							  </Children>
+							</ButtonWidget>
+							
+						  </ItemTemplate>
+						</GridWidget>
+					
+					  </Children>
+					</ListPanel>
+					
+					<Widget WidthSizePolicy="Fixed" HeightSizePolicy="StretchToParent" SuggestedWidth="2" HorizontalAlignment="Right" Sprite="Encyclopedia\divider_vertical" />
+				  </Children>
+				</Widget>
+				
+				
+				<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" >
+			      <Children>
+				    <EncyclopediaTroopScrollablePanel Id="RightSideScrollablePanel" HeightSizePolicy ="StretchToParent" WidthSizePolicy="StretchToParent" InnerPanel="RightSideRect\InnerPanel" ClipRect="RightSideRect" VerticalAlignment="Center" HorizontalAlignment="Center" HorizontalScrollbar="..\RightSideHorizontalScrollbar" VerticalScrollbar="..\RightSideVerticalScrollbar" PanWithMouseEnabled="true" AutoHideScrollBars="true" MarginTop="50" MarginBottom="85" >
+					  <Children>
+						<Widget Id="RightSideRect" HeightSizePolicy ="StretchToParent" WidthSizePolicy="StretchToParent" HorizontalAlignment="Center" DoNotAcceptEvents="true" ClipContents="true" MarginRight="25" MarginBottom="-85">
+						  <Children>
+							<Widget Id="InnerPanel" HeightSizePolicy="CoverChildren" WidthSizePolicy="CoverChildren" HorizontalAlignment="Center" IsHidden="@HasErrors" >
+							  <Children>
+								<Widget DataSource="{Tree}" HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" WidthSizePolicy="CoverChildren" MarginTop="10" MarginBottom="65">
+								  <Children>
+									<TitleElement Id="InnerPanel" HorizontalAlignment="Center" DoNotAcceptEvents="true"/>
+								  </Children>
+								</Widget>
+							  </Children>
+							</Widget>
+						  </Children>
+						</Widget>
+
+					  </Children>
+					</EncyclopediaTroopScrollablePanel>
+
+
+					<Widget HeightSizePolicy ="Fixed" WidthSizePolicy="StretchToParent" SuggestedHeight="158" Sprite="StdAssets\scroll_hide" VerticalAlignment="Bottom" IsEnabled="false"/>
+					
+					<ScrollbarWidget HeightSizePolicy ="StretchToParent" WidthSizePolicy="Fixed" Id="RightSideVerticalScrollbar" SuggestedWidth="30" MinValue="0" MaxValue="100" MarginRight="10" MarginBottom="70" MarginTop="0" AlignmentAxis="Vertical" HorizontalAlignment="Right" VerticalAlignment="Center" Handle="ScrollbarHandle" UpdateChildrenStates="true" >
+					  <Children>
+						<Widget Id="ScrollbarBed" WidthSizePolicy="Fixed" HeightSizePolicy="StretchToParent" SuggestedWidth="4" HorizontalAlignment="Center"  Sprite="SPGeneral\SPRecruitment\slider_thin_bed_vertical" />
+						<ImageWidget Id="ScrollbarHandle" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" MinHeight="153" SuggestedWidth="30" SuggestedHeight="150" HorizontalAlignment="Center" Brush="Encyclopedia.Scroll.Handle.Vertical" />
+					  </Children>
+					</ScrollbarWidget>
+					
+					<ScrollbarWidget HeightSizePolicy ="Fixed" WidthSizePolicy="StretchToParent" Id="RightSideHorizontalScrollbar" SuggestedHeight="8" MinValue="0" MaxValue="100" MarginLeft="40" MarginRight="55" MarginBottom="65" AlignmentAxis="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom" Handle="ScrollbarHandle" UpdateChildrenStates="true" >
+					  <Children>
+						<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="4" VerticalAlignment="Center" Sprite="SPGeneral\SPRecruitment\slider_thin_bed_horizontal" />
+						<ImageWidget Id="ScrollbarHandle" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" MinWidth="153" SuggestedHeight="30" SuggestedWidth="150" VerticalAlignment="Center" Brush="Encyclopedia.Scroll.Handle.Horizontal" />
+					  </Children>
+					</ScrollbarWidget>
+				  
+				  </Children>
+				</Widget>
+
+
+		      </Children>
+			</ListPanel>
+				  
 			
 			<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Sprite="frame_9" ExtendLeft="18" ExtendTop="18" ExtendRight="18" ExtendBottom="18" IsEnabled="false" />
 		  </Children>
