@@ -39,13 +39,13 @@ namespace BannerKings.UI.Windows
 						Banner = new ImageIdentifierVM(BannerCode.CreateFrom(kingdom.Banner), true);
 					}
 						
-					Name = title.sovereign.name.ToString();
+					Name = title.sovereign.FullName.ToString();
 				}
 				else
 				{
 					this.Tree = new TitleElementVM(title);
 					Banner = new ImageIdentifierVM(BannerCode.CreateFrom(data.Settlement.OwnerClan.Banner), true);
-					Name = title.name.ToString();
+					Name = title.FullName.ToString();
 				}
 			}
 			

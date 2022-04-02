@@ -33,6 +33,32 @@ namespace BannerKings.Managers
             InitializeTitles();
         }
 
+        public void FixTitles()
+        {
+            foreach (FeudalTitle title in Titles.Keys)
+            {
+                if (title.type == TitleType.Dukedom)
+                {
+                    if (title.shortName.ToString() == "1" && title.deJure.StringId == "lord_3_1")
+                        title.SetName(new TextObject("Perassia"));
+                    else if (title.shortName.ToString() == "2" && title.deJure.StringId == "lord_3_16")
+                        title.SetName(new TextObject("Jarjarys"));
+                    else if (title.shortName.ToString() == "2" && title.deJure.StringId == "lord_3_5")
+                        title.SetName(new TextObject("Retana"));
+                    else if (title.shortName.ToString() == "2" && title.deJure.StringId == "lord_3_3")
+                        title.SetName(new TextObject("Caldea"));
+                    else if (title.shortName.ToString() == "1" && title.deJure.StringId == "lord_6_17")
+                        title.SetName(new TextObject("Kohi Rohini"));
+                    else if (title.shortName.ToString() == "1" && title.deJure.StringId == "lord_6_1")
+                        title.SetName(new TextObject("Tanaz Baikal"));
+                    else if (title.shortName.ToString() == "1" && title.deJure.StringId == "lord_6_4")
+                        title.SetName(new TextObject("Bars Dagan"));
+                    else if (title.shortName.ToString() == "1" && title.deJure.StringId == "lord_6_5")
+                        title.SetName(new TextObject("Devseg"));
+                }
+            }
+        }
+
         public bool IsHeroTitleHolder(Hero hero)
         {
             FeudalTitle result = null;
@@ -230,8 +256,8 @@ namespace BannerKings.Managers
                 BannerKingsConfig.Instance.TitleManager.GrantLordship(lordship, newKingdom.Leader, clan.Leader);
                 if (clan == Clan.PlayerClan)
                 {
-                    GameTexts.SetVariable("FIEF", lordship.name);
-                    GameTexts.SetVariable("SOVEREIGN", sovereign.name);
+                    GameTexts.SetVariable("FIEF", lordship.FullName);
+                    GameTexts.SetVariable("SOVEREIGN", sovereign.FullName);
                     InformationManager.ShowInquiry(new InquiryData("Enfoeffement Right", new TextObject("You have been generously granted the {FIEF} as part of your vassal rights to the {SOVEREIGN}.").ToString(),
                     true, false, GameTexts.FindText("str_done").ToString(), null, null, null), false);
                 }
@@ -493,7 +519,7 @@ namespace BannerKings.Managers
             if (sovereign == null || sovereign.contract == null) return;
             
             string description = BannerKingsConfig.Instance.TitleManager.GetContractText(sovereign);
-            InformationManager.ShowInquiry(new InquiryData(string.Format("Enfoeffement Contract for {0}", sovereign.name),
+            InformationManager.ShowInquiry(new InquiryData(string.Format("Enfoeffement Contract for {0}", sovereign.FullName),
                 description, true, false, buttonString, "", null, null), false);
         }
 
@@ -533,7 +559,7 @@ namespace BannerKings.Managers
         {
             FeudalContract contract = title.contract;
             StringBuilder sb = new StringBuilder(string.Format("You, {0}, formally accept to be henceforth bound to the {1}, fulfill your duties as well as uphold your rights," +
-                " what can not be undone by means other than abdication of all rights and lands associated with the contract, treachery, or death.", Hero.MainHero.Name.ToString(), title.name.ToString()));
+                " what can not be undone by means other than abdication of all rights and lands associated with the contract, treachery, or death.", Hero.MainHero.Name.ToString(), title.FullName.ToString()));
             sb.Append(Environment.NewLine);
             sb.Append("   ");
             sb.Append(Environment.NewLine);
@@ -674,7 +700,7 @@ namespace BannerKings.Managers
             public Hero deFacto { get; internal set; }
 
             [SaveableProperty(6)]
-            public TextObject name { get; private set; }
+            private TextObject name { get; set; }
 
             [SaveableProperty(7)]
             public TextObject shortName { get; private set; }
@@ -709,6 +735,19 @@ namespace BannerKings.Managers
                 this.shortName = new TextObject(name);
                 this.contract = contract;
                 dueTax = 0;
+            }
+
+            public void SetName(TextObject shortname) => this.shortName = shortname;
+
+            public TextObject FullName
+            {
+                get
+                {
+                    TextObject text = new TextObject("{=!}{TITLE} of {NAME}");
+                    text.SetTextVariable("TITLE", BannerKings.Helpers.Helpers.GetTitlePrefix(this.type, deJure.Culture));
+                    text.SetTextVariable("NAME", this.shortName.ToString());
+                    return text;
+                }
             }
 
             public Hero DeFacto

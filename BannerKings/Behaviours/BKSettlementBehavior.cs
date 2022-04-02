@@ -14,14 +14,12 @@ using TaleWorlds.ObjectSystem;
 using static BannerKings.Managers.PopulationManager;
 using HarmonyLib;
 using BannerKings.Populations;
-using BannerKings.Managers.Institutions;
 using TaleWorlds.CampaignSystem.Overlay;
 using TaleWorlds.CampaignSystem.SandBox.CampaignBehaviors;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Populations.Villages;
 using static BannerKings.Managers.Policies.BKTaxPolicy;
 using BannerKings.Managers.Decisions;
-using static BannerKings.Managers.TitleManager;
 
 namespace BannerKings.Behaviors
 {
@@ -74,6 +72,8 @@ namespace BannerKings.Behaviors
                 else BannerKingsConfig.Instance.InitManagers(populationManager, policyManager,
                     titleManager, courtManager);
             }
+
+            BannerKingsConfig.Instance.TitleManager.FixTitles();
         }
 
       

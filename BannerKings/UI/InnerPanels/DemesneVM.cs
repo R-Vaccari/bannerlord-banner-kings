@@ -66,9 +66,9 @@ namespace BannerKings.UI
 						"Your legitimacy to this title and it's vassals. You are lawful when you own this title, and considered a foreigner if your culture differs from it."));
 				}
 
-				if (title.sovereign != null) DemesneInfo.Add(new InformationElement("Sovereign:", title.sovereign.name.ToString(),
+				if (title.sovereign != null) DemesneInfo.Add(new InformationElement("Sovereign:", title.sovereign.FullName.ToString(),
 					"The master suzerain of this title, be they a king or emperor type suzerain."));
-				if (duchy != null) DemesneInfo.Add(new InformationElement("Dukedom:", duchy.name.ToString(),
+				if (duchy != null) DemesneInfo.Add(new InformationElement("Dukedom:", duchy.FullName.ToString(),
 					"The dukedom this settlement is associated with."));
 
 				GovernmentInfo.Add(new InformationElement("Government Type:", title.contract.Government.ToString(),

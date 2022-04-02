@@ -38,7 +38,7 @@ namespace BannerKings.Utils
 				list.Add(new TooltipProperty(new TextObject("{=!}Titles", null).ToString(), " ", 0, false, TooltipProperty.TooltipPropertyFlags.None));
 				TooltipAddSeperator(list, false);
 				foreach (FeudalTitle title in titles)
-					list.Add(new TooltipProperty(title.name.ToString(), GetOwnership(hero, title), 0, false, TooltipProperty.TooltipPropertyFlags.None));
+					list.Add(new TooltipProperty(title.FullName.ToString(), GetOwnership(hero, title), 0, false, TooltipProperty.TooltipPropertyFlags.None));
 			}
 
 			if (usurp != null && !usurp.Usurpable)

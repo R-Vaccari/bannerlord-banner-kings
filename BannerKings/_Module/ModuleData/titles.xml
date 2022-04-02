@@ -181,7 +181,7 @@
 		
 		
 		<kingdom faction="Aserai" contract="feudal" deJure="lord_3_1">
-			<duchy name="1" deJure="lord_3_1">
+			<duchy name="Perassia" deJure="lord_3_1">
 				<county settlement="Quyaz" deJure="lord_3_1">
 					<barony settlement="Tubilis Castle" deJure="lord_3_1"/>
 				</county>
@@ -190,7 +190,7 @@
 					<barony settlement="Ain Baliq Castle" deJure="lord_3_19"/>
 				</county>
 			</duchy>
-			<duchy name="2" deJure="lord_3_16">
+			<duchy name="Jarjarys" deJure="lord_3_16">
 				<county settlement="Askar" deJure="lord_3_17">
 					<barony settlement="Barihal Castle" deJure="lord_A9_l"/>
 				</county>
@@ -198,7 +198,7 @@
 					<barony settlement="Jamayeh Castle" deJure="lord_3_16"/>
 				</county>
 			</duchy>
-			<duchy name="2" deJure="lord_3_5">
+			<duchy name="Retana" deJure="lord_3_5">
 				<county settlement="Qasira" deJure="lord_3_18">
 					<barony settlement="Medeni Castle" deJure="lord_3_3"/>
 				</county>
@@ -206,7 +206,7 @@
 					<barony settlement="Sahel Castle" deJure="lord_3_5"/>
 				</county>
 			</duchy>
-			<duchy name="2" deJure="lord_3_3">
+			<duchy name="Caldea" deJure="lord_3_3">
 				<county settlement="Razih" deJure="lord_3_3">
 					<barony settlement="Tamnuh Castle" deJure="lord_3_22"/>
 				</county>
@@ -217,7 +217,7 @@
 		</kingdom>
 		
 		<kingdom faction="Khuzait" contract="tribal" deJure="lord_6_1">
-			<duchy name="1" deJure="lord_6_17">
+			<duchy name="Kohi Rohini" deJure="lord_6_17">
 				<county settlement="Odokh" deJure="lord_6_17">
 					<barony settlement="Simira Castle" deJure="lord_6_19"/>
 				</county>
@@ -225,7 +225,7 @@
 					<barony settlement="Erzenur Castle" deJure="lord_K9_l"/>
 				</county>
 			</duchy>
-			<duchy name="1" deJure="lord_6_1">
+			<duchy name="Tanaz Baikal" deJure="lord_6_1">
 				<county settlement="Chaikand" deJure="lord_6_1">
 					<barony settlement="Usek Castle" deJure="lord_6_5"/>
 				</county>
@@ -233,13 +233,13 @@
 					<barony settlement="Tepes Castle" deJure="lord_6_1"/>
 				</county>
 			</duchy>
-			<duchy name="1" deJure="lord_6_5">
+			<duchy name="Devseg" deJure="lord_6_5">
 				<county settlement="Ortongard" deJure="lord_6_5">
 					<barony settlement="Hakkun Castle" deJure="lord_6_20"/>
 					<barony settlement="Khimli Castle" deJure="lord_6_19"/>
 				</county>
 			</duchy>
-			<duchy name="1" deJure="lord_6_4">
+			<duchy name="Bars Dagan" deJure="lord_6_4">
 				<county settlement="Baltakhand" deJure="lord_6_4">
 					<barony settlement="Kaysar Castle" deJure="lord_6_18"/>
 					<barony settlement="Dinar Castle" deJure="lord_6_18"/>

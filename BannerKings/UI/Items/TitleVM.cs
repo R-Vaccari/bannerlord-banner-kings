@@ -132,6 +132,6 @@ namespace BannerKings.UI.Items
 		}
 
 		[DataSourceProperty]
-		public string NameText => this.title.name.ToString();
+		public string NameText => this.title.FullName.ToString();
 	}
 }
