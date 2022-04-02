@@ -48,6 +48,7 @@ namespace BannerKings
                     campaignStarter.AddBehavior(new BKRansomBehavior());
                     campaignStarter.AddBehavior(new BKTitleBehavior());
 
+                    campaignStarter.AddModel(new BKCompanionPrices());
                     campaignStarter.AddModel(new BKProsperityModel());
                     campaignStarter.AddModel(new BKTaxModel());
                     campaignStarter.AddModel(new BKFoodModel());
@@ -121,7 +122,7 @@ namespace BannerKings
                         FeudalTitle sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(__instance.Kingdom);
                         if (sovereign != null)
                         {
-                            __result = !PolicyHelper.GetForbiddenGovernmentPolicies(sovereign.contract.government).Contains(__instance.Policy);
+                            __result = !PolicyHelper.GetForbiddenGovernmentPolicies(sovereign.contract.Government).Contains(__instance.Policy);
                             return false;
                         }
                     }
@@ -285,7 +286,7 @@ namespace BannerKings
                     if (BannerKingsConfig.Instance.TitleManager != null)
                     {
                         FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(clan.Leader);
-                        return title != null && title.contract != null && title.contract.rights.Contains(FeudalRights.Assistance_Rights);
+                        return title != null && title.contract != null && title.contract.Rights.Contains(FeudalRights.Assistance_Rights);
                     }
                     return true;
                 }
@@ -591,13 +592,11 @@ namespace BannerKings
                                     desiredAmount = (float)amount;
 
 
-                                if (town.FoodStocks <= (float)town.FoodStocksUpperLimit() * 0.1f)
+                                if (item.IsFood && town.FoodStocks <= (float)town.FoodStocksUpperLimit() * 0.1f)
                                 {
-                                    float requiredFood = town.FoodChange;
+                                    float requiredFood = town.FoodChange * -1f;
                                     if (amount > requiredFood)
                                         desiredAmount += requiredFood + 1f;
-                                    else if (amount == requiredFood)
-                                        desiredAmount = requiredFood;
                                     else desiredAmount += amount;
                                 }
 
@@ -606,7 +605,7 @@ namespace BannerKings
                                 if (finalAmount > amount)
                                 {
                                     finalAmount = amount;
-                                    if (type != ConsumptionType.None) popData.EconomicData.UpdateSatisfaction(type, -0.001f);
+                                    if (type != ConsumptionType.None) popData.EconomicData.UpdateSatisfaction(type, -0.0015f);
                                 }
                                 else if (type != ConsumptionType.None) popData.EconomicData.UpdateSatisfaction(type, 0.001f);
                                 
@@ -620,18 +619,15 @@ namespace BannerKings
                         }
                         List<Town.SellLog> list = new List<Town.SellLog>();
                         foreach (KeyValuePair<ItemCategory, int> keyValuePair in saleLog)
-                        {
                             if (keyValuePair.Value > 0)
-                            {
                                 list.Add(new Town.SellLog(keyValuePair.Key, keyValuePair.Value));
-                            }
-                        }
+ 
                         town.SetSoldItems(list);
                         return false;
                     }
                     else return true;
                 }
-            }
+            } 
         }     
     }
 }

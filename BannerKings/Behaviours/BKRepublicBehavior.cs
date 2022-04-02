@@ -30,7 +30,7 @@ namespace BannerKings.Behaviours
                 FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
                 if (title == null || title.contract == null) return;
   
-                GovernmentType government = title.contract.government;
+                GovernmentType government = title.contract.Government;
                 if (government == GovernmentType.Republic)
                 {
                     bool inElection = false;
@@ -41,7 +41,7 @@ namespace BannerKings.Behaviours
                             break;
                         }
                                     
-                    if (!inElection)
+                    if (!inElection && kingdom.Clans.Count > 2)
                         kingdom.AddDecision(new RepublicElectionDecision(kingdom.RulingClan, kingdom.RulingClan), true);
                 }     
                 

@@ -17,7 +17,7 @@ namespace BannerKings.Managers.Helpers
         {
             if (title != null)
             {
-                SuccessionType succession = title.contract.succession;
+                SuccessionType succession = title.contract.Succession;
                 if (succession == SuccessionType.Elective_Monarchy || succession == SuccessionType.Republic)
                     ApplyVanillaSuccession(list, victim, kingdom);
                 else if (succession == SuccessionType.Hereditary_Monarchy)
@@ -51,6 +51,7 @@ namespace BannerKings.Managers.Helpers
             else
             {
                 yield return SuccessionType.Elective_Monarchy;
+                yield return SuccessionType.Hereditary_Monarchy;
                 yield break;
             }
         }

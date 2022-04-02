@@ -86,7 +86,7 @@ namespace BannerKings.Behaviors
             foreach (FeudalTitle title in titles)
             {
                 if (title.type != TitleType.Lordship || title.fief == null || title.deJure != Hero.MainHero) continue;
-                lordshipsToGive.Add(new InquiryElement(title, title.name.ToString(), new ImageIdentifier()));
+                lordshipsToGive.Add(new InquiryElement(title, title.FullName.ToString(), new ImageIdentifier()));
             }
 
             if (lordshipsToGive.Count == 0)

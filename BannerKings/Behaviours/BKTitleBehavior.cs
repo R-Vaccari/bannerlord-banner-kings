@@ -40,7 +40,7 @@ namespace BannerKings.Behaviours
             if (sovereign == null || sovereign.contract == null) return;
 
 
-            if (sovereign.contract.rights.Contains(FeudalRights.Conquest_Rights))
+            if (sovereign.contract.Rights.Contains(FeudalRights.Conquest_Rights))
             {
                 List<KingdomDecision> decisions = kingdom.UnresolvedDecisions.ToList();
                 KingdomDecision bkDecision = decisions.FirstOrDefault(x => x is BKSettlementClaimantDecision && (x as SettlementClaimantDecision).Settlement == settlement);
@@ -91,7 +91,7 @@ namespace BannerKings.Behaviours
             if (detail == ChangeOwnerOfSettlementAction.ChangeOwnerOfSettlementDetail.BySiege)
             {
                 bool absoluteRightGranted = false;
-                if (sovereign.contract.rights.Contains(FeudalRights.Absolute_Land_Rights))
+                if (sovereign.contract.Rights.Contains(FeudalRights.Absolute_Land_Rights))
                 {
                     FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement);
                     if (title != null)
@@ -112,7 +112,7 @@ namespace BannerKings.Behaviours
                     }
                 }
 
-                if (!absoluteRightGranted && sovereign.contract.rights.Contains(FeudalRights.Conquest_Rights))
+                if (!absoluteRightGranted && sovereign.contract.Rights.Contains(FeudalRights.Conquest_Rights))
                 {
                     List<KingdomDecision> decisions = kingdom.UnresolvedDecisions.ToList();
                     KingdomDecision decision = decisions.FirstOrDefault(x => x is SettlementClaimantDecision && (x as SettlementClaimantDecision).Settlement == settlement);

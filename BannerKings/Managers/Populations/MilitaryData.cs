@@ -98,10 +98,10 @@ namespace BannerKings.Managers.Populations
             float craftsmanMilitarism = model.GetClassMilitarism(PopType.Craftsmen);
             float craftsmen = data.GetTypeCount(PopType.Craftsmen);
             int peasantCap = (int)((serfs * serfMilitarism) + (craftsmen * craftsmanMilitarism));
-            int peasantGrowth = (int)(data.Growth.ResultNumber * (serfMilitarism) + craftsmanMilitarism);
+            int peasantGrowth = (int)(data.Growth.ResultNumber * (serfMilitarism + craftsmanMilitarism));
             if (peasantGrowth == 0) peasantGrowth++;
             if (peasantManpower > peasantCap)
-                this.peasantManpower += (int)((float)peasantGrowth * -1f); // Change later
+                this.peasantManpower += (int)((float)peasantGrowth * -1f);
             else if (peasantManpower < peasantCap)
                 this.peasantManpower += peasantGrowth;
 

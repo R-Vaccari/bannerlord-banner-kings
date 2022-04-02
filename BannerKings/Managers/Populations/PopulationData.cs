@@ -108,7 +108,7 @@ namespace BannerKings.Populations
             set
             {
                 if (value != stability)
-                    stability = value;
+                    stability = MBMath.ClampFloat(value, 0f, 1f);
             }
         }
 
@@ -150,13 +150,25 @@ namespace BannerKings.Populations
             {
                 Dictionary<PopType, float[]> desiredTypes = GetDesiredPopTypes(settlement);
                 List<ValueTuple<PopType, float>> typesList = new List<ValueTuple<PopType, float>>();
+
+                
+                if (pops < 0)
+                {
+                    PopulationClass slaveClass = classes.FirstOrDefault(x => x.type == PopType.Slaves);
+                    if (slaveClass != null && slaveClass.count > 0)
+                    {
+                        UpdatePopType(PopType.Slaves, pops);
+                        return;
+                    }     
+                }
+
                 classes.ForEach(popClass =>
                 {
                     PopType type = popClass.type;
                     if (pops < 0 && popClass.count >= pops)
                     {
                         bool hasExcess = GetCurrentTypeFraction(type) > desiredTypes[type][1];
-                        typesList.Add(new ValueTuple<PopType, float>(popClass.type, desiredTypes[type][0] * (hasExcess ? 2f : 1f)));
+                        typesList.Add(new ValueTuple<PopType, float>(popClass.type, (float)popClass.type * 5f + desiredTypes[type][0] * (hasExcess ? 2f : 1f)));
                     }
                     else if (pops > 0)
                     {
@@ -279,8 +291,12 @@ namespace BannerKings.Populations
             set
             {
                 this.settlementOwner = value;
-                if (this.IsCulturePresent(settlementOwner.Culture))
-                    this.AddCulture(settlementOwner.Culture, 0f);
+                if (!this.IsCulturePresent(settlementOwner.Culture) && this.settlementOwner == Hero.MainHero)
+                {
+                    if (this.settlementOwner.Culture == this.DominantCulture)
+                        this.AddCulture(settlementOwner.Culture, 1f, 1f);
+                    else this.AddCulture(settlementOwner.Culture, 0f);
+                }
             }
         }
 
@@ -298,6 +314,24 @@ namespace BannerKings.Populations
             else dataClass.Acceptance = acceptance;
         }
 
+        public void AddCulture(CultureObject culture, float acceptance, float assim)
+        {
+            CultureDataClass dataClass = null;
+            foreach (CultureDataClass data in this.cultures)
+                if (data.Culture == culture)
+                {
+                    dataClass = data;
+                    break;
+                }
+
+            if (dataClass == null) this.cultures.Add(new CultureDataClass(culture, assim, acceptance));
+            else
+            {
+                dataClass.Acceptance = acceptance;
+                dataClass.Assimilation = assim;
+            }
+        }
+
         public float GetAssimilation(CultureObject culture)
         {
             CultureDataClass data = this.cultures.FirstOrDefault(x => x.Culture == culture);
@@ -312,7 +346,7 @@ namespace BannerKings.Populations
 
         internal override void Update(PopulationData data)
         {
-            this.settlementOwner = data.Settlement.Owner;
+            this.SettlementOwner = data.Settlement.Owner;
             BKCultureAssimilationModel assimModel = (BKCultureAssimilationModel)BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(BKCultureAssimilationModel));
             BKCultureAcceptanceModel accModel = (BKCultureAcceptanceModel)BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(BKCultureAcceptanceModel));
             HashSet<CultureDataClass> toDelete = new HashSet<CultureDataClass>();
@@ -717,17 +751,20 @@ namespace BannerKings.Populations
                 float construction = laborers * 0.010f;
                 float progress = 15f / construction;
 
-                List<(int, float)> list = new List<(int, float)>();
-                list.Add(new(0, this.composition[0]));
-                list.Add(new(1, this.composition[1]));
-                list.Add(new(2, this.composition[2]));
-                int choosen = MBRandom.ChooseWeighted(list);
+                if (progress > 0f)
+                {
+                    List<(int, float)> list = new List<(int, float)>();
+                    list.Add(new(0, this.composition[0]));
+                    list.Add(new(1, this.composition[1]));
+                    list.Add(new(2, this.composition[2]));
+                    int choosen = MBRandom.ChooseWeighted(list);
 
-                if (choosen == 0)
-                    this.farmland += progress;
-                else if (choosen == 1)
-                    this.pasture += progress;
-                else this.woodland += progress;
+                    if (choosen == 0)
+                        this.farmland += progress;
+                    else if (choosen == 1)
+                        this.pasture += progress;
+                    else this.woodland += progress;
+                }
             }
 
 
@@ -750,6 +787,14 @@ namespace BannerKings.Populations
                     this.pasture += progress;
                 else this.woodland += progress;
             }
+
+            float farmland = this.farmland;
+            float pastureland = this.pasture;
+            float woodland = this.woodland;
+
+            this.farmland = MBMath.ClampFloat(farmland, 0f, 100000f);
+            this.pasture = MBMath.ClampFloat(pastureland, 0f, 50000f);
+            this.woodland = MBMath.ClampFloat(woodland, 0f, 50000f);
         }
     }
 

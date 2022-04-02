@@ -15,8 +15,8 @@ namespace BannerKings.Managers.Helpers
             if (title != null)
             {
                 List<Hero> candidates = GetCandidates(victim.Clan, victim);
-                SuccessionType succession = title.contract.succession;
-                InheritanceType inheritance = title.contract.inheritance;
+                SuccessionType succession = title.contract.Succession;
+                InheritanceType inheritance = title.contract.Inheritance;
 
                 Kingdom kingdom = clan.Kingdom;
                 if (kingdom != null)
@@ -46,7 +46,7 @@ namespace BannerKings.Managers.Helpers
 
         private static void ApplySeniority(FeudalTitle title, Hero victim, List<Hero> candidates)
         {
-            GenderLaw genderLaw = title.contract.genderLaw;
+            GenderLaw genderLaw = title.contract.GenderLaw;
             Hero heir;
             candidates.Sort((Hero x, Hero y) => y.Age.CompareTo(x.Age));
             if (genderLaw == GenderLaw.Agnatic)
@@ -66,7 +66,7 @@ namespace BannerKings.Managers.Helpers
 
         private static void ApplyPrimogeniture(FeudalTitle title, Hero victim, List<Hero> candidates)
         {
-            GenderLaw genderLaw = title.contract.genderLaw;
+            GenderLaw genderLaw = title.contract.GenderLaw;
             Hero heir;
             candidates.Sort((Hero x, Hero y) => y.Age.CompareTo(x.Age));
             if (genderLaw == GenderLaw.Agnatic)
@@ -89,7 +89,7 @@ namespace BannerKings.Managers.Helpers
 
         private static void ApplyUltimogeniture(FeudalTitle title, Hero victim, List<Hero> candidates)
         {
-            GenderLaw genderLaw = title.contract.genderLaw;
+            GenderLaw genderLaw = title.contract.GenderLaw;
             Hero heir;
             candidates.Sort((Hero x, Hero y) => x.Age.CompareTo(y.Age));
             if (genderLaw == GenderLaw.Agnatic)
@@ -124,7 +124,7 @@ namespace BannerKings.Managers.Helpers
                 FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetHighestTitleWithinFaction(victim, victim.Clan.Kingdom);
                 if (title.sovereign == null) BannerKingsConfig.Instance.TitleManager.InheritTitle(victim, heir, title);
                 List<Hero> candidates = GetCandidates(victim.Clan, victim);
-                InheritanceType inheritance = title.contract.inheritance;
+                InheritanceType inheritance = title.contract.Inheritance;
                 FeudalTitle remainingTitle = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(victim);
                 if (remainingTitle != null)
                     if (inheritance == InheritanceType.Primogeniture)

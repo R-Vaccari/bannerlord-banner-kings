@@ -52,7 +52,7 @@ namespace BannerKings
             this.Models.Add(new BKCultureAcceptanceModel());
             this.Models.Add(new BKAdministrativeModel());
             this.Models.Add(new BKLegitimacyModel());
-            this.Models.Add(new BKUsurpationModel());
+            this.Models.Add(new BKTitleModel());
             this.Models.Add(new BKStabilityModel());
             this.Models.Add(new BKGrowthModel());
             this.Models.Add(new BKEconomyModel());

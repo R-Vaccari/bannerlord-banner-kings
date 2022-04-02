@@ -31,13 +31,11 @@ namespace BannerKings.Managers.Duties
             if (proportion < base.Completion)
             {
                 Clan.PlayerClan.Renown -= 50f * (1f - proportion);
-                ChangeRelationAction.ApplyPlayerRelation(this.Party.LeaderHero, (int)((float)MBRandom.RandomInt(-12, -5) * (1f - proportion)), false, false);
                 result = string.Format("You have failed to fulfill your duty if military assistance to {0}. As a result, your clan's reputation has suffered, and your liege is unsatisfied.", this.Party.LeaderHero.Name);
             } else
             {
                 float influence = 15f;
                 GainKingdomInfluenceAction.ApplyForDefault(Hero.MainHero, influence);
-                ChangeRelationAction.ApplyPlayerRelation(this.Party.LeaderHero, MBRandom.RandomInt(5, 10), false, false);
                 result = string.Format("{0} holds your duty of military aid fulfilled. You have gained {1} influence, and your liege has more positive view on you.", this.Party.LeaderHero.Name, influence);
             }
 

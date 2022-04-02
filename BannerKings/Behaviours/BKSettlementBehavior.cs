@@ -14,14 +14,12 @@ using TaleWorlds.ObjectSystem;
 using static BannerKings.Managers.PopulationManager;
 using HarmonyLib;
 using BannerKings.Populations;
-using BannerKings.Managers.Institutions;
 using TaleWorlds.CampaignSystem.Overlay;
 using TaleWorlds.CampaignSystem.SandBox.CampaignBehaviors;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Populations.Villages;
 using static BannerKings.Managers.Policies.BKTaxPolicy;
 using BannerKings.Managers.Decisions;
-using static BannerKings.Managers.TitleManager;
 
 namespace BannerKings.Behaviors
 {
@@ -74,6 +72,8 @@ namespace BannerKings.Behaviors
                 else BannerKingsConfig.Instance.InitManagers(populationManager, policyManager,
                     titleManager, courtManager);
             }
+
+            BannerKingsConfig.Instance.TitleManager.FixTitles();
         }
 
       
@@ -296,6 +296,14 @@ namespace BannerKings.Behaviors
 
             float randomFloat = MBRandom.RandomFloat;
             int count = settlement.Notables.Count;
+            if (desiredAmont == count) return;
+            else if (count > desiredAmont)
+            {
+                for (int i = count - 1; i <= count - desiredAmont; i--)
+                    KillCharacterAction.ApplyByRemove(settlement.Notables[i], false, true);
+                return;
+            } 
+                
             float num2 = settlement.Notables.Any<Hero>() ? ((float)(desiredAmont - settlement.Notables.Count) / (float)desiredAmont) : 1f;
             num2 *= MathF.Pow(num2, 0.36f);
             if (randomFloat <= num2)

@@ -1,31 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Election;
 using TaleWorlds.Localization;
 using static BannerKings.Managers.TitleManager;
 
-namespace BannerKings.Managers.Kingdoms
+namespace BannerKings.Managers.Kingdoms.Contract
 {
-    public class KingdomGovernmentDecision : KingdomDecision
+    public abstract class BKContractDecision : KingdomDecision
     {
+        protected FeudalTitle Title { get; set; }
 
-        private GovernmentType governmentType;
-
-        public KingdomGovernmentDecision(Clan proposerClan, GovernmentType governmentType) : base(proposerClan)
+        public BKContractDecision(Clan proposerClan, FeudalTitle title) : base(proposerClan)
         {
-            this.governmentType = governmentType;
+            this.Title = title;
         }
+
+        public abstract float CalculateKingdomSupport(Kingdom kingdom);
 
         public override void ApplyChosenOutcome(DecisionOutcome chosenOutcome)
         {
-            throw new NotImplementedException();
+
         }
 
         public override void ApplySecondaryEffects(List<DecisionOutcome> possibleOutcomes, DecisionOutcome chosenOutcome)
         {
-            throw new NotImplementedException();
+
         }
 
         public override Clan DetermineChooser()
@@ -35,67 +34,68 @@ namespace BannerKings.Managers.Kingdoms
 
         public override IEnumerable<DecisionOutcome> DetermineInitialCandidates()
         {
-            throw new NotImplementedException();
+            yield break;
         }
 
         public override void DetermineSponsors(List<DecisionOutcome> possibleOutcomes)
         {
-            throw new NotImplementedException();
         }
 
         public override float DetermineSupport(Clan clan, DecisionOutcome possibleOutcome)
         {
-            throw new NotImplementedException();
+            return 0;
         }
 
         public override TextObject GetChooseDescription()
         {
-            throw new NotImplementedException();
+            TextObject textObject = new TextObject("{=!}As the sovereign of {KINGDOM}, you must decide whether to approve this contract change or not.", null);
+            textObject.SetTextVariable("KINGDOM", this.Kingdom.Name);
+            return textObject;
         }
 
         public override TextObject GetChooseTitle()
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         public override TextObject GetChosenOutcomeText(DecisionOutcome chosenOutcome, SupportStatus supportStatus, bool isShortVersion = false)
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         public override TextObject GetGeneralTitle()
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         public override int GetProposalInfluenceCost()
         {
-            throw new NotImplementedException();
+            return 0;
         }
 
         public override DecisionOutcome GetQueriedDecisionOutcome(List<DecisionOutcome> possibleOutcomes)
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         public override TextObject GetSecondaryEffects()
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         public override TextObject GetSupportDescription()
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         public override TextObject GetSupportTitle()
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         public override bool IsAllowed()
         {
-            throw new NotImplementedException();
+            return this.Title != null && this.Title.contract != null;
         }
     }
 }

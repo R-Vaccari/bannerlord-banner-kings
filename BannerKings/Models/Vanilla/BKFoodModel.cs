@@ -175,6 +175,8 @@ namespace BannerKings.Models
 		public ExplainedNumber GetPopulationFoodConsumption(PopulationData data)
         {
 			ExplainedNumber result = new ExplainedNumber();
+			result.LimitMin(-1000f);
+			result.LimitMax(0f);
 			int citySerfs = data.GetTypeCount(PopType.Serfs);
 			float serfConsumption = (float)citySerfs * SERF_FOOD * -1f;
 			result.Add((float)serfConsumption, new TextObject("Serfs consumption", null));
@@ -203,6 +205,8 @@ namespace BannerKings.Models
 		public ExplainedNumber GetPopulationFoodProduction(PopulationData data)
         {
 			ExplainedNumber result = new ExplainedNumber();
+			result.LimitMin(0f);
+			result.LimitMax(1000f);
 			LandData landData = data.LandData;
 			result.Add(landData.Farmland * 0.018f, new TextObject("{=!}Farmlands"));
 			result.Add(landData.Pastureland * 0.005f, new TextObject("{=!}Pasturelands"));
@@ -218,6 +222,5 @@ namespace BannerKings.Models
 		{
 			Campaign.Current.Models.IssueModel.GetIssueEffectsOfSettlement(DefaultIssueEffects.SettlementFood, town.Settlement, ref explainedNumber);
 		}
-
 	}
 }

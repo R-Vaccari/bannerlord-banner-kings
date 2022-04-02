@@ -71,7 +71,7 @@ namespace BannerKings.UI
                     "How long this settlement will take to start starving in case of a siege."));
 
                 StringBuilder sb = new StringBuilder();
-                sb.Append(base.data.MilitaryData.Catapultae);
+                sb.Append(base.data.MilitaryData.Ballistae);
                 sb.Append(", ");
                 sb.Append(base.data.MilitaryData.Catapultae);
                 sb.Append(", ");
@@ -120,9 +120,6 @@ namespace BannerKings.UI
                         }
                         else if (lord == Hero.MainHero)
                             InformationManager.DisplayMessage(new InformationMessage(string.Format("Militia already raised from {0}", settlement.Name)));
-
-                        else if (lord == Hero.MainHero)
-                            InformationManager.DisplayMessage(new InformationMessage(string.Format("Not enough influence to raise militia at {0}", settlement.Name)));
                     }
                     else if (lord == Hero.MainHero)
                         InformationManager.DisplayMessage(new InformationMessage(string.Format("Not enough men available to raise militia at {0}", settlement.Name)));

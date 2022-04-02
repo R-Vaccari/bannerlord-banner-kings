@@ -30,7 +30,7 @@ namespace BannerKings.Models
                 float serfs = data.GetTypeCount(PopType.Serfs);
                 ConsumptionType type = Helpers.Helpers.GetTradeGoodConsumptionType(category);
 
-                float prosperity = 0.5f + town.Prosperity * 0.0001f;
+                float prosperity = 0.5f + town.Prosperity * 0.00012f;
                 float baseResult = 0f;
                 if (type == ConsumptionType.Luxury)
                 {
@@ -53,9 +53,8 @@ namespace BannerKings.Models
                 float num4 = category.LuxuryDemand * num2;
                 float result = num3 + num4;
                 if (category.BaseDemand < 1E-08f)
-                {
                     result = num * 0.01f;
-                }
+                
 
                 return result;
             } else return base.GetDailyDemandForCategory(town, category, extraProsperity);
@@ -110,7 +109,7 @@ namespace BannerKings.Models
             FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetSovereignFromSettlement(settlement);
             if (title != null)
             {
-                GovernmentType government = title.contract.government;
+                GovernmentType government = title.contract.Government;
                 if (government == GovernmentType.Republic)
                     result.Add(0.4f, new TextObject("Government"));
                 else if (government == GovernmentType.Feudal)

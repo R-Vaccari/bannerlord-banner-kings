@@ -73,6 +73,70 @@ namespace BannerKings.Helpers
             
         }
 
+        public static string GetGovernmentDescription(GovernmentType type)
+        {
+            TextObject text = null;
+            if (type == GovernmentType.Imperial)
+                text = new TextObject("{=!}An Imperial government is a highly centralized one. Policies favor the ruling clan at the expense of vassals. A strong leadership that sees it's vassals more as administrators than lords.");
+            else if (type == GovernmentType.Tribal)
+                text = new TextObject("{=!}The Tribal association is the most descentralized government. Policies to favor the ruling clan are unwelcome, and every lord is a 'king' or 'queen' in their own right.");
+            else if (type == GovernmentType.Republic)
+                text = new TextObject("{=!}Republics are firmly setup to avoid the accumulation of power. Every clan is given a chance to rule, and though are able to have a few political advantages, the state is always the priority.");
+            else text = new TextObject("{=!}Feudal societies can be seen as the midway between tribals and imperials. Although the ruling clan accumulates privileges, and often cannot be easily removed from the throne, lords and their rightful property need to be respected.");
+
+            return text.ToString();
+        }
+
+        public static string GetSuccessionTypeDescription(SuccessionType type)
+        {
+            TextObject text = null;
+            if (type == SuccessionType.Elective_Monarchy)
+                text = new TextObject("{=!}In elective monarchies, the ruler is chosen from the realm's dynasties, and rules until death or abdication. Elections take place and all dynasties are able to vote when a new leader is required.");
+            else if (type == SuccessionType.Hereditary_Monarchy)
+                text = new TextObject("{=!}In hereditary monarchies, the monarch is always the ruling dynasty's leader. No election takes place, and the realm does not change leadership without extraordinary measures.");
+            else if (type == SuccessionType.Imperial)
+                text = new TextObject("{=!}Imperial successions are completely dictated by the emperor/empress. They will choose from most competent members in their family, as well as other family leaders. Imperial succession values age, family prestigy, military and administration skills. No election takes place.");
+            else text = new TextObject("{=!}Republican successions ensure the power is never concentrated. Each year, a new ruler is chosen from the realm's dynasties. The previous ruler is strickly forbidden to participate. Age, family prestige and administration skills are sought after in candidates.");
+
+            return text.ToString();
+        }
+
+        public static string GetSuccessionTypeName(SuccessionType type)
+        {
+            TextObject text = null;
+            if (type == SuccessionType.Elective_Monarchy)
+                text = new TextObject("{=!}Elective Monarchy");
+            else if (type == SuccessionType.Hereditary_Monarchy)
+                text = new TextObject("{=!}Hereditary Monarchy");
+            else if (type == SuccessionType.Imperial)
+                text = new TextObject("{=!}Imperial");
+            else text = new TextObject("{=!}Republican");
+
+            return text.ToString();
+        }
+
+        public static string GetInheritanceDescription(InheritanceType type)
+        {
+            TextObject text = null;
+            if (type == InheritanceType.Primogeniture)
+                text = new TextObject("{=!}Primogeniture favors blood family of eldest age. Clan members not related by blood are last resort.");
+            else if (type == InheritanceType.Seniority)
+                text = new TextObject("{=!}Seniority favors those of more advanced age in the clan, regardless of blood connections.");
+            else text = new TextObject("{=!}Ultimogeniture favors the youngest in the clan, as well as blood family. Clan members not related by blood are last resort.");
+
+            return text.ToString();
+        }
+
+        public static string GetGenderLawDescription(GenderLaw type)
+        {
+            TextObject text = null;
+            if (type == GenderLaw.Agnatic)
+                text = new TextObject("{=!}Agnatic law favors males. Although females are not completely excluded, they will only be chosen in case a male candidate is not present.");
+            else text = new TextObject("{=!}Cognatic law sees no distinction between both genders. Candidates are choosen stricly on their merits, as per the context requires.");
+
+            return text.ToString();
+        }
+
         public static string GetClassHint(PopType type, CultureObject culture)
         {
             string name = GetClassName(type, culture).ToString();
@@ -180,17 +244,68 @@ namespace BannerKings.Helpers
             return title.ToString();
         }
 
-        public static string GetTitlePrefix(TitleType type)
+        public static string GetGovernmentString(GovernmentType type, CultureObject culture = null)
         {
-            if (type == TitleType.Kingdom)
-                return "Kingdom";
-            else if (type == TitleType.Dukedom)
-                return "Dukedom";
-            else if (type == TitleType.County)
-                return "County";
-            else if (type == TitleType.Barony)
-                return "Barony";
-            else return "Lordship";
+            TextObject title = null;
+
+            if (culture != null)
+            {
+                if (culture.StringId == "sturgia")
+                {
+                    if (type == GovernmentType.Tribal)
+                        title = new TextObject("{=!}Grand-Principality");
+                }
+            }
+
+            if (title == null)
+            {
+                if (type == GovernmentType.Feudal)
+                    title = new TextObject("{=!}Kingdom");
+                else if (type == GovernmentType.Tribal)
+                    title = new TextObject("{=!}High Kingship");
+                else if (type == GovernmentType.Imperial)
+                    title = new TextObject("{=!}Empire");
+                else title = new TextObject("{=!}Republic");
+            }
+
+            return title.ToString();
+        }
+
+        public static string GetTitlePrefix(TitleType type, CultureObject culture = null)
+        {
+            TextObject title = null;
+
+            if (culture != null)
+            {
+                if (culture.StringId == "sturgia")
+                {
+                    if (type == TitleType.Kingdom)
+                        title = new TextObject("{=!}Grand-Principality");
+                    else if (type == TitleType.Dukedom)
+                        title = new TextObject("{=!}Principality");
+                    else if (type == TitleType.County)
+                        title = new TextObject("{=!}Boyardom");
+                    else if (type == TitleType.Barony)
+                        title = new TextObject("{=!}Voivodeship");
+                    else title = new TextObject("{=!}Gospodin");
+                }
+            }
+
+            if (title == null)
+            {
+                if (type == TitleType.Kingdom)
+                    title = new TextObject("{=!}Kingdom");
+                else if (type == TitleType.Dukedom)
+                    title = new TextObject("{=!}Dukedom");
+                else if (type == TitleType.County)
+                    title = new TextObject("{=!}County");
+                else if (type == TitleType.Barony)
+                    title = new TextObject("{=!}Barony");
+                else title = new TextObject("{=!}Lordship");
+            }
+            
+
+            return title.ToString();
         }
 
 

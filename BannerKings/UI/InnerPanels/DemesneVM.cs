@@ -1,15 +1,13 @@
-﻿using BannerKings.Managers.Policies;
+﻿using BannerKings.Managers.Kingdoms.Contract;
+using BannerKings.Managers.Policies;
 using BannerKings.Models;
 using BannerKings.Populations;
 using BannerKings.UI.Items;
 using System;
-using System.Text;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.ViewModelCollection;
-using TaleWorlds.Core;
 using TaleWorlds.Core.ViewModelCollection;
 using TaleWorlds.Library;
-using TaleWorlds.Localization;
 using static BannerKings.Managers.TitleManager;
 
 namespace BannerKings.UI
@@ -17,17 +15,9 @@ namespace BannerKings.UI
     public class DemesneVM : BannerKingsViewModel
     {
 		private HeroVM deJure;
-		private MBBindingList<VassalTitleVM> _vassals;
 		private MBBindingList<InformationElement> demesneInfo, landInfo, terrainInfo, workforceInfo, governmentInfo;
 		private FeudalTitle title;
 		private FeudalTitle duchy;
-		private (bool, string) isTitleUsurpable;
-		private (bool, string) _duchyUsurpable;
-		private UsurpCosts costs;
-		private UsurpCosts duchyCosts;
-		private BKUsurpationModel model;
-		private bool _contractEnabled;
-		private bool _usurpDuchyEnabled;
 		private SelectorVM<BKItemVM> workforceVM;
 		private BKWorkforcePolicy workforceItem;
 
@@ -37,11 +27,7 @@ namespace BannerKings.UI
 			if (title != null)
             {
 				this.deJure = new HeroVM(title.deJure, false);
-				this.model = new BKUsurpationModel();
-				this.costs = model.GetUsurpationCosts(title, Hero.MainHero);
 				this.duchy = BannerKingsConfig.Instance.TitleManager.GetDuchy(this.title);
-				this._contractEnabled = BannerKingsConfig.Instance.TitleManager.IsHeroTitleHolder(Hero.MainHero) && Clan.PlayerClan.Kingdom != null;
-				this.isTitleUsurpable = model.IsUsurpable(title, Hero.MainHero);
 			}
 
 			this.demesneInfo = new MBBindingList<InformationElement>();
@@ -73,29 +59,28 @@ namespace BannerKings.UI
 			if (title != null)
             {
 				float legitimacyType = new BKLegitimacyModel().CalculateEffect(base.data.Settlement).ResultNumber;
-				if (legitimacyType != 0f)
+				if (legitimacyType > 0f)
 				{
 					LegitimacyType legitimacy = (LegitimacyType)legitimacyType;
 					DemesneInfo.Add(new InformationElement("Legitimacy:", legitimacy.ToString().Replace('_', ' '),
 						"Your legitimacy to this title and it's vassals. You are lawful when you own this title, and considered a foreigner if your culture differs from it."));
 				}
 
-				if (title.sovereign != null) DemesneInfo.Add(new InformationElement("Sovereign:", title.sovereign.name.ToString(),
+				if (title.sovereign != null) DemesneInfo.Add(new InformationElement("Sovereign:", title.sovereign.FullName.ToString(),
 					"The master suzerain of this title, be they a king or emperor type suzerain."));
-				if (duchy != null) DemesneInfo.Add(new InformationElement("Dukedom:", duchy.name.ToString(),
+				if (duchy != null) DemesneInfo.Add(new InformationElement("Dukedom:", duchy.FullName.ToString(),
 					"The dukedom this settlement is associated with."));
 
-				GovernmentInfo.Add(new InformationElement("Government Type:", title.contract.government.ToString(),
+				GovernmentInfo.Add(new InformationElement("Government Type:", title.contract.Government.ToString(),
 					"The dukedom this settlement is associated with."));
-				GovernmentInfo.Add(new InformationElement("Succession Type:", title.contract.succession.ToString().Replace("_", " "),
+				GovernmentInfo.Add(new InformationElement("Succession Type:", title.contract.Succession.ToString().Replace("_", " "),
 					"The dukedom this settlement is associated with."));
-				GovernmentInfo.Add(new InformationElement("Inheritance Type:", title.contract.inheritance.ToString(),
+				GovernmentInfo.Add(new InformationElement("Inheritance Type:", title.contract.Inheritance.ToString(),
 					"The dukedom this settlement is associated with."));
-				GovernmentInfo.Add(new InformationElement("Gender Law:", title.contract.genderLaw.ToString(),
+				GovernmentInfo.Add(new InformationElement("Gender Law:", title.contract.GenderLaw.ToString(),
 					"The dukedom this settlement is associated with."));
 
 				DeJure = new HeroVM(title.deJure, false);
-				this.isTitleUsurpable = model.IsUsurpable(title, Hero.MainHero);
 			}
 			
 
@@ -148,91 +133,11 @@ namespace BannerKings.UI
 		{
 			if (title != null)
             {
-				bool usurpable = isTitleUsurpable.Item1;
-				if (usurpable)
-					BannerKingsConfig.Instance.TitleManager.UsurpTitle(title.deJure, Hero.MainHero, title, costs);
-				else InformationManager.DisplayMessage(new InformationMessage(isTitleUsurpable.Item2));
-				RefreshValues();
+				Kingdom kingdom = this.data.Settlement.OwnerClan.Kingdom;
+				if (kingdom != null)
+					kingdom.AddDecision(new BKGovernmentDecision(this.data.Settlement.OwnerClan, GovernmentType.Imperial, this.title));
 			}
 		}
-
-		[DataSourceProperty]
-		public HintViewModel UsurpHint
-		{
-			get
-			{
-				if (title != null)
-                {
-					UsurpCosts costs = model.GetUsurpationCosts(title, Hero.MainHero);
-					StringBuilder sb = new StringBuilder("Usurp this title from it's owner, making you the lawful ruler of this settlement. Usurping from lords within your kingdom degrades your clan's reputation.");
-					sb.Append(Environment.NewLine);
-					sb.Append("Costs:");
-					sb.Append(Environment.NewLine);
-					sb.Append(string.Format("{0} gold.", (int)costs.gold));
-					sb.Append(Environment.NewLine);
-					sb.Append(string.Format("{0} influence.", (int)costs.influence));
-					sb.Append(Environment.NewLine);
-					sb.Append(string.Format("{0} renown.", (int)costs.renown));
-					return new HintViewModel(new TextObject(sb.ToString()));
-				}
-				return new HintViewModel(new TextObject("{=!}No title identified for this settlement."));
-			}
-		}
-
-		/*
-		private void OnDuchyUsurpPress()
-		{
-			bool usurpable = _duchyUsurpable.Item1;
-			if (usurpable)
-				BannerKingsConfig.Instance.TitleManager.UsurpTitle(_duchy.deJure, Hero.MainHero, _duchy, duchyCosts);
-			else InformationManager.DisplayMessage(new InformationMessage(_duchyUsurpable.Item2));
-			RefreshValues();
-		}
-
-		private void OnSuzerainPress()
-        {
-			FeudalTitle suzerain = BannerKingsConfig.Instance.TitleManager.CalculateHeroSuzerain(Hero.MainHero);
-			if (suzerain != null)
-				Campaign.Current.EncyclopediaManager.GoToLink(suzerain.deJure.EncyclopediaLink);
-			else InformationManager.DisplayMessage(new InformationMessage("You currently have no suzerain."));
-		}
-
-		private void OnVassalsPress()
-        {
-			List<InquiryElement> list = new List<InquiryElement>();
-			HashSet<FeudalTitle> titles = BannerKingsConfig.Instance.TitleManager.GetTitles(Hero.MainHero);
-			foreach (FeudalTitle title in titles)
-            {
-				if (title.vassals != null )
-					foreach (FeudalTitle vassal in title.vassals)
-					{
-						Hero deJure = vassal.deJure;
-						if (deJure != Hero.MainHero && (deJure.Clan.Kingdom == Clan.PlayerClan.Kingdom || deJure.Clan == Clan.PlayerClan))
-						{
-							FeudalTitle deJureSuzerain = BannerKingsConfig.Instance.TitleManager.CalculateHeroSuzerain(deJure);
-							if (deJureSuzerain != null && deJureSuzerain.deFacto == Hero.MainHero)
-								list.Add(new InquiryElement(deJure, deJure.Name.ToString(),
-									new ImageIdentifier(CampaignUIHelper.GetCharacterCode(deJure.CharacterObject, false))
-								));
-						}
-					}	
-			}
-
-			if (list.Count > 0)
-				InformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-					"Your direct vassals", "You are the legal suzerain of these lords. They must fulfill their duties towards you and you uphold their rights.", list, true, 1,
-					GameTexts.FindText("str_done", null).ToString(), "", null, null, ""), false);
-			else InformationManager.DisplayMessage(new InformationMessage("You currently have no vassals."));
-		}
-
-		private void OnContractPress()
-        {
-			Kingdom kingdom = _title.fief.OwnerClan.Kingdom;
-			if (kingdom != null)
-				BannerKingsConfig.Instance.TitleManager.ShowContract(kingdom.Leader, "Close");
-			else InformationManager.DisplayMessage(new InformationMessage("Unable to open contract: no kingdom associated with this title."));
-		} */
-
 
 		[DataSourceProperty]
 		public MBBindingList<InformationElement> LandInfo
@@ -318,40 +223,5 @@ namespace BannerKings.UI
 				}
 			}
 		}
-
-		/*
-		[DataSourceProperty]
-		public MBBindingList<VassalTitleVM> Vassals
-		{
-			get => this._vassals;
-			set
-			{
-				if (value != this._vassals)
-				{
-					this._vassals = value;
-					base.OnPropertyChanged("Vassals");
-				}
-			}
-		}
-
-		
-
-		[DataSourceProperty]
-		public HintViewModel UsurpDuchyHint
-		{
-			get
-			{
-				StringBuilder sb = new StringBuilder("Usurp the duchy associated with this settlement, making you the lawful suzerain of any other lords within the duchy that are not dukes or higher themselves. Usurping a duchy requires the ownership of at least one of the counties within it.");
-				sb.Append(Environment.NewLine);
-				sb.Append("Costs:");
-				sb.Append(Environment.NewLine);
-				sb.Append(string.Format("{0} gold.", (int)duchyCosts.gold));
-				sb.Append(Environment.NewLine);
-				sb.Append(string.Format("{0} influence.", (int)duchyCosts.influence));
-				sb.Append(Environment.NewLine);
-				sb.Append(string.Format("{0} renown.", (int)duchyCosts.renown));
-				return new HintViewModel(new TextObject(sb.ToString()));
-			}
-		}*/
 	}
 }
