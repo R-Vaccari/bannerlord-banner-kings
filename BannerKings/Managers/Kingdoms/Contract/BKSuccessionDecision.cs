@@ -80,60 +80,41 @@ namespace BannerKings.Managers.Kingdoms.Contract
         public override float DetermineSupport(Clan clan, DecisionOutcome possibleOutcome)
         {
             SuccessionDecisionOutcome policyDecisionOutcome = possibleOutcome as SuccessionDecisionOutcome;
-            if(clan == base.Kingdom.RulingClan && clan != this.ProposerClan)
-            {
-                if (policyDecisionOutcome.ShouldDecisionBeEnforced)
-                    return -100f;
-                else return 100f;
-            }
+            float authoritarian = clan.Leader.GetTraitLevel(DefaultTraits.Authoritarian);
+            float egalitarian = clan.Leader.GetTraitLevel(DefaultTraits.Authoritarian);
+            float oligarchic = clan.Leader.GetTraitLevel(DefaultTraits.Authoritarian);
+            float[] weights = this.GetWeights();
 
-            int authoritarian = clan.Leader.GetTraitLevel(DefaultTraits.Authoritarian);
-            int egalitarian = clan.Leader.GetTraitLevel(DefaultTraits.Authoritarian);
-            int oligarchic = clan.Leader.GetTraitLevel(DefaultTraits.Authoritarian);
+            float num = weights[0] * authoritarian;
+            float num2 = weights[1] * oligarchic;
+            float num3 = weights[2] * egalitarian;
 
-            if (policyDecisionOutcome.ShouldDecisionBeEnforced)
-            {
-
-            }
-
-            float num = 0.1f;
-            float num2 = 0.1f;
-            float num3 = 0.1f;
-            if (clan.Kingdom != null && clan.Kingdom.RulingClan == clan)
-            {
-                num2 += 1f;
-                num3 -= 1.5f;
-                num -= 0.4f;
-            }
-            else if (clan.IsMinorFaction)
-            {
-                num += 1f;
-                num3 -= 1.5f;
-                num2 -= 0.3f;
-            }
-            else if (clan.Tier >= 3)
-            {
-                num -= 1.3f;
-                num3 += (float)clan.Tier * 0.2f;
-                num2 -= 1.3f;
-            }
-            else if (clan.Tier == 2)
-            {
-                num2 -= 0.1f;
-                num3 += 0.4f;
-                num -= 0.5f;
-            }
-            CultureObject culture = clan.Culture;
-            num += 0.6f * (float)clan.Leader.GetTraitLevel(DefaultTraits.Egalitarian) - 0.9f * (float)clan.Leader.GetTraitLevel(DefaultTraits.Oligarchic);
-            num3 += 0.6f * (float)clan.Leader.GetTraitLevel(DefaultTraits.Oligarchic) - 0.9f * (float)clan.Leader.GetTraitLevel(DefaultTraits.Egalitarian) - 0.5f * (float)clan.Leader.GetTraitLevel(DefaultTraits.Authoritarian);
-            num2 += 0.8f * (float)clan.Leader.GetTraitLevel(DefaultTraits.Authoritarian) - 1.3f * (float)clan.Leader.GetTraitLevel(DefaultTraits.Oligarchic);
             float num4 = num + num3 + num2;
+
+            if (clan == base.Kingdom.RulingClan)
+                if (this.successionType == SuccessionType.Hereditary_Monarchy && policyDecisionOutcome.ShouldDecisionBeEnforced)
+                {
+                    num4 += 2f;
+                }
+                else num4 -= 2f;
+
             float num5;
             if (policyDecisionOutcome.ShouldDecisionBeEnforced)
                 num5 = 60f;
             else num5 = -100f;
 
             return num4 * num5;
+        }
+
+        private float[] GetWeights()
+        {
+            if (this.successionType == SuccessionType.Hereditary_Monarchy)
+                return new float[] { 1f, 3f, -2f };
+            else if (this.successionType == SuccessionType.Elective_Monarchy)
+                return new float[] { -1f, 5f, 1f };
+            else if (this.successionType == SuccessionType.Imperial)
+                return new float[] { 5f, -2f, -1f };
+            else return new float[] { -3f, 1f, 5f };
         }
 
         public override TextObject GetChooseDescription()

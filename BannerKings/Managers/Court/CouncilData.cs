@@ -43,7 +43,7 @@ namespace BannerKings.Managers.Court
             MBReadOnlyList<Hero> members = Clan.PlayerClan.Heroes;
             if (members != null && members.Count > 0)
                 foreach (Hero member in members)
-                    if (member != this.clan.Leader && member.IsAlive)
+                    if (member != this.clan.Leader && member.IsAlive && !heroes.Contains(member))
                         heroes.Add(member);
 
             if (BannerKingsConfig.Instance.TitleManager.IsHeroTitleHolder(Hero.MainHero))
@@ -51,7 +51,7 @@ namespace BannerKings.Managers.Court
                 List<FeudalTitle> vassals = BannerKingsConfig.Instance.TitleManager.GetVassals(Hero.MainHero);
                 if (vassals != null && vassals.Count > 0)
                     foreach (FeudalTitle vassal in vassals)
-                        if (vassal.deJure != this.clan.Leader) 
+                        if (vassal.deJure != this.clan.Leader && !heroes.Contains(vassal.deJure)) 
                             heroes.Add(vassal.deJure);
             }
 
@@ -63,7 +63,8 @@ namespace BannerKings.Managers.Court
                     MBReadOnlyList<Hero> notables = town.Settlement.Notables;
                     if (notables != null && notables.Count > 0)
                         foreach (Hero notable in notables)
-                            heroes.Add(notable);
+                            if (!heroes.Contains(notable))
+                               heroes.Add(notable);
                                 
                 }
             }

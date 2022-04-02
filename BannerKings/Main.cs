@@ -48,6 +48,7 @@ namespace BannerKings
                     campaignStarter.AddBehavior(new BKRansomBehavior());
                     campaignStarter.AddBehavior(new BKTitleBehavior());
 
+                    campaignStarter.AddModel(new BKCompanionPrices());
                     campaignStarter.AddModel(new BKProsperityModel());
                     campaignStarter.AddModel(new BKTaxModel());
                     campaignStarter.AddModel(new BKFoodModel());
