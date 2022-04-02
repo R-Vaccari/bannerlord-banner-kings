@@ -29,7 +29,7 @@ namespace BannerKings.Models
 				PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
                 int slaves = data.GetTypeCount(PopType.Slaves);
                 bool surplusExists = BannerKingsConfig.Instance.PopulationManager.PopSurplusExists(town.Settlement, PopType.Slaves, true);
-                baseResult.Add((float)slaves * SLAVE_LOYALTY * (surplusExists ? 1.1f : 1f), new TextObject("Slave population"));
+                baseResult.Add((float)slaves * SLAVE_LOYALTY, new TextObject("Slave population"));
 
 				TaxType tax = (BannerKingsConfig.Instance.PolicyManager.GetPolicy(town.Settlement, "tax") as BKTaxPolicy).Policy;
 				if (tax == TaxType.Low)
