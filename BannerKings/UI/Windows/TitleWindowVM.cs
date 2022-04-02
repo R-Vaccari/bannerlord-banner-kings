@@ -125,7 +125,14 @@ namespace BannerKings.UI.Windows
 			List<InquiryElement> laws = new List<InquiryElement>();
 			foreach (GenderLaw type in BannerKingsConfig.Instance.TitleManager.GetGenderLawTypes())
 				if (type != this.title.contract.GenderLaw)
-					laws.Add(new InquiryElement(type, type.ToString(), null, true, BannerKings.Helpers.Helpers.GetGenderLawDescription(type)));
+                {
+					BKGenderDecision decision = new BKGenderDecision(this.data.Settlement.OwnerClan, type, this.title?.sovereign);
+					TextObject text = new TextObject("{=!}{LAW} - ({SUPPORT}% support)");
+					text.SetTextVariable("LAW", type.ToString());
+					text.SetTextVariable("SUPPORT", decision.CalculateKingdomSupport(this.kingdom));
+					laws.Add(new InquiryElement(type, text.ToString(), null, true, BannerKings.Helpers.Helpers.GetGenderLawDescription(type)));
+				}
+					
 			return laws;
 		}
 
@@ -134,7 +141,14 @@ namespace BannerKings.UI.Windows
 			List<InquiryElement> laws = new List<InquiryElement>();
 			foreach (InheritanceType type in BannerKingsConfig.Instance.TitleManager.GetInheritanceTypes())
 				if (type != this.title.contract.Inheritance)
-					laws.Add(new InquiryElement(type, type.ToString(), null, true, BannerKings.Helpers.Helpers.GetInheritanceDescription(type)));
+                {
+					BKInheritanceDecision decision = new BKInheritanceDecision(this.data.Settlement.OwnerClan, type, this.title?.sovereign);
+					TextObject text = new TextObject("{=!}{LAW} - ({SUPPORT}% support)");
+					text.SetTextVariable("LAW", type.ToString());
+					text.SetTextVariable("SUPPORT", decision.CalculateKingdomSupport(this.kingdom));
+					laws.Add(new InquiryElement(type, text.ToString(), null, true, BannerKings.Helpers.Helpers.GetInheritanceDescription(type)));
+				}
+					
 			return laws;
 		}
 
@@ -143,7 +157,14 @@ namespace BannerKings.UI.Windows
 			List<InquiryElement> laws = new List<InquiryElement>();
 			foreach (SuccessionType type in SuccessionHelper.GetValidSuccessions(this.title.contract.Government))
 				if (type != this.title.contract.Succession)
-					laws.Add(new InquiryElement(type, Helpers.Helpers.GetSuccessionTypeName(type), null, true, BannerKings.Helpers.Helpers.GetSuccessionTypeDescription(type)));
+                {
+					BKSuccessionDecision decision = new BKSuccessionDecision(this.data.Settlement.OwnerClan, type, this.title?.sovereign);
+					TextObject text = new TextObject("{=!}{LAW} - ({SUPPORT}% support)");
+					text.SetTextVariable("LAW", Helpers.Helpers.GetSuccessionTypeName(type));
+					text.SetTextVariable("SUPPORT", decision.CalculateKingdomSupport(this.kingdom));
+					laws.Add(new InquiryElement(type, text.ToString(), null, true, BannerKings.Helpers.Helpers.GetSuccessionTypeDescription(type)));
+				}
+					
 			return laws;
 		}
 
@@ -152,7 +173,14 @@ namespace BannerKings.UI.Windows
 			List<InquiryElement> laws = new List<InquiryElement>();
 			foreach (GovernmentType type in BannerKingsConfig.Instance.TitleManager.GetGovernmentTypes())
 				if (type != this.title.contract.Government)
-					laws.Add(new InquiryElement(type, type.ToString(), null, true, BannerKings.Helpers.Helpers.GetGovernmentDescription(type)));
+                {
+					BKGovernmentDecision decision = new BKGovernmentDecision(this.data.Settlement.OwnerClan, type, this.title?.sovereign);
+					TextObject text = new TextObject("{=!}{LAW} - ({SUPPORT}% support)");
+					text.SetTextVariable("LAW", type.ToString());
+					text.SetTextVariable("SUPPORT", decision.CalculateKingdomSupport(this.kingdom));
+					laws.Add(new InquiryElement(type, text.ToString(), null, true, BannerKings.Helpers.Helpers.GetGovernmentDescription(type)));
+				}
+					
 			return laws;
 		}
 

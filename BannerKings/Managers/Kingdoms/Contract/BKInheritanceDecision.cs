@@ -3,6 +3,7 @@ using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Election;
 using TaleWorlds.Core;
+using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.SaveSystem;
 using static BannerKings.Managers.TitleManager;
@@ -39,7 +40,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
                     clans++;
                 }
 
-            return support / clans;
+            return MBMath.ClampFloat(support / clans, 0f, 100f);
         }
 
         public override void ApplySecondaryEffects(List<DecisionOutcome> possibleOutcomes, DecisionOutcome chosenOutcome)
