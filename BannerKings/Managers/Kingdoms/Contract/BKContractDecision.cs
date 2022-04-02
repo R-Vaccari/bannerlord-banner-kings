@@ -6,7 +6,7 @@ using static BannerKings.Managers.TitleManager;
 
 namespace BannerKings.Managers.Kingdoms.Contract
 {
-    public class BKContractDecision : KingdomDecision
+    public abstract class BKContractDecision : KingdomDecision
     {
         protected FeudalTitle Title { get; set; }
 
@@ -14,6 +14,8 @@ namespace BannerKings.Managers.Kingdoms.Contract
         {
             this.Title = title;
         }
+
+        public abstract float CalculateKingdomSupport(Kingdom kingdom);
 
         public override void ApplyChosenOutcome(DecisionOutcome chosenOutcome)
         {

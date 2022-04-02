@@ -776,6 +776,22 @@ namespace BannerKings.Managers
                     foreach (FeudalTitle vassal in this.vassals)
                         vassal.ChangeContract(succession);
             }
+
+            public void ChangeContract(InheritanceType inheritance)
+            {
+                this.contract.ChangeInheritance(inheritance);
+                if (this.vassals != null && this.vassals.Count > 0)
+                    foreach (FeudalTitle vassal in this.vassals)
+                        vassal.ChangeContract(inheritance);
+            }
+
+            public void ChangeContract(GenderLaw genderLaw)
+            {
+                this.contract.ChangeGenderLaw(genderLaw);
+                if (this.vassals != null && this.vassals.Count > 0)
+                    foreach (FeudalTitle vassal in this.vassals)
+                        vassal.ChangeContract(genderLaw);
+            }
         }
 
         public class FeudalContract
@@ -889,11 +905,28 @@ namespace BannerKings.Managers
             Republic
         }
 
+        public IEnumerable<GovernmentType> GetSuccessionTypes()
+        {
+            yield return GovernmentType.Feudal;
+            yield return GovernmentType.Tribal;
+            yield return GovernmentType.Imperial;
+            yield return GovernmentType.Republic;
+            yield break;
+        }
+
         public enum InheritanceType
         {
             Primogeniture,
             Ultimogeniture,
             Seniority
+        }
+
+        public IEnumerable<InheritanceType> GetInheritanceTypes()
+        {
+            yield return InheritanceType.Primogeniture;
+            yield return InheritanceType.Ultimogeniture;
+            yield return InheritanceType.Seniority;
+            yield break;
         }
 
         public enum GenderLaw
@@ -902,12 +935,28 @@ namespace BannerKings.Managers
             Cognatic
         }
 
+        public IEnumerable<GenderLaw> GetGenderLawTypes()
+        {
+            yield return GenderLaw.Agnatic;
+            yield return GenderLaw.Cognatic;
+            yield break;
+        }
+
         public enum GovernmentType
         {
             Feudal,
             Tribal,
             Imperial,
             Republic
+        }
+
+        public IEnumerable<GovernmentType> GetGovernmentTypes()
+        {
+            yield return GovernmentType.Feudal;
+            yield return GovernmentType.Tribal;
+            yield return GovernmentType.Imperial;
+            yield return GovernmentType.Republic;
+            yield break;
         }
     }
 }

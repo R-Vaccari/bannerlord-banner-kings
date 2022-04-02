@@ -51,6 +51,7 @@ namespace BannerKings.Managers.Helpers
             else
             {
                 yield return SuccessionType.Elective_Monarchy;
+                yield return SuccessionType.Hereditary_Monarchy;
                 yield break;
             }
         }
