@@ -41,7 +41,7 @@ namespace BannerKings.Behaviours
                             break;
                         }
                                     
-                    if (!inElection)
+                    if (!inElection && kingdom.Clans.Count > 2)
                         kingdom.AddDecision(new RepublicElectionDecision(kingdom.RulingClan, kingdom.RulingClan), true);
                 }     
                 
