@@ -64,25 +64,25 @@ namespace BannerKings.UI.Windows
 
 
 			List<InquiryElement> governments = this.GetGovernments();
-			DecisionElement governmentButton = this.CreateButton(governments, new BKGovernmentDecision(this.data.Settlement.OwnerClan, (GovernmentType)governments[0].Identifier, this.title.sovereign),
+			DecisionElement governmentButton = this.CreateButton(governments, new BKGovernmentDecision(this.data.Settlement.OwnerClan, (GovernmentType)governments[0].Identifier, this.title?.sovereign),
 				new TextObject("{=!}Government").ToString(),
 				new TextObject("{=!}Propose a change in government structure, altering the allowed succession forms and aspects of settlement governance. Depending on the government choice, an appropriate succession type will be enforced as well."));
 			governmentButton.Enabled = allSetup;
 
 			List<InquiryElement> successions = this.GetSuccessions();
-			DecisionElement successionButton = this.CreateButton(successions, new BKSuccessionDecision(this.data.Settlement.OwnerClan, (SuccessionType)successions[0].Identifier, this.title.sovereign),
+			DecisionElement successionButton = this.CreateButton(successions, new BKSuccessionDecision(this.data.Settlement.OwnerClan, (SuccessionType)successions[0].Identifier, this.title?.sovereign),
 				new TextObject("{=!}Succession").ToString(),
 				new TextObject("{=!}Propose a change in the realm's succession, altering how the next sovereign is chosen."));
 			successionButton.Enabled = allSetup && this.title.contract.Government != GovernmentType.Imperial && this.title.contract.Government != GovernmentType.Republic;
 
 			List<InquiryElement> inheritances = this.GetInheritances();
-			DecisionElement inheritanceButton = this.CreateButton(inheritances, new BKInheritanceDecision(this.data.Settlement.OwnerClan, (InheritanceType)inheritances[0].Identifier, this.title.sovereign),
+			DecisionElement inheritanceButton = this.CreateButton(inheritances, new BKInheritanceDecision(this.data.Settlement.OwnerClan, (InheritanceType)inheritances[0].Identifier, this.title?.sovereign),
 				new TextObject("{=!}Inheritance").ToString(),
 				new TextObject("{=!}Propose a change in clan inheritances, that is, who becomes the clan leader once the leader dies."));
 			inheritanceButton.Enabled = allSetup;
 
 			List<InquiryElement> genderLaws = this.GetGenderLaws();
-			DecisionElement genderButton = this.CreateButton(genderLaws, new BKGenderDecision(this.data.Settlement.OwnerClan, (GenderLaw)genderLaws[0].Identifier, this.title.sovereign), 
+			DecisionElement genderButton = this.CreateButton(genderLaws, new BKGenderDecision(this.data.Settlement.OwnerClan, (GenderLaw)genderLaws[0].Identifier, this.title?.sovereign), 
 				new TextObject("{=!}Gender Law").ToString(),
 				new TextObject("{=!}Propose a change in gender laws, dictating whether males and females are viewed equally in various aspects."));
 			genderButton.Enabled = allSetup;

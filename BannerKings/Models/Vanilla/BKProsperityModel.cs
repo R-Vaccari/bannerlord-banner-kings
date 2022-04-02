@@ -58,7 +58,7 @@ namespace BannerKings.Models
 				}
 
 				float houseCost = fortification.Prosperity < 1500f ? 6f - (fortification.Prosperity / 250f - 1f) : fortification.Prosperity >= 6000f 
-					? 6f - (2f - (fortification.Prosperity / 3000f)) : 0f;
+					? -1f + ((fortification.Prosperity / 3000f) * -1f) : 0f;
 				explainedNumber.Add(houseCost, HousingCostsText, null);
 
 				if (fortification.IsTown)
@@ -79,14 +79,6 @@ namespace BannerKings.Models
 					float merchantEffect = merchantGold < 20000f ? (merchantGold / 10000f) - 2f : merchantGold >= 200000f ? MathF.Min((200000f * 0.000005f) - 1f, 2f) : 0f;
 					explainedNumber.Add(merchantEffect, new TextObject("Merchants wealth"));
 
-
-					if (fortification.Workshops != null)
-                    {
-						float workshopEffect = 0f;
-						foreach (Workshop shop in fortification.Workshops)
-							workshopEffect += shop.IsRunning ? 0.3f : -0.3f;
-						explainedNumber.Add(workshopEffect, new TextObject("Running workshops"));
-                    }
 				}
 
 				if (fortification.Governor != null)
