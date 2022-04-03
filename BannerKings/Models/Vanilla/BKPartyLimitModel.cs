@@ -18,7 +18,7 @@ namespace BannerKings.Models
             if (!party.IsMobile || party.MobileParty.IsGarrison)
                 return baseResult;
 
-            if (party.MobileParty.PartyComponent.Leader != null)
+            if (party.MobileParty.LeaderHero != null)
                 if (party.MobileParty.PartyComponent.Leader.Culture.HasFeat(CalradiaExpandedKingdoms.Feats.CEKFeats.ApolssalianPositiveFeatFour))
                     baseResult.Add(CalradiaExpandedKingdoms.Feats.CEKFeats.ApolssalianPositiveFeatFour.EffectBonus, GameTexts.FindText("str_culture", null));
 
