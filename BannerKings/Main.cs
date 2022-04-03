@@ -60,7 +60,7 @@ namespace BannerKings
                     campaignStarter.AddModel(new BKSecurityModel());
                     campaignStarter.AddModel(new BKPartyLimitModel());
                     campaignStarter.AddModel(new BKEconomyModel());
-                    campaignStarter.AddModel(new BKPriceFactorModel());
+                    //campaignStarter.AddModel(new BKPriceFactorModel());
                     campaignStarter.AddModel(new BKWorkshopModel());
                     //campaignStarter.AddModel(new BKClanFinanceModel());
                     campaignStarter.AddModel(new BKArmyManagementModel());

@@ -61,15 +61,11 @@ namespace BannerKings.Managers
 
         public bool IsHeroTitleHolder(Hero hero)
         {
-            FeudalTitle result = null;
-            foreach (KeyValuePair<FeudalTitle, Hero> pair in Titles)
-                if (pair.Key.deFacto == hero || pair.Key.deJure == hero)
-                {
-                    result = pair.Key;
-                    break;
-                }
+            foreach (FeudalTitle title in Titles.Keys.ToList())
+                if (title.deFacto == hero || title.deJure == hero)
+                    return true;
 
-            return result != null;
+            return false;
         }
         public FeudalTitle GetTitle(Settlement settlement)
         {
