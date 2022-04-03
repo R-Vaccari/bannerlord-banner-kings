@@ -1,14 +1,17 @@
 ﻿using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Election;
-using TaleWorlds.Library;
+using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Managers.Kingdoms
 {
     public class BKSettlementClaimantDecision : SettlementClaimantDecision
     {
-        List<Clan> participants;
-        bool conquestRights;
+        [SaveableProperty(200)]
+        private List<Clan> participants { get; set; }
+
+        [SaveableProperty(201)]
+        private bool conquestRights { get; set; }
         public BKSettlementClaimantDecision(Clan proposerClan, Settlement settlement, Hero capturerHero, Clan clanToExclude, List<Clan> participants, bool conquestRights) : base(proposerClan, settlement, capturerHero, clanToExclude)
         {
             this.participants = participants;

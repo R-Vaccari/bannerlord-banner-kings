@@ -3,6 +3,8 @@ using BannerKings.Managers;
 using BannerKings.Managers.Court;
 using BannerKings.Managers.Decisions;
 using BannerKings.Managers.Duties;
+using BannerKings.Managers.Kingdoms;
+using BannerKings.Managers.Kingdoms.Contract;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Tournament;
@@ -86,6 +88,14 @@ namespace BannerKings
             base.AddClassDefinition(typeof(AuxiliumDuty), 52);
             base.AddClassDefinition(typeof(RansomDuty), 53);
             base.AddClassDefinition(typeof(BannerKingsTournament), 54);
+            base.AddClassDefinition(typeof(BKContractDecision), 55);
+            base.AddClassDefinition(typeof(BKGenderDecision), 56);
+            base.AddClassDefinition(typeof(BKInheritanceDecision), 57);
+            base.AddClassDefinition(typeof(BKSuccessionDecision), 58);
+            base.AddClassDefinition(typeof(BKGovernmentDecision), 59);
+            base.AddClassDefinition(typeof(RepublicElectionDecision), 60);
+            base.AddClassDefinition(typeof(BKSettlementClaimantDecision), 61);
+            base.AddClassDefinition(typeof(BKKingElectionDecision), 62);
         }
 
         protected override void DefineContainerDefinitions()

@@ -2,12 +2,14 @@
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Election;
 using TaleWorlds.Localization;
+using TaleWorlds.SaveSystem;
 using static BannerKings.Managers.TitleManager;
 
 namespace BannerKings.Managers.Kingdoms.Contract
 {
     public abstract class BKContractDecision : KingdomDecision
     {
+        [SaveableProperty(99)]
         protected FeudalTitle Title { get; set; }
 
         public BKContractDecision(Clan proposerClan, FeudalTitle title) : base(proposerClan)

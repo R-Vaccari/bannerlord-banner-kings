@@ -5,12 +5,14 @@ using System.Linq;
 using TaleWorlds.Localization;
 using TaleWorlds.Library;
 using TaleWorlds.Core;
+using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Managers.Kingdoms
 {
     public class RepublicElectionDecision : BKKingElectionDecision
 	{
-		protected Clan toExclude;
+		[SaveableProperty(200)]
+		protected Clan toExclude { get; set; }
 		public override TextObject GetChooseTitle()
 		{
 			TextObject textObject = new TextObject("{=!}Choose the next Grand-Prince of the {KINGDOM_NAME} Republic", null);

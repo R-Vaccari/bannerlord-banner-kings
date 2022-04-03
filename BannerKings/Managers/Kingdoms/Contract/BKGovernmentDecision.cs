@@ -12,8 +12,8 @@ namespace BannerKings.Managers.Kingdoms.Contract
 {
     public class BKGovernmentDecision : BKContractDecision
     {
-
-        private GovernmentType governmentType;
+        [SaveableProperty(100)]
+        private GovernmentType governmentType { get; set; }
 
         public BKGovernmentDecision(Clan proposerClan, GovernmentType governmentType, FeudalTitle title) : base(proposerClan, title)
         {
@@ -34,9 +34,10 @@ namespace BannerKings.Managers.Kingdoms.Contract
             float support = 0f;
             float clans = 0;
             foreach (Clan clan in kingdom.Clans)
-                if (!clan.IsUnderMercenaryService && clan != Clan.PlayerClan)
+                if (!clan.IsUnderMercenaryService)
                 {
-                    support += this.DetermineSupport(clan, new GovernmentDecisionOutcome(true));
+                    if (clan == Clan.PlayerClan) support += 100f;
+                    else support += this.DetermineSupport(clan, new GovernmentDecisionOutcome(true));
                     clans++;
                 }
 

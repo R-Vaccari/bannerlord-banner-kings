@@ -13,7 +13,8 @@ namespace BannerKings.Managers.Kingdoms.Contract
     public class BKGenderDecision : BKContractDecision
     {
 
-        private GenderLaw genderLaw;
+        [SaveableProperty(100)]
+        private GenderLaw genderLaw { get; set; }
 
         public BKGenderDecision(Clan proposerClan, GenderLaw genderLaw, FeudalTitle title) : base(proposerClan, title)
         {
@@ -69,10 +70,14 @@ namespace BannerKings.Managers.Kingdoms.Contract
             float num = 2f * (float)clan.Leader.GetTraitLevel(DefaultTraits.Egalitarian) - 2f * (float)clan.Leader.GetTraitLevel(DefaultTraits.Authoritarian);
             float num2 = 0f;
             FeudalTitle sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(base.Kingdom);
-            GovernmentType government = sovereign.contract.Government;
-            if (government == GovernmentType.Tribal || government == GovernmentType.Republic)
-                num2++;
-            else num--;
+            if (sovereign != null && sovereign.contract != null)
+            {
+                GovernmentType government = sovereign.contract.Government;
+                if (government == GovernmentType.Tribal || government == GovernmentType.Republic)
+                    num2++;
+                else num--;
+            }
+            
 
             return this.genderLaw == GenderLaw.Cognatic && policyDecisionOutcome.ShouldDecisionBeEnforced ? (num + num2) * 60f : (num + num2) * -100f;
         }
@@ -163,9 +168,10 @@ namespace BannerKings.Managers.Kingdoms.Contract
             float support = 0f;
             float clans = 0;
             foreach (Clan clan in kingdom.Clans)
-                if (!clan.IsUnderMercenaryService && clan != Clan.PlayerClan)
+                if (!clan.IsUnderMercenaryService)
                 {
-                    support += this.DetermineSupport(clan, new GenderLawDecisionOutcome(true));
+                    if (clan == Clan.PlayerClan) support += 100f;
+                    else support += this.DetermineSupport(clan, new GenderLawDecisionOutcome(true));
                     clans++;
                 }
 

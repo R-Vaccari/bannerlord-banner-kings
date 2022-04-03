@@ -12,8 +12,8 @@ namespace BannerKings.Managers.Kingdoms.Contract
 {
     public class BKSuccessionDecision : BKContractDecision
     {
-
-        private SuccessionType successionType;
+        [SaveableProperty(100)]
+        private SuccessionType successionType { get; set; }
 
         public BKSuccessionDecision(Clan proposerClan, SuccessionType governmentType, FeudalTitle title) : base(proposerClan, title)
         {
@@ -34,9 +34,10 @@ namespace BannerKings.Managers.Kingdoms.Contract
             float support = 0f;
             float clans = 0;
             foreach (Clan clan in kingdom.Clans)
-                if (!clan.IsUnderMercenaryService && clan != Clan.PlayerClan)
+                if (!clan.IsUnderMercenaryService)
                 {
-                    support += this.DetermineSupport(clan, new SuccessionDecisionOutcome(true));
+                    if (clan == Clan.PlayerClan) support += 100f;
+                    else support += this.DetermineSupport(clan, new SuccessionDecisionOutcome(true));
                     clans++;
                 }
 
