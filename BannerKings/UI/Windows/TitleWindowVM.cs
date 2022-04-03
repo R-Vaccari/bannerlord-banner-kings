@@ -30,23 +30,22 @@ namespace BannerKings.UI.Windows
 			this.decisions = new MBBindingList<DecisionElement>();
 			if (title != null)
             {
+				kingdom = data.Settlement.OwnerClan.Kingdom;
 				if (title.sovereign != null)
 				{
 					this.Tree = new TitleElementVM(title.sovereign);
-					kingdom = BannerKingsConfig.Instance.TitleManager.GetTitleFaction(title.sovereign);
-					if (kingdom != null)
-                    {
-						Banner = new ImageIdentifierVM(BannerCode.CreateFrom(kingdom.Banner), true);
-					}
-						
+					Kingdom deJureKingdom = BannerKingsConfig.Instance.TitleManager.GetTitleFaction(title.sovereign);
+					if (deJureKingdom != null)
+						Banner = new ImageIdentifierVM(BannerCode.CreateFrom(deJureKingdom.Banner), true);
+
 					Name = title.sovereign.FullName.ToString();
 				}
-				else
-				{
-					this.Tree = new TitleElementVM(title);
+				else this.Tree = new TitleElementVM(title);
+
+				if (Banner == null)
 					Banner = new ImageIdentifierVM(BannerCode.CreateFrom(data.Settlement.OwnerClan.Banner), true);
+				if (Name == null)
 					Name = title.FullName.ToString();
-				}
 			}
 			
         }
@@ -64,28 +63,28 @@ namespace BannerKings.UI.Windows
 
 
 			List<InquiryElement> governments = this.GetGovernments();
-			DecisionElement governmentButton = this.CreateButton(governments, new BKGovernmentDecision(this.data.Settlement.OwnerClan, (GovernmentType)governments[0].Identifier, this.title?.sovereign),
+			DecisionElement governmentButton = this.CreateButton(governments, governments.Count >= 1 ? new BKGovernmentDecision(this.data.Settlement.OwnerClan, (GovernmentType)governments[0].Identifier, this.title?.sovereign) : null,
 				new TextObject("{=!}Government").ToString(),
 				new TextObject("{=!}Propose a change in government structure, altering the allowed succession forms and aspects of settlement governance. Depending on the government choice, an appropriate succession type will be enforced as well."));
-			governmentButton.Enabled = allSetup;
+			governmentButton.Enabled = allSetup && governments.Count >= 1;
 
 			List<InquiryElement> successions = this.GetSuccessions();
-			DecisionElement successionButton = this.CreateButton(successions, new BKSuccessionDecision(this.data.Settlement.OwnerClan, (SuccessionType)successions[0].Identifier, this.title?.sovereign),
+			DecisionElement successionButton = this.CreateButton(successions, successions.Count >= 1 ? new BKSuccessionDecision(this.data.Settlement.OwnerClan, (SuccessionType)successions[0].Identifier, this.title?.sovereign) : null,
 				new TextObject("{=!}Succession").ToString(),
 				new TextObject("{=!}Propose a change in the realm's succession, altering how the next sovereign is chosen."));
-			successionButton.Enabled = allSetup && this.title.contract.Government != GovernmentType.Imperial && this.title.contract.Government != GovernmentType.Republic;
+			successionButton.Enabled = allSetup && successions.Count >= 1 && this.title.contract.Government != GovernmentType.Imperial && this.title.contract.Government != GovernmentType.Republic;
 
 			List<InquiryElement> inheritances = this.GetInheritances();
-			DecisionElement inheritanceButton = this.CreateButton(inheritances, new BKInheritanceDecision(this.data.Settlement.OwnerClan, (InheritanceType)inheritances[0].Identifier, this.title?.sovereign),
+			DecisionElement inheritanceButton = this.CreateButton(inheritances, inheritances.Count >= 1 ? new BKInheritanceDecision(this.data.Settlement.OwnerClan, (InheritanceType)inheritances[0].Identifier, this.title?.sovereign) : null,
 				new TextObject("{=!}Inheritance").ToString(),
 				new TextObject("{=!}Propose a change in clan inheritances, that is, who becomes the clan leader once the leader dies."));
-			inheritanceButton.Enabled = allSetup;
+			inheritanceButton.Enabled = allSetup && inheritances.Count >= 1;
 
 			List<InquiryElement> genderLaws = this.GetGenderLaws();
-			DecisionElement genderButton = this.CreateButton(genderLaws, new BKGenderDecision(this.data.Settlement.OwnerClan, (GenderLaw)genderLaws[0].Identifier, this.title?.sovereign), 
+			DecisionElement genderButton = this.CreateButton(genderLaws, genderLaws.Count >= 1 ? new BKGenderDecision(this.data.Settlement.OwnerClan, (GenderLaw)genderLaws[0].Identifier, this.title?.sovereign) : null, 
 				new TextObject("{=!}Gender Law").ToString(),
 				new TextObject("{=!}Propose a change in gender laws, dictating whether males and females are viewed equally in various aspects."));
-			genderButton.Enabled = allSetup;
+			genderButton.Enabled = allSetup && genderLaws.Count >= 1;
 				
 
 			this.Contract = contractButton;
@@ -100,14 +99,16 @@ namespace BannerKings.UI.Windows
 				{
 					TextObject description = new TextObject("{=!}Select a {LAW} to be voted on. Starting an election costs {INFLUENCE} influence.");
 					description.SetTextVariable("LAW", law);
-					int cost = decision.GetInfluenceCost(null);
+					int cost = decision != null ? decision.GetInfluenceCost(null) : 0;
 					description.SetTextVariable("INFLUENCE", cost);
 
-					InformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(law, description.ToString(), 
+					if (this.kingdom != null && options.Count > 0 && decision != null)
+                    {
+						InformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(law, description.ToString(),
 						options, true, 1, GameTexts.FindText("str_done", null).ToString(), string.Empty,
 						new Action<List<InquiryElement>>(delegate (List<InquiryElement> x)
 						{
-							if (Clan.PlayerClan.Influence < cost) 
+							if (Clan.PlayerClan.Influence < cost)
 								InformationManager.DisplayMessage(new InformationMessage("Not enough influence."));
 							else if (decision.Kingdom.UnresolvedDecisions.Any(x => x is BKContractDecision))
 								InformationManager.DisplayMessage(new InformationMessage("Ongoing contract-altering decision."));
@@ -117,6 +118,8 @@ namespace BannerKings.UI.Windows
 								kingdom.AddDecision(decision, true);
 							}
 						}), null, string.Empty), false);
+					}
+					
 				}, hint);
 
 
@@ -124,7 +127,7 @@ namespace BannerKings.UI.Windows
         {
 			List<InquiryElement> laws = new List<InquiryElement>();
 			foreach (GenderLaw type in BannerKingsConfig.Instance.TitleManager.GetGenderLawTypes())
-				if (type != this.title.contract.GenderLaw)
+				if (this.kingdom != null && type != this.title.contract.GenderLaw)
                 {
 					BKGenderDecision decision = new BKGenderDecision(this.data.Settlement.OwnerClan, type, this.title?.sovereign);
 					TextObject text = new TextObject("{=!}{LAW} - ({SUPPORT}% support)");
@@ -140,7 +143,7 @@ namespace BannerKings.UI.Windows
 		{
 			List<InquiryElement> laws = new List<InquiryElement>();
 			foreach (InheritanceType type in BannerKingsConfig.Instance.TitleManager.GetInheritanceTypes())
-				if (type != this.title.contract.Inheritance)
+				if (this.kingdom != null && type != this.title.contract.Inheritance)
                 {
 					BKInheritanceDecision decision = new BKInheritanceDecision(this.data.Settlement.OwnerClan, type, this.title?.sovereign);
 					TextObject text = new TextObject("{=!}{LAW} - ({SUPPORT}% support)");
@@ -156,7 +159,7 @@ namespace BannerKings.UI.Windows
 		{
 			List<InquiryElement> laws = new List<InquiryElement>();
 			foreach (SuccessionType type in SuccessionHelper.GetValidSuccessions(this.title.contract.Government))
-				if (type != this.title.contract.Succession)
+				if (this.kingdom != null && type != this.title.contract.Succession)
                 {
 					BKSuccessionDecision decision = new BKSuccessionDecision(this.data.Settlement.OwnerClan, type, this.title?.sovereign);
 					TextObject text = new TextObject("{=!}{LAW} - ({SUPPORT}% support)");
@@ -172,7 +175,7 @@ namespace BannerKings.UI.Windows
 		{
 			List<InquiryElement> laws = new List<InquiryElement>();
 			foreach (GovernmentType type in BannerKingsConfig.Instance.TitleManager.GetGovernmentTypes())
-				if (type != this.title.contract.Government)
+				if (this.kingdom != null && type != this.title.contract.Government)
                 {
 					BKGovernmentDecision decision = new BKGovernmentDecision(this.data.Settlement.OwnerClan, type, this.title?.sovereign);
 					TextObject text = new TextObject("{=!}{LAW} - ({SUPPORT}% support)");
