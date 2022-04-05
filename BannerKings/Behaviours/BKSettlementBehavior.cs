@@ -20,6 +20,7 @@ using BannerKings.Managers.Policies;
 using BannerKings.Managers.Populations.Villages;
 using static BannerKings.Managers.Policies.BKTaxPolicy;
 using BannerKings.Managers.Decisions;
+using System.Reflection;
 
 namespace BannerKings.Behaviors
 {
@@ -71,9 +72,9 @@ namespace BannerKings.Behaviors
                 
                 else BannerKingsConfig.Instance.InitManagers(populationManager, policyManager,
                     titleManager, courtManager);
-            }
 
-            BannerKingsConfig.Instance.TitleManager.FixTitles();
+                // BannerKingsConfig.Instance.TitleManager.FixTitles();
+            } 
         }
 
       
@@ -250,8 +251,8 @@ namespace BannerKings.Behaviors
 
             if (settlement.IsCastle)
             {
-                SetNotables(settlement);
-                UpdateVolunteers(settlement);
+                //SetNotables(settlement);
+                //UpdateVolunteers(settlement);
                 if (settlement.Town != null && settlement.Town.GarrisonParty != null)
                 {
                     foreach (Building castleBuilding in settlement.Town.Buildings)
@@ -273,132 +274,46 @@ namespace BannerKings.Behaviors
                             }
                         }
                 }
-            } else 
+            } else if (settlement.IsVillage)
             {
-                if (settlement.IsVillage)
+                PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
+                VillageData villageData = data.VillageData;
+                if (villageData != null)
                 {
-                    PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
-                    VillageData villageData = data.VillageData;
-                    if (villageData != null)
-                    {
-                        float trainning = villageData.GetBuildingLevel(DefaultVillageBuildings.Instance.Manor);
-                    }
-                } 
-            }
-        }
-
-        private void SetNotables(Settlement settlement)
-        {
-            int desiredAmont = 0;
-            List<Occupation> list = new List<Occupation> { Occupation.RuralNotable, Occupation.Headman };
-            foreach (Occupation occ in list)
-                desiredAmont += Campaign.Current.Models.NotableSpawnModel.GetTargetNotableCountForSettlement(settlement, occ);
-
-            float randomFloat = MBRandom.RandomFloat;
-            int count = settlement.Notables.Count;
-            if (desiredAmont == count) return;
-            else if (count > desiredAmont)
-            {
-                for (int i = count - 1; i <= count - desiredAmont; i--)
-                    KillCharacterAction.ApplyByRemove(settlement.Notables[i], false, true);
-                return;
-            } 
-                
-            float num2 = settlement.Notables.Any<Hero>() ? ((float)(desiredAmont - settlement.Notables.Count) / (float)desiredAmont) : 1f;
-            num2 *= MathF.Pow(num2, 0.36f);
-            if (randomFloat <= num2)
-            {
-                List<Occupation> list2 = new List<Occupation>();
-                foreach (Occupation occupation2 in list)
-                {
-                    int num3 = 0;
-                    using (List<Hero>.Enumerator enumerator2 = settlement.Notables.GetEnumerator())
-                    {
-                        while (enumerator2.MoveNext())
-                            if (enumerator2.Current.CharacterObject.Occupation == occupation2)
-                                num3++;
-                    }
-                    int targetNotableCountForSettlement = Campaign.Current.Models.NotableSpawnModel.GetTargetNotableCountForSettlement(settlement, occupation2);
-                    if (num3 < targetNotableCountForSettlement)
-                        list2.Add(occupation2);
-
+                    float trainning = villageData.GetBuildingLevel(DefaultVillageBuildings.Instance.Manor);
                 }
-                if (list2.Count > 0)
-                    EnterSettlementAction.ApplyForCharacterOnly(HeroCreator.CreateHeroAtOccupation(list2.GetRandomElement<Occupation>(), settlement), settlement);
-
-            }
+            }    
         }
 
-        private void UpdateVolunteers(Settlement settlement)
+        internal static void KillNotables(Settlement settlement, int amount)
         {
-            foreach (Hero hero in settlement.Notables)
+            Hero notable = null;
+            int i = 0;
+            try
             {
-                if (hero.CanHaveRecruits)
-                {
-                    bool flag = false;
-                    CharacterObject basicVolunteer = Campaign.Current.Models.VolunteerProductionModel.GetBasicVolunteer(hero);
-                    for (int i = 0; i < 6; i++)
+                List<Hero> notables = new List<Hero>(settlement.Notables);
+                foreach (Hero hero in notables)
+                    if (hero.BornSettlement != settlement)
                     {
-                        if (MBRandom.RandomFloat < Campaign.Current.Models.VolunteerProductionModel.GetDailyVolunteerProductionProbability(hero, i, settlement))
-                        {
-                            CharacterObject characterObject = hero.VolunteerTypes[i];
-                            if (characterObject == null)
-                            {
-                                hero.VolunteerTypes[i] = basicVolunteer;
-                                flag = true;
-                            }
-                            else
-                            {
-                                float num = 40000f / (MathF.Max(50f, hero.Power) * MathF.Max(50f, hero.Power));
-                                int tier = characterObject.Tier;
-                                if (MBRandom.RandomInt((int)MathF.Max(2f, (float)tier * num)) == 0 && characterObject.UpgradeTargets.Length != 0 && characterObject.Tier <= 3)
-                                {
-                                    hero.VolunteerTypes[i] = characterObject.UpgradeTargets[MBRandom.RandomInt(characterObject.UpgradeTargets.Length)];
-                                    flag = true;
-                                }
-                            }
-                        }
+                        notable = hero;
+                        LeaveSettlementAction.ApplyForCharacterOnly(hero);
+                        KillCharacterAction.ApplyByRemove(hero, false, true);
+                        i++;
                     }
-                    if (flag)
-                    {
-                        CharacterObject[] volunteerTypes = hero.VolunteerTypes;
-                        for (int j = 1; j < 6; j++)
-                        {
-                            CharacterObject characterObject2 = volunteerTypes[j];
-                            if (characterObject2 != null)
-                            {
-                                int num2 = 0;
-                                int num3 = j - 1;
-                                CharacterObject characterObject3 = volunteerTypes[num3];
-                                while (num3 >= 0 && (characterObject3 == null || (float)characterObject2.Level + (characterObject2.IsMounted ? 0.5f : 0f) < (float)characterObject3.Level + (characterObject3.IsMounted ? 0.5f : 0f)))
-                                {
-                                    if (characterObject3 == null)
-                                    {
-                                        num3--;
-                                        num2++;
-                                        if (num3 >= 0)
-                                            characterObject3 = volunteerTypes[num3];
-                                        
-                                    }
-                                    else
-                                    {
-                                        volunteerTypes[num3 + 1 + num2] = characterObject3;
-                                        num3--;
-                                        num2 = 0;
-                                        if (num3 >= 0)
-                                            characterObject3 = volunteerTypes[num3];
-                                        
-                                    }
-                                }
-                                volunteerTypes[num3 + 1 + num2] = characterObject2;
-                            }
-                        }
-                    }
-                }
+            }
+            catch (Exception ex)
+            {
+                string cause = "Exception in Banner Kings KillNotables method. ";
+                string objInfo = null;
+                if (notable != null)
+                    objInfo = string.Format("Notable: Name [{0}], Id [{1}], Culture [{2}]\nSettleent: Name [{3}], Id [{4}], Culture [{5}]", 
+                        notable.Name, notable.StringId, notable.Culture, settlement.Name, settlement.StringId, settlement.Culture);
+                else objInfo = "Null notable.";
+
+                throw new BannerKingsException(cause + objInfo, ex);
             }
         }
 
-        
 
         private void OnSessionLaunched(CampaignGameStarter campaignGameStarter)
         {
@@ -1216,6 +1131,71 @@ namespace BannerKings.Behaviors
 
     namespace Patches
     {
+
+        [HarmonyPatch(typeof(UrbanCharactersCampaignBehavior), "SpawnNotablesIfNeeded")]
+        class SpawnNotablesIfNeededPatch
+        {
+            static bool Prefix(Settlement settlement)
+            {
+                List<Occupation> list = new List<Occupation>();
+                if (settlement.IsTown)
+                {
+                    list = new List<Occupation>
+                    {
+                        Occupation.GangLeader,
+                        Occupation.Artisan,
+                        Occupation.Merchant
+                    };
+                }
+                else if (settlement.IsVillage)
+                {
+                    list = new List<Occupation>
+                    {
+                        Occupation.RuralNotable,
+                        Occupation.Headman
+                    };
+                } else if (settlement.IsCastle)
+                {
+                    list = new List<Occupation>
+                    {
+                        Occupation.Headman
+                    };
+                }
+                float randomFloat = MBRandom.RandomFloat;
+                int num = 0;
+                foreach (Occupation occupation in list)
+                    num += Campaign.Current.Models.NotableSpawnModel.GetTargetNotableCountForSettlement(settlement, occupation);
+                
+                int count = settlement.Notables.Count;
+                float num2 = settlement.Notables.Any<Hero>() ? ((float)(num - settlement.Notables.Count) / (float)num) : 1f;
+                num2 *= MathF.Pow(num2, 0.36f);
+                if (randomFloat <= num2 && count < num)
+                {
+                    List<Occupation> list2 = new List<Occupation>();
+                    foreach (Occupation occupation2 in list)
+                    {
+                        int num3 = 0;
+                        using (List<Hero>.Enumerator enumerator2 = settlement.Notables.GetEnumerator())
+                        {
+                            while (enumerator2.MoveNext())
+                                if (enumerator2.Current.CharacterObject.Occupation == occupation2)
+                                    num3++;
+                        }
+                        int targetNotableCountForSettlement = Campaign.Current.Models.NotableSpawnModel.GetTargetNotableCountForSettlement(settlement, occupation2);
+                        if (num3 < targetNotableCountForSettlement)
+                            list2.Add(occupation2);
+                        
+                    }
+                    if (list2.Count > 0)
+                        EnterSettlementAction.ApplyForCharacterOnly(HeroCreator.CreateHeroAtOccupation(list2.GetRandomElement<Occupation>(), settlement), settlement);
+                    
+                }
+                else if (count > num)
+                    BKSettlementBehavior.KillNotables(settlement, count - num);
+
+                return false;
+            }
+        }
 
         [HarmonyPatch(typeof(CaravansCampaignBehavior), "SpawnCaravan")]
         class SpawnCaravanPatch
