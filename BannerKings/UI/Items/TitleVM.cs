@@ -6,8 +6,6 @@ using TaleWorlds.Core.ViewModelCollection;
 using TaleWorlds.Library;
 using static BannerKings.Managers.TitleManager;
 using BannerKings.Models;
-using System.Text;
-using System;
 using TaleWorlds.Localization;
 using System.Collections.Generic;
 
