@@ -45,5 +45,13 @@ namespace BannerKings
 
 			return "Knighthood requirements for player companions enabled.";
 		}
+
+		[CommandLineFunctionality.CommandLineArgumentFunction("reinit_titles", "bannerkings")]
+		public static string ReinitTitles(List<string> strings)
+		{
+			BannerKingsConfig.Instance.TitleManager.InitializeTitles();
+
+			return "Successfully reinitted titles.";
+		}
 	}
 }
