@@ -4,6 +4,7 @@ using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.Library;
+using TaleWorlds.ObjectSystem;
 
 namespace BannerKings
 {
@@ -25,8 +26,29 @@ namespace BannerKings
 				count++;
 			}
 
-			BannerKingsConfig.Instance.wipeData = true;
-				
+			List<CharacterObject> civillians = MBObjectManager.Instance.GetObjectTypeList<CharacterObject>().ToList()
+				.FindAll(x => x.StringId.Contains("craftsman_") || x.StringId == "noble_empire" || x.StringId == "noble_vlandia" ||
+				x.StringId == "noble_sturgia" || x.StringId == "noble_aserai" || x.StringId == "noble_khuzait" || x.StringId == "noble_battania");
+
+			foreach (MobileParty party in MobileParty.All)
+			{
+				foreach (CharacterObject civillian in civillians)
+				{
+					if (party.MemberRoster != null && party.MemberRoster.Contains(civillian))
+					{
+						int memberCount = party.MemberRoster.GetTroopCount(civillian);
+						party.MemberRoster.RemoveTroop(civillian, memberCount);
+					}
+
+					if (party.PrisonRoster != null && party.PrisonRoster.Contains(civillian))
+					{
+						int memberCount = party.PrisonRoster.GetTroopCount(civillian);
+						party.PrisonRoster.RemoveTroop(civillian, memberCount);
+					}
+				}
+			}
+
+			BannerKingsConfig.Instance.wipeData = true;	
 			return string.Format("{0} parties destroyed.", count);
 		}
 
