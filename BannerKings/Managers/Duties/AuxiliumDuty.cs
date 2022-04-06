@@ -2,6 +2,7 @@
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
+using TaleWorlds.Localization;
 using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Managers.Duties
@@ -27,19 +28,31 @@ namespace BannerKings.Managers.Duties
         public override void Finish()
         {
             float proportion = MathF.Clamp((float)ArmyHours / (float)RunnedHours, 0f, 1f);
-            string result = null;
+            TextObject result = null;
+            Hero suzerain = this.Party.Owner;
+            if (suzerain == null)
+                suzerain = Clan.PlayerClan.Kingdom.Leader;
             if (proportion < base.Completion)
             {
                 Clan.PlayerClan.Renown -= 50f * (1f - proportion);
-                result = string.Format("You have failed to fulfill your duty if military assistance to {0}. As a result, your clan's reputation has suffered, and your liege is unsatisfied.", this.Party.LeaderHero.Name);
+                int relation = MBRandom.RandomInt(-12, -5);
+                ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero.MainHero, suzerain, relation, false);
+                result = new TextObject("{=!}You have failed to fulfill your duty of military assistance to {SUZERAIN}. As a result, your clan's reputation has suffered, and your relationship with suzerain has changed by {RELATION}.");
+                result.SetTextVariable("SUZERAIN", suzerain.Name);
+                result.SetTextVariable("RELATION", relation);
             } else
             {
                 float influence = 15f;
                 GainKingdomInfluenceAction.ApplyForDefault(Hero.MainHero, influence);
-                result = string.Format("{0} holds your duty of military aid fulfilled. You have gained {1} influence, and your liege has more positive view on you.", this.Party.LeaderHero.Name, influence);
+                int relation = MBRandom.RandomInt(5, 10);
+                ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero.MainHero, suzerain, relation, false);
+                result = new TextObject("{=!}{SUZERAIN} holds your duty of military aid fulfilled. You have gained {INFLUENCE} and {RELATION} relatin with your suzerain.");
+                result.SetTextVariable("INFLUENCE", influence);
+                result.SetTextVariable("SUZERAIN", suzerain.Name);
+                result.SetTextVariable("RELATION", relation);
             }
 
-            InformationManager.ShowInquiry(new InquiryData("Duty of Military Aid", result,
+            InformationManager.ShowInquiry(new InquiryData("Duty of Military Aid", result.ToString(),
                     true, false, GameTexts.FindText("str_done").ToString(), null, null, null), true);
         }
 

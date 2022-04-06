@@ -60,7 +60,7 @@ namespace BannerKings
                     campaignStarter.AddModel(new BKSecurityModel());
                     campaignStarter.AddModel(new BKPartyLimitModel());
                     campaignStarter.AddModel(new BKEconomyModel());
-                    campaignStarter.AddModel(new BKPriceFactorModel());
+                    //campaignStarter.AddModel(new BKPriceFactorModel());
                     campaignStarter.AddModel(new BKWorkshopModel());
                     //campaignStarter.AddModel(new BKClanFinanceModel());
                     campaignStarter.AddModel(new BKArmyManagementModel());
@@ -617,6 +617,25 @@ namespace BannerKings
                                 saleLog[itemCategory] = num4 + finalAmount;
                             }
                         }
+
+                        if (town.FoodStocks <= (float)town.FoodStocksUpperLimit() * 0.05f && town.Settlement.Stash != null)
+                        {
+                            List<ItemRosterElement> elements = new List<ItemRosterElement>();
+                            foreach (ItemRosterElement element in town.Settlement.Stash)
+                                if (element.EquipmentElement.Item != null && element.EquipmentElement.Item.ItemCategory.Properties == ItemCategory.Property.BonusToFoodStores)
+                                    elements.Add(element);
+
+                            foreach (ItemRosterElement element in elements)
+                            {
+                                ItemCategory category = element.EquipmentElement.Item.ItemCategory;
+                                if (saleLog.ContainsKey(category))
+                                    saleLog[category] += element.Amount;
+                                else saleLog.Add(category, element.Amount);
+                                town.Settlement.Stash.Remove(element);
+                            }
+                        }
+
+
                         List<Town.SellLog> list = new List<Town.SellLog>();
                         foreach (KeyValuePair<ItemCategory, int> keyValuePair in saleLog)
                             if (keyValuePair.Value > 0)

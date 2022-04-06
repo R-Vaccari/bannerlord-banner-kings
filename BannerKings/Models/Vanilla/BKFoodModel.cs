@@ -40,7 +40,7 @@ namespace BannerKings.Models
 			PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
 
 			result.Add(this.GetPopulationFoodConsumption(data).ResultNumber, new TextObject("{=!}Population Consumption"));
-			result.Add(this.GetPopulationFoodProduction(data).ResultNumber, new TextObject("{=!}Population Production"));
+			result.Add(this.GetPopulationFoodProduction(data, town).ResultNumber, new TextObject("{=!}Population Production"));
 
 			//float prosperityImpact = -town.Owner.Settlement.Prosperity / (town.IsCastle ? 400f : 120f);
 			//result.Add(prosperityImpact, new TextObject("Prosperity effect"), null);
@@ -74,34 +74,6 @@ namespace BannerKings.Models
 			if (((ownerClan != null) ? ownerClan.Kingdom : null) != null && town.Settlement.OwnerClan.Kingdom.ActivePolicies.Contains(DefaultPolicies.HuntingRights))
 				result.Add(2f, DefaultPolicies.HuntingRights.Name, null);
 			
-			if (!town.Owner.Settlement.IsUnderSiege)
-			{
-				/*foreach (Village village in town.Owner.Settlement.BoundVillages)
-				{
-					if (village.VillageState == Village.VillageStates.Normal)
-					{
-						float villageFood = CalculateVillageProduction(village);
-						result.Add((float)villageFood, village.Name, null);
-					}
-					else
-					{
-						int num6 = 0;
-						result.Add((float)num6, village.Name, null);
-					}
-				} */
-				using (List<Building>.Enumerator enumerator2 = town.Buildings.GetEnumerator())
-				{
-					while (enumerator2.MoveNext())
-					{
-						Building building = enumerator2.Current;
-						float buildingEffectAmount = building.GetBuildingEffectAmount(BuildingEffectEnum.FoodProduction);
-						if (buildingEffectAmount > 0f)
-							result.Add(buildingEffectAmount, building.Name, null);
-						
-					}
-					goto IL_296;
-				}
-			}
 			if (town.Governor != null && town.Governor.GetPerkValue(DefaultPerks.Roguery.DirtyFighting))
 				result.Add(DefaultPerks.Roguery.DirtyFighting.SecondaryBonus, DefaultPerks.Roguery.DirtyFighting.Name, null);
 
@@ -127,41 +99,6 @@ namespace BannerKings.Models
 
 			GetSettlementFoodChangeDueToIssues(town, ref result);
 			return result;
-		}
-
-		private float CalculateVillageProduction(Village village)
-        {
-			if (BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(village.Settlement))
-			{
-				PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(village.Settlement);
-				float food = 0;
-				int nobles = data.GetTypeCount(PopType.Nobles);
-				int serfs = data.GetTypeCount(PopType.Serfs);
-				int slaves = data.GetTypeCount(PopType.Slaves);
-				if (IsVillageProducingFood(village))
-					food += (float)(serfs + slaves) * SERF_FOOD * 4f;
-				else if (IsVillageAMine(village))
-					food += (float)serfs * SERF_FOOD;
-				else
-					food += ((float)(serfs + slaves) * SERF_FOOD) * 1.2f;
-
-				food += (float)nobles * NOBLE_FOOD;
-
-				return food;
-			}
-			else return 10;
-		}
-
-		private int CalculateFoodPurchasedFromMarket(Town town)
-		{
-			return Enumerable.Sum<Town.SellLog>(town.SoldItems, delegate (Town.SellLog x)
-			{
-				if (x.Category.Properties != ItemCategory.Property.BonusToFoodStores)
-				{
-					return 0;
-				}
-				return x.Number;
-			});
 		}
 
 		public int GetFoodEstimate(Settlement settlement, int maxStocks)
@@ -202,7 +139,7 @@ namespace BannerKings.Models
 			return result;
 		}
 
-		public ExplainedNumber GetPopulationFoodProduction(PopulationData data)
+		public ExplainedNumber GetPopulationFoodProduction(PopulationData data, Town town)
         {
 			ExplainedNumber result = new ExplainedNumber();
 			result.LimitMin(0f);
@@ -215,6 +152,22 @@ namespace BannerKings.Models
 			if (fertility != 0f) result.AddFactor(fertility, new TextObject("{=!}Fertility"));
 			float saturation = MBMath.ClampFloat(landData.WorkforceSaturation, 0f, 1f) - 1f;
 			if (saturation != 0f) result.AddFactor(saturation, new TextObject("{=!}Workforce Saturation"));
+
+			if (town != null)
+			{
+				Building b = null;
+				foreach (Building building in town.Buildings)
+					if (building.BuildingType == DefaultBuildingTypes.CastleGardens ||
+						building.BuildingType == DefaultBuildingTypes.SettlementWorkshop)
+					{
+						b = building;
+						break;
+					}
+
+				if (b != null && b.CurrentLevel > 0)
+					result.AddFactor((float)b.CurrentLevel * (town.IsCastle ? 0.5f : 0.3f), b.Name);
+			}
+
 			return result;
 		}
 

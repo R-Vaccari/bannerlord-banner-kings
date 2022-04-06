@@ -19,10 +19,12 @@ namespace BannerKings.Managers
         private Dictionary<FeudalTitle, Hero> Titles { get; set; }
 
         [SaveableProperty(2)]
-        public Dictionary<Kingdom, FeudalTitle> Kingdoms { get; set; }
+        private Dictionary<Kingdom, FeudalTitle> Kingdoms { get; set; }
 
         [SaveableProperty(3)]
         public bool Knighthood { get; set; } = true;
+
+        private Dictionary<Hero, List<FeudalTitle>> DeJures { get; set; }
 
 
         public TitleManager(Dictionary<FeudalTitle, Hero> titles, Dictionary<Hero, List<FeudalTitle>> titleHolders, Dictionary<Kingdom, FeudalTitle> kingdoms)
@@ -31,6 +33,7 @@ namespace BannerKings.Managers
             this.Kingdoms = kingdoms;
             this.Knighthood = true;
             InitializeTitles();
+            RefreshDeJure();
         }
 
         public void FixTitles()
@@ -59,17 +62,26 @@ namespace BannerKings.Managers
             }
         }
 
+        public void RefreshDeJure()
+        {
+            if (this.DeJures == null) this.DeJures = new Dictionary<Hero, List<FeudalTitle>>();
+            else this.DeJures.Clear();
+            foreach (FeudalTitle title in this.Titles.Keys.ToList())
+            {
+                Hero hero = title.deJure;
+                if (!this.DeJures.ContainsKey(hero))
+                    this.DeJures.Add(hero, new List<FeudalTitle>() { title });
+                else this.DeJures[hero].Add(title);
+            }
+        }
+
         public bool IsHeroTitleHolder(Hero hero)
         {
-            FeudalTitle result = null;
-            foreach (KeyValuePair<FeudalTitle, Hero> pair in Titles)
-                if (pair.Key.deFacto == hero || pair.Key.deJure == hero)
-                {
-                    result = pair.Key;
-                    break;
-                }
+            foreach (FeudalTitle title in Titles.Keys.ToList())
+                if (title.deFacto == hero || title.deJure == hero)
+                    return true;
 
-            return result != null;
+            return false;
         }
         public FeudalTitle GetTitle(Settlement settlement)
         {
@@ -122,6 +134,10 @@ namespace BannerKings.Managers
                 {
                     title.deJure = newOwner;
                     Titles[title] = newOwner;
+                    DeJures[oldOwner].Remove(title);
+                    if (DeJures.ContainsKey(newOwner))
+                        DeJures[newOwner].Add(title);
+                    else DeJures.Add(newOwner, new List<FeudalTitle>() { title });
                 }
                 else title.deFacto = newOwner;
             }
@@ -266,10 +282,19 @@ namespace BannerKings.Managers
 
         public List<FeudalTitle> GetAllDeJure(Hero hero)
         {
+            if (this.DeJures != null)
+            {
+                List<FeudalTitle> titleList = null;
+                this.DeJures.TryGetValue(hero, out titleList);
+                if (titleList == null) titleList = new List<FeudalTitle>();
+                return titleList;
+            }
+                
+            
             List<FeudalTitle> list = new List<FeudalTitle>();
-            foreach (KeyValuePair<FeudalTitle, Hero> pair in Titles)
-                if (pair.Value == hero)
-                    list.Add(pair.Key);
+            foreach (FeudalTitle title in Titles.Keys.ToList())
+                if (title.deJure == hero)
+                    list.Add(title);
             return list;
         }
 
@@ -283,7 +308,7 @@ namespace BannerKings.Managers
         }
         public FeudalTitle GetHighestTitle(Hero hero)
         {
-            if (hero != null && IsHeroTitleHolder(hero))
+            if (hero != null)
             {
                 FeudalTitle highestTitle = null;
                 foreach (FeudalTitle title in GetAllDeJure(hero))

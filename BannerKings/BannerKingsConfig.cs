@@ -40,8 +40,8 @@ namespace BannerKings
             DefaultVillageBuildings.Instance.Init();
             this.PopulationManager = populationManager;
             this.PolicyManager = policyManager;
-            this.TitleManager = titleManager != null ? titleManager : new TitleManager(new Dictionary<FeudalTitle, Hero>(), new Dictionary<Hero, List<FeudalTitle>>(),
-                new Dictionary<Kingdom, FeudalTitle>());
+            this.TitleManager = titleManager;
+            titleManager.RefreshDeJure();
             this.CourtManager = court;
             this.InitModels();
         }
