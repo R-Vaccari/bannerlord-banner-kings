@@ -40,7 +40,7 @@ namespace BannerKings.Models
 			PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
 
 			result.Add(this.GetPopulationFoodConsumption(data).ResultNumber, new TextObject("{=!}Population Consumption"));
-			result.Add(this.GetPopulationFoodProduction(data).ResultNumber, new TextObject("{=!}Population Production"));
+			result.Add(this.GetPopulationFoodProduction(data, town).ResultNumber, new TextObject("{=!}Population Production"));
 
 			//float prosperityImpact = -town.Owner.Settlement.Prosperity / (town.IsCastle ? 400f : 120f);
 			//result.Add(prosperityImpact, new TextObject("Prosperity effect"), null);
@@ -92,12 +92,12 @@ namespace BannerKings.Models
 		public int GetFoodEstimate(Settlement settlement, int maxStocks)
 		{
 			PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
-			ExplainedNumber result = this.GetPopulationFoodConsumption(data, settlement.Town);
+			ExplainedNumber result = this.GetPopulationFoodConsumption(data);
 			int finalResult = (int)((float)maxStocks / (result.ResultNumber * -1f));
 			return finalResult;
 		}
 
-		public ExplainedNumber GetPopulationFoodConsumption(PopulationData data, Town town)
+		public ExplainedNumber GetPopulationFoodConsumption(PopulationData data)
         {
 			ExplainedNumber result = new ExplainedNumber();
 			result.LimitMin(-1000f);
@@ -124,26 +124,10 @@ namespace BannerKings.Models
 			if (data.Settlement.IsCastle)
 				result.AddFactor(-0.1f, new TextObject("{=!}Castle rations"));
 
-			if (town != null)
-            {
-				Building b = null;
-				foreach (Building building in town.Buildings)
-					if (building.BuildingType == DefaultBuildingTypes.CastleGardens ||
-						building.BuildingType == DefaultBuildingTypes.SettlementWorkshop)
-                    {
-						b = building;
-						break;
-                    }
-
-				if (b != null)
-					result.AddFactor((float)b.CurrentLevel * (town.IsCastle ? 0.5f : 0.3f), b.Name);
-			}
-				
-
 			return result;
 		}
 
-		public ExplainedNumber GetPopulationFoodProduction(PopulationData data)
+		public ExplainedNumber GetPopulationFoodProduction(PopulationData data, Town town)
         {
 			ExplainedNumber result = new ExplainedNumber();
 			result.LimitMin(0f);
@@ -156,6 +140,22 @@ namespace BannerKings.Models
 			if (fertility != 0f) result.AddFactor(fertility, new TextObject("{=!}Fertility"));
 			float saturation = MBMath.ClampFloat(landData.WorkforceSaturation, 0f, 1f) - 1f;
 			if (saturation != 0f) result.AddFactor(saturation, new TextObject("{=!}Workforce Saturation"));
+
+			if (town != null)
+			{
+				Building b = null;
+				foreach (Building building in town.Buildings)
+					if (building.BuildingType == DefaultBuildingTypes.CastleGardens ||
+						building.BuildingType == DefaultBuildingTypes.SettlementWorkshop)
+					{
+						b = building;
+						break;
+					}
+
+				if (b != null && b.CurrentLevel > 0)
+					result.AddFactor((float)b.CurrentLevel * (town.IsCastle ? 0.5f : 0.3f), b.Name);
+			}
+
 			return result;
 		}
 

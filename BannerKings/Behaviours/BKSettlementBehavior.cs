@@ -67,14 +67,14 @@ namespace BannerKings.Behaviors
 
             if (dataStore.IsLoading)
             {
-                if (populationManager == null)
+                if (populationManager == null && policyManager == null && titleManager == null && courtManager == null)
                     BannerKingsConfig.Instance.InitManagers();
                 
                 else BannerKingsConfig.Instance.InitManagers(populationManager, policyManager,
                     titleManager, courtManager);
 
-                // BannerKingsConfig.Instance.TitleManager.FixTitles();
-            } 
+                BannerKingsConfig.Instance.TitleManager.FixTitles();
+            }
         }
 
       
@@ -273,6 +273,11 @@ namespace BannerKings.Behaviors
                                         garrison.MemberRoster.AddToCounts(settlement.Culture.EliteBasicTroop, 1);
                             }
                         }
+
+
+                    if (settlement.Town.FoodStocks <= (float)settlement.Town.FoodStocksUpperLimit() * 0.05f && 
+                        settlement.Town.Settlement.Stash != null)
+                        ConsumeStash(settlement);
                 }
             } else if (settlement.IsVillage)
             {
@@ -283,6 +288,23 @@ namespace BannerKings.Behaviors
                     float trainning = villageData.GetBuildingLevel(DefaultVillageBuildings.Instance.Manor);
                 }
             }    
+        }
+
+        internal static void ConsumeStash(Settlement settlement)
+        {
+            List<ItemRosterElement> elements = new List<ItemRosterElement>();
+            foreach (ItemRosterElement element in settlement.Stash)
+                if (element.EquipmentElement.Item != null && element.EquipmentElement.Item.ItemCategory.Properties == ItemCategory.Property.BonusToFoodStores)
+                    elements.Add(element);
+
+            int food = 0;
+            foreach (ItemRosterElement element in elements)
+            {
+                food += element.Amount;
+                settlement.Stash.Remove(element);
+            }
+
+            if (food > 0) settlement.Town.FoodStocks += food;
         }
 
         internal static void KillNotables(Settlement settlement, int amount)
@@ -297,7 +319,7 @@ namespace BannerKings.Behaviors
                     {
                         notable = hero;
                         LeaveSettlementAction.ApplyForCharacterOnly(hero);
-                        KillCharacterAction.ApplyByRemove(hero, false, true);
+                        DisableHeroAction.Apply(hero);
                         i++;
                     }
             }
@@ -487,6 +509,7 @@ namespace BannerKings.Behaviors
             campaignGameStarter.AddGameMenuOption("bannerkings", "manage_court", "{=!}Noble Court",
                new GameMenuOption.OnConditionDelegate(MenuCourtCondition),
                new GameMenuOption.OnConsequenceDelegate(MenuCourtConsequence), false, -1, false);
+
 
             campaignGameStarter.AddGameMenuOption("bannerkings", "bannerkings_action", "{=!}Take an action",
                 delegate (MenuCallbackArgs args) {
@@ -1132,11 +1155,14 @@ namespace BannerKings.Behaviors
     namespace Patches
     {
 
+
         [HarmonyPatch(typeof(UrbanCharactersCampaignBehavior), "SpawnNotablesIfNeeded")]
         class SpawnNotablesIfNeededPatch
         {
             static bool Prefix(Settlement settlement)
             {
+                if (settlement.IsCastle && settlement.Name.ToString().Contains("Ab Comer"))
+                    Console.WriteLine();
                 List<Occupation> list = new List<Occupation>();
                 if (settlement.IsTown)
                 {

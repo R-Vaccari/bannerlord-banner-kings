@@ -263,9 +263,9 @@ namespace BannerKings.Managers
         public List<FeudalTitle> GetAllDeJure(Hero hero)
         {
             List<FeudalTitle> list = new List<FeudalTitle>();
-            foreach (KeyValuePair<FeudalTitle, Hero> pair in Titles)
-                if (pair.Value == hero)
-                    list.Add(pair.Key);
+            foreach (FeudalTitle title in Titles.Keys.ToList())
+                if (title.deJure == hero)
+                    list.Add(title);
             return list;
         }
 
@@ -279,7 +279,7 @@ namespace BannerKings.Managers
         }
         public FeudalTitle GetHighestTitle(Hero hero)
         {
-            if (hero != null && IsHeroTitleHolder(hero))
+            if (hero != null)
             {
                 FeudalTitle highestTitle = null;
                 foreach (FeudalTitle title in GetAllDeJure(hero))
