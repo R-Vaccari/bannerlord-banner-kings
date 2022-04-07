@@ -75,5 +75,20 @@ namespace BannerKings
 
 			return "Successfully reinitted titles.";
 		}
+
+		[CommandLineFunctionality.CommandLineArgumentFunction("fix_wanderer_occupations", "bannerkings")]
+		public static string FixWandererOccupations(List<string> strings)
+		{
+			foreach (Hero hero in Hero.AllAliveHeroes)
+			{
+				if (BannerKingsConfig.Instance.TitleManager.IsHeroKnighted(hero))
+				{
+					hero.IsNoble = true;
+					hero.SetNewOccupation(Occupation.Lord);
+				}
+			}
+
+			return "Fixed wanderer occupations.";
+		}
 	}
 }

@@ -72,6 +72,8 @@ namespace BannerKings.Behaviours
                     bool mainParty = hero.PartyBelongedTo == MobileParty.MainParty;
                     MobilePartyHelper.CreateNewClanMobileParty(hero, clan, out mainParty);
                     WarPartyComponent component = clan.WarPartyComponents.FirstOrDefault(x => x.Leader == hero);
+                    hero.IsNoble = true;
+                    hero.SetNewOccupation(Occupation.Lord);
                     if (component != null)
                         EnterSettlementAction.ApplyForParty(component.MobileParty, settlement);
                 }    
