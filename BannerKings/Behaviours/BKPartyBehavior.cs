@@ -7,6 +7,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
+using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
 using static BannerKings.Managers.PopulationManager;
 
@@ -20,6 +21,7 @@ namespace BannerKings.Behaviours
             CampaignEvents.MobilePartyDestroyed.AddNonSerializedListener(this, new Action<MobileParty, PartyBase>(OnMobilePartyDestroyed));
             CampaignEvents.SettlementEntered.AddNonSerializedListener(this, new Action<MobileParty, Settlement, Hero>(OnSettlementEntered));
             CampaignEvents.DailyTickSettlementEvent.AddNonSerializedListener(this, new Action<Settlement>(DailySettlementTick));
+            CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, new Action<CampaignGameStarter>(OnSessionLaunched));
         }
 
         private void HourlyTickParty(MobileParty party)
@@ -244,6 +246,221 @@ namespace BannerKings.Behaviours
             int slaves = (int)((double)data.GetTypeCount(PopType.Slaves) * 0.005d);
             data.UpdatePopType(PopType.Slaves, (int)((float)slaves * -1f));
             PopulationPartyComponent.CreateSlaveCaravan("slavecaravan_", origin, target.Settlement, "Slave Caravan from {0}", slaves);
+        }
+
+        private void OnSessionLaunched(CampaignGameStarter campaignGameStarter)
+        {
+            AddDialog(campaignGameStarter);
+        }
+
+        private void AddDialog(CampaignGameStarter starter)
+        {
+
+            starter.AddDialogLine("traveller_serf_party_start", "start", "traveller_party_greeting",
+                "M'lord! We are humble folk, travelling between towns, looking for work and trade.",
+                new ConversationSentence.OnConditionDelegate(this.traveller_serf_start_on_condition), null, 100, null);
+
+            starter.AddDialogLine("traveller_craftsman_party_start", "start", "traveller_party_greeting",
+                "Good day to you. We are craftsmen travelling for business purposes.",
+                new ConversationSentence.OnConditionDelegate(this.traveller_craftsman_start_on_condition), null, 100, null);
+
+            starter.AddDialogLine("traveller_noble_party_start", "start", "traveller_party_greeting",
+                "Yes? Please do not interfere with our caravan.",
+                new ConversationSentence.OnConditionDelegate(this.traveller_noble_start_on_condition), null, 100, null);
+
+
+            starter.AddPlayerLine("traveller_party_loot", "traveller_party_greeting", "close_window",
+                new TextObject("{=XaPMUJV0}Whatever you have, I'm taking it. Surrender or die!", null).ToString(),
+                new ConversationSentence.OnConditionDelegate(this.traveller_aggression_on_condition),
+                delegate { PlayerEncounter.Current.IsEnemy = true; },
+                100, null, null);
+
+            starter.AddPlayerLine("traveller_party_leave", "traveller_party_greeting", "close_window",
+                new TextObject("{=dialog_end_nice}Carry on, then. Farewell.", null).ToString(), null,
+                delegate { PlayerEncounter.LeaveEncounter = true; },
+                100, null, null);
+
+            starter.AddDialogLine("slavecaravan_friend_party_start", "start", "slavecaravan_party_greeting",
+                "My lord, we are taking these rabble somewhere they can be put to good use.",
+                new ConversationSentence.OnConditionDelegate(this.slavecaravan_amicable_on_condition), null, 100, null);
+
+            starter.AddDialogLine("slavecaravan_neutral_party_start", "start", "slavecaravan_party_greeting",
+                "If you're not planning to join those vermin back there, move away![rf:idle_angry][ib:aggressive]",
+                new ConversationSentence.OnConditionDelegate(this.slavecaravan_neutral_on_condition), null, 100, null);
+
+            starter.AddPlayerLine("slavecaravan_party_leave", "slavecaravan_party_greeting", "close_window",
+               new TextObject("{=dialog_end_nice}Carry on, then. Farewell.", null).ToString(), null,
+               delegate { PlayerEncounter.LeaveEncounter = true; },
+               100, null, null);
+
+            starter.AddPlayerLine("slavecaravan_party_threat", "slavecaravan_party_greeting", "slavecaravan_threat",
+               new TextObject("{=!}Give me your slaves and gear, or else!", null).ToString(),
+               new ConversationSentence.OnConditionDelegate(this.slavecaravan_neutral_on_condition),
+               null, 100, null, null);
+
+            starter.AddDialogLine("slavecaravan_party_threat_response", "slavecaravan_threat", "close_window",
+                "One more for the mines! Lads, get the whip![rf:idle_angry][ib:aggressive]",
+                null, delegate { PlayerEncounter.Current.IsEnemy = true; }, 100, null);
+
+            starter.AddDialogLine("raised_militia_party_start", "start", "raised_militia_greeting",
+                "M'lord! We are ready to serve you.",
+                new ConversationSentence.OnConditionDelegate(this.raised_militia_start_on_condition), null, 100, null);
+
+            starter.AddPlayerLine("raised_militia_party_follow", "raised_militia_greeting", "raised_militia_order",
+               new TextObject("{=!}Follow my company.", null).ToString(),
+               new ConversationSentence.OnConditionDelegate(this.raised_militia_order_on_condition),
+               new ConversationSentence.OnConsequenceDelegate(this.raised_militia_follow_on_consequence), 100, null, null);
+
+            starter.AddPlayerLine("raised_militia_party_retreat", "raised_militia_greeting", "raised_militia_order",
+               new TextObject("{=!}You may go home.", null).ToString(),
+               new ConversationSentence.OnConditionDelegate(this.raised_militia_order_on_condition),
+               new ConversationSentence.OnConsequenceDelegate(this.raised_militia_retreat_on_consequence), 100, null, null);
+
+            starter.AddDialogLine("raised_militia_order_response", "raised_militia_order", "close_window",
+                "Aye!",
+                null, delegate { PlayerEncounter.LeaveEncounter = true; }, 100, null);
+        }
+
+        private bool IsTravellerParty(PartyBase party)
+        {
+            bool value = false;
+            if (party != null && party.MobileParty != null)
+                if (BannerKingsConfig.Instance.PopulationManager.IsPopulationParty(party.MobileParty))
+                    value = true;
+            return value;
+        }
+
+        private bool traveller_serf_start_on_condition()
+        {
+            bool value = false;
+            PartyBase party = PlayerEncounter.EncounteredParty;
+            if (IsTravellerParty(party))
+            {
+                PopulationPartyComponent component = (PopulationPartyComponent)party.MobileParty.PartyComponent;
+                if (component.popType == PopType.Serfs)
+                    value = true;
+            }
+
+            return value;
+        }
+
+        private void raised_militia_retreat_on_consequence()
+        {
+            PartyBase party = PlayerEncounter.EncounteredParty;
+            if (IsTravellerParty(party))
+            {
+                MilitiaComponent component = (MilitiaComponent)party.MobileParty.PartyComponent;
+                component.behavior = AiBehavior.GoToSettlement;
+            }
+        }
+
+        private void raised_militia_follow_on_consequence()
+        {
+            PartyBase party = PlayerEncounter.EncounteredParty;
+            if (IsTravellerParty(party))
+            {
+                MilitiaComponent component = (MilitiaComponent)party.MobileParty.PartyComponent;
+                component.behavior = AiBehavior.EscortParty;
+            }
+        }
+
+        private bool raised_militia_start_on_condition()
+        {
+            bool value = false;
+            PartyBase party = PlayerEncounter.EncounteredParty;
+            if (IsTravellerParty(party))
+                if (party.MobileParty.PartyComponent is MilitiaComponent)
+                    value = true;
+
+            return value;
+        }
+
+        private bool raised_militia_order_on_condition()
+        {
+            bool value = false;
+            PartyBase party = PlayerEncounter.EncounteredParty;
+            if (IsTravellerParty(party))
+                if (party.MobileParty.PartyComponent is MilitiaComponent && party.Owner == Hero.MainHero)
+                    value = true;
+
+            return value;
+        }
+
+        private bool traveller_craftsman_start_on_condition()
+        {
+            bool value = false;
+            PartyBase party = PlayerEncounter.EncounteredParty;
+            if (IsTravellerParty(party))
+            {
+                PopulationPartyComponent component = (PopulationPartyComponent)party.MobileParty.PartyComponent;
+                if (component.popType == PopType.Craftsmen)
+                    value = true;
+            }
+
+            return value;
+        }
+
+        private bool traveller_noble_start_on_condition()
+        {
+            bool value = false;
+            PartyBase party = PlayerEncounter.EncounteredParty;
+            if (IsTravellerParty(party))
+            {
+                PopulationPartyComponent component = (PopulationPartyComponent)party.MobileParty.PartyComponent;
+                if (component.popType == PopType.Nobles)
+                    value = true;
+            }
+
+            return value;
+        }
+
+        private bool traveller_aggression_on_condition()
+        {
+            bool value = false;
+            PartyBase party = PlayerEncounter.EncounteredParty;
+            if (IsTravellerParty(party))
+            {
+                PopulationPartyComponent component = (PopulationPartyComponent)party.MobileParty.PartyComponent;
+                Kingdom partyKingdom = component.OriginSettlement.OwnerClan.Kingdom;
+                if (partyKingdom != null)
+                    if (Hero.MainHero.Clan.Kingdom == null || component.OriginSettlement.OwnerClan.Kingdom != Hero.MainHero.Clan.Kingdom)
+                        value = true;
+            }
+
+            return value;
+        }
+
+        private bool slavecaravan_neutral_on_condition()
+        {
+            bool value = false;
+            PartyBase party = PlayerEncounter.EncounteredParty;
+            if (IsTravellerParty(party))
+            {
+                PopulationPartyComponent component = (PopulationPartyComponent)party.MobileParty.PartyComponent;
+                Kingdom partyKingdom = component.OriginSettlement.OwnerClan.Kingdom;
+                if (partyKingdom != null && component.slaveCaravan)
+                    if (Hero.MainHero.Clan.Kingdom == null || component.OriginSettlement.OwnerClan.Kingdom != Hero.MainHero.Clan.Kingdom)
+                        value = true;
+            }
+
+            return value;
+        }
+
+        private bool slavecaravan_amicable_on_condition()
+        {
+            bool value = false;
+            PartyBase party = PlayerEncounter.EncounteredParty;
+            if (IsTravellerParty(party))
+            {
+                PopulationPartyComponent component = (PopulationPartyComponent)party.MobileParty.PartyComponent;
+                Kingdom partyKingdom = component.OriginSettlement.OwnerClan.Kingdom;
+                Kingdom heroKingdom = Hero.MainHero.Clan.Kingdom;
+                if (component.slaveCaravan && ((partyKingdom != null && heroKingdom != null && partyKingdom == heroKingdom)
+                    || (component.OriginSettlement.OwnerClan == Hero.MainHero.Clan)))
+                    value = true;
+            }
+
+            return value;
         }
 
         public override void SyncData(IDataStore dataStore)
