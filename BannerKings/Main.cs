@@ -108,6 +108,31 @@ namespace BannerKings
             }
         }
 
+        namespace Fixes
+        {
+            // Fix crash on wanderer same gender child born
+            [HarmonyPatch(typeof(NameGenerator), "GenerateHeroFullName")]
+            class NameGeneratorPatch
+            {
+                static bool Prefix(ref TextObject __result, Hero hero, TextObject heroFirstName, bool useDeterministicValues = true)
+                {
+                    if (BannerKingsConfig.Instance.TitleManager.IsHeroTitleHolder(hero.IsFemale ? hero.Mother : hero.Father))
+                    {
+                        TextObject textObject = heroFirstName;
+                        textObject.SetTextVariable("FEMALE", hero.IsFemale ? 1 : 0);
+                        textObject.SetTextVariable("IMPERIAL", (hero.Culture.StringId == "empire") ? 1 : 0);
+                        textObject.SetTextVariable("COASTAL", (hero.Culture.StringId == "empire" || hero.Culture.StringId == "vlandia") ? 1 : 0);
+                        textObject.SetTextVariable("NORTHERN", (hero.Culture.StringId == "battania" || hero.Culture.StringId == "sturgia") ? 1 : 0);
+                        textObject.SetCharacterProperties("HERO", hero.CharacterObject, false);
+                        textObject.SetTextVariable("FIRSTNAME", heroFirstName);
+                        __result = textObject;
+                        return false;
+                    }
+                    return true;
+                }
+            }
+        }
+
 
         namespace Government
         {
@@ -646,7 +671,7 @@ namespace BannerKings
                     }
                     else return true;
                 }
-            } 
+            }
         }     
     }
 }
