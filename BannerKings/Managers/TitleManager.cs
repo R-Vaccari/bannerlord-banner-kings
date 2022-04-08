@@ -179,6 +179,40 @@ namespace BannerKings.Managers
             return null;
         }
 
+        public Dictionary<Clan, List<FeudalTitle>> CalculateVassalClanTitles(Clan suzerainClan)
+        {
+            Dictionary<Clan, List<FeudalTitle>> clans = new Dictionary<Clan, List<FeudalTitle>> ();
+            Kingdom kingdom = suzerainClan.Kingdom;
+            if (kingdom == null || suzerainClan == null) return clans;
+
+            List<FeudalTitle> suzerainTitles = this.GetAllDeJure(suzerainClan);
+            if (suzerainTitles.Count == 0) return clans;
+
+            foreach (FeudalTitle title in suzerainTitles)
+                if (title.vassals != null && title.vassals.Count > 0)
+                    foreach (FeudalTitle vassal in title.vassals)
+                    {
+                        if (vassal.deJure.Clan == suzerainClan) continue;
+
+                        FeudalTitle vassalSuzerain = this.CalculateHeroSuzerain(vassal.deJure);
+                        if (vassalSuzerain == null) continue;
+                        else
+                        {
+                            Clan suzerainDeJureClan = vassalSuzerain.deJure.Clan;
+                            if (suzerainDeJureClan == suzerainClan) 
+                            {
+                                Clan vassalDeJureClan = vassal.deJure.Clan;
+                                if (!clans.ContainsKey(vassalDeJureClan))
+                                    clans.Add(vassalDeJureClan, new List<FeudalTitle>() { vassal });
+                                else clans[vassalDeJureClan].Add(title);
+                            }
+                        }
+                    }
+            
+
+            return clans;
+        }
+
         public bool HasSuzerain(Settlement settlement)
         {
             FeudalTitle vassal = GetTitle(settlement);
