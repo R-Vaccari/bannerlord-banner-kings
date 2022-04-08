@@ -62,7 +62,7 @@ namespace BannerKings
                     campaignStarter.AddModel(new BKEconomyModel());
                     //campaignStarter.AddModel(new BKPriceFactorModel());
                     campaignStarter.AddModel(new BKWorkshopModel());
-                    campaignStarter.AddModel(new BKClanFinanceModel());
+                    //campaignStarter.AddModel(new BKClanFinanceModel());
                     campaignStarter.AddModel(new BKArmyManagementModel());
                     campaignStarter.AddModel(new BKSiegeEventModel());
                     campaignStarter.AddModel(new BKTournamentModel());
@@ -116,7 +116,10 @@ namespace BannerKings
             {
                 static bool Prefix(ref TextObject __result, Hero hero, TextObject heroFirstName, bool useDeterministicValues = true)
                 {
-                    if (BannerKingsConfig.Instance.TitleManager.IsHeroTitleHolder(hero.IsFemale ? hero.Mother : hero.Father))
+
+                    Hero parent = hero.IsFemale ? hero.Mother : hero.Father;
+                    if (parent == null) return true;
+                    if (BannerKingsConfig.Instance.TitleManager.IsHeroKnighted(parent) && hero.IsWanderer)
                     {
                         TextObject textObject = heroFirstName;
                         textObject.SetTextVariable("FEMALE", hero.IsFemale ? 1 : 0);
