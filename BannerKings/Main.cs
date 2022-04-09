@@ -35,46 +35,41 @@ namespace BannerKings
         {
             if (game.GameType is Campaign)
             {
-                try
-                {
-                    CampaignGameStarter campaignStarter = (CampaignGameStarter)gameStarter;
-                    campaignStarter.AddBehavior(new BKSettlementBehavior());
-                    campaignStarter.AddBehavior(new BKCompanionBehavior());
-                    campaignStarter.AddBehavior(new BKTournamentBehavior());
-                    campaignStarter.AddBehavior(new BKRepublicBehavior());
-                    campaignStarter.AddBehavior(new BKPartyBehavior());
-                    campaignStarter.AddBehavior(new BKClanBehavior());
-                    campaignStarter.AddBehavior(new BKArmyBehavior());
-                    campaignStarter.AddBehavior(new BKRansomBehavior());
-                    campaignStarter.AddBehavior(new BKTitleBehavior());
+                CampaignGameStarter campaignStarter = (CampaignGameStarter)gameStarter;
+                campaignStarter.AddBehavior(new BKSettlementBehavior());
+                campaignStarter.AddBehavior(new BKCompanionBehavior());
+                campaignStarter.AddBehavior(new BKTournamentBehavior());
+                campaignStarter.AddBehavior(new BKRepublicBehavior());
+                campaignStarter.AddBehavior(new BKPartyBehavior());
+                campaignStarter.AddBehavior(new BKClanBehavior());
+                campaignStarter.AddBehavior(new BKArmyBehavior());
+                campaignStarter.AddBehavior(new BKRansomBehavior());
+                campaignStarter.AddBehavior(new BKTitleBehavior());
 
-                    campaignStarter.AddModel(new BKCompanionPrices());
-                    campaignStarter.AddModel(new BKProsperityModel());
-                    campaignStarter.AddModel(new BKTaxModel());
-                    campaignStarter.AddModel(new BKFoodModel());
-                    campaignStarter.AddModel(new BKConstructionModel());
-                    campaignStarter.AddModel(new BKMilitiaModel());
-                    campaignStarter.AddModel(new BKInfluenceModel());
-                    campaignStarter.AddModel(new BKLoyaltyModel());
-                    campaignStarter.AddModel(new BKVillageProductionModel());
-                    campaignStarter.AddModel(new BKSecurityModel());
-                    campaignStarter.AddModel(new BKPartyLimitModel());
-                    campaignStarter.AddModel(new BKEconomyModel());
-                    //campaignStarter.AddModel(new BKPriceFactorModel());
-                    campaignStarter.AddModel(new BKWorkshopModel());
-                    campaignStarter.AddModel(new BKClanFinanceModel());
-                    campaignStarter.AddModel(new BKArmyManagementModel());
-                    campaignStarter.AddModel(new BKSiegeEventModel());
-                    campaignStarter.AddModel(new BKTournamentModel());
-                    campaignStarter.AddModel(new BKRaidModel());
-                    campaignStarter.AddModel(new BKVolunteerModel());
-                    campaignStarter.AddModel(new BKNotableModel());
-                    campaignStarter.AddModel(new BKGarrisonModel());
-                    campaignStarter.AddModel(new BKRansomModel());
-                    campaignStarter.AddModel(new BKClanTierModel());
-                } catch (Exception e)
-                {
-                }
+                campaignStarter.AddModel(new BKCompanionPrices());
+                campaignStarter.AddModel(new BKProsperityModel());
+                campaignStarter.AddModel(new BKTaxModel());
+                campaignStarter.AddModel(new BKFoodModel());
+                campaignStarter.AddModel(new BKConstructionModel());
+                campaignStarter.AddModel(new BKMilitiaModel());
+                campaignStarter.AddModel(new BKInfluenceModel());
+                campaignStarter.AddModel(new BKLoyaltyModel());
+                campaignStarter.AddModel(new BKVillageProductionModel());
+                campaignStarter.AddModel(new BKSecurityModel());
+                campaignStarter.AddModel(new BKPartyLimitModel());
+                campaignStarter.AddModel(new BKEconomyModel());
+                //campaignStarter.AddModel(new BKPriceFactorModel());
+                campaignStarter.AddModel(new BKWorkshopModel());
+                campaignStarter.AddModel(new BKClanFinanceModel());
+                campaignStarter.AddModel(new BKArmyManagementModel());
+                campaignStarter.AddModel(new BKSiegeEventModel());
+                campaignStarter.AddModel(new BKTournamentModel());
+                campaignStarter.AddModel(new BKRaidModel());
+                campaignStarter.AddModel(new BKVolunteerModel());
+                campaignStarter.AddModel(new BKNotableModel());
+                campaignStarter.AddModel(new BKGarrisonModel());
+                campaignStarter.AddModel(new BKRansomModel());
+                campaignStarter.AddModel(new BKClanTierModel());
             }
 
             //xtender.Register(typeof(Main).Assembly);
