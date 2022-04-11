@@ -5,9 +5,9 @@ using System.Xml;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
-using static BannerKings.Managers.TitleManager;
 using static BannerKings.Managers.PopulationManager;
 using static TaleWorlds.Core.ItemCategory;
+using BannerKings.Managers.Titles;
 
 namespace BannerKings.Helpers
 {

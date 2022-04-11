@@ -7,14 +7,42 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Core.ViewModelCollection;
 using TaleWorlds.Localization;
-using static BannerKings.Managers.TitleManager;
+using BannerKings.Managers.Titles;
+using BannerKings.Models;
+using TaleWorlds.CampaignSystem.ViewModelCollection;
 
 namespace BannerKings.Utils
 {
     public static class UIHelper
     {
 
-		public static List<TooltipProperty> GetHeroCourtTooltip(Hero hero, UsurpData usurp = null, List<Hero> claimants = null)
+		public static void ShowTitleActionPopup(TitleAction action)
+		{
+			BKTitleModel model = (BannerKingsConfig.Instance.Models.First(x => x is BKTitleModel) as BKTitleModel);
+			TextObject description = null;
+			TextObject affirmativeText = null;
+			Hero receiver = null;
+			if (action.Type == ActionType.Grant)
+            {
+				List<InquiryElement> options = new List<InquiryElement>();
+				foreach (Hero hero in model.GetGrantCandidates(action.ActionTaker))
+					options.Add(new InquiryElement(hero, hero.Name.ToString(), new ImageIdentifier(CampaignUIHelper.GetCharacterCode(hero.CharacterObject, false))));
+
+
+				InformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(new TextObject().ToString(), 
+					new TextObject().ToString(),
+					options, true, 1, GameTexts.FindText("str_done", null).ToString(), string.Empty,
+					new Action<List<InquiryElement>>(delegate (List<InquiryElement> x)
+					{
+						receiver = (Hero?)x[0].Identifier;
+					}), null, string.Empty), false);
+			}
+
+			InformationManager.ShowInquiry(new TaleWorlds.Library.InquiryData("", description.ToString(),
+				true, true, affirmativeText.ToString(), "Cancel", () => action.TakeAction(null), null, string.Empty));
+
+		}
+		public static List<TooltipProperty> GetHeroCourtTooltip(Hero hero, TitleAction usurp = null, List<Hero> claimants = null)
 		{
 			List<TooltipProperty> list = new List<TooltipProperty>
 			{
@@ -41,7 +69,7 @@ namespace BannerKings.Utils
 					list.Add(new TooltipProperty(title.FullName.ToString(), GetOwnership(hero, title), 0, false, TooltipProperty.TooltipPropertyFlags.None));
 			}
 
-			if (usurp != null && !usurp.Usurpable)
+			if (usurp != null && !usurp.Possible)
 			{
 				TooltipAddEmptyLine(list, false);
 				list.Add(new TooltipProperty(new TextObject("{=!}Usurp", null).ToString(), " ", 0, false, TooltipProperty.TooltipPropertyFlags.None));

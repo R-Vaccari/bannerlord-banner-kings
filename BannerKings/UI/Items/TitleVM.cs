@@ -4,10 +4,10 @@ using System.Linq;
 using TaleWorlds.Core;
 using TaleWorlds.Core.ViewModelCollection;
 using TaleWorlds.Library;
-using static BannerKings.Managers.TitleManager;
 using BannerKings.Models;
 using TaleWorlds.Localization;
 using System.Collections.Generic;
+using BannerKings.Managers.Titles;
 
 namespace BannerKings.UI.Items
 {
@@ -34,7 +34,7 @@ namespace BannerKings.UI.Items
 			if (title != null)
 			{
 				BKTitleModel model = (BannerKingsConfig.Instance.Models.First(x => x is BKTitleModel) as BKTitleModel);
-				UsurpData usurpData = model.IsUsurpable(title, Hero.MainHero);
+				TitleAction usurpData = model.GetAction(ActionType.Usurp, title, Hero.MainHero);
 				List<Hero> claimants = model.GetClaimants(title);
 
 				CharacterCode characterCode = CharacterCode.CreateFrom(title.deJure.CharacterObject);
@@ -48,36 +48,34 @@ namespace BannerKings.UI.Items
 					DecisionElement usurpButton = new DecisionElement().SetAsButtonOption(new TextObject("{=!}Usurp").ToString(),
 						delegate 
 						{
-							if (usurpData.Usurpable)
+							if (usurpData.Possible)
 							{
-								BannerKingsConfig.Instance.TitleManager.UsurpTitle(title.deJure, Hero.MainHero, title, usurpData);
+								UIHelper.ShowTitleActionPopup(usurpData);
 								RefreshValues();
 							}	
 						},
 						new TextObject(sb.ToString()));
-					usurpButton.Enabled = usurpData.Usurpable;
+					usurpButton.Enabled = usurpData.Possible;
 					this.Decisions.Add(usurpButton);
+				} else
+                {
+					TitleAction grantData = model.GetAction(ActionType.Grant, title, Hero.MainHero);
+					if (grantData.Possible)
+                    {
+						TextObject sb = new TextObject("{=!}Grant this title away to another eligible lord.");
+						DecisionElement usurpButton = new DecisionElement().SetAsButtonOption(new TextObject("{=!}Grant").ToString(),
+							delegate
+							{
+								UIHelper.ShowTitleActionPopup(grantData);
+								RefreshValues();
+							},
+							new TextObject(sb.ToString()));
+						usurpButton.Enabled = usurpData.Possible;
+						this.Decisions.Add(usurpButton);
+					}
 				}
 			}
 		}
-
-		private bool EvaluateShowUsurp()
-        {
-			if (title.deJure == Hero.MainHero) return false;
-			else if (title.DeFacto == Hero.MainHero) return true;
-			else
-            {
-				bool result = false;
-				if (title.vassals != null && title.vassals.Count > 0)
-					foreach (FeudalTitle vassal in title.vassals)
-						if (vassal.deJure == Hero.MainHero)
-                        {
-							result = true;
-							break;
-                        }
-				return result;
-            }
-        }
 
 		public void ExecuteLink()
 		{

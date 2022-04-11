@@ -10,7 +10,7 @@ using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
-using static BannerKings.Managers.TitleManager;
+using BannerKings.Managers.Titles;
 
 namespace BannerKings.UI.Windows
 {
@@ -115,7 +115,7 @@ namespace BannerKings.UI.Windows
 							else
 							{
 								GainKingdomInfluenceAction.ApplyForDefault(Hero.MainHero, -cost);
-								kingdom.AddDecision(decision, true);
+								kingdom.AddDecision((BKContractDecision)x[0].Identifier, true);
 							}
 						}), null, string.Empty), false);
 					}
