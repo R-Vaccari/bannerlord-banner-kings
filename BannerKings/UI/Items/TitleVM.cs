@@ -43,8 +43,6 @@ namespace BannerKings.UI.Items
 				
 				if (claimants.Contains(Hero.MainHero))
 				{
-
-					TextObject sb = new TextObject("{=!}Usurp this title from it's owner, making you the lawful ruler of this settlement. Usurping from lords within your kingdom degrades your clan's reputation.");
 					DecisionElement usurpButton = new DecisionElement().SetAsButtonOption(new TextObject("{=!}Usurp").ToString(),
 						delegate 
 						{
@@ -53,8 +51,7 @@ namespace BannerKings.UI.Items
 								UIHelper.ShowTitleActionPopup(usurpData);
 								RefreshValues();
 							}	
-						},
-						new TextObject(sb.ToString()));
+						}, null);
 					usurpButton.Enabled = usurpData.Possible;
 					this.Decisions.Add(usurpButton);
 				} else
@@ -62,16 +59,14 @@ namespace BannerKings.UI.Items
 					TitleAction grantData = model.GetAction(ActionType.Grant, title, Hero.MainHero);
 					if (grantData.Possible)
                     {
-						TextObject sb = new TextObject("{=!}Grant this title away to another eligible lord.");
-						DecisionElement usurpButton = new DecisionElement().SetAsButtonOption(new TextObject("{=!}Grant").ToString(),
+						DecisionElement grantButton = new DecisionElement().SetAsButtonOption(new TextObject("{=!}Grant").ToString(),
 							delegate
 							{
 								UIHelper.ShowTitleActionPopup(grantData);
 								RefreshValues();
-							},
-							new TextObject(sb.ToString()));
-						usurpButton.Enabled = usurpData.Possible;
-						this.Decisions.Add(usurpButton);
+							}, null);
+						grantButton.Enabled = grantData.Possible;
+						this.Decisions.Add(grantButton);
 					}
 				}
 			}

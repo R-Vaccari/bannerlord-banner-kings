@@ -23,6 +23,7 @@ using BannerKings.Models.Vanilla;
 using BannerKings.Behaviours;
 using TaleWorlds.CampaignSystem.Election;
 using TaleWorlds.CampaignSystem.SandBox.GameComponents;
+using BannerKings.Managers.Titles;
 
 namespace BannerKings
 {

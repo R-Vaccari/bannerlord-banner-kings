@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using BannerKings.Managers.Titles;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Election;
-using static BannerKings.Managers.TitleManager;
 
 namespace BannerKings.Managers.Kingdoms
 {

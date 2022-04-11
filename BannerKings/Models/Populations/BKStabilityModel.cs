@@ -4,6 +4,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Localization;
 using static BannerKings.Managers.TitleManager;
 using System.Linq;
+using BannerKings.Managers.Titles;
 
 namespace BannerKings.Models
 {

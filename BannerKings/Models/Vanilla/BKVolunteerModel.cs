@@ -11,6 +11,7 @@ using TaleWorlds.Core;
 using BannerKings.Managers.Policies;
 using static BannerKings.Managers.Policies.BKDraftPolicy;
 using static BannerKings.Managers.TitleManager;
+using BannerKings.Managers.Titles;
 
 namespace BannerKings.Models.Vanilla
 {

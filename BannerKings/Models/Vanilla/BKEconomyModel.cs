@@ -1,6 +1,7 @@
 ﻿using BannerKings.Managers;
 using BannerKings.Managers.Court;
 using BannerKings.Managers.Policies;
+using BannerKings.Managers.Titles;
 using BannerKings.Populations;
 using System;
 using TaleWorlds.CampaignSystem;

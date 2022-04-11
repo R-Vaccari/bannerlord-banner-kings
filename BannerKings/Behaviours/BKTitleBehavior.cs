@@ -10,6 +10,7 @@ using static BannerKings.Managers.TitleManager;
 using static TaleWorlds.CampaignSystem.Actions.ChangeKingdomAction;
 using TaleWorlds.CampaignSystem.Election;
 using BannerKings.Managers.Kingdoms;
+using BannerKings.Managers.Titles;
 
 namespace BannerKings.Behaviours
 {

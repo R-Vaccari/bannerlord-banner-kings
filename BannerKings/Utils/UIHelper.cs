@@ -24,22 +24,31 @@ namespace BannerKings.Utils
 			Hero receiver = null;
 			if (action.Type == ActionType.Grant)
             {
+				description = new TextObject("{=!}Grant this title away to {RECEIVER}, making them the legal owner of it. If the receiver is in your kingdom and the title is landed (attached to a fief), they will also receive the direct ownership of that fief and it's revenue. Granting a title provides positive relations with the receiver.");
+				affirmativeText = new TextObject("{=!}Grant");
 				List<InquiryElement> options = new List<InquiryElement>();
 				foreach (Hero hero in model.GetGrantCandidates(action.ActionTaker))
 					options.Add(new InquiryElement(hero, hero.Name.ToString(), new ImageIdentifier(CampaignUIHelper.GetCharacterCode(hero.CharacterObject, false))));
 
 
-				InformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(new TextObject().ToString(), 
-					new TextObject().ToString(),
-					options, true, 1, GameTexts.FindText("str_done", null).ToString(), string.Empty,
-					new Action<List<InquiryElement>>(delegate (List<InquiryElement> x)
-					{
-						receiver = (Hero?)x[0].Identifier;
-					}), null, string.Empty), false);
+				InformationManager.ShowMultiSelectionInquiry(
+					new MultiSelectionInquiryData(
+						new TextObject("Grant away {TITLE}").SetTextVariable("TITLE", action.Title.FullName).ToString(), 
+						new TextObject("{=!}Select a lord who you would like to grant this title to.").ToString(),
+						options, true, 1, GameTexts.FindText("str_done", null).ToString(), string.Empty,
+						new Action<List<InquiryElement>>(delegate (List<InquiryElement> x)
+						{
+							receiver = (Hero?)x[0].Identifier;
+							description.SetTextVariable("RECEIVER", receiver.Name);
+						}), null, string.Empty), false);
+			} else
+            {
+				description = new TextObject("{=!}Usurp this title from it's owner, making you the lawful ruler of this settlement. Usurping from lords within your kingdom degrades your clan's reputation.");
+				affirmativeText = new TextObject("{=!}Usurp");
 			}
 
 			InformationManager.ShowInquiry(new TaleWorlds.Library.InquiryData("", description.ToString(),
-				true, true, affirmativeText.ToString(), "Cancel", () => action.TakeAction(null), null, string.Empty));
+				true, true, affirmativeText.ToString(), "Cancel", () => action.TakeAction(receiver), null, string.Empty));
 
 		}
 		public static List<TooltipProperty> GetHeroCourtTooltip(Hero hero, TitleAction usurp = null, List<Hero> claimants = null)

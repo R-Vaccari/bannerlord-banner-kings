@@ -1,4 +1,5 @@
 ﻿using BannerKings.Managers.Duties;
+using BannerKings.Managers.Titles;
 using Helpers;
 using System;
 using TaleWorlds.CampaignSystem;
