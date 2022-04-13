@@ -39,36 +39,41 @@ namespace BannerKings.UI.Items
 
 				CharacterCode characterCode = CharacterCode.CreateFrom(title.deJure.CharacterObject);
 				this.ImageIdentifier = new ImageIdentifierVM(characterCode);
-				this.Hint = new BasicTooltipViewModel(() => UIHelper.GetHeroCourtTooltip(title.deJure, usurpData, claimants));
-				
+
+				List<TitleAction> actions = new List<TitleAction>();
+				actions.Add(usurpData);
 				if (claimants.Contains(Hero.MainHero))
 				{
 					DecisionElement usurpButton = new DecisionElement().SetAsButtonOption(new TextObject("{=!}Usurp").ToString(),
-						delegate 
-						{
-							if (usurpData.Possible)
-							{
-								UIHelper.ShowTitleActionPopup(usurpData);
-								RefreshValues();
-							}	
-						}, null);
+						() => UIHelper.ShowTitleActionPopup(usurpData, this));
+
+				
 					usurpButton.Enabled = usurpData.Possible;
 					this.Decisions.Add(usurpButton);
-				} else
+				} 
+
+				TitleAction grantData = model.GetAction(ActionType.Grant, title, Hero.MainHero);
+				actions.Add(grantData);
+				if (grantData.Possible)
                 {
-					TitleAction grantData = model.GetAction(ActionType.Grant, title, Hero.MainHero);
-					if (grantData.Possible)
-                    {
-						DecisionElement grantButton = new DecisionElement().SetAsButtonOption(new TextObject("{=!}Grant").ToString(),
-							delegate
-							{
-								UIHelper.ShowTitleActionPopup(grantData);
-								RefreshValues();
-							}, null);
-						grantButton.Enabled = grantData.Possible;
-						this.Decisions.Add(grantButton);
-					}
+					DecisionElement grantButton = new DecisionElement().SetAsButtonOption(new TextObject("{=!}Grant").ToString(),
+						() => UIHelper.ShowTitleActionPopup(grantData, this));
+					grantButton.Enabled = grantData.Possible;
+					this.Decisions.Add(grantButton);
 				}
+
+				TitleAction revokeData = model.GetAction(ActionType.Revoke, title, Hero.MainHero);
+				actions.Add(revokeData);
+				if (revokeData.Possible)
+				{
+					DecisionElement revokeButton = new DecisionElement().SetAsButtonOption(new TextObject("{=!}Revoke").ToString(),
+						() => UIHelper.ShowTitleActionPopup(revokeData, this));
+					revokeButton.Enabled = revokeData.Possible;
+					this.Decisions.Add(revokeButton);
+				}
+				
+
+				this.Hint = new BasicTooltipViewModel(() => UIHelper.GetTitleTooltip(title.deJure, actions, claimants));
 			}
 		}
 

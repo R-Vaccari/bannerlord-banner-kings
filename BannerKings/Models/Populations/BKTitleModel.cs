@@ -15,7 +15,102 @@ namespace BannerKings.Models
         {
             if (type == ActionType.Usurp)
                 return GetUsurp(title, taker);
+            else if (type == ActionType.Revoke)
+                return GetRevoke(title, taker);
             else return GetGrant(title, taker);
+        }
+
+        private TitleAction GetRevoke(FeudalTitle title, Hero revoker)
+        {
+            TitleAction revokeAction = new TitleAction(ActionType.Revoke, title, revoker);
+            if (title == null || revoker == null) return null;
+            revokeAction.Influence = this.GetInfluenceUsurpCost(title) * 0.8f;
+            revokeAction.Renown = this.GetRenownUsurpCost(title) * 0.6f;
+
+            if (title.deJure == revoker)
+            {
+                revokeAction.Possible = false;
+                revokeAction.Reason = new TextObject("{=!}Can not revoke one's own title.");
+                return revokeAction;
+            }
+
+            Kingdom revokerKingdom = revoker.Clan.Kingdom;
+            if (revokerKingdom == null || revokerKingdom != title.deJure.Clan.Kingdom)
+            {
+                revokeAction.Possible = false;
+                revokeAction.Reason = new TextObject("{=!}Can not revoke a title of a lord outside your realm.");
+                return revokeAction;
+            }
+
+            GovernmentType governmentType = title.contract.Government;
+            if (governmentType == GovernmentType.Tribal)
+            {
+                revokeAction.Possible = false;
+                revokeAction.Reason = new TextObject("{=!}Tribal government does not allow revoking.");
+                return revokeAction;
+            }
+            else if (governmentType == GovernmentType.Republic)
+            {
+                if (title.type != TitleType.Dukedom)
+                {
+                    revokeAction.Possible = false;
+                    revokeAction.Reason = new TextObject("{=!}Republics can only revoke duke titles.");
+                    return revokeAction;
+                }
+
+                FeudalTitle sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(revokerKingdom);
+                if (revoker != sovereign.deJure)
+                {
+                    revokeAction.Possible = false;
+                    revokeAction.Reason = new TextObject("{=!}Not de Jure faction leader.");
+                    return revokeAction;
+                }
+            }
+            else if (governmentType == GovernmentType.Imperial)
+            {
+                FeudalTitle sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(revokerKingdom);
+                if (revoker != sovereign.deJure)
+                {
+                    revokeAction.Possible = false;
+                    revokeAction.Reason = new TextObject("{=!}Not de Jure faction leader.");
+                    return revokeAction;
+                }
+            }
+            else
+            {
+                List<FeudalTitle> titles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(revoker);
+                bool vassal = false;
+                foreach (FeudalTitle revokerTitle in titles)
+                    if (revokerTitle.vassals != null)
+                        foreach (FeudalTitle revokerTitleVassal in revokerTitle.vassals)
+                            if (revokerTitleVassal.deJure == title.deJure)
+                            {
+                                vassal = true;
+                                break;
+                            }
+
+                if (!vassal)
+                {
+                    revokeAction.Possible = false;
+                    revokeAction.Reason = new TextObject("{=!}Not a direct vassal.");
+                    return revokeAction;
+                }
+            }
+
+
+            FeudalTitle revokerHighest = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(revoker);
+            FeudalTitle targetHighest = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(title.deJure);
+
+            if (targetHighest.type <= revokerHighest.type)
+            {
+                revokeAction.Possible = false;
+                revokeAction.Reason = new TextObject("{=!}Can not revoke from a lord of superior hierarchy.");
+                return revokeAction;
+            }
+
+            revokeAction.Possible = true;
+            revokeAction.Reason = new TextObject("{=!}You may grant away this title.");
+            return revokeAction;
         }
 
         private TitleAction GetGrant(FeudalTitle title, Hero grantor)
@@ -56,7 +151,7 @@ namespace BannerKings.Models
             if (highest == title)
             {
                 grantAction.Possible = false;
-                grantAction.Reason = new TextObject("{=!}Not possible to grant one's highest title.");
+                grantAction.Reason = new TextObject("{=!}Not possible to grant one's main title.");
                 return grantAction;
 
             }
@@ -115,7 +210,7 @@ namespace BannerKings.Models
                 if (usurper.Gold < usurpData.Gold || usurper.Clan.Influence < usurpData.Influence)
                 {
                     usurpData.Possible = false;
-                    usurpData.Reason = new TextObject("{=!}You do not have the required resources to obtain this title.");
+                    usurpData.Reason = new TextObject("{=!}Missing required resources.");
                     return usurpData;
                 }
 

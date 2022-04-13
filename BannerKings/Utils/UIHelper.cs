@@ -10,13 +10,14 @@ using TaleWorlds.Localization;
 using BannerKings.Managers.Titles;
 using BannerKings.Models;
 using TaleWorlds.CampaignSystem.ViewModelCollection;
+using TaleWorlds.Library;
 
 namespace BannerKings.Utils
 {
     public static class UIHelper
     {
 
-		public static void ShowTitleActionPopup(TitleAction action)
+		public static void ShowTitleActionPopup(TitleAction action, ViewModel vm = null)
 		{
 			BKTitleModel model = (BannerKingsConfig.Instance.Models.First(x => x is BKTitleModel) as BKTitleModel);
 			TextObject description = null;
@@ -33,7 +34,7 @@ namespace BannerKings.Utils
 
 				InformationManager.ShowMultiSelectionInquiry(
 					new MultiSelectionInquiryData(
-						new TextObject("Grant away {TITLE}").SetTextVariable("TITLE", action.Title.FullName).ToString(), 
+						new TextObject("{=!}Grant {TITLE}").SetTextVariable("TITLE", action.Title.FullName).ToString(), 
 						new TextObject("{=!}Select a lord who you would like to grant this title to.").ToString(),
 						options, true, 1, GameTexts.FindText("str_done", null).ToString(), string.Empty,
 						new Action<List<InquiryElement>>(delegate (List<InquiryElement> x)
@@ -41,17 +42,94 @@ namespace BannerKings.Utils
 							receiver = (Hero?)x[0].Identifier;
 							description.SetTextVariable("RECEIVER", receiver.Name);
 						}), null, string.Empty), false);
-			} else
+			}
+			if (action.Type == ActionType.Revoke)
+            {
+				description = new TextObject("{=!}Revoking transfers the legal ownership of a vassal's title to the suzerain. The revoking restrictions are associated with the title's government type.");
+				affirmativeText = new TextObject("{=!}Revoke");
+			}
+			else
             {
 				description = new TextObject("{=!}Usurp this title from it's owner, making you the lawful ruler of this settlement. Usurping from lords within your kingdom degrades your clan's reputation.");
 				affirmativeText = new TextObject("{=!}Usurp");
 			}
 
 			InformationManager.ShowInquiry(new TaleWorlds.Library.InquiryData("", description.ToString(),
-				true, true, affirmativeText.ToString(), "Cancel", () => action.TakeAction(receiver), null, string.Empty));
+				true, true, affirmativeText.ToString(), "Cancel", delegate 
+				{ 
+					action.TakeAction(receiver);
+					if (vm != null) vm.RefreshValues();
+				}, null, string.Empty));
+		}
+
+		public static List<TooltipProperty> GetTitleTooltip(Hero hero, List<TitleAction> actions, List<Hero> claimants)
+		{
+			List<TooltipProperty> list = new List<TooltipProperty>
+			{
+				new TooltipProperty("", hero.Name.ToString(), 0, false, TooltipProperty.TooltipPropertyFlags.Title)
+			};
+			MBTextManager.SetTextVariable("LEFT", GameTexts.FindText("str_tooltip_label_relation", null), false);
+			string definition = GameTexts.FindText("str_LEFT_ONLY", null).ToString();
+			list.Add(new TooltipProperty(definition, ((int)hero.GetRelationWithPlayer()).ToString(), 0, false, TooltipProperty.TooltipPropertyFlags.None));
+			MBTextManager.SetTextVariable("LEFT", GameTexts.FindText("str_tooltip_label_type", null), false);
+			string definition2 = GameTexts.FindText("str_LEFT_ONLY", null).ToString();
+			list.Add(new TooltipProperty(definition2, GetCorrelation(hero), 0, false, TooltipProperty.TooltipPropertyFlags.None));
+			list.Add(new TooltipProperty(new TextObject("{=jaaQijQs}Age").ToString(), hero.Age.ToString(), 0, false, TooltipProperty.TooltipPropertyFlags.None));
+
+			if (hero.CurrentSettlement != null)
+				list.Add(new TooltipProperty(new TextObject("{=!}Settlement").ToString(), hero.CurrentSettlement.Name.ToString(), 0, false, TooltipProperty.TooltipPropertyFlags.None));
+
+			List<FeudalTitle> titles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(hero);
+			if (titles.Count > 0)
+			{
+				TooltipAddEmptyLine(list, false);
+				list.Add(new TooltipProperty(new TextObject("{=!}Titles", null).ToString(), " ", 0, false, TooltipProperty.TooltipPropertyFlags.None));
+				TooltipAddSeperator(list, false);
+				foreach (FeudalTitle title in titles)
+					list.Add(new TooltipProperty(title.FullName.ToString(), GetOwnership(hero, title), 0, false, TooltipProperty.TooltipPropertyFlags.None));
+			}
+
+			foreach (TitleAction action in actions)
+				AddActionHint(ref list, action);
+
+			if (claimants != null && claimants.Count > 0)
+			{
+				TooltipAddEmptyLine(list, false);
+				list.Add(new TooltipProperty(new TextObject("{=!}Claimants", null).ToString(), " ", 0, false, TooltipProperty.TooltipPropertyFlags.None));
+				TooltipAddSeperator(list, false);
+				foreach (Hero claimant in claimants)
+					list.Add(new TooltipProperty(claimant.Name.ToString(), new TextObject("").ToString(), 0, false, TooltipProperty.TooltipPropertyFlags.None));
+			}
+
+			return list;
+		}
+
+
+		private static void AddActionHint(ref List<TooltipProperty> list, TitleAction action)
+        {
+			TooltipAddEmptyLine(list, false);
+			list.Add(new TooltipProperty(new TextObject("{=!}Usurp", null).ToString(), " ", 0, false, TooltipProperty.TooltipPropertyFlags.None));
+			TooltipAddSeperator(list, false);
+
+			list.Add(new TooltipProperty(new TextObject("{=!}Reason").ToString(), action.Reason.ToString(), 0, false, TooltipProperty.TooltipPropertyFlags.None));
+			if (action.Gold > 0)
+				list.Add(new TooltipProperty(new TextObject("{=!}Gold").ToString(), new TextObject("{=!}{GOLD} coins.")
+					.SetTextVariable("GOLD", action.Gold.ToString("0.0"))
+					.ToString(), 0, false, TooltipProperty.TooltipPropertyFlags.None));
+
+			if (action.Influence > 0)
+				list.Add(new TooltipProperty(new TextObject("{=!}Influence").ToString(), new TextObject("{=!}{INFLUENCE} influence.")
+					.SetTextVariable("INFLUENCE", action.Influence.ToString("0.0"))
+					.ToString(), 0, false, TooltipProperty.TooltipPropertyFlags.None));
+
+			if (action.Renown > 0)
+				list.Add(new TooltipProperty(new TextObject("{=!}Influence").ToString(), new TextObject("{=!}{RENOWN} renown.")
+					.SetTextVariable("RENOWN", action.Renown.ToString("0.0"))
+					.ToString(), 0, false, TooltipProperty.TooltipPropertyFlags.None));
 
 		}
-		public static List<TooltipProperty> GetHeroCourtTooltip(Hero hero, TitleAction usurp = null, List<Hero> claimants = null)
+
+		public static List<TooltipProperty> GetHeroCourtTooltip(Hero hero)
 		{
 			List<TooltipProperty> list = new List<TooltipProperty>
 			{
@@ -76,35 +154,6 @@ namespace BannerKings.Utils
 				TooltipAddSeperator(list, false);
 				foreach (FeudalTitle title in titles)
 					list.Add(new TooltipProperty(title.FullName.ToString(), GetOwnership(hero, title), 0, false, TooltipProperty.TooltipPropertyFlags.None));
-			}
-
-			if (usurp != null && !usurp.Possible)
-			{
-				TooltipAddEmptyLine(list, false);
-				list.Add(new TooltipProperty(new TextObject("{=!}Usurp", null).ToString(), " ", 0, false, TooltipProperty.TooltipPropertyFlags.None));
-				TooltipAddSeperator(list, false);
-				TextObject gold = new TextObject("{=!}{GOLD} coins.");
-				gold.SetTextVariable("GOLD", usurp.Gold.ToString("0.0"));
-
-				TextObject influence = new TextObject("{=!}{INFLUENCE} influence.");
-				influence.SetTextVariable("INFLUENCE", usurp.Influence.ToString("0.0"));
-
-				TextObject renown = new TextObject("{=!}{RENOWN} renown.");
-				renown.SetTextVariable("RENOWN", usurp.Renown.ToString("0.0"));
-
-				list.Add(new TooltipProperty(new TextObject("{=!}Reason").ToString(), usurp.Reason.ToString(), 0, false, TooltipProperty.TooltipPropertyFlags.None));
-				list.Add(new TooltipProperty(new TextObject("{=!}Gold").ToString(), gold.ToString(), 0, false, TooltipProperty.TooltipPropertyFlags.None));
-				list.Add(new TooltipProperty(new TextObject("{=!}Influence").ToString(), influence.ToString(), 0, false, TooltipProperty.TooltipPropertyFlags.None));
-				list.Add(new TooltipProperty(new TextObject("{=!}Renown").ToString(), renown.ToString(), 0, false, TooltipProperty.TooltipPropertyFlags.None));
-			}
-
-			if (claimants != null && claimants.Count > 0)
-			{
-				TooltipAddEmptyLine(list, false);
-				list.Add(new TooltipProperty(new TextObject("{=!}Claimants", null).ToString(), " ", 0, false, TooltipProperty.TooltipPropertyFlags.None));
-				TooltipAddSeperator(list, false);
-				foreach (Hero claimant in claimants)
-					list.Add(new TooltipProperty(claimant.Name.ToString(), new TextObject("").ToString(), 0, false, TooltipProperty.TooltipPropertyFlags.None));
 			}
 
 			return list;
