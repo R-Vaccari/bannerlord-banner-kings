@@ -24,6 +24,9 @@ using BannerKings.Behaviours;
 using TaleWorlds.CampaignSystem.Election;
 using TaleWorlds.CampaignSystem.SandBox.GameComponents;
 using BannerKings.Managers.Titles;
+using TaleWorlds.CampaignSystem.SandBox.GameComponents.Map;
+using static BannerKings.Managers.Policies.BKDraftPolicy;
+using BannerKings.Managers.Court;
 
 namespace BannerKings
 {
@@ -102,6 +105,17 @@ namespace BannerKings
                     }
                 }
             }
+
+            [HarmonyPatch(typeof(DefaultVolunteerProductionModel), "GetDailyVolunteerProductionProbability")]
+            class GetDailyVolunteerProductionProbabilityPatch
+            {
+                static bool Prefix(Hero hero, int index, Settlement settlement, ref ExplainedNumber __result)
+                {
+
+                    __result = new BKVolunteerModel().GetDraftEfficiency(hero, index, settlement);
+                    return false;
+                }
+            }
         }
 
         namespace Fixes
@@ -128,6 +142,22 @@ namespace BannerKings
                         return false;
                     }
                     return true;
+                }
+            }
+
+
+            [HarmonyPatch(typeof(Hero), "CanHaveQuestsOrIssues")]
+            class CanHaveQuestsOrIssuesPatch
+            {
+                static bool Prefix(Hero __instance, ref bool __result)
+                {
+                    if (__instance.Issue != null)
+                        return false;
+                    
+                    bool result = __instance.IsActive && __instance.IsAlive;
+                    CampaignEventDispatcher.Instance.CanHaveQuestsOrIssues(__instance, ref result);
+
+                    return false;
                 }
             }
         }

@@ -21,7 +21,7 @@ namespace BannerKings.Utils
 		{
 			BKTitleModel model = (BannerKingsConfig.Instance.Models.First(x => x is BKTitleModel) as BKTitleModel);
 			TextObject description = null;
-			TextObject affirmativeText = null;
+			TextObject affirmativeText = GetActionText(action.Type);
 			Hero receiver = null;
 			if (action.Type == ActionType.Grant)
             {
@@ -43,7 +43,7 @@ namespace BannerKings.Utils
 							description.SetTextVariable("RECEIVER", receiver.Name);
 						}), null, string.Empty), false);
 			}
-			if (action.Type == ActionType.Revoke)
+			else if (action.Type == ActionType.Revoke)
             {
 				description = new TextObject("{=!}Revoking transfers the legal ownership of a vassal's title to the suzerain. The revoking restrictions are associated with the title's government type.");
 				affirmativeText = new TextObject("{=!}Revoke");
@@ -104,11 +104,19 @@ namespace BannerKings.Utils
 			return list;
 		}
 
+		private static TextObject GetActionText(ActionType type)
+        {
+			if (type == ActionType.Usurp)
+				return new TextObject("{=!}Usurp", null);
+			else if (type == ActionType.Revoke)
+				return new TextObject("{=!}Revoke", null);
+			else return new TextObject("{=!}Grant", null);
+		}
 
 		private static void AddActionHint(ref List<TooltipProperty> list, TitleAction action)
         {
 			TooltipAddEmptyLine(list, false);
-			list.Add(new TooltipProperty(new TextObject("{=!}Usurp", null).ToString(), " ", 0, false, TooltipProperty.TooltipPropertyFlags.None));
+			list.Add(new TooltipProperty(GetActionText(action.Type).ToString(), " ", 0, false, TooltipProperty.TooltipPropertyFlags.None));
 			TooltipAddSeperator(list, false);
 
 			list.Add(new TooltipProperty(new TextObject("{=!}Reason").ToString(), action.Reason.ToString(), 0, false, TooltipProperty.TooltipPropertyFlags.None));
