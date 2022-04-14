@@ -69,7 +69,8 @@ namespace BannerKings.Models
 
 				float proportion = (float)craftsmen / (float)slaves;
 				float finalProportion = Math.Min(proportion, (town.IsCastle ? 0.4f : 0.1f));
-				return (int)(GetSlaveWorkforce(town.Settlement) * (finalProportion * 10f));
+				int result = (int)(GetSlaveWorkforce(town.Settlement) * (finalProportion * 10f));
+				return MBMath.ClampInt(result, 0, 100);
 			}
 			else return base.GetBoostAmount(town);
         }

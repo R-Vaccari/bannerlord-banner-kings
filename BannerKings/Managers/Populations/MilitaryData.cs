@@ -62,6 +62,9 @@ namespace BannerKings.Managers.Populations
                 if (this.peasantManpower >= quantity) this.peasantManpower -= quantity;
                 else this.peasantManpower = 0;
             }
+
+            this.nobleManpower = Math.Max(this.nobleManpower, 0);
+            this.peasantManpower = Math.Max(this.peasantManpower, 0);
         }
 
         public int Manpower => peasantManpower + nobleManpower;
