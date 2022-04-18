@@ -27,6 +27,8 @@ using BannerKings.Managers.Titles;
 using TaleWorlds.CampaignSystem.SandBox.GameComponents.Map;
 using static BannerKings.Managers.Policies.BKDraftPolicy;
 using BannerKings.Managers.Court;
+using static TaleWorlds.CampaignSystem.SandBox.Issues.CaravanAmbushIssueBehavior;
+using static TaleWorlds.CampaignSystem.SandBox.Issues.LandLordNeedsManualLaborersIssueBehavior;
 
 namespace BannerKings
 {
@@ -109,10 +111,10 @@ namespace BannerKings
             [HarmonyPatch(typeof(DefaultVolunteerProductionModel), "GetDailyVolunteerProductionProbability")]
             class GetDailyVolunteerProductionProbabilityPatch
             {
-                static bool Prefix(Hero hero, int index, Settlement settlement, ref ExplainedNumber __result)
+                static bool Prefix(Hero hero, int index, Settlement settlement, ref float __result)
                 {
 
-                    __result = new BKVolunteerModel().GetDraftEfficiency(hero, index, settlement);
+                    __result = new BKVolunteerModel().GetDraftEfficiency(hero, index, settlement).ResultNumber;
                     return false;
                 }
             }
@@ -158,6 +160,45 @@ namespace BannerKings
                     CampaignEventDispatcher.Instance.CanHaveQuestsOrIssues(__instance, ref result);
 
                     return false;
+                }
+            }
+
+
+            [HarmonyPatch(typeof(CaravanAmbushIssue), "IssueStayAliveConditions")]
+            class CaravanIssueStayAliveConditionsPatch
+            {
+                static bool Prefix(CaravanAmbushIssue __instance, ref bool __result)
+                {
+                    if (__instance.IssueOwner != null)
+                        if (__instance.IssueOwner.OwnedCaravans == null || __instance.IssueOwner.MapFaction == null)
+                        {
+                            __result = false;
+                            return false;
+                        }
+
+                    return true;
+                }
+            }
+
+            [HarmonyPatch(typeof(LandLordNeedsManualLaborersIssue), "IssueStayAliveConditions")]
+            class LaborersIssueStayAliveConditionsPatch
+            {
+                static bool Prefix(LandLordNeedsManualLaborersIssue __instance, ref bool __result)
+                {
+                    if (__instance.IssueOwner != null)
+                    {
+                        if (__instance.IssueOwner.CurrentSettlement == null || !__instance.IssueOwner.CurrentSettlement.IsVillage)
+                        {
+                            __result = false;
+                            return false;
+                        }
+                    } else
+                    {
+                        __result = false;
+                        return false;
+                    }
+
+                    return true;
                 }
             }
         }

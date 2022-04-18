@@ -69,33 +69,27 @@ namespace BannerKings.Models
 
 				float proportion = (float)craftsmen / (float)slaves;
 				float finalProportion = Math.Min(proportion, (town.IsCastle ? 0.4f : 0.1f));
-				int result = (int)(GetSlaveWorkforce(town.Settlement) * (finalProportion * 10f));
+				int result = (int)(GetWorkforce(town.Settlement) * (finalProportion * 8f));
 				return MBMath.ClampInt(result, 0, 100);
 			}
 			else return base.GetBoostAmount(town);
         }
 
-		private float GetSlaveWorkforce(Settlement settlement)
+		private float GetWorkforce(Settlement settlement)
         {
 			PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
 			bool construction = BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(data.Settlement, "workforce", (int)WorkforcePolicy.Construction);
-			int slaves = (int)((float)data.GetTypeCount(PopType.Slaves) * data.EconomicData.StateSlaves * (construction ? 1f : 0.5f));
-			return (float)slaves * SLAVE_CONSTRUCTION;
+			float slaves = (float)data.GetTypeCount(PopType.Slaves) * data.EconomicData.StateSlaves * (construction ? 1f : 0.5f);
+			float serfs = (float)data.GetTypeCount(PopType.Slaves) * (construction ? 0.15f : 0.1f);
+			return ((float)slaves * SLAVE_CONSTRUCTION) + (serfs * SERF_CONSTRUCTION);
 		}
 
 		private int CalculateDailyConstructionPowerInternal(Town town, ref ExplainedNumber result, bool omitBoost = false)
 		{
 			PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
 			int slaves = data.GetTypeCount(PopType.Slaves);
-			result.Add(GetSlaveWorkforce(town.Settlement), new TextObject("Slave workforce"), null);
-
+			result.Add(GetWorkforce(town.Settlement), new TextObject("{=!}Workforce"), null);
 			result.Add(3f, new TextObject("Base"), null);
-
-			if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(town.Settlement, "workforce", (int)WorkforcePolicy.Construction))
-            {
-				int serfs = data.GetTypeCount(PopType.Serfs);
-				result.Add(((float)serfs * 0.15f) * SERF_CONSTRUCTION, new TextObject("Serfs from construction policy"), null);
-			}
 
 			if (town.IsCastle && town.Security >= 50)
 				if (town.GarrisonParty != null)
@@ -198,7 +192,7 @@ namespace BannerKings.Models
 		}
 
 		private const float SLAVE_CONSTRUCTION = 0.015f;
-		private const float SERF_CONSTRUCTION = 0.0075f;
+		private const float SERF_CONSTRUCTION = 0.010f;
 
 		private readonly TextObject ProductionFromMarketText = new TextObject("{=vaZDJGMx}Construction from Market", null);
 		private readonly TextObject CultureText = GameTexts.FindText("str_culture", null);
