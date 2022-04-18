@@ -20,7 +20,6 @@ using BannerKings.Managers.Policies;
 using BannerKings.Managers.Populations.Villages;
 using static BannerKings.Managers.Policies.BKTaxPolicy;
 using BannerKings.Managers.Decisions;
-using System.Reflection;
 
 namespace BannerKings.Behaviors
 {

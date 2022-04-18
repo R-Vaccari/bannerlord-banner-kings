@@ -8,6 +8,7 @@ using BannerKings.Models;
 using TaleWorlds.Localization;
 using System.Collections.Generic;
 using BannerKings.Managers.Titles;
+using BannerKings.Models.BKModels;
 
 namespace BannerKings.UI.Items
 {
@@ -42,7 +43,7 @@ namespace BannerKings.UI.Items
 
 				List<TitleAction> actions = new List<TitleAction>();
 				actions.Add(usurpData);
-				if (claimants.Contains(Hero.MainHero))
+				if (title.GetHeroClaim(Hero.MainHero) != ClaimType.None)
 				{
 					DecisionElement usurpButton = new DecisionElement().SetAsButtonOption(new TextObject("{=!}Usurp").ToString(),
 						() => UIHelper.ShowTitleActionPopup(usurpData, this));
@@ -50,7 +51,17 @@ namespace BannerKings.UI.Items
 				
 					usurpButton.Enabled = usurpData.Possible;
 					this.Decisions.Add(usurpButton);
-				} 
+				}
+
+				TitleAction claimAction = model.GetAction(ActionType.Claim, title, Hero.MainHero);
+				actions.Add(claimAction);
+				if (claimAction.Possible)
+                {
+					DecisionElement claimButton = new DecisionElement().SetAsButtonOption(new TextObject("{=!}Claim").ToString(),
+						() => UIHelper.ShowTitleActionPopup(claimAction, this));
+					claimButton.Enabled = claimAction.Possible;
+					this.Decisions.Add(claimButton);
+				}
 
 				TitleAction grantData = model.GetAction(ActionType.Grant, title, Hero.MainHero);
 				actions.Add(grantData);

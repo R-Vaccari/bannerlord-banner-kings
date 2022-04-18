@@ -8,9 +8,9 @@ using TaleWorlds.Core;
 using TaleWorlds.Core.ViewModelCollection;
 using TaleWorlds.Localization;
 using BannerKings.Managers.Titles;
-using BannerKings.Models;
 using TaleWorlds.CampaignSystem.ViewModelCollection;
 using TaleWorlds.Library;
+using BannerKings.Models.BKModels;
 
 namespace BannerKings.Utils
 {
@@ -47,10 +47,14 @@ namespace BannerKings.Utils
             {
 				description = new TextObject("{=!}Revoking transfers the legal ownership of a vassal's title to the suzerain. The revoking restrictions are associated with the title's government type.");
 				affirmativeText = new TextObject("{=!}Revoke");
+			} else if (action.Type == ActionType.Claim)
+            {
+				description = new TextObject("{=!}Claiming this title sets a legal precedence for you to legally own it, thus allowing it to be usurped. Claims last a lord's entire life until they are pressed.");
+				affirmativeText = new TextObject("{=!}Claim");
 			}
 			else
             {
-				description = new TextObject("{=!}Usurp this title from it's owner, making you the lawful ruler of this settlement. Usurping from lords within your kingdom degrades your clan's reputation.");
+				description = new TextObject("{=!}Press your claim and usurp this title from it's owner, making you the lawful ruler of this title. Usurping from lords within your kingdom degrades your clan's reputation.");
 				affirmativeText = new TextObject("{=!}Usurp");
 			}
 
@@ -95,7 +99,7 @@ namespace BannerKings.Utils
 			if (claimants != null && claimants.Count > 0)
 			{
 				TooltipAddEmptyLine(list, false);
-				list.Add(new TooltipProperty(new TextObject("{=!}Claimants", null).ToString(), " ", 0, false, TooltipProperty.TooltipPropertyFlags.None));
+				list.Add(new TooltipProperty(new TextObject("{=!}Possible Claimants", null).ToString(), " ", 0, false, TooltipProperty.TooltipPropertyFlags.None));
 				TooltipAddSeperator(list, false);
 				foreach (Hero claimant in claimants)
 					list.Add(new TooltipProperty(claimant.Name.ToString(), new TextObject("").ToString(), 0, false, TooltipProperty.TooltipPropertyFlags.None));
@@ -110,6 +114,8 @@ namespace BannerKings.Utils
 				return new TextObject("{=!}Usurp", null);
 			else if (type == ActionType.Revoke)
 				return new TextObject("{=!}Revoke", null);
+			else if (type == ActionType.Claim)
+				return new TextObject("{=!}Claim", null);
 			else return new TextObject("{=!}Grant", null);
 		}
 

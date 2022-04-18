@@ -37,6 +37,9 @@ namespace BannerKings.Managers.Titles
 
         [SaveableProperty(10)]
         public FeudalContract contract { get; private set; }
+        private Dictionary<Hero, ClaimType> claims { get; set; }
+
+        private Dictionary<Hero, CampaignTime> ongoingClaims {get; set;}
 
         public override bool Equals(object obj)
         {
@@ -59,9 +62,99 @@ namespace BannerKings.Managers.Titles
             this.shortName = new TextObject(name);
             this.contract = contract;
             dueTax = 0;
+            this.claims = new Dictionary<Hero, ClaimType>();
         }
 
         public void SetName(TextObject shortname) => this.shortName = shortname;
+
+        public Dictionary<Hero, ClaimType> Claims
+        {
+            get
+            {
+                if (this.claims == null) this.claims = new Dictionary<Hero, ClaimType>();
+                return this.claims;
+            }
+        }
+
+        public Dictionary<Hero, CampaignTime> OngoingClaims
+        {
+            get
+            {
+                if (this.ongoingClaims == null) this.ongoingClaims = new Dictionary<Hero, CampaignTime>();
+                return this.ongoingClaims;
+            }
+        }
+
+        public ClaimType GetHeroClaim(Hero hero)
+        {;
+
+            if (hero == null) return ClaimType.None;
+            if (this.Claims.ContainsKey(hero))
+                return this.Claims[hero];
+            else if (this.OngoingClaims.ContainsKey(hero))
+                return ClaimType.Ongoing;
+            else return ClaimType.None;
+        }
+
+        public void AddOngoingClaim(Hero hero)
+        {
+            if (hero == null) return;
+            if (!this.OngoingClaims.ContainsKey(hero))
+                this.OngoingClaims.Add(hero, CampaignTime.YearsFromNow(1));
+            
+        }
+
+        public void AddClaim(Hero hero, ClaimType type, bool force = false)
+        {
+            if (hero == null || type == ClaimType.None) return;
+
+            if (!force)
+            {
+                if (this.OngoingClaims.ContainsKey(hero))
+                {
+                    this.Claims.Add(hero, type);
+                    this.OngoingClaims.Remove(hero);
+                }
+            } else
+            {
+                this.Claims.Add(hero, type);
+                if (this.OngoingClaims.ContainsKey(hero))
+                    this.OngoingClaims.Remove(hero);
+            } 
+        }
+
+        public void RemoveClaim(Hero hero)
+        {
+            if (this.claims.ContainsKey(hero))
+                this.Claims.Remove(hero);
+        }
+
+        public void CleanClaims()
+        {
+            Hero currentDeFacto = this.DeFacto;
+            List<Hero> toRemove = new List<Hero>();
+            foreach (KeyValuePair<Hero, ClaimType> pair in this.Claims)
+            {
+                if (pair.Key.IsDead)
+                {
+                    toRemove.Add(pair.Key);
+                    continue;
+                }
+                if (pair.Value == ClaimType.DeFacto && pair.Key != currentDeFacto)
+                    toRemove.Add(pair.Key);
+            }
+                
+            foreach (Hero hero in toRemove)
+                this.Claims.Remove(hero);
+
+            toRemove.Clear();
+            foreach (Hero hero in this.OngoingClaims.Keys.ToList())
+                if (hero.IsDead)
+                    toRemove.Add(hero);
+
+            foreach (Hero hero in toRemove)
+                this.Claims.Remove(hero);
+        }
 
         public TextObject FullName
         {
@@ -166,5 +259,14 @@ namespace BannerKings.Managers.Titles
         County,
         Barony,
         Lordship
+    }
+
+    public enum ClaimType
+    {
+        Fabricated,
+        Previous_Owner,
+        DeFacto,
+        None,
+        Ongoing
     }
 }

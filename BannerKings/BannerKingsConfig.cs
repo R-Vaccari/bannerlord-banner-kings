@@ -11,6 +11,7 @@ using TaleWorlds.Library;
 using BannerKings.Managers.Populations.Villages;
 using BannerKings.Managers.Court;
 using BannerKings.Managers.Titles;
+using BannerKings.Models.BKModels;
 
 namespace BannerKings
 {

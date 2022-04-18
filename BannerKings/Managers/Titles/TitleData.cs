@@ -1,6 +1,7 @@
 ﻿using BannerKings.Populations;
+using System.Collections.Generic;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.SaveSystem;
-using static BannerKings.Managers.TitleManager;
 
 namespace BannerKings.Managers.Titles
 {
@@ -17,7 +18,14 @@ namespace BannerKings.Managers.Titles
         public FeudalTitle Title => this.title;
         internal override void Update(PopulationData data)
         {
+            this.title.CleanClaims();
+            Dictionary<Hero, ClaimType> toAdd = new Dictionary<Hero, ClaimType>();
+            foreach (KeyValuePair<Hero,CampaignTime> pair in this.title.OngoingClaims)
+                if (pair.Value.RemainingDaysFromNow <= 0)
+                    toAdd.Add(pair.Key, this.title.DeFacto == pair.Key ? ClaimType.DeFacto : ClaimType.Fabricated);
 
+            foreach (KeyValuePair<Hero, ClaimType> pair in toAdd)
+                this.title.AddClaim(pair.Key, pair.Value);
         }
     }
 }
