@@ -114,8 +114,13 @@ namespace BannerKings
                 static bool Prefix(Hero hero, int index, Settlement settlement, ref float __result)
                 {
 
-                    __result = new BKVolunteerModel().GetDraftEfficiency(hero, index, settlement).ResultNumber;
-                    return false;
+                    if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
+                    {
+                        __result = new BKVolunteerModel().GetDraftEfficiency(hero, index, settlement).ResultNumber;
+                        return false;
+                    }
+
+                    return true;
                 }
             }
         }

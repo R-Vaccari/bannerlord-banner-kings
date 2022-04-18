@@ -241,7 +241,7 @@ namespace BannerKings.Behaviors
 
         private void DailySettlementTick(Settlement settlement)
         {
-            if (settlement == null) return;
+            if (settlement == null || settlement.StringId.Contains("tutorial")) return;
             
             if (BannerKingsConfig.Instance.PopulationManager == null)
                 BannerKingsConfig.Instance.InitManagers();
