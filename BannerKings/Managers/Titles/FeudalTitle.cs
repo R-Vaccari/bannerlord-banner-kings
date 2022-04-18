@@ -37,9 +37,12 @@ namespace BannerKings.Managers.Titles
 
         [SaveableProperty(10)]
         public FeudalContract contract { get; private set; }
+
+        [SaveableProperty(11)]
         private Dictionary<Hero, ClaimType> claims { get; set; }
 
-        private Dictionary<Hero, CampaignTime> ongoingClaims {get; set;}
+        [SaveableProperty(12)]
+        private Dictionary<Hero, CampaignTime> ongoingClaims { get; set; }
 
         public override bool Equals(object obj)
         {

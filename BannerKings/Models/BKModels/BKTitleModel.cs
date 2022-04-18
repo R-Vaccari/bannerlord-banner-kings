@@ -28,7 +28,6 @@ namespace BannerKings.Models.BKModels
             claimAction.Gold = this.GetGoldUsurpCost(title) * 0.1f;
             claimAction.Influence = this.GetInfluenceUsurpCost(title) * 0.2f;
             claimAction.Renown = this.GetRenownUsurpCost(title) * 0.2f;
-
             List<Hero> possibleClaimants = this.GetClaimants(title);
 
             if (title.deJure == claimant)
@@ -45,7 +44,6 @@ namespace BannerKings.Models.BKModels
                 return claimAction;
             }
 
-
             ClaimType claimType = title.GetHeroClaim(claimant);
             if (claimType == ClaimType.Ongoing)
             {
@@ -57,6 +55,20 @@ namespace BannerKings.Models.BKModels
             {
                 claimAction.Possible = false;
                 claimAction.Reason = new TextObject("{=!}Already a claimant.");
+                return claimAction;
+            }
+
+            if (title.deJure.Clan == claimant.Clan)
+            {
+                claimAction.Possible = false;
+                claimAction.Reason = new TextObject("{=!}Owner is in same clan.");
+                return claimAction;
+            }
+
+            if (claimant.Gold < claimAction.Gold || claimant.Clan.Influence < claimAction.Influence)
+            {
+                claimAction.Possible = false;
+                claimAction.Reason = new TextObject("{=!}Missing required resources.");
                 return claimAction;
             }
 

@@ -98,6 +98,7 @@ namespace BannerKings
             base.AddClassDefinition(typeof(BKSettlementClaimantDecision), 61);
             base.AddClassDefinition(typeof(BKKingElectionDecision), 62);
             base.AddClassDefinition(typeof(TitleData), 63);
+            base.AddEnumDefinition(typeof(ClaimType), 64);
         }
 
         protected override void DefineContainerDefinitions()
@@ -117,6 +118,7 @@ namespace BannerKings
             base.ConstructContainerDefinition(typeof(List<FeudalRights>));
             base.ConstructContainerDefinition(typeof(Dictionary<Clan, CouncilData>));
             base.ConstructContainerDefinition(typeof(List<CouncilMember>));
+            base.ConstructContainerDefinition(typeof(Dictionary<Hero, ClaimType>));
 
         }
     }
