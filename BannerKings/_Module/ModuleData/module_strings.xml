@@ -37,8 +37,7 @@
 		
 		
 		<string id="str_feudalism_contract_header" text="{=feudalism_contract_header}Enfoeffement Contract for {0}" />
-		<string id="str_feudalism_contract_paragraph" text="{=str_feudalism_contract_paragraph}You, {0}, formally accept to be henceforth bound to the {1}, fulfill your duties as well as uphold your rights," +
-                " what can not be undone by means other than abdication of all rights and lands associated with the contract, treachery, or death." />
+		<string id="str_feudalism_contract_paragraph" text="{=str_feudalism_contract_paragraph}You, {0}, formally accept to be henceforth bound to the {1}, fulfill your duties as well as uphold your rights, what can not be undone by means other than abdication of all rights and lands associated with the contract, treachery, or death." />
 		<string id="str_feudalism_contract_duties" text="{=feudalism_contract_duties}Duties" />
 		<string id="str_feudalism_contract_rights" text="{=feudalism_contract_rights}Rights" />
 		
