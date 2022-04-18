@@ -1,5 +1,6 @@
 ﻿using BannerKings.Managers.Court;
 using BannerKings.Managers.Policies;
+using BannerKings.Managers.Titles;
 using BannerKings.Populations;
 using CalradiaExpandedKingdoms.Models;
 using TaleWorlds.CampaignSystem;

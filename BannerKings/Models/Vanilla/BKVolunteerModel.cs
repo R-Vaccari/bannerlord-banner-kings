@@ -10,13 +10,11 @@ using BannerKings.Managers.Court;
 using TaleWorlds.Core;
 using BannerKings.Managers.Policies;
 using static BannerKings.Managers.Policies.BKDraftPolicy;
-using static BannerKings.Managers.TitleManager;
-using System.Collections.Generic;
-using CalradiaExpandedKingdoms;
+using BannerKings.Managers.Titles;
 
 namespace BannerKings.Models.Vanilla
 {
-    class BKVolunteerModel : DefaultVolunteerProductionModel
+    class BKVolunteerModel : CalradiaExpandedKingdoms.Models.CEKVolunteerProductionModel
     {
 
         public override bool CanHaveRecruits(Hero hero)
@@ -40,7 +38,9 @@ namespace BannerKings.Models.Vanilla
         public override CharacterObject GetBasicVolunteer(Hero sellerHero)
         {
             Settlement settlement = sellerHero.CurrentSettlement;
-            if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
+            CharacterObject result = base.GetBasicVolunteer(sellerHero);
+            if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement)
+                && result == sellerHero.Culture.BasicTroop)
             {
                 PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
                 float power = sellerHero.Power;
@@ -48,57 +48,9 @@ namespace BannerKings.Models.Vanilla
                 float random = MBRandom.RandomFloatRanged(1f, 100f);
                 if (data.MilitaryData.NobleManpower > 0 && chance >= random)
                     return sellerHero.Culture.EliteBasicTroop;
-                else
-                {
-                    CharacterObject recruit = base.GetBasicVolunteer(sellerHero);
-
-                    if (sellerHero.CurrentSettlement == null)
-                        return recruit;
-                    
-                    CultureObject cultureObject = sellerHero.CurrentSettlement.Culture;
-
-                    int randNum = MBRandom.RandomInt(1, 100);
-                    List<RecruitData> recruits = new List<RecruitData>();
-                    recruits = RecruitManager.instance.Recruits.Where(x => x.culture == cultureObject).ToList();
-
-                    if (recruits.Count > 0)
-                    {
-                        int chance2 = 0;
-                        foreach (RecruitData recruitData in recruits)
-                        {
-                            chance2 = chance2 + recruitData.chance;
-                            if (recruitData.faction != null)
-                            {
-                                if (recruitData.faction == settlement.OwnerClan.MapFaction)
-                                {
-                                    if (randNum <= chance2)
-                                    {
-                                        recruit = recruitData.character;
-                                        break;
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                if (randNum <= chance2)
-                                {
-                                    recruit = recruitData.character;
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
+                else return sellerHero.Culture.BasicTroop;
             }
-            return base.GetBasicVolunteer(sellerHero);
-        }
-
-        public override float GetDailyVolunteerProductionProbability(Hero hero, int index, Settlement settlement)
-        {
-            if (BannerKingsConfig.Instance.PopulationManager != null)
-                return this.GetDraftEfficiency(hero, index, settlement).ResultNumber;
-            else 
-                return base.GetDailyVolunteerProductionProbability(hero, index, settlement);
+            return result;
         }
 
         public ExplainedNumber GetDraftEfficiency(Hero hero, int index, Settlement settlement)
@@ -134,9 +86,6 @@ namespace BannerKings.Models.Vanilla
                 if (government == GovernmentType.Tribal)
                     explainedNumber.AddFactor(0.2f, new TextObject("{=!}Government"));
 
-                if (hero.Culture.HasFeat(CalradiaExpandedKingdoms.Feats.CEKFeats.PaleicianPositiveFeatThree))
-                    explainedNumber.AddFactor(CalradiaExpandedKingdoms.Feats.CEKFeats.PaleicianPositiveFeatThree.EffectBonus);
-                
                 return explainedNumber;
             }
             return new ExplainedNumber(0f);

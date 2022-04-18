@@ -1,4 +1,5 @@
-﻿using TaleWorlds.CampaignSystem;
+﻿using BannerKings.Managers.Titles;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
@@ -18,7 +19,7 @@ namespace BannerKings.Managers.Duties
         [SaveableProperty(6)]
         private int ArmyHours { get; set; }
 
-        public AuxiliumDuty(CampaignTime dueTime, MobileParty leader, float completion) : base(dueTime, TitleManager.FeudalDuties.Auxilium, completion)
+        public AuxiliumDuty(CampaignTime dueTime, MobileParty leader, float completion) : base(dueTime, FeudalDuties.Auxilium, completion)
         {
             this.Party = leader;
             RunnedHours = 0;

@@ -1,4 +1,5 @@
-﻿using Helpers;
+﻿using BannerKings.Managers.Titles;
+using Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;

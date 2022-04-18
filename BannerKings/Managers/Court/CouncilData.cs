@@ -6,6 +6,7 @@ using TaleWorlds.Library;
 using static BannerKings.Managers.TitleManager;
 using BannerKings.Populations;
 using TaleWorlds.SaveSystem;
+using BannerKings.Managers.Titles;
 
 namespace BannerKings.Managers.Court
 {

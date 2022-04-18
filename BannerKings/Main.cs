@@ -11,7 +11,6 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.MountAndBlade;
-using static BannerKings.Managers.TitleManager;
 using static BannerKings.Managers.PopulationManager;
 using TaleWorlds.CampaignSystem.SandBox.CampaignBehaviors;
 using System.Reflection;
@@ -23,6 +22,9 @@ using BannerKings.Models.Vanilla;
 using BannerKings.Behaviours;
 using TaleWorlds.CampaignSystem.Election;
 using TaleWorlds.CampaignSystem.SandBox.GameComponents;
+using BannerKings.Managers.Titles;
+using static TaleWorlds.CampaignSystem.SandBox.Issues.CaravanAmbushIssueBehavior;
+using static TaleWorlds.CampaignSystem.SandBox.Issues.LandLordNeedsManualLaborersIssueBehavior;
 
 namespace BannerKings
 {
@@ -104,6 +106,90 @@ namespace BannerKings
                         PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
                         data.MilitaryData.DeduceManpower(data, number, troop);
                     }
+                }
+            }
+        }
+
+        namespace Fixes
+        {
+            // Fix crash on wanderer same gender child born
+            [HarmonyPatch(typeof(NameGenerator), "GenerateHeroFullName")]
+            class NameGeneratorPatch
+            {
+                static bool Prefix(ref TextObject __result, Hero hero, TextObject heroFirstName, bool useDeterministicValues = true)
+                {
+
+                    Hero parent = hero.IsFemale ? hero.Mother : hero.Father;
+                    if (parent == null) return true;
+                    if (BannerKingsConfig.Instance.TitleManager.IsHeroKnighted(parent) && hero.IsWanderer)
+                    {
+                        TextObject textObject = heroFirstName;
+                        textObject.SetTextVariable("FEMALE", hero.IsFemale ? 1 : 0);
+                        textObject.SetTextVariable("IMPERIAL", (hero.Culture.StringId == "empire") ? 1 : 0);
+                        textObject.SetTextVariable("COASTAL", (hero.Culture.StringId == "empire" || hero.Culture.StringId == "vlandia") ? 1 : 0);
+                        textObject.SetTextVariable("NORTHERN", (hero.Culture.StringId == "battania" || hero.Culture.StringId == "sturgia") ? 1 : 0);
+                        textObject.SetCharacterProperties("HERO", hero.CharacterObject, false);
+                        textObject.SetTextVariable("FIRSTNAME", heroFirstName);
+                        __result = textObject;
+                        return false;
+                    }
+                    return true;
+                }
+            }
+
+
+            [HarmonyPatch(typeof(Hero), "CanHaveQuestsOrIssues")]
+            class CanHaveQuestsOrIssuesPatch
+            {
+                static bool Prefix(Hero __instance, ref bool __result)
+                {
+                    if (__instance.Issue != null)
+                        return false;
+
+                    bool result = __instance.IsActive && __instance.IsAlive;
+                    CampaignEventDispatcher.Instance.CanHaveQuestsOrIssues(__instance, ref result);
+
+                    return false;
+                }
+            }
+
+
+            [HarmonyPatch(typeof(CaravanAmbushIssue), "IssueStayAliveConditions")]
+            class CaravanIssueStayAliveConditionsPatch
+            {
+                static bool Prefix(CaravanAmbushIssue __instance, ref bool __result)
+                {
+                    if (__instance.IssueOwner != null)
+                        if (__instance.IssueOwner.OwnedCaravans == null || __instance.IssueOwner.MapFaction == null)
+                        {
+                            __result = false;
+                            return false;
+                        }
+
+                    return true;
+                }
+            }
+
+            [HarmonyPatch(typeof(LandLordNeedsManualLaborersIssue), "IssueStayAliveConditions")]
+            class LaborersIssueStayAliveConditionsPatch
+            {
+                static bool Prefix(LandLordNeedsManualLaborersIssue __instance, ref bool __result)
+                {
+                    if (__instance.IssueOwner != null)
+                    {
+                        if (__instance.IssueOwner.CurrentSettlement == null || !__instance.IssueOwner.CurrentSettlement.IsVillage)
+                        {
+                            __result = false;
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        __result = false;
+                        return false;
+                    }
+
+                    return true;
                 }
             }
         }

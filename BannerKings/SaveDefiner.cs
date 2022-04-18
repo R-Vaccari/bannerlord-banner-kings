@@ -9,6 +9,7 @@ using BannerKings.Managers.Policies;
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Tournament;
 using BannerKings.Managers.Populations.Villages;
+using BannerKings.Managers.Titles;
 using BannerKings.Populations;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
@@ -96,6 +97,7 @@ namespace BannerKings
             base.AddClassDefinition(typeof(RepublicElectionDecision), 60);
             base.AddClassDefinition(typeof(BKSettlementClaimantDecision), 61);
             base.AddClassDefinition(typeof(BKKingElectionDecision), 62);
+            base.AddClassDefinition(typeof(TitleData), 63);
         }
 
         protected override void DefineContainerDefinitions()

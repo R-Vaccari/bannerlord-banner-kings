@@ -1,5 +1,6 @@
 ﻿using BannerKings.Managers.Helpers;
 using BannerKings.Managers.Populations.Villages;
+using BannerKings.Managers.Titles;
 using BannerKings.Populations;
 using BannerKings.UI.Windows;
 using HarmonyLib;

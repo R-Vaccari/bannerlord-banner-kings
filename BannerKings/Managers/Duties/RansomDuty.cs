@@ -1,4 +1,5 @@
 ﻿using BannerKings.Behaviours;
+using BannerKings.Managers.Titles;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.Core;
@@ -13,7 +14,7 @@ namespace BannerKings.Managers.Duties
         [SaveableProperty(4)]
         public Hero DebtOwner { get; private set; }
 
-        public RansomDuty(CampaignTime dueTime, Hero owner, float completion) : base(dueTime, TitleManager.FeudalDuties.Ransom, completion)
+        public RansomDuty(CampaignTime dueTime, Hero owner, float completion) : base(dueTime, FeudalDuties.Ransom, completion)
         {
             this.DebtOwner = owner;
         }

@@ -13,6 +13,7 @@ using TaleWorlds.CampaignSystem.ViewModelCollection;
 using TaleWorlds.CampaignSystem.ViewModelCollection.ClanManagement.Categories;
 using SandBox;
 using System.Linq;
+using BannerKings.Managers.Titles;
 
 namespace BannerKings.Behaviors
 {

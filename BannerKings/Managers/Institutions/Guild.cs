@@ -4,6 +4,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using System.Linq;
 using TaleWorlds.Library;
+using TaleWorlds.CampaignSystem.Actions;
 
 namespace BannerKings.Managers.Institutions
 {
@@ -22,7 +23,10 @@ namespace BannerKings.Managers.Institutions
             this.productions = productions;
         }
 
-    
+        public override void Destroy()
+        {
+            KillCharacterAction.ApplyByRemove(this.leader);
+        }
 
         public int Capital => this.capital;
         public MBReadOnlyList<Hero> Members => new MBReadOnlyList<Hero>(this.members);

@@ -7,12 +7,11 @@ using static BannerKings.Managers.Policies.BKMilitiaPolicy;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Populations.Villages;
 using BannerKings.Managers.Court;
-using static BannerKings.Managers.TitleManager;
-using TaleWorlds.Core;
+using BannerKings.Managers.Titles;
 
 namespace BannerKings.Models
 {
-    public class BKMilitiaModel : DefaultSettlementMilitiaModel
+    public class BKMilitiaModel : CalradiaExpandedKingdoms.Models.CEKSettlementMilitiaModel
     {
         public override void CalculateMilitiaSpawnRate(Settlement settlement, out float meleeTroopRate, out float rangedTroopRate)
         {
@@ -54,28 +53,6 @@ namespace BannerKings.Models
                     float trainning = villageData.GetBuildingLevel(DefaultVillageBuildings.Instance.TrainningGrounds);
                     if (trainning > 0)
                         baseResult.Add(trainning == 1 ? 0.2f : (trainning == 2 ? 0.5f : 1f), new TextObject("{=BkTiRPT4}Training Fields"));
-                }
-
-                if (settlement.OwnerClan != null)
-                {
-                    if (settlement.OwnerClan.Leader != null)
-                    {
-                        if (settlement.OwnerClan.Leader.Culture.HasFeat(CalradiaExpandedKingdoms.Feats.CEKFeats.RhodokPositiveFeatTwo))
-                            baseResult.Add(1f, GameTexts.FindText("str_culture", null));
-                        
-                        if (settlement.OwnerClan.Leader.Culture.HasFeat(CalradiaExpandedKingdoms.Feats.CEKFeats.KhuzaitNegativeFeatTwo))
-                            baseResult.Add(CalradiaExpandedKingdoms.Feats.CEKFeats.KhuzaitNegativeFeatTwo.EffectBonus, GameTexts.FindText("str_culture", null));
-                        
-                        if (settlement.OwnerClan.Leader.Culture.HasFeat(CalradiaExpandedKingdoms.Feats.CEKFeats.VagirPositiveFeatThree))
-                            baseResult.Add(1f, GameTexts.FindText("str_culture", null));
-                        
-                        if (settlement.OwnerClan.Leader.Culture.HasFeat(CalradiaExpandedKingdoms.Feats.CEKFeats.PaleicianPositiveFeatThree))
-                            baseResult.Add(0.5f, GameTexts.FindText("str_culture", null));
-                        
-                        if (settlement.OwnerClan.Leader.Culture.HasFeat(CalradiaExpandedKingdoms.Feats.CEKFeats.ApolssalianPositiveFeatThree))
-                            if (settlement.OwnerClan.Culture == settlement.Culture)
-                                baseResult.Add(CalradiaExpandedKingdoms.Feats.CEKFeats.ApolssalianPositiveFeatThree.EffectBonus, GameTexts.FindText("str_culture", null));
-                    }
                 }
 
                 BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref baseResult, settlement.OwnerClan.Leader, CouncilPosition.Marshall, 1f, false);

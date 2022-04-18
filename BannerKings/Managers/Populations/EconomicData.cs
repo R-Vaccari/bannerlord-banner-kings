@@ -28,7 +28,7 @@ namespace BannerKings.Managers.Populations
             Guild guild = null)
         {
             this.settlement = settlement;
-            this.guild = new Guild(settlement, Managers.Institutions.GuildType.Merchants, null);
+            this.guild = guild;
             this.satisfactions = new float[] { 0.5f, 0.5f, 0.5f, 0.5f };
             this.stateSlaves = MBRandom.RandomFloatRanged(0.4f, 0.6f);
         }
@@ -52,7 +52,11 @@ namespace BannerKings.Managers.Populations
 
         internal override void Update(PopulationData data)
         {
-
+            if (this.guild != null)
+            {
+                this.guild.Destroy();
+                this.guild = null;
+            }
         }
 
         public ExplainedNumber AdministrativeCost => BannerKingsConfig.Instance.Models

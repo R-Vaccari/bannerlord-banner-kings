@@ -13,6 +13,7 @@ using BannerKings.Managers.Institutions;
 using BannerKings.Managers.Populations.Villages;
 using BannerKings.Managers.Populations;
 using static BannerKings.Managers.Policies.BKWorkforcePolicy;
+using BannerKings.Managers.Titles;
 
 namespace BannerKings.Populations
 {
@@ -45,7 +46,10 @@ namespace BannerKings.Populations
         [SaveableProperty(9)]
         private TournamentData tournamentData { get; set; }
 
-        
+        [SaveableProperty(10)]
+        private TitleData titleData { get; set; }
+
+
 
         public PopulationData(List<PopulationClass> classes, Settlement settlement, float assimilation, List<CultureDataClass> cultures = null, Guild guild = null)
         {
@@ -79,6 +83,18 @@ namespace BannerKings.Populations
             get => this.tournamentData;
             set => this.tournamentData = value;
         }
+
+        public TitleData TitleData
+        {
+            get
+            {
+                if (this.titleData == null)
+                    titleData = new TitleData(BannerKingsConfig.Instance.TitleManager.GetTitle(this.settlement));
+
+                return titleData;
+            }
+        }
+
         public VillageData VillageData => this.villageData;
 
         public ExplainedNumber Foreigner => new BKForeignerModel().CalculateEffect(this.settlement);
@@ -222,6 +238,8 @@ namespace BannerKings.Populations
             landData.Update(this);
             if (villageData != null) villageData.Update(this);
             if (tournamentData != null) tournamentData.Update(this);
+            if (titleData == null) titleData = new TitleData(BannerKingsConfig.Instance.TitleManager.GetTitle(this.settlement));
+            titleData.Update(this);
         }
     }
 

@@ -25,6 +25,8 @@ namespace BannerKings.Managers.Institutions
             }
         }
 
+        public abstract void Destroy();
+
         public float Influence => this.influence;
 
         public abstract Hero GenerateLeader();

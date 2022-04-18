@@ -4,10 +4,10 @@ using System.Linq;
 using TaleWorlds.Core;
 using TaleWorlds.Core.ViewModelCollection;
 using TaleWorlds.Library;
-using static BannerKings.Managers.TitleManager;
 using BannerKings.Models;
 using TaleWorlds.Localization;
 using System.Collections.Generic;
+using BannerKings.Managers.Titles;
 
 namespace BannerKings.UI.Items
 {
@@ -34,50 +34,48 @@ namespace BannerKings.UI.Items
 			if (title != null)
 			{
 				BKTitleModel model = (BannerKingsConfig.Instance.Models.First(x => x is BKTitleModel) as BKTitleModel);
-				UsurpData usurpData = model.IsUsurpable(title, Hero.MainHero);
+				TitleAction usurpData = model.GetAction(ActionType.Usurp, title, Hero.MainHero);
 				List<Hero> claimants = model.GetClaimants(title);
 
 				CharacterCode characterCode = CharacterCode.CreateFrom(title.deJure.CharacterObject);
 				this.ImageIdentifier = new ImageIdentifierVM(characterCode);
-				this.Hint = new BasicTooltipViewModel(() => UIHelper.GetHeroCourtTooltip(title.deJure, usurpData, claimants));
-				
+
+				List<TitleAction> actions = new List<TitleAction>();
+				actions.Add(usurpData);
 				if (claimants.Contains(Hero.MainHero))
 				{
-
-					TextObject sb = new TextObject("{=!}Usurp this title from it's owner, making you the lawful ruler of this settlement. Usurping from lords within your kingdom degrades your clan's reputation.");
 					DecisionElement usurpButton = new DecisionElement().SetAsButtonOption(new TextObject("{=!}Usurp").ToString(),
-						delegate 
-						{
-							if (usurpData.Usurpable)
-							{
-								BannerKingsConfig.Instance.TitleManager.UsurpTitle(title.deJure, Hero.MainHero, title, usurpData);
-								RefreshValues();
-							}	
-						},
-						new TextObject(sb.ToString()));
-					usurpButton.Enabled = usurpData.Usurpable;
+						() => UIHelper.ShowTitleActionPopup(usurpData, this));
+
+				
+					usurpButton.Enabled = usurpData.Possible;
 					this.Decisions.Add(usurpButton);
+				} 
+
+				TitleAction grantData = model.GetAction(ActionType.Grant, title, Hero.MainHero);
+				actions.Add(grantData);
+				if (grantData.Possible)
+                {
+					DecisionElement grantButton = new DecisionElement().SetAsButtonOption(new TextObject("{=!}Grant").ToString(),
+						() => UIHelper.ShowTitleActionPopup(grantData, this));
+					grantButton.Enabled = grantData.Possible;
+					this.Decisions.Add(grantButton);
 				}
+
+				TitleAction revokeData = model.GetAction(ActionType.Revoke, title, Hero.MainHero);
+				actions.Add(revokeData);
+				if (revokeData.Possible)
+				{
+					DecisionElement revokeButton = new DecisionElement().SetAsButtonOption(new TextObject("{=!}Revoke").ToString(),
+						() => UIHelper.ShowTitleActionPopup(revokeData, this));
+					revokeButton.Enabled = revokeData.Possible;
+					this.Decisions.Add(revokeButton);
+				}
+				
+
+				this.Hint = new BasicTooltipViewModel(() => UIHelper.GetTitleTooltip(title.deJure, actions, claimants));
 			}
 		}
-
-		private bool EvaluateShowUsurp()
-        {
-			if (title.deJure == Hero.MainHero) return false;
-			else if (title.DeFacto == Hero.MainHero) return true;
-			else
-            {
-				bool result = false;
-				if (title.vassals != null && title.vassals.Count > 0)
-					foreach (FeudalTitle vassal in title.vassals)
-						if (vassal.deJure == Hero.MainHero)
-                        {
-							result = true;
-							break;
-                        }
-				return result;
-            }
-        }
 
 		public void ExecuteLink()
 		{

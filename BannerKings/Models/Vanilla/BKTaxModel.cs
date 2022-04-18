@@ -1,8 +1,8 @@
 ﻿using BannerKings.Managers.Policies;
+using BannerKings.Managers.Titles;
 using BannerKings.Populations;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
-using TaleWorlds.CampaignSystem.SandBox.GameComponents;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 using static BannerKings.Managers.Policies.BKTaxPolicy;
@@ -10,7 +10,7 @@ using static BannerKings.Managers.PopulationManager;
 
 namespace BannerKings.Models
 {
-    class BKTaxModel : DefaultSettlementTaxModel
+    class BKTaxModel : CalradiaExpandedKingdoms.Models.CEKSettlementTaxModel
     {
         public static readonly float NOBLE_OUTPUT = 2f;
         public static readonly float CRAFTSMEN_OUTPUT = 0.75f;
@@ -39,6 +39,7 @@ namespace BannerKings.Models
 
                 float admCost = new BKAdministrativeModel().CalculateEffect(town.Settlement).ResultNumber;
                 baseResult.AddFactor(admCost * -1f, new TextObject("Administrative costs"));
+                CalculateDueTax(data, baseResult.ResultNumber);
             }
 
             return baseResult;
@@ -65,10 +66,23 @@ namespace BannerKings.Models
                 {
                     float admCost = new BKAdministrativeModel().CalculateEffect(village.Settlement).ResultNumber;
                     baseResult *= 1f - admCost;
-                }  
+                }
+
+                CalculateDueTax(BannerKingsConfig.Instance.PopulationManager.GetPopData(village.Settlement), (float)baseResult);
             }
 
             return (int)baseResult;
+        }
+
+        private void CalculateDueTax(PopulationData data, float result)
+        {
+            TitleData titleData = data.TitleData;
+            FeudalContract contract = titleData.Title.contract;
+            if (contract != null && contract.Duties.ContainsKey(FeudalDuties.Taxation))
+            {
+                float factor = contract.Duties[FeudalDuties.Taxation];
+                titleData.Title.dueTax = result * factor;
+            }
         }
 
         public override float GetTownCommissionChangeBasedOnSecurity(Town town, float commission)

@@ -1,6 +1,6 @@
-﻿
-using BannerKings.Managers.Court;
+﻿using BannerKings.Managers.Court;
 using BannerKings.Managers.Policies;
+using BannerKings.Managers.Titles;
 using BannerKings.Populations;
 using CalradiaExpandedKingdoms.Models;
 using Helpers;
@@ -12,7 +12,6 @@ using TaleWorlds.Localization;
 using static BannerKings.Managers.Policies.BKCriminalPolicy;
 using static BannerKings.Managers.Policies.BKTaxPolicy;
 using static BannerKings.Managers.PopulationManager;
-using static BannerKings.Managers.TitleManager;
 
 namespace BannerKings.Models
 {

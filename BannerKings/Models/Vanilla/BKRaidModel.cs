@@ -1,17 +1,15 @@
 ﻿using BannerKings.Managers.Populations.Villages;
 using BannerKings.Populations;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.SandBox.GameComponents;
 
 namespace BannerKings.Models.Vanilla
 {
-    class BKRaidModel : DefaultRaidModel
+    class BKRaidModel : CalradiaExpandedKingdoms.Models.CEKRaidModel
     {
 
         public override float CalculateHitDamage(MapEventSide attackerSide, float settlementHitPoints)
         {
             float result = base.CalculateHitDamage(attackerSide, settlementHitPoints);
-
             MapEventSide defender = attackerSide.MapEvent.DefenderSide;
 
             Settlement settlement = null;
@@ -26,10 +24,6 @@ namespace BannerKings.Models.Vanilla
                     if (palisade > 0)
                         result *= (1f - (0.12f * palisade));
                 }
-
-            if (attackerSide.LeaderParty.LeaderHero != null)
-                if (attackerSide.LeaderParty.LeaderHero.Culture.HasFeat(CalradiaExpandedKingdoms.Feats.CEKFeats.NordlingPositiveFeatOne))
-                    result *= CalradiaExpandedKingdoms.Feats.CEKFeats.NordlingPositiveFeatOne.EffectBonus;
 
             return result;
         }

@@ -1,4 +1,5 @@
-﻿using TaleWorlds.CampaignSystem;
+﻿using BannerKings.Managers.Titles;
+using TaleWorlds.CampaignSystem;
 using static BannerKings.Managers.TitleManager;
 
 namespace BannerKings.Models
