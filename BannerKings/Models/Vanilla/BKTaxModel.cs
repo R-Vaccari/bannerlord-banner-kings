@@ -8,7 +8,6 @@ using TaleWorlds.Core;
 using TaleWorlds.Localization;
 using static BannerKings.Managers.Policies.BKTaxPolicy;
 using static BannerKings.Managers.PopulationManager;
-using static BannerKings.Managers.TitleManager;
 
 namespace BannerKings.Models
 {
@@ -61,9 +60,11 @@ namespace BannerKings.Models
                     baseResult = 0;
                     int random = MBRandom.RandomInt(1, 100);
                     if (random <= 33 && village.Settlement.Notables != null)
-                        ChangeRelationAction.ApplyPlayerRelation(village.Settlement.Notables.GetRandomElement(), 1);
+                    {
+                        Hero notable = village.Settlement.Notables.GetRandomElement();
+                        if (notable != null) ChangeRelationAction.ApplyRelationChangeBetweenHeroes(village.Settlement.Owner, notable, 1);
+                    }
                 }
-
                 if (baseResult > 0)
                 {
                     float admCost = new BKAdministrativeModel().CalculateEffect(village.Settlement).ResultNumber;
@@ -79,6 +80,7 @@ namespace BannerKings.Models
         private void CalculateDueTax(PopulationData data, float result)
         {
             TitleData titleData = data.TitleData;
+            if (titleData == null) return;
             FeudalContract contract = titleData.Title.contract;
             if (contract != null && contract.Duties.ContainsKey(FeudalDuties.Taxation))
             {

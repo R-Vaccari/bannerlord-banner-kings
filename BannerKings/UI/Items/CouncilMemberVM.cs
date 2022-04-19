@@ -1,5 +1,4 @@
 ﻿using BannerKings.Managers.Court;
-using BannerKings.Utils;
 using System;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.ViewModelCollection.GameMenu.TownManagement;

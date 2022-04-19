@@ -12,7 +12,7 @@ using TaleWorlds.CampaignSystem.ViewModelCollection;
 using TaleWorlds.Library;
 using BannerKings.Models.BKModels;
 
-namespace BannerKings.Utils
+namespace BannerKings.UI
 {
     public static class UIHelper
     {
@@ -49,7 +49,7 @@ namespace BannerKings.Utils
 				affirmativeText = new TextObject("{=!}Revoke");
 			} else if (action.Type == ActionType.Claim)
             {
-				description = new TextObject("{=!}Claiming this title sets a legal precedence for you to legally own it, thus allowing it to be usurped. Claims last a lord's entire life until they are pressed.");
+				description = new TextObject("{=!}Claiming this title sets a legal precedence for you to legally own it, thus allowing it to be usurped. A claim takes 1 year to build. Claims last until they are pressed or until it's owner dies.");
 				affirmativeText = new TextObject("{=!}Claim");
 			}
 			else
@@ -58,7 +58,7 @@ namespace BannerKings.Utils
 				affirmativeText = new TextObject("{=!}Usurp");
 			}
 
-			InformationManager.ShowInquiry(new TaleWorlds.Library.InquiryData("", description.ToString(),
+			InformationManager.ShowInquiry(new InquiryData("", description.ToString(),
 				true, true, affirmativeText.ToString(), "Cancel", delegate 
 				{ 
 					action.TakeAction(receiver);
@@ -66,8 +66,9 @@ namespace BannerKings.Utils
 				}, null, string.Empty));
 		}
 
-		public static List<TooltipProperty> GetTitleTooltip(Hero hero, List<TitleAction> actions, List<Hero> claimants)
+		public static List<TooltipProperty> GetTitleTooltip(FeudalTitle title, List<TitleAction> actions)
 		{
+			Hero hero = title.deJure;
 			List<TooltipProperty> list = new List<TooltipProperty>
 			{
 				new TooltipProperty("", hero.Name.ToString(), 0, false, TooltipProperty.TooltipPropertyFlags.Title)
@@ -89,13 +90,30 @@ namespace BannerKings.Utils
 				TooltipAddEmptyLine(list, false);
 				list.Add(new TooltipProperty(new TextObject("{=!}Titles", null).ToString(), " ", 0, false, TooltipProperty.TooltipPropertyFlags.None));
 				TooltipAddSeperator(list, false);
-				foreach (FeudalTitle title in titles)
-					list.Add(new TooltipProperty(title.FullName.ToString(), GetOwnership(hero, title), 0, false, TooltipProperty.TooltipPropertyFlags.None));
+				foreach (FeudalTitle t in titles)
+					list.Add(new TooltipProperty(t.FullName.ToString(), GetOwnership(hero, t), 0, false, TooltipProperty.TooltipPropertyFlags.None));
 			}
 
 			foreach (TitleAction action in actions)
 				AddActionHint(ref list, action);
 
+			if (title.OngoingClaims.Count() + title.Claims.Count() > 0)
+            {
+				TooltipAddEmptyLine(list, false);
+				list.Add(new TooltipProperty(new TextObject("{=!}Claimants", null).ToString(), " ", 0, false, TooltipProperty.TooltipPropertyFlags.None));
+				TooltipAddSeperator(list, false);
+				foreach (KeyValuePair<Hero, CampaignTime> pair in title.OngoingClaims)
+					list.Add(new TooltipProperty(pair.Key.Name.ToString(), new TextObject("{=!}{DAYS} days left to build claim.")
+						.SetTextVariable("DAYS", pair.Value.RemainingDaysFromNow)
+						.ToString(), 0, false, TooltipProperty.TooltipPropertyFlags.None));
+
+				foreach (KeyValuePair<Hero, ClaimType> pair in title.Claims)
+					list.Add(new TooltipProperty(pair.Key.Name.ToString(), GetClaimText(pair.Value).ToString(), 
+						0, false, TooltipProperty.TooltipPropertyFlags.None));
+			}
+
+
+			List<Hero> claimants = (BannerKingsConfig.Instance.Models.First(x => x is BKTitleModel) as BKTitleModel).GetClaimants(title);
 			if (claimants != null && claimants.Count > 0)
 			{
 				TooltipAddEmptyLine(list, false);
@@ -107,6 +125,13 @@ namespace BannerKings.Utils
 
 			return list;
 		}
+
+		private static TextObject GetClaimText(ClaimType type)
+        {
+			if (type == ClaimType.Previous_Owner)
+				return new TextObject("{=!}Previous title owner");
+			else return new TextObject("{=!}Fabricated claim");
+        }
 
 		private static TextObject GetActionText(ActionType type)
         {

@@ -31,21 +31,26 @@ namespace BannerKings.Managers.Titles
                 this.title.AddClaim(pair.Key, pair.Value);
 
             Hero owner = data.Settlement.Owner;
+            
             if (owner != Hero.MainHero && owner != title.deJure)
             {
                 float random = MBRandom.RandomFloatRanged(0f, 1f);
                 if (random >= 0.2f) return;
                 
                 BKTitleModel model = BannerKingsConfig.Instance.Models.First(x => x is BKTitleModel) as BKTitleModel;
+                int honor = owner.GetTraitLevel(DefaultTraits.Honor);
+                if (owner.IsFriend(title.deJure) && honor >= -1) return;
+                
                 TitleAction claimAction = model.GetAction(ActionType.Claim, this.title, owner);
                 if (claimAction.Possible)
                 {
-                    if (owner.GetTraitLevel(DefaultTraits.Honor) > 1)
-                    {
-                        Kingdom kingdom = owner.Clan.Kingdom;
-                        if (kingdom == null || kingdom != this.title.deJure.Clan.Kingdom)
-                            claimAction.TakeAction(null);
-                    } else claimAction.TakeAction(null);
+                    bool differentKingdoms = owner.Clan.Kingdom == null || owner.Clan.Kingdom != this.title.deJure.Clan.Kingdom;
+                    bool knight = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(title.deJure).Count() == 1;
+
+                    if (differentKingdoms)
+                        claimAction.TakeAction(null);
+                    else if (!knight && honor < -1)
+                        claimAction.TakeAction(null);
                 }
                 else
                 {

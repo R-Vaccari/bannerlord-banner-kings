@@ -21,7 +21,6 @@ using static BannerKings.Managers.Policies.BKMilitiaPolicy;
 using static BannerKings.Managers.Policies.BKTaxPolicy;
 using static BannerKings.Managers.Policies.BKWorkforcePolicy;
 using static BannerKings.Managers.PopulationManager;
-using static BannerKings.Managers.TitleManager;
 
 namespace BannerKings
 {
@@ -119,7 +118,6 @@ namespace BannerKings
             base.ConstructContainerDefinition(typeof(Dictionary<Clan, CouncilData>));
             base.ConstructContainerDefinition(typeof(List<CouncilMember>));
             base.ConstructContainerDefinition(typeof(Dictionary<Hero, ClaimType>));
-
         }
     }
 }

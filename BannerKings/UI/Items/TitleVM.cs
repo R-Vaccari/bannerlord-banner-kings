@@ -1,10 +1,8 @@
-﻿using BannerKings.Utils;
-using TaleWorlds.CampaignSystem;
+﻿using TaleWorlds.CampaignSystem;
 using System.Linq;
 using TaleWorlds.Core;
 using TaleWorlds.Core.ViewModelCollection;
 using TaleWorlds.Library;
-using BannerKings.Models;
 using TaleWorlds.Localization;
 using System.Collections.Generic;
 using BannerKings.Managers.Titles;
@@ -36,8 +34,6 @@ namespace BannerKings.UI.Items
 			{
 				BKTitleModel model = (BannerKingsConfig.Instance.Models.First(x => x is BKTitleModel) as BKTitleModel);
 				TitleAction usurpData = model.GetAction(ActionType.Usurp, title, Hero.MainHero);
-				List<Hero> claimants = model.GetClaimants(title);
-
 				CharacterCode characterCode = CharacterCode.CreateFrom(title.deJure.CharacterObject);
 				this.ImageIdentifier = new ImageIdentifierVM(characterCode);
 
@@ -47,8 +43,6 @@ namespace BannerKings.UI.Items
 				{
 					DecisionElement usurpButton = new DecisionElement().SetAsButtonOption(new TextObject("{=!}Usurp").ToString(),
 						() => UIHelper.ShowTitleActionPopup(usurpData, this));
-
-				
 					usurpButton.Enabled = usurpData.Possible;
 					this.Decisions.Add(usurpButton);
 				}
@@ -84,7 +78,7 @@ namespace BannerKings.UI.Items
 				}
 				
 
-				this.Hint = new BasicTooltipViewModel(() => UIHelper.GetTitleTooltip(title.deJure, actions, claimants));
+				this.Hint = new BasicTooltipViewModel(() => UIHelper.GetTitleTooltip(title, actions));
 			}
 		}
 
