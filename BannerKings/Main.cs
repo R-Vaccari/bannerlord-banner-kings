@@ -160,9 +160,9 @@ namespace BannerKings
                 {
                     if (__instance.Issue != null)
                         return false;
-                    
-                    bool result = __instance.IsActive && __instance.IsAlive;
-                    CampaignEventDispatcher.Instance.CanHaveQuestsOrIssues(__instance, ref result);
+
+                    __result = __instance.IsActive && __instance.IsAlive;
+                    CampaignEventDispatcher.Instance.CanHaveQuestsOrIssues(__instance, ref __result);
 
                     return false;
                 }
