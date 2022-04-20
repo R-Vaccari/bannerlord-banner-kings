@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Election;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
-using static BannerKings.Managers.TitleManager;
 
 namespace BannerKings.Managers.Helpers
 {
@@ -16,19 +16,32 @@ namespace BannerKings.Managers.Helpers
 
         public static void ApplySuccession(FeudalTitle title, List<Clan> list, Hero victim, Kingdom kingdom)
         {
-            if (title != null)
+            if (title != null && title.sovereign == null)
             {
+                Hero heir = null;
                 SuccessionType succession = title.contract.Succession;
-                if (succession == SuccessionType.Elective_Monarchy || succession == SuccessionType.Republic)
-                    ApplyVanillaSuccession(list, victim, kingdom);
-                else if (succession == SuccessionType.Hereditary_Monarchy)
-                    ApplyHereditarySuccession(list, victim, kingdom);
+                if (succession == SuccessionType.Hereditary_Monarchy)
+                    heir = ApplyHereditarySuccession(list, victim, kingdom);
                 else if (succession == SuccessionType.Imperial)
-                    ApplyImperialSuccession(list, victim, kingdom);
+                    heir = ApplyImperialSuccession(list, victim, kingdom);
+
+                if (heir != null)
+                {
+                    BannerKingsConfig.Instance.TitleManager.InheritTitle(title.deJure, heir, title);
+                    Type.GetType("TaleWorlds.CampaignSystem.Actions.ChangeRulingClanAction, TaleWorlds.CampaignSystem")
+                        .GetMethod("Apply", BindingFlags.Public | BindingFlags.Static).Invoke(null, new object[] { kingdom, heir.Clan });
+
+                    KingdomDecision decision = kingdom.UnresolvedDecisions.FirstOrDefault(x => x is KingSelectionKingdomDecision);
+                    if (decision != null)
+                        kingdom.RemoveDecision(decision);
+
+                    if (Clan.PlayerClan.Kingdom != null && Clan.PlayerClan.Kingdom == victim.Clan.Kingdom)
+                        InformationManager.AddQuickInformation(new TextObject("{=!}{HEIR} has rightfully inherited the {TITLE}")
+                            .SetTextVariable("HEIR", heir.Name)
+                            .SetTextVariable("TITLE", title.FullName));
+                    return;
+                }
             }
-            else
-               ApplyVanillaSuccession(list, victim, kingdom);
-            
         }
 
         public static IEnumerable<SuccessionType> GetValidSuccessions(GovernmentType government)
@@ -69,25 +82,17 @@ namespace BannerKings.Managers.Helpers
                     .GetMethod("Apply", BindingFlags.Public | BindingFlags.Static).Invoke(null, new object[] { kingdom, list.First<Clan>() });
         }
 
-        private static void ApplyHereditarySuccession(List<Clan> list, Hero victim, Kingdom kingdom)
+        private static Hero ApplyHereditarySuccession(List<Clan> list, Hero victim, Kingdom kingdom)
         {
-            Clan clan = victim.Clan;
-            if (clan.Heroes.Any((Hero x) => !x.IsChild && x != victim && x.IsAlive && (x.IsNoble || x.IsMinorFactionHero)))
-                Type.GetType("TaleWorlds.CampaignSystem.Actions.ChangeRulingClanAction, TaleWorlds.CampaignSystem")
-                    .GetMethod("Apply", BindingFlags.Public | BindingFlags.Static).Invoke(null, new object[] { kingdom, clan });
-            else ApplyVanillaSuccession(list, victim, kingdom);
+            return victim.Clan.Leader;
         }
 
-        private static void ApplyImperialSuccession(List<Clan> list, Hero victim, Kingdom kingdom)
+        private static Hero ApplyImperialSuccession(List<Clan> list, Hero victim, Kingdom kingdom)
         {
-            Hero heir = GetImperialHeir(list, victim);
-            if (heir != null)
-                Type.GetType("TaleWorlds.CampaignSystem.Actions.ChangeRulingClanAction, TaleWorlds.CampaignSystem")
-                    .GetMethod("Apply", BindingFlags.Public | BindingFlags.Static).Invoke(null, new object[] { kingdom, heir.Clan });
-            else ApplyVanillaSuccession(list, victim, kingdom);
+            return GetImperialHeir(list, victim);
         }
 
-        public static Hero GetImperialHeir(List<Clan> list, Hero victim)
+        public static Hero GetImperialHeir(List<Clan> list, Hero victim, bool includeLeader = false)
         {
             List<ValueTuple<Hero, float>> candidates = new List<ValueTuple<Hero, float>>();
             foreach (Clan clan in list)
@@ -95,22 +100,14 @@ namespace BannerKings.Managers.Helpers
 
                 if (clan != victim.Clan)
                     candidates.Add(new ValueTuple<Hero, float>(clan.Leader, CalculateHeirPreference(victim, clan.Leader)));
-                else
-                {
-                   foreach (Hero familyMember in clan.Heroes)
-                        if (!familyMember.IsChild && familyMember != victim && familyMember.IsAlive && (familyMember.IsNoble || familyMember.IsMinorFactionHero))
+                else foreach (Hero familyMember in clan.Heroes)
+                        if (!familyMember.IsChild && familyMember.IsAlive && (familyMember.IsNoble || familyMember.IsMinorFactionHero))
+                        {
+                            if (familyMember == victim && !includeLeader) continue;
                             candidates.Add(new ValueTuple<Hero, float>(clan.Leader, CalculateHeirPreference(victim, clan.Leader)));
-                }
+                        }   
             }
-
-            Hero heir = MBRandom.ChooseWeighted(candidates);
-            if (heir != null)
-            {
-                InheritanceHelper.ApplyImperialInheritance(victim, heir);
-                if (Clan.PlayerClan.Kingdom != null && Clan.PlayerClan.Kingdom == victim.Clan.Kingdom)
-                    InformationManager.AddQuickInformation(new TextObject(heir.Name.ToString() + " was appointed Emperor."));
-            }
-            return heir;
+            return MBRandom.ChooseWeighted(candidates);
         }
 
         private static float CalculateHeirPreference(Hero victim, Hero candidate)

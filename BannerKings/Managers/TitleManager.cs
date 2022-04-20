@@ -142,6 +142,9 @@ namespace BannerKings.Managers
             {
                 if (deJure)
                 {
+                    InformationManager.DisplayMessage(new InformationMessage(new TextObject("{=!}{HEIR} has rightfully inherited the {TITLE}")
+                            .SetTextVariable("HEIR", newOwner.Name)
+                            .SetTextVariable("TITLE", title.FullName).ToString()));
                     title.deJure = newOwner;
                     Titles[title] = newOwner;
                     DeJures[oldOwner].Remove(title);
@@ -260,6 +263,7 @@ namespace BannerKings.Managers
             {
                 if (title.deJure == oldOwner) ExecuteOwnershipChange(oldOwner, heir, title, true);
                 if (title.deFacto == oldOwner) ExecuteOwnershipChange(oldOwner, heir, title, false);  
+                
             }
         }
 

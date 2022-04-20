@@ -6,11 +6,11 @@ using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
-using static BannerKings.Managers.TitleManager;
 using static TaleWorlds.CampaignSystem.Actions.ChangeKingdomAction;
 using TaleWorlds.CampaignSystem.Election;
 using BannerKings.Managers.Kingdoms;
 using BannerKings.Managers.Titles;
+using BannerKings.Managers.Helpers;
 
 namespace BannerKings.Behaviours
 {
@@ -18,6 +18,8 @@ namespace BannerKings.Behaviours
     {
         public override void RegisterEvents()
         {
+            CampaignEvents.KingdomDecisionAdded.AddNonSerializedListener(this, new Action<KingdomDecision, bool>(OnKingdomDecisionAdded));
+            CampaignEvents.HeroKilledEvent.AddNonSerializedListener(this, new Action<Hero, Hero, KillCharacterAction.KillCharacterActionDetail, bool>(OnHeroKilled));
             CampaignEvents.DailyTickSettlementEvent.AddNonSerializedListener(this, new Action<Settlement>(OnDailyTickSettlement));
             CampaignEvents.ClanChangedKingdom.AddNonSerializedListener(this, new Action<Clan, Kingdom, Kingdom, ChangeKingdomActionDetail, bool>(OnClanChangedKingdom));
             CampaignEvents.OnClanDestroyedEvent.AddNonSerializedListener(this, new Action<Clan>(OnClanDestroyed));
@@ -27,6 +29,41 @@ namespace BannerKings.Behaviours
         public override void SyncData(IDataStore dataStore)
         {
             
+        }
+
+        private void OnKingdomDecisionAdded(KingdomDecision decision, bool isPlayerInvolved)
+        {
+            if (decision is not KingSelectionKingdomDecision) return;
+
+            FeudalTitle sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(decision.Kingdom);
+            if (sovereign == null || sovereign.contract == null) return;
+
+            if (sovereign.contract.Succession == SuccessionType.Hereditary_Monarchy || sovereign.contract.Succession == SuccessionType.Imperial)
+                decision.Kingdom.RemoveDecision(decision);
+        }
+
+        private void OnHeroKilled(Hero victim, Hero killer, KillCharacterAction.KillCharacterActionDetail detail, bool showNotification = true)
+        {
+            if (victim == null || victim.Clan == null || BannerKingsConfig.Instance.TitleManager == null) return;
+
+            FeudalTitle sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(victim.Clan.Kingdom);
+            List<FeudalTitle> titles = new List<FeudalTitle>(BannerKingsConfig.Instance.TitleManager.GetAllDeJure(victim));
+            if (titles.Count == 0) return;
+
+            InheritanceHelper.ApplyInheritanceAllTitles(titles, victim);
+
+            if (sovereign != null)
+                foreach (FeudalTitle title in titles)
+                {
+                    if (title.Equals(sovereign))
+                    {
+                        List<Clan> list = (from t in victim.Clan.Kingdom.Clans
+                                           where !t.IsEliminated && !t.IsUnderMercenaryService
+                                           select t).ToList<Clan>();
+                        if (!list.IsEmpty())
+                            SuccessionHelper.ApplySuccession(title, list, victim, victim.Clan.Kingdom);
+                    }
+                }
         }
 
         public void OnDailyTickSettlement(Settlement settlement)
@@ -62,7 +99,7 @@ namespace BannerKings.Behaviours
                     if (!clans.Contains(clanParty.ActualClan))
                         clans.Add(clanParty.ActualClan);
                 kingdom.AddDecision(new BKSettlementClaimantDecision(kingdom.RulingClan, settlement, settlement.LastAttackerParty.LeaderHero, null, clans, true), true); ;
-                if (clans.Contains(Clan.PlayerClan))
+                if (clans.Contains(Clan.PlayerClan) && !Clan.PlayerClan.IsUnderMercenaryService)
                 {
                     GameTexts.SetVariable("ARMY", army.Name);
                     GameTexts.SetVariable("SETTLEMENT", settlement.Name);
