@@ -31,25 +31,20 @@ namespace BannerKings.Managers.Titles
                 this.title.AddClaim(pair.Key, pair.Value);
 
             Hero owner = data.Settlement.Owner;
-            
             if (owner != Hero.MainHero && owner != title.deJure)
             {
+                if ((owner.IsFriend(title.deJure) && owner.Clan.Kingdom == title.deJure.Clan.Kingdom) 
+                    || owner.Clan == title.deJure.Clan) return;
+
                 float random = MBRandom.RandomFloatRanged(0f, 1f);
                 if (random >= 0.2f) return;
                 
                 BKTitleModel model = BannerKingsConfig.Instance.Models.First(x => x is BKTitleModel) as BKTitleModel;
-                int honor = owner.GetTraitLevel(DefaultTraits.Honor);
-                if (owner.IsFriend(title.deJure) && honor >= -1) return;
-                
                 TitleAction claimAction = model.GetAction(ActionType.Claim, this.title, owner);
                 if (claimAction.Possible)
                 {
-                    bool differentKingdoms = owner.Clan.Kingdom == null || owner.Clan.Kingdom != this.title.deJure.Clan.Kingdom;
-                    bool knight = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(title.deJure).Count() == 1;
-
-                    if (differentKingdoms)
-                        claimAction.TakeAction(null);
-                    else if (!knight && honor < -1)
+                    bool knight = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(title.deJure).Count() == 1 && title.type == TitleType.Lordship;
+                    if ((owner.Clan.Kingdom == null || owner.Clan.Kingdom != this.title.deJure.Clan.Kingdom) || !knight)
                         claimAction.TakeAction(null);
                 }
                 else

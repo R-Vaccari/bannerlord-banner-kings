@@ -7,7 +7,6 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.Core;
 using TaleWorlds.ObjectSystem;
-using static BannerKings.Managers.TitleManager;
 
 namespace BannerKings.Behaviours
 {

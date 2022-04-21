@@ -65,6 +65,25 @@ namespace BannerKings.Models.BKModels
                 return claimAction;
             }
 
+            if (title.type == TitleType.Lordship)
+            {
+                Kingdom kingdom = claimant.Clan.Kingdom;
+                if (kingdom != null && kingdom == title.deJure.Clan.Kingdom && BannerKingsConfig.Instance.TitleManager.GetAllDeJure(title.deJure).Count == 1)
+                {
+                    claimAction.Possible = false;
+                    claimAction.Reason = new TextObject("{=!}Not possible to claim a knight's lordship within your faction.");
+                    return claimAction;
+                }
+
+                FeudalTitle boundTitle = BannerKingsConfig.Instance.TitleManager.GetTitle(title.fief.Village.Bound);
+                if (claimant != boundTitle.deJure)
+                {
+                    claimAction.Possible = false;
+                    claimAction.Reason = new TextObject("{=!}Not possible to claim lordships without owning it's suzerain title.");
+                    return claimAction;
+                }
+            }
+
             if (claimant.Gold < claimAction.Gold || claimant.Clan.Influence < claimAction.Influence)
             {
                 claimAction.Possible = false;
@@ -240,7 +259,8 @@ namespace BannerKings.Models.BKModels
                 return usurpData;
             }
 
-            if (title.GetHeroClaim(usurper) != ClaimType.None)
+            ClaimType type = title.GetHeroClaim(usurper);
+            if (type != ClaimType.None && type != ClaimType.Ongoing)
             {
                 usurpData.Possible = true;
                 usurpData.Reason = new TextObject("{=!}You may claim this title.");
