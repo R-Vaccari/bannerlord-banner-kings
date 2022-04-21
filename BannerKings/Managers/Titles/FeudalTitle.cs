@@ -269,6 +269,7 @@ namespace BannerKings.Managers.Titles
         Fabricated,
         Previous_Owner,
         DeFacto,
+        Clan_Split,
         None,
         Ongoing
     }

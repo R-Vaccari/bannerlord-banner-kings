@@ -38,13 +38,18 @@ namespace BannerKings.Managers.Helpers
             
             List<Hero> candidates = GetCandidates(victim.Clan, victim);
             Hero mainHeir = GetHeirInternal(highest.contract.Inheritance, highest.contract.GenderLaw, victim, candidates);
+            List<FeudalTitle> mainHeirTitles = new List<FeudalTitle>();
             Dictionary<Hero, List<FeudalTitle>> secondaryHeirs = new Dictionary<Hero, List<FeudalTitle>>();
             foreach (KeyValuePair<InheritanceType, List<FeudalTitle>> pair in inheritanceDic)
             {
                 Hero heir = GetHeirInternal(pair.Key, highest.contract.GenderLaw, victim, candidates);
                 foreach (FeudalTitle t in pair.Value)
+                {
                     BannerKingsConfig.Instance.TitleManager.InheritTitle(victim, heir, t);
-
+                    if (heir != mainHeir)
+                        t.AddClaim(mainHeir, ClaimType.Clan_Split, true);
+                }
+                    
                 if (heir != mainHeir)
                     secondaryHeirs.Add(heir, pair.Value);
             }
@@ -54,15 +59,27 @@ namespace BannerKings.Managers.Helpers
             if (secondaryHeirs.Count > 0)
                 foreach (KeyValuePair<Hero, List<FeudalTitle>> pair in secondaryHeirs)
                 {
-                    if (pair.Value.Any(x => x.fief != null && !x.fief.IsVillage)) 
+                    if (pair.Value.Any(x => x.fief != null && !x.fief.IsVillage && x.DeFacto.Clan == victim.Clan)) 
                     {
                         List<FeudalTitle> landed = pair.Value.FindAll(x => x.fief != null && !x.fief.IsVillage);
                         Clan newClan = Clan.CreateCompanionToLordClan(pair.Key, landed[0].fief, 
                             NameGenerator.Current.GenerateClanName(pair.Key.Culture, landed[0].fief),
                             pair.Key.Culture.PossibleClanBannerIconsIDs.GetRandomElement());
 
+                        if (newClan.Leader.Spouse != null && newClan.Leader.Spouse.Clan == victim.Clan)
+                            newClan.Leader.Spouse.Clan = newClan;
+
+                        if (newClan.Leader.Children.Count > 0)
+                            foreach (Hero child in newClan.Leader.Children)
+                                if (child.Clan == victim.Clan) 
+                                    child.Clan = newClan;
+
+                        foreach (FeudalTitle t in mainHeirTitles)
+                            t.AddClaim(newClan.Leader, ClaimType.Clan_Split, true);
+
                         foreach (FeudalTitle t in landed)
-                            ChangeOwnerOfSettlementAction.ApplyByGift(t.fief, newClan.Leader);
+                            if (t.DeFacto.Clan == victim.Clan)
+                                ChangeOwnerOfSettlementAction.ApplyByGift(t.fief, newClan.Leader);
 
                         if (victim.Clan.Kingdom != null)
                             ChangeKingdomAction.ApplyByJoinToKingdom(newClan, victim.Clan.Kingdom);
