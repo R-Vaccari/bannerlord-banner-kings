@@ -47,6 +47,8 @@ namespace BannerKings.Behaviours
             if (victim == null || victim.Clan == null || BannerKingsConfig.Instance.TitleManager == null) return;
 
             FeudalTitle sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(victim.Clan.Kingdom);
+            if (sovereign == null || sovereign.contract == null) return;
+
             List<FeudalTitle> titles = new List<FeudalTitle>(BannerKingsConfig.Instance.TitleManager.GetAllDeJure(victim));
             if (titles.Count == 0) return;
 
@@ -62,6 +64,7 @@ namespace BannerKings.Behaviours
                                            select t).ToList<Clan>();
                         if (!list.IsEmpty())
                             SuccessionHelper.ApplySuccession(title, list, victim, victim.Clan.Kingdom);
+                        break;
                     }
                 }
         }

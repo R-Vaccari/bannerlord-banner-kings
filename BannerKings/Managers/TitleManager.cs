@@ -77,8 +77,6 @@ namespace BannerKings.Managers
             }
         }
 
-     
-
         public bool IsHeroTitleHolder(Hero hero)
         {
             foreach (FeudalTitle title in Titles.Keys.ToList())
@@ -109,6 +107,11 @@ namespace BannerKings.Managers
 
                 throw new BannerKingsException(cause + objInfo, ex);
             }
+        }
+
+        public FeudalTitle GetTitleByName(String name)
+        {
+            return this.Titles.FirstOrDefault(x => x.Key.FullName.ToString() == name).Key;
         }
 
         public GovernmentType GetSettlementGovernment(Settlement settlement)
@@ -142,9 +145,6 @@ namespace BannerKings.Managers
             {
                 if (deJure)
                 {
-                    InformationManager.DisplayMessage(new InformationMessage(new TextObject("{=!}{HEIR} has rightfully inherited the {TITLE}")
-                            .SetTextVariable("HEIR", newOwner.Name)
-                            .SetTextVariable("TITLE", title.FullName).ToString()));
                     title.deJure = newOwner;
                     Titles[title] = newOwner;
                     DeJures[oldOwner].Remove(title);

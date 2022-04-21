@@ -38,7 +38,7 @@ namespace BannerKings.Managers.Helpers
                     if (Clan.PlayerClan.Kingdom != null && Clan.PlayerClan.Kingdom == victim.Clan.Kingdom)
                         InformationManager.AddQuickInformation(new TextObject("{=!}{HEIR} has rightfully inherited the {TITLE}")
                             .SetTextVariable("HEIR", heir.Name)
-                            .SetTextVariable("TITLE", title.FullName));
+                            .SetTextVariable("TITLE", title.FullName), 0, heir.CharacterObject);
                     return;
                 }
             }

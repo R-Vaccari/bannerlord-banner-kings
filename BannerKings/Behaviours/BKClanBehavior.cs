@@ -28,6 +28,19 @@ namespace BannerKings.Behaviours
             if (clan.IsEliminated || clan.IsBanditFaction || clan.Kingdom == null || clan == Clan.PlayerClan ||
                 BannerKingsConfig.Instance.TitleManager == null) return;
 
+
+            foreach (WarPartyComponent component in clan.WarPartyComponents)
+            {
+                Hero leader = component.Leader;
+                if (leader != null && leader != clan.Leader && leader.IsWanderer)
+                {
+                    leader.SetNewOccupation(Occupation.Lord);
+                    leader.Clan = null;
+                    leader.Clan = clan;
+                }
+            }
+                
+
             if (clan.WarPartyComponents.Count < clan.CommanderLimit && clan.Companions.Count < clan.CompanionLimit && 
                 clan.Settlements.Count(x => x.IsVillage ) > 1 && clan.Influence >= 150)
             {

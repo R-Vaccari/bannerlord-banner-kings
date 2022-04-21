@@ -49,7 +49,7 @@ namespace BannerKings.Managers.Helpers
                     secondaryHeirs.Add(heir, pair.Value);
             }
 
-            if (mainHeir != null)  ChangeClanLeaderAction.ApplyWithSelectedNewLeader(victim.Clan, mainHeir);
+            if (mainHeir != null) ChangeClanLeaderAction.ApplyWithSelectedNewLeader(victim.Clan, mainHeir);
 
             if (secondaryHeirs.Count > 0)
                 foreach (KeyValuePair<Hero, List<FeudalTitle>> pair in secondaryHeirs)
@@ -57,7 +57,16 @@ namespace BannerKings.Managers.Helpers
                     if (pair.Value.Any(x => x.fief != null && !x.fief.IsVillage)) 
                     {
                         List<FeudalTitle> landed = pair.Value.FindAll(x => x.fief != null && !x.fief.IsVillage);
-                        Clan newClan = Clan.CreateCompanionToLordClan(pair.Key, landed[0].fief, new TextObject("{=!}NEW CLAN"), 100);
+                        Clan newClan = Clan.CreateCompanionToLordClan(pair.Key, landed[0].fief, 
+                            NameGenerator.Current.GenerateClanName(pair.Key.Culture, landed[0].fief),
+                            pair.Key.Culture.PossibleClanBannerIconsIDs.GetRandomElement());
+
+                        foreach (FeudalTitle t in landed)
+                            ChangeOwnerOfSettlementAction.ApplyByGift(t.fief, newClan.Leader);
+
+                        if (victim.Clan.Kingdom != null)
+                            ChangeKingdomAction.ApplyByJoinToKingdom(newClan, victim.Clan.Kingdom);
+
                         InformationManager.DisplayMessage(new InformationMessage(new TextObject("{=!}The {NEW} has branched off from {ORIGINAL} due to inheritance laws.")
                             .SetTextVariable("NEW", newClan.Name)
                             .SetTextVariable("ORIGINAL", victim.Clan.Name)
