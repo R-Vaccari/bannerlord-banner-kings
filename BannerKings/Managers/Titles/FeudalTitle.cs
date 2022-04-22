@@ -45,6 +45,7 @@ namespace BannerKings.Managers.Titles
         [SaveableProperty(12)]
         private Dictionary<Hero, CampaignTime> ongoingClaims { get; set; }
 
+        [SaveableProperty(13)]
         private Dictionary<FeudalTitle, float> deJureDrift { get; set; }
 
         public override bool Equals(object obj)
@@ -78,6 +79,7 @@ namespace BannerKings.Managers.Titles
         {
             get 
             {
+                if (this.deJureDrift == null) this.deJureDrift = new Dictionary<FeudalTitle, float>();
                 Dictionary<FeudalTitle, float> dic = new Dictionary<FeudalTitle, float>();
                 foreach (KeyValuePair<FeudalTitle, float> pair in this.deJureDrift)
                     dic.Add(pair.Key, pair.Value);
@@ -108,14 +110,13 @@ namespace BannerKings.Managers.Titles
 
         private void AddDrift(FeudalTitle newSovereign, float progress)
         {
-            if (this.deJureDrift.ContainsKey(newSovereign))
+            if (this.DeJureDrifts.ContainsKey(newSovereign))
                 this.deJureDrift[newSovereign] += progress;
             else this.deJureDrift.Add(newSovereign, 0f);
 
             if (this.deJureDrift[newSovereign] >= 1f)
-            {
-                this.SetSovereign(newSovereign)
-            }
+                this.DriftTitle(newSovereign);
+            
             else if (this.deJureDrift[newSovereign] < 0f)
                 this.deJureDrift[newSovereign] = 0f;
         }
@@ -262,17 +263,29 @@ namespace BannerKings.Managers.Titles
 
         public bool Active => this.deJure != null || this.deFacto != null;
 
-        public void SetSovereign(FeudalTitle sovereign, bool notification = false)
+        public bool IsSovereignLevel => (int)this.type <= 1;
+
+        public void DriftTitle(FeudalTitle newSovereign)
+        {
+            if (this.type == TitleType.Dukedom && newSovereign.IsSovereignLevel)
+            {
+                this.sovereign.vassals.Remove(this);
+                this.SetSovereign(newSovereign);
+                newSovereign.vassals.Add(this);
+
+                InformationManager.DisplayMessage(new InformationMessage(new TextObject("{=!}{TITLE} has drifted into a legal part of {SOVEREIGN}")
+                    .SetTextVariable("TITLE", this.FullName)
+                    .SetTextVariable("SOVEREIGN", newSovereign.FullName)
+                    .ToString()));
+            }
+        }
+
+        public void SetSovereign(FeudalTitle sovereign)
         {
             this.sovereign = sovereign;
             if (this.vassals != null && this.vassals.Count > 0)
                 foreach (FeudalTitle vassal in this.vassals)
                     vassal.SetSovereign(sovereign);
-            if (notification)
-                InformationManager.DisplayMessage(new InformationMessage(new TextObject("{=!}The {TILE} has drifted into a legal part of {SOVEREIGN}.")
-                    .SetTextVariable("TITLE", this.FullName)
-                    .SetTextVariable("SOVEREIGN", sovereign.FullName)
-                    .ToString()));
         }
 
         public void ChangeContract(GovernmentType government)

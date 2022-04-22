@@ -105,7 +105,7 @@ namespace BannerKings.UI
 
 				foreach (KeyValuePair<FeudalTitle, float> pair in title.DeJureDrifts)
 					list.Add(new TooltipProperty(pair.Key.FullName.ToString(), new TextObject("{=!}{PERCENTAGE} complete.")
-						.SetTextVariable("PERCENTAGE", pair.Value.ToString("0.00") + '%')
+						.SetTextVariable("PERCENTAGE", (pair.Value * 100f).ToString("0.000") + '%')
 						.ToString(), 0, false, TooltipProperty.TooltipPropertyFlags.None));
 
 			}

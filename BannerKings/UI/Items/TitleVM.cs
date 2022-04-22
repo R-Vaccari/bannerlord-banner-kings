@@ -73,10 +73,13 @@ namespace BannerKings.UI.Items
 					this.Decisions.Add(revokeButton);
 				}
 
-				if (!grantData.Possible) actions.Add(usurpData);
-				if (!usurpData.Possible) actions.Add(grantData);
-				if (!grantData.Possible || !usurpData.Possible) actions.Add(claimAction);
-				actions.Add(revokeData);
+				if (title.deJure != Hero.MainHero)
+				{
+					actions.Add(usurpData);
+					actions.Add(claimAction);
+					actions.Add(revokeData);
+				}
+				else actions.Add(grantData);
 
 				this.Hint = new BasicTooltipViewModel(() => UIHelper.GetTitleTooltip(title, actions));
 			}
