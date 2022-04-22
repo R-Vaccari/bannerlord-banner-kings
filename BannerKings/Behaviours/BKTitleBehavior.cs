@@ -16,9 +16,10 @@ namespace BannerKings.Behaviours
 {
     public class BKTitleBehavior : CampaignBehaviorBase
     {
+
         public override void RegisterEvents()
         {
-            CampaignEvents.KingdomDecisionAdded.AddNonSerializedListener(this, new Action<KingdomDecision, bool>(OnKingdomDecisionAdded));
+            CampaignEvents.DailyTickEvent.AddNonSerializedListener(this, new Action(this.OnDailyTick));
             CampaignEvents.HeroKilledEvent.AddNonSerializedListener(this, new Action<Hero, Hero, KillCharacterAction.KillCharacterActionDetail, bool>(OnHeroKilled));
             CampaignEvents.DailyTickSettlementEvent.AddNonSerializedListener(this, new Action<Settlement>(OnDailyTickSettlement));
             CampaignEvents.ClanChangedKingdom.AddNonSerializedListener(this, new Action<Clan, Kingdom, Kingdom, ChangeKingdomActionDetail, bool>(OnClanChangedKingdom));
@@ -31,15 +32,21 @@ namespace BannerKings.Behaviours
             
         }
 
-        private void OnKingdomDecisionAdded(KingdomDecision decision, bool isPlayerInvolved)
+        private void OnDailyTick()
         {
-            if (decision is not KingSelectionKingdomDecision) return;
+            if (BannerKingsConfig.Instance.TitleManager == null) return;
 
-            FeudalTitle sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(decision.Kingdom);
-            if (sovereign == null || sovereign.contract == null) return;
+            foreach (FeudalTitle duchy in BannerKingsConfig.Instance.TitleManager.GetAllTitlesByType(TitleType.Dukedom))
+            {
+                Kingdom faction = duchy.deJure.Clan.Kingdom;
+                if (faction == null || faction != duchy.DeFacto.Clan.Kingdom) continue;
 
-            if (sovereign.contract.Succession == SuccessionType.Hereditary_Monarchy || sovereign.contract.Succession == SuccessionType.Imperial)
-                decision.Kingdom.RemoveDecision(decision);
+                FeudalTitle currentSovereign = duchy.sovereign;
+                FeudalTitle currentFactionSovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(faction);
+                if (currentSovereign == null || currentFactionSovereign == null || currentSovereign == currentFactionSovereign) return;
+
+                duchy.TickDrift(currentFactionSovereign);
+            }
         }
 
         private void OnHeroKilled(Hero victim, Hero killer, KillCharacterAction.KillCharacterActionDetail detail, bool showNotification = true)
@@ -59,11 +66,7 @@ namespace BannerKings.Behaviours
                 {
                     if (title.Equals(sovereign))
                     {
-                        List<Clan> list = (from t in victim.Clan.Kingdom.Clans
-                                           where !t.IsEliminated && !t.IsUnderMercenaryService
-                                           select t).ToList<Clan>();
-                        if (!list.IsEmpty())
-                            SuccessionHelper.ApplySuccession(title, list, victim, victim.Clan.Kingdom);
+                        SuccessionHelper.ApplySuccession(title, victim, victim.Clan.Kingdom);
                         break;
                     }
                 }

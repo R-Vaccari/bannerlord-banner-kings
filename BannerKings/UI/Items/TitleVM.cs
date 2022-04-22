@@ -33,12 +33,11 @@ namespace BannerKings.UI.Items
 			if (title != null)
 			{
 				BKTitleModel model = (BannerKingsConfig.Instance.Models.First(x => x is BKTitleModel) as BKTitleModel);
-				TitleAction usurpData = model.GetAction(ActionType.Usurp, title, Hero.MainHero);
 				CharacterCode characterCode = CharacterCode.CreateFrom(title.deJure.CharacterObject);
 				this.ImageIdentifier = new ImageIdentifierVM(characterCode);
 
 				List<TitleAction> actions = new List<TitleAction>();
-				actions.Add(usurpData);
+				TitleAction usurpData = model.GetAction(ActionType.Usurp, title, Hero.MainHero);
 				if (title.GetHeroClaim(Hero.MainHero) != ClaimType.None)
 				{
 					DecisionElement usurpButton = new DecisionElement().SetAsButtonOption(new TextObject("{=!}Usurp").ToString(),
@@ -48,7 +47,6 @@ namespace BannerKings.UI.Items
 				}
 
 				TitleAction claimAction = model.GetAction(ActionType.Claim, title, Hero.MainHero);
-				actions.Add(claimAction);
 				if (claimAction.Possible)
                 {
 					DecisionElement claimButton = new DecisionElement().SetAsButtonOption(new TextObject("{=!}Claim").ToString(),
@@ -58,7 +56,6 @@ namespace BannerKings.UI.Items
 				}
 
 				TitleAction grantData = model.GetAction(ActionType.Grant, title, Hero.MainHero);
-				actions.Add(grantData);
 				if (grantData.Possible)
                 {
 					DecisionElement grantButton = new DecisionElement().SetAsButtonOption(new TextObject("{=!}Grant").ToString(),
@@ -68,7 +65,6 @@ namespace BannerKings.UI.Items
 				}
 
 				TitleAction revokeData = model.GetAction(ActionType.Revoke, title, Hero.MainHero);
-				actions.Add(revokeData);
 				if (revokeData.Possible)
 				{
 					DecisionElement revokeButton = new DecisionElement().SetAsButtonOption(new TextObject("{=!}Revoke").ToString(),
@@ -76,7 +72,11 @@ namespace BannerKings.UI.Items
 					revokeButton.Enabled = revokeData.Possible;
 					this.Decisions.Add(revokeButton);
 				}
-				
+
+				if (!grantData.Possible) actions.Add(usurpData);
+				if (!usurpData.Possible) actions.Add(grantData);
+				if (!grantData.Possible || !usurpData.Possible) actions.Add(claimAction);
+				actions.Add(revokeData);
 
 				this.Hint = new BasicTooltipViewModel(() => UIHelper.GetTitleTooltip(title, actions));
 			}

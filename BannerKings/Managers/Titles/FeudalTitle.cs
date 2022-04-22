@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.Core;
 using TaleWorlds.Localization;
 using TaleWorlds.SaveSystem;
 
@@ -44,6 +45,8 @@ namespace BannerKings.Managers.Titles
         [SaveableProperty(12)]
         private Dictionary<Hero, CampaignTime> ongoingClaims { get; set; }
 
+        private Dictionary<FeudalTitle, float> deJureDrift { get; set; }
+
         public override bool Equals(object obj)
         {
             if (obj is FeudalTitle)
@@ -66,9 +69,56 @@ namespace BannerKings.Managers.Titles
             this.contract = contract;
             dueTax = 0;
             this.claims = new Dictionary<Hero, ClaimType>();
+            this.deJureDrift = new Dictionary<FeudalTitle, float>();
         }
 
         public void SetName(TextObject shortname) => this.shortName = shortname;
+
+        public Dictionary<FeudalTitle, float> DeJureDrifts
+        {
+            get 
+            {
+                Dictionary<FeudalTitle, float> dic = new Dictionary<FeudalTitle, float>();
+                foreach (KeyValuePair<FeudalTitle, float> pair in this.deJureDrift)
+                    dic.Add(pair.Key, pair.Value);
+
+                return dic;
+            }
+        }
+
+        public void TickDrift(FeudalTitle current, float progress = 0.000793f)
+        {
+            this.AddDrift(current, progress);
+            List<FeudalTitle> toRemove = null;
+            foreach (FeudalTitle sovereign in this.deJureDrift.Keys.ToList())
+                if (sovereign != current)
+                {
+                    this.deJureDrift[sovereign] -= progress;
+                    if (this.deJureDrift[sovereign] <= 0f)
+                    {
+                        if (toRemove == null) toRemove = new List<FeudalTitle>();
+                        toRemove.Add(sovereign);
+                    }
+                }
+
+            if (toRemove != null)
+                foreach (FeudalTitle title in toRemove)
+                    this.deJureDrift.Remove(title);
+        }
+
+        private void AddDrift(FeudalTitle newSovereign, float progress)
+        {
+            if (this.deJureDrift.ContainsKey(newSovereign))
+                this.deJureDrift[newSovereign] += progress;
+            else this.deJureDrift.Add(newSovereign, 0f);
+
+            if (this.deJureDrift[newSovereign] >= 1f)
+            {
+                this.SetSovereign(newSovereign)
+            }
+            else if (this.deJureDrift[newSovereign] < 0f)
+                this.deJureDrift[newSovereign] = 0f;
+        }
 
         public Dictionary<Hero, ClaimType> Claims
         {
@@ -210,15 +260,19 @@ namespace BannerKings.Managers.Titles
             }
         }
 
-
         public bool Active => this.deJure != null || this.deFacto != null;
 
-        public void SetSovereign(FeudalTitle sovereign)
+        public void SetSovereign(FeudalTitle sovereign, bool notification = false)
         {
             this.sovereign = sovereign;
             if (this.vassals != null && this.vassals.Count > 0)
                 foreach (FeudalTitle vassal in this.vassals)
                     vassal.SetSovereign(sovereign);
+            if (notification)
+                InformationManager.DisplayMessage(new InformationMessage(new TextObject("{=!}The {TILE} has drifted into a legal part of {SOVEREIGN}.")
+                    .SetTextVariable("TITLE", this.FullName)
+                    .SetTextVariable("SOVEREIGN", sovereign.FullName)
+                    .ToString()));
         }
 
         public void ChangeContract(GovernmentType government)

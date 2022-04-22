@@ -30,30 +30,33 @@ namespace BannerKings.Managers.Titles
             foreach (KeyValuePair<Hero, ClaimType> pair in toAdd)
                 this.title.AddClaim(pair.Key, pair.Value);
 
-            Hero owner = data.Settlement.Owner;
-            if (owner != Hero.MainHero && owner != title.deJure)
-            {
-                if ((owner.IsFriend(title.deJure) && owner.Clan.Kingdom == title.deJure.Clan.Kingdom) 
-                    || owner.Clan == title.deJure.Clan) return;
+            this.AITick(data.Settlement.Owner);
+        }
 
-                float random = MBRandom.RandomFloatRanged(0f, 1f);
-                if (random >= 0.2f) return;
-                
-                BKTitleModel model = BannerKingsConfig.Instance.Models.First(x => x is BKTitleModel) as BKTitleModel;
-                TitleAction claimAction = model.GetAction(ActionType.Claim, this.title, owner);
-                if (claimAction.Possible)
-                {
-                    bool knight = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(title.deJure).Count() == 1 && title.type == TitleType.Lordship;
-                    if ((owner.Clan.Kingdom == null || owner.Clan.Kingdom != this.title.deJure.Clan.Kingdom) || !knight)
-                        claimAction.TakeAction(null);
-                }
-                else
-                {
-                    TitleAction usurpAction = model.GetAction(ActionType.Usurp, this.title, owner);
-                    if (usurpAction.Possible)
-                        usurpAction.TakeAction(null);
-                }
+        private void AITick(Hero owner)
+        {
+            if (owner == Hero.MainHero || owner == title.deJure) return;
+            
+            if ((owner.IsFriend(title.deJure) && owner.Clan.Kingdom == title.deJure.Clan.Kingdom)
+                || owner.Clan == title.deJure.Clan) return;
+
+            float random = MBRandom.RandomFloatRanged(0f, 1f);
+            if (random >= 0.2f) return;
+
+            BKTitleModel model = BannerKingsConfig.Instance.Models.First(x => x is BKTitleModel) as BKTitleModel;
+            TitleAction claimAction = model.GetAction(ActionType.Claim, this.title, owner);
+            if (claimAction.Possible)
+            {
+                bool knight = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(title.deJure).Count() == 1 && title.type == TitleType.Lordship;
+                if ((owner.Clan.Kingdom == null || owner.Clan.Kingdom != this.title.deJure.Clan.Kingdom) || !knight)
+                    claimAction.TakeAction(null);
             }
+            else
+            {
+                TitleAction usurpAction = model.GetAction(ActionType.Usurp, this.title, owner);
+                if (usurpAction.Possible)
+                    usurpAction.TakeAction(null);
+            } 
         }
     }
 }

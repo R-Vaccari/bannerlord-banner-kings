@@ -97,6 +97,19 @@ namespace BannerKings.UI
 			foreach (TitleAction action in actions)
 				AddActionHint(ref list, action);
 
+			if (title.DeJureDrifts.Count() > 0)
+            {
+				TooltipAddEmptyLine(list, false);
+				list.Add(new TooltipProperty(new TextObject("{=!}De Jure Drifts", null).ToString(), " ", 0, false, TooltipProperty.TooltipPropertyFlags.None));
+				TooltipAddSeperator(list, false);
+
+				foreach (KeyValuePair<FeudalTitle, float> pair in title.DeJureDrifts)
+					list.Add(new TooltipProperty(pair.Key.FullName.ToString(), new TextObject("{=!}{PERCENTAGE} complete.")
+						.SetTextVariable("PERCENTAGE", pair.Value.ToString("0.00") + '%')
+						.ToString(), 0, false, TooltipProperty.TooltipPropertyFlags.None));
+
+			}
+
 			if (title.OngoingClaims.Count() + title.Claims.Count() > 0)
             {
 				TooltipAddEmptyLine(list, false);

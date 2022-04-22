@@ -109,6 +109,8 @@ namespace BannerKings.Managers
             }
         }
 
+        public List<FeudalTitle> GetAllTitlesByType(TitleType type) => this.Titles.Keys.ToList().FindAll(x => x.type == type);
+
         public FeudalTitle GetTitleByName(String name)
         {
             return this.Titles.FirstOrDefault(x => x.Key.FullName.ToString() == name).Key;

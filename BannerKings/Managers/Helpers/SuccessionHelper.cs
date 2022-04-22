@@ -14,18 +14,24 @@ namespace BannerKings.Managers.Helpers
     public static class SuccessionHelper
     {
 
-        public static void ApplySuccession(FeudalTitle title, List<Clan> list, Hero victim, Kingdom kingdom)
+        public static Hero ApplySuccession(FeudalTitle title, Hero victim, Kingdom kingdom, bool applyEffects = true)
         {
-            if (title != null && title.sovereign == null)
+            List<Clan> list = new List<Clan>();
+            if (victim.Clan.Kingdom != null)
+                list = (from t in victim.Clan.Kingdom.Clans
+                        where !t.IsEliminated && !t.IsUnderMercenaryService
+                        select t).ToList<Clan>();
+
+            Hero heir = null;
+            if (title != null && !list.IsEmpty() && title.sovereign == null)
             {
-                Hero heir = null;
                 SuccessionType succession = title.contract.Succession;
                 if (succession == SuccessionType.Hereditary_Monarchy)
                     heir = ApplyHereditarySuccession(list, victim, kingdom);
                 else if (succession == SuccessionType.Imperial)
                     heir = ApplyImperialSuccession(list, victim, kingdom);
 
-                if (heir != null)
+                if (heir != null && applyEffects)
                 {
                     BannerKingsConfig.Instance.TitleManager.InheritTitle(title.deJure, heir, title);
                     Type.GetType("TaleWorlds.CampaignSystem.Actions.ChangeRulingClanAction, TaleWorlds.CampaignSystem")
@@ -39,9 +45,10 @@ namespace BannerKings.Managers.Helpers
                         InformationManager.AddQuickInformation(new TextObject("{=!}{HEIR} has rightfully inherited the {TITLE}")
                             .SetTextVariable("HEIR", heir.Name)
                             .SetTextVariable("TITLE", title.FullName), 0, heir.CharacterObject);
-                    return;
+                    
                 }
             }
+            return heir;
         }
 
         public static IEnumerable<SuccessionType> GetValidSuccessions(GovernmentType government)
