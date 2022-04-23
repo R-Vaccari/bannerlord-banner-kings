@@ -76,14 +76,15 @@ namespace BannerKings.UI.Panels
 					foreach (VillageBuilding building2 in localDevelopmentList)
 						if (!building2.BuildingType.IsDefaultProject)
 							villageData.BuildingsInProgress.Enqueue(building2);
-
-					villageData.CurrentBuilding = villageData.Buildings
-						.FirstOrDefault(x => x.BuildingType.StringId == localDevelopmentList[0].BuildingType.StringId);
 				}
 
 				if (building != null && building.BuildingType.BuildingLocation == BuildingLocation.Daily)
-						villageData.CurrentDefault = villageData.Buildings
-							.FirstOrDefault(x => x.BuildingType.StringId == building.BuildingType.StringId);
+					foreach (VillageBuilding b in villageData.Buildings)
+                    {
+						if (b.BuildingType.StringId == building.BuildingType.StringId)
+							b.IsCurrentlyDefault = true;
+						else b.IsCurrentlyDefault = false;
+                    }
 			}
 		}
 

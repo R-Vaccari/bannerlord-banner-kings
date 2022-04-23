@@ -107,7 +107,6 @@ namespace BannerKings.UI
 					list.Add(new TooltipProperty(pair.Key.FullName.ToString(), new TextObject("{=!}{PERCENTAGE} complete.")
 						.SetTextVariable("PERCENTAGE", (pair.Value * 100f).ToString("0.000") + '%')
 						.ToString(), 0, false, TooltipProperty.TooltipPropertyFlags.None));
-
 			}
 
 			if (title.OngoingClaims.Count() + title.Claims.Count() > 0)

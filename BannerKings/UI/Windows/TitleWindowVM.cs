@@ -47,7 +47,6 @@ namespace BannerKings.UI.Windows
 				if (Name == null)
 					Name = title.FullName.ToString();
 			}
-			
         }
 
         public override void RefreshValues()
@@ -86,7 +85,6 @@ namespace BannerKings.UI.Windows
 				new TextObject("{=!}Gender Law").ToString(),
 				new TextObject("{=!}Propose a change in gender laws, dictating whether males and females are viewed equally in various aspects."));
 			genderButton.Enabled = allSetup && genderLaws.Count >= 1;
-				
 
 			this.Contract = contractButton;
 			this.Decisions.Add(governmentButton);
@@ -120,9 +118,7 @@ namespace BannerKings.UI.Windows
 							}
 						}), null, string.Empty), false);
 					}
-					
 				}, hint);
-
 
 		private List<InquiryElement> GetGenderLaws()
         {
@@ -187,7 +183,6 @@ namespace BannerKings.UI.Windows
 					
 			return laws;
 		}
-
 
 		[DataSourceProperty]
 		public DecisionElement Contract

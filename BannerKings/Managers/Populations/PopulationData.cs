@@ -88,9 +88,6 @@ namespace BannerKings.Populations
         {
             get
             {
-                if (this.titleData == null)
-                    titleData = new TitleData(BannerKingsConfig.Instance.TitleManager.GetTitle(this.settlement));
-
                 return titleData;
             }
         }
@@ -490,83 +487,82 @@ namespace BannerKings.Populations
             return 0;
         }
 
+        public void ReInitializeBuildings()
+        {
+            List<VillageBuilding> toAdd = new List<VillageBuilding>();
+            foreach (VillageBuilding b in this.buildings)
+            {
+                if (b.Explanation == null)
+                {
+                    string id = b.BuildingType.StringId;
+                    BuildingType type = DefaultVillageBuildings.Instance.All()
+                        .FirstOrDefault(x => x.StringId == id);
+                    if (type != null)
+                        toAdd.Add(new VillageBuilding(type, this.Village.MarketTown, this.Village,
+                            b.BuildingProgress, b.CurrentLevel));
+                }  
+            }
+
+            if (toAdd.Count > 0)
+            {
+                this.buildings.Clear();
+                foreach (VillageBuilding b in toAdd)
+                    this.buildings.Add(b);
+            }
+
+            List<VillageBuilding> toAddQueue = new List<VillageBuilding>();
+            foreach (VillageBuilding b in this.inProgress)
+                if (b.Explanation == null)
+                {
+                    string id = b.BuildingType.StringId;
+                    BuildingType type = DefaultVillageBuildings.Instance.All()
+                        .FirstOrDefault(x => x.StringId == id);
+                    if (type != null)
+                        toAddQueue.Add(new VillageBuilding(type, this.Village.MarketTown, this.Village,
+                            b.BuildingProgress, b.CurrentLevel));
+                }
+
+            if (toAddQueue.Count > 0)
+            {
+                this.inProgress.Clear();
+                foreach (VillageBuilding b in toAddQueue)
+                    this.inProgress.Enqueue(b);
+            }
+        }
+
         public Village Village => this.village;
         public List<VillageBuilding> Buildings
         {
-            get
-            {
-                List<VillageBuilding> buildings = new List<VillageBuilding>(this.buildings);
-                List<VillageBuilding> toAdd = new List<VillageBuilding>();
-                foreach (VillageBuilding b in buildings)
-                {
-                    if (b.Explanation == null)
-                    {
-                        string id = b.BuildingType.StringId;
-                        BuildingType type = DefaultVillageBuildings.Instance.All()
-                            .FirstOrDefault(x => x.StringId == id);
-                        if (type != null)
-                            toAdd.Add(new VillageBuilding(type, this.Village.MarketTown, this.Village,
-                                this.current.BuildingProgress, this.current.CurrentLevel));
-                    }  
-                }
-
-                if (toAdd.Count > 0)
-                {
-                    this.buildings.Clear();
-                    foreach (VillageBuilding b in toAdd)
-                        this.buildings.Add(b);
-                }
-
-
-                return this.buildings;
-            }
+            get => this.buildings;
         }
+
         public VillageBuilding CurrentBuilding
         {
             get
             {
-                if (this.current == null)
-                    this.current = this.buildings.GetRandomElementWithPredicate(x => x.BuildingType.BuildingLocation != BuildingLocation.Daily);
+                VillageBuilding building = null;
 
-                if (this.current.BuildingType.Explanation == null)
-                {
-                    string id = this.current.BuildingType.StringId;
-                    BuildingType type = DefaultVillageBuildings.Instance.All()
-                        .FirstOrDefault(x => x.StringId == this.current.BuildingType.StringId);
-                    if (type == null) type = DefaultVillageBuildings.Instance.All().FirstOrDefault(x => x.BuildingLocation != BuildingLocation.Daily);
-                    VillageBuilding newCurrent = new VillageBuilding(type,
-                        this.Village.MarketTown, this.Village,
-                        this.current.BuildingProgress, this.current.CurrentLevel);
-                    this.current = newCurrent;
-                }
+                if (this.inProgress != null && !this.inProgress.IsEmpty())
+                    building = (VillageBuilding?)this.inProgress.Peek();
 
-                return this.current;
+                return building != null ? building : this.CurrentDefault;
             }
-            set => this.current = value;
         }
 
         public VillageBuilding CurrentDefault
         {
             get
             {
-                if (this.currentDefault == null)
-                    this.currentDefault = this.buildings.FirstOrDefault(x => x.BuildingType.StringId == "bannerkings_daily_production");
-
-                if (this.currentDefault.BuildingType.Explanation == null)
+                VillageBuilding building = this.buildings.FirstOrDefault(x => x.IsCurrentlyDefault);
+                if (building == null)
                 {
-                    string id = this.currentDefault.BuildingType.StringId;
-                    BuildingType type = DefaultVillageBuildings.Instance.All()
-                        .FirstOrDefault(x => x.StringId == this.currentDefault.BuildingType.StringId);
-                    if (type == null) type = DefaultVillageBuildings.Instance.All().FirstOrDefault(x => x.BuildingLocation == BuildingLocation.Daily);
-                    VillageBuilding newCurrent = new VillageBuilding(type,
-                        this.Village.MarketTown, this.Village,
-                        this.currentDefault.BuildingProgress, this.currentDefault.CurrentLevel);
-                    this.currentDefault = newCurrent;
+                    VillageBuilding dailyProd = this.buildings.FirstOrDefault(x => x.BuildingType.StringId == "bannerkings_daily_production");
+                    dailyProd.IsCurrentlyDefault = true;
+                    building = dailyProd;
                 }
 
-                return this.currentDefault;
+                return building;
             }
-            set => this.currentDefault = value;
         }
 
         public Queue<Building> BuildingsInProgress

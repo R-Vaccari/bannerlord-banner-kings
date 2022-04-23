@@ -97,6 +97,13 @@ namespace BannerKings.Managers
             if (level > 0) explainedNumber.AddFactor(level * 0.05f);
         }
 
+        public void ReInitBuildings()
+        {
+            foreach (PopulationData data in this.Populations.Values)
+                if (data.VillageData != null)
+                    data.VillageData.ReInitializeBuildings();
+        }
+
         public static void InitializeSettlementPops(Settlement settlement)
         {
             int popQuantityRef = GetDesiredTotalPop(settlement);

@@ -17,7 +17,6 @@ using TaleWorlds.CampaignSystem.ViewModelCollection.KingdomManagement.KingdomDec
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
-using static BannerKings.Managers.TitleManager;
 
 namespace BannerKings.UI
 {
