@@ -1,5 +1,6 @@
 ﻿using BannerKings.Components;
 using BannerKings.Populations;
+using HarmonyLib;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -475,6 +476,27 @@ namespace BannerKings.Behaviours
         public override void SyncData(IDataStore dataStore)
         {
  
+        }
+    }
+
+    namespace Patches
+    {
+        [HarmonyPatch(typeof(DestroyPartyAction), "Apply")]
+        class ApplyPatch
+        {
+            static void Postfix(PartyBase destroyerParty, MobileParty destroyedParty)
+            {
+                Console.WriteLine(destroyedParty.Name);
+            }
+        }
+
+        [HarmonyPatch(typeof(DestroyPartyAction), "ApplyForDisbanding")]
+        class ApplyForDisbandingPatch
+        {
+            static void Postfix(MobileParty disbandedParty, Settlement relatedSettlement)
+            {
+                Console.WriteLine(disbandedParty.Name);
+            }
         }
     }
 }

@@ -29,6 +29,7 @@ namespace BannerKings.Components
                 mobileParty.ShouldJoinPlayerBattles = true;
                 mobileParty.Aggressiveness = 0.1f;
                 mobileParty.PaymentLimit = Campaign.Current.Models.PartyWageModel.MaxWage;
+                mobileParty.Ai.SetAIState(AIState.Undefined);
             });
         }
 
