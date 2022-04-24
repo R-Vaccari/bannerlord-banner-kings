@@ -62,11 +62,13 @@ namespace BannerKings.Managers
         {
             List<MobileParty> list = new List<MobileParty>();
             foreach (MobileParty party in Caravans)
-                if (party.PartyComponent is MilitiaComponent && party.Owner.Clan == clan)
+                if (party.PartyComponent is RetinueComponent && party.Owner.Clan == clan)
                     list.Add(party);
             
             return list;
         }
+
+        public List<MobileParty> GetParties(Type type) => this.Caravans.FindAll(x => x.GetType() == type);
 
         public List<(ItemObject, float)> GetProductions(VillageData villageData)
         {

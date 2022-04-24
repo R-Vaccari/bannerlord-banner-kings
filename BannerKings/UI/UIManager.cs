@@ -336,8 +336,6 @@ namespace BannerKings.UI
                         MethodInfo set = __instance.GetType().GetMethod("OnCurrentProjectSet", BindingFlags.Instance | BindingFlags.NonPublic);
                         MethodInfo reset = __instance.GetType().GetMethod("OnResetCurrentProject", BindingFlags.Instance | BindingFlags.NonPublic);
 
-                        List<VillageBuilding> buildings = new List<VillageBuilding>(villageData.Buildings);
-
                         foreach (VillageBuilding building in villageData.Buildings)
                         {
                             BuildingLocation location = building.BuildingType.BuildingLocation;
@@ -349,9 +347,8 @@ namespace BannerKings.UI
                                 new Action(delegate {
                                     __instance.CurrentSelectedProject = (__instance.LocalDevelopmentList.Count > 0) ?
                                     __instance.AvailableProjects.First((SettlementBuildingProjectVM p) => p.Building.BuildingType.StringId == __instance.LocalDevelopmentList[0].BuildingType.StringId) : __instance.CurrentDailyDefault;
-                                }),
-                                building
-                            );
+                                    }), building);
+
                                 __instance.AvailableProjects.Add(vm);
                                 if (building.BuildingType.StringId == villageData.CurrentBuilding.BuildingType.StringId)
                                     __instance.CurrentSelectedProject = vm;
@@ -370,15 +367,20 @@ namespace BannerKings.UI
                                     __instance.CurrentDailyDefault.IsDefault = true;
                                     settlementDailyProjectVM.IsDefault = true;
                                 }
-
-                                if (building.BuildingType.Explanation != null && __instance.CurrentDailyDefault == null ||
-                                    __instance.CurrentDailyDefault.Building == null)
-                                    __instance.CurrentDailyDefault = settlementDailyProjectVM;
                             }
                         }
 
                         foreach (VillageBuilding item in villageData.BuildingsInProgress)
                             __instance.LocalDevelopmentList.Add(item);
+
+                        if (__instance.LocalDevelopmentList.Count > 0)
+                        {
+                            Building first = __instance.LocalDevelopmentList[0];
+                            selection.Invoke(__instance, new object[] { __instance.AvailableProjects.First(x => x.Building.BuildingType.StringId == first.BuildingType.StringId), true });
+                            foreach (VillageBuilding b in villageData.BuildingsInProgress)
+                                if (b.BuildingType.StringId != first.BuildingType.StringId)
+                                    selection.Invoke(__instance, new object[] { __instance.AvailableProjects.First(x => x.Building.BuildingType.StringId == b.BuildingType.StringId), false });
+                        }
 
                         MethodInfo refreshQueue = __instance.GetType().GetMethod("RefreshDevelopmentsQueueIndex", BindingFlags.Instance | BindingFlags.NonPublic);
                         refreshQueue.Invoke(__instance, null);

@@ -33,12 +33,21 @@ namespace BannerKings.Behaviours
                 PopulationPartyComponent component = (PopulationPartyComponent)party.PartyComponent;
                 Settlement target = component._target;
 
+                if (component is RetinueComponent)
+                {
+                    if (party.CurrentSettlement == null)
+                        EnterSettlementAction.ApplyForParty(party, party.HomeSettlement);
+
+                    party.SetMoveModeHold();
+                    return;
+                }
+
                 if (component is MilitiaComponent)
                 {
                     MilitiaComponent militiaComponent = (MilitiaComponent)component;
-                    AiBehavior behavior = militiaComponent.behavior;
+                    AiBehavior behavior = militiaComponent.Behavior;
                     if (behavior == AiBehavior.EscortParty)
-                        party.SetMoveEscortParty(militiaComponent._escortTarget);
+                        party.SetMoveEscortParty(militiaComponent.Escort);
                     else party.SetMoveGoToSettlement(militiaComponent.OriginSettlement);
                     return;
                 }
@@ -350,7 +359,7 @@ namespace BannerKings.Behaviours
             if (IsTravellerParty(party))
             {
                 MilitiaComponent component = (MilitiaComponent)party.MobileParty.PartyComponent;
-                component.behavior = AiBehavior.GoToSettlement;
+                component.Behavior = AiBehavior.GoToSettlement;
             }
         }
 
@@ -360,7 +369,7 @@ namespace BannerKings.Behaviours
             if (IsTravellerParty(party))
             {
                 MilitiaComponent component = (MilitiaComponent)party.MobileParty.PartyComponent;
-                component.behavior = AiBehavior.EscortParty;
+                component.Behavior = AiBehavior.EscortParty;
             }
         }
 

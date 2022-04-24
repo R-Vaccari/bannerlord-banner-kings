@@ -113,7 +113,7 @@ namespace BannerKings.UI
                             if (party.CurrentSettlement != null && party.CurrentSettlement == settlement)
                             {
                                 int menCount = party.MemberRoster.TotalManCount;
-                                MilitiaComponent.CreateMilitiaEscort("raisedmilitia_", settlement, settlement, "Raised Militia from {0}", Hero.MainHero.PartyBelongedTo, party);
+                                MilitiaComponent.CreateMilitiaEscort(settlement, Hero.MainHero.PartyBelongedTo, party);
                                 if (lord == Hero.MainHero)
                                     InformationManager.DisplayMessage(new InformationMessage(string.Format("{0} men raised as militia at {1}!", menCount, settlement.Name)));
                             }

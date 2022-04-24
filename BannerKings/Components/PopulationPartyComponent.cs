@@ -11,7 +11,7 @@ using BannerKings.Populations;
 
 namespace BannerKings.Components
 {
-    class PopulationPartyComponent : PartyComponent
+    public class PopulationPartyComponent : PartyComponent
     {
         [SaveableProperty(1)]
         public Settlement _target { get; set; }
@@ -98,7 +98,6 @@ namespace BannerKings.Components
                         if (soldier != null)
                             roster.AddToCounts(soldier, GetCountToAdd(roster.TotalRegulars, soldier.Tier, soldier.IsRanged));
                     }
-
             }
             
             party.InitializeMobilePartyAroundPosition(roster, new TroopRoster(party.Party), origin.GatePosition, 1f);
@@ -129,7 +128,7 @@ namespace BannerKings.Components
             
         }
 
-        protected static void GiveFood(ref MobileParty party)
+        public static void GiveFood(ref MobileParty party)
         {
             foreach (ItemObject itemObject in Items.All)
             {

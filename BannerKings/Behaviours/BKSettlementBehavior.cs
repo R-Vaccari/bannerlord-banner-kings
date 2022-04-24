@@ -1,5 +1,4 @@
-﻿
-using BannerKings.Managers;
+﻿using BannerKings.Managers;
 using BannerKings.UI;
 using System;
 using System.Collections.Generic;
@@ -20,12 +19,12 @@ using BannerKings.Managers.Policies;
 using BannerKings.Managers.Populations.Villages;
 using static BannerKings.Managers.Policies.BKTaxPolicy;
 using BannerKings.Managers.Decisions;
+using BannerKings.Components;
 
 namespace BannerKings.Behaviors
 {
     public class BKSettlementBehavior : CampaignBehaviorBase
     {
-
         private PopulationManager populationManager = null;
         private PolicyManager policyManager = null;
         private TitleManager titleManager = null;
@@ -282,9 +281,20 @@ namespace BannerKings.Behaviors
             {
                 PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
                 VillageData villageData = data.VillageData;
+                villageData.StartRandomProject();
                 if (villageData != null)
                 {
-                    float trainning = villageData.GetBuildingLevel(DefaultVillageBuildings.Instance.Manor);
+                    float manor = villageData.GetBuildingLevel(DefaultVillageBuildings.Instance.Manor);
+                    if (manor > 0)
+                    {
+                        List<MobileParty> retinues = BannerKingsConfig.Instance.PopulationManager.GetParties(Type.GetType("RetinueComponent"));
+                        MobileParty retinue = null;
+                        if (retinues.Count > 0) retinue = retinues.Find(x => x.HomeSettlement == settlement);
+                        if (retinue == null)
+                            retinue = RetinueComponent.CreateRetinue(settlement);
+                        
+                        (retinue.PartyComponent as RetinueComponent).DailyTick(manor);
+                    }
                 }
             }    
         }

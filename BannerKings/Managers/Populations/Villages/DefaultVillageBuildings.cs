@@ -51,8 +51,7 @@ namespace BannerKings.Managers.Populations.Villages
             }, BuildingLocation.Settlement, new Tuple<BuildingEffectEnum, float, float, float>[]
             {
    
-            }, 0);
-
+            }, 1);
 
             this.palisade = new BuildingType("bannerkings_palisade");
             Game.Current.ObjectManager.RegisterPresumedObject<BuildingType>(palisade);
@@ -107,8 +106,6 @@ namespace BannerKings.Managers.Populations.Villages
    
             }, 0);
 
-            
-
             this.bakery = new BuildingType("bannerkings_bakery");
             this.bakery.Initialize(new TextObject("{=!}Bakery"), 
                 new TextObject("{=!}Supply tools and space for a local bakery, allowing serfs to turn wheat into bread. Adds bread as production good."), new int[]
@@ -134,7 +131,6 @@ namespace BannerKings.Managers.Populations.Villages
  
             }, 0);
 
-
             this.animalHousing = new BuildingType("bannerkings_animal_housing");
             Game.Current.ObjectManager.RegisterPresumedObject<BuildingType>(animalHousing);
             this.animalHousing.Initialize(new TextObject("{=!}Animal Housing"), 
@@ -147,7 +143,6 @@ namespace BannerKings.Managers.Populations.Villages
             {
   
             }, 0);
-
 
             this.farming = new BuildingType("bannerkings_farming");
             Game.Current.ObjectManager.RegisterPresumedObject<BuildingType>(farming);
@@ -162,8 +157,6 @@ namespace BannerKings.Managers.Populations.Villages
     
             }, 0);
 
-
-
             this.sawmill = new BuildingType("bannerkings_sawmill");
             Game.Current.ObjectManager.RegisterPresumedObject<BuildingType>(sawmill);
             this.sawmill.Initialize(new TextObject("{=!}Sawmill"), 
@@ -176,7 +169,6 @@ namespace BannerKings.Managers.Populations.Villages
             {
 
             }, 0);
-
 
             this.butter = new BuildingType("bannerkings_butter");
             this.butter.Initialize(new TextObject("{=!}Butter Mill"), 
@@ -234,7 +226,6 @@ namespace BannerKings.Managers.Populations.Villages
 
             }, 0);
 
-
             this.dailyFarm = new BuildingType("bannerkings_daily_farm");
             Game.Current.ObjectManager.RegisterPresumedObject<BuildingType>(dailyFarm);
             this.dailyFarm.Initialize(new TextObject("{=!}Farmland", null), new TextObject("{=!}Focus efforts on creating new arable acres, used for farming purposes. More farming acres increase output of farming goods.", null), new int[3], BuildingLocation.Daily, new Tuple<BuildingEffectEnum, float, float, float>[]
@@ -277,7 +268,6 @@ namespace BannerKings.Managers.Populations.Villages
             yield break;
         }
 
-
         public static IEnumerable<BuildingType> VillageBuildings(Village village)
         {
             VillageType type = village.VillageType;
@@ -308,7 +298,6 @@ namespace BannerKings.Managers.Populations.Villages
             if (type == DefaultVillageTypes.IronMine)
                 yield return Instance.Blacksmith;
             yield break;
-            
         }
     }
 }

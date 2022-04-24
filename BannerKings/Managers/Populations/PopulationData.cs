@@ -480,6 +480,12 @@ namespace BannerKings.Populations
             this.inProgress = new Queue<Building>();
         }
 
+        public void StartRandomProject()
+        {
+            if (this.inProgress.IsEmpty())
+                this.inProgress.Enqueue(this.buildings.GetRandomElementWithPredicate(x => x.BuildingType.BuildingLocation != BuildingLocation.Daily));
+        }
+
         public int GetBuildingLevel(BuildingType type)
         {
             Building building = this.buildings.FirstOrDefault(x => x.BuildingType == type);
@@ -576,9 +582,6 @@ namespace BannerKings.Populations
 
         internal override void Update(PopulationData data)
         {
-
-            
-
             VillageBuilding current = this.CurrentBuilding;
             if (current != null && this.BuildingsInProgress.Count() > 0)
                 if (this.BuildingsInProgress.Peek().BuildingType.StringId == current.BuildingType.StringId)
