@@ -407,6 +407,13 @@ namespace BannerKings.Behaviors
 
             // ------- ACTIONS --------
 
+            campaignGameStarter.AddGameMenuOption("bannerkings_actions", "action_slave_transfer", "{=!}Transfer slaves",
+                new GameMenuOption.OnConditionDelegate(MenuSlavesActionCondition), delegate (MenuCallbackArgs x)
+                {
+                    UIHelper.ShowSlaveTransferScreen();
+
+                }, false, -1, false);
+
             campaignGameStarter.AddGameMenuOption("bannerkings_actions", "action_meet_nobility", "{=!}Meet nobility",
                 new GameMenuOption.OnConditionDelegate(MenuMeetNobilityActionCondition), delegate (MenuCallbackArgs x)
                 {
@@ -727,6 +734,12 @@ namespace BannerKings.Behaviors
                     criminal = kingdom.MainHeroCrimeRating > 0;
             }
             return criminal;
+        }
+
+        private static bool MenuSlavesActionCondition(MenuCallbackArgs args)
+        {
+            args.optionLeaveType = GameMenuOption.LeaveType.TroopSelection;
+            return Settlement.CurrentSettlement.OwnerClan == Clan.PlayerClan;
         }
 
         private static bool MenuWaitActionPeasantCondition(MenuCallbackArgs args)

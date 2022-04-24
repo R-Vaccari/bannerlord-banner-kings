@@ -90,14 +90,6 @@ namespace BannerKings.Behaviours
                     BannerKingsConfig.Instance.PopulationManager.RemoveCaravan(party);
                 }
             }
-
-            /*
-            if (party.StringId.Contains("slavecaravan") && party.Party != null && party.Party.NumberOfHealthyMembers == 0)
-            {
-                DestroyPartyAction.Apply(null, party);
-                if (PopulationConfig.Instance.PopulationManager.IsPopulationParty(party))
-                    PopulationConfig.Instance.PopulationManager.RemoveCaravan(party);
-            }*/
         }
 
         private void DailySettlementTick(Settlement settlement)

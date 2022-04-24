@@ -11,11 +11,29 @@ using BannerKings.Managers.Titles;
 using TaleWorlds.CampaignSystem.ViewModelCollection;
 using TaleWorlds.Library;
 using BannerKings.Models.BKModels;
+using BannerKings.Populations;
+using static BannerKings.Managers.PopulationManager;
 
 namespace BannerKings.UI
 {
     public static class UIHelper
     {
+		public static void ShowSlaveTransferScreen()
+        {
+			TroopRoster leftMemberRoster = TroopRoster.CreateDummyTroopRoster();
+			PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(Settlement.CurrentSettlement);
+			int count = (int)((float)data.GetTypeCount(PopType.Slaves) * data.EconomicData.StateSlaves);
+			int playerPrisonerCount = MobileParty.MainParty.PrisonRoster.TotalRegulars;
+			TroopRoster stlmtSlaves = new TroopRoster(null);
+			stlmtSlaves.AddToCounts(CharacterObject.All.FirstOrDefault(x => x.StringId == "looter"), count);
+			PartyScreenManager.OpenScreenAsLoot(TroopRoster.CreateDummyTroopRoster(), stlmtSlaves, Settlement.CurrentSettlement.Name, 0, 
+				delegate (PartyBase partyBase, TroopRoster leftMemberRoster, TroopRoster leftPrisonRoster, 
+				PartyBase rightOwnerParty, TroopRoster rightMemberRoster, TroopRoster rightPrisonRoster, bool fromCancel) 
+				{
+					int removed = leftPrisonRoster.TotalRegulars - count;
+					data.UpdatePopType(PopType.Slaves, removed, true);
+				});
+		}
 
 		public static void ShowTitleActionPopup(TitleAction action, ViewModel vm = null)
 		{

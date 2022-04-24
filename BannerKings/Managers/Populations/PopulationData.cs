@@ -195,7 +195,7 @@ namespace BannerKings.Populations
             }
         }
 
-        public void UpdatePopType(PopType type, int count, bool estateSlave = false)
+        public void UpdatePopType(PopType type, int count, bool stateSlaves = false)
         {
             if (type != PopType.None)
             {
@@ -205,9 +205,11 @@ namespace BannerKings.Populations
 
                 if (type == PopType.Slaves)
                 {
-                    float currentTotal = pops.count;
-                    float toAdd = count;
-                    float proportion = toAdd / currentTotal;
+                    int total = pops.count + count;
+                    float currentState = (float)pops.count * this.economicData.StateSlaves;
+                    if (stateSlaves)
+                        currentState += count;
+                    this.economicData.StateSlaves = currentState / (float)total;
                 }
 
                 pops.count += count;

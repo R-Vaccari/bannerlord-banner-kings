@@ -26,6 +26,7 @@ using TaleWorlds.CampaignSystem.SandBox.GameComponents.Map;
 using static TaleWorlds.CampaignSystem.SandBox.Issues.CaravanAmbushIssueBehavior;
 using static TaleWorlds.CampaignSystem.SandBox.Issues.LandLordNeedsManualLaborersIssueBehavior;
 using static TaleWorlds.CampaignSystem.Election.KingSelectionKingdomDecision;
+using static TaleWorlds.CampaignSystem.SandBox.Issues.VillageNeedsToolsIssueBehavior;
 
 namespace BannerKings
 {
@@ -165,6 +166,27 @@ namespace BannerKings
                 }
             }
 
+            [HarmonyPatch(typeof(VillageNeedsToolsIssue), "IssueStayAliveConditions")]
+            class VillageIssueStayAliveConditionsPatch
+            {
+                static bool Prefix(CaravanAmbushIssue __instance, ref bool __result)
+                {
+                    if (__instance.IssueOwner != null)
+                    {
+                        if (__instance.IssueOwner.CurrentSettlement == null || !__instance.IssueOwner.CurrentSettlement.IsVillage)
+                        {
+                            __result = false;
+                            return false;
+                        }
+                    } else
+                    {
+                        __result = false;
+                        return false;
+                    } 
+
+                    return true;
+                }
+            }
 
             [HarmonyPatch(typeof(CaravanAmbushIssue), "IssueStayAliveConditions")]
             class CaravanIssueStayAliveConditionsPatch
