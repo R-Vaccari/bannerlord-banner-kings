@@ -5,7 +5,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 
-namespace BannerKings.Models
+namespace BannerKings.Models.BKModels
 {
     public class BKTitleModel : IBannerKingsModel
     {
@@ -17,7 +17,84 @@ namespace BannerKings.Models
                 return GetUsurp(title, taker);
             else if (type == ActionType.Revoke)
                 return GetRevoke(title, taker);
+            else if (type == ActionType.Claim)
+                return GetClaim(title, taker);
             else return GetGrant(title, taker);
+        }
+
+        private TitleAction GetClaim(FeudalTitle title, Hero claimant)
+        {
+            TitleAction claimAction = new TitleAction(ActionType.Claim, title, claimant);
+            claimAction.Gold = this.GetGoldUsurpCost(title) * 0.1f;
+            claimAction.Influence = this.GetInfluenceUsurpCost(title) * 0.2f;
+            claimAction.Renown = this.GetRenownUsurpCost(title) * 0.2f;
+            List<Hero> possibleClaimants = this.GetClaimants(title);
+
+            if (title.deJure == claimant)
+            {
+                claimAction.Possible = false;
+                claimAction.Reason = new TextObject("{=!}Already legal owner.");
+                return claimAction;
+            }
+
+            if (!possibleClaimants.Contains(claimant))
+            {
+                claimAction.Possible = false;
+                claimAction.Reason = new TextObject("{=!}Not a possible claimant.");
+                return claimAction;
+            }
+
+            ClaimType claimType = title.GetHeroClaim(claimant);
+            if (claimType == ClaimType.Ongoing)
+            {
+                claimAction.Possible = false;
+                claimAction.Reason = new TextObject("{=!}Already building a claim.");
+                return claimAction;
+            }
+            else if (claimType != ClaimType.None)
+            {
+                claimAction.Possible = false;
+                claimAction.Reason = new TextObject("{=!}Already a claimant.");
+                return claimAction;
+            }
+
+            if (title.deJure.Clan == claimant.Clan)
+            {
+                claimAction.Possible = false;
+                claimAction.Reason = new TextObject("{=!}Owner is in same clan.");
+                return claimAction;
+            }
+
+            if (title.type == TitleType.Lordship)
+            {
+                Kingdom kingdom = claimant.Clan.Kingdom;
+                if (kingdom != null && kingdom == title.deJure.Clan.Kingdom && BannerKingsConfig.Instance.TitleManager.GetAllDeJure(title.deJure).Count == 1)
+                {
+                    claimAction.Possible = false;
+                    claimAction.Reason = new TextObject("{=!}Not possible to claim a knight's lordship within your faction.");
+                    return claimAction;
+                }
+
+                FeudalTitle boundTitle = BannerKingsConfig.Instance.TitleManager.GetTitle(title.fief.Village.Bound);
+                if (claimant != boundTitle.deJure)
+                {
+                    claimAction.Possible = false;
+                    claimAction.Reason = new TextObject("{=!}Not possible to claim lordships without owning it's suzerain title.");
+                    return claimAction;
+                }
+            }
+
+            if (claimant.Gold < claimAction.Gold || claimant.Clan.Influence < claimAction.Influence)
+            {
+                claimAction.Possible = false;
+                claimAction.Reason = new TextObject("{=!}Missing required resources.");
+                return claimAction;
+            }
+
+            claimAction.Possible = true;
+            claimAction.Reason = new TextObject("{=!}You may claim this title.");
+
+            return claimAction;
         }
 
         private TitleAction GetRevoke(FeudalTitle title, Hero revoker)
@@ -30,7 +107,7 @@ namespace BannerKings.Models
             if (title.deJure == revoker)
             {
                 revokeAction.Possible = false;
-                revokeAction.Reason = new TextObject("{=!}Can not revoke one's own title.");
+                revokeAction.Reason = new TextObject("{=!}Already legal owner.");
                 return revokeAction;
             }
 
@@ -182,17 +259,8 @@ namespace BannerKings.Models
                 return usurpData;
             }
 
-            bool claim = title.DeFacto == Hero.MainHero;
-            if (!claim)
-                if (title.vassals != null && title.vassals.Count > 0)
-                    foreach (FeudalTitle vassal in title.vassals)
-                        if (vassal.deJure == Hero.MainHero)
-                        {
-                            claim = true;
-                            break;
-                        }
-
-            if (claim)
+            ClaimType type = title.GetHeroClaim(usurper);
+            if (type != ClaimType.None && type != ClaimType.Ongoing)
             {
                 usurpData.Possible = true;
                 usurpData.Reason = new TextObject("{=!}You may claim this title.");
@@ -206,12 +274,22 @@ namespace BannerKings.Models
                     return usurpData;
                 }
 
-
                 if (usurper.Gold < usurpData.Gold || usurper.Clan.Influence < usurpData.Influence)
                 {
                     usurpData.Possible = false;
                     usurpData.Reason = new TextObject("{=!}Missing required resources.");
                     return usurpData;
+                }
+
+                if (title.IsSovereignLevel)
+                {
+                    Kingdom faction = BannerKingsConfig.Instance.TitleManager.GetTitleFaction(title);
+                    if (faction.Leader != usurper)
+                    {
+                        usurpData.Possible = false;
+                        usurpData.Reason = new TextObject("{=!}Must be faction leader to usurp highest title in hierarchy.");
+                        return usurpData;
+                    }
                 }
 
                 return usurpData;

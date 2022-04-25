@@ -40,7 +40,11 @@ namespace BannerKings.Managers.Populations
 
         public float Tariff => new BKTaxModel().GetTownTaxRatio(settlement.Town);
 
-        public float StateSlaves => this.stateSlaves;
+        public float StateSlaves
+        {
+            get => this.stateSlaves;
+            set => this.stateSlaves = MBMath.ClampFloat(value, 0f, 1f);
+        }
 
         public float[] Satisfactions => this.satisfactions;
 

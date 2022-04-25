@@ -1,13 +1,12 @@
-﻿using BannerKings.Utils;
-using TaleWorlds.CampaignSystem;
+﻿using TaleWorlds.CampaignSystem;
 using System.Linq;
 using TaleWorlds.Core;
 using TaleWorlds.Core.ViewModelCollection;
 using TaleWorlds.Library;
-using BannerKings.Models;
 using TaleWorlds.Localization;
 using System.Collections.Generic;
 using BannerKings.Managers.Titles;
+using BannerKings.Models.BKModels;
 
 namespace BannerKings.UI.Items
 {
@@ -34,26 +33,29 @@ namespace BannerKings.UI.Items
 			if (title != null)
 			{
 				BKTitleModel model = (BannerKingsConfig.Instance.Models.First(x => x is BKTitleModel) as BKTitleModel);
-				TitleAction usurpData = model.GetAction(ActionType.Usurp, title, Hero.MainHero);
-				List<Hero> claimants = model.GetClaimants(title);
-
 				CharacterCode characterCode = CharacterCode.CreateFrom(title.deJure.CharacterObject);
 				this.ImageIdentifier = new ImageIdentifierVM(characterCode);
 
 				List<TitleAction> actions = new List<TitleAction>();
-				actions.Add(usurpData);
-				if (claimants.Contains(Hero.MainHero))
+				TitleAction usurpData = model.GetAction(ActionType.Usurp, title, Hero.MainHero);
+				if (title.GetHeroClaim(Hero.MainHero) != ClaimType.None)
 				{
 					DecisionElement usurpButton = new DecisionElement().SetAsButtonOption(new TextObject("{=!}Usurp").ToString(),
 						() => UIHelper.ShowTitleActionPopup(usurpData, this));
-
-				
 					usurpButton.Enabled = usurpData.Possible;
 					this.Decisions.Add(usurpButton);
-				} 
+				}
+
+				TitleAction claimAction = model.GetAction(ActionType.Claim, title, Hero.MainHero);
+				if (claimAction.Possible)
+                {
+					DecisionElement claimButton = new DecisionElement().SetAsButtonOption(new TextObject("{=!}Claim").ToString(),
+						() => UIHelper.ShowTitleActionPopup(claimAction, this));
+					claimButton.Enabled = claimAction.Possible;
+					this.Decisions.Add(claimButton);
+				}
 
 				TitleAction grantData = model.GetAction(ActionType.Grant, title, Hero.MainHero);
-				actions.Add(grantData);
 				if (grantData.Possible)
                 {
 					DecisionElement grantButton = new DecisionElement().SetAsButtonOption(new TextObject("{=!}Grant").ToString(),
@@ -63,7 +65,6 @@ namespace BannerKings.UI.Items
 				}
 
 				TitleAction revokeData = model.GetAction(ActionType.Revoke, title, Hero.MainHero);
-				actions.Add(revokeData);
 				if (revokeData.Possible)
 				{
 					DecisionElement revokeButton = new DecisionElement().SetAsButtonOption(new TextObject("{=!}Revoke").ToString(),
@@ -71,9 +72,16 @@ namespace BannerKings.UI.Items
 					revokeButton.Enabled = revokeData.Possible;
 					this.Decisions.Add(revokeButton);
 				}
-				
 
-				this.Hint = new BasicTooltipViewModel(() => UIHelper.GetTitleTooltip(title.deJure, actions, claimants));
+				if (title.deJure != Hero.MainHero)
+				{
+					actions.Add(usurpData);
+					actions.Add(claimAction);
+					actions.Add(revokeData);
+				}
+				else actions.Add(grantData);
+
+				this.Hint = new BasicTooltipViewModel(() => UIHelper.GetTitleTooltip(title, actions));
 			}
 		}
 

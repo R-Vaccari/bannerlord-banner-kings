@@ -11,6 +11,7 @@ using TaleWorlds.Library;
 using BannerKings.Managers.Populations.Villages;
 using BannerKings.Managers.Court;
 using BannerKings.Managers.Titles;
+using BannerKings.Models.BKModels;
 
 namespace BannerKings
 {
@@ -29,6 +30,7 @@ namespace BannerKings
         {
             DefaultVillageBuildings.Instance.Init();
             this.PopulationManager = new PopulationManager(new Dictionary<Settlement, PopulationData>(), new List<MobileParty>());
+            this.PopulationManager.ReInitBuildings();
             this.PolicyManager = new PolicyManager(new Dictionary<Settlement, List<BannerKingsDecision>>(), new Dictionary<Settlement,
             List<BannerKingsPolicy>>());
             this.TitleManager = new TitleManager(new Dictionary<FeudalTitle, Hero>(), new Dictionary<Hero, List<FeudalTitle>>(), new Dictionary<Kingdom, FeudalTitle>());
@@ -40,6 +42,7 @@ namespace BannerKings
         {
             DefaultVillageBuildings.Instance.Init();
             this.PopulationManager = populationManager;
+            this.PopulationManager.ReInitBuildings();
             this.PolicyManager = policyManager;
             this.TitleManager = titleManager;
             titleManager.RefreshDeJure();

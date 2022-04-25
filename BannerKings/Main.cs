@@ -15,7 +15,6 @@ using static BannerKings.Managers.PopulationManager;
 using TaleWorlds.CampaignSystem.SandBox.CampaignBehaviors;
 using System.Reflection;
 using TaleWorlds.ObjectSystem;
-using TaleWorlds.CampaignSystem.CharacterDevelopment.Managers;
 using BannerKings.Managers.Helpers;
 using BannerKings.Populations;
 using BannerKings.Models.Vanilla;
@@ -23,8 +22,11 @@ using BannerKings.Behaviours;
 using TaleWorlds.CampaignSystem.Election;
 using TaleWorlds.CampaignSystem.SandBox.GameComponents;
 using BannerKings.Managers.Titles;
+using TaleWorlds.CampaignSystem.SandBox.GameComponents.Map;
 using static TaleWorlds.CampaignSystem.SandBox.Issues.CaravanAmbushIssueBehavior;
 using static TaleWorlds.CampaignSystem.SandBox.Issues.LandLordNeedsManualLaborersIssueBehavior;
+using static TaleWorlds.CampaignSystem.Election.KingSelectionKingdomDecision;
+using static TaleWorlds.CampaignSystem.SandBox.Issues.VillageNeedsToolsIssueBehavior;
 
 namespace BannerKings
 {
@@ -37,46 +39,41 @@ namespace BannerKings
         {
             if (game.GameType is Campaign)
             {
-                try
-                {
-                    CampaignGameStarter campaignStarter = (CampaignGameStarter)gameStarter;
-                    campaignStarter.AddBehavior(new BKSettlementBehavior());
-                    campaignStarter.AddBehavior(new BKCompanionBehavior());
-                    campaignStarter.AddBehavior(new BKTournamentBehavior());
-                    campaignStarter.AddBehavior(new BKRepublicBehavior());
-                    campaignStarter.AddBehavior(new BKPartyBehavior());
-                    campaignStarter.AddBehavior(new BKClanBehavior());
-                    campaignStarter.AddBehavior(new BKArmyBehavior());
-                    campaignStarter.AddBehavior(new BKRansomBehavior());
-                    campaignStarter.AddBehavior(new BKTitleBehavior());
+                CampaignGameStarter campaignStarter = (CampaignGameStarter)gameStarter;
+                campaignStarter.AddBehavior(new BKSettlementBehavior());
+                campaignStarter.AddBehavior(new BKCompanionBehavior());
+                campaignStarter.AddBehavior(new BKTournamentBehavior());
+                campaignStarter.AddBehavior(new BKRepublicBehavior());
+                campaignStarter.AddBehavior(new BKPartyBehavior());
+                campaignStarter.AddBehavior(new BKClanBehavior());
+                campaignStarter.AddBehavior(new BKArmyBehavior());
+                campaignStarter.AddBehavior(new BKRansomBehavior());
+                campaignStarter.AddBehavior(new BKTitleBehavior());
 
-                    campaignStarter.AddModel(new BKCompanionPrices());
-                    campaignStarter.AddModel(new BKProsperityModel());
-                    campaignStarter.AddModel(new BKTaxModel());
-                    campaignStarter.AddModel(new BKFoodModel());
-                    campaignStarter.AddModel(new BKConstructionModel());
-                    campaignStarter.AddModel(new BKMilitiaModel());
-                    campaignStarter.AddModel(new BKInfluenceModel());
-                    campaignStarter.AddModel(new BKLoyaltyModel());
-                    campaignStarter.AddModel(new BKVillageProductionModel());
-                    campaignStarter.AddModel(new BKSecurityModel());
-                    campaignStarter.AddModel(new BKPartyLimitModel());
-                    campaignStarter.AddModel(new BKEconomyModel());
-                    //campaignStarter.AddModel(new BKPriceFactorModel());
-                    campaignStarter.AddModel(new BKWorkshopModel());
-                    campaignStarter.AddModel(new BKClanFinanceModel());
-                    campaignStarter.AddModel(new BKArmyManagementModel());
-                    campaignStarter.AddModel(new BKSiegeEventModel());
-                    campaignStarter.AddModel(new BKTournamentModel());
-                    campaignStarter.AddModel(new BKRaidModel());
-                    campaignStarter.AddModel(new BKVolunteerModel());
-                    campaignStarter.AddModel(new BKNotableModel());
-                    campaignStarter.AddModel(new BKGarrisonModel());
-                    campaignStarter.AddModel(new BKRansomModel());
-                    campaignStarter.AddModel(new BKClanTierModel());
-                } catch (Exception e)
-                {
-                }
+                campaignStarter.AddModel(new BKCompanionPrices());
+                campaignStarter.AddModel(new BKProsperityModel());
+                campaignStarter.AddModel(new BKTaxModel());
+                campaignStarter.AddModel(new BKFoodModel());
+                campaignStarter.AddModel(new BKConstructionModel());
+                campaignStarter.AddModel(new BKMilitiaModel());
+                campaignStarter.AddModel(new BKInfluenceModel());
+                campaignStarter.AddModel(new BKLoyaltyModel());
+                campaignStarter.AddModel(new BKVillageProductionModel());
+                campaignStarter.AddModel(new BKSecurityModel());
+                campaignStarter.AddModel(new BKPartyLimitModel());
+                campaignStarter.AddModel(new BKEconomyModel());
+                //campaignStarter.AddModel(new BKPriceFactorModel());
+                campaignStarter.AddModel(new BKWorkshopModel());
+                campaignStarter.AddModel(new BKClanFinanceModel());
+                campaignStarter.AddModel(new BKArmyManagementModel());
+                campaignStarter.AddModel(new BKSiegeEventModel());
+                campaignStarter.AddModel(new BKTournamentModel());
+                campaignStarter.AddModel(new BKRaidModel());
+                campaignStarter.AddModel(new BKVolunteerModel());
+                campaignStarter.AddModel(new BKNotableModel());
+                campaignStarter.AddModel(new BKGarrisonModel());
+                campaignStarter.AddModel(new BKRansomModel());
+                campaignStarter.AddModel(new BKClanTierModel());
             }
 
             //xtender.Register(typeof(Main).Assembly);
@@ -106,6 +103,22 @@ namespace BannerKings
                         PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
                         data.MilitaryData.DeduceManpower(data, number, troop);
                     }
+                }
+            }
+
+            [HarmonyPatch(typeof(DefaultVolunteerProductionModel), "GetDailyVolunteerProductionProbability")]
+            class GetDailyVolunteerProductionProbabilityPatch
+            {
+                static bool Prefix(Hero hero, int index, Settlement settlement, ref float __result)
+                {
+
+                    if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
+                    {
+                        __result = new BKVolunteerModel().GetDraftEfficiency(hero, index, settlement).ResultNumber;
+                        return false;
+                    }
+
+                    return true;
                 }
             }
         }
@@ -146,13 +159,34 @@ namespace BannerKings
                     if (__instance.Issue != null)
                         return false;
 
-                    bool result = __instance.IsActive && __instance.IsAlive;
-                    CampaignEventDispatcher.Instance.CanHaveQuestsOrIssues(__instance, ref result);
+                    __result = __instance.IsActive && __instance.IsAlive;
+                    CampaignEventDispatcher.Instance.CanHaveQuestsOrIssues(__instance, ref __result);
 
                     return false;
                 }
             }
 
+            [HarmonyPatch(typeof(VillageNeedsToolsIssue), "IssueStayAliveConditions")]
+            class VillageIssueStayAliveConditionsPatch
+            {
+                static bool Prefix(CaravanAmbushIssue __instance, ref bool __result)
+                {
+                    if (__instance.IssueOwner != null)
+                    {
+                        if (__instance.IssueOwner.CurrentSettlement == null || !__instance.IssueOwner.CurrentSettlement.IsVillage)
+                        {
+                            __result = false;
+                            return false;
+                        }
+                    } else
+                    {
+                        __result = false;
+                        return false;
+                    } 
+
+                    return true;
+                }
+            }
 
             [HarmonyPatch(typeof(CaravanAmbushIssue), "IssueStayAliveConditions")]
             class CaravanIssueStayAliveConditionsPatch
@@ -182,8 +216,7 @@ namespace BannerKings
                             __result = false;
                             return false;
                         }
-                    }
-                    else
+                    } else
                     {
                         __result = false;
                         return false;
@@ -216,145 +249,18 @@ namespace BannerKings
                 }
             }
 
-            [HarmonyPatch(typeof(KillCharacterAction), "ApplyInternal")]
-            class KillCharacterActionPatch
+            [HarmonyPatch(typeof(KingSelectionKingdomDecision), "ApplyChosenOutcome")]
+            class ApplyChosenOutcomePatch
             {
-                static bool Prefix(Hero victim, Hero killer, KillCharacterAction.KillCharacterActionDetail actionDetail, bool showNotification, bool isForced = false)
+                static void Postfix(KingSelectionKingdomDecision __instance, DecisionOutcome chosenOutcome)
                 {
-                    if (!victim.CanDie(actionDetail) && !isForced)
-                        return false;
-
-                    if (!victim.IsAlive)
+                    FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(__instance.Kingdom);
+                    if (title != null)
                     {
-                        Debug.FailedAssert("Victim: " + victim.Name + " is already dead!", "C:\\Develop\\mb3\\Source\\Bannerlord\\TaleWorlds.CampaignSystem\\Actions\\KillCharacterAction.cs", "ApplyInternal", 35);
-                        return false;
+                        Hero deJure = title.deJure;
+                        Hero king = ((KingSelectionDecisionOutcome)chosenOutcome).King;
+                        if (deJure != king) BannerKingsConfig.Instance.TitleManager.InheritTitle(deJure, king, title);
                     }
-                    if (victim.IsNotable)
-                    {
-                        IssueBase issue = victim.Issue;
-                        if (((issue != null) ? issue.IssueQuest : null) != null)
-                            Debug.FailedAssert("Trying to kill a notable that has quest!", "C:\\Develop\\mb3\\Source\\Bannerlord\\TaleWorlds.CampaignSystem\\Actions\\KillCharacterAction.cs", "ApplyInternal", 42);
-
-                    }
-                    MobileParty partyBelongedTo = victim.PartyBelongedTo;
-                    if (((partyBelongedTo != null) ? partyBelongedTo.MapEvent : null) == null)
-                    {
-                        MobileParty partyBelongedTo2 = victim.PartyBelongedTo;
-                        if (((partyBelongedTo2 != null) ? partyBelongedTo2.SiegeEvent : null) == null)
-                            goto IL_E2;
-
-                    }
-                    if (victim.DeathMark == KillCharacterAction.KillCharacterActionDetail.None)
-                    {
-                        victim.AddDeathMark(killer, actionDetail);
-                        return false;
-                    }
-                IL_E2:
-                    CampaignEventDispatcher.Instance.OnBeforeHeroKilled(victim, killer, actionDetail, showNotification);
-                    if (victim.IsHumanPlayerCharacter && victim.DeathMark == KillCharacterAction.KillCharacterActionDetail.None && actionDetail == KillCharacterAction.KillCharacterActionDetail.DiedInBattle)
-                    {
-                        victim.MakeWounded(killer, actionDetail);
-                        return false;
-                    }
-                    if (victim.IsHumanPlayerCharacter && !isForced)
-                    {
-                        victim.MakeWounded(killer, actionDetail);
-                        CampaignEventDispatcher.Instance.OnBeforeMainCharacterDied();
-                        return false;
-                    }
-
-                    victim.EncyclopediaText = (TextObject)Type.GetType("TaleWorlds.CampaignSystem.Actions.KillCharacterAction, TaleWorlds.CampaignSystem").GetMethod("CreateObituary", BindingFlags.Static | BindingFlags.NonPublic).Invoke(null, new object[] { victim, actionDetail });
-                    if (victim.Clan != null && (victim.Clan.Leader == victim || victim == Hero.MainHero))
-                    {
-                        Kingdom kingdom = victim.Clan.Kingdom;
-                        FeudalTitle title = null;
-                        if (BannerKingsConfig.Instance.TitleManager != null && BannerKingsConfig.Instance.TitleManager.IsHeroTitleHolder(victim))
-                        {
-                            if (kingdom != null) title = BannerKingsConfig.Instance.TitleManager.GetHighestTitleWithinFaction(victim, victim.Clan.Kingdom);
-                            else title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(victim);
-                        }
-
-                        if (victim != Hero.MainHero && victim.Clan.Heroes.Any((Hero x) => !x.IsChild && x != victim && x.IsAlive && (x.IsNoble || x.IsMinorFactionHero)))
-                            InheritanceHelper.ApplyInheritance(title, victim);
-
-                        if (kingdom != null)
-                        {
-                            if (victim.Clan.Kingdom.RulingClan == victim.Clan)
-                            {
-                                List<Clan> list = (from t in victim.Clan.Kingdom.Clans
-                                                   where !t.IsEliminated && t.Leader != victim && !t.IsUnderMercenaryService
-                                                   select t).ToList<Clan>();
-
-                                if (list.IsEmpty<Clan>())
-                                    DestroyKingdomAction.Apply(victim.Clan.Kingdom);
-                                else SuccessionHelper.ApplySuccession(title, list, victim, kingdom);
-                            }
-                        }
-                    }
-
-                    if (victim.PartyBelongedTo != null && (victim.PartyBelongedTo.LeaderHero == victim || victim == Hero.MainHero))
-                    {
-                        if (victim.PartyBelongedTo.Army != null)
-                        {
-                            if (victim.PartyBelongedTo.Army.LeaderParty == victim.PartyBelongedTo)
-                                victim.PartyBelongedTo.Army.DisperseArmy(Army.ArmyDispersionReason.ArmyLeaderIsDead);
-
-                            else victim.PartyBelongedTo.Army = null;
-
-                        }
-                        if (victim.PartyBelongedTo != MobileParty.MainParty)
-                        {
-                            victim.PartyBelongedTo.SetMoveModeHold();
-                            if (victim.Clan != null && victim.Clan.IsRebelClan)
-                                DestroyPartyAction.Apply(null, victim.PartyBelongedTo);
-
-                        }
-                    }
-                    Type.GetType("TaleWorlds.CampaignSystem.Actions.KillCharacterAction, TaleWorlds.CampaignSystem").GetMethod("MakeDead", BindingFlags.Static | BindingFlags.NonPublic).Invoke(null, new object[] { victim, true });
-                    if (victim.GovernorOf != null)
-                        ChangeGovernorAction.ApplyByGiveUpCurrent(victim);
-
-                    if (actionDetail == KillCharacterAction.KillCharacterActionDetail.Executed && killer == Hero.MainHero && victim.Clan != null && !victim.Clan.IsNeutralClan)
-                    {
-                        if (victim.GetTraitLevel(DefaultTraits.Honor) >= 0)
-                            TraitLevelingHelper.OnLordExecuted();
-
-                        foreach (Clan clan in Clan.All)
-                        {
-                            if (!clan.IsEliminated && !clan.IsBanditFaction && clan != Clan.PlayerClan && clan != CampaignData.NeutralFaction)
-                            {
-                                bool affectRelatives;
-                                int relationChangeForExecutingHero = Campaign.Current.Models.ExecutionRelationModel.GetRelationChangeForExecutingHero(victim, clan.Leader, out affectRelatives);
-                                if (relationChangeForExecutingHero != 0)
-                                    ChangeRelationAction.ApplyPlayerRelation(clan.Leader, relationChangeForExecutingHero, affectRelatives, true);
-
-                            }
-                        }
-                    }
-                    if (victim.Clan != null && !victim.Clan.IsEliminated && !victim.Clan.IsBanditFaction && !victim.Clan.IsNeutralClan && (victim.Clan.Leader == victim || victim.Clan.Leader == null))
-                        DestroyClanAction.Apply(victim.Clan);
-
-                    CampaignEventDispatcher.Instance.OnHeroKilled(victim, killer, actionDetail, showNotification);
-                    if (victim.Spouse != null)
-                        victim.Spouse = null;
-
-                    if (victim.CompanionOf != null)
-                        RemoveCompanionAction.ApplyByDeath(victim.CompanionOf, victim);
-
-                    if (victim.CurrentSettlement != null)
-                    {
-                        if (victim.CurrentSettlement == Settlement.CurrentSettlement)
-                        {
-                            LocationComplex locationComplex = LocationComplex.Current;
-                            if (locationComplex != null)
-                                locationComplex.RemoveCharacterIfExists(victim);
-
-                        }
-                        if (victim.StayingInSettlement != null)
-                            victim.StayingInSettlement = null;
-
-                    }
-                    return false;
                 }
             }
         }
@@ -362,8 +268,6 @@ namespace BannerKings
 
         namespace Economy
         {
-
-
             [HarmonyPatch(typeof(DefaultClanFinanceModel), "AddIncomeFromKingdomBudget")]
             class AddIncomeFromKingdomBudgetPatch
             {
@@ -732,7 +636,7 @@ namespace BannerKings
                     }
                     else return true;
                 }
-            } 
+            }
         }     
     }
 }

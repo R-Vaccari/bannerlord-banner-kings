@@ -7,7 +7,6 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.Core;
 using TaleWorlds.ObjectSystem;
-using static BannerKings.Managers.TitleManager;
 
 namespace BannerKings.Behaviours
 {
@@ -22,11 +21,21 @@ namespace BannerKings.Behaviours
         {
         }
 
-
         private void DailyClanTick(Clan clan)
         {
             if (clan.IsEliminated || clan.IsBanditFaction || clan.Kingdom == null || clan == Clan.PlayerClan ||
                 BannerKingsConfig.Instance.TitleManager == null) return;
+
+            foreach (WarPartyComponent component in clan.WarPartyComponents)
+            {
+                Hero leader = component.Leader;
+                if (leader != null && leader != clan.Leader && leader.IsWanderer)
+                {
+                    leader.SetNewOccupation(Occupation.Lord);
+                    leader.Clan = null;
+                    leader.Clan = clan;
+                }
+            }
 
             if (clan.WarPartyComponents.Count < clan.CommanderLimit && clan.Companions.Count < clan.CompanionLimit && 
                 clan.Settlements.Count(x => x.IsVillage ) > 1 && clan.Influence >= 150)
@@ -67,6 +76,7 @@ namespace BannerKings.Behaviours
                 {
                     Hero hero = HeroCreator.CreateSpecialHero(template, settlement, clan, null,
                     Campaign.Current.Models.AgeModel.HeroComesOfAge + 5 + MBRandom.RandomInt(27));
+                    hero.SetNewOccupation(Occupation.Lord);
                     EquipmentHelper.AssignHeroEquipmentFromEquipment(hero, roster.AllEquipments.GetRandomElement());
                     GainKingdomInfluenceAction.ApplyForDefault(clan.Leader, -150f);
                     BannerKingsConfig.Instance.TitleManager.GrantLordship(title, title.deJure, hero);

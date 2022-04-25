@@ -21,7 +21,6 @@ using static BannerKings.Managers.Policies.BKMilitiaPolicy;
 using static BannerKings.Managers.Policies.BKTaxPolicy;
 using static BannerKings.Managers.Policies.BKWorkforcePolicy;
 using static BannerKings.Managers.PopulationManager;
-using static BannerKings.Managers.TitleManager;
 
 namespace BannerKings
 {
@@ -98,6 +97,8 @@ namespace BannerKings
             base.AddClassDefinition(typeof(BKSettlementClaimantDecision), 61);
             base.AddClassDefinition(typeof(BKKingElectionDecision), 62);
             base.AddClassDefinition(typeof(TitleData), 63);
+            base.AddEnumDefinition(typeof(ClaimType), 64);
+            base.AddClassDefinition(typeof(RetinueComponent), 65);
         }
 
         protected override void DefineContainerDefinitions()
@@ -117,7 +118,8 @@ namespace BannerKings
             base.ConstructContainerDefinition(typeof(List<FeudalRights>));
             base.ConstructContainerDefinition(typeof(Dictionary<Clan, CouncilData>));
             base.ConstructContainerDefinition(typeof(List<CouncilMember>));
-
+            base.ConstructContainerDefinition(typeof(Dictionary<Hero, ClaimType>));
+            base.ConstructContainerDefinition(typeof(Dictionary<FeudalTitle, float>));
         }
     }
 }

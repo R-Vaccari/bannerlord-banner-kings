@@ -1,5 +1,6 @@
 ﻿using BannerKings.Components;
 using BannerKings.Populations;
+using HarmonyLib;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,12 +34,21 @@ namespace BannerKings.Behaviours
                 PopulationPartyComponent component = (PopulationPartyComponent)party.PartyComponent;
                 Settlement target = component._target;
 
+                if (component is RetinueComponent)
+                {
+                    if (party.CurrentSettlement == null)
+                        EnterSettlementAction.ApplyForParty(party, party.HomeSettlement);
+
+                    party.SetMoveModeHold();
+                    return;
+                }
+
                 if (component is MilitiaComponent)
                 {
                     MilitiaComponent militiaComponent = (MilitiaComponent)component;
-                    AiBehavior behavior = militiaComponent.behavior;
+                    AiBehavior behavior = militiaComponent.Behavior;
                     if (behavior == AiBehavior.EscortParty)
-                        party.SetMoveEscortParty(militiaComponent._escortTarget);
+                        party.SetMoveEscortParty(militiaComponent.Escort);
                     else party.SetMoveGoToSettlement(militiaComponent.OriginSettlement);
                     return;
                 }
@@ -80,14 +90,6 @@ namespace BannerKings.Behaviours
                     BannerKingsConfig.Instance.PopulationManager.RemoveCaravan(party);
                 }
             }
-
-            /*
-            if (party.StringId.Contains("slavecaravan") && party.Party != null && party.Party.NumberOfHealthyMembers == 0)
-            {
-                DestroyPartyAction.Apply(null, party);
-                if (PopulationConfig.Instance.PopulationManager.IsPopulationParty(party))
-                    PopulationConfig.Instance.PopulationManager.RemoveCaravan(party);
-            }*/
         }
 
         private void DailySettlementTick(Settlement settlement)
@@ -350,7 +352,7 @@ namespace BannerKings.Behaviours
             if (IsTravellerParty(party))
             {
                 MilitiaComponent component = (MilitiaComponent)party.MobileParty.PartyComponent;
-                component.behavior = AiBehavior.GoToSettlement;
+                component.Behavior = AiBehavior.GoToSettlement;
             }
         }
 
@@ -360,7 +362,7 @@ namespace BannerKings.Behaviours
             if (IsTravellerParty(party))
             {
                 MilitiaComponent component = (MilitiaComponent)party.MobileParty.PartyComponent;
-                component.behavior = AiBehavior.EscortParty;
+                component.Behavior = AiBehavior.EscortParty;
             }
         }
 
@@ -466,6 +468,27 @@ namespace BannerKings.Behaviours
         public override void SyncData(IDataStore dataStore)
         {
  
+        }
+    }
+
+    namespace Patches
+    {
+        [HarmonyPatch(typeof(DestroyPartyAction), "Apply")]
+        class ApplyPatch
+        {
+            static void Postfix(PartyBase destroyerParty, MobileParty destroyedParty)
+            {
+                Console.WriteLine(destroyedParty.Name);
+            }
+        }
+
+        [HarmonyPatch(typeof(DestroyPartyAction), "ApplyForDisbanding")]
+        class ApplyForDisbandingPatch
+        {
+            static void Postfix(MobileParty disbandedParty, Settlement relatedSettlement)
+            {
+                Console.WriteLine(disbandedParty.Name);
+            }
         }
     }
 }

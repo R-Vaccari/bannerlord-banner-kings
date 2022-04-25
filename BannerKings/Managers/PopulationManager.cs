@@ -25,7 +25,13 @@ namespace BannerKings.Managers
 
         public bool IsSettlementPopulated(Settlement settlement)
         {
-            if (Populations != null) return Populations.ContainsKey(settlement);
+            if (Populations != null)
+            {
+                if (settlement.StringId.Contains("Ruin") || settlement.StringId.Contains("tutorial"))
+                    return false;
+
+                else return Populations.ContainsKey(settlement);
+            }
             else return false;
         }
 
@@ -62,11 +68,13 @@ namespace BannerKings.Managers
         {
             List<MobileParty> list = new List<MobileParty>();
             foreach (MobileParty party in Caravans)
-                if (party.PartyComponent is MilitiaComponent && party.Owner.Clan == clan)
+                if (party.PartyComponent is RetinueComponent && party.Owner.Clan == clan)
                     list.Add(party);
             
             return list;
         }
+
+        public List<MobileParty> GetParties(Type type) => this.Caravans.FindAll(x => x.GetType() == type);
 
         public List<(ItemObject, float)> GetProductions(VillageData villageData)
         {
@@ -97,8 +105,18 @@ namespace BannerKings.Managers
             if (level > 0) explainedNumber.AddFactor(level * 0.05f);
         }
 
+        public void ReInitBuildings()
+        {
+            foreach (PopulationData data in this.Populations.Values)
+                if (data.VillageData != null)
+                    data.VillageData.ReInitializeBuildings();
+        }
+
         public static void InitializeSettlementPops(Settlement settlement)
         {
+            if (settlement.StringId.Contains("Ruin") || settlement.StringId.Contains("tutorial"))
+                return;
+
             int popQuantityRef = GetDesiredTotalPop(settlement);
             Dictionary<PopType, float[]> desiredTypes = GetDesiredPopTypes(settlement);
             List<PopulationClass> classes = new List<PopulationClass>();
@@ -183,45 +201,63 @@ namespace BannerKings.Managers
 
         public static Dictionary<PopType, float[]> GetDesiredPopTypes(Settlement settlement)
         {
+            float nobleFactor = 1f;
+            float slaveFactor = 1f;
+            Kingdom faction = settlement.OwnerClan.Kingdom;
+            if (faction != null)
+            {
+                if (faction.ActivePolicies.Contains(DefaultPolicies.Serfdom))
+                    slaveFactor -= 0.3f;
+
+                if (faction.ActivePolicies.Contains(DefaultPolicies.ForgivenessOfDebts))
+                    slaveFactor -= 0.1f;
+
+                if (faction.ActivePolicies.Contains(DefaultPolicies.Citizenship))
+                    nobleFactor += 0.1f;
+            }
+
             if (settlement.IsCastle)
                 return new Dictionary<PopType, float[]>()
                 {
-                    { PopType.Nobles, new float[] {0.07f, 0.09f} },
+                    { PopType.Nobles, new float[] {0.07f * nobleFactor, 0.09f * nobleFactor } },
                     { PopType.Craftsmen, new float[] {0.03f, 0.05f} },
                     { PopType.Serfs, new float[] {0.75f, 0.8f} },
-                    { PopType.Slaves, new float[] {0.1f, 0.15f} }
+                    { PopType.Slaves, new float[] {0.1f * slaveFactor, 0.15f * slaveFactor } }
                 };
             else if (settlement.IsVillage)
             {
                 if (IsVillageProducingFood(settlement.Village))
                     return new Dictionary<PopType, float[]>()
                     {
-                        { PopType.Nobles, new float[] {0.035f, 0.055f} },
+                        { PopType.Nobles, new float[] {0.035f * nobleFactor, 0.055f * nobleFactor } },
+                        { PopType.Craftsmen, new float[] { 0.01f, 0.02f} },
                         { PopType.Serfs, new float[] {0.7f, 0.8f} },
-                        { PopType.Slaves, new float[] {0.1f, 0.2f} }
+                        { PopType.Slaves, new float[] {0.1f * slaveFactor, 0.2f * slaveFactor } }
                     };
                 else if (IsVillageAMine(settlement.Village))
                     return new Dictionary<PopType, float[]>()
                     {
-                        { PopType.Nobles, new float[] {0.02f, 0.04f} },
+                        { PopType.Nobles, new float[] {0.02f * nobleFactor, 0.04f * nobleFactor } },
+                        { PopType.Craftsmen, new float[] {0.01f, 0.02f} },
                         { PopType.Serfs, new float[] {0.3f, 0.4f} },
-                        { PopType.Slaves, new float[] {0.6f, 0.7f} }
+                        { PopType.Slaves, new float[] {0.6f * slaveFactor, 0.7f * slaveFactor } }
                     };
                 else
                     return new Dictionary<PopType, float[]>()
                     {
-                        { PopType.Nobles, new float[] {0.025f, 0.045f} },
+                        { PopType.Nobles, new float[] {0.025f * nobleFactor, 0.045f * nobleFactor } },
+                        { PopType.Craftsmen, new float[] { 0.01f, 0.02f } },
                         { PopType.Serfs, new float[] {0.5f, 0.7f} },
-                        { PopType.Slaves, new float[] {0.4f, 0.5f} }
+                        { PopType.Slaves, new float[] {0.4f * slaveFactor, 0.5f * slaveFactor } }
                     };
             }
             else if (settlement.IsTown)
                 return new Dictionary<PopType, float[]>()
                 {
-                    { PopType.Nobles, new float[] {0.01f, 0.03f} },
+                    { PopType.Nobles, new float[] {0.01f * nobleFactor, 0.03f * nobleFactor } },
                     { PopType.Craftsmen, new float[] {0.06f, 0.08f} },
                     { PopType.Serfs, new float[] {0.6f, 0.7f} },
-                    { PopType.Slaves, new float[] {0.1f, 0.2f} }
+                    { PopType.Slaves, new float[] {0.1f * slaveFactor, 0.2f * slaveFactor } }
                 };
             else return null;
         }
@@ -229,7 +265,6 @@ namespace BannerKings.Managers
         public static bool IsVillageProducingFood(Village village) => village.VillageType == DefaultVillageTypes.CattleRange || village.VillageType == DefaultVillageTypes.DateFarm ||
                 village.VillageType == DefaultVillageTypes.Fisherman || village.VillageType == DefaultVillageTypes.OliveTrees ||
                 village.VillageType == DefaultVillageTypes.VineYard || village.VillageType == DefaultVillageTypes.WheatFarm;
-
 
         public static bool IsVillageAMine(Village village) => village.VillageType == DefaultVillageTypes.SilverMine || village.VillageType == DefaultVillageTypes.IronMine ||
                 village.VillageType == DefaultVillageTypes.SaltMine || village.VillageType == DefaultVillageTypes.ClayMine;

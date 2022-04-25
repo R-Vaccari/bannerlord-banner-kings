@@ -14,7 +14,6 @@ namespace BannerKings.Managers.Titles
         public ActionType Type { get; private set; }
         public FeudalTitle Title { get; private set; }
         public Hero ActionTaker { get; private set; }
-        public Hero ActionReceiver { get; set; }
 
         public TitleAction(ActionType type, FeudalTitle title, Hero taker)
         {
@@ -37,7 +36,9 @@ namespace BannerKings.Managers.Titles
             if (!this.Possible) return;
 
             if (this.Type == ActionType.Usurp)
-                BannerKingsConfig.Instance.TitleManager.UsurpTitle(this.Title.deJure, this.ActionTaker, this.Title, this);
+                BannerKingsConfig.Instance.TitleManager.UsurpTitle(this.Title.deJure, this);
+            else if (this.Type == ActionType.Claim)
+                BannerKingsConfig.Instance.TitleManager.AddOngoingClaim(this);
             else BannerKingsConfig.Instance.TitleManager.GrantTitle(receiver, this.ActionTaker, this.Title, this.Influence);
         }
     }
@@ -48,6 +49,7 @@ namespace BannerKings.Managers.Titles
         Revoke,
         Grant,
         Destroy,
-        Create
+        Create,
+        Claim
     }
 }

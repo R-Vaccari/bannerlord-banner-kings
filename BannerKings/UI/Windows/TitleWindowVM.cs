@@ -47,7 +47,6 @@ namespace BannerKings.UI.Windows
 				if (Name == null)
 					Name = title.FullName.ToString();
 			}
-			
         }
 
         public override void RefreshValues()
@@ -55,7 +54,8 @@ namespace BannerKings.UI.Windows
             base.RefreshValues();
 			this.Decisions.Clear();
 
-			bool allSetup = this.kingdom != null && this.title != null && this.title.contract != null;
+			bool allSetup = this.kingdom != null && this.title != null && this.title.contract != null &&
+				this.kingdom == BannerKingsConfig.Instance.TitleManager.GetTitleFaction(title);
 			DecisionElement contractButton = new DecisionElement().SetAsButtonOption(new TextObject("{=!}Contract").ToString(),
 				() => BannerKingsConfig.Instance.TitleManager.ShowContract(kingdom.Leader, GameTexts.FindText("str_done").ToString()),
 				new TextObject("{=!}Review this kingdom's contract, signed by lords that join it."));
@@ -85,7 +85,6 @@ namespace BannerKings.UI.Windows
 				new TextObject("{=!}Gender Law").ToString(),
 				new TextObject("{=!}Propose a change in gender laws, dictating whether males and females are viewed equally in various aspects."));
 			genderButton.Enabled = allSetup && genderLaws.Count >= 1;
-				
 
 			this.Contract = contractButton;
 			this.Decisions.Add(governmentButton);
@@ -119,9 +118,7 @@ namespace BannerKings.UI.Windows
 							}
 						}), null, string.Empty), false);
 					}
-					
 				}, hint);
-
 
 		private List<InquiryElement> GetGenderLaws()
         {
@@ -186,7 +183,6 @@ namespace BannerKings.UI.Windows
 					
 			return laws;
 		}
-
 
 		[DataSourceProperty]
 		public DecisionElement Contract

@@ -1,7 +1,6 @@
 ﻿using BannerKings.Managers.Court;
 using BannerKings.Populations;
 using BannerKings.UI.Items;
-using BannerKings.Utils;
 using System;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
@@ -22,7 +21,6 @@ namespace BannerKings.UI.Panels
 		private HeroVM steward;
 		private HeroVM chancellor;
 		private HeroVM spymaster;
-		private string admCost;
 		private MBBindingList<CouncilMemberVM> courtMembers;
 
 		public CourtVM(PopulationData data) : base(data, true)

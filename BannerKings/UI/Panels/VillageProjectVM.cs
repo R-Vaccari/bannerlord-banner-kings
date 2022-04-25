@@ -40,11 +40,11 @@ namespace BannerKings.UI.Panels
 			   "How much the local population can progress with construction projects, on a daily basis"));
 			ConstructionInfo.Add(new InformationElement("Current Progress:", villageData.IsCurrentlyBuilding ? FormatValue(villageData.CurrentBuilding.BuildingProgress / 
 				villageData.CurrentBuilding.GetConstructionCost()) : "Daily project (endless)",
-			   "How much the local population can progress with construction projects, on a daily basis"));
+			   "Amount of completed work in the current project"));
 			ConstructionInfo.Add(new InformationElement("Days to complete:", villageData.IsCurrentlyBuilding ?
 				FormatDays((villageData.CurrentBuilding.GetConstructionCost() - villageData.CurrentBuilding.BuildingProgress) /
 				villageData.Construction) + " Days" : "Daily project (endless)",
-			   "How much the local population can progress with construction projects, on a daily basis"));
+			   "Remaining days for the current project to be built"));
 
 			BKVillageProductionModel model = new BKVillageProductionModel();
 			float productionQuantity = 0f;
@@ -56,12 +56,10 @@ namespace BannerKings.UI.Panels
 			}
 			sb.Remove(sb.Length - 2, 1);
 			string productionString = sb.ToString();
-			ProductionInfo.Add(new InformationElement("Food Production:", model.CalculateDailyFoodProductionAmount(villageData.Village).ToString() + " (Daily)",
-			   "How much the local population can progress with construction projects, on a daily basis"));
 			ProductionInfo.Add(new InformationElement("Goods Production:", productionQuantity.ToString() + " (Daily)",
-			   "How much the local population can progress with construction projects, on a daily basis"));
+			   "Sum of goods produced on a daily basis, including all the types produced here"));
 			ProductionInfo.Add(new InformationElement("Items Produced:", productionString,
-			   "How much the local population can progress with construction projects, on a daily basis"));
+			   "The types of outputs produced in this village"));
 		}
 
 		private void OnProjectSelectionDone()
@@ -76,14 +74,15 @@ namespace BannerKings.UI.Panels
 					foreach (VillageBuilding building2 in localDevelopmentList)
 						if (!building2.BuildingType.IsDefaultProject)
 							villageData.BuildingsInProgress.Enqueue(building2);
-
-					villageData.CurrentBuilding = villageData.Buildings
-						.FirstOrDefault(x => x.BuildingType.StringId == localDevelopmentList[0].BuildingType.StringId);
 				}
 
 				if (building != null && building.BuildingType.BuildingLocation == BuildingLocation.Daily)
-						villageData.CurrentDefault = villageData.Buildings
-							.FirstOrDefault(x => x.BuildingType.StringId == building.BuildingType.StringId);
+					foreach (VillageBuilding b in villageData.Buildings)
+                    {
+						if (b.BuildingType.StringId == building.BuildingType.StringId)
+							b.IsCurrentlyDefault = true;
+						else b.IsCurrentlyDefault = false;
+                    }
 			}
 		}
 

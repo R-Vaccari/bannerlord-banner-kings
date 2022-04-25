@@ -1,5 +1,5 @@
 ﻿using BannerKings.Managers.Titles;
-using BannerKings.Models;
+using BannerKings.Models.BKModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -76,8 +76,6 @@ namespace BannerKings.Managers
             }
         }
 
-     
-
         public bool IsHeroTitleHolder(Hero hero)
         {
             foreach (FeudalTitle title in Titles.Keys.ToList())
@@ -91,6 +89,11 @@ namespace BannerKings.Managers
         {
             try
             {
+                if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
+                {
+                    TitleData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement).TitleData;
+                    if (data != null) return data.Title;
+                }
                 return Titles.Keys.ToList().Find(x => x.fief == settlement);
             }
             catch (Exception ex)
@@ -103,6 +106,13 @@ namespace BannerKings.Managers
 
                 throw new BannerKingsException(cause + objInfo, ex);
             }
+        }
+
+        public List<FeudalTitle> GetAllTitlesByType(TitleType type) => this.Titles.Keys.ToList().FindAll(x => x.type == type);
+
+        public FeudalTitle GetTitleByName(String name)
+        {
+            return this.Titles.FirstOrDefault(x => x.Key.FullName.ToString() == name).Key;
         }
 
         public GovernmentType GetSettlementGovernment(Settlement settlement)
@@ -257,6 +267,20 @@ namespace BannerKings.Managers
             }
         }
 
+        public void AddOngoingClaim(TitleAction action)
+        {
+            Hero claimant = action.ActionTaker;
+            action.Title.AddOngoingClaim(action.ActionTaker);
+            GainKingdomInfluenceAction.ApplyForDefault(claimant, -action.Influence);
+            claimant.ChangeHeroGold((int)-action.Gold);
+            claimant.Clan.Renown -= action.Renown;
+            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(action.ActionTaker, action.Title.deJure, (int)Math.Min(-5f, (float)new BKTitleModel().GetRelationImpact(action.Title) * -0.1f), true);
+
+            if (action.Title.deJure == Hero.MainHero)
+                InformationManager.AddQuickInformation(new TextObject("{=!}{CLAIMANT} is building a claim on your title, {TITLE}.")
+                    .SetTextVariable("CLAIMANT", claimant.Name)
+                    .SetTextVariable("TITLE", action.Title.FullName));
+        }
         
         public void GrantTitle(Hero receiver, Hero grantor, FeudalTitle title, float influence)
         {
@@ -265,32 +289,46 @@ namespace BannerKings.Managers
             if (receiver.Clan.Kingdom != null && receiver.Clan.Kingdom == kingdom)
                 ExecuteOwnershipChange(grantor, receiver, title, false);
 
-            ChangeRelationAction.ApplyPlayerRelation(receiver, (int)((float)new BKTitleModel().GetRelationImpact(title) * -1f), true, true);
+            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(grantor, receiver, (int)((float)new BKTitleModel().GetRelationImpact(title) * -1f), true);
             GainKingdomInfluenceAction.ApplyForDefault(grantor, influence);
         }
 
-        public void UsurpTitle(Hero oldOwner, Hero usurper, FeudalTitle title, TitleAction costs)
+        public void UsurpTitle(Hero oldOwner, TitleAction action)
         {
-            ExecuteOwnershipChange(oldOwner, usurper, title, true);
-
+            Hero usurper = action.ActionTaker;
+            FeudalTitle title = action.Title;
+            InformationManager.DisplayMessage(new InformationMessage(new TextObject("{=!}{USURPER} has usurped the {TITLE}.")
+                .SetTextVariable("USURPER", usurper.Name)
+                .SetTextVariable("TITLE", action.Title.FullName)
+                .ToString()));
+            if (title.deJure == Hero.MainHero)
+                InformationManager.AddQuickInformation(new TextObject("{=!}{USURPER} has usurped your title, {TITLE}.")
+                    .SetTextVariable("USURPER", usurper.Name)
+                    .SetTextVariable("TITLE", action.Title.FullName));
+           
             int impact = new BKTitleModel().GetRelationImpact(title);
-            ChangeRelationAction.ApplyPlayerRelation(oldOwner, impact, true, true);
+            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(usurper, oldOwner, impact, true);
             Kingdom kingdom = oldOwner.Clan.Kingdom;
             if (kingdom != null) 
                 foreach(Clan clan in kingdom.Clans) 
-                    if (clan != oldOwner.Clan && clan.IsMapFaction && clan.IsKingdomFaction)
+                    if (clan != oldOwner.Clan && clan != usurper.Clan && !clan.IsUnderMercenaryService)
                     {
                         int random = MBRandom.RandomInt(1, 100);
                         if (random <= 10)
-                            ChangeRelationAction.ApplyPlayerRelation(oldOwner, (int)((float)impact * 0.3f), true, true);
+                            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(usurper, oldOwner, (int)((float)impact * 0.3f), true);
                     }
 
-            if (costs.Gold > 0)
-                usurper.ChangeHeroGold((int)-costs.Gold);
-            if (costs.Influence > 0)
-                usurper.Clan.Influence -= costs.Influence;
-            if (costs.Renown > 0)
-                usurper.Clan.Renown -= costs.Renown;
+            if (action.Gold > 0)
+                usurper.ChangeHeroGold((int)-action.Gold);
+            if (action.Influence > 0)
+                usurper.Clan.Influence -= action.Influence;
+            if (action.Renown > 0)
+                usurper.Clan.Renown -= action.Renown;
+
+            title.RemoveClaim(usurper);
+            title.AddClaim(oldOwner, ClaimType.Previous_Owner, true);
+            ExecuteOwnershipChange(oldOwner, usurper, title, true);
+
             //OwnershipNotification notification = new OwnershipNotification(title, new TextObject(string.Format("You are now the rightful owner to {0}", title.name)));
             //Campaign.Current.CampaignInformationManager.NewMapNoticeAdded(notification);
         }

@@ -25,8 +25,8 @@
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <WarningsAsErrors />
     <WarningLevel>2</WarningLevel>
-    <DefineConstants>DEBUG;TRACE;RELEASE</DefineConstants>
-    <Optimize>false</Optimize>
+    <DefineConstants>RELEASE</DefineConstants>
+    <Optimize>true</Optimize>
     <DebugType>full</DebugType>
     <DebugSymbols>true</DebugSymbols>
     <PlatformTarget>AnyCPU</PlatformTarget>
