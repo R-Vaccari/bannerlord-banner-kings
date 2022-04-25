@@ -92,7 +92,8 @@ namespace BannerKings.Managers
                 if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
                 {
                     TitleData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement).TitleData;
-                    if (data != null) return data.Title;
+                    if (data != null && data.Title != null)
+                        return data.Title;
                 }
                 return Titles.Keys.ToList().Find(x => x.fief == settlement);
             }
