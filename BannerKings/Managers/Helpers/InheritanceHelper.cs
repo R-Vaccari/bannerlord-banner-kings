@@ -34,7 +34,6 @@ namespace BannerKings.Managers.Helpers
                 }
                 else noContracts.Add(title);
             }
-
             
             List<Hero> candidates = GetCandidates(victim.Clan, victim);
             Hero mainHeir = GetHeirInternal(highest.contract.Inheritance, highest.contract.GenderLaw, victim, candidates);
@@ -76,6 +75,9 @@ namespace BannerKings.Managers.Helpers
 
                         foreach (FeudalTitle t in mainHeirTitles)
                             t.AddClaim(newClan.Leader, ClaimType.Clan_Split, true);
+
+                        foreach (FeudalTitle t in pair.Value)
+                            t.AddClaim(mainHeir, ClaimType.Clan_Split, true);
 
                         foreach (FeudalTitle t in landed)
                             if (t.DeFacto.Clan == victim.Clan)

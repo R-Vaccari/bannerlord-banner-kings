@@ -155,26 +155,17 @@ namespace BannerKings.Managers.Titles
             if (hero == null) return;
             if (!this.OngoingClaims.ContainsKey(hero))
                 this.OngoingClaims.Add(hero, CampaignTime.YearsFromNow(1));
-            
         }
 
         public void AddClaim(Hero hero, ClaimType type, bool force = false)
         {
             if (hero == null || type == ClaimType.None) return;
-
-            if (!force)
-            {
-                if (this.OngoingClaims.ContainsKey(hero))
-                {
-                    this.Claims.Add(hero, type);
-                    this.OngoingClaims.Remove(hero);
-                }
-            } else
-            {
-                this.Claims.Add(hero, type);
-                if (this.OngoingClaims.ContainsKey(hero))
-                    this.OngoingClaims.Remove(hero);
-            } 
+            this.Claims.Add(hero, type);
+            if (this.OngoingClaims.ContainsKey(hero))
+                this.OngoingClaims.Remove(hero);
+            if (hero == Hero.MainHero)
+                InformationManager.AddQuickInformation(new TextObject("{=!}You now have a claim on the {TITLE}")
+                            .SetTextVariable("TITLE", this.FullName), 0);
         }
 
         public void RemoveClaim(Hero hero)

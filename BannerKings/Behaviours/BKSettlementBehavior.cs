@@ -190,7 +190,7 @@ namespace BannerKings.Behaviors
 
         private void DailySettlementTick(Settlement settlement)
         {
-            if (settlement == null || settlement.StringId.Contains("tutorial")) return;
+            if (settlement == null || settlement.StringId.Contains("tutorial") || settlement.StringId.Contains("Ruin")) return;
             
             if (BannerKingsConfig.Instance.PopulationManager == null)
                 BannerKingsConfig.Instance.InitManagers();
@@ -331,7 +331,6 @@ namespace BannerKings.Behaviors
         {
 
             campaignGameStarter.AddGameMenu("bannerkings", "Banner Kings", new OnInitDelegate(MenuBannerKingsInit));
-
             campaignGameStarter.AddGameMenu("bannerkings_actions", "Banner Kings", new OnInitDelegate(MenuBannerKingsInit));
 
             // ------- WAIT MENUS --------
@@ -996,7 +995,7 @@ namespace BannerKings.Behaviors
         {
             static bool Prefix(MobileParty sellerParty, TroopRoster prisoners, Settlement currentSettlement, bool applyGoldChange = true)
             {
-                if (currentSettlement != null && (currentSettlement.IsCastle || currentSettlement.IsTown) &&BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(currentSettlement))
+                if (currentSettlement != null && (currentSettlement.IsCastle || currentSettlement.IsTown) && BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(currentSettlement))
                 {
                     BKCriminalPolicy policy = (BKCriminalPolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(currentSettlement, "criminal");
                     if (policy.Policy == BKCriminalPolicy.CriminalPolicy.Enslavement)

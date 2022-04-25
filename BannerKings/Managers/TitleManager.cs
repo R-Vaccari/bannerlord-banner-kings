@@ -1,5 +1,4 @@
 ﻿using BannerKings.Managers.Titles;
-using BannerKings.Models;
 using BannerKings.Models.BKModels;
 using System;
 using System.Collections.Generic;
@@ -265,7 +264,6 @@ namespace BannerKings.Managers
             {
                 if (title.deJure == oldOwner) ExecuteOwnershipChange(oldOwner, heir, title, true);
                 if (title.deFacto == oldOwner) ExecuteOwnershipChange(oldOwner, heir, title, false);  
-                
             }
         }
 

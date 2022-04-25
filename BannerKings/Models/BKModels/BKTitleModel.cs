@@ -274,12 +274,22 @@ namespace BannerKings.Models.BKModels
                     return usurpData;
                 }
 
-
                 if (usurper.Gold < usurpData.Gold || usurper.Clan.Influence < usurpData.Influence)
                 {
                     usurpData.Possible = false;
                     usurpData.Reason = new TextObject("{=!}Missing required resources.");
                     return usurpData;
+                }
+
+                if (title.IsSovereignLevel)
+                {
+                    Kingdom faction = BannerKingsConfig.Instance.TitleManager.GetTitleFaction(title);
+                    if (faction.Leader != usurper)
+                    {
+                        usurpData.Possible = false;
+                        usurpData.Reason = new TextObject("{=!}Must be faction leader to usurp highest title in hierarchy.");
+                        return usurpData;
+                    }
                 }
 
                 return usurpData;

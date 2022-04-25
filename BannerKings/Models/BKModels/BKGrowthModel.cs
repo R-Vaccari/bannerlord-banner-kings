@@ -1,11 +1,8 @@
-﻿
-using BannerKings.Managers;
-using BannerKings.Populations;
+﻿using BannerKings.Populations;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 using static BannerKings.Managers.Policies.BKDraftPolicy;
-using static BannerKings.Managers.PolicyManager;
 using static BannerKings.Managers.PopulationManager;
 
 namespace BannerKings.Models
@@ -47,21 +44,14 @@ namespace BannerKings.Models
         public ExplainedNumber CalculateEffect(Settlement settlement, PopulationData data)
         {
             ExplainedNumber result = new ExplainedNumber();
-
-
             if (settlement.IsVillage || !settlement.IsStarving)
             {
                 result.Add(5f, new TextObject("Base"));
-
-                int cap = CalculateSettlementCap(settlement);
-                float filledCapacity = (float)data.TotalPop / (float)cap;
-
+                float filledCapacity = (float)data.TotalPop / (float)CalculateSettlementCap(settlement);
                 data.Classes.ForEach(popClass =>
                 {
-                    result.Add((float)popClass.count * POP_GROWTH_FACTOR *
-                        (popClass.type != PopType.Slaves ? 1f : -1f) *
-                        (1f - (1f * filledCapacity)),
-                        new TextObject("{0} growth"));
+                    if (popClass.type != PopType.Slaves)
+                        result.Add((float)popClass.count * POP_GROWTH_FACTOR  * (1f - filledCapacity),  new TextObject("{0} growth"));
                 });
             }
             else if (settlement.IsStarving)
@@ -78,13 +68,12 @@ namespace BannerKings.Models
                 if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(settlement, "draft", (int)DraftPolicy.Demobilization))
                     result.AddFactor(0.05f, new TextObject("Draft policy"));
             
-
             return result;
         }
 
         public ExplainedNumber CalculateEffect(Settlement settlement)
         {
-            throw new System.NotImplementedException();
+            return new ExplainedNumber();
         }
     }
 }

@@ -11,6 +11,7 @@ using TaleWorlds.CampaignSystem.Election;
 using BannerKings.Managers.Kingdoms;
 using BannerKings.Managers.Titles;
 using BannerKings.Managers.Helpers;
+using HarmonyLib;
 
 namespace BannerKings.Behaviours
 {
@@ -19,6 +20,7 @@ namespace BannerKings.Behaviours
 
         public override void RegisterEvents()
         {
+            //CampaignEvents.RulingCLanChanged.AddNonSerializedListener(this, new Action<Kingdom, Clan>(this.OnRulingClanChanged));
             CampaignEvents.DailyTickEvent.AddNonSerializedListener(this, new Action(this.OnDailyTick));
             CampaignEvents.HeroKilledEvent.AddNonSerializedListener(this, new Action<Hero, Hero, KillCharacterAction.KillCharacterActionDetail, bool>(OnHeroKilled));
             CampaignEvents.DailyTickSettlementEvent.AddNonSerializedListener(this, new Action<Settlement>(OnDailyTickSettlement));
@@ -30,6 +32,17 @@ namespace BannerKings.Behaviours
         public override void SyncData(IDataStore dataStore)
         {
             
+        }
+
+        private void OnRulingClanChanged(Kingdom kingdom, Clan clan)
+        {
+            if (BannerKingsConfig.Instance.TitleManager == null) return;
+
+            FeudalTitle sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
+            if (sovereign == null || sovereign.contract == null) return;
+
+            if (sovereign.deJure == clan.Leader) return;
+
         }
 
         private void OnDailyTick()

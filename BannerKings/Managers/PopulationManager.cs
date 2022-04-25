@@ -25,7 +25,13 @@ namespace BannerKings.Managers
 
         public bool IsSettlementPopulated(Settlement settlement)
         {
-            if (Populations != null) return Populations.ContainsKey(settlement);
+            if (Populations != null)
+            {
+                if (settlement.StringId.Contains("Ruin") || settlement.StringId.Contains("tutorial"))
+                    return false;
+
+                else return Populations.ContainsKey(settlement);
+            }
             else return false;
         }
 
@@ -108,6 +114,9 @@ namespace BannerKings.Managers
 
         public static void InitializeSettlementPops(Settlement settlement)
         {
+            if (settlement.StringId.Contains("Ruin") || settlement.StringId.Contains("tutorial"))
+                return;
+
             int popQuantityRef = GetDesiredTotalPop(settlement);
             Dictionary<PopType, float[]> desiredTypes = GetDesiredPopTypes(settlement);
             List<PopulationClass> classes = new List<PopulationClass>();
