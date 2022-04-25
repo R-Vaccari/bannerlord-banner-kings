@@ -11,7 +11,6 @@ using TaleWorlds.CampaignSystem.Election;
 using BannerKings.Managers.Kingdoms;
 using BannerKings.Managers.Titles;
 using BannerKings.Managers.Helpers;
-using HarmonyLib;
 
 namespace BannerKings.Behaviours
 {

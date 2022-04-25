@@ -66,12 +66,9 @@ namespace BannerKings.Managers.Kingdoms
 
         public override float CalculateMeritOfOutcome(DecisionOutcome candidateOutcome)
         {
-
 			float merit = 0f;
 			foreach (Clan clan in base.Kingdom.Clans)
 				merit += CalculateMeritInternal(clan, candidateOutcome);
-
-
 			return merit;
 		}
 
@@ -96,6 +93,5 @@ namespace BannerKings.Managers.Kingdoms
 			}
 			return MathF.Clamp(merit, -3f, 8f);
 		}
-	
     }
 }

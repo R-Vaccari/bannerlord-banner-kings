@@ -140,8 +140,7 @@ namespace BannerKings.Managers.Titles
         }
 
         public ClaimType GetHeroClaim(Hero hero)
-        {;
-
+        {
             if (hero == null) return ClaimType.None;
             if (this.Claims.ContainsKey(hero))
                 return this.Claims[hero];
@@ -263,6 +262,11 @@ namespace BannerKings.Managers.Titles
                 this.sovereign.vassals.Remove(this);
                 this.SetSovereign(newSovereign);
                 newSovereign.vassals.Add(this);
+
+                this.ChangeContract(newSovereign.contract.Government);
+                this.ChangeContract(newSovereign.contract.Succession);
+                this.ChangeContract(newSovereign.contract.Inheritance);
+                this.ChangeContract(newSovereign.contract.GenderLaw);
 
                 InformationManager.DisplayMessage(new InformationMessage(new TextObject("{=!}{TITLE} has drifted into a legal part of {SOVEREIGN}")
                     .SetTextVariable("TITLE", this.FullName)

@@ -268,8 +268,6 @@ namespace BannerKings
 
         namespace Economy
         {
-
-
             [HarmonyPatch(typeof(DefaultClanFinanceModel), "AddIncomeFromKingdomBudget")]
             class AddIncomeFromKingdomBudgetPatch
             {

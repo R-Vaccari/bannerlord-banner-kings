@@ -56,7 +56,6 @@ namespace BannerKings.Models
             }
             else if (settlement.IsStarving)
             {
-
                 float starvation = -5;
                 starvation += (int)((float)data.TotalPop * -0.007f);
                 result.Add(starvation, new TextObject("Starvation"));
