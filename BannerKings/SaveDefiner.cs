@@ -98,6 +98,7 @@ namespace BannerKings
             base.AddClassDefinition(typeof(BKKingElectionDecision), 62);
             base.AddClassDefinition(typeof(TitleData), 63);
             base.AddEnumDefinition(typeof(ClaimType), 64);
+            base.AddClassDefinition(typeof(RetinueComponent), 65);
         }
 
         protected override void DefineContainerDefinitions()
