@@ -30,8 +30,21 @@ namespace BannerKings.UI
 				delegate (PartyBase partyBase, TroopRoster leftMemberRoster, TroopRoster leftPrisonRoster, 
 				PartyBase rightOwnerParty, TroopRoster rightMemberRoster, TroopRoster rightPrisonRoster, bool fromCancel) 
 				{
-					int removed = leftPrisonRoster.TotalRegulars - count;
-					data.UpdatePopType(PopType.Slaves, removed, true);
+					if (leftPrisonRoster.TotalHeroes > 0)
+                    {
+						List<CharacterObject> heroes = new List<CharacterObject>();
+						foreach (TroopRosterElement element in leftPrisonRoster.GetTroopRoster())
+							if (element.Character.IsHero)
+								heroes.Add(element.Character);
+
+						foreach (CharacterObject hero in heroes)
+                        {
+							leftPrisonRoster.RemoveTroop(hero);
+							rightPrisonRoster.AddToCounts(hero, 1);
+						}
+					}
+
+					data.UpdatePopType(PopType.Slaves, leftPrisonRoster.TotalRegulars - count, true);
 				});
 		}
 
