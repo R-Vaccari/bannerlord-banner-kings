@@ -14,6 +14,7 @@ using BannerKings.Managers.Populations.Villages;
 using BannerKings.Managers.Populations;
 using static BannerKings.Managers.Policies.BKWorkforcePolicy;
 using BannerKings.Managers.Titles;
+using BannerKings.Managers;
 
 namespace BannerKings.Populations
 {
@@ -147,14 +148,50 @@ namespace BannerKings.Populations
                     int fractions = (int)((float)pops / (divisibleNegative ? -20f : 20f));
                     int reminder = pops % 20;
                     for (int i = 0; i < fractions; i++)
-                    {
-                        SelectAndUpdatePop(settlement, divisibleNegative ? -20 : 20);
-                    }
-                    SelectAndUpdatePop(settlement, divisibleNegative ? -reminder : reminder);
+                        this.SelectAndUpdatePop(settlement, divisibleNegative ? -20 : 20);
+                    
+                    this.SelectAndUpdatePop(settlement, divisibleNegative ? -reminder : reminder);
                 }
-                else SelectAndUpdatePop(settlement, pops);
+                else this.SelectAndUpdatePop(settlement, pops);
             }
-            else UpdatePopType(target, pops);
+            else this.UpdatePopType(target, pops);
+
+            this.BalanceClasses(settlement);
+        }
+
+        private void BalanceClasses(Settlement settlement)
+        {
+            Dictionary<PopType, float[]> dic = PopulationManager.GetDesiredPopTypes(settlement);
+            Dictionary<PopType, float> currentDic = new Dictionary<PopType, float>()
+            {
+                { PopType.Nobles, this.GetCurrentTypeFraction(PopType.Nobles) },
+                { PopType.Craftsmen, this.GetCurrentTypeFraction(PopType.Craftsmen) },
+                { PopType.Serfs, this.GetCurrentTypeFraction(PopType.Serfs) },
+                { PopType.Slaves, this.GetCurrentTypeFraction(PopType.Slaves) }
+            };
+            
+            if (currentDic[PopType.Slaves] > dic[PopType.Slaves][1])
+            {
+                int random = MBMath.ClampInt(MBRandom.RandomInt(0, 25), 0, this.GetTypeCount(PopType.Slaves));
+                this.UpdatePopType(PopType.Slaves, -random);
+                this.UpdatePopType(PopType.Serfs, random);
+                if (settlement.Town != null)
+                    settlement.Town.Security -= (float)random * 0.01f;
+            }
+
+            if (currentDic[PopType.Serfs] > dic[PopType.Serfs][1])
+            {
+                int random = MBMath.ClampInt(MBRandom.RandomInt(0, 25), 0, this.GetTypeCount(PopType.Serfs));
+                this.UpdatePopType(PopType.Serfs, -random);
+                this.UpdatePopType(PopType.Craftsmen, random);
+            }
+
+            if (currentDic[PopType.Craftsmen] > dic[PopType.Craftsmen][1])
+            {
+                int random = MBMath.ClampInt(MBRandom.RandomInt(0, 25), 0, this.GetTypeCount(PopType.Craftsmen));
+                this.UpdatePopType(PopType.Craftsmen, -random);
+                this.UpdatePopType(PopType.Nobles, random);
+            }
         }
 
         private void SelectAndUpdatePop(Settlement settlement, int pops)
