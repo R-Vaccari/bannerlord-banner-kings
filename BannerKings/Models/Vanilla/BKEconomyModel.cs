@@ -1,6 +1,7 @@
 ﻿using BannerKings.Managers;
 using BannerKings.Managers.Court;
 using BannerKings.Managers.Policies;
+using BannerKings.Managers.Titles;
 using BannerKings.Populations;
 using System;
 using TaleWorlds.CampaignSystem;
@@ -39,12 +40,12 @@ namespace BannerKings.Models
                 } else if (type == ConsumptionType.Industrial)
                 {
                     baseResult += craftsmen * 10f;
-                    baseResult += serfs * 0.1f;
+                    baseResult += serfs * 0.2f;
                 } else
                 {
                     baseResult += nobles * 1f;
                     baseResult += craftsmen * 1f;
-                    baseResult += serfs * 0.12f;
+                    baseResult += serfs * 0.40f;
                 }
                 
                 float num = MathF.Max(0f, baseResult * prosperity + extraProsperity);

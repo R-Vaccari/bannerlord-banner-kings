@@ -1,5 +1,4 @@
-﻿using BannerKings.Components;
-using BannerKings.Managers;
+﻿using BannerKings.Managers;
 using BannerKings.UI;
 using System;
 using System.Collections.Generic;
@@ -20,12 +19,13 @@ using BannerKings.Managers.Policies;
 using BannerKings.Managers.Populations.Villages;
 using static BannerKings.Managers.Policies.BKTaxPolicy;
 using BannerKings.Managers.Decisions;
+using BannerKings.Components;
+using static BannerKings.Managers.Policies.BKWorkforcePolicy;
 
 namespace BannerKings.Behaviors
 {
     public class BKSettlementBehavior : CampaignBehaviorBase
     {
-
         private PopulationManager populationManager = null;
         private PolicyManager policyManager = null;
         private TitleManager titleManager = null;
@@ -36,13 +36,13 @@ namespace BannerKings.Behaviors
 
         public override void RegisterEvents()
         {
+            CampaignEvents.SettlementEntered.AddNonSerializedListener(this, new Action<MobileParty, Settlement, Hero>(OnSettlementEntered));
             CampaignEvents.DailyTickSettlementEvent.AddNonSerializedListener(this, new Action<Settlement>(DailySettlementTick));
             CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, new Action<CampaignGameStarter>(OnSessionLaunched));
         }
 
         public override void SyncData(IDataStore dataStore)
         {
-            
             if (dataStore.IsSaving)
             {
                 populationManager = BannerKingsConfig.Instance.PopulationManager;
@@ -66,17 +66,16 @@ namespace BannerKings.Behaviors
 
             if (dataStore.IsLoading)
             {
-                if (populationManager == null)
+                if (populationManager == null && policyManager == null && titleManager == null && courtManager == null)
                     BannerKingsConfig.Instance.InitManagers();
                 
                 else BannerKingsConfig.Instance.InitManagers(populationManager, policyManager,
                     titleManager, courtManager);
-            }
 
-            BannerKingsConfig.Instance.TitleManager.FixTitles();
+                BannerKingsConfig.Instance.TitleManager.FixTitles();
+            }
         }
 
-      
         private void OnSettlementEntered(MobileParty party, Settlement target, Hero hero)
         {
             if (party != null && BannerKingsConfig.Instance.PopulationManager != null)
@@ -84,7 +83,6 @@ namespace BannerKings.Behaviors
                 if (party.LeaderHero != null && party.LeaderHero == target.Owner && party.LeaderHero != Hero.MainHero
                     && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(target)) 
                 {
-
                     int random = MBRandom.RandomInt(1, 100);
                     if (random > 5) return;
 
@@ -93,11 +91,34 @@ namespace BannerKings.Behaviors
                     List<BannerKingsDecision> changedDecisions = new List<BannerKingsDecision>();
                     if (target.Town != null)
                     {
+                        Town town = target.Town;
+                        if (town.FoodStocks < (float)town.FoodStocksUpperLimit() * 0.2f && town.FoodChange < 0f)
+                        {
+                            BKRationDecision rationDecision = (BKRationDecision)currentDecisions.FirstOrDefault(x => x.GetIdentifier() == "decision_ration");
+                            rationDecision.Enabled = true;
+                            changedDecisions.Add(rationDecision);
+                        } else
+                        {
+                            BKRationDecision rationDecision = (BKRationDecision)currentDecisions.FirstOrDefault(x => x.GetIdentifier() == "decision_ration");
+                            rationDecision.Enabled = false;
+                            changedDecisions.Add(rationDecision);
+                        }
 
-                        if (target.Town.LoyaltyChange < 0)
+                        MobileParty garrison = town.GarrisonParty;
+                        if (garrison != null)
+                        {
+                            float wage = garrison.TotalWage;
+                            float income = Campaign.Current.Models.SettlementTaxModel.CalculateTownTax(town).ResultNumber;
+                            if (wage >= income * 0.5f)
+                                BannerKingsConfig.Instance.PolicyManager.UpdateSettlementPolicy(target, new BKGarrisonPolicy(BKGarrisonPolicy.GarrisonPolicy.Dischargement, target));
+                            else if (wage <= income * 0.2f)
+                                BannerKingsConfig.Instance.PolicyManager.UpdateSettlementPolicy(target, new BKGarrisonPolicy(BKGarrisonPolicy.GarrisonPolicy.Enlistment, target));
+                            else BannerKingsConfig.Instance.PolicyManager.UpdateSettlementPolicy(target, new BKGarrisonPolicy(BKGarrisonPolicy.GarrisonPolicy.Standard, target));
+                        } 
+
+                        if (town.LoyaltyChange < 0)
                             UpdateTaxPolicy(1, target);
                         else UpdateTaxPolicy(-1, target);
-
 
                         if (kingdom != null)
                         {
@@ -120,7 +141,7 @@ namespace BannerKings.Behaviors
                         else if (mercy < 0) targetCriminal = new BKCriminalPolicy(BKCriminalPolicy.CriminalPolicy.Execution, target);
                         else targetCriminal = new BKCriminalPolicy(BKCriminalPolicy.CriminalPolicy.Enslavement, target);
 
-                        if (targetCriminal.Policy != criminal.Policy)
+                        if (targetCriminal.Policy != criminal.Policy) 
                             BannerKingsConfig.Instance.PolicyManager.UpdateSettlementPolicy(target, targetCriminal);
 
                         BKTaxSlavesDecision taxSlavesDecision = (BKTaxSlavesDecision)currentDecisions.FirstOrDefault(x => x.GetIdentifier() == "decision_slaves_tax");
@@ -130,101 +151,30 @@ namespace BannerKings.Behaviors
                             taxSlavesDecision.Enabled = false;
                         changedDecisions.Add(taxSlavesDecision);
 
+                        BKWorkforcePolicy workforce = (BKWorkforcePolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(target, "workforce");
+                        List<ValueTuple<WorkforcePolicy, float>> workforcePolicies = new List<ValueTuple<WorkforcePolicy, float>>();
+                        workforcePolicies.Add((WorkforcePolicy.None, 1f));
+                        float saturation = BannerKingsConfig.Instance.PopulationManager.GetPopData(target).LandData.WorkforceSaturation;
+                        if (saturation > 1f)
+                            workforcePolicies.Add((WorkforcePolicy.Land_Expansion, 2f));
+                        if (town.Security < 20f)
+                            workforcePolicies.Add((WorkforcePolicy.Martial_Law, 2f));
+                        BannerKingsConfig.Instance.PolicyManager.UpdateSettlementPolicy(target, new BKWorkforcePolicy(MBRandom.ChooseWeighted(workforcePolicies), target));
 
                         foreach (BannerKingsDecision dec in changedDecisions)
                             BannerKingsConfig.Instance.PolicyManager.UpdateSettlementDecision(target, dec);
                     }
                     else if (target.IsVillage)
                     {
+                        VillageData villageData = BannerKingsConfig.Instance.PopulationManager.GetPopData(target).VillageData;
+                        villageData.StartRandomProject();
                         float hearths = target.Village.Hearth;
                         if (hearths < 300f)
                             UpdateTaxPolicy(-1, target);
                         else if (hearths > 1000f)
                             UpdateTaxPolicy(1, target);
                     }
-
-                    /*
-                       Hero lord = party.LeaderHero;
-                       Kingdom kingdom = lord.Clan.Kingdom;
-                       List<ValueTuple<PolicyType, bool>> decisions = new List<ValueTuple<PolicyType, bool>>();
-                       if (!target.IsVillage && target.Town != null)
-                       {
-                           if (kingdom != null)
-                           {
-                               IEnumerable<Kingdom> enemies = FactionManager.GetEnemyKingdoms(kingdom);
-                               bool atWar = enemies.Count() > 0;
-
-                               decisions.Add((PolicyType.CONSCRIPTION, atWar));
-                               decisions.Add((PolicyType.SUBSIDIZE_MILITIA, atWar));
-                           }
-
-
-                           TaxType tax = BannerKingsConfig.Instance.PolicyManager.GetSettlementTax(target);
-                           if (target.Town.LoyaltyChange < 0)
-                           {
-                               if (!BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(target, PolicyType.EXEMPTION))
-                                   decisions.Add((PolicyType.EXEMPTION, true));
-
-                               if (tax == TaxType.High)
-                                   BannerKingsConfig.Instance.PolicyManager.UpdateTaxPolicy(target, TaxType.Standard);
-                               else if (tax == TaxType.Standard)
-                                   BannerKingsConfig.Instance.PolicyManager.UpdateTaxPolicy(target, TaxType.Low);
-                           } else
-                           {
-                               if (tax == TaxType.Standard)
-                                   BannerKingsConfig.Instance.PolicyManager.UpdateTaxPolicy(target, TaxType.High);
-                               else if (tax == TaxType.Low)
-                                   BannerKingsConfig.Instance.PolicyManager.UpdateTaxPolicy(target, TaxType.Standard);
-                           }
-
-                           float filledCapacity = new BKGrowthModel().GetSettlementFilledCapacity(target);
-                           bool growth = lord.Clan.Influence >= 300 && filledCapacity < 0.5f;
-                           decisions.Add((PolicyType.POP_GROWTH, growth));
-
-                           if (target.IsCastle)
-                               foreach (Building castleBuilding in target.Town.Buildings)
-                                   if (Helpers.Helpers._buildingCastleRetinue != null && castleBuilding.BuildingType == Helpers.Helpers._buildingCastleRetinue)
-                                   {
-                                       MobileParty garrison = target.Town.GarrisonParty;
-                                       if (garrison.MemberRoster != null && garrison.MemberRoster.Count > 0)
-                                           foreach (TroopRosterElement soldierElement in garrison.MemberRoster.GetTroopRoster())
-                                               if (Helpers.Helpers.IsRetinueTroop(soldierElement.Character, target.Culture)
-                                                   && party.MemberRoster.TotalManCount < party.Party.PartySizeLimit)
-                                               {
-                                                   int available = soldierElement.Number;
-                                                   int space = party.Party.PartySizeLimit - party.MemberRoster.TotalManCount;
-                                                   int toBeTaken = available > space ? space : available;
-                                                   party.MemberRoster.AddToCounts(soldierElement.Character, toBeTaken);
-                                                   garrison.MemberRoster.RemoveTroop(soldierElement.Character, toBeTaken);
-                                               }
-                                   }
-
-                       } else if (target.IsVillage)
-                       {
-                           if (kingdom != null)
-                           {
-                               IEnumerable<Kingdom> enemies = FactionManager.GetEnemyKingdoms(kingdom);
-                               bool atWar = enemies.Count() > 0;
-                               decisions.Add((PolicyType.SUBSIDIZE_MILITIA, atWar));
-                           }
-
-                           float hearths = target.Village.Hearth;
-                           if (hearths < 300f)
-                               BannerKingsConfig.Instance.PolicyManager.UpdateTaxPolicy(target, TaxType.Low);
-                           else if (hearths < 1000f)
-                               BannerKingsConfig.Instance.PolicyManager.UpdateTaxPolicy(target, TaxType.Standard);
-                           else BannerKingsConfig.Instance.PolicyManager.UpdateTaxPolicy(target, TaxType.High);
-
-
-                           float filledCapacity = new BKGrowthModel().GetSettlementFilledCapacity(target);
-                           bool growth = lord.Clan.Influence >= 300 && filledCapacity < 0.5f;
-                           decisions.Add((PolicyType.POP_GROWTH, growth));
-                       }
-
-                       foreach ((PolicyType, bool) decision in decisions) 
-                           BannerKingsConfig.Instance.PolicyManager.UpdateSettlementDecision(target, decision.Item1, decision.Item2);
-                             */
-                    }
+                }
             }
         }
 
@@ -240,7 +190,7 @@ namespace BannerKings.Behaviors
 
         private void DailySettlementTick(Settlement settlement)
         {
-            if (settlement == null) return;
+            if (settlement == null || settlement.StringId.Contains("tutorial") || settlement.StringId.Contains("Ruin")) return;
             
             if (BannerKingsConfig.Instance.PopulationManager == null)
                 BannerKingsConfig.Instance.InitManagers();
@@ -250,8 +200,8 @@ namespace BannerKings.Behaviors
 
             if (settlement.IsCastle)
             {
-                SetNotables(settlement);
-                UpdateVolunteers(settlement);
+                //SetNotables(settlement);
+                //UpdateVolunteers(settlement);
                 if (settlement.Town != null && settlement.Town.GarrisonParty != null)
                 {
                     foreach (Building castleBuilding in settlement.Town.Buildings)
@@ -272,137 +222,81 @@ namespace BannerKings.Behaviors
                                         garrison.MemberRoster.AddToCounts(settlement.Culture.EliteBasicTroop, 1);
                             }
                         }
+
+
+                    if (settlement.Town.FoodStocks <= (float)settlement.Town.FoodStocksUpperLimit() * 0.05f && 
+                        settlement.Town.Settlement.Stash != null)
+                        ConsumeStash(settlement);
                 }
-            } else 
+            } else if (settlement.IsVillage)
             {
-                if (settlement.IsVillage)
+                VillageData villageData = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement).VillageData;
+                if (villageData != null)
                 {
-                    PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
-                    VillageData villageData = data.VillageData;
-                    if (villageData != null)
+                    float manor = villageData.GetBuildingLevel(DefaultVillageBuildings.Instance.Manor);
+                    if (manor > 0)
                     {
-                        float trainning = villageData.GetBuildingLevel(DefaultVillageBuildings.Instance.Manor);
+                        List<MobileParty> retinues = BannerKingsConfig.Instance.PopulationManager.GetParties(Type.GetType("RetinueComponent"));
+                        MobileParty retinue = null;
+                        if (retinues.Count > 0) retinue = retinues.Find(x => x.HomeSettlement == settlement);
+                        if (retinue == null)
+                            retinue = RetinueComponent.CreateRetinue(settlement);
+                        
+                        (retinue.PartyComponent as RetinueComponent).DailyTick(manor);
                     }
-                } 
-            }
+                }
+            }    
         }
 
-        private void SetNotables(Settlement settlement)
+        internal static void ConsumeStash(Settlement settlement)
         {
-            int desiredAmont = 0;
-            List<Occupation> list = new List<Occupation> { Occupation.RuralNotable, Occupation.Headman };
-            foreach (Occupation occ in list)
-                desiredAmont += Campaign.Current.Models.NotableSpawnModel.GetTargetNotableCountForSettlement(settlement, occ);
+            List<ItemRosterElement> elements = new List<ItemRosterElement>();
+            foreach (ItemRosterElement element in settlement.Stash)
+                if (element.EquipmentElement.Item != null && element.EquipmentElement.Item.ItemCategory.Properties == ItemCategory.Property.BonusToFoodStores)
+                    elements.Add(element);
 
-            float randomFloat = MBRandom.RandomFloat;
-            int count = settlement.Notables.Count;
-            if (desiredAmont == count) return;
-            else if (count > desiredAmont)
+            int food = 0;
+            foreach (ItemRosterElement element in elements)
             {
-                for (int i = count - 1; i <= count - desiredAmont; i--)
-                    KillCharacterAction.ApplyByRemove(settlement.Notables[i], false, true);
-                return;
-            } 
-                
-            float num2 = settlement.Notables.Any<Hero>() ? ((float)(desiredAmont - settlement.Notables.Count) / (float)desiredAmont) : 1f;
-            num2 *= MathF.Pow(num2, 0.36f);
-            if (randomFloat <= num2)
-            {
-                List<Occupation> list2 = new List<Occupation>();
-                foreach (Occupation occupation2 in list)
-                {
-                    int num3 = 0;
-                    using (List<Hero>.Enumerator enumerator2 = settlement.Notables.GetEnumerator())
-                    {
-                        while (enumerator2.MoveNext())
-                            if (enumerator2.Current.CharacterObject.Occupation == occupation2)
-                                num3++;
-                    }
-                    int targetNotableCountForSettlement = Campaign.Current.Models.NotableSpawnModel.GetTargetNotableCountForSettlement(settlement, occupation2);
-                    if (num3 < targetNotableCountForSettlement)
-                        list2.Add(occupation2);
-
-                }
-                if (list2.Count > 0)
-                    EnterSettlementAction.ApplyForCharacterOnly(HeroCreator.CreateHeroAtOccupation(list2.GetRandomElement<Occupation>(), settlement), settlement);
-
+                food += element.Amount;
+                settlement.Stash.Remove(element);
             }
+
+            if (food > 0) settlement.Town.FoodStocks += food;
         }
 
-        private void UpdateVolunteers(Settlement settlement)
+        internal static void KillNotables(Settlement settlement, int amount)
         {
-            foreach (Hero hero in settlement.Notables)
+            Hero notable = null;
+            int i = 0;
+            try
             {
-                if (hero.CanHaveRecruits)
-                {
-                    bool flag = false;
-                    CharacterObject basicVolunteer = Campaign.Current.Models.VolunteerProductionModel.GetBasicVolunteer(hero);
-                    for (int i = 0; i < 6; i++)
+                List<Hero> notables = new List<Hero>(settlement.Notables);
+                foreach (Hero hero in notables)
+                    if (hero.BornSettlement != settlement)
                     {
-                        if (MBRandom.RandomFloat < Campaign.Current.Models.VolunteerProductionModel.GetDailyVolunteerProductionProbability(hero, i, settlement))
-                        {
-                            CharacterObject characterObject = hero.VolunteerTypes[i];
-                            if (characterObject == null)
-                            {
-                                hero.VolunteerTypes[i] = basicVolunteer;
-                                flag = true;
-                            }
-                            else
-                            {
-                                float num = 40000f / (MathF.Max(50f, hero.Power) * MathF.Max(50f, hero.Power));
-                                int tier = characterObject.Tier;
-                                if (MBRandom.RandomInt((int)MathF.Max(2f, (float)tier * num)) == 0 && characterObject.UpgradeTargets.Length != 0 && characterObject.Tier <= 3)
-                                {
-                                    hero.VolunteerTypes[i] = characterObject.UpgradeTargets[MBRandom.RandomInt(characterObject.UpgradeTargets.Length)];
-                                    flag = true;
-                                }
-                            }
-                        }
+                        notable = hero;
+                        LeaveSettlementAction.ApplyForCharacterOnly(hero);
+                        DisableHeroAction.Apply(hero);
+                        i++;
                     }
-                    if (flag)
-                    {
-                        CharacterObject[] volunteerTypes = hero.VolunteerTypes;
-                        for (int j = 1; j < 6; j++)
-                        {
-                            CharacterObject characterObject2 = volunteerTypes[j];
-                            if (characterObject2 != null)
-                            {
-                                int num2 = 0;
-                                int num3 = j - 1;
-                                CharacterObject characterObject3 = volunteerTypes[num3];
-                                while (num3 >= 0 && (characterObject3 == null || (float)characterObject2.Level + (characterObject2.IsMounted ? 0.5f : 0f) < (float)characterObject3.Level + (characterObject3.IsMounted ? 0.5f : 0f)))
-                                {
-                                    if (characterObject3 == null)
-                                    {
-                                        num3--;
-                                        num2++;
-                                        if (num3 >= 0)
-                                            characterObject3 = volunteerTypes[num3];
-                                        
-                                    }
-                                    else
-                                    {
-                                        volunteerTypes[num3 + 1 + num2] = characterObject3;
-                                        num3--;
-                                        num2 = 0;
-                                        if (num3 >= 0)
-                                            characterObject3 = volunteerTypes[num3];
-                                        
-                                    }
-                                }
-                                volunteerTypes[num3 + 1 + num2] = characterObject2;
-                            }
-                        }
-                    }
-                }
+            }
+            catch (Exception ex)
+            {
+                string cause = "Exception in Banner Kings KillNotables method. ";
+                string objInfo = null;
+                if (notable != null)
+                    objInfo = string.Format("Notable: Name [{0}], Id [{1}], Culture [{2}]\nSettleent: Name [{3}], Id [{4}], Culture [{5}]", 
+                        notable.Name, notable.StringId, notable.Culture, settlement.Name, settlement.StringId, settlement.Culture);
+                else objInfo = "Null notable.";
+
+                throw new BannerKingsException(cause + objInfo, ex);
             }
         }
 
-        
 
         private void OnSessionLaunched(CampaignGameStarter campaignGameStarter)
         {
-            AddDialog(campaignGameStarter);
             AddMenus(campaignGameStarter);
 
             if (BannerKingsConfig.Instance.PopulationManager != null)
@@ -437,7 +331,6 @@ namespace BannerKings.Behaviors
         {
 
             campaignGameStarter.AddGameMenu("bannerkings", "Banner Kings", new OnInitDelegate(MenuBannerKingsInit));
-
             campaignGameStarter.AddGameMenu("bannerkings_actions", "Banner Kings", new OnInitDelegate(MenuBannerKingsInit));
 
             // ------- WAIT MENUS --------
@@ -513,6 +406,13 @@ namespace BannerKings.Behaviors
 
             // ------- ACTIONS --------
 
+            campaignGameStarter.AddGameMenuOption("bannerkings_actions", "action_slave_transfer", "{=!}Transfer slaves",
+                new GameMenuOption.OnConditionDelegate(MenuSlavesActionCondition), delegate (MenuCallbackArgs x)
+                {
+                    UIHelper.ShowSlaveTransferScreen();
+
+                }, false, -1, false);
+
             campaignGameStarter.AddGameMenuOption("bannerkings_actions", "action_meet_nobility", "{=!}Meet nobility",
                 new GameMenuOption.OnConditionDelegate(MenuMeetNobilityActionCondition), delegate (MenuCallbackArgs x)
                 {
@@ -572,6 +472,7 @@ namespace BannerKings.Behaviors
             campaignGameStarter.AddGameMenuOption("bannerkings", "manage_court", "{=!}Noble Court",
                new GameMenuOption.OnConditionDelegate(MenuCourtCondition),
                new GameMenuOption.OnConsequenceDelegate(MenuCourtConsequence), false, -1, false);
+
 
             campaignGameStarter.AddGameMenuOption("bannerkings", "bannerkings_action", "{=!}Take an action",
                 delegate (MenuCallbackArgs args) {
@@ -834,6 +735,12 @@ namespace BannerKings.Behaviors
             return criminal;
         }
 
+        private static bool MenuSlavesActionCondition(MenuCallbackArgs args)
+        {
+            args.optionLeaveType = GameMenuOption.LeaveType.TroopSelection;
+            return Settlement.CurrentSettlement.OwnerClan == Clan.PlayerClan;
+        }
+
         private static bool MenuWaitActionPeasantCondition(MenuCallbackArgs args)
         {
             args.optionLeaveType = GameMenuOption.LeaveType.Wait;
@@ -1000,222 +907,76 @@ namespace BannerKings.Behaviors
         {
             args.MenuTitle = new TextObject("{=!}Banner Kings");
         }
-
-       
-        private void AddDialog(CampaignGameStarter starter)
-        {
-
-            starter.AddDialogLine("traveller_serf_party_start", "start", "traveller_party_greeting", 
-                "M'lord! We are humble folk, travelling between towns, looking for work and trade.", 
-                new ConversationSentence.OnConditionDelegate(this.traveller_serf_start_on_condition), null, 100, null);
-
-            starter.AddDialogLine("traveller_craftsman_party_start", "start", "traveller_party_greeting",
-                "Good day to you. We are craftsmen travelling for business purposes.",
-                new ConversationSentence.OnConditionDelegate(this.traveller_craftsman_start_on_condition), null, 100, null);
-
-            starter.AddDialogLine("traveller_noble_party_start", "start", "traveller_party_greeting",
-                "Yes? Please do not interfere with our caravan.",
-                new ConversationSentence.OnConditionDelegate(this.traveller_noble_start_on_condition), null, 100, null);
-
-
-            starter.AddPlayerLine("traveller_party_loot", "traveller_party_greeting", "close_window", 
-                new TextObject("{=XaPMUJV0}Whatever you have, I'm taking it. Surrender or die!", null).ToString(),
-                new ConversationSentence.OnConditionDelegate(this.traveller_aggression_on_condition), 
-                delegate { PlayerEncounter.Current.IsEnemy = true; }, 
-                100, null, null);
-
-            starter.AddPlayerLine("traveller_party_leave", "traveller_party_greeting", "close_window",
-                new TextObject("{=dialog_end_nice}Carry on, then. Farewell.", null).ToString(), null,
-                delegate { PlayerEncounter.LeaveEncounter = true; },
-                100, null, null);
-
-            starter.AddDialogLine("slavecaravan_friend_party_start", "start", "slavecaravan_party_greeting",
-                "My lord, we are taking these rabble somewhere they can be put to good use.",
-                new ConversationSentence.OnConditionDelegate(this.slavecaravan_amicable_on_condition), null, 100, null);
-
-            starter.AddDialogLine("slavecaravan_neutral_party_start", "start", "slavecaravan_party_greeting",
-                "If you're not planning to join those vermin back there, move away![rf:idle_angry][ib:aggressive]",
-                new ConversationSentence.OnConditionDelegate(this.slavecaravan_neutral_on_condition), null, 100, null);
-
-            starter.AddPlayerLine("slavecaravan_party_leave", "slavecaravan_party_greeting", "close_window",
-               new TextObject("{=dialog_end_nice}Carry on, then. Farewell.", null).ToString(), null,
-               delegate { PlayerEncounter.LeaveEncounter = true; },
-               100, null, null);
-
-            starter.AddPlayerLine("slavecaravan_party_threat", "slavecaravan_party_greeting", "slavecaravan_threat",
-               new TextObject("{=!}Give me your slaves and gear, or else!", null).ToString(),
-               new ConversationSentence.OnConditionDelegate(this.slavecaravan_neutral_on_condition),
-               null, 100, null, null);
-
-            starter.AddDialogLine("slavecaravan_party_threat_response", "slavecaravan_threat", "close_window",
-                "One more for the mines! Lads, get the whip![rf:idle_angry][ib:aggressive]",
-                null, delegate { PlayerEncounter.Current.IsEnemy = true; }, 100, null);
-
-            starter.AddDialogLine("raised_militia_party_start", "start", "raised_militia_greeting",
-                "M'lord! We are ready to serve you.",
-                new ConversationSentence.OnConditionDelegate(this.raised_militia_start_on_condition), null, 100, null);
-
-            starter.AddPlayerLine("raised_militia_party_follow", "raised_militia_greeting", "raised_militia_order",
-               new TextObject("{=!}Follow my company.", null).ToString(),
-               new ConversationSentence.OnConditionDelegate(this.raised_militia_order_on_condition),
-               new ConversationSentence.OnConsequenceDelegate(this.raised_militia_follow_on_consequence), 100, null, null);
-
-            starter.AddPlayerLine("raised_militia_party_retreat", "raised_militia_greeting", "raised_militia_order",
-               new TextObject("{=!}You may go home.", null).ToString(),
-               new ConversationSentence.OnConditionDelegate(this.raised_militia_order_on_condition),
-               new ConversationSentence.OnConsequenceDelegate(this.raised_militia_retreat_on_consequence), 100, null, null);
-
-            starter.AddDialogLine("raised_militia_order_response", "raised_militia_order", "close_window",
-                "Aye!",
-                null, delegate { PlayerEncounter.LeaveEncounter = true; }, 100, null);
-        }
-
-        private bool IsTravellerParty(PartyBase party)
-        {
-            bool value = false;
-            if (party != null && party.MobileParty != null)
-                if (BannerKingsConfig.Instance.PopulationManager.IsPopulationParty(party.MobileParty))
-                    value = true;
-            return value;
-        }
-
-        private bool traveller_serf_start_on_condition()
-        {
-            bool value = false;
-            PartyBase party = PlayerEncounter.EncounteredParty;
-            if (IsTravellerParty(party))
-            {
-                PopulationPartyComponent component = (PopulationPartyComponent)party.MobileParty.PartyComponent;
-                if (component.popType == PopType.Serfs)
-                    value = true;
-            }
-    
-            return value;
-        }
-
-        private void raised_militia_retreat_on_consequence()
-        {
-            PartyBase party = PlayerEncounter.EncounteredParty;
-            if (IsTravellerParty(party))
-            {
-                MilitiaComponent component = (MilitiaComponent)party.MobileParty.PartyComponent;
-                component.behavior = AiBehavior.GoToSettlement;
-            }
-        }
-
-        private void raised_militia_follow_on_consequence()
-        {
-            PartyBase party = PlayerEncounter.EncounteredParty;
-            if (IsTravellerParty(party))
-            {
-                MilitiaComponent component = (MilitiaComponent)party.MobileParty.PartyComponent;
-                component.behavior = AiBehavior.EscortParty;
-            }
-        }
-
-        private bool raised_militia_start_on_condition()
-        {
-            bool value = false;
-            PartyBase party = PlayerEncounter.EncounteredParty;
-            if (IsTravellerParty(party))
-                if (party.MobileParty.PartyComponent is MilitiaComponent)
-                    value = true;
-
-            return value;
-        }
-
-        private bool raised_militia_order_on_condition()
-        {
-            bool value = false;
-            PartyBase party = PlayerEncounter.EncounteredParty;
-            if (IsTravellerParty(party))
-                if (party.MobileParty.PartyComponent is MilitiaComponent && party.Owner == Hero.MainHero)
-                    value = true;
-
-            return value;
-        }
-
-        private bool traveller_craftsman_start_on_condition()
-        {
-            bool value = false;
-            PartyBase party = PlayerEncounter.EncounteredParty;
-            if (IsTravellerParty(party))
-            {
-                PopulationPartyComponent component = (PopulationPartyComponent)party.MobileParty.PartyComponent;
-                if (component.popType == PopType.Craftsmen)
-                    value = true;
-            }
-
-            return value;
-        }
-
-        private bool traveller_noble_start_on_condition()
-        {
-            bool value = false;
-            PartyBase party = PlayerEncounter.EncounteredParty;
-            if (IsTravellerParty(party))
-            {
-                PopulationPartyComponent component = (PopulationPartyComponent)party.MobileParty.PartyComponent;
-                if (component.popType == PopType.Nobles)
-                    value = true;
-            }
-
-            return value;
-        }
-
-        private bool traveller_aggression_on_condition()
-        {
-            bool value = false;
-            PartyBase party = PlayerEncounter.EncounteredParty;
-            if (IsTravellerParty(party))
-            {
-                PopulationPartyComponent component = (PopulationPartyComponent)party.MobileParty.PartyComponent;
-                Kingdom partyKingdom = component.OriginSettlement.OwnerClan.Kingdom;
-                if (partyKingdom != null)
-                    if (Hero.MainHero.Clan.Kingdom == null || component.OriginSettlement.OwnerClan.Kingdom != Hero.MainHero.Clan.Kingdom)
-                        value = true;
-            }
-
-            return value;
-        }
-
-        private bool slavecaravan_neutral_on_condition()
-        {
-            bool value = false;
-            PartyBase party = PlayerEncounter.EncounteredParty;
-            if (IsTravellerParty(party))
-            {
-                PopulationPartyComponent component = (PopulationPartyComponent)party.MobileParty.PartyComponent;
-                Kingdom partyKingdom = component.OriginSettlement.OwnerClan.Kingdom;
-                if (partyKingdom != null && component.slaveCaravan)
-                    if (Hero.MainHero.Clan.Kingdom == null || component.OriginSettlement.OwnerClan.Kingdom != Hero.MainHero.Clan.Kingdom)
-                        value = true;
-            }
-
-            return value;
-        }
-
-        private bool slavecaravan_amicable_on_condition()
-        {
-            bool value = false;
-            PartyBase party = PlayerEncounter.EncounteredParty;
-            if (IsTravellerParty(party))
-            {
-                PopulationPartyComponent component = (PopulationPartyComponent)party.MobileParty.PartyComponent;
-                Kingdom partyKingdom = component.OriginSettlement.OwnerClan.Kingdom;
-                Kingdom heroKingdom = Hero.MainHero.Clan.Kingdom;
-                if (component.slaveCaravan && ((partyKingdom != null && heroKingdom != null && partyKingdom == heroKingdom) 
-                    || (component.OriginSettlement.OwnerClan == Hero.MainHero.Clan))) 
-                    value = true;
-            }
-
-            return value;
-        }
-
     }
 
     namespace Patches
     {
+
+
+        [HarmonyPatch(typeof(UrbanCharactersCampaignBehavior), "SpawnNotablesIfNeeded")]
+        class SpawnNotablesIfNeededPatch
+        {
+            static bool Prefix(Settlement settlement)
+            {
+                if (settlement.IsCastle && settlement.Name.ToString().Contains("Ab Comer"))
+                    Console.WriteLine();
+                List<Occupation> list = new List<Occupation>();
+                if (settlement.IsTown)
+                {
+                    list = new List<Occupation>
+                    {
+                        Occupation.GangLeader,
+                        Occupation.Artisan,
+                        Occupation.Merchant
+                    };
+                }
+                else if (settlement.IsVillage)
+                {
+                    list = new List<Occupation>
+                    {
+                        Occupation.RuralNotable,
+                        Occupation.Headman
+                    };
+                } else if (settlement.IsCastle)
+                {
+                    list = new List<Occupation>
+                    {
+                        Occupation.Headman
+                    };
+                }
+                float randomFloat = MBRandom.RandomFloat;
+                int num = 0;
+                foreach (Occupation occupation in list)
+                    num += Campaign.Current.Models.NotableSpawnModel.GetTargetNotableCountForSettlement(settlement, occupation);
+                
+                int count = settlement.Notables.Count;
+                float num2 = settlement.Notables.Any<Hero>() ? ((float)(num - settlement.Notables.Count) / (float)num) : 1f;
+                num2 *= MathF.Pow(num2, 0.36f);
+                if (randomFloat <= num2 && count < num)
+                {
+                    List<Occupation> list2 = new List<Occupation>();
+                    foreach (Occupation occupation2 in list)
+                    {
+                        int num3 = 0;
+                        using (List<Hero>.Enumerator enumerator2 = settlement.Notables.GetEnumerator())
+                        {
+                            while (enumerator2.MoveNext())
+                                if (enumerator2.Current.CharacterObject.Occupation == occupation2)
+                                    num3++;
+                        }
+                        int targetNotableCountForSettlement = Campaign.Current.Models.NotableSpawnModel.GetTargetNotableCountForSettlement(settlement, occupation2);
+                        if (num3 < targetNotableCountForSettlement)
+                            list2.Add(occupation2);
+                        
+                    }
+                    if (list2.Count > 0)
+                        EnterSettlementAction.ApplyForCharacterOnly(HeroCreator.CreateHeroAtOccupation(list2.GetRandomElement<Occupation>(), settlement), settlement);
+                    
+                }
+
+                return false;
+            }
+        }
 
         [HarmonyPatch(typeof(CaravansCampaignBehavior), "SpawnCaravan")]
         class SpawnCaravanPatch
@@ -1234,7 +995,7 @@ namespace BannerKings.Behaviors
         {
             static bool Prefix(MobileParty sellerParty, TroopRoster prisoners, Settlement currentSettlement, bool applyGoldChange = true)
             {
-                if (currentSettlement != null && (currentSettlement.IsCastle || currentSettlement.IsTown) &&BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(currentSettlement))
+                if (currentSettlement != null && (currentSettlement.IsCastle || currentSettlement.IsTown) && BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(currentSettlement))
                 {
                     BKCriminalPolicy policy = (BKCriminalPolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(currentSettlement, "criminal");
                     if (policy.Policy == BKCriminalPolicy.CriminalPolicy.Enslavement)

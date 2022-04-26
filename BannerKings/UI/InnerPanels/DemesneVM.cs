@@ -1,5 +1,6 @@
 ﻿using BannerKings.Managers.Kingdoms.Contract;
 using BannerKings.Managers.Policies;
+using BannerKings.Managers.Titles;
 using BannerKings.Models;
 using BannerKings.Populations;
 using BannerKings.UI.Items;

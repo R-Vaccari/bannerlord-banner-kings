@@ -29,6 +29,8 @@ namespace BannerKings.Managers.Institutions
 
         public abstract Hero GenerateLeader();
 
+        public abstract void Destroy();
+
         public float GetFavor(Hero hero)
         {
             if (this.favors.ContainsKey(hero))

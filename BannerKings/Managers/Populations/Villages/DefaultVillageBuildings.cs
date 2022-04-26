@@ -41,6 +41,7 @@ namespace BannerKings.Managers.Populations.Villages
         public void Init()
         {
             this.manor = new BuildingType("bannerkings_manor");
+            Game.Current.ObjectManager.RegisterPresumedObject<BuildingType>(manor);
             this.manor.Initialize(new TextObject("{=!}Manor"), 
                 new TextObject("{=!}Manor house, the lord's home and center of the village. A manor house allows the housing of a small retinue in the village (15, 30, 45 men). Increases influence from nobles (15%, 30%, 50%)."), new int[]
             {
@@ -50,10 +51,10 @@ namespace BannerKings.Managers.Populations.Villages
             }, BuildingLocation.Settlement, new Tuple<BuildingEffectEnum, float, float, float>[]
             {
    
-            }, 0);
-
+            }, 1);
 
             this.palisade = new BuildingType("bannerkings_palisade");
+            Game.Current.ObjectManager.RegisterPresumedObject<BuildingType>(palisade);
             this.palisade.Initialize(new TextObject("{=!}Palisade"), 
                 new TextObject("{=!}A set of wooden stakes placed around the village like a wall. Reduces raiding speed (12%, 24%, 36%)."), new int[]
             {
@@ -66,6 +67,7 @@ namespace BannerKings.Managers.Populations.Villages
             }, 0);
 
             this.trainning = new BuildingType("bannerkings_trainning");
+            Game.Current.ObjectManager.RegisterPresumedObject<BuildingType>(trainning);
             this.trainning.Initialize(new TextObject("{=!}Trainning Grounds"), 
                 new TextObject("{=!}Stablish a zone dedicated for trainning, as well as it's required equipments, where locals can train basic military arts. Increases militia production (0.2, 0.5, 1.0)."), new int[]
             {
@@ -78,6 +80,7 @@ namespace BannerKings.Managers.Populations.Villages
             }, 0);
 
             this.warehouse = new BuildingType("bannerkings_warehouse");
+            Game.Current.ObjectManager.RegisterPresumedObject<BuildingType>(warehouse);
             this.warehouse.Initialize(new TextObject("{=!}Arms Warehouse"), 
                 new TextObject("{=!}Construct a warehouse dedicated to keep military equipment as well as provide their maintenance. Improves militia quality (4%, 8%, 12%)."), new int[]
             {
@@ -103,8 +106,6 @@ namespace BannerKings.Managers.Populations.Villages
    
             }, 0);
 
-            
-
             this.bakery = new BuildingType("bannerkings_bakery");
             this.bakery.Initialize(new TextObject("{=!}Bakery"), 
                 new TextObject("{=!}Supply tools and space for a local bakery, allowing serfs to turn wheat into bread. Adds bread as production good."), new int[]
@@ -118,6 +119,7 @@ namespace BannerKings.Managers.Populations.Villages
             }, 0);
 
             this.mining = new BuildingType("bannerkings_mining");
+            Game.Current.ObjectManager.RegisterPresumedObject<BuildingType>(mining);
             this.mining.Initialize(new TextObject("{=!}Mining Infrastructure"), 
                 new TextObject("{=!}Build mining equipment and infrastructure to improve working conditions in local mines. Increases ore production (5%, 10%, 15%)."), new int[]
             {
@@ -129,8 +131,8 @@ namespace BannerKings.Managers.Populations.Villages
  
             }, 0);
 
-
             this.animalHousing = new BuildingType("bannerkings_animal_housing");
+            Game.Current.ObjectManager.RegisterPresumedObject<BuildingType>(animalHousing);
             this.animalHousing.Initialize(new TextObject("{=!}Animal Housing"), 
                 new TextObject("{=!}Invest on infrastructure for animal housing and grazing, yielding more from your pasture lands. Increases live animals production (5%, 10%, 15%)."), new int[]
             {
@@ -142,8 +144,8 @@ namespace BannerKings.Managers.Populations.Villages
   
             }, 0);
 
-
             this.farming = new BuildingType("bannerkings_farming");
+            Game.Current.ObjectManager.RegisterPresumedObject<BuildingType>(farming);
             this.farming.Initialize(new TextObject("{=!}Farming Infrastructure"), 
                 new TextObject("{=!}Provide farming equipment and stablish systems to maximise land productivity. Increases farm goods production (5%, 10%, 15%)."), new int[]
             {
@@ -155,9 +157,8 @@ namespace BannerKings.Managers.Populations.Villages
     
             }, 0);
 
-
-
             this.sawmill = new BuildingType("bannerkings_sawmill");
+            Game.Current.ObjectManager.RegisterPresumedObject<BuildingType>(sawmill);
             this.sawmill.Initialize(new TextObject("{=!}Sawmill"), 
                 new TextObject("{=!}Build a sawmill, improving the speed and quality of log cutting into usable hardwood. Increases hardwood production (5%, 10%, 15%)."), new int[]
             {
@@ -168,7 +169,6 @@ namespace BannerKings.Managers.Populations.Villages
             {
 
             }, 0);
-
 
             this.butter = new BuildingType("bannerkings_butter");
             this.butter.Initialize(new TextObject("{=!}Butter Mill"), 
@@ -220,25 +220,28 @@ namespace BannerKings.Managers.Populations.Villages
 
 
             this.dailyProduction = new BuildingType("bannerkings_daily_production");
+            Game.Current.ObjectManager.RegisterPresumedObject<BuildingType>(dailyProduction);
             this.dailyProduction.Initialize(new TextObject("{=!}Production", null), new TextObject("{=!}Focus the population's effort in productivity, not expanding land or changing it's type. While this option is not active, productivity output is reduced.", null), new int[3], BuildingLocation.Daily, new Tuple<BuildingEffectEnum, float, float, float>[]
             {
 
             }, 0);
 
-
             this.dailyFarm = new BuildingType("bannerkings_daily_farm");
+            Game.Current.ObjectManager.RegisterPresumedObject<BuildingType>(dailyFarm);
             this.dailyFarm.Initialize(new TextObject("{=!}Farmland", null), new TextObject("{=!}Focus efforts on creating new arable acres, used for farming purposes. More farming acres increase output of farming goods.", null), new int[3], BuildingLocation.Daily, new Tuple<BuildingEffectEnum, float, float, float>[]
             {
 
             }, 0);
 
             this.dailyPasture = new BuildingType("bannerkings_daily_pasture");
+            Game.Current.ObjectManager.RegisterPresumedObject<BuildingType>(dailyPasture);
             this.dailyPasture.Initialize(new TextObject("{=!}Pastureland", null), new TextObject("{=!}Focus efforts on creating new acres of pasture, where cattle and animals graze and thrive. More pasture acres increase output of animals and animal products.", null), new int[3], BuildingLocation.Daily, new Tuple<BuildingEffectEnum, float, float, float>[]
             {
 
             }, 0);
 
             this.dailyWoods = new BuildingType("bannerkings_daily_woods");
+            Game.Current.ObjectManager.RegisterPresumedObject<BuildingType>(dailyWoods);
             this.dailyWoods.Initialize(new TextObject("{=!}Woodland", null), new TextObject("{=!}Focus efforts on turning acres into woodlands. Acres of woodland allow more higher yields of logs and berries, as well as help the land not becoming overfarmed or grazed.", null), new int[3], BuildingLocation.Daily, new Tuple<BuildingEffectEnum, float, float, float>[]
             {
 
@@ -264,7 +267,6 @@ namespace BannerKings.Managers.Populations.Villages
             yield return Instance.Blacksmith;
             yield break;
         }
-
 
         public static IEnumerable<BuildingType> VillageBuildings(Village village)
         {
@@ -296,7 +298,6 @@ namespace BannerKings.Managers.Populations.Villages
             if (type == DefaultVillageTypes.IronMine)
                 yield return Instance.Blacksmith;
             yield break;
-            
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using BannerKings.Managers.Policies;
+using BannerKings.Managers.Titles;
 using BannerKings.Populations;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
@@ -39,6 +40,7 @@ namespace BannerKings.Models
 
                 float admCost = new BKAdministrativeModel().CalculateEffect(town.Settlement).ResultNumber;
                 baseResult.AddFactor(admCost * -1f, new TextObject("Administrative costs"));
+                CalculateDueTax(data, baseResult.ResultNumber);
             }
 
             return baseResult;
@@ -58,17 +60,33 @@ namespace BannerKings.Models
                     baseResult = 0;
                     int random = MBRandom.RandomInt(1, 100);
                     if (random <= 33 && village.Settlement.Notables != null)
-                        ChangeRelationAction.ApplyPlayerRelation(village.Settlement.Notables.GetRandomElement(), 1);
+                    {
+                        Hero notable = village.Settlement.Notables.GetRandomElement();
+                        if (notable != null) ChangeRelationAction.ApplyRelationChangeBetweenHeroes(village.Settlement.Owner, notable, 1);
+                    }
                 }
-
                 if (baseResult > 0)
                 {
                     float admCost = new BKAdministrativeModel().CalculateEffect(village.Settlement).ResultNumber;
                     baseResult *= 1f - admCost;
-                }  
+                }
+
+                CalculateDueTax(BannerKingsConfig.Instance.PopulationManager.GetPopData(village.Settlement), (float)baseResult);
             }
 
             return (int)baseResult;
+        }
+
+        private void CalculateDueTax(PopulationData data, float result)
+        {
+            TitleData titleData = data.TitleData;
+            if (titleData == null) return;
+            FeudalContract contract = titleData.Title.contract;
+            if (contract != null && contract.Duties.ContainsKey(FeudalDuties.Taxation))
+            {
+                float factor = contract.Duties[FeudalDuties.Taxation];
+                titleData.Title.dueTax = result * factor;
+            }
         }
 
         public override float GetTownCommissionChangeBasedOnSecurity(Town town, float commission)

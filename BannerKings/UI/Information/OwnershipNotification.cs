@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using BannerKings.Managers.Titles;
+using System.Collections.Generic;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 using static BannerKings.Managers.TitleManager;

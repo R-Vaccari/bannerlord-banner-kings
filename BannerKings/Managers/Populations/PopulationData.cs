@@ -13,6 +13,8 @@ using BannerKings.Managers.Institutions;
 using BannerKings.Managers.Populations.Villages;
 using BannerKings.Managers.Populations;
 using static BannerKings.Managers.Policies.BKWorkforcePolicy;
+using BannerKings.Managers.Titles;
+using BannerKings.Managers;
 
 namespace BannerKings.Populations
 {
@@ -45,7 +47,10 @@ namespace BannerKings.Populations
         [SaveableProperty(9)]
         private TournamentData tournamentData { get; set; }
 
-        
+        [SaveableProperty(10)]
+        private TitleData titleData { get; set; }
+
+
 
         public PopulationData(List<PopulationClass> classes, Settlement settlement, float assimilation, List<CultureDataClass> cultures = null, Guild guild = null)
         {
@@ -79,6 +84,15 @@ namespace BannerKings.Populations
             get => this.tournamentData;
             set => this.tournamentData = value;
         }
+
+        public TitleData TitleData
+        {
+            get
+            {
+                return titleData;
+            }
+        }
+
         public VillageData VillageData => this.villageData;
 
         public ExplainedNumber Foreigner => new BKForeignerModel().CalculateEffect(this.settlement);
@@ -134,14 +148,50 @@ namespace BannerKings.Populations
                     int fractions = (int)((float)pops / (divisibleNegative ? -20f : 20f));
                     int reminder = pops % 20;
                     for (int i = 0; i < fractions; i++)
-                    {
-                        SelectAndUpdatePop(settlement, divisibleNegative ? -20 : 20);
-                    }
-                    SelectAndUpdatePop(settlement, divisibleNegative ? -reminder : reminder);
+                        this.SelectAndUpdatePop(settlement, divisibleNegative ? -20 : 20);
+                    
+                    this.SelectAndUpdatePop(settlement, divisibleNegative ? -reminder : reminder);
                 }
-                else SelectAndUpdatePop(settlement, pops);
+                else this.SelectAndUpdatePop(settlement, pops);
             }
-            else UpdatePopType(target, pops);
+            else this.UpdatePopType(target, pops);
+
+            this.BalanceClasses(settlement);
+        }
+
+        private void BalanceClasses(Settlement settlement)
+        {
+            Dictionary<PopType, float[]> dic = PopulationManager.GetDesiredPopTypes(settlement);
+            Dictionary<PopType, float> currentDic = new Dictionary<PopType, float>()
+            {
+                { PopType.Nobles, this.GetCurrentTypeFraction(PopType.Nobles) },
+                { PopType.Craftsmen, this.GetCurrentTypeFraction(PopType.Craftsmen) },
+                { PopType.Serfs, this.GetCurrentTypeFraction(PopType.Serfs) },
+                { PopType.Slaves, this.GetCurrentTypeFraction(PopType.Slaves) }
+            };
+            
+            if (currentDic[PopType.Slaves] > dic[PopType.Slaves][1])
+            {
+                int random = MBMath.ClampInt(MBRandom.RandomInt(0, 25), 0, this.GetTypeCount(PopType.Slaves));
+                this.UpdatePopType(PopType.Slaves, -random);
+                this.UpdatePopType(PopType.Serfs, random);
+                if (settlement.Town != null)
+                    settlement.Town.Security -= (float)random * 0.01f;
+            }
+
+            if (currentDic[PopType.Serfs] > dic[PopType.Serfs][1])
+            {
+                int random = MBMath.ClampInt(MBRandom.RandomInt(0, 25), 0, this.GetTypeCount(PopType.Serfs));
+                this.UpdatePopType(PopType.Serfs, -random);
+                this.UpdatePopType(PopType.Craftsmen, random);
+            }
+
+            if (currentDic[PopType.Craftsmen] > dic[PopType.Craftsmen][1])
+            {
+                int random = MBMath.ClampInt(MBRandom.RandomInt(0, 25), 0, this.GetTypeCount(PopType.Craftsmen));
+                this.UpdatePopType(PopType.Craftsmen, -random);
+                this.UpdatePopType(PopType.Nobles, random);
+            }
         }
 
         private void SelectAndUpdatePop(Settlement settlement, int pops)
@@ -182,7 +232,7 @@ namespace BannerKings.Populations
             }
         }
 
-        public void UpdatePopType(PopType type, int count, bool estateSlave = false)
+        public void UpdatePopType(PopType type, int count, bool stateSlaves = false)
         {
             if (type != PopType.None)
             {
@@ -192,9 +242,11 @@ namespace BannerKings.Populations
 
                 if (type == PopType.Slaves)
                 {
-                    float currentTotal = pops.count;
-                    float toAdd = count;
-                    float proportion = toAdd / currentTotal;
+                    int total = pops.count + count;
+                    float currentState = (float)pops.count * this.economicData.StateSlaves;
+                    if (stateSlaves)
+                        currentState += count;
+                    this.economicData.StateSlaves = currentState / (float)total;
                 }
 
                 pops.count += count;
@@ -222,6 +274,8 @@ namespace BannerKings.Populations
             landData.Update(this);
             if (villageData != null) villageData.Update(this);
             if (tournamentData != null) tournamentData.Update(this);
+            if (titleData == null) titleData = new TitleData(BannerKingsConfig.Instance.TitleManager.GetTitle(this.settlement));
+            titleData.Update(this);
         }
     }
 
@@ -465,6 +519,12 @@ namespace BannerKings.Populations
             this.inProgress = new Queue<Building>();
         }
 
+        public void StartRandomProject()
+        {
+            if (this.inProgress.IsEmpty())
+                this.inProgress.Enqueue(this.buildings.GetRandomElementWithPredicate(x => x.BuildingType.BuildingLocation != BuildingLocation.Daily));
+        }
+
         public int GetBuildingLevel(BuildingType type)
         {
             Building building = this.buildings.FirstOrDefault(x => x.BuildingType == type);
@@ -472,83 +532,82 @@ namespace BannerKings.Populations
             return 0;
         }
 
+        public void ReInitializeBuildings()
+        {
+            List<VillageBuilding> toAdd = new List<VillageBuilding>();
+            foreach (VillageBuilding b in this.buildings)
+            {
+                if (b.Explanation == null)
+                {
+                    string id = b.BuildingType.StringId;
+                    BuildingType type = DefaultVillageBuildings.Instance.All()
+                        .FirstOrDefault(x => x.StringId == id);
+                    if (type != null)
+                        toAdd.Add(new VillageBuilding(type, this.Village.MarketTown, this.Village,
+                            b.BuildingProgress, b.CurrentLevel));
+                }  
+            }
+
+            if (toAdd.Count > 0)
+            {
+                this.buildings.Clear();
+                foreach (VillageBuilding b in toAdd)
+                    this.buildings.Add(b);
+            }
+
+            List<VillageBuilding> toAddQueue = new List<VillageBuilding>();
+            foreach (VillageBuilding b in this.inProgress)
+                if (b.Explanation == null)
+                {
+                    string id = b.BuildingType.StringId;
+                    BuildingType type = DefaultVillageBuildings.Instance.All()
+                        .FirstOrDefault(x => x.StringId == id);
+                    if (type != null)
+                        toAddQueue.Add(new VillageBuilding(type, this.Village.MarketTown, this.Village,
+                            b.BuildingProgress, b.CurrentLevel));
+                }
+
+            if (toAddQueue.Count > 0)
+            {
+                this.inProgress.Clear();
+                foreach (VillageBuilding b in toAddQueue)
+                    this.inProgress.Enqueue(b);
+            }
+        }
+
         public Village Village => this.village;
         public List<VillageBuilding> Buildings
         {
-            get
-            {
-                List<VillageBuilding> buildings = new List<VillageBuilding>(this.buildings);
-                List<VillageBuilding> toAdd = new List<VillageBuilding>();
-                foreach (VillageBuilding b in buildings)
-                {
-                    if (b.Explanation == null)
-                    {
-                        string id = b.BuildingType.StringId;
-                        BuildingType type = DefaultVillageBuildings.Instance.All()
-                            .FirstOrDefault(x => x.StringId == id);
-                        if (type != null)
-                            toAdd.Add(new VillageBuilding(type, this.Village.MarketTown, this.Village,
-                                this.current.BuildingProgress, this.current.CurrentLevel));
-                    }  
-                }
-
-                if (toAdd.Count > 0)
-                {
-                    this.buildings.Clear();
-                    foreach (VillageBuilding b in toAdd)
-                        this.buildings.Add(b);
-                }
-
-
-                return this.buildings;
-            }
+            get => this.buildings;
         }
+
         public VillageBuilding CurrentBuilding
         {
             get
             {
-                if (this.current == null)
-                    this.current = this.buildings.GetRandomElementWithPredicate(x => x.BuildingType.BuildingLocation != BuildingLocation.Daily);
+                VillageBuilding building = null;
 
-                if (this.current.BuildingType.Explanation == null)
-                {
-                    string id = this.current.BuildingType.StringId;
-                    BuildingType type = DefaultVillageBuildings.Instance.All()
-                        .FirstOrDefault(x => x.StringId == this.current.BuildingType.StringId);
-                    if (type == null) type = DefaultVillageBuildings.Instance.All().FirstOrDefault(x => x.BuildingLocation != BuildingLocation.Daily);
-                    VillageBuilding newCurrent = new VillageBuilding(type,
-                        this.Village.MarketTown, this.Village,
-                        this.current.BuildingProgress, this.current.CurrentLevel);
-                    this.current = newCurrent;
-                }
+                if (this.inProgress != null && !this.inProgress.IsEmpty())
+                    building = (VillageBuilding?)this.inProgress.Peek();
 
-                return this.current;
+                return building != null ? building : this.CurrentDefault;
             }
-            set => this.current = value;
         }
 
         public VillageBuilding CurrentDefault
         {
             get
             {
-                if (this.currentDefault == null)
-                    this.currentDefault = this.buildings.FirstOrDefault(x => x.BuildingType.StringId == "bannerkings_daily_production");
-
-                if (this.currentDefault.BuildingType.Explanation == null)
+                VillageBuilding building = this.buildings.FirstOrDefault(x => x.IsCurrentlyDefault);
+                if (building == null)
                 {
-                    string id = this.currentDefault.BuildingType.StringId;
-                    BuildingType type = DefaultVillageBuildings.Instance.All()
-                        .FirstOrDefault(x => x.StringId == this.currentDefault.BuildingType.StringId);
-                    if (type == null) type = DefaultVillageBuildings.Instance.All().FirstOrDefault(x => x.BuildingLocation == BuildingLocation.Daily);
-                    VillageBuilding newCurrent = new VillageBuilding(type,
-                        this.Village.MarketTown, this.Village,
-                        this.currentDefault.BuildingProgress, this.currentDefault.CurrentLevel);
-                    this.currentDefault = newCurrent;
+                    VillageBuilding dailyProd = this.buildings.FirstOrDefault(x => x.BuildingType.StringId == "bannerkings_daily_production");
+                    dailyProd.IsCurrentlyDefault = true;
+                    building = dailyProd;
                 }
 
-                return this.currentDefault;
+                return building;
             }
-            set => this.currentDefault = value;
         }
 
         public Queue<Building> BuildingsInProgress
@@ -562,9 +621,6 @@ namespace BannerKings.Populations
 
         internal override void Update(PopulationData data)
         {
-
-            
-
             VillageBuilding current = this.CurrentBuilding;
             if (current != null && this.BuildingsInProgress.Count() > 0)
                 if (this.BuildingsInProgress.Peek().BuildingType.StringId == current.BuildingType.StringId)

@@ -8,6 +8,7 @@ using BannerKings.Managers.Policies;
 using BannerKings.Managers.Populations.Villages;
 using BannerKings.Managers.Court;
 using static BannerKings.Managers.TitleManager;
+using BannerKings.Managers.Titles;
 
 namespace BannerKings.Models
 {

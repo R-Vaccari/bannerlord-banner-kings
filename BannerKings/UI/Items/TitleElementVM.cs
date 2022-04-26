@@ -1,7 +1,5 @@
-﻿using System.Linq;
-using TaleWorlds.CampaignSystem;
+﻿using BannerKings.Managers.Titles;
 using TaleWorlds.Library;
-using static BannerKings.Managers.TitleManager;
 
 namespace BannerKings.UI.Items
 {

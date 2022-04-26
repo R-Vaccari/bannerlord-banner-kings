@@ -28,7 +28,7 @@ namespace BannerKings.Managers.Populations
             Guild guild = null)
         {
             this.settlement = settlement;
-            this.guild = new Guild(settlement, Managers.Institutions.GuildType.Merchants, null);
+            this.guild = guild;
             this.satisfactions = new float[] { 0.5f, 0.5f, 0.5f, 0.5f };
             this.stateSlaves = MBRandom.RandomFloatRanged(0.4f, 0.6f);
         }
@@ -40,7 +40,11 @@ namespace BannerKings.Managers.Populations
 
         public float Tariff => new BKTaxModel().GetTownTaxRatio(settlement.Town);
 
-        public float StateSlaves => this.stateSlaves;
+        public float StateSlaves
+        {
+            get => this.stateSlaves;
+            set => this.stateSlaves = MBMath.ClampFloat(value, 0f, 1f);
+        }
 
         public float[] Satisfactions => this.satisfactions;
 
@@ -52,7 +56,11 @@ namespace BannerKings.Managers.Populations
 
         internal override void Update(PopulationData data)
         {
-
+            if (this.guild != null)
+            {
+                this.guild.Destroy();
+                this.guild = null;
+            }
         }
 
         public ExplainedNumber AdministrativeCost => BannerKingsConfig.Instance.Models

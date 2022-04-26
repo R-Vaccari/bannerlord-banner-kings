@@ -11,6 +11,7 @@ using TaleWorlds.Core;
 using BannerKings.Managers.Policies;
 using static BannerKings.Managers.Policies.BKDraftPolicy;
 using static BannerKings.Managers.TitleManager;
+using BannerKings.Managers.Titles;
 
 namespace BannerKings.Models.Vanilla
 {
@@ -49,14 +50,6 @@ namespace BannerKings.Models.Vanilla
                 else return sellerHero.Culture.BasicTroop;
             }
             return base.GetBasicVolunteer(sellerHero);
-        }
-
-        public override float GetDailyVolunteerProductionProbability(Hero hero, int index, Settlement settlement)
-        {
-            if (BannerKingsConfig.Instance.PopulationManager != null)
-                return this.GetDraftEfficiency(hero, index, settlement).ResultNumber;
-            else 
-                return base.GetDailyVolunteerProductionProbability(hero, index, settlement);
         }
 
         public ExplainedNumber GetDraftEfficiency(Hero hero, int index, Settlement settlement)
