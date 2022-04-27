@@ -64,6 +64,20 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
 
         public override int GetMaxClergyRank() => 4;
 
+        public override TextObject GetRankTitle(int rank)
+        {
+            TextObject text = null;
+            if (rank == 4)
+                text = new TextObject("{=!}Murshid");
+            else if (rank == 3)
+                text = new TextObject("{=!}Imam");
+            else if (rank == 2)
+                text = new TextObject("{=!}Akhund");
+            else text = new TextObject("{=!}Faqir");
+
+            return text;
+        }
+
         public override List<Divinity> GetSecondaryDivinities()
         {
             throw new NotImplementedException();

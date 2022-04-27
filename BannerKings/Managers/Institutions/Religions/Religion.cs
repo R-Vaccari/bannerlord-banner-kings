@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Library;
 using System.Linq;
+using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Institutions.Religions
 {
@@ -29,10 +30,17 @@ namespace BannerKings.Managers.Institutions.Religions
         public Clergyman GenerateClergyman(Settlement settlement)
         {
             int rank = faith.GetIdealRank(settlement);
-            CharacterObject character = CharacterObject.All.FirstOrDefault(x => x.StringId == "bannerkings_preacher_aserai_1");
+            TextObject title = this.faith.GetRankTitle(rank);
+            CharacterObject character = this.faith.GetPreset(rank);
             if (character != null)
             {
-                Clergyman clergyman = new Clergyman(HeroCreator.CreateSpecialHero(character, settlement), rank);
+                Hero hero = HeroCreator.CreateSpecialHero(character, settlement);
+                TextObject firstName = hero.FirstName;
+                TextObject fullName = new TextObject("{=!}{RELIGIOUS_TITLE} {NAME}")
+                    .SetTextVariable("RELIGIOUS_TITLE", title)
+                    .SetTextVariable("NAME", firstName);
+                hero.SetName(fullName, firstName);
+                Clergyman clergyman = new Clergyman(hero, rank);
                 return clergyman;
             } else
             {

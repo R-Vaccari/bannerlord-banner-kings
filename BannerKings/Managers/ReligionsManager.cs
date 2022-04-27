@@ -36,7 +36,7 @@ namespace BannerKings.Managers
             foreach (KeyValuePair<CultureObject, Religion> pair in this.Cultures)
             {
                 List<CharacterObject> presets = CharacterObject.All.ToList().FindAll(x => x.Occupation == Occupation.Preacher
-                && x.Culture == pair.Key);
+                && x.Culture == pair.Key && x.IsTemplate && x.StringId.Contains("bannerkings"));
                 foreach (CharacterObject preset in presets)
                 {
                     int number = int.Parse(preset.StringId[preset.StringId.Length - 1].ToString());

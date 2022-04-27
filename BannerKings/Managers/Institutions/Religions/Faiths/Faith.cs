@@ -65,6 +65,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
         public abstract TextObject GetClergyForbiddenAnswer(int rank);
         public abstract TextObject GetClergyInduction(int rank);
         public abstract int GetIdealRank(Settlement settlement);
+        public abstract TextObject GetRankTitle(int rank);
     }
 
     public enum FaithStance

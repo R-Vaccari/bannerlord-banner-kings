@@ -298,7 +298,6 @@ namespace BannerKings.Behaviors
         private void OnSessionLaunched(CampaignGameStarter campaignGameStarter)
         {
             AddMenus(campaignGameStarter);
-
             if (BannerKingsConfig.Instance.PopulationManager != null)
             {
                 foreach (Settlement settlement in Settlement.All)
@@ -312,9 +311,8 @@ namespace BannerKings.Behaviors
             if (BannerKingsConfig.Instance.PolicyManager == null || BannerKingsConfig.Instance.TitleManager == null)
                 BannerKingsConfig.Instance.InitManagers();
 
-
+            BannerKingsConfig.Instance.ReligionsManager.InitializePresets();
                 
-
             BuildingType retinueType = MBObjectManager.Instance.GetObjectTypeList<BuildingType>().FirstOrDefault(x => x == Helpers.Helpers._buildingCastleRetinue);
             if (retinueType == null)
             {
