@@ -11,6 +11,11 @@ namespace BannerKings.Managers.Institutions.Religions
         public DescentralizedLeadership() : base()
         {
             this.leaders = new List<Hero>();
+            
+        }
+
+        public override void Initialize(Religion religion)
+        {
             this.religion = religion;
         }
 

@@ -5,21 +5,20 @@ using TaleWorlds.Library;
 
 namespace BannerKings.Managers.Institutions.Religions
 {
-    public abstract class Religion : LandedInstitution
+    public class Religion : LandedInstitution
     {
         private Dictionary<Settlement, Hero> clergy;
         private Faith faith;
         private ReligiousLeadership leadership;
         private List<CultureObject> favoredCultures;
 
-        protected Religion(Settlement settlement, Faith faith, ReligiousLeadership leadership,
+        public Religion(Settlement settlement, Faith faith, ReligiousLeadership leadership,
             List<CultureObject> favoredCultures) : base(settlement)
         {
             this.clergy = new Dictionary<Settlement, Hero>();
             this.leadership = leadership;
             this.faith = faith;
             this.favoredCultures = favoredCultures;
-            
         }
 
         public Divinity MainGod => this.faith.MainGod;
@@ -32,6 +31,12 @@ namespace BannerKings.Managers.Institutions.Religions
         }
 
         public bool IsFavoredCulture(CultureObject culture) => this.favoredCultures.Contains(culture);
+
+        public override void Destroy()
+        {
+            throw new System.NotImplementedException();
+        }
+
         public MBReadOnlyList<CultureObject> FavoredCultures => this.favoredCultures.GetReadOnlyList();
 
     }

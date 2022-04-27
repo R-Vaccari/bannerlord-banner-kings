@@ -1,7 +1,6 @@
 ﻿using BannerKings.Managers;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
-using static BannerKings.Managers.TitleManager;
 using BannerKings.Populations;
 using BannerKings.Models;
 using BannerKings.Managers.Policies;
@@ -12,6 +11,8 @@ using BannerKings.Managers.Populations.Villages;
 using BannerKings.Managers.Court;
 using BannerKings.Managers.Titles;
 using BannerKings.Models.BKModels;
+using BannerKings.Managers.Institutions.Religions;
+using BannerKings.Managers.Institutions.Religions.Faiths;
 
 namespace BannerKings
 {
@@ -22,6 +23,7 @@ namespace BannerKings
         public PolicyManager PolicyManager;
         public TitleManager TitleManager;
         public CourtManager CourtManager;
+        public ReligionsManager ReligionsManager;
         public HashSet<IBannerKingsModel> Models = new HashSet<IBannerKingsModel>();
         public bool wipeData = false;
         public MBReadOnlyList<BuildingType> VillageBuildings { get; set; }
@@ -29,24 +31,30 @@ namespace BannerKings
         public void InitManagers()
         {
             DefaultVillageBuildings.Instance.Init();
+            DefaultDivinities.Instance.Initialize();
+            DefaultFaiths.Instance.Initialize();
             this.PopulationManager = new PopulationManager(new Dictionary<Settlement, PopulationData>(), new List<MobileParty>());
             this.PopulationManager.ReInitBuildings();
             this.PolicyManager = new PolicyManager(new Dictionary<Settlement, List<BannerKingsDecision>>(), new Dictionary<Settlement,
             List<BannerKingsPolicy>>());
             this.TitleManager = new TitleManager(new Dictionary<FeudalTitle, Hero>(), new Dictionary<Hero, List<FeudalTitle>>(), new Dictionary<Kingdom, FeudalTitle>());
             this.CourtManager = new CourtManager(new Dictionary<Clan, CouncilData>());
+            this.ReligionsManager = new ReligionsManager();
             this.InitModels();
         }
 
         public void InitManagers(PopulationManager populationManager, PolicyManager policyManager, TitleManager titleManager, CourtManager court)
         {
             DefaultVillageBuildings.Instance.Init();
+            DefaultDivinities.Instance.Initialize();
+            DefaultFaiths.Instance.Initialize();
             this.PopulationManager = populationManager;
             this.PopulationManager.ReInitBuildings();
             this.PolicyManager = policyManager;
             this.TitleManager = titleManager;
             titleManager.RefreshDeJure();
             this.CourtManager = court;
+            this.ReligionsManager = new ReligionsManager();
             this.InitModels();
         }
 
@@ -63,10 +71,7 @@ namespace BannerKings
             this.Models.Add(new BKCaravanAttractionModel());
         }
 
-        public static BannerKingsConfig Instance
-        {
-            get => ConfigHolder.CONFIG;
-        }
+        public static BannerKingsConfig Instance => ConfigHolder.CONFIG;
 
         internal struct ConfigHolder
         {

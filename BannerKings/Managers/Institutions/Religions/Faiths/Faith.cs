@@ -9,11 +9,11 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
         private FaithGroup faithGroup;
         private Divinity mainGod;
         private Dictionary<TraitObject, bool> traits;
-        private Dictionary<Religion, ReligiousStance> stances;
+        private Dictionary<Faith, FaithStance> stances;
 
         public Faith() 
         {
-            this.stances = new Dictionary<Religion, ReligiousStance>();
+            this.stances = new Dictionary<Faith, FaithStance>();
         }
 
         protected void Initialize(Divinity mainGod, Dictionary<TraitObject, bool> traits, FaithGroup faithGroup)
@@ -21,6 +21,14 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
             this.mainGod = mainGod;
             this.traits = traits;
             this.faithGroup = faithGroup;
+        }
+
+        public void AddStance(Faith faith, FaithStance stance)
+        {
+            if (faith == this) return;
+            if (this.stances.ContainsKey(faith))
+                this.stances[faith] = stance;
+            else this.stances.Add(faith, stance);
         }
 
         public Dictionary<TraitObject, bool> Traits => this.traits;
@@ -40,7 +48,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
         public abstract TextObject GetClergyInduction(int rank);
     }
 
-    public enum ReligiousStance
+    public enum FaithStance
     {
         Tolerated,
         Untolerated,

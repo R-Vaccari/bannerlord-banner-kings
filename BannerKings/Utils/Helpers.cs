@@ -8,6 +8,7 @@ using TaleWorlds.Localization;
 using static BannerKings.Managers.PopulationManager;
 using static TaleWorlds.Core.ItemCategory;
 using BannerKings.Managers.Titles;
+using TaleWorlds.ObjectSystem;
 
 namespace BannerKings.Helpers
 {
@@ -308,6 +309,8 @@ namespace BannerKings.Helpers
             return title.ToString();
         }
 
+
+        public static CultureObject GetCulture(string id) => MBObjectManager.Instance.GetObjectTypeList<CultureObject>().FirstOrDefault(x => x.StringId == id);
 
 
         public static bool IsRetinueTroop(CharacterObject character, CultureObject settlementCulture)
