@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
@@ -34,6 +35,16 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
         public override TextObject GetClergyProveFaith(int rank)
         {
             throw new NotImplementedException();
+        }
+
+        public override int GetIdealRank(Settlement settlement)
+        {
+            if (settlement.IsTown)
+                return 3;
+            if (settlement.IsCastle)
+                return 2;
+
+            return 1;
         }
 
         public override List<Divinity> GetMainDivinities()

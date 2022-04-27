@@ -1,4 +1,5 @@
-﻿using SandBox.Source.Towns;
+﻿using BannerKings.Managers.Institutions.Religions;
+using SandBox.Source.Towns;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,23 +31,23 @@ namespace BannerKings.Behaviours
 
         private void OnSettlementEntered(MobileParty party, Settlement target, Hero hero)
         {
-            if (hero == Hero.MainHero && target.StringId == "town_A1")
-            {
-                this.CreateMaster(target);
-            }
+            if (hero != Hero.MainHero && target.StringId != "town_A1") return;
+            
+            ReligionData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(target).ReligionData;
+            if (data == null) return;
+
+            this.AddClergymanToKeep(data, target);
         }
 
-        private void CreateMaster(Settlement target)
+        private void AddClergymanToKeep(ReligionData data, Settlement settlement)
         {
-            CharacterObject character = CharacterObject.All.FirstOrDefault(x => x.StringId == "bannerkings_preacher_aserai_1");
-            Hero hero = HeroCreator.CreateSpecialHero(character, target);
-            AgentData agent = new AgentData(new SimpleAgentOrigin(hero.CharacterObject, 0, null, default(UniqueTroopDescriptor)));
+            AgentData agent = new AgentData(new SimpleAgentOrigin(data.Clergyman.Hero.CharacterObject, 0, null, default(UniqueTroopDescriptor)));
             LocationCharacter locCharacter = new LocationCharacter(agent, 
                 new LocationCharacter.AddBehaviorsDelegate(SandBoxManager.Instance.AgentBehaviorManager.AddFixedCharacterBehaviors), 
-                "sp_throne", true, LocationCharacter.CharacterRelations.Neutral, null, true, false, null, false, false, true);
+                null, true, LocationCharacter.CharacterRelations.Neutral, null, true, false, null, false, false, true);
 
-            target.LocationComplex.GetLocationWithId("lordshall")
-                .AddLocationCharacters(delegate { return locCharacter; }, target.Culture,
+            settlement.LocationComplex.GetLocationWithId("lordshall")
+                .AddLocationCharacters(delegate { return locCharacter; }, settlement.Culture,
                 LocationCharacter.CharacterRelations.Neutral, 1);
         }
     }

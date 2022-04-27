@@ -15,6 +15,7 @@ using BannerKings.Managers.Populations;
 using static BannerKings.Managers.Policies.BKWorkforcePolicy;
 using BannerKings.Managers.Titles;
 using BannerKings.Managers;
+using BannerKings.Managers.Institutions.Religions;
 
 namespace BannerKings.Populations
 {
@@ -49,6 +50,8 @@ namespace BannerKings.Populations
 
         [SaveableProperty(10)]
         private TitleData titleData { get; set; }
+
+        private ReligionData religionData { get; set; }
 
 
 
@@ -85,14 +88,8 @@ namespace BannerKings.Populations
             set => this.tournamentData = value;
         }
 
-        public TitleData TitleData
-        {
-            get
-            {
-                return titleData;
-            }
-        }
-
+        public TitleData TitleData => this.titleData;
+        public ReligionData ReligionData => this.religionData;
         public VillageData VillageData => this.villageData;
 
         public ExplainedNumber Foreigner => new BKForeignerModel().CalculateEffect(this.settlement);
@@ -276,6 +273,13 @@ namespace BannerKings.Populations
             if (tournamentData != null) tournamentData.Update(this);
             if (titleData == null) titleData = new TitleData(BannerKingsConfig.Instance.TitleManager.GetTitle(this.settlement));
             titleData.Update(this);
+
+            if (religionData == null)
+            {
+                Religion religion = BannerKingsConfig.Instance.ReligionsManager.GetIdealReligion(settlement.Culture);
+                if (religion != null)
+                    this.religionData = new ReligionData(religion, this.settlement);
+            }
         }
     }
 

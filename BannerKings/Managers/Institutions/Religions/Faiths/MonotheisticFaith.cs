@@ -12,9 +12,9 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
         }
 
         public void Initialize(Divinity mainGod, Dictionary<TraitObject, bool> traits,
-          FaithGroup faithGroup)
+          FaithGroup faithGroup, Dictionary<int, CharacterObject> presets)
         {
-            base.Initialize(mainGod, traits, faithGroup);
+            base.Initialize(mainGod, traits, faithGroup, presets);
         }
     }
 }

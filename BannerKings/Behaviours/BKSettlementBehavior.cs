@@ -311,6 +311,8 @@ namespace BannerKings.Behaviors
             
             if (BannerKingsConfig.Instance.PolicyManager == null || BannerKingsConfig.Instance.TitleManager == null)
                 BannerKingsConfig.Instance.InitManagers();
+
+
                 
 
             BuildingType retinueType = MBObjectManager.Instance.GetObjectTypeList<BuildingType>().FirstOrDefault(x => x == Helpers.Helpers._buildingCastleRetinue);

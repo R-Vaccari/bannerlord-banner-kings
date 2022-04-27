@@ -10,17 +10,20 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
         private Divinity mainGod;
         private Dictionary<TraitObject, bool> traits;
         private Dictionary<Faith, FaithStance> stances;
+        private Dictionary<int, CharacterObject> presets;
 
         public Faith() 
         {
             this.stances = new Dictionary<Faith, FaithStance>();
         }
 
-        protected void Initialize(Divinity mainGod, Dictionary<TraitObject, bool> traits, FaithGroup faithGroup)
+        protected void Initialize(Divinity mainGod, Dictionary<TraitObject, bool> traits, FaithGroup faithGroup,
+            Dictionary<int, CharacterObject> presets)
         {
             this.mainGod = mainGod;
             this.traits = traits;
             this.faithGroup = faithGroup;
+            this.presets = presets;
         }
 
         public void AddStance(Faith faith, FaithStance stance)
@@ -29,6 +32,21 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
             if (this.stances.ContainsKey(faith))
                 this.stances[faith] = stance;
             else this.stances.Add(faith, stance);
+        }
+
+        public void AddPreset(int rank, CharacterObject preset)
+        {
+            if (!this.presets.ContainsKey(rank))
+                this.presets.Add(rank, preset);
+            else this.presets[rank] = preset;
+        }
+
+        public CharacterObject GetPreset(int rank)
+        {
+            if (this.presets.ContainsKey(rank))
+                return this.presets[rank];
+
+            return null;
         }
 
         public Dictionary<TraitObject, bool> Traits => this.traits;
@@ -46,6 +64,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
         public abstract TextObject GetClergyProveFaith(int rank);
         public abstract TextObject GetClergyForbiddenAnswer(int rank);
         public abstract TextObject GetClergyInduction(int rank);
+        public abstract int GetIdealRank(Settlement settlement);
     }
 
     public enum FaithStance
