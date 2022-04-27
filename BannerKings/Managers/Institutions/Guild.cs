@@ -14,10 +14,11 @@ namespace BannerKings.Managers.Institutions
         private GuildType type;
         private List<Hero> members;
         private int capital;
+        private Hero guildMaster;
         public Guild(Settlement settlement, GuildType type, IEnumerable<ValueTuple<ItemObject, float>> productions) : base(settlement)
         {
             this.capital = 10000;
-            this.leader = this.GenerateLeader();
+            this.guildMaster = this.GenerateLeader();
             this.members = new List<Hero>();
             this.type = type;
             this.productions = productions;
@@ -25,7 +26,7 @@ namespace BannerKings.Managers.Institutions
 
         public override void Destroy()
         {
-            KillCharacterAction.ApplyByRemove(this.leader);     
+            KillCharacterAction.ApplyByRemove(this.guildMaster);     
         }
 
         public int Capital => this.capital;
@@ -43,7 +44,17 @@ namespace BannerKings.Managers.Institutions
                 this.members.Remove(hero);
         }
 
-        public override Hero GenerateLeader()
+        public Hero Leader
+        {
+            get
+            {
+                if (this.guildMaster == null || !this.guildMaster.IsAlive || this.guildMaster.IsActive)
+                    this.guildMaster = GenerateLeader();
+                return this.guildMaster;
+            }
+        }
+
+        public Hero GenerateLeader()
         {
             CultureObject culture = base.Settlement.Culture;
             IEnumerable<CharacterObject> templates = from x in culture.NotableAndWandererTemplates 

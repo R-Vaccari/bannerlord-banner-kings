@@ -5,29 +5,15 @@ namespace BannerKings.Managers.Institutions
 {
     public abstract class Institution
     {
-
-        protected Hero leader;
         protected float influence;
         protected Dictionary<Hero, float> favors;
 
-        public Institution()
+        protected Institution()
         {
             this.favors = new Dictionary<Hero, float>();
         }
 
-        public Hero Leader
-        {
-            get
-            {
-                if (this.leader == null || !this.leader.IsAlive || this.leader.IsActive)
-                    this.leader = GenerateLeader();
-                return this.leader;
-            }
-        }
-
         public float Influence => this.influence;
-
-        public abstract Hero GenerateLeader();
 
         public abstract void Destroy();
 
