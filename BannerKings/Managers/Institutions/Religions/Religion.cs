@@ -4,6 +4,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.Library;
 using System.Linq;
 using TaleWorlds.Localization;
+using TaleWorlds.CampaignSystem.Actions;
 
 namespace BannerKings.Managers.Institutions.Religions
 {
@@ -42,6 +43,7 @@ namespace BannerKings.Managers.Institutions.Religions
                     .SetTextVariable("RELIGIOUS_TITLE", title)
                     .SetTextVariable("NAME", firstName);
                 hero.SetName(fullName, firstName);
+                EnterSettlementAction.ApplyForCharacterOnly(hero, settlement);
                 Clergyman clergyman = new Clergyman(hero, rank);
                 this.clergy.Add(settlement, clergyman);
                 return clergyman;

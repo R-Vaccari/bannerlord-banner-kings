@@ -54,6 +54,14 @@ namespace BannerKings.Managers
             return null;
         }
 
+        public bool IsReligionMember(Hero hero, Religion religion)
+        {
+            if (this.Religions.ContainsKey(religion))
+                if (this.Religions[religion].Contains(hero))
+                    return true;
+            return false;
+        }
+
         public bool IsPreacher(Hero hero)
         {
             foreach (Religion rel in this.Religions.Keys.ToList())

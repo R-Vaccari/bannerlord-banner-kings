@@ -56,22 +56,57 @@ namespace BannerKings.Behaviours
 
         private void AddDialogue(CampaignGameStarter starter)
         {
-            starter.AddDialogLine("minor_faction_preacher_introduction", "lord_introduction", "lord_start", 
+            starter.AddDialogLine("bk_preacher_introduction", "lord_introduction", "lord_start", 
                 "{=!}{CLERGYMAN_GREETING}", 
                 new ConversationSentence.OnConditionDelegate(this.OnConditionClergymanGreeting), null, 100, null);
-        }
 
+            
+            starter.AddPlayerLine("bk_question_preaching", "lord_talk_ask_something_2", "bk_preacher_asked_preaching",
+                "{=!}What are you preaching?", 
+                new ConversationSentence.OnConditionDelegate(this.IsPreacher), null, 100, null, null);
+
+            starter.AddDialogLine("bk_answer_preaching_1", "bk_preacher_asked_preaching", "bk_preacher_asked_preaching_last",
+                "{=!}{CLERGYMAN_PREACHING}",
+                new ConversationSentence.OnConditionDelegate(this.IsPreacher), null, 100, null);
+
+            starter.AddDialogLine("bk_answer_preaching_2", "bk_preacher_asked_preaching_last", "lord_talk_ask_something",
+                "{=!}{CLERGYMAN_PREACHING_LAST}",
+                new ConversationSentence.OnConditionDelegate(this.IsPreacher), null, 100, null);
+
+
+            starter.AddPlayerLine("bk_question_faith", "lord_talk_ask_something_2", "bk_preacher_asked_faith",
+                "{=!}How do I prove my faith?",
+                new ConversationSentence.OnConditionDelegate(this.IsPreacher), null, 100, null, null);
+
+            starter.AddDialogLine("bk_answer_faith_1", "bk_preacher_asked_faith", "bk_preacher_asked_faith_last",
+                "{=!}{CLERGYMAN_FAITH}",
+                new ConversationSentence.OnConditionDelegate(this.IsPreacher), null, 100, null);
+
+            starter.AddDialogLine("bk_answer_faith_2", "bk_preacher_asked_faith_last", "lord_talk_ask_something",
+                "{=!}{CLERGYMAN_FAITH_LAST}",
+                new ConversationSentence.OnConditionDelegate(this.IsPreacher), null, 100, null);
+        }
+        private bool IsPreacher() => Campaign.Current.ConversationManager.CurrentConversationIsFirst && Hero.OneToOneConversationHero.IsPreacher &&
+                BannerKingsConfig.Instance.ReligionsManager != null && BannerKingsConfig.Instance.ReligionsManager.IsPreacher(Hero.OneToOneConversationHero);
         private bool OnConditionClergymanGreeting()
         {
-            if (Campaign.Current.ConversationManager.CurrentConversationIsFirst && Hero.OneToOneConversationHero.IsPreacher && 
-                BannerKingsConfig.Instance.ReligionsManager != null)
+            if (this.IsPreacher())
             {
-                Clergyman clergyman = BannerKingsConfig.Instance.ReligionsManager.GetClergymanFromHeroHero(Hero.OneToOneConversationHero);
-                Religion religion = BannerKingsConfig.Instance.ReligionsManager.GetClergymanReligion(clergyman);
-                MBTextManager.SetTextVariable("CLERGYMAN_GREETING", religion.Faith.GetClergyGreeting(clergyman.Rank), false);
+                InitializePreacherTexts();
                 return true;
             }
             return false;
+        }
+        private void InitializePreacherTexts()
+        {
+            Clergyman clergyman = BannerKingsConfig.Instance.ReligionsManager.GetClergymanFromHeroHero(Hero.OneToOneConversationHero);
+            Religion religion = BannerKingsConfig.Instance.ReligionsManager.GetClergymanReligion(clergyman);
+            TextObject greeting = BannerKingsConfig.Instance.ReligionsManager.IsReligionMember(Hero.MainHero, religion) ? religion.Faith.GetClergyGreetingInducted(clergyman.Rank) : religion.Faith.GetClergyGreeting(clergyman.Rank);
+            MBTextManager.SetTextVariable("CLERGYMAN_GREETING", greeting, false);
+            MBTextManager.SetTextVariable("CLERGYMAN_PREACHING", religion.Faith.GetClergyPreachingAnswer(clergyman.Rank), false);
+            MBTextManager.SetTextVariable("CLERGYMAN_PREACHING_LAST", religion.Faith.GetClergyPreachingAnswerLast(clergyman.Rank), false);
+            MBTextManager.SetTextVariable("CLERGYMAN_FAITH", religion.Faith.GetClergyProveFaith(clergyman.Rank), false);
+            MBTextManager.SetTextVariable("CLERGYMAN_FAITH_LAST", religion.Faith.GetClergyProveFaithLast(clergyman.Rank), false);
         }
     }
 
