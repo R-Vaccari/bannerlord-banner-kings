@@ -40,6 +40,10 @@ namespace BannerKings.Managers
             try
             {
                 if (Populations.ContainsKey(settlement)) return Populations[settlement];
+
+                if (settlement.StringId.Contains("Ruin") || settlement.StringId.Contains("tutorial"))
+                    return null;
+                
                 InitializeSettlementPops(settlement);
                 return Populations[settlement];
             } catch (Exception ex)

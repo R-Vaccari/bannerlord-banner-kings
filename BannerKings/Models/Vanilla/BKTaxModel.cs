@@ -5,6 +5,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.SandBox.GameComponents;
 using TaleWorlds.Core;
+using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using static BannerKings.Managers.Policies.BKTaxPolicy;
 using static BannerKings.Managers.PopulationManager;
@@ -24,13 +25,25 @@ namespace BannerKings.Models
 
             if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
             {
+                baseResult.LimitMin(-200000f);
+                baseResult.LimitMax(200000f);
                 bool taxSlaves = BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(town.Settlement, "decision_slaves_tax");
                 PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
-                double nobles = data.GetTypeCount(PopType.Nobles);
-                double craftsmen = data.GetTypeCount(PopType.Nobles) * (1f - data.EconomicData.Mercantilism.ResultNumber);
-                double serfs = data.GetTypeCount(PopType.Nobles);
-                double slaves = data.GetTypeCount(PopType.Slaves) * (taxSlaves ? 1f : 1f - data.EconomicData.StateSlaves);
-                baseResult.Add((float)(nobles * NOBLE_OUTPUT + craftsmen * CRAFTSMEN_OUTPUT + serfs * SERF_OUTPUT + slaves * SLAVE_OUTPUT), new TextObject("Population output"));
+                float nobles = data.GetTypeCount(PopType.Nobles);
+                float craftsmen = data.GetTypeCount(PopType.Nobles);
+                float serfs = data.GetTypeCount(PopType.Nobles);
+                float slaves = data.GetTypeCount(PopType.Slaves);
+
+                if (craftsmen > 0)
+                    craftsmen *= (1f - data.EconomicData.Mercantilism.ResultNumber);
+
+                if (slaves > 0)
+                    slaves *= (taxSlaves ? 1f : 1f - data.EconomicData.StateSlaves);
+
+                if (nobles > 0f) baseResult.Add(MBMath.ClampFloat(nobles * NOBLE_OUTPUT, 0f, 50000f), new TextObject("{=!}{CLASS} output").SetTextVariable("CLASS", "Nobles"));
+                if (craftsmen > 0f) baseResult.Add(MBMath.ClampFloat(craftsmen * CRAFTSMEN_OUTPUT, 0f, 50000f), new TextObject("{=!}{CLASS} output").SetTextVariable("CLASS", "Craftsmen"));
+                if (serfs > 0f) baseResult.Add(MBMath.ClampFloat(serfs * SERF_OUTPUT, 0f, 50000f), new TextObject("{=!}{CLASS} output").SetTextVariable("CLASS", "Serfs"));
+                if (slaves > 0f) baseResult.Add(MBMath.ClampFloat(slaves * SLAVE_OUTPUT, 0f, 50000f), new TextObject("{=!}{CLASS} output").SetTextVariable("CLASS", "Slaves"));
 
                 TaxType taxType = ((BKTaxPolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(town.Settlement, "tax")).Policy;
                 if (taxType == TaxType.Low)
@@ -84,7 +97,7 @@ namespace BannerKings.Models
             FeudalContract contract = titleData.Title.contract;
             if (contract != null && contract.Duties.ContainsKey(FeudalDuties.Taxation))
             {
-                float factor = contract.Duties[FeudalDuties.Taxation];
+                float factor = MBMath.ClampFloat(contract.Duties[FeudalDuties.Taxation], 0f, 0.8f);
                 titleData.Title.dueTax = result * factor;
             }
         }
