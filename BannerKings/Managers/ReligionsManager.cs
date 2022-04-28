@@ -35,8 +35,9 @@ namespace BannerKings.Managers
         {
             foreach (KeyValuePair<CultureObject, Religion> pair in this.Cultures)
             {
+                string id = pair.Value.Faith.GetId();
                 List<CharacterObject> presets = CharacterObject.All.ToList().FindAll(x => x.Occupation == Occupation.Preacher
-                && x.Culture == pair.Key && x.IsTemplate && x.StringId.Contains("bannerkings"));
+                && x.Culture == pair.Key && x.IsTemplate && x.StringId.Contains("bannerkings") && x.StringId.Contains(id));
                 foreach (CharacterObject preset in presets)
                 {
                     int number = int.Parse(preset.StringId[preset.StringId.Length - 1].ToString());
@@ -50,6 +51,35 @@ namespace BannerKings.Managers
             if (this.Cultures.ContainsKey(culture))
                 return this.Cultures[culture];
 
+            return null;
+        }
+
+        public bool IsPreacher(Hero hero)
+        {
+            foreach (Religion rel in this.Religions.Keys.ToList())
+                foreach (Clergyman clergy in rel.Clergy.Values.ToList())
+                    if (clergy.Hero == hero)
+                        return true;
+
+            return false;
+        }
+
+        public Clergyman GetClergymanFromHeroHero(Hero hero)
+        {
+            foreach (Religion rel in this.Religions.Keys.ToList())
+                foreach (Clergyman clergy in rel.Clergy.Values.ToList())
+                    if (clergy.Hero == hero)
+                        return clergy;
+
+            return null;
+        }
+
+        public Religion GetClergymanReligion(Clergyman clergyman)
+        {
+            foreach (Religion rel in this.Religions.Keys.ToList())
+                foreach (Clergyman clergy in rel.Clergy.Values.ToList())
+                    if (clergy == clergyman)
+                        return rel;
             return null;
         }
     }

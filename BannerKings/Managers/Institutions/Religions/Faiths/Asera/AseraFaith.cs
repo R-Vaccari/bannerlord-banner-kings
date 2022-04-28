@@ -14,7 +14,11 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
 
         public override TextObject GetClergyGreeting(int rank)
         {
-            throw new NotImplementedException();
+            TextObject text = null;
+            if (rank == 3)
+                text = new TextObject("{=!}Peace be upon you, outlander. May you walk with the safety of Asera while you dwell in the company of his sons - and while you walk the lands where his Code is law. I am an Imam of the Aserai, and I bid you hospitality expecting it fully in kind. Is there something I may do for our mutual good?");
+
+            return text;
         }
 
         public override TextObject GetClergyGreetingInducted(int rank)
@@ -36,6 +40,8 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
         {
             throw new NotImplementedException();
         }
+
+        public override string GetId() => "asera";
 
         public override int GetIdealRank(Settlement settlement)
         {

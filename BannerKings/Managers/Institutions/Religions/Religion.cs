@@ -9,7 +9,7 @@ namespace BannerKings.Managers.Institutions.Religions
 {
     public class Religion : LandedInstitution
     {
-        private Dictionary<Settlement, Hero> clergy;
+        private Dictionary<Settlement, Clergyman> clergy;
         private Faith faith;
         private ReligiousLeadership leadership;
         private List<CultureObject> favoredCultures;
@@ -17,7 +17,7 @@ namespace BannerKings.Managers.Institutions.Religions
         public Religion(Settlement settlement, Faith faith, ReligiousLeadership leadership,
             List<CultureObject> favoredCultures) : base(settlement)
         {
-            this.clergy = new Dictionary<Settlement, Hero>();
+            this.clergy = new Dictionary<Settlement, Clergyman>();
             this.leadership = leadership;
             this.faith = faith;
             this.favoredCultures = favoredCultures;
@@ -26,6 +26,8 @@ namespace BannerKings.Managers.Institutions.Religions
         public Divinity MainGod => this.faith.MainGod;
         public Hero Leader => this.leadership.GetLeader();
         public Faith Faith => this.faith;
+
+        public MBReadOnlyDictionary<Settlement, Clergyman> Clergy => this.clergy.GetReadOnlyDictionary();
 
         public Clergyman GenerateClergyman(Settlement settlement)
         {
@@ -41,6 +43,7 @@ namespace BannerKings.Managers.Institutions.Religions
                     .SetTextVariable("NAME", firstName);
                 hero.SetName(fullName, firstName);
                 Clergyman clergyman = new Clergyman(hero, rank);
+                this.clergy.Add(settlement, clergyman);
                 return clergyman;
             } else
             {
