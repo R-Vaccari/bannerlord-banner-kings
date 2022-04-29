@@ -1,5 +1,4 @@
-﻿using BannerKings.Managers;
-using BannerKings.Managers.Court;
+﻿using BannerKings.Managers.Court;
 using BannerKings.Populations;
 using Helpers;
 using System.Linq;
@@ -32,18 +31,18 @@ namespace BannerKings.Models
 				ExplainedNumber explainedNumber = new ExplainedNumber(0f, true);
 				PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(fortification.Settlement);
                 int craftsmen = data.GetTypeCount(PopType.Craftsmen);
-				explainedNumber.Add((float)craftsmen * 0.0005f, new TextObject("Craftsmen output"));
+				explainedNumber.Add(craftsmen * 0.0005f, new TextObject("Craftsmen output"));
                 int slaves = data.GetTypeCount(PopType.Slaves);
-				explainedNumber.Add((float)slaves * -0.0001f, new TextObject("Slave population"));
+				explainedNumber.Add(slaves * -0.0001f, new TextObject("Slave population"));
 
                 if (BannerKingsConfig.Instance.PopulationManager.PopSurplusExists(fortification.Settlement, PopType.Slaves, true))
-					explainedNumber.Add((float)slaves * -0.0003f, new TextObject("Slave surplus"));
+					explainedNumber.Add(slaves * -0.0003f, new TextObject("Slave surplus"));
 
 				float factor = data.Stability - 1f + data.Stability;
-				float stabilityImpact = (float)STABILITY_FACTOR * factor;
+				float stabilityImpact = STABILITY_FACTOR * factor;
 				explainedNumber.Add(stabilityImpact, new TextObject("Stability impact"));
 
-				int foodLimitForBonus = (int)((float)fortification.FoodStocksUpperLimit() * 0.8f);
+				int foodLimitForBonus = (int)(fortification.FoodStocksUpperLimit() * 0.8f);
 				if (fortification.FoodStocks >= foodLimitForBonus)
 					explainedNumber.Add(0.5f, new TextObject("Well fed populace"));
 				else if (fortification.Settlement.IsStarving)
@@ -59,7 +58,7 @@ namespace BannerKings.Models
 
 				float houseCost = fortification.Prosperity < 1500f ? 6f - (fortification.Prosperity / 250f - 1f) : fortification.Prosperity >= 6000f 
 					? -1f + ((fortification.Prosperity / 3000f) * -1f) : 0f;
-				explainedNumber.Add(houseCost, HousingCostsText, null);
+				explainedNumber.Add(houseCost, HousingCostsText);
 
 				if (fortification.IsTown)
 				{
@@ -72,7 +71,7 @@ namespace BannerKings.Models
 					});
 					if (num3 > 0)
 					{
-						explainedNumber.Add((float)num3 * 0.1f, ProsperityFromMarketText, null);
+						explainedNumber.Add(num3 * 0.1f, ProsperityFromMarketText);
 					}
 
 					float merchantGold = fortification.Gold;
@@ -108,7 +107,7 @@ namespace BannerKings.Models
 				{
 					float buildingEffectAmount = building2.GetBuildingEffectAmount(BuildingEffectEnum.Prosperity);
 					if (!building2.BuildingType.IsDefaultProject && buildingEffectAmount > 0f)
-						explainedNumber.Add(buildingEffectAmount, building2.Name, null);
+						explainedNumber.Add(buildingEffectAmount, building2.Name);
 					
 					if (building2.BuildingType == DefaultBuildingTypes.SettlementAquaducts || building2.BuildingType == DefaultBuildingTypes.CastleGranary || 
 						building2.BuildingType == DefaultBuildingTypes.SettlementGranary)
@@ -116,24 +115,24 @@ namespace BannerKings.Models
 				}
 				
 				if (fortification.IsTown && !fortification.CurrentBuilding.IsCurrentlyDefault && fortification.Governor != null && fortification.Governor.GetPerkValue(DefaultPerks.Trade.TrickleDown))
-					explainedNumber.Add(DefaultPerks.Trade.TrickleDown.SecondaryBonus, DefaultPerks.Trade.TrickleDown.Name, null);
+					explainedNumber.Add(DefaultPerks.Trade.TrickleDown.SecondaryBonus, DefaultPerks.Trade.TrickleDown.Name);
 				
 				if (fortification.Settlement.OwnerClan.Kingdom != null)
 				{
 					if (fortification.Settlement.OwnerClan.Kingdom.ActivePolicies.Contains(DefaultPolicies.RoadTolls))
-						explainedNumber.Add(-0.2f, DefaultPolicies.RoadTolls.Name, null);
+						explainedNumber.Add(-0.2f, DefaultPolicies.RoadTolls.Name);
 					
 					if (fortification.Settlement.OwnerClan.Kingdom.RulingClan == fortification.Settlement.OwnerClan && fortification.Settlement.OwnerClan.Kingdom.ActivePolicies.Contains(DefaultPolicies.ImperialTowns))
-						explainedNumber.Add(1f, DefaultPolicies.ImperialTowns.Name, null);
+						explainedNumber.Add(1f, DefaultPolicies.ImperialTowns.Name);
 					
 					if (fortification.Settlement.OwnerClan.Kingdom.ActivePolicies.Contains(DefaultPolicies.CrownDuty))
-						explainedNumber.Add(-1f, DefaultPolicies.CrownDuty.Name, null);
+						explainedNumber.Add(-1f, DefaultPolicies.CrownDuty.Name);
 					
 					if (fortification.Settlement.OwnerClan.Kingdom.ActivePolicies.Contains(DefaultPolicies.WarTax))
-						explainedNumber.Add(-1f, DefaultPolicies.WarTax.Name, null);
+						explainedNumber.Add(-1f, DefaultPolicies.WarTax.Name);
 					
 				}
-				this.GetSettlementProsperityChangeDueToIssues(fortification.Settlement, ref explainedNumber);
+				GetSettlementProsperityChangeDueToIssues(fortification.Settlement, ref explainedNumber);
 
 				BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref explainedNumber, fortification.OwnerClan.Leader, CouncilPosition.Steward, 1f, false);
 				return explainedNumber;
@@ -146,9 +145,9 @@ namespace BannerKings.Models
 			Campaign.Current.Models.IssueModel.GetIssueEffectsOfSettlement(DefaultIssueEffects.SettlementProsperity, settlement, ref result);
 		}
 
-		private static readonly TextObject FoodShortageText = new TextObject("{=qTFKvGSg}Food Shortage", null);
-		private static readonly TextObject ProsperityFromMarketText = new TextObject("{=RNT5hMVb}Goods From Market", null);
-		private static readonly TextObject Governor = new TextObject("{=Fa2nKXxI}Governor", null);
-		private static readonly TextObject HousingCostsText = new TextObject("{=ByRAgJy4}Housing Costs", null);
+		private static readonly TextObject FoodShortageText = new TextObject("{=qTFKvGSg}Food Shortage");
+		private static readonly TextObject ProsperityFromMarketText = new TextObject("{=RNT5hMVb}Goods From Market");
+		private static readonly TextObject Governor = new TextObject("{=Fa2nKXxI}Governor");
+		private static readonly TextObject HousingCostsText = new TextObject("{=ByRAgJy4}Housing Costs");
 	}
 }

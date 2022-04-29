@@ -1,17 +1,16 @@
-﻿using BannerKings.Populations;
+﻿using BannerKings.Managers.Court;
+using BannerKings.Managers.Policies;
+using BannerKings.Managers.Titles;
+using BannerKings.Populations;
+using Helpers;
+using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.SandBox.GameComponents.Map;
+using TaleWorlds.Core;
 using TaleWorlds.Library;
-using System.Linq;
-using Helpers;
 using TaleWorlds.Localization;
 using static BannerKings.Managers.PopulationManager;
-using BannerKings.Managers.Court;
-using TaleWorlds.Core;
-using BannerKings.Managers.Policies;
 using static BannerKings.Managers.Policies.BKDraftPolicy;
-using static BannerKings.Managers.TitleManager;
-using BannerKings.Managers.Titles;
 
 namespace BannerKings.Models.Vanilla
 {
@@ -31,7 +30,8 @@ namespace BannerKings.Models.Vanilla
                     PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
                     return data.MilitaryData.Manpower > 0;
                 }
-                else return true;
+
+                return true;
             }
             return false;
         }
@@ -47,7 +47,7 @@ namespace BannerKings.Models.Vanilla
                 float random = MBRandom.RandomFloatRanged(1f, 100f);
                 if (data.MilitaryData.NobleManpower > 0 && chance >= random)
                     return sellerHero.Culture.EliteBasicTroop;
-                else return sellerHero.Culture.BasicTroop;
+                return sellerHero.Culture.BasicTroop;
             }
             return base.GetBasicVolunteer(sellerHero);
         }
@@ -61,10 +61,10 @@ namespace BannerKings.Models.Vanilla
                 foreach (Town town in hero.CurrentSettlement.MapFaction.Fiefs)
                     num2 += (town.IsTown ? (((town.Settlement.Prosperity < 3000f) ? 1 : ((town.Settlement.Prosperity < 6000f) ? 2 : 3)) + town.Villages.Count<Village>()) : town.Villages.Count<Village>());
 
-                float num3 = (num2 < 46) ? ((float)num2 / 46f * ((float)num2 / 46f)) : 1f;
+                float num3 = (num2 < 46) ? (num2 / 46f * (num2 / 46f)) : 1f;
                 num += ((hero.CurrentSettlement != null && num3 < 1f) ? ((1f - num3) * 0.2f) : 0f);
-                float baseNumber = 0.75f * MathF.Clamp(MathF.Pow(num, (float)(index + 1)), 0f, 1f);
-                ExplainedNumber explainedNumber = new ExplainedNumber(baseNumber, true, null);
+                float baseNumber = 0.75f * MathF.Clamp(MathF.Pow(num, index + 1), 0f, 1f);
+                ExplainedNumber explainedNumber = new ExplainedNumber(baseNumber, true);
                 Clan clan = hero.Clan;
                 if (((clan != null) ? clan.Kingdom : null) != null && hero.Clan.Kingdom.ActivePolicies.Contains(DefaultPolicies.Cantons))
                     explainedNumber.AddFactor(0.2f, new TextObject("Cantons kingdom policy"));
@@ -109,15 +109,18 @@ namespace BannerKings.Models.Vanilla
             {
                 return 0.1f;
             }
-            else if (type == PopType.Craftsmen)
+
+            if (type == PopType.Craftsmen)
             {
                 return 0.03f;
             }
-            else if (type == PopType.Nobles)
+
+            if (type == PopType.Nobles)
             {
                 return 0.12f;
             }
-            else return 0;
+
+            return 0;
         }
     }
 }

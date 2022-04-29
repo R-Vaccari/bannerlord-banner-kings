@@ -1,8 +1,6 @@
-﻿using BannerKings.Managers.Policies;
-using TaleWorlds.CampaignSystem;
+﻿using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.SandBox.GameComponents;
 using TaleWorlds.Core;
-using static BannerKings.Managers.PolicyManager;
 
 namespace BannerKings.Models
 {

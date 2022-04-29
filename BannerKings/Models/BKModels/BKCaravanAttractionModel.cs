@@ -1,6 +1,5 @@
 ﻿using BannerKings.Managers.Court;
 using BannerKings.Populations;
-using System;
 using TaleWorlds.CampaignSystem;
 
 namespace BannerKings.Models.Populations

@@ -1,5 +1,4 @@
-﻿using BannerKings.Managers;
-using BannerKings.Managers.Court;
+﻿using BannerKings.Managers.Court;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Titles;
 using BannerKings.Populations;
@@ -12,7 +11,6 @@ using TaleWorlds.Localization;
 using static BannerKings.Managers.Policies.BKTaxPolicy;
 using static BannerKings.Managers.Policies.BKWorkforcePolicy;
 using static BannerKings.Managers.PopulationManager;
-using static BannerKings.Managers.TitleManager;
 
 namespace BannerKings.Models
 {
@@ -23,7 +21,7 @@ namespace BannerKings.Models
         public override float GetDailyDemandForCategory(Town town, ItemCategory category, int extraProsperity)
         {
             if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement)
-                && category.IsValid && category.StringId != "banner")
+                                                                     && category.IsValid && category.StringId != "banner")
             {
                 PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
                 float nobles = data.GetTypeCount(PopType.Nobles);
@@ -58,11 +56,13 @@ namespace BannerKings.Models
                 
 
                 return result;
-            } else return base.GetDailyDemandForCategory(town, category, extraProsperity);
+            }
+
+            return base.GetDailyDemandForCategory(town, category, extraProsperity);
         }
 
         public override float GetEstimatedDemandForCategory(Town town, ItemData itemData, ItemCategory category) => 
-            this.GetDailyDemandForCategory(town, category, 1000);
+            GetDailyDemandForCategory(town, category, 1000);
 
         public override float GetDemandChangeFromValue(float purchaseValue)
         {
@@ -80,8 +80,8 @@ namespace BannerKings.Models
         {
             if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
                 return GetMerchantIncome(town);
-            
-            else return base.GetTownGoldChange(town);
+
+            return base.GetTownGoldChange(town);
         }
 
         public int GetMerchantIncome(Town town)

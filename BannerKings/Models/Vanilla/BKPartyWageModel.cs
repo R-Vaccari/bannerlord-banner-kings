@@ -71,12 +71,12 @@ namespace BannerKings.Models.Vanilla
 					}
 				}
 
-				float proportion = MBMath.ClampFloat(totalCulture / (float)mobileParty.MemberRoster.TotalManCount, 0f, 1f);
+				float proportion = MBMath.ClampFloat(totalCulture / mobileParty.MemberRoster.TotalManCount, 0f, 1f);
 				if (proportion > 0f)
 					result.AddFactor(proportion * -0.1f, GameTexts.FindText("str_culture"));
 
 				if (mobileParty.IsGarrison)
-					result.AddFactor(-0.05f, null);
+					result.AddFactor(-0.05f);
 			}
 
 			return result;
@@ -89,28 +89,28 @@ namespace BannerKings.Models.Vanilla
 			if (buyerHero != null)
             {
 				if (Helpers.Helpers.IsRetinueTroop(troop))
-					result.AddFactor(0.20f, null);
+					result.AddFactor(0.20f);
 
 				if (troop.Culture == buyerHero.Culture)
-					result.AddFactor(-0.05f, GameTexts.FindText("str_culture", null));
+					result.AddFactor(-0.05f, GameTexts.FindText("str_culture"));
 
 				if (buyerHero.Clan != null)
 				{
 					if (buyerHero.CurrentSettlement != null && buyerHero.CurrentSettlement.OwnerClan != null
 						&& buyerHero.CurrentSettlement.OwnerClan == buyerHero.Clan)
-						result.AddFactor(-0.15f, null);
+						result.AddFactor(-0.15f);
 
 					if (troop.IsInfantry)
-						result.AddFactor(-0.05f, null);
+						result.AddFactor(-0.05f);
 
 					Kingdom buyerKingdom = buyerHero.Clan.Kingdom;
 					if (buyerKingdom != null && troop.Culture != buyerHero.Culture)
-						result.AddFactor(0.25f, GameTexts.FindText("str_kingdom", null));
+						result.AddFactor(0.25f, GameTexts.FindText("str_kingdom"));
 
 					if (buyerHero.Clan.Tier >= 4)
-						result.AddFactor((float)(buyerHero.Clan.Tier - 3) * 0.05f, null);
+						result.AddFactor((buyerHero.Clan.Tier - 3) * 0.05f);
 					else if (buyerHero.Clan.Tier <= 1)
-						result.AddFactor((float)(buyerHero.Clan.Tier - 2) * 0.05f, null);
+						result.AddFactor((buyerHero.Clan.Tier - 2) * 0.05f);
 				}
 			}
 

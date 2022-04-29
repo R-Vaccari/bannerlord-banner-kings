@@ -1,18 +1,18 @@
 ﻿using BannerKings.Managers.Decisions;
 using BannerKings.Managers.Policies;
+using BannerKings.Models;
 using BannerKings.Populations;
 using BannerKings.UI.Items;
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Core.ViewModelCollection;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using static BannerKings.Managers.PopulationManager;
-using BannerKings.Models;
-using System.Text;
 
 namespace BannerKings.UI
 {
@@ -31,8 +31,8 @@ namespace BannerKings.UI
             productionInfo = new MBBindingList<InformationElement>();
             revenueInfo = new MBBindingList<InformationElement>();
             satisfactionInfo = new MBBindingList<InformationElement>();
-            this.settlement = _settlement;
-            this.RefreshValues();
+            settlement = _settlement;
+            RefreshValues();
         }
 
         public override void RefreshValues()
@@ -51,20 +51,20 @@ namespace BannerKings.UI
             ProductionInfo.Add(new InformationElement("Production Efficiency:", FormatValue(data.EconomicData.ProductionEfficiency.ResultNumber),
                "The speed at which workshops produce goods, affected by kingdom policies and craftsmen."));
 
-            if (base.IsVillage)
+            if (IsVillage)
             {
-                VillageData villageData = this.data.VillageData;
+                VillageData villageData = data.VillageData;
                 BKVillageProductionModel model = new BKVillageProductionModel();
                 float productionQuantity = 0f;
                 StringBuilder sb = new StringBuilder();
                 foreach ((ItemObject, float) production in BannerKingsConfig.Instance.PopulationManager.GetProductions(villageData))
                 {
-                    sb.Append(production.Item1.Name.ToString() + ", ");
+                    sb.Append(production.Item1.Name + ", ");
                     productionQuantity += model.CalculateDailyProductionAmount(villageData.Village, production.Item1);
                 }
                 sb.Remove(sb.Length - 2, 1);
                 string productionString = sb.ToString();
-                ProductionInfo.Add(new InformationElement("Goods Production:", productionQuantity.ToString() + " (Daily)",
+                ProductionInfo.Add(new InformationElement("Goods Production:", productionQuantity + " (Daily)",
                    "How much the local population can progress with construction projects, on a daily basis."));
                 ProductionInfo.Add(new InformationElement("Items Produced:", productionString,
                    "Goods locally produced by the population."));
@@ -83,14 +83,14 @@ namespace BannerKings.UI
                 {
                     float value = data.EconomicData.Satisfactions[i];
                     ConsumptionType type = (ConsumptionType)i;
-                    string desc = type.ToString() + " Goods:";
+                    string desc = type + " Goods:";
                     SatisfactionInfo.Add(new InformationElement(desc, FormatValue(value), Helpers.Helpers.GetConsumptionHint(type)));
                 }
 
                 criminalItem = (BKCriminalPolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(settlement, "criminal");
-                CriminalSelector = base.GetSelector(criminalItem, new Action<SelectorVM<BKItemVM>>(this.criminalItem.OnChange));
+                CriminalSelector = GetSelector(criminalItem, criminalItem.OnChange);
                 CriminalSelector.SelectedIndex = criminalItem.Selected;
-                CriminalSelector.SetOnChangeAction(this.criminalItem.OnChange);
+                CriminalSelector.SetOnChangeAction(criminalItem.OnChange);
 
                 List<BannerKingsDecision> decisions = BannerKingsConfig.Instance.PolicyManager.GetDefaultDecisions(settlement);
                 BannerKingsDecision slaveDecision = decisions.FirstOrDefault(x => x.GetIdentifier() == "decision_slaves_export");
@@ -101,7 +101,7 @@ namespace BannerKings.UI
                     .SetAsBooleanOption(slaveDecision.GetName(), slaveDecision.Enabled, delegate (bool value)
                     {
                         slaveDecision.OnChange(value);
-                        this.RefreshValues();
+                        RefreshValues();
 
                     }, new TextObject(slaveDecision.GetHint()));
 
@@ -109,7 +109,7 @@ namespace BannerKings.UI
                     .SetAsBooleanOption(tariffDecision.GetName(), tariffDecision.Enabled, delegate (bool value)
                     {
                         tariffDecision.OnChange(value);
-                        this.RefreshValues();
+                        RefreshValues();
 
                     }, new TextObject(slaveDecision.GetHint()));
 
@@ -117,7 +117,7 @@ namespace BannerKings.UI
                     .SetAsBooleanOption(slaveTaxDecision.GetName(), slaveTaxDecision.Enabled, delegate (bool value)
                     {
                         slaveTaxDecision.OnChange(value);
-                        this.RefreshValues();
+                        RefreshValues();
 
                     }, new TextObject(slaveTaxDecision.GetHint()));
 
@@ -125,7 +125,7 @@ namespace BannerKings.UI
                     .SetAsBooleanOption(mercantilismDecision.GetName(), mercantilismDecision.Enabled, delegate (bool value)
                     {
                         mercantilismDecision.OnChange(value);
-                        this.RefreshValues();
+                        RefreshValues();
 
                     }, new TextObject(mercantilismDecision.GetHint()));
             }
@@ -134,18 +134,18 @@ namespace BannerKings.UI
                     "Costs associated with the settlement administration, including those of active policies and decisions, deducted on tax revenue."));
 
             taxItem = (BKTaxPolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(settlement, "tax");
-            TaxSelector = base.GetSelector(taxItem, new Action<SelectorVM<BKItemVM>>(this.taxItem.OnChange));
+            TaxSelector = GetSelector(taxItem, taxItem.OnChange);
             TaxSelector.SelectedIndex = taxItem.Selected;
-            TaxSelector.SetOnChangeAction(this.taxItem.OnChange);
+            TaxSelector.SetOnChangeAction(taxItem.OnChange);
 
             
         }
 
         private void OnTournamentPress()
         {
-            TournamentData tournament = new TournamentData(this.settlement.Town);
+            TournamentData tournament = new TournamentData(settlement.Town);
             data.TournamentData = tournament;
-            this.roster = tournament.Roster;
+            roster = tournament.Roster;
             InventoryManager.OpenScreenAsStash(tournament.Roster);
             RefreshValues();
         }
@@ -159,8 +159,8 @@ namespace BannerKings.UI
         {
             get 
             {
-                if (this.settlement.IsTown)
-                    return !this.settlement.Town.HasTournament && Hero.MainHero.Gold >= 5000;
+                if (settlement.IsTown)
+                    return !settlement.Town.HasTournament && Hero.MainHero.Gold >= 5000;
                 
                 return false;
             }
@@ -175,7 +175,7 @@ namespace BannerKings.UI
                 if (value != exportToogle)
                 {
                     exportToogle = value;
-                    base.OnPropertyChangedWithValue(value, "ExportToogle");
+                    OnPropertyChangedWithValue(value);
                 }
             }
         }
@@ -189,7 +189,7 @@ namespace BannerKings.UI
                 if (value != tariffToogle)
                 {
                     tariffToogle = value;
-                    base.OnPropertyChangedWithValue(value, "TariffToogle");
+                    OnPropertyChangedWithValue(value);
                 }
             }
         }
@@ -203,7 +203,7 @@ namespace BannerKings.UI
                 if (value != slaveTaxToogle)
                 {
                     slaveTaxToogle = value;
-                    base.OnPropertyChangedWithValue(value, "SlaveTaxToogle");
+                    OnPropertyChangedWithValue(value);
                 }
             }
         }
@@ -217,7 +217,7 @@ namespace BannerKings.UI
                 if (value != mercantilismToogle)
                 {
                     mercantilismToogle = value;
-                    base.OnPropertyChangedWithValue(value, "MercantilismToogle");
+                    OnPropertyChangedWithValue(value);
                 }
             }
         }
@@ -225,13 +225,13 @@ namespace BannerKings.UI
         [DataSourceProperty]
         public SelectorVM<BKItemVM> CriminalSelector
         {
-            get => this.criminalSelector;
+            get => criminalSelector;
             set
             {
-                if (value != this.criminalSelector)
+                if (value != criminalSelector)
                 {
-                    this.criminalSelector = value;
-                    base.OnPropertyChangedWithValue(value, "CriminalSelector");
+                    criminalSelector = value;
+                    OnPropertyChangedWithValue(value);
                 }
             }
         }
@@ -239,13 +239,13 @@ namespace BannerKings.UI
         [DataSourceProperty]
         public SelectorVM<BKItemVM> TaxSelector
         {
-            get => this.taxSelector;
+            get => taxSelector;
             set
             {
-                if (value != this.taxSelector)
+                if (value != taxSelector)
                 {
-                    this.taxSelector = value;
-                    base.OnPropertyChangedWithValue(value, "TaxSelector");
+                    taxSelector = value;
+                    OnPropertyChangedWithValue(value);
                 }
             }
         }
@@ -259,7 +259,7 @@ namespace BannerKings.UI
                 if (value != productionInfo)
                 {
                     productionInfo = value;
-                    base.OnPropertyChangedWithValue(value, "ProductionInfo");
+                    OnPropertyChangedWithValue(value);
                 }
             }
         }
@@ -273,7 +273,7 @@ namespace BannerKings.UI
                 if (value != revenueInfo)
                 {
                     revenueInfo = value;
-                    base.OnPropertyChangedWithValue(value, "RevenueInfo");
+                    OnPropertyChangedWithValue(value);
                 }
             }
         }
@@ -287,7 +287,7 @@ namespace BannerKings.UI
                 if (value != satisfactionInfo)
                 {
                     satisfactionInfo = value;
-                    base.OnPropertyChangedWithValue(value, "SatisfactionInfo");
+                    OnPropertyChangedWithValue(value);
                 }
             }
         }
@@ -295,13 +295,13 @@ namespace BannerKings.UI
         public override void OnFinalize()
         {
             base.OnFinalize();
-            if (this.roster != null && !this.roster.IsEmpty())
+            if (roster != null && !roster.IsEmpty())
             {
                 ITournamentManager tournamentManager = Campaign.Current.TournamentManager;
-                tournamentManager.AddTournament(Campaign.Current.Models.TournamentModel.CreateTournament(this.settlement.Town));
+                tournamentManager.AddTournament(Campaign.Current.Models.TournamentModel.CreateTournament(settlement.Town));
                 Hero.MainHero.ChangeHeroGold(-5000);
                 InformationManager.DisplayMessage(new InformationMessage(String
-                    .Format("Tournament started with prize: {0}", this.data.TournamentData.Prize.Name), "event:/ui/notification/coins_negative"));
+                    .Format("Tournament started with prize: {0}", data.TournamentData.Prize.Name), "event:/ui/notification/coins_negative"));
             }     
         }
     }

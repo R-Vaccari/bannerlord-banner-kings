@@ -12,20 +12,20 @@ namespace BannerKings.Managers.Institutions
 
         public Institution()
         {
-            this.favors = new Dictionary<Hero, float>();
+            favors = new Dictionary<Hero, float>();
         }
 
         public Hero Leader
         {
             get
             {
-                if (this.leader == null || !this.leader.IsAlive || this.leader.IsActive)
-                    this.leader = GenerateLeader();
-                return this.leader;
+                if (leader == null || !leader.IsAlive || leader.IsActive)
+                    leader = GenerateLeader();
+                return leader;
             }
         }
 
-        public float Influence => this.influence;
+        public float Influence => influence;
 
         public abstract Hero GenerateLeader();
 
@@ -33,16 +33,16 @@ namespace BannerKings.Managers.Institutions
 
         public float GetFavor(Hero hero)
         {
-            if (this.favors.ContainsKey(hero))
-                return this.favors[hero];
+            if (favors.ContainsKey(hero))
+                return favors[hero];
             return 0f;
         }
 
         public void AddFavor(Hero hero, float favor)
         {
-            if (this.favors.ContainsKey(hero))
-                this.favors[hero] += favor;
-            else this.favors.Add(hero, favor);
+            if (favors.ContainsKey(hero))
+                favors[hero] += favor;
+            else favors.Add(hero, favor);
         }
 
     }

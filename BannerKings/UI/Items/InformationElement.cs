@@ -15,7 +15,7 @@ namespace BannerKings
             {
                 _description = description;
                 _value = value;
-                this.Hint = new HintViewModel(new TextObject(hintText));
+                Hint = new HintViewModel(new TextObject(hintText));
             }
 
 
@@ -28,7 +28,7 @@ namespace BannerKings
                     if (value != _description)
                     {
                         _description = value;
-                        base.OnPropertyChangedWithValue(value, "Name");
+                        OnPropertyChangedWithValue(value, "Name");
                     }
                 }
             }
@@ -42,7 +42,7 @@ namespace BannerKings
                     if (value != _value)
                     {
                         _value = value;
-                        base.OnPropertyChangedWithValue(value, "Count");
+                        OnPropertyChangedWithValue(value, "Count");
                     }
                 }
             }
@@ -56,7 +56,7 @@ namespace BannerKings
                     if (value != _hint)
                     {
                         _hint = value;
-                        base.OnPropertyChangedWithValue(value, "Hint");
+                        OnPropertyChangedWithValue(value);
                     }
                 }
             }

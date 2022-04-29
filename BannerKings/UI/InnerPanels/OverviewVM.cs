@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
-using static BannerKings.Managers.PopulationManager;
 
 namespace BannerKings.UI
 {
@@ -27,9 +26,9 @@ namespace BannerKings.UI
             culturesList = new MBBindingList<CultureElementVM>();
             cultureInfo = new MBBindingList<InformationElement>();
             statsInfo = new MBBindingList<InformationElement>();
-            this.settlement = _settlement;
+            settlement = _settlement;
             this._isSelected = _isSelected;
-            this.RefreshValues();
+            RefreshValues();
         }
 
         public override void RefreshValues()
@@ -73,7 +72,7 @@ namespace BannerKings.UI
                     .SetAsBooleanOption(decision.GetName(), decision.Enabled, delegate (bool value)
                     {
                         decision.OnChange(value);
-                        this.RefreshValues();
+                        RefreshValues();
 
                     }, new TextObject(decision.GetHint()));
                     switch (decision.GetIdentifier())
@@ -95,7 +94,7 @@ namespace BannerKings.UI
                 if (value != foreignerToogle)
                 {
                     foreignerToogle = value;
-                    base.OnPropertyChangedWithValue(value, "ForeignerToogle");
+                    OnPropertyChangedWithValue(value);
                 }
             }
         }
@@ -109,7 +108,7 @@ namespace BannerKings.UI
                 if (value != culturesList)
                 {
                     culturesList = value;
-                    base.OnPropertyChangedWithValue(value, "CultureList");
+                    OnPropertyChangedWithValue(value);
                 }
             }
         }
@@ -123,7 +122,7 @@ namespace BannerKings.UI
                 if (value != classesList)
                 {
                     classesList = value;
-                    base.OnPropertyChangedWithValue(value, "PopList");
+                    OnPropertyChangedWithValue(value);
                 }
             }
         }
@@ -137,7 +136,7 @@ namespace BannerKings.UI
                 if (value != cultureInfo)
                 {
                     cultureInfo = value;
-                    base.OnPropertyChangedWithValue(value, "CultureInfo");
+                    OnPropertyChangedWithValue(value);
                 }
             }
         }
@@ -151,7 +150,7 @@ namespace BannerKings.UI
                 if (value != statsInfo)
                 {
                     statsInfo = value;
-                    base.OnPropertyChangedWithValue(value, "StatsInfo");
+                    OnPropertyChangedWithValue(value);
                 }
             }
         }

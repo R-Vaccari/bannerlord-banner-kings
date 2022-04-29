@@ -13,8 +13,8 @@ namespace BannerKings.Managers.Decisions
 
         public BannerKingsDecision(Settlement settlement, bool enabled)
         {
-            this.Settlement = settlement;
-            this.Enabled = enabled;
+            Settlement = settlement;
+            Enabled = enabled;
         }
 
         public abstract string GetHint();
@@ -22,7 +22,7 @@ namespace BannerKings.Managers.Decisions
         public abstract string GetIdentifier();
         public void OnChange(bool value)
         {
-            this.Enabled = value;
+            Enabled = value;
         }
     }
 }

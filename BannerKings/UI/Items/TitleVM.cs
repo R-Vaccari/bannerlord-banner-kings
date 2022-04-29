@@ -1,12 +1,12 @@
-﻿using TaleWorlds.CampaignSystem;
+﻿using BannerKings.Managers.Titles;
+using BannerKings.Models.BKModels;
+using System.Collections.Generic;
 using System.Linq;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Core.ViewModelCollection;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
-using System.Collections.Generic;
-using BannerKings.Managers.Titles;
-using BannerKings.Models.BKModels;
 
 namespace BannerKings.UI.Items
 {
@@ -20,21 +20,21 @@ namespace BannerKings.UI.Items
 		public TitleVM(FeudalTitle title)
 		{
 			this.title = title;
-			this.decisions = new MBBindingList<DecisionElement>();
-			this.RefreshValues();
+			decisions = new MBBindingList<DecisionElement>();
+			RefreshValues();
 		}
 
 		public override void RefreshValues()
 		{
 			base.RefreshValues();
-			this.Decisions.Clear();
+			Decisions.Clear();
 			
 
 			if (title != null)
 			{
 				BKTitleModel model = (BannerKingsConfig.Instance.Models.First(x => x is BKTitleModel) as BKTitleModel);
 				CharacterCode characterCode = CharacterCode.CreateFrom(title.deJure.CharacterObject);
-				this.ImageIdentifier = new ImageIdentifierVM(characterCode);
+				ImageIdentifier = new ImageIdentifierVM(characterCode);
 
 				List<TitleAction> actions = new List<TitleAction>();
 				TitleAction usurpData = model.GetAction(ActionType.Usurp, title, Hero.MainHero);
@@ -43,7 +43,7 @@ namespace BannerKings.UI.Items
 					DecisionElement usurpButton = new DecisionElement().SetAsButtonOption(new TextObject("{=!}Usurp").ToString(),
 						() => UIHelper.ShowTitleActionPopup(usurpData, this));
 					usurpButton.Enabled = usurpData.Possible;
-					this.Decisions.Add(usurpButton);
+					Decisions.Add(usurpButton);
 				}
 
 				TitleAction claimAction = model.GetAction(ActionType.Claim, title, Hero.MainHero);
@@ -52,7 +52,7 @@ namespace BannerKings.UI.Items
 					DecisionElement claimButton = new DecisionElement().SetAsButtonOption(new TextObject("{=!}Claim").ToString(),
 						() => UIHelper.ShowTitleActionPopup(claimAction, this));
 					claimButton.Enabled = claimAction.Possible;
-					this.Decisions.Add(claimButton);
+					Decisions.Add(claimButton);
 				}
 
 				TitleAction grantData = model.GetAction(ActionType.Grant, title, Hero.MainHero);
@@ -61,7 +61,7 @@ namespace BannerKings.UI.Items
 					DecisionElement grantButton = new DecisionElement().SetAsButtonOption(new TextObject("{=!}Grant").ToString(),
 						() => UIHelper.ShowTitleActionPopup(grantData, this));
 					grantButton.Enabled = grantData.Possible;
-					this.Decisions.Add(grantButton);
+					Decisions.Add(grantButton);
 				}
 
 				TitleAction revokeData = model.GetAction(ActionType.Revoke, title, Hero.MainHero);
@@ -70,7 +70,7 @@ namespace BannerKings.UI.Items
 					DecisionElement revokeButton = new DecisionElement().SetAsButtonOption(new TextObject("{=!}Revoke").ToString(),
 						() => UIHelper.ShowTitleActionPopup(revokeData, this));
 					revokeButton.Enabled = revokeData.Possible;
-					this.Decisions.Add(revokeButton);
+					Decisions.Add(revokeButton);
 				}
 
 				if (title.deJure != Hero.MainHero)
@@ -81,27 +81,27 @@ namespace BannerKings.UI.Items
 				}
 				else actions.Add(grantData);
 
-				this.Hint = new BasicTooltipViewModel(() => UIHelper.GetTitleTooltip(title, actions));
+				Hint = new BasicTooltipViewModel(() => UIHelper.GetTitleTooltip(title, actions));
 			}
 		}
 
 		public void ExecuteLink()
 		{
-			if (this.title.deJure != null)
-				Campaign.Current.EncyclopediaManager.GoToLink(this.title.deJure.EncyclopediaLink);
+			if (title.deJure != null)
+				Campaign.Current.EncyclopediaManager.GoToLink(title.deJure.EncyclopediaLink);
 			
 		}
 
 		[DataSourceProperty]
 		public MBBindingList<DecisionElement> Decisions
 		{
-			get => this.decisions;
+			get => decisions;
 			set
 			{
-				if (value != this.decisions)
+				if (value != decisions)
 				{
-					this.decisions = value;
-					base.OnPropertyChangedWithValue(value, "Decisions");
+					decisions = value;
+					OnPropertyChangedWithValue(value);
 				}
 			}
 		}
@@ -110,13 +110,13 @@ namespace BannerKings.UI.Items
 		[DataSourceProperty]
 		public BasicTooltipViewModel Hint
 		{
-			get => this.hint;
+			get => hint;
 			set
 			{
-				if (value != this.hint)
+				if (value != hint)
 				{
-					this.hint = value;
-					base.OnPropertyChangedWithValue(value, "Hint");
+					hint = value;
+					OnPropertyChangedWithValue(value);
 				}
 			}
 		}
@@ -124,18 +124,18 @@ namespace BannerKings.UI.Items
 		[DataSourceProperty]
 		public ImageIdentifierVM ImageIdentifier
 		{
-			get => this.imageIdentifier;
+			get => imageIdentifier;
 			set
 			{
-				if (value != this.imageIdentifier)
+				if (value != imageIdentifier)
 				{
-					this.imageIdentifier = value;
-					base.OnPropertyChangedWithValue(value, "ImageIdentifier");
+					imageIdentifier = value;
+					OnPropertyChangedWithValue(value);
 				}
 			}
 		}
 
 		[DataSourceProperty]
-		public string NameText => this.title.FullName.ToString();
+		public string NameText => title.FullName.ToString();
 	}
 }

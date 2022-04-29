@@ -18,11 +18,11 @@ namespace BannerKings.Behaviours
     {
         public override void RegisterEvents()
         {
-            CampaignEvents.HourlyTickPartyEvent.AddNonSerializedListener(this, new Action<MobileParty>(HourlyTickParty));
-            CampaignEvents.MobilePartyDestroyed.AddNonSerializedListener(this, new Action<MobileParty, PartyBase>(OnMobilePartyDestroyed));
-            CampaignEvents.SettlementEntered.AddNonSerializedListener(this, new Action<MobileParty, Settlement, Hero>(OnSettlementEntered));
-            CampaignEvents.DailyTickSettlementEvent.AddNonSerializedListener(this, new Action<Settlement>(DailySettlementTick));
-            CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, new Action<CampaignGameStarter>(OnSessionLaunched));
+            CampaignEvents.HourlyTickPartyEvent.AddNonSerializedListener(this, HourlyTickParty);
+            CampaignEvents.MobilePartyDestroyed.AddNonSerializedListener(this, OnMobilePartyDestroyed);
+            CampaignEvents.SettlementEntered.AddNonSerializedListener(this, OnSettlementEntered);
+            CampaignEvents.DailyTickSettlementEvent.AddNonSerializedListener(this, DailySettlementTick);
+            CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, OnSessionLaunched);
         }
 
         private void HourlyTickParty(MobileParty party)
@@ -197,7 +197,7 @@ namespace BannerKings.Behaviours
                             if (settlement.IsTown && settlement != origin)
                                 list.Add(new ValueTuple<Settlement, float>(settlement, 1f));
 
-                        Settlement target = MBRandom.ChooseWeighted<Settlement>(list);
+                        Settlement target = MBRandom.ChooseWeighted(list);
                         return target;
                     }
                 }
@@ -216,24 +216,24 @@ namespace BannerKings.Behaviours
             string name;
             if (random < 60)
             {
-                civilian = MBObjectManager.Instance.GetObjectTypeList<CharacterObject>().FirstOrDefault(x => x.StringId == "villager_" + origin.Culture.StringId.ToString());
+                civilian = MBObjectManager.Instance.GetObjectTypeList<CharacterObject>().FirstOrDefault(x => x.StringId == "villager_" + origin.Culture.StringId);
                 count = MBRandom.RandomInt(30, 70);
                 type = PopType.Serfs;
             }
             else if (random < 90)
             {
-                civilian = MBObjectManager.Instance.GetObjectTypeList<CharacterObject>().FirstOrDefault(x => x.StringId == "craftsman_" + origin.Culture.StringId.ToString());
+                civilian = MBObjectManager.Instance.GetObjectTypeList<CharacterObject>().FirstOrDefault(x => x.StringId == "craftsman_" + origin.Culture.StringId);
                 count = MBRandom.RandomInt(15, 30);
                 type = PopType.Craftsmen;
             }
             else
             {
-                civilian = MBObjectManager.Instance.GetObjectTypeList<CharacterObject>().FirstOrDefault(x => x.StringId == "noble_" + origin.Culture.StringId.ToString());
+                civilian = MBObjectManager.Instance.GetObjectTypeList<CharacterObject>().FirstOrDefault(x => x.StringId == "noble_" + origin.Culture.StringId);
                 count = MBRandom.RandomInt(10, 15);
                 type = PopType.Nobles;
             }
 
-            name = "Travelling " + Helpers.Helpers.GetClassName(type, origin.Culture).ToString() + " from {0}";
+            name = "Travelling " + Helpers.Helpers.GetClassName(type, origin.Culture) + " from {0}";
 
             if (civilian != null)
                 PopulationPartyComponent.CreateTravellerParty("travellers_", origin, target,
@@ -245,8 +245,8 @@ namespace BannerKings.Behaviours
         {
             Settlement origin = target.MarketTown.Settlement;
             PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(origin);
-            int slaves = (int)((double)data.GetTypeCount(PopType.Slaves) * 0.005d);
-            data.UpdatePopType(PopType.Slaves, (int)((float)slaves * -1f));
+            int slaves = (int)(data.GetTypeCount(PopType.Slaves) * 0.005d);
+            data.UpdatePopType(PopType.Slaves, (int)(slaves * -1f));
             PopulationPartyComponent.CreateSlaveCaravan("slavecaravan_", origin, target.Settlement, "Slave Caravan from {0}", slaves);
         }
 
@@ -260,67 +260,64 @@ namespace BannerKings.Behaviours
 
             starter.AddDialogLine("traveller_serf_party_start", "start", "traveller_party_greeting",
                 "M'lord! We are humble folk, travelling between towns, looking for work and trade.",
-                new ConversationSentence.OnConditionDelegate(this.traveller_serf_start_on_condition), null, 100, null);
+                traveller_serf_start_on_condition, null);
 
             starter.AddDialogLine("traveller_craftsman_party_start", "start", "traveller_party_greeting",
                 "Good day to you. We are craftsmen travelling for business purposes.",
-                new ConversationSentence.OnConditionDelegate(this.traveller_craftsman_start_on_condition), null, 100, null);
+                traveller_craftsman_start_on_condition, null);
 
             starter.AddDialogLine("traveller_noble_party_start", "start", "traveller_party_greeting",
                 "Yes? Please do not interfere with our caravan.",
-                new ConversationSentence.OnConditionDelegate(this.traveller_noble_start_on_condition), null, 100, null);
+                traveller_noble_start_on_condition, null);
 
 
             starter.AddPlayerLine("traveller_party_loot", "traveller_party_greeting", "close_window",
-                new TextObject("{=XaPMUJV0}Whatever you have, I'm taking it. Surrender or die!", null).ToString(),
-                new ConversationSentence.OnConditionDelegate(this.traveller_aggression_on_condition),
-                delegate { PlayerEncounter.Current.IsEnemy = true; },
-                100, null, null);
+                new TextObject("{=XaPMUJV0}Whatever you have, I'm taking it. Surrender or die!").ToString(),
+                traveller_aggression_on_condition,
+                delegate { PlayerEncounter.Current.IsEnemy = true; });
 
             starter.AddPlayerLine("traveller_party_leave", "traveller_party_greeting", "close_window",
-                new TextObject("{=dialog_end_nice}Carry on, then. Farewell.", null).ToString(), null,
-                delegate { PlayerEncounter.LeaveEncounter = true; },
-                100, null, null);
+                new TextObject("{=dialog_end_nice}Carry on, then. Farewell.").ToString(), null,
+                delegate { PlayerEncounter.LeaveEncounter = true; });
 
             starter.AddDialogLine("slavecaravan_friend_party_start", "start", "slavecaravan_party_greeting",
                 "My lord, we are taking these rabble somewhere they can be put to good use.",
-                new ConversationSentence.OnConditionDelegate(this.slavecaravan_amicable_on_condition), null, 100, null);
+                slavecaravan_amicable_on_condition, null);
 
             starter.AddDialogLine("slavecaravan_neutral_party_start", "start", "slavecaravan_party_greeting",
                 "If you're not planning to join those vermin back there, move away![rf:idle_angry][ib:aggressive]",
-                new ConversationSentence.OnConditionDelegate(this.slavecaravan_neutral_on_condition), null, 100, null);
+                slavecaravan_neutral_on_condition, null);
 
             starter.AddPlayerLine("slavecaravan_party_leave", "slavecaravan_party_greeting", "close_window",
-               new TextObject("{=dialog_end_nice}Carry on, then. Farewell.", null).ToString(), null,
-               delegate { PlayerEncounter.LeaveEncounter = true; },
-               100, null, null);
+               new TextObject("{=dialog_end_nice}Carry on, then. Farewell.").ToString(), null,
+               delegate { PlayerEncounter.LeaveEncounter = true; });
 
             starter.AddPlayerLine("slavecaravan_party_threat", "slavecaravan_party_greeting", "slavecaravan_threat",
-               new TextObject("{=!}Give me your slaves and gear, or else!", null).ToString(),
-               new ConversationSentence.OnConditionDelegate(this.slavecaravan_neutral_on_condition),
-               null, 100, null, null);
+               new TextObject("{=!}Give me your slaves and gear, or else!").ToString(),
+               slavecaravan_neutral_on_condition,
+               null);
 
             starter.AddDialogLine("slavecaravan_party_threat_response", "slavecaravan_threat", "close_window",
                 "One more for the mines! Lads, get the whip![rf:idle_angry][ib:aggressive]",
-                null, delegate { PlayerEncounter.Current.IsEnemy = true; }, 100, null);
+                null, delegate { PlayerEncounter.Current.IsEnemy = true; });
 
             starter.AddDialogLine("raised_militia_party_start", "start", "raised_militia_greeting",
                 "M'lord! We are ready to serve you.",
-                new ConversationSentence.OnConditionDelegate(this.raised_militia_start_on_condition), null, 100, null);
+                raised_militia_start_on_condition, null);
 
             starter.AddPlayerLine("raised_militia_party_follow", "raised_militia_greeting", "raised_militia_order",
-               new TextObject("{=!}Follow my company.", null).ToString(),
-               new ConversationSentence.OnConditionDelegate(this.raised_militia_order_on_condition),
-               new ConversationSentence.OnConsequenceDelegate(this.raised_militia_follow_on_consequence), 100, null, null);
+               new TextObject("{=!}Follow my company.").ToString(),
+               raised_militia_order_on_condition,
+               raised_militia_follow_on_consequence);
 
             starter.AddPlayerLine("raised_militia_party_retreat", "raised_militia_greeting", "raised_militia_order",
-               new TextObject("{=!}You may go home.", null).ToString(),
-               new ConversationSentence.OnConditionDelegate(this.raised_militia_order_on_condition),
-               new ConversationSentence.OnConsequenceDelegate(this.raised_militia_retreat_on_consequence), 100, null, null);
+               new TextObject("{=!}You may go home.").ToString(),
+               raised_militia_order_on_condition,
+               raised_militia_retreat_on_consequence);
 
             starter.AddDialogLine("raised_militia_order_response", "raised_militia_order", "close_window",
                 "Aye!",
-                null, delegate { PlayerEncounter.LeaveEncounter = true; }, 100, null);
+                null, delegate { PlayerEncounter.LeaveEncounter = true; });
         }
 
         private bool IsTravellerParty(PartyBase party)

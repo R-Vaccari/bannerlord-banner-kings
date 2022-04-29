@@ -12,20 +12,20 @@ namespace BannerKings.UI.Items
 		private BasicTooltipViewModel courtHint;
 		public CouncilMemberVM(Hero member, Action<SettlementGovernorSelectionItemVM> onSelection, CouncilPosition position, float competence) : base(member, onSelection)
         { 
-            this.GovernorHint = new BasicTooltipViewModel(() => UIHelper.GetHeroGovernorEffectsTooltip(member, position, competence));
-			this.CourtHint = new BasicTooltipViewModel(() => UIHelper.GetHeroCourtTooltip(member));
+            GovernorHint = new BasicTooltipViewModel(() => UIHelper.GetHeroGovernorEffectsTooltip(member, position, competence));
+			CourtHint = new BasicTooltipViewModel(() => UIHelper.GetHeroCourtTooltip(member));
 		}
 
 		[DataSourceProperty]
 		public BasicTooltipViewModel CourtHint
 		{
-			get => this.courtHint;	
+			get => courtHint;	
 			set
 			{
-				if (value != this.courtHint)
+				if (value != courtHint)
 				{
-					this.courtHint = value;
-					base.OnPropertyChangedWithValue(value, "CourtHint");
+					courtHint = value;
+					OnPropertyChangedWithValue(value);
 				}
 			}
 		}

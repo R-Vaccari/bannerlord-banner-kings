@@ -1,20 +1,19 @@
-﻿using System;
-using System.Linq;
+﻿using BannerKings.Managers.Institutions;
+using BannerKings.Managers.Populations;
+using BannerKings.Managers.Populations.Villages;
+using BannerKings.Managers.Titles;
+using BannerKings.Models;
+using BannerKings.Models.Populations;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
+using TaleWorlds.ObjectSystem;
 using TaleWorlds.SaveSystem;
 using static BannerKings.Managers.PopulationManager;
-using BannerKings.Models;
-using BannerKings.Models.Populations;
-using TaleWorlds.ObjectSystem;
-using BannerKings.Managers.Institutions;
-using BannerKings.Managers.Populations.Villages;
-using BannerKings.Managers.Populations;
 using static BannerKings.Managers.Policies.BKWorkforcePolicy;
-using BannerKings.Managers.Titles;
-using BannerKings.Managers;
 
 namespace BannerKings.Populations
 {
@@ -53,9 +52,9 @@ namespace BannerKings.Populations
         public PopulationData(List<PopulationClass> classes, Settlement settlement, float assimilation, List<CultureDataClass> cultures = null, Guild guild = null)
         {
             this.classes = classes;
-            this.stability = 0.5f;
+            stability = 0.5f;
             this.settlement = settlement;
-            this.economicData = new EconomicData(settlement, guild);
+            economicData = new EconomicData(settlement, guild);
 
             if (cultures == null)
             {
@@ -66,21 +65,21 @@ namespace BannerKings.Populations
             this.cultureData = new CultureData(settlement.Owner, cultures);
             float total = TotalPop;
             float nobles = classes.First(x => x.type == PopType.Nobles).count;
-            this.militaryData = new MilitaryData(settlement, (int)(total * 0.04f), (int)(nobles * 0.08f));
-            this.landData = new LandData(this);
+            militaryData = new MilitaryData(settlement, (int)(total * 0.04f), (int)(nobles * 0.08f));
+            landData = new LandData(this);
 
             if (settlement.Village != null)
-                this.villageData = new VillageData(settlement.Village);
+                villageData = new VillageData(settlement.Village);
         }
 
-        public CultureData CultureData => this.cultureData;
-        public MilitaryData MilitaryData => this.militaryData;
-        public LandData LandData => this.landData;
-        public EconomicData EconomicData => this.economicData;
+        public CultureData CultureData => cultureData;
+        public MilitaryData MilitaryData => militaryData;
+        public LandData LandData => landData;
+        public EconomicData EconomicData => economicData;
         public TournamentData TournamentData
         {
-            get => this.tournamentData;
-            set => this.tournamentData = value;
+            get => tournamentData;
+            set => tournamentData = value;
         }
 
         public TitleData TitleData
@@ -91,9 +90,9 @@ namespace BannerKings.Populations
             }
         }
 
-        public VillageData VillageData => this.villageData;
+        public VillageData VillageData => villageData;
 
-        public ExplainedNumber Foreigner => new BKForeignerModel().CalculateEffect(this.settlement);
+        public ExplainedNumber Foreigner => new BKForeignerModel().CalculateEffect(settlement);
 
         public int TotalPop {
             get
@@ -104,19 +103,19 @@ namespace BannerKings.Populations
             }
         }
 
-        public Settlement Settlement => this.settlement;
+        public Settlement Settlement => settlement;
         public ExplainedNumber Growth
         {
             get
             {
                 BKGrowthModel model = (BKGrowthModel)BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(BKGrowthModel));
-                return model.CalculateEffect(this.settlement, this);
+                return model.CalculateEffect(settlement, this);
             }
         }
 
         public float Stability
         {
-            get => this.stability;
+            get => stability;
             set
             {
                 if (value != stability)
@@ -140,55 +139,55 @@ namespace BannerKings.Populations
             {
                 if (settlement.Owner == Hero.MainHero)
                     InformationManager.DisplayMessage(new InformationMessage());
-                bool divisibleNegative = ((float)pops * -1f) > 20;
+                bool divisibleNegative = (pops * -1f) > 20;
                 if (pops > 20 || divisibleNegative)
                 {
-                    int fractions = (int)((float)pops / (divisibleNegative ? -20f : 20f));
+                    int fractions = (int)(pops / (divisibleNegative ? -20f : 20f));
                     int reminder = pops % 20;
                     for (int i = 0; i < fractions; i++)
-                        this.SelectAndUpdatePop(settlement, divisibleNegative ? -20 : 20);
+                        SelectAndUpdatePop(settlement, divisibleNegative ? -20 : 20);
                     
-                    this.SelectAndUpdatePop(settlement, divisibleNegative ? -reminder : reminder);
+                    SelectAndUpdatePop(settlement, divisibleNegative ? -reminder : reminder);
                 }
-                else this.SelectAndUpdatePop(settlement, pops);
+                else SelectAndUpdatePop(settlement, pops);
             }
-            else this.UpdatePopType(target, pops);
+            else UpdatePopType(target, pops);
 
-            this.BalanceClasses(settlement);
+            BalanceClasses(settlement);
         }
 
         private void BalanceClasses(Settlement settlement)
         {
-            Dictionary<PopType, float[]> dic = PopulationManager.GetDesiredPopTypes(settlement);
-            Dictionary<PopType, float> currentDic = new Dictionary<PopType, float>()
+            Dictionary<PopType, float[]> dic = GetDesiredPopTypes(settlement);
+            Dictionary<PopType, float> currentDic = new Dictionary<PopType, float>
             {
-                { PopType.Nobles, this.GetCurrentTypeFraction(PopType.Nobles) },
-                { PopType.Craftsmen, this.GetCurrentTypeFraction(PopType.Craftsmen) },
-                { PopType.Serfs, this.GetCurrentTypeFraction(PopType.Serfs) },
-                { PopType.Slaves, this.GetCurrentTypeFraction(PopType.Slaves) }
+                { PopType.Nobles, GetCurrentTypeFraction(PopType.Nobles) },
+                { PopType.Craftsmen, GetCurrentTypeFraction(PopType.Craftsmen) },
+                { PopType.Serfs, GetCurrentTypeFraction(PopType.Serfs) },
+                { PopType.Slaves, GetCurrentTypeFraction(PopType.Slaves) }
             };
             
             if (currentDic[PopType.Slaves] > dic[PopType.Slaves][1])
             {
-                int random = MBMath.ClampInt(MBRandom.RandomInt(0, 25), 0, this.GetTypeCount(PopType.Slaves));
-                this.UpdatePopType(PopType.Slaves, -random);
-                this.UpdatePopType(PopType.Serfs, random);
+                int random = MBMath.ClampInt(MBRandom.RandomInt(0, 25), 0, GetTypeCount(PopType.Slaves));
+                UpdatePopType(PopType.Slaves, -random);
+                UpdatePopType(PopType.Serfs, random);
                 if (settlement.Town != null)
-                    settlement.Town.Security -= (float)random * 0.01f;
+                    settlement.Town.Security -= random * 0.01f;
             }
 
             if (currentDic[PopType.Serfs] > dic[PopType.Serfs][1])
             {
-                int random = MBMath.ClampInt(MBRandom.RandomInt(0, 25), 0, this.GetTypeCount(PopType.Serfs));
-                this.UpdatePopType(PopType.Serfs, -random);
-                this.UpdatePopType(PopType.Craftsmen, random);
+                int random = MBMath.ClampInt(MBRandom.RandomInt(0, 25), 0, GetTypeCount(PopType.Serfs));
+                UpdatePopType(PopType.Serfs, -random);
+                UpdatePopType(PopType.Craftsmen, random);
             }
 
             if (currentDic[PopType.Craftsmen] > dic[PopType.Craftsmen][1])
             {
-                int random = MBMath.ClampInt(MBRandom.RandomInt(0, 25), 0, this.GetTypeCount(PopType.Craftsmen));
-                this.UpdatePopType(PopType.Craftsmen, -random);
-                this.UpdatePopType(PopType.Nobles, random);
+                int random = MBMath.ClampInt(MBRandom.RandomInt(0, 25), 0, GetTypeCount(PopType.Craftsmen));
+                UpdatePopType(PopType.Craftsmen, -random);
+                UpdatePopType(PopType.Nobles, random);
             }
         }
 
@@ -241,10 +240,10 @@ namespace BannerKings.Populations
                 if (type == PopType.Slaves)
                 {
                     int total = pops.count + count;
-                    float currentState = (float)pops.count * this.economicData.StateSlaves;
+                    float currentState = pops.count * economicData.StateSlaves;
                     if (stateSlaves)
                         currentState += count;
-                    this.economicData.StateSlaves = currentState / (float)total;
+                    economicData.StateSlaves = currentState / total;
                 }
 
                 pops.count += count;
@@ -260,21 +259,21 @@ namespace BannerKings.Populations
             return MBMath.ClampInt(i, 0, 50000);
         }
 
-        public float GetCurrentTypeFraction(PopType type) => (float)GetTypeCount(type) / (float)TotalPop;
+        public float GetCurrentTypeFraction(PopType type) => GetTypeCount(type) / (float)TotalPop;
 
         internal override void Update(PopulationData data)
         {
             BKGrowthModel model = (BKGrowthModel)BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(BKGrowthModel));
-            int growthFactor = (int)model.CalculateEffect(this.settlement, this).ResultNumber;
-            this.UpdatePopulation(settlement, growthFactor, PopType.None);
-            this.Stability += BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(BKStabilityModel)).CalculateEffect(settlement).ResultNumber;
+            int growthFactor = (int)model.CalculateEffect(settlement, this).ResultNumber;
+            UpdatePopulation(settlement, growthFactor, PopType.None);
+            Stability += BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(BKStabilityModel)).CalculateEffect(settlement).ResultNumber;
             economicData.Update(this);
             cultureData.Update(this);
             militaryData.Update(this);
             landData.Update(this);
             if (villageData != null) villageData.Update(this);
             if (tournamentData != null) tournamentData.Update(this);
-            if (titleData == null) titleData = new TitleData(BannerKingsConfig.Instance.TitleManager.GetTitle(this.settlement));
+            if (titleData == null) titleData = new TitleData(BannerKingsConfig.Instance.TitleManager.GetTitle(settlement));
             titleData.Update(this);
         }
     }
@@ -308,7 +307,7 @@ namespace BannerKings.Populations
             this.cultures = cultures;
         }
 
-        public List<CultureDataClass> Cultures => this.cultures;
+        public List<CultureDataClass> Cultures => cultures;
 
         public CultureObject DominantCulture
         {
@@ -318,7 +317,7 @@ namespace BannerKings.Populations
                 CultureObject ownerCulture = settlementOwner.Culture;
                 float ownerShare = 0f;
                 float share = 0f;
-                foreach (CultureDataClass data in this.cultures)
+                foreach (CultureDataClass data in cultures)
                 {
                     if (data.Assimilation >= share && data.Culture.MilitiaSpearman != null)
                     {
@@ -335,21 +334,21 @@ namespace BannerKings.Populations
 
         public bool IsCulturePresent(CultureObject culture)
         {
-            CultureDataClass data = this.cultures.FirstOrDefault(x => x.Culture == culture);
+            CultureDataClass data = cultures.FirstOrDefault(x => x.Culture == culture);
             return data != null;
         }
 
         public Hero SettlementOwner
         {
-            get => this.settlementOwner;
+            get => settlementOwner;
             set
             {
-                this.settlementOwner = value;
-                if (!this.IsCulturePresent(settlementOwner.Culture) && this.settlementOwner == Hero.MainHero)
+                settlementOwner = value;
+                if (!IsCulturePresent(settlementOwner.Culture) && settlementOwner == Hero.MainHero)
                 {
-                    if (this.settlementOwner.Culture == this.DominantCulture)
-                        this.AddCulture(settlementOwner.Culture, 1f, 1f);
-                    else this.AddCulture(settlementOwner.Culture, 0f);
+                    if (settlementOwner.Culture == DominantCulture)
+                        AddCulture(settlementOwner.Culture, 1f, 1f);
+                    else AddCulture(settlementOwner.Culture, 0f);
                 }
             }
         }
@@ -357,28 +356,28 @@ namespace BannerKings.Populations
         public void AddCulture(CultureObject culture, float acceptance)
         {
             CultureDataClass dataClass = null;
-            foreach (CultureDataClass data in this.cultures)
+            foreach (CultureDataClass data in cultures)
                 if (data.Culture == culture)
                 {
                     dataClass = data;
                     break;
                 }
 
-            if (dataClass == null) this.cultures.Add(new CultureDataClass(culture, 0f, acceptance));
+            if (dataClass == null) cultures.Add(new CultureDataClass(culture, 0f, acceptance));
             else dataClass.Acceptance = acceptance;
         }
 
         public void AddCulture(CultureObject culture, float acceptance, float assim)
         {
             CultureDataClass dataClass = null;
-            foreach (CultureDataClass data in this.cultures)
+            foreach (CultureDataClass data in cultures)
                 if (data.Culture == culture)
                 {
                     dataClass = data;
                     break;
                 }
 
-            if (dataClass == null) this.cultures.Add(new CultureDataClass(culture, assim, acceptance));
+            if (dataClass == null) cultures.Add(new CultureDataClass(culture, assim, acceptance));
             else
             {
                 dataClass.Acceptance = acceptance;
@@ -388,25 +387,25 @@ namespace BannerKings.Populations
 
         public float GetAssimilation(CultureObject culture)
         {
-            CultureDataClass data = this.cultures.FirstOrDefault(x => x.Culture == culture);
+            CultureDataClass data = cultures.FirstOrDefault(x => x.Culture == culture);
             return data != null ? data.Assimilation : 0f;
         }
 
         public float GetAcceptance(CultureObject culture)
         {
-            CultureDataClass data = this.cultures.FirstOrDefault(x => x.Culture == culture);
+            CultureDataClass data = cultures.FirstOrDefault(x => x.Culture == culture);
             return data != null ? data.Acceptance : 0f;
         }
 
         internal override void Update(PopulationData data)
         {
-            this.SettlementOwner = data.Settlement.Owner;
+            SettlementOwner = data.Settlement.Owner;
             BKCultureAssimilationModel assimModel = (BKCultureAssimilationModel)BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(BKCultureAssimilationModel));
             BKCultureAcceptanceModel accModel = (BKCultureAcceptanceModel)BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(BKCultureAcceptanceModel));
             HashSet<CultureDataClass> toDelete = new HashSet<CultureDataClass>();
 
             float foreignerShare = 0f;
-            foreach (CultureDataClass cultureData in this.cultures)
+            foreach (CultureDataClass cultureData in cultures)
             {
                 cultureData.Acceptance += accModel.CalculateEffect(data.Settlement, cultureData).ResultNumber;
                 cultureData.Assimilation += assimModel.CalculateEffect(data.Settlement, cultureData).ResultNumber;
@@ -419,22 +418,22 @@ namespace BannerKings.Populations
 
             if (toDelete.Count > 0)
                 foreach (CultureDataClass cultureData in toDelete)
-                this.cultures.Remove(cultureData);
+                cultures.Remove(cultureData);
 
             float foreignerTarget = data.Foreigner.ResultNumber;
             float diff = foreignerTarget - foreignerShare;
             if (foreignerShare < foreignerTarget)
             {
                 float random = MBRandom.RandomFloatRanged(diff);
-                IEnumerable<CultureObject> presentCultures = from cultureClass in this.cultures select cultureClass.Culture;
+                IEnumerable<CultureObject> presentCultures = from cultureClass in cultures select cultureClass.Culture;
                 CultureObject randomForeign = MBObjectManager.Instance.GetObjectTypeList<CultureObject>()
                     .GetRandomElementWithPredicate(x => x != settlementOwner.Culture && x != data.Settlement.Culture && !x.IsBandit
                     && !presentCultures.Contains(x));
                 if (randomForeign != null)
                 {
-                    this.cultures.Add(new CultureDataClass(randomForeign, random, random));
-                    foreach (CultureDataClass cultureData in this.cultures)
-                        if (cultureData.Culture == this.DominantCulture)
+                    cultures.Add(new CultureDataClass(randomForeign, random, random));
+                    foreach (CultureDataClass cultureData in cultures)
+                        if (cultureData.Culture == DominantCulture)
                         {
                             cultureData.Assimilation -= random;
                             break;
@@ -442,7 +441,7 @@ namespace BannerKings.Populations
                 }     
             }
 
-            CultureObject dominant = this.DominantCulture;
+            CultureObject dominant = DominantCulture;
             if (dominant.BasicTroop != null && dominant.MilitiaSpearman != null)
             {
                 data.Settlement.Culture = dominant;
@@ -513,21 +512,21 @@ namespace BannerKings.Populations
         public VillageData(Village village)
         {
             this.village = village;
-            this.buildings = new List<VillageBuilding>();
+            buildings = new List<VillageBuilding>();
             foreach (BuildingType type in DefaultVillageBuildings.VillageBuildings(village))
-                this.buildings.Add(new VillageBuilding(type, village.MarketTown, village));
-            this.inProgress = new Queue<Building>();
+                buildings.Add(new VillageBuilding(type, village.MarketTown, village));
+            inProgress = new Queue<Building>();
         }
 
         public void StartRandomProject()
         {
-            if (this.inProgress.IsEmpty())
-                this.inProgress.Enqueue(this.buildings.GetRandomElementWithPredicate(x => x.BuildingType.BuildingLocation != BuildingLocation.Daily));
+            if (inProgress.IsEmpty())
+                inProgress.Enqueue(buildings.GetRandomElementWithPredicate(x => x.BuildingType.BuildingLocation != BuildingLocation.Daily));
         }
 
         public int GetBuildingLevel(BuildingType type)
         {
-            Building building = this.buildings.FirstOrDefault(x => x.BuildingType == type);
+            Building building = buildings.FirstOrDefault(x => x.BuildingType == type);
             if (building != null) return building.CurrentLevel;
             return 0;
         }
@@ -535,7 +534,7 @@ namespace BannerKings.Populations
         public void ReInitializeBuildings()
         {
             List<VillageBuilding> toAdd = new List<VillageBuilding>();
-            foreach (VillageBuilding b in this.buildings)
+            foreach (VillageBuilding b in buildings)
             {
                 if (b.Explanation == null)
                 {
@@ -543,42 +542,42 @@ namespace BannerKings.Populations
                     BuildingType type = DefaultVillageBuildings.Instance.All()
                         .FirstOrDefault(x => x.StringId == id);
                     if (type != null)
-                        toAdd.Add(new VillageBuilding(type, this.Village.MarketTown, this.Village,
+                        toAdd.Add(new VillageBuilding(type, Village.MarketTown, Village,
                             b.BuildingProgress, b.CurrentLevel));
                 }  
             }
 
             if (toAdd.Count > 0)
             {
-                this.buildings.Clear();
+                buildings.Clear();
                 foreach (VillageBuilding b in toAdd)
-                    this.buildings.Add(b);
+                    buildings.Add(b);
             }
 
             List<VillageBuilding> toAddQueue = new List<VillageBuilding>();
-            foreach (VillageBuilding b in this.inProgress)
+            foreach (VillageBuilding b in inProgress)
                 if (b.Explanation == null)
                 {
                     string id = b.BuildingType.StringId;
                     BuildingType type = DefaultVillageBuildings.Instance.All()
                         .FirstOrDefault(x => x.StringId == id);
                     if (type != null)
-                        toAddQueue.Add(new VillageBuilding(type, this.Village.MarketTown, this.Village,
+                        toAddQueue.Add(new VillageBuilding(type, Village.MarketTown, Village,
                             b.BuildingProgress, b.CurrentLevel));
                 }
 
             if (toAddQueue.Count > 0)
             {
-                this.inProgress.Clear();
+                inProgress.Clear();
                 foreach (VillageBuilding b in toAddQueue)
-                    this.inProgress.Enqueue(b);
+                    inProgress.Enqueue(b);
             }
         }
 
-        public Village Village => this.village;
+        public Village Village => village;
         public List<VillageBuilding> Buildings
         {
-            get => this.buildings;
+            get => buildings;
         }
 
         public VillageBuilding CurrentBuilding
@@ -587,10 +586,10 @@ namespace BannerKings.Populations
             {
                 VillageBuilding building = null;
 
-                if (this.inProgress != null && !this.inProgress.IsEmpty())
-                    building = (VillageBuilding?)this.inProgress.Peek();
+                if (inProgress != null && !inProgress.IsEmpty())
+                    building = (VillageBuilding?)inProgress.Peek();
 
-                return building != null ? building : this.CurrentDefault;
+                return building != null ? building : CurrentDefault;
             }
         }
 
@@ -598,10 +597,10 @@ namespace BannerKings.Populations
         {
             get
             {
-                VillageBuilding building = this.buildings.FirstOrDefault(x => x.IsCurrentlyDefault);
+                VillageBuilding building = buildings.FirstOrDefault(x => x.IsCurrentlyDefault);
                 if (building == null)
                 {
-                    VillageBuilding dailyProd = this.buildings.FirstOrDefault(x => x.BuildingType.StringId == "bannerkings_daily_production");
+                    VillageBuilding dailyProd = buildings.FirstOrDefault(x => x.BuildingType.StringId == "bannerkings_daily_production");
                     dailyProd.IsCurrentlyDefault = true;
                     building = dailyProd;
                 }
@@ -612,29 +611,29 @@ namespace BannerKings.Populations
 
         public Queue<Building> BuildingsInProgress
         {
-            get => this.inProgress;
-            set => this.inProgress = value;
+            get => inProgress;
+            set => inProgress = value;
         }
 
-        public bool IsCurrentlyBuilding => this.BuildingsInProgress.Count() > 0;
-        public float Construction => new BKConstructionModel().CalculateVillageConstruction(this.village.Settlement).ResultNumber;
+        public bool IsCurrentlyBuilding => BuildingsInProgress.Count() > 0;
+        public float Construction => new BKConstructionModel().CalculateVillageConstruction(village.Settlement).ResultNumber;
 
         internal override void Update(PopulationData data)
         {
-            VillageBuilding current = this.CurrentBuilding;
-            if (current != null && this.BuildingsInProgress.Count() > 0)
-                if (this.BuildingsInProgress.Peek().BuildingType.StringId == current.BuildingType.StringId)
+            VillageBuilding current = CurrentBuilding;
+            if (current != null && BuildingsInProgress.Count() > 0)
+                if (BuildingsInProgress.Peek().BuildingType.StringId == current.BuildingType.StringId)
                 {
-                    current.BuildingProgress += this.Construction;
-                    if ((float)current.GetConstructionCost() <= current.BuildingProgress)
+                    current.BuildingProgress += Construction;
+                    if (current.GetConstructionCost() <= current.BuildingProgress)
                     {
                         if (current.CurrentLevel < 3)
                             current.LevelUp();
                     
                         if (current.CurrentLevel == 3)
-                            current.BuildingProgress = (float)current.GetConstructionCost();
+                            current.BuildingProgress = current.GetConstructionCost();
                     
-                        this.BuildingsInProgress.Dequeue();
+                        BuildingsInProgress.Dequeue();
                     }
                 } 
         }
@@ -668,8 +667,8 @@ namespace BannerKings.Populations
         public LandData(PopulationData data)
         {
             this.data = data;
-            this.composition = new float[3];
-            this.Init(data.TotalPop);
+            composition = new float[3];
+            Init(data.TotalPop);
         }
 
         private void Init(int totalPops)
@@ -677,60 +676,60 @@ namespace BannerKings.Populations
             float farmRatio = 0f;
             float pastureRatio = 0f;
             float woodRatio = 0f;
-            if (this.Terrain == TerrainType.Desert)
+            if (Terrain == TerrainType.Desert)
             {
-                this.fertility = 0.5f;
-                this.terrainDifficulty = 1.4f;
+                fertility = 0.5f;
+                terrainDifficulty = 1.4f;
                 farmRatio = 0.9f;
                 pastureRatio = 0.08f;
                 woodRatio = 0.02f;
             }
-            else if (this.Terrain == TerrainType.Steppe)
+            else if (Terrain == TerrainType.Steppe)
             {
-                this.fertility = 0.75f;
-                this.terrainDifficulty = 1f;
+                fertility = 0.75f;
+                terrainDifficulty = 1f;
                 farmRatio = 0.45f;
                 pastureRatio = 0.5f;
                 woodRatio = 0.05f;
             }
-            else if (this.Terrain == TerrainType.Mountain)
+            else if (Terrain == TerrainType.Mountain)
             {
-                this.fertility = 0.7f;
-                this.terrainDifficulty = 2f;
+                fertility = 0.7f;
+                terrainDifficulty = 2f;
                 farmRatio = 0.5f;
                 pastureRatio = 0.35f;
                 woodRatio = 0.15f;
             }
-            else if (this.Terrain == TerrainType.Canyon)
+            else if (Terrain == TerrainType.Canyon)
             {
-                this.fertility = 0.5f;
-                this.terrainDifficulty = 2f;
+                fertility = 0.5f;
+                terrainDifficulty = 2f;
                 farmRatio = 0.9f;
                 pastureRatio = 0.08f;
                 woodRatio = 0.02f;
             }
-            else if (this.Terrain == TerrainType.Forest)
+            else if (Terrain == TerrainType.Forest)
             {
-                this.fertility = 0.5f;
-                this.terrainDifficulty = 2f;
+                fertility = 0.5f;
+                terrainDifficulty = 2f;
                 farmRatio = 0.45f;
                 pastureRatio = 0.15f;
                 woodRatio = 0.40f;
             } else
             {
-                this.fertility = 1f;
-                this.terrainDifficulty = 1f;
+                fertility = 1f;
+                terrainDifficulty = 1f;
                 farmRatio = 0.7f;
                 pastureRatio = 0.22f;
                 woodRatio = 0.08f;
             }
-            this.composition[0] = farmRatio;
-            this.composition[1] = pastureRatio;
-            this.composition[2] = woodRatio;
-            float acres = this.data.Settlement.IsVillage ? (float)totalPops * MBRandom.RandomFloatRanged(3f, 3.5f) : (float)totalPops * MBRandom.RandomFloatRanged(2.5f, 3.0f);
-            this.farmland = acres * farmRatio;
-            this.pasture = acres * pastureRatio;
-            this.woodland = acres * woodRatio;
+            composition[0] = farmRatio;
+            composition[1] = pastureRatio;
+            composition[2] = woodRatio;
+            float acres = data.Settlement.IsVillage ? totalPops * MBRandom.RandomFloatRanged(3f, 3.5f) : totalPops * MBRandom.RandomFloatRanged(2.5f, 3.0f);
+            farmland = acres * farmRatio;
+            pasture = acres * pastureRatio;
+            woodland = acres * woodRatio;
         }
 
         public TerrainType Terrain => Campaign.Current.MapSceneWrapper.GetTerrainTypeAtPosition(data.Settlement.Position2D);
@@ -739,28 +738,28 @@ namespace BannerKings.Populations
         {
             get
             {
-                float serfs = this.data.GetTypeCount(PopType.Serfs) * 0.5f;
-                float slaves = this.data.GetTypeCount(PopType.Slaves);
+                float serfs = data.GetTypeCount(PopType.Serfs) * 0.5f;
+                float slaves = data.GetTypeCount(PopType.Slaves);
 
-                Town town = this.data.Settlement.Town;
+                Town town = data.Settlement.Town;
                 if (town != null && town.BuildingsInProgress.Count > 0)
-                    slaves -= slaves * this.data.EconomicData.StateSlaves * 0.5f;
+                    slaves -= slaves * data.EconomicData.StateSlaves * 0.5f;
 
-                if (!this.data.Settlement.IsVillage)
+                if (!data.Settlement.IsVillage)
                 {
-                    if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(this.data.Settlement, "workforce", (int)WorkforcePolicy.Martial_Law))
+                    if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(data.Settlement, "workforce", (int)WorkforcePolicy.Martial_Law))
                     {
-                        float militia = this.data.Settlement.Town.Militia / 2;
+                        float militia = data.Settlement.Town.Militia / 2;
                         serfs -= militia / 2f;
-                    } else if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(this.data.Settlement, "workforce", (int)WorkforcePolicy.Land_Expansion))
+                    } else if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(data.Settlement, "workforce", (int)WorkforcePolicy.Land_Expansion))
                     {
                         serfs *= 0.8f;
                         slaves *= 0.8f;
                     }
-                    else if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(this.data.Settlement, "workforce", (int)WorkforcePolicy.Construction))
+                    else if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(data.Settlement, "workforce", (int)WorkforcePolicy.Construction))
                     {
                         serfs *= 0.85f;
-                        slaves -= slaves * this.data.EconomicData.StateSlaves * 0.5f;
+                        slaves -= slaves * data.EconomicData.StateSlaves * 0.5f;
                     }
                 }
                 return Math.Max((int)(serfs + slaves), 0);
@@ -771,19 +770,19 @@ namespace BannerKings.Populations
         {
             get
             {
-                float available = this.AvailableWorkForce;
-                float farms = this.farmland / 4f;
+                float available = AvailableWorkForce;
+                float farms = farmland / 4f;
                 float pasture = this.pasture / 8f;
                 return available / (farms + pasture);
             }
         }
 
-        public float Acreage => this.farmland + this.pasture + this.woodland;
-        public float Farmland => this.farmland;
-        public float Pastureland => this.pasture;
-        public float Woodland => this.woodland;
-        public float Fertility => this.fertility;
-        public float Difficulty => this.terrainDifficulty;
+        public float Acreage => farmland + pasture + woodland;
+        public float Farmland => farmland;
+        public float Pastureland => pasture;
+        public float Woodland => woodland;
+        public float Fertility => fertility;
+        public float Difficulty => terrainDifficulty;
 
         internal override void Update(PopulationData data)
         {
@@ -798,38 +797,38 @@ namespace BannerKings.Populations
                     if (type == DefaultVillageBuildings.Instance.DailyFarm)
                         this.farmland += progress;
                     else if (type == DefaultVillageBuildings.Instance.DailyPasture)
-                        this.pasture += progress;
+                        pasture += progress;
                     else this.woodland += progress;
                 }
             } else if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(this.data.Settlement, "workforce", (int)WorkforcePolicy.Land_Expansion))
             {
-                float laborers = (float)this.AvailableWorkForce * 0.2f;
+                float laborers = AvailableWorkForce * 0.2f;
                 float construction = laborers * 0.010f;
                 float progress = 15f / construction;
 
                 if (progress > 0f)
                 {
                     List<(int, float)> list = new List<(int, float)>();
-                    list.Add(new(0, this.composition[0]));
-                    list.Add(new(1, this.composition[1]));
-                    list.Add(new(2, this.composition[2]));
+                    list.Add(new(0, composition[0]));
+                    list.Add(new(1, composition[1]));
+                    list.Add(new(2, composition[2]));
                     int choosen = MBRandom.ChooseWeighted(list);
 
                     if (choosen == 0)
                         this.farmland += progress;
                     else if (choosen == 1)
-                        this.pasture += progress;
+                        pasture += progress;
                     else this.woodland += progress;
                 }
             }
 
 
-            if (this.WorkforceSaturation > 1f)
+            if (WorkforceSaturation > 1f)
             {
                 List<(int, float)> list = new List<(int, float)>();
-                list.Add(new(0, this.composition[0]));
-                list.Add(new(1, this.composition[1]));
-                list.Add(new(2, this.composition[2]));
+                list.Add(new(0, composition[0]));
+                list.Add(new(1, composition[1]));
+                list.Add(new(2, composition[2]));
                 int choosen = MBRandom.ChooseWeighted(list);
 
                 float construction = this.data.Settlement.IsVillage ? this.data.VillageData.Construction : 
@@ -840,16 +839,16 @@ namespace BannerKings.Populations
                 if (choosen == 0)
                     this.farmland += progress;
                 else if (choosen == 1)
-                    this.pasture += progress;
+                    pasture += progress;
                 else this.woodland += progress;
             }
 
             float farmland = this.farmland;
-            float pastureland = this.pasture;
+            float pastureland = pasture;
             float woodland = this.woodland;
 
             this.farmland = MBMath.ClampFloat(farmland, 0f, 100000f);
-            this.pasture = MBMath.ClampFloat(pastureland, 0f, 50000f);
+            pasture = MBMath.ClampFloat(pastureland, 0f, 50000f);
             this.woodland = MBMath.ClampFloat(woodland, 0f, 50000f);
         }
     }
@@ -870,28 +869,28 @@ namespace BannerKings.Populations
         public TournamentData(Town town)
         {
             this.town = town;
-            this.roster = new ItemRoster();
-            this.active = true;
+            roster = new ItemRoster();
+            active = true;
         }
 
         public bool Active
         {
-            get => this.active;
+            get => active;
             set
             {
-                this.active = value;
+                active = value;
             }
         }
 
-        public ItemRoster Roster => this.roster;
+        public ItemRoster Roster => roster;
         public ItemObject Prize
         {
             get
             {
-                if (this.prize == null)
+                if (prize == null)
                 {
                     List<ItemObject> items = new List<ItemObject>();
-                    foreach (ItemRosterElement element in this.roster)
+                    foreach (ItemRosterElement element in roster)
                     {
                         EquipmentElement equipment = element.EquipmentElement;
                         ItemObject item = equipment.Item;
@@ -903,18 +902,18 @@ namespace BannerKings.Populations
                     if (items.Count > 0)
                     {
                         items.Sort((x, y) => x.Value.CompareTo(y.Value));
-                        this.prize = items[0];
+                        prize = items[0];
                     }
                 }
                 
-                return this.prize;
+                return prize;
             }
         }
 
         internal override void Update(PopulationData data)
         {
             if (!data.Settlement.Town.HasTournament)
-                this.active = false;
+                active = false;
         }
     }
 }

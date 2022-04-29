@@ -17,7 +17,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
 
         public BKSuccessionDecision(Clan proposerClan, SuccessionType governmentType, FeudalTitle title) : base(proposerClan, title)
         {
-            this.successionType = governmentType;
+            successionType = governmentType;
         }
 
         public override void ApplyChosenOutcome(DecisionOutcome chosenOutcome)
@@ -25,7 +25,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
             bool newGovernment = (chosenOutcome as SuccessionDecisionOutcome).ShouldDecisionBeEnforced;
             if (newGovernment)
             {
-                this.Title.ChangeContract(successionType);
+                Title.ChangeContract(successionType);
             }
         }
 
@@ -37,7 +37,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
                 if (!clan.IsUnderMercenaryService)
                 {
                     if (clan == Clan.PlayerClan) support += 100f;
-                    else support += this.DetermineSupport(clan, new SuccessionDecisionOutcome(true));
+                    else support += DetermineSupport(clan, new SuccessionDecisionOutcome(true));
                     clans++;
                 }
 
@@ -57,14 +57,13 @@ namespace BannerKings.Managers.Kingdoms.Contract
 
         public override Clan DetermineChooser()
         {
-            return base.Kingdom.RulingClan;
+            return Kingdom.RulingClan;
         }
 
         public override IEnumerable<DecisionOutcome> DetermineInitialCandidates()
         {
             yield return new SuccessionDecisionOutcome(true);
             yield return new SuccessionDecisionOutcome(false);
-            yield break;
         }
 
         public override void DetermineSponsors(List<DecisionOutcome> possibleOutcomes)
@@ -72,9 +71,9 @@ namespace BannerKings.Managers.Kingdoms.Contract
             foreach (DecisionOutcome decisionOutcome in possibleOutcomes)
             {
                 if (((SuccessionDecisionOutcome)decisionOutcome).ShouldDecisionBeEnforced)
-                    decisionOutcome.SetSponsor(base.ProposerClan);
+                    decisionOutcome.SetSponsor(ProposerClan);
 
-                else base.AssignDefaultSponsor(decisionOutcome);
+                else AssignDefaultSponsor(decisionOutcome);
             }
         }
 
@@ -84,7 +83,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
             float authoritarian = clan.Leader.GetTraitLevel(DefaultTraits.Authoritarian);
             float egalitarian = clan.Leader.GetTraitLevel(DefaultTraits.Authoritarian);
             float oligarchic = clan.Leader.GetTraitLevel(DefaultTraits.Authoritarian);
-            float[] weights = this.GetWeights();
+            float[] weights = GetWeights();
 
             float num = weights[0] * authoritarian;
             float num2 = weights[1] * oligarchic;
@@ -92,8 +91,8 @@ namespace BannerKings.Managers.Kingdoms.Contract
 
             float num4 = num + num3 + num2;
 
-            if (clan == base.Kingdom.RulingClan)
-                if (this.successionType == SuccessionType.Hereditary_Monarchy && policyDecisionOutcome.ShouldDecisionBeEnforced)
+            if (clan == Kingdom.RulingClan)
+                if (successionType == SuccessionType.Hereditary_Monarchy && policyDecisionOutcome.ShouldDecisionBeEnforced)
                 {
                     num4 += 2f;
                 }
@@ -109,27 +108,27 @@ namespace BannerKings.Managers.Kingdoms.Contract
 
         private float[] GetWeights()
         {
-            if (this.successionType == SuccessionType.Hereditary_Monarchy)
-                return new float[] { 1f, 3f, -2f };
-            else if (this.successionType == SuccessionType.Elective_Monarchy)
-                return new float[] { -1f, 5f, 1f };
-            else if (this.successionType == SuccessionType.Imperial)
-                return new float[] { 5f, -2f, -1f };
-            else return new float[] { -3f, 1f, 5f };
+            if (successionType == SuccessionType.Hereditary_Monarchy)
+                return new[] { 1f, 3f, -2f };
+            if (successionType == SuccessionType.Elective_Monarchy)
+                return new[] { -1f, 5f, 1f };
+            if (successionType == SuccessionType.Imperial)
+                return new[] { 5f, -2f, -1f };
+            return new[] { -3f, 1f, 5f };
         }
 
         public override TextObject GetChooseDescription()
         {
-            TextObject textObject = new TextObject("{=0EqPRs21}As {?IS_FEMALE}queen{?}king{\\?} you must decide whether to enforce the policy of {POLICY_NAME}.", null);
-            textObject.SetTextVariable("IS_FEMALE", this.DetermineChooser().Leader.IsFemale ? 1 : 0);
-            textObject.SetTextVariable("POLICY_NAME", this.successionType.ToString());
+            TextObject textObject = new TextObject("{=0EqPRs21}As {?IS_FEMALE}queen{?}king{\\?} you must decide whether to enforce the policy of {POLICY_NAME}.");
+            textObject.SetTextVariable("IS_FEMALE", DetermineChooser().Leader.IsFemale ? 1 : 0);
+            textObject.SetTextVariable("POLICY_NAME", successionType.ToString());
             return textObject;
         }
 
         public override TextObject GetChooseTitle()
         {
-            TextObject textObject = new TextObject("{=!}Change government to {GOVERNMENT}", null);
-            textObject.SetTextVariable("GOVERNMENT", this.successionType.ToString());
+            TextObject textObject = new TextObject("{=!}Change government to {GOVERNMENT}");
+            textObject.SetTextVariable("GOVERNMENT", successionType.ToString());
             return textObject;
         }
 
@@ -138,21 +137,21 @@ namespace BannerKings.Managers.Kingdoms.Contract
             TextObject textObject;
             bool newGovernment = ((SuccessionDecisionOutcome)chosenOutcome).ShouldDecisionBeEnforced;
             if (newGovernment)
-                textObject = new TextObject("{=!}The {KINGDOM}'s government is now {POLICY_DESCRIPTION}. {POLICY_SUPPORT}", null);
-            else textObject = new TextObject("{=!}The {KINGDOM}'s government will continue to be {POLICY_DESCRIPTION}. {POLICY_SUPPORT}", null);
+                textObject = new TextObject("{=!}The {KINGDOM}'s government is now {POLICY_DESCRIPTION}. {POLICY_SUPPORT}");
+            else textObject = new TextObject("{=!}The {KINGDOM}'s government will continue to be {POLICY_DESCRIPTION}. {POLICY_SUPPORT}");
 
 
-            textObject.SetTextVariable("KINGDOM", base.Kingdom.InformalName);
-            textObject.SetTextVariable("POLICY_DESCRIPTION", newGovernment ? this.successionType.ToString() : this.Title.contract.Succession.ToString());
-            if (isShortVersion || base.IsSingleClanDecision())
+            textObject.SetTextVariable("KINGDOM", Kingdom.InformalName);
+            textObject.SetTextVariable("POLICY_DESCRIPTION", newGovernment ? successionType.ToString() : Title.contract.Succession.ToString());
+            if (isShortVersion || IsSingleClanDecision())
                 textObject.SetTextVariable("POLICY_SUPPORT", TextObject.Empty);
             else
             {
                 textObject.SetTextVariable("POLICY_SUPPORT", "{=bqEO389P}This decision caused a split in the council.");
-                if (supportStatus == KingdomDecision.SupportStatus.Majority)
+                if (supportStatus == SupportStatus.Majority)
                     textObject.SetTextVariable("POLICY_SUPPORT", "{=3W67kdtc}This decision had the support of the council.");
                 
-                if (supportStatus == KingdomDecision.SupportStatus.Minority)
+                if (supportStatus == SupportStatus.Minority)
                     textObject.SetTextVariable("POLICY_SUPPORT", "{=b6MgRYlM}This decision was rejected by the support of the council.");
                 
             }
@@ -161,7 +160,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
 
         public override TextObject GetGeneralTitle()
         {
-            return new TextObject(this.successionType.ToString());
+            return new TextObject(successionType.ToString());
         }
 
         public override int GetProposalInfluenceCost()
@@ -171,23 +170,23 @@ namespace BannerKings.Managers.Kingdoms.Contract
 
         public override DecisionOutcome GetQueriedDecisionOutcome(List<DecisionOutcome> possibleOutcomes)
         {
-            return possibleOutcomes.FirstOrDefault((DecisionOutcome t) => ((SuccessionDecisionOutcome)t).ShouldDecisionBeEnforced);
+            return possibleOutcomes.FirstOrDefault(t => ((SuccessionDecisionOutcome)t).ShouldDecisionBeEnforced);
         }
 
         public override TextObject GetSupportDescription()
         {
-            TextObject textObject = new TextObject("{=!}{CLAN} proposes a change of government, currently {CURRENT} to {PROPOSED}. You can pick your stance regarding this decision.", null);
+            TextObject textObject = new TextObject("{=!}{CLAN} proposes a change of government, currently {CURRENT} to {PROPOSED}. You can pick your stance regarding this decision.");
 
-            textObject.SetTextVariable("CLAN", this.DetermineChooser().Leader.Name);
-            textObject.SetTextVariable("CURRENT", BannerKings.Helpers.Helpers.GetGovernmentString(this.Title.contract.Government, base.Kingdom.Culture));
-            textObject.SetTextVariable("PROPOSED", this.successionType.ToString());
+            textObject.SetTextVariable("CLAN", DetermineChooser().Leader.Name);
+            textObject.SetTextVariable("CURRENT", BannerKings.Helpers.Helpers.GetGovernmentString(Title.contract.Government, Kingdom.Culture));
+            textObject.SetTextVariable("PROPOSED", successionType.ToString());
             return textObject;
         }
 
         public override TextObject GetSupportTitle()
         {
-            TextObject textObject = new TextObject("{=!}Vote for change of realm's succession to {GOVERNMENT}", null);
-            textObject.SetTextVariable("GOVERNMENT", this.successionType.ToString());
+            TextObject textObject = new TextObject("{=!}Vote for change of realm's succession to {GOVERNMENT}");
+            textObject.SetTextVariable("GOVERNMENT", successionType.ToString());
             return textObject;
         }
 
@@ -208,17 +207,17 @@ namespace BannerKings.Managers.Kingdoms.Contract
 
             public override TextObject GetDecisionTitle()
             {
-                TextObject textObject = new TextObject("{=kakxnaN5}{?SUPPORT}Yes{?}No{\\?}", null);
-                textObject.SetTextVariable("SUPPORT", this.ShouldDecisionBeEnforced ? 1 : 0);
+                TextObject textObject = new TextObject("{=kakxnaN5}{?SUPPORT}Yes{?}No{\\?}");
+                textObject.SetTextVariable("SUPPORT", ShouldDecisionBeEnforced ? 1 : 0);
                 return textObject;
             }
 
             public override TextObject GetDecisionDescription()
             {
-                if (this.ShouldDecisionBeEnforced)
-                    return new TextObject("{=pWyxaauF}We support this proposal", null);
+                if (ShouldDecisionBeEnforced)
+                    return new TextObject("{=pWyxaauF}We support this proposal");
 
-                return new TextObject("{=BktSNgY4}We oppose this proposal", null);
+                return new TextObject("{=BktSNgY4}We oppose this proposal");
             }
 
             public override string GetDecisionLink()
@@ -233,7 +232,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
 
             public SuccessionDecisionOutcome(bool shouldBeEnforced)
             {
-                this.ShouldDecisionBeEnforced = shouldBeEnforced;
+                ShouldDecisionBeEnforced = shouldBeEnforced;
             }
         }
     }

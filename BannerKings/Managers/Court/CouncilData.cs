@@ -1,12 +1,11 @@
-﻿using System.Collections.Generic;
-using TaleWorlds.CampaignSystem;
+﻿using BannerKings.Managers.Titles;
+using BannerKings.Populations;
+using System.Collections.Generic;
 using System.Linq;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
-using static BannerKings.Managers.TitleManager;
-using BannerKings.Populations;
 using TaleWorlds.SaveSystem;
-using BannerKings.Managers.Titles;
 
 namespace BannerKings.Managers.Court
 {
@@ -21,16 +20,16 @@ namespace BannerKings.Managers.Court
         public CouncilData(Clan clan, Hero marshall = null, Hero chancellor = null, Hero steward = null, Hero spymaster = null)
         {
             this.clan = clan;
-            this.members = new List<CouncilMember>();
-            this.members.Add(new CouncilMember(marshall, CouncilPosition.Marshall));
-            this.members.Add(new CouncilMember(chancellor, CouncilPosition.Chancellor));
-            this.members.Add(new CouncilMember(steward, CouncilPosition.Steward));
-            this.members.Add(new CouncilMember(spymaster, CouncilPosition.Spymaster));
+            members = new List<CouncilMember>();
+            members.Add(new CouncilMember(marshall, CouncilPosition.Marshall));
+            members.Add(new CouncilMember(chancellor, CouncilPosition.Chancellor));
+            members.Add(new CouncilMember(steward, CouncilPosition.Steward));
+            members.Add(new CouncilMember(spymaster, CouncilPosition.Spymaster));
         }
 
         internal override void Update(PopulationData data)
         {
-            foreach (CouncilMember member in this.members)
+            foreach (CouncilMember member in members)
             {
                 if (member.Member != null && member.Member.IsDead)
                     member.Member = null;
@@ -44,7 +43,7 @@ namespace BannerKings.Managers.Court
             MBReadOnlyList<Hero> members = Clan.PlayerClan.Heroes;
             if (members != null && members.Count > 0)
                 foreach (Hero member in members)
-                    if (member != this.clan.Leader && member.IsAlive && !heroes.Contains(member))
+                    if (member != clan.Leader && member.IsAlive && !heroes.Contains(member))
                         heroes.Add(member);
 
             if (BannerKingsConfig.Instance.TitleManager.IsHeroTitleHolder(Hero.MainHero))
@@ -52,11 +51,11 @@ namespace BannerKings.Managers.Court
                 List<FeudalTitle> vassals = BannerKingsConfig.Instance.TitleManager.GetVassals(Hero.MainHero);
                 if (vassals != null && vassals.Count > 0)
                     foreach (FeudalTitle vassal in vassals)
-                        if (vassal.deJure != this.clan.Leader && !heroes.Contains(vassal.deJure)) 
+                        if (vassal.deJure != clan.Leader && !heroes.Contains(vassal.deJure)) 
                             heroes.Add(vassal.deJure);
             }
 
-            MBReadOnlyList<Town> towns = this.clan.Fiefs;
+            MBReadOnlyList<Town> towns = clan.Fiefs;
             if (towns != null && towns.Count > 0)
             {
                 foreach (Town town in towns)
@@ -76,7 +75,7 @@ namespace BannerKings.Managers.Court
         public List<Hero> GetMembers()
         {
             List<Hero> heroes = new List<Hero>();
-            foreach (CouncilMember councilMember in this.members)
+            foreach (CouncilMember councilMember in members)
                 if (councilMember.Member != null) heroes.Add(councilMember.Member);
 
             return heroes;
@@ -85,7 +84,7 @@ namespace BannerKings.Managers.Court
         public bool IsMember(Hero hero)
         {
             bool member = false;
-            foreach (CouncilMember councilMember in this.members)
+            foreach (CouncilMember councilMember in members)
                 if (councilMember.Member == hero)
                 {
                     member = true;
@@ -99,7 +98,7 @@ namespace BannerKings.Managers.Court
         {
             float competence = 0f;
             bool found = false;
-            foreach (CouncilMember member in this.members)
+            foreach (CouncilMember member in members)
                 if (member.Member == hero)
                 {
                     competence = member.Competence;
@@ -116,7 +115,7 @@ namespace BannerKings.Managers.Court
         public float GetCompetence(CouncilPosition position)
         {
             float competence = 0f;
-            foreach (CouncilMember member in this.members)
+            foreach (CouncilMember member in members)
                 if (member.Position == position)
                 {
                     competence = member.Competence;
@@ -127,23 +126,23 @@ namespace BannerKings.Managers.Court
 
         public Hero Marshall
         {
-            get => this.members.First(x => x.Position == CouncilPosition.Marshall).Member;
-            set =>  this.members.First(x => x.Position == CouncilPosition.Marshall).Member = value;
+            get => members.First(x => x.Position == CouncilPosition.Marshall).Member;
+            set =>  members.First(x => x.Position == CouncilPosition.Marshall).Member = value;
         }
         public Hero Chancellor
         {
-            get => this.members.First(x => x.Position == CouncilPosition.Chancellor).Member;
-            set => this.members.First(x => x.Position == CouncilPosition.Chancellor).Member = value;
+            get => members.First(x => x.Position == CouncilPosition.Chancellor).Member;
+            set => members.First(x => x.Position == CouncilPosition.Chancellor).Member = value;
         }
         public Hero Steward
         {
-            get => this.members.First(x => x.Position == CouncilPosition.Steward).Member;
-            set => this.members.First(x => x.Position == CouncilPosition.Steward).Member = value;
+            get => members.First(x => x.Position == CouncilPosition.Steward).Member;
+            set => members.First(x => x.Position == CouncilPosition.Steward).Member = value;
         }
         public Hero Spymaster
         {
-            get => this.members.First(x => x.Position == CouncilPosition.Spymaster).Member;
-            set => this.members.First(x => x.Position == CouncilPosition.Spymaster).Member = value;
+            get => members.First(x => x.Position == CouncilPosition.Spymaster).Member;
+            set => members.First(x => x.Position == CouncilPosition.Spymaster).Member = value;
         }
 
         public float AdministrativeCosts
@@ -175,37 +174,37 @@ namespace BannerKings.Managers.Court
 
         public Hero Member
         {
-            get => this.member;
-            set => this.member = value;
+            get => member;
+            set => member = value;
         }
-        public CouncilPosition Position => this.position;
+        public CouncilPosition Position => position;
         public float Competence
         {
             get
             {
-                if (this.member != null)
+                if (member != null)
                 {
                     int targetCap = 300;
                     float primarySkill = 0f;
                     float secondarySkill = 0f;
 
                     targetCap += 15 * (member.GetAttributeValue(DefaultCharacterAttributes.Intelligence) - 5);
-                    if (this.position == CouncilPosition.Marshall)
+                    if (position == CouncilPosition.Marshall)
                     {
                         primarySkill = member.GetSkillValue(DefaultSkills.Leadership);
                         secondarySkill = member.GetSkillValue(DefaultSkills.Tactics);
                     }
-                    else if (this.position == CouncilPosition.Chancellor)
+                    else if (position == CouncilPosition.Chancellor)
                     {
                         primarySkill = member.GetSkillValue(DefaultSkills.Charm);
                         secondarySkill = member.GetSkillValue(DefaultSkills.Charm);
                     }
-                    else if (this.position == CouncilPosition.Steward)
+                    else if (position == CouncilPosition.Steward)
                     {
                         primarySkill = member.GetSkillValue(DefaultSkills.Steward);
                         secondarySkill = member.GetSkillValue(DefaultSkills.Trade);
                     }
-                    else if (this.position == CouncilPosition.Spymaster)
+                    else if (position == CouncilPosition.Spymaster)
                     {
                         primarySkill = member.GetSkillValue(DefaultSkills.Roguery);
                         secondarySkill = member.GetSkillValue(DefaultSkills.Scouting);

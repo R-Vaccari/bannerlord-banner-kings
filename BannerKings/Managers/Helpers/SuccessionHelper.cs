@@ -59,22 +59,21 @@ namespace BannerKings.Managers.Helpers
                 yield return SuccessionType.Elective_Monarchy;
                 yield break;
             }
-            else if (government == GovernmentType.Imperial)
+
+            if (government == GovernmentType.Imperial)
             {
                 yield return SuccessionType.Imperial;
                 yield break;
             }
-            else if (government == GovernmentType.Republic)
+
+            if (government == GovernmentType.Republic)
             {
                 yield return SuccessionType.Republic;
                 yield break;
             }
-            else
-            {
-                yield return SuccessionType.Elective_Monarchy;
-                yield return SuccessionType.Hereditary_Monarchy;
-                yield break;
-            }
+
+            yield return SuccessionType.Elective_Monarchy;
+            yield return SuccessionType.Hereditary_Monarchy;
         }
 
         private static void ApplyVanillaSuccession(List<Clan> list, Hero victim, Kingdom kingdom)
@@ -86,7 +85,7 @@ namespace BannerKings.Managers.Helpers
             }
             else if (list.Count == 1)
                 Type.GetType("TaleWorlds.CampaignSystem.Actions.ChangeRulingClanAction, TaleWorlds.CampaignSystem")
-                    .GetMethod("Apply", BindingFlags.Public | BindingFlags.Static).Invoke(null, new object[] { kingdom, list.First<Clan>() });
+                    .GetMethod("Apply", BindingFlags.Public | BindingFlags.Static).Invoke(null, new object[] { kingdom, list.First() });
         }
 
         private static Hero ApplyHereditarySuccession(List<Clan> list, Hero victim, Kingdom kingdom)

@@ -5,7 +5,6 @@ using System;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Engine.GauntletUI;
 using TaleWorlds.Engine.Screens;
-using TaleWorlds.Library;
 
 namespace BannerKings.UI.Windows
 {
@@ -18,18 +17,18 @@ namespace BannerKings.UI.Windows
         public BannerKingsMapView(string id)
         {
             this.id = id;
-            this.CreateLayout();
+            CreateLayout();
         }
 
         protected override void CreateLayout()
         {
             base.CreateLayout();
-            layer = new GauntletLayer(550, "GauntletLayer", false);
-            ValueTuple<BannerKingsViewModel, string> tuple = this.GetVM(this.id);
+            layer = new GauntletLayer(550);
+            ValueTuple<BannerKingsViewModel, string> tuple = GetVM(id);
             datasource = tuple.Item1;
             layer.LoadMovie(tuple.Item2, datasource);
 
-            layer.InputRestrictions.SetInputRestrictions(false, InputUsageMask.All);
+            layer.InputRestrictions.SetInputRestrictions(false);
             MapScreen.Instance.AddLayer(layer);
             ScreenManager.TrySetFocus(layer);
         }
@@ -39,18 +38,18 @@ namespace BannerKings.UI.Windows
             PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(Settlement.CurrentSettlement);
             if (id == "population")
                 return (new PopulationVM(data), "PopulationWindow");
-            else if (id == "guild")
+            if (id == "guild")
                 return (new GuildVM(data), "GuildWindow");
-            else if (id == "vilage_project")
+            if (id == "vilage_project")
                 return (new VillageProjectVM(data), "VillageProjectWindow");
-            else if (id == "court")
+            if (id == "court")
                 return (new CourtVM(data), "CourtWindow");
-            else if (id == "titles")
+            if (id == "titles")
                 return (new TitleWindowVM(data), "TitlesWindow");
-            else return (new PopulationVM(data), "PopulationWindow");
+            return (new PopulationVM(data), "PopulationWindow");
         }
 
         public void Close() => MapScreen.Instance.RemoveLayer(layer);
-        public void Refresh() => this.datasource.RefreshValues();
+        public void Refresh() => datasource.RefreshValues();
     }
 }

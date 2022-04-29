@@ -29,12 +29,12 @@ namespace BannerKings.Managers.Populations
         {
             this.settlement = settlement;
             this.guild = guild;
-            this.satisfactions = new float[] { 0.5f, 0.5f, 0.5f, 0.5f };
-            this.stateSlaves = MBRandom.RandomFloatRanged(0.4f, 0.6f);
+            satisfactions = new[] { 0.5f, 0.5f, 0.5f, 0.5f };
+            stateSlaves = MBRandom.RandomFloatRanged(0.4f, 0.6f);
         }
 
 
-        public Guild Guild => this.guild;
+        public Guild Guild => guild;
 
         public float Corruption => 1f;
 
@@ -42,24 +42,24 @@ namespace BannerKings.Managers.Populations
 
         public float StateSlaves
         {
-            get => MBMath.ClampFloat(this.stateSlaves, 0f, 1f);
-            set => this.stateSlaves = MBMath.ClampFloat(value, 0f, 1f);
+            get => MBMath.ClampFloat(stateSlaves, 0f, 1f);
+            set => stateSlaves = MBMath.ClampFloat(value, 0f, 1f);
         }
 
-        public float[] Satisfactions => this.satisfactions;
+        public float[] Satisfactions => satisfactions;
 
         public void UpdateSatisfaction(ConsumptionType type, float value)
         {
-            float current = this.satisfactions[(int)type];
-            this.satisfactions[(int)type] = MathF.Clamp(current + value, 0f, 1f);
+            float current = satisfactions[(int)type];
+            satisfactions[(int)type] = MathF.Clamp(current + value, 0f, 1f);
         }
 
         internal override void Update(PopulationData data)
         {
-            if (this.guild != null)
+            if (guild != null)
             {
-                this.guild.Destroy();
-                this.guild = null;
+                guild.Destroy();
+                guild = null;
             }
         }
 

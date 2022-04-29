@@ -22,10 +22,10 @@ namespace BannerKings.Managers.Kingdoms
         {
             if (conquestRights)
             {
-                List<SettlementClaimantDecision.ClanAsDecisionOutcome> list = new List<SettlementClaimantDecision.ClanAsDecisionOutcome>();
+                List<ClanAsDecisionOutcome> list = new List<ClanAsDecisionOutcome>();
                 foreach (Clan clan in participants)
-                    if (clan != this.ClanToExclude && !clan.IsUnderMercenaryService && !clan.IsEliminated && !clan.Leader.IsDead)
-                        list.Add(new SettlementClaimantDecision.ClanAsDecisionOutcome(clan));
+                    if (clan != ClanToExclude && !clan.IsUnderMercenaryService && !clan.IsEliminated && !clan.Leader.IsDead)
+                        list.Add(new ClanAsDecisionOutcome(clan));
 
                 return list;
             }
