@@ -80,7 +80,7 @@ namespace BannerKings.Behaviors
         {
             if (party == null || party.LeaderHero == null || BannerKingsConfig.Instance.PopulationManager == null) return;
 
-            if (target == null || target.Owner == null) return;
+            if (target == null || target.OwnerClan == null) return;
 
             if (party.LeaderHero != target.Owner || party.LeaderHero == Hero.MainHero ||
                 !BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(target)) return;

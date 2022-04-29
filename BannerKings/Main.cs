@@ -27,6 +27,7 @@ using static TaleWorlds.CampaignSystem.SandBox.Issues.CaravanAmbushIssueBehavior
 using static TaleWorlds.CampaignSystem.SandBox.Issues.LandLordNeedsManualLaborersIssueBehavior;
 using static TaleWorlds.CampaignSystem.Election.KingSelectionKingdomDecision;
 using static TaleWorlds.CampaignSystem.SandBox.Issues.VillageNeedsToolsIssueBehavior;
+using static TaleWorlds.CampaignSystem.SandBox.Issues.EscortMerchantCaravanIssueBehavior;
 
 namespace BannerKings
 {
@@ -217,6 +218,36 @@ namespace BannerKings
                             return false;
                         }
                     } else
+                    {
+                        __result = false;
+                        return false;
+                    }
+
+                    return true;
+                }
+            }
+
+            [HarmonyPatch(typeof(EscortMerchantCaravanIssue), "ConditionsHold")]
+            class EscortCaravanConditionsHoldPatch
+            {
+                static bool Prefix(Hero issueGiver, ref bool __result)
+                {
+                    if (issueGiver.CurrentSettlement == null || issueGiver.CurrentSettlement.IsVillage)
+                    {
+                        __result = false;
+                        return false;
+                    }
+
+                    return true;
+                }
+            }
+
+            [HarmonyPatch(typeof(EscortMerchantCaravanIssue), "IssueStayAliveConditions")]
+            class EscortCaravanIssueStayAliveConditionsPatch
+            {
+                static bool Prefix(EscortMerchantCaravanIssue __instance, ref bool __result)
+                {
+                    if (__instance.IssueOwner.CurrentSettlement == null || __instance.IssueOwner.CurrentSettlement.IsVillage)
                     {
                         __result = false;
                         return false;
