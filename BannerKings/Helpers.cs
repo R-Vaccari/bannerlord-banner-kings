@@ -170,75 +170,201 @@ namespace BannerKings.Helpers
                 if (culture.StringId == "battania")
                 {
                     if (type == TitleType.Kingdom)
-                        title = new TextObject("{=!}Ard-Righ");
+                    {
+                        if (female)
+                            title = new TextObject("{=!}Ard-Banrigh");
+                        else title = new TextObject("{=!}{MALE}Ard-Rìgh{?}Queen{\\?}");
+                    }
                     else if (type == TitleType.Dukedom)
-                        title = new TextObject("{=!}Righ");
+                    {
+                        if (female)
+                            title = new TextObject("{=!}Banrigh");
+                        else title = new TextObject("{=!}{MALE}Rìgh{?}Queen{\\?}");
+                    }
                     else if (type == TitleType.County)
-                        title = new TextObject("{=!}Mormaer");
+                    {
+                        if (female)
+                            title = new TextObject("{=!}Bantiarna");
+                        else title = new TextObject("{=!}{MALE}Mormaer{?}Queen{\\?}");
+                    }
                     else if (type == TitleType.Barony)
-                        title = new TextObject("{=!}Toisiche");
-                    else title = new TextObject("{=!}Tighearna");
+                    {
+                        if (female)
+                            title = new TextObject("{=!}Thaoiseach");
+                        else title = new TextObject("{=!}{MALE}Toisiche{?}Queen{\\?}");
+                    }
+                    else
+                    {
+                        if (female)
+                            title = new TextObject("{=!}Baintighearna");
+                        else title = new TextObject("{=!}{MALE}Tighearna{?}Queen{\\?}");
+                    }
                 } else if (culture.StringId == "empire")
                 {
                     if (type == TitleType.Kingdom)
-                        title = new TextObject("{=!}Rex");
+                    {
+                        if (female)
+                            title = new TextObject("{=!}Regina");
+                        else title = new TextObject("{=!}{MALE}Rex{?}Queen{\\?}");
+                    }
                     else if (type == TitleType.Dukedom)
-                        title = new TextObject("{=!}Dux");
+                    {
+                        if (female)
+                            title = new TextObject("{=!}Ducissa");
+                        else title = new TextObject("{=!}{MALE}Dux{?}Queen{\\?}");
+                    }
                     else if (type == TitleType.County)
-                        title = new TextObject("{=!}Conte");
+                    {
+                        if (female)
+                            title = new TextObject("{=!}Cometessa");
+                        else title = new TextObject("{=!}{MALE}Conte{?}Queen{\\?}");
+                    }
                     else if (type == TitleType.Barony)
-                        title = new TextObject("{=!}Baro");
-                    else title = new TextObject("{=!}Dominus");
+                    {
+                        if (female)
+                            title = new TextObject("{=!}Baronessa");
+                        else title = new TextObject("{=!}{MALE}Baro{?}Queen{\\?}");
+                    }
+                    else
+                    {
+                        if (female)
+                            title = new TextObject("{=!}Domina");
+                        else title = new TextObject("{=!}{MALE}Dominus{?}Queen{\\?}");
+                    }
                 }
                 else if (culture.StringId == "aserai")
                 {
                     if (type == TitleType.Kingdom)
-                        title = new TextObject("{=!}Sultan");
+                    {
+                        if (female)
+                            title = new TextObject("{=!}Sultana");
+                        else title = new TextObject("{=!}{MALE}Sultan{?}Queen{\\?}");
+                    }
                     else if (type == TitleType.Dukedom)
-                        title = new TextObject("{=!}Emir");
+                    {
+                        if (female)
+                            title = new TextObject("{=!}Emira");
+                        else title = new TextObject("{=!}{MALE}Emir{?}Queen{\\?}");
+                    }
                     else if (type == TitleType.County)
-                        title = new TextObject("{=!}Sheikh");
+                    {
+                        if (female)
+                            title = new TextObject("{=!}Shaykah");
+                        else title = new TextObject("{=!}{MALE}Sheikh{?}Queen{\\?}");
+                    }
                     else if (type == TitleType.Barony)
-                        title = new TextObject("{=!}Wali");
-                    else title = new TextObject("{=!}Mawlaa");
+                    {
+                        if (female)
+                            title = new TextObject("{=!}Walia");
+                        else title = new TextObject("{=!}{MALE}Wali{?}Queen{\\?}");
+                    }
+                    else
+                    {
+                        if (female)
+                            title = new TextObject("{=!}Beghum");
+                        else title = new TextObject("{=!}{MALE}Mawlaa{?}Queen{\\?}");
+                    }
                 }
                 else if (culture.StringId == "khuzait")
                 {
                     if (type == TitleType.Kingdom)
-                        title = new TextObject("{=!}Khagan");
+                    {
+                        if (female)
+                            title = new TextObject("{=!}Khatun");
+                        else title = new TextObject("{=!}{MALE}Khagan{?}Queen{\\?}");
+                    }
                     else if (type == TitleType.Dukedom)
-                        title = new TextObject("{=!}Baghatur");
+                    {
+                        if (female)
+                            title = new TextObject("{=!}Bekhi");
+                        else title = new TextObject("{=!}{MALE}Baghatur{?}Queen{\\?}");
+                    }
                     else if (type == TitleType.County)
-                        title = new TextObject("{=!}Khan");
+                    {
+                        if (female)
+                            title = new TextObject("{=!}Khanum");
+                        else title = new TextObject("{=!}{MALE}Khan{?}Queen{\\?}");
+                    }
                     else if (type == TitleType.Barony)
-                        title = new TextObject("{=!}Bey");
-                    else title = new TextObject("{=!}Erxem");
+                    {
+                        if (female)
+                            title = new TextObject("{=!}Begum");
+                        else title = new TextObject("{=!}{MALE}Bey{?}Queen{\\?}");
+                    }
+                    else
+                    {
+                        if (female)
+                            title = new TextObject("{=!}Khatagtai");
+                        else title = new TextObject("{=!}{MALE}Erxem{?}Queen{\\?}");
+                    }
                 }
                 else if (culture.StringId == "sturgia")
                 {
                     if (type == TitleType.Kingdom)
-                        title = new TextObject("{=!}Velikiy Knyaz");
+                    {
+                        if (female)
+                            title = new TextObject("{=!}Velikaya Knyaginya");
+                        else title = new TextObject("{=!}{MALE}Velikiy Knyaz{?}Queen{\\?}");
+                    }
                     else if (type == TitleType.Dukedom)
-                        title = new TextObject("{=!}Knyaz");
+                    {
+                        if (female)
+                            title = new TextObject("{=!}Knyaginya");
+                        else title = new TextObject("{=!}{MALE}Knyaz{?}Queen{\\?}");
+                    }
                     else if (type == TitleType.County)
-                        title = new TextObject("{=!}Boyar");
+                    {
+                        if (female)
+                            title = new TextObject("{=!}Boyarina");
+                        else title = new TextObject("{=!}{MALE}Boyar{?}Queen{\\?}");
+                    }
                     else if (type == TitleType.Barony)
-                        title = new TextObject("{=!}Voivode");
-                    else title = new TextObject("{=!}Gospodin");
+                    {
+                        if (female)
+                            title = new TextObject("{=!}Voivodina");
+                        else title = new TextObject("{=!}{MALE}Voivode{?}Queen{\\?}");
+                    }
+                    else
+                    {
+                        if (female)
+                            title = new TextObject("{=!}Gospoda");
+                        else title = new TextObject("{=!}{MALE}Gospodin{?}Queen{\\?}");
+                    }
                 }
             }
 
             if (title == null)
             {
                 if (type == TitleType.Kingdom)
-                    title = new TextObject("{=!}King");
+                {
+                    if (female)
+                        title = new TextObject("{=!}Queen");
+                    else title = new TextObject("{=!}{MALE}King{?}Queen{\\?}");
+                }
                 else if (type == TitleType.Dukedom)
-                    title = new TextObject("{=!}Duke");
+                {
+                    if (female)
+                        title = new TextObject("{=!}Duchess");
+                    else title = new TextObject("{=!}{MALE}Duke{?}Duchess{\\?}");
+                }
                 else if (type == TitleType.County)
-                    title = new TextObject("{=!}Count");
+                {
+                    if (female)
+                        title = new TextObject("{=!}Countess");
+                    else title = new TextObject("{=!}{MALE}Count{?}Countess{\\?}");
+                }
                 else if (type == TitleType.Barony)
-                    title = new TextObject("{=!}Baron");
-                else title = new TextObject("{=!}Lord");
+                {
+                    if (female)
+                        title = new TextObject("{=!}Baroness");
+                    else title = new TextObject("{=!}{MALE}Baron{?}Baroness{\\?}");
+                }
+                else
+                {
+                    if (female)
+                    title = new TextObject("{=!}Lady");
+                    else title = new TextObject("{=!}{MALE}Lord{?}Lady{\\?}");
+                }
             }
 
             return title.ToString();
@@ -308,7 +434,30 @@ namespace BannerKings.Helpers
             return title.ToString();
         }
 
+        public static bool IsRetinueTroop(CharacterObject character)
+        {
+            CharacterObject nobleRecruit = character.Culture.EliteBasicTroop;
+            if (nobleRecruit.UpgradeTargets == null)
+                return false;
 
+            if (character == nobleRecruit)
+                return true;
+
+            if (nobleRecruit.UpgradeTargets != null)
+            {
+                CharacterObject[] currentUpgrades = nobleRecruit.UpgradeTargets;
+                while (currentUpgrades != null && currentUpgrades.Count() > 0)
+                {
+                    CharacterObject upgrade = currentUpgrades[0];
+                    if (upgrade == character)
+                        return true;
+                    else
+                        currentUpgrades = upgrade.UpgradeTargets;
+                }           
+            }
+
+            return false;
+        }
 
         public static bool IsRetinueTroop(CharacterObject character, CultureObject settlementCulture)
         {

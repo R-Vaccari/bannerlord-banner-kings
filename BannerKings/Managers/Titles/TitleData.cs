@@ -21,6 +21,8 @@ namespace BannerKings.Managers.Titles
         public FeudalTitle Title => this.title;
         internal override void Update(PopulationData data)
         {
+            if (this.title == null) return;
+
             this.title.CleanClaims();
             Dictionary<Hero, ClaimType> toAdd = new Dictionary<Hero, ClaimType>();
             foreach (KeyValuePair<Hero,CampaignTime> pair in this.title.OngoingClaims)

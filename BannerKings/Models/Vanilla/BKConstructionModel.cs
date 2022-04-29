@@ -67,6 +67,9 @@ namespace BannerKings.Models
 				int craftsmen = data.GetTypeCount(PopType.Craftsmen);
 				int slaves = data.GetTypeCount(PopType.Slaves);
 
+				if (slaves <= 0)
+					slaves = 1;
+
 				float proportion = (float)craftsmen / (float)slaves;
 				float finalProportion = Math.Min(proportion, (town.IsCastle ? 0.4f : 0.1f));
 				int result = (int)(GetWorkforce(town.Settlement) * (finalProportion * 8f));
@@ -81,13 +84,14 @@ namespace BannerKings.Models
 			bool construction = BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(data.Settlement, "workforce", (int)WorkforcePolicy.Construction);
 			float slaves = (float)data.GetTypeCount(PopType.Slaves) * data.EconomicData.StateSlaves * (construction ? 1f : 0.5f);
 			float serfs = (float)data.GetTypeCount(PopType.Slaves) * (construction ? 0.15f : 0.1f);
-			return ((float)slaves * SLAVE_CONSTRUCTION) + (serfs * SERF_CONSTRUCTION);
+			float slaveTotal = slaves > 0 ? slaves * SLAVE_CONSTRUCTION : 0f;
+			float serfTotal = (serfs * SERF_CONSTRUCTION);
+			return slaveTotal + serfTotal;
 		}
 
 		private int CalculateDailyConstructionPowerInternal(Town town, ref ExplainedNumber result, bool omitBoost = false)
 		{
 			PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
-			int slaves = data.GetTypeCount(PopType.Slaves);
 			result.Add(GetWorkforce(town.Settlement), new TextObject("{=!}Workforce"), null);
 			result.Add(3f, new TextObject("Base"), null);
 

@@ -29,10 +29,11 @@ namespace BannerKings.Managers
             {
                 if (settlement.StringId.Contains("Ruin") || settlement.StringId.Contains("tutorial"))
                     return false;
-
+                else if (!settlement.IsVillage && !settlement.IsTown && !settlement.IsCastle)
+                        return false;
                 else return Populations.ContainsKey(settlement);
             }
-            else return false;
+            return false;
         }
 
         public PopulationData GetPopData(Settlement settlement) 
@@ -40,6 +41,13 @@ namespace BannerKings.Managers
             try
             {
                 if (Populations.ContainsKey(settlement)) return Populations[settlement];
+
+                if (settlement.StringId.Contains("Ruin") || settlement.StringId.Contains("tutorial"))
+                    return null;
+
+                if (!settlement.IsVillage && !settlement.IsTown && !settlement.IsCastle)
+                    return null;
+                
                 InitializeSettlementPops(settlement);
                 return Populations[settlement];
             } catch (Exception ex)

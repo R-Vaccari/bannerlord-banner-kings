@@ -50,8 +50,6 @@ namespace BannerKings.Populations
         [SaveableProperty(10)]
         private TitleData titleData { get; set; }
 
-
-
         public PopulationData(List<PopulationClass> classes, Settlement settlement, float assimilation, List<CultureDataClass> cultures = null, Guild guild = null)
         {
             this.classes = classes;
@@ -256,8 +254,10 @@ namespace BannerKings.Populations
 
         public int GetTypeCount(PopType type)
         {
+            int i = 0;
             PopulationClass targetClass = classes.Find(popClass => popClass.type == type);
-            return targetClass != null ? targetClass.count : 0;
+            if (targetClass != null) i = targetClass.count;
+            return MBMath.ClampInt(i, 0, 50000);
         }
 
         public float GetCurrentTypeFraction(PopType type) => (float)GetTypeCount(type) / (float)TotalPop;

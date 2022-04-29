@@ -14,8 +14,7 @@ namespace BannerKings.Models
         public override ExplainedNumber GetPartyMemberSizeLimit(PartyBase party, bool includeDescriptions = false)
         {
             ExplainedNumber baseResult = base.GetPartyMemberSizeLimit(party, includeDescriptions);
-
-            if (!party.IsMobile || party.MobileParty.IsGarrison)
+            if (party.MobileParty == null || !party.IsMobile || party.MobileParty.IsGarrison)
                 return baseResult;
 
             if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsPopulationParty(party.MobileParty))

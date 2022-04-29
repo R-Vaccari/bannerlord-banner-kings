@@ -106,6 +106,8 @@ namespace BannerKings.Models
         public ExplainedNumber CalculateEffect(Settlement settlement)
         {
             ExplainedNumber result = new ExplainedNumber(0.1f);
+            result.LimitMin(0f);
+            result.LimitMax(1f);
 
             FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetSovereignFromSettlement(settlement);
             if (title != null)
