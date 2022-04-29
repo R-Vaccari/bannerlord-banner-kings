@@ -67,7 +67,7 @@ namespace BannerKings.Models.Vanilla
 							if (skillValue > 30) totalCost += skillValue * companionModel.GetCostFactor(skill);
 						}
 
-						result.Add(totalCost * 0.05f, elementCopyAtIndex.Character.Name);
+						result.Add(totalCost * 0.005f, elementCopyAtIndex.Character.Name);
 					}
 				}
 
