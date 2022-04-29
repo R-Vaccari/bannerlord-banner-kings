@@ -61,16 +61,14 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
         public abstract TextObject GetClergyGreeting(int rank);
         public abstract TextObject GetClergyGreetingInducted(int rank);
         public abstract TextObject GetClergyPreachingAnswer(int rank);
-
         public abstract TextObject GetClergyPreachingAnswerLast(int rank);
         public abstract TextObject GetClergyProveFaith(int rank);
-
         public abstract TextObject GetClergyProveFaithLast(int rank);
         public abstract TextObject GetClergyForbiddenAnswer(int rank);
+        public abstract TextObject GetClergyForbiddenAnswerLast(int rank);
         public abstract TextObject GetClergyInduction(int rank);
         public abstract int GetIdealRank(Settlement settlement);
         public abstract TextObject GetRankTitle(int rank);
-
         public abstract string GetId();
     }
 

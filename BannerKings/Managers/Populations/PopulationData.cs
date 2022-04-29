@@ -280,6 +280,9 @@ namespace BannerKings.Populations
                 if (religion != null)
                     this.religionData = new ReligionData(religion, this.settlement);
             }
+
+            if (this.religionData != null)
+                this.religionData.Update(this);
         }
     }
 

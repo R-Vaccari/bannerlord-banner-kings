@@ -30,7 +30,8 @@ namespace BannerKings.Managers.Institutions.Religions
 
         internal override void Update(PopulationData data)
         {
-     
+            if (this.clergyman == null)
+                this.clergyman = this.religion.GenerateClergyman(this.settlement);
         }
     }
 }
