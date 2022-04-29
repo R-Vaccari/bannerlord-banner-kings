@@ -28,6 +28,7 @@ using static TaleWorlds.CampaignSystem.SandBox.Issues.LandLordNeedsManualLaborer
 using static TaleWorlds.CampaignSystem.Election.KingSelectionKingdomDecision;
 using static TaleWorlds.CampaignSystem.SandBox.Issues.VillageNeedsToolsIssueBehavior;
 using static TaleWorlds.CampaignSystem.SandBox.Issues.EscortMerchantCaravanIssueBehavior;
+using TaleWorlds.CampaignSystem.SandBox.Issues;
 
 namespace BannerKings
 {
@@ -75,6 +76,7 @@ namespace BannerKings
                 campaignStarter.AddModel(new BKGarrisonModel());
                 campaignStarter.AddModel(new BKRansomModel());
                 campaignStarter.AddModel(new BKClanTierModel());
+                campaignStarter.AddModel(new BKPartyWageModel());
             }
 
             //xtender.Register(typeof(Main).Assembly);
@@ -227,7 +229,7 @@ namespace BannerKings
                 }
             }
 
-            [HarmonyPatch(typeof(EscortMerchantCaravanIssue), "ConditionsHold")]
+            [HarmonyPatch(typeof(EscortMerchantCaravanIssueBehavior), "ConditionsHold")]
             class EscortCaravanConditionsHoldPatch
             {
                 static bool Prefix(Hero issueGiver, ref bool __result)

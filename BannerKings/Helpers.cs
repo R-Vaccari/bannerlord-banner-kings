@@ -434,7 +434,30 @@ namespace BannerKings.Helpers
             return title.ToString();
         }
 
+        public static bool IsRetinueTroop(CharacterObject character)
+        {
+            CharacterObject nobleRecruit = character.Culture.EliteBasicTroop;
+            if (nobleRecruit.UpgradeTargets == null)
+                return false;
 
+            if (character == nobleRecruit)
+                return true;
+
+            if (nobleRecruit.UpgradeTargets != null)
+            {
+                CharacterObject[] currentUpgrades = nobleRecruit.UpgradeTargets;
+                while (currentUpgrades != null && currentUpgrades.Count() > 0)
+                {
+                    CharacterObject upgrade = currentUpgrades[0];
+                    if (upgrade == character)
+                        return true;
+                    else
+                        currentUpgrades = upgrade.UpgradeTargets;
+                }           
+            }
+
+            return false;
+        }
 
         public static bool IsRetinueTroop(CharacterObject character, CultureObject settlementCulture)
         {
