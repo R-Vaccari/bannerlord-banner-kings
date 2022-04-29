@@ -93,7 +93,7 @@ namespace BannerKings.Models
         private void CalculateDueTax(PopulationData data, float result)
         {
             TitleData titleData = data.TitleData;
-            if (titleData == null) return;
+            if (titleData == null || titleData.Title == null) return;
             FeudalContract contract = titleData.Title.contract;
             if (contract != null && contract.Duties.ContainsKey(FeudalDuties.Taxation))
             {
