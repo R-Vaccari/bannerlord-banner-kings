@@ -16,8 +16,8 @@ namespace BannerKings.Models
 			ExplainedNumber baseResult = base.CalculateClanGoldChange(clan, includeDescriptions, applyWithdrawals);
 			if (BannerKingsConfig.Instance.TitleManager != null)
 			{
-				this.CalculateClanExpenseInternal(clan, ref baseResult);
-				this.CalculateClanIncomeInternal(clan, ref baseResult, applyWithdrawals);	
+				CalculateClanExpenseInternal(clan, ref baseResult);
+				CalculateClanIncomeInternal(clan, ref baseResult, applyWithdrawals);	
 			}
 
 			return baseResult;
@@ -27,7 +27,7 @@ namespace BannerKings.Models
         {
 			ExplainedNumber baseResult = base.CalculateClanIncome(clan, includeDescriptions, applyWithdrawals);
 			if (BannerKingsConfig.Instance.TitleManager != null) 
-				this.CalculateClanIncomeInternal(clan, ref baseResult, applyWithdrawals);
+				CalculateClanIncomeInternal(clan, ref baseResult, applyWithdrawals);
 
 			return baseResult;
         }
@@ -36,7 +36,7 @@ namespace BannerKings.Models
 		{
 			ExplainedNumber baseResult = base.CalculateClanExpenses(clan, includeDescriptions, applyWithdrawals);
 			if (BannerKingsConfig.Instance.TitleManager != null)
-				this.CalculateClanExpenseInternal(clan, ref baseResult);
+				CalculateClanExpenseInternal(clan, ref baseResult);
 
 			return baseResult;
 		}
@@ -63,16 +63,16 @@ namespace BannerKings.Models
                 {
 					DefaultClanFinanceModel model = new DefaultClanFinanceModel();
 					MethodInfo expense = model.GetType().GetMethod("AddExpenseFromLeaderParty", BindingFlags.Instance | BindingFlags.NonPublic);
-					object[] array = new object[] { clan, new ExplainedNumber(), applyWithdrawals };
+					object[] array = { clan, new ExplainedNumber(), applyWithdrawals };
 					expense.Invoke(model, array);
 					float payment = ((ExplainedNumber)array[1]).ResultNumber * -1f;
-					float limit = (float)clan.Tier * 1000f;
+					float limit = clan.Tier * 1000f;
 					if (payment > limit)
 						payment = limit;
 					if (kingdom.KingdomBudgetWallet >= payment)
 					{
 						if (applyWithdrawals) kingdom.KingdomBudgetWallet -= (int)payment;
-						result.Add((float)payment, new TextObject("{=!}Army compensation rights"), null);
+						result.Add(payment, new TextObject("{=!}Army compensation rights"));
 					}
 				}
 			}

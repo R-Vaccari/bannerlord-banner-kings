@@ -1,6 +1,6 @@
-﻿using TaleWorlds.CampaignSystem;
+﻿using System.Linq;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.SandBox.GameComponents;
-using System.Linq;
 
 namespace BannerKings.Models
 {
@@ -13,8 +13,10 @@ namespace BannerKings.Models
             {
                 BKEconomyModel model = (BKEconomyModel)BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(BKEconomyModel));
                 return model.CalculateProductionEfficiency(town.Settlement).ResultNumber;
-            } else return base.GetPolicyEffectToProduction(town); 
-           
+            }
+
+            return base.GetPolicyEffectToProduction(town);
+
         }
     }
 }

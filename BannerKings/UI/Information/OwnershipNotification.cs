@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
-using static BannerKings.Managers.TitleManager;
 
 namespace BannerKings.UI.Information
 {

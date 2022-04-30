@@ -26,18 +26,18 @@ namespace BannerKings.Managers.Titles
         public FeudalContract(Dictionary<FeudalDuties, float> duties, List<FeudalRights> rights, GovernmentType government,
             SuccessionType succession, InheritanceType inheritance, GenderLaw genderLaw)
         {
-            this.Duties = duties;
-            this.Rights = rights;
-            this.Government = government;
-            this.Succession = succession;
-            this.Inheritance = inheritance;
-            this.GenderLaw = genderLaw;
+            Duties = duties;
+            Rights = rights;
+            Government = government;
+            Succession = succession;
+            Inheritance = inheritance;
+            GenderLaw = genderLaw;
         }
 
-        public void ChangeGovernment(GovernmentType governmentType) => this.Government = governmentType;
-        public void ChangeSuccession(SuccessionType successionType) => this.Succession = successionType;
-        public void ChangeInheritance(InheritanceType inheritanceType) => this.Inheritance = inheritanceType;
-        public void ChangeGenderLaw(GenderLaw genderLaw) => this.GenderLaw = genderLaw;
+        public void ChangeGovernment(GovernmentType governmentType) => Government = governmentType;
+        public void ChangeSuccession(SuccessionType successionType) => Succession = successionType;
+        public void ChangeInheritance(InheritanceType inheritanceType) => Inheritance = inheritanceType;
+        public void ChangeGenderLaw(GenderLaw genderLaw) => GenderLaw = genderLaw;
     }
 
     public enum FeudalDuties

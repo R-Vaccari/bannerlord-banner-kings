@@ -124,7 +124,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
                 foreach (Hero notable in settlement.Notables)
                     relation += notable.GetRelation(Hero.MainHero);
 
-                float medium = relation / (float)settlement.Notables.Count;
+                float medium = relation / settlement.Notables.Count;
                 if (medium < 0)
                     text = new TextObject("{=!}If you wish to be made a follower of the Code of Asera, you must treat these people as you would a sibling - you must cherish them, exalt them, protect them and educate them. Show them your better nature and I shall perform upon you our rites of induction.");
                 else if (medium < 20)

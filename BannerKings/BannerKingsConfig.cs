@@ -1,18 +1,18 @@
 ﻿using BannerKings.Managers;
-using System.Collections.Generic;
-using TaleWorlds.CampaignSystem;
-using BannerKings.Populations;
-using BannerKings.Models;
-using BannerKings.Managers.Policies;
-using BannerKings.Managers.Decisions;
-using BannerKings.Models.Populations;
-using TaleWorlds.Library;
-using BannerKings.Managers.Populations.Villages;
 using BannerKings.Managers.Court;
-using BannerKings.Managers.Titles;
-using BannerKings.Models.BKModels;
+using BannerKings.Managers.Decisions;
 using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Institutions.Religions.Faiths;
+using BannerKings.Managers.Policies;
+using BannerKings.Managers.Populations.Villages;
+using BannerKings.Managers.Titles;
+using BannerKings.Models;
+using BannerKings.Models.BKModels;
+using BannerKings.Models.Populations;
+using BannerKings.Populations;
+using System.Collections.Generic;
+using TaleWorlds.CampaignSystem;
+using TaleWorlds.Library;
 
 namespace BannerKings
 {
@@ -33,14 +33,14 @@ namespace BannerKings
             DefaultVillageBuildings.Instance.Init();
             DefaultDivinities.Instance.Initialize();
             DefaultFaiths.Instance.Initialize();
-            this.PopulationManager = new PopulationManager(new Dictionary<Settlement, PopulationData>(), new List<MobileParty>());
-            this.PopulationManager.ReInitBuildings();
-            this.PolicyManager = new PolicyManager(new Dictionary<Settlement, List<BannerKingsDecision>>(), new Dictionary<Settlement,
+            PopulationManager = new PopulationManager(new Dictionary<Settlement, PopulationData>(), new List<MobileParty>());
+            PopulationManager.ReInitBuildings();
+            PolicyManager = new PolicyManager(new Dictionary<Settlement, List<BannerKingsDecision>>(), new Dictionary<Settlement,
             List<BannerKingsPolicy>>());
-            this.TitleManager = new TitleManager(new Dictionary<FeudalTitle, Hero>(), new Dictionary<Hero, List<FeudalTitle>>(), new Dictionary<Kingdom, FeudalTitle>());
-            this.CourtManager = new CourtManager(new Dictionary<Clan, CouncilData>());
-            this.ReligionsManager = new ReligionsManager();
-            this.InitModels();
+            TitleManager = new TitleManager(new Dictionary<FeudalTitle, Hero>(), new Dictionary<Hero, List<FeudalTitle>>(), new Dictionary<Kingdom, FeudalTitle>());
+            CourtManager = new CourtManager(new Dictionary<Clan, CouncilData>());
+            ReligionsManager = new ReligionsManager();
+            InitModels();
         }
 
         public void InitManagers(PopulationManager populationManager, PolicyManager policyManager, TitleManager titleManager, CourtManager court)
@@ -48,27 +48,27 @@ namespace BannerKings
             DefaultVillageBuildings.Instance.Init();
             DefaultDivinities.Instance.Initialize();
             DefaultFaiths.Instance.Initialize();
-            this.PopulationManager = populationManager;
-            this.PopulationManager.ReInitBuildings();
-            this.PolicyManager = policyManager;
-            this.TitleManager = titleManager;
+            PopulationManager = populationManager;
+            PopulationManager.ReInitBuildings();
+            PolicyManager = policyManager;
+            TitleManager = titleManager;
             titleManager.RefreshDeJure();
-            this.CourtManager = court;
-            this.ReligionsManager = new ReligionsManager();
-            this.InitModels();
+            CourtManager = court;
+            ReligionsManager = new ReligionsManager();
+            InitModels();
         }
 
         private void InitModels()
         {
-            this.Models.Add(new BKCultureAssimilationModel());
-            this.Models.Add(new BKCultureAcceptanceModel());
-            this.Models.Add(new BKAdministrativeModel());
-            this.Models.Add(new BKLegitimacyModel());
-            this.Models.Add(new BKTitleModel());
-            this.Models.Add(new BKStabilityModel());
-            this.Models.Add(new BKGrowthModel());
-            this.Models.Add(new BKEconomyModel());
-            this.Models.Add(new BKCaravanAttractionModel());
+            Models.Add(new BKCultureAssimilationModel());
+            Models.Add(new BKCultureAcceptanceModel());
+            Models.Add(new BKAdministrativeModel());
+            Models.Add(new BKLegitimacyModel());
+            Models.Add(new BKTitleModel());
+            Models.Add(new BKStabilityModel());
+            Models.Add(new BKGrowthModel());
+            Models.Add(new BKEconomyModel());
+            Models.Add(new BKCaravanAttractionModel());
         }
 
         public static BannerKingsConfig Instance => ConfigHolder.CONFIG;

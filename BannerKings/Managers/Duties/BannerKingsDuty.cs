@@ -1,7 +1,6 @@
 ﻿using BannerKings.Managers.Titles;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.SaveSystem;
-using static BannerKings.Managers.TitleManager;
 
 namespace BannerKings.Managers.Duties
 {
@@ -18,9 +17,9 @@ namespace BannerKings.Managers.Duties
 
         public BannerKingsDuty(CampaignTime dueTime, FeudalDuties type, float completion = 0f)
         {
-            this.Completion = completion;
-            this.DueTime = dueTime;
-            this.Type = type;
+            Completion = completion;
+            DueTime = dueTime;
+            Type = type;
         }
 
         public abstract void Tick();

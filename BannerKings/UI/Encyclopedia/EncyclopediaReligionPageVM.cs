@@ -14,7 +14,7 @@ namespace BannerKings.UI.Encyclopedia
 
 		public EncyclopediaReligionPageVM(EncyclopediaPageArgs args) : base(args)
         {
-			religion = (Religion?)base.Obj;
+			religion = (Religion?)Obj;
 			Clergymen = new MBBindingList<HeroVM>();
         }
 
@@ -36,13 +36,13 @@ namespace BannerKings.UI.Encyclopedia
 		[DataSourceProperty]
 		public MBBindingList<HeroVM> Faithful
 		{
-			get => this.faithful;
+			get => faithful;
 			set
 			{
-				if (value != this.faithful)
+				if (value != faithful)
 				{
-					this.faithful = value;
-					base.OnPropertyChangedWithValue(value, "Faithful");
+					faithful = value;
+					OnPropertyChangedWithValue(value);
 				}
 			}
 		}
@@ -51,13 +51,13 @@ namespace BannerKings.UI.Encyclopedia
 		[DataSourceProperty]
 		public MBBindingList<HeroVM> Clergymen
 		{
-			get => this.clergymen;
+			get => clergymen;
 			set
 			{
-				if (value != this.clergymen)
+				if (value != clergymen)
 				{
-					this.clergymen = value;
-					base.OnPropertyChangedWithValue(value, "Clergymen");
+					clergymen = value;
+					OnPropertyChangedWithValue(value);
 				}
 			}
 		}

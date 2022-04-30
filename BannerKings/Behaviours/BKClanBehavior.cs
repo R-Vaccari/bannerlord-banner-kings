@@ -1,6 +1,5 @@
 ﻿using BannerKings.Managers.Titles;
 using Helpers;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
@@ -14,7 +13,7 @@ namespace BannerKings.Behaviours
     {
         public override void RegisterEvents()
         {
-            CampaignEvents.DailyTickClanEvent.AddNonSerializedListener(this, new Action<Clan>(DailyClanTick));
+            CampaignEvents.DailyTickClanEvent.AddNonSerializedListener(this, DailyClanTick);
         }
 
         public override void SyncData(IDataStore dataStore)
@@ -68,10 +67,10 @@ namespace BannerKings.Behaviours
                 if (source == null) return;
                 MBEquipmentRoster roster = (from e in source where e.IsMediumNobleEquipmentTemplate
                                                 select e into x orderby MBRandom.RandomInt()
-                                                select x).FirstOrDefault<MBEquipmentRoster>();
+                                                select x).FirstOrDefault();
                 if (roster == null) return;
 
-                float price = this.GetPrice(village.Village.MarketTown.Settlement, roster);
+                float price = GetPrice(village.Village.MarketTown.Settlement, roster);
                 if (clan.Leader.Gold >= price * 2f)
                 {
                     Hero hero = HeroCreator.CreateSpecialHero(template, settlement, clan, null,
@@ -97,7 +96,7 @@ namespace BannerKings.Behaviours
                 Equipment equip = roster.AllEquipments.GetRandomElement<Equipment>();
                 for (int i = 0; i < 12; i++)
                 {
-                    EquipmentElement element = new EquipmentElement(equip[i].Item, equip[i].ItemModifier, null, false);
+                    EquipmentElement element = new EquipmentElement(equip[i].Item, equip[i].ItemModifier);
                     if (!element.IsEmpty && element.Item != null)
                         price += settlement.Town.MarketData.GetPrice(element.Item);
                 }

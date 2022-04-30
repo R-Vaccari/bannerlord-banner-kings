@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Election;
-using System.Linq;
-using TaleWorlds.Localization;
-using TaleWorlds.Library;
 using TaleWorlds.Core;
+using TaleWorlds.Library;
+using TaleWorlds.Localization;
 using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Managers.Kingdoms
@@ -15,36 +15,36 @@ namespace BannerKings.Managers.Kingdoms
 		protected Clan toExclude { get; set; }
 		public override TextObject GetChooseTitle()
 		{
-			TextObject textObject = new TextObject("{=!}Choose the next Grand-Prince of the {KINGDOM_NAME} Republic", null);
-			textObject.SetTextVariable("KINGDOM_NAME", base.Kingdom.Name);
+			TextObject textObject = new TextObject("{=!}Choose the next Grand-Prince of the {KINGDOM_NAME} Republic");
+			textObject.SetTextVariable("KINGDOM_NAME", Kingdom.Name);
 			return textObject;
 		}
 
 		public override TextObject GetSupportDescription()
 		{
-			TextObject textObject = new TextObject("{=!}{KINGDOM_NAME} Republic will decide who will be elected Grand-Prince. You can pick your stance regarding this decision.", null);
-			textObject.SetTextVariable("KINGDOM_NAME", base.Kingdom.Name);
+			TextObject textObject = new TextObject("{=!}{KINGDOM_NAME} Republic will decide who will be elected Grand-Prince. You can pick your stance regarding this decision.");
+			textObject.SetTextVariable("KINGDOM_NAME", Kingdom.Name);
 			return textObject;
 		}
 
 		public override TextObject GetChooseDescription()
 		{
-			TextObject textObject = new TextObject("{=!}Choose the next Grand-Prince of the {KINGDOM_NAME} Republic", null);
-			textObject.SetTextVariable("KINGDOM_NAME", base.Kingdom.Name);
+			TextObject textObject = new TextObject("{=!}Choose the next Grand-Prince of the {KINGDOM_NAME} Republic");
+			textObject.SetTextVariable("KINGDOM_NAME", Kingdom.Name);
 			return textObject;
 		}
 
 		public RepublicElectionDecision(Clan proposerClan, Clan clanToExclude = null) : base(proposerClan, clanToExclude)
         {
-			this.toExclude = clanToExclude;
+			toExclude = clanToExclude;
         }
 
         public override IEnumerable<DecisionOutcome> DetermineInitialCandidates()
         {
 			Dictionary<Clan, float> dictionary = new Dictionary<Clan, float>();
-			foreach (Clan clan in base.Kingdom.Clans)
+			foreach (Clan clan in Kingdom.Clans)
 			{
-				if (!clan.IsUnderMercenaryService && !clan.IsEliminated && clan != this.toExclude)
+				if (!clan.IsUnderMercenaryService && !clan.IsEliminated && clan != toExclude)
 				{
 					Hero leader = clan.Leader;
 					float age = leader.Age;
@@ -58,16 +58,15 @@ namespace BannerKings.Managers.Kingdoms
 																 orderby t.Value descending
 																 select t).Take(3);
 			foreach (KeyValuePair<Clan, float> keyValuePair in enumerable)
-				yield return new KingSelectionKingdomDecision.KingSelectionDecisionOutcome(keyValuePair.Key.Leader);
+				yield return new KingSelectionDecisionOutcome(keyValuePair.Key.Leader);
 			
 			IEnumerator<KeyValuePair<Clan, float>> enumerator2 = null;
-			yield break;
-		}
+        }
 
         public override float CalculateMeritOfOutcome(DecisionOutcome candidateOutcome)
         {
 			float merit = 0f;
-			foreach (Clan clan in base.Kingdom.Clans)
+			foreach (Clan clan in Kingdom.Clans)
 				merit += CalculateMeritInternal(clan, candidateOutcome);
 			return merit;
 		}
@@ -78,11 +77,11 @@ namespace BannerKings.Managers.Kingdoms
 			Hero leader = clan.Leader;
 			if (leader != Hero.MainHero)
 			{
-				if (clan == base.Kingdom.RulingClan)
+				if (clan == Kingdom.RulingClan)
 					merit -= 5f;
 
 				merit += leader.Age / 10f;
-				merit += (float)clan.Tier / 2f;
+				merit += clan.Tier / 2f;
 				merit += MBRandom.RandomFloat;
 				merit -= MBRandom.RandomFloat * 2f;
 				merit += leader.GetSkillValue(DefaultSkills.Charm) * 0.01f;

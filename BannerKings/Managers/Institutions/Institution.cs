@@ -10,25 +10,25 @@ namespace BannerKings.Managers.Institutions
 
         protected Institution()
         {
-            this.favors = new Dictionary<Hero, float>();
+            favors = new Dictionary<Hero, float>();
         }
 
-        public float Influence => this.influence;
+        public float Influence => influence;
 
         public abstract void Destroy();
 
         public float GetFavor(Hero hero)
         {
-            if (this.favors.ContainsKey(hero))
-                return this.favors[hero];
+            if (favors.ContainsKey(hero))
+                return favors[hero];
             return 0f;
         }
 
         public void AddFavor(Hero hero, float favor)
         {
-            if (this.favors.ContainsKey(hero))
-                this.favors[hero] += favor;
-            else this.favors.Add(hero, favor);
+            if (favors.ContainsKey(hero))
+                favors[hero] += favor;
+            else favors.Add(hero, favor);
         }
 
     }

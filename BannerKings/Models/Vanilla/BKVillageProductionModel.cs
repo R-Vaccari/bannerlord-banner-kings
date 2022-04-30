@@ -1,6 +1,7 @@
 ﻿using BannerKings.Managers.Populations.Villages;
 using BannerKings.Populations;
 using Helpers;
+using System;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.SandBox.GameComponents.Map;
@@ -15,9 +16,9 @@ namespace BannerKings.Models
         private static readonly float SLAVE_PRODUCTION = 0.00125f;
         public override float CalculateDailyProductionAmount(Village village, ItemObject item)
         {
-            if (village.Settlement != null && village.VillageState == Village.VillageStates.Normal && BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(village.Settlement))
+	        if (village.Settlement != null && village.VillageState == Village.VillageStates.Normal && BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(village.Settlement))
             {
-                ExplainedNumber explainedNumber = new ExplainedNumber(0f, false, null);
+                ExplainedNumber explainedNumber = new ExplainedNumber(0f);
                 PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(village.Settlement);
 				VillageData villageData = data.VillageData;
                 int serfs = data.GetTypeCount(PopType.Serfs);
@@ -28,17 +29,17 @@ namespace BannerKings.Models
 				explainedNumber.AddFactor(production ? 0.15f : -0.20f);
 
 				List<(ItemObject, float)> productions = BannerKingsConfig.Instance.PopulationManager.GetProductions(villageData);
-				foreach (System.ValueTuple<ItemObject, float> valueTuple in productions)
+				foreach (ValueTuple<ItemObject, float> valueTuple in productions)
 				{
 					ItemObject item2 = valueTuple.Item1;
 					float num = valueTuple.Item2;
 					if (item2 == item)
 					{
-						float num2 = (float)(village.GetHearthLevel() + 1) * 0.5f;
+						float num2 = (village.GetHearthLevel() + 1) * 0.5f;
 						if (item.IsMountable && item.Tier == ItemObject.ItemTiers.Tier2 && PerkHelper.GetPerkValueForTown(DefaultPerks.Riding.Horde, village.TradeBound.Town) && MBRandom.RandomFloat < DefaultPerks.Riding.Horde.SecondaryBonus * 0.01f)
 							num += 1f;
 						
-						explainedNumber.Add((float)serfs * SERF_PRODUCTION + (float)slaves * SLAVE_PRODUCTION + num, null, null);
+						explainedNumber.Add(serfs * SERF_PRODUCTION + slaves * SLAVE_PRODUCTION + num);
 						if (item.ItemCategory == DefaultItemCategories.Grain || item.ItemCategory == DefaultItemCategories.Olives || item.ItemCategory == DefaultItemCategories.Fish || item.ItemCategory == DefaultItemCategories.DateFruit)
 							PerkHelper.AddPerkBonusForTown(DefaultPerks.Trade.GranaryAccountant, village.TradeBound.Town, ref explainedNumber);
 						
@@ -79,10 +80,10 @@ namespace BannerKings.Models
 						if (characterObject != null)
 						{
 							if (characterObject.Culture.HasFeat(DefaultCulturalFeats.KhuzaitAnimalProductionFeat) && (item.ItemCategory == DefaultItemCategories.Sheep || item.ItemCategory == DefaultItemCategories.Cow || item.ItemCategory == DefaultItemCategories.WarHorse || item.ItemCategory == DefaultItemCategories.Horse || item.ItemCategory == DefaultItemCategories.PackAnimal))
-								explainedNumber.AddFactor(DefaultCulturalFeats.KhuzaitAnimalProductionFeat.EffectBonus, GameTexts.FindText("str_culture", null));
+								explainedNumber.AddFactor(DefaultCulturalFeats.KhuzaitAnimalProductionFeat.EffectBonus, GameTexts.FindText("str_culture"));
 							
 							if (village.Bound.IsCastle && characterObject.Culture.HasFeat(DefaultCulturalFeats.VlandianCastleVillageProductionFeat))
-								explainedNumber.AddFactor(DefaultCulturalFeats.VlandianCastleVillageProductionFeat.EffectBonus, GameTexts.FindText("str_culture", null));
+								explainedNumber.AddFactor(DefaultCulturalFeats.VlandianCastleVillageProductionFeat.EffectBonus, GameTexts.FindText("str_culture"));
 							
 						}
 					}
@@ -92,7 +93,9 @@ namespace BannerKings.Models
 				explainedNumber.AddFactor(eff);
 
 				return explainedNumber.ResultNumber;
-            } else return base.CalculateDailyProductionAmount(village, item);
+            }
+
+	        return base.CalculateDailyProductionAmount(village, item);
         }
     }
 }

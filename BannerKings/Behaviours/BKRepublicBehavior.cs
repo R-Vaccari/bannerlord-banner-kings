@@ -1,9 +1,7 @@
 ﻿using BannerKings.Managers.Kingdoms;
 using BannerKings.Managers.Titles;
-using System;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Election;
-using static BannerKings.Managers.TitleManager;
 
 namespace BannerKings.Behaviours
 {
@@ -11,7 +9,7 @@ namespace BannerKings.Behaviours
     {
         public override void RegisterEvents()
         {
-            CampaignEvents.DailyTickEvent.AddNonSerializedListener(this, new Action(DailyTick));
+            CampaignEvents.DailyTickEvent.AddNonSerializedListener(this, DailyTick);
         }
 
         public override void SyncData(IDataStore dataStore)

@@ -18,14 +18,15 @@ namespace BannerKings.Managers.Populations.Tournament
 
         protected override ItemObject GetTournamentPrize(bool includePlayer, int lastRecordedNobleCountForTournamentPrize)
         {
-            PopulationData popData = BannerKingsConfig.Instance.PopulationManager.GetPopData(base.Town.Settlement);
+            PopulationData popData = BannerKingsConfig.Instance.PopulationManager.GetPopData(Town.Settlement);
             TournamentData tournament = popData.TournamentData;
             if (tournament != null)
             {
-                this.data = tournament;
+                data = tournament;
                 return tournament.Prize;
-            } else  
-                return base.GetTournamentPrize(includePlayer, lastRecordedNobleCountForTournamentPrize);
+            }
+
+            return base.GetTournamentPrize(includePlayer, lastRecordedNobleCountForTournamentPrize);
         }
     }
 }

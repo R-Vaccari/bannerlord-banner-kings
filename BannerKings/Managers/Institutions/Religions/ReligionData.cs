@@ -1,5 +1,4 @@
 ﻿using BannerKings.Populations;
-using System;
 using TaleWorlds.CampaignSystem;
 
 namespace BannerKings.Managers.Institutions.Religions
@@ -16,22 +15,22 @@ namespace BannerKings.Managers.Institutions.Religions
             this.settlement = settlement;
         }
 
-        public Religion Religion => this.religion;
-        public Settlement Settlement => this.settlement;
+        public Religion Religion => religion;
+        public Settlement Settlement => settlement;
 
         public Clergyman Clergyman
         {
             get
             {
-                if (this.clergyman == null) this.clergyman = this.religion.GenerateClergyman(this.settlement);
-                return this.clergyman;
+                if (clergyman == null) clergyman = religion.GenerateClergyman(settlement);
+                return clergyman;
             }
         }
 
         internal override void Update(PopulationData data)
         {
-            if (this.clergyman == null)
-                this.clergyman = this.religion.GenerateClergyman(this.settlement);
+            if (clergyman == null)
+                clergyman = religion.GenerateClergyman(settlement);
         }
     }
 }

@@ -1,31 +1,30 @@
-﻿using TaleWorlds.CampaignSystem;
+﻿using BannerKings.Managers.Titles;
+using HarmonyLib;
+using SandBox;
 using System;
 using System.Collections.Generic;
-using System.Text;
-using TaleWorlds.Core;
-using TaleWorlds.Library;
-using static BannerKings.Managers.TitleManager;
-using TaleWorlds.CampaignSystem.Actions;
-using HarmonyLib;
-using TaleWorlds.Localization;
+using System.Linq;
 using System.Reflection;
+using System.Text;
+using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.ViewModelCollection;
 using TaleWorlds.CampaignSystem.ViewModelCollection.ClanManagement.Categories;
-using SandBox;
-using System.Linq;
-using BannerKings.Managers.Titles;
+using TaleWorlds.Core;
+using TaleWorlds.Library;
+using TaleWorlds.Localization;
 
 namespace BannerKings.Behaviors
 {
     public class BKCompanionBehavior : CampaignBehaviorBase
     {
 
-        private FeudalTitle titleGiven = null;
+        private FeudalTitle titleGiven;
         List<InquiryElement> lordshipsToGive = new List<InquiryElement>();
         public override void RegisterEvents()
         {
-            CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, new Action<CampaignGameStarter>(OnSessionLaunched));
-            CampaignEvents.HeroKilledEvent.AddNonSerializedListener(this, new Action<Hero, Hero, KillCharacterAction.KillCharacterActionDetail, bool>(this.OnHeroKilled));
+            CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, OnSessionLaunched);
+            CampaignEvents.HeroKilledEvent.AddNonSerializedListener(this, OnHeroKilled);
         }
 
         public override void SyncData(IDataStore dataStore)
@@ -56,21 +55,21 @@ namespace BannerKings.Behaviors
             knighthoodSb.Append("As a knight, they are capable of raising a personal retinue and are obliged to fulfill their duties.");
 
             starter.AddPlayerLine("companion_grant_knighthood", "companion_role", "companion_knighthood_question", "Would you like to serve me as my knight?", 
-                new ConversationSentence.OnConditionDelegate(this.GrantKnighthoodOnCondition), delegate {
-                    InformationManager.ShowInquiry(new InquiryData("Bestowing Knighthood", knighthoodSb.ToString(), true, false, "Understood", null, null, null), false);
-                }, 100, new ConversationSentence.OnClickableConditionDelegate(GrantKnighthoodOnClickable), null);
+                GrantKnighthoodOnCondition, delegate {
+                    InformationManager.ShowInquiry(new InquiryData("Bestowing Knighthood", knighthoodSb.ToString(), true, false, "Understood", null, null, null));
+                }, 100, GrantKnighthoodOnClickable);
 
             starter.AddDialogLine("companion_grant_knighthood_response", "companion_knighthood_question", "companion_knighthood_response",
-                "My lord, I would be honored.", null, null, 100, null); 
+                "My lord, I would be honored.", null, null); 
 
             starter.AddPlayerLine("companion_grant_knighthood_response_confirm", "companion_knighthood_response", "companion_knighthood_accepted", "Let us decide your fief.",
-                new ConversationSentence.OnConditionDelegate(this.companion_knighthood_accepted_on_condition), new ConversationSentence.OnConsequenceDelegate(this.GrantKnighthoodOnConsequence), 100, null, null);
+                companion_knighthood_accepted_on_condition, GrantKnighthoodOnConsequence);
 
             starter.AddPlayerLine("companion_grant_knighthood_response_cancel", "companion_knighthood_response", "companion_role_pretalk", "Actualy, I would like to discuss this at a later time.",
-               null, null, 100, null, null);
+               null, null);
 
             starter.AddPlayerLine("companion_grant_knighthood_granted", "companion_knighthood_accepted", "close_window", "It is decided then. I bestow upon you the title of Knight.",
-                null, null, 100, null, null);
+                null, null);
         }
 
         private bool GrantKnighthoodOnCondition()
@@ -104,7 +103,7 @@ namespace BannerKings.Behaviors
             int tier = Clan.PlayerClan.Tier;
             if (tier < 2)
             {
-                hintText = new TextObject("{=!}Your Clan Tier needs to be at least {TIER}.", null);
+                hintText = new TextObject("{=!}Your Clan Tier needs to be at least {TIER}.");
                 hintText.SetTextVariable("TIER", 2);
                 return false;
             }
@@ -112,32 +111,32 @@ namespace BannerKings.Behaviors
             Kingdom kingdom = Clan.PlayerClan.Kingdom;
             if (kingdom == null)
             {
-                hintText = new TextObject("{=!}Before bestowing knighthood, you need to be formally part of a kingdom.", null);
+                hintText = new TextObject("{=!}Before bestowing knighthood, you need to be formally part of a kingdom.");
                 return false;
             }
 
             List<FeudalTitle> titles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(Hero.MainHero);
             if (titles.Count == 0)
             {
-                hintText = new TextObject("{=!}You do not legally own any title.", null);
+                hintText = new TextObject("{=!}You do not legally own any title.");
                 return false;
             }
 
             List<FeudalTitle> lordships = titles.FindAll(x => x.type == TitleType.Lordship);
             if (lordships.Count == 0)
             {
-                hintText = new TextObject("{=!}You do not legally own any lordship that could be given to land a new vassal.", null);
+                hintText = new TextObject("{=!}You do not legally own any lordship that could be given to land a new vassal.");
                 return false;
             }
 
             if (Clan.PlayerClan.Influence < 150)
             {
-                hintText = new TextObject("{=!}Bestowing knighthood requires {INFLUENCE} influence to legitimize your new vassal.", null);
+                hintText = new TextObject("{=!}Bestowing knighthood requires {INFLUENCE} influence to legitimize your new vassal.");
                 hintText.SetTextVariable("INFLUENCE", 150);
                 return false;
             }
 
-            hintText = new TextObject("{=!}Bestowing knighthood requires {GOLD} gold to give your vassal financial security.", null);
+            hintText = new TextObject("{=!}Bestowing knighthood requires {GOLD} gold to give your vassal financial security.");
             hintText.SetTextVariable("GOLD", 5000);
 
             return Hero.MainHero.Gold >= 5000;
@@ -147,8 +146,8 @@ namespace BannerKings.Behaviors
         {
             InformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                     "Select the fief you would like to give away", string.Empty, lordshipsToGive, true, 1, 
-                    GameTexts.FindText("str_done", null).ToString(), "", new Action<List<InquiryElement>>(this.OnNewPartySelectionOver), 
-                    new Action<List<InquiryElement>>(this.OnNewPartySelectionOver), ""), false);
+                    GameTexts.FindText("str_done").ToString(), "", OnNewPartySelectionOver, 
+                    OnNewPartySelectionOver));
         }
 
         private void OnNewPartySelectionOver(List<InquiryElement> element)
@@ -156,8 +155,8 @@ namespace BannerKings.Behaviors
             if (element.Count == 0)
                 return;
             
-            this.titleGiven = (FeudalTitle)element[0].Identifier;
-            BannerKingsConfig.Instance.TitleManager.GrantLordship(this.titleGiven, Hero.MainHero, Hero.OneToOneConversationHero);
+            titleGiven = (FeudalTitle)element[0].Identifier;
+            BannerKingsConfig.Instance.TitleManager.GrantLordship(titleGiven, Hero.MainHero, Hero.OneToOneConversationHero);
             GainKingdomInfluenceAction.ApplyForDefault(Hero.MainHero, -150f);
             GiveGoldAction.ApplyBetweenCharacters(Hero.MainHero, Hero.OneToOneConversationHero, 5000);
         }
@@ -228,34 +227,34 @@ namespace BannerKings.Behaviors
                             MethodInfo hintMethod = __instance.GetType().GetMethod("GetPartyLeaderAssignmentSkillsHint", BindingFlags.NonPublic | BindingFlags.Instance);
                             string hint = (string)hintMethod.Invoke(__instance, new object[] { hero });
                             if (hero.PartyBelongedToAsPrisoner != null)
-                                hint = new TextObject("{=vOojEcIf}You cannot assign a prisoner member as a new party leader", null).ToString();
+                                hint = new TextObject("{=vOojEcIf}You cannot assign a prisoner member as a new party leader").ToString();
                             else if (hero.IsReleased)
-                                hint = new TextObject("{=OhNYkblK}This hero has just escaped from captors and will be available after some time.", null).ToString();
+                                hint = new TextObject("{=OhNYkblK}This hero has just escaped from captors and will be available after some time.").ToString();
                             else if (hero.PartyBelongedTo != null && hero.PartyBelongedTo.LeaderHero == hero)
-                                hint = new TextObject("{=aFYwbosi}This hero is already leading a party.", null).ToString();
+                                hint = new TextObject("{=aFYwbosi}This hero is already leading a party.").ToString();
                             else if (hero.PartyBelongedTo != null && hero.PartyBelongedTo.LeaderHero != Hero.MainHero)
-                                hint = new TextObject("{=FjJi1DJb}This hero is already a part of an another party.", null).ToString();
+                                hint = new TextObject("{=FjJi1DJb}This hero is already a part of an another party.").ToString();
                             else if (____getSettlementOfGovernor(hero) != null)
-                                hint = new TextObject("{=Hz8XO8wk}Governors cannot lead a mobile party and be a governor at the same time.", null).ToString();
+                                hint = new TextObject("{=Hz8XO8wk}Governors cannot lead a mobile party and be a governor at the same time.").ToString();
                             else if (hero.HeroState == Hero.CharacterStates.Disabled)
-                                hint = new TextObject("{=slzfQzl3}This hero is lost", null).ToString();
+                                hint = new TextObject("{=slzfQzl3}This hero is lost").ToString();
                             else if (hero.HeroState == Hero.CharacterStates.Fugitive)
-                                hint = new TextObject("{=dD3kRDHi}This hero is a fugitive and running from their captors. They will be available after some time.", null).ToString();
+                                hint = new TextObject("{=dD3kRDHi}This hero is a fugitive and running from their captors. They will be available after some time.").ToString();
                             else if (!BannerKingsConfig.Instance.TitleManager.IsHeroKnighted(hero))
-                                hint = new TextObject("A hero must be knighted and granted land before being able to raise a personal retinue. You may bestow knighthood by talking to them.", null).ToString();
+                                hint = new TextObject("A hero must be knighted and granted land before being able to raise a personal retinue. You may bestow knighthood by talking to them.").ToString();
                             else isEnabled = true;
 
-                            list.Add(new InquiryElement(hero, hero.Name.ToString(), new ImageIdentifier(CampaignUIHelper.GetCharacterCode(hero.CharacterObject, false)), isEnabled, hint));
+                            list.Add(new InquiryElement(hero, hero.Name.ToString(), new ImageIdentifier(CampaignUIHelper.GetCharacterCode(hero.CharacterObject)), isEnabled, hint));
                         }
                     }
                     if (list.Count > 0)
                     {
                         MethodInfo method = __instance.GetType().GetMethod("OnNewPartySelectionOver", BindingFlags.NonPublic | BindingFlags.Instance);
-                        InformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(new TextObject("{=0Q4Xo2BQ}Select the Leader of the New Party", null).ToString(),
-                            string.Empty, list, true, 1, GameTexts.FindText("str_done", null).ToString(), "", new Action<List<InquiryElement>>(delegate (List<InquiryElement> x) { method.Invoke(__instance, new object[] { x }); }),
-                            new Action<List<InquiryElement>>(delegate (List<InquiryElement> x) { method.Invoke(__instance, new object[] { x }); }), ""), false);
+                        InformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(new TextObject("{=0Q4Xo2BQ}Select the Leader of the New Party").ToString(),
+                            string.Empty, list, true, 1, GameTexts.FindText("str_done").ToString(), "", delegate (List<InquiryElement> x) { method.Invoke(__instance, new object[] { x }); },
+                            delegate (List<InquiryElement> x) { method.Invoke(__instance, new object[] { x }); }));
                     }
-                    else InformationManager.AddQuickInformation(new TextObject("{=qZvNIVGV}There is no one available in your clan who can lead a party right now.", null), 0, null, "");
+                    else InformationManager.AddQuickInformation(new TextObject("{=qZvNIVGV}There is no one available in your clan who can lead a party right now."));
                 }
 
                 return false;

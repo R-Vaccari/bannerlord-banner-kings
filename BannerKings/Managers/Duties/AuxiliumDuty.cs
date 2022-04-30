@@ -21,19 +21,19 @@ namespace BannerKings.Managers.Duties
 
         public AuxiliumDuty(CampaignTime dueTime, MobileParty leader, float completion) : base(dueTime, FeudalDuties.Auxilium, completion)
         {
-            this.Party = leader;
+            Party = leader;
             RunnedHours = 0;
             ArmyHours = 0;
         }
 
         public override void Finish()
         {
-            float proportion = MathF.Clamp((float)ArmyHours / (float)RunnedHours, 0f, 1f);
+            float proportion = MathF.Clamp(ArmyHours / (float)RunnedHours, 0f, 1f);
             TextObject result = null;
-            Hero suzerain = this.Party.Owner;
+            Hero suzerain = Party.Owner;
             if (suzerain == null)
                 suzerain = Clan.PlayerClan.Kingdom.Leader;
-            if (proportion < base.Completion)
+            if (proportion < Completion)
             {
                 Clan.PlayerClan.Renown -= 50f * (1f - proportion);
                 int relation = MBRandom.RandomInt(-12, -5);
@@ -59,7 +59,7 @@ namespace BannerKings.Managers.Duties
 
         public override void Tick()
         {
-            float remaining = base.DueTime.RemainingHoursFromNow;
+            float remaining = DueTime.RemainingHoursFromNow;
             Army army = Party.Army;
             if (army != null) 
             {
@@ -70,7 +70,7 @@ namespace BannerKings.Managers.Duties
                         ArmyHours++;
                 }
                 else if (army.Parties.Contains(MobileParty.MainParty))
-                    base.DueTime = CampaignTime.Now;
+                    DueTime = CampaignTime.Now;
             }
         }
     }

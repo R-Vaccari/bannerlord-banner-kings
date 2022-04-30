@@ -1,9 +1,7 @@
 ﻿using BannerKings.Managers.Duties;
 using BannerKings.Managers.Titles;
-using System;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
-using static BannerKings.Managers.TitleManager;
 
 namespace BannerKings.Behaviours
 {
@@ -14,7 +12,7 @@ namespace BannerKings.Behaviours
         public override void RegisterEvents()
         {
             CampaignEvents.HeroPrisonerReleased.AddNonSerializedListener(this, 
-                new Action<Hero, PartyBase, IFaction, EndCaptivityDetail>(this.OnHeroPrisonerReleased));
+                OnHeroPrisonerReleased);
         }
 
         public override void SyncData(IDataStore dataStore)
@@ -41,7 +39,7 @@ namespace BannerKings.Behaviours
             if (contract == null || !contract.Duties.ContainsKey(FeudalDuties.Ransom)) return;
 
             float completion = contract.Duties[FeudalDuties.Ransom];
-            float ransom = Campaign.Current.Models.RansomValueCalculationModel.PrisonerRansomValue(released.CharacterObject, null);
+            float ransom = Campaign.Current.Models.RansomValueCalculationModel.PrisonerRansomValue(released.CharacterObject);
             playerRansomDuty = new RansomDuty(CampaignTime.DaysFromNow(2), released, ransom * completion);
         }
     }

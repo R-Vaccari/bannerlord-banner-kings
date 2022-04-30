@@ -14,7 +14,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
 
         public Faith() 
         {
-            this.stances = new Dictionary<Faith, FaithStance>();
+            stances = new Dictionary<Faith, FaithStance>();
         }
 
         protected void Initialize(Divinity mainGod, Dictionary<TraitObject, bool> traits, FaithGroup faithGroup,
@@ -29,29 +29,29 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
         public void AddStance(Faith faith, FaithStance stance)
         {
             if (faith == this) return;
-            if (this.stances.ContainsKey(faith))
-                this.stances[faith] = stance;
-            else this.stances.Add(faith, stance);
+            if (stances.ContainsKey(faith))
+                stances[faith] = stance;
+            else stances.Add(faith, stance);
         }
 
         public void AddPreset(int rank, CharacterObject preset)
         {
-            if (!this.presets.ContainsKey(rank))
-                this.presets.Add(rank, preset);
-            else this.presets[rank] = preset;
+            if (!presets.ContainsKey(rank))
+                presets.Add(rank, preset);
+            else presets[rank] = preset;
         }
 
         public CharacterObject GetPreset(int rank)
         {
-            if (this.presets.ContainsKey(rank))
-                return this.presets[rank];
+            if (presets.ContainsKey(rank))
+                return presets[rank];
 
             return null;
         }
 
-        public Dictionary<TraitObject, bool> Traits => this.traits;
-        public FaithGroup FaithGroup => this.faithGroup;
-        public Divinity MainGod => this.mainGod;
+        public Dictionary<TraitObject, bool> Traits => traits;
+        public FaithGroup FaithGroup => faithGroup;
+        public Divinity MainGod => mainGod;
 
         public abstract TextObject GetFaithName();
         public abstract TextObject GetFaithDescription();

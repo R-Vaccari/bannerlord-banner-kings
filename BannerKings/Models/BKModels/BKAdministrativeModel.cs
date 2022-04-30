@@ -17,7 +17,7 @@ namespace BannerKings.Models
             if (governor != null)
             {
                 int skill = governor.GetSkillValue(DefaultSkills.Steward);
-                float effect = (float)skill * -0.0005f;
+                float effect = skill * -0.0005f;
                 if (effect > 0.20f)
                     effect = 0.20f;
                 baseResult.Add(effect, new TextObject("Governor stewardship"));

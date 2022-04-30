@@ -30,17 +30,17 @@ namespace BannerKings.Managers.Populations
             this.settlement = settlement;
             this.peasantManpower = peasantManpower;
             this.nobleManpower = nobleManpower;
-            this.engines = new List<SiegeEngineType>();
+            engines = new List<SiegeEngineType>();
         }
 
         public void DeduceManpower(PopulationData data, int quantity, CharacterObject troop)
         {
             int tier = troop.Tier;
-            bool noble = BannerKings.Utils.Helpers.IsRetinueTroop(troop, settlement.Culture);
+            bool noble = Utils.Helpers.IsRetinueTroop(troop, settlement.Culture);
             if (noble)
             {
-                if (this.nobleManpower >= quantity) this.nobleManpower -= quantity;
-                else this.nobleManpower = 0;
+                if (nobleManpower >= quantity) nobleManpower -= quantity;
+                else nobleManpower = 0;
                 data.UpdatePopType(PopType.Nobles, -quantity);
             }
             else
@@ -59,12 +59,12 @@ namespace BannerKings.Managers.Populations
                 {
                     data.UpdatePopType(PopType.Serfs, -quantity);
                 }
-                if (this.peasantManpower >= quantity) this.peasantManpower -= quantity;
-                else this.peasantManpower = 0;
+                if (peasantManpower >= quantity) peasantManpower -= quantity;
+                else peasantManpower = 0;
             }
 
-            this.nobleManpower = Math.Max(this.nobleManpower, 0);
-            this.peasantManpower = Math.Max(this.peasantManpower, 0);
+            nobleManpower = Math.Max(nobleManpower, 0);
+            peasantManpower = Math.Max(peasantManpower, 0);
         }
 
         public int Manpower => peasantManpower + nobleManpower;
@@ -86,7 +86,7 @@ namespace BannerKings.Managers.Populations
 
         public int Holdout => new BKFoodModel().GetFoodEstimate(settlement, settlement.Town.FoodStocksUpperLimit());
 
-        public IEnumerable<SiegeEngineType> Engines => this.engines;
+        public IEnumerable<SiegeEngineType> Engines => engines;
 
         public int Ballistae => new BKSiegeEventModel().GetPrebuiltSiegeEnginesOfSettlement(settlement).Count(x => x == DefaultSiegeEngineTypes.Ballista);
         public int Catapultae => new BKSiegeEventModel().GetPrebuiltSiegeEnginesOfSettlement(settlement).Count(x => x == DefaultSiegeEngineTypes.Catapult);
@@ -104,9 +104,9 @@ namespace BannerKings.Managers.Populations
             int peasantGrowth = (int)(data.Growth.ResultNumber * (serfMilitarism + craftsmanMilitarism));
             if (peasantGrowth == 0) peasantGrowth++;
             if (peasantManpower > peasantCap)
-                this.peasantManpower += (int)((float)peasantGrowth * -1f);
+                peasantManpower += (int)(peasantGrowth * -1f);
             else if (peasantManpower < peasantCap)
-                this.peasantManpower += peasantGrowth;
+                peasantManpower += peasantGrowth;
 
             float nobleMilitarism = model.GetClassMilitarism(PopType.Nobles);
             float nobles = data.GetTypeCount(PopType.Nobles);
@@ -114,9 +114,9 @@ namespace BannerKings.Managers.Populations
             int nobleGrowth = (int)(data.Growth.ResultNumber * nobleMilitarism);
             if (nobleGrowth == 0) nobleGrowth++;
             if (nobleManpower > nobleCap)
-                this.nobleManpower += (int)((float)nobleGrowth * -1f);
+                nobleManpower += (int)(nobleGrowth * -1f);
             else if (nobleManpower < nobleCap)
-                this.nobleManpower += nobleGrowth;
+                nobleManpower += nobleGrowth;
         }
     }
 }

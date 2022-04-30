@@ -13,27 +13,27 @@ namespace BannerKings.Managers
 
         public ReligionsManager()
         {
-            this.Religions = new Dictionary<Religion, List<Hero>>();
-            this.Cultures = new Dictionary<CultureObject, Religion>();
+            Religions = new Dictionary<Religion, List<Hero>>();
+            Cultures = new Dictionary<CultureObject, Religion>();
             InitializeReligions();
         }
 
         public void InitializeReligions()
         {
-            CultureObject aserai = BannerKings.Utils.Helpers.GetCulture("aserai");
-            CultureObject khuzait = BannerKings.Utils.Helpers.GetCulture("khuzait");
-            CultureObject imperial = BannerKings.Utils.Helpers.GetCulture("imperial");
+            CultureObject aserai = Utils.Helpers.GetCulture("aserai");
+            CultureObject khuzait = Utils.Helpers.GetCulture("khuzait");
+            CultureObject imperial = Utils.Helpers.GetCulture("imperial");
 
             Religion aseraiReligion = new Religion(Settlement.All.First(x => x.StringId == "town_A1"), DefaultFaiths.Instance.AseraCode, new DescentralizedLeadership(),
-                new List<CultureObject>() { aserai, khuzait, imperial });
+                new List<CultureObject> { aserai, khuzait, imperial });
 
-            this.Religions.Add(aseraiReligion, new List<Hero>());
-            this.Cultures.Add(aserai, aseraiReligion);
+            Religions.Add(aseraiReligion, new List<Hero>());
+            Cultures.Add(aserai, aseraiReligion);
         }
 
         public void InitializePresets()
         {
-            foreach (KeyValuePair<CultureObject, Religion> pair in this.Cultures)
+            foreach (KeyValuePair<CultureObject, Religion> pair in Cultures)
             {
                 string id = pair.Value.Faith.GetId();
                 List<CharacterObject> presets = CharacterObject.All.ToList().FindAll(x => x.Occupation == Occupation.Preacher
@@ -48,23 +48,23 @@ namespace BannerKings.Managers
 
         public Religion GetIdealReligion(CultureObject culture)
         {
-            if (this.Cultures.ContainsKey(culture))
-                return this.Cultures[culture];
+            if (Cultures.ContainsKey(culture))
+                return Cultures[culture];
 
             return null;
         }
 
         public bool IsReligionMember(Hero hero, Religion religion)
         {
-            if (this.Religions.ContainsKey(religion))
-                if (this.Religions[religion].Contains(hero))
+            if (Religions.ContainsKey(religion))
+                if (Religions[religion].Contains(hero))
                     return true;
             return false;
         }
 
         public bool IsPreacher(Hero hero)
         {
-            foreach (Religion rel in this.Religions.Keys.ToList())
+            foreach (Religion rel in Religions.Keys.ToList())
                 foreach (Clergyman clergy in rel.Clergy.Values.ToList())
                     if (clergy.Hero == hero)
                         return true;
@@ -74,7 +74,7 @@ namespace BannerKings.Managers
 
         public Clergyman GetClergymanFromHeroHero(Hero hero)
         {
-            foreach (Religion rel in this.Religions.Keys.ToList())
+            foreach (Religion rel in Religions.Keys.ToList())
                 foreach (Clergyman clergy in rel.Clergy.Values.ToList())
                     if (clergy.Hero == hero)
                         return clergy;
@@ -84,7 +84,7 @@ namespace BannerKings.Managers
 
         public Religion GetClergymanReligion(Clergyman clergyman)
         {
-            foreach (Religion rel in this.Religions.Keys.ToList())
+            foreach (Religion rel in Religions.Keys.ToList())
                 foreach (Clergyman clergy in rel.Clergy.Values.ToList())
                     if (clergy == clergyman)
                         return rel;

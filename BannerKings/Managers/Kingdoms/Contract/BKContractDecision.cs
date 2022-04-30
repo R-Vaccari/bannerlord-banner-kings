@@ -4,7 +4,6 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Election;
 using TaleWorlds.Localization;
 using TaleWorlds.SaveSystem;
-using static BannerKings.Managers.TitleManager;
 
 namespace BannerKings.Managers.Kingdoms.Contract
 {
@@ -15,7 +14,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
 
         public BKContractDecision(Clan proposerClan, FeudalTitle title) : base(proposerClan)
         {
-            this.Title = title;
+            Title = title;
         }
 
         public abstract float CalculateKingdomSupport(Kingdom kingdom);
@@ -32,7 +31,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
 
         public override Clan DetermineChooser()
         {
-            return base.Kingdom.RulingClan;
+            return Kingdom.RulingClan;
         }
 
         public override IEnumerable<DecisionOutcome> DetermineInitialCandidates()
@@ -51,8 +50,8 @@ namespace BannerKings.Managers.Kingdoms.Contract
 
         public override TextObject GetChooseDescription()
         {
-            TextObject textObject = new TextObject("{=!}As the sovereign of {KINGDOM}, you must decide whether to approve this contract change or not.", null);
-            textObject.SetTextVariable("KINGDOM", this.Kingdom.Name);
+            TextObject textObject = new TextObject("{=!}As the sovereign of {KINGDOM}, you must decide whether to approve this contract change or not.");
+            textObject.SetTextVariable("KINGDOM", Kingdom.Name);
             return textObject;
         }
 
@@ -98,7 +97,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
 
         public override bool IsAllowed()
         {
-            return this.Title != null && this.Title.contract != null;
+            return Title != null && Title.contract != null;
         }
     }
 }

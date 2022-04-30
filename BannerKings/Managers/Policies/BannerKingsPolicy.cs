@@ -17,8 +17,8 @@ namespace BannerKings.Managers.Policies
 
         public BannerKingsPolicy(Settlement settlement, int selected)
         {
-            this.Settlement = settlement;
-            this.Selected = selected;
+            Settlement = settlement;
+            Selected = selected;
         }
         public abstract string GetHint(int value);
         public abstract string GetIdentifier();

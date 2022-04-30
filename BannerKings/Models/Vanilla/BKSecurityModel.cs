@@ -1,5 +1,4 @@
-﻿using BannerKings.Managers;
-using BannerKings.Managers.Court;
+﻿using BannerKings.Managers.Court;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Titles;
 using BannerKings.Populations;
@@ -8,7 +7,6 @@ using TaleWorlds.CampaignSystem.SandBox.GameComponents.Map;
 using TaleWorlds.Localization;
 using static BannerKings.Managers.Policies.BKCriminalPolicy;
 using static BannerKings.Managers.Policies.BKWorkforcePolicy;
-using static BannerKings.Managers.TitleManager;
 
 namespace BannerKings.Models
 {
@@ -47,7 +45,7 @@ namespace BannerKings.Models
                 BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref baseResult, town.OwnerClan.Leader, CouncilPosition.Spymaster, 1f, false);
             }
 
-            this.GetHideoutBonus(town, ref baseResult);
+            GetHideoutBonus(town, ref baseResult);
             return baseResult;
         }
 
@@ -65,7 +63,7 @@ namespace BannerKings.Models
                 }
             }
             if (num3 == 0)
-                explainedNumber.Add(0.5f, new TextObject("No hideouts nearby"), null);
+                explainedNumber.Add(0.5f, new TextObject("No hideouts nearby"));
             
         }
 

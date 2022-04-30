@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TaleWorlds.Localization;
+﻿using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Institutions.Religions
 {
@@ -20,9 +15,9 @@ namespace BannerKings.Managers.Institutions.Religions
 
         public void Initialize()
         {
-            this.asera = new Divinity(new TextObject("{=!}Asera"), new TextObject("{=!}The god of the Aserai."));
+            asera = new Divinity(new TextObject("{=!}Asera"), new TextObject("{=!}The god of the Aserai."));
         }
 
-        public Divinity Asera => this.asera;
+        public Divinity Asera => asera;
     }
 }

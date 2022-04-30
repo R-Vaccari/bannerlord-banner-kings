@@ -53,7 +53,7 @@ namespace BannerKings.Managers.Titles
             if (obj is FeudalTitle)
             {
                 FeudalTitle target = (FeudalTitle)obj;
-                return this.fief != null ? this.fief == target.fief : this.name == target.name;
+                return fief != null ? fief == target.fief : name == target.name;
             }
             return base.Equals(obj);
         }
@@ -65,23 +65,23 @@ namespace BannerKings.Managers.Titles
             this.vassals = vassals;
             this.deJure = deJure;
             this.deFacto = deFacto;
-            this.name = new TextObject(BannerKings.Utils.Helpers.GetTitlePrefix(type) + " of " + name);
-            this.shortName = new TextObject(name);
+            this.name = new TextObject(Utils.Helpers.GetTitlePrefix(type) + " of " + name);
+            shortName = new TextObject(name);
             this.contract = contract;
             dueTax = 0;
-            this.claims = new Dictionary<Hero, ClaimType>();
-            this.deJureDrift = new Dictionary<FeudalTitle, float>();
+            claims = new Dictionary<Hero, ClaimType>();
+            deJureDrift = new Dictionary<FeudalTitle, float>();
         }
 
-        public void SetName(TextObject shortname) => this.shortName = shortname;
+        public void SetName(TextObject shortname) => shortName = shortname;
 
         public Dictionary<FeudalTitle, float> DeJureDrifts
         {
             get 
             {
-                if (this.deJureDrift == null) this.deJureDrift = new Dictionary<FeudalTitle, float>();
+                if (deJureDrift == null) deJureDrift = new Dictionary<FeudalTitle, float>();
                 Dictionary<FeudalTitle, float> dic = new Dictionary<FeudalTitle, float>();
-                foreach (KeyValuePair<FeudalTitle, float> pair in this.deJureDrift)
+                foreach (KeyValuePair<FeudalTitle, float> pair in deJureDrift)
                     dic.Add(pair.Key, pair.Value);
 
                 return dic;
@@ -90,13 +90,13 @@ namespace BannerKings.Managers.Titles
 
         public void TickDrift(FeudalTitle current, float progress = 0.000793f)
         {
-            this.AddDrift(current, progress);
+            AddDrift(current, progress);
             List<FeudalTitle> toRemove = null;
-            foreach (FeudalTitle sovereign in this.deJureDrift.Keys.ToList())
+            foreach (FeudalTitle sovereign in deJureDrift.Keys.ToList())
                 if (sovereign != current)
                 {
-                    this.deJureDrift[sovereign] -= progress;
-                    if (this.deJureDrift[sovereign] <= 0f)
+                    deJureDrift[sovereign] -= progress;
+                    if (deJureDrift[sovereign] <= 0f)
                     {
                         if (toRemove == null) toRemove = new List<FeudalTitle>();
                         toRemove.Add(sovereign);
@@ -105,28 +105,28 @@ namespace BannerKings.Managers.Titles
 
             if (toRemove != null)
                 foreach (FeudalTitle title in toRemove)
-                    this.deJureDrift.Remove(title);
+                    deJureDrift.Remove(title);
         }
 
         private void AddDrift(FeudalTitle newSovereign, float progress)
         {
-            if (this.DeJureDrifts.ContainsKey(newSovereign))
-                this.deJureDrift[newSovereign] += progress;
-            else this.deJureDrift.Add(newSovereign, 0f);
+            if (DeJureDrifts.ContainsKey(newSovereign))
+                deJureDrift[newSovereign] += progress;
+            else deJureDrift.Add(newSovereign, 0f);
 
-            if (this.deJureDrift[newSovereign] >= 1f)
-                this.DriftTitle(newSovereign);
+            if (deJureDrift[newSovereign] >= 1f)
+                DriftTitle(newSovereign);
             
-            else if (this.deJureDrift[newSovereign] < 0f)
-                this.deJureDrift[newSovereign] = 0f;
+            else if (deJureDrift[newSovereign] < 0f)
+                deJureDrift[newSovereign] = 0f;
         }
 
         public Dictionary<Hero, ClaimType> Claims
         {
             get
             {
-                if (this.claims == null) this.claims = new Dictionary<Hero, ClaimType>();
-                return this.claims;
+                if (claims == null) claims = new Dictionary<Hero, ClaimType>();
+                return claims;
             }
         }
 
@@ -134,50 +134,50 @@ namespace BannerKings.Managers.Titles
         {
             get
             {
-                if (this.ongoingClaims == null) this.ongoingClaims = new Dictionary<Hero, CampaignTime>();
-                return this.ongoingClaims;
+                if (ongoingClaims == null) ongoingClaims = new Dictionary<Hero, CampaignTime>();
+                return ongoingClaims;
             }
         }
 
         public ClaimType GetHeroClaim(Hero hero)
         {
             if (hero == null) return ClaimType.None;
-            if (this.Claims.ContainsKey(hero))
-                return this.Claims[hero];
-            else if (this.OngoingClaims.ContainsKey(hero))
+            if (Claims.ContainsKey(hero))
+                return Claims[hero];
+            if (OngoingClaims.ContainsKey(hero))
                 return ClaimType.Ongoing;
-            else return ClaimType.None;
+            return ClaimType.None;
         }
 
         public void AddOngoingClaim(Hero hero)
         {
             if (hero == null) return;
-            if (!this.OngoingClaims.ContainsKey(hero))
-                this.OngoingClaims.Add(hero, CampaignTime.YearsFromNow(1));
+            if (!OngoingClaims.ContainsKey(hero))
+                OngoingClaims.Add(hero, CampaignTime.YearsFromNow(1));
         }
 
         public void AddClaim(Hero hero, ClaimType type, bool force = false)
         {
             if (hero == null || type == ClaimType.None) return;
-            this.Claims.Add(hero, type);
-            if (this.OngoingClaims.ContainsKey(hero))
-                this.OngoingClaims.Remove(hero);
+            Claims.Add(hero, type);
+            if (OngoingClaims.ContainsKey(hero))
+                OngoingClaims.Remove(hero);
             if (hero == Hero.MainHero)
                 InformationManager.AddQuickInformation(new TextObject("{=!}You now have a claim on the {TITLE}")
-                            .SetTextVariable("TITLE", this.FullName), 0);
+                            .SetTextVariable("TITLE", FullName));
         }
 
         public void RemoveClaim(Hero hero)
         {
-            if (this.claims.ContainsKey(hero))
-                this.Claims.Remove(hero);
+            if (claims.ContainsKey(hero))
+                Claims.Remove(hero);
         }
 
         public void CleanClaims()
         {
-            Hero currentDeFacto = this.DeFacto;
+            Hero currentDeFacto = DeFacto;
             List<Hero> toRemove = new List<Hero>();
-            foreach (KeyValuePair<Hero, ClaimType> pair in this.Claims)
+            foreach (KeyValuePair<Hero, ClaimType> pair in Claims)
             {
                 if (pair.Key.IsDead)
                 {
@@ -189,15 +189,15 @@ namespace BannerKings.Managers.Titles
             }
                 
             foreach (Hero hero in toRemove)
-                this.Claims.Remove(hero);
+                Claims.Remove(hero);
 
             toRemove.Clear();
-            foreach (Hero hero in this.OngoingClaims.Keys.ToList())
+            foreach (Hero hero in OngoingClaims.Keys.ToList())
                 if (hero.IsDead)
                     toRemove.Add(hero);
 
             foreach (Hero hero in toRemove)
-                this.Claims.Remove(hero);
+                Claims.Remove(hero);
         }
 
         public TextObject FullName
@@ -205,8 +205,8 @@ namespace BannerKings.Managers.Titles
             get
             {
                 TextObject text = new TextObject("{=!}{TITLE} of {NAME}");
-                text.SetTextVariable("TITLE", BannerKings.Utils.Helpers.GetTitlePrefix(this.type, deJure.Culture));
-                text.SetTextVariable("NAME", this.shortName.ToString());
+                text.SetTextVariable("TITLE", Utils.Helpers.GetTitlePrefix(type, deJure.Culture));
+                text.SetTextVariable("NAME", shortName.ToString());
                 return text;
             }
         }
@@ -215,61 +215,55 @@ namespace BannerKings.Managers.Titles
         {
             get
             {
-                if (this.fief != null)
+                if (fief != null)
                 {
-                    return this.fief.Owner;
+                    return fief.Owner;
                 }
-                else
+
+                Dictionary<Hero, int> contestors = new Dictionary<Hero, int>();
+                foreach (FeudalTitle title in vassals)
                 {
-                    Dictionary<Hero, int> contestors = new Dictionary<Hero, int>();
-                    foreach (FeudalTitle title in this.vassals)
-                    {
-                        Hero vassal = title.DeFacto;
-                        if (contestors.ContainsKey(vassal))
-                            contestors[vassal] += 1;
-                        else contestors.Add(vassal, 1);
-                    }
-
-                    int deJureCount = contestors.ContainsKey(this.deJure) ? contestors[this.deJure] : 0;
-                    int highestCount = contestors.Values.Max();
-                    List<Hero> highestCountHeroes = contestors.Keys.ToList().FindAll(x => contestors[x] == highestCount);
-                    if (highestCountHeroes.Contains(this.deJure))
-                        return this.deJure;
-                    else
-                    {
-                        Hero selected = highestCountHeroes[0];
-                        if (highestCountHeroes.Count > 1)
-                            foreach (Hero competitor in highestCountHeroes)
-                                if (competitor != selected && competitor.Clan.Tier > selected.Clan.Tier ||
-                                    competitor.Clan.Influence > selected.Clan.Influence)
-                                    selected = competitor;
-
-                        return selected;
-
-                    }
+                    Hero vassal = title.DeFacto;
+                    if (contestors.ContainsKey(vassal))
+                        contestors[vassal] += 1;
+                    else contestors.Add(vassal, 1);
                 }
+
+                int deJureCount = contestors.ContainsKey(deJure) ? contestors[deJure] : 0;
+                int highestCount = contestors.Values.Max();
+                List<Hero> highestCountHeroes = contestors.Keys.ToList().FindAll(x => contestors[x] == highestCount);
+                if (highestCountHeroes.Contains(deJure))
+                    return deJure;
+                Hero selected = highestCountHeroes[0];
+                if (highestCountHeroes.Count > 1)
+                    foreach (Hero competitor in highestCountHeroes)
+                        if (competitor != selected && competitor.Clan.Tier > selected.Clan.Tier ||
+                            competitor.Clan.Influence > selected.Clan.Influence)
+                            selected = competitor;
+
+                return selected;
             }
         }
 
-        public bool Active => this.deJure != null || this.deFacto != null;
+        public bool Active => deJure != null || deFacto != null;
 
-        public bool IsSovereignLevel => (int)this.type <= 1;
+        public bool IsSovereignLevel => (int)type <= 1;
 
         public void DriftTitle(FeudalTitle newSovereign)
         {
-            if (this.type == TitleType.Dukedom && newSovereign.IsSovereignLevel)
+            if (type == TitleType.Dukedom && newSovereign.IsSovereignLevel)
             {
-                this.sovereign.vassals.Remove(this);
-                this.SetSovereign(newSovereign);
+                sovereign.vassals.Remove(this);
+                SetSovereign(newSovereign);
                 newSovereign.vassals.Add(this);
 
-                this.ChangeContract(newSovereign.contract.Government);
-                this.ChangeContract(newSovereign.contract.Succession);
-                this.ChangeContract(newSovereign.contract.Inheritance);
-                this.ChangeContract(newSovereign.contract.GenderLaw);
+                ChangeContract(newSovereign.contract.Government);
+                ChangeContract(newSovereign.contract.Succession);
+                ChangeContract(newSovereign.contract.Inheritance);
+                ChangeContract(newSovereign.contract.GenderLaw);
 
                 InformationManager.DisplayMessage(new InformationMessage(new TextObject("{=!}{TITLE} has drifted into a legal part of {SOVEREIGN}")
-                    .SetTextVariable("TITLE", this.FullName)
+                    .SetTextVariable("TITLE", FullName)
                     .SetTextVariable("SOVEREIGN", newSovereign.FullName)
                     .ToString()));
             }
@@ -278,40 +272,40 @@ namespace BannerKings.Managers.Titles
         public void SetSovereign(FeudalTitle sovereign)
         {
             this.sovereign = sovereign;
-            if (this.vassals != null && this.vassals.Count > 0)
-                foreach (FeudalTitle vassal in this.vassals)
+            if (vassals != null && vassals.Count > 0)
+                foreach (FeudalTitle vassal in vassals)
                     vassal.SetSovereign(sovereign);
         }
 
         public void ChangeContract(GovernmentType government)
         {
-            this.contract.ChangeGovernment(government);
-            if (this.vassals != null && this.vassals.Count > 0)
-                foreach (FeudalTitle vassal in this.vassals)
+            contract.ChangeGovernment(government);
+            if (vassals != null && vassals.Count > 0)
+                foreach (FeudalTitle vassal in vassals)
                     vassal.ChangeContract(government);
         }
 
         public void ChangeContract(SuccessionType succession)
         {
-            this.contract.ChangeSuccession(succession);
-            if (this.vassals != null && this.vassals.Count > 0)
-                foreach (FeudalTitle vassal in this.vassals)
+            contract.ChangeSuccession(succession);
+            if (vassals != null && vassals.Count > 0)
+                foreach (FeudalTitle vassal in vassals)
                     vassal.ChangeContract(succession);
         }
 
         public void ChangeContract(InheritanceType inheritance)
         {
-            this.contract.ChangeInheritance(inheritance);
-            if (this.vassals != null && this.vassals.Count > 0)
-                foreach (FeudalTitle vassal in this.vassals)
+            contract.ChangeInheritance(inheritance);
+            if (vassals != null && vassals.Count > 0)
+                foreach (FeudalTitle vassal in vassals)
                     vassal.ChangeContract(inheritance);
         }
 
         public void ChangeContract(GenderLaw genderLaw)
         {
-            this.contract.ChangeGenderLaw(genderLaw);
-            if (this.vassals != null && this.vassals.Count > 0)
-                foreach (FeudalTitle vassal in this.vassals)
+            contract.ChangeGenderLaw(genderLaw);
+            if (vassals != null && vassals.Count > 0)
+                foreach (FeudalTitle vassal in vassals)
                     vassal.ChangeContract(genderLaw);
         }
     }

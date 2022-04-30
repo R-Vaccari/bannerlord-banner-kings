@@ -27,7 +27,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
             bool newGovernment = (chosenOutcome as GenderLawDecisionOutcome).ShouldDecisionBeEnforced;
             if (newGovernment)
             {
-                this.Title.ChangeContract(genderLaw);
+                Title.ChangeContract(genderLaw);
             }
         }
 
@@ -43,14 +43,13 @@ namespace BannerKings.Managers.Kingdoms.Contract
 
         public override Clan DetermineChooser()
         {
-            return base.Kingdom.RulingClan;
+            return Kingdom.RulingClan;
         }
 
         public override IEnumerable<DecisionOutcome> DetermineInitialCandidates()
         {
             yield return new GenderLawDecisionOutcome(true);
             yield return new GenderLawDecisionOutcome(false);
-            yield break;
         }
 
         public override void DetermineSponsors(List<DecisionOutcome> possibleOutcomes)
@@ -58,18 +57,18 @@ namespace BannerKings.Managers.Kingdoms.Contract
             foreach (DecisionOutcome decisionOutcome in possibleOutcomes)
             {
                 if (((GenderLawDecisionOutcome)decisionOutcome).ShouldDecisionBeEnforced)
-                    decisionOutcome.SetSponsor(base.ProposerClan);
+                    decisionOutcome.SetSponsor(ProposerClan);
 
-                else base.AssignDefaultSponsor(decisionOutcome);
+                else AssignDefaultSponsor(decisionOutcome);
             }
         }
 
         public override float DetermineSupport(Clan clan, DecisionOutcome possibleOutcome)
         {
             GenderLawDecisionOutcome policyDecisionOutcome = possibleOutcome as GenderLawDecisionOutcome;
-            float num = 2f * (float)clan.Leader.GetTraitLevel(DefaultTraits.Egalitarian) - 2f * (float)clan.Leader.GetTraitLevel(DefaultTraits.Authoritarian);
+            float num = 2f * clan.Leader.GetTraitLevel(DefaultTraits.Egalitarian) - 2f * clan.Leader.GetTraitLevel(DefaultTraits.Authoritarian);
             float num2 = 0f;
-            FeudalTitle sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(base.Kingdom);
+            FeudalTitle sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(Kingdom);
             if (sovereign != null && sovereign.contract != null)
             {
                 GovernmentType government = sovereign.contract.Government;
@@ -79,21 +78,21 @@ namespace BannerKings.Managers.Kingdoms.Contract
             }
             
 
-            return this.genderLaw == GenderLaw.Cognatic && policyDecisionOutcome.ShouldDecisionBeEnforced ? (num + num2) * 60f : (num + num2) * -100f;
+            return genderLaw == GenderLaw.Cognatic && policyDecisionOutcome.ShouldDecisionBeEnforced ? (num + num2) * 60f : (num + num2) * -100f;
         }
 
         public override TextObject GetChooseDescription()
         {
-            TextObject textObject = new TextObject("{=0EqPRs21}As {?IS_FEMALE}queen{?}king{\\?} you must decide whether to enforce the policy of {POLICY_NAME}.", null);
-            textObject.SetTextVariable("IS_FEMALE", this.DetermineChooser().Leader.IsFemale ? 1 : 0);
-            textObject.SetTextVariable("POLICY_NAME", this.genderLaw.ToString());
+            TextObject textObject = new TextObject("{=0EqPRs21}As {?IS_FEMALE}queen{?}king{\\?} you must decide whether to enforce the policy of {POLICY_NAME}.");
+            textObject.SetTextVariable("IS_FEMALE", DetermineChooser().Leader.IsFemale ? 1 : 0);
+            textObject.SetTextVariable("POLICY_NAME", genderLaw.ToString());
             return textObject;
         }
 
         public override TextObject GetChooseTitle()
         {
-            TextObject textObject = new TextObject("{=!}Change government to {GOVERNMENT}", null);
-            textObject.SetTextVariable("GOVERNMENT", this.genderLaw.ToString());
+            TextObject textObject = new TextObject("{=!}Change government to {GOVERNMENT}");
+            textObject.SetTextVariable("GOVERNMENT", genderLaw.ToString());
             return textObject;
         }
 
@@ -102,21 +101,21 @@ namespace BannerKings.Managers.Kingdoms.Contract
             TextObject textObject;
             bool newGovernment = ((GenderLawDecisionOutcome)chosenOutcome).ShouldDecisionBeEnforced;
             if (newGovernment)
-                textObject = new TextObject("{=!}The {KINGDOM}'s government is now {POLICY_DESCRIPTION}. {POLICY_SUPPORT}", null);
-            else textObject = new TextObject("{=!}The {KINGDOM}'s government will continue to be {POLICY_DESCRIPTION}. {POLICY_SUPPORT}", null);
+                textObject = new TextObject("{=!}The {KINGDOM}'s government is now {POLICY_DESCRIPTION}. {POLICY_SUPPORT}");
+            else textObject = new TextObject("{=!}The {KINGDOM}'s government will continue to be {POLICY_DESCRIPTION}. {POLICY_SUPPORT}");
 
 
-            textObject.SetTextVariable("KINGDOM", base.Kingdom.InformalName);
-            textObject.SetTextVariable("POLICY_DESCRIPTION", newGovernment ? this.genderLaw.ToString() : this.Title.contract.Succession.ToString());
-            if (isShortVersion || base.IsSingleClanDecision())
+            textObject.SetTextVariable("KINGDOM", Kingdom.InformalName);
+            textObject.SetTextVariable("POLICY_DESCRIPTION", newGovernment ? genderLaw.ToString() : Title.contract.Succession.ToString());
+            if (isShortVersion || IsSingleClanDecision())
                 textObject.SetTextVariable("POLICY_SUPPORT", TextObject.Empty);
             else
             {
                 textObject.SetTextVariable("POLICY_SUPPORT", "{=bqEO389P}This decision caused a split in the council.");
-                if (supportStatus == KingdomDecision.SupportStatus.Majority)
+                if (supportStatus == SupportStatus.Majority)
                     textObject.SetTextVariable("POLICY_SUPPORT", "{=3W67kdtc}This decision had the support of the council.");
                 
-                if (supportStatus == KingdomDecision.SupportStatus.Minority)
+                if (supportStatus == SupportStatus.Minority)
                     textObject.SetTextVariable("POLICY_SUPPORT", "{=b6MgRYlM}This decision was rejected by the support of the council.");
                 
             }
@@ -125,7 +124,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
 
         public override TextObject GetGeneralTitle()
         {
-            return new TextObject(this.genderLaw.ToString());
+            return new TextObject(genderLaw.ToString());
         }
 
         public override int GetProposalInfluenceCost()
@@ -135,23 +134,23 @@ namespace BannerKings.Managers.Kingdoms.Contract
 
         public override DecisionOutcome GetQueriedDecisionOutcome(List<DecisionOutcome> possibleOutcomes)
         {
-            return possibleOutcomes.FirstOrDefault((DecisionOutcome t) => ((GenderLawDecisionOutcome)t).ShouldDecisionBeEnforced);
+            return possibleOutcomes.FirstOrDefault(t => ((GenderLawDecisionOutcome)t).ShouldDecisionBeEnforced);
         }
 
         public override TextObject GetSupportDescription()
         {
-            TextObject textObject = new TextObject("{=!}{CLAN} proposes a change of government, currently {CURRENT} to {PROPOSED}. You can pick your stance regarding this decision.", null);
+            TextObject textObject = new TextObject("{=!}{CLAN} proposes a change of government, currently {CURRENT} to {PROPOSED}. You can pick your stance regarding this decision.");
 
-            textObject.SetTextVariable("CLAN", this.DetermineChooser().Leader.Name);
-            textObject.SetTextVariable("CURRENT", BannerKings.Utils.Helpers.GetGovernmentString(this.Title.contract.Government, base.Kingdom.Culture));
-            textObject.SetTextVariable("PROPOSED", this.genderLaw.ToString());
+            textObject.SetTextVariable("CLAN", DetermineChooser().Leader.Name);
+            textObject.SetTextVariable("CURRENT", Utils.Helpers.GetGovernmentString(Title.contract.Government, Kingdom.Culture));
+            textObject.SetTextVariable("PROPOSED", genderLaw.ToString());
             return textObject;
         }
 
         public override TextObject GetSupportTitle()
         {
-            TextObject textObject = new TextObject("{=!}Vote for change of realm's succession to {GOVERNMENT}", null);
-            textObject.SetTextVariable("GOVERNMENT", this.genderLaw.ToString());
+            TextObject textObject = new TextObject("{=!}Vote for change of realm's succession to {GOVERNMENT}");
+            textObject.SetTextVariable("GOVERNMENT", genderLaw.ToString());
             return textObject;
         }
 
@@ -171,7 +170,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
                 if (!clan.IsUnderMercenaryService)
                 {
                     if (clan == Clan.PlayerClan) support += 100f;
-                    else support += this.DetermineSupport(clan, new GenderLawDecisionOutcome(true));
+                    else support += DetermineSupport(clan, new GenderLawDecisionOutcome(true));
                     clans++;
                 }
 
@@ -187,17 +186,17 @@ namespace BannerKings.Managers.Kingdoms.Contract
 
             public override TextObject GetDecisionTitle()
             {
-                TextObject textObject = new TextObject("{=kakxnaN5}{?SUPPORT}Yes{?}No{\\?}", null);
-                textObject.SetTextVariable("SUPPORT", this.ShouldDecisionBeEnforced ? 1 : 0);
+                TextObject textObject = new TextObject("{=kakxnaN5}{?SUPPORT}Yes{?}No{\\?}");
+                textObject.SetTextVariable("SUPPORT", ShouldDecisionBeEnforced ? 1 : 0);
                 return textObject;
             }
 
             public override TextObject GetDecisionDescription()
             {
-                if (this.ShouldDecisionBeEnforced)
-                    return new TextObject("{=pWyxaauF}We support this proposal", null);
+                if (ShouldDecisionBeEnforced)
+                    return new TextObject("{=pWyxaauF}We support this proposal");
 
-                return new TextObject("{=BktSNgY4}We oppose this proposal", null);
+                return new TextObject("{=BktSNgY4}We oppose this proposal");
             }
 
             public override string GetDecisionLink()
@@ -212,7 +211,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
 
             public GenderLawDecisionOutcome(bool shouldBeEnforced)
             {
-                this.ShouldDecisionBeEnforced = shouldBeEnforced;
+                ShouldDecisionBeEnforced = shouldBeEnforced;
             }
         }
     }

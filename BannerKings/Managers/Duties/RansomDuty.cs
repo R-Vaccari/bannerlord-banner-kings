@@ -16,15 +16,15 @@ namespace BannerKings.Managers.Duties
 
         public RansomDuty(CampaignTime dueTime, Hero owner, float completion) : base(dueTime, FeudalDuties.Ransom, completion)
         {
-            this.DebtOwner = owner;
+            DebtOwner = owner;
         }
 
         public override void Finish()
         {
             string result = null;
-            if (Hero.MainHero.Gold >= base.Completion)
+            if (Hero.MainHero.Gold >= Completion)
             {
-                GiveGoldToClanAction.ApplyFromHeroToClan(Hero.MainHero, this.DebtOwner.Clan, (int)base.Completion);
+                GiveGoldToClanAction.ApplyFromHeroToClan(Hero.MainHero, DebtOwner.Clan, (int)Completion);
                 result = new TextObject("{SUZERAIN} holds your oath of ransom aid fulfilled. You have payed {RANSOM} gold and your liege is satisfied.").ToString();
             } else
             {
@@ -38,17 +38,17 @@ namespace BannerKings.Managers.Duties
 
         public override void Tick()
         {
-            GameTexts.SetVariable("SUZERAIN", this.DebtOwner.Name);
-            GameTexts.SetVariable("RANSOM", base.Completion);
-            float remaining = base.DueTime.RemainingDaysFromNow;
-            if (remaining > 0) this.Finish();
+            GameTexts.SetVariable("SUZERAIN", DebtOwner.Name);
+            GameTexts.SetVariable("RANSOM", Completion);
+            float remaining = DueTime.RemainingDaysFromNow;
+            if (remaining > 0) Finish();
 
-            GameTexts.SetVariable("REMAINING", base.Completion);
+            GameTexts.SetVariable("REMAINING", Completion);
             InformationManager.ShowInquiry(new InquiryData("Duty of Ransom Aid", new TextObject("{=!} Your suzerain, {SUZERAIN}, has requested that you fulfill your contract obligations and pay him {RANSOM} gold in order to compensate their ransom. You have {REMAINING} days left to pay it.").ToString(),
                     true, true, "Pay Immediatly", "Withhold For a Day", delegate
                     {
-                        this.Finish();
-                    }, null), false);
+                        Finish();
+                    }, null));
         }
     }
 }
