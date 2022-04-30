@@ -20,9 +20,9 @@ namespace BannerKings.Managers
 
         public void InitializeReligions()
         {
-            CultureObject aserai = BannerKings.Helpers.Helpers.GetCulture("aserai");
-            CultureObject khuzait = BannerKings.Helpers.Helpers.GetCulture("khuzait");
-            CultureObject imperial = BannerKings.Helpers.Helpers.GetCulture("imperial");
+            CultureObject aserai = BannerKings.Utils.Helpers.GetCulture("aserai");
+            CultureObject khuzait = BannerKings.Utils.Helpers.GetCulture("khuzait");
+            CultureObject imperial = BannerKings.Utils.Helpers.GetCulture("imperial");
 
             Religion aseraiReligion = new Religion(Settlement.All.First(x => x.StringId == "town_A1"), DefaultFaiths.Instance.AseraCode, new DescentralizedLeadership(),
                 new List<CultureObject>() { aserai, khuzait, imperial });

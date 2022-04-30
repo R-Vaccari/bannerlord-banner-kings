@@ -20,7 +20,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
 
         public void Initialize()
         {
-            this.aseraGroup = new FaithGroup(new TextObject("{=!}Code of Asera"), new TextObject("{=!}Those that believe in Asera as the true and only prohpet."));
+            this.aseraGroup = new FaithGroup(new TextObject("{=!}Aseran Faiths"), new TextObject("{=!}Those that believe in Asera as the true and only prohpet."));
             this.aseraCode = new AseraFaith();
 
             this.aseraCode.Initialize(DefaultDivinities.Instance.Asera, 

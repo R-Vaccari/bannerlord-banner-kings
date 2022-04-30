@@ -179,7 +179,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
             TextObject textObject = new TextObject("{=!}{CLAN} proposes a change of government, currently {CURRENT} to {PROPOSED}. You can pick your stance regarding this decision.", null);
 
             textObject.SetTextVariable("CLAN", this.DetermineChooser().Leader.Name);
-            textObject.SetTextVariable("CURRENT", BannerKings.Helpers.Helpers.GetGovernmentString(this.Title.contract.Government, base.Kingdom.Culture));
+            textObject.SetTextVariable("CURRENT", BannerKings.Utils.Helpers.GetGovernmentString(this.Title.contract.Government, base.Kingdom.Culture));
             textObject.SetTextVariable("PROPOSED", this.successionType.ToString());
             return textObject;
         }

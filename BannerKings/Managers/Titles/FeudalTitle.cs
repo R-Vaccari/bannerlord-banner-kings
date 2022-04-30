@@ -65,7 +65,7 @@ namespace BannerKings.Managers.Titles
             this.vassals = vassals;
             this.deJure = deJure;
             this.deFacto = deFacto;
-            this.name = new TextObject(BannerKings.Helpers.Helpers.GetTitlePrefix(type) + " of " + name);
+            this.name = new TextObject(BannerKings.Utils.Helpers.GetTitlePrefix(type) + " of " + name);
             this.shortName = new TextObject(name);
             this.contract = contract;
             dueTax = 0;
@@ -205,7 +205,7 @@ namespace BannerKings.Managers.Titles
             get
             {
                 TextObject text = new TextObject("{=!}{TITLE} of {NAME}");
-                text.SetTextVariable("TITLE", BannerKings.Helpers.Helpers.GetTitlePrefix(this.type, deJure.Culture));
+                text.SetTextVariable("TITLE", BannerKings.Utils.Helpers.GetTitlePrefix(this.type, deJure.Culture));
                 text.SetTextVariable("NAME", this.shortName.ToString());
                 return text;
             }

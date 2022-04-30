@@ -7,6 +7,11 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
 {
     public class AseraFaith : MonotheisticFaith
     {
+
+        public override TextObject GetFaithName() => new TextObject("{=!}Code of Asera");
+        public override TextObject GetFaithDescription() => new TextObject("{=!}Founded by the immediate sons of the legendary patriarch of the Southlands, the Code of Asera forms the basis of philosophy, art and law among the members of the confederated Aserai tribes. All tribesmen of the Aserai who do not wander as bedouin, are assumed to be followers of the Code of Asera - though only those who seek to study the intricacies of the mythic patrilineal bloodline and its influence upon the world are celebrated and viewed as Sons of Asera; a facet of colloquial nomenclature meant to force camaraderie as all members of the Sultanate make claim to being descendants of Asera. Faqir, akhund, imams, and mushid make up the various levels of clergy who preach the Code and seek to apply its nuanced legalisms and rites to the Southlands. As a whole, those who follow the Code of Asera place an emphasis on charity between communities, vengeance against those who defy precedent or tradition, and mercy given in kindness with justice forced if kindness is scorned.");
+
+
         public override TextObject GetClergyForbiddenAnswer(int rank)
         {
             TextObject text = null;

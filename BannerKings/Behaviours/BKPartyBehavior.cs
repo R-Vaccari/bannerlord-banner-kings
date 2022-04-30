@@ -145,13 +145,13 @@ namespace BannerKings.Behaviours
 
                     if (component.slaveCaravan)
                     {
-                        int slaves = Helpers.Helpers.GetRosterCount(party.PrisonRoster);
+                        int slaves = Utils.Helpers.GetRosterCount(party.PrisonRoster);
                         data.UpdatePopType(PopType.Slaves, slaves);
                     }
                     else if (component.popType != PopType.None)
                     {
                         string filter = component.popType == PopType.Serfs ? "villager" : (component.popType == PopType.Craftsmen ? "craftsman" : "noble");
-                        int pops = Helpers.Helpers.GetRosterCount(party.MemberRoster, filter);
+                        int pops = Utils.Helpers.GetRosterCount(party.MemberRoster, filter);
                         data.UpdatePopType(component.popType, pops);
                     }
 
@@ -233,7 +233,7 @@ namespace BannerKings.Behaviours
                 type = PopType.Nobles;
             }
 
-            name = "Travelling " + Helpers.Helpers.GetClassName(type, origin.Culture).ToString() + " from {0}";
+            name = "Travelling " + Utils.Helpers.GetClassName(type, origin.Culture).ToString() + " from {0}";
 
             if (civilian != null)
                 PopulationPartyComponent.CreateTravellerParty("travellers_", origin, target,

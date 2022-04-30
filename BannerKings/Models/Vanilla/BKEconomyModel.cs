@@ -29,7 +29,7 @@ namespace BannerKings.Models
                 float nobles = data.GetTypeCount(PopType.Nobles);
                 float craftsmen = data.GetTypeCount(PopType.Craftsmen);
                 float serfs = data.GetTypeCount(PopType.Serfs);
-                ConsumptionType type = Helpers.Helpers.GetTradeGoodConsumptionType(category);
+                ConsumptionType type = Utils.Helpers.GetTradeGoodConsumptionType(category);
 
                 float prosperity = 0.5f + town.Prosperity * 0.00012f;
                 float baseResult = 0f;

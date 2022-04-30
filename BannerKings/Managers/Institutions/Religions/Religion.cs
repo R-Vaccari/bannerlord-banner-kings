@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Library;
-using System.Linq;
 using TaleWorlds.Localization;
 using TaleWorlds.CampaignSystem.Actions;
 

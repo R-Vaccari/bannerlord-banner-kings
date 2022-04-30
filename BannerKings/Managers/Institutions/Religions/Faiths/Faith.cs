@@ -52,6 +52,9 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
         public Dictionary<TraitObject, bool> Traits => this.traits;
         public FaithGroup FaithGroup => this.faithGroup;
         public Divinity MainGod => this.mainGod;
+
+        public abstract TextObject GetFaithName();
+        public abstract TextObject GetFaithDescription();
         public abstract List<Divinity> GetMainDivinities();
         public abstract List<Divinity> GetSecondaryDivinities();
         public abstract TextObject GetMainGodDescription();

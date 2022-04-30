@@ -489,7 +489,7 @@ namespace BannerKings.Managers
 
         public void InitializeTitles()
         {
-            XmlDocument doc = BannerKings.Helpers.Helpers.CreateDocumentFromXmlFile(BasePath.Name + "Modules/BannerKings/ModuleData/titles.xml");
+            XmlDocument doc = BannerKings.Utils.Helpers.CreateDocumentFromXmlFile(BasePath.Name + "Modules/BannerKings/ModuleData/titles.xml");
             XmlNode titlesNode = doc.ChildNodes[1].ChildNodes[0];
             bool autoGenerate = bool.Parse(titlesNode.Attributes["autoGenerate"].Value);
  
