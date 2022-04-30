@@ -37,7 +37,7 @@ namespace BannerKings.Behaviours
             if (hero != Hero.MainHero && target.StringId != "town_A1" || target.Town == null) return;
             
             ReligionData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(target).ReligionData;
-            if (data == null) return;
+            if (data == null || data.Clergyman == null) return;
 
              this.AddClergymanToKeep(data, target);
         }
@@ -88,7 +88,7 @@ namespace BannerKings.Behaviours
 
 
             starter.AddPlayerLine("bk_question_faith_forbidden", "lord_talk_ask_something_2", "bk_preacher_asked_faith_forbidden",
-                "{=!}What is forbidden to the faith??",
+                "{=!}What is forbidden to the faith?",
                 new ConversationSentence.OnConditionDelegate(this.IsPreacher), null, 100, null, null);
 
             starter.AddDialogLine("bk_answer_faith_forbidden_1", "bk_preacher_asked_faith_forbidden", "bk_preacher_asked_faith_forbidden_last",
@@ -97,6 +97,18 @@ namespace BannerKings.Behaviours
 
             starter.AddDialogLine("bk_answer_faith_forbidden_2", "bk_preacher_asked_faith_forbidden_last", "lord_talk_ask_something",
                 "{=!}{CLERGYMAN_FAITH__FORBIDDEN_LAST}",
+                new ConversationSentence.OnConditionDelegate(this.IsPreacher), null, 100, null);
+
+            starter.AddPlayerLine("bk_question_induction", "lord_talk_ask_something_2", "bk_preacher_asked_induction",
+               "{=!}What is forbidden to the faith?",
+               new ConversationSentence.OnConditionDelegate(this.IsPreacher), null, 100, null, null);
+
+            starter.AddDialogLine("bk_answer_induction_1", "bk_preacher_asked_induction", "bk_preacher_asked_induction_last",
+                "{=!}{CLERGYMAN_INDUCTION}",
+                new ConversationSentence.OnConditionDelegate(this.IsPreacher), null, 100, null);
+
+            starter.AddDialogLine("bk_answer_induction_2", "bk_preacher_asked_induction_last", "lord_talk_ask_something",
+                "{=!}{CLERGYMAN_INDUCTION_LAST}",
                 new ConversationSentence.OnConditionDelegate(this.IsPreacher), null, 100, null);
         }
         private bool IsPreacher() => Campaign.Current.ConversationManager.CurrentConversationIsFirst && Hero.OneToOneConversationHero.IsPreacher &&
@@ -122,6 +134,8 @@ namespace BannerKings.Behaviours
             MBTextManager.SetTextVariable("CLERGYMAN_FAITH_LAST", religion.Faith.GetClergyProveFaithLast(clergyman.Rank), false);
             MBTextManager.SetTextVariable("CLERGYMAN_FAITH_FORBIDDEN", religion.Faith.GetClergyForbiddenAnswer(clergyman.Rank), false);
             MBTextManager.SetTextVariable("CLERGYMAN_FAITH__FORBIDDEN_LAST", religion.Faith.GetClergyForbiddenAnswerLast(clergyman.Rank), false);
+            MBTextManager.SetTextVariable("CLERGYMAN_INDUCTION", religion.Faith.GetClergyInduction(clergyman.Rank), false);
+            MBTextManager.SetTextVariable("CLERGYMAN_INDUCTION_LAST", religion.Faith.GetClergyInductionLast(clergyman.Rank), false);
         }
     }
 

@@ -74,7 +74,58 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
                 text = new TextObject("{=!}Mashaera, blood of my blood. It is good to see you are alive and that you are in good health; for the world is rife with conflict beyond our brotherhood and little is to be held as certain. Are you here on pilgrimage or duty, in good tidings or ill news? How may this humble Imam be of service to his sibling?");
             else if (rank == 2)
                 text = new TextObject("{=!}Peace be upon you, my kin. Have you come to study the Code of Asera? I shall grant you what wisdom I have gleaned in my long hours of study, but as your brother I must tell you that I find myself more ignorant the more I realize the breadth of what there is still yet to learn.");
-            else text = new TextObject("{=!}Peace be upon you and may you be favored by Asera, my kin. What may this humble faqir do for you on this glorious day?");
+            else
+            {
+                Settlement settlement = Settlement.CurrentSettlement;
+                if (settlement == null || !settlement.IsVillage) return null;
+
+                if (Hero.MainHero.Culture != Utils.Helpers.GetCulture("aserai"))
+                    text = new TextObject("{=!}Alas, you are no Son of Asera and thus you could never truly follow the Code of Asera. Not in any way that I could fathom. There may be precedent for one beyond our blood to successfully follow the code, but for this you should seek out an Akhund; a scholar of the faith.");
+
+                float relation = 0;
+                foreach (Hero notable in settlement.Notables)
+                    relation += notable.GetRelation(Hero.MainHero);
+
+                float medium = relation / (float)settlement.Notables.Count;
+                if (medium < 0)
+                    text = new TextObject("{=!}You think that it would go unnoticed how the folk here cringe at your visage? How your name is whispered with scornful lips? Are they mislead about you? Perhaps, perhaps. We shall see.");
+                else if (medium < 20)
+                    text = new TextObject("{=!}You are known to me and to this village; not as a savior or as a good soul, but as one of us. You are humble, perhaps because you lack the boldness to pursue being charitable - or perhaps just the means. I do not know, and I do not judge.");
+            }
+
+            return text;
+        }
+
+        public override TextObject GetClergyInductionLast(int rank)
+        {
+            TextObject text = null;
+            if (rank == 4)
+            {
+
+            }
+            else if (rank == 3)
+                text = new TextObject("{=!}Mashaera, blood of my blood. It is good to see you are alive and that you are in good health; for the world is rife with conflict beyond our brotherhood and little is to be held as certain. Are you here on pilgrimage or duty, in good tidings or ill news? How may this humble Imam be of service to his sibling?");
+            else if (rank == 2)
+                text = new TextObject("{=!}Peace be upon you, my kin. Have you come to study the Code of Asera? I shall grant you what wisdom I have gleaned in my long hours of study, but as your brother I must tell you that I find myself more ignorant the more I realize the breadth of what there is still yet to learn.");
+            else
+            {
+                Settlement settlement = Settlement.CurrentSettlement;
+                if (settlement == null || !settlement.IsVillage) return null;
+
+                if (Hero.MainHero.Culture != Utils.Helpers.GetCulture("aserai"))
+                    text = new TextObject("{=!}I wish you well in such pursuits, and that you live a life of peace wherever this path may take you.");
+
+                float relation = 0;
+                foreach (Hero notable in settlement.Notables)
+                    relation += notable.GetRelation(Hero.MainHero);
+
+                float medium = relation / (float)settlement.Notables.Count;
+                if (medium < 0)
+                    text = new TextObject("{=!}If you wish to be made a follower of the Code of Asera, you must treat these people as you would a sibling - you must cherish them, exalt them, protect them and educate them. Show them your better nature and I shall perform upon you our rites of induction.");
+                else if (medium < 20)
+                    text = new TextObject("{=!}I welcome you, my kin - blood of my blood. May you go in peace and bring honor to his legacy.");
+                else text = new TextObject("{=!}");
+            }
 
             return text;
         }

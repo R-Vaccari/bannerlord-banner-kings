@@ -10,7 +10,7 @@ using static TaleWorlds.Core.ItemCategory;
 using BannerKings.Managers.Titles;
 using TaleWorlds.ObjectSystem;
 
-namespace BannerKings.Helpers
+namespace BannerKings.Utils
 {
     public static class Helpers
     {
