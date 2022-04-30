@@ -91,7 +91,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
                 foreach (Hero notable in settlement.Notables)
                     relation += notable.GetRelation(Hero.MainHero);
 
-                float medium = relation / (float)settlement.Notables.Count;
+                float medium = relation / settlement.Notables.Count;
                 if (medium < 0)
                     text = new TextObject("{=!}You think that it would go unnoticed how the folk here cringe at your visage? How your name is whispered with scornful lips? Are they mislead about you? Perhaps, perhaps. We shall see.");
                 else if (medium < 20)

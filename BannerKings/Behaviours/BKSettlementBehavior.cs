@@ -996,31 +996,39 @@ namespace BannerKings.Behaviors
         {
             static bool Prefix(MobileParty sellerParty, TroopRoster prisoners, Settlement currentSettlement, bool applyGoldChange = true)
             {
-                if (currentSettlement != null && (currentSettlement.IsCastle || currentSettlement.IsTown) && BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(currentSettlement))
+                if (currentSettlement != null && sellerParty != null && prisoners != null && currentSettlement != null && BannerKingsConfig.Instance != null && (currentSettlement.IsCastle || currentSettlement.IsTown) &&
+                    BannerKingsConfig.Instance.PopulationManager != null &&
+                    BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(currentSettlement))
                 {
                     BKCriminalPolicy policy = (BKCriminalPolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(currentSettlement, "criminal");
-                    if (policy.Policy == BKCriminalPolicy.CriminalPolicy.Enslavement)
-                        BannerKingsConfig.Instance.PopulationManager.GetPopData(currentSettlement)
-                            .UpdatePopType(PopType.Slaves, Utils.Helpers.GetRosterCount(prisoners));
-                    else if (policy.Policy == BKCriminalPolicy.CriminalPolicy.Forgiveness)
+                    if (policy != null)
                     {
-                        Dictionary<CultureObject, int> dic = new Dictionary<CultureObject, int>();
-                        foreach (TroopRosterElement element in prisoners.GetTroopRoster())
+                        if (policy.Policy == BKCriminalPolicy.CriminalPolicy.Enslavement)
+                            BannerKingsConfig.Instance.PopulationManager.GetPopData(currentSettlement)
+                                .UpdatePopType(PopType.Slaves, Utils.Helpers.GetRosterCount(prisoners));
+                        else if (policy.Policy == BKCriminalPolicy.CriminalPolicy.Forgiveness)
                         {
-                            if (element.Character.Occupation == Occupation.Bandit) continue;
-                            CultureObject culture = element.Character.Culture;
-                            if (culture == null) continue;
-                            if (dic.ContainsKey(culture))
-                                dic[culture] += element.Number;
-                            else dic.Add(culture, element.Number);
-                        }
+                            Dictionary<CultureObject, int> dic = new Dictionary<CultureObject, int>();
+                            foreach (TroopRosterElement element in prisoners.GetTroopRoster())
+                            {
+                                if (element.Character.Occupation == Occupation.Bandit) continue;
+                                CultureObject culture = element.Character.Culture;
+                                if (culture == null) continue;
+                                if (dic.ContainsKey(culture))
+                                    dic[culture] += element.Number;
+                                else dic.Add(culture, element.Number);
+                            }
 
-                        foreach (KeyValuePair<CultureObject, int> pair in dic)
-                        {
-                            Settlement random = Settlement.All.GetRandomElementWithPredicate(x => x.Culture == pair.Key);
-                            if (random != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(currentSettlement))
-                                BannerKingsConfig.Instance.PopulationManager.GetPopData(random)
-                                    .UpdatePopType(PopType.Serfs, pair.Value);
+                            foreach (KeyValuePair<CultureObject, int> pair in dic)
+                            {
+                                Settlement random =
+                                    Settlement.All.GetRandomElementWithPredicate(x => x.Culture == pair.Key);
+                                if (random != null &&
+                                    BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(
+                                        currentSettlement))
+                                    BannerKingsConfig.Instance.PopulationManager.GetPopData(random)
+                                        .UpdatePopType(PopType.Serfs, pair.Value);
+                            }
                         }
                     }
                     else return false;

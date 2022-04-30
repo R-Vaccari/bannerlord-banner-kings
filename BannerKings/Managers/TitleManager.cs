@@ -143,7 +143,7 @@ namespace BannerKings.Managers
 
         private void ExecuteOwnershipChange(Hero oldOwner, Hero newOwner, FeudalTitle title, bool deJure)
         {
-            if (Titles.ContainsKey(title))
+            if (Titles != null && Titles.ContainsKey(title))
             {
                 if (deJure)
                 {
