@@ -162,7 +162,7 @@ namespace BannerKings.Helpers
             else return "Satisfaction over availability of food types.";
         }
 
-        public static string GetTitleHonorary(TitleType type, bool female, CultureObject culture = null)
+        public static string GetTitleHonorary(TitleType type, GovernmentType government, bool female, CultureObject culture = null)
         {
             TextObject title = null;
             if (culture != null)
@@ -201,11 +201,20 @@ namespace BannerKings.Helpers
                     }
                 } else if (culture.StringId == "empire")
                 {
+
                     if (type == TitleType.Kingdom)
                     {
-                        if (female)
-                            title = new TextObject("{=!}Regina");
-                        else title = new TextObject("{=!}{MALE}Rex{?}Queen{\\?}");
+                        if (government == GovernmentType.Republic)
+                        {
+                            if (female)
+                                title = new TextObject("{=!}Principissa");
+                            else title = new TextObject("{=!}Princeps");
+                        } else
+                        {
+                            if (female)
+                                title = new TextObject("{=!}Regina");
+                            else title = new TextObject("{=!}{MALE}Rex{?}Queen{\\?}");
+                        }
                     }
                     else if (type == TitleType.Dukedom)
                     {
@@ -397,7 +406,7 @@ namespace BannerKings.Helpers
             return title.ToString();
         }
 
-        public static string GetTitlePrefix(TitleType type, CultureObject culture = null)
+        public static string GetTitlePrefix(TitleType type, GovernmentType government, CultureObject culture = null)
         {
             TextObject title = null;
 
@@ -414,6 +423,33 @@ namespace BannerKings.Helpers
                     else if (type == TitleType.Barony)
                         title = new TextObject("{=!}Voivodeship");
                     else title = new TextObject("{=!}Gospodin");
+                } else if (culture.StringId == "sturgia")
+                {
+                    if (type == TitleType.Kingdom)
+                    {
+                        if (government == GovernmentType.Republic)
+                            title = new TextObject("{=!}Princedom");
+                    }
+                        
+                }
+                else if (culture.StringId == "sturgia")
+                {
+                    if (type == TitleType.Kingdom)
+                        title = new TextObject("{=!}Sultanate");
+                    else if (type == TitleType.Dukedom)
+                        title = new TextObject("{=!}Emirate");
+                    else if (type == TitleType.County)
+                        title = new TextObject("{=!}Sheikhdom");
+                } else if (culture.StringId == "battania")
+                {
+                    if (type == TitleType.Kingdom)
+                    {
+                        if (government == GovernmentType.Tribal)
+                            title = new TextObject("{=!}High-Kingdom");
+                    }
+                } else if (culture.StringId == "khuzait")
+                {
+
                 }
             }
 

@@ -177,14 +177,16 @@ namespace BannerKings.Behaviors
                     string desc = "";
                     FeudalTitle current = null;
                     List<FeudalTitle> finalList = titles.OrderBy(x => (int)x.type).ToList();
+                    GovernmentType government = GovernmentType.Feudal;
                     foreach (FeudalTitle title in finalList)
                     {
+                        if (title.contract != null) government = title.contract.Government;
                         if (current == null)
-                            desc += string.Format("{0} of {1}", Helpers.Helpers.GetTitleHonorary(title.type, false), title.shortName);
+                            desc += string.Format("{0} of {1}", Helpers.Helpers.GetTitleHonorary(title.type, government, false), title.shortName);
                         else if (current.type == title.type)
                             desc += ", " + title.shortName;
                         else if (current.type != title.type)
-                            desc += string.Format(" and {0} of {1}", Helpers.Helpers.GetTitleHonorary(title.type, false), title.shortName);
+                            desc += string.Format(" and {0} of {1}", Helpers.Helpers.GetTitleHonorary(title.type, government, false), title.shortName);
                         current = title;
                     }
                     __result = __result + Environment.NewLine + desc;
