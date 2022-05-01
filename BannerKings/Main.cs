@@ -508,37 +508,6 @@ namespace BannerKings
             }
 
 
-            // Pass on settlement party as parameter
-            [HarmonyPatch(typeof(Town))]
-            class TownItemPricePatch
-            {
-
-                [HarmonyPrefix]
-                [HarmonyPatch("GetItemPrice", new Type[] { typeof(ItemObject), typeof(MobileParty), typeof(bool) })]
-                static bool Prefix1(Town __instance, ref int __result, ItemObject item, MobileParty tradingParty = null, bool isSelling = false)
-                {
-                    if (__instance != null && __instance.MarketData != null && __instance.GarrisonParty != null && __instance.GarrisonParty.Party != null)
-                    {
-                        __result = __instance.MarketData.GetPrice(item, tradingParty, isSelling, __instance.GarrisonParty.Party);
-                        return false;
-                    }
-                    else return true;
-                }
-
-                
-                [HarmonyPrefix]
-                [HarmonyPatch("GetItemPrice", new Type[] { typeof(EquipmentElement), typeof(MobileParty), typeof(bool) })]
-                static bool Prefix2(Town __instance, ref int __result, EquipmentElement itemRosterElement, MobileParty tradingParty = null, bool isSelling = false)
-                {
-                    if (__instance != null && __instance.MarketData != null && __instance.GarrisonParty != null && __instance.GarrisonParty.Party != null)
-                    {
-                        __result = __instance.MarketData.GetPrice(itemRosterElement, tradingParty, isSelling, __instance.GarrisonParty.Party);
-                        return false;
-                    }
-                    else return true;
-                }
-            }
-
             // Impact prosperity
             [HarmonyPatch(typeof(ChangeOwnerOfWorkshopAction), "ApplyInternal")]
             class BankruptcyPatch
