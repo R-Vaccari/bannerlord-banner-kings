@@ -46,6 +46,25 @@ namespace BannerKings.Managers
             }
         }
 
+        public List<Religion> GetReligions()
+        {
+            List<Religion> religions = new List<Religion>();
+            foreach (Religion rel in Religions.Keys)
+                religions.Add(rel);
+
+            return religions;
+        }
+
+        public List<Hero> GetFaithfulHeroes(Religion religion)
+        {
+            List<Hero> heroes = new List<Hero>();
+            if (Religions.ContainsKey(religion))
+                foreach (Hero hero in Religions[religion])
+                    heroes.Add(hero);
+
+            return heroes;
+        }
+
         public Religion GetIdealReligion(CultureObject culture)
         {
             if (this.Cultures.ContainsKey(culture))

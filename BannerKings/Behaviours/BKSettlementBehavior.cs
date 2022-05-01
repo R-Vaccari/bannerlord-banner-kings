@@ -21,6 +21,7 @@ using static BannerKings.Managers.Policies.BKTaxPolicy;
 using BannerKings.Managers.Decisions;
 using BannerKings.Components;
 using static BannerKings.Managers.Policies.BKWorkforcePolicy;
+using BannerKings.Managers.Institutions.Religions;
 
 namespace BannerKings.Behaviors
 {
@@ -473,6 +474,9 @@ namespace BannerKings.Behaviors
                new GameMenuOption.OnConditionDelegate(MenuCourtCondition),
                new GameMenuOption.OnConsequenceDelegate(MenuCourtConsequence), false, -1, false);
 
+            campaignGameStarter.AddGameMenuOption("bannerkings", "manage_court", "{=!}{RELIGION_NAME}",
+               new GameMenuOption.OnConditionDelegate(MenuReligionCondition),
+               new GameMenuOption.OnConsequenceDelegate(MenuReligionConsequence), false, -1, false);
 
             campaignGameStarter.AddGameMenuOption("bannerkings", "bannerkings_action", "{=!}Take an action",
                 delegate (MenuCallbackArgs args) {
@@ -804,6 +808,16 @@ namespace BannerKings.Behaviors
                 (Settlement.CurrentSettlement.OwnerClan == Clan.PlayerClan || kingdom == Settlement.CurrentSettlement.OwnerClan.Kingdom);
         }
 
+        private static bool MenuReligionCondition(MenuCallbackArgs args)
+        {
+            args.optionLeaveType = GameMenuOption.LeaveType.ShowMercy;
+            Settlement currentSettlement = Settlement.CurrentSettlement;
+            ReligionData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(currentSettlement).ReligionData;
+            if (data != null) MBTextManager.SetTextVariable("RELIGION_NAME", data.Religion.Faith.GetFaithName());
+            
+            return data != null;
+        }
+
         private static bool MenuCourtCondition(MenuCallbackArgs args)
         {
             args.optionLeaveType = GameMenuOption.LeaveType.RansomAndBribe;
@@ -871,6 +885,8 @@ namespace BannerKings.Behaviors
         }
 
         private static void MenuCourtConsequence(MenuCallbackArgs args) => UIManager.Instance.ShowWindow("court");
+
+        private static void MenuReligionConsequence(MenuCallbackArgs args) => UIManager.Instance.ShowWindow("religions");
 
         private static void MenuSettlementManageConsequence(MenuCallbackArgs args) => UIManager.Instance.ShowWindow("population");
 

@@ -181,8 +181,6 @@ namespace BannerKings.UI
         }
          */
 
-
-
         [HarmonyPatch(typeof(SettlementProjectVM))]
         internal class CharacterCreationCultureStagePatch
         {
