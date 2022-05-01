@@ -29,6 +29,15 @@ namespace BannerKings.Managers
 
             this.Religions.Add(aseraiReligion, new List<Hero>());
             this.Cultures.Add(aserai, aseraiReligion);
+
+            InitializeFaithfulHeroes(aseraiReligion, aserai);
+        }
+
+        public void InitializeFaithfulHeroes(Religion rel, CultureObject culture)
+        {
+            foreach (Hero hero in Hero.AllAliveHeroes)
+                if (!hero.IsDisabled && (hero.IsNoble || hero.IsNotable || hero.IsWanderer) && hero.Culture == culture)
+                    Religions[rel].Add(hero);
         }
 
         public void InitializePresets()

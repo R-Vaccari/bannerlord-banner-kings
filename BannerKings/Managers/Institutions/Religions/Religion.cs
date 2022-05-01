@@ -27,6 +27,8 @@ namespace BannerKings.Managers.Institutions.Religions
         public Hero Leader => this.leadership.GetLeader();
         public Faith Faith => this.faith;
 
+        public CultureObject BaseCulture => favoredCultures[0];
+
         public MBReadOnlyDictionary<Settlement, Clergyman> Clergy => this.clergy.GetReadOnlyDictionary();
 
         public Clergyman GenerateClergyman(Settlement settlement)

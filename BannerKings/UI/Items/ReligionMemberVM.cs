@@ -7,7 +7,7 @@ using TaleWorlds.Library;
 
 namespace BannerKings.UI.Items
 {
-    class ReligionMemberVM : SettlementGovernorSelectionItemVM
+    public class ReligionMemberVM : SettlementGovernorSelectionItemVM
     {
 		private BasicTooltipViewModel religionHint;
 		public ReligionMemberVM(Clergyman clergyman, Action<SettlementGovernorSelectionItemVM> onSelection) : base(clergyman.Hero, onSelection)

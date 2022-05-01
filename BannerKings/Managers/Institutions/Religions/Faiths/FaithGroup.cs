@@ -17,6 +17,8 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
             this.members = new List<Faith>();
         }
 
+        public TextObject Name => name;
+        public TextObject Description => description;
         public MBReadOnlyList<Faith> Members => this.members.GetReadOnlyList();
 
         public void AddMember(Faith faith)

@@ -1,7 +1,9 @@
 ﻿using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Populations;
 using BannerKings.UI.Items;
+using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.ViewModelCollection.Encyclopedia.EncyclopediaItems;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
@@ -10,36 +12,105 @@ namespace BannerKings.UI.Panels
     class ReligionVM : BannerKingsViewModel
     {
 		private MBBindingList<InformationElement> courtInfo;
-		private MBBindingList<ReligionMemberVM> clergymen, faithful;
+		private MBBindingList<ReligionMemberVM> clergymen;
+		private MBBindingList<ReligionMemberVM> faithful;
+		private MBBindingList<BKTraitItemVM> virtues;
 		private Religion religion;
 
 		public ReligionVM(PopulationData data) : base(data, true)
         {
 			religion = data.ReligionData.Religion;
 			courtInfo = new MBBindingList<InformationElement>();
-			clergymen = new MBBindingList<ReligionMemberVM>();
-			faithful = new MBBindingList<ReligionMemberVM>();
-			foreach (Clergyman clgm in religion.Clergy.Values)
-				clergymen.Add(new ReligionMemberVM(clgm, null));
-
-			foreach (Hero hero in BannerKingsConfig.Instance.ReligionsManager.GetFaithfulHeroes(religion))
-				faithful.Add(new ReligionMemberVM(hero, null));
+			Clergymen = new MBBindingList<ReligionMemberVM>();
+			Faithful = new MBBindingList<ReligionMemberVM>();
+			Virtues = new MBBindingList<BKTraitItemVM>();
+			
 		}
 
         public override void RefreshValues()
         {
             base.RefreshValues();
-			this.CourtInfo.Clear();
-			//CourtInfo.Add(new InformationElement("Administrative costs:", base.FormatValue(council.AdministrativeCosts),
-			//	"Costs associated with payment of council members, deducted on all your fiefs' revenues."));
+			Clergymen.Clear();
+			Faithful.Clear();
+			Virtues.Clear();
+
+			foreach (Clergyman clgm in religion.Clergy.Values)
+				Clergymen.Add(new ReligionMemberVM(clgm, null));
+
+			foreach (Hero hero in BannerKingsConfig.Instance.ReligionsManager.GetFaithfulHeroes(religion))
+				Faithful.Add(new ReligionMemberVM(hero, null));
+
+			foreach (KeyValuePair<TraitObject, bool> pair in religion.Faith.Traits)
+				Virtues.Add(new BKTraitItemVM(pair.Key, pair.Value));
 
 		}
+
+		[DataSourceProperty]
+		public string ClergymenText => new TextObject("{=!}Clergymen").ToString();
+
+		[DataSourceProperty]
+		public string FaithfulText => new TextObject("{=!}Faithful").ToString();
+
+		[DataSourceProperty]
+		public string GroupText => new TextObject("{=!}Faith Group").ToString();
+
+		[DataSourceProperty]
+		public string VirtuesText => new TextObject("{=!}Virtues").ToString();
 
 		[DataSourceProperty]
 		public string Name => religion.Faith.GetFaithName().ToString();
 
 		[DataSourceProperty]
 		public string Description => religion.Faith.GetFaithDescription().ToString();
+
+		[DataSourceProperty]
+		public string GroupName => religion.Faith.FaithGroup.Name.ToString();
+
+		[DataSourceProperty]
+		public string GroupDescription => religion.Faith.FaithGroup.Description.ToString();
+
+
+		[DataSourceProperty]
+		public MBBindingList<BKTraitItemVM> Virtues
+		{
+			get => virtues;
+			set
+			{
+				if (value != virtues)
+				{
+					virtues = value;
+					base.OnPropertyChangedWithValue(value, "Virtues");
+				}
+			}
+		}
+
+		[DataSourceProperty]
+		public MBBindingList<ReligionMemberVM> Clergymen
+		{
+			get => clergymen;
+			set
+			{
+				if (value != clergymen)
+				{
+					clergymen = value;
+					base.OnPropertyChangedWithValue(value, "Clergymen");
+				}
+			}
+		}
+
+		[DataSourceProperty]
+		public MBBindingList<ReligionMemberVM> Faithful
+		{
+			get => faithful;
+			set
+			{
+				if (value != faithful)
+				{
+					faithful = value;
+					base.OnPropertyChangedWithValue(value, "Faithful");
+				}
+			}
+		}
 
 
 		[DataSourceProperty]
@@ -52,37 +123,6 @@ namespace BannerKings.UI.Panels
 				{
 					courtInfo = value;
 					base.OnPropertyChangedWithValue(value, "CourtInfo");
-				}
-			}
-		}
-
-		[DataSourceProperty]
-		public string Title => new TextObject("{=!}Council of {PLAYER_NAME}").ToString();
-
-		[DataSourceProperty]
-		public MBBindingList<ReligionMemberVM> Clergymen
-		{
-			get => this.clergymen;
-			set
-			{
-				if (value != this.clergymen)
-				{
-					this.clergymen = value;
-					base.OnPropertyChangedWithValue(value, "Clergymen");
-				}
-			}
-		}
-
-		[DataSourceProperty]
-		public MBBindingList<ReligionMemberVM> Faithful
-		{
-			get => this.faithful;
-			set
-			{
-				if (value != this.faithful)
-				{
-					this.faithful = value;
-					base.OnPropertyChangedWithValue(value, "Faithful");
 				}
 			}
 		}

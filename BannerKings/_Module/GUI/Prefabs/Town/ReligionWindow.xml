@@ -4,6 +4,9 @@
   <Constants>
     <Constant Name="Popup.CloseButton.Width" BrushLayer="Default" BrushName="Popup.CloseButton" BrushValueType="Width" />
     <Constant Name="Popup.CloseButton.Height" BrushLayer="Default" BrushName="Popup.CloseButton" BrushValueType="Height" />
+	<Constant Name="Encyclopedia.SubPage.Element.Width" BrushName="Encyclopedia.SubPage.Element" BrushLayer="Default" BrushValueType="Width"/>
+    <Constant Name="Encyclopedia.SubPage.Element.Height" BrushName="Encyclopedia.SubPage.Element" BrushLayer="Default" BrushValueType="Height"/>
+	<Constant Name="ScaleFactor" BooleanCheck="*IsBig" OnFalse="1.5" OnTrue="2.1" />
 	<Contstant Name="Governor.Selection.Margin" Value="12" />
   </Constants>
   <Parameters>
@@ -22,105 +25,121 @@
 			<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" Brush="Clan.Leader.Text"  Brush.FontSize="40" Text="@Title" MarginTop="20"/>
 			
 			
-			<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" VerticalAlignment="Bottom" SuggestedHeight="350" HorizontalAlignment="Center">
+			<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" >
 			  <Children>
-				<EncyclopediaTroopScrollablePanel Id="RightSideScrollablePanel" HeightSizePolicy="CoverChildren" WidthSizePolicy="StretchToParent" InnerPanel="RightSideRect\InnerPanel" ClipRect="RightSideRect"  VerticalScrollbar="..\RightSideVerticalScrollbar" PanWithMouseEnabled="true" AutoHideScrollBars="true" MarginBottom="20" >
+			
+				<EncyclopediaTroopScrollablePanel Id="RightSideScrollablePanel" HeightSizePolicy ="StretchToParent" WidthSizePolicy="StretchToParent" InnerPanel="RightSideRect\InnerPanel" ClipRect="RightSideRect" VerticalAlignment="Center" HorizontalAlignment="Center" HorizontalScrollbar="..\RightSideHorizontalScrollbar" VerticalScrollbar="..\RightSideVerticalScrollbar" PanWithMouseEnabled="true" AutoHideScrollBars="true" MarginTop="50" MarginBottom="85" >
 				  <Children>
-					<Widget Id="RightSideRect" HeightSizePolicy="StretchToParent" WidthSizePolicy="StretchToParent" HorizontalAlignment="Center" DoNotAcceptEvents="true" ClipContents="true" MarginLeft="25" MarginRight="25" >
+					<Widget Id="RightSideRect" HeightSizePolicy ="StretchToParent" WidthSizePolicy="StretchToParent" HorizontalAlignment="Center" DoNotAcceptEvents="true" ClipContents="true" MarginRight="25" MarginBottom="-85">
 					  <Children>
-						<Widget Id="InnerPanel" HeightSizePolicy="CoverChildren" WidthSizePolicy="StretchToParent" SuggestedHeight="320" HorizontalAlignment="Center" Sprite="governor_popup_9">
+						<Widget Id="InnerPanel" HeightSizePolicy="CoverChildren" WidthSizePolicy="CoverChildren" HorizontalAlignment="Center" IsHidden="@HasErrors" >
 						  <Children>
-							
-							<GridWidget Id="InnerList" DataSource="{Clergymen}" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" MarginTop="25" MarginBottom="25" HorizontalAlignment="Center" DefaultCellWidth="130" DefaultCellHeight="120" ColumnCount="7" MarginRight="15" MarginLeft="15">
-							  <ItemTemplate>
-								<ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" MarginLeft="10" MarginRight="10" StackLayout.LayoutMethod="VerticalBottomToTop" HorizontalAlignment="Center" VerticalAlignment="Top">
-									<Children>
-										<ButtonWidget DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="120" SuggestedHeight="100" HorizontalAlignment="Center" VerticalAlignment="Center" Command.Click="ExecuteLink" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint">
+							<Widget HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" WidthSizePolicy="CoverChildren" MarginTop="10" MarginBottom="65">
+							  <Children>
+							  
+								<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" StackLayout.LayoutMethod="VerticalBottomToTop" DoNotAcceptEvents="true">
+								  <Children>
+								    <EncyclopediaDivider MarginTop="50" Parameter.Title="@Title" Parameter.ItemList="..\ElementsGrid"/>
+							  
+									<GridWidget Id="ElementsGrid" DataSource="{Elements}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" SuggestedWidth="350" SuggestedHeight="350" DefaultCellWidth="100" DefaultCellHeight="100" ColumnCount="9" MarginTop="10" >
+									  <ItemTemplate>
+										<ButtonWidget DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedHeight="80" SuggestedWidth="100" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="Encyclopedia.SubPage.Element" Command.Click="ExecuteLink" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint">
 										  <Children>
-											<ImageIdentifierWidget DataSource="{Visual}" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" SuggestedHeight="100" MarginLeft="17" MarginRight="18" MarginTop="17" MarginBottom="18" AdditionalArgs="@AdditionalArgs" ImageId="@Id" ImageTypeCode="@ImageTypeCode" />
+											<ImageIdentifierWidget DataSource="{Visual}" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" AdditionalArgs="@AdditionalArgs" ImageId="@Id" ImageTypeCode="@ImageTypeCode" OverlayTextureScale="!ScaleFactor" MarginRight="3" MarginLeft="3" MarginBottom="3" MarginTop="3" />
 											<HintWidget DataSource="{ReligionHint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" IsDisabled="true" />
-											<BrushWidget DoNotAcceptEvents="true" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Brush="TownManagement.GovernorPopup.GoldFrame" />
+											<TextWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="117" SuggestedHeight="30" VerticalAlignment="Bottom" HorizontalAlignment="Center" PositionYOffset="34" Brush="TownManagement.GovernorPopup.Name.Text" Text="@Name" />
 										  </Children>
-										</ButtonWidget>
-										<TextWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="117" SuggestedHeight="30" HorizontalAlignment="Center" Brush="TownManagement.GovernorPopup.Name.Text" Text="@Name" />
-									</Children>
+										</ButtonWidget>		
+									  </ItemTemplate>
+									</GridWidget>
+								  </Children>
 								</ListPanel>
-							  </ItemTemplate>
-							</GridWidget>
-							
+
+								
+							  </Children>
+							</Widget>
 						  </Children>
 						</Widget>
 					  </Children>
 					</Widget>
+
 				  </Children>
 				</EncyclopediaTroopScrollablePanel>
 
 
 				<Widget HeightSizePolicy ="Fixed" WidthSizePolicy="StretchToParent" SuggestedHeight="158" Sprite="StdAssets\scroll_hide" VerticalAlignment="Bottom" IsEnabled="false"/>
 				
-				<ScrollbarWidget HeightSizePolicy="StretchToParent" WidthSizePolicy="Fixed" Id="RightSideVerticalScrollbar" SuggestedWidth="30" MinValue="0" MaxValue="100" MarginRight="10" MarginBottom="70" MarginTop="0" AlignmentAxis="Vertical" HorizontalAlignment="Right" VerticalAlignment="Center" Handle="ScrollbarHandle" UpdateChildrenStates="true" >
+				<ScrollbarWidget HeightSizePolicy ="StretchToParent" WidthSizePolicy="Fixed" Id="RightSideVerticalScrollbar" SuggestedWidth="30" MinValue="0" MaxValue="100" MarginRight="10" MarginBottom="70" MarginTop="0" AlignmentAxis="Vertical" HorizontalAlignment="Right" VerticalAlignment="Center" Handle="ScrollbarHandle" UpdateChildrenStates="true" >
 				  <Children>
 					<Widget Id="ScrollbarBed" WidthSizePolicy="Fixed" HeightSizePolicy="StretchToParent" SuggestedWidth="4" HorizontalAlignment="Center"  Sprite="SPGeneral\SPRecruitment\slider_thin_bed_vertical" />
 					<ImageWidget Id="ScrollbarHandle" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" MinHeight="153" SuggestedWidth="30" SuggestedHeight="150" HorizontalAlignment="Center" Brush="Encyclopedia.Scroll.Handle.Vertical" />
 				  </Children>
 				</ScrollbarWidget>
-				  
-			  </Children>
-			</Widget>
-			
-			
-			<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" Brush="Clan.Leader.Text"  Brush.FontSize="30" Text="Your Court" MarginTop="313"/>
-			
-			<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" VerticalAlignment="Bottom" SuggestedHeight="350" HorizontalAlignment="Center">
-			  <Children>
-				<EncyclopediaTroopScrollablePanel Id="RightSideScrollablePanel" HeightSizePolicy="CoverChildren" WidthSizePolicy="StretchToParent" InnerPanel="RightSideRect\InnerPanel" ClipRect="RightSideRect"  VerticalScrollbar="..\RightSideVerticalScrollbar" PanWithMouseEnabled="true" AutoHideScrollBars="true" MarginBottom="20" >
-				  <Children>
-					<Widget Id="RightSideRect" HeightSizePolicy="StretchToParent" WidthSizePolicy="StretchToParent" HorizontalAlignment="Center" DoNotAcceptEvents="true" ClipContents="true" MarginLeft="25" MarginRight="25" >
-					  <Children>
-						<Widget Id="InnerPanel" HeightSizePolicy="CoverChildren" WidthSizePolicy="StretchToParent" SuggestedHeight="320" HorizontalAlignment="Center" Sprite="governor_popup_9">
-						  <Children>
-							
-							<GridWidget Id="InnerList" DataSource="{Faithful}" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" MarginTop="25" MarginBottom="25" HorizontalAlignment="Center" DefaultCellWidth="130" DefaultCellHeight="120" ColumnCount="7" MarginRight="15" MarginLeft="15">
-							  <ItemTemplate>
-								<ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" MarginLeft="10" MarginRight="10" StackLayout.LayoutMethod="VerticalBottomToTop" HorizontalAlignment="Center" VerticalAlignment="Top">
-									<Children>
-										<ButtonWidget DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="120" SuggestedHeight="100" HorizontalAlignment="Center" VerticalAlignment="Center" Command.Click="ExecuteLink" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint">
-										  <Children>
-											<ImageIdentifierWidget DataSource="{Visual}" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" SuggestedHeight="100" MarginLeft="17" MarginRight="18" MarginTop="17" MarginBottom="18" AdditionalArgs="@AdditionalArgs" ImageId="@Id" ImageTypeCode="@ImageTypeCode" />
-											<HintWidget DataSource="{ReligionHint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" IsDisabled="true" />
-											<BrushWidget DoNotAcceptEvents="true" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Brush="TownManagement.GovernorPopup.GoldFrame" />
-										  </Children>
-										</ButtonWidget>
-										<TextWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="117" SuggestedHeight="30" HorizontalAlignment="Center" Brush="TownManagement.GovernorPopup.Name.Text" Text="@Name" />
-									</Children>
-								</ListPanel>
-							  </ItemTemplate>
-							</GridWidget>
-							
-						  </Children>
-						</Widget>
-					  </Children>
-					</Widget>
-				  </Children>
-				</EncyclopediaTroopScrollablePanel>
-
-
-				<Widget HeightSizePolicy ="Fixed" WidthSizePolicy="StretchToParent" SuggestedHeight="158" Sprite="StdAssets\scroll_hide" VerticalAlignment="Bottom" IsEnabled="false"/>
 				
-				<ScrollbarWidget HeightSizePolicy="StretchToParent" WidthSizePolicy="Fixed" Id="RightSideVerticalScrollbar" SuggestedWidth="30" MinValue="0" MaxValue="100" MarginRight="10" MarginBottom="70" MarginTop="0" AlignmentAxis="Vertical" HorizontalAlignment="Right" VerticalAlignment="Center" Handle="ScrollbarHandle" UpdateChildrenStates="true" >
+				<ScrollbarWidget HeightSizePolicy ="Fixed" WidthSizePolicy="StretchToParent" Id="RightSideHorizontalScrollbar" SuggestedHeight="8" MinValue="0" MaxValue="100" MarginLeft="40" MarginRight="55" MarginBottom="65" AlignmentAxis="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom" Handle="ScrollbarHandle" UpdateChildrenStates="true" >
 				  <Children>
-					<Widget Id="ScrollbarBed" WidthSizePolicy="Fixed" HeightSizePolicy="StretchToParent" SuggestedWidth="4" HorizontalAlignment="Center"  Sprite="SPGeneral\SPRecruitment\slider_thin_bed_vertical" />
-					<ImageWidget Id="ScrollbarHandle" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" MinHeight="153" SuggestedWidth="30" SuggestedHeight="150" HorizontalAlignment="Center" Brush="Encyclopedia.Scroll.Handle.Vertical" />
+					<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="4" VerticalAlignment="Center" Sprite="SPGeneral\SPRecruitment\slider_thin_bed_horizontal" />
+					<ImageWidget Id="ScrollbarHandle" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" MinWidth="153" SuggestedHeight="30" SuggestedWidth="150" VerticalAlignment="Center" Brush="Encyclopedia.Scroll.Handle.Horizontal" />
 				  </Children>
 				</ScrollbarWidget>
-				  
+			
 			  </Children>
 			</Widget>
-			
+			<!--
+			<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" SuggestedHeight="350" HorizontalAlignment="Center">
+			  <Children>
 			  
-			<BKGovernorSelectionPopup Id="MarshallPopup" DataSource="{CouncilMemberSelection}" DoNotAcceptEvents="true" IsVisible="false" PopupParentWidget="..\VerticalList\CouncilMembers\MarshallWidget\GovernorListPanel\GovernorSelectionButton"/>
+				<EncyclopediaTroopScrollablePanel Id="RightSideScrollablePanel" HeightSizePolicy="CoverChildren" WidthSizePolicy="StretchToParent" MarginRight="50" InnerPanel="RightSideRect\InnerPanel" ClipRect="RightSideRect"  VerticalScrollbar="..\RightSideVerticalScrollbar" PanWithMouseEnabled="true" AutoHideScrollBars="true" MarginBottom="20" >
+				  <Children>
+					<Widget Id="RightSideRect" HeightSizePolicy="StretchToParent" WidthSizePolicy="StretchToParent" HorizontalAlignment="Center" DoNotAcceptEvents="true" ClipContents="true" >
+					  <Children>
+						<Widget Id="InnerPanel" HeightSizePolicy="CoverChildren" WidthSizePolicy="StretchToParent" SuggestedHeight="320" HorizontalAlignment="Center">
+						  <Children>
+						  
+						    <GridWidget Id="InnerList" DataSource="{ElementsLists}" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" MarginTop="25" MarginBottom="25" HorizontalAlignment="Center" DefaultCellWidth="500" DefaultCellHeight="300" ColumnCount="1" MarginRight="15" MarginLeft="15">
+							  <ItemTemplate>
+							    <ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" MarginLeft="10" MarginRight="10" StackLayout.LayoutMethod="VerticalBottomToTop" HorizontalAlignment="Center" VerticalAlignment="Top">
+								  <Children>
+
+									<EncyclopediaDivider MarginTop="50" Parameter.Title="@Title" Parameter.ItemList="..\ElementsGrid"/>
+									
+									<GridWidget Id="ElementsGrid" DataSource="{Elements}" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" MarginTop="25" MarginBottom="25" HorizontalAlignment="Center" DefaultCellWidth="130" DefaultCellHeight="120" ColumnCount="7" MarginRight="15" MarginLeft="15">
+									  <ItemTemplate>
+										<ButtonWidget DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedHeight="80" SuggestedWidth="100" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="Encyclopedia.SubPage.Element" Command.Click="ExecuteLink" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint">
+										  <Children>
+											<ImageIdentifierWidget DataSource="{Visual}" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" AdditionalArgs="@AdditionalArgs" ImageId="@Id" ImageTypeCode="@ImageTypeCode" OverlayTextureScale="!ScaleFactor" MarginRight="3" MarginLeft="3" MarginBottom="3" MarginTop="3" />
+											<HintWidget DataSource="{ReligionHint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" IsDisabled="true" />
+											<TextWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="117" SuggestedHeight="30" VerticalAlignment="Bottom" HorizontalAlignment="Center" PositionYOffset="34" Brush="TownManagement.GovernorPopup.Name.Text" Text="@Name" />
+										  </Children>
+										</ButtonWidget>	
+									  </ItemTemplate>
+									</GridWidget>
+
+
+								  </Children>
+								</ListPanel>
+							  </ItemTemplate>
+							</GridWidget>
+						    
+						  </Children>
+						</Widget>
+					  </Children>
+					</Widget>
+				  </Children>
+				</EncyclopediaTroopScrollablePanel>
+				
+				<Widget HeightSizePolicy ="Fixed" WidthSizePolicy="StretchToParent" SuggestedHeight="158" Sprite="StdAssets\scroll_hide" VerticalAlignment="Bottom" IsEnabled="false"/>
+					
+				<ScrollbarWidget HeightSizePolicy="StretchToParent" WidthSizePolicy="Fixed" Id="RightSideVerticalScrollbar" SuggestedWidth="30" MinValue="0" MaxValue="100" MarginRight="10" MarginBottom="70" MarginTop="0" AlignmentAxis="Vertical" HorizontalAlignment="Right" VerticalAlignment="Center" Handle="ScrollbarHandle" UpdateChildrenStates="true" >
+				  <Children>
+					<Widget Id="ScrollbarBed" WidthSizePolicy="Fixed" HeightSizePolicy="StretchToParent" SuggestedWidth="4" HorizontalAlignment="Center"  Sprite="SPGeneral\SPRecruitment\slider_thin_bed_vertical" />
+					<ImageWidget Id="ScrollbarHandle" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" MinHeight="153" SuggestedWidth="30" SuggestedHeight="150" HorizontalAlignment="Center" Brush="Encyclopedia.Scroll.Handle.Vertical" />
+				  </Children>
+				</ScrollbarWidget>
 			
-            <!--Frame Border-->
+			  </Children>
+			</Widget> -->
+
             <Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Sprite="frame_9" ExtendLeft="18" ExtendTop="18" ExtendRight="18" ExtendBottom="18" IsEnabled="false" />
           </Children>
         </Widget>
