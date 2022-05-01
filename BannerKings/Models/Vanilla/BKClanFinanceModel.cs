@@ -48,6 +48,7 @@ namespace BannerKings.Models
             {
 				foreach (KeyValuePair<Clan, List<FeudalTitle>> pair in dictionary)
 				{
+					if (clan.Kingdom != pair.Key.Kingdom) continue;
 					float amount = 0f;
 					foreach (FeudalTitle title in pair.Value)
 						amount += title.dueTax;
@@ -85,7 +86,12 @@ namespace BannerKings.Models
 
 			FeudalTitle suzerain = BannerKingsConfig.Instance.TitleManager.CalculateHeroSuzerain(clan.Leader);
 			if (suzerain == null) return;
-            
+
+			Kingdom deJureKingdom = null;
+			if (suzerain.deJure.Clan != null)
+				deJureKingdom = suzerain.deJure.Clan.Kingdom;
+
+			if (deJureKingdom == null || deJureKingdom != clan.Kingdom) return;
 			float amount = 0f;
 			foreach (FeudalTitle title in titles)
 				amount += title.dueTax;

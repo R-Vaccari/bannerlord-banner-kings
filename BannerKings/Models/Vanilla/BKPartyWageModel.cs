@@ -58,6 +58,7 @@ namespace BannerKings.Models.Vanilla
 
 					if (elementCopyAtIndex.Character.IsHero)
                     {
+						if (elementCopyAtIndex.Character.HeroObject == Hero.MainHero) continue;
 						MBReadOnlyList<SkillObject> skills = MBObjectManager.Instance.GetObjectTypeList<SkillObject>();
 						BKCompanionPrices companionModel = new BKCompanionPrices();
 						float totalCost = 0f;
