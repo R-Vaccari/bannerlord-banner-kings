@@ -219,7 +219,9 @@ namespace BannerKings.Managers.Titles
             {
                 if (this.fief != null)
                 {
-                    return this.fief.Owner;
+                    if (fief.OwnerClan != null)
+                        return this.fief.Owner;
+                    return null;
                 }
                 else
                 {
