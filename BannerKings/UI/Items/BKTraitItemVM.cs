@@ -1,7 +1,6 @@
 ﻿using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core.ViewModelCollection;
 using TaleWorlds.Library;
-using TaleWorlds.Localization;
 
 namespace BannerKings.UI.Items
 {
@@ -12,8 +11,11 @@ namespace BannerKings.UI.Items
 			this._traitObj = traitObj;
 			this.TraitId = traitObj.StringId;
 			this.Value = positive ? 2 : -2;
-			this.Hint = new HintViewModel(new TextObject("{=!}", null), null);
+			this.Hint = new HintViewModel(traitObj.Description, null);
 		}
+
+		[DataSourceProperty]
+		public string Name => _traitObj.Name.ToString();
 
 		[DataSourceProperty]
 		public string TraitId
