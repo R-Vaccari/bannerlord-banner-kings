@@ -37,6 +37,9 @@ namespace BannerKings.Behaviours
                 }
             }
 
+            if (clan != Clan.PlayerClan)
+                BannerKingsConfig.Instance.CourtManager.UpdateCouncil(clan);
+
             if (clan.WarPartyComponents.Count < clan.CommanderLimit && clan.Companions.Count < clan.CompanionLimit && 
                 clan.Settlements.Count(x => x.IsVillage ) > 1 && clan.Influence >= 150)
             {

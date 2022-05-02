@@ -3,10 +3,10 @@ using TaleWorlds.CampaignSystem;
 using System.Linq;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
-using static BannerKings.Managers.TitleManager;
 using BannerKings.Populations;
 using TaleWorlds.SaveSystem;
 using BannerKings.Managers.Titles;
+using System;
 
 namespace BannerKings.Managers.Court
 {
@@ -18,7 +18,8 @@ namespace BannerKings.Managers.Court
         [SaveableProperty(2)]
         private List<CouncilMember> members { get; set; }
 
-        public CouncilData(Clan clan, Hero marshall = null, Hero chancellor = null, Hero steward = null, Hero spymaster = null)
+        public CouncilData(Clan clan, Hero marshall = null, Hero chancellor = null, Hero steward = null, Hero spymaster = null,
+            Hero spiritual = null)
         {
             this.clan = clan;
             this.members = new List<CouncilMember>();
@@ -26,15 +27,46 @@ namespace BannerKings.Managers.Court
             this.members.Add(new CouncilMember(chancellor, CouncilPosition.Chancellor));
             this.members.Add(new CouncilMember(steward, CouncilPosition.Steward));
             this.members.Add(new CouncilMember(spymaster, CouncilPosition.Spymaster));
+            this.members.Add(new CouncilMember(spiritual, CouncilPosition.Spiritual));
         }
 
         internal override void Update(PopulationData data)
         {
             foreach (CouncilMember member in this.members)
             {
-                if (member.Member != null && member.Member.IsDead)
+                if (member.Member != null && (member.Member.IsDead || member.Member.IsDisabled))
                     member.Member = null;
             }
+
+            if (MBRandom.RandomInt(1, 100) > 5) return;
+
+            CouncilMember vacant = members.FirstOrDefault(x => x.Member == null);
+            if (vacant == null) return;
+
+            vacant.Member = SelectHeroForPosition(vacant);
+        }
+
+        public List<Hero> GetAvailableHeroes()
+        {
+            List<Hero> currentMembers = GetMembers();
+            List<Hero> available = new List<Hero>();
+            foreach (CouncilMember position in members)
+            {
+                Hero hero = position.Member;
+                if (!currentMembers.Contains(hero) && hero.IsAlive && !hero.IsChild)
+                    available.Add(hero);
+            }
+            return available;
+        }
+
+        public Hero SelectHeroForPosition(CouncilMember position)
+        {
+            List<ValueTuple<Hero, float>> list = new List<ValueTuple<Hero, float>>();
+            foreach(Hero hero in GetAvailableHeroes())
+                list.Add((hero, GetCompetence(hero, position.Position) + ((float)clan.Leader.GetRelation(hero) * 0.001f)));
+            
+
+            return MBRandom.ChooseWeighted(list);
         }
 
         public List<Hero> GetCourtMembers()
@@ -145,6 +177,11 @@ namespace BannerKings.Managers.Court
             get => this.members.First(x => x.Position == CouncilPosition.Spymaster).Member;
             set => this.members.First(x => x.Position == CouncilPosition.Spymaster).Member = value;
         }
+        public Hero Spiritual
+        {
+            get => this.members.First(x => x.Position == CouncilPosition.Spiritual).Member;
+            set => this.members.First(x => x.Position == CouncilPosition.Spiritual).Member = value;
+        }
 
         public float AdministrativeCosts
         {
@@ -222,6 +259,7 @@ namespace BannerKings.Managers.Court
         Marshall,
         Chancellor,
         Steward,
-        Spymaster
+        Spymaster,
+        Spiritual
     }
 }
