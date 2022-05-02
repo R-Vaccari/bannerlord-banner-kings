@@ -1,5 +1,6 @@
 ﻿using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Institutions.Religions.Faiths;
+using BannerKings.Managers.Institutions.Religions.Leaderships;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
@@ -20,11 +21,11 @@ namespace BannerKings.Managers
 
         public void InitializeReligions()
         {
-            CultureObject aserai = BannerKings.Utils.Helpers.GetCulture("aserai");
-            CultureObject khuzait = BannerKings.Utils.Helpers.GetCulture("khuzait");
-            CultureObject imperial = BannerKings.Utils.Helpers.GetCulture("imperial");
+            CultureObject aserai = Utils.Helpers.GetCulture("aserai");
+            CultureObject khuzait = Utils.Helpers.GetCulture("khuzait");
+            CultureObject imperial = Utils.Helpers.GetCulture("imperial");
 
-            Religion aseraiReligion = new Religion(Settlement.All.First(x => x.StringId == "town_A1"), DefaultFaiths.Instance.AseraCode, new DescentralizedLeadership(),
+            Religion aseraiReligion = new Religion(Settlement.All.First(x => x.StringId == "town_A1"), DefaultFaiths.Instance.AseraCode, new KinshipLeadership(),
                 new List<CultureObject>() { aserai, khuzait, imperial });
 
             this.Religions.Add(aseraiReligion, new List<Hero>());
