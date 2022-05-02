@@ -27,10 +27,11 @@ namespace BannerKings.UI.Items
         {
             base.RefreshValues();
             List<Hero> currentCouncil = council.GetMembers();
+            CouncilMember currentMember = council.GetCouncilMember(Position);
             MBBindingList<SettlementGovernorSelectionItemVM> newList = new MBBindingList<SettlementGovernorSelectionItemVM>();
             newList.Add(this.AvailableGovernors[0]);
             foreach (Hero hero in this.courtMembers)
-                if (!currentCouncil.Contains(hero) && hero.IsAlive && !hero.IsChild)
+                if (!currentCouncil.Contains(hero) && hero.IsAlive && !hero.IsChild && currentMember.IsValidCandidate(hero))
                     newList.Add(new CouncilMemberVM(hero, new Action<SettlementGovernorSelectionItemVM>(this.OnSelection),
                                     Position, council.GetCompetence(hero, Position)));
 

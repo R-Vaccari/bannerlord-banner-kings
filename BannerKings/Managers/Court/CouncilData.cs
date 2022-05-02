@@ -7,6 +7,7 @@ using BannerKings.Populations;
 using TaleWorlds.SaveSystem;
 using BannerKings.Managers.Titles;
 using System;
+using BannerKings.Managers.Institutions.Religions;
 
 namespace BannerKings.Managers.Court
 {
@@ -53,6 +54,7 @@ namespace BannerKings.Managers.Court
             foreach (CouncilMember position in members)
             {
                 Hero hero = position.Member;
+                if (hero == null) continue;
                 if (!currentMembers.Contains(hero) && hero.IsAlive && !hero.IsChild)
                     available.Add(hero);
             }
@@ -91,6 +93,7 @@ namespace BannerKings.Managers.Court
             MBReadOnlyList<Town> towns = this.clan.Fiefs;
             if (towns != null && towns.Count > 0)
             {
+                Religion rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(clan.Leader);
                 foreach (Town town in towns)
                 {
                     MBReadOnlyList<Hero> notables = town.Settlement.Notables;
@@ -98,7 +101,9 @@ namespace BannerKings.Managers.Court
                         foreach (Hero notable in notables)
                             if (!heroes.Contains(notable))
                                heroes.Add(notable);
-                                
+
+                    if (rel != null && rel.Clergy.ContainsKey(town.Settlement))
+                        heroes.Add(rel.Clergy[town.Settlement].Hero);                        
                 }
             }
 
@@ -179,9 +184,21 @@ namespace BannerKings.Managers.Court
         }
         public Hero Spiritual
         {
-            get => this.members.First(x => x.Position == CouncilPosition.Spiritual).Member;
+            get 
+            {
+                CouncilMember position = members.FirstOrDefault(x => x.Position == CouncilPosition.Spiritual);
+                if (position == null)
+                {
+                    position = new CouncilMember(null, CouncilPosition.Spiritual);
+                    members.Add(position);
+                }
+
+                return position.Member;
+            }
             set => this.members.First(x => x.Position == CouncilPosition.Spiritual).Member = value;
         }
+
+        public CouncilMember GetCouncilMember(CouncilPosition position) => members.FirstOrDefault(x => x.Position == position);
 
         public float AdministrativeCosts
         {
@@ -190,7 +207,7 @@ namespace BannerKings.Managers.Court
                 float costs = 0f;
                 foreach (CouncilMember councilMember in members)
                     if (councilMember.Member != null)
-                        costs += 0.03f;
+                        costs += councilMember.AdministrativeCosts();
                 return costs;
             }
         }
@@ -216,6 +233,31 @@ namespace BannerKings.Managers.Court
             set => this.member = value;
         }
         public CouncilPosition Position => this.position;
+
+        public bool IsValidCandidate(Hero candidate)
+        {
+            if (position == CouncilPosition.Spiritual)
+            {
+                return BannerKingsConfig.Instance.ReligionsManager.IsPreacher(candidate);
+            }
+
+            return true;
+        }
+
+        public float AdministrativeCosts()
+        {
+            float cost = 0.01f;
+            if (position == CouncilPosition.Spiritual)
+                cost = 0f;
+            else if (IsCorePosition(position))
+                cost = 0.03f;
+
+            return cost;
+        }
+
+        public bool IsCorePosition(CouncilPosition position) => position == CouncilPosition.Marshall || position == CouncilPosition.Steward ||
+            position == CouncilPosition.Steward || position == CouncilPosition.Chancellor;
+
         public float Competence
         {
             get

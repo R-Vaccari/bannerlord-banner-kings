@@ -21,6 +21,7 @@ namespace BannerKings.UI.Panels
 		private HeroVM steward;
 		private HeroVM chancellor;
 		private HeroVM spymaster;
+		private HeroVM spiritual;
 		private MBBindingList<CouncilMemberVM> courtMembers;
 
 		public CourtVM(PopulationData data) : base(data, true)
@@ -46,6 +47,7 @@ namespace BannerKings.UI.Panels
 			this.Steward = new HeroVM(council.Steward);
 			this.Chancellor = new HeroVM(council.Chancellor);
 			this.Spymaster = new HeroVM(council.Spymaster);
+			Spiritual = new HeroVM(council.Spiritual);
 			CourtInfo.Add(new InformationElement("Administrative costs:", base.FormatValue(council.AdministrativeCosts),
 				"Costs associated with payment of council members, deducted on all your fiefs' revenues."));
 
@@ -70,8 +72,7 @@ namespace BannerKings.UI.Panels
                 {
 					this.Marshall = new HeroVM(member);
 					this.council.Marshall = member;
-				}
-					
+				}	
 			}
 			else if (councilPosition == CouncilPosition.Steward)
             {
@@ -95,6 +96,13 @@ namespace BannerKings.UI.Panels
 				{
 					this.Spymaster = new HeroVM(member);
 					this.council.Spymaster = member;
+				}
+			} else if (councilPosition == CouncilPosition.Spiritual)
+            {
+				if (this.Spiritual.Hero != member)
+				{
+					this.Spiritual = new HeroVM(member);
+					this.council.Spiritual = member;
 				}
 			}
 			this.RefreshValues();			
@@ -155,6 +163,20 @@ namespace BannerKings.UI.Panels
 				{
 					this.marshall = value;
 					base.OnPropertyChangedWithValue(value, "Marshall");
+				}
+			}
+		}
+
+		[DataSourceProperty]
+		public HeroVM Spiritual
+		{
+			get => this.spiritual;
+			set
+			{
+				if (value != this.spiritual)
+				{
+					this.spiritual = value;
+					base.OnPropertyChangedWithValue(value, "Spiritual");
 				}
 			}
 		}

@@ -65,6 +65,8 @@ namespace BannerKings.Managers
             return religions;
         }
 
+        public Religion GetHeroReligion(Hero hero) => Religions.FirstOrDefault(pair => pair.Value.Contains(hero)).Key;
+
         public List<Hero> GetFaithfulHeroes(Religion religion)
         {
             List<Hero> heroes = new List<Hero>();

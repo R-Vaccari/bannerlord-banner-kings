@@ -37,7 +37,7 @@ namespace BannerKings.Behaviours
                 }
             }
 
-            if (clan != Clan.PlayerClan)
+            //if (clan != Clan.PlayerClan)
                 BannerKingsConfig.Instance.CourtManager.UpdateCouncil(clan);
 
             if (clan.WarPartyComponents.Count < clan.CommanderLimit && clan.Companions.Count < clan.CompanionLimit && 

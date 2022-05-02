@@ -24,7 +24,6 @@ namespace BannerKings.Managers.Institutions.Religions
         }
 
         public Divinity MainGod => this.faith.MainGod;
-        public Hero Leader => this.leadership.GetLeader();
         public Faith Faith => this.faith;
 
         public CultureObject BaseCulture => favoredCultures[0];
