@@ -25,12 +25,12 @@ namespace BannerKings.UI.Panels
 		private MBBindingList<RoyalPositionVM> royalPositions;
 		private MBBindingList<CouncilMemberVM> courtMembers;
 
-		public CourtVM(PopulationData data) : base(data, true)
+		public CourtVM(PopulationData data, bool royalCourt) : base(data, true)
         {
-			GameTexts.SetVariable("PLAYER_NAME", Hero.MainHero.Name);
 			this.courtInfo = new MBBindingList<InformationElement>();
 			royalPositions = new MBBindingList<RoyalPositionVM>();
-			this.council = BannerKingsConfig.Instance.CourtManager.GetCouncil(Hero.MainHero);
+			if (!royalCourt) this.council = BannerKingsConfig.Instance.CourtManager.GetCouncil(Hero.MainHero);
+			else this.council = BannerKingsConfig.Instance.CourtManager.GetCouncil(Clan.PlayerClan.Kingdom.Leader);
 			councilPosition = CouncilPosition.Marshall;
 			this.courtMembers = new MBBindingList<CouncilMemberVM>();
 			List<Hero> heroes = council.GetCourtMembers();
@@ -54,8 +54,9 @@ namespace BannerKings.UI.Panels
 			CourtInfo.Add(new InformationElement("Administrative costs:", base.FormatValue(council.AdministrativeCosts),
 				"Costs associated with payment of council members, deducted on all your fiefs' revenues."));
 
-			foreach (CouncilMember position in council.RoyalPositions)
-				RoyalPositions.Add(new RoyalPositionVM(position));
+			if (council.IsRoyal)
+				foreach (CouncilMember position in council.RoyalPositions)
+					RoyalPositions.Add(new RoyalPositionVM(position));
 
 		}
 
@@ -143,7 +144,9 @@ namespace BannerKings.UI.Panels
 		}
 
 		[DataSourceProperty]
-		public string Title => new TextObject("{=!}Council of {PLAYER_NAME}").ToString();
+		public string Title => new TextObject("{=!}Council of {NAME}")
+			.SetTextVariable("NAME", council.Owner.Name)
+			.ToString();
 
 		[DataSourceProperty]
 		public bool IsRoyal => council.IsRoyal;

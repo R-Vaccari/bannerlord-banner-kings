@@ -78,6 +78,8 @@ namespace BannerKings.Managers
 
         public bool IsHeroTitleHolder(Hero hero)
         {
+            if (DeJures != null) return DeJures.ContainsKey(hero);
+
             foreach (FeudalTitle title in Titles.Keys.ToList())
                 if (title.deFacto == hero || title.deJure == hero)
                     return true;

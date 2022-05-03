@@ -22,6 +22,7 @@ using BannerKings.Managers.Decisions;
 using BannerKings.Components;
 using static BannerKings.Managers.Policies.BKWorkforcePolicy;
 using BannerKings.Managers.Institutions.Religions;
+using BannerKings.Managers.Court;
 
 namespace BannerKings.Behaviors
 {
@@ -470,9 +471,13 @@ namespace BannerKings.Behaviors
                new GameMenuOption.OnConditionDelegate(MenuTitlesCondition),
                new GameMenuOption.OnConsequenceDelegate(MenuTitlesConsequence), false, -1, false);
 
-            campaignGameStarter.AddGameMenuOption("bannerkings", "manage_court", "{=!}Noble Court",
+            campaignGameStarter.AddGameMenuOption("bannerkings", "manage_court", "{=!}Noble court",
                new GameMenuOption.OnConditionDelegate(MenuCourtCondition),
                new GameMenuOption.OnConsequenceDelegate(MenuCourtConsequence), false, -1, false);
+
+            campaignGameStarter.AddGameMenuOption("bannerkings", "manage_court_royal", "{=!}Royal court",
+               new GameMenuOption.OnConditionDelegate(MenuCourtRoyalCondition),
+               new GameMenuOption.OnConsequenceDelegate(MenuCourtRoyalConsequence), false, -1, false);
 
             campaignGameStarter.AddGameMenuOption("bannerkings", "manage_court", "{=!}{RELIGION_NAME}",
                new GameMenuOption.OnConditionDelegate(MenuReligionCondition),
@@ -825,6 +830,16 @@ namespace BannerKings.Behaviors
             return currentSettlement.OwnerClan == Hero.MainHero.Clan && !currentSettlement.IsVillage;
         }
 
+        private static bool MenuCourtRoyalCondition(MenuCallbackArgs args)
+        {
+            args.optionLeaveType = GameMenuOption.LeaveType.RansomAndBribe;
+            Settlement currentSettlement = Settlement.CurrentSettlement;
+            Kingdom kingdom = Clan.PlayerClan.Kingdom;
+            CouncilData council = BannerKingsConfig.Instance.CourtManager.GetCouncil(Clan.PlayerClan.Kingdom.Leader);
+            return currentSettlement.OwnerClan == Hero.MainHero.Clan && !currentSettlement.IsVillage && kingdom != null &&
+                kingdom.Leader != Hero.MainHero && council.IsRoyal;
+        }
+
         private static bool MenuTitlesCondition(MenuCallbackArgs args)
         {
             args.optionLeaveType = GameMenuOption.LeaveType.Surrender;
@@ -885,6 +900,8 @@ namespace BannerKings.Behaviors
         }
 
         private static void MenuCourtConsequence(MenuCallbackArgs args) => UIManager.Instance.ShowWindow("court");
+
+        private static void MenuCourtRoyalConsequence(MenuCallbackArgs args) => UIManager.Instance.ShowWindow("court_royal");
 
         private static void MenuReligionConsequence(MenuCallbackArgs args) => UIManager.Instance.ShowWindow("religions");
 

@@ -36,7 +36,18 @@ namespace BannerKings.Managers.Court
             royalMembers = new List<CouncilMember>();
         }
 
-        public MBReadOnlyList<CouncilMember> RoyalPositions => royalMembers.GetReadOnlyList();
+        public Hero Owner => clan.Leader;
+
+        public MBReadOnlyList<CouncilMember> RoyalPositions
+        {
+            get
+            {
+                if (royalMembers == null)
+                    royalMembers = new List<CouncilMember>();
+                return royalMembers.GetReadOnlyList();
+            }
+        }
+        
 
         public bool IsRoyal
         {
@@ -58,7 +69,16 @@ namespace BannerKings.Managers.Court
 
         internal override void Update(PopulationData data)
         {
+
+            if (royalMembers == null) royalMembers = new List<CouncilMember>();
+
             foreach (CouncilMember member in this.members)
+            {
+                if (member.Member != null && (member.Member.IsDead || member.Member.IsDisabled))
+                    member.Member = null;
+            }
+
+            foreach (CouncilMember member in this.royalMembers)
             {
                 if (member.Member != null && (member.Member.IsDead || member.Member.IsDisabled))
                     member.Member = null;
@@ -70,12 +90,15 @@ namespace BannerKings.Managers.Court
                     if (!position.IsRoyal)
                     {
                         position.IsRoyal = true;
-                        if (!position.IsValidCandidate(position.Member))
+                        if (position.Member != null && !position.IsValidCandidate(position.Member))
                             position.Member = null;
                     }
 
-                foreach (CouncilMember position in GetIdealRoyalPositions())
-                    royalMembers.Add(position);
+                List<CouncilMember> royal = GetIdealRoyalPositions();
+                if (royalMembers.Count != royal.Count)
+                    foreach (CouncilMember position in royal)
+                        if (royalMembers.FirstOrDefault(x => x.Position == position.Position) == null)
+                            royalMembers.Add(position);
             }
             else
             {
@@ -144,19 +167,25 @@ namespace BannerKings.Managers.Court
         {
             List<Hero> heroes = new List<Hero>();
 
-            MBReadOnlyList<Hero> members = Clan.PlayerClan.Heroes;
+            MBReadOnlyList<Hero> members = clan.Heroes;
             if (members != null && members.Count > 0)
                 foreach (Hero member in members)
                     if (member != this.clan.Leader && member.IsAlive && !heroes.Contains(member))
                         heroes.Add(member);
 
-            if (BannerKingsConfig.Instance.TitleManager.IsHeroTitleHolder(Hero.MainHero))
+            if (BannerKingsConfig.Instance.TitleManager.IsHeroTitleHolder(Owner))
             {
-                List<FeudalTitle> vassals = BannerKingsConfig.Instance.TitleManager.GetVassals(Hero.MainHero);
+                List<FeudalTitle> vassals = BannerKingsConfig.Instance.TitleManager.GetVassals(Owner);
                 if (vassals != null && vassals.Count > 0)
                     foreach (FeudalTitle vassal in vassals)
                         if (vassal.deJure != this.clan.Leader && !heroes.Contains(vassal.deJure)) 
                             heroes.Add(vassal.deJure);
+
+                FeudalTitle highest = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(Owner);
+                if (highest != null && highest.IsSovereignLevel && clan.Kingdom != null)
+                    foreach (Clan clan in clan.Kingdom.Clans)
+                        if (clan.Leader != Owner && !heroes.Contains(clan.Leader))
+                            heroes.Add(clan.Leader);
             }
 
             MBReadOnlyList<Town> towns = this.clan.Fiefs;

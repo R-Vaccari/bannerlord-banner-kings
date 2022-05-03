@@ -168,10 +168,10 @@
 								</ListPanel>
 								
 								
-								<GridWidget Id="RoyalGrid" IsHidden="@IsRoyal" DataSource="{RoyalPositions}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" MarginRight="100" MarginLeft="100" HorizontalAlignment="Center" SuggestedHeight="350" DefaultCellWidth="100" DefaultCellHeight="120" ColumnCount="4" MarginTop="10" >
+								<GridWidget Id="RoyalGrid" IsHidden="@IsRoyal" DataSource="{RoyalPositions}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" MarginRight="100" MarginLeft="100" HorizontalAlignment="Center" SuggestedHeight="350" DefaultCellWidth="190" DefaultCellHeight="150" ColumnCount="4" MarginTop="50" >
 								  <ItemTemplate>
 								  
-									<Widget WidthSizePolicy="Fixed" HeightSizePolicy="CoverChildren" SuggestedWidth="140" MarginRight="20" MarginLeft="25" HorizontalAlignment="Left">
+									<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" SuggestedWidth="110" MarginRight="20" MarginLeft="20" HorizontalAlignment="Center">
 									  <Children>
 										<ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Top" StackLayout.LayoutMethod="VerticalBottomToTop">
 										  <Children>
@@ -182,7 +182,7 @@
 												<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" HorizontalAlignment="Center" SuggestedHeight="7" MarginLeft="5" MarginRight="5" Sprite="SPGeneral\TownManagement\horizontal_divider" />
 											  </Children>
 											</ListPanel>
-											<ToggleWidget Command.Click="SetId" CommandParameter.Click="@String" DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" MarginTop="30" SuggestedWidth="191" SuggestedHeight="130" HorizontalAlignment="Center" Brush="TownManagement.Governor" WidgetToClose="..\..\..\..\MarshallPopup" UpdateChildrenStates="true">
+											<ToggleWidget Command.Click="SetId" CommandParameter.Click="@String" DoNotPassEventsToChildren="true" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginTop="30" SuggestedWidth="191" SuggestedHeight="130" HorizontalAlignment="Center" Brush="TownManagement.Governor" WidgetToClose="..\..\..\..\MarshallPopup" UpdateChildrenStates="true">
 											  <Children>
 												<ImageWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="69" SuggestedHeight="69" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="TownManagement.Governor.PlusButton" />
 												<ImageIdentifierWidget Id="ElementImage" DataSource="{ImageIdentifier}" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" HorizontalAlignment="Center" MarginLeft="3" MarginRight="3" MarginTop="3" MarginBottom="3" AdditionalArgs="@AdditionalArgs" ImageId="@Id" ImageTypeCode="@ImageTypeCode" />
