@@ -301,6 +301,28 @@ namespace BannerKings
 
         namespace Economy
         {
+            [HarmonyPatch(typeof(ClanVariablesCampaignBehavior), "UpdateClanSettlementAutoRecruitment")]
+            class AutoRecruitmentPatch
+            {
+                static bool Prefix(Clan clan)
+                {
+                    if (clan.MapFaction != null && clan.MapFaction.IsKingdomFaction)
+                    {
+                        IEnumerable<Kingdom> enemies = FactionManager.GetEnemyKingdoms(clan.Kingdom);
+                        foreach (Settlement settlement in clan.Settlements)
+                        {
+                            if (settlement.IsFortification && settlement.Town.GarrisonParty != null)
+                            {
+                                if (enemies.Count() >= 0 && settlement.Town.GarrisonParty.MemberRoster.TotalManCount < 500)
+                                    settlement.Town.GarrisonAutoRecruitmentIsEnabled = true;
+                                settlement.Town.GarrisonAutoRecruitmentIsEnabled = false;
+                            }
+                        }
+                    }
+                    return false;
+                }
+            }
+
             [HarmonyPatch(typeof(DefaultClanFinanceModel), "AddIncomeFromKingdomBudget")]
             class AddIncomeFromKingdomBudgetPatch
             {
