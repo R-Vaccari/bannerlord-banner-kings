@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.ViewModelCollection.GameMenu.TownManagement;
 using TaleWorlds.Library;
-using static BannerKings.Managers.TitleManager;
 
 namespace BannerKings.UI.Items
 {

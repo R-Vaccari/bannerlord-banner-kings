@@ -166,6 +166,38 @@
 									
 								  </Children>
 								</ListPanel>
+								
+								
+								<GridWidget Id="RoyalGrid" IsHidden="@IsRoyal" DataSource="{RoyalPositions}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" MarginRight="100" MarginLeft="100" HorizontalAlignment="Center" SuggestedHeight="350" DefaultCellWidth="100" DefaultCellHeight="120" ColumnCount="4" MarginTop="10" >
+								  <ItemTemplate>
+								  
+									<Widget WidthSizePolicy="Fixed" HeightSizePolicy="CoverChildren" SuggestedWidth="140" MarginRight="20" MarginLeft="25" HorizontalAlignment="Left">
+									  <Children>
+										<ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Top" StackLayout.LayoutMethod="VerticalBottomToTop">
+										  <Children>
+											<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedWidth="191" StackLayout.LayoutMethod="HorizontalLeftToRight" DoNotAcceptEvents="true">
+											  <Children>
+												<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" HorizontalAlignment="Center" SuggestedHeight="7" MarginLeft="5" MarginRight="5" Sprite="SPGeneral\TownManagement\horizontal_divider" />
+												<RichTextWidget DoNotAcceptEvents="true" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="OverlayPopup.ButtonText" Brush.FontSize="26" Text="@Title"/>
+												<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" HorizontalAlignment="Center" SuggestedHeight="7" MarginLeft="5" MarginRight="5" Sprite="SPGeneral\TownManagement\horizontal_divider" />
+											  </Children>
+											</ListPanel>
+											<ToggleWidget Command.Click="SetId" CommandParameter.Click="@String" DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" MarginTop="30" SuggestedWidth="191" SuggestedHeight="130" HorizontalAlignment="Center" Brush="TownManagement.Governor" WidgetToClose="..\..\..\..\MarshallPopup" UpdateChildrenStates="true">
+											  <Children>
+												<ImageWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="69" SuggestedHeight="69" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="TownManagement.Governor.PlusButton" />
+												<ImageIdentifierWidget Id="ElementImage" DataSource="{ImageIdentifier}" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" HorizontalAlignment="Center" MarginLeft="3" MarginRight="3" MarginTop="3" MarginBottom="3" AdditionalArgs="@AdditionalArgs" ImageId="@Id" ImageTypeCode="@ImageTypeCode" />
+												<TextWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="250" SuggestedHeight="30" HorizontalAlignment="Center" VerticalAlignment="Bottom" PositionYOffset="40" Brush="Encyclopedia.SubPage.Element.Name.Text" Brush.FontSize="25" Text="@NameText" />
+												<HintWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" />
+											  </Children>
+											</ToggleWidget>
+										  </Children>
+										</ListPanel>
+									  </Children>
+									</Widget>
+						
+								  </ItemTemplate>
+								</GridWidget>
+								
 							
 								<EncyclopediaDivider MarginTop="80" Parameter.Title="Court" Parameter.ItemList="..\CourtGrid"/>
 							

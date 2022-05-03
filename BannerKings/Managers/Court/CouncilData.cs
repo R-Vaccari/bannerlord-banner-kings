@@ -8,6 +8,7 @@ using TaleWorlds.SaveSystem;
 using BannerKings.Managers.Titles;
 using System;
 using BannerKings.Managers.Institutions.Religions;
+using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Court
 {
@@ -19,6 +20,9 @@ namespace BannerKings.Managers.Court
         [SaveableProperty(2)]
         private List<CouncilMember> members { get; set; }
 
+        [SaveableProperty(3)]
+        private List<CouncilMember> royalMembers { get; set; }
+
         public CouncilData(Clan clan, Hero marshall = null, Hero chancellor = null, Hero steward = null, Hero spymaster = null,
             Hero spiritual = null)
         {
@@ -29,7 +33,28 @@ namespace BannerKings.Managers.Court
             this.members.Add(new CouncilMember(steward, CouncilPosition.Steward));
             this.members.Add(new CouncilMember(spymaster, CouncilPosition.Spymaster));
             this.members.Add(new CouncilMember(spiritual, CouncilPosition.Spiritual));
+            royalMembers = new List<CouncilMember>();
         }
+
+        public MBReadOnlyList<CouncilMember> RoyalPositions => royalMembers.GetReadOnlyList();
+
+        public bool IsRoyal
+        {
+            get
+            {
+                Kingdom kingdom = clan.Kingdom;
+                if (kingdom == null) return false;
+
+                if (clan.Kingdom.RulingClan != clan)
+                    return false;
+
+                FeudalTitle sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
+                if (sovereign == null) return false;
+
+                return sovereign.deJure == clan.Leader;
+            }
+        }
+        
 
         internal override void Update(PopulationData data)
         {
@@ -39,12 +64,55 @@ namespace BannerKings.Managers.Court
                     member.Member = null;
             }
 
+            if (IsRoyal)
+            {
+                foreach (CouncilMember position in members)
+                    if (!position.IsRoyal)
+                    {
+                        position.IsRoyal = true;
+                        if (!position.IsValidCandidate(position.Member))
+                            position.Member = null;
+                    }
+
+                foreach (CouncilMember position in GetIdealRoyalPositions())
+                    royalMembers.Add(position);
+            }
+            else
+            {
+                if (royalMembers.Count > 0) royalMembers.Clear();
+                foreach (CouncilMember position in members)
+                        if (position.IsRoyal)
+                            position.IsRoyal = false;
+            }
+
             if (MBRandom.RandomInt(1, 100) > 5) return;
 
             CouncilMember vacant = members.FirstOrDefault(x => x.Member == null);
-            if (vacant == null) return;
+            if (vacant == null)
+            {
+                vacant = royalMembers.FirstOrDefault(x => x.Member == null);
+                if (vacant == null) return;
+            }
 
             vacant.Member = SelectHeroForPosition(vacant);
+        }
+
+        public List<CouncilMember> GetIdealRoyalPositions()
+        {
+            List<CouncilMember> positions = new List<CouncilMember>();
+            if (clan.Kingdom == null) return positions;
+
+            FeudalTitle sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(clan.Kingdom);
+            if (sovereign == null || sovereign.contract == null) return positions;
+            GovernmentType government = sovereign.contract.Government;
+
+            if (government == GovernmentType.Imperial)
+                positions.Add(new CouncilMember(null, CouncilPosition.Heir));
+
+            if (clan.Kingdom.Culture == Utils.Helpers.GetCulture("vlandia"))
+                positions.Add(new CouncilMember(null, CouncilPosition.Castellan));
+
+            return positions;
         }
 
         public List<Hero> GetAvailableHeroes()
@@ -65,7 +133,8 @@ namespace BannerKings.Managers.Court
         {
             List<ValueTuple<Hero, float>> list = new List<ValueTuple<Hero, float>>();
             foreach(Hero hero in GetAvailableHeroes())
-                list.Add((hero, GetCompetence(hero, position.Position) + ((float)clan.Leader.GetRelation(hero) * 0.001f)));
+                if (position.IsValidCandidate(hero))
+                    list.Add((hero, GetCompetence(hero, position.Position) + ((float)clan.Leader.GetRelation(hero) * 0.001f)));
             
 
             return MBRandom.ChooseWeighted(list);
@@ -221,6 +290,9 @@ namespace BannerKings.Managers.Court
         [SaveableProperty(2)]
         private CouncilPosition position { get; set; }
 
+        [SaveableProperty(3)]
+        private bool isRoyal { get; set; }
+
         public CouncilMember(Hero member, CouncilPosition position)
         {
             this.member = member;
@@ -233,6 +305,19 @@ namespace BannerKings.Managers.Court
             set => this.member = value;
         }
         public CouncilPosition Position => this.position;
+        public bool IsRoyal
+        {
+            get => isRoyal;
+            set => isRoyal = value;
+        }
+
+        public TextObject GetName()
+        {
+            TextObject text = new TextObject("{=!}" + position.ToString());
+            
+
+            return text;
+        }
 
         public bool IsValidCandidate(Hero candidate)
         {
@@ -240,6 +325,8 @@ namespace BannerKings.Managers.Court
             {
                 return BannerKingsConfig.Instance.ReligionsManager.IsPreacher(candidate);
             }
+            else if (IsCorePosition(position))
+                return candidate.IsNoble;
 
             return true;
         }
@@ -302,6 +389,9 @@ namespace BannerKings.Managers.Court
         Chancellor,
         Steward,
         Spymaster,
-        Spiritual
+        Spiritual,
+        Heir,
+        Castellan,
+        Druzina
     }
 }
