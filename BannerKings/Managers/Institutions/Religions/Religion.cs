@@ -14,18 +14,20 @@ namespace BannerKings.Managers.Institutions.Religions
         private Faith faith;
         private ReligiousLeadership leadership;
         private List<CultureObject> favoredCultures;
+        private List<string> doctrineIds;
 
         public Religion(Settlement settlement, Faith faith, ReligiousLeadership leadership,
-            List<CultureObject> favoredCultures) : base(settlement)
+            List<CultureObject> favoredCultures, List<string> doctrineIds) : base(settlement)
         {
             clergy = new Dictionary<Settlement, Clergyman>();
             this.leadership = leadership;
             this.faith = faith;
             this.favoredCultures = favoredCultures;
+            this.doctrineIds = doctrineIds;
         }
 
+        public CultureObject MainCulture => favoredCultures[0];
         public Divinity MainGod => faith.MainGod;
-        public Hero Leader => leadership.GetLeader();
         public Faith Faith => faith;
 
         public MBReadOnlyDictionary<Settlement, Clergyman> Clergy => clergy.GetReadOnlyDictionary();

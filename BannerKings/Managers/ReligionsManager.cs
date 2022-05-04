@@ -9,12 +9,10 @@ namespace BannerKings.Managers
     public class ReligionsManager
     {
         private Dictionary<Religion, List<Hero>> Religions { get; set; }
-        private Dictionary<CultureObject, Religion> Cultures { get; set; }
 
         public ReligionsManager()
         {
             Religions = new Dictionary<Religion, List<Hero>>();
-            Cultures = new Dictionary<CultureObject, Religion>();
             InitializeReligions();
         }
 
@@ -24,32 +22,34 @@ namespace BannerKings.Managers
             CultureObject khuzait = Utils.Helpers.GetCulture("khuzait");
             CultureObject imperial = Utils.Helpers.GetCulture("imperial");
 
-            Religion aseraiReligion = new Religion(Settlement.All.First(x => x.StringId == "town_A1"), DefaultFaiths.Instance.AseraCode, new DescentralizedLeadership(),
-                new List<CultureObject> { aserai, khuzait, imperial });
+            Religion aseraiReligion = new Religion(Settlement.All.First(x => x.StringId == "town_A1"), 
+                DefaultFaiths.Instance.AseraCode, new DescentralizedLeadership(),
+                new List<CultureObject> { aserai, khuzait, imperial },
+                new List<string>());
 
             Religions.Add(aseraiReligion, new List<Hero>());
-            Cultures.Add(aserai, aseraiReligion);
         }
 
         public void InitializePresets()
         {
-            foreach (KeyValuePair<CultureObject, Religion> pair in Cultures)
+            foreach (Religion rel in Religions.Keys.ToList())
             {
-                string id = pair.Value.Faith.GetId();
+                string id = rel.Faith.GetId();
                 List<CharacterObject> presets = CharacterObject.All.ToList().FindAll(x => x.Occupation == Occupation.Preacher
-                && x.Culture == pair.Key && x.IsTemplate && x.StringId.Contains("bannerkings") && x.StringId.Contains(id));
+                && x.Culture == rel.MainCulture && x.IsTemplate && x.StringId.Contains("bannerkings") && x.StringId.Contains(id));
                 foreach (CharacterObject preset in presets)
                 {
                     int number = int.Parse(preset.StringId[preset.StringId.Length - 1].ToString());
-                    pair.Value.Faith.AddPreset(number, preset);
+                    rel.Faith.AddPreset(number, preset);
                 }
             }
         }
 
         public Religion GetIdealReligion(CultureObject culture)
         {
-            if (Cultures.ContainsKey(culture))
-                return Cultures[culture];
+            foreach (Religion rel in Religions.Keys.ToList())
+                if (rel.MainCulture == culture)
+                    return rel;
 
             return null;
         }
