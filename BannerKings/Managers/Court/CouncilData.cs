@@ -131,9 +131,16 @@ namespace BannerKings.Managers.Court
 
             if (government == GovernmentType.Imperial)
                 positions.Add(new CouncilMember(null, CouncilPosition.Heir));
+            else if (government == GovernmentType.Feudal)
+                positions.Add(new CouncilMember(null, CouncilPosition.Constable));
 
             if (clan.Kingdom.Culture == Utils.Helpers.GetCulture("vlandia"))
                 positions.Add(new CouncilMember(null, CouncilPosition.Castellan));
+
+            if (clan.Kingdom.Culture == Utils.Helpers.GetCulture("battania"))
+                positions.Add(new CouncilMember(null, CouncilPosition.Elder));
+
+
 
             return positions;
         }
@@ -421,6 +428,8 @@ namespace BannerKings.Managers.Court
         Spiritual,
         Heir,
         Castellan,
-        Druzina
+        Druzina,
+        Elder,
+        Constable
     }
 }
