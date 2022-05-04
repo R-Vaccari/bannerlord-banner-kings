@@ -1,6 +1,5 @@
 ﻿using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Institutions.Religions.Faiths;
-using BannerKings.Managers.Institutions.Religions.Leaderships;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
@@ -14,8 +13,8 @@ namespace BannerKings.Managers
 
         public ReligionsManager()
         {
-            this.Religions = new Dictionary<Religion, List<Hero>>();
-            this.Cultures = new Dictionary<CultureObject, Religion>();
+            Religions = new Dictionary<Religion, List<Hero>>();
+            Cultures = new Dictionary<CultureObject, Religion>();
             InitializeReligions();
         }
 
@@ -25,25 +24,16 @@ namespace BannerKings.Managers
             CultureObject khuzait = Utils.Helpers.GetCulture("khuzait");
             CultureObject imperial = Utils.Helpers.GetCulture("imperial");
 
-            Religion aseraiReligion = new Religion(Settlement.All.First(x => x.StringId == "town_A1"), DefaultFaiths.Instance.AseraCode, new KinshipLeadership(),
-                new List<CultureObject>() { aserai, khuzait, imperial });
+            Religion aseraiReligion = new Religion(Settlement.All.First(x => x.StringId == "town_A1"), DefaultFaiths.Instance.AseraCode, new DescentralizedLeadership(),
+                new List<CultureObject> { aserai, khuzait, imperial });
 
-            this.Religions.Add(aseraiReligion, new List<Hero>());
-            this.Cultures.Add(aserai, aseraiReligion);
-
-            InitializeFaithfulHeroes(aseraiReligion, aserai);
-        }
-
-        public void InitializeFaithfulHeroes(Religion rel, CultureObject culture)
-        {
-            foreach (Hero hero in Hero.AllAliveHeroes)
-                if (!hero.IsDisabled && (hero.IsNoble || hero.IsNotable || hero.IsWanderer) && hero.Culture == culture)
-                    Religions[rel].Add(hero);
+            Religions.Add(aseraiReligion, new List<Hero>());
+            Cultures.Add(aserai, aseraiReligion);
         }
 
         public void InitializePresets()
         {
-            foreach (KeyValuePair<CultureObject, Religion> pair in this.Cultures)
+            foreach (KeyValuePair<CultureObject, Religion> pair in Cultures)
             {
                 string id = pair.Value.Faith.GetId();
                 List<CharacterObject> presets = CharacterObject.All.ToList().FindAll(x => x.Occupation == Occupation.Preacher
@@ -56,46 +46,25 @@ namespace BannerKings.Managers
             }
         }
 
-        public List<Religion> GetReligions()
-        {
-            List<Religion> religions = new List<Religion>();
-            foreach (Religion rel in Religions.Keys)
-                religions.Add(rel);
-
-            return religions;
-        }
-
-        public Religion GetHeroReligion(Hero hero) => Religions.FirstOrDefault(pair => pair.Value.Contains(hero)).Key;
-
-        public List<Hero> GetFaithfulHeroes(Religion religion)
-        {
-            List<Hero> heroes = new List<Hero>();
-            if (Religions.ContainsKey(religion))
-                foreach (Hero hero in Religions[religion])
-                    heroes.Add(hero);
-
-            return heroes;
-        }
-
         public Religion GetIdealReligion(CultureObject culture)
         {
-            if (this.Cultures.ContainsKey(culture))
-                return this.Cultures[culture];
+            if (Cultures.ContainsKey(culture))
+                return Cultures[culture];
 
             return null;
         }
 
         public bool IsReligionMember(Hero hero, Religion religion)
         {
-            if (this.Religions.ContainsKey(religion))
-                if (this.Religions[religion].Contains(hero))
+            if (Religions.ContainsKey(religion))
+                if (Religions[religion].Contains(hero))
                     return true;
             return false;
         }
 
         public bool IsPreacher(Hero hero)
         {
-            foreach (Religion rel in this.Religions.Keys.ToList())
+            foreach (Religion rel in Religions.Keys.ToList())
                 foreach (Clergyman clergy in rel.Clergy.Values.ToList())
                     if (clergy.Hero == hero)
                         return true;
@@ -105,7 +74,7 @@ namespace BannerKings.Managers
 
         public Clergyman GetClergymanFromHeroHero(Hero hero)
         {
-            foreach (Religion rel in this.Religions.Keys.ToList())
+            foreach (Religion rel in Religions.Keys.ToList())
                 foreach (Clergyman clergy in rel.Clergy.Values.ToList())
                     if (clergy.Hero == hero)
                         return clergy;
@@ -115,7 +84,7 @@ namespace BannerKings.Managers
 
         public Religion GetClergymanReligion(Clergyman clergyman)
         {
-            foreach (Religion rel in this.Religions.Keys.ToList())
+            foreach (Religion rel in Religions.Keys.ToList())
                 foreach (Clergyman clergy in rel.Clergy.Values.ToList())
                     if (clergy == clergyman)
                         return rel;

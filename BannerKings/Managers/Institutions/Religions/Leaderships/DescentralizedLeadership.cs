@@ -1,15 +1,33 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 
 namespace BannerKings.Managers.Institutions.Religions
 {
-    public abstract class DescentralizedLeadership : ReligiousLeadership
+    public class DescentralizedLeadership : ReligiousLeadership
     {
-        public override void Initialize(Religion religion)
+
+        private List<Hero> leaders;
+        private Religion religion;
+        public DescentralizedLeadership()
         {
-            religion = religion;
+            leaders = new List<Hero>();
+            
         }
 
-        public abstract List<Clergyman> GetLeaders();
+        public override void Initialize(Religion religion)
+        {
+            this.religion = religion;
+        }
+
+        public override void DecideNewLeader()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override Hero GetLeader()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -13,12 +13,12 @@ namespace BannerKings.Managers
 
         public CourtManager(Dictionary<Clan, CouncilData> councils)
         {
-            this.Councils = councils;
+            Councils = councils;
         }
 
         public void ApplyCouncilEffect(ref ExplainedNumber result, Hero settlementOwner, CouncilPosition position, float maxEffect, bool factor)
         {
-            CouncilData council = this.GetCouncil(settlementOwner);
+            CouncilData council = GetCouncil(settlementOwner);
             float competence = council.GetCompetence(position);
             if (competence != 0f)
             {
@@ -29,7 +29,7 @@ namespace BannerKings.Managers
 
         public int GetCouncilEffectInteger(Hero settlementOwner, CouncilPosition position, float maxEffect)
         {
-            CouncilData council = this.GetCouncil(settlementOwner);
+            CouncilData council = GetCouncil(settlementOwner);
             float competence = council.GetCompetence(position);
             return (int)(maxEffect * competence);
         }
@@ -37,31 +37,25 @@ namespace BannerKings.Managers
         public CouncilData GetCouncil(Hero hero)
         {
             Clan clan = hero.Clan;
-            if (this.Councils.ContainsKey(clan))
-                return this.Councils[clan];
-            else
-            {
-                CouncilData council = new CouncilData(clan);
-                this.Councils.Add(clan, council);
-                return council;
-            }
+            if (Councils.ContainsKey(clan))
+                return Councils[clan];
+            CouncilData council = new CouncilData(clan);
+            Councils.Add(clan, council);
+            return council;
         }
 
         public CouncilData GetCouncil(Clan clan)
         {
-            if (this.Councils.ContainsKey(clan))
-                return this.Councils[clan];
-            else
-            {
-                CouncilData council = new CouncilData(clan);
-                this.Councils.Add(clan, council);
-                return council;
-            }
+            if (Councils.ContainsKey(clan))
+                return Councils[clan];
+            CouncilData council = new CouncilData(clan);
+            Councils.Add(clan, council);
+            return council;
         }
 
         public void UpdateCouncil(Clan clan)
         {
-            CouncilData data = this.GetCouncil(clan.Leader);
+            CouncilData data = GetCouncil(clan.Leader);
             data.Update(null);
         }
     }

@@ -1,7 +1,6 @@
 ﻿using BannerKings.Managers.Titles;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
-using static BannerKings.Managers.TitleManager;
 
 namespace BannerKings.Managers.Helpers
 {

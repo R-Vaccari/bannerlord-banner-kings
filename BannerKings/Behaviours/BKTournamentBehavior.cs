@@ -11,7 +11,7 @@ namespace BannerKings.Behaviours
     {
         public override void RegisterEvents()
         {
-            CampaignEvents.TournamentFinished.AddNonSerializedListener(this, new Action<CharacterObject, MBReadOnlyList<CharacterObject>, Town, ItemObject>(this.OnTournamentFinished));
+            CampaignEvents.TournamentFinished.AddNonSerializedListener(this, OnTournamentFinished);
         }
 
         public override void SyncData(IDataStore dataStore)

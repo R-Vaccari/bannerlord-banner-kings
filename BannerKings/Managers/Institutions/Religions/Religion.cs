@@ -1,9 +1,10 @@
 ﻿using BannerKings.Managers.Institutions.Religions.Faiths;
+using System;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
-using TaleWorlds.CampaignSystem.Actions;
 
 namespace BannerKings.Managers.Institutions.Religions
 {
@@ -17,24 +18,23 @@ namespace BannerKings.Managers.Institutions.Religions
         public Religion(Settlement settlement, Faith faith, ReligiousLeadership leadership,
             List<CultureObject> favoredCultures) : base(settlement)
         {
-            this.clergy = new Dictionary<Settlement, Clergyman>();
+            clergy = new Dictionary<Settlement, Clergyman>();
             this.leadership = leadership;
             this.faith = faith;
             this.favoredCultures = favoredCultures;
         }
 
-        public Divinity MainGod => this.faith.MainGod;
-        public Faith Faith => this.faith;
+        public Divinity MainGod => faith.MainGod;
+        public Hero Leader => leadership.GetLeader();
+        public Faith Faith => faith;
 
-        public CultureObject BaseCulture => favoredCultures[0];
-
-        public MBReadOnlyDictionary<Settlement, Clergyman> Clergy => this.clergy.GetReadOnlyDictionary();
+        public MBReadOnlyDictionary<Settlement, Clergyman> Clergy => clergy.GetReadOnlyDictionary();
 
         public Clergyman GenerateClergyman(Settlement settlement)
         {
             int rank = faith.GetIdealRank(settlement);
-            TextObject title = this.faith.GetRankTitle(rank);
-            CharacterObject character = this.faith.GetPreset(rank);
+            TextObject title = faith.GetRankTitle(rank);
+            CharacterObject character = faith.GetPreset(rank);
             if (character != null)
             {
                 Hero hero = HeroCreator.CreateSpecialHero(character, settlement);
@@ -45,22 +45,21 @@ namespace BannerKings.Managers.Institutions.Religions
                 hero.SetName(fullName, firstName);
                 EnterSettlementAction.ApplyForCharacterOnly(hero, settlement);
                 Clergyman clergyman = new Clergyman(hero, rank);
-                this.clergy.Add(settlement, clergyman);
+                clergy.Add(settlement, clergyman);
                 return clergyman;
-            } else
-            {
-                throw new BannerKingsException("");
             }
+
+            throw new BannerKingsException("");
         }
 
-        public bool IsFavoredCulture(CultureObject culture) => this.favoredCultures.Contains(culture);
+        public bool IsFavoredCulture(CultureObject culture) => favoredCultures.Contains(culture);
 
         public override void Destroy()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
-        public MBReadOnlyList<CultureObject> FavoredCultures => this.favoredCultures.GetReadOnlyList();
+        public MBReadOnlyList<CultureObject> FavoredCultures => favoredCultures.GetReadOnlyList();
 
     }
 }

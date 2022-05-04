@@ -1,12 +1,12 @@
-﻿using BannerKings.Managers.Policies;
-using System.Linq;
+﻿using BannerKings.Managers.Decisions;
+using BannerKings.Managers.Policies;
 using System.Collections.Generic;
+using System.Linq;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.SaveSystem;
 using static BannerKings.Managers.Policies.BKGarrisonPolicy;
 using static BannerKings.Managers.Policies.BKMilitiaPolicy;
 using static BannerKings.Managers.Policies.BKCriminalPolicy;
-using BannerKings.Managers.Decisions;
-using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Managers
 {
@@ -29,7 +29,6 @@ namespace BannerKings.Managers
                 yield return "decision_tariff_exempt";
                 yield return "decision_slaves_tax";
                 yield return "decision_mercantilism";
-                yield break;
             }
         }
 
@@ -44,7 +43,6 @@ namespace BannerKings.Managers
                 yield return "decision_tariff_exempt";
                 yield return "decision_slaves_tax";
                 yield return "decision_mercantilism";
-                yield break;
             }
         }
 
@@ -54,7 +52,6 @@ namespace BannerKings.Managers
             {
                 yield return "decision_militia_encourage";
                 yield return "decision_militia_subsidize";
-                yield break;
             }
         }
 
@@ -68,19 +65,18 @@ namespace BannerKings.Managers
                 yield return "militia";
                 yield return "tax";
                 yield return "workforce";
-                yield break;
             }
         }
 
         public PolicyManager(Dictionary<Settlement, List<BannerKingsDecision>> DECISIONS, Dictionary<Settlement, List<BannerKingsPolicy>> POLICIES)
         {
-            this.SettlementDecisions = DECISIONS;
-            this.SettlementPolicies = POLICIES;
+            SettlementDecisions = DECISIONS;
+            SettlementPolicies = POLICIES;
         }
 
         public void InitializeSettlement(Settlement settlement)
         {
-            if (!this.SettlementDecisions.ContainsKey(settlement))
+            if (!SettlementDecisions.ContainsKey(settlement))
                 InitializeDecisions(settlement);
             if (!SettlementPolicies.ContainsKey(settlement))
                 InitializePolicies(settlement);
@@ -101,17 +97,17 @@ namespace BannerKings.Managers
             if (settlement.IsVillage)
             {
                 foreach (string id in VillageDecisions)
-                    decisions.Add(this.GenerateDecision(settlement, id));
+                    decisions.Add(GenerateDecision(settlement, id));
             } else if (settlement.IsCastle)
             {
                 foreach (string id in CastleDecisions)
-                    decisions.Add(this.GenerateDecision(settlement, id));
+                    decisions.Add(GenerateDecision(settlement, id));
             } else if (settlement.IsTown)
             {
                 foreach (string id in TownDecisions)
-                    decisions.Add(this.GenerateDecision(settlement, id));
+                    decisions.Add(GenerateDecision(settlement, id));
             }
-            this.SettlementDecisions.Add(settlement, decisions);
+            SettlementDecisions.Add(settlement, decisions);
         }
 
         private void InitializePolicies(Settlement settlement)
@@ -119,17 +115,17 @@ namespace BannerKings.Managers
             List<BannerKingsPolicy> policies = new List<BannerKingsPolicy>();
 
             foreach (string id in Policies)
-                policies.Add(this.GeneratePolicy(settlement, id));
+                policies.Add(GeneratePolicy(settlement, id));
      
-            this.SettlementPolicies.Add(settlement, policies);
+            SettlementPolicies.Add(settlement, policies);
         }
 
         public int GetActiveCostlyDecisionsNumber(Settlement settlement)
         {
-            if (this.SettlementDecisions.ContainsKey(settlement))
+            if (SettlementDecisions.ContainsKey(settlement))
             {
                 int i = 0;
-                foreach (BannerKingsDecision decision in this.SettlementDecisions[settlement])
+                foreach (BannerKingsDecision decision in SettlementDecisions[settlement])
                     if (decision.Enabled)
                     {
                         string id = decision.GetIdentifier();
@@ -143,7 +139,7 @@ namespace BannerKings.Managers
         }
         public bool IsPolicyEnacted(Settlement settlement, string policyType, int value)
         {
-            BannerKingsPolicy policy = this.GetPolicy(settlement, policyType);
+            BannerKingsPolicy policy = GetPolicy(settlement, policyType);
             return policy.Selected == value;
         }
 
@@ -172,20 +168,19 @@ namespace BannerKings.Managers
         {
             if (policyType == "decision_militia_subsidize")
                 return new BKSubsidizeMilitiaDecision(settlement, false);
-            else if (policyType == "decision_militia_encourage")
+            if (policyType == "decision_militia_encourage")
                 return new BKEncourageMilitiaDecision(settlement, false);
-            else if (policyType == "decision_ration")
+            if (policyType == "decision_ration")
                 return new BKRationDecision(settlement, false);
-            else if (policyType == "decision_tariff_exempt")
+            if (policyType == "decision_tariff_exempt")
                 return new BKExemptTariffDecision(settlement, false);
-            else if (policyType == "decision_foreigner_ban")
+            if (policyType == "decision_foreigner_ban")
                 return new BKBanForeignersDecision(settlement, false);
-            else if (policyType == "decision_slaves_tax")
+            if (policyType == "decision_slaves_tax")
                 return new BKTaxSlavesDecision(settlement, false);
-            else if (policyType == "decision_mercantilism")
+            if (policyType == "decision_mercantilism")
                 return new BKEncourageMercantilism(settlement, false);
-            else
-                return new BKExportSlavesDecision(settlement, true);
+            return new BKExportSlavesDecision(settlement, true);
 
         }
 
@@ -193,15 +188,15 @@ namespace BannerKings.Managers
         {
             if (policyType == "garrison")
                 return new BKGarrisonPolicy(GarrisonPolicy.Standard, settlement);
-            else if (policyType == "militia")
+            if (policyType == "militia")
                 return new BKMilitiaPolicy(MilitiaPolicy.Balanced, settlement);
             if (policyType == "tax")
                 return new BKTaxPolicy(BKTaxPolicy.TaxType.Standard, settlement);
             if (policyType == "workforce")
                 return new BKWorkforcePolicy(BKWorkforcePolicy.WorkforcePolicy.None, settlement);
-            else if (policyType == "draft")
+            if (policyType == "draft")
                 return new BKDraftPolicy(BKDraftPolicy.DraftPolicy.Standard, settlement);
-            else return new BKCriminalPolicy(CriminalPolicy.Enslavement, settlement);
+            return new BKCriminalPolicy(CriminalPolicy.Enslavement, settlement);
         }
 
         private void AddSettlementPolicy(Settlement settlement)

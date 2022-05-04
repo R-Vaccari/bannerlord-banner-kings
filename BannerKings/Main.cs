@@ -1,28 +1,28 @@
-﻿using HarmonyLib;
-using BannerKings.Behaviors;
+﻿using BannerKings.Behaviors;
+using BannerKings.Behaviours;
+using BannerKings.Managers.Helpers;
+using BannerKings.Managers.Titles;
 using BannerKings.Models;
+using BannerKings.Models.Vanilla;
+using BannerKings.Populations;
+using HarmonyLib;
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
+using TaleWorlds.CampaignSystem.Election;
+using TaleWorlds.CampaignSystem.SandBox.CampaignBehaviors;
 using TaleWorlds.CampaignSystem.SandBox.CampaignBehaviors.VillageBehaviors;
+using TaleWorlds.CampaignSystem.SandBox.GameComponents;
+using TaleWorlds.CampaignSystem.SandBox.GameComponents.Map;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.MountAndBlade;
-using static BannerKings.Managers.PopulationManager;
-using TaleWorlds.CampaignSystem.SandBox.CampaignBehaviors;
-using System.Reflection;
 using TaleWorlds.ObjectSystem;
-using BannerKings.Managers.Helpers;
-using BannerKings.Populations;
-using BannerKings.Models.Vanilla;
-using BannerKings.Behaviours;
-using TaleWorlds.CampaignSystem.Election;
-using TaleWorlds.CampaignSystem.SandBox.GameComponents;
-using BannerKings.Managers.Titles;
-using TaleWorlds.CampaignSystem.SandBox.GameComponents.Map;
+using static BannerKings.Managers.PopulationManager;
 using static TaleWorlds.CampaignSystem.SandBox.Issues.CaravanAmbushIssueBehavior;
 using static TaleWorlds.CampaignSystem.SandBox.Issues.LandLordNeedsManualLaborersIssueBehavior;
 using static TaleWorlds.CampaignSystem.Election.KingSelectionKingdomDecision;
@@ -142,7 +142,7 @@ namespace BannerKings
                         textObject.SetTextVariable("IMPERIAL", (hero.Culture.StringId == "empire") ? 1 : 0);
                         textObject.SetTextVariable("COASTAL", (hero.Culture.StringId == "empire" || hero.Culture.StringId == "vlandia") ? 1 : 0);
                         textObject.SetTextVariable("NORTHERN", (hero.Culture.StringId == "battania" || hero.Culture.StringId == "sturgia") ? 1 : 0);
-                        textObject.SetCharacterProperties("HERO", hero.CharacterObject, false);
+                        textObject.SetCharacterProperties("HERO", hero.CharacterObject);
                         textObject.SetTextVariable("FIRSTNAME", heroFirstName);
                         __result = textObject;
                         return false;
@@ -309,11 +309,12 @@ namespace BannerKings
                                     deJure.Gold += result;
                                     continue;
                                 }
-                                else if (deJure.Clan.Kingdom == clan.Kingdom)
+
+                                if (deJure.Clan.Kingdom == clan.Kingdom)
                                     continue;
                             }
 
-                            goldChange.Add((float)result, new TextObject("{=!}{A0}", null), village.Name);
+                            goldChange.Add(result, new TextObject("{=!}{A0}"), village.Name);
                         }
 
                         foreach (FeudalTitle lordship in lordships)
@@ -329,7 +330,7 @@ namespace BannerKings
                                     Hero deJure = lordship.deJure;
                                     deJure.Gold += result;
                                 }
-                                else goldChange.Add((float)result, new TextObject("{=!}{A0}", null), village.Name);
+                                else goldChange.Add(result, new TextObject("{=!}{A0}"), village.Name);
                             }
                         }
                         return false;
@@ -339,7 +340,7 @@ namespace BannerKings
 
                 private static int CalculateVillageIncome(ref ExplainedNumber goldChange, Village village, Clan clan, bool applyWithdrawals)
                 {
-                    int total = (village.VillageState == Village.VillageStates.Looted || village.VillageState == Village.VillageStates.BeingRaided) ? 0 : ((int)((float)village.TradeTaxAccumulated / 5f));
+                    int total = (village.VillageState == Village.VillageStates.Looted || village.VillageState == Village.VillageStates.BeingRaided) ? 0 : ((int)(village.TradeTaxAccumulated / 5f));
                     int num2 = total;
                     if (clan.Kingdom != null && clan.Kingdom.RulingClan != clan && clan.Kingdom.ActivePolicies.Contains(DefaultPolicies.LandTax))
                     {
@@ -347,7 +348,7 @@ namespace BannerKings
                     }     
 
                     if (village.Bound.Town != null && village.Bound.Town.Governor != null && village.Bound.Town.Governor.GetPerkValue(DefaultPerks.Scouting.ForestKin))
-                        total += MathF.Round((float)total * DefaultPerks.Scouting.ForestKin.SecondaryBonus * 0.01f);
+                        total += MathF.Round(total * DefaultPerks.Scouting.ForestKin.SecondaryBonus * 0.01f);
 
                     Settlement bound = village.Bound;
                     bool flag;
@@ -359,7 +360,7 @@ namespace BannerKings
                         flag = (((town != null) ? town.Governor : null) != null);
                     }
                     if (flag && village.Bound.Town.Governor.GetPerkValue(DefaultPerks.Steward.Logistician))
-                        total += MathF.Round((float)total * DefaultPerks.Steward.Logistician.SecondaryBonus * 0.01f);
+                        total += MathF.Round(total * DefaultPerks.Steward.Logistician.SecondaryBonus * 0.01f);
 
                     if (applyWithdrawals)
                         village.TradeTaxAccumulated -= num2;
@@ -368,8 +369,8 @@ namespace BannerKings
                     {
                         if (!village.IsOwnerUnassigned && village.Settlement.OwnerClan != clan)
                         {
-                            int policyTotal = (village.VillageState == Village.VillageStates.Looted || village.VillageState == Village.VillageStates.BeingRaided) ? 0 : ((int)((float)village.TradeTaxAccumulated / 5f));
-                            total += (int)((float)policyTotal * 0.05f);
+                            int policyTotal = (village.VillageState == Village.VillageStates.Looted || village.VillageState == Village.VillageStates.BeingRaided) ? 0 : ((int)(village.TradeTaxAccumulated / 5f));
+                            total += (int)(policyTotal * 0.05f);
                         }
                     }
 
@@ -397,8 +398,8 @@ namespace BannerKings
                 private static ItemCategory _itemCategoryBread;
                 static void Postfix()
                 {
-                    _itemCategoryBread = Game.Current.ObjectManager.RegisterPresumedObject<ItemCategory>(new ItemCategory("bread"));
-                    _itemCategoryBread.InitializeObject(true, 50, 20, ItemCategory.Property.BonusToFoodStores, null, 0f, false, true);
+                    _itemCategoryBread = Game.Current.ObjectManager.RegisterPresumedObject(new ItemCategory("bread"));
+                    _itemCategoryBread.InitializeObject(true, 50, 20, ItemCategory.Property.BonusToFoodStores);
                 }
             }
 
@@ -409,19 +410,19 @@ namespace BannerKings
                 static bool Prefix(Village village, MobileParty villagerParty)
                 {
                     ItemObject mule = MBObjectManager.Instance.GetObject<ItemObject>(x => x.StringId == "mule");
-                    int muleCount = (int)((float)villagerParty.MemberRoster.TotalManCount * 0.1f);
+                    int muleCount = (int)(villagerParty.MemberRoster.TotalManCount * 0.1f);
                     villagerParty.ItemRoster.AddToCounts(mule, muleCount);
                     ItemRoster itemRoster = village.Settlement.ItemRoster;
-                    float num = (float)villagerParty.InventoryCapacity - villagerParty.ItemRoster.TotalWeight;
+                    float num = villagerParty.InventoryCapacity - villagerParty.ItemRoster.TotalWeight;
                     for (int i = 0; i < 4; i++)
                     {
                         foreach (ItemRosterElement itemRosterElement in itemRoster)
                         {
                             ItemObject item = itemRosterElement.EquipmentElement.Item;
-                            int num2 = MBRandom.RoundRandomized((float)itemRosterElement.Amount * 0.2f);
+                            int num2 = MBRandom.RoundRandomized(itemRosterElement.Amount * 0.2f);
                             if (num2 > 0)
                             {
-                                if (!item.HasHorseComponent && item.Weight * (float)num2 > num)
+                                if (!item.HasHorseComponent && item.Weight * num2 > num)
                                 {
                                     num2 = MathF.Ceiling(num / item.Weight);
                                     if (num2 <= 0)
@@ -431,7 +432,7 @@ namespace BannerKings
                                 }
                                 if (!item.HasHorseComponent)
                                 {
-                                    num -= (float)num2 * item.Weight;
+                                    num -= num2 * item.Weight;
                                 }
                                 villagerParty.Party.ItemRoster.AddToCounts(itemRosterElement.EquipmentElement, num2);
                                 itemRoster.AddToCounts(itemRosterElement.EquipmentElement, -num2);
@@ -471,7 +472,8 @@ namespace BannerKings
                         }
                         return false;
                     }
-                    else return true;
+
+                    return true;
                 }
             }
 
@@ -482,7 +484,7 @@ namespace BannerKings
             {
 
                 [HarmonyPrefix]
-                [HarmonyPatch("GetItemPrice", new Type[] { typeof(ItemObject), typeof(MobileParty), typeof(bool) })]
+                [HarmonyPatch("GetItemPrice", typeof(ItemObject), typeof(MobileParty), typeof(bool))]
                 static bool Prefix1(Town __instance, ref int __result, ItemObject item, MobileParty tradingParty = null, bool isSelling = false)
                 {
                     if (__instance != null && __instance.MarketData != null && __instance.GarrisonParty != null && __instance.GarrisonParty.Party != null)
@@ -490,12 +492,13 @@ namespace BannerKings
                         __result = __instance.MarketData.GetPrice(item, tradingParty, isSelling, __instance.GarrisonParty.Party);
                         return false;
                     }
-                    else return true;
+
+                    return true;
                 }
 
                 
                 [HarmonyPrefix]
-                [HarmonyPatch("GetItemPrice", new Type[] { typeof(EquipmentElement), typeof(MobileParty), typeof(bool) })]
+                [HarmonyPatch("GetItemPrice", typeof(EquipmentElement), typeof(MobileParty), typeof(bool))]
                 static bool Prefix2(Town __instance, ref int __result, EquipmentElement itemRosterElement, MobileParty tradingParty = null, bool isSelling = false)
                 {
                     if (__instance != null && __instance.MarketData != null && __instance.GarrisonParty != null && __instance.GarrisonParty.Party != null)
@@ -503,7 +506,8 @@ namespace BannerKings
                         __result = __instance.MarketData.GetPrice(itemRosterElement, tradingParty, isSelling, __instance.GarrisonParty.Party);
                         return false;
                     }
-                    else return true;
+
+                    return true;
                 }
             }
 
@@ -547,7 +551,8 @@ namespace BannerKings
                         }
                         return false;
                     }
-                    else return true; 
+
+                    return true;
                 }
             }
 
@@ -577,13 +582,13 @@ namespace BannerKings
                             float num = (float)dynMethod.Invoke(null, new object[] { town, demand, itemCategory });
                             if (num > 0.01f)
                             {
-                                int price = marketData.GetPrice(item, null, false, null);
-                                float desiredAmount = num / (float)price;
-                                if (desiredAmount > (float)amount)
-                                    desiredAmount = (float)amount;
+                                int price = marketData.GetPrice(item);
+                                float desiredAmount = num / price;
+                                if (desiredAmount > amount)
+                                    desiredAmount = amount;
 
 
-                                if (item.IsFood && town.FoodStocks <= (float)town.FoodStocksUpperLimit() * 0.1f)
+                                if (item.IsFood && town.FoodStocks <= town.FoodStocksUpperLimit() * 0.1f)
                                 {
                                     float requiredFood = town.FoodChange * -1f;
                                     if (amount > requiredFood)
@@ -601,7 +606,7 @@ namespace BannerKings
                                 else if (type != ConsumptionType.None) popData.EconomicData.UpdateSatisfaction(type, 0.001f);
                                 
                                 itemRoster.AddToCounts(elementCopyAtIndex.EquipmentElement, -finalAmount);
-                                categoryDemand[itemCategory] = num - desiredAmount * (float)price;
+                                categoryDemand[itemCategory] = num - desiredAmount * price;
                                 town.ChangeGold(finalAmount * price);
                                 int num4 = 0;
                                 saleLog.TryGetValue(itemCategory, out num4);
@@ -609,7 +614,7 @@ namespace BannerKings
                             }
                         }
 
-                        if (town.FoodStocks <= (float)town.FoodStocksUpperLimit() * 0.05f && town.Settlement.Stash != null)
+                        if (town.FoodStocks <= town.FoodStocksUpperLimit() * 0.05f && town.Settlement.Stash != null)
                         {
                             List<ItemRosterElement> elements = new List<ItemRosterElement>();
                             foreach (ItemRosterElement element in town.Settlement.Stash)
@@ -635,7 +640,8 @@ namespace BannerKings
                         town.SetSoldItems(list);
                         return false;
                     }
-                    else return true;
+
+                    return true;
                 }
             }
         }     

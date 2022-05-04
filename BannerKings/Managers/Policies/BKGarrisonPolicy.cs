@@ -15,15 +15,15 @@ namespace BannerKings.Managers.Policies
         public GarrisonPolicy Policy { get; private set; }
         public BKGarrisonPolicy(GarrisonPolicy policy, Settlement settlement) : base(settlement, (int)policy)
         {
-            this.Policy = policy;
+            Policy = policy;
         }
         public override string GetHint(int value)
         {
             if (value == (int)GarrisonPolicy.Dischargement)
                 return "Discharge a garrison member on a daily basis from duty. Slows down garrison trainning.";
-            else if (value == (int)GarrisonPolicy.Enlistment)
+            if (value == (int)GarrisonPolicy.Enlistment)
                 return "Increase the quantity of auto recruited garrison soldiers, as well as provide more trainning. Increases adm. costs.";
-            else return "Standard garrison policy, no particular effect.";
+            return "Standard garrison policy, no particular effect.";
         }
 
         public override void OnChange(SelectorVM<BKItemVM> obj)
@@ -31,8 +31,8 @@ namespace BannerKings.Managers.Policies
             if (obj.SelectedItem != null)
             {
                 BKItemVM vm = obj.GetCurrentItem();
-                this.Policy = (GarrisonPolicy)vm.value;
-                base.Selected = vm.value;
+                Policy = (GarrisonPolicy)vm.value;
+                Selected = vm.value;
                 BannerKingsConfig.Instance.PolicyManager.UpdateSettlementPolicy(Settlement, this);
             }
         }
@@ -49,7 +49,6 @@ namespace BannerKings.Managers.Policies
             yield return GarrisonPolicy.Standard;
             yield return GarrisonPolicy.Enlistment;
             yield return GarrisonPolicy.Dischargement;
-            yield break;
         }
     }
 }

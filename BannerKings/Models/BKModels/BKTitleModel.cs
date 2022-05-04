@@ -15,20 +15,20 @@ namespace BannerKings.Models.BKModels
         {
             if (type == ActionType.Usurp)
                 return GetUsurp(title, taker);
-            else if (type == ActionType.Revoke)
+            if (type == ActionType.Revoke)
                 return GetRevoke(title, taker);
-            else if (type == ActionType.Claim)
+            if (type == ActionType.Claim)
                 return GetClaim(title, taker);
-            else return GetGrant(title, taker);
+            return GetGrant(title, taker);
         }
 
         private TitleAction GetClaim(FeudalTitle title, Hero claimant)
         {
             TitleAction claimAction = new TitleAction(ActionType.Claim, title, claimant);
-            claimAction.Gold = this.GetGoldUsurpCost(title) * 0.1f;
-            claimAction.Influence = this.GetInfluenceUsurpCost(title) * 0.2f;
-            claimAction.Renown = this.GetRenownUsurpCost(title) * 0.2f;
-            List<Hero> possibleClaimants = this.GetClaimants(title);
+            claimAction.Gold = GetGoldUsurpCost(title) * 0.1f;
+            claimAction.Influence = GetInfluenceUsurpCost(title) * 0.2f;
+            claimAction.Renown = GetRenownUsurpCost(title) * 0.2f;
+            List<Hero> possibleClaimants = GetClaimants(title);
 
             if (title.deJure == claimant)
             {
@@ -51,7 +51,8 @@ namespace BannerKings.Models.BKModels
                 claimAction.Reason = new TextObject("{=!}Already building a claim.");
                 return claimAction;
             }
-            else if (claimType != ClaimType.None)
+
+            if (claimType != ClaimType.None)
             {
                 claimAction.Possible = false;
                 claimAction.Reason = new TextObject("{=!}Already a claimant.");
@@ -101,8 +102,8 @@ namespace BannerKings.Models.BKModels
         {
             TitleAction revokeAction = new TitleAction(ActionType.Revoke, title, revoker);
             if (title == null || revoker == null) return null;
-            revokeAction.Influence = this.GetInfluenceUsurpCost(title) * 0.8f;
-            revokeAction.Renown = this.GetRenownUsurpCost(title) * 0.6f;
+            revokeAction.Influence = GetInfluenceUsurpCost(title) * 0.8f;
+            revokeAction.Renown = GetRenownUsurpCost(title) * 0.6f;
 
             if (title.deJure == revoker)
             {
@@ -126,7 +127,8 @@ namespace BannerKings.Models.BKModels
                 revokeAction.Reason = new TextObject("{=!}Tribal government does not allow revoking.");
                 return revokeAction;
             }
-            else if (governmentType == GovernmentType.Republic)
+
+            if (governmentType == GovernmentType.Republic)
             {
                 if (title.type != TitleType.Dukedom)
                 {
@@ -215,7 +217,7 @@ namespace BannerKings.Models.BKModels
                 }
             }
 
-            List<Hero> candidates = this.GetGrantCandidates(grantor);
+            List<Hero> candidates = GetGrantCandidates(grantor);
             if (candidates.Count == 0)
             {
                 grantAction.Possible = false;
@@ -234,7 +236,7 @@ namespace BannerKings.Models.BKModels
             }
 
             grantAction.Possible = true;
-            grantAction.Influence = this.GetInfluenceUsurpCost(title) * 0.33f;
+            grantAction.Influence = GetInfluenceUsurpCost(title) * 0.33f;
             grantAction.Reason = new TextObject("{=!}You may grant away this title.");
             return grantAction;
         }
@@ -344,7 +346,7 @@ namespace BannerKings.Models.BKModels
             if (title.fief != null)
             {
                 PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(title.fief);
-                gold += (float)data.TotalPop / 100f;
+                gold += data.TotalPop / 100f;
             }
             return gold;
         }

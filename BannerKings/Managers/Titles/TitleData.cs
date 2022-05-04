@@ -1,10 +1,10 @@
 ﻿using BannerKings.Models.BKModels;
 using BannerKings.Populations;
 using System.Collections.Generic;
-using TaleWorlds.CampaignSystem;
-using TaleWorlds.SaveSystem;
 using System.Linq;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
+using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Managers.Titles
 {
@@ -18,19 +18,19 @@ namespace BannerKings.Managers.Titles
             this.title = title;
         }
 
-        public FeudalTitle Title => this.title;
+        public FeudalTitle Title => title;
         internal override void Update(PopulationData data)
         {
-            this.title.CleanClaims();
+            title.CleanClaims();
             Dictionary<Hero, ClaimType> toAdd = new Dictionary<Hero, ClaimType>();
-            foreach (KeyValuePair<Hero,CampaignTime> pair in this.title.OngoingClaims)
+            foreach (KeyValuePair<Hero,CampaignTime> pair in title.OngoingClaims)
                 if (pair.Value.RemainingDaysFromNow <= 0)
                     toAdd.Add(pair.Key, ClaimType.Fabricated);
 
             foreach (KeyValuePair<Hero, ClaimType> pair in toAdd)
-                this.title.AddClaim(pair.Key, pair.Value);
+                title.AddClaim(pair.Key, pair.Value);
 
-            this.AITick(data.Settlement.Owner);
+            AITick(data.Settlement.Owner);
         }
 
         private void AITick(Hero owner)
@@ -44,16 +44,16 @@ namespace BannerKings.Managers.Titles
             if (random >= 0.2f) return;
 
             BKTitleModel model = BannerKingsConfig.Instance.Models.First(x => x is BKTitleModel) as BKTitleModel;
-            TitleAction claimAction = model.GetAction(ActionType.Claim, this.title, owner);
+            TitleAction claimAction = model.GetAction(ActionType.Claim, title, owner);
             if (claimAction.Possible)
             {
                 bool knight = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(title.deJure).Count() == 1 && title.type == TitleType.Lordship;
-                if ((owner.Clan.Kingdom == null || owner.Clan.Kingdom != this.title.deJure.Clan.Kingdom) || !knight)
+                if ((owner.Clan.Kingdom == null || owner.Clan.Kingdom != title.deJure.Clan.Kingdom) || !knight)
                     claimAction.TakeAction(null);
             }
             else
             {
-                TitleAction usurpAction = model.GetAction(ActionType.Usurp, this.title, owner);
+                TitleAction usurpAction = model.GetAction(ActionType.Usurp, title, owner);
                 if (usurpAction.Possible)
                     usurpAction.TakeAction(null);
             } 

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using TaleWorlds.CampaignSystem;
-using TaleWorlds.Core;
 using System.Linq;
-using TaleWorlds.Library;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
+using TaleWorlds.Core;
+using TaleWorlds.Library;
 
 namespace BannerKings.Managers.Institutions
 {
@@ -17,46 +17,46 @@ namespace BannerKings.Managers.Institutions
         private Hero guildMaster;
         public Guild(Settlement settlement, GuildType type, IEnumerable<ValueTuple<ItemObject, float>> productions) : base(settlement)
         {
-            this.capital = 10000;
-            this.guildMaster = this.GenerateLeader();
-            this.members = new List<Hero>();
+            capital = 10000;
+            guildMaster = GenerateLeader();
+            members = new List<Hero>();
             this.type = type;
             this.productions = productions;
         }
 
         public override void Destroy()
         {
-            KillCharacterAction.ApplyByRemove(this.guildMaster);     
+            KillCharacterAction.ApplyByRemove(guildMaster);     
         }
 
-        public int Capital => this.capital;
-        public MBReadOnlyList<Hero> Members => new MBReadOnlyList<Hero>(this.members);
+        public int Capital => capital;
+        public MBReadOnlyList<Hero> Members => new MBReadOnlyList<Hero>(members);
 
         public void AddMemer(Hero hero)
         {
-            if (this.settlement.Notables.Contains(hero) && !this.members.Contains(hero))
-                this.members.Add(hero);
+            if (settlement.Notables.Contains(hero) && !members.Contains(hero))
+                members.Add(hero);
         }
 
         public void RemoveMember(Hero hero)
         {
-            if (this.members.Contains(hero))
-                this.members.Remove(hero);
+            if (members.Contains(hero))
+                members.Remove(hero);
         }
 
         public Hero Leader
         {
             get
             {
-                if (this.guildMaster == null || !this.guildMaster.IsAlive || this.guildMaster.IsActive)
-                    this.guildMaster = GenerateLeader();
-                return this.guildMaster;
+                if (guildMaster == null || !guildMaster.IsAlive || guildMaster.IsActive)
+                    guildMaster = GenerateLeader();
+                return guildMaster;
             }
         }
 
         public Hero GenerateLeader()
         {
-            CultureObject culture = base.Settlement.Culture;
+            CultureObject culture = Settlement.Culture;
             IEnumerable<CharacterObject> templates = from x in culture.NotableAndWandererTemplates 
                                                      where (x.Occupation == Occupation.Merchant || x.Occupation == Occupation.Artisan)
                                                      select x;

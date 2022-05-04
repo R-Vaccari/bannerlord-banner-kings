@@ -18,7 +18,7 @@ namespace BannerKings.UI.Items
         {
             this.onDone = onDone;
             this.council = council;
-            this.Position = position;
+            Position = position;
             this.courtMembers = courtMembers;
         }
 
@@ -26,15 +26,14 @@ namespace BannerKings.UI.Items
         {
             base.RefreshValues();
             List<Hero> currentCouncil = council.GetMembers();
-            CouncilMember currentMember = council.GetCouncilMember(Position);
             MBBindingList<SettlementGovernorSelectionItemVM> newList = new MBBindingList<SettlementGovernorSelectionItemVM>();
-            newList.Add(this.AvailableGovernors[0]);
-            foreach (Hero hero in this.courtMembers)
-                if (!currentCouncil.Contains(hero) && hero.IsAlive && !hero.IsChild && currentMember.IsValidCandidate(hero))
-                    newList.Add(new CouncilMemberVM(hero, new Action<SettlementGovernorSelectionItemVM>(this.OnSelection),
+            newList.Add(AvailableGovernors[0]);
+            foreach (Hero hero in courtMembers)
+                if (!currentCouncil.Contains(hero) && hero.IsAlive && !hero.IsChild)
+                    newList.Add(new CouncilMemberVM(hero, OnSelection,
                                     Position, council.GetCompetence(hero, Position)));
 
-            this.AvailableGovernors = newList;
+            AvailableGovernors = newList;
         }
 
         private void OnSelection(SettlementGovernorSelectionItemVM item)

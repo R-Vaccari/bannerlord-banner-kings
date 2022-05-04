@@ -44,9 +44,9 @@ namespace BannerKings.UI
         {
             if (MapScreen.Instance != null)
             {
-                if (this.mapView == null) this.mapView = new BannerKingsMapView(id);
-                else if (this.mapView.id != id) this.mapView = new BannerKingsMapView(id);
-                this.mapView.Refresh();
+                if (mapView == null) mapView = new BannerKingsMapView(id);
+                else if (mapView.id != id) mapView = new BannerKingsMapView(id);
+                mapView.Refresh();
             }
         }
 
@@ -113,8 +113,8 @@ namespace BannerKings.UI
                             select p)
                 {
                     __instance.OtherPolicies.Add(new KingdomPolicyItemVM(policy2,
-                        new Action<KingdomPolicyItemVM>(delegate (KingdomPolicyItemVM x) { select.Invoke(__instance, new object[] { x }); }),
-                        new Func<PolicyObject, bool>(IsPolicyActive)));
+                        delegate (KingdomPolicyItemVM x) { select.Invoke(__instance, new object[] { x }); },
+                        IsPolicyActive));
                 }
             }
 
@@ -227,12 +227,12 @@ namespace BannerKings.UI
                     PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
                     MethodInfo refresh = __instance.GetType().GetMethod("RefreshPartyProperties", BindingFlags.Instance | BindingFlags.NonPublic);
                     refresh.Invoke(__instance, null);
-                    int num = __instance.TroopsInCart.Sum((RecruitVolunteerTroopVM t) => t.Cost);
+                    int num = __instance.TroopsInCart.Sum(t => t.Cost);
  
                     foreach (RecruitVolunteerTroopVM recruitVolunteerTroopVM in __instance.TroopsInCart)
                     {
                         recruitVolunteerTroopVM.Owner.OwnerHero.VolunteerTypes[recruitVolunteerTroopVM.Index] = null;
-                        MobileParty.MainParty.MemberRoster.AddToCounts(recruitVolunteerTroopVM.Character, 1, false, 0, 0, true, -1);
+                        MobileParty.MainParty.MemberRoster.AddToCounts(recruitVolunteerTroopVM.Character, 1);
                         CampaignEventDispatcher.Instance.OnUnitRecruited(recruitVolunteerTroopVM.Character, 1);
                         data.MilitaryData.DeduceManpower(data, 1, recruitVolunteerTroopVM.Character);
                         GiveGoldAction.ApplyBetweenCharacters(Hero.MainHero, recruitVolunteerTroopVM.Owner.OwnerHero, recruitVolunteerTroopVM.Cost, true);
@@ -241,7 +241,7 @@ namespace BannerKings.UI
                     if (num > 0)
                     {
                         MBTextManager.SetTextVariable("GOLD_AMOUNT", MathF.Abs(num));
-                        InformationManager.DisplayMessage(new InformationMessage(GameTexts.FindText("str_gold_removed_with_icon", null).ToString(), "event:/ui/notification/coins_negative"));
+                        InformationManager.DisplayMessage(new InformationMessage(GameTexts.FindText("str_gold_removed_with_icon").ToString(), "event:/ui/notification/coins_negative"));
                     }
                     __instance.Deactivate();
                     return false;
@@ -284,7 +284,7 @@ namespace BannerKings.UI
                         __instance.LocalDevelopmentList.Clear();
                         __instance.LocalDevelopmentList.Add(selectedItem.Building);
                     }
-                    else if (__instance.LocalDevelopmentList.Exists((Building d) => d == selectedItem.Building))
+                    else if (__instance.LocalDevelopmentList.Exists(d => d == selectedItem.Building))
                     {
                         __instance.LocalDevelopmentList.Remove(selectedItem.Building);
                     }
@@ -340,12 +340,12 @@ namespace BannerKings.UI
                             if (location != BuildingLocation.Daily)
                             {
                                 SettlementBuildingProjectVM vm = new SettlementBuildingProjectVM(
-                                new Action<SettlementProjectVM, bool>(delegate (SettlementProjectVM x, bool y) { selection.Invoke(__instance, new object[] { x, y }); }),
-                                new Action<SettlementProjectVM>(delegate (SettlementProjectVM x) { set.Invoke(__instance, new object[] { x }); }),
-                                new Action(delegate {
+                                delegate (SettlementProjectVM x, bool y) { selection.Invoke(__instance, new object[] { x, y }); },
+                                delegate (SettlementProjectVM x) { set.Invoke(__instance, new object[] { x }); },
+                                delegate {
                                     __instance.CurrentSelectedProject = (__instance.LocalDevelopmentList.Count > 0) ?
-                                    __instance.AvailableProjects.First((SettlementBuildingProjectVM p) => p.Building.BuildingType.StringId == __instance.LocalDevelopmentList[0].BuildingType.StringId) : __instance.CurrentDailyDefault;
-                                    }), building);
+                                        __instance.AvailableProjects.First(p => p.Building.BuildingType.StringId == __instance.LocalDevelopmentList[0].BuildingType.StringId) : __instance.CurrentDailyDefault;
+                                }, building);
 
                                 __instance.AvailableProjects.Add(vm);
                                 if (building.BuildingType.StringId == villageData.CurrentBuilding.BuildingType.StringId)
@@ -353,10 +353,10 @@ namespace BannerKings.UI
                             } else
                             {
                                 SettlementDailyProjectVM settlementDailyProjectVM = new SettlementDailyProjectVM(
-                                new Action<SettlementProjectVM, bool>(delegate (SettlementProjectVM x, bool y) { selection.Invoke(__instance, new object[] { x, y }); }),
-                                new Action<SettlementProjectVM>(delegate (SettlementProjectVM x) { set.Invoke(__instance, new object[] { x }); }),
-                                new Action(delegate {   __instance.CurrentSelectedProject = (__instance.LocalDevelopmentList.Count > 0) ?
-                                    __instance.AvailableProjects.First((SettlementBuildingProjectVM p) => p.Building.BuildingType.StringId == __instance.LocalDevelopmentList[0].BuildingType.StringId) : __instance.CurrentDailyDefault; }),
+                                delegate (SettlementProjectVM x, bool y) { selection.Invoke(__instance, new object[] { x, y }); },
+                                delegate (SettlementProjectVM x) { set.Invoke(__instance, new object[] { x }); },
+                                delegate {   __instance.CurrentSelectedProject = (__instance.LocalDevelopmentList.Count > 0) ?
+                                    __instance.AvailableProjects.First(p => p.Building.BuildingType.StringId == __instance.LocalDevelopmentList[0].BuildingType.StringId) : __instance.CurrentDailyDefault; },
                                 building);
                                 __instance.DailyDefaultList.Add(settlementDailyProjectVM);
                                 if (building.BuildingType.StringId == villageData.CurrentDefault.BuildingType.StringId)

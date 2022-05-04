@@ -18,21 +18,21 @@ namespace BannerKings.UI
 
 		public Action OnPressAction { get; set; }
 
-		private bool booleanValue = false;
+		private bool booleanValue;
 		private Action<bool> booleanAction;
 		public bool show, enabled;
 
 		public bool OptionValueAsBoolean
 		{
-			get => this.booleanValue;
+			get => booleanValue;
 			set
 			{
-				bool flag = value != this.booleanValue;
+				bool flag = value != booleanValue;
 				if (flag)
 				{
-					this.booleanValue = value;
-					base.OnPropertyChanged("OptionValueAsBoolean");
-					this.booleanAction(value);
+					booleanValue = value;
+					OnPropertyChanged();
+					booleanAction(value);
 				}
 			}
 		}
@@ -40,37 +40,37 @@ namespace BannerKings.UI
 
 		public DecisionElement SetAsBooleanOption(string desc, bool initialValue, Action<bool> onChange, TextObject hintText)
 		{
-			this.Hint = new HintViewModel(hintText);
-			this.OptionTypeID = 1;
-			this.Description = desc;
-			this.booleanValue = initialValue;
-			this.booleanAction = onChange;
-			this.Show = true;
-			this.Enabled = true;
+			Hint = new HintViewModel(hintText);
+			OptionTypeID = 1;
+			Description = desc;
+			booleanValue = initialValue;
+			booleanAction = onChange;
+			Show = true;
+			Enabled = true;
 			return this;
 		}
 
 		public DecisionElement SetAsButtonOption(string buttonName, Action onPress, TextObject hintText = null)
 		{
-			this.OptionTypeID = 3;
-			this.ButtonName = buttonName;
-			this.OnPressAction = onPress;
-			this.Hint = new HintViewModel(hintText);
-			this.Show = true;
-			this.Enabled = true;
+			OptionTypeID = 3;
+			ButtonName = buttonName;
+			OnPressAction = onPress;
+			Hint = new HintViewModel(hintText);
+			Show = true;
+			Enabled = true;
 			return this;
 		}
 
 		 
 		public void OnPress()
 		{
-			if (this.OnPressAction != null) this.OnPressAction();
+			if (OnPressAction != null) OnPressAction();
 		}
 
 		public DecisionElement SetAsTitle(string title, TextObject hintText = null)
 		{
-			this.OptionTypeID = 0;
-			this.Description = title;
+			OptionTypeID = 0;
+			Description = title;
 			return this;
 		}
 
@@ -85,7 +85,7 @@ namespace BannerKings.UI
 				if (value != hint)
 				{
 					hint = value;
-					base.OnPropertyChangedWithValue(value, "Hint");
+					OnPropertyChangedWithValue(value);
 				}
 			}
 		}
@@ -99,7 +99,7 @@ namespace BannerKings.UI
 				if (value != enabled)
 				{
 					enabled = value;
-					base.OnPropertyChangedWithValue(value, "Enabled");
+					OnPropertyChangedWithValue(value);
 				}
 			}
 		}
@@ -113,7 +113,7 @@ namespace BannerKings.UI
 				if (value != show)
 				{
 					show = value;
-					base.OnPropertyChangedWithValue(value, "Show");
+					OnPropertyChangedWithValue(value);
 				}
 			}
 		}
@@ -127,7 +127,7 @@ namespace BannerKings.UI
 				if (value != description)
 				{
 					description = value;
-					base.OnPropertyChangedWithValue(value, "Description");
+					OnPropertyChangedWithValue(value);
 				}
 			}
 		}

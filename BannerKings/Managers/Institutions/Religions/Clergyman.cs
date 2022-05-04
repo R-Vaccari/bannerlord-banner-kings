@@ -14,7 +14,7 @@ namespace BannerKings.Managers.Institutions.Religions
             this.rank = rank;
         }
 
-        public Hero Hero => this.hero;
-        public int Rank => this.rank;
+        public Hero Hero => hero;
+        public int Rank => rank;
     }
 }

@@ -15,7 +15,7 @@ namespace BannerKings.Managers.Kingdoms
         public override void ApplyChosenOutcome(DecisionOutcome chosenOutcome)
         {
             base.ApplyChosenOutcome(chosenOutcome);
-            FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(base.Kingdom);
+            FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(Kingdom);
             if (title != null)
             {
                 Hero deJure = title.deJure;

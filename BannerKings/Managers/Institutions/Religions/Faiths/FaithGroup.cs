@@ -14,23 +14,21 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
         {
             this.name = name;
             this.description = description;
-            this.members = new List<Faith>();
+            members = new List<Faith>();
         }
 
-        public TextObject Name => name;
-        public TextObject Description => description;
-        public MBReadOnlyList<Faith> Members => this.members.GetReadOnlyList();
+        public MBReadOnlyList<Faith> Members => members.GetReadOnlyList();
 
         public void AddMember(Faith faith)
         {
-            if (!this.members.Contains(faith))
-                this.members.Add(faith);
+            if (!members.Contains(faith))
+                members.Add(faith);
         }
 
         public void RemoveMember(Faith faith)
         {
-            if (this.members.Contains(faith))
-                this.members.Remove(faith);
+            if (members.Contains(faith))
+                members.Remove(faith);
         }
     }
 }

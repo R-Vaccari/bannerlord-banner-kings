@@ -13,7 +13,7 @@ namespace BannerKings.Managers.Institutions.Religions
             this.description = description;
         }
 
-        public TextObject Name => this.name;
-        public TextObject Description => this.description;
+        public TextObject Name => name;
+        public TextObject Description => description;
     }
 }

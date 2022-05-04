@@ -1,10 +1,9 @@
-﻿using BannerKings.Populations;
+﻿using BannerKings.Managers.Titles;
+using BannerKings.Populations;
+using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
-using static BannerKings.Managers.TitleManager;
-using System.Linq;
-using BannerKings.Managers.Titles;
 
 namespace BannerKings.Models
 {
@@ -17,7 +16,7 @@ namespace BannerKings.Models
             float stability = data.Stability;
             if (settlement.Town != null)
             {
-                float targetStability = this.CalculateStabilityTarget(settlement).ResultNumber;
+                float targetStability = CalculateStabilityTarget(settlement).ResultNumber;
                 float random1 = 0.01f * MBRandom.RandomFloat;
                 float random2 = 0.01f * MBRandom.RandomFloat;
                 float change = targetStability > stability ? 0.015f + random1 - random2 : targetStability < stability ? -0.015f - random1 + random2 : 0f;

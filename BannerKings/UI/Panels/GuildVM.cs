@@ -12,25 +12,25 @@ namespace BannerKings.UI.Panels
 
 		public GuildVM(PopulationData data) : base(data, true)
         {
-			this.guild = data.EconomicData.Guild;
-			this.guildInfo = new MBBindingList<InformationElement>();
+			guild = data.EconomicData.Guild;
+			guildInfo = new MBBindingList<InformationElement>();
 		}
 
         public override void RefreshValues()
         {
             base.RefreshValues();
 			GuildInfo.Clear();
-			GuildInfo.Add(new InformationElement("Capital:", this.guild.Capital.ToString(),
+			GuildInfo.Add(new InformationElement("Capital:", guild.Capital.ToString(),
 				"This guild's financial resources"));
-			GuildInfo.Add(new InformationElement("Influence:", this.guild.Influence.ToString(),
+			GuildInfo.Add(new InformationElement("Influence:", guild.Influence.ToString(),
 				"Soft power this guild has, allowing them to call in favors and make demands"));
 		}
 
         [DataSourceProperty]
-		public ImageIdentifierVM GuildMaster => new ImageIdentifierVM(CharacterCode.CreateFrom(this.guild.Leader.CharacterObject));
+		public ImageIdentifierVM GuildMaster => new ImageIdentifierVM(CharacterCode.CreateFrom(guild.Leader.CharacterObject));
 
 		[DataSourceProperty]
-		public string GuildMasterName => "Guildmaster " + this.guild.Leader.Name;
+		public string GuildMasterName => "Guildmaster " + guild.Leader.Name;
 
 		[DataSourceProperty]
 		public MBBindingList<InformationElement> GuildInfo
@@ -41,7 +41,7 @@ namespace BannerKings.UI.Panels
 				if (value != guildInfo)
 				{
 					guildInfo = value;
-					base.OnPropertyChangedWithValue(value, "GuildInfo");
+					OnPropertyChangedWithValue(value);
 				}
 			}
 		}

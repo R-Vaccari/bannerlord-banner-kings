@@ -2,7 +2,6 @@
 using BannerKings.Managers.Titles;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.SandBox.GameComponents;
-using static BannerKings.Managers.TitleManager;
 
 namespace BannerKings.Models.Vanilla
 {

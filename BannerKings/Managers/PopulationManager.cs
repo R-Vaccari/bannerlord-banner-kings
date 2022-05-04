@@ -19,8 +19,8 @@ namespace BannerKings.Managers
 
         public PopulationManager(Dictionary<Settlement, PopulationData> pops, List<MobileParty> caravans)
         {
-            this.Populations = pops;
-            this.Caravans = caravans;
+            Populations = pops;
+            Caravans = caravans;
         }
 
         public bool IsSettlementPopulated(Settlement settlement)
@@ -30,9 +30,10 @@ namespace BannerKings.Managers
                 if (settlement.StringId.Contains("Ruin") || settlement.StringId.Contains("tutorial"))
                     return false;
 
-                else return Populations.ContainsKey(settlement);
+                return Populations.ContainsKey(settlement);
             }
-            else return false;
+
+            return false;
         }
 
         public PopulationData GetPopData(Settlement settlement) 
@@ -74,7 +75,7 @@ namespace BannerKings.Managers
             return list;
         }
 
-        public List<MobileParty> GetParties(Type type) => this.Caravans.FindAll(x => x.GetType() == type);
+        public List<MobileParty> GetParties(Type type) => Caravans.FindAll(x => x.GetType() == type);
 
         public List<(ItemObject, float)> GetProductions(VillageData villageData)
         {
@@ -107,7 +108,7 @@ namespace BannerKings.Managers
 
         public void ReInitBuildings()
         {
-            foreach (PopulationData data in this.Populations.Values)
+            foreach (PopulationData data in Populations.Values)
                 if (data.VillageData != null)
                     data.VillageData.ReInitializeBuildings();
         }
@@ -144,7 +145,7 @@ namespace BannerKings.Managers
             double ratio;
             if (maxSurplus) ratio = popRatios[type][1];
             else ratio = MBRandom.RandomFloatRanged(popRatios[type][0], popRatios[type][1]);
-            double currentRatio = (double)pops / (double)data.TotalPop;
+            double currentRatio = pops / (double)data.TotalPop;
             return currentRatio > ratio;
         }
 
@@ -172,17 +173,19 @@ namespace BannerKings.Managers
                 float prosperityFactor = (0.0001f * settlement.Prosperity) + 1f;
                 return MBRandom.RandomInt((int)(2000 * prosperityFactor), (int)(3000 * prosperityFactor));
             }
-            else if (settlement.IsVillage)
+
+            if (settlement.IsVillage)
                 return MBRandom.RandomInt((int)settlement.Village.Hearth * 4, (int)settlement.Village.Hearth * 6);
-            else if (settlement.IsTown)
+            if (settlement.IsTown)
             {
                 float prosperityFactor = (0.0001f * settlement.Prosperity) + 1f;
                 if (settlement.Owner != null && settlement.Owner.IsFactionLeader)
                     prosperityFactor *= 1.2f;
                 if (!IsMetropolis(settlement)) return MBRandom.RandomInt((int)(8000 * prosperityFactor), (int)(15000 * prosperityFactor));
-                else return MBRandom.RandomInt((int)(20000 * prosperityFactor), (int)(25000 * prosperityFactor));
+                return MBRandom.RandomInt((int)(20000 * prosperityFactor), (int)(25000 * prosperityFactor));
             }
-            else return 0;
+
+            return 0;
         }
 
         private static bool IsMetropolis(Settlement settlement) => settlement.Name.ToString() == "Liberartis" ||
@@ -194,7 +197,7 @@ namespace BannerKings.Managers
         {
             Dictionary<PopType, float[]> desiredTypes = GetDesiredPopTypes(settlement);
             PopulationData data = GetPopData(settlement);
-            int max = (int)((float)data.TotalPop * desiredTypes[type][1]);
+            int max = (int)(data.TotalPop * desiredTypes[type][1]);
             int current = data.GetTypeCount(type);
             return current - max;
         }
@@ -217,49 +220,49 @@ namespace BannerKings.Managers
             }
 
             if (settlement.IsCastle)
-                return new Dictionary<PopType, float[]>()
+                return new Dictionary<PopType, float[]>
                 {
-                    { PopType.Nobles, new float[] {0.07f * nobleFactor, 0.09f * nobleFactor } },
-                    { PopType.Craftsmen, new float[] {0.03f, 0.05f} },
-                    { PopType.Serfs, new float[] {0.75f, 0.8f} },
-                    { PopType.Slaves, new float[] {0.1f * slaveFactor, 0.15f * slaveFactor } }
+                    { PopType.Nobles, new[] {0.07f * nobleFactor, 0.09f * nobleFactor } },
+                    { PopType.Craftsmen, new[] {0.03f, 0.05f} },
+                    { PopType.Serfs, new[] {0.75f, 0.8f} },
+                    { PopType.Slaves, new[] {0.1f * slaveFactor, 0.15f * slaveFactor } }
                 };
-            else if (settlement.IsVillage)
+            if (settlement.IsVillage)
             {
                 if (IsVillageProducingFood(settlement.Village))
-                    return new Dictionary<PopType, float[]>()
+                    return new Dictionary<PopType, float[]>
                     {
-                        { PopType.Nobles, new float[] {0.035f * nobleFactor, 0.055f * nobleFactor } },
-                        { PopType.Craftsmen, new float[] { 0.01f, 0.02f} },
-                        { PopType.Serfs, new float[] {0.7f, 0.8f} },
-                        { PopType.Slaves, new float[] {0.1f * slaveFactor, 0.2f * slaveFactor } }
+                        { PopType.Nobles, new[] {0.035f * nobleFactor, 0.055f * nobleFactor } },
+                        { PopType.Craftsmen, new[] { 0.01f, 0.02f} },
+                        { PopType.Serfs, new[] {0.7f, 0.8f} },
+                        { PopType.Slaves, new[] {0.1f * slaveFactor, 0.2f * slaveFactor } }
                     };
-                else if (IsVillageAMine(settlement.Village))
-                    return new Dictionary<PopType, float[]>()
+                if (IsVillageAMine(settlement.Village))
+                    return new Dictionary<PopType, float[]>
                     {
-                        { PopType.Nobles, new float[] {0.02f * nobleFactor, 0.04f * nobleFactor } },
-                        { PopType.Craftsmen, new float[] {0.01f, 0.02f} },
-                        { PopType.Serfs, new float[] {0.3f, 0.4f} },
-                        { PopType.Slaves, new float[] {0.6f * slaveFactor, 0.7f * slaveFactor } }
+                        { PopType.Nobles, new[] {0.02f * nobleFactor, 0.04f * nobleFactor } },
+                        { PopType.Craftsmen, new[] {0.01f, 0.02f} },
+                        { PopType.Serfs, new[] {0.3f, 0.4f} },
+                        { PopType.Slaves, new[] {0.6f * slaveFactor, 0.7f * slaveFactor } }
                     };
-                else
-                    return new Dictionary<PopType, float[]>()
-                    {
-                        { PopType.Nobles, new float[] {0.025f * nobleFactor, 0.045f * nobleFactor } },
-                        { PopType.Craftsmen, new float[] { 0.01f, 0.02f } },
-                        { PopType.Serfs, new float[] {0.5f, 0.7f} },
-                        { PopType.Slaves, new float[] {0.4f * slaveFactor, 0.5f * slaveFactor } }
-                    };
-            }
-            else if (settlement.IsTown)
-                return new Dictionary<PopType, float[]>()
+                return new Dictionary<PopType, float[]>
                 {
-                    { PopType.Nobles, new float[] {0.01f * nobleFactor, 0.03f * nobleFactor } },
-                    { PopType.Craftsmen, new float[] {0.06f, 0.08f} },
-                    { PopType.Serfs, new float[] {0.6f, 0.7f} },
-                    { PopType.Slaves, new float[] {0.1f * slaveFactor, 0.2f * slaveFactor } }
+                    { PopType.Nobles, new[] {0.025f * nobleFactor, 0.045f * nobleFactor } },
+                    { PopType.Craftsmen, new[] { 0.01f, 0.02f } },
+                    { PopType.Serfs, new[] {0.5f, 0.7f} },
+                    { PopType.Slaves, new[] {0.4f * slaveFactor, 0.5f * slaveFactor } }
                 };
-            else return null;
+            }
+
+            if (settlement.IsTown)
+                return new Dictionary<PopType, float[]>
+                {
+                    { PopType.Nobles, new[] {0.01f * nobleFactor, 0.03f * nobleFactor } },
+                    { PopType.Craftsmen, new[] {0.06f, 0.08f} },
+                    { PopType.Serfs, new[] {0.6f, 0.7f} },
+                    { PopType.Slaves, new[] {0.1f * slaveFactor, 0.2f * slaveFactor } }
+                };
+            return null;
         }
 
         public static bool IsVillageProducingFood(Village village) => village.VillageType == DefaultVillageTypes.CattleRange || village.VillageType == DefaultVillageTypes.DateFarm ||

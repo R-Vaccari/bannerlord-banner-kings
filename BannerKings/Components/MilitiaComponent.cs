@@ -1,7 +1,7 @@
 ﻿using TaleWorlds.CampaignSystem;
 using TaleWorlds.Localization;
-using static BannerKings.Managers.PopulationManager;
 using TaleWorlds.SaveSystem;
+using static BannerKings.Managers.PopulationManager;
 
 namespace BannerKings.Components
 {
@@ -15,8 +15,8 @@ namespace BannerKings.Components
 
         public MilitiaComponent(Settlement origin, MobileParty escortTarget) : base(origin, origin, "", false, PopType.None)
         {
-            this.Escort = escortTarget;
-            this.Behavior = AiBehavior.EscortParty;
+            Escort = escortTarget;
+            Behavior = AiBehavior.EscortParty;
         }
 
         private static MobileParty CreateParty(string id, Settlement origin, MobileParty escortTarget)

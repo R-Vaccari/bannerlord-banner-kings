@@ -61,10 +61,7 @@ namespace BannerKings
 			if (CampaignCheats.CheckParameters(strings, 0) || CampaignCheats.CheckParameters(strings, 1))
 				return "Format is \"bannerkings.give_title [TitleName] | [PersonName]";
 
-			string[] array = CampaignCheats.ConcatenateString(strings).Split(new char[]
-			{
-				'|'
-			});
+			string[] array = CampaignCheats.ConcatenateString(strings).Split('|');
 
 			if (array.Length != 2)
 				return "Format is \"bannerkings.give_title [TitleName] | [PersonName]";

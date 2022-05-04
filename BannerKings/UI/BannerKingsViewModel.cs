@@ -23,7 +23,7 @@ namespace BannerKings.UI
         protected string FormatDays(float value) => (value).ToString("0");
         protected SelectorVM<BKItemVM> GetSelector(BannerKingsPolicy policy, Action<SelectorVM<BKItemVM>> action)
         {
-            SelectorVM<BKItemVM> selector = new SelectorVM<BKItemVM>(0, new Action<SelectorVM<BKItemVM>>(action));
+            SelectorVM<BKItemVM> selector = new SelectorVM<BKItemVM>(0, action);
             selector.SetOnChangeAction(null);
             int i = 0;
             foreach (Enum enumValue in policy.GetPolicies())
@@ -38,23 +38,23 @@ namespace BannerKings.UI
         }
 
         [DataSourceProperty]
-        public bool HasTown => !this.IsVillage;
+        public bool HasTown => !IsVillage;
 
         [DataSourceProperty]
-        public bool IsVillage => this.data.Settlement.IsVillage;
+        public bool IsVillage => data.Settlement.IsVillage;
         
 
         [DataSourceProperty]
         public bool IsSelected
         {
-            get => this.selected;
+            get => selected;
             set
             {
-                if (value != this.selected)
+                if (value != selected)
                 {
-                    this.selected = value;
-                    if (value) this.RefreshValues();
-                    base.OnPropertyChangedWithValue(value, "IsSelected");
+                    selected = value;
+                    if (value) RefreshValues();
+                    OnPropertyChangedWithValue(value);
                 }
             }
         }

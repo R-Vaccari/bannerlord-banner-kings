@@ -1,6 +1,5 @@
 using System;
 
-
 public class GenericSingleton<T> : IDisposable where T : class, new()
 {
     private static T _instance;

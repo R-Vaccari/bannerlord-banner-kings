@@ -26,7 +26,7 @@ namespace BannerKings.Models
                 if (governor != null)
                 {
                     int skill = governor.GetSkillValue(DefaultSkills.Steward);
-                    float effect = (float)skill * 0.00005f;
+                    float effect = skill * 0.00005f;
                     if (effect > 0.015f)
                         effect = 0.015f;
                     baseResult.Add(effect, new TextObject("Governor effect"));
@@ -65,7 +65,7 @@ namespace BannerKings.Models
                         if (governor != null)
                         {
                             int skill = governor.GetSkillValue(DefaultSkills.Steward);
-                            float effect = (float)skill * 0.00005f;
+                            float effect = skill * 0.00005f;
                             if (effect > 0.015f)
                                 effect = 0.015f;
                             result.Add(effect, new TextObject("Governor effect"));
@@ -87,7 +87,7 @@ namespace BannerKings.Models
                             ownerClass = dataClass;
                     if (ownerClass != null)
                     {
-                        float assimChange = this.CalculateEffect(settlement, ownerClass).ResultNumber;
+                        float assimChange = CalculateEffect(settlement, ownerClass).ResultNumber;
                         result.Add(assimChange);
                     }
                 }

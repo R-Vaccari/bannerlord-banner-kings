@@ -1,14 +1,13 @@
-﻿using TaleWorlds.CampaignSystem;
+﻿using BannerKings.Managers.Court;
+using BannerKings.Managers.Policies;
+using BannerKings.Managers.Populations.Villages;
+using BannerKings.Managers.Titles;
+using BannerKings.Populations;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.SandBox.GameComponents;
 using TaleWorlds.Localization;
 using static BannerKings.Managers.PopulationManager;
-using BannerKings.Populations;
 using static BannerKings.Managers.Policies.BKMilitiaPolicy;
-using BannerKings.Managers.Policies;
-using BannerKings.Managers.Populations.Villages;
-using BannerKings.Managers.Court;
-using static BannerKings.Managers.TitleManager;
-using BannerKings.Managers.Titles;
 
 namespace BannerKings.Models
 {
@@ -41,7 +40,7 @@ namespace BannerKings.Models
                 int serfs = data.GetTypeCount(PopType.Serfs);
                 float maxMilitia = GetMilitiaLimit(data, settlement);
                 float filledCapacity = settlement.IsVillage ? settlement.Village.Militia / maxMilitia : settlement.Town.Militia / maxMilitia;
-                float baseGrowth = (float)serfs * 0.0025f;
+                float baseGrowth = serfs * 0.0025f;
 
                 if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(settlement, "decision_militia_encourage"))
                     baseResult.Add(baseGrowth * (1f - 1f * filledCapacity), new TextObject("Conscription policy"));
@@ -65,10 +64,10 @@ namespace BannerKings.Models
         public float GetMilitiaLimit(PopulationData data, Settlement settlement)
         {
             if (settlement.IsCastle)
-                return (float)data.TotalPop * 0.1f + 200f;
-            else if (settlement.IsVillage)
-                return (float)data.TotalPop * 0.05f + 20f;
-            else return (float)data.TotalPop * 0.02f + 100f;
+                return data.TotalPop * 0.1f + 200f;
+            if (settlement.IsVillage)
+                return data.TotalPop * 0.05f + 20f;
+            return data.TotalPop * 0.02f + 100f;
         }
 
         public override float CalculateEliteMilitiaSpawnChance(Settlement settlement)

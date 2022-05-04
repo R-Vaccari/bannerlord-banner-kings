@@ -1,13 +1,13 @@
-﻿using System;
-using TaleWorlds.CampaignSystem;
-using TaleWorlds.Localization;
-using System.Linq;
-using TaleWorlds.Core;
-using static BannerKings.Managers.PopulationManager;
-using TaleWorlds.SaveSystem;
+﻿using BannerKings.Populations;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using TaleWorlds.CampaignSystem;
+using TaleWorlds.Core;
+using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
-using BannerKings.Populations;
+using TaleWorlds.SaveSystem;
+using static BannerKings.Managers.PopulationManager;
 
 namespace BannerKings.Components
 {
@@ -29,7 +29,7 @@ namespace BannerKings.Components
         public PopType popType { get; set; }
 
 
-        public PopulationPartyComponent(Settlement target, Settlement origin, string name, bool slaveCaravan, PopType popType) : base()
+        public PopulationPartyComponent(Settlement target, Settlement origin, string name, bool slaveCaravan, PopType popType)
         {
             _target = target;
             _name = name;
@@ -40,7 +40,7 @@ namespace BannerKings.Components
 
         private static MobileParty CreateParty(string id, Settlement origin, bool slaveCaravan, Settlement target, string name, PopType popType)
         {
-            return MobileParty.CreateParty(id + origin + target.Name.ToString(), new PopulationPartyComponent(target, origin, String.Format(name, origin.Name.ToString()), slaveCaravan, popType),
+            return MobileParty.CreateParty(id + origin + target.Name, new PopulationPartyComponent(target, origin, String.Format(name, origin.Name), slaveCaravan, popType),
                 delegate (MobileParty mobileParty)
             {
                 mobileParty.SetPartyUsedByQuest(true);
@@ -107,7 +107,7 @@ namespace BannerKings.Components
             BannerKingsConfig.Instance.PopulationManager.AddParty(party);
         }
 
-        private static int GetCountToAdd(int partySize, int tier, bool ranged) => (int)((float)partySize / (float)(tier + (ranged ? 3 : 2)))  + MBRandom.RandomInt(-2, 3);
+        private static int GetCountToAdd(int partySize, int tier, bool ranged) => (int)(partySize / (float)(tier + (ranged ? 3 : 2)))  + MBRandom.RandomInt(-2, 3);
 
         protected static void GiveMounts(ref MobileParty party)
         {
@@ -124,7 +124,7 @@ namespace BannerKings.Components
                     itemObject = itemObject2;
 
             if (itemObject != null)
-                party.ItemRoster.Add(new ItemRosterElement(itemObject, (int)((float)party.Party.NumberOfAllMembers * 0.25f), null));
+                party.ItemRoster.Add(new ItemRosterElement(itemObject, (int)(party.Party.NumberOfAllMembers * 0.25f)));
             
         }
 
@@ -134,8 +134,8 @@ namespace BannerKings.Components
             {
                 if (itemObject.IsFood)
                 {
-                    int num2 = MBRandom.RoundRandomized((float)party.Party.NumberOfAllMembers * 
-                        (1f / (float)itemObject.Value) * (float)16 * MBRandom.RandomFloat * 
+                    int num2 = MBRandom.RoundRandomized(party.Party.NumberOfAllMembers * 
+                        (1f / itemObject.Value) * 16 * MBRandom.RandomFloat * 
                         MBRandom.RandomFloat * MBRandom.RandomFloat * MBRandom.RandomFloat);
                     if (num2 > 0)
                         party.ItemRoster.AddToCounts(itemObject, num2);  
@@ -172,15 +172,15 @@ namespace BannerKings.Components
                     {
                         if (item.StringId == "silver" || item.StringId == "jewelry" || item.StringId == "spice"
                         || item.StringId == "velvet" || item.StringId == "fur") 
-                            goods.Add(new ValueTuple<ItemObject, float>(item, 1f * (10f / partySize) / (float)item.Value));
+                            goods.Add(new ValueTuple<ItemObject, float>(item, 1f * (10f / partySize) / item.Value));
                     }
                     else if (type == PopType.Craftsmen)
                     {
                         if (item.StringId == "wool" || item.StringId == "pottery" || item.StringId == "cotton" ||
                         item.StringId == "flax" || item.StringId == "linen" || item.StringId == "leather" || item.StringId == "tools")
-                            goods.Add(new ValueTuple<ItemObject, float>(item, 1f * (10f / partySize) / (float)item.Value));
+                            goods.Add(new ValueTuple<ItemObject, float>(item, 1f * (10f / partySize) / item.Value));
                     }
-                    goods.Add(new ValueTuple<ItemObject, float>(item, 1f / (float)item.Value));
+                    goods.Add(new ValueTuple<ItemObject, float>(item, 1f / item.Value));
 
                 }
 
@@ -203,7 +203,6 @@ namespace BannerKings.Components
                 yield return CraftingMaterials.Iron6;
                 yield return CraftingMaterials.IronOre;
                 yield return CraftingMaterials.Wood;
-                yield break;
             } 
         }
 
@@ -213,7 +212,7 @@ namespace BannerKings.Components
         {
             get
             {
-                return new TextObject(String.Format(_name, HomeSettlement.Name.ToString()));
+                return new TextObject(String.Format(_name, HomeSettlement.Name));
             }
         }
 

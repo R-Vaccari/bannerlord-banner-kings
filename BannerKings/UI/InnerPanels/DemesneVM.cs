@@ -4,12 +4,10 @@ using BannerKings.Managers.Titles;
 using BannerKings.Models;
 using BannerKings.Populations;
 using BannerKings.UI.Items;
-using System;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.ViewModelCollection;
 using TaleWorlds.Core.ViewModelCollection;
 using TaleWorlds.Library;
-using static BannerKings.Managers.TitleManager;
 
 namespace BannerKings.UI
 {
@@ -27,15 +25,15 @@ namespace BannerKings.UI
 			this.title = title;
 			if (title != null)
             {
-				this.deJure = new HeroVM(title.deJure, false);
-				this.duchy = BannerKingsConfig.Instance.TitleManager.GetDuchy(this.title);
+				deJure = new HeroVM(title.deJure);
+				duchy = BannerKingsConfig.Instance.TitleManager.GetDuchy(this.title);
 			}
 
-			this.demesneInfo = new MBBindingList<InformationElement>();
-			this.governmentInfo = new MBBindingList<InformationElement>();
-			this.landInfo = new MBBindingList<InformationElement>();
-			this.terrainInfo = new MBBindingList<InformationElement>();
-			this.workforceInfo = new MBBindingList<InformationElement>();
+			demesneInfo = new MBBindingList<InformationElement>();
+			governmentInfo = new MBBindingList<InformationElement>();
+			landInfo = new MBBindingList<InformationElement>();
+			terrainInfo = new MBBindingList<InformationElement>();
+			workforceInfo = new MBBindingList<InformationElement>();
 			
 			/*
 			
@@ -50,7 +48,7 @@ namespace BannerKings.UI
 		public override void RefreshValues()
         {
 			base.RefreshValues();
-			LandData landData = base.data.LandData;
+			LandData landData = data.LandData;
 			DemesneInfo.Clear();
 			LandInfo.Clear();
 			TerrainInfo.Clear();
@@ -59,7 +57,7 @@ namespace BannerKings.UI
 
 			if (title != null)
             {
-				float legitimacyType = new BKLegitimacyModel().CalculateEffect(base.data.Settlement).ResultNumber;
+				float legitimacyType = new BKLegitimacyModel().CalculateEffect(data.Settlement).ResultNumber;
 				if (legitimacyType > 0f)
 				{
 					LegitimacyType legitimacy = (LegitimacyType)legitimacyType;
@@ -81,50 +79,50 @@ namespace BannerKings.UI
 				GovernmentInfo.Add(new InformationElement("Gender Law:", title.contract.GenderLaw.ToString(),
 					"The dukedom this settlement is associated with."));
 
-				DeJure = new HeroVM(title.deJure, false);
+				DeJure = new HeroVM(title.deJure);
 			}
 			
 
-			LandInfo.Add(new InformationElement("Acreage:", landData.Acreage.ToString() + " acres",
+			LandInfo.Add(new InformationElement("Acreage:", landData.Acreage + " acres",
 				"Current quantity of usable acres in this region"));
-			LandInfo.Add(new InformationElement("Farmland:", landData.Farmland.ToString() + " acres",
+			LandInfo.Add(new InformationElement("Farmland:", landData.Farmland + " acres",
 				"Acres in this region used as farmland, the main source of food in most places"));
-			LandInfo.Add(new InformationElement("Pastureland:", landData.Pastureland.ToString() + " acres",
+			LandInfo.Add(new InformationElement("Pastureland:", landData.Pastureland + " acres",
 				"Acres in this region used as pastureland, to raise cattle and other animals. These output meat and animal products such as butter and cheese"));
-			LandInfo.Add(new InformationElement("Woodland:", landData.Woodland.ToString() + " acres",
+			LandInfo.Add(new InformationElement("Woodland:", landData.Woodland + " acres",
 				"Acres in this region used as woodland, kept for hunting, foraging of berries and materials like wood"));
 
 			TerrainInfo.Add(new InformationElement("Type:", landData.Terrain.ToString(),
 				"The local terrain type. Dictates fertility and terrain difficulty."));
-			TerrainInfo.Add(new InformationElement("Fertility:", base.FormatValue(landData.Fertility),
+			TerrainInfo.Add(new InformationElement("Fertility:", FormatValue(landData.Fertility),
 				"How fertile the region is. This depends solely on the local terrain type - harsher environments like deserts are less fertile than plains and grassy hills"));
-			TerrainInfo.Add(new InformationElement("Terrain Difficulty:", base.FormatValue(landData.Difficulty),
+			TerrainInfo.Add(new InformationElement("Terrain Difficulty:", FormatValue(landData.Difficulty),
 				"Represents how difficult it is to create new usable acres. Like fertility, depends on terrain, but is not strictly correlated to it"));
 
 			WorkforceInfo.Add(new InformationElement("Available Workforce:", landData.AvailableWorkForce.ToString(),
 				"The amount of productive workers in this region, able to work the land"));
-			WorkforceInfo.Add(new InformationElement("Workforce Saturation:", base.FormatValue(landData.WorkforceSaturation),
+			WorkforceInfo.Add(new InformationElement("Workforce Saturation:", FormatValue(landData.WorkforceSaturation),
 				"Represents how many workers there are in correlation to the amount needed to fully utilize the acreage. Saturation over 100% indicates more workers than the land needs, while under 100% means not all acres are producing output"));
 
-			if (base.HasTown)
+			if (HasTown)
 			{
 				workforceItem = (BKWorkforcePolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(data.Settlement, "workforce");
-				WorkforceSelector = base.GetSelector(workforceItem, new Action<SelectorVM<BKItemVM>>(this.workforceItem.OnChange));
+				WorkforceSelector = GetSelector(workforceItem, workforceItem.OnChange);
 				WorkforceSelector.SelectedIndex = workforceItem.Selected;
-				WorkforceSelector.SetOnChangeAction(this.workforceItem.OnChange);
+				WorkforceSelector.SetOnChangeAction(workforceItem.OnChange);
 			}
 		}
 
 		[DataSourceProperty]
 		public SelectorVM<BKItemVM> WorkforceSelector
 		{
-			get => this.workforceVM;
+			get => workforceVM;
 			set
 			{
-				if (value != this.workforceVM)
+				if (value != workforceVM)
 				{
-					this.workforceVM = value;
-					base.OnPropertyChangedWithValue(value, "WorkforceSelector");
+					workforceVM = value;
+					OnPropertyChangedWithValue(value);
 				}
 			}
 		}
@@ -134,9 +132,9 @@ namespace BannerKings.UI
 		{
 			if (title != null)
             {
-				Kingdom kingdom = this.data.Settlement.OwnerClan.Kingdom;
+				Kingdom kingdom = data.Settlement.OwnerClan.Kingdom;
 				if (kingdom != null)
-					kingdom.AddDecision(new BKGovernmentDecision(this.data.Settlement.OwnerClan, GovernmentType.Imperial, this.title));
+					kingdom.AddDecision(new BKGovernmentDecision(data.Settlement.OwnerClan, GovernmentType.Imperial, title));
 			}
 		}
 
@@ -149,7 +147,7 @@ namespace BannerKings.UI
 				if (value != landInfo)
 				{
 					landInfo = value;
-					base.OnPropertyChangedWithValue(value, "LandInfo");
+					OnPropertyChangedWithValue(value);
 				}
 			}
 		}
@@ -163,7 +161,7 @@ namespace BannerKings.UI
 				if (value != terrainInfo)
 				{
 					terrainInfo = value;
-					base.OnPropertyChangedWithValue(value, "TerrainInfo");
+					OnPropertyChangedWithValue(value);
 				}
 			}
 		}
@@ -177,7 +175,7 @@ namespace BannerKings.UI
 				if (value != workforceInfo)
 				{
 					workforceInfo = value;
-					base.OnPropertyChangedWithValue(value, "WorkforceInfo");
+					OnPropertyChangedWithValue(value);
 				}
 			}
 		}
@@ -191,7 +189,7 @@ namespace BannerKings.UI
 				if (value != governmentInfo)
 				{
 					governmentInfo = value;
-					base.OnPropertyChangedWithValue(value, "GovernmentInfo");
+					OnPropertyChangedWithValue(value);
 				}
 			}
 		}
@@ -205,7 +203,7 @@ namespace BannerKings.UI
 				if (value != demesneInfo)
 				{
 					demesneInfo = value;
-					base.OnPropertyChangedWithValue(value, "DemesneInfo");
+					OnPropertyChangedWithValue(value);
 				}
 			}
 		}
@@ -214,13 +212,13 @@ namespace BannerKings.UI
 		[DataSourceProperty]
 		public HeroVM DeJure
 		{
-			get => this.deJure;
+			get => deJure;
 			set
 			{
-				if (value != this.deJure)
+				if (value != deJure)
 				{
-					this.deJure = value;
-					base.OnPropertyChangedWithValue(value, "DeJure");
+					deJure = value;
+					OnPropertyChangedWithValue(value);
 				}
 			}
 		}

@@ -1,5 +1,4 @@
-﻿using System;
-using TaleWorlds.CampaignSystem;
+﻿using TaleWorlds.CampaignSystem;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Titles
@@ -17,29 +16,29 @@ namespace BannerKings.Managers.Titles
 
         public TitleAction(ActionType type, FeudalTitle title, Hero taker)
         {
-            this.Type = type;
-            this.Title = title;
-            this.ActionTaker = taker;
+            Type = type;
+            Title = title;
+            ActionTaker = taker;
         }
 
         public TitleAction(bool possible, TextObject reason, float gold, float influence, float renown)
         {
-            this.Possible = possible;
-            this.Reason = reason;
-            this.Gold = gold;
-            this.Influence = influence;
-            this.Renown = renown;
+            Possible = possible;
+            Reason = reason;
+            Gold = gold;
+            Influence = influence;
+            Renown = renown;
         }
 
         public void TakeAction(Hero receiver)
         {
-            if (!this.Possible) return;
+            if (!Possible) return;
 
-            if (this.Type == ActionType.Usurp)
-                BannerKingsConfig.Instance.TitleManager.UsurpTitle(this.Title.deJure, this);
-            else if (this.Type == ActionType.Claim)
+            if (Type == ActionType.Usurp)
+                BannerKingsConfig.Instance.TitleManager.UsurpTitle(Title.deJure, this);
+            else if (Type == ActionType.Claim)
                 BannerKingsConfig.Instance.TitleManager.AddOngoingClaim(this);
-            else BannerKingsConfig.Instance.TitleManager.GrantTitle(receiver, this.ActionTaker, this.Title, this.Influence);
+            else BannerKingsConfig.Instance.TitleManager.GrantTitle(receiver, ActionTaker, Title, Influence);
         }
     }
 

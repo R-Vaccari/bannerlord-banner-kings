@@ -38,7 +38,7 @@ namespace BannerKings.Models
         public float GetSettlementFilledCapacity(Settlement settlement)
         {
             PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
-            return (float)data.TotalPop / (float)CalculateSettlementCap(settlement);
+            return data.TotalPop / (float)CalculateSettlementCap(settlement);
         }
 
         public ExplainedNumber CalculateEffect(Settlement settlement, PopulationData data)
@@ -47,20 +47,20 @@ namespace BannerKings.Models
             if (settlement.IsVillage || !settlement.IsStarving)
             {
                 result.Add(5f, new TextObject("Base"));
-                float filledCapacity = (float)data.TotalPop / (float)CalculateSettlementCap(settlement);
+                float filledCapacity = data.TotalPop / (float)CalculateSettlementCap(settlement);
                 data.Classes.ForEach(popClass =>
                 {
                     if (popClass.type != PopType.Slaves)
-                        result.Add((float)popClass.count * POP_GROWTH_FACTOR  * (1f - filledCapacity),  new TextObject("{0} growth"));
+                        result.Add(popClass.count * POP_GROWTH_FACTOR  * (1f - filledCapacity),  new TextObject("{0} growth"));
                 });
             }
             else if (settlement.IsStarving)
             {
                 float starvation = -5;
-                starvation += (int)((float)data.TotalPop * -0.007f);
+                starvation += (int)(data.TotalPop * -0.007f);
                 result.Add(starvation, new TextObject("Starvation"));
                 if (settlement.OwnerClan.Leader == Hero.MainHero)
-                    InformationManager.DisplayMessage(new InformationMessage(string.Format("Population is starving at {0}!", settlement.Name.ToString())));
+                    InformationManager.DisplayMessage(new InformationMessage(string.Format("Population is starving at {0}!", settlement.Name)));
             }
 
             if (!settlement.IsVillage)

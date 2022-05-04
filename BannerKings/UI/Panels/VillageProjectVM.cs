@@ -1,15 +1,13 @@
 ﻿using BannerKings.Managers.Populations.Villages;
+using BannerKings.Models;
 using BannerKings.Populations;
-using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Text;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.ViewModelCollection.GameMenu;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
-using BannerKings.Models;
-using System.Text;
 
 namespace BannerKings.UI.Panels
 {
@@ -22,11 +20,11 @@ namespace BannerKings.UI.Panels
 
 		public VillageProjectVM(PopulationData data) : base(data, true)
         {
-            projects = new SettlementProjectSelectionVM(data.Settlement, new Action(this.OnProjectSelectionDone));
+            projects = new SettlementProjectSelectionVM(data.Settlement, OnProjectSelectionDone);
 			constructionInfo = new MBBindingList<InformationElement>();
 			productionInfo = new MBBindingList<InformationElement>();
 			GameTexts.SetVariable("VILLAGE_NAME", data.Settlement.Name);
-			this.villageData = base.data.VillageData;
+			villageData = this.data.VillageData;
 		}
 
         public override void RefreshValues()
@@ -36,7 +34,7 @@ namespace BannerKings.UI.Panels
 
 			ConstructionInfo.Clear();
 			ProductionInfo.Clear();
-			ConstructionInfo.Add(new InformationElement("Construction:", villageData.Construction.ToString() + " (Daily)",
+			ConstructionInfo.Add(new InformationElement("Construction:", villageData.Construction + " (Daily)",
 			   "How much the local population can progress with construction projects, on a daily basis"));
 			ConstructionInfo.Add(new InformationElement("Current Progress:", villageData.IsCurrentlyBuilding ? FormatValue(villageData.CurrentBuilding.BuildingProgress / 
 				villageData.CurrentBuilding.GetConstructionCost()) : "Daily project (endless)",
@@ -51,12 +49,12 @@ namespace BannerKings.UI.Panels
 			StringBuilder sb = new StringBuilder();
 			foreach ((ItemObject, float) production in BannerKingsConfig.Instance.PopulationManager.GetProductions(villageData))
             {
-				sb.Append(production.Item1.Name.ToString() + ", ");
+				sb.Append(production.Item1.Name + ", ");
 				productionQuantity += model.CalculateDailyProductionAmount(villageData.Village, production.Item1);
 			}
 			sb.Remove(sb.Length - 2, 1);
 			string productionString = sb.ToString();
-			ProductionInfo.Add(new InformationElement("Goods Production:", productionQuantity.ToString() + " (Daily)",
+			ProductionInfo.Add(new InformationElement("Goods Production:", productionQuantity + " (Daily)",
 			   "Sum of goods produced on a daily basis, including all the types produced here"));
 			ProductionInfo.Add(new InformationElement("Items Produced:", productionString,
 			   "The types of outputs produced in this village"));
@@ -67,8 +65,8 @@ namespace BannerKings.UI.Panels
 			if (villageData != null)
             {
 				villageData.BuildingsInProgress.Clear();
-				List<Building> localDevelopmentList = this.Projects.LocalDevelopmentList;
-				Building? building = this.Projects.CurrentDailyDefault?.Building;
+				List<Building> localDevelopmentList = Projects.LocalDevelopmentList;
+				Building? building = Projects.CurrentDailyDefault?.Building;
 				if (localDevelopmentList != null && localDevelopmentList.Count > 0)
                 {
 					foreach (VillageBuilding building2 in localDevelopmentList)
@@ -92,14 +90,14 @@ namespace BannerKings.UI.Panels
         [DataSourceProperty]
 		public SettlementProjectSelectionVM Projects
 		{
-			get => this.projects;
+			get => projects;
 
 			set
 			{
-				if (value != this.projects)
+				if (value != projects)
 				{
-					this.projects = value;
-					base.OnPropertyChangedWithValue(value, "Projects");
+					projects = value;
+					OnPropertyChangedWithValue(value);
 				}
 			}
 		}
@@ -113,7 +111,7 @@ namespace BannerKings.UI.Panels
 				if (value != productionInfo)
 				{
 					productionInfo = value;
-					base.OnPropertyChangedWithValue(value, "ProductionInfo");
+					OnPropertyChangedWithValue(value);
 				}
 			}
 		}
@@ -127,7 +125,7 @@ namespace BannerKings.UI.Panels
 				if (value != constructionInfo)
 				{
 					constructionInfo = value;
-					base.OnPropertyChangedWithValue(value, "ConstructionInfo");
+					OnPropertyChangedWithValue(value);
 				}
 			}
 		}

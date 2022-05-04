@@ -21,10 +21,10 @@ namespace BannerKings
             public string Name => dataClass.Culture.Name.ToString();
 
             [DataSourceProperty]
-            public string Acceptance => base.FormatValue(dataClass.Acceptance);
+            public string Acceptance => FormatValue(dataClass.Acceptance);
 
             [DataSourceProperty]
-            public string Assimilation => base.FormatValue(dataClass.Assimilation);
+            public string Assimilation => FormatValue(dataClass.Assimilation);
 
             [DataSourceProperty]
             public HintViewModel Hint => new HintViewModel(new TextObject());

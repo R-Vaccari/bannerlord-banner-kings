@@ -1,7 +1,4 @@
-﻿using BannerKings.UI.Items;
-using System;
-using TaleWorlds.CampaignSystem;
-using TaleWorlds.Core.ViewModelCollection;
+﻿using TaleWorlds.CampaignSystem;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Decisions
