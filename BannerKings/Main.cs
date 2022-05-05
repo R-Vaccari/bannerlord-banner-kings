@@ -304,7 +304,17 @@ namespace BannerKings
         namespace Economy
         {
 
-
+            [HarmonyPatch(typeof(HeroHelper), "StartRecruitingMoneyLimit")]
+            class StartRecruitingMoneyLimitPatch
+            {
+                static bool Prefix(Hero hero, ref float __result)
+                {
+                    __result = 50f;
+                    if (hero.PartyBelongedTo != null)
+                        __result += 1000f;
+                    return false;
+                }
+            }
 
             [HarmonyPatch(typeof(ClanVariablesCampaignBehavior), "UpdateClanSettlementAutoRecruitment")]
             class AutoRecruitmentPatch
@@ -334,7 +344,8 @@ namespace BannerKings
                 static bool Prefix(Clan clan)
                 {
                     if (clan.IsMinorFaction) return true;
-                    float income = Campaign.Current.Models.ClanFinanceModel.CalculateClanGoldChange(clan).ResultNumber;
+                    float income = Campaign.Current.Models.ClanFinanceModel.CalculateClanIncome(clan).ResultNumber * 0.5f +
+                        clan.Gold * 0.05f;
                     if (income > 0f)
                     {
                         float knights = 0f;
