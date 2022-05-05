@@ -422,10 +422,9 @@ namespace BannerKings.Populations
                 this.cultures.Remove(cultureData);
 
             float foreignerTarget = data.Foreigner.ResultNumber;
-            float diff = foreignerTarget - foreignerShare;
             if (foreignerShare < foreignerTarget)
             {
-                float random = MBRandom.RandomFloatRanged(diff);
+                float random = MBRandom.RandomFloatRanged(foreignerTarget - foreignerShare);
                 IEnumerable<CultureObject> presentCultures = from cultureClass in this.cultures select cultureClass.Culture;
                 CultureObject randomForeign = MBObjectManager.Instance.GetObjectTypeList<CultureObject>()
                     .GetRandomElementWithPredicate(x => x != settlementOwner.Culture && x != data.Settlement.Culture && !x.IsBandit

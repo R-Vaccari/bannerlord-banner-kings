@@ -78,6 +78,7 @@ namespace BannerKings
                 campaignStarter.AddModel(new BKRansomModel());
                 campaignStarter.AddModel(new BKClanTierModel());
                 campaignStarter.AddModel(new BKPartyWageModel());
+                campaignStarter.AddModel(new BKSettlementValueModel());
             }
 
             //xtender.Register(typeof(Main).Assembly);

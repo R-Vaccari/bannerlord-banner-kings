@@ -133,8 +133,28 @@ namespace BannerKings.Behaviours
         {
             if (BannerKingsConfig.Instance.TitleManager == null) return;
 
+            if (detail == ChangeOwnerOfSettlementAction.ChangeOwnerOfSettlementDetail.ByBarter)
+            {
+                FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement);
+                if (oldOwner == title.deJure)
+                {
+                    BannerKingsConfig.Instance.TitleManager.InheritTitle(oldOwner, newOwner, title);
+                    if (!settlement.IsVillage)
+                        foreach (Village village in settlement.BoundVillages)
+                        {
+                            FeudalTitle villageTitle = BannerKingsConfig.Instance.TitleManager.GetTitle(village.Settlement);
+                            if (villageTitle.deJure == oldOwner)
+                                BannerKingsConfig.Instance.TitleManager.InheritTitle(oldOwner,
+                                newOwner,
+                                villageTitle);
+                        }  
+                }
+                return;
+            }
+
             if (settlement.Town != null && settlement.Town.IsOwnerUnassigned &&
                 detail != ChangeOwnerOfSettlementAction.ChangeOwnerOfSettlementDetail.ByLeaveFaction) return;
+
 
             BannerKingsConfig.Instance.TitleManager.ApplyOwnerChange(settlement, newOwner);
             Kingdom kingdom = newOwner.Clan.Kingdom;
