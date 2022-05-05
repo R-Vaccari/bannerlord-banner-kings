@@ -58,7 +58,7 @@ namespace BannerKings.Models.Vanilla
 
 					if (elementCopyAtIndex.Character.IsHero)
                     {
-						if (elementCopyAtIndex.Character.HeroObject == Hero.MainHero) continue;
+						if (elementCopyAtIndex.Character.HeroObject == mobileParty.LeaderHero) continue;
 						MBReadOnlyList<SkillObject> skills = MBObjectManager.Instance.GetObjectTypeList<SkillObject>();
 						BKCompanionPrices companionModel = new BKCompanionPrices();
 						float totalCost = 0f;
@@ -77,7 +77,7 @@ namespace BannerKings.Models.Vanilla
 					result.AddFactor(proportion * -0.1f, GameTexts.FindText("str_culture"));
 
 				if (mobileParty.IsGarrison)
-					result.AddFactor(-0.05f, null);
+					result.AddFactor(-0.66f, null);
 			}
 
 			return result;
@@ -107,6 +107,7 @@ namespace BannerKings.Models.Vanilla
 					Kingdom buyerKingdom = buyerHero.Clan.Kingdom;
 					if (buyerKingdom != null && troop.Culture != buyerHero.Culture)
 						result.AddFactor(0.25f, GameTexts.FindText("str_kingdom", null));
+					else result.AddFactor(-0.1f, GameTexts.FindText("str_kingdom", null));
 
 					if (buyerHero.Clan.Tier >= 4)
 						result.AddFactor((float)(buyerHero.Clan.Tier - 3) * 0.05f, null);

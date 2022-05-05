@@ -29,6 +29,7 @@ using static TaleWorlds.CampaignSystem.Election.KingSelectionKingdomDecision;
 using static TaleWorlds.CampaignSystem.SandBox.Issues.VillageNeedsToolsIssueBehavior;
 using static TaleWorlds.CampaignSystem.SandBox.Issues.EscortMerchantCaravanIssueBehavior;
 using TaleWorlds.CampaignSystem.SandBox.Issues;
+using Helpers;
 
 namespace BannerKings
 {
@@ -301,6 +302,9 @@ namespace BannerKings
 
         namespace Economy
         {
+
+
+
             [HarmonyPatch(typeof(ClanVariablesCampaignBehavior), "UpdateClanSettlementAutoRecruitment")]
             class AutoRecruitmentPatch
             {
@@ -323,10 +327,39 @@ namespace BannerKings
                 }
             }
 
-            [HarmonyPatch(typeof(DefaultClanFinanceModel), "AddIncomeFromKingdomBudget")]
-            class AddIncomeFromKingdomBudgetPatch
+            [HarmonyPatch(typeof(ClanVariablesCampaignBehavior), "MakeClanFinancialEvaluation")]
+            class MakeClanFinancialEvaluationPatch
             {
-                static bool Prefix(Clan clan, ref ExplainedNumber goldChange, bool applyWithdrawals)
+                static bool Prefix(Clan clan)
+                {
+                    if (clan.IsMinorFaction) return true;
+                    float income = Campaign.Current.Models.ClanFinanceModel.CalculateClanGoldChange(clan).ResultNumber;
+                    if (income > 0f)
+                    {
+                        float knights = 0f;
+                        foreach (WarPartyComponent partyComponent in clan.WarPartyComponents)
+                            if (partyComponent.Leader != null && partyComponent.Leader != clan.Leader &&
+                                BannerKingsConfig.Instance.TitleManager.GetHighestTitle(partyComponent.Leader) != null)
+                                knights++;
+
+                        foreach (WarPartyComponent partyComponent in clan.WarPartyComponents)
+                        {
+                            float share = income / clan.WarPartyComponents.Count - knights;
+                            partyComponent.MobileParty.PaymentLimit = (int)(300f + share);
+                        }
+
+                        return false;
+                    }
+                    return true;
+                }
+            }
+
+            [HarmonyPatch(typeof(DefaultClanFinanceModel))]
+            class ClanFinancesPatches
+            {
+                [HarmonyPrefix]
+                [HarmonyPatch("AddIncomeFromKingdomBudget", MethodType.Normal)]
+                static bool KingdomBudgetPrefix(Clan clan, ref ExplainedNumber goldChange, bool applyWithdrawals)
                 {
                     if (BannerKingsConfig.Instance.TitleManager != null)
                     {
@@ -335,12 +368,55 @@ namespace BannerKings
                     }
                     return true;
                 }
-            }
 
-            [HarmonyPatch(typeof(DefaultClanFinanceModel), "AddVillagesIncome")]
-            class AddVillagesIncomePatch
-            {
-                static bool Prefix(Clan clan, ref ExplainedNumber goldChange, bool applyWithdrawals)
+
+                [HarmonyPrefix]
+                [HarmonyPatch("AddExpensesFromParties", MethodType.Normal)]
+                static bool PartyExpensesPrefix(Clan clan, ref ExplainedNumber goldChange, bool applyWithdrawals = false)
+                {
+                    if (BannerKingsConfig.Instance.TitleManager != null)
+                    {
+                        List<MobileParty> list = new List<MobileParty>();
+                        foreach (Hero hero in clan.Lords)
+                            foreach (CaravanPartyComponent caravanPartyComponent in hero.OwnedCaravans)
+                                list.Add(caravanPartyComponent.MobileParty);
+
+                        foreach (Hero hero2 in clan.Companions)
+                            foreach (CaravanPartyComponent caravanPartyComponent2 in hero2.OwnedCaravans)
+                                list.Add(caravanPartyComponent2.MobileParty);
+
+                        foreach (WarPartyComponent warPartyComponent in clan.WarPartyComponents)
+                            list.Add(warPartyComponent.MobileParty);
+                        
+                        foreach (MobileParty mobileParty in list)
+                        {
+                            if (mobileParty.IsActive && mobileParty.LeaderHero != clan.Leader)
+                            {
+                                DefaultClanFinanceModel model = new DefaultClanFinanceModel();
+                                MethodInfo addExpense = model.GetType().GetMethod("AddPartyExpense", BindingFlags.Instance | BindingFlags.NonPublic);
+                                object[] array = new object[] { mobileParty, clan, new ExplainedNumber(), applyWithdrawals };
+                                addExpense.Invoke(model, array);
+                                if (BannerKingsConfig.Instance.TitleManager.GetHighestTitle(mobileParty.LeaderHero) == null) 
+                                    goldChange.Add(((ExplainedNumber)array[2]).ResultNumber, new TextObject("{=iPDOLbi3}Party wages {A0}"), mobileParty.Name);
+                                else
+                                {
+                                    MethodInfo calculateWage = model.GetType().GetMethod("CalculatePartyWage", BindingFlags.Instance | BindingFlags.NonPublic);
+                                    int wage = (int)calculateWage.Invoke(model, new object[] { mobileParty, mobileParty.LeaderHero.Gold, applyWithdrawals });
+                                    if (applyWithdrawals)
+                                        mobileParty.LeaderHero.Gold -= MathF.Min(mobileParty.LeaderHero.Gold, wage);
+                                }
+                            }
+                        }
+
+                        return false;
+                    }
+                    return true;
+                }
+
+
+                [HarmonyPrefix]
+                [HarmonyPatch("AddVillagesIncome", MethodType.Normal)]
+                static bool VillageIncomePrefix(Clan clan, ref ExplainedNumber goldChange, bool applyWithdrawals)
                 {
                     if (BannerKingsConfig.Instance.TitleManager != null)
                     {
@@ -398,7 +474,7 @@ namespace BannerKings
                     if (clan.Kingdom != null && clan.Kingdom.RulingClan != clan && clan.Kingdom.ActivePolicies.Contains(DefaultPolicies.LandTax))
                     {
                         total += (int)((-(float)total) * 0.05f);
-                    }     
+                    }
 
                     if (village.Bound.Town != null && village.Bound.Town.Governor != null && village.Bound.Town.Governor.GetPerkValue(DefaultPerks.Scouting.ForestKin))
                         total += MathF.Round((float)total * DefaultPerks.Scouting.ForestKin.SecondaryBonus * 0.01f);
@@ -430,6 +506,7 @@ namespace BannerKings
                     return total;
                 }
             }
+
 
             [HarmonyPatch(typeof(CaravansCampaignBehavior), "GetTradeScoreForTown")]
             class GetTradeScoreForTownPatch

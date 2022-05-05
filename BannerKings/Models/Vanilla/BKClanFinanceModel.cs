@@ -13,7 +13,7 @@ namespace BannerKings.Models
 
         public override ExplainedNumber CalculateClanGoldChange(Clan clan, bool includeDescriptions = false, bool applyWithdrawals = false)
         {
-			ExplainedNumber baseResult = base.CalculateClanGoldChange(clan, includeDescriptions, applyWithdrawals);
+			ExplainedNumber baseResult = base.CalculateClanGoldChange(clan, true, applyWithdrawals);
 			if (BannerKingsConfig.Instance.TitleManager != null)
 			{
 				this.CalculateClanExpenseInternal(clan, ref baseResult);
