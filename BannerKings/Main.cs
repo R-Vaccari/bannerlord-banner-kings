@@ -338,16 +338,23 @@ namespace BannerKings
                     {
                         float knights = 0f;
                         foreach (WarPartyComponent partyComponent in clan.WarPartyComponents)
-                            if (partyComponent.Leader != null && partyComponent.Leader != clan.Leader &&
-                                BannerKingsConfig.Instance.TitleManager.GetHighestTitle(partyComponent.Leader) != null)
-                                knights++;
+                            if (partyComponent.Leader != null && partyComponent.Leader != clan.Leader)
+                            {
+                                FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(partyComponent.Leader);
+                                if (title != null)
+                                {
+                                    knights++;
+                                    partyComponent.MobileParty.PaymentLimit = (int)(50f + (title.fief.IsVillage ? 
+                                        title.fief.Village.TradeTaxAccumulated : 
+                                        Campaign.Current.Models.SettlementTaxModel.CalculateTownTax(title.fief.Town).ResultNumber));
+                                }
+                            }
 
                         foreach (WarPartyComponent partyComponent in clan.WarPartyComponents)
                         {
                             float share = income / clan.WarPartyComponents.Count - knights;
                             partyComponent.MobileParty.PaymentLimit = (int)(300f + share);
                         }
-
                         return false;
                     }
                     return true;
