@@ -450,7 +450,6 @@ namespace BannerKings.Populations
                     foreach (Hero notable in data.Settlement.Notables)
                         notable.Culture = dominant;
             }
-            
         }
     }
 
