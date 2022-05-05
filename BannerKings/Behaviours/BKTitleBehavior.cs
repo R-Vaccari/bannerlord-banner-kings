@@ -155,7 +155,6 @@ namespace BannerKings.Behaviours
             if (settlement.Town != null && settlement.Town.IsOwnerUnassigned &&
                 detail != ChangeOwnerOfSettlementAction.ChangeOwnerOfSettlementDetail.ByLeaveFaction) return;
 
-
             BannerKingsConfig.Instance.TitleManager.ApplyOwnerChange(settlement, newOwner);
             Kingdom kingdom = newOwner.Clan.Kingdom;
             if (kingdom == null) return;
@@ -175,7 +174,7 @@ namespace BannerKings.Behaviours
                         foreach (Clan clan in kingdom.Clans)
                             if (clan.Leader == title.deJure)
                             {
-                                ChangeOwnerOfSettlementAction.ApplyByDefault(clan.Leader, settlement);
+                                ChangeOwnerOfSettlementAction.ApplyByKingDecision(clan.Leader, settlement);
                                 absoluteRightGranted = true;
                                 if (clan.Leader == Hero.MainHero)
                                 {
@@ -199,7 +198,7 @@ namespace BannerKings.Behaviours
                     Army army = party.Army;
                     if (army != null) return;
 
-                    ChangeOwnerOfSettlementAction.ApplyByDefault(capturerHero, settlement);
+                    ChangeOwnerOfSettlementAction.ApplyByKingDecision(capturerHero, settlement);
                     if (capturerHero == Hero.MainHero)
                     {
                         GameTexts.SetVariable("SETTLEMENT", settlement.Name);
