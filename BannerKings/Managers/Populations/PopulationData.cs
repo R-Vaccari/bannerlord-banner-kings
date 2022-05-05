@@ -345,7 +345,7 @@ namespace BannerKings.Populations
             set
             {
                 this.settlementOwner = value;
-                if (!this.IsCulturePresent(settlementOwner.Culture) && this.settlementOwner == Hero.MainHero)
+                if (!this.IsCulturePresent(settlementOwner.Culture))
                 {
                     if (this.settlementOwner.Culture == this.DominantCulture)
                         this.AddCulture(settlementOwner.Culture, 1f, 1f);
@@ -410,7 +410,7 @@ namespace BannerKings.Populations
             {
                 cultureData.Acceptance += accModel.CalculateEffect(data.Settlement, cultureData).ResultNumber;
                 cultureData.Assimilation += assimModel.CalculateEffect(data.Settlement, cultureData).ResultNumber;
-                if (cultureData.Culture != settlementOwner.Culture && cultureData.Assimilation > 0.01)
+                if (cultureData.Culture != settlementOwner.Culture && cultureData.Assimilation <= 0.01)
                     toDelete.Add(cultureData);
 
                 if (cultureData.Culture != settlementOwner.Culture && cultureData.Culture != data.Settlement.Culture)
@@ -422,10 +422,9 @@ namespace BannerKings.Populations
                 this.cultures.Remove(cultureData);
 
             float foreignerTarget = data.Foreigner.ResultNumber;
-            float diff = foreignerTarget - foreignerShare;
             if (foreignerShare < foreignerTarget)
             {
-                float random = MBRandom.RandomFloatRanged(diff);
+                float random = MBRandom.RandomFloatRanged(foreignerTarget - foreignerShare);
                 IEnumerable<CultureObject> presentCultures = from cultureClass in this.cultures select cultureClass.Culture;
                 CultureObject randomForeign = MBObjectManager.Instance.GetObjectTypeList<CultureObject>()
                     .GetRandomElementWithPredicate(x => x != settlementOwner.Culture && x != data.Settlement.Culture && !x.IsBandit
@@ -450,7 +449,6 @@ namespace BannerKings.Populations
                     foreach (Hero notable in data.Settlement.Notables)
                         notable.Culture = dominant;
             }
-            
         }
     }
 

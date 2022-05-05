@@ -5,6 +5,7 @@ using static BannerKings.Managers.PopulationManager;
 using static BannerKings.Managers.PolicyManager;
 using BannerKings.Populations;
 using BannerKings.Managers.Populations.Villages;
+using TaleWorlds.Library;
 
 namespace BannerKings.Models
 {
@@ -19,13 +20,8 @@ namespace BannerKings.Models
                 if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
                 {
                     PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
-                    int nobles = data.GetTypeCount(PopType.Nobles);
-                    if (BannerKingsConfig.Instance.PopulationManager.PopSurplusExists(settlement, PopType.Nobles, true))
-                    {
-                        int extra = BannerKingsConfig.Instance.PopulationManager.GetPopCountOverLimit(settlement, PopType.Nobles);
-                        baseResult.Add(((float)extra * -2f) * 0.01f, new TextObject(string.Format("Excess noble population at {0}", settlement.Name)));
-                    }
-                    baseResult.Add((float)nobles * 0.01f, new TextObject(string.Format("Nobles influence from {0}", settlement.Name)));
+                    float nobles = data.GetTypeCount(PopType.Nobles);
+                    baseResult.Add(MBMath.ClampFloat(nobles * 0.01f, 0f, 12f), new TextObject(string.Format("Nobles influence from {0}", settlement.Name)));
 
                     VillageData villageData = data.VillageData;
                     if (villageData != null)
@@ -33,6 +29,13 @@ namespace BannerKings.Models
                         float manor = villageData.GetBuildingLevel(DefaultVillageBuildings.Instance.TrainningGrounds);
                         if (manor > 0)
                             baseResult.AddFactor(manor == 3 ? 0.5f : manor * 0.15f, new TextObject("{=!}Manor"));
+                    }
+
+                    if (BannerKingsConfig.Instance.PopulationManager.PopSurplusExists(settlement, PopType.Nobles, true))
+                    {
+                        float result = baseResult.ResultNumber;
+                        float extra = BannerKingsConfig.Instance.PopulationManager.GetPopCountOverLimit(settlement, PopType.Nobles);
+                        baseResult.Add(MBMath.ClampFloat(extra * -0.01f, result * -0.5f, -0.1f), new TextObject(string.Format("Excess noble population at {0}", settlement.Name)));
                     }
                 }
             }

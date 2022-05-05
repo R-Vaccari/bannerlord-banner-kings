@@ -2,7 +2,9 @@
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.SandBox.GameComponents;
 using TaleWorlds.Localization;
+using System.Linq;
 using static BannerKings.Managers.Policies.BKGarrisonPolicy;
+using TaleWorlds.Library;
 
 namespace BannerKings.Models.Vanilla
 {
@@ -23,6 +25,28 @@ namespace BannerKings.Models.Vanilla
 
             return baseResult;
 
+        }
+
+        public override int FindNumberOfTroopsToLeaveToGarrison(MobileParty mobileParty, Settlement settlement)
+        {
+            int result = base.FindNumberOfTroopsToLeaveToGarrison(mobileParty, settlement);
+            if (result > 0)
+            {
+                Kingdom kingdom = settlement.OwnerClan.Kingdom;
+                if (kingdom != null)
+                {
+                    float enemies = FactionManager.GetEnemyKingdoms(kingdom).Count();
+                    float strength = 0f;
+                    if (settlement.Town != null && settlement.Town.GarrisonParty != null)
+                        strength = settlement.Town.GarrisonParty.MemberRoster.TotalManCount;
+                    if (strength > 500) return 0;
+
+                    if (enemies == 0) return 0;
+                    return (int)MathF.Max(((float)result / 10f - enemies), 0f);
+                }
+            }
+
+            return result;
         }
     }
 }

@@ -1015,7 +1015,7 @@ namespace BannerKings.Behaviors
                         {
                             if (element.Character.Occupation == Occupation.Bandit) continue;
                             CultureObject culture = element.Character.Culture;
-                            if (culture == null) continue;
+                            if (culture == null || culture.IsBandit) continue;
                             if (dic.ContainsKey(culture))
                                 dic[culture] += element.Number;
                             else dic.Add(culture, element.Number);
@@ -1023,10 +1023,13 @@ namespace BannerKings.Behaviors
 
                         foreach (KeyValuePair<CultureObject, int> pair in dic)
                         {
-                            Settlement random = Settlement.All.GetRandomElementWithPredicate(x => x.Culture == pair.Key);
-                            if (random != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(currentSettlement))
-                                BannerKingsConfig.Instance.PopulationManager.GetPopData(random)
-                                    .UpdatePopType(PopType.Serfs, pair.Value);
+                            if (Settlement.All.Any(x => x.Culture == pair.Key))
+                            {
+                                Settlement random = Settlement.All.GetRandomElementWithPredicate(x => x.Culture == pair.Key);
+                                if (random != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(currentSettlement))
+                                    BannerKingsConfig.Instance.PopulationManager.GetPopData(random)
+                                        .UpdatePopType(PopType.Serfs, pair.Value);
+                            } 
                         }
                     }
                     else return false;
@@ -1068,13 +1071,16 @@ namespace BannerKings.Behaviors
 
                         foreach (KeyValuePair<CultureObject, int> pair in dic)
                         {
-                            Settlement random = Settlement.All.GetRandomElementWithPredicate(x => x.Culture == pair.Key);
-                            if (random != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(currentSettlement))
+                            if (Settlement.All.Any(x => x.Culture == pair.Key))
                             {
-                                PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(currentSettlement);
-                                if (data != null)
-                                    data.UpdatePopType(PopType.Serfs, pair.Value);
-                            }
+                                Settlement random = Settlement.All.GetRandomElementWithPredicate(x => x.Culture == pair.Key);
+                                if (random != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(currentSettlement))
+                                {
+                                    PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(currentSettlement);
+                                    if (data != null)
+                                        data.UpdatePopType(PopType.Serfs, pair.Value);
+                                }
+                            }  
                         }
                     }
                     else return false;

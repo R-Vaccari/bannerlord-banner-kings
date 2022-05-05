@@ -58,12 +58,12 @@ namespace BannerKings.Models
                 LegitimacyType legitimacyType = (LegitimacyType)BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(BKLegitimacyModel))
                     .CalculateEffect(settlement).ResultNumber;
                 if (legitimacyType == LegitimacyType.Lawful)
-                    legitimacy = 10f;
+                    legitimacy = 0.1f;
                 else if (legitimacyType == LegitimacyType.Lawful_Foreigner)
-                    legitimacy = 5f;
+                    legitimacy = 0.05f;
                 else if (legitimacyType == LegitimacyType.Unlawful)
-                    legitimacy = -5f;
-                else legitimacy = -10f;
+                    legitimacy = -0.05f;
+                else legitimacy = -0.1f;
 
                 GovernmentType government = BannerKingsConfig.Instance.TitleManager.GetSettlementGovernment(settlement);
                 if (government == GovernmentType.Feudal)

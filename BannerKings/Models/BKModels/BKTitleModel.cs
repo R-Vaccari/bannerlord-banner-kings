@@ -338,7 +338,7 @@ namespace BannerKings.Models.BKModels
 
         private float GetRenownUsurpCost(FeudalTitle title) => 100f / (float)title.type + 1f;
 
-        private float GetGoldUsurpCost(FeudalTitle title)
+        public float GetGoldUsurpCost(FeudalTitle title)
         {
             float gold = 100000f / (float)title.type + 1f;
             if (title.fief != null)

@@ -13,10 +13,10 @@ namespace BannerKings.Models
 {
     class BKTaxModel : CalradiaExpandedKingdoms.Models.CEKSettlementTaxModel
     {
-        public static readonly float NOBLE_OUTPUT = 2f;
-        public static readonly float CRAFTSMEN_OUTPUT = 0.75f;
-        public static readonly float SERF_OUTPUT = 0.2f;
-        public static readonly float SLAVE_OUTPUT = 0.3f;
+        public static readonly float NOBLE_OUTPUT = 2.2f;
+        public static readonly float CRAFTSMEN_OUTPUT = 0.82f;
+        public static readonly float SERF_OUTPUT = 0.22f;
+        public static readonly float SLAVE_OUTPUT = 0.33f;
 
         public override ExplainedNumber CalculateTownTax(Town town, bool includeDescriptions = false)
         {
