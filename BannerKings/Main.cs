@@ -356,12 +356,16 @@ namespace BannerKings
                                 if (partyComponent.Leader != null && partyComponent.Leader != clan.Leader)
                                 {
                                     FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(partyComponent.Leader);
-                                    if (title != null)
+                                    if (title != null && title.fief != null)
                                     {
                                         knights++;
-                                        partyComponent.MobileParty.PaymentLimit = (int)(50f + (title.fief.IsVillage ?
-                                            title.fief.Village.TradeTaxAccumulated :
-                                            Campaign.Current.Models.SettlementTaxModel.CalculateTownTax(title.fief.Town).ResultNumber));
+                                        float limit = 0f;
+                                        if (title.fief.IsVillage)
+                                            limit = title.fief.Village.TradeTaxAccumulated;
+                                        else if (title.fief.Town != null)
+                                            limit = Campaign.Current.Models.SettlementTaxModel.CalculateTownTax(title.fief.Town).ResultNumber;
+
+                                        partyComponent.MobileParty.PaymentLimit = (int)(50f + limit);
                                     }
                                 }
 
