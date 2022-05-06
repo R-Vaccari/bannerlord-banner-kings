@@ -38,15 +38,19 @@ namespace BannerKings.UI.Windows
             PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(Settlement.CurrentSettlement);
             if (id == "population")
                 return (new PopulationVM(data), "PopulationWindow");
-            if (id == "guild")
+            else if (id == "guild")
                 return (new GuildVM(data), "GuildWindow");
-            if (id == "vilage_project")
+            else if (id == "vilage_project")
                 return (new VillageProjectVM(data), "VillageProjectWindow");
-            if (id == "court")
-                return (new CourtVM(data), "CourtWindow");
-            if (id == "titles")
+            else if (id == "court")
+                return (new CourtVM(data, false), "CourtWindow");
+            else if (id == "court_royal")
+                return (new CourtVM(data, true), "CourtWindow");
+            else if (id == "titles")
                 return (new TitleWindowVM(data), "TitlesWindow");
-            return (new PopulationVM(data), "PopulationWindow");
+            else if (id == "religions")
+                return (new ReligionVM(data), "ReligionWindow");
+            else return (new PopulationVM(data), "PopulationWindow");
         }
 
         public void Close() => MapScreen.Instance.RemoveLayer(layer);

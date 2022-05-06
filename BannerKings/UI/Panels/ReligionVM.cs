@@ -1,4 +1,5 @@
 ﻿using BannerKings.Managers.Institutions.Religions;
+using BannerKings.Managers.Institutions.Religions.Doctrines;
 using BannerKings.Populations;
 using BannerKings.UI.Items;
 using System.Collections.Generic;
@@ -15,6 +16,7 @@ namespace BannerKings.UI.Panels
 		private MBBindingList<ReligionMemberVM> clergymen;
 		private MBBindingList<ReligionMemberVM> faithful;
 		private MBBindingList<BKTraitItemVM> virtues;
+		private MBBindingList<Doctrine> doctrines;
 		private Religion religion;
 
 		public ReligionVM(PopulationData data) : base(data, true)
@@ -43,6 +45,9 @@ namespace BannerKings.UI.Panels
 			foreach (KeyValuePair<TraitObject, bool> pair in religion.Faith.Traits)
 				Virtues.Add(new BKTraitItemVM(pair.Key, pair.Value));
 
+			foreach (string docString in religion.Doctrines)
+				doctrines.Add(DefaultDoctrines.Instance.GetById(docString));
+
 		}
 
 		[DataSourceProperty]
@@ -56,6 +61,8 @@ namespace BannerKings.UI.Panels
 
 		[DataSourceProperty]
 		public string VirtuesText => new TextObject("{=!}Virtues").ToString();
+		[DataSourceProperty]
+		public string DoctrinesText => new TextObject("{=!}Doctrines").ToString();
 
 		[DataSourceProperty]
 		public string Name => religion.Faith.GetFaithName().ToString();
@@ -80,6 +87,20 @@ namespace BannerKings.UI.Panels
 				{
 					virtues = value;
 					base.OnPropertyChangedWithValue(value, "Virtues");
+				}
+			}
+		}
+
+		[DataSourceProperty]
+		public MBBindingList<Doctrine> Doctrines
+		{
+			get => doctrines;
+			set
+			{
+				if (value != doctrines)
+				{
+					doctrines = value;
+					base.OnPropertyChangedWithValue(value, "Doctrines");
 				}
 			}
 		}

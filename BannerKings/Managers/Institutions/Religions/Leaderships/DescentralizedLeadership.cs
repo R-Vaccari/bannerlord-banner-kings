@@ -4,7 +4,7 @@ using TaleWorlds.CampaignSystem;
 
 namespace BannerKings.Managers.Institutions.Religions
 {
-    public class DescentralizedLeadership : ReligiousLeadership
+    public abstract class DescentralizedLeadership : ReligiousLeadership
     {
 
         private List<Hero> leaders;
@@ -20,14 +20,6 @@ namespace BannerKings.Managers.Institutions.Religions
             this.religion = religion;
         }
 
-        public override void DecideNewLeader()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override Hero GetLeader()
-        {
-            throw new NotImplementedException();
-        }
+        public abstract List<Clergyman> GetLeaders();
     }
 }
