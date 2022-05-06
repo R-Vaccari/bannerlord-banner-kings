@@ -60,14 +60,18 @@
 									
 									<EncyclopediaDivider MarginTop="50" Parameter.Title="@DoctrinesText" Parameter.ItemList="..\DoctrinesGrid"/>
 							  
-									<GridWidget Id="DoctrinesGrid" DataSource="{Doctrines}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" MarginRight="100" MarginLeft="100" HorizontalAlignment="Center" SuggestedHeight="350" DefaultCellWidth="100" DefaultCellHeight="120" ColumnCount="4" MarginTop="10" >
+									<GridWidget Id="DoctrinesGrid" DataSource="{Doctrines}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" MarginRight="100" MarginLeft="100" HorizontalAlignment="Center" DefaultCellWidth="350" DefaultCellHeight="120" ColumnCount="2" MarginTop="10" >
 									  <ItemTemplate>
-										<ListPanel HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" WidthSizePolicy="CoverChildren"  StackLayout.LayoutMethod="VerticalBottomToTop">
+										<Widget HorizontalAlignment="Center" HeightSizePolicy="StretchToParent">
 										  <Children>
-											<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" Brush="Clan.Leader.Text"  Brush.FontSize="22" Text="@Name" MarginBottom="15"/>
-											<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" Brush="Clan.Leader.Text"  Brush.FontSize="14" Text="@Effects" />
+										    <ListPanel HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" WidthSizePolicy="Fixed" SuggestedWidth="350" StackLayout.LayoutMethod="VerticalBottomToTop">
+											  <Children>
+												<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" Brush="Clan.Leader.Text"  Brush.FontSize="30" Text="@Name" MarginBottom="15"/>
+												<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" Brush="Clan.Leader.Text"  Brush.FontSize="20" Text="@Effects" />
+											  </Children>
+											</ListPanel>
 										  </Children>
-									    </ListPanel>
+										</Widget>
 									  </ItemTemplate>
 									</GridWidget>
 									

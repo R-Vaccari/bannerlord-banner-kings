@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.Core;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
@@ -195,16 +196,18 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
             return text;
         }
 
-        public override string GetId() => "asera";
+        public override string GetId() => "amra";
 
         public override int GetIdealRank(Settlement settlement)
         {
-            if (settlement.IsTown)
-                return 3;
-            if (settlement.IsCastle)
-                return 2;
+            if (settlement.IsVillage)
+            {
+                if (MBRandom.RandomInt(1, 100) < 50)
+                    return 2;
+                return 1;
+            }
 
-            return 1;
+            return 0;
         }
 
         public override List<Divinity> GetMainDivinities()

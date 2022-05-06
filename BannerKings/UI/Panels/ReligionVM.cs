@@ -4,7 +4,6 @@ using BannerKings.Populations;
 using BannerKings.UI.Items;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.ViewModelCollection.Encyclopedia.EncyclopediaItems;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
@@ -16,7 +15,7 @@ namespace BannerKings.UI.Panels
 		private MBBindingList<ReligionMemberVM> clergymen;
 		private MBBindingList<ReligionMemberVM> faithful;
 		private MBBindingList<BKTraitItemVM> virtues;
-		private MBBindingList<Doctrine> doctrines;
+		private MBBindingList<DoctrineVM> doctrines;
 		private Religion religion;
 
 		public ReligionVM(PopulationData data) : base(data, true)
@@ -26,7 +25,7 @@ namespace BannerKings.UI.Panels
 			Clergymen = new MBBindingList<ReligionMemberVM>();
 			Faithful = new MBBindingList<ReligionMemberVM>();
 			Virtues = new MBBindingList<BKTraitItemVM>();
-			
+			Doctrines = new MBBindingList<DoctrineVM>();
 		}
 
         public override void RefreshValues()
@@ -46,7 +45,7 @@ namespace BannerKings.UI.Panels
 				Virtues.Add(new BKTraitItemVM(pair.Key, pair.Value));
 
 			foreach (string docString in religion.Doctrines)
-				doctrines.Add(DefaultDoctrines.Instance.GetById(docString));
+				doctrines.Add(new DoctrineVM(DefaultDoctrines.Instance.GetById(docString)));
 
 		}
 
@@ -61,6 +60,7 @@ namespace BannerKings.UI.Panels
 
 		[DataSourceProperty]
 		public string VirtuesText => new TextObject("{=!}Virtues").ToString();
+
 		[DataSourceProperty]
 		public string DoctrinesText => new TextObject("{=!}Doctrines").ToString();
 
@@ -92,7 +92,7 @@ namespace BannerKings.UI.Panels
 		}
 
 		[DataSourceProperty]
-		public MBBindingList<Doctrine> Doctrines
+		public MBBindingList<DoctrineVM> Doctrines
 		{
 			get => doctrines;
 			set

@@ -34,8 +34,9 @@ namespace BannerKings.Behaviours
 
         private void OnSettlementEntered(MobileParty party, Settlement target, Hero hero)
         {
-            if (hero != Hero.MainHero && target.StringId != "town_A1" || target.Town == null ||
-                BannerKingsConfig.Instance.PopulationManager == null || !BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(target)) return;
+            if (hero != Hero.MainHero || target.Town == null ||
+                BannerKingsConfig.Instance.PopulationManager == null || !BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(target)) 
+                return;
 
             ReligionData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(target).ReligionData;
             if (data == null || data.Clergyman == null) return;

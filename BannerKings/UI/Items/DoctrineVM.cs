@@ -3,7 +3,7 @@ using TaleWorlds.Library;
 
 namespace BannerKings.UI.Items
 {
-    public class DoctrineVM
+    public class DoctrineVM : ViewModel
     {
         private Doctrine doctrine;
 

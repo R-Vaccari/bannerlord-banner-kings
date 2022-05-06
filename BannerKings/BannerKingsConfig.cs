@@ -2,6 +2,7 @@
 using BannerKings.Managers.Court;
 using BannerKings.Managers.Decisions;
 using BannerKings.Managers.Institutions.Religions;
+using BannerKings.Managers.Institutions.Religions.Doctrines;
 using BannerKings.Managers.Institutions.Religions.Faiths;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Populations.Villages;
@@ -33,6 +34,7 @@ namespace BannerKings
             DefaultVillageBuildings.Instance.Init();
             DefaultDivinities.Instance.Initialize();
             DefaultFaiths.Instance.Initialize();
+            DefaultDoctrines.Instance.Initialize();
             PopulationManager = new PopulationManager(new Dictionary<Settlement, PopulationData>(), new List<MobileParty>());
             PopulationManager.ReInitBuildings();
             PolicyManager = new PolicyManager(new Dictionary<Settlement, List<BannerKingsDecision>>(), new Dictionary<Settlement,
@@ -48,6 +50,7 @@ namespace BannerKings
             DefaultVillageBuildings.Instance.Init();
             DefaultDivinities.Instance.Initialize();
             DefaultFaiths.Instance.Initialize();
+            DefaultDoctrines.Instance.Initialize();
             PopulationManager = populationManager;
             PopulationManager.ReInitBuildings();
             PolicyManager = policyManager;

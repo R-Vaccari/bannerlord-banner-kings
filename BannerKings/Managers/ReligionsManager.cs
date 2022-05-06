@@ -37,13 +37,16 @@ namespace BannerKings.Managers
                 new List<string>() { "druidism", "animism" });
 
             Religions.Add(aseraiReligion, new List<Hero>());
+            Religions.Add(battaniaReligion, new List<Hero>());
+            InitializeFaithfulHeroes(aseraiReligion, aserai);
             InitializeFaithfulHeroes(aseraiReligion, aserai);
         }
 
         public void InitializeFaithfulHeroes(Religion rel, CultureObject culture)
         {
             foreach (Hero hero in Hero.AllAliveHeroes)
-                if (!hero.IsDisabled && (hero.IsNoble || hero.IsNotable || hero.IsWanderer) && hero.Culture == culture)
+                if (!hero.IsDisabled && (hero.IsNoble || hero.IsNotable || hero.IsWanderer) && hero.Culture == culture
+                    && !hero.IsChild)
                     Religions[rel].Add(hero);
         }
 
@@ -85,8 +88,9 @@ namespace BannerKings.Managers
 
         public Religion GetIdealReligion(CultureObject culture)
         {
-            if (this.Cultures.ContainsKey(culture))
-                return this.Cultures[culture];
+            foreach (Religion rel in Religions.Keys.ToList())
+                if (rel.MainCulture == culture)
+                    return rel;
 
             return null;
         }
@@ -101,7 +105,7 @@ namespace BannerKings.Managers
 
         public bool IsPreacher(Hero hero)
         {
-            foreach (Religion rel in this.Religions.Keys.ToList())
+            foreach (Religion rel in Religions.Keys.ToList())
                 foreach (Clergyman clergy in rel.Clergy.Values.ToList())
                     if (clergy.Hero == hero)
                         return true;
