@@ -29,7 +29,7 @@ namespace BannerKings.Models.BKModels
                     {
                         int target = traits[trait] ? 1 : -1;
                         if (target > 0) result.Add(traitLevel * (traitLevel > 0 ? 0.2f : -0.2f), trait.Name);
-                        else result.Add(traitLevel * (traitLevel < 0 ? 0.2f : -0.2f), trait.Name);
+                        else result.Add(traitLevel * (-traitLevel < 0 ? 0.2f : -0.2f), trait.Name);
                     }
                 }
 

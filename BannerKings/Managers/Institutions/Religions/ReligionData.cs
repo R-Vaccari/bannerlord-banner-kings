@@ -1,5 +1,7 @@
-﻿using BannerKings.Populations;
+﻿using BannerKings.Models.BKModels;
+using BannerKings.Populations;
 using TaleWorlds.CampaignSystem;
+using System.Linq;
 
 namespace BannerKings.Managers.Institutions.Religions
 {
@@ -31,6 +33,10 @@ namespace BannerKings.Managers.Institutions.Religions
         {
             if (clergyman == null)
                 clergyman = religion.GenerateClergyman(settlement);
+
+            BKPietyModel model = ((BKPietyModel)BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(BKPietyModel)));
+            foreach (Hero hero in BannerKingsConfig.Instance.ReligionsManager.GetFaithfulHeroes(religion))
+                BannerKingsConfig.Instance.ReligionsManager.AddPiety(religion, hero, model.CalculateEffect(hero).ResultNumber);
         }
     }
 }

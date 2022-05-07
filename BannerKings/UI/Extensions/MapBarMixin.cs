@@ -23,6 +23,7 @@ namespace BannerKings.UI.Extensions
 			if (BannerKingsConfig.Instance.ReligionsManager == null) return;
 
 			Religion rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(Hero.MainHero);
+			Piety = (int)BannerKingsConfig.Instance.ReligionsManager.GetPiety(rel, Hero.MainHero);
 			pietyHint = new BasicTooltipViewModel(() => UIHelper.GetPietyTooltip(rel, Hero.MainHero, Piety));
 			PietyWithAbbrText = CampaignUIHelper.GetAbbreviatedValueTextFromValue(Piety);
 			//if (rel == null) return;

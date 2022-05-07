@@ -1,20 +1,23 @@
 ﻿using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Institutions.Religions.Faiths;
 using BannerKings.Managers.Institutions.Religions.Leaderships;
+using BannerKings.Models;
+using BannerKings.Models.BKModels;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.Library;
 
 namespace BannerKings.Managers
 {
     public class ReligionsManager
     {
-        private Dictionary<Religion, List<Hero>> Religions { get; set; }
+        private Dictionary<Religion, Dictionary<Hero, float>> Religions { get; set; }
         private Dictionary<CultureObject, Religion> Cultures { get; set; }
 
         public ReligionsManager()
         {
-            this.Religions = new Dictionary<Religion, List<Hero>>();
+            this.Religions = new Dictionary<Religion, Dictionary<Hero, float>>();
             this.Cultures = new Dictionary<CultureObject, Religion>();
             InitializeReligions();
         }
@@ -36,8 +39,8 @@ namespace BannerKings.Managers
                 new List<CultureObject> { battania },
                 new List<string>() { "druidism", "animism" });
 
-            Religions.Add(aseraiReligion, new List<Hero>());
-            Religions.Add(battaniaReligion, new List<Hero>());
+            Religions.Add(aseraiReligion, new Dictionary<Hero, float>());
+            Religions.Add(battaniaReligion, new Dictionary<Hero, float>());
             InitializeFaithfulHeroes(aseraiReligion, aserai);
             InitializeFaithfulHeroes(battaniaReligion, battania);
         }
@@ -47,7 +50,7 @@ namespace BannerKings.Managers
             foreach (Hero hero in Hero.AllAliveHeroes)
                 if (!hero.IsDisabled && (hero.IsNoble || hero.IsNotable || hero.IsWanderer) && hero.Culture == culture
                     && !hero.IsChild)
-                    Religions[rel].Add(hero);
+                    Religions[rel].Add(hero, 50f);
         }
 
         public void InitializePresets()
@@ -74,13 +77,13 @@ namespace BannerKings.Managers
             return religions;
         }
 
-        public Religion GetHeroReligion(Hero hero) => Religions.FirstOrDefault(pair => pair.Value.Contains(hero)).Key;
+        public Religion GetHeroReligion(Hero hero) => Religions.FirstOrDefault(pair => pair.Value.ContainsKey(hero)).Key;
 
         public List<Hero> GetFaithfulHeroes(Religion religion)
         {
             List<Hero> heroes = new List<Hero>();
             if (Religions.ContainsKey(religion))
-                foreach (Hero hero in Religions[religion])
+                foreach (Hero hero in Religions[religion].Keys.ToList())
                     heroes.Add(hero);
 
             return heroes;
@@ -97,10 +100,27 @@ namespace BannerKings.Managers
 
         public bool IsReligionMember(Hero hero, Religion religion)
         {
-            if (this.Religions.ContainsKey(religion))
-                if (this.Religions[religion].Contains(hero))
+            if (Religions.ContainsKey(religion))
+                if (Religions[religion].ContainsKey(hero))
                     return true;
             return false;
+        }
+
+        public void AddPiety(Religion rel, Hero hero, float piety)
+        {
+            if (rel == null || hero == null) return;
+            if (Religions[rel].ContainsKey(hero))
+                Religions[rel][hero] += piety;
+        }
+
+        public float GetPiety(Religion rel, Hero hero)
+        {
+            if (rel == null || hero == null) return 0f;
+            float piety = 0f;
+            if (Religions[rel].ContainsKey(hero))
+                piety = Religions[rel][hero];
+
+            return MBMath.ClampFloat(piety, -1000f, 1000f);
         }
 
         public bool IsPreacher(Hero hero)
