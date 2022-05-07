@@ -1,4 +1,5 @@
 ﻿using BannerKings.Managers.Court;
+using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Institutions.Religions.Faiths;
 using BannerKings.Managers.Titles;
 using BannerKings.Models.BKModels;
@@ -37,6 +38,21 @@ namespace BannerKings.UI
 			else text = new TextObject("{=!}Polytheism");
 
 			return text;
+		}
+
+		public static List<TooltipProperty> GetPietyTooltip(Religion rel, Hero hero, int piety)
+		{
+			BKPietyModel model = (BKPietyModel)BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(BKPietyModel));
+			List<TooltipProperty> tooltipForAccumulatingProperty = CampaignUIHelper.GetTooltipForAccumulatingProperty(new TextObject("Piety").ToString(), piety, model.CalculateEffect(hero));
+
+			TextObject relText = null;
+			if (rel == null)
+				relText = new TextObject("{=!}You do not currently adhere to any faith.");
+			else relText = new TextObject("{=!}You are following the {FAITH} faith.")
+					.SetTextVariable("FAITH", rel.Faith.GetFaithName());
+			tooltipForAccumulatingProperty.Add(new TooltipProperty("", relText.ToString(), 0, false, TooltipProperty.TooltipPropertyFlags.None));
+			
+			return tooltipForAccumulatingProperty;
 		}
 
 		public static void ShowSlaveTransferScreen()

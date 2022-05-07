@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Institutions.Religions.Faiths
@@ -26,6 +27,8 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
             this.presets = presets;
         }
 
+        public MBReadOnlyDictionary<TraitObject, bool> Traits => traits.GetReadOnlyDictionary();
+
         public void AddStance(Faith faith, FaithStance stance)
         {
             if (faith == this) return;
@@ -48,8 +51,6 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
 
             return null;
         }
-
-        public Dictionary<TraitObject, bool> Traits => traits;
         public FaithGroup FaithGroup => faithGroup;
         public Divinity MainGod => mainGod;
 

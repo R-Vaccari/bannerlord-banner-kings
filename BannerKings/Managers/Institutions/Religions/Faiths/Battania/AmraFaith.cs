@@ -44,13 +44,10 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
         public override TextObject GetClergyGreeting(int rank)
         {
             TextObject text = null;
-            if (rank == 4)
-                text = new TextObject("{=!}Know that I tolerate your presence on behalf of my blooded siblings in the Banu, and though you may desire to coax me with honeyed words or threats of coercion - know also that I am beyond your grasp. I am the Murshid of [Placename], and my word guides the Sultanate by the reading of the Code of Asera. Speak truthfully and with no deceit, lest I denounce your lineage and see them flayed to the last.");
-            else if (rank == 3)
-                text = new TextObject("{=!}Peace be upon you, outlander. May you walk with the safety of Asera while you dwell in the company of his sons - and while you walk the lands where his Code is law. I am an Imam of the Aserai, and I bid you hospitality expecting it fully in kind. Is there something I may do for our mutual good?");
-            else if (rank == 2)
-                text = new TextObject("{=!}Peace be to you, outlander. You do not carry yourself as a Son of Asera, so I shall forgive your ignorance - provided you come here in search of wisdom. I am an Akhund, a scholar of the Code of Asera, the guiding truth of the southlands. If you come here with a clouded heart, there is little I can offer you.");
-            else text = new TextObject("{=!}Peace be to you, outlander. May you be welcomed in the lands of the Sons of Asera. May you enter here in kindness, but know that we do court the ignorant.");
+            if (rank == 2)
+                text = new TextObject("{=!}Oh aye? What brings you before this Brithem judge? Lost your favorite cattle, perhaps scrape your knee on your way up the Uchalion? If you come seeking satisfaction, you’re better off finding it in a Vlandian brothel or in some imperial parlor succoring down milk-of-the-poppy. My judgment is not meant to bring you anything you couldn’t take for yourself, and my law-speaking is for the Battanian people not whatever matter of wild hound you were born to be.");
+            else text = new TextObject("{=!}Am I to have words thee, {NAME}? And if so, are they to be kind ones? Do you come to me in the hopes that I might slather a bride in mud so her wiles are not driven to hysteria by the invisible probings of the fair folk? Mayhaps you heard tales of the Brandui like myself and how we will put a gimlet eye on rivals for a price - oh aye, make their loins shrivel up like a gooseberry and produce only half-wit sons? You best speak your part quick, I’ve no time for the fool courting of foreign folk.You best watch your words too, there’s nary a man in this land who wouldn’t stab you in the gizzard to win my approval.")
+                    .SetTextVariable("NAME", Hero.MainHero.Name);
 
             return text;
         }
@@ -58,13 +55,9 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
         public override TextObject GetClergyGreetingInducted(int rank)
         {
             TextObject text = null;
-            if (rank == 4)
-                text = new TextObject("{=!}Blessings of paradise and the Heavens upon you, blooded sibling. You come before the Murshid of [Placename], a guide to the Sultanate and of kin to the Banu. Surely you know that I am a busy man who must contend with matters of state whilst consulting the Code of Asera. What is it that I may do for you while I have this single moment to offer?");
-            else if (rank == 3)
-                text = new TextObject("{=!}Mashaera, blood of my blood. It is good to see you are alive and that you are in good health; for the world is rife with conflict beyond our brotherhood and little is to be held as certain. Are you here on pilgrimage or duty, in good tidings or ill news? How may this humble Imam be of service to his sibling?");
-            else if (rank == 2)
-                text = new TextObject("{=!}Peace be upon you, my kin. Have you come to study the Code of Asera? I shall grant you what wisdom I have gleaned in my long hours of study, but as your brother I must tell you that I find myself more ignorant the more I realize the breadth of what there is still yet to learn.");
-            else text = new TextObject("{=!}Peace be upon you and may you be favored by Asera, my kin. What may this humble faqir do for you on this glorious day?");
+            if (rank == 2)
+                text = new TextObject("{=!}Croseo, kinsfolk. How does this season upon the Uchalion greet ye? Have you drunk of the Llyn Tywal lately? Bloodied the noses of Vlandian dogsbodies and Sturgian wastrels? You stand here upon our blessed soil and have fool’s pride enough to come upon your Brithem brethren and act his equal - so I must assume you make your ancestors proud or you’ve stones enough to stand in my eyeline and bluff!");
+            else text = new TextObject("{=!}Croseo, you child of the Uchalion. Have you looked upon the Morcomb in recent days? Have you glutted yourself on the fish of the River Fiur? Bashed the teeth in of any southern fool who’d claim themselves emperor of all they survey? You stand before me on blessed soil and you speak to the Bandrui as though you were a Brithem or mormaer lordling - so I assume you’ve cause to bid for my counsel. Lest ye be a fool, though to be a fool can be a blessed thing.Fool’s have the chance to leave their foolishness behind, after all.");
 
             return text;
         }
@@ -139,14 +132,9 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
         public override TextObject GetClergyPreachingAnswer(int rank)
         {
             TextObject text = null;
-            if (rank == 4)
-                text = new TextObject("{=!}I offer my sage counsel to the kin of the Banu, to guide them upon the paths walked by Asera of old. I grant them the means of pilgrimage - for only when one knows the deepest wisdom and learned truths of the Code of Asera may they truly strive for self-improvement.");
-            else if (rank == 3)
-                text = new TextObject("{=!}I preach the glory of Asera, our progenitor of legend. I preach lessons learned from the treasury of wisdom he has granted us as his children. I preach that the Aserai shall reign in happiness and in sorrow, so long as we remain as brothers within the Banu confederacies.");
-            else if (rank == 2)
-                text = new TextObject("{=!}I preach that which is hidden in poetics of Nahasi dialects and in the riddles of converts stolen away by Darshi slavers in generations past. I seek to unravel the mysteries of all that Asera asked of his sons - to truly understand charity, devotion, and the cost of peace even in these times of eschatological turmoil.");
-            else text = new TextObject("{=!}I preach the Code of Asera, the backbone of our society, the soul of our nation. For we are all Sons of Asera in these lands, and it is through the patriarch’s example that we go forth in honor and bring glory to his legacy.");
-
+            if (rank == 2)
+                text = new TextObject("{=!}My judgment and discernment is a matter of the Amra Ollamh, for I am a teacher who speaks of the great cycles of our people - from the giant’s seat of the lower Rhennod to the riverlands of the Ircara! ‘Tis true, many a land has been lost to fool imperials and bastard-born Nordlanders playing at Sturgians; but a Battanian heart beats ever true. I shepherd our tales, our traditions; ensure the young know how they’re meant to act and that the old don’t forget their place.");
+            else text = new TextObject("{=!}I carry the soul of our people with my words and I weave our spirit into our actions; for I am a Bandrui and this is my purpose. Be they a child born upon the Ailta Druin or left to a cruel winter’s chill on the Rock of Glanys, it is my voice that guides the next generation of our people to glory! ‘Tis my voice more than any other that tells the tale of our finest hunters, of clever lords in wolfskin mien, or highland rebels cutting the gristle from the gullets of imperial soft bodies. ‘Tis sad, the state of the Uchalion and her people.In elder days my circle would dwell in sacred groves and offer counsel to heroes and high kings - now we languish in walls of stone, beset by foreign hedge knights, Sturgian raiders, and whatever mess the Empire sees fit to view itself as.");
 
             return text;
         }
@@ -154,15 +142,9 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
         public override TextObject GetClergyPreachingAnswerLast(int rank)
         {
             TextObject text = null;
-
-            if (rank == 4)
-                text = new TextObject("{=!}I ensure they remember that they are as siblings to the lowliest beggar or the most jackal-thirsting Jawwal marauder; that they must always express love towards that which is good and revile the roguery that leads the soul towards wicked deeds.");
-            else if (rank == 3)
-                text = new TextObject("{=!}I preach that our future shall be as luminous as the sun and as enduring as the Nahasa, so long as we remain united, so long as we are charitable, so long as we welcome even the Jawwal to embrace the Code as their own guiding path in life!");
-            else if (rank == 2)
-                text = new TextObject("{=!}I preach that we should question the nature of goodness and of wisdom; for a good man would not claim to be wise, and a wise man not claim to be good.");
-            else text = new TextObject("{=!}We are those who adhere to tradition but know also the struggle to move beyond the belligerence of the past - we are no Jawwal, after all.");
-
+            if (rank == 2)
+                text = new TextObject("{=!}You might hear tell that our lot are charlatans bickering on about river nymphs and sea dragons - but allegory and metaphor aren’t words belonging only to toga-shriven scribes. And there’s more to this world than you or I have the Sight to simply dismiss after all. But to answer your question, and to say it right, I’ll say just this: I am that which judges a true Battanian of their worth.To see that they make mischief and might alike enough to please their grandfather’s grandfathers in the heavenly hereafter.Ne’er are there more an Uchalion born Battanian than those who follow the creed of the Amra Ollamh.");
+            else text = new TextObject("{=!}A cruel humiliation, to be one who touches upon the mysterious and grants counsel now reduced to the stuff of gossiping washerwomen and charlatan knaves in search of river nymphs to bed and lindworms to slay. Allegory and metaphor lost to those who view our lands as savage and backward as their own prejudices. But I’ll speak true and quick then, for you’ve not come for my screed. I am that which guides a Battanian to know their truth.To see their heart beats in rhythm with the cycles of creation, that they know might and mischief enough to please the unseen and to court the joy of their ancestors long displaced.Ne’er are there more an Uchalion born Battanian than those who are guided by the Amra Ollamh.");
 
             return text;
         }
@@ -170,13 +152,9 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
         public override TextObject GetClergyProveFaith(int rank)
         {
             TextObject text = null;
-            if (rank == 4)
-                text = new TextObject("{=!}You come before me, like a wriggling eel slithering to a master archer and asking to learn to wield the bow. I shall speak plainly to you, for my time is short and my station vaunted. When you see that which is evil, you must change it by whatever force you can - if not your hands, then your heart, if not your heart, then your words.");
-            else if (rank == 3)
-                text = new TextObject("{=!}A common question among the devout and misguided alike; for how can one truly be assured they walk the righteous path? We know not until the end comes and we are weighed against the deeds of our progenitor; but I shall guide you with what wisdom I can.");
-            else if (rank == 2)
-                text = new TextObject("{=!}Consider your actions and why it is you perform them. If you are of influence, do you wield this power for the good of your siblings or do you take it for your own aggrandizement? When your people starve, do you feast? Do you turn to the sword? Is blood spilled for bread gained a worthy trade?");
-            else text = new TextObject("{=!}It does my heart kindly to hear you wish to prove your faith. We live in an age of lip service by most - though I hold no blame to the common man for this; they show their adherence and their faith in their daily labors. If you wish to prove your faith and your adherence to doctrine, you must be a soul who knows peace and who adheres to hierarchy.");
+            if (rank == 2)
+                text = new TextObject("{=!}‘Tis both no simple thing and a thing that couldn’t be simpler; not that I wish to speak in riddles. Save that nonsense for the draoithe. If you want to prove your mettle, you must simply be a Battanian. Of course, to be Battanian is a tarnished thing in our current state - too many folk wrongly think they know what it means. If you wish to prove yourself wise in the Amra Ollamh, you must make yourself known for your cunning and your guile.");
+            else text = new TextObject("{=!}Supposing you’re seeking a fate higher than a bóaire ‘pon the highlands, there are ways and means you could show yourself a true Battanian. First matter of that, of course, is to be a Battanian - be ye tarnished or true by the many foes which nip upon our borderlands with the ravening greed of thieving children. Assuming you can manage to be born right of our blood, ‘tis a simple task to follow. Gather yourself a throng of right - minded Battanians and make yours a name to be sung and feared.");
 
 
             return text;
@@ -185,13 +163,9 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
         public override TextObject GetClergyProveFaithLast(int rank)
         {
             TextObject text = null;
-            if (rank == 4)
-                text = new TextObject("{=!}Seek to improve the lives of even the least of your people and you shall make kings of them all; and know that should you find yourself poorer and your servants richer that you are a better sibling than many of your blood. You can only hope then that they shall follow your example, follow the Code of Asera, and spread this prosperity to all.");
-            else if (rank == 3)
-                text = new TextObject("{=!}Foremost in my viewing, as a man of the cities of our lands; is the act of almsgiving. We are as keepers to our brothers, to our sisters and siblings; and only a cruel soul would let the blood of their blood starve.You are only as pure as the lowest among us, and thus you purify yourself of sin when you seek to uplift the whole of the Aserai.");
-            else if (rank == 2)
-                text = new TextObject("{=!}If you seek to prove your faith, you must internalize the Code of Asera - you must learn and accept that you are but one of his Sons - and you must seek to bring forth a better world for your children to inherit. Prove your faith by making that world. Time will tell if the image in your mind is truly an embodiment of the Code’s doctrines or merely self-indulgence.");
-            else text = new TextObject("{=!}Release your prisoners if you no longer war with their masters; or give them to your master for they shall know better. Choose peace when your enemies desire it; let them lick their wounds and if they strike you again, punish them with biting steel and the shame of their recidivism.");
+            if (rank == 2)
+                text = new TextObject("{=!}Make a name for yourself which is held in the fear of landed lords and in the whimsical romance of young dreamers. Raid cattle from those without the mettle to keep them safe, and make lords both Battanian and foreign fear your blade but know your charity. You’ll prove your faith by shepherding tomorrow for the Battanian people; with cattle, with iron, and were you of a more legendary portent - by stealing back what others have stolen from us!");
+            else text = new TextObject("{=!}Don yourself the wolfskins if you’ve the mind for tradition; take that which can be yours by right of might, honor no landed claim - Battanians and beasts alike may graze where they deign to. Bring iron to the forges and the folk of Battania so youngbloods might dream of blades to someday hold in more than their errant wishes! And were you truly to be guided by the Amra Ollamh, you’d cast the Vlandian, Sturgian, and imperial dogs from our land.Preferably off the side of a cliff, but none shall be picky so long as they’re made to flee in fear of your wrath.");
 
             return text;
         }

@@ -27,14 +27,13 @@ using static TaleWorlds.CampaignSystem.SandBox.Issues.CaravanAmbushIssueBehavior
 using static TaleWorlds.CampaignSystem.SandBox.Issues.LandLordNeedsManualLaborersIssueBehavior;
 using static TaleWorlds.CampaignSystem.Election.KingSelectionKingdomDecision;
 using static TaleWorlds.CampaignSystem.SandBox.Issues.VillageNeedsToolsIssueBehavior;
+using Bannerlord.UIExtenderEx;
 
 namespace BannerKings
 {
     public class Main : MBSubModuleBase
     {
-        public static Harmony patcher = new Harmony("Patcher");
-        //private readonly UIExtender xtender = new UIExtender("BannerKings");
-
+        private static readonly UIExtender xtender = new UIExtender(typeof(Main).Namespace);
         protected override void OnGameStart(Game game, IGameStarter gameStarter)
         {
             if (game.GameType is Campaign)
@@ -76,15 +75,15 @@ namespace BannerKings
                 campaignStarter.AddModel(new BKRansomModel());
                 campaignStarter.AddModel(new BKClanTierModel());
             }
-
-            //xtender.Register(typeof(Main).Assembly);
-            //xtender.Enable();
         }
 
         protected override void OnSubModuleLoad()
         {
-            new Harmony("BannerKings").PatchAll();
+            
             base.OnSubModuleLoad();
+            new Harmony("BannerKings").PatchAll();
+            xtender.Register(typeof(Main).Assembly);
+            xtender.Enable();
         }
     }
 

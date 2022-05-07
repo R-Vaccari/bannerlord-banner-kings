@@ -72,6 +72,7 @@ namespace BannerKings
             Models.Add(new BKGrowthModel());
             Models.Add(new BKEconomyModel());
             Models.Add(new BKCaravanAttractionModel());
+            Models.Add(new BKPietyModel());
         }
 
         public static BannerKingsConfig Instance => ConfigHolder.CONFIG;
