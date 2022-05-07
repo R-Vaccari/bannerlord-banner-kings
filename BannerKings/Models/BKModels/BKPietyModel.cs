@@ -2,8 +2,8 @@
 using System;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.Core;
 using TaleWorlds.Library;
-using TaleWorlds.Localization;
 
 namespace BannerKings.Models.BKModels
 {
@@ -33,7 +33,7 @@ namespace BannerKings.Models.BKModels
                     }
                 }
 
-                result.Add(0.1f, new TextObject("{=!}Faithful"));
+                if (rel.FavoredCultures.Contains(hero.Culture)) result.Add(0.1f, GameTexts.FindText("str_culture"));
             }
 
             return result;

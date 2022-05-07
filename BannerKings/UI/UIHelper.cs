@@ -47,8 +47,8 @@ namespace BannerKings.UI
 
 			TextObject relText = null;
 			if (rel == null)
-				relText = new TextObject("{=!}You do not currently adhere to any faith.");
-			else relText = new TextObject("{=!}You are following the {FAITH} faith.")
+				relText = new TextObject("{=!}You do not currently adhere to any faith");
+			else relText = new TextObject("{=!}You are following the {FAITH} faith")
 					.SetTextVariable("FAITH", rel.Faith.GetFaithName());
 			tooltipForAccumulatingProperty.Add(new TooltipProperty("", relText.ToString(), 0, false, TooltipProperty.TooltipPropertyFlags.None));
 			
