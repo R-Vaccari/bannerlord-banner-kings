@@ -155,6 +155,24 @@ namespace BannerKings
                 }
             }
 
+            [HarmonyPatch(typeof(TownMarketData))]
+            class TownItemPricePatch
+            {
+
+                [HarmonyPrefix]
+                [HarmonyPatch("GetPrice", new Type[] { typeof(EquipmentElement), typeof(MobileParty), typeof(bool), typeof(PartyBase) })]
+                static bool Prefix2(TownMarketData __instance, ref int __result, EquipmentElement itemRosterElement, MobileParty tradingParty = null, bool isSelling = false, PartyBase merchantParty = null)
+                {
+                    if (itemRosterElement.Item == null) __result = 0;
+                    else
+                    {
+                        ItemData categoryData = __instance.GetCategoryData(itemRosterElement.Item.GetItemCategory());
+                        __result = Campaign.Current.Models.TradeItemPriceFactorModel.GetPrice(itemRosterElement, tradingParty, merchantParty, isSelling, (float)categoryData.InStoreValue, categoryData.Supply, categoryData.Demand);
+                    }
+                    return false;
+                }
+            }
+
 
             [HarmonyPatch(typeof(Hero), "CanHaveQuestsOrIssues")]
             class CanHaveQuestsOrIssuesPatch
