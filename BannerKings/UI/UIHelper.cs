@@ -1,4 +1,5 @@
 ﻿using BannerKings.Managers.Court;
+using BannerKings.Managers.Institutions.Religions.Faiths;
 using BannerKings.Managers.Titles;
 using BannerKings.Models.BKModels;
 using BannerKings.Populations;
@@ -18,6 +19,26 @@ namespace BannerKings.UI
 {
     public static class UIHelper
     {
+		public static TextObject GetFaithTypeName(Faith faith)
+        {
+			TextObject text = null;
+			if (faith is MonotheisticFaith)
+				text = new TextObject("{=!}Monotheism");
+			else text = new TextObject("{=!}Polytheism");
+
+			return text;
+        }
+
+		public static TextObject GetFaithTypeDescription(Faith faith)
+		{
+			TextObject text = null;
+			if (faith is MonotheisticFaith)
+				text = new TextObject("{=!}Monotheism");
+			else text = new TextObject("{=!}Polytheism");
+
+			return text;
+		}
+
 		public static void ShowSlaveTransferScreen()
         {
 			TroopRoster leftMemberRoster = TroopRoster.CreateDummyTroopRoster();
@@ -339,6 +360,4 @@ namespace BannerKings.UI
 			properties.Add(new TooltipProperty("", string.Empty, 0, onlyShowOnExtend, TooltipProperty.TooltipPropertyFlags.DefaultSeperator));
 		}
 	}
-
-	
 }

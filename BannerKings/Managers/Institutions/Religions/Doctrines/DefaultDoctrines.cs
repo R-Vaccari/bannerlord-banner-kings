@@ -12,7 +12,7 @@ namespace BannerKings.Managers.Institutions.Religions.Doctrines
             public static DefaultDoctrines CONFIG = new DefaultDoctrines();
         }
 
-        private Doctrine druidism, animism;
+        private Doctrine druidism, animism, legalism, communalFaith, literalism, pastoralism, pacifism;
 
         public Doctrine Druidism => druidism;
         public Doctrine Animism => animism;
@@ -26,6 +26,11 @@ namespace BannerKings.Managers.Institutions.Religions.Doctrines
 
             animism = new Doctrine("animism", new TextObject("{=!}Animism"), 
                 new TextObject("{=!}Spirits inhabit everywhere in this world, hidden in plain sight. Under the earth, flowing along rivers or bound to animals or trees, spirits can be anywhere. It is the duty of the faithful to not harm the balance of the material world with the spiritual world, which are often one and the same."),
+                new TextObject("{=!}Virtuous lords have increased battle morale"),
+                new List<string>());
+
+            legalism = new Doctrine("legalism", new TextObject("{=!}Legalism"),
+                new TextObject("{=!}Without laws, man is but beast. The wisdom of previous generations is preserved through law, which must be followed to the letter."),
                 new TextObject("{=!}Virtuous lords have increased battle morale"),
                 new List<string>());
         }

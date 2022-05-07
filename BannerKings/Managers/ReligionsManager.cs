@@ -39,7 +39,7 @@ namespace BannerKings.Managers
             Religions.Add(aseraiReligion, new List<Hero>());
             Religions.Add(battaniaReligion, new List<Hero>());
             InitializeFaithfulHeroes(aseraiReligion, aserai);
-            InitializeFaithfulHeroes(aseraiReligion, aserai);
+            InitializeFaithfulHeroes(battaniaReligion, battania);
         }
 
         public void InitializeFaithfulHeroes(Religion rel, CultureObject culture)

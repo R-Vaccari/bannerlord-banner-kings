@@ -27,6 +27,7 @@ namespace BannerKings.Managers.Institutions.Religions
         }
 
         public CultureObject MainCulture => favoredCultures[0];
+        public ReligiousLeadership Leadership => leadership;
         public Divinity MainGod => faith.MainGod;
         public Faith Faith => faith;
         public MBReadOnlyList<string> Doctrines => doctrineIds.GetReadOnlyList();

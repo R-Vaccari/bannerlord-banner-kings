@@ -15,7 +15,8 @@ namespace BannerKings.UI.Panels
 		private MBBindingList<ReligionMemberVM> clergymen;
 		private MBBindingList<ReligionMemberVM> faithful;
 		private MBBindingList<BKTraitItemVM> virtues;
-		private MBBindingList<DoctrineVM> doctrines;
+		private MBBindingList<ReligionElementVM> doctrines;
+		private MBBindingList<ReligionElementVM> aspects;
 		private Religion religion;
 
 		public ReligionVM(PopulationData data) : base(data, true)
@@ -25,7 +26,8 @@ namespace BannerKings.UI.Panels
 			Clergymen = new MBBindingList<ReligionMemberVM>();
 			Faithful = new MBBindingList<ReligionMemberVM>();
 			Virtues = new MBBindingList<BKTraitItemVM>();
-			Doctrines = new MBBindingList<DoctrineVM>();
+			Doctrines = new MBBindingList<ReligionElementVM>();
+			Aspects = new MBBindingList<ReligionElementVM>();
 		}
 
         public override void RefreshValues()
@@ -34,6 +36,8 @@ namespace BannerKings.UI.Panels
 			Clergymen.Clear();
 			Faithful.Clear();
 			Virtues.Clear();
+			Doctrines.Clear();
+			Aspects.Clear();
 
 			foreach (Clergyman clgm in religion.Clergy.Values)
 				Clergymen.Add(new ReligionMemberVM(clgm, null));
@@ -45,8 +49,15 @@ namespace BannerKings.UI.Panels
 				Virtues.Add(new BKTraitItemVM(pair.Key, pair.Value));
 
 			foreach (string docString in religion.Doctrines)
-				doctrines.Add(new DoctrineVM(DefaultDoctrines.Instance.GetById(docString)));
+            {
+				Doctrine doctrine = DefaultDoctrines.Instance.GetById(docString);
+				if (doctrine != null)
+					Doctrines.Add(new ReligionElementVM(doctrine.Name, doctrine.Effects, doctrine.Description));
+			}
 
+			Aspects.Add(new ReligionElementVM(new TextObject("{=!}Leadership"), religion.Leadership.GetName(), religion.Leadership.GetHint()));
+			Aspects.Add(new ReligionElementVM(new TextObject("{=!}Faith"), UIHelper.GetFaithTypeName(religion.Faith), UIHelper.GetFaithTypeDescription(religion.Faith)));
+			Aspects.Add(new ReligionElementVM(new TextObject("{=!}Culture"), religion.MainCulture.Name, new TextObject("{=!}The main culture associated with this faith.")));
 		}
 
 		[DataSourceProperty]
@@ -63,6 +74,9 @@ namespace BannerKings.UI.Panels
 
 		[DataSourceProperty]
 		public string DoctrinesText => new TextObject("{=!}Doctrines").ToString();
+
+		[DataSourceProperty]
+		public string AspectsText => new TextObject("{=!}Aspects").ToString();
 
 		[DataSourceProperty]
 		public string Name => religion.Faith.GetFaithName().ToString();
@@ -92,7 +106,21 @@ namespace BannerKings.UI.Panels
 		}
 
 		[DataSourceProperty]
-		public MBBindingList<DoctrineVM> Doctrines
+		public MBBindingList<ReligionElementVM> Aspects
+		{
+			get => aspects;
+			set
+			{
+				if (value != aspects)
+				{
+					aspects = value;
+					base.OnPropertyChangedWithValue(value, "Aspects");
+				}
+			}
+		}
+
+		[DataSourceProperty]
+		public MBBindingList<ReligionElementVM> Doctrines
 		{
 			get => doctrines;
 			set
