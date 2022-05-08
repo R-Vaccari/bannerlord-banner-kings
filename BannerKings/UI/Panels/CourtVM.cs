@@ -69,6 +69,7 @@ namespace BannerKings.UI.Panels
 				this.CouncilMemberSelection.Position = newPosition;
 				RefreshValues();
 			}
+			CouncilMemberSelection.ShowOptions();
 		}
 
 		private void SetCouncilMember(Hero member)

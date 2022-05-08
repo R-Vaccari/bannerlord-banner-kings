@@ -88,6 +88,16 @@ namespace BannerKings.Models
 
 		public void CalculateClanExpenseInternal(Clan clan, ref ExplainedNumber result, bool applyWithdrawals)
 		{
+
+			CouncilData data = BannerKingsConfig.Instance.CourtManager.GetCouncil(clan);
+			if (data != null)
+				foreach (CouncilMember position in data.GetOccupiedPositions())
+				{
+					result.Add(-position.DueWage, new TextObject("{=!}Council wage to {NAME}").SetTextVariable("NAME", position.Member.Name));
+					if (applyWithdrawals && !position.Member.IsNoble)
+						position.Member.Gold += position.DueWage;
+				}
+
 			List<FeudalTitle> titles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(clan);
 			if (titles.Count == 0) return;
 
@@ -98,15 +108,6 @@ namespace BannerKings.Models
 			foreach (FeudalTitle title in titles)
 				amount += title.dueTax;
 			result.Add(-amount, new TextObject("{=!}Taxes to {SUZERAIN}").SetTextVariable("SUZERAIN", suzerain.deJure.Name));
-
-			CouncilData data = BannerKingsConfig.Instance.CourtManager.GetCouncil(clan);
-			if (data != null)
-				foreach (CouncilMember position in data.GetOccupiedPositions())
-				{
-					result.Add(-position.DueWage, new TextObject("{=!}Council wage to {NAME}").SetTextVariable("NAME", position.Member.Name));
-					if (applyWithdrawals && !position.Member.IsNoble)
-						position.Member.Gold += position.DueWage;
-				}
 		}
 	}
 }

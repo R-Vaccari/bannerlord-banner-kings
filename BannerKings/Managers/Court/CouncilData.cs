@@ -195,7 +195,7 @@ namespace BannerKings.Managers.Court
             MBReadOnlyList<Hero> members = clan.Heroes;
             if (members != null && members.Count > 0)
                 foreach (Hero member in members)
-                    if (member != this.clan.Leader && member.IsAlive && !heroes.Contains(member))
+                    if (member != this.clan.Leader && member.IsAlive && !member.IsChild && !heroes.Contains(member))
                         heroes.Add(member);
 
             if (BannerKingsConfig.Instance.TitleManager.IsHeroTitleHolder(Owner))
