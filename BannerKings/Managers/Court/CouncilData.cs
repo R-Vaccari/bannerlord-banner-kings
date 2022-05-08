@@ -9,6 +9,7 @@ using BannerKings.Managers.Titles;
 using System;
 using BannerKings.Managers.Institutions.Religions;
 using TaleWorlds.Localization;
+using BannerKings.Managers.Kingdoms.Council;
 
 namespace BannerKings.Managers.Court
 {
@@ -95,10 +96,18 @@ namespace BannerKings.Managers.Court
                     }
 
                 List<CouncilMember> royal = GetIdealRoyalPositions();
-                if (royalMembers.Count != royal.Count)
-                    foreach (CouncilMember position in royal)
-                        if (royalMembers.FirstOrDefault(x => x.Position == position.Position) == null)
-                            royalMembers.Add(position);
+                foreach (CouncilMember position in royal)
+                    if (royalMembers.FirstOrDefault(x => x.Position == position.Position) == null)
+                        royalMembers.Add(position);
+
+                List<CouncilMember> toRemove = new List<CouncilMember>();
+                foreach (CouncilMember position in royalMembers)
+                    if (royal.FirstOrDefault(x => x.Position == position.Position) == null)
+                        toRemove.Add(position);
+
+                if (toRemove.Count > 0)
+                    foreach (CouncilMember position in toRemove)
+                        royalMembers.Remove(position);
             }
             else
             {
@@ -117,7 +126,7 @@ namespace BannerKings.Managers.Court
                 if (vacant == null) return;
             }
 
-            vacant.Member = SelectHeroForPosition(vacant);
+            AddHeroToPosition(vacant);
         }
 
         public List<CouncilMember> GetIdealRoyalPositions()
@@ -145,29 +154,38 @@ namespace BannerKings.Managers.Court
             return positions;
         }
 
-        public List<Hero> GetAvailableHeroes()
+        public List<Hero> GetAvailableHeroes(bool lordsOnly = false)
         {
             List<Hero> currentMembers = GetMembers();
             List<Hero> available = new List<Hero>();
-            foreach (CouncilMember position in members)
+            foreach (Hero hero in GetCourtMembers())
             {
-                Hero hero = position.Member;
                 if (hero == null) continue;
                 if (!currentMembers.Contains(hero) && hero.IsAlive && !hero.IsChild)
-                    available.Add(hero);
+                {
+                    if (lordsOnly && hero.IsNoble)
+                        available.Add(hero);
+                    else available.Add(hero);
+                }   
             }
             return available;
         }
 
-        public Hero SelectHeroForPosition(CouncilMember position)
+        public void AddHeroToPosition(CouncilMember position)
+        {
+            if (!clan.Kingdom.ActivePolicies.Contains(DefaultPolicies.Senate) || position.Position == CouncilPosition.Spiritual)
+                position.Member = MBRandom.ChooseWeighted(GetHeroesForPosition(position));
+            else clan.Kingdom.AddDecision(new BKCouncilPositionDecision(clan, this, position));
+        }
+
+        public List<ValueTuple<Hero, float>> GetHeroesForPosition(CouncilMember position)
         {
             List<ValueTuple<Hero, float>> list = new List<ValueTuple<Hero, float>>();
             foreach (Hero hero in GetAvailableHeroes())
                 if (position.IsValidCandidate(hero))
                     list.Add((hero, GetCompetence(hero, position.Position) + ((float)clan.Leader.GetRelation(hero) * 0.001f)));
 
-
-            return MBRandom.ChooseWeighted(list);
+            return list;
         }
 
         public List<Hero> GetCourtMembers()
@@ -358,10 +376,8 @@ namespace BannerKings.Managers.Court
         public bool IsValidCandidate(Hero candidate)
         {
             if (position == CouncilPosition.Spiritual)
-            {
                 return BannerKingsConfig.Instance.ReligionsManager.IsPreacher(candidate);
-            }
-            else if (IsCorePosition(position))
+            else if (IsRoyal && IsCorePosition(position))
                 return candidate.IsNoble;
 
             return true;

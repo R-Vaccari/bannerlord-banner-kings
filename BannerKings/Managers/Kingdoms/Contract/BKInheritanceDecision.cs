@@ -174,7 +174,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
 
         public override TextObject GetSupportTitle()
         {
-            TextObject textObject = new TextObject("{=!}Vote for change of realm's succession to {GOVERNMENT}");
+            TextObject textObject = new TextObject("{=!}Vote to change realm clans' inheritance to {GOVERNMENT}");
             textObject.SetTextVariable("GOVERNMENT", inheritanceType.ToString());
             return textObject;
         }

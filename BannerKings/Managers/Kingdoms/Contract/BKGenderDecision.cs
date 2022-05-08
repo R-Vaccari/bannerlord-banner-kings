@@ -149,7 +149,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
 
         public override TextObject GetSupportTitle()
         {
-            TextObject textObject = new TextObject("{=!}Vote for change of realm's succession to {GOVERNMENT}");
+            TextObject textObject = new TextObject("{=!}Vote to change of realm's gender law to {GOVERNMENT}");
             textObject.SetTextVariable("GOVERNMENT", genderLaw.ToString());
             return textObject;
         }

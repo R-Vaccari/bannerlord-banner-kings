@@ -236,7 +236,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
 
         public override TextObject GetSupportTitle()
         {
-            TextObject textObject = new TextObject("{=!}Vote for change of government to {GOVERNMENT}");
+            TextObject textObject = new TextObject("{=!}Vote to change form of government to {GOVERNMENT}");
             textObject.SetTextVariable("GOVERNMENT", governmentType.ToString());
             return textObject;
         }

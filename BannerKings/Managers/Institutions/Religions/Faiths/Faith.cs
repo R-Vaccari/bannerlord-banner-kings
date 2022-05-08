@@ -29,6 +29,17 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
 
         public MBReadOnlyDictionary<TraitObject, bool> Traits => traits.GetReadOnlyDictionary();
 
+        public FaithStance GetStance(Faith otherFaith)
+        {
+            if (otherFaith == this)
+                return FaithStance.Tolerated;
+
+            if (stances.ContainsKey(otherFaith))
+                return stances[otherFaith];
+
+            return FaithStance.Untolerated;
+        }
+
         public void AddStance(Faith faith, FaithStance stance)
         {
             if (faith == this) return;

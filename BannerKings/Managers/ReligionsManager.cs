@@ -13,12 +13,10 @@ namespace BannerKings.Managers
     public class ReligionsManager
     {
         private Dictionary<Religion, Dictionary<Hero, float>> Religions { get; set; }
-        private Dictionary<CultureObject, Religion> Cultures { get; set; }
 
         public ReligionsManager()
         {
             this.Religions = new Dictionary<Religion, Dictionary<Hero, float>>();
-            this.Cultures = new Dictionary<CultureObject, Religion>();
             InitializeReligions();
         }
 
