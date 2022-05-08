@@ -78,12 +78,9 @@ namespace BannerKings.Models
 				}
 			}
 
-			if (BannerKingsConfig.Instance.CourtManager != null)
-			{
-				CouncilMember position = BannerKingsConfig.Instance.CourtManager.GetHeroPosition(clan.Leader);
-				if (position != null)
-					result.Add(position.DueWage, new TextObject("{=!}Councillor role"));
-			}
+			CouncilMember position = BannerKingsConfig.Instance.CourtManager.GetHeroPosition(clan.Leader);
+			if (position != null)
+				result.Add(position.DueWage, new TextObject("{=!}Councillor role"));
 		}
 
 		public void CalculateClanExpenseInternal(Clan clan, ref ExplainedNumber result, bool applyWithdrawals)

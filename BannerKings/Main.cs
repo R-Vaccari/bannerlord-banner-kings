@@ -28,6 +28,7 @@ using static TaleWorlds.CampaignSystem.SandBox.Issues.LandLordNeedsManualLaborer
 using static TaleWorlds.CampaignSystem.Election.KingSelectionKingdomDecision;
 using static TaleWorlds.CampaignSystem.SandBox.Issues.VillageNeedsToolsIssueBehavior;
 using Bannerlord.UIExtenderEx;
+using BannerKings.Managers.Kingdoms.Council;
 
 namespace BannerKings
 {
@@ -149,6 +150,40 @@ namespace BannerKings
                     return true;
                 }
             }
+
+           /* [HarmonyPatch(typeof(KingdomDecision), "ShouldBeCancelled")]
+            class ShouldBeCancelledPatch
+            {
+                static bool Prefix(KingdomDecision __instance, ref bool __result)
+                {
+
+                    if (__instance is BKCouncilPositionDecision)
+                    {
+                        if (!__instance.IsAllowed())
+                        {
+                            __result = true;
+                            return false;
+                        }
+                        if (__instance.ProposerClan == Clan.PlayerClan)
+                        {
+                            __result = false;
+                            return false;
+                        }
+                        List<DecisionOutcome> list = __instance.NarrowDownCandidates(__instance.DetermineInitialCandidates().ToList<DecisionOutcome>(), 3);
+                        DecisionOutcome queriedDecisionOutcome = __instance.GetQueriedDecisionOutcome(list);
+                        __instance.DetermineSponsors(list);
+                        Supporter.SupportWeights supportWeights;
+                        DecisionOutcome decisionOutcome = __instance.DetermineSupportOption(new Supporter(__instance.ProposerClan), list, out supportWeights, true);
+                        bool flag = __instance.ProposerClan.Influence > (float)__instance.GetInfluenceCostOfSupport(__instance.ProposerClan, Supporter.SupportWeights.SlightlyFavor) * 1.5f;
+                        bool flag2 = list.Any((DecisionOutcome t) => t.SponsorClan != null && t.SponsorClan.IsEliminated);
+                        bool flag3 = supportWeights == Supporter.SupportWeights.StayNeutral || decisionOutcome == null;
+                        bool flag4 = decisionOutcome != queriedDecisionOutcome || (decisionOutcome == queriedDecisionOutcome && flag3);
+                        __result = flag2 || (list.Any((DecisionOutcome t) => t.SponsorClan == __instance.ProposerClan) && !flag);
+                        return false;
+                    }
+                    return true;
+                }
+            } */
 
 
             [HarmonyPatch(typeof(Hero), "CanHaveQuestsOrIssues")]

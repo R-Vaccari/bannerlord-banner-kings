@@ -73,6 +73,8 @@ namespace BannerKings.Managers.Court
 
             if (royalMembers == null) royalMembers = new List<CouncilMember>();
 
+            if (clan.IsUnderMercenaryService) return;
+
             foreach (CouncilMember member in this.members)
             {
                 if (member.Member != null && (member.Member.IsDead || member.Member.IsDisabled))
@@ -84,6 +86,9 @@ namespace BannerKings.Managers.Court
                 if (member.Member != null && (member.Member.IsDead || member.Member.IsDisabled))
                     member.Member = null;
             }
+
+            if (clan.Name.ToString() == "Comnos")
+                Console.WriteLine();
 
             if (IsRoyal)
             {
@@ -117,7 +122,6 @@ namespace BannerKings.Managers.Court
                         position.IsRoyal = false;
             }
 
-            if (MBRandom.RandomInt(1, 100) > 5) return;
 
             CouncilMember vacant = members.FirstOrDefault(x => x.Member == null);
             if (vacant == null)
@@ -126,6 +130,7 @@ namespace BannerKings.Managers.Court
                 if (vacant == null) return;
             }
 
+            
             AddHeroToPosition(vacant);
         }
 
@@ -149,8 +154,6 @@ namespace BannerKings.Managers.Court
             if (clan.Kingdom.Culture == Utils.Helpers.GetCulture("battania"))
                 positions.Add(new CouncilMember(null, CouncilPosition.Elder, clan));
 
-
-
             return positions;
         }
 
@@ -173,9 +176,15 @@ namespace BannerKings.Managers.Court
 
         public void AddHeroToPosition(CouncilMember position)
         {
-            if (!clan.Kingdom.ActivePolicies.Contains(DefaultPolicies.Senate) || position.Position == CouncilPosition.Spiritual)
-                position.Member = MBRandom.ChooseWeighted(GetHeroesForPosition(position));
-            else clan.Kingdom.AddDecision(new BKCouncilPositionDecision(clan, this, position));
+            //if (!clan.Kingdom.ActivePolicies.Contains(DefaultPolicies.Senate) ||
+            //    position.Position == CouncilPosition.Spiritual || !IsRoyal)]
+
+            position.Member = MBRandom.ChooseWeighted(GetHeroesForPosition(position));
+
+            //else {
+            //   BKCouncilPositionDecision decision = new BKCouncilPositionDecision(clan, this, position);
+            //   clan.Kingdom.AddDecision(decision, true);
+            //}
         }
 
         public List<ValueTuple<Hero, float>> GetHeroesForPosition(CouncilMember position)
