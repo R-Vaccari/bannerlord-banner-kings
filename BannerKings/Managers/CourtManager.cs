@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Localization;
 using TaleWorlds.SaveSystem;
+using System.Linq;
 
 namespace BannerKings.Managers
 {
@@ -51,6 +52,33 @@ namespace BannerKings.Managers
             CouncilData council = new CouncilData(clan);
             Councils.Add(clan, council);
             return council;
+        }
+
+        public CouncilMember GetHeroPosition(Hero hero)
+        {
+            if (hero.IsNoble && (hero.Clan == null || hero.Clan.Kingdom == null) || hero.IsChild ||
+                hero.IsDead) return null;
+            Kingdom kingdom = null;
+            if ((hero.IsNoble || hero.IsWanderer) && hero.Clan != null) kingdom = hero.Clan.Kingdom;
+            else if (hero.CurrentSettlement != null && hero.CurrentSettlement.OwnerClan != null) 
+                kingdom = hero.CurrentSettlement.OwnerClan.Kingdom;
+
+            Clan targetClan = null;
+            if (kingdom != null)
+            {
+                List<Clan> clans = Councils.Keys.ToList();
+                foreach (Clan clan in clans)
+                    if (Councils[clan].GetMembers().Contains(hero))
+                    {
+                        targetClan = clan;
+                        break;
+                    }
+            }
+
+            if (targetClan != null)
+                return Councils[targetClan].GetHeroPosition(hero);
+
+            return null;
         }
 
         public void UpdateCouncil(Clan clan)

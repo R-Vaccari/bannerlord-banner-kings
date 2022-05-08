@@ -39,9 +39,6 @@ namespace BannerKings.Models
             float decisions = BannerKingsConfig.Instance.PolicyManager.GetActiveCostlyDecisionsNumber(settlement);
             baseResult.Add(0.025f * decisions, new TextObject("{=!}Active decisions"));
 
-            baseResult.Add(BannerKingsConfig.Instance.CourtManager.GetCouncil(settlement.OwnerClan).AdministrativeCosts,
-                new TextObject("{=!}Council costs"));
-
             return baseResult;
         }
     }

@@ -1,4 +1,5 @@
-﻿using BannerKings.Managers.Populations.Villages;
+﻿using BannerKings.Managers.Court;
+using BannerKings.Managers.Populations.Villages;
 using BannerKings.Populations;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.SandBox.GameComponents;
@@ -34,6 +35,13 @@ namespace BannerKings.Models
                             baseResult.AddFactor(manor == 3 ? 0.5f : manor * 0.15f, new TextObject("{=!}Manor"));
                     }
                 }
+            }
+
+            if (BannerKingsConfig.Instance.CourtManager != null)
+            {
+                CouncilMember position = BannerKingsConfig.Instance.CourtManager.GetHeroPosition(clan.Leader);
+                if (position != null)
+                    baseResult.Add(position.IsCorePosition(position.Position) ? 1f : 0.5f, new TextObject("{=!}Councillor role"));
             }
                 
             return baseResult;

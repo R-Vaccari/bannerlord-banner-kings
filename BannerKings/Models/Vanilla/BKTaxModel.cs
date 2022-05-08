@@ -1,4 +1,5 @@
-﻿using BannerKings.Managers.Policies;
+﻿using BannerKings.Managers.Court;
+using BannerKings.Managers.Policies;
 using BannerKings.Managers.Titles;
 using BannerKings.Populations;
 using TaleWorlds.CampaignSystem;
@@ -39,8 +40,9 @@ namespace BannerKings.Models
                     baseResult.AddFactor(0.15f, new TextObject("Tax policy"));
 
                 float admCost = new BKAdministrativeModel().CalculateEffect(town.Settlement).ResultNumber;
-                baseResult.AddFactor(admCost * -1f, new TextObject("Administrative costs"));
                 CalculateDueTax(data, baseResult.ResultNumber);
+                CalculateDueWages(BannerKingsConfig.Instance.CourtManager.GetCouncil(town.Settlement.OwnerClan), baseResult.ResultNumber);
+                baseResult.AddFactor(admCost * -1f, new TextObject("Administrative costs"));
             }
 
             return baseResult;
@@ -72,9 +74,21 @@ namespace BannerKings.Models
                 }
 
                 CalculateDueTax(BannerKingsConfig.Instance.PopulationManager.GetPopData(village.Settlement), (float)baseResult);
+                CouncilData data = BannerKingsConfig.Instance.CourtManager.GetCouncil(village.Settlement.OwnerClan);
+                if (data != null) CalculateDueWages(data, (float)baseResult);
             }
 
             return (int)baseResult;
+        }
+
+        private void CalculateDueWages(CouncilData data, float result)
+        {
+            foreach (CouncilMember position in data.GetOccupiedPositions())
+            {
+                float cost = position.AdministrativeCosts();
+                if (cost > 0f)
+                    position.DueWage = (int)(result * cost);
+            }
         }
 
         private void CalculateDueTax(PopulationData data, float result)

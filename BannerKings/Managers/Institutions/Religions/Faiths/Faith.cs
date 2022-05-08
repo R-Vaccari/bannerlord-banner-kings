@@ -31,6 +31,9 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
 
         public FaithStance GetStance(Faith otherFaith)
         {
+            if (otherFaith == null)
+                return FaithStance.Untolerated;
+
             if (otherFaith == this)
                 return FaithStance.Tolerated;
 

@@ -1,4 +1,5 @@
-﻿using BannerKings.Managers.Titles;
+﻿using BannerKings.Managers.Court;
+using BannerKings.Managers.Titles;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -16,7 +17,7 @@ namespace BannerKings.Models
 			ExplainedNumber baseResult = base.CalculateClanGoldChange(clan, includeDescriptions, applyWithdrawals);
 			if (BannerKingsConfig.Instance.TitleManager != null)
 			{
-				CalculateClanExpenseInternal(clan, ref baseResult);
+				CalculateClanExpenseInternal(clan, ref baseResult, applyWithdrawals);
 				CalculateClanIncomeInternal(clan, ref baseResult, applyWithdrawals);	
 			}
 
@@ -36,7 +37,7 @@ namespace BannerKings.Models
 		{
 			ExplainedNumber baseResult = base.CalculateClanExpenses(clan, includeDescriptions, applyWithdrawals);
 			if (BannerKingsConfig.Instance.TitleManager != null)
-				CalculateClanExpenseInternal(clan, ref baseResult);
+				CalculateClanExpenseInternal(clan, ref baseResult, applyWithdrawals);
 
 			return baseResult;
 		}
@@ -76,20 +77,36 @@ namespace BannerKings.Models
 					}
 				}
 			}
+
+			if (BannerKingsConfig.Instance.CourtManager != null)
+			{
+				CouncilMember position = BannerKingsConfig.Instance.CourtManager.GetHeroPosition(clan.Leader);
+				if (position != null)
+					result.Add(position.DueWage, new TextObject("{=!}Councillor role"));
+			}
 		}
 
-		public void CalculateClanExpenseInternal(Clan clan, ref ExplainedNumber result)
-        {
+		public void CalculateClanExpenseInternal(Clan clan, ref ExplainedNumber result, bool applyWithdrawals)
+		{
 			List<FeudalTitle> titles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(clan);
 			if (titles.Count == 0) return;
 
 			FeudalTitle suzerain = BannerKingsConfig.Instance.TitleManager.CalculateHeroSuzerain(clan.Leader);
 			if (suzerain == null) return;
-            
+
 			float amount = 0f;
 			foreach (FeudalTitle title in titles)
 				amount += title.dueTax;
 			result.Add(-amount, new TextObject("{=!}Taxes to {SUZERAIN}").SetTextVariable("SUZERAIN", suzerain.deJure.Name));
+
+			CouncilData data = BannerKingsConfig.Instance.CourtManager.GetCouncil(clan);
+			if (data != null)
+				foreach (CouncilMember position in data.GetOccupiedPositions())
+				{
+					result.Add(-position.DueWage, new TextObject("{=!}Council wage to {NAME}").SetTextVariable("NAME", position.Member.Name));
+					if (applyWithdrawals && !position.Member.IsNoble)
+						position.Member.Gold += position.DueWage;
+				}
 		}
 	}
 }
