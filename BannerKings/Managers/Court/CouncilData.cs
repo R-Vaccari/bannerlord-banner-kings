@@ -87,18 +87,21 @@ namespace BannerKings.Managers.Court
                     member.Member = null;
             }
 
-            if (clan.Name.ToString() == "Comnos")
-                Console.WriteLine();
-
             if (IsRoyal)
             {
                 foreach (CouncilMember position in members)
+                {
                     if (!position.IsRoyal)
                     {
                         position.IsRoyal = true;
                         if (position.Member != null && !position.IsValidCandidate(position.Member))
                             position.Member = null;
                     }
+
+                    if (position.Clan == null)
+                        position.Clan = clan;
+                }
+                    
 
                 List<CouncilMember> royal = GetIdealRoyalPositions();
                 foreach (CouncilMember position in royal)
@@ -122,6 +125,7 @@ namespace BannerKings.Managers.Court
                         position.IsRoyal = false;
             }
 
+            if (MBRandom.RandomInt(1, 100) <= 5) return;
 
             CouncilMember vacant = members.FirstOrDefault(x => x.Member == null);
             if (vacant == null)
@@ -387,7 +391,11 @@ namespace BannerKings.Managers.Court
             set => isRoyal = value;
         }
 
-        public Clan Clan => clan;
+        public Clan Clan
+        {
+            get => clan;
+            set => clan = value;
+        }
         public int DueWage
         {
             get => dueWage;

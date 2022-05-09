@@ -43,27 +43,31 @@ namespace BannerKings.UI.Items
         public void ShowOptions()
         {
             List<InquiryElement> options = new List<InquiryElement>();
-            foreach (SettlementGovernorSelectionItemVM vm in AvailableGovernors)
+            if (council.Owner == Hero.MainHero)
             {
-                ImageIdentifier image = null;
-                string name = "None";
-                if (vm.Governor != null) 
+                foreach (SettlementGovernorSelectionItemVM vm in AvailableGovernors)
                 {
-                    image = new ImageIdentifier(CampaignUIHelper.GetCharacterCode(vm.Governor.CharacterObject));
-                    name = vm.Governor.Name.ToString();
-                } 
-                options.Add(new InquiryElement(vm.Governor, name, image));
-            }
+                    ImageIdentifier image = null;
+                    string name = "None";
+                    if (vm.Governor != null)
+                    {
+                        image = new ImageIdentifier(CampaignUIHelper.GetCharacterCode(vm.Governor.CharacterObject));
+                        name = vm.Governor.Name.ToString();
+                    }
+                    options.Add(new InquiryElement(vm.Governor, name, image));
+                }
 
-            InformationManager.ShowMultiSelectionInquiry(
-                    new MultiSelectionInquiryData(
-                        new TextObject("{=!}Select Councillor").ToString(),
-                        new TextObject("{=!}Select a lord who you would like to grant this title to.").ToString(),
-                        options, true, 1, GameTexts.FindText("str_done").ToString(), string.Empty,
-                        delegate (List<InquiryElement> x)
-                        {
-                            onDone((Hero?)x[0].Identifier);
-                        }, null, string.Empty));
+                InformationManager.ShowMultiSelectionInquiry(
+                        new MultiSelectionInquiryData(
+                            new TextObject("{=!}Select Councillor").ToString(),
+                            new TextObject("{=!}Select who you would like to fill this position.").ToString(),
+                            options, true, 1, GameTexts.FindText("str_done").ToString(), string.Empty,
+                            delegate (List<InquiryElement> x)
+                            {
+                                onDone((Hero?)x[0].Identifier);
+                            }, null, string.Empty));
+            }
+            
         }
 
         private void OnSelection(SettlementGovernorSelectionItemVM item)
