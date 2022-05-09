@@ -16,7 +16,7 @@ namespace BannerKings.Behaviours
 {
     public class BKTitleBehavior : CampaignBehaviorBase
     {
-        private Dictionary<Settlement, List<Clan>> conqueredByArmies;
+        private Dictionary<Settlement, List<Clan>> conqueredByArmies = new Dictionary<Settlement, List<Clan>>();
 
         public override void RegisterEvents()
         {
@@ -32,9 +32,6 @@ namespace BannerKings.Behaviours
         public override void SyncData(IDataStore dataStore)
         {
             dataStore.SyncData("bannerkings-armies", ref conqueredByArmies);
-
-            if (conqueredByArmies == null)
-                conqueredByArmies = new Dictionary<Settlement, List<Clan>>();
         }
 
         private void OnRulingClanChanged(Kingdom kingdom, Clan clan)
@@ -110,12 +107,6 @@ namespace BannerKings.Behaviours
                 if (vanillaDecision != null)
                     kingdom.RemoveDecision(vanillaDecision);
 
-                MobileParty party = settlement.LastAttackerParty;
-                if (party == null) return;
-
-                Army army = party.Army;
-                if (army == null) return;
-
                 if (!conqueredByArmies.ContainsKey(settlement)) return;
 
                 List<Clan> clans = conqueredByArmies[settlement];
@@ -124,7 +115,13 @@ namespace BannerKings.Behaviours
                 kingdom.AddDecision(new BKSettlementClaimantDecision(kingdom.RulingClan, settlement, settlement.LastAttackerParty.LeaderHero, null, conqueredByArmies[settlement], true), true); ;
                 if (clans.Contains(Clan.PlayerClan) && !Clan.PlayerClan.IsUnderMercenaryService)
                 {
-                    GameTexts.SetVariable("ARMY", army.Name);
+                    MobileParty party = clans[0].Leader.PartyBelongedTo;
+                    Army army = null;
+                    if (party != null)
+                        army = party.Army;
+
+                    if (army != null) GameTexts.SetVariable("ARMY", army.Name);
+                    else GameTexts.SetVariable("ARMY", new TextObject("{=!}the conquering army"));
                     GameTexts.SetVariable("SETTLEMENT", settlement.Name);
                     InformationManager.ShowInquiry(new InquiryData(new TextObject("Conquest Right - Election").ToString(),
                         new TextObject("By contract law, you and the participants of {ARMY} will compete in election for the ownership of {SETTLEMENT}.").ToString(),
@@ -208,7 +205,7 @@ namespace BannerKings.Behaviours
                         else conqueredByArmies[settlement].Clear();
 
                         foreach (MobileParty clanParty in army.Parties)
-                            if (!conqueredByArmies[settlement].Contains(clanParty.ActualClan))
+                            if (!conqueredByArmies[settlement].Contains(clanParty.ActualClan) && !clanParty.ActualClan.IsUnderMercenaryService)
                                 conqueredByArmies[settlement].Add(clanParty.ActualClan);
 
                         return;
