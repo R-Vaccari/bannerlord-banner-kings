@@ -16,6 +16,7 @@ namespace BannerKings.Behaviours
 {
     public class BKTitleBehavior : CampaignBehaviorBase
     {
+        private Dictionary<Settlement, List<Clan>> conqueredByArmies;
 
         public override void RegisterEvents()
         {
@@ -30,7 +31,10 @@ namespace BannerKings.Behaviours
 
         public override void SyncData(IDataStore dataStore)
         {
-            
+            dataStore.SyncData("bannerkings-armies", ref conqueredByArmies);
+
+            if (conqueredByArmies == null)
+                conqueredByArmies = new Dictionary<Settlement, List<Clan>>();
         }
 
         private void OnRulingClanChanged(Kingdom kingdom, Clan clan)
@@ -111,12 +115,13 @@ namespace BannerKings.Behaviours
 
                 Army army = party.Army;
                 if (army == null) return;
-                
-                List<Clan> clans = new List<Clan>();
-                foreach (MobileParty clanParty in army.Parties)
-                    if (!clans.Contains(clanParty.ActualClan))
-                        clans.Add(clanParty.ActualClan);
-                kingdom.AddDecision(new BKSettlementClaimantDecision(kingdom.RulingClan, settlement, settlement.LastAttackerParty.LeaderHero, null, clans, true), true); ;
+
+                if (!conqueredByArmies.ContainsKey(settlement)) return;
+
+                List<Clan> clans = conqueredByArmies[settlement];
+                if (clans.Count == 1) ChangeOwnerOfSettlementAction.ApplyByKingDecision(clans[0].Leader, settlement);
+
+                kingdom.AddDecision(new BKSettlementClaimantDecision(kingdom.RulingClan, settlement, settlement.LastAttackerParty.LeaderHero, null, conqueredByArmies[settlement], true), true); ;
                 if (clans.Contains(Clan.PlayerClan) && !Clan.PlayerClan.IsUnderMercenaryService)
                 {
                     GameTexts.SetVariable("ARMY", army.Name);
@@ -196,7 +201,18 @@ namespace BannerKings.Behaviours
 
                     MobileParty party = settlement.LastAttackerParty;
                     Army army = party.Army;
-                    if (army != null) return;
+                    if (army != null)
+                    {
+                        if (!conqueredByArmies.ContainsKey(settlement))
+                            conqueredByArmies.Add(settlement, new List<Clan>());
+                        else conqueredByArmies[settlement].Clear();
+
+                        foreach (MobileParty clanParty in army.Parties)
+                            if (!conqueredByArmies[settlement].Contains(clanParty.ActualClan))
+                                conqueredByArmies[settlement].Add(clanParty.ActualClan);
+
+                        return;
+                    }
 
                     ChangeOwnerOfSettlementAction.ApplyByKingDecision(capturerHero, settlement);
                     if (capturerHero == Hero.MainHero)
