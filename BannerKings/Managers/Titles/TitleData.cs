@@ -21,12 +21,13 @@ namespace BannerKings.Managers.Titles
         public FeudalTitle Title => this.title;
         internal override void Update(PopulationData data)
         {
+            if (title == null) title = BannerKingsConfig.Instance.TitleManager.GetTitle(data.Settlement);
             if (this.title == null) return;
 
             this.title.CleanClaims();
             Dictionary<Hero, ClaimType> toAdd = new Dictionary<Hero, ClaimType>();
             foreach (KeyValuePair<Hero,CampaignTime> pair in this.title.OngoingClaims)
-                if (pair.Value.RemainingDaysFromNow <= 0)
+                if (pair.Value.ElapsedYearsUntilNow >= 1f)
                     toAdd.Add(pair.Key, ClaimType.Fabricated);
 
             foreach (KeyValuePair<Hero, ClaimType> pair in toAdd)

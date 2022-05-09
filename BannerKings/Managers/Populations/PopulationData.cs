@@ -83,16 +83,8 @@ namespace BannerKings.Populations
             set => this.tournamentData = value;
         }
 
-        public TitleData TitleData
-        {
-            get
-            {
-                return titleData;
-            }
-        }
-
+        public TitleData TitleData => titleData;
         public VillageData VillageData => this.villageData;
-
         public ExplainedNumber Foreigner => new BKForeignerModel().CalculateEffect(this.settlement);
 
         public int TotalPop {
