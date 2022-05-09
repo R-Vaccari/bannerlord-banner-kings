@@ -146,7 +146,7 @@ namespace BannerKings.Models.BKModels
             else if (governmentType == GovernmentType.Imperial)
             {
                 FeudalTitle sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(revokerKingdom);
-                if (revoker != sovereign.deJure)
+                if (sovereign == null || revoker != sovereign.deJure)
                 {
                     revokeAction.Possible = false;
                     revokeAction.Reason = new TextObject("{=!}Not de Jure faction leader.");
