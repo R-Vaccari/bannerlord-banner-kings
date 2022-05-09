@@ -1,29 +1,30 @@
-﻿using BannerKings.Managers.Policies;
-using TaleWorlds.CampaignSystem;
+﻿using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.SandBox.GameComponents;
 using TaleWorlds.Core;
-using static BannerKings.Managers.PolicyManager;
+using TaleWorlds.Library;
 
 namespace BannerKings.Models
 {
     class BKPriceFactorModel : DefaultTradeItemPriceFactorModel
     {
-        public override int GetPrice(EquipmentElement itemRosterElement, MobileParty clientParty, PartyBase merchant, bool isSelling, float inStoreValue, float supply, float demand)
+       /* public override int GetPrice(EquipmentElement itemRosterElement, MobileParty clientParty, PartyBase merchant, bool isSelling, float inStoreValue, float supply, float demand)
         {
             float baseResult = base.GetPrice(itemRosterElement, clientParty, merchant, isSelling, inStoreValue, supply, demand);
-            if (clientParty != null && merchant != null && merchant.MobileParty != null && merchant.MobileParty.PartyComponent != null && merchant.MobileParty.PartyComponent.HomeSettlement != null 
-                && BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(merchant.MobileParty.PartyComponent.HomeSettlement))
+            if (itemRosterElement.Item.StringId == "mule")
             {
-                Settlement settlement = merchant.MobileParty.PartyComponent.HomeSettlement;
-                if (itemRosterElement.Item.IsFood)
-                    if (settlement.Town.FoodChange < 0)
-                        baseResult *= 1.3f;
-
-
-
+                float penalty = GetTradePenalty(itemRosterElement.Item, clientParty, merchant, isSelling, inStoreValue, supply, demand);
             }
                 
             return (int)baseResult;
+        } */
+
+        public override float GetBasePriceFactor(ItemCategory itemCategory, float inStoreValue, float supply, float demand, bool isSelling, int transferValue)
+        {
+            float baseResult = base.GetBasePriceFactor(itemCategory, inStoreValue, supply, demand, isSelling, transferValue);
+            if (itemCategory.IsTradeGood || itemCategory.IsAnimal)
+                baseResult = MathF.Clamp(baseResult, 0.4f, 8f);
+
+            return baseResult;
         }
     }
 }
