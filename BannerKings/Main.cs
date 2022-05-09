@@ -130,6 +130,7 @@ namespace BannerKings
 
         namespace Fixes
         {
+
             // Fix crash on wanderer same gender child born
             [HarmonyPatch(typeof(NameGenerator), "GenerateHeroFullName")]
             class NameGeneratorPatch
@@ -578,6 +579,69 @@ namespace BannerKings
                     _itemCategoryBread.InitializeObject(true, 50, 20, ItemCategory.Property.BonusToFoodStores, null, 0f, false, true);
                 }
             }
+
+
+            [HarmonyPatch(typeof(SellGoodsForTradeAction), "ApplyInternal")]
+            class SellGoodsPatch
+            {
+                static bool Prefix(object[] __args)
+                {
+                    Settlement settlement = (Settlement)__args[0];
+                    MobileParty mobileParty = (MobileParty)__args[1];
+                    if (settlement != null && mobileParty != null)
+                        if (settlement.IsTown && mobileParty.IsVillager)
+                        {
+                            Town component = settlement.GetComponent<Town>();
+                            List<ValueTuple<ItemObject, int>> list = new List<ValueTuple<ItemObject, int>>();
+                            int num = 10000;
+                            ItemObject itemObject = null;
+                            for (int i = 0; i < mobileParty.ItemRoster.Count; i++)
+                            {
+                                ItemRosterElement elementCopyAtIndex = mobileParty.ItemRoster.GetElementCopyAtIndex(i);
+                                if (elementCopyAtIndex.EquipmentElement.Item.ItemCategory == DefaultItemCategories.PackAnimal && elementCopyAtIndex.EquipmentElement.Item.Value < num)
+                                {
+                                    num = elementCopyAtIndex.EquipmentElement.Item.Value;
+                                    itemObject = elementCopyAtIndex.EquipmentElement.Item;
+                                }
+                            }
+                            for (int j = mobileParty.ItemRoster.Count - 1; j >= 0; j--)
+                            {
+                                ItemRosterElement elementCopyAtIndex2 = mobileParty.ItemRoster.GetElementCopyAtIndex(j);
+                                int itemPrice = component.GetItemPrice(elementCopyAtIndex2.EquipmentElement, mobileParty, true);
+                                int num2 = mobileParty.ItemRoster.GetElementNumber(j);
+                                if (elementCopyAtIndex2.EquipmentElement.Item == itemObject)
+                                {
+                                    int num3 = (int)(0.5f * (float)mobileParty.MemberRoster.TotalManCount) + 2;
+                                    num2 -= num3;
+
+                                    if (itemObject.StringId == "mule")
+                                        num2 -= (int)(mobileParty.MemberRoster.TotalManCount * 0.1f);
+                                }
+                                if (num2 > 0)
+                                {
+                                    int num4 = MathF.Min(num2, component.Gold / itemPrice);
+                                    if (num4 > 0)
+                                    {
+                                        mobileParty.PartyTradeGold += num4 * itemPrice;
+                                        EquipmentElement equipmentElement = elementCopyAtIndex2.EquipmentElement;
+                                        component.ChangeGold(-num4 * itemPrice);
+                                        settlement.ItemRoster.AddToCounts(equipmentElement, num4);
+                                        mobileParty.ItemRoster.AddToCounts(equipmentElement, -num4);
+                                        list.Add(new ValueTuple<ItemObject, int>(equipmentElement.Item, num4));
+                                    }
+                                }
+                            }
+
+                            if (!list.IsEmpty<ValueTuple<ItemObject, int>>())
+                                CampaignEventDispatcher.Instance.OnCaravanTransactionCompleted(mobileParty, component, list);
+
+                            return false;
+                        }
+
+                    return true;
+                }
+            }
+
 
             //Mules
             [HarmonyPatch(typeof(VillagerCampaignBehavior), "MoveItemsToVillagerParty")]
