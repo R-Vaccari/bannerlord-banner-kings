@@ -25,7 +25,7 @@ namespace BannerKings.Models.Vanilla
                         foreach (Village village in settlement.BoundVillages)
                         {
                             FeudalTitle villageTitle = BannerKingsConfig.Instance.TitleManager.GetTitle(village.Settlement);
-                            if (villageTitle.deJure == settlement.Owner) result += model.GetGoldUsurpCost(villageTitle) * 3f;
+                            if (villageTitle != null && villageTitle.deJure == settlement.Owner) result += model.GetGoldUsurpCost(villageTitle) * 3f;
                         }   
                     }
                 }

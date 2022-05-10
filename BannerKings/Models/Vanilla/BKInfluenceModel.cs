@@ -15,6 +15,9 @@ namespace BannerKings.Models
         {
             ExplainedNumber baseResult = base.CalculateInfluenceChange(clan, includeDescriptions);
 
+            float generalSupport = 0f;
+            float generalAutonomy = 0f;
+            float i = 0;
             foreach (Settlement settlement in clan.Settlements)
             {
                 if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
@@ -38,11 +41,18 @@ namespace BannerKings.Models
                         baseResult.Add(MBMath.ClampFloat(extra * -0.01f, result * -0.5f, -0.1f), new TextObject(string.Format("Excess noble population at {0}", settlement.Name)));
                     }
 
-                    float support = data.NotableSupport - 0.5f;
-                    if (support != 0f) baseResult.AddFactor(support, new TextObject("{=!}Notable Support"));
+                    generalSupport  += data.NotableSupport - 0.5f;
+                    generalAutonomy += -0.5f * data.Autonomy;
+                    i++;
                 }
             }
-                
+
+
+            float finalSupport = generalSupport / i;
+            float finalAutonomy = generalAutonomy / i;
+            if (finalSupport != 0f) baseResult.AddFactor(finalSupport, new TextObject("{=!}Overall notable support"));
+            if (finalAutonomy != 0f) baseResult.AddFactor(finalAutonomy, new TextObject("{=!}Overall settlement autonomy"));
+
             return baseResult;
         }
     }

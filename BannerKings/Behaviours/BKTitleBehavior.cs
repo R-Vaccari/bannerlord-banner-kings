@@ -51,15 +51,19 @@ namespace BannerKings.Behaviours
 
             foreach (FeudalTitle duchy in BannerKingsConfig.Instance.TitleManager.GetAllTitlesByType(TitleType.Dukedom))
             {
+                duchy.TickClaims();
                 Kingdom faction = duchy.deJure.Clan.Kingdom;
                 if (faction == null || faction != duchy.DeFacto.Clan.Kingdom) continue;
 
                 FeudalTitle currentSovereign = duchy.sovereign;
                 FeudalTitle currentFactionSovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(faction);
-                if (currentSovereign == null || currentFactionSovereign == null || currentSovereign == currentFactionSovereign) return;
+                if (currentSovereign == null || currentFactionSovereign == null || currentSovereign == currentFactionSovereign) continue;
 
                 duchy.TickDrift(currentFactionSovereign);
             }
+
+            foreach (FeudalTitle kingdom in BannerKingsConfig.Instance.TitleManager.GetAllTitlesByType(TitleType.Kingdom))
+                kingdom.TickClaims();
         }
 
         private void OnHeroKilled(Hero victim, Hero killer, KillCharacterAction.KillCharacterActionDetail detail, bool showNotification = true)

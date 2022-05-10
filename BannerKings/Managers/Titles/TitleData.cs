@@ -22,18 +22,10 @@ namespace BannerKings.Managers.Titles
         internal override void Update(PopulationData data)
         {
             if (title == null) title = BannerKingsConfig.Instance.TitleManager.GetTitle(data.Settlement);
-            if (this.title == null) return;
-
-            this.title.CleanClaims();
-            Dictionary<Hero, ClaimType> toAdd = new Dictionary<Hero, ClaimType>();
-            foreach (KeyValuePair<Hero,CampaignTime> pair in this.title.OngoingClaims)
-                if (pair.Value.ElapsedYearsUntilNow >= 1f)
-                    toAdd.Add(pair.Key, ClaimType.Fabricated);
-
-            foreach (KeyValuePair<Hero, ClaimType> pair in toAdd)
-                this.title.AddClaim(pair.Key, pair.Value);
-
-            this.AITick(data.Settlement.Owner);
+            if (title == null) return;
+            title.CleanClaims();
+            title.TickClaims();
+            AITick(data.Settlement.Owner);
         }
 
         private void AITick(Hero owner)

@@ -265,35 +265,6 @@ namespace BannerKings.Behaviors
             if (food > 0) settlement.Town.FoodStocks += food;
         }
 
-        internal static void KillNotables(Settlement settlement, int amount)
-        {
-            Hero notable = null;
-            int i = 0;
-            try
-            {
-                List<Hero> notables = new List<Hero>(settlement.Notables);
-                foreach (Hero hero in notables)
-                    if (hero.BornSettlement != settlement)
-                    {
-                        notable = hero;
-                        LeaveSettlementAction.ApplyForCharacterOnly(hero);
-                        DisableHeroAction.Apply(hero);
-                        i++;
-                    }
-            }
-            catch (Exception ex)
-            {
-                string cause = "Exception in Banner Kings KillNotables method. ";
-                string objInfo = null;
-                if (notable != null)
-                    objInfo = string.Format("Notable: Name [{0}], Id [{1}], Culture [{2}]\nSettleent: Name [{3}], Id [{4}], Culture [{5}]", 
-                        notable.Name, notable.StringId, notable.Culture, settlement.Name, settlement.StringId, settlement.Culture);
-                else objInfo = "Null notable.";
-
-                throw new BannerKingsException(cause + objInfo, ex);
-            }
-        }
-
 
         private void OnSessionLaunched(CampaignGameStarter campaignGameStarter)
         {
