@@ -2,7 +2,6 @@
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
-using static BannerKings.Managers.TitleManager;
 using System.Linq;
 using BannerKings.Managers.Titles;
 
@@ -10,6 +9,12 @@ namespace BannerKings.Models
 {
     class BKStabilityModel : IBannerKingsModel
     {
+        public ExplainedNumber CalculateAutonomyEffect(Settlement settlement, float stability)
+        {
+            ExplainedNumber result = new ExplainedNumber();
+
+            return result;
+        }
         public ExplainedNumber CalculateEffect(Settlement settlement)
         {
             ExplainedNumber result = new ExplainedNumber();

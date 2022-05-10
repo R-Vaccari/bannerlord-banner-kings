@@ -52,6 +52,7 @@ namespace BannerKings
                 campaignStarter.AddBehavior(new BKArmyBehavior());
                 campaignStarter.AddBehavior(new BKRansomBehavior());
                 campaignStarter.AddBehavior(new BKTitleBehavior());
+                campaignStarter.AddBehavior(new BKNotableBehavior());
 
                 campaignStarter.AddModel(new BKCompanionPrices());
                 campaignStarter.AddModel(new BKProsperityModel());
@@ -73,12 +74,13 @@ namespace BannerKings
                 campaignStarter.AddModel(new BKTournamentModel());
                 campaignStarter.AddModel(new BKRaidModel());
                 campaignStarter.AddModel(new BKVolunteerModel());
-                campaignStarter.AddModel(new BKNotableModel());
+                campaignStarter.AddModel(new BKNotableSpawnModel());
                 campaignStarter.AddModel(new BKGarrisonModel());
                 campaignStarter.AddModel(new BKRansomModel());
                 campaignStarter.AddModel(new BKClanTierModel());
                 campaignStarter.AddModel(new BKPartyWageModel());
                 campaignStarter.AddModel(new BKSettlementValueModel());
+                campaignStarter.AddModel(new BKNotablePowerModel());
             }
 
             //xtender.Register(typeof(Main).Assembly);
