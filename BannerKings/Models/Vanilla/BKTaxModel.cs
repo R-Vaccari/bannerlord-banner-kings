@@ -51,8 +51,13 @@ namespace BannerKings.Models
                 else if (taxType == TaxType.High)
                     baseResult.AddFactor(0.15f, new TextObject("Tax policy"));
 
+
                 float admCost = new BKAdministrativeModel().CalculateEffect(town.Settlement).ResultNumber;
                 baseResult.AddFactor(admCost * -1f, new TextObject("Administrative costs"));
+
+                if (baseResult.ResultNumber > 0f)
+                    baseResult.AddFactor(-0.6f * data.Autonomy, new TextObject("{=!}Autonomy"));
+
                 CalculateDueTax(data, baseResult.ResultNumber);
             }
 

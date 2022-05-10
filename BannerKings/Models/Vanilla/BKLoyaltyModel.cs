@@ -78,6 +78,8 @@ namespace BannerKings.Models
 				if (government == GovernmentType.Republic)
 					baseResult.Add(1f, new TextObject("{=!}Government"));
 
+				baseResult.Add(2f * data.Autonomy, new TextObject("Autonomy"));
+
 				BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref baseResult, town.OwnerClan.Leader, CouncilPosition.Chancellor, 1f, false);
 				return baseResult;
             } else return base.CalculateLoyaltyChange(town, includeDescriptions); 
