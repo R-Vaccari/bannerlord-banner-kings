@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
@@ -207,17 +208,12 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
             return 1;
         }
 
-        public override List<Divinity> GetMainDivinity()
+        public override Divinity GetMainDivinity()
         {
             throw new NotImplementedException();
         }
 
         public override TextObject GetMainDivinitiesDescription()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override TextObject GetMainGodDescription()
         {
             throw new NotImplementedException();
         }
@@ -238,7 +234,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
             return text;
         }
 
-        public override List<Divinity> GetSecondaryDivinities()
+        public override MBReadOnlyList<Divinity> GetSecondaryDivinities()
         {
             throw new NotImplementedException();
         }

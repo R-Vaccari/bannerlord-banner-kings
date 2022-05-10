@@ -17,6 +17,7 @@ namespace BannerKings.UI.Panels
 		private MBBindingList<BKTraitItemVM> virtues;
 		private MBBindingList<ReligionElementVM> doctrines;
 		private MBBindingList<ReligionElementVM> aspects;
+		private MBBindingList<ReligionElementVM> secondaryDivinities;
 		private Religion religion;
 
 		public ReligionVM(PopulationData data) : base(data, true)
@@ -28,6 +29,7 @@ namespace BannerKings.UI.Panels
 			Virtues = new MBBindingList<BKTraitItemVM>();
 			Doctrines = new MBBindingList<ReligionElementVM>();
 			Aspects = new MBBindingList<ReligionElementVM>();
+			SecondaryDivinities = new MBBindingList<ReligionElementVM>();
 		}
 
         public override void RefreshValues()
@@ -55,7 +57,12 @@ namespace BannerKings.UI.Panels
 					Doctrines.Add(new ReligionElementVM(doctrine.Name, doctrine.Effects, doctrine.Description));
 			}
 
+			foreach (Divinity divinity in religion.Faith.GetSecondaryDivinities())
+				SecondaryDivinities.Add(new ReligionElementVM(divinity.SecondaryTitle, divinity.Name, divinity.Description));
+
 			Aspects.Add(new ReligionElementVM(new TextObject("{=!}Leadership"), religion.Leadership.GetName(), religion.Leadership.GetHint()));
+			Aspects.Add(new ReligionElementVM(religion.Faith.GetMainDivinitiesDescription(), religion.Faith.GetMainDivinity().Name, religion.Faith.GetMainDivinity().Description));
+			Aspects.Add(new ReligionElementVM(new TextObject("{=!}Faith Group"), religion.Faith.FaithGroup.Name, religion.Faith.FaithGroup.Description));
 			Aspects.Add(new ReligionElementVM(new TextObject("{=!}Faith"), UIHelper.GetFaithTypeName(religion.Faith), UIHelper.GetFaithTypeDescription(religion.Faith)));
 			Aspects.Add(new ReligionElementVM(new TextObject("{=!}Culture"), religion.MainCulture.Name, new TextObject("{=!}The main culture associated with this faith.")));
 		}
@@ -71,6 +78,9 @@ namespace BannerKings.UI.Panels
 
 		[DataSourceProperty]
 		public string VirtuesText => new TextObject("{=!}Virtues").ToString();
+
+		[DataSourceProperty]
+		public string SecondaryDivinitiesText => religion.Faith.GetSecondaryDivinitiesDescription().ToString();
 
 		[DataSourceProperty]
 		public string DoctrinesText => new TextObject("{=!}Doctrines").ToString();
@@ -115,6 +125,20 @@ namespace BannerKings.UI.Panels
 				{
 					aspects = value;
 					base.OnPropertyChangedWithValue(value, "Aspects");
+				}
+			}
+		}
+
+		[DataSourceProperty]
+		public MBBindingList<ReligionElementVM> SecondaryDivinities
+		{
+			get => secondaryDivinities;
+			set
+			{
+				if (value != secondaryDivinities)
+				{
+					secondaryDivinities = value;
+					base.OnPropertyChangedWithValue(value, "SecondaryDivinities");
 				}
 			}
 		}

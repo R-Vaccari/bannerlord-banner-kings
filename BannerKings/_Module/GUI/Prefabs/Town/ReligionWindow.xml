@@ -45,7 +45,7 @@
 							  
 									<GridWidget Id="AspectsGrid" DataSource="{Aspects}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" MarginRight="100" MarginLeft="100" HorizontalAlignment="Center" DefaultCellWidth="250" DefaultCellHeight="120" ColumnCount="3" MarginTop="10" >
 									  <ItemTemplate>
-										<Widget HorizontalAlignment="Center" HeightSizePolicy="StretchToParent" VerticalAlignment="Center" UpdateChildrenStates="true">
+										<Widget HorizontalAlignment="Center" HeightSizePolicy="StretchToParent" WidthSizePolicy="StretchToParent" VerticalAlignment="Center" DoNotPassEventsToChildren="true">
 										  <Children>
 										    <HintWidget DataSource="{Hint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" SuggestedHeight="15" SuggestedWidth="100" VerticalAlignment="Center" HorizontalAlignment="Center" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" />
 										    <ListPanel HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" WidthSizePolicy="Fixed" SuggestedWidth="250" StackLayout.LayoutMethod="VerticalBottomToTop">
@@ -58,6 +58,45 @@
 										</Widget>
 									  </ItemTemplate>
 									</GridWidget>
+			
+			
+									<EncyclopediaDivider MarginTop="50" Parameter.Title="@SecondaryDivinitiesText" Parameter.ItemList="..\DivinitiesGrid"/>
+							  
+									<GridWidget Id="DivinitiesGrid" DataSource="{SecondaryDivinities}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" MarginRight="100" MarginLeft="100" HorizontalAlignment="Center" DefaultCellWidth="350" DefaultCellHeight="120" ColumnCount="2" MarginTop="10" >
+									  <ItemTemplate>
+										<Widget HorizontalAlignment="Center" HeightSizePolicy="StretchToParent" WidthSizePolicy="StretchToParent" VerticalAlignment="Center" DoNotPassEventsToChildren="true">
+										  <Children>
+										    <ListPanel HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" WidthSizePolicy="Fixed" SuggestedWidth="350" StackLayout.LayoutMethod="VerticalBottomToTop">
+											  <Children>
+												<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" Brush="Clan.Leader.Text"  Brush.FontSize="20" Text="@Name" MarginBottom="15"/>
+												<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" Brush="Clan.Leader.Text"  Brush.FontSize="30" Text="@Description" />
+											  </Children>
+											</ListPanel>
+											<HintWidget DataSource="{Hint}" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedHeight="15" SuggestedWidth="100" VerticalAlignment="Center" HorizontalAlignment="Center" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" />
+										  </Children>
+										</Widget>
+									  </ItemTemplate>
+									</GridWidget>
+									
+									
+									<EncyclopediaDivider MarginTop="50" Parameter.Title="@DoctrinesText" Parameter.ItemList="..\DoctrinesGrid"/>
+							  
+									<GridWidget Id="DoctrinesGrid" DataSource="{Doctrines}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" MarginRight="100" MarginLeft="100" HorizontalAlignment="Center" DefaultCellWidth="350" DefaultCellHeight="120" ColumnCount="2" MarginTop="10" >
+									  <ItemTemplate>
+										<Widget HorizontalAlignment="Center" HeightSizePolicy="StretchToParent" WidthSizePolicy="StretchToParent" VerticalAlignment="Center" DoNotPassEventsToChildren="true">
+										  <Children>
+										    <ListPanel HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" WidthSizePolicy="Fixed" SuggestedWidth="350" StackLayout.LayoutMethod="VerticalBottomToTop">
+											  <Children>
+												<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" Brush="Clan.Leader.Text"  Brush.FontSize="30" Text="@Name" MarginBottom="15"/>
+												<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" Brush="Clan.Leader.Text"  Brush.FontSize="20" Text="@Description" />
+											  </Children>
+											</ListPanel>
+											<HintWidget DataSource="{Hint}" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedHeight="15" SuggestedWidth="100" VerticalAlignment="Center" HorizontalAlignment="Center" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" />
+										  </Children>
+										</Widget>
+									  </ItemTemplate>
+									</GridWidget>
+									
 									
 									<EncyclopediaDivider MarginTop="50" Parameter.Title="@VirtuesText" Parameter.ItemList="..\VirtuesGrid"/>
 							  
@@ -73,25 +112,6 @@
 											<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" Brush="Clan.Leader.Text"  Brush.FontSize="22" Text="@Name" MarginBottom="35"/>
 										  </Children>
 									    </ListPanel>
-									  </ItemTemplate>
-									</GridWidget>
-									
-									
-									<EncyclopediaDivider MarginTop="50" Parameter.Title="@DoctrinesText" Parameter.ItemList="..\DoctrinesGrid"/>
-							  
-									<GridWidget Id="DoctrinesGrid" DataSource="{Doctrines}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" MarginRight="100" MarginLeft="100" HorizontalAlignment="Center" DefaultCellWidth="350" DefaultCellHeight="120" ColumnCount="2" MarginTop="10" >
-									  <ItemTemplate>
-										<Widget HorizontalAlignment="Center" HeightSizePolicy="StretchToParent">
-										  <Children>
-										    <ListPanel HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" WidthSizePolicy="Fixed" SuggestedWidth="350" StackLayout.LayoutMethod="VerticalBottomToTop">
-											  <Children>
-												<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" Brush="Clan.Leader.Text"  Brush.FontSize="30" Text="@Name" MarginBottom="15"/>
-												<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" Brush="Clan.Leader.Text"  Brush.FontSize="20" Text="@Description" />
-											  </Children>
-											</ListPanel>
-											<HintWidget DataSource="{Hint}" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedHeight="15" SuggestedWidth="100" VerticalAlignment="Center" HorizontalAlignment="Center" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" />
-										  </Children>
-										</Widget>
 									  </ItemTemplate>
 									</GridWidget>
 									

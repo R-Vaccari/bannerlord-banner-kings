@@ -25,13 +25,18 @@ namespace BannerKings.Managers.Institutions.Religions
 
             amraSecondary1 = new Divinity(new TextObject("{=!}Na Sidhfir"),
                 new TextObject("{=!}Those deemed to have won the favor of the Slaugh Aos’An and the love of the Battanian people for more than a generation may be vaunted into the ranks of the Na Sidhfir - the Immortal Men of the Woods. Occupying a position equally heroic and tragic, the grand figures of the Na Sidhfir are claimed to be tireless and exhausted entities - unable to rest so long as they are remembered, but too self-absorbed to allow their songs to go unsung. Derwyddon practitioners claim the Na Sidhfir possess the bodies of Wolfskins, allowing them to rest and ravage away from the heavenly realms."),
-                new TextObject());
+                new TextObject(),
+                new TextObject("{=!}Ancestor Spirits"));
 
             amraSecondary2 = new Divinity(new TextObject("{=!}Dymhna Sidset"),
-                new TextObject("{=!} Patient devils, the Dymhna Sidset are the stuff of children’s parables and ill told tales around campfires. They are the spittal on a rabid dog’s lips, the rage of a mother bear seeking a misplaced cub, the cold biting steel that strikes only in betrayal. Though the attempted Calradification of the Uchalion Plateau could not purge this pagan belief set entirely, it did compartmentalize and mangle its body of rituals. Giants, ghosts, and many an unseen shade were changed from beings of tale and legend to “patient devils” by the whims of the Empire. In recent years, some have sought to venerate the Dymhna Sidset; viewing them instead as aspects of rebellion and irredentism."),
-                new TextObject());
+                new TextObject("{=!}Patient devils, the Dymhna Sidset are the stuff of children’s parables and ill told tales around campfires. They are the spittal on a rabid dog’s lips, the rage of a mother bear seeking a misplaced cub, the cold biting steel that strikes only in betrayal. Though the attempted Calradification of the Uchalion Plateau could not purge this pagan belief set entirely, it did compartmentalize and mangle its body of rituals. Giants, ghosts, and many an unseen shade were changed from beings of tale and legend to “patient devils” by the whims of the Empire. In recent years, some have sought to venerate the Dymhna Sidset; viewing them instead as aspects of rebellion and irredentism."),
+                new TextObject(),
+                new TextObject("{=!}Natural Spirits"));
         }
 
         public Divinity Asera => asera;
+        public Divinity AmraMain => amraMain;
+        public Divinity AmraSecondary1 => amraSecondary1;
+        public Divinity AmraSecondary2 => amraSecondary2;
     }
 }

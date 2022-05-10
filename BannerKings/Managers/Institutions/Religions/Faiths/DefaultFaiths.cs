@@ -29,11 +29,11 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
                 aseraGroup,
                 new Dictionary<int, CharacterObject>());
 
-            battaniaGroup = new FaithGroup(new TextObject("{=!}Derwyddon Faiths"), new TextObject("{=!}The faith in the old Calradia gods."));
+            battaniaGroup = new FaithGroup(new TextObject("{=!}Derwyddon Faiths"), new TextObject("{=!}The faith in the old Calradian gods."));
             amraFaith = new AmraFaith();
 
-            amraFaith.Initialize(null,
-                new List<Divinity>(),
+            amraFaith.Initialize(DefaultDivinities.Instance.AmraMain,
+                new List<Divinity>() { DefaultDivinities.Instance.AmraSecondary1, DefaultDivinities.Instance.AmraSecondary2 },
                 new Dictionary<TraitObject, bool>
                 {
                     { DefaultTraits.Honor, false },
