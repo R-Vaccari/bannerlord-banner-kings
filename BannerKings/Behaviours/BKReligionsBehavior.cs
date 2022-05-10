@@ -1,7 +1,9 @@
 ﻿using BannerKings.Managers.Institutions.Religions;
+using BannerKings.Models.BKModels;
 using HarmonyLib;
 using SandBox;
 using System;
+using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.SandBox;
 using TaleWorlds.Core;
@@ -13,6 +15,7 @@ namespace BannerKings.Behaviours
     {
         public override void RegisterEvents()
         {
+            CampaignEvents.DailyTickEvent.AddNonSerializedListener(this, new Action(DailyTick));
             CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, new Action<CampaignGameStarter>(OnSessionLaunched));
             CampaignEvents.SettlementEntered.AddNonSerializedListener(this, new Action<MobileParty, Settlement, Hero>(OnSettlementEntered));
             //CampaignEvents.DailyTickSettlementEvent.AddNonSerializedListener(this, new Action<Settlement>(DailySettlementTick));
@@ -27,6 +30,15 @@ namespace BannerKings.Behaviours
         {
             this.AddDialogue(starter);
         }
+
+        private void DailyTick()
+        {
+            BKPietyModel model = ((BKPietyModel)BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(BKPietyModel)));
+            foreach (Religion religion in BannerKingsConfig.Instance.ReligionsManager.GetReligions())
+                foreach (Hero hero in BannerKingsConfig.Instance.ReligionsManager.GetFaithfulHeroes(religion))
+                    BannerKingsConfig.Instance.ReligionsManager.AddPiety(religion, hero, model.CalculateEffect(hero).ResultNumber);
+        }
+
         private void DailySettlementTick(Settlement settlement)
         {
 

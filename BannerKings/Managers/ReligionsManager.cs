@@ -1,12 +1,12 @@
 ﻿using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Institutions.Religions.Faiths;
 using BannerKings.Managers.Institutions.Religions.Leaderships;
-using BannerKings.Models;
-using BannerKings.Models.BKModels;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.Core;
 using TaleWorlds.Library;
+using TaleWorlds.Localization;
 
 namespace BannerKings.Managers
 {
@@ -39,16 +39,47 @@ namespace BannerKings.Managers
 
             Religions.Add(aseraiReligion, new Dictionary<Hero, float>());
             Religions.Add(battaniaReligion, new Dictionary<Hero, float>());
-            InitializeFaithfulHeroes(aseraiReligion, aserai);
-            InitializeFaithfulHeroes(battaniaReligion, battania);
+            InitializeFaithfulHeroes();
         }
 
-        public void InitializeFaithfulHeroes(Religion rel, CultureObject culture)
+        public void InitializeFaithfulHeroes()
         {
-            foreach (Hero hero in Hero.AllAliveHeroes)
-                if (!hero.IsDisabled && (hero.IsNoble || hero.IsNotable || hero.IsWanderer) && hero.Culture == culture
-                    && !hero.IsChild)
-                    Religions[rel].Add(hero, 50f);
+            foreach (Religion rel in Religions.Keys.ToList())
+                foreach (Hero hero in Hero.AllAliveHeroes)
+                    if (hero != Hero.MainHero && !hero.IsDisabled && (hero.Clan != null || hero.IsNotable || hero.IsWanderer) && hero.Culture == rel.MainCulture
+                        && !hero.IsChild)
+                        Religions[rel].Add(hero, 50f);
+
+            List<InquiryElement> elements = new List<InquiryElement>();
+            foreach (Religion religion in Religions.Keys.ToList())
+                elements.Add(new InquiryElement(religion, 
+                    new TextObject("{=!}{RELIGION} - {PIETY} piety")
+                    .SetTextVariable("RELIGION", religion.Faith.GetFaithName())
+                    .SetTextVariable("PIETY", GetPiety(religion))
+                    .ToString(), 
+                    null, true, religion.Faith.GetFaithDescription().ToString()));
+            
+
+            elements.Sort(delegate(InquiryElement x, InquiryElement y) { return GetPiety(x.Identifier as Religion).CompareTo(GetPiety(y.Identifier as Religion)); });
+
+            InformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(new TextObject("{=!}Your faith").ToString(), 
+                new TextObject("{=!}You look up to the skies and realize there must be something more. You feel there must be a higher purpose for yourself, and people expect you to defend a certain faith. Upholding your cultural forefathers' faith would be considered most pious. Similarly, following a faith that accepts your culture would be pious, however not as much as your true ancestry. Alternatively, having a completely different faith is possible, though a less walked path. What is your faith?").ToString(),
+                elements, false, 1,
+                GameTexts.FindText("str_done").ToString(), string.Empty, delegate (List<InquiryElement> element)
+                {
+                    Religion religion = (Religion)element[0].Identifier;
+                    Religions[religion].Add(Hero.MainHero, GetPiety(religion));
+                }, null)); 
+        }
+
+        private int GetPiety(Religion religion)
+        {
+            int piety = 0;
+            if (religion.MainCulture == Hero.MainHero.Culture)
+                piety = 100;
+            else if (religion.FavoredCultures.Contains(Hero.MainHero.Culture))
+                piety = 50;
+            return piety;
         }
 
         public void InitializePresets()

@@ -34,9 +34,6 @@ namespace BannerKings.Managers.Institutions.Religions
             if (clergyman == null)
                 clergyman = religion.GenerateClergyman(settlement);
 
-            BKPietyModel model = ((BKPietyModel)BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(BKPietyModel)));
-            foreach (Hero hero in BannerKingsConfig.Instance.ReligionsManager.GetFaithfulHeroes(religion))
-                BannerKingsConfig.Instance.ReligionsManager.AddPiety(religion, hero, model.CalculateEffect(hero).ResultNumber);
         }
     }
 }

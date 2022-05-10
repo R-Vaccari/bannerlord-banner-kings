@@ -13,6 +13,8 @@ namespace BannerKings.UI.Extensions
     internal class MapBarMixin : BaseViewModelMixin<MapInfoVM>
     {
 		private BasicTooltipViewModel pietyHint;
+		private int piety;
+		private string pietyAbbr;
 		public MapBarMixin(MapInfoVM vm) : base(vm)
         {
 			Piety = 0;
@@ -24,18 +26,52 @@ namespace BannerKings.UI.Extensions
 
 			Religion rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(Hero.MainHero);
 			Piety = (int)BannerKingsConfig.Instance.ReligionsManager.GetPiety(rel, Hero.MainHero);
-			pietyHint = new BasicTooltipViewModel(() => UIHelper.GetPietyTooltip(rel, Hero.MainHero, Piety));
+			PietyHint = new BasicTooltipViewModel(() => UIHelper.GetPietyTooltip(rel, Hero.MainHero, Piety));
 			PietyWithAbbrText = CampaignUIHelper.GetAbbreviatedValueTextFromValue(Piety);
 			//if (rel == null) return;
 		}
 
 		[DataSourceProperty]
-		public int Piety { get; set; }
+		public int Piety
+		{
+			get => piety;
+			set
+			{
+				if (value != this.piety)
+				{
+					this.piety = value;
+					ViewModel!.OnPropertyChangedWithValue(value, "Piety");
+				}
+			}
+		}
+
 
 		[DataSourceProperty]
-		public string PietyWithAbbrText { get; set; }
+		public string PietyWithAbbrText
+		{
+			get => pietyAbbr;
+			set
+			{
+				if (value != this.pietyAbbr)
+				{
+					this.pietyAbbr = value;
+					ViewModel!.OnPropertyChangedWithValue(value, "PietyWithAbbrText");
+				}
+			}
+		}
 
 		[DataSourceProperty]
-		public BasicTooltipViewModel PietyHint => pietyHint;
+		public BasicTooltipViewModel PietyHint
+		{
+			get => pietyHint;
+			set
+			{
+				if (value != this.pietyHint)
+				{
+					pietyHint = value;
+					ViewModel!.OnPropertyChangedWithValue(value, "PietyHint");
+				}
+			}
+		}
 	}
 }
