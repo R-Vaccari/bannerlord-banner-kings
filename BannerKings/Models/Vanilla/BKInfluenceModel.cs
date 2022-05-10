@@ -37,6 +37,9 @@ namespace BannerKings.Models
                         float extra = BannerKingsConfig.Instance.PopulationManager.GetPopCountOverLimit(settlement, PopType.Nobles);
                         baseResult.Add(MBMath.ClampFloat(extra * -0.01f, result * -0.5f, -0.1f), new TextObject(string.Format("Excess noble population at {0}", settlement.Name)));
                     }
+
+                    float support = data.NotableSupport - 0.5f;
+                    if (support != 0f) baseResult.AddFactor(support, new TextObject("{=!}Notable Support"));
                 }
             }
                 

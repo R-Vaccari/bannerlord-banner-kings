@@ -16,6 +16,7 @@ namespace BannerKings.Models.Vanilla
             {
                 BKTitleModel model = (BKTitleModel)BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(BKTitleModel));
                 FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement);
+                if (title == null) return result;
                 if (title.deJure == title.DeFacto)
                 {
                     result += model.GetGoldUsurpCost(title) * 3f;
