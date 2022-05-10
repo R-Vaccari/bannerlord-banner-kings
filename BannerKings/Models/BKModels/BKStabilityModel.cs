@@ -7,25 +7,34 @@ using BannerKings.Managers.Titles;
 
 namespace BannerKings.Models
 {
-    class BKStabilityModel : IBannerKingsModel
+    public class BKStabilityModel : IBannerKingsModel
     {
-        public ExplainedNumber CalculateAutonomyEffect(Settlement settlement, float stability)
+        public ExplainedNumber CalculateAutonomyEffect(Settlement settlement, float stability, float autonomy)
         {
             ExplainedNumber result = new ExplainedNumber();
+            result.LimitMin(-0.01f);
+            result.LimitMax(0.01f);
+            float targetAutonomy = CalculateAutonomyTarget(settlement, stability).ResultNumber;
+            float random1 = 0.005f * MBRandom.RandomFloat;
+            float random2 = 0.005f * MBRandom.RandomFloat;
+            float change = targetAutonomy > autonomy ? 0.005f + random1 - random2 : targetAutonomy < autonomy ? -0.005f - random1 + random2 : 0f;
+            result.Add(change, new TextObject());
 
             return result;
         }
         public ExplainedNumber CalculateEffect(Settlement settlement)
         {
             ExplainedNumber result = new ExplainedNumber();
+            result.LimitMin(-0.01f);
+            result.LimitMax(0.01f);
             PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
             float stability = data.Stability;
             if (settlement.Town != null)
             {
                 float targetStability = this.CalculateStabilityTarget(settlement).ResultNumber;
-                float random1 = 0.01f * MBRandom.RandomFloat;
-                float random2 = 0.01f * MBRandom.RandomFloat;
-                float change = targetStability > stability ? 0.015f + random1 - random2 : targetStability < stability ? -0.015f - random1 + random2 : 0f;
+                float random1 = 0.005f * MBRandom.RandomFloat;
+                float random2 = 0.005f * MBRandom.RandomFloat;
+                float change = targetStability > stability ? 0.005f + random1 - random2 : targetStability < stability ? -0.005f - random1 + random2 : 0f;
                 result.Add(change, new TextObject());
             }
             else if (settlement.IsVillage && settlement.Village != null)
@@ -36,9 +45,28 @@ namespace BannerKings.Models
             return result;
         }
 
+        public ExplainedNumber CalculateAutonomyTarget(Settlement settlement, float stability)
+        {
+            ExplainedNumber result = new ExplainedNumber();
+            result.LimitMin(0f);
+            result.LimitMax(1f);
+
+            result.Add(1f - stability);
+            if (settlement.Town != null && settlement.Town.Governor != null && settlement.Town.Governor.IsNotable)
+                result.Add(0.2f);
+
+            if (settlement.Culture == settlement.Owner.Culture)
+                result.Add(-0.1f);
+
+
+            return result;
+        }
+
         public ExplainedNumber CalculateStabilityTarget(Settlement settlement)
         {
             ExplainedNumber result = new ExplainedNumber();
+            result.LimitMin(0f);
+            result.LimitMax(1f);
             PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
             float stability = data.Stability;
             if (settlement.Town != null)
@@ -53,11 +81,11 @@ namespace BannerKings.Models
                 foreach (float satisfaction in satisfactions)
                     averageSatisfaction += satisfaction / 4f;
 
-                result.Add(sec / 4f, new TextObject("Security"));
-                result.Add(loyalty / 4f, new TextObject("Loyalty"));
-                result.Add(assimilation / 4f, new TextObject("Cultural assimilation"));
-                result.Add(averageSatisfaction / 4f, new TextObject("Produce satisfactions"));
-                result.Add(sec / 4f, new TextObject("Security"));
+                result.Add(sec / 5f, new TextObject("Security"));
+                result.Add(loyalty / 5f, new TextObject("Loyalty"));
+                result.Add(assimilation / 5f, new TextObject("Cultural assimilation"));
+                result.Add(averageSatisfaction / 5f, new TextObject("Produce satisfactions"));
+                result.Add(data.NotableSupport / 5f, new TextObject("{=!}Notable support"));
 
                 float legitimacy = 0f;
                 LegitimacyType legitimacyType = (LegitimacyType)BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(BKLegitimacyModel))

@@ -129,6 +129,26 @@ namespace BannerKings.Populations
             }
         }
 
+        public float NotableSupport
+        {
+            get
+            {
+                float support = 0f;
+                float totalPower = 0f;
+                foreach (Hero notable in settlement.Notables)
+                    totalPower += notable.Power;
+
+                foreach (Hero notable in settlement.Notables)
+                {
+                    float powerShare = notable.Power / totalPower;
+                    float relation = (float)notable.GetRelation(settlement.OwnerClan.Leader) * 0.01f + 0.5f;
+                    support += relation * powerShare;
+                }
+
+                return MBMath.ClampFloat(support, 0f, 1f);
+            }
+        }
+
         public List<PopulationClass> Classes
         {
             get => classes;
@@ -274,7 +294,7 @@ namespace BannerKings.Populations
             UpdatePopulation(settlement, growthFactor, PopType.None);
             BKStabilityModel stabilityModel = (BKStabilityModel)BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(BKStabilityModel));
             Stability += stabilityModel.CalculateEffect(settlement).ResultNumber;
-            Autonomy += stabilityModel.CalculateAutonomyEffect(settlement, Stability).ResultNumber;
+            Autonomy += stabilityModel.CalculateAutonomyEffect(settlement, Stability, Autonomy).ResultNumber;
             economicData.Update(this);
             cultureData.Update(this);
             militaryData.Update(this);
@@ -327,7 +347,7 @@ namespace BannerKings.Populations
                 float share = 0f;
                 foreach (CultureDataClass data in this.cultures)
                 {
-                    if (data.Assimilation >= share && data.Culture.MilitiaSpearman != null)
+                    if (data.Assimilation >= share && data.Culture.MilitiaPartyTemplate != null)
                     {
                         culture = data.Culture;
                         share = data.Assimilation;
