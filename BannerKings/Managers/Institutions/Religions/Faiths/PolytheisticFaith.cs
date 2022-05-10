@@ -5,7 +5,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
 {
     public abstract class PolytheisticFaith : Faith
     {
-        private List<Divinity> pantheon;
+        protected List<Divinity> pantheon;
 
         public void Initialize(Divinity mainGod, List<Divinity> pantheon, Dictionary<TraitObject, bool> traits,
           FaithGroup faithGroup, Dictionary<int, CharacterObject> presets)

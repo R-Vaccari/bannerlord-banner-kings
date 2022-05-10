@@ -207,7 +207,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
             return 1;
         }
 
-        public override List<Divinity> GetMainDivinities()
+        public override List<Divinity> GetMainDivinity()
         {
             throw new NotImplementedException();
         }

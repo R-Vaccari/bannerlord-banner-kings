@@ -7,11 +7,11 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
 {
     public abstract class Faith
     {
-        private FaithGroup faithGroup;
-        private Divinity mainGod;
-        private Dictionary<TraitObject, bool> traits;
-        private Dictionary<Faith, FaithStance> stances;
-        private Dictionary<int, CharacterObject> presets;
+        protected FaithGroup faithGroup;
+        protected Divinity mainGod;
+        protected Dictionary<TraitObject, bool> traits;
+        protected Dictionary<Faith, FaithStance> stances;
+        protected Dictionary<int, CharacterObject> presets;
 
         public Faith() 
         {
@@ -70,9 +70,8 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
 
         public abstract TextObject GetFaithName();
         public abstract TextObject GetFaithDescription();
-        public abstract List<Divinity> GetMainDivinities();
-        public abstract List<Divinity> GetSecondaryDivinities();
-        public abstract TextObject GetMainGodDescription();
+        public abstract Divinity GetMainDivinity();
+        public abstract MBReadOnlyList<Divinity> GetSecondaryDivinities();
         public abstract TextObject GetMainDivinitiesDescription();
         public abstract TextObject GetSecondaryDivinitiesDescription();
         public abstract int GetMaxClergyRank();

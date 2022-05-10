@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
+using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
@@ -184,20 +185,9 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
             return 0;
         }
 
-        public override List<Divinity> GetMainDivinities()
-        {
-            throw new NotImplementedException();
-        }
+        public override Divinity GetMainDivinity() => mainGod;
 
-        public override TextObject GetMainDivinitiesDescription()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override TextObject GetMainGodDescription()
-        {
-            throw new NotImplementedException();
-        }
+        public override TextObject GetMainDivinitiesDescription() => new TextObject("{=!}Great Spirits");
 
         public override int GetMaxClergyRank() => 2;
 
@@ -211,14 +201,8 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
             return text;
         }
 
-        public override List<Divinity> GetSecondaryDivinities()
-        {
-            throw new NotImplementedException();
-        }
+        public override MBReadOnlyList<Divinity> GetSecondaryDivinities() => pantheon.GetReadOnlyList();
 
-        public override TextObject GetSecondaryDivinitiesDescription()
-        {
-            throw new NotImplementedException();
-        }
+        public override TextObject GetSecondaryDivinitiesDescription() => new TextObject("{=!}Spirits");
     }
 }
