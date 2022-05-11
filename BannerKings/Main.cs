@@ -420,6 +420,33 @@ namespace BannerKings
 
 
                 [HarmonyPrefix]
+                [HarmonyPatch("AddExpensesFromGarrisons", MethodType.Normal)]
+                static bool GarrisonsPrefix(Clan clan, ref ExplainedNumber goldChange, bool applyWithdrawals = false)
+                {
+                    if (BannerKingsConfig.Instance.TitleManager != null)
+                    {
+                        DefaultClanFinanceModel model = new DefaultClanFinanceModel();
+                        MethodInfo calculateWage = model.GetType().GetMethod("CalculatePartyWage", BindingFlags.Instance | BindingFlags.NonPublic);
+                        if (clan == Clan.PlayerClan)
+                            Console.WriteLine();
+
+                        foreach (Town town in clan.Fiefs)
+                        {
+                            MobileParty garrisonParty = town.GarrisonParty;
+                            
+                            if (garrisonParty != null && garrisonParty.IsActive)
+                            {
+                                int wage = (int)calculateWage.Invoke(model, new object[] { garrisonParty, clan.Gold, applyWithdrawals });
+                                if (wage > 0) goldChange.Add(-wage, new TextObject("{=iPDOLbi3}Party wages {A0}"), garrisonParty.Name);
+                            }
+                        }
+                        return false;
+                    }
+                    return true;
+                }
+
+
+                [HarmonyPrefix]
                 [HarmonyPatch("AddExpensesFromParties", MethodType.Normal)]
                 static bool PartyExpensesPrefix(Clan clan, ref ExplainedNumber goldChange, bool applyWithdrawals = false)
                 {
@@ -436,13 +463,13 @@ namespace BannerKings
 
                         foreach (WarPartyComponent warPartyComponent in clan.WarPartyComponents)
                             list.Add(warPartyComponent.MobileParty);
-                        
+
+                        DefaultClanFinanceModel model = new DefaultClanFinanceModel();
+                        MethodInfo addExpense = model.GetType().GetMethod("AddPartyExpense", BindingFlags.Instance | BindingFlags.NonPublic);
                         foreach (MobileParty mobileParty in list)
                         {
-                            if (mobileParty.IsActive && mobileParty.LeaderHero != clan.Leader)
+                            if (mobileParty.LeaderHero != null && mobileParty.LeaderHero != clan.Leader)
                             {
-                                DefaultClanFinanceModel model = new DefaultClanFinanceModel();
-                                MethodInfo addExpense = model.GetType().GetMethod("AddPartyExpense", BindingFlags.Instance | BindingFlags.NonPublic);
                                 object[] array = new object[] { mobileParty, clan, new ExplainedNumber(), applyWithdrawals };
                                 addExpense.Invoke(model, array);
                                 if (BannerKingsConfig.Instance.TitleManager.GetHighestTitle(mobileParty.LeaderHero) == null) 

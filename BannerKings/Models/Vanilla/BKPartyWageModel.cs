@@ -76,8 +76,9 @@ namespace BannerKings.Models.Vanilla
 				if (proportion > 0f)
 					result.AddFactor(proportion * -0.1f, GameTexts.FindText("str_culture"));
 
+				
 				if (mobileParty.IsGarrison)
-					result.AddFactor(-0.66f, null);
+					result.Add(result.ResultNumber * - 0.5f, null);
 			}
 
 			return result;
