@@ -113,24 +113,27 @@ namespace BannerKings.Behaviours
 
                 if (!conqueredByArmies.ContainsKey(settlement)) return;
 
-                List<Clan> clans = conqueredByArmies[settlement];
+                List<Clan> clans = conqueredByArmies[settlement].FindAll(x => x.Kingdom == kingdom && !x.IsUnderMercenaryService);
                 if (clans.Count == 1) ChangeOwnerOfSettlementAction.ApplyByKingDecision(clans[0].Leader, settlement);
-
-                kingdom.AddDecision(new BKSettlementClaimantDecision(kingdom.RulingClan, settlement, settlement.LastAttackerParty.LeaderHero, null, conqueredByArmies[settlement], true), true); ;
-                if (clans.Contains(Clan.PlayerClan) && !Clan.PlayerClan.IsUnderMercenaryService)
+                else if (clans.Count == 0) kingdom.AddDecision(new KingSelectionKingdomDecision(kingdom.RulingClan), true);
+                else
                 {
-                    MobileParty party = clans[0].Leader.PartyBelongedTo;
-                    Army army = null;
-                    if (party != null)
-                        army = party.Army;
+                    kingdom.AddDecision(new BKSettlementClaimantDecision(kingdom.RulingClan, settlement, settlement.LastAttackerParty.LeaderHero, null, conqueredByArmies[settlement], true), true);
+                    if (clans.Contains(Clan.PlayerClan) && !Clan.PlayerClan.IsUnderMercenaryService)
+                    {
+                        MobileParty party = clans[0].Leader.PartyBelongedTo;
+                        Army army = null;
+                        if (party != null)
+                            army = party.Army;
 
-                    if (army != null) GameTexts.SetVariable("ARMY", army.Name);
-                    else GameTexts.SetVariable("ARMY", new TextObject("{=!}the conquering army"));
-                    GameTexts.SetVariable("SETTLEMENT", settlement.Name);
-                    InformationManager.ShowInquiry(new InquiryData(new TextObject("Conquest Right - Election").ToString(),
-                        new TextObject("By contract law, you and the participants of {ARMY} will compete in election for the ownership of {SETTLEMENT}.").ToString(),
-                        true, false, GameTexts.FindText("str_done").ToString(), null, null, null), true);
-                }           
+                        if (army != null) GameTexts.SetVariable("ARMY", army.Name);
+                        else GameTexts.SetVariable("ARMY", new TextObject("{=!}the conquering army"));
+                        GameTexts.SetVariable("SETTLEMENT", settlement.Name);
+                        InformationManager.ShowInquiry(new InquiryData(new TextObject("Conquest Right - Election").ToString(),
+                            new TextObject("By contract law, you and the participants of {ARMY} will compete in election for the ownership of {SETTLEMENT}.").ToString(),
+                            true, false, GameTexts.FindText("str_done").ToString(), null, null, null), true);
+                    }
+                }        
             } 
         }
 
@@ -138,6 +141,9 @@ namespace BannerKings.Behaviours
             ChangeOwnerOfSettlementAction.ChangeOwnerOfSettlementDetail detail)
         {
             if (BannerKingsConfig.Instance.TitleManager == null) return;
+
+            if (conqueredByArmies.ContainsKey(settlement))
+                conqueredByArmies.Remove(settlement);
 
             if (detail == ChangeOwnerOfSettlementAction.ChangeOwnerOfSettlementDetail.ByBarter)
             {

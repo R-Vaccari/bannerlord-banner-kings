@@ -1,11 +1,10 @@
-﻿using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.SandBox.GameComponents;
+﻿using TaleWorlds.CampaignSystem.SandBox.GameComponents;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 
 namespace BannerKings.Models
 {
-    class BKPriceFactorModel : DefaultTradeItemPriceFactorModel
+    public class BKPriceFactorModel : DefaultTradeItemPriceFactorModel
     {
        /* public override int GetPrice(EquipmentElement itemRosterElement, MobileParty clientParty, PartyBase merchant, bool isSelling, float inStoreValue, float supply, float demand)
         {
@@ -23,6 +22,9 @@ namespace BannerKings.Models
             float baseResult = base.GetBasePriceFactor(itemCategory, inStoreValue, supply, demand, isSelling, transferValue);
             if (itemCategory.IsTradeGood || itemCategory.IsAnimal)
                 baseResult = MathF.Clamp(baseResult, 0.4f, 8f);
+
+            if (itemCategory.Properties == ItemCategory.Property.BonusToFoodStores)
+                baseResult = MathF.Clamp(baseResult, 0.1f, 4f);
 
             return baseResult;
         }
