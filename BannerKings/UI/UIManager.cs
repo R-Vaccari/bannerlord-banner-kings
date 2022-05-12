@@ -62,7 +62,20 @@ namespace BannerKings.UI
 
     namespace Patches
     {
-
+        [HarmonyPatch(typeof(SettlementGovernorSelectionVM))]
+        internal class AvailableGovernorsPatch
+        {
+            [HarmonyPostfix]
+            [HarmonyPatch(MethodType.Constructor, new Type[] { typeof(Settlement), typeof(Action<Hero>) } )]
+            internal static void ConstructorPostfix(SettlementGovernorSelectionVM __instance, Settlement settlement, Action<Hero> onDone)
+            {
+                if (settlement != null)
+                    foreach (Hero notable in settlement.Notables)
+                        if (!notable.IsDisabled && !notable.IsDead)
+                            __instance.AvailableGovernors.Add(new SettlementGovernorSelectionItemVM(notable, 
+                                new Action<SettlementGovernorSelectionItemVM>(delegate (SettlementGovernorSelectionItemVM x) { onDone.Invoke(x.Governor); })));
+            }
+        }
 
         [HarmonyPatch(typeof(Hero))]
         internal class HeroNamePatch

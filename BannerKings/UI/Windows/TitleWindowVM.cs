@@ -54,8 +54,8 @@ namespace BannerKings.UI.Windows
             base.RefreshValues();
 			this.Decisions.Clear();
 
-			bool allSetup = this.kingdom != null && this.title != null && this.title.contract != null &&
-				this.kingdom == BannerKingsConfig.Instance.TitleManager.GetTitleFaction(title);
+			if (title == null || title.contract == null) return;
+			bool allSetup = this.kingdom != null && this.kingdom == BannerKingsConfig.Instance.TitleManager.GetTitleFaction(title);
 			DecisionElement contractButton = new DecisionElement().SetAsButtonOption(new TextObject("{=!}Contract").ToString(),
 				() => BannerKingsConfig.Instance.TitleManager.ShowContract(kingdom.Leader, GameTexts.FindText("str_done").ToString()),
 				new TextObject("{=!}Review this kingdom's contract, signed by lords that join it."));

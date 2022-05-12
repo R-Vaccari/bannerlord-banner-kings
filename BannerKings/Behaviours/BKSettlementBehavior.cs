@@ -36,6 +36,7 @@ namespace BannerKings.Behaviors
 
         public override void RegisterEvents()
         {
+            CampaignEvents.OnSiegeAftermathAppliedEvent.AddNonSerializedListener(this, new Action<MobileParty, Settlement, SiegeAftermathCampaignBehavior.SiegeAftermath, Clan, Dictionary<MobileParty, float>>(OnSiegeAftermath));
             CampaignEvents.SettlementEntered.AddNonSerializedListener(this, new Action<MobileParty, Settlement, Hero>(OnSettlementEntered));
             CampaignEvents.DailyTickSettlementEvent.AddNonSerializedListener(this, new Action<Settlement>(DailySettlementTick));
             CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, new Action<CampaignGameStarter>(OnSessionLaunched));
@@ -74,6 +75,40 @@ namespace BannerKings.Behaviors
 
                 BannerKingsConfig.Instance.TitleManager.FixTitles();
             }
+        }
+
+        private void OnSiegeAftermath(MobileParty attackerParty, Settlement settlement, SiegeAftermathCampaignBehavior.SiegeAftermath aftermathType, Clan previousSettlementOwner, Dictionary<MobileParty, float> partyContributions)
+        {
+            if (aftermathType == SiegeAftermathCampaignBehavior.SiegeAftermath.ShowMercy || settlement == null || settlement.Town == null ||
+                BannerKingsConfig.Instance.PopulationManager == null ||!BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement)) 
+                return;
+
+            PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
+            float shareToKill;
+            if (aftermathType == SiegeAftermathCampaignBehavior.SiegeAftermath.Pillage)
+                shareToKill = MBRandom.RandomFloatRanged(0.1f, 0.16f);
+            else shareToKill = MBRandom.RandomFloatRanged(0.16f, 0.24f);
+            int killTotal = (int)((float)data.TotalPop * shareToKill);
+            int lognum = killTotal;
+            List<ValueTuple<PopType, float>> weights = new List<(PopType, float)>();
+            foreach (KeyValuePair<PopType, float[]> pair in PopulationManager.GetDesiredPopTypes(settlement))
+                weights.Add(new (pair.Key, pair.Value[0]));
+
+            if (killTotal <= 0) return;
+
+            while (killTotal > 0)
+            {
+                int random = MBRandom.RandomInt(10, 20);
+                PopType target = MBRandom.ChooseWeighted(weights);
+                int finalNum = MBMath.ClampInt(random, 0, data.GetTypeCount(target));
+                data.UpdatePopType(target, -finalNum);
+                killTotal -= finalNum;
+            }
+
+            InformationManager.DisplayMessage(new InformationMessage(new TextObject("{=!}{NUMBER} have been killed in the siege aftermath of {SETTLEMENT}.")
+                .SetTextVariable("NUMBER", lognum)
+                .SetTextVariable("SETTLEMENT", settlement.Name)
+                .ToString()));
         }
 
         private void OnSettlementEntered(MobileParty party, Settlement target, Hero hero)
@@ -263,35 +298,6 @@ namespace BannerKings.Behaviors
             }
 
             if (food > 0) settlement.Town.FoodStocks += food;
-        }
-
-        internal static void KillNotables(Settlement settlement, int amount)
-        {
-            Hero notable = null;
-            int i = 0;
-            try
-            {
-                List<Hero> notables = new List<Hero>(settlement.Notables);
-                foreach (Hero hero in notables)
-                    if (hero.BornSettlement != settlement)
-                    {
-                        notable = hero;
-                        LeaveSettlementAction.ApplyForCharacterOnly(hero);
-                        DisableHeroAction.Apply(hero);
-                        i++;
-                    }
-            }
-            catch (Exception ex)
-            {
-                string cause = "Exception in Banner Kings KillNotables method. ";
-                string objInfo = null;
-                if (notable != null)
-                    objInfo = string.Format("Notable: Name [{0}], Id [{1}], Culture [{2}]\nSettleent: Name [{3}], Id [{4}], Culture [{5}]", 
-                        notable.Name, notable.StringId, notable.Culture, settlement.Name, settlement.StringId, settlement.Culture);
-                else objInfo = "Null notable.";
-
-                throw new BannerKingsException(cause + objInfo, ex);
-            }
         }
 
 
@@ -918,8 +924,6 @@ namespace BannerKings.Behaviors
         {
             static bool Prefix(Settlement settlement)
             {
-                if (settlement.IsCastle && settlement.Name.ToString().Contains("Ab Comer"))
-                    Console.WriteLine();
                 List<Occupation> list = new List<Occupation>();
                 if (settlement.IsTown)
                 {
@@ -1025,8 +1029,8 @@ namespace BannerKings.Behaviors
                         {
                             if (Settlement.All.Any(x => x.Culture == pair.Key))
                             {
-                                Settlement random = Settlement.All.GetRandomElementWithPredicate(x => x.Culture == pair.Key);
-                                if (random != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(currentSettlement))
+                                Settlement random = Settlement.All.FirstOrDefault(x => x.Culture == pair.Key);
+                                if (random != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(random))
                                     BannerKingsConfig.Instance.PopulationManager.GetPopData(random)
                                         .UpdatePopType(PopType.Serfs, pair.Value);
                             } 
@@ -1073,8 +1077,8 @@ namespace BannerKings.Behaviors
                         {
                             if (Settlement.All.Any(x => x.Culture == pair.Key))
                             {
-                                Settlement random = Settlement.All.GetRandomElementWithPredicate(x => x.Culture == pair.Key);
-                                if (random != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(currentSettlement))
+                                Settlement random = Settlement.All.FirstOrDefault(x => x.Culture == pair.Key);
+                                if (random != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(random))
                                 {
                                     PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(currentSettlement);
                                     if (data != null)

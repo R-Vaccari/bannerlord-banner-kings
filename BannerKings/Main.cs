@@ -52,6 +52,7 @@ namespace BannerKings
                 campaignStarter.AddBehavior(new BKArmyBehavior());
                 campaignStarter.AddBehavior(new BKRansomBehavior());
                 campaignStarter.AddBehavior(new BKTitleBehavior());
+                campaignStarter.AddBehavior(new BKNotableBehavior());
 
                 campaignStarter.AddModel(new BKCompanionPrices());
                 campaignStarter.AddModel(new BKProsperityModel());
@@ -65,7 +66,7 @@ namespace BannerKings
                 campaignStarter.AddModel(new BKSecurityModel());
                 campaignStarter.AddModel(new BKPartyLimitModel());
                 campaignStarter.AddModel(new BKEconomyModel());
-                //campaignStarter.AddModel(new BKPriceFactorModel());
+                campaignStarter.AddModel(new BKPriceFactorModel());
                 campaignStarter.AddModel(new BKWorkshopModel());
                 campaignStarter.AddModel(new BKClanFinanceModel());
                 campaignStarter.AddModel(new BKArmyManagementModel());
@@ -73,12 +74,13 @@ namespace BannerKings
                 campaignStarter.AddModel(new BKTournamentModel());
                 campaignStarter.AddModel(new BKRaidModel());
                 campaignStarter.AddModel(new BKVolunteerModel());
-                campaignStarter.AddModel(new BKNotableModel());
+                campaignStarter.AddModel(new BKNotableSpawnModel());
                 campaignStarter.AddModel(new BKGarrisonModel());
                 campaignStarter.AddModel(new BKRansomModel());
                 campaignStarter.AddModel(new BKClanTierModel());
                 campaignStarter.AddModel(new BKPartyWageModel());
                 campaignStarter.AddModel(new BKSettlementValueModel());
+                campaignStarter.AddModel(new BKNotablePowerModel());
             }
 
             //xtender.Register(typeof(Main).Assembly);
@@ -130,6 +132,7 @@ namespace BannerKings
 
         namespace Fixes
         {
+
             // Fix crash on wanderer same gender child born
             [HarmonyPatch(typeof(NameGenerator), "GenerateHeroFullName")]
             class NameGeneratorPatch
@@ -152,6 +155,24 @@ namespace BannerKings
                         return false;
                     }
                     return true;
+                }
+            }
+
+            [HarmonyPatch(typeof(TownMarketData))]
+            class TownItemPricePatch
+            {
+
+                [HarmonyPrefix]
+                [HarmonyPatch("GetPrice", new Type[] { typeof(EquipmentElement), typeof(MobileParty), typeof(bool), typeof(PartyBase) })]
+                static bool Prefix2(TownMarketData __instance, ref int __result, EquipmentElement itemRosterElement, MobileParty tradingParty = null, bool isSelling = false, PartyBase merchantParty = null)
+                {
+                    if (itemRosterElement.Item == null) __result = 0;
+                    else
+                    {
+                        ItemData categoryData = __instance.GetCategoryData(itemRosterElement.Item.GetItemCategory());
+                        __result = Campaign.Current.Models.TradeItemPriceFactorModel.GetPrice(itemRosterElement, tradingParty, merchantParty, isSelling, (float)categoryData.InStoreValue, categoryData.Supply, categoryData.Demand);
+                    }
+                    return false;
                 }
             }
 
@@ -399,6 +420,33 @@ namespace BannerKings
 
 
                 [HarmonyPrefix]
+                [HarmonyPatch("AddExpensesFromGarrisons", MethodType.Normal)]
+                static bool GarrisonsPrefix(Clan clan, ref ExplainedNumber goldChange, bool applyWithdrawals = false)
+                {
+                    if (BannerKingsConfig.Instance.TitleManager != null)
+                    {
+                        DefaultClanFinanceModel model = new DefaultClanFinanceModel();
+                        MethodInfo calculateWage = model.GetType().GetMethod("CalculatePartyWage", BindingFlags.Instance | BindingFlags.NonPublic);
+                        if (clan == Clan.PlayerClan)
+                            Console.WriteLine();
+
+                        foreach (Town town in clan.Fiefs)
+                        {
+                            MobileParty garrisonParty = town.GarrisonParty;
+                            
+                            if (garrisonParty != null && garrisonParty.IsActive)
+                            {
+                                int wage = (int)calculateWage.Invoke(model, new object[] { garrisonParty, clan.Gold, applyWithdrawals });
+                                if (wage > 0) goldChange.Add(-wage, new TextObject("{=iPDOLbi3}Party wages {A0}"), garrisonParty.Name);
+                            }
+                        }
+                        return false;
+                    }
+                    return true;
+                }
+
+
+                [HarmonyPrefix]
                 [HarmonyPatch("AddExpensesFromParties", MethodType.Normal)]
                 static bool PartyExpensesPrefix(Clan clan, ref ExplainedNumber goldChange, bool applyWithdrawals = false)
                 {
@@ -415,13 +463,13 @@ namespace BannerKings
 
                         foreach (WarPartyComponent warPartyComponent in clan.WarPartyComponents)
                             list.Add(warPartyComponent.MobileParty);
-                        
+
+                        DefaultClanFinanceModel model = new DefaultClanFinanceModel();
+                        MethodInfo addExpense = model.GetType().GetMethod("AddPartyExpense", BindingFlags.Instance | BindingFlags.NonPublic);
                         foreach (MobileParty mobileParty in list)
                         {
-                            if (mobileParty.IsActive && mobileParty.LeaderHero != clan.Leader)
+                            if (mobileParty.LeaderHero != null && mobileParty.LeaderHero != clan.Leader)
                             {
-                                DefaultClanFinanceModel model = new DefaultClanFinanceModel();
-                                MethodInfo addExpense = model.GetType().GetMethod("AddPartyExpense", BindingFlags.Instance | BindingFlags.NonPublic);
                                 object[] array = new object[] { mobileParty, clan, new ExplainedNumber(), applyWithdrawals };
                                 addExpense.Invoke(model, array);
                                 if (BannerKingsConfig.Instance.TitleManager.GetHighestTitle(mobileParty.LeaderHero) == null) 
@@ -560,6 +608,69 @@ namespace BannerKings
                     _itemCategoryBread.InitializeObject(true, 50, 20, ItemCategory.Property.BonusToFoodStores, null, 0f, false, true);
                 }
             }
+
+
+            [HarmonyPatch(typeof(SellGoodsForTradeAction), "ApplyInternal")]
+            class SellGoodsPatch
+            {
+                static bool Prefix(object[] __args)
+                {
+                    Settlement settlement = (Settlement)__args[0];
+                    MobileParty mobileParty = (MobileParty)__args[1];
+                    if (settlement != null && mobileParty != null)
+                        if (settlement.IsTown && mobileParty.IsVillager)
+                        {
+                            Town component = settlement.GetComponent<Town>();
+                            List<ValueTuple<ItemObject, int>> list = new List<ValueTuple<ItemObject, int>>();
+                            int num = 10000;
+                            ItemObject itemObject = null;
+                            for (int i = 0; i < mobileParty.ItemRoster.Count; i++)
+                            {
+                                ItemRosterElement elementCopyAtIndex = mobileParty.ItemRoster.GetElementCopyAtIndex(i);
+                                if (elementCopyAtIndex.EquipmentElement.Item.ItemCategory == DefaultItemCategories.PackAnimal && elementCopyAtIndex.EquipmentElement.Item.Value < num)
+                                {
+                                    num = elementCopyAtIndex.EquipmentElement.Item.Value;
+                                    itemObject = elementCopyAtIndex.EquipmentElement.Item;
+                                }
+                            }
+                            for (int j = mobileParty.ItemRoster.Count - 1; j >= 0; j--)
+                            {
+                                ItemRosterElement elementCopyAtIndex2 = mobileParty.ItemRoster.GetElementCopyAtIndex(j);
+                                int itemPrice = component.GetItemPrice(elementCopyAtIndex2.EquipmentElement, mobileParty, true);
+                                int num2 = mobileParty.ItemRoster.GetElementNumber(j);
+                                if (elementCopyAtIndex2.EquipmentElement.Item == itemObject)
+                                {
+                                    int num3 = (int)(0.5f * (float)mobileParty.MemberRoster.TotalManCount) + 2;
+                                    num2 -= num3;
+
+                                    if (itemObject.StringId == "mule")
+                                        num2 -= (int)(mobileParty.MemberRoster.TotalManCount * 0.1f);
+                                }
+                                if (num2 > 0)
+                                {
+                                    int num4 = MathF.Min(num2, component.Gold / itemPrice);
+                                    if (num4 > 0)
+                                    {
+                                        mobileParty.PartyTradeGold += num4 * itemPrice;
+                                        EquipmentElement equipmentElement = elementCopyAtIndex2.EquipmentElement;
+                                        component.ChangeGold(-num4 * itemPrice);
+                                        settlement.ItemRoster.AddToCounts(equipmentElement, num4);
+                                        mobileParty.ItemRoster.AddToCounts(equipmentElement, -num4);
+                                        list.Add(new ValueTuple<ItemObject, int>(equipmentElement.Item, num4));
+                                    }
+                                }
+                            }
+
+                            if (!list.IsEmpty<ValueTuple<ItemObject, int>>())
+                                CampaignEventDispatcher.Instance.OnCaravanTransactionCompleted(mobileParty, component, list);
+
+                            return false;
+                        }
+
+                    return true;
+                }
+            }
+
 
             //Mules
             [HarmonyPatch(typeof(VillagerCampaignBehavior), "MoveItemsToVillagerParty")]

@@ -1,22 +1,24 @@
-﻿using BannerKings.Managers.Court;
+﻿
+using BannerKings.Managers.Court;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Titles;
 using BannerKings.Populations;
-using CalradiaExpandedKingdoms.Models;
 using Helpers;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.SandBox.GameComponents;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using static BannerKings.Managers.Policies.BKCriminalPolicy;
 using static BannerKings.Managers.Policies.BKTaxPolicy;
 using static BannerKings.Managers.PopulationManager;
+using static BannerKings.Managers.TitleManager;
 
 namespace BannerKings.Models
 {
-    class BKLoyaltyModel : CEKSettlementLoyaltyModel
-	{
+    class BKLoyaltyModel : DefaultSettlementLoyaltyModel
+    {
         private static readonly float SLAVE_LOYALTY = -0.00035f;
 		private static readonly float LOYALTY_FACTOR = 4f;
 
@@ -68,13 +70,15 @@ namespace BannerKings.Models
 					baseResult.Add(value, new TextObject("{=!}Criminal policy"));
 				}
 
-
 				if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(town.Settlement, "decision_ration"))
-					baseResult.Add(town.IsUnderSiege ? -2f : -4f, new TextObject("{=!}Enforce rations decision"));
+					baseResult.Add(town.IsUnderSiege || town.FoodStocks >= (float)town.FoodStocksUpperLimit() * 0.1f ? -2f : -4f, 
+						new TextObject("{=!}Enforce rations decision"));
 
 				GovernmentType government = BannerKingsConfig.Instance.TitleManager.GetSettlementGovernment(town.Settlement);
 				if (government == GovernmentType.Republic)
 					baseResult.Add(1f, new TextObject("{=!}Government"));
+
+				baseResult.Add(2f * data.Autonomy, new TextObject("Autonomy"));
 
 				BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref baseResult, town.OwnerClan.Leader, CouncilPosition.Chancellor, 1f, false);
 				return baseResult;
@@ -144,31 +148,8 @@ namespace BannerKings.Models
 				if (town.Governor != null)
 					explainedNumber.Add(result * ((town.Governor.Culture == town.Culture) ? 0.1f : -0.1f), GovernorCultureText);
 
-				if (town.OwnerClan.Leader.Culture.HasFeat(CalradiaExpandedKingdoms.Feats.CEKFeats.AseraiNegativeFeatTwo))
-					explainedNumber.Add(CalradiaExpandedKingdoms.Feats.CEKFeats.AseraiNegativeFeatTwo.EffectBonus, GameTexts.FindText("str_culture", null));
 
-				if (town.OwnerClan.Leader.Culture.HasFeat(CalradiaExpandedKingdoms.Feats.CEKFeats.LyrionNegativeFeatTwo))
-					explainedNumber.Add(CalradiaExpandedKingdoms.Feats.CEKFeats.LyrionNegativeFeatTwo.EffectBonus, GameTexts.FindText("str_culture", null));
-
-
-				if (town.OwnerClan.Leader.Culture.HasFeat(CalradiaExpandedKingdoms.Feats.CEKFeats.ApolssalianNegativeFeatOne))
-					if (town.Culture != town.OwnerClan.Culture)
-						explainedNumber.Add(CalradiaExpandedKingdoms.Feats.CEKFeats.ApolssalianNegativeFeatOne.EffectBonus, GameTexts.FindText("str_culture", null));
-
-				if (town.Governor != null)
-				{
-					if (town.Governor.Culture != town.Culture && town.OwnerClan.Leader.Culture.HasFeat(CalradiaExpandedKingdoms.Feats.CEKFeats.EmpirePositiveFeatFour))
-						explainedNumber.Add(1f, GameTexts.FindText("str_culture", null));
-
-					if (town.Governor.Culture != town.Culture && town.OwnerClan.Leader.Culture.HasFeat(CalradiaExpandedKingdoms.Feats.CEKFeats.VagirPositiveFeatOne))
-						explainedNumber.Add(1f, GameTexts.FindText("str_culture", null));
-
-					if (town.Governor.Culture != town.Culture && town.OwnerClan.Leader.Culture.HasFeat(CalradiaExpandedKingdoms.Feats.CEKFeats.PaleicianPositiveFeatFour))
-						explainedNumber.Add(1f, GameTexts.FindText("str_culture", null));
-				}
-
-
-			} else if (town.Settlement.OwnerClan.Culture != town.Settlement.Culture) // vanilla behavior
+				} else if (town.Settlement.OwnerClan.Culture != town.Settlement.Culture) // vanilla behavior
 				explainedNumber.Add(-3f, CultureText, null);
 			
 		}
@@ -232,7 +213,7 @@ namespace BannerKings.Models
 			if (town.FoodStocks >= foodLimitForBonus)
 				explainedNumber.Add(0.5f, new TextObject("Well fed populace"));
 			else if (town.Settlement.IsStarving)
-				explainedNumber.AddFactor(-0.3f, StarvingText);
+				explainedNumber.Add(-2f, StarvingText);
 		}
 
 		private void GetSettlementLoyaltyChangeDueToSecurity(Town town, ref ExplainedNumber explainedNumber)

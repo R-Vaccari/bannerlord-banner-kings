@@ -16,6 +16,7 @@ namespace BannerKings.Models.Vanilla
             {
                 BKTitleModel model = (BKTitleModel)BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(BKTitleModel));
                 FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement);
+                if (title == null) return result;
                 if (title.deJure == title.DeFacto)
                 {
                     result += model.GetGoldUsurpCost(title) * 3f;
@@ -24,7 +25,7 @@ namespace BannerKings.Models.Vanilla
                         foreach (Village village in settlement.BoundVillages)
                         {
                             FeudalTitle villageTitle = BannerKingsConfig.Instance.TitleManager.GetTitle(village.Settlement);
-                            if (villageTitle.deJure == settlement.Owner) result += model.GetGoldUsurpCost(villageTitle) * 3f;
+                            if (villageTitle != null && villageTitle.deJure == settlement.Owner) result += model.GetGoldUsurpCost(villageTitle) * 3f;
                         }   
                     }
                 }

@@ -100,7 +100,10 @@ namespace BannerKings.Models
                 else tax = 0.85f;
             }
             float efficiency = data.EconomicData.ProductionEfficiency.ResultNumber;
-            return (int)(privateSlaves * tax * efficiency);
+            if (privateSlaves > 0f)
+                return (int)(privateSlaves * tax * efficiency);
+
+            return 0;
         }
 
         public ExplainedNumber CalculateEffect(Settlement settlement)

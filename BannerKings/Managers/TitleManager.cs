@@ -228,17 +228,6 @@ namespace BannerKings.Managers
             return clans;
         }
 
-        public bool HasSuzerain(Settlement settlement)
-        {
-            FeudalTitle vassal = GetTitle(settlement);
-            if (vassal != null)
-            {
-                FeudalTitle suzerain = GetImmediateSuzerain(vassal);
-                return suzerain != null;
-            }
-            return false;
-        }
-
         public bool HasSuzerain(FeudalTitle vassal)
         {
             FeudalTitle suzerain = GetImmediateSuzerain(vassal);
