@@ -1,6 +1,9 @@
-﻿using System;
+﻿using HarmonyLib;
+using System;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
+using TaleWorlds.CampaignSystem.CharacterDevelopment.Managers;
+using TaleWorlds.CampaignSystem.SandBox.CampaignBehaviors;
 using TaleWorlds.Core;
 
 namespace BannerKings.Behaviours
@@ -34,6 +37,34 @@ namespace BannerKings.Behaviours
 
             if (MBRandom.RandomInt(1, 100) < 5)
                 ChangeRelationAction.ApplyRelationChangeBetweenHeroes(settlement.Town.OwnerClan.Leader, governor, 1, true);
+        }
+    }
+
+    namespace Patches
+    {
+        [HarmonyPatch(typeof(GovernorCampaignBehavior), "DailyTickSettlement")]
+        class DailyTickSettlementPatch
+        {
+            static bool Prefix(Settlement settlement)
+            {
+                if ((settlement.IsTown || settlement.IsCastle) && settlement.Town.Governor != null)
+                {
+                    Hero governor = settlement.Town.Governor;
+                    if (governor.IsNotable || governor.Clan == null)
+                    {
+
+                        if (governor.GetPerkValue(DefaultPerks.Charm.MeaningfulFavors) && MBRandom.RandomFloat < 0.02f)
+                            foreach (Hero hero in settlement.Notables)
+                                if (hero.Power >= 200f)
+                                    ChangeRelationAction.ApplyRelationChangeBetweenHeroes(settlement.OwnerClan.Leader, hero, (int)DefaultPerks.Charm.MeaningfulFavors.SecondaryBonus, true);
+
+                        SkillLevelingManager.OnSettlementGoverned(governor, settlement);
+                        return false;
+                    }
+                }
+                
+                return true;
+            }
         }
     }
 }

@@ -924,8 +924,6 @@ namespace BannerKings.Behaviors
         {
             static bool Prefix(Settlement settlement)
             {
-                if (settlement.IsCastle && settlement.Name.ToString().Contains("Ab Comer"))
-                    Console.WriteLine();
                 List<Occupation> list = new List<Occupation>();
                 if (settlement.IsTown)
                 {
@@ -1031,8 +1029,8 @@ namespace BannerKings.Behaviors
                         {
                             if (Settlement.All.Any(x => x.Culture == pair.Key))
                             {
-                                Settlement random = Settlement.All.GetRandomElementWithPredicate(x => x.Culture == pair.Key);
-                                if (random != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(currentSettlement))
+                                Settlement random = Settlement.All.FirstOrDefault(x => x.Culture == pair.Key);
+                                if (random != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(random))
                                     BannerKingsConfig.Instance.PopulationManager.GetPopData(random)
                                         .UpdatePopType(PopType.Serfs, pair.Value);
                             } 
@@ -1079,8 +1077,8 @@ namespace BannerKings.Behaviors
                         {
                             if (Settlement.All.Any(x => x.Culture == pair.Key))
                             {
-                                Settlement random = Settlement.All.GetRandomElementWithPredicate(x => x.Culture == pair.Key);
-                                if (random != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(currentSettlement))
+                                Settlement random = Settlement.All.FirstOrDefault(x => x.Culture == pair.Key);
+                                if (random != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(random))
                                 {
                                     PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(currentSettlement);
                                     if (data != null)

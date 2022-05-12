@@ -2,7 +2,6 @@
 using TaleWorlds.CampaignSystem.SandBox.GameComponents;
 using TaleWorlds.Localization;
 using static BannerKings.Managers.PopulationManager;
-using static BannerKings.Managers.PolicyManager;
 using BannerKings.Populations;
 using BannerKings.Managers.Populations.Villages;
 using TaleWorlds.Library;
@@ -47,11 +46,13 @@ namespace BannerKings.Models
                 }
             }
 
-
-            float finalSupport = generalSupport / i;
-            float finalAutonomy = generalAutonomy / i;
-            if (finalSupport != 0f) baseResult.AddFactor(finalSupport, new TextObject("{=!}Overall notable support"));
-            if (finalAutonomy != 0f) baseResult.AddFactor(finalAutonomy, new TextObject("{=!}Overall settlement autonomy"));
+            if (i > 0)
+            {
+                float finalSupport = MBMath.ClampFloat(generalSupport / i, -0.5f, 0.5f);
+                float finalAutonomy = MBMath.ClampFloat(generalAutonomy / i, -0.5f, 0f);
+                if (finalSupport != 0f) baseResult.AddFactor(finalSupport, new TextObject("{=!}Overall notable support"));
+                if (finalAutonomy != 0f) baseResult.AddFactor(finalAutonomy, new TextObject("{=!}Overall settlement autonomy"));
+            }
 
             return baseResult;
         }
