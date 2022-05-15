@@ -50,6 +50,8 @@ namespace BannerKings.Populations
         [SaveableProperty(10)]
         private TitleData titleData { get; set; }
 
+        [SaveableProperty(11)]
+        private float autonomy { get; set; } = 0f;
         private ReligionData religionData { get; set; }
 
 
@@ -119,6 +121,36 @@ namespace BannerKings.Populations
             {
                 if (value != stability)
                     stability = MBMath.ClampFloat(value, 0f, 1f);
+            }
+        }
+
+        public float Autonomy
+        {
+            get => autonomy;
+            set
+            {
+                if (value != autonomy)
+                    autonomy = MBMath.ClampFloat(value, 0f, 1f);
+            }
+        }
+
+        public float NotableSupport
+        {
+            get
+            {
+                float support = 0f;
+                float totalPower = 0f;
+                foreach (Hero notable in settlement.Notables)
+                    totalPower += notable.Power;
+
+                foreach (Hero notable in settlement.Notables)
+                {
+                    float powerShare = notable.Power / totalPower;
+                    float relation = (float)notable.GetRelation(settlement.OwnerClan.Leader) * 0.01f + 0.5f;
+                    support += relation * powerShare;
+                }
+
+                return MBMath.ClampFloat(support, 0f, 1f);
             }
         }
 
@@ -252,8 +284,10 @@ namespace BannerKings.Populations
 
         public int GetTypeCount(PopType type)
         {
+            int i = 0;
             PopulationClass targetClass = classes.Find(popClass => popClass.type == type);
-            return targetClass != null ? targetClass.count : 0;
+            if (targetClass != null) i = targetClass.count;
+            return MBMath.ClampInt(i, 0, 50000);
         }
 
         public float GetCurrentTypeFraction(PopType type) => GetTypeCount(type) / (float)TotalPop;
@@ -261,9 +295,11 @@ namespace BannerKings.Populations
         internal override void Update(PopulationData data)
         {
             BKGrowthModel model = (BKGrowthModel)BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(BKGrowthModel));
-            int growthFactor = (int)model.CalculateEffect(settlement, this).ResultNumber;
+            int growthFactor = (int)model.CalculateEffect(this.settlement, this).ResultNumber;
             UpdatePopulation(settlement, growthFactor, PopType.None);
-            Stability += BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(BKStabilityModel)).CalculateEffect(settlement).ResultNumber;
+            BKStabilityModel stabilityModel = (BKStabilityModel)BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(BKStabilityModel));
+            Stability += stabilityModel.CalculateEffect(settlement).ResultNumber;
+            Autonomy += stabilityModel.CalculateAutonomyEffect(settlement, Stability, Autonomy).ResultNumber;
             economicData.Update(this);
             cultureData.Update(this);
             militaryData.Update(this);
@@ -320,22 +356,13 @@ namespace BannerKings.Populations
         {
             get
             {
-                CultureObject culture = null;
-                CultureObject ownerCulture = settlementOwner.Culture;
-                float ownerShare = 0f;
-                float share = 0f;
-                foreach (CultureDataClass data in cultures)
-                {
-                    if (data.Assimilation >= share && data.Culture.MilitiaSpearman != null)
-                    {
-                        culture = data.Culture;
-                        share = data.Assimilation;
-                        if (data.Culture == ownerCulture)
-                            ownerShare = data.Assimilation;
-                    }
-                }
+                List<ValueTuple<CultureObject, float>> eligible = new List<(CultureObject, float)>();
+                foreach (CultureDataClass data in this.cultures)
+                    if (data.Culture.MilitiaPartyTemplate != null && data.Culture.DefaultPartyTemplate != null && !data.Culture.IsBandit)
+                        eligible.Add((data.Culture, data.Assimilation));
+                eligible.OrderByDescending(pair => pair.Item2);
 
-                return share > ownerShare ? culture : ownerCulture;
+                return eligible[0].Item1;
             }
         }
 
@@ -350,8 +377,8 @@ namespace BannerKings.Populations
             get => settlementOwner;
             set
             {
-                settlementOwner = value;
-                if (!IsCulturePresent(settlementOwner.Culture) && settlementOwner == Hero.MainHero)
+                this.settlementOwner = value;
+                if (!this.IsCulturePresent(settlementOwner.Culture))
                 {
                     if (settlementOwner.Culture == DominantCulture)
                         AddCulture(settlementOwner.Culture, 1f, 1f);
@@ -416,7 +443,7 @@ namespace BannerKings.Populations
             {
                 cultureData.Acceptance += accModel.CalculateEffect(data.Settlement, cultureData).ResultNumber;
                 cultureData.Assimilation += assimModel.CalculateEffect(data.Settlement, cultureData).ResultNumber;
-                if (cultureData.Culture != settlementOwner.Culture && cultureData.Assimilation > 0.01)
+                if (cultureData.Culture != settlementOwner.Culture && cultureData.Assimilation <= 0.01)
                     toDelete.Add(cultureData);
 
                 if (cultureData.Culture != settlementOwner.Culture && cultureData.Culture != data.Settlement.Culture)
@@ -428,11 +455,10 @@ namespace BannerKings.Populations
                 cultures.Remove(cultureData);
 
             float foreignerTarget = data.Foreigner.ResultNumber;
-            float diff = foreignerTarget - foreignerShare;
             if (foreignerShare < foreignerTarget)
             {
-                float random = MBRandom.RandomFloatRanged(diff);
-                IEnumerable<CultureObject> presentCultures = from cultureClass in cultures select cultureClass.Culture;
+                float random = MBRandom.RandomFloatRanged(foreignerTarget - foreignerShare);
+                IEnumerable<CultureObject> presentCultures = from cultureClass in this.cultures select cultureClass.Culture;
                 CultureObject randomForeign = MBObjectManager.Instance.GetObjectTypeList<CultureObject>()
                     .GetRandomElementWithPredicate(x => x != settlementOwner.Culture && x != data.Settlement.Culture && !x.IsBandit
                     && !presentCultures.Contains(x));
@@ -456,7 +482,6 @@ namespace BannerKings.Populations
                     foreach (Hero notable in data.Settlement.Notables)
                         notable.Culture = dominant;
             }
-            
         }
     }
 

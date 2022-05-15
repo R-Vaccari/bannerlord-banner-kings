@@ -225,17 +225,6 @@ namespace BannerKings.Managers
             return clans;
         }
 
-        public bool HasSuzerain(Settlement settlement)
-        {
-            FeudalTitle vassal = GetTitle(settlement);
-            if (vassal != null)
-            {
-                FeudalTitle suzerain = GetImmediateSuzerain(vassal);
-                return suzerain != null;
-            }
-            return false;
-        }
-
         public bool HasSuzerain(FeudalTitle vassal)
         {
             FeudalTitle suzerain = GetImmediateSuzerain(vassal);
@@ -561,8 +550,12 @@ namespace BannerKings.Managers
                 foreach (Settlement settlement in Settlement.All)
                 {
                     if (settlement.IsVillage) continue;
-                    if (settlement.OwnerClan != null && settlement.OwnerClan.Leader != null) 
-                        CreateLandedTitle(settlement, settlement.Owner, settlement.IsTown ? TitleType.County : TitleType.Barony, GenerateContract("feudal"));
+                    else if (settlement.OwnerClan != null && settlement.OwnerClan.Leader != null && (settlement.IsTown || settlement.IsCastle)) 
+                            CreateLandedTitle(settlement, 
+                                settlement.Owner, settlement.IsTown ? TitleType.County : TitleType.Barony, 
+                                GenerateContract("feudal"), 
+                                null);
+                    
                 }         
         }
 

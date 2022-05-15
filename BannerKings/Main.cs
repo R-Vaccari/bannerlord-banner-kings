@@ -27,6 +27,9 @@ using static TaleWorlds.CampaignSystem.SandBox.Issues.CaravanAmbushIssueBehavior
 using static TaleWorlds.CampaignSystem.SandBox.Issues.LandLordNeedsManualLaborersIssueBehavior;
 using static TaleWorlds.CampaignSystem.Election.KingSelectionKingdomDecision;
 using static TaleWorlds.CampaignSystem.SandBox.Issues.VillageNeedsToolsIssueBehavior;
+using static TaleWorlds.CampaignSystem.SandBox.Issues.EscortMerchantCaravanIssueBehavior;
+using TaleWorlds.CampaignSystem.SandBox.Issues;
+using Helpers;
 using Bannerlord.UIExtenderEx;
 using BannerKings.Managers.Kingdoms.Council;
 
@@ -49,7 +52,7 @@ namespace BannerKings
                 campaignStarter.AddBehavior(new BKArmyBehavior());
                 campaignStarter.AddBehavior(new BKRansomBehavior());
                 campaignStarter.AddBehavior(new BKTitleBehavior());
-                campaignStarter.AddBehavior(new BKReligionsBehavior());
+                campaignStarter.AddBehavior(new BKNotableBehavior());
 
                 campaignStarter.AddModel(new BKCompanionPrices());
                 campaignStarter.AddModel(new BKProsperityModel());
@@ -63,7 +66,7 @@ namespace BannerKings
                 campaignStarter.AddModel(new BKSecurityModel());
                 campaignStarter.AddModel(new BKPartyLimitModel());
                 campaignStarter.AddModel(new BKEconomyModel());
-                //campaignStarter.AddModel(new BKPriceFactorModel());
+                campaignStarter.AddModel(new BKPriceFactorModel());
                 campaignStarter.AddModel(new BKWorkshopModel());
                 campaignStarter.AddModel(new BKClanFinanceModel());
                 campaignStarter.AddModel(new BKArmyManagementModel());
@@ -71,10 +74,13 @@ namespace BannerKings
                 campaignStarter.AddModel(new BKTournamentModel());
                 campaignStarter.AddModel(new BKRaidModel());
                 campaignStarter.AddModel(new BKVolunteerModel());
-                campaignStarter.AddModel(new BKNotableModel());
+                campaignStarter.AddModel(new BKNotableSpawnModel());
                 campaignStarter.AddModel(new BKGarrisonModel());
                 campaignStarter.AddModel(new BKRansomModel());
                 campaignStarter.AddModel(new BKClanTierModel());
+                campaignStarter.AddModel(new BKPartyWageModel());
+                campaignStarter.AddModel(new BKSettlementValueModel());
+                campaignStarter.AddModel(new BKNotablePowerModel());
             }
         }
 
@@ -126,6 +132,7 @@ namespace BannerKings
 
         namespace Fixes
         {
+
             // Fix crash on wanderer same gender child born
             [HarmonyPatch(typeof(NameGenerator), "GenerateHeroFullName")]
             class NameGeneratorPatch
@@ -148,6 +155,24 @@ namespace BannerKings
                         return false;
                     }
                     return true;
+                }
+            }
+
+            [HarmonyPatch(typeof(TownMarketData))]
+            class TownItemPricePatch
+            {
+
+                [HarmonyPrefix]
+                [HarmonyPatch("GetPrice", new Type[] { typeof(EquipmentElement), typeof(MobileParty), typeof(bool), typeof(PartyBase) })]
+                static bool Prefix2(TownMarketData __instance, ref int __result, EquipmentElement itemRosterElement, MobileParty tradingParty = null, bool isSelling = false, PartyBase merchantParty = null)
+                {
+                    if (itemRosterElement.Item == null) __result = 0;
+                    else
+                    {
+                        ItemData categoryData = __instance.GetCategoryData(itemRosterElement.Item.GetItemCategory());
+                        __result = Campaign.Current.Models.TradeItemPriceFactorModel.GetPrice(itemRosterElement, tradingParty, merchantParty, isSelling, (float)categoryData.InStoreValue, categoryData.Supply, categoryData.Demand);
+                    }
+                    return false;
                 }
             }
 
@@ -260,6 +285,36 @@ namespace BannerKings
                     return true;
                 }
             }
+
+            [HarmonyPatch(typeof(EscortMerchantCaravanIssueBehavior), "ConditionsHold")]
+            class EscortCaravanConditionsHoldPatch
+            {
+                static bool Prefix(Hero issueGiver, ref bool __result)
+                {
+                    if (issueGiver.CurrentSettlement == null || issueGiver.CurrentSettlement.IsVillage)
+                    {
+                        __result = false;
+                        return false;
+                    }
+
+                    return true;
+                }
+            }
+
+            [HarmonyPatch(typeof(EscortMerchantCaravanIssue), "IssueStayAliveConditions")]
+            class EscortCaravanIssueStayAliveConditionsPatch
+            {
+                static bool Prefix(EscortMerchantCaravanIssue __instance, ref bool __result)
+                {
+                    if (__instance.IssueOwner.CurrentSettlement == null || __instance.IssueOwner.CurrentSettlement.IsVillage)
+                    {
+                        __result = false;
+                        return false;
+                    }
+
+                    return true;
+                }
+            }
         }
 
 
@@ -303,10 +358,91 @@ namespace BannerKings
 
         namespace Economy
         {
-            [HarmonyPatch(typeof(DefaultClanFinanceModel), "AddIncomeFromKingdomBudget")]
-            class AddIncomeFromKingdomBudgetPatch
+
+            [HarmonyPatch(typeof(HeroHelper), "StartRecruitingMoneyLimit")]
+            class StartRecruitingMoneyLimitPatch
             {
-                static bool Prefix(Clan clan, ref ExplainedNumber goldChange, bool applyWithdrawals)
+                static bool Prefix(Hero hero, ref float __result)
+                {
+                    __result = 50f;
+                    if (hero.PartyBelongedTo != null)
+                        __result += 1000f;
+                    return false;
+                }
+            }
+
+            [HarmonyPatch(typeof(ClanVariablesCampaignBehavior), "UpdateClanSettlementAutoRecruitment")]
+            class AutoRecruitmentPatch
+            {
+                static bool Prefix(Clan clan)
+                {
+                    if (clan.MapFaction != null && clan.MapFaction.IsKingdomFaction)
+                    {
+                        IEnumerable<Kingdom> enemies = FactionManager.GetEnemyKingdoms(clan.Kingdom);
+                        foreach (Settlement settlement in clan.Settlements)
+                        {
+                            if (settlement.IsFortification && settlement.Town.GarrisonParty != null)
+                            {
+                                if (enemies.Count() >= 0 && settlement.Town.GarrisonParty.MemberRoster.TotalManCount < 500)
+                                    settlement.Town.GarrisonAutoRecruitmentIsEnabled = true;
+                                settlement.Town.GarrisonAutoRecruitmentIsEnabled = false;
+                            }
+                        }
+                    }
+                    return false;
+                }
+            }
+
+            [HarmonyPatch(typeof(ClanVariablesCampaignBehavior), "MakeClanFinancialEvaluation")]
+            class MakeClanFinancialEvaluationPatch
+            {
+                static bool Prefix(Clan clan)
+                {
+                    if (clan.IsMinorFaction) return true;
+
+                    if (BannerKingsConfig.Instance.TitleManager != null)
+                    {
+                        float income = Campaign.Current.Models.ClanFinanceModel.CalculateClanIncome(clan).ResultNumber * 0.5f +
+                        clan.Gold * 0.05f;
+                        if (income > 0f)
+                        {
+                            float knights = 0f;
+                            foreach (WarPartyComponent partyComponent in clan.WarPartyComponents)
+                                if (partyComponent.Leader != null && partyComponent.Leader != clan.Leader)
+                                {
+                                    FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(partyComponent.Leader);
+                                    if (title != null && title.fief != null)
+                                    {
+                                        knights++;
+                                        float limit = 0f;
+                                        if (title.fief.IsVillage)
+                                            limit = title.fief.Village.TradeTaxAccumulated;
+                                        else if (title.fief.Town != null)
+                                            limit = Campaign.Current.Models.SettlementTaxModel.CalculateTownTax(title.fief.Town).ResultNumber;
+
+                                        partyComponent.MobileParty.PaymentLimit = (int)(50f + limit);
+                                    }
+                                }
+
+                            foreach (WarPartyComponent partyComponent in clan.WarPartyComponents)
+                            {
+                                float share = income / clan.WarPartyComponents.Count - knights;
+                                partyComponent.MobileParty.PaymentLimit = (int)(300f + share);
+                            }
+                            return false;
+                        }
+                    }
+
+                    return true;
+                }
+            }
+
+            [HarmonyPatch(typeof(DefaultClanFinanceModel))]
+            class ClanFinancesPatches
+            {
+                [HarmonyPrefix]
+                [HarmonyPatch("AddIncomeFromKingdomBudget", MethodType.Normal)]
+                static bool KingdomBudgetPrefix(Clan clan, ref ExplainedNumber goldChange, bool applyWithdrawals)
                 {
                     if (BannerKingsConfig.Instance.TitleManager != null)
                     {
@@ -315,12 +451,82 @@ namespace BannerKings
                     }
                     return true;
                 }
-            }
 
-            [HarmonyPatch(typeof(DefaultClanFinanceModel), "AddVillagesIncome")]
-            class AddVillagesIncomePatch
-            {
-                static bool Prefix(Clan clan, ref ExplainedNumber goldChange, bool applyWithdrawals)
+
+                [HarmonyPrefix]
+                [HarmonyPatch("AddExpensesFromGarrisons", MethodType.Normal)]
+                static bool GarrisonsPrefix(Clan clan, ref ExplainedNumber goldChange, bool applyWithdrawals = false)
+                {
+                    if (BannerKingsConfig.Instance.TitleManager != null)
+                    {
+                        DefaultClanFinanceModel model = new DefaultClanFinanceModel();
+                        MethodInfo calculateWage = model.GetType().GetMethod("CalculatePartyWage", BindingFlags.Instance | BindingFlags.NonPublic);
+                        if (clan == Clan.PlayerClan)
+                            Console.WriteLine();
+
+                        foreach (Town town in clan.Fiefs)
+                        {
+                            MobileParty garrisonParty = town.GarrisonParty;
+                            
+                            if (garrisonParty != null && garrisonParty.IsActive)
+                            {
+                                int wage = (int)calculateWage.Invoke(model, new object[] { garrisonParty, clan.Gold, applyWithdrawals });
+                                if (wage > 0) goldChange.Add(-wage, new TextObject("{=iPDOLbi3}Party wages {A0}"), garrisonParty.Name);
+                            }
+                        }
+                        return false;
+                    }
+                    return true;
+                }
+
+
+                [HarmonyPrefix]
+                [HarmonyPatch("AddExpensesFromParties", MethodType.Normal)]
+                static bool PartyExpensesPrefix(Clan clan, ref ExplainedNumber goldChange, bool applyWithdrawals = false)
+                {
+                    if (BannerKingsConfig.Instance.TitleManager != null)
+                    {
+                        List<MobileParty> list = new List<MobileParty>();
+                        foreach (Hero hero in clan.Lords)
+                            foreach (CaravanPartyComponent caravanPartyComponent in hero.OwnedCaravans)
+                                list.Add(caravanPartyComponent.MobileParty);
+
+                        foreach (Hero hero2 in clan.Companions)
+                            foreach (CaravanPartyComponent caravanPartyComponent2 in hero2.OwnedCaravans)
+                                list.Add(caravanPartyComponent2.MobileParty);
+
+                        foreach (WarPartyComponent warPartyComponent in clan.WarPartyComponents)
+                            list.Add(warPartyComponent.MobileParty);
+
+                        DefaultClanFinanceModel model = new DefaultClanFinanceModel();
+                        MethodInfo addExpense = model.GetType().GetMethod("AddPartyExpense", BindingFlags.Instance | BindingFlags.NonPublic);
+                        foreach (MobileParty mobileParty in list)
+                        {
+                            if (mobileParty.LeaderHero != null && mobileParty.LeaderHero != clan.Leader)
+                            {
+                                object[] array = new object[] { mobileParty, clan, new ExplainedNumber(), applyWithdrawals };
+                                addExpense.Invoke(model, array);
+                                if (BannerKingsConfig.Instance.TitleManager.GetHighestTitle(mobileParty.LeaderHero) == null) 
+                                    goldChange.Add(((ExplainedNumber)array[2]).ResultNumber, new TextObject("{=iPDOLbi3}Party wages {A0}"), mobileParty.Name);
+                                else
+                                {
+                                    MethodInfo calculateWage = model.GetType().GetMethod("CalculatePartyWage", BindingFlags.Instance | BindingFlags.NonPublic);
+                                    int wage = (int)calculateWage.Invoke(model, new object[] { mobileParty, mobileParty.LeaderHero.Gold, applyWithdrawals });
+                                    if (applyWithdrawals)
+                                        mobileParty.LeaderHero.Gold -= MathF.Min(mobileParty.LeaderHero.Gold, wage);
+                                }
+                            }
+                        }
+
+                        return false;
+                    }
+                    return true;
+                }
+
+
+                [HarmonyPrefix]
+                [HarmonyPatch("AddVillagesIncome", MethodType.Normal)]
+                static bool VillageIncomePrefix(Clan clan, ref ExplainedNumber goldChange, bool applyWithdrawals)
                 {
                     if (BannerKingsConfig.Instance.TitleManager != null)
                     {
@@ -379,7 +585,7 @@ namespace BannerKings
                     if (clan.Kingdom != null && clan.Kingdom.RulingClan != clan && clan.Kingdom.ActivePolicies.Contains(DefaultPolicies.LandTax))
                     {
                         total += (int)((-(float)total) * 0.05f);
-                    }     
+                    }
 
                     if (village.Bound.Town != null && village.Bound.Town.Governor != null && village.Bound.Town.Governor.GetPerkValue(DefaultPerks.Scouting.ForestKin))
                         total += MathF.Round(total * DefaultPerks.Scouting.ForestKin.SecondaryBonus * 0.01f);
@@ -412,6 +618,7 @@ namespace BannerKings
                 }
             }
 
+
             [HarmonyPatch(typeof(CaravansCampaignBehavior), "GetTradeScoreForTown")]
             class GetTradeScoreForTownPatch
             {
@@ -436,6 +643,69 @@ namespace BannerKings
                     _itemCategoryBread.InitializeObject(true, 50, 20, ItemCategory.Property.BonusToFoodStores);
                 }
             }
+
+
+            [HarmonyPatch(typeof(SellGoodsForTradeAction), "ApplyInternal")]
+            class SellGoodsPatch
+            {
+                static bool Prefix(object[] __args)
+                {
+                    Settlement settlement = (Settlement)__args[0];
+                    MobileParty mobileParty = (MobileParty)__args[1];
+                    if (settlement != null && mobileParty != null)
+                        if (settlement.IsTown && mobileParty.IsVillager)
+                        {
+                            Town component = settlement.GetComponent<Town>();
+                            List<ValueTuple<ItemObject, int>> list = new List<ValueTuple<ItemObject, int>>();
+                            int num = 10000;
+                            ItemObject itemObject = null;
+                            for (int i = 0; i < mobileParty.ItemRoster.Count; i++)
+                            {
+                                ItemRosterElement elementCopyAtIndex = mobileParty.ItemRoster.GetElementCopyAtIndex(i);
+                                if (elementCopyAtIndex.EquipmentElement.Item.ItemCategory == DefaultItemCategories.PackAnimal && elementCopyAtIndex.EquipmentElement.Item.Value < num)
+                                {
+                                    num = elementCopyAtIndex.EquipmentElement.Item.Value;
+                                    itemObject = elementCopyAtIndex.EquipmentElement.Item;
+                                }
+                            }
+                            for (int j = mobileParty.ItemRoster.Count - 1; j >= 0; j--)
+                            {
+                                ItemRosterElement elementCopyAtIndex2 = mobileParty.ItemRoster.GetElementCopyAtIndex(j);
+                                int itemPrice = component.GetItemPrice(elementCopyAtIndex2.EquipmentElement, mobileParty, true);
+                                int num2 = mobileParty.ItemRoster.GetElementNumber(j);
+                                if (elementCopyAtIndex2.EquipmentElement.Item == itemObject)
+                                {
+                                    int num3 = (int)(0.5f * (float)mobileParty.MemberRoster.TotalManCount) + 2;
+                                    num2 -= num3;
+
+                                    if (itemObject.StringId == "mule")
+                                        num2 -= (int)(mobileParty.MemberRoster.TotalManCount * 0.1f);
+                                }
+                                if (num2 > 0)
+                                {
+                                    int num4 = MathF.Min(num2, component.Gold / itemPrice);
+                                    if (num4 > 0)
+                                    {
+                                        mobileParty.PartyTradeGold += num4 * itemPrice;
+                                        EquipmentElement equipmentElement = elementCopyAtIndex2.EquipmentElement;
+                                        component.ChangeGold(-num4 * itemPrice);
+                                        settlement.ItemRoster.AddToCounts(equipmentElement, num4);
+                                        mobileParty.ItemRoster.AddToCounts(equipmentElement, -num4);
+                                        list.Add(new ValueTuple<ItemObject, int>(equipmentElement.Item, num4));
+                                    }
+                                }
+                            }
+
+                            if (!list.IsEmpty<ValueTuple<ItemObject, int>>())
+                                CampaignEventDispatcher.Instance.OnCaravanTransactionCompleted(mobileParty, component, list);
+
+                            return false;
+                        }
+
+                    return true;
+                }
+            }
+
 
             //Mules
             [HarmonyPatch(typeof(VillagerCampaignBehavior), "MoveItemsToVillagerParty")]
@@ -511,39 +781,6 @@ namespace BannerKings
                 }
             }
 
-
-            // Pass on settlement party as parameter
-            [HarmonyPatch(typeof(Town))]
-            class TownItemPricePatch
-            {
-
-                [HarmonyPrefix]
-                [HarmonyPatch("GetItemPrice", typeof(ItemObject), typeof(MobileParty), typeof(bool))]
-                static bool Prefix1(Town __instance, ref int __result, ItemObject item, MobileParty tradingParty = null, bool isSelling = false)
-                {
-                    if (__instance != null && __instance.MarketData != null && __instance.GarrisonParty != null && __instance.GarrisonParty.Party != null)
-                    {
-                        __result = __instance.MarketData.GetPrice(item, tradingParty, isSelling, __instance.GarrisonParty.Party);
-                        return false;
-                    }
-
-                    return true;
-                }
-
-                
-                [HarmonyPrefix]
-                [HarmonyPatch("GetItemPrice", typeof(EquipmentElement), typeof(MobileParty), typeof(bool))]
-                static bool Prefix2(Town __instance, ref int __result, EquipmentElement itemRosterElement, MobileParty tradingParty = null, bool isSelling = false)
-                {
-                    if (__instance != null && __instance.MarketData != null && __instance.GarrisonParty != null && __instance.GarrisonParty.Party != null)
-                    {
-                        __result = __instance.MarketData.GetPrice(itemRosterElement, tradingParty, isSelling, __instance.GarrisonParty.Party);
-                        return false;
-                    }
-
-                    return true;
-                }
-            }
 
             // Impact prosperity
             [HarmonyPatch(typeof(ChangeOwnerOfWorkshopAction), "ApplyInternal")]

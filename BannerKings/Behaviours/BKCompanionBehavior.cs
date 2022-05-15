@@ -176,8 +176,10 @@ namespace BannerKings.Behaviors
                     string desc = "";
                     FeudalTitle current = null;
                     List<FeudalTitle> finalList = titles.OrderBy(x => (int)x.type).ToList();
+                    GovernmentType government = GovernmentType.Feudal;
                     foreach (FeudalTitle title in finalList)
                     {
+                        if (title.contract != null) government = title.contract.Government;
                         if (current == null)
                             desc += string.Format("{0} of {1}", Utils.Helpers.GetTitleHonorary(title.type, false), title.shortName);
                         else if (current.type == title.type)

@@ -62,7 +62,20 @@ namespace BannerKings.UI
 
     namespace Patches
     {
-
+        [HarmonyPatch(typeof(SettlementGovernorSelectionVM))]
+        internal class AvailableGovernorsPatch
+        {
+            [HarmonyPostfix]
+            [HarmonyPatch(MethodType.Constructor, new Type[] { typeof(Settlement), typeof(Action<Hero>) } )]
+            internal static void ConstructorPostfix(SettlementGovernorSelectionVM __instance, Settlement settlement, Action<Hero> onDone)
+            {
+                if (settlement != null)
+                    foreach (Hero notable in settlement.Notables)
+                        if (!notable.IsDisabled && !notable.IsDead)
+                            __instance.AvailableGovernors.Add(new SettlementGovernorSelectionItemVM(notable, 
+                                new Action<SettlementGovernorSelectionItemVM>(delegate (SettlementGovernorSelectionItemVM x) { onDone.Invoke(x.Governor); })));
+            }
+        }
 
         [HarmonyPatch(typeof(Hero))]
         internal class HeroNamePatch
@@ -77,7 +90,9 @@ namespace BannerKings.UI
                     FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(__instance);
                     if (title != null)
                     {
-                        string honorary = Utils.Helpers.GetTitleHonorary(title.type, false, kingdom != null ? kingdom.Culture : __instance.Culture);
+                        GovernmentType government = GovernmentType.Feudal;
+                        if (title.contract != null) government = title.contract.Government;
+                        string honorary = Helpers.Helpers.GetTitleHonorary(title.type, government, __instance.IsFemale, kingdom != null ? kingdom.Culture : __instance.Culture);
                         TextObject name = (TextObject)__instance.GetType()
                             .GetField("_name", BindingFlags.Instance | BindingFlags.NonPublic)
                             .GetValue(__instance);

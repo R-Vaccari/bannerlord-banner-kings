@@ -38,9 +38,10 @@ namespace BannerKings.Behaviors
 
         public override void RegisterEvents()
         {
-            CampaignEvents.SettlementEntered.AddNonSerializedListener(this, OnSettlementEntered);
-            CampaignEvents.DailyTickSettlementEvent.AddNonSerializedListener(this, DailySettlementTick);
-            CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, OnSessionLaunched);
+            CampaignEvents.OnSiegeAftermathAppliedEvent.AddNonSerializedListener(this, new Action<MobileParty, Settlement, SiegeAftermathCampaignBehavior.SiegeAftermath, Clan, Dictionary<MobileParty, float>>(OnSiegeAftermath));
+            CampaignEvents.SettlementEntered.AddNonSerializedListener(this, new Action<MobileParty, Settlement, Hero>(OnSettlementEntered));
+            CampaignEvents.DailyTickSettlementEvent.AddNonSerializedListener(this, new Action<Settlement>(DailySettlementTick));
+            CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, new Action<CampaignGameStarter>(OnSessionLaunched));
         }
 
         public override void SyncData(IDataStore dataStore)
@@ -78,15 +79,51 @@ namespace BannerKings.Behaviors
             }
         }
 
+        private void OnSiegeAftermath(MobileParty attackerParty, Settlement settlement, SiegeAftermathCampaignBehavior.SiegeAftermath aftermathType, Clan previousSettlementOwner, Dictionary<MobileParty, float> partyContributions)
+        {
+            if (aftermathType == SiegeAftermathCampaignBehavior.SiegeAftermath.ShowMercy || settlement == null || settlement.Town == null ||
+                BannerKingsConfig.Instance.PopulationManager == null ||!BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement)) 
+                return;
+
+            PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
+            float shareToKill;
+            if (aftermathType == SiegeAftermathCampaignBehavior.SiegeAftermath.Pillage)
+                shareToKill = MBRandom.RandomFloatRanged(0.1f, 0.16f);
+            else shareToKill = MBRandom.RandomFloatRanged(0.16f, 0.24f);
+            int killTotal = (int)((float)data.TotalPop * shareToKill);
+            int lognum = killTotal;
+            List<ValueTuple<PopType, float>> weights = new List<(PopType, float)>();
+            foreach (KeyValuePair<PopType, float[]> pair in PopulationManager.GetDesiredPopTypes(settlement))
+                weights.Add(new (pair.Key, pair.Value[0]));
+
+            if (killTotal <= 0) return;
+
+            while (killTotal > 0)
+            {
+                int random = MBRandom.RandomInt(10, 20);
+                PopType target = MBRandom.ChooseWeighted(weights);
+                int finalNum = MBMath.ClampInt(random, 0, data.GetTypeCount(target));
+                data.UpdatePopType(target, -finalNum);
+                killTotal -= finalNum;
+            }
+
+            InformationManager.DisplayMessage(new InformationMessage(new TextObject("{=!}{NUMBER} have been killed in the siege aftermath of {SETTLEMENT}.")
+                .SetTextVariable("NUMBER", lognum)
+                .SetTextVariable("SETTLEMENT", settlement.Name)
+                .ToString()));
+        }
+
         private void OnSettlementEntered(MobileParty party, Settlement target, Hero hero)
         {
-            if (party != null && BannerKingsConfig.Instance.PopulationManager != null)
-            {
-                if (party.LeaderHero != null && party.LeaderHero == target.Owner && party.LeaderHero != Hero.MainHero
-                    && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(target)) 
-                {
-                    int random = MBRandom.RandomInt(1, 100);
-                    if (random > 5) return;
+            if (party == null || party.LeaderHero == null || BannerKingsConfig.Instance.PopulationManager == null) return;
+
+            if (target == null || target.OwnerClan == null) return;
+
+            if (party.LeaderHero != target.Owner || party.LeaderHero == Hero.MainHero ||
+                !BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(target)) return;
+
+            int random = MBRandom.RandomInt(1, 100);
+            if (random > 5) return;
 
                     Kingdom kingdom = target.OwnerClan.Kingdom;
                     List<BannerKingsDecision> currentDecisions = BannerKingsConfig.Instance.PolicyManager.GetDefaultDecisions(target);
@@ -106,77 +143,75 @@ namespace BannerKings.Behaviors
                             changedDecisions.Add(rationDecision);
                         }
 
-                        MobileParty garrison = town.GarrisonParty;
-                        if (garrison != null)
-                        {
-                            float wage = garrison.TotalWage;
-                            float income = Campaign.Current.Models.SettlementTaxModel.CalculateTownTax(town).ResultNumber;
-                            if (wage >= income * 0.5f)
-                                BannerKingsConfig.Instance.PolicyManager.UpdateSettlementPolicy(target, new BKGarrisonPolicy(BKGarrisonPolicy.GarrisonPolicy.Dischargement, target));
-                            else if (wage <= income * 0.2f)
-                                BannerKingsConfig.Instance.PolicyManager.UpdateSettlementPolicy(target, new BKGarrisonPolicy(BKGarrisonPolicy.GarrisonPolicy.Enlistment, target));
-                            else BannerKingsConfig.Instance.PolicyManager.UpdateSettlementPolicy(target, new BKGarrisonPolicy(BKGarrisonPolicy.GarrisonPolicy.Standard, target));
-                        } 
+                MobileParty garrison = town.GarrisonParty;
+                if (garrison != null)
+                {
+                    float wage = garrison.TotalWage;
+                    float income = Campaign.Current.Models.SettlementTaxModel.CalculateTownTax(town).ResultNumber;
+                    if (wage >= income * 0.5f)
+                        BannerKingsConfig.Instance.PolicyManager.UpdateSettlementPolicy(target, new BKGarrisonPolicy(BKGarrisonPolicy.GarrisonPolicy.Dischargement, target));
+                    else if (wage <= income * 0.2f)
+                        BannerKingsConfig.Instance.PolicyManager.UpdateSettlementPolicy(target, new BKGarrisonPolicy(BKGarrisonPolicy.GarrisonPolicy.Enlistment, target));
+                    else BannerKingsConfig.Instance.PolicyManager.UpdateSettlementPolicy(target, new BKGarrisonPolicy(BKGarrisonPolicy.GarrisonPolicy.Standard, target));
+                } 
 
-                        if (town.LoyaltyChange < 0)
-                            UpdateTaxPolicy(1, target);
-                        else UpdateTaxPolicy(-1, target);
+                if (town.LoyaltyChange < 0)
+                    UpdateTaxPolicy(1, target);
+                else UpdateTaxPolicy(-1, target);
 
-                        if (kingdom != null)
-                        {
-                            IEnumerable<Kingdom> enemies = FactionManager.GetEnemyKingdoms(kingdom);
-                            bool atWar = enemies.Count() > 0;
+                if (kingdom != null)
+                {
+                    IEnumerable<Kingdom> enemies = FactionManager.GetEnemyKingdoms(kingdom);
+                    bool atWar = enemies.Count() > 0;
 
-                            if (target.Owner.GetTraitLevel(DefaultTraits.Calculating) > 0)
-                            {
-                                BKSubsidizeMilitiaDecision subsidizeMilitiaDecision = (BKSubsidizeMilitiaDecision)currentDecisions.FirstOrDefault(x => x.GetIdentifier() == "decision_militia_subsidize");
-                                subsidizeMilitiaDecision.Enabled = atWar ? true : false;
-                                changedDecisions.Add(subsidizeMilitiaDecision);
-                            }
-                        }
-
-                        BKCriminalPolicy criminal = (BKCriminalPolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(target, "criminal");
-                        int mercy = target.Owner.GetTraitLevel(DefaultTraits.Mercy);
-                        BKCriminalPolicy targetCriminal = null;
-
-                        if (mercy > 0) targetCriminal = new BKCriminalPolicy(BKCriminalPolicy.CriminalPolicy.Forgiveness, target);
-                        else if (mercy < 0) targetCriminal = new BKCriminalPolicy(BKCriminalPolicy.CriminalPolicy.Execution, target);
-                        else targetCriminal = new BKCriminalPolicy(BKCriminalPolicy.CriminalPolicy.Enslavement, target);
-
-                        if (targetCriminal.Policy != criminal.Policy) 
-                            BannerKingsConfig.Instance.PolicyManager.UpdateSettlementPolicy(target, targetCriminal);
-
-                        BKTaxSlavesDecision taxSlavesDecision = (BKTaxSlavesDecision)currentDecisions.FirstOrDefault(x => x.GetIdentifier() == "decision_slaves_tax");
-                        if (target.Owner.GetTraitLevel(DefaultTraits.Authoritarian) > 0)
-                            taxSlavesDecision.Enabled = true;
-                        else if (target.Owner.GetTraitLevel(DefaultTraits.Egalitarian) > 0)
-                            taxSlavesDecision.Enabled = false;
-                        changedDecisions.Add(taxSlavesDecision);
-
-                        BKWorkforcePolicy workforce = (BKWorkforcePolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(target, "workforce");
-                        List<ValueTuple<WorkforcePolicy, float>> workforcePolicies = new List<ValueTuple<WorkforcePolicy, float>>();
-                        workforcePolicies.Add((WorkforcePolicy.None, 1f));
-                        float saturation = BannerKingsConfig.Instance.PopulationManager.GetPopData(target).LandData.WorkforceSaturation;
-                        if (saturation > 1f)
-                            workforcePolicies.Add((WorkforcePolicy.Land_Expansion, 2f));
-                        if (town.Security < 20f)
-                            workforcePolicies.Add((WorkforcePolicy.Martial_Law, 2f));
-                        BannerKingsConfig.Instance.PolicyManager.UpdateSettlementPolicy(target, new BKWorkforcePolicy(MBRandom.ChooseWeighted(workforcePolicies), target));
-
-                        foreach (BannerKingsDecision dec in changedDecisions)
-                            BannerKingsConfig.Instance.PolicyManager.UpdateSettlementDecision(target, dec);
-                    }
-                    else if (target.IsVillage)
+                    if (target.Owner.GetTraitLevel(DefaultTraits.Calculating) > 0)
                     {
-                        VillageData villageData = BannerKingsConfig.Instance.PopulationManager.GetPopData(target).VillageData;
-                        villageData.StartRandomProject();
-                        float hearths = target.Village.Hearth;
-                        if (hearths < 300f)
-                            UpdateTaxPolicy(-1, target);
-                        else if (hearths > 1000f)
-                            UpdateTaxPolicy(1, target);
+                        BKSubsidizeMilitiaDecision subsidizeMilitiaDecision = (BKSubsidizeMilitiaDecision)currentDecisions.FirstOrDefault(x => x.GetIdentifier() == "decision_militia_subsidize");
+                        subsidizeMilitiaDecision.Enabled = atWar ? true : false;
+                        changedDecisions.Add(subsidizeMilitiaDecision);
                     }
                 }
+
+                BKCriminalPolicy criminal = (BKCriminalPolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(target, "criminal");
+                int mercy = target.Owner.GetTraitLevel(DefaultTraits.Mercy);
+                BKCriminalPolicy targetCriminal = null;
+
+                if (mercy > 0) targetCriminal = new BKCriminalPolicy(BKCriminalPolicy.CriminalPolicy.Forgiveness, target);
+                else if (mercy < 0) targetCriminal = new BKCriminalPolicy(BKCriminalPolicy.CriminalPolicy.Execution, target);
+                else targetCriminal = new BKCriminalPolicy(BKCriminalPolicy.CriminalPolicy.Enslavement, target);
+
+                if (targetCriminal.Policy != criminal.Policy) 
+                    BannerKingsConfig.Instance.PolicyManager.UpdateSettlementPolicy(target, targetCriminal);
+
+                BKTaxSlavesDecision taxSlavesDecision = (BKTaxSlavesDecision)currentDecisions.FirstOrDefault(x => x.GetIdentifier() == "decision_slaves_tax");
+                if (target.Owner.GetTraitLevel(DefaultTraits.Authoritarian) > 0)
+                    taxSlavesDecision.Enabled = true;
+                else if (target.Owner.GetTraitLevel(DefaultTraits.Egalitarian) > 0)
+                    taxSlavesDecision.Enabled = false;
+                changedDecisions.Add(taxSlavesDecision);
+
+                BKWorkforcePolicy workforce = (BKWorkforcePolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(target, "workforce");
+                List<ValueTuple<WorkforcePolicy, float>> workforcePolicies = new List<ValueTuple<WorkforcePolicy, float>>();
+                workforcePolicies.Add((WorkforcePolicy.None, 1f));
+                float saturation = BannerKingsConfig.Instance.PopulationManager.GetPopData(target).LandData.WorkforceSaturation;
+                if (saturation > 1f)
+                    workforcePolicies.Add((WorkforcePolicy.Land_Expansion, 2f));
+                if (town.Security < 20f)
+                    workforcePolicies.Add((WorkforcePolicy.Martial_Law, 2f));
+                BannerKingsConfig.Instance.PolicyManager.UpdateSettlementPolicy(target, new BKWorkforcePolicy(MBRandom.ChooseWeighted(workforcePolicies), target));
+
+                foreach (BannerKingsDecision dec in changedDecisions)
+                    BannerKingsConfig.Instance.PolicyManager.UpdateSettlementDecision(target, dec);
+            }
+            else if (target.IsVillage)
+            {
+                VillageData villageData = BannerKingsConfig.Instance.PopulationManager.GetPopData(target).VillageData;
+                villageData.StartRandomProject();
+                float hearths = target.Village.Hearth;
+                if (hearths < 300f)
+                    UpdateTaxPolicy(-1, target);
+                else if (hearths > 1000f)
+                    UpdateTaxPolicy(1, target);
             }
         }
 
@@ -265,35 +300,6 @@ namespace BannerKings.Behaviors
             }
 
             if (food > 0) settlement.Town.FoodStocks += food;
-        }
-
-        internal static void KillNotables(Settlement settlement, int amount)
-        {
-            Hero notable = null;
-            int i = 0;
-            try
-            {
-                List<Hero> notables = new List<Hero>(settlement.Notables);
-                foreach (Hero hero in notables)
-                    if (hero.BornSettlement != settlement)
-                    {
-                        notable = hero;
-                        LeaveSettlementAction.ApplyForCharacterOnly(hero);
-                        DisableHeroAction.Apply(hero);
-                        i++;
-                    }
-            }
-            catch (Exception ex)
-            {
-                string cause = "Exception in Banner Kings KillNotables method. ";
-                string objInfo = null;
-                if (notable != null)
-                    objInfo = string.Format("Notable: Name [{0}], Id [{1}], Culture [{2}]\nSettleent: Name [{3}], Id [{4}], Culture [{5}]", 
-                        notable.Name, notable.StringId, notable.Culture, settlement.Name, settlement.StringId, settlement.Culture);
-                else objInfo = "Null notable.";
-
-                throw new BannerKingsException(cause + objInfo, ex);
-            }
         }
 
 
@@ -954,8 +960,6 @@ namespace BannerKings.Behaviors
         {
             static bool Prefix(Settlement settlement)
             {
-                if (settlement.IsCastle && settlement.Name.ToString().Contains("Ab Comer"))
-                    Console.WriteLine();
                 List<Occupation> list = new List<Occupation>();
                 if (settlement.IsTown)
                 {
@@ -1035,35 +1039,39 @@ namespace BannerKings.Behaviors
                     BannerKingsConfig.Instance.PopulationManager != null &&
                     BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(currentSettlement))
                 {
-                    BKCriminalPolicy policy = (BKCriminalPolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(currentSettlement, "criminal");
-                    if (policy != null)
-                    {
-                        if (policy.Policy == BKCriminalPolicy.CriminalPolicy.Enslavement)
-                            BannerKingsConfig.Instance.PopulationManager.GetPopData(currentSettlement)
-                                .UpdatePopType(PopType.Slaves, Utils.Helpers.GetRosterCount(prisoners));
-                        else if (policy.Policy == BKCriminalPolicy.CriminalPolicy.Forgiveness)
-                        {
-                            Dictionary<CultureObject, int> dic = new Dictionary<CultureObject, int>();
-                            foreach (TroopRosterElement element in prisoners.GetTroopRoster())
-                            {
-                                if (element.Character.Occupation == Occupation.Bandit) continue;
-                                CultureObject culture = element.Character.Culture;
-                                if (culture == null) continue;
-                                if (dic.ContainsKey(culture))
-                                    dic[culture] += element.Number;
-                                else dic.Add(culture, element.Number);
-                            }
+                    if (!currentSettlement.IsVillage && !currentSettlement.IsTown && !currentSettlement.IsCastle)
+                        return true;
 
-                            foreach (KeyValuePair<CultureObject, int> pair in dic)
+                    BKCriminalPolicy policy = (BKCriminalPolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(currentSettlement, "criminal");
+                    if (policy.Policy == BKCriminalPolicy.CriminalPolicy.Enslavement)
+                    {
+                        PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(currentSettlement);
+                        if (data != null)
+                            data.UpdatePopType(PopType.Slaves, Helpers.Helpers.GetRosterCount(prisoners));
+                    }
+                        
+                    else if (policy.Policy == BKCriminalPolicy.CriminalPolicy.Forgiveness)
+                    {
+                        Dictionary<CultureObject, int> dic = new Dictionary<CultureObject, int>();
+                        foreach (TroopRosterElement element in prisoners.GetTroopRoster())
+                        {
+                            if (element.Character.Occupation == Occupation.Bandit) continue;
+                            CultureObject culture = element.Character.Culture;
+                            if (culture == null || culture.IsBandit) continue;
+                            if (dic.ContainsKey(culture))
+                                dic[culture] += element.Number;
+                            else dic.Add(culture, element.Number);
+                        }
+
+                        foreach (KeyValuePair<CultureObject, int> pair in dic)
+                        {
+                            if (Settlement.All.Any(x => x.Culture == pair.Key))
                             {
-                                Settlement random =
-                                    Settlement.All.GetRandomElementWithPredicate(x => x.Culture == pair.Key);
-                                if (random != null &&
-                                    BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(
-                                        currentSettlement))
+                                Settlement random = Settlement.All.FirstOrDefault(x => x.Culture == pair.Key);
+                                if (random != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(random))
                                     BannerKingsConfig.Instance.PopulationManager.GetPopData(random)
                                         .UpdatePopType(PopType.Serfs, pair.Value);
-                            }
+                            } 
                         }
                     }
                     else return false;
@@ -1080,10 +1088,16 @@ namespace BannerKings.Behaviors
             {
                 if (currentSettlement != null && (currentSettlement.IsCastle || currentSettlement.IsTown) & BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(currentSettlement))
                 {
+                    if (!currentSettlement.IsVillage && !currentSettlement.IsTown && !currentSettlement.IsCastle)
+                        return true;
+
                     BKCriminalPolicy policy = (BKCriminalPolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(currentSettlement, "criminal");
                     if (policy.Policy == BKCriminalPolicy.CriminalPolicy.Enslavement)
-                        BannerKingsConfig.Instance.PopulationManager.GetPopData(currentSettlement)
-                            .UpdatePopType(PopType.Slaves, Utils.Helpers.GetRosterCount(prisoners));
+                    {
+                        PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(currentSettlement);
+                        if (data != null)
+                            data.UpdatePopType(PopType.Slaves, Helpers.Helpers.GetRosterCount(prisoners));
+                    }
                     else if (policy.Policy == BKCriminalPolicy.CriminalPolicy.Forgiveness)
                     {
                         Dictionary<CultureObject, int> dic = new Dictionary<CultureObject, int>();
@@ -1099,10 +1113,16 @@ namespace BannerKings.Behaviors
 
                         foreach (KeyValuePair<CultureObject, int> pair in dic)
                         {
-                            Settlement random = Settlement.All.GetRandomElementWithPredicate(x => x.Culture == pair.Key);
-                            if (random != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(currentSettlement))
-                                BannerKingsConfig.Instance.PopulationManager.GetPopData(random)
-                                    .UpdatePopType(PopType.Serfs, pair.Value);
+                            if (Settlement.All.Any(x => x.Culture == pair.Key))
+                            {
+                                Settlement random = Settlement.All.FirstOrDefault(x => x.Culture == pair.Key);
+                                if (random != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(random))
+                                {
+                                    PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(currentSettlement);
+                                    if (data != null)
+                                        data.UpdatePopType(PopType.Serfs, pair.Value);
+                                }
+                            }  
                         }
                     }
                     else return false;

@@ -88,6 +88,17 @@ namespace BannerKings.Managers.Titles
             }
         }
 
+        public void TickClaims()
+        {
+            Dictionary<Hero, ClaimType> toAdd = new Dictionary<Hero, ClaimType>();
+            foreach (KeyValuePair<Hero, CampaignTime> pair in OngoingClaims)
+                if (pair.Value.RemainingDaysFromNow <= 0f)
+                    toAdd.Add(pair.Key, ClaimType.Fabricated);
+
+            foreach (KeyValuePair<Hero, ClaimType> pair in toAdd)
+                AddClaim(pair.Key, pair.Value);
+        }
+
         public void TickDrift(FeudalTitle current, float progress = 0.000793f)
         {
             AddDrift(current, progress);

@@ -21,15 +21,10 @@ namespace BannerKings.Managers.Titles
         public FeudalTitle Title => title;
         internal override void Update(PopulationData data)
         {
+            if (title == null) title = BannerKingsConfig.Instance.TitleManager.GetTitle(data.Settlement);
+            if (title == null) return;
             title.CleanClaims();
-            Dictionary<Hero, ClaimType> toAdd = new Dictionary<Hero, ClaimType>();
-            foreach (KeyValuePair<Hero,CampaignTime> pair in title.OngoingClaims)
-                if (pair.Value.RemainingDaysFromNow <= 0)
-                    toAdd.Add(pair.Key, ClaimType.Fabricated);
-
-            foreach (KeyValuePair<Hero, ClaimType> pair in toAdd)
-                title.AddClaim(pair.Key, pair.Value);
-
+            title.TickClaims();
             AITick(data.Settlement.Owner);
         }
 

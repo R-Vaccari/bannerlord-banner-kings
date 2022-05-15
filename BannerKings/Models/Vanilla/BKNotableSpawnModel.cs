@@ -3,7 +3,7 @@ using TaleWorlds.CampaignSystem.SandBox.GameComponents.Map;
 
 namespace BannerKings.Models.Vanilla
 {
-    public class BKNotableModel : DefaultNotableSpawnModel
+    public class BKNotableSpawnModel : DefaultNotableSpawnModel
     {
 
         public override int GetTargetNotableCountForSettlement(Settlement settlement, Occupation occupation)

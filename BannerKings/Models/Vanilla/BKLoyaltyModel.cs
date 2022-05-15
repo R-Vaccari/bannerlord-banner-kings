@@ -67,15 +67,16 @@ namespace BannerKings.Models
 					else value = -0.3f;
 					baseResult.Add(value, new TextObject("{=!}Criminal policy"));
 				}
-					
-					
 
 				if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(town.Settlement, "decision_ration"))
-					baseResult.Add(town.IsUnderSiege ? -2f : -4f, new TextObject("{=!}Enforce rations decision"));
+					baseResult.Add(town.IsUnderSiege || town.FoodStocks >= (float)town.FoodStocksUpperLimit() * 0.1f ? -2f : -4f, 
+						new TextObject("{=!}Enforce rations decision"));
 
 				GovernmentType government = BannerKingsConfig.Instance.TitleManager.GetSettlementGovernment(town.Settlement);
 				if (government == GovernmentType.Republic)
 					baseResult.Add(1f, new TextObject("{=!}Government"));
+
+				baseResult.Add(2f * data.Autonomy, new TextObject("Autonomy"));
 
 				BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref baseResult, town.OwnerClan.Leader, CouncilPosition.Chancellor, 1f, false);
 				return baseResult;
@@ -212,7 +213,7 @@ namespace BannerKings.Models
 			if (town.FoodStocks >= foodLimitForBonus)
 				explainedNumber.Add(0.5f, new TextObject("Well fed populace"));
 			else if (town.Settlement.IsStarving)
-				explainedNumber.AddFactor(-0.3f, StarvingText);
+				explainedNumber.Add(-2f, StarvingText);
 		}
 
 		private void GetSettlementLoyaltyChangeDueToSecurity(Town town, ref ExplainedNumber explainedNumber)

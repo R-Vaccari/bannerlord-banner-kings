@@ -56,7 +56,7 @@ namespace BannerKings.Models.Vanilla
 			return (int)explainedNumber.ResultNumber;
 		}
 
-		private int GetCostFactor(SkillObject skill)
+		public int GetCostFactor(SkillObject skill)
 		{
 			if (skill == DefaultSkills.Bow || skill == DefaultSkills.OneHanded || skill == DefaultSkills.TwoHanded ||
 			    skill == DefaultSkills.Crossbow || skill == DefaultSkills.Throwing || skill == DefaultSkills.Polearm ||

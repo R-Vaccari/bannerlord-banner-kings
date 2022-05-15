@@ -42,8 +42,14 @@ namespace BannerKings.Managers.Populations
 
         public float StateSlaves
         {
-            get => stateSlaves;
-            set => stateSlaves = MBMath.ClampFloat(value, 0f, 1f);
+            get 
+            {
+                if (float.IsNaN(stateSlaves))
+                    stateSlaves = 0f;
+                return MBMath.ClampFloat(stateSlaves, 0f, 1f);
+            }
+            
+            set => this.stateSlaves = MBMath.ClampFloat(value, 0f, 1f);
         }
 
         public float[] Satisfactions => satisfactions;

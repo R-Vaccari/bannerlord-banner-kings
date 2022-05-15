@@ -51,6 +51,10 @@ namespace BannerKings.UI
 
                 StatsInfo.Add(new InformationElement("Stability:", FormatValue(data.Stability),
                     "The overall stability of this settlement, affected by security, loyalty, assimilation and whether you are legally entitled to the settlement. Stability is the basis of economic prosperity."));
+                StatsInfo.Add(new InformationElement("Autonomy:", FormatValue(data.Autonomy),
+                    "Autonomy is inversely correlated to stability, therefore less stability equals more autonomy. Higher autonomy will reduce tax revenue while increasing loyalty. Matching culture with the settlement and setting a local notable as governor increases autonomy. Higher autonomy will also slow down assimilation."));
+                StatsInfo.Add(new InformationElement("Notable Support:", FormatValue(data.NotableSupport),
+                    "Represents how much the local elite supports you. Support of each notable is weighted on their power, meaning that not having the support of a notable that holds most power will result in a small support percentage. Support is gained through better relations with the notables."));
                 StatsInfo.Add(new InformationElement("Total Population:", data.TotalPop.ToString(),
                     "Number of people present in this settlement and surrounding regions."));
                 StatsInfo.Add(new InformationElement("Population Growth:", new BKGrowthModel().CalculateEffect(settlement, data).ResultNumber.ToString(), 

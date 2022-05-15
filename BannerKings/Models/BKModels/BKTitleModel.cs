@@ -148,7 +148,7 @@ namespace BannerKings.Models.BKModels
             else if (governmentType == GovernmentType.Imperial)
             {
                 FeudalTitle sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(revokerKingdom);
-                if (revoker != sovereign.deJure)
+                if (sovereign == null || revoker != sovereign.deJure)
                 {
                     revokeAction.Possible = false;
                     revokeAction.Reason = new TextObject("{=!}Not de Jure faction leader.");
@@ -340,7 +340,7 @@ namespace BannerKings.Models.BKModels
 
         private float GetRenownUsurpCost(FeudalTitle title) => 100f / (float)title.type + 1f;
 
-        private float GetGoldUsurpCost(FeudalTitle title)
+        public float GetGoldUsurpCost(FeudalTitle title)
         {
             float gold = 100000f / (float)title.type + 1f;
             if (title.fief != null)

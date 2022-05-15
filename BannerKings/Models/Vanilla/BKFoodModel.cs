@@ -1,5 +1,4 @@
 ﻿using BannerKings.Populations;
-using System;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.SandBox.GameComponents;
 using TaleWorlds.Core;
@@ -96,23 +95,36 @@ namespace BannerKings.Models
 		public ExplainedNumber GetPopulationFoodConsumption(PopulationData data)
         {
 			ExplainedNumber result = new ExplainedNumber();
-			result.LimitMin(-1000f);
+			result.LimitMin(-1500f);
 			result.LimitMax(0f);
 			int citySerfs = data.GetTypeCount(PopType.Serfs);
-			float serfConsumption = citySerfs * SERF_FOOD * -1f;
-			result.Add(MathF.Round(serfConsumption), new TextObject("Serfs consumption"));
+			if (citySerfs > 0)
+            {
+				float serfConsumption = (float)citySerfs * SERF_FOOD * -1f;
+				result.Add((float)serfConsumption, new TextObject("Serfs consumption", null));
+			}
 
 			int citySlaves = data.GetTypeCount(PopType.Slaves);
-			float slaveConsumption = citySlaves * SERF_FOOD * -0.5f;
-			result.Add(MathF.Round(slaveConsumption), new TextObject("Slaves consumption"));
+			if (citySlaves > 0)
+            {
+				float slaveConsumption = (float)citySlaves * SERF_FOOD * -0.5f;
+				result.Add((float)slaveConsumption, new TextObject("Slaves consumption", null));
+			}
 
 			int cityNobles = data.GetTypeCount(PopType.Nobles);
-			float nobleConsumption = cityNobles * NOBLE_FOOD;
-			result.Add(MathF.Round(nobleConsumption), new TextObject("Nobles consumption"));
-
+			if (cityNobles > 0)
+            {
+				float nobleConsumption = (float)cityNobles * NOBLE_FOOD;
+				result.Add((float)nobleConsumption, new TextObject("Nobles consumption", null));
+			}
+			
 			int cityCraftsmen = data.GetTypeCount(PopType.Craftsmen);
-			float craftsmenConsumption = cityCraftsmen * CRAFTSMEN_FOOD;
-			result.Add(MathF.Round(craftsmenConsumption), new TextObject("Craftsmen consumption"));
+			if (cityCraftsmen > 0)
+            {
+				float craftsmenConsumption = (float)cityCraftsmen * CRAFTSMEN_FOOD;
+				result.Add((float)craftsmenConsumption, new TextObject("Craftsmen consumption", null));
+			}
+			
 
 			if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(data.Settlement, "decision_ration"))
 				result.AddFactor(-0.4f, new TextObject("{=!}Enforce rations decision"));
@@ -127,18 +139,18 @@ namespace BannerKings.Models
         {
 			ExplainedNumber result = new ExplainedNumber();
 			result.LimitMin(0f);
-			result.LimitMax(1000f);
-			LandData landData = data.LandData;
-			result.Add(MathF.Round(landData.Farmland * 0.018f), new TextObject("{=!}Farmlands"));
-			result.Add(MathF.Round(landData.Pastureland * 0.005f), new TextObject("{=!}Pasturelands"));
-			result.Add(MathF.Round(landData.Woodland * 0.001f), new TextObject("{=!}Woodlands"));
-			float fertility = landData.Fertility - 1f;
-			if (fertility != 0f) result.AddFactor(MathF.Round(fertility), new TextObject("{=!}Fertility"));
-	        float saturation = MBMath.ClampFloat(landData.WorkforceSaturation, 0f, 1f) - 1f;
-			if (saturation != 0f) result.AddFactor(MathF.Round(saturation), new TextObject("{=!}Workforce Saturation"));
+			result.LimitMax(1500f);
+			if (!town.IsUnderSiege)
+            {
+				LandData landData = data.LandData;
+				result.Add(landData.Farmland * 0.018f, new TextObject("{=!}Farmlands"));
+				result.Add(landData.Pastureland * 0.005f, new TextObject("{=!}Pasturelands"));
+				result.Add(landData.Woodland * 0.001f, new TextObject("{=!}Woodlands"));
+				float fertility = landData.Fertility - 1f;
+				if (fertility != 0f) result.AddFactor(fertility, new TextObject("{=!}Fertility"));
+				float saturation = MBMath.ClampFloat(landData.WorkforceSaturation, 0f, 1f) - 1f;
+				if (saturation != 0f) result.AddFactor(saturation, new TextObject("{=!}Workforce Saturation"));
 
-			if (town != null)
-			{
 				Building b = null;
 				foreach (Building building in town.Buildings)
 					if (building.BuildingType == DefaultBuildingTypes.CastleGardens ||
