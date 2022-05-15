@@ -20,14 +20,14 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
             aseraGroup = new FaithGroup(new TextObject("{=!}Aseran Faiths"), new TextObject("{=!}Those that believe in Asera as the true and only prohpet."));
             aseraCode = new AseraFaith();
 
-            aseraCode.Initialize(DefaultDivinities.Instance.Asera, 
+            aseraCode.Initialize(DefaultDivinities.Instance.AseraMain,
+                new List<Divinity>() { DefaultDivinities.Instance.AseraSecondary1, DefaultDivinities.Instance.AseraSecondary2, DefaultDivinities.Instance.AseraSecondary3 },
                 new Dictionary<TraitObject, bool>
                 { 
                     { DefaultTraits.Honor, true }, 
                     { DefaultTraits.Valor, true } 
                 }, 
-                aseraGroup,
-                new Dictionary<int, CharacterObject>());
+                aseraGroup);
 
             battaniaGroup = new FaithGroup(new TextObject("{=!}Derwyddon Faiths"), new TextObject("{=!}The faith in the old Calradian gods."));
             amraFaith = new AmraFaith();
@@ -39,8 +39,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
                     { DefaultTraits.Honor, false },
                     { DefaultTraits.Valor, true }
                 },
-                battaniaGroup,
-                new Dictionary<int, CharacterObject>());
+                battaniaGroup);
 
             
         }

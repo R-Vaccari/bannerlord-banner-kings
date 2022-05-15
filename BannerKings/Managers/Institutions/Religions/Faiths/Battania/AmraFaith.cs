@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using TaleWorlds.CampaignSystem;
+﻿using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -9,7 +7,10 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
 {
     public class AmraFaith : PolytheisticFaith
     {
+        public AmraFaith() : base()
+        {
 
+        }
         public override TextObject GetFaithName() => new TextObject("{=!}Amra Ollamh");
         public override TextObject GetFaithDescription() => new TextObject("{=!}The creed of the Amra Ollamh, “that which is wondrous and great” - is the long-standing folkloric tradition of the people who dwell up the Uchalion plateau. Though outsiders are wont to confuse the Amra Ollamh as little more than tales of goblins, sprites, fair folk and woodland monsters - the creed itself is in fact a deeply involved cultural institution meant to instill the youth of Battania with the lessons of their forebears by way of colloquial metaphor. The Brithem, law-speakers and judges, more than often related to the headmen of their village, maintain traditions whilst the women of the Bandrui preach these tales to children with the hopes of driving them to boldness and hopeful ambitions later on in life. Cattle raiding, braggadocious dueling bouts, and no small amount of criminal activity paired with lessons of mercy make up much of what is learnt by those who follow the Amra Ollamh. Those seeking greater insight into the spiritual matters of the Battanians are more likely to be dissuaded by Brithem lawspeakers, so as not to intrude upon the more esoteric matters handled by the practitioners of the Derwyddon arts.");
 
@@ -31,11 +32,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
         public override TextObject GetClergyForbiddenAnswerLast(int rank)
         {
             TextObject text = null;
-            if (rank == 4)
-                text = new TextObject("{=!}…And in weakness, do not allow others to usurp your station. Rebellion, sedition, betrayal - anathema to the Code of Asera. Brother shall not strike against brother, least of all by a knife in the back or by rousing a mob with vicious words or common strife. Suffer not rebellion, for to allow it to foment in the first place speaks to the immensity of your failings. All the pointless bloodshed which may come from such will tarnish you eternal, such that you may find yourself denied Heaven - condemned to an agony of your own making.");
-            else if (rank == 3)
-                text = new TextObject("{=!}Be mindful also of the company you keep, for though all among the Aserai are as brothers - and even the Jawwal and Bedouin are as our cousins; those beyond our blood lineage may not understand your purpose. They may lead you from the path, away from the Code; away from the good of the Aserai. But perhaps I speak this in fear - the long toll of the Empire upon our culture.");
-            else if (rank == 2)
+            if (rank == 2)
                 text = new TextObject("{=!}To not seek vengeance against those who have attacked your holdings, besieged your homes, murdered your people - is a greater shame. No doctrine of peace can outweigh the Code of Asera in this regard. Many such debts need to be paid, and it is horrifying that our rulers so often choose to forget this. The serpent which bites you and slithers away does not leave you in peace; only when the serpent is crushed, maimed, unable to bite you again does it depart in peace.");
             else text = new TextObject("{=!}When you are called by your brothers, you must come to them; you must serve beside them, you must never fail them if it is in your power. Know also that keeping the company of those outside the Code of Asera will surely corrupt you - you are your brother’s keeper, and they in turn yours. For good or for ill.");
 
@@ -66,13 +63,8 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
         public override TextObject GetClergyInduction(int rank)
         {
             TextObject text = null;
-            if (rank == 4)
-            {
-
-            }
-            else if (rank == 3)
-                text = new TextObject("{=!}Mashaera, blood of my blood. It is good to see you are alive and that you are in good health; for the world is rife with conflict beyond our brotherhood and little is to be held as certain. Are you here on pilgrimage or duty, in good tidings or ill news? How may this humble Imam be of service to his sibling?");
-            else if (rank == 2)
+            
+            if (rank == 2)
                 text = new TextObject("{=!}Peace be upon you, my kin. Have you come to study the Code of Asera? I shall grant you what wisdom I have gleaned in my long hours of study, but as your brother I must tell you that I find myself more ignorant the more I realize the breadth of what there is still yet to learn.");
             else
             {
@@ -99,13 +91,8 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
         public override TextObject GetClergyInductionLast(int rank)
         {
             TextObject text = null;
-            if (rank == 4)
-            {
-
-            }
-            else if (rank == 3)
-                text = new TextObject("{=!}Mashaera, blood of my blood. It is good to see you are alive and that you are in good health; for the world is rife with conflict beyond our brotherhood and little is to be held as certain. Are you here on pilgrimage or duty, in good tidings or ill news? How may this humble Imam be of service to his sibling?");
-            else if (rank == 2)
+            
+            if (rank == 2)
                 text = new TextObject("{=!}Peace be upon you, my kin. Have you come to study the Code of Asera? I shall grant you what wisdom I have gleaned in my long hours of study, but as your brother I must tell you that I find myself more ignorant the more I realize the breadth of what there is still yet to learn.");
             else
             {

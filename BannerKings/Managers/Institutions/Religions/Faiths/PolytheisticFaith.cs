@@ -7,10 +7,15 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
     {
         protected List<Divinity> pantheon;
 
-        public void Initialize(Divinity mainGod, List<Divinity> pantheon, Dictionary<TraitObject, bool> traits,
-          FaithGroup faithGroup, Dictionary<int, CharacterObject> presets)
+        public PolytheisticFaith() : base()
         {
-            base.Initialize(mainGod, traits, faithGroup, presets);
+
+        }
+
+        public void Initialize(Divinity mainGod, List<Divinity> pantheon, Dictionary<TraitObject, bool> traits,
+          FaithGroup faithGroup)
+        {
+            base.Initialize(mainGod, traits, faithGroup);
             this.pantheon = pantheon;
         }
     }

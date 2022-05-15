@@ -16,15 +16,14 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
         public Faith() 
         {
             stances = new Dictionary<Faith, FaithStance>();
+            presets = new Dictionary<int, CharacterObject>();
         }
 
-        protected void Initialize(Divinity mainGod, Dictionary<TraitObject, bool> traits, FaithGroup faithGroup,
-            Dictionary<int, CharacterObject> presets)
+        protected void Initialize(Divinity mainGod, Dictionary<TraitObject, bool> traits, FaithGroup faithGroup)
         {
             this.mainGod = mainGod;
             this.traits = traits;
             this.faithGroup = faithGroup;
-            this.presets = presets;
         }
 
         public MBReadOnlyDictionary<TraitObject, bool> Traits => traits.GetReadOnlyDictionary();

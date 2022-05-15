@@ -24,6 +24,7 @@ namespace BannerKings.Managers.Institutions.Religions
             this.faith = faith;
             this.favoredCultures = favoredCultures;
             this.doctrineIds = doctrineIds;
+            leadership.Initialize(this);
         }
 
         public CultureObject MainCulture => favoredCultures[0];

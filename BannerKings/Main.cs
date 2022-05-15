@@ -31,7 +31,6 @@ using static TaleWorlds.CampaignSystem.SandBox.Issues.EscortMerchantCaravanIssue
 using TaleWorlds.CampaignSystem.SandBox.Issues;
 using Helpers;
 using Bannerlord.UIExtenderEx;
-using BannerKings.Managers.Kingdoms.Council;
 
 namespace BannerKings
 {
@@ -53,6 +52,7 @@ namespace BannerKings
                 campaignStarter.AddBehavior(new BKRansomBehavior());
                 campaignStarter.AddBehavior(new BKTitleBehavior());
                 campaignStarter.AddBehavior(new BKNotableBehavior());
+                campaignStarter.AddBehavior(new BKReligionsBehavior());
 
                 campaignStarter.AddModel(new BKCompanionPrices());
                 campaignStarter.AddModel(new BKProsperityModel());

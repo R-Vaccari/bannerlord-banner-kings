@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using TaleWorlds.CampaignSystem;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace BannerKings.Managers.Institutions.Religions
 {
     public abstract class DescentralizedLeadership : ReligiousLeadership
     {
 
-        private List<Hero> leaders;
-        private Religion religion;
+        protected Religion religion;
         public DescentralizedLeadership()
         {
-            leaders = new List<Hero>();
             
         }
 
@@ -20,6 +17,14 @@ namespace BannerKings.Managers.Institutions.Religions
             this.religion = religion;
         }
 
-        public abstract List<Clergyman> GetLeaders();
+        public List<Clergyman> GetLeaders()
+        {
+            List<Clergyman> list = new List<Clergyman>();
+            int max = religion.Faith.GetMaxClergyRank();
+            foreach (Clergyman clergyman in religion.Clergy.Values.ToList())
+                if (clergyman.Rank == max)
+                    list.Add(clergyman);
+            return list;
+        }
     }
 }

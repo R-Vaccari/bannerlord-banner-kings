@@ -5,10 +5,15 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
 {
     public abstract class MonotheisticFaith : Faith
     {
-        public void Initialize(Divinity mainGod, Dictionary<TraitObject, bool> traits,
-          FaithGroup faithGroup, Dictionary<int, CharacterObject> presets)
+        public MonotheisticFaith() : base()
         {
-            base.Initialize(mainGod, traits, faithGroup, presets);
+            
+        }
+
+        public void Initialize(Divinity mainGod, List<Divinity> secondaryGods, Dictionary<TraitObject, bool> traits,
+          FaithGroup faithGroup)
+        {
+            base.Initialize(mainGod, traits, faithGroup);
         }
     }
 }
