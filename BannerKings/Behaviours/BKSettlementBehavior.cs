@@ -1047,7 +1047,7 @@ namespace BannerKings.Behaviors
                     {
                         PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(currentSettlement);
                         if (data != null)
-                            data.UpdatePopType(PopType.Slaves, Helpers.Helpers.GetRosterCount(prisoners));
+                            data.UpdatePopType(PopType.Slaves, Utils.Helpers.GetRosterCount(prisoners));
                     }
                         
                     else if (policy.Policy == BKCriminalPolicy.CriminalPolicy.Forgiveness)
@@ -1096,7 +1096,7 @@ namespace BannerKings.Behaviors
                     {
                         PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(currentSettlement);
                         if (data != null)
-                            data.UpdatePopType(PopType.Slaves, Helpers.Helpers.GetRosterCount(prisoners));
+                            data.UpdatePopType(PopType.Slaves, Utils.Helpers.GetRosterCount(prisoners));
                     }
                     else if (policy.Policy == BKCriminalPolicy.CriminalPolicy.Forgiveness)
                     {

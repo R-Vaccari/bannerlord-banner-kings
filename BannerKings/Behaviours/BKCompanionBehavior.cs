@@ -181,11 +181,11 @@ namespace BannerKings.Behaviors
                     {
                         if (title.contract != null) government = title.contract.Government;
                         if (current == null)
-                            desc += string.Format("{0} of {1}", Utils.Helpers.GetTitleHonorary(title.type, false), title.shortName);
+                            desc += string.Format("{0} of {1}", Utils.Helpers.GetTitleHonorary(title.type, title.contract.Government, false), title.shortName);
                         else if (current.type == title.type)
                             desc += ", " + title.shortName;
                         else if (current.type != title.type)
-                            desc += string.Format(" and {0} of {1}", Utils.Helpers.GetTitleHonorary(title.type, false), title.shortName);
+                            desc += string.Format(" and {0} of {1}", Utils.Helpers.GetTitleHonorary(title.type, title.contract.Government, false), title.shortName);
                         current = title;
                     }
                     __result = __result + Environment.NewLine + desc;

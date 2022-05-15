@@ -512,6 +512,12 @@ namespace BannerKings.Utils
             return false;
         }
 
+        public static CultureObject GetCulture(string id)
+        {
+            CultureObject culture = MBObjectManager.Instance.GetObjectTypeList<CultureObject>().FirstOrDefault(x => x.StringId == id);
+            return culture;
+        }
+
         public static ConsumptionType GetTradeGoodConsumptionType(ItemCategory item)
         {
             string id = item.StringId;
