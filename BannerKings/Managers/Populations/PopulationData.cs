@@ -341,22 +341,13 @@ namespace BannerKings.Populations
         {
             get
             {
-                CultureObject culture = null;
-                CultureObject ownerCulture = settlementOwner.Culture;
-                float ownerShare = 0f;
-                float share = 0f;
+                List<ValueTuple<CultureObject, float>> eligible = new List<(CultureObject, float)>();
                 foreach (CultureDataClass data in this.cultures)
-                {
-                    if (data.Assimilation >= share && data.Culture.MilitiaPartyTemplate != null)
-                    {
-                        culture = data.Culture;
-                        share = data.Assimilation;
-                        if (data.Culture == ownerCulture)
-                            ownerShare = data.Assimilation;
-                    }
-                }
+                    if (data.Culture.MilitiaPartyTemplate != null && data.Culture.DefaultPartyTemplate != null && !data.Culture.IsBandit)
+                        eligible.Add((data.Culture, data.Assimilation));
+                eligible.OrderByDescending(pair => pair.Item2);
 
-                return share > ownerShare ? culture : ownerCulture;
+                return eligible[0].Item1;
             }
         }
 
