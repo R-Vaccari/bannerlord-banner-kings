@@ -34,20 +34,29 @@ namespace BannerKings.Managers.Institutions.Religions
         public MBReadOnlyList<string> Doctrines => doctrineIds.GetReadOnlyList();
         public MBReadOnlyDictionary<Settlement, Clergyman> Clergy => clergy.GetReadOnlyDictionary();
 
+        public void AddClergyman(Settlement settlement, Clergyman clergyman)
+        {
+            if (clergy.ContainsKey(settlement))
+                clergy[settlement] = clergyman;
+            else clergy.Add(settlement, clergyman);
+        }
+
+        public Clergyman GetClergyman(Settlement settlement)
+        {
+            if (clergy.ContainsKey(settlement))
+                return clergy[settlement];
+
+            return null;
+        }
+
         public Clergyman GenerateClergyman(Settlement settlement)
         {
             int rank = faith.GetIdealRank(settlement);
             if (rank <= 0) return null;
-            TextObject title = faith.GetRankTitle(rank);
             CharacterObject character = faith.GetPreset(rank);
             if (character != null)
             {
-                Hero hero = HeroCreator.CreateSpecialHero(character, settlement);
-                TextObject firstName = hero.FirstName;
-                TextObject fullName = new TextObject("{=!}{RELIGIOUS_TITLE} {NAME}")
-                    .SetTextVariable("RELIGIOUS_TITLE", title)
-                    .SetTextVariable("NAME", firstName);
-                hero.SetName(fullName, firstName);
+                Hero hero = GenerateClergymanHero(character, settlement, rank);
                 EnterSettlementAction.ApplyForCharacterOnly(hero, settlement);
                 Clergyman clergyman = new Clergyman(hero, rank);
                 clergy.Add(settlement, clergyman);
@@ -55,6 +64,17 @@ namespace BannerKings.Managers.Institutions.Religions
             }
 
             throw new BannerKingsException("");
+        }
+
+        public Hero GenerateClergymanHero(CharacterObject preset, Settlement settlement, int rank)
+        {
+            Hero hero = HeroCreator.CreateSpecialHero(preset, settlement);
+            TextObject firstName = hero.FirstName;
+            TextObject fullName = new TextObject("{=!}{RELIGIOUS_TITLE} {NAME}")
+                .SetTextVariable("RELIGIOUS_TITLE", faith.GetRankTitle(rank))
+                .SetTextVariable("NAME", firstName);
+            hero.SetName(fullName, firstName);
+            return hero;
         }
 
         public bool IsFavoredCulture(CultureObject culture) => favoredCultures.Contains(culture);
@@ -65,6 +85,17 @@ namespace BannerKings.Managers.Institutions.Religions
         }
 
         public MBReadOnlyList<CultureObject> FavoredCultures => favoredCultures.GetReadOnlyList();
+
+        public override bool Equals(object obj)
+        {
+            if (obj is Religion)
+            {
+                Religion rel = (Religion)obj;
+                return faith.GetId() == rel.Faith.GetId();
+            }
+                
+            return base.Equals(obj);
+        }
 
     }
 }

@@ -18,9 +18,11 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
         public override TextObject GetClergyForbiddenAnswer(int rank)
         {
             TextObject text = null;
-            if (rank == 2)
-                text = new TextObject("{=!}…A curious question; though I suppose I would know the deeper answers to this. Few are the faqir or even imam who are as studied in the various things so easily lost in transcription or by cause of would-be sultans seeking to justify their cruelty. The Code does not abide warring between Sons, a facet easily lost and ignored but a point of shame that could tarnish many of our leaders.");
-            else text = new TextObject("{=!}It is wise to ask this - we dwell in uncertain times. Greed and rage cloud the hearts of many. Do no harm to the other Sons of Asera; the villagers should never fear your blade in these lands. Do not rob them of their wealth, even if the Sultan demands it - you must be charitable, you are their sibling.");
+            if (rank == 3)
+                text = new TextObject("{=!}I’ve no qualms over many a mortal failing, but if you are to bind thine self to the throne of the Martyr and seek to untwist your soul of sin - you must serve none save for another Darusosian Martyr. Be it Rhagaea Pethros, the Divine Heir Ira Pethros; or any other who may yet emerge immaculate - you must serve only the ends of our Empire. Seek not to burden thyself with a hoard of filthy lucre, for denars shall twist thine soul to marred, mangled ends.");
+            else if (rank == 2)
+                text = new TextObject("{=!}Be not one who acts unbenignantly, for we servants within the Darusosian Martyrdom need be graceful in our deeds. Do not sully your house with cohorts or spouses who were born of upstart states or pagan cultures who deny the will of the Martyr.");
+            else text = new TextObject("{=!}Only a blind man would look upon the state of the Empire and think it saved. If you wish to remain in the good graces of the Darusosian Martyrdom, you should not seek to usurp the whims of the imperial throne. Should you be blessed to serve the house of Pethros, allow them to grant you territories - never make demands of them. If you fail to provide donations and services to our clergy, this too shall be noticed and your reputation shall fall.");
 
             return text;
         }
@@ -28,9 +30,11 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
         public override TextObject GetClergyForbiddenAnswerLast(int rank)
         {
             TextObject text = null;
-            if (rank == 2)
-                text = new TextObject("{=!}To not seek vengeance against those who have attacked your holdings, besieged your homes, murdered your people - is a greater shame. No doctrine of peace can outweigh the Code of Asera in this regard. Many such debts need to be paid, and it is horrifying that our rulers so often choose to forget this. The serpent which bites you and slithers away does not leave you in peace; only when the serpent is crushed, maimed, unable to bite you again does it depart in peace.");
-            else text = new TextObject("{=!}When you are called by your brothers, you must come to them; you must serve beside them, you must never fail them if it is in your power. Know also that keeping the company of those outside the Code of Asera will surely corrupt you - you are your brother’s keeper, and they in turn yours. For good or for ill.");
+            if (rank == 3)
+                text = new TextObject("{=!}Give generously to the Martyrdom, for to do otherwise is to see patrician and plebeian alike suffer unjustly. Thou knowest also that many a foul upstart seeks to further denigrate our Empire. They must be rent asunder, their holdings broken, their deviant crowns shattered beneath our bootheels.Knoweth your purpose in our faith shall ever be as a cudgel and a bulwark.Lest you stumble across a mystery that transfixes thine mind, thou shall know peace only at our duty’s end.");
+            else if (rank == 2)
+                text = new TextObject("{=!}Do not allow our enemies to remain comfortable in their belligerent stagnancy. Be as a scourge to the Embers of the Flame, but take not the heads of their heresiarch masters - they must learn penance upon the path to re-entering the Martyr’s good graces.");
+            else text = new TextObject("{=!}If the Empire goes to war against usurpers or savages, you must join and do your part. If you fail to act in service to the Calradic ideals of the Empire, you shall be acting in heresy against the will of Darusos, Arenicos, and all others who have been deified by their deeds on the throne.");
 
             return text;
         }

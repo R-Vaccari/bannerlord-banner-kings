@@ -24,7 +24,7 @@ namespace BannerKings.Managers
         {
             CultureObject aserai = Utils.Helpers.GetCulture("aserai");
             CultureObject khuzait = Utils.Helpers.GetCulture("khuzait");
-            CultureObject imperial = Utils.Helpers.GetCulture("imperial");
+            CultureObject imperial = Utils.Helpers.GetCulture("empire");
             CultureObject battania = Utils.Helpers.GetCulture("battania");
 
             Religion aseraiReligion = new Religion(Settlement.All.First(x => x.StringId == "town_A1"), 
@@ -37,8 +37,15 @@ namespace BannerKings.Managers
                 new List<CultureObject> { battania },
                 new List<string>() { "druidism", "animism" });
 
-            Religions.Add(aseraiReligion, new Dictionary<Hero, float>());
+            Religion darusosianReligion = new Religion(Settlement.All.First(x => x.StringId == "town_ES4"),
+               DefaultFaiths.Instance.Darusosian, new HierocraticLeadership(),
+               new List<CultureObject> { imperial },
+               new List<string>());
+
             Religions.Add(battaniaReligion, new Dictionary<Hero, float>());
+            Religions.Add(aseraiReligion, new Dictionary<Hero, float>());
+            Religions.Add(darusosianReligion, new Dictionary<Hero, float>());
+
             InitializeFaithfulHeroes();
         }
 
@@ -46,9 +53,27 @@ namespace BannerKings.Managers
         {
             foreach (Religion rel in Religions.Keys.ToList())
                 foreach (Hero hero in Hero.AllAliveHeroes)
-                    if (hero != Hero.MainHero && !hero.IsDisabled && (hero.Clan != null || hero.IsNotable || hero.IsWanderer) && hero.Culture == rel.MainCulture
-                        && !hero.IsChild)
-                        Religions[rel].Add(hero, 50f);
+                {
+                    if (hero == Hero.MainHero || hero.IsDisabled || hero.IsChild || hero.Culture != rel.MainCulture) continue;
+
+                    string id = rel.Faith.GetId();
+                    if (id == "darusosian")
+                    {
+                        Kingdom kingdom = null;
+                        if (hero.Clan != null)
+                            kingdom = hero.Clan.Kingdom;
+                        else if (hero.IsNotable && hero.CurrentSettlement != null && hero.CurrentSettlement.OwnerClan != null)
+                            kingdom = hero.CurrentSettlement.OwnerClan.Kingdom;
+                        else if (hero.IsWanderer && hero.BornSettlement != null && hero.BornSettlement.OwnerClan != null)
+                            kingdom = hero.BornSettlement.OwnerClan.Kingdom;
+
+                        if (kingdom == null || (id == "darusosian" && kingdom.StringId != "empire_s"))
+                            continue;
+                    }
+                    
+                     Religions[rel].Add(hero, 50f);
+                }
+                    
 
             List<InquiryElement> elements = new List<InquiryElement>();
             foreach (Religion religion in Religions.Keys.ToList())
@@ -58,9 +83,6 @@ namespace BannerKings.Managers
                     .SetTextVariable("PIETY", GetPiety(religion))
                     .ToString(), 
                     null, true, religion.Faith.GetFaithDescription().ToString()));
-            
-
-            elements.Sort(delegate(InquiryElement x, InquiryElement y) { return GetPiety(x.Identifier as Religion).CompareTo(GetPiety(y.Identifier as Religion)); });
 
             InformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(new TextObject("{=!}Your faith").ToString(), 
                 new TextObject("{=!}You look up to the skies and realize there must be something more. You feel there must be a higher purpose for yourself, and people expect you to defend a certain faith. Upholding your cultural forefathers' faith would be considered most pious. Similarly, following a faith that accepts your culture would be pious, however not as much as your true ancestry. Alternatively, having a completely different faith is possible, though a less walked path. What is your faith?").ToString(),
@@ -88,7 +110,7 @@ namespace BannerKings.Managers
             {
                 string id = rel.Faith.GetId();
                 List<CharacterObject> presets = CharacterObject.All.ToList().FindAll(x => x.Occupation == Occupation.Preacher
-                && x.Culture == rel.MainCulture && x.IsTemplate && x.StringId.Contains("bannerkings") && x.StringId.Contains(id));
+                && x.IsTemplate && x.StringId.Contains("bannerkings") && x.StringId.Contains(id));
                 foreach (CharacterObject preset in presets)
                 {
                     int number = int.Parse(preset.StringId[preset.StringId.Length - 1].ToString());

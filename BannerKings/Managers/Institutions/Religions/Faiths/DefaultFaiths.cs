@@ -1,4 +1,5 @@
 ﻿using BannerKings.Managers.Institutions.Religions.Faiths.Asera;
+using BannerKings.Managers.Institutions.Religions.Faiths.Battania;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Localization;
@@ -13,7 +14,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
 
         public Faith AseraCode => aseraCode;
         public Faith AmraOllahm => amraFaith;
-
+        public Faith Darusosian => darusosian;
 
         public void Initialize()
         {

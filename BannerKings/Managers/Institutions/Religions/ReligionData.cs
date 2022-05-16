@@ -31,6 +31,7 @@ namespace BannerKings.Managers.Institutions.Religions
 
         internal override void Update(PopulationData data)
         {
+            clergyman = religion.GetClergyman(data.Settlement);
             if (clergyman == null)
                 clergyman = religion.GenerateClergyman(settlement);
 
