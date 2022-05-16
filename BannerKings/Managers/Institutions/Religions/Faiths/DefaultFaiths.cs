@@ -7,8 +7,8 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
 {
     public class DefaultFaiths
     {
-        private FaithGroup aseraGroup, battaniaGroup;
-        private MonotheisticFaith aseraCode;
+        private FaithGroup aseraGroup, battaniaGroup, imperialGroup;
+        private MonotheisticFaith aseraCode, darusosian;
         private PolytheisticFaith amraFaith;
 
         public Faith AseraCode => aseraCode;
@@ -29,7 +29,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
                 }, 
                 aseraGroup);
 
-            battaniaGroup = new FaithGroup(new TextObject("{=!}Derwyddon Faiths"), new TextObject("{=!}The faith in the old Calradian gods."));
+            battaniaGroup = new FaithGroup(new TextObject("{=!}Derwyddon Faiths"), new TextObject("{=!}The faiths in the true old Calradian gods."));
             amraFaith = new AmraFaith();
 
             amraFaith.Initialize(DefaultDivinities.Instance.AmraMain,
@@ -41,7 +41,19 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
                 },
                 battaniaGroup);
 
-            
+
+            imperialGroup = new FaithGroup(new TextObject("{=!}Calradian Faiths"), new TextObject("{=!}The Imperial Calradian faiths."));
+            darusosian = new DarusosianFaith();
+
+            darusosian.Initialize(DefaultDivinities.Instance.DarusosianMain,
+                new List<Divinity>() { DefaultDivinities.Instance.DarusosianSecondary1, DefaultDivinities.Instance.DarusosianSecondary2 },
+                new Dictionary<TraitObject, bool>
+                {
+                    { DefaultTraits.Honor, false },
+                    { DefaultTraits.Valor, true }
+                },
+                imperialGroup);
+
         }
 
         public static DefaultFaiths Instance => ConfigHolder.CONFIG;

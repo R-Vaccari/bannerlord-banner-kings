@@ -114,7 +114,7 @@ namespace BannerKings.Behaviours
                 new ConversationSentence.OnConditionDelegate(this.IsPreacher), null, 100, null);
 
             starter.AddPlayerLine("bk_question_induction", "lord_talk_ask_something_2", "bk_preacher_asked_induction",
-               "{=!}What is forbidden to the faith?",
+               "{=!}I would like to be inducted.",
                new ConversationSentence.OnConditionDelegate(this.IsPreacher), null, 100, null, null);
 
             starter.AddDialogLine("bk_answer_induction_1", "bk_preacher_asked_induction", "bk_preacher_asked_induction_last",

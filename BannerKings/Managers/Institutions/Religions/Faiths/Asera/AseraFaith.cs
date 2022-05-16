@@ -246,5 +246,10 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
         {
             throw new NotImplementedException();
         }
+
+        public override (bool, TextObject) GetInductionAllowed(Hero hero, int rank)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

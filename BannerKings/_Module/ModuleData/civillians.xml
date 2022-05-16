@@ -3,7 +3,7 @@
 
 
 	  
-	<NPCCharacter id="bannerkings_preacher_amra_1" name="{=yr5pa0hs}{HERO.FIRSTNAME}" voice="softspoken" age="28" is_template="true" default_group="Infantry" is_hero="false" culture="Culture.battania" occupation="Preacher">
+	<NPCCharacter id="bannerkings_preacher_amra_1" name="{=yr5pa0hs}{HERO.FIRSTNAME}" voice="softspoken" age="40" is_template="true" is_female="true" default_group="Infantry" is_hero="false" culture="Culture.battania" occupation="Preacher">
     <face>
       <face_key_template value="BodyProperty.villager_battania" />
     </face>
@@ -29,7 +29,7 @@
     </Equipments>
   </NPCCharacter>
   
-  <NPCCharacter id="bannerkings_preacher_amra_2" name="{=yr5pa0hs}{HERO.FIRSTNAME}" voice="softspoken" age="28" is_template="true" default_group="Infantry" is_hero="false" culture="Culture.battania" occupation="Preacher">
+  <NPCCharacter id="bannerkings_preacher_amra_2" name="{=yr5pa0hs}{HERO.FIRSTNAME}" voice="softspoken" age="55" is_template="true" default_group="Infantry" is_hero="false" culture="Culture.battania" occupation="Preacher">
     <face>
       <face_key_template value="BodyProperty.villager_battania" />
     </face>

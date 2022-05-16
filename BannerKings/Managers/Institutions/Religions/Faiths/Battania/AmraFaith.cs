@@ -3,7 +3,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
+namespace BannerKings.Managers.Institutions.Religions.Faiths.Battania
 {
     public class AmraFaith : PolytheisticFaith
     {
@@ -18,13 +18,9 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
         public override TextObject GetClergyForbiddenAnswer(int rank)
         {
             TextObject text = null;
-            if (rank == 4)
-                text = new TextObject("{=!}Do not be as a glutton or a beast; neither hoarding nor bloodlust should color your life. If you take justice into your hands you may find yourself forever grasping for more - allow your betters to guide you as an elder sibling should; do not kill prisoners who have wronged you without their say. But do not reveal yourself to be lax or limp of arm either; for justice will often be your task.");
-            else if (rank == 3)
-                text = new TextObject("{=!}You must never betray the blood of your blood, to do so is to spit upon the Code. If you are called to serve the Aserai, you must shed blood for their cause - at least once, so as to show that you honor your siblings even should you disagree with their choices. You must ensure any who serve you do not suffer the ravages of conflict without justice on your lips and a safe bastion for them to find reprieve in.");
-            else if (rank == 2)
-                text = new TextObject("{=!}…A curious question; though I suppose I would know the deeper answers to this. Few are the faqir or even imam who are as studied in the various things so easily lost in transcription or by cause of would-be sultans seeking to justify their cruelty. The Code does not abide warring between Sons, a facet easily lost and ignored but a point of shame that could tarnish many of our leaders.");
-            else text = new TextObject("{=!}It is wise to ask this - we dwell in uncertain times. Greed and rage cloud the hearts of many. Do no harm to the other Sons of Asera; the villagers should never fear your blade in these lands. Do not rob them of their wealth, even if the Sultan demands it - you must be charitable, you are their sibling.");
+            if (rank == 2)
+                text = new TextObject("{=!}No respect shall ever come to those who bend the knee willingly, and least of all to the foreign upstarts who gnaw upon our holdings. Those who strike upon our wildling sons, wolfskin or otherwise, put our future in danger as a people.");
+            else text = new TextObject("{=!}Were you to lick the boot of Vlandian, Sturgian or make yourself a lackey to the Empire, I’d see you personally whipped raw and thrown into the salted waters of the Bay of Varcheg! If you strike down the wildlings and the wolfskins you run the risk of butchering the blooded leaders of Battania’s next generation - so sharpen your teeth against them as you are wont, but take not their heads.");
 
             return text;
         }
@@ -33,8 +29,9 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
         {
             TextObject text = null;
             if (rank == 2)
-                text = new TextObject("{=!}To not seek vengeance against those who have attacked your holdings, besieged your homes, murdered your people - is a greater shame. No doctrine of peace can outweigh the Code of Asera in this regard. Many such debts need to be paid, and it is horrifying that our rulers so often choose to forget this. The serpent which bites you and slithers away does not leave you in peace; only when the serpent is crushed, maimed, unable to bite you again does it depart in peace.");
-            else text = new TextObject("{=!}When you are called by your brothers, you must come to them; you must serve beside them, you must never fail them if it is in your power. Know also that keeping the company of those outside the Code of Asera will surely corrupt you - you are your brother’s keeper, and they in turn yours. For good or for ill.");
+                text = new TextObject("{=!}In truth, anything which would show you to be lacking in cleverness and the means to make mischief will show you to be a failure under the creed of the Amrah Ollamh.");
+            else text = new TextObject("{=!}Suffer no humiliation and no slander towards our people, towards your Bandrui and Brithem alike. We are all one Battania, and if you see us sundered you best see us forged anew with haste. Otherwise you’d deserve a fate far fouler than what any draoith could conjure up. I’d personally suggest ye get slathered in honey, your limbs snapped, and thrown into a craggy pit to be feasted on by boars.But you wouldn’t be such a craven to tempt that fate, now would ye {NAME}?")
+                    .SetTextVariable("NAME", Hero.MainHero.Name);
 
             return text;
         }
@@ -50,6 +47,25 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
             return text;
         }
 
+        public override (bool, TextObject) GetInductionAllowed(Hero hero, int rank)
+        {
+            bool possible = true;
+            TextObject text = new TextObject("{=!}You will be converted");
+            if (hero.GetSkillValue(DefaultSkills.Roguery) < 50)
+            {
+                possible = false;
+                text = new TextObject("{=!}Not enough roquery");
+            }
+
+            if (hero.Culture != Utils.Helpers.GetCulture("battania"))
+            {
+                possible = false;
+                text = new TextObject("{=!}Unaccepted culture");
+            }
+
+            return new(possible, text);
+        }
+
         public override TextObject GetClergyGreetingInducted(int rank)
         {
             TextObject text = null;
@@ -63,26 +79,33 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
         public override TextObject GetClergyInduction(int rank)
         {
             TextObject text = null;
-            
+            (bool, TextObject) induction = GetInductionAllowed(Hero.MainHero, rank);
             if (rank == 2)
-                text = new TextObject("{=!}Peace be upon you, my kin. Have you come to study the Code of Asera? I shall grant you what wisdom I have gleaned in my long hours of study, but as your brother I must tell you that I find myself more ignorant the more I realize the breadth of what there is still yet to learn.");
+            {
+                if (!induction.Item1)
+                    text = new TextObject("{=!}Bah! Would you like to know what the difference between you and a rock might be? A rock might cut a silhouette making me think it a Battanian hiding in shadows. You’ve not the guile, the gut, or the making of a merry mischief maker. You may as well come to me as a Temean senator with a formal inquest pleading: “Oh honored Brithem, take me ‘pon the comhdhail and see me cherished by all the true kindred of the Uchalion.”");
+                else
+                {
+                    if (Hero.MainHero.GetSkillValue(DefaultSkills.Roguery) > 100)
+                        text = new TextObject("{=!}Da Iawn, {NAME}. Rare is it that I look upon one such as yourself and feel pride, and ne’er do I look upon one such as yourself and feel humility! But tis the wisest of men who speaks least and I’ve made myself the fool in your presence; good humor that. Truly your heart beats for Battania, a soul ever the envy of any mormaer or fian gone gallowglass or made to fight upon the highland fields. Blessed this is; a kindness this is.")
+                            .SetTextVariable("NAME", Hero.MainHero.Name);
+                    else
+                        text = new TextObject("{=!}Now you have the look of someone I wouldn’t spit upon. There’s a glint in the eye, something at the corner of your lips - you’ve got the capacity to act as a true Battanian should. Shameful that your blood might have been muddled with the conquest of many a foe; but a Battanian heart beats true in defiance of such origins.");
+                }
+            }
             else
             {
-                Settlement settlement = Settlement.CurrentSettlement;
-                if (settlement == null || !settlement.IsVillage) return null;
+                if (!induction.Item1)
+                    text = new TextObject("{=!}You’re a lout, a fool and were it not for the laws of hospitality which I choose to honor I’d bash your teeth in with a rock. You want to be inducted as a follower of the Amra Ollamh, best find yourself a Brithem who can tell you to sod off as I’ve only words to share so disparaging they’d rouse your grandmother from her grave and see her slap sense into that thick head of yours. Bah!");
+                else
+                {
+                    if (Hero.MainHero.GetSkillValue(DefaultSkills.Roguery) > 100)
+                        text = new TextObject("{=!}Da Iawn, {NAME}. Mind me and grant me the courtesy of a moment in stunned silence, for not since the ancient rebel queens of the hill clans which warred with the Laconians and Dryatics before the damnable Calradoi came ashore; have I had the knowledge to know of one whose heart beats so true for Battania. Envious I am, for those who cannot do must surely teach and I know all too well that I shall carry your name ‘pon my lips for many a year to come.You’ve the guile of a rogue and the cadence of one who is worthy of legend.May the mormaer blush at your mention and the fian wish they were half the man you’re being denies by being.")
+                            .SetTextVariable("NAME", Hero.MainHero.Name);
+                    else
+                        text = new TextObject("{=!}Wise of ye to come to me rather than a Brithem - they’d feed you pretty words and think to marry you off to some mruigfher with more denars than chest hairs who’d ne’er considered a freeborn maid such as yourself could be more than a bride. Clever girl. I pray that your cunning lasts, for this is a cruel age filled with many a petulant dog who’d deny you the right of gutting him like a trout just by malus of your breasts.");
 
-                if (Hero.MainHero.Culture != Utils.Helpers.GetCulture("aserai"))
-                    text = new TextObject("{=!}Alas, you are no Son of Asera and thus you could never truly follow the Code of Asera. Not in any way that I could fathom. There may be precedent for one beyond our blood to successfully follow the code, but for this you should seek out an Akhund; a scholar of the faith.");
-
-                float relation = 0;
-                foreach (Hero notable in settlement.Notables)
-                    relation += notable.GetRelation(Hero.MainHero);
-
-                float medium = relation / settlement.Notables.Count;
-                if (medium < 0)
-                    text = new TextObject("{=!}You think that it would go unnoticed how the folk here cringe at your visage? How your name is whispered with scornful lips? Are they mislead about you? Perhaps, perhaps. We shall see.");
-                else if (medium < 20)
-                    text = new TextObject("{=!}You are known to me and to this village; not as a savior or as a good soul, but as one of us. You are humble, perhaps because you lack the boldness to pursue being charitable - or perhaps just the means. I do not know, and I do not judge.");
+                }
             }
 
             return text;
@@ -91,27 +114,34 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
         public override TextObject GetClergyInductionLast(int rank)
         {
             TextObject text = null;
-            
+
+            (bool, TextObject) induction = GetInductionAllowed(Hero.MainHero, rank);
             if (rank == 2)
-                text = new TextObject("{=!}Peace be upon you, my kin. Have you come to study the Code of Asera? I shall grant you what wisdom I have gleaned in my long hours of study, but as your brother I must tell you that I find myself more ignorant the more I realize the breadth of what there is still yet to learn.");
+            {
+                if (!induction.Item1)
+                    text = new TextObject("{=!}Get out of my sight until you’ve got stones enough to be worthy of it. I’d excuse this if you were a child or at least born of the highlands; but you’re just wasting my time with that slackened look about your face!");
+                else
+                {
+                    if (Hero.MainHero.GetSkillValue(DefaultSkills.Roguery) > 100)
+                        text = new TextObject("{=!}I’ll honor your desire to be formally recognized by a britherm, and when next the comhdhail is gathered I shall speak your praises as one bound to the creed of the Amra Ollamh. You shall be as the creed is known, of the greatest and most wonderous - a teacher who leads by example. Aros yn wir, aros yn ffyddlon;[charactername].Stay true, stay faithful; look homeward and ensure that Battania is ne’er forgotten -be it by scars or song.In living glory or storied tale.")
+                            .SetTextVariable("NAME", Hero.MainHero.Name);
+                    else text = new TextObject("{=!}I’ll honor your desire. Swear upon your integrity, upon your mettle and might, that you will shepherd the next generation of Battanians - that you will carry on our traditions, lead by example, take what you desire and give back in kind. There are no oaths I can bind you to, no words that shall suffice - keep the swearing within your heart and may it strangle you bitterly should you break it. A fo ben, bid bont, {NAME}.Be a bridge for our people. Never forget to look homeward.")
+                            .SetTextVariable("NAME", Hero.MainHero.Name);
+                }
+            }
             else
             {
-                Settlement settlement = Settlement.CurrentSettlement;
-                if (settlement == null || !settlement.IsVillage) return null;
-
-                if (Hero.MainHero.Culture != Utils.Helpers.GetCulture("aserai"))
-                    text = new TextObject("{=!}I wish you well in such pursuits, and that you live a life of peace wherever this path may take you.");
-
-                float relation = 0;
-                foreach (Hero notable in settlement.Notables)
-                    relation += notable.GetRelation(Hero.MainHero);
-
-                float medium = relation / settlement.Notables.Count;
-                if (medium < 0)
-                    text = new TextObject("{=!}If you wish to be made a follower of the Code of Asera, you must treat these people as you would a sibling - you must cherish them, exalt them, protect them and educate them. Show them your better nature and I shall perform upon you our rites of induction.");
-                else if (medium < 20)
-                    text = new TextObject("{=!}I welcome you, my kin - blood of my blood. May you go in peace and bring honor to his legacy.");
-                else text = new TextObject("{=!}");
+                if (!induction.Item1)
+                    text = new TextObject("{=!}Get out my sight, you’re no true Battanian and even if you thought yourself one tis the work of a Brithem to judge a man of their mettle - for the Bandrui see true all your flaws and I’m not liable to sully the oaths of our folk for such a tarnished soul as ye. I’ve seen pig iron blades of greater worth than your bleary being. Get ye gone before I rouse the village and see you chased by hounds to the edge of the Uchalion!");
+                else
+                {
+                    if (Hero.MainHero.GetSkillValue(DefaultSkills.Roguery) > 100)
+                        text = new TextObject("{=!}So aye, I’ll honor you this induction. When next the comhdhail is called I’ll shame every britherm from Bog Beth to Claig Ban with tales of your deed and how easily you came to embody the creed of the Amra Ollamh. Aros yn wir, aros yn ffyddlon; {NAME}.Ye magnificent one. Stay true, stay faithful, and may you become storied among our folk until none dare seek to take the highlands from her trueborn children.")
+                            .SetTextVariable("NAME", Hero.MainHero.Name);
+                    else
+                        text = new TextObject("{=!}So aye, I’ll honor your desire. You’ve the quality of one who knows their mettle and who deals in sword arms and battered egos with ease. Such is the rite of any trueborn Battanian. May you lead by example, may you inspire many more to prove their mischief and make mercy theirs to distribute. I’ve no oaths to bind you, and no words nor hollow praise shall suffice - so I bid you swear within your heart that you shall honor the Amra Ollamh and that should you betray it, may it trammel you beneath a crushing stone. A fo ben, bid bont, {NAME}.Look homeward, but do not be bound to its petty whims..You’ve the means for greatness.Seize them.")
+                            .SetTextVariable("NAME", Hero.MainHero.Name);
+                }
             }
 
             return text;
