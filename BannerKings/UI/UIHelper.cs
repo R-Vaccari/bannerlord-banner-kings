@@ -87,7 +87,7 @@ namespace BannerKings.UI
 				});
 		}
 
-		public static void ShowTitleActionPopup(BannerKingsAction action, ViewModel vm = null)
+		public static void ShowActionPopup(BannerKingsAction action, ViewModel vm = null)
 		{
 			TextObject description = null;
 			TextObject affirmativeText = null;
@@ -140,6 +140,14 @@ namespace BannerKings.UI
                 {
 					description = new TextObject("{=!}Request your liege to grant you this position in the council.");
 					affirmativeText = new TextObject("{=!}Request");
+				} else if (councilAction.Type == CouncilActionType.SWAP)
+                {
+					description = new TextObject("{=!}Request your liege to grant you this position in the council.");
+					affirmativeText = new TextObject("{=!}Swap");
+				} else
+                {
+					description = new TextObject("{=!}Relinquish your position in the council. It will cost no influence and exempt you of any council privileges.");
+					affirmativeText = new TextObject("{=!}Relinquish");
 				}
             }
 			

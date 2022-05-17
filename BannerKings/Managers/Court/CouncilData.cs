@@ -9,7 +9,6 @@ using BannerKings.Managers.Titles;
 using System;
 using BannerKings.Managers.Institutions.Religions;
 using TaleWorlds.Localization;
-using BannerKings.Managers.Kingdoms.Council;
 using BannerKings.Models.BKModels;
 
 namespace BannerKings.Managers.Court
@@ -50,6 +49,17 @@ namespace BannerKings.Managers.Court
             }
         }
 
+        public MBReadOnlyList<CouncilMember> AllPositions
+        {
+            get
+            {
+                List<CouncilMember> all = new List<CouncilMember>();
+                all.AddRange(members);
+                all.AddRange(royalMembers);
+                return all.GetReadOnlyList();
+            }
+        }
+
 
         public bool IsRoyal
         {
@@ -80,28 +90,29 @@ namespace BannerKings.Managers.Court
             {
                 if (member.Member != null && (member.Member.IsDead || member.Member.IsDisabled))
                     member.Member = null;
+
+                if (member.Clan == null)
+                    member.Clan = clan;
             }
 
             foreach (CouncilMember member in this.royalMembers)
             {
                 if (member.Member != null && (member.Member.IsDead || member.Member.IsDisabled))
                     member.Member = null;
+
+                if (member.Clan == null)
+                    member.Clan = clan;
             }
 
             if (IsRoyal)
             {
                 foreach (CouncilMember position in members)
-                {
                     if (!position.IsRoyal)
                     {
                         position.IsRoyal = true;
                         if (position.Member != null && !position.IsValidCandidate(position.Member))
                             position.Member = null;
                     }
-
-                    if (position.Clan == null)
-                        position.Clan = clan;
-                }
                     
 
                 List<CouncilMember> royal = GetIdealRoyalPositions();

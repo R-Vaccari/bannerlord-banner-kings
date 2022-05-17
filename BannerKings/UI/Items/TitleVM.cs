@@ -41,7 +41,7 @@ namespace BannerKings.UI.Items
 				if (title.GetHeroClaim(Hero.MainHero) != ClaimType.None)
 				{
 					DecisionElement usurpButton = new DecisionElement().SetAsButtonOption(new TextObject("{=!}Usurp").ToString(),
-						() => UIHelper.ShowTitleActionPopup(usurpData, this));
+						() => UIHelper.ShowActionPopup(usurpData, this));
 					usurpButton.Enabled = usurpData.Possible;
 					Decisions.Add(usurpButton);
 				}
@@ -50,7 +50,7 @@ namespace BannerKings.UI.Items
 				if (claimAction.Possible)
                 {
 					DecisionElement claimButton = new DecisionElement().SetAsButtonOption(new TextObject("{=!}Claim").ToString(),
-						() => UIHelper.ShowTitleActionPopup(claimAction, this));
+						() => UIHelper.ShowActionPopup(claimAction, this));
 					claimButton.Enabled = claimAction.Possible;
 					Decisions.Add(claimButton);
 				}
@@ -59,7 +59,7 @@ namespace BannerKings.UI.Items
 				if (grantData.Possible)
                 {
 					DecisionElement grantButton = new DecisionElement().SetAsButtonOption(new TextObject("{=!}Grant").ToString(),
-						() => UIHelper.ShowTitleActionPopup(grantData, this));
+						() => UIHelper.ShowActionPopup(grantData, this));
 					grantButton.Enabled = grantData.Possible;
 					Decisions.Add(grantButton);
 				}
@@ -68,7 +68,7 @@ namespace BannerKings.UI.Items
 				if (revokeData.Possible)
 				{
 					DecisionElement revokeButton = new DecisionElement().SetAsButtonOption(new TextObject("{=!}Revoke").ToString(),
-						() => UIHelper.ShowTitleActionPopup(revokeData, this));
+						() => UIHelper.ShowActionPopup(revokeData, this));
 					revokeButton.Enabled = revokeData.Possible;
 					Decisions.Add(revokeButton);
 				}

@@ -1,6 +1,8 @@
 ﻿using BannerKings.Managers.Court;
+using BannerKings.Models.BKModels;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.ViewModelCollection;
 using TaleWorlds.CampaignSystem.ViewModelCollection.GameMenu.TownManagement;
@@ -66,6 +68,25 @@ namespace BannerKings.UI.Items
                             {
                                 onDone((Hero?)x[0].Identifier);
                             }, null, string.Empty));
+            } else
+            {
+                CouncilMember target = council.AllPositions.FirstOrDefault(x => x.Position == Position);
+                if (target == null) return;
+
+                BKCouncilModel model = (BKCouncilModel)BannerKingsConfig.Instance.Models.First(x => x is BKCouncilModel);
+                if (target.Member == Hero.MainHero)
+                {
+                    CouncilAction action = model.GetAction(CouncilActionType.RELINQUISH, council, Hero.MainHero, target);
+                    UIHelper.ShowActionPopup(action, this);
+                } else if (council.GetHeroPosition(Hero.MainHero) == null || target.Member == null)
+                {
+                    CouncilAction action = model.GetAction(CouncilActionType.REQUEST, council, Hero.MainHero, target);
+                    UIHelper.ShowActionPopup(action, this);
+                } else
+                {
+                    CouncilAction action = model.GetAction(CouncilActionType.SWAP, council, Hero.MainHero, target, council.GetHeroPosition(Hero.MainHero));
+                    UIHelper.ShowActionPopup(action, this);
+                }
             }
             
         }

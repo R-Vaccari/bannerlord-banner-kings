@@ -93,7 +93,8 @@ namespace BannerKings.Managers
             if (action.TargetPosition == null || action.ActionTaker == null || !action.Possible) return;
 
             action.TargetPosition.Member = action.ActionTaker;
-            GainKingdomInfluenceAction.ApplyForDefault(action.ActionTaker, -action.Influence);
+            if (action.ActionTaker.Clan != null) GainKingdomInfluenceAction.ApplyForDefault(action.ActionTaker, -action.Influence);
+            else if (action.ActionTaker.IsNotable) action.ActionTaker.AddPower(-action.Influence);
             ChangeRelationAction.ApplyRelationChangeBetweenHeroes(action.TargetPosition.Clan.Leader, action.ActionTaker, 5);
         }
 
@@ -104,7 +105,8 @@ namespace BannerKings.Managers
             Hero currentCouncilman = action.TargetPosition.Member;
             action.CurrentPosition.Member = currentCouncilman;
             action.TargetPosition.Member = action.ActionTaker;
-            GainKingdomInfluenceAction.ApplyForDefault(action.ActionTaker, -action.Influence);
+            if (action.ActionTaker.Clan != null) GainKingdomInfluenceAction.ApplyForDefault(action.ActionTaker, -action.Influence);
+            else if (action.ActionTaker.IsNotable) action.ActionTaker.AddPower(-action.Influence);
             ChangeRelationAction.ApplyRelationChangeBetweenHeroes(action.TargetPosition.Clan.Leader, action.ActionTaker, 5);
             if (currentCouncilman != null)
                 ChangeRelationAction.ApplyRelationChangeBetweenHeroes(currentCouncilman, action.ActionTaker, -5);

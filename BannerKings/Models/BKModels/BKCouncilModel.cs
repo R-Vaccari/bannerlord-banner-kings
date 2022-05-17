@@ -11,6 +11,7 @@ namespace BannerKings.Models.BKModels
             return new ExplainedNumber();
         }
 
+
         public CouncilAction GetAction(CouncilActionType type, CouncilData council, Hero requester, CouncilMember targetPosition, CouncilMember currentPosition = null)
         {
             if (type == CouncilActionType.REQUEST)
@@ -34,11 +35,35 @@ namespace BannerKings.Models.BKModels
                 return action;
             }
 
-            if (requester.Clan.Influence < action.Influence)
+            if (!targetPosition.IsValidCandidate(requester))
+            {
+                action.Possible = false;
+                action.Reason = new TextObject("{=!}Not a valid candidate.");
+                return action;
+            }
+
+            if (requester.Clan != null && requester.Clan.Influence < action.Influence)
             {
                 action.Possible = false;
                 action.Reason = new TextObject("{=!}Not enough influence.");
                 return action;
+            }
+
+            if (targetPosition.IsCorePosition(targetPosition.Position))
+            {
+                if (requester.Clan != null && !requester.Clan.Kingdom.Leader.IsFriend(requester))
+                {
+                    action.Possible = false;
+                    action.Reason = new TextObject("{=!}Not trustworthy enough for this position.");
+                    return action;
+                }
+
+                if (council.GetCompetence(requester, targetPosition.Position) < 0.5f)
+                {
+                    action.Possible = false;
+                    action.Reason = new TextObject("{=!}Not competent enough for this position.");
+                    return action;
+                }
             }
 
             action.Possible = true;
@@ -81,7 +106,14 @@ namespace BannerKings.Models.BKModels
                 return action;
             }
 
-            if (requester.Clan.Influence < action.Influence)
+            if (!targetPosition.IsValidCandidate(requester))
+            {
+                action.Possible = false;
+                action.Reason = new TextObject("{=!}Not a valid candidate.");
+                return action;
+            }
+
+            if (requester.Clan != null && requester.Clan.Influence < action.Influence)
             {
                 action.Possible = false;
                 action.Reason = new TextObject("{=!}Not enough influence.");
@@ -90,7 +122,7 @@ namespace BannerKings.Models.BKModels
 
             if (targetPosition.IsCorePosition(targetPosition.Position))
             {
-                if (!requester.Clan.Kingdom.Leader.IsFriend(requester))
+                if (requester.Clan != null && !requester.Clan.Kingdom.Leader.IsFriend(requester))
                 {
                     action.Possible = false;
                     action.Reason = new TextObject("{=!}Not trustworthy enough for this position.");
