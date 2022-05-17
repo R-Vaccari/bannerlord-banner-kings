@@ -136,24 +136,37 @@ namespace BannerKings.UI
 			} else
             {
 				CouncilAction councilAction = (CouncilAction)action;
+				TextObject accept = new TextObject("{=!}Will accept: {ANSWER}")
+					.SetTextVariable("ANSWER", councilAction.Possible ? GameTexts.FindText("str_yes") : 
+					new TextObject("{=!}{NO}.\n{REASON}")
+						.SetTextVariable("NO", GameTexts.FindText("str_no"))
+						.SetTextVariable("REASON", councilAction.Reason));
+
 				if (councilAction.Type == CouncilActionType.REQUEST)
                 {
-					description = new TextObject("{=!}Request your liege to grant you this position in the council.");
+					description = new TextObject("{=!}Request your liege to grant you this position in the council. This action will cost {INFLUENCE} influence.\n\n{ACCEPT}")
+						.SetTextVariable("INFLUENCE", councilAction.Influence)
+						.SetTextVariable("ACCEPT", accept);
 					affirmativeText = new TextObject("{=!}Request");
 				} else if (councilAction.Type == CouncilActionType.SWAP)
                 {
-					description = new TextObject("{=!}Request your liege to grant you this position in the council.");
+					description = new TextObject("{=!}Request to swap your current position with {COUNCILMAN} position of {POSITION}. This action will cost {INFLUENCE} influence.\n\n{ACCEPT}")
+						.SetTextVariable("COUNCILMAN", councilAction.TargetPosition.Member.Name)
+						.SetTextVariable("POSITION", councilAction.TargetPosition.GetName())
+						.SetTextVariable("INFLUENCE", councilAction.Influence)
+						.SetTextVariable("ACCEPT", accept);
 					affirmativeText = new TextObject("{=!}Swap");
 				} else
                 {
-					description = new TextObject("{=!}Relinquish your position in the council. It will cost no influence and exempt you of any council privileges.");
+					description = new TextObject("{=!}Relinquish your position in the council. It will cost no influence and exempt you of any council privileges.\n\n{ACCEPT}")
+						.SetTextVariable("ACCEPT", accept);
 					affirmativeText = new TextObject("{=!}Relinquish");
 				}
             }
 			
 
 			InformationManager.ShowInquiry(new InquiryData("", description.ToString(),
-				true, true, affirmativeText.ToString(), "Cancel", delegate 
+				action.Possible, true, affirmativeText.ToString(), GameTexts.FindText("str_selection_widget_cancel").ToString(), delegate 
 				{ 
 					action.TakeAction(receiver);
 					if (vm != null) vm.RefreshValues();

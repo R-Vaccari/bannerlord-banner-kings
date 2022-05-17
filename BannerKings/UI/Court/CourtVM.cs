@@ -12,7 +12,7 @@ namespace BannerKings.UI.Panels
 {
 	class CourtVM : BannerKingsViewModel
 	{
-		private CouncilVM governorSelection;
+		private CouncilVM councilVM;
 		private MBBindingList<InformationElement> courtInfo;
 		private CouncilData council;
 		private CouncilPosition councilPosition;
@@ -36,7 +36,7 @@ namespace BannerKings.UI.Panels
 			foreach (Hero hero in heroes)
 				this.courtMembers.Add(new CouncilMemberVM(hero, null,
 									councilPosition, council.GetCompetence(hero, councilPosition)));
-			CouncilMemberSelection = new CouncilVM(new Action<Hero>(this.SetCouncilMember), this.council, councilPosition, heroes);
+			CouncilVM = new CouncilVM(new Action<Hero>(this.SetCouncilMember), this.council, councilPosition, heroes);
 		}
 
 		public override void RefreshValues()
@@ -44,7 +44,7 @@ namespace BannerKings.UI.Panels
 			base.RefreshValues();
 			this.CourtInfo.Clear();
 			RoyalPositions.Clear();
-			this.CouncilMemberSelection.RefreshValues();
+			this.CouncilVM.RefreshValues();
 			this.Marshall = new HeroVM(council.Marshall);
 			this.Steward = new HeroVM(council.Steward);
 			this.Chancellor = new HeroVM(council.Chancellor);
@@ -55,7 +55,7 @@ namespace BannerKings.UI.Panels
 
 			if (council.IsRoyal)
 				foreach (CouncilMember position in council.RoyalPositions)
-					RoyalPositions.Add(new RoyalPositionVM(position));
+					RoyalPositions.Add(new RoyalPositionVM(position, new Action<string>(SetId)));
 
 		}
 
@@ -65,10 +65,10 @@ namespace BannerKings.UI.Panels
 			if (this.councilPosition != newPosition)
 			{
 				this.councilPosition = newPosition;
-				this.CouncilMemberSelection.Position = newPosition;
+				this.CouncilVM.Position = newPosition;
 				RefreshValues();
 			}
-			CouncilMemberSelection.ShowOptions();
+			CouncilVM.ShowOptions();
 		}
 
 		private void SetCouncilMember(Hero member)
@@ -167,15 +167,15 @@ namespace BannerKings.UI.Panels
 		}
 
 		[DataSourceProperty]
-		public CouncilVM CouncilMemberSelection
+		public CouncilVM CouncilVM
 		{
-			get => this.governorSelection;
+			get => this.councilVM;
 			set
 			{
-				if (value != this.governorSelection)
+				if (value != this.councilVM)
 				{
-					this.governorSelection = value;
-					base.OnPropertyChangedWithValue(value, "GovernorSelection");
+					this.councilVM = value;
+					base.OnPropertyChangedWithValue(value, "CouncilVM");
 				}
 			}
 		}
