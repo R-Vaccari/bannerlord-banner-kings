@@ -10,6 +10,7 @@ using System;
 using BannerKings.Managers.Institutions.Religions;
 using TaleWorlds.Localization;
 using BannerKings.Managers.Kingdoms.Council;
+using BannerKings.Models.BKModels;
 
 namespace BannerKings.Managers.Court
 {
@@ -134,8 +135,9 @@ namespace BannerKings.Managers.Court
                 if (vacant == null) return;
             }
 
-            
-            AddHeroToPosition(vacant);
+            Hero hero = MBRandom.ChooseWeighted(GetHeroesForPosition(vacant));
+            BannerKingsConfig.Instance.CourtManager.AddHeroToCouncil(((BKCouncilModel)BannerKingsConfig.Instance.Models.First(x => x is BKCouncilModel))
+                .GetAction(CouncilActionType.REQUEST, this, hero, vacant));
         }
 
         public List<CouncilMember> GetIdealRoyalPositions()
@@ -176,19 +178,6 @@ namespace BannerKings.Managers.Court
                 }   
             }
             return available;
-        }
-
-        public void AddHeroToPosition(CouncilMember position)
-        {
-            //if (!clan.Kingdom.ActivePolicies.Contains(DefaultPolicies.Senate) ||
-            //    position.Position == CouncilPosition.Spiritual || !IsRoyal)]
-
-            position.Member = MBRandom.ChooseWeighted(GetHeroesForPosition(position));
-
-            //else {
-            //   BKCouncilPositionDecision decision = new BKCouncilPositionDecision(clan, this, position);
-            //   clan.Kingdom.AddDecision(decision, true);
-            //}
         }
 
         public List<ValueTuple<Hero, float>> GetHeroesForPosition(CouncilMember position)

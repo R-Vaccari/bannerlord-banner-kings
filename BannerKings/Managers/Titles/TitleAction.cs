@@ -3,16 +3,13 @@ using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Titles
 {
-    public class TitleAction
+    public class TitleAction : BannerKingsAction
     {
-        public bool Possible { get; set; }
-        public TextObject Reason { get; set; }
         public float Gold { get; set; }
-        public float Influence { get; set; }
         public float Renown { get; set; }
         public ActionType Type { get; private set; }
         public FeudalTitle Title { get; private set; }
-        public Hero ActionTaker { get; private set; }
+        
 
         public TitleAction(ActionType type, FeudalTitle title, Hero taker)
         {
@@ -30,7 +27,7 @@ namespace BannerKings.Managers.Titles
             Renown = renown;
         }
 
-        public void TakeAction(Hero receiver)
+        public override void TakeAction(Hero receiver)
         {
             if (!Possible) return;
 

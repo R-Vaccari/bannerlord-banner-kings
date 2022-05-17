@@ -1,4 +1,5 @@
-﻿using BannerKings.Managers.Court;
+﻿using BannerKings.Managers;
+using BannerKings.Managers.Court;
 using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Institutions.Religions.Faiths;
 using BannerKings.Managers.Titles;
@@ -15,6 +16,7 @@ using TaleWorlds.Core.ViewModelCollection;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using static BannerKings.Managers.PopulationManager;
+using ActionType = BannerKings.Managers.Titles.ActionType;
 
 namespace BannerKings.UI
 {
@@ -85,46 +87,62 @@ namespace BannerKings.UI
 				});
 		}
 
-		public static void ShowTitleActionPopup(TitleAction action, ViewModel vm = null)
+		public static void ShowTitleActionPopup(BannerKingsAction action, ViewModel vm = null)
 		{
-			BKTitleModel model = (BannerKingsConfig.Instance.Models.First(x => x is BKTitleModel) as BKTitleModel);
 			TextObject description = null;
-			TextObject affirmativeText = GetActionText(action.Type);
+			TextObject affirmativeText = null;
 			Hero receiver = null;
-			if (action.Type == ActionType.Grant)
+
+			if (action is TitleAction)
             {
-				description = new TextObject("{=!}Grant this title away to {RECEIVER}, making them the legal owner of it. If the receiver is in your kingdom and the title is landed (attached to a fief), they will also receive the direct ownership of that fief and it's revenue. Granting a title provides positive relations with the receiver.");
-				affirmativeText = new TextObject("{=!}Grant");
-				List<InquiryElement> options = new List<InquiryElement>();
-				foreach (Hero hero in model.GetGrantCandidates(action.ActionTaker))
-					options.Add(new InquiryElement(hero, hero.Name.ToString(), new ImageIdentifier(CampaignUIHelper.GetCharacterCode(hero.CharacterObject))));
+				TitleAction titleAction = (TitleAction)action;
+				affirmativeText = GetActionText(titleAction.Type);
+
+				if (titleAction.Type == ActionType.Grant)
+				{
+					description = new TextObject("{=!}Grant this title away to {RECEIVER}, making them the legal owner of it. If the receiver is in your kingdom and the title is landed (attached to a fief), they will also receive the direct ownership of that fief and it's revenue. Granting a title provides positive relations with the receiver.");
+					affirmativeText = new TextObject("{=!}Grant");
+					List<InquiryElement> options = new List<InquiryElement>();
+					foreach (Hero hero in (BannerKingsConfig.Instance.Models.First(x => x is BKTitleModel) as BKTitleModel).GetGrantCandidates(action.ActionTaker))
+						options.Add(new InquiryElement(hero, hero.Name.ToString(), new ImageIdentifier(CampaignUIHelper.GetCharacterCode(hero.CharacterObject))));
 
 
-				InformationManager.ShowMultiSelectionInquiry(
-					new MultiSelectionInquiryData(
-						new TextObject("{=!}Grant {TITLE}").SetTextVariable("TITLE", action.Title.FullName).ToString(), 
-						new TextObject("{=!}Select a lord who you would like to grant this title to.").ToString(),
-						options, true, 1, GameTexts.FindText("str_done").ToString(), string.Empty,
-						delegate (List<InquiryElement> x)
-						{
-							receiver = (Hero?)x[0].Identifier;
-							description.SetTextVariable("RECEIVER", receiver.Name);
-						}, null, string.Empty));
-			}
-			else if (action.Type == ActionType.Revoke)
+					InformationManager.ShowMultiSelectionInquiry(
+						new MultiSelectionInquiryData(
+							new TextObject("{=!}Grant {TITLE}").SetTextVariable("TITLE", titleAction.Title.FullName).ToString(),
+							new TextObject("{=!}Select a lord who you would like to grant this title to.").ToString(),
+							options, true, 1, GameTexts.FindText("str_done").ToString(), string.Empty,
+							delegate (List<InquiryElement> x)
+							{
+								receiver = (Hero?)x[0].Identifier;
+								description.SetTextVariable("RECEIVER", receiver.Name);
+							}, null, string.Empty));
+				}
+				else if (titleAction.Type == ActionType.Revoke)
+				{
+					description = new TextObject("{=!}Revoking transfers the legal ownership of a vassal's title to the suzerain. The revoking restrictions are associated with the title's government type.");
+					affirmativeText = new TextObject("{=!}Revoke");
+				}
+				else if (titleAction.Type == ActionType.Claim)
+				{
+					description = new TextObject("{=!}Claiming this title sets a legal precedence for you to legally own it, thus allowing it to be usurped. A claim takes 1 year to build. Claims last until they are pressed or until it's owner dies.");
+					affirmativeText = new TextObject("{=!}Claim");
+				}
+				else
+				{
+					description = new TextObject("{=!}Press your claim and usurp this title from it's owner, making you the lawful ruler of this title. Usurping from lords within your kingdom degrades your clan's reputation.");
+					affirmativeText = new TextObject("{=!}Usurp");
+				}
+			} else
             {
-				description = new TextObject("{=!}Revoking transfers the legal ownership of a vassal's title to the suzerain. The revoking restrictions are associated with the title's government type.");
-				affirmativeText = new TextObject("{=!}Revoke");
-			} else if (action.Type == ActionType.Claim)
-            {
-				description = new TextObject("{=!}Claiming this title sets a legal precedence for you to legally own it, thus allowing it to be usurped. A claim takes 1 year to build. Claims last until they are pressed or until it's owner dies.");
-				affirmativeText = new TextObject("{=!}Claim");
-			}
-			else
-            {
-				description = new TextObject("{=!}Press your claim and usurp this title from it's owner, making you the lawful ruler of this title. Usurping from lords within your kingdom degrades your clan's reputation.");
-				affirmativeText = new TextObject("{=!}Usurp");
-			}
+				CouncilAction councilAction = (CouncilAction)action;
+				if (councilAction.Type == CouncilActionType.REQUEST)
+                {
+					description = new TextObject("{=!}Request your liege to grant you this position in the council.");
+					affirmativeText = new TextObject("{=!}Request");
+				}
+            }
+			
 
 			InformationManager.ShowInquiry(new InquiryData("", description.ToString(),
 				true, true, affirmativeText.ToString(), "Cancel", delegate 

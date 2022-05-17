@@ -4,6 +4,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.Localization;
 using TaleWorlds.SaveSystem;
 using System.Linq;
+using TaleWorlds.CampaignSystem.Actions;
 
 namespace BannerKings.Managers
 {
@@ -85,6 +86,28 @@ namespace BannerKings.Managers
         {
             CouncilData data = GetCouncil(clan.Leader);
             data.Update(null);
+        }
+
+        public void AddHeroToCouncil(CouncilAction action)
+        {
+            if (action.TargetPosition == null || action.ActionTaker == null || !action.Possible) return;
+
+            action.TargetPosition.Member = action.ActionTaker;
+            GainKingdomInfluenceAction.ApplyForDefault(action.ActionTaker, -action.Influence);
+            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(action.TargetPosition.Clan.Leader, action.ActionTaker, 5);
+        }
+
+        public void SwapCouncilPositions(CouncilAction action)
+        {
+            if (action.TargetPosition == null || action.ActionTaker == null || !action.Possible || action.CurrentPosition == null) return;
+
+            Hero currentCouncilman = action.TargetPosition.Member;
+            action.CurrentPosition.Member = currentCouncilman;
+            action.TargetPosition.Member = action.ActionTaker;
+            GainKingdomInfluenceAction.ApplyForDefault(action.ActionTaker, -action.Influence);
+            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(action.TargetPosition.Clan.Leader, action.ActionTaker, 5);
+            if (currentCouncilman != null)
+                ChangeRelationAction.ApplyRelationChangeBetweenHeroes(currentCouncilman, action.ActionTaker, -5);
         }
     }
 }

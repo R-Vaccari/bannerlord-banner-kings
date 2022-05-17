@@ -9,8 +9,6 @@ namespace BannerKings.Models.BKModels
 {
     public class BKTitleModel : IBannerKingsModel
     {
-
-
         public TitleAction GetAction(ActionType type, FeudalTitle title, Hero taker, Hero receiver = null)
         {
             if (type == ActionType.Usurp)
