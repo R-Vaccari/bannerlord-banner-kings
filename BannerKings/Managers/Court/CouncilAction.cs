@@ -24,6 +24,7 @@ namespace BannerKings.Managers.Court
                 BannerKingsConfig.Instance.CourtManager.AddHeroToCouncil(this);
             else if (Type == CouncilActionType.SWAP)
                 BannerKingsConfig.Instance.CourtManager.SwapCouncilPositions(this);
+            else BannerKingsConfig.Instance.CourtManager.RelinquishCouncilPosition(this);
         }
     }
 

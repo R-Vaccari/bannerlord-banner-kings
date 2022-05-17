@@ -111,5 +111,12 @@ namespace BannerKings.Managers
             if (currentCouncilman != null)
                 ChangeRelationAction.ApplyRelationChangeBetweenHeroes(currentCouncilman, action.ActionTaker, -5);
         }
+
+        public void RelinquishCouncilPosition(CouncilAction action)
+        {
+            if (action.TargetPosition == null || action.ActionTaker == null || !action.Possible) return;
+
+            action.CurrentPosition.Member = null;
+        }
     }
 }
