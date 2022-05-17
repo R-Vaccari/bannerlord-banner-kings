@@ -1,4 +1,5 @@
 ﻿using BannerKings.Managers.Court;
+using BannerKings.Managers.Titles;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Localization;
 
@@ -20,7 +21,6 @@ namespace BannerKings.Models.BKModels
                 return GetRelinquish(type, requester, currentPosition, targetPosition);
             else return GetSwap(type, council, requester, targetPosition, currentPosition);
         }
-
 
 
         private CouncilAction GetSwap(CouncilActionType type, CouncilData council, Hero requester, CouncilMember targetPosition, CouncilMember currentPosition = null)
@@ -62,6 +62,18 @@ namespace BannerKings.Models.BKModels
                 {
                     action.Possible = false;
                     action.Reason = new TextObject("{=!}Not competent enough for this position.");
+                    return action;
+                }
+            }
+
+            if (targetPosition.Member != null)
+            {
+                float candidateDesire = GetDesirability(requester, council, targetPosition);
+                float currentDesire = GetDesirability(targetPosition.Member, council, targetPosition);
+                if (currentDesire > candidateDesire)
+                {
+                    action.Possible = false;
+                    action.Reason = new TextObject("{=!}Not a better candidate than current councillor.");
                     return action;
                 }
             }
@@ -137,9 +149,35 @@ namespace BannerKings.Models.BKModels
                 }
             }
 
+            if (targetPosition.Member != null)
+            {
+                float candidateDesire = GetDesirability(requester, council, targetPosition);
+                float currentDesire = GetDesirability(targetPosition.Member, council, targetPosition);
+                if (currentDesire > candidateDesire)
+                {
+                    action.Possible = false;
+                    action.Reason = new TextObject("{=!}Not a better candidate than current councillor.");
+                    return action;
+                }
+            }
+
             action.Possible = true;
             action.Reason = new TextObject("{=!}Action can be taken.");
             return action;
+        }
+
+        public float GetDesirability(Hero candidate, CouncilData council, CouncilMember position)
+        {
+            float titleWeight = 0;
+            float competence = council.GetCompetence(candidate, position.Position);
+            float relation = council.Owner.GetRelation(candidate) * 0.01f;
+            if (candidate.Clan == council.Owner.Clan)
+                relation -= 0.2f;
+            FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(candidate);
+            if (title != null)
+                titleWeight = 4 - (int)title.type;
+
+            return (titleWeight + competence + relation) / 3f;
         }
 
         public int GetInfluenceCost(CouncilActionType type, CouncilMember targetPosition)
