@@ -88,18 +88,22 @@ namespace BannerKings.Models.BKModels
         {
             CouncilAction action = new CouncilAction(type, requester, targetPosition, currentPosition, council);
             action.Influence = GetInfluenceCost(type, targetPosition);
-            if (currentPosition == null)
-            {
-                action.Possible = false;
-                action.Reason = new TextObject("{=!}No position to be relinquished.");
-                return action;
-            }
 
-            if (currentPosition.Member != requester)
+            if (requester != null)
             {
-                action.Possible = false;
-                action.Reason = new TextObject("{=!}Not current councilman of the position.");
-                return action;
+                if (targetPosition == null)
+                {
+                    action.Possible = false;
+                    action.Reason = new TextObject("{=!}No position to be relinquished.");
+                    return action;
+                }
+
+                if (targetPosition.Member != requester)
+                {
+                    action.Possible = false;
+                    action.Reason = new TextObject("{=!}Not current councilman of the position.");
+                    return action;
+                }
             }
 
             action.Possible = true;

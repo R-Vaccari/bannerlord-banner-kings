@@ -68,8 +68,11 @@ namespace BannerKings.UI.Items
                             delegate (List<InquiryElement> x)
                             {
                                 Hero requester = (Hero?)x[0].Identifier;
-                                model.GetAction(CouncilActionType.REQUEST, council, requester, council.AllPositions.FirstOrDefault(x => x.Position == Position), null, true)
-                                .TakeAction();
+                                CouncilAction action;
+                                if (requester != null)
+                                    action = model.GetAction(CouncilActionType.REQUEST, council, requester, council.AllPositions.FirstOrDefault(x => x.Position == Position), null, true);
+                                else action = model.GetAction(CouncilActionType.RELINQUISH, council, requester, council.AllPositions.FirstOrDefault(x => x.Position == Position));
+                                action.TakeAction();
                                 onDone(requester);
                             }, null, string.Empty));
             } else

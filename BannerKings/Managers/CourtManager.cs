@@ -90,24 +90,33 @@ namespace BannerKings.Managers
             data.Update(null);
         }
 
-        public void AddHeroToCouncil(CouncilAction action)
+        private void CheckReligionRankChange(CouncilAction action)
         {
-            if (action.TargetPosition == null || action.ActionTaker == null || !action.Possible) return;
-
             Religion rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(action.Council.Owner);
             if (rel != null && rel.Leadership.GetType() == typeof(KinshipLeadership) && action.TargetPosition.Position == CouncilPosition.Spiritual)
             {
                 Hero currentClergyman = action.TargetPosition.Member;
                 if (currentClergyman != null)
-                    rel.Leadership.ChangeClergymanRank(BannerKingsConfig.Instance.ReligionsManager.GetClergymanFromHeroHero(currentClergyman), 
-                        rel.Faith.GetIdealRank(currentClergyman.CurrentSettlement != null ? currentClergyman.CurrentSettlement : currentClergyman.BornSettlement, 
+                    rel.Leadership.ChangeClergymanRank(BannerKingsConfig.Instance.ReligionsManager.GetClergymanFromHeroHero(currentClergyman),
+                        rel.Faith.GetIdealRank(currentClergyman.CurrentSettlement != null ? currentClergyman.CurrentSettlement : currentClergyman.BornSettlement,
                         false));
 
                 Hero newClergyman = action.ActionTaker;
-                rel.Leadership.ChangeClergymanRank(BannerKingsConfig.Instance.ReligionsManager.GetClergymanFromHeroHero(newClergyman),
-                        rel.Faith.GetMaxClergyRank());
+                if (newClergyman != null)
+                    rel.Leadership.ChangeClergymanRank(BannerKingsConfig.Instance.ReligionsManager.GetClergymanFromHeroHero(newClergyman),
+                            rel.Faith.GetMaxClergyRank());
             }
+        }
 
+        public void AddHeroToCouncil(CouncilAction action)
+        {
+            if (action.TargetPosition == null || action.ActionTaker == null || !action.Possible) return;
+
+            if (action.TargetPosition.Member != null)
+                ChangeRelationAction.ApplyRelationChangeBetweenHeroes(action.Council.Owner, action.TargetPosition.Member, -8);
+
+            CheckReligionRankChange(action);
+            if (action.ActionTaker == null) return;
             action.TargetPosition.Member = action.ActionTaker;
             if (action.ActionTaker.Clan != null) GainKingdomInfluenceAction.ApplyForDefault(action.ActionTaker, -action.Influence);
             else if (action.ActionTaker.IsNotable) action.ActionTaker.AddPower(-action.Influence);
@@ -125,14 +134,16 @@ namespace BannerKings.Managers
             else if (action.ActionTaker.IsNotable) action.ActionTaker.AddPower(-action.Influence);
             ChangeRelationAction.ApplyRelationChangeBetweenHeroes(action.TargetPosition.Clan.Leader, action.ActionTaker, 5);
             if (currentCouncilman != null)
-                ChangeRelationAction.ApplyRelationChangeBetweenHeroes(currentCouncilman, action.ActionTaker, -5);
+                ChangeRelationAction.ApplyRelationChangeBetweenHeroes(currentCouncilman, action.ActionTaker, -8);
         }
 
         public void RelinquishCouncilPosition(CouncilAction action)
         {
-            if (action.TargetPosition == null || action.ActionTaker == null || !action.Possible) return;
+            if (action.TargetPosition == null || !action.Possible) return;
 
-            action.CurrentPosition.Member = null;
+            CheckReligionRankChange(action);
+            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(action.Council.Owner, action.TargetPosition.Member, -8);
+            action.TargetPosition.Member = null;
         }
     }
 }
