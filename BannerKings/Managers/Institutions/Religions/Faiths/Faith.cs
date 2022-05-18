@@ -94,7 +94,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
         public abstract TextObject GetClergyInduction(int rank);
         public abstract TextObject GetClergyInductionLast(int rank);
         public abstract ValueTuple<bool, TextObject> GetInductionAllowed(Hero hero, int rank);
-        public abstract int GetIdealRank(Settlement settlement);
+        public abstract int GetIdealRank(Settlement settlement, bool isCapital);
         public abstract TextObject GetRankTitle(int rank);
         public abstract string GetId();
     }

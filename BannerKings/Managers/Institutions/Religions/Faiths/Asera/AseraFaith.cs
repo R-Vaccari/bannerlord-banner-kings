@@ -201,7 +201,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
 
         public override string GetId() => "asera";
 
-        public override int GetIdealRank(Settlement settlement)
+        public override int GetIdealRank(Settlement settlement, bool isCapital)
         {
             if (settlement.IsTown)
                 return 3;

@@ -24,5 +24,7 @@ namespace BannerKings.Managers.Institutions.Religions
                     list.Add(clergyman);
             return list;
         }
+
+        public override bool IsLeader(Clergyman clergyman) => GetLeaders().Contains(clergyman);
     }
 }

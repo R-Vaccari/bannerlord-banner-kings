@@ -190,7 +190,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Battania
 
         public override string GetId() => "amra";
 
-        public override int GetIdealRank(Settlement settlement)
+        public override int GetIdealRank(Settlement settlement, bool isCapital)
         {
             if (settlement.IsVillage)
             {

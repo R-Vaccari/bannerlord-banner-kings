@@ -174,14 +174,14 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
 
         public override string GetId() => "darusosian";
 
-        public override int GetIdealRank(Settlement settlement)
+        public override int GetIdealRank(Settlement settlement, bool isCapital)
         {
-            if (settlement.IsVillage)
-            {
-                if (MBRandom.RandomInt(1, 100) < 50)
-                    return 2;
+            if (isCapital)
+                return 3;
+            else if (settlement.IsTown)
+                return 2;
+            else if(settlement.IsCastle || settlement.IsVillage)
                 return 1;
-            }
 
             return 0;
         }

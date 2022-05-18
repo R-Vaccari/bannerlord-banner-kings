@@ -5,6 +5,8 @@ using TaleWorlds.Localization;
 using TaleWorlds.SaveSystem;
 using System.Linq;
 using TaleWorlds.CampaignSystem.Actions;
+using BannerKings.Managers.Institutions.Religions;
+using BannerKings.Managers.Institutions.Religions.Leaderships;
 
 namespace BannerKings.Managers
 {
@@ -91,6 +93,20 @@ namespace BannerKings.Managers
         public void AddHeroToCouncil(CouncilAction action)
         {
             if (action.TargetPosition == null || action.ActionTaker == null || !action.Possible) return;
+
+            Religion rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(action.TargetPosition.Clan.Leader);
+            if (rel.Leadership.GetType() == typeof(KinshipLeadership) && action.TargetPosition.Position == CouncilPosition.Spiritual)
+            {
+                Hero currentClergyman = action.TargetPosition.Member;
+                if (currentClergyman != null)
+                    rel.Leadership.ChangeClergymanRank(BannerKingsConfig.Instance.ReligionsManager.GetClergymanFromHeroHero(currentClergyman), 
+                        rel.Faith.GetIdealRank(currentClergyman.CurrentSettlement != null ? currentClergyman.CurrentSettlement : currentClergyman.BornSettlement, 
+                        false));
+
+                Hero newClergyman = action.ActionTaker;
+                rel.Leadership.ChangeClergymanRank(BannerKingsConfig.Instance.ReligionsManager.GetClergymanFromHeroHero(newClergyman),
+                        rel.Faith.GetMaxClergyRank());
+            }
 
             action.TargetPosition.Member = action.ActionTaker;
             if (action.ActionTaker.Clan != null) GainKingdomInfluenceAction.ApplyForDefault(action.ActionTaker, -action.Influence);

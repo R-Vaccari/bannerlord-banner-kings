@@ -38,7 +38,6 @@ namespace BannerKings.Managers.Institutions.Religions
             clergyman = religion.GetClergyman(data.Settlement);
             if (clergyman == null)
                 clergyman = religion.GenerateClergyman(settlement);
-
         }
     }
 }

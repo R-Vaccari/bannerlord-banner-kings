@@ -61,7 +61,7 @@ namespace BannerKings.Managers.Institutions.Religions
 
         public Clergyman GenerateClergyman(Settlement settlement)
         {
-            int rank = faith.GetIdealRank(settlement);
+            int rank = faith.GetIdealRank(settlement, settlement == this.settlement);
             if (rank <= 0) return null;
             CharacterObject character = faith.GetPreset(rank);
             if (character != null)
