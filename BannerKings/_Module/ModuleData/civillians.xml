@@ -1,7 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <NPCCharacters>
-
-
 	  
 	<NPCCharacter id="bannerkings_preacher_amra_1" name="{=yr5pa0hs}{HERO.FIRSTNAME}" voice="softspoken" age="40" is_template="true" is_female="true" default_group="Infantry" is_hero="false" culture="Culture.battania" occupation="Preacher">
     <face>
@@ -25,6 +23,38 @@
 		  <equipment slot="Cape" id="Item.battania_civil_cloak" />
 		  <equipment slot="Body" id="Item.battania_civil_b" />
 		  <equipment slot="Leg" id="Item.highland_boots" />
+		</EquipmentRoster>
+		<EquipmentRoster civilian="true">
+		  <equipment slot="Head" id="Item.TV_battania_hood_a" />
+		  <equipment slot="Cape" id="Item.TV_battania_cloak_l" />
+		  <equipment slot="Body" id="Item.battania_light_armor_c" />
+		  <equipment slot="Leg" id="Item.TV_battania_boots_t" />
+		</EquipmentRoster>
+		<EquipmentRoster civilian="true">
+		  <equipment slot="Head" id="Item.TV_battania_hood_a3" />
+		  <equipment slot="Cape" id="Item.TV_battania_cloak_l3" />
+		  <equipment slot="Body" id="Item.battania_light_armor_b" />
+		  <equipment slot="Leg" id="Item.TV_battania_boots_s" />
+		</EquipmentRoster>
+		<EquipmentRoster civilian="true">
+		  <equipment slot="Head" id="Item.TV_battania_hood_a2" />
+		  <equipment slot="Cape" id="Item.TV_battania_cloak_l2" />
+		  <equipment slot="Body" id="Item.ao_battanian_woolen_tunic_with_kilt" />
+		  <equipment slot="Leg" id="Item.TV_battania_boots_v" />
+		</EquipmentRoster>
+		<EquipmentRoster civilian="true">
+		  <equipment slot="Cape" id="Item.battania_cloak_b" />
+		  <equipment slot="Body" id="Item.long_fur_coat" />
+		  <equipment slot="Leg" id="Item.TV_battania_boots_v" />
+		</EquipmentRoster>
+		<EquipmentRoster civilian="true">
+		  <equipment slot="Cape" id="Item.battania_cloak" />
+		  <equipment slot="Body" id="Item.battania_civil_a" />
+		  <equipment slot="Leg" id="Item.TV_battania_boots_u" />
+		</EquipmentRoster>
+		<EquipmentRoster civilian="true">
+		  <equipment slot="Body" id="Item.fur_waistcoat_over_tunic" />
+		  <equipment slot="Leg" id="Item.TV_battania_boots_s" />
 		</EquipmentRoster>
     </Equipments>
   </NPCCharacter>
@@ -52,8 +82,41 @@
 		  <equipment slot="Body" id="Item.battania_civil_b" />
 		  <equipment slot="Leg" id="Item.highland_boots" />
 		</EquipmentRoster>
+		<EquipmentRoster civilian="true">
+		  <equipment slot="Head" id="Item.TV_battania_hood_a" />
+		  <equipment slot="Cape" id="Item.TV_battania_cloak_l" />
+		  <equipment slot="Body" id="Item.battania_light_armor_b" />
+		  <equipment slot="Leg" id="Item.TV_battania_boots_t" />
+		</EquipmentRoster>
+		<EquipmentRoster civilian="true">
+		  <equipment slot="Head" id="Item.TV_battania_hood_a3" />
+		  <equipment slot="Cape" id="Item.TV_battania_cloak_l3" />
+		  <equipment slot="Body" id="Item.battania_light_armor_b" />
+		  <equipment slot="Leg" id="Item.TV_battania_boots_s" />
+		</EquipmentRoster>
+		<EquipmentRoster civilian="true">
+		  <equipment slot="Head" id="Item.TV_battania_hood_a2" />
+		  <equipment slot="Cape" id="Item.TV_battania_cloak_l2" />
+		  <equipment slot="Body" id="Item.ao_battanian_woolen_tunic_with_kilt" />
+		  <equipment slot="Leg" id="Item.TV_battania_boots_v" />
+		</EquipmentRoster>
+		<EquipmentRoster civilian="true">
+		  <equipment slot="Cape" id="Item.battania_cloak_b" />
+		  <equipment slot="Body" id="Item.long_fur_coat" />
+		  <equipment slot="Leg" id="Item.TV_battania_boots_v" />
+		</EquipmentRoster>
+		<EquipmentRoster civilian="true">
+		  <equipment slot="Cape" id="Item.battania_cloak" />
+		  <equipment slot="Body" id="Item.battania_civil_a" />
+		  <equipment slot="Leg" id="Item.TV_battania_boots_u" />
+		</EquipmentRoster>
+		<EquipmentRoster civilian="true">
+		  <equipment slot="Body" id="Item.fur_waistcoat_over_tunic" />
+		  <equipment slot="Leg" id="Item.TV_battania_boots_s" />
+		</EquipmentRoster>
     </Equipments>
   </NPCCharacter>
+  
   
   <NPCCharacter id="bannerkings_preacher_darusosian_1" name="{=yr5pa0hs}{HERO.FIRSTNAME}" voice="softspoken" age="55" is_template="true" default_group="Infantry" is_hero="false" culture="Culture.empire" occupation="Preacher">
     <face>
@@ -69,14 +132,12 @@
     </Traits>
     <Equipments>
 		<EquipmentRoster>
-		  <equipment slot="Cape" id="Item.battania_civil_cloak" />
-		  <equipment slot="Body" id="Item.battania_civil_b" />
-		  <equipment slot="Leg" id="Item.highland_boots" />
+		  <equipment slot="Body" id="Item.monk_robe" />
+		  <equipment slot="Leg" id="Item.folded_town_boots" />
 		</EquipmentRoster>
 		<EquipmentRoster civilian="true">
-		  <equipment slot="Cape" id="Item.battania_civil_cloak" />
-		  <equipment slot="Body" id="Item.battania_civil_b" />
-		  <equipment slot="Leg" id="Item.highland_boots" />
+		  <equipment slot="Body" id="Item.monk_robe" />
+		  <equipment slot="Leg" id="Item.folded_town_boots" />
 		</EquipmentRoster>
     </Equipments>
   </NPCCharacter>
@@ -95,17 +156,17 @@
     </Traits>
     <Equipments>
 		<EquipmentRoster>
-		  <equipment slot="Cape" id="Item.battania_civil_cloak" />
-		  <equipment slot="Body" id="Item.battania_civil_b" />
-		  <equipment slot="Leg" id="Item.highland_boots" />
+		  <equipment slot="Body" id="Item.monk_robe" />
+		  <equipment slot="Leg" id="Item.folded_town_boots" />
 		</EquipmentRoster>
 		<EquipmentRoster civilian="true">
-		  <equipment slot="Cape" id="Item.battania_civil_cloak" />
-		  <equipment slot="Body" id="Item.battania_civil_b" />
-		  <equipment slot="Leg" id="Item.highland_boots" />
+		  <equipment slot="Body" id="Item.monk_robe" />
+		  <equipment slot="Leg" id="Item.folded_town_boots" />
 		</EquipmentRoster>
     </Equipments>
   </NPCCharacter>
+  
+
   
   <NPCCharacter id="bannerkings_preacher_darusosian_3" name="{=yr5pa0hs}{HERO.FIRSTNAME}" voice="softspoken" age="55" is_template="true" default_group="Infantry" is_hero="false" culture="Culture.empire" occupation="Preacher">
     <face>
@@ -121,14 +182,12 @@
     </Traits>
     <Equipments>
 		<EquipmentRoster>
-		  <equipment slot="Cape" id="Item.battania_civil_cloak" />
-		  <equipment slot="Body" id="Item.battania_civil_b" />
-		  <equipment slot="Leg" id="Item.highland_boots" />
+		  <equipment slot="Body" id="Item.monk_robe" />
+		  <equipment slot="Leg" id="Item.folded_town_boots" />
 		</EquipmentRoster>
 		<EquipmentRoster civilian="true">
-		  <equipment slot="Cape" id="Item.battania_civil_cloak" />
-		  <equipment slot="Body" id="Item.battania_civil_b" />
-		  <equipment slot="Leg" id="Item.highland_boots" />
+		  <equipment slot="Body" id="Item.monk_robe" />
+		  <equipment slot="Leg" id="Item.folded_town_boots" />
 		</EquipmentRoster>
     </Equipments>
   </NPCCharacter>
@@ -157,8 +216,33 @@
 		  <equipment slot="Body" id="Item.aserai_civil_e" />
 		  <equipment slot="Leg" id="Item.highland_boots" />
 		</EquipmentRoster>
+		<EquipmentRoster civilian="true">
+		  <equipment slot="Body" id="Item.aserai_civil_d" />
+		  <equipment slot="Leg" id="Item.highland_boots" />
+		</EquipmentRoster>
+		<EquipmentRoster civilian="true">
+		  <equipment slot="Head" id="Item.aserai_civil_e_hscarf" />
+		  <equipment slot="Body" id="Item.aserai_civil_c" />
+		  <equipment slot="Leg" id="Item.highland_boots" />
+		</EquipmentRoster>
+		<EquipmentRoster civilian="true">
+		  <equipment slot="Head" id="Item.aserai_civil_d_hscarf" />
+		  <equipment slot="Body" id="Item.aserai_civil_d" />
+		  <equipment slot="Leg" id="Item.highland_boots" />
+		</EquipmentRoster>
+		<EquipmentRoster civilian="true">
+		  <equipment slot="Head" id="Item.aserai_civil_hscarf_a" />
+		  <equipment slot="Body" id="Item.aserai_civil_b" />
+		  <equipment slot="Leg" id="Item.highland_boots" />
+		</EquipmentRoster>
+		<EquipmentRoster civilian="true">
+		  <equipment slot="Head" id="Item.aserai_civil_c_head" />
+		  <equipment slot="Body" id="Item.aserai_civil_d" />
+		  <equipment slot="Leg" id="Item.highland_boots" />
+		</EquipmentRoster>
     </Equipments>
   </NPCCharacter>
+
   
   <NPCCharacter id="bannerkings_preacher_asera_2" name="{=yr5pa0hs}{HERO.FIRSTNAME}" voice="softspoken" age="28" is_template="true" default_group="Infantry" is_hero="false" culture="Culture.aserai" occupation="Preacher">
     <face>
@@ -181,6 +265,30 @@
 		<EquipmentRoster civilian="true">
 		  <equipment slot="Head" id="Item.AR_roman_hat_a" />
 		  <equipment slot="Body" id="Item.aserai_civil_e" />
+		  <equipment slot="Leg" id="Item.highland_boots" />
+		</EquipmentRoster>
+		<EquipmentRoster civilian="true">
+		  <equipment slot="Body" id="Item.aserai_civil_d" />
+		  <equipment slot="Leg" id="Item.highland_boots" />
+		</EquipmentRoster>
+		<EquipmentRoster civilian="true">
+		  <equipment slot="Head" id="Item.aserai_civil_e_hscarf" />
+		  <equipment slot="Body" id="Item.aserai_civil_c" />
+		  <equipment slot="Leg" id="Item.highland_boots" />
+		</EquipmentRoster>
+		<EquipmentRoster civilian="true">
+		  <equipment slot="Head" id="Item.aserai_civil_d_hscarf" />
+		  <equipment slot="Body" id="Item.aserai_civil_d" />
+		  <equipment slot="Leg" id="Item.highland_boots" />
+		</EquipmentRoster>
+		<EquipmentRoster civilian="true">
+		  <equipment slot="Head" id="Item.aserai_civil_hscarf_a" />
+		  <equipment slot="Body" id="Item.aserai_civil_b" />
+		  <equipment slot="Leg" id="Item.highland_boots" />
+		</EquipmentRoster>
+		<EquipmentRoster civilian="true">
+		  <equipment slot="Head" id="Item.aserai_civil_c_head" />
+		  <equipment slot="Body" id="Item.aserai_civil_d" />
 		  <equipment slot="Leg" id="Item.highland_boots" />
 		</EquipmentRoster>
     </Equipments>
@@ -207,6 +315,30 @@
 		<EquipmentRoster civilian="true">
 		  <equipment slot="Head" id="Item.AR_roman_hat_a" />
 		  <equipment slot="Body" id="Item.aserai_civil_e" />
+		  <equipment slot="Leg" id="Item.highland_boots" />
+		</EquipmentRoster>
+		<EquipmentRoster civilian="true">
+		  <equipment slot="Body" id="Item.aserai_civil_d" />
+		  <equipment slot="Leg" id="Item.highland_boots" />
+		</EquipmentRoster>
+		<EquipmentRoster civilian="true">
+		  <equipment slot="Head" id="Item.aserai_civil_e_hscarf" />
+		  <equipment slot="Body" id="Item.aserai_civil_c" />
+		  <equipment slot="Leg" id="Item.highland_boots" />
+		</EquipmentRoster>
+		<EquipmentRoster civilian="true">
+		  <equipment slot="Head" id="Item.aserai_civil_d_hscarf" />
+		  <equipment slot="Body" id="Item.aserai_civil_d" />
+		  <equipment slot="Leg" id="Item.highland_boots" />
+		</EquipmentRoster>
+		<EquipmentRoster civilian="true">
+		  <equipment slot="Head" id="Item.aserai_civil_hscarf_a" />
+		  <equipment slot="Body" id="Item.aserai_civil_b" />
+		  <equipment slot="Leg" id="Item.highland_boots" />
+		</EquipmentRoster>
+		<EquipmentRoster civilian="true">
+		  <equipment slot="Head" id="Item.aserai_civil_c_head" />
+		  <equipment slot="Body" id="Item.aserai_civil_d" />
 		  <equipment slot="Leg" id="Item.highland_boots" />
 		</EquipmentRoster>
     </Equipments>

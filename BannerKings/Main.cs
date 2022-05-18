@@ -42,7 +42,6 @@ namespace BannerKings
             if (game.GameType is Campaign)
             {
                 CampaignGameStarter campaignStarter = (CampaignGameStarter)gameStarter;
-                campaignStarter.AddBehavior(new BKSaveBehavior());
                 campaignStarter.AddBehavior(new BKSettlementBehavior());
                 campaignStarter.AddBehavior(new BKCompanionBehavior());
                 campaignStarter.AddBehavior(new BKTournamentBehavior());

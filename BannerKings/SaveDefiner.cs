@@ -132,7 +132,8 @@ namespace BannerKings
             base.ConstructContainerDefinition(typeof(List<CouncilMember>));
             base.ConstructContainerDefinition(typeof(Dictionary<Hero, ClaimType>));
             base.ConstructContainerDefinition(typeof(Dictionary<FeudalTitle, float>));
-            base.ConstructContainerDefinition(typeof(Dictionary<Settlement, List<Clan>>)); 
+            base.ConstructContainerDefinition(typeof(Dictionary<Settlement, List<Clan>>));
+            ConstructContainerDefinition(typeof(Dictionary<Hero, float>));
             ConstructContainerDefinition(typeof(Dictionary<Religion, Dictionary<Hero, float>>)); 
             ConstructContainerDefinition(typeof(Dictionary<Settlement, Clergyman>));
             ConstructContainerDefinition(typeof(List<Faith>));

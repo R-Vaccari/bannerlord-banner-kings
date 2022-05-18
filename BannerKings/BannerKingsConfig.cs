@@ -58,7 +58,7 @@ namespace BannerKings
             TitleManager = titleManager;
             titleManager.RefreshDeJure();
             CourtManager = court;
-            ReligionsManager = religions;
+            ReligionsManager = religions != null ? religions : new ReligionsManager();
             InitModels();
         }
 

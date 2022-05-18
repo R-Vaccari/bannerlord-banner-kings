@@ -155,6 +155,19 @@ namespace BannerKings.Behaviours
 
     namespace Patches
     {
+        [HarmonyPatch(typeof(Hero), "IsNotable", MethodType.Getter)]
+        class IsNotablePatch
+        {
+            static void Postfix(Hero __instance, ref bool __result)
+            {
+                if (BannerKingsConfig.Instance.ReligionsManager != null && __instance.IsPreacher && BannerKingsConfig.Instance.ReligionsManager.IsPreacher(__instance))
+                {
+                    Religion religion = BannerKingsConfig.Instance.ReligionsManager.GetClergymanReligion(BannerKingsConfig.Instance.ReligionsManager.GetClergymanFromHeroHero(__instance));
+                    __result = religion.Doctrines.Contains("druidism");
+                }
+            }
+        }
+
 
         [HarmonyPatch(typeof(LordConversationsCampaignBehavior), "conversation_puritan_preacher_introduction_on_condition")]
         class PuritanPreacherPatch
