@@ -94,8 +94,8 @@ namespace BannerKings.Managers
         {
             if (action.TargetPosition == null || action.ActionTaker == null || !action.Possible) return;
 
-            Religion rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(action.TargetPosition.Clan.Leader);
-            if (rel.Leadership.GetType() == typeof(KinshipLeadership) && action.TargetPosition.Position == CouncilPosition.Spiritual)
+            Religion rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(action.Council.Owner);
+            if (rel != null && rel.Leadership.GetType() == typeof(KinshipLeadership) && action.TargetPosition.Position == CouncilPosition.Spiritual)
             {
                 Hero currentClergyman = action.TargetPosition.Member;
                 if (currentClergyman != null)
@@ -111,7 +111,7 @@ namespace BannerKings.Managers
             action.TargetPosition.Member = action.ActionTaker;
             if (action.ActionTaker.Clan != null) GainKingdomInfluenceAction.ApplyForDefault(action.ActionTaker, -action.Influence);
             else if (action.ActionTaker.IsNotable) action.ActionTaker.AddPower(-action.Influence);
-            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(action.TargetPosition.Clan.Leader, action.ActionTaker, 5);
+            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(action.Council.Owner, action.ActionTaker, 5);
         }
 
         public void SwapCouncilPositions(CouncilAction action)

@@ -55,7 +55,7 @@ namespace BannerKings.Managers.Court
             {
                 List<CouncilMember> all = new List<CouncilMember>();
                 all.AddRange(members);
-                all.AddRange(royalMembers);
+                if (royalMembers != null) all.AddRange(royalMembers);
                 return all.GetReadOnlyList();
             }
         }
@@ -238,8 +238,23 @@ namespace BannerKings.Managers.Court
                             if (!heroes.Contains(notable))
                                 heroes.Add(notable);
 
-                    if (rel != null && rel.Clergy.ContainsKey(town.Settlement))
-                        heroes.Add(rel.Clergy[town.Settlement].Hero);
+                    foreach (Village village in town.Villages)
+                    {
+                        MBReadOnlyList<Hero> villageNotables = village.Settlement.Notables;
+                        if (villageNotables != null && villageNotables.Count > 0)
+                            foreach (Hero notable in villageNotables)
+                                if (!heroes.Contains(notable))
+                                {
+                                    if (notable.IsPreacher)
+                                    {
+                                        Clergyman clergyman = BannerKingsConfig.Instance.ReligionsManager.GetClergymanFromHeroHero(notable);
+                                        if (clergyman != null && BannerKingsConfig.Instance.ReligionsManager.GetClergymanReligion(clergyman) != rel)
+                                            continue;
+                                    }
+                                    heroes.Add(notable);
+                                }
+                                    
+                    }
                 }
             }
 

@@ -8,13 +8,15 @@ namespace BannerKings.Managers.Court
         public CouncilMember TargetPosition { get; private set; }
         public CouncilMember CurrentPosition { get; private set; }
         public CouncilActionType Type { get; private set; }
+        public CouncilData Council { get; private set; }
 
-        public CouncilAction(CouncilActionType type, Hero actionTaker, CouncilMember target, CouncilMember current)
+        public CouncilAction(CouncilActionType type, Hero actionTaker, CouncilMember target, CouncilMember current, CouncilData council)
         {
             ActionTaker = actionTaker;
             TargetPosition = target;
             CurrentPosition = current;
             Type = type;
+            Council = council;
         }
 
 

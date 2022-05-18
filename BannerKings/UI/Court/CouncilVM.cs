@@ -59,6 +59,7 @@ namespace BannerKings.UI.Items
                     options.Add(new InquiryElement(vm.Governor, name, image));
                 }
 
+                BKCouncilModel model = (BKCouncilModel)BannerKingsConfig.Instance.Models.First(x => x is BKCouncilModel);
                 InformationManager.ShowMultiSelectionInquiry(
                         new MultiSelectionInquiryData(
                             new TextObject("{=!}Select Councillor").ToString(),
@@ -66,7 +67,10 @@ namespace BannerKings.UI.Items
                             options, true, 1, GameTexts.FindText("str_done").ToString(), string.Empty,
                             delegate (List<InquiryElement> x)
                             {
-                                onDone((Hero?)x[0].Identifier);
+                                Hero requester = (Hero?)x[0].Identifier;
+                                model.GetAction(CouncilActionType.REQUEST, council, requester, council.AllPositions.FirstOrDefault(x => x.Position == Position), null, true)
+                                .TakeAction();
+                                onDone(requester);
                             }, null, string.Empty));
             } else
             {

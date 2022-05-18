@@ -13,19 +13,20 @@ namespace BannerKings.Models.BKModels
         }
 
 
-        public CouncilAction GetAction(CouncilActionType type, CouncilData council, Hero requester, CouncilMember targetPosition, CouncilMember currentPosition = null)
+        public CouncilAction GetAction(CouncilActionType type, CouncilData council, Hero requester, CouncilMember targetPosition, CouncilMember currentPosition = null,
+            bool appointed = false)
         {
             if (type == CouncilActionType.REQUEST)
-                return GetRequest(type, council, requester, targetPosition, currentPosition);
+                return GetRequest(type, council, requester, targetPosition, currentPosition, appointed);
             else if (type == CouncilActionType.RELINQUISH)
-                return GetRelinquish(type, requester, currentPosition, targetPosition);
-            else return GetSwap(type, council, requester, targetPosition, currentPosition);
+                return GetRelinquish(type, council, requester, currentPosition, targetPosition, appointed);
+            else return GetSwap(type, council, requester, targetPosition, currentPosition, appointed);
         }
 
 
-        private CouncilAction GetSwap(CouncilActionType type, CouncilData council, Hero requester, CouncilMember targetPosition, CouncilMember currentPosition = null)
+        private CouncilAction GetSwap(CouncilActionType type, CouncilData council, Hero requester, CouncilMember targetPosition, CouncilMember currentPosition = null, bool appointed = false)
         {
-            CouncilAction action = new CouncilAction(type, requester, targetPosition, currentPosition);
+            CouncilAction action = new CouncilAction(type, requester, targetPosition, currentPosition, council);
             action.Influence = GetInfluenceCost(type, targetPosition);
 
             if (currentPosition == null || currentPosition.Member != requester)
@@ -83,9 +84,9 @@ namespace BannerKings.Models.BKModels
             return action;
         }
 
-        private CouncilAction GetRelinquish(CouncilActionType type, Hero requester, CouncilMember currentPosition, CouncilMember targetPosition = null)
+        private CouncilAction GetRelinquish(CouncilActionType type, CouncilData council, Hero requester, CouncilMember currentPosition, CouncilMember targetPosition = null, bool appointed = false)
         {
-            CouncilAction action = new CouncilAction(type, requester, targetPosition, currentPosition);
+            CouncilAction action = new CouncilAction(type, requester, targetPosition, currentPosition, council);
             action.Influence = GetInfluenceCost(type, targetPosition);
             if (currentPosition == null)
             {
@@ -106,9 +107,9 @@ namespace BannerKings.Models.BKModels
             return action;
         }
 
-        private CouncilAction GetRequest(CouncilActionType type, CouncilData council, Hero requester, CouncilMember targetPosition, CouncilMember currentPosition = null)
+        private CouncilAction GetRequest(CouncilActionType type, CouncilData council, Hero requester, CouncilMember targetPosition, CouncilMember currentPosition = null, bool appointed = false)
         {
-            CouncilAction action = new CouncilAction(type, requester, targetPosition, currentPosition);
+            CouncilAction action = new CouncilAction(type, requester, targetPosition, currentPosition, council);
             action.Influence = GetInfluenceCost(type, targetPosition);
 
             if (currentPosition != null && currentPosition.Member == requester)
@@ -132,32 +133,36 @@ namespace BannerKings.Models.BKModels
                 return action;
             }
 
-            if (targetPosition.IsCorePosition(targetPosition.Position))
+
+            if (!appointed)
             {
-                if (requester.Clan != null && !requester.Clan.Kingdom.Leader.IsFriend(requester))
+                if (targetPosition.IsCorePosition(targetPosition.Position))
                 {
-                    action.Possible = false;
-                    action.Reason = new TextObject("{=!}Not trustworthy enough for this position.");
-                    return action;
+                    if (requester.Clan != null && !requester.Clan.Kingdom.Leader.IsFriend(requester))
+                    {
+                        action.Possible = false;
+                        action.Reason = new TextObject("{=!}Not trustworthy enough for this position.");
+                        return action;
+                    }
+
+                    if (council.GetCompetence(requester, targetPosition.Position) < 0.5f)
+                    {
+                        action.Possible = false;
+                        action.Reason = new TextObject("{=!}Not competent enough for this position.");
+                        return action;
+                    }
                 }
 
-                if (council.GetCompetence(requester, targetPosition.Position) < 0.5f)
+                if (targetPosition.Member != null)
                 {
-                    action.Possible = false;
-                    action.Reason = new TextObject("{=!}Not competent enough for this position.");
-                    return action;
-                }
-            }
-
-            if (targetPosition.Member != null)
-            {
-                float candidateDesire = GetDesirability(requester, council, targetPosition);
-                float currentDesire = GetDesirability(targetPosition.Member, council, targetPosition);
-                if (currentDesire > candidateDesire)
-                {
-                    action.Possible = false;
-                    action.Reason = new TextObject("{=!}Not a better candidate than current councillor.");
-                    return action;
+                    float candidateDesire = GetDesirability(requester, council, targetPosition);
+                    float currentDesire = GetDesirability(targetPosition.Member, council, targetPosition);
+                    if (currentDesire > candidateDesire)
+                    {
+                        action.Possible = false;
+                        action.Reason = new TextObject("{=!}Not a better candidate than current councillor.");
+                        return action;
+                    }
                 }
             }
 

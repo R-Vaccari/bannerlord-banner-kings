@@ -17,5 +17,10 @@ namespace BannerKings.Managers.Institutions.Religions.Leaderships
         {
 
         }
+
+        public override bool IsLeader(Clergyman clergyman)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

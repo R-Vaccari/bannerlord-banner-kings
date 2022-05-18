@@ -155,7 +155,7 @@ namespace BannerKings.Behaviours
 
     namespace Patches
     {
-        [HarmonyPatch(typeof(Hero), "IsNotable", MethodType.Getter)]
+        /*[HarmonyPatch(typeof(Hero), "IsNotable", MethodType.Getter)]
         class IsNotablePatch
         {
             static void Postfix(Hero __instance, ref bool __result)
@@ -166,7 +166,7 @@ namespace BannerKings.Behaviours
                     __result = religion.Doctrines.Contains("druidism");
                 }
             }
-        }
+        } */
 
 
         [HarmonyPatch(typeof(LordConversationsCampaignBehavior), "conversation_puritan_preacher_introduction_on_condition")]
