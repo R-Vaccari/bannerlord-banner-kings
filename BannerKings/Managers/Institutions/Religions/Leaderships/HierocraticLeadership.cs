@@ -1,7 +1,4 @@
-﻿using System;
-using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.Actions;
-using TaleWorlds.Localization;
+﻿using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Institutions.Religions.Leaderships
 {

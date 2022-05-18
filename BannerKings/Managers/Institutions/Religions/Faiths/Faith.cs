@@ -3,15 +3,23 @@ using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
+using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Managers.Institutions.Religions.Faiths
 {
     public abstract class Faith
     {
+        [SaveableField(1)]
         protected FaithGroup faithGroup;
+
+        [SaveableField(2)]
         protected Divinity mainGod;
-        protected Dictionary<TraitObject, bool> traits;
+
+        [SaveableField(3)]
         protected Dictionary<Faith, FaithStance> stances;
+
+        protected Dictionary<TraitObject, bool> traits;
+
         protected Dictionary<int, CharacterObject> presets;
 
         public Faith() 

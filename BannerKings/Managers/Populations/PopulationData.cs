@@ -52,6 +52,8 @@ namespace BannerKings.Populations
 
         [SaveableProperty(11)]
         private float autonomy { get; set; } = 0f;
+
+        [SaveableProperty(12)]
         private ReligionData religionData { get; set; }
 
 

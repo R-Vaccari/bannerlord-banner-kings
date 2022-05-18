@@ -3,6 +3,8 @@ using BannerKings.Managers;
 using BannerKings.Managers.Court;
 using BannerKings.Managers.Decisions;
 using BannerKings.Managers.Duties;
+using BannerKings.Managers.Institutions.Religions;
+using BannerKings.Managers.Institutions.Religions.Faiths;
 using BannerKings.Managers.Kingdoms;
 using BannerKings.Managers.Kingdoms.Contract;
 using BannerKings.Managers.Policies;
@@ -99,6 +101,16 @@ namespace BannerKings
             AddClassDefinition(typeof(TitleData), 63);
             AddEnumDefinition(typeof(ClaimType), 64);
             AddClassDefinition(typeof(RetinueComponent), 65);
+            AddClassDefinition(typeof(ReligionsManager), 66);
+            AddClassDefinition(typeof(Religion), 67);
+            AddClassDefinition(typeof(Faith), 68);
+            AddEnumDefinition(typeof(FaithStance), 69);
+            AddClassDefinition(typeof(FaithGroup), 70);
+            AddClassDefinition(typeof(Divinity), 71);
+            AddClassDefinition(typeof(ReligiousLeadership), 72); 
+            AddClassDefinition(typeof(Clergyman), 73);
+            AddClassDefinition(typeof(PolytheisticFaith), 74);
+            AddClassDefinition(typeof(ReligionData), 75);
         }
 
         protected override void DefineContainerDefinitions()
@@ -120,7 +132,12 @@ namespace BannerKings
             base.ConstructContainerDefinition(typeof(List<CouncilMember>));
             base.ConstructContainerDefinition(typeof(Dictionary<Hero, ClaimType>));
             base.ConstructContainerDefinition(typeof(Dictionary<FeudalTitle, float>));
-            base.ConstructContainerDefinition(typeof(Dictionary<Settlement, List<Clan>>));
+            base.ConstructContainerDefinition(typeof(Dictionary<Settlement, List<Clan>>)); 
+            ConstructContainerDefinition(typeof(Dictionary<Religion, Dictionary<Hero, float>>)); 
+            ConstructContainerDefinition(typeof(Dictionary<Settlement, Clergyman>));
+            ConstructContainerDefinition(typeof(List<Faith>));
+            ConstructContainerDefinition(typeof(List<Divinity>));
+            ConstructContainerDefinition(typeof(Dictionary<Faith, FaithStance>));
         }
     }
 }

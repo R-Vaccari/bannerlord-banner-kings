@@ -1,11 +1,12 @@
-﻿using TaleWorlds.CampaignSystem;
-using TaleWorlds.Localization;
+﻿using TaleWorlds.Localization;
+using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Managers.Institutions.Religions
 {
     public abstract class ReligiousLeadership
     {
-        private Religion religion;
+        [SaveableField(1)]
+        protected Religion religion;
         public abstract void Initialize(Religion religion);
 
         public abstract TextObject GetName();

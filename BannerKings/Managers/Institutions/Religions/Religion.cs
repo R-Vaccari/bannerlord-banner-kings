@@ -5,15 +5,25 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
+using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Managers.Institutions.Religions
 {
     public class Religion : LandedInstitution
     {
+        [SaveableField(1)]
         private Dictionary<Settlement, Clergyman> clergy;
+
+        [SaveableField(2)]
         private Faith faith;
+
+        [SaveableField(3)]
         private ReligiousLeadership leadership;
+
+        [SaveableField(4)]
         private List<CultureObject> favoredCultures;
+
+        [SaveableField(5)]
         private List<string> doctrineIds;
 
         public Religion(Settlement settlement, Faith faith, ReligiousLeadership leadership,

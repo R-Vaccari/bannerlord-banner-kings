@@ -45,7 +45,8 @@ namespace BannerKings
             InitModels();
         }
 
-        public void InitManagers(PopulationManager populationManager, PolicyManager policyManager, TitleManager titleManager, CourtManager court)
+        public void InitManagers(PopulationManager populationManager, PolicyManager policyManager, TitleManager titleManager, CourtManager court,
+            ReligionsManager religions)
         {
             DefaultVillageBuildings.Instance.Init();
             DefaultDivinities.Instance.Initialize();
@@ -57,7 +58,7 @@ namespace BannerKings
             TitleManager = titleManager;
             titleManager.RefreshDeJure();
             CourtManager = court;
-            ReligionsManager = new ReligionsManager();
+            ReligionsManager = religions;
             InitModels();
         }
 

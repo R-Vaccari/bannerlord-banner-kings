@@ -7,11 +7,13 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
+using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Managers
 {
     public class ReligionsManager
     {
+        [SaveableProperty(1)]
         private Dictionary<Religion, Dictionary<Hero, float>> Religions { get; set; }
 
         public ReligionsManager()

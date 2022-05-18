@@ -5,8 +5,6 @@ namespace BannerKings.Managers.Institutions.Religions
 {
     public abstract class DescentralizedLeadership : ReligiousLeadership
     {
-
-        protected Religion religion;
         public DescentralizedLeadership()
         {
             

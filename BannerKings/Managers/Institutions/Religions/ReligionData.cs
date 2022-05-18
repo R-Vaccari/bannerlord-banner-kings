@@ -1,14 +1,18 @@
-﻿using BannerKings.Models.BKModels;
-using BannerKings.Populations;
+﻿using BannerKings.Populations;
 using TaleWorlds.CampaignSystem;
-using System.Linq;
+using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Managers.Institutions.Religions
 {
     public class ReligionData : BannerKingsData
     {
+        [SaveableField(1)]
         private Settlement settlement;
+
+        [SaveableField(2)]
         private Clergyman clergyman;
+
+        [SaveableField(3)]
         private Religion religion;
 
         public ReligionData(Religion religion, Settlement settlement)

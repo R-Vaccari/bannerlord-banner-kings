@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Managers.Institutions.Religions.Faiths
 {
     public abstract class PolytheisticFaith : Faith
     {
+        [SaveableField(6)]
         protected List<Divinity> pantheon;
 
         public PolytheisticFaith() : base()
