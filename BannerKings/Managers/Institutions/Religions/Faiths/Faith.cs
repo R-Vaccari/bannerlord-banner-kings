@@ -18,6 +18,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
         [SaveableField(3)]
         protected Dictionary<Faith, FaithStance> stances;
 
+        [SaveableField(4)]
         protected Dictionary<TraitObject, bool> traits;
 
         protected Dictionary<int, CharacterObject> presets;

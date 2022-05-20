@@ -18,13 +18,14 @@ namespace BannerKings.Managers.Institutions.Religions
         private Faith faith;
 
         [SaveableField(3)]
-        private ReligiousLeadership leadership;
+        private List<string> doctrineIds;
 
         [SaveableField(4)]
         private List<CultureObject> favoredCultures;
 
         [SaveableField(5)]
-        private List<string> doctrineIds;
+        private ReligiousLeadership leadership;
+
 
         public Religion(Settlement settlement, Faith faith, ReligiousLeadership leadership,
             List<CultureObject> favoredCultures, List<string> doctrineIds) : base(settlement)

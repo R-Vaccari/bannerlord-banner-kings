@@ -378,13 +378,13 @@ namespace BannerKings.Managers.Court
         private CouncilPosition position { get; set; }
 
         [SaveableProperty(3)]
-        private bool isRoyal { get; set; }
+        private bool isRoyal { get; set; } = false;
 
         [SaveableProperty(4)]
-        private Clan clan { get; set; }
+        private Clan clan { get; set; } = null;
 
         [SaveableProperty(5)]
-        private int dueWage { get; set; }
+        private int dueWage { get; set; } = 0;
 
         public CouncilMember(Hero member, CouncilPosition position, Clan clan)
         {

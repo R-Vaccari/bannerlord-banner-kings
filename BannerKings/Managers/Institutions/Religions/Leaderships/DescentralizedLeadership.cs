@@ -12,10 +12,10 @@ namespace BannerKings.Managers.Institutions.Religions
 
         public override void Initialize(Religion religion)
         {
-            this.religion = religion;
+
         }
 
-        public List<Clergyman> GetLeaders()
+        public List<Clergyman> GetLeaders(Religion religion)
         {
             List<Clergyman> list = new List<Clergyman>();
             int max = religion.Faith.GetMaxClergyRank();
@@ -25,6 +25,6 @@ namespace BannerKings.Managers.Institutions.Religions
             return list;
         }
 
-        public override bool IsLeader(Clergyman clergyman) => GetLeaders().Contains(clergyman);
+        public override bool IsLeader(Clergyman clergyman) => false;
     }
 }

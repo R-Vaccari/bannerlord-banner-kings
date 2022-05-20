@@ -5,6 +5,9 @@ using BannerKings.Managers.Decisions;
 using BannerKings.Managers.Duties;
 using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Institutions.Religions.Faiths;
+using BannerKings.Managers.Institutions.Religions.Faiths.Asera;
+using BannerKings.Managers.Institutions.Religions.Faiths.Battania;
+using BannerKings.Managers.Institutions.Religions.Leaderships;
 using BannerKings.Managers.Kingdoms;
 using BannerKings.Managers.Kingdoms.Contract;
 using BannerKings.Managers.Policies;
@@ -107,10 +110,21 @@ namespace BannerKings
             AddEnumDefinition(typeof(FaithStance), 69);
             AddClassDefinition(typeof(FaithGroup), 70);
             AddClassDefinition(typeof(Divinity), 71);
-            AddClassDefinition(typeof(ReligiousLeadership), 72); 
+            AddClassDefinition(typeof(ReligionData), 72);
             AddClassDefinition(typeof(Clergyman), 73);
             AddClassDefinition(typeof(PolytheisticFaith), 74);
-            AddClassDefinition(typeof(ReligionData), 75);
+            AddClassDefinition(typeof(MonotheisticFaith), 75);
+            AddClassDefinition(typeof(AseraFaith), 76);
+            AddClassDefinition(typeof(AmraFaith), 77);
+            AddClassDefinition(typeof(DarusosianFaith), 78);
+            AddClassDefinition(typeof(ReligiousLeadership), 79);
+            AddClassDefinition(typeof(CentralizedLeadership), 80);
+            AddClassDefinition(typeof(DescentralizedLeadership), 81);
+            AddClassDefinition(typeof(HierocraticLeadership), 82);
+            AddClassDefinition(typeof(AutocephalousLeadership), 83);
+            AddClassDefinition(typeof(KinshipLeadership), 84);
+            AddClassDefinition(typeof(AutonomousLeadership), 85);
+
         }
 
         protected override void DefineContainerDefinitions()
@@ -137,8 +151,9 @@ namespace BannerKings
             ConstructContainerDefinition(typeof(Dictionary<Religion, Dictionary<Hero, float>>)); 
             ConstructContainerDefinition(typeof(Dictionary<Settlement, Clergyman>));
             ConstructContainerDefinition(typeof(List<Faith>));
-            ConstructContainerDefinition(typeof(List<Divinity>));
+            ConstructContainerDefinition(typeof(List<Divinity>)); 
             ConstructContainerDefinition(typeof(Dictionary<Faith, FaithStance>));
+            ConstructContainerDefinition(typeof(Dictionary<TraitObject, bool>));
         }
     }
 }

@@ -97,13 +97,13 @@ namespace BannerKings.Managers
             {
                 Hero currentClergyman = action.TargetPosition.Member;
                 if (currentClergyman != null)
-                    rel.Leadership.ChangeClergymanRank(BannerKingsConfig.Instance.ReligionsManager.GetClergymanFromHeroHero(currentClergyman),
+                    rel.Leadership.ChangeClergymanRank(rel, BannerKingsConfig.Instance.ReligionsManager.GetClergymanFromHeroHero(currentClergyman),
                         rel.Faith.GetIdealRank(currentClergyman.CurrentSettlement != null ? currentClergyman.CurrentSettlement : currentClergyman.BornSettlement,
                         false));
 
                 Hero newClergyman = action.ActionTaker;
                 if (newClergyman != null)
-                    rel.Leadership.ChangeClergymanRank(BannerKingsConfig.Instance.ReligionsManager.GetClergymanFromHeroHero(newClergyman),
+                    rel.Leadership.ChangeClergymanRank(rel, BannerKingsConfig.Instance.ReligionsManager.GetClergymanFromHeroHero(newClergyman),
                             rel.Faith.GetMaxClergyRank());
             }
         }

@@ -21,6 +21,10 @@ namespace BannerKings.Managers.Institutions.Religions
         }
 
         public Hero Hero => hero;
-        public int Rank => rank;
+        public int Rank
+        {
+            get => rank;
+            set => rank = value;
+        }
     }
 }
