@@ -1,19 +1,15 @@
 ﻿using System.Collections.Generic;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
-using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Managers.Institutions.Religions.Faiths
 {
     public class FaithGroup
     {
-        [SaveableField(1)]
         private List<Faith> members;
 
-        [SaveableField(2)]
         private TextObject name;
 
-        [SaveableField(3)]
         private TextObject description;
 
         public FaithGroup(TextObject name, TextObject description)

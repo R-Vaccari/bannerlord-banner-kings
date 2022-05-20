@@ -28,7 +28,8 @@ namespace BannerKings.Behaviours
 
         private void OnSessionLaunched(CampaignGameStarter starter)
         {
-            this.AddDialogue(starter);
+            AddDialogue(starter);
+            BannerKingsConfig.Instance.ReligionsManager.PostInitialize();
         }
 
         private void DailyTick()

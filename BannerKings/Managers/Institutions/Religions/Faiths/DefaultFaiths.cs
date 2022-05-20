@@ -57,6 +57,25 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
 
         }
 
+        public Faith GetById(string id)
+        {
+            Faith faith = null;
+            foreach (Faith f in All)
+                if (f.GetId() == id)
+                    faith = f;
+            return faith;
+        }
+
+        public IEnumerable<Faith> All
+        {
+            get
+            {
+                yield return AseraCode;
+                yield return AmraOllahm;
+                yield return Darusosian;
+            }
+        }
+
         public static DefaultFaiths Instance => ConfigHolder.CONFIG;
 
         internal struct ConfigHolder

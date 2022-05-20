@@ -38,6 +38,11 @@ namespace BannerKings.Managers.Institutions.Religions
             leadership.Initialize(this);
         }
 
+        internal void PostInitialize(Faith faith)
+        {
+            this.faith = faith;
+        }
+
         public CultureObject MainCulture => favoredCultures[0];
         public ReligiousLeadership Leadership => leadership;
         public Divinity MainGod => faith.MainGod;
