@@ -14,13 +14,11 @@ using BannerKings.Models.Populations;
 using BannerKings.Populations;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.Library;
 
 namespace BannerKings
 {
     public class BannerKingsConfig
     {
-
         public PopulationManager PopulationManager;
         public PolicyManager PolicyManager;
         public TitleManager TitleManager;
@@ -28,7 +26,6 @@ namespace BannerKings
         public ReligionsManager ReligionsManager;
         public HashSet<IBannerKingsModel> Models = new HashSet<IBannerKingsModel>();
         public bool wipeData = false;
-        public MBReadOnlyList<BuildingType> VillageBuildings { get; set; }
 
         private void Initialize()
         {
@@ -36,7 +33,6 @@ namespace BannerKings
             DefaultDivinities.Instance.Initialize();
             DefaultFaiths.Instance.Initialize();
             DefaultDoctrines.Instance.Initialize();
-            
 
             Models.Add(new BKCultureAssimilationModel());
             Models.Add(new BKCultureAcceptanceModel());

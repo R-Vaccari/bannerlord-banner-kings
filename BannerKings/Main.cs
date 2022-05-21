@@ -32,6 +32,8 @@ using TaleWorlds.CampaignSystem.SandBox.Issues;
 using Helpers;
 using Bannerlord.UIExtenderEx;
 using BannerKings.Managers.Skills;
+using SandBox.View.Map;
+using BannerKings.Managers.Institutions.Religions;
 
 namespace BannerKings
 {
@@ -130,6 +132,18 @@ namespace BannerKings
                     }
 
                     return true;
+                }
+            }
+        }
+
+        namespace Map
+        {
+            [HarmonyPatch(typeof(MapScreen), "OnInitialize")]
+            public static class MapScreenOnInitializePatch
+            {
+                private static void Postfix()
+                {
+                    BannerKingsConfig.Instance.ReligionsManager.PostInitialize();
                 }
             }
         }

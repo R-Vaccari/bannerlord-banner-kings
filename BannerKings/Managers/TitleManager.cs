@@ -1,4 +1,5 @@
-﻿using BannerKings.Managers.Titles;
+﻿using BannerKings.Managers.Skills;
+using BannerKings.Managers.Titles;
 using BannerKings.Models.BKModels;
 using System;
 using System.Collections.Generic;
@@ -278,6 +279,25 @@ namespace BannerKings.Managers
 
             ChangeRelationAction.ApplyRelationChangeBetweenHeroes(grantor, receiver, (int)(new BKTitleModel().GetRelationImpact(title) * -1f));
             GainKingdomInfluenceAction.ApplyForDefault(grantor, influence);
+
+            grantor.AddSkillXp(BKSkills.Instance.Lordship, 500f / ((float)title.type * 2f));
+        }
+
+        public void RevokeTitle(TitleAction action)
+        {
+            Hero currentOwner = action.Title.deJure;
+            InformationManager.DisplayMessage(new InformationMessage(new TextObject("{=!}{REVOKER} has revoked the {TITLE}.")
+                .SetTextVariable("REVOKER", action.ActionTaker.Name)
+                .SetTextVariable("TITLE", action.Title.FullName)
+                .ToString()));
+            int impact = new BKTitleModel().GetRelationImpact(action.Title);
+            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(action.ActionTaker, currentOwner, impact);
+
+            action.Title.RemoveClaim(action.ActionTaker);
+            action.Title.AddClaim(currentOwner, ClaimType.Previous_Owner, true);
+            ExecuteOwnershipChange(currentOwner, action.ActionTaker, action.Title, true);
+
+            action.ActionTaker.AddSkillXp(BKSkills.Instance.Lordship, 200f / ((float)action.Title.type * 2f));
         }
 
         public void UsurpTitle(Hero oldOwner, TitleAction action)
@@ -315,6 +335,8 @@ namespace BannerKings.Managers
             title.RemoveClaim(usurper);
             title.AddClaim(oldOwner, ClaimType.Previous_Owner, true);
             ExecuteOwnershipChange(oldOwner, usurper, title, true);
+
+            action.ActionTaker.AddSkillXp(BKSkills.Instance.Lordship, 1000f - ((float)title.type * 100f));
 
             //OwnershipNotification notification = new OwnershipNotification(title, new TextObject(string.Format("You are now the rightful owner to {0}", title.name)));
             //Campaign.Current.CampaignInformationManager.NewMapNoticeAdded(notification);

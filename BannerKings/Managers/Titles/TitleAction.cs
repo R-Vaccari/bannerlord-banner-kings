@@ -18,15 +18,6 @@ namespace BannerKings.Managers.Titles
             ActionTaker = taker;
         }
 
-        public TitleAction(bool possible, TextObject reason, float gold, float influence, float renown)
-        {
-            Possible = possible;
-            Reason = reason;
-            Gold = gold;
-            Influence = influence;
-            Renown = renown;
-        }
-
         public override void TakeAction(Hero receiver)
         {
             if (!Possible) return;
@@ -35,6 +26,8 @@ namespace BannerKings.Managers.Titles
                 BannerKingsConfig.Instance.TitleManager.UsurpTitle(Title.deJure, this);
             else if (Type == ActionType.Claim)
                 BannerKingsConfig.Instance.TitleManager.AddOngoingClaim(this);
+            else if (Type == ActionType.Revoke)
+                BannerKingsConfig.Instance.TitleManager.RevokeTitle(this);
             else BannerKingsConfig.Instance.TitleManager.GrantTitle(receiver, ActionTaker, Title, Influence);
         }
     }

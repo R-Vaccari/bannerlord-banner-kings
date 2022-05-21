@@ -123,7 +123,6 @@ namespace BannerKings.UI
                 FieldInfo skillId = __instance.GetType().GetField("_skillId", BindingFlags.Instance | BindingFlags.NonPublic);
                 skillId.SetValue(__instance, text);
                 return false;
-
             }
         }
 

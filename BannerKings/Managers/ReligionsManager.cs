@@ -102,6 +102,8 @@ namespace BannerKings.Managers
                 rel.PostInitialize(faith);
             }
 
+            if (GetHeroReligion(Hero.MainHero) != null) return; 
+
             List<InquiryElement> elements = new List<InquiryElement>();
             foreach (Religion religion in Religions.Keys.ToList())
                 elements.Add(new InquiryElement(religion,

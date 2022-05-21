@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using BannerKings.Managers.Skills;
+using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
@@ -92,8 +93,11 @@ namespace BannerKings.Managers.Titles
         {
             Dictionary<Hero, ClaimType> toAdd = new Dictionary<Hero, ClaimType>();
             foreach (KeyValuePair<Hero, CampaignTime> pair in OngoingClaims)
+            {
                 if (pair.Value.RemainingDaysFromNow <= 0f)
                     toAdd.Add(pair.Key, ClaimType.Fabricated);
+                else pair.Key.AddSkillXp(BKSkills.Instance.Lordship, 3.5f);
+            }
 
             foreach (KeyValuePair<Hero, ClaimType> pair in toAdd)
                 AddClaim(pair.Key, pair.Value);
