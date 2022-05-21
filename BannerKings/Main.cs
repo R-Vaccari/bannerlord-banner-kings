@@ -82,6 +82,7 @@ namespace BannerKings
                 campaignStarter.AddModel(new BKPartyWageModel());
                 campaignStarter.AddModel(new BKSettlementValueModel());
                 campaignStarter.AddModel(new BKNotablePowerModel());
+                campaignStarter.LoadGameTexts(BasePath.Name + "Modules/BannerKings/ModuleData/module_strings.xml");
 
                 BKAttributes.Instance.Initialize();
                 BKSkills.Instance.Initialize();
@@ -90,7 +91,6 @@ namespace BannerKings
 
         protected override void OnSubModuleLoad()
         {
-            
             base.OnSubModuleLoad();
             new Harmony("BannerKings").PatchAll();
             xtender.Register(typeof(Main).Assembly);

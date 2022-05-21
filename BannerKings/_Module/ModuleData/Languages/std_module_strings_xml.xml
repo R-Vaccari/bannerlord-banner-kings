@@ -4,6 +4,9 @@
 		<tag language="English" />
 	</tags>
 	<strings>
+		<string id="bk_skill_scholarship_learn" text="Actively be studying for an education. Read books." />
+		<string id="bk_skill_theology_learn" text="Interact with divinities through oaths, sacrifices or blessings. Curse and cure curses." />
+		<string id="bk_skill_lordship_learn" text="Fulfill duties. Complete actions with titles such as claiming, granting or usurping." />
 		<string id="pop_class_nobles" text="Nobles" />
 		<string id="pop_class_craftsmen" text="Craftsmen" />
 		<string id="pop_class_serfs" text="Serfs" />

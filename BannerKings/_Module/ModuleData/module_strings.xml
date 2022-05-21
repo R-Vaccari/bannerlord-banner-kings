@@ -1,6 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <base xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" type="string">
 	<strings>
+		<string id="str_how_to_learn_skill.Scholarship" text="{=bk_skill_scholarship_learn}Actively be studying for an education. Read books." />
+		<string id="str_how_to_learn_skill.Theology" text="{=bk_skill_theology_learn}Interact with divinities through oaths, sacrifices or blessings. Curse and cure curses." />
+		<string id="str_how_to_learn_skill.Lordship" text="{=bk_skill_lordship_learn}Fulfill duties. Complete actions with titles such as claiming, granting or usurping." />
+		
 		<string id="str_pop_class_nobles" text="{=pop_class_nobles}Nobles" />
 		<string id="str_pop_class_craftsmen" text="{=pop_class_craftsmen}Craftsmen" />
 		<string id="str_pop_class_serfs" text="{=pop_class_serfs}Serfs" />

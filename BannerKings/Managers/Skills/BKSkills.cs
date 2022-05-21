@@ -7,19 +7,19 @@ namespace BannerKings.Managers.Skills
     {
         public void Initialize()
         {
-            scholarship = Game.Current.ObjectManager.RegisterPresumedObject<SkillObject>(new SkillObject("scholarship"));
+            scholarship = Game.Current.ObjectManager.RegisterPresumedObject<SkillObject>(new SkillObject("Scholarship"));
             scholarship.Initialize(new TextObject("{=!}Scholarship", null), 
                 new TextObject("{=!}Reading and writting competence as well as knowledge over literary and legal matters.", null), 
                 SkillObject.SkillTypeEnum.Personal)
                 .SetAttribute(BKAttributes.Instance.Wisdom);
 
-            scholarship = Game.Current.ObjectManager.RegisterPresumedObject<SkillObject>(new SkillObject("theology"));
+            scholarship = Game.Current.ObjectManager.RegisterPresumedObject<SkillObject>(new SkillObject("Theology"));
             scholarship.Initialize(new TextObject("{=!}Theology", null),
                 new TextObject("{=!}Understanding over spiritual matters. Normally reserved for preachers and the most pious faithful.", null),
                 SkillObject.SkillTypeEnum.Personal)
                 .SetAttribute(BKAttributes.Instance.Wisdom);
 
-            scholarship = Game.Current.ObjectManager.RegisterPresumedObject<SkillObject>(new SkillObject("lordship"));
+            scholarship = Game.Current.ObjectManager.RegisterPresumedObject<SkillObject>(new SkillObject("Lordship"));
             scholarship.Initialize(new TextObject("{=!}Lordship", null),
                 new TextObject("{=!}Ability to deal with legal administration of titles and feudal contracts.", null),
                 SkillObject.SkillTypeEnum.Personal)

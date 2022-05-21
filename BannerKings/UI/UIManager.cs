@@ -113,11 +113,11 @@ namespace BannerKings.UI
             static bool Prefix(SkillIconVisualWidget __instance, string value)
             {
                 string text = value;
-                if (value == "lordship")
+                if (value == "Lordship")
                     text = "leadership";
-                else if (value == "scholarship")
+                else if (value == "Scholarship")
                     text = "Steward";
-                else if (value == "theology")
+                else if (value == "Theology")
                     text = "charm";
 
                 FieldInfo skillId = __instance.GetType().GetField("_skillId", BindingFlags.Instance | BindingFlags.NonPublic);
