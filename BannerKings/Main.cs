@@ -31,6 +31,7 @@ using static TaleWorlds.CampaignSystem.SandBox.Issues.EscortMerchantCaravanIssue
 using TaleWorlds.CampaignSystem.SandBox.Issues;
 using Helpers;
 using Bannerlord.UIExtenderEx;
+using BannerKings.Managers.Skills;
 
 namespace BannerKings
 {
@@ -81,6 +82,9 @@ namespace BannerKings
                 campaignStarter.AddModel(new BKPartyWageModel());
                 campaignStarter.AddModel(new BKSettlementValueModel());
                 campaignStarter.AddModel(new BKNotablePowerModel());
+
+                BKAttributes.Instance.Initialize();
+                BKSkills.Instance.Initialize();
             }
         }
 

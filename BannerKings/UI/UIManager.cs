@@ -1,5 +1,6 @@
 ﻿using BannerKings.Managers.Helpers;
 using BannerKings.Managers.Populations.Villages;
+using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
 using BannerKings.Populations;
 using BannerKings.UI.Windows;
@@ -11,12 +12,14 @@ using System.Linq;
 using System.Reflection;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
+using TaleWorlds.CampaignSystem.ViewModelCollection.CharacterCreation;
 using TaleWorlds.CampaignSystem.ViewModelCollection.GameMenu;
 using TaleWorlds.CampaignSystem.ViewModelCollection.GameMenu.TownManagement;
 using TaleWorlds.CampaignSystem.ViewModelCollection.KingdomManagement.KingdomDecision;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
+using TaleWorlds.MountAndBlade.GauntletUI.Widgets;
 
 namespace BannerKings.UI
 {
@@ -103,6 +106,26 @@ namespace BannerKings.UI
             }
         }
 
+
+        [HarmonyPatch(typeof(SkillIconVisualWidget), "SkillId", MethodType.Setter)]
+        class SkillIconOnLateUpdatePatch
+        {
+            static bool Prefix(SkillIconVisualWidget __instance, string value)
+            {
+                string text = value;
+                if (value == "lordship")
+                    text = "leadership";
+                else if (value == "scholarship")
+                    text = "Steward";
+                else if (value == "theology")
+                    text = "charm";
+
+                FieldInfo skillId = __instance.GetType().GetField("_skillId", BindingFlags.Instance | BindingFlags.NonPublic);
+                skillId.SetValue(__instance, text);
+                return false;
+
+            }
+        }
 
         [HarmonyPatch(typeof(KingdomPoliciesVM), "RefreshPolicyList")]
         class RefreshPolicyListPatch

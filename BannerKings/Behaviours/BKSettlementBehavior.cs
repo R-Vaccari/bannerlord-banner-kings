@@ -322,8 +322,7 @@ namespace BannerKings.Behaviors
             if (BannerKingsConfig.Instance.PolicyManager == null || BannerKingsConfig.Instance.TitleManager == null)
                 BannerKingsConfig.Instance.InitManagers();
 
-            BKAttributes.Instance.Initialize();
-            BKSkills.Instance.Initialize();
+          
 
             BuildingType retinueType = MBObjectManager.Instance.GetObjectTypeList<BuildingType>().FirstOrDefault(x => x == Utils.Helpers._buildingCastleRetinue);
             if (retinueType == null)

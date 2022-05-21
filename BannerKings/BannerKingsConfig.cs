@@ -6,6 +6,7 @@ using BannerKings.Managers.Institutions.Religions.Doctrines;
 using BannerKings.Managers.Institutions.Religions.Faiths;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Populations.Villages;
+using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
 using BannerKings.Models;
 using BannerKings.Models.BKModels;
@@ -35,6 +36,7 @@ namespace BannerKings
             DefaultDivinities.Instance.Initialize();
             DefaultFaiths.Instance.Initialize();
             DefaultDoctrines.Instance.Initialize();
+            
 
             Models.Add(new BKCultureAssimilationModel());
             Models.Add(new BKCultureAcceptanceModel());

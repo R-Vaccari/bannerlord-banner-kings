@@ -8,9 +8,9 @@ namespace BannerKings.Managers.Skills
         public void Initialize()
         {
 
-            wisdom = Game.Current.ObjectManager.RegisterPresumedObject<CharacterAttribute>(new CharacterAttribute("wisdom"));
+            wisdom = Game.Current.ObjectManager.RegisterPresumedObject(new CharacterAttribute("wisdom"));
             wisdom.Initialize(new TextObject("{=!}Wisdom", null), 
-                new TextObject("{=!}Wisdom represents your world knowledge an competence to deal with skills that require deep learning.", null),
+                new TextObject("{=!}Wisdom represents your world knowledge and competence to deal with skills that require deep learning.", null),
                 new TextObject("{=!}WIS", null));
         }
 
