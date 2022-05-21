@@ -29,41 +29,13 @@ namespace BannerKings
         public bool wipeData = false;
         public MBReadOnlyList<BuildingType> VillageBuildings { get; set; }
 
-        public void InitManagers()
+        private void Initialize()
         {
             DefaultVillageBuildings.Instance.Init();
             DefaultDivinities.Instance.Initialize();
             DefaultFaiths.Instance.Initialize();
             DefaultDoctrines.Instance.Initialize();
-            PopulationManager = new PopulationManager(new Dictionary<Settlement, PopulationData>(), new List<MobileParty>());
-            PopulationManager.ReInitBuildings();
-            PolicyManager = new PolicyManager(new Dictionary<Settlement, List<BannerKingsDecision>>(), new Dictionary<Settlement,
-            List<BannerKingsPolicy>>());
-            TitleManager = new TitleManager(new Dictionary<FeudalTitle, Hero>(), new Dictionary<Hero, List<FeudalTitle>>(), new Dictionary<Kingdom, FeudalTitle>());
-            CourtManager = new CourtManager(new Dictionary<Clan, CouncilData>());
-            ReligionsManager = new ReligionsManager();
-            InitModels();
-        }
 
-        public void InitManagers(PopulationManager populationManager, PolicyManager policyManager, TitleManager titleManager, CourtManager court,
-            ReligionsManager religions)
-        {
-            DefaultVillageBuildings.Instance.Init();
-            DefaultDivinities.Instance.Initialize();
-            DefaultFaiths.Instance.Initialize();
-            DefaultDoctrines.Instance.Initialize();
-            PopulationManager = populationManager;
-            PopulationManager.ReInitBuildings();
-            PolicyManager = policyManager;
-            TitleManager = titleManager;
-            titleManager.RefreshDeJure();
-            CourtManager = court;
-            ReligionsManager = religions != null ? religions : new ReligionsManager();
-            InitModels();
-        }
-
-        private void InitModels()
-        {
             Models.Add(new BKCultureAssimilationModel());
             Models.Add(new BKCultureAcceptanceModel());
             Models.Add(new BKAdministrativeModel());
@@ -75,6 +47,31 @@ namespace BannerKings
             Models.Add(new BKCaravanAttractionModel());
             Models.Add(new BKPietyModel());
             Models.Add(new BKCouncilModel());
+        }
+
+        public void InitManagers()
+        {
+            Initialize();
+            PopulationManager = new PopulationManager(new Dictionary<Settlement, PopulationData>(), new List<MobileParty>());
+            PopulationManager.ReInitBuildings();
+            PolicyManager = new PolicyManager(new Dictionary<Settlement, List<BannerKingsDecision>>(), new Dictionary<Settlement,
+            List<BannerKingsPolicy>>());
+            TitleManager = new TitleManager(new Dictionary<FeudalTitle, Hero>(), new Dictionary<Hero, List<FeudalTitle>>(), new Dictionary<Kingdom, FeudalTitle>());
+            CourtManager = new CourtManager(new Dictionary<Clan, CouncilData>());
+            ReligionsManager = new ReligionsManager();
+        }
+
+        public void InitManagers(PopulationManager populationManager, PolicyManager policyManager, TitleManager titleManager, CourtManager court,
+            ReligionsManager religions)
+        {
+            Initialize();
+            PopulationManager = populationManager;
+            PopulationManager.ReInitBuildings();
+            PolicyManager = policyManager;
+            TitleManager = titleManager;
+            titleManager.RefreshDeJure();
+            CourtManager = court;
+            ReligionsManager = religions != null ? religions : new ReligionsManager();
         }
 
         public static BannerKingsConfig Instance => ConfigHolder.CONFIG;

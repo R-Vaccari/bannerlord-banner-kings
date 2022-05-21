@@ -21,7 +21,7 @@ namespace BannerKings.Managers.Institutions.Religions.Doctrines
         {
             druidism = new Doctrine("druidism", new TextObject("{=!}Druidism"), 
                 new TextObject("{=!}Clergy is considered part of the Druid caste, who represent the spiritual power, but are also involved in political, material affairs. In a way, druids are a form of lesser nobility and cannot be excluded from political affairs."), 
-                new TextObject("{=!}Druids will act as notables in settlements\nNo religious council advisor causes daily influence loss"),
+                new TextObject("{=!}Preachers provide noble troops\nNo religious council advisor causes daily influence loss"),
                 new List<string>());
 
             animism = new Doctrine("animism", new TextObject("{=!}Animism"), 

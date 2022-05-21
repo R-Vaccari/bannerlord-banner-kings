@@ -23,6 +23,7 @@ using static BannerKings.Managers.Policies.BKTaxPolicy;
 using static BannerKings.Managers.Policies.BKWorkforcePolicy;
 using BannerKings.Managers.Court;
 using BannerKings.Managers.Institutions.Religions;
+using BannerKings.Managers.Skills;
 
 namespace BannerKings.Behaviors
 {
@@ -320,6 +321,9 @@ namespace BannerKings.Behaviors
 
             if (BannerKingsConfig.Instance.PolicyManager == null || BannerKingsConfig.Instance.TitleManager == null)
                 BannerKingsConfig.Instance.InitManagers();
+
+            BKAttributes.Instance.Initialize();
+            BKSkills.Instance.Initialize();
 
             BuildingType retinueType = MBObjectManager.Instance.GetObjectTypeList<BuildingType>().FirstOrDefault(x => x == Utils.Helpers._buildingCastleRetinue);
             if (retinueType == null)

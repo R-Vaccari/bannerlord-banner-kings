@@ -14,11 +14,11 @@ namespace BannerKings.Managers
     public class ReligionsManager
     {
         [SaveableProperty(1)]
-        private Dictionary<Religion, Dictionary<Hero, float>> Religions { get; set; }
+        private Dictionary<Religion, Dictionary<Hero, FaithfulData>> Religions { get; set; }
 
         public ReligionsManager()
         {
-            this.Religions = new Dictionary<Religion, Dictionary<Hero, float>>();
+            this.Religions = new Dictionary<Religion, Dictionary<Hero, FaithfulData>>();
             InitializeReligions();
         }
 
@@ -29,7 +29,7 @@ namespace BannerKings.Managers
             CultureObject imperial = Utils.Helpers.GetCulture("empire");
             CultureObject battania = Utils.Helpers.GetCulture("battania");
 
-            Religion aseraiReligion = new Religion(Settlement.All.First(x => x.StringId == "town_A1"), 
+            Religion aseraiReligion = new Religion(null, 
                 DefaultFaiths.Instance.AseraCode, new KinshipLeadership(),
                 new List<CultureObject> { aserai, khuzait, imperial },
                 new List<string>());
@@ -44,9 +44,9 @@ namespace BannerKings.Managers
                new List<CultureObject> { imperial },
                new List<string>());
 
-            Religions.Add(battaniaReligion, new Dictionary<Hero, float>());
-            Religions.Add(aseraiReligion, new Dictionary<Hero, float>());
-            Religions.Add(darusosianReligion, new Dictionary<Hero, float>());
+            Religions.Add(battaniaReligion, new Dictionary<Hero, FaithfulData>());
+            Religions.Add(aseraiReligion, new Dictionary<Hero, FaithfulData>());
+            Religions.Add(darusosianReligion, new Dictionary<Hero, FaithfulData>());
 
             InitializeFaithfulHeroes();
         }
@@ -73,27 +73,8 @@ namespace BannerKings.Managers
                             continue;
                     }
                     
-                     Religions[rel].Add(hero, 50f);
+                    Religions[rel].Add(hero, new FaithfulData(100f));
                 }
-                    
-
-            List<InquiryElement> elements = new List<InquiryElement>();
-            foreach (Religion religion in Religions.Keys.ToList())
-                elements.Add(new InquiryElement(religion, 
-                    new TextObject("{=!}{RELIGION} - {PIETY} piety")
-                    .SetTextVariable("RELIGION", religion.Faith.GetFaithName())
-                    .SetTextVariable("PIETY", GetPiety(religion))
-                    .ToString(), 
-                    null, true, religion.Faith.GetFaithDescription().ToString()));
-
-            InformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(new TextObject("{=!}Your faith").ToString(), 
-                new TextObject("{=!}You look up to the skies and realize there must be something more. You feel there must be a higher purpose for yourself, and people expect you to defend a certain faith. Upholding your cultural forefathers' faith would be considered most pious. Similarly, following a faith that accepts your culture would be pious, however not as much as your true ancestry. Alternatively, having a completely different faith is possible, though a less walked path. What is your faith?").ToString(),
-                elements, false, 1,
-                GameTexts.FindText("str_done").ToString(), string.Empty, delegate (List<InquiryElement> element)
-                {
-                    Religion religion = (Religion)element[0].Identifier;
-                    Religions[religion].Add(Hero.MainHero, GetPiety(religion));
-                }, null)); 
         }
 
         private int GetPiety(Religion religion)
@@ -120,6 +101,24 @@ namespace BannerKings.Managers
                 }
                 rel.PostInitialize(faith);
             }
+
+            List<InquiryElement> elements = new List<InquiryElement>();
+            foreach (Religion religion in Religions.Keys.ToList())
+                elements.Add(new InquiryElement(religion,
+                    new TextObject("{=!}{RELIGION} - {PIETY} piety")
+                    .SetTextVariable("RELIGION", religion.Faith.GetFaithName())
+                    .SetTextVariable("PIETY", GetPiety(religion))
+                    .ToString(),
+                    null, true, religion.Faith.GetFaithDescription().ToString()));
+
+            InformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(new TextObject("{=!}Your faith").ToString(),
+                new TextObject("{=!}You look up to the skies and realize there must be something more. You feel there must be a higher purpose for yourself, and people expect you to defend a certain faith. Upholding your cultural forefathers' faith would be considered most pious. Similarly, following a faith that accepts your culture would be pious, however not as much as your true ancestry. Alternatively, having a completely different faith is possible, though a less walked path. What is your faith?").ToString(),
+                elements, true, 1,
+                GameTexts.FindText("str_done").ToString(), string.Empty, delegate (List<InquiryElement> element)
+                {
+                    Religion religion = (Religion)element[0].Identifier;
+                    Religions[religion].Add(Hero.MainHero, new FaithfulData(GetPiety(religion)));
+                }, null));
         }
 
         public List<Religion> GetReligions()
@@ -164,7 +163,7 @@ namespace BannerKings.Managers
         {
             if (rel == null || hero == null) return;
             if (Religions[rel].ContainsKey(hero))
-                Religions[rel][hero] += piety;
+                Religions[rel][hero].AddPiety(piety);
         }
 
         public float GetPiety(Religion rel, Hero hero)
@@ -172,7 +171,7 @@ namespace BannerKings.Managers
             if (rel == null || hero == null) return 0f;
             float piety = 0f;
             if (Religions[rel].ContainsKey(hero))
-                piety = Religions[rel][hero];
+                piety = Religions[rel][hero].Piety;
 
             return MBMath.ClampFloat(piety, -1000f, 1000f);
         }

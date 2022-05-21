@@ -124,6 +124,7 @@ namespace BannerKings
             AddClassDefinition(typeof(AutocephalousLeadership), 83);
             AddClassDefinition(typeof(KinshipLeadership), 84);
             AddClassDefinition(typeof(AutonomousLeadership), 85);
+            AddClassDefinition(typeof(FaithfulData), 86);
 
         }
 
@@ -147,8 +148,8 @@ namespace BannerKings
             base.ConstructContainerDefinition(typeof(Dictionary<Hero, ClaimType>));
             base.ConstructContainerDefinition(typeof(Dictionary<FeudalTitle, float>));
             base.ConstructContainerDefinition(typeof(Dictionary<Settlement, List<Clan>>));
-            ConstructContainerDefinition(typeof(Dictionary<Hero, float>));
-            ConstructContainerDefinition(typeof(Dictionary<Religion, Dictionary<Hero, float>>)); 
+            ConstructContainerDefinition(typeof(Dictionary<Hero, FaithfulData>));
+            ConstructContainerDefinition(typeof(Dictionary<Religion, Dictionary<Hero, FaithfulData>>)); 
             ConstructContainerDefinition(typeof(Dictionary<Settlement, Clergyman>));
             ConstructContainerDefinition(typeof(List<Faith>));
             ConstructContainerDefinition(typeof(List<Divinity>)); 

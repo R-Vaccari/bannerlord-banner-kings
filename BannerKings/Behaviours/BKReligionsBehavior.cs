@@ -18,6 +18,7 @@ namespace BannerKings.Behaviours
             CampaignEvents.DailyTickEvent.AddNonSerializedListener(this, new Action(DailyTick));
             CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, new Action<CampaignGameStarter>(OnSessionLaunched));
             CampaignEvents.SettlementEntered.AddNonSerializedListener(this, new Action<MobileParty, Settlement, Hero>(OnSettlementEntered));
+            CampaignEvents.OnGameLoadedEvent.AddNonSerializedListener(this, new Action<CampaignGameStarter>(OnGameLoaded));
             //CampaignEvents.DailyTickSettlementEvent.AddNonSerializedListener(this, new Action<Settlement>(DailySettlementTick));
         }
 
@@ -25,11 +26,14 @@ namespace BannerKings.Behaviours
         {
         }
 
+        private void OnGameLoaded(CampaignGameStarter starter)
+        {
+            BannerKingsConfig.Instance.ReligionsManager.PostInitialize();
+        }
 
         private void OnSessionLaunched(CampaignGameStarter starter)
         {
             AddDialogue(starter);
-            BannerKingsConfig.Instance.ReligionsManager.PostInitialize();
         }
 
         private void DailyTick()
