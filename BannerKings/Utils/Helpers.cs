@@ -521,7 +521,7 @@ namespace BannerKings.Utils
         public static ConsumptionType GetTradeGoodConsumptionType(ItemCategory item)
         {
             string id = item.StringId;
-            if (id == "silver" || id == "jewelry" || id == "spice" || id == "velvet" || id == "fur")
+            if (id == "silver" || id == "jewelry" || id == "spice" || id == "velvet")
                 return ConsumptionType.Luxury;
             if (id == "wool" || id == "pottery" || id == "cotton" || id == "flax" || id == "linen" || id == "leather" || id == "tools")
                 return ConsumptionType.Industrial;

@@ -772,7 +772,7 @@ namespace BannerKings.Populations
         {
             get
             {
-                float serfs = data.GetTypeCount(PopType.Serfs) * 0.5f;
+                float serfs = data.GetTypeCount(PopType.Serfs) * (data.Settlement.IsVillage ? 0.85f : 0.5f);
                 float slaves = data.GetTypeCount(PopType.Slaves);
 
                 Town town = data.Settlement.Town;
@@ -805,10 +805,28 @@ namespace BannerKings.Populations
             get
             {
                 float available = AvailableWorkForce;
-                float farms = farmland / 4f;
-                float pasture = this.pasture / 8f;
+                float farms = farmland / GetRequiredLabor("farmland");
+                float pasture = this.pasture / GetRequiredLabor("pasture");
                 return available / (farms + pasture);
             }
+        }
+
+        public float GetRequiredLabor(string type)
+        {
+            if (type == "farmland")
+                return 4f;
+            else if (type == "pasture")
+                return 8f;
+            else return 10f;
+        }
+
+        public float GetAcreOutput(string type)
+        {
+            if (type == "farmland")
+                return 0.022f;
+            else if (type == "pasture")
+                return 0.008f;
+            else return 0.0018f;
         }
 
         public float Acreage => farmland + pasture + woodland;
