@@ -233,6 +233,33 @@ namespace BannerKings.Behaviors
             UpdateSettlementPops(settlement);
             BannerKingsConfig.Instance.PolicyManager.InitializeSettlement(settlement);
 
+
+            if (settlement.Town != null)
+            {
+                Town town = settlement.Town;
+                if (town.FoodStocks >= town.FoodStocksUpperLimit() - 10)
+                {
+                    
+                    LandData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement).LandData;
+                    List<ItemObject> items = new List<ItemObject>();
+                    float excess = town.FoodChange;
+                    float farmProportion = data.Farmland / data.Acreage;
+                    
+                    items.Add(Game.Current.ObjectManager.GetObjectTypeList<ItemObject>().First(x => x.StringId == "grain"));
+                    items.Add(Game.Current.ObjectManager.GetObjectTypeList<ItemObject>().First(x => x.StringId == "meat"));
+                    ItemObject grain = ;
+                    int grainPrice = town.GetItemPrice(grain);
+                    int grainCount = (int)(excess * farmProportion);
+                    int grainFinalPrice = (int)((float)grainPrice * (float)grainCount);
+
+                    town.Owner.ItemRoster.AddToCounts(grain, grainCount);
+                    town.ChangeGold(-grainFinalPrice);
+                    
+
+                }
+            }
+
+
             if (settlement.IsCastle)
             {
                 //SetNotables(settlement);

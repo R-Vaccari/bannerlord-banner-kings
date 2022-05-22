@@ -107,9 +107,25 @@ namespace BannerKings.Managers
             return productions;
         }
 
-        public void ApplyProductionBuildingEffect(ref ExplainedNumber explainedNumber, BuildingType type, VillageData data)
+        public void ApplyProductionBuildingEffect(ref ExplainedNumber explainedNumber, ItemObject item, VillageData data)
         {
-            int level = data.GetBuildingLevel(type);
+            BuildingType buildingType = null;
+            if (item.IsAnimal)
+                buildingType = DefaultVillageBuildings.Instance.AnimalHousing;
+            else if (item.ItemCategory == DefaultItemCategories.Clay || item.ItemCategory == DefaultItemCategories.Iron || item.ItemCategory == DefaultItemCategories.Silver
+                    || item.ItemCategory == DefaultItemCategories.Salt)
+                buildingType = DefaultVillageBuildings.Instance.Mining;
+            else if (item.ItemCategory == DefaultItemCategories.Wood)
+                buildingType = DefaultVillageBuildings.Instance.Sawmill;
+
+            else if (item.ItemCategory == DefaultItemCategories.Fish)
+                buildingType = DefaultVillageBuildings.Instance.FishFarm;
+
+            else if (item.ItemCategory == DefaultItemCategories.Grain || item.ItemCategory == DefaultItemCategories.DateFruit ||
+                item.ItemCategory == DefaultItemCategories.Grape || item.ItemCategory == DefaultItemCategories.Olives || item.ItemCategory == DefaultItemCategories.Flax)
+                buildingType = DefaultVillageBuildings.Instance.Farming;
+
+            int level = data.GetBuildingLevel(buildingType);
             if (level > 0) explainedNumber.AddFactor(level * 0.05f);
         }
 
