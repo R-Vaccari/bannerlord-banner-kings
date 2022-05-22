@@ -297,6 +297,13 @@ namespace BannerKings.Managers
             action.Title.AddClaim(currentOwner, ClaimType.Previous_Owner, true);
             ExecuteOwnershipChange(currentOwner, action.ActionTaker, action.Title, true);
 
+            if (action.Gold > 0)
+                action.ActionTaker.ChangeHeroGold((int)-action.Gold);
+            if (action.Influence > 0)
+                action.ActionTaker.Clan.Influence -= action.Influence;
+            if (action.Renown > 0)
+                action.ActionTaker.Clan.Renown -= action.Renown;
+
             action.ActionTaker.AddSkillXp(BKSkills.Instance.Lordship, 200f / ((float)action.Title.type * 2f));
         }
 

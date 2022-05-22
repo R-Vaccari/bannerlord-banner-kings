@@ -28,7 +28,7 @@ namespace BannerKings.Managers
             CultureObject khuzait = Utils.Helpers.GetCulture("khuzait");
             CultureObject imperial = Utils.Helpers.GetCulture("empire");
             CultureObject battania = Utils.Helpers.GetCulture("battania");
-
+            List<Religion> rels = new List<Religion>();
             Religion aseraiReligion = new Religion(null, 
                 DefaultFaiths.Instance.AseraCode, new KinshipLeadership(),
                 new List<CultureObject> { aserai, khuzait, imperial },
@@ -43,38 +43,41 @@ namespace BannerKings.Managers
                DefaultFaiths.Instance.Darusosian, new HierocraticLeadership(),
                new List<CultureObject> { imperial },
                new List<string>());
+            rels.Add(aseraiReligion);
+            rels.Add(battaniaReligion);
+            rels.Add(darusosianReligion);
 
-            Religions.Add(battaniaReligion, new Dictionary<Hero, FaithfulData>());
-            Religions.Add(aseraiReligion, new Dictionary<Hero, FaithfulData>());
-            Religions.Add(darusosianReligion, new Dictionary<Hero, FaithfulData>());
-
-            InitializeFaithfulHeroes();
+            foreach (Religion rel in rels)
+                if (!Religions.ContainsKey(rel))
+                {
+                    Religions.Add(rel, new Dictionary<Hero, FaithfulData>());
+                    InitializeFaithfulHeroes(rel);
+                }
         }
 
-        public void InitializeFaithfulHeroes()
+        public void InitializeFaithfulHeroes(Religion rel)
         {
-            foreach (Religion rel in Religions.Keys.ToList())
-                foreach (Hero hero in Hero.AllAliveHeroes)
+            foreach (Hero hero in Hero.AllAliveHeroes)
+            {
+                if (hero == Hero.MainHero || hero.IsDisabled || hero.IsChild || hero.Culture != rel.MainCulture) continue;
+
+                string id = rel.Faith.GetId();
+                if (id == "darusosian")
                 {
-                    if (hero == Hero.MainHero || hero.IsDisabled || hero.IsChild || hero.Culture != rel.MainCulture) continue;
+                    Kingdom kingdom = null;
+                    if (hero.Clan != null)
+                        kingdom = hero.Clan.Kingdom;
+                    else if (hero.IsNotable && hero.CurrentSettlement != null && hero.CurrentSettlement.OwnerClan != null)
+                        kingdom = hero.CurrentSettlement.OwnerClan.Kingdom;
+                    else if (hero.IsWanderer && hero.BornSettlement != null && hero.BornSettlement.OwnerClan != null)
+                        kingdom = hero.BornSettlement.OwnerClan.Kingdom;
 
-                    string id = rel.Faith.GetId();
-                    if (id == "darusosian")
-                    {
-                        Kingdom kingdom = null;
-                        if (hero.Clan != null)
-                            kingdom = hero.Clan.Kingdom;
-                        else if (hero.IsNotable && hero.CurrentSettlement != null && hero.CurrentSettlement.OwnerClan != null)
-                            kingdom = hero.CurrentSettlement.OwnerClan.Kingdom;
-                        else if (hero.IsWanderer && hero.BornSettlement != null && hero.BornSettlement.OwnerClan != null)
-                            kingdom = hero.BornSettlement.OwnerClan.Kingdom;
-
-                        if (kingdom == null || (id == "darusosian" && kingdom.StringId != "empire_s"))
-                            continue;
-                    }
-                    
-                    Religions[rel].Add(hero, new FaithfulData(100f));
+                    if (kingdom == null || (id == "darusosian" && kingdom.StringId != "empire_s"))
+                        continue;
                 }
+                    
+                Religions[rel].Add(hero, new FaithfulData(100f));
+            }
         }
 
         private int GetPiety(Religion religion)

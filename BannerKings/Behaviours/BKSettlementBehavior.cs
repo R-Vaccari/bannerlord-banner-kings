@@ -23,7 +23,6 @@ using static BannerKings.Managers.Policies.BKTaxPolicy;
 using static BannerKings.Managers.Policies.BKWorkforcePolicy;
 using BannerKings.Managers.Court;
 using BannerKings.Managers.Institutions.Religions;
-using BannerKings.Managers.Skills;
 
 namespace BannerKings.Behaviors
 {

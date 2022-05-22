@@ -70,6 +70,7 @@ namespace BannerKings
             titleManager.RefreshDeJure();
             CourtManager = court;
             ReligionsManager = religions != null ? religions : new ReligionsManager();
+            ReligionsManager.InitializeReligions();
         }
 
         public static BannerKingsConfig Instance => ConfigHolder.CONFIG;
