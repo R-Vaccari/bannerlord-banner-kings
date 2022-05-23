@@ -89,20 +89,16 @@ namespace BannerKings.Managers
             List<(ItemObject, float)> productions = new List<(ItemObject, float)>(villageData.Village.VillageType.Productions);
 
             float tannery = villageData.GetBuildingLevel(DefaultVillageBuildings.Instance.Tannery);
-            if (tannery > 0)
-            {
-                /*ItemObject randomItem = this.GetRandomItem(production.Outputs[i].Item1, town);
-                if (randomItem != null)
-                {
-                    list.Add(new ValueTuple<ItemObject, int>(randomItem, item));
-                    num3 += town.GetItemPrice(randomItem, null, true) * item;
-                } WorkshopCampaignBehavior for reference how to add arms to production    */
-                productions.Add(new ValueTuple<ItemObject, float>(Game.Current.ObjectManager.GetObject<ItemObject>("leather"), tannery * 0.5f));
-            }
+            if (tannery > 0) productions.Add(new ValueTuple<ItemObject, float>(Game.Current.ObjectManager.GetObject<ItemObject>("leather"), tannery * 0.5f));
 
             float smith = villageData.GetBuildingLevel(DefaultVillageBuildings.Instance.Blacksmith);
-            if (smith > 0)
-                productions.Add(new ValueTuple<ItemObject, float>(Game.Current.ObjectManager.GetObject<ItemObject>("tools"), smith * 0.5f));
+            if (smith > 0) productions.Add(new ValueTuple<ItemObject, float>(Game.Current.ObjectManager.GetObject<ItemObject>("tools"), smith * 0.5f));
+
+            if (PopulationManager.IsVillageProducingFood(villageData.Village))
+            {
+                productions.Add(new ValueTuple<ItemObject, float>(Game.Current.ObjectManager.GetObject<ItemObject>("chicken"), 5f));
+                productions.Add(new ValueTuple<ItemObject, float>(Game.Current.ObjectManager.GetObject<ItemObject>("goose"), 2f));
+            }
 
             return productions;
         }

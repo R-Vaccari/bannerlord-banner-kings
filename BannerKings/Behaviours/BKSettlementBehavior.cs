@@ -237,25 +237,53 @@ namespace BannerKings.Behaviors
             if (settlement.Town != null)
             {
                 Town town = settlement.Town;
+                LandData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement).LandData;
+
+                if (data.WorkforceSaturation > 1f)
+                {
+                    float workers = data.AvailableWorkForce * (data.WorkforceSaturation - 1f);
+                    HashSet<ItemObject> items = new HashSet<ItemObject>();
+                    if (town.Villages.Count > 0)
+                        foreach (Village vil in town.Villages)
+                        {
+                            VillageData vilData = BannerKingsConfig.Instance.PopulationManager.GetPopData(vil.Settlement).VillageData;
+                            foreach ((ItemObject, float) tuple in BannerKingsConfig.Instance.PopulationManager.GetProductions(vilData))
+                                if (tuple.Item1.IsTradeGood && !tuple.Item1.IsFood) items.Add(tuple.Item1);
+                        }
+
+                    if (items.Count > 0)
+                    {
+                        ItemObject random = items.GetRandomElementInefficiently();
+                        int itemCount = (int)(workers * 0.01f);
+                        BuyOutput(town, random, itemCount, town.GetItemPrice(random));
+                    }
+                }
+
+
                 if (town.FoodStocks >= town.FoodStocksUpperLimit() - 10)
                 {
-                    
-                    LandData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement).LandData;
-                    List<ItemObject> items = new List<ItemObject>();
-                    float excess = town.FoodChange;
-                    float farmProportion = data.Farmland / data.Acreage;
-                    
-                    items.Add(Game.Current.ObjectManager.GetObjectTypeList<ItemObject>().First(x => x.StringId == "grain"));
-                    items.Add(Game.Current.ObjectManager.GetObjectTypeList<ItemObject>().First(x => x.StringId == "meat"));
-                    ItemObject grain = ;
-                    int grainPrice = town.GetItemPrice(grain);
-                    int grainCount = (int)(excess * farmProportion);
-                    int grainFinalPrice = (int)((float)grainPrice * (float)grainCount);
+                    HashSet<ItemObject> items = new HashSet<ItemObject>();
+                    if (town.Villages.Count > 0)
+                        foreach (Village vil in town.Villages)
+                        {
+                            VillageData vilData = BannerKingsConfig.Instance.PopulationManager.GetPopData(vil.Settlement).VillageData;
+                            foreach ((ItemObject, float) tuple in BannerKingsConfig.Instance.PopulationManager.GetProductions(vilData))
+                                items.Add(tuple.Item1);
+                        }
+                    float excess = town.FoodChange - 10;
+                    //float pasturePorportion = data.Pastureland / data.Acreage;
 
-                    town.Owner.ItemRoster.AddToCounts(grain, grainCount);
-                    town.ChangeGold(-grainFinalPrice);
-                    
-
+                    float farmFood = MBMath.ClampFloat(data.Farmland * data.GetAcreOutput("farmland"), 0f, excess);
+                    if (town.IsCastle) farmFood *= 0.1f;
+                    while (farmFood > 1f)
+                        foreach (ItemObject item in items)
+                        {
+                            if (!item.IsFood) continue;
+                            int count = farmFood > 10f ? (int)MBMath.ClampFloat(farmFood * MBRandom.RandomFloat, 0f, farmFood) : (int)farmFood;
+                            if (count == 0) break;
+                            BuyOutput(town, item, count, town.GetItemPrice(item));
+                            farmFood -= count;
+                        }
                 }
             }
 
@@ -308,6 +336,26 @@ namespace BannerKings.Behaviors
                     }
                 }
             }    
+        }
+
+        private void BuyOutput(Town town, ItemObject item, int count, int price)
+        {
+            int itemFinalPrice = (int)((float)price * (float)count);
+            if (town.IsTown)
+            {
+                town.Owner.ItemRoster.AddToCounts(item, count);
+                town.ChangeGold(-itemFinalPrice);
+            } else
+            {
+                town.Settlement.Stash.AddToCounts(item, count);
+                town.OwnerClan.Leader.ChangeHeroGold(-itemFinalPrice);
+                if (town.OwnerClan.Leader == Hero.MainHero)
+                    InformationManager.DisplayMessage(new InformationMessage(new TextObject("You have been charged {GOLD} for the excess production of {ITEM}, now in your stash at {CASTLE}.")
+                        .SetTextVariable("GOLD", itemFinalPrice)
+                        .SetTextVariable("ITEM", item.Name)
+                        .SetTextVariable("CASTLE", town.Name)
+                        .ToString()));
+            }
         }
 
         internal static void ConsumeStash(Settlement settlement)
