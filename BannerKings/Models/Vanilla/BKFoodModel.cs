@@ -151,14 +151,20 @@ namespace BannerKings.Models
 				if (fertility != 0f)
 				{
 					float toDeduce = result.ResultNumber * fertility;
-					result.Add(-toDeduce, new TextObject("{=!}Fertility"));
+					result.Add(toDeduce, new TextObject("{=!}Fertility"));
 				}
 				float saturation = MBMath.ClampFloat(landData.WorkforceSaturation, 0f, 1f) - 1f;
 				if (saturation != 0f)
 				{
 					float toDeduce = result.ResultNumber * saturation;
-					result.Add(-toDeduce, new TextObject("{=!}Workforce Saturation"));
+					result.Add(toDeduce, new TextObject("{=!}Workforce Saturation"));
 				}
+
+				float season = CampaignTime.Now.GetSeasonOfYearf;
+				if (season == 3f)
+					result.AddFactor(-0.2f, GameTexts.FindText("str_date_format_" + season));
+				else if (season == 1f)
+					result.AddFactor(0.05f, GameTexts.FindText("str_date_format_" + season));
 
 				Building b = null;
 				foreach (Building building in town.Buildings)
