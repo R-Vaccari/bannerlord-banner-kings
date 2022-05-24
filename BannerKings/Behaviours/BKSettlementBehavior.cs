@@ -78,6 +78,12 @@ namespace BannerKings.Behaviors
             }
         }
 
+        private void TickSettlementData(Settlement settlement)
+        {
+            UpdateSettlementPops(settlement);
+            BannerKingsConfig.Instance.PolicyManager.InitializeSettlement(settlement);
+        }
+
         private void OnSiegeAftermath(MobileParty attackerParty, Settlement settlement, SiegeAftermathCampaignBehavior.SiegeAftermath aftermathType, Clan previousSettlementOwner, Dictionary<MobileParty, float> partyContributions)
         {
             if (aftermathType == SiegeAftermathCampaignBehavior.SiegeAftermath.ShowMercy || settlement == null || settlement.Town == null ||
@@ -219,25 +225,31 @@ namespace BannerKings.Behaviors
             BKTaxPolicy tax = ((BKTaxPolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(settlement, "tax"));
             TaxType taxType = tax.Policy;
             if ((value == 1 && taxType != TaxType.High) || value == -1 && taxType != TaxType.Low)
-            {
-                BannerKingsConfig.Instance.PolicyManager.UpdateSettlementPolicy(settlement, new BKTaxPolicy((TaxType)taxType + value, settlement));
-            }
+                BannerKingsConfig.Instance.PolicyManager.UpdateSettlementPolicy(settlement, new BKTaxPolicy(taxType + value, settlement));
+            
         }
 
         private void DailySettlementTick(Settlement settlement)
         {
             if (settlement == null || settlement.StringId.Contains("tutorial") || settlement.StringId.Contains("Ruin")) return;
             
-            if (BannerKingsConfig.Instance.PopulationManager == null)
-                BannerKingsConfig.Instance.InitManagers();
+            if (BannerKingsConfig.Instance.PopulationManager == null) BannerKingsConfig.Instance.InitManagers();
 
-            UpdateSettlementPops(settlement);
-            BannerKingsConfig.Instance.PolicyManager.InitializeSettlement(settlement);
-
+            TickSettlementData(settlement);
 
             if (settlement.Town != null)
             {
                 Town town = settlement.Town;
+                BKWorkshopModel wkModel = (BKWorkshopModel)Campaign.Current.Models.WorkshopModel;
+                foreach (Workshop wk in town.Workshops)
+                    if (wk.IsRunning && wk.Owner.IsNotable)
+                    {
+                        int gold = Campaign.Current.Models.ClanFinanceModel.CalculateOwnerIncomeFromWorkshop(wk);
+                        gold -= (int)(wkModel.CalculateWorkshopTax(wk.Settlement).ResultNumber * gold);
+                        wk.Owner.ChangeHeroGold(gold);
+                        wk.ChangeGold(-gold);
+                    }
+
                 LandData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement).LandData;
 
                 if (data.WorkforceSaturation > 1f)

@@ -325,6 +325,33 @@ namespace BannerKings
         namespace Economy
         {
 
+            [HarmonyPatch(typeof(UrbanCharactersCampaignBehavior), "BalanceGoldAndPowerOfNotable")]
+            class BalanceGoldAndPowerOfNotablePatch
+            {
+                static bool Prefix(Hero notable)
+                {
+                    if (notable.Gold > 10500)
+                    {
+                        int num = (notable.Gold - 10000) / 500;
+                        GiveGoldAction.ApplyBetweenCharacters(notable, null, num * 500, true);
+                        notable.AddPower((float)num);
+                        return false;
+                    }
+                    return true;
+                }
+            }
+
+            [HarmonyPatch(typeof(Workshop), "Expense", MethodType.Getter)]
+            class WorkshopExpensePatch
+            {
+                static bool Prefix(Workshop __instance, ref int __result)
+                {
+                    __result = (int)(__instance.Settlement.Prosperity * 0.01f +
+                    Campaign.Current.Models.WorkshopModel.GetDailyExpense(__instance.Level));
+                    return false;
+                }
+            }
+
             [HarmonyPatch(typeof(HeroHelper), "StartRecruitingMoneyLimit")]
             class StartRecruitingMoneyLimitPatch
             {
@@ -368,8 +395,14 @@ namespace BannerKings
 
                     if (BannerKingsConfig.Instance.TitleManager != null)
                     {
-                        float income = Campaign.Current.Models.ClanFinanceModel.CalculateClanIncome(clan).ResultNumber * 0.5f +
-                        clan.Gold * 0.05f;
+                        bool war = false;
+                        if (clan.Kingdom != null)
+                            war = FactionManager.GetEnemyKingdoms(clan.Kingdom).Count() > 0;
+                        float income = Campaign.Current.Models.ClanFinanceModel.CalculateClanIncome(clan).ResultNumber * (war ? 0.5f : 0.2f);
+                        if (war)
+                            income += clan.Gold * 0.05f;
+
+
                         if (income > 0f)
                         {
                             float knights = 0f;
@@ -595,17 +628,6 @@ namespace BannerKings
                         PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
                         __result *= data.EconomicData.CaravanAttraction.ResultNumber;
                     }
-                }
-            }
-
-            [HarmonyPatch(typeof(DefaultItemCategories), "InitializeAll")]
-            class InitializeCategoriesPatch
-            {
-                private static ItemCategory _itemCategoryBread;
-                static void Postfix()
-                {
-                    _itemCategoryBread = Game.Current.ObjectManager.RegisterPresumedObject<ItemCategory>(new ItemCategory("bread"));
-                    _itemCategoryBread.InitializeObject(true, 50, 20, ItemCategory.Property.BonusToFoodStores, null, 0f, false, true);
                 }
             }
 

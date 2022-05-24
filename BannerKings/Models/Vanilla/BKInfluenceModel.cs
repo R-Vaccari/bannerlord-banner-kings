@@ -40,6 +40,11 @@ namespace BannerKings.Models
                         baseResult.Add(MBMath.ClampFloat(extra * -0.01f, result * -0.5f, -0.1f), new TextObject(string.Format("Excess noble population at {0}", settlement.Name)));
                     }
 
+                    if (data.Stability >= 0.5f && data.NotableSupport >= 0.5f)
+                        foreach (Hero notable in data.Settlement.Notables)
+                            if (notable.SupporterOf == clan && notable.Gold > 5000)
+                                baseResult.Add(-1f, new TextObject("{=!}Aid from {NOTABLE}").SetTextVariable("NOTABLE", notable.Name));
+
                     generalSupport  += data.NotableSupport - 0.5f;
                     generalAutonomy += -0.5f * data.Autonomy;
                     i++;
