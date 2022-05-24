@@ -21,6 +21,7 @@ using static BannerKings.Managers.Policies.BKTaxPolicy;
 using BannerKings.Managers.Decisions;
 using BannerKings.Components;
 using static BannerKings.Managers.Policies.BKWorkforcePolicy;
+using BannerKings.Models;
 
 namespace BannerKings.Behaviors
 {
@@ -270,7 +271,8 @@ namespace BannerKings.Behaviors
                             foreach ((ItemObject, float) tuple in BannerKingsConfig.Instance.PopulationManager.GetProductions(vilData))
                                 items.Add(tuple.Item1);
                         }
-                    float excess = town.FoodChange - 10;
+                    float excess = ((BKFoodModel)Campaign.Current.Models.SettlementFoodModel)
+                        .GetPopulationFoodProduction(BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement), town).ResultNumber - 10;
                     //float pasturePorportion = data.Pastureland / data.Acreage;
 
                     float farmFood = MBMath.ClampFloat(data.Farmland * data.GetAcreOutput("farmland"), 0f, excess);
