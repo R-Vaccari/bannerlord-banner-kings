@@ -33,7 +33,6 @@ using Helpers;
 using Bannerlord.UIExtenderEx;
 using BannerKings.Managers.Skills;
 using SandBox.View.Map;
-using BannerKings.Managers.Institutions.Religions;
 
 namespace BannerKings
 {
@@ -46,6 +45,7 @@ namespace BannerKings
             {
                 CampaignGameStarter campaignStarter = (CampaignGameStarter)gameStarter;
                 campaignStarter.AddBehavior(new BKSettlementBehavior());
+                campaignStarter.AddBehavior(new BKBookBehavior());
                 campaignStarter.AddBehavior(new BKCompanionBehavior());
                 campaignStarter.AddBehavior(new BKTournamentBehavior());
                 campaignStarter.AddBehavior(new BKRepublicBehavior());
