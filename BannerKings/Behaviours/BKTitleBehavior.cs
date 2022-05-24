@@ -118,7 +118,7 @@ namespace BannerKings.Behaviours
                 else if (clans.Count == 0) kingdom.AddDecision(new KingSelectionKingdomDecision(kingdom.RulingClan), true);
                 else
                 {
-                    kingdom.AddDecision(new BKSettlementClaimantDecision(kingdom.RulingClan, settlement, settlement.LastAttackerParty.LeaderHero, null, conqueredByArmies[settlement], true), true);
+                    kingdom.AddDecision(new BKSettlementClaimantDecision(kingdom.RulingClan, settlement, null, null, conqueredByArmies[settlement], true), true);
                     if (clans.Contains(Clan.PlayerClan) && !Clan.PlayerClan.IsUnderMercenaryService)
                     {
                         MobileParty party = clans[0].Leader.PartyBelongedTo;
