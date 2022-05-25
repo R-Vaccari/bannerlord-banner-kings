@@ -12,6 +12,7 @@ using BannerKings.Managers.Populations.Villages;
 using BannerKings.Managers.Court;
 using BannerKings.Managers.Titles;
 using BannerKings.Models.BKModels;
+using BannerKings.Managers.AI;
 
 namespace BannerKings
 {
@@ -23,6 +24,7 @@ namespace BannerKings
         public TitleManager TitleManager;
         public CourtManager CourtManager;
         public HashSet<IBannerKingsModel> Models = new HashSet<IBannerKingsModel>();
+        public AIBehavior AI = new AIBehavior();
         public bool wipeData = false;
         public MBReadOnlyList<BuildingType> VillageBuildings { get; set; }
 
