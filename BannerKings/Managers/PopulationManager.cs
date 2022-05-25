@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
+using TaleWorlds.Library;
 using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Managers
@@ -16,6 +17,8 @@ namespace BannerKings.Managers
 
         [SaveableProperty(2)]
         private List<MobileParty> Caravans { get; set; }
+
+        public MBReadOnlyList<MobileParty> AllParties => Caravans.GetReadOnlyList();
 
         public PopulationManager(Dictionary<Settlement, PopulationData> pops, List<MobileParty> caravans)
         {
@@ -81,8 +84,6 @@ namespace BannerKings.Managers
             
             return list;
         }
-
-        public List<MobileParty> GetParties(Type type) => this.Caravans.FindAll(x => x.GetType() == type);
 
         public List<(ItemObject, float)> GetProductions(VillageData villageData)
         {

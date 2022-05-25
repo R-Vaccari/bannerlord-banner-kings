@@ -234,11 +234,10 @@ namespace BannerKings.Behaviors
                     float manor = villageData.GetBuildingLevel(DefaultVillageBuildings.Instance.Manor);
                     if (manor > 0)
                     {
-                        List<MobileParty> retinues = BannerKingsConfig.Instance.PopulationManager.GetParties(Type.GetType("RetinueComponent"));
+                        MBReadOnlyList<MobileParty> retinues = BannerKingsConfig.Instance.PopulationManager.AllParties;
                         MobileParty retinue = null;
-                        if (retinues.Count > 0) retinue = retinues.Find(x => x.HomeSettlement == settlement);
-                        if (retinue == null)
-                            retinue = RetinueComponent.CreateRetinue(settlement);
+                        if (retinues.Count > 0) retinue = retinues.FirstOrDefault(x => x.StringId == string.Format("bk_retinue_{0}", settlement.Name.ToString()));
+                        if (retinue == null) retinue = RetinueComponent.CreateRetinue(settlement);
                         
                         (retinue.PartyComponent as RetinueComponent).DailyTick(manor);
                     } 

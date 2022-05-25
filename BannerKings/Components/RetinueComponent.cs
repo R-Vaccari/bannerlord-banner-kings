@@ -25,11 +25,8 @@ namespace BannerKings.Components
             {
                 mobileParty.SetPartyUsedByQuest(true);
                 mobileParty.Party.Visuals.SetMapIconAsDirty();
-                mobileParty.SetInititave(0.5f, 1f, float.MaxValue);
-                mobileParty.ShouldJoinPlayerBattles = true;
-                mobileParty.Aggressiveness = 0.1f;
-                mobileParty.PaymentLimit = Campaign.Current.Models.PartyWageModel.MaxWage;
-                mobileParty.Ai.SetAIState(AIState.Undefined);
+                mobileParty.Ai.DisableAi();
+                mobileParty.Aggressiveness = 0f;
             });
         }
 
