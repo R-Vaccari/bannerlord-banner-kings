@@ -42,12 +42,12 @@
         <GameType value="CustomGame"/>
       </IncludedGameTypes>
     </XmlNode>
-	<XmlNode>                
+	<!--<XmlNode>                
 		<XmlName id="WorkshopTypes" path="workshops"/>
 		<IncludedGameTypes>
 			<GameType value = "Campaign"/>
 			<GameType value = "CampaignStoryMode"/>
 		</IncludedGameTypes>
-	</XmlNode>  
+	</XmlNode>  -->
   </Xmls>
 </Module>

@@ -1,22 +1,21 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <WorkshopTypes>
-  <WorkshopType id="bakery" name="{=!}Bakery" equipment_cost="2000" frequency="1" jobname="{=!}Baker" description="{=!}The bakery specializes in producing bread, a highly sought after product, out of grain. It also produces delicious buttery pies.">
+  <WorkshopType id="bakery" name="{=!}Bakery" equipment_cost="2000" frequency="2" jobname="{=!}Baker" description="{=!}The bakery specializes in producing bread, a highly sought after product, out of grain. It also produces delicious buttery pies.">
     <Meshes sign_mesh_name="shop_sign_merchantbakery" shop_prop_mesh_name_1="shop_prop_merchantflour_a" shop_prop_mesh_name_2="shop_prop_merchantflour_b" shop_prop_mesh_name_3_1="shop_prop_merchantflour_c" shop_prop_mesh_name_4="Shop_prop_merchantbakery_d" shop_prop_mesh_name_5="Shop_prop_merchantbakery_e" shop_prop_mesh_name_6="Shop_prop_merchantbakery_f" />
-    <Production conversion_speed="0.8">
+    <Production conversion_speed="20">
       <Inputs>
         <Input input_item="grain" />
       </Inputs>
       <Outputs>
-        <Output output="ItemCategory.bread" output_count="2" />
+        <Output output="ItemCategory.bread" />
       </Outputs>
     </Production>
-    <Production conversion_speed="1">
+    <Production conversion_speed="15">
       <Inputs>
         <Input input_item="grain" />
-		<Input input_item="butter" />
       </Inputs>
       <Outputs>
-        <Output output="ItemCategory.pie" />
+        <Output output="ItemCategory.pie" output_count="2" />
       </Outputs>
     </Production>
   </WorkshopType>

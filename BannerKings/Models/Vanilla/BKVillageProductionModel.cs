@@ -11,8 +11,8 @@ namespace BannerKings.Models
 {
 	class BKVillageProductionModel : DefaultVillageProductionCalculatorModel
 	{
-		private static readonly float PRODUCTION = 0.0005f;
-		private static readonly float BOOSTED_PRODUCTION = 0.00125f;
+		private static readonly float PRODUCTION = 0.00072f;
+		private static readonly float BOOSTED_PRODUCTION = 0.0015f;
 		public override float CalculateDailyProductionAmount(Village village, ItemObject item)
 		{
 			if (village.Settlement != null && village.VillageState == Village.VillageStates.Normal && BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(village.Settlement))
@@ -98,6 +98,8 @@ namespace BannerKings.Models
 				float maxWorkforce = acres / data.GetRequiredLabor("wood");
 				float workforce = Math.Min(maxWorkforce, serfs + slaves);
 				result.Add(workforce * data.GetAcreOutput("wood") * 15f);
+				float serfFactor = serfs / workforce;
+				if (serfFactor > 0f) result.AddFactor(serfFactor * 0.5f);
 			}
 			else if ((item.IsAnimal || item.IsMountable) && item.HorseComponent != null)
 			{
@@ -105,6 +107,8 @@ namespace BannerKings.Models
 				float maxWorkforce = acres / data.GetRequiredLabor("pasture");
 				float workforce = Math.Min(maxWorkforce, serfs + slaves);
 				result.Add(workforce * data.GetAcreOutput("pasture") * item.HorseComponent.MeatCount);
+				float serfFactor = serfs / workforce;
+				if (serfFactor > 0f) result.AddFactor(serfFactor * 0.5f);
 			}
 			else if (item.IsFood && item.StringId != "fish")
 			{
@@ -113,7 +117,7 @@ namespace BannerKings.Models
 				float workforce = Math.Min(maxWorkforce, serfs + slaves);
 				result.Add(workforce * data.GetAcreOutput("farmland"));
 				float serfFactor = serfs / workforce;
-				if (serfFactor > 0f) result.AddFactor(serfFactor * 0.5f);
+				if (serfFactor > 0f) result.AddFactor(serfFactor * 1f);
 			}
 			else
 			{

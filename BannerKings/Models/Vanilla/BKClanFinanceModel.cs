@@ -44,13 +44,14 @@ namespace BannerKings.Models
 
 		public void CalculateClanIncomeInternal(Clan clan, ref ExplainedNumber result, bool applyWithdrawals)
 		{
+
 			Kingdom kingdom = clan.Kingdom;
 			BKWorkshopModel wkModel = (BKWorkshopModel)Campaign.Current.Models.WorkshopModel;
 			foreach (Town town in clan.Fiefs)
             {
 				float tax = wkModel.CalculateWorkshopTax(town.Settlement).ResultNumber;
 				foreach (Workshop wk in town.Workshops)
-					if (wk.IsRunning && wk.Owner != clan.Leader)
+					if (wk.IsRunning && wk.Owner != clan.Leader && wk.WorkshopType.StringId != "artisans")
 						result.Add(base.CalculateOwnerIncomeFromWorkshop(wk) * tax, new TextObject("{=!}Taxes from {WORKSHOP} at {TOWN}")
 							.SetTextVariable("WORKSHOP", wk.Name)
 							.SetTextVariable("TOWN", town.Name));
