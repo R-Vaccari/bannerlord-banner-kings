@@ -1,4 +1,5 @@
 ﻿using BannerKings.Components;
+using BannerKings.Managers.Items;
 using BannerKings.Managers.Populations.Villages;
 using BannerKings.Populations;
 using System;
@@ -97,9 +98,19 @@ namespace BannerKings.Managers
 
             if (PopulationManager.IsVillageProducingFood(villageData.Village))
             {
-                productions.Add(new ValueTuple<ItemObject, float>(Game.Current.ObjectManager.GetObject<ItemObject>("chicken"), 5f));
+                productions.Add(new ValueTuple<ItemObject, float>(Game.Current.ObjectManager.GetObject<ItemObject>("chicken"), 4f));
                 productions.Add(new ValueTuple<ItemObject, float>(Game.Current.ObjectManager.GetObject<ItemObject>("goose"), 2f));
             }
+
+            if (villageData.Village.VillageType == DefaultVillageTypes.OliveTrees)
+                productions.Add(new ValueTuple<ItemObject, float>(BKItems.Instance.Orange, 2f));
+            else if (villageData.Village.VillageType == DefaultVillageTypes.WheatFarm)
+            {
+                productions.Add(new ValueTuple<ItemObject, float>(BKItems.Instance.Apple, 2f));
+                productions.Add(new ValueTuple<ItemObject, float>(BKItems.Instance.Carrot, 2f));
+            }
+
+            productions.Add(new ValueTuple<ItemObject, float>(BKItems.Instance.Bread, 1f));
 
             return productions;
         }

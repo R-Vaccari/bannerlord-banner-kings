@@ -30,6 +30,7 @@ using static TaleWorlds.CampaignSystem.SandBox.Issues.VillageNeedsToolsIssueBeha
 using static TaleWorlds.CampaignSystem.SandBox.Issues.EscortMerchantCaravanIssueBehavior;
 using TaleWorlds.CampaignSystem.SandBox.Issues;
 using Helpers;
+using BannerKings.Managers.Items;
 
 namespace BannerKings
 {
@@ -82,6 +83,9 @@ namespace BannerKings
                 campaignStarter.AddModel(new BKPartyWageModel());
                 campaignStarter.AddModel(new BKSettlementValueModel());
                 campaignStarter.AddModel(new BKNotablePowerModel());
+                campaignStarter.LoadGameTexts(BasePath.Name + "Modules/BannerKings/ModuleData/module_strings.xml");
+                BKItemCategories.Instance.Initialize();
+                BKItems.Instance.Initialize();
             }
 
             //xtender.Register(typeof(Main).Assembly);
