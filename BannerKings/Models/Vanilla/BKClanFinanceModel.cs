@@ -55,10 +55,8 @@ namespace BannerKings.Models
 							.SetTextVariable("WORKSHOP", wk.Name)
 							.SetTextVariable("TOWN", town.Name));
 
-				PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
-				if (data.Stability >= 0.5f && data.NotableSupport >= 0.5f && kingdom != null &&
-					FactionManager.GetEnemyFactions(kingdom).Count() > 0 && clan.Influence > 50f * clan.Tier)
-					foreach (Hero notable in data.Settlement.Notables)
+				if (BannerKingsConfig.Instance.AI.AcceptNotableAid(clan, BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement)))
+					foreach (Hero notable in town.Settlement.Notables)
 						if (notable.SupporterOf == clan && notable.Gold > 5000)
                         {
 							result.Add(200f, new TextObject("{=!}Aid from {NOTABLE}").SetTextVariable("NOTABLE", notable.Name));

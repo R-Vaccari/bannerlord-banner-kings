@@ -13,6 +13,12 @@ namespace BannerKings.Managers.AI
 {
     public class AIBehavior
     {
+        public bool AcceptNotableAid(Clan clan, PopulationData data)
+        {
+            Kingdom kingdom = clan.Kingdom;
+            return data.Stability >= 0.5f && data.NotableSupport >= 0.5f && kingdom != null &&
+                    FactionManager.GetEnemyFactions(kingdom).Count() > 0 && clan.Influence > 50f * clan.Tier;
+        }
 
         public void SettlementManagement(Settlement target)
         {
