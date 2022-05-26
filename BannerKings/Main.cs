@@ -83,6 +83,7 @@ namespace BannerKings
                 campaignStarter.AddModel(new BKPartyWageModel());
                 campaignStarter.AddModel(new BKSettlementValueModel());
                 campaignStarter.AddModel(new BKNotablePowerModel());
+                campaignStarter.AddModel(new BKPartyFoodConsumption());
                 campaignStarter.LoadGameTexts(BasePath.Name + "Modules/BannerKings/ModuleData/module_strings.xml");
                 BKItemCategories.Instance.Initialize();
                 BKItems.Instance.Initialize();

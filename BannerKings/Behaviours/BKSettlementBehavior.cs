@@ -236,7 +236,7 @@ namespace BannerKings.Behaviors
                     {
                         MBReadOnlyList<MobileParty> retinues = BannerKingsConfig.Instance.PopulationManager.AllParties;
                         MobileParty retinue = null;
-                        if (retinues.Count > 0) retinue = retinues.FirstOrDefault(x => x.StringId == string.Format("bk_retinue_{0}", settlement.Name.ToString()));
+                        if (retinues.Count > 0) retinue = retinues.FirstOrDefault(x => x.StringId.Contains(string.Format("bk_retinue_{0}", settlement.Name.ToString())));
                         if (retinue == null) retinue = RetinueComponent.CreateRetinue(settlement);
                         
                         (retinue.PartyComponent as RetinueComponent).DailyTick(manor);

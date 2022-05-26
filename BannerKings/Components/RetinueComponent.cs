@@ -43,8 +43,6 @@ namespace BannerKings.Components
         public void DailyTick(float level)
         {
             MobileParty party = this.MobileParty;
-            if (party.Food == 0f) GiveFood(ref party);
-
             int cap = (int)(level * 15f);
             if (party.MemberRoster.TotalManCount < cap)
             {
