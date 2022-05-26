@@ -4,6 +4,14 @@
 		<tag language="English" />
 	</tags>
 	<strings>
+		<string id="bk_item_bread" text="Bread{@Plural}loathes of bread{\@}" />
+		<string id="bk_item_pie" text="Pie{@Plural}baskets of pies{\@}" />
+		<string id="bk_item_apple" text="Apples{@Plural}baskets of apples{\@}" />
+		<string id="bk_item_orange" text="Oranges{@Plural}baskets of oranges{\@}" />
+		<string id="bk_item_carrot" text="Carrots{@Plural}baskets of carrots{\@}" />
+	
+	
+	
 		<string id="pop_class_nobles" text="Nobles" />
 		<string id="pop_class_craftsmen" text="Craftsmen" />
 		<string id="pop_class_serfs" text="Serfs" />

@@ -1,4 +1,5 @@
 ﻿using BannerKings.Managers.Titles;
+using BannerKings.Populations;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -43,6 +44,30 @@ namespace BannerKings.Models
 
 		public void CalculateClanIncomeInternal(Clan clan, ref ExplainedNumber result, bool applyWithdrawals)
 		{
+
+			Kingdom kingdom = clan.Kingdom;
+			BKWorkshopModel wkModel = (BKWorkshopModel)Campaign.Current.Models.WorkshopModel;
+			foreach (Town town in clan.Fiefs)
+            {
+				float tax = wkModel.CalculateWorkshopTax(town.Settlement).ResultNumber;
+				foreach (Workshop wk in town.Workshops)
+					if (wk.IsRunning && wk.Owner != clan.Leader && wk.WorkshopType.StringId != "artisans")
+						result.Add(base.CalculateOwnerIncomeFromWorkshop(wk) * tax, new TextObject("{=!}Taxes from {WORKSHOP} at {TOWN}")
+							.SetTextVariable("WORKSHOP", wk.Name)
+							.SetTextVariable("TOWN", town.Name));
+
+				if (BannerKingsConfig.Instance.AI.AcceptNotableAid(clan, BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement)))
+					foreach (Hero notable in town.Settlement.Notables)
+						if (notable.SupporterOf == clan && notable.Gold > 5000)
+                        {
+							result.Add(200f, new TextObject("{=!}Aid from {NOTABLE}").SetTextVariable("NOTABLE", notable.Name));
+							if (applyWithdrawals)
+								notable.Gold -= 200;
+                        }
+			}
+				
+
+
 			Dictionary<Clan, List<FeudalTitle>> dictionary = BannerKingsConfig.Instance.TitleManager.CalculateVassalClanTitles(clan);
 			if (dictionary.Count >= 0)
             {
@@ -58,7 +83,7 @@ namespace BannerKings.Models
 
 			if (!clan.IsUnderMercenaryService && clan.Kingdom != null && FactionManager.GetEnemyKingdoms(clan.Kingdom).Count() > 0)
             {
-				Kingdom kingdom = clan.Kingdom;
+				
 				FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
 				if (title != null && title.contract != null && title.contract.Rights.Contains(FeudalRights.Army_Compensation_Rights))
                 {
@@ -81,7 +106,18 @@ namespace BannerKings.Models
 
 		public void CalculateClanExpenseInternal(Clan clan, ref ExplainedNumber result)
         {
-			List<FeudalTitle> titles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(clan);
+			BKWorkshopModel wkModel = (BKWorkshopModel)Campaign.Current.Models.WorkshopModel;
+			foreach (Workshop wk in clan.Leader.OwnedWorkshops)
+				if (wk.IsRunning && wk.Settlement.OwnerClan != clan)
+                {
+					float tax = wkModel.CalculateWorkshopTax(wk.Settlement).ResultNumber;
+					result.Add(base.CalculateOwnerIncomeFromWorkshop(wk) * -tax, new TextObject("{=!}{WORKSHOP} taxes to {CLAN}")
+						.SetTextVariable("WORKSHOP", wk.Name)
+						.SetTextVariable("CLAN", wk.Settlement.OwnerClan.Name));
+				}
+					
+
+			List <FeudalTitle> titles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(clan);
 			if (titles.Count == 0) return;
 
 			FeudalTitle suzerain = BannerKingsConfig.Instance.TitleManager.CalculateHeroSuzerain(clan.Leader);
@@ -97,5 +133,5 @@ namespace BannerKings.Models
 				amount += title.dueTax;
 			result.Add(-amount, new TextObject("{=!}Taxes to {SUZERAIN}").SetTextVariable("SUZERAIN", suzerain.deJure.Name));
 		}
-	}
+    }
 }

@@ -1,10 +1,12 @@
 ﻿using BannerKings.Components;
+using BannerKings.Managers.Items;
 using BannerKings.Managers.Populations.Villages;
 using BannerKings.Populations;
 using System;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
+using TaleWorlds.Library;
 using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Managers
@@ -16,6 +18,8 @@ namespace BannerKings.Managers
 
         [SaveableProperty(2)]
         private List<MobileParty> Caravans { get; set; }
+
+        public MBReadOnlyList<MobileParty> AllParties => Caravans.GetReadOnlyList();
 
         public PopulationManager(Dictionary<Settlement, PopulationData> pops, List<MobileParty> caravans)
         {
@@ -82,34 +86,54 @@ namespace BannerKings.Managers
             return list;
         }
 
-        public List<MobileParty> GetParties(Type type) => this.Caravans.FindAll(x => x.GetType() == type);
-
         public List<(ItemObject, float)> GetProductions(VillageData villageData)
         {
             List<(ItemObject, float)> productions = new List<(ItemObject, float)>(villageData.Village.VillageType.Productions);
 
             float tannery = villageData.GetBuildingLevel(DefaultVillageBuildings.Instance.Tannery);
-            if (tannery > 0)
-            {
-                /*ItemObject randomItem = this.GetRandomItem(production.Outputs[i].Item1, town);
-                if (randomItem != null)
-                {
-                    list.Add(new ValueTuple<ItemObject, int>(randomItem, item));
-                    num3 += town.GetItemPrice(randomItem, null, true) * item;
-                } WorkshopCampaignBehavior for reference how to add arms to production    */
-                productions.Add(new ValueTuple<ItemObject, float>(Game.Current.ObjectManager.GetObject<ItemObject>("leather"), tannery * 0.5f));
-            }
+            if (tannery > 0) productions.Add(new ValueTuple<ItemObject, float>(Game.Current.ObjectManager.GetObject<ItemObject>("leather"), tannery * 0.5f));
 
             float smith = villageData.GetBuildingLevel(DefaultVillageBuildings.Instance.Blacksmith);
-            if (smith > 0)
-                productions.Add(new ValueTuple<ItemObject, float>(Game.Current.ObjectManager.GetObject<ItemObject>("tools"), smith * 0.5f));
+            if (smith > 0) productions.Add(new ValueTuple<ItemObject, float>(Game.Current.ObjectManager.GetObject<ItemObject>("tools"), smith * 0.5f));
+
+            if (PopulationManager.IsVillageProducingFood(villageData.Village))
+            {
+                productions.Add(new ValueTuple<ItemObject, float>(Game.Current.ObjectManager.GetObject<ItemObject>("chicken"), 4f));
+                productions.Add(new ValueTuple<ItemObject, float>(Game.Current.ObjectManager.GetObject<ItemObject>("goose"), 2f));
+            }
+
+            if (villageData.Village.VillageType == DefaultVillageTypes.OliveTrees)
+                productions.Add(new ValueTuple<ItemObject, float>(BKItems.Instance.Orange, 2f));
+            else if (villageData.Village.VillageType == DefaultVillageTypes.WheatFarm)
+            {
+                productions.Add(new ValueTuple<ItemObject, float>(BKItems.Instance.Apple, 2f));
+                productions.Add(new ValueTuple<ItemObject, float>(BKItems.Instance.Carrot, 2f));
+            }
+
+            productions.Add(new ValueTuple<ItemObject, float>(BKItems.Instance.Bread, 1f));
 
             return productions;
         }
 
-        public void ApplyProductionBuildingEffect(ref ExplainedNumber explainedNumber, BuildingType type, VillageData data)
+        public void ApplyProductionBuildingEffect(ref ExplainedNumber explainedNumber, ItemObject item, VillageData data)
         {
-            int level = data.GetBuildingLevel(type);
+            BuildingType buildingType = null;
+            if (item.IsAnimal)
+                buildingType = DefaultVillageBuildings.Instance.AnimalHousing;
+            else if (item.ItemCategory == DefaultItemCategories.Clay || item.ItemCategory == DefaultItemCategories.Iron || item.ItemCategory == DefaultItemCategories.Silver
+                    || item.ItemCategory == DefaultItemCategories.Salt)
+                buildingType = DefaultVillageBuildings.Instance.Mining;
+            else if (item.ItemCategory == DefaultItemCategories.Wood)
+                buildingType = DefaultVillageBuildings.Instance.Sawmill;
+
+            else if (item.ItemCategory == DefaultItemCategories.Fish)
+                buildingType = DefaultVillageBuildings.Instance.FishFarm;
+
+            else if (item.ItemCategory == DefaultItemCategories.Grain || item.ItemCategory == DefaultItemCategories.DateFruit ||
+                item.ItemCategory == DefaultItemCategories.Grape || item.ItemCategory == DefaultItemCategories.Olives || item.ItemCategory == DefaultItemCategories.Flax)
+                buildingType = DefaultVillageBuildings.Instance.Farming;
+
+            int level = data.GetBuildingLevel(buildingType);
             if (level > 0) explainedNumber.AddFactor(level * 0.05f);
         }
 

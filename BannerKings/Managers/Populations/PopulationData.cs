@@ -341,22 +341,13 @@ namespace BannerKings.Populations
         {
             get
             {
-                CultureObject culture = null;
-                CultureObject ownerCulture = settlementOwner.Culture;
-                float ownerShare = 0f;
-                float share = 0f;
+                List<ValueTuple<CultureObject, float>> eligible = new List<(CultureObject, float)>();
                 foreach (CultureDataClass data in this.cultures)
-                {
-                    if (data.Assimilation >= share && data.Culture.MilitiaPartyTemplate != null)
-                    {
-                        culture = data.Culture;
-                        share = data.Assimilation;
-                        if (data.Culture == ownerCulture)
-                            ownerShare = data.Assimilation;
-                    }
-                }
+                    if (data.Culture.MilitiaPartyTemplate != null && data.Culture.DefaultPartyTemplate != null && !data.Culture.IsBandit)
+                        eligible.Add((data.Culture, data.Assimilation));
+                eligible.OrderByDescending(pair => pair.Item2);
 
-                return share > ownerShare ? culture : ownerCulture;
+                return eligible[0].Item1;
             }
         }
 
@@ -685,7 +676,7 @@ namespace BannerKings.Populations
         private float fertility { get; set; }
 
         [SaveableProperty(6)]
-        private float terrainDifficulty  { get; set; }
+        private float terrainDifficulty { get; set; }
 
         [SaveableProperty(7)]
         private float[] composition { get; set; }
@@ -693,8 +684,8 @@ namespace BannerKings.Populations
         public LandData(PopulationData data)
         {
             this.data = data;
-            this.composition = new float[3];
-            this.Init(data.TotalPop);
+            composition = new float[3];
+            Init(data.TotalPop);
         }
 
         private void Init(int totalPops)
@@ -702,60 +693,61 @@ namespace BannerKings.Populations
             float farmRatio = 0f;
             float pastureRatio = 0f;
             float woodRatio = 0f;
-            if (this.Terrain == TerrainType.Desert)
+            if (Terrain == TerrainType.Desert)
             {
-                this.fertility = 0.5f;
-                this.terrainDifficulty = 1.4f;
+                fertility = 0.5f;
+                terrainDifficulty = 1.4f;
                 farmRatio = 0.9f;
                 pastureRatio = 0.08f;
                 woodRatio = 0.02f;
             }
-            else if (this.Terrain == TerrainType.Steppe)
+            else if (Terrain == TerrainType.Steppe)
             {
-                this.fertility = 0.75f;
-                this.terrainDifficulty = 1f;
+                fertility = 0.75f;
+                terrainDifficulty = 1f;
                 farmRatio = 0.45f;
                 pastureRatio = 0.5f;
                 woodRatio = 0.05f;
             }
-            else if (this.Terrain == TerrainType.Mountain)
+            else if (Terrain == TerrainType.Mountain)
             {
-                this.fertility = 0.7f;
-                this.terrainDifficulty = 2f;
+                fertility = 0.7f;
+                terrainDifficulty = 2f;
                 farmRatio = 0.5f;
                 pastureRatio = 0.35f;
                 woodRatio = 0.15f;
             }
-            else if (this.Terrain == TerrainType.Canyon)
+            else if (Terrain == TerrainType.Canyon)
             {
-                this.fertility = 0.5f;
-                this.terrainDifficulty = 2f;
+                fertility = 0.5f;
+                terrainDifficulty = 2f;
                 farmRatio = 0.9f;
                 pastureRatio = 0.08f;
                 woodRatio = 0.02f;
             }
-            else if (this.Terrain == TerrainType.Forest)
+            else if (Terrain == TerrainType.Forest)
             {
-                this.fertility = 0.5f;
-                this.terrainDifficulty = 2f;
+                fertility = 0.5f;
+                terrainDifficulty = 2f;
                 farmRatio = 0.45f;
                 pastureRatio = 0.15f;
                 woodRatio = 0.40f;
-            } else
+            }
+            else
             {
-                this.fertility = 1f;
-                this.terrainDifficulty = 1f;
+                fertility = 1f;
+                terrainDifficulty = 1f;
                 farmRatio = 0.7f;
                 pastureRatio = 0.22f;
                 woodRatio = 0.08f;
             }
-            this.composition[0] = farmRatio;
-            this.composition[1] = pastureRatio;
-            this.composition[2] = woodRatio;
-            float acres = this.data.Settlement.IsVillage ? (float)totalPops * MBRandom.RandomFloatRanged(3f, 3.5f) : (float)totalPops * MBRandom.RandomFloatRanged(2.5f, 3.0f);
-            this.farmland = acres * farmRatio;
-            this.pasture = acres * pastureRatio;
-            this.woodland = acres * woodRatio;
+            composition[0] = farmRatio;
+            composition[1] = pastureRatio;
+            composition[2] = woodRatio;
+            float acres = data.Settlement.IsVillage ? totalPops * MBRandom.RandomFloatRanged(3f, 3.5f) : totalPops * MBRandom.RandomFloatRanged(2.5f, 3.0f);
+            farmland = acres * farmRatio;
+            pasture = acres * pastureRatio;
+            woodland = acres * woodRatio;
         }
 
         public TerrainType Terrain => Campaign.Current.MapSceneWrapper.GetTerrainTypeAtPosition(data.Settlement.Position2D);
@@ -764,28 +756,29 @@ namespace BannerKings.Populations
         {
             get
             {
-                float serfs = this.data.GetTypeCount(PopType.Serfs) * 0.5f;
-                float slaves = this.data.GetTypeCount(PopType.Slaves);
+                float serfs = data.GetTypeCount(PopType.Serfs) * (data.Settlement.IsVillage ? 0.85f : 0.5f);
+                float slaves = data.GetTypeCount(PopType.Slaves);
 
-                Town town = this.data.Settlement.Town;
+                Town town = data.Settlement.Town;
                 if (town != null && town.BuildingsInProgress.Count > 0)
-                    slaves -= slaves * this.data.EconomicData.StateSlaves * 0.5f;
+                    slaves -= slaves * data.EconomicData.StateSlaves * 0.5f;
 
-                if (!this.data.Settlement.IsVillage)
+                if (!data.Settlement.IsVillage)
                 {
-                    if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(this.data.Settlement, "workforce", (int)WorkforcePolicy.Martial_Law))
+                    if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(data.Settlement, "workforce", (int)WorkforcePolicy.Martial_Law))
                     {
-                        float militia = this.data.Settlement.Town.Militia / 2;
+                        float militia = data.Settlement.Town.Militia / 2;
                         serfs -= militia / 2f;
-                    } else if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(this.data.Settlement, "workforce", (int)WorkforcePolicy.Land_Expansion))
+                    }
+                    else if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(data.Settlement, "workforce", (int)WorkforcePolicy.Land_Expansion))
                     {
                         serfs *= 0.8f;
                         slaves *= 0.8f;
                     }
-                    else if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(this.data.Settlement, "workforce", (int)WorkforcePolicy.Construction))
+                    else if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(data.Settlement, "workforce", (int)WorkforcePolicy.Construction))
                     {
                         serfs *= 0.85f;
-                        slaves -= slaves * this.data.EconomicData.StateSlaves * 0.5f;
+                        slaves -= slaves * data.EconomicData.StateSlaves * 0.5f;
                     }
                 }
                 return Math.Max((int)(serfs + slaves), 0);
@@ -796,19 +789,37 @@ namespace BannerKings.Populations
         {
             get
             {
-                float available = this.AvailableWorkForce;
-                float farms = this.farmland / 4f;
-                float pasture = this.pasture / 8f;
+                float available = AvailableWorkForce;
+                float farms = farmland / GetRequiredLabor("farmland");
+                float pasture = this.pasture / GetRequiredLabor("pasture");
                 return available / (farms + pasture);
             }
         }
 
-        public float Acreage => this.farmland + this.pasture + this.woodland;
-        public float Farmland => this.farmland;
-        public float Pastureland => this.pasture;
-        public float Woodland => this.woodland;
-        public float Fertility => this.fertility;
-        public float Difficulty => this.terrainDifficulty;
+        public float GetRequiredLabor(string type)
+        {
+            if (type == "farmland")
+                return 4f;
+            else if (type == "pasture")
+                return 8f;
+            else return 10f;
+        }
+
+        public float GetAcreOutput(string type)
+        {
+            if (type == "farmland")
+                return 0.022f;
+            else if (type == "pasture")
+                return 0.008f;
+            else return 0.0018f;
+        }
+
+        public float Acreage => farmland + pasture + woodland;
+        public float Farmland => farmland;
+        public float Pastureland => pasture;
+        public float Woodland => woodland;
+        public float Fertility => fertility;
+        public float Difficulty => terrainDifficulty;
 
         internal override void Update(PopulationData data)
         {
@@ -823,41 +834,42 @@ namespace BannerKings.Populations
                     if (type == DefaultVillageBuildings.Instance.DailyFarm)
                         this.farmland += progress;
                     else if (type == DefaultVillageBuildings.Instance.DailyPasture)
-                        this.pasture += progress;
+                        pasture += progress;
                     else this.woodland += progress;
                 }
-            } else if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(this.data.Settlement, "workforce", (int)WorkforcePolicy.Land_Expansion))
+            }
+            else if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(this.data.Settlement, "workforce", (int)WorkforcePolicy.Land_Expansion))
             {
-                float laborers = (float)this.AvailableWorkForce * 0.2f;
+                float laborers = AvailableWorkForce * 0.2f;
                 float construction = laborers * 0.010f;
                 float progress = 15f / construction;
 
                 if (progress > 0f)
                 {
                     List<(int, float)> list = new List<(int, float)>();
-                    list.Add(new(0, this.composition[0]));
-                    list.Add(new(1, this.composition[1]));
-                    list.Add(new(2, this.composition[2]));
+                    list.Add(new(0, composition[0]));
+                    list.Add(new(1, composition[1]));
+                    list.Add(new(2, composition[2]));
                     int choosen = MBRandom.ChooseWeighted(list);
 
                     if (choosen == 0)
                         this.farmland += progress;
                     else if (choosen == 1)
-                        this.pasture += progress;
+                        pasture += progress;
                     else this.woodland += progress;
                 }
             }
 
 
-            if (this.WorkforceSaturation > 1f)
+            if (WorkforceSaturation > 1f)
             {
                 List<(int, float)> list = new List<(int, float)>();
-                list.Add(new(0, this.composition[0]));
-                list.Add(new(1, this.composition[1]));
-                list.Add(new(2, this.composition[2]));
+                list.Add(new(0, composition[0]));
+                list.Add(new(1, composition[1]));
+                list.Add(new(2, composition[2]));
                 int choosen = MBRandom.ChooseWeighted(list);
 
-                float construction = this.data.Settlement.IsVillage ? this.data.VillageData.Construction : 
+                float construction = this.data.Settlement.IsVillage ? this.data.VillageData.Construction :
                     new BKConstructionModel().CalculateDailyConstructionPower(this.data.Settlement.Town).ResultNumber;
                 construction *= 0.8f;
                 float progress = 15f / construction;
@@ -865,16 +877,16 @@ namespace BannerKings.Populations
                 if (choosen == 0)
                     this.farmland += progress;
                 else if (choosen == 1)
-                    this.pasture += progress;
+                    pasture += progress;
                 else this.woodland += progress;
             }
 
             float farmland = this.farmland;
-            float pastureland = this.pasture;
+            float pastureland = pasture;
             float woodland = this.woodland;
 
             this.farmland = MBMath.ClampFloat(farmland, 0f, 100000f);
-            this.pasture = MBMath.ClampFloat(pastureland, 0f, 50000f);
+            pasture = MBMath.ClampFloat(pastureland, 0f, 50000f);
             this.woodland = MBMath.ClampFloat(woodland, 0f, 50000f);
         }
     }

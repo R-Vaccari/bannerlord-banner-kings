@@ -40,7 +40,7 @@ namespace BannerKings.Behaviours
             if (clan.WarPartyComponents.Count < clan.CommanderLimit && clan.Companions.Count < clan.CompanionLimit && 
                 clan.Settlements.Count(x => x.IsVillage ) > 1 && clan.Influence >= 150)
             {
-                Settlement village = clan.Settlements.FirstOrDefault(x => x.IsVillage);
+                Settlement village = clan.Settlements.GetRandomElementWithPredicate(x => x.IsVillage);
                 if (village == null) return;
                 List<FeudalTitle> clanTitles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(clan);
                 FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetTitle(village);

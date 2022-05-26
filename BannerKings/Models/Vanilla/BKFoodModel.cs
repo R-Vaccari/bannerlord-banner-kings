@@ -149,20 +149,34 @@ namespace BannerKings.Models
 		}
 
 		public ExplainedNumber GetPopulationFoodProduction(PopulationData data, Town town)
-        {
+		{
 			ExplainedNumber result = new ExplainedNumber();
 			result.LimitMin(0f);
 			result.LimitMax(1500f);
 			if (!town.IsUnderSiege)
-            {
+			{
 				LandData landData = data.LandData;
-				result.Add(landData.Farmland * 0.018f, new TextObject("{=!}Farmlands"));
-				result.Add(landData.Pastureland * 0.005f, new TextObject("{=!}Pasturelands"));
-				result.Add(landData.Woodland * 0.001f, new TextObject("{=!}Woodlands"));
+				result.Add(landData.Farmland * landData.GetAcreOutput("farmland"), new TextObject("{=!}Farmlands"));
+				result.Add(landData.Pastureland * landData.GetAcreOutput("pasture"), new TextObject("{=!}Pasturelands"));
+				result.Add(landData.Woodland * landData.GetAcreOutput("wood"), new TextObject("{=!}Woodlands"));
 				float fertility = landData.Fertility - 1f;
-				if (fertility != 0f) result.AddFactor(fertility, new TextObject("{=!}Fertility"));
+				if (fertility != 0f)
+				{
+					float toDeduce = result.ResultNumber * fertility;
+					result.Add(toDeduce, new TextObject("{=!}Fertility"));
+				}
 				float saturation = MBMath.ClampFloat(landData.WorkforceSaturation, 0f, 1f) - 1f;
-				if (saturation != 0f) result.AddFactor(saturation, new TextObject("{=!}Workforce Saturation"));
+				if (saturation != 0f)
+				{
+					float toDeduce = result.ResultNumber * saturation;
+					result.Add(toDeduce, new TextObject("{=!}Workforce Saturation"));
+				}
+
+				float season = CampaignTime.Now.GetSeasonOfYearf;
+				if (season == 3f)
+					result.AddFactor(-0.2f, GameTexts.FindText("str_date_format_" + season));
+				else if (season == 1f)
+					result.AddFactor(0.05f, GameTexts.FindText("str_date_format_" + season));
 
 				Building b = null;
 				foreach (Building building in town.Buildings)
@@ -174,7 +188,7 @@ namespace BannerKings.Models
 					}
 
 				if (b != null && b.CurrentLevel > 0)
-					result.AddFactor((float)b.CurrentLevel * (town.IsCastle ? 0.5f : 0.3f), b.Name);
+					result.AddFactor(MathF.Round(b.CurrentLevel * (town.IsCastle ? 0.5f : 0.3f)), b.Name);
 			}
 
 			return result;

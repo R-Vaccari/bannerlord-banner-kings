@@ -1,6 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <base xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" type="string">
 	<strings>
+		<string id="str_item_category.bread" text="{=bk_item_bread}Bread{@Plural}loathes of bread{\@}" />
+		<string id="str_item_category.pie" text="{=bk_item_pie}Pie{@Plural}baskets of pies{\@}" />
+		<string id="str_item_category.apple" text="{=bk_item_apple}Apples{@Plural}baskets of apples{\@}" />
+		<string id="str_item_category.orange" text="{=orange}Orange{@Plural}baskets of oranges{\@}" />
+		<string id="str_item_category.carrot" text="{=carrot}Carrots{@Plural}baskets of carrots{\@}" />
+	
+	
+	
 		<string id="str_pop_class_nobles" text="{=pop_class_nobles}Nobles" />
 		<string id="str_pop_class_craftsmen" text="{=pop_class_craftsmen}Craftsmen" />
 		<string id="str_pop_class_serfs" text="{=pop_class_serfs}Serfs" />
