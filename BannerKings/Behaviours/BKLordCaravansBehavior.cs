@@ -26,7 +26,7 @@ namespace BannerKings.Behaviours
             if (ShouldHaveCaravan(lord))
             {
                 lord.ChangeHeroGold(-15000);
-                CaravanPartyComponent.CreateCaravanParty(hero, target, false, null, null, 0);
+                CaravanPartyComponent.CreateCaravanParty(lord, target, false, null, null, 0);
             }
         }
 
