@@ -44,6 +44,7 @@ namespace BannerKings.Models
 
 		public void CalculateClanIncomeInternal(Clan clan, ref ExplainedNumber result, bool applyWithdrawals)
 		{
+			Kingdom kingdom = clan.Kingdom;
 			BKWorkshopModel wkModel = (BKWorkshopModel)Campaign.Current.Models.WorkshopModel;
 			foreach (Town town in clan.Fiefs)
             {
@@ -55,7 +56,8 @@ namespace BannerKings.Models
 							.SetTextVariable("TOWN", town.Name));
 
 				PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
-				if (data.Stability >= 0.5f && data.NotableSupport >= 0.5f)
+				if (data.Stability >= 0.5f && data.NotableSupport >= 0.5f && kingdom != null &&
+					FactionManager.GetEnemyFactions(kingdom).Count() > 0 && clan.Influence > 50f * clan.Tier)
 					foreach (Hero notable in data.Settlement.Notables)
 						if (notable.SupporterOf == clan && notable.Gold > 5000)
                         {
@@ -82,7 +84,7 @@ namespace BannerKings.Models
 
 			if (!clan.IsUnderMercenaryService && clan.Kingdom != null && FactionManager.GetEnemyKingdoms(clan.Kingdom).Count() > 0)
             {
-				Kingdom kingdom = clan.Kingdom;
+				
 				FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
 				if (title != null && title.contract != null && title.contract.Rights.Contains(FeudalRights.Army_Compensation_Rights))
                 {
