@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Text;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
-using static BannerKings.Managers.TitleManager;
 using TaleWorlds.CampaignSystem.Actions;
 using HarmonyLib;
 using TaleWorlds.Localization;
@@ -17,7 +16,7 @@ using BannerKings.Managers.Titles;
 
 namespace BannerKings.Behaviors
 {
-    public class BKCompanionBehavior : CampaignBehaviorBase
+    public class BKKnighthoodBehavior : CampaignBehaviorBase
     {
 
         private FeudalTitle titleGiven = null;
@@ -25,7 +24,6 @@ namespace BannerKings.Behaviors
         public override void RegisterEvents()
         {
             CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, new Action<CampaignGameStarter>(OnSessionLaunched));
-            CampaignEvents.HeroKilledEvent.AddNonSerializedListener(this, new Action<Hero, Hero, KillCharacterAction.KillCharacterActionDetail, bool>(this.OnHeroKilled));
         }
 
         public override void SyncData(IDataStore dataStore)
@@ -35,11 +33,6 @@ namespace BannerKings.Behaviors
         private void OnSessionLaunched(CampaignGameStarter campaignGameStarter)
         {
             AddDialog(campaignGameStarter);
-        }
-
-        private void OnHeroKilled(Hero victim, Hero killer, KillCharacterAction.KillCharacterActionDetail detail, bool showNotification = true)
-        {
-        
         }
 
         private void AddDialog(CampaignGameStarter starter)
@@ -64,7 +57,7 @@ namespace BannerKings.Behaviors
                 "My lord, I would be honored.", null, null, 100, null); 
 
             starter.AddPlayerLine("companion_grant_knighthood_response_confirm", "companion_knighthood_response", "companion_knighthood_accepted", "Let us decide your fief.",
-                new ConversationSentence.OnConditionDelegate(this.companion_knighthood_accepted_on_condition), new ConversationSentence.OnConsequenceDelegate(this.GrantKnighthoodOnConsequence), 100, null, null);
+                new ConversationSentence.OnConditionDelegate(this.CompanionKnighthoodAcceptedCondition), new ConversationSentence.OnConsequenceDelegate(this.GrantKnighthoodOnConsequence), 100, null, null);
 
             starter.AddPlayerLine("companion_grant_knighthood_response_cancel", "companion_knighthood_response", "companion_role_pretalk", "Actualy, I would like to discuss this at a later time.",
                null, null, 100, null, null);
@@ -80,7 +73,7 @@ namespace BannerKings.Behaviors
             return companion != null && companion.Clan == Clan.PlayerClan && BannerKingsConfig.Instance.TitleManager.Knighthood;
         }
 
-        private bool companion_knighthood_accepted_on_condition()
+        private bool CompanionKnighthoodAcceptedCondition()
         {
             lordshipsToGive.Clear();
             List<FeudalTitle> titles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(Hero.MainHero);
@@ -153,19 +146,42 @@ namespace BannerKings.Behaviors
 
         private void OnNewPartySelectionOver(List<InquiryElement> element)
         {
-            if (element.Count == 0)
-                return;
-            
-            this.titleGiven = (FeudalTitle)element[0].Identifier;
-            BannerKingsConfig.Instance.TitleManager.GrantLordship(this.titleGiven, Hero.MainHero, Hero.OneToOneConversationHero);
+            if (element.Count == 0) return;
+
+            Hero knight = Hero.OneToOneConversationHero;
+            titleGiven = (FeudalTitle)element[0].Identifier;
+            BannerKingsConfig.Instance.TitleManager.GrantLordship(this.titleGiven, Hero.MainHero, knight);
             GainKingdomInfluenceAction.ApplyForDefault(Hero.MainHero, -150f);
-            GiveGoldAction.ApplyBetweenCharacters(Hero.MainHero, Hero.OneToOneConversationHero, 5000);
-            Hero.OneToOneConversationHero.SetNewOccupation(Occupation.Lord);
+            GiveGoldAction.ApplyBetweenCharacters(Hero.MainHero, knight, 5000);
+            knight.SetNewOccupation(Occupation.Lord);
+            knight.Clan = null;
+            knight.Clan = Clan.PlayerClan;
         }
     }
 
     namespace Patches
     {
+
+        [HarmonyPatch(typeof(Hero), "FindSuitableCompanionsToLeadCaravan")]
+        class SuitableCaravanLeaderPatch
+        {
+            static bool Postfix(ref List<CharacterObject> __result)
+            {
+                if (BannerKingsConfig.Instance.TitleManager == null) return;
+                List<CharacterObject> list = new List<CharacterObject>();
+                foreach (TroopRosterElement troopRosterElement in MobileParty.MainParty.MemberRoster.GetTroopRoster())
+                {
+                    Hero heroObject = troopRosterElement.Character.HeroObject;
+                    if (heroObject != null && heroObject != Hero.MainHero && heroObject.Clan == Clan.PlayerClan && heroObject.GovernorOf == null && heroObject.CanLeadParty())
+                    {
+                        FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(heroObject);
+                        if (title == null) list.Add(troopRosterElement.Character);
+                    }
+                }
+                __result = list;
+                return false;
+            }
+        }
 
         [HarmonyPatch(typeof(Hero), "SetHeroEncyclopediaTextAndLinks")]
         class HeroDescriptionPatch
