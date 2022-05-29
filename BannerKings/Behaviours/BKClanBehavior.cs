@@ -29,11 +29,16 @@ namespace BannerKings.Behaviours
             foreach (WarPartyComponent component in clan.WarPartyComponents)
             {
                 Hero leader = component.Leader;
+                
                 if (leader != null && leader != clan.Leader && leader.IsWanderer)
                 {
-                    leader.SetNewOccupation(Occupation.Lord);
-                    leader.Clan = null;
-                    leader.Clan = clan;
+                    FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(leader);
+                    if (title != null)
+                    {
+                        leader.SetNewOccupation(Occupation.Lord);
+                        leader.Clan = null;
+                        leader.Clan = clan;
+                    }
                 }
             }
 

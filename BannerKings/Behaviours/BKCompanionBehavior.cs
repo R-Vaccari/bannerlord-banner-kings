@@ -160,6 +160,7 @@ namespace BannerKings.Behaviors
             BannerKingsConfig.Instance.TitleManager.GrantLordship(this.titleGiven, Hero.MainHero, Hero.OneToOneConversationHero);
             GainKingdomInfluenceAction.ApplyForDefault(Hero.MainHero, -150f);
             GiveGoldAction.ApplyBetweenCharacters(Hero.MainHero, Hero.OneToOneConversationHero, 5000);
+            Hero.OneToOneConversationHero.SetNewOccupation(Occupation.Lord);
         }
     }
 
