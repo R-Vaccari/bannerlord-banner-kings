@@ -162,10 +162,10 @@ namespace BannerKings.Behaviors
     namespace Patches
     {
 
-        [HarmonyPatch(typeof(Hero), "FindSuitableCompanionsToLeadCaravan")]
+        [HarmonyPatch(typeof(LordConversationsCampaignBehavior), "FindSuitableCompanionsToLeadCaravan")]
         class SuitableCaravanLeaderPatch
         {
-            static bool Postfix(ref List<CharacterObject> __result)
+            static bool Prefix(ref List<CharacterObject> __result)
             {
                 if (BannerKingsConfig.Instance.TitleManager == null) return true;
                 List<CharacterObject> list = new List<CharacterObject>();

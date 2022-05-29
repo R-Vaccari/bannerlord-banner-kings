@@ -24,27 +24,27 @@ namespace BannerKings.Managers.Items
             apple = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("apple"));
             InitializeTradeGood(apple,
                 new TextObject("{=bk_item_apple}Apples{@Plural}baskets of apples\\@}", null), "foods_basket_apple",
-                BKItemCategories.Instance.Apple, 5, 10f, ItemObject.ItemTypeEnum.Goods);
+                BKItemCategories.Instance.Apple, 5, 10f, ItemObject.ItemTypeEnum.Goods, true);
 
             orange = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("orange"));
             InitializeTradeGood(orange,
                 new TextObject("{=bk_item_orange}Oranges{@Plural}baskets of oranges\\@}", null), "foods_orange_basket",
-                BKItemCategories.Instance.Apple, 5, 10f, ItemObject.ItemTypeEnum.Goods);
+                BKItemCategories.Instance.Apple, 5, 10f, ItemObject.ItemTypeEnum.Goods, true);
 
             bread = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("bread"));
             InitializeTradeGood(bread,
                 new TextObject("{=bk_item_bread}Bread{@Plural}loathes of bread\\@}", null), "merchandise_bread",
-                BKItemCategories.Instance.Apple, 5, 10f, ItemObject.ItemTypeEnum.Goods);
+                BKItemCategories.Instance.Apple, 5, 10f, ItemObject.ItemTypeEnum.Goods, true);
 
             pie = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("pie"));
             InitializeTradeGood(pie,
                 new TextObject("{=bk_item_pie}Pie{@Plural}baskets of pies\\@}", null), "kitchen_pie",
-                BKItemCategories.Instance.Apple, 5, 10f, ItemObject.ItemTypeEnum.Goods);
+                BKItemCategories.Instance.Apple, 5, 10f, ItemObject.ItemTypeEnum.Goods, true);
 
             carrot = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("carrot"));
             InitializeTradeGood(carrot,
                 new TextObject("{=bk_item_carrot}Carrots{@Plural}baskets of carrots\\@}", null), "foods_carrots_basket",
-                BKItemCategories.Instance.Apple, 5, 10f, ItemObject.ItemTypeEnum.Goods);
+                BKItemCategories.Instance.Apple, 5, 10f, ItemObject.ItemTypeEnum.Goods, true);
 
 
             /*
