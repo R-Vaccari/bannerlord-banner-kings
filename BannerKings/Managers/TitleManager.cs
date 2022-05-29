@@ -271,7 +271,29 @@ namespace BannerKings.Managers
                     .SetTextVariable("CLAIMANT", claimant.Name)
                     .SetTextVariable("TITLE", action.Title.FullName));
         }
-        
+
+        public void RevokeTitle(TitleAction action)
+        {
+            Hero currentOwner = action.Title.deJure;
+            InformationManager.DisplayMessage(new InformationMessage(new TextObject("{=!}{REVOKER} has revoked the {TITLE}.")
+                .SetTextVariable("REVOKER", action.ActionTaker.Name)
+                .SetTextVariable("TITLE", action.Title.FullName)
+                .ToString()));
+            int impact = new BKTitleModel().GetRelationImpact(action.Title);
+            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(action.ActionTaker, currentOwner, impact);
+
+            action.Title.RemoveClaim(action.ActionTaker);
+            action.Title.AddClaim(currentOwner, ClaimType.Previous_Owner, true);
+            ExecuteOwnershipChange(currentOwner, action.ActionTaker, action.Title, true);
+
+            if (action.Gold > 0)
+                action.ActionTaker.ChangeHeroGold((int)-action.Gold);
+            if (action.Influence > 0)
+                action.ActionTaker.Clan.Influence -= action.Influence;
+            if (action.Renown > 0)
+                action.ActionTaker.Clan.Renown -= action.Renown;
+        }
+
         public void GrantTitle(Hero receiver, Hero grantor, FeudalTitle title, float influence)
         {
             ExecuteOwnershipChange(grantor, receiver, title, true);
