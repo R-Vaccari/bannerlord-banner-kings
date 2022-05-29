@@ -8,6 +8,14 @@ namespace BannerKings.Managers.Items
     {
         private ItemObject apple, orange, bread, pie, carrot, bookHeartsDesire, bookSiege, bookStrategikon,
             bookLeadership, bookTrade, bookDictionary, bookMounted;
+
+        public ItemObject BookHeartsDesire => bookHeartsDesire;
+        public ItemObject BookSiege => bookSiege;
+        public ItemObject BookStrategikon => bookStrategikon;
+        public ItemObject BookLeadership => bookLeadership;
+        public ItemObject BookTrade => bookTrade;
+        public ItemObject BookDictionary => bookDictionary;
+        public ItemObject BookMounted => bookMounted;
         
         public override void Initialize()
         {

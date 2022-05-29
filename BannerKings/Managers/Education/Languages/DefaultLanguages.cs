@@ -6,6 +6,13 @@ namespace BannerKings.Managers.Education.Languages
     public class DefaultLanguages : DefaultTypeInitializer<DefaultLanguages>
     {
         private Language battanian, vlandic, calradian, sturgian, aseran, khuzait, vakken;
+        public Language Battanian => battanian;
+        public Language Vlandic => vlandic;
+        public Language Calradian => calradian;
+        public Language Sturgian => sturgian;
+        public Language Aseran => aseran;
+        public Language Khuzait => khuzait;
+        public Language Vakken => vakken;
         public override void Initialize()
         {
             battanian = new Language(new TextObject("{=ZvoyX6DX}Battanian"), new TextObject(), null);
