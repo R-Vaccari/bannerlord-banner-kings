@@ -17,10 +17,7 @@ using TaleWorlds.CampaignSystem.Overlay;
 using TaleWorlds.CampaignSystem.SandBox.CampaignBehaviors;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Populations.Villages;
-using static BannerKings.Managers.Policies.BKTaxPolicy;
-using BannerKings.Managers.Decisions;
 using BannerKings.Components;
-using static BannerKings.Managers.Policies.BKWorkforcePolicy;
 using BannerKings.Models;
 
 namespace BannerKings.Behaviors
@@ -118,7 +115,7 @@ namespace BannerKings.Behaviors
 
         private void OnSettlementEntered(MobileParty party, Settlement target, Hero hero)
         {
-            if (party != null && party.IsLordParty && party.LeaderHero == target.OwnerClan.Leader)
+            if (party != null && party.IsLordParty && target.OwnerClan != null && party.LeaderHero == target.OwnerClan.Leader)
                 if ((!target.IsVillage && target.Town.Governor == null) || (target.IsVillage && target.Village.MarketTown.Governor == null))
                     BannerKingsConfig.Instance.AI.SettlementManagement(target);
         }
