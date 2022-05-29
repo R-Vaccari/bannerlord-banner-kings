@@ -167,7 +167,7 @@ namespace BannerKings.Behaviors
         {
             static bool Postfix(ref List<CharacterObject> __result)
             {
-                if (BannerKingsConfig.Instance.TitleManager == null) return;
+                if (BannerKingsConfig.Instance.TitleManager == null) return true;
                 List<CharacterObject> list = new List<CharacterObject>();
                 foreach (TroopRosterElement troopRosterElement in MobileParty.MainParty.MemberRoster.GetTroopRoster())
                 {
