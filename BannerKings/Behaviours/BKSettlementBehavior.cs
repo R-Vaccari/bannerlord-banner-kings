@@ -169,8 +169,10 @@ namespace BannerKings.Behaviors
                             foreach ((ItemObject, float) tuple in BannerKingsConfig.Instance.PopulationManager.GetProductions(vilData))
                                 items.Add(tuple.Item1);
                         }
-                    float excess = ((BKFoodModel)Campaign.Current.Models.SettlementFoodModel)
-                        .GetPopulationFoodProduction(BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement), town).ResultNumber - 10;
+                    BKFoodModel foodModel = (BKFoodModel)Campaign.Current.Models.SettlementFoodModel;
+                    PopulationData popData = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
+                    float excess = foodModel.GetPopulationFoodProduction(popData, town).ResultNumber - 10
+                        - foodModel.GetPopulationFoodConsumption(popData).ResultNumber;
                     //float pasturePorportion = data.Pastureland / data.Acreage;
 
                     float farmFood = MBMath.ClampFloat(data.Farmland * data.GetAcreOutput("farmland"), 0f, excess);
@@ -278,7 +280,7 @@ namespace BannerKings.Behaviors
         {
             if (roster.TotalFood > maxStorage)
             {
-                int toRot = (int)(roster.TotalFood * 0.02f);
+                int toRot = (int)(roster.TotalFood * 0.01f);
                 while (toRot > 0)
                 {
                     ItemRosterElement element = roster.GetRandomElementWithPredicate(x => x.EquipmentElement.Item != null &&
