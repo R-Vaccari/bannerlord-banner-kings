@@ -1,6 +1,6 @@
 ﻿using BannerKings.Managers.Education.Languages;
 using BannerKings.Managers.Items;
-using TaleWorlds.CampaignSystem;
+using TaleWorlds.Core;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Education.Books
@@ -11,47 +11,26 @@ namespace BannerKings.Managers.Education.Books
             bookLeadership, bookTrade, bookDictionary, bookMounted;
         public override void Initialize()
         {
-            bookHeartsDesire = new BookType(BKItems.Instance.BookHeartsDesire, new TextObject(), DefaultLanguages.Instance.Vlandic, 
-                delegate (Hero hero) 
-                { 
-
-                });
+            bookHeartsDesire = new BookType(BKItems.Instance.BookHeartsDesire, new TextObject(), DefaultLanguages.Instance.Vlandic,
+               BookUse.Skillbook, DefaultSkills.Charm);
 
             bookSiege = new BookType(BKItems.Instance.BookSiege, new TextObject(), DefaultLanguages.Instance.Calradian,
-                delegate (Hero hero)
-                {
-
-                });
+                BookUse.Focusbook, DefaultSkills.Engineering);
 
             bookStrategikon = new BookType(BKItems.Instance.BookStrategikon, new TextObject(), DefaultLanguages.Instance.Calradian,
-                delegate (Hero hero)
-                {
-
-                });
+                BookUse.Focusbook, DefaultSkills.Tactics);
 
             bookTrade = new BookType(BKItems.Instance.BookTrade, new TextObject(), DefaultLanguages.Instance.Aseran,
-                delegate (Hero hero)
-                {
-
-                });
+               BookUse.Focusbook, DefaultSkills.Trade);
 
             bookDictionary = new BookType(BKItems.Instance.BookDictionary, new TextObject(), DefaultLanguages.Instance.Calradian,
-                delegate (Hero hero)
-                {
-
-                });
+                BookUse.Dictionary);
 
             bookMounted = new BookType(BKItems.Instance.BookMounted, new TextObject(), DefaultLanguages.Instance.Vlandic,
-                delegate (Hero hero)
-                {
-
-                });
+                BookUse.Focusbook, DefaultSkills.Riding);
 
             bookLeadership = new BookType(BKItems.Instance.BookLeadership, new TextObject(), DefaultLanguages.Instance.Calradian,
-                delegate (Hero hero)
-                {
-
-                });
+                BookUse.Focusbook, DefaultSkills.Leadership);
         }
     }
 }
