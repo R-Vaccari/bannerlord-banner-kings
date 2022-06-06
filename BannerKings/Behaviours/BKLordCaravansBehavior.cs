@@ -21,7 +21,7 @@ namespace BannerKings.Behaviours
 
             Hero lord = party.LeaderHero;
             Kingdom kingdom = lord.Clan.Kingdom;
-            if (kingdom == null || target.OwnerClan == null || target.OwnerClan.Kingdom != kingdom) return;
+            if (lord == Hero.MainHero || kingdom == null || target.OwnerClan == null || target.OwnerClan.Kingdom != kingdom) return;
 
             if (ShouldHaveCaravan(lord))
             {
