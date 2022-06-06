@@ -13,11 +13,11 @@ namespace BannerKings.Managers.Institutions.Guilds
     {
         private GuildType type;
         private Hero guildMaster;
-        protected Dictionary<Hero, float> members;
+        protected List<Hero> members;
         public Guild(Settlement settlement, Hero guildmaster, GuildTrade trade) : base(settlement)
         {
             this.guildMaster = guildMaster;
-            members = new Dictionary<Hero, float>();
+            members = new List<Hero>();
             type = new GuildType(trade);
         }
 
@@ -28,18 +28,35 @@ namespace BannerKings.Managers.Institutions.Guilds
             data.EconomicData.RemoveGuild();
         }
 
+        public float Influence
+        {
+            get
+            {
+                float power = guildMaster.Power;
+                foreach (Hero hero in members)
+                    if (settlement.Notables.Contains(hero))
+                        power += hero.Power;
+
+                float settlementPower = 0f;
+                foreach (Hero hero in settlement.Notables)
+                    settlementPower += hero.Power;
+
+                return power / settlementPower;
+            }
+        }
+
         public int Capital => guildMaster.Gold;
         public GuildType GuildType => type;
-        public MBReadOnlyDictionary<Hero, float> Members => members.GetReadOnlyDictionary();
+        public MBReadOnlyList<Hero> Members => members.GetReadOnlyList();
 
         public void AddMemer(Hero hero)
         {
-            if (!members.ContainsKey(hero)) members.Add(hero, 0f);
+            if (!members.Contains(hero)) members.Add(hero);
         }
 
         public void RemoveMember(Hero hero)
         {
-            if (members.ContainsKey(hero)) members.Remove(hero);
+            if (members.Contains(hero)) members.Remove(hero);
         }
 
         public Hero Leader

@@ -1,4 +1,5 @@
-﻿using BannerKings.Populations;
+﻿using BannerKings.Managers.Institutions.Guilds;
+using BannerKings.Populations;
 using BannerKings.UI;
 using System;
 using System.Collections.Generic;
@@ -170,6 +171,10 @@ namespace BannerKings.Behaviours
                new GameMenuOption.OnConditionDelegate(MenuCourtCondition),
                new GameMenuOption.OnConsequenceDelegate(MenuCourtConsequence), false, -1, false);
 
+            campaignGameStarter.AddGameMenuOption("bannerkings", "manage_guild", "{=!}{GUILD_NAME}",
+                new GameMenuOption.OnConditionDelegate(MenuGuildCondition),
+                new GameMenuOption.OnConsequenceDelegate(MenuGuildManageConsequence), false, -1, false);
+
 
             campaignGameStarter.AddGameMenuOption("bannerkings", "bannerkings_action", "{=!}Take an action",
                 delegate (MenuCallbackArgs args) {
@@ -191,9 +196,7 @@ namespace BannerKings.Behaviours
                     GameMenu.SwitchToMenu(menu);
                 }, true, -1, false);
 
-            //campaignGameStarter.AddGameMenuOption("bannerkings_keep", "manage_guild", "{=!}Guild management",
-            //    new GameMenuOption.OnConditionDelegate(game_menu_town_manage_guild_on_condition),
-            //    new GameMenuOption.OnConsequenceDelegate(game_menu_town_manage_guild_on_consequence), false, -1, false);
+            
 
 
             // ------- CASTLE --------
@@ -498,6 +501,21 @@ namespace BannerKings.Behaviours
             Kingdom kingdom = Clan.PlayerClan.Kingdom;
             return Settlement.CurrentSettlement.IsCastle && Settlement.CurrentSettlement.Notables.Count > 0 &&
                 (Settlement.CurrentSettlement.OwnerClan == Clan.PlayerClan || kingdom == Settlement.CurrentSettlement.OwnerClan.Kingdom);
+        }
+
+        private static bool MenuGuildCondition(MenuCallbackArgs args)
+        {
+            args.optionLeaveType = GameMenuOption.LeaveType.Trade;
+            Settlement settlement = Settlement.CurrentSettlement;
+            bool hasGuild = false;
+            if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
+            {
+                Guild guild = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement).EconomicData.Guild;
+                hasGuild = guild != null;
+                if (hasGuild) GameTexts.SetVariable("GUILD_NAME", guild.GuildType.Name.ToString());
+            }
+               
+            return hasGuild;
         }
 
         private static bool MenuCourtCondition(MenuCallbackArgs args)

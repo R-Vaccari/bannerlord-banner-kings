@@ -2,7 +2,7 @@
 
 namespace BannerKings.Managers.Institutions
 {
-    public abstract class LandedInstitution : Institution
+    public abstract class LandedInstitution
     {
         protected Settlement settlement;
 
@@ -10,6 +10,8 @@ namespace BannerKings.Managers.Institutions
         {
             this.settlement = settlement;
         }
+
+        public abstract void Destroy();
 
         public Settlement Settlement => settlement;
     }
