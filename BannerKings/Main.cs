@@ -459,6 +459,16 @@ namespace BannerKings
                     return true;
                 }
 
+                [HarmonyPrefix]
+                [HarmonyPatch("AddIncomeFromParty", MethodType.Normal)]
+                static bool AddIncomeFromPartyPrefix(MobileParty party, Clan clan, ref ExplainedNumber goldChange, bool applyWithdrawals)
+                {
+                    if (BannerKingsConfig.Instance.TitleManager != null && party.LeaderHero != null && party.LeaderHero != clan.Leader)
+                        return BannerKingsConfig.Instance.TitleManager.GetHighestTitle(party.LeaderHero) == null;
+                    
+                    return true;
+                }
+
 
                 [HarmonyPrefix]
                 [HarmonyPatch("AddExpensesFromGarrisons", MethodType.Normal)]
