@@ -24,11 +24,38 @@ namespace BannerKings.Behaviors
         public override void RegisterEvents()
         {
             CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, new Action<CampaignGameStarter>(OnSessionLaunched));
+            CampaignEvents.DailyTickHeroEvent.AddNonSerializedListener(this, new Action<Hero>(OnHeroDailyTick));
         }
 
         public override void SyncData(IDataStore dataStore)
         {
         }
+
+        private void OnHeroDailyTick(Hero hero)
+        {
+            if (hero.Clan == null || hero == hero.Clan.Leader || hero.Occupation != Occupation.Lord || 
+                BannerKingsConfig.Instance.TitleManager == null) return;
+
+            FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(hero);
+            if (title == null || title.fief.Village == null || title.type != TitleType.Lordship || !CanCreateClan(hero)) return;
+
+            Clan originalClan = hero.Clan;
+            Clan clan = Clan.CreateClan(hero.StringId + "_knight_clan");
+            Settlement settlement = title.fief.Village.TradeBound;
+            TextObject name = NameGenerator.Current.GenerateClanName(hero.Culture, settlement);
+            clan.InitializeClan(name, name, hero.Culture, Banner.CreateOneColoredBannerWithOneIcon(settlement.MapFaction.Banner.GetFirstIconColor(), settlement.MapFaction.Banner.GetPrimaryColor(), 
+                hero.Culture.PossibleClanBannerIconsIDs.GetRandomElement()), settlement.GatePosition, false);
+            clan.Kingdom = originalClan.Kingdom;
+            clan.AddRenown(150f);
+            hero.Clan = clan;
+            clan.SetLeader(hero);
+            InformationManager.AddQuickInformation(new TextObject("{=!}The {NEW} has been formed by {HERO}, previously a knight of {ORIGINAL}.")
+                            .SetTextVariable("NEW", clan.Name)
+                            .SetTextVariable("HERO", hero.Name)
+                            .SetTextVariable("ORIGINAL", originalClan.Name));
+        }
+
+        private bool CanCreateClan(Hero hero) => hero.Gold >= 30000 && hero.Power >= 150f;
 
         private void OnSessionLaunched(CampaignGameStarter campaignGameStarter)
         {
