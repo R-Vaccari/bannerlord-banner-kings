@@ -20,11 +20,15 @@ namespace BannerKings.Models
         public override float GetBasePriceFactor(ItemCategory itemCategory, float inStoreValue, float supply, float demand, bool isSelling, int transferValue)
         {
             float baseResult = base.GetBasePriceFactor(itemCategory, inStoreValue, supply, demand, isSelling, transferValue);
-            if (itemCategory.IsTradeGood || itemCategory.IsAnimal)
+            
+            if (itemCategory.IsTradeGood)
                 baseResult = MathF.Clamp(baseResult, 0.4f, 8f);
 
             if (itemCategory.Properties == ItemCategory.Property.BonusToFoodStores)
                 baseResult = MathF.Clamp(baseResult, 0.1f, 4f);
+
+            if (itemCategory.IsAnimal)
+                baseResult = MathF.Clamp(baseResult, 0.4f, 4f);
 
             return baseResult;
         }

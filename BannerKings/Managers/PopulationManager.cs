@@ -1,4 +1,5 @@
 ﻿using BannerKings.Components;
+using BannerKings.Managers.Institutions.Guilds;
 using BannerKings.Managers.Items;
 using BannerKings.Managers.Populations.Villages;
 using BannerKings.Populations;
@@ -113,6 +114,16 @@ namespace BannerKings.Managers
             productions.Add(new ValueTuple<ItemObject, float>(BKItems.Instance.Bread, 1f));
 
             return productions;
+        }
+
+        public void ApplyGuildEffect(ref ExplainedNumber result, Guild guild, float maxEffect, bool factor)
+        {
+            float effect = maxEffect * guild.Influence;
+            if (effect != 0f)
+            {
+                if (!factor) result.Add(effect, guild.GuildType.Name);
+                else result.AddFactor(effect, guild.GuildType.Name);
+            }
         }
 
         public void ApplyProductionBuildingEffect(ref ExplainedNumber explainedNumber, ItemObject item, VillageData data)

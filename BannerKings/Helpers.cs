@@ -513,13 +513,15 @@ namespace BannerKings.Helpers
 
         public static ConsumptionType GetTradeGoodConsumptionType(ItemCategory item)
         {
+
             string id = item.StringId;
-            if (id == "silver" || id == "jewelry" || id == "spice" || id == "velvet")
-                return ConsumptionType.Luxury;
-            else if (id == "wool" || id == "pottery" || id == "cotton" || id == "flax" || id == "linen" || id == "leather" || id == "tools")
-                return ConsumptionType.Industrial;
-            else if (item.Properties == Property.BonusToFoodStores)
+            if (item.Properties == Property.BonusToFoodStores)
                 return ConsumptionType.Food;
+            else  if (id == "silver" || id == "jewelry" || id == "spice" || id == "velvet" || id == "war_horse" || id.EndsWith("4") || id.EndsWith("5"))
+                return ConsumptionType.Luxury;
+            else if (id == "wool" || id == "pottery" || id == "cotton" || id == "flax" || id == "linen" || id == "leather" || id == "tools"
+                || id.EndsWith("3") || id.Contains("horse"))
+                return ConsumptionType.Industrial;
             else return ConsumptionType.General;
         }
 

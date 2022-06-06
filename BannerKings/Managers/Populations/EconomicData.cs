@@ -68,6 +68,7 @@ namespace BannerKings.Managers.Populations
 
         internal override void Update(PopulationData data)
         {
+            /*
             if (guild == null && settlement.IsTown)
             {
                 Hero notable = Guild.EvaluateNewLeader(settlement);
@@ -81,7 +82,7 @@ namespace BannerKings.Managers.Populations
                         .SetTextVariable("TOWN", settlement.Name)
                         .ToString()));
                 }
-            }
+            }*/
         }
 
         public ExplainedNumber AdministrativeCost => BannerKingsConfig.Instance.Models
