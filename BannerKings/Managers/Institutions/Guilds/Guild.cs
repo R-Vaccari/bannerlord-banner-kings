@@ -14,7 +14,7 @@ namespace BannerKings.Managers.Institutions.Guilds
         private GuildType type;
         private Hero guildMaster;
         protected List<Hero> members;
-        public Guild(Settlement settlement, Hero guildmaster, GuildTrade trade) : base(settlement)
+        public Guild(Settlement settlement, Hero guildMaster, GuildTrade trade) : base(settlement)
         {
             this.guildMaster = guildMaster;
             members = new List<Hero>();
@@ -26,6 +26,16 @@ namespace BannerKings.Managers.Institutions.Guilds
             if (guildMaster != null) KillCharacterAction.ApplyByRemove(guildMaster);
             PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(Settlement);
             data.EconomicData.RemoveGuild();
+        }
+
+        public int Income
+        {
+            get
+            {
+                PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
+                return (int)MBMath.ClampFloat((data.GetTypeCount(PopulationManager.PopType.Craftsmen) * data.EconomicData.Mercantilism.ResultNumber * Influence * 0.82f) 
+                    * 1f + data.Autonomy, 0f, 10000f);
+            }
         }
 
         public float Influence
