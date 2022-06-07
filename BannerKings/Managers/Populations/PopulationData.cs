@@ -15,6 +15,7 @@ using BannerKings.Managers.Populations;
 using static BannerKings.Managers.Policies.BKWorkforcePolicy;
 using BannerKings.Managers.Titles;
 using BannerKings.Managers;
+using BannerKings.Managers.Institutions.Guilds;
 
 namespace BannerKings.Populations
 {

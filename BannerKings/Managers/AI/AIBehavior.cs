@@ -24,6 +24,8 @@ namespace BannerKings.Managers.AI
         {
             if (BannerKingsConfig.Instance.PopulationManager == null || !BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(target))
                 return;
+
+            if (target.OwnerClan == Clan.PlayerClan) return;
             
             Kingdom kingdom = target.OwnerClan.Kingdom;
             List<BannerKingsDecision> currentDecisions = BannerKingsConfig.Instance.PolicyManager.GetDefaultDecisions(target);

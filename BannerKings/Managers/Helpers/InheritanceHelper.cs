@@ -147,7 +147,7 @@ namespace BannerKings.Managers.Helpers
         {
             List<Hero> candidates = new List<Hero>();
             foreach (Hero x in clan.Heroes)
-                if (!x.IsChild && x != victim && x.IsAlive && (x.IsNoble || x.IsMinorFactionHero))
+                if (!x.IsChild && x != victim && x.IsAlive && (x.Occupation == Occupation.Lord || x.IsMinorFactionHero))
                     candidates.Add(x);
             return candidates;
         }

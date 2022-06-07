@@ -1,0 +1,84 @@
+<Prefab>
+  <Constants>
+
+    <Constant Name="CharacterDeveloper.SkillButtonBackground.Width" BrushLayer="Default" BrushName="CharacterDeveloper.SkillButtonBackground" BrushValueType="Width" />
+    <Constant Name="CharacterDeveloper.SkillButtonBackground.Height" BrushLayer="Default" BrushName="CharacterDeveloper.SkillButtonBackground" BrushValueType="Height" />
+
+  </Constants>
+  <Window>
+    <Widget DataSource="{CurrentCharacter}" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" IsVisible="false" Sprite="BlankWhiteSquare_9" Color="#00000088">
+      <Children>
+        <CharacterDeveloperAttributeInspectionPopupWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="533" SuggestedHeight="627" HorizontalAlignment="Left" VerticalAlignment="Top" MarginTop="135" Command.Deactivate="ExecuteStopInspectingCurrentAttribute" Sprite="CharacterDeveloper\AttributePopup\attribute_popup_canvas" IsActive="@IsInspectingAnAttribute" PositionXOffset="70" PositionYOffset="25">
+          <Children>
+
+            <ListPanel DataSource="{CurrentInspectedAttribute}" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginLeft="30" MarginRight="30" StackLayout.LayoutMethod="VerticalBottomToTop" >
+              <Children>
+
+                <ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" HorizontalAlignment="Center" SuggestedHeight="450" VerticalAlignment="Top" MarginTop="25" StackLayout.LayoutMethod="VerticalBottomToTop" >
+                  <Children>
+                    <TextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" MarginLeft="30" MarginRight="30" Brush="Kingdom.DecisionTitleBig.Text" Text="@Name" />
+                    <TextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" MarginLeft="30" MarginRight="30" Brush="Kingdom.DecisionTitleMedium.Text" Text="@NameExtended" MarginBottom="10"/>
+                    <TextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" MarginLeft="30" MarginRight="30" Brush="Kingdom.DecisionParagraph.Text" Text="@Description" />
+
+                    <ListPanel DataSource="{BoundSkills}" WidthSizePolicy="CoverChildren" HeightSizePolicy="StretchToParent" HorizontalAlignment="Center" VerticalAlignment="Center" MarginTop="25" >
+                      <ItemTemplate>
+                        <ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" MarginLeft="8" MarginRight="8" StackLayout.LayoutMethod="VerticalBottomToTop">
+                          <Children>
+                            <SkillIconVisualWidget HorizontalAlignment="Center" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="70" SuggestedHeight="70" MarginBottom="5" SkillId="@SkillId">
+                              <!--<HintWidget DataSource="{Hint}" HeightSizePolicy ="StretchToParent" WidthSizePolicy="StretchToParent" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint"/>-->
+                            </SkillIconVisualWidget>
+                            <TextWidget HorizontalAlignment="Center" MaxWidth="165" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" Text="@Name" Brush="Kingdom.DecisionParagraph.Text" Brush.FontSize="20" ClipContents="false"/>
+                          </Children>
+                        </ListPanel>
+                      </ItemTemplate>
+                    </ListPanel>
+
+                    <TextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" Brush="Kingdom.DecisionParagraph.Text" Brush.TextVerticalAlignment="Bottom" Text="@IncreaseHelpText" MarginBottom="40" ClipContents="false" />
+
+                  </Children>
+                </ListPanel>
+
+
+                <ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" MarginTop="20"  StackLayout.LayoutMethod="VerticalBottomToTop" >
+                  <Children>
+
+                    <ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Bottom">
+                      <Children>
+                        <!--Unspent Attribute Points Number-->
+                        <Widget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" VerticalAlignment="Center">
+                          <Children>
+                            <TextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" Brush="Kingdom.DecisionParagraph.Text" Text="@UnspentAttributePointsText"/>
+                          </Children>
+                        </Widget>
+                        <!--Attribute Point Image-->
+                        <Widget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="35" SuggestedHeight="35" VerticalAlignment="Center" Sprite="CharacterDeveloper\attribute_point_icon"/>
+                      </Children>
+                    </ListPanel>
+
+                    <ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren"  HorizontalAlignment="Center" StackLayout.LayoutMethod="HorizontalLeftToRight" >
+                      <Children>
+                        <TextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" Brush="Kingdom.DecisionParagraph.Text" VerticalAlignment="Center" HorizontalAlignment="Center" Brush.FontSize="72" IntText="@AttributeValue"/>
+
+                        <ButtonWidget  WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="77" SuggestedHeight="77" HorizontalAlignment="Center" MarginBottom="15" Command.Click="ExecuteAddAttributePoint" Brush="CharacterDeveloper.AddAttribute.Button" IsEnabled="@CanAddPoint"/>
+                      </Children>
+                    </ListPanel>
+                  </Children>
+                </ListPanel>
+
+              </Children>
+            </ListPanel>
+
+            <Widget DoNotAcceptEvents="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="576" SuggestedHeight="675" HorizontalAlignment="Left" VerticalAlignment="Center" MarginBottom="0"  PositionXOffset="-20"  Sprite="CharacterDeveloper\AttributePopup\attribute_popup_frame" />
+            <Widget DoNotAcceptEvents="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="566" SuggestedHeight="55" HorizontalAlignment="Left" VerticalAlignment="Bottom"  PositionXOffset="-3" MarginBottom="125" Sprite="CharacterDeveloper\AttributePopup\attribute_popup_divider" />
+
+            <!--Close Inspection Popup Button-->
+            <ButtonWidget DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="84" SuggestedHeight="84" HorizontalAlignment="Center" VerticalAlignment="Center" MarginLeft="520" MarginBottom="620" Command.Click="ExecuteStopInspectingCurrentAttribute" Brush="Attribute.Close.Button" />
+
+          </Children>
+        </CharacterDeveloperAttributeInspectionPopupWidget>
+
+
+      </Children>
+    </Widget>
+  </Window>
+</Prefab>

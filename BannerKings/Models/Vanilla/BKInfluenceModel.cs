@@ -5,7 +5,7 @@ using static BannerKings.Managers.PopulationManager;
 using BannerKings.Populations;
 using BannerKings.Managers.Populations.Villages;
 using TaleWorlds.Library;
-using System.Linq;
+using BannerKings.Managers.Titles;
 
 namespace BannerKings.Models
 {
@@ -49,6 +49,17 @@ namespace BannerKings.Models
                     generalSupport  += data.NotableSupport - 0.5f;
                     generalAutonomy += -0.5f * data.Autonomy;
                     i++;
+
+                    if (settlement.IsVillage)
+                    {
+                        FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement);
+                        if (title.deJure != null)
+                        {
+                            Clan deJureClan = title.deJure.Clan;
+                            if (title.deJure != deJureClan.Leader)
+                                title.deJure.AddPower(baseResult.ResultNumber * 0.1f);
+                        }
+                    }
                 }
             }
 

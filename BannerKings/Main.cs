@@ -45,7 +45,8 @@ namespace BannerKings
             {
                 CampaignGameStarter campaignStarter = (CampaignGameStarter)gameStarter;
                 campaignStarter.AddBehavior(new BKSettlementBehavior());
-                campaignStarter.AddBehavior(new BKCompanionBehavior());
+                campaignStarter.AddBehavior(new BKSettlementActions());
+                campaignStarter.AddBehavior(new BKKnighthoodBehavior());
                 campaignStarter.AddBehavior(new BKTournamentBehavior());
                 campaignStarter.AddBehavior(new BKRepublicBehavior());
                 campaignStarter.AddBehavior(new BKPartyBehavior());
@@ -455,6 +456,16 @@ namespace BannerKings
                         FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(clan.Leader);
                         return title != null && title.contract != null && title.contract.Rights.Contains(FeudalRights.Assistance_Rights);
                     }
+                    return true;
+                }
+
+                [HarmonyPrefix]
+                [HarmonyPatch("AddIncomeFromParty", MethodType.Normal)]
+                static bool AddIncomeFromPartyPrefix(MobileParty party, Clan clan, ref ExplainedNumber goldChange, bool applyWithdrawals)
+                {
+                    if (BannerKingsConfig.Instance.TitleManager != null && party.LeaderHero != null && party.LeaderHero != clan.Leader)
+                        return BannerKingsConfig.Instance.TitleManager.GetHighestTitle(party.LeaderHero) == null;
+                    
                     return true;
                 }
 

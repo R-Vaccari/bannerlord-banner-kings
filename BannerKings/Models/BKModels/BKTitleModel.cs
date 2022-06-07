@@ -101,8 +101,8 @@ namespace BannerKings.Models.BKModels
         {
             TitleAction revokeAction = new TitleAction(ActionType.Revoke, title, revoker);
             if (title == null || revoker == null) return null;
-            revokeAction.Influence = this.GetInfluenceUsurpCost(title) * 0.8f;
-            revokeAction.Renown = this.GetRenownUsurpCost(title) * 0.6f;
+            revokeAction.Influence = GetInfluenceUsurpCost(title) * 0.8f;
+            revokeAction.Renown = GetRenownUsurpCost(title) * 0.6f;
 
             if (title.deJure == revoker)
             {
@@ -126,7 +126,8 @@ namespace BannerKings.Models.BKModels
                 revokeAction.Reason = new TextObject("{=!}Tribal government does not allow revoking.");
                 return revokeAction;
             }
-            else if (governmentType == GovernmentType.Republic)
+
+            if (governmentType == GovernmentType.Republic)
             {
                 if (title.type != TitleType.Dukedom)
                 {

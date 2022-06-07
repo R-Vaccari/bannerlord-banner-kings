@@ -1,4 +1,4 @@
-﻿using BannerKings.Managers.Institutions;
+﻿using BannerKings.Managers.Institutions.Guilds;
 using BannerKings.Populations;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
@@ -21,9 +21,11 @@ namespace BannerKings.UI.Panels
             base.RefreshValues();
 			GuildInfo.Clear();
 			GuildInfo.Add(new InformationElement("Capital:", this.guild.Capital.ToString(),
-				"This guild's financial resources"));
+				"This guild's financial resources."));
 			GuildInfo.Add(new InformationElement("Influence:", this.guild.Influence.ToString(),
-				"Soft power this guild has, allowing them to call in favors and make demands"));
+				"The guild's grip on the settlement, composed by it's members and their power."));
+			GuildInfo.Add(new InformationElement("Income:", this.guild.Income.ToString(),
+				"Daily income of the guild, based on their influence over the settlement, it's mercantilism and autonomy."));
 		}
 
         [DataSourceProperty]
@@ -44,9 +46,6 @@ namespace BannerKings.UI.Panels
 					base.OnPropertyChangedWithValue(value, "GuildInfo");
 				}
 			}
-		}
-
-		public void ExecuteClose() => UIManager.Instance.CloseUI();
-		
+		}	
 	}
 }

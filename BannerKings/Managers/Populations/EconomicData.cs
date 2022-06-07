@@ -1,4 +1,4 @@
-﻿using BannerKings.Managers.Institutions;
+﻿using BannerKings.Managers.Institutions.Guilds;
 using BannerKings.Models;
 using BannerKings.Models.Populations;
 using BannerKings.Populations;
@@ -6,6 +6,7 @@ using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
+using TaleWorlds.Localization;
 using TaleWorlds.SaveSystem;
 using static BannerKings.Managers.PopulationManager;
 
@@ -33,6 +34,11 @@ namespace BannerKings.Managers.Populations
             this.stateSlaves = MBRandom.RandomFloatRanged(0.4f, 0.6f);
         }
 
+        public void RemoveGuild()
+        {
+            if (guild != null)
+                guild = null;
+        }
 
         public Guild Guild => this.guild;
 
@@ -62,11 +68,21 @@ namespace BannerKings.Managers.Populations
 
         internal override void Update(PopulationData data)
         {
-            if (this.guild != null)
+            /*
+            if (guild == null && settlement.IsTown)
             {
-                this.guild.Destroy();
-                this.guild = null;
-            }
+                Hero notable = Guild.EvaluateNewLeader(settlement);
+                if (notable != null && Guild.IsSuitable(notable))
+                {
+                    guild = new Guild(settlement, notable, Guild.GetSuitableTrade(settlement, notable));
+                    notable.AddPower(-100f);
+                    InformationManager.DisplayMessage(new InformationMessage(new TextObject("{=!}{HERO} has formed a {GUILD} at {TOWN}.")
+                        .SetTextVariable("HERO", notable.Name)
+                        .SetTextVariable("GUILD", guild.GuildType.Name)
+                        .SetTextVariable("TOWN", settlement.Name)
+                        .ToString()));
+                }
+            }*/
         }
 
         public ExplainedNumber AdministrativeCost => BannerKingsConfig.Instance.Models

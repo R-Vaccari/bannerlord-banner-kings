@@ -2,15 +2,17 @@
 
 namespace BannerKings.Managers.Institutions
 {
-    public abstract class LandedInstitution : Institution
+    public abstract class LandedInstitution
     {
         protected Settlement settlement;
 
-        public LandedInstitution(Settlement settlement) : base()
+        public LandedInstitution(Settlement settlement)
         {
             this.settlement = settlement;
         }
 
-        public Settlement Settlement => this.settlement;
+        public abstract void Destroy();
+
+        public Settlement Settlement => settlement;
     }
 }

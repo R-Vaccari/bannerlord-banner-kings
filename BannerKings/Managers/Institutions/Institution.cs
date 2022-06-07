@@ -1,20 +1,15 @@
-﻿using System.Collections.Generic;
-using TaleWorlds.CampaignSystem;
-
+﻿
 namespace BannerKings.Managers.Institutions
 {
     public abstract class Institution
     {
-
-        protected Hero leader;
         protected float influence;
-        protected Dictionary<Hero, float> favors;
 
-        public Institution()
+        protected Institution()
         {
-            this.favors = new Dictionary<Hero, float>();
         }
 
+<<<<<<< HEAD
         public Hero Leader
         {
             get
@@ -45,5 +40,10 @@ namespace BannerKings.Managers.Institutions
             else this.favors.Add(hero, favor);
         }
 
+=======
+        public float Influence => influence;
+
+        public abstract void Destroy();
+>>>>>>> main
     }
 }

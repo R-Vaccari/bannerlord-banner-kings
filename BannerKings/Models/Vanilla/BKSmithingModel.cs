@@ -17,13 +17,14 @@ namespace BannerKings.Models.Vanilla
             if (item.WeaponComponent != null && item.WeaponComponent.PrimaryWeapon != null)
             {
                 int metalCap = GetMetalMax(item.WeaponComponent.PrimaryWeapon.WeaponClass);
-                while (metalCount > metalCap)
-                    for (int i = 0; i < result.Length; i++)
-                        if (i >= 2 && i <= 6 && result[i] > 0 && metalCount > metalCap)
-                        {
-                            result[i]--;
-                            metalCount--;
-                        }
+                if (metalCount > 0 && metalCap > 0)
+                    while (metalCount > metalCap)
+                        for (int i = 0; i < result.Length; i++)
+                            if (i >= 2 && i <= 6 && result[i] > 0 && metalCount > metalCap)
+                            {
+                                result[i]--;
+                                metalCount--;
+                            }
                 
                             
                 if (item.WeaponComponent.PrimaryWeapon.WeaponClass == WeaponClass.Dagger)
