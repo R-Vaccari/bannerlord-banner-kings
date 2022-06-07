@@ -37,12 +37,13 @@ namespace BannerKings.Behaviors
                 BannerKingsConfig.Instance.TitleManager == null) return;
 
             FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(hero);
-            if (title == null || title.fief.Village == null || title.type != TitleType.Lordship || !CanCreateClan(hero)) return;
+            if (title == null ||  title.type != TitleType.Lordship || title.fief.Village == null || !CanCreateClan(hero)) return;
 
             Clan originalClan = hero.Clan;
-            Clan clan = Clan.CreateClan(hero.StringId + "_knight_clan");
             Settlement settlement = title.fief.Village.TradeBound;
-            TextObject name = NameGenerator.Current.GenerateClanName(hero.Culture, settlement);
+            TextObject name = GetRandomName(hero.Culture, settlement);
+            if (name == null || Clan.All.Any((Clan t) => t.Name.Equals(name)) || Clan.PlayerClan.Name.Equals(name)) return;
+            Clan clan = Clan.CreateClan(hero.StringId + "_knight_clan");
             clan.InitializeClan(name, name, hero.Culture, Banner.CreateOneColoredBannerWithOneIcon(settlement.MapFaction.Banner.GetFirstIconColor(), settlement.MapFaction.Banner.GetPrimaryColor(), 
                 hero.Culture.PossibleClanBannerIconsIDs.GetRandomElement()), settlement.GatePosition, false);
             clan.Kingdom = originalClan.Kingdom;
@@ -55,7 +56,19 @@ namespace BannerKings.Behaviors
                             .SetTextVariable("ORIGINAL", originalClan.Name));
         }
 
-        private bool CanCreateClan(Hero hero) => hero.Gold >= 30000 && hero.Power >= 150f;
+        private TextObject GetRandomName(CultureObject culture, Settlement settlement)
+        {
+            TextObject random = null;
+            if (culture.ClanNameList.Count > 1)
+                random = culture.ClanNameList.GetRandomElementInefficiently();
+            else
+            {
+                random = culture.ClanNameList[0];
+                random.SetTextVariable("ORIGIN_SETTLEMENT", settlement.Name);
+            }
+            return random;
+        }
+        private bool CanCreateClan(Hero hero) => hero.Gold >= 30000 && hero.Power >= 250f;
 
         private void OnSessionLaunched(CampaignGameStarter campaignGameStarter)
         {
