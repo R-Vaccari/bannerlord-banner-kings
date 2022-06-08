@@ -1,9 +1,6 @@
-﻿using BannerKings.Managers.Institutions.Religions;
-using Bannerlord.UIExtenderEx.Attributes;
+﻿using Bannerlord.UIExtenderEx.Attributes;
 using Bannerlord.UIExtenderEx.ViewModels;
-using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.ViewModelCollection;
-using TaleWorlds.CampaignSystem.ViewModelCollection.Map;
 using TaleWorlds.Core.ViewModelCollection;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -14,16 +11,36 @@ namespace BannerKings.UI.Extensions
     internal class CharacterDeveloperMixin : BaseViewModelMixin<CharacterDeveloperVM>
     {
 		private BasicTooltipViewModel pietyHint;
-		private int piety;
+		private bool visible;
 		private string educationText;
 		public CharacterDeveloperMixin(CharacterDeveloperVM vm) : base(vm)
         {
-        }
+			EducationVisible = false;
+		}
 
         public override void OnRefresh()
         {
 			EducationText = new TextObject("{=!}Education").ToString();
 			//if (rel == null) return;
+		}
+
+		public void OpenEducation()
+        {
+			EducationVisible = true;
+			OnRefresh();
+        }
+
+		public bool EducationVisible
+        {
+			get => visible;
+			set
+			{
+				if (value != visible)
+				{
+					visible = value;
+					ViewModel!.OnPropertyChangedWithValue(value, "EducationVisible");
+				}
+			}
 		}
 
 		[DataSourceProperty]

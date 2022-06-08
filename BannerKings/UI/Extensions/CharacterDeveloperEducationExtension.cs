@@ -17,7 +17,7 @@ namespace BannerKings.UI.Extensions
         public CharacterDeveloperEducationExtension()
         {
             XmlDocument firstChild = new XmlDocument();
-            firstChild.LoadXml("<ButtonWidget DoNotPassEventsToChildren=\"true\" WidthSizePolicy=\"Fixed\" HeightSizePolicy=\"Fixed\" SuggestedWidth=\"170\" SuggestedHeight=\"65\" HorizontalAlignment=\"Center\" MarginTop=\"80\" Brush=\"Header.Tab.Center\" Command.Click=\"OpenEducation\" UpdateChildrenStates=\"true\"><Children><TextWidget WidthSizePolicy = \"StretchToParent\" HeightSizePolicy = \"StretchToParent\" MarginTop = \"3\" Brush = \"Clan.TabControl.Text\" Text = \"@EducationText\"/></Children></ButtonWidget>");
+            firstChild.LoadXml("<ButtonWidget DoNotPassEventsToChildren=\"true\" WidthSizePolicy=\"Fixed\" HeightSizePolicy=\"Fixed\" SuggestedWidth=\"170\" SuggestedHeight=\"65\" HorizontalAlignment=\"Center\" MarginTop=\"80\" Brush=\"Header.Tab.Center\" Command.Click=\"OpenEducation\" UpdateChildrenStates=\"false\"><Children><TextWidget WidthSizePolicy = \"StretchToParent\" HeightSizePolicy = \"StretchToParent\" MarginTop = \"3\" Brush = \"Clan.TabControl.Text\" Text = \"@EducationText\"/></Children></ButtonWidget>");
 
             nodes = new List<XmlNode> { firstChild };
         }
@@ -25,5 +25,26 @@ namespace BannerKings.UI.Extensions
         [PrefabExtensionXmlNodes]
         public IEnumerable<XmlNode> Nodes => nodes;
         
+    }
+
+    [PrefabExtension("CharacterDeveloper", "descendant::Widget/Children", "CharacterDeveloper")]
+    internal class CharacterDeveloperEducationExtension2 : PrefabExtensionInsertPatch
+    {
+        public override InsertType Type => InsertType.Child;
+        public override int Index => 8;
+
+        private List<XmlNode> nodes;
+
+        public CharacterDeveloperEducationExtension2()
+        {
+            XmlDocument firstChild = new XmlDocument();
+            firstChild.LoadXml("<EducationInspectPopup/>");
+
+            nodes = new List<XmlNode> { firstChild };
+        }
+
+        [PrefabExtensionXmlNodes]
+        public IEnumerable<XmlNode> Nodes => nodes;
+
     }
 }
