@@ -281,23 +281,13 @@ namespace BannerKings.Behaviors
             if (roster.TotalFood > maxStorage)
             {
                 int toRot = (int)(roster.TotalFood * 0.01f);
-                while (toRot > 0)
+                foreach (ItemRosterElement element in roster.ToList().FindAll(x => x.EquipmentElement.Item != null &&
+                        x.EquipmentElement.Item.ItemCategory.Properties == ItemCategory.Property.BonusToFoodStores))
                 {
-                    ItemRosterElement element = roster.GetRandomElementWithPredicate(x => x.EquipmentElement.Item != null &&
-                        x.EquipmentElement.Item.ItemCategory.Properties == ItemCategory.Property.BonusToFoodStores);
-                    if (element.Amount > 10)
-                    {
-                        float random = MBRandom.RandomFloatRanged(10f, element.Amount);
-                        int result = (int)MathF.Min(random, (float)toRot);
-                        roster.AddToCounts(element.EquipmentElement, -result);
-                        toRot -= result;
-                    }
-                    else
-                    {
-                        int result = (int)MathF.Min(element.Amount, toRot);
-                        roster.AddToCounts(element.EquipmentElement, -result);
-                        toRot -= result;
-                    }
+                    if (toRot <= 0) break;
+                    int result = (int)MathF.Min(MBRandom.RandomFloatRanged(10f, toRot), (float)element.Amount);
+                    roster.AddToCounts(element.EquipmentElement, -result);
+                    toRot -= result;
                 }
             }
         }
