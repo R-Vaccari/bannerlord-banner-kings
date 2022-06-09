@@ -24,12 +24,21 @@ namespace BannerKings.UI.Extensions
 			//if (rel == null) return;
 		}
 
+		[DataSourceMethod]
 		public void OpenEducation()
         {
 			EducationVisible = true;
 			OnRefresh();
         }
 
+		[DataSourceMethod]
+		public void CloseEducation()
+		{
+			EducationVisible = false;
+			OnRefresh();
+		}
+
+		[DataSourceProperty]
 		public bool EducationVisible
         {
 			get => visible;

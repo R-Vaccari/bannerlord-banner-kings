@@ -25,7 +25,7 @@
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <WarningsAsErrors />
     <WarningLevel>2</WarningLevel>
-    <DefineConstants>TRACE;DEBUG;RELEASE</DefineConstants>
+    <DefineConstants>DEBUG;TRACE;RELEASE</DefineConstants>
     <Optimize>false</Optimize>
     <DebugType>full</DebugType>
     <DebugSymbols>true</DebugSymbols>
@@ -312,6 +312,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="UI\Education\" />
     <Folder Include="_Module\GUI\Prefabs" />
     <Folder Include="_Module\ModuleData" />
   </ItemGroup>
