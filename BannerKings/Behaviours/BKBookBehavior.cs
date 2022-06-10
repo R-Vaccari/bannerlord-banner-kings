@@ -18,8 +18,7 @@ namespace BannerKings.Behaviours
 
         private void OnSessionLaunched(CampaignGameStarter campaignGameStarter)
         {
-            BKItemCategories.Instance.Initialize();
-            BKItems.Instance.Initialize();
+            
         }
     }
 }

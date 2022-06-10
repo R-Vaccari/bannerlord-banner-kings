@@ -312,7 +312,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="UI\Education\" />
     <Folder Include="_Module\GUI\Prefabs" />
     <Folder Include="_Module\ModuleData" />
   </ItemGroup>

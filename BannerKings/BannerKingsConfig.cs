@@ -1,9 +1,12 @@
 ﻿using BannerKings.Managers;
 using BannerKings.Managers.Court;
 using BannerKings.Managers.Decisions;
+using BannerKings.Managers.Education.Books;
+using BannerKings.Managers.Education.Languages;
 using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Institutions.Religions.Doctrines;
 using BannerKings.Managers.Institutions.Religions.Faiths;
+using BannerKings.Managers.Items;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Populations.Villages;
 using BannerKings.Managers.Skills;
@@ -34,6 +37,10 @@ namespace BannerKings
             DefaultDivinities.Instance.Initialize();
             DefaultFaiths.Instance.Initialize();
             DefaultDoctrines.Instance.Initialize();
+            BKItemCategories.Instance.Initialize();
+            BKItems.Instance.Initialize();
+            DefaultLanguages.Instance.Initialize();
+            DefaultBookTypes.Instance.Initialize();
 
             Models.Add(new BKCultureAssimilationModel());
             Models.Add(new BKCultureAcceptanceModel());

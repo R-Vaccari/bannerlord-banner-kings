@@ -41,7 +41,7 @@ namespace BannerKings.UI
         public bool HasTown => !IsVillage;
 
         [DataSourceProperty]
-        public bool IsVillage => data.Settlement.IsVillage;
+        public bool IsVillage => data != null && data.Settlement.IsVillage;
         
 
         [DataSourceProperty]

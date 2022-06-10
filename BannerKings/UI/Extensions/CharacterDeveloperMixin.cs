@@ -1,4 +1,5 @@
-﻿using Bannerlord.UIExtenderEx.Attributes;
+﻿using BannerKings.UI.Education;
+using Bannerlord.UIExtenderEx.Attributes;
 using Bannerlord.UIExtenderEx.ViewModels;
 using TaleWorlds.CampaignSystem.ViewModelCollection;
 using TaleWorlds.Core.ViewModelCollection;
@@ -10,18 +11,22 @@ namespace BannerKings.UI.Extensions
     [ViewModelMixin("RefreshValues")]
     internal class CharacterDeveloperMixin : BaseViewModelMixin<CharacterDeveloperVM>
     {
-		private BasicTooltipViewModel pietyHint;
+		//private BasicTooltipViewModel pietyHint;
+		private CharacterDeveloperVM characterDeveloper;
+		private EducationVM educationVM;
 		private bool visible;
 		private string educationText;
 		public CharacterDeveloperMixin(CharacterDeveloperVM vm) : base(vm)
         {
 			EducationVisible = false;
+			characterDeveloper = vm;
 		}
 
         public override void OnRefresh()
         {
 			EducationText = new TextObject("{=!}Education").ToString();
-			//if (rel == null) return;
+			Education = new EducationVM(characterDeveloper.CurrentCharacter.Hero);
+			Education.RefreshValues();
 		}
 
 		[DataSourceMethod]
@@ -36,6 +41,20 @@ namespace BannerKings.UI.Extensions
 		{
 			EducationVisible = false;
 			OnRefresh();
+		}
+
+		[DataSourceProperty]
+		public EducationVM Education
+		{
+			get => educationVM;
+			set
+			{
+				if (value != educationVM)
+				{
+					educationVM = value;
+					ViewModel!.OnPropertyChangedWithValue(value, "Education");
+				}
+			}
 		}
 
 		[DataSourceProperty]

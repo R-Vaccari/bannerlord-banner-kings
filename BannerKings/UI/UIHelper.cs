@@ -22,6 +22,29 @@ namespace BannerKings.UI
 {
     public static class UIHelper
     {
+
+		public static TextObject GetLanguageFluencyText(float fluency)
+        {
+			TextObject text = null;
+			switch(fluency)
+            {
+				case >= 0.9f:
+					text = new TextObject("{=!}Fluent");
+					break;
+				case >= 0.5f:
+					text = new TextObject("{=!}Capable");
+					break;
+				case >= 0.1f:
+					text = new TextObject("{=!}Novice");
+					break;
+				default:
+					text = new TextObject("{=!}Incompetent");
+					break;
+            }
+
+			return text;
+        }
+
 		public static TextObject GetFaithTypeName(Faith faith)
         {
 			TextObject text = null;
