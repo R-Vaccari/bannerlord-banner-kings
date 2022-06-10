@@ -33,6 +33,7 @@ namespace BannerKings.Behaviors
         private TitleManager titleManager;
         private CourtManager courtManager;
         private ReligionsManager religionsManager;
+        private EducationManager educationsManager;
         private static float actionGold;
         private static int actionHuntGame;
         private static CampaignTime actionStart = CampaignTime.Now;
@@ -54,6 +55,7 @@ namespace BannerKings.Behaviors
                 titleManager = BannerKingsConfig.Instance.TitleManager;
                 courtManager = BannerKingsConfig.Instance.CourtManager;
                 religionsManager = BannerKingsConfig.Instance.ReligionsManager;
+                educationsManager = BannerKingsConfig.Instance.EducationManager;
             }
 
             if (BannerKingsConfig.Instance.wipeData)
@@ -63,6 +65,7 @@ namespace BannerKings.Behaviors
                 titleManager = null;
                 courtManager = null;
                 religionsManager = null;
+                educationsManager = null;
             }
 
             dataStore.SyncData("bannerkings-populations", ref populationManager);
@@ -70,6 +73,7 @@ namespace BannerKings.Behaviors
             dataStore.SyncData("bannerkings-courts", ref courtManager);
             dataStore.SyncData("bannerkings-policies", ref policyManager);
             dataStore.SyncData("bannerkings-religions", ref religionsManager);
+            dataStore.SyncData("bannerkings-educations", ref educationsManager);
 
             if (dataStore.IsLoading)
             {
@@ -77,7 +81,7 @@ namespace BannerKings.Behaviors
                     BannerKingsConfig.Instance.InitManagers();
 
                 else BannerKingsConfig.Instance.InitManagers(populationManager, policyManager,
-                    titleManager, courtManager, religionsManager);
+                    titleManager, courtManager, religionsManager, educationsManager);
             }
         }
 

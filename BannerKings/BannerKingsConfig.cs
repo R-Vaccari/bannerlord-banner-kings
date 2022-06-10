@@ -24,6 +24,7 @@ namespace BannerKings
         public TitleManager TitleManager;
         public CourtManager CourtManager;
         public ReligionsManager ReligionsManager;
+        public EducationManager EducationManager;
         public HashSet<IBannerKingsModel> Models = new HashSet<IBannerKingsModel>();
         public bool wipeData = false;
 
@@ -57,10 +58,11 @@ namespace BannerKings
             TitleManager = new TitleManager(new Dictionary<FeudalTitle, Hero>(), new Dictionary<Hero, List<FeudalTitle>>(), new Dictionary<Kingdom, FeudalTitle>());
             CourtManager = new CourtManager(new Dictionary<Clan, CouncilData>());
             ReligionsManager = new ReligionsManager();
+            EducationManager = new EducationManager();
         }
 
         public void InitManagers(PopulationManager populationManager, PolicyManager policyManager, TitleManager titleManager, CourtManager court,
-            ReligionsManager religions)
+            ReligionsManager religions, EducationManager educations)
         {
             Initialize();
             PopulationManager = populationManager;
@@ -70,7 +72,7 @@ namespace BannerKings
             titleManager.RefreshDeJure();
             CourtManager = court;
             ReligionsManager = religions != null ? religions : new ReligionsManager();
-            ReligionsManager.InitializeReligions();
+            EducationManager = educations != null ? educations : new EducationManager();
         }
 
         public static BannerKingsConfig Instance => ConfigHolder.CONFIG;
