@@ -9,7 +9,6 @@ using BannerKings.Managers.Institutions.Religions.Faiths;
 using BannerKings.Managers.Items;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Populations.Villages;
-using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
 using BannerKings.Models;
 using BannerKings.Models.BKModels;
@@ -22,12 +21,16 @@ namespace BannerKings
 {
     public class BannerKingsConfig
     {
-        public PopulationManager PopulationManager;
-        public PolicyManager PolicyManager;
-        public TitleManager TitleManager;
-        public CourtManager CourtManager;
-        public ReligionsManager ReligionsManager;
-        public EducationManager EducationManager;
+        public PopulationManager PopulationManager { get; private set; }
+        public PolicyManager PolicyManager { get; private set; }
+        public TitleManager TitleManager { get; private set; }
+        public CourtManager CourtManager { get; private set; }
+        public ReligionsManager ReligionsManager { get; private set; }
+        public EducationManager EducationManager { get; private set; }
+
+
+        public BKEducationModel EducationModel { get; private set; } = new BKEducationModel();
+
         public HashSet<IBannerKingsModel> Models = new HashSet<IBannerKingsModel>();
         public bool wipeData = false;
 

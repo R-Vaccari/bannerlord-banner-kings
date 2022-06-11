@@ -70,8 +70,11 @@ namespace BannerKings.Managers
             {
                 if (KnowsLanguage(hero, language)) continue;
                 foreach(Hero courtMember in court)
+                {
+                    if (courtMember.IsChild || courtMember.IsPrisoner) continue;
                     if (KnowsLanguage(courtMember, language))
-                        list.Add(new (language, courtMember));
+                        list.Add(new(language, courtMember));
+                }
             }
 
             RETURN:
@@ -89,6 +92,12 @@ namespace BannerKings.Managers
         {
             if (Educations.ContainsKey(hero))
                 Educations[hero].SetCurrentBook(book);
+        }
+
+        public void SetCurrentLanguage(Hero hero, Language language, Hero instructor)
+        {
+            if (Educations.ContainsKey(hero))
+                Educations[hero].SetCurrentLanguage(language, instructor);
         }
 
         public MBReadOnlyList<BookType> GetAvailableBooks(MobileParty party)

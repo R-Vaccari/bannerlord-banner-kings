@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using BannerKings.Managers.Education.Training;
 using TaleWorlds.Library;
 using TaleWorlds.CampaignSystem;
+using System;
 
 namespace BannerKings.Managers.Education
 {
@@ -29,10 +30,40 @@ namespace BannerKings.Managers.Education
             languageInstructor = null;
         }
 
-        public void SetCurrentBook(BookType book) => currentBook = book;
+        public void SetCurrentBook(BookType book)
+        {
+            if (book != null && !books.ContainsKey(book)) books.Add(book, 0f);
+            currentBook = book;
+        }
 
+        public void SetCurrentLanguage(Language language, Hero instructor)
+        {
+            if (language != null && !languages.ContainsKey(language)) languages.Add(language, 0f);
+            currentLanguage = language;
+            languageInstructor = instructor;
+        }
         public BookType CurrentBook => currentBook;
+        public float CurrentBookProgress
+        {
+            get
+            {
+                float progress = 0f;
+                if (currentBook != null && books.ContainsKey(currentBook)) progress = books[currentBook];
+                return progress;
+            }
+        }
+
         public Language CurrentLanguage => currentLanguage;
+        public float CurrentLanguageFluency
+        {
+            get
+            {
+                float progress = 0f;
+                if (currentLanguage != null && languages.ContainsKey(currentLanguage)) progress = languages[currentLanguage];
+                return progress;
+            }
+        }
+
         public Hero LanguageInstructor => languageInstructor;
         public Mastery Mastery => mastery;
         public MBReadOnlyDictionary<Language, float> Languages => languages.GetReadOnlyDictionary();

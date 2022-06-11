@@ -55,7 +55,7 @@
 										  <Children>
 										  
 										    <TextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" Brush="OverlayPopup.ButtonText" Brush.FontSize="26" Text="@CurrentBookText" HorizontalAlignment="Center"/>
-											<GridWidget DataSource="{CurrentBookInfo}" WidthSizePolicy="CoverChildren" HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" MarginRight="30" DefaultCellWidth="150" DefaultCellHeight="30" ColumnCount="1" >
+											<GridWidget DataSource="{CurrentBookInfo}" WidthSizePolicy="CoverChildren" HorizontalAlignment="Center" MarginRight="100" HeightSizePolicy="CoverChildren"  DefaultCellWidth="150" DefaultCellHeight="30" ColumnCount="1" >
 											  <ItemTemplate>
 												<InformationElement/>
 											  </ItemTemplate>
@@ -97,6 +97,30 @@
 												<InformationElement/>
 											  </ItemTemplate>
 											</GridWidget>
+										  </Children>
+										</ListPanel>
+									  </Children>
+									</Widget>
+									
+									<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren">
+									  <Children>
+									    <ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" StackLayout.LayoutMethod="VerticalBottomToTop" DoNotAcceptEvents="true">
+										  <Children>
+										  
+										    <TextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" Brush="OverlayPopup.ButtonText" Brush.FontSize="26" Text="@CurrentLanguageText" HorizontalAlignment="Center"/>
+											<GridWidget DataSource="{CurrentLanguageInfo}" WidthSizePolicy="CoverChildren" HorizontalAlignment="Center" MarginRight="100" HeightSizePolicy="CoverChildren" DefaultCellWidth="150" DefaultCellHeight="30" ColumnCount="1" >
+											  <ItemTemplate>
+												<InformationElement/>
+											  </ItemTemplate>
+											</GridWidget>
+											
+											<ButtonWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedHeight="48" SuggestedWidth="200" MarginTop="20" HorizontalAlignment="Center" VerticalAlignment="Top" Brush="ButtonBrush2" Command.Click="SelectNewLanguage" IsEnabled="true">
+											  <Children>  
+												<HintWidget DataSource="{TournamentHint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" />	
+												<RichTextWidget DoNotAcceptEvents="true" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="OverlayPopup.ButtonText" Brush.FontSize="20" Text="@ChooseLanguageText"/>
+											  </Children>
+											</ButtonWidget>
+											
 										  </Children>
 										</ListPanel>
 									  </Children>
