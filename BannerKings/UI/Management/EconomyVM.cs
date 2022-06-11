@@ -42,14 +42,26 @@ namespace BannerKings.UI
             RevenueInfo.Clear();
             SatisfactionInfo.Clear();
 
-            ProductionInfo.Add(new InformationElement("Merchants' Revenue:", data.EconomicData.MerchantRevenue.ToString(),
-               "Daily revenue of local merchants, based on slave workforce and production efficiency."));
-            ProductionInfo.Add(new InformationElement("State Slaves:", FormatValue(data.EconomicData.StateSlaves),
-               "Percentage of slaves in this settlement that are state-owned and therefore used for state purposes such as building projects."));
-            ProductionInfo.Add(new InformationElement("Production Quality:", FormatValue(data.EconomicData.ProductionQuality.ResultNumber),
-               "How much workshops expend to produce output. Higher quality yields more profit."));
-            ProductionInfo.Add(new InformationElement("Production Efficiency:", FormatValue(data.EconomicData.ProductionEfficiency.ResultNumber),
-               "The speed at which workshops produce goods, affected by kingdom policies and craftsmen."));
+            ProductionInfo.Add(new InformationElement(new TextObject("Merchants' Revenue:").ToString(), data.EconomicData.MerchantRevenue.ToString(),
+               new TextObject("Daily revenue of local merchants, based on slave workforce and production efficiency.").ToString()));
+
+            ProductionInfo.Add(new InformationElement(new TextObject("State Slaves:").ToString(), FormatValue(data.EconomicData.StateSlaves),
+               new TextObject("Percentage of slaves in this settlement that are state-owned and therefore used for state purposes such as building projects.").ToString()));
+
+            ExplainedNumber quality = data.EconomicData.ProductionQuality;
+            ProductionInfo.Add(new InformationElement(new TextObject("Production Quality:").ToString(), FormatValue(quality.ResultNumber),
+               new TextObject("{=!}{TEXT}\n{EXPLANATIONS}")
+               .SetTextVariable("TEXT", new TextObject("{=!}How much workshops expend to produce output. Higher quality yields more profit."))
+               .SetTextVariable("EXPLANATIONS", quality.GetExplanations())
+               .ToString())); 
+
+            ExplainedNumber efficiency = data.EconomicData.ProductionEfficiency;
+            ProductionInfo.Add(new InformationElement(new TextObject("Production Efficiency:").ToString(), FormatValue(efficiency.ResultNumber),
+               new TextObject("{=!}{TEXT}\n{EXPLANATIONS}")
+               .SetTextVariable("TEXT", new TextObject("{=!}The speed at which workshops produce goods, affected by kingdom policies and craftsmen"))
+               .SetTextVariable("EXPLANATIONS", efficiency.GetExplanations())
+               .ToString()));
+
 
             if (IsVillage)
             {
@@ -64,20 +76,30 @@ namespace BannerKings.UI
                 }
                 sb.Remove(sb.Length - 2, 1);
                 string productionString = sb.ToString();
-                ProductionInfo.Add(new InformationElement("Goods Production:", productionQuantity + " (Daily)",
-                   "How much the local population can progress with construction projects, on a daily basis."));
-                ProductionInfo.Add(new InformationElement("Items Produced:", productionString,
-                   "Goods locally produced by the population."));
+                ProductionInfo.Add(new InformationElement(new TextObject("Goods Production:").ToString(), productionQuantity + " (Daily)",
+                   new TextObject("How much the local population can progress with construction projects, on a daily basis.").ToString()));
+                ProductionInfo.Add(new InformationElement(new TextObject("Items Produced:").ToString(), productionString,
+                   new TextObject("Goods locally produced by the population.").ToString()));
             } 
             else
             {
-                RevenueInfo.Add(new InformationElement("Tariff:", FormatValue(data.EconomicData.Tariff),
-                      "Percentage of an item's value charged as tax when sold."));
-                RevenueInfo.Add(new InformationElement("Mercantilism:", FormatValue(data.EconomicData.Mercantilism.ResultNumber),
-                      "Represents how economicaly free craftsmen, tradesmen and guilds are. Increased mercantilism reduces the tax revenue of these, but allows them to" +
-                      " accumulate wealth or contribute more to overall prosperity."));
-                RevenueInfo.Add(new InformationElement("Caravan Attractiveness:", FormatValue(data.EconomicData.CaravanAttraction.ResultNumber),
-                      "How attractive this town is for caravans. Likelihood of caravan visits are dictated mainly by prices, and attractiveness is a factor added on top of that."));
+                RevenueInfo.Add(new InformationElement(new TextObject("Tariff:").ToString(), FormatValue(data.EconomicData.Tariff),
+                      new TextObject("Percentage of an item's value charged as tax when sold.").ToString()));
+
+                ExplainedNumber mercantilism = data.EconomicData.Mercantilism;
+                RevenueInfo.Add(new InformationElement(new TextObject("Mercantilism:").ToString(), FormatValue(mercantilism.ResultNumber),
+                    new TextObject("{=!}{TEXT}\n{EXPLANATIONS}")
+                   .SetTextVariable("TEXT", new TextObject("{=!}Represents how economicaly free craftsmen, tradesmen and guilds are. Increased mercantilism reduces the tax revenue of these, but allows them to accumulate wealth or contribute more to overall prosperity."))
+                   .SetTextVariable("EXPLANATIONS", mercantilism.GetExplanations())
+                   .ToString()));
+
+                ExplainedNumber caravanAttractiveness = data.EconomicData.CaravanAttraction;
+                RevenueInfo.Add(new InformationElement(new TextObject("Caravan Attractiveness:").ToString(), FormatValue(caravanAttractiveness.ResultNumber),
+                    new TextObject("{=!}{TEXT}\n{EXPLANATIONS}")
+                   .SetTextVariable("TEXT", new TextObject("{=!}How attractive this town is for caravans. Likelihood of caravan visits are dictated mainly by prices, and attractiveness is a factor added on top of that."))
+                   .SetTextVariable("EXPLANATIONS", caravanAttractiveness.GetExplanations())
+                   .ToString()));
+                
 
                 for (int i = 0; i < 4; i++)
                 {

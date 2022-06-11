@@ -8,6 +8,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.ViewModelCollection;
 using TaleWorlds.Core.ViewModelCollection;
 using TaleWorlds.Library;
+using TaleWorlds.Localization;
 
 namespace BannerKings.UI
 {
@@ -61,48 +62,48 @@ namespace BannerKings.UI
 				if (legitimacyType > 0f)
 				{
 					LegitimacyType legitimacy = (LegitimacyType)legitimacyType;
-					DemesneInfo.Add(new InformationElement("Legitimacy:", legitimacy.ToString().Replace('_', ' '),
-						"Your legitimacy to this title and it's vassals. You are lawful when you own this title, and considered a foreigner if your culture differs from it."));
+					DemesneInfo.Add(new InformationElement(new TextObject("Legitimacy:").ToString(), legitimacy.ToString().Replace('_', ' '),
+						new TextObject("Your legitimacy to this title and it's vassals. You are lawful when you own this title, and considered a foreigner if your culture differs from it.").ToString()));
 				}
 
-				if (title.sovereign != null) DemesneInfo.Add(new InformationElement("Sovereign:", title.sovereign.FullName.ToString(),
-					"The master suzerain of this title, be they a king or emperor type suzerain."));
+				if (title.sovereign != null) DemesneInfo.Add(new InformationElement(new TextObject("Sovereign:").ToString(), title.sovereign.FullName.ToString(),
+					new TextObject("The master suzerain of this title, be they a king or emperor type suzerain.").ToString()));
 				if (duchy != null) DemesneInfo.Add(new InformationElement("Dukedom:", duchy.FullName.ToString(),
 					"The dukedom this settlement is associated with."));
 
-				GovernmentInfo.Add(new InformationElement("Government Type:", title.contract.Government.ToString(),
-					"The dukedom this settlement is associated with."));
-				GovernmentInfo.Add(new InformationElement("Succession Type:", title.contract.Succession.ToString().Replace("_", " "),
-					"The dukedom this settlement is associated with."));
-				GovernmentInfo.Add(new InformationElement("Inheritance Type:", title.contract.Inheritance.ToString(),
-					"The dukedom this settlement is associated with."));
-				GovernmentInfo.Add(new InformationElement("Gender Law:", title.contract.GenderLaw.ToString(),
-					"The dukedom this settlement is associated with."));
+				GovernmentInfo.Add(new InformationElement(new TextObject("Government Type:").ToString(), title.contract.Government.ToString(),
+					new TextObject("The dukedom this settlement is associated with.").ToString()));
+				GovernmentInfo.Add(new InformationElement(new TextObject("Succession Type:").ToString(), title.contract.Succession.ToString().Replace("_", " "),
+					new TextObject("The dukedom this settlement is associated with.").ToString()));
+				GovernmentInfo.Add(new InformationElement(new TextObject("Inheritance Type:").ToString(), title.contract.Inheritance.ToString(),
+					new TextObject("The dukedom this settlement is associated with.").ToString()));
+				GovernmentInfo.Add(new InformationElement(new TextObject("Gender Law:").ToString(), title.contract.GenderLaw.ToString(),
+					new TextObject("The dukedom this settlement is associated with.").ToString()));
 
 				DeJure = new HeroVM(title.deJure);
 			}
 			
 
-			LandInfo.Add(new InformationElement("Acreage:", landData.Acreage + " acres",
-				"Current quantity of usable acres in this region"));
-			LandInfo.Add(new InformationElement("Farmland:", landData.Farmland + " acres",
-				"Acres in this region used as farmland, the main source of food in most places"));
-			LandInfo.Add(new InformationElement("Pastureland:", landData.Pastureland + " acres",
-				"Acres in this region used as pastureland, to raise cattle and other animals. These output meat and animal products such as butter and cheese"));
-			LandInfo.Add(new InformationElement("Woodland:", landData.Woodland + " acres",
-				"Acres in this region used as woodland, kept for hunting, foraging of berries and materials like wood"));
+			LandInfo.Add(new InformationElement(new TextObject("Acreage:").ToString(), landData.Acreage + " acres",
+				new TextObject("Current quantity of usable acres in this region").ToString()));
+			LandInfo.Add(new InformationElement(new TextObject("Farmland:").ToString(), landData.Farmland + " acres",
+				new TextObject("Acres in this region used as farmland, the main source of food in most places").ToString()));
+			LandInfo.Add(new InformationElement(new TextObject("Pastureland:").ToString(), landData.Pastureland + " acres",
+				new TextObject("Acres in this region used as pastureland, to raise cattle and other animals. These output meat and animal products such as butter and cheese").ToString()));
+			LandInfo.Add(new InformationElement(new TextObject("Woodland:").ToString(), landData.Woodland + " acres",
+				new TextObject("Acres in this region used as woodland, kept for hunting, foraging of berries and materials like wood").ToString()));
 
-			TerrainInfo.Add(new InformationElement("Type:", landData.Terrain.ToString(),
-				"The local terrain type. Dictates fertility and terrain difficulty."));
-			TerrainInfo.Add(new InformationElement("Fertility:", FormatValue(landData.Fertility),
-				"How fertile the region is. This depends solely on the local terrain type - harsher environments like deserts are less fertile than plains and grassy hills"));
-			TerrainInfo.Add(new InformationElement("Terrain Difficulty:", FormatValue(landData.Difficulty),
-				"Represents how difficult it is to create new usable acres. Like fertility, depends on terrain, but is not strictly correlated to it"));
+			TerrainInfo.Add(new InformationElement(new TextObject("Type:").ToString(), landData.Terrain.ToString(),
+				new TextObject("The local terrain type. Dictates fertility and terrain difficulty.").ToString()));
+			TerrainInfo.Add(new InformationElement(new TextObject("Fertility:").ToString(), FormatValue(landData.Fertility),
+				new TextObject("How fertile the region is. This depends solely on the local terrain type - harsher environments like deserts are less fertile than plains and grassy hills").ToString()));
+			TerrainInfo.Add(new InformationElement(new TextObject("Terrain Difficulty:").ToString(), FormatValue(landData.Difficulty),
+				new TextObject("Represents how difficult it is to create new usable acres. Like fertility, depends on terrain, but is not strictly correlated to it").ToString()));
 
-			WorkforceInfo.Add(new InformationElement("Available Workforce:", landData.AvailableWorkForce.ToString(),
-				"The amount of productive workers in this region, able to work the land"));
-			WorkforceInfo.Add(new InformationElement("Workforce Saturation:", FormatValue(landData.WorkforceSaturation),
-				"Represents how many workers there are in correlation to the amount needed to fully utilize the acreage. Saturation over 100% indicates more workers than the land needs, while under 100% means not all acres are producing output"));
+			WorkforceInfo.Add(new InformationElement(new TextObject("Available Workforce:").ToString(), landData.AvailableWorkForce.ToString(),
+				new TextObject("The amount of productive workers in this region, able to work the land").ToString()));
+			WorkforceInfo.Add(new InformationElement(new TextObject("Workforce Saturation:").ToString(), FormatValue(landData.WorkforceSaturation),
+				new TextObject("Represents how many workers there are in correlation to the amount needed to fully utilize the acreage. Saturation over 100% indicates more workers than the land needs, while under 100% means not all acres are producing output").ToString()));
 
 			if (HasTown)
 			{
