@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Xml;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.SandBox;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
@@ -15,6 +16,20 @@ namespace BannerKings.Utils
     public static class Helpers
     {
         public static BuildingType _buildingCastleRetinue = Game.Current.ObjectManager.RegisterPresumedObject(new BuildingType("building_castle_retinue"));
+
+
+        public static void AddSellerToKeep(Hero seller, Settlement settlement)
+        {
+            AgentData agent = new AgentData(new SimpleAgentOrigin(seller.CharacterObject, 0, null, default(UniqueTroopDescriptor)));
+            LocationCharacter locCharacter = new LocationCharacter(agent,
+                new LocationCharacter.AddBehaviorsDelegate(SandBoxManager.Instance.AgentBehaviorManager.AddFixedCharacterBehaviors),
+                null, true, LocationCharacter.CharacterRelations.Neutral, null, true, false, null, false, false, true);
+
+            settlement.LocationComplex.GetLocationWithId("lordshall")
+                .AddLocationCharacters(delegate { return locCharacter; }, settlement.Culture,
+                LocationCharacter.CharacterRelations.Neutral, 1);
+        }
+
         public static int GetRosterCount(TroopRoster roster, string filter = null)
         {
             List<TroopRosterElement> rosters = roster.GetTroopRoster();

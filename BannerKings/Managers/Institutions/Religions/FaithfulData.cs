@@ -24,7 +24,6 @@ namespace BannerKings.Managers.Institutions.Religions
         public float Piety => piety;
         internal override void Update(PopulationData data)
         {
-            throw new NotImplementedException();
         }
     }
 }

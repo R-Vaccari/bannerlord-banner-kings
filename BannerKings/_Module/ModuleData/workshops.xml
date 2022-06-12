@@ -1,0 +1,161 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<WorkshopTypes>
+  <WorkshopType id="bakery" name="{=!}Bakery" equipment_cost="2000" frequency="2" jobname="{=!}Baker" description="{=!}The bakery specializes in producing bread, a highly sought after product, out of grain. It also produces delicious buttery pies.">
+    <Meshes sign_mesh_name="shop_sign_merchantbakery" shop_prop_mesh_name_1="shop_prop_merchantflour_a" shop_prop_mesh_name_2="shop_prop_merchantflour_b" shop_prop_mesh_name_3_1="shop_prop_merchantflour_c" shop_prop_mesh_name_4="Shop_prop_merchantbakery_d" shop_prop_mesh_name_5="Shop_prop_merchantbakery_e" shop_prop_mesh_name_6="Shop_prop_merchantbakery_f" />
+    <Production conversion_speed="20">
+      <Inputs>
+        <Input input_item="grain" />
+      </Inputs>
+      <Outputs>
+        <Output output="ItemCategory.bread" />
+      </Outputs>
+    </Production>
+    <Production conversion_speed="15">
+      <Inputs>
+        <Input input_item="grain" />
+      </Inputs>
+      <Outputs>
+        <Output output="ItemCategory.pie" output_count="2" />
+      </Outputs>
+    </Production>
+  </WorkshopType>
+  
+  <WorkshopType id="fletcher" name="{=!}Fletcher" equipment_cost="3000" frequency="1" jobname="{=!}Fletcher" description="{=!}The fletcher makes both ranged weapons and their ammunitions. High-end bows and crossbows are produced at a higher rate.">
+    <Meshes sign_mesh_name="shop_sign_merchantsmithing" shop_prop_mesh_name_1="shop_prop_merchantsmithing_a" shop_prop_mesh_name_2="shop_prop_merchantsmithing_b" shop_prop_mesh_name_3_1="shop_prop_merchantweapons_melee_c" shop_prop_mesh_name_4="shop_prop_merchantarmory_heavy_c" shop_prop_mesh_name_5="shop_prop_merchantsmithing_d" shop_prop_mesh_name_6="shop_prop_merchantsmithing_e" />
+    <Production conversion_speed="0.8">
+      <Inputs>
+	    <Input input_item="hardwood" />
+		<Input input_item="iron" />
+	  </Inputs>
+      <Outputs>
+        <Output output="ItemCategory.arrows" output_count="3" />
+      </Outputs>
+    </Production>
+    <Production conversion_speed="1.5">
+      <Inputs>
+	    <Input input_item="hardwood" />
+	  </Inputs>
+      <Outputs>
+        <Output output="ItemCategory.ranged_weapons" />
+      </Outputs>
+    </Production>
+    <Production conversion_speed="1">
+      <Inputs>
+        <Input input_item="hardwood" />
+      </Inputs>
+      <Outputs>
+        <Output output="ItemCategory.ranged_weapons_2" />
+      </Outputs>
+    </Production>
+    <Production conversion_speed="0.7">
+      <Inputs>
+        <Input input_item="hardwood" />
+      </Inputs>
+      <Outputs>
+        <Output output="ItemCategory.ranged_weapons_3" />
+      </Outputs>
+    </Production>
+    <Production conversion_speed="0.4">
+      <Inputs>
+        <Input input_item="hardwood" />
+        <Input input_item="leather" />
+      </Inputs>
+      <Outputs>
+        <Output output="ItemCategory.ranged_weapons_4" />
+      </Outputs>
+    </Production>
+    <Production conversion_speed="0.2">
+      <Inputs>
+        <Input input_item="hardwood" />
+        <Input input_item="leather" />
+        <Input input_item="iron" />
+      </Inputs>
+      <Outputs>
+        <Output output="ItemCategory.ranged_weapons_5" />
+      </Outputs>
+    </Production>
+  </WorkshopType>
+  
+  <WorkshopType id="armorsmithy" name="{=!}Armorsmithy" equipment_cost="4000" frequency="1" jobname="{=!}Armorsmith" description="{=!}The armorsmithy is a smithy specialized in soldier armor and cavalry barding. The smithy produces high-end gear at a higher rate.">
+    <Meshes sign_mesh_name="shop_sign_merchantsmithing" shop_prop_mesh_name_1="shop_prop_merchantsmithing_a" shop_prop_mesh_name_2="shop_prop_merchantsmithing_b" shop_prop_mesh_name_3_1="shop_prop_merchantweapons_melee_c" shop_prop_mesh_name_4="shop_prop_merchantarmory_heavy_c" shop_prop_mesh_name_5="shop_prop_merchantsmithing_d" shop_prop_mesh_name_6="shop_prop_merchantsmithing_e" />
+    <Production conversion_speed="0.8">
+      <Inputs>
+        <Input input_item="leather" />
+      </Inputs>
+      <Outputs>
+        <Output output="ItemCategory.light_armor" output_count="2" />
+      </Outputs>
+    </Production>
+    <Production conversion_speed="1">
+      <Inputs>
+        <Input input_item="leather" />
+      </Inputs>
+      <Outputs>
+        <Output output="ItemCategory.medium_armor" />
+      </Outputs>
+    </Production>
+    <Production conversion_speed="1.5">
+      <Inputs>
+		<Input input_item="leather" />
+        <Input input_item="iron" />
+      </Inputs>
+      <Outputs>
+        <Output output="ItemCategory.heavy_armor" />
+      </Outputs>
+    </Production>
+    <Production conversion_speed="1.0">
+      <Inputs>
+		<Input input_item="leather" />
+        <Input input_item="iron" input_count="2"/>
+      </Inputs>
+      <Outputs>
+        <Output output="ItemCategory.ultra_armor" />
+      </Outputs>
+    </Production>
+	<Production conversion_speed="0.6">
+      <Inputs>
+        <Input input_item="hardwood" />
+      </Inputs>
+      <Outputs>
+        <Output output="ItemCategory.horse_equipment" />
+      </Outputs>
+    </Production>
+    <Production conversion_speed="1.5">
+      <Inputs>
+        <Input input_item="hardwood" />
+      </Inputs>
+      <Outputs>
+        <Output output="ItemCategory.horse_equipment_2" />
+      </Outputs>
+    </Production>
+    <Production conversion_speed="1.0">
+      <Inputs>
+        <Input input_item="hardwood" />
+        <Input input_item="leather" />
+      </Inputs>
+      <Outputs>
+        <Output output="ItemCategory.horse_equipment_3" />
+      </Outputs>
+    </Production>
+    <Production conversion_speed="0.8">
+      <Inputs>
+        <Input input_item="hardwood" />
+        <Input input_item="iron" />
+        <Input input_item="leather" />
+      </Inputs>
+      <Outputs>
+        <Output output="ItemCategory.horse_equipment_4" />
+      </Outputs>
+    </Production>
+    <Production conversion_speed="0.4">
+      <Inputs>
+        <Input input_item="hardwood" />
+        <Input input_item="iron" input_count="2" />
+        <Input input_item="leather" />
+      </Inputs>
+      <Outputs>
+        <Output output="ItemCategory.horse_equipment_5" />
+      </Outputs>
+    </Production>
+  </WorkshopType>
+</WorkshopTypes>

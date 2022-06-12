@@ -1,7 +1,64 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <NPCCharacters>
+
+
+  <NPCCharacter id="bannerkings_bookseller_battania" name="{=!}{HERO.FIRSTNAME} the Loremaster" default_group="Infantry" age="65" voice="softspoken" is_template="true" is_hero="false" culture="Culture.battania" occupation="Special">
+	<face>
+      <face_key_template value="BodyProperty.villager_battania" />
+    </face>
+	<skills />
+	<Traits>
+	  <Trait id="KnightFightingSkills" value="5" />
+	  <Trait id="Commander" value="5" />
+	  <Trait id="Politician" value="5" />
+	  <Trait id="Manager" value="5" />
+	  <Trait id="Honor" value="+1" />
+	</Traits>
+	<Equipments>
+	  <EquipmentRoster>
+		  <equipment slot="Head" id="Item.TV_battania_hood_a" />
+		  <equipment slot="Cape" id="Item.TV_battania_cloak_l" />
+		  <equipment slot="Body" id="Item.battania_light_armor_c" />
+		  <equipment slot="Leg" id="Item.TV_battania_boots_t" />
+	  </EquipmentRoster>
+	  <EquipmentRoster civilian="true">
+		  <equipment slot="Head" id="Item.TV_battania_hood_a" />
+		  <equipment slot="Cape" id="Item.TV_battania_cloak_l" />
+		  <equipment slot="Body" id="Item.battania_light_armor_c" />
+		  <equipment slot="Leg" id="Item.TV_battania_boots_t" />
+		</EquipmentRoster>
+	</Equipments>
+  </NPCCharacter>
+  
+  <NPCCharacter id="bannerkings_bookseller_empire" name="{=yr5pa0hs}{HERO.FIRSTNAME}, the Book Keeper" default_group="Infantry" age="65" voice="softspoken" is_template="true" is_hero="false" culture="Culture.empire" occupation="Special">
+	<face>
+      <face_key_template value="BodyProperty.villager_empire" />
+    </face>
+	<skills />
+	<Traits>
+	  <Trait id="KnightFightingSkills" value="5" />
+	  <Trait id="Commander" value="5" />
+	  <Trait id="Politician" value="5" />
+	  <Trait id="Manager" value="5" />
+	  <Trait id="Honor" value="+1" />
+	</Traits>
+	<Equipments>
+	  <EquipmentRoster>
+		  <equipment slot="Head" id="Item.TV_battania_hood_a" />
+		  <equipment slot="Cape" id="Item.TV_battania_cloak_l" />
+		  <equipment slot="Body" id="Item.battania_light_armor_c" />
+		  <equipment slot="Leg" id="Item.TV_battania_boots_t" />
+	  </EquipmentRoster>
+	  <EquipmentRoster civilian="true">
+		  <equipment slot="Head" id="Item.TV_battania_hood_a" />
+		  <equipment slot="Cape" id="Item.TV_battania_cloak_l" />
+		  <equipment slot="Body" id="Item.battania_light_armor_c" />
+		  <equipment slot="Leg" id="Item.TV_battania_boots_t" />
+		</EquipmentRoster>
+	</Equipments>
+  </NPCCharacter>
 	  
-	<NPCCharacter id="bannerkings_preacher_amra_1" name="{=yr5pa0hs}{HERO.FIRSTNAME}" voice="softspoken" age="40" is_template="true" is_female="true" default_group="Infantry" is_hero="false" culture="Culture.battania" occupation="Preacher">
+  <NPCCharacter id="bannerkings_preacher_amra_1" name="{=yr5pa0hs}{HERO.FIRSTNAME}" voice="softspoken" age="40" is_template="true" is_female="true" default_group="Infantry" is_hero="false" culture="Culture.battania" occupation="Preacher">
     <face>
       <face_key_template value="BodyProperty.villager_battania" />
     </face>

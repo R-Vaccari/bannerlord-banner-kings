@@ -52,19 +52,7 @@ namespace BannerKings.Behaviours
             ReligionData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(target).ReligionData;
             if (data == null || data.Clergyman == null) return;
 
-            this.AddClergymanToKeep(data, target);
-        }
-
-        private void AddClergymanToKeep(ReligionData data, Settlement settlement)
-        {
-            AgentData agent = new AgentData(new SimpleAgentOrigin(data.Clergyman.Hero.CharacterObject, 0, null, default(UniqueTroopDescriptor)));
-            LocationCharacter locCharacter = new LocationCharacter(agent,
-                new LocationCharacter.AddBehaviorsDelegate(SandBoxManager.Instance.AgentBehaviorManager.AddFixedCharacterBehaviors),
-                null, true, LocationCharacter.CharacterRelations.Neutral, null, true, false, null, false, false, true);
-
-            settlement.LocationComplex.GetLocationWithId("lordshall")
-                .AddLocationCharacters(delegate { return locCharacter; }, settlement.Culture,
-                LocationCharacter.CharacterRelations.Neutral, 1);
+            Utils.Helpers.AddSellerToKeep(data.Clergyman.Hero, target);
         }
 
         private void AddDialogue(CampaignGameStarter starter)
@@ -72,7 +60,6 @@ namespace BannerKings.Behaviours
             starter.AddDialogLine("bk_preacher_introduction", "lord_introduction", "lord_start",
                 "{=!}{CLERGYMAN_GREETING}",
                 new ConversationSentence.OnConditionDelegate(this.OnConditionClergymanGreeting), null, 100, null);
-
 
             starter.AddPlayerLine("bk_question_preaching", "lord_talk_ask_something_2", "bk_preacher_asked_preaching",
                 "{=!}What are you preaching?",
