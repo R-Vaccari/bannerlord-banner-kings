@@ -4,7 +4,6 @@ using TaleWorlds.Core;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using BannerKings.Managers.Education.Books;
-using TaleWorlds.CampaignSystem.SandBox;
 
 namespace BannerKings.Behaviours
 {
@@ -18,6 +17,7 @@ namespace BannerKings.Behaviours
             CampaignEvents.SettlementEntered.AddNonSerializedListener(this, OnSettlementEntered);
             CampaignEvents.HeroKilledEvent.AddNonSerializedListener(this, OnHeroKilled);
             CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, OnSessionLaunched);
+            CampaignEvents.OnNewGameCreatedEvent.AddNonSerializedListener(this, OnGameStarted);
         }
 
         public override void SyncData(IDataStore dataStore)
@@ -88,9 +88,12 @@ namespace BannerKings.Behaviours
 
         private void OnSessionLaunched(CampaignGameStarter campaignGameStarter)
         {
-            
-            if (BookSellers.Count == 0) SpawnInitialSellers();
             AddDialogue(campaignGameStarter);
+        }
+
+        private void OnGameStarted(CampaignGameStarter campaignGameStarter)
+        {
+            SpawnInitialSellers();
         }
 
         private void AddDialogue(CampaignGameStarter starter)

@@ -45,7 +45,7 @@ namespace BannerKings
             {
                 CampaignGameStarter campaignStarter = (CampaignGameStarter)gameStarter;
                 campaignStarter.AddBehavior(new BKSettlementBehavior());
-                campaignStarter.AddBehavior(new BKBookBehavior());
+                //campaignStarter.AddBehavior(new BKBookBehavior());
                 campaignStarter.AddBehavior(new BKCompanionBehavior());
                 campaignStarter.AddBehavior(new BKTournamentBehavior());
                 campaignStarter.AddBehavior(new BKRepublicBehavior());

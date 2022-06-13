@@ -5,11 +5,19 @@ namespace BannerKings.Managers.Skills
 {
     public class BKPerks : DefaultTypeInitializer<BKPerks>
     {
-        private PerkObject scholarshipPolyglot;
+        private PerkObject scholarshipLiterate, scholarshipPolyglot;
 
         public override void Initialize()
         {
-            scholarshipPolyglot = Game.Current.ObjectManager.RegisterPresumedObject<PerkObject>(new PerkObject("ScholarshipPolyglot"));
+            scholarshipLiterate = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("ScholarshipLiterate"));
+            scholarshipLiterate.InitializeNew("{=!}Literate", BKSkills.Instance.Scholarship, GetTierCost(1), null,
+                "{=!}Allows reading books.", SkillEffect.PerkRole.Personal, 0f,
+                SkillEffect.EffectIncrementType.Invalid, string.Empty,
+                SkillEffect.PerkRole.None, 0f,
+                SkillEffect.EffectIncrementType.Invalid,
+                TroopClassFlag.None, TroopClassFlag.None);
+
+            scholarshipPolyglot = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("ScholarshipPolyglot"));
             scholarshipPolyglot.InitializeNew("{=!}Polyglot", BKSkills.Instance.Scholarship, GetTierCost(2), null, 
                 "{=!}Increase language learning rate by 20%.", SkillEffect.PerkRole.Personal, 20f, 
                 SkillEffect.EffectIncrementType.AddFactor, "{=!}Gain more relation when greeting lords in their language.", 

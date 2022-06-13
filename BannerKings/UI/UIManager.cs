@@ -107,7 +107,7 @@ namespace BannerKings.UI
         }
 
 
-        [HarmonyPatch(typeof(SkillIconVisualWidget), "SkillId", MethodType.Setter)]
+       /* [HarmonyPatch(typeof(SkillIconVisualWidget), "SkillId", MethodType.Setter)]
         class SkillIconOnLateUpdatePatch
         {
             static bool Prefix(SkillIconVisualWidget __instance, string value)
@@ -121,10 +121,10 @@ namespace BannerKings.UI
                     text = "charm";
 
                 FieldInfo skillId = __instance.GetType().GetField("_skillId", BindingFlags.Instance | BindingFlags.NonPublic);
-                skillId.SetValue(__instance, text);
+                if (skillId != null) skillId.SetValue(__instance, text);
                 return false;
             }
-        }
+        } */
 
         [HarmonyPatch(typeof(KingdomPoliciesVM), "RefreshPolicyList")]
         class RefreshPolicyListPatch
