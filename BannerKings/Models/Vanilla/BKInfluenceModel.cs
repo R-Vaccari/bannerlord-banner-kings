@@ -56,8 +56,7 @@ namespace BannerKings.Models
                         if (title.deJure != null)
                         {
                             Clan deJureClan = title.deJure.Clan;
-                            if (title.deJure != deJureClan.Leader)
-                                title.deJure.AddPower(baseResult.ResultNumber * 0.1f);
+                            if (title.deJure != deJureClan.Leader && settlement.OwnerClan == deJureClan) title.deJure.AddPower(baseResult.ResultNumber * 0.1f);
                         }
                     }
                 }

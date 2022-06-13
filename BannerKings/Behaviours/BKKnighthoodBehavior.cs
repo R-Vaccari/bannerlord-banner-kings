@@ -48,8 +48,11 @@ namespace BannerKings.Behaviors
                 hero.Culture.PossibleClanBannerIconsIDs.GetRandomElement()), settlement.GatePosition, false);
             clan.Kingdom = originalClan.Kingdom;
             clan.AddRenown(150f);
+            hero.Clan = null;
+            hero.CompanionOf = null;
             hero.Clan = clan;
             clan.SetLeader(hero);
+            hero.AddPower(-hero.Power);
             InformationManager.AddQuickInformation(new TextObject("{=!}The {NEW} has been formed by {HERO}, previously a knight of {ORIGINAL}.")
                             .SetTextVariable("NEW", clan.Name)
                             .SetTextVariable("HERO", hero.Name)
@@ -68,7 +71,9 @@ namespace BannerKings.Behaviors
             }
             return random;
         }
-        private bool CanCreateClan(Hero hero) => hero.Gold >= 30000 && hero.Power >= 250f;
+        private bool CanCreateClan(Hero hero) => hero.Gold >= 30000 && hero.Power >= 250f && hero.Occupation == Occupation.Lord &&
+            hero.Father != hero.Clan.Leader && hero.Mother != hero.Clan.Leader && !hero.Children.Contains(hero.Clan.Leader) && 
+            !hero.Siblings.Contains(hero.Clan.Leader);
 
         private void OnSessionLaunched(CampaignGameStarter campaignGameStarter)
         {
