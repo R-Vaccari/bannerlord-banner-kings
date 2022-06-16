@@ -17,7 +17,7 @@ namespace BannerKings.UI.Extensions
         public ClanManagementExtension()
         {
             XmlDocument firstChild = new XmlDocument();
-            firstChild.LoadXml("<ClanCourt DataSource=\"{ClanIncome}\" IsVisible=\"false\" />");
+            firstChild.LoadXml("<ClanCourt DataSource=\"{Court}\" IsVisible=\"false\" />");
 
             nodes = new List<XmlNode> { firstChild };
         }
@@ -38,7 +38,7 @@ namespace BannerKings.UI.Extensions
         public ClanManagementExtension2()
         {
             XmlDocument firstChild = new XmlDocument();
-            firstChild.LoadXml("<ButtonWidget DoNotPassEventsToChildren=\"true\" WidthSizePolicy=\"Fixed\" HeightSizePolicy=\"Fixed\" SuggestedWidth=\"!Header.Tab.Center.Width.Scaled\" SuggestedHeight=\"!Header.Tab.Center.Height.Scaled\" PositionYOffset=\"6\" MarginRight=\"2\" Brush=\"Header.Tab.Center\" Command.Click=\"SelectCourt\" IsSelected=\"@IsFiefsSelected\" UpdateChildrenStates=\"true\"><Children><TextWidget WidthSizePolicy = \"StretchToParent\" HeightSizePolicy = \"StretchToParent\" MarginTop = \"3\" Brush = \"Clan.TabControl.Text\" Text = \"@CourtText\" /></Children></ButtonWidget > ");
+            firstChild.LoadXml("<ButtonWidget DoNotPassEventsToChildren=\"true\" WidthSizePolicy=\"Fixed\" HeightSizePolicy=\"Fixed\" SuggestedWidth=\"!Header.Tab.Center.Width.Scaled\" SuggestedHeight=\"!Header.Tab.Center.Height.Scaled\" PositionYOffset=\"6\" MarginRight=\"2\" Brush=\"Header.Tab.Center\" Command.Click=\"SelectCourt\" IsSelected=\"@CourtSelected\" UpdateChildrenStates=\"true\"><Children><TextWidget WidthSizePolicy = \"StretchToParent\" HeightSizePolicy = \"StretchToParent\" MarginTop = \"3\" Brush = \"Clan.TabControl.Text\" Text = \"@CourtText\" /></Children></ButtonWidget > ");
 
             nodes = new List<XmlNode> { firstChild };
         }

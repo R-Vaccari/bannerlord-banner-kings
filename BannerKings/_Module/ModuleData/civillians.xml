@@ -2,7 +2,7 @@
 <NPCCharacters>
 
 
-  <NPCCharacter id="bannerkings_bookseller_battania" name="{=!}{HERO.FIRSTNAME} the Loremaster" default_group="Infantry" age="65" voice="softspoken" is_template="true" is_hero="false" culture="Culture.battania" occupation="Special">
+  <NPCCharacter id="bannerkings_bookseller_battania" name="{=!}{FIRSTNAME} the Loremaster" default_group="Infantry" age="65" voice="softspoken" is_template="true" is_hero="false" culture="Culture.battania" occupation="Special">
 	<face>
       <face_key_template value="BodyProperty.villager_battania" />
     </face>
@@ -30,7 +30,7 @@
 	</Equipments>
   </NPCCharacter>
   
-  <NPCCharacter id="bannerkings_bookseller_empire" name="{=yr5pa0hs}{HERO.FIRSTNAME}, the Book Keeper" default_group="Infantry" age="65" voice="softspoken" is_template="true" is_hero="false" culture="Culture.empire" occupation="Special">
+  <NPCCharacter id="bannerkings_bookseller_empire" name="{=yr5pa0hs}{FIRSTNAME}, the Book Keeper" default_group="Infantry" age="65" voice="softspoken" is_template="true" is_hero="false" culture="Culture.empire" occupation="Special">
 	<face>
       <face_key_template value="BodyProperty.villager_empire" />
     </face>

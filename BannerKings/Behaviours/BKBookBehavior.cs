@@ -4,6 +4,7 @@ using TaleWorlds.Core;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using BannerKings.Managers.Education.Books;
+using TaleWorlds.Localization;
 
 namespace BannerKings.Behaviours
 {
@@ -61,6 +62,8 @@ namespace BannerKings.Behaviours
                 Settlement randomSettlement = town.Settlement;
                 Hero hero = HeroCreator.CreateSpecialHero(character, randomSettlement, null, null,
                        Campaign.Current.Models.AgeModel.HeroComesOfAge + 10 + MBRandom.RandomInt(60));
+                TextObject firstName = hero.IsFemale ? hero.Culture.FemaleNameList.GetRandomElement() : hero.Culture.MaleNameList.GetRandomElement();
+                hero.SetName(character.Name.SetTextVariable("FIRSTNAME", firstName), firstName);
                 hero.StayingInSettlement = randomSettlement;
                 BookSellers.Add(hero, GetStartingBooks(hero.Culture));
 

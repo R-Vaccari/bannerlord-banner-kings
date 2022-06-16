@@ -1,4 +1,5 @@
-﻿using BannerKings.UI.Education;
+﻿using BannerKings.UI.Court;
+using BannerKings.UI.Education;
 using Bannerlord.UIExtenderEx.Attributes;
 using Bannerlord.UIExtenderEx.ViewModels;
 using TaleWorlds.CampaignSystem.ViewModelCollection.ClanManagement;
@@ -7,23 +8,28 @@ using TaleWorlds.Localization;
 
 namespace BannerKings.UI.Extensions
 {
-    [ViewModelMixin("RefreshValues")]
+    [ViewModelMixin("SetSelectedCategory")]
     internal class ClanManagementMixin : BaseViewModelMixin<ClanManagementVM>
     {
 		//private BasicTooltipViewModel pietyHint;
-		private ClanManagementVM characterDeveloper;
-		private EducationVM educationVM;
-		private bool visible;
-		private string educationText;
+		private ClanManagementVM clanManagement;
+		private ClanCourtVM courtVM;
+		private bool courtSelected;
+
 		public ClanManagementMixin(ClanManagementVM vm) : base(vm)
         {
-			EducationVisible = false;
-			characterDeveloper = vm;
+			clanManagement = vm;
+			courtVM = new ClanCourtVM();
 		}
 
         public override void OnRefresh()
         {
-
+			courtVM.RefreshValues();
+			if (clanManagement.IsMembersSelected || clanManagement.IsPartiesSelected || clanManagement.IsFiefsSelected || clanManagement.IsIncomeSelected)
+            {
+				Court.IsSelected = false;
+				CourtSelected = false;
+			}
 		}
 
 		[DataSourceProperty]
@@ -32,39 +38,45 @@ namespace BannerKings.UI.Extensions
 		[DataSourceMethod]
 		public void SelectCourt()
         {
+			clanManagement.ClanMembers.IsSelected = false;
+			clanManagement.ClanParties.IsSelected = false;
+			clanManagement.ClanFiefs.IsSelected = false;
+			clanManagement.ClanIncome.IsSelected = false;
 
-        }
-
-
+			clanManagement.IsMembersSelected = false;
+			clanManagement.IsPartiesSelected = false;
+			clanManagement.IsFiefsSelected = false;
+			clanManagement.IsIncomeSelected = false;
+			Court.IsSelected = true;
+			CourtSelected = true;
+		}
 
 		[DataSourceProperty]
-		public EducationVM Education
+		public bool CourtSelected
 		{
-			get => educationVM;
+			get => courtSelected;
 			set
 			{
-				if (value != educationVM)
+				if (value != courtSelected)
 				{
-					educationVM = value;
-					ViewModel!.OnPropertyChangedWithValue(value, "Education");
+					courtSelected = value;
+					ViewModel!.OnPropertyChangedWithValue(value, "CourtSelected");
 				}
 			}
 		}
 
 		[DataSourceProperty]
-		public bool EducationVisible
-        {
-			get => visible;
+		public ClanCourtVM Court
+		{
+			get => courtVM;
 			set
 			{
-				if (value != visible)
+				if (value != courtVM)
 				{
-					visible = value;
-					ViewModel!.OnPropertyChangedWithValue(value, "EducationVisible");
+					courtVM = value;
+					ViewModel!.OnPropertyChangedWithValue(value, "Court");
 				}
 			}
 		}
-
-
 	}
 }
