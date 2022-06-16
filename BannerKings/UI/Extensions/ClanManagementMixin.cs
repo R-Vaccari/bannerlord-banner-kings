@@ -1,5 +1,4 @@
 ﻿using BannerKings.UI.Court;
-using BannerKings.UI.Education;
 using Bannerlord.UIExtenderEx.Attributes;
 using Bannerlord.UIExtenderEx.ViewModels;
 using TaleWorlds.CampaignSystem.ViewModelCollection.ClanManagement;
@@ -13,13 +12,13 @@ namespace BannerKings.UI.Extensions
     {
 		//private BasicTooltipViewModel pietyHint;
 		private ClanManagementVM clanManagement;
-		private ClanCourtVM courtVM;
+		private CourtVM courtVM;
 		private bool courtSelected;
 
 		public ClanManagementMixin(ClanManagementVM vm) : base(vm)
         {
 			clanManagement = vm;
-			courtVM = new ClanCourtVM();
+			courtVM = new CourtVM(false);
 		}
 
         public override void OnRefresh()
@@ -66,7 +65,7 @@ namespace BannerKings.UI.Extensions
 		}
 
 		[DataSourceProperty]
-		public ClanCourtVM Court
+		public CourtVM Court
 		{
 			get => courtVM;
 			set

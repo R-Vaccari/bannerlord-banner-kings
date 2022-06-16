@@ -1,4 +1,5 @@
 ﻿using BannerKings.Populations;
+using BannerKings.UI.Court;
 using BannerKings.UI.Panels;
 using SandBox.View.Map;
 using System;
@@ -42,10 +43,6 @@ namespace BannerKings.UI.Windows
                 return (new GuildVM(data), "GuildWindow");
             else if (id == "vilage_project")
                 return (new VillageProjectVM(data), "VillageProjectWindow");
-            else if (id == "court")
-                return (new CourtVM(data, false), "CourtWindow");
-            else if (id == "court_royal")
-                return (new CourtVM(data, true), "CourtWindow");
             else if (id == "titles")
                 return (new TitleWindowVM(data), "TitlesWindow");
             else if (id == "religions")

@@ -4,6 +4,88 @@
 		<tag language="English" />
 	</tags>
 	<strings>
+	
+	    <string id="bk_council_description_marshall" text="The {NAME} oversees the military administration of the realm. They are responsible for the efficiency of settlement defenses and drafting of the population." />
+		<string id="bk_council_description_steward" text="{NAME} are responsible for the well-being of finances and trade. They improve the economic prospects and prosperity of fiefs." />
+		<string id="bk_council_description_chancellor" text="{NAME} represent their lord in matters of diplomacy. They improve relations with the lord's peers and vassals." />
+		<string id="bk_council_description_spymaster" text="Responsible for security and skullduggery, the {NAME} handle the dirty side of a council's duties. They are responsible for personal security of their lord, as well as dealing with criminal activities, including carrying them out." />
+		<string id="bk_council_description_spiritual_guide" text="The {NAME} is the representative of faith within a lord's inner circle. Their duty is to be a bridge between the material and spiritual powers, and make certain their suzerain adheres to the faith's principles." />
+	
+		<string id="bk_spiritual_guide" text="Spiritual Guide" />
+	
+		<string id="bk_council_marshall_empire" text="Domesticus" />
+		<string id="bk_council_marshall_sturgia" text="Domesticus" />
+		<string id="bk_council_marshall_battania" text="Marasgal" />
+		<string id="bk_council_marshall_vlandia" text="Marshall" />
+		<string id="bk_council_marshall_khuzait" text="Jagutu-iin Darga" />
+		<string id="bk_council_marshall_aserai" text="Domesticus" />
+		
+		<string id="bk_council_marshall_royal_empire" text="Magister Domesticus" />
+		<string id="bk_council_marshall_royal_sturgia" text="Domesticus" />
+		<string id="bk_council_marshall_royal_battania" text="Ard Marasgal" />
+		<string id="bk_council_marshall_royal_vlandia" text="Grand Marshall" />
+		<string id="bk_council_marshall_royal_khuzait" text="Tumetu-iin Noyan" />
+		<string id="bk_council_marshall_royal_aserai" text="Domesticus" />
+		
+		<string id="bk_council_steward_empire" text="Comes Largitionum" />
+		<string id="bk_council_steward_sturgia" text="Domesticus" />
+		<string id="bk_council_steward_battania" text="Sheumarlan" />
+		<string id="bk_council_steward_vlandia" text="Steward" />
+		<string id="bk_council_steward_khuzait" text="Domesticus" />
+		<string id="bk_council_steward_aserai" text="Domesticus" />
+		
+		<string id="bk_council_steward_royal_empire" text="Comes Sacrarum Largitionum" />
+		<string id="bk_council_steward_royal_sturgia" text="Domesticus" />
+		<string id="bk_council_steward_royal_battania" text="Ard Sheumarlan" />
+		<string id="bk_council_steward_royal_vlandia" text="High Steward" />
+		<string id="bk_council_steward_royal_khuzait" text="Cherbi" />
+		<string id="bk_council_steward_royal_aserai" text="Domesticus" />
+		
+		<string id="bk_council_chancellor_empire" text="Cancellarius" />
+		<string id="bk_council_chancellor_sturgia" text="Domesticus" />
+		<string id="bk_council_chancellor_battania" text="Seansalair" />
+		<string id="bk_council_chancellor_vlandia" text="Chancellor" />
+		<string id="bk_council_chancellor_khuzait" text="Domesticus" />
+		<string id="bk_council_chancellor_aserai" text="Domesticus" />
+		
+		<string id="bk_council_chancellor_royal_empire" text="Magister Cancellarius" />
+		<string id="bk_council_chancellor_royal_sturgia" text="Domesticus" />
+		<string id="bk_council_chancellor_royal_battania" text="Ard Seansalair" />
+		<string id="bk_council_chancellor_royal_vlandia" text="High Chancellor" />
+		<string id="bk_council_chancellor_royal_khuzait" text="Cherbi" />
+		<string id="bk_council_chancellor_royal_aserai" text="Domesticus" />
+		
+		<string id="bk_council_spymaster_empire" text="Custodis" />
+		<string id="bk_council_spymaster_sturgia" text="Domesticus" />
+		<string id="bk_council_spymaster_battania" text="Treòraiche" />
+		<string id="bk_council_spymaster_vlandia" text="Spymaster" />
+		<string id="bk_council_spymaster_khuzait" text="Khevtuul" />
+		<string id="bk_council_spymaster_aserai" text="Domesticus" />
+		
+		<string id="bk_council_spymaster_royal_empire" text="Magister Officiorum" />
+		<string id="bk_council_spymaster_royal_sturgia" text="Domesticus" />
+		<string id="bk_council_spymaster_royal_battania" text="Ard Treòraiche" />
+		<string id="bk_council_spymaster_royal_vlandia" text="Grand Spymaster" />
+		<string id="bk_council_spymaster_royal_khuzait" text="Cherbi" />
+		<string id="bk_council_spymaster_royal_aserai" text="Domesticus" />
+		
+		<string id="bk_council_spiritual_guide_empire" text="Custodis" />
+		<string id="bk_council_spiritual_guide_sturgia" text="Domesticus" />
+		<string id="bk_council_spiritual_guide_battania" text="Treòraiche" />
+		<string id="bk_council_spiritual_guide_vlandia" text="Seneschal" />
+		<string id="bk_council_spiritual_guide_khuzait" text="Khevtuul" />
+		<string id="bk_council_spiritual_guide_aserai" text="Domesticus" />
+		
+		<string id="bk_council_spiritual_guide_royal_empire" text="Magister Officiorum" />
+		<string id="bk_council_spiritual_guide_royal_sturgia" text="Domesticus" />
+		<string id="bk_council_spiritual_guide_royal_battania" text="Ard Treòraiche" />
+		<string id="bk_council_spiritual_guide_royal_vlandia" text="Royal Seneschal" />
+		<string id="bk_council_spiritual_guide_royal_khuzait" text="Cherbi" />
+		<string id="bk_council_spiritual_guide_royal_aserai" text="Domesticus" />
+		
+		<string id="bk_council_elder_royal_battania" text="Seanar" />
+		
+	
 		<string id="bk_skill_scholarship_learn" text="Actively be studying for an education. Read books." />
 		<string id="bk_skill_theology_learn" text="Interact with divinities through oaths, sacrifices or blessings. Curse and cure curses." />
 		<string id="bk_skill_lordship_learn" text="Fulfill duties. Complete actions with titles such as claiming, granting or usurping." />

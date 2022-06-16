@@ -12,13 +12,13 @@ namespace BannerKings.UI.Extensions
     {
 		//private BasicTooltipViewModel pietyHint;
 		private KingdomManagementVM kingdomManagement;
-		private ClanCourtVM courtVM;
+		private CourtVM courtVM;
 		private bool courtSelected, demesneSelected;
 
 		public KingdomManagementMixin(KingdomManagementVM vm) : base(vm)
         {
 			kingdomManagement = vm;
-			courtVM = new ClanCourtVM();
+			courtVM = new CourtVM(true);
 		}
 
         public override void OnRefresh()
@@ -95,7 +95,7 @@ namespace BannerKings.UI.Extensions
 		}
 
 		[DataSourceProperty]
-		public ClanCourtVM Court
+		public CourtVM Court
 		{
 			get => courtVM;
 			set

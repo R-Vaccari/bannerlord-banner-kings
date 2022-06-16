@@ -1,61 +1,87 @@
 ﻿using BannerKings.Managers.Court;
-using BannerKings.Populations;
 using BannerKings.UI.Items;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.ViewModelCollection;
+using TaleWorlds.CampaignSystem.ViewModelCollection.ClanManagement;
+using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace BannerKings.UI.Panels
+namespace BannerKings.UI.Court
 {
-	class CourtVM : BannerKingsViewModel
-	{
+    class CourtVM : BannerKingsViewModel
+    {
+        private MBBindingList<ClanLordItemVM> family, courtiers;
 		private CouncilVM councilVM;
-		private MBBindingList<InformationElement> courtInfo;
 		private CouncilData council;
 		private CouncilPosition councilPosition;
+		private bool isSelected, isRoyal;
 		private HeroVM marshall;
 		private HeroVM steward;
 		private HeroVM chancellor;
 		private HeroVM spymaster;
 		private HeroVM spiritual;
-		private MBBindingList<RoyalPositionVM> royalPositions;
-		private MBBindingList<CouncilMemberVM> courtMembers;
+		private MBBindingList<RoyalPositionVM> corePositions, royalPositions;
+		private MBBindingList<InformationElement> courtInfo;
 
-		public CourtVM(PopulationData data, bool royalCourt) : base(data, true)
-		{
-			this.courtInfo = new MBBindingList<InformationElement>();
+		public CourtVM(bool royal) : base(null, false)
+        {
+			if (!royal) council = BannerKingsConfig.Instance.CourtManager.GetCouncil(Hero.MainHero);
+			else council = BannerKingsConfig.Instance.CourtManager.GetCouncil(Clan.PlayerClan.Kingdom.Leader);
+			isSelected = false;
+			family = new MBBindingList<ClanLordItemVM>();
+			courtiers = new MBBindingList<ClanLordItemVM>();
+			corePositions = new MBBindingList<RoyalPositionVM>();
 			royalPositions = new MBBindingList<RoyalPositionVM>();
-			if (!royalCourt) this.council = BannerKingsConfig.Instance.CourtManager.GetCouncil(Hero.MainHero);
-			else this.council = BannerKingsConfig.Instance.CourtManager.GetCouncil(Clan.PlayerClan.Kingdom.Leader);
+			courtInfo = new MBBindingList<InformationElement>();
 			councilPosition = CouncilPosition.Marshall;
-			this.courtMembers = new MBBindingList<CouncilMemberVM>();
-			List<Hero> heroes = council.GetCourtMembers();
-			foreach (Hero hero in heroes)
-				this.courtMembers.Add(new CouncilMemberVM(hero, null,
-									councilPosition, council.GetCompetence(hero, councilPosition)));
-			CouncilVM = new CouncilVM(new Action<Hero>(this.SetCouncilMember), this.council, councilPosition, heroes);
+			isRoyal = royal;
 		}
 
-		public override void RefreshValues()
-		{
-			base.RefreshValues();
-			this.CourtInfo.Clear();
+        public override void RefreshValues()
+        {
+            base.RefreshValues();
+			Family.Clear();
+			Courtiers.Clear();
+			CourtInfo.Clear();
+			CorePositions.Clear();
 			RoyalPositions.Clear();
-			this.CouncilVM.RefreshValues();
-			this.Marshall = new HeroVM(council.Marshall);
-			this.Steward = new HeroVM(council.Steward);
-			this.Chancellor = new HeroVM(council.Chancellor);
-			this.Spymaster = new HeroVM(council.Spymaster);
+			List<Hero> heroes = council.GetCourtMembers();
+			CouncilVM = new CouncilVM(new Action<Hero>(SetCouncilMember), council, councilPosition, heroes);
+
+			foreach (Hero hero in heroes)
+			{
+				if (hero.Spouse == Hero.MainHero || Hero.MainHero.Children.Contains(hero) || Hero.MainHero.Siblings.Contains(hero))
+					Family.Add(new ClanLordItemVM(hero, null));
+				else Courtiers.Add(new ClanLordItemVM(hero, null));
+
+			}
+
+			Marshall = new HeroVM(council.Marshall);
+			Steward = new HeroVM(council.Steward);
+			Chancellor = new HeroVM(council.Chancellor);
+			Spymaster = new HeroVM(council.Spymaster);
 			Spiritual = new HeroVM(council.Spiritual);
+
 			CourtInfo.Add(new InformationElement("Administrative costs:", base.FormatValue(council.AdministrativeCosts),
 				"Costs associated with payment of council members, deducted on all your fiefs' revenues."));
 
-			if (council.IsRoyal)
+			foreach (CouncilMember position in council.Positions)
+            {
+				if (position.Clan == null) position.Clan = council.Owner.Clan;
+				CorePositions.Add(new RoyalPositionVM(position, new Action<string>(SetId)));
+			}
+				
+
+			if (isRoyal)
 				foreach (CouncilMember position in council.RoyalPositions)
+                {
+					if (position.Clan == null) position.Clan = council.Owner.Clan;
 					RoyalPositions.Add(new RoyalPositionVM(position, new Action<string>(SetId)));
+				}
 
 		}
 
@@ -117,51 +143,37 @@ namespace BannerKings.UI.Panels
 		}
 
 		[DataSourceProperty]
-		public MBBindingList<InformationElement> CourtInfo
+		public string FamilyText => GameTexts.FindText("str_family_group", null).ToString();
+
+		[DataSourceProperty]
+		public string CourtiersText => new TextObject("{=!}Courtiers").ToString();
+
+
+
+		[DataSourceProperty]
+		public bool IsSelected
 		{
-			get => courtInfo;
+			get => isSelected;
 			set
 			{
-				if (value != courtInfo)
+				if (value != isSelected)
 				{
-					courtInfo = value;
-					base.OnPropertyChangedWithValue(value, "CourtInfo");
+					isSelected = value;
+					OnPropertyChangedWithValue(value, "IsSelected");
 				}
 			}
 		}
 
 		[DataSourceProperty]
-		public MBBindingList<RoyalPositionVM> RoyalPositions
+		public bool IsRoyal
 		{
-			get => royalPositions;
+			get => isRoyal;
 			set
 			{
-				if (value != royalPositions)
+				if (value != isRoyal)
 				{
-					royalPositions = value;
-					base.OnPropertyChangedWithValue(value, "RoyalPositions");
-				}
-			}
-		}
-
-		[DataSourceProperty]
-		public string Title => new TextObject("{=!}Council of {NAME}")
-			.SetTextVariable("NAME", council.Owner.Name)
-			.ToString();
-
-		[DataSourceProperty]
-		public bool IsRoyal => council.IsRoyal;
-
-		[DataSourceProperty]
-		public MBBindingList<CouncilMemberVM> CourtMembers
-		{
-			get => this.courtMembers;
-			set
-			{
-				if (value != this.courtMembers)
-				{
-					this.courtMembers = value;
-					base.OnPropertyChangedWithValue(value, "CourtMembers");
+					isRoyal = value;
+					OnPropertyChangedWithValue(value, "IsRoyal");
 				}
 			}
 		}
@@ -176,6 +188,76 @@ namespace BannerKings.UI.Panels
 				{
 					this.councilVM = value;
 					base.OnPropertyChangedWithValue(value, "CouncilVM");
+				}
+			}
+		}
+
+		[DataSourceProperty]
+		public MBBindingList<ClanLordItemVM> Family
+		{
+			get => family;
+			set
+			{
+				if (value != family)
+				{
+					family = value;
+					OnPropertyChangedWithValue(value, "Family");
+				}
+			}
+		}
+
+		[DataSourceProperty]
+		public MBBindingList<ClanLordItemVM> Courtiers
+		{
+			get => courtiers;
+			set
+			{
+				if (value != courtiers)
+				{
+					courtiers = value;
+					OnPropertyChangedWithValue(value, "Courtiers");
+				}
+			}
+		}
+
+		[DataSourceProperty]
+		public MBBindingList<InformationElement> CourtInfo
+		{
+			get => courtInfo;
+			set
+			{
+				if (value != courtInfo)
+				{
+					courtInfo = value;
+					base.OnPropertyChangedWithValue(value, "CourtInfo");
+				}
+			}
+		}
+
+		[DataSourceProperty]
+		public MBBindingList<RoyalPositionVM> CorePositions
+		{
+			get => corePositions;
+			set
+			{
+				if (value != corePositions)
+				{
+					corePositions = value;
+					base.OnPropertyChangedWithValue(value, "CorePositions");
+				}
+			}
+		}
+
+		[DataSourceProperty]
+		public MBBindingList<RoyalPositionVM> RoyalPositions
+		{
+			get => royalPositions;
+			set
+			{
+				if (value != royalPositions)
+				{
+					royalPositions = value;
+					base.OnPropertyChangedWithValue(value, "RoyalPositions");
 				}
 			}
 		}

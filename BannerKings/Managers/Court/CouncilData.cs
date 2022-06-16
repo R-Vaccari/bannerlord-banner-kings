@@ -10,6 +10,7 @@ using System;
 using BannerKings.Managers.Institutions.Religions;
 using TaleWorlds.Localization;
 using BannerKings.Models.BKModels;
+using BannerKings.Managers.Institutions.Religions.Leaderships;
 
 namespace BannerKings.Managers.Court
 {
@@ -28,16 +29,35 @@ namespace BannerKings.Managers.Court
             Hero spiritual = null)
         {
             this.clan = clan;
-            this.members = new List<CouncilMember>();
-            this.members.Add(new CouncilMember(marshall, CouncilPosition.Marshall, clan));
-            this.members.Add(new CouncilMember(chancellor, CouncilPosition.Chancellor, clan));
-            this.members.Add(new CouncilMember(steward, CouncilPosition.Steward, clan));
-            this.members.Add(new CouncilMember(spymaster, CouncilPosition.Spymaster, clan));
-            this.members.Add(new CouncilMember(spiritual, CouncilPosition.Spiritual, clan));
+            members = new List<CouncilMember>();
+            members.Add(new CouncilMember(marshall, CouncilPosition.Marshall, clan));
+            members.Add(new CouncilMember(chancellor, CouncilPosition.Chancellor, clan));
+            members.Add(new CouncilMember(steward, CouncilPosition.Steward, clan));
+            members.Add(new CouncilMember(spymaster, CouncilPosition.Spymaster, clan));
+            members.Add(new CouncilMember(spiritual, CouncilPosition.Spiritual, clan));
             royalMembers = new List<CouncilMember>();
         }
 
         public Hero Owner => clan.Leader;
+
+        public CouncilMember GetMemberFromPosition(CouncilPosition position)
+        {
+            CouncilMember member = members.FirstOrDefault(x => x.Position == position);
+            if (member != null) return member;
+
+            CouncilMember royalMember = royalMembers.FirstOrDefault(x => x.Position == position);
+            return royalMember;
+        }
+
+        public MBReadOnlyList<CouncilMember> Positions
+        {
+            get
+            {
+                if (members == null)
+                    members = new List<CouncilMember>();
+                return members.GetReadOnlyList();
+            }
+        }
 
         public MBReadOnlyList<CouncilMember> RoyalPositions
         {
@@ -83,9 +103,6 @@ namespace BannerKings.Managers.Court
         {
 
             if (royalMembers == null) royalMembers = new List<CouncilMember>();
-
-            if (clan.IsUnderMercenaryService) return;
-
             foreach (CouncilMember member in this.members)
             {
                 if (member.Member != null && (member.Member.IsDead || member.Member.IsDisabled))
@@ -103,6 +120,8 @@ namespace BannerKings.Managers.Court
                 if (member.Clan == null)
                     member.Clan = clan;
             }
+
+            if (clan.IsUnderMercenaryService) return;
 
             if (IsRoyal)
             {
@@ -161,7 +180,7 @@ namespace BannerKings.Managers.Court
             GovernmentType government = sovereign.contract.Government;
 
             if (government == GovernmentType.Imperial)
-                positions.Add(new CouncilMember(null, CouncilPosition.Heir, clan));
+                positions.Add(new CouncilMember(null, CouncilPosition.Prince, clan));
             else if (government == GovernmentType.Feudal)
                 positions.Add(new CouncilMember(null, CouncilPosition.Constable, clan));
 
@@ -320,23 +339,23 @@ namespace BannerKings.Managers.Court
 
         public Hero Marshall
         {
-            get => this.members.First(x => x.Position == CouncilPosition.Marshall).Member;
-            set => this.members.First(x => x.Position == CouncilPosition.Marshall).Member = value;
+            get => members.First(x => x.Position == CouncilPosition.Marshall).Member;
+            set => members.First(x => x.Position == CouncilPosition.Marshall).Member = value;
         }
         public Hero Chancellor
         {
-            get => this.members.First(x => x.Position == CouncilPosition.Chancellor).Member;
-            set => this.members.First(x => x.Position == CouncilPosition.Chancellor).Member = value;
+            get => members.First(x => x.Position == CouncilPosition.Chancellor).Member;
+            set => members.First(x => x.Position == CouncilPosition.Chancellor).Member = value;
         }
         public Hero Steward
         {
-            get => this.members.First(x => x.Position == CouncilPosition.Steward).Member;
-            set => this.members.First(x => x.Position == CouncilPosition.Steward).Member = value;
+            get => members.First(x => x.Position == CouncilPosition.Steward).Member;
+            set => members.First(x => x.Position == CouncilPosition.Steward).Member = value;
         }
         public Hero Spymaster
         {
-            get => this.members.First(x => x.Position == CouncilPosition.Spymaster).Member;
-            set => this.members.First(x => x.Position == CouncilPosition.Spymaster).Member = value;
+            get => members.First(x => x.Position == CouncilPosition.Spymaster).Member;
+            set => members.First(x => x.Position == CouncilPosition.Spymaster).Member = value;
         }
         public Hero Spiritual
         {
@@ -416,14 +435,26 @@ namespace BannerKings.Managers.Court
             get => dueWage;
             set => dueWage = value;
         }
-        
+
         public TextObject GetName()
         {
-            TextObject text = new TextObject("{=!}" + position.ToString());
+            if (position != CouncilPosition.Spiritual) return GameTexts.FindText("str_bk_council_" + position.ToString().ToLower() + (isRoyal ? "_royal" : ""),
+            Culture.StringId);
 
+            Religion rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(clan.Leader);
+            if (rel != null)
+            {
+                if (rel.Leadership is KinshipLeadership)
+                    return rel.Faith.GetRankTitle(rel.Faith.GetMaxClergyRank());
 
-            return text;
+            }
+
+            return GameTexts.FindText("str_bk_spiritual_guide");
         }
+
+        public TextObject GetDescription() => GameTexts.FindText("str_bk_council_description_" + position.ToString().ToLower());
+            
+        
 
         public bool IsValidCandidate(Hero candidate)
         {
@@ -444,6 +475,25 @@ namespace BannerKings.Managers.Court
                 cost = 0.03f;
 
             return cost;
+        }
+
+        public float InfluenceCosts()
+        {
+            float cost = 0f;
+            if (IsCorePosition(position) && position != CouncilPosition.Spiritual)
+                cost = IsRoyal ? 0.05f : 0.03f;
+
+
+            return cost;
+        }
+
+        public CultureObject Culture
+        {
+            get
+            {
+                if (clan.Kingdom != null) return clan.Kingdom.Culture;
+                else return clan.Culture;
+            }
         }
 
         public bool IsCorePosition(CouncilPosition position) => position == CouncilPosition.Marshall || position == CouncilPosition.Steward ||
@@ -495,7 +545,7 @@ namespace BannerKings.Managers.Court
         Steward,
         Spymaster,
         Spiritual,
-        Heir,
+        Prince,
         Castellan,
         Druzina,
         Elder,
