@@ -1,14 +1,47 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <base xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" type="string">
 	<strings>
-	
+		
+		<string id="str_bk_council_description_marshall" text="{=bk_council_description_marshall}The {NAME} oversees the military administration of the realm. They are responsible for the efficiency of settlement defenses and drafting of the population." />
+		<string id="str_bk_council_description_steward" text="{=bk_council_description_steward}{NAME} are responsible for the well-being of finances and trade. They improve the economic prospects and prosperity of fiefs." />
+		<string id="str_bk_council_description_chancellor" text="{=bk_council_description_chancellor}{NAME} represent their lord in matters of diplomacy. They improve relations with the lord's peers and vassals." />
+		<string id="str_bk_council_description_spymaster" text="{=bk_council_description_spymaster}Responsible for security and skullduggery, the {NAME} handle the dirty side of a council's duties. They are responsible for personal security of their lord, as well as dealing with criminal activities, including carrying them out." />
+		<string id="str_bk_council_description_spiritual" text="{=bk_council_description_spiritual}The {NAME} is the representative of faith within a lord's inner circle. Their duty is to be a bridge between the material and spiritual powers, and make certain their suzerain adheres to the faith's principles." />
 	
 		<string id="str_bk_council_marshall.empire" text="{=bk_council_marshall_empire}Domesticus" />
+		<string id="str_bk_council_chancellor.empire" text="{=bk_council_steward_empire}Comes Largitionum" />
+		<string id="str_bk_council_steward.empire" text="{=bk_council_chancellor_empire}Cancellarius" />
+		<string id="str_bk_council_spymaster.empire" text="{=bk_council_spymaster_empire}Custodis" />
 		
 		<string id="str_bk_council_marshall.battania" text="{=bk_council_marshall_battania}Marasgal" />
 		<string id="str_bk_council_chancellor.battania" text="{=bk_council_steward_battania}Sheumarlan" />
 		<string id="str_bk_council_steward.battania" text="{=bk_council_chancellor_battania}Seansalair" />
 		<string id="str_bk_council_spymaster.battania" text="{=bk_council_spymaster_battania}Treòraiche" />
+		
+		<string id="str_bk_council_marshall_royal.battania" text="{=bk_council_marshall_royal_battania}Ard Marasgal" />
+		<string id="str_bk_council_chancellor_royal.battania" text="{=bk_council_steward_royal_battania}Ard Sheumarlan" />
+		<string id="str_bk_council_steward_royal.battania" text="{=bk_council_chancellor_royal_battania}Ard Seansalair" />
+		<string id="str_bk_council_spymaster_royal.battania" text="{=bk_council_spymaster_royal_battania}Ard Treòraiche" />
+		
+		<string id="str_bk_council_marshall.vlandia" text="{=bk_council_marshall_vlandia}Marasgal" />
+		<string id="str_bk_council_chancellor.vlandia" text="{=bk_council_steward_vlandia}Chancellor" />
+		<string id="str_bk_council_steward.vlandia" text="{=bk_council_chancellor_vlandia}Steward" />
+		<string id="str_bk_council_spymaster.vlandia" text="{=bk_council_spymaster_vlandia}Spymaster" />
+		
+		<string id="str_bk_council_marshall.khuzait" text="{=bk_council_marshall_khuzait}Jagutu-iin Darga" />
+		<string id="str_bk_council_chancellor.khuzait" text="{=bk_council_steward_khuzait}Sheumarlan" />
+		<string id="str_bk_council_steward.khuzait" text="{=bk_council_chancellor_khuzait}Seansalair" />
+		<string id="str_bk_council_spymaster.khuzait" text="{=bk_council_spymaster_khuzait}Khevtuul" />
+		
+		<string id="str_bk_council_marshall.sturgia" text="{=bk_council_marshall_sturgia}Marasgal" />
+		<string id="str_bk_council_chancellor.sturgia" text="{=bk_council_steward_sturgia}Sheumarlan" />
+		<string id="str_bk_council_steward.sturgia" text="{=bk_council_chancellor_sturgia}Seansalair" />
+		<string id="str_bk_council_spymaster.sturgia" text="{=bk_council_spymaster_sturgia}Treòraiche" />
+		
+		<string id="str_bk_council_marshall.aserai" text="{=bk_council_marshall_aserai}Marasgal" />
+		<string id="str_bk_council_chancellor.aserai" text="{=bk_council_steward_aserai}Sheumarlan" />
+		<string id="str_bk_council_steward.aserai" text="{=bk_council_chancellor_aserai}Seansalair" />
+		<string id="str_bk_council_spymaster.aserai" text="{=bk_council_spymaster_aserai}Treòraiche" />
 		
 		<string id="str_bk_spiritual_guide" text="{=bk_spiritual_guide}Spiritual Guide" />
 	

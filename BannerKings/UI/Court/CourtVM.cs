@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.ViewModelCollection;
 using TaleWorlds.CampaignSystem.ViewModelCollection.ClanManagement;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
@@ -18,20 +17,15 @@ namespace BannerKings.UI.Court
 		private CouncilVM councilVM;
 		private CouncilData council;
 		private CouncilPosition councilPosition;
-		private bool isSelected, isRoyal;
-		private HeroVM marshall;
-		private HeroVM steward;
-		private HeroVM chancellor;
-		private HeroVM spymaster;
-		private HeroVM spiritual;
+		private bool isRoyal;
 		private MBBindingList<RoyalPositionVM> corePositions, royalPositions;
 		private MBBindingList<InformationElement> courtInfo;
+		private string positionName, positionDescription;
 
 		public CourtVM(bool royal) : base(null, false)
         {
 			if (!royal) council = BannerKingsConfig.Instance.CourtManager.GetCouncil(Hero.MainHero);
-			else council = BannerKingsConfig.Instance.CourtManager.GetCouncil(Clan.PlayerClan.Kingdom.Leader);
-			isSelected = false;
+			else if (Clan.PlayerClan.Kingdom != null) council = BannerKingsConfig.Instance.CourtManager.GetCouncil(Clan.PlayerClan.Kingdom.Leader);
 			family = new MBBindingList<ClanLordItemVM>();
 			courtiers = new MBBindingList<ClanLordItemVM>();
 			corePositions = new MBBindingList<RoyalPositionVM>();
@@ -60,19 +54,13 @@ namespace BannerKings.UI.Court
 
 			}
 
-			Marshall = new HeroVM(council.Marshall);
-			Steward = new HeroVM(council.Steward);
-			Chancellor = new HeroVM(council.Chancellor);
-			Spymaster = new HeroVM(council.Spymaster);
-			Spiritual = new HeroVM(council.Spiritual);
-
 			CourtInfo.Add(new InformationElement("Administrative costs:", base.FormatValue(council.AdministrativeCosts),
 				"Costs associated with payment of council members, deducted on all your fiefs' revenues."));
 
 			foreach (CouncilMember position in council.Positions)
             {
 				if (position.Clan == null) position.Clan = council.Owner.Clan;
-				CorePositions.Add(new RoyalPositionVM(position, new Action<string>(SetId)));
+				CorePositions.Add(new RoyalPositionVM(position, new Action<string>(SetId), new Action<string>(UpdatePositionTexts)));
 			}
 				
 
@@ -80,9 +68,25 @@ namespace BannerKings.UI.Court
 				foreach (CouncilMember position in council.RoyalPositions)
                 {
 					if (position.Clan == null) position.Clan = council.Owner.Clan;
-					RoyalPositions.Add(new RoyalPositionVM(position, new Action<string>(SetId)));
+					RoyalPositions.Add(new RoyalPositionVM(position, new Action<string>(SetId), new Action<string>(UpdatePositionTexts)));
 				}
 
+			CouncilMember member = council.GetMemberFromPosition(councilPosition);
+			if (member != null)
+			{
+				positionName = member.GetName().ToString();
+				positionDescription = member.GetDescription().ToString();
+			}
+		}
+
+		private void UpdatePositionTexts(string id)
+        {
+			CouncilMember member = council.GetMemberFromPosition((CouncilPosition)Enum.Parse(typeof(CouncilPosition), id));
+			if (member != null)
+            {
+				CurrentPositionNameText = member.GetName().ToString();
+				CurrentPositionDescriptionText = member.GetDescription().ToString();
+			}
 		}
 
 		private void SetId(string id)
@@ -99,47 +103,8 @@ namespace BannerKings.UI.Court
 
 		private void SetCouncilMember(Hero member)
 		{
-			if (councilPosition == CouncilPosition.Marshall)
-			{
-				if (this.Marshall.Hero != member)
-				{
-					this.Marshall = new HeroVM(member);
-					this.council.Marshall = member;
-				}
-			}
-			else if (councilPosition == CouncilPosition.Steward)
-			{
-				if (this.Steward.Hero != member)
-				{
-					this.Steward = new HeroVM(member);
-					this.council.Steward = member;
-				}
-			}
-			else if (councilPosition == CouncilPosition.Chancellor)
-			{
-				if (this.Chancellor.Hero != member)
-				{
-					this.Chancellor = new HeroVM(member);
-					this.council.Chancellor = member;
-				}
-			}
-			else if (councilPosition == CouncilPosition.Spymaster)
-			{
-				if (this.Spymaster.Hero != member)
-				{
-					this.Spymaster = new HeroVM(member);
-					this.council.Spymaster = member;
-				}
-			}
-			else if (councilPosition == CouncilPosition.Spiritual)
-			{
-				if (this.Spiritual.Hero != member)
-				{
-					this.Spiritual = new HeroVM(member);
-					this.council.Spiritual = member;
-				}
-			}
-			this.RefreshValues();
+			council.GetMemberFromPosition(councilPosition).Member = member;
+			RefreshValues();
 		}
 
 		[DataSourceProperty]
@@ -148,18 +113,30 @@ namespace BannerKings.UI.Court
 		[DataSourceProperty]
 		public string CourtiersText => new TextObject("{=!}Courtiers").ToString();
 
-
-
 		[DataSourceProperty]
-		public bool IsSelected
+		public string CurrentPositionNameText
 		{
-			get => isSelected;
+			get => positionName;
 			set
 			{
-				if (value != isSelected)
+				if (value != positionName)
 				{
-					isSelected = value;
-					OnPropertyChangedWithValue(value, "IsSelected");
+					positionName = value;
+					OnPropertyChangedWithValue(value, "CurrentPositionNameText");
+				}
+			}
+		}
+
+		[DataSourceProperty]
+		public string CurrentPositionDescriptionText
+		{
+			get => positionDescription;
+			set
+			{
+				if (value != positionDescription)
+				{
+					positionDescription = value;
+					OnPropertyChangedWithValue(value, "CurrentPositionDescriptionText");
 				}
 			}
 		}
@@ -258,76 +235,6 @@ namespace BannerKings.UI.Court
 				{
 					royalPositions = value;
 					base.OnPropertyChangedWithValue(value, "RoyalPositions");
-				}
-			}
-		}
-
-		[DataSourceProperty]
-		public HeroVM Marshall
-		{
-			get => this.marshall;
-			set
-			{
-				if (value != this.marshall)
-				{
-					this.marshall = value;
-					base.OnPropertyChangedWithValue(value, "Marshall");
-				}
-			}
-		}
-
-		[DataSourceProperty]
-		public HeroVM Spiritual
-		{
-			get => this.spiritual;
-			set
-			{
-				if (value != this.spiritual)
-				{
-					this.spiritual = value;
-					base.OnPropertyChangedWithValue(value, "Spiritual");
-				}
-			}
-		}
-
-		[DataSourceProperty]
-		public HeroVM Steward
-		{
-			get => this.steward;
-			set
-			{
-				if (value != this.steward)
-				{
-					this.steward = value;
-					base.OnPropertyChangedWithValue(value, "Steward");
-				}
-			}
-		}
-
-		[DataSourceProperty]
-		public HeroVM Chancellor
-		{
-			get => this.chancellor;
-			set
-			{
-				if (value != this.chancellor)
-				{
-					this.chancellor = value;
-					base.OnPropertyChangedWithValue(value, "Chancellor");
-				}
-			}
-		}
-
-		[DataSourceProperty]
-		public HeroVM Spymaster
-		{
-			get => this.spymaster;
-			set
-			{
-				if (value != this.spymaster)
-				{
-					this.spymaster = value;
-					base.OnPropertyChangedWithValue(value, "Spymaster");
 				}
 			}
 		}

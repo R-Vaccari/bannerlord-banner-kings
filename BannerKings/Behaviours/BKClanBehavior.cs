@@ -22,8 +22,15 @@ namespace BannerKings.Behaviours
 
         private void DailyClanTick(Clan clan)
         {
-            if (clan.IsEliminated || clan.IsBanditFaction || clan.Kingdom == null || clan == Clan.PlayerClan ||
+            if (clan.IsEliminated || clan.IsBanditFaction || clan.Kingdom == null ||
                 BannerKingsConfig.Instance.TitleManager == null) return;
+
+            BannerKingsConfig.Instance.CourtManager.UpdateCouncil(clan);
+            foreach (Hero companion in clan.Companions)
+                if (companion.Occupation == Occupation.Lord)
+                    companion.CompanionOf = null;
+
+            if (clan == Clan.PlayerClan) return;
 
             foreach (WarPartyComponent component in clan.WarPartyComponents)
             {
@@ -35,9 +42,7 @@ namespace BannerKings.Behaviours
                     leader.Clan = clan;
                 }
             }
-
-            //if (clan != Clan.PlayerClan)
-                BannerKingsConfig.Instance.CourtManager.UpdateCouncil(clan);
+                
 
             if (clan.WarPartyComponents.Count < clan.CommanderLimit && clan.Companions.Count < clan.CompanionLimit && 
                 clan.Settlements.Count(x => x.IsVillage ) > 1 && clan.Influence >= 150)

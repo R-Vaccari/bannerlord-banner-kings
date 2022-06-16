@@ -103,6 +103,7 @@ namespace BannerKings.Managers.Court
         {
 
             if (royalMembers == null) royalMembers = new List<CouncilMember>();
+            if (GetMemberFromPosition(CouncilPosition.Spiritual) == null) members.Add(new CouncilMember(null, CouncilPosition.Spiritual, clan));
             foreach (CouncilMember member in this.members)
             {
                 if (member.Member != null && (member.Member.IsDead || member.Member.IsDisabled))
@@ -156,7 +157,7 @@ namespace BannerKings.Managers.Court
                         position.IsRoyal = false;
             }
 
-            if (MBRandom.RandomInt(1, 100) <= 5) return;
+            if (clan == Clan.PlayerClan || MBRandom.RandomInt(1, 100) <= 5) return;
 
             CouncilMember vacant = members.FirstOrDefault(x => x.Member == null);
             if (vacant == null)
@@ -452,9 +453,8 @@ namespace BannerKings.Managers.Court
             return GameTexts.FindText("str_bk_spiritual_guide");
         }
 
-        public TextObject GetDescription() => GameTexts.FindText("str_bk_council_description_" + position.ToString().ToLower());
-            
-        
+        public TextObject GetDescription() => GameTexts.FindText("str_bk_council_description_" + position.ToString().ToLower())
+            .SetTextVariable("NAME", GetName());
 
         public bool IsValidCandidate(Hero candidate)
         {

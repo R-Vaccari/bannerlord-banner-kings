@@ -9,7 +9,7 @@
 		<string id="bk_council_description_steward" text="{NAME} are responsible for the well-being of finances and trade. They improve the economic prospects and prosperity of fiefs." />
 		<string id="bk_council_description_chancellor" text="{NAME} represent their lord in matters of diplomacy. They improve relations with the lord's peers and vassals." />
 		<string id="bk_council_description_spymaster" text="Responsible for security and skullduggery, the {NAME} handle the dirty side of a council's duties. They are responsible for personal security of their lord, as well as dealing with criminal activities, including carrying them out." />
-		<string id="bk_council_description_spiritual_guide" text="The {NAME} is the representative of faith within a lord's inner circle. Their duty is to be a bridge between the material and spiritual powers, and make certain their suzerain adheres to the faith's principles." />
+		<string id="bk_council_description_spiritual" text="The {NAME} is the representative of faith within a lord's inner circle. Their duty is to be a bridge between the material and spiritual powers, and make certain their suzerain adheres to the faith's principles." />
 	
 		<string id="bk_spiritual_guide" text="Spiritual Guide" />
 	

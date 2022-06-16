@@ -28,7 +28,7 @@
 
   </Constants>
   <Window>
-    <Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" IsVisible="@DemesneSelected">
+    <Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" IsVisible="@IsSelected">
       <Children>
 
         <ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent">

@@ -9,17 +9,24 @@ namespace BannerKings.UI.Items
     {
 
         private CouncilMember position;
-        private Action<string> setId;
-        public RoyalPositionVM(CouncilMember position, Action<string> setId) : base(position.Member)
+        private Action<string> setId, updatePosition;
+        public RoyalPositionVM(CouncilMember position, Action<string> setId, Action<string> updatePosition) : base(position.Member)
         {
             this.position = position;
             this.setId = setId;
+            this.updatePosition = updatePosition;
         }
 
         private void SetId()
         {
             if (setId != null)
                 setId(position.Position.ToString());
+        }
+
+        private void UpdatePosition()
+        {
+            if (updatePosition != null)
+                updatePosition(position.Position.ToString());
         }
 
         [DataSourceProperty]

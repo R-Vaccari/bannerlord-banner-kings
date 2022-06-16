@@ -1,4 +1,5 @@
 ﻿using BannerKings.UI.Court;
+using BannerKings.UI.Windows;
 using Bannerlord.UIExtenderEx.Attributes;
 using Bannerlord.UIExtenderEx.ViewModels;
 using TaleWorlds.CampaignSystem.ViewModelCollection;
@@ -13,12 +14,14 @@ namespace BannerKings.UI.Extensions
 		//private BasicTooltipViewModel pietyHint;
 		private KingdomManagementVM kingdomManagement;
 		private CourtVM courtVM;
+		private DemesneHierarchyVM demesneVM;
 		private bool courtSelected, demesneSelected;
 
 		public KingdomManagementMixin(KingdomManagementVM vm) : base(vm)
         {
 			kingdomManagement = vm;
 			courtVM = new CourtVM(true);
+			demesneVM = new DemesneHierarchyVM(BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(vm.Kingdom), vm.Kingdom);
 		}
 
         public override void OnRefresh()
@@ -104,6 +107,20 @@ namespace BannerKings.UI.Extensions
 				{
 					courtVM = value;
 					ViewModel!.OnPropertyChangedWithValue(value, "Court");
+				}
+			}
+		}
+
+		[DataSourceProperty]
+		public DemesneHierarchyVM Demesne
+		{
+			get => demesneVM;
+			set
+			{
+				if (value != demesneVM)
+				{
+					demesneVM = value;
+					ViewModel!.OnPropertyChangedWithValue(value, "Demesne");
 				}
 			}
 		}
