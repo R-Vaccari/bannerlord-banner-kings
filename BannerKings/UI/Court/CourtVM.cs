@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.ViewModelCollection.CharacterDeveloper;
 using TaleWorlds.CampaignSystem.ViewModelCollection.ClanManagement;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
@@ -18,8 +19,9 @@ namespace BannerKings.UI.Court
 		private CouncilData council;
 		private CouncilPosition councilPosition;
 		private bool isRoyal;
-		private MBBindingList<RoyalPositionVM> corePositions, royalPositions;
-		private MBBindingList<InformationElement> courtInfo;
+		private MBBindingList<CouncilPositionVM> corePositions, royalPositions;
+		private MBBindingList<InformationElement> courtInfo, courtierInfo;
+		private CharacterVM currentCharacter;
 		private string positionName, positionDescription;
 
 		public CourtVM(bool royal) : base(null, false)
@@ -28,11 +30,13 @@ namespace BannerKings.UI.Court
 			else if (Clan.PlayerClan.Kingdom != null) council = BannerKingsConfig.Instance.CourtManager.GetCouncil(Clan.PlayerClan.Kingdom.Leader);
 			family = new MBBindingList<ClanLordItemVM>();
 			courtiers = new MBBindingList<ClanLordItemVM>();
-			corePositions = new MBBindingList<RoyalPositionVM>();
-			royalPositions = new MBBindingList<RoyalPositionVM>();
+			corePositions = new MBBindingList<CouncilPositionVM>();
+			royalPositions = new MBBindingList<CouncilPositionVM>();
 			courtInfo = new MBBindingList<InformationElement>();
+			courtierInfo = new MBBindingList<InformationElement>();
 			councilPosition = CouncilPosition.Marshall;
 			isRoyal = royal;
+			currentCharacter = new CharacterVM(Hero.MainHero, null);
 		}
 
         public override void RefreshValues()
@@ -43,14 +47,16 @@ namespace BannerKings.UI.Court
 			CourtInfo.Clear();
 			CorePositions.Clear();
 			RoyalPositions.Clear();
+			CourtierInfo.Clear();
 			List<Hero> heroes = council.GetCourtMembers();
 			CouncilVM = new CouncilVM(new Action<Hero>(SetCouncilMember), council, councilPosition, heroes);
 
 			foreach (Hero hero in heroes)
 			{
-				if (hero.Spouse == Hero.MainHero || Hero.MainHero.Children.Contains(hero) || Hero.MainHero.Siblings.Contains(hero))
-					Family.Add(new ClanLordItemVM(hero, null));
-				else Courtiers.Add(new ClanLordItemVM(hero, null));
+				if (hero.Spouse == council.Owner || council.Owner.Children.Contains(hero) || council.Owner.Siblings.Contains(hero) ||
+					council.Owner.Father == hero || council.Owner.Mother == hero)
+					Family.Add(new ClanLordItemVM(hero, new Action<ClanLordItemVM>(SetCurrentCharacter)));
+				else Courtiers.Add(new ClanLordItemVM(hero, new Action<ClanLordItemVM>(SetCurrentCharacter)));
 
 			}
 
@@ -60,7 +66,7 @@ namespace BannerKings.UI.Court
 			foreach (CouncilMember position in council.Positions)
             {
 				if (position.Clan == null) position.Clan = council.Owner.Clan;
-				CorePositions.Add(new RoyalPositionVM(position, new Action<string>(SetId), new Action<string>(UpdatePositionTexts)));
+				CorePositions.Add(new CouncilPositionVM(position, new Action<string>(SetId), new Action<string>(UpdatePositionTexts)));
 			}
 				
 
@@ -68,7 +74,7 @@ namespace BannerKings.UI.Court
 				foreach (CouncilMember position in council.RoyalPositions)
                 {
 					if (position.Clan == null) position.Clan = council.Owner.Clan;
-					RoyalPositions.Add(new RoyalPositionVM(position, new Action<string>(SetId), new Action<string>(UpdatePositionTexts)));
+					RoyalPositions.Add(new CouncilPositionVM(position, new Action<string>(SetId), new Action<string>(UpdatePositionTexts)));
 				}
 
 			CouncilMember member = council.GetMemberFromPosition(councilPosition);
@@ -76,6 +82,15 @@ namespace BannerKings.UI.Court
 			{
 				positionName = member.GetName().ToString();
 				positionDescription = member.GetDescription().ToString();
+			}
+
+			if (currentCharacter != null)
+            {
+				CourtierInfo.Add(new InformationElement(string.Empty, GameTexts.FindText("str_occupation", currentCharacter.Hero.Occupation.ToString()).ToString(),
+				string.Empty));
+				CouncilMember heroPosition = council.GetHeroPosition(currentCharacter.Hero);
+				if (heroPosition != null) CourtierInfo.Add(new InformationElement(string.Empty, heroPosition.GetName().ToString(),
+				string.Empty));
 			}
 		}
 
@@ -104,6 +119,12 @@ namespace BannerKings.UI.Court
 		private void SetCouncilMember(Hero member)
 		{
 			council.GetMemberFromPosition(councilPosition).Member = member;
+			RefreshValues();
+		}
+
+		private void SetCurrentCharacter(ClanLordItemVM vm)
+        {
+			CurrentCharacter = new CharacterVM(vm.GetHero(), null);
 			RefreshValues();
 		}
 
@@ -156,6 +177,20 @@ namespace BannerKings.UI.Court
 		}
 
 		[DataSourceProperty]
+		public CharacterVM CurrentCharacter
+		{
+			get => currentCharacter;
+			set
+			{
+				if (value != currentCharacter)
+				{
+					currentCharacter = value;
+					OnPropertyChangedWithValue(value, "CurrentCharacter");
+				}
+			}
+		}
+
+		[DataSourceProperty]
 		public CouncilVM CouncilVM
 		{
 			get => this.councilVM;
@@ -198,6 +233,20 @@ namespace BannerKings.UI.Court
 		}
 
 		[DataSourceProperty]
+		public MBBindingList<InformationElement> CourtierInfo
+		{
+			get => courtierInfo;
+			set
+			{
+				if (value != courtierInfo)
+				{
+					courtierInfo = value;
+					base.OnPropertyChangedWithValue(value, "CourtierInfo");
+				}
+			}
+		}
+
+		[DataSourceProperty]
 		public MBBindingList<InformationElement> CourtInfo
 		{
 			get => courtInfo;
@@ -212,7 +261,7 @@ namespace BannerKings.UI.Court
 		}
 
 		[DataSourceProperty]
-		public MBBindingList<RoyalPositionVM> CorePositions
+		public MBBindingList<CouncilPositionVM> CorePositions
 		{
 			get => corePositions;
 			set
@@ -226,7 +275,7 @@ namespace BannerKings.UI.Court
 		}
 
 		[DataSourceProperty]
-		public MBBindingList<RoyalPositionVM> RoyalPositions
+		public MBBindingList<CouncilPositionVM> RoyalPositions
 		{
 			get => royalPositions;
 			set

@@ -81,6 +81,24 @@
 			  </Children>
 			</ListPanel> 
 			
+			<ListPanel HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" WidthSizePolicy="Fixed" SuggestedWidth="600" StackLayout.LayoutMethod="HorizontalLeftToRight">
+			  <Children>
+				<CharacterTableauWidget DataSource="{CurrentCharacter\HeroCharacter}" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="225" SuggestedHeight="500" HorizontalAlignment="Left" VerticalAlignment="Center" BannerCodeText="@BannerCodeText" BodyProperties="@BodyProperties" CharStringId="@CharStringId" EquipmentCode="@EquipmentCode" IsFemale="@IsFemale" MountCreationKey="@MountCreationKey" StanceIndex="@StanceIndex" ArmorColor1="@ArmorColor1" ArmorColor2="@ArmorColor2" IsEnabled="false" PositionXOffset="-50" DoNotUseCustomScale="true"/>
+				
+				<ListPanel HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" WidthSizePolicy="Fixed" SuggestedWidth="600" StackLayout.LayoutMethod="VerticalBottomToTop">
+				  <Children>
+					<RichTextWidget DataSource="{CurrentCharacter\HeroCharacter}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" Brush="Clan.Leader.Text"  Brush.FontSize="30" Text="@HeroNameText" MarginBottom="15"/>
+					<GridWidget DataSource="{CourtierInfo}" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren"  HorizontalAlignment="Left" MarginLeft="60" DefaultCellWidth="150" DefaultCellHeight="30" ColumnCount="1">
+					  <ItemTemplate>
+						<InformationElement/>
+					  </ItemTemplate>
+					</GridWidget>
+				  </Children>
+				</ListPanel> 
+				
+				</Children>
+			</ListPanel> 
+			
 		  </Children>
 		</ListPanel>
 

@@ -5,12 +5,12 @@ using TaleWorlds.Library;
 
 namespace BannerKings.UI.Items
 {
-    public class RoyalPositionVM : HeroVM
+    public class CouncilPositionVM : HeroVM
     {
 
         private CouncilMember position;
         private Action<string> setId, updatePosition;
-        public RoyalPositionVM(CouncilMember position, Action<string> setId, Action<string> updatePosition) : base(position.Member)
+        public CouncilPositionVM(CouncilMember position, Action<string> setId, Action<string> updatePosition) : base(position.Member)
         {
             this.position = position;
             this.setId = setId;

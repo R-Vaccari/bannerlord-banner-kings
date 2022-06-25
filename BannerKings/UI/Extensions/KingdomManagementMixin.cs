@@ -11,7 +11,6 @@ namespace BannerKings.UI.Extensions
     [ViewModelMixin("SetSelectedCategory")]
     internal class KingdomManagementMixin : BaseViewModelMixin<KingdomManagementVM>
     {
-		//private BasicTooltipViewModel pietyHint;
 		private KingdomManagementVM kingdomManagement;
 		private CourtVM courtVM;
 		private DemesneHierarchyVM demesneVM;
@@ -32,11 +31,14 @@ namespace BannerKings.UI.Extensions
 				Court.IsSelected = false;
 				CourtSelected = false;
 				DemesneSelected = false;
+				Demesne.IsSelected = false;
 			}
 		}
 
+		
+
 		[DataSourceProperty]
-		public string DemesneText => new TextObject("{=!}Demesne").ToString();
+		public string DemesneText => new TextObject("{=!}Crown Demesne").ToString();
 
 		[DataSourceProperty]
 		public string CourtText => new TextObject("{=!}Court").ToString();
@@ -51,6 +53,7 @@ namespace BannerKings.UI.Extensions
 			kingdomManagement.Diplomacy.Show = false;
 
 			DemesneSelected = false;
+			Demesne.IsSelected = false;
 			Court.IsSelected = true;
 			CourtSelected = true;
 		}
@@ -65,6 +68,7 @@ namespace BannerKings.UI.Extensions
 			kingdomManagement.Diplomacy.Show = false;
 
 			DemesneSelected = true;
+			Demesne.IsSelected = true;
 			Court.IsSelected = false;
 			CourtSelected = false;
 		}

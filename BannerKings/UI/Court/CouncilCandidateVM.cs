@@ -7,10 +7,10 @@ using TaleWorlds.Library;
 
 namespace BannerKings.UI.Items
 {
-    class CouncilMemberVM : SettlementGovernorSelectionItemVM
+    class CouncilCandidateVM : SettlementGovernorSelectionItemVM
     {
 		private BasicTooltipViewModel courtHint;
-		public CouncilMemberVM(Hero member, Action<SettlementGovernorSelectionItemVM> onSelection, CouncilPosition position, float competence) : base(member, onSelection)
+		public CouncilCandidateVM(Hero member, Action<SettlementGovernorSelectionItemVM> onSelection, CouncilPosition position, float competence) : base(member, onSelection)
         { 
             GovernorHint = new BasicTooltipViewModel(() => UIHelper.GetHeroGovernorEffectsTooltip(member, position, competence));
 			CourtHint = new BasicTooltipViewModel(() => UIHelper.GetHeroCourtTooltip(member));

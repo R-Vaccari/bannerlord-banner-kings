@@ -36,7 +36,7 @@ namespace BannerKings.UI.Items
             CouncilMember councilPosition = new CouncilMember(null, Position, null);
             foreach (Hero hero in courtMembers)
                 if (!currentCouncil.Contains(hero) && hero.IsAlive && !hero.IsChild && councilPosition.IsValidCandidate(hero))
-                    newList.Add(new CouncilMemberVM(hero, OnSelection,
+                    newList.Add(new CouncilCandidateVM(hero, OnSelection,
                                     Position, council.GetCompetence(hero, Position)));
 
             AvailableGovernors = newList;

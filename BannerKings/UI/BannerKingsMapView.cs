@@ -36,7 +36,8 @@ namespace BannerKings.UI.Windows
 
         private (BannerKingsViewModel, string) GetVM(string id)
         {
-            PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(Settlement.CurrentSettlement);
+            PopulationData data = null;
+            if (Settlement.CurrentSettlement != null) data = BannerKingsConfig.Instance.PopulationManager.GetPopData(Settlement.CurrentSettlement);
             if (id == "population")
                 return (new PopulationVM(data), "PopulationWindow");
             else if (id == "guild")
@@ -44,7 +45,7 @@ namespace BannerKings.UI.Windows
             else if (id == "vilage_project")
                 return (new VillageProjectVM(data), "VillageProjectWindow");
             else if (id == "titles")
-                return (new TitleWindowVM(data), "TitlesWindow");
+                return (new DemesneHierarchyVM(BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(Clan.PlayerClan.Kingdom), Clan.PlayerClan.Kingdom), "TitlesWindow");
             else if (id == "religions")
                 return (new ReligionVM(data), "ReligionWindow");
             else return (new PopulationVM(data), "PopulationWindow");
