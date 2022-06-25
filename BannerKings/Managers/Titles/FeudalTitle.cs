@@ -174,7 +174,7 @@ namespace BannerKings.Managers.Titles
         public void AddClaim(Hero hero, ClaimType type, bool force = false)
         {
             if (hero == null || type == ClaimType.None) return;
-            Claims.Add(hero, type);
+            if (!Claims.ContainsKey(hero)) Claims.Add(hero, type);
             if (OngoingClaims.ContainsKey(hero))
                 OngoingClaims.Remove(hero);
             if (hero == Hero.MainHero)
@@ -220,8 +220,10 @@ namespace BannerKings.Managers.Titles
             get
             {
                 TextObject text = new TextObject("{=!}{TITLE} of {NAME}");
-                text.SetTextVariable("TITLE", Utils.Helpers.GetTitlePrefix(type, contract.Government, deJure.Culture));
-                text.SetTextVariable("NAME", shortName.ToString());
+                GovernmentType type = GovernmentType.Feudal;
+                if (contract != null) type = contract.Government;
+                text.SetTextVariable("TITLE", BannerKings.Utils.Helpers.GetTitlePrefix(this.type, contract.Government, deJure.Culture));
+                text.SetTextVariable("NAME", this.shortName.ToString());
                 return text;
             }
         }

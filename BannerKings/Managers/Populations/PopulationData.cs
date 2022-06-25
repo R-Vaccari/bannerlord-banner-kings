@@ -1,5 +1,4 @@
-﻿using BannerKings.Managers.Institutions;
-using BannerKings.Managers.Institutions.Religions;
+﻿using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Villages;
 using BannerKings.Managers.Titles;
@@ -15,6 +14,7 @@ using TaleWorlds.ObjectSystem;
 using TaleWorlds.SaveSystem;
 using static BannerKings.Managers.PopulationManager;
 using static BannerKings.Managers.Policies.BKWorkforcePolicy;
+using BannerKings.Managers.Institutions.Guilds;
 
 namespace BannerKings.Populations
 {

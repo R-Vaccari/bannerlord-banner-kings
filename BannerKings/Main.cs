@@ -33,6 +33,7 @@ using Helpers;
 using Bannerlord.UIExtenderEx;
 using BannerKings.Managers.Skills;
 using SandBox.View.Map;
+using BannerKings.Managers.Items;
 
 namespace BannerKings
 {
@@ -46,7 +47,8 @@ namespace BannerKings
                 CampaignGameStarter campaignStarter = (CampaignGameStarter)gameStarter;
                 campaignStarter.AddBehavior(new BKSettlementBehavior());
                 //campaignStarter.AddBehavior(new BKBookBehavior());
-                campaignStarter.AddBehavior(new BKCompanionBehavior());
+                campaignStarter.AddBehavior(new BKSettlementActions());
+                campaignStarter.AddBehavior(new BKKnighthoodBehavior());
                 campaignStarter.AddBehavior(new BKTournamentBehavior());
                 campaignStarter.AddBehavior(new BKRepublicBehavior());
                 campaignStarter.AddBehavior(new BKPartyBehavior());
@@ -57,6 +59,7 @@ namespace BannerKings
                 campaignStarter.AddBehavior(new BKNotableBehavior());
                 campaignStarter.AddBehavior(new BKReligionsBehavior());
                 campaignStarter.AddBehavior(new BKSkillBehavior());
+                campaignStarter.AddBehavior(new BKLordCaravansBehavior());
 
                 campaignStarter.AddModel(new BKCompanionPrices());
                 campaignStarter.AddModel(new BKProsperityModel());
@@ -85,6 +88,11 @@ namespace BannerKings
                 campaignStarter.AddModel(new BKPartyWageModel());
                 campaignStarter.AddModel(new BKSettlementValueModel());
                 campaignStarter.AddModel(new BKNotablePowerModel());
+                campaignStarter.AddModel(new BKPartyFoodConsumption());
+                campaignStarter.AddModel(new BKSmithingModel());
+                campaignStarter.LoadGameTexts(BasePath.Name + "Modules/BannerKings/ModuleData/module_strings.xml");
+                BKItemCategories.Instance.Initialize();
+                BKItems.Instance.Initialize();
                 campaignStarter.LoadGameTexts(BasePath.Name + "Modules/BannerKings/ModuleData/module_strings.xml");
 
                 BKAttributes.Instance.Initialize();
@@ -378,6 +386,33 @@ namespace BannerKings
         namespace Economy
         {
 
+            [HarmonyPatch(typeof(UrbanCharactersCampaignBehavior), "BalanceGoldAndPowerOfNotable")]
+            class BalanceGoldAndPowerOfNotablePatch
+            {
+                static bool Prefix(Hero notable)
+                {
+                    if (notable.Gold > 10500)
+                    {
+                        int num = (notable.Gold - 10000) / 500;
+                        GiveGoldAction.ApplyBetweenCharacters(notable, null, num * 500, true);
+                        notable.AddPower((float)num);
+                        return false;
+                    }
+                    return true;
+                }
+            }
+
+            [HarmonyPatch(typeof(Workshop), "Expense", MethodType.Getter)]
+            class WorkshopExpensePatch
+            {
+                static bool Prefix(Workshop __instance, ref int __result)
+                {
+                    __result = (int)(__instance.Settlement.Prosperity * 0.01f +
+                    Campaign.Current.Models.WorkshopModel.GetDailyExpense(__instance.Level));
+                    return false;
+                }
+            }
+
             [HarmonyPatch(typeof(HeroHelper), "StartRecruitingMoneyLimit")]
             class StartRecruitingMoneyLimitPatch
             {
@@ -421,8 +456,14 @@ namespace BannerKings
 
                     if (BannerKingsConfig.Instance.TitleManager != null)
                     {
-                        float income = Campaign.Current.Models.ClanFinanceModel.CalculateClanIncome(clan).ResultNumber * 0.5f +
-                        clan.Gold * 0.05f;
+                        bool war = false;
+                        if (clan.Kingdom != null)
+                            war = FactionManager.GetEnemyKingdoms(clan.Kingdom).Count() > 0;
+                        float income = Campaign.Current.Models.ClanFinanceModel.CalculateClanIncome(clan).ResultNumber * (war ? 0.5f : 0.2f);
+                        if (war)
+                            income += clan.Gold * 0.05f;
+
+
                         if (income > 0f)
                         {
                             float knights = 0f;
@@ -468,6 +509,16 @@ namespace BannerKings
                         FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(clan.Leader);
                         return title != null && title.contract != null && title.contract.Rights.Contains(FeudalRights.Assistance_Rights);
                     }
+                    return true;
+                }
+
+                [HarmonyPrefix]
+                [HarmonyPatch("AddIncomeFromParty", MethodType.Normal)]
+                static bool AddIncomeFromPartyPrefix(MobileParty party, Clan clan, ref ExplainedNumber goldChange, bool applyWithdrawals)
+                {
+                    if (BannerKingsConfig.Instance.TitleManager != null && party.LeaderHero != null && party.LeaderHero != clan.Leader)
+                        return BannerKingsConfig.Instance.TitleManager.GetHighestTitle(party.LeaderHero) == null;
+                    
                     return true;
                 }
 
@@ -649,17 +700,6 @@ namespace BannerKings
                         PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
                         __result *= data.EconomicData.CaravanAttraction.ResultNumber;
                     }
-                }
-            }
-
-            [HarmonyPatch(typeof(DefaultItemCategories), "InitializeAll")]
-            class InitializeCategoriesPatch
-            {
-                private static ItemCategory _itemCategoryBread;
-                static void Postfix()
-                {
-                    _itemCategoryBread = Game.Current.ObjectManager.RegisterPresumedObject(new ItemCategory("bread"));
-                    _itemCategoryBread.InitializeObject(true, 50, 20, ItemCategory.Property.BonusToFoodStores);
                 }
             }
 

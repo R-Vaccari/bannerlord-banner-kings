@@ -1,4 +1,4 @@
-﻿using BannerKings.Managers.Institutions;
+﻿using BannerKings.Managers.Institutions.Guilds;
 using BannerKings.Populations;
 using TaleWorlds.Core;
 using TaleWorlds.Library;

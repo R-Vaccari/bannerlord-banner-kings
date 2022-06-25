@@ -1,4 +1,5 @@
-﻿using BannerKings.Managers.Titles;
+﻿using BannerKings.Actions;
+using BannerKings.Managers.Titles;
 using Helpers;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,11 +36,15 @@ namespace BannerKings.Behaviours
             foreach (WarPartyComponent component in clan.WarPartyComponents)
             {
                 Hero leader = component.Leader;
+                
                 if (leader != null && leader != clan.Leader && leader.IsWanderer)
                 {
-                    leader.SetNewOccupation(Occupation.Lord);
-                    leader.Clan = null;
-                    leader.Clan = clan;
+                    FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(leader);
+                    if (title != null)
+                    {
+                        leader.SetNewOccupation(Occupation.Lord);
+                        ClanActions.JoinClan(leader, clan);
+                    }
                 }
             }
                 
@@ -47,7 +52,7 @@ namespace BannerKings.Behaviours
             if (clan.WarPartyComponents.Count < clan.CommanderLimit && clan.Companions.Count < clan.CompanionLimit && 
                 clan.Settlements.Count(x => x.IsVillage ) > 1 && clan.Influence >= 150)
             {
-                Settlement village = clan.Settlements.FirstOrDefault(x => x.IsVillage);
+                Settlement village = clan.Settlements.GetRandomElementWithPredicate(x => x.IsVillage);
                 if (village == null) return;
                 List<FeudalTitle> clanTitles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(clan);
                 FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetTitle(village);

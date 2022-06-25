@@ -16,6 +16,7 @@ using BannerKings.Models.Populations;
 using BannerKings.Populations;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
+using BannerKings.Managers.AI;
 
 namespace BannerKings
 {
@@ -32,6 +33,7 @@ namespace BannerKings
         public BKEducationModel EducationModel { get; private set; } = new BKEducationModel();
 
         public HashSet<IBannerKingsModel> Models = new HashSet<IBannerKingsModel>();
+        public AIBehavior AI = new AIBehavior();
         public bool wipeData = false;
 
         private void Initialize()

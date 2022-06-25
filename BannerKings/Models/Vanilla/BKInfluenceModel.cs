@@ -8,6 +8,7 @@ using static BannerKings.Managers.PopulationManager;
 using BannerKings.Populations;
 using BannerKings.Managers.Populations.Villages;
 using TaleWorlds.Library;
+using BannerKings.Managers.Titles;
 
 namespace BannerKings.Models
 {
@@ -31,7 +32,7 @@ namespace BannerKings.Models
                     VillageData villageData = data.VillageData;
                     if (villageData != null)
                     {
-                        float manor = villageData.GetBuildingLevel(DefaultVillageBuildings.Instance.TrainningGrounds);
+                        float manor = villageData.GetBuildingLevel(DefaultVillageBuildings.Instance.Manor);
                         if (manor > 0)
                             baseResult.AddFactor(manor == 3 ? 0.5f : manor * 0.15f, new TextObject("{=!}Manor"));
                     }
@@ -43,9 +44,24 @@ namespace BannerKings.Models
                         baseResult.Add(MBMath.ClampFloat(extra * -0.01f, result * -0.5f, -0.1f), new TextObject(string.Format("Excess noble population at {0}", settlement.Name)));
                     }
 
+                    if (BannerKingsConfig.Instance.AI.AcceptNotableAid(clan, data))
+                        foreach (Hero notable in data.Settlement.Notables)
+                            if (notable.SupporterOf == clan && notable.Gold > 5000)
+                                baseResult.Add(-1f, new TextObject("{=!}Aid from {NOTABLE}").SetTextVariable("NOTABLE", notable.Name));
+
                     generalSupport  += data.NotableSupport - 0.5f;
                     generalAutonomy += -0.5f * data.Autonomy;
                     i++;
+
+                    if (settlement.IsVillage)
+                    {
+                        FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement);
+                        if (title.deJure != null)
+                        {
+                            Clan deJureClan = title.deJure.Clan;
+                            if (title.deJure != deJureClan.Leader && settlement.OwnerClan == deJureClan) title.deJure.AddPower(baseResult.ResultNumber * 0.1f);
+                        }
+                    }
                 }
             }
 

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.ViewModelCollection;
 using TaleWorlds.CampaignSystem.ViewModelCollection.CharacterDeveloper;
 using TaleWorlds.CampaignSystem.ViewModelCollection.ClanManagement;
 using TaleWorlds.Core;
@@ -86,11 +87,11 @@ namespace BannerKings.UI.Court
 
 			if (currentCharacter != null)
             {
-				CourtierInfo.Add(new InformationElement(string.Empty, GameTexts.FindText("str_occupation", currentCharacter.Hero.Occupation.ToString()).ToString(),
-				string.Empty));
+				CourtierInfo.Add(new InformationElement(GameTexts.FindText("str_enc_sf_occupation").ToString(), 
+					CampaignUIHelper.GetHeroOccupationName(currentCharacter.Hero).ToString(), string.Empty));
 				CouncilMember heroPosition = council.GetHeroPosition(currentCharacter.Hero);
-				if (heroPosition != null) CourtierInfo.Add(new InformationElement(string.Empty, heroPosition.GetName().ToString(),
-				string.Empty));
+				if (heroPosition != null) CourtierInfo.Add(new InformationElement(new TextObject("{=!}Council Position:").ToString(), 
+					heroPosition.GetName().ToString(), string.Empty));
 			}
 		}
 

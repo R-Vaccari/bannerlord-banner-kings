@@ -10,7 +10,7 @@
   <VisualDefinitions>
   </VisualDefinitions>
   <Window>
-    <Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" IsActive="true">
+    <Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" IsActive="true" Sprite="BlankWhiteSquare_9" Color="#00000088">
       <Children>
         <Widget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="650" SuggestedHeight="600" HorizontalAlignment="Center" VerticalAlignment="Center" Sprite="BlankWhiteSquare_9" Color="#39291eFF">
           <Children>

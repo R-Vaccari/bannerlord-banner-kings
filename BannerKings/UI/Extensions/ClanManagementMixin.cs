@@ -13,12 +13,13 @@ namespace BannerKings.UI.Extensions
 		//private BasicTooltipViewModel pietyHint;
 		private ClanManagementVM clanManagement;
 		private CourtVM courtVM;
-		private bool courtSelected;
+		private bool courtSelected, financesVisible;
 
 		public ClanManagementMixin(ClanManagementVM vm) : base(vm)
         {
 			clanManagement = vm;
 			courtVM = new CourtVM(false);
+			FinancesVisible = true;
 		}
 
         public override void OnRefresh()
@@ -51,6 +52,20 @@ namespace BannerKings.UI.Extensions
 		}
 
 		[DataSourceProperty]
+		public bool FinancesVisible
+		{
+			get => financesVisible;
+			set
+			{
+				if (value != financesVisible)
+				{
+					financesVisible = value;
+					ViewModel!.OnPropertyChangedWithValue(value, "FinancesVisible");
+				}
+			}
+		}
+
+		[DataSourceProperty]
 		public bool CourtSelected
 		{
 			get => courtSelected;
@@ -59,6 +74,7 @@ namespace BannerKings.UI.Extensions
 				if (value != courtSelected)
 				{
 					courtSelected = value;
+					FinancesVisible = !value;
 					ViewModel!.OnPropertyChangedWithValue(value, "CourtSelected");
 				}
 			}

@@ -47,4 +47,14 @@ namespace BannerKings.UI.Extensions
         public IEnumerable<XmlNode> Nodes => nodes;
 
     }
+
+    [PrefabExtension("ClanScreen", "descendant::Widget[@Id='FinancePanelWidget']", "ClanScreen")]
+    internal class AddMultipleAttributesExamplePatch : PrefabExtensionSetAttributePatch
+    {
+
+        public override List<Attribute> Attributes => new()
+        {
+            new Attribute("IsVisible", "@FinancesVisible"),
+        };
+    }
 }

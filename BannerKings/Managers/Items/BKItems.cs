@@ -16,39 +16,48 @@ namespace BannerKings.Managers.Items
         public ItemObject BookTrade => bookTrade;
         public ItemObject BookDictionary => bookDictionary;
         public ItemObject BookMounted => bookMounted;
-        
+
+        public ItemObject Apple => apple;
+
+        public ItemObject Bread => bread;
+
+        public ItemObject Pie => pie;
+
+        public ItemObject Carrot => carrot;
+
+        public ItemObject Orange => orange;
+
         public override void Initialize()
         {
             apple = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("apple"));
             InitializeTradeGood(apple,
-                new TextObject("{=!}Apples{@Plural}baskets of apples\\@}", null), "foods_basket_apple",
-                BKItemCategories.Instance.Apple, 5, 10f, ItemObject.ItemTypeEnum.Goods);
+                new TextObject("{=bk_item_apple}Apples{@Plural}baskets of apples\\@}", null), "foods_basket_apple",
+                BKItemCategories.Instance.Apple, 5, 10f, ItemObject.ItemTypeEnum.Goods, true);
 
             orange = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("orange"));
             InitializeTradeGood(orange,
-                new TextObject("{=!}Oranges{@Plural}baskets of oranges\\@}", null), "foods_orange_basket",
-                BKItemCategories.Instance.Apple, 5, 10f, ItemObject.ItemTypeEnum.Goods);
+                new TextObject("{=bk_item_orange}Oranges{@Plural}baskets of oranges\\@}", null), "foods_orange_basket",
+                BKItemCategories.Instance.Apple, 5, 10f, ItemObject.ItemTypeEnum.Goods, true);
 
             bread = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("bread"));
             InitializeTradeGood(bread,
-                new TextObject("{=!}Bread{@Plural}loathes of bread\\@}", null), "merchandise_bread",
-                BKItemCategories.Instance.Apple, 5, 10f, ItemObject.ItemTypeEnum.Goods);
+                new TextObject("{=bk_item_bread}Bread{@Plural}loathes of bread\\@}", null), "merchandise_bread",
+                BKItemCategories.Instance.Apple, 5, 10f, ItemObject.ItemTypeEnum.Goods, true);
 
             pie = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("pie"));
             InitializeTradeGood(pie,
-                new TextObject("{=!}Pie{@Plural}baskets of pies\\@}", null), "kitchen_pie",
-                BKItemCategories.Instance.Apple, 5, 10f, ItemObject.ItemTypeEnum.Goods);
+                new TextObject("{=bk_item_pie}Pie{@Plural}baskets of pies\\@}", null), "kitchen_pie",
+                BKItemCategories.Instance.Apple, 5, 10f, ItemObject.ItemTypeEnum.Goods, true);
 
             carrot = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("carrot"));
             InitializeTradeGood(carrot,
-                new TextObject("{=!}Carrots{@Plural}baskets of carrots\\@}", null), "foods_carrots_basket",
-                BKItemCategories.Instance.Apple, 5, 10f, ItemObject.ItemTypeEnum.Goods);
-
+                new TextObject("{=bk_item_carrot}Carrots{@Plural}baskets of carrots\\@}", null), "foods_carrots_basket",
+                BKItemCategories.Instance.Apple, 5, 10f, ItemObject.ItemTypeEnum.Goods, true);
 
 
             bookHeartsDesire = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("book_hearts_desire"));
-            InitializeTradeGood(bookHeartsDesire, 
-                new TextObject("{=!}Heart's Desire{@Plural}collection of Heart's Desire books{\\@}", null), "lib_book_closed_a", 
+            InitializeTradeGood(bookHeartsDesire,
+                new TextObject("{=!}Heart's Desire{@Plural}collection of Heart's Desire books{\\@}", null), "lib_book_closed_a",
                 BKItemCategories.Instance.Book, 300000, 1f, ItemObject.ItemTypeEnum.Goods);
 
             bookSiege = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("book_siege"));
@@ -83,9 +92,9 @@ namespace BannerKings.Managers.Items
         }
 
         static void InitializeTradeGood(ItemObject item, TextObject name, string meshName, ItemCategory category, int value, float weight, ItemObject.ItemTypeEnum itemType, bool isFood = false)
-		{
-			MethodInfo method = item.GetType().GetMethod("InitializeTradeGood", BindingFlags.Static | BindingFlags.NonPublic);
-			method.Invoke(null, new object[] { item, name, meshName, category, value, weight, itemType, isFood });
-		}
-	}
+        {
+            MethodInfo method = item.GetType().GetMethod("InitializeTradeGood", BindingFlags.Static | BindingFlags.NonPublic);
+            method.Invoke(null, new object[] { item, name, meshName, category, value, weight, itemType, isFood });
+        }
+    }
 }

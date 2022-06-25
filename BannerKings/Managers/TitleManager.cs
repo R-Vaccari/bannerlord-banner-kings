@@ -269,19 +269,6 @@ namespace BannerKings.Managers
                     .SetTextVariable("CLAIMANT", claimant.Name)
                     .SetTextVariable("TITLE", action.Title.FullName));
         }
-        
-        public void GrantTitle(Hero receiver, Hero grantor, FeudalTitle title, float influence)
-        {
-            ExecuteOwnershipChange(grantor, receiver, title, true);
-            Kingdom kingdom = grantor.Clan.Kingdom;
-            if (receiver.Clan.Kingdom != null && receiver.Clan.Kingdom == kingdom)
-                ExecuteOwnershipChange(grantor, receiver, title, false);
-
-            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(grantor, receiver, (int)(new BKTitleModel().GetRelationImpact(title) * -1f));
-            GainKingdomInfluenceAction.ApplyForDefault(grantor, influence);
-
-            grantor.AddSkillXp(BKSkills.Instance.Lordship, 500f / ((float)title.type * 2f));
-        }
 
         public void RevokeTitle(TitleAction action)
         {
@@ -305,6 +292,19 @@ namespace BannerKings.Managers
                 action.ActionTaker.Clan.Renown -= action.Renown;
 
             action.ActionTaker.AddSkillXp(BKSkills.Instance.Lordship, 200f / ((float)action.Title.type * 2f));
+        }
+
+        public void GrantTitle(Hero receiver, Hero grantor, FeudalTitle title, float influence)
+        {
+            ExecuteOwnershipChange(grantor, receiver, title, true);
+            Kingdom kingdom = grantor.Clan.Kingdom;
+            if (receiver.Clan.Kingdom != null && receiver.Clan.Kingdom == kingdom)
+                ExecuteOwnershipChange(grantor, receiver, title, false);
+
+            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(grantor, receiver, (int)(new BKTitleModel().GetRelationImpact(title) * -1f));
+            GainKingdomInfluenceAction.ApplyForDefault(grantor, influence);
+
+            grantor.AddSkillXp(BKSkills.Instance.Lordship, 500f / ((float)title.type * 2f));
         }
 
         public void UsurpTitle(Hero oldOwner, TitleAction action)

@@ -30,6 +30,9 @@ namespace BannerKings.Utils
                 LocationCharacter.CharacterRelations.Neutral, 1);
         }
 
+
+        public static bool IsClanLeader(Hero hero) => hero.Clan != null && hero.Clan.Leader == hero;
+
         public static int GetRosterCount(TroopRoster roster, string filter = null)
         {
             List<TroopRosterElement> rosters = roster.GetTroopRoster();
@@ -535,14 +538,16 @@ namespace BannerKings.Utils
 
         public static ConsumptionType GetTradeGoodConsumptionType(ItemCategory item)
         {
+
             string id = item.StringId;
-            if (id == "silver" || id == "jewelry" || id == "spice" || id == "velvet")
-                return ConsumptionType.Luxury;
-            if (id == "wool" || id == "pottery" || id == "cotton" || id == "flax" || id == "linen" || id == "leather" || id == "tools")
-                return ConsumptionType.Industrial;
             if (item.Properties == Property.BonusToFoodStores)
                 return ConsumptionType.Food;
-            return ConsumptionType.General;
+            else  if (id == "silver" || id == "jewelry" || id == "spice" || id == "velvet" || id == "war_horse" || id.EndsWith("4") || id.EndsWith("5"))
+                return ConsumptionType.Luxury;
+            else if (id == "wool" || id == "pottery" || id == "cotton" || id == "flax" || id == "linen" || id == "leather" || id == "tools"
+                || id.EndsWith("3") || id.Contains("horse"))
+                return ConsumptionType.Industrial;
+            else return ConsumptionType.General;
         }
 
         public static ConsumptionType GetTradeGoodConsumptionType(ItemObject item)

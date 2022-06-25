@@ -28,7 +28,7 @@ namespace BannerKings.Managers.Titles
                 BannerKingsConfig.Instance.TitleManager.AddOngoingClaim(this);
             else if (Type == ActionType.Revoke)
                 BannerKingsConfig.Instance.TitleManager.RevokeTitle(this);
-            else BannerKingsConfig.Instance.TitleManager.GrantTitle(receiver, ActionTaker, Title, Influence);
+            else BannerKingsConfig.Instance.TitleManager.GrantTitle(receiver, this.ActionTaker, this.Title, this.Influence);
         }
     }
 

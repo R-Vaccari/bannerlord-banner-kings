@@ -1,8 +1,8 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <Module>
-  <Name value="$modulename$" />
-  <Id value="$modulename$" />
-  <Version value="v$version$" />
+  <Name value="BannerKings" />
+  <Id value="BannerKings" />
+  <Version value="v0.0.1" />
   <DefaultModule value="false"/>
   <SingleplayerModule value="true"/>
   <MultiplayerModule value="false"/>
@@ -16,9 +16,9 @@
   </DependedModules>
   <SubModules>
     <SubModule>
-      <Name value="$modulename$" />
-      <DLLName value="$modulename$.dll" />
-      <SubModuleClassType value="$modulename$.Main" />
+      <Name value="BannerKings" />
+      <DLLName value="BannerKings.dll" />
+      <SubModuleClassType value="BannerKings.Main" />
       <Tags>
         <Tag key="DedicatedServerType" value="none" />
         <Tag key="IsNoRenderModeElement" value="false" />
@@ -42,5 +42,12 @@
         <GameType value="CustomGame"/>
       </IncludedGameTypes>
     </XmlNode>
+	<!--<XmlNode>                
+		<XmlName id="WorkshopTypes" path="workshops"/>
+		<IncludedGameTypes>
+			<GameType value = "Campaign"/>
+			<GameType value = "CampaignStoryMode"/>
+		</IncludedGameTypes>
+	</XmlNode>  -->
   </Xmls>
 </Module>
