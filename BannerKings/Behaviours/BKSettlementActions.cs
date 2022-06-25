@@ -1,4 +1,5 @@
 ﻿using BannerKings.Managers.Institutions.Guilds;
+using BannerKings.Managers.Titles;
 using BannerKings.Populations;
 using BannerKings.UI;
 using System;
@@ -529,7 +530,7 @@ namespace BannerKings.Behaviours
         {
             args.optionLeaveType = GameMenuOption.LeaveType.Surrender;
             Settlement currentSettlement = Settlement.CurrentSettlement;
-            return currentSettlement.OwnerClan == Hero.MainHero.Clan && !currentSettlement.IsVillage;
+            return currentSettlement.MapFaction == Hero.MainHero.MapFaction;
         }
 
         private static bool MenuSettlementManageCondition(MenuCallbackArgs args)
@@ -541,7 +542,10 @@ namespace BannerKings.Behaviours
         private static bool MenuVillageBuildingCondition(MenuCallbackArgs args)
         {
             args.optionLeaveType = GameMenuOption.LeaveType.Manage;
-            return Settlement.CurrentSettlement.OwnerClan == Hero.MainHero.Clan && Settlement.CurrentSettlement.IsVillage;
+            bool titleOnwer = false;
+            FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetTitle(Settlement.CurrentSettlement);
+            if (title != null) titleOnwer = title.deJure == Hero.MainHero;
+            return (titleOnwer || Settlement.CurrentSettlement.OwnerClan == Hero.MainHero.Clan) && Settlement.CurrentSettlement.IsVillage;
         }
 
         private static bool MenuGuildManageCondition(MenuCallbackArgs args)
