@@ -29,7 +29,7 @@ namespace BannerKings.Models
                     VillageData villageData = data.VillageData;
                     if (villageData != null)
                     {
-                        float manor = villageData.GetBuildingLevel(DefaultVillageBuildings.Instance.TrainningGrounds);
+                        float manor = villageData.GetBuildingLevel(DefaultVillageBuildings.Instance.Manor);
                         if (manor > 0)
                             baseResult.AddFactor(manor == 3 ? 0.5f : manor * 0.15f, new TextObject("{=!}Manor"));
                     }
