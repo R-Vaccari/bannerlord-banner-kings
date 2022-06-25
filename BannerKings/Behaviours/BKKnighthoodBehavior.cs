@@ -13,6 +13,7 @@ using TaleWorlds.CampaignSystem.ViewModelCollection.ClanManagement.Categories;
 using SandBox;
 using System.Linq;
 using BannerKings.Managers.Titles;
+using BannerKings.Actions;
 
 namespace BannerKings.Behaviors
 {
@@ -40,37 +41,16 @@ namespace BannerKings.Behaviors
             if (title == null ||  title.type != TitleType.Lordship || title.fief.Village == null || !CanCreateClan(hero)) return;
 
             Clan originalClan = hero.Clan;
-            Settlement settlement = title.fief.Village.TradeBound;
-            TextObject name = GetRandomName(hero.Culture, settlement);
-            if (name == null || Clan.All.Any((Clan t) => t.Name.Equals(name)) || Clan.PlayerClan.Name.Equals(name)) return;
-            Clan clan = Clan.CreateClan(hero.StringId + "_knight_clan");
-            clan.InitializeClan(name, name, hero.Culture, Banner.CreateOneColoredBannerWithOneIcon(settlement.MapFaction.Banner.GetFirstIconColor(), settlement.MapFaction.Banner.GetPrimaryColor(), 
-                hero.Culture.PossibleClanBannerIconsIDs.GetRandomElement()), settlement.GatePosition, false);
-            clan.Kingdom = originalClan.Kingdom;
-            clan.AddRenown(150f);
-            hero.Clan = null;
-            hero.CompanionOf = null;
-            hero.Clan = clan;
-            clan.SetLeader(hero);
-            hero.AddPower(-hero.Power);
+            if (hero.Spouse != null && Utils.Helpers.IsClanLeader(hero.Spouse)) return;
+
+            ClanActions.CreateNewClan(hero, title.fief, hero.StringId + "_knight_clan");
             InformationManager.AddQuickInformation(new TextObject("{=!}The {NEW} has been formed by {HERO}, previously a knight of {ORIGINAL}.")
-                            .SetTextVariable("NEW", clan.Name)
+                            .SetTextVariable("NEW", hero.Clan.Name)
                             .SetTextVariable("HERO", hero.Name)
                             .SetTextVariable("ORIGINAL", originalClan.Name));
         }
 
-        private TextObject GetRandomName(CultureObject culture, Settlement settlement)
-        {
-            TextObject random = null;
-            if (culture.ClanNameList.Count > 1)
-                random = culture.ClanNameList.GetRandomElementInefficiently();
-            else
-            {
-                random = culture.ClanNameList[0];
-                random.SetTextVariable("ORIGIN_SETTLEMENT", settlement.Name);
-            }
-            return random;
-        }
+        
         private bool CanCreateClan(Hero hero) => hero.Gold >= 30000 && hero.Power >= 250f && hero.Occupation == Occupation.Lord &&
             hero.Father != hero.Clan.Leader && hero.Mother != hero.Clan.Leader && !hero.Children.Contains(hero.Clan.Leader) && 
             !hero.Siblings.Contains(hero.Clan.Leader);
@@ -244,11 +224,11 @@ namespace BannerKings.Behaviors
                     {
                         if (title.contract != null) government = title.contract.Government;
                         if (current == null)
-                            desc += string.Format("{0} of {1}", Helpers.Helpers.GetTitleHonorary(title.type, government, false), title.shortName);
+                            desc += string.Format("{0} of {1}", Utils.Helpers.GetTitleHonorary(title.type, government, false), title.shortName);
                         else if (current.type == title.type)
                             desc += ", " + title.shortName;
                         else if (current.type != title.type)
-                            desc += string.Format(" and {0} of {1}", Helpers.Helpers.GetTitleHonorary(title.type, government, false), title.shortName);
+                            desc += string.Format(" and {0} of {1}", Utils.Helpers.GetTitleHonorary(title.type, government, false), title.shortName);
                         current = title;
                     }
                     __result = __result + Environment.NewLine + desc;

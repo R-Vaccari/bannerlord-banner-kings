@@ -90,7 +90,7 @@ namespace BannerKings.Models.Vanilla
 
 			if (buyerHero != null)
             {
-				if (Helpers.Helpers.IsRetinueTroop(troop))
+				if (Utils.Helpers.IsRetinueTroop(troop))
 					result.AddFactor(0.20f, null);
 
 				if (troop.Culture == buyerHero.Culture)

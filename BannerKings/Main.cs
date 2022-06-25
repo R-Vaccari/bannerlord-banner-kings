@@ -871,7 +871,7 @@ namespace BannerKings
                                 }
 
                                 int finalAmount = MBRandom.RoundRandomized(desiredAmount);
-                                ConsumptionType type = Helpers.Helpers.GetTradeGoodConsumptionType(item);
+                                ConsumptionType type = Utils.Helpers.GetTradeGoodConsumptionType(item);
                                 if (finalAmount > amount)
                                 {
                                     finalAmount = amount;

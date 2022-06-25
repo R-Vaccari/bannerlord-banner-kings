@@ -218,7 +218,7 @@ namespace BannerKings.Managers.Titles
                 TextObject text = new TextObject("{=!}{TITLE} of {NAME}");
                 GovernmentType type = GovernmentType.Feudal;
                 if (contract != null) type = contract.Government;
-                text.SetTextVariable("TITLE", BannerKings.Helpers.Helpers.GetTitlePrefix(this.type, contract.Government, deJure.Culture));
+                text.SetTextVariable("TITLE", BannerKings.Utils.Helpers.GetTitlePrefix(this.type, contract.Government, deJure.Culture));
                 text.SetTextVariable("NAME", this.shortName.ToString());
                 return text;
             }

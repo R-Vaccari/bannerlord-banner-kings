@@ -92,7 +92,7 @@ namespace BannerKings.UI
                     {
                         GovernmentType government = GovernmentType.Feudal;
                         if (title.contract != null) government = title.contract.Government;
-                        string honorary = Helpers.Helpers.GetTitleHonorary(title.type, government, __instance.IsFemale, kingdom != null ? kingdom.Culture : __instance.Culture);
+                        string honorary = Utils.Helpers.GetTitleHonorary(title.type, government, __instance.IsFemale, kingdom != null ? kingdom.Culture : __instance.Culture);
                         TextObject name = (TextObject)__instance.GetType()
                             .GetField("_name", BindingFlags.Instance | BindingFlags.NonPublic)
                             .GetValue(__instance);

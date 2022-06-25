@@ -197,7 +197,7 @@ namespace BannerKings.Behaviors
                 if (settlement.Town != null && settlement.Town.GarrisonParty != null)
                 {
                     foreach (Building castleBuilding in settlement.Town.Buildings)
-                        if (Helpers.Helpers._buildingCastleRetinue != null && castleBuilding.BuildingType == Helpers.Helpers._buildingCastleRetinue)
+                        if (Utils.Helpers._buildingCastleRetinue != null && castleBuilding.BuildingType == Utils.Helpers._buildingCastleRetinue)
                         {
                             MobileParty garrison = settlement.Town.GarrisonParty;
                             if (garrison.MemberRoster != null && garrison.MemberRoster.Count > 0)
@@ -205,7 +205,7 @@ namespace BannerKings.Behaviors
                                 List<TroopRosterElement> elements = garrison.MemberRoster.GetTroopRoster();
                                 int currentRetinue = 0;
                                 foreach (TroopRosterElement soldierElement in elements)
-                                    if (Helpers.Helpers.IsRetinueTroop(soldierElement.Character, settlement.Culture))
+                                    if (Utils.Helpers.IsRetinueTroop(soldierElement.Character, settlement.Culture))
                                         currentRetinue += soldierElement.Number;
 
                                 int maxRetinue = castleBuilding.CurrentLevel == 1 ? 20 : (castleBuilding.CurrentLevel == 2 ? 40 : 60);
@@ -322,10 +322,10 @@ namespace BannerKings.Behaviors
                     settlement.Culture = data.CultureData.DominantCulture;
                 }
 
-            BuildingType retinueType = MBObjectManager.Instance.GetObjectTypeList<BuildingType>().FirstOrDefault(x => x == Helpers.Helpers._buildingCastleRetinue);
+            BuildingType retinueType = MBObjectManager.Instance.GetObjectTypeList<BuildingType>().FirstOrDefault(x => x == Utils.Helpers._buildingCastleRetinue);
             if (retinueType == null)
             {
-                Helpers.Helpers._buildingCastleRetinue.Initialize(new TextObject("{=!}Retinue Barracks", null), new TextObject("{=!}Barracks for the castle retinue, a group of elite soldiers. The retinue is added to the garrison over time, up to a limit of 20, 40 or 60 (building level).", null), new int[]
+                Utils.Helpers._buildingCastleRetinue.Initialize(new TextObject("{=!}Retinue Barracks", null), new TextObject("{=!}Barracks for the castle retinue, a group of elite soldiers. The retinue is added to the garrison over time, up to a limit of 20, 40 or 60 (building level).", null), new int[]
                 {
                      1000,
                      1500,
@@ -431,7 +431,7 @@ namespace BannerKings.Behaviors
                     {
                         PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(currentSettlement);
                         if (data != null)
-                            data.UpdatePopType(PopType.Slaves, Helpers.Helpers.GetRosterCount(prisoners));
+                            data.UpdatePopType(PopType.Slaves, Utils.Helpers.GetRosterCount(prisoners));
                     }
                         
                     else if (policy.Policy == BKCriminalPolicy.CriminalPolicy.Forgiveness)
@@ -480,7 +480,7 @@ namespace BannerKings.Behaviors
                     {
                         PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(currentSettlement);
                         if (data != null)
-                            data.UpdatePopType(PopType.Slaves, Helpers.Helpers.GetRosterCount(prisoners));
+                            data.UpdatePopType(PopType.Slaves, Utils.Helpers.GetRosterCount(prisoners));
                     }
                     else if (policy.Policy == BKCriminalPolicy.CriminalPolicy.Forgiveness)
                     {
@@ -543,7 +543,7 @@ namespace BannerKings.Behaviors
         {
             static void Postfix()
             {
-                Helpers.Helpers._buildingCastleRetinue.Initialize(new TextObject("{=!}Retinue Barracks", null), new TextObject("{=!}Barracks for the castle retinue, a group of elite soldiers. The retinue is added to the garrison over time, up to a limit of 20, 40 or 60 (building level).", null), new int[]
+                Utils.Helpers._buildingCastleRetinue.Initialize(new TextObject("{=!}Retinue Barracks", null), new TextObject("{=!}Barracks for the castle retinue, a group of elite soldiers. The retinue is added to the garrison over time, up to a limit of 20, 40 or 60 (building level).", null), new int[]
                 {
                      800,
                      1200,
