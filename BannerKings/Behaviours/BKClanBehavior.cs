@@ -1,4 +1,5 @@
-﻿using BannerKings.Managers.Titles;
+﻿using BannerKings.Actions;
+using BannerKings.Managers.Titles;
 using Helpers;
 using System;
 using System.Collections.Generic;
@@ -36,8 +37,7 @@ namespace BannerKings.Behaviours
                     if (title != null)
                     {
                         leader.SetNewOccupation(Occupation.Lord);
-                        leader.Clan = null;
-                        leader.Clan = clan;
+                        ClanActions.JoinClan(leader, clan);
                     }
                 }
             }

@@ -165,8 +165,8 @@ namespace BannerKings.Behaviors
         {
             InformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                     "Select the fief you would like to give away", string.Empty, lordshipsToGive, true, 1, 
-                    GameTexts.FindText("str_done", null).ToString(), "", new Action<List<InquiryElement>>(this.OnNewPartySelectionOver), 
-                    new Action<List<InquiryElement>>(this.OnNewPartySelectionOver), ""), false);
+                    GameTexts.FindText("str_done", null).ToString(), "", new Action<List<InquiryElement>>(OnNewPartySelectionOver), 
+                    new Action<List<InquiryElement>>(OnNewPartySelectionOver), ""), false);
         }
 
         private void OnNewPartySelectionOver(List<InquiryElement> element)
@@ -179,8 +179,7 @@ namespace BannerKings.Behaviors
             GainKingdomInfluenceAction.ApplyForDefault(Hero.MainHero, -150f);
             GiveGoldAction.ApplyBetweenCharacters(Hero.MainHero, knight, 5000);
             knight.SetNewOccupation(Occupation.Lord);
-            knight.Clan = null;
-            knight.Clan = Clan.PlayerClan;
+            ClanActions.JoinClan(knight, Clan.PlayerClan);
         }
     }
 
