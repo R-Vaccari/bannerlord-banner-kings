@@ -170,9 +170,9 @@ namespace BannerKings.Managers.Titles
         public void AddClaim(Hero hero, ClaimType type, bool force = false)
         {
             if (hero == null || type == ClaimType.None) return;
-            this.Claims.Add(hero, type);
-            if (this.OngoingClaims.ContainsKey(hero))
-                this.OngoingClaims.Remove(hero);
+            if (!Claims.ContainsKey(hero)) Claims.Add(hero, type);
+            if (OngoingClaims.ContainsKey(hero))
+                OngoingClaims.Remove(hero);
             if (hero == Hero.MainHero)
                 InformationManager.AddQuickInformation(new TextObject("{=!}You now have a claim on the {TITLE}")
                             .SetTextVariable("TITLE", this.FullName), 0);
@@ -180,8 +180,8 @@ namespace BannerKings.Managers.Titles
 
         public void RemoveClaim(Hero hero)
         {
-            if (this.claims.ContainsKey(hero))
-                this.Claims.Remove(hero);
+            if (claims.ContainsKey(hero))
+                Claims.Remove(hero);
         }
 
         public void CleanClaims()
@@ -200,15 +200,15 @@ namespace BannerKings.Managers.Titles
             }
                 
             foreach (Hero hero in toRemove)
-                this.Claims.Remove(hero);
+                Claims.Remove(hero);
 
             toRemove.Clear();
-            foreach (Hero hero in this.OngoingClaims.Keys.ToList())
+            foreach (Hero hero in OngoingClaims.Keys.ToList())
                 if (hero.IsDead)
                     toRemove.Add(hero);
 
             foreach (Hero hero in toRemove)
-                this.Claims.Remove(hero);
+                Claims.Remove(hero);
         }
 
         public TextObject FullName
