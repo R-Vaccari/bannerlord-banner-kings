@@ -536,6 +536,22 @@ namespace BannerKings.Managers.Court
                 return 0f;
             }
         }
+
+        public IEnumerable<CouncilPrivileges> GetPrivileges()
+        {
+            float adm = AdministrativeCosts();
+            if (adm > 0.03f) yield return CouncilPrivileges.HIGH_WAGE;
+            else if (adm > 0.01f) yield return CouncilPrivileges.MID_WAGE;
+            else if (adm > 0f) yield return CouncilPrivileges.LOW_WAGE;
+
+            if (position == CouncilPosition.Spiritual) yield return CouncilPrivileges.CLERGYMEN_EXCLUSIVE;
+
+            if (IsCorePosition(position) && IsRoyal) yield return CouncilPrivileges.NOBLE_EXCLUSIVE;
+
+            float influence = InfluenceCosts();
+            if (influence >= 0.05f) yield return CouncilPrivileges.HIGH_INFLUENCE;
+            else if (influence > 0f) yield return CouncilPrivileges.INFLUENCE;
+        }
     }
 
     public enum CouncilPosition
@@ -551,5 +567,16 @@ namespace BannerKings.Managers.Court
         Elder,
         Constable,
         None
+    }
+
+    public enum CouncilPrivileges
+    {
+        LOW_WAGE,
+        MID_WAGE,
+        HIGH_WAGE,
+        INFLUENCE,
+        HIGH_INFLUENCE,
+        CLERGYMEN_EXCLUSIVE,
+        NOBLE_EXCLUSIVE
     }
 }

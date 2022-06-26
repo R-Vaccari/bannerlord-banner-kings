@@ -1,6 +1,23 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <base xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" type="string">
 	<strings>
+	
+		<string id="str_bk_council_privilege.low_wage" text="{=bk_council_privilege_low_wage}Low Wage" />
+		<string id="str_bk_council_privilege.mid_wage" text="{=bk_council_privilege_mid_wage}Wage" />
+		<string id="str_bk_council_privilege.high_wage" text="{=bk_council_privilege_high_wage}High Wage" />
+		<string id="str_bk_council_privilege.influence" text="{=bk_council_privilege_influence}Influence" />
+		<string id="str_bk_council_privilege.high_influence" text="{=bk_council_privilege_high_influence}High Influence" />
+		<string id="str_bk_council_privilege.clergymen_exclusive" text="{=bk_council_privilege_clergymen_exclusive}Clergymen Exclusive" />
+		<string id="str_bk_council_privilege.noble_exlusive" text="{=bk_council_privilege_noble_exlusive}Noble Exclusive" />
+		
+		<string id="str_bk_council_privilege_description.low_wage" text="{=bk_council_privilege_low_wage_description}A low daily wage, fit for less important positions in a council." />
+		<string id="str_bk_council_privilege_description.mid_wage" text="{=bk_council_privilege_mid_wage_description}A mediocre wage, used for the main positions in lesser councils, or midling positios in royal councils." />
+		<string id="str_bk_council_privilege_description.high_wage" text="{=bk_council_privilege_high_wage_description}A distinct daily wage, exlusive to the main positions of greater, royal councils." />
+		<string id="str_bk_council_privilege_description.influence" text="{=bk_council_privilege_influence_description}Councillors with this privilege receive extra influence (or Power, if notable)." />
+		<string id="str_bk_council_privilege_description.high_influence" text="{=bk_council_privilege_high_influence_description}Councillors with this privilege receive a great boost of influence to their clans" />
+		<string id="str_bk_council_privilege_description.clergymen_exclusive" text="{=bk_council_privilege_clergymen_exclusive_description}This position may only be filled by clergymen of the clan or kingdom's faith." />
+		<string id="str_bk_council_privilege_description.noble_exlusive" text="{=bk_council_privilege_noble_exlusive_description}This position is an important one and therefore must only be filled by nobles. Notables from settlements are not acceptable." />
+	
 		
 		<string id="str_bk_council_description_marshall" text="{=bk_council_description_marshall}The {NAME} oversees the military administration of the realm. They are responsible for the efficiency of settlement defenses and drafting of the population." />
 		<string id="str_bk_council_description_steward" text="{=bk_council_description_steward}{NAME} are responsible for the well-being of finances and trade. They improve the economic prospects and prosperity of fiefs." />

@@ -107,7 +107,7 @@ namespace BannerKings.UI
         }
 
 
-       /* [HarmonyPatch(typeof(SkillIconVisualWidget), "SkillId", MethodType.Setter)]
+        [HarmonyPatch(typeof(SkillIconVisualWidget), "SkillId", MethodType.Setter)]
         class SkillIconOnLateUpdatePatch
         {
             static bool Prefix(SkillIconVisualWidget __instance, string value)
@@ -124,7 +124,7 @@ namespace BannerKings.UI
                 if (skillId != null) skillId.SetValue(__instance, text);
                 return false;
             }
-        } */
+        } 
 
         [HarmonyPatch(typeof(KingdomPoliciesVM), "RefreshPolicyList")]
         class RefreshPolicyListPatch

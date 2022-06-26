@@ -5,7 +5,7 @@ namespace BannerKings.Managers.Skills
 {
     public class BKPerks : DefaultTypeInitializer<BKPerks>
     {
-        private PerkObject scholarshipLiterate, scholarshipPolyglot;
+        private PerkObject scholarshipLiterate, scholarshipPolyglot, scholarshipLearner;
 
         public override void Initialize()
         {
@@ -17,12 +17,20 @@ namespace BannerKings.Managers.Skills
                 SkillEffect.EffectIncrementType.Invalid,
                 TroopClassFlag.None, TroopClassFlag.None);
 
+            scholarshipPolyglot = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("ScholarshipLearner"));
+            scholarshipPolyglot.InitializeNew("{=!}Avid Learner", BKSkills.Instance.Scholarship, GetTierCost(2), null,
+                "{=!}Increase language learning rate by 20%.", SkillEffect.PerkRole.Personal, 20f,
+                SkillEffect.EffectIncrementType.AddFactor, "{=!}Gain more relation when greeting lords in their language.",
+                SkillEffect.PerkRole.Personal, 3f,
+                SkillEffect.EffectIncrementType.Add,
+                TroopClassFlag.None, TroopClassFlag.None);
+
             scholarshipPolyglot = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("ScholarshipPolyglot"));
-            scholarshipPolyglot.InitializeNew("{=!}Polyglot", BKSkills.Instance.Scholarship, GetTierCost(2), null, 
-                "{=!}Increase language learning rate by 20%.", SkillEffect.PerkRole.Personal, 20f, 
-                SkillEffect.EffectIncrementType.AddFactor, "{=!}Gain more relation when greeting lords in their language.", 
-                SkillEffect.PerkRole.Personal, 3f, 
-                SkillEffect.EffectIncrementType.Add, 
+            scholarshipPolyglot.InitializeNew("{=!}Polyglot", BKSkills.Instance.Scholarship, GetTierCost(6), null, 
+                "{=!}Reading competence is increased for all languages, even those you don't speak.", SkillEffect.PerkRole.Personal, 10f, 
+                SkillEffect.EffectIncrementType.AddFactor, string.Empty, 
+                SkillEffect.PerkRole.None, 0f, 
+                SkillEffect.EffectIncrementType.Invalid, 
                 TroopClassFlag.None, TroopClassFlag.None);
         }
 

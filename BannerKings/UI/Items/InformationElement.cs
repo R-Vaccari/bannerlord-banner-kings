@@ -8,13 +8,13 @@ namespace BannerKings
     {
         public class InformationElement : ViewModel
         {
-            private string _description, _value;
+            private string description, value;
             private HintViewModel _hint { get; set; }
 
             public InformationElement(string description, string value, string hintText) 
             {
-                _description = description;
-                _value = value;
+                this.description = description;
+                this.value = value;
                 Hint = new HintViewModel(new TextObject(hintText));
             }
 
@@ -22,13 +22,13 @@ namespace BannerKings
             [DataSourceProperty]
             public string Description
             {
-                get => _description;
+                get => description;
                 set
                 {
-                    if (value != _description)
+                    if (value != description)
                     {
-                        _description = value;
-                        OnPropertyChangedWithValue(value, "Name");
+                        description = value;
+                        OnPropertyChangedWithValue(value, "Description");
                     }
                 }
             }
@@ -36,13 +36,13 @@ namespace BannerKings
             [DataSourceProperty]
             public string Value
             {
-                get => _value;
+                get => value;
                 set
                 {
-                    if (value != _value)
+                    if (value != this.value)
                     {
-                        _value = value;
-                        OnPropertyChangedWithValue(value, "Count");
+                        this.value = value;
+                        OnPropertyChangedWithValue(value, "Value");
                     }
                 }
             }

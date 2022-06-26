@@ -91,12 +91,12 @@ namespace BannerKings
                 campaignStarter.AddModel(new BKPartyFoodConsumption());
                 campaignStarter.AddModel(new BKSmithingModel());
                 campaignStarter.LoadGameTexts(BasePath.Name + "Modules/BannerKings/ModuleData/module_strings.xml");
-                BKItemCategories.Instance.Initialize();
-                BKItems.Instance.Initialize();
-                campaignStarter.LoadGameTexts(BasePath.Name + "Modules/BannerKings/ModuleData/module_strings.xml");
 
                 BKAttributes.Instance.Initialize();
                 BKSkills.Instance.Initialize();
+                BKPerks.Instance.Initialize();
+                BKItemCategories.Instance.Initialize();
+                BKItems.Instance.Initialize();
             }
         }
 

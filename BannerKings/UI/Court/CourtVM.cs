@@ -21,7 +21,7 @@ namespace BannerKings.UI.Court
 		private CouncilPosition councilPosition;
 		private bool isRoyal;
 		private MBBindingList<CouncilPositionVM> corePositions, royalPositions;
-		private MBBindingList<InformationElement> courtInfo, courtierInfo;
+		private MBBindingList<InformationElement> courtInfo, privilegesInfo, courtierInfo;
 		private CharacterVM currentCharacter;
 		private string positionName, positionDescription;
 
@@ -35,6 +35,7 @@ namespace BannerKings.UI.Court
 			royalPositions = new MBBindingList<CouncilPositionVM>();
 			courtInfo = new MBBindingList<InformationElement>();
 			courtierInfo = new MBBindingList<InformationElement>();
+			privilegesInfo = new MBBindingList<InformationElement>();
 			councilPosition = CouncilPosition.Marshall;
 			isRoyal = royal;
 			currentCharacter = new CharacterVM(Hero.MainHero, null);
@@ -49,6 +50,7 @@ namespace BannerKings.UI.Court
 			CorePositions.Clear();
 			RoyalPositions.Clear();
 			CourtierInfo.Clear();
+			PrivilegesInfo.Clear();
 			List<Hero> heroes = council.GetCourtMembers();
 			CouncilVM = new CouncilVM(new Action<Hero>(SetCouncilMember), council, councilPosition, heroes);
 
@@ -83,16 +85,25 @@ namespace BannerKings.UI.Court
 			{
 				positionName = member.GetName().ToString();
 				positionDescription = member.GetDescription().ToString();
+
+				foreach (CouncilPrivileges privilege in member.GetPrivileges())
+					PrivilegesInfo.Add(new InformationElement(GameTexts.FindText("str_bk_council_privilege", privilege.ToString().ToLower()).ToString(),
+						string.Empty,
+						GameTexts.FindText("str_bk_council_privilege_description", privilege.ToString().ToLower()).ToString()));
 			}
 
 			if (currentCharacter != null)
             {
 				CourtierInfo.Add(new InformationElement(GameTexts.FindText("str_enc_sf_occupation").ToString(), 
 					CampaignUIHelper.GetHeroOccupationName(currentCharacter.Hero).ToString(), string.Empty));
+
+				string positionString = GameTexts.FindText("role", "None").ToString();
 				CouncilMember heroPosition = council.GetHeroPosition(currentCharacter.Hero);
-				if (heroPosition != null) CourtierInfo.Add(new InformationElement(new TextObject("{=!}Council Position:").ToString(), 
-					heroPosition.GetName().ToString(), string.Empty));
+				if (heroPosition != null) positionString = heroPosition.GetName().ToString();
+				else if (currentCharacter.Hero == council.Owner) positionString = GameTexts.FindText("role", "ClanLeader").ToString();
+				CourtierInfo.Add(new InformationElement(new TextObject("{=!}Council Position:").ToString(), positionString, string.Empty));
 			}
+			
 		}
 
 		private void UpdatePositionTexts(string id)
@@ -102,6 +113,11 @@ namespace BannerKings.UI.Court
             {
 				CurrentPositionNameText = member.GetName().ToString();
 				CurrentPositionDescriptionText = member.GetDescription().ToString();
+				PrivilegesInfo.Clear();
+				foreach (CouncilPrivileges privilege in member.GetPrivileges())
+					PrivilegesInfo.Add(new InformationElement(GameTexts.FindText("str_bk_council_privilege", privilege.ToString().ToLower()).ToString(),
+						string.Empty,
+						GameTexts.FindText("str_bk_council_privilege_description", privilege.ToString().ToLower()).ToString()));
 			}
 		}
 
@@ -134,6 +150,9 @@ namespace BannerKings.UI.Court
 
 		[DataSourceProperty]
 		public string CourtiersText => new TextObject("{=!}Courtiers").ToString();
+
+		[DataSourceProperty]
+		public string PrivilegesText => new TextObject("{=bk_privileges}Privileges").ToString();
 
 		[DataSourceProperty]
 		public string CurrentPositionNameText
@@ -234,6 +253,20 @@ namespace BannerKings.UI.Court
 		}
 
 		[DataSourceProperty]
+		public MBBindingList<InformationElement> PrivilegesInfo
+		{
+			get => privilegesInfo;
+			set
+			{
+				if (value != privilegesInfo)
+				{
+					privilegesInfo = value;
+					OnPropertyChangedWithValue(value, "PrivilegesInfo");
+				}
+			}
+		}
+
+		[DataSourceProperty]
 		public MBBindingList<InformationElement> CourtierInfo
 		{
 			get => courtierInfo;
@@ -242,7 +275,7 @@ namespace BannerKings.UI.Court
 				if (value != courtierInfo)
 				{
 					courtierInfo = value;
-					base.OnPropertyChangedWithValue(value, "CourtierInfo");
+					OnPropertyChangedWithValue(value, "CourtierInfo");
 				}
 			}
 		}
@@ -256,7 +289,7 @@ namespace BannerKings.UI.Court
 				if (value != courtInfo)
 				{
 					courtInfo = value;
-					base.OnPropertyChangedWithValue(value, "CourtInfo");
+					OnPropertyChangedWithValue(value, "CourtInfo");
 				}
 			}
 		}
@@ -270,7 +303,7 @@ namespace BannerKings.UI.Court
 				if (value != corePositions)
 				{
 					corePositions = value;
-					base.OnPropertyChangedWithValue(value, "CorePositions");
+					OnPropertyChangedWithValue(value, "CorePositions");
 				}
 			}
 		}
@@ -284,7 +317,7 @@ namespace BannerKings.UI.Court
 				if (value != royalPositions)
 				{
 					royalPositions = value;
-					base.OnPropertyChangedWithValue(value, "RoyalPositions");
+					OnPropertyChangedWithValue(value, "RoyalPositions");
 				}
 			}
 		}
