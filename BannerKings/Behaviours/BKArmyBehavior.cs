@@ -1,11 +1,13 @@
-﻿using BannerKings.Managers.Duties;
+﻿using BannerKings.Managers.Court;
+using BannerKings.Managers.Duties;
+using BannerKings.Managers.Kingdoms.Policies;
 using BannerKings.Managers.Titles;
+using HarmonyLib;
 using Helpers;
 using System;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
-using static BannerKings.Managers.TitleManager;
 
 namespace BannerKings.Behaviours
 {
@@ -125,6 +127,33 @@ namespace BannerKings.Behaviours
             }
 
             playerArmyDuty.Tick();
+        }
+    }
+
+    namespace Patches
+    {
+        [HarmonyPatch(typeof(Kingdom), "CreateArmy")]
+        class CreateArmyPatch
+        {
+            static bool Prefix(Hero armyLeader, IMapPoint target, Army.ArmyTypes selectedArmyType)
+            {
+                if (armyLeader != armyLeader.Clan.Leader) return false;
+
+                Kingdom kingdom = armyLeader.Clan.Kingdom;
+                if (kingdom != null && BannerKingsConfig.Instance.TitleManager != null)
+                {
+                    FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(armyLeader);
+                    if (title == null || title.type == TitleType.Lordship) return false;
+
+                    if (kingdom.ActivePolicies.Contains(BKPolicies.Instance.LimitedArmyPrivilege))
+                    {
+                        CouncilData council = BannerKingsConfig.Instance.CourtManager.GetCouncil(kingdom.RulingClan);
+                        if (armyLeader != council.Marshall || title.type > TitleType.Dukedom) return false;
+                    }
+                }
+
+                return true;
+            }
         }
     }
 }

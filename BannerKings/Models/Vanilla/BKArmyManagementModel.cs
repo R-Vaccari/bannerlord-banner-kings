@@ -1,12 +1,22 @@
-﻿using BannerKings.Managers.Titles;
+﻿using BannerKings.Managers.Kingdoms.Policies;
+using BannerKings.Managers.Titles;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.SandBox.GameComponents.Map;
-using static BannerKings.Managers.TitleManager;
 
 namespace BannerKings.Models
 {
-    class BKArmyManagementModel : DefaultArmyManagementCalculationModel
+    public class BKArmyManagementModel : DefaultArmyManagementCalculationModel
     {
+        public override float DailyBeingAtArmyInfluenceAward(MobileParty armyMemberParty)
+        {
+            float result = base.DailyBeingAtArmyInfluenceAward(armyMemberParty);
+            if (armyMemberParty.MapFaction.IsKingdomFaction &&
+                (armyMemberParty.MapFaction as Kingdom).ActivePolicies.Contains(BKPolicies.Instance.LimitedArmyPrivilege))
+                result *= 1.5f;
+
+            return result;
+        }
+
         public override int CalculatePartyInfluenceCost(MobileParty armyLeaderParty, MobileParty party)
         {
             float result = base.CalculatePartyInfluenceCost(armyLeaderParty, party);
