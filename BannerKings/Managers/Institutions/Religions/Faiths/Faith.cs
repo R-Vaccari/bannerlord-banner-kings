@@ -9,15 +9,12 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
 {
     public abstract class Faith
     {
-        protected FaithGroup faithGroup;
-
-        protected Divinity mainGod;
-
         [SaveableField(1)]
         protected Dictionary<Faith, FaithStance> stances;
 
+        protected FaithGroup faithGroup;
+        protected Divinity mainGod;
         protected Dictionary<TraitObject, bool> traits;
-
         protected Dictionary<int, CharacterObject> presets;
 
         public Faith() 

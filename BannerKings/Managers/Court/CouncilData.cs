@@ -469,10 +469,8 @@ namespace BannerKings.Managers.Court
         public float AdministrativeCosts()
         {
             float cost = 0.01f;
-            if (position == CouncilPosition.Spiritual)
-                cost = 0f;
-            else if (IsCorePosition(position))
-                cost = 0.03f;
+            if (position == CouncilPosition.Spiritual) cost = 0f;
+            else if (IsCorePosition(position)) cost = IsRoyal ?0.045f : 0.0275f;
 
             return cost;
         }
@@ -482,7 +480,6 @@ namespace BannerKings.Managers.Court
             float cost = 0f;
             if (IsCorePosition(position) && position != CouncilPosition.Spiritual)
                 cost = IsRoyal ? 0.05f : 0.03f;
-
 
             return cost;
         }
@@ -497,7 +494,7 @@ namespace BannerKings.Managers.Court
         }
 
         public bool IsCorePosition(CouncilPosition position) => position == CouncilPosition.Marshall || position == CouncilPosition.Steward ||
-            position == CouncilPosition.Steward || position == CouncilPosition.Chancellor;
+            position == CouncilPosition.Spymaster || position == CouncilPosition.Chancellor;
 
         public float Competence
         {
