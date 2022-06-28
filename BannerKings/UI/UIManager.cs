@@ -1,6 +1,7 @@
 ﻿using BannerKings.Managers.Helpers;
 using BannerKings.Managers.Populations.Villages;
 using BannerKings.Managers.Titles;
+using BannerKings.Models;
 using BannerKings.Populations;
 using BannerKings.UI.Windows;
 using HarmonyLib;
@@ -11,6 +12,7 @@ using System.Linq;
 using System.Reflection;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
+using TaleWorlds.CampaignSystem.ViewModelCollection;
 using TaleWorlds.CampaignSystem.ViewModelCollection.GameMenu;
 using TaleWorlds.CampaignSystem.ViewModelCollection.GameMenu.TownManagement;
 using TaleWorlds.CampaignSystem.ViewModelCollection.KingdomManagement.KingdomDecision;
@@ -141,61 +143,6 @@ namespace BannerKings.UI
 
         }
 
-        /*
-         * [HarmonyPatch(typeof(SettlementProjectVM))]
-        internal class CharacterCreationCultureStagePatch
-        {
-            [HarmonyPrefix]
-            [HarmonyPatch("Building", MethodType.Setter)]
-            internal static bool SetterPrefix(SettlementProjectVM __instance, Building value)
-            {
-                FieldInfo _building = __instance.GetType().GetField("_building", BindingFlags.Instance | BindingFlags.NonPublic);
-                _building.SetValue(__instance, value);
-                __instance.Name = ((value != null) ? value.Name.ToString() : "");
-                __instance.Explanation = ((value != null) ? value.Explanation.ToString() : "");
-                string code = ((value != null) ? value.BuildingType.StringId.ToLower() : "");
-                if (code == "bannerkings_palisade")
-                    code = "building_fortifications";
-                else if (code == "bannerkings_trainning")
-                    code = "building_settlement_militia_barracks";
-                else if (code == "bannerkings_manor")
-                    code = "building_castle_castallans_office";
-                else if (code == "bannerkings_bakery" || code == "bannerkings_butter" || code == "bannerkings_daily_pasture")
-                    code = "building_settlement_granary";
-                else if (code == "bannerkings_mining")
-                    code = "building_siege_workshop";
-                else if (code == "bannerkings_farming" || code == "bannerkings_daily_farm")
-                    code = "building_settlement_lime_kilns";
-                else if (code == "bannerkings_sawmill" || code == "bannerkings_tannery" || code == "bannerkings_blacksmith")
-                    code = "building_castle_workshops";
-                else if (code == "bannerkings_daily_woods" || code == "bannerkings_fishing")
-                    code = "building_irrigation";
-                else if (code == "bannerkings_warehouse")
-                    code = "building_settlement_garrison_barracks";
-                else if (code == "bannerkings_courier")
-                    code = "building_castle_lime_kilns";
-
-                int constructionCost = __instance.Building.GetConstructionCost();
-                TextObject textObject;
-                if (constructionCost > 0)
-                {
-                    textObject = new TextObject("{=tAwRIPiy}Construction Cost: {COST}", null);
-                    textObject.SetTextVariable("COST", constructionCost);
-                }
-                else
-                {
-                    textObject = TextObject.Empty;
-                }
-                __instance.ProductionCostText = ((value != null) ? textObject.ToString() : "");
-                __instance.CurrentPositiveEffectText = ((value != null) ? value.GetBonusExplanation().ToString() : "");
-
-                __instance.VisualCode = code;
-
-                return false;
-            }
-        }
-         */
-
 
 
         [HarmonyPatch(typeof(SettlementProjectVM))]
@@ -267,8 +214,29 @@ namespace BannerKings.UI
             }
         }
 
+        [HarmonyPatch(typeof(ArmyManagementVM))]
+        class ArmyManagementVMPatch
+        {
+            [HarmonyPostfix]
+            [HarmonyPatch("OnRefresh", MethodType.Normal)]
+            static void Postfix(ArmyManagementVM __instance)
+            {
+                __instance.CanCreateArmy = (float)__instance.TotalCost <= Hero.MainHero.Clan.Influence && __instance.PartiesInCart.Count > 1 &&
+                    new BKArmyManagementModel().CanCreateArmy(Hero.MainHero);
+            }
+
+            [HarmonyPrefix]
+            [HarmonyPatch("ExecuteDone", MethodType.Normal)]
+            static bool Prefix(ArmyManagementVM __instance)
+            {
+                bool canCreate = new BKArmyManagementModel().CanCreateArmy(Hero.MainHero);
+                if (!canCreate) InformationManager.AddQuickInformation(new TextObject("{=!}Not crown Marshal or low position in title hierarchy", null), 0, null, "");
+                return canCreate;
+            }
+        }
+
         [HarmonyPatch(typeof(SettlementProjectVM), "RefreshValues")]
-        class SettlementProjectVMPRefreshPatch
+        class SettlementProjectVMRefreshPatch
         {
             static bool Prefix()
             {
