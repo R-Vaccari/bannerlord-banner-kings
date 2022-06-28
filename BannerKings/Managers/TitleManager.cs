@@ -25,55 +25,34 @@ namespace BannerKings.Managers
         [SaveableProperty(3)]
         public bool Knighthood { get; set; } = true;
 
+        [SaveableProperty(4)]
+        private Dictionary<Hero, float> Knights { get; set; } = new Dictionary<Hero, float>();
         private Dictionary<Hero, List<FeudalTitle>> DeJures { get; set; }
 
 
         public TitleManager(Dictionary<FeudalTitle, Hero> titles, Dictionary<Hero, List<FeudalTitle>> titleHolders, Dictionary<Kingdom, FeudalTitle> kingdoms)
         {
-            this.Titles = titles;
-            this.Kingdoms = kingdoms;
-            this.Knighthood = true;
+            Titles = titles;
+            Kingdoms = kingdoms;
+            Knighthood = true;
             InitializeTitles();
             RefreshDeJure();
         }
 
-        public void FixTitles()
-        {
-            foreach (FeudalTitle title in Titles.Keys)
-            {
-                if (title.type == TitleType.Dukedom)
-                {
-                    if (title.shortName.ToString() == "1" && title.deJure.StringId == "lord_3_1")
-                        title.SetName(new TextObject("Perassia"));
-                    else if (title.shortName.ToString() == "2" && title.deJure.StringId == "lord_3_16")
-                        title.SetName(new TextObject("Jarjarys"));
-                    else if (title.shortName.ToString() == "2" && title.deJure.StringId == "lord_3_5")
-                        title.SetName(new TextObject("Retana"));
-                    else if (title.shortName.ToString() == "2" && title.deJure.StringId == "lord_3_3")
-                        title.SetName(new TextObject("Caldea"));
-                    else if (title.shortName.ToString() == "1" && title.deJure.StringId == "lord_6_17")
-                        title.SetName(new TextObject("Kohi Rohini"));
-                    else if (title.shortName.ToString() == "1" && title.deJure.StringId == "lord_6_1")
-                        title.SetName(new TextObject("Tanaz Baikal"));
-                    else if (title.shortName.ToString() == "1" && title.deJure.StringId == "lord_6_4")
-                        title.SetName(new TextObject("Bars Dagan"));
-                    else if (title.shortName.ToString() == "1" && title.deJure.StringId == "lord_6_5")
-                        title.SetName(new TextObject("Devseg"));
-                }
-            }
-        }
-
         public void RefreshDeJure()
         {
-            if (this.DeJures == null) this.DeJures = new Dictionary<Hero, List<FeudalTitle>>();
-            else this.DeJures.Clear();
-            foreach (FeudalTitle title in this.Titles.Keys.ToList())
+
+            if (DeJures == null) DeJures = new Dictionary<Hero, List<FeudalTitle>>();
+            else DeJures.Clear();
+            foreach (FeudalTitle title in Titles.Keys.ToList())
             {
                 Hero hero = title.deJure;
-                if (!this.DeJures.ContainsKey(hero))
-                    this.DeJures.Add(hero, new List<FeudalTitle>() { title });
-                else this.DeJures[hero].Add(title);
+                if (!DeJures.ContainsKey(hero))
+                    DeJures.Add(hero, new List<FeudalTitle>() { title });
+                else DeJures[hero].Add(title);
             }
+
+            if (Knights == null) Knights = new Dictionary<Hero, float>();
         }
 
         public bool IsHeroTitleHolder(Hero hero)
@@ -119,7 +98,7 @@ namespace BannerKings.Managers
         public GovernmentType GetSettlementGovernment(Settlement settlement)
         {
             GovernmentType type = GovernmentType.Feudal;
-            FeudalTitle title = this.GetTitle(settlement);
+            FeudalTitle title = GetTitle(settlement);
             if (title != null)
                 if (title.contract != null)
                     type = title.contract.Government;
@@ -373,6 +352,23 @@ namespace BannerKings.Managers
                     true, false, GameTexts.FindText("str_done").ToString(), null, null, null), false);
                 }
             }
+        }
+
+        public void AddKnightInfluence(Hero hero, float influence)
+        {
+            if (Knights.ContainsKey(hero)) Knights[hero] += influence;
+            else Knights.Add(hero, influence);
+        }
+
+        public void RemoveKnights(Hero hero)
+        {
+            if (Knights.ContainsKey(hero)) Knights.Remove(hero);
+        }
+
+        public float GetKnightInfluence(Hero hero)
+        {
+            if (Knights.ContainsKey(hero)) return Knights[hero];
+            else return 0f;
         }
 
         public List<FeudalTitle> GetAllDeJure(Hero hero)

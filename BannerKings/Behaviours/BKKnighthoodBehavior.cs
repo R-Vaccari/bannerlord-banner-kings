@@ -34,7 +34,7 @@ namespace BannerKings.Behaviors
 
         private void OnHeroDailyTick(Hero hero)
         {
-            if (hero.Clan == null || hero == hero.Clan.Leader || hero.Occupation != Occupation.Lord || 
+            if (hero.Clan == null || hero == hero.Clan.Leader || hero == Hero.MainHero || hero.Occupation != Occupation.Lord || 
                 BannerKingsConfig.Instance.TitleManager == null) return;
 
             FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(hero);
@@ -51,7 +51,7 @@ namespace BannerKings.Behaviors
         }
 
         
-        private bool CanCreateClan(Hero hero) => hero.Gold >= 30000 && hero.Power >= 250f && hero.Occupation == Occupation.Lord &&
+        private bool CanCreateClan(Hero hero) => hero.Gold >= 30000 && BannerKingsConfig.Instance.TitleManager.GetKnightInfluence(hero) >= 250f && hero.Occupation == Occupation.Lord &&
             hero.Father != hero.Clan.Leader && hero.Mother != hero.Clan.Leader && !hero.Children.Contains(hero.Clan.Leader) && 
             !hero.Siblings.Contains(hero.Clan.Leader);
 

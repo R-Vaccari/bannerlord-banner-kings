@@ -50,13 +50,14 @@ namespace BannerKings.Models
                     generalAutonomy += -0.5f * data.Autonomy;
                     i++;
 
-                    if (settlement.IsVillage)
+                    if (settlement.IsVillage && BannerKingsConfig.Instance.TitleManager != null)
                     {
                         FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement);
                         if (title.deJure != null)
                         {
                             Clan deJureClan = title.deJure.Clan;
-                            if (title.deJure != deJureClan.Leader && settlement.OwnerClan == deJureClan) title.deJure.AddPower(baseResult.ResultNumber * 0.1f);
+                            if (title.deJure != deJureClan.Leader && settlement.OwnerClan == deJureClan) 
+                                BannerKingsConfig.Instance.TitleManager.AddKnightInfluence(title.deJure, baseResult.ResultNumber * 0.1f);
                         }
                     }
                 }

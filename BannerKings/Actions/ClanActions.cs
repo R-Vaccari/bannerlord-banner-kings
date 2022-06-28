@@ -12,15 +12,16 @@ namespace BannerKings.Actions
         {
             if (name == null) name = GetRandomName(hero.Culture, settlement);
             if (name == null || Clan.All.Any((Clan t) => t.Name.Equals(name) || t.Name.HasSameValue(name) ||
-                t.Name.ToString().Trim() == name.ToString().Trim()) || Clan.PlayerClan.Name.Equals(name)) return null;
+                t.Name.ToString().Trim() == name.ToString().Trim() || t.HomeSettlement == settlement) || Clan.PlayerClan.Name.Equals(name)) return null;
 
             Clan originalClan = hero.Clan;
             Clan clan = Clan.CreateClan(id);
+
             clan.InitializeClan(name, name, hero.Culture, Banner.CreateOneColoredBannerWithOneIcon(settlement.MapFaction.Banner.GetFirstIconColor(), settlement.MapFaction.Banner.GetPrimaryColor(),
                 hero.Culture.PossibleClanBannerIconsIDs.GetRandomElement()), settlement.GatePosition, false);
             clan.AddRenown(renown);
             clan.SetLeader(hero);
-            hero.AddPower(-hero.Power);
+            clan.UpdateHomeSettlement(settlement);
 
             JoinClan(hero, clan);
             if (hero.Spouse != null && !Utils.Helpers.IsClanLeader(hero.Spouse)) JoinClan(hero.Spouse, clan);
@@ -33,6 +34,8 @@ namespace BannerKings.Actions
             {
                 if (originalClan.Kingdom != null) clan.Kingdom = originalClan.Kingdom;
             }
+
+            BannerKingsConfig.Instance.TitleManager.RemoveKnights(hero);
 
             return clan;
         }
