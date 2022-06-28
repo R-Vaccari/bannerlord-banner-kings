@@ -18,7 +18,7 @@ namespace BannerKings.Managers
 
         public ReligionsManager()
         {
-            this.Religions = new Dictionary<Religion, Dictionary<Hero, FaithfulData>>();
+            Religions = new Dictionary<Religion, Dictionary<Hero, FaithfulData>>();
             InitializeReligions();
         }
 

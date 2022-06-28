@@ -6,18 +6,15 @@ namespace BannerKings.Managers.Institutions.Religions
     public class Divinity
     {
         [SaveableField(1)]
+        private string id;
+
         private TextObject name;
-
-        [SaveableField(2)]
         private TextObject description;
-
-        [SaveableField(3)]
         private TextObject effects;
-
-        [SaveableField(4)]
         private TextObject secondaryTitle;
-        public Divinity(TextObject name, TextObject description, TextObject effects, TextObject secondaryTitle = null)
+        public Divinity(string id, TextObject name, TextObject description, TextObject effects, TextObject secondaryTitle = null)
         {
+            this.id = id;
             this.name = name;
             this.description = description;
             this.effects = effects;

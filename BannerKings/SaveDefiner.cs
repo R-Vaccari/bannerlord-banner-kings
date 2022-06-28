@@ -108,7 +108,7 @@ namespace BannerKings
             AddClassDefinition(typeof(Religion), 67);
             AddClassDefinition(typeof(Faith), 68);
             AddEnumDefinition(typeof(FaithStance), 69);
-            AddClassDefinition(typeof(FaithGroup), 70);
+            AddClassDefinition(typeof(FaithfulData), 70);
             AddClassDefinition(typeof(Divinity), 71);
             AddClassDefinition(typeof(ReligionData), 72);
             AddClassDefinition(typeof(Clergyman), 73);
@@ -124,7 +124,7 @@ namespace BannerKings
             AddClassDefinition(typeof(AutocephalousLeadership), 83);
             AddClassDefinition(typeof(KinshipLeadership), 84);
             AddClassDefinition(typeof(AutonomousLeadership), 85);
-            AddClassDefinition(typeof(FaithfulData), 86);
+            
 
         }
 
@@ -148,13 +148,12 @@ namespace BannerKings
             base.ConstructContainerDefinition(typeof(Dictionary<Hero, ClaimType>));
             base.ConstructContainerDefinition(typeof(Dictionary<FeudalTitle, float>));
             base.ConstructContainerDefinition(typeof(Dictionary<Settlement, List<Clan>>));
-            ConstructContainerDefinition(typeof(Dictionary<Hero, FaithfulData>));
-            ConstructContainerDefinition(typeof(Dictionary<Religion, Dictionary<Hero, FaithfulData>>)); 
             ConstructContainerDefinition(typeof(Dictionary<Settlement, Clergyman>));
-            ConstructContainerDefinition(typeof(List<Faith>));
             ConstructContainerDefinition(typeof(List<Divinity>)); 
             ConstructContainerDefinition(typeof(Dictionary<Faith, FaithStance>));
             ConstructContainerDefinition(typeof(Dictionary<TraitObject, bool>));
+            ConstructContainerDefinition(typeof(Dictionary<Hero, FaithfulData>));
+            ConstructContainerDefinition(typeof(Dictionary<Religion, Dictionary<Hero, FaithfulData>>));
         }
     }
 }

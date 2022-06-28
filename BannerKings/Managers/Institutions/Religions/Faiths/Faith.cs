@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
+using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Managers.Institutions.Religions.Faiths
 {
@@ -12,6 +13,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
 
         protected Divinity mainGod;
 
+        [SaveableField(1)]
         protected Dictionary<Faith, FaithStance> stances;
 
         protected Dictionary<TraitObject, bool> traits;

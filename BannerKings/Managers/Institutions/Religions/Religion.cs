@@ -14,16 +14,14 @@ namespace BannerKings.Managers.Institutions.Religions
         [SaveableField(1)]
         private Dictionary<Settlement, Clergyman> clergy;
 
-        [SaveableField(2)]
+
         private Faith faith;
 
-        [SaveableField(3)]
+     
         private List<string> doctrineIds;
 
-        [SaveableField(4)]
         private List<CultureObject> favoredCultures;
 
-        [SaveableField(5)]
         private ReligiousLeadership leadership;
 
 
