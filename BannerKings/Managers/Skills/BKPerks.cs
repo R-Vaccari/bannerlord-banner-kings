@@ -32,6 +32,15 @@ namespace BannerKings.Managers.Skills
                 SkillEffect.PerkRole.None, 0f, 
                 SkillEffect.EffectIncrementType.Invalid, 
                 TroopClassFlag.None, TroopClassFlag.None);
+
+
+            scholarshipPolyglot = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("MasterySiege"));
+            scholarshipPolyglot.InitializeNew("{=!}Siege Engineer", null, 0, null,
+                "{=!}Reading competence is increased for all languages, even those you don't speak.", SkillEffect.PerkRole.Personal, 10f,
+                SkillEffect.EffectIncrementType.AddFactor, string.Empty,
+                SkillEffect.PerkRole.None, 0f,
+                SkillEffect.EffectIncrementType.Invalid,
+                TroopClassFlag.None, TroopClassFlag.None);
         }
 
         private int GetTierCost(int tierIndex) => Requirements[tierIndex - 1];

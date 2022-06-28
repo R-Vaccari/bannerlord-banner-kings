@@ -13,13 +13,13 @@ namespace BannerKings.Managers.Education
     {
         private Dictionary<BookType, float> books;
         private Dictionary<Language, float> languages;
-        private Mastery mastery;
+        private Lifestyle mastery;
         private float masteryProgress;
         private BookType currentBook;
         private Language currentLanguage;
         private Hero languageInstructor;
 
-        public EducationData(Dictionary<Language, float> languages, float masteryProgress = 0f, Mastery mastery = null)
+        public EducationData(Dictionary<Language, float> languages, float masteryProgress = 0f, Lifestyle mastery = null)
         {
             this.languages = languages;
             books = new Dictionary<BookType, float>();
@@ -65,7 +65,7 @@ namespace BannerKings.Managers.Education
         }
 
         public Hero LanguageInstructor => languageInstructor;
-        public Mastery Mastery => mastery;
+        public Lifestyle Mastery => mastery;
         public MBReadOnlyDictionary<Language, float> Languages => languages.GetReadOnlyDictionary();
         public MBReadOnlyDictionary<BookType, float> Books => books.GetReadOnlyDictionary();
 

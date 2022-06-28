@@ -470,7 +470,7 @@ namespace BannerKings.Managers.Court
         {
             float cost = 0.01f;
             if (position == CouncilPosition.Spiritual) cost = 0f;
-            else if (IsCorePosition(position)) cost = IsRoyal ?0.045f : 0.0275f;
+            else if (IsCorePosition(position)) cost = IsRoyal ? 0.045f : 0.0275f;
 
             return cost;
         }
@@ -548,6 +548,8 @@ namespace BannerKings.Managers.Court
             float influence = InfluenceCosts();
             if (influence >= 0.05f) yield return CouncilPrivileges.HIGH_INFLUENCE;
             else if (influence > 0f) yield return CouncilPrivileges.INFLUENCE;
+
+            if (position == CouncilPosition.Marshall && IsRoyal) yield return CouncilPrivileges.ARMY_PRIVILEGE;
         }
     }
 
@@ -574,6 +576,9 @@ namespace BannerKings.Managers.Court
         INFLUENCE,
         HIGH_INFLUENCE,
         CLERGYMEN_EXCLUSIVE,
-        NOBLE_EXCLUSIVE
+        NOBLE_EXCLUSIVE,
+        ARMY_PRIVILEGE,
+        COUNCIL_PRIVILEGE,
+        REVOKE_PRIVILEGE
     }
 }

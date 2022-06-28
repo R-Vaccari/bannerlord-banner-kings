@@ -30,7 +30,7 @@ namespace BannerKings.Managers
                 if (native == null) native = DefaultLanguages.Instance.Calradian;
                 languages.Add(native, 1f);
 
-                Mastery mastery = null;
+                Lifestyle mastery = null;
                 float masteryProgress = 0f;
 
                 if (hero.IsNotable)

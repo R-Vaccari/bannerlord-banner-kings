@@ -1,4 +1,5 @@
 ﻿using BannerKings.Managers.Court;
+using BannerKings.Managers.Education.Languages;
 using BannerKings.UI.Items;
 using System;
 using System.Collections.Generic;
@@ -102,6 +103,13 @@ namespace BannerKings.UI.Court
 				if (heroPosition != null) positionString = heroPosition.GetName().ToString();
 				else if (currentCharacter.Hero == council.Owner) positionString = GameTexts.FindText("role", "ClanLeader").ToString();
 				CourtierInfo.Add(new InformationElement(new TextObject("{=!}Council Position:").ToString(), positionString, string.Empty));
+
+				string languagesString = "";
+				foreach (KeyValuePair<Language, float> pair in BannerKingsConfig.Instance.EducationManager.GetHeroEducation(currentCharacter.Hero).Languages)
+					languagesString += new TextObject("{LANGUAGE} ({COMPETENCE})")
+						.SetTextVariable("LANGUAGE", pair.Key.Name)
+						.SetTextVariable("LANGUAGE", UIHelper.GetLanguageFluencyText(pair.Value));
+				CourtierInfo.Add(new InformationElement(new TextObject("{=!}Languages:").ToString(), languagesString, string.Empty));
 			}
 			
 		}
