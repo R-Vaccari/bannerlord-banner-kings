@@ -15,7 +15,7 @@ namespace BannerKings.UI.Education
     {
         private Hero hero;
         private MBBindingList<InformationElement> booksReadInfo, knownLanguagesInfo, currentBookInfo,
-            currentLanguageInfo;
+            currentLanguageInfo, currentLifestyleInfo;
         private EducationData data;
 
         public EducationVM(Hero hero) : base(null, false)
@@ -26,6 +26,7 @@ namespace BannerKings.UI.Education
             knownLanguagesInfo = new MBBindingList<InformationElement>();
             currentBookInfo = new MBBindingList<InformationElement>();
             currentLanguageInfo = new MBBindingList<InformationElement>();
+            currentLifestyleInfo = new MBBindingList<InformationElement>();
         }
 
         public override void RefreshValues()
@@ -164,6 +165,11 @@ namespace BannerKings.UI.Education
                 }, null));
         }
 
+        private void SelectLifestyle()
+        {
+
+        }
+
         [DataSourceProperty]
         public bool ChangeBookPossible => hero.PartyBelongedTo != null && BannerKingsConfig.Instance.EducationManager.GetAvailableBooks(hero.PartyBelongedTo).Count > 0;
 
@@ -192,7 +198,13 @@ namespace BannerKings.UI.Education
         public string BooksReadText => new TextObject("{=!}Books Read").ToString();
 
         [DataSourceProperty]
-        public string MasteryText => new TextObject("{=!}Mastery").ToString();
+        public string LifestyleText => new TextObject("{=!}Lifestyle").ToString();
+
+        [DataSourceProperty]
+        public string ChooseLifestyleText => new TextObject("{=!}Choose Lifestyle").ToString();
+
+        [DataSourceProperty]
+        public string InvestFocusText => new TextObject("{=!}Invest Focus").ToString();
 
         [DataSourceProperty]
         public MBBindingList<InformationElement> KnownLanguagesInfo
@@ -232,6 +244,20 @@ namespace BannerKings.UI.Education
                 {
                     currentBookInfo = value;
                     OnPropertyChangedWithValue(value, "CurrentBookInfo");
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public MBBindingList<InformationElement> CurrentLifestyleInfo
+        {
+            get => currentLifestyleInfo;
+            set
+            {
+                if (value != currentLifestyleInfo)
+                {
+                    currentLifestyleInfo = value;
+                    OnPropertyChangedWithValue(value, "CurrentLifestyleInfo");
                 }
             }
         }

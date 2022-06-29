@@ -1,7 +1,7 @@
 ﻿using BannerKings.Managers.Education;
 using BannerKings.Managers.Education.Books;
 using BannerKings.Managers.Education.Languages;
-using BannerKings.Managers.Education.Training;
+using BannerKings.Managers.Education.Lifestyles;
 using System;
 using System.Collections.Generic;
 using System.Linq;

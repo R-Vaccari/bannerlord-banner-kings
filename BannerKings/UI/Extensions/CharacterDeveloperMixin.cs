@@ -2,7 +2,6 @@
 using Bannerlord.UIExtenderEx.Attributes;
 using Bannerlord.UIExtenderEx.ViewModels;
 using TaleWorlds.CampaignSystem.ViewModelCollection;
-using TaleWorlds.Core.ViewModelCollection;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 

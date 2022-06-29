@@ -4,28 +4,30 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace BannerKings.Managers.Education.Training
+namespace BannerKings.Managers.Education.Lifestyles
 {
     public class Lifestyle : BannerKingsObject
     {
+        private float progress;
         private CultureObject culture;
         private SkillObject firstSkill;
         private SkillObject secondSkill;
         private List<PerkObject> perks;
 
-        public Lifestyle(TextObject name, TextObject description, SkillObject firstSkill, SkillObject secondSkill,
-            CultureObject culture = null) : base(name, description)
+        public Lifestyle(string id, TextObject name, TextObject description) : base(id, name, description)
         {
+        }
+
+        public void Initialize(SkillObject firstSkill, SkillObject secondSkill,
+            List<PerkObject> perks, CultureObject culture = null)
+        { 
             this.firstSkill = firstSkill;
             this.secondSkill = secondSkill;
+            this.perks = perks;
             this.culture = culture;
         }
 
-        public override void Initialize()
-        {
-            throw new System.NotImplementedException();
-        }
-
+        public float Progress => progress;
         public CultureObject Culture => culture;
         public SkillObject FirstSkill => firstSkill;
         public SkillObject SecondSkill => secondSkill;

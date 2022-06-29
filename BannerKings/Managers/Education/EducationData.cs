@@ -2,10 +2,9 @@
 using BannerKings.Managers.Education.Languages;
 using BannerKings.Populations;
 using System.Collections.Generic;
-using BannerKings.Managers.Education.Training;
+using BannerKings.Managers.Education.Lifestyles;
 using TaleWorlds.Library;
 using TaleWorlds.CampaignSystem;
-using System;
 
 namespace BannerKings.Managers.Education
 {
@@ -13,18 +12,16 @@ namespace BannerKings.Managers.Education
     {
         private Dictionary<BookType, float> books;
         private Dictionary<Language, float> languages;
-        private Lifestyle mastery;
-        private float masteryProgress;
+        private Lifestyle lifestyle;
         private BookType currentBook;
         private Language currentLanguage;
         private Hero languageInstructor;
 
-        public EducationData(Dictionary<Language, float> languages, float masteryProgress = 0f, Lifestyle mastery = null)
+        public EducationData(Dictionary<Language, float> languages, Lifestyle lifestyle = null)
         {
             this.languages = languages;
             books = new Dictionary<BookType, float>();
-            this.mastery = mastery;
-            this.masteryProgress = masteryProgress;
+            this.lifestyle = lifestyle;
             currentBook = null;
             currentLanguage = null;
             languageInstructor = null;
@@ -65,12 +62,10 @@ namespace BannerKings.Managers.Education
         }
 
         public Hero LanguageInstructor => languageInstructor;
-        public Lifestyle Mastery => mastery;
+        public Lifestyle Lifestyle => lifestyle;
         public MBReadOnlyDictionary<Language, float> Languages => languages.GetReadOnlyDictionary();
         public MBReadOnlyDictionary<BookType, float> Books => books.GetReadOnlyDictionary();
-
         public bool IsBookRead(BookType type) => books.ContainsKey(type) && books[type] >= 1f;
-        public bool HasTraining => masteryProgress >= 1f;
 
         internal override void Update(PopulationData data)
         {

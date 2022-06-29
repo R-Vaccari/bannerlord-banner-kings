@@ -4,18 +4,17 @@ namespace BannerKings
 {
     public abstract class BannerKingsObject
     {
-        private TextObject name;
-        private TextObject description;
+        private string id;
+        protected TextObject name;
+        protected TextObject description;
 
-        public BannerKingsObject(TextObject name, TextObject description)
+        public BannerKingsObject(string id, TextObject name, TextObject description)
         {
-            this.name = name;
-            this.description = description;
+            this.id = id;
         }
 
+        public string Id => id;
         public TextObject Name => name;
         public TextObject Description => description;
-
-        public abstract void Initialize();
     }
 }
