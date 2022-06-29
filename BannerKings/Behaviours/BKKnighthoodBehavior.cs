@@ -43,15 +43,15 @@ namespace BannerKings.Behaviors
             Clan originalClan = hero.Clan;
             if (hero.Spouse != null && Utils.Helpers.IsClanLeader(hero.Spouse)) return;
 
-            ClanActions.CreateNewClan(hero, title.fief, hero.StringId + "_knight_clan");
-            InformationManager.AddQuickInformation(new TextObject("{=!}The {NEW} has been formed by {HERO}, previously a knight of {ORIGINAL}.")
+            Clan newClan = ClanActions.CreateNewClan(hero, title.fief, hero.StringId + "_knight_clan", null, 150f, true);
+            if (newClan != null) InformationManager.AddQuickInformation(new TextObject("{=!}The {NEW} has been formed by {HERO}, previously a knight of {ORIGINAL}.")
                             .SetTextVariable("NEW", hero.Clan.Name)
                             .SetTextVariable("HERO", hero.Name)
                             .SetTextVariable("ORIGINAL", originalClan.Name));
         }
 
         
-        private bool CanCreateClan(Hero hero) => hero.Gold >= 30000 && BannerKingsConfig.Instance.TitleManager.GetKnightInfluence(hero) >= 250f && hero.Occupation == Occupation.Lord &&
+        private bool CanCreateClan(Hero hero) => hero.Gold >= 50000 && BannerKingsConfig.Instance.TitleManager.GetKnightInfluence(hero) >= 250f && hero.Occupation == Occupation.Lord &&
             hero.Father != hero.Clan.Leader && hero.Mother != hero.Clan.Leader && !hero.Children.Contains(hero.Clan.Leader) && 
             !hero.Siblings.Contains(hero.Clan.Leader);
 

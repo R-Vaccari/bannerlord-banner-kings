@@ -1,5 +1,7 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 
@@ -8,34 +10,37 @@ namespace BannerKings.Actions
     public static class ClanActions
     {
 
-        public static Clan CreateNewClan(Hero hero, Settlement settlement, string id, TextObject name = null, float renown = 150f)
+        public static Clan CreateNewClan(Hero hero, Settlement settlement, string id, TextObject name = null, float renown = 150f, bool removeGold = false)
         {
             if (name == null) name = GetRandomName(hero.Culture, settlement);
-            if (name == null || Clan.All.Any((Clan t) => t.Name.Equals(name) || t.Name.HasSameValue(name) ||
-                t.Name.ToString().Trim() == name.ToString().Trim() || t.HomeSettlement == settlement) || Clan.PlayerClan.Name.Equals(name)) return null;
+            List<string> names = new List<string>();
+            foreach (Clan existingClan in Clan.All.ToList().FindAll(x => x.Culture == hero.Culture))
+                names.Add(existingClan.Name.ToString());
+
+            if (name == null || names.Any(x => x.Contains(name.ToString()) || x == name.ToString())) return null;
+
+            if (Clan.All.Any(x => x.HomeSettlement == settlement)) return null;
 
             Clan originalClan = hero.Clan;
             Clan clan = Clan.CreateClan(id);
 
+            hero.Clan = null;
+            hero.CompanionOf = null;
             clan.InitializeClan(name, name, hero.Culture, Banner.CreateOneColoredBannerWithOneIcon(settlement.MapFaction.Banner.GetFirstIconColor(), settlement.MapFaction.Banner.GetPrimaryColor(),
                 hero.Culture.PossibleClanBannerIconsIDs.GetRandomElement()), settlement.GatePosition, false);
             clan.AddRenown(renown);
+            hero.Clan = clan;
             clan.SetLeader(hero);
             clan.UpdateHomeSettlement(settlement);
-
-            JoinClan(hero, clan);
             if (hero.Spouse != null && !Utils.Helpers.IsClanLeader(hero.Spouse)) JoinClan(hero.Spouse, clan);
 
             if (hero.Children.Count > 0)
                 foreach (Hero child in hero.Children)
                     if (child.IsChild) JoinClan(child, clan);
 
-            if (originalClan != null)
-            {
-                if (originalClan.Kingdom != null) clan.Kingdom = originalClan.Kingdom;
-            }
-
+            ChangeKingdomAction.ApplyByJoinToKingdom(clan, originalClan.Kingdom, false);
             BannerKingsConfig.Instance.TitleManager.RemoveKnights(hero);
+            if (removeGold) hero.ChangeHeroGold(-50000);
 
             return clan;
         }
