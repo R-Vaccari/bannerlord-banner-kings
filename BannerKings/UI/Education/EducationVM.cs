@@ -1,6 +1,7 @@
 ﻿using BannerKings.Managers.Education;
 using BannerKings.Managers.Education.Books;
 using BannerKings.Managers.Education.Languages;
+using BannerKings.Managers.Education.Lifestyles;
 using BannerKings.Models.BKModels;
 using System;
 using System.Collections.Generic;
@@ -15,7 +16,7 @@ namespace BannerKings.UI.Education
     {
         private Hero hero;
         private MBBindingList<InformationElement> booksReadInfo, knownLanguagesInfo, currentBookInfo,
-            currentLanguageInfo, currentLifestyleInfo;
+            currentLanguageInfo, currentLifestyleInfo, lifestyleProgressInfo;
         private EducationData data;
 
         public EducationVM(Hero hero) : base(null, false)
@@ -27,6 +28,7 @@ namespace BannerKings.UI.Education
             currentBookInfo = new MBBindingList<InformationElement>();
             currentLanguageInfo = new MBBindingList<InformationElement>();
             currentLifestyleInfo = new MBBindingList<InformationElement>();
+            lifestyleProgressInfo = new MBBindingList<InformationElement>();
         }
 
         public override void RefreshValues()
@@ -36,6 +38,8 @@ namespace BannerKings.UI.Education
             KnownLanguagesInfo.Clear();
             CurrentBookInfo.Clear();
             CurrentLanguageInfo.Clear();
+            CurrentLifestyleInfo.Clear();
+            LifestyleProgressInfo.Clear();
             data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(hero);
             BKEducationModel model = BannerKingsConfig.Instance.EducationModel;
             if (data.Books.Count == 0)
@@ -94,6 +98,14 @@ namespace BannerKings.UI.Education
             foreach (KeyValuePair<Language, float> pair in data.Languages)
                 KnownLanguagesInfo.Add(new InformationElement(pair.Key.Name.ToString(), UIHelper.GetLanguageFluencyText(pair.Value).ToString(),
                     pair.Key.Description.ToString()));
+
+            if (data.Lifestyle == null)
+                LifestyleProgressInfo.Add(new InformationElement(new TextObject("{=!}No lifestyle currently adopted").ToString(), string.Empty,
+                    new TextObject("{=!}Languages may be taught by your courtiers that have a good fluency, so long they understand it more than you. Languages can be actively studied on the settlement the courtier is located at.").ToString()));
+            else
+            {
+
+            }
         }
         
         private void SelectNewLanguage()
@@ -111,19 +123,19 @@ namespace BannerKings.UI.Education
                         tuple.Item1.Name.ToString() + " - " + tuple.Item2.Name.ToString(),
                         null));
 
-            InformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(new TextObject("{=!}Choose Book").ToString(),
-                new TextObject("{=!}Select what book you would like to read. Options may be disabled due to language barrier, or lack of Literate perk.").ToString(), elements, true, 1,
+            InformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(new TextObject("{=!}Choose Language").ToString(),
+                new TextObject("{=!}Select a language you would like to learn. Learning a language requires an instructor from your court, and different people have different teaching skills. Learning languages is easier when they are intelligible with a language you already speak fluently.").ToString(), elements, true, 1,
                 GameTexts.FindText("str_done").ToString(), string.Empty,
                 delegate (List<InquiryElement> x)
                 {
                     ValueTuple<Language, Hero> result = (ValueTuple<Language, Hero>)x[0].Identifier;
                     BannerKingsConfig.Instance.EducationManager.SetCurrentLanguage(hero, result.Item1, result.Item2);
-                    if (result.Item1 != null) InformationManager.DisplayMessage(new InformationMessage(new TextObject("{=!}{HERO} is now learning {BOOK} from {INSTRUCTOR}.")
+                    if (result.Item1 != null) InformationManager.DisplayMessage(new InformationMessage(new TextObject("{=!}{HERO} is now learning {LANGUAGE} from {INSTRUCTOR}.")
                         .SetTextVariable("HERO", hero.Name)
-                        .SetTextVariable("BOOK", result.Item1.Name)
+                        .SetTextVariable("LANGUAGE", result.Item1.Name)
                         .SetTextVariable("INSTRUCTOR", result.Item2.Name)
                         .ToString()));
-                    else InformationManager.DisplayMessage(new InformationMessage(new TextObject("{=!}{HERO} stopped reading any books.")
+                    else InformationManager.DisplayMessage(new InformationMessage(new TextObject("{=!}{HERO} stopped learning any languages.")
                         .SetTextVariable("HERO", hero.Name)
                         .ToString()));
                     RefreshValues();
@@ -167,7 +179,39 @@ namespace BannerKings.UI.Education
 
         private void SelectLifestyle()
         {
+            MBReadOnlyList<Lifestyle> lfs = BannerKingsConfig.Instance.EducationManager.GetViableLifestyles(hero);
+            List<InquiryElement> elements = new List<InquiryElement>();
+            elements.Add(new InquiryElement(null,
+                       new TextObject("{=!}None").ToString(),
+                       null));
 
+            foreach (Lifestyle lf in lfs)
+                if (lf != data.Lifestyle)
+                    elements.Add(new InquiryElement(lf,
+                        new TextObject("{LIFESTYLE} ({SKILL1} / {SKILL2})")
+                        .SetTextVariable("LIFESTYLE", lf.Name)
+                        .SetTextVariable("SKILL1", lf.FirstSkill.Name)
+                        .SetTextVariable("SKILL2", lf.SecondSkill.Name).ToString(),
+                        null,
+                        lf.CanLearn(hero),
+                        lf.Description.ToString()));
+
+            InformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(new TextObject("{=!}Choose Lifestyle").ToString(),
+               new TextObject("{=!}Select a lifestyle you would like to adopt. Picking a lifestyle will undo the progress of the lifestyle you are currently learning, if any. Each lifestyle is based on 2 skills, and you need at least 150 profficiency in each skill to adopt it.").ToString(), elements, true, 1,
+               GameTexts.FindText("str_done").ToString(), string.Empty,
+               delegate (List<InquiryElement> x)
+               {
+                   Lifestyle lf = (Lifestyle)x[0].Identifier;
+                   BannerKingsConfig.Instance.EducationManager.SetCurrentLifestyle(hero, lf);
+                   if (lf != null) InformationManager.DisplayMessage(new InformationMessage(new TextObject("{=!}{HERO} has adopted the {LIFESTYLE} lifestyle.")
+                       .SetTextVariable("HERO", hero.Name)
+                       .SetTextVariable("LIFESTYLE", lf.Name)
+                       .ToString()));
+                   else InformationManager.DisplayMessage(new InformationMessage(new TextObject("{=!}{HERO} is not following any lifestyle.")
+                       .SetTextVariable("HERO", hero.Name)
+                       .ToString()));
+                   RefreshValues();
+               }, null));
         }
 
         [DataSourceProperty]
@@ -258,6 +302,20 @@ namespace BannerKings.UI.Education
                 {
                     currentLifestyleInfo = value;
                     OnPropertyChangedWithValue(value, "CurrentLifestyleInfo");
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public MBBindingList<InformationElement> LifestyleProgressInfo
+        {
+            get => lifestyleProgressInfo;
+            set
+            {
+                if (value != lifestyleProgressInfo)
+                {
+                    lifestyleProgressInfo = value;
+                    OnPropertyChangedWithValue(value, "LifestyleProgressInfo");
                 }
             }
         }

@@ -17,6 +17,7 @@ using BannerKings.Populations;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using BannerKings.Managers.AI;
+using BannerKings.Managers.Education.Lifestyles;
 
 namespace BannerKings
 {
@@ -30,7 +31,7 @@ namespace BannerKings
         public EducationManager EducationManager { get; private set; }
 
 
-        public BKEducationModel EducationModel { get; private set; } = new BKEducationModel();
+        public BKEducationModel EducationModel { get; } = new BKEducationModel();
 
         public HashSet<IBannerKingsModel> Models = new HashSet<IBannerKingsModel>();
         public AIBehavior AI = new AIBehavior();
@@ -46,6 +47,7 @@ namespace BannerKings
             BKItems.Instance.Initialize();
             DefaultLanguages.Instance.Initialize();
             DefaultBookTypes.Instance.Initialize();
+            DefaultLifestyles.Instance.Initialize();
 
             Models.Add(new BKCultureAssimilationModel());
             Models.Add(new BKCultureAcceptanceModel());

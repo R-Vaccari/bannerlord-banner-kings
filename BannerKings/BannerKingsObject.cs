@@ -11,6 +11,8 @@ namespace BannerKings
         public BannerKingsObject(string id, TextObject name, TextObject description)
         {
             this.id = id;
+            this.name = name;
+            this.description = description;
         }
 
         public string Id => id;

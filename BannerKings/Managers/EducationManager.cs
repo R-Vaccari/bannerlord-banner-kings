@@ -100,6 +100,32 @@ namespace BannerKings.Managers
                 Educations[hero].SetCurrentLanguage(language, instructor);
         }
 
+        public void SetCurrentLifestyle(Hero hero, Lifestyle lf)
+        {
+            if (Educations.ContainsKey(hero))
+                Educations[hero].SetCurrentLifestyle(lf);
+        }
+
+        public MBReadOnlyList<Lifestyle> GetLearnableLifestyles(Hero hero)
+        {
+            List<Lifestyle> list = new List<Lifestyle>();
+            foreach (Lifestyle lf in GetViableLifestyles(hero))
+                if (lf.CanLearn(hero))
+                    list.Add(lf);
+
+            return list.GetReadOnlyList();
+        }
+
+        public MBReadOnlyList<Lifestyle> GetViableLifestyles(Hero hero)
+        {
+            List<Lifestyle> list = new List<Lifestyle>();
+            foreach (Lifestyle lf in DefaultLifestyles.Instance.All)
+                if (lf.Culture == null || lf.Culture == hero.Culture)
+                    list.Add(lf);
+
+            return list.GetReadOnlyList();
+        }
+
         public MBReadOnlyList<BookType> GetAvailableBooks(MobileParty party)
         {
             List<BookType> list = new List<BookType>();

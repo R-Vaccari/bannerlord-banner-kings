@@ -10,9 +10,16 @@ namespace BannerKings.Managers.Education.Lifestyles
     public class DefaultLifestyles : DefaultTypeInitializer<DefaultLifestyles>
     {
         private Lifestyle fian, cataphract, diplomat, august, siegeEngineer, civilAdministrator;
+
+        public Lifestyle Fian => fian;
+        public Lifestyle Diplomat => diplomat;
+        public Lifestyle August => august;
+        public Lifestyle Cataphract => cataphract;
+        public Lifestyle SiegeEngineer => siegeEngineer;
+        public Lifestyle CivilAdministrator => civilAdministrator;
         public override void Initialize()
         {
-            fian = new Lifestyle("training_fian", new TextObject("{=!Fian}"), new TextObject("{=!}"));
+            fian = new Lifestyle("training_fian", new TextObject("{=!}Fian"), new TextObject("{=!}"));
             fian.Initialize(DefaultSkills.Bow, DefaultSkills.TwoHanded, new List<PerkObject>() { },
                 Game.Current.ObjectManager.GetObjectTypeList<CultureObject>().FirstOrDefault(x => x.StringId == "battania"));
 
@@ -31,6 +38,19 @@ namespace BannerKings.Managers.Education.Lifestyles
 
             civilAdministrator = new Lifestyle("training_civilAdministrator", new TextObject("{=!}Civil Administrator"), new TextObject("{=!}"));
             civilAdministrator.Initialize(DefaultSkills.Engineering, DefaultSkills.Steward, new List<PerkObject>() { });
+        }
+
+        public IEnumerable<Lifestyle> All
+        {
+            get
+            {
+                yield return Fian;
+                yield return Diplomat;
+                yield return August;
+                yield return Cataphract;
+                yield return SiegeEngineer;
+                yield return CivilAdministrator;
+            }
         }
     }
 }

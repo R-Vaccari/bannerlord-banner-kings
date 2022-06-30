@@ -39,6 +39,11 @@ namespace BannerKings.Managers.Education
             currentLanguage = language;
             languageInstructor = instructor;
         }
+
+        public void SetCurrentLifestyle(Lifestyle lifestyle)
+        {
+            this.lifestyle = lifestyle;
+        }
         public BookType CurrentBook => currentBook;
         public float CurrentBookProgress
         {
