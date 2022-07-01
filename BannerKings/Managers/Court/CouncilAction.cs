@@ -1,5 +1,6 @@
 ﻿
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Actions;
 
 namespace BannerKings.Managers.Court
 {
@@ -27,6 +28,11 @@ namespace BannerKings.Managers.Court
             else if (Type == CouncilActionType.SWAP)
                 BannerKingsConfig.Instance.CourtManager.SwapCouncilPositions(this);
             else BannerKingsConfig.Instance.CourtManager.RelinquishCouncilPosition(this);
+        }
+
+        public void Reject(Hero rejector)
+        {
+            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(ActionTaker, rejector, CourtManager.ON_REJECTED_RELATION);
         }
     }
 

@@ -157,18 +157,36 @@ namespace BannerKings.Managers.Court
                         position.IsRoyal = false;
             }
 
-            if (clan == Clan.PlayerClan || MBRandom.RandomInt(1, 100) <= 5) return;
+            if (MBRandom.RandomInt(1, 100) <= 5) return;
 
             CouncilMember vacant = members.FirstOrDefault(x => x.Member == null);
             if (vacant == null)
             {
-                vacant = royalMembers.FirstOrDefault(x => x.Member == null);
+                vacant = royalMembers.GetRandomElementWithPredicate(x => x.Member == null);
                 if (vacant == null) return;
             }
 
             Hero hero = MBRandom.ChooseWeighted(GetHeroesForPosition(vacant));
-            BannerKingsConfig.Instance.CourtManager.AddHeroToCouncil(((BKCouncilModel)BannerKingsConfig.Instance.Models.First(x => x is BKCouncilModel))
-                .GetAction(CouncilActionType.REQUEST, this, hero, vacant));
+            if (hero != null)
+            {
+                CouncilAction action = BannerKingsConfig.Instance.CouncilModel.GetAction(CouncilActionType.REQUEST, this, hero, vacant);
+                if (Owner == Hero.MainHero)
+                {
+                    bool answer = false;
+                    InformationManager.ShowInquiry(new InquiryData(new TextObject("{=!}Council Position Request").ToString(),
+                        new TextObject("{=!}{REQUESTER} requests the position of {POSITION} in your council.")
+                        .SetTextVariable("REQUESTER", action.ActionTaker.EncyclopediaLinkWithName)
+                        .SetTextVariable("POSITION", action.TargetPosition.GetName()).ToString(),
+                    action.Possible, true, GameTexts.FindText("str_selection_widget_accept").ToString(),
+                    GameTexts.FindText("str_selection_widget_cancel").ToString(), 
+                    () => action.TakeAction(),
+                    () => action.Reject(Owner), string.Empty));
+                } else
+                {
+                    if (BannerKingsConfig.Instance.CouncilModel.WillAcceptAction(action, Owner)) action.TakeAction();
+                    else action.Reject(Owner);
+                }
+            }  
         }
 
         public List<CouncilMember> GetIdealRoyalPositions()
@@ -578,7 +596,6 @@ namespace BannerKings.Managers.Court
         CLERGYMEN_EXCLUSIVE,
         NOBLE_EXCLUSIVE,
         ARMY_PRIVILEGE,
-        COUNCIL_PRIVILEGE,
         REVOKE_PRIVILEGE
     }
 }

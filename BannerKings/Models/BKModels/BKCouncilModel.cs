@@ -1,15 +1,21 @@
 ﻿using BannerKings.Managers.Court;
 using BannerKings.Managers.Titles;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.Core;
+using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Models.BKModels
 {
     public class BKCouncilModel : IBannerKingsModel
     {
-        public ExplainedNumber CalculateEffect(Settlement settlement)
+        public ExplainedNumber CalculateEffect(Settlement settlement) => new ExplainedNumber();
+        
+        public bool WillAcceptAction(CouncilAction action, Hero hero)
         {
-            return new ExplainedNumber();
+            if (action.Type != CouncilActionType.REQUEST) return true;
+            
+            return action.Possible;
         }
 
 

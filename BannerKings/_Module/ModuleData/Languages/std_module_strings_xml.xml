@@ -11,7 +11,8 @@
 		<string id="bk_council_privilege_influence" text="Influence" />
 		<string id="bk_council_privilege_high_influence" text="High Influence" />
 		<string id="bk_council_privilege_clergymen_exclusive" text="Clergymen Exclusive" />
-		<string id="bk_council_privilege_noble_exlusive" text="Noble Exclusive" />
+		<string id="bk_council_privilege_noble_exclusive" text="Noble Exclusive" />
+		<string id="bk_council_privilege_army_privilege" text="Army Privilege" />
 		
 		<string id="bk_council_privilege_low_wage_description" text="A low daily wage, fit for less important positions in a council." />
 		<string id="bk_council_privilege_mid_wage_description" text="A mediocre wage, used for the main positions in lesser councils, or midling positios in royal councils." />
@@ -19,7 +20,9 @@
 		<string id="bk_council_privilege_influence_description" text="Councillors with this privilege receive extra influence (or Power, if notable)." />
 		<string id="bk_council_privilege_high_influence_description" text="Councillors with this privilege receive a great boost of influence to their clans." />
 		<string id="bk_council_privilege_clergymen_exclusive_description" text="This position may only be filled by clergymen of the clan or kingdom's faith." />
-		<string id="bk_council_privilege_noble_exlusive_description" text="This position is an important one and therefore must only be filled by nobles. Notables from settlements are not acceptable." />
+		<string id="bk_council_privilege_noble_exclusive_description" text="This position is an important one and therefore must only be filled by nobles. Notables from settlements are not acceptable." />
+		<string id="bk_council_privilege_army_privilege_description" text="This position confers the councillor irrevocable ability to raise armies." />
+
 	
 	    <string id="bk_council_description_marshall" text="The {NAME} oversees the military administration of the realm. They are responsible for the efficiency of settlement defenses and drafting of the population." />
 		<string id="bk_council_description_steward" text="{NAME} are responsible for the well-being of finances and trade. They improve the economic prospects and prosperity of fiefs." />

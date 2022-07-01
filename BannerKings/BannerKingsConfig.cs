@@ -32,6 +32,7 @@ namespace BannerKings
 
 
         public BKEducationModel EducationModel { get; } = new BKEducationModel();
+        public BKCouncilModel CouncilModel { get; } = new BKCouncilModel();
 
         public HashSet<IBannerKingsModel> Models = new HashSet<IBannerKingsModel>();
         public AIBehavior AI = new AIBehavior();

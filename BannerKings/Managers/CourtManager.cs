@@ -15,6 +15,10 @@ namespace BannerKings.Managers
         [SaveableProperty(1)]
         private Dictionary<Clan, CouncilData> Councils { get; set; }
 
+        public static readonly int ON_FIRED_RELATION = -12;
+        public static readonly int ON_REJECTED_RELATION = -6;
+        public static readonly int ON_HIRED_RELATION = 6;
+
         public CourtManager(Dictionary<Clan, CouncilData> councils)
         {
             Councils = councils;
@@ -113,14 +117,14 @@ namespace BannerKings.Managers
             if (action.TargetPosition == null || action.ActionTaker == null || !action.Possible) return;
 
             if (action.TargetPosition.Member != null)
-                ChangeRelationAction.ApplyRelationChangeBetweenHeroes(action.Council.Owner, action.TargetPosition.Member, -8);
+                ChangeRelationAction.ApplyRelationChangeBetweenHeroes(action.Council.Owner, action.TargetPosition.Member, ON_FIRED_RELATION);
 
             CheckReligionRankChange(action);
             if (action.ActionTaker == null) return;
             action.TargetPosition.Member = action.ActionTaker;
             if (action.ActionTaker.Clan != null) GainKingdomInfluenceAction.ApplyForDefault(action.ActionTaker, -action.Influence);
             else if (action.ActionTaker.IsNotable) action.ActionTaker.AddPower(-action.Influence);
-            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(action.Council.Owner, action.ActionTaker, 5);
+            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(action.Council.Owner, action.ActionTaker, ON_HIRED_RELATION);
         }
 
         public void SwapCouncilPositions(CouncilAction action)
@@ -132,9 +136,7 @@ namespace BannerKings.Managers
             action.TargetPosition.Member = action.ActionTaker;
             if (action.ActionTaker.Clan != null) GainKingdomInfluenceAction.ApplyForDefault(action.ActionTaker, -action.Influence);
             else if (action.ActionTaker.IsNotable) action.ActionTaker.AddPower(-action.Influence);
-            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(action.TargetPosition.Clan.Leader, action.ActionTaker, 5);
-            if (currentCouncilman != null)
-                ChangeRelationAction.ApplyRelationChangeBetweenHeroes(currentCouncilman, action.ActionTaker, -8);
+            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(action.TargetPosition.Clan.Leader, action.ActionTaker, ON_HIRED_RELATION);
         }
 
         public void RelinquishCouncilPosition(CouncilAction action)
@@ -142,7 +144,7 @@ namespace BannerKings.Managers
             if (action.TargetPosition == null || !action.Possible) return;
 
             CheckReligionRankChange(action);
-            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(action.Council.Owner, action.TargetPosition.Member, -8);
+            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(action.Council.Owner, action.TargetPosition.Member, ON_FIRED_RELATION);
             action.TargetPosition.Member = null;
         }
     }
