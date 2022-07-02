@@ -49,6 +49,18 @@ namespace BannerKings.Managers
             }
         }
 
+        public Language GetNativeLanguage(Hero hero)
+        {
+            Language native = DefaultLanguages.Instance.All.FirstOrDefault(x => x.Culture == hero.Culture);
+            if (Educations.ContainsKey(hero))
+            {
+                if (!Educations[hero].Languages.ContainsKey(native))
+                    native = Educations[hero].Languages.First().Key;
+            }
+
+            return native;
+        }
+
         public EducationData GetHeroEducation(Hero hero)
         {
             EducationData data = null;

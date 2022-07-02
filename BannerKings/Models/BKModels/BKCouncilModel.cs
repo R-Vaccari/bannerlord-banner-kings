@@ -1,8 +1,6 @@
 ﻿using BannerKings.Managers.Court;
 using BannerKings.Managers.Titles;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.Core;
-using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Models.BKModels
@@ -10,6 +8,33 @@ namespace BannerKings.Models.BKModels
     public class BKCouncilModel : IBannerKingsModel
     {
         public ExplainedNumber CalculateEffect(Settlement settlement) => new ExplainedNumber();
+
+        public (bool, string) IsCouncilRoyal(Clan clan)
+        {
+            TextObject explanation = new TextObject("{=!}Legal crown council.");
+
+            Kingdom kingdom = clan.Kingdom;
+            if (kingdom == null) 
+            {
+                explanation = new TextObject("{=!}No kingdom.");
+                return new(false, explanation.ToString());
+            }
+
+            if (clan.Kingdom.RulingClan != clan)
+            {
+                explanation = new TextObject("{=!}Not the ruling clan.");
+                return new(false, explanation.ToString());
+            }
+
+            FeudalTitle sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
+            if (sovereign == null)
+            {
+                explanation = new TextObject("{=!}Does not hold faction's sovereign title.");
+                return new(false, explanation.ToString());
+            }
+
+            return new(true, explanation.ToString());
+        }
         
         public bool WillAcceptAction(CouncilAction action, Hero hero)
         {

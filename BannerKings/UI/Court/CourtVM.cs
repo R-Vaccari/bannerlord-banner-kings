@@ -1,5 +1,6 @@
 ﻿using BannerKings.Managers.Court;
 using BannerKings.Managers.Education.Languages;
+using BannerKings.Managers.Institutions.Religions;
 using BannerKings.UI.Items;
 using System;
 using System.Collections.Generic;
@@ -64,8 +65,22 @@ namespace BannerKings.UI.Court
 
 			}
 
-			CourtInfo.Add(new InformationElement("Administrative costs:", base.FormatValue(council.AdministrativeCosts),
+			CourtInfo.Add(new InformationElement("Administrative costs:", FormatValue(council.AdministrativeCosts),
 				"Costs associated with payment of council members, deducted on all your fiefs' revenues."));
+
+			(bool, string) royalExplanation = BannerKingsConfig.Instance.CouncilModel.IsCouncilRoyal(council.Owner.Clan);
+			IsRoyal = royalExplanation.Item1;
+			CourtInfo.Add(new InformationElement(new TextObject("{=!}Crown council:").ToString(), 
+				GameTexts.FindText(royalExplanation.Item1 ? "str_yes" : "str_no").ToString(), royalExplanation.Item2));
+
+			Religion rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(council.Owner);
+			CourtInfo.Add(new InformationElement(new TextObject("{=!}Court Religion:").ToString(),
+				rel != null ? rel.GetName().ToString() : GameTexts.FindText("role", "None").ToString(), 
+				new TextObject("{=!}This council's owner's faith. Candidates for religious positions must adhere to the same faith. Other council positions may be affected by the faith's doctrines.").ToString()));
+
+			CourtInfo.Add(new InformationElement(new TextObject("{=!}Court Language:").ToString(),
+				BannerKingsConfig.Instance.EducationManager.GetNativeLanguage(council.Owner).Name.ToString(),
+				new TextObject("{=!}This council's owner's language. Courtiers that do not speak the language may feel alienated.").ToString()));
 
 			foreach (CouncilMember position in council.Positions)
             {
@@ -74,7 +89,7 @@ namespace BannerKings.UI.Court
 			}
 				
 
-			if (isRoyal)
+			if (IsRoyal)
 				foreach (CouncilMember position in council.RoyalPositions)
                 {
 					if (position.Clan == null) position.Clan = council.Owner.Clan;

@@ -78,24 +78,7 @@ namespace BannerKings.Managers.Court
             }
         }
 
-
-        public bool IsRoyal
-        {
-            get
-            {
-                Kingdom kingdom = clan.Kingdom;
-                if (kingdom == null) return false;
-
-                if (clan.Kingdom.RulingClan != clan)
-                    return false;
-
-                FeudalTitle sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
-                if (sovereign == null) return false;
-
-                return sovereign.deJure == clan.Leader;
-            }
-        }
-
+        public bool IsRoyal => BannerKingsConfig.Instance.CouncilModel.IsCouncilRoyal(clan).Item1;
 
         internal override void Update(PopulationData data)
         {
