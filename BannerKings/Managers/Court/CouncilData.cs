@@ -9,8 +9,6 @@ using BannerKings.Managers.Titles;
 using System;
 using BannerKings.Managers.Institutions.Religions;
 using TaleWorlds.Localization;
-using BannerKings.Models.BKModels;
-using BannerKings.Managers.Institutions.Religions.Leaderships;
 
 namespace BannerKings.Managers.Court
 {
@@ -103,23 +101,20 @@ namespace BannerKings.Managers.Court
         {
 
             if (royalMembers == null) royalMembers = new List<CouncilMember>();
+            List<Hero> courtiers = GetCourtMembers();
             if (GetMemberFromPosition(CouncilPosition.Spiritual) == null) members.Add(new CouncilMember(null, CouncilPosition.Spiritual, clan));
             foreach (CouncilMember member in this.members)
             {
-                if (member.Member != null && (member.Member.IsDead || member.Member.IsDisabled))
+                if (member.Member != null && (member.Member.IsDead || member.Member.IsDisabled || !courtiers.Contains(member.Member)))
                     member.Member = null;
-
-                if (member.Clan == null)
-                    member.Clan = clan;
+                if (member.Clan == null) member.Clan = clan;
             }
 
             foreach (CouncilMember member in this.royalMembers)
             {
-                if (member.Member != null && (member.Member.IsDead || member.Member.IsDisabled))
+                if (member.Member != null && (member.Member.IsDead || member.Member.IsDisabled || !courtiers.Contains(member.Member)))
                     member.Member = null;
-
-                if (member.Clan == null)
-                    member.Clan = clan;
+                if (member.Clan == null) member.Clan = clan;
             }
 
             if (clan.IsUnderMercenaryService) return;
@@ -157,7 +152,7 @@ namespace BannerKings.Managers.Court
                         position.IsRoyal = false;
             }
 
-            if (MBRandom.RandomInt(1, 100) <= 5) return;
+            if (Owner == Hero.MainHero || MBRandom.RandomInt(1, 100) >= 5) return;
 
             CouncilMember vacant = members.FirstOrDefault(x => x.Member == null);
             if (vacant == null)
@@ -169,24 +164,21 @@ namespace BannerKings.Managers.Court
             Hero hero = MBRandom.ChooseWeighted(GetHeroesForPosition(vacant));
             if (hero != null)
             {
-                CouncilAction action = BannerKingsConfig.Instance.CouncilModel.GetAction(CouncilActionType.REQUEST, this, hero, vacant);
-                if (Owner == Hero.MainHero)
-                {
-                    bool answer = false;
-                    InformationManager.ShowInquiry(new InquiryData(new TextObject("{=!}Council Position Request").ToString(),
-                        new TextObject("{=!}{REQUESTER} requests the position of {POSITION} in your council.")
-                        .SetTextVariable("REQUESTER", action.ActionTaker.EncyclopediaLinkWithName)
-                        .SetTextVariable("POSITION", action.TargetPosition.GetName()).ToString(),
-                    action.Possible, true, GameTexts.FindText("str_selection_widget_accept").ToString(),
-                    GameTexts.FindText("str_selection_widget_cancel").ToString(), 
-                    () => action.TakeAction(),
-                    () => action.Reject(Owner), string.Empty));
-                } else
-                {
-                    if (BannerKingsConfig.Instance.CouncilModel.WillAcceptAction(action, Owner)) action.TakeAction();
-                    else action.Reject(Owner);
-                }
-            }  
+                CouncilAction action = BannerKingsConfig.Instance.CouncilModel.GetAction(CouncilActionType.REQUEST, this, hero, vacant, null, true);
+                if (BannerKingsConfig.Instance.CouncilModel.WillAcceptAction(action, Owner)) action.TakeAction();
+                else action.Reject(Owner);
+            }
+
+            /* bool answer = false;
+                   InformationManager.ShowInquiry(new InquiryData(new TextObject("{=!}Council Position Request").ToString(),
+                       new TextObject("{=!}{REQUESTER} requests the position of {POSITION} in your council.")
+                       .SetTextVariable("REQUESTER", action.ActionTaker.EncyclopediaLinkWithName)
+                       .SetTextVariable("POSITION", action.TargetPosition.GetName()).ToString(),
+                   action.Possible, true, GameTexts.FindText("str_selection_widget_accept").ToString(),
+                   GameTexts.FindText("str_selection_widget_cancel").ToString(), 
+                   () => action.TakeAction(),
+                   () => action.Reject(Owner), string.Empty));
+                  */
         }
 
         public List<CouncilMember> GetIdealRoyalPositions()
@@ -392,7 +384,13 @@ namespace BannerKings.Managers.Court
             set => this.members.First(x => x.Position == CouncilPosition.Spiritual).Member = value;
         }
 
-        public CouncilMember GetCouncilMember(CouncilPosition position) => members.FirstOrDefault(x => x.Position == position);
+        public CouncilMember GetCouncilMember(CouncilPosition position)
+        {
+            CouncilMember result = null;
+            result = members.FirstOrDefault(x => x.Position == position);
+            if (result == null) result = royalMembers.FirstOrDefault(x => x.Position == position);
+            return result;
+        }
 
         public float AdministrativeCosts
         {
@@ -457,9 +455,9 @@ namespace BannerKings.Managers.Court
 
         public TextObject GetName()
         {
-            if (position != CouncilPosition.Spiritual) return GameTexts.FindText("str_bk_council_" + position.ToString().ToLower() + (isRoyal ? "_royal" : ""),
-            Culture.StringId);
-
+            
+            return GameTexts.FindText("str_bk_council_" + position.ToString().ToLower() + (isRoyal ? "_royal" : ""),Culture.StringId);
+            /*
             Religion rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(clan.Leader);
             if (rel != null)
             {
@@ -468,7 +466,7 @@ namespace BannerKings.Managers.Court
 
             }
 
-            return GameTexts.FindText("str_bk_spiritual_guide");
+            return GameTexts.FindText("str_bk_spiritual_guide");*/
         }
 
         public TextObject GetDescription() => GameTexts.FindText("str_bk_council_description_" + position.ToString().ToLower())
@@ -476,10 +474,14 @@ namespace BannerKings.Managers.Court
 
         public bool IsValidCandidate(Hero candidate)
         {
+            if (candidate.Clan != null && candidate.Clan.IsUnderMercenaryService) return false;
+
             if (position == CouncilPosition.Spiritual)
                 return BannerKingsConfig.Instance.ReligionsManager.IsPreacher(candidate);
+            else if (position == CouncilPosition.Elder)
+                return candidate.Culture == Culture && candidate.Age >= 50;
             else if (IsRoyal && IsCorePosition(position))
-                return candidate.IsNoble && !candidate.Clan.IsUnderMercenaryService;
+                return candidate.Occupation == Occupation.Lord;
 
             return true;
         }

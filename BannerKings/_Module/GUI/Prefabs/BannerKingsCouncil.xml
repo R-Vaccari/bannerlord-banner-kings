@@ -65,7 +65,7 @@
 								<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" HorizontalAlignment="Center" SuggestedHeight="7" MarginLeft="5" MarginRight="5" Sprite="SPGeneral\TownManagement\horizontal_divider" />
 							  </Children>
 							</ListPanel>
-							<ToggleWidget DoNotPassEventsToChildren="true" Command.Click="SetId" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginTop="30" SuggestedWidth="191" SuggestedHeight="130" HorizontalAlignment="Center" Brush="TownManagement.Governor" UpdateChildrenStates="true">
+							<ToggleWidget DoNotPassEventsToChildren="true" Command.Click="SetId" Command.HoverBegin="UpdatePosition" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginTop="30" SuggestedWidth="191" SuggestedHeight="130" HorizontalAlignment="Center" Brush="TownManagement.Governor" UpdateChildrenStates="true">
 							  <Children>
 								<ImageWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="69" SuggestedHeight="69" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="TownManagement.Governor.PlusButton" />
 								<ImageIdentifierWidget Id="ElementImage" DataSource="{ImageIdentifier}" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" HorizontalAlignment="Center" MarginLeft="3" MarginRight="3" MarginTop="3" MarginBottom="3" AdditionalArgs="@AdditionalArgs" ImageId="@Id" ImageTypeCode="@ImageTypeCode" />
@@ -93,7 +93,7 @@
 					
 					<RichTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" MarginTop="15" HorizontalAlignment="Center" Brush="Clan.Leader.Text"  Brush.FontSize="30" Text="@PrivilegesText" MarginBottom="15"/>
 					
-					<GridWidget DataSource="{PrivilegesInfo}" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren"  HorizontalAlignment="Center" DefaultCellWidth="200" DefaultCellHeight="30" ColumnCount="3">
+					<GridWidget DataSource="{PrivilegesInfo}" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren"  HorizontalAlignment="Center" DefaultCellWidth="200" DefaultCellHeight="30" ColumnCount="4">
 					  <ItemTemplate>
 					  
 					    <Widget HorizontalAlignment="Center" HeightSizePolicy="StretchToParent" WidthSizePolicy="StretchToParent" VerticalAlignment="Center" DoNotPassEventsToChildren="true">

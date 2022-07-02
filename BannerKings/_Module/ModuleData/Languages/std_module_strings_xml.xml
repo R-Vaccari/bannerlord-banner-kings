@@ -29,6 +29,7 @@
 		<string id="bk_council_description_chancellor" text="{NAME} represent their lord in matters of diplomacy. They improve relations with the lord's peers and vassals." />
 		<string id="bk_council_description_spymaster" text="Responsible for security and skullduggery, the {NAME} handle the dirty side of a council's duties. They are responsible for personal security of their lord, as well as dealing with criminal activities, including carrying them out." />
 		<string id="bk_council_description_spiritual" text="The {NAME} is the representative of faith within a lord's inner circle. Their duty is to be a bridge between the material and spiritual powers, and make certain their suzerain adheres to the faith's principles." />
+		<string id="bk_council_description_elder" text="The {NAME} represent the caste of respected aged leaders in a tribal society. Their presence increases the influence of a sovereign over the common people." />
 	
 		<string id="bk_spiritual_guide" text="Spiritual Guide" />
 	
@@ -90,14 +91,14 @@
 		
 		<string id="bk_council_spiritual_guide_empire" text="Custodis" />
 		<string id="bk_council_spiritual_guide_sturgia" text="Domesticus" />
-		<string id="bk_council_spiritual_guide_battania" text="Treòraiche" />
+		<string id="bk_council_spiritual_guide_battania" text="Draoidh" />
 		<string id="bk_council_spiritual_guide_vlandia" text="Seneschal" />
 		<string id="bk_council_spiritual_guide_khuzait" text="Khevtuul" />
 		<string id="bk_council_spiritual_guide_aserai" text="Domesticus" />
 		
 		<string id="bk_council_spiritual_guide_royal_empire" text="Magister Officiorum" />
 		<string id="bk_council_spiritual_guide_royal_sturgia" text="Domesticus" />
-		<string id="bk_council_spiritual_guide_royal_battania" text="Ard Treòraiche" />
+		<string id="bk_council_spiritual_guide_royal_battania" text="Ard Draoidh" />
 		<string id="bk_council_spiritual_guide_royal_vlandia" text="Royal Seneschal" />
 		<string id="bk_council_spiritual_guide_royal_khuzait" text="Cherbi" />
 		<string id="bk_council_spiritual_guide_royal_aserai" text="Domesticus" />

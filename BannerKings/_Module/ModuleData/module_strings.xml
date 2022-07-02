@@ -9,7 +9,7 @@
 		<string id="str_bk_council_privilege.high_influence" text="{=bk_council_privilege_high_influence}High Influence" />
 		<string id="str_bk_council_privilege.clergymen_exclusive" text="{=bk_council_privilege_clergymen_exclusive}Clergymen Exclusive" />
 		<string id="str_bk_council_privilege.noble_exclusive" text="{=bk_council_privilege_noble_exclusive}Noble Exclusive" />
-		<string id="str_bk_council_privilege_army_privilege" text="{=bk_council_privilege_army_privilege}Army Privilege" />
+		<string id="str_bk_council_privilege.army_privilege" text="{=bk_council_privilege_army_privilege}Army Privilege" />
 		
 		<string id="str_bk_council_privilege_description.low_wage" text="{=bk_council_privilege_low_wage_description}A low daily wage, fit for less important positions in a council." />
 		<string id="str_bk_council_privilege_description.mid_wage" text="{=bk_council_privilege_mid_wage_description}A mediocre wage, used for the main positions in lesser councils, or midling positios in royal councils." />
@@ -18,13 +18,14 @@
 		<string id="str_bk_council_privilege_description.high_influence" text="{=bk_council_privilege_high_influence_description}Councillors with this privilege receive a great boost of influence to their clans" />
 		<string id="str_bk_council_privilege_description.clergymen_exclusive" text="{=bk_council_privilege_clergymen_exclusive_description}This position may only be filled by clergymen of the clan or kingdom's faith." />
 		<string id="str_bk_council_privilege_description.noble_exclusive" text="{=bk_council_privilege_noble_exclusive_description}This position is an important one and therefore must only be filled by nobles. Notables from settlements are not acceptable." />
-		<string id="str_bk_council_privilege_army_privilege_description" text="{=bk_council_privilege_army_privilege_description}This position confers the councillor irrevocable ability to raise armies." />
+		<string id="str_bk_council_privilege_description.army_privilege" text="{=bk_council_privilege_army_privilege_description}This position confers the councillor irrevocable ability to raise armies." />
 		
 		<string id="str_bk_council_description_marshall" text="{=bk_council_description_marshall}The {NAME} oversees the military administration of the realm. They are responsible for the efficiency of settlement defenses and drafting of the population." />
 		<string id="str_bk_council_description_steward" text="{=bk_council_description_steward}{NAME} are responsible for the well-being of finances and trade. They improve the economic prospects and prosperity of fiefs." />
 		<string id="str_bk_council_description_chancellor" text="{=bk_council_description_chancellor}{NAME} represent their lord in matters of diplomacy. They improve relations with the lord's peers and vassals." />
 		<string id="str_bk_council_description_spymaster" text="{=bk_council_description_spymaster}Responsible for security and skullduggery, the {NAME} handle the dirty side of a council's duties. They are responsible for personal security of their lord, as well as dealing with criminal activities, including carrying them out." />
 		<string id="str_bk_council_description_spiritual" text="{=bk_council_description_spiritual}The {NAME} is the representative of faith within a lord's inner circle. Their duty is to be a bridge between the material and spiritual powers, and make certain their suzerain adheres to the faith's principles." />
+		<string id="str_bk_council_description_elder" text="{=bk_council_description_elder}The {NAME} represent the caste of respected aged leaders in a tribal society. Their presence increases the influence of a sovereign over the common people." />
 	
 		<string id="str_bk_council_marshall.empire" text="{=bk_council_marshall_empire}Domesticus" />
 		<string id="str_bk_council_chancellor.empire" text="{=bk_council_steward_empire}Comes Largitionum" />
@@ -35,11 +36,15 @@
 		<string id="str_bk_council_chancellor.battania" text="{=bk_council_steward_battania}Sheumarlan" />
 		<string id="str_bk_council_steward.battania" text="{=bk_council_chancellor_battania}Seansalair" />
 		<string id="str_bk_council_spymaster.battania" text="{=bk_council_spymaster_battania}Treòraiche" />
+		<string id="str_bk_council_spiritual_guide.battania" text="{=bk_council_spiritual_guide_battania}Draoidh" />
 		
 		<string id="str_bk_council_marshall_royal.battania" text="{=bk_council_marshall_royal_battania}Ard Marasgal" />
 		<string id="str_bk_council_chancellor_royal.battania" text="{=bk_council_steward_royal_battania}Ard Sheumarlan" />
 		<string id="str_bk_council_steward_royal.battania" text="{=bk_council_chancellor_royal_battania}Ard Seansalair" />
 		<string id="str_bk_council_spymaster_royal.battania" text="{=bk_council_spymaster_royal_battania}Ard Treòraiche" />
+		<string id="str_bk_council_spiritual_royal.battania" text="{=bk_council_spiritual_guide_royal_battania}Ard Draoidh" />		
+		<string id="str_bk_council_elder.battania" text="{=bk_council_elder_royal_battania}Seanar" />
+		
 		
 		<string id="str_bk_council_marshall.vlandia" text="{=bk_council_marshall_vlandia}Marasgal" />
 		<string id="str_bk_council_chancellor.vlandia" text="{=bk_council_steward_vlandia}Chancellor" />

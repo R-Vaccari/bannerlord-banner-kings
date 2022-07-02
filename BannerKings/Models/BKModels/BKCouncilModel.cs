@@ -120,7 +120,7 @@ namespace BannerKings.Models.BKModels
         private CouncilAction GetRequest(CouncilActionType type, CouncilData council, Hero requester, CouncilMember targetPosition, CouncilMember currentPosition = null, bool appointed = false)
         {
             CouncilAction action = new CouncilAction(type, requester, targetPosition, currentPosition, council);
-            action.Influence = GetInfluenceCost(type, targetPosition);
+            action.Influence = appointed ? 0f : GetInfluenceCost(type, targetPosition);
 
             if (currentPosition != null && currentPosition.Member == requester)
             {

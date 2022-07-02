@@ -106,10 +106,10 @@ namespace BannerKings.UI.Court
 
 				string languagesString = "";
 				foreach (KeyValuePair<Language, float> pair in BannerKingsConfig.Instance.EducationManager.GetHeroEducation(currentCharacter.Hero).Languages)
-					languagesString += new TextObject("{LANGUAGE} ({COMPETENCE})")
+					languagesString += new TextObject("{=!}{LANGUAGE} ({COMPETENCE}),")
 						.SetTextVariable("LANGUAGE", pair.Key.Name)
-						.SetTextVariable("LANGUAGE", UIHelper.GetLanguageFluencyText(pair.Value));
-				CourtierInfo.Add(new InformationElement(new TextObject("{=!}Languages:").ToString(), languagesString, string.Empty));
+						.SetTextVariable("COMPETENCE", UIHelper.GetLanguageFluencyText(pair.Value));
+				CourtierInfo.Add(new InformationElement(new TextObject("{=!}Languages:").ToString(), languagesString.Remove(languagesString.Length - 1), string.Empty));
 			}
 			
 		}

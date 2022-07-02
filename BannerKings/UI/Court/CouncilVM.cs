@@ -25,6 +25,7 @@ namespace BannerKings.UI.Items
             this.council = council;
             Position = position;
             this.courtMembers = courtMembers;
+            RefreshValues();
         }
 
         public override void RefreshValues()
@@ -33,7 +34,7 @@ namespace BannerKings.UI.Items
             List<Hero> currentCouncil = council.GetMembers();
             MBBindingList<SettlementGovernorSelectionItemVM> newList = new MBBindingList<SettlementGovernorSelectionItemVM>();
             newList.Add(AvailableGovernors[0]);
-            CouncilMember councilPosition = new CouncilMember(null, Position, null);
+            CouncilMember councilPosition = council.GetCouncilMember(Position);
             foreach (Hero hero in courtMembers)
                 if (!currentCouncil.Contains(hero) && hero.IsAlive && !hero.IsChild && councilPosition.IsValidCandidate(hero))
                     newList.Add(new CouncilCandidateVM(hero, OnSelection,
