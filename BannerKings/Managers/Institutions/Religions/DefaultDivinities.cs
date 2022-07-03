@@ -5,7 +5,8 @@ namespace BannerKings.Managers.Institutions.Religions
     public class DefaultDivinities
     {
         private Divinity aseraMain, aseraSecondary1, aseraSecondary2, aseraSecondary3,
-            amraMain, amraSecondary1, amraSecondary2, darusosianMain, darusosianSecondary1, darusosianSecondary2;
+            amraMain, amraSecondary1, amraSecondary2, darusosianMain, darusosianSecondary1, darusosianSecondary2,
+            vlandiaMain, vlandiaSecondary1, vlandiaSecondary2;
 
         public static DefaultDivinities Instance => ConfigHolder.CONFIG;
 
@@ -61,6 +62,18 @@ namespace BannerKings.Managers.Institutions.Religions
                 new TextObject("{=!}The Empire has long held its own pantheon of divine entities which rule over all aspects of mortal life and which are appeased by means of ritual sacrifice, festival activities, and prayers for absolution. Within the Darusosian Martyrdom, the locally vaunted Lycaronian Triad is held above all other eternal divinities and viewed as adjacent to mortal emperors risen to divinity by the rites of the divus. Iovis, the Sky-Father reigns as the henotheistic patriarch who traditionally dwells upon Mount Erithrys. He is accompanied by Astaronia, his bride who represents that which must be protected by the machinations of imperial might; and by his daughter Mesnona who was born from the ego of Iovis and who grants insight to mortal petitioners."),
                 new TextObject(),
                 new TextObject("{=!}Gods"));
+
+            vlandiaMain = new Divinity("vlandia-main", new TextObject("{=!}Lai Vlandia"),
+                new TextObject("{=!}The Canticles sung in stanza and deed within the Lai Vlandia speak to the grand narrative of the modern age; couplets detailing tales of adventure and romance, of peasant heroes and baronial lords. All modern men are viewed as participants within the Lai Vlandia; regardless of their wishes, so long as they know that Vlandia exists. The songs are often written in such a way that one may make known their beliefs and views on the subject by means of intonation; whilst the tomes depicting the tales are renown for their strange marginalia which often descend into comic flourishes where lesser scriveners depict their favored and reviled characters as strange creatures or grotesque beasts."),
+                new TextObject());
+
+            vlandiaSecondary1 = new Divinity("vlandia-secondary-1", new TextObject("{=!}Ribaldi Cant"),
+                new TextObject("{=!}Those who buck against the perceived hegemony of the Lai Vlandia, be they peasant rebels or upstart lords, will claim piety by way of the Ribaldi Cant. Though traditionalists will note the Cant is but a deviation of the illuminated manuscripts and oral tales of the pre-Calradic Vlandian culture, modern adherents claim the Cant to be the methodology of rebels, wanderers, rascals, and conquerors. Subtlety is seldom found, and parables and morality plays are all too commonly twisted to back the ideology of the teller. As such the works depicted therein are often viewed as satire or crude witticisms, but few cloisters will deny their worth. They are part of the Lai Vlandia, and thus the Canticles, regardless of their desires. "),
+                new TextObject());
+
+            vlandiaSecondary2 = new Divinity("vlandia-secondary-2", new TextObject("{=!}Meridional Cantigan"),
+                new TextObject("{=!}The vitriolic and zealous among the modern Vlandians have as of late begun singing the Meridional Cantigan and marching towards the Southlands in a belligerent crusade. Claiming to be a reprisal of a song sung before the days of Osrac Iron-Arm, these goliard warrior-poets speak the harsh rhymes of their ancient conqueror patriarchs and wayward followers. They seek truth in deed, to be worthy of a completed song for an era; to serve in harmony with the Canticles, the Lai Vlandia, and to be remembered in illuminations befitting those enshrined in legend."),
+                new TextObject());
         }
 
         public Divinity AseraMain => aseraMain;
@@ -74,5 +87,9 @@ namespace BannerKings.Managers.Institutions.Religions
         public Divinity DarusosianMain => darusosianMain;
         public Divinity DarusosianSecondary1 => darusosianSecondary1;
         public Divinity DarusosianSecondary2 => darusosianSecondary2;
+
+        public Divinity VlandiaMain => vlandiaMain;
+        public Divinity VlandiaSecondary1 => vlandiaSecondary1;
+        public Divinity VlandiaSecondary2 => vlandiaSecondary2;
     }
 }
