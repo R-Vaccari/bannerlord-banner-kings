@@ -1,20 +1,23 @@
 ﻿using BannerKings.Managers.Institutions.Religions.Faiths.Asera;
 using BannerKings.Managers.Institutions.Religions.Faiths.Battania;
+using BannerKings.Managers.Institutions.Religions.Faiths.Rites;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Localization;
+using TaleWorlds.ObjectSystem;
 
 namespace BannerKings.Managers.Institutions.Religions.Faiths
 {
     public class DefaultFaiths
     {
-        private FaithGroup aseraGroup, battaniaGroup, imperialGroup;
+        private FaithGroup aseraGroup, battaniaGroup, imperialGroup, vlandiaGroup;
         private MonotheisticFaith aseraCode, darusosian;
-        private PolytheisticFaith amraFaith;
+        private PolytheisticFaith amraFaith, canticlesFaith;
 
         public Faith AseraCode => aseraCode;
         public Faith AmraOllahm => amraFaith;
         public Faith Darusosian => darusosian;
+        public Faith Canticles => canticlesFaith;
 
         public void Initialize()
         {
@@ -50,10 +53,22 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
                 new List<Divinity>() { DefaultDivinities.Instance.DarusosianSecondary1, DefaultDivinities.Instance.DarusosianSecondary2 },
                 new Dictionary<TraitObject, bool>
                 {
-                    { DefaultTraits.Honor, false },
-                    { DefaultTraits.Valor, true }
+                    { DefaultTraits.Honor, true },
+                    { DefaultTraits.Mercy, true }
                 },
                 imperialGroup);
+
+
+            vlandiaGroup = new FaithGroup(new TextObject("{=!}Vlandic Faiths"), new TextObject("{=!}The faiths brought through the seas by the Vlandic peoples."));
+            canticlesFaith = new CanticlesFaith();
+            canticlesFaith.Initialize(DefaultDivinities.Instance.VlandiaMain,
+                new List<Divinity>() { DefaultDivinities.Instance.VlandiaSecondary1, DefaultDivinities.Instance.VlandiaSecondary2 },
+                new Dictionary<TraitObject, bool>
+                {
+                    { DefaultTraits.Mercy, false },
+                    { DefaultTraits.Valor, true }
+                },
+                vlandiaGroup, new List<Rite>() {  });
 
         }
 
@@ -73,6 +88,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
                 yield return AseraCode;
                 yield return AmraOllahm;
                 yield return Darusosian;
+                yield return Canticles;
             }
         }
 

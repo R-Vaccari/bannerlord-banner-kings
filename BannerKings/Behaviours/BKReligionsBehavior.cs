@@ -1,12 +1,13 @@
 ﻿using BannerKings.Managers.Institutions.Religions;
+using BannerKings.Managers.Institutions.Religions.Faiths.Rites;
 using BannerKings.Models.BKModels;
 using HarmonyLib;
 using SandBox;
 using System;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.SandBox;
-using TaleWorlds.Core;
+using TaleWorlds.CampaignSystem.Actions;
+using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Behaviours
@@ -18,6 +19,7 @@ namespace BannerKings.Behaviours
             CampaignEvents.DailyTickEvent.AddNonSerializedListener(this, new Action(DailyTick));
             CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, new Action<CampaignGameStarter>(OnSessionLaunched));
             CampaignEvents.SettlementEntered.AddNonSerializedListener(this, new Action<MobileParty, Settlement, Hero>(OnSettlementEntered));
+            CampaignEvents.HeroKilledEvent.AddNonSerializedListener(this, OnHeroKilled);
             //CampaignEvents.DailyTickSettlementEvent.AddNonSerializedListener(this, new Action<Settlement>(DailySettlementTick));
         }
 
@@ -28,6 +30,11 @@ namespace BannerKings.Behaviours
         private void OnSessionLaunched(CampaignGameStarter starter)
         {
             AddDialogue(starter);
+        }
+
+        private void OnHeroKilled(Hero victim, Hero killer, KillCharacterAction.KillCharacterActionDetail detail, bool showNotification = true)
+        {
+            BannerKingsConfig.Instance.ReligionsManager.RemoveHero(victim);
         }
 
         private void DailyTick()
@@ -110,7 +117,53 @@ namespace BannerKings.Behaviours
             starter.AddDialogLine("bk_answer_induction_2", "bk_preacher_asked_induction_last", "lord_talk_ask_something",
                 "{=!}{CLERGYMAN_INDUCTION_LAST}",
                 new ConversationSentence.OnConditionDelegate(this.IsPreacher), null, 100, null);
+
+            starter.AddPlayerLine("bk_question_rite", "lord_talk_ask_something_2", "bk_preacher_asked_rites",
+                "{=!}I would like to perform a rite.",
+                () => true, () => RitesOnCondition(starter), 100, null, null);
+
+            starter.AddDialogLine("bk_answer_rite", "bk_preacher_asked_rites", "bk_preacher_asked_rites_answer",
+                "{=!}Certainly.",
+                null, null, 100, null);
+
         }
+
+        private bool RitesOnCondition(CampaignGameStarter starter)
+        {
+            bool possible = false;
+            Clergyman clergyman = BannerKingsConfig.Instance.ReligionsManager.GetClergymanFromHeroHero(Hero.OneToOneConversationHero);
+            if (clergyman != null)
+            {
+                Religion religion = BannerKingsConfig.Instance.ReligionsManager.GetClergymanReligion(clergyman);
+                if (religion != null)
+                {
+                    MBReadOnlyList<Rite> rites = religion.Rites;
+                    possible = rites.Count > 0;
+                    foreach (Rite rite in rites)
+                        starter.AddPlayerLine("bk_preacher_asked_rites_answer", "bk_preacher_asked_rites_answer",
+                            "lord_talk_ask_something", rite.GetName().ToString(),
+                            () => true, () => rite.Execute(Hero.MainHero));
+
+                    starter.AddPlayerLine("bk_preacher_asked_rites_answer", "bk_preacher_asked_rites_answer", "lord_talk_ask_something", "{=D33fIGQe}Never mind.", null, null, 100, null, null);
+                }
+            }
+
+            return possible;
+        }
+
+        private bool CanPerformRite(RiteType rite)
+        {
+            bool possible = false;
+            Clergyman clergyman = BannerKingsConfig.Instance.ReligionsManager.GetClergymanFromHeroHero(Hero.OneToOneConversationHero);
+            if (clergyman != null)
+            {
+                Religion religion = BannerKingsConfig.Instance.ReligionsManager.GetClergymanReligion(clergyman);
+                if (religion != null) possible = religion.Rites.Any(x => x.GetRiteType() == rite);
+            }
+
+            return possible;
+        }
+
         private bool IsPreacher() => Campaign.Current.ConversationManager.CurrentConversationIsFirst && Hero.OneToOneConversationHero.IsPreacher &&
                 BannerKingsConfig.Instance.ReligionsManager != null && BannerKingsConfig.Instance.ReligionsManager.IsPreacher(Hero.OneToOneConversationHero);
         private bool OnConditionClergymanGreeting()

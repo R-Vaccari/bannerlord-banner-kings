@@ -8,7 +8,7 @@ using TaleWorlds.Localization;
 
 namespace BannerKings.Behaviours
 {
-    public class BKBookBehavior : CampaignBehaviorBase
+    public class BKEducationBehavior : CampaignBehaviorBase
     {
         private Dictionary<Hero, ItemRoster> BookSellers { get; set; } = new Dictionary<Hero, ItemRoster>();
 
@@ -28,16 +28,14 @@ namespace BannerKings.Behaviours
 
         private void OnWeeklyTick()
         {
-
             if (BookSellers.Count < DesiredSellerCount())
                 SpawnInitialSellers();
-
-            
         }
 
         private void OnHeroKilled(Hero victim, Hero killer, KillCharacterAction.KillCharacterActionDetail detail, bool showNotification = true)
         {
             if (BookSellers.ContainsKey(victim)) BookSellers.Remove(victim);
+            BannerKingsConfig.Instance.EducationManager.RemoveHero(victim);
         }
 
         private void OnSettlementEntered(MobileParty party, Settlement target, Hero hero)

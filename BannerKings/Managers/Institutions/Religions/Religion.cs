@@ -1,4 +1,5 @@
 ﻿using BannerKings.Managers.Institutions.Religions.Faiths;
+using BannerKings.Managers.Institutions.Religions.Faiths.Rites;
 using System;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
@@ -23,6 +24,7 @@ namespace BannerKings.Managers.Institutions.Religions
         [SaveableField(4)]
         private List<CultureObject> favoredCultures;
 
+        [SaveableField(5)]
         private List<string> doctrineIds;
 
         public Religion(Settlement settlement, Faith faith, ReligiousLeadership leadership,
@@ -39,6 +41,19 @@ namespace BannerKings.Managers.Institutions.Religions
         internal void PostInitialize(Faith faith)
         {
             this.faith = faith;
+        }
+
+        public MBReadOnlyList<Rite> Rites
+        {
+            get
+            {
+                List<Rite> list = new List<Rite>();
+                list.AddRange(faith.Rites);
+                if (doctrineIds.Contains("sacrifice"))
+                    list.Add(new Sacrifice());
+
+                return list.GetReadOnlyList();
+            }
         }
 
         public CultureObject MainCulture => favoredCultures[0];

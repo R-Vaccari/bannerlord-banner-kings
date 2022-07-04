@@ -5,7 +5,7 @@ using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
 {
-    public class CanticlesFaith : MonotheisticFaith
+    public class CanticlesFaith : PolytheisticFaith
     {
         public CanticlesFaith() : base()
         {

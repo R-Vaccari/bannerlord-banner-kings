@@ -7,6 +7,7 @@ using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Institutions.Religions.Faiths;
 using BannerKings.Managers.Institutions.Religions.Faiths.Asera;
 using BannerKings.Managers.Institutions.Religions.Faiths.Battania;
+using BannerKings.Managers.Institutions.Religions.Faiths.Rites;
 using BannerKings.Managers.Institutions.Religions.Leaderships;
 using BannerKings.Managers.Kingdoms;
 using BannerKings.Managers.Kingdoms.Contract;
@@ -124,7 +125,8 @@ namespace BannerKings
             AddClassDefinition(typeof(AutocephalousLeadership), 83);
             AddClassDefinition(typeof(KinshipLeadership), 84);
             AddClassDefinition(typeof(AutonomousLeadership), 85);
-            
+            AddClassDefinition(typeof(CanticlesFaith), 86);
+            AddEnumDefinition(typeof(RiteType), 87);
 
         }
 
@@ -153,6 +155,7 @@ namespace BannerKings
             ConstructContainerDefinition(typeof(Dictionary<Faith, FaithStance>));
             ConstructContainerDefinition(typeof(Dictionary<TraitObject, bool>));
             ConstructContainerDefinition(typeof(Dictionary<Hero, FaithfulData>));
+            ConstructContainerDefinition(typeof(Dictionary<RiteType, CampaignTime>));
             ConstructContainerDefinition(typeof(Dictionary<Religion, Dictionary<Hero, FaithfulData>>));
         }
     }

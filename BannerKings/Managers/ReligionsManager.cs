@@ -28,6 +28,7 @@ namespace BannerKings.Managers
             CultureObject khuzait = Utils.Helpers.GetCulture("khuzait");
             CultureObject imperial = Utils.Helpers.GetCulture("empire");
             CultureObject battania = Utils.Helpers.GetCulture("battania");
+            CultureObject vlandia = Utils.Helpers.GetCulture("vlandia");
             List<Religion> rels = new List<Religion>();
             Religion aseraiReligion = new Religion(null, 
                 DefaultFaiths.Instance.AseraCode, new KinshipLeadership(),
@@ -43,9 +44,15 @@ namespace BannerKings.Managers
                DefaultFaiths.Instance.Darusosian, new HierocraticLeadership(),
                new List<CultureObject> { imperial },
                new List<string>());
+
+            Religion vlandiaReligion = new Religion(null,
+               DefaultFaiths.Instance.Canticles, new HierocraticLeadership(),
+               new List<CultureObject> { vlandia },
+               new List<string>() { "sacrifice", "literalism" });
             rels.Add(aseraiReligion);
             rels.Add(battaniaReligion);
             rels.Add(darusosianReligion);
+            rels.Add(vlandiaReligion);
 
             foreach (Religion rel in rels)
                 if (!Religions.ContainsKey(rel))
@@ -88,6 +95,13 @@ namespace BannerKings.Managers
             else if (religion.FavoredCultures.Contains(Hero.MainHero.Culture))
                 piety = 50;
             return piety;
+        }
+
+        public FaithfulData GetFaithfulData(Hero hero)
+        {
+            Religion rel = GetHeroReligion(hero);
+            if (rel != null) return Religions[rel][hero];
+            else return null;
         }
 
         public void PostInitialize()
@@ -164,11 +178,38 @@ namespace BannerKings.Managers
             return false;
         }
 
-        public void AddPiety(Religion rel, Hero hero, float piety)
+        public void RemoveHero(Hero hero)
+        {
+            Religion rel = GetHeroReligion(hero);
+            if (rel != null) Religions[rel].Remove(hero);
+        }
+
+        public void AddPiety(Religion rel, Hero hero, float piety, bool notifyPlayer = false)
         {
             if (rel == null || hero == null) return;
             if (Religions[rel].ContainsKey(hero))
                 Religions[rel][hero].AddPiety(piety);
+
+            if (notifyPlayer && hero == Hero.MainHero)
+                InformationManager.AddQuickInformation(new TextObject("{=!}{HERO} has recieved {PIETY} piety.")
+                    .SetTextVariable("HERO", hero.Name)
+                    .SetTextVariable("PIETY", piety));
+        }
+
+        public void AddPiety(Hero hero, float piety, bool notifyPlayer = false)
+        {
+            if (hero == null) return;
+
+            Religion rel = GetHeroReligion(hero);
+            if (rel == null) return;
+
+            if (Religions[rel].ContainsKey(hero))
+                Religions[rel][hero].AddPiety(piety);
+
+            if (notifyPlayer && hero == Hero.MainHero)
+                InformationManager.AddQuickInformation(new TextObject("{=!}{HERO} has recieved {PIETY} piety.")
+                    .SetTextVariable("HERO", hero.Name)
+                    .SetTextVariable("PIETY", piety));
         }
 
         public float GetPiety(Religion rel, Hero hero)

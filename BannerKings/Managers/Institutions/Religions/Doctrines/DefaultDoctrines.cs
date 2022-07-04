@@ -12,7 +12,7 @@ namespace BannerKings.Managers.Institutions.Religions.Doctrines
             public static DefaultDoctrines CONFIG = new DefaultDoctrines();
         }
 
-        private Doctrine druidism, animism, legalism, communalFaith, literalism, pastoralism, pacifism, heathenTax, childbirth;
+        private Doctrine druidism, animism, legalism, communalFaith, literalism, pastoralism, pacifism, heathenTax, childbirth, sacrifice;
 
         public Doctrine Druidism => druidism;
         public Doctrine Animism => animism;
@@ -56,7 +56,12 @@ namespace BannerKings.Managers.Institutions.Religions.Doctrines
 
             literalism = new Doctrine("literalism", new TextObject("{=!}Literalism"),
                 new TextObject("{=!}It is only through our holy texts that we can uphold our values and faith."),
-                new TextObject("{=!}Increased stability in settlements\nPiety maluses while participating in wars and declaring wars"),
+                new TextObject("{=!}High scholarship provides piety, illiteracy reduces piety"),
+                new List<string>());
+
+            sacrifice = new Doctrine("sacrifice", new TextObject("{=!}Human Sacrifices"),
+                new TextObject("{=!}Worthy opponents are deserving of a better death than commoners in the battlefield. We can prove our devotion by ritually sacrificing them."),
+                new TextObject("{=!}Allows the Human Sacrifice rite"),
                 new List<string>());
         }
 

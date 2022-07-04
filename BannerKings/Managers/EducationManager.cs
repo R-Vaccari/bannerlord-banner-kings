@@ -100,6 +100,12 @@ namespace BannerKings.Managers
             return true;
         }
 
+        public void RemoveHero(Hero hero)
+        {
+            if (Educations.ContainsKey(hero)) Educations.Remove(hero);
+        }
+
+
         public void SetCurrentBook(Hero hero, BookType book)
         {
             if (Educations.ContainsKey(hero))

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BannerKings.Managers.Institutions.Religions.Faiths.Rites;
+using System;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Library;
@@ -16,6 +17,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
         protected Divinity mainGod;
         protected Dictionary<TraitObject, bool> traits;
         protected Dictionary<int, CharacterObject> presets;
+        protected List<Rite> rites;
 
         public Faith() 
         {
@@ -23,13 +25,17 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
             presets = new Dictionary<int, CharacterObject>();
         }
 
-        protected void Initialize(Divinity mainGod, Dictionary<TraitObject, bool> traits, FaithGroup faithGroup)
+        protected void Initialize(Divinity mainGod, Dictionary<TraitObject, bool> traits, FaithGroup faithGroup, List<Rite> rites = null)
         {
             this.mainGod = mainGod;
             this.traits = traits;
             this.faithGroup = faithGroup;
+            if (rites == null) rites = new List<Rite>();
+            this.rites = rites;
+
         }
 
+        public MBReadOnlyList<Rite> Rites => rites.GetReadOnlyList();
         public MBReadOnlyDictionary<TraitObject, bool> Traits => traits.GetReadOnlyDictionary();
 
         public FaithStance GetStance(Faith otherFaith)
