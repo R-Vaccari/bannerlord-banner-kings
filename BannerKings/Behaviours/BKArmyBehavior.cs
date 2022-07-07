@@ -15,6 +15,7 @@ namespace BannerKings.Behaviours
     public class BKArmyBehavior : CampaignBehaviorBase
     {
         public static AuxiliumDuty playerArmyDuty;
+        public static CampaignTime lastDutyTime = CampaignTime.Never;
 
         public override void RegisterEvents()
         {
@@ -26,9 +27,10 @@ namespace BannerKings.Behaviours
 
         public override void SyncData(IDataStore dataStore)
         {
-            if (BannerKingsConfig.Instance.wipeData)
-                playerArmyDuty = null;
+            if (BannerKingsConfig.Instance.wipeData) playerArmyDuty = null;
+
             dataStore.SyncData("bannerkings-military-duty", ref playerArmyDuty);
+            dataStore.SyncData("bannerkings-military-duty-time", ref lastDutyTime);
         }
 
         public void OnPartyJoinedArmyEvent(MobileParty party)
@@ -56,6 +58,7 @@ namespace BannerKings.Behaviours
             {
                 playerArmyDuty.Finish();
                 playerArmyDuty = null;
+                lastDutyTime = CampaignTime.Now;
             }   
         }
 
@@ -84,15 +87,11 @@ namespace BannerKings.Behaviours
             if (Hero.MainHero.IsPrisoner) return;
 
             MobileParty suzerainParty = this.EvaluateSuzerainParty(army, suzerain.deJure, joinningParty);
-            if (suzerainParty != null)
+            if (suzerainParty != null && playerArmyDuty == null && lastDutyTime.ElapsedWeeksUntilNow >= 1f)
             {
                 float days = 2f;
                 Settlement settlement = SettlementHelper.FindNearestSettlement((Settlement x) => x.IsFortification || x.IsVillage, army.AiBehaviorObject);
-                InformationManager.ShowInquiry(new InquiryData("Duty Calls",
-                    string.Format("Your suzerain, {0}, has summoned you to fulfill your oath of military aid. You have {1} to join {2}, currently close to {3}.", 
-                    suzerainParty.LeaderHero.Name.ToString(), days, army.Name, settlement.Name),
-                    true, false, "Understood", null, null, null), false);
-                BKArmyBehavior.playerArmyDuty = new Managers.Duties.AuxiliumDuty(CampaignTime.DaysFromNow(days), suzerainParty, completion);
+                BKArmyBehavior.playerArmyDuty = new AuxiliumDuty(CampaignTime.DaysFromNow(days), suzerainParty, completion, settlement, army.Name);
             }
         }
 
