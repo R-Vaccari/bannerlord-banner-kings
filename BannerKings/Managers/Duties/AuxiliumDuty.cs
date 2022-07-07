@@ -39,10 +39,10 @@ namespace BannerKings.Managers.Duties
                 suzerain = Clan.PlayerClan.Kingdom.Leader;
             if (proportion < base.Completion)
             {
-                Clan.PlayerClan.Renown -= 50f * (1f - proportion);
+                Clan.PlayerClan.Renown -= 30f * (1f - proportion);
                 int relation = MBRandom.RandomInt(-12, -5);
                 ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero.MainHero, suzerain, relation, false);
-                result = new TextObject("{=!}You have failed to fulfill your duty of military assistance to {SUZERAIN}. As a result, your clan's reputation has suffered, and your relationship with suzerain has changed by {RELATION}.");
+                result = new TextObject("{=!}You have failed to fulfill your duty of military assistance to {SUZERAIN}. As a result, your clan's renown has suffered, and your relationship with suzerain has changed by {RELATION}.");
                 result.SetTextVariable("SUZERAIN", suzerain.Name);
                 result.SetTextVariable("RELATION", relation);
             } else

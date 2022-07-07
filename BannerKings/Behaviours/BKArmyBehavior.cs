@@ -1,14 +1,10 @@
-﻿using BannerKings.Managers.Court;
-using BannerKings.Managers.Duties;
-using BannerKings.Managers.Kingdoms.Policies;
+﻿using BannerKings.Managers.Duties;
 using BannerKings.Managers.Titles;
 using BannerKings.Models;
 using HarmonyLib;
 using Helpers;
 using System;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.Core;
-using TaleWorlds.Library;
 
 namespace BannerKings.Behaviours
 {
