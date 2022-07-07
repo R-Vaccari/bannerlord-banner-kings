@@ -9,8 +9,15 @@ using BannerKings.Managers.Titles;
 
 namespace BannerKings.Models
 {
-    class BKInfluenceModel : DefaultClanPoliticsModel
+    public class BKInfluenceModel : DefaultClanPoliticsModel
     {
+
+        public float GetRejectKnighthoodCost(Clan clan)
+        {
+            float gain = CalculateInfluenceChange(clan, false).ResultNumber;
+            return 10f + (gain * 0.05f);
+        }
+
         public override ExplainedNumber CalculateInfluenceChange(Clan clan, bool includeDescriptions = false)
         {
             ExplainedNumber baseResult = base.CalculateInfluenceChange(clan, includeDescriptions);

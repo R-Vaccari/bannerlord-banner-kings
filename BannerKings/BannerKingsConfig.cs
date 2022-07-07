@@ -28,6 +28,8 @@ namespace BannerKings
         public bool wipeData = false;
         public MBReadOnlyList<BuildingType> VillageBuildings { get; set; }
 
+        public BKInfluenceModel InfluenceModel { get; } = new BKInfluenceModel();
+
         public void InitManagers()
         {
             DefaultVillageBuildings.Instance.Init();

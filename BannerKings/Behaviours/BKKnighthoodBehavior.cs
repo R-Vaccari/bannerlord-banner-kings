@@ -43,6 +43,41 @@ namespace BannerKings.Behaviors
             Clan originalClan = hero.Clan;
             if (hero.Spouse != null && Utils.Helpers.IsClanLeader(hero.Spouse)) return;
 
+            if (originalClan != Clan.PlayerClan) CreateClan(hero, originalClan, title);
+            else
+            {
+                TextObject requestText;
+                if (hero.IsFriend(Hero.MainHero)) requestText = new TextObject("{=!}I humbly ask of you to release me of my duties in the {CLAN}. I shall remain as your vassal and loyal friend.");
+                else if (hero.IsEnemy(Hero.MainHero)) requestText = new TextObject("{=!}I request of you to release me of my duties in the {CLAN}. It is time for me to lead my own family.");
+                else requestText = new TextObject("{=!}I demand of you to release me of the {CLAN}. It is time we part ways.");
+                requestText = requestText.SetTextVariable("CLAN", originalClan.Name);
+
+                float cost = BannerKingsConfig.Instance.InfluenceModel.GetRejectKnighthoodCost(originalClan);
+                InformationManager.ShowInquiry(new InquiryData(new TextObject("The clan of {HERO}").SetTextVariable("HERO", hero.Name).ToString(),
+                    new TextObject("{GREETING} {PLAYER}, {TEXT}\nRejecting their request would cost {INFLUENCE} influence.")
+                    .SetTextVariable("GREETING", GameTexts.FindText(Hero.MainHero.IsFemale ? "str_my_lady" : "str_my_lord"))
+                    .SetTextVariable("PLAYER", Hero.MainHero.Name)
+                    .SetTextVariable("TEXT", requestText)
+                    .SetTextVariable("INFLUENCE", cost)
+                    .ToString(),
+                    true, true, GameTexts.FindText("str_accept").ToString(), GameTexts.FindText("str_reject").ToString(), 
+                    () =>
+                    {
+                        ChangeRelationAction.ApplyRelationChangeBetweenHeroes(hero, originalClan.Leader, 5);
+                        CreateClan(hero, originalClan, title);
+                    }, 
+                    () =>
+                    {
+                        ChangeRelationAction.ApplyRelationChangeBetweenHeroes(hero, originalClan.Leader, -12);
+                        GainKingdomInfluenceAction.ApplyForDefault(originalClan.Leader, -cost);
+                        BannerKingsConfig.Instance.TitleManager.AddKnightInfluence(hero, -200);
+                    }), false);
+            }
+            
+        }
+
+        private void CreateClan(Hero hero, Clan originalClan, FeudalTitle title)
+        {
             Clan newClan = ClanActions.CreateNewClan(hero, title.fief, hero.StringId + "_knight_clan", null, 150f, true);
             if (newClan != null) InformationManager.AddQuickInformation(new TextObject("{=!}The {NEW} has been formed by {HERO}, previously a knight of {ORIGINAL}.")
                             .SetTextVariable("NEW", hero.Clan.Name)
@@ -51,7 +86,7 @@ namespace BannerKings.Behaviors
         }
 
         
-        private bool CanCreateClan(Hero hero) => hero.Gold >= 50000 && BannerKingsConfig.Instance.TitleManager.GetKnightInfluence(hero) >= 250f && hero.Occupation == Occupation.Lord &&
+        private bool CanCreateClan(Hero hero) => hero.Gold >= 50000 && BannerKingsConfig.Instance.TitleManager.GetKnightInfluence(hero) >= 350f && hero.Occupation == Occupation.Lord &&
             hero.Father != hero.Clan.Leader && hero.Mother != hero.Clan.Leader && !hero.Children.Contains(hero.Clan.Leader) && 
             !hero.Siblings.Contains(hero.Clan.Leader);
 

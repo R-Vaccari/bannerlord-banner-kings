@@ -12,7 +12,7 @@ using static BannerKings.Managers.PopulationManager;
 
 namespace BannerKings.Models
 {
-    class BKConstructionModel : DefaultBuildingConstructionModel
+    public class BKConstructionModel : DefaultBuildingConstructionModel
     {
 		public ExplainedNumber CalculateVillageConstruction(Settlement settlement)
         {
