@@ -12,15 +12,15 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
         public abstract float GetTimeInterval();
 
         public abstract void Execute(Hero executor);
-
+        public abstract void SetDialogue();
         public abstract float GetPietyReward();
         public bool MeetsCondition(Hero hero) 
         {
             FaithfulData data = BannerKingsConfig.Instance.ReligionsManager.GetFaithfulData(hero);
             return hero.IsAlive && !hero.IsChild && !hero.IsPrisoner && hero.PartyBelongedTo != null &&
                 data != null && data.HasTimePassedForRite(GetRiteType(), GetTimeInterval());
-        } 
-        protected abstract void Complete(Hero actionTaker);
+        }
+        public abstract void Complete(Hero actionTaker);
     }
 
     public enum RiteType

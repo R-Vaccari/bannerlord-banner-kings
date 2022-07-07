@@ -5,6 +5,7 @@ using HarmonyLib;
 using SandBox;
 using System;
 using System.Linq;
+using System.Text;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.Library;
@@ -122,10 +123,6 @@ namespace BannerKings.Behaviours
                 "{=!}I would like to perform a rite.",
                 () => true, () => RitesOnCondition(starter), 100, null, null);
 
-            starter.AddDialogLine("bk_answer_rite", "bk_preacher_asked_rites", "bk_preacher_asked_rites_answer",
-                "{=!}Certainly.",
-                null, null, 100, null);
-
         }
 
         private bool RitesOnCondition(CampaignGameStarter starter)
@@ -138,13 +135,50 @@ namespace BannerKings.Behaviours
                 if (religion != null)
                 {
                     MBReadOnlyList<Rite> rites = religion.Rites;
+                    Rite selected = null;
                     possible = rites.Count > 0;
-                    foreach (Rite rite in rites)
-                        starter.AddPlayerLine("bk_preacher_asked_rites_answer", "bk_preacher_asked_rites_answer",
-                            "lord_talk_ask_something", rite.GetName().ToString(),
-                            () => true, () => rite.Execute(Hero.MainHero));
+                    starter.AddDialogLine("bk_answer_rite", "bk_preacher_asked_rites", "bk_preacher_asked_rites_answer",
+                        "{=!}{CLERGYMAN_RITE}",
+                        null, null, 100, null);
+               
+                    TextObject faithText = new TextObject("{=!}{FAITH} teaches us that we may perform {RITES}.");
+                    TextObject riteText = new TextObject("{=!}Certainly, {HERO}. Remember that proving your devotion is a life-long process. Once a rite is done, some time is needed before it may be consummated again. {RITES}")
+                        .SetTextVariable("HERO", Hero.MainHero.Name);
 
+                    starter.AddDialogLine("bk_rite_pending", "bk_rite_pending", "bk_rite_pending",
+                        "{=!}I will wait your decision on what to offer.",
+                        null, null, 100, null);
+                    starter.AddPlayerLine("bk_rite_pending", "bk_rite_pending", "bk_rite_confirm", "{=!}I have decided.",
+                        null, null, 100, null, null);
+
+                    starter.AddDialogLine("bk_rite_confirm", "bk_rite_confirm", "bk_rite_confirm",
+                        "{=!}{CLERGYMAN_RITE_CONFIRM}",
+                        null, null, 100, null);
+                    starter.AddPlayerLine("bk_rite_confirm", "bk_rite_confirm", "lord_talk_ask_something", "{=!}See it done.", 
+                        null, () => { if (selected != null) selected.Complete(Hero.MainHero); }, 
+                        100, null, null);
+                    starter.AddPlayerLine("bk_rite_confirm", "bk_rite_confirm", "lord_talk_ask_something", "{=D33fIGQe}Never mind.", 
+                        null, null, 100, null, null);
+
+                    StringBuilder sb = new StringBuilder();
+                    foreach (Rite rite in rites)
+                    {
+                        sb.Append(rite.GetName().ToString() + ", ");
+                        starter.AddPlayerLine("bk_preacher_asked_rites_answer", "bk_preacher_asked_rites_answer",
+                            "bk_rite_pending", rite.GetName().ToString(),
+                            () => true, () => 
+                            { 
+                                rite.Execute(Hero.MainHero);
+                                selected = rite;
+                            });
+                    }
                     starter.AddPlayerLine("bk_preacher_asked_rites_answer", "bk_preacher_asked_rites_answer", "lord_talk_ask_something", "{=D33fIGQe}Never mind.", null, null, 100, null, null);
+                    sb.Remove(sb.Length - 2, 2);
+                    MBTextManager.SetTextVariable("CLERGYMAN_RITE", riteText.SetTextVariable("RITES", faithText
+                        .SetTextVariable("FAITH", religion.Faith.GetFaithName())
+                        .SetTextVariable("RITES", sb.ToString())), false);
+
+
                 }
             }
 
@@ -164,7 +198,7 @@ namespace BannerKings.Behaviours
             return possible;
         }
 
-        private bool IsPreacher() => Campaign.Current.ConversationManager.CurrentConversationIsFirst && Hero.OneToOneConversationHero.IsPreacher &&
+        private bool IsPreacher() => Hero.OneToOneConversationHero.IsPreacher &&
                 BannerKingsConfig.Instance.ReligionsManager != null && BannerKingsConfig.Instance.ReligionsManager.IsPreacher(Hero.OneToOneConversationHero);
         private bool OnConditionClergymanGreeting()
         {

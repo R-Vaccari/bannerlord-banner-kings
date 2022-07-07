@@ -209,7 +209,7 @@ namespace BannerKings.Managers
             if (notifyPlayer && hero == Hero.MainHero)
                 InformationManager.AddQuickInformation(new TextObject("{=!}{HERO} has recieved {PIETY} piety.")
                     .SetTextVariable("HERO", hero.Name)
-                    .SetTextVariable("PIETY", piety));
+                    .SetTextVariable("PIETY", (int)piety));
         }
 
         public float GetPiety(Religion rel, Hero hero)

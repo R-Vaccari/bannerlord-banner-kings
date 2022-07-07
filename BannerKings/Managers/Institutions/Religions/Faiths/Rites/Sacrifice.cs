@@ -35,46 +35,59 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
                             delegate (List<InquiryElement> x)
                             {
                                 input = (Hero?)x[0].Identifier;
-                                Complete(executor);
+                                SetDialogue();
                             }, null, string.Empty));
         }
 
-        protected override void Complete(Hero actionTaker)
+        public override void Complete(Hero actionTaker)
         {
             if (input == null) return;
-            //Religion inputReligion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(input);
+            Religion inputReligion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(input);
+            Religion actionTakerReligion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(actionTaker);
+            if (inputReligion != null && inputReligion == actionTakerReligion) return;
             float piety = GetPietyReward();
-            KillCharacterAction.ApplyByMurder(input, actionTaker, false);
-            BannerKingsConfig.Instance.ReligionsManager.AddPiety(actionTaker, piety, true);
-            actionTaker.AddSkillXp(BKSkills.Instance.Theology, piety * 2f);
+            KillCharacterAction.ApplyByExecution(input, actionTaker, false);
+            InformationManager.AddQuickInformation(new TextObject("{=!}{SACRIFICE} was ritually sacrificed by {HERO}.")
+                    .SetTextVariable("HERO", actionTaker.Name)
+                    .SetTextVariable("SACRIFICE", input.Name), 
+                    0, actionTaker.CharacterObject, "event:/ui/notification/relation");
 
-            /*if (inputReligion == null || inputReligion != BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(actionTaker))
+            BannerKingsConfig.Instance.ReligionsManager.AddPiety(actionTaker, piety, true);
+            actionTaker.AddSkillXp(BKSkills.Instance.Theology, piety * 1.2f);
+            
+            foreach (Clan clan in Clan.All)
             {
-                int relationChangeForExecutingHero = Campaign.Current.Models.ExecutionRelationModel.GetRelationChangeForExecutingHero(victim, clan.Leader, out affectRelatives);
-                if (relationChangeForExecutingHero != 0)
-                    ChangeRelationAction.ApplyPlayerRelation(clan.Leader, relationChangeForExecutingHero, affectRelatives, true);
-                
-            }*/
+                Religion clanReligion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(clan.Leader);
+                if (clan != actionTaker.Clan && (clanReligion == null || !clanReligion.Doctrines.Contains("sacrifice")))
+                {
+                    bool affectRelatives;
+                    int relationChangeForExecutingHero = Campaign.Current.Models.ExecutionRelationModel.GetRelationChangeForExecutingHero(input, actionTaker, out affectRelatives);
+                    if (relationChangeForExecutingHero != 0)
+                        ChangeRelationAction.ApplyRelationChangeBetweenHeroes(actionTaker, clan.Leader, relationChangeForExecutingHero, true);
+                }
+            }
         }
 
         public new bool MeetsCondition(Hero hero) => base.MeetsCondition(hero) &&
             hero.IsPartyLeader && hero.PartyBelongedTo.PrisonRoster.TotalHeroes > 0;
-
         public override TextObject GetDescription() => new TextObject("{=!}Sacrifice {HERO} to prove your devotion.");
-
         public override TextObject GetName() => new TextObject("{=!}Human Sacrifice");
-
         public override RiteType GetRiteType() => RiteType.SACRIFICE;
-
         public override float GetTimeInterval() => 2f;
 
         public override float GetPietyReward()
         {
-            float renown = 150f;
-            if (input.Clan != null) renown = input.Clan.Renown;
+            float renown = 100f;
+            if (input.Clan != null) renown = input.Clan.Renown / 10f;
             return renown;
         }
 
-       
+        public override void SetDialogue()
+        {
+            //MBTextManager.SetTextVariable("CLERGYMAN_RITE_CONFIRM", new TextObject("{=!}The fate of {HERO} was sealed once they dared draw sword on us. Let us rejoice upon the glory we bathe ourselves in as the enemy bleeds!")
+            //   .SetTextVariable("HERO", input.Name), false);
+            MBTextManager.SetTextVariable("CLERGYMAN_RITE_CONFIRM", new TextObject("{=!}The fate of {HERO} was sealed once they dared draw sword on us. Affirm the rite and we shall rejoice upon the glory we bathe ourselves in as the enemy bleeds!")
+               .SetTextVariable("HERO", input.Name), false);
+        }
     }
 }
