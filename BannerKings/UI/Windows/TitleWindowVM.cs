@@ -188,11 +188,11 @@ namespace BannerKings.UI.Windows
         {
 			TitleAction action = BannerKingsConfig.Instance.TitleModel.GetFoundKingdom(Clan.PlayerClan.Kingdom, Hero.MainHero);
 			InformationManager.ShowInquiry(new InquiryData(new TextObject("{=!}Founding a new Kingdom").ToString(),
-					new TextObject("Found a new title for your kingdom. The title will legitimize your position and allow the de Jure domain of the kingdom to expand through de Jure drift of dukedoms, as well as extend your influence as a suzerain. Founding a title would increase your clan's renown by {RENOWN}. \n \nCosts: {GOLD} {GOLD_ICON}, {INFLUENCE} {INFLUENCE_ICON} \n\nCan form kingdom: {POSSIBLE} \n\nReason: {REASON}")
+					new TextObject("Found a new title for your kingdom. The title will legitimize your position and allow the de Jure domain of the kingdom to expand through de Jure drift of dukedoms, as well as extend your influence as a suzerain. Founding a title would increase your clan's renown by {RENOWN}. \n \nCosts: {GOLD} {GOLD_ICON}, {INFLUENCE} {INFLUENCE_ICON} \n\nCan form kingdom: {POSSIBLE} \n\nExplanation: {REASON}")
 					.SetTextVariable("POSSIBLE", GameTexts.FindText(action.Possible ? "str_yes" : "str_no"))
-					.SetTextVariable("GOLD", action.Gold)
+					.SetTextVariable("GOLD", (int)action.Gold)
 					.SetTextVariable("GOLD_ICON", "{=!}<img src=\"General\\Icons\\Coin@2x\" extend=\"8\">")
-					.SetTextVariable("INFLUENCE", action.Influence)
+					.SetTextVariable("INFLUENCE", (int)action.Influence)
 					.SetTextVariable("INFLUENCE_ICON", "{=!}<img src=\"General\\Icons\\Influence@2x\" extend=\"7\">")
 					.SetTextVariable("RENOWN", action.Renown)
 					.SetTextVariable("REASON", action.Reason)

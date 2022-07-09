@@ -14,8 +14,10 @@ namespace BannerKings.Models.BKModels
         public TitleAction GetFoundKingdom(Kingdom faction, Hero founder)
         {
             TitleAction foundAction = new TitleAction(ActionType.Found, null, founder);
-            foundAction.Gold = 500000;
-            foundAction.Influence = 1000;
+            foundAction.Gold = 500000 + (BannerKingsConfig.Instance.ClanFinanceModel.CalculateClanIncome(founder.Clan).ResultNumber *
+                CampaignTime.DaysInYear);
+            foundAction.Influence = 1000 + (BannerKingsConfig.Instance.InfluenceModel.CalculateInfluenceChange(founder.Clan).ResultNumber * 
+                CampaignTime.DaysInYear * 0.1f);
             foundAction.Renown = 100;
 
             if (faction == null)
@@ -55,7 +57,7 @@ namespace BannerKings.Models.BKModels
                 return foundAction;
             }
 
-            if (faction.Clans.Count < 1)
+            if (faction.Clans.Count < 3)
             {
                 foundAction.Possible = false;
                 foundAction.Reason = new TextObject("{=!}Cannot found a kingdom for a faction with less than 3 clans.");

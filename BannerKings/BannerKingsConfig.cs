@@ -31,6 +31,7 @@ namespace BannerKings
         public BKInfluenceModel InfluenceModel { get; } = new BKInfluenceModel();
         public BKTitleModel TitleModel { get; } = new BKTitleModel();
         public BKStabilityModel StabilityModel { get; } = new BKStabilityModel();
+        public BKClanFinanceModel ClanFinanceModel { get; } = new BKClanFinanceModel();
 
         public void InitManagers()
         {
