@@ -108,7 +108,7 @@ namespace BannerKings.Models
 
         public ExplainedNumber CalculateEffect(Settlement settlement)
         {
-            ExplainedNumber result = new ExplainedNumber(0.1f);
+            ExplainedNumber result = new ExplainedNumber(0.1f, true);
             result.LimitMin(0f);
             result.LimitMax(1f);
 
@@ -134,7 +134,7 @@ namespace BannerKings.Models
 
         public ExplainedNumber CalculateProductionEfficiency(Settlement settlement)
         {
-            ExplainedNumber result = new ExplainedNumber();
+            ExplainedNumber result = new ExplainedNumber(0, true);
             if (!settlement.IsVillage) result.Add(new DefaultWorkshopModel().GetPolicyEffectToProduction(settlement.Town));
             else result.Add(0.7f);
             PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
@@ -158,7 +158,7 @@ namespace BannerKings.Models
 
         public ExplainedNumber CalculateProductionQuality(Settlement settlement)
         {
-            return new ExplainedNumber(1f);
+            return new ExplainedNumber(1f, true);
         }
     }
 }

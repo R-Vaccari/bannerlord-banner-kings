@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Localization;
 
@@ -13,34 +14,33 @@ namespace BannerKings.Managers.Titles
         public float Renown { get; set; }
         public ActionType Type { get; private set; }
         public FeudalTitle Title { get; private set; }
+        public List<FeudalTitle> Vassals { get; private set; }
         public Hero ActionTaker { get; private set; }
 
-        public TitleAction(ActionType type, FeudalTitle title, Hero taker)
+        public TitleAction(ActionType type, FeudalTitle title, Hero actionTaker)
         {
-            this.Type = type;
-            this.Title = title;
-            this.ActionTaker = taker;
+            Type = type;
+            Title = title;
+            ActionTaker = actionTaker;
+            Vassals = new List<FeudalTitle>();
         }
 
-        public TitleAction(bool possible, TextObject reason, float gold, float influence, float renown)
-        {
-            this.Possible = possible;
-            this.Reason = reason;
-            this.Gold = gold;
-            this.Influence = influence;
-            this.Renown = renown;
-        }
+        public void SetTile(FeudalTitle title) => Title = title;
+
+        public void SetVassals(List<FeudalTitle> vassals) => Vassals = vassals;
 
         public void TakeAction(Hero receiver)
         {
-            if (!this.Possible) return;
+            if (!Possible) return;
 
-            if (this.Type == ActionType.Usurp)
+            if (Type == ActionType.Usurp)
                 BannerKingsConfig.Instance.TitleManager.UsurpTitle(this.Title.deJure, this);
-            else if (this.Type == ActionType.Claim)
+            else if (Type == ActionType.Claim)
                 BannerKingsConfig.Instance.TitleManager.AddOngoingClaim(this);
             else if (Type == ActionType.Revoke)
                 BannerKingsConfig.Instance.TitleManager.RevokeTitle(this);
+            else if (Type == ActionType.Found)
+                BannerKingsConfig.Instance.TitleManager.FoundKingdom(this);
             else BannerKingsConfig.Instance.TitleManager.GrantTitle(receiver, this.ActionTaker, this.Title, this.Influence);
         }
     }
@@ -52,6 +52,7 @@ namespace BannerKings.Managers.Titles
         Grant,
         Destroy,
         Create,
-        Claim
+        Claim,
+        Found
     }
 }

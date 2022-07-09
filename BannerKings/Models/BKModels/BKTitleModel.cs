@@ -4,12 +4,78 @@ using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
+using System.Linq;
 
 namespace BannerKings.Models.BKModels
 {
     public class BKTitleModel : IBannerKingsModel
     {
 
+        public TitleAction GetFoundKingdom(Kingdom faction, Hero founder)
+        {
+            TitleAction foundAction = new TitleAction(ActionType.Found, null, founder);
+            foundAction.Gold = 500000 + (BannerKingsConfig.Instance.ClanFinanceModel.CalculateClanIncome(founder.Clan).ResultNumber *
+                CampaignTime.DaysInYear);
+            foundAction.Influence = 1000 + (BannerKingsConfig.Instance.InfluenceModel.CalculateInfluenceChange(founder.Clan).ResultNumber * 
+                CampaignTime.DaysInYear * 0.1f);
+            foundAction.Renown = 100;
+
+            if (faction == null)
+            {
+                foundAction.Possible = false;
+                foundAction.Reason = new TextObject("{=!}No kingdom.");
+                return foundAction;
+            }
+
+            FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(faction);
+            if (title != null)
+            {
+                foundAction.Possible = false;
+                foundAction.Reason = new TextObject("{=!}Faction sovereign title already exists.");
+                return foundAction;
+            }
+
+            if (faction.Leader != founder)
+            {
+                foundAction.Possible = false;
+                foundAction.Reason = new TextObject("{=!}Not leader of current faction.");
+                return foundAction;
+            }
+
+            List<FeudalTitle> titles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(founder);
+            if (titles.Any(x => x.type <= TitleType.Kingdom)) 
+            {
+                foundAction.Possible = false;
+                foundAction.Reason = new TextObject("{=!}Cannot found a kingdom while already being a de Jure sovereign.");
+                return foundAction;
+            }
+
+            if (!titles.Any(x => x.type <= TitleType.Dukedom))
+            {
+                foundAction.Possible = false;
+                foundAction.Reason = new TextObject("{=!}Cannot found a kingdom without a de Jure duke level title.");
+                return foundAction;
+            }
+
+            if (faction.Clans.Count < 3)
+            {
+                foundAction.Possible = false;
+                foundAction.Reason = new TextObject("{=!}Cannot found a kingdom for a faction with less than 3 clans.");
+                return foundAction;
+            }
+
+            if (founder.Gold < foundAction.Gold || founder.Clan.Influence < foundAction.Influence)
+            {
+                foundAction.Possible = false;
+                foundAction.Reason = new TextObject("{=!}You lack the required resources.");
+                return foundAction;
+            }
+
+            foundAction.Possible = true;
+            foundAction.Reason = new TextObject("{=!}Kingdom can be founded.");
+
+            return foundAction;
+        }
 
         public TitleAction GetAction(ActionType type, FeudalTitle title, Hero taker, Hero receiver = null)
         {

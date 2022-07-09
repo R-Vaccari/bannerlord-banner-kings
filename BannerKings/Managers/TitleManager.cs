@@ -284,6 +284,23 @@ namespace BannerKings.Managers
             GainKingdomInfluenceAction.ApplyForDefault(grantor, influence);
         }
 
+        public void FoundKingdom(TitleAction action)
+        {
+            FeudalTitle title = CreateKingdom(action.ActionTaker, action.ActionTaker.Clan.Kingdom, TitleType.Kingdom, new List<FeudalTitle>(action.Vassals), action.Title.contract);
+            action.ActionTaker.Clan.AddRenown(action.Renown);
+
+            action.Title.DriftTitle(title, false);
+            foreach (FeudalTitle vassal in action.Vassals)
+                vassal.DriftTitle(title);
+
+            action.ActionTaker.ChangeHeroGold(-(int)action.Gold);
+            GainKingdomInfluenceAction.ApplyForDefault(action.ActionTaker, -action.Influence);
+            InformationManager.AddQuickInformation(new TextObject("{=!}The {TITLE} has been founded by {FOUNDER}.")
+                    .SetTextVariable("FOUNDER", action.ActionTaker.Name)
+                    .SetTextVariable("TITLE", title.FullName),
+                    0, null, "event:/ui/notification/relation");
+        }
+
         public void UsurpTitle(Hero oldOwner, TitleAction action)
         {
             Hero usurper = action.ActionTaker;

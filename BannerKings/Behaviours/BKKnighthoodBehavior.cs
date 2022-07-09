@@ -91,8 +91,7 @@ namespace BannerKings.Behaviors
 
         
         private bool CanCreateClan(Hero hero) => hero.Gold >= 50000 && BannerKingsConfig.Instance.TitleManager.GetKnightInfluence(hero) >= 350f && hero.Occupation == Occupation.Lord &&
-            hero.Father != hero.Clan.Leader && hero.Mother != hero.Clan.Leader && !hero.Children.Contains(hero.Clan.Leader) && 
-            !hero.Siblings.Contains(hero.Clan.Leader);
+            !Utils.Helpers.IsCloseFamily(hero, hero.Clan.Leader);
 
         private void OnSessionLaunched(CampaignGameStarter campaignGameStarter)
         {
@@ -323,7 +322,7 @@ namespace BannerKings.Behaviors
                                 hint = new TextObject("{=slzfQzl3}This hero is lost", null).ToString();
                             else if (hero.HeroState == Hero.CharacterStates.Fugitive)
                                 hint = new TextObject("{=dD3kRDHi}This hero is a fugitive and running from their captors. They will be available after some time.", null).ToString();
-                            else if (!BannerKingsConfig.Instance.TitleManager.IsHeroKnighted(hero))
+                            else if (!Utils.Helpers.IsCloseFamily(hero, Hero.MainHero) && !BannerKingsConfig.Instance.TitleManager.IsHeroKnighted(hero))
                                 hint = new TextObject("A hero must be knighted and granted land before being able to raise a personal retinue. You may bestow knighthood by talking to them.", null).ToString();
                             else isEnabled = true;
 

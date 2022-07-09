@@ -16,7 +16,7 @@ namespace BannerKings.Managers.AI
         public bool AcceptNotableAid(Clan clan, PopulationData data)
         {
             Kingdom kingdom = clan.Kingdom;
-            return data.Stability >= 0.5f && data.NotableSupport >= 0.5f && kingdom != null &&
+            return data.Stability >= 0.5f && data.NotableSupport.ResultNumber >= 0.5f && kingdom != null &&
                     FactionManager.GetEnemyFactions(kingdom).Count() > 0 && clan.Influence > 50f * clan.Tier;
         }
 

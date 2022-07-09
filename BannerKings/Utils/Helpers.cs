@@ -15,6 +15,8 @@ namespace BannerKings.Utils
     {
 
         public static bool IsClanLeader(Hero hero) => hero.Clan != null && hero.Clan.Leader == hero;
+        public static bool IsCloseFamily(Hero hero, Hero family) => hero.Father == family || hero.Mother == family || hero.Children.Contains(family) ||
+            hero.Siblings.Contains(family);
 
         public static BuildingType _buildingCastleRetinue = Game.Current.ObjectManager.RegisterPresumedObject<BuildingType>(new BuildingType("building_castle_retinue"));
         public static int GetRosterCount(TroopRoster roster, string filter = null)
@@ -492,7 +494,7 @@ namespace BannerKings.Utils
                     else if (type == TitleType.Barony)
                         title = new TextObject("{=!}Voivodeship");
                     else title = new TextObject("{=!}Gospodin");
-                } 
+                }
                 else if (culture.StringId == "aserai")
                 {
                     if (type == TitleType.Kingdom)
@@ -501,7 +503,8 @@ namespace BannerKings.Utils
                         title = new TextObject("{=!}Emirate");
                     else if (type == TitleType.County)
                         title = new TextObject("{=!}Sheikhdom");
-                } else if (culture.StringId == "battania")
+                }
+                else if (culture.StringId == "battania")
                 {
                     if (government == GovernmentType.Tribal)
                     {

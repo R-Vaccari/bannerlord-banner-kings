@@ -1,5 +1,4 @@
 ﻿using BannerKings.Managers.Titles;
-using BannerKings.Populations;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -9,7 +8,7 @@ using TaleWorlds.Localization;
 
 namespace BannerKings.Models
 {
-    class BKClanFinanceModel : CalradiaExpandedKingdoms.Models.CEKClanFinanceModel
+    public class BKClanFinanceModel : DefaultClanFinanceModel
     {
 
         public override ExplainedNumber CalculateClanGoldChange(Clan clan, bool includeDescriptions = false, bool applyWithdrawals = false)
