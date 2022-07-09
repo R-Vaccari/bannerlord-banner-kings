@@ -376,6 +376,39 @@ namespace BannerKings.Utils
                         else title = new TextObject("{=!}Hlaford");
                     }
                 }
+                else if (culture.StringId == "apolssalian")
+                {
+                    if (type == TitleType.Kingdom)
+                    {
+                        if (female)
+                            title = new TextObject("{=!}Basilissa");
+                        else title = new TextObject("{=!}Basileus");
+                    }
+                    else if (type == TitleType.Dukedom)
+                    {
+                        if (female)
+                            title = new TextObject("{=!}Doukissa");
+                        else title = new TextObject("{=!}Doux");
+                    }
+                    else if (type == TitleType.County)
+                    {
+                        if (female)
+                            title = new TextObject("{=!}Komessa");
+                        else title = new TextObject("{=!}Komes");
+                    }
+                    else if (type == TitleType.Barony)
+                    {
+                        if (female)
+                            title = new TextObject("{=!}Baroni");
+                        else title = new TextObject("{=!}Baronos");
+                    }
+                    else
+                    {
+                        if (female)
+                            title = new TextObject("{=!}Árkhousa");
+                        else title = new TextObject("{=!}Árkhon");
+                    }
+                }
             }
 
             if (title == null)
