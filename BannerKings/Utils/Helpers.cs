@@ -15,6 +15,8 @@ namespace BannerKings.Utils
     {
 
         public static bool IsClanLeader(Hero hero) => hero.Clan != null && hero.Clan.Leader == hero;
+        public static bool IsCloseFamily(Hero hero, Hero family) => hero.Father == family || hero.Mother == family || hero.Children.Contains(family) ||
+            hero.Siblings.Contains(family);
 
         public static BuildingType _buildingCastleRetinue = Game.Current.ObjectManager.RegisterPresumedObject<BuildingType>(new BuildingType("building_castle_retinue"));
         public static int GetRosterCount(TroopRoster roster, string filter = null)
