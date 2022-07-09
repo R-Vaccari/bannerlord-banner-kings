@@ -113,7 +113,7 @@
 			</duchy>
 		</kingdom>
 		
-		<kingdom faction="Nordling" contract="tribal" deJure="lord_2_1">
+		<kingdom faction="Nordlings" contract="tribal" deJure="lord_2_1">
 			<duchy name="Nordden" deJure="lord_2_1">
 				<county settlement="Balgard"  deJure="lord_2_1">
 					<barony settlement="Takor Castle" deJure="lord_2_1"/>
@@ -163,7 +163,7 @@
 		</kingdom>
 		
 		
-		<kingdom faction="Northern Empire" contract="republic" deJure="lord_1_1">
+		<kingdom faction="Dryatican Republic" contract="republic" deJure="lord_1_1">
 			<duchy name="Nevys" deJure="lord_1_20">
 				<county settlement="Amprela" deJure="lord_1_20">
 					<barony settlement="Pons Castle" deJure="lord_1_51"/>
@@ -209,7 +209,7 @@
 			</duchy>
 		</kingdom>
 		
-		<kingdom faction="Southern Empire" contract="imperial" deJure="lord_1_14">
+		<kingdom faction="Calradian Empire" contract="imperial" deJure="lord_1_14">
 			<duchy name="Sethys" deJure="lord_1_54">
 				<county settlement="Phycaon" deJure="lord_1_54"/>
 				<county settlement="Vostrum" deJure="lord_1_30">
@@ -294,13 +294,13 @@
 			</duchy>
 		</kingdom>
 		
-		<kingdom faction="Khergit" contract="tribal" deJure="lord_6_3">
-			<duchy name="Kohi Rohini" deJure="lord_6_3">
-				<county settlement="Odokh" deJure="lord_6_3">
+		<kingdom faction="Khergit" contract="tribal" deJure="lord_6_4">
+			<duchy name="Kohi Rohini" deJure="lord_6_4">
+				<county settlement="Odokh" deJure="lord_6_4">
 					<barony settlement="Gereden Castle" deJure="lord_K9_l"/>
 				</county>
 				<county settlement="Khuovai" deJure="lord_6_19">
-					<barony settlement="Tsogeel Castle" deJure="lord_6_3"/>
+					<barony settlement="Tsogeel Castle" deJure="lord_6_4"/>
 				</county>
 			</duchy>
 			<duchy name="Asacys" deJure="lord_6_17">
