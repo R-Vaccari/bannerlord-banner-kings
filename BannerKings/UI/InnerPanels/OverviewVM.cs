@@ -44,8 +44,8 @@ namespace BannerKings.UI
             if (data != null && data.Classes != null)
             {
                 data.Classes.ForEach(popClass => PopList
-                    .Add(new PopulationInfoVM(Helpers.Helpers.GetClassName(popClass.type, settlement.Culture).ToString(), popClass.count,
-                        Helpers.Helpers.GetClassHint(popClass.type, settlement.Culture))));
+                    .Add(new PopulationInfoVM(Utils.Helpers.GetClassName(popClass.type, settlement.Culture).ToString(), popClass.count,
+                        Utils.Helpers.GetClassHint(popClass.type, settlement.Culture))));
 
                 data.CultureData.Cultures.ForEach(culture => CultureList
                     .Add(new CultureElementVM(data, culture)));

@@ -31,6 +31,7 @@ using static TaleWorlds.CampaignSystem.SandBox.Issues.EscortMerchantCaravanIssue
 using TaleWorlds.CampaignSystem.SandBox.Issues;
 using Helpers;
 using BannerKings.Managers.Items;
+using BannerKings.Managers.Kingdoms.Policies;
 
 namespace BannerKings
 {
@@ -89,6 +90,7 @@ namespace BannerKings
                 campaignStarter.LoadGameTexts(BasePath.Name + "Modules/BannerKings/ModuleData/module_strings.xml");
                 BKItemCategories.Instance.Initialize();
                 BKItems.Instance.Initialize();
+                BKPolicies.Instance.Initialize();
             }
 
             //xtender.Register(typeof(Main).Assembly);
@@ -871,7 +873,7 @@ namespace BannerKings
                                 }
 
                                 int finalAmount = MBRandom.RoundRandomized(desiredAmount);
-                                ConsumptionType type = Helpers.Helpers.GetTradeGoodConsumptionType(item);
+                                ConsumptionType type = Utils.Helpers.GetTradeGoodConsumptionType(item);
                                 if (finalAmount > amount)
                                 {
                                     finalAmount = amount;

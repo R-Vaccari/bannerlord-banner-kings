@@ -1,4 +1,5 @@
-﻿using BannerKings.Managers.Titles;
+﻿using BannerKings.Actions;
+using BannerKings.Managers.Titles;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
@@ -61,17 +62,7 @@ namespace BannerKings.Managers.Helpers
                     if (pair.Value.Any(x => x.fief != null && !x.fief.IsVillage && x.DeFacto.Clan == victim.Clan)) 
                     {
                         List<FeudalTitle> landed = pair.Value.FindAll(x => x.fief != null && !x.fief.IsVillage);
-                        Clan newClan = Clan.CreateCompanionToLordClan(pair.Key, landed[0].fief, 
-                            NameGenerator.Current.GenerateClanName(pair.Key.Culture, landed[0].fief),
-                            pair.Key.Culture.PossibleClanBannerIconsIDs.GetRandomElement());
-
-                        if (newClan.Leader.Spouse != null && newClan.Leader.Spouse.Clan == victim.Clan)
-                            newClan.Leader.Spouse.Clan = newClan;
-
-                        if (newClan.Leader.Children.Count > 0)
-                            foreach (Hero child in newClan.Leader.Children)
-                                if (child.Clan == victim.Clan) 
-                                    child.Clan = newClan;
+                        Clan newClan = ClanActions.CreateNewClan(pair.Key, landed[0].fief, pair.Key.StringId + "_split_clan");
 
                         foreach (FeudalTitle t in mainHeirTitles)
                             t.AddClaim(newClan.Leader, ClaimType.Clan_Split, true);

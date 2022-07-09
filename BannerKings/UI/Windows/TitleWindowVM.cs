@@ -130,7 +130,7 @@ namespace BannerKings.UI.Windows
 					TextObject text = new TextObject("{=!}{LAW} - ({SUPPORT}% support)");
 					text.SetTextVariable("LAW", type.ToString());
 					text.SetTextVariable("SUPPORT", decision.CalculateKingdomSupport(this.kingdom));
-					laws.Add(new InquiryElement(type, text.ToString(), null, true, BannerKings.Helpers.Helpers.GetGenderLawDescription(type)));
+					laws.Add(new InquiryElement(type, text.ToString(), null, true, BannerKings.Utils.Helpers.GetGenderLawDescription(type)));
 				}
 					
 			return laws;
@@ -146,7 +146,7 @@ namespace BannerKings.UI.Windows
 					TextObject text = new TextObject("{=!}{LAW} - ({SUPPORT}% support)");
 					text.SetTextVariable("LAW", type.ToString());
 					text.SetTextVariable("SUPPORT", decision.CalculateKingdomSupport(this.kingdom));
-					laws.Add(new InquiryElement(type, text.ToString(), null, true, BannerKings.Helpers.Helpers.GetInheritanceDescription(type)));
+					laws.Add(new InquiryElement(type, text.ToString(), null, true, BannerKings.Utils.Helpers.GetInheritanceDescription(type)));
 				}
 					
 			return laws;
@@ -160,9 +160,9 @@ namespace BannerKings.UI.Windows
                 {
 					BKSuccessionDecision decision = new BKSuccessionDecision(this.data.Settlement.OwnerClan, type, this.title?.sovereign);
 					TextObject text = new TextObject("{=!}{LAW} - ({SUPPORT}% support)");
-					text.SetTextVariable("LAW", Helpers.Helpers.GetSuccessionTypeName(type));
+					text.SetTextVariable("LAW", Utils.Helpers.GetSuccessionTypeName(type));
 					text.SetTextVariable("SUPPORT", decision.CalculateKingdomSupport(this.kingdom));
-					laws.Add(new InquiryElement(type, text.ToString(), null, true, BannerKings.Helpers.Helpers.GetSuccessionTypeDescription(type)));
+					laws.Add(new InquiryElement(type, text.ToString(), null, true, BannerKings.Utils.Helpers.GetSuccessionTypeDescription(type)));
 				}
 					
 			return laws;
@@ -178,7 +178,7 @@ namespace BannerKings.UI.Windows
 					TextObject text = new TextObject("{=!}{LAW} - ({SUPPORT}% support)");
 					text.SetTextVariable("LAW", type.ToString());
 					text.SetTextVariable("SUPPORT", decision.CalculateKingdomSupport(this.kingdom));
-					laws.Add(new InquiryElement(type, text.ToString(), null, true, BannerKings.Helpers.Helpers.GetGovernmentDescription(type)));
+					laws.Add(new InquiryElement(type, text.ToString(), null, true, BannerKings.Utils.Helpers.GetGovernmentDescription(type)));
 				}
 					
 			return laws;

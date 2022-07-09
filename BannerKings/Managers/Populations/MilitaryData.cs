@@ -36,7 +36,7 @@ namespace BannerKings.Managers.Populations
         public void DeduceManpower(PopulationData data, int quantity, CharacterObject troop)
         {
             int tier = troop.Tier;
-            bool noble = BannerKings.Helpers.Helpers.IsRetinueTroop(troop, settlement.Culture);
+            bool noble = BannerKings.Utils.Helpers.IsRetinueTroop(troop, settlement.Culture);
             if (noble)
             {
                 if (this.nobleManpower >= quantity) this.nobleManpower -= quantity;

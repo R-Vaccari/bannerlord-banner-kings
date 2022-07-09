@@ -84,7 +84,7 @@ namespace BannerKings.UI
                     float value = data.EconomicData.Satisfactions[i];
                     ConsumptionType type = (ConsumptionType)i;
                     string desc = type.ToString() + " Goods:";
-                    SatisfactionInfo.Add(new InformationElement(desc, FormatValue(value), Helpers.Helpers.GetConsumptionHint(type)));
+                    SatisfactionInfo.Add(new InformationElement(desc, FormatValue(value), Utils.Helpers.GetConsumptionHint(type)));
                 }
 
                 criminalItem = (BKCriminalPolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(settlement, "criminal");

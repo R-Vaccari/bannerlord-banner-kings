@@ -9,8 +9,12 @@ using BannerKings.Managers.Titles;
 
 namespace BannerKings.Models
 {
-    class BKInfluenceModel : DefaultClanPoliticsModel
+    public class BKInfluenceModel : DefaultClanPoliticsModel
     {
+
+        public float GetRejectKnighthoodCost(Clan clan) => 10f + (CalculateInfluenceChange(clan, false).ResultNumber * 0.025f * (float)CampaignTime.DaysInYear);
+        
+
         public override ExplainedNumber CalculateInfluenceChange(Clan clan, bool includeDescriptions = false)
         {
             ExplainedNumber baseResult = base.CalculateInfluenceChange(clan, includeDescriptions);
@@ -29,7 +33,7 @@ namespace BannerKings.Models
                     VillageData villageData = data.VillageData;
                     if (villageData != null)
                     {
-                        float manor = villageData.GetBuildingLevel(DefaultVillageBuildings.Instance.TrainningGrounds);
+                        float manor = villageData.GetBuildingLevel(DefaultVillageBuildings.Instance.Manor);
                         if (manor > 0)
                             baseResult.AddFactor(manor == 3 ? 0.5f : manor * 0.15f, new TextObject("{=!}Manor"));
                     }
@@ -50,13 +54,14 @@ namespace BannerKings.Models
                     generalAutonomy += -0.5f * data.Autonomy;
                     i++;
 
-                    if (settlement.IsVillage)
+                    if (settlement.IsVillage && BannerKingsConfig.Instance.TitleManager != null)
                     {
                         FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement);
                         if (title.deJure != null)
                         {
                             Clan deJureClan = title.deJure.Clan;
-                            if (title.deJure != deJureClan.Leader && settlement.OwnerClan == deJureClan) title.deJure.AddPower(baseResult.ResultNumber * 0.1f);
+                            if (title.deJure != deJureClan.Leader && settlement.OwnerClan == deJureClan) 
+                                BannerKingsConfig.Instance.TitleManager.AddKnightInfluence(title.deJure, baseResult.ResultNumber * 0.1f);
                         }
                     }
                 }

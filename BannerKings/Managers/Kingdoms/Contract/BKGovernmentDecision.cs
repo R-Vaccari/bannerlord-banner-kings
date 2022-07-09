@@ -192,7 +192,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
 
 
             textObject.SetTextVariable("KINGDOM", base.Kingdom.InformalName);
-            textObject.SetTextVariable("POLICY_DESCRIPTION", BannerKings.Helpers.Helpers
+            textObject.SetTextVariable("POLICY_DESCRIPTION", BannerKings.Utils.Helpers
                 .GetGovernmentString(newGovernment ? this.governmentType : this.Title.contract.Government));
             if (isShortVersion || base.IsSingleClanDecision())
                 textObject.SetTextVariable("POLICY_SUPPORT", TextObject.Empty);
@@ -211,7 +211,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
 
         public override TextObject GetGeneralTitle()
         {
-            return new TextObject(BannerKings.Helpers.Helpers
+            return new TextObject(BannerKings.Utils.Helpers
                 .GetGovernmentString(this.governmentType));
         }
 
@@ -230,8 +230,8 @@ namespace BannerKings.Managers.Kingdoms.Contract
             TextObject textObject = new TextObject("{=!}{CLAN} proposes a change of government, currently {CURRENT} to {PROPOSED}. You can pick your stance regarding this decision.", null);
 
             textObject.SetTextVariable("CLAN", this.DetermineChooser().Leader.Name);
-            textObject.SetTextVariable("CURRENT", BannerKings.Helpers.Helpers.GetGovernmentString(this.Title.contract.Government, base.Kingdom.Culture));
-            textObject.SetTextVariable("PROPOSED", BannerKings.Helpers.Helpers.GetGovernmentString(governmentType, base.Kingdom.Culture));
+            textObject.SetTextVariable("CURRENT", BannerKings.Utils.Helpers.GetGovernmentString(this.Title.contract.Government, base.Kingdom.Culture));
+            textObject.SetTextVariable("PROPOSED", BannerKings.Utils.Helpers.GetGovernmentString(governmentType, base.Kingdom.Culture));
             return textObject;
         }
 

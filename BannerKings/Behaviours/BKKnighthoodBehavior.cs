@@ -13,6 +13,7 @@ using TaleWorlds.CampaignSystem.ViewModelCollection.ClanManagement.Categories;
 using SandBox;
 using System.Linq;
 using BannerKings.Managers.Titles;
+using BannerKings.Actions;
 
 namespace BannerKings.Behaviors
 {
@@ -33,45 +34,63 @@ namespace BannerKings.Behaviors
 
         private void OnHeroDailyTick(Hero hero)
         {
-            if (hero.Clan == null || hero == hero.Clan.Leader || hero.Occupation != Occupation.Lord || 
+            if (hero.Clan == null || hero == hero.Clan.Leader || hero == Hero.MainHero || hero.Occupation != Occupation.Lord || 
                 BannerKingsConfig.Instance.TitleManager == null) return;
 
             FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(hero);
             if (title == null ||  title.type != TitleType.Lordship || title.fief.Village == null || !CanCreateClan(hero)) return;
 
             Clan originalClan = hero.Clan;
-            Settlement settlement = title.fief.Village.TradeBound;
-            TextObject name = GetRandomName(hero.Culture, settlement);
-            if (name == null || Clan.All.Any((Clan t) => t.Name.Equals(name)) || Clan.PlayerClan.Name.Equals(name)) return;
-            Clan clan = Clan.CreateClan(hero.StringId + "_knight_clan");
-            clan.InitializeClan(name, name, hero.Culture, Banner.CreateOneColoredBannerWithOneIcon(settlement.MapFaction.Banner.GetFirstIconColor(), settlement.MapFaction.Banner.GetPrimaryColor(), 
-                hero.Culture.PossibleClanBannerIconsIDs.GetRandomElement()), settlement.GatePosition, false);
-            clan.Kingdom = originalClan.Kingdom;
-            clan.AddRenown(150f);
-            hero.Clan = null;
-            hero.CompanionOf = null;
-            hero.Clan = clan;
-            clan.SetLeader(hero);
-            hero.AddPower(-hero.Power);
-            InformationManager.AddQuickInformation(new TextObject("{=!}The {NEW} has been formed by {HERO}, previously a knight of {ORIGINAL}.")
-                            .SetTextVariable("NEW", clan.Name)
+            if (hero.Spouse != null && Utils.Helpers.IsClanLeader(hero.Spouse)) return;
+
+            if (originalClan != Clan.PlayerClan) CreateClan(hero, originalClan, title);
+            else
+            {
+
+                TextObject clanName = ClanActions.CanCreateNewClan(hero, title.fief);
+                if (clanName == null) return;
+
+                TextObject requestText;
+                if (hero.IsFriend(Hero.MainHero)) requestText = new TextObject("{=!}I humbly ask of you to release me of my duties in the {CLAN}. I shall remain as your vassal and loyal friend.");
+                else if (hero.IsEnemy(Hero.MainHero)) requestText = new TextObject("{=!}I request of you to release me of my duties in the {CLAN}. It is time for me to lead my own family.");
+                else requestText = new TextObject("{=!}I demand of you to release me of the {CLAN}. It is time we part ways.");
+                requestText = requestText.SetTextVariable("CLAN", originalClan.Name);
+
+                float cost = BannerKingsConfig.Instance.InfluenceModel.GetRejectKnighthoodCost(originalClan);
+                InformationManager.ShowInquiry(new InquiryData(new TextObject("The clan of {HERO}").SetTextVariable("HERO", hero.Name).ToString(),
+                    new TextObject("{GREETING} {PLAYER}, {TEXT}\nRejecting their request would cost {INFLUENCE} influence.")
+                    .SetTextVariable("GREETING", GameTexts.FindText(Hero.MainHero.IsFemale ? "str_my_lady" : "str_my_lord"))
+                    .SetTextVariable("PLAYER", Hero.MainHero.Name)
+                    .SetTextVariable("TEXT", requestText)
+                    .SetTextVariable("INFLUENCE", cost)
+                    .ToString(),
+                    true, true, GameTexts.FindText("str_accept").ToString(), GameTexts.FindText("str_reject").ToString(), 
+                    () =>
+                    {
+                        ChangeRelationAction.ApplyRelationChangeBetweenHeroes(hero, originalClan.Leader, 5);
+                        CreateClan(hero, originalClan, title, clanName);
+                    }, 
+                    () =>
+                    {
+                        ChangeRelationAction.ApplyRelationChangeBetweenHeroes(hero, originalClan.Leader, -12);
+                        GainKingdomInfluenceAction.ApplyForDefault(originalClan.Leader, -cost);
+                        BannerKingsConfig.Instance.TitleManager.AddKnightInfluence(hero, -200);
+                    }), false);
+            }
+            
+        }
+
+        private void CreateClan(Hero hero, Clan originalClan, FeudalTitle title, TextObject name = null)
+        {
+            Clan newClan = ClanActions.CreateNewClan(hero, title.fief, hero.StringId + "_knight_clan", name, 150f, true);
+            if (newClan != null) InformationManager.AddQuickInformation(new TextObject("{=!}The {NEW} has been formed by {HERO}, previously a knight of {ORIGINAL}.")
+                            .SetTextVariable("NEW", hero.Clan.Name)
                             .SetTextVariable("HERO", hero.Name)
                             .SetTextVariable("ORIGINAL", originalClan.Name));
         }
 
-        private TextObject GetRandomName(CultureObject culture, Settlement settlement)
-        {
-            TextObject random = null;
-            if (culture.ClanNameList.Count > 1)
-                random = culture.ClanNameList.GetRandomElementInefficiently();
-            else
-            {
-                random = culture.ClanNameList[0];
-                random.SetTextVariable("ORIGIN_SETTLEMENT", settlement.Name);
-            }
-            return random;
-        }
-        private bool CanCreateClan(Hero hero) => hero.Gold >= 30000 && hero.Power >= 250f && hero.Occupation == Occupation.Lord &&
+        
+        private bool CanCreateClan(Hero hero) => hero.Gold >= 50000 && BannerKingsConfig.Instance.TitleManager.GetKnightInfluence(hero) >= 350f && hero.Occupation == Occupation.Lord &&
             hero.Father != hero.Clan.Leader && hero.Mother != hero.Clan.Leader && !hero.Children.Contains(hero.Clan.Leader) && 
             !hero.Siblings.Contains(hero.Clan.Leader);
 
@@ -185,8 +204,8 @@ namespace BannerKings.Behaviors
         {
             InformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                     "Select the fief you would like to give away", string.Empty, lordshipsToGive, true, 1, 
-                    GameTexts.FindText("str_done", null).ToString(), "", new Action<List<InquiryElement>>(this.OnNewPartySelectionOver), 
-                    new Action<List<InquiryElement>>(this.OnNewPartySelectionOver), ""), false);
+                    GameTexts.FindText("str_done", null).ToString(), "", new Action<List<InquiryElement>>(OnNewPartySelectionOver), 
+                    new Action<List<InquiryElement>>(OnNewPartySelectionOver), ""), false);
         }
 
         private void OnNewPartySelectionOver(List<InquiryElement> element)
@@ -199,8 +218,7 @@ namespace BannerKings.Behaviors
             GainKingdomInfluenceAction.ApplyForDefault(Hero.MainHero, -150f);
             GiveGoldAction.ApplyBetweenCharacters(Hero.MainHero, knight, 5000);
             knight.SetNewOccupation(Occupation.Lord);
-            knight.Clan = null;
-            knight.Clan = Clan.PlayerClan;
+            ClanActions.JoinClan(knight, Clan.PlayerClan);
         }
     }
 
@@ -244,11 +262,11 @@ namespace BannerKings.Behaviors
                     {
                         if (title.contract != null) government = title.contract.Government;
                         if (current == null)
-                            desc += string.Format("{0} of {1}", Helpers.Helpers.GetTitleHonorary(title.type, government, false), title.shortName);
+                            desc += string.Format("{0} of {1}", Utils.Helpers.GetTitleHonorary(title.type, government, false), title.shortName);
                         else if (current.type == title.type)
                             desc += ", " + title.shortName;
                         else if (current.type != title.type)
-                            desc += string.Format(" and {0} of {1}", Helpers.Helpers.GetTitleHonorary(title.type, government, false), title.shortName);
+                            desc += string.Format(" and {0} of {1}", Utils.Helpers.GetTitleHonorary(title.type, government, false), title.shortName);
                         current = title;
                     }
                     __result = __result + Environment.NewLine + desc;

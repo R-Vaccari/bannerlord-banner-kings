@@ -4,6 +4,7 @@ using Helpers;
 using System;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.SandBox.GameComponents;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -12,8 +13,8 @@ using static BannerKings.Managers.PopulationManager;
 
 namespace BannerKings.Models
 {
-    class BKConstructionModel : CEKBuildingConstructionModel
-	{
+    public class BKConstructionModel : DefaultBuildingConstructionModel
+    {
 		public ExplainedNumber CalculateVillageConstruction(Settlement settlement)
         {
 			ExplainedNumber result = new ExplainedNumber(0f, true, null);
