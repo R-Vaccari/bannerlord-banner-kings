@@ -426,16 +426,8 @@ namespace BannerKings.Utils
                     else if (type == TitleType.Barony)
                         title = new TextObject("{=!}Voivodeship");
                     else title = new TextObject("{=!}Gospodin");
-                } else if (culture.StringId == "sturgia")
-                {
-                    if (type == TitleType.Kingdom)
-                    {
-                        if (government == GovernmentType.Republic)
-                            title = new TextObject("{=!}Princedom");
-                    }
-                        
                 }
-                else if (culture.StringId == "sturgia")
+                else if (culture.StringId == "aserai")
                 {
                     if (type == TitleType.Kingdom)
                         title = new TextObject("{=!}Sultanate");
@@ -443,16 +435,16 @@ namespace BannerKings.Utils
                         title = new TextObject("{=!}Emirate");
                     else if (type == TitleType.County)
                         title = new TextObject("{=!}Sheikhdom");
-                } else if (culture.StringId == "battania")
+                }
+                else if (culture.StringId == "battania")
                 {
-                    if (type == TitleType.Kingdom)
+                    if (government == GovernmentType.Tribal)
                     {
-                        if (government == GovernmentType.Tribal)
+                        if (type == TitleType.Kingdom)
                             title = new TextObject("{=!}High-Kingdom");
+                        else if (type == TitleType.Dukedom)
+                            title = new TextObject("{=!}Petty Kingdom");
                     }
-                } else if (culture.StringId == "khuzait")
-                {
-
                 }
             }
 
