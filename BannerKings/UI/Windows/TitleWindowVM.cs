@@ -184,6 +184,46 @@ namespace BannerKings.UI.Windows
 			return laws;
 		}
 
+		private void ShowFoundKingdom()
+        {
+			TitleAction action = BannerKingsConfig.Instance.TitleModel.GetFoundKingdom(Clan.PlayerClan.Kingdom, Hero.MainHero);
+			InformationManager.ShowInquiry(new InquiryData(new TextObject("{=!}Founding a new Kingdom").ToString(),
+					new TextObject("Found a new title for your kingdom. The title will legitimize your position and allow the de Jure domain of the kingdom to expand through de Jure drift of dukedoms, as well as extend your influence as a suzerain. Founding a title would increase your clan's renown by {RENOWN}. \n \nCosts: {GOLD} {GOLD_ICON}, {INFLUENCE} {INFLUENCE_ICON} \n\nCan form kingdom: {POSSIBLE} \n\nReason: {REASON}")
+					.SetTextVariable("POSSIBLE", GameTexts.FindText(action.Possible ? "str_yes" : "str_no"))
+					.SetTextVariable("GOLD", action.Gold)
+					.SetTextVariable("GOLD_ICON", "{=!}<img src=\"General\\Icons\\Coin@2x\" extend=\"8\">")
+					.SetTextVariable("INFLUENCE", action.Influence)
+					.SetTextVariable("INFLUENCE_ICON", "{=!}<img src=\"General\\Icons\\Influence@2x\" extend=\"7\">")
+					.SetTextVariable("RENOWN", action.Renown)
+					.SetTextVariable("REASON", action.Reason)
+					.ToString(),
+					action.Possible, true, GameTexts.FindText("str_accept").ToString(), GameTexts.FindText("str_cancel").ToString(),
+					() =>
+					{
+						List<InquiryElement> duchies = new List<InquiryElement>();
+						foreach (FeudalTitle dukedom in BannerKingsConfig.Instance.TitleManager.GetAllDeJure(Hero.MainHero).FindAll(x => x.type == TitleType.Dukedom))
+							duchies.Add(new InquiryElement(dukedom, dukedom.FullName.ToString(), null));
+
+						InformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
+							new TextObject("{=!}Founding Dukedoms").ToString(), new TextObject("{=!}Select up to 3 dukedoms that will compose your kingdom. The kingdom's contract will follow the first dukedom's contract. Dukedom titles from other clans in the faction may be included as well.").ToString(), 
+							duchies, true, 3,
+							GameTexts.FindText("str_done", null).ToString(), string.Empty, 
+							delegate (List<InquiryElement> list) 
+							{
+								FeudalTitle firstDukedom = (FeudalTitle)list[0].Identifier;
+								List<FeudalTitle> vassals = new List<FeudalTitle>();
+								foreach (InquiryElement element in list)
+									if ((FeudalTitle)list[0].Identifier != firstDukedom) vassals.Add((FeudalTitle)element.Identifier);
+								action.SetTile(firstDukedom);
+								action.SetVassals(vassals);
+								action.TakeAction(null);
+							}, null), false);
+					}, null), false);
+		}
+
+		[DataSourceProperty]
+		public string FoundKingdomText => new TextObject("Found Kingdom").ToString();
+
 		[DataSourceProperty]
 		public DecisionElement Contract
 		{

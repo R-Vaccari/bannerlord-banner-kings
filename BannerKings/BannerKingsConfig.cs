@@ -29,6 +29,7 @@ namespace BannerKings
         public MBReadOnlyList<BuildingType> VillageBuildings { get; set; }
 
         public BKInfluenceModel InfluenceModel { get; } = new BKInfluenceModel();
+        public BKTitleModel TitleModel { get; } = new BKTitleModel();
 
         public void InitManagers()
         {
