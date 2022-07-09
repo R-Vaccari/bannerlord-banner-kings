@@ -4,9 +4,9 @@ using BannerKings.Models.Populations;
 using BannerKings.Populations;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
-using static BannerKings.Managers.PopulationManager;
 
 namespace BannerKings.UI
 {
@@ -27,9 +27,9 @@ namespace BannerKings.UI
             culturesList = new MBBindingList<CultureElementVM>();
             cultureInfo = new MBBindingList<InformationElement>();
             statsInfo = new MBBindingList<InformationElement>();
-            this.settlement = _settlement;
+            settlement = _settlement;
             this._isSelected = _isSelected;
-            this.RefreshValues();
+            RefreshValues();
         }
 
         public override void RefreshValues()
@@ -58,7 +58,18 @@ namespace BannerKings.UI
                     "Represents how much the local elite supports you. Support of each notable is weighted on their power, meaning that not having the support of a notable that holds most power will result in a small support percentage. Support is gained through better relations with the notables."));
                 StatsInfo.Add(new InformationElement("Total Population:", data.TotalPop.ToString(),
                     "Number of people present in this settlement and surrounding regions."));
-                StatsInfo.Add(new InformationElement("Population Growth:", new BKGrowthModel().CalculateEffect(settlement, data).ResultNumber.ToString(), 
+
+                ExplainedNumber influence = BannerKingsConfig.Instance.InfluenceModel.CalculateSettlementInfluence(settlement, data);
+                StatsInfo.Add(new InformationElement(GameTexts.FindText("str_total_influence").ToString(), new TextObject("{=!}{INFLUENCE} {ICON}")
+                    .SetTextVariable("INFLUENCE", influence.ResultNumber.ToString("0.00"))
+                    .SetTextVariable("ICON", "{=!}<img src=\"General\\Icons\\Influence@2x\" extend=\"7\">")
+                    .ToString(),
+                    new TextObject("{=!}{TEXT}\n{EXPLANATIONS}")
+                    .SetTextVariable("TEXT", new TextObject("{=!}The amount of influence this settlement provides in your realm."))
+                    .SetTextVariable("EXPLANATIONS", influence.GetExplanations())
+                    .ToString()));
+
+                StatsInfo.Add(new InformationElement("Population Growth:", new BKGrowthModel().CalculateEffect(settlement, data).ResultNumber.ToString(),
                     "The population growth of your settlement on a daily basis, distributed among the classes."));
                 StatsInfo.Add(new InformationElement("Foreigner Ratio:", FormatValue(new BKForeignerModel().CalculateEffect(settlement).ResultNumber),
                     "Merchant and freemen foreigners that refuse to be assimilated, but have a living in this settlement."));
@@ -77,7 +88,7 @@ namespace BannerKings.UI
                     .SetAsBooleanOption(decision.GetName(), decision.Enabled, delegate (bool value)
                     {
                         decision.OnChange(value);
-                        this.RefreshValues();
+                        RefreshValues();
 
                     }, new TextObject(decision.GetHint()));
                     switch (decision.GetIdentifier())
@@ -87,7 +98,7 @@ namespace BannerKings.UI
                             break;
                     }
                 }
-            } 
+            }
         }
 
         [DataSourceProperty]
@@ -99,7 +110,7 @@ namespace BannerKings.UI
                 if (value != foreignerToogle)
                 {
                     foreignerToogle = value;
-                    base.OnPropertyChangedWithValue(value, "ForeignerToogle");
+                    OnPropertyChangedWithValue(value);
                 }
             }
         }
@@ -113,7 +124,7 @@ namespace BannerKings.UI
                 if (value != culturesList)
                 {
                     culturesList = value;
-                    base.OnPropertyChangedWithValue(value, "CultureList");
+                    OnPropertyChangedWithValue(value);
                 }
             }
         }
@@ -127,7 +138,7 @@ namespace BannerKings.UI
                 if (value != classesList)
                 {
                     classesList = value;
-                    base.OnPropertyChangedWithValue(value, "PopList");
+                    OnPropertyChangedWithValue(value);
                 }
             }
         }
@@ -141,7 +152,7 @@ namespace BannerKings.UI
                 if (value != cultureInfo)
                 {
                     cultureInfo = value;
-                    base.OnPropertyChangedWithValue(value, "CultureInfo");
+                    OnPropertyChangedWithValue(value);
                 }
             }
         }
@@ -155,7 +166,7 @@ namespace BannerKings.UI
                 if (value != statsInfo)
                 {
                     statsInfo = value;
-                    base.OnPropertyChangedWithValue(value, "StatsInfo");
+                    OnPropertyChangedWithValue(value);
                 }
             }
         }

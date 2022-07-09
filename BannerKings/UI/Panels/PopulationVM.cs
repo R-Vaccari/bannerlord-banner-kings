@@ -22,7 +22,7 @@ namespace BannerKings
 
             public PopulationVM(PopulationData data) : base(data, true)
             {
-                this.settlement = data.Settlement;
+                settlement = data.Settlement;
                 overviewVM = new OverviewVM(data, settlement, true);
                 economyVM = new EconomyVM(data, settlement, false);
                 demesneVM = new DemesneVM(data, BannerKingsConfig.Instance.TitleManager.GetTitle(settlement), false);
@@ -36,33 +36,33 @@ namespace BannerKings
 
             public void SetSelectedCategory(int index)
             {
-                this.OverView.IsSelected = false;
-                this.Economy.IsSelected = false;
-                this.Demesne.IsSelected = false;
-                this.IsOverviewSelected = false;
-                this.IsEconomySelected = false;
-                this.IsDemesneSelected = false;
-                this.IsMilitarySelected = false;
-                this.Military.IsSelected = false;
+                OverView.IsSelected = false;
+                Economy.IsSelected = false;
+                Demesne.IsSelected = false;
+                IsOverviewSelected = false;
+                IsEconomySelected = false;
+                IsDemesneSelected = false;
+                IsMilitarySelected = false;
+                Military.IsSelected = false;
                 if (index == 0)
                 {
-                    this.OverView.IsSelected = true;
-                    this.IsOverviewSelected = true;
+                    OverView.IsSelected = true;
+                    IsOverviewSelected = true;
                 }
                 else if (index == 1)
                 {
-                    this.Economy.IsSelected = true;
-                    this.IsEconomySelected = true;
+                    Economy.IsSelected = true;
+                    IsEconomySelected = true;
                 }   
                 else if (index == 2)
                 {
-                    this.Demesne.IsSelected = true;
-                    this.IsDemesneSelected = true;
+                    Demesne.IsSelected = true;
+                    IsDemesneSelected = true;
                 }
                 else if (index == 3)
                 {
-                    this.Military.IsSelected = true;
-                    this.IsMilitarySelected = true;
+                    Military.IsSelected = true;
+                    IsMilitarySelected = true;
                 }
 
                 RefreshValues();
