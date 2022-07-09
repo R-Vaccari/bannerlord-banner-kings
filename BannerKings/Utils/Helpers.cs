@@ -170,7 +170,7 @@ namespace BannerKings.Utils
             TextObject title = null;
             if (culture != null)
             {
-                if (culture.StringId == "battania")
+                if (culture.StringId == "battania" || culture.StringId == "vagir")
                 {
                     if (type == TitleType.Kingdom)
                     {
@@ -202,7 +202,7 @@ namespace BannerKings.Utils
                             title = new TextObject("{=!}Baintighearna");
                         else title = new TextObject("{=!}{MALE}Tighearna{?}Queen{\\?}");
                     }
-                } else if (culture.StringId == "empire")
+                } else if (culture.StringId == "empire" || culture.StringId == "republic")
                 {
 
                     if (type == TitleType.Kingdom)
@@ -277,7 +277,7 @@ namespace BannerKings.Utils
                         else title = new TextObject("{=!}{MALE}Mawlaa{?}Queen{\\?}");
                     }
                 }
-                else if (culture.StringId == "khuzait")
+                else if (culture.StringId == "khuzait" || culture.StringId == "rebkhu")
                 {
                     if (type == TitleType.Kingdom)
                     {
@@ -341,6 +341,39 @@ namespace BannerKings.Utils
                         if (female)
                             title = new TextObject("{=!}Gospoda");
                         else title = new TextObject("{=!}{MALE}Gospodin{?}Queen{\\?}");
+                    }
+                }
+                else if (culture.StringId == "nordling")
+                {
+                    if (type == TitleType.Kingdom)
+                    {
+                        if (female)
+                            title = new TextObject("{=!}Dróttning");
+                        else title = new TextObject("{=!}Konungr");
+                    }
+                    else if (type == TitleType.Dukedom)
+                    {
+                        if (female)
+                            title = new TextObject("{=!}Hertogaynja");
+                        else title = new TextObject("{=!}Hertogi");
+                    }
+                    else if (type == TitleType.County)
+                    {
+                        if (female)
+                            title = new TextObject("{=!}Hlaefdige");
+                        else title = new TextObject("{=!}Jarl");
+                    }
+                    else if (type == TitleType.Barony)
+                    {
+                        if (female)
+                            title = new TextObject("{=!}Hlaefdige");
+                        else title = new TextObject("{=!}Thegn");
+                    }
+                    else
+                    {
+                        if (female)
+                            title = new TextObject("{=!}Hlaefdige");
+                        else title = new TextObject("{=!}Hlaford");
                     }
                 }
             }
@@ -426,16 +459,8 @@ namespace BannerKings.Utils
                     else if (type == TitleType.Barony)
                         title = new TextObject("{=!}Voivodeship");
                     else title = new TextObject("{=!}Gospodin");
-                } else if (culture.StringId == "sturgia")
-                {
-                    if (type == TitleType.Kingdom)
-                    {
-                        if (government == GovernmentType.Republic)
-                            title = new TextObject("{=!}Princedom");
-                    }
-                        
-                }
-                else if (culture.StringId == "sturgia")
+                } 
+                else if (culture.StringId == "aserai")
                 {
                     if (type == TitleType.Kingdom)
                         title = new TextObject("{=!}Sultanate");
@@ -445,14 +470,22 @@ namespace BannerKings.Utils
                         title = new TextObject("{=!}Sheikhdom");
                 } else if (culture.StringId == "battania")
                 {
-                    if (type == TitleType.Kingdom)
+                    if (government == GovernmentType.Tribal)
                     {
-                        if (government == GovernmentType.Tribal)
+                        if (type == TitleType.Kingdom)
                             title = new TextObject("{=!}High-Kingdom");
+                        else if (type == TitleType.Dukedom)
+                            title = new TextObject("{=!}Petty Kingdom");
                     }
-                } else if (culture.StringId == "khuzait")
+                } 
+                else if (culture.StringId == "nordling")
                 {
-
+                    if (type == TitleType.Dukedom)
+                        title = new TextObject("{=!}Hertogidom");
+                    else if (type == TitleType.County)
+                        title = new TextObject("{=!}Jarldom");
+                    else if (type == TitleType.Barony)
+                        title = new TextObject("{=!}Thanate");
                 }
             }
 
