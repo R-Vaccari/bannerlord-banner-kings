@@ -46,6 +46,10 @@ namespace BannerKings.Behaviors
             if (originalClan != Clan.PlayerClan) CreateClan(hero, originalClan, title);
             else
             {
+
+                TextObject clanName = ClanActions.CanCreateNewClan(hero, title.fief);
+                if (clanName == null) return;
+
                 TextObject requestText;
                 if (hero.IsFriend(Hero.MainHero)) requestText = new TextObject("{=!}I humbly ask of you to release me of my duties in the {CLAN}. I shall remain as your vassal and loyal friend.");
                 else if (hero.IsEnemy(Hero.MainHero)) requestText = new TextObject("{=!}I request of you to release me of my duties in the {CLAN}. It is time for me to lead my own family.");
@@ -64,7 +68,7 @@ namespace BannerKings.Behaviors
                     () =>
                     {
                         ChangeRelationAction.ApplyRelationChangeBetweenHeroes(hero, originalClan.Leader, 5);
-                        CreateClan(hero, originalClan, title);
+                        CreateClan(hero, originalClan, title, clanName);
                     }, 
                     () =>
                     {
@@ -76,9 +80,9 @@ namespace BannerKings.Behaviors
             
         }
 
-        private void CreateClan(Hero hero, Clan originalClan, FeudalTitle title)
+        private void CreateClan(Hero hero, Clan originalClan, FeudalTitle title, TextObject name = null)
         {
-            Clan newClan = ClanActions.CreateNewClan(hero, title.fief, hero.StringId + "_knight_clan", null, 150f, true);
+            Clan newClan = ClanActions.CreateNewClan(hero, title.fief, hero.StringId + "_knight_clan", name, 150f, true);
             if (newClan != null) InformationManager.AddQuickInformation(new TextObject("{=!}The {NEW} has been formed by {HERO}, previously a knight of {ORIGINAL}.")
                             .SetTextVariable("NEW", hero.Clan.Name)
                             .SetTextVariable("HERO", hero.Name)

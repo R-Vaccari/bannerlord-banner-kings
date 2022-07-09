@@ -12,11 +12,8 @@ namespace BannerKings.Models
     public class BKInfluenceModel : DefaultClanPoliticsModel
     {
 
-        public float GetRejectKnighthoodCost(Clan clan)
-        {
-            float gain = CalculateInfluenceChange(clan, false).ResultNumber;
-            return 10f + (gain * 0.05f);
-        }
+        public float GetRejectKnighthoodCost(Clan clan) => 10f + (CalculateInfluenceChange(clan, false).ResultNumber * 0.025f * (float)CampaignTime.DaysInYear);
+        
 
         public override ExplainedNumber CalculateInfluenceChange(Clan clan, bool includeDescriptions = false)
         {

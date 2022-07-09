@@ -9,8 +9,7 @@ namespace BannerKings.Actions
 {
     public static class ClanActions
     {
-
-        public static Clan CreateNewClan(Hero hero, Settlement settlement, string id, TextObject name = null, float renown = 150f, bool removeGold = false)
+        public static TextObject CanCreateNewClan(Hero hero, Settlement settlement, TextObject name = null)
         {
             if (name == null) name = GetRandomName(hero.Culture, settlement);
             List<string> names = new List<string>();
@@ -20,6 +19,13 @@ namespace BannerKings.Actions
             if (name == null || names.Any(x => x.Contains(name.ToString()) || x == name.ToString())) return null;
 
             if (Clan.All.Any(x => x.HomeSettlement == settlement)) return null;
+
+            return name;
+        }
+        public static Clan CreateNewClan(Hero hero, Settlement settlement, string id, TextObject name = null, float renown = 150f, bool removeGold = false)
+        {
+            if (name == null) name = CanCreateNewClan(hero, settlement, null);
+            if (name == null) return null;
 
             Clan originalClan = hero.Clan;
             Clan clan = Clan.CreateClan(id);
