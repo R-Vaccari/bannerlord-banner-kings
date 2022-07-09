@@ -152,8 +152,12 @@ namespace BannerKings.UI
                     }, new TextObject(mercantilismDecision.GetHint()));
             }
 
-            RevenueInfo.Add(new InformationElement("Administrative Cost:", FormatValue(data.EconomicData.AdministrativeCost.ResultNumber),
-                    "Costs associated with the settlement administration, including those of active policies and decisions, deducted on tax revenue."));
+            ExplainedNumber admCost = data.EconomicData.AdministrativeCost;
+            RevenueInfo.Add(new InformationElement("Administrative Cost:", FormatValue(admCost.ResultNumber),
+                 new TextObject("{=!}{TEXT}\n{EXPLANATIONS}")
+                   .SetTextVariable("TEXT", new TextObject("Costs associated with the settlement administration, including those of active policies and decisions, deducted on tax revenue."))
+                   .SetTextVariable("EXPLANATIONS", admCost.GetExplanations())
+                   .ToString()));
 
             taxItem = (BKTaxPolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(settlement, "tax");
             TaxSelector = GetSelector(taxItem, taxItem.OnChange);

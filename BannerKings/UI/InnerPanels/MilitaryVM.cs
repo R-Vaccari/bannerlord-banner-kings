@@ -45,10 +45,20 @@ namespace BannerKings.UI
             DefenseInfo.Clear();
             ManpowerInfo.Clear();
             SiegeInfo.Clear();
-            DefenseInfo.Add(new InformationElement("Militia Cap:", new BKMilitiaModel().GetMilitiaLimit(data, settlement).ToString(),
-                    "The maximum number of militiamen this settlement can support, based on it's population."));
-            DefenseInfo.Add(new InformationElement("Militia Quality:", FormatValue(new BKMilitiaModel().CalculateEliteMilitiaSpawnChance(settlement)),
-                    "Chance of militiamen being spawned as veterans instead of recruits."));
+
+            ExplainedNumber militiaCap = new BKMilitiaModel().GetMilitiaLimit(data, settlement);
+            DefenseInfo.Add(new InformationElement("Militia Cap:", militiaCap.ResultNumber.ToString(),
+                new TextObject("{=!}{TEXT}\n{EXPLANATIONS}")
+                   .SetTextVariable("TEXT", new TextObject("{=!}The maximum number of militiamen this settlement can support, based on it's population."))
+                   .SetTextVariable("EXPLANATIONS", militiaCap.GetExplanations())
+                   .ToString()));
+
+            ExplainedNumber militiaQuality = new BKMilitiaModel().MilitiaSpawnChanceExplained(settlement);
+            DefenseInfo.Add(new InformationElement("Militia Quality:", FormatValue(militiaQuality.ResultNumber),
+                    new TextObject("{=!}{TEXT}\n{EXPLANATIONS}")
+                   .SetTextVariable("TEXT", new TextObject("{=!}Chance of militiamen being spawned as veterans instead of recruits."))
+                   .SetTextVariable("EXPLANATIONS", militiaQuality.GetExplanations())
+                   .ToString()));
 
             ManpowerInfo.Add(new InformationElement("Manpower:", data.MilitaryData.Manpower.ToString(),
                     new TextObject("{=!}The total manpower of nobles plus peasants.").ToString()));

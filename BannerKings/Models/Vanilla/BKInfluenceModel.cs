@@ -32,7 +32,7 @@ namespace BannerKings.Models
                             if (notable.SupporterOf == clan && notable.Gold > 5000)
                                 baseResult.Add(-1f, new TextObject("{=!}Aid from {NOTABLE}").SetTextVariable("NOTABLE", notable.Name));
 
-                    generalSupport  += data.NotableSupport - 0.5f;
+                    generalSupport  += data.NotableSupport.ResultNumber - 0.5f;
                     generalAutonomy += -0.5f * data.Autonomy;
                     i++;
 
@@ -64,7 +64,7 @@ namespace BannerKings.Models
 
         public ExplainedNumber CalculateSettlementInfluence(Settlement settlement, PopulationData data)
         {
-            ExplainedNumber settlementResult = new ExplainedNumber();
+            ExplainedNumber settlementResult = new ExplainedNumber(0f, true);
             float nobles = data.GetTypeCount(PopType.Nobles);
             settlementResult.Add(MBMath.ClampFloat(nobles * 0.01f, 0f, 12f), new TextObject(string.Format("Nobles influence from {0}", settlement.Name)));
 

@@ -10,7 +10,7 @@ namespace BannerKings.Models.Populations
     {
         public ExplainedNumber CalculateEffect(Settlement settlement)
         {
-            ExplainedNumber result = new ExplainedNumber(1f);
+            ExplainedNumber result = new ExplainedNumber(1f, true);
 
             PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
             result.Add(data.EconomicData.Mercantilism.ResultNumber / 2f, new TextObject("{=!}Mercantilism"));
