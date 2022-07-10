@@ -1,0 +1,142 @@
+<Prefab>
+  <Variables>
+  </Variables>
+  <Constants>
+  </Constants>
+  <Parameters>
+  </Parameters>
+  <VisualDefinitions>
+  </VisualDefinitions>
+  <Window>
+    <Widget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" IsActive="true">
+      <Children>
+	  
+	    <ScrollablePanel Id="CouncilScrollablePanel" WidthSizePolicy="CoverChildren" HeightSizePolicy="StretchToParent" MarginLeft="3" MarginBottom="3" AutoHideScrollBars="true" ClipRect="Rect" InnerPanel="Rect\VerticalList" MouseScrollAxis="Vertical" VerticalScrollbar="..\CouncilScrollbar\Scrollbar">
+		  <Children>
+
+			<Widget Id="Rect" WidthSizePolicy="CoverChildren" HeightSizePolicy="StretchToParent" ClipContents="true">
+			  <Children>
+	  
+	  
+				<ListPanel Id="VerticalList" WidthSizePolicy="Fixed" HeightSizePolicy="CoverChildren" SuggestedWidth="950" MarginLeft="10" MarginRight="290" StackLayout.LayoutMethod="VerticalBottomToTop" DoNotAcceptEvents="false">
+				  <Children>
+				  
+					<GridWidget DataSource="{CourtInfo}" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren"  HorizontalAlignment="Left" MarginLeft="60" DefaultCellWidth="150" DefaultCellHeight="30" ColumnCount="1">
+					  <ItemTemplate>
+						<InformationElement/>
+					  </ItemTemplate>
+					</GridWidget>
+		  
+					
+					<GridWidget Id="CoreGrid" DataSource="{CorePositions}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" MarginTop="20" HorizontalAlignment="Center" SuggestedHeight="350" DefaultCellWidth="190" DefaultCellHeight="150" ColumnCount="5"  >
+					  <ItemTemplate>
+						<ListPanel WidthSizePolicy="Fixed" HeightSizePolicy="CoverChildren" SuggestedWidth="180" HorizontalAlignment="Center" VerticalAlignment="Top" StackLayout.LayoutMethod="VerticalBottomToTop">
+						  <Children>
+							<ListPanel WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="180" StackLayout.LayoutMethod="HorizontalLeftToRight" DoNotAcceptEvents="true">
+							  <Children>
+								<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" HorizontalAlignment="Center" SuggestedHeight="7" MarginLeft="5" MarginRight="5" Sprite="SPGeneral\TownManagement\horizontal_divider" />
+								<RichTextWidget DoNotAcceptEvents="true" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="OverlayPopup.ButtonText" Brush.FontSize="26" Text="@Title"/>
+								<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" HorizontalAlignment="Center" SuggestedHeight="7" MarginLeft="5" MarginRight="5" Sprite="SPGeneral\TownManagement\horizontal_divider" />
+							  </Children>
+							</ListPanel>
+							<ToggleWidget DoNotPassEventsToChildren="true" Command.Click="SetId" Command.HoverBegin="UpdatePosition" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" MarginTop="30" SuggestedWidth="180" SuggestedHeight="130" HorizontalAlignment="Center" Brush="TownManagement.Governor" UpdateChildrenStates="true">
+							  <Children>
+								<ImageWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="69" SuggestedHeight="69" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="TownManagement.Governor.PlusButton" IsHidden="@HasGovernor" />
+								<ImageIdentifierWidget Id="ElementImage" DataSource="{ImageIdentifier}" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" HorizontalAlignment="Center" MarginLeft="3" MarginRight="3" MarginTop="3" MarginBottom="3" AdditionalArgs="@AdditionalArgs" ImageId="@Id" ImageTypeCode="@ImageTypeCode" />
+								<TextWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="250" SuggestedHeight="30" HorizontalAlignment="Center" VerticalAlignment="Bottom" PositionYOffset="40" Brush="Encyclopedia.SubPage.Element.Name.Text" Brush.FontSize="25" Text="@NameText" />
+								<HintWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" />
+							  </Children>
+							</ToggleWidget>
+						  </Children>
+						</ListPanel>
+					  </ItemTemplate>
+					</GridWidget>
+					
+					
+					<GridWidget Id="RoyalGrid" IsHidden="@IsRoyal" DataSource="{RoyalPositions}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" MarginRight="100" MarginLeft="100" HorizontalAlignment="Center" SuggestedHeight="350" DefaultCellWidth="190" DefaultCellHeight="150" ColumnCount="4" MarginTop="50" >
+					  <ItemTemplate>
+					  
+						<ListPanel WidthSizePolicy="Fixed" HeightSizePolicy="CoverChildren" SuggestedWidth="190" HorizontalAlignment="Center" VerticalAlignment="Top" StackLayout.LayoutMethod="VerticalBottomToTop">
+						  <Children>
+							<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedWidth="191" StackLayout.LayoutMethod="HorizontalLeftToRight" DoNotAcceptEvents="true">
+							  <Children>
+								<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" HorizontalAlignment="Center" SuggestedHeight="7" MarginLeft="5" MarginRight="5" Sprite="SPGeneral\TownManagement\horizontal_divider" />
+								<RichTextWidget DoNotAcceptEvents="true" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="OverlayPopup.ButtonText" Brush.FontSize="26" Text="@Title"/>
+								<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" HorizontalAlignment="Center" SuggestedHeight="7" MarginLeft="5" MarginRight="5" Sprite="SPGeneral\TownManagement\horizontal_divider" />
+							  </Children>
+							</ListPanel>
+							<ToggleWidget DoNotPassEventsToChildren="true" Command.Click="SetId" Command.HoverBegin="UpdatePosition" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginTop="30" SuggestedWidth="191" SuggestedHeight="130" HorizontalAlignment="Center" Brush="TownManagement.Governor" UpdateChildrenStates="true">
+							  <Children>
+								<ImageWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="69" SuggestedHeight="69" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="TownManagement.Governor.PlusButton" />
+								<ImageIdentifierWidget Id="ElementImage" DataSource="{ImageIdentifier}" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" HorizontalAlignment="Center" MarginLeft="3" MarginRight="3" MarginTop="3" MarginBottom="3" AdditionalArgs="@AdditionalArgs" ImageId="@Id" ImageTypeCode="@ImageTypeCode" />
+								<TextWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="250" SuggestedHeight="30" HorizontalAlignment="Center" VerticalAlignment="Bottom" PositionYOffset="40" Brush="Encyclopedia.SubPage.Element.Name.Text" Brush.FontSize="25" Text="@NameText" />
+								<HintWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" />
+							  </Children>
+							</ToggleWidget>
+						  </Children>
+						</ListPanel>
+			
+					  </ItemTemplate>
+					</GridWidget>
+					
+					
+					
+					<ListPanel HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" WidthSizePolicy="Fixed" SuggestedWidth="600" StackLayout.LayoutMethod="VerticalBottomToTop">
+					  <Children>
+						<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" Brush="Clan.Leader.Text"  Brush.FontSize="30" Text="@CurrentPositionNameText" MarginBottom="15"/>
+						<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" Brush="Clan.Leader.Text"  Brush.FontSize="20" Text="@CurrentPositionDescriptionText" />
+					  </Children>
+					</ListPanel> 
+					
+					<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="7" MarginLeft="250" MarginRight="250" MarginTop="20" VerticalAlignment="Bottom" PositionYOffset="7" Sprite="SPGeneral\TownManagement\horizontal_divider" />
+
+					
+					<RichTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" MarginTop="15" HorizontalAlignment="Center" Brush="Clan.Leader.Text"  Brush.FontSize="30" Text="@PrivilegesText" MarginBottom="15"/>
+					
+					<GridWidget DataSource="{PrivilegesInfo}" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren"  HorizontalAlignment="Center" DefaultCellWidth="200" DefaultCellHeight="30" ColumnCount="4">
+					  <ItemTemplate>
+					  
+					    <Widget HorizontalAlignment="Center" HeightSizePolicy="StretchToParent" WidthSizePolicy="StretchToParent" VerticalAlignment="Center" DoNotPassEventsToChildren="true">
+						  <Children>
+							<HintWidget DataSource="{Hint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" SuggestedHeight="15" SuggestedWidth="100" VerticalAlignment="Center" HorizontalAlignment="Center" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" />
+							<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" Brush="Clan.Leader.Text"  Brush.FontSize="24" Text="@Description" />
+						  </Children>
+						</Widget>
+						
+					  </ItemTemplate>
+					</GridWidget>
+					
+					<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="7" MarginLeft="150" MarginRight="150" MarginTop="20" VerticalAlignment="Bottom" PositionYOffset="7" Sprite="SPGeneral\TownManagement\horizontal_divider" />
+					
+					<ListPanel HorizontalAlignment="Center" MarginTop="15" HeightSizePolicy="CoverChildren" WidthSizePolicy="Fixed" SuggestedWidth="600" StackLayout.LayoutMethod="HorizontalLeftToRight">
+					  <Children>
+						<CharacterTableauWidget DataSource="{CurrentCharacter\HeroCharacter}" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="180" SuggestedHeight="400" HorizontalAlignment="Left" VerticalAlignment="Center" BannerCodeText="@BannerCodeText" BodyProperties="@BodyProperties" CharStringId="@CharStringId" EquipmentCode="@EquipmentCode" IsFemale="@IsFemale" MountCreationKey="@MountCreationKey" StanceIndex="@StanceIndex" ArmorColor1="@ArmorColor1" ArmorColor2="@ArmorColor2" IsEnabled="false" PositionXOffset="-50" DoNotUseCustomScale="true"/>
+						
+						<ListPanel HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" WidthSizePolicy="Fixed" MarginTop="20" SuggestedWidth="600" StackLayout.LayoutMethod="VerticalBottomToTop">
+						  <Children>
+							<RichTextWidget DataSource="{CurrentCharacter}" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Left" MarginLeft="10" Brush="Clan.Leader.Text" Brush.FontSize="24" Text="@HeroNameText" MarginBottom="15"/>
+							<GridWidget DataSource="{CourtierInfo}" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren"  HorizontalAlignment="Left" MarginLeft="10" DefaultCellWidth="150" DefaultCellHeight="30" ColumnCount="1">
+							  <ItemTemplate>
+								<InformationElement/>
+							  </ItemTemplate>
+							</GridWidget>
+						  </Children>
+						</ListPanel> 
+						
+						</Children>
+					</ListPanel> 
+					
+				  </Children>
+				</ListPanel>
+				
+			  </Children>
+			</Widget>
+		  </Children>
+		</ScrollablePanel>
+
+		<Standard.VerticalScrollbar Id="CouncilScrollbar" HeightSizePolicy="StretchToParent" HorizontalAlignment="Right" VerticalAlignment="Bottom" MarginLeft="2" MarginRight="2" MarginBottom="3" />
+
+      </Children>
+    </Widget>
+  </Window>
+</Prefab>

@@ -201,8 +201,9 @@ namespace BannerKings.UI.Windows
 					() =>
 					{
 						List<InquiryElement> duchies = new List<InquiryElement>();
-						foreach (FeudalTitle dukedom in BannerKingsConfig.Instance.TitleManager.GetAllDeJure(Hero.MainHero).FindAll(x => x.type == TitleType.Dukedom))
-							duchies.Add(new InquiryElement(dukedom, dukedom.FullName.ToString(), null));
+						foreach (Clan clan in kingdom.Clans)
+							foreach (FeudalTitle dukedom in BannerKingsConfig.Instance.TitleManager.GetAllDeJure(clan.Leader).FindAll(x => x.type == TitleType.Dukedom))
+								duchies.Add(new InquiryElement(dukedom, dukedom.FullName.ToString(), null));
 
 						InformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
 							new TextObject("{=!}Founding Dukedoms").ToString(), new TextObject("{=!}Select up to 3 dukedoms that will compose your kingdom. The kingdom's contract will follow the first dukedom's contract. Dukedom titles from other clans in the faction may be included as well.").ToString(), 
