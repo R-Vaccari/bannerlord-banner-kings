@@ -1,8 +1,9 @@
-﻿using TaleWorlds.Core;
+﻿using System.Collections.Generic;
+using TaleWorlds.Core;
 
 namespace BannerKings.Managers.Items
 {
-    public class BKItemCategories : DefaultTypeInitializer<BKItemCategories>
+    public class BKItemCategories : DefaultTypeInitializer<BKItemCategories, ItemCategory>
     {
         private ItemCategory book, apple, orange, bread, pie, carrot;
 
@@ -12,6 +13,9 @@ namespace BannerKings.Managers.Items
         public ItemCategory Bread => bread;
         public ItemCategory Pie => pie;
         public ItemCategory Carrot => carrot;
+
+        public override IEnumerable<ItemCategory> All => throw new System.NotImplementedException();
+
         public override void Initialize()
         {
             book = Game.Current.ObjectManager.RegisterPresumedObject<ItemCategory>(new ItemCategory("book"));

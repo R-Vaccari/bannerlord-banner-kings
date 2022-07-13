@@ -36,7 +36,18 @@ namespace BannerKings.Managers.Education
 
         public void PostInitialize()
         {
+            Lifestyle lf = DefaultLifestyles.Instance.GetById(lifestyle);
+            lifestyle.Initialize(lf.Name, lf.Description, lf.FirstSkill, lf.SecondSkill, new List<PerkObject>(lf.Perks), lf.Culture);
 
+            foreach(KeyValuePair<Language, float> pair in languages)
+            {
+                Language language = pair.Key;
+                Language l2 = DefaultLanguages.Instance.GetById(language);
+                language.Initialize(l2.Name, l2.Description, l2.Culture, DefaultLanguages.Instance.GetIntelligibles(l2));
+            }
+
+            Language l = DefaultLanguages.Instance.GetById(currentLanguage);
+            currentLanguage.Initialize(l.Name, l.Description, l.Culture, DefaultLanguages.Instance.GetIntelligibles(l));
         }
 
         public void SetCurrentBook(BookType book)

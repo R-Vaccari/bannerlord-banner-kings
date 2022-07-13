@@ -7,7 +7,7 @@ using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Education.Lifestyles
 {
-    public class DefaultLifestyles : DefaultTypeInitializer<DefaultLifestyles>
+    public class DefaultLifestyles : DefaultTypeInitializer<DefaultLifestyles, Lifestyle>
     {
         private Lifestyle fian, cataphract, diplomat, august, siegeEngineer, civilAdministrator;
 
@@ -46,7 +46,7 @@ namespace BannerKings.Managers.Education.Lifestyles
                 DefaultSkills.Engineering, DefaultSkills.Steward, new List<PerkObject>() { });
         }
 
-        public IEnumerable<Lifestyle> All
+        public override IEnumerable<Lifestyle> All
         {
             get
             {

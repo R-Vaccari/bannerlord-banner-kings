@@ -1,10 +1,11 @@
-﻿using System.Reflection;
+﻿using System.Collections.Generic;
+using System.Reflection;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Items
 {
-    public class BKItems : DefaultTypeInitializer<BKItems>
+    public class BKItems : DefaultTypeInitializer<BKItems, ItemObject>
     {
         private ItemObject apple, orange, bread, pie, carrot, bookHeartsDesire, bookSiege, bookStrategikon,
             bookLeadership, bookTrade, bookDictionary, bookMounted;
@@ -26,6 +27,8 @@ namespace BannerKings.Managers.Items
         public ItemObject Carrot => carrot;
 
         public ItemObject Orange => orange;
+
+        public override IEnumerable<ItemObject> All => throw new System.NotImplementedException();
 
         public override void Initialize()
         {

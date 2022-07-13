@@ -1,16 +1,15 @@
 ﻿using TaleWorlds.Localization;
+using TaleWorlds.ObjectSystem;
 
 namespace BannerKings
 {
-    public abstract class BannerKingsObject
+    public abstract class BannerKingsObject : MBObjectBase
     {
-        private string id;
         protected TextObject name;
         protected TextObject description;
 
-        public BannerKingsObject(string id)
+        public BannerKingsObject(string id) : base(id)
         {
-            this.id = id;
         }
 
         protected void Initialize(TextObject name, TextObject description)
@@ -18,8 +17,6 @@ namespace BannerKings
             this.name = name;
             this.description = description;
         }
-
-        public string Id => id;
         public TextObject Name => name;
         public TextObject Description => description;
     }

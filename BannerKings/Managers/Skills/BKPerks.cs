@@ -1,9 +1,10 @@
-﻿using TaleWorlds.CampaignSystem;
+﻿using System.Collections.Generic;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 
 namespace BannerKings.Managers.Skills
 {
-    public class BKPerks : DefaultTypeInitializer<BKPerks>
+    public class BKPerks : DefaultTypeInitializer<BKPerks, PerkObject>
     {
         private PerkObject scholarshipLiterate, scholarshipPolyglot, scholarshipLearner;
 
@@ -60,5 +61,7 @@ namespace BannerKings.Managers.Skills
             275,
             300
         };
+
+        public override IEnumerable<PerkObject> All => throw new System.NotImplementedException();
     }
 }

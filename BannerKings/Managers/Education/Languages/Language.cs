@@ -1,29 +1,27 @@
 ﻿using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Education.Languages
 {
-    public class Language
+    public class Language : BannerKingsObject
     {
-        private TextObject name;
-        private TextObject description;
         private CultureObject culture;
         private Dictionary<Language, float> inteligible;
-        public Language(TextObject name, TextObject description, CultureObject culture)
+        public Language(string id) : base(id)
         {
-            this.name = name;
-            this.description = description;
-            this.culture = culture;
         }
 
-        public void Initialize(Dictionary<Language, float> inteligible)
+        public void Initialize(TextObject name, TextObject description, CultureObject culture, Dictionary<Language, float> inteligible)
         {
+            Initialize(name, description);
+            this.culture = culture;
             this.inteligible = inteligible;
         }
 
-        public TextObject Name => name;
-        public TextObject Description => description;
         public CultureObject Culture => culture;
+
+        public MBReadOnlyDictionary<Language, float> Inteligible => inteligible.GetReadOnlyDictionary();
     }
 }

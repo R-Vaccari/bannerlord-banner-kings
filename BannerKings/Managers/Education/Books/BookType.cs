@@ -5,7 +5,7 @@ using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Education.Books
 {
-    public class BookType
+    public class BookType : BannerKingsObject
     {
         private ItemObject bookItem;
         private TextObject description;
@@ -13,8 +13,13 @@ namespace BannerKings.Managers.Education.Books
         private SkillObject skill;
         private BookUse bookUse;
 
-        public BookType(ItemObject bookItem, TextObject description, Language language, BookUse bookUse, SkillObject skill = null)
+        public BookType(string id) : base(id)
         {
+        }
+
+        public void Initialize(ItemObject bookItem, TextObject description, Language language, BookUse bookUse, SkillObject skill = null)
+        {
+            Initialize(null, description);
             this.bookItem = bookItem;
             this.description = description;
             this.language = language;

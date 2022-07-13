@@ -6,7 +6,7 @@ using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Education.Books
 {
-    public class DefaultBookTypes : DefaultTypeInitializer<DefaultBookTypes>
+    public class DefaultBookTypes : DefaultTypeInitializer<DefaultBookTypes, BookType>
     {
         private BookType bookHeartsDesire, bookSiege, bookStrategikon,
             bookLeadership, bookTrade, bookDictionary, bookMounted;
@@ -21,29 +21,36 @@ namespace BannerKings.Managers.Education.Books
 
         public override void Initialize()
         {
-            bookHeartsDesire = new BookType(BKItems.Instance.BookHeartsDesire, new TextObject(), DefaultLanguages.Instance.Vlandic,
+            bookHeartsDesire = new BookType("book_heartsDesire");
+            bookHeartsDesire.Initialize(BKItems.Instance.BookHeartsDesire, new TextObject(), DefaultLanguages.Instance.Vlandic,
                BookUse.Skillbook, DefaultSkills.Charm);
 
-            bookSiege = new BookType(BKItems.Instance.BookSiege, new TextObject(), DefaultLanguages.Instance.Calradian,
+            bookSiege = new BookType("book_siege");
+            bookSiege.Initialize(BKItems.Instance.BookSiege, new TextObject(), DefaultLanguages.Instance.Calradian,
                 BookUse.Focusbook, DefaultSkills.Engineering);
 
-            bookStrategikon = new BookType(BKItems.Instance.BookStrategikon, new TextObject(), DefaultLanguages.Instance.Calradian,
+            bookStrategikon = new BookType("book_tactics");
+            bookStrategikon.Initialize(BKItems.Instance.BookStrategikon, new TextObject(), DefaultLanguages.Instance.Calradian,
                 BookUse.Focusbook, DefaultSkills.Tactics);
 
-            bookTrade = new BookType(BKItems.Instance.BookTrade, new TextObject(), DefaultLanguages.Instance.Aseran,
+            bookTrade = new BookType("book_trade");
+            bookTrade.Initialize(BKItems.Instance.BookTrade, new TextObject(), DefaultLanguages.Instance.Aseran,
                BookUse.Focusbook, DefaultSkills.Trade);
 
-            bookDictionary = new BookType(BKItems.Instance.BookDictionary, new TextObject(), DefaultLanguages.Instance.Calradian,
+            bookDictionary = new BookType("book_dictionary");
+            bookDictionary.Initialize(BKItems.Instance.BookDictionary, new TextObject(), DefaultLanguages.Instance.Calradian,
                 BookUse.Dictionary);
 
-            bookMounted = new BookType(BKItems.Instance.BookMounted, new TextObject(), DefaultLanguages.Instance.Vlandic,
+            bookMounted = new BookType("book_riding");
+            bookMounted.Initialize(BKItems.Instance.BookMounted, new TextObject(), DefaultLanguages.Instance.Vlandic,
                 BookUse.Focusbook, DefaultSkills.Riding);
 
-            bookLeadership = new BookType(BKItems.Instance.BookLeadership, new TextObject(), DefaultLanguages.Instance.Calradian,
+            bookLeadership = new BookType("book_leadership");
+            bookLeadership.Initialize(BKItems.Instance.BookLeadership, new TextObject(), DefaultLanguages.Instance.Calradian,
                 BookUse.Focusbook, DefaultSkills.Leadership);
         }
 
-        public IEnumerable<BookType> All
+        public override IEnumerable<BookType> All
         {
             get
             {
