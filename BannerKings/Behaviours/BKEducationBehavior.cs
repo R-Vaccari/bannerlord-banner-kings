@@ -14,6 +14,7 @@ namespace BannerKings.Behaviours
 
         public override void RegisterEvents()
         {
+            CampaignEvents.DailyTickHeroEvent.AddNonSerializedListener(this, OnDailyTick);
             CampaignEvents.WeeklyTickEvent.AddNonSerializedListener(this, OnWeeklyTick);
             CampaignEvents.SettlementEntered.AddNonSerializedListener(this, OnSettlementEntered);
             CampaignEvents.HeroKilledEvent.AddNonSerializedListener(this, OnHeroKilled);
@@ -24,6 +25,11 @@ namespace BannerKings.Behaviours
         public override void SyncData(IDataStore dataStore)
         {
 
+        }
+
+        private void OnDailyTick(Hero hero)
+        {
+            BannerKingsConfig.Instance.EducationManager.UpdateHeroData(hero);
         }
 
         private void OnWeeklyTick()

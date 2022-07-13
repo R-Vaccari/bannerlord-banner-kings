@@ -1,6 +1,7 @@
 ﻿using BannerKings.Managers.Court;
 using BannerKings.Managers.Titles;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.Core;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Models.BKModels
@@ -8,6 +9,59 @@ namespace BannerKings.Models.BKModels
     public class BKCouncilModel : IBannerKingsModel
     {
         public ExplainedNumber CalculateEffect(Settlement settlement) => new ExplainedNumber();
+
+        public ExplainedNumber CalculateDemesneLimit(Hero hero)
+        {
+            ExplainedNumber result = new ExplainedNumber(0.5f, true);
+            result.LimitMin(0.5f);
+            result.LimitMax(10f);
+
+            result.Add(hero.Clan.Tier / 2f, GameTexts.FindText("str_clan_tier_bonus"));
+
+            FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(hero);
+            if (title != null)
+            {
+                float bonus = 0f;
+                if (title.type != TitleType.Lordship)
+                {
+                    if (title.type == TitleType.Barony) bonus = 0.5f;
+                    else if (title.type == TitleType.County) bonus = 1f;
+                    else if (title.type == TitleType.Dukedom) bonus = 3f;
+                    else if (title.type == TitleType.Kingdom) bonus = 6f;
+                    else bonus = 10f;
+                }
+
+                if (bonus > 0f) result.Add(bonus, new TextObject("Highest title level"));
+            }
+
+            return result;
+        }
+
+        public ExplainedNumber CalculateVassalLimit(Hero hero)
+        {
+            ExplainedNumber result = new ExplainedNumber(0f, true);
+            result.LimitMin(0f);
+            result.LimitMax(50f);
+            result.Add(hero.Clan.Tier, GameTexts.FindText("str_clan_tier_bonus"));
+
+            FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(hero);
+            if (title != null)
+            {
+                float bonus = 0f;
+                if (title.type != TitleType.Lordship)
+                {
+                    if (title.type == TitleType.Barony) bonus = 1f;
+                    else if (title.type == TitleType.County) bonus = 2f;
+                    else if (title.type == TitleType.Dukedom) bonus = 4f;
+                    else if (title.type == TitleType.Kingdom) bonus = 10f;
+                    else bonus = 20f;
+                }
+
+                if (bonus > 0f) result.Add(bonus, new TextObject("Highest title level"));
+            }
+
+            return result;
+        }
 
         public (bool, string) IsCouncilRoyal(Clan clan)
         {

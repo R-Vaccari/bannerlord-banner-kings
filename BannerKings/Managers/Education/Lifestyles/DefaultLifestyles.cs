@@ -19,25 +19,31 @@ namespace BannerKings.Managers.Education.Lifestyles
         public Lifestyle CivilAdministrator => civilAdministrator;
         public override void Initialize()
         {
-            fian = new Lifestyle("training_fian", new TextObject("{=!}Fian"), new TextObject("{=!}"));
-            fian.Initialize(DefaultSkills.Bow, DefaultSkills.TwoHanded, new List<PerkObject>() { },
+            fian = new Lifestyle("lifestyle_fian");
+            fian.Initialize(new TextObject("{=!}Fian"), new TextObject("{=!}"), DefaultSkills.Bow, 
+                DefaultSkills.TwoHanded, new List<PerkObject>() { },
                 Game.Current.ObjectManager.GetObjectTypeList<CultureObject>().FirstOrDefault(x => x.StringId == "battania"));
 
-            cataphract = new Lifestyle("training_cataphract", new TextObject("{=!}Cataphract"), new TextObject("{=!}"));
-            cataphract.Initialize(DefaultSkills.Polearm, DefaultSkills.Riding, new List<PerkObject>() { },
+            cataphract = new Lifestyle("lifestyle_cataphract");
+            cataphract.Initialize(new TextObject("{=!}Cataphract"), new TextObject("{=!}"), 
+                DefaultSkills.Polearm, DefaultSkills.Riding, new List<PerkObject>() { },
                 Game.Current.ObjectManager.GetObjectTypeList<CultureObject>().FirstOrDefault(x => x.StringId == "empire"));
 
-            diplomat = new Lifestyle("training_diplomat", new TextObject("{=!}Diplomat"), new TextObject("{=!}"));
-            diplomat.Initialize(DefaultSkills.Charm, BKSkills.Instance.Lordship, new List<PerkObject>() { });
+            diplomat = new Lifestyle("lifestyle_diplomat");
+            diplomat.Initialize(new TextObject("{=!}Diplomat"), new TextObject("{=!}"), 
+                DefaultSkills.Charm, BKSkills.Instance.Lordship, new List<PerkObject>() { });
 
-            august = new Lifestyle("training_august", new TextObject("{=!}August"), new TextObject("{=!}"));
-            august.Initialize(DefaultSkills.Leadership, BKSkills.Instance.Lordship, new List<PerkObject>() { });
+            august = new Lifestyle("lifestyle_august");
+            august.Initialize(new TextObject("{=!}August"), new TextObject("{=!}"), 
+                DefaultSkills.Leadership, BKSkills.Instance.Lordship, new List<PerkObject>() { });
 
-            siegeEngineer = new Lifestyle("training_siegeEngineer", new TextObject("{=!}Siege Engineer"), new TextObject("{=!}"));
-            siegeEngineer.Initialize(DefaultSkills.Engineering, DefaultSkills.Tactics, new List<PerkObject>() { });
+            siegeEngineer = new Lifestyle("lifestyle_siegeEngineer");
+            siegeEngineer.Initialize(new TextObject("{=!}Siege Engineer"), new TextObject("{=!}"), 
+                DefaultSkills.Engineering, DefaultSkills.Tactics, new List<PerkObject>() { });
 
-            civilAdministrator = new Lifestyle("training_civilAdministrator", new TextObject("{=!}Civil Administrator"), new TextObject("{=!}"));
-            civilAdministrator.Initialize(DefaultSkills.Engineering, DefaultSkills.Steward, new List<PerkObject>() { });
+            civilAdministrator = new Lifestyle("lifestyle_civilAdministrator");
+            civilAdministrator.Initialize(new TextObject("{=!}Civil Administrator"), new TextObject("{=!}"), 
+                DefaultSkills.Engineering, DefaultSkills.Steward, new List<PerkObject>() { });
         }
 
         public IEnumerable<Lifestyle> All

@@ -8,9 +8,13 @@ namespace BannerKings
         protected TextObject name;
         protected TextObject description;
 
-        public BannerKingsObject(string id, TextObject name, TextObject description)
+        public BannerKingsObject(string id)
         {
             this.id = id;
+        }
+
+        protected void Initialize(TextObject name, TextObject description)
+        {
             this.name = name;
             this.description = description;
         }

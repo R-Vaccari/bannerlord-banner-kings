@@ -45,7 +45,7 @@ namespace BannerKings.Managers
                 }
 
 
-                Educations.Add(hero, new EducationData(languages));
+                Educations.Add(hero, new EducationData(hero, languages));
             }
         }
 
@@ -68,6 +68,11 @@ namespace BannerKings.Managers
                 data = Educations[hero];
 
             return data;
+        }
+
+        public void UpdateHeroData(Hero hero)
+        {
+            if (Educations.ContainsKey(hero)) Educations[hero].Update(null);
         }
 
         public MBReadOnlyList<ValueTuple<Language, Hero>> GetAvailableLanguagesToLearn(Hero hero)

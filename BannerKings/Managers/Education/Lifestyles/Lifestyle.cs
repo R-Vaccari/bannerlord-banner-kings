@@ -14,13 +14,14 @@ namespace BannerKings.Managers.Education.Lifestyles
         private SkillObject secondSkill;
         private List<PerkObject> perks;
 
-        public Lifestyle(string id, TextObject name, TextObject description) : base(id, name, description)
+        public Lifestyle(string id) : base(id)
         {
         }
 
-        public void Initialize(SkillObject firstSkill, SkillObject secondSkill,
+        public void Initialize(TextObject name, TextObject description, SkillObject firstSkill, SkillObject secondSkill,
             List<PerkObject> perks, CultureObject culture = null)
-        { 
+        {
+            Initialize(name, description);
             this.firstSkill = firstSkill;
             this.secondSkill = secondSkill;
             this.perks = perks;
@@ -30,6 +31,7 @@ namespace BannerKings.Managers.Education.Lifestyles
         public bool CanLearn(Hero hero) => (culture == null ||hero.Culture == culture) && hero.GetSkillValue(firstSkill) >= 150 
             && hero.GetSkillValue(secondSkill) >= 150;
 
+        public void AddProgress(float progress) => this.progress += progress;
         public float Progress => progress;
         public CultureObject Culture => culture;
         public SkillObject FirstSkill => firstSkill;
