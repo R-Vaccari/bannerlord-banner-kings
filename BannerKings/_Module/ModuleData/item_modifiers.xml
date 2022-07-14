@@ -11,9 +11,9 @@
   <ItemModifier id="fine_consumable" name="{=xeb1b5PQ}Fine {ITEMNAME}"  price_factor="1.2" />
   <ItemModifier id="poor_consumable" name="{=bk_modifier_poor}Poor {ITEMNAME}" price_factor="0.7" />
   
-  <ItemModifier id="purebred_horse" name="{=bk_modifier_purebred}Purebred {ITEMNAME}" price_factor="1.5"/>
-  <ItemModifier id="strong_horse" name="{=bk_modifier_strong}Strong {ITEMNAME}" price_factor="1.2"/>
-  <ItemModifier id="stubborn_horse" name="{=bk_modifier_stubborn}Stubborn {ITEMNAME}"  price_factor="0.8"/>
-  <ItemModifier id="anaemic_horse" name="{=bk_modifier_anaemic}Anaemic {ITEMNAME}"  price_factor="0.6"/>
+  <ItemModifier id="purebred_animal" name="{=bk_modifier_purebred}Purebred {ITEMNAME}" price_factor="1.5"/>
+  <ItemModifier id="strong_animal" name="{=bk_modifier_strong}Strong {ITEMNAME}" price_factor="1.2"/>
+  <ItemModifier id="stubborn_animal" name="{=bk_modifier_stubborn}Stubborn {ITEMNAME}"  price_factor="0.8"/>
+  <ItemModifier id="anaemic_animal" name="{=bk_modifier_anaemic}Anaemic {ITEMNAME}"  price_factor="0.6"/>
   
 </ItemModifiers>

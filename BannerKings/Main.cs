@@ -417,8 +417,9 @@ namespace BannerKings
                     else if (outputItem.IsAnimal) modifierGroup = Game.Current.ObjectManager.GetObject<ItemModifierGroup>("animals");
                     else modifierGroup = Game.Current.ObjectManager.GetObject<ItemModifierGroup>("goods");
 
-                    int itemPrice = town.GetItemPrice(outputItem, null, false);
-                    town.Owner.ItemRoster.AddToCounts(new EquipmentElement(outputItem, modifierGroup.GetRandomModifierWithTarget(data.ProductionQuality.ResultNumber), null, false), count);
+                    ItemModifier modifier = modifierGroup.GetRandomModifierWithTarget(data.ProductionQuality.ResultNumber);
+                    int itemPrice = (int)(town.GetItemPrice(outputItem, null, false) * modifier.PriceMultiplier);
+                    town.Owner.ItemRoster.AddToCounts(new EquipmentElement(outputItem, modifier, null, false), count);
                     if (Campaign.Current.GameStarted && !doNotEffectCapital)
                     {
                         int num = MathF.Min(1000, itemPrice) * count;
