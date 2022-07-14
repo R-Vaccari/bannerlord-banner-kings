@@ -4,6 +4,13 @@
 		<tag language="English" />
 	</tags>
 	<strings>
+		
+		<string id="bk_modifier_purebred" text="Poor {ITEMNAME}" />
+		<string id="bk_modifier_strong" text="Strong {ITEMNAME}" />
+		<string id="bk_modifier_stubborn" text="Stubborn {ITEMNAME}" />
+		<string id="bk_modifier_anaemic" text="Anaemic {ITEMNAME}" />
+		<string id="bk_modifier_poor" text="Poor {ITEMNAME}" />
+	
 		<string id="bk_privileges" text="Privileges" />
 		<string id="bk_council_privilege_low_wage" text="Low Wage" />
 		<string id="bk_council_privilege_mid_wage" text="Wage" />

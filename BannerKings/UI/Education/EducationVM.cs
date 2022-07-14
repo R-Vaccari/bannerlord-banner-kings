@@ -42,7 +42,7 @@ namespace BannerKings.UI.Education
             CurrentLifestyleInfo.Clear();
             LifestyleProgressInfo.Clear();
             data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(hero);
-            BKEducationModel model = BannerKingsConfig.Instance.EducationModel;
+
             if (data.Books.Count == 0)
                 BooksReadInfo.Add(new InformationElement(new TextObject("{=!}No books read yet").ToString(), string.Empty,
                     new TextObject("{=!}Books need to be in your inventory or the current settlement's Stash in order to be readable. To start reading you need to be literate and either have a dictionary or have a minimum understanding of it's language.").ToString()));
@@ -63,6 +63,11 @@ namespace BannerKings.UI.Education
                     FormatValue(data.CurrentBookProgress),
                     new TextObject("{=!}How close you are to finishing the book.").ToString()));
 
+                ExplainedNumber result = data.CurrentBookReadingRate;
+                CurrentLanguageInfo.Add(new InformationElement(new TextObject("{=!}Reading rate:").ToString(),
+                    FormatValue(result.ResultNumber),
+                    result.GetExplanations()));
+
                 CurrentBookInfo.Add(new InformationElement(new TextObject("{=!}Language:").ToString(), 
                     data.CurrentBook.Language.Name.ToString(),
                     data.CurrentBook.Language.Description.ToString()));
@@ -82,7 +87,7 @@ namespace BannerKings.UI.Education
                     FormatValue(data.CurrentLanguageFluency),
                     new TextObject("{=!}How close you are to speaking the language effortlessly.").ToString()));
 
-                ExplainedNumber result = model.CalculateLanguageLearningRate(hero, data.LanguageInstructor, data.CurrentLanguage);
+                ExplainedNumber result = data.CurrentLanguageLearningRate;
                 CurrentLanguageInfo.Add(new InformationElement(new TextObject("{=!}Learning Rate:").ToString(),
                     FormatValue(result.ResultNumber),
                     result.GetExplanations()));

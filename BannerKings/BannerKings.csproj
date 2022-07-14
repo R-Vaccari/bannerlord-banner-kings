@@ -312,6 +312,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Managers\Innovations\" />
     <Folder Include="_Module\GUI\Prefabs" />
     <Folder Include="_Module\ModuleData" />
   </ItemGroup>

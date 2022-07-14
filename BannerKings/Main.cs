@@ -34,6 +34,7 @@ using Bannerlord.UIExtenderEx;
 using BannerKings.Managers.Skills;
 using SandBox.View.Map;
 using BannerKings.Managers.Items;
+using BannerKings.Managers.Populations;
 
 namespace BannerKings
 {
@@ -399,6 +400,33 @@ namespace BannerKings
                         return false;
                     }
                     return true;
+                }
+            }
+
+            [HarmonyPatch(typeof(WorkshopsCampaignBehavior), "ProduceOutput")]
+            class WorkshopProduceOutputPatch
+            {
+                static bool Prefix(ItemObject outputItem, Town town, Workshop workshop, int count, bool doNotEffectCapital)
+                {
+                    if (BannerKingsConfig.Instance.PopulationManager == null || !BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
+                        return true;
+
+                    EconomicData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement).EconomicData;
+                    ItemModifierGroup modifierGroup;
+                    if (outputItem.IsFood) modifierGroup = Game.Current.ObjectManager.GetObject<ItemModifierGroup>("consumables");
+                    else if (outputItem.IsAnimal) modifierGroup = Game.Current.ObjectManager.GetObject<ItemModifierGroup>("animals");
+                    else modifierGroup = Game.Current.ObjectManager.GetObject<ItemModifierGroup>("goods");
+
+                    int itemPrice = town.GetItemPrice(outputItem, null, false);
+                    town.Owner.ItemRoster.AddToCounts(new EquipmentElement(outputItem, modifierGroup.GetRandomModifierWithTarget(data.ProductionQuality.ResultNumber), null, false), count);
+                    if (Campaign.Current.GameStarted && !doNotEffectCapital)
+                    {
+                        int num = MathF.Min(1000, itemPrice) * count;
+                        workshop.ChangeGold(num);
+                        town.ChangeGold(-num);
+                    }
+                    CampaignEventDispatcher.Instance.OnItemProduced(outputItem, town.Owner.Settlement, count);
+                    return false;
                 }
             }
 
@@ -874,9 +902,7 @@ namespace BannerKings
                                     village.Owner.ItemRoster.AddToCounts(item, num);
                                     CampaignEventDispatcher.Instance.OnItemProduced(item, village.Owner.Settlement, num);
                                 }
-                                else
-                                    village.TradeBound.ItemRoster.AddToCounts(item, num);
-
+                                else village.TradeBound.ItemRoster.AddToCounts(item, num);
                             }
                         }
                         return false;

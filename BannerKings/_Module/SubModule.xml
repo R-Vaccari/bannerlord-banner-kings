@@ -42,6 +42,12 @@
         <GameType value="CustomGame"/>
       </IncludedGameTypes>
     </XmlNode>
+	<XmlNode>                
+		<XmlName id="ItemModifiers" path="item_modifiers"/>
+	</XmlNode>               
+	<XmlNode>                
+		<XmlName id="ItemModifierGroups" path="item_modifiers_groups"/>
+	</XmlNode>  
 	<!--<XmlNode>                
 		<XmlName id="WorkshopTypes" path="workshops"/>
 		<IncludedGameTypes>
