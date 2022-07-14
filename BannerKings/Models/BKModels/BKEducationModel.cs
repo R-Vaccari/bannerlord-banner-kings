@@ -2,6 +2,7 @@
 using BannerKings.Managers.Education.Languages;
 using BannerKings.Managers.Skills;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Models.BKModels
@@ -17,8 +18,15 @@ namespace BannerKings.Models.BKModels
             result.LimitMax(5f);
 
             result.Add(student.GetSkillValue(BKSkills.Instance.Scholarship) * 0.1f, BKSkills.Instance.Scholarship.Name);
-            result.AddFactor(BannerKingsConfig.Instance.EducationManager.GetHeroEducation(instructor).GetLanguageFluency(language), 
-                new TextObject("{=!}Instructor fluency"));
+
+            float teaching = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(instructor).GetLanguageFluency(language) - 1f;
+            if (!float.IsNaN(teaching) && teaching != 0f) result.AddFactor(teaching,   new TextObject("{=!}Instructor fluency"));
+            
+            Language native = BannerKingsConfig.Instance.EducationManager.GetNativeLanguage(student);
+            MBReadOnlyDictionary<Language, float> dic = native.Inteligible;
+            if (dic.ContainsKey(language))
+                result.Add(dic[language], new TextObject("{=!}Intelligibility with {LANGUAGE}").SetTextVariable("LANGUAGE", native.Name));
+
 
             return result;
         }

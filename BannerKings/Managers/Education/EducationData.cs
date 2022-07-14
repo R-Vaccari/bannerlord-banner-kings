@@ -20,8 +20,8 @@ namespace BannerKings.Managers.Education
         private Language currentLanguage;
         private Hero languageInstructor;
 
-        private const float LANGUAGE_RATE = 1f / (CampaignTime.DaysInYear * 4f);
-        private const float BOOK_RATE = 1f / (CampaignTime.DaysInYear * 2f);
+        private const float LANGUAGE_RATE = 1f / (CampaignTime.DaysInYear * 5f);
+        private const float BOOK_RATE = 1f / (CampaignTime.DaysInYear * 3f);
 
         public EducationData(Hero hero, Dictionary<Language, float> languages, Lifestyle lifestyle = null)
         {
@@ -123,6 +123,8 @@ namespace BannerKings.Managers.Education
             BKEducationModel model = BannerKingsConfig.Instance.EducationModel;
             if (languageInstructor != null && (languageInstructor.IsDead || languageInstructor.IsDisabled))
                 languageInstructor = null;
+
+            if (hero.IsDead || hero.IsPrisoner) return;
 
             if (CurrentLanguage != null && LanguageInstructor != null) GainLanguageFluency(CurrentLanguage, CurrentLanguageLearningRate.ResultNumber);
             if (CurrentBook != null) GainBookReading(CurrentBook, CurrentBookReadingRate.ResultNumber);

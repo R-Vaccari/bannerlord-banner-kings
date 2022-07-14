@@ -6,6 +6,7 @@ using BannerKings.Models.BKModels;
 using System;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.ViewModelCollection;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -104,7 +105,18 @@ namespace BannerKings.UI.Education
                     new TextObject("{=!}Languages may be taught by your courtiers that have a good fluency, so long they understand it more than you. Languages can be actively studied on the settlement the courtier is located at.").ToString()));
             else
             {
-
+                LifestyleProgressInfo.Add(new InformationElement(new TextObject("{=!}Lifestyle:").ToString(),
+                    data.Lifestyle.Name.ToString(),
+                    string.Empty));
+                LifestyleProgressInfo.Add(new InformationElement(new TextObject("{=!}Progress:").ToString(),
+                    FormatValue(data.Lifestyle.Progress),
+                    string.Empty));
+                LifestyleProgressInfo.Add(new InformationElement(new TextObject("{=!}First skill:").ToString(),
+                    data.Lifestyle.FirstSkill.Name.ToString(),
+                    data.Lifestyle.FirstSkill.Description.ToString()));
+                LifestyleProgressInfo.Add(new InformationElement(new TextObject("{=!}Second skill:").ToString(),
+                    data.Lifestyle.SecondSkill.Name.ToString(),
+                    data.Lifestyle.SecondSkill.Description.ToString()));
             }
         }
         
@@ -121,10 +133,11 @@ namespace BannerKings.UI.Education
                 if (tuple.Item1 != data.CurrentLanguage && tuple.Item2 != data.LanguageInstructor)
                     elements.Add(new InquiryElement(tuple,
                         tuple.Item1.Name.ToString() + " - " + tuple.Item2.Name.ToString(),
-                        null));
+                        new ImageIdentifier(CampaignUIHelper.GetCharacterCode(tuple.Item2.CharacterObject)),
+                        tuple.Item2.IsFriend(Hero.MainHero), tuple.Item2.CurrentSettlement.Name.ToString()));
 
             InformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(new TextObject("{=!}Choose Language").ToString(),
-                new TextObject("{=!}Select a language you would like to learn. Learning a language requires an instructor from your court, and different people have different teaching skills. Learning languages is easier when they are intelligible with a language you already speak fluently.").ToString(), elements, true, 1,
+                new TextObject("{=!}Select a language you would like to learn. Learning a language requires an instructor from your court, and different people have different teaching skills. A courtier must have a good opinion of you in order to be available. Learning languages is easier when they are intelligible with your native language.").ToString(), elements, true, 1,
                 GameTexts.FindText("str_done").ToString(), string.Empty,
                 delegate (List<InquiryElement> x)
                 {
@@ -215,7 +228,7 @@ namespace BannerKings.UI.Education
         }
 
         [DataSourceProperty]
-        public bool ChangeBookPossible => hero.PartyBelongedTo != null && BannerKingsConfig.Instance.EducationManager.GetAvailableBooks(hero.PartyBelongedTo).Count > 0;
+        public bool ChangeBookPossible => hero.PartyBelongedTo != null;
 
         [DataSourceProperty]
         public string LanguagesText => new TextObject("{=!}Languages").ToString();
