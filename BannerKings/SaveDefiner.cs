@@ -3,6 +3,10 @@ using BannerKings.Managers;
 using BannerKings.Managers.Court;
 using BannerKings.Managers.Decisions;
 using BannerKings.Managers.Duties;
+using BannerKings.Managers.Education;
+using BannerKings.Managers.Education.Books;
+using BannerKings.Managers.Education.Languages;
+using BannerKings.Managers.Education.Lifestyles;
 using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Institutions.Religions.Faiths;
 using BannerKings.Managers.Institutions.Religions.Faiths.Asera;
@@ -126,8 +130,12 @@ namespace BannerKings
             AddClassDefinition(typeof(KinshipLeadership), 84);
             AddClassDefinition(typeof(AutonomousLeadership), 85);
             AddClassDefinition(typeof(CanticlesFaith), 86);
-            AddEnumDefinition(typeof(RiteType), 87);
-
+            AddEnumDefinition(typeof(RiteType), 87); 
+            AddClassDefinition(typeof(EducationData), 88);
+            AddClassDefinition(typeof(BookType), 89);
+            AddClassDefinition(typeof(Language), 90);
+            AddClassDefinition(typeof(Lifestyle), 91);
+            AddClassDefinition(typeof(EducationManager), 92);
         }
 
         protected override void DefineContainerDefinitions()
@@ -157,6 +165,9 @@ namespace BannerKings
             ConstructContainerDefinition(typeof(Dictionary<Hero, FaithfulData>));
             ConstructContainerDefinition(typeof(Dictionary<RiteType, CampaignTime>));
             ConstructContainerDefinition(typeof(Dictionary<Religion, Dictionary<Hero, FaithfulData>>));
+            ConstructContainerDefinition(typeof(Dictionary<Hero, EducationData>));
+            ConstructContainerDefinition(typeof(Dictionary<BookType, float>));
+            ConstructContainerDefinition(typeof(Dictionary<Language, float>));
         }
     }
 }

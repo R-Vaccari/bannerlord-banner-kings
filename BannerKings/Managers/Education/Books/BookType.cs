@@ -8,7 +8,6 @@ namespace BannerKings.Managers.Education.Books
     public class BookType : BannerKingsObject
     {
         private ItemObject bookItem;
-        private TextObject description;
         private Language language;
         private SkillObject skill;
         private BookUse bookUse;
@@ -41,7 +40,6 @@ namespace BannerKings.Managers.Education.Books
 
         public ItemObject Item => bookItem;
         public Language Language => language;
-        public TextObject Description => description;
         public SkillObject Skill => skill;
         public BookUse Use => bookUse;
     }

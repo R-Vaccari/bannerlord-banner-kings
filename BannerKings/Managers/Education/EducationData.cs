@@ -7,17 +7,31 @@ using TaleWorlds.Library;
 using TaleWorlds.CampaignSystem;
 using BannerKings.Models.BKModels;
 using BannerKings.Managers.Skills;
+using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Managers.Education
 {
     public class EducationData : BannerKingsData
     {
+        [SaveableField(1)]
         private Hero hero;
+
+        [SaveableField(2)]
         private Dictionary<BookType, float> books;
+
+        [SaveableField(3)]
         private Dictionary<Language, float> languages;
+
+        [SaveableField(4)]
         private Lifestyle lifestyle;
+
+        [SaveableField(5)]
         private BookType currentBook;
+
+        [SaveableField(6)]
         private Language currentLanguage;
+
+        [SaveableField(7)]
         private Hero languageInstructor;
 
         private const float LANGUAGE_RATE = 1f / (CampaignTime.DaysInYear * 5f);
@@ -37,7 +51,7 @@ namespace BannerKings.Managers.Education
         public void PostInitialize()
         {
             Lifestyle lf = DefaultLifestyles.Instance.GetById(lifestyle);
-            lifestyle.Initialize(lf.Name, lf.Description, lf.FirstSkill, lf.SecondSkill, new List<PerkObject>(lf.Perks), lf.Culture);
+            if (lf != null) lifestyle.Initialize(lf.Name, lf.Description, lf.FirstSkill, lf.SecondSkill, new List<PerkObject>(lf.Perks), lf.Culture);
 
             foreach(KeyValuePair<Language, float> pair in languages)
             {
@@ -46,8 +60,15 @@ namespace BannerKings.Managers.Education
                 language.Initialize(l2.Name, l2.Description, l2.Culture, DefaultLanguages.Instance.GetIntelligibles(l2));
             }
 
+            foreach (KeyValuePair<BookType, float> pair in books)
+            {
+                BookType book = pair.Key;
+                BookType b = DefaultBookTypes.Instance.GetById(book);
+                book.Initialize(b.Item, b.Description, b.Language, b.Use, b.Skill);
+            }
+
             Language l = DefaultLanguages.Instance.GetById(currentLanguage);
-            currentLanguage.Initialize(l.Name, l.Description, l.Culture, DefaultLanguages.Instance.GetIntelligibles(l));
+            if (l != null) currentLanguage.Initialize(l.Name, l.Description, l.Culture, DefaultLanguages.Instance.GetIntelligibles(l));
         }
 
         public void SetCurrentBook(BookType book)

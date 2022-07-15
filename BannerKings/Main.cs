@@ -35,6 +35,9 @@ using BannerKings.Managers.Skills;
 using SandBox.View.Map;
 using BannerKings.Managers.Items;
 using BannerKings.Managers.Populations;
+using BannerKings.Managers.Education.Languages;
+using BannerKings.Managers.Education.Books;
+using BannerKings.Managers.Education.Lifestyles;
 
 namespace BannerKings
 {
@@ -153,7 +156,7 @@ namespace BannerKings
             {
                 private static void Postfix()
                 {
-                    BannerKingsConfig.Instance.ReligionsManager.PostInitialize();
+                    BannerKingsConfig.Instance.ReligionsManager.PostInitialize();  
                 }
             }
         }

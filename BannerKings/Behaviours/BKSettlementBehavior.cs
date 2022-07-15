@@ -55,7 +55,7 @@ namespace BannerKings.Behaviors
                 titleManager = null;
                 courtManager = null;
                 religionsManager = null;
-
+                educationsManager = null;
             }
 
             dataStore.SyncData("bannerkings-populations", ref populationManager);
@@ -63,7 +63,7 @@ namespace BannerKings.Behaviors
             dataStore.SyncData("bannerkings-courts", ref courtManager);
             dataStore.SyncData("bannerkings-policies", ref policyManager);
             dataStore.SyncData("bannerkings-religions", ref religionsManager);
-
+            dataStore.SyncData("bannerkings-educations", ref educationsManager);
 
             if (dataStore.IsLoading)
             {

@@ -3,11 +3,13 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
+using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Managers.Education.Lifestyles
 {
     public class Lifestyle : BannerKingsObject
     {
+        [SaveableField(100)]
         private float progress;
         private CultureObject culture;
         private SkillObject firstSkill;
@@ -16,6 +18,7 @@ namespace BannerKings.Managers.Education.Lifestyles
 
         public Lifestyle(string id) : base(id)
         {
+            progress = 0f;
         }
 
         public void Initialize(TextObject name, TextObject description, SkillObject firstSkill, SkillObject secondSkill,

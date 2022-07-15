@@ -17,6 +17,10 @@ namespace BannerKings
 
         public abstract IEnumerable<X> All { get; }
 
-        public X GetById(X input) => All.FirstOrDefault(x => x.StringId == input.StringId);
+        public X GetById(X input)
+        {
+            if (input != null) return All.FirstOrDefault(x => x.StringId == input.StringId);
+            else return null;
+        }
     }
 }

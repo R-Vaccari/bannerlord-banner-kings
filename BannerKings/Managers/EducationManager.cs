@@ -8,11 +8,13 @@ using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
+using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Managers
 {
     public class EducationManager
     {
+        [SaveableProperty(1)]
         private Dictionary<Hero, EducationData> Educations { get; set; }
 
         public EducationManager()
@@ -47,6 +49,12 @@ namespace BannerKings.Managers
 
                 Educations.Add(hero, new EducationData(hero, languages));
             }
+        }
+
+        public void PostInitialize()
+        {
+            foreach (EducationData data in Educations.Values.ToList())
+                data.PostInitialize();
         }
 
         public Language GetNativeLanguage(Hero hero)

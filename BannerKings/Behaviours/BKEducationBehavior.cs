@@ -20,6 +20,7 @@ namespace BannerKings.Behaviours
             CampaignEvents.WeeklyTickEvent.AddNonSerializedListener(this, OnWeeklyTick);
             CampaignEvents.SettlementEntered.AddNonSerializedListener(this, OnSettlementEntered);
             CampaignEvents.HeroKilledEvent.AddNonSerializedListener(this, OnHeroKilled);
+            CampaignEvents.OnGameLoadedEvent.AddNonSerializedListener(this, OnGameLoaded);
             CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, OnSessionLaunched);
             CampaignEvents.OnNewGameCreatedEvent.AddNonSerializedListener(this, OnGameStarted);
         }
@@ -95,9 +96,15 @@ namespace BannerKings.Behaviours
 
         private int DesiredSellerCount() => (int)(Town.AllTowns.Count / 15f);
 
+        private void OnGameLoaded(CampaignGameStarter campaignGameStarter)
+        {
+            BannerKingsConfig.Instance.EducationManager.PostInitialize();
+        }
+
         private void OnSessionLaunched(CampaignGameStarter campaignGameStarter)
         {
             AddDialogue(campaignGameStarter);
+            BannerKingsConfig.Instance.EducationManager.PostInitialize();
         }
 
         private void OnGameStarted(CampaignGameStarter campaignGameStarter)

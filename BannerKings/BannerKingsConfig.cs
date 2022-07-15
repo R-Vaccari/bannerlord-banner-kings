@@ -44,8 +44,7 @@ namespace BannerKings
             DefaultDivinities.Instance.Initialize();
             DefaultFaiths.Instance.Initialize();
             DefaultDoctrines.Instance.Initialize();
-            BKItemCategories.Instance.Initialize();
-            BKItems.Instance.Initialize();
+
             DefaultLanguages.Instance.Initialize();
             DefaultBookTypes.Instance.Initialize();
             DefaultLifestyles.Instance.Initialize();
