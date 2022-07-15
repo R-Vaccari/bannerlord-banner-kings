@@ -3,21 +3,41 @@ using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Institutions.Religions.Doctrines
 {
-    public class DefaultDoctrines
+    public class DefaultDoctrines : DefaultTypeInitializer<DefaultDoctrines, Doctrine>
     {
 
-        public static DefaultDoctrines Instance => ConfigHolder.CONFIG;
-        internal struct ConfigHolder
-        {
-            public static DefaultDoctrines CONFIG = new DefaultDoctrines();
-        }
 
         private Doctrine druidism, animism, legalism, communalFaith, literalism, pastoralism, pacifism, heathenTax, childbirth, sacrifice;
 
         public Doctrine Druidism => druidism;
         public Doctrine Animism => animism;
+        public Doctrine Legalism => legalism;
+        public Doctrine CommunalFaith => communalFaith;
+        public Doctrine Literalism => literalism;
+        public Doctrine Pastoralism => pastoralism;
+        public Doctrine Pacifism => pacifism;
+        public Doctrine HeathenTax => heathenTax;
+        public Doctrine Childbirth => childbirth;
+        public Doctrine Sacrifice => sacrifice;
 
-        public void Initialize()
+        public override IEnumerable<Doctrine> All
+        {
+            get
+            {
+                yield return Druidism;
+                yield return Animism;
+                yield return Legalism;
+                yield return CommunalFaith;
+                yield return Literalism;
+                yield return Pastoralism;
+                yield return Pacifism;
+                yield return HeathenTax;
+                yield return Childbirth;
+                yield return Sacrifice;
+            }
+        }
+
+        public override void Initialize()
         {
             druidism = new Doctrine("druidism", new TextObject("{=!}Druidism"), 
                 new TextObject("{=!}Clergy is considered part of the Druid caste, who represent the spiritual power, but are also involved in political, material affairs. In a way, druids are a form of lesser nobility and cannot be excluded from political affairs."), 
@@ -63,13 +83,6 @@ namespace BannerKings.Managers.Institutions.Religions.Doctrines
                 new TextObject("{=!}Worthy opponents are deserving of a better death than commoners in the battlefield. We can prove our devotion by ritually sacrificing them."),
                 new TextObject("{=!}Allows the Human Sacrifice rite"),
                 new List<string>());
-        }
-
-        public Doctrine GetById(string doctrineId)
-        {
-            if (doctrineId == "druidism")
-                return druidism;
-            else return animism;
         }
     }
 }

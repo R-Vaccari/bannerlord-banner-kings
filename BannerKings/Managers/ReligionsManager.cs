@@ -33,7 +33,7 @@ namespace BannerKings.Managers
             Religion aseraiReligion = new Religion(null, 
                 DefaultFaiths.Instance.AseraCode, new KinshipLeadership(),
                 new List<CultureObject> { aserai, khuzait, imperial },
-                new List<string>());
+                new List<string>() { "literalism" , "legalism", "heathen_tax" });
 
             Religion battaniaReligion = new Religion(null,
                 DefaultFaiths.Instance.AmraOllahm, new AutonomousLeadership(),
@@ -43,12 +43,12 @@ namespace BannerKings.Managers
             Religion darusosianReligion = new Religion(Settlement.All.First(x => x.StringId == "town_ES4"),
                DefaultFaiths.Instance.Darusosian, new HierocraticLeadership(),
                new List<CultureObject> { imperial },
-               new List<string>());
+               new List<string>() { "legalism" });
 
             Religion vlandiaReligion = new Religion(null,
                DefaultFaiths.Instance.Canticles, new HierocraticLeadership(),
                new List<CultureObject> { vlandia },
-               new List<string>() { "sacrifice", "literalism" });
+               new List<string>() { "sacrifice", "literalism", "childbirth" });
             rels.Add(aseraiReligion);
             rels.Add(battaniaReligion);
             rels.Add(darusosianReligion);

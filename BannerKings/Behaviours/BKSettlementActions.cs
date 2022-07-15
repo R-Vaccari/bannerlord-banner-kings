@@ -173,7 +173,7 @@ namespace BannerKings.Behaviours
                new GameMenuOption.OnConditionDelegate(MenuCourtCondition),
                new GameMenuOption.OnConsequenceDelegate(MenuCourtConsequence), false, -1, false);
 
-            campaignGameStarter.AddGameMenuOption("bannerkings", "manage_faith", "{=!}{FAITH}",
+            campaignGameStarter.AddGameMenuOption("bannerkings", "manage_faith", "{FAITH}",
                new GameMenuOption.OnConditionDelegate(MenuFaithCondition),
                new GameMenuOption.OnConsequenceDelegate(MenuFaithConsequence), false, -1, false);
 
@@ -533,7 +533,7 @@ namespace BannerKings.Behaviours
             {
                 ReligionData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(Settlement.CurrentSettlement).ReligionData;
                 hasFaith = data != null;
-                if (data != null) GameTexts.SetVariable("FAITH", data.Religion.GetName());
+                if (data != null) MBTextManager.SetTextVariable("FAITH", data.Religion.GetName());
             }
                  
             return hasFaith;
