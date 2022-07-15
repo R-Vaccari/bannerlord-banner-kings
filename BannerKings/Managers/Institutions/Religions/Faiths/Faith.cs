@@ -15,6 +15,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
 
         protected FaithGroup faithGroup;
         protected Divinity mainGod;
+        protected List<Divinity> pantheon;
         protected Dictionary<TraitObject, bool> traits;
         protected Dictionary<int, CharacterObject> presets;
         protected List<Rite> rites;

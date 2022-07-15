@@ -204,9 +204,9 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
             return text;
         }
 
-        public override MBReadOnlyList<Divinity> GetSecondaryDivinities() => null;
+        public override MBReadOnlyList<Divinity> GetSecondaryDivinities() => pantheon.GetReadOnlyList();
 
-        public override TextObject GetSecondaryDivinitiesDescription() => new TextObject("{=!}Spirits");
+        public override TextObject GetSecondaryDivinitiesDescription() => new TextObject("{=!}Cults");
 
         public override (bool, TextObject) GetInductionAllowed(Hero hero, int rank)
         {

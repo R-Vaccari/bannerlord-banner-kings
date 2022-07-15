@@ -10,10 +10,11 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
             
         }
 
-        public void Initialize(Divinity mainGod, List<Divinity> secondaryGods, Dictionary<TraitObject, bool> traits,
+        public void Initialize(Divinity mainGod, List<Divinity> pantheon, Dictionary<TraitObject, bool> traits,
           FaithGroup faithGroup)
         {
-            base.Initialize(mainGod, traits, faithGroup);
+            Initialize(mainGod, traits, faithGroup);
+            this.pantheon = pantheon;
         }
     }
 }

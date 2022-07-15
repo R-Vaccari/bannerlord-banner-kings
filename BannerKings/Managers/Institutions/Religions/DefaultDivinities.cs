@@ -23,15 +23,18 @@ namespace BannerKings.Managers.Institutions.Religions
 
             aseraSecondary1 = new Divinity("asera-secondary-1", new TextObject("{=!}Damma-Siddiq"),
                 new TextObject("{=!}Descended from those who dedicated themselves to the Code of Asera but who were married into the true bloodlines of Asera’s descendents are known as the Damma-Siddiq; those of truthful blood. It is through their reforms, compromises, and bold rhetoric that marriage may allow even those born outside the Sultanate to come to be viewed as being of the blood of Asera - albeit through legalism and spirit."),
-                new TextObject());
+                new TextObject(),
+                new TextObject("{=!}School"));
 
-            aseraSecondary2 = new Divinity("asera-secondary-2", new TextObject("{=!}Rashuqqalih"),
+            aseraSecondary2 = new Divinity("asera-secondary-2", new TextObject("{=!}Ibn-Zakaa"),
                 new TextObject("{=!}Only the direct line of Asera’s sons can claim to be Ibn-Zakaa; to be born a Pure Son. Such claims have led to kinstrife and civil war in the past, with daughters being viewed as a dead end to a pure line, and many a ‘lesser son’ made eunuch as means of societal control. In the modern age, the Ibn-Zakaa are far more enlightened, viewing themselves not as deserving of a divinely appointed respect but rather in the light of those who have much to prove to be worthy in the eyes of their progenitor."),
-                new TextObject());
+                new TextObject(),
+                new TextObject("{=!}School"));
 
-            aseraSecondary3 = new Divinity("asera-secondary-3", new TextObject("{=!}Damma-Siddiq"),
+            aseraSecondary3 = new Divinity("asera-secondary-3", new TextObject("{=!}Rashuqqalih"),
                 new TextObject("{=!}The schools of philosophy preached by the Rashuqqalih practitioners of the Code, are concerned foremost with matters of righteousness and societal elegance. To be of the blood of Asera is to be bound to the morals of a mortal man made legendary, and thus matters of failure and mortal flaws must be treated with compassion. The most famous practitioner of the Rashuqqalih school was Queen Eshora, who brought several nomadic badw tribes into the Sultanate by accepting their adherence to tradition as a thing to be celebrated, rather than as a matter to consider them a distasteful other."),
-                new TextObject());
+                new TextObject(),
+                new TextObject("{=!}School"));
 
 
             amraMain = new Divinity("amra-main", new TextObject("{=!}Sluagh Aos’An"), 
@@ -69,11 +72,13 @@ namespace BannerKings.Managers.Institutions.Religions
 
             vlandiaSecondary1 = new Divinity("vlandia-secondary-1", new TextObject("{=!}Ribaldi Cant"),
                 new TextObject("{=!}Those who buck against the perceived hegemony of the Lai Vlandia, be they peasant rebels or upstart lords, will claim piety by way of the Ribaldi Cant. Though traditionalists will note the Cant is but a deviation of the illuminated manuscripts and oral tales of the pre-Calradic Vlandian culture, modern adherents claim the Cant to be the methodology of rebels, wanderers, rascals, and conquerors. Subtlety is seldom found, and parables and morality plays are all too commonly twisted to back the ideology of the teller. As such the works depicted therein are often viewed as satire or crude witticisms, but few cloisters will deny their worth. They are part of the Lai Vlandia, and thus the Canticles, regardless of their desires. "),
-                new TextObject());
+                new TextObject(),
+                new TextObject("{=!}Saga"));
 
             vlandiaSecondary2 = new Divinity("vlandia-secondary-2", new TextObject("{=!}Meridional Cantigan"),
                 new TextObject("{=!}The vitriolic and zealous among the modern Vlandians have as of late begun singing the Meridional Cantigan and marching towards the Southlands in a belligerent crusade. Claiming to be a reprisal of a song sung before the days of Osrac Iron-Arm, these goliard warrior-poets speak the harsh rhymes of their ancient conqueror patriarchs and wayward followers. They seek truth in deed, to be worthy of a completed song for an era; to serve in harmony with the Canticles, the Lai Vlandia, and to be remembered in illuminations befitting those enshrined in legend."),
-                new TextObject());
+                new TextObject(),
+                new TextObject("{=!}Saga"));
         }
 
         public Divinity AseraMain => aseraMain;

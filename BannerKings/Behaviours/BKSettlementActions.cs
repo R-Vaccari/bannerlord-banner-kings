@@ -1,4 +1,5 @@
 ﻿using BannerKings.Managers.Institutions.Guilds;
+using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Titles;
 using BannerKings.Populations;
 using BannerKings.UI;
@@ -171,6 +172,10 @@ namespace BannerKings.Behaviours
             campaignGameStarter.AddGameMenuOption("bannerkings", "manage_court", "{=!}Noble Court",
                new GameMenuOption.OnConditionDelegate(MenuCourtCondition),
                new GameMenuOption.OnConsequenceDelegate(MenuCourtConsequence), false, -1, false);
+
+            campaignGameStarter.AddGameMenuOption("bannerkings", "manage_faith", "{=!}{FAITH}",
+               new GameMenuOption.OnConditionDelegate(MenuFaithCondition),
+               new GameMenuOption.OnConsequenceDelegate(MenuFaithConsequence), false, -1, false);
 
             campaignGameStarter.AddGameMenuOption("bannerkings", "manage_guild", "{=!}{GUILD_NAME}",
                 new GameMenuOption.OnConditionDelegate(MenuGuildCondition),
@@ -519,6 +524,21 @@ namespace BannerKings.Behaviours
             return hasGuild;
         }
 
+        private static bool MenuFaithCondition(MenuCallbackArgs args)
+        {
+            args.optionLeaveType = GameMenuOption.LeaveType.RansomAndBribe;
+            
+            bool hasFaith = false;
+            if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(Settlement.CurrentSettlement))
+            {
+                ReligionData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(Settlement.CurrentSettlement).ReligionData;
+                hasFaith = data != null;
+                if (data != null) GameTexts.SetVariable("FAITH", data.Religion.GetName());
+            }
+                 
+            return hasFaith;
+        }
+
         private static bool MenuCourtCondition(MenuCallbackArgs args)
         {
             args.optionLeaveType = GameMenuOption.LeaveType.RansomAndBribe;
@@ -591,6 +611,8 @@ namespace BannerKings.Behaviours
         private static void MenuCourtConsequence(MenuCallbackArgs args) => UIManager.Instance.ShowWindow("court");
 
         private static void MenuSettlementManageConsequence(MenuCallbackArgs args) => UIManager.Instance.ShowWindow("population");
+
+        private static void MenuFaithConsequence(MenuCallbackArgs args) => UIManager.Instance.ShowWindow("religions");
 
         private static void MenuGuildManageConsequence(MenuCallbackArgs args) => UIManager.Instance.ShowWindow("guild");
 

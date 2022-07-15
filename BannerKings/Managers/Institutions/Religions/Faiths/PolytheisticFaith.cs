@@ -7,7 +7,6 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
 {
     public abstract class PolytheisticFaith : Faith
     {
-        protected List<Divinity> pantheon;
 
         public PolytheisticFaith() : base()
         {
