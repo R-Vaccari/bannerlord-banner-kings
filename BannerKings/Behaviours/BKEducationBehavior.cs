@@ -5,6 +5,8 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using BannerKings.Managers.Education.Books;
 using TaleWorlds.Localization;
+using BannerKings.Managers.Education.Languages;
+using BannerKings.Managers.Education;
 
 namespace BannerKings.Behaviours
 {
@@ -110,6 +112,42 @@ namespace BannerKings.Behaviours
                 new ConversationSentence.OnConditionDelegate(IsBookSeller), 
                 new ConversationSentence.OnConsequenceDelegate(OnBuyBookConsequence), 
                 100, null, null);
+
+
+
+            starter.AddPlayerLine("lord_meet_player_response3", "lord_meet_player_response", "lord_introduction",
+                "{=NmGJs7yB}My name is {PLAYER.NAME}, {?CONVERSATION_NPC.GENDER}madam{?}sir{\\?}. May I ask your name?." + " (You ask in {NPC_LANGUAGE})", 
+                new ConversationSentence.OnConditionDelegate(OnMeetLanguageCondition), 
+                new ConversationSentence.OnConsequenceDelegate(OnMeetLanguageConsequence), 
+                100, null, null);
+        }
+
+        private bool OnMeetLanguageCondition()
+        {
+            bool speakslLanguage = false;
+            if (BannerKingsConfig.Instance.EducationManager != null)
+            {
+                Language playerLanguage = BannerKingsConfig.Instance.EducationManager.GetNativeLanguage(Hero.MainHero);
+                Language npcLanguage = BannerKingsConfig.Instance.EducationManager.GetNativeLanguage(Hero.OneToOneConversationHero);
+                if (npcLanguage != null && playerLanguage != null && playerLanguage != npcLanguage)
+                {
+                    EducationData data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(Hero.MainHero);
+                    if (data.GetLanguageFluency(npcLanguage) >= 0.5f)
+                        speakslLanguage = true;
+
+                    MBTextManager.SetTextVariable("NPC_LANGUAGE", npcLanguage.Name);
+                }
+            }
+            
+
+            return Campaign.Current.ConversationManager.CurrentConversationIsFirst && speakslLanguage;
+        }
+
+        private void OnMeetLanguageConsequence()
+        {
+            Language npcLanguage = BannerKingsConfig.Instance.EducationManager.GetNativeLanguage(Hero.OneToOneConversationHero);
+            float relation = 6 * BannerKingsConfig.Instance.EducationManager.GetHeroEducation(Hero.MainHero).GetLanguageFluency(npcLanguage);
+            ChangeRelationAction.ApplyPlayerRelation(Hero.OneToOneConversationHero, (int)relation, false, true);
         }
 
         private void OnBuyBookConsequence()
