@@ -121,7 +121,11 @@ namespace BannerKings.Behaviours
 
             starter.AddPlayerLine("bk_question_rite", "lord_talk_ask_something_2", "bk_preacher_asked_rites",
                 "{=!}I would like to perform a rite.",
-                () => true, () => RitesOnCondition(starter), 100, null, null);
+                new ConversationSentence.OnConditionDelegate(IsPreacher), () => RitesOnCondition(starter), 100, null, null);
+
+            starter.AddDialogLine("bk_answer_rite", "bk_preacher_asked_rites", "lord_talk_ask_something",
+                    "{=!}I am afraid that won't be possible.",
+                    () => !RitesOnCondition(starter), null, 100, null);
 
         }
 

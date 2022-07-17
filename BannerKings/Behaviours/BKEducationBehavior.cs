@@ -8,15 +8,16 @@ using TaleWorlds.Localization;
 using BannerKings.Managers.Education.Languages;
 using BannerKings.Managers.Education;
 using HarmonyLib;
-using System;
 using BannerKings.Managers.Skills;
 using TaleWorlds.Library;
+using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Behaviours
 {
     public class BKEducationBehavior : CampaignBehaviorBase
     {
-        private Dictionary<Hero, ItemRoster> BookSellers { get; set; } = new Dictionary<Hero, ItemRoster>();
+        [SaveableField(1)]
+        private Dictionary<Hero, ItemRoster> bookSellers  = new Dictionary<Hero, ItemRoster>();
 
         public override void RegisterEvents()
         {
@@ -32,17 +33,28 @@ namespace BannerKings.Behaviours
 
         public override void SyncData(IDataStore dataStore)
         {
+            if (BannerKingsConfig.Instance.wipeData)
+            {
+                bookSellers = null;
+            }
 
+            dataStore.SyncData("bannerkings-booksellers", ref bookSellers);
+
+            if (dataStore.IsLoading)
+                if (bookSellers == null) bookSellers = new Dictionary<Hero, ItemRoster>();
         }
 
         private void OnDailyTick(Hero hero)
         {
             BannerKingsConfig.Instance.EducationManager.UpdateHeroData(hero);
+            if (hero.IsSpecial && hero.Template.StringId.Contains("bannerkings_bookseller_"))
+                if (!bookSellers.ContainsKey(hero))
+                    bookSellers.Add(hero, GetStartingBooks(hero.Culture));
         }
 
         private void OnWeeklyTick()
         {
-            if (BookSellers.Count < DesiredSellerCount())
+            if (bookSellers.Count < DesiredSellerCount())
                 SpawnInitialSellers();
         }
 
@@ -53,15 +65,15 @@ namespace BannerKings.Behaviours
 
         private void OnHeroKilled(Hero victim, Hero killer, KillCharacterAction.KillCharacterActionDetail detail, bool showNotification = true)
         {
-            if (BookSellers.ContainsKey(victim)) BookSellers.Remove(victim);
+            if (bookSellers.ContainsKey(victim)) bookSellers.Remove(victim);
             BannerKingsConfig.Instance.EducationManager.RemoveHero(victim);
         }
 
         private void OnSettlementEntered(MobileParty party, Settlement target, Hero hero)
         {
             if (hero != Hero.MainHero || target.Town == null) return;
-            if (BookSellers.Any(x => x.Key.StayingInSettlement == target) && target.IsTown)
-                Utils.Helpers.AddSellerToKeep(BookSellers.First(x => x.Key.StayingInSettlement == target).Key, target);
+            if (bookSellers.Any(x => x.Key.StayingInSettlement == target) && target.IsTown)
+                Utils.Helpers.AddSellerToKeep(bookSellers.First(x => x.Key.StayingInSettlement == target).Key, target);
         }
 
         private void SpawnInitialSellers()
@@ -69,10 +81,10 @@ namespace BannerKings.Behaviours
             List<CharacterObject> templates = CharacterObject.All.ToList().FindAll(x => x.Occupation == Occupation.Special && x.StringId.Contains("bannerkings_bookseller_"));
             foreach (CharacterObject character in templates)
             {
-                if (BookSellers.Keys.Any(x => x.Culture == character.Culture)) continue;
+                if (bookSellers.Keys.Any(x => x.Culture == character.Culture)) continue;
 
                 List<Settlement> currentSettlements = new List<Settlement>();
-                foreach (Hero seller in BookSellers.Keys) currentSettlements.Add(seller.StayingInSettlement);
+                foreach (Hero seller in bookSellers.Keys) currentSettlements.Add(seller.StayingInSettlement);
 
                 Town town = Town.AllTowns.GetRandomElementWithPredicate(x => !currentSettlements.Contains(x.Settlement)
                     && x.Culture == character.Culture);
@@ -84,7 +96,7 @@ namespace BannerKings.Behaviours
                 TextObject firstName = hero.IsFemale ? hero.Culture.FemaleNameList.GetRandomElement() : hero.Culture.MaleNameList.GetRandomElement();
                 hero.SetName(character.Name.SetTextVariable("FIRSTNAME", firstName), firstName);
                 hero.StayingInSettlement = randomSettlement;
-                BookSellers.Add(hero, GetStartingBooks(hero.Culture));
+                bookSellers.Add(hero, GetStartingBooks(hero.Culture));
 
             }
         }
@@ -172,7 +184,7 @@ namespace BannerKings.Behaviours
         private void OnBuyBookConsequence()
         {
             MobileParty party = new MobileParty();
-            foreach (ItemRosterElement element in BookSellers[Hero.OneToOneConversationHero]) party.ItemRoster.Add(element);
+            foreach (ItemRosterElement element in bookSellers[Hero.OneToOneConversationHero]) party.ItemRoster.Add(element);
             InventoryManager.OpenTradeWithCaravanOrAlleyParty(party, InventoryManager.InventoryCategoryType.Goods);
         }
 

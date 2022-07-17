@@ -169,10 +169,6 @@ namespace BannerKings.Behaviours
                new GameMenuOption.OnConditionDelegate(MenuTitlesCondition),
                new GameMenuOption.OnConsequenceDelegate(MenuTitlesConsequence), false, -1, false);
 
-            campaignGameStarter.AddGameMenuOption("bannerkings", "manage_court", "{=!}Noble Court",
-               new GameMenuOption.OnConditionDelegate(MenuCourtCondition),
-               new GameMenuOption.OnConsequenceDelegate(MenuCourtConsequence), false, -1, false);
-
             campaignGameStarter.AddGameMenuOption("bannerkings", "manage_faith", "{=!}{RELIGION_NAME}",
                new GameMenuOption.OnConditionDelegate(MenuFaithCondition),
                new GameMenuOption.OnConsequenceDelegate(MenuFaithConsequence), false, -1, false);

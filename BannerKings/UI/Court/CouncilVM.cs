@@ -71,8 +71,8 @@ namespace BannerKings.UI.Items
                                 Hero requester = (Hero?)x[0].Identifier;
                                 CouncilMember position = council.AllPositions.FirstOrDefault(x => x.Position == Position);
                                 CouncilAction action = null;
-                                if (requester != null) action = model.GetAction(CouncilActionType.REQUEST, council, requester, , null, true);
-                                else if (position.Member != null) action = model.GetAction(CouncilActionType.RELINQUISH, council, requester, council.AllPositions.FirstOrDefault(x => x.Position == Position));
+                                if (requester != null) action = model.GetAction(CouncilActionType.REQUEST, council, requester, position, null, true);
+                                else if (position.Member != null) action = model.GetAction(CouncilActionType.RELINQUISH, council, requester, position);
 
                                 if (action != null) 
                                 {
