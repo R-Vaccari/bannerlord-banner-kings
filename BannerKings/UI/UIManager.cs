@@ -12,11 +12,17 @@ using System.Linq;
 using System.Reflection;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
+using TaleWorlds.CampaignSystem.CharacterCreationContent;
+using TaleWorlds.CampaignSystem.ViewModelCollection;
 using TaleWorlds.CampaignSystem.ViewModelCollection.CharacterCreation;
+using TaleWorlds.CampaignSystem.ViewModelCollection.CharacterDeveloper;
+using TaleWorlds.CampaignSystem.ViewModelCollection.Education;
+using TaleWorlds.CampaignSystem.ViewModelCollection.Encyclopedia.EncyclopediaItems;
 using TaleWorlds.CampaignSystem.ViewModelCollection.GameMenu;
 using TaleWorlds.CampaignSystem.ViewModelCollection.GameMenu.TownManagement;
 using TaleWorlds.CampaignSystem.ViewModelCollection.KingdomManagement.KingdomDecision;
 using TaleWorlds.Core;
+using TaleWorlds.Core.ViewModelCollection;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.MountAndBlade.GauntletUI.Widgets;
@@ -163,61 +169,6 @@ namespace BannerKings.UI
 
         }
 
-        /*
-         * [HarmonyPatch(typeof(SettlementProjectVM))]
-        internal class CharacterCreationCultureStagePatch
-        {
-            [HarmonyPrefix]
-            [HarmonyPatch("Building", MethodType.Setter)]
-            internal static bool SetterPrefix(SettlementProjectVM __instance, Building value)
-            {
-                FieldInfo _building = __instance.GetType().GetField("_building", BindingFlags.Instance | BindingFlags.NonPublic);
-                _building.SetValue(__instance, value);
-                __instance.Name = ((value != null) ? value.Name.ToString() : "");
-                __instance.Explanation = ((value != null) ? value.Explanation.ToString() : "");
-                string code = ((value != null) ? value.BuildingType.StringId.ToLower() : "");
-                if (code == "bannerkings_palisade")
-                    code = "building_fortifications";
-                else if (code == "bannerkings_trainning")
-                    code = "building_settlement_militia_barracks";
-                else if (code == "bannerkings_manor")
-                    code = "building_castle_castallans_office";
-                else if (code == "bannerkings_bakery" || code == "bannerkings_butter" || code == "bannerkings_daily_pasture")
-                    code = "building_settlement_granary";
-                else if (code == "bannerkings_mining")
-                    code = "building_siege_workshop";
-                else if (code == "bannerkings_farming" || code == "bannerkings_daily_farm")
-                    code = "building_settlement_lime_kilns";
-                else if (code == "bannerkings_sawmill" || code == "bannerkings_tannery" || code == "bannerkings_blacksmith")
-                    code = "building_castle_workshops";
-                else if (code == "bannerkings_daily_woods" || code == "bannerkings_fishing")
-                    code = "building_irrigation";
-                else if (code == "bannerkings_warehouse")
-                    code = "building_settlement_garrison_barracks";
-                else if (code == "bannerkings_courier")
-                    code = "building_castle_lime_kilns";
-
-                int constructionCost = __instance.Building.GetConstructionCost();
-                TextObject textObject;
-                if (constructionCost > 0)
-                {
-                    textObject = new TextObject("{=tAwRIPiy}Construction Cost: {COST}", null);
-                    textObject.SetTextVariable("COST", constructionCost);
-                }
-                else
-                {
-                    textObject = TextObject.Empty;
-                }
-                __instance.ProductionCostText = ((value != null) ? textObject.ToString() : "");
-                __instance.CurrentPositiveEffectText = ((value != null) ? value.GetBonusExplanation().ToString() : "");
-
-                __instance.VisualCode = code;
-
-                return false;
-            }
-        }
-         */
-
         [HarmonyPatch(typeof(SettlementProjectVM))]
         internal class CharacterCreationCultureStagePatch
         {
@@ -284,6 +235,100 @@ namespace BannerKings.UI
                     return false;
                 }
                 return true;
+            }
+        }
+
+        [HarmonyPatch(typeof(CharacterCreationGainedPropertiesVM), MethodType.Constructor, new Type[] { typeof(CharacterCreation), typeof(int) })]
+        class CharacterCreationGainedPropertiesVMConstructorPatch
+        {
+            static void Postfix(CharacterCreationGainedPropertiesVM __instance, CharacterCreation characterCreation, int currentIndex)
+            {
+                __instance.GainGroups.Add(new CharacterCreationGainGroupItemVM(BKAttributes.Instance.Wisdom, characterCreation, currentIndex));
+            }
+        }
+
+        [HarmonyPatch(typeof(EducationGainedPropertiesVM), MethodType.Constructor, new Type[] { typeof(Hero), typeof(int) })]
+        class EducationGainedPropertiesVMConstructorPatch
+        {
+            static void Postfix(EducationGainedPropertiesVM __instance, Hero child, int pageCount)
+            {
+                __instance.GainGroups.Clear();
+                foreach (CharacterAttribute attributeObj in BKAttributes.AllAttributes)
+                    __instance.GainGroups.Add(new EducationGainGroupItemVM(attributeObj));
+
+            }
+        }
+
+        [HarmonyPatch(typeof(CharacterVM), "InitializeCharacter")]
+        class InitializeCharacterPatch
+        {
+            static bool Prefix(CharacterVM __instance)
+            {
+                MethodInfo inspectAttr = __instance.GetType().GetMethod("OnInspectAttribute", BindingFlags.Instance | BindingFlags.NonPublic);
+                MethodInfo addAttr = __instance.GetType().GetMethod("OnAddAttributePoint", BindingFlags.Instance | BindingFlags.NonPublic);
+                MethodInfo startSelection = __instance.GetType().GetMethod("OnStartPerkSelection", BindingFlags.Instance | BindingFlags.NonPublic);
+
+                __instance.HeroCharacter = new HeroViewModel(CharacterViewModel.StanceTypes.None);
+                __instance.Skills = new MBBindingList<SkillVM>();
+                __instance.Traits = new MBBindingList<EncyclopediaTraitItemVM>();
+                __instance.Attributes.Clear();
+                __instance.HeroCharacter.FillFrom(__instance.Hero, -1, false, false);
+                __instance.HeroCharacter.SetEquipment(EquipmentIndex.ArmorItemEndSlot, default(EquipmentElement));
+                __instance.HeroCharacter.SetEquipment(EquipmentIndex.HorseHarness, default(EquipmentElement));
+                __instance.HeroCharacter.SetEquipment(EquipmentIndex.NumAllWeaponSlots, default(EquipmentElement));
+
+                foreach (CharacterAttribute characterAttribute in BKAttributes.AllAttributes)
+                {
+                    CharacterAttributeItemVM item = new CharacterAttributeItemVM(__instance.Hero,
+                        characterAttribute,
+                        __instance,
+                        delegate (CharacterAttributeItemVM x) { inspectAttr.Invoke(__instance, new object[] { x }); },
+                        delegate (CharacterAttributeItemVM x) { addAttr.Invoke(__instance, new object[] { x }); });
+
+                    __instance.Attributes.Add(item);
+
+                    foreach (SkillObject skill2 in characterAttribute.Skills)
+                    {
+                        __instance.Skills.Add(new SkillVM(skill2, __instance,
+                            delegate (PerkVM x) { startSelection.Invoke(__instance, new object[] { x }); }));
+                    }
+                }
+
+                using (List<SkillObject>.Enumerator enumerator3 = Skills.All.GetEnumerator())
+                {
+                    while (enumerator3.MoveNext())
+                    {
+                        SkillObject skill = enumerator3.Current;
+                        if (__instance.Skills.All((SkillVM s) => s.Skill != skill))
+                            __instance.Skills.Add(new SkillVM(skill, __instance, 
+                                delegate (PerkVM x) { startSelection.Invoke(__instance, new object[] { x }); }));
+                        
+                    }
+                }
+                foreach (SkillVM skillVM in __instance.Skills) skillVM.RefreshWithCurrentValues();
+                
+                foreach (CharacterAttributeItemVM characterAttributeItemVM in __instance.Attributes) characterAttributeItemVM.RefreshWithCurrentValues();
+
+                __instance.SetCurrentSkill(__instance.Skills[0]);
+                __instance.RefreshCharacterValues();
+                __instance.CharacterStats = new MBBindingList<StringPairItemVM>();
+                if (__instance.Hero.GovernorOf != null)
+                {
+                    GameTexts.SetVariable("SETTLEMENT_NAME", __instance.Hero.GovernorOf.Name.ToString());
+                    __instance.CharacterStats.Add(new StringPairItemVM(GameTexts.FindText("str_governor_of_label", null).ToString(), "", null));
+                }
+                if (MobileParty.MainParty.GetHeroPerkRole(__instance.Hero) != SkillEffect.PerkRole.None)
+                {
+                    __instance.CharacterStats.Add(new StringPairItemVM(CampaignUIHelper.GetHeroClanRoleText(__instance.Hero, Clan.PlayerClan), "", null));
+                }
+                foreach (TraitObject traitObject in CampaignUIHelper.GetHeroTraits())
+                {
+                    if (__instance.Hero.GetTraitLevel(traitObject) != 0)
+                        __instance.Traits.Add(new EncyclopediaTraitItemVM(traitObject, __instance.Hero));
+                    
+                }
+
+                return false;
             }
         }
 

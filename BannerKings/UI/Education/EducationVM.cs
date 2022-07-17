@@ -2,7 +2,6 @@
 using BannerKings.Managers.Education.Books;
 using BannerKings.Managers.Education.Languages;
 using BannerKings.Managers.Education.Lifestyles;
-using BannerKings.Models.BKModels;
 using System;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
@@ -63,10 +62,9 @@ namespace BannerKings.UI.Education
                     FormatValue(data.CurrentBookProgress),
                     new TextObject("{=!}How close you are to finishing the book.").ToString()));
 
-                ExplainedNumber result = data.CurrentBookReadingRate;
                 CurrentLanguageInfo.Add(new InformationElement(new TextObject("{=!}Reading rate:").ToString(),
-                    FormatValue(result.ResultNumber),
-                    result.GetExplanations()));
+                    FormatValue(data.CurrentBookReadingRate.ResultNumber),
+                    data.CurrentBookReadingRate.GetExplanations()));
 
                 CurrentBookInfo.Add(new InformationElement(new TextObject("{=!}Language:").ToString(), 
                     data.CurrentBook.Language.Name.ToString(),

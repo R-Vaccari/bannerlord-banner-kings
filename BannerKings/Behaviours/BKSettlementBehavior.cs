@@ -34,6 +34,7 @@ namespace BannerKings.Behaviors
             CampaignEvents.SettlementEntered.AddNonSerializedListener(this, new Action<MobileParty, Settlement, Hero>(OnSettlementEntered));
             CampaignEvents.DailyTickSettlementEvent.AddNonSerializedListener(this, new Action<Settlement>(DailySettlementTick));
             CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, new Action<CampaignGameStarter>(OnSessionLaunched));
+            CampaignEvents.OnNewGameCreatedEvent.AddNonSerializedListener(this, new Action<CampaignGameStarter>(OnGameCreated));
         }
 
         public override void SyncData(IDataStore dataStore)
@@ -317,6 +318,11 @@ namespace BannerKings.Behaviors
             if (food > 0) settlement.Town.FoodStocks += food;
         }
 
+
+        private void OnGameCreated(CampaignGameStarter campaignGameStarter)
+        {
+            BannerKingsConfig.Instance.InitManagers();
+        }
 
         private void OnSessionLaunched(CampaignGameStarter campaignGameStarter)
         {

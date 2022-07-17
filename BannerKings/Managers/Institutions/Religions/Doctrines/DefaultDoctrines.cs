@@ -49,9 +49,15 @@ namespace BannerKings.Managers.Institutions.Religions.Doctrines
                 new TextObject("{=!}Woodland acreage provides piety\nReduced baseline fervor"),
                 new List<string>());
 
+            communalFaith = new Doctrine("communal_faith", new TextObject("{=!}Communal Faith"),
+                new TextObject("{=!}"),
+                new TextObject("{=!}"),
+                new List<string>());
+
+
             legalism = new Doctrine("legalism", new TextObject("{=!}Legalism"),
                 new TextObject("{=!}Without laws, man is but beast. The wisdom of previous generations is preserved through law, which must be followed to the letter."),
-                new TextObject("{=!}Heathens can not fill council positions\nHigh scholarship provides piety\n+1 to vassal limit for each personal virtue"),
+                new TextObject("{=!}Heathens can not fill council positions\n+1 to vassal limit for each personal virtue"),
                 new List<string>());
 
             heathenTax = new Doctrine("heathen_tax", new TextObject("{=!}Heathen Taxation"),

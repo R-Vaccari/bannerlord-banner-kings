@@ -7,6 +7,10 @@ using BannerKings.Managers.Education.Books;
 using TaleWorlds.Localization;
 using BannerKings.Managers.Education.Languages;
 using BannerKings.Managers.Education;
+using HarmonyLib;
+using System;
+using BannerKings.Managers.Skills;
+using TaleWorlds.Library;
 
 namespace BannerKings.Behaviours
 {
@@ -109,7 +113,7 @@ namespace BannerKings.Behaviours
 
         private void OnGameStarted(CampaignGameStarter campaignGameStarter)
         {
-            SpawnInitialSellers();
+            //SpawnInitialSellers();
         }
 
         private void AddDialogue(CampaignGameStarter starter)
@@ -166,5 +170,23 @@ namespace BannerKings.Behaviours
 
         private bool IsBookSeller() => Hero.OneToOneConversationHero.IsSpecial && 
             Hero.OneToOneConversationHero.CharacterObject.OriginalCharacter.StringId.Contains("bannerkings_bookseller");
+
+        
+    }
+
+    namespace Patches
+    {
+        [HarmonyPatch(typeof(Attributes), "All", MethodType.Getter)]
+        class AttributesPatch
+        {
+            static bool Prefix(ref MBReadOnlyList<CharacterAttribute> __result)
+            {
+
+                List<CharacterAttribute> list = new List<CharacterAttribute>(BKAttributes.AllAttributes);
+                list.Remove(BKAttributes.Instance.Wisdom);
+                __result = list.GetReadOnlyList();
+                return false;
+            }
+        }
     }
 }

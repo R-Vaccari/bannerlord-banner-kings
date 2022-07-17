@@ -22,5 +22,11 @@ namespace BannerKings
             if (input != null) return All.FirstOrDefault(x => x.StringId == input.StringId);
             else return null;
         }
+
+        public X GetById(string input)
+        {
+            if (input != null) return All.FirstOrDefault(x => x.StringId == input);
+            else return null;
+        }
     }
 }
