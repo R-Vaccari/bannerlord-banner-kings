@@ -153,7 +153,8 @@ namespace BannerKings
             {
                 private static void Postfix()
                 {
-                    BannerKingsConfig.Instance.ReligionsManager.PostInitialize();  
+                    BannerKingsConfig.Instance.ReligionsManager.PostInitialize();
+                    BannerKingsConfig.Instance.EducationManager.InitializeEducationsIfNeeded();
                 }
             }
         }

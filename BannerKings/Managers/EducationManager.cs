@@ -20,11 +20,12 @@ namespace BannerKings.Managers
         public EducationManager()
         {
             Educations = new Dictionary<Hero, EducationData>();
-            InitializeEducations();
         }
 
-        public void InitializeEducations()
+        public void InitializeEducationsIfNeeded()
         {
+            if (!Educations.IsEmpty()) return;
+
             foreach (Hero hero in Hero.AllAliveHeroes)
             {
                 Dictionary<Language, float> languages = new Dictionary<Language, float>();

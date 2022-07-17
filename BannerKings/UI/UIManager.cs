@@ -238,14 +238,74 @@ namespace BannerKings.UI
             }
         }
 
-        [HarmonyPatch(typeof(CharacterCreationGainedPropertiesVM), MethodType.Constructor, new Type[] { typeof(CharacterCreation), typeof(int) })]
-        class CharacterCreationGainedPropertiesVMConstructorPatch
+        [HarmonyPatch(typeof(CharacterCreationGainedPropertiesVM))]
+        class CharacterCreationGainedPropertiesVMPatches
         {
-            static void Postfix(CharacterCreationGainedPropertiesVM __instance, CharacterCreation characterCreation, int currentIndex)
+
+            [HarmonyPrefix]
+            [HarmonyPatch(MethodType.Constructor, new Type[] { typeof(CharacterCreation), typeof(int)})]
+            static void Prefix1(CharacterCreationGainedPropertiesVM __instance, CharacterCreation characterCreation, int currentIndex)
             {
-                __instance.GainGroups.Add(new CharacterCreationGainGroupItemVM(BKAttributes.Instance.Wisdom, characterCreation, currentIndex));
+                FieldInfo _characterCreation = __instance
+                    .GetType()
+                    .GetField("_characterCreation",
+                    BindingFlags.Instance | BindingFlags.NonPublic);
+                _characterCreation.SetValue(__instance, characterCreation);
+
+                FieldInfo _currentIndex = __instance
+                    .GetType()
+                    .GetField("_currentIndex",
+                    BindingFlags.Instance | BindingFlags.NonPublic);
+                _currentIndex.SetValue(__instance, currentIndex);
+
+                FieldInfo _affectedAttributesMap = __instance
+                    .GetType()
+                    .GetField("_affectedAttributesMap",
+                    BindingFlags.Instance | BindingFlags.NonPublic);
+                _affectedAttributesMap.SetValue(__instance, new Dictionary<CharacterAttribute, Tuple<int, int>>());
+
+                FieldInfo _affectedSkillMap = __instance
+                    .GetType()
+                    .GetField("_affectedSkillMap",
+                    BindingFlags.Instance | BindingFlags.NonPublic);
+                _affectedSkillMap.SetValue(__instance, new Dictionary<SkillObject, Tuple<int, int>>());
+
+                PropertyInfo GainGroups = __instance
+                    .GetType()
+                    .GetProperty("GainGroups",
+                    BindingFlags.Instance | BindingFlags.Public);
+                GainGroups.SetValue(__instance, new MBBindingList<CharacterCreationGainGroupItemVM>());
+
+
+                foreach (CharacterAttribute attributeObj in BKAttributes.AllAttributes)
+                {
+                    __instance.GainGroups.Add(new CharacterCreationGainGroupItemVM(attributeObj, characterCreation, currentIndex));
+                }
+                __instance.UpdateValues();
+            }
+
+            [HarmonyPostfix]
+            [HarmonyPatch("PopulateInitialValues")]
+            static void Postfix1(CharacterCreationGainedPropertiesVM __instance)
+            {
+                CharacterAttribute characterAttribute = BKAttributes.Instance.Wisdom;
+                int attributeValue = Hero.MainHero.GetAttributeValue(characterAttribute);
+
+                Dictionary<CharacterAttribute, Tuple<int, int>> _affectedAttributesMap = (Dictionary<CharacterAttribute, Tuple<int, int>>)__instance
+                    .GetType()
+                    .GetField("_affectedAttributesMap",
+                    BindingFlags.Instance | BindingFlags.NonPublic).GetValue(__instance);
+
+                if (_affectedAttributesMap.ContainsKey(characterAttribute))
+                {
+                    Tuple<int, int> tuple2 = _affectedAttributesMap[characterAttribute];
+                    _affectedAttributesMap[characterAttribute] = new Tuple<int, int>(tuple2.Item1 + attributeValue, 0);
+                }
+                else  _affectedAttributesMap.Add(characterAttribute, new Tuple<int, int>(attributeValue, 0));
+                
             }
         }
+
 
         [HarmonyPatch(typeof(EducationGainedPropertiesVM), MethodType.Constructor, new Type[] { typeof(Hero), typeof(int) })]
         class EducationGainedPropertiesVMConstructorPatch
