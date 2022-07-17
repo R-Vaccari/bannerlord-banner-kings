@@ -27,6 +27,7 @@ namespace BannerKings.Behaviours
             CampaignEvents.OnGameLoadedEvent.AddNonSerializedListener(this, OnGameLoaded);
             CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, OnSessionLaunched);
             CampaignEvents.OnNewGameCreatedEvent.AddNonSerializedListener(this, OnGameStarted);
+            CampaignEvents.HeroComesOfAgeEvent.AddNonSerializedListener(this, OnHeroComesOfAge);
         }
 
         public override void SyncData(IDataStore dataStore)
@@ -43,6 +44,11 @@ namespace BannerKings.Behaviours
         {
             if (BookSellers.Count < DesiredSellerCount())
                 SpawnInitialSellers();
+        }
+
+        private void OnHeroComesOfAge(Hero hero) 
+        {
+            BannerKingsConfig.Instance.EducationManager.InitHeroEducation(hero);
         }
 
         private void OnHeroKilled(Hero victim, Hero killer, KillCharacterAction.KillCharacterActionDetail detail, bool showNotification = true)
@@ -62,10 +68,12 @@ namespace BannerKings.Behaviours
         {
             List<CharacterObject> templates = CharacterObject.All.ToList().FindAll(x => x.Occupation == Occupation.Special && x.StringId.Contains("bannerkings_bookseller_"));
             foreach (CharacterObject character in templates)
-            { 
+            {
+                if (BookSellers.Keys.Any(x => x.Culture == character.Culture)) continue;
+
                 List<Settlement> currentSettlements = new List<Settlement>();
                 foreach (Hero seller in BookSellers.Keys) currentSettlements.Add(seller.StayingInSettlement);
-     
+
                 Town town = Town.AllTowns.GetRandomElementWithPredicate(x => !currentSettlements.Contains(x.Settlement)
                     && x.Culture == character.Culture);
                 if (town == null || town.Settlement == null) continue;

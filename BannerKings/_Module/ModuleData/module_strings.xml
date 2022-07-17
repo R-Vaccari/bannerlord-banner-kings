@@ -36,7 +36,7 @@
 		<string id="str_bk_council_chancellor.battania" text="{=bk_council_steward_battania}Sheumarlan" />
 		<string id="str_bk_council_steward.battania" text="{=bk_council_chancellor_battania}Seansalair" />
 		<string id="str_bk_council_spymaster.battania" text="{=bk_council_spymaster_battania}Treòraiche" />
-		<string id="str_bk_council_spiritual_guide.battania" text="{=bk_council_spiritual_guide_battania}Draoidh" />
+		<string id="str_bk_council_spiritual.battania" text="{=bk_council_spiritual_guide_battania}Draoidh" />
 		
 		<string id="str_bk_council_marshall_royal.battania" text="{=bk_council_marshall_royal_battania}Ard Marasgal" />
 		<string id="str_bk_council_chancellor_royal.battania" text="{=bk_council_steward_royal_battania}Ard Sheumarlan" />
@@ -44,12 +44,28 @@
 		<string id="str_bk_council_spymaster_royal.battania" text="{=bk_council_spymaster_royal_battania}Ard Treòraiche" />
 		<string id="str_bk_council_spiritual_royal.battania" text="{=bk_council_spiritual_guide_royal_battania}Ard Draoidh" />		
 		<string id="str_bk_council_elder.battania" text="{=bk_council_elder_royal_battania}Seanar" />
+
 		
-		
-		<string id="str_bk_council_marshall.vlandia" text="{=bk_council_marshall_vlandia}Marasgal" />
+		<string id="str_bk_council_marshall.vlandia" text="{=bk_council_marshall_vlandia}Marshal" />
 		<string id="str_bk_council_chancellor.vlandia" text="{=bk_council_steward_vlandia}Chancellor" />
 		<string id="str_bk_council_steward.vlandia" text="{=bk_council_chancellor_vlandia}Steward" />
 		<string id="str_bk_council_spymaster.vlandia" text="{=bk_council_spymaster_vlandia}Spymaster" />
+		<string id="str_bk_council_spiritual.vlandia" text="{=bk_council_spiritual_guide_vlandia}Seneschal" />
+		
+		<string id="str_bk_council_marshall_royal.vlandia" text="{=bk_council_marshall_royal_vlandia}Grand Marshal" />
+		<string id="str_bk_council_chancellor_royal.vlandia" text="{=bk_council_chancellor_royal_vlandia}High Chancellor" />
+		<string id="str_bk_council_steward_royal.vlandia" text="{=bk_council_steward_royal_vlandia}High Steward" />
+		<string id="str_bk_council_spymaster_royal.vlandia" text="{=bk_council_spymaster_royal_vlandia}Grand Spymaster" />
+		<string id="str_bk_council_spiritual_royal.vlandia" text="{=bk_council_spiritual_guide_royal_vlandia}High Seneschal" />	
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		
 		<string id="str_bk_council_marshall.khuzait" text="{=bk_council_marshall_khuzait}Jagutu-iin Darga" />
 		<string id="str_bk_council_chancellor.khuzait" text="{=bk_council_steward_khuzait}Sheumarlan" />

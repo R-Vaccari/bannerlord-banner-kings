@@ -26,30 +26,33 @@ namespace BannerKings.Managers
         {
             if (!Educations.IsEmpty()) return;
 
-            foreach (Hero hero in Hero.AllAliveHeroes)
+            foreach (Hero hero in Hero.AllAliveHeroes) InitHeroEducation(hero);
+        }
+
+        public void InitHeroEducation(Hero hero)
+        {
+            if (Educations.ContainsKey(hero)) return;
+            Dictionary<Language, float> languages = new Dictionary<Language, float>();
+            Language native = DefaultLanguages.Instance.All.FirstOrDefault(x => x.Culture == hero.Culture);
+            if (native == null) native = DefaultLanguages.Instance.Calradian;
+            languages.Add(native, 1f);
+
+            Lifestyle mastery = null;
+            float masteryProgress = 0f;
+
+            if (hero.IsNotable)
             {
-                Dictionary<Language, float> languages = new Dictionary<Language, float>();
-                Language native = DefaultLanguages.Instance.All.FirstOrDefault(x => x.Culture == hero.Culture);
-                if (native == null) native = DefaultLanguages.Instance.Calradian;
-                languages.Add(native, 1f);
-
-                Lifestyle mastery = null;
-                float masteryProgress = 0f;
-
-                if (hero.IsNotable)
-                {
-                    if (!languages.ContainsKey(DefaultLanguages.Instance.Calradian) && MBRandom.RandomFloat <= 0.15f)
-                        languages.Add(DefaultLanguages.Instance.Calradian, MBRandom.RandomFloatRanged(0.5f, 1f));
-                }
-
-                if (hero.Occupation == Occupation.Lord || hero.Occupation == Occupation.Wanderer)
-                {
-
-                }
-
-
-                Educations.Add(hero, new EducationData(hero, languages));
+                if (!languages.ContainsKey(DefaultLanguages.Instance.Calradian) && MBRandom.RandomFloat <= 0.15f)
+                    languages.Add(DefaultLanguages.Instance.Calradian, MBRandom.RandomFloatRanged(0.5f, 1f));
             }
+
+            if (hero.Occupation == Occupation.Lord || hero.Occupation == Occupation.Wanderer)
+            {
+
+            }
+
+
+            Educations.Add(hero, new EducationData(hero, languages));
         }
 
         public void PostInitialize()
@@ -107,7 +110,11 @@ namespace BannerKings.Managers
             return list.GetReadOnlyList();
         }
 
-        private bool KnowsLanguage(Hero hero, Language language) => Educations[hero].Languages.ContainsKey(language) && Educations[hero].Languages[language] == 1f;
+        private bool KnowsLanguage(Hero hero, Language language) 
+        {
+            if (!Educations.ContainsKey(hero)) InitHeroEducation(hero);
+            return Educations[hero].Languages.ContainsKey(language) && Educations[hero].Languages[language] == 1f;
+        } 
 
         public bool CanRead(Language language, Hero hero)
         {

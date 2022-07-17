@@ -44,16 +44,38 @@
 	</Traits>
 	<Equipments>
 	  <EquipmentRoster>
-		  <equipment slot="Head" id="Item.TV_battania_hood_a" />
-		  <equipment slot="Cape" id="Item.TV_battania_cloak_l" />
-		  <equipment slot="Body" id="Item.battania_light_armor_c" />
-		  <equipment slot="Leg" id="Item.TV_battania_boots_t" />
+		  <equipment slot="Body" id="Item.monk_robe" />
+		  <equipment slot="Leg" id="Item.folded_town_boots" />
 	  </EquipmentRoster>
 	  <EquipmentRoster civilian="true">
-		  <equipment slot="Head" id="Item.TV_battania_hood_a" />
-		  <equipment slot="Cape" id="Item.TV_battania_cloak_l" />
-		  <equipment slot="Body" id="Item.battania_light_armor_c" />
-		  <equipment slot="Leg" id="Item.TV_battania_boots_t" />
+		  <equipment slot="Body" id="Item.monk_robe" />
+		  <equipment slot="Leg" id="Item.folded_town_boots" />
+		</EquipmentRoster>
+	</Equipments>
+  </NPCCharacter>
+  
+  <NPCCharacter id="bannerkings_bookseller_vlandia" name="{=yr5pa0hs}{FIRSTNAME}, the Wise" default_group="Infantry" age="65" voice="softspoken" is_template="true" is_hero="false" culture="Culture.vlandia" occupation="Special">
+	<face>
+      <face_key_template value="BodyProperty.villager_vlandia" />
+    </face>
+	<skills />
+	<Traits>
+	  <Trait id="KnightFightingSkills" value="5" />
+	  <Trait id="Commander" value="5" />
+	  <Trait id="Politician" value="5" />
+	  <Trait id="Manager" value="5" />
+	  <Trait id="Honor" value="+1" />
+	</Traits>
+	<Equipments>
+	  <EquipmentRoster>
+		  <equipment slot="Body" id="Item.monk_robe" />
+		  <equipment slot="Cape" id="Item.hood" />
+		  <equipment slot="Leg" id="Item.folded_town_boots" />
+	  </EquipmentRoster>
+	  <EquipmentRoster civilian="true">
+		  <equipment slot="Body" id="Item.monk_robe" />
+		  <equipment slot="Cape" id="Item.hood" />
+		  <equipment slot="Leg" id="Item.folded_town_boots" />
 		</EquipmentRoster>
 	</Equipments>
   </NPCCharacter>

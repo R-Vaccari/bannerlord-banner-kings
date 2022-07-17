@@ -43,14 +43,14 @@
 		<string id="bk_council_marshall_empire" text="Domesticus" />
 		<string id="bk_council_marshall_sturgia" text="Domesticus" />
 		<string id="bk_council_marshall_battania" text="Marasgal" />
-		<string id="bk_council_marshall_vlandia" text="Marshall" />
+		<string id="bk_council_marshall_vlandia" text="Marshal" />
 		<string id="bk_council_marshall_khuzait" text="Jagutu-iin Darga" />
 		<string id="bk_council_marshall_aserai" text="Domesticus" />
 		
 		<string id="bk_council_marshall_royal_empire" text="Magister Domesticus" />
 		<string id="bk_council_marshall_royal_sturgia" text="Domesticus" />
 		<string id="bk_council_marshall_royal_battania" text="Ard Marasgal" />
-		<string id="bk_council_marshall_royal_vlandia" text="Grand Marshall" />
+		<string id="bk_council_marshall_royal_vlandia" text="Grand Marshal" />
 		<string id="bk_council_marshall_royal_khuzait" text="Tumetu-iin Noyan" />
 		<string id="bk_council_marshall_royal_aserai" text="Domesticus" />
 		
@@ -106,7 +106,7 @@
 		<string id="bk_council_spiritual_guide_royal_empire" text="Magister Officiorum" />
 		<string id="bk_council_spiritual_guide_royal_sturgia" text="Domesticus" />
 		<string id="bk_council_spiritual_guide_royal_battania" text="Ard Draoidh" />
-		<string id="bk_council_spiritual_guide_royal_vlandia" text="Royal Seneschal" />
+		<string id="bk_council_spiritual_guide_royal_vlandia" text="High Seneschal" />
 		<string id="bk_council_spiritual_guide_royal_khuzait" text="Cherbi" />
 		<string id="bk_council_spiritual_guide_royal_aserai" text="Domesticus" />
 		
