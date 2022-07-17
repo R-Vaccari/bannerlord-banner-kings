@@ -172,7 +172,7 @@ namespace BannerKings.UI.Education
                     elements.Add(new InquiryElement(book, 
                         book.Item.Name.ToString() + " - " + book.Language.Name, 
                         null,
-                        BannerKingsConfig.Instance.EducationManager.CanRead(book.Language, hero), 
+                        BannerKingsConfig.Instance.EducationManager.CanRead(book, hero), 
                         book.Description.ToString()));
 
             InformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(new TextObject("{=!}Choose Book").ToString(),

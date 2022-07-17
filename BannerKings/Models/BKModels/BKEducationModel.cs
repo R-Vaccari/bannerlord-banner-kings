@@ -37,6 +37,9 @@ namespace BannerKings.Models.BKModels
             float fluency = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(reader).GetLanguageFluency(book.Language);
             result.Add(fluency, new TextObject("{=!}{LANGUAGE} fluency").SetTextVariable("LANGUAGE", book.Language.Name));
 
+            MBReadOnlyList<BookType> books = BannerKingsConfig.Instance.EducationManager.GetAvailableBooks(reader.PartyBelongedTo);
+            if (books.Contains(DefaultBookTypes.Instance.Dictionary)) result.Add(0.2f, DefaultBookTypes.Instance.Dictionary.Name);
+
             return result;
         }
     }

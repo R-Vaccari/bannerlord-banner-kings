@@ -114,11 +114,22 @@ namespace BannerKings.Managers
         {
             if (!Educations.ContainsKey(hero)) InitHeroEducation(hero);
             return Educations[hero].Languages.ContainsKey(language) && Educations[hero].Languages[language] == 1f;
-        } 
+        }
 
-        public bool CanRead(Language language, Hero hero)
+        public bool CanRead(BookType book, Hero hero)
         {
-            return true;
+            Language language = book.Language;
+
+            MBReadOnlyDictionary<BookType, float> readBooks = Educations[hero].Books;
+            if (readBooks.ContainsKey(book)&& readBooks[book] >= 1f) return false;
+
+            MBReadOnlyDictionary<Language, float> languages = Educations[hero].Languages;
+            if (languages.ContainsKey(language) && languages[language] >= 0.2f) return true;
+            else
+            {
+                MBReadOnlyList<BookType> books = BannerKingsConfig.Instance.EducationManager.GetAvailableBooks(hero.PartyBelongedTo);
+                return books.Contains(DefaultBookTypes.Instance.Dictionary);
+            }
         }
 
         public void RemoveHero(Hero hero)

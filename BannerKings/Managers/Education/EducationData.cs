@@ -8,6 +8,8 @@ using TaleWorlds.CampaignSystem;
 using BannerKings.Models.BKModels;
 using BannerKings.Managers.Skills;
 using TaleWorlds.SaveSystem;
+using TaleWorlds.Core;
+using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Education
 {
@@ -128,14 +130,32 @@ namespace BannerKings.Managers.Education
         {
             float result = LANGUAGE_RATE * rate;
             languages[language] += result;
-            hero.AddSkillXp(BKSkills.Instance.Scholarship, MBMath.ClampInt((int)result, 1, 10));
-            
+            if (languages[language] >= 1f)
+            {
+                currentLanguage = null;
+                languageInstructor = null;
+                if (hero.Clan == Clan.PlayerClan) InformationManager.DisplayMessage(new InformationMessage(new TextObject("{HERO} has finished learning the {LANGUAGE} language.")
+                    .SetTextVariable("HERO", hero.Name)
+                    .SetTextVariable("LANGUAGE", language.Name)
+                    .ToString()));
+            }
+
+            hero.AddSkillXp(BKSkills.Instance.Scholarship, MBMath.ClampInt((int)result, 1, 10)); 
         }
 
         public void GainBookReading(BookType book, float rate)
         {
             float result = BOOK_RATE * rate;
             books[book] += result;
+            if (books[book] >= 1f)
+            {
+                currentBook = null;
+                if (hero.Clan == Clan.PlayerClan) InformationManager.DisplayMessage(new InformationMessage(new TextObject("{HERO} has finished reading {BOOK}.")
+                    .SetTextVariable("HERO", hero.Name)
+                    .SetTextVariable("BOOK", book.Name)
+                    .ToString()));
+            }
+            
             hero.AddSkillXp(BKSkills.Instance.Scholarship, MBMath.ClampInt((int)result, 1, 10));
         }
 
