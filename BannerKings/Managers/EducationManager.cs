@@ -78,6 +78,7 @@ namespace BannerKings.Managers
             EducationData data = null;
             if (Educations.ContainsKey(hero))
                 data = Educations[hero];
+            else InitHeroEducation(hero);
 
             return data;
         }
