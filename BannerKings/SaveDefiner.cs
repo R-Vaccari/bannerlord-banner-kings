@@ -168,6 +168,7 @@ namespace BannerKings
             ConstructContainerDefinition(typeof(Dictionary<Hero, EducationData>));
             ConstructContainerDefinition(typeof(Dictionary<BookType, float>));
             ConstructContainerDefinition(typeof(Dictionary<Language, float>));
+            ConstructContainerDefinition(typeof(Dictionary<Hero, ItemRoster>));
         }
     }
 }

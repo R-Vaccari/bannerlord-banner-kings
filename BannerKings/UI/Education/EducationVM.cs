@@ -58,11 +58,11 @@ namespace BannerKings.UI.Education
                     data.CurrentBook.Item.Name.ToString(),
                     data.CurrentBook.Description.ToString()));
 
-                CurrentLanguageInfo.Add(new InformationElement(new TextObject("{=!}Progress:").ToString(),
+                CurrentBookInfo.Add(new InformationElement(new TextObject("{=!}Progress:").ToString(),
                     FormatValue(data.CurrentBookProgress),
                     new TextObject("{=!}How close you are to finishing the book.").ToString()));
 
-                CurrentLanguageInfo.Add(new InformationElement(new TextObject("{=!}Reading rate:").ToString(),
+                CurrentBookInfo.Add(new InformationElement(new TextObject("{=!}Reading rate:").ToString(),
                     FormatValue(data.CurrentBookReadingRate.ResultNumber),
                     data.CurrentBookReadingRate.GetExplanations()));
 
