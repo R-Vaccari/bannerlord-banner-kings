@@ -48,6 +48,7 @@ namespace BannerKings.Behaviours
                     .GetField("_attributes", BindingFlags.Instance | BindingFlags.NonPublic)
                     .GetValue(charSkills);
 
+                if (charSkills.HasProperty(BKSkills.Instance.Scholarship)) continue;
                 skillsDic.Add(BKSkills.Instance.Scholarship, 0);
                 skillsDic.Add(BKSkills.Instance.Theology, 0);
                 skillsDic.Add(BKSkills.Instance.Lordship, 0);
