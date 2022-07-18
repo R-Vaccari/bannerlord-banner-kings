@@ -29,9 +29,9 @@ namespace BannerKings.Managers
             foreach (Hero hero in Hero.AllAliveHeroes) InitHeroEducation(hero);
         }
 
-        public void InitHeroEducation(Hero hero)
+        public EducationData InitHeroEducation(Hero hero)
         {
-            if (Educations.ContainsKey(hero)) return;
+            if (Educations.ContainsKey(hero)) return null;
             Dictionary<Language, float> languages = new Dictionary<Language, float>();
             Language native = DefaultLanguages.Instance.All.FirstOrDefault(x => x.Culture == hero.Culture);
             if (native == null) native = DefaultLanguages.Instance.Calradian;
@@ -51,8 +51,9 @@ namespace BannerKings.Managers
 
             }
 
-
-            Educations.Add(hero, new EducationData(hero, languages));
+            EducationData data = new EducationData(hero, languages);
+            Educations.Add(hero, data);
+            return data;
         }
 
         public void PostInitialize()
@@ -76,9 +77,8 @@ namespace BannerKings.Managers
         public EducationData GetHeroEducation(Hero hero)
         {
             EducationData data = null;
-            if (Educations.ContainsKey(hero))
-                data = Educations[hero];
-            else InitHeroEducation(hero);
+            if (Educations.ContainsKey(hero)) data = Educations[hero];
+            else data = InitHeroEducation(hero);
 
             return data;
         }
@@ -119,18 +119,9 @@ namespace BannerKings.Managers
 
         public bool CanRead(BookType book, Hero hero)
         {
-            Language language = book.Language;
-
             MBReadOnlyDictionary<BookType, float> readBooks = Educations[hero].Books;
-            if (readBooks.ContainsKey(book)&& readBooks[book] >= 1f) return false;
-
-            MBReadOnlyDictionary<Language, float> languages = Educations[hero].Languages;
-            if (languages.ContainsKey(language) && languages[language] >= 0.2f) return true;
-            else
-            {
-                MBReadOnlyList<BookType> books = BannerKingsConfig.Instance.EducationManager.GetAvailableBooks(hero.PartyBelongedTo);
-                return books.Contains(DefaultBookTypes.Instance.Dictionary);
-            }
+            if (readBooks.ContainsKey(book) && readBooks[book] >= 1f) return false;
+            else return BannerKingsConfig.Instance.EducationModel.CalculateBookReadingRate(book, hero).ResultNumber >= 0.2f;
         }
 
         public void RemoveHero(Hero hero)
