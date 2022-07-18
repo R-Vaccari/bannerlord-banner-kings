@@ -3,6 +3,7 @@ using BannerKings.Managers.Institutions.Religions.Faiths.Battania;
 using BannerKings.Managers.Institutions.Religions.Faiths.Rites;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.Core;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
 
@@ -24,6 +25,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
             aseraGroup = new FaithGroup(new TextObject("{=!}Aseran Faiths"), new TextObject("{=!}Those that believe in Asera as the true and only prohpet."));
             aseraCode = new AseraFaith();
 
+            Rite zabiha = new Zabiha();
             aseraCode.Initialize(DefaultDivinities.Instance.AseraMain,
                 new List<Divinity>() { DefaultDivinities.Instance.AseraSecondary1, DefaultDivinities.Instance.AseraSecondary2, DefaultDivinities.Instance.AseraSecondary3 },
                 new Dictionary<TraitObject, bool>
@@ -31,11 +33,12 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
                     { DefaultTraits.Honor, true }, 
                     { DefaultTraits.Valor, true } 
                 }, 
-                aseraGroup);
+                aseraGroup, new List<Rite>() { zabiha });
 
             battaniaGroup = new FaithGroup(new TextObject("{=!}Derwyddon Faiths"), new TextObject("{=!}The faiths in the true old Calradian gods."));
             amraFaith = new AmraFaith();
 
+            Rite ironOffering = new Offering(DefaultItems.IronOre, 100);
             amraFaith.Initialize(DefaultDivinities.Instance.AmraMain,
                 new List<Divinity>() { DefaultDivinities.Instance.AmraSecondary1, DefaultDivinities.Instance.AmraSecondary2 },
                 new Dictionary<TraitObject, bool>
@@ -43,7 +46,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
                     { DefaultTraits.Honor, false },
                     { DefaultTraits.Valor, true }
                 },
-                battaniaGroup);
+                battaniaGroup, new List<Rite>() { ironOffering });
 
 
             imperialGroup = new FaithGroup(new TextObject("{=!}Calradian Faiths"), new TextObject("{=!}The Imperial Calradian faiths."));

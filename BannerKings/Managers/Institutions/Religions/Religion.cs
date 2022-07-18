@@ -49,8 +49,7 @@ namespace BannerKings.Managers.Institutions.Religions
             {
                 List<Rite> list = new List<Rite>();
                 list.AddRange(faith.Rites);
-                if (doctrineIds.Contains("sacrifice"))
-                    list.Add(new Sacrifice());
+                if (doctrineIds.Contains("sacrifice")) list.Add(new Sacrifice());
 
                 return list.GetReadOnlyList();
             }
