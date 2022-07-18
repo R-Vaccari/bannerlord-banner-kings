@@ -1,5 +1,4 @@
-﻿using BannerKings.Managers.Skills;
-using BannerKings.Managers.Titles;
+﻿using BannerKings.Managers.Titles;
 using BannerKings.Models.BKModels;
 using System;
 using System.Collections.Generic;
@@ -26,6 +25,8 @@ namespace BannerKings.Managers
         [SaveableProperty(3)]
         public bool Knighthood { get; set; } = true;
 
+        [SaveableProperty(4)]
+        private Dictionary<Hero, float> Knights { get; set; } = new Dictionary<Hero, float>();
         private Dictionary<Hero, List<FeudalTitle>> DeJures { get; set; }
 
 
@@ -38,49 +39,24 @@ namespace BannerKings.Managers
             RefreshDeJure();
         }
 
-        public void FixTitles()
-        {
-            foreach (FeudalTitle title in Titles.Keys)
-            {
-                if (title.type == TitleType.Dukedom)
-                {
-                    if (title.shortName.ToString() == "1" && title.deJure.StringId == "lord_3_1")
-                        title.SetName(new TextObject("Perassia"));
-                    else if (title.shortName.ToString() == "2" && title.deJure.StringId == "lord_3_16")
-                        title.SetName(new TextObject("Jarjarys"));
-                    else if (title.shortName.ToString() == "2" && title.deJure.StringId == "lord_3_5")
-                        title.SetName(new TextObject("Retana"));
-                    else if (title.shortName.ToString() == "2" && title.deJure.StringId == "lord_3_3")
-                        title.SetName(new TextObject("Caldea"));
-                    else if (title.shortName.ToString() == "1" && title.deJure.StringId == "lord_6_17")
-                        title.SetName(new TextObject("Kohi Rohini"));
-                    else if (title.shortName.ToString() == "1" && title.deJure.StringId == "lord_6_1")
-                        title.SetName(new TextObject("Tanaz Baikal"));
-                    else if (title.shortName.ToString() == "1" && title.deJure.StringId == "lord_6_4")
-                        title.SetName(new TextObject("Bars Dagan"));
-                    else if (title.shortName.ToString() == "1" && title.deJure.StringId == "lord_6_5")
-                        title.SetName(new TextObject("Devseg"));
-                }
-            }
-        }
-
         public void RefreshDeJure()
         {
+
             if (DeJures == null) DeJures = new Dictionary<Hero, List<FeudalTitle>>();
             else DeJures.Clear();
             foreach (FeudalTitle title in Titles.Keys.ToList())
             {
                 Hero hero = title.deJure;
                 if (!DeJures.ContainsKey(hero))
-                    DeJures.Add(hero, new List<FeudalTitle> { title });
+                    DeJures.Add(hero, new List<FeudalTitle>() { title });
                 else DeJures[hero].Add(title);
             }
+
+            if (Knights == null) Knights = new Dictionary<Hero, float>();
         }
 
         public bool IsHeroTitleHolder(Hero hero)
         {
-            if (DeJures != null) return DeJures.ContainsKey(hero);
-
             foreach (FeudalTitle title in Titles.Keys.ToList())
                 if (title.deFacto == hero || title.deJure == hero)
                     return true;
@@ -112,11 +88,11 @@ namespace BannerKings.Managers
             }
         }
 
-        public List<FeudalTitle> GetAllTitlesByType(TitleType type) => Titles.Keys.ToList().FindAll(x => x.type == type);
+        public List<FeudalTitle> GetAllTitlesByType(TitleType type) => this.Titles.Keys.ToList().FindAll(x => x.type == type);
 
         public FeudalTitle GetTitleByName(String name)
         {
-            return Titles.FirstOrDefault(x => x.Key.FullName.ToString() == name).Key;
+            return this.Titles.FirstOrDefault(x => x.Key.FullName.ToString() == name).Key;
         }
 
         public GovernmentType GetSettlementGovernment(Settlement settlement)
@@ -146,7 +122,7 @@ namespace BannerKings.Managers
 
         private void ExecuteOwnershipChange(Hero oldOwner, Hero newOwner, FeudalTitle title, bool deJure)
         {
-            if (Titles != null && Titles.ContainsKey(title))
+            if (Titles.ContainsKey(title))
             {
                 if (deJure)
                 {
@@ -155,7 +131,7 @@ namespace BannerKings.Managers
                     DeJures[oldOwner].Remove(title);
                     if (DeJures.ContainsKey(newOwner))
                         DeJures[newOwner].Add(title);
-                    else DeJures.Add(newOwner, new List<FeudalTitle> { title });
+                    else DeJures.Add(newOwner, new List<FeudalTitle>() { title });
                 }
                 else title.deFacto = newOwner;
             }
@@ -182,14 +158,16 @@ namespace BannerKings.Managers
                 Kingdom kingdom2 = GetTitleFaction(suzerain);
                 if (kingdom2 == kingdom1)
                     return suzerain;
-                FeudalTitle factionTitle = GetHighestTitleWithinFaction(hero, kingdom1);
-                if (factionTitle != null)
+                else
                 {
-                    FeudalTitle suzerainFaction = GetImmediateSuzerain(factionTitle);
-                    return suzerainFaction;
+                    FeudalTitle factionTitle = GetHighestTitleWithinFaction(hero, kingdom1);
+                    if (factionTitle != null)
+                    {
+                        FeudalTitle suzerainFaction = GetImmediateSuzerain(factionTitle);
+                        return suzerainFaction;
+                    } else
+                        return GetHighestTitle(kingdom1.Leader);
                 }
-
-                return GetHighestTitle(kingdom1.Leader);
             }
 
             return null;
@@ -201,7 +179,7 @@ namespace BannerKings.Managers
             Kingdom kingdom = suzerainClan.Kingdom;
             if (kingdom == null || suzerainClan == null) return clans;
 
-            List<FeudalTitle> suzerainTitles = GetAllDeJure(suzerainClan);
+            List<FeudalTitle> suzerainTitles = this.GetAllDeJure(suzerainClan);
             if (suzerainTitles.Count == 0) return clans;
 
             foreach (FeudalTitle title in suzerainTitles)
@@ -210,15 +188,18 @@ namespace BannerKings.Managers
                     {
                         if (vassal.deJure.Clan == suzerainClan) continue;
 
-                        FeudalTitle vassalSuzerain = CalculateHeroSuzerain(vassal.deJure);
+                        FeudalTitle vassalSuzerain = this.CalculateHeroSuzerain(vassal.deJure);
                         if (vassalSuzerain == null) continue;
-                        Clan suzerainDeJureClan = vassalSuzerain.deJure.Clan;
-                        if (suzerainDeJureClan == suzerainClan) 
+                        else
                         {
-                            Clan vassalDeJureClan = vassal.deJure.Clan;
-                            if (!clans.ContainsKey(vassalDeJureClan))
-                                clans.Add(vassalDeJureClan, new List<FeudalTitle> { vassal });
-                            else clans[vassalDeJureClan].Add(title);
+                            Clan suzerainDeJureClan = vassalSuzerain.deJure.Clan;
+                            if (suzerainDeJureClan == suzerainClan) 
+                            {
+                                Clan vassalDeJureClan = vassal.deJure.Clan;
+                                if (!clans.ContainsKey(vassalDeJureClan))
+                                    clans.Add(vassalDeJureClan, new List<FeudalTitle>() { vassal });
+                                else clans[vassalDeJureClan].Add(title);
+                            }
                         }
                     }
             
@@ -262,7 +243,7 @@ namespace BannerKings.Managers
             GainKingdomInfluenceAction.ApplyForDefault(claimant, -action.Influence);
             claimant.ChangeHeroGold((int)-action.Gold);
             claimant.Clan.Renown -= action.Renown;
-            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(action.ActionTaker, action.Title.deJure, (int)Math.Min(-5f, new BKTitleModel().GetRelationImpact(action.Title) * -0.1f));
+            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(action.ActionTaker, action.Title.deJure, (int)Math.Min(-5f, (float)new BKTitleModel().GetRelationImpact(action.Title) * -0.1f), true);
 
             if (action.Title.deJure == Hero.MainHero)
                 InformationManager.AddQuickInformation(new TextObject("{=!}{CLAIMANT} is building a claim on your title, {TITLE}.")
@@ -290,8 +271,6 @@ namespace BannerKings.Managers
                 action.ActionTaker.Clan.Influence -= action.Influence;
             if (action.Renown > 0)
                 action.ActionTaker.Clan.Renown -= action.Renown;
-
-            action.ActionTaker.AddSkillXp(BKSkills.Instance.Lordship, 200f / ((float)action.Title.type * 2f));
         }
 
         public void GrantTitle(Hero receiver, Hero grantor, FeudalTitle title, float influence)
@@ -301,10 +280,25 @@ namespace BannerKings.Managers
             if (receiver.Clan.Kingdom != null && receiver.Clan.Kingdom == kingdom)
                 ExecuteOwnershipChange(grantor, receiver, title, false);
 
-            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(grantor, receiver, (int)(new BKTitleModel().GetRelationImpact(title) * -1f));
+            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(grantor, receiver, (int)((float)new BKTitleModel().GetRelationImpact(title) * -1f), true);
             GainKingdomInfluenceAction.ApplyForDefault(grantor, influence);
+        }
 
-            grantor.AddSkillXp(BKSkills.Instance.Lordship, 500f / ((float)title.type * 2f));
+        public void FoundKingdom(TitleAction action)
+        {
+            FeudalTitle title = CreateKingdom(action.ActionTaker, action.ActionTaker.Clan.Kingdom, TitleType.Kingdom, new List<FeudalTitle>(action.Vassals), action.Title.contract);
+            action.ActionTaker.Clan.AddRenown(action.Renown);
+
+            action.Title.DriftTitle(title, false);
+            foreach (FeudalTitle vassal in action.Vassals)
+                vassal.DriftTitle(title);
+
+            action.ActionTaker.ChangeHeroGold(-(int)action.Gold);
+            GainKingdomInfluenceAction.ApplyForDefault(action.ActionTaker, -action.Influence);
+            InformationManager.AddQuickInformation(new TextObject("{=!}The {TITLE} has been founded by {FOUNDER}.")
+                    .SetTextVariable("FOUNDER", action.ActionTaker.Name)
+                    .SetTextVariable("TITLE", title.FullName),
+                    0, null, "event:/ui/notification/relation");
         }
 
         public void UsurpTitle(Hero oldOwner, TitleAction action)
@@ -321,7 +315,7 @@ namespace BannerKings.Managers
                     .SetTextVariable("TITLE", action.Title.FullName));
            
             int impact = new BKTitleModel().GetRelationImpact(title);
-            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(usurper, oldOwner, impact);
+            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(usurper, oldOwner, impact, true);
             Kingdom kingdom = oldOwner.Clan.Kingdom;
             if (kingdom != null) 
                 foreach(Clan clan in kingdom.Clans) 
@@ -329,7 +323,7 @@ namespace BannerKings.Managers
                     {
                         int random = MBRandom.RandomInt(1, 100);
                         if (random <= 10)
-                            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(usurper, oldOwner, (int)(impact * 0.3f));
+                            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(usurper, oldOwner, (int)((float)impact * 0.3f), true);
                     }
 
             if (action.Gold > 0)
@@ -342,8 +336,6 @@ namespace BannerKings.Managers
             title.RemoveClaim(usurper);
             title.AddClaim(oldOwner, ClaimType.Previous_Owner, true);
             ExecuteOwnershipChange(oldOwner, usurper, title, true);
-
-            action.ActionTaker.AddSkillXp(BKSkills.Instance.Lordship, 1000f - ((float)title.type * 100f));
 
             //OwnershipNotification notification = new OwnershipNotification(title, new TextObject(string.Format("You are now the rightful owner to {0}", title.name)));
             //Campaign.Current.CampaignInformationManager.NewMapNoticeAdded(notification);
@@ -365,7 +357,7 @@ namespace BannerKings.Managers
             List<FeudalTitle> lordships = titles.FindAll(x => x.type == TitleType.Lordship);
             if (lordships.Count == 0) return;
 
-            FeudalTitle lordship = (from l in lordships where l.fief != null select l into x orderby x.fief.Village.Hearth select x).FirstOrDefault();
+            FeudalTitle lordship = (from l in lordships where l.fief != null select l into x orderby x.fief.Village.Hearth select x).FirstOrDefault<FeudalTitle>();
             if (lordship != null)
             {
                 BannerKingsConfig.Instance.TitleManager.GrantLordship(lordship, newKingdom.Leader, clan.Leader);
@@ -374,17 +366,34 @@ namespace BannerKings.Managers
                     GameTexts.SetVariable("FIEF", lordship.FullName);
                     GameTexts.SetVariable("SOVEREIGN", sovereign.FullName);
                     InformationManager.ShowInquiry(new InquiryData("Enfoeffement Right", new TextObject("You have been generously granted the {FIEF} as part of your vassal rights to the {SOVEREIGN}.").ToString(),
-                    true, false, GameTexts.FindText("str_done").ToString(), null, null, null));
+                    true, false, GameTexts.FindText("str_done").ToString(), null, null, null), false);
                 }
             }
         }
 
+        public void AddKnightInfluence(Hero hero, float influence)
+        {
+            if (Knights.ContainsKey(hero)) Knights[hero] += influence;
+            else Knights.Add(hero, influence);
+        }
+
+        public void RemoveKnights(Hero hero)
+        {
+            if (Knights.ContainsKey(hero)) Knights.Remove(hero);
+        }
+
+        public float GetKnightInfluence(Hero hero)
+        {
+            if (Knights.ContainsKey(hero)) return Knights[hero];
+            else return 0f;
+        }
+
         public List<FeudalTitle> GetAllDeJure(Hero hero)
         {
-            if (DeJures != null)
+            if (this.DeJures != null)
             {
                 List<FeudalTitle> titleList = null;
-                DeJures.TryGetValue(hero, out titleList);
+                this.DeJures.TryGetValue(hero, out titleList);
                 if (titleList == null) titleList = new List<FeudalTitle>();
                 return titleList;
             }
@@ -415,8 +424,7 @@ namespace BannerKings.Managers
                         highestTitle = title;
                 return highestTitle;
             }
-
-            return null;
+            else return null;
         }
 
         public FeudalTitle GetHighestTitleWithinFaction(Hero hero, Kingdom faction)
@@ -429,8 +437,7 @@ namespace BannerKings.Managers
                         highestTitle = title;
                 return highestTitle;
             }
-
-            return null;
+            else return null;
         }
 
         public FeudalTitle GetSovereignTitle(Kingdom faction)
@@ -439,7 +446,7 @@ namespace BannerKings.Managers
             {
                 if (faction != null && Kingdoms.ContainsKey(faction))
                     return Kingdoms[faction];
-                return null;
+                else return null;
             }
             catch (Exception ex)
             {
@@ -476,10 +483,10 @@ namespace BannerKings.Managers
         public List<FeudalTitle> GetVassals(Hero lord)
         {
             List<FeudalTitle> vassals = new List<FeudalTitle>();
-            FeudalTitle highest = GetHighestTitle(lord);
+            FeudalTitle highest = this.GetHighestTitle(lord);
             if (highest != null) 
             {
-                TitleType threshold = GetHighestTitle(lord).type + 1;
+                TitleType threshold = this.GetHighestTitle(lord).type + 1;
                 List<FeudalTitle> allTitles = GetAllDeJure(lord);
 
                 foreach (FeudalTitle title in allTitles)
@@ -506,7 +513,7 @@ namespace BannerKings.Managers
 
         public void InitializeTitles()
         {
-            XmlDocument doc = Utils.Helpers.CreateDocumentFromXmlFile(BasePath.Name + "Modules/BannerKings/ModuleData/titles.xml");
+            XmlDocument doc = BannerKings.Utils.Helpers.CreateDocumentFromXmlFile(BasePath.Name + "Modules/BannerKings/ModuleData/titles.xml");
             XmlNode titlesNode = doc.ChildNodes[1].ChildNodes[0];
             bool autoGenerate = bool.Parse(titlesNode.Attributes["autoGenerate"].Value);
  
@@ -648,28 +655,34 @@ namespace BannerKings.Managers
             
             string description = BannerKingsConfig.Instance.TitleManager.GetContractText(sovereign);
             InformationManager.ShowInquiry(new InquiryData(string.Format("Enfoeffement Contract for {0}", sovereign.FullName),
-                description, true, false, buttonString, "", null, null));
+                description, true, false, buttonString, "", null, null), false);
         }
 
         public FeudalTitle GetDuchy(FeudalTitle title)
         {
             IEnumerable<FeudalTitle> duchies = Titles.Keys.Where(x => x.type == TitleType.Dukedom && x.sovereign != null && x.sovereign == title.sovereign);
 
-            FeudalTitle suzerain1 = GetImmediateSuzerain(title);
+            FeudalTitle suzerain1 = this.GetImmediateSuzerain(title);
             if (suzerain1 != null)
             {
                 if (suzerain1.type == TitleType.Dukedom)
                     return suzerain1;
-                FeudalTitle suzerain2 = GetImmediateSuzerain(suzerain1);
-                if (suzerain2 != null)
+                else
                 {
-                    if (suzerain2.type == TitleType.Dukedom)
-                        return suzerain2;
-                    FeudalTitle suzerain3 = GetImmediateSuzerain(suzerain2);
-                    if (suzerain3 != null)
+                    FeudalTitle suzerain2 = this.GetImmediateSuzerain(suzerain1);
+                    if (suzerain2 != null)
                     {
-                        if (suzerain3.type == TitleType.Dukedom)
-                            return suzerain3;
+                        if (suzerain2.type == TitleType.Dukedom)
+                            return suzerain2;
+                        else
+                        {
+                            FeudalTitle suzerain3 = this.GetImmediateSuzerain(suzerain2);
+                            if (suzerain3 != null)
+                            {
+                                if (suzerain3.type == TitleType.Dukedom)
+                                    return suzerain3;
+                            }
+                        }
                     }
                 }
             }
@@ -681,7 +694,7 @@ namespace BannerKings.Managers
         {
             FeudalContract contract = title.contract;
             StringBuilder sb = new StringBuilder(string.Format("You, {0}, formally accept to be henceforth bound to the {1}, fulfill your duties as well as uphold your rights," +
-                " what can not be undone by means other than abdication of all rights and lands associated with the contract, treachery, or death.", Hero.MainHero.Name, title.FullName));
+                " what can not be undone by means other than abdication of all rights and lands associated with the contract, treachery, or death.", Hero.MainHero.Name.ToString(), title.FullName.ToString()));
             sb.Append(Environment.NewLine);
             sb.Append("   ");
             sb.Append(Environment.NewLine);
@@ -689,7 +702,7 @@ namespace BannerKings.Managers
             sb.Append(Environment.NewLine);
             foreach (KeyValuePair<FeudalDuties, float> duty in contract.Duties)
             {
-                sb.Append(GetDutyString(duty.Key, duty.Value));
+                sb.Append(this.GetDutyString(duty.Key, duty.Value));
                 sb.Append(Environment.NewLine);
             }
             sb.Append(Environment.NewLine);
@@ -723,54 +736,46 @@ namespace BannerKings.Managers
         {
             if (right == FeudalRights.Absolute_Land_Rights)
                 return "You are entitled to ownership of any conquered lands whose title you own.";
-            if (right == FeudalRights.Enfoeffement_Rights)
+            else if (right == FeudalRights.Enfoeffement_Rights)
                 return "You are entitled to be granted land in case you have none, whenever possible.";
-            if (right == FeudalRights.Conquest_Rights)
+            else if (right == FeudalRights.Conquest_Rights)
                 return "You are entitled to the ownership of any lands you conquered by yourself.";
-            return "";
+            else return "";
         }
 
         private FeudalContract GenerateContract(string type)
         {
             if (type == "imperial")
-                return new FeudalContract(new Dictionary<FeudalDuties, float>
-                    {
+                return new FeudalContract(new Dictionary<FeudalDuties, float>() {
                     { FeudalDuties.Ransom, 0.10f },
                     { FeudalDuties.Taxation, 0.4f }
-                }, new List<FeudalRights>
-                    {
+                }, new List<FeudalRights>() {
                     FeudalRights.Assistance_Rights,
                     FeudalRights.Army_Compensation_Rights
                 }, GovernmentType.Imperial, SuccessionType.Imperial,
                 InheritanceType.Primogeniture, GenderLaw.Agnatic);
-            if (type == "tribal")
-                return new FeudalContract(new Dictionary<FeudalDuties, float>
-                    {
-                        { FeudalDuties.Taxation, 0.125f },
-                        { FeudalDuties.Auxilium, 0.66f }
-                    }, new List<FeudalRights>
-                    {
-                        FeudalRights.Conquest_Rights,
-                        FeudalRights.Absolute_Land_Rights
-                    }, GovernmentType.Tribal, SuccessionType.Elective_Monarchy,
-                    InheritanceType.Seniority, GenderLaw.Agnatic);
-            if (type == "republic")
-                return new FeudalContract(new Dictionary<FeudalDuties, float>
-                    {
-                        { FeudalDuties.Ransom, 0.10f },
-                        { FeudalDuties.Taxation, 0.4f }
-                    }, new List<FeudalRights>
-                    {
-                        FeudalRights.Assistance_Rights,
-                        FeudalRights.Army_Compensation_Rights
-                    }, GovernmentType.Republic, SuccessionType.Republic,
-                    InheritanceType.Primogeniture, GenderLaw.Cognatic);
-            return new FeudalContract(new Dictionary<FeudalDuties, float>
-                {
+            else if (type == "tribal")
+                return new FeudalContract(new Dictionary<FeudalDuties, float>() {
+                    { FeudalDuties.Taxation, 0.125f },
+                    { FeudalDuties.Auxilium, 0.66f }
+                }, new List<FeudalRights>() {
+                    FeudalRights.Conquest_Rights,
+                    FeudalRights.Absolute_Land_Rights
+                }, GovernmentType.Tribal, SuccessionType.Elective_Monarchy,
+                InheritanceType.Seniority, GenderLaw.Agnatic);
+            else if (type == "republic")
+                return new FeudalContract(new Dictionary<FeudalDuties, float>() {
+                    { FeudalDuties.Ransom, 0.10f },
+                    { FeudalDuties.Taxation, 0.4f }
+                }, new List<FeudalRights>() {
+                    FeudalRights.Assistance_Rights,
+                    FeudalRights.Army_Compensation_Rights
+                }, GovernmentType.Republic, SuccessionType.Republic,
+                InheritanceType.Primogeniture, GenderLaw.Cognatic);
+            else return new FeudalContract(new Dictionary<FeudalDuties, float>() {
                     { FeudalDuties.Ransom, 0.20f },
                     { FeudalDuties.Auxilium, 0.4f }
-                }, new List<FeudalRights>
-                {
+                }, new List<FeudalRights>() {
                     FeudalRights.Absolute_Land_Rights,
                     FeudalRights.Enfoeffement_Rights
                 }, GovernmentType.Feudal, SuccessionType.Hereditary_Monarchy,
@@ -818,6 +823,7 @@ namespace BannerKings.Managers
             yield return GovernmentType.Tribal;
             yield return GovernmentType.Imperial;
             yield return GovernmentType.Republic;
+            yield break;
         }
 
         public IEnumerable<InheritanceType> GetInheritanceTypes()
@@ -825,12 +831,14 @@ namespace BannerKings.Managers
             yield return InheritanceType.Primogeniture;
             yield return InheritanceType.Ultimogeniture;
             yield return InheritanceType.Seniority;
+            yield break;
         }
 
         public IEnumerable<GenderLaw> GetGenderLawTypes()
         {
             yield return GenderLaw.Agnatic;
             yield return GenderLaw.Cognatic;
+            yield break;
         }
 
         public IEnumerable<GovernmentType> GetGovernmentTypes()
@@ -839,6 +847,7 @@ namespace BannerKings.Managers
             yield return GovernmentType.Tribal;
             yield return GovernmentType.Imperial;
             yield return GovernmentType.Republic;
+            yield break;
         }
     }
 }

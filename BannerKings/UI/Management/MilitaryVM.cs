@@ -45,21 +45,37 @@ namespace BannerKings.UI
             DefenseInfo.Clear();
             ManpowerInfo.Clear();
             SiegeInfo.Clear();
-            DefenseInfo.Add(new InformationElement("Militia Cap:", new BKMilitiaModel().GetMilitiaLimit(data, settlement).ToString(),
-                    "The maximum number of militiamen this settlement can support, based on it's population."));
-            DefenseInfo.Add(new InformationElement("Militia Quality:", FormatValue(new BKMilitiaModel().CalculateEliteMilitiaSpawnChance(settlement)),
-                    "Chance of militiamen being spawned as veterans instead of recruits."));
+
+            ExplainedNumber militiaCap = new BKMilitiaModel().GetMilitiaLimit(data, settlement);
+            DefenseInfo.Add(new InformationElement("Militia Cap:", militiaCap.ResultNumber.ToString(),
+                new TextObject("{=!}{TEXT}\n{EXPLANATIONS}")
+                   .SetTextVariable("TEXT", new TextObject("{=!}The maximum number of militiamen this settlement can support, based on it's population."))
+                   .SetTextVariable("EXPLANATIONS", militiaCap.GetExplanations())
+                   .ToString()));
+
+            ExplainedNumber militiaQuality = new BKMilitiaModel().MilitiaSpawnChanceExplained(settlement);
+            DefenseInfo.Add(new InformationElement("Militia Quality:", FormatValue(militiaQuality.ResultNumber),
+                    new TextObject("{=!}{TEXT}\n{EXPLANATIONS}")
+                   .SetTextVariable("TEXT", new TextObject("{=!}Chance of militiamen being spawned as veterans instead of recruits."))
+                   .SetTextVariable("EXPLANATIONS", militiaQuality.GetExplanations())
+                   .ToString()));
 
             ManpowerInfo.Add(new InformationElement("Manpower:", data.MilitaryData.Manpower.ToString(),
-                    "Manpower"));
+                    new TextObject("{=!}The total manpower of nobles plus peasants.").ToString()));
             ManpowerInfo.Add(new InformationElement("Noble Manpower:", data.MilitaryData.NobleManpower.ToString(),
-                   "Manpower"));
+                   new TextObject("{=!}Manpower from noble population. Noble militarism is higher, but nobles often are less numerous. These are drafted as noble recruits.").ToString()));
             ManpowerInfo.Add(new InformationElement("Peasant Manpower:", data.MilitaryData.PeasantManpower.ToString(),
-                   "Manpower"));
+                   new TextObject("{=!}Manpower from serf and craftsmen classes. These are drafted as cultural non-noble recruits.").ToString()));
             ManpowerInfo.Add(new InformationElement("Militarism:", FormatValue(data.MilitaryData.Militarism.ResultNumber),
-                   "Manpower"));
+                   new TextObject("{=!}{TEXT}\n{EXPLANATIONS}")
+                   .SetTextVariable("TEXT", new TextObject("{=!}How much the population is willing or able to militarily serve. Militarism increases the manpower caps."))
+                   .SetTextVariable("EXPLANATIONS", data.MilitaryData.Militarism.GetExplanations())
+                   .ToString()));
             ManpowerInfo.Add(new InformationElement("Draft Efficiency:", FormatValue(data.MilitaryData.DraftEfficiency.ResultNumber),
-                   "Manpower"));
+                   new TextObject("{=!}{TEXT}\n{EXPLANATIONS}")
+                   .SetTextVariable("TEXT", new TextObject("{=!}How quickly volunteer availability in notables replenishes."))
+                   .SetTextVariable("EXPLANATIONS", data.MilitaryData.DraftEfficiency.GetExplanations())
+                   .ToString()));
 
             List<BannerKingsDecision> decisions = BannerKingsConfig.Instance.PolicyManager.GetDefaultDecisions(settlement);
             if (HasTown)
@@ -84,7 +100,7 @@ namespace BannerKings.UI
                 GarrisonSelector.SelectedIndex = garrisonItem.Selected;
                 GarrisonSelector.SetOnChangeAction(garrisonItem.OnChange);
 
-                
+
 
                 BannerKingsDecision rationDecision = decisions.FirstOrDefault(x => x.GetIdentifier() == "decision_ration");
 
@@ -137,10 +153,10 @@ namespace BannerKings.UI
             DraftSelector.SetOnChangeAction(delegate (SelectorVM<BKItemVM> obj) {
                 draftItem.OnChange(obj);
                 RefreshValues();
-                });
+            });
 
             BannerKingsDecision conscriptionDecision = decisions.FirstOrDefault(x => x.GetIdentifier() == "decision_militia_encourage");
-            BannerKingsDecision subsidizeDecision = decisions.FirstOrDefault(x => x.GetIdentifier() == "decision_militia_subsidize");  
+            BannerKingsDecision subsidizeDecision = decisions.FirstOrDefault(x => x.GetIdentifier() == "decision_militia_subsidize");
 
             conscriptionToogle = new DecisionElement()
                 .SetAsBooleanOption(conscriptionDecision.GetName(), conscriptionDecision.Enabled, delegate (bool value)

@@ -30,8 +30,8 @@ namespace BannerKings.Managers
             float competence = council.GetCompetence(position);
             if (competence != 0f)
             {
-                if (!factor) result.Add(maxEffect * competence, new TextObject("{=!}Council Effect"));
-                else result.AddFactor(maxEffect * competence, new TextObject("{=!}Council Effect"));
+                if (!factor) result.Add(maxEffect * competence, new TextObject("{=!}Council effect"));
+                else result.AddFactor(maxEffect * competence, new TextObject("{=!}Council effect"));
             }
         }
 

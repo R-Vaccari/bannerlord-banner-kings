@@ -69,6 +69,7 @@ namespace BannerKings.Behaviours
         {
             if (victim == null || victim.Clan == null || BannerKingsConfig.Instance.TitleManager == null) return;
 
+            BannerKingsConfig.Instance.TitleManager.RemoveKnights(victim);
             FeudalTitle sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(victim.Clan.Kingdom);
             if (sovereign == null || sovereign.contract == null) return;
 

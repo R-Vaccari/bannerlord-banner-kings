@@ -47,18 +47,38 @@ namespace BannerKings.Models
             return result;
         }
 
+        public ExplainedNumber CalculateNotableSupport(Settlement settlement)
+        {
+            ExplainedNumber result = new ExplainedNumber(0f, true);
+            result.LimitMin(0f);
+            result.LimitMax(1f);
+            float support = 0f;
+            float totalPower = 0f;
+            foreach (Hero notable in settlement.Notables)
+                totalPower += notable.Power;
+
+            foreach (Hero notable in settlement.Notables)
+            {
+                float powerShare = notable.Power / totalPower;
+                float relation = (float)notable.GetRelation(settlement.OwnerClan.Leader) * 0.01f + 0.5f;
+                result.Add(relation * powerShare, notable.Name);
+            }
+
+            return result;
+        }
+
         public ExplainedNumber CalculateAutonomyTarget(Settlement settlement, float stability)
         {
-            ExplainedNumber result = new ExplainedNumber();
+            ExplainedNumber result = new ExplainedNumber(0f, true);
             result.LimitMin(0f);
             result.LimitMax(1f);
 
-            result.Add(1f - stability);
+            result.Add(1f - stability, new TextObject("{=!}Stability"));
             if (settlement.Town != null && settlement.Town.Governor != null && settlement.Town.Governor.IsNotable)
-                result.Add(0.2f);
+                result.Add(0.2f, new TextObject("{=!}Notable governor"));
 
             if (settlement.Culture == settlement.Owner.Culture)
-                result.Add(-0.1f);
+                result.Add(-0.1f, GameTexts.FindText("str_culture"));
 
 
             return result;
@@ -66,7 +86,7 @@ namespace BannerKings.Models
 
         public ExplainedNumber CalculateStabilityTarget(Settlement settlement)
         {
-            ExplainedNumber result = new ExplainedNumber();
+            ExplainedNumber result = new ExplainedNumber(0f, true);
             result.LimitMin(0f);
             result.LimitMax(1f);
             PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
@@ -87,7 +107,7 @@ namespace BannerKings.Models
                 result.Add(loyalty / 5f, new TextObject("Loyalty"));
                 result.Add(assimilation / 5f, new TextObject("Cultural assimilation"));
                 result.Add(averageSatisfaction / 5f, new TextObject("Produce satisfactions"));
-                result.Add(data.NotableSupport / 5f, new TextObject("{=!}Notable support"));
+                result.Add(data.NotableSupport.ResultNumber / 5f, new TextObject("{=!}Notable support"));
 
                 float legitimacy = 0f;
                 LegitimacyType legitimacyType = (LegitimacyType)BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(BKLegitimacyModel))

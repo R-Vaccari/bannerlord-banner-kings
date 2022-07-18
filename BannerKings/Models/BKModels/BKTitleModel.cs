@@ -4,29 +4,97 @@ using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
+using System.Linq;
 
 namespace BannerKings.Models.BKModels
 {
     public class BKTitleModel : IBannerKingsModel
     {
+
+        public TitleAction GetFoundKingdom(Kingdom faction, Hero founder)
+        {
+            TitleAction foundAction = new TitleAction(ActionType.Found, null, founder);
+            foundAction.Gold = 500000 + (BannerKingsConfig.Instance.ClanFinanceModel.CalculateClanIncome(founder.Clan).ResultNumber *
+                CampaignTime.DaysInYear);
+            foundAction.Influence = 1000 + (BannerKingsConfig.Instance.InfluenceModel.CalculateInfluenceChange(founder.Clan).ResultNumber * 
+                CampaignTime.DaysInYear * 0.1f);
+            foundAction.Renown = 100;
+
+            if (faction == null)
+            {
+                foundAction.Possible = false;
+                foundAction.Reason = new TextObject("{=!}No kingdom.");
+                return foundAction;
+            }
+
+            FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(faction);
+            if (title != null)
+            {
+                foundAction.Possible = false;
+                foundAction.Reason = new TextObject("{=!}Faction sovereign title already exists.");
+                return foundAction;
+            }
+
+            if (faction.Leader != founder)
+            {
+                foundAction.Possible = false;
+                foundAction.Reason = new TextObject("{=!}Not leader of current faction.");
+                return foundAction;
+            }
+
+            List<FeudalTitle> titles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(founder);
+            if (titles.Any(x => x.type <= TitleType.Kingdom)) 
+            {
+                foundAction.Possible = false;
+                foundAction.Reason = new TextObject("{=!}Cannot found a kingdom while already being a de Jure sovereign.");
+                return foundAction;
+            }
+
+            if (!titles.Any(x => x.type <= TitleType.Dukedom))
+            {
+                foundAction.Possible = false;
+                foundAction.Reason = new TextObject("{=!}Cannot found a kingdom without a de Jure duke level title.");
+                return foundAction;
+            }
+
+            if (faction.Clans.Count < 3)
+            {
+                foundAction.Possible = false;
+                foundAction.Reason = new TextObject("{=!}Cannot found a kingdom for a faction with less than 3 clans.");
+                return foundAction;
+            }
+
+            if (founder.Gold < foundAction.Gold || founder.Clan.Influence < foundAction.Influence)
+            {
+                foundAction.Possible = false;
+                foundAction.Reason = new TextObject("{=!}You lack the required resources.");
+                return foundAction;
+            }
+
+            foundAction.Possible = true;
+            foundAction.Reason = new TextObject("{=!}Kingdom can be founded.");
+
+            return foundAction;
+        }
+
         public TitleAction GetAction(ActionType type, FeudalTitle title, Hero taker, Hero receiver = null)
         {
             if (type == ActionType.Usurp)
                 return GetUsurp(title, taker);
-            if (type == ActionType.Revoke)
+            else if (type == ActionType.Revoke)
                 return GetRevoke(title, taker);
-            if (type == ActionType.Claim)
+            else if (type == ActionType.Claim)
                 return GetClaim(title, taker);
-            return GetGrant(title, taker);
+            else return GetGrant(title, taker);
         }
 
         private TitleAction GetClaim(FeudalTitle title, Hero claimant)
         {
             TitleAction claimAction = new TitleAction(ActionType.Claim, title, claimant);
-            claimAction.Gold = GetGoldUsurpCost(title) * 0.1f;
-            claimAction.Influence = GetInfluenceUsurpCost(title) * 0.2f;
-            claimAction.Renown = GetRenownUsurpCost(title) * 0.2f;
-            List<Hero> possibleClaimants = GetClaimants(title);
+            claimAction.Gold = this.GetGoldUsurpCost(title) * 0.1f;
+            claimAction.Influence = this.GetInfluenceUsurpCost(title) * 0.2f;
+            claimAction.Renown = this.GetRenownUsurpCost(title) * 0.2f;
+            List<Hero> possibleClaimants = this.GetClaimants(title);
 
             if (title.deJure == claimant)
             {
@@ -49,8 +117,7 @@ namespace BannerKings.Models.BKModels
                 claimAction.Reason = new TextObject("{=!}Already building a claim.");
                 return claimAction;
             }
-
-            if (claimType != ClaimType.None)
+            else if (claimType != ClaimType.None)
             {
                 claimAction.Possible = false;
                 claimAction.Reason = new TextObject("{=!}Already a claimant.");
@@ -215,7 +282,7 @@ namespace BannerKings.Models.BKModels
                 }
             }
 
-            List<Hero> candidates = GetGrantCandidates(grantor);
+            List<Hero> candidates = this.GetGrantCandidates(grantor);
             if (candidates.Count == 0)
             {
                 grantAction.Possible = false;
@@ -234,7 +301,7 @@ namespace BannerKings.Models.BKModels
             }
 
             grantAction.Possible = true;
-            grantAction.Influence = GetInfluenceUsurpCost(title) * 0.33f;
+            grantAction.Influence = this.GetInfluenceUsurpCost(title) * 0.33f;
             grantAction.Reason = new TextObject("{=!}You may grant away this title.");
             return grantAction;
         }
@@ -344,7 +411,7 @@ namespace BannerKings.Models.BKModels
             if (title.fief != null)
             {
                 PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(title.fief);
-                gold += data.TotalPop / 100f;
+                gold += (float)data.TotalPop / 100f;
             }
             return gold;
         }

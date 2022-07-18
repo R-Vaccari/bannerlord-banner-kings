@@ -38,7 +38,12 @@ namespace BannerKings
         public AIBehavior AI = new AIBehavior();
         public bool wipeData = false;
 
-        private void Initialize()
+        public BKInfluenceModel InfluenceModel { get; } = new BKInfluenceModel();
+        public BKTitleModel TitleModel { get; } = new BKTitleModel();
+        public BKStabilityModel StabilityModel { get; } = new BKStabilityModel();
+        public BKClanFinanceModel ClanFinanceModel { get; } = new BKClanFinanceModel();
+
+        public void Initialize()
         {
             DefaultVillageBuildings.Instance.Init();
             DefaultDivinities.Instance.Initialize();

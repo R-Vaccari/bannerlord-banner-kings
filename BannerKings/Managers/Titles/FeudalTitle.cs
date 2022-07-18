@@ -266,7 +266,7 @@ namespace BannerKings.Managers.Titles
 
         public bool IsSovereignLevel => (int)type <= 1;
 
-        public void DriftTitle(FeudalTitle newSovereign)
+        public void DriftTitle(FeudalTitle newSovereign, bool notify = true)
         {
             if (type == TitleType.Dukedom && newSovereign.IsSovereignLevel)
             {
@@ -279,8 +279,8 @@ namespace BannerKings.Managers.Titles
                 ChangeContract(newSovereign.contract.Inheritance);
                 ChangeContract(newSovereign.contract.GenderLaw);
 
-                InformationManager.DisplayMessage(new InformationMessage(new TextObject("{=!}{TITLE} has drifted into a legal part of {SOVEREIGN}")
-                    .SetTextVariable("TITLE", FullName)
+                if (notify) InformationManager.DisplayMessage(new InformationMessage(new TextObject("{=!}{TITLE} has drifted into a legal part of {SOVEREIGN}")
+                    .SetTextVariable("TITLE", this.FullName)
                     .SetTextVariable("SOVEREIGN", newSovereign.FullName)
                     .ToString()));
             }

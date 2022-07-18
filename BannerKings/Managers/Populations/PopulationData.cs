@@ -136,25 +136,7 @@ namespace BannerKings.Populations
             }
         }
 
-        public float NotableSupport
-        {
-            get
-            {
-                float support = 0f;
-                float totalPower = 0f;
-                foreach (Hero notable in settlement.Notables)
-                    totalPower += notable.Power;
-
-                foreach (Hero notable in settlement.Notables)
-                {
-                    float powerShare = notable.Power / totalPower;
-                    float relation = (float)notable.GetRelation(settlement.OwnerClan.Leader) * 0.01f + 0.5f;
-                    support += relation * powerShare;
-                }
-
-                return MBMath.ClampFloat(support, 0f, 1f);
-            }
-        }
+        public ExplainedNumber NotableSupport => BannerKingsConfig.Instance.StabilityModel.CalculateNotableSupport(settlement);
 
         public List<PopulationClass> Classes
         {

@@ -2,6 +2,7 @@
 using BannerKings.Managers.Populations.Villages;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
+using BannerKings.Models;
 using BannerKings.Populations;
 using BannerKings.UI.Windows;
 using HarmonyLib;
@@ -393,7 +394,7 @@ namespace BannerKings.UI
         }
 
         [HarmonyPatch(typeof(SettlementProjectVM), "RefreshValues")]
-        class SettlementProjectVMPRefreshPatch
+        class SettlementProjectVMRefreshPatch
         {
             static bool Prefix()
             {

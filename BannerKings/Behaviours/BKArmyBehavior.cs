@@ -1,29 +1,32 @@
 ﻿using BannerKings.Managers.Duties;
 using BannerKings.Managers.Titles;
+using BannerKings.Models;
+using HarmonyLib;
 using Helpers;
+using System;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.Core;
-using TaleWorlds.Library;
 
 namespace BannerKings.Behaviours
 {
     public class BKArmyBehavior : CampaignBehaviorBase
     {
         public static AuxiliumDuty playerArmyDuty;
+        public static CampaignTime lastDutyTime = CampaignTime.Never;
 
         public override void RegisterEvents()
         {
-            CampaignEvents.OnPartyJoinedArmyEvent.AddNonSerializedListener(this, OnPartyJoinedArmyEvent);
-            CampaignEvents.ArmyCreated.AddNonSerializedListener(this, OnArmyCreated);
-            CampaignEvents.ArmyDispersed.AddNonSerializedListener(this, OnArmyDispersed);
-            CampaignEvents.AiHourlyTickEvent.AddNonSerializedListener(this, AiHourlyTick);
+            CampaignEvents.OnPartyJoinedArmyEvent.AddNonSerializedListener(this, new Action<MobileParty>(this.OnPartyJoinedArmyEvent));
+            CampaignEvents.ArmyCreated.AddNonSerializedListener(this, new Action<Army>(this.OnArmyCreated));
+            CampaignEvents.ArmyDispersed.AddNonSerializedListener(this, new Action<Army, Army.ArmyDispersionReason, bool>(this.OnArmyDispersed));
+            CampaignEvents.AiHourlyTickEvent.AddNonSerializedListener(this, new Action<MobileParty, PartyThinkParams>(this.AiHourlyTick));
         }
 
         public override void SyncData(IDataStore dataStore)
         {
-            if (BannerKingsConfig.Instance.wipeData)
-                playerArmyDuty = null;
+            if (BannerKingsConfig.Instance.wipeData) playerArmyDuty = null;
+
             dataStore.SyncData("bannerkings-military-duty", ref playerArmyDuty);
+            dataStore.SyncData("bannerkings-military-duty-time", ref lastDutyTime);
         }
 
         public void OnPartyJoinedArmyEvent(MobileParty party)
@@ -35,7 +38,7 @@ namespace BannerKings.Behaviours
 
             FeudalTitle playerTitle = BannerKingsConfig.Instance.TitleManager.GetHighestTitleWithinFaction(Hero.MainHero, playerKingdom);
             if (playerTitle != null)
-                EvaluateSummonPlayer(playerTitle, party.Army, party);
+                this.EvaluateSummonPlayer(playerTitle, party.Army, party);
         }
 
         public void OnArmyDispersed(Army army, Army.ArmyDispersionReason reason, bool isPlayersArmy)
@@ -51,6 +54,7 @@ namespace BannerKings.Behaviours
             {
                 playerArmyDuty.Finish();
                 playerArmyDuty = null;
+                lastDutyTime = CampaignTime.Now;
             }   
         }
 
@@ -65,7 +69,7 @@ namespace BannerKings.Behaviours
 
             FeudalTitle playerTitle = BannerKingsConfig.Instance.TitleManager.GetHighestTitleWithinFaction(Hero.MainHero, playerKingdom);
             if (playerTitle != null)
-                EvaluateSummonPlayer(playerTitle, army);
+                this.EvaluateSummonPlayer(playerTitle, army);
         }
 
         private void EvaluateSummonPlayer(FeudalTitle playerTitle, Army army, MobileParty joinningParty = null)
@@ -78,16 +82,12 @@ namespace BannerKings.Behaviours
             if (suzerain == null) return;
             if (Hero.MainHero.IsPrisoner) return;
 
-            MobileParty suzerainParty = EvaluateSuzerainParty(army, suzerain.deJure, joinningParty);
-            if (suzerainParty != null)
+            MobileParty suzerainParty = this.EvaluateSuzerainParty(army, suzerain.deJure, joinningParty);
+            if (suzerainParty != null && playerArmyDuty == null && lastDutyTime.ElapsedWeeksUntilNow >= 1f)
             {
                 float days = 2f;
-                Settlement settlement = SettlementHelper.FindNearestSettlement(x => x.IsFortification || x.IsVillage, army.AiBehaviorObject);
-                InformationManager.ShowInquiry(new InquiryData("Duty Calls",
-                    string.Format("Your suzerain, {0}, has summoned you to fulfill your oath of military aid. You have {1} to join {2}, currently close to {3}.", 
-                    suzerainParty.LeaderHero.Name, days, army.Name, settlement.Name),
-                    true, false, "Understood", null, null, null));
-                playerArmyDuty = new AuxiliumDuty(CampaignTime.DaysFromNow(days), suzerainParty, completion);
+                Settlement settlement = SettlementHelper.FindNearestSettlement((Settlement x) => x.IsFortification || x.IsVillage, army.AiBehaviorObject);
+                BKArmyBehavior.playerArmyDuty = new AuxiliumDuty(CampaignTime.DaysFromNow(days), suzerainParty, completion, settlement, army.Name);
             }
         }
 
@@ -123,6 +123,18 @@ namespace BannerKings.Behaviours
             }
 
             playerArmyDuty.Tick();
+        }
+    }
+
+    namespace Patches
+    {
+        [HarmonyPatch(typeof(Kingdom), "CreateArmy")]
+        class CreateArmyPatch
+        {
+            static bool Prefix(Hero armyLeader, IMapPoint target, Army.ArmyTypes selectedArmyType)
+            {
+                return new BKArmyManagementModel().CanCreateArmy(armyLeader);
+            }
         }
     }
 }

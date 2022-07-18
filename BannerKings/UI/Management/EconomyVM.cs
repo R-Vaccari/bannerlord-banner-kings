@@ -53,7 +53,7 @@ namespace BannerKings.UI
                new TextObject("{=!}{TEXT}\n{EXPLANATIONS}")
                .SetTextVariable("TEXT", new TextObject("{=!}How much workshops expend to produce output. Higher quality yields more profit."))
                .SetTextVariable("EXPLANATIONS", quality.GetExplanations())
-               .ToString())); 
+               .ToString()));
 
             ExplainedNumber efficiency = data.EconomicData.ProductionEfficiency;
             ProductionInfo.Add(new InformationElement(new TextObject("Production Efficiency:").ToString(), FormatValue(efficiency.ResultNumber),
@@ -80,7 +80,7 @@ namespace BannerKings.UI
                    new TextObject("How much the local population can progress with construction projects, on a daily basis.").ToString()));
                 ProductionInfo.Add(new InformationElement(new TextObject("Items Produced:").ToString(), productionString,
                    new TextObject("Goods locally produced by the population.").ToString()));
-            } 
+            }
             else
             {
                 RevenueInfo.Add(new InformationElement(new TextObject("Tariff:").ToString(), FormatValue(data.EconomicData.Tariff),
@@ -99,7 +99,7 @@ namespace BannerKings.UI
                    .SetTextVariable("TEXT", new TextObject("{=!}How attractive this town is for caravans. Likelihood of caravan visits are dictated mainly by prices, and attractiveness is a factor added on top of that."))
                    .SetTextVariable("EXPLANATIONS", caravanAttractiveness.GetExplanations())
                    .ToString()));
-                
+
 
                 for (int i = 0; i < 4; i++)
                 {
@@ -152,15 +152,19 @@ namespace BannerKings.UI
                     }, new TextObject(mercantilismDecision.GetHint()));
             }
 
-            RevenueInfo.Add(new InformationElement("Administrative Cost:", FormatValue(data.EconomicData.AdministrativeCost.ResultNumber),
-                    "Costs associated with the settlement administration, including those of active policies and decisions, deducted on tax revenue."));
+            ExplainedNumber admCost = data.EconomicData.AdministrativeCost;
+            RevenueInfo.Add(new InformationElement("Administrative Cost:", FormatValue(admCost.ResultNumber),
+                 new TextObject("{=!}{TEXT}\n{EXPLANATIONS}")
+                   .SetTextVariable("TEXT", new TextObject("Costs associated with the settlement administration, including those of active policies and decisions, deducted on tax revenue."))
+                   .SetTextVariable("EXPLANATIONS", admCost.GetExplanations())
+                   .ToString()));
 
             taxItem = (BKTaxPolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(settlement, "tax");
             TaxSelector = GetSelector(taxItem, taxItem.OnChange);
             TaxSelector.SelectedIndex = taxItem.Selected;
             TaxSelector.SetOnChangeAction(taxItem.OnChange);
 
-            
+
         }
 
         private void OnTournamentPress()
@@ -177,13 +181,13 @@ namespace BannerKings.UI
             "provide an adequate prize. Sponsoring games improves population loyalty towards you, and valuable prizes provide renown to your name."));
 
         [DataSourceProperty]
-        public bool TournamentAvailable 
+        public bool TournamentAvailable
         {
-            get 
+            get
             {
                 if (settlement.IsTown)
                     return !settlement.Town.HasTournament && Hero.MainHero.Gold >= 5000;
-                
+
                 return false;
             }
         }
@@ -324,7 +328,7 @@ namespace BannerKings.UI
                 Hero.MainHero.ChangeHeroGold(-5000);
                 InformationManager.DisplayMessage(new InformationMessage(String
                     .Format("Tournament started with prize: {0}", data.TournamentData.Prize.Name), "event:/ui/notification/coins_negative"));
-            }     
+            }
         }
     }
 }

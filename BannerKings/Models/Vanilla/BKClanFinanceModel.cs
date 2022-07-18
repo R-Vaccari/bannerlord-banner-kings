@@ -10,7 +10,7 @@ using TaleWorlds.Localization;
 
 namespace BannerKings.Models
 {
-    class BKClanFinanceModel : DefaultClanFinanceModel
+    public class BKClanFinanceModel : DefaultClanFinanceModel
     {
 
         public override ExplainedNumber CalculateClanGoldChange(Clan clan, bool includeDescriptions = false, bool applyWithdrawals = false)

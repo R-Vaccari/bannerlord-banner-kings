@@ -34,6 +34,8 @@ using Bannerlord.UIExtenderEx;
 using BannerKings.Managers.Skills;
 using SandBox.View.Map;
 using BannerKings.Managers.Items;
+using BannerKings.Managers.Kingdoms.Policies;
+using TaleWorlds.CampaignSystem.SandBox.GameComponents.Party;
 using BannerKings.Managers.Populations;
 
 namespace BannerKings
@@ -98,6 +100,7 @@ namespace BannerKings
                 BKPerks.Instance.Initialize();
                 BKItemCategories.Instance.Initialize();
                 BKItems.Instance.Initialize();
+                BKPolicies.Instance.Initialize();
             }
         }
 
@@ -342,6 +345,41 @@ namespace BannerKings
                     }
 
                     return true;
+                }
+            }
+
+
+            [HarmonyPatch(typeof(DefaultPartyMoraleModel), "CalculateFoodVarietyMoraleBonus")]
+            class CalculateFoodVarietyMoraleBonusPatch
+            {
+                static bool Prefix(MobileParty party, ref ExplainedNumber result)
+                {
+                    float num = MBMath.ClampFloat(party.ItemRoster.FoodVariety - 5f, -5f, 5f);
+                    if (num != 0f && (num >= 0f || party.LeaderHero == null || !party.LeaderHero.GetPerkValue(DefaultPerks.Steward.Spartan)))
+                    {
+                        if (num > 0f && party.HasPerk(DefaultPerks.Steward.Gourmet, false))
+                        {
+                            result.Add(num * DefaultPerks.Steward.Gourmet.PrimaryBonus, DefaultPerks.Steward.Gourmet.Name, null);
+                            return false;
+                        }
+                        result.Add(num, GameTexts.FindText("str_food_bonus_morale", null), null);
+                    }
+
+                    float totalModifiers = 0f;
+                    float modifierRate = 0f;
+                    foreach (ItemRosterElement element in party.ItemRoster.ToList().FindAll(x => x.EquipmentElement.Item.IsFood))
+                    {
+                        ItemModifier modifier = element.EquipmentElement.ItemModifier;
+                        if (modifier != null)
+                        {
+                            totalModifiers++;
+                            modifierRate += modifier.PriceMultiplier;
+                        }
+                    }
+
+                    if (modifierRate != 0f) result.Add(MBMath.ClampFloat(modifierRate / totalModifiers, -5f, 5f), new TextObject("{=!}Food quality"));
+
+                    return false;
                 }
             }
         }
