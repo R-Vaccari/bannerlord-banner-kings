@@ -12,14 +12,18 @@ namespace BannerKings.Managers.Institutions.Religions
         private TextObject description;
         private TextObject effects;
         private TextObject secondaryTitle;
-        public Divinity(string id, TextObject name, TextObject description, TextObject effects, TextObject secondaryTitle = null)
+        private int blessingCost;
+        public Divinity(string id, TextObject name, TextObject description, TextObject effects, TextObject secondaryTitle = null, int blessingCost = 500)
         {
             this.id = id;
             this.name = name;
             this.description = description;
             this.effects = effects;
             this.secondaryTitle = secondaryTitle != null ? secondaryTitle : new TextObject();
+            this.blessingCost = blessingCost;
         }
+
+        public int BlessingCost => blessingCost; 
 
         public TextObject Name => name;
         public TextObject Description => description;

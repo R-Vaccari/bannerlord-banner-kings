@@ -1,5 +1,4 @@
 ﻿using TaleWorlds.CampaignSystem;
-using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
@@ -221,5 +220,11 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
 
             return new(possible, text);
         }
+
+        public override TextObject GetBlessingActionName() => new TextObject("{=!}I would like to medidate on one of the sagas.");
+        public override TextObject GetBlessingQuestion() => new TextObject("{=!}And which one of sacred sagas, of heroes past and renowned, would you like to medidate upon?");
+        public override TextObject GetBlessingConfirmQuestion() => new TextObject("{=!}Are you sure? If so, you shall take these teachings deep into your heart. Let your soul sing for the anguished fallen, and hope one day you may join them in the Canticles!");
+
+        public override TextObject GetBlessingQuickInformation() => new TextObject("{=!}{HERO} is now medidating on the {DIVINITY} saga.");
     }
 }

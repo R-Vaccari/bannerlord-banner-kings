@@ -99,6 +99,11 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
         public abstract int GetIdealRank(Settlement settlement, bool isCapital);
         public abstract TextObject GetRankTitle(int rank);
         public abstract string GetId();
+
+        public abstract TextObject GetBlessingActionName();
+        public abstract TextObject GetBlessingQuestion();
+        public abstract TextObject GetBlessingConfirmQuestion();
+        public abstract TextObject GetBlessingQuickInformation();
     }
 
     public enum FaithStance

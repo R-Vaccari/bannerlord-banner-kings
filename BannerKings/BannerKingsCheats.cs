@@ -1,4 +1,5 @@
-﻿using BannerKings.Managers.Titles;
+﻿using BannerKings.Managers.Institutions.Religions;
+using BannerKings.Managers.Titles;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
@@ -77,6 +78,16 @@ namespace BannerKings
 			return "Title successfully inherited.";
 		}
 
+
+		[CommandLineFunctionality.CommandLineArgumentFunction("add_piety", "bannerkings")]
+		public static string AddPiety(List<string> strings)
+		{
+			float piety;
+			if (float.TryParse(strings[0], out piety)) BannerKingsConfig.Instance.ReligionsManager.AddPiety(Hero.MainHero, piety);
+			else return string.Format("{0} is not a number.", strings[0]);
+
+			return string.Format("{0} piety added to Main player.", piety);
+		}
 
 		[CommandLineFunctionality.CommandLineArgumentFunction("disable_knighthood", "bannerkings")]
 		public static string DisableKnighthood(List<string> strings)

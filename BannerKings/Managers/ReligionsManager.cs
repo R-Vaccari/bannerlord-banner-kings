@@ -149,6 +149,18 @@ namespace BannerKings.Managers
             return religions;
         }
 
+        public void AddBlessing(Divinity divinity, Hero hero, Religion religion, bool notify = false)
+        {
+            if (Religions[religion].ContainsKey(hero))
+            {
+                Religions[religion][hero].AddBoon(divinity);
+                if (notify) InformationManager.AddQuickInformation(religion.Faith.GetBlessingQuickInformation()
+                    .SetTextVariable("HERO", hero.Name)
+                    .SetTextVariable("DIVINITY", divinity.Name),
+                    0, hero.CharacterObject, "event:/ui/notification/relation");
+            } 
+        }
+
         public Religion GetHeroReligion(Hero hero) => Religions.FirstOrDefault(pair => pair.Value.ContainsKey(hero)).Key;
 
         public List<Hero> GetFaithfulHeroes(Religion religion)

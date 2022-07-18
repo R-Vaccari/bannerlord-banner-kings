@@ -221,5 +221,25 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Battania
         public override MBReadOnlyList<Divinity> GetSecondaryDivinities() => pantheon.GetReadOnlyList();
 
         public override TextObject GetSecondaryDivinitiesDescription() => new TextObject("{=!}Spirits");
+
+        public override TextObject GetBlessingActionName()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override TextObject GetBlessingQuestion()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override TextObject GetBlessingConfirmQuestion()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override TextObject GetBlessingQuickInformation()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

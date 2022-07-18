@@ -1,5 +1,4 @@
 ﻿using TaleWorlds.CampaignSystem;
-using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
@@ -209,6 +208,26 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
         public override TextObject GetSecondaryDivinitiesDescription() => new TextObject("{=!}Cults");
 
         public override (bool, TextObject) GetInductionAllowed(Hero hero, int rank)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override TextObject GetBlessingActionName()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override TextObject GetBlessingQuestion()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override TextObject GetBlessingConfirmQuestion()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override TextObject GetBlessingQuickInformation()
         {
             throw new System.NotImplementedException();
         }

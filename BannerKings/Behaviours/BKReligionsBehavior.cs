@@ -4,10 +4,12 @@ using BannerKings.Models.BKModels;
 using HarmonyLib;
 using SandBox;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
+using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
@@ -15,6 +17,7 @@ namespace BannerKings.Behaviours
 {
     public class BKReligionsBehavior : CampaignBehaviorBase
     {
+        private Divinity selectedDivinity;
         public override void RegisterEvents()
         {
             CampaignEvents.DailyTickEvent.AddNonSerializedListener(this, new Action(DailyTick));
@@ -119,13 +122,126 @@ namespace BannerKings.Behaviours
                 "{=!}{CLERGYMAN_INDUCTION_LAST}",
                 new ConversationSentence.OnConditionDelegate(this.IsPreacher), null, 100, null);
 
+
+
+            starter.AddPlayerLine("bk_question_boon", "lord_talk_ask_something_2", "bk_preacher_asked_boon",
+                "{=!}{CLERGYMAN_BLESSING_ACTION}",
+                new ConversationSentence.OnConditionDelegate(IsPreacher),
+                new ConversationSentence.OnConsequenceDelegate(BlessingOnConsequence), 
+                100, 
+                new ConversationSentence.OnClickableConditionDelegate(BlessingOnClickable), 
+                null);
+
+           
+
+            starter.AddDialogLine("bk_answer_boon", "bk_preacher_asked_boon", "bk_preacher_asked_boon_answer",
+                "{=!}{CLERGYMAN_BLESSING_QUESTION}",
+                null, new ConversationSentence.OnConsequenceDelegate(BlessingPositiveAnswerOnConsequence), 100, null);
+
+            starter.AddPlayerLine("bk_preacher_asked_boon_answer", "bk_preacher_asked_boon_answer", "bk_boon_confirm",
+              "{=!}I have decided.", null, 
+              null, 
+              100, null, null);
+
+            starter.AddPlayerLine("bk_preacher_asked_boon_answer", "bk_preacher_asked_boon_answer", "lord_talk_ask_something",
+              "{=D33fIGQe}Never mind.", null, null, 100, null, null);
+
+            starter.AddDialogLine("bk_boon_confirm", "bk_boon_confirm", "bk_boon_confirm",
+                "{=!}{CLERGYMAN_BLESSING_CONFIRM}",
+                null, null, 100, null);
+
+            starter.AddPlayerLine("bk_boon_confirm", "bk_boon_confirm", "lord_talk_ask_something", "{=!}See it done.",
+                () => selectedDivinity != null, new ConversationSentence.OnConsequenceDelegate(BlessingConfirmOnConsequence),
+                100, null, null);
+
+            starter.AddPlayerLine("bk_boon_confirm", "bk_boon_confirm", "lord_talk_ask_something", "{=D33fIGQe}Never mind.",
+                null, null, 100, null, null);
+
+
+
+
             starter.AddPlayerLine("bk_question_rite", "lord_talk_ask_something_2", "bk_preacher_asked_rites",
                 "{=!}I would like to perform a rite.",
-                new ConversationSentence.OnConditionDelegate(IsPreacher), () => RitesOnCondition(starter), 100, null, null);
+                () => IsPreacher() && RitesOnCondition(starter), null, 100, null, null);
 
-            starter.AddDialogLine("bk_answer_rite", "bk_preacher_asked_rites", "lord_talk_ask_something",
+            starter.AddDialogLine("bk_answer_rite_impossible", "bk_preacher_asked_rites", "lord_talk_ask_something",
                     "{=!}I am afraid that won't be possible.",
                     () => !RitesOnCondition(starter), null, 100, null);
+
+        }
+
+        private void BlessingPositiveAnswerOnConsequence()
+        {
+            List<InquiryElement> list = new List<InquiryElement>();
+            Religion religion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(Hero.MainHero);
+            float piety = BannerKingsConfig.Instance.ReligionsManager.GetPiety(religion, Hero.MainHero);
+
+            foreach (Divinity div in religion.Faith.GetSecondaryDivinities())
+                list.Add(new InquiryElement(div, div.Name.ToString(), null, piety >= div.BlessingCost, div.Effects.ToString()));
+
+            InformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
+                    religion.Faith.GetSecondaryDivinitiesDescription().ToString(), 
+                    string.Empty, list, 
+                    false, 1,
+                    GameTexts.FindText("str_done", null).ToString(), string.Empty,
+                    delegate (List<InquiryElement> x)
+                    {
+                        Divinity divinity = (Divinity?)x[0].Identifier;
+                        selectedDivinity = divinity;
+                    },
+                    null, 
+                    string.Empty), false);
+        }
+
+        private void BlessingConfirmOnConsequence()
+        {
+            Clergyman clergyman = BannerKingsConfig.Instance.ReligionsManager.GetClergymanFromHeroHero(Hero.OneToOneConversationHero);
+            Religion religion = BannerKingsConfig.Instance.ReligionsManager.GetClergymanReligion(clergyman);
+            BannerKingsConfig.Instance.ReligionsManager.AddBlessing(selectedDivinity, Hero.MainHero, religion);
+        }
+
+        private bool BlessingOnClickable(out TextObject hintText)
+        {
+            bool possible = false;
+            Clergyman clergyman = BannerKingsConfig.Instance.ReligionsManager.GetClergymanFromHeroHero(Hero.OneToOneConversationHero);
+            Religion religion = BannerKingsConfig.Instance.ReligionsManager.GetClergymanReligion(clergyman);
+            Religion playerReligion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(Hero.MainHero);
+
+            if (religion.Faith.GetId() != playerReligion.Faith.GetId())
+            {
+                hintText = new TextObject("{=!}You do not adhere to the {FAITH} faith.")
+                    .SetTextVariable("FAITH", religion.Faith.GetFaithName());
+                return false;
+            }
+
+            float piety = BannerKingsConfig.Instance.ReligionsManager.GetPiety(playerReligion, Hero.MainHero);
+            float minPiety = 500f;
+            bool anyPossible = false;
+            foreach (Divinity divinity in religion.Faith.GetSecondaryDivinities())
+            {
+                bool optionPossible = piety >= divinity.BlessingCost;
+                if (optionPossible) anyPossible = true;
+                if (divinity.BlessingCost < minPiety) minPiety = divinity.BlessingCost;
+            }
+
+            if (!anyPossible)
+            {
+                hintText = new TextObject("{=!}Not enough piety to receive any blessing (minimum {PIETY} piety).")
+                    .SetTextVariable("PIETY", minPiety);
+                return false;
+            }
+
+            hintText = new TextObject("{=!}Expend your piety in exchange of a blessing or inspiration.");
+            return true;
+        }
+
+        private void BlessingOnConsequence()
+        {
+            Clergyman clergyman = BannerKingsConfig.Instance.ReligionsManager.GetClergymanFromHeroHero(Hero.OneToOneConversationHero);
+            Religion religion = BannerKingsConfig.Instance.ReligionsManager.GetClergymanReligion(clergyman);
+
+            MBTextManager.SetTextVariable("CLERGYMAN_BLESSING_CONFIRM", religion.Faith.GetBlessingConfirmQuestion());
+            MBTextManager.SetTextVariable("CLERGYMAN_BLESSING_QUESTION", religion.Faith.GetBlessingQuestion());
 
         }
 
@@ -133,58 +249,52 @@ namespace BannerKings.Behaviours
         {
             bool possible = false;
             Clergyman clergyman = BannerKingsConfig.Instance.ReligionsManager.GetClergymanFromHeroHero(Hero.OneToOneConversationHero);
-            if (clergyman != null)
-            {
-                Religion religion = BannerKingsConfig.Instance.ReligionsManager.GetClergymanReligion(clergyman);
-                if (religion != null)
-                {
-                    MBReadOnlyList<Rite> rites = religion.Rites;
-                    Rite selected = null;
-                    possible = rites.Count > 0;
-                    starter.AddDialogLine("bk_answer_rite", "bk_preacher_asked_rites", "bk_preacher_asked_rites_answer",
-                        "{=!}{CLERGYMAN_RITE}",
-                        null, null, 100, null);
+            Religion religion = BannerKingsConfig.Instance.ReligionsManager.GetClergymanReligion(clergyman);
+            MBReadOnlyList<Rite> rites = religion.Rites;
+            Rite selected = null;
+
+            possible = rites.Count > 0;
+            starter.AddDialogLine("bk_answer_rite", "bk_preacher_asked_rites", "bk_preacher_asked_rites_answer",
+                "{=!}{CLERGYMAN_RITE}",
+                null, null, 100, null);
                
-                    TextObject faithText = new TextObject("{=!}{FAITH} teaches us that we may perform {RITES}.");
-                    TextObject riteText = new TextObject("{=!}Certainly, {HERO}. Remember that proving your devotion is a life-long process. Once a rite is done, some time is needed before it may be consummated again. {RITES}")
-                        .SetTextVariable("HERO", Hero.MainHero.Name);
+            TextObject faithText = new TextObject("{=!}{FAITH} teaches us that we may perform {RITES}.");
+            TextObject riteText = new TextObject("{=!}Certainly, {HERO}. Remember that proving your devotion is a life-long process. Once a rite is done, some time is needed before it may be consummated again. {RITES}")
+                .SetTextVariable("HERO", Hero.MainHero.Name);
 
-                    starter.AddDialogLine("bk_rite_pending", "bk_rite_pending", "bk_rite_pending",
-                        "{=!}I will wait your decision on what to offer.",
-                        null, null, 100, null);
-                    starter.AddPlayerLine("bk_rite_pending", "bk_rite_pending", "bk_rite_confirm", "{=!}I have decided.",
-                        null, null, 100, null, null);
+            starter.AddDialogLine("bk_rite_pending", "bk_rite_pending", "bk_rite_pending",
+                "{=!}I will wait your decision on what to offer.",
+                null, null, 100, null);
+            starter.AddPlayerLine("bk_rite_pending", "bk_rite_pending", "bk_rite_confirm", "{=!}I have decided.",
+                null, null, 100, null, null);
 
-                    starter.AddDialogLine("bk_rite_confirm", "bk_rite_confirm", "bk_rite_confirm",
-                        "{=!}{CLERGYMAN_RITE_CONFIRM}",
-                        null, null, 100, null);
-                    starter.AddPlayerLine("bk_rite_confirm", "bk_rite_confirm", "lord_talk_ask_something", "{=!}See it done.", 
-                        null, () => { if (selected != null) selected.Complete(Hero.MainHero); }, 
-                        100, null, null);
-                    starter.AddPlayerLine("bk_rite_confirm", "bk_rite_confirm", "lord_talk_ask_something", "{=D33fIGQe}Never mind.", 
-                        null, null, 100, null, null);
+            starter.AddDialogLine("bk_rite_confirm", "bk_rite_confirm", "bk_rite_confirm",
+                "{=!}{CLERGYMAN_RITE_CONFIRM}",
+                null, null, 100, null);
+            starter.AddPlayerLine("bk_rite_confirm", "bk_rite_confirm", "lord_talk_ask_something", "{=!}See it done.", 
+                null, () => { if (selected != null) selected.Complete(Hero.MainHero); }, 
+                100, null, null);
+            starter.AddPlayerLine("bk_rite_confirm", "bk_rite_confirm", "lord_talk_ask_something", "{=D33fIGQe}Never mind.", 
+                null, null, 100, null, null);
 
-                    StringBuilder sb = new StringBuilder();
-                    foreach (Rite rite in rites)
-                    {
-                        sb.Append(rite.GetName().ToString() + ", ");
-                        starter.AddPlayerLine("bk_preacher_asked_rites_answer", "bk_preacher_asked_rites_answer",
-                            "bk_rite_pending", rite.GetName().ToString(),
-                            () => true, () => 
-                            { 
-                                rite.Execute(Hero.MainHero);
-                                selected = rite;
-                            });
-                    }
-                    starter.AddPlayerLine("bk_preacher_asked_rites_answer", "bk_preacher_asked_rites_answer", "lord_talk_ask_something", "{=D33fIGQe}Never mind.", null, null, 100, null, null);
-                    sb.Remove(sb.Length - 2, 2);
-                    MBTextManager.SetTextVariable("CLERGYMAN_RITE", riteText.SetTextVariable("RITES", faithText
-                        .SetTextVariable("FAITH", religion.Faith.GetFaithName())
-                        .SetTextVariable("RITES", sb.ToString())), false);
-
-
-                }
+            StringBuilder sb = new StringBuilder();
+            foreach (Rite rite in rites)
+            {
+                sb.Append(rite.GetName().ToString() + ", ");
+                starter.AddPlayerLine("bk_preacher_asked_rites_answer", "bk_preacher_asked_rites_answer",
+                    "bk_rite_pending", rite.GetName().ToString(),
+                    () => true, () => 
+                    { 
+                        rite.Execute(Hero.MainHero);
+                        selected = rite;
+                    });
             }
+            starter.AddPlayerLine("bk_preacher_asked_rites_answer", "bk_preacher_asked_rites_answer", "lord_talk_ask_something", "{=D33fIGQe}Never mind.", null, null, 100, null, null);
+            sb.Remove(sb.Length - 2, 2);
+            MBTextManager.SetTextVariable("CLERGYMAN_RITE", riteText.SetTextVariable("RITES", faithText
+                .SetTextVariable("FAITH", religion.Faith.GetFaithName())
+                .SetTextVariable("RITES", sb.ToString())), false);
+
 
             return possible;
         }
@@ -227,6 +337,7 @@ namespace BannerKings.Behaviours
             MBTextManager.SetTextVariable("CLERGYMAN_FAITH__FORBIDDEN_LAST", religion.Faith.GetClergyForbiddenAnswerLast(clergyman.Rank), false);
             MBTextManager.SetTextVariable("CLERGYMAN_INDUCTION", religion.Faith.GetClergyInduction(clergyman.Rank), false);
             MBTextManager.SetTextVariable("CLERGYMAN_INDUCTION_LAST", religion.Faith.GetClergyInductionLast(clergyman.Rank), false);
+            MBTextManager.SetTextVariable("CLERGYMAN_BLESSING_ACTION", religion.Faith.GetBlessingActionName());
         }
     }
 
