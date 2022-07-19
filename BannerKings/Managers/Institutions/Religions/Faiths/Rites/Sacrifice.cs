@@ -55,7 +55,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
             BannerKingsConfig.Instance.ReligionsManager.AddPiety(actionTaker, piety, true);
             actionTaker.AddSkillXp(BKSkills.Instance.Theology, piety * 1.2f);
             
-            foreach (Clan clan in Clan.All)
+            /*foreach (Clan clan in Clan.All)
             {
                 Religion clanReligion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(clan.Leader);
                 if (clan != actionTaker.Clan && (clanReligion == null || !clanReligion.Doctrines.Contains("sacrifice")))
@@ -65,11 +65,16 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
                     if (relationChangeForExecutingHero != 0)
                         ChangeRelationAction.ApplyRelationChangeBetweenHeroes(actionTaker, clan.Leader, relationChangeForExecutingHero, true);
                 }
-            }
+            }*/
         }
 
-        public new bool MeetsCondition(Hero hero) => base.MeetsCondition(hero) &&
-            hero.IsPartyLeader && hero.PartyBelongedTo.PrisonRoster.TotalHeroes > 0;
+        public override bool MeetsCondition(Hero hero) 
+        {
+            FaithfulData data = BannerKingsConfig.Instance.ReligionsManager.GetFaithfulData(hero);
+            return hero.IsAlive && !hero.IsChild && !hero.IsPrisoner && hero.PartyBelongedTo != null &&
+                data != null && data.HasTimePassedForRite(GetRiteType(), GetTimeInterval()) && hero.IsPartyLeader && hero.PartyBelongedTo.PrisonRoster.TotalHeroes > 0; ;
+        }
+        
         public override TextObject GetDescription() => new TextObject("{=!}Sacrifice {HERO} to prove your devotion.");
         public override TextObject GetName() => new TextObject("{=!}Human Sacrifice");
         public override RiteType GetRiteType() => RiteType.SACRIFICE;

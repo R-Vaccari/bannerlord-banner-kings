@@ -18,6 +18,7 @@ namespace BannerKings.Behaviours
     public class BKReligionsBehavior : CampaignBehaviorBase
     {
         private Divinity selectedDivinity;
+        private Rite selectedRite;
         public override void RegisterEvents()
         {
             CampaignEvents.DailyTickEvent.AddNonSerializedListener(this, new Action(DailyTick));
@@ -132,8 +133,6 @@ namespace BannerKings.Behaviours
                 new ConversationSentence.OnClickableConditionDelegate(BlessingOnClickable), 
                 null);
 
-           
-
             starter.AddDialogLine("bk_answer_boon", "bk_preacher_asked_boon", "bk_preacher_asked_boon_answer",
                 "{=!}{CLERGYMAN_BLESSING_QUESTION}",
                 null, new ConversationSentence.OnConsequenceDelegate(BlessingPositiveAnswerOnConsequence), 100, null);
@@ -162,11 +161,44 @@ namespace BannerKings.Behaviours
 
             starter.AddPlayerLine("bk_question_rite", "lord_talk_ask_something_2", "bk_preacher_asked_rites",
                 "{=!}I would like to perform a rite.",
-                () => IsPreacher() && RitesOnCondition(starter), null, 100, null, null);
+                new ConversationSentence.OnConditionDelegate(IsPreacher),
+                new ConversationSentence.OnConsequenceDelegate(RitesOnConsequence), 
+                100, 
+                new ConversationSentence.OnClickableConditionDelegate(RitesOnClickable), 
+                null);
+
+            starter.AddDialogLine("bk_answer_rite", "bk_preacher_asked_rites", "bk_preacher_asked_rites_answer",
+                "{=!}{CLERGYMAN_RITE}",
+                null, 
+                new ConversationSentence.OnConsequenceDelegate(RitesPositiveAnswerOnConsequence), 
+                100,
+                null);
 
             starter.AddDialogLine("bk_answer_rite_impossible", "bk_preacher_asked_rites", "lord_talk_ask_something",
                     "{=!}I am afraid that won't be possible.",
-                    () => !RitesOnCondition(starter), null, 100, null);
+                    new ConversationSentence.OnConditionDelegate(IsPreacher), 
+                    null, 
+                    100, 
+                    null);
+
+            starter.AddPlayerLine("bk_preacher_asked_rites_answer", "bk_preacher_asked_rites_answer", "bk_rite_confirm",
+              "{=!}I have decided.", null,
+              null,
+              100, null, null);
+
+            starter.AddPlayerLine("bk_preacher_asked_rites_answer", "bk_preacher_asked_rites_answer", "lord_talk_ask_something",
+              "{=D33fIGQe}Never mind.", null,
+              null,
+              100, null, null);
+
+            starter.AddDialogLine("bk_rite_confirm", "bk_rite_confirm", "bk_rite_confirm",
+                "{=!}{CLERGYMAN_RITE_CONFIRM}",
+                null, null, 100, null);
+            starter.AddPlayerLine("bk_rite_confirm", "bk_rite_confirm", "lord_talk_ask_something", "{=!}See it done.",
+                null, () => { if (selectedRite != null) selectedRite.Complete(Hero.MainHero); },
+                100, null, null);
+            starter.AddPlayerLine("bk_rite_confirm", "bk_rite_confirm", "lord_talk_ask_something", "{=D33fIGQe}Never mind.",
+                null, null, 100, null, null);
 
         }
 
@@ -202,7 +234,6 @@ namespace BannerKings.Behaviours
 
         private bool BlessingOnClickable(out TextObject hintText)
         {
-            bool possible = false;
             Clergyman clergyman = BannerKingsConfig.Instance.ReligionsManager.GetClergymanFromHeroHero(Hero.OneToOneConversationHero);
             Religion religion = BannerKingsConfig.Instance.ReligionsManager.GetClergymanReligion(clergyman);
             Religion playerReligion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(Hero.MainHero);
@@ -245,58 +276,79 @@ namespace BannerKings.Behaviours
 
         }
 
-        private bool RitesOnCondition(CampaignGameStarter starter)
+        private bool RitesOnClickable(out TextObject hintText)
         {
-            bool possible = false;
             Clergyman clergyman = BannerKingsConfig.Instance.ReligionsManager.GetClergymanFromHeroHero(Hero.OneToOneConversationHero);
             Religion religion = BannerKingsConfig.Instance.ReligionsManager.GetClergymanReligion(clergyman);
-            MBReadOnlyList<Rite> rites = religion.Rites;
-            Rite selected = null;
+            Religion playerReligion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(Hero.MainHero);
 
-            possible = rites.Count > 0;
-            starter.AddDialogLine("bk_answer_rite", "bk_preacher_asked_rites", "bk_preacher_asked_rites_answer",
-                "{=!}{CLERGYMAN_RITE}",
-                null, null, 100, null);
+            if (religion.Faith.GetId() != playerReligion.Faith.GetId())
+            {
+                hintText = new TextObject("{=!}You do not adhere to the {FAITH} faith.")
+                    .SetTextVariable("FAITH", religion.Faith.GetFaithName());
+                return false;
+            }
+
+            bool anyPossible = false;
+            foreach (Rite rite in religion.Rites)
+                if (rite.MeetsCondition(Hero.MainHero))
+                {
+                    anyPossible = true;
+                    break;
+                }
+ 
+            if (!anyPossible)
+            {
+                hintText = new TextObject("{=!}No rite is currently possible to perform.");
+                return false;
+            }
+
+            hintText = new TextObject("{=!}Perform a rite such as an offering in exchange for piety.");
+            return true;
+        }
+
+        private void RitesPositiveAnswerOnConsequence()
+        {
+            List<InquiryElement> list = new List<InquiryElement>();
+            Religion religion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(Hero.MainHero);
+            float piety = BannerKingsConfig.Instance.ReligionsManager.GetPiety(religion, Hero.MainHero);
+
+            foreach (Rite rite in religion.Rites)
+                list.Add(new InquiryElement(rite, rite.GetName().ToString(), null, rite.MeetsCondition(Hero.MainHero), rite.GetDescription().ToString()));
+
+            InformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
+                    religion.Faith.GetSecondaryDivinitiesDescription().ToString(),
+                    string.Empty, list,
+                    false, 1,
+                    GameTexts.FindText("str_done", null).ToString(), string.Empty,
+                    delegate (List<InquiryElement> x)
+                    {
+                        Rite rite = (Rite?)x[0].Identifier;
+                        selectedRite = rite;
+                        rite.Execute(Hero.MainHero);
+                    },
+                    null,
+                    string.Empty), false);
+        }
+
+        private void RitesOnConsequence()
+        {
+            Clergyman clergyman = BannerKingsConfig.Instance.ReligionsManager.GetClergymanFromHeroHero(Hero.OneToOneConversationHero);
+            Religion religion = BannerKingsConfig.Instance.ReligionsManager.GetClergymanReligion(clergyman);
                
             TextObject faithText = new TextObject("{=!}{FAITH} teaches us that we may perform {RITES}.");
             TextObject riteText = new TextObject("{=!}Certainly, {HERO}. Remember that proving your devotion is a life-long process. Once a rite is done, some time is needed before it may be consummated again. {RITES}")
                 .SetTextVariable("HERO", Hero.MainHero.Name);
 
-            starter.AddDialogLine("bk_rite_pending", "bk_rite_pending", "bk_rite_pending",
-                "{=!}I will wait your decision on what to offer.",
-                null, null, 100, null);
-            starter.AddPlayerLine("bk_rite_pending", "bk_rite_pending", "bk_rite_confirm", "{=!}I have decided.",
-                null, null, 100, null, null);
-
-            starter.AddDialogLine("bk_rite_confirm", "bk_rite_confirm", "bk_rite_confirm",
-                "{=!}{CLERGYMAN_RITE_CONFIRM}",
-                null, null, 100, null);
-            starter.AddPlayerLine("bk_rite_confirm", "bk_rite_confirm", "lord_talk_ask_something", "{=!}See it done.", 
-                null, () => { if (selected != null) selected.Complete(Hero.MainHero); }, 
-                100, null, null);
-            starter.AddPlayerLine("bk_rite_confirm", "bk_rite_confirm", "lord_talk_ask_something", "{=D33fIGQe}Never mind.", 
-                null, null, 100, null, null);
-
             StringBuilder sb = new StringBuilder();
-            foreach (Rite rite in rites)
-            {
+            foreach (Rite rite in religion.Rites)
                 sb.Append(rite.GetName().ToString() + ", ");
-                starter.AddPlayerLine("bk_preacher_asked_rites_answer", "bk_preacher_asked_rites_answer",
-                    "bk_rite_pending", rite.GetName().ToString(),
-                    () => true, () => 
-                    { 
-                        rite.Execute(Hero.MainHero);
-                        selected = rite;
-                    });
-            }
-            starter.AddPlayerLine("bk_preacher_asked_rites_answer", "bk_preacher_asked_rites_answer", "lord_talk_ask_something", "{=D33fIGQe}Never mind.", null, null, 100, null, null);
-            sb.Remove(sb.Length - 2, 2);
+            
+
             MBTextManager.SetTextVariable("CLERGYMAN_RITE", riteText.SetTextVariable("RITES", faithText
                 .SetTextVariable("FAITH", religion.Faith.GetFaithName())
                 .SetTextVariable("RITES", sb.ToString())), false);
 
-
-            return possible;
         }
 
         private bool CanPerformRite(RiteType rite)

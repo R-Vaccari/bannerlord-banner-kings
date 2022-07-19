@@ -39,11 +39,13 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
             .SetTextVariable("ITEM", input.Name)
             .SetTextVariable("COUNT", inputCount);
 
-        public new bool MeetsCondition(Hero hero)
+        public override bool MeetsCondition(Hero hero)
         {
-            bool baseResult = base.MeetsCondition(hero);
+            FaithfulData data = BannerKingsConfig.Instance.ReligionsManager.GetFaithfulData(hero);
+            bool baseResult = hero.IsAlive && !hero.IsChild && !hero.IsPrisoner && hero.PartyBelongedTo != null &&
+                data != null && data.HasTimePassedForRite(GetRiteType(), GetTimeInterval());
             bool hasItems = false;
-            if (hero.PartyBelongedTo != null)
+            if (baseResult)
             {
                 ItemRoster roster = hero.PartyBelongedTo.ItemRoster;
                 foreach (ItemRosterElement element in roster)
