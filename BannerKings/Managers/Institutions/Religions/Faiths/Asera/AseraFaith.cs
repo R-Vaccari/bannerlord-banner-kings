@@ -265,5 +265,10 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
         {
             throw new NotImplementedException();
         }
+
+        public override TextObject GetBlessingActionName()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
