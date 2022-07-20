@@ -153,7 +153,7 @@ namespace BannerKings.Managers
         {
             if (Religions[religion].ContainsKey(hero))
             {
-                Religions[religion][hero].AddBoon(divinity);
+                Religions[religion][hero].AddBlessing(divinity);
                 if (notify) InformationManager.AddQuickInformation(religion.Faith.GetBlessingQuickInformation()
                     .SetTextVariable("HERO", hero.Name)
                     .SetTextVariable("DIVINITY", divinity.Name),

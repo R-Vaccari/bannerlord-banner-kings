@@ -113,7 +113,10 @@ namespace BannerKings.Behaviours
 
             starter.AddPlayerLine("bk_question_induction", "lord_talk_ask_something_2", "bk_preacher_asked_induction",
                "{=!}I would like to be inducted.",
-               new ConversationSentence.OnConditionDelegate(this.IsPreacher), null, 100, null, null);
+               new ConversationSentence.OnConditionDelegate(IsPreacher), 
+               null, 100, 
+               new ConversationSentence.OnClickableConditionDelegate(InductionOnClickable), 
+               null);
 
             starter.AddDialogLine("bk_answer_induction_1", "bk_preacher_asked_induction", "bk_preacher_asked_induction_last",
                 "{=!}{CLERGYMAN_INDUCTION}",
@@ -175,11 +178,11 @@ namespace BannerKings.Behaviours
                 null);
 
             starter.AddDialogLine("bk_answer_rite_impossible", "bk_preacher_asked_rites", "lord_talk_ask_something",
-                    "{=!}I am afraid that won't be possible.",
-                    new ConversationSentence.OnConditionDelegate(IsPreacher), 
-                    null, 
-                    100, 
-                    null);
+                "{=!}I am afraid that won't be possible.",
+                new ConversationSentence.OnConditionDelegate(IsPreacher), 
+                null, 
+                100, 
+                null);
 
             starter.AddPlayerLine("bk_preacher_asked_rites_answer", "bk_preacher_asked_rites_answer", "bk_rite_confirm",
               "{=!}I have decided.", null,
@@ -202,6 +205,31 @@ namespace BannerKings.Behaviours
 
         }
 
+        private bool InductionOnClickable(out TextObject hintText)
+        {
+            Clergyman clergyman = BannerKingsConfig.Instance.ReligionsManager.GetClergymanFromHeroHero(Hero.OneToOneConversationHero);
+            Religion religion = BannerKingsConfig.Instance.ReligionsManager.GetClergymanReligion(clergyman);
+            Religion playerReligion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(Hero.MainHero);
+
+            if (playerReligion.Faith.GetId() == religion.Faith.GetId())
+            {
+                hintText = new TextObject("{=!}Already an adherent of this faith.");
+                return false;
+            }
+
+            (bool, TextObject) result = religion.Faith.GetInductionAllowed(Hero.MainHero, clergyman.Rank);
+            if (!result.Item1)
+            {
+                hintText = result.Item2;
+                return false;
+            }
+
+            hintText = new TextObject("{=!}{POSSIBLE}. Changing faiths will significantly impact your clan's renown. Your piety in the new faith will be zero. Lords of {CURRENT_FAITH} faith may disapprove your change.")
+                .SetTextVariable("POSSIBLE", result.Item2)
+                .SetTextVariable("CURRENT_FAITH", playerReligion.Faith.GetFaithName());
+            return true;
+        }
+
         private void BlessingPositiveAnswerOnConsequence()
         {
             List<InquiryElement> list = new List<InquiryElement>();
@@ -209,11 +237,22 @@ namespace BannerKings.Behaviours
             float piety = BannerKingsConfig.Instance.ReligionsManager.GetPiety(religion, Hero.MainHero);
 
             foreach (Divinity div in religion.Faith.GetSecondaryDivinities())
-                list.Add(new InquiryElement(div, div.Name.ToString(), null, piety >= div.BlessingCost, div.Effects.ToString()));
+                list.Add(new InquiryElement(div, 
+                    div.Name.ToString(), 
+                    null, 
+                    piety >= div.BlessingCost, 
+                    new TextObject("{=!}{DESCRIPTION}\n{EFFECTS}")
+                    .SetTextVariable("DESCRIPTION", div.Description)
+                    .SetTextVariable("EFFECTS", div.Effects)
+                    .ToString()));
 
             InformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                     religion.Faith.GetSecondaryDivinitiesDescription().ToString(), 
-                    string.Empty, list, 
+                    new TextObject("{=!}Select which of the {SECONDARIES} you would like to {BLESSING_ACTION}.")
+                    .SetTextVariable("SECONDARIES", religion.Faith.GetSecondaryDivinitiesDescription())
+                    .SetTextVariable("BLESSING_ACTION", religion.Faith.GetBlessingActionName())
+                    .ToString(), 
+                    list, 
                     false, 1,
                     GameTexts.FindText("str_done", null).ToString(), string.Empty,
                     delegate (List<InquiryElement> x)
@@ -389,7 +428,7 @@ namespace BannerKings.Behaviours
             MBTextManager.SetTextVariable("CLERGYMAN_FAITH__FORBIDDEN_LAST", religion.Faith.GetClergyForbiddenAnswerLast(clergyman.Rank), false);
             MBTextManager.SetTextVariable("CLERGYMAN_INDUCTION", religion.Faith.GetClergyInduction(clergyman.Rank), false);
             MBTextManager.SetTextVariable("CLERGYMAN_INDUCTION_LAST", religion.Faith.GetClergyInductionLast(clergyman.Rank), false);
-            MBTextManager.SetTextVariable("CLERGYMAN_BLESSING_ACTION", religion.Faith.GetBlessingActionName());
+            MBTextManager.SetTextVariable("CLERGYMAN_BLESSING_ACTION", religion.Faith.GetBlessingAction());
         }
     }
 

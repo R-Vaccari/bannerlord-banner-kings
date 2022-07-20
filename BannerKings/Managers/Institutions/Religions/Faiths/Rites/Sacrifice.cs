@@ -31,7 +31,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
                         new MultiSelectionInquiryData(
                             GetName().ToString(),
                             GetDescription().ToString(),
-                            options, true, 1, GameTexts.FindText("str_done").ToString(), string.Empty,
+                            options, false, 1, GameTexts.FindText("str_done").ToString(), string.Empty,
                             delegate (List<InquiryElement> x)
                             {
                                 input = (Hero?)x[0].Identifier;
@@ -52,7 +52,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
                     .SetTextVariable("SACRIFICE", input.Name), 
                     0, actionTaker.CharacterObject, "event:/ui/notification/relation");
 
-            BannerKingsConfig.Instance.ReligionsManager.AddPiety(actionTaker, piety, true);
+            BannerKingsConfig.Instance.ReligionsManager.AddPiety(actionTaker, piety, actionTaker.Clan == Clan.PlayerClan);
             actionTaker.AddSkillXp(BKSkills.Instance.Theology, piety * 1.2f);
             
             /*foreach (Clan clan in Clan.All)

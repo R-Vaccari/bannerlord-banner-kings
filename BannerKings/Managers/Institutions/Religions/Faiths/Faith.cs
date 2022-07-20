@@ -100,6 +100,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
         public abstract TextObject GetRankTitle(int rank);
         public abstract string GetId();
 
+        public abstract TextObject GetBlessingAction();
         public abstract TextObject GetBlessingActionName();
         public abstract TextObject GetBlessingQuestion();
         public abstract TextObject GetBlessingConfirmQuestion();

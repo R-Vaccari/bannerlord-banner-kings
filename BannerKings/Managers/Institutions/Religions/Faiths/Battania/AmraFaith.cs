@@ -222,24 +222,14 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Battania
 
         public override TextObject GetSecondaryDivinitiesDescription() => new TextObject("{=!}Spirits");
 
-        public override TextObject GetBlessingActionName()
-        {
-            throw new System.NotImplementedException();
-        }
+        public override TextObject GetBlessingAction() => new TextObject("{=!}I would like to swear an oath to the spirits.");
 
-        public override TextObject GetBlessingQuestion()
-        {
-            throw new System.NotImplementedException();
-        }
+        public override TextObject GetBlessingQuestion() => new TextObject("{=!}And what spirits would ye be bound to? Those of wolves and warriors whose savagery are unmatched, or the spirits of Uchalion, who breathe fire into our hearts to fight the enemy?");
 
-        public override TextObject GetBlessingConfirmQuestion()
-        {
-            throw new System.NotImplementedException();
-        }
+        public override TextObject GetBlessingConfirmQuestion() => new TextObject("{=!}Be ye sure of that. Only a fool would break an oath with the spirits.");
 
-        public override TextObject GetBlessingQuickInformation()
-        {
-            throw new System.NotImplementedException();
-        }
+        public override TextObject GetBlessingQuickInformation() => new TextObject("{=!}{HERO} has sworn an oath to the {DIVINITY} spirits.");
+
+        public override TextObject GetBlessingActionName() => new TextObject("{=!}pledge an oath to.");
     }
 }
