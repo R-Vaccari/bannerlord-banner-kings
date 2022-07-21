@@ -14,6 +14,17 @@ namespace BannerKings.Models
 {
     public class BKConstructionModel : DefaultBuildingConstructionModel
     {
+		public ExplainedNumber CalculateInfrastructureLimit(Settlement settlement)
+        {
+			ExplainedNumber result = new ExplainedNumber(0f, true);
+			result.LimitMin(0f);
+			result.LimitMax(50f);
+			PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
+			result.Add(data.TotalPop / 1200f, new TextObject("{=!}Total population"));
+
+			return result;
+		}
+
 		public ExplainedNumber CalculateVillageConstruction(Settlement settlement)
         {
 			ExplainedNumber result = new ExplainedNumber(0f, true);

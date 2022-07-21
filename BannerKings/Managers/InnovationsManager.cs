@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
+using TaleWorlds.Library;
 
 namespace BannerKings.Managers
 {
@@ -34,6 +35,16 @@ namespace BannerKings.Managers
                     }
                 }
             }
+        }
+
+        public MBReadOnlyList<Innovation> GetInnovations(CultureObject culture)
+        {
+            List<Innovation> list = new List<Innovation>();
+            if (Innovations.ContainsKey(culture))
+                foreach (Innovation innov in Innovations[culture])
+                    list.Add(innov);
+
+            return list.GetReadOnlyList();
         }
     }
 }

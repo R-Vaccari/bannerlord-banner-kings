@@ -9,9 +9,10 @@ namespace BannerKings.Managers.Innovations
     public class DefaultInnovations : DefaultTypeInitializer<DefaultInnovations, Innovation>
     {
 
-        private Innovation heavyPlough, threeFieldsSystem, sewers;
+        private Innovation heavyPlough, threeFieldsSystem, sewers, publicWorks, cranes, wheelbarrow, blastFurnace;
         public Innovation HeavyPlough => heavyPlough;
         public Innovation ThreeFieldsSystem => threeFieldsSystem;
+        public Innovation PublicWorks => publicWorks;
 
         public override IEnumerable<Innovation> All
         {
@@ -19,6 +20,7 @@ namespace BannerKings.Managers.Innovations
             {
                 yield return HeavyPlough;
                 yield return ThreeFieldsSystem;
+                yield return PublicWorks;
             }
         }
 
@@ -36,6 +38,14 @@ namespace BannerKings.Managers.Innovations
 
             threeFieldsSystem = new Innovation("innovation_three_field_system");
             threeFieldsSystem.Initialize(new TextObject(),
+                new TextObject(),
+                new TextObject(),
+                1000f,
+                null,
+                null);
+
+            publicWorks = new Innovation("innovation_public_works");
+            publicWorks.Initialize(new TextObject(),
                 new TextObject(),
                 new TextObject(),
                 1000f,

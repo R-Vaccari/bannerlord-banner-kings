@@ -19,5 +19,11 @@ namespace BannerKings
         }
         public TextObject Name => name;
         public TextObject Description => description;
+
+        public override bool Equals(object obj)
+        {
+            if (obj is BannerKingsObject) return ((BannerKingsObject) obj).StringId == StringId;
+            return base.Equals(obj);
+        }
     }
 }
