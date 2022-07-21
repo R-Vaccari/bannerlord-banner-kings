@@ -62,6 +62,12 @@ namespace BannerKings.Managers
                 data.PostInitialize();
         }
 
+        public Language GetNativeLanguage(CultureObject culture)
+        {
+            Language native = DefaultLanguages.Instance.All.FirstOrDefault(x => x.Culture == culture);
+            return native;
+        }
+
         public Language GetNativeLanguage(Hero hero)
         {
             Language native = DefaultLanguages.Instance.All.FirstOrDefault(x => x.Culture == hero.Culture);
