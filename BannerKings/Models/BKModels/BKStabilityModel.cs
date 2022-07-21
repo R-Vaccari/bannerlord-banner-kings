@@ -4,8 +4,6 @@ using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
-using System.Linq;
-using BannerKings.Managers.Titles;
 
 namespace BannerKings.Models
 {
@@ -109,6 +107,11 @@ namespace BannerKings.Models
                 result.Add(averageSatisfaction / 5f, new TextObject("Produce satisfactions"));
                 result.Add(data.NotableSupport.ResultNumber / 5f, new TextObject("{=!}Notable support"));
 
+                float demesneLimit = CalculateDemesneLimit(settlement.Owner).ResultNumber;
+                float currentDemesne = CalculateCurrentDemesne(settlement.OwnerClan).ResultNumber;
+                if (currentDemesne > demesneLimit) result.Add((demesneLimit - currentDemesne) * 5f, new TextObject("{=!}Demesne over limit by {POINTS}")
+                    .SetTextVariable("POINTS", demesneLimit - currentDemesne));
+
                 float legitimacy = 0f;
                 LegitimacyType legitimacyType = (LegitimacyType)BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(BKLegitimacyModel))
                     .CalculateEffect(settlement).ResultNumber;
@@ -126,6 +129,137 @@ namespace BannerKings.Models
 
                 result.Add(legitimacy, new TextObject("Legitimacy"));
             }
+            return result;
+        }
+
+
+        public ExplainedNumber CalculateCurrentUnlandedDemesne(Clan clan)
+        {
+            ExplainedNumber result = new ExplainedNumber(0f, true);
+            result.LimitMin(0f);
+
+            Hero leader = clan.Leader;
+            foreach (FeudalTitle title in BannerKingsConfig.Instance.TitleManager.GetAllDeJure(leader))
+            {
+                float value = 0f;
+                if (title.type == TitleType.Dukedom) value = 0.5f;
+                else if (title.type <= TitleType.Kingdom) value = 1f;
+                else if (title.type <= TitleType.Empire) value = 1.5f;
+
+                if (value != 0f)
+                    result.Add(value, new TextObject("{=!}{TITLE}")
+                        .SetTextVariable("SETTLEMENT", title.FullName));
+            }
+
+            return result;
+        }
+
+        public ExplainedNumber CalculateUnlandedDemesneLimit(Hero hero)
+        {
+            ExplainedNumber result = new ExplainedNumber(0f, true);
+            result.LimitMin(0f);
+            result.LimitMax(5f);
+
+            result.Add(hero.Clan.Tier / 3f, GameTexts.FindText("str_clan_tier_bonus"));
+            return result;
+        }
+
+        public ExplainedNumber CalculateCurrentDemesne(Clan clan)
+        {
+            ExplainedNumber result = new ExplainedNumber(0f, true);
+            result.LimitMin(0f);
+
+            Hero leader = clan.Leader;
+            foreach (Settlement settlement in clan.Settlements)
+            {
+                float value;
+                if (settlement.IsTown) value = 2f;
+                else if (settlement.IsCastle) value = 1f;
+                else value = 0.5f;
+
+                bool deJure = false;
+                FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement);
+                if (title != null)
+                {
+                    if (title.deJure == leader)
+                    {
+                        deJure = true;
+                        value *= 0.75f;
+                    }
+                    else if (title.deJure != null && title.deJure.Clan == clan) value = 0f;
+                }
+
+                if (value != 0f) 
+                    result.Add(value, new TextObject("{=!}{SETTLEMENT}{DEJURE}")
+                        .SetTextVariable("SETTLEMENT", settlement.Name)
+                        .SetTextVariable("DEJURE", deJure ? "(de Jure)" : ""));
+            }
+
+            return result;
+        }
+
+        public ExplainedNumber CalculateCurrentVassals(Clan clan)
+        {
+            ExplainedNumber result = new ExplainedNumber(0f, true);
+            result.LimitMin(0f);
+
+            Hero leader = clan.Leader;
+            foreach (Hero hero in BannerKingsConfig.Instance.TitleManager.CalculateVassals(leader))
+                result.Add(1f, hero.Name);
+
+            return result;
+        }
+
+        public ExplainedNumber CalculateDemesneLimit(Hero hero)
+        {
+            ExplainedNumber result = new ExplainedNumber(0.5f, true);
+            result.LimitMin(0.5f);
+            result.LimitMax(10f);
+
+            result.Add(hero.Clan.Tier / 2f, GameTexts.FindText("str_clan_tier_bonus"));
+
+            FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(hero);
+            if (title != null)
+            {
+                float bonus = 0f;
+                if (title.type != TitleType.Lordship)
+                {
+                    if (title.type == TitleType.Barony) bonus = 0.5f;
+                    else if (title.type == TitleType.County) bonus = 1f;
+                    else if (title.type == TitleType.Dukedom) bonus = 3f;
+                    else if (title.type == TitleType.Kingdom) bonus = 6f;
+                    else bonus = 10f;
+                }
+
+                if (bonus > 0f) result.Add(bonus, new TextObject("Highest title level"));
+            }
+
+            return result;
+        }
+
+        public ExplainedNumber CalculateVassalLimit(Hero hero)
+        {
+            ExplainedNumber result = new ExplainedNumber(0f, true);
+            result.LimitMin(0f);
+            result.LimitMax(50f);
+            result.Add(hero.Clan.Tier, GameTexts.FindText("str_clan_tier_bonus"));
+
+            FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(hero);
+            if (title != null)
+            {
+                float bonus = 0f;
+                if (title.type != TitleType.Lordship)
+                {
+                    if (title.type == TitleType.Barony) bonus = 1f;
+                    else if (title.type == TitleType.County) bonus = 2f;
+                    else if (title.type == TitleType.Dukedom) bonus = 4f;
+                    else if (title.type == TitleType.Kingdom) bonus = 10f;
+                    else bonus = 20f;
+                }
+
+                if (bonus > 0f) result.Add(bonus, new TextObject("Highest title level"));
+            }
+
             return result;
         }
     }

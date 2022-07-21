@@ -5,8 +5,6 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.SandBox.GameComponents;
 using TaleWorlds.Localization;
 using static BannerKings.Managers.PopulationManager;
-using BannerKings.Populations;
-using BannerKings.Managers.Populations.Villages;
 using TaleWorlds.Library;
 using BannerKings.Managers.Titles;
 
@@ -15,7 +13,7 @@ namespace BannerKings.Models
     public class BKInfluenceModel : DefaultClanPoliticsModel
     {
 
-        public float GetRejectKnighthoodCost(Clan clan) => 10f + (CalculateInfluenceChange(clan, false).ResultNumber * 0.025f * (float)CampaignTime.DaysInYear);
+        public float GetRejectKnighthoodCost(Clan clan) => 10f + (MathF.Max(CalculateInfluenceChange(clan, false).ResultNumber, 5f) * 0.025f * (float)CampaignTime.DaysInYear);
         
 
         public override ExplainedNumber CalculateInfluenceChange(Clan clan, bool includeDescriptions = false)

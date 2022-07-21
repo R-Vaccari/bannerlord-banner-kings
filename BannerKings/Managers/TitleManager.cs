@@ -173,6 +173,24 @@ namespace BannerKings.Managers
             return null;
         }
 
+        public List<Hero> CalculateVassals(Hero suzerain)
+        {
+            List<Hero> list = new List<Hero>();
+            List<FeudalTitle> suzerainTitles = GetAllDeJure(suzerain);
+            foreach (FeudalTitle title in suzerainTitles)
+                if (title.vassals != null && title.vassals.Count > 0)
+                    foreach (FeudalTitle vassal in title.vassals)
+                    {
+                        if (vassal.deJure != null)
+                        {
+                            if (vassal.deJure.Clan != suzerain.Clan && vassal.deJure.Clan.Kingdom == suzerain.Clan.Kingdom) list.Add(vassal.deJure);
+                            else if (vassal.deJure.Clan == suzerain.Clan && vassal.deJure != suzerain) list.Add(vassal.deJure);
+                        }
+                    }
+
+            return list;
+        }
+
         public Dictionary<Clan, List<FeudalTitle>> CalculateVassalClanTitles(Clan suzerainClan)
         {
             Dictionary<Clan, List<FeudalTitle>> clans = new Dictionary<Clan, List<FeudalTitle>> ();
