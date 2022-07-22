@@ -37,6 +37,7 @@ using BannerKings.Managers.Items;
 using BannerKings.Managers.Kingdoms.Policies;
 using TaleWorlds.CampaignSystem.SandBox.GameComponents.Party;
 using BannerKings.Managers.Populations;
+using BannerKings.Managers.Innovations;
 
 namespace BannerKings
 {
@@ -102,6 +103,7 @@ namespace BannerKings
                 BKItemCategories.Instance.Initialize();
                 BKItems.Instance.Initialize();
                 BKPolicies.Instance.Initialize();
+                DefaultInnovations.Instance.Initialize();
             }
         }
 

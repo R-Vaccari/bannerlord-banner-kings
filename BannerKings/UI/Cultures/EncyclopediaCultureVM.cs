@@ -1,5 +1,7 @@
 ﻿using BannerKings.Managers.Education.Languages;
+using BannerKings.Managers.Innovations;
 using BannerKings.Populations;
+using BannerKings.UI.Items;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Core.ViewModelCollection;
@@ -12,6 +14,7 @@ namespace BannerKings.UI.Cultures
     {
         private CultureObject culture;
         private MBBindingList<StringPairItemVM> information, traits;
+        private MBBindingList<TripleStringItemVM> innovations;
         private string description;
 
         public EncyclopediaCultureVM(CultureObject culture) : base(null, false)
@@ -19,6 +22,7 @@ namespace BannerKings.UI.Cultures
             this.culture = culture;
             information = new MBBindingList<StringPairItemVM>();
             traits = new MBBindingList<StringPairItemVM>();
+            innovations = new MBBindingList<TripleStringItemVM>();
             RefreshValues();
         }
 
@@ -27,6 +31,7 @@ namespace BannerKings.UI.Cultures
             base.RefreshValues();
             Information.Clear();
             Traits.Clear();
+            Innovations.Clear();
 
             Description = GameTexts.FindText("str_culture_description", culture.StringId).ToString();
 
@@ -54,6 +59,16 @@ namespace BannerKings.UI.Cultures
             foreach (FeatObject trait in culture.GetCulturalFeats())
                 Traits.Add(new StringPairItemVM(string.Empty,
                     trait.Description.ToString(), null));
+
+            foreach (Innovation innovation in BannerKingsConfig.Instance.InnovationsManager.GetInnovations(culture))
+                Innovations.Add(new TripleStringItemVM(innovation.Name.ToString(),
+                    innovation.Effects.ToString(), 
+                    new TextObject("{=!}{CURRENT}/{REQUIRED} ({PERCENTAGE})")
+                    .SetTextVariable("CURRENT", innovation.CurrentProgress)
+                    .SetTextVariable("REQUIRED", innovation.RequiredProgress)
+                    .SetTextVariable("PERCENTAGE", FormatValue(innovation.CurrentProgress / innovation.RequiredProgress))
+                    .ToString(), 
+                    new BasicTooltipViewModel(() => innovation.Description.ToString())));
         }
 
         [DataSourceProperty]
@@ -80,6 +95,20 @@ namespace BannerKings.UI.Cultures
                 {
                     information = value;
                     OnPropertyChangedWithValue(value, "Information");
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public MBBindingList<TripleStringItemVM> Innovations
+        {
+            get => innovations;
+            set
+            {
+                if (value != innovations)
+                {
+                    innovations = value;
+                    OnPropertyChangedWithValue(value, "Innovations");
                 }
             }
         }

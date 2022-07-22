@@ -29,6 +29,7 @@ namespace BannerKings
         public CourtManager CourtManager { get; private set; }
         public ReligionsManager ReligionsManager { get; private set; }
         public EducationManager EducationManager { get; private set; }
+        public InnovationsManager InnovationsManager { get; private set; }
 
 
         public BKEducationModel EducationModel { get; } = new BKEducationModel();
@@ -92,6 +93,7 @@ namespace BannerKings
             CourtManager = court;
             ReligionsManager = religions != null ? religions : new ReligionsManager();
             EducationManager = educations != null ? educations : new EducationManager();
+            InnovationsManager = new InnovationsManager();
         }
 
         public static BannerKingsConfig Instance => ConfigHolder.CONFIG;
