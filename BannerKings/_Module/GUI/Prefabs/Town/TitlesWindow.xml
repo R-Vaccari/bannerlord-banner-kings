@@ -41,9 +41,10 @@
 						  </Children>
 						</ButtonWidget>
 						
-						<ButtonWidget IsVisible="true" IsEnabled="true" DoNotPassEventsToChildren="true" WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="40" MarginLeft="20" MarginRight="20" MarginTop="20" Brush="ButtonBrush2" Command.Click="ShowFoundKingdom" UpdateChildrenStates="true">
+						<ButtonWidget DataSource="{FoundKingdom}" IsVisible="@Show" IsEnabled="@Enabled" DoNotPassEventsToChildren="true" WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="40" MarginLeft="20" MarginRight="20" MarginTop="20" Brush="ButtonBrush2" Command.Click="OnPress" UpdateChildrenStates="true">
 						  <Children>
-							<TextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginTop="3" Brush="Clan.TabControl.Text" Text="@FoundKingdomText" />
+							<HintWidget DataSource="{Hint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" />	
+							<TextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginTop="3" Brush="Clan.TabControl.Text" Text="@ButtonName" />
 						  </Children>
 						</ButtonWidget>
 						
