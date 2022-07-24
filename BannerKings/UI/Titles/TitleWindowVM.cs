@@ -1,20 +1,21 @@
 ﻿using BannerKings.Managers.Helpers;
 using BannerKings.Managers.Kingdoms.Contract;
-using BannerKings.Managers.Titles;
 using BannerKings.Populations;
 using BannerKings.UI.Items;
-using System.Collections.Generic;
+using System;
 using System.Linq;
+using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
+using BannerKings.Managers.Titles;
 
 namespace BannerKings.UI.Windows
 {
-    public class TitleWindowVM : BannerKingsViewModel
-    {
+	public class TitleWindowVM : BannerKingsViewModel
+	{
 		private TitleElementVM tree;
 		private FeudalTitle title;
 		private MBBindingList<DecisionElement> decisions;
@@ -24,11 +25,11 @@ namespace BannerKings.UI.Windows
 		private string name;
 
 		public TitleWindowVM(PopulationData data) : base(data, true)
-        {
-			title = BannerKingsConfig.Instance.TitleManager.GetTitle(data.Settlement);
+		{
+		    title = BannerKingsConfig.Instance.TitleManager.GetTitle(data.Settlement);
 			decisions = new MBBindingList<DecisionElement>();
 			if (title != null)
-            {
+			{
 				kingdom = data.Settlement.OwnerClan.Kingdom;
 				if (title.sovereign != null)
 				{
@@ -46,11 +47,11 @@ namespace BannerKings.UI.Windows
 				if (Name == null)
 					Name = title.FullName.ToString();
 			}
-        }
+		}
 
-        public override void RefreshValues()
-        {
-            base.RefreshValues();
+		public override void RefreshValues()
+		{
+			base.RefreshValues();
 			Decisions.Clear();
 
 			if (title == null || title.contract == null) return;
@@ -62,25 +63,25 @@ namespace BannerKings.UI.Windows
 
 
 			List<InquiryElement> governments = GetGovernments();
-			DecisionElement governmentButton = CreateButton(governments, governments.Count >= 1 ? new BKGovernmentDecision(data.Settlement.OwnerClan, (GovernmentType)governments[0].Identifier, title?.sovereign) : null,
+			DecisionElement governmentButton = CreateButton(governments, governments.Count >= 1 ? new BKGovernmentDecision(this.data.Settlement.OwnerClan, (GovernmentType)governments[0].Identifier, this.title?.sovereign) : null,
 				new TextObject("{=!}Government").ToString(),
 				new TextObject("{=!}Propose a change in government structure, altering the allowed succession forms and aspects of settlement governance. Depending on the government choice, an appropriate succession type will be enforced as well."));
 			governmentButton.Enabled = allSetup && governments.Count >= 1;
 
 			List<InquiryElement> successions = GetSuccessions();
-			DecisionElement successionButton = CreateButton(successions, successions.Count >= 1 ? new BKSuccessionDecision(data.Settlement.OwnerClan, (SuccessionType)successions[0].Identifier, title?.sovereign) : null,
+			DecisionElement successionButton = CreateButton(successions, successions.Count >= 1 ? new BKSuccessionDecision(this.data.Settlement.OwnerClan, (SuccessionType)successions[0].Identifier, this.title?.sovereign) : null,
 				new TextObject("{=!}Succession").ToString(),
 				new TextObject("{=!}Propose a change in the realm's succession, altering how the next sovereign is chosen."));
-			successionButton.Enabled = allSetup && successions.Count >= 1 && title.contract.Government != GovernmentType.Imperial && title.contract.Government != GovernmentType.Republic;
+			successionButton.Enabled = allSetup && successions.Count >= 1 && this.title.contract.Government != GovernmentType.Imperial && this.title.contract.Government != GovernmentType.Republic;
 
 			List<InquiryElement> inheritances = GetInheritances();
-			DecisionElement inheritanceButton = CreateButton(inheritances, inheritances.Count >= 1 ? new BKInheritanceDecision(data.Settlement.OwnerClan, (InheritanceType)inheritances[0].Identifier, title?.sovereign) : null,
+			DecisionElement inheritanceButton = CreateButton(inheritances, inheritances.Count >= 1 ? new BKInheritanceDecision(this.data.Settlement.OwnerClan, (InheritanceType)inheritances[0].Identifier, this.title?.sovereign) : null,
 				new TextObject("{=!}Inheritance").ToString(),
 				new TextObject("{=!}Propose a change in clan inheritances, that is, who becomes the clan leader once the leader dies."));
 			inheritanceButton.Enabled = allSetup && inheritances.Count >= 1;
 
 			List<InquiryElement> genderLaws = GetGenderLaws();
-			DecisionElement genderButton = CreateButton(genderLaws, genderLaws.Count >= 1 ? new BKGenderDecision(data.Settlement.OwnerClan, (GenderLaw)genderLaws[0].Identifier, title?.sovereign) : null, 
+			DecisionElement genderButton = CreateButton(genderLaws, genderLaws.Count >= 1 ? new BKGenderDecision(this.data.Settlement.OwnerClan, (GenderLaw)genderLaws[0].Identifier, this.title?.sovereign) : null,
 				new TextObject("{=!}Gender Law").ToString(),
 				new TextObject("{=!}Propose a change in gender laws, dictating whether males and females are viewed equally in various aspects."));
 			genderButton.Enabled = allSetup && genderLaws.Count >= 1;
@@ -94,44 +95,44 @@ namespace BannerKings.UI.Windows
 
 		private DecisionElement CreateButton(List<InquiryElement> options, BKContractDecision decision, string law, TextObject hint) => new DecisionElement()
 			.SetAsButtonOption(law, delegate
-				{
-					TextObject description = new TextObject("{=!}Select a {LAW} to be voted on. Starting an election costs {INFLUENCE} influence.");
-					description.SetTextVariable("LAW", law);
-					int cost = decision != null ? decision.GetInfluenceCost(null) : 0;
-					description.SetTextVariable("INFLUENCE", cost);
+			{
+				TextObject description = new TextObject("{=!}Select a {LAW} to be voted on. Starting an election costs {INFLUENCE} influence.");
+				description.SetTextVariable("LAW", law);
+				int cost = decision != null ? decision.GetInfluenceCost(null) : 0;
+				description.SetTextVariable("INFLUENCE", cost);
 
-					if (kingdom != null && options.Count > 0 && decision != null)
-                    {
-						InformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(law, description.ToString(),
-						options, true, 1, GameTexts.FindText("str_done").ToString(), string.Empty,
-						delegate (List<InquiryElement> x)
+				if (kingdom != null && options.Count > 0 && decision != null)
+				{
+					InformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(law, description.ToString(),
+					options, true, 1, GameTexts.FindText("str_done", null).ToString(), string.Empty,
+					new Action<List<InquiryElement>>(delegate (List<InquiryElement> x)
+					{
+						if (Clan.PlayerClan.Influence < cost)
+							InformationManager.DisplayMessage(new InformationMessage("Not enough influence."));
+						else if (decision.Kingdom.UnresolvedDecisions.Any(x => x is BKContractDecision))
+							InformationManager.DisplayMessage(new InformationMessage("Ongoing contract-altering decision."));
+						else
 						{
-							if (Clan.PlayerClan.Influence < cost)
-								InformationManager.DisplayMessage(new InformationMessage("Not enough influence."));
-							else if (decision.Kingdom.UnresolvedDecisions.Any(x => x is BKContractDecision))
-								InformationManager.DisplayMessage(new InformationMessage("Ongoing contract-altering decision."));
-							else
-							{
-								GainKingdomInfluenceAction.ApplyForDefault(Hero.MainHero, -cost);
-								kingdom.AddDecision((BKContractDecision)x[0].Identifier, true);
-							}
-						}, null, string.Empty));
-					}
-				}, hint);
+							GainKingdomInfluenceAction.ApplyForDefault(Hero.MainHero, -cost);
+							kingdom.AddDecision((BKContractDecision)x[0].Identifier, true);
+						}
+					}), null, string.Empty), false);
+				}
+			}, hint);
 
 		private List<InquiryElement> GetGenderLaws()
-        {
+		{
 			List<InquiryElement> laws = new List<InquiryElement>();
 			foreach (GenderLaw type in BannerKingsConfig.Instance.TitleManager.GetGenderLawTypes())
 				if (kingdom != null && type != title.contract.GenderLaw)
-                {
-					BKGenderDecision decision = new BKGenderDecision(data.Settlement.OwnerClan, type, title?.sovereign);
+				{
+					BKGenderDecision decision = new BKGenderDecision(this.data.Settlement.OwnerClan, type, this.title?.sovereign);
 					TextObject text = new TextObject("{=!}{LAW} - ({SUPPORT}% support)");
 					text.SetTextVariable("LAW", type.ToString());
-					text.SetTextVariable("SUPPORT", decision.CalculateKingdomSupport(kingdom));
-					laws.Add(new InquiryElement(type, text.ToString(), null, true, Utils.Helpers.GetGenderLawDescription(type)));
+					text.SetTextVariable("SUPPORT", decision.CalculateKingdomSupport(this.kingdom));
+					laws.Add(new InquiryElement(type, text.ToString(), null, true, BannerKings.Utils.Helpers.GetGenderLawDescription(type)));
 				}
-					
+
 			return laws;
 		}
 
@@ -140,30 +141,30 @@ namespace BannerKings.UI.Windows
 			List<InquiryElement> laws = new List<InquiryElement>();
 			foreach (InheritanceType type in BannerKingsConfig.Instance.TitleManager.GetInheritanceTypes())
 				if (kingdom != null && type != title.contract.Inheritance)
-                {
-					BKInheritanceDecision decision = new BKInheritanceDecision(data.Settlement.OwnerClan, type, title?.sovereign);
+				{
+					BKInheritanceDecision decision = new BKInheritanceDecision(this.data.Settlement.OwnerClan, type, this.title?.sovereign);
 					TextObject text = new TextObject("{=!}{LAW} - ({SUPPORT}% support)");
 					text.SetTextVariable("LAW", type.ToString());
-					text.SetTextVariable("SUPPORT", decision.CalculateKingdomSupport(kingdom));
-					laws.Add(new InquiryElement(type, text.ToString(), null, true, Utils.Helpers.GetInheritanceDescription(type)));
+					text.SetTextVariable("SUPPORT", decision.CalculateKingdomSupport(this.kingdom));
+					laws.Add(new InquiryElement(type, text.ToString(), null, true, BannerKings.Utils.Helpers.GetInheritanceDescription(type)));
 				}
-					
+
 			return laws;
 		}
 
 		private List<InquiryElement> GetSuccessions()
 		{
 			List<InquiryElement> laws = new List<InquiryElement>();
-			foreach (SuccessionType type in SuccessionHelper.GetValidSuccessions(title.contract.Government))
+			foreach (SuccessionType type in SuccessionHelper.GetValidSuccessions(this.title.contract.Government))
 				if (kingdom != null && type != title.contract.Succession)
-                {
-					BKSuccessionDecision decision = new BKSuccessionDecision(data.Settlement.OwnerClan, type, title?.sovereign);
+				{
+					BKSuccessionDecision decision = new BKSuccessionDecision(this.data.Settlement.OwnerClan, type, this.title?.sovereign);
 					TextObject text = new TextObject("{=!}{LAW} - ({SUPPORT}% support)");
 					text.SetTextVariable("LAW", Utils.Helpers.GetSuccessionTypeName(type));
-					text.SetTextVariable("SUPPORT", decision.CalculateKingdomSupport(kingdom));
-					laws.Add(new InquiryElement(type, text.ToString(), null, true, Utils.Helpers.GetSuccessionTypeDescription(type)));
+					text.SetTextVariable("SUPPORT", decision.CalculateKingdomSupport(this.kingdom));
+					laws.Add(new InquiryElement(type, text.ToString(), null, true, BannerKings.Utils.Helpers.GetSuccessionTypeDescription(type)));
 				}
-					
+
 			return laws;
 		}
 
@@ -172,19 +173,19 @@ namespace BannerKings.UI.Windows
 			List<InquiryElement> laws = new List<InquiryElement>();
 			foreach (GovernmentType type in BannerKingsConfig.Instance.TitleManager.GetGovernmentTypes())
 				if (kingdom != null && type != title.contract.Government)
-                {
-					BKGovernmentDecision decision = new BKGovernmentDecision(data.Settlement.OwnerClan, type, title?.sovereign);
+				{
+					BKGovernmentDecision decision = new BKGovernmentDecision(this.data.Settlement.OwnerClan, type, this.title?.sovereign);
 					TextObject text = new TextObject("{=!}{LAW} - ({SUPPORT}% support)");
 					text.SetTextVariable("LAW", type.ToString());
-					text.SetTextVariable("SUPPORT", decision.CalculateKingdomSupport(kingdom));
-					laws.Add(new InquiryElement(type, text.ToString(), null, true, Utils.Helpers.GetGovernmentDescription(type)));
+					text.SetTextVariable("SUPPORT", decision.CalculateKingdomSupport(this.kingdom));
+					laws.Add(new InquiryElement(type, text.ToString(), null, true, BannerKings.Utils.Helpers.GetGovernmentDescription(type)));
 				}
-					
+
 			return laws;
 		}
 
 		private void ShowFoundKingdom()
-        {
+		{
 			TitleAction action = BannerKingsConfig.Instance.TitleModel.GetFoundKingdom(Clan.PlayerClan.Kingdom, Hero.MainHero);
 			InformationManager.ShowInquiry(new InquiryData(new TextObject("{=!}Founding a new Kingdom").ToString(),
 					new TextObject("Found a new title for your kingdom. The title will legitimize your position and allow the de Jure domain of the kingdom to expand through de Jure drift of dukedoms, as well as extend your influence as a suzerain. Founding a title would increase your clan's renown by {RENOWN}. \n \nCosts: {GOLD} {GOLD_ICON}, {INFLUENCE} {INFLUENCE_ICON} \n\nCan form kingdom: {POSSIBLE} \n\nExplanation: {REASON}")
@@ -200,15 +201,14 @@ namespace BannerKings.UI.Windows
 					() =>
 					{
 						List<InquiryElement> duchies = new List<InquiryElement>();
-						foreach (Clan clan in kingdom.Clans)
-							foreach (FeudalTitle dukedom in BannerKingsConfig.Instance.TitleManager.GetAllDeJure(clan.Leader).FindAll(x => x.type == TitleType.Dukedom))
-								duchies.Add(new InquiryElement(dukedom, dukedom.FullName.ToString(), null));
+						foreach (FeudalTitle dukedom in BannerKingsConfig.Instance.TitleManager.GetAllDeJure(Hero.MainHero).FindAll(x => x.type == TitleType.Dukedom))
+							duchies.Add(new InquiryElement(dukedom, dukedom.FullName.ToString(), null));
 
 						InformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-							new TextObject("{=!}Founding Dukedoms").ToString(), new TextObject("{=!}Select up to 3 dukedoms that will compose your kingdom. The kingdom's contract will follow the first dukedom's contract. Dukedom titles from other clans in the faction may be included as well.").ToString(), 
+							new TextObject("{=!}Founding Dukedoms").ToString(), new TextObject("{=!}Select up to 3 dukedoms that will compose your kingdom. The kingdom's contract will follow the first dukedom's contract. Dukedom titles from other clans in the faction may be included as well.").ToString(),
 							duchies, true, 3,
-							GameTexts.FindText("str_done", null).ToString(), string.Empty, 
-							delegate (List<InquiryElement> list) 
+							GameTexts.FindText("str_done", null).ToString(), string.Empty,
+							delegate (List<InquiryElement> list)
 							{
 								FeudalTitle firstDukedom = (FeudalTitle)list[0].Identifier;
 								List<FeudalTitle> vassals = new List<FeudalTitle>();
@@ -222,7 +222,7 @@ namespace BannerKings.UI.Windows
 		}
 
 		[DataSourceProperty]
-		public string FoundKingdomText => new TextObject("Found Kingdom").ToString();
+		public string FoundKingdomText => new TextObject("{=!}Found Kingdom").ToString();
 
 		[DataSourceProperty]
 		public DecisionElement Contract
@@ -233,7 +233,7 @@ namespace BannerKings.UI.Windows
 				if (value != contract)
 				{
 					contract = value;
-					OnPropertyChangedWithValue(value);
+					OnPropertyChangedWithValue(value, "Contract");
 				}
 			}
 		}
@@ -248,7 +248,7 @@ namespace BannerKings.UI.Windows
 				if (value != decisions)
 				{
 					decisions = value;
-					OnPropertyChangedWithValue(value);
+					OnPropertyChangedWithValue(value, "Decisions");
 				}
 			}
 		}
@@ -262,7 +262,7 @@ namespace BannerKings.UI.Windows
 				if (value != name)
 				{
 					name = value;
-					OnPropertyChangedWithValue(value);
+					OnPropertyChangedWithValue(value, "Name");
 				}
 			}
 		}
@@ -270,13 +270,13 @@ namespace BannerKings.UI.Windows
 		[DataSourceProperty]
 		public ImageIdentifierVM Banner
 		{
-			get => banner;	
+			get => banner;
 			set
 			{
 				if (value != banner)
 				{
 					banner = value;
-					OnPropertyChangedWithValue(value);
+					OnPropertyChangedWithValue(value, "Banner");
 				}
 			}
 		}
@@ -290,7 +290,7 @@ namespace BannerKings.UI.Windows
 				if (value != tree)
 				{
 					tree = value;
-					OnPropertyChangedWithValue(value);
+					OnPropertyChangedWithValue(value, "Tree");
 				}
 			}
 		}

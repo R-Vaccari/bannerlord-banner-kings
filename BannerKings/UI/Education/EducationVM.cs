@@ -137,10 +137,16 @@ namespace BannerKings.UI.Education
 
             foreach (ValueTuple<Language, Hero> tuple in results)
                 if (tuple.Item1 != data.CurrentLanguage && tuple.Item2 != data.LanguageInstructor)
+                {
+                    Hero hero = tuple.Item2;
+                    string settlementString = hero.CurrentSettlement != null ? hero.CurrentSettlement.Name.ToString() :
+                        new TextObject("{=!}None (in a mobile party)").ToString();
                     elements.Add(new InquiryElement(tuple,
-                        tuple.Item1.Name.ToString() + " - " + tuple.Item2.Name.ToString(),
-                        new ImageIdentifier(CampaignUIHelper.GetCharacterCode(tuple.Item2.CharacterObject)),
-                        tuple.Item2.IsFriend(Hero.MainHero), tuple.Item2.CurrentSettlement.Name.ToString()));
+                        tuple.Item1.Name.ToString() + " - " + hero.Name.ToString(),
+                        new ImageIdentifier(CampaignUIHelper.GetCharacterCode(hero.CharacterObject)),
+                        hero.IsFriend(Hero.MainHero) || hero.Clan == Clan.PlayerClan, settlementString));
+                }
+                    
 
             InformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(new TextObject("{=!}Choose Language").ToString(),
                 new TextObject("{=!}Select a language you would like to learn. Learning a language requires an instructor from your court, and different people have different teaching skills. A courtier must have a good opinion of you in order to be available. Learning languages is easier when they are intelligible with your native language.").ToString(), elements, true, 1,

@@ -30,6 +30,10 @@ namespace BannerKings.Models.Vanilla
                 int num2 = skillValue - num;
                 result.AddFactor(-1f - 0.1f * (float)num2, new TextObject("{=bcA7ZuyO}Learning Limit Exceeded", null));
             }
+
+            if (hero.GetPerkValue(BKPerks.Instance.ScholarshipMagnumOpus))
+                result.Add(0.02f * hero.GetSkillValue(BKSkills.Instance.Scholarship) - 230, BKPerks.Instance.ScholarshipMagnumOpus.Name);
+
             result.LimitMin(0.05f);
             return result;
         }
