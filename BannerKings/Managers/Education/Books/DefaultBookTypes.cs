@@ -19,6 +19,11 @@ namespace BannerKings.Managers.Education.Books
         public BookType Dictionary => bookDictionary;
         public BookType Mounted => bookMounted;
         public BookType Leadership => bookLeadership;
+        public BookType OneHanded => bookOneHanded;
+        public BookType TwoHanded => bookTwoHanded;
+        public BookType Polearm => bookPolearm;
+        public BookType Crossbow => bookCrossbow;
+        public BookType Bow => bookBow;
 
         public override void Initialize()
         {
@@ -83,6 +88,11 @@ namespace BannerKings.Managers.Education.Books
                 yield return Dictionary;
                 yield return Mounted;
                 yield return Leadership;
+                yield return OneHanded;
+                yield return TwoHanded;
+                yield return Polearm;
+                yield return Crossbow;
+                yield return Bow;
             }
         }
     }

@@ -80,10 +80,11 @@ namespace BannerKings
             CourtManager = new CourtManager(new Dictionary<Clan, CouncilData>());
             ReligionsManager = new ReligionsManager();
             EducationManager = new EducationManager();
+            InnovationsManager = new InnovationsManager();
         }
 
         public void InitManagers(PopulationManager populationManager, PolicyManager policyManager, TitleManager titleManager, CourtManager court,
-            ReligionsManager religions, EducationManager educations)
+            ReligionsManager religions, EducationManager educations, InnovationsManager innovations)
         {
             Initialize();
             PopulationManager = populationManager;
@@ -94,7 +95,7 @@ namespace BannerKings
             CourtManager = court;
             ReligionsManager = religions != null ? religions : new ReligionsManager();
             EducationManager = educations != null ? educations : new EducationManager();
-            InnovationsManager = new InnovationsManager();
+            InnovationsManager = innovations != null ? innovations : new InnovationsManager();
         }
 
         public static BannerKingsConfig Instance => ConfigHolder.CONFIG;

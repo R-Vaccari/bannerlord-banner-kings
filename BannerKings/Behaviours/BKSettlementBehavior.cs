@@ -27,6 +27,7 @@ namespace BannerKings.Behaviors
         private CourtManager courtManager;
         private ReligionsManager religionsManager;
         private EducationManager educationsManager = null;
+        private InnovationsManager innovationsManager = null;
 
         public override void RegisterEvents()
         {
@@ -47,6 +48,7 @@ namespace BannerKings.Behaviors
                 courtManager = BannerKingsConfig.Instance.CourtManager;
                 religionsManager = BannerKingsConfig.Instance.ReligionsManager;
                 educationsManager = BannerKingsConfig.Instance.EducationManager;
+                innovationsManager = BannerKingsConfig.Instance.InnovationsManager;
             }
 
             if (BannerKingsConfig.Instance.wipeData)
@@ -57,6 +59,7 @@ namespace BannerKings.Behaviors
                 courtManager = null;
                 religionsManager = null;
                 educationsManager = null;
+                innovationsManager = null;
             }
 
             dataStore.SyncData("bannerkings-populations", ref populationManager);
@@ -65,6 +68,7 @@ namespace BannerKings.Behaviors
             dataStore.SyncData("bannerkings-policies", ref policyManager);
             dataStore.SyncData("bannerkings-religions", ref religionsManager);
             dataStore.SyncData("bannerkings-educations", ref educationsManager);
+            dataStore.SyncData("bannerkings-innovations", ref innovationsManager);
 
             if (dataStore.IsLoading)
             {
@@ -72,7 +76,7 @@ namespace BannerKings.Behaviors
                     BannerKingsConfig.Instance.InitManagers();
 
                 else BannerKingsConfig.Instance.InitManagers(populationManager, policyManager,
-                    titleManager, courtManager, religionsManager, educationsManager);
+                    titleManager, courtManager, religionsManager, educationsManager, innovationsManager);
             }
         }
 

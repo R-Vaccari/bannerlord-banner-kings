@@ -24,7 +24,7 @@ namespace BannerKings.Managers
             {
                 if (culture.IsBandit || !culture.IsInitialized) continue;
 
-                Innovations.Add(culture, new InnovationData(new List<Innovation>()));
+                Innovations.Add(culture, new InnovationData(new List<Innovation>(), culture));
                 foreach (Innovation innovation in DefaultInnovations.Instance.All)
                 {
                     if (innovation.Culture == null || innovation.Culture == culture)

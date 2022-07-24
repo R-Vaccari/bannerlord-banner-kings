@@ -22,20 +22,27 @@ namespace BannerKings.Managers.Innovations
         [SaveableField(4)]
         private List<Innovation> innovations;
 
-        public InnovationData(List<Innovation> innovations)
+        [SaveableField(5)]
+        private CultureObject culture;
+
+        public InnovationData(List<Innovation> innovations, CultureObject culture)
         {
             this.innovations = innovations;
+            this.culture = culture;
         }
 
         public void PostInitialize()
         {
-            Innovation fasc = DefaultInnovations.Instance.GetById(fascination);
-            fascination.Initialize(fasc.Name, fasc.Description, fasc.Effects, fasc.RequiredProgress, fasc.Culture, fasc.Requirement);
+            if (fascination != null)
+            {
+                Innovation fasc = DefaultInnovations.Instance.GetById(fascination);
+                fascination.Initialize(fasc.Name, fasc.Description, fasc.Effects, fasc.RequiredProgress, fasc.Culture, fasc.Requirement);
+            }
 
             foreach (Innovation innovation in innovations)
             {
                 Innovation innov = DefaultInnovations.Instance.GetById(innovation);
-                fascination.Initialize(innov.Name, innov.Description, innov.Effects, innov.RequiredProgress, innov.Culture, innov.Requirement);
+                innovation.Initialize(innov.Name, innov.Description, innov.Effects, innov.RequiredProgress, innov.Culture, innov.Requirement);
             }
         }
 
@@ -50,7 +57,20 @@ namespace BannerKings.Managers.Innovations
 
         internal override void Update(PopulationData data = null)
         {
+            if (culturalHead == null)
+            {
+                List<Clan> clans = new List<Clan>(Clan.All).FindAll(x => !x.IsEliminated && x.Culture == culture && x.Leader != null);
+                if (clans.Count > 0)
+                {
+                    clans.Sort((x, y) => x.Renown.CompareTo(y.Renown));
+                    culturalHead = clans[0];
+                }
+            }
+
+            if (culturalHead == null) return;
+
             List<Innovation> unfinished = innovations.FindAll(x => !x.Finished);
+            if (fascination == null) fascination = unfinished.GetRandomElement();
             for (int i = 0; i < 10; i++)
             {
                 Innovation random = unfinished.GetRandomElement();
@@ -65,7 +85,7 @@ namespace BannerKings.Managers.Innovations
                 random.AddProgress(result);
             }
 
-            if (fascination == null) fascination = unfinished.GetRandomElementWithPredicate(x => !x.Finished);
+            
 
             research = 0f;
         }
