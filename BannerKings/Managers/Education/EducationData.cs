@@ -161,15 +161,18 @@ namespace BannerKings.Managers.Education
 
         internal override void Update(PopulationData data)
         {
-            BKEducationModel model = BannerKingsConfig.Instance.EducationModel;
             if (languageInstructor != null && (languageInstructor.IsDead || languageInstructor.IsDisabled))
                 languageInstructor = null;
 
             if (hero.IsDead || hero.IsPrisoner) return;
 
             if (CurrentLanguage != null && LanguageInstructor != null) GainLanguageFluency(CurrentLanguage, CurrentLanguageLearningRate.ResultNumber);
-            if (CurrentBook != null) GainBookReading(CurrentBook, CurrentBookReadingRate.ResultNumber);
-            
+            if (CurrentBook != null)
+            {
+                float rate = CurrentBookReadingRate.ResultNumber;
+                if (rate == 0f) currentBook = null;
+                else GainBookReading(CurrentBook, CurrentBookReadingRate.ResultNumber);
+            }
         }
     }
 }

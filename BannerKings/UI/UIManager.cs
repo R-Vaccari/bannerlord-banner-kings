@@ -113,7 +113,7 @@ namespace BannerKings.UI
             }
         }
 
-        [HarmonyPatch(typeof(SkillVM), MethodType.Constructor)]
+        [HarmonyPatch(typeof(SkillVM), MethodType.Constructor, new Type[] { typeof(SkillObject), typeof(CharacterVM), typeof(Action<PerkVM>) })]
         class SkillVMConstructorPatch
         {
             static void Postfix(SkillVM __instance, SkillObject skill, CharacterVM developerVM, Action<PerkVM> onStartPerkSelection)

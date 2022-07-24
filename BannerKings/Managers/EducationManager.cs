@@ -2,6 +2,7 @@
 using BannerKings.Managers.Education.Books;
 using BannerKings.Managers.Education.Languages;
 using BannerKings.Managers.Education.Lifestyles;
+using BannerKings.Managers.Skills;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -127,7 +128,8 @@ namespace BannerKings.Managers
         {
             MBReadOnlyDictionary<BookType, float> readBooks = Educations[hero].Books;
             if (readBooks.ContainsKey(book) && readBooks[book] >= 1f) return false;
-            else return BannerKingsConfig.Instance.EducationModel.CalculateBookReadingRate(book, hero).ResultNumber >= 0.2f;
+            else return hero.GetPerkValue(BKPerks.Instance.ScholarshipLiterate) && BannerKingsConfig.Instance.EducationModel
+                    .CalculateBookReadingRate(book, hero).ResultNumber >= 0.2f;
         }
 
         public void RemoveHero(Hero hero)

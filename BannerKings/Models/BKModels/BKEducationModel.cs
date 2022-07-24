@@ -1,4 +1,5 @@
-﻿using BannerKings.Managers.Education.Books;
+﻿using BannerKings.Managers.Education;
+using BannerKings.Managers.Education.Books;
 using BannerKings.Managers.Education.Languages;
 using BannerKings.Managers.Skills;
 using TaleWorlds.CampaignSystem;
@@ -11,22 +12,37 @@ namespace BannerKings.Models.BKModels
     {
         public ExplainedNumber CalculateEffect(Settlement settlement) => new ExplainedNumber();
 
+        public ExplainedNumber CalculateLanguageLimit(Hero learner)
+        {
+            ExplainedNumber result = new ExplainedNumber(2f, true);
+            if (learner.GetPerkValue(BKPerks.Instance.ScholarshipAvidLearner)) result.Add(2f, BKPerks.Instance.ScholarshipAvidLearner.Name);
+            if (learner.GetPerkValue(BKPerks.Instance.ScholarshipBookWorm)) result.Add(1f, BKPerks.Instance.ScholarshipBookWorm.Name);
+            if (learner.GetPerkValue(BKPerks.Instance.ScholarshipPolyglot)) result.Add(2f, BKPerks.Instance.ScholarshipPolyglot.Name);
+
+            return result;
+        }
+
         public ExplainedNumber CalculateLanguageLearningRate(Hero student, Hero instructor, Language language)
         {
             ExplainedNumber result = new ExplainedNumber(1f, true);
-            result.LimitMin(1f);
+            result.LimitMin(0f);
             result.LimitMax(5f);
 
             result.Add(student.GetSkillValue(BKSkills.Instance.Scholarship) * 0.1f, BKSkills.Instance.Scholarship.Name);
 
-            float teaching = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(instructor).GetLanguageFluency(language) - 1f;
-            if (!float.IsNaN(teaching) && teaching != 0f) result.AddFactor(teaching,   new TextObject("{=!}Instructor fluency"));
+            EducationData data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(instructor);
+            float teaching = data.GetLanguageFluency(language) - 1f;
+            if (!float.IsNaN(teaching) && teaching != 0f) result.AddFactor(teaching, new TextObject("{=!}Instructor fluency"));
             
             Language native = BannerKingsConfig.Instance.EducationManager.GetNativeLanguage(student);
             MBReadOnlyDictionary<Language, float> dic = native.Inteligible;
-            if (dic.ContainsKey(language))
-                result.Add(dic[language], new TextObject("{=!}Intelligibility with {LANGUAGE}").SetTextVariable("LANGUAGE", native.Name));
+            if (dic.ContainsKey(language)) result.Add(dic[language], new TextObject("{=!}Intelligibility with {LANGUAGE}")
+                .SetTextVariable("LANGUAGE", native.Name));
 
+            if (student.GetPerkValue(BKPerks.Instance.ScholarshipAvidLearner)) result.AddFactor(0.2f, BKPerks.Instance.ScholarshipAvidLearner.Name);
+
+            float overLimit = data.Languages.Count - CalculateLanguageLimit(student).ResultNumber;
+            if (overLimit > 0f) result.AddFactor(-0.33f * overLimit, new TextObject("{=!}Over languages limit"));
 
             return result;
         }
@@ -39,6 +55,9 @@ namespace BannerKings.Models.BKModels
 
             MBReadOnlyList<BookType> books = BannerKingsConfig.Instance.EducationManager.GetAvailableBooks(reader.PartyBelongedTo);
             if (books.Contains(DefaultBookTypes.Instance.Dictionary)) result.Add(0.2f, DefaultBookTypes.Instance.Dictionary.Name);
+
+            if (reader.GetPerkValue(BKPerks.Instance.ScholarshipWellRead)) result.AddFactor(0.12f, BKPerks.Instance.ScholarshipWellRead.Name);
+            if (reader.GetPerkValue(BKPerks.Instance.ScholarshipBookWorm)) result.AddFactor(0.20f, BKPerks.Instance.ScholarshipBookWorm.Name);
 
             return result;
         }

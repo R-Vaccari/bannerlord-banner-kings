@@ -99,6 +99,9 @@ namespace BannerKings.UI.Education
                     new TextObject("{=!}Active learning can be done at the instructor's location.").ToString()));
             }
 
+            ExplainedNumber languageLimit = BannerKingsConfig.Instance.EducationModel.CalculateLanguageLimit(hero);
+            KnownLanguagesInfo.Add(new InformationElement(new TextObject("{=!}Languages limit:").ToString(), languageLimit.ResultNumber.ToString(),
+                   languageLimit.GetExplanations().ToString()));
             foreach (KeyValuePair<Language, float> pair in data.Languages)
                 KnownLanguagesInfo.Add(new InformationElement(pair.Key.Name.ToString(), UIHelper.GetLanguageFluencyText(pair.Value).ToString(),
                     pair.Key.Description.ToString()));

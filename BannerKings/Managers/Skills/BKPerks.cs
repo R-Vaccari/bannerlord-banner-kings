@@ -29,7 +29,7 @@ namespace BannerKings.Managers.Skills
         {
             scholarshipLiterate = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("ScholarshipLiterate"));
             scholarshipLiterate.InitializeNew("{=!}Literate", BKSkills.Instance.Scholarship, GetTierCost(1), null,
-                "{=!}Allows reading books.", SkillEffect.PerkRole.Personal, 0f,
+                "{=!}Allows reading books", SkillEffect.PerkRole.Personal, 0f,
                 SkillEffect.EffectIncrementType.Invalid, string.Empty,
                 SkillEffect.PerkRole.None, 0f,
                 SkillEffect.EffectIncrementType.Invalid,
@@ -79,8 +79,8 @@ namespace BannerKings.Managers.Skills
                 TroopClassFlag.None, TroopClassFlag.None);
 
             
-            scholarshipAccountant.InitializeNew("{=!}Mechanic", BKSkills.Instance.Scholarship, GetTierCost(5), scholarshipMechanic,
-                "{=!}Engineering skill tree yields both perks rather than 1",
+            scholarshipAccountant.InitializeNew("{=!}Accountant", BKSkills.Instance.Scholarship, GetTierCost(5), scholarshipMechanic,
+                "{=!}Stewardship skill tree yields both perks rather than 1",
                 SkillEffect.PerkRole.Personal, 0f,
                 SkillEffect.EffectIncrementType.Invalid,
                 string.Empty,
@@ -101,7 +101,7 @@ namespace BannerKings.Managers.Skills
             scholarshipBookWorm = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("ScholarshipBookWorm"));
             scholarshipBookWorm.InitializeNew("{=!}Book Worm", BKSkills.Instance.Scholarship, GetTierCost(7), null,
                 "{=!}Increased reading rates for books",
-                SkillEffect.PerkRole.Personal, 12f,
+                SkillEffect.PerkRole.Personal, 20f,
                 SkillEffect.EffectIncrementType.Add,
                 "{=!}Language limit is increased by 1",
                 SkillEffect.PerkRole.Personal, 1f,
@@ -131,7 +131,7 @@ namespace BannerKings.Managers.Skills
             scholarshipTreasurer = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("ScholarshipTreasurer"));
             scholarshipScientist = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("ScholarshipNaturalScientist"));
 
-            scholarshipTreasurer.InitializeNew("{=!}Natural Scientist", BKSkills.Instance.Scholarship, GetTierCost(10), scholarshipScientist,
+            scholarshipTreasurer.InitializeNew("{=!}Treasurer", BKSkills.Instance.Scholarship, GetTierCost(10), scholarshipScientist,
                 "{=!}Trade skill tree yields both perks rather than 1",
                 SkillEffect.PerkRole.Personal, 0f,
                 SkillEffect.EffectIncrementType.Invalid,
