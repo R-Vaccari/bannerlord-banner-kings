@@ -1,12 +1,14 @@
 ﻿using TaleWorlds.CampaignSystem;
 using TaleWorlds.Localization;
+using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Managers.Innovations
 {
     public class Innovation : BannerKingsObject
     {
-        private float requiredProgress;
+        [SaveableField(100)]
         private float currentProgress;
+        private float requiredProgress;
         private CultureObject culture;
         private TextObject effects;
         private Innovation requirement;
@@ -26,6 +28,9 @@ namespace BannerKings.Managers.Innovations
             this.requirement = requirement;
         }
 
+        public void AddProgress(float points) => currentProgress += points;
+
+        public bool Finished => currentProgress >= requiredProgress;
         public Innovation Requirement => requirement;
         public float RequiredProgress => requiredProgress;
         public float CurrentProgress => currentProgress;

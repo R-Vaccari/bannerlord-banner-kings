@@ -77,15 +77,7 @@ namespace BannerKings.Managers
                 Caravans.Remove(party);
         }
 
-        public List<MobileParty> GetClanMilitias(Clan clan)
-        {
-            List<MobileParty> list = new List<MobileParty>();
-            foreach (MobileParty party in Caravans)
-                if (party.PartyComponent is RetinueComponent && party.Owner.Clan == clan)
-                    list.Add(party);
-            
-            return list;
-        }
+
 
         public List<(ItemObject, float)> GetProductions(VillageData villageData)
         {
@@ -206,9 +198,7 @@ namespace BannerKings.Managers
             }
         }
 
-        public 
-
-         static int GetDesiredTotalPop(Settlement settlement)
+        public  static int GetDesiredTotalPop(Settlement settlement)
         {
             if (settlement.IsCastle)
             {

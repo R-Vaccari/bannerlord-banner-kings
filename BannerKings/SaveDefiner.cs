@@ -7,6 +7,7 @@ using BannerKings.Managers.Education;
 using BannerKings.Managers.Education.Books;
 using BannerKings.Managers.Education.Languages;
 using BannerKings.Managers.Education.Lifestyles;
+using BannerKings.Managers.Innovations;
 using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Institutions.Religions.Faiths;
 using BannerKings.Managers.Institutions.Religions.Faiths.Asera;
@@ -136,6 +137,9 @@ namespace BannerKings
             AddClassDefinition(typeof(Language), 90);
             AddClassDefinition(typeof(Lifestyle), 91);
             AddClassDefinition(typeof(EducationManager), 92);
+            AddClassDefinition(typeof(Innovation), 93);
+            AddClassDefinition(typeof(InnovationData), 94);
+            AddClassDefinition(typeof(InnovationsManager), 95);
         }
 
         protected override void DefineContainerDefinitions()
@@ -170,6 +174,9 @@ namespace BannerKings
             ConstructContainerDefinition(typeof(Dictionary<Language, float>));
             ConstructContainerDefinition(typeof(Dictionary<Hero, ItemRoster>));
             ConstructContainerDefinition(typeof(Dictionary<Hero, float>));
+            ConstructContainerDefinition(typeof(List<Innovation>));
+            ConstructContainerDefinition(typeof(Dictionary<CultureObject, InnovationData>));
+            
         }
     }
 }

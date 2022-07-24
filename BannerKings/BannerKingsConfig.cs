@@ -43,6 +43,7 @@ namespace BannerKings
         public BKEducationModel EducationModel { get; } = new BKEducationModel();
         public BKCouncilModel CouncilModel { get; } = new BKCouncilModel();
         public BKLearningModel LearningModel { get; } = new BKLearningModel();
+        public BKInnovationsModel InnovationsModel { get; } = new BKInnovationsModel();
 
         public void Initialize()
         {

@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using BannerKings.Managers.Education.Lifestyles;
 using TaleWorlds.Library;
 using TaleWorlds.CampaignSystem;
-using BannerKings.Models.BKModels;
 using BannerKings.Managers.Skills;
 using TaleWorlds.SaveSystem;
 using TaleWorlds.Core;

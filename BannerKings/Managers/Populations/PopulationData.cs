@@ -56,8 +56,6 @@ namespace BannerKings.Populations
         [SaveableProperty(12)]
         private ReligionData religionData { get; set; }
 
-
-
         public PopulationData(List<PopulationClass> classes, Settlement settlement, float assimilation, List<CultureDataClass> cultures = null, Guild guild = null)
         {
             this.classes = classes;
