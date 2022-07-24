@@ -1,5 +1,6 @@
 ﻿using BannerKings.Managers.Institutions.Guilds;
 using BannerKings.Managers.Institutions.Religions;
+using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
 using BannerKings.Populations;
 using BannerKings.UI;
@@ -104,7 +105,32 @@ namespace BannerKings.Behaviours
                     this.SwitchToMenuIfThereIsAnInterrupt(args.MenuContext.GameMenu.StringId);
                 }, true, -1, false);
 
+            campaignGameStarter.AddWaitGameMenu("bannerkings_wait_study", "{=!}You are studying scholarship with {SCHOLARSHIP_TUTOR}. The instruction costs {SCHOLARSHIP_GOLD} per hour.",
+               new OnInitDelegate(MenuWaitInit),
+               new OnConditionDelegate(MenuActionStudyCondition),
+               new OnConsequenceDelegate(MenuActionConsequenceNeutral),
+               new OnTickDelegate(TickWaitStudy), GameMenu.MenuAndOptionType.WaitMenuShowProgressAndHoursOption, GameOverlays.MenuOverlayType.SettlementWithBoth, 4f, GameMenu.MenuFlags.None, null);
+
+            campaignGameStarter.AddGameMenuOption("bannerkings_wait_study", "wait_leave", "{=3sRdGQou}Leave",
+                delegate (MenuCallbackArgs args) {
+                    args.optionLeaveType = GameMenuOption.LeaveType.Leave;
+                    return true;
+                },
+                delegate (MenuCallbackArgs args)
+                {
+                    PlayerEncounter.Current.IsPlayerWaiting = false;
+                    this.SwitchToMenuIfThereIsAnInterrupt(args.MenuContext.GameMenu.StringId);
+                }, true, -1, false);
+
+
+
             // ------- ACTIONS --------
+
+            campaignGameStarter.AddGameMenuOption("bannerkings_actions", "action_study", "{=!}Study scholarship",
+                new GameMenuOption.OnConditionDelegate(MenuActionStudyCondition), delegate (MenuCallbackArgs x)
+                {
+                    GameMenu.SwitchToMenu("bannerkings_wait_study");
+                }, false, -1, false);
 
             campaignGameStarter.AddGameMenuOption("bannerkings_actions", "action_slave_transfer", "{=!}Transfer slaves",
                 new GameMenuOption.OnConditionDelegate(MenuSlavesActionCondition), delegate (MenuCallbackArgs x)
@@ -302,6 +328,37 @@ namespace BannerKings.Behaviours
             }
         }
 
+        private static void TickWaitStudy(MenuCallbackArgs args, CampaignTime dt)
+        {
+            TickCheckHealth();
+            float progress = args.MenuContext.GameMenu.Progress;
+            int diff = (int)actionStart.ElapsedHoursUntilNow;
+            if (diff > 0)
+            {
+                args.MenuContext.GameMenu.SetProgressOfWaitingInMenu(diff * 0.25f);
+
+                if (args.MenuContext.GameMenu.Progress != progress)
+                {
+                    Hero main = Hero.MainHero;
+                    Hero seller = Campaign.Current.GetCampaignBehavior<BKEducationBehavior>().GetBookSeller(Settlement.CurrentSettlement);
+                    if (seller != null)
+                    {
+                        main.AddSkillXp(BKSkills.Instance.Scholarship, 5f);
+                        GiveGoldAction.ApplyBetweenCharacters(Hero.MainHero, seller, 
+                            (int)BannerKingsConfig.Instance.EducationModel.CalculateLessionCost(Hero.MainHero, seller).ResultNumber);
+                        InformationManager.DisplayMessage(new InformationMessage(new TextObject("{=!}You have improved your {SKILL} skill during your current action.")
+                                .SetTextVariable("SKILL", BKSkills.Instance.Scholarship.Name)
+                                .ToString()));
+                    } else
+                    {
+                        InformationManager.DisplayMessage(new InformationMessage(
+                        new TextObject("{=!}You have stopped your current action because the instructor has left the settlement.").ToString()));
+                        GameMenu.SwitchToMenu("bannerkings_actions");
+                    }
+                }
+            }
+        }
+
         private static void TickWaitTrainGuard(MenuCallbackArgs args, CampaignTime dt)
         {
             float progress = args.MenuContext.GameMenu.Progress;
@@ -446,7 +503,6 @@ namespace BannerKings.Behaviours
         {
             args.optionLeaveType = GameMenuOption.LeaveType.Wait;
             MBTextManager.SetTextVariable("CURRENT_SETTLEMENT", Settlement.CurrentSettlement.EncyclopediaLinkWithName, false);
-            //Clan.PlayerClan.Kingdom == null && MobileParty.MainParty.MemberRoster.TotalManCount == 1
             return IsPeasant();
         }
 
@@ -454,10 +510,23 @@ namespace BannerKings.Behaviours
         {
             args.optionLeaveType = GameMenuOption.LeaveType.Recruit;
             MBTextManager.SetTextVariable("CURRENT_SETTLEMENT", Settlement.CurrentSettlement.EncyclopediaLinkWithName, false);
-            bool criminal = false;
 
-            //Clan.PlayerClan.Kingdom == null && MobileParty.MainParty.MemberRoster.TotalManCount == 1
             return IsPeasant() && !IsWounded() && !IsCriminal(Settlement.CurrentSettlement.OwnerClan) && !Settlement.CurrentSettlement.IsVillage;
+        }
+
+        private static bool MenuActionStudyCondition(MenuCallbackArgs args)
+        {
+            args.optionLeaveType = GameMenuOption.LeaveType.Wait;
+            Hero seller = Campaign.Current.GetCampaignBehavior<BKEducationBehavior>().GetBookSeller(Settlement.CurrentSettlement);
+            bool hasSeller = seller != null;
+            if (hasSeller)
+            {
+                MBTextManager.SetTextVariable("SCHOLARSHIP_TUTOR", seller.Name, false);
+                MBTextManager.SetTextVariable("SCHOLARSHIP_GOLD", BannerKingsConfig.Instance.EducationModel.CalculateLessionCost(Hero.MainHero,
+                    seller).ResultNumber.ToString(), false);
+            }
+   
+            return !IsWounded() && hasSeller && !IsCriminal(Settlement.CurrentSettlement.OwnerClan) && !Settlement.CurrentSettlement.IsVillage;
         }
 
         private static bool MenuTrainGuardActionPeasantCondition(MenuCallbackArgs args)
@@ -599,6 +668,13 @@ namespace BannerKings.Behaviours
         {
             GiveGoldAction.ApplyForSettlementToCharacter(Settlement.CurrentSettlement, Hero.MainHero, (int)actionGold);
             actionGold = 0f;
+            args.MenuContext.GameMenu.EndWait();
+            args.MenuContext.GameMenu.SetProgressOfWaitingInMenu(0f);
+            GameMenu.SwitchToMenu("bannerkings");
+        }
+
+        private static void MenuActionConsequenceNeutral(MenuCallbackArgs args)
+        {
             args.MenuContext.GameMenu.EndWait();
             args.MenuContext.GameMenu.SetProgressOfWaitingInMenu(0f);
             GameMenu.SwitchToMenu("bannerkings");

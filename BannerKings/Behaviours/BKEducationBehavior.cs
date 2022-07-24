@@ -28,9 +28,18 @@ namespace BannerKings.Behaviours
             CampaignEvents.HeroKilledEvent.AddNonSerializedListener(this, OnHeroKilled);
             CampaignEvents.OnGameLoadedEvent.AddNonSerializedListener(this, OnGameLoaded);
             CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, OnSessionLaunched);
-            CampaignEvents.OnNewGameCreatedEvent.AddNonSerializedListener(this, OnGameStarted);
             CampaignEvents.HeroComesOfAgeEvent.AddNonSerializedListener(this, OnHeroComesOfAge);
             CampaignEvents.PerkOpenedEvent.AddNonSerializedListener(this, OnPerkOpened);
+        }
+
+        public Hero GetBookSeller(Settlement settlement)
+        {
+            Hero hero = null;
+            foreach (Hero key in bookSellers.Keys)
+                if (key.CurrentSettlement == settlement)
+                    hero = key;
+
+            return hero;
         }
 
         public override void SyncData(IDataStore dataStore)
@@ -150,12 +159,6 @@ namespace BannerKings.Behaviours
         private void OnSessionLaunched(CampaignGameStarter campaignGameStarter)
         {
             AddDialogue(campaignGameStarter);
-            BannerKingsConfig.Instance.EducationManager.PostInitialize();
-        }
-
-        private void OnGameStarted(CampaignGameStarter campaignGameStarter)
-        {
-            //SpawnInitialSellers();
         }
 
         private void AddDialogue(CampaignGameStarter starter)

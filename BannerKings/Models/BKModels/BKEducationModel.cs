@@ -12,6 +12,13 @@ namespace BannerKings.Models.BKModels
     {
         public ExplainedNumber CalculateEffect(Settlement settlement) => new ExplainedNumber();
 
+        public ExplainedNumber CalculateLessionCost(Hero student, Hero instructor)
+        {
+            ExplainedNumber result = new ExplainedNumber(1000f, true);
+
+            return result;
+        }
+
         public ExplainedNumber CalculateLanguageLimit(Hero learner)
         {
             ExplainedNumber result = new ExplainedNumber(2f, true);
