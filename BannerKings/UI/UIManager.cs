@@ -113,6 +113,19 @@ namespace BannerKings.UI
             }
         }
 
+        [HarmonyPatch(typeof(SkillVM), MethodType.Constructor)]
+        class SkillVMConstructorPatch
+        {
+            static void Postfix(SkillVM __instance, SkillObject skill, CharacterVM developerVM, Action<PerkVM> onStartPerkSelection)
+            {
+                ExplainedNumber explainedNumber = BannerKingsConfig.Instance.LearningModel.CalculateLearningLimit(developerVM.Hero, 
+                    developerVM.GetCurrentAttributePoint(skill.CharacterAttribute), 
+                    __instance.CurrentFocusLevel, 
+                    skill.CharacterAttribute.Name, 
+                    true);
+                __instance.LearningLimitTooltip = new BasicTooltipViewModel(() => CampaignUIHelper.GetTooltipForAccumulatingPropertyWithResult(new TextObject("{=YT9giTet}Learning Limit", null).ToString(), explainedNumber.ResultNumber, ref explainedNumber));
+            }
+        }
 
         [HarmonyPatch(typeof(SkillIconVisualWidget), "SkillId", MethodType.Setter)]
         class SkillIconOnLateUpdatePatch
@@ -120,12 +133,9 @@ namespace BannerKings.UI
             static bool Prefix(SkillIconVisualWidget __instance, string value)
             {
                 string text = value;
-                if (value == "Lordship")
-                    text = "leadership";
-                else if (value == "Scholarship")
-                    text = "Steward";
-                else if (value == "Theology")
-                    text = "charm";
+                if (value == "Lordship") text = "leadership";
+                else if (value == "Scholarship") text = "Steward";
+                else if (value == "Theology") text = "charm";
 
                 FieldInfo skillId = __instance.GetType().GetField("_skillId", BindingFlags.Instance | BindingFlags.NonPublic);
                 if (skillId != null) skillId.SetValue(__instance, text);

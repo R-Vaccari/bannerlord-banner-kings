@@ -18,6 +18,7 @@ using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using BannerKings.Managers.AI;
 using BannerKings.Managers.Education.Lifestyles;
+using BannerKings.Models.Vanilla;
 
 namespace BannerKings
 {
@@ -31,10 +32,6 @@ namespace BannerKings
         public EducationManager EducationManager { get; private set; }
         public InnovationsManager InnovationsManager { get; private set; }
 
-
-        public BKEducationModel EducationModel { get; } = new BKEducationModel();
-        public BKCouncilModel CouncilModel { get; } = new BKCouncilModel();
-
         public HashSet<IBannerKingsModel> Models = new HashSet<IBannerKingsModel>();
         public AIBehavior AI = new AIBehavior();
         public bool wipeData = false;
@@ -43,6 +40,9 @@ namespace BannerKings
         public BKTitleModel TitleModel { get; } = new BKTitleModel();
         public BKStabilityModel StabilityModel { get; } = new BKStabilityModel();
         public BKClanFinanceModel ClanFinanceModel { get; } = new BKClanFinanceModel();
+        public BKEducationModel EducationModel { get; } = new BKEducationModel();
+        public BKCouncilModel CouncilModel { get; } = new BKCouncilModel();
+        public BKLearningModel LearningModel { get; } = new BKLearningModel();
 
         public void Initialize()
         {

@@ -11,6 +11,7 @@ using HarmonyLib;
 using BannerKings.Managers.Skills;
 using TaleWorlds.Library;
 using TaleWorlds.SaveSystem;
+using System.Reflection;
 
 namespace BannerKings.Behaviours
 {
@@ -29,6 +30,7 @@ namespace BannerKings.Behaviours
             CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, OnSessionLaunched);
             CampaignEvents.OnNewGameCreatedEvent.AddNonSerializedListener(this, OnGameStarted);
             CampaignEvents.HeroComesOfAgeEvent.AddNonSerializedListener(this, OnHeroComesOfAge);
+            CampaignEvents.PerkOpenedEvent.AddNonSerializedListener(this, OnPerkOpened);
         }
 
         public override void SyncData(IDataStore dataStore)
@@ -42,6 +44,26 @@ namespace BannerKings.Behaviours
 
             if (dataStore.IsLoading)
                 if (bookSellers == null) bookSellers = new Dictionary<Hero, ItemRoster>();
+        }
+
+        private void OnPerkOpened(Hero hero, PerkObject perk)
+        {
+            if (perk.AlternativePerk != null)
+            {
+                MethodInfo method = hero.GetType().GetMethod("SetPerkValueInternal", BindingFlags.Instance | BindingFlags.NonPublic);
+                SkillObject skill = perk.Skill;
+                if (skill == DefaultSkills.Engineering && hero.GetPerkValue(BKPerks.Instance.ScholarshipMechanic))
+                    method.Invoke(hero, new object[] { perk.AlternativePerk, false });
+
+                else if (skill == DefaultSkills.Steward && hero.GetPerkValue(BKPerks.Instance.ScholarshipAccountant))
+                    method.Invoke(hero, new object[] { perk.AlternativePerk, false });
+
+                else if (skill == DefaultSkills.Medicine && hero.GetPerkValue(BKPerks.Instance.ScholarshipNaturalScientist))
+                    method.Invoke(hero, new object[] { perk.AlternativePerk, false });
+
+                else if (skill == DefaultSkills.Trade && hero.GetPerkValue(BKPerks.Instance.ScholarshipTreasurer))
+                    method.Invoke(hero, new object[] { perk.AlternativePerk, false });
+            }
         }
 
         private void OnDailyTick(Hero hero)
