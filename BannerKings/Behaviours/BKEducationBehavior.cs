@@ -64,7 +64,9 @@ namespace BannerKings.Behaviours
                     perk == BKPerks.Instance.ScholarshipMechanic || perk == BKPerks.Instance.ScholarshipMechanic)
                 {
                     InformationManager.ShowInquiry(new InquiryData(new TextObject("{=!}Double Perks").ToString(), 
-                        new TextObject("{=!}Double perks will only be yielded after this perk's selection, the effect does not apply retroactively. The effect will take place after choosing the perk in the skill with double yield (ie Engineering, Medicine) and closing this tab with 'Done'. It is also suggested you do this after closing this popup before trying to get any double perks.").ToString(),
+                        new TextObject("{=!}From now on, double perks will be yielded for the {SKILL} skill. The perks will be rewarded after closing the Character tab with 'Done', not immediatly after selecting them.")
+                        .SetTextVariable("SKILL", perk.Skill.Name)
+                        .ToString(),
                         true, false, 
                         GameTexts.FindText("str_selection_widget_accept").ToString(), 
                         string.Empty, 
@@ -73,17 +75,13 @@ namespace BannerKings.Behaviours
                 {
                     MethodInfo method = hero.GetType().GetMethod("SetPerkValueInternal", BindingFlags.Instance | BindingFlags.NonPublic);
                     SkillObject skill = perk.Skill;
-                    if (skill == DefaultSkills.Engineering && hero.GetPerkValue(BKPerks.Instance.ScholarshipMechanic))
+                    if ((skill == DefaultSkills.Engineering && hero.GetPerkValue(BKPerks.Instance.ScholarshipMechanic)) || (skill == DefaultSkills.Steward && hero.GetPerkValue(BKPerks.Instance.ScholarshipAccountant))
+                        || (skill == DefaultSkills.Medicine && hero.GetPerkValue(BKPerks.Instance.ScholarshipNaturalScientist)) || (skill == DefaultSkills.Trade && hero.GetPerkValue(BKPerks.Instance.ScholarshipTreasurer)))
+                    {
                         method.Invoke(hero, new object[] { perk.AlternativePerk, true });
-
-                    else if (skill == DefaultSkills.Steward && hero.GetPerkValue(BKPerks.Instance.ScholarshipAccountant))
-                        method.Invoke(hero, new object[] { perk.AlternativePerk, true });
-
-                    else if (skill == DefaultSkills.Medicine && hero.GetPerkValue(BKPerks.Instance.ScholarshipNaturalScientist))
-                        method.Invoke(hero, new object[] { perk.AlternativePerk, true });
-
-                    else if (skill == DefaultSkills.Trade && hero.GetPerkValue(BKPerks.Instance.ScholarshipTreasurer))
-                        method.Invoke(hero, new object[] { perk.AlternativePerk, true });
+                        InformationManager.AddQuickInformation(new TextObject("{=!}You have received the {PERK} as a double perk yield reward.")
+                            .SetTextVariable("PERK", perk.AlternativePerk.Name));
+                    }
                 }
             }
         }
