@@ -18,6 +18,7 @@ namespace BannerKings.UI.Education
         private MBBindingList<InformationElement> booksReadInfo, knownLanguagesInfo, currentBookInfo,
             currentLanguageInfo, currentLifestyleInfo, lifestyleProgressInfo;
         private EducationData data;
+        private bool canAddFocus = false;
 
         public EducationVM(Hero hero) : base(null, false)
         {
@@ -111,12 +112,23 @@ namespace BannerKings.UI.Education
                     new TextObject("{=!}Languages may be taught by your courtiers that have a good fluency, so long they understand it more than you. Languages can be actively studied on the settlement the courtier is located at.").ToString()));
             else
             {
+
+                CanAddFocus = data.Lifestyle.CanInvestFocus(hero) && hero.HeroDeveloper.UnspentFocusPoints > 0;
+
                 LifestyleProgressInfo.Add(new InformationElement(new TextObject("{=!}Lifestyle:").ToString(),
                     data.Lifestyle.Name.ToString(),
                     string.Empty));
+                LifestyleProgressInfo.Add(new InformationElement(new TextObject("{=!}Necessary skill:").ToString(),
+                    data.Lifestyle.InvestedFocus.ToString(),
+                    new TextObject("{=!}Necessary skill amount in either lifestyle skill to enable next focus investment and perk unlock.")
+                    .ToString()));
+                LifestyleProgressInfo.Add(new InformationElement(new TextObject("{=!}Invested focus:").ToString(),
+                    data.Lifestyle.InvestedFocus.ToString(),
+                    string.Empty));
                 LifestyleProgressInfo.Add(new InformationElement(new TextObject("{=!}Progress:").ToString(),
                     FormatValue(data.Lifestyle.Progress),
-                    string.Empty));
+                    new TextObject("{=!}Current progress in this stage. Once progress hits 100% and you have the necessary skill threshold, you can invest your next focus point in exchange for the next lifestyle perk.")
+                    .ToString()));
                 LifestyleProgressInfo.Add(new InformationElement(new TextObject("{=!}First skill:").ToString(),
                     data.Lifestyle.FirstSkill.Name.ToString(),
                     data.Lifestyle.FirstSkill.Description.ToString()));
@@ -240,6 +252,13 @@ namespace BannerKings.UI.Education
                }, null));
         }
 
+        private void InvestFocus()
+        {
+            if (hero.HeroDeveloper.UnspentFocusPoints <= 0) return;
+            hero.HeroDeveloper.UnspentFocusPoints -= 1;
+            data.Lifestyle.InvestFocus();
+        }
+
         [DataSourceProperty]
         public bool ChangeBookPossible => hero.PartyBelongedTo != null;
 
@@ -356,6 +375,20 @@ namespace BannerKings.UI.Education
                 {
                     booksReadInfo = value;
                     OnPropertyChangedWithValue(value, "BooksReadInfo");
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public bool CanAddFocus
+        {
+            get => canAddFocus;
+            set
+            {
+                if (value != canAddFocus)
+                {
+                    canAddFocus = value;
+                    OnPropertyChangedWithValue(value, "CanAddFocus");
                 }
             }
         }

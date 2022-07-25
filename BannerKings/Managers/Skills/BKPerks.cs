@@ -10,6 +10,9 @@ namespace BannerKings.Managers.Skills
             scholarshipTutor, scholarshipWellRead, scholarshipMechanic, scholarshipAccountant, scholarshipTeacher, scholarshipBookWorm,
             scholarshipPeerReview, scholarshipBedtimeStory, scholarshipScientist, scholarshipTreasurer, scholarshipMagnumOpus;
 
+        private PerkObject lordshipTraditionalist, lordshipAdaptive, lordshipAccolade, lordshipManorLord,
+            lordshipMilitaryAdministration, lordshipEconomicAdministration, lordshipClaimant, lordshipPatron;
+
         public PerkObject ScholarshipLiterate => scholarshipLiterate;
         public PerkObject ScholarshipAvidLearner => scholarshipLearner;
         public PerkObject ScholarshipTutor => scholarshipTutor;
@@ -27,6 +30,94 @@ namespace BannerKings.Managers.Skills
 
         public override void Initialize()
         {
+
+            
+            lordshipTraditionalist = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LordshipTraditionalist"));
+            lordshipAdaptive = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LordshipAdaptive"));
+
+            lordshipTraditionalist.InitializeNew("{=!}Traditionalist", BKSkills.Instance.Lordship, GetTierCost(1), lordshipAdaptive,
+                "{=!}Increased cultural assimilation speed by 10%",
+                SkillEffect.PerkRole.Ruler, 0.1f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                "{=!}Increased militarism in assimilated settlements by flat 1%",
+                SkillEffect.PerkRole.Ruler, 1f,
+                SkillEffect.EffectIncrementType.Add,
+                TroopClassFlag.None, TroopClassFlag.None);
+
+            lordshipAdaptive.InitializeNew("{=!}Adaptive", BKSkills.Instance.Lordship, GetTierCost(1), lordshipTraditionalist,
+                "{=!}Reduced loyalty onus from different cultures by 15%",
+                SkillEffect.PerkRole.Ruler, 0.1f,
+                SkillEffect.EffectIncrementType.Add,
+                "{=!}Increased settlement stability target by flat 2%",
+                SkillEffect.PerkRole.Ruler, 1f,
+                SkillEffect.EffectIncrementType.Add,
+                TroopClassFlag.None, TroopClassFlag.None);
+
+            lordshipAccolade = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LordshipAccolade"));
+            lordshipManorLord = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LordshipManorLord"));
+
+            lordshipAccolade.InitializeNew("{=!}Accolade", BKSkills.Instance.Lordship, GetTierCost(2), lordshipManorLord,
+                "{=!}Knighting requires 15% less influence", 
+                SkillEffect.PerkRole.Ruler, -0.15f, 
+                SkillEffect.EffectIncrementType.AddFactor, 
+                "{=!}Vassal limit increased by 1",
+                SkillEffect.PerkRole.Ruler, 1f,
+                SkillEffect.EffectIncrementType.Add,
+                TroopClassFlag.None, TroopClassFlag.None);
+
+            lordshipManorLord.InitializeNew("{=!}Manor Lord", BKSkills.Instance.Lordship, GetTierCost(2), lordshipAccolade,
+                "{=!}Villages weigh 20% less in demesne limit",
+                SkillEffect.PerkRole.Ruler, -0.20f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                "{=!}Manors provide extra flat 0.2 influence",
+                SkillEffect.PerkRole.ClanLeader, 0.2f,
+                SkillEffect.EffectIncrementType.Add,
+                TroopClassFlag.None, TroopClassFlag.None);
+
+            lordshipMilitaryAdministration = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LordshipMilitaryAdministration"));
+            lordshipEconomicAdministration = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LordshipEconomicAdministration"));
+
+            lordshipMilitaryAdministration.InitializeNew("{=!}Military Administration", BKSkills.Instance.Lordship, GetTierCost(3), lordshipEconomicAdministration,
+                "{=!}Increased settlement militarism in settlements by flat 2%",
+                SkillEffect.PerkRole.Ruler, 0.02f,
+                SkillEffect.EffectIncrementType.Add,
+                "{=!}Increased settlement drafting speed by 20%",
+                SkillEffect.PerkRole.Ruler, 0.2f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                TroopClassFlag.None, TroopClassFlag.None);
+
+            lordshipEconomicAdministration.InitializeNew("{=!}Economic Administration", BKSkills.Instance.Lordship, GetTierCost(3), lordshipMilitaryAdministration,
+                "{=!}Increased settlement production efficiency by 20%",
+                SkillEffect.PerkRole.Ruler, 0.2f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                "{=!}Increased settlement production quality by 10%",
+                SkillEffect.PerkRole.Ruler, 0.1f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                TroopClassFlag.None, TroopClassFlag.None);
+
+            lordshipClaimant = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LordshipClaimant"));
+            lordshipPatron = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LordshipPatron"));
+
+            lordshipClaimant.InitializeNew("{=!}Claimant", BKSkills.Instance.Lordship, GetTierCost(4), lordshipPatron,
+                "{=!}Claims are built 30% faster",
+                SkillEffect.PerkRole.Ruler, 0.3f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                "{=!}Hostile actions (claim, usurp & revoke) are 5% cheaper",
+                SkillEffect.PerkRole.Ruler, 0.05f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                TroopClassFlag.None, TroopClassFlag.None);
+
+            lordshipPatron.InitializeNew("{=!}Patron", BKSkills.Instance.Lordship, GetTierCost(4), lordshipClaimant,
+                "{=!}Grating titles yields renown",
+                SkillEffect.PerkRole.Ruler, 0.2f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                "{=!}Amicable actions (grant, negotiate) yield more positive relation",
+                SkillEffect.PerkRole.Ruler, 0.1f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                TroopClassFlag.None, TroopClassFlag.None);
+
+
+
             scholarshipLiterate = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("ScholarshipLiterate"));
             scholarshipLiterate.InitializeNew("{=!}Literate", BKSkills.Instance.Scholarship, GetTierCost(1), null,
                 "{=!}Allows reading books", SkillEffect.PerkRole.Personal, 0f,

@@ -172,6 +172,12 @@ namespace BannerKings.Managers.Education
                 if (rate == 0f) currentBook = null;
                 else GainBookReading(CurrentBook, CurrentBookReadingRate.ResultNumber);
             }
+
+            if (Lifestyle != null)
+            {
+                float progress = 1f / (CampaignTime.DaysInYear * 2f);
+                Lifestyle.AddProgress(progress);
+            }
         }
     }
 }

@@ -73,12 +73,11 @@ namespace BannerKings.Behaviours
                         null, null, string.Empty));
                 } else
                 {
-                    MethodInfo method = hero.GetType().GetMethod("SetPerkValueInternal", BindingFlags.Instance | BindingFlags.NonPublic);
                     SkillObject skill = perk.Skill;
                     if ((skill == DefaultSkills.Engineering && hero.GetPerkValue(BKPerks.Instance.ScholarshipMechanic)) || (skill == DefaultSkills.Steward && hero.GetPerkValue(BKPerks.Instance.ScholarshipAccountant))
                         || (skill == DefaultSkills.Medicine && hero.GetPerkValue(BKPerks.Instance.ScholarshipNaturalScientist)) || (skill == DefaultSkills.Trade && hero.GetPerkValue(BKPerks.Instance.ScholarshipTreasurer)))
                     {
-                        method.Invoke(hero, new object[] { perk.AlternativePerk, true });
+                        hero.HeroDeveloper.SetPropertyValue(perk.AlternativePerk, 1);
                         InformationManager.AddQuickInformation(new TextObject("{=!}You have received the {PERK} as a double perk yield reward.")
                             .SetTextVariable("PERK", perk.AlternativePerk.Name));
                     }
