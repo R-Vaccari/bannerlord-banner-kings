@@ -7,6 +7,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Core.ViewModelCollection;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
+using System.Linq;
 
 namespace BannerKings.UI.Cultures
 {
@@ -60,15 +61,38 @@ namespace BannerKings.UI.Cultures
                 Traits.Add(new StringPairItemVM(string.Empty,
                     trait.Description.ToString(), null));
 
-            foreach (Innovation innovation in BannerKingsConfig.Instance.InnovationsManager.GetInnovations(culture))
-                Innovations.Add(new TripleStringItemVM(innovation.Name.ToString(),
-                    innovation.Effects.ToString(), 
-                    new TextObject("{=!}{CURRENT}/{REQUIRED} ({PERCENTAGE})")
-                    .SetTextVariable("CURRENT", innovation.CurrentProgress)
-                    .SetTextVariable("REQUIRED", innovation.RequiredProgress)
-                    .SetTextVariable("PERCENTAGE", FormatValue(innovation.CurrentProgress / innovation.RequiredProgress))
-                    .ToString(), 
-                    new BasicTooltipViewModel(() => innovation.Description.ToString())));
+            InnovationData innovationData = BannerKingsConfig.Instance.InnovationsManager.GetInnovationData(culture);
+            if (innovationData != null)
+            {
+
+                if (innovationData.CulturalHead != null) Information.Add(new StringPairItemVM(new TextObject("{=!}Cultural Head:").ToString(),
+                    innovationData.CulturalHead.Name.ToString(), null));
+
+                if (innovationData.Fascination != null) Information.Add(new StringPairItemVM(new TextObject("{=!}Cultural Fascination:").ToString(),
+                    innovationData.Fascination.Name.ToString(), new BasicTooltipViewModel(() => innovationData.Fascination.Description.ToString())));
+
+                ExplainedNumber research = new ExplainedNumber(0f, true);
+                foreach (Settlement settlement in Settlement.All)
+                {
+                    if (settlement.Culture != culture) continue;
+                    research.Add(BannerKingsConfig.Instance.InnovationsModel.CalculateSettlementResearch(settlement).ResultNumber, settlement.Name);
+                }
+
+                Information.Add(new StringPairItemVM(new TextObject("{=!}Research (Daily):").ToString(),
+                    research.ResultNumber.ToString("0.00"), new BasicTooltipViewModel(() => research.GetExplanations())));
+
+                foreach (Innovation innovation in innovationData.Innovations)
+                    Innovations.Add(new TripleStringItemVM(innovation.Name.ToString(),
+                        innovation.Effects.ToString(),
+                        new TextObject("{=!}{CURRENT}/{REQUIRED} ({PERCENTAGE})")
+                        .SetTextVariable("CURRENT", innovation.CurrentProgress.ToString("0.00"))
+                        .SetTextVariable("REQUIRED", innovation.RequiredProgress)
+                        .SetTextVariable("PERCENTAGE", FormatValue(innovation.CurrentProgress / innovation.RequiredProgress))
+                        .ToString(),
+                        new BasicTooltipViewModel(() => innovation.Description.ToString())));
+            }
+
+            
         }
 
         [DataSourceProperty]

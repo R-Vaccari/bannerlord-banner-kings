@@ -62,6 +62,13 @@ namespace BannerKings.Managers
             
         }
 
+        public InnovationData GetInnovationData(CultureObject culture)
+        {
+            InnovationData data = null;
+            if (Innovations.ContainsKey(culture)) data = Innovations[culture];
+            return data;
+        }
+
         public MBReadOnlyList<Innovation> GetInnovations(CultureObject culture)
         {
             List<Innovation> list = new List<Innovation>();
