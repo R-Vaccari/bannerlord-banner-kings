@@ -57,21 +57,34 @@ namespace BannerKings.Behaviours
 
         private void OnPerkOpened(Hero hero, PerkObject perk)
         {
-            if (perk.AlternativePerk != null)
+            if (perk.AlternativePerk != null && !hero.GetPerkValue(perk.AlternativePerk))
             {
-                MethodInfo method = hero.GetType().GetMethod("SetPerkValueInternal", BindingFlags.Instance | BindingFlags.NonPublic);
-                SkillObject skill = perk.Skill;
-                if (skill == DefaultSkills.Engineering && hero.GetPerkValue(BKPerks.Instance.ScholarshipMechanic))
-                    method.Invoke(hero, new object[] { perk.AlternativePerk, false });
 
-                else if (skill == DefaultSkills.Steward && hero.GetPerkValue(BKPerks.Instance.ScholarshipAccountant))
-                    method.Invoke(hero, new object[] { perk.AlternativePerk, false });
+                if (perk == BKPerks.Instance.ScholarshipMechanic || perk == BKPerks.Instance.ScholarshipMechanic ||
+                    perk == BKPerks.Instance.ScholarshipMechanic || perk == BKPerks.Instance.ScholarshipMechanic)
+                {
+                    InformationManager.ShowInquiry(new InquiryData(new TextObject("{=!}Double Perks").ToString(), 
+                        new TextObject("{=!}Double perks will only be yielded after this perk's selection, the effect does not apply retroactively. The effect will take place after choosing the perk in the skill with double yield (ie Engineering, Medicine) and closing this tab with 'Done'. It is also suggested you do this after closing this popup before trying to get any double perks.").ToString(),
+                        true, false, 
+                        GameTexts.FindText("str_selection_widget_accept").ToString(), 
+                        string.Empty, 
+                        null, null, string.Empty));
+                } else
+                {
+                    MethodInfo method = hero.GetType().GetMethod("SetPerkValueInternal", BindingFlags.Instance | BindingFlags.NonPublic);
+                    SkillObject skill = perk.Skill;
+                    if (skill == DefaultSkills.Engineering && hero.GetPerkValue(BKPerks.Instance.ScholarshipMechanic))
+                        method.Invoke(hero, new object[] { perk.AlternativePerk, true });
 
-                else if (skill == DefaultSkills.Medicine && hero.GetPerkValue(BKPerks.Instance.ScholarshipNaturalScientist))
-                    method.Invoke(hero, new object[] { perk.AlternativePerk, false });
+                    else if (skill == DefaultSkills.Steward && hero.GetPerkValue(BKPerks.Instance.ScholarshipAccountant))
+                        method.Invoke(hero, new object[] { perk.AlternativePerk, true });
 
-                else if (skill == DefaultSkills.Trade && hero.GetPerkValue(BKPerks.Instance.ScholarshipTreasurer))
-                    method.Invoke(hero, new object[] { perk.AlternativePerk, false });
+                    else if (skill == DefaultSkills.Medicine && hero.GetPerkValue(BKPerks.Instance.ScholarshipNaturalScientist))
+                        method.Invoke(hero, new object[] { perk.AlternativePerk, true });
+
+                    else if (skill == DefaultSkills.Trade && hero.GetPerkValue(BKPerks.Instance.ScholarshipTreasurer))
+                        method.Invoke(hero, new object[] { perk.AlternativePerk, true });
+                }
             }
         }
 

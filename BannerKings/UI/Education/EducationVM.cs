@@ -149,7 +149,8 @@ namespace BannerKings.UI.Education
                     
 
             InformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(new TextObject("{=!}Choose Language").ToString(),
-                new TextObject("{=!}Select a language you would like to learn. Learning a language requires an instructor from your court, and different people have different teaching skills. A courtier must have a good opinion of you in order to be available. Learning languages is easier when they are intelligible with your native language.").ToString(), elements, true, 1,
+                new TextObject("{=!}Select a language you would like to learn. Learning a language requires an instructor from your court, and different people have different teaching skills. A courtier must have a good opinion of you in order to be available. Learning languages is easier when they are intelligible with your native language.").ToString(), 
+                elements, true, 1,
                 GameTexts.FindText("str_done").ToString(), string.Empty,
                 delegate (List<InquiryElement> x)
                 {

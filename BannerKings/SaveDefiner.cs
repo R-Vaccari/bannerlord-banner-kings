@@ -140,6 +140,7 @@ namespace BannerKings
             AddClassDefinition(typeof(Innovation), 93);
             AddClassDefinition(typeof(InnovationData), 94);
             AddClassDefinition(typeof(InnovationsManager), 95);
+            AddClassDefinition(typeof(BannerKingsObject), 96);
         }
 
         protected override void DefineContainerDefinitions()
