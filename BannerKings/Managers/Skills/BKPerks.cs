@@ -6,6 +6,9 @@ namespace BannerKings.Managers.Skills
 {
     public class BKPerks : DefaultTypeInitializer<BKPerks, PerkObject>
     {
+
+        public HashSet<PerkObject> LifestylePerks { get; private set; } = new HashSet<PerkObject>();
+
         private PerkObject scholarshipLiterate, scholarshipPolyglot, scholarshipLearner,
             scholarshipTutor, scholarshipWellRead, scholarshipMechanic, scholarshipAccountant, scholarshipTeacher, scholarshipBookWorm,
             scholarshipPeerReview, scholarshipBedtimeStory, scholarshipScientist, scholarshipTreasurer, scholarshipMagnumOpus;
@@ -13,6 +16,9 @@ namespace BannerKings.Managers.Skills
         private PerkObject lordshipTraditionalist, lordshipAdaptive, lordshipAccolade, lordshipManorLord,
             lordshipMilitaryAdministration, lordshipEconomicAdministration, lordshipClaimant, lordshipPatron;
 
+        private PerkObject fianHighlander;
+
+        public PerkObject FianHighlander => fianHighlander;
         public PerkObject ScholarshipLiterate => scholarshipLiterate;
         public PerkObject ScholarshipAvidLearner => scholarshipLearner;
         public PerkObject ScholarshipTutor => scholarshipTutor;
@@ -30,8 +36,17 @@ namespace BannerKings.Managers.Skills
 
         public override void Initialize()
         {
+            fianHighlander = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleFianHighlander"));
+            LifestylePerks.Add(fianHighlander);
+            fianHighlander.InitializeNew("{=!}Highlander", null, -10, null,
+                "{=!}Increases your movement speed by 5%",
+                SkillEffect.PerkRole.Personal, 0.05f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                "{=!}Increases your swing speed with two handed swords by 3%",
+                SkillEffect.PerkRole.Personal, 0.03f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                TroopClassFlag.None, TroopClassFlag.None);
 
-            
             lordshipTraditionalist = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LordshipTraditionalist"));
             lordshipAdaptive = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LordshipAdaptive"));
 

@@ -21,7 +21,7 @@ namespace BannerKings.Managers.Education.Lifestyles
         {
             fian = new Lifestyle("lifestyle_fian");
             fian.Initialize(new TextObject("{=!}Fian"), new TextObject("{=!}"), DefaultSkills.Bow, 
-                DefaultSkills.TwoHanded, new List<PerkObject>() { },
+                DefaultSkills.TwoHanded, new List<PerkObject>() { BKPerks.Instance.FianHighlander },
                 Game.Current.ObjectManager.GetObjectTypeList<CultureObject>().FirstOrDefault(x => x.StringId == "battania"));
 
             cataphract = new Lifestyle("lifestyle_cataphract");

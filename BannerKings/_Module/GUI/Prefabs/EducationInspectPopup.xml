@@ -176,7 +176,7 @@
 											  </Children>
 											</ButtonWidget>
 											
-											<ButtonWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedHeight="48" SuggestedWidth="200" MarginTop="20" HorizontalAlignment="Center" VerticalAlignment="Top" Brush="ButtonBrush2" Command.Click="SelectNewLanguage" IsEnabled="true">
+											<ButtonWidget IsEnabled="@CanAddFocus" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedHeight="48" SuggestedWidth="200" MarginTop="20" HorizontalAlignment="Center" VerticalAlignment="Top" Brush="ButtonBrush2" Command.Click="InvestFocus" >
 											  <Children>  
 												<HintWidget DataSource="{TournamentHint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" />	
 												<RichTextWidget DoNotAcceptEvents="true" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="OverlayPopup.ButtonText" Brush.FontSize="20" Text="@InvestFocusText"/>
@@ -191,6 +191,22 @@
 								  </Children>
 								</ListPanel>
 								
+								<Widget Id="PerksList" DataSource="{Perks}" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" HorizontalAlignment="Center" DoNotAcceptEvents="true" >
+								  <ItemTemplate>
+									<PerkItemWidget DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="30" SuggestedHeight="86" HorizontalAlignment="Center" AlternativeType="@AlternativeType" Command.Click="ExecuteStartSelection" Command.AlternateClick="ExecuteShowPerkConcept" PerkState="@PerkState" Level="@Level" PerkVisualWidgetParent="PerkVisualWidgetParent" PerkVisualWidget="PerkVisualWidgetParent\PerkVisualWidget" NotEarnedPerkBrush="CharacterDeveloper.NotEarnedPerkBrush" EarnedNotSelectedPerkBrush="CharacterDeveloper.EarnedNotSelectedPerkBrush" InSelectionPerkBrush="CharacterDeveloper.InSelectionPerkBrush" EarnedActivePerkBrush="CharacterDeveloper.EarnedActivePerkBrush" EarnedNotActivePerkBrush="CharacterDeveloper.EarnedNotActivePerkBrush" EarnedPreviousPerkNotSelectedPerkBrush="CharacterDeveloper.EarnedNotSelectedFollowingPerk.Brush" UpdateChildrenStates="true">
+									  <Children>
+
+										<BrushWidget Id="PerkVisualWidgetParent" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="80" SuggestedHeight="86" HorizontalAlignment="Center" VerticalAlignment="Center" >
+										  <Children>
+											<Widget Id="PerkVisualWidget" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="30" SuggestedHeight="30" HorizontalAlignment="Center" MarginTop="23"  Sprite="@PerkId" ValueFactor="-100" />
+										  </Children>
+										</BrushWidget>
+
+										<HintWidget DataSource="{Hint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" />
+									  </Children>
+									</PerkItemWidget>
+								  </ItemTemplate>
+								</Widget>
 								
 								
 							  </Children>

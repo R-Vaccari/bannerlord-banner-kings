@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.ViewModelCollection;
+using TaleWorlds.CampaignSystem.ViewModelCollection.CharacterDeveloper;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -15,14 +16,17 @@ namespace BannerKings.UI.Education
     public class EducationVM : BannerKingsViewModel
     {
         private Hero hero;
+        private CharacterDeveloperVM developerVM;
         private MBBindingList<InformationElement> booksReadInfo, knownLanguagesInfo, currentBookInfo,
             currentLanguageInfo, currentLifestyleInfo, lifestyleProgressInfo;
+        private MBBindingList<PerkVM> perks;
         private EducationData data;
         private bool canAddFocus = false;
 
-        public EducationVM(Hero hero) : base(null, false)
+        public EducationVM(Hero hero, CharacterDeveloperVM developerVM) : base(null, false)
         {
             this.hero = hero;
+            this.developerVM = developerVM;
             data = null;
             booksReadInfo = new MBBindingList<InformationElement>();
             knownLanguagesInfo = new MBBindingList<InformationElement>();
@@ -30,6 +34,7 @@ namespace BannerKings.UI.Education
             currentLanguageInfo = new MBBindingList<InformationElement>();
             currentLifestyleInfo = new MBBindingList<InformationElement>();
             lifestyleProgressInfo = new MBBindingList<InformationElement>();
+            perks = new MBBindingList<PerkVM>();
         }
 
         public override void RefreshValues()
@@ -41,6 +46,7 @@ namespace BannerKings.UI.Education
             CurrentLanguageInfo.Clear();
             CurrentLifestyleInfo.Clear();
             LifestyleProgressInfo.Clear();
+            Perks.Clear();
             data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(hero);
 
             if (data.Books.Count == 0)
@@ -95,8 +101,10 @@ namespace BannerKings.UI.Education
                     data.LanguageInstructor.Name.ToString(),
                     data.LanguageInstructor.Name.ToString()));
 
+                string settlementString = data.LanguageInstructor.CurrentSettlement != null ? data.LanguageInstructor.CurrentSettlement.Name.ToString()
+                    : new TextObject("{=!}None (in a mobile party)").ToString();
                 CurrentLanguageInfo.Add(new InformationElement(new TextObject("{=!}Instructor Location:").ToString(),
-                    data.LanguageInstructor.CurrentSettlement.Name.ToString(),
+                    settlementString,
                     new TextObject("{=!}Active learning can be done at the instructor's location.").ToString()));
             }
 
@@ -135,6 +143,10 @@ namespace BannerKings.UI.Education
                 LifestyleProgressInfo.Add(new InformationElement(new TextObject("{=!}Second skill:").ToString(),
                     data.Lifestyle.SecondSkill.Name.ToString(),
                     data.Lifestyle.SecondSkill.Description.ToString()));
+
+                foreach (PerkObject perk in data.Lifestyle.Perks)
+                    Perks.Add(new PerkVM(perk, true, PerkVM.PerkAlternativeType.NoAlternative, null, null, (PerkObject p) => data.Perks.Contains(perk),
+                        (PerkObject p) => false));
             }
         }
         
@@ -256,7 +268,11 @@ namespace BannerKings.UI.Education
         {
             if (hero.HeroDeveloper.UnspentFocusPoints <= 0) return;
             hero.HeroDeveloper.UnspentFocusPoints -= 1;
-            data.Lifestyle.InvestFocus();
+            PerkObject perk = data.Lifestyle.InvestFocus(hero);
+            data.AddPerk(perk);
+
+            RefreshValues();
+            developerVM.RefreshValues();
         }
 
         [DataSourceProperty]
@@ -294,6 +310,20 @@ namespace BannerKings.UI.Education
 
         [DataSourceProperty]
         public string InvestFocusText => new TextObject("{=!}Invest Focus").ToString();
+
+        [DataSourceProperty]
+        public MBBindingList<PerkVM> Perks
+        {
+            get => perks;
+            set
+            {
+                if (value != perks)
+                {
+                    perks = value;
+                    OnPropertyChangedWithValue(value, "Perks");
+                }
+            }
+        }
 
         [DataSourceProperty]
         public MBBindingList<InformationElement> KnownLanguagesInfo

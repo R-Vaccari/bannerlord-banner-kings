@@ -24,7 +24,7 @@ namespace BannerKings.UI.Extensions
         public override void OnRefresh()
         {
 			EducationText = new TextObject("{=!}Education").ToString();
-			Education = new EducationVM(characterDeveloper.CurrentCharacter.Hero);
+			Education = new EducationVM(characterDeveloper.CurrentCharacter.Hero, characterDeveloper);
 			Education.RefreshValues();
 		}
 

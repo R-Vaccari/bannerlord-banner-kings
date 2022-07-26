@@ -35,6 +35,9 @@ namespace BannerKings.Managers.Education
         [SaveableField(7)]
         private Hero languageInstructor;
 
+        [SaveableField(8)]
+        private List<PerkObject> gainedPerks;
+
         private const float LANGUAGE_RATE = 1f / (CampaignTime.DaysInYear * 5f);
         private const float BOOK_RATE = 1f / (CampaignTime.DaysInYear * 3f);
 
@@ -47,6 +50,7 @@ namespace BannerKings.Managers.Education
             currentBook = null;
             currentLanguage = null;
             languageInstructor = null;
+            gainedPerks = new List<PerkObject>();
         }
 
         public void PostInitialize()
@@ -85,11 +89,14 @@ namespace BannerKings.Managers.Education
             languageInstructor = instructor;
         }
 
+        public void AddPerk(PerkObject perk) => gainedPerks.Add(perk);
+
         public void SetCurrentLifestyle(Lifestyle lifestyle)
         {
             this.lifestyle = lifestyle;
         }
         public BookType CurrentBook => currentBook;
+        public MBReadOnlyList<PerkObject> Perks => gainedPerks.GetReadOnlyList();
         public float CurrentBookProgress
         {
             get
@@ -160,6 +167,8 @@ namespace BannerKings.Managers.Education
 
         internal override void Update(PopulationData data)
         {
+            if (gainedPerks == null) gainedPerks = new List<PerkObject>();
+
             if (languageInstructor != null && (languageInstructor.IsDead || languageInstructor.IsDisabled))
                 languageInstructor = null;
 
@@ -175,8 +184,8 @@ namespace BannerKings.Managers.Education
 
             if (Lifestyle != null)
             {
-                float progress = 1f / (CampaignTime.DaysInYear * 2f);
-                Lifestyle.AddProgress(progress);
+                //float progress = 1f / (CampaignTime.DaysInYear * 2f);
+                Lifestyle.AddProgress(1f);
             }
         }
     }
