@@ -8,6 +8,8 @@ using TaleWorlds.Core.ViewModelCollection;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using System.Linq;
+using Bannerlord.UIExtenderEx.Attributes;
+using System.Collections.Generic;
 
 namespace BannerKings.UI.Cultures
 {
@@ -16,6 +18,7 @@ namespace BannerKings.UI.Cultures
         private CultureObject culture;
         private MBBindingList<StringPairItemVM> information, traits;
         private MBBindingList<TripleStringItemVM> innovations;
+        private bool assumeHead, changeFascination;
         private string description;
 
         public EncyclopediaCultureVM(CultureObject culture) : base(null, false)
@@ -24,6 +27,8 @@ namespace BannerKings.UI.Cultures
             information = new MBBindingList<StringPairItemVM>();
             traits = new MBBindingList<StringPairItemVM>();
             innovations = new MBBindingList<TripleStringItemVM>();
+            assumeHead = false;
+            changeFascination = false;
             RefreshValues();
         }
 
@@ -71,6 +76,9 @@ namespace BannerKings.UI.Cultures
                 if (innovationData.Fascination != null) Information.Add(new StringPairItemVM(new TextObject("{=!}Cultural Fascination:").ToString(),
                     innovationData.Fascination.Name.ToString(), new BasicTooltipViewModel(() => innovationData.Fascination.Description.ToString())));
 
+                ChangeFascinationPossible = innovationData.CulturalHead == Clan.PlayerClan;
+                AssumeHeadPossible = innovationData.CanAssumeCulturalHead(Clan.PlayerClan);
+
                 ExplainedNumber research = new ExplainedNumber(0f, true);
                 foreach (Settlement settlement in Settlement.All)
                 {
@@ -91,8 +99,84 @@ namespace BannerKings.UI.Cultures
                         .ToString(),
                         new BasicTooltipViewModel(() => innovation.Description.ToString())));
             }
+        }
 
-            
+        [DataSourceMethod]
+        private void AssumeCultureHead()
+        {
+            InnovationData innovationData = BannerKingsConfig.Instance.InnovationsManager.GetInnovationData(culture);
+            if (innovationData != null)
+            {
+                InformationManager.ShowInquiry(new InquiryData(new TextObject("{=!}Culture Head").ToString(),
+                    new TextObject("{=!}Assume the position of culture head.").ToString(), true, true,
+                    GameTexts.FindText("str_confirm").ToString(),
+                    GameTexts.FindText("str_cancel").ToString(),
+                    () => innovationData.AssumeCulturalHead(Clan.PlayerClan),
+                    null
+                    ));
+            }
+        }
+
+        [DataSourceMethod]
+        private void ChangeFascination()
+        {
+            InnovationData innovationData = BannerKingsConfig.Instance.InnovationsManager.GetInnovationData(culture);
+            if (innovationData != null)
+            {
+                List<InquiryElement> elements = new List<InquiryElement>();
+                foreach (Innovation innovation in innovationData.Innovations)
+                    elements.Add(new InquiryElement(innovation,
+                               innovation.Name.ToString(),
+                               null,
+                               innovationData.CanChangeFascination(Clan.PlayerClan, innovation),
+                               innovation.Description.ToString()));
+
+                InformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(new TextObject("{=!}Choose Fascination").ToString(),
+                    new TextObject("{=!}The cultural fascination is an innovation that progresses faster than others.").ToString(),
+                    elements, true, 1,
+                    GameTexts.FindText("str_done").ToString(), string.Empty,
+                    delegate (List<InquiryElement> x)
+                    {
+                        Innovation innov = (Innovation)x[0].Identifier;
+                        if (innov == null) return;
+
+                        innovationData.ChangeFascination(innov);
+                        RefreshValues();
+                    }, null));
+            }
+        }
+
+        [DataSourceProperty]
+        public string AssumeCultureHeadText => new TextObject("{=!}Culture Head").ToString();
+
+        public string ChangeFascinationText => new TextObject("{=!}Fascination").ToString();
+
+        [DataSourceProperty]
+        public bool ChangeFascinationPossible
+        {
+            get => changeFascination;
+            set
+            {
+                if (value != changeFascination)
+                {
+                    changeFascination = value;
+                    OnPropertyChangedWithValue(value, "ChangeFascinationPossible");
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public bool AssumeHeadPossible
+        {
+            get => assumeHead;
+            set
+            {
+                if (value != assumeHead)
+                {
+                    assumeHead = value;
+                    OnPropertyChangedWithValue(value, "AssumeHeadPossible");
+                }
+            }
         }
 
         [DataSourceProperty]

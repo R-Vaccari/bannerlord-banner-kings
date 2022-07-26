@@ -5,6 +5,7 @@ using TaleWorlds.Library;
 using TaleWorlds.Core;
 using BannerKings.Managers.Skills;
 using TaleWorlds.SaveSystem;
+using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Innovations
 {
@@ -46,6 +47,33 @@ namespace BannerKings.Managers.Innovations
             }
         }
 
+        public bool CanAssumeCulturalHead(Clan clan)
+        {
+            float renown = 0f;
+            if (culturalHead != null) renown = culturalHead.Renown;
+            return clan.Culture == culture && clan != culturalHead && clan.Renown > renown;
+        }
+
+        public bool CanChangeFascination(Clan clan, Innovation fascination) => clan == culturalHead && !fascination.Finished && fascination != this.fascination;
+
+        public void AssumeCulturalHead(Clan clan)
+        {
+            culturalHead = clan;
+            if (culture == Clan.PlayerClan.Culture)
+                InformationManager.AddQuickInformation(new TextObject("{=!}The {CLAN} has assumed the role of cultural head of the {CULTURE} culture.")
+                            .SetTextVariable("CLAN", clan.Name)
+                            .SetTextVariable("CULTURE", culture.Name), 0, null, "event:/ui/notification/relation");
+        }
+
+        public void ChangeFascination(Innovation fascination)
+        {
+            this.fascination = fascination;
+            if (culture == Clan.PlayerClan.Culture) 
+                InformationManager.AddQuickInformation(new TextObject("{=!}The {CULTURE} is now fascinated by the {FASCINATION} innovation.")
+                            .SetTextVariable("FASCINATION", fascination.Name)
+                            .SetTextVariable("CULTURE", culture.Name), 0, null, "event:/ui/notification/relation");
+        }
+
         public void SetFascination(Innovation innovation) => fascination = innovation;
         public void AddInnovation(Innovation innov) => innovations.Add(innov);
 
@@ -63,14 +91,14 @@ namespace BannerKings.Managers.Innovations
                 if (clans.Count > 0)
                 {
                     clans.Sort((x, y) => y.Renown.CompareTo(x.Renown));
-                    culturalHead = clans[0];
+                    AssumeCulturalHead(clans[0]);
                 }
             }
 
             if (culturalHead == null) return;
 
             List<Innovation> unfinished = innovations.FindAll(x => !x.Finished);
-            if (fascination == null) fascination = unfinished.GetRandomElement();
+            if (fascination == null) ChangeFascination(unfinished.GetRandomElement());
             for (int i = 0; i < 10; i++)
             {
                 Innovation random = unfinished.GetRandomElement();
