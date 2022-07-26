@@ -41,6 +41,7 @@ namespace BannerKings.Managers.Education.Lifestyles
         {
             PerkObject perk = perks[investedFocus];
             investedFocus += 1;
+            progress = 0f;
             InformationManager.AddQuickInformation(new TextObject("{=!}You have received the {PERK} from the {LIFESTYLE} lifestyle.")
                             .SetTextVariable("PERK", perk.Name)
                             .SetTextVariable("LIFESTYLE", Name));

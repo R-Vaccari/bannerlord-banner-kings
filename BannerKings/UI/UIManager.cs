@@ -127,6 +127,19 @@ namespace BannerKings.UI
             }
         }
 
+        [HarmonyPatch(typeof(CharacterVM), "RefreshValues")]
+        class CharacterVMRefreshPatch
+        {
+            static bool Prefix(CharacterVM __instance)
+            {
+                PropertyInfo focus = __instance.GetType().GetProperty("OrgUnspentFocusPoints", BindingFlags.Instance | BindingFlags.Public);
+                int value = __instance.GetCharacterDeveloper().UnspentFocusPoints;
+                focus.SetValue(__instance, value);
+                __instance.UnspentCharacterPoints = value;
+                return true;
+            }
+        }
+
         [HarmonyPatch(typeof(SkillIconVisualWidget), "SkillId", MethodType.Setter)]
         class SkillIconOnLateUpdatePatch
         {

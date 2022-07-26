@@ -96,7 +96,15 @@ namespace BannerKings.Managers.Education
             this.lifestyle = lifestyle;
         }
         public BookType CurrentBook => currentBook;
-        public MBReadOnlyList<PerkObject> Perks => gainedPerks.GetReadOnlyList();
+        public MBReadOnlyList<PerkObject> Perks
+        {
+            get
+            {
+                if (gainedPerks == null) gainedPerks = new List<PerkObject>();
+                return gainedPerks.GetReadOnlyList();
+            }
+        }
+        
         public float CurrentBookProgress
         {
             get
@@ -167,8 +175,6 @@ namespace BannerKings.Managers.Education
 
         internal override void Update(PopulationData data)
         {
-            if (gainedPerks == null) gainedPerks = new List<PerkObject>();
-
             if (languageInstructor != null && (languageInstructor.IsDead || languageInstructor.IsDisabled))
                 languageInstructor = null;
 
@@ -181,12 +187,10 @@ namespace BannerKings.Managers.Education
                 if (rate == 0f) currentBook = null;
                 else GainBookReading(CurrentBook, CurrentBookReadingRate.ResultNumber);
             }
-
+            //1f / (CampaignTime.DaysInYear * 2f)
             if (Lifestyle != null)
-            {
-                //float progress = 1f / (CampaignTime.DaysInYear * 2f);
                 Lifestyle.AddProgress(1f);
-            }
+            
         }
     }
 }

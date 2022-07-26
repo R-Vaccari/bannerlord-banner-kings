@@ -21,7 +21,7 @@ namespace BannerKings.Managers.Education.Lifestyles
         {
             fian = new Lifestyle("lifestyle_fian");
             fian.Initialize(new TextObject("{=!}Fian"), new TextObject("{=!}"), DefaultSkills.Bow, 
-                DefaultSkills.TwoHanded, new List<PerkObject>() { BKPerks.Instance.FianHighlander },
+                DefaultSkills.TwoHanded, new List<PerkObject>() { BKPerks.Instance.FianHighlander, BKPerks.Instance.FianRanger, BKPerks.Instance.FianFennid },
                 Game.Current.ObjectManager.GetObjectTypeList<CultureObject>().FirstOrDefault(x => x.StringId == "battania"));
 
             cataphract = new Lifestyle("lifestyle_cataphract");
@@ -43,7 +43,8 @@ namespace BannerKings.Managers.Education.Lifestyles
 
             civilAdministrator = new Lifestyle("lifestyle_civilAdministrator");
             civilAdministrator.Initialize(new TextObject("{=!}Civil Administrator"), new TextObject("{=!}"), 
-                DefaultSkills.Engineering, DefaultSkills.Steward, new List<PerkObject>() { });
+                DefaultSkills.Engineering, DefaultSkills.Steward, new List<PerkObject>() { BKPerks.Instance.CivilEngineer, BKPerks.Instance.CivilCultivator,
+                BKPerks.Instance.CivilManufacturer, BKPerks.Instance.CivilOverseer });
         }
 
         public override IEnumerable<Lifestyle> All

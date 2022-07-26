@@ -16,9 +16,18 @@ namespace BannerKings.Managers.Skills
         private PerkObject lordshipTraditionalist, lordshipAdaptive, lordshipAccolade, lordshipManorLord,
             lordshipMilitaryAdministration, lordshipEconomicAdministration, lordshipClaimant, lordshipPatron;
 
-        private PerkObject fianHighlander;
+        private PerkObject fianHighlander, fianRanger, fianFennid, civilEngineer, civilCultivator, civilOverseer, civilManufacturer;
 
         public PerkObject FianHighlander => fianHighlander;
+        public PerkObject FianRanger => fianRanger;
+        public PerkObject FianFennid => fianFennid;
+
+        public PerkObject CivilEngineer => civilEngineer;
+        public PerkObject CivilCultivator => civilCultivator;
+        public PerkObject CivilManufacturer => civilManufacturer;
+        public PerkObject CivilOverseer => civilOverseer;
+
+
         public PerkObject ScholarshipLiterate => scholarshipLiterate;
         public PerkObject ScholarshipAvidLearner => scholarshipLearner;
         public PerkObject ScholarshipTutor => scholarshipTutor;
@@ -38,7 +47,7 @@ namespace BannerKings.Managers.Skills
         {
             fianHighlander = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleFianHighlander"));
             LifestylePerks.Add(fianHighlander);
-            fianHighlander.InitializeNew("{=!}Highlander", null, -10, null,
+            fianHighlander.InitializeNew("{=!}Highlander", null, 75, null,
                 "{=!}Increases your movement speed by 5%",
                 SkillEffect.PerkRole.Personal, 0.05f,
                 SkillEffect.EffectIncrementType.AddFactor,
@@ -46,6 +55,75 @@ namespace BannerKings.Managers.Skills
                 SkillEffect.PerkRole.Personal, 0.03f,
                 SkillEffect.EffectIncrementType.AddFactor,
                 TroopClassFlag.None, TroopClassFlag.None);
+
+            fianRanger = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleFianRanger"));
+            LifestylePerks.Add(fianRanger);
+            fianRanger.InitializeNew("{=!}Ranger", null, 150, null,
+                "{=5NRai8K5}Increase maximum track life by 20%",
+                SkillEffect.PerkRole.Personal, 0.05f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                "{=XzbpZji3}Increases your damage with bows by 8%.",
+                SkillEffect.PerkRole.Personal, 0.03f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                TroopClassFlag.None, TroopClassFlag.None);
+
+            fianFennid = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleFianFennid"));
+            LifestylePerks.Add(fianFennid);
+            fianFennid.InitializeNew("{=!}Fénnid", null, 225, null,
+                "{=MOITVVNu}Aiming with your bow is 25% faster.",
+                SkillEffect.PerkRole.Personal, 0.05f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                "{=lOaVRxdR}Increases your two handed weapon damage by 10%.",
+                SkillEffect.PerkRole.Personal, 0.03f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                TroopClassFlag.None, TroopClassFlag.None);
+
+            civilEngineer = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleCivilEngineer"));
+            LifestylePerks.Add(civilEngineer);
+            civilEngineer.InitializeNew("{=!}Civil Engineer", null, 75, null,
+                "{=!}Settlements have an additional catapult during siege start.",
+                SkillEffect.PerkRole.Personal, 0.05f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                "{=!}Workforce yields 20% extra construction.",
+                SkillEffect.PerkRole.Personal, 0.03f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                TroopClassFlag.None, TroopClassFlag.None);
+
+            civilCultivator = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleCivilCultivator"));
+            LifestylePerks.Add(civilCultivator);
+            civilCultivator.InitializeNew("{=!}Cultivator", null, 150, null,
+                "{=!}Agricultural yield increases by flat 5%.",
+                SkillEffect.PerkRole.Personal, 0.05f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                "{=!}Village hearth growth increases by 1.",
+                SkillEffect.PerkRole.Personal, 0.03f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                TroopClassFlag.None, TroopClassFlag.None);
+
+            civilOverseer = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleCivilOverseer"));
+            civilManufacturer = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleCivilManufacturer"));
+
+            LifestylePerks.Add(civilOverseer);
+            civilOverseer.InitializeNew("{=!}Overseer", null, 300, null,
+                "{=!}Stability increases by flat 5%.",
+                SkillEffect.PerkRole.Personal, 0.05f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                "{=!}.",
+                SkillEffect.PerkRole.Personal, 0.03f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                TroopClassFlag.None, TroopClassFlag.None);
+            
+            LifestylePerks.Add(civilManufacturer);
+            civilManufacturer.InitializeNew("{=!}Manufacturer", null, 225, null,
+                "{=!}Production efficiency increases by flat 15%.",
+                SkillEffect.PerkRole.Personal, 0.05f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                "{=!}Production quality increases by flat 10%.",
+                SkillEffect.PerkRole.Personal, 0.03f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                TroopClassFlag.None, TroopClassFlag.None);
+
+
 
             lordshipTraditionalist = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LordshipTraditionalist"));
             lordshipAdaptive = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LordshipAdaptive"));

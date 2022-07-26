@@ -20,7 +20,7 @@
 						<Widget HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" WidthSizePolicy="CoverChildren" MarginTop="10" MarginBottom="100">
 						  <Children>
 						  
-						    <ListPanel WidthSizePolicy="Fixed" HeightSizePolicy="CoverChildren" SuggestedWidth="720" StackLayout.LayoutMethod="VerticalBottomToTop" DoNotAcceptEvents="true" MarginTop="20">
+						    <ListPanel WidthSizePolicy="Fixed" HeightSizePolicy="CoverChildren" SuggestedWidth="720" StackLayout.LayoutMethod="VerticalBottomToTop" DoNotAcceptEvents="true" MarginTop="20" MarginBottom="20">
 							  <Children>
 							  
 							    <TextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" Brush="Encyclopedia.SubPage.Header.Text" Text="Education of Aedid" MarginBottom="20" />
@@ -191,7 +191,7 @@
 								  </Children>
 								</ListPanel>
 								
-								<Widget Id="PerksList" DataSource="{Perks}" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" HorizontalAlignment="Center" DoNotAcceptEvents="true" >
+								<GridWidget Id="PerksList" DataSource="{Perks}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" MarginTop="20" DoNotAcceptEvents="true" DefaultCellWidth="30" DefaultCellHeight="90" ColumnCount="3">
 								  <ItemTemplate>
 									<PerkItemWidget DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="30" SuggestedHeight="86" HorizontalAlignment="Center" AlternativeType="@AlternativeType" Command.Click="ExecuteStartSelection" Command.AlternateClick="ExecuteShowPerkConcept" PerkState="@PerkState" Level="@Level" PerkVisualWidgetParent="PerkVisualWidgetParent" PerkVisualWidget="PerkVisualWidgetParent\PerkVisualWidget" NotEarnedPerkBrush="CharacterDeveloper.NotEarnedPerkBrush" EarnedNotSelectedPerkBrush="CharacterDeveloper.EarnedNotSelectedPerkBrush" InSelectionPerkBrush="CharacterDeveloper.InSelectionPerkBrush" EarnedActivePerkBrush="CharacterDeveloper.EarnedActivePerkBrush" EarnedNotActivePerkBrush="CharacterDeveloper.EarnedNotActivePerkBrush" EarnedPreviousPerkNotSelectedPerkBrush="CharacterDeveloper.EarnedNotSelectedFollowingPerk.Brush" UpdateChildrenStates="true">
 									  <Children>
@@ -206,7 +206,7 @@
 									  </Children>
 									</PerkItemWidget>
 								  </ItemTemplate>
-								</Widget>
+								</GridWidget>
 								
 								
 							  </Children>

@@ -5,7 +5,7 @@ using TaleWorlds.Core;
 
 namespace BannerKings.Models.Vanilla
 {
-    class BKSiegeEventModel : DefaultSiegeEventModel
+    public class BKSiegeEventModel : DefaultSiegeEventModel
     {
 
         public override IEnumerable<SiegeEngineType> GetPrebuiltSiegeEnginesOfSettlement(Settlement settlement)

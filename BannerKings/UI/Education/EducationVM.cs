@@ -127,7 +127,7 @@ namespace BannerKings.UI.Education
                     data.Lifestyle.Name.ToString(),
                     string.Empty));
                 LifestyleProgressInfo.Add(new InformationElement(new TextObject("{=!}Necessary skill:").ToString(),
-                    data.Lifestyle.InvestedFocus.ToString(),
+                    data.Lifestyle.NecessarySkillForFocus.ToString(),
                     new TextObject("{=!}Necessary skill amount in either lifestyle skill to enable next focus investment and perk unlock.")
                     .ToString()));
                 LifestyleProgressInfo.Add(new InformationElement(new TextObject("{=!}Invested focus:").ToString(),
@@ -144,9 +144,18 @@ namespace BannerKings.UI.Education
                     data.Lifestyle.SecondSkill.Name.ToString(),
                     data.Lifestyle.SecondSkill.Description.ToString()));
 
-                foreach (PerkObject perk in data.Lifestyle.Perks)
-                    Perks.Add(new PerkVM(perk, true, PerkVM.PerkAlternativeType.NoAlternative, null, null, (PerkObject p) => data.Perks.Contains(perk),
-                        (PerkObject p) => false));
+                MBReadOnlyList<PerkObject> perks = data.Lifestyle.Perks;
+                MBReadOnlyList<PerkObject> gainedPerks = data.Perks;
+                for (int i = 0; i < perks.Count; i++)
+                {
+                    PerkObject perk = perks[i];
+                    Perks.Add(new PerkVM(perk, 
+                        i <= data.Lifestyle.InvestedFocus, 
+                        PerkVM.PerkAlternativeType.NoAlternative, 
+                        null, null, 
+                        (PerkObject p) => gainedPerks.Contains(perk),
+                        (PerkObject p) => data.Lifestyle.InvestedFocus == i - 1));
+                }                
             }
         }
         
@@ -271,7 +280,7 @@ namespace BannerKings.UI.Education
             PerkObject perk = data.Lifestyle.InvestFocus(hero);
             data.AddPerk(perk);
 
-            RefreshValues();
+            developerVM.CurrentCharacter.RefreshValues();
             developerVM.RefreshValues();
         }
 
