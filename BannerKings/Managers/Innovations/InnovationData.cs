@@ -62,7 +62,7 @@ namespace BannerKings.Managers.Innovations
                 List<Clan> clans = new List<Clan>(Clan.All).FindAll(x => !x.IsEliminated && x.Culture == culture && x.Leader != null);
                 if (clans.Count > 0)
                 {
-                    clans.Sort((x, y) => x.Renown.CompareTo(y.Renown));
+                    clans.Sort((x, y) => y.Renown.CompareTo(x.Renown));
                     culturalHead = clans[0];
                 }
             }
