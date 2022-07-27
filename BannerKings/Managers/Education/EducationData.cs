@@ -187,9 +187,8 @@ namespace BannerKings.Managers.Education
                 if (rate == 0f) currentBook = null;
                 else GainBookReading(CurrentBook, CurrentBookReadingRate.ResultNumber);
             }
-            //1f / (CampaignTime.DaysInYear * 2f)
             if (Lifestyle != null)
-                Lifestyle.AddProgress(1f);
+                Lifestyle.AddProgress(1f / (CampaignTime.DaysInYear * 2f));
             
         }
     }

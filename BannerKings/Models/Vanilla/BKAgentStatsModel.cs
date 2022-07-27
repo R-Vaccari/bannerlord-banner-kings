@@ -22,6 +22,9 @@ namespace BannerKings.Models.Vanilla
                 MBReadOnlyList<PerkObject> perks = data.Perks;
                 if (weaponComponentData.RelevantSkill == DefaultSkills.Bow && perks.Contains(BKPerks.Instance.FianFennid))
                     agentDrivenProperties.ThrustOrRangedReadySpeedMultiplier *= 1.25f;
+
+                if (weaponComponentData.RelevantSkill == DefaultSkills.TwoHanded && !agent.HasMount && weaponComponentData.WeaponClass == WeaponClass.TwoHandedSword)
+                    agentDrivenProperties.SwingSpeedMultiplier *= 1.06f;
             }
         }
     }

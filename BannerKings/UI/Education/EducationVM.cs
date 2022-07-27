@@ -276,10 +276,8 @@ namespace BannerKings.UI.Education
         private void InvestFocus()
         {
             if (hero.HeroDeveloper.UnspentFocusPoints <= 0) return;
-            hero.HeroDeveloper.UnspentFocusPoints -= 1;
-            PerkObject perk = data.Lifestyle.InvestFocus(hero);
-            data.AddPerk(perk);
-
+            
+            data.Lifestyle.InvestFocus(data, hero);
             developerVM.CurrentCharacter.RefreshValues();
             developerVM.RefreshValues();
         }

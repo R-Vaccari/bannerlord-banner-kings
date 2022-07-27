@@ -51,7 +51,7 @@ namespace BannerKings.Managers.Skills
                 "{=!}Increases your movement speed by 5%",
                 SkillEffect.PerkRole.Personal, 0.05f,
                 SkillEffect.EffectIncrementType.AddFactor,
-                "{=!}Increases your swing speed with two handed swords by 3%",
+                "{=!}Increases your swing speed with two handed swords by 6%",
                 SkillEffect.PerkRole.Personal, 0.03f,
                 SkillEffect.EffectIncrementType.AddFactor,
                 TroopClassFlag.None, TroopClassFlag.None);
