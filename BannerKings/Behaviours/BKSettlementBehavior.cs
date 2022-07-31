@@ -422,17 +422,7 @@ namespace BannerKings.Behaviors
             }
         }
 
-        [HarmonyPatch(typeof(CaravansCampaignBehavior), "SpawnCaravan")]
-        class SpawnCaravanPatch
-        {
-            static bool Prefix(Hero hero, bool initialSpawn = false)
-            {
-                if (hero.CurrentSettlement != null && hero.CurrentSettlement.IsTown)
-                    return true;
-                
-                return false;
-            }
-        }
+       
 
         [HarmonyPatch(typeof(SellPrisonersAction), "ApplyForAllPrisoners")]
         class ApplyAllPrisionersPatch

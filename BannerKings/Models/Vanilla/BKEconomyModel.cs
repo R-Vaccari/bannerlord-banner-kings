@@ -21,6 +21,37 @@ namespace BannerKings.Models
     {
         private static readonly float CRAFTSMEN_EFFECT_CAP = 0.4f;
 
+        public ExplainedNumber GetCaravanPrice(Settlement settlement, Hero buyer, bool isLarge = false)
+        {
+            ExplainedNumber cost = new ExplainedNumber(isLarge ? 22500 : 15000, true);
+
+            if (buyer.Culture.HasFeat(DefaultCulturalFeats.AseraiTraderFeat))
+                cost.AddFactor(-DefaultCulturalFeats.AseraiTraderFeat.EffectBonus, DefaultCulturalFeats.AseraiTraderFeat.Name);
+
+            if (settlement == null) settlement = Hero.OneToOneConversationHero.CurrentSettlement;
+
+            if (settlement != null)
+            {
+                PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
+                cost.AddFactor(1f - data.EconomicData.Mercantilism.ResultNumber, new TextObject("{=!}Mecantilism"));
+                cost.AddFactor(data.EconomicData.CaravanAttraction.ResultNumber - 1f, new TextObject("{=!}Caravan attraction"));
+            }
+
+            return cost;
+        }
+
+        public ExplainedNumber CalculateCaravanAttraction(Settlement settlement)
+        {
+            ExplainedNumber result = new ExplainedNumber(1f, true);
+
+            PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
+            result.Add(data.EconomicData.Mercantilism.ResultNumber / 2f, new TextObject("{=!}Mercantilism"));
+            result.AddFactor(data.MilitaryData.Militarism.ResultNumber * -1f, new TextObject("{=!}Militarism"));
+
+            BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref result, settlement.OwnerClan.Leader, CouncilPosition.Steward, 0.15f, true);
+            return result;
+        }
+
         public override float GetDailyDemandForCategory(Town town, ItemCategory category, int extraProsperity)
         {
             if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement)

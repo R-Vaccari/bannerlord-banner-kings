@@ -45,6 +45,7 @@ namespace BannerKings
         public BKLearningModel LearningModel { get; } = new BKLearningModel();
         public BKInnovationsModel InnovationsModel { get; } = new BKInnovationsModel();
         public BKEconomyModel EconomyModel { get; } = new BKEconomyModel();
+        public BKWorkshopModel WorkshopModel { get; } = new BKWorkshopModel();
         public BKAdministrativeModel AdministrativeModel { get; } = new BKAdministrativeModel();
 
         public void Initialize()
@@ -66,7 +67,6 @@ namespace BannerKings
             Models.Add(new BKStabilityModel());
             Models.Add(new BKGrowthModel());
             Models.Add(new BKEconomyModel());
-            Models.Add(new BKCaravanAttractionModel());
             Models.Add(new BKPietyModel());
             Models.Add(new BKCouncilModel());
         }

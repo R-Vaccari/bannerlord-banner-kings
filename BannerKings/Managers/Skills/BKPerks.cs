@@ -31,7 +31,7 @@ namespace BannerKings.Managers.Skills
 
         public PerkObject SiegeEngineer => siegeEngineer;
 
-        public PerkObject LordshipEconomicAdministration => LordshipEconomicAdministration;
+        public PerkObject LordshipEconomicAdministration => lordshipEconomicAdministration;
         public PerkObject ScholarshipLiterate => scholarshipLiterate;
         public PerkObject ScholarshipAvidLearner => scholarshipLearner;
         public PerkObject ScholarshipTutor => scholarshipTutor;

@@ -84,7 +84,7 @@ namespace BannerKings.Managers.Populations
 
         public ExplainedNumber AdministrativeCost => BannerKingsConfig.Instance.AdministrativeModel.CalculateEffect(settlement);
         public float MerchantRevenue => settlement.Town != null ? BannerKingsConfig.Instance.EconomyModel.GetMerchantIncome(settlement.Town) : 0f;
-        public ExplainedNumber CaravanAttraction => BannerKingsConfig.Instance.EconomyModel.CalculateEffect(settlement);
+        public ExplainedNumber CaravanAttraction => BannerKingsConfig.Instance.EconomyModel.CalculateCaravanAttraction(settlement);
         public ExplainedNumber Mercantilism => BannerKingsConfig.Instance.EconomyModel.CalculateEffect(settlement);
         public ExplainedNumber ProductionEfficiency => BannerKingsConfig.Instance.EconomyModel.CalculateProductionEfficiency(settlement);
         public ExplainedNumber ProductionQuality => BannerKingsConfig.Instance.EconomyModel.CalculateProductionQuality(settlement);

@@ -8,7 +8,7 @@ using TaleWorlds.Library;
 
 namespace BannerKings.Models
 {
-    class BKWorkshopModel : DefaultWorkshopModel
+    public class BKWorkshopModel : DefaultWorkshopModel
     {
         public override int GetSellingCost(Workshop workshop)
         {
