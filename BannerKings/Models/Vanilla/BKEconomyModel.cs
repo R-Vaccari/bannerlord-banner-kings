@@ -17,7 +17,7 @@ using static BannerKings.Managers.PopulationManager;
 
 namespace BannerKings.Models
 {
-    class BKEconomyModel : DefaultSettlementEconomyModel, IEconomyModel
+    public class BKEconomyModel : DefaultSettlementEconomyModel, IEconomyModel
     {
         private static readonly float CRAFTSMEN_EFFECT_CAP = 0.4f;
 

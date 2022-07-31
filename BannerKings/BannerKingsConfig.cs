@@ -44,6 +44,8 @@ namespace BannerKings
         public BKCouncilModel CouncilModel { get; } = new BKCouncilModel();
         public BKLearningModel LearningModel { get; } = new BKLearningModel();
         public BKInnovationsModel InnovationsModel { get; } = new BKInnovationsModel();
+        public BKEconomyModel EconomyModel { get; } = new BKEconomyModel();
+        public BKAdministrativeModel AdministrativeModel { get; } = new BKAdministrativeModel();
 
         public void Initialize()
         {

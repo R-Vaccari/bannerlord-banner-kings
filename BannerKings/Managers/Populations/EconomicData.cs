@@ -1,8 +1,6 @@
 ﻿using BannerKings.Managers.Institutions.Guilds;
 using BannerKings.Models;
-using BannerKings.Models.Populations;
 using BannerKings.Populations;
-using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
@@ -84,40 +82,12 @@ namespace BannerKings.Managers.Populations
             }*/
         }
 
-        public ExplainedNumber AdministrativeCost => BannerKingsConfig.Instance.Models
-            .First(x => x.GetType() == typeof(BKAdministrativeModel)).CalculateEffect(settlement);
-        public float MerchantRevenue => settlement.Town != null ? new BKEconomyModel().GetMerchantIncome(settlement.Town) : 0f;
-        public ExplainedNumber CaravanAttraction
-        {
-            get
-            {
-                BKCaravanAttractionModel model = (BKCaravanAttractionModel)BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(BKCaravanAttractionModel));
-                return model.CalculateEffect(settlement);
-            }
-        }
-        public ExplainedNumber Mercantilism
-        {
-            get
-            {
-                BKEconomyModel model = (BKEconomyModel)BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(BKEconomyModel));
-                return model.CalculateEffect(settlement);
-            }
-        }
-        public ExplainedNumber ProductionEfficiency
-        {
-            get
-            {
-                BKEconomyModel model = (BKEconomyModel)BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(BKEconomyModel));
-                return model.CalculateProductionEfficiency(settlement);
-            }
-        }
-        public ExplainedNumber ProductionQuality
-        {
-            get
-            {
-                BKEconomyModel model = (BKEconomyModel)BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(BKEconomyModel));
-                return model.CalculateProductionQuality(settlement);
-            }
-        }
+        public ExplainedNumber AdministrativeCost => BannerKingsConfig.Instance.AdministrativeModel.CalculateEffect(settlement);
+        public float MerchantRevenue => settlement.Town != null ? BannerKingsConfig.Instance.EconomyModel.GetMerchantIncome(settlement.Town) : 0f;
+        public ExplainedNumber CaravanAttraction => BannerKingsConfig.Instance.EconomyModel.CalculateEffect(settlement);
+        public ExplainedNumber Mercantilism => BannerKingsConfig.Instance.EconomyModel.CalculateEffect(settlement);
+        public ExplainedNumber ProductionEfficiency => BannerKingsConfig.Instance.EconomyModel.CalculateProductionEfficiency(settlement);
+        public ExplainedNumber ProductionQuality => BannerKingsConfig.Instance.EconomyModel.CalculateProductionQuality(settlement);
+
     }
 }
