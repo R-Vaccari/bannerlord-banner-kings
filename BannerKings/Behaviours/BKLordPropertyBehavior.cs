@@ -38,9 +38,9 @@ namespace BannerKings.Behaviours
                 CaravanPartyComponent.CreateCaravanParty(lord, target, false, null, null, 0);
             }
 
-            if (target.IsTown)
+            if (target.IsTown && !target.Town.Workshops.Any(x => x.Owner == lord))
             {
-                Workshop random = target.Town.Workshops.GetRandomElementWithPredicate(x => x.Owner != lord);
+                Workshop random = target.Town.Workshops.GetRandomElement();
                 if (random != null)
                 {
                     float workshopCost = BannerKingsConfig.Instance.WorkshopModel.GetBuyingCostForPlayer(random);
