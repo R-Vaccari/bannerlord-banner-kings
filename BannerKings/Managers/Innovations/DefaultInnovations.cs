@@ -53,7 +53,7 @@ namespace BannerKings.Managers.Innovations
             publicWorks = new Innovation("innovation_public_works");
             publicWorks.Initialize(new TextObject("{=!}Public Works"),
                 new TextObject("{=!}Focused efforts on public infrastructure by the state allow further development of new and existing buildings."),
-                new TextObject("{=!}Expands Infrastructure limit in settlements"),
+                new TextObject("{=!}Expands Infrastructure limit in settlements by flat 3"),
                 2000f,
                 null,
                 null);

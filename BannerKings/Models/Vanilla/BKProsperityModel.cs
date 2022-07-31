@@ -1,4 +1,6 @@
 ﻿using BannerKings.Managers.Court;
+using BannerKings.Managers.Education;
+using BannerKings.Managers.Skills;
 using BannerKings.Populations;
 using Helpers;
 using System.Linq;
@@ -17,10 +19,13 @@ namespace BannerKings.Models
 		public override ExplainedNumber CalculateHearthChange(Village village, bool includeDescriptions = false)
         {
             ExplainedNumber baseResult = base.CalculateHearthChange(village);
-            //if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(village.Settlement))
-               // new BKGrowthModel().CalculateHearthGrowth(village, ref baseResult);
+			//if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(village.Settlement))
+			// new BKGrowthModel().CalculateHearthGrowth(village, ref baseResult);
 
-            return baseResult;
+			EducationData data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(village.Settlement.Owner);
+			if (data.HasPerk(BKPerks.Instance.CivilCultivator)) baseResult.Add(1f, BKPerks.Instance.CivilCultivator.Name);
+
+			return baseResult;
         }
 
         public override ExplainedNumber CalculateProsperityChange(Town fortification, bool includeDescriptions = false)
@@ -69,10 +74,7 @@ namespace BannerKings.Models
 						
 						return x.Number;
 					});
-					if (num3 > 0)
-					{
-						explainedNumber.Add(num3 * 0.1f, ProsperityFromMarketText);
-					}
+					if (num3 > 0) explainedNumber.Add(num3 * 0.1f, ProsperityFromMarketText);
 
 					float merchantGold = fortification.Gold;
 					float merchantEffect = merchantGold < 20000f ? (merchantGold / 10000f) - 2f : merchantGold >= 200000f ? MathF.Min((200000f * 0.000005f) - 1f, 2f) : 0f;
@@ -140,10 +142,9 @@ namespace BannerKings.Models
             return baseResult;
         }
 
-		private void GetSettlementProsperityChangeDueToIssues(Settlement settlement, ref ExplainedNumber result)
-		{
+		private void GetSettlementProsperityChangeDueToIssues(Settlement settlement, ref ExplainedNumber result) => 
 			Campaign.Current.Models.IssueModel.GetIssueEffectsOfSettlement(DefaultIssueEffects.SettlementProsperity, settlement, ref result);
-		}
+		
 
 		private static readonly TextObject FoodShortageText = new TextObject("{=qTFKvGSg}Food Shortage");
 		private static readonly TextObject ProsperityFromMarketText = new TextObject("{=RNT5hMVb}Goods From Market");
