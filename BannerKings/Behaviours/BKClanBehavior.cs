@@ -33,6 +33,10 @@ namespace BannerKings.Behaviours
 
             if (clan == Clan.PlayerClan) return;
 
+            foreach (Hero companion in clan.Companions)
+                if (companion.Occupation == Occupation.Lord)
+                    companion.CompanionOf = null;
+
             foreach (WarPartyComponent component in clan.WarPartyComponents)
             {
                 Hero leader = component.Leader;

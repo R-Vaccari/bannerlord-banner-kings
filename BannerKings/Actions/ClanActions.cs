@@ -55,6 +55,7 @@ namespace BannerKings.Actions
         {
             hero.Clan = null;
             hero.CompanionOf = null;
+            hero.SetNewOccupation(Occupation.Lord);
             hero.Clan = clan;
         }
 

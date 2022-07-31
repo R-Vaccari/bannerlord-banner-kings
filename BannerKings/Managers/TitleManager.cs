@@ -113,8 +113,7 @@ namespace BannerKings.Managers
             TitleAction action = BannerKingsConfig.Instance.TitleModel.GetAction(ActionType.Grant, title, grantor);
             action.Influence = -BannerKingsConfig.Instance.TitleModel.GetGrantKnighthoodCost(grantor).ResultNumber;
             action.TakeAction(knight);
-            GiveGoldAction.ApplyBetweenCharacters(grantor, knight, 5000);
-            knight.SetNewOccupation(Occupation.Lord);
+            if (grantor == Hero.MainHero) GiveGoldAction.ApplyBetweenCharacters(grantor, knight, 5000);
             ClanActions.JoinClan(knight, Clan.PlayerClan);
         }
 
