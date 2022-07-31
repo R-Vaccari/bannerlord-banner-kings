@@ -88,13 +88,13 @@ namespace BannerKings.Behaviours
                 {
                     Hero hero = HeroCreator.CreateSpecialHero(template, settlement, clan, null,
                     Campaign.Current.Models.AgeModel.HeroComesOfAge + 5 + MBRandom.RandomInt(27));
-                    hero.SetNewOccupation(Occupation.Lord);
+                    BannerKingsConfig.Instance.TitleManager.GrantKnighthood(title, hero, title.deJure);
+
                     EquipmentHelper.AssignHeroEquipmentFromEquipment(hero, roster.AllEquipments.GetRandomElement());
-                    GainKingdomInfluenceAction.ApplyForDefault(clan.Leader, -150f);
-                    BannerKingsConfig.Instance.TitleManager.GrantLordship(title, title.deJure, hero);
                     bool mainParty = hero.PartyBelongedTo == MobileParty.MainParty;
                     MobilePartyHelper.CreateNewClanMobileParty(hero, clan, out mainParty);
                     WarPartyComponent component = clan.WarPartyComponents.FirstOrDefault(x => x.Leader == hero);
+                    
                     if (component != null)
                         EnterSettlementAction.ApplyForParty(component.MobileParty, settlement);
                 }    

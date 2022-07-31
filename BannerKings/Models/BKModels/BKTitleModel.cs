@@ -11,6 +11,12 @@ namespace BannerKings.Models.BKModels
     public class BKTitleModel : IBannerKingsModel
     {
 
+        public ExplainedNumber GetGrantKnighthoodCost(Hero grantor)
+        {
+            ExplainedNumber result = new ExplainedNumber(150f, true);
+
+            return result;
+        }
         public TitleAction GetFoundKingdom(Kingdom faction, Hero founder)
         {
             TitleAction foundAction = new TitleAction(ActionType.Found, null, founder);

@@ -1,4 +1,5 @@
-﻿using BannerKings.Managers.Titles;
+﻿using BannerKings.Actions;
+using BannerKings.Managers.Titles;
 using BannerKings.Models.BKModels;
 using System;
 using System.Collections.Generic;
@@ -104,6 +105,15 @@ namespace BannerKings.Managers
                     type = title.contract.Government;
 
             return type;
+        }
+
+        public void GrantKnighthood(FeudalTitle title, Hero knight, Hero grantor)
+        {
+            BannerKingsConfig.Instance.TitleManager.GrantLordship(title, grantor, knight);
+            GainKingdomInfluenceAction.ApplyForDefault(grantor, -BannerKingsConfig.Instance.TitleModel.GetGrantKnighthoodCost(grantor).ResultNumber);
+            GiveGoldAction.ApplyBetweenCharacters(grantor, knight, 5000);
+            knight.SetNewOccupation(Occupation.Lord);
+            ClanActions.JoinClan(knight, Clan.PlayerClan);
         }
 
         public bool IsHeroKnighted(Hero hero) => hero.IsNoble && IsHeroTitleHolder(hero);

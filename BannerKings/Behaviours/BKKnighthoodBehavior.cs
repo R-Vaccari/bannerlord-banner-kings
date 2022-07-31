@@ -210,14 +210,7 @@ namespace BannerKings.Behaviors
         private void OnNewPartySelectionOver(List<InquiryElement> element)
         {
             if (element.Count == 0) return;
-
-            Hero knight = Hero.OneToOneConversationHero;
-            titleGiven = (FeudalTitle)element[0].Identifier;
-            BannerKingsConfig.Instance.TitleManager.GrantLordship(this.titleGiven, Hero.MainHero, knight);
-            GainKingdomInfluenceAction.ApplyForDefault(Hero.MainHero, -150f);
-            GiveGoldAction.ApplyBetweenCharacters(Hero.MainHero, knight, 5000);
-            knight.SetNewOccupation(Occupation.Lord);
-            ClanActions.JoinClan(knight, Clan.PlayerClan);
+            BannerKingsConfig.Instance.TitleManager.GrantKnighthood((FeudalTitle)element[0].Identifier, Hero.OneToOneConversationHero, Hero.MainHero);
         }
     }
 

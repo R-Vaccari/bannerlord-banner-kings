@@ -10,6 +10,7 @@ namespace BannerKings.UI.Court
         public CouncillorHeroVM(Hero hero, TextObject positionName) : base(hero)
         {
             this.positionName = positionName;
+            RefreshValues();
         }
 
         public override void RefreshValues()
