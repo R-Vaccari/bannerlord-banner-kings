@@ -98,22 +98,23 @@ namespace BannerKings.Managers.Innovations
             if (culturalHead == null) return;
 
             List<Innovation> unfinished = innovations.FindAll(x => !x.Finished);
-            if (fascination == null) ChangeFascination(unfinished.GetRandomElement());
-            for (int i = 0; i < 10; i++)
+            if (unfinished.Count > 0)
             {
-                Innovation random = unfinished.GetRandomElement();
-                float result = research * 0.1f;
-                if (random == fascination)
+                if (fascination == null) ChangeFascination(unfinished.GetRandomElement());
+                for (int i = 0; i < 10; i++)
                 {
-                    float toAdd = 1.1f;
-                    if (culturalHead.Leader.GetPerkValue(BKPerks.Instance.ScholarshipWellRead))
-                        toAdd += 0.2f;
-                    result *= toAdd;
+                    Innovation random = unfinished.GetRandomElement();
+                    float result = research * 0.1f;
+                    if (random == fascination)
+                    {
+                        float toAdd = 1.1f;
+                        if (culturalHead.Leader.GetPerkValue(BKPerks.Instance.ScholarshipWellRead))
+                            toAdd += 0.2f;
+                        result *= toAdd;
+                    }
+                    random.AddProgress(result);
                 }
-                random.AddProgress(result);
             }
-
-            
 
             research = 0f;
         }
