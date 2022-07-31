@@ -157,8 +157,11 @@ namespace BannerKings.Models
             if (settlement.OwnerClan != null)
             {
                 EducationData education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(settlement.Owner);
-                if (education.Perks.Contains(BKPerks.Instance.CivilManufacturer))
+                if (education.HasPerk(BKPerks.Instance.CivilManufacturer))
                     result.Add(0.15f, BKPerks.Instance.CivilManufacturer.Name);
+
+                if (settlement.Owner.GetPerkValue(BKPerks.Instance.LordshipEconomicAdministration))
+                    result.Add(0.1f, BKPerks.Instance.CivilManufacturer.Name);
             }
 
             InnovationData innovations = BannerKingsConfig.Instance.InnovationsManager.GetInnovationData(settlement.Culture);

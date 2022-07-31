@@ -31,6 +31,7 @@ namespace BannerKings.Managers.Skills
 
         public PerkObject SiegeEngineer => siegeEngineer;
 
+        public PerkObject LordshipEconomicAdministration => LordshipEconomicAdministration;
         public PerkObject ScholarshipLiterate => scholarshipLiterate;
         public PerkObject ScholarshipAvidLearner => scholarshipLearner;
         public PerkObject ScholarshipTutor => scholarshipTutor;
@@ -195,10 +196,10 @@ namespace BannerKings.Managers.Skills
                 TroopClassFlag.None, TroopClassFlag.None);
 
             lordshipEconomicAdministration.InitializeNew("{=!}Economic Administration", BKSkills.Instance.Lordship, GetTierCost(3), lordshipMilitaryAdministration,
-                "{=!}Increased settlement production efficiency by 20%",
+                "{=!}Increased settlement production efficiency by 10%",
                 SkillEffect.PerkRole.Ruler, 0.2f,
                 SkillEffect.EffectIncrementType.AddFactor,
-                "{=!}Increased settlement production quality by 10%",
+                "{=!}Increased settlement production quality by 5%",
                 SkillEffect.PerkRole.Ruler, 0.1f,
                 SkillEffect.EffectIncrementType.AddFactor,
                 TroopClassFlag.None, TroopClassFlag.None);

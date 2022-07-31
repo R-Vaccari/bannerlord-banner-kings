@@ -51,7 +51,7 @@ namespace BannerKings.UI
             ExplainedNumber quality = data.EconomicData.ProductionQuality;
             ProductionInfo.Add(new InformationElement(new TextObject("Production Quality:").ToString(), FormatValue(quality.ResultNumber),
                new TextObject("{=!}{TEXT}\n{EXPLANATIONS}")
-               .SetTextVariable("TEXT", new TextObject("{=!}How much workshops expend to produce output. Higher quality yields more profit."))
+               .SetTextVariable("TEXT", new TextObject("{=!}Describes the quality of products produced in this settlement. Higher quality means workshops are more likely to produce goods with positive modifiers, therefore yielding a higher income. Because better products are more expensive, more money is extracted from caravans into market gold and the owner's tariff. This is also a factor in workshop prices."))
                .SetTextVariable("EXPLANATIONS", quality.GetExplanations())
                .ToString()));
 

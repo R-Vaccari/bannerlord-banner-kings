@@ -3,12 +3,60 @@ using TaleWorlds.CampaignSystem.SandBox.GameComponents;
 using System.Linq;
 using BannerKings.Populations;
 using BannerKings.Managers.Policies;
+using TaleWorlds.Core;
+using TaleWorlds.Library;
 
 namespace BannerKings.Models
 {
     class BKWorkshopModel : DefaultWorkshopModel
     {
-        
+        public override int GetSellingCost(Workshop workshop)
+        {
+
+
+            return (int)(GetBuyingCostForPlayer(workshop) * 0.5f);
+        }
+
+        public override int GetBuyingCostForPlayer(Workshop workshop)
+        {
+            float result = base.GetSellingCost(workshop) + 10000;
+
+            if (workshop.Settlement != null)
+            {
+                Town town = workshop.Settlement.Town;
+                int costs = 0;
+                int sellValue = 0;
+                MBReadOnlyList<ItemObject> items = Game.Current.ObjectManager.GetObjectTypeList<ItemObject>();
+
+                foreach (WorkshopType.Production production in workshop.WorkshopType.Productions)
+                {
+                    foreach ((ItemCategory, int) input in production.Inputs)
+                        costs += GetCost(items, town, input.Item1, input.Item2);
+
+                    foreach ((ItemCategory, int) output in production.Outputs)
+                        sellValue += GetCost(items, town, output.Item1, output.Item2);
+                }
+
+                result += (int)((sellValue - costs) * (float)CampaignTime.DaysInYear);
+                result *= BannerKingsConfig.Instance.EconomyModel.CalculateProductionQuality(workshop.Settlement).ResultNumber;
+                
+            }
+
+            if (workshop.Owner.OwnedWorkshops.Count == 1) result *= 1.2f;
+            if (workshop.Owner.OwnedCommonAreas.Count == 0) result *= 1.2f;
+
+            return (int)result;
+        }
+
+        private int GetCost(MBReadOnlyList<ItemObject> items, Town town, ItemCategory category, int quantity)
+        {
+            float cost = 0;
+            ItemObject item = items.FirstOrDefault(x => x.ItemCategory == category);
+            if (item != null) cost += town.GetItemPrice(item) * (float)quantity;
+
+            return (int)cost;
+        }
+
         public override float GetPolicyEffectToProduction(Town town)
         {
             if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
