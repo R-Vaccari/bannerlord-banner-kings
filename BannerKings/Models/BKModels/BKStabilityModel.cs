@@ -1,4 +1,6 @@
-﻿using BannerKings.Managers.Titles;
+﻿using BannerKings.Managers.Education;
+using BannerKings.Managers.Skills;
+using BannerKings.Managers.Titles;
 using BannerKings.Populations;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
@@ -106,6 +108,10 @@ namespace BannerKings.Models
                 result.Add(assimilation / 5f, new TextObject("Cultural assimilation"));
                 result.Add(averageSatisfaction / 5f, new TextObject("Produce satisfactions"));
                 result.Add(data.NotableSupport.ResultNumber / 5f, new TextObject("{=!}Notable support"));
+
+                EducationData education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(town.OwnerClan.Leader);
+                if (education.Perks.Contains(BKPerks.Instance.CivilEngineer))
+                    result.Add(0.05f, BKPerks.Instance.CivilEngineer.Name);
 
                 float demesneLimit = CalculateDemesneLimit(settlement.Owner).ResultNumber;
                 float currentDemesne = CalculateCurrentDemesne(settlement.OwnerClan).ResultNumber;

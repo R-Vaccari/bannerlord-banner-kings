@@ -1,5 +1,7 @@
 ﻿using BannerKings.Managers.Court;
+using BannerKings.Managers.Education;
 using BannerKings.Managers.Policies;
+using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
 using BannerKings.Populations;
 using System;
@@ -151,6 +153,13 @@ namespace BannerKings.Models
             if (government == GovernmentType.Feudal)
                 result.AddFactor(0.15f, new TextObject("{=!}Government"));
 
+            if (settlement.OwnerClan != null)
+            {
+                EducationData education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(settlement.Owner);
+                if (education.Perks.Contains(BKPerks.Instance.CivilManufacturer))
+                    result.Add(0.15f, BKPerks.Instance.CivilManufacturer.Name);
+            }
+
             BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref result, settlement.OwnerClan.Leader, CouncilPosition.Steward, 0.15f, true);
 
             return result;
@@ -158,7 +167,20 @@ namespace BannerKings.Models
 
         public ExplainedNumber CalculateProductionQuality(Settlement settlement)
         {
-            return new ExplainedNumber(1f, true);
+            ExplainedNumber result =  new ExplainedNumber(1f, true);
+            result.LimitMin(0f);
+            result.LimitMax(2f);
+
+            result.Add((CalculateEffect(settlement).ResultNumber - 0.4f)  * 0.5f, new TextObject("{=!}Mercantilism"));
+
+            if (settlement.OwnerClan != null)
+            {
+                EducationData education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(settlement.Owner);
+                if (education.Perks.Contains(BKPerks.Instance.CivilManufacturer))
+                    result.Add(0.1f, BKPerks.Instance.CivilManufacturer.Name);
+            }
+
+            return result;
         }
     }
 }

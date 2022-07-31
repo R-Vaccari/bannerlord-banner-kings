@@ -16,7 +16,8 @@ namespace BannerKings.Managers.Skills
         private PerkObject lordshipTraditionalist, lordshipAdaptive, lordshipAccolade, lordshipManorLord,
             lordshipMilitaryAdministration, lordshipEconomicAdministration, lordshipClaimant, lordshipPatron;
 
-        private PerkObject fianHighlander, fianRanger, fianFennid, civilEngineer, civilCultivator, civilOverseer, civilManufacturer;
+        private PerkObject fianHighlander, fianRanger, fianFennid, civilEngineer, civilCultivator, civilOverseer, civilManufacturer,
+            siegeEngineer;
 
         public PerkObject FianHighlander => fianHighlander;
         public PerkObject FianRanger => fianRanger;
@@ -27,6 +28,8 @@ namespace BannerKings.Managers.Skills
         public PerkObject CivilManufacturer => civilManufacturer;
         public PerkObject CivilOverseer => civilOverseer;
 
+
+        public PerkObject SiegeEngineer => siegeEngineer;
 
         public PerkObject ScholarshipLiterate => scholarshipLiterate;
         public PerkObject ScholarshipAvidLearner => scholarshipLearner;
@@ -108,7 +111,7 @@ namespace BannerKings.Managers.Skills
                 "{=!}Stability increases by flat 5%.",
                 SkillEffect.PerkRole.Personal, 0.05f,
                 SkillEffect.EffectIncrementType.AddFactor,
-                "{=!}.",
+                "{=!}Increases infrastructure limit by flat 5.",
                 SkillEffect.PerkRole.Personal, 0.03f,
                 SkillEffect.EffectIncrementType.AddFactor,
                 TroopClassFlag.None, TroopClassFlag.None);
@@ -119,6 +122,18 @@ namespace BannerKings.Managers.Skills
                 SkillEffect.PerkRole.Personal, 0.05f,
                 SkillEffect.EffectIncrementType.AddFactor,
                 "{=!}Production quality increases by flat 10%.",
+                SkillEffect.PerkRole.Personal, 0.03f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                TroopClassFlag.None, TroopClassFlag.None);
+
+
+            siegeEngineer = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleSiegeEngineer"));
+            LifestylePerks.Add(siegeEngineer);
+            siegeEngineer.InitializeNew("{=!}Siege Engineer", null, 75, null,
+                "{=!}Get a pre-built catapult as attacker during siege.",
+                SkillEffect.PerkRole.Personal, 0.05f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                "{=!}Damage to walls increased by 10% during siege.",
                 SkillEffect.PerkRole.Personal, 0.03f,
                 SkillEffect.EffectIncrementType.AddFactor,
                 TroopClassFlag.None, TroopClassFlag.None);

@@ -1,4 +1,6 @@
-﻿using BannerKings.Populations;
+﻿using BannerKings.Managers.Education;
+using BannerKings.Managers.Skills;
+using BannerKings.Populations;
 using Helpers;
 using System;
 using System.Linq;
@@ -109,6 +111,10 @@ namespace BannerKings.Models
 			PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
 			result.Add(GetWorkforce(town.Settlement), new TextObject("{=!}Workforce"), null);
 			result.Add(3f, new TextObject("Base"), null);
+
+			EducationData education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(town.OwnerClan.Leader);
+			if (education.Perks.Contains(BKPerks.Instance.CivilEngineer))
+				result.AddFactor(0.2f, BKPerks.Instance.CivilEngineer.Name);
 
 			if (town.IsCastle && town.Security >= 50)
 				if (town.GarrisonParty != null)
