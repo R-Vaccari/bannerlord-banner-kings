@@ -1,5 +1,6 @@
 ﻿using BannerKings.Managers.Court;
 using BannerKings.Managers.Education;
+using BannerKings.Managers.Innovations;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
@@ -158,6 +159,19 @@ namespace BannerKings.Models
                 EducationData education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(settlement.Owner);
                 if (education.Perks.Contains(BKPerks.Instance.CivilManufacturer))
                     result.Add(0.15f, BKPerks.Instance.CivilManufacturer.Name);
+            }
+
+            InnovationData innovations = BannerKingsConfig.Instance.InnovationsManager.GetInnovationData(settlement.Culture);
+            if (innovations != null)
+            {
+                if (innovations.HasFinishedInnovation(DefaultInnovations.Instance.Wheelbarrow))
+                    result.AddFactor(0.06f, DefaultInnovations.Instance.Wheelbarrow.Name);
+
+                if (innovations.HasFinishedInnovation(DefaultInnovations.Instance.BlastFurnace))
+                    result.AddFactor(0.15f, DefaultInnovations.Instance.BlastFurnace.Name);
+
+                if (innovations.HasFinishedInnovation(DefaultInnovations.Instance.Cranes))
+                    result.AddFactor(0.06f, DefaultInnovations.Instance.Cranes.Name);
             }
 
             BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref result, settlement.OwnerClan.Leader, CouncilPosition.Steward, 0.15f, true);

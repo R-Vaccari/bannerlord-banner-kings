@@ -15,6 +15,9 @@ using TaleWorlds.SaveSystem;
 using static BannerKings.Managers.PopulationManager;
 using static BannerKings.Managers.Policies.BKWorkforcePolicy;
 using BannerKings.Managers.Institutions.Guilds;
+using BannerKings.Managers.Education;
+using BannerKings.Managers.Skills;
+using BannerKings.Managers.Innovations;
 
 namespace BannerKings.Populations
 {
@@ -802,11 +805,35 @@ namespace BannerKings.Populations
 
         public float GetAcreOutput(string type)
         {
-            if (type == "farmland")
-                return 0.022f;
-            else if (type == "pasture")
-                return 0.008f;
-            else return 0.0018f;
+            float result = 0f;
+            if (type == "farmland") result = 0.018f;
+            else if (type == "pasture") result = 0.006f;
+            else result = 0.0012f;
+
+            Hero owner = null;
+            if (data.Settlement.OwnerClan != null) owner = data.Settlement.Owner;
+            if (owner != null)
+            {
+                EducationData data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(owner);
+                if (data.HasPerk(BKPerks.Instance.CivilCultivator))
+                    result *= 0.05f;
+            }
+
+            InnovationData innovations = BannerKingsConfig.Instance.InnovationsManager.GetInnovationData(data.Settlement.Culture);
+            if (innovations != null)
+            {
+                if (type == "farmland")
+                {
+                    if (innovations.HasFinishedInnovation(DefaultInnovations.Instance.HeavyPlough))
+                        result *= 0.08f;
+
+                    if (innovations.HasFinishedInnovation(DefaultInnovations.Instance.ThreeFieldsSystem))
+                        result *= 0.25f;
+                }
+            }
+
+
+            return result;
         }
 
         public float Acreage => farmland + pasture + woodland;

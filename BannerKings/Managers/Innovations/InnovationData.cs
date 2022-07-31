@@ -6,6 +6,7 @@ using TaleWorlds.Core;
 using BannerKings.Managers.Skills;
 using TaleWorlds.SaveSystem;
 using TaleWorlds.Localization;
+using System.Linq;
 
 namespace BannerKings.Managers.Innovations
 {
@@ -47,6 +48,15 @@ namespace BannerKings.Managers.Innovations
             }
         }
 
+        public bool HasFinishedInnovation(Innovation innovation)
+        {
+            if (innovations.Contains(innovation))
+                foreach (Innovation i in innovations)
+                    if (i == innovation)
+                        return i.Finished;
+
+            return false;
+        }
         public bool CanAssumeCulturalHead(Clan clan)
         {
             float renown = 0f;

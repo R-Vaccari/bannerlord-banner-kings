@@ -1,4 +1,5 @@
 ﻿using BannerKings.Managers.Education;
+using BannerKings.Managers.Innovations;
 using BannerKings.Managers.Skills;
 using BannerKings.Populations;
 using Helpers;
@@ -115,6 +116,13 @@ namespace BannerKings.Models
 			EducationData education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(town.OwnerClan.Leader);
 			if (education.Perks.Contains(BKPerks.Instance.CivilEngineer))
 				result.AddFactor(0.2f, BKPerks.Instance.CivilEngineer.Name);
+
+			InnovationData innovations = BannerKingsConfig.Instance.InnovationsManager.GetInnovationData(town.Culture);
+			if (innovations != null)
+			{
+				if (innovations.HasFinishedInnovation(DefaultInnovations.Instance.Cranes))
+					result.AddFactor(0.12f, DefaultInnovations.Instance.Cranes.Name);
+			}
 
 			if (town.IsCastle && town.Security >= 50)
 				if (town.GarrisonParty != null)

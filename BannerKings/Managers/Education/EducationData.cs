@@ -91,6 +91,8 @@ namespace BannerKings.Managers.Education
 
         public void AddPerk(PerkObject perk) => gainedPerks.Add(perk);
 
+        public bool HasPerk(PerkObject perk) => gainedPerks.Contains(perk);
+
         public void SetCurrentLifestyle(Lifestyle lifestyle)
         {
             this.lifestyle = lifestyle;
