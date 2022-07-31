@@ -146,15 +146,17 @@ namespace BannerKings.Managers.Education
             languages[language] += result;
             if (languages[language] >= 1f)
             {
+                languages[language] = 1f;
                 currentLanguage = null;
                 languageInstructor = null;
                 if (hero.Clan == Clan.PlayerClan) InformationManager.DisplayMessage(new InformationMessage(new TextObject("{HERO} has finished learning the {LANGUAGE} language.")
                     .SetTextVariable("HERO", hero.Name)
                     .SetTextVariable("LANGUAGE", language.Name)
                     .ToString()));
+                hero.AddSkillXp(BKSkills.Instance.Scholarship, 200);
             }
 
-            hero.AddSkillXp(BKSkills.Instance.Scholarship, MBMath.ClampInt((int)result, 1, 10)); 
+            hero.AddSkillXp(BKSkills.Instance.Scholarship, MBMath.ClampInt((int)result, 2, 10)); 
         }
 
         public void GainBookReading(BookType book, float rate)
@@ -163,14 +165,17 @@ namespace BannerKings.Managers.Education
             books[book] += result;
             if (books[book] >= 1f)
             {
+                books[book] = 1f;
+                book.FinishBook(hero);
                 currentBook = null;
                 if (hero.Clan == Clan.PlayerClan) InformationManager.DisplayMessage(new InformationMessage(new TextObject("{HERO} has finished reading {BOOK}.")
                     .SetTextVariable("HERO", hero.Name)
                     .SetTextVariable("BOOK", book.Name)
                     .ToString()));
+                hero.AddSkillXp(BKSkills.Instance.Scholarship, 200);
             }
             
-            hero.AddSkillXp(BKSkills.Instance.Scholarship, MBMath.ClampInt((int)result, 1, 10));
+            hero.AddSkillXp(BKSkills.Instance.Scholarship, MBMath.ClampInt((int)result, 2, 10));
         }
 
         internal override void Update(PopulationData data)

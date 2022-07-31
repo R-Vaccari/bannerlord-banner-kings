@@ -34,7 +34,8 @@ namespace BannerKings.Managers.Education.Books
             else
             {
                 hero.AddSkillXp(skill, 300f);
-                hero.HeroDeveloper.AddFocus(skill, 1);
+                if (hero.HeroDeveloper.CanAddFocusToSkill(skill)) hero.HeroDeveloper.AddFocus(skill, 1);
+                else hero.AddSkillXp(skill, 1000f);
             }
         }
 
