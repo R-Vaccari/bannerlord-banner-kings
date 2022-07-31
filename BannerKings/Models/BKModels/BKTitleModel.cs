@@ -13,7 +13,20 @@ namespace BannerKings.Models.BKModels
 
         public ExplainedNumber GetGrantKnighthoodCost(Hero grantor)
         {
-            ExplainedNumber result = new ExplainedNumber(150f, true);
+            ExplainedNumber result = new ExplainedNumber(120f, true);
+            FeudalTitle highest = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(grantor);
+
+            float extra = 0f;
+
+            if (highest.type < TitleType.Barony)
+            {
+                if (highest.type == TitleType.County) extra = 30f;
+                else if (highest.type == TitleType.Dukedom) extra = 60f;
+                else if (highest.type == TitleType.Kingdom) extra = 100f;
+                else extra = 180f;
+            }
+
+            if (extra != 0f) result.Add(extra, new TextObject("{=!}Highest title level"));
 
             return result;
         }
@@ -438,6 +451,21 @@ namespace BannerKings.Models.BKModels
             else result = MBRandom.RandomInt(120, 150);
 
             return -result;
+        }
+
+        public int GetSkillReward(FeudalTitle title, ActionType type)
+        {
+            if (type == ActionType.Found) return 2000;
+
+            int result;
+            if (title.type == TitleType.Lordship) result = 100;
+            else if (title.type == TitleType.Barony) result = 200;
+            else if (title.type == TitleType.County) result = 300;
+            else if (title.type == TitleType.Dukedom) result = 500;
+            else if (title.type == TitleType.Kingdom) result = 1000;
+            else result = 1500;
+
+            return result;
         }
 
         public ExplainedNumber CalculateEffect(Settlement settlement)

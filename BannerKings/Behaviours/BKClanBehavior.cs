@@ -1,4 +1,5 @@
 ﻿using BannerKings.Actions;
+using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
 using Helpers;
 using System.Collections.Generic;
@@ -27,9 +28,8 @@ namespace BannerKings.Behaviours
                 BannerKingsConfig.Instance.TitleManager == null) return;
 
             BannerKingsConfig.Instance.CourtManager.UpdateCouncil(clan);
-            foreach (Hero companion in clan.Companions)
-                if (companion.Occupation == Occupation.Lord)
-                    companion.CompanionOf = null;
+            int councillours = BannerKingsConfig.Instance.CourtManager.GetCouncilloursCount(clan);
+            if (councillours != 0) clan.Leader.AddSkillXp(BKSkills.Instance.Lordship, councillours * 2f);
 
             if (clan == Clan.PlayerClan) return;
 

@@ -1,4 +1,5 @@
 ﻿using BannerKings.Actions;
+using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
 using BannerKings.Models.BKModels;
 using System;
@@ -109,8 +110,9 @@ namespace BannerKings.Managers
 
         public void GrantKnighthood(FeudalTitle title, Hero knight, Hero grantor)
         {
-            BannerKingsConfig.Instance.TitleManager.GrantLordship(title, grantor, knight);
-            GainKingdomInfluenceAction.ApplyForDefault(grantor, -BannerKingsConfig.Instance.TitleModel.GetGrantKnighthoodCost(grantor).ResultNumber);
+            TitleAction action = BannerKingsConfig.Instance.TitleModel.GetAction(ActionType.Grant, title, grantor);
+            action.Influence = -BannerKingsConfig.Instance.TitleModel.GetGrantKnighthoodCost(grantor).ResultNumber;
+            action.TakeAction(knight);
             GiveGoldAction.ApplyBetweenCharacters(grantor, knight, 5000);
             knight.SetNewOccupation(Occupation.Lord);
             ClanActions.JoinClan(knight, Clan.PlayerClan);
@@ -301,15 +303,18 @@ namespace BannerKings.Managers
                 action.ActionTaker.Clan.Renown -= action.Renown;
         }
 
-        public void GrantTitle(Hero receiver, Hero grantor, FeudalTitle title, float influence)
+        public void GrantTitle(TitleAction action, Hero receiver)
         {
-            ExecuteOwnershipChange(grantor, receiver, title, true);
+            Hero grantor = action.ActionTaker;
+            ExecuteOwnershipChange(grantor, receiver, action.Title, true);
             Kingdom kingdom = grantor.Clan.Kingdom;
             if (receiver.Clan.Kingdom != null && receiver.Clan.Kingdom == kingdom)
-                ExecuteOwnershipChange(grantor, receiver, title, false);
+                ExecuteOwnershipChange(grantor, receiver, action.Title, false);
 
-            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(grantor, receiver, (int)((float)new BKTitleModel().GetRelationImpact(title) * -1f), true);
-            GainKingdomInfluenceAction.ApplyForDefault(grantor, influence);
+            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(grantor, receiver, BannerKingsConfig.Instance.TitleModel.GetRelationImpact(action.Title), true);
+            GainKingdomInfluenceAction.ApplyForDefault(grantor, action.Influence);
+            grantor.AddSkillXp(BKSkills.Instance.Lordship, BannerKingsConfig.Instance.TitleModel.GetSkillReward(action.Title, action.Type));
+
         }
 
         public void FoundKingdom(TitleAction action)
@@ -327,6 +332,7 @@ namespace BannerKings.Managers
                     .SetTextVariable("FOUNDER", action.ActionTaker.Name)
                     .SetTextVariable("TITLE", title.FullName),
                     0, null, "event:/ui/notification/relation");
+            action.ActionTaker.AddSkillXp(BKSkills.Instance.Lordship, BannerKingsConfig.Instance.TitleModel.GetSkillReward(action.Title, action.Type));
         }
 
         public void UsurpTitle(Hero oldOwner, TitleAction action)
@@ -342,7 +348,7 @@ namespace BannerKings.Managers
                     .SetTextVariable("USURPER", usurper.Name)
                     .SetTextVariable("TITLE", action.Title.FullName));
            
-            int impact = new BKTitleModel().GetRelationImpact(title);
+            int impact = BannerKingsConfig.Instance.TitleModel.GetRelationImpact(title);
             ChangeRelationAction.ApplyRelationChangeBetweenHeroes(usurper, oldOwner, impact, true);
             Kingdom kingdom = oldOwner.Clan.Kingdom;
             if (kingdom != null) 
@@ -364,6 +370,8 @@ namespace BannerKings.Managers
             title.RemoveClaim(usurper);
             title.AddClaim(oldOwner, ClaimType.Previous_Owner, true);
             ExecuteOwnershipChange(oldOwner, usurper, title, true);
+
+            action.ActionTaker.AddSkillXp(BKSkills.Instance.Lordship, BannerKingsConfig.Instance.TitleModel.GetSkillReward(action.Title, action.Type));
 
             //OwnershipNotification notification = new OwnershipNotification(title, new TextObject(string.Format("You are now the rightful owner to {0}", title.name)));
             //Campaign.Current.CampaignInformationManager.NewMapNoticeAdded(notification);
@@ -388,7 +396,10 @@ namespace BannerKings.Managers
             FeudalTitle lordship = (from l in lordships where l.fief != null select l into x orderby x.fief.Village.Hearth select x).FirstOrDefault<FeudalTitle>();
             if (lordship != null)
             {
-                BannerKingsConfig.Instance.TitleManager.GrantLordship(lordship, newKingdom.Leader, clan.Leader);
+                TitleAction action = BannerKingsConfig.Instance.TitleModel.GetAction(ActionType.Grant, lordship, newKingdom.Leader);
+                action.Influence = -BannerKingsConfig.Instance.TitleModel.GetGrantKnighthoodCost(newKingdom.Leader).ResultNumber;
+                action.TakeAction(clan.Leader);
+
                 if (clan == Clan.PlayerClan)
                 {
                     GameTexts.SetVariable("FIEF", lordship.FullName);
@@ -643,13 +654,6 @@ namespace BannerKings.Managers
                 target = settlement.Owner;
 
             return target;
-        }
-
-        public void GrantLordship(FeudalTitle title, Hero giver, Hero receiver)
-        {
-            ExecuteOwnershipChange(giver, receiver, title, true);
-            ExecuteOwnershipChange(giver, receiver, title, false);
-            receiver.IsNoble = true;
         }
 
         public void ApplyOwnerChange(Settlement settlement, Hero newOwner)

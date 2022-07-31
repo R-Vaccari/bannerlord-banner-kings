@@ -19,9 +19,7 @@ namespace BannerKings.Behaviors
 {
     public class BKKnighthoodBehavior : CampaignBehaviorBase
     {
-
-        private FeudalTitle titleGiven = null;
-        List<InquiryElement> lordshipsToGive = new List<InquiryElement>();
+        private List<InquiryElement> lordshipsToGive = new List<InquiryElement>();
         public override void RegisterEvents()
         {
             CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, new Action<CampaignGameStarter>(OnSessionLaunched));
@@ -109,10 +107,10 @@ namespace BannerKings.Behaviors
             knighthoodSb.Append(Environment.NewLine);
             knighthoodSb.Append(" ");
             knighthoodSb.Append(Environment.NewLine);
-            knighthoodSb.Append("As a knight, they are capable of raising a personal retinue and are obliged to fulfill their duties.");
+            knighthoodSb.Append("As a knight, they are capable of raising a personal retinue to serve your clan and are obliged to fulfill their duties.");
 
             starter.AddPlayerLine("companion_grant_knighthood", "companion_role", "companion_knighthood_question", "Would you like to serve me as my knight?", 
-                new ConversationSentence.OnConditionDelegate(this.GrantKnighthoodOnCondition), delegate {
+                new ConversationSentence.OnConditionDelegate(GrantKnighthoodOnCondition), delegate {
                     InformationManager.ShowInquiry(new InquiryData("Bestowing Knighthood", knighthoodSb.ToString(), true, false, "Understood", null, null, null), false);
                 }, 100, new ConversationSentence.OnClickableConditionDelegate(GrantKnighthoodOnClickable), null);
 
@@ -120,7 +118,7 @@ namespace BannerKings.Behaviors
                 "My lord, I would be honored.", null, null, 100, null); 
 
             starter.AddPlayerLine("companion_grant_knighthood_response_confirm", "companion_knighthood_response", "companion_knighthood_accepted", "Let us decide your fief.",
-                new ConversationSentence.OnConditionDelegate(this.CompanionKnighthoodAcceptedCondition), new ConversationSentence.OnConsequenceDelegate(this.GrantKnighthoodOnConsequence), 100, null, null);
+                new ConversationSentence.OnConditionDelegate(CompanionKnighthoodAcceptedCondition), new ConversationSentence.OnConsequenceDelegate(GrantKnighthoodOnConsequence), 100, null, null);
 
             starter.AddPlayerLine("companion_grant_knighthood_response_cancel", "companion_knighthood_response", "companion_role_pretalk", "Actualy, I would like to discuss this at a later time.",
                null, null, 100, null, null);
@@ -143,7 +141,8 @@ namespace BannerKings.Behaviors
             foreach (FeudalTitle title in titles)
             {
                 if (title.type != TitleType.Lordship || title.fief == null || title.deJure != Hero.MainHero) continue;
-                lordshipsToGive.Add(new InquiryElement(title, title.FullName.ToString(), new ImageIdentifier()));
+                TitleAction action = BannerKingsConfig.Instance.TitleModel.GetAction(ActionType.Grant, title, Hero.MainHero);
+                lordshipsToGive.Add(new InquiryElement(title, title.FullName.ToString(), null, action.Possible, action.Reason.ToString()));
             }
 
             if (lordshipsToGive.Count == 0)
@@ -186,12 +185,21 @@ namespace BannerKings.Behaviors
                 return false;
             }
 
-            if (Clan.PlayerClan.Influence < 150)
+            if (lordships.Count == 1)
             {
-                hintText = new TextObject("{=!}Bestowing knighthood requires {INFLUENCE} influence to legitimize your new vassal.", null);
-                hintText.SetTextVariable("INFLUENCE", 150);
+                hintText = new TextObject("{=!}You cannot grant away your only lordship.", null);
                 return false;
             }
+
+            ExplainedNumber influence = BannerKingsConfig.Instance.TitleModel.GetGrantKnighthoodCost(Hero.MainHero);
+            if (Clan.PlayerClan.Influence < influence.ResultNumber)
+            {
+                hintText = new TextObject("{=!}Bestowing knighthood requires {INFLUENCE} influence to legitimize your new vassal.\n{EXPLANATIONS}", null)
+                    .SetTextVariable("INFLUENCE", influence.ResultNumber)
+                    .SetTextVariable("EXPLANATIONS", influence.GetExplanations());
+                return false;
+            }
+
 
             hintText = new TextObject("{=!}Bestowing knighthood requires {GOLD} gold to give your vassal financial security.", null);
             hintText.SetTextVariable("GOLD", 5000);
@@ -199,19 +207,15 @@ namespace BannerKings.Behaviors
             return Hero.MainHero.Gold >= 5000;
         }
 
-        private void GrantKnighthoodOnConsequence()
-        {
-            InformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                    "Select the fief you would like to give away", string.Empty, lordshipsToGive, true, 1, 
-                    GameTexts.FindText("str_done", null).ToString(), "", new Action<List<InquiryElement>>(OnNewPartySelectionOver), 
-                    new Action<List<InquiryElement>>(OnNewPartySelectionOver), ""), false);
-        }
-
-        private void OnNewPartySelectionOver(List<InquiryElement> element)
-        {
-            if (element.Count == 0) return;
-            BannerKingsConfig.Instance.TitleManager.GrantKnighthood((FeudalTitle)element[0].Identifier, Hero.OneToOneConversationHero, Hero.MainHero);
-        }
+        private void GrantKnighthoodOnConsequence() => InformationManager
+            .ShowMultiSelectionInquiry(new MultiSelectionInquiryData(new TextObject("{=!}Select the fief you would like to give away").ToString(), 
+                string.Empty, lordshipsToGive, false, 1, 
+                GameTexts.FindText("str_done", null).ToString(), string.Empty, 
+                delegate (List<InquiryElement> list) 
+                {
+                    BannerKingsConfig.Instance.TitleManager.GrantKnighthood((FeudalTitle)list[0].Identifier, Hero.OneToOneConversationHero, Hero.MainHero);
+                }, null, string.Empty), 
+            false);
     }
 
     namespace Patches

@@ -88,6 +88,8 @@ namespace BannerKings.Managers
             return null;
         }
 
+        public int GetCouncilloursCount(Clan clan) => GetCouncil(clan.Leader).GetOccupiedPositions().Count;
+
         public void UpdateCouncil(Clan clan)
         {
             CouncilData data = GetCouncil(clan.Leader);

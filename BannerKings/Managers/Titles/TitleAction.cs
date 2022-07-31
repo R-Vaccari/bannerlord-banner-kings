@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Titles
 {
@@ -30,14 +28,14 @@ namespace BannerKings.Managers.Titles
             if (!Possible) return;
 
             if (Type == ActionType.Usurp)
-                BannerKingsConfig.Instance.TitleManager.UsurpTitle(this.Title.deJure, this);
+                BannerKingsConfig.Instance.TitleManager.UsurpTitle(Title.deJure, this);
             else if (Type == ActionType.Claim)
                 BannerKingsConfig.Instance.TitleManager.AddOngoingClaim(this);
             else if (Type == ActionType.Revoke)
                 BannerKingsConfig.Instance.TitleManager.RevokeTitle(this);
             else if (Type == ActionType.Found)
                 BannerKingsConfig.Instance.TitleManager.FoundKingdom(this);
-            else BannerKingsConfig.Instance.TitleManager.GrantTitle(receiver, this.ActionTaker, this.Title, this.Influence);
+            else BannerKingsConfig.Instance.TitleManager.GrantTitle(this, receiver);
         }
     }
 
