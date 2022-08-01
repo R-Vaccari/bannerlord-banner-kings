@@ -18,7 +18,7 @@ namespace BannerKings.Models.Vanilla
             if (effectiveSiegePartyForSide != null && effectiveSiegePartyForSide.LeaderHero != null)
             {
                 EducationData data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(effectiveSiegePartyForSide.LeaderHero);
-                if (data.HasPerk(BKPerks.Instance.SiegePlanner))
+                if (data.HasPerk(BKPerks.Instance.SiegeOverseer))
                     result *= 1.2f;
             }
 

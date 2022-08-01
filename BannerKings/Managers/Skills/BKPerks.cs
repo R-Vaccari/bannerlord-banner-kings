@@ -17,7 +17,7 @@ namespace BannerKings.Managers.Skills
             lordshipMilitaryAdministration, lordshipEconomicAdministration, lordshipClaimant, lordshipPatron;
 
         private PerkObject fianHighlander, fianRanger, fianFennid, civilEngineer, civilCultivator, civilOverseer, civilManufacturer,
-            siegeEngineer, siegePlanner;
+            siegeEngineer, siegePlanner, siegeOverseer;
 
         public PerkObject FianHighlander => fianHighlander;
         public PerkObject FianRanger => fianRanger;
@@ -31,6 +31,7 @@ namespace BannerKings.Managers.Skills
 
         public PerkObject SiegeEngineer => siegeEngineer;
         public PerkObject SiegePlanner => siegePlanner;
+        public PerkObject SiegeOverseer => siegeOverseer;
 
         public PerkObject LordshipEconomicAdministration => lordshipEconomicAdministration;
         public PerkObject ScholarshipLiterate => scholarshipLiterate;
@@ -146,7 +147,18 @@ namespace BannerKings.Managers.Skills
                 "{=!}Ranged infantry deals 15% more damage in siege simulations.",
                 SkillEffect.PerkRole.Personal, 0.05f,
                 SkillEffect.EffectIncrementType.AddFactor,
-                "{=ta2z0bEv}Camp preparation is 20% faster..",
+                "{=rkKMB9qK}Wall hit points are increased by 25%.",
+                SkillEffect.PerkRole.Personal, 0.03f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                TroopClassFlag.None, TroopClassFlag.None);
+
+            siegeOverseer = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleSiegeOverseer"));
+            LifestylePerks.Add(siegeOverseer);
+            siegeOverseer.InitializeNew("{=!}Siege Overseer", null, 150, null,
+                "{=!}Army consumes 15% less food during sieges, either attacking or defending.",
+                SkillEffect.PerkRole.Personal, 0.05f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                "{=ta2z0bEv}Camp preparation is 20% faster.",
                 SkillEffect.PerkRole.Personal, 0.03f,
                 SkillEffect.EffectIncrementType.AddFactor,
                 TroopClassFlag.None, TroopClassFlag.None);
