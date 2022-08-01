@@ -301,14 +301,16 @@ namespace BannerKings.Models.BKModels
                 }
             }
 
-            List<Hero> candidates = this.GetGrantCandidates(grantor);
-            if (candidates.Count == 0)
+            if (title.type > TitleType.Lordship)
             {
-                grantAction.Possible = false;
-                grantAction.Reason = new TextObject("{=!}No valid candidates in kingdom.");
-                return grantAction;
+                List<Hero> candidates = GetGrantCandidates(grantor);
+                if (candidates.Count == 0)
+                {
+                    grantAction.Possible = false;
+                    grantAction.Reason = new TextObject("{=!}No valid candidates in kingdom.");
+                    return grantAction;
+                }
             }
-
 
             FeudalTitle highest = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(grantor);
             if (highest == title)
@@ -320,7 +322,7 @@ namespace BannerKings.Models.BKModels
             }
 
             grantAction.Possible = true;
-            grantAction.Influence = this.GetInfluenceUsurpCost(title) * 0.33f;
+            grantAction.Influence = GetInfluenceUsurpCost(title) * 0.33f;
             grantAction.Reason = new TextObject("{=!}You may grant away this title.");
             return grantAction;
         }

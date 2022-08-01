@@ -11,6 +11,20 @@ namespace BannerKings.Models.Vanilla
     public class BKSiegeEventModel : DefaultSiegeEventModel
     {
 
+        public override float GetConstructionProgressPerHour(SiegeEngineType type, SiegeEvent siegeEvent, ISiegeEventSide side)
+        {
+            float result = base.GetConstructionProgressPerHour(type, siegeEvent, side);
+            MobileParty effectiveSiegePartyForSide = this.GetEffectiveSiegePartyForSide(siegeEvent, side.BattleSide);
+            if (effectiveSiegePartyForSide != null && effectiveSiegePartyForSide.LeaderHero != null)
+            {
+                EducationData data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(effectiveSiegePartyForSide.LeaderHero);
+                if (data.HasPerk(BKPerks.Instance.SiegePlanner))
+                    result *= 1.2f;
+            }
+
+            return result;
+        }
+
         public override IEnumerable<SiegeEngineType> GetPrebuiltSiegeEnginesOfSettlement(Settlement settlement)
         {
             List<SiegeEngineType> baseResult = new List<SiegeEngineType>(base.GetPrebuiltSiegeEnginesOfSettlement(settlement));

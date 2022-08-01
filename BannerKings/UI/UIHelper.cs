@@ -126,7 +126,7 @@ namespace BannerKings.UI
 					description = new TextObject("{=!}Grant this title away to {RECEIVER}, making them the legal owner of it. If the receiver is in your kingdom and the title is landed (attached to a fief), they will also receive the direct ownership of that fief and it's revenue. Granting a title provides positive relations with the receiver.");
 					affirmativeText = new TextObject("{=!}Grant");
 					List<InquiryElement> options = new List<InquiryElement>();
-					foreach (Hero hero in (BannerKingsConfig.Instance.Models.First(x => x is BKTitleModel) as BKTitleModel).GetGrantCandidates(action.ActionTaker))
+					foreach (Hero hero in BannerKingsConfig.Instance.TitleModel.GetGrantCandidates(action.ActionTaker))
 						options.Add(new InquiryElement(hero, hero.Name.ToString(), new ImageIdentifier(CampaignUIHelper.GetCharacterCode(hero.CharacterObject))));
 
 

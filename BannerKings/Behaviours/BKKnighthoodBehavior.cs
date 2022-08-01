@@ -36,7 +36,13 @@ namespace BannerKings.Behaviors
                 BannerKingsConfig.Instance.TitleManager == null) return;
 
             FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(hero);
-            if (title == null ||  title.type != TitleType.Lordship || title.fief.Village == null || !CanCreateClan(hero)) return;
+            if (title == null ||  title.type != TitleType.Lordship || title.fief.Village == null) return;
+
+            //if (hero.Clan.GetName().ToString() == "Prienicos")
+             //   if (!hero.Clan.Heroes.Contains(hero))
+             //       ClanActions.JoinClan(hero, hero.Clan);
+
+            if (!CanCreateClan(hero)) return;
 
             Clan originalClan = hero.Clan;
             if (hero.Spouse != null && Utils.Helpers.IsClanLeader(hero.Spouse)) return;

@@ -17,7 +17,7 @@ namespace BannerKings.Managers.Skills
             lordshipMilitaryAdministration, lordshipEconomicAdministration, lordshipClaimant, lordshipPatron;
 
         private PerkObject fianHighlander, fianRanger, fianFennid, civilEngineer, civilCultivator, civilOverseer, civilManufacturer,
-            siegeEngineer;
+            siegeEngineer, siegePlanner;
 
         public PerkObject FianHighlander => fianHighlander;
         public PerkObject FianRanger => fianRanger;
@@ -30,6 +30,7 @@ namespace BannerKings.Managers.Skills
 
 
         public PerkObject SiegeEngineer => siegeEngineer;
+        public PerkObject SiegePlanner => siegePlanner;
 
         public PerkObject LordshipEconomicAdministration => lordshipEconomicAdministration;
         public PerkObject ScholarshipLiterate => scholarshipLiterate;
@@ -135,6 +136,17 @@ namespace BannerKings.Managers.Skills
                 SkillEffect.PerkRole.Personal, 0.05f,
                 SkillEffect.EffectIncrementType.AddFactor,
                 "{=!}Damage to walls increased by 10% during siege.",
+                SkillEffect.PerkRole.Personal, 0.03f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                TroopClassFlag.None, TroopClassFlag.None);
+
+            siegePlanner = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleSiegePlanner"));
+            LifestylePerks.Add(siegePlanner);
+            siegePlanner.InitializeNew("{=!}Siege Planner", null, 150, null,
+                "{=!}Ranged infantry deals 15% more damage in siege simulations.",
+                SkillEffect.PerkRole.Personal, 0.05f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                "{=ta2z0bEv}Camp preparation is 20% faster..",
                 SkillEffect.PerkRole.Personal, 0.03f,
                 SkillEffect.EffectIncrementType.AddFactor,
                 TroopClassFlag.None, TroopClassFlag.None);

@@ -32,29 +32,11 @@ namespace BannerKings.Behaviours
             if (councillours != 0) clan.Leader.AddSkillXp(BKSkills.Instance.Lordship, councillours * 2f);
 
             if (clan == Clan.PlayerClan) return;
-
-            foreach (Hero companion in clan.Companions)
-                if (companion.Occupation == Occupation.Lord)
-                    companion.CompanionOf = null;
-
-            foreach (WarPartyComponent component in clan.WarPartyComponents)
-            {
-                Hero leader = component.Leader;
-                
-                if (leader != null && leader != clan.Leader && leader.IsWanderer)
-                {
-                    FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(leader);
-                    if (title != null)
-                    {
-                        leader.SetNewOccupation(Occupation.Lord);
-                        ClanActions.JoinClan(leader, clan);
-                    }
-                }
-            }
                 
 
             if (clan.WarPartyComponents.Count < clan.CommanderLimit && clan.Companions.Count < clan.CompanionLimit && 
-                clan.Settlements.Count(x => x.IsVillage ) > 1 && clan.Influence >= 150)
+                clan.Settlements.Count(x => x.IsVillage ) > 1 && clan.Influence >= BannerKingsConfig.Instance.TitleModel
+                .GetGrantKnighthoodCost(clan.Leader).ResultNumber)
             {
                 Settlement village = clan.Settlements.GetRandomElementWithPredicate(x => x.IsVillage);
                 if (village == null) return;
@@ -92,6 +74,7 @@ namespace BannerKings.Behaviours
                 {
                     Hero hero = HeroCreator.CreateSpecialHero(template, settlement, clan, null,
                     Campaign.Current.Models.AgeModel.HeroComesOfAge + 5 + MBRandom.RandomInt(27));
+
                     BannerKingsConfig.Instance.TitleManager.GrantKnighthood(title, hero, title.deJure);
 
                     EquipmentHelper.AssignHeroEquipmentFromEquipment(hero, roster.AllEquipments.GetRandomElement());
