@@ -133,7 +133,7 @@ namespace BannerKings.Managers.Skills
             siegeEngineer = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleSiegeEngineer"));
             LifestylePerks.Add(siegeEngineer);
             siegeEngineer.InitializeNew("{=!}Siege Engineer", null, 75, null,
-                "{=!}Get a pre-built catapult as attacker during siege.",
+                "{=!}Get a pre-built ballista as attacker during siege.",
                 SkillEffect.PerkRole.Personal, 0.05f,
                 SkillEffect.EffectIncrementType.AddFactor,
                 "{=!}Damage to walls increased by 10% during siege.",

@@ -39,7 +39,7 @@ namespace BannerKings.Managers.Education.Lifestyles
 
             siegeEngineer = new Lifestyle("lifestyle_siegeEngineer");
             siegeEngineer.Initialize(new TextObject("{=!}Siege Engineer"), new TextObject("{=!}"), 
-                DefaultSkills.Engineering, DefaultSkills.Tactics, new List<PerkObject>() { });
+                DefaultSkills.Engineering, DefaultSkills.Tactics, new List<PerkObject>() { BKPerks.Instance.SiegeEngineer, BKPerks.Instance.SiegePlanner, BKPerks.Instance.SiegeOverseer });
 
             civilAdministrator = new Lifestyle("lifestyle_civilAdministrator");
             civilAdministrator.Initialize(new TextObject("{=!}Civil Administrator"), new TextObject("{=!}"), 

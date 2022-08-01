@@ -45,7 +45,7 @@ namespace BannerKings.Models.Vanilla
             {
                 EducationData data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(besiegerCamp.BesiegerParty.LeaderHero);
                 if (data.Perks.Contains(BKPerks.Instance.SiegeEngineer))
-                    baseResult.Add(DefaultSiegeEngineTypes.Catapult);
+                    baseResult.Add(DefaultSiegeEngineTypes.Ballista);
             }
 
             return baseResult;
