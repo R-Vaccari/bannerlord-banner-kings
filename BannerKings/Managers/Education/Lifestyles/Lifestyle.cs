@@ -16,6 +16,8 @@ namespace BannerKings.Managers.Education.Lifestyles
         private SkillObject firstSkill;
         private SkillObject secondSkill;
         private List<PerkObject> perks;
+        private TextObject effects;
+        private float firstEffect, secondEffect;
 
         public Lifestyle(string id) : base(id)
         {
@@ -24,12 +26,15 @@ namespace BannerKings.Managers.Education.Lifestyles
         }
 
         public void Initialize(TextObject name, TextObject description, SkillObject firstSkill, SkillObject secondSkill,
-            List<PerkObject> perks, CultureObject culture = null)
+            List<PerkObject> perks, TextObject effects, float firstEffect, float secondEffect, CultureObject culture = null)
         {
             Initialize(name, description);
             this.firstSkill = firstSkill;
             this.secondSkill = secondSkill;
             this.perks = perks;
+            this.effects = effects;
+            this.firstEffect = firstEffect;
+            this.secondEffect = secondEffect;
             this.culture = culture;
         }
 
@@ -57,6 +62,9 @@ namespace BannerKings.Managers.Education.Lifestyles
         public int InvestedFocus => investedFocus;
         public float Progress => progress;
         public CultureObject Culture => culture;
+        public TextObject PassiveEffects => effects.SetTextVariable("EFFECT1", firstEffect).SetTextVariable("EFFECT2", secondEffect);
+        public float FirstEffect => firstEffect;
+        public float SecondEffect => secondEffect;
         public SkillObject FirstSkill => firstSkill;
         public SkillObject SecondSkill => secondSkill;
         public MBReadOnlyList<PerkObject> Perks => perks.GetReadOnlyList();

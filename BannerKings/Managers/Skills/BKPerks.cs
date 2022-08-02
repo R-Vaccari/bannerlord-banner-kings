@@ -200,7 +200,7 @@ namespace BannerKings.Managers.Skills
                 "{=!}Demesne limit increased by 1.",
                 SkillEffect.PerkRole.Personal, 0.05f,
                 SkillEffect.EffectIncrementType.AddFactor,
-                "{=!}Title actions cost 5% less denarii and influence.",
+                "{=!}Title actions cost / yield 5% less / more denarii and influence.",
                 SkillEffect.PerkRole.Personal, 0.03f,
                 SkillEffect.EffectIncrementType.AddFactor,
                 TroopClassFlag.None, TroopClassFlag.None);
