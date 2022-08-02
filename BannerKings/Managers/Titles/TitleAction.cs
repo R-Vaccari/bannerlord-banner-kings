@@ -19,6 +19,8 @@ namespace BannerKings.Managers.Titles
             Vassals = new List<FeudalTitle>();
         }
 
+        public bool IsHostile() => Type == ActionType.Usurp || Type == ActionType.Claim || Type == ActionType.Revoke;
+
         public void SetTile(FeudalTitle title) => Title = title;
 
         public void SetVassals(List<FeudalTitle> vassals) => Vassals = vassals;

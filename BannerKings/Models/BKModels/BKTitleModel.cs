@@ -5,6 +5,8 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 using System.Linq;
+using BannerKings.Managers.Education;
+using BannerKings.Managers.Skills;
 
 namespace BannerKings.Models.BKModels
 {
@@ -92,7 +94,7 @@ namespace BannerKings.Models.BKModels
 
             foundAction.Possible = true;
             foundAction.Reason = new TextObject("{=!}Kingdom can be founded.");
-
+            ApplyDiscounts(foundAction);
             return foundAction;
         }
 
@@ -178,6 +180,7 @@ namespace BannerKings.Models.BKModels
 
             claimAction.Possible = true;
             claimAction.Reason = new TextObject("{=!}You may claim this title.");
+            ApplyDiscounts(claimAction);
 
             return claimAction;
         }
@@ -273,6 +276,7 @@ namespace BannerKings.Models.BKModels
 
             revokeAction.Possible = true;
             revokeAction.Reason = new TextObject("{=!}You may grant away this title.");
+            ApplyDiscounts(revokeAction);
             return revokeAction;
         }
 
@@ -324,6 +328,7 @@ namespace BannerKings.Models.BKModels
             grantAction.Possible = true;
             grantAction.Influence = GetInfluenceUsurpCost(title) * 0.33f;
             grantAction.Reason = new TextObject("{=!}You may grant away this title.");
+            ApplyDiscounts(grantAction);
             return grantAction;
         }
 
@@ -386,7 +391,28 @@ namespace BannerKings.Models.BKModels
             usurpData.Possible = false;
             usurpData.Reason = new TextObject("{=!}No rightful claim.");
 
+            ApplyDiscounts(usurpData);
+
             return usurpData;
+        }
+
+        protected void ApplyDiscounts(TitleAction action)
+        {
+            if (action.ActionTaker == null) return;
+
+            EducationData education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(action.ActionTaker);
+            if (education.HasPerk(BKPerks.Instance.AugustDeJure)) 
+            {
+                if (action.IsHostile() || action.Type == ActionType.Found)
+                {
+                    if (action.Influence != 0f) action.Influence *= 0.95f;
+                    if (action.Gold != 0f) action.Gold *= 0.95f;
+                } else
+                {
+                    if (action.Influence != 0f) action.Influence *= 1.05f;
+                    if (action.Gold != 0f) action.Gold *= 1.05f;
+                }
+            }
         }
 
         public List<Hero> GetGrantCandidates(Hero grantor)

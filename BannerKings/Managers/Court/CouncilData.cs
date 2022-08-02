@@ -9,6 +9,9 @@ using BannerKings.Managers.Titles;
 using System;
 using BannerKings.Managers.Institutions.Religions;
 using TaleWorlds.Localization;
+using BannerKings.Managers.Education;
+using BannerKings.Managers.Skills;
+using TaleWorlds.CampaignSystem.Actions;
 
 namespace BannerKings.Managers.Court
 {
@@ -86,20 +89,35 @@ namespace BannerKings.Managers.Court
             if (royalMembers == null) royalMembers = new List<CouncilMember>();
             List<Hero> courtiers = GetCourtMembers();
             if (GetMemberFromPosition(CouncilPosition.Spiritual) == null) members.Add(new CouncilMember(null, CouncilPosition.Spiritual, clan));
-            foreach (CouncilMember member in this.members)
+            foreach (CouncilMember member in members)
             {
                 if (member.Member != null && (member.Member.IsDead || member.Member.IsDisabled || !courtiers.Contains(member.Member)))
                     member.Member = null;
                 if (member.Clan == null) member.Clan = clan;
             }
 
-            foreach (CouncilMember member in this.royalMembers)
+            foreach (CouncilMember member in royalMembers)
             {
                 if (member.Member != null && (member.Member.IsDead || member.Member.IsDisabled || !courtiers.Contains(member.Member)))
                     member.Member = null;
                 if (member.Clan == null) member.Clan = clan;
             }
 
+            if (MBRandom.RandomFloat <= 0.02f)
+            {
+                EducationData education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(Owner);
+                if (education.HasPerk(BKPerks.Instance.AugustDeFacto))
+                {
+                    Hero random = GetOccupiedPositions().GetRandomElement().Member;
+                    ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Owner, random, 1, false);
+                    if (Owner == Hero.MainHero)
+                        InformationManager.DisplayMessage(new InformationMessage(new TextObject("{=!}You improved relations with {HERO} due to {PERK} lifestyle perk.")
+                            .SetTextVariable("HERO", random.Name)
+                            .SetTextVariable("PERK", BKPerks.Instance.AugustDeFacto.Name)
+                            .ToString()));
+                }
+            }
+            
             if (clan.IsUnderMercenaryService) return;
 
             if (IsRoyal)
@@ -131,8 +149,7 @@ namespace BannerKings.Managers.Court
             {
                 if (royalMembers.Count > 0) royalMembers.Clear();
                 foreach (CouncilMember position in members)
-                    if (position.IsRoyal)
-                        position.IsRoyal = false;
+                    if (position.IsRoyal) position.IsRoyal = false;
             }
 
             if (Owner == Hero.MainHero || MBRandom.RandomInt(1, 100) >= 5) return;
@@ -278,6 +295,9 @@ namespace BannerKings.Managers.Court
         {
             List<CouncilMember> heroes = new List<CouncilMember>();
             foreach (CouncilMember councilMember in members)
+                if (councilMember.Member != null) heroes.Add(councilMember);
+
+            foreach (CouncilMember councilMember in royalMembers)
                 if (councilMember.Member != null) heroes.Add(councilMember);
 
             return heroes;

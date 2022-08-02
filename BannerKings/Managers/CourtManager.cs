@@ -7,6 +7,7 @@ using System.Linq;
 using TaleWorlds.CampaignSystem.Actions;
 using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Institutions.Religions.Leaderships;
+using TaleWorlds.Core;
 
 namespace BannerKings.Managers
 {
@@ -123,6 +124,13 @@ namespace BannerKings.Managers
 
             CheckReligionRankChange(action);
             if (action.ActionTaker == null) return;
+
+            if (action.ActionTaker == Hero.MainHero)
+                InformationManager.AddQuickInformation(new TextObject("{=!}{OWNER} has appointed you as their {POSITION}.")
+                    .SetTextVariable("OWNER", action.Council.Owner.Name)
+                    .SetTextVariable("POSITION", action.TargetPosition.GetName()), 
+                    0, action.Council.Owner.CharacterObject, "event:/ui/notification/relation");
+
             action.TargetPosition.Member = action.ActionTaker;
             if (action.ActionTaker.Clan != null) GainKingdomInfluenceAction.ApplyForDefault(action.ActionTaker, -action.Influence);
             else if (action.ActionTaker.IsNotable) action.ActionTaker.AddPower(-action.Influence);

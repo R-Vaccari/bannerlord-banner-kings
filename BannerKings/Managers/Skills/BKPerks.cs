@@ -17,7 +17,7 @@ namespace BannerKings.Managers.Skills
             lordshipMilitaryAdministration, lordshipEconomicAdministration, lordshipClaimant, lordshipPatron;
 
         private PerkObject fianHighlander, fianRanger, fianFennid, civilEngineer, civilCultivator, civilOverseer, civilManufacturer,
-            siegeEngineer, siegePlanner, siegeOverseer;
+            siegeEngineer, siegePlanner, siegeOverseer, augustCommander, augustDeFacto, augustDeJure, augustKingOfKings;
 
         public PerkObject FianHighlander => fianHighlander;
         public PerkObject FianRanger => fianRanger;
@@ -32,6 +32,12 @@ namespace BannerKings.Managers.Skills
         public PerkObject SiegeEngineer => siegeEngineer;
         public PerkObject SiegePlanner => siegePlanner;
         public PerkObject SiegeOverseer => siegeOverseer;
+
+        public PerkObject AugustCommander => augustCommander;
+        public PerkObject AugustDeFacto => augustDeFacto;
+        public PerkObject AugustDeJure => augustDeJure;
+        public PerkObject AugustKingOfKings => augustKingOfKings;
+
 
         public PerkObject LordshipEconomicAdministration => lordshipEconomicAdministration;
         public PerkObject ScholarshipLiterate => scholarshipLiterate;
@@ -54,10 +60,10 @@ namespace BannerKings.Managers.Skills
             fianHighlander = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleFianHighlander"));
             LifestylePerks.Add(fianHighlander);
             fianHighlander.InitializeNew("{=!}Highlander", null, 75, null,
-                "{=!}Increases your movement speed by 5%",
+                "{=!}Increases your movement speed by 5%.",
                 SkillEffect.PerkRole.Personal, 0.05f,
                 SkillEffect.EffectIncrementType.AddFactor,
-                "{=!}Increases your swing speed with two handed swords by 6%",
+                "{=!}Increases your swing speed with two handed swords by 6%.",
                 SkillEffect.PerkRole.Personal, 0.03f,
                 SkillEffect.EffectIncrementType.AddFactor,
                 TroopClassFlag.None, TroopClassFlag.None);
@@ -65,7 +71,7 @@ namespace BannerKings.Managers.Skills
             fianRanger = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleFianRanger"));
             LifestylePerks.Add(fianRanger);
             fianRanger.InitializeNew("{=!}Ranger", null, 150, null,
-                "{=5NRai8K5}Increase maximum track life by 20%",
+                "{=5NRai8K5}Increase maximum track life by 20%.",
                 SkillEffect.PerkRole.Personal, 0.05f,
                 SkillEffect.EffectIncrementType.AddFactor,
                 "{=XzbpZji3}Increases your damage with bows by 8%.",
@@ -154,11 +160,58 @@ namespace BannerKings.Managers.Skills
 
             siegeOverseer = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleSiegeOverseer"));
             LifestylePerks.Add(siegeOverseer);
-            siegeOverseer.InitializeNew("{=!}Siege Overseer", null, 150, null,
+            siegeOverseer.InitializeNew("{=!}Siege Overseer", null, 225, null,
                 "{=!}Army consumes 15% less food during sieges, either attacking or defending.",
                 SkillEffect.PerkRole.Personal, 0.05f,
                 SkillEffect.EffectIncrementType.AddFactor,
                 "{=ta2z0bEv}Camp preparation is 20% faster.",
+                SkillEffect.PerkRole.Personal, 0.03f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                TroopClassFlag.None, TroopClassFlag.None);
+
+
+
+            augustCommander = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleAugustCommander"));
+            LifestylePerks.Add(augustCommander);
+            augustCommander.InitializeNew("{=!}Commander", null, 75, null,
+                "{=920FKjJk}Increases your party size by 5.",
+                SkillEffect.PerkRole.Personal, 0.05f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                "{=!}Increases party morale by flat 3%.",
+                SkillEffect.PerkRole.Personal, 0.03f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                TroopClassFlag.None, TroopClassFlag.None);
+
+
+            augustDeFacto = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleAugustDeFacto"));
+            LifestylePerks.Add(augustDeFacto);
+            augustDeFacto.InitializeNew("{=!}De Facto", null, 150, null,
+                "{=!}Settlement autonomy reduced by flat 3%.",
+                SkillEffect.PerkRole.Personal, 0.05f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                "{=!}Randomly receive positive relations with a councillour.",
+                SkillEffect.PerkRole.Personal, 0.03f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                TroopClassFlag.None, TroopClassFlag.None);
+
+            augustDeJure = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleAugustDeJure"));
+            LifestylePerks.Add(augustDeJure);
+            augustDeJure.InitializeNew("{=!}De Jure", null, 225, null,
+                "{=!}Demesne limit increased by 1.",
+                SkillEffect.PerkRole.Personal, 0.05f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                "{=!}Title actions cost 5% less denarii and influence.",
+                SkillEffect.PerkRole.Personal, 0.03f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                TroopClassFlag.None, TroopClassFlag.None);
+
+            augustKingOfKings = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleAugustKingOfKings"));
+            LifestylePerks.Add(augustKingOfKings);
+            augustKingOfKings.InitializeNew("{=!}King of Kings", null, 300, null,
+                "{=!}If king level or higher, increase vassal limit by 2.",
+                SkillEffect.PerkRole.Personal, 0.05f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                "{=!}If king level or higher, increase unlanded demesne limit by 1.",
                 SkillEffect.PerkRole.Personal, 0.03f,
                 SkillEffect.EffectIncrementType.AddFactor,
                 TroopClassFlag.None, TroopClassFlag.None);

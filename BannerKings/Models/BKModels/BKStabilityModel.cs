@@ -80,6 +80,13 @@ namespace BannerKings.Models
             if (settlement.Culture == settlement.Owner.Culture)
                 result.Add(-0.1f, GameTexts.FindText("str_culture"));
 
+            if (settlement.OwnerClan != null)
+            {
+                EducationData education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(settlement.Owner);
+                if (education.HasPerk(BKPerks.Instance.AugustDeFacto))
+                    result.Add(-0.03f, BKPerks.Instance.AugustDeFacto.Name);
+            }
+           
 
             return result;
         }
@@ -167,6 +174,16 @@ namespace BannerKings.Models
             result.LimitMax(5f);
 
             result.Add(hero.Clan.Tier / 3f, GameTexts.FindText("str_clan_tier_bonus"));
+
+            FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(hero);
+            if (title != null && title.type <= TitleType.Kingdom)
+            {
+                EducationData education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(hero);
+                if (education.HasPerk(BKPerks.Instance.AugustKingOfKings))
+                    result.Add(1f, BKPerks.Instance.AugustKingOfKings.Name);
+            }
+                
+
             return result;
         }
 
@@ -240,6 +257,10 @@ namespace BannerKings.Models
                 if (bonus > 0f) result.Add(bonus, new TextObject("Highest title level"));
             }
 
+            EducationData education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(hero);
+            if (education.HasPerk(BKPerks.Instance.AugustDeJure))
+                result.Add(1f, BKPerks.Instance.AugustDeJure.Name);
+
             return result;
         }
 
@@ -247,7 +268,7 @@ namespace BannerKings.Models
         {
             ExplainedNumber result = new ExplainedNumber(0f, true);
             result.LimitMin(0f);
-            result.LimitMax(50f);
+            result.LimitMax(20f);
             result.Add(hero.Clan.Tier, GameTexts.FindText("str_clan_tier_bonus"));
 
             FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(hero);
@@ -258,9 +279,16 @@ namespace BannerKings.Models
                 {
                     if (title.type == TitleType.Barony) bonus = 1f;
                     else if (title.type == TitleType.County) bonus = 2f;
-                    else if (title.type == TitleType.Dukedom) bonus = 4f;
-                    else if (title.type == TitleType.Kingdom) bonus = 10f;
-                    else bonus = 20f;
+                    else if (title.type == TitleType.Dukedom) bonus = 3f;
+                    else
+                    {
+                        if (title.type == TitleType.Kingdom) bonus = 6f;
+                        else bonus = 8f;
+
+                        EducationData education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(hero);
+                        if (education.HasPerk(BKPerks.Instance.AugustKingOfKings))
+                            result.Add(2f, BKPerks.Instance.AugustKingOfKings.Name);
+                    }
                 }
 
                 if (bonus > 0f) result.Add(bonus, new TextObject("Highest title level"));
