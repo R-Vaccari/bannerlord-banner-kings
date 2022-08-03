@@ -3,7 +3,6 @@ using BannerKings.Managers.Skills;
 using SandBox;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
-using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 
 namespace BannerKings.Models.Vanilla
@@ -15,16 +14,30 @@ namespace BannerKings.Models.Vanilla
             base.UpdateAgentStats(agent, agentDrivenProperties);
             EquipmentIndex wieldedItemIndex3 = agent.GetWieldedItemIndex(Agent.HandIndex.MainHand);
             WeaponComponentData weaponComponentData = (wieldedItemIndex3 != EquipmentIndex.None) ? agent.Equipment[wieldedItemIndex3].CurrentUsageItem : null;
-            if (weaponComponentData != null && agent.Character != null && agent.Character.IsHero)
+            if (weaponComponentData != null && agent.Character != null)
             {
-                Hero hero = (agent.Character as CharacterObject).HeroObject;
-                EducationData data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(hero);
-                MBReadOnlyList<PerkObject> perks = data.Perks;
-                if (weaponComponentData.RelevantSkill == DefaultSkills.Bow && perks.Contains(BKPerks.Instance.FianFennid))
-                    agentDrivenProperties.ThrustOrRangedReadySpeedMultiplier *= 1.25f;
+                if (agent.Formation != null && agent.Formation.Captain != null && agent.Formation.Captain.IsHero)
+                {
+                    Hero captain = (agent.Formation.Captain.Character as CharacterObject).HeroObject;
+                    EducationData data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(captain);
+                    if (agent.HasMount && data.HasPerk(BKPerks.Instance.CataphractEquites))
+                        agentDrivenProperties.MountChargeDamage *= 1.1f;
 
-                if (weaponComponentData.RelevantSkill == DefaultSkills.TwoHanded && !agent.HasMount && weaponComponentData.WeaponClass == WeaponClass.TwoHandedSword)
-                    agentDrivenProperties.SwingSpeedMultiplier *= 1.06f;
+                    if (agent.HasMount && data.HasPerk(BKPerks.Instance.CataphractAdaptiveTactics))
+                        agentDrivenProperties.MountManeuver *= 1.08f;
+                }
+                
+
+                if (agent.Character.IsHero)
+                {
+                    Hero hero = (agent.Character as CharacterObject).HeroObject;
+                    EducationData data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(hero);
+                    if (data.HasPerk(BKPerks.Instance.FianFennid) && weaponComponentData.RelevantSkill == DefaultSkills.Bow)
+                        agentDrivenProperties.ThrustOrRangedReadySpeedMultiplier *= 1.25f;
+
+                    if (data.HasPerk(BKPerks.Instance.FianHighlander) && weaponComponentData.RelevantSkill == DefaultSkills.TwoHanded && !agent.HasMount && weaponComponentData.WeaponClass == WeaponClass.TwoHandedSword)
+                        agentDrivenProperties.SwingSpeedMultiplier *= 1.06f;
+                }
             }
         }
     }

@@ -5,6 +5,8 @@ using BannerKings.Populations;
 using BannerKings.Managers.Policies;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
+using BannerKings.Managers.Education;
+using BannerKings.Managers.Skills;
 
 namespace BannerKings.Models
 {
@@ -67,7 +69,7 @@ namespace BannerKings.Models
            
         }
 
-        public ExplainedNumber CalculateWorkshopTax(Settlement settlement)
+        public ExplainedNumber CalculateWorkshopTax(Settlement settlement, Hero payer)
         {
             ExplainedNumber result = new ExplainedNumber();
             result.LimitMin(0f);
@@ -78,6 +80,17 @@ namespace BannerKings.Models
             if (tax.Policy == BKTaxPolicy.TaxType.High) result.Add(0.3f);
             else if (tax.Policy == BKTaxPolicy.TaxType.High) result.Add(0.2f);
             else result.Add(0.1f);
+
+            EducationData payerEducation = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(payer);
+            if (payerEducation.HasPerk(BKPerks.Instance.CaravaneerEntrepeneur))
+                result.AddFactor(-0.2f, BKPerks.Instance.CaravaneerEntrepeneur.Name);
+
+            if (settlement.OwnerClan != null)
+            {
+                EducationData ownerEducation = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(settlement.Owner);
+                if (ownerEducation.HasPerk(BKPerks.Instance.CaravaneerEntrepeneur))
+                    result.AddFactor(0.2f, BKPerks.Instance.CaravaneerEntrepeneur.Name);
+            }
 
             result.AddFactor(data.EconomicData.Mercantilism.ResultNumber * -0.5f);
 

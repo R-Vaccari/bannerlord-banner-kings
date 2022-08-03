@@ -193,6 +193,9 @@ namespace BannerKings.Models
 
                 if (settlement.Owner.GetPerkValue(BKPerks.Instance.LordshipEconomicAdministration))
                     result.Add(0.1f, BKPerks.Instance.CivilManufacturer.Name);
+
+                if (education.HasPerk(BKPerks.Instance.CaravaneerEntrepeneur))
+                    result.Add(0.1f, BKPerks.Instance.CaravaneerEntrepeneur.Name);
             }
 
             InnovationData innovations = BannerKingsConfig.Instance.InnovationsManager.GetInnovationData(settlement.Culture);

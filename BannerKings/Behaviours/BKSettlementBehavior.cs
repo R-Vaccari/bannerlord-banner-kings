@@ -144,7 +144,7 @@ namespace BannerKings.Behaviors
                     if (wk.IsRunning && wk.Owner.IsNotable)
                     {
                         int gold = Campaign.Current.Models.ClanFinanceModel.CalculateOwnerIncomeFromWorkshop(wk);
-                        gold -= (int)(wkModel.CalculateWorkshopTax(wk.Settlement).ResultNumber * gold);
+                        gold -= (int)(wkModel.CalculateWorkshopTax(wk.Settlement, wk.Owner).ResultNumber * gold);
                         wk.Owner.ChangeHeroGold(gold);
                         wk.ChangeGold(-gold);
                     }

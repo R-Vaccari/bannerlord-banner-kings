@@ -1,4 +1,6 @@
-﻿using TaleWorlds.CampaignSystem;
+﻿using BannerKings.Managers.Education;
+using BannerKings.Managers.Skills;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.SandBox.GameComponents.Party;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
@@ -46,15 +48,19 @@ namespace BannerKings.Models.Vanilla
         {
 			ExplainedNumber result = base.GetTotalWage(mobileParty, includeDescriptions);
 
-			Hero owner = mobileParty.LeaderHero != null ? mobileParty.LeaderHero : mobileParty.Owner;
-			if (owner != null)
+			Hero leader = mobileParty.LeaderHero != null ? mobileParty.LeaderHero : mobileParty.Owner;
+			if (leader != null)
             {
 				float totalCulture = 0f;
+				float mountedTroops = 0f;
 				for (int i = 0; i < mobileParty.MemberRoster.Count; i++)
 				{
 					TroopRosterElement elementCopyAtIndex = mobileParty.MemberRoster.GetElementCopyAtIndex(i);
-					if (elementCopyAtIndex.Character.Culture == owner.Culture)
+					if (elementCopyAtIndex.Character.Culture == leader.Culture)
 						totalCulture += elementCopyAtIndex.Number;
+
+					if (elementCopyAtIndex.Character.HasMount())
+						mountedTroops += elementCopyAtIndex.Number;
 
 					if (elementCopyAtIndex.Character.IsHero)
                     {
@@ -76,9 +82,20 @@ namespace BannerKings.Models.Vanilla
 				if (proportion > 0f)
 					result.AddFactor(proportion * -0.1f, GameTexts.FindText("str_culture"));
 
-				
 				if (mobileParty.IsGarrison)
-					result.Add(result.ResultNumber * - 0.5f, null);
+					result.Add(result.ResultNumber * -0.5f, null);
+
+
+				EducationData education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(leader);
+				if (education.HasPerk(BKPerks.Instance.CataphractEquites) && mountedTroops > 0f)
+					result.AddFactor(mountedTroops * -0.1f, BKPerks.Instance.CataphractEquites.Name);
+			}
+
+			if (mobileParty.IsCaravan && mobileParty.Owner != null)
+            {
+				EducationData education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(mobileParty.Owner);
+				if (education.HasPerk(BKPerks.Instance.CaravaneerDealer))
+					result.AddFactor(-0.1f, BKPerks.Instance.CaravaneerDealer.Name);
 			}
 
 			return result;

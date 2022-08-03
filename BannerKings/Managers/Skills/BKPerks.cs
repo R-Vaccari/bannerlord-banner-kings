@@ -17,7 +17,9 @@ namespace BannerKings.Managers.Skills
             lordshipMilitaryAdministration, lordshipEconomicAdministration, lordshipClaimant, lordshipPatron;
 
         private PerkObject fianHighlander, fianRanger, fianFennid, civilEngineer, civilCultivator, civilOverseer, civilManufacturer,
-            siegeEngineer, siegePlanner, siegeOverseer, augustCommander, augustDeFacto, augustDeJure, augustKingOfKings;
+            siegeEngineer, siegePlanner, siegeOverseer, augustCommander, augustDeFacto, augustDeJure, augustKingOfKings,
+            cataphractEquites, cataphractAdaptiveTactics, cataphractKlibanophori, caravaneerStrider, caravaneerDealer,
+            caravaneerEntrepeneur;
 
         public PerkObject FianHighlander => fianHighlander;
         public PerkObject FianRanger => fianRanger;
@@ -38,6 +40,14 @@ namespace BannerKings.Managers.Skills
         public PerkObject AugustDeJure => augustDeJure;
         public PerkObject AugustKingOfKings => augustKingOfKings;
 
+        public PerkObject CataphractEquites => cataphractEquites;
+        public PerkObject CataphractAdaptiveTactics => cataphractAdaptiveTactics;
+        public PerkObject CataphractKlibanophoros => cataphractKlibanophori;
+
+        public PerkObject CaravaneerStrider => caravaneerStrider;
+        public PerkObject CaravaneerDealer => caravaneerDealer;
+        public PerkObject CaravaneerEntrepeneur => caravaneerEntrepeneur;
+
 
         public PerkObject LordshipEconomicAdministration => lordshipEconomicAdministration;
         public PerkObject ScholarshipLiterate => scholarshipLiterate;
@@ -55,7 +65,7 @@ namespace BannerKings.Managers.Skills
         public PerkObject ScholarshipTreasurer => scholarshipTreasurer;
         public PerkObject ScholarshipMagnumOpus => scholarshipMagnumOpus;
 
-        public override void Initialize()
+        private void InitializePerks()
         {
             fianHighlander = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleFianHighlander"));
             LifestylePerks.Add(fianHighlander);
@@ -124,7 +134,7 @@ namespace BannerKings.Managers.Skills
                 SkillEffect.PerkRole.Personal, 0.03f,
                 SkillEffect.EffectIncrementType.AddFactor,
                 TroopClassFlag.None, TroopClassFlag.None);
-            
+
             LifestylePerks.Add(civilManufacturer);
             civilManufacturer.InitializeNew("{=!}Manufacturer", null, 225, null,
                 "{=!}Production efficiency increases by flat 15%.",
@@ -217,6 +227,80 @@ namespace BannerKings.Managers.Skills
                 TroopClassFlag.None, TroopClassFlag.None);
 
 
+
+            cataphractEquites = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleCataphractEquites"));
+            LifestylePerks.Add(cataphractEquites);
+            cataphractEquites.InitializeNew("{=!}Equites", null, 75, null,
+                "{=!}You and troops in your formation deal 10% more charge damage.",
+                SkillEffect.PerkRole.Captain, 4f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                "{=!}Mounted troops cost 10% less denarii maintenance.",
+                SkillEffect.PerkRole.Personal, 0.03f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                TroopClassFlag.None, TroopClassFlag.None);
+
+
+            cataphractAdaptiveTactics = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleCataphractAdaptiveTactics"));
+            LifestylePerks.Add(cataphractAdaptiveTactics);
+            cataphractAdaptiveTactics.InitializeNew("{=!}Adaptive Tactics", null, 150, null,
+                "{=!}Increased damage on horseback with polearms, sidearms and bows by 5%.",
+                SkillEffect.PerkRole.Personal, 5f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                "{=!}You and troops in your formation have 8% more maneuvering.",
+                SkillEffect.PerkRole.Captain, 8f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                TroopClassFlag.None, TroopClassFlag.None);
+
+            cataphractKlibanophori = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleCataphractKlibanophori"));
+            LifestylePerks.Add(cataphractKlibanophori);
+            cataphractKlibanophori.InitializeNew("{=!}Klibanophori", null, 225, null,
+                "{=!}You and troops in your formation receive 5% less damange when mounted.",
+                SkillEffect.PerkRole.Personal, 0.05f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                "{=!}You and troops in your formation deal 6% extra thrust damage when mounted.",
+                SkillEffect.PerkRole.Personal, 0.03f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                TroopClassFlag.None, TroopClassFlag.None);
+
+
+
+            caravaneerStrider = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleCaravaneerStrider"));
+            LifestylePerks.Add(caravaneerStrider);
+            caravaneerStrider.InitializeNew("{=!}Strider", null, 75, null,
+                "{=!}Increases your movement speed by 3%.",
+                SkillEffect.PerkRole.PartyLeader, 3f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                "{=ulgd9Veb}Increases carry capacity of pack animals by 20%.",
+                SkillEffect.PerkRole.Personal, 0.03f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                TroopClassFlag.None, TroopClassFlag.None);
+
+
+            caravaneerDealer = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleCaravaneerDealer"));
+            LifestylePerks.Add(caravaneerDealer);
+            caravaneerDealer.InitializeNew("{=!}Dealer", null, 150, null,
+                "{=!}Caravan wages are reduced by 10%.",
+                SkillEffect.PerkRole.PartyOwner, 10f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                "{=!}Your caravans move 4% faster during daytime.",
+                SkillEffect.PerkRole.Captain, 8f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                TroopClassFlag.None, TroopClassFlag.None);
+
+            caravaneerEntrepeneur = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleCaravaneerEntrepeneur"));
+            LifestylePerks.Add(caravaneerEntrepeneur);
+            caravaneerEntrepeneur.InitializeNew("{=!}Entrepeneur", null, 225, null,
+                "{=!}Increased settlement production efficiency by flat 10%.",
+                SkillEffect.PerkRole.Personal, 10f,
+                SkillEffect.EffectIncrementType.Add,
+                "{=!}You pay 20% less workshop taxes to other clans. Your settlements tax others' workshops 20% more.",
+                SkillEffect.PerkRole.Personal, 20f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                TroopClassFlag.None, TroopClassFlag.None);
+        }
+        public override void Initialize()
+        {
+            InitializePerks();
 
             lordshipTraditionalist = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LordshipTraditionalist"));
             lordshipAdaptive = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LordshipAdaptive"));
@@ -444,8 +528,8 @@ namespace BannerKings.Managers.Skills
                 SkillEffect.PerkRole.Personal, 50f,
                 SkillEffect.EffectIncrementType.AddFactor,
                 TroopClassFlag.None, TroopClassFlag.None);
-            
         }
+
 
         private int GetTierCost(int tierIndex) => Requirements[tierIndex - 1];
 

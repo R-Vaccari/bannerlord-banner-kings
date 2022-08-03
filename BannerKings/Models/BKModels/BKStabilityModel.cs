@@ -117,8 +117,8 @@ namespace BannerKings.Models
                 result.Add(data.NotableSupport.ResultNumber / 5f, new TextObject("{=!}Notable support"));
 
                 EducationData education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(town.OwnerClan.Leader);
-                if (education.Perks.Contains(BKPerks.Instance.CivilEngineer))
-                    result.Add(0.05f, BKPerks.Instance.CivilEngineer.Name);
+                if (education.Perks.Contains(BKPerks.Instance.CivilOverseer))
+                    result.Add(0.05f, BKPerks.Instance.CivilOverseer.Name);
 
                 float demesneLimit = CalculateDemesneLimit(settlement.Owner).ResultNumber;
                 float currentDemesne = CalculateCurrentDemesne(settlement.OwnerClan).ResultNumber;

@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
+using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Education.Lifestyles
 {
     public class DefaultLifestyles : DefaultTypeInitializer<DefaultLifestyles, Lifestyle>
     {
-        private Lifestyle fian, cataphract, diplomat, august, siegeEngineer, civilAdministrator;
+        private Lifestyle fian, cataphract, diplomat, august, siegeEngineer, civilAdministrator, caravaneer, outlaw, mercenary, 
+            kheshig, varyag;
 
         public Lifestyle Fian => fian;
         public Lifestyle Diplomat => diplomat;
@@ -19,39 +21,68 @@ namespace BannerKings.Managers.Education.Lifestyles
         public Lifestyle CivilAdministrator => civilAdministrator;
         public override void Initialize()
         {
+            MBReadOnlyList<CultureObject> cultures = Game.Current.ObjectManager.GetObjectTypeList<CultureObject>();
+
             fian = new Lifestyle("lifestyle_fian");
             fian.Initialize(new TextObject("{=!}Fian"), new TextObject("{=!}"), DefaultSkills.Bow, 
                 DefaultSkills.TwoHanded, new List<PerkObject>() { BKPerks.Instance.FianHighlander, BKPerks.Instance.FianRanger, BKPerks.Instance.FianFennid },
-                 new TextObject("{=!}"), 0f, 0f,
-                Game.Current.ObjectManager.GetObjectTypeList<CultureObject>().FirstOrDefault(x => x.StringId == "battania"));
+                 new TextObject("{=!}Battanian settlements have +{EFFECT1} militia\nReduced damage by {EFFECT2}% when mounted"), 
+                 1f, 30f,
+                cultures.FirstOrDefault(x => x.StringId == "battania"));
 
             cataphract = new Lifestyle("lifestyle_cataphract");
             cataphract.Initialize(new TextObject("{=!}Cataphract"), new TextObject("{=!}"), 
-                DefaultSkills.Polearm, DefaultSkills.Riding, new List<PerkObject>() { },
-                 new TextObject("{=!}"), 0f, 0f,
-                Game.Current.ObjectManager.GetObjectTypeList<CultureObject>().FirstOrDefault(x => x.StringId == "empire"));
+                DefaultSkills.Polearm, DefaultSkills.Riding, 
+                new List<PerkObject>() { BKPerks.Instance.CataphractEquites, BKPerks.Instance.CataphractAdaptiveTactics, BKPerks.Instance.CataphractKlibanophoros },
+                new TextObject("{=!}Increased renown from victories by {EFFECT1}%\n"), 
+                0f, 0f,
+                cultures.FirstOrDefault(x => x.StringId == "empire"));
 
             diplomat = new Lifestyle("lifestyle_diplomat");
             diplomat.Initialize(new TextObject("{=!}Diplomat"), new TextObject("{=!}"), 
-                DefaultSkills.Charm, BKSkills.Instance.Lordship, new List<PerkObject>() { }, new TextObject("{=!}"), 0f, 0f);
+                DefaultSkills.Charm, BKSkills.Instance.Lordship, 
+                new List<PerkObject>() { }, 
+                new TextObject("{=!}"), 0f, 0f);
 
             august = new Lifestyle("lifestyle_august");
             august.Initialize(new TextObject("{=!}August"), new TextObject("{=!}"), 
-                DefaultSkills.Leadership, BKSkills.Instance.Lordship, new List<PerkObject>() { BKPerks.Instance.AugustCommander, BKPerks.Instance.AugustDeFacto,
+                DefaultSkills.Leadership, BKSkills.Instance.Lordship, 
+                new List<PerkObject>() { BKPerks.Instance.AugustCommander, BKPerks.Instance.AugustDeFacto,
                 BKPerks.Instance.AugustDeJure, BKPerks.Instance.AugustKingOfKings }, 
                 new TextObject("{=!}1 knight less is counted towards vassal limit\nTrade penalty increased by {EFFECT2}%"), 
                 1f, 20f);
 
             siegeEngineer = new Lifestyle("lifestyle_siegeEngineer");
             siegeEngineer.Initialize(new TextObject("{=!}Siege Engineer"), new TextObject("{=!}"), 
-                DefaultSkills.Engineering, DefaultSkills.Tactics, new List<PerkObject>() { BKPerks.Instance.SiegeEngineer, BKPerks.Instance.SiegePlanner, 
-                    BKPerks.Instance.SiegeOverseer }, new TextObject("{=!}"), 0f, 0f);
+                DefaultSkills.Engineering, DefaultSkills.Tactics, 
+                new List<PerkObject>() { BKPerks.Instance.SiegeEngineer, BKPerks.Instance.SiegePlanner,  BKPerks.Instance.SiegeOverseer }, 
+                new TextObject("{=!}"), 0f, 0f);
 
             civilAdministrator = new Lifestyle("lifestyle_civilAdministrator");
             civilAdministrator.Initialize(new TextObject("{=!}Civil Administrator"), new TextObject("{=!}"), 
-                DefaultSkills.Engineering, DefaultSkills.Steward, new List<PerkObject>() { BKPerks.Instance.CivilEngineer, BKPerks.Instance.CivilCultivator,
+                DefaultSkills.Engineering, DefaultSkills.Steward, 
+                new List<PerkObject>() { BKPerks.Instance.CivilEngineer, BKPerks.Instance.CivilCultivator,
                 BKPerks.Instance.CivilManufacturer, BKPerks.Instance.CivilOverseer }, 
                 new TextObject("{=!}Reduced demesne weight of towns by {EFFECT1}%\nParty size reduced by {EFFECT2}"), 
+                20f, 8f);
+
+            caravaneer = new Lifestyle("lifestyle_caravaneer");
+            caravaneer.Initialize(new TextObject("{=!}Caravaneer"), new TextObject("{=!}"),
+                DefaultSkills.Trade, DefaultSkills.Scouting, 
+                new List<PerkObject>() { BKPerks.Instance.CaravaneerStrider, BKPerks.Instance.CaravaneerDealer, BKPerks.Instance.CaravaneerEntrepeneur },
+                new TextObject("{=!}Reduced trade penalty by {EFFECT1}%\nParty size reduced by {EFFECT2}"),
+                20f, 8f);
+
+            outlaw = new Lifestyle("lifestyle_outlaw");
+            outlaw.Initialize(new TextObject("{=!}Outlaw"), new TextObject("{=!}"),
+                DefaultSkills.Roguery, DefaultSkills.Scouting, new List<PerkObject>() {  },
+                new TextObject("{=!}Reduced demesne weight of towns by {EFFECT1}%\nParty size reduced by {EFFECT2}"),
+                20f, 8f);
+
+            mercenary = new Lifestyle("lifestyle_mercenary");
+            mercenary.Initialize(new TextObject("{=!}Mercenary"), new TextObject("{=!}"),
+                DefaultSkills.Leadership, DefaultSkills.Roguery, new List<PerkObject>() {  },
+                new TextObject("{=!}Reduced demesne weight of towns by {EFFECT1}%\nParty size reduced by {EFFECT2}"),
                 20f, 8f);
         }
 
@@ -60,7 +91,7 @@ namespace BannerKings.Managers.Education.Lifestyles
             get
             {
                 yield return Fian;
-                yield return Diplomat;
+                //yield return Diplomat;
                 yield return August;
                 yield return Cataphract;
                 yield return SiegeEngineer;

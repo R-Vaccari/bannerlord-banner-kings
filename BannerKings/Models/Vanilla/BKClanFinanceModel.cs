@@ -50,10 +50,9 @@ namespace BannerKings.Models
 			BKWorkshopModel wkModel = (BKWorkshopModel)Campaign.Current.Models.WorkshopModel;
 			foreach (Town town in clan.Fiefs)
             {
-				float tax = wkModel.CalculateWorkshopTax(town.Settlement).ResultNumber;
 				foreach (Workshop wk in town.Workshops)
 					if (wk.IsRunning && wk.Owner != clan.Leader && wk.WorkshopType.StringId != "artisans")
-						result.Add(base.CalculateOwnerIncomeFromWorkshop(wk) * tax, new TextObject("{=!}Taxes from {WORKSHOP} at {TOWN}")
+						result.Add(base.CalculateOwnerIncomeFromWorkshop(wk) * wkModel.CalculateWorkshopTax(town.Settlement, wk.Owner).ResultNumber, new TextObject("{=!}Taxes from {WORKSHOP} at {TOWN}")
 							.SetTextVariable("WORKSHOP", wk.Name)
 							.SetTextVariable("TOWN", town.Name));
 
@@ -115,7 +114,7 @@ namespace BannerKings.Models
 			foreach (Workshop wk in clan.Leader.OwnedWorkshops)
 				if (wk.IsRunning && wk.Settlement.OwnerClan != clan)
                 {
-					float tax = wkModel.CalculateWorkshopTax(wk.Settlement).ResultNumber;
+					float tax = wkModel.CalculateWorkshopTax(wk.Settlement, clan.Leader).ResultNumber;
 					result.Add(base.CalculateOwnerIncomeFromWorkshop(wk) * -tax, new TextObject("{=!}{WORKSHOP} taxes to {CLAN}")
 						.SetTextVariable("WORKSHOP", wk.Name)
 						.SetTextVariable("CLAN", wk.Settlement.OwnerClan.Name));
