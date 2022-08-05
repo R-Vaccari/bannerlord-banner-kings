@@ -114,7 +114,13 @@ namespace BannerKings.Managers
             action.Influence = -BannerKingsConfig.Instance.TitleModel.GetGrantKnighthoodCost(grantor).ResultNumber;
             action.TakeAction(knight);
             if (grantor == Hero.MainHero) GiveGoldAction.ApplyBetweenCharacters(grantor, knight, 5000);
-            ClanActions.JoinClan(knight, Clan.PlayerClan);
+            ClanActions.JoinClan(knight, grantor.Clan);
+
+            if (Clan.PlayerClan.Kingdom != null && grantor.Clan.Kingdom == Clan.PlayerClan.Kingdom)
+                InformationManager.DisplayMessage(new InformationMessage(new TextObject("{=!}The {CLAN} has knighted {KNIGHT}.")
+                    .SetTextVariable("CLAN", grantor.Clan.Name)
+                    .SetTextVariable("KNIGHT", knight.Name)
+                    .ToString()));
         }
 
         public bool IsHeroKnighted(Hero hero) => hero.IsNoble && IsHeroTitleHolder(hero);

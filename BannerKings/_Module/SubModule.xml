@@ -26,6 +26,14 @@
     </SubModule>
   </SubModules>
   <Xmls>
+	<XmlNode>
+		<XmlName id="EquipmentRosters" path="equipment_sets"/>
+		<IncludedGameTypes>
+			<GameType value="Campaign"/>
+			<GameType value="CampaignStoryMode"/>
+			<GameType value="CustomGame"/>
+		</IncludedGameTypes>
+	</XmlNode>
     <XmlNode>
       <XmlName path="civillians" id="NPCCharacters"/>
       <IncludedGameTypes>

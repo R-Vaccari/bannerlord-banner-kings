@@ -21,15 +21,15 @@ namespace BannerKings.UI.Extensions
     {
         private EncyclopediaClanPageVM clanPageVM;
         private MBBindingList<HeroVM> knights;
-        private MBBindingList<CouncillorHeroVM> councillors;
+        private MBBindingList<CustomNameHeroVM> councillors, companions;
         private EncyclopediaCultureVM cultureVM;
         private bool addedFields = false;
         public EncyclopediaClanPageMixin(EncyclopediaClanPageVM vm) : base(vm)
         {
             clanPageVM = vm;
             knights = new MBBindingList<HeroVM>();
-            councillors = new MBBindingList<CouncillorHeroVM>();
-            
+            councillors = new MBBindingList<CustomNameHeroVM>();
+            companions = new MBBindingList<CustomNameHeroVM>();
         }
 
         public override void OnRefresh()
@@ -37,14 +37,14 @@ namespace BannerKings.UI.Extensions
             clanPageVM.ClanInfo.Clear();
             Knights.Clear();
             Councillors.Clear();
+            Companions.Clear();
             Clan clan = clanPageVM.Obj as Clan;
             CultureInfo = new EncyclopediaCultureVM(clan.Culture);
-            MBReadOnlyList<Hero> members = (clanPageVM.Obj as Clan).Lords;
             int caravans = 0;
             int workshops = 0;
 
             string highestTitle = null;
-            foreach (Hero member in members) 
+            foreach (Hero member in clan.Lords) 
             {
                 if (member.IsDead || member.IsChild) continue;
                 caravans += member.OwnedCaravans.Count;
@@ -67,10 +67,30 @@ namespace BannerKings.UI.Extensions
                 }
             }
 
+            foreach (Hero companion in clan.Companions)
+            {
+                if (companion.IsDead || companion.IsChild) continue;
+                TextObject roleTitle = null;
+
+                if (companion.PartyBelongedTo != null && !companion.IsPartyLeader)
+                {
+                    SkillEffect.PerkRole role = companion.PartyBelongedTo.GetHeroPerkRole(companion);
+                    if (role != SkillEffect.PerkRole.None) roleTitle = GameTexts.FindText("str_clan_role", role.ToString().ToLower());
+                }
+
+                if (clanPageVM.Members.Any(x => x.Hero == companion))
+                {
+                    HeroVM vm = clanPageVM.Members.First(x => x.Hero == companion);
+                    clanPageVM.Members.Remove(vm);
+                }
+
+                Companions.Add(new CustomNameHeroVM(companion, roleTitle, true));
+            }
+
             CouncilData council = BannerKingsConfig.Instance.CourtManager.GetCouncil(clan);
             if (council != null) 
                 foreach (CouncilMember position in council.GetOccupiedPositions())
-                    Councillors.Add(new CouncillorHeroVM(position.Member, position.GetName()));
+                    Councillors.Add(new CustomNameHeroVM(position.Member, position.GetName()));
 
             if (!addedFields)
             {
@@ -108,6 +128,9 @@ namespace BannerKings.UI.Extensions
         public string KnightsText => new TextObject("{=!}Knights").ToString();
 
         [DataSourceProperty]
+        public string CompanionsText => new TextObject("{=!}Companions").ToString();
+
+        [DataSourceProperty]
         public string CouncilText => new TextObject("{=!}Council").ToString();
 
         [DataSourceProperty]
@@ -120,6 +143,20 @@ namespace BannerKings.UI.Extensions
                 {
                     cultureVM = value;
                     ViewModel!.OnPropertyChangedWithValue(value, "CultureInfo");
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public MBBindingList<CustomNameHeroVM> Companions
+        {
+            get => companions;
+            set
+            {
+                if (value != companions)
+                {
+                    companions = value;
+                    ViewModel!.OnPropertyChangedWithValue(value, "Companions");
                 }
             }
         }
@@ -139,7 +176,7 @@ namespace BannerKings.UI.Extensions
         }
 
         [DataSourceProperty]
-        public MBBindingList<CouncillorHeroVM> Councillors
+        public MBBindingList<CustomNameHeroVM> Councillors
         {
             get => councillors;
             set

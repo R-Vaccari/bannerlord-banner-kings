@@ -9,12 +9,13 @@ namespace BannerKings.Models.Vanilla
 {
     public class BKAgentStatsModel : SandboxAgentStatCalculateModel
     {
+
         public override void UpdateAgentStats(Agent agent, AgentDrivenProperties agentDrivenProperties)
         {
             base.UpdateAgentStats(agent, agentDrivenProperties);
-            EquipmentIndex wieldedItemIndex3 = agent.GetWieldedItemIndex(Agent.HandIndex.MainHand);
-            WeaponComponentData weaponComponentData = (wieldedItemIndex3 != EquipmentIndex.None) ? agent.Equipment[wieldedItemIndex3].CurrentUsageItem : null;
-            if (weaponComponentData != null && agent.Character != null)
+            //MissionWeapon missionWeapon = agent.WieldedWeapon;
+            //WeaponComponentData weaponComponentData = (!missionWeapon.Equals(MissionWeapon.Invalid)) ? agent.Equipment[missionWeapon.CurrentUsageIndex].CurrentUsageItem  : null;
+            if (agent.Character != null)
             {
                 if (agent.Formation != null && agent.Formation.Captain != null && agent.Formation.Captain.IsHero)
                 {
@@ -28,7 +29,7 @@ namespace BannerKings.Models.Vanilla
                 }
                 
 
-                if (agent.Character.IsHero)
+                /*if (agent.Character.IsHero)
                 {
                     Hero hero = (agent.Character as CharacterObject).HeroObject;
                     EducationData data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(hero);
@@ -37,7 +38,7 @@ namespace BannerKings.Models.Vanilla
 
                     if (data.HasPerk(BKPerks.Instance.FianHighlander) && weaponComponentData.RelevantSkill == DefaultSkills.TwoHanded && !agent.HasMount && weaponComponentData.WeaponClass == WeaponClass.TwoHandedSword)
                         agentDrivenProperties.SwingSpeedMultiplier *= 1.06f;
-                }
+                }*/
             }
         }
     }
