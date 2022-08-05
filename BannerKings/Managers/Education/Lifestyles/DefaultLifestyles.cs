@@ -70,19 +70,31 @@ namespace BannerKings.Managers.Education.Lifestyles
             caravaneer.Initialize(new TextObject("{=!}Caravaneer"), new TextObject("{=!}"),
                 DefaultSkills.Trade, DefaultSkills.Scouting, 
                 new List<PerkObject>() { BKPerks.Instance.CaravaneerStrider, BKPerks.Instance.CaravaneerDealer, BKPerks.Instance.CaravaneerEntrepeneur },
-                new TextObject("{=!}Reduced trade penalty by {EFFECT1}%\nParty size reduced by {EFFECT2}"),
+                new TextObject("{=!}Reduced trade penalty by {EFFECT1}%\nReduced speed during nighttime by {EFFECT2}%"),
                 20f, 8f);
 
             outlaw = new Lifestyle("lifestyle_outlaw");
             outlaw.Initialize(new TextObject("{=!}Outlaw"), new TextObject("{=!}"),
                 DefaultSkills.Roguery, DefaultSkills.Scouting, new List<PerkObject>() {  },
-                new TextObject("{=!}Reduced demesne weight of towns by {EFFECT1}%\nParty size reduced by {EFFECT2}"),
-                20f, 8f);
+                new TextObject("{=!}Bandit troops are {EFFECT1}% faster on map\nRandomly lose relations with heroes that disapprove criminality when entering dialogue"),
+                10f, 8f);
 
             mercenary = new Lifestyle("lifestyle_mercenary");
             mercenary.Initialize(new TextObject("{=!}Mercenary"), new TextObject("{=!}"),
                 DefaultSkills.Leadership, DefaultSkills.Roguery, new List<PerkObject>() {  },
-                new TextObject("{=!}Reduced demesne weight of towns by {EFFECT1}%\nParty size reduced by {EFFECT2}"),
+                new TextObject("{=!}Reduced demesne weight of towns by {EFFECT1}%\nSettlement stability reduced by {EFFECT2}%"),
+                20f, 8f);
+
+            kheshig = new Lifestyle("lifestyle_kheshig");
+            kheshig.Initialize(new TextObject("{=!}Kheshig"), new TextObject("{=!}"),
+                DefaultSkills.Leadership, DefaultSkills.Roguery, new List<PerkObject>() { },
+                new TextObject("{=!}Reduced demesne weight of towns by {EFFECT1}%\nSettlement stability reduced by {EFFECT2}%"),
+                20f, 8f);
+
+            varyag = new Lifestyle("lifestyle_varyag");
+            varyag.Initialize(new TextObject("{=!}Varyag"), new TextObject("{=!}"),
+                DefaultSkills.Leadership, DefaultSkills.Roguery, new List<PerkObject>() { },
+                new TextObject("{=!}Reduced demesne weight of towns by {EFFECT1}%\nSettlement stability reduced by {EFFECT2}%"),
                 20f, 8f);
         }
 
@@ -92,8 +104,9 @@ namespace BannerKings.Managers.Education.Lifestyles
             {
                 yield return Fian;
                 //yield return Diplomat;
-                yield return August;
                 yield return Cataphract;
+                yield return August;
+               
                 yield return SiegeEngineer;
                 yield return CivilAdministrator;
             }

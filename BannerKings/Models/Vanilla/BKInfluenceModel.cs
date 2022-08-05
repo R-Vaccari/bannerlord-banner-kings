@@ -7,6 +7,8 @@ using TaleWorlds.Localization;
 using static BannerKings.Managers.PopulationManager;
 using TaleWorlds.Library;
 using BannerKings.Managers.Titles;
+using BannerKings.Managers.Education;
+using BannerKings.Managers.Skills;
 
 namespace BannerKings.Models
 {
@@ -23,6 +25,19 @@ namespace BannerKings.Models
             float generalSupport = 0f;
             float generalAutonomy = 0f;
             float i = 0;
+
+            EducationData education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(clan.Leader);
+            if (education.HasPerk(BKPerks.Instance.OutlawPlunderer))
+            {
+                float bandits = 0;
+                if (clan.Leader.PartyBelongedTo != null && !clan.Leader.IsPrisoner)
+                    foreach (TroopRosterElement element in clan.Leader.PartyBelongedTo.MemberRoster.GetTroopRoster())
+                        if (element.Character.Occupation == Occupation.Bandit)
+                            bandits += element.Number;
+
+                baseResult.Add(bandits * 0.1f, BKPerks.Instance.OutlawPlunderer.Name);
+            }
+
             foreach (Settlement settlement in clan.Settlements)
             {
                 if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
@@ -66,6 +81,8 @@ namespace BannerKings.Models
                 if (finalSupport != 0f) baseResult.AddFactor(finalSupport, new TextObject("{=!}Overall notable support"));
                 if (finalAutonomy != 0f) baseResult.AddFactor(finalAutonomy, new TextObject("{=!}Overall settlement autonomy"));
             }
+
+
 
             return baseResult;
         }

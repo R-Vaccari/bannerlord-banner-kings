@@ -19,6 +19,9 @@ namespace BannerKings.Models.Vanilla
 
                 if (data.HasPerk(BKPerks.Instance.CaravaneerStrider))
                     baseResult.AddFactor(0.03f, BKPerks.Instance.CaravaneerStrider.Name);
+
+                if (Campaign.Current.IsNight && data.HasPerk(BKPerks.Instance.OutlawNightPredator))
+                    baseResult.AddFactor(0.06f, BKPerks.Instance.OutlawNightPredator.Name);
             }
 
             if (mobileParty.IsCaravan && mobileParty.Owner != null)

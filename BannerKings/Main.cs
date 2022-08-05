@@ -104,6 +104,8 @@ namespace BannerKings
                 campaignStarter.AddModel(new BKPartyConsumptionModel());
                 campaignStarter.AddModel(new BKWallHitpointModel());
                 campaignStarter.AddModel(new BKInventoryCapacityModel());
+                campaignStarter.AddModel(new BKMapVisibilityModel());
+                campaignStarter.AddModel(new BKPartyImpairmentModel());
                 campaignStarter.LoadGameTexts(BasePath.Name + "Modules/BannerKings/ModuleData/module_strings.xml");
 
                 BKAttributes.Instance.Initialize();

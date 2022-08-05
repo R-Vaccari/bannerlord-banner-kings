@@ -19,7 +19,8 @@ namespace BannerKings.Managers.Skills
         private PerkObject fianHighlander, fianRanger, fianFennid, civilEngineer, civilCultivator, civilOverseer, civilManufacturer,
             siegeEngineer, siegePlanner, siegeOverseer, augustCommander, augustDeFacto, augustDeJure, augustKingOfKings,
             cataphractEquites, cataphractAdaptiveTactics, cataphractKlibanophori, caravaneerStrider, caravaneerDealer,
-            caravaneerEntrepeneur;
+            caravaneerEntrepeneur, outlawKidnapper, outlawPlunderer, outlawNightPredator, outlawUnderworldKing,
+            kheshigKhorchin, kheshigTorguud, kheshigKhevtuul;
 
         public PerkObject FianHighlander => fianHighlander;
         public PerkObject FianRanger => fianRanger;
@@ -47,6 +48,10 @@ namespace BannerKings.Managers.Skills
         public PerkObject CaravaneerStrider => caravaneerStrider;
         public PerkObject CaravaneerDealer => caravaneerDealer;
         public PerkObject CaravaneerEntrepeneur => caravaneerEntrepeneur;
+
+        public PerkObject OutlawKidnapper => outlawKidnapper;
+        public PerkObject OutlawPlunderer => outlawPlunderer;
+        public PerkObject OutlawNightPredator => outlawNightPredator;
 
 
         public PerkObject LordshipEconomicAdministration => lordshipEconomicAdministration;
@@ -297,7 +302,58 @@ namespace BannerKings.Managers.Skills
                 SkillEffect.PerkRole.Personal, 20f,
                 SkillEffect.EffectIncrementType.AddFactor,
                 TroopClassFlag.None, TroopClassFlag.None);
+
+
+
+            outlawKidnapper = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleOutlawKidnapper"));
+            LifestylePerks.Add(outlawKidnapper);
+            outlawKidnapper.InitializeNew("{=!}Kidnapper", null, 75, null,
+                "{=!}30% better deals reansoming lords.",
+                SkillEffect.PerkRole.PartyLeader, 3f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                "{=!}Decreases the duration of the disorganized state after breaking sieges and raids by 30%.",
+                SkillEffect.PerkRole.Personal, 0.03f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                TroopClassFlag.None, TroopClassFlag.None);
+
+
+            outlawPlunderer = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleOutlawPlunderer"));
+            LifestylePerks.Add(outlawPlunderer);
+            outlawPlunderer.InitializeNew("{=!}Infamous Plunderer", null, 150, null,
+                "{=!}Bandit troops in your party yield influence.",
+                SkillEffect.PerkRole.PartyOwner, 10f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                "{=!}Raiding villages is 15% faster.",
+                SkillEffect.PerkRole.Captain, 8f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                TroopClassFlag.None, TroopClassFlag.None);
+
+            outlawNightPredator = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleOutlawNightPredator"));
+            LifestylePerks.Add(outlawNightPredator);
+            outlawNightPredator.InitializeNew("{=!}Night Predator", null, 225, null,
+                "{=!}Your party is 50% harder to spot in forests.",
+                SkillEffect.PerkRole.Personal, 10f,
+                SkillEffect.EffectIncrementType.Add,
+                "{=!}Increased nighttime movement by 6%.",
+                SkillEffect.PerkRole.Personal, 20f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                TroopClassFlag.None, TroopClassFlag.None);
+
+            outlawNightPredator = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleOutlawUnderworldKing"));
+            LifestylePerks.Add(outlawNightPredator);
+            outlawNightPredator.InitializeNew("{=!}Underworld King", null, 300, null,
+                "{=!}Killing bandit leaders yields renown.",
+                SkillEffect.PerkRole.Personal, 10f,
+                SkillEffect.EffectIncrementType.Add,
+                "{=!}",
+                SkillEffect.PerkRole.Personal, 20f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                TroopClassFlag.None, TroopClassFlag.None);
         }
+
+
+
+
         public override void Initialize()
         {
             InitializePerks();
