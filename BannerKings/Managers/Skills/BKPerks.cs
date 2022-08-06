@@ -52,6 +52,7 @@ namespace BannerKings.Managers.Skills
         public PerkObject OutlawKidnapper => outlawKidnapper;
         public PerkObject OutlawPlunderer => outlawPlunderer;
         public PerkObject OutlawNightPredator => outlawNightPredator;
+        public PerkObject OutlawUnderworldKing => outlawUnderworldKing;
 
 
         public PerkObject LordshipEconomicAdministration => lordshipEconomicAdministration;
@@ -339,9 +340,9 @@ namespace BannerKings.Managers.Skills
                 SkillEffect.EffectIncrementType.AddFactor,
                 TroopClassFlag.None, TroopClassFlag.None);
 
-            outlawNightPredator = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleOutlawUnderworldKing"));
-            LifestylePerks.Add(outlawNightPredator);
-            outlawNightPredator.InitializeNew("{=!}Underworld King", null, 300, null,
+            outlawUnderworldKing = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleOutlawUnderworldKing"));
+            LifestylePerks.Add(outlawUnderworldKing);
+            outlawUnderworldKing.InitializeNew("{=!}Underworld King", null, 300, null,
                 "{=!}Killing bandit leaders yields renown.",
                 SkillEffect.PerkRole.Personal, 10f,
                 SkillEffect.EffectIncrementType.Add,

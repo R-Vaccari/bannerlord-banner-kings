@@ -1,7 +1,7 @@
-﻿using BannerKings.Actions;
-using BannerKings.Managers.Skills;
+﻿using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
 using Helpers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
@@ -13,13 +13,39 @@ namespace BannerKings.Behaviours
 {
     public class BKClanBehavior : CampaignBehaviorBase
     {
+
         public override void RegisterEvents()
         {
             CampaignEvents.DailyTickClanEvent.AddNonSerializedListener(this, DailyClanTick);
+            CampaignEvents.HeroPrisonerTaken.AddNonSerializedListener(this, new Action<PartyBase, Hero>(OnHeroPrisonerTaken));
+            CampaignEvents.OnHeroGetsBusyEvent.AddNonSerializedListener(this, new Action<Hero, HeroGetsBusyReasons>(OnHeroGetsBusy));
+            CampaignEvents.HeroKilledEvent.AddNonSerializedListener(this, new Action<Hero, Hero, KillCharacterAction.KillCharacterActionDetail, bool>(OnHeroKilled));
         }
 
         public override void SyncData(IDataStore dataStore)
         {
+        }
+
+        private void OnHeroGetsBusy(Hero hero, HeroGetsBusyReasons heroGetsBusyReason)
+        {
+            if (hero.CompanionOf != null) RemovePartyRoleIfExist(hero);
+        }
+
+        private void OnHeroPrisonerTaken(PartyBase party, Hero prisoner)
+        {
+            if (prisoner.CompanionOf != null) RemovePartyRoleIfExist(prisoner);
+        }
+
+        private void OnHeroKilled(Hero victim, Hero killer, KillCharacterAction.KillCharacterActionDetail detail, bool showNotification = true)
+        {
+            if (victim.CompanionOf != null) RemovePartyRoleIfExist(victim);  
+        }
+
+        private void RemovePartyRoleIfExist(Hero hero)
+        {
+            foreach (WarPartyComponent warPartyComponent in hero.Clan.WarPartyComponents)
+                if (warPartyComponent.MobileParty.GetHeroPerkRole(hero) != SkillEffect.PerkRole.None)
+                    warPartyComponent.MobileParty.RemoveHeroPerkRole(hero);
         }
 
         private void DailyClanTick(Clan clan)
@@ -31,15 +57,49 @@ namespace BannerKings.Behaviours
             int councillours = BannerKingsConfig.Instance.CourtManager.GetCouncilloursCount(clan);
             if (councillours != 0) clan.Leader.AddSkillXp(BKSkills.Instance.Lordship, councillours * 2f);
 
-            if (clan == Clan.PlayerClan) return;
+            if (clan == Clan.PlayerClan || clan.IsUnderMercenaryService || clan.IsMinorFaction || clan.IsBanditFaction) return;
 
             EvaluateRecruitKnight(clan);
             EvaluateRecruitCompanion(clan);
+            SetCompanionParty(clan);
+        }
+
+        private void SetCompanionParty(Clan clan)
+        {
+            foreach (Hero companion in clan.Companions)
+            {
+                if (companion.PartyBelongedTo != null && !companion.IsPrisoner && companion.IsReady)
+                {
+                    SkillEffect.PerkRole role;
+                    if (companion.GetSkillValue(DefaultSkills.Medicine) >= 80) role = SkillEffect.PerkRole.Surgeon;
+                    else if (companion.GetSkillValue(DefaultSkills.Engineering) >= 80) role = SkillEffect.PerkRole.Engineer;
+                    else if (companion.GetSkillValue(DefaultSkills.Steward) >= 80) role = SkillEffect.PerkRole.Quartermaster;
+                    else if (companion.GetSkillValue(DefaultSkills.Scouting) >= 80) role = SkillEffect.PerkRole.Scout;
+                    else role = SkillEffect.PerkRole.None;
+
+                    WarPartyComponent warParty = clan.WarPartyComponents.FirstOrDefault(x => x.Leader == clan.Leader);
+                    if (warParty != null && warParty.MobileParty != null) AssignToRole(warParty.MobileParty, role, companion);
+                    else
+                    {
+                        WarPartyComponent warParty2 = clan.WarPartyComponents.GetRandomElement();
+                        if (warParty2 != null && warParty2.MobileParty != null) AssignToRole(warParty2.MobileParty, role, companion);
+                    }
+                }
+            }
+        }
+
+        private void AssignToRole(MobileParty party, SkillEffect.PerkRole role, Hero hero)
+        {
+            AddHeroToPartyAction.Apply(hero, party, false);
+            if (role == SkillEffect.PerkRole.Scout && party.Scout == null) party.SetPartyScout(hero);
+            else if (role == SkillEffect.PerkRole.Engineer && party.Engineer == null) party.SetPartyEngineer(hero);
+            else if (role == SkillEffect.PerkRole.Quartermaster && party.Quartermaster == null) party.SetPartyQuartermaster(hero);
+            else if (role == SkillEffect.PerkRole.Surgeon && party.Surgeon == null) party.SetPartySurgeon(hero); 
         }
 
         private void EvaluateRecruitCompanion(Clan clan)
         {
-            if (clan.Leader.PartyBelongedTo == null || clan.Leader.IsPrisoner) return;
+            if (clan.Leader.PartyBelongedTo == null || clan.Leader.IsPrisoner || clan.Companions.Count >= clan.CompanionLimit) return;
 
             WarPartyComponent warParty = clan.WarPartyComponents.FirstOrDefault(x => x.Leader == clan.Leader);
             if (warParty == null || warParty.MobileParty == null) return;
@@ -57,14 +117,13 @@ namespace BannerKings.Behaviours
             if (candidates.Count == 0) return;
 
             SkillEffect.PerkRole result = MBRandom.ChooseWeighted(candidates);
-            Dictionary<SkillEffect.PerkRole, List<TraitObject>> traits = new Dictionary<SkillEffect.PerkRole, List<TraitObject>>() 
-            { 
+            Dictionary<SkillEffect.PerkRole, List<TraitObject>> traits = new Dictionary<SkillEffect.PerkRole, List<TraitObject>>()
+            {
                 { SkillEffect.PerkRole.Scout, new List<TraitObject>() { DefaultTraits.WoodsScoutSkills, DefaultTraits.SteppeScoutSkills, DefaultTraits.HillScoutSkills, DefaultTraits.DesertScoutSkills } },
                 { SkillEffect.PerkRole.Surgeon, new List<TraitObject>() { DefaultTraits.Surgery } },
                 { SkillEffect.PerkRole.Engineer, new List<TraitObject>() { DefaultTraits.Siegecraft } },
                 { SkillEffect.PerkRole.Quartermaster, new List<TraitObject>() { DefaultTraits.Manager } },
             };
-
 
             CharacterObject template = GetAdequateTemplate(traits[result], clan.Culture);
             if (template == null) return;
@@ -76,12 +135,7 @@ namespace BannerKings.Behaviours
                     Campaign.Current.Models.AgeModel.HeroComesOfAge + 5 + MBRandom.RandomInt(27));
             EquipmentHelper.AssignHeroEquipmentFromEquipment(hero, equipment);
             hero.CompanionOf = clan;
-
-            AddHeroToPartyAction.Apply(hero, mobileParty, false);
-            if (result == SkillEffect.PerkRole.Scout) mobileParty.SetPartyScout(hero);
-            else if (result == SkillEffect.PerkRole.Surgeon) mobileParty.SetPartySurgeon(hero);
-            else if (result == SkillEffect.PerkRole.Quartermaster) mobileParty.SetPartyQuartermaster(hero);
-            else mobileParty.SetPartyEngineer(hero);
+            AssignToRole(mobileParty, result, hero);
         }
 
         private CharacterObject GetAdequateTemplate(List<TraitObject> traits, CultureObject culture)
@@ -102,7 +156,7 @@ namespace BannerKings.Behaviours
                                                     select e;
             if (source == null) return null;
             MBEquipmentRoster roster = (from e in source where e.EquipmentCulture == clan.Culture select e).ToList()
-                .GetRandomElementWithPredicate(x => noble ? x.IsMediumNobleEquipmentTemplate : x.StringId.Contains("bk_companion"));
+                .GetRandomElementWithPredicate(x => noble ? x.IsMediumNobleEquipmentTemplate : x.StringId.Contains("bannerkings_companion"));
 
             if (roster == null) return null;
 

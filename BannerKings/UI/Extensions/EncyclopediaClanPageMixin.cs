@@ -114,7 +114,7 @@ namespace BannerKings.UI.Extensions
                 clanPageVM.ClanInfo.Add(new StringPairItemVM(new TextObject("{=!}Owned Workshops:").ToString(),
                     workshops.ToString(), null));
 
-                if (highestTitle != null) clanPageVM.ClanInfo.Add(new StringPairItemVM(new TextObject("{=!}Highest Title:").ToString(),
+                if (highestTitle != null) clanPageVM.ClanInfo.Add(new StringPairItemVM(new TextObject("{=!}Title Level:").ToString(),
                     highestTitle, null));
 
                 addedFields = true;

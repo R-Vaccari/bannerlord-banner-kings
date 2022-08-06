@@ -19,6 +19,8 @@ namespace BannerKings.Managers.Education.Lifestyles
         public Lifestyle Cataphract => cataphract;
         public Lifestyle SiegeEngineer => siegeEngineer;
         public Lifestyle CivilAdministrator => civilAdministrator;
+        public Lifestyle Outlaw => outlaw;
+        public Lifestyle Caravaneer => caravaneer;
         public override void Initialize()
         {
             MBReadOnlyList<CultureObject> cultures = Game.Current.ObjectManager.GetObjectTypeList<CultureObject>();
@@ -75,7 +77,9 @@ namespace BannerKings.Managers.Education.Lifestyles
 
             outlaw = new Lifestyle("lifestyle_outlaw");
             outlaw.Initialize(new TextObject("{=!}Outlaw"), new TextObject("{=!}"),
-                DefaultSkills.Roguery, DefaultSkills.Scouting, new List<PerkObject>() {  },
+                DefaultSkills.Roguery, DefaultSkills.Scouting,
+                new List<PerkObject>() { BKPerks.Instance.OutlawKidnapper, BKPerks.Instance.OutlawPlunderer,
+                BKPerks.Instance.OutlawNightPredator, BKPerks.Instance.OutlawUnderworldKing },
                 new TextObject("{=!}Bandit troops are {EFFECT1}% faster on map\nRandomly lose relations with heroes that disapprove criminality when entering dialogue"),
                 10f, 8f);
 
@@ -105,8 +109,9 @@ namespace BannerKings.Managers.Education.Lifestyles
                 yield return Fian;
                 //yield return Diplomat;
                 yield return Cataphract;
+                yield return Outlaw;
+                yield return Caravaneer;
                 yield return August;
-               
                 yield return SiegeEngineer;
                 yield return CivilAdministrator;
             }
