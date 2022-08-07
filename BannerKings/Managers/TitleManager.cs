@@ -208,7 +208,7 @@ namespace BannerKings.Managers
             return list;
         }
 
-        public Dictionary<Clan, List<FeudalTitle>> CalculateVassalClanTitles(Clan suzerainClan)
+        public Dictionary<Clan, List<FeudalTitle>> CalculateVassalClanTitles(Clan suzerainClan, Clan targetClan = null)
         {
             Dictionary<Clan, List<FeudalTitle>> clans = new Dictionary<Clan, List<FeudalTitle>> ();
             Kingdom kingdom = suzerainClan.Kingdom;
@@ -221,7 +221,7 @@ namespace BannerKings.Managers
                 if (title.vassals != null && title.vassals.Count > 0)
                     foreach (FeudalTitle vassal in title.vassals)
                     {
-                        if (vassal.deJure.Clan == suzerainClan) continue;
+                        if (vassal.deJure.Clan == suzerainClan || (targetClan != null && vassal.deJure.Clan != targetClan)) continue;
 
                         FeudalTitle vassalSuzerain = this.CalculateHeroSuzerain(vassal.deJure);
                         if (vassalSuzerain == null) continue;

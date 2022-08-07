@@ -68,7 +68,7 @@ namespace BannerKings.Behaviours
         {
             foreach (Hero companion in clan.Companions)
             {
-                if (companion.PartyBelongedTo != null && !companion.IsPrisoner && companion.IsReady)
+                if (companion.PartyBelongedTo != null && companion.PartyBelongedTo.LeaderHero == companion && !companion.IsPrisoner && companion.IsReady)
                 {
                     SkillEffect.PerkRole role;
                     if (companion.GetSkillValue(DefaultSkills.Medicine) >= 80) role = SkillEffect.PerkRole.Surgeon;

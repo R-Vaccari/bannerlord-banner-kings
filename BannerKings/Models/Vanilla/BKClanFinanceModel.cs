@@ -76,7 +76,7 @@ namespace BannerKings.Models
 					if (clan.Kingdom != pair.Key.Kingdom) continue;
 					float amount = 0f;
 					foreach (FeudalTitle title in pair.Value)
-						amount += title.dueTax;
+						amount += (int)title.dueTax;
 					result.Add(amount, new TextObject("{=!}Taxes from {CLAN}").SetTextVariable("CLAN", pair.Key.Name));
 				}
 			}
@@ -130,9 +130,6 @@ namespace BannerKings.Models
 				}
 
 
-			List <FeudalTitle> titles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(clan);
-			if (titles.Count == 0) return;
-
 			FeudalTitle suzerain = BannerKingsConfig.Instance.TitleManager.CalculateHeroSuzerain(clan.Leader);
 			if (suzerain == null) return;
 
@@ -141,9 +138,12 @@ namespace BannerKings.Models
 				deJureKingdom = suzerain.deJure.Clan.Kingdom;
 
 			if (deJureKingdom == null || deJureKingdom != clan.Kingdom) return;
+
 			float amount = 0f;
-			foreach (FeudalTitle title in titles)
-				amount += title.dueTax;
+			Dictionary<Clan, List<FeudalTitle>> dictionary = BannerKingsConfig.Instance.TitleManager.CalculateVassalClanTitles(suzerain.deJure.Clan, clan);
+			foreach (FeudalTitle title in dictionary[clan])
+				amount += (int)title.dueTax;
+
 			result.Add(-amount, new TextObject("{=!}Taxes to {SUZERAIN}").SetTextVariable("SUZERAIN", suzerain.deJure.Name));
 		}
     }

@@ -117,6 +117,14 @@ namespace BannerKings.UI.Extensions
                 if (highestTitle != null) clanPageVM.ClanInfo.Add(new StringPairItemVM(new TextObject("{=!}Title Level:").ToString(),
                     highestTitle, null));
 
+                ExplainedNumber income = BannerKingsConfig.Instance.ClanFinanceModel.CalculateClanIncome(clan, true);
+                clanPageVM.ClanInfo.Add(new StringPairItemVM(new TextObject("{=!}Income:").ToString(),
+                    income.ResultNumber.ToString(), new BasicTooltipViewModel(() => income.GetExplanations())));
+
+                ExplainedNumber expenses = BannerKingsConfig.Instance.ClanFinanceModel.CalculateClanExpenses(clan, true);
+                clanPageVM.ClanInfo.Add(new StringPairItemVM(new TextObject("{=!}Expenses:").ToString(),
+                    expenses.ResultNumber.ToString(), new BasicTooltipViewModel(() => expenses.GetExplanations())));
+
                 addedFields = true;
             }
         }
