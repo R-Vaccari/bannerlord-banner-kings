@@ -21,6 +21,7 @@ namespace BannerKings.Managers.Education.Lifestyles
         public Lifestyle CivilAdministrator => civilAdministrator;
         public Lifestyle Outlaw => outlaw;
         public Lifestyle Caravaneer => caravaneer;
+        public Lifestyle Mercenary => mercenary;
         public override void Initialize()
         {
             MBReadOnlyList<CultureObject> cultures = Game.Current.ObjectManager.GetObjectTypeList<CultureObject>();
@@ -109,6 +110,7 @@ namespace BannerKings.Managers.Education.Lifestyles
                 yield return Fian;
                 //yield return Diplomat;
                 yield return Cataphract;
+                yield return Mercenary;
                 yield return Outlaw;
                 yield return Caravaneer;
                 yield return August;

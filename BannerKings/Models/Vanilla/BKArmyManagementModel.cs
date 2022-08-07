@@ -1,5 +1,7 @@
 ﻿using BannerKings.Managers.Court;
+using BannerKings.Managers.Education;
 using BannerKings.Managers.Kingdoms.Policies;
+using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.SandBox.GameComponents.Map;
@@ -36,6 +38,13 @@ namespace BannerKings.Models
             if (armyMemberParty.MapFaction.IsKingdomFaction &&
                 (armyMemberParty.MapFaction as Kingdom).ActivePolicies.Contains(BKPolicies.Instance.LimitedArmyPrivilege))
                 result *= 1.5f;
+
+            if (armyMemberParty.LeaderHero != null)
+            {
+                EducationData education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(armyMemberParty.LeaderHero);
+                if (education.HasPerk(BKPerks.Instance.MercenaryFamousSellswords))
+                    result *= 1.3f;
+            }
 
             return result;
         }

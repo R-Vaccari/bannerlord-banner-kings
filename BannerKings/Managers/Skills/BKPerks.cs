@@ -20,7 +20,7 @@ namespace BannerKings.Managers.Skills
             siegeEngineer, siegePlanner, siegeOverseer, augustCommander, augustDeFacto, augustDeJure, augustKingOfKings,
             cataphractEquites, cataphractAdaptiveTactics, cataphractKlibanophori, caravaneerStrider, caravaneerDealer,
             caravaneerEntrepeneur, outlawKidnapper, outlawPlunderer, outlawNightPredator, outlawUnderworldKing,
-            kheshigKhorchin, kheshigTorguud, kheshigKhevtuul;
+            kheshigKhorchin, kheshigTorguud, kheshigKhevtuul, mercenaryLocalConnections, mercenaryRansacker, mercenarySellswords;
 
         public PerkObject FianHighlander => fianHighlander;
         public PerkObject FianRanger => fianRanger;
@@ -53,6 +53,14 @@ namespace BannerKings.Managers.Skills
         public PerkObject OutlawPlunderer => outlawPlunderer;
         public PerkObject OutlawNightPredator => outlawNightPredator;
         public PerkObject OutlawUnderworldKing => outlawUnderworldKing;
+
+        public PerkObject KheshigKhorchin => kheshigKhorchin;
+        public PerkObject KheshigTorguud => kheshigTorguud;
+        public PerkObject KheshigKhevtuul => kheshigKhevtuul;
+
+        public PerkObject MercenaryLocalConnections => mercenaryLocalConnections;
+        public PerkObject MercenaryRansacker => mercenaryRansacker;
+        public PerkObject MercenaryFamousSellswords => mercenarySellswords;
 
 
         public PerkObject LordshipEconomicAdministration => lordshipEconomicAdministration;
@@ -347,6 +355,40 @@ namespace BannerKings.Managers.Skills
                 SkillEffect.PerkRole.Personal, 10f,
                 SkillEffect.EffectIncrementType.Add,
                 "{=!}",
+                SkillEffect.PerkRole.Personal, 20f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                TroopClassFlag.None, TroopClassFlag.None);
+
+
+
+            mercenaryLocalConnections = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleMercenaryLocalConnections"));
+            LifestylePerks.Add(mercenaryLocalConnections);
+            mercenaryLocalConnections.InitializeNew("{=!}Local Connections", null, 75, null,
+                "{=!}While serving as mercenary, gain the ability to recruit from local minor factions in towns.",
+                SkillEffect.PerkRole.PartyLeader, 3f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                "{=!}Recruiting mercenary troops is 10% cheaper.",
+                SkillEffect.PerkRole.Personal, 0.03f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                TroopClassFlag.None, TroopClassFlag.None);
+
+
+            mercenaryRansacker = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleMercenaryRansacker"));
+            mercenaryRansacker.InitializeNew("{=!}Ransacker", null, 150, null,
+                "{=!}Gain 10% more share of loot in victories.",
+                SkillEffect.PerkRole.PartyOwner, 10f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                "{=!}Raiding villages is 15% faster.",
+                SkillEffect.PerkRole.Captain, 8f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                TroopClassFlag.None, TroopClassFlag.None);
+
+            mercenarySellswords = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleMercenarySellswords"));
+            mercenarySellswords.InitializeNew("{=!}Famous Sellswords", null, 225, null,
+                "{=!}Influence award for army participation increased by 30%.",
+                SkillEffect.PerkRole.Personal, 10f,
+                SkillEffect.EffectIncrementType.Add,
+                "{=!}Renown award for victories increased by 20%.",
                 SkillEffect.PerkRole.Personal, 20f,
                 SkillEffect.EffectIncrementType.AddFactor,
                 TroopClassFlag.None, TroopClassFlag.None);

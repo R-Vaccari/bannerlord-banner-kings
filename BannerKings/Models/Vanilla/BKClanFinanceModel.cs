@@ -1,4 +1,7 @@
 ﻿using BannerKings.Managers.Court;
+using BannerKings.Managers.Education;
+using BannerKings.Managers.Education.Lifestyles;
+using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
 using BannerKings.Populations;
 using System.Collections.Generic;
@@ -6,6 +9,7 @@ using System.Linq;
 using System.Reflection;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.SandBox.GameComponents;
+using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Models
@@ -106,6 +110,17 @@ namespace BannerKings.Models
 			CouncilMember position = BannerKingsConfig.Instance.CourtManager.GetHeroPosition(clan.Leader);
 			if (position != null)
 				result.Add(position.DueWage, new TextObject("{=!}Councillor role"));
+		}
+
+		private void AddMercenaryIncome(Clan clan, ref ExplainedNumber goldChange, bool applyWithdrawals)
+		{
+			if (clan.IsUnderMercenaryService && clan.Leader != null && clan.Kingdom != null)
+			{
+				int num = MathF.Ceiling(clan.Influence * (1f / Campaign.Current.Models.ClanFinanceModel.RevenueSmoothenFraction())) * clan.MercenaryAwardMultiplier;
+				EducationData education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(clan.Leader);
+				if (education.Lifestyle == DefaultLifestyles.Instance.Mercenary)
+					goldChange.Add((int)(num * 0.15f), new TextObject("{=!}Lifestyle"));
+			}
 		}
 
 		public void CalculateClanExpenseInternal(Clan clan, ref ExplainedNumber result, bool applyWithdrawals)
