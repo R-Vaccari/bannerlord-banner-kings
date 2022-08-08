@@ -456,24 +456,10 @@ namespace BannerKings.Managers.Court
             set => dueWage = value;
         }
 
-        public TextObject GetName()
-        {
-            
-            return GameTexts.FindText("str_bk_council_" + position.ToString().ToLower() + (isRoyal ? "_royal" : ""),Culture.StringId);
-            /*
-            Religion rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(clan.Leader);
-            if (rel != null)
-            {
-                if (rel.Leadership is KinshipLeadership)
-                    return rel.Faith.GetRankTitle(rel.Faith.GetMaxClergyRank());
-
-            }
-
-            return GameTexts.FindText("str_bk_spiritual_guide");*/
-        }
-
+        public TextObject GetName() => GameTexts.FindText("str_bk_council_" + position.ToString().ToLower() + (isRoyal ? "_royal" : ""),Culture.StringId);
         public TextObject GetDescription() => GameTexts.FindText("str_bk_council_description_" + position.ToString().ToLower())
             .SetTextVariable("NAME", GetName());
+        public TextObject GetEffects() => GameTexts.FindText("str_bk_council_" + position.ToString().ToLower() + "_effects");
 
         public bool IsValidCandidate(Hero candidate)
         {

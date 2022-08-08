@@ -74,7 +74,9 @@ namespace BannerKings.Behaviours
         {
             foreach (Hero companion in clan.Companions)
             {
-                if (companion.PartyBelongedTo != null && companion.PartyBelongedTo.LeaderHero == companion && !companion.IsPrisoner && companion.IsReady)
+                if ((companion.PartyBelongedTo != null && companion.PartyBelongedTo.LeaderHero == companion && !companion.IsPrisoner && companion.IsReady) ||
+                    (companion.PartyBelongedTo != null && companion.PartyBelongedTo.LeaderHero.Clan == companion.Clan && !companion.IsPrisoner &&
+                    companion.PartyBelongedTo.GetHeroPerkRole(companion) == SkillEffect.PerkRole.None))
                 {
                     SkillEffect.PerkRole role;
                     if (companion.GetSkillValue(DefaultSkills.Medicine) >= 80) role = SkillEffect.PerkRole.Surgeon;
@@ -83,15 +85,26 @@ namespace BannerKings.Behaviours
                     else if (companion.GetSkillValue(DefaultSkills.Scouting) >= 80) role = SkillEffect.PerkRole.Scout;
                     else role = SkillEffect.PerkRole.None;
 
-                    WarPartyComponent warParty = clan.WarPartyComponents.FirstOrDefault(x => x.Leader == clan.Leader);
-                    if (warParty != null && warParty.MobileParty != null) AssignToRole(warParty.MobileParty, role, companion);
-                    else
+
+                    if (clan.WarPartyComponents.Count > 0)
                     {
-                        WarPartyComponent warParty2 = clan.WarPartyComponents.GetRandomElement();
-                        if (warParty2 != null && warParty2.MobileParty != null) AssignToRole(warParty2.MobileParty, role, companion);
+                        WarPartyComponent warParty = clan.WarPartyComponents.GetRandomElementWithPredicate(x => IsRoleFree(x.MobileParty, role));
+                        AssignToRole(warParty.MobileParty, role, companion);
                     }
                 }
             }
+        }
+
+        private bool IsRoleFree(MobileParty party, SkillEffect.PerkRole role)
+        {
+            if (role != SkillEffect.PerkRole.None)
+            {
+                if (role == SkillEffect.PerkRole.Scout) return party.Scout == null;
+                else if (role == SkillEffect.PerkRole.Engineer) return party.Engineer == null;
+                else if (role == SkillEffect.PerkRole.Quartermaster) return party.Quartermaster == null;
+                else if (role == SkillEffect.PerkRole.Surgeon) return party.Surgeon == null;
+            }
+            return true;
         }
 
         private void AssignToRole(MobileParty party, SkillEffect.PerkRole role, Hero hero)

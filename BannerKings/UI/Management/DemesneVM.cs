@@ -75,8 +75,8 @@ namespace BannerKings.UI
 				ExplainedNumber demesneCap = BannerKingsConfig.Instance.StabilityModel.CalculateDemesneLimit(Hero.MainHero);
 
 				GovernmentInfo.Add(new InformationElement(new TextObject("Demesne limit:").ToString(), currentDemesne.ResultNumber + " / " + demesneCap.ResultNumber,
-					new TextObject("{TEXT}\nCurrent demesne: {CURRENT}\nLimit:{LIMIT}.")
-					.SetTextVariable("TEXT", new TextObject("{=!}Demesne limit describes how many settlements you may own without negative implications. Different settlement types have different weights, villages being the lowest, towns being the highest. Being over the limit reduces stability across all your settlements."))
+					new TextObject("{TEXT}\nCurrent demesne:\n{CURRENT}\n \nLimit:\n{LIMIT}")
+					.SetTextVariable("TEXT", new TextObject("{=!}Demesne limit describes how many settlements you may own without negative implications. Different settlement types have different weights, villages being the lowest, towns being the highest. Being over the limit reduces stability across all your settlements. Owning a settlement's title will reduce it's weight."))
 					.SetTextVariable("CURRENT", currentDemesne.GetExplanations())
 					.SetTextVariable("LIMIT", demesneCap.GetExplanations())
 					.ToString()));
@@ -84,8 +84,8 @@ namespace BannerKings.UI
 				ExplainedNumber currentUnlandedDemesne = BannerKingsConfig.Instance.StabilityModel.CalculateCurrentUnlandedDemesne(Hero.MainHero.Clan);
 				ExplainedNumber unlandedDemesneCap = BannerKingsConfig.Instance.StabilityModel.CalculateUnlandedDemesneLimit(Hero.MainHero);
 
-				GovernmentInfo.Add(new InformationElement(new TextObject("Demesne limit:").ToString(), currentUnlandedDemesne.ResultNumber + " / " + unlandedDemesneCap.ResultNumber,
-					new TextObject("{TEXT}\nCurrent demesne: {CURRENT}\nLimit:{LIMIT}.")
+				GovernmentInfo.Add(new InformationElement(new TextObject("Unlanded Demesne limit:").ToString(), currentUnlandedDemesne.ResultNumber + " / " + unlandedDemesneCap.ResultNumber,
+					new TextObject("{TEXT}\nCurrent demesne:\n{CURRENT}\n \nLimit:\n{LIMIT}")
 					.SetTextVariable("TEXT", new TextObject("{=!}Unlanded demesne limit describes how many unlanded titles you may own. Unlanded titles are titles such as dukedoms and kingdoms - titles not directly associated with a settlement. Dukedoms have the lowest weight while empires have the biggest. Being over the limit progressively reduces relations with your vassals."))
 					.SetTextVariable("CURRENT", currentUnlandedDemesne.GetExplanations())
 					.SetTextVariable("LIMIT", unlandedDemesneCap.GetExplanations())
@@ -95,8 +95,8 @@ namespace BannerKings.UI
 				ExplainedNumber vassalsCap = BannerKingsConfig.Instance.StabilityModel.CalculateVassalLimit(Hero.MainHero);
 
 				GovernmentInfo.Add(new InformationElement(new TextObject("Vassal limit:").ToString(), currentVassals.ResultNumber + " / " + vassalsCap.ResultNumber,
-					new TextObject("{TEXT}\nCurrent vassals:\n{CURRENT}\n \nLimit:\n{LIMIT}.")
-					.SetTextVariable("TEXT", new TextObject("{=!}Vassal limit is how many vassals you may have without negative consequences. Vassals are clans whose highest title are under your own (ie, a barony title under your county title, or knight clans with a single lordship) or knights in your clan. Companions and family members do not count. Being over the limit progressively reduces your influence gain."))
+					new TextObject("{TEXT}\nCurrent vassals:\n{CURRENT}\n \nLimit:\n{LIMIT}")
+					.SetTextVariable("TEXT", new TextObject("{=!}Vassal limit is how many vassals you may have without negative consequences. Vassals are clans whose highest title are under your own (ie, a barony title under your county title, or knight clans with a single lordship) or knights in your clan. Knights only weight 0.5 towards the limit, while clan leaders weight 1. Companions and family members do not count. Being over the limit progressively reduces your influence gain."))
 					.SetTextVariable("CURRENT", currentVassals.GetExplanations())
 					.SetTextVariable("LIMIT", vassalsCap.GetExplanations())
 					.ToString()));

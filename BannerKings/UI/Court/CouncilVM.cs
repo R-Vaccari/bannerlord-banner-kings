@@ -7,6 +7,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.ViewModelCollection;
 using TaleWorlds.CampaignSystem.ViewModelCollection.GameMenu.TownManagement;
 using TaleWorlds.Core;
+using TaleWorlds.Core.ViewModelCollection;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
@@ -52,12 +53,19 @@ namespace BannerKings.UI.Items
                 {
                     ImageIdentifier image = null;
                     string name = "None";
+                    string hint = "";
                     if (vm.Governor != null)
                     {
                         image = new ImageIdentifier(CampaignUIHelper.GetCharacterCode(vm.Governor.CharacterObject));
                         name = vm.Governor.Name.ToString();
+                        MBStringBuilder sb = new MBStringBuilder();
+                        foreach (TooltipProperty property in UIHelper.GetHeroGovernorEffectsTooltip(vm.Governor, Position, council.GetCompetence(vm.Governor, Position)))
+                            if (!property.DefinitionLabel.IsEmpty() && !property.ValueLabel.IsEmpty()) 
+                                sb.AppendLine(property.DefinitionLabel + ": " + property.ValueLabel);
+                        hint = sb.ToString();
                     }
-                    options.Add(new InquiryElement(vm.Governor, name, image));
+
+                    options.Add(new InquiryElement(vm.Governor, name, image, true, hint));
                 }
 
                 BKCouncilModel model = (BKCouncilModel)BannerKingsConfig.Instance.Models.First(x => x is BKCouncilModel);
@@ -85,27 +93,18 @@ namespace BannerKings.UI.Items
                 CouncilMember target = council.AllPositions.FirstOrDefault(x => x.Position == Position);
                 if (target == null) return;
 
+                CouncilAction action;
                 BKCouncilModel model = (BKCouncilModel)BannerKingsConfig.Instance.Models.First(x => x is BKCouncilModel);
-                if (target.Member == Hero.MainHero)
-                {
-                    CouncilAction action = model.GetAction(CouncilActionType.RELINQUISH, council, Hero.MainHero, target);
-                    UIHelper.ShowActionPopup(action, this);
-                } else if (council.GetHeroPosition(Hero.MainHero) == null || target.Member == null)
-                {
-                    CouncilAction action = model.GetAction(CouncilActionType.REQUEST, council, Hero.MainHero, target);
-                    UIHelper.ShowActionPopup(action, this);
-                } else
-                {
-                    CouncilAction action = model.GetAction(CouncilActionType.SWAP, council, Hero.MainHero, target, council.GetHeroPosition(Hero.MainHero));
-                    UIHelper.ShowActionPopup(action, this);
-                }
+                if (target.Member == Hero.MainHero) action = model.GetAction(CouncilActionType.RELINQUISH, council, Hero.MainHero, target);
+                else if (council.GetHeroPosition(Hero.MainHero) == null || target.Member == null) action = model.GetAction(CouncilActionType.REQUEST, council, Hero.MainHero, target);
+                else  action = model.GetAction(CouncilActionType.SWAP, council, Hero.MainHero, target, council.GetHeroPosition(Hero.MainHero));
+
+                UIHelper.ShowActionPopup(action, this);
             }
             
         }
 
-        private void OnSelection(SettlementGovernorSelectionItemVM item)
-        {
-            onDone(item.Governor);
-        }
+        private void OnSelection(SettlementGovernorSelectionItemVM item) => onDone(item.Governor);
+        
     }
 }

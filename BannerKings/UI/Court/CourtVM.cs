@@ -25,7 +25,7 @@ namespace BannerKings.UI.Court
 		private MBBindingList<CouncilPositionVM> corePositions, royalPositions;
 		private MBBindingList<InformationElement> courtInfo, privilegesInfo, courtierInfo;
 		private CharacterVM currentCharacter;
-		private string positionName, positionDescription;
+		private string positionName, positionDescription, positionEffects;
 
 		public CourtVM(bool royal) : base(null, false)
         {
@@ -101,6 +101,7 @@ namespace BannerKings.UI.Court
 			{
 				positionName = member.GetName().ToString();
 				positionDescription = member.GetDescription().ToString();
+				positionEffects = member.GetEffects().ToString();
 
 				foreach (CouncilPrivileges privilege in member.GetPrivileges())
 					PrivilegesInfo.Add(new InformationElement(GameTexts.FindText("str_bk_council_privilege", privilege.ToString().ToLower()).ToString(),
@@ -136,6 +137,7 @@ namespace BannerKings.UI.Court
             {
 				CurrentPositionNameText = member.GetName().ToString();
 				CurrentPositionDescriptionText = member.GetDescription().ToString();
+				CurrentEffectsDescriptionText = member.GetEffects().ToString();
 				PrivilegesInfo.Clear();
 				foreach (CouncilPrivileges privilege in member.GetPrivileges())
 					PrivilegesInfo.Add(new InformationElement(GameTexts.FindText("str_bk_council_privilege", privilege.ToString().ToLower()).ToString(),
@@ -147,10 +149,10 @@ namespace BannerKings.UI.Court
 		private void SetId(string id)
 		{
 			CouncilPosition newPosition = (CouncilPosition)Enum.Parse(typeof(CouncilPosition), id);
-			if (this.councilPosition != newPosition)
+			if (councilPosition != newPosition)
 			{
-				this.councilPosition = newPosition;
-				this.CouncilVM.Position = newPosition;
+				councilPosition = newPosition;
+				CouncilVM.Position = newPosition;
 				RefreshValues();
 			}
 			CouncilVM.ShowOptions();
@@ -175,7 +177,24 @@ namespace BannerKings.UI.Court
 		public string CourtiersText => new TextObject("{=!}Courtiers").ToString();
 
 		[DataSourceProperty]
-		public string PrivilegesText => new TextObject("{=bk_privileges}Privileges").ToString();
+		public string EffectsText => new TextObject("{=!}Effects").ToString();
+
+		[DataSourceProperty]
+		public string PrivilegesText => new TextObject("{=bk_privileges}Privileges").ToString(); 
+
+		[DataSourceProperty]
+		public string CurrentEffectsDescriptionText
+		{
+			get => positionEffects;
+			set
+			{
+				if (value != positionEffects)
+				{
+					positionEffects = value;
+					OnPropertyChangedWithValue(value, "CurrentEffectsDescriptionText");
+				}
+			}
+		}
 
 		[DataSourceProperty]
 		public string CurrentPositionNameText

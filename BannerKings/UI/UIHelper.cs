@@ -386,42 +386,9 @@ namespace BannerKings.UI
 		
 			TooltipAddEmptyLine(list);
 			list.Add(new TooltipProperty(new TextObject("{=!}Settlement Effects").ToString(), " ", 0));
-			TooltipAddSeperator(list);
-			List<ValueTuple<string, string>> councilEffects = GetCouncilMemberEffects(position, competence);
-			foreach (ValueTuple<string, string> effect in councilEffects)
-				list.Add(new TooltipProperty(effect.Item1, effect.Item2, 0));
+
 			TooltipAddEmptyLine(list);
 			return list;
-		}
-
-		private static List<ValueTuple<string, string>> GetCouncilMemberEffects(CouncilPosition position, float competence)
-        {
-			List<ValueTuple<string, string>> lines = new List<ValueTuple<string, string>>();
-			if (position == CouncilPosition.Marshall)
-            {
-				lines.Add(("Militia", FormatDailyValue(1f * competence)));
-				lines.Add(("Militarism", FormatValue(3f * competence)));
-				lines.Add(("Draft Efficiency", FormatValue(25 * competence)));
-			} else if (position == CouncilPosition.Steward) 
-			{
-				lines.Add(("Prosperity", FormatDailyValue(1f * competence)));
-				lines.Add(("Production Efficiency", FormatValue(15f * competence)));
-				lines.Add(("Caravan Attractiveness", FormatValue(15f * competence)));
-			}
-			else if (position == CouncilPosition.Chancellor)
-			{
-				lines.Add(("Loyalty", FormatDailyValue(1f * competence)));
-				lines.Add(("Vassals Limit", FormatDailyValue((int)(4f * competence))));
-				lines.Add(("Disagreement Impact", FormatValueNegative(30f * competence)));
-			}
-			else if (position == CouncilPosition.Spymaster)
-			{
-				lines.Add(("Security", FormatDailyValue(1f * competence)));
-				lines.Add(("Crime Rating", FormatValue(5f * competence)));
-				lines.Add(("Settle Issues", FormatValue(3f * competence)));
-			}
-
-			return lines;
 		}
 
 		private static string FormatValue(float value) => value.ToString("0.00") + '%';

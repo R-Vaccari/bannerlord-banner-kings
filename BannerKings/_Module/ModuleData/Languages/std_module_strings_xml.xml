@@ -39,6 +39,15 @@
 		<string id="bk_council_description_elder" text="The {NAME} represent the caste of respected aged leaders in a tribal society. Their presence increases the influence of a sovereign over the common people." />
 	
 		<string id="bk_spiritual_guide" text="Spiritual Guide" />
+		
+		
+		<string id="bk_council_marshall_effects" text="Settlement militia +1\\nSettlement militarism +1% flat\\nSettlement draft efficiencty +25% flat" />
+		<string id="bk_council_steward_effects" text="Settlement prosperity +1\nSettlement production efficiency +15% flat\nSettlement caravan attractiveness +15% flat" />
+		<string id="bk_council_chancellor_effects" text="Settlement loyalty +1\nVassal limit +1\nDisagreements impact -20%" />
+		<string id="bk_council_spymaster_effects" text="Settlement security +1" />
+		<string id="bk_council_spiritual_effects" text="" />
+		
+		
 	
 		<string id="bk_council_marshall_empire" text="Domesticus" />
 		<string id="bk_council_marshall_sturgia" text="Domesticus" />

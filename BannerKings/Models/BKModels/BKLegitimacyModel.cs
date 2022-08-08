@@ -3,7 +3,7 @@ using TaleWorlds.CampaignSystem;
 
 namespace BannerKings.Models
 {
-    class BKLegitimacyModel : IBannerKingsModel
+    public class BKLegitimacyModel : IBannerKingsModel
     {
         public ExplainedNumber CalculateEffect(Settlement settlement)
         {

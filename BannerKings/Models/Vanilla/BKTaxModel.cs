@@ -15,9 +15,9 @@ namespace BannerKings.Models
 {
     class BKTaxModel : DefaultSettlementTaxModel
     {
-        public static readonly float NOBLE_OUTPUT = 2.2f;
-        public static readonly float CRAFTSMEN_OUTPUT = 0.82f;
-        public static readonly float SERF_OUTPUT = 0.22f;
+        public static readonly float NOBLE_OUTPUT = 4.2f;
+        public static readonly float CRAFTSMEN_OUTPUT = 1.2f;
+        public static readonly float SERF_OUTPUT = 0.26f;
         public static readonly float SLAVE_OUTPUT = 0.33f;
 
         public override ExplainedNumber CalculateTownTax(Town town, bool includeDescriptions = false)
@@ -52,6 +52,8 @@ namespace BannerKings.Models
                 else if (taxType == TaxType.High)
                     baseResult.AddFactor(0.15f, new TextObject("Tax policy"));
 
+                LegitimacyType legitimacy = (LegitimacyType)new BKLegitimacyModel().CalculateEffect(town.Settlement).ResultNumber;
+                if (legitimacy == LegitimacyType.Lawful) baseResult.AddFactor(0.05f, new TextObject("{=!}Legitimiacy"));
 
                 float admCost = new BKAdministrativeModel().CalculateEffect(town.Settlement).ResultNumber;
                 baseResult.AddFactor(admCost * -1f, new TextObject("Administrative costs"));
@@ -122,11 +124,6 @@ namespace BannerKings.Models
             }
         }
 
-        public override float GetTownCommissionChangeBasedOnSecurity(Town town, float commission)
-        {
-            return commission;
-        }
-
         public override float GetTownTaxRatio(Town town) {
             if (BannerKingsConfig.Instance.PolicyManager != null)
                 if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(town.Settlement, "decision_tariff_exempt"))
@@ -134,8 +131,5 @@ namespace BannerKings.Models
             
             return base.GetTownTaxRatio(town);
         }
-
-        public override float GetVillageTaxRatio() => base.GetVillageTaxRatio();
-        
     }
 }

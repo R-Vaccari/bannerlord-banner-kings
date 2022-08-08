@@ -122,7 +122,7 @@ namespace BannerKings.Models
 
                 float demesneLimit = CalculateDemesneLimit(settlement.Owner).ResultNumber;
                 float currentDemesne = CalculateCurrentDemesne(settlement.OwnerClan).ResultNumber;
-                if (currentDemesne > demesneLimit) result.Add((demesneLimit - currentDemesne) * 5f, new TextObject("{=!}Demesne over limit by {POINTS}")
+                if (currentDemesne > demesneLimit) result.Add((demesneLimit - currentDemesne) * 0.18f, new TextObject("{=!}Demesne over limit by {POINTS}")
                     .SetTextVariable("POINTS", demesneLimit - currentDemesne));
 
                 float legitimacy = 0f;
@@ -169,7 +169,7 @@ namespace BannerKings.Models
 
         public ExplainedNumber CalculateUnlandedDemesneLimit(Hero hero)
         {
-            ExplainedNumber result = new ExplainedNumber(0f, true);
+            ExplainedNumber result = new ExplainedNumber(0.5f, true);
             result.LimitMin(0f);
             result.LimitMax(5f);
 
@@ -227,8 +227,20 @@ namespace BannerKings.Models
             result.LimitMin(0f);
 
             Hero leader = clan.Leader;
-            foreach (Hero hero in BannerKingsConfig.Instance.TitleManager.CalculateVassals(leader))
-                result.Add(1f, hero.Name);
+            foreach (FeudalTitle title in BannerKingsConfig.Instance.TitleManager.GetAllDeJure(clan))
+            {
+                if (title.vassals == null || title.vassals.Count == 0) continue;
+
+                foreach (FeudalTitle vassal in title.vassals)
+                {
+                    Hero deJure = vassal.deJure;
+                    if (deJure == null || deJure == leader) continue;
+
+                    if (deJure.Clan == leader.Clan) result.Add(0.5f, deJure.Name);
+                    else if (BannerKingsConfig.Instance.TitleManager.CalculateHeroSuzerain(deJure).deJure == leader)
+                        result.Add(1f, deJure.Name);
+                }
+            }
 
             return result;
         }
@@ -266,10 +278,10 @@ namespace BannerKings.Models
 
         public ExplainedNumber CalculateVassalLimit(Hero hero)
         {
-            ExplainedNumber result = new ExplainedNumber(0f, true);
+            ExplainedNumber result = new ExplainedNumber(0.5f, true);
             result.LimitMin(0f);
             result.LimitMax(20f);
-            result.Add(hero.Clan.Tier, GameTexts.FindText("str_clan_tier_bonus"));
+            result.Add(hero.Clan.Tier / 2f, GameTexts.FindText("str_clan_tier_bonus"));
 
             FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(hero);
             if (title != null)
@@ -277,13 +289,13 @@ namespace BannerKings.Models
                 float bonus = 0f;
                 if (title.type != TitleType.Lordship)
                 {
-                    if (title.type == TitleType.Barony) bonus = 1f;
-                    else if (title.type == TitleType.County) bonus = 2f;
-                    else if (title.type == TitleType.Dukedom) bonus = 3f;
+                    if (title.type == TitleType.Barony) bonus = 0.5f;
+                    else if (title.type == TitleType.County) bonus = 1f;
+                    else if (title.type == TitleType.Dukedom) bonus = 1.5f;
                     else
                     {
-                        if (title.type == TitleType.Kingdom) bonus = 6f;
-                        else bonus = 8f;
+                        if (title.type == TitleType.Kingdom) bonus = 3f;
+                        else bonus = 4f;
 
                         EducationData education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(hero);
                         if (education.HasPerk(BKPerks.Instance.AugustKingOfKings))
