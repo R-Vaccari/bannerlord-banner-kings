@@ -18,8 +18,8 @@ namespace BannerKings.Models.BKModels
                 int nobles = data.GetTypeCount(Managers.PopulationManager.PopType.Nobles);
                 int craftsmen = data.GetTypeCount(Managers.PopulationManager.PopType.Craftsmen);
 
-                if (nobles > 0) result.Add(nobles / 10000f, new TextObject("{=!}Nobles"));
-                if (craftsmen > 0) result.Add(craftsmen / 15000f, new TextObject("{=!}Craftsmen"));
+                if (nobles > 0) result.Add(nobles / 100000f, new TextObject("{=!}Nobles"));
+                if (craftsmen > 0) result.Add(craftsmen / 150000f, new TextObject("{=!}Craftsmen"));
 
                 if (settlement.Owner.GetPerkValue(BKPerks.Instance.ScholarshipPeerReview))
                     result.AddFactor(0.2f, BKPerks.Instance.ScholarshipPeerReview.Name);

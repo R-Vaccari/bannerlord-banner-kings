@@ -53,7 +53,8 @@ namespace BannerKings.Managers.Education.Lifestyles
             data.AddPerk(perk);
             investedFocus += 1;
             progress = 0f;
-            InformationManager.AddQuickInformation(new TextObject("{=!}You have received the {PERK} perk from the {LIFESTYLE} lifestyle.")
+            if (hero == Hero.MainHero) 
+                InformationManager.AddQuickInformation(new TextObject("{=!}You have received the {PERK} perk from the {LIFESTYLE} lifestyle.")
                             .SetTextVariable("PERK", perk.Name)
                             .SetTextVariable("LIFESTYLE", Name));
         } 

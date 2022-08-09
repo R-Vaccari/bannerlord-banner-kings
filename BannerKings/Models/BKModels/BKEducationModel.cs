@@ -35,7 +35,7 @@ namespace BannerKings.Models.BKModels
             result.LimitMin(0f);
             result.LimitMax(5f);
 
-            result.Add(student.GetSkillValue(BKSkills.Instance.Scholarship) * 0.1f, BKSkills.Instance.Scholarship.Name);
+            result.Add(student.GetSkillValue(BKSkills.Instance.Scholarship) * 0.01f, BKSkills.Instance.Scholarship.Name);
 
             EducationData data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(instructor);
             float teaching = data.GetLanguageFluency(language) - 1f;
