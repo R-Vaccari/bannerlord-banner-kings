@@ -89,7 +89,8 @@ namespace BannerKings.Behaviours
                     if (clan.WarPartyComponents.Count > 0)
                     {
                         WarPartyComponent warParty = clan.WarPartyComponents.GetRandomElementWithPredicate(x => IsRoleFree(x.MobileParty, role));
-                        AssignToRole(warParty.MobileParty, role, companion);
+                        if (warParty != null) AssignToRole(warParty.MobileParty, role, companion);
+                        else AssignToRole(clan.WarPartyComponents.GetRandomElement().MobileParty, SkillEffect.PerkRole.None, companion);
                     }
                 }
             }

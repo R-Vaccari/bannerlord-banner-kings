@@ -44,6 +44,9 @@ namespace BannerKings.Managers.AI
             {
                 politicianWeight += 2;
                 warriorWeight += 3;
+
+                if (!hero.Clan.IsMinorFaction) mercenaryWeight = 0;
+                healerWeight -= 1;
             } else if (occupation == Occupation.Wanderer)
             {
                 warriorWeight += 4;
@@ -61,6 +64,8 @@ namespace BannerKings.Managers.AI
 
             foreach (Lifestyle lf in DefaultLifestyles.Instance.All)
             {
+                if (!lf.CanLearn(hero)) continue;
+
                 SkillObject first = lf.FirstSkill;
                 SkillObject second = lf.SecondSkill;
                 (Lifestyle, float) tuple = new(lf, 0f);

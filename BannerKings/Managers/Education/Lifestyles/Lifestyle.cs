@@ -11,6 +11,8 @@ namespace BannerKings.Managers.Education.Lifestyles
     {
         [SaveableField(100)]
         private float progress;
+
+        [SaveableField(101)]
         private int investedFocus;
         private CultureObject culture;
         private SkillObject firstSkill;
