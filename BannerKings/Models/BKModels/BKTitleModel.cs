@@ -17,10 +17,9 @@ namespace BannerKings.Models.BKModels
         {
             ExplainedNumber result = new ExplainedNumber(120f, true);
             FeudalTitle highest = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(grantor);
-
             float extra = 0f;
 
-            if (highest.type < TitleType.Barony)
+            if (highest != null && highest.type < TitleType.Barony)
             {
                 if (highest.type == TitleType.County) extra = 30f;
                 else if (highest.type == TitleType.Dukedom) extra = 60f;

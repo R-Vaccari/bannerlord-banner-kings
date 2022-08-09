@@ -38,9 +38,12 @@ namespace BannerKings.Managers.Education.Lifestyles
             this.culture = culture;
         }
 
-        public float NecessarySkillForFocus => 75f * (investedFocus + 1f);
+        public float NecessarySkillForFocus => 80f * (investedFocus + 1f);
+
+        public bool CanLearn(Hero hero) => (culture == null || hero.Culture == culture) && hero.GetSkillValue(firstSkill) >= 15
+            && hero.GetSkillValue(secondSkill) >= 15;
         public bool CanInvestFocus(Hero hero) => progress >= 1f && perks.Count >= investedFocus + 1 && 
-            (hero.GetSkillValue(firstSkill) >= NecessarySkillForFocus || hero.GetSkillValue(secondSkill) >= NecessarySkillForFocus);
+            (hero.GetSkillValue(firstSkill) + hero.GetSkillValue(secondSkill) >= NecessarySkillForFocus);
         public void InvestFocus(EducationData data, Hero hero) 
         {
             hero.HeroDeveloper.UnspentFocusPoints -= 1;
@@ -48,13 +51,10 @@ namespace BannerKings.Managers.Education.Lifestyles
             data.AddPerk(perk);
             investedFocus += 1;
             progress = 0f;
-            InformationManager.AddQuickInformation(new TextObject("{=!}You have received the {PERK} from the {LIFESTYLE} lifestyle.")
+            InformationManager.AddQuickInformation(new TextObject("{=!}You have received the {PERK} perk from the {LIFESTYLE} lifestyle.")
                             .SetTextVariable("PERK", perk.Name)
                             .SetTextVariable("LIFESTYLE", Name));
         } 
-
-        public bool CanLearn(Hero hero) => (culture == null ||hero.Culture == culture) && hero.GetSkillValue(firstSkill) >= 75 
-            && hero.GetSkillValue(secondSkill) >= 75;
 
         public void AddProgress(float progress) => this.progress = MBMath.ClampFloat(this.progress + progress, 0f, 1f);
         

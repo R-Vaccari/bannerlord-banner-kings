@@ -1,8 +1,10 @@
 ﻿using BannerKings.Managers.Court;
 using BannerKings.Models.BKModels;
+using Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.ViewModelCollection;
 using TaleWorlds.CampaignSystem.ViewModelCollection.GameMenu.TownManagement;
@@ -58,11 +60,10 @@ namespace BannerKings.UI.Items
                     {
                         image = new ImageIdentifier(CampaignUIHelper.GetCharacterCode(vm.Governor.CharacterObject));
                         name = vm.Governor.Name.ToString();
-                        MBStringBuilder sb = new MBStringBuilder();
-                        foreach (TooltipProperty property in UIHelper.GetHeroGovernorEffectsTooltip(vm.Governor, Position, council.GetCompetence(vm.Governor, Position)))
-                            if (!property.DefinitionLabel.IsEmpty() && !property.ValueLabel.IsEmpty()) 
-                                sb.AppendLine(property.DefinitionLabel + ": " + property.ValueLabel);
-                        hint = sb.ToString();
+                        StringBuilder sb = new StringBuilder(GameTexts.FindText("str_tooltip_label_type").ToString() + ": " + 
+                            HeroHelper.GetCharacterTypeName(vm.Governor).ToString());
+                        sb.AppendLine(new TextObject("{=!}Competence:").ToString() + council.GetCompetence(vm.Governor, Position));
+                        hint = sb.ToString(); 
                     }
 
                     options.Add(new InquiryElement(vm.Governor, name, image, true, hint));

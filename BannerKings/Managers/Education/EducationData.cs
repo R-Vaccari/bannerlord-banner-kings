@@ -147,6 +147,8 @@ namespace BannerKings.Managers.Education
             else return 0f;
         }
 
+        public float StandartLifestyleProgress => 1f / (CampaignTime.DaysInYear * 6f);
+
         public void GainLanguageFluency(Language language, float rate)
         {
             float result = LANGUAGE_RATE * rate;
@@ -200,7 +202,7 @@ namespace BannerKings.Managers.Education
                 else GainBookReading(CurrentBook, CurrentBookReadingRate.ResultNumber);
             }
             if (Lifestyle != null)
-                Lifestyle.AddProgress(1f / (CampaignTime.DaysInYear * 2f));
+                Lifestyle.AddProgress(StandartLifestyleProgress);
             
         }
     }

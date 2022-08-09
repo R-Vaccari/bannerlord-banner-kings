@@ -1,5 +1,7 @@
 ﻿using BannerKings.Managers.Decisions;
+using BannerKings.Managers.Education.Lifestyles;
 using BannerKings.Managers.Policies;
+using BannerKings.Managers.Skills;
 using BannerKings.Populations;
 using System;
 using System.Collections.Generic;
@@ -13,6 +15,76 @@ namespace BannerKings.Managers.AI
 {
     public class AIBehavior
     {
+
+        public Lifestyle ChooseLifestyle(Hero hero)
+        {
+            List<(Lifestyle, float)> candidates = new List<(Lifestyle, float)>();
+
+            int rogueWeight = hero.GetTraitLevel(DefaultTraits.RogueSkills) - hero.GetTraitLevel(DefaultTraits.Mercy) - 
+                hero.GetTraitLevel(DefaultTraits.Honor) + hero.GetTraitLevel(DefaultTraits.Thug) + hero.GetTraitLevel(DefaultTraits.Thief);
+
+            int politicianWeight = hero.GetTraitLevel(DefaultTraits.Politician) + hero.GetTraitLevel(DefaultTraits.Commander);
+
+            int merchantWeight = hero.GetTraitLevel(DefaultTraits.Blacksmith) + hero.GetTraitLevel(DefaultTraits.Manager);
+
+            int siegeWeight = hero.GetTraitLevel(DefaultTraits.Siegecraft);
+
+            int healerWeight = hero.GetTraitLevel(DefaultTraits.Surgery);
+
+            int warriorWeight = hero.GetTraitLevel(DefaultTraits.ArcherFIghtingSkills) + hero.GetTraitLevel(DefaultTraits.BossFightingSkills) + 
+                hero.GetTraitLevel(DefaultTraits.CavalryFightingSkills) + hero.GetTraitLevel(DefaultTraits.HuscarlFightingSkills) +
+                hero.GetTraitLevel(DefaultTraits.HopliteFightingSkills) + hero.GetTraitLevel(DefaultTraits.HorseArcherFightingSkills) +
+                hero.GetTraitLevel(DefaultTraits.KnightFightingSkills) + hero.GetTraitLevel(DefaultTraits.PeltastFightingSkills) +
+                hero.GetTraitLevel(DefaultTraits.Fighter);
+
+            int mercenaryWeight = hero.GetTraitLevel(DefaultTraits.RogueSkills) - hero.GetTraitLevel(DefaultTraits.Honor);
+
+            Occupation occupation = hero.Occupation;
+            if (occupation == Occupation.Lord)
+            {
+                politicianWeight += 2;
+                warriorWeight += 3;
+            } else if (occupation == Occupation.Wanderer)
+            {
+                warriorWeight += 4;
+                mercenaryWeight += 1;
+            } else if (hero.IsNotable)
+            {
+                if (occupation == Occupation.GangLeader) rogueWeight += 2;
+                mercenaryWeight += 4;
+
+                politicianWeight = 0;
+                warriorWeight = 0;
+                mercenaryWeight = 0;
+            }
+
+
+            foreach (Lifestyle lf in DefaultLifestyles.Instance.All)
+            {
+                SkillObject first = lf.FirstSkill;
+                SkillObject second = lf.SecondSkill;
+                (Lifestyle, float) tuple = new(lf, 0f);
+
+                if (first == DefaultSkills.Medicine || second == DefaultSkills.Medicine) tuple.Item2 += healerWeight;
+                else if (first == DefaultSkills.Engineering || second == DefaultSkills.Engineering) tuple.Item2 += siegeWeight;
+                else if (first == DefaultSkills.Trade || second == DefaultSkills.Trade) tuple.Item2 += merchantWeight;
+                else if (first == DefaultSkills.Leadership || second == DefaultSkills.Leadership || 
+                    first == BKSkills.Instance.Lordship || second == BKSkills.Instance.Lordship) tuple.Item2 += politicianWeight;
+                else if (first == DefaultSkills.Roguery || second == DefaultSkills.Roguery)
+                {
+                    if (hero.Clan != null && hero.Clan.IsMinorFaction) tuple.Item2 += mercenaryWeight;
+                    tuple.Item2 += rogueWeight;
+                }
+                else tuple.Item2 += warriorWeight;
+
+                if (lf.Culture == hero.Culture && tuple.Item2 != 0f) tuple.Item2 += 1f;
+
+                candidates.Add(tuple);
+            }
+
+            return MBRandom.ChooseWeighted(candidates);
+        }
+
         public bool AcceptNotableAid(Clan clan, PopulationData data)
         {
             Kingdom kingdom = clan.Kingdom;
