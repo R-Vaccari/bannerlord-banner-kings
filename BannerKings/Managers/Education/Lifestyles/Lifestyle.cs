@@ -27,6 +27,14 @@ namespace BannerKings.Managers.Education.Lifestyles
             investedFocus = 0;
         }
 
+        public static Lifestyle CreateLifestyle(Lifestyle lf)
+        {
+            Lifestyle lifestyle = new Lifestyle(lf.StringId);
+            lifestyle.Initialize(lf.Name, lf.Description, lf.FirstSkill, lf.SecondSkill, new List<PerkObject>(lf.Perks), lf.PassiveEffects,
+                    lf.FirstEffect, lf.SecondEffect, lf.Culture);
+            return lifestyle;
+        }
+
         public void Initialize(TextObject name, TextObject description, SkillObject firstSkill, SkillObject secondSkill,
             List<PerkObject> perks, TextObject effects, float firstEffect, float secondEffect, CultureObject culture = null)
         {
@@ -38,6 +46,13 @@ namespace BannerKings.Managers.Education.Lifestyles
             this.firstEffect = firstEffect;
             this.secondEffect = secondEffect;
             this.culture = culture;
+
+        }
+
+        public void loadFix(float progress = 0f, int focus = 0)
+        {
+            this.progress = progress;
+            this.investedFocus = focus;
         }
 
         public float NecessarySkillForFocus => 80f * (investedFocus + 1f);

@@ -46,7 +46,7 @@ namespace BannerKings.Managers.Education
             this.hero = hero;
             this.languages = languages;
             books = new Dictionary<BookType, float>();
-            this.lifestyle = lifestyle;
+            this.lifestyle = lifestyle != null ? Lifestyle.CreateLifestyle(lifestyle) : null;
             currentBook = null;
             currentLanguage = null;
             languageInstructor = null;
@@ -56,8 +56,11 @@ namespace BannerKings.Managers.Education
         public void PostInitialize()
         {
             Lifestyle lf = DefaultLifestyles.Instance.GetById(lifestyle);
-            if (lf != null) lifestyle.Initialize(lf.Name, lf.Description, lf.FirstSkill, lf.SecondSkill, new List<PerkObject>(lf.Perks), lf.PassiveEffects,
-                lf.FirstEffect, lf.SecondEffect, lf.Culture);
+
+            if (lf != null)
+                lifestyle.Initialize(lf.Name, lf.Description, lf.FirstSkill, lf.SecondSkill, new List<PerkObject>(lf.Perks), lf.PassiveEffects,
+                    lf.FirstEffect, lf.SecondEffect, lf.Culture);
+            
 
             foreach(KeyValuePair<Language, float> pair in languages)
             {
@@ -100,8 +103,9 @@ namespace BannerKings.Managers.Education
 
         public void SetCurrentLifestyle(Lifestyle lifestyle)
         {
-            this.lifestyle = lifestyle;
+            if (lifestyle != null) this.lifestyle = Lifestyle.CreateLifestyle(lifestyle);
         }
+
         public BookType CurrentBook => currentBook;
         public MBReadOnlyList<PerkObject> Perks
         {

@@ -124,6 +124,16 @@ namespace BannerKings.Behaviours
 
 
 
+
+            campaignGameStarter.AddWaitGameMenu("bannerkings_wait_crafting", "{=!}You are working on the smith for {CRAFTING_HOURS} hours.",
+              new OnInitDelegate(MenuWaitInit),
+              new OnConditionDelegate(MenuMeetNobilityActionCondition),
+              new OnConsequenceDelegate(MenuActionMeetNobilityConsequence),
+              new OnTickDelegate(TickWaitMeetNobility), GameMenu.MenuAndOptionType.WaitMenuShowProgressAndHoursOption, GameOverlays.MenuOverlayType.SettlementWithBoth, 4f, GameMenu.MenuFlags.None, null);
+
+
+
+
             // ------- ACTIONS --------
 
             campaignGameStarter.AddGameMenuOption("bannerkings_actions", "action_study", "{=!}Study scholarship",
