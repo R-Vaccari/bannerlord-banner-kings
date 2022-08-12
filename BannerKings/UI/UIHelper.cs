@@ -196,6 +196,7 @@ namespace BannerKings.UI
 				}, null, string.Empty));
 		}
 
+
 		public static List<TooltipProperty> GetTitleTooltip(FeudalTitle title, List<TitleAction> actions)
 		{
 			Hero hero = title.deJure;
@@ -395,12 +396,12 @@ namespace BannerKings.UI
 		private static string FormatValueNegative(float value) => '-' + value.ToString("0.00") + '%';
 		private static string FormatDailyValue(float value) => '+' + value.ToString("0.00");
 
-		private static void TooltipAddEmptyLine(List<TooltipProperty> properties, bool onlyShowOnExtend = false)
+		public static void TooltipAddEmptyLine(List<TooltipProperty> properties, bool onlyShowOnExtend = false)
 		{
 			properties.Add(new TooltipProperty(string.Empty, string.Empty, -1, onlyShowOnExtend));
 		}
 
-		private static void TooltipAddSeperator(List<TooltipProperty> properties, bool onlyShowOnExtend = false)
+		public static void TooltipAddSeperator(List<TooltipProperty> properties, bool onlyShowOnExtend = false)
 		{
 			properties.Add(new TooltipProperty("", string.Empty, 0, onlyShowOnExtend, TooltipProperty.TooltipPropertyFlags.DefaultSeperator));
 		}
