@@ -1,5 +1,8 @@
-﻿using TaleWorlds.CampaignSystem.SandBox.GameComponents.Map;
+﻿using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.SandBox.CampaignBehaviors;
+using TaleWorlds.CampaignSystem.SandBox.GameComponents.Map;
 using TaleWorlds.Core;
+using TaleWorlds.Library;
 
 namespace BannerKings.Models.Vanilla
 {
@@ -51,6 +54,38 @@ namespace BannerKings.Models.Vanilla
                 weaponClass == WeaponClass.TwoHandedSword)
                 return 3;
             return -1;
+        }
+
+
+        public override int GetEnergyCostForSmithing(ItemObject item, Hero hero)
+        {
+            int max = Campaign.Current.GetCampaignBehavior<ICraftingCampaignBehavior>().GetMaxHeroCraftingStamina(hero);
+            int result = base.GetEnergyCostForSmithing(item, hero);
+
+            if (item.WeaponComponent != null && item.WeaponComponent.PrimaryWeapon != null)
+            {
+                WeaponClass weaponClass = item.WeaponComponent.PrimaryWeapon.WeaponClass;
+                if (weaponClass == WeaponClass.TwoHandedAxe || weaponClass == WeaponClass.TwoHandedMace || weaponClass == WeaponClass.TwoHandedSword)
+                    result = (int)(result * 1.5f);
+                else if (weaponClass == WeaponClass.OneHandedSword || weaponClass == WeaponClass.OneHandedAxe || weaponClass == WeaponClass.Mace)
+                    result = (int)(result * 1.2f);
+            }
+
+            return MBMath.ClampInt(result, 15, max);
+        }
+
+        public override int GetEnergyCostForSmelting(ItemObject item, Hero hero)
+        {
+            int result = base.GetEnergyCostForSmelting(item, hero);
+
+            return result;
+        }
+
+        public override int GetEnergyCostForRefining(ref Crafting.RefiningFormula refineFormula, Hero hero)
+        {
+            int result = base.GetEnergyCostForRefining(ref refineFormula, hero);
+
+            return result;
         }
     }
 }

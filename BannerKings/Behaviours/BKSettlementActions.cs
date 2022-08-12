@@ -20,6 +20,7 @@ namespace BannerKings.Behaviours
         private static float actionGold = 0f;
         private static int actionHuntGame = 0;
         private static CampaignTime actionStart = CampaignTime.Now;
+        private float totalHours = 0f;
         public override void RegisterEvents()
         {
             CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, new Action<CampaignGameStarter>(OnSessionLaunched));
@@ -127,9 +128,9 @@ namespace BannerKings.Behaviours
 
             campaignGameStarter.AddWaitGameMenu("bannerkings_wait_crafting", "{=!}You are working on the smith for {CRAFTING_HOURS} hours.",
               new OnInitDelegate(MenuWaitInit),
-              new OnConditionDelegate(MenuMeetNobilityActionCondition),
-              new OnConsequenceDelegate(MenuActionMeetNobilityConsequence),
-              new OnTickDelegate(TickWaitMeetNobility), GameMenu.MenuAndOptionType.WaitMenuShowProgressAndHoursOption, GameOverlays.MenuOverlayType.SettlementWithBoth, 4f, GameMenu.MenuFlags.None, null);
+              new OnConditionDelegate((c) => true),
+              new OnConsequenceDelegate(MenuActionConsequenceNeutral),
+              new OnTickDelegate(TickWaitCrafting), GameMenu.MenuAndOptionType.WaitMenuShowProgressAndHoursOption, GameOverlays.MenuOverlayType.SettlementWithBoth, 0f, GameMenu.MenuFlags.None, null);
 
 
 
@@ -338,6 +339,13 @@ namespace BannerKings.Behaviours
             }
         }
 
+        public void StartCraftingMenu(float totalHours)
+        {
+            this.totalHours = totalHours;
+            MBTextManager.SetTextVariable("CRAFTING_HOURS", totalHours.ToString("0.0"), false);
+            GameMenu.SwitchToMenu("bannerkings_wait_crafting");
+        }
+
         private static void TickWaitStudy(MenuCallbackArgs args, CampaignTime dt)
         {
             TickCheckHealth();
@@ -446,6 +454,13 @@ namespace BannerKings.Behaviours
                     }
                 }
             }
+        }
+
+        private void TickWaitCrafting(MenuCallbackArgs args, CampaignTime dt)
+        {
+            float diff = actionStart.ElapsedHoursUntilNow;
+            float progress = diff / totalHours;
+            args.MenuContext.GameMenu.SetProgressOfWaitingInMenu(progress);
         }
 
         private static void TickWaitMeetNobility(MenuCallbackArgs args, CampaignTime dt)
