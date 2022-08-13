@@ -89,7 +89,7 @@ namespace BannerKings.Models.Vanilla
                     result[mainMaterialIndex] = (int)(ingots * 0.9f);
                     result[mainMaterialIndex - 1] = (int)(ingots * 0.1f);
                 }
-                else if (material == ArmorMaterialTypes.Leather) result[9] = MBMath.ClampInt((int)(item.Weight / 1f), 1, 100);
+                else if (material == ArmorMaterialTypes.Leather) result[9] = MBMath.ClampInt((int)(item.Weight / 10f), 1, 100);
                 else if (material == ArmorMaterialTypes.Cloth) result[10] = 1;
             } else if (item.HasWeaponComponent)
             {

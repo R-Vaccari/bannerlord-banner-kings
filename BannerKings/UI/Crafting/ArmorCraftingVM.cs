@@ -75,8 +75,7 @@ namespace BannerKings.UI.Crafting
                 {
                     currentItem = value;
                     OnPropertyChangedWithValue(value, "CurrentItem");
-                    mixin.UpdateMaterials();
-                    mixin.UpdateMainAction();
+                    mixin.OnRefresh();
                 }
             }
         }

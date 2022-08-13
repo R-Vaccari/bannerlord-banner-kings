@@ -19,7 +19,7 @@ namespace BannerKings.UI.Extensions
     {
 		private CraftingVM crafting;
         private ArmorCraftingVM armorCrafting;
-        private MBBindingList<CraftingResourceItemVM> extraMaterials;
+        private MBBindingList<ExtraMaterialItemVM> currentExtraMaterials;
         private float startingStamina, spentStamina;
         private string hoursSpent;
         private HintViewModel craftingArmorHint;
@@ -29,7 +29,7 @@ namespace BannerKings.UI.Extensions
         public CraftingMixin(CraftingVM vm) : base(vm)
         {
 			crafting = vm;
-            extraMaterials = new MBBindingList<CraftingResourceItemVM>();
+            currentExtraMaterials = new MBBindingList<ExtraMaterialItemVM>();
             startingStamina = 0f;
             spentStamina = 0f;
             craftingArmorHint = new HintViewModel();
@@ -46,18 +46,21 @@ namespace BannerKings.UI.Extensions
             if (crafting.IsInCraftingMode || crafting.IsInRefinementMode || crafting.IsInSmeltingMode)
                 IsInArmorMode = false;
 
+            CurrentExtraMaterials.Clear();
+
+            MBReadOnlyList<ItemObject> items = Game.Current.ObjectManager.GetObjectTypeList<ItemObject>();
+            CurrentExtraMaterials.Add(new ExtraMaterialItemVM(items.First(x => x.StringId == "leather")));
+            CurrentExtraMaterials.Add(new ExtraMaterialItemVM(items.First(x => x.StringId == "linen")));
+
             UpdateMainAction();
 
             CraftingAvailableHeroItemVM heroVm = crafting.AvailableCharactersForSmithing.FirstOrDefault(x => x.Hero == Hero.MainHero);
             if (heroVm != null && heroVm.CurrentStamina != startingStamina)
                 spentStamina = startingStamina - heroVm.CurrentStamina;
 
-            if (crafting.IsMainActionEnabled)
-            {
-
-                HoursSpentText = new TextObject("{=!}Hours spent for all actions: {HOURS} hours.")
-                        .SetTextVariable("HOURS", GetSpentHours().ToString("0.0"))
-                        .ToString();
+            HoursSpentText = new TextObject("{=!}Hours spent for all actions: {HOURS} hours.")
+                .SetTextVariable("HOURS", GetSpentHours().ToString("0.0"))
+                .ToString();
 
                 /*float hours;
 
@@ -80,7 +83,7 @@ namespace BannerKings.UI.Extensions
                        hours = Campaign.Current.Models.SmithingModel.GetEnergyCostForSmithing(currentCraftedItemObject, crafterHero);
                    }
                }*/
-            }
+            
         }
 
         [DataSourceMethod]
@@ -91,10 +94,23 @@ namespace BannerKings.UI.Extensions
             {
                 SpendMaterials();
                 ItemObject item = armorCrafting.CurrentItem.Item;
+                int staminaSpent = CurrentEnergy;
+
+                float botchChance = BannerKingsConfig.Instance.SmithingModel.CalculateBotchingChance(crafting.CurrentCraftingHero.Hero, 
+                    armorCrafting.CurrentItem.Difficulty);
+                if (MBRandom.RandomFloat < botchChance)
+                {
+                    InformationManager.AddQuickInformation(new TextObject("{=!}{HERO} has botched {ITEM}!")
+                        .SetTextVariable("HERO", crafting.CurrentCraftingHero.Hero.Name)
+                        .SetTextVariable("ITEM", item.Name),
+                        0, null, "event:/ui/notification/relation");
+
+                    staminaSpent = (int)(staminaSpent * 0.5f);
+                    goto FINISH;
+                }
+
                 EquipmentElement element = new EquipmentElement(item);
-
                 TextObject qualityText = new TextObject();
-
                 if ((item.HasWeaponComponent && item.WeaponComponent.ItemModifierGroup != null) ||
                     (item.HasArmorComponent && item.ArmorComponent.ItemModifierGroup != null))
                 {
@@ -118,10 +134,14 @@ namespace BannerKings.UI.Extensions
                     0, null, "event:/ui/notification/relation");
                 PartyBase.MainParty.ItemRoster.AddToCounts(element, 1);
 
+
+                FINISH:
                 crafting.CurrentCraftingHero.Hero.AddSkillXp(DefaultSkills.Crafting,
                     BannerKingsConfig.Instance.SmithingModel.GetSkillXpForSmithingInFreeBuildMode(item));
+
                 Campaign.Current.GetCampaignBehavior<ICraftingCampaignBehavior>()
-                    .SetHeroCraftingStamina(crafting.CurrentCraftingHero.Hero, CurrentEnergy);
+                    .SetHeroCraftingStamina(crafting.CurrentCraftingHero.Hero, (int)crafting.CurrentCraftingHero.CurrentStamina - staminaSpent);
+                crafting.CurrentCraftingHero.RefreshStamina();
 
                 OnRefresh();
             }  
@@ -174,6 +194,8 @@ namespace BannerKings.UI.Extensions
         {
             int[] materials = CurrentMaterials;
             for (int l = 0; l < 9; l++) crafting.PlayerCurrentMaterials[l].ResourceChangeAmount = -materials[l];
+            CurrentExtraMaterials.First(x => x.Material.StringId == "leather").ResourceChangeAmount = -materials[9];
+            CurrentExtraMaterials.First(x => x.Material.StringId == "linen").ResourceChangeAmount = -materials[10];
         }
 
         public bool HasEnergy() => crafting.CurrentCraftingHero.CurrentStamina >= CurrentEnergy;
@@ -185,8 +207,8 @@ namespace BannerKings.UI.Extensions
             {
                 int[] materials = CurrentMaterials;
                 MBReadOnlyList<ItemObject> items = Game.Current.ObjectManager.GetObjectTypeList<ItemObject>();
-                if (materials[9] > 0) extraMaterials = PartyBase.MainParty.ItemRoster.GetItemNumber(items.First(x => x.StringId == "leather")) > materials[9];
-                if (materials[10] > 0) extraMaterials = PartyBase.MainParty.ItemRoster.GetItemNumber(items.First(x => x.StringId == "linen")) > materials[10];
+                if (materials[9] > 0) extraMaterials = CurrentExtraMaterials.First(x => x.Material.StringId == "leather").ResourceAmount > materials[9];
+                if (materials[10] > 0) extraMaterials = CurrentExtraMaterials.First(x => x.Material.StringId == "linen").ResourceAmount > materials[10];
             }
 
             return ingots && extraMaterials;
@@ -236,18 +258,15 @@ namespace BannerKings.UI.Extensions
         }
 
         [DataSourceProperty]
-        public MBBindingList<CraftingResourceItemVM> CurrentExtraMaterials
+        public MBBindingList<ExtraMaterialItemVM> CurrentExtraMaterials
         {
-            get
-            {
-                return this._playerCurrentMaterials;
-            }
+            get => currentExtraMaterials;
             set
             {
-                if (value != this._playerCurrentMaterials)
+                if (value != currentExtraMaterials)
                 {
-                    this._playerCurrentMaterials = value;
-                    base.OnPropertyChangedWithValue(value, "CurrentExtraMaterials");
+                    currentExtraMaterials = value;
+                    ViewModel!.OnPropertyChangedWithValue(value, "CurrentExtraMaterials");
                 }
             }
         }

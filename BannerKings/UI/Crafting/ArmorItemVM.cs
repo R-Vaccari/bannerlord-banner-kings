@@ -142,6 +142,9 @@ namespace BannerKings.UI.Crafting
 			.ToString();
 
 		[DataSourceProperty]
+		public int Difficulty => difficulty;
+
+		[DataSourceProperty]
 		public string DifficultyText =>  difficulty.ToString() + " " + GameTexts.FindText("str_crafting_difficulty").ToString();
 
 		[DataSourceProperty]
