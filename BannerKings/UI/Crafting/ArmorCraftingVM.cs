@@ -5,8 +5,8 @@ namespace BannerKings.UI.Crafting
 {
     public class ArmorCraftingVM : ViewModel
     {
-
         private MBBindingList<ArmorItemVM> armors;
+        private ArmorItemVM currentItem;
 
         public ArmorCraftingVM()
         {
@@ -22,6 +22,22 @@ namespace BannerKings.UI.Crafting
             {
                 if (!item.HasArmorComponent) continue;
                 Armors.Add(new ArmorItemVM(item));
+            }
+
+            CurrentItem = Armors[0];
+        }
+
+        [DataSourceProperty]
+        public ArmorItemVM CurrentItem
+        {
+            get => currentItem;
+            set
+            {
+                if (value != currentItem)
+                {
+                    currentItem = value;
+                    OnPropertyChangedWithValue(value, "CurrentItem");
+                }
             }
         }
 

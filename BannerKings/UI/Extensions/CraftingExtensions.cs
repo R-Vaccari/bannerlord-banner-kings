@@ -6,7 +6,26 @@ using System.Xml;
 namespace BannerKings.UI.Extensions
 {
 
+    [PrefabExtension("Crafting", "descendant::CraftingScreenWidget/Children", "Crafting")]
+    internal class CraftingArmorLeftPanelExtension : PrefabExtensionInsertPatch
+    {
+        public override InsertType Type => InsertType.Child;
+        public override int Index => 5;
 
+        private List<XmlNode> nodes;
+
+        public CraftingArmorLeftPanelExtension()
+        {
+            XmlDocument firstChild = new XmlDocument();
+            firstChild.LoadXml("<Widget WidthSizePolicy=\"Fixed\" HeightSizePolicy=\"CoverChildren\" SuggestedWidth=\"918\" HorizontalAlignment=\"Left\" VerticalAlignment=\"Center\" MarginLeft=\"179\" MarginTop=\"20\" MarginBottom=\"150\" IsVisible=\"@IsInArmorMode\" MinHeight=\"287\"><Children><Widget WidthSizePolicy = \"Fixed\" HeightSizePolicy = \"Fixed\" SuggestedWidth = \"1053\" SuggestedHeight = \"4\" HorizontalAlignment = \"Center\" VerticalAlignment = \"Top\" Sprite = \"Crafting\\left_field_frame\" /><Widget DataSource = \"{ArmorCrafting}\" WidthSizePolicy = \"Fixed\" HeightSizePolicy = \"CoverChildren\" SuggestedWidth = \"1053\" HorizontalAlignment = \"Center\" MarginTop = \"4\" Sprite = \"Crafting\\left_field_canvas\" Color = \"#000000FF\" MinHeight = \"287\" ><Children><Widget DataSource = \"{CurrentItem}\" WidthSizePolicy = \"CoverChildren\" HeightSizePolicy = \"CoverChildren\" HorizontalAlignment = \"Center\" VerticalAlignment = \"Center\" MarginBottom = \"60\" MarginTop = \"60\" ><Children> <ImageIdentifierWidget DataSource = \"{Visual}\" DoNotAcceptEvents = \"true\" WidthSizePolicy = \"Fixed\" HeightSizePolicy = \"Fixed\" SuggestedWidth = \"224\" SuggestedHeight = \"102\" HorizontalAlignment = \"Center\" VerticalAlignment = \"Center\" AdditionalArgs = \"@AdditionalArgs\" ImageId = \"@Id\" ImageTypeCode = \"@ImageTypeCode\" LoadingIconWidget = \"LoadingIconWidget\" ><Children> <Standard.CircleLoadingWidget HorizontalAlignment = \"Center\" VerticalAlignment = \"Center\" Id = \"LoadingIconWidget\" /> </Children> </ImageIdentifierWidget> </Children></Widget></Children></Widget><Widget WidthSizePolicy = \"Fixed\" HeightSizePolicy = \"Fixed\" SuggestedWidth = \"1053\" SuggestedHeight = \"4\" HorizontalAlignment = \"Center\" VerticalAlignment = \"Bottom\" Sprite = \"Crafting\\left_field_frame\" VerticalFlip = \"true\" /></Children></Widget>");
+
+            nodes = new List<XmlNode> { firstChild };
+        }
+
+        [PrefabExtensionXmlNodes]
+        public IEnumerable<XmlNode> Nodes => nodes;
+
+    }
 
     [PrefabExtension("Crafting", "descendant::ListPanel[@Id='CategoryParent']/Children", "Crafting")]
     internal class CraftingInsertArmorCategoryExtension : PrefabExtensionInsertPatch

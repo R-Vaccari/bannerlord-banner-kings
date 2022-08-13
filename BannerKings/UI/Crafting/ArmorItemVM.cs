@@ -72,6 +72,9 @@ namespace BannerKings.UI.Crafting
 		public string ItemName => item.Name.ToString();
 
 		[DataSourceProperty]
+		public ItemObject Item => item;
+
+		[DataSourceProperty]
 		public BasicTooltipViewModel Hint
 		{
 			get => hint;

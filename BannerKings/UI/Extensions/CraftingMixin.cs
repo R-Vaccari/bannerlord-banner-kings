@@ -90,6 +90,11 @@ namespace BannerKings.UI.Extensions
             IsInArmorMode = true;
             armorCrafting.RefreshValues();
 
+            CraftingVM.OnItemRefreshedDelegate onItemRefreshed = crafting.OnItemRefreshed;
+            if (onItemRefreshed != null)
+                onItemRefreshed(false);
+            
+
             // int[] smithingCostsForWeaponDesign = Campaign.Current.Models.SmithingModel.GetSmithingCostsForWeaponDesign();
             // for (int l = 0; l < 9; l++)
             //    crafting.PlayerCurrentMaterials[l].ResourceChangeAmount = smithingCostsForWeaponDesign[l];
