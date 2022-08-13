@@ -2,6 +2,12 @@
 <base xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" type="string">
 	<strings>
 	
+		<string id="str_bk_crafting_itemtype.bodyarmor" text="{=bk_crafting_itemtype_bodyarmor}Body Armors" />
+		<string id="str_bk_crafting_itemtype.barding" text="{=bk_crafting_itemtype_barding}Bardings" />
+		<string id="str_bk_crafting_itemtype.shield" text="{=bk_crafting_itemtype_shield}Shields" />
+		<string id="str_bk_crafting_itemtype.ammo" text="{=bk_crafting_itemtype_ammo}Ammos" />
+	
+	
 		<string id="str_bk_council_privilege.low_wage" text="{=bk_council_privilege_low_wage}Low Wage" />
 		<string id="str_bk_council_privilege.mid_wage" text="{=bk_council_privilege_mid_wage}Wage" />
 		<string id="str_bk_council_privilege.high_wage" text="{=bk_council_privilege_high_wage}High Wage" />

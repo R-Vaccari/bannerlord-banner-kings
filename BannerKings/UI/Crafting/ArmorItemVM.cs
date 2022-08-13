@@ -12,18 +12,24 @@ namespace BannerKings.UI.Crafting
         private ItemObject item;
 		private ImageIdentifierVM visual;
 		private BasicTooltipViewModel hint;
+		private ArmorCraftingVM.ItemType type;
+		private int difficulty, stamina;
 
-		public ArmorItemVM(ArmorCraftingVM armorCrafting, ItemObject item) : base(null, false)
+		public ArmorItemVM(ArmorCraftingVM armorCrafting, ItemObject item, ArmorCraftingVM.ItemType type) : base(null, false)
         {
 			this.armorCrafting = armorCrafting;
             this.item = item;
 			Visual = new ImageIdentifierVM(item, "");
 			Hint = new BasicTooltipViewModel(() => GetHint());
+			stamina = BannerKingsConfig.Instance.SmithingModel.CalculateArmorStamina(item);
+			difficulty = BannerKingsConfig.Instance.SmithingModel.CalculateArmorDifficulty(item);
+			this.type = type;
 		}
 
         public override void RefreshValues()
         {
             base.RefreshValues();
+			
 		}
 
 		public void ExecuteSelection()
@@ -86,13 +92,10 @@ namespace BannerKings.UI.Crafting
 			list.Add(new TooltipProperty(GameTexts.FindText("str_crafting").ToString(), " ", 0));
 			UIHelper.TooltipAddSeperator(list);
 
-			int difficulty = BannerKingsConfig.Instance.SmithingModel.CalculateArmorDifficulty(item);
+
 			MBTextManager.SetTextVariable("LEFT", GameTexts.FindText("str_crafting_difficulty"));
-			list.Add(new TooltipProperty(GameTexts.FindText("str_LEFT_ONLY").ToString(),difficulty.ToString(), 0));
-
-			list.Add(new TooltipProperty(new TextObject("{=!}Stamina").ToString(), 
-				BannerKingsConfig.Instance.SmithingModel.CalculateArmorStamina(item).ToString(), 0));
-
+			list.Add(new TooltipProperty(GameTexts.FindText("str_LEFT_ONLY").ToString(), difficulty.ToString(), 0));
+			list.Add(new TooltipProperty(new TextObject("{=!}Stamina").ToString(), stamina.ToString(), 0));
 			list.Add(new TooltipProperty(new TextObject("{=!}Botching Chance").ToString(),
 				FormatValue(BannerKingsConfig.Instance.SmithingModel.CalculateBotchingChance(armorCrafting.Hero, difficulty)), 0));
 
@@ -121,7 +124,21 @@ namespace BannerKings.UI.Crafting
 		public string ItemName => item.Name.ToString();
 
 		[DataSourceProperty]
+		public string ItemTypeText => GameTexts.FindText("str_bk_crafting_itemtype", type.ToString().ToLower()).ToString();
+
+		[DataSourceProperty]
 		public ItemObject Item => item;
+
+		[DataSourceProperty]
+		public string ValueText => new TextObject("{=!}{GOLD} denarii")
+			.SetTextVariable("GOLD", item.Value)
+			.ToString();
+
+		[DataSourceProperty]
+		public string DifficultyText =>  difficulty.ToString() + " " + GameTexts.FindText("str_crafting_difficulty").ToString();
+
+		[DataSourceProperty]
+		public string StaminaText => stamina.ToString() + " " + new TextObject("{=!}Stamina").ToString()  ;
 
 		[DataSourceProperty]
 		public BasicTooltipViewModel Hint

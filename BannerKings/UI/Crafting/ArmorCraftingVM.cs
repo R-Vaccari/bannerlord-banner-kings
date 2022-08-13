@@ -25,10 +25,21 @@ namespace BannerKings.UI.Crafting
             foreach (ItemObject item in Game.Current.ObjectManager.GetObjectTypeList<ItemObject>())
             {
                 if (!item.HasArmorComponent) continue;
-                Armors.Add(new ArmorItemVM(this, item));
+                Armors.Add(new ArmorItemVM(this, item, GetItemType(item)));
             }
 
             CurrentItem = Armors[0];
+        }
+
+        public ItemType GetItemType(ItemObject item)
+        {
+            if (item.HasArmorComponent)
+            {
+                if (item.ItemType == ItemObject.ItemTypeEnum.HorseHarness) return ItemType.Barding;
+                else return ItemType.BodyArmor;
+            }
+
+            return ItemType.Ammo;
         }
 
         public Hero Hero => mixin.Hero;
@@ -43,7 +54,8 @@ namespace BannerKings.UI.Crafting
                 {
                     currentItem = value;
                     OnPropertyChangedWithValue(value, "CurrentItem");
-                    mixin.UpdateMaterials(currentItem.Item);
+                    mixin.UpdateMaterials();
+                    mixin.UpdateMainAction();
                 }
             }
         }
@@ -60,6 +72,14 @@ namespace BannerKings.UI.Crafting
                     OnPropertyChangedWithValue(value, "Armors");
                 }
             }
+        }
+
+        public enum ItemType
+        {
+            BodyArmor,
+            Barding,
+            Shield,
+            Ammo
         }
     }
 }

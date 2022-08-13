@@ -43,12 +43,19 @@ namespace BannerKings.UI.Extensions
             if (crafting.IsInCraftingMode || crafting.IsInRefinementMode || crafting.IsInSmeltingMode)
                 IsInArmorMode = false;
 
+            UpdateMainAction();
+
             CraftingAvailableHeroItemVM heroVm = crafting.AvailableCharactersForSmithing.FirstOrDefault(x => x.Hero == Hero.MainHero);
             if (heroVm != null && heroVm.CurrentStamina != startingStamina)
                 spentStamina = startingStamina - heroVm.CurrentStamina;
 
             if (crafting.IsMainActionEnabled)
             {
+
+                HoursSpentText = new TextObject("{=!}Hours spent for all actions: {HOURS} hours.")
+                        .SetTextVariable("HOURS", GetSpentHours().ToString("0.0"))
+                        .ToString();
+
                 /*float hours;
 
                if (crafting.IsInSmeltingMode)
@@ -70,13 +77,29 @@ namespace BannerKings.UI.Extensions
                        hours = Campaign.Current.Models.SmithingModel.GetEnergyCostForSmithing(currentCraftedItemObject, crafterHero);
                    }
                }*/
+            }
+        }
 
-                TextObject botchText = new TextObject();
+        public void UpdateMainAction()
+        {
+            if (IsInArmorMode)
+            {
+                UpdateMaterials();
 
-                HoursSpentText = new TextObject("{=!}Hours spent for all actions: {HOURS} hours.\n{BOTCH}")
-                        .SetTextVariable("HOURS", GetSpentHours().ToString("0.0"))
-                        .SetTextVariable("BOTCH", botchText)
-                        .ToString();
+                if (!HasEnergy())
+                {
+                    crafting.IsMainActionEnabled = false;
+                    if (crafting.MainActionHint != null)
+                        crafting.MainActionHint = new BasicTooltipViewModel(() => new TextObject("{=PRE5RKpp}You must rest and spend time before you can do this action.", null).ToString());
+                }
+                else if (!HasMaterials())
+                {
+                    crafting.IsMainActionEnabled = false;
+                    if (crafting.MainActionHint != null)
+                        crafting.MainActionHint = new BasicTooltipViewModel(() => new TextObject("{=gduqxfck}You don't have all required materials!", null).ToString());
+
+                }
+                else crafting.IsMainActionEnabled = true;
             }
         }
 
@@ -84,12 +107,31 @@ namespace BannerKings.UI.Extensions
 
         private float GetSpentHours() => spentStamina / 6f;
 
-        public void UpdateMaterials(ItemObject item)
+        public void UpdateMaterials()
         {
-            int[] smithingCostsForWeaponDesign = BannerKingsConfig.Instance.SmithingModel.GetSmeltingOutputForArmor(item);
-            for (int l = 0; l < 9; l++)
-                crafting.PlayerCurrentMaterials[l].ResourceChangeAmount = smithingCostsForWeaponDesign[l];
+            int[] materials = CurrentMaterials;
+            for (int l = 0; l < 9; l++) crafting.PlayerCurrentMaterials[l].ResourceChangeAmount = -materials[l];
         }
+
+        public bool HasEnergy() => crafting.CurrentCraftingHero.CurrentStamina >= CurrentEnergy;
+        public bool HasMaterials()
+        {
+            bool ingots = crafting.PlayerCurrentMaterials.Any((CraftingResourceItemVM m) => m.ResourceChangeAmount + m.ResourceAmount < 0);
+            bool extraMaterials = false;
+            if (ingots)
+            {
+                int[] materials = CurrentMaterials;
+                MBReadOnlyList<ItemObject> items = Game.Current.ObjectManager.GetObjectTypeList<ItemObject>();
+                if (materials[9] > 0) extraMaterials = PartyBase.MainParty.ItemRoster.GetItemNumber(items.First(x => x.StringId == "leather")) > materials[9];
+                if (materials[10] > 0) extraMaterials = PartyBase.MainParty.ItemRoster.GetItemNumber(items.First(x => x.StringId == "linen")) > materials[10];
+            }
+
+            return ingots && extraMaterials;
+        }
+        
+
+        private int[] CurrentMaterials => BannerKingsConfig.Instance.SmithingModel.GetSmeltingOutputForArmor(armorCrafting.CurrentItem.Item);
+        private int CurrentEnergy => BannerKingsConfig.Instance.SmithingModel.CalculateArmorStamina(armorCrafting.CurrentItem.Item);
 
         [DataSourceMethod]
         public void ExecuteSwitchToArmor()

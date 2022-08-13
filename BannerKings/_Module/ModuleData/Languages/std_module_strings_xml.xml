@@ -4,6 +4,12 @@
 		<tag language="English" />
 	</tags>
 	<strings>
+	
+		<string id="bk_crafting_itemtype_bodyarmor" text="Body Armors" />
+		<string id="bk_crafting_itemtype_barding" text="Bardings" />
+		<string id="bk_crafting_itemtype_shield" text="Shields" />
+		<string id="bk_crafting_itemtype_ammo" text="Ammos" />
+	
 		
 		<string id="bk_modifier_purebred" text="Poor {ITEMNAME}" />
 		<string id="bk_modifier_strong" text="Strong {ITEMNAME}" />
