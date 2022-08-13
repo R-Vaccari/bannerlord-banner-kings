@@ -1,4 +1,6 @@
-﻿using TaleWorlds.Core;
+﻿using BannerKings.UI.Extensions;
+using TaleWorlds.CampaignSystem;
+using TaleWorlds.Core;
 using TaleWorlds.Library;
 
 namespace BannerKings.UI.Crafting
@@ -7,9 +9,11 @@ namespace BannerKings.UI.Crafting
     {
         private MBBindingList<ArmorItemVM> armors;
         private ArmorItemVM currentItem;
+        private CraftingMixin mixin;
 
-        public ArmorCraftingVM()
+        public ArmorCraftingVM(CraftingMixin mixin)
         {
+            this.mixin = mixin;
             armors = new MBBindingList<ArmorItemVM>();
         }
 
@@ -21,11 +25,13 @@ namespace BannerKings.UI.Crafting
             foreach (ItemObject item in Game.Current.ObjectManager.GetObjectTypeList<ItemObject>())
             {
                 if (!item.HasArmorComponent) continue;
-                Armors.Add(new ArmorItemVM(item));
+                Armors.Add(new ArmorItemVM(this, item));
             }
 
             CurrentItem = Armors[0];
         }
+
+        public Hero Hero => mixin.Hero;
 
         [DataSourceProperty]
         public ArmorItemVM CurrentItem
@@ -37,6 +43,7 @@ namespace BannerKings.UI.Crafting
                 {
                     currentItem = value;
                     OnPropertyChangedWithValue(value, "CurrentItem");
+                    mixin.UpdateMaterials(currentItem.Item);
                 }
             }
         }

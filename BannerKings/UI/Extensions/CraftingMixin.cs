@@ -9,11 +9,12 @@ using TaleWorlds.Core.ViewModelCollection;
 using BannerKings.Behaviours;
 using TaleWorlds.Library;
 using BannerKings.UI.Crafting;
+using TaleWorlds.Core;
 
 namespace BannerKings.UI.Extensions
 {
     [ViewModelMixin("UpdateCraftingStamina")]
-    internal class CraftingMixin : BaseViewModelMixin<CraftingVM>
+    public class CraftingMixin : BaseViewModelMixin<CraftingVM>
     {
 		private CraftingVM crafting;
         private ArmorCraftingVM armorCrafting;
@@ -33,7 +34,7 @@ namespace BannerKings.UI.Extensions
             CraftingAvailableHeroItemVM heroVm = crafting.AvailableCharactersForSmithing.FirstOrDefault(x => x.Hero == Hero.MainHero);
             if (heroVm != null)
                 startingStamina = heroVm.CurrentStamina;
-            armorCrafting = new ArmorCraftingVM();
+            armorCrafting = new ArmorCraftingVM(this);
         }
 
         public override void OnRefresh()
@@ -79,7 +80,16 @@ namespace BannerKings.UI.Extensions
             }
         }
 
+        public Hero Hero => crafting.CurrentCraftingHero.Hero;
+
         private float GetSpentHours() => spentStamina / 6f;
+
+        public void UpdateMaterials(ItemObject item)
+        {
+            int[] smithingCostsForWeaponDesign = BannerKingsConfig.Instance.SmithingModel.GetSmeltingOutputForArmor(item);
+            for (int l = 0; l < 9; l++)
+                crafting.PlayerCurrentMaterials[l].ResourceChangeAmount = smithingCostsForWeaponDesign[l];
+        }
 
         [DataSourceMethod]
         public void ExecuteSwitchToArmor()
@@ -93,12 +103,6 @@ namespace BannerKings.UI.Extensions
             CraftingVM.OnItemRefreshedDelegate onItemRefreshed = crafting.OnItemRefreshed;
             if (onItemRefreshed != null)
                 onItemRefreshed(false);
-            
-
-            // int[] smithingCostsForWeaponDesign = Campaign.Current.Models.SmithingModel.GetSmithingCostsForWeaponDesign();
-            // for (int l = 0; l < 9; l++)
-            //    crafting.PlayerCurrentMaterials[l].ResourceChangeAmount = smithingCostsForWeaponDesign[l];
-
         }
 
         [DataSourceMethod]

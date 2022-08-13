@@ -47,6 +47,7 @@ namespace BannerKings
         public BKEconomyModel EconomyModel { get; } = new BKEconomyModel();
         public BKWorkshopModel WorkshopModel { get; } = new BKWorkshopModel();
         public BKAdministrativeModel AdministrativeModel { get; } = new BKAdministrativeModel();
+        public BKSmithingModel SmithingModel { get; } = new BKSmithingModel();
 
         public void Initialize()
         {

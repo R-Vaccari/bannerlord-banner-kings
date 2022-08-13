@@ -3,11 +3,95 @@ using TaleWorlds.CampaignSystem.SandBox.CampaignBehaviors;
 using TaleWorlds.CampaignSystem.SandBox.GameComponents.Map;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
+using static TaleWorlds.Core.ArmorComponent;
 
 namespace BannerKings.Models.Vanilla
 {
     public class BKSmithingModel : DefaultSmithingModel
     {
+
+        public float CalculateBotchingChance(Hero hero, int difficulty)
+        {
+            float chance = (float)difficulty / hero.GetSkillValue(DefaultSkills.Crafting) + 1;
+
+            return MBMath.ClampFloat(chance, 0f, 0.8f);
+        }
+
+        public int CalculateArmorStamina(ItemObject item)
+        {
+            float result = 0;
+            if (item.HasArmorComponent)
+            {
+                result += item.Weight * 5f;
+                result += item.Tierf * 5f;
+
+                if (item.ItemType == ItemObject.ItemTypeEnum.BodyArmor) result += 50f;
+                else if (item.ItemType == ItemObject.ItemTypeEnum.HeadArmor) result += 30f;
+                else result += 10f;
+
+                if (item.ArmorComponent.MaterialType == ArmorMaterialTypes.Plate) result += 40f;
+                else if (item.ArmorComponent.MaterialType == ArmorMaterialTypes.Chainmail) result += 25f;
+                else result += 10f;
+            }
+
+            return MBMath.ClampInt((int)result, 10, 300);
+        }
+
+
+        public int CalculateArmorDifficulty(ItemObject item)
+        {
+            float result = 0;
+            if (item.HasArmorComponent)
+            {
+                result += item.Tierf * 20f;
+
+                if (item.ItemType == ItemObject.ItemTypeEnum.BodyArmor || item.ItemType == ItemObject.ItemTypeEnum.HorseHarness) result *= 1.5f;
+                else if (item.ItemType == ItemObject.ItemTypeEnum.HeadArmor) result *= 1.2f;
+
+                if (item.ArmorComponent.MaterialType == ArmorMaterialTypes.Plate) result *= 1.4f;
+                else if (item.ArmorComponent.MaterialType == ArmorMaterialTypes.Chainmail) result *= 1.25f;
+                else if (item.ArmorComponent.MaterialType == ArmorMaterialTypes.Leather) result *= 1.1f;
+            }
+
+            return MBMath.ClampInt((int)result, 10, 300);
+        }
+
+
+        public int[] GetSmeltingOutputForArmor(ItemObject item)
+        {
+            int[] result = new int[11];
+
+            if (!item.HasArmorComponent) return result;
+
+            ArmorMaterialTypes material = item.ArmorComponent.MaterialType;
+            if (material == ArmorMaterialTypes.Chainmail || material == ArmorMaterialTypes.Plate)
+            {
+                int ingots = (int)((item.Weight * 0.8f) / 0.5f);
+                CraftingMaterials mainMaterial;
+
+                if (item.Tierf < 4f)
+                {
+                    mainMaterial = CraftingMaterials.Iron3;
+                    result[10] = 1;
+                }
+                else
+                {
+                    result[9] = 1;
+                    if (item.Tierf < 5f) mainMaterial = CraftingMaterials.Iron4;
+                    else if (item.Tierf < 6f) mainMaterial = CraftingMaterials.Iron5;
+                    else mainMaterial = CraftingMaterials.Iron6;
+                }
+
+                int mainMaterialIndex = (int)mainMaterial;
+                result[mainMaterialIndex] = (int)(ingots * 0.9f);
+                result[mainMaterialIndex - 1] = (int)(ingots * 0.1f);
+
+            }
+            else if (material == ArmorMaterialTypes.Leather) result[9] = 1;
+            else if (material == ArmorMaterialTypes.Cloth) result[10] = 1;
+
+            return result;
+        }
 
         public override int[] GetSmeltingOutputForItem(ItemObject item)
         {
