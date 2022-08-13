@@ -65,26 +65,30 @@ namespace BannerKings.UI.Crafting
 			MBTextManager.SetTextVariable("LEFT", GameTexts.FindText("str_crafting_stat", "Weight"));
 			list.Add(new TooltipProperty(GameTexts.FindText("str_LEFT_ONLY").ToString().Replace(":", ""), item.Weight.ToString(), 0));
 
-			MBTextManager.SetTextVariable("LEFT", new TextObject("{=!}Material"));
-			list.Add(new TooltipProperty(GameTexts.FindText("str_LEFT_ONLY").ToString(), item.ArmorComponent.MaterialType.ToString(), 0));
+			if (item.HasArmorComponent)
+            {
+				MBTextManager.SetTextVariable("LEFT", new TextObject("{=!}Material"));
+				list.Add(new TooltipProperty(GameTexts.FindText("str_LEFT_ONLY").ToString(), item.ArmorComponent.MaterialType.ToString(), 0));
 
 
 
-			UIHelper.TooltipAddEmptyLine(list);
-			list.Add(new TooltipProperty(new TextObject("{=!}Armor").ToString(), " ", 0));
-			UIHelper.TooltipAddSeperator(list);
+				UIHelper.TooltipAddEmptyLine(list);
+				list.Add(new TooltipProperty(new TextObject("{=!}Armor").ToString(), " ", 0));
+				UIHelper.TooltipAddSeperator(list);
 
-			MBTextManager.SetTextVariable("LEFT", GameTexts.FindText("str_inventory_head_armor"));
-			list.Add(new TooltipProperty(GameTexts.FindText("str_LEFT_ONLY").ToString(), item.ArmorComponent.HeadArmor.ToString(), 0));
+				MBTextManager.SetTextVariable("LEFT", GameTexts.FindText("str_inventory_head_armor"));
+				list.Add(new TooltipProperty(GameTexts.FindText("str_LEFT_ONLY").ToString(), item.ArmorComponent.HeadArmor.ToString(), 0));
 
-			MBTextManager.SetTextVariable("LEFT", GameTexts.FindText("str_inventory_body_armor"));
-			list.Add(new TooltipProperty(GameTexts.FindText("str_LEFT_ONLY").ToString(), item.ArmorComponent.BodyArmor.ToString(), 0));
+				MBTextManager.SetTextVariable("LEFT", GameTexts.FindText("str_inventory_body_armor"));
+				list.Add(new TooltipProperty(GameTexts.FindText("str_LEFT_ONLY").ToString(), item.ArmorComponent.BodyArmor.ToString(), 0));
 
-			MBTextManager.SetTextVariable("LEFT", GameTexts.FindText("str_inventory_leg_armor"));
-			list.Add(new TooltipProperty(GameTexts.FindText("str_LEFT_ONLY").ToString(), item.ArmorComponent.LegArmor.ToString(), 0));
+				MBTextManager.SetTextVariable("LEFT", GameTexts.FindText("str_inventory_leg_armor"));
+				list.Add(new TooltipProperty(GameTexts.FindText("str_LEFT_ONLY").ToString(), item.ArmorComponent.LegArmor.ToString(), 0));
 
-			MBTextManager.SetTextVariable("LEFT", GameTexts.FindText("str_inventory_arm_armor"));
-			list.Add(new TooltipProperty(GameTexts.FindText("str_LEFT_ONLY").ToString(), item.ArmorComponent.ArmArmor.ToString(), 0));
+				MBTextManager.SetTextVariable("LEFT", GameTexts.FindText("str_inventory_arm_armor"));
+				list.Add(new TooltipProperty(GameTexts.FindText("str_LEFT_ONLY").ToString(), item.ArmorComponent.ArmArmor.ToString(), 0));
+			}
+			
 
 
 
@@ -104,7 +108,7 @@ namespace BannerKings.UI.Crafting
 			list.Add(new TooltipProperty(new TextObject("{=!}Materials").ToString(), " ", 0));
 			UIHelper.TooltipAddSeperator(list);
 
-			int[] materials = BannerKingsConfig.Instance.SmithingModel.GetSmeltingOutputForArmor(item);
+			int[] materials = BannerKingsConfig.Instance.SmithingModel.GetCraftingInputForArmor(item);
 			for (int l = 0; l < 11; l++)
             {
 				if (materials[l] == 0) continue;

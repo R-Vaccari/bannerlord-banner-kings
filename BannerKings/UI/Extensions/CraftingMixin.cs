@@ -10,6 +10,7 @@ using BannerKings.Behaviours;
 using TaleWorlds.Library;
 using BannerKings.UI.Crafting;
 using TaleWorlds.Core;
+using TaleWorlds.CampaignSystem.SandBox.CampaignBehaviors;
 
 namespace BannerKings.UI.Extensions
 {
@@ -18,6 +19,7 @@ namespace BannerKings.UI.Extensions
     {
 		private CraftingVM crafting;
         private ArmorCraftingVM armorCrafting;
+        private MBBindingList<CraftingResourceItemVM> extraMaterials;
         private float startingStamina, spentStamina;
         private string hoursSpent;
         private HintViewModel craftingArmorHint;
@@ -27,6 +29,7 @@ namespace BannerKings.UI.Extensions
         public CraftingMixin(CraftingVM vm) : base(vm)
         {
 			crafting = vm;
+            extraMaterials = new MBBindingList<CraftingResourceItemVM>();
             startingStamina = 0f;
             spentStamina = 0f;
             craftingArmorHint = new HintViewModel();
@@ -80,6 +83,66 @@ namespace BannerKings.UI.Extensions
             }
         }
 
+        [DataSourceMethod]
+        public void ExecuteMainActionBK()
+        {
+            if (!IsInArmorMode) crafting.ExecuteMainAction();
+            else
+            {
+                SpendMaterials();
+                ItemObject item = armorCrafting.CurrentItem.Item;
+                EquipmentElement element = new EquipmentElement(item);
+
+                TextObject qualityText = new TextObject();
+
+                if ((item.HasWeaponComponent && item.WeaponComponent.ItemModifierGroup != null) ||
+                    (item.HasArmorComponent && item.ArmorComponent.ItemModifierGroup != null))
+                {
+                    int quality = BannerKingsConfig.Instance.SmithingModel.GetModifierForCraftedItem(item);
+                    ItemModifierGroup modifierGroup;
+                    if (item.HasWeaponComponent) modifierGroup = item.WeaponComponent.ItemModifierGroup;
+                    else modifierGroup = item.ArmorComponent.ItemModifierGroup;
+
+                    ItemModifier modifier = modifierGroup.GetRandomModifierWithTarget(quality);
+                    if (modifier != null)
+                    {
+                        qualityText = new TextObject("{=!} with {QUALITY} quality").SetTextVariable("QUALITY", modifier.Name);
+                        element.SetModifier(modifier);
+                    }
+                }
+
+                InformationManager.AddQuickInformation(new TextObject("{=!}{HERO} has crafted {ITEM}{QUALITY}.")
+                    .SetTextVariable("HERO", crafting.CurrentCraftingHero.Hero.Name)
+                    .SetTextVariable("ITEM", item.Name)
+                    .SetTextVariable("QUALITY", qualityText), 
+                    0, null, "event:/ui/notification/relation");
+                PartyBase.MainParty.ItemRoster.AddToCounts(element, 1);
+
+                crafting.CurrentCraftingHero.Hero.AddSkillXp(DefaultSkills.Crafting,
+                    BannerKingsConfig.Instance.SmithingModel.GetSkillXpForSmithingInFreeBuildMode(item));
+                Campaign.Current.GetCampaignBehavior<ICraftingCampaignBehavior>()
+                    .SetHeroCraftingStamina(crafting.CurrentCraftingHero.Hero, CurrentEnergy);
+
+                OnRefresh();
+            }  
+        }
+
+        private void SpendMaterials()
+        {
+            MBReadOnlyList<ItemObject> items = Game.Current.ObjectManager.GetObjectTypeList<ItemObject>();
+            int[] materials = BannerKingsConfig.Instance.SmithingModel.GetCraftingInputForArmor(armorCrafting.CurrentItem.Item);
+            for (int l = 0; l < 11; l++)
+            {
+                if (materials[l] == 0) continue;
+
+                ItemObject item;
+                if (l < 9) item = BannerKingsConfig.Instance.SmithingModel.GetCraftingMaterialItem((CraftingMaterials)l);
+                else item = items.First(x => x.StringId == (l == 9 ? "leather" : "linen"));
+
+                MobileParty.MainParty.ItemRoster.AddToCounts(item, -materials[l]);
+            }
+        }
+
         public void UpdateMainAction()
         {
             if (IsInArmorMode)
@@ -116,7 +179,7 @@ namespace BannerKings.UI.Extensions
         public bool HasEnergy() => crafting.CurrentCraftingHero.CurrentStamina >= CurrentEnergy;
         public bool HasMaterials()
         {
-            bool ingots = crafting.PlayerCurrentMaterials.Any((CraftingResourceItemVM m) => m.ResourceChangeAmount + m.ResourceAmount < 0);
+            bool ingots = !crafting.PlayerCurrentMaterials.Any((CraftingResourceItemVM m) => m.ResourceChangeAmount + m.ResourceAmount < 0);
             bool extraMaterials = false;
             if (ingots)
             {
@@ -130,7 +193,7 @@ namespace BannerKings.UI.Extensions
         }
         
 
-        private int[] CurrentMaterials => BannerKingsConfig.Instance.SmithingModel.GetSmeltingOutputForArmor(armorCrafting.CurrentItem.Item);
+        private int[] CurrentMaterials => BannerKingsConfig.Instance.SmithingModel.GetCraftingInputForArmor(armorCrafting.CurrentItem.Item);
         private int CurrentEnergy => BannerKingsConfig.Instance.SmithingModel.CalculateArmorStamina(armorCrafting.CurrentItem.Item);
 
         [DataSourceMethod]
@@ -155,7 +218,7 @@ namespace BannerKings.UI.Extensions
         }
 
         [DataSourceProperty]
-        public string ArmorText => new TextObject("{=!}Forge Armor").ToString();
+        public string ArmorText => new TextObject("{=!}Craft").ToString();
    
 
         [DataSourceProperty]
@@ -168,6 +231,23 @@ namespace BannerKings.UI.Extensions
                 {
                     hoursSpent = value;
                     ViewModel!.OnPropertyChangedWithValue(value, "HoursSpentText");
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public MBBindingList<CraftingResourceItemVM> CurrentExtraMaterials
+        {
+            get
+            {
+                return this._playerCurrentMaterials;
+            }
+            set
+            {
+                if (value != this._playerCurrentMaterials)
+                {
+                    this._playerCurrentMaterials = value;
+                    base.OnPropertyChangedWithValue(value, "CurrentExtraMaterials");
                 }
             }
         }

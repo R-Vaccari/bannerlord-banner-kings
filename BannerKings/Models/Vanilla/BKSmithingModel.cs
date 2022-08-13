@@ -9,22 +9,27 @@ namespace BannerKings.Models.Vanilla
 {
     public class BKSmithingModel : DefaultSmithingModel
     {
+        public int GetModifierForCraftedItem(ItemObject item)
+        {
+            return 0;
+        }
+
 
         public float CalculateBotchingChance(Hero hero, int difficulty)
         {
             float chance = (float)difficulty / hero.GetSkillValue(DefaultSkills.Crafting) + 1;
 
-            return MBMath.ClampFloat(chance, 0f, 0.8f);
+            return MBMath.ClampFloat(chance, 0f, 0.9f);
         }
 
         public int CalculateArmorStamina(ItemObject item)
         {
             float result = 0;
+            result += item.Weight * 5f;
+            result += item.Tierf * 5f;
+
             if (item.HasArmorComponent)
             {
-                result += item.Weight * 5f;
-                result += item.Tierf * 5f;
-
                 if (item.ItemType == ItemObject.ItemTypeEnum.BodyArmor) result += 50f;
                 else if (item.ItemType == ItemObject.ItemTypeEnum.HeadArmor) result += 30f;
                 else result += 10f;
@@ -40,11 +45,9 @@ namespace BannerKings.Models.Vanilla
 
         public int CalculateArmorDifficulty(ItemObject item)
         {
-            float result = 0;
+            float result = item.Tierf * 20f;
             if (item.HasArmorComponent)
             {
-                result += item.Tierf * 20f;
-
                 if (item.ItemType == ItemObject.ItemTypeEnum.BodyArmor || item.ItemType == ItemObject.ItemTypeEnum.HorseHarness) result *= 1.5f;
                 else if (item.ItemType == ItemObject.ItemTypeEnum.HeadArmor) result *= 1.2f;
 
@@ -57,38 +60,52 @@ namespace BannerKings.Models.Vanilla
         }
 
 
-        public int[] GetSmeltingOutputForArmor(ItemObject item)
+        public int[] GetCraftingInputForArmor(ItemObject item)
         {
             int[] result = new int[11];
 
-            if (!item.HasArmorComponent) return result;
-
-            ArmorMaterialTypes material = item.ArmorComponent.MaterialType;
-            if (material == ArmorMaterialTypes.Chainmail || material == ArmorMaterialTypes.Plate)
+            if (item.HasArmorComponent)
             {
-                int ingots = (int)((item.Weight * 0.8f) / 0.5f);
-                CraftingMaterials mainMaterial;
-
-                if (item.Tierf < 4f)
+                ArmorMaterialTypes material = item.ArmorComponent.MaterialType;
+                if (material == ArmorMaterialTypes.Chainmail || material == ArmorMaterialTypes.Plate)
                 {
-                    mainMaterial = CraftingMaterials.Iron3;
-                    result[10] = 1;
+                    int ingots = (int)((item.Weight * 0.8f) / 0.5f);
+                    CraftingMaterials mainMaterial;
+
+                    if (item.Tierf < 4f)
+                    {
+                        mainMaterial = CraftingMaterials.Iron3;
+                        result[10] = 1;
+                    }
+                    else
+                    {
+                        result[9] = 1;
+                        if (item.Tierf < 5f) mainMaterial = CraftingMaterials.Iron4;
+                        else if (item.Tierf < 6f) mainMaterial = CraftingMaterials.Iron5;
+                        else mainMaterial = CraftingMaterials.Iron6;
+                    }
+
+                    int mainMaterialIndex = (int)mainMaterial;
+                    result[mainMaterialIndex] = (int)(ingots * 0.9f);
+                    result[mainMaterialIndex - 1] = (int)(ingots * 0.1f);
                 }
-                else
+                else if (material == ArmorMaterialTypes.Leather) result[9] = MBMath.ClampInt((int)(item.Weight / 1f), 1, 100);
+                else if (material == ArmorMaterialTypes.Cloth) result[10] = 1;
+            } else if (item.HasWeaponComponent)
+            {
+                
+                if (item.WeaponComponent.PrimaryWeapon.IsShield)
                 {
-                    result[9] = 1;
-                    if (item.Tierf < 5f) mainMaterial = CraftingMaterials.Iron4;
-                    else if (item.Tierf < 6f) mainMaterial = CraftingMaterials.Iron5;
-                    else mainMaterial = CraftingMaterials.Iron6;
+                    result[7] = 1;
+                    if (item.WeaponComponent.PrimaryWeapon.PhysicsMaterial == "shield_metal")
+                        result[4] = (int)((item.Weight * 0.5f) / 0.5f); ;
+                    
+                } else
+                {
+                    result[7] = 1;
+                    result[3] = 1;
                 }
-
-                int mainMaterialIndex = (int)mainMaterial;
-                result[mainMaterialIndex] = (int)(ingots * 0.9f);
-                result[mainMaterialIndex - 1] = (int)(ingots * 0.1f);
-
-            }
-            else if (material == ArmorMaterialTypes.Leather) result[9] = 1;
-            else if (material == ArmorMaterialTypes.Cloth) result[10] = 1;
+            }           
 
             return result;
         }

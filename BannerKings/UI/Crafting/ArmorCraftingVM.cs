@@ -26,7 +26,9 @@ namespace BannerKings.UI.Crafting
 
             foreach (ItemObject item in Game.Current.ObjectManager.GetObjectTypeList<ItemObject>())
             {
-                if (!item.HasArmorComponent) continue;
+                if (item.IsAnimal || item.IsTradeGood || item.IsMountable || item.IsCraftedWeapon || item.IsBannerItem || item.IsFood || item.NotMerchandise ||
+                    (item.HasWeaponComponent && (item.WeaponComponent.PrimaryWeapon.IsRangedWeapon || item.WeaponComponent.PrimaryWeapon.IsMeleeWeapon))) 
+                    continue;
                 Armors.Add(new ArmorItemVM(this, item, GetItemType(item)));
             }
 
@@ -41,13 +43,13 @@ namespace BannerKings.UI.Crafting
                 if (item.ItemType == ItemObject.ItemTypeEnum.HorseHarness) return ItemType.Barding;
                 else return ItemType.BodyArmor;
             }
+            else if (item.HasWeaponComponent && item.WeaponComponent.PrimaryWeapon.IsShield)
+                return ItemType.Shield;
 
             return ItemType.Ammo;
         }
 
         public Hero Hero => mixin.Hero;
-
-        
 
         [DataSourceProperty]
         public ArmorCraftingSortController SortController

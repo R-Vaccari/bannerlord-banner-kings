@@ -38,7 +38,7 @@ namespace BannerKings.UI.Extensions
         public CraftingInsertArmorCategoryExtension()
         {
             XmlDocument firstChild = new XmlDocument();
-            firstChild.LoadXml("<ButtonWidget Id=\"CraftingArmorCategoryButton\" DoNotPassEventsToChildren=\"true\" WidthSizePolicy=\"Fixed\" HeightSizePolicy=\"Fixed\" SuggestedWidth=\"380\" SuggestedHeight=\"136\" Brush=\"Crafting.CraftingTab.Button\" Command.Click=\"ExecuteSwitchToArmor\" IsSelected=\"@IsInArmorMode\" UpdateChildrenStates=\"true\"><Children><ListPanel DoNotAcceptEvents = \"true\" WidthSizePolicy = \"StretchToParent\" HeightSizePolicy = \"StretchToParent\" HorizontalAlignment = \"Center\" VerticalAlignment = \"Center\" MarginTop = \"7\" StackLayout.LayoutMethod = \"VerticalBottomToTop\" UpdateChildrenStates = \"true\"><Children><BrushWidget WidthSizePolicy = \"Fixed\" HeightSizePolicy = \"Fixed\" SuggestedWidth = \"33\" SuggestedHeight = \"29\" HorizontalAlignment = \"Center\" VerticalAlignment = \"Top\" Brush = \"Crafting.Craft.Icon\" /><TextWidget WidthSizePolicy = \"StretchToParent\" HeightSizePolicy = \"StretchToParent\" MarginLeft = \"100\" MarginRight = \"100\" MarginBottom = \"60\" Brush = \"Crafting.Tabs.Text\" Text = \"@ArmorText\" /></Children></ListPanel><HintWidget DataSource = \"{CraftingArmorHint}\" WidthSizePolicy = \"StretchToParent\" HeightSizePolicy = \"StretchToParent\" Command.HoverBegin = \"ExecuteBeginHint\" Command.HoverEnd = \"ExecuteEndHint\" IsEnabled = \"false\" /></Children></ButtonWidget>");
+            firstChild.LoadXml("<ButtonWidget Id=\"CraftingArmorCategoryButton\" DoNotPassEventsToChildren=\"true\" WidthSizePolicy=\"Fixed\" HeightSizePolicy=\"Fixed\" SuggestedWidth=\"320\" SuggestedHeight=\"136\" Brush=\"Crafting.CraftingTab.Button\" Command.Click=\"ExecuteSwitchToArmor\" IsSelected=\"@IsInArmorMode\" UpdateChildrenStates=\"true\"><Children><ListPanel DoNotAcceptEvents = \"true\" WidthSizePolicy = \"StretchToParent\" HeightSizePolicy = \"StretchToParent\" HorizontalAlignment = \"Center\" VerticalAlignment = \"Center\" MarginTop = \"7\" StackLayout.LayoutMethod = \"VerticalBottomToTop\" UpdateChildrenStates = \"true\"><Children><BrushWidget WidthSizePolicy = \"Fixed\" HeightSizePolicy = \"Fixed\" SuggestedWidth = \"33\" SuggestedHeight = \"29\" HorizontalAlignment = \"Center\" VerticalAlignment = \"Top\" Brush = \"Crafting.Craft.Icon\" /><TextWidget WidthSizePolicy = \"StretchToParent\" HeightSizePolicy = \"StretchToParent\" MarginLeft = \"100\" MarginRight = \"100\" MarginBottom = \"60\" Brush = \"Crafting.Tabs.Text\" Text = \"@ArmorText\" /></Children></ListPanel><HintWidget DataSource = \"{CraftingArmorHint}\" WidthSizePolicy = \"StretchToParent\" HeightSizePolicy = \"StretchToParent\" Command.HoverBegin = \"ExecuteBeginHint\" Command.HoverEnd = \"ExecuteEndHint\" IsEnabled = \"false\" /></Children></ButtonWidget>");
 
             nodes = new List<XmlNode> { firstChild };
         }
@@ -72,6 +72,46 @@ namespace BannerKings.UI.Extensions
         [PrefabExtensionXmlNodes]
         public IEnumerable<XmlNode> Nodes => nodes;
 
+    }
+
+    [PrefabExtension("Crafting", "descendant::ButtonWidget[@Id='RefinementCategoryButton']", "Crafting")]
+    internal class RefinementCategoryButtonPatch : PrefabExtensionSetAttributePatch
+    {
+
+        public override List<Attribute> Attributes => new()
+        {
+            new Attribute("SuggestedWidth", "320"),
+        };
+    }
+
+    [PrefabExtension("Crafting", "descendant::ButtonWidget[@Id='CraftingCategoryButton']", "Crafting")]
+    internal class CraftingCategoryButtonPatch : PrefabExtensionSetAttributePatch
+    {
+
+        public override List<Attribute> Attributes => new()
+        {
+            new Attribute("SuggestedWidth", "320"),
+        };
+    }
+
+    [PrefabExtension("Crafting", "descendant::ButtonWidget[@Id='SmeltingCategoryButton']", "Crafting")]
+    internal class SmeltingCategoryButtonPatch : PrefabExtensionSetAttributePatch
+    {
+
+        public override List<Attribute> Attributes => new()
+        {
+            new Attribute("SuggestedWidth", "320"),
+        };
+    }
+
+    [PrefabExtension("Crafting", "descendant::ButtonWidget[@Id='MainActionButtonWidget']", "Crafting")]
+    internal class MainActionButtonPatch : PrefabExtensionSetAttributePatch
+    {
+
+        public override List<Attribute> Attributes => new()
+        {
+            new Attribute("Command.Click", "ExecuteMainActionBK"),
+        };
     }
 
 
