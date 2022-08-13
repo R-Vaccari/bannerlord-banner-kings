@@ -8,6 +8,7 @@ namespace BannerKings.UI.Crafting
     public class ArmorCraftingVM : ViewModel
     {
         private MBBindingList<ArmorItemVM> armors;
+        private ArmorCraftingSortController sortController;
         private ArmorItemVM currentItem;
         private CraftingMixin mixin;
 
@@ -15,6 +16,7 @@ namespace BannerKings.UI.Crafting
         {
             this.mixin = mixin;
             armors = new MBBindingList<ArmorItemVM>();
+            SortController = new ArmorCraftingSortController();
         }
 
         public override void RefreshValues()
@@ -28,6 +30,7 @@ namespace BannerKings.UI.Crafting
                 Armors.Add(new ArmorItemVM(this, item, GetItemType(item)));
             }
 
+            SortController.SetListToControl(Armors);
             CurrentItem = Armors[0];
         }
 
@@ -43,6 +46,22 @@ namespace BannerKings.UI.Crafting
         }
 
         public Hero Hero => mixin.Hero;
+
+        
+
+        [DataSourceProperty]
+        public ArmorCraftingSortController SortController
+        {
+            get => sortController;
+            set
+            {
+                if (value != sortController)
+                {
+                    sortController = value;
+                    OnPropertyChangedWithValue(value, "SortController");
+                }
+            }
+        }
 
         [DataSourceProperty]
         public ArmorItemVM CurrentItem

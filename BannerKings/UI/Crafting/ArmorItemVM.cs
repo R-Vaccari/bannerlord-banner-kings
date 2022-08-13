@@ -124,6 +124,9 @@ namespace BannerKings.UI.Crafting
 		public string ItemName => item.Name.ToString();
 
 		[DataSourceProperty]
+		public ArmorCraftingVM.ItemType ItemType => type;
+
+		[DataSourceProperty]
 		public string ItemTypeText => GameTexts.FindText("str_bk_crafting_itemtype", type.ToString().ToLower()).ToString();
 
 		[DataSourceProperty]
