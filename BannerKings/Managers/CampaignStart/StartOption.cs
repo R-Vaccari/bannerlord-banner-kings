@@ -37,6 +37,22 @@ namespace BannerKings.Managers.CampaignStart
             this.lifestyle = lifestyle;
         }
 
+        public void PostInitialize()
+        {
+            StartOption so = DefaultStartOptions.Instance.GetById(StringId);
+            name = so.name;
+            description = so.description;
+            shortDescription = so.shortDescription;
+            gold = so.gold;
+            food = so.food;
+            troops = so.troops;
+            morale = so.morale;
+            influence = so.influence;
+            criminal = so.criminal;
+            culture = so.culture;
+            lifestyle = so.lifestyle;
+        }
+
         public TextObject ShortDescription => shortDescription;
         public int Gold => gold;
         public int Food => food;

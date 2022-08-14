@@ -1,5 +1,7 @@
-﻿using BannerKings.Managers.CampaignStart;
+﻿using BannerKings.Behaviours;
+using BannerKings.Managers.CampaignStart;
 using System;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 
@@ -27,7 +29,7 @@ namespace BannerKings.UI.CampaignStart
 
         public void ExecuteFinish()
         {
-            Selected.Action?.Invoke();
+            Campaign.Current.GetCampaignBehavior<BKCampaignStartBehavior>().SetStartOption(Selected.Option);
             ExecuteClose();
         }
 

@@ -130,9 +130,7 @@ namespace BannerKings.UI
 						options.Add(new InquiryElement(hero, hero.Name.ToString(), new ImageIdentifier(CampaignUIHelper.GetCharacterCode(hero.CharacterObject))));
 
 
-					InformationManager.ShowMultiSelectionInquiry(
-						new MultiSelectionInquiryData(
-							new TextObject("{=!}Grant {TITLE}").SetTextVariable("TITLE", titleAction.Title.FullName).ToString(),
+					InformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(new TextObject("{=!}Grant {TITLE}").SetTextVariable("TITLE", titleAction.Title.FullName).ToString(),
 							new TextObject("{=!}Select a lord who you would like to grant this title to.").ToString(),
 							options, true, 1, GameTexts.FindText("str_done").ToString(), string.Empty,
 							delegate (List<InquiryElement> x)

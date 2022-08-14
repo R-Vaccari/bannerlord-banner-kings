@@ -1,5 +1,6 @@
 ﻿using BannerKings.Components;
 using BannerKings.Managers;
+using BannerKings.Managers.CampaignStart;
 using BannerKings.Managers.Court;
 using BannerKings.Managers.Decisions;
 using BannerKings.Managers.Duties;
@@ -141,6 +142,7 @@ namespace BannerKings
             AddClassDefinition(typeof(InnovationData), 94);
             AddClassDefinition(typeof(InnovationsManager), 95);
             AddClassDefinition(typeof(BannerKingsObject), 96);
+            AddClassDefinition(typeof(StartOption), 97);
         }
 
         protected override void DefineContainerDefinitions()

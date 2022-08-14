@@ -49,21 +49,15 @@ namespace BannerKings.Managers.Education.Lifestyles
 
         }
 
-        public void loadFix(float progress = 0f, int focus = 0)
-        {
-            this.progress = progress;
-            this.investedFocus = focus;
-        }
-
         public float NecessarySkillForFocus => 80f * (investedFocus + 1f);
 
         public bool CanLearn(Hero hero) => (culture == null || hero.Culture == culture) && hero.GetSkillValue(firstSkill) >= 15
             && hero.GetSkillValue(secondSkill) >= 15;
         public bool CanInvestFocus(Hero hero) => progress >= 1f && perks.Count >= investedFocus + 1 && 
             (hero.GetSkillValue(firstSkill) + hero.GetSkillValue(secondSkill) >= NecessarySkillForFocus);
-        public void InvestFocus(EducationData data, Hero hero) 
+        public void InvestFocus(EducationData data, Hero hero, bool cheat = false) 
         {
-            hero.HeroDeveloper.UnspentFocusPoints -= 1;
+            if (!cheat) hero.HeroDeveloper.UnspentFocusPoints -= 1;
             PerkObject perk = perks[investedFocus];
             data.AddPerk(perk);
             investedFocus += 1;

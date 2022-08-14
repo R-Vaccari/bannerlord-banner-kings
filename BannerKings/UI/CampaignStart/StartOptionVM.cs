@@ -59,6 +59,8 @@ namespace BannerKings.UI.CampaignStart
             onSelect(this);
         }
 
+        public StartOption Option => option;
+
         [DataSourceProperty]
         public BasicTooltipViewModel Hint
         {

@@ -156,6 +156,15 @@ namespace BannerKings.Managers
                 Educations[hero].SetCurrentLifestyle(lf);
         }
 
+        public void SetStartOptionLifestyle(Hero hero, Lifestyle lf)
+        {
+            if (Educations.ContainsKey(hero))
+            {
+                Educations[hero].SetCurrentLifestyle(lf);
+                Educations[hero].Lifestyle.InvestFocus(Educations[hero], hero, true);
+            }   
+        }
+
         public MBReadOnlyList<Lifestyle> GetLearnableLifestyles(Hero hero)
         {
             List<Lifestyle> list = new List<Lifestyle>();
