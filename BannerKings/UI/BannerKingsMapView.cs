@@ -1,6 +1,6 @@
 ﻿using BannerKings.Managers.Titles;
 using BannerKings.Populations;
-using BannerKings.UI.Court;
+using BannerKings.UI.CampaignStart;
 using BannerKings.UI.Panels;
 using SandBox.View.Map;
 using System;
@@ -47,13 +47,15 @@ namespace BannerKings.UI.Windows
                 return (new VillageProjectVM(data), "VillageProjectWindow");
             else if (id == "titles")
             {
-                
+
                 FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetTitle(Settlement.CurrentSettlement);
                 if (title == null) title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(Clan.PlayerClan.Kingdom);
                 return (new DemesneHierarchyVM(title.sovereign != null ? title.sovereign : title, Clan.PlayerClan.Kingdom), "TitlesWindow");
-            } 
+            }
             else if (id == "religions")
                 return (new ReligionVM(data), "ReligionWindow");
+            else if (id == "campaignStart")
+                return new(new CampaignStartVM(), "CampaignStartPopup");
             else return (new PopulationVM(data), "PopulationWindow");
         }
 

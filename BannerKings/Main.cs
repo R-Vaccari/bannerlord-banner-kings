@@ -38,6 +38,7 @@ using BannerKings.Managers.Kingdoms.Policies;
 using TaleWorlds.CampaignSystem.SandBox.GameComponents.Party;
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Innovations;
+using BannerKings.Managers.CampaignStart;
 
 namespace BannerKings
 {
@@ -66,6 +67,7 @@ namespace BannerKings
                 campaignStarter.AddBehavior(new BKLordPropertyBehavior());
                 campaignStarter.AddBehavior(new BKInnovationsBehavior());
                 campaignStarter.AddBehavior(new BKLifestyleBehavior());
+                campaignStarter.AddBehavior(new BKCampaignStartBehavior());
                 //campaignStarter.AddBehavior(new BKCombatBehavior());
 
                 campaignStarter.AddModel(new BKCompanionPrices());
@@ -116,6 +118,7 @@ namespace BannerKings
                 BKItems.Instance.Initialize();
                 BKPolicies.Instance.Initialize();
                 DefaultInnovations.Instance.Initialize();
+                DefaultStartOptions.Instance.Initialize();
             }
         }
 
