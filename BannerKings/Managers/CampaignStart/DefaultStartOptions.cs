@@ -6,6 +6,7 @@ using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using System.Linq;
 using TaleWorlds.CampaignSystem.Actions;
+using Helpers;
 
 namespace BannerKings.Managers.CampaignStart
 {
@@ -34,8 +35,10 @@ namespace BannerKings.Managers.CampaignStart
         public override void Initialize()
         {
 
-            MBReadOnlyList<CharacterObject> characters = Game.Current.ObjectManager.GetObjectTypeList<CharacterObject>();
-            
+            MBReadOnlyList<ItemObject> items = Game.Current.ObjectManager.GetObjectTypeList<ItemObject>(); 
+            ItemObject mule = items.FirstOrDefault(x => x.StringId == "mule");
+            ItemObject sumpter = items.FirstOrDefault(x => x.StringId == "sumpter_horse");
+
 
             adventurer = new StartOption("start_adventurer");
             adventurer.Initialize(new TextObject("{=!}Adventurer"),
@@ -55,9 +58,12 @@ namespace BannerKings.Managers.CampaignStart
                 -25000, 25, 10, 50, -50f,
                 () =>
                 {
-                    Kingdom kingdom = Kingdom.All.FirstOrDefault(x => x.Culture == Hero.MainHero.Culture);
+                    Settlement settlement = SettlementHelper.FindNearestSettlement(x => x.OwnerClan != null && x.OwnerClan.Kingdom != null, null);
+                    Kingdom kingdom = settlement.OwnerClan.Kingdom;
                     if (kingdom == null) kingdom = Kingdom.All.GetRandomElement();
                     ChangeKingdomAction.ApplyByJoinToKingdom(Clan.PlayerClan, kingdom, false);
+                    BannerKingsConfig.Instance.TitleManager.GiveLordshipOnKingdomJoin(kingdom, Clan.PlayerClan, true);
+                    MobileParty.MainParty.ItemRoster.AddToCounts(sumpter, 2);
                 }, 
                 0f,
                 null,
@@ -70,12 +76,15 @@ namespace BannerKings.Managers.CampaignStart
                 250, 0, 22, 30, 0f,
                 () =>
                 {
+                    MBReadOnlyList<CharacterObject> characters = Game.Current.ObjectManager.GetObjectTypeList<CharacterObject>();
                     TroopRoster roster = MobileParty.MainParty.MemberRoster;
                     roster.AddToCounts(characters.First(x => x.StringId == "mercenary_1"), 4);
                     roster.AddToCounts(characters.First(x => x.StringId == "mercenary_2"), 6);
                     roster.AddToCounts(characters.First(x => x.StringId == "mercenary_4"), 4);
                     roster.AddToCounts(characters.First(x => x.StringId == "mercenary_3"), 3);
                     roster.AddToCounts(characters.First(x => x.StringId == "mercenary_5"), 5);
+
+                    MobileParty.MainParty.ItemRoster.AddToCounts(sumpter, 8);
                 }, 
                 50f,
                 null,
@@ -100,11 +109,14 @@ namespace BannerKings.Managers.CampaignStart
 
                     PartyTemplateObject template = templates.First(x => x.StringId == templateName);
                     TroopRoster roster = MobileParty.MainParty.MemberRoster;
+                    
                     for (int i = 0; i < 15; i++)
                     {
                         if (i >= 10 && template.Stacks.Count >= 2) roster.AddToCounts(template.Stacks[1].Character, 1);
                         else roster.AddToCounts(template.Stacks[0].Character, 1);
                     }
+
+                    MobileParty.MainParty.ItemRoster.AddToCounts(sumpter, 6);
                 },
                 100f,
                 null,
@@ -132,6 +144,8 @@ namespace BannerKings.Managers.CampaignStart
                         }
                     }
 
+                    party.ItemRoster.AddToCounts(sumpter, 3);
+                    party.ItemRoster.AddToCounts(mule, 2);
 
                     int goodsValue = 0;
                     foreach (ItemObject itemObject in TaleWorlds.CampaignSystem.Items.AllTradeGoods)

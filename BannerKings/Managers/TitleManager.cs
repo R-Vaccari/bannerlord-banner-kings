@@ -382,7 +382,7 @@ namespace BannerKings.Managers
             //Campaign.Current.CampaignInformationManager.NewMapNoticeAdded(notification);
         }
 
-        public void GiveLordshipOnKingdomJoin(Kingdom newKingdom, Clan clan)
+        public void GiveLordshipOnKingdomJoin(Kingdom newKingdom, Clan clan, bool force = false)
         {
             List<FeudalTitle> clanTitles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(clan);
             if (clanTitles.Count > 0) return;
@@ -390,15 +390,18 @@ namespace BannerKings.Managers
             FeudalTitle sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(newKingdom);
             if (sovereign == null || sovereign.contract == null) return;
 
+            if (force) goto GIVE;
+
             if (!sovereign.contract.Rights.Contains(FeudalRights.Enfoeffement_Rights)) return;
 
+            GIVE:
             List<FeudalTitle> titles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(newKingdom.Leader);
             if (titles.Count == 0) return;
 
             List<FeudalTitle> lordships = titles.FindAll(x => x.type == TitleType.Lordship);
             if (lordships.Count == 0) return;
 
-            FeudalTitle lordship = (from l in lordships where l.fief != null select l into x orderby x.fief.Village.Hearth select x).FirstOrDefault<FeudalTitle>();
+            FeudalTitle lordship = (from l in lordships where l.fief != null select l into x orderby x.fief.Village.Hearth select x).FirstOrDefault();
             if (lordship != null)
             {
                 TitleAction action = BannerKingsConfig.Instance.TitleModel.GetAction(ActionType.Grant, lordship, newKingdom.Leader);

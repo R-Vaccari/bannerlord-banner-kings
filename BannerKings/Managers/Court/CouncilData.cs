@@ -459,7 +459,8 @@ namespace BannerKings.Managers.Court
         public TextObject GetName() => GameTexts.FindText("str_bk_council_" + position.ToString().ToLower() + (isRoyal ? "_royal" : ""),Culture.StringId);
         public TextObject GetDescription() => GameTexts.FindText("str_bk_council_description_" + position.ToString().ToLower())
             .SetTextVariable("NAME", GetName());
-        public TextObject GetEffects() => GameTexts.FindText("str_bk_council_" + position.ToString().ToLower() + "_effects");
+        public TextObject GetEffects() => GameTexts.FindText("str_bk_council_" + position.ToString().ToLower() + "_effects")
+            .SetTextVariable("BREAK", "\n");
 
         public bool IsValidCandidate(Hero candidate)
         {

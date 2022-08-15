@@ -3,7 +3,6 @@ using BannerKings.UI;
 using Helpers;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.Core;
@@ -16,11 +15,13 @@ namespace BannerKings.Behaviours
     {
 
         private StartOption option;
-        public CampaignTime StartTime { get; private set; } = CampaignTime.Never;
+        private bool hasSeenInquiry = false;
+        private CampaignTime startTime = CampaignTime.Never;
 
         public override void RegisterEvents()
         {
             CampaignEvents.OnCharacterCreationIsOverEvent.AddNonSerializedListener(this, new Action(OnCharacterCreationOver));
+            CampaignEvents.OnGameLoadFinishedEvent.AddNonSerializedListener(this, new Action(OnGameLoaded));
         }
 
         public override void SyncData(IDataStore dataStore)
@@ -28,14 +29,15 @@ namespace BannerKings.Behaviours
             if (BannerKingsConfig.Instance.wipeData) option = null;
 
             dataStore.SyncData("bannerkings-campaignstart-option", ref option);
-            dataStore.SyncData("bannerkings-campaignstart-time", ref option);
+            dataStore.SyncData("bannerkings-campaignstart-time", ref startTime);
+            dataStore.SyncData("bannerkings-campaignstart-inquiry", ref hasSeenInquiry);
         }
 
         public void SetStartOption(StartOption option)
         {
             this.option = option;
             option.Action?.Invoke();
-            StartTime = CampaignTime.Now;
+            startTime = CampaignTime.Now;
 
             Hero mainHero = Hero.MainHero;
             mainHero.ChangeHeroGold(option.Gold - mainHero.Gold);
@@ -69,8 +71,12 @@ namespace BannerKings.Behaviours
             }
         }
 
+        private void OnGameLoaded()
+        {
+            if (!hasSeenInquiry) ShowInquiry();
+        }
+
         private void OnCharacterCreationOver() => UIManager.Instance.ShowWindow("campaignStart");
-        
 
         private void ShowInquiry()
         {
@@ -86,7 +92,7 @@ namespace BannerKings.Behaviours
             elements.Add(new InquiryElement(settlements, settlements.Name.ToString(), null, true, settlements.Hint.ToString()));
 
             LearningElement skills = new LearningElement(new TextObject("{=!}Game Balance - Skills"),
-                new TextObject("{=!}Banner Kings introduces a new Attribute - Wisdom - as well as 3 new skills: Scholarship, Lordship and Theology. On top of that, skill modifiers are changed. For starters, the minimum experience gain is now 5% rather than 0%. This means that the vanilla game would block you from learning skills past a certain past - this is not the case anymore. You can always keep learning, albeit very slowly. Learning limits are also changed - attribute points provided mere 5 additional learning limit to skills, despite being the hardest point to acquire. Instead they now provide 15."),
+                new TextObject("{=!}Banner Kings introduces a new Attribute - Wisdom - as well as 3 new skills: Scholarship, Lordship and Theology. These new skills provide new ways to acquire experience and level up. On top of that, skill modifiers are changed. For starters, the minimum experience gain is now 5% rather than 0%. This means that the vanilla game would block you from learning skills past a certain past - this is not the case anymore. You can always keep learning, albeit very slowly."),
                 new TextObject("{=!}Learn about the new skills and experience gainning changes."));
             elements.Add(new InquiryElement(skills, skills.Name.ToString(), null, true, skills.Hint.ToString()));
 
@@ -96,14 +102,26 @@ namespace BannerKings.Behaviours
             elements.Add(new InquiryElement(softLimits, softLimits.Name.ToString(), null, true, softLimits.Hint.ToString()));
 
             LearningElement aiFinances = new LearningElement(new TextObject("{=!}Game Balance - AI Finances & War"),
-                new TextObject("{=!}In Banner Kings, AI lords now have much more dynamic financial lives. AI clans will buy caravans and workshops in similar manner to player. The same costs, incomes and restrictions apply. Over time, this means AI clans will build several sources of income, allowing them to grow bigger and stronger, or have reserves then losing their settlements. Another major change is that AI will now save money during peace time. Lords will roam the world with small parties - enough to not get consistently captured by bandits - saving their reserves for war time. As a consequence of that, settlements train their volunteers - when war time comes, armies will be immediatly drafted and made mostly of quality troops instead of recruits."),
+                new TextObject("{=!}In Banner Kings, AI lords now have much more dynamic financial lives. AI clans will buy caravans and workshops in similar manner to player. The same costs, incomes and restrictions apply.\nOver time, this means AI clans will build several sources of income, allowing them to grow bigger and stronger, or have reserves then losing their settlements.\nAnother major change is that AI will now save money during peace time. Lords will roam the world with small parties - enough to not get consistently captured by bandits - saving their reserves for war time. As a consequence of that, settlements train their volunteers - when war time comes, armies will be immediatly drafted and made mostly of quality troops instead of recruits.\nLastly, notables will now financially aid the clans they are supporters of. This creates a flow of currency from notables to lords, making them a more active part of wartimes."),
                 new TextObject("{=!}Learn about the expansions to AI financial decisions that make the game more dynamic."));
             elements.Add(new InquiryElement(aiFinances, aiFinances.Name.ToString(), null, true, aiFinances.Hint.ToString()));
 
+            LearningElement food = new LearningElement(new TextObject("{=!}Game Balance - Settlement Food"),
+                new TextObject("{=!}Food is extensively reworked. Food in settlemetns is now produced and consumed in the hundreds by the day - every single person in the population eats, in a similar rate to your soldiers. Food in settlements is now dictated by settlement acreage and it's workforce. The settlement needs acres ready to work and people - serfs and slaves - to work on them. Settlements will no longer starve with markets full of food - the population will buy off the market stocks when production does not meed demand, meaning true starvating will only start when markets are completely out of food. Food stocks are much higher, based on population. Excess food in stocks will rot. If the limit is reached, the population sells food items to the market instead of the food simply disappearing. Food can be manually dumped into the settlement by stocking the Stack with food - it will only be consumed when the normal reserves are very low."),
+                new TextObject("{=!}Learn about the expansions to AI financial decisions that make the game more dynamic."));
+            elements.Add(new InquiryElement(food, food.Name.ToString(), null, true, food.Hint.ToString()));
+
             LearningElement economy = new LearningElement(new TextObject("{=!}Economy"),
-                new TextObject("{=!}"),
+                new TextObject("{=!}In Banner Kings, the economy landscape is quite different.\nDemand is generated by population in settlements, and therefore much more dynamic than before as population classes fluctuate, and each class has different demands.\nTrade goods have modifiers such as 'fine', 'masterwork' or 'crude', what opens new possibilities in terms of profit.\nManufactured items are on average quite more expensive, making workshops and caravans significantly more profitable.\nWorkshops owners now pay taxes to the settlement owner.\nSettlement market gold no longer resets on a daily basis - settlements can accumulate large amounts of gold, or go bankrupt, hence need some time to recover."),
                 new TextObject("{=!}Learn about the various improvements over the economy system."));
             elements.Add(new InquiryElement(economy, economy.Name.ToString(), null, true, economy.Hint.ToString()));
+
+            LearningElement economyVillages = new LearningElement(new TextObject("{=!}Economy - Villages"),
+                new TextObject("{=!}Villages produce income by selling their production outputs. Villages will now produce based on population workforce, as well as available acreage, if fitting. For example, agricultural productions are limited by the amount of acres available and their production capacity - even if you have extra workers, the fields can only produce so much.\nAs a result, villages can produce much more income than before. This is extra relevant for Knighthood, which you can read more about in the articles below."),
+                new TextObject("{=!}Learn about the various improvements over the economy system."));
+            elements.Add(new InquiryElement(economyVillages, economyVillages.Name.ToString(), null, true, economyVillages.Hint.ToString()));
+
+
 
             LearningElement education = new LearningElement(new TextObject("{=!}Educations"),
                 new TextObject("{=!}"),

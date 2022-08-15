@@ -34,10 +34,10 @@
 		<string id="str_bk_council_description_elder" text="{=bk_council_description_elder}The {NAME} represent the caste of respected aged leaders in a tribal society. Their presence increases the influence of a sovereign over the common people." />
 	
 		
-		<string id="str_bk_council_marshall_effects" text="{=bk_council_marshall_effects}Settlement militia +1\\nSettlement militarism +1% flat\\nSettlement draft efficiencty +25% flat" />
-		<string id="str_bk_council_steward_effects" text="{=bk_council_steward_effects}Settlement prosperity +1\nSettlement production efficiency +15% flat\nSettlement caravan attractiveness +15% flat" />
-		<string id="str_bk_council_chancellor_effects" text="{=bk_council_chancellor_effects}Settlement loyalty +1\nVassal limit +1\nDisagreements impact -20%" />
-		<string id="str_bk_council_spymaster_effects" text="{=bk_council_spymaster_effects}Settlement security +1" />
+		<string id="str_bk_council_marshall_effects" text="{=bk_council_marshall_effects}Settlement militia +1{BREAK}Settlement militarism +1% flat{BREAK}Settlement draft efficiencty +25% flat" />
+		<string id="str_bk_council_steward_effects" text="{=bk_council_steward_effects}Settlement prosperity +1{BREAK}Settlement production efficiency +15% flat{BREAK}Settlement caravan attractiveness +15% flat" />
+		<string id="str_bk_council_chancellor_effects" text="{=bk_council_chancellor_effects}Settlement loyalty +1{BREAK}Vassal limit +1{BREAK}Disagreements impact -20%" />
+		<string id="str_bk_council_spymaster_effects" text="{=bk_council_spymaster_effects}Settlement security +1{BREAK}Settlement autonomy -3% flat{BREAK}" />
 		<string id="str_bk_council_spiritual_effects" text="{=bk_council_spiritual_effects}" />
 	
 	
