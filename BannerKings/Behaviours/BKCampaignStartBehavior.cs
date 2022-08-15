@@ -42,7 +42,6 @@ namespace BannerKings.Behaviours
         public void SetStartOption(StartOption option)
         {
             this.option = option;
-            option.Action?.Invoke();
             startTime = CampaignTime.Now;
 
             Hero mainHero = Hero.MainHero;
@@ -57,6 +56,8 @@ namespace BannerKings.Behaviours
                 Settlement settlement = SettlementHelper.FindNearestSettlement(x => x.OwnerClan != null && x.OwnerClan.Kingdom != null, null);
                 ChangeCrimeRatingAction.Apply(settlement.OwnerClan.Kingdom, option.Criminal);
             }
+
+            option.Action?.Invoke();
 
             ShowInquiry();
         }

@@ -27,6 +27,12 @@ namespace BannerKings.Managers.Education.Lifestyles
             investedFocus = 0;
         }
 
+        public override bool Equals(object obj)
+        {
+            if (obj is Lifestyle) return StringId == (obj as Lifestyle).StringId;
+            return base.Equals(obj);
+        }
+
         public static Lifestyle CreateLifestyle(Lifestyle lf)
         {
             Lifestyle lifestyle = new Lifestyle(lf.StringId);

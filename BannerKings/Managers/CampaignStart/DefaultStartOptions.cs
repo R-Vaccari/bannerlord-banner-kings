@@ -36,9 +36,6 @@ namespace BannerKings.Managers.CampaignStart
         public override void Initialize()
         {
 
-            MBReadOnlyList<ItemObject> items = Game.Current.ObjectManager.GetObjectTypeList<ItemObject>(); 
-            ItemObject mule = items.FirstOrDefault(x => x.StringId == "mule");
-            ItemObject sumpter = items.FirstOrDefault(x => x.StringId == "sumpter_horse");
 
             adventurer = new StartOption("start_adventurer");
             adventurer.Initialize(new TextObject("{=!}Adventurer"),
@@ -57,6 +54,9 @@ namespace BannerKings.Managers.CampaignStart
                 -25000, 25, 10, 50, -50f,
                 () =>
                 {
+                    MBReadOnlyList<ItemObject> items = Game.Current.ObjectManager.GetObjectTypeList<ItemObject>();
+                    ItemObject sumpter = items.FirstOrDefault(x => x.StringId == "sumpter_horse");
+
                     Settlement settlement = SettlementHelper.FindNearestSettlement(x => x.OwnerClan != null && x.OwnerClan.Kingdom != null, null);
                     Kingdom kingdom = settlement.OwnerClan.Kingdom;
                     if (kingdom == null) kingdom = Kingdom.All.GetRandomElement();
@@ -76,6 +76,9 @@ namespace BannerKings.Managers.CampaignStart
                 250, 0, 22, 30, 0f,
                 () =>
                 {
+                    MBReadOnlyList<ItemObject> items = Game.Current.ObjectManager.GetObjectTypeList<ItemObject>();
+                    ItemObject sumpter = items.FirstOrDefault(x => x.StringId == "sumpter_horse");
+
                     MBReadOnlyList<CharacterObject> characters = Game.Current.ObjectManager.GetObjectTypeList<CharacterObject>();
                     TroopRoster roster = MobileParty.MainParty.MemberRoster;
                     roster.AddToCounts(characters.First(x => x.StringId == "mercenary_1"), 4);
@@ -97,6 +100,8 @@ namespace BannerKings.Managers.CampaignStart
                 50, 2, 15, 50, 0f,
                 () =>
                 {
+                    MBReadOnlyList<ItemObject> items = Game.Current.ObjectManager.GetObjectTypeList<ItemObject>();
+                    ItemObject sumpter = items.FirstOrDefault(x => x.StringId == "vlandia_horse");
                     MBReadOnlyList<PartyTemplateObject> templates = Game.Current.ObjectManager.GetObjectTypeList<PartyTemplateObject>();
                     string templateName = "looters_template";
                     
@@ -116,7 +121,7 @@ namespace BannerKings.Managers.CampaignStart
                         else roster.AddToCounts(template.Stacks[0].Character, 1);
                     }
 
-                    MobileParty.MainParty.ItemRoster.AddToCounts(sumpter, 6);
+                    MobileParty.MainParty.ItemRoster.Add(new ItemRosterElement(sumpter, 6));
                 },
                 100f,
                 null,
@@ -132,6 +137,10 @@ namespace BannerKings.Managers.CampaignStart
                     MBReadOnlyList<PartyTemplateObject> templates = Game.Current.ObjectManager.GetObjectTypeList<PartyTemplateObject>();
                     PartyTemplateObject template = templates.FirstOrDefault(x => x.StringId == "caravan_template_" + Hero.MainHero.Culture.StringId);
                     MobileParty party = MobileParty.MainParty;
+
+                    MBReadOnlyList<ItemObject> items = Game.Current.ObjectManager.GetObjectTypeList<ItemObject>();
+                    ItemObject mule = items.FirstOrDefault(x => x.StringId == "mule");
+                    ItemObject sumpter = items.FirstOrDefault(x => x.StringId == "sumpter_horse");
 
                     if (template != null)
                     {

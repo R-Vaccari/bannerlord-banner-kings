@@ -24,7 +24,7 @@ namespace BannerKings.Models.Vanilla
                 if (Campaign.Current.IsNight && data.HasPerk(BKPerks.Instance.OutlawNightPredator))
                     baseResult.AddFactor(0.06f, BKPerks.Instance.OutlawNightPredator.Name);
 
-                if (data.Lifestyle == DefaultLifestyles.Instance.Outlaw)
+                if (data.Lifestyle != null && data.Lifestyle.Equals(DefaultLifestyles.Instance.Outlaw))
                 {
                     int count = 0;
                     foreach (TroopRosterElement element in mobileParty.MemberRoster.GetTroopRoster())
