@@ -59,10 +59,7 @@ namespace BannerKings.Managers
 
         public bool IsHeroTitleHolder(Hero hero)
         {
-            foreach (FeudalTitle title in Titles.Keys.ToList())
-                if (title.deFacto == hero || title.deJure == hero)
-                    return true;
-
+            if (DeJures.ContainsKey(hero)) return DeJures[hero].Count > 0;
             return false;
         }
 
@@ -190,25 +187,30 @@ namespace BannerKings.Managers
             return null;
         }
 
-        public List<Hero> CalculateVassals(Hero suzerain)
+        /*public List<Hero> CalculateVassals(Clan clan)
         {
-            List<Hero> list = new List<Hero>();
-            List<FeudalTitle> suzerainTitles = GetAllDeJure(suzerain);
-            foreach (FeudalTitle title in suzerainTitles)
-                if (title.vassals != null && title.vassals.Count > 0)
-                    foreach (FeudalTitle vassal in title.vassals)
-                    {
-                        if (vassal.deJure != null)
-                        {
-                            if (vassal.deJure.Clan != suzerain.Clan && vassal.deJure.Clan.Kingdom == suzerain.Clan.Kingdom) list.Add(vassal.deJure);
-                            else if (vassal.deJure.Clan == suzerain.Clan && vassal.deJure != suzerain) list.Add(vassal.deJure);
-                        }
-                    }
+            List<Hero> result = new List<Hero>();
 
-            return list;
-        }
+            Hero leader = clan.Leader;
+            foreach (FeudalTitle title in BannerKingsConfig.Instance.TitleManager.GetAllDeJure(clan))
+            {
+                if (title.vassals == null || title.vassals.Count == 0) continue;
 
-        public Dictionary<Clan, List<FeudalTitle>> CalculateVassalClanTitles(Clan suzerainClan, Clan targetClan = null)
+                foreach (FeudalTitle vassal in title.vassals)
+                {
+                    Hero deJure = vassal.deJure;
+                    if (deJure == null || deJure == leader) continue;
+
+                    if (deJure.Clan == leader.Clan) result.Add(deJure);
+                    else if (BannerKingsConfig.Instance.TitleManager.CalculateHeroSuzerain(deJure).deJure == leader)
+                        result.Add(deJure);
+                }
+            }
+
+            return result;
+        } */
+
+        public Dictionary<Clan, List<FeudalTitle>> CalculateVassals(Clan suzerainClan, Clan clanToIgnore = null)
         {
             Dictionary<Clan, List<FeudalTitle>> clans = new Dictionary<Clan, List<FeudalTitle>> ();
             Kingdom kingdom = suzerainClan.Kingdom;
@@ -221,7 +223,7 @@ namespace BannerKings.Managers
                 if (title.vassals != null && title.vassals.Count > 0)
                     foreach (FeudalTitle vassal in title.vassals)
                     {
-                        if (vassal.deJure.Clan == suzerainClan || (targetClan != null && vassal.deJure.Clan != targetClan)) continue;
+                        if (vassal.deJure.Clan == suzerainClan || (clanToIgnore != null && vassal.deJure.Clan != clanToIgnore)) continue;
 
                         FeudalTitle vassalSuzerain = this.CalculateHeroSuzerain(vassal.deJure);
                         if (vassalSuzerain == null) continue;
@@ -319,6 +321,8 @@ namespace BannerKings.Managers
             ChangeRelationAction.ApplyRelationChangeBetweenHeroes(grantor, receiver, BannerKingsConfig.Instance.TitleModel.GetRelationImpact(action.Title), true);
             GainKingdomInfluenceAction.ApplyForDefault(grantor, action.Influence);
             grantor.AddSkillXp(BKSkills.Instance.Lordship, BannerKingsConfig.Instance.TitleModel.GetSkillReward(action.Title, action.Type));
+
+            if (receiver.CompanionOf != null) ClanActions.JoinClan(receiver, grantor.Clan);
 
         }
 
@@ -437,10 +441,10 @@ namespace BannerKings.Managers
 
         public List<FeudalTitle> GetAllDeJure(Hero hero)
         {
-            if (this.DeJures != null)
+            if (DeJures != null)
             {
-                List<FeudalTitle> titleList = null;
-                this.DeJures.TryGetValue(hero, out titleList);
+                List<FeudalTitle> titleList;
+                DeJures.TryGetValue(hero, out titleList);
                 if (titleList == null) titleList = new List<FeudalTitle>();
                 return titleList;
             }

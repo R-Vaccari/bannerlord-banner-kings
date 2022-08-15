@@ -7,6 +7,7 @@ using TaleWorlds.Localization;
 using System.Linq;
 using TaleWorlds.CampaignSystem.Actions;
 using Helpers;
+using BannerKings.Managers.Skills;
 
 namespace BannerKings.Managers.CampaignStart
 {
@@ -39,7 +40,6 @@ namespace BannerKings.Managers.CampaignStart
             ItemObject mule = items.FirstOrDefault(x => x.StringId == "mule");
             ItemObject sumpter = items.FirstOrDefault(x => x.StringId == "sumpter_horse");
 
-
             adventurer = new StartOption("start_adventurer");
             adventurer.Initialize(new TextObject("{=!}Adventurer"),
                 new TextObject("{=!}A free spirit, you are roaming the continent without constraints, or a clear objective. The world is for the taking, will you take your share?"),
@@ -51,10 +51,9 @@ namespace BannerKings.Managers.CampaignStart
                 null);
 
             indebtedLord = new StartOption("start_lord");
-            indebtedLord.
-                Initialize(new TextObject("{=!}Indebted Lord"),
+            indebtedLord.Initialize(new TextObject("{=!}Indebted Lord"),
                 new TextObject("{=!}After a series of inherited problems and bad decisions, you find yourself in debt. Thankfuly, you are a landed lord, with income from your Lordship. A food supply and a small retinue accompany you, though their loyalty will be tested by the lack of denars..."),
-                new TextObject("{=!}Start as a lord in a kingdom, with a Lordship title. Significant gold and influence onus that will take time to recuperate. Influence gain is halved for 5 years. Gain 25 lordship skill."), 
+                new TextObject("{=!}Start as a lord in a kingdom, with a Lordship title. Significant gold and influence onus that will take time to recuperate. Influence gain is halved for 5 years. Gain lordship skill."), 
                 -25000, 25, 10, 50, -50f,
                 () =>
                 {
@@ -64,6 +63,7 @@ namespace BannerKings.Managers.CampaignStart
                     ChangeKingdomAction.ApplyByJoinToKingdom(Clan.PlayerClan, kingdom, false);
                     BannerKingsConfig.Instance.TitleManager.GiveLordshipOnKingdomJoin(kingdom, Clan.PlayerClan, true);
                     MobileParty.MainParty.ItemRoster.AddToCounts(sumpter, 2);
+                    Hero.MainHero.AddSkillXp(BKSkills.Instance.Lordship, 2000);
                 }, 
                 0f,
                 null,

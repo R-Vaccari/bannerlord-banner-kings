@@ -20,6 +20,7 @@ namespace BannerKings.Behaviours
 
         public override void RegisterEvents()
         {
+            CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, OnSessionLaunched);
             CampaignEvents.OnCharacterCreationIsOverEvent.AddNonSerializedListener(this, new Action(OnCharacterCreationOver));
             CampaignEvents.OnGameLoadFinishedEvent.AddNonSerializedListener(this, new Action(OnGameLoaded));
         }
@@ -31,6 +32,11 @@ namespace BannerKings.Behaviours
             dataStore.SyncData("bannerkings-campaignstart-option", ref option);
             dataStore.SyncData("bannerkings-campaignstart-time", ref startTime);
             dataStore.SyncData("bannerkings-campaignstart-inquiry", ref hasSeenInquiry);
+        }
+
+        private void OnSessionLaunched(CampaignGameStarter starter)
+        {
+            DefaultStartOptions.Instance.Initialize();
         }
 
         public void SetStartOption(StartOption option)
@@ -76,7 +82,11 @@ namespace BannerKings.Behaviours
             if (!hasSeenInquiry) ShowInquiry();
         }
 
-        private void OnCharacterCreationOver() => UIManager.Instance.ShowWindow("campaignStart");
+        private void OnCharacterCreationOver() 
+        {
+            
+            UIManager.Instance.ShowWindow("campaignStart");
+        } 
 
         private void ShowInquiry()
         {

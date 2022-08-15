@@ -4,6 +4,7 @@ using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
 using BannerKings.Models;
 using BannerKings.Populations;
+using BannerKings.UI.Notifications;
 using BannerKings.UI.Windows;
 using HarmonyLib;
 using SandBox.View.Map;
@@ -22,6 +23,7 @@ using TaleWorlds.CampaignSystem.ViewModelCollection.Encyclopedia.EncyclopediaIte
 using TaleWorlds.CampaignSystem.ViewModelCollection.GameMenu;
 using TaleWorlds.CampaignSystem.ViewModelCollection.GameMenu.TownManagement;
 using TaleWorlds.CampaignSystem.ViewModelCollection.KingdomManagement.KingdomDecision;
+using TaleWorlds.CampaignSystem.ViewModelCollection.Map;
 using TaleWorlds.Core;
 using TaleWorlds.Core.ViewModelCollection;
 using TaleWorlds.Library;
@@ -72,6 +74,19 @@ namespace BannerKings.UI
 
     namespace Patches
     {
+
+        [HarmonyPatch(typeof(MapNotificationVM), "PopulateTypeDictionary")]
+        class PopulateNotificationsPatch
+        {
+            static void Postfix(MapNotificationVM __instance)
+            {
+                Dictionary<Type, Type> dic = (Dictionary<Type, Type>)__instance.GetType().GetField("_itemConstructors", BindingFlags.Instance | BindingFlags.NonPublic)
+                    .GetValue(__instance);
+                dic.Add(typeof(DemesneLimitNotification), typeof(DemesneLimitNotificationVM));
+                dic.Add(typeof(UnlandedDemesneLimitNotification), typeof(DemesneLimitNotificationVM));
+            }
+        }
+
         [HarmonyPatch(typeof(SettlementGovernorSelectionVM))]
         internal class AvailableGovernorsPatch
         {

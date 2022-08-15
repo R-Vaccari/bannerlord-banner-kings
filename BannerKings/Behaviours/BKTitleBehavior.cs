@@ -1,6 +1,8 @@
-﻿using BannerKings.Managers.Helpers;
+﻿using BannerKings.Managers.AI;
+using BannerKings.Managers.Helpers;
 using BannerKings.Managers.Kingdoms;
 using BannerKings.Managers.Titles;
+using BannerKings.UI.Notifications;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
@@ -20,6 +22,7 @@ namespace BannerKings.Behaviours
         public override void RegisterEvents()
         {
             //CampaignEvents.RulingCLanChanged.AddNonSerializedListener(this, new Action<Kingdom, Clan>(this.OnRulingClanChanged));
+            CampaignEvents.DailyTickHeroEvent.AddNonSerializedListener(this, OnDailyTickHero);
             CampaignEvents.DailyTickEvent.AddNonSerializedListener(this, OnDailyTick);
             CampaignEvents.HeroKilledEvent.AddNonSerializedListener(this, OnHeroKilled);
             CampaignEvents.DailyTickSettlementEvent.AddNonSerializedListener(this, OnDailyTickSettlement);
@@ -42,6 +45,78 @@ namespace BannerKings.Behaviours
 
             if (sovereign.deJure == clan.Leader) return;
 
+        }
+
+        private void OnDailyTickHero(Hero hero)
+        {
+            if (hero.IsChild || hero.Occupation != Occupation.Lord || hero.Clan.IsMinorFaction ||
+                !BannerKingsConfig.Instance.TitleManager.IsHeroTitleHolder(hero)) return;
+
+            CheckOverDemesneLimit(hero);
+            CheckOverUnlandedDemesneLimit(hero);
+            CheckOverVassalLimit(hero);
+        }
+
+        private void CheckOverDemesneLimit(Hero hero)
+        {
+            if (BannerKingsConfig.Instance.StabilityModel.IsHeroOverDemesneLimit(hero))
+            {
+                if (hero == Hero.MainHero)
+                {
+                    Campaign.Current.CampaignInformationManager.NewMapNoticeAdded(new DemesneLimitNotification());
+                    return;
+                }
+
+                if (hero.Clan.Kingdom != null && hero.Clan == hero.Clan.Kingdom.RulingClan)
+                {
+                    Kingdom kingdom = hero.Clan.Kingdom;
+                    if (kingdom.UnresolvedDecisions.Any(x => x is SettlementClaimantDecision)) return;
+                }
+
+                AIBehavior AI = new AIBehavior();
+                float limit = BannerKingsConfig.Instance.StabilityModel.CalculateDemesneLimit(hero).ResultNumber;
+                float current = BannerKingsConfig.Instance.StabilityModel.CalculateCurrentDemesne(hero.Clan).ResultNumber;
+                float diff = current - limit;
+                if (diff < 0.5f) return;
+
+                FeudalTitle title = AI.ChooseTitleToGive(hero, diff);
+                if (title == null) return;
+
+                Hero receiver = AI.ChooseVassalToGiftLandedTitle(hero, title);
+                if (receiver == null) return;
+
+                TitleAction action = BannerKingsConfig.Instance.TitleModel.GetAction(ActionType.Grant, title, hero);
+                InformationManager.DisplayMessage(new InformationMessage(new TextObject("{HERO} is giving {TITLE} to {RECEIVER}")
+                    .SetTextVariable("HERO", hero.Name)
+                    .SetTextVariable("TITLE", title.FullName)
+                    .SetTextVariable("RECEIVER", receiver.Name)
+                    .ToString()));
+                BannerKingsConfig.Instance.TitleManager.GrantTitle(action, receiver);
+            }
+        }
+
+        private void CheckOverUnlandedDemesneLimit(Hero hero)
+        {
+            if (BannerKingsConfig.Instance.StabilityModel.IsHeroOverUnlandedDemesneLimit(hero))
+            {
+                if (hero == Hero.MainHero)
+                {
+                    Campaign.Current.CampaignInformationManager.NewMapNoticeAdded(new UnlandedDemesneLimitNotification());
+                    return;
+                }
+            }
+        }
+
+        private void CheckOverVassalLimit(Hero hero)
+        {
+            if (BannerKingsConfig.Instance.StabilityModel.IsHeroOverVassalLimit(hero))
+            {
+                if (hero == Hero.MainHero)
+                {
+                    Campaign.Current.CampaignInformationManager.NewMapNoticeAdded(new VassalLimitNotification());
+                    return;
+                }
+            }
         }
 
         private void OnDailyTick()

@@ -72,7 +72,7 @@ namespace BannerKings.Models
 				
 
 
-			Dictionary<Clan, List<FeudalTitle>> dictionary = BannerKingsConfig.Instance.TitleManager.CalculateVassalClanTitles(clan);
+			Dictionary<Clan, List<FeudalTitle>> dictionary = BannerKingsConfig.Instance.TitleManager.CalculateVassals(clan);
 			if (dictionary.Count >= 0)
             {
 				foreach (KeyValuePair<Clan, List<FeudalTitle>> pair in dictionary)
@@ -155,7 +155,7 @@ namespace BannerKings.Models
 			if (deJureKingdom == null || deJureKingdom != clan.Kingdom) return;
 
 			float amount = 0f;
-			Dictionary<Clan, List<FeudalTitle>> dictionary = BannerKingsConfig.Instance.TitleManager.CalculateVassalClanTitles(suzerain.deJure.Clan, clan);
+			Dictionary<Clan, List<FeudalTitle>> dictionary = BannerKingsConfig.Instance.TitleManager.CalculateVassals(suzerain.deJure.Clan, clan);
 			foreach (FeudalTitle title in dictionary[clan])
 				amount += (int)title.dueTax;
 

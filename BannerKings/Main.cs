@@ -118,7 +118,6 @@ namespace BannerKings
                 BKItems.Instance.Initialize();
                 BKPolicies.Instance.Initialize();
                 DefaultInnovations.Instance.Initialize();
-                DefaultStartOptions.Instance.Initialize();
             }
         }
 
