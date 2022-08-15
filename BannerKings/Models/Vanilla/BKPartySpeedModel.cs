@@ -1,4 +1,5 @@
 ﻿using BannerKings.Managers.Education;
+using BannerKings.Managers.Education.Lifestyles;
 using BannerKings.Managers.Skills;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.SandBox.GameComponents.Map;
@@ -22,6 +23,16 @@ namespace BannerKings.Models.Vanilla
 
                 if (Campaign.Current.IsNight && data.HasPerk(BKPerks.Instance.OutlawNightPredator))
                     baseResult.AddFactor(0.06f, BKPerks.Instance.OutlawNightPredator.Name);
+
+                if (data.Lifestyle == DefaultLifestyles.Instance.Outlaw)
+                {
+                    int count = 0;
+                    foreach (TroopRosterElement element in mobileParty.MemberRoster.GetTroopRoster())
+                        if (element.Character.IsHero || element.Character.Occupation == Occupation.Bandit)
+                            count += element.Number;
+
+                    baseResult.AddFactor((count / mobileParty.MemberRoster.TotalManCount) * 0.1f, data.Lifestyle.Name);
+                }
             }
 
             if (mobileParty.IsCaravan && mobileParty.Owner != null)

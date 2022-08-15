@@ -3,6 +3,7 @@ using BannerKings.Managers.Education;
 using BannerKings.Managers.Education.Lifestyles;
 using System;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.Core;
 
 namespace BannerKings.Behaviours
@@ -11,12 +12,26 @@ namespace BannerKings.Behaviours
     {
         public override void RegisterEvents()
         {
+            CampaignEvents.ConversationEnded.AddNonSerializedListener(this, new Action<CharacterObject>(OnConversationEnded));
             CampaignEvents.WeeklyTickEvent.AddNonSerializedListener(this, new Action(OnWeeklyTick));
             CampaignEvents.HeroGainedSkill.AddNonSerializedListener(this, new Action<Hero, SkillObject, bool, int, bool>(OnHeroGainedSkill));
         }
 
         public override void SyncData(IDataStore dataStore)
         {
+        }
+
+        private void OnConversationEnded(CharacterObject character)
+        {
+            EducationData education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(Hero.MainHero);
+            if (education.Lifestyle == DefaultLifestyles.Instance.Outlaw && character.IsHero)
+            {
+                if (character.Occupation != Occupation.GangLeader || character.HeroObject.GetTraitLevel(DefaultTraits.Honor) >= 0)
+                {
+                    float random = MBRandom.RandomFloat;
+                    if (random < 0.05f) ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero.MainHero, character.HeroObject, -3);
+                }
+            }
         }
 
         public void OnHeroGainedSkill(Hero hero, SkillObject skill, bool hasNewPerk, int change = 1, bool shouldNotify = true)

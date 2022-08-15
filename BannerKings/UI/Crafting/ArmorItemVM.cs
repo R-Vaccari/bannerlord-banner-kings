@@ -21,7 +21,7 @@ namespace BannerKings.UI.Crafting
             this.item = item;
 			Visual = new ImageIdentifierVM(item, "");
 			Hint = new BasicTooltipViewModel(() => GetHint());
-			stamina = BannerKingsConfig.Instance.SmithingModel.CalculateArmorStamina(item);
+			stamina = BannerKingsConfig.Instance.SmithingModel.CalculateArmorStamina(item, armorCrafting.Hero);
 			difficulty = BannerKingsConfig.Instance.SmithingModel.CalculateArmorDifficulty(item);
 			this.type = type;
 		}

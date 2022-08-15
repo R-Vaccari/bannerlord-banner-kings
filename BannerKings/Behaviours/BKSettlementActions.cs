@@ -126,7 +126,7 @@ namespace BannerKings.Behaviours
 
 
 
-            campaignGameStarter.AddWaitGameMenu("bannerkings_wait_crafting", "{=!}You are working on the smith for {CRAFTING_HOURS} hours.",
+            campaignGameStarter.AddWaitGameMenu("bannerkings_wait_crafting", "{=!}You are working on the smith for {CRAFTING_HOURS} hours. The current hourly rate of this smith is: {CRAFTING_RATE} {GOLD_ICON}.{CRAFTING_EXPLANATION}",
               new OnInitDelegate(MenuWaitInit),
               new OnConditionDelegate((c) => true),
               new OnConsequenceDelegate(MenuActionConsequenceNeutral),
@@ -343,6 +343,11 @@ namespace BannerKings.Behaviours
         {
             this.totalHours = totalHours;
             MBTextManager.SetTextVariable("CRAFTING_HOURS", totalHours.ToString("0.0"), false);
+            ExplainedNumber cost = BannerKingsConfig.Instance.SmithingModel.GetSmithingHourlyPrice(Settlement.CurrentSettlement, Hero.MainHero);
+            int costInt = (int)cost.ResultNumber;
+            GameTexts.SetVariable("CRAFTING_RATE", costInt);
+            GameTexts.SetVariable("CRAFTING_EXPLANATION", cost.GetExplanations());
+            GameTexts.SetVariable("GOLD_ICON", "{=!}<img src=\"General\\Icons\\Coin@2x\" extend=\"8\">");
             GameMenu.SwitchToMenu("bannerkings_wait_crafting");
         }
 
@@ -458,9 +463,23 @@ namespace BannerKings.Behaviours
 
         private void TickWaitCrafting(MenuCallbackArgs args, CampaignTime dt)
         {
-            float diff = actionStart.ElapsedHoursUntilNow;
-            float progress = diff / totalHours;
-            args.MenuContext.GameMenu.SetProgressOfWaitingInMenu(progress);
+            float progress = args.MenuContext.GameMenu.Progress;
+            int diff = (int)actionStart.ElapsedHoursUntilNow;
+
+           
+            if (diff > 0)
+            {
+                args.MenuContext.GameMenu.SetProgressOfWaitingInMenu(diff / totalHours);
+                if (args.MenuContext.GameMenu.Progress != progress)
+                {
+                    ExplainedNumber cost = BannerKingsConfig.Instance.SmithingModel.GetSmithingHourlyPrice(Settlement.CurrentSettlement, Hero.MainHero);
+                    int costInt = (int)cost.ResultNumber;
+                    GameTexts.SetVariable("CRAFTING_RATE", costInt);
+                    GameTexts.SetVariable("CRAFTING_EXPLANATION", cost.GetExplanations());
+                    GameTexts.SetVariable("GOLD_ICON", "{=!}<img src=\"General\\Icons\\Coin@2x\" extend=\"8\">");
+                    GiveGoldAction.ApplyForCharacterToSettlement(Hero.MainHero, Settlement.CurrentSettlement, costInt);
+                }
+            }
         }
 
         private static void TickWaitMeetNobility(MenuCallbackArgs args, CampaignTime dt)
@@ -481,9 +500,8 @@ namespace BannerKings.Behaviours
                         GameTexts.SetVariable("INFLUENCE", influence);
                         GameTexts.SetVariable("SKILL", DefaultSkills.Charm.Name);
                         Hero.MainHero.AddSkillXp(DefaultSkills.Charm, MBRandom.RandomFloatRanged(10f, 25f));
-                        InformationManager.DisplayMessage(
-                            new InformationMessage(
-                                new TextObject("{=!}You have have improved your {SKILL} skill and gained {INFLUENCE} influence while meeting with nobles.").ToString()));
+                        InformationManager.DisplayMessage(new InformationMessage(new TextObject("{=!}You have improved your {SKILL} skill and gained {INFLUENCE} influence while meeting with nobles.")
+                            .ToString()));
                     }
                 }
             }

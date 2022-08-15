@@ -82,14 +82,14 @@ namespace BannerKings.Models
             else result.Add(0.1f);
 
             EducationData payerEducation = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(payer);
-            if (payerEducation.HasPerk(BKPerks.Instance.CaravaneerEntrepeneur))
-                result.AddFactor(-0.2f, BKPerks.Instance.CaravaneerEntrepeneur.Name);
+            if (payerEducation.HasPerk(BKPerks.Instance.ArtisanEntrepeneur))
+                result.AddFactor(-0.2f, BKPerks.Instance.ArtisanEntrepeneur.Name);
 
             if (settlement.OwnerClan != null)
             {
                 EducationData ownerEducation = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(settlement.Owner);
-                if (ownerEducation.HasPerk(BKPerks.Instance.CaravaneerEntrepeneur))
-                    result.AddFactor(0.2f, BKPerks.Instance.CaravaneerEntrepeneur.Name);
+                if (ownerEducation.HasPerk(BKPerks.Instance.ArtisanEntrepeneur))
+                    result.AddFactor(0.2f, BKPerks.Instance.ArtisanEntrepeneur.Name);
             }
 
             result.AddFactor(data.EconomicData.Mercantilism.ResultNumber * -0.5f);

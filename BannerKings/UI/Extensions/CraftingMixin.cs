@@ -114,7 +114,7 @@ namespace BannerKings.UI.Extensions
                 if ((item.HasWeaponComponent && item.WeaponComponent.ItemModifierGroup != null) ||
                     (item.HasArmorComponent && item.ArmorComponent.ItemModifierGroup != null))
                 {
-                    int quality = BannerKingsConfig.Instance.SmithingModel.GetModifierForCraftedItem(item);
+                    int quality = BannerKingsConfig.Instance.SmithingModel.GetModifierForCraftedItem(item, Hero);
                     ItemModifierGroup modifierGroup;
                     if (item.HasWeaponComponent) modifierGroup = item.WeaponComponent.ItemModifierGroup;
                     else modifierGroup = item.ArmorComponent.ItemModifierGroup;
@@ -216,7 +216,7 @@ namespace BannerKings.UI.Extensions
         
 
         private int[] CurrentMaterials => BannerKingsConfig.Instance.SmithingModel.GetCraftingInputForArmor(armorCrafting.CurrentItem.Item);
-        private int CurrentEnergy => BannerKingsConfig.Instance.SmithingModel.CalculateArmorStamina(armorCrafting.CurrentItem.Item);
+        private int CurrentEnergy => BannerKingsConfig.Instance.SmithingModel.CalculateArmorStamina(armorCrafting.CurrentItem.Item, Hero);
 
         [DataSourceMethod]
         public void ExecuteSwitchToArmor()

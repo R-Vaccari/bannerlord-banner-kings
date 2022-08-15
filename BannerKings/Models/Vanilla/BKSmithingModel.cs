@@ -1,4 +1,7 @@
-﻿using TaleWorlds.CampaignSystem;
+﻿using BannerKings.Managers.Education;
+using BannerKings.Managers.Education.Lifestyles;
+using BannerKings.Managers.Skills;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.SandBox.CampaignBehaviors;
 using TaleWorlds.CampaignSystem.SandBox.GameComponents.Map;
 using TaleWorlds.Core;
@@ -9,20 +12,46 @@ namespace BannerKings.Models.Vanilla
 {
     public class BKSmithingModel : DefaultSmithingModel
     {
-        public int GetModifierForCraftedItem(ItemObject item)
+        public ExplainedNumber GetSmithingHourlyPrice(Settlement settlement, Hero hero)
         {
-            return 0;
+            ExplainedNumber result = new ExplainedNumber(50f, true);
+
+            float prosperity = settlement.Prosperity / 5000f;
+            if (prosperity >= 1f) result.Add(prosperity, GameTexts.FindText("str_prosperity"));
+
+            if (hero.Clan.Tier > 0) result.AddFactor(hero.Clan.Tier * 0.1f, GameTexts.FindText("str_clan"));
+
+            EducationData education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(hero);
+            if (education.HasPerk(BKPerks.Instance.ArtisanSmith))
+                result.AddFactor(-0.15f, BKPerks.Instance.ArtisanSmith.Name);
+
+            return result;
+        }
+
+        public int GetModifierForCraftedItem(ItemObject item, Hero hero)
+        {
+            int result = 0;
+
+
+            EducationData education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(hero);
+            if (education.HasPerk(BKPerks.Instance.ArtisanCraftsman) && MBRandom.RandomFloat <= 0.05f)
+                result += 1;
+
+            return result;
         }
 
 
         public float CalculateBotchingChance(Hero hero, int difficulty)
         {
             float chance = (float)difficulty / hero.GetSkillValue(DefaultSkills.Crafting) + 1;
+            EducationData education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(hero);
+            if (education.Lifestyle == DefaultLifestyles.Instance.Artisan)
+                chance -= 0.1f;
 
             return MBMath.ClampFloat(chance, 0f, 0.9f);
         }
 
-        public int CalculateArmorStamina(ItemObject item)
+        public int CalculateArmorStamina(ItemObject item, Hero hero)
         {
             float result = 0;
             result += item.Weight * 5f;
@@ -38,6 +67,10 @@ namespace BannerKings.Models.Vanilla
                 else if (item.ArmorComponent.MaterialType == ArmorMaterialTypes.Chainmail) result += 25f;
                 else result += 10f;
             }
+
+            EducationData education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(hero);
+            if (education.HasPerk(BKPerks.Instance.ArtisanSmith))
+                result *= 0.9f;
 
             return MBMath.ClampInt((int)result, 10, 300);
         }

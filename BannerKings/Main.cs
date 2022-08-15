@@ -15,7 +15,6 @@ using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.Election;
 using TaleWorlds.CampaignSystem.SandBox.CampaignBehaviors;
 using TaleWorlds.CampaignSystem.SandBox.CampaignBehaviors.VillageBehaviors;
-using TaleWorlds.CampaignSystem.SandBox.GameComponents;
 using TaleWorlds.CampaignSystem.SandBox.GameComponents.Map;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
@@ -39,6 +38,7 @@ using TaleWorlds.CampaignSystem.SandBox.GameComponents.Party;
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Innovations;
 using BannerKings.Managers.CampaignStart;
+using BannerKings.Managers.Education;
 
 namespace BannerKings
 {
@@ -474,7 +474,17 @@ namespace BannerKings
                     else if (outputItem.IsAnimal) modifierGroup = Game.Current.ObjectManager.GetObject<ItemModifierGroup>("animals");
                     else modifierGroup = Game.Current.ObjectManager.GetObject<ItemModifierGroup>("goods");
 
-                    ItemModifier modifier = modifierGroup.GetRandomModifierWithTarget(data.ProductionQuality.ResultNumber);
+
+                    float result = data.ProductionQuality.ResultNumber;
+                    if (workshop.Owner != null)
+                    {
+                        EducationData education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(workshop.Owner);
+                        if (education.HasPerk(BKPerks.Instance.ArtisanCraftsman))
+                            result += 0.05f;
+                    }
+                    
+
+                    ItemModifier modifier = modifierGroup.GetRandomModifierWithTarget();
                     int itemPrice = (int)(town.GetItemPrice(outputItem, null, false) * modifier.PriceMultiplier);
                     town.Owner.ItemRoster.AddToCounts(new EquipmentElement(outputItem, modifier, null, false), count);
                     if (Campaign.Current.GameStarted && !doNotEffectCapital)
