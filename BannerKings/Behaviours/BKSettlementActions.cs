@@ -664,16 +664,23 @@ namespace BannerKings.Behaviours
         private static bool MenuSettlementManageCondition(MenuCallbackArgs args)
         {
             args.optionLeaveType = GameMenuOption.LeaveType.Manage;
-            return Settlement.CurrentSettlement.OwnerClan == Hero.MainHero.Clan;
+            bool deJure = false;
+            FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetTitle(Settlement.CurrentSettlement);
+            if (title != null && title.deJure == Hero.MainHero && Settlement.CurrentSettlement.OwnerClan.Kingdom == Clan.PlayerClan.Kingdom)
+                deJure = true;
+
+            return Settlement.CurrentSettlement.OwnerClan == Hero.MainHero.Clan || (deJure && Settlement.CurrentSettlement.IsVillage);
         }
 
         private static bool MenuVillageBuildingCondition(MenuCallbackArgs args)
         {
             args.optionLeaveType = GameMenuOption.LeaveType.Manage;
-            bool titleOnwer = false;
+            bool deJure = false;
             FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetTitle(Settlement.CurrentSettlement);
-            if (title != null) titleOnwer = title.deJure == Hero.MainHero;
-            return (titleOnwer || Settlement.CurrentSettlement.OwnerClan == Hero.MainHero.Clan) && Settlement.CurrentSettlement.IsVillage;
+            if (title != null && title.deJure == Hero.MainHero && Settlement.CurrentSettlement.OwnerClan.Kingdom == Clan.PlayerClan.Kingdom)
+                deJure = true;
+
+            return (deJure || Settlement.CurrentSettlement.OwnerClan == Hero.MainHero.Clan) && Settlement.CurrentSettlement.IsVillage;
         }
 
         private static bool MenuGuildManageCondition(MenuCallbackArgs args)
