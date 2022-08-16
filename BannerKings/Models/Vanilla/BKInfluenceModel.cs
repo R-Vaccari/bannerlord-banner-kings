@@ -9,6 +9,8 @@ using TaleWorlds.Library;
 using BannerKings.Managers.Titles;
 using BannerKings.Managers.Education;
 using BannerKings.Managers.Skills;
+using BannerKings.Behaviours;
+using BannerKings.Managers.CampaignStart;
 
 namespace BannerKings.Models
 {
@@ -21,6 +23,9 @@ namespace BannerKings.Models
         public override ExplainedNumber CalculateInfluenceChange(Clan clan, bool includeDescriptions = false)
         {
             ExplainedNumber baseResult = base.CalculateInfluenceChange(clan, includeDescriptions);
+
+            if (clan == Clan.PlayerClan && Campaign.Current.GetCampaignBehavior<BKCampaignStartBehavior>().HasDebuff(DefaultStartOptions.Instance.IndebtedLord))
+                baseResult.Add(-5f, DefaultStartOptions.Instance.IndebtedLord.Name);
 
             float generalSupport = 0f;
             float generalAutonomy = 0f;

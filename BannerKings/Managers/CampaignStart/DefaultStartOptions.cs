@@ -13,13 +13,14 @@ namespace BannerKings.Managers.CampaignStart
 {
     public class DefaultStartOptions : DefaultTypeInitializer<DefaultStartOptions, StartOption>
     {
-        private StartOption adventurer, indebtedLord, mercenary, outlaw, caravaneer;
+        private StartOption adventurer, indebtedLord, mercenary, outlaw, caravaneer, gladiator;
 
         public StartOption Adventurer => adventurer;
         public StartOption IndebtedLord => indebtedLord;
         public StartOption Mercenary => mercenary;
         public StartOption Outlaw => outlaw;
         public StartOption Caravaneer => caravaneer;
+        public StartOption Gladiator => gladiator;
 
         public override IEnumerable<StartOption> All
         {

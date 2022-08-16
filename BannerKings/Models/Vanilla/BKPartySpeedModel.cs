@@ -1,4 +1,6 @@
-﻿using BannerKings.Managers.Education;
+﻿using BannerKings.Behaviours;
+using BannerKings.Managers.CampaignStart;
+using BannerKings.Managers.Education;
 using BannerKings.Managers.Education.Lifestyles;
 using BannerKings.Managers.Skills;
 using TaleWorlds.CampaignSystem;
@@ -41,6 +43,9 @@ namespace BannerKings.Models.Vanilla
                 if (Campaign.Current.IsDay && data.HasPerk(BKPerks.Instance.CaravaneerDealer))
                     baseResult.AddFactor(0.04f, BKPerks.Instance.FianHighlander.Name);
             }
+
+            if (mobileParty.LeaderHero == Hero.MainHero && Campaign.Current.GetCampaignBehavior<BKCampaignStartBehavior>().HasDebuff(DefaultStartOptions.Instance.Caravaneer))
+                baseResult.AddFactor(-0.05f, DefaultStartOptions.Instance.Caravaneer.Name);
 
             return baseResult;
         }

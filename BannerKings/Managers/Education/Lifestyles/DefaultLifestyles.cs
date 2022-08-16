@@ -76,7 +76,7 @@ namespace BannerKings.Managers.Education.Lifestyles
                 DefaultSkills.Trade, DefaultSkills.Scouting, 
                 new List<PerkObject>() { BKPerks.Instance.CaravaneerStrider, BKPerks.Instance.CaravaneerDealer,  },
                 new TextObject("{=!}Reduced trade penalty by {EFFECT1}%\nReduced speed during nighttime by {EFFECT2}%"),
-                20f, 8f);
+                10f, 8f);
 
             artisan = new Lifestyle("lifestyle_artisan");
             artisan.Initialize(new TextObject("{=!}Artisan"), new TextObject("{=!}"),

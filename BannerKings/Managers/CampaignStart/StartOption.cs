@@ -21,6 +21,12 @@ namespace BannerKings.Managers.CampaignStart
         {
         }
 
+        public override bool Equals(object obj)
+        {
+            if (obj is StartOption) return StringId == (obj as StartOption).StringId;
+            return base.Equals(obj);
+        }
+
         public void Initialize(TextObject name, TextObject description, TextObject shortDescription, int gold, int food, int troops, int morale, float influence, 
             Action action, float criminal = 0f, CultureObject culture = null, Lifestyle lifestyle = null)
         {

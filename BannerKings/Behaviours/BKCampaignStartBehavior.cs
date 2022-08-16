@@ -15,8 +15,14 @@ namespace BannerKings.Behaviours
     {
 
         private StartOption option;
-        private bool hasSeenInquiry = false;
+        private bool hasSeenInquiry;
         private CampaignTime startTime = CampaignTime.Never;
+
+        public bool HasDebuff(StartOption option)
+        {
+            if (this.option != null && this.option.Equals(option) && startTime.ElapsedYearsUntilNow < 5) return true;
+            return false;
+        }
 
         public override void RegisterEvents()
         {
@@ -46,7 +52,6 @@ namespace BannerKings.Behaviours
 
             Hero mainHero = Hero.MainHero;
             mainHero.ChangeHeroGold(option.Gold - mainHero.Gold);
-            GainKingdomInfluenceAction.ApplyForDefault(mainHero, option.Influence);
             AddFood(MobileParty.MainParty, option.Food);
             if (option.Lifestyle != null)
                 BannerKingsConfig.Instance.EducationManager.SetStartOptionLifestyle(Hero.MainHero, option.Lifestyle);
@@ -58,6 +63,7 @@ namespace BannerKings.Behaviours
             }
 
             option.Action?.Invoke();
+            GainKingdomInfluenceAction.ApplyForDefault(mainHero, option.Influence);
 
             ShowInquiry();
         }
