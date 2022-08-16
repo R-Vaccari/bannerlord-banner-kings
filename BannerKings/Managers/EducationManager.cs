@@ -66,6 +66,8 @@ namespace BannerKings.Managers
         public Language GetNativeLanguage(CultureObject culture)
         {
             Language native = DefaultLanguages.Instance.All.FirstOrDefault(x => x.Culture == culture);
+            if (native == null) native = DefaultLanguages.Instance.Calradian;
+
             return native;
         }
 
