@@ -50,12 +50,22 @@ namespace BannerKings.Managers.CampaignStart
             indebtedLord = new StartOption("start_lord");
             indebtedLord.Initialize(new TextObject("{=!}Indebted Lord"),
                 new TextObject("{=!}After a series of inherited problems and bad decisions, you find yourself in debt. Thankfuly, you are a landed lord, with income from your Lordship. A food supply and a small retinue accompany you, though their loyalty will be tested by the lack of denars..."),
-                new TextObject("{=!}Start as a lord in a kingdom, with a Lordship title. Significant gold and influence onus that will take time to recuperate. Influence gain is halved for 5 years. Gain lordship skill."), 
-                -25000, 25, 10, 50, -50f,
+                new TextObject("{=!}Start as a lord in a kingdom, with a Lordship title. No settlement income or influence for 5 years. The village you own can be managed by you, and you will receive it's income after 5 years. Gain Scholarship skill."), 
+                0, 25, 10, 50, -50f,
                 () =>
                 {
                     MBReadOnlyList<ItemObject> items = Game.Current.ObjectManager.GetObjectTypeList<ItemObject>();
                     ItemObject sumpter = items.FirstOrDefault(x => x.StringId == "sumpter_horse");
+
+                    MBReadOnlyList<PartyTemplateObject> templates = Game.Current.ObjectManager.GetObjectTypeList<PartyTemplateObject>();
+                    PartyTemplateObject template = templates.First(x => x.StringId == "kingdom_hero_party_" + Hero.MainHero.Culture.StringId + "_template");
+
+                    TroopRoster roster = MobileParty.MainParty.MemberRoster;
+                    for (int i = 0; i < 10; i++)
+                    {
+                        if (i >= 6) roster.AddToCounts(template.Stacks[2].Character, 1);
+                        else roster.AddToCounts(template.Stacks[1].Character, 1);
+                    }
 
                     Settlement settlement = SettlementHelper.FindNearestSettlement(x => x.OwnerClan != null && x.OwnerClan.Kingdom != null, null);
                     Kingdom kingdom = settlement.OwnerClan.Kingdom;
@@ -63,7 +73,7 @@ namespace BannerKings.Managers.CampaignStart
                     ChangeKingdomAction.ApplyByJoinToKingdom(Clan.PlayerClan, kingdom, false);
                     BannerKingsConfig.Instance.TitleManager.GiveLordshipOnKingdomJoin(kingdom, Clan.PlayerClan, true);
                     MobileParty.MainParty.ItemRoster.AddToCounts(sumpter, 2);
-                    Hero.MainHero.AddSkillXp(BKSkills.Instance.Lordship, 2000);
+                    Hero.MainHero.AddSkillXp(BKSkills.Instance.Scholarship, 2000);
                 }, 
                 0f,
                 null,

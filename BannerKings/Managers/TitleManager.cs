@@ -29,29 +29,38 @@ namespace BannerKings.Managers
 
         [SaveableProperty(4)]
         private Dictionary<Hero, float> Knights { get; set; } = new Dictionary<Hero, float>();
-        private Dictionary<Hero, List<FeudalTitle>> DeJures { get; set; }
+        private Dictionary<Hero, List<FeudalTitle>> DeJuresCache { get; set; }
+        private Dictionary<Settlement, FeudalTitle> SettlementCache { get; set; }
 
 
-        public TitleManager(Dictionary<FeudalTitle, Hero> titles, Dictionary<Hero, List<FeudalTitle>> titleHolders, Dictionary<Kingdom, FeudalTitle> kingdoms)
+        public TitleManager(Dictionary<FeudalTitle, Hero> titles, Dictionary<Kingdom, FeudalTitle> kingdoms)
         {
             Titles = titles;
             Kingdoms = kingdoms;
             Knighthood = true;
             InitializeTitles();
-            RefreshDeJure();
+            RefreshCaches();
         }
 
-        public void RefreshDeJure()
+        public void RefreshCaches()
         {
+            if (SettlementCache == null) SettlementCache = new Dictionary<Settlement, FeudalTitle>();
+            if (DeJuresCache == null) DeJuresCache = new Dictionary<Hero, List<FeudalTitle>>();
+            else
+            {
+                SettlementCache.Clear();
+                DeJuresCache.Clear();
+            }
+           
 
-            if (DeJures == null) DeJures = new Dictionary<Hero, List<FeudalTitle>>();
-            else DeJures.Clear();
             foreach (FeudalTitle title in Titles.Keys.ToList())
             {
                 Hero hero = title.deJure;
-                if (!DeJures.ContainsKey(hero))
-                    DeJures.Add(hero, new List<FeudalTitle>() { title });
-                else DeJures[hero].Add(title);
+                if (!DeJuresCache.ContainsKey(hero))
+                    DeJuresCache.Add(hero, new List<FeudalTitle>() { title });
+                else DeJuresCache[hero].Add(title);
+
+                if (title.fief != null) SettlementCache.Add(title.fief, title);
             }
 
             if (Knights == null) Knights = new Dictionary<Hero, float>();
@@ -59,7 +68,7 @@ namespace BannerKings.Managers
 
         public bool IsHeroTitleHolder(Hero hero)
         {
-            if (DeJures.ContainsKey(hero)) return DeJures[hero].Count > 0;
+            if (DeJuresCache.ContainsKey(hero)) return DeJuresCache[hero].Count > 0;
             return false;
         }
 
@@ -67,12 +76,7 @@ namespace BannerKings.Managers
         {
             try
             {
-                if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
-                {
-                    TitleData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement).TitleData;
-                    if (data != null && data.Title != null)
-                        return data.Title;
-                }
+                if (SettlementCache != null && SettlementCache.ContainsKey(settlement)) return SettlementCache[settlement];
                 return Titles.Keys.ToList().Find(x => x.fief == settlement);
             }
             catch (Exception ex)
@@ -142,10 +146,10 @@ namespace BannerKings.Managers
                 {
                     title.deJure = newOwner;
                     Titles[title] = newOwner;
-                    DeJures[oldOwner].Remove(title);
-                    if (DeJures.ContainsKey(newOwner))
-                        DeJures[newOwner].Add(title);
-                    else DeJures.Add(newOwner, new List<FeudalTitle>() { title });
+                    DeJuresCache[oldOwner].Remove(title);
+                    if (DeJuresCache.ContainsKey(newOwner))
+                        DeJuresCache[newOwner].Add(title);
+                    else DeJuresCache.Add(newOwner, new List<FeudalTitle>() { title });
                 }
                 else title.deFacto = newOwner;
             }
@@ -441,10 +445,10 @@ namespace BannerKings.Managers
 
         public List<FeudalTitle> GetAllDeJure(Hero hero)
         {
-            if (DeJures != null)
+            if (DeJuresCache != null)
             {
                 List<FeudalTitle> titleList;
-                DeJures.TryGetValue(hero, out titleList);
+                DeJuresCache.TryGetValue(hero, out titleList);
                 if (titleList == null) titleList = new List<FeudalTitle>();
                 return titleList;
             }

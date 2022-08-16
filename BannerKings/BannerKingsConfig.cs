@@ -79,7 +79,7 @@ namespace BannerKings
             PopulationManager.ReInitBuildings();
             PolicyManager = new PolicyManager(new Dictionary<Settlement, List<BannerKingsDecision>>(), new Dictionary<Settlement,
             List<BannerKingsPolicy>>());
-            TitleManager = new TitleManager(new Dictionary<FeudalTitle, Hero>(), new Dictionary<Hero, List<FeudalTitle>>(), new Dictionary<Kingdom, FeudalTitle>());
+            TitleManager = new TitleManager(new Dictionary<FeudalTitle, Hero>(), new Dictionary<Kingdom, FeudalTitle>());
             CourtManager = new CourtManager(new Dictionary<Clan, CouncilData>());
             ReligionsManager = new ReligionsManager();
             EducationManager = new EducationManager();
@@ -94,7 +94,7 @@ namespace BannerKings
             PopulationManager.ReInitBuildings();
             PolicyManager = policyManager;
             TitleManager = titleManager;
-            titleManager.RefreshDeJure();
+            titleManager.RefreshCaches();
             CourtManager = court;
             ReligionsManager = religions != null ? religions : new ReligionsManager();
             EducationManager = educations != null ? educations : new EducationManager();
