@@ -517,12 +517,6 @@ namespace BannerKings.Populations
         [SaveableProperty(2)]
         List<VillageBuilding> buildings { get; set; }
 
-        [SaveableProperty(3)]
-        VillageBuilding current { get; set; }
-
-        [SaveableProperty(4)]
-        VillageBuilding currentDefault { get; set; }
-
         [SaveableProperty(5)]
         Queue<Building> inProgress { get; set; }
 
@@ -550,45 +544,11 @@ namespace BannerKings.Populations
 
         public void ReInitializeBuildings()
         {
-            List<VillageBuilding> toAdd = new List<VillageBuilding>();
-            foreach (VillageBuilding b in buildings)
-            {
-                if (b.Explanation == null)
-                {
-                    string id = b.BuildingType.StringId;
-                    BuildingType type = DefaultVillageBuildings.Instance.All()
-                        .FirstOrDefault(x => x.StringId == id);
-                    if (type != null)
-                        toAdd.Add(new VillageBuilding(type, Village.MarketTown, Village,
-                            b.BuildingProgress, b.CurrentLevel));
-                }  
-            }
+            foreach (VillageBuilding building in buildings)
+                building.PostInitialize();
 
-            if (toAdd.Count > 0)
-            {
-                buildings.Clear();
-                foreach (VillageBuilding b in toAdd)
-                    buildings.Add(b);
-            }
-
-            List<VillageBuilding> toAddQueue = new List<VillageBuilding>();
-            foreach (VillageBuilding b in inProgress)
-                if (b.Explanation == null)
-                {
-                    string id = b.BuildingType.StringId;
-                    BuildingType type = DefaultVillageBuildings.Instance.All()
-                        .FirstOrDefault(x => x.StringId == id);
-                    if (type != null)
-                        toAddQueue.Add(new VillageBuilding(type, Village.MarketTown, Village,
-                            b.BuildingProgress, b.CurrentLevel));
-                }
-
-            if (toAddQueue.Count > 0)
-            {
-                inProgress.Clear();
-                foreach (VillageBuilding b in toAddQueue)
-                    inProgress.Enqueue(b);
-            }
+            foreach (VillageBuilding building in inProgress)
+                building.PostInitialize();
         }
 
         public Village Village => village;

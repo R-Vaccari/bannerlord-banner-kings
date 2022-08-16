@@ -73,7 +73,7 @@ namespace BannerKings.Managers
 
         public Language GetNativeLanguage(Hero hero)
         {
-            Language native = DefaultLanguages.Instance.All.FirstOrDefault(x => x.Culture == hero.Culture);
+            Language native = GetNativeLanguage(hero.Culture);
             if (Educations.ContainsKey(hero))
             {
                 if (!Educations[hero].Languages.ContainsKey(native))

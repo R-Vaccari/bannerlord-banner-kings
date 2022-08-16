@@ -6,7 +6,7 @@ using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Populations.Villages
 {
-    public class DefaultVillageBuildings
+    public class DefaultVillageBuildings : DefaultTypeInitializer<DefaultVillageBuildings, BuildingType>
     {
         private BuildingType manor, palisade, trainning, bakery, mining, courier,
             animalHousing, farming, sawmill, butter, tannery, fishing, blacksmith,
@@ -31,66 +31,65 @@ namespace BannerKings.Managers.Populations.Villages
         public BuildingType DailyPasture => dailyPasture;
         public BuildingType DailyWoods => dailyWoods;
 
-        public static DefaultVillageBuildings Instance => ConfigHolder.CONFIG;
-        
-        internal struct ConfigHolder
-        {
-            public static DefaultVillageBuildings CONFIG = new DefaultVillageBuildings();
-        }
 
-        public void Init()
+
+        public override void Initialize()
         {
             manor = new BuildingType("bannerkings_manor");
             Game.Current.ObjectManager.RegisterPresumedObject(manor);
             manor.Initialize(new TextObject("{=!}Manor"), 
-                new TextObject("{=!}Manor house, the lord's home and center of the village. A manor house allows the housing of a small retinue in the village (15, 30, 45 men). Increases influence from nobles (15%, 30%, 50%)."), new[]
-            {
-                4000,
-                6000,
-                8000
-            }, BuildingLocation.Settlement, new Tuple<BuildingEffectEnum, float, float, float>[]
-            {
+                new TextObject("{=!}Manor house, the lord's home and center of the village. A manor house allows the housing of a small retinue in the village (15, 30, 45 men). Increases influence from nobles (15%, 30%, 50%)."), 
+                new[]
+                {
+                    4000,
+                    6000,
+                    8000
+                }, BuildingLocation.Settlement, new Tuple<BuildingEffectEnum, float, float, float>[]
+                {
    
-            }, 1);
+                });
 
             palisade = new BuildingType("bannerkings_palisade");
             Game.Current.ObjectManager.RegisterPresumedObject(palisade);
             palisade.Initialize(new TextObject("{=!}Palisade"), 
-                new TextObject("{=!}A set of wooden stakes placed around the village like a wall. Reduces raiding speed (12%, 24%, 36%)."), new[]
-            {
-                3000,
-                5000,
-                7000
-            }, BuildingLocation.Settlement, new Tuple<BuildingEffectEnum, float, float, float>[]
-            {
+                new TextObject("{=!}A set of wooden stakes placed around the village like a wall. Reduces raiding speed (12%, 24%, 36%)."), 
+                new[]
+                {
+                    3000,
+                    5000,
+                    7000
+                }, BuildingLocation.Settlement, new Tuple<BuildingEffectEnum, float, float, float>[]
+                {
 
-            });
+                });
 
             trainning = new BuildingType("bannerkings_trainning");
             Game.Current.ObjectManager.RegisterPresumedObject(trainning);
             trainning.Initialize(new TextObject("{=!}Trainning Grounds"), 
-                new TextObject("{=!}Stablish a zone dedicated for trainning, as well as it's required equipments, where locals can train basic military arts. Increases militia production (0.2, 0.5, 1.0)."), new[]
-            {
-                1500,
-                2400,
-                3200
-            }, BuildingLocation.Settlement, new Tuple<BuildingEffectEnum, float, float, float>[]
-            {
+                new TextObject("{=!}Stablish a zone dedicated for trainning, as well as it's required equipments, where locals can train basic military arts. Increases militia production (0.2, 0.5, 1.0)."), 
+                new[]
+                {
+                    1500,
+                    2400,
+                    3200
+                }, BuildingLocation.Settlement, new Tuple<BuildingEffectEnum, float, float, float>[]
+                {
 
-            });
+                });
 
             warehouse = new BuildingType("bannerkings_warehouse");
             Game.Current.ObjectManager.RegisterPresumedObject(warehouse);
             warehouse.Initialize(new TextObject("{=!}Arms Warehouse"), 
-                new TextObject("{=!}Construct a warehouse dedicated to keep military equipment as well as provide their maintenance. Improves militia quality (4%, 8%, 12%)."), new[]
-            {
-                2000,
-                3000,
-                4000
-            }, BuildingLocation.Settlement, new Tuple<BuildingEffectEnum, float, float, float>[]
-            {
+                new TextObject("{=!}Construct a warehouse dedicated to keep military equipment as well as provide their maintenance. Improves militia quality (4%, 8%, 12%)."), 
+                new[]
+                {
+                    2000,
+                    3000,
+                    4000
+                }, BuildingLocation.Settlement, new Tuple<BuildingEffectEnum, float, float, float>[]
+                {
 
-            });
+                });
 
             Game.Current.ObjectManager.RegisterPresumedObject(new BuildingType("bannerkings_warehouse"));
 
@@ -248,23 +247,27 @@ namespace BannerKings.Managers.Populations.Villages
             });
         }
 
-        public IEnumerable<BuildingType> All()
-        {
-            yield return Instance.Manor;
-            yield return Instance.Palisade;
-            yield return Instance.TrainningGrounds;
-            yield return Instance.Warehouse;
-            yield return Instance.DailyProduction;
-            yield return Instance.DailyFarm;
-            yield return Instance.DailyPasture;
-            yield return Instance.DailyWoods;
-            yield return Instance.Farming;
-            yield return Instance.Mining;
-            yield return Instance.AnimalHousing;
-            yield return Instance.Sawmill;
-            yield return Instance.FishFarm;
-            yield return Instance.Tannery;
-            yield return Instance.Blacksmith;
+        public override IEnumerable<BuildingType> All
+        { 
+            get
+            {
+                yield return Instance.Manor;
+                yield return Instance.Palisade;
+                yield return Instance.TrainningGrounds;
+                yield return Instance.Warehouse;
+                yield return Instance.DailyProduction;
+                yield return Instance.DailyFarm;
+                yield return Instance.DailyPasture;
+                yield return Instance.DailyWoods;
+                yield return Instance.Farming;
+                yield return Instance.Mining;
+                yield return Instance.AnimalHousing;
+                yield return Instance.Sawmill;
+                yield return Instance.FishFarm;
+                yield return Instance.Tannery;
+                yield return Instance.Blacksmith;
+            }
+            
         }
 
         public static IEnumerable<BuildingType> VillageBuildings(Village village)

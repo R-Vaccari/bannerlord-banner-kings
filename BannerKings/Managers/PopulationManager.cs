@@ -28,6 +28,13 @@ namespace BannerKings.Managers
             Caravans = caravans;
         }
 
+        public void PostInitialize()
+        {
+            foreach (PopulationData data in Populations.Values)
+                if (data.VillageData != null)
+                    data.VillageData.ReInitializeBuildings();
+        }
+
         public bool IsSettlementPopulated(Settlement settlement)
         {
             if (Populations != null)
@@ -140,12 +147,7 @@ namespace BannerKings.Managers
             if (level > 0) explainedNumber.AddFactor(level * 0.05f);
         }
 
-        public void ReInitBuildings()
-        {
-            foreach (PopulationData data in Populations.Values)
-                if (data.VillageData != null)
-                    data.VillageData.ReInitializeBuildings();
-        }
+        
 
         public static void InitializeSettlementPops(Settlement settlement)
         {

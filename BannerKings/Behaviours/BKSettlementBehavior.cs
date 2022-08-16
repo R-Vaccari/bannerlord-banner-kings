@@ -31,6 +31,7 @@ namespace BannerKings.Behaviors
 
         public override void RegisterEvents()
         {
+            CampaignEvents.OnGameLoadedEvent.AddNonSerializedListener(this, OnGameLoaded);
             CampaignEvents.OnSiegeAftermathAppliedEvent.AddNonSerializedListener(this, new Action<MobileParty, Settlement, SiegeAftermathCampaignBehavior.SiegeAftermath, Clan, Dictionary<MobileParty, float>>(OnSiegeAftermath));
             CampaignEvents.SettlementEntered.AddNonSerializedListener(this, new Action<MobileParty, Settlement, Hero>(OnSettlementEntered));
             CampaignEvents.DailyTickSettlementEvent.AddNonSerializedListener(this, new Action<Settlement>(DailySettlementTick));
@@ -80,6 +81,8 @@ namespace BannerKings.Behaviors
             }
         }
 
+        private void OnGameLoaded(CampaignGameStarter starter) => BannerKingsConfig.Instance.PopulationManager.PostInitialize();
+        
         private void TickSettlementData(Settlement settlement)
         {
             UpdateSettlementPops(settlement);

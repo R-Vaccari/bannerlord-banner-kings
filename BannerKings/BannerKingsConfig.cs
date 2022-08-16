@@ -51,7 +51,7 @@ namespace BannerKings
 
         public void Initialize()
         {
-            DefaultVillageBuildings.Instance.Init();
+            DefaultVillageBuildings.Instance.Initialize();
             DefaultDivinities.Instance.Initialize();
             DefaultFaiths.Instance.Initialize();
             DefaultDoctrines.Instance.Initialize();
@@ -76,7 +76,6 @@ namespace BannerKings
         {
             Initialize();
             PopulationManager = new PopulationManager(new Dictionary<Settlement, PopulationData>(), new List<MobileParty>());
-            PopulationManager.ReInitBuildings();
             PolicyManager = new PolicyManager(new Dictionary<Settlement, List<BannerKingsDecision>>(), new Dictionary<Settlement,
             List<BannerKingsPolicy>>());
             TitleManager = new TitleManager(new Dictionary<FeudalTitle, Hero>(), new Dictionary<Kingdom, FeudalTitle>());
@@ -91,7 +90,6 @@ namespace BannerKings
         {
             Initialize();
             PopulationManager = populationManager;
-            PopulationManager.ReInitBuildings();
             PolicyManager = policyManager;
             TitleManager = titleManager;
             titleManager.RefreshCaches();

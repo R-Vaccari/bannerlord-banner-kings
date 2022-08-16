@@ -97,6 +97,7 @@ namespace BannerKings.Behaviours
 
         private void ShowInquiry()
         {
+            hasSeenInquiry = true;
             List<InquiryElement> elements = new List<InquiryElement>();
             LearningElement religions = new LearningElement(new TextObject("{=!}Religions"), 
                 new TextObject("{=!}"), 

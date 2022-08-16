@@ -466,13 +466,8 @@ namespace BannerKings.UI
                         __instance.LocalDevelopmentList.Add(selectedItem.Building);
                     }
                     else if (__instance.LocalDevelopmentList.Exists(d => d == selectedItem.Building))
-                    {
                         __instance.LocalDevelopmentList.Remove(selectedItem.Building);
-                    }
-                    else
-                    {
-                        __instance.LocalDevelopmentList.Add(selectedItem.Building);
-                    }
+                    else __instance.LocalDevelopmentList.Add(selectedItem.Building);
                 }
                 else
                 {
@@ -483,13 +478,10 @@ namespace BannerKings.UI
                 MethodInfo refresh = __instance.GetType().GetMethod("RefreshDevelopmentsQueueIndex", BindingFlags.Instance | BindingFlags.NonPublic);
                 refresh.Invoke(__instance, null);
                 if (__instance.LocalDevelopmentList.Count == 0)
-                {
                     __instance.CurrentSelectedProject = __instance.CurrentDailyDefault;
-                }
                 else if (selectedItem != __instance.CurrentSelectedProject)
-                {
                     __instance.CurrentSelectedProject = selectedItem;
-                }
+                
                 FieldInfo fi = __instance.GetType().GetField("_onAnyChangeInQueue", BindingFlags.Instance | BindingFlags.NonPublic);
                 Action onAnyChangeInQueue = (Action)fi.GetValue(__instance);
                 if (onAnyChangeInQueue != null)
