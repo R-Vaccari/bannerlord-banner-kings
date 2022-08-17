@@ -650,9 +650,9 @@ namespace BannerKings.Populations
 
         private void Init(int totalPops)
         {
-            float farmRatio = 0f;
-            float pastureRatio = 0f;
-            float woodRatio = 0f;
+            float farmRatio;
+            float pastureRatio;
+            float woodRatio;
             if (Terrain == TerrainType.Desert)
             {
                 fertility = 0.5f;
@@ -765,7 +765,7 @@ namespace BannerKings.Populations
 
         public float GetAcreOutput(string type)
         {
-            float result = 0f;
+            float result;
             if (type == "farmland") result = 0.018f;
             else if (type == "pasture") result = 0.006f;
             else result = 0.0012f;
