@@ -600,7 +600,7 @@ namespace BannerKings
                                     village.Owner.ItemRoster.AddToCounts(item, num);
                                     CampaignEventDispatcher.Instance.OnItemProduced(item, village.Owner.Settlement, num);
                                 }
-                                else village.TradeBound.ItemRoster.AddToCounts(item, num);
+                                else village.Bound.ItemRoster.AddToCounts(item, num);
                             }
                         }
                         return false;

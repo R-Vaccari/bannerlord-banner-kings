@@ -284,7 +284,7 @@ namespace BannerKings.Managers.AI
                 foreach (BannerKingsDecision dec in changedDecisions)
                     BannerKingsConfig.Instance.PolicyManager.UpdateSettlementDecision(target, dec);
             }
-            else if (target.IsVillage && target.Village.TradeBound.Town.Governor != null)
+            else if (target.IsVillage && target.Village.Bound.Town.Governor != null)
             {
                 VillageData villageData = BannerKingsConfig.Instance.PopulationManager.GetPopData(target).VillageData;
                 villageData.StartRandomProject();

@@ -41,7 +41,6 @@ namespace BannerKings.Behaviors
             CampaignEvents.SettlementEntered.AddNonSerializedListener(this, new Action<MobileParty, Settlement, Hero>(OnSettlementEntered));
             CampaignEvents.DailyTickSettlementEvent.AddNonSerializedListener(this, new Action<Settlement>(DailySettlementTick));
             CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, new Action<CampaignGameStarter>(OnSessionLaunched));
-            CampaignEvents.OnNewGameCreatedEvent.AddNonSerializedListener(this, new Action<CampaignGameStarter>(OnGameCreated));
         }
 
         public override void SyncData(IDataStore dataStore)
@@ -76,14 +75,9 @@ namespace BannerKings.Behaviors
             dataStore.SyncData("bannerkings-educations", ref educationsManager);
             dataStore.SyncData("bannerkings-innovations", ref innovationsManager);
 
-            if (dataStore.IsLoading)
-            {
-                if (populationManager == null && policyManager == null && titleManager == null && courtManager == null)
-                    BannerKingsConfig.Instance.InitManagers();
-
-                else BannerKingsConfig.Instance.InitManagers(populationManager, policyManager,
+            if (dataStore.IsLoading && populationManager != null)
+                BannerKingsConfig.Instance.InitManagers(populationManager, policyManager,
                     titleManager, courtManager, religionsManager, educationsManager, innovationsManager);
-            }
         }
 
         private void OnGameLoaded(CampaignGameStarter starter) => BannerKingsConfig.Instance.PopulationManager.PostInitialize();
@@ -131,7 +125,7 @@ namespace BannerKings.Behaviors
         private void OnSettlementEntered(MobileParty party, Settlement target, Hero hero)
         {
             if (party != null && party.IsLordParty && target.OwnerClan != null && party.LeaderHero == target.OwnerClan.Leader)
-                if ((!target.IsVillage && target.Town.Governor == null) || (target.IsVillage && target.Village.TradeBound.Town.Governor == null))
+                if ((!target.IsVillage && target.Town.Governor == null) || (target.IsVillage && target.Village.Bound.Town.Governor == null))
                     BannerKingsConfig.Instance.AI.SettlementManagement(target);
         }
 
@@ -330,11 +324,6 @@ namespace BannerKings.Behaviors
             if (food > 0) settlement.Town.FoodStocks += food;
         }
 
-
-        private void OnGameCreated(CampaignGameStarter campaignGameStarter)
-        {
-            BannerKingsConfig.Instance.InitManagers();
-        }
 
         private void OnSessionLaunched(CampaignGameStarter campaignGameStarter)
         {

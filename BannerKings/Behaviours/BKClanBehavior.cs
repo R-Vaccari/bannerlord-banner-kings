@@ -234,7 +234,7 @@ namespace BannerKings.Behaviours
                                             select x).FirstOrDefault();
                 if (roster == null) return;
 
-                float price = GetPrice(village.Village.TradeBound, roster);
+                float price = GetPrice(village.Village.Bound, roster);
                 if (clan.Leader.Gold >= price * 2f)
                 {
                     Hero hero = HeroCreator.CreateSpecialHero(template, settlement, clan, null,

@@ -73,7 +73,7 @@ namespace BannerKings.Models.Vanilla
 
                 if (hero.VolunteerTypes != null)
                     if (hero.VolunteerTypes[index] != null && hero.VolunteerTypes[index].IsMounted &&
-                        PerkHelper.GetPerkValueForTown(DefaultPerks.Riding.CavalryTactics, settlement.IsVillage ? settlement.Village.TradeBound.Town : settlement.Town))
+                        PerkHelper.GetPerkValueForTown(DefaultPerks.Riding.CavalryTactics, settlement.IsVillage ? settlement.Village.Bound.Town : settlement.Town))
                         explainedNumber.AddFactor(DefaultPerks.Riding.CavalryTactics.PrimaryBonus * 0.01f, DefaultPerks.Riding.CavalryTactics.PrimaryDescription);
 
                 BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref explainedNumber, settlement.OwnerClan.Leader, CouncilPosition.Marshall, 0.25f, true);

@@ -14,7 +14,7 @@ namespace BannerKings.Models
             ExplainedNumber baseResult = new ExplainedNumber(0.12f, true);
             baseResult.LimitMin(0f);
 
-            Hero governor = settlement.IsVillage ? settlement.Village.TradeBound.Town.Governor : settlement.Town.Governor;
+            Hero governor = settlement.IsVillage ? settlement.Village.Bound.Town.Governor : settlement.Town.Governor;
             if (governor != null)
             {
                 int skill = governor.GetSkillValue(DefaultSkills.Steward);

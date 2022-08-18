@@ -528,7 +528,7 @@ namespace BannerKings.Populations
             this.village = village;
             buildings = new List<VillageBuilding>();
             foreach (BuildingType type in DefaultVillageBuildings.VillageBuildings(village))
-                buildings.Add(new VillageBuilding(type, village.TradeBound.Town, village));
+                buildings.Add(new VillageBuilding(type, village.Bound.Town, village));
             inProgress = new Queue<Building>();
         }
 

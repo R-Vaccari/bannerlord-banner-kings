@@ -2,7 +2,6 @@
 using BannerKings.Managers.CampaignStart;
 using BannerKings.UI;
 using Helpers;
-using System;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
@@ -17,7 +16,6 @@ namespace BannerKings.Behaviours
 {
     public class BKCampaignStartBehavior : CampaignBehaviorBase
     {
-
         private StartOption option;
         private bool hasSeenInquiry;
         private CampaignTime startTime = CampaignTime.Never;
@@ -30,6 +28,7 @@ namespace BannerKings.Behaviours
 
         public override void RegisterEvents()
         {
+            CampaignEvents.OnNewGameCreatedEvent.AddNonSerializedListener(this, OnGameCreated);
             CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, OnSessionLaunched);
             CampaignEvents.OnCharacterCreationIsOverEvent.AddNonSerializedListener(this, OnCharacterCreationOver);
             CampaignEvents.OnGameLoadFinishedEvent.AddNonSerializedListener(this, OnGameLoaded);
@@ -88,6 +87,8 @@ namespace BannerKings.Behaviours
             }
         }
 
+        private void OnGameCreated(CampaignGameStarter starter) => InitializeData();
+
         private void OnGameLoaded()
         {
             InitializeData();
@@ -96,7 +97,6 @@ namespace BannerKings.Behaviours
 
         private void OnCharacterCreationOver() 
         {
-            InitializeData();
             UIManager.Instance.ShowWindow("campaignStart");
         } 
 
@@ -106,7 +106,8 @@ namespace BannerKings.Behaviours
             {
                 BannerKingsConfig.Instance.InitManagers();
                 foreach (Settlement settlement in Settlement.All)
-                    PopulationManager.InitializeSettlementPops(settlement);
+                    if (settlement.IsVillage || settlement.IsTown || settlement.IsCastle)
+                        PopulationManager.InitializeSettlementPops(settlement);
 
                 foreach (Clan clan in Clan.All)
                     if (!clan.IsEliminated && !clan.IsBanditFaction)
@@ -114,6 +115,8 @@ namespace BannerKings.Behaviours
 
                 foreach (Hero hero in Hero.AllAliveHeroes)
                     BannerKingsConfig.Instance.EducationManager.InitHeroEducation(hero);
+
+                BannerKingsConfig.Instance.ReligionsManager.PostInitialize();
             }
         }
 

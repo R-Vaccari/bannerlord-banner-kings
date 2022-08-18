@@ -39,24 +39,24 @@ namespace BannerKings.Models
 						float weight = valueTuple.Item2 / totalWeight;
 						explainedNumber.Add(GetWorkforceOutput(serfs * weight, slaves * weight, item, data.LandData).ResultNumber);
 
-						if (item.IsMountable && item.Tier == ItemObject.ItemTiers.Tier2 && PerkHelper.GetPerkValueForTown(DefaultPerks.Riding.Horde, village.TradeBound.Town) && MBRandom.RandomFloat < DefaultPerks.Riding.Horde.SecondaryBonus * 0.01f)
+						if (item.IsMountable && item.Tier == ItemObject.ItemTiers.Tier2 && PerkHelper.GetPerkValueForTown(DefaultPerks.Riding.Horde, village.Bound.Town) && MBRandom.RandomFloat < DefaultPerks.Riding.Horde.SecondaryBonus * 0.01f)
 							explainedNumber.Add(1f);
 
 						if (item.ItemCategory == DefaultItemCategories.Grain || item.ItemCategory == DefaultItemCategories.Olives || item.ItemCategory == DefaultItemCategories.Fish || item.ItemCategory == DefaultItemCategories.DateFruit)
-							PerkHelper.AddPerkBonusForTown(DefaultPerks.Trade.GranaryAccountant, village.TradeBound.Town, ref explainedNumber);
+							PerkHelper.AddPerkBonusForTown(DefaultPerks.Trade.GranaryAccountant, village.Bound.Town, ref explainedNumber);
 
 						else if (item.ItemCategory == DefaultItemCategories.Clay || item.ItemCategory == DefaultItemCategories.Iron
 							|| item.ItemCategory == DefaultItemCategories.Cotton || item.ItemCategory == DefaultItemCategories.Silver)
-							PerkHelper.AddPerkBonusForTown(DefaultPerks.Trade.TradeyardForeman, village.TradeBound.Town, ref explainedNumber);
+							PerkHelper.AddPerkBonusForTown(DefaultPerks.Trade.TradeyardForeman, village.Bound.Town, ref explainedNumber);
 
 						if (item.IsTradeGood)
-							PerkHelper.AddPerkBonusForTown(DefaultPerks.Athletics.Steady, village.TradeBound.Town, ref explainedNumber);
+							PerkHelper.AddPerkBonusForTown(DefaultPerks.Athletics.Steady, village.Bound.Town, ref explainedNumber);
 
-						if (PerkHelper.GetPerkValueForTown(DefaultPerks.Riding.Breeder, village.TradeBound.Town))
-							PerkHelper.AddPerkBonusForTown(DefaultPerks.Riding.Breeder, village.TradeBound.Town, ref explainedNumber);
+						if (PerkHelper.GetPerkValueForTown(DefaultPerks.Riding.Breeder, village.Bound.Town))
+							PerkHelper.AddPerkBonusForTown(DefaultPerks.Riding.Breeder, village.Bound.Town, ref explainedNumber);
 
 						if (item.IsAnimal)
-							PerkHelper.AddPerkBonusForTown(DefaultPerks.Medicine.PerfectHealth, village.TradeBound.Town, ref explainedNumber);
+							PerkHelper.AddPerkBonusForTown(DefaultPerks.Medicine.PerfectHealth, village.Bound.Town, ref explainedNumber);
 
 						BannerKingsConfig.Instance.PopulationManager.ApplyProductionBuildingEffect(ref explainedNumber, output, villageData);
 

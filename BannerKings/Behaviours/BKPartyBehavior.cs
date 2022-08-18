@@ -247,7 +247,7 @@ namespace BannerKings.Behaviours
 
         private void SendSlaveCaravan(Village target)
         {
-            Settlement origin = target.TradeBound;
+            Settlement origin = target.Bound;
             PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(origin);
             int slaves = (int)(data.GetTypeCount(PopType.Slaves) * 0.005d);
             data.UpdatePopType(PopType.Slaves, (int)(slaves * -1f));
