@@ -19,6 +19,8 @@ using TaleWorlds.CampaignSystem;
 using BannerKings.Managers.AI;
 using BannerKings.Managers.Education.Lifestyles;
 using BannerKings.Models.Vanilla;
+using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.CampaignSystem.Party;
 
 namespace BannerKings
 {

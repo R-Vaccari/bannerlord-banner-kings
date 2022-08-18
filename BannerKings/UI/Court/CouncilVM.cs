@@ -70,7 +70,7 @@ namespace BannerKings.UI.Items
                 }
 
                 BKCouncilModel model = (BKCouncilModel)BannerKingsConfig.Instance.Models.First(x => x is BKCouncilModel);
-                InformationManager.ShowMultiSelectionInquiry(
+                MBInformationManager.ShowMultiSelectionInquiry(
                         new MultiSelectionInquiryData(
                             new TextObject("{=!}Select Councillor").ToString(),
                             new TextObject("{=!}Select who you would like to fill this position.").ToString(),

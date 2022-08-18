@@ -1,6 +1,12 @@
 ﻿using BannerKings.Populations;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.SandBox.GameComponents;
+using TaleWorlds.CampaignSystem.CharacterDevelopment;
+using TaleWorlds.CampaignSystem.ComponentInterfaces;
+using TaleWorlds.CampaignSystem.GameComponents;
+using TaleWorlds.CampaignSystem.Issues;
+using TaleWorlds.CampaignSystem.Party;
+using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.CampaignSystem.Settlements.Buildings;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -19,7 +25,7 @@ namespace BannerKings.Models
         public override int NumberOfMenOnGarrisonToEatOneFood => 20;
         public override int CastleFoodStockUpperLimitBonus => 150;
 
-        public override ExplainedNumber CalculateTownFoodStocksChange(Town town, bool includeDescriptions = false)
+        public override ExplainedNumber CalculateTownFoodStocksChange(Town town, bool includeMarketStocks = true, bool includeDescriptions = false)
         {
 	        if (BannerKingsConfig.Instance.PopulationManager != null && 
 	            BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement)) 
@@ -159,7 +165,7 @@ namespace BannerKings.Models
 					result.Add(toDeduce, new TextObject("{=!}Workforce Saturation"));
 				}
 
-				float season = CampaignTime.Now.GetSeasonOfYearf;
+				float season = CampaignTime.Now.GetSeasonOfYear;
 				if (season == 3f)
 					result.AddFactor(-0.2f, GameTexts.FindText("str_date_format_" + season));
 				else if (season == 1f)
@@ -185,5 +191,5 @@ namespace BannerKings.Models
 		{
 			Campaign.Current.Models.IssueModel.GetIssueEffectsOfSettlement(DefaultIssueEffects.SettlementFood, town.Settlement, ref explainedNumber);
 		}
-	}
+    }
 }

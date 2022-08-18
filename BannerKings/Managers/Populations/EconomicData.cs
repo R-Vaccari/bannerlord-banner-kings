@@ -2,6 +2,7 @@
 using BannerKings.Models;
 using BannerKings.Populations;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.SaveSystem;

@@ -1,16 +1,16 @@
 ﻿using Bannerlord.UIExtenderEx.Attributes;
 using Bannerlord.UIExtenderEx.ViewModels;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.ViewModelCollection;
 using TaleWorlds.Localization;
 using System.Linq;
-using TaleWorlds.CampaignSystem.ViewModelCollection.Craft;
-using TaleWorlds.Core.ViewModelCollection;
 using BannerKings.Behaviours;
 using TaleWorlds.Library;
 using BannerKings.UI.Crafting;
 using TaleWorlds.Core;
-using TaleWorlds.CampaignSystem.SandBox.CampaignBehaviors;
+using TaleWorlds.CampaignSystem.ViewModelCollection.WeaponCrafting;
+using TaleWorlds.Core.ViewModelCollection.Information;
+using TaleWorlds.CampaignSystem.CampaignBehaviors;
+using TaleWorlds.CampaignSystem.Party;
 
 namespace BannerKings.UI.Extensions
 {
@@ -100,7 +100,7 @@ namespace BannerKings.UI.Extensions
                     armorCrafting.CurrentItem.Difficulty);
                 if (MBRandom.RandomFloat < botchChance)
                 {
-                    InformationManager.AddQuickInformation(new TextObject("{=!}{HERO} has botched {ITEM}!")
+                    MBInformationManager.AddQuickInformation(new TextObject("{=!}{HERO} has botched {ITEM}!")
                         .SetTextVariable("HERO", crafting.CurrentCraftingHero.Hero.Name)
                         .SetTextVariable("ITEM", item.Name),
                         0, null, "event:/ui/notification/relation");
@@ -127,7 +127,7 @@ namespace BannerKings.UI.Extensions
                     }
                 }
 
-                InformationManager.AddQuickInformation(new TextObject("{=!}{HERO} has crafted {ITEM}{QUALITY}.")
+                MBInformationManager.AddQuickInformation(new TextObject("{=!}{HERO} has crafted {ITEM}{QUALITY}.")
                     .SetTextVariable("HERO", crafting.CurrentCraftingHero.Hero.Name)
                     .SetTextVariable("ITEM", item.Name)
                     .SetTextVariable("QUALITY", qualityText), 

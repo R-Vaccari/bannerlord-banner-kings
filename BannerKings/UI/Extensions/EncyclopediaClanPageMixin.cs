@@ -13,6 +13,9 @@ using TaleWorlds.Core;
 using BannerKings.UI.Court;
 using BannerKings.Managers.Court;
 using BannerKings.UI.Cultures;
+using TaleWorlds.CampaignSystem.ViewModelCollection.Encyclopedia.Pages;
+using TaleWorlds.Core.ViewModelCollection.Generic;
+using TaleWorlds.Core.ViewModelCollection.Information;
 
 namespace BannerKings.UI.Extensions
 {

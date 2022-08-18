@@ -1,6 +1,7 @@
 ﻿using BannerKings.Populations;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.Core;
+using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using static BannerKings.Managers.Policies.BKDraftPolicy;
 using static BannerKings.Managers.PopulationManager;

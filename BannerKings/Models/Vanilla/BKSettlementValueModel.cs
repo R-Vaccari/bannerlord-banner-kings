@@ -2,16 +2,17 @@
 using BannerKings.Models.BKModels;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.SandBox.GameComponents.Map;
+using TaleWorlds.CampaignSystem.GameComponents;
+using TaleWorlds.CampaignSystem.Settlements;
 
 namespace BannerKings.Models.Vanilla
 {
     public class BKSettlementValueModel : DefaultSettlementValueModel
     {
 
-        public override float CalculateValueForFaction(Settlement settlement, IFaction faction)
+        public override float CalculateSettlementValueForFaction(Settlement settlement, IFaction faction)
         {
-            float result = base.CalculateValueForFaction(settlement, faction);
+            float result = base.CalculateSettlementValueForFaction(settlement, faction);
             if (BannerKingsConfig.Instance.TitleManager != null)
             {
                 BKTitleModel model = (BKTitleModel)BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(BKTitleModel));

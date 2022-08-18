@@ -24,7 +24,7 @@ namespace BannerKings.Managers.Duties
             string result = null;
             if (Hero.MainHero.Gold >= Completion)
             {
-                GiveGoldToClanAction.ApplyFromHeroToClan(Hero.MainHero, DebtOwner.Clan, (int)Completion);
+                GiveGoldAction.ApplyBetweenCharacters(Hero.MainHero, DebtOwner, (int)Completion);
                 result = new TextObject("{SUZERAIN} holds your oath of ransom aid fulfilled. You have payed {RANSOM} gold and your liege is satisfied.").ToString();
             } else
             {

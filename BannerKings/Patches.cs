@@ -14,22 +14,26 @@ using System.Linq;
 using System.Reflection;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
+using TaleWorlds.CampaignSystem.CampaignBehaviors;
+using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.Election;
-using TaleWorlds.CampaignSystem.SandBox.CampaignBehaviors;
-using TaleWorlds.CampaignSystem.SandBox.CampaignBehaviors.VillageBehaviors;
-using TaleWorlds.CampaignSystem.SandBox.GameComponents.Map;
-using TaleWorlds.CampaignSystem.SandBox.GameComponents.Party;
-using TaleWorlds.CampaignSystem.SandBox.Issues;
+using TaleWorlds.CampaignSystem.Extensions;
+using TaleWorlds.CampaignSystem.GameComponents;
+using TaleWorlds.CampaignSystem.Issues;
+using TaleWorlds.CampaignSystem.Party;
+using TaleWorlds.CampaignSystem.Roster;
+using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.CampaignSystem.Settlements.Workshops;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
 using static BannerKings.Managers.PopulationManager;
 using static TaleWorlds.CampaignSystem.Election.KingSelectionKingdomDecision;
-using static TaleWorlds.CampaignSystem.SandBox.Issues.CaravanAmbushIssueBehavior;
-using static TaleWorlds.CampaignSystem.SandBox.Issues.EscortMerchantCaravanIssueBehavior;
-using static TaleWorlds.CampaignSystem.SandBox.Issues.LandLordNeedsManualLaborersIssueBehavior;
-using static TaleWorlds.CampaignSystem.SandBox.Issues.VillageNeedsToolsIssueBehavior;
+using static TaleWorlds.CampaignSystem.Issues.CaravanAmbushIssueBehavior;
+using static TaleWorlds.CampaignSystem.Issues.EscortMerchantCaravanIssueBehavior;
+using static TaleWorlds.CampaignSystem.Issues.LandLordNeedsManualLaborersIssueBehavior;
+using static TaleWorlds.CampaignSystem.Issues.VillageNeedsToolsIssueBehavior;
 
 namespace BannerKings
 {
@@ -52,7 +56,7 @@ namespace BannerKings
                 }
             }
 
-            [HarmonyPatch(typeof(DefaultVolunteerProductionModel), "GetDailyVolunteerProductionProbability")]
+            [HarmonyPatch(typeof(DefaultVolunteerModel), "GetDailyVolunteerProductionProbability")]
             class GetDailyVolunteerProductionProbabilityPatch
             {
                 static bool Prefix(Hero hero, int index, Settlement settlement, ref float __result)
@@ -348,7 +352,7 @@ namespace BannerKings
         namespace Economy
         {
 
-            [HarmonyPatch(typeof(UrbanCharactersCampaignBehavior), "BalanceGoldAndPowerOfNotable")]
+            [HarmonyPatch(typeof(NotablesCampaignBehavior), "BalanceGoldAndPowerOfNotable")]
             class BalanceGoldAndPowerOfNotablePatch
             {
                 static bool Prefix(Hero notable)
@@ -450,8 +454,8 @@ namespace BannerKings
                     if (settlement != null && mobileParty != null)
                         if (settlement.IsTown && mobileParty.IsVillager)
                         {
-                            Town component = settlement.GetComponent<Town>();
-                            List<ValueTuple<ItemObject, int>> list = new List<ValueTuple<ItemObject, int>>();
+                            Town component = settlement.Town;
+                            List<ValueTuple<EquipmentElement, int>> list = new List<ValueTuple<EquipmentElement, int>>();
                             int num = 10000;
                             ItemObject itemObject = null;
                             for (int i = 0; i < mobileParty.ItemRoster.Count; i++)
@@ -486,12 +490,12 @@ namespace BannerKings
                                         component.ChangeGold(-num4 * itemPrice);
                                         settlement.ItemRoster.AddToCounts(equipmentElement, num4);
                                         mobileParty.ItemRoster.AddToCounts(equipmentElement, -num4);
-                                        list.Add(new ValueTuple<ItemObject, int>(equipmentElement.Item, num4));
+                                        list.Add(new ValueTuple<EquipmentElement, int>(new EquipmentElement(equipmentElement.Item), num4));
                                     }
                                 }
                             }
 
-                            if (!list.IsEmpty<ValueTuple<ItemObject, int>>())
+                            if (!list.IsEmpty())
                                 CampaignEventDispatcher.Instance.OnCaravanTransactionCompleted(mobileParty, component, list);
 
                             return false;

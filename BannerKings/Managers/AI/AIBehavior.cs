@@ -8,6 +8,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.CharacterDevelopment;
+using TaleWorlds.CampaignSystem.Party;
+using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using static BannerKings.Managers.Policies.BKTaxPolicy;
 using static BannerKings.Managers.Policies.BKWorkforcePolicy;
@@ -281,7 +284,7 @@ namespace BannerKings.Managers.AI
                 foreach (BannerKingsDecision dec in changedDecisions)
                     BannerKingsConfig.Instance.PolicyManager.UpdateSettlementDecision(target, dec);
             }
-            else if (target.IsVillage && target.Village.MarketTown.Governor != null)
+            else if (target.IsVillage && target.Village.TradeBound.Town.Governor != null)
             {
                 VillageData villageData = BannerKingsConfig.Instance.PopulationManager.GetPopData(target).VillageData;
                 villageData.StartRandomProject();

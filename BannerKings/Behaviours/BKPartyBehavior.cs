@@ -6,6 +6,10 @@ using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
+using TaleWorlds.CampaignSystem.Encounters;
+using TaleWorlds.CampaignSystem.Party;
+using TaleWorlds.CampaignSystem.Roster;
+using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -243,7 +247,7 @@ namespace BannerKings.Behaviours
 
         private void SendSlaveCaravan(Village target)
         {
-            Settlement origin = target.MarketTown.Settlement;
+            Settlement origin = target.TradeBound;
             PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(origin);
             int slaves = (int)(data.GetTypeCount(PopType.Slaves) * 0.005d);
             data.UpdatePopType(PopType.Slaves, (int)(slaves * -1f));

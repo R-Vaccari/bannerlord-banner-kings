@@ -1,7 +1,7 @@
 ﻿using BannerKings.Managers.Education;
 using BannerKings.Managers.Education.Lifestyles;
 using BannerKings.Managers.Skills;
-using SandBox;
+using SandBox.GameComponents;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade;
@@ -11,9 +11,9 @@ namespace BannerKings.Models.Vanilla
     public class BKAgentDamageModel : SandboxAgentApplyDamageModel
     {
         
-        public override float CalculateDamage(ref AttackInformation attackInformation, ref AttackCollisionData collisionData, in MissionWeapon weapon, float baseDamage)
+        public override float CalculateDamage(in AttackInformation attackInformation, in AttackCollisionData collisionData, in MissionWeapon weapon, float baseDamage)
         {
-            float baseResult = base.CalculateDamage(ref attackInformation, ref collisionData, in weapon, baseDamage);
+            float baseResult = base.CalculateDamage(in attackInformation, in collisionData, in weapon, baseDamage);
             CharacterObject aggressor = attackInformation.AttackerAgentCharacter as CharacterObject;
             CharacterObject aggressorCaptain = attackInformation.AttackerCaptainCharacter as CharacterObject;
             CharacterObject victim = attackInformation.VictimAgentCharacter as CharacterObject;

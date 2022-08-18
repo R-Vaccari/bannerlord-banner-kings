@@ -18,6 +18,9 @@ using BannerKings.Managers.Institutions.Guilds;
 using BannerKings.Managers.Education;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Innovations;
+using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.CampaignSystem.Settlements.Buildings;
+using TaleWorlds.CampaignSystem.Roster;
 
 namespace BannerKings.Populations
 {
@@ -280,7 +283,7 @@ namespace BannerKings.Populations
         internal override void Update(PopulationData data)
         {
             BKGrowthModel model = (BKGrowthModel)BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(BKGrowthModel));
-            int growthFactor = (int)model.CalculateEffect(this.settlement, this).ResultNumber;
+            int growthFactor = (int)model.CalculateEffect(settlement, this).ResultNumber;
             UpdatePopulation(settlement, growthFactor, PopType.None);
             BKStabilityModel stabilityModel = (BKStabilityModel)BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(BKStabilityModel));
             Stability += stabilityModel.CalculateEffect(settlement).ResultNumber;
@@ -525,7 +528,7 @@ namespace BannerKings.Populations
             this.village = village;
             buildings = new List<VillageBuilding>();
             foreach (BuildingType type in DefaultVillageBuildings.VillageBuildings(village))
-                buildings.Add(new VillageBuilding(type, village.MarketTown, village));
+                buildings.Add(new VillageBuilding(type, village.TradeBound.Town, village));
             inProgress = new Queue<Building>();
         }
 

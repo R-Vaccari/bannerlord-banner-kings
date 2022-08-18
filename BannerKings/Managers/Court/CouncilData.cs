@@ -12,6 +12,7 @@ using TaleWorlds.Localization;
 using BannerKings.Managers.Education;
 using BannerKings.Managers.Skills;
 using TaleWorlds.CampaignSystem.Actions;
+using TaleWorlds.CampaignSystem.Settlements;
 
 namespace BannerKings.Managers.Court
 {
@@ -213,7 +214,7 @@ namespace BannerKings.Managers.Court
                 if (hero == null) continue;
                 if (!currentMembers.Contains(hero) && hero.IsAlive && !hero.IsChild)
                 {
-                    if (lordsOnly && hero.IsNoble)
+                    if (lordsOnly && hero.IsLord)
                         available.Add(hero);
                     else available.Add(hero);
                 }   

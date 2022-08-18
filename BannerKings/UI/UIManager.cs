@@ -7,7 +7,6 @@ using BannerKings.Populations;
 using BannerKings.UI.Notifications;
 using BannerKings.UI.Windows;
 using HarmonyLib;
-using SandBox.View.Map;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,17 +14,24 @@ using System.Reflection;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.CharacterCreationContent;
+using TaleWorlds.CampaignSystem.CharacterDevelopment;
+using TaleWorlds.CampaignSystem.Extensions;
+using TaleWorlds.CampaignSystem.Party;
+using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.CampaignSystem.Settlements.Buildings;
 using TaleWorlds.CampaignSystem.ViewModelCollection;
 using TaleWorlds.CampaignSystem.ViewModelCollection.CharacterCreation;
 using TaleWorlds.CampaignSystem.ViewModelCollection.CharacterDeveloper;
 using TaleWorlds.CampaignSystem.ViewModelCollection.Education;
-using TaleWorlds.CampaignSystem.ViewModelCollection.Encyclopedia.EncyclopediaItems;
-using TaleWorlds.CampaignSystem.ViewModelCollection.GameMenu;
+using TaleWorlds.CampaignSystem.ViewModelCollection.Encyclopedia.Items;
+using TaleWorlds.CampaignSystem.ViewModelCollection.GameMenu.Recruitment;
 using TaleWorlds.CampaignSystem.ViewModelCollection.GameMenu.TownManagement;
-using TaleWorlds.CampaignSystem.ViewModelCollection.KingdomManagement.KingdomDecision;
+using TaleWorlds.CampaignSystem.ViewModelCollection.KingdomManagement.Policies;
 using TaleWorlds.CampaignSystem.ViewModelCollection.Map;
 using TaleWorlds.Core;
 using TaleWorlds.Core.ViewModelCollection;
+using TaleWorlds.Core.ViewModelCollection.Generic;
+using TaleWorlds.Core.ViewModelCollection.Information;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.MountAndBlade.GauntletUI.Widgets;
@@ -54,12 +60,9 @@ namespace BannerKings.UI
 
         public void ShowWindow(string id)
         {
-            if (MapScreen.Instance != null)
-            {
-                if (mapView == null) mapView = new BannerKingsMapView(id);
-                else if (mapView.id != id) mapView = new BannerKingsMapView(id);
-                mapView.Refresh();
-            }
+            if (mapView == null) mapView = new BannerKingsMapView(id);
+            else if (mapView.id != id) mapView = new BannerKingsMapView(id);
+            mapView.Refresh();
         }
 
         public void CloseUI()
@@ -109,7 +112,7 @@ namespace BannerKings.UI
             [HarmonyPatch("Name", MethodType.Getter)]
             internal static void GetterPostfix(Hero __instance, ref TextObject __result)
             {
-                if (__instance.IsNoble && BannerKingsConfig.Instance.TitleManager != null)
+                if (__instance.IsLord && BannerKingsConfig.Instance.TitleManager != null)
                 {
                     Kingdom kingdom = __instance.Clan != null ? __instance.Clan.Kingdom : null;
                     FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(__instance);

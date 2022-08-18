@@ -1,4 +1,4 @@
-﻿using TaleWorlds.CampaignSystem.ViewModelCollection.Map;
+﻿using TaleWorlds.CampaignSystem.ViewModelCollection.Map.MapNotificationTypes;
 
 namespace BannerKings.UI.Notifications
 {

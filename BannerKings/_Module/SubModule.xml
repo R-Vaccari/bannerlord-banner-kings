@@ -3,9 +3,8 @@
   <Name value="BannerKings" />
   <Id value="BannerKings" />
   <Version value="v0.0.1" />
-  <DefaultModule value="false"/>
-  <SingleplayerModule value="true"/>
-  <MultiplayerModule value="false"/>
+  <DefaultModule value="true"/>
+  <ModuleCategory value="Singleplayer"/>
   <Official value="false"/>
   <DependedModules>
     <DependedModule Id="Bannerlord.Harmony" DependentVersion="v2.1.1.65"/>

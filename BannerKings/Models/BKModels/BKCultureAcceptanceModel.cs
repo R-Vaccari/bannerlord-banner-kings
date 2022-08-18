@@ -2,6 +2,7 @@
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Localization;
 using System.Linq;
+using TaleWorlds.CampaignSystem.Settlements;
 
 namespace BannerKings.Models
 {

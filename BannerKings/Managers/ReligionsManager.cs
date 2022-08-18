@@ -4,6 +4,7 @@ using BannerKings.Managers.Institutions.Religions.Leaderships;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -100,7 +101,7 @@ namespace BannerKings.Managers
                     .ToString(),
                     null, true, religion.Faith.GetFaithDescription().ToString()));
 
-            InformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(new TextObject("{=!}Your faith").ToString(),
+            MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(new TextObject("{=!}Your faith").ToString(),
                 new TextObject("{=!}You look up to the skies and realize there must be something more. You feel there must be a higher purpose for yourself, and people expect you to defend a certain faith. Upholding your cultural forefathers' faith would be considered most pious. Similarly, following a faith that accepts your culture would be pious, however not as much as your true ancestry. Alternatively, having a completely different faith is possible, though a less walked path. What is your faith?").ToString(),
                 elements, true, 1,
                 GameTexts.FindText("str_done").ToString(), string.Empty, delegate (List<InquiryElement> element)
@@ -157,7 +158,7 @@ namespace BannerKings.Managers
             if (Religions[religion].ContainsKey(hero))
             {
                 Religions[religion][hero].AddBlessing(divinity);
-                if (notify) InformationManager.AddQuickInformation(religion.Faith.GetBlessingQuickInformation()
+                if (notify) MBInformationManager.AddQuickInformation(religion.Faith.GetBlessingQuickInformation()
                     .SetTextVariable("HERO", hero.Name)
                     .SetTextVariable("DIVINITY", divinity.Name),
                     0, hero.CharacterObject, "event:/ui/notification/relation");
@@ -206,7 +207,7 @@ namespace BannerKings.Managers
                 Religions[rel][hero].AddPiety(piety);
 
             if (notifyPlayer && hero == Hero.MainHero)
-                InformationManager.AddQuickInformation(new TextObject("{=!}{HERO} has recieved {PIETY} piety.")
+                MBInformationManager.AddQuickInformation(new TextObject("{=!}{HERO} has recieved {PIETY} piety.")
                     .SetTextVariable("HERO", hero.Name)
                     .SetTextVariable("PIETY", piety));
         }
@@ -222,7 +223,7 @@ namespace BannerKings.Managers
                 Religions[rel][hero].AddPiety(piety);
 
             if (notifyPlayer && hero == Hero.MainHero)
-                InformationManager.AddQuickInformation(new TextObject("{=!}{HERO} has recieved {PIETY} piety.")
+                MBInformationManager.AddQuickInformation(new TextObject("{=!}{HERO} has recieved {PIETY} piety.")
                     .SetTextVariable("HERO", hero.Name)
                     .SetTextVariable("PIETY", (int)piety));
         }

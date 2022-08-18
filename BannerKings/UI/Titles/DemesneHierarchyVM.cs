@@ -105,7 +105,7 @@ namespace BannerKings.UI.Windows
 							foreach (FeudalTitle dukedom in BannerKingsConfig.Instance.TitleManager.GetAllDeJure(clan.Leader).FindAll(x => x.type == TitleType.Dukedom))
 								duchies.Add(new InquiryElement(dukedom, dukedom.FullName.ToString(), null));
 
-						InformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
+						MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
 							new TextObject("{=!}Founding Dukedoms").ToString(), new TextObject("{=!}Select up to 3 dukedoms that will compose your kingdom. The kingdom's contract will follow the first dukedom's contract. Dukedom titles from other clans in the faction may be included as well.").ToString(),
 							duchies, true, 3,
 							GameTexts.FindText("str_done", null).ToString(), string.Empty,
@@ -132,7 +132,7 @@ namespace BannerKings.UI.Windows
 
 				if (kingdom != null && options.Count > 0 && decision != null)
 				{
-					InformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(law, description.ToString(),
+					MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(law, description.ToString(),
 					options, true, 1, GameTexts.FindText("str_done").ToString(), string.Empty,
 					delegate (List<InquiryElement> x)
 					{

@@ -1,5 +1,5 @@
-﻿using TaleWorlds.CampaignSystem;
-using TaleWorlds.Core.ViewModelCollection;
+﻿using TaleWorlds.CampaignSystem.CharacterDevelopment;
+using TaleWorlds.Core.ViewModelCollection.Information;
 using TaleWorlds.Library;
 
 namespace BannerKings.UI.Items
@@ -8,10 +8,10 @@ namespace BannerKings.UI.Items
     {
 		public BKTraitItemVM(TraitObject traitObj, bool positive)
 		{
-			this._traitObj = traitObj;
-			this.TraitId = traitObj.StringId;
-			this.Value = positive ? 2 : -2;
-			this.Hint = new HintViewModel(traitObj.Description, null);
+			_traitObj = traitObj;
+			TraitId = traitObj.StringId;
+			Value = positive ? 2 : -2;
+			Hint = new HintViewModel(traitObj.Description, null);
 		}
 
 		[DataSourceProperty]

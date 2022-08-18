@@ -5,6 +5,9 @@ using HarmonyLib;
 using Helpers;
 using System;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Map;
+using TaleWorlds.CampaignSystem.Party;
+using TaleWorlds.CampaignSystem.Settlements;
 
 namespace BannerKings.Behaviours
 {
@@ -131,10 +134,9 @@ namespace BannerKings.Behaviours
         [HarmonyPatch(typeof(Kingdom), "CreateArmy")]
         class CreateArmyPatch
         {
-            static bool Prefix(Hero armyLeader, IMapPoint target, Army.ArmyTypes selectedArmyType)
-            {
-                return new BKArmyManagementModel().CanCreateArmy(armyLeader);
-            }
+            static bool Prefix(Hero armyLeader, Settlement targetSettlement, Army.ArmyTypes selectedArmyType) => 
+                new BKArmyManagementModel().CanCreateArmy(armyLeader);
+            
         }
     }
 }

@@ -1,10 +1,14 @@
 ﻿using HarmonyLib;
+using Helpers;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
-using TaleWorlds.CampaignSystem.CharacterDevelopment.Managers;
-using TaleWorlds.CampaignSystem.SandBox.CampaignBehaviors;
+using TaleWorlds.CampaignSystem.CampaignBehaviors;
+using TaleWorlds.CampaignSystem.CharacterDevelopment;
+using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 
@@ -44,6 +48,72 @@ namespace BannerKings.Behaviours
 
     namespace Patches
     {
+
+        [HarmonyPatch(typeof(SettlementHelper), "SpawnNotablesIfNeeded")]
+        class SpawnNotablesIfNeededPatch
+        {
+            static bool Prefix(Settlement settlement)
+            {
+                List<Occupation> list = new List<Occupation>();
+                if (settlement.IsTown)
+                {
+                    list = new List<Occupation>
+                    {
+                        Occupation.GangLeader,
+                        Occupation.Artisan,
+                        Occupation.Merchant
+                    };
+                }
+                else if (settlement.IsVillage)
+                {
+                    list = new List<Occupation>
+                    {
+                        Occupation.RuralNotable,
+                        Occupation.Headman
+                    };
+                }
+                else if (settlement.IsCastle)
+                {
+                    list = new List<Occupation>
+                    {
+                        Occupation.Headman
+                    };
+                }
+                float randomFloat = MBRandom.RandomFloat;
+                int num = 0;
+                foreach (Occupation occupation in list)
+                    num += Campaign.Current.Models.NotableSpawnModel.GetTargetNotableCountForSettlement(settlement, occupation);
+
+                int count = settlement.Notables.Count;
+                float num2 = settlement.Notables.Any<Hero>() ? ((float)(num - settlement.Notables.Count) / (float)num) : 1f;
+                num2 *= MathF.Pow(num2, 0.36f);
+                if (randomFloat <= num2 && count < num)
+                {
+                    List<Occupation> list2 = new List<Occupation>();
+                    foreach (Occupation occupation2 in list)
+                    {
+                        int num3 = 0;
+                        using (List<Hero>.Enumerator enumerator2 = settlement.Notables.GetEnumerator())
+                        {
+                            while (enumerator2.MoveNext())
+                                if (enumerator2.Current.CharacterObject.Occupation == occupation2)
+                                    num3++;
+                        }
+                        int targetNotableCountForSettlement = Campaign.Current.Models.NotableSpawnModel.GetTargetNotableCountForSettlement(settlement, occupation2);
+                        if (num3 < targetNotableCountForSettlement)
+                            list2.Add(occupation2);
+
+                    }
+                    if (list2.Count > 0)
+                        EnterSettlementAction.ApplyForCharacterOnly(HeroCreator.CreateHeroAtOccupation(list2.GetRandomElement<Occupation>(), settlement), settlement);
+
+                }
+
+                return false;
+            }
+        }
+
+
         // Fix perk crash due to notable not having a Clan.
         [HarmonyPatch(typeof(GovernorCampaignBehavior), "DailyTickSettlement")]
         class DailyTickSettlementPatch

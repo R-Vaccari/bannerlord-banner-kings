@@ -3,6 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Extensions;
+using TaleWorlds.CampaignSystem.Party;
+using TaleWorlds.CampaignSystem.Party.PartyComponents;
+using TaleWorlds.CampaignSystem.Roster;
+using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
@@ -45,7 +50,7 @@ namespace BannerKings.Components
             {
                 mobileParty.SetPartyUsedByQuest(true);
                 mobileParty.Party.Visuals.SetMapIconAsDirty();
-                mobileParty.SetInititave(0f, 1f, float.MaxValue);
+                mobileParty.SetInitiative(0f, 1f, float.MaxValue);
                 mobileParty.ShouldJoinPlayerBattles = false;
                 mobileParty.Aggressiveness = 0f;
                 mobileParty.SetMoveGoToSettlement(target);

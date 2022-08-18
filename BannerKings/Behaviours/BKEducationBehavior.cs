@@ -11,7 +11,13 @@ using HarmonyLib;
 using BannerKings.Managers.Skills;
 using TaleWorlds.Library;
 using TaleWorlds.SaveSystem;
-using System.Reflection;
+using TaleWorlds.CampaignSystem.Roster;
+using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.CampaignSystem.Party;
+using TaleWorlds.CampaignSystem.CharacterDevelopment;
+using TaleWorlds.CampaignSystem.Conversation;
+using TaleWorlds.CampaignSystem.Inventory;
+using TaleWorlds.CampaignSystem.Extensions;
 
 namespace BannerKings.Behaviours
 {
@@ -77,8 +83,8 @@ namespace BannerKings.Behaviours
                     if ((skill == DefaultSkills.Engineering && hero.GetPerkValue(BKPerks.Instance.ScholarshipMechanic)) || (skill == DefaultSkills.Steward && hero.GetPerkValue(BKPerks.Instance.ScholarshipAccountant))
                         || (skill == DefaultSkills.Medicine && hero.GetPerkValue(BKPerks.Instance.ScholarshipNaturalScientist)) || (skill == DefaultSkills.Trade && hero.GetPerkValue(BKPerks.Instance.ScholarshipTreasurer)))
                     {
-                        hero.HeroDeveloper.SetPropertyValue(perk.AlternativePerk, 1);
-                        InformationManager.AddQuickInformation(new TextObject("{=!}You have received the {PERK} as a double perk yield reward.")
+                        hero.HeroDeveloper.AddPerk(perk.AlternativePerk);
+                        MBInformationManager.AddQuickInformation(new TextObject("{=!}You have received the {PERK} as a double perk yield reward.")
                             .SetTextVariable("PERK", perk.AlternativePerk.Name));
                     }
                 }

@@ -1,12 +1,17 @@
 ﻿using HarmonyLib;
 using System.Linq;
-using SandBox;
 using System;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.SandBox.CampaignBehaviors;
 using TaleWorlds.Core;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.Localization;
+using TaleWorlds.CampaignSystem.Party;
+using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.CampaignSystem.Party.PartyComponents;
+using TaleWorlds.Library;
+using TaleWorlds.CampaignSystem.Settlements.Workshops;
+using TaleWorlds.CampaignSystem.CampaignBehaviors;
+using SandBox.CampaignBehaviors;
 
 namespace BannerKings.Behaviours
 {

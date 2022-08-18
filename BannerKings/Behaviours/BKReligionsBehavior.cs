@@ -2,13 +2,16 @@
 using BannerKings.Managers.Institutions.Religions.Faiths.Rites;
 using BannerKings.Models.BKModels;
 using HarmonyLib;
-using SandBox;
+using SandBox.CampaignBehaviors;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
+using TaleWorlds.CampaignSystem.Conversation;
+using TaleWorlds.CampaignSystem.Party;
+using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -246,7 +249,7 @@ namespace BannerKings.Behaviours
                     .SetTextVariable("EFFECTS", div.Effects)
                     .ToString()));
 
-            InformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
+            MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                     religion.Faith.GetSecondaryDivinitiesDescription().ToString(), 
                     new TextObject("{=!}Select which of the {SECONDARIES} you would like to {BLESSING_ACTION}.")
                     .SetTextVariable("SECONDARIES", religion.Faith.GetSecondaryDivinitiesDescription())
@@ -355,7 +358,7 @@ namespace BannerKings.Behaviours
             foreach (Rite rite in religion.Rites)
                 list.Add(new InquiryElement(rite, rite.GetName().ToString(), null, rite.MeetsCondition(Hero.MainHero), rite.GetDescription().ToString()));
 
-            InformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
+            MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                     religion.Faith.GetSecondaryDivinitiesDescription().ToString(),
                     string.Empty, list,
                     false, 1,

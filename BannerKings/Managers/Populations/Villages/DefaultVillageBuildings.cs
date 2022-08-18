@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.CampaignSystem.Settlements.Buildings;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 
@@ -15,6 +16,12 @@ namespace BannerKings.Managers.Populations.Villages
         public BuildingType Manor => manor;
         public BuildingType Palisade => palisade;
         public BuildingType TrainningGrounds => trainning;
+
+        internal BuildingType GetById(BuildingType buildingType)
+        {
+            throw new NotImplementedException();
+        }
+
         public BuildingType Warehouse => warehouse;
         public BuildingType Courier => courier;
         public BuildingType Bakery => bakery;

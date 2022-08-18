@@ -1,5 +1,4 @@
 ﻿using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.SandBox.GameComponents;
 using System.Linq;
 using BannerKings.Populations;
 using BannerKings.Managers.Policies;
@@ -7,18 +6,16 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using BannerKings.Managers.Education;
 using BannerKings.Managers.Skills;
+using TaleWorlds.CampaignSystem.Settlements.Workshops;
+using TaleWorlds.CampaignSystem.GameComponents;
+using TaleWorlds.CampaignSystem.Settlements;
 
 namespace BannerKings.Models
 {
     public class BKWorkshopModel : DefaultWorkshopModel
     {
-        public override int GetSellingCost(Workshop workshop)
-        {
-
-
-            return (int)(GetBuyingCostForPlayer(workshop) * 0.5f);
-        }
-
+        public override int GetSellingCost(Workshop workshop) => base.GetSellingCost(workshop);
+        
         public override int GetBuyingCostForPlayer(Workshop workshop)
         {
             float result = base.GetSellingCost(workshop) + 10000;
@@ -35,8 +32,14 @@ namespace BannerKings.Models
                     foreach ((ItemCategory, int) input in production.Inputs)
                         costs += GetCost(items, town, input.Item1, input.Item2);
 
+                    int outputCost = 10000;
                     foreach ((ItemCategory, int) output in production.Outputs)
-                        sellValue += GetCost(items, town, output.Item1, output.Item2);
+                    {
+                        int cost = GetCost(items, town, output.Item1, output.Item2);
+                        if (cost < outputCost) outputCost = cost;
+                    }
+
+                    sellValue += outputCost;
                 }
 
                 result += (int)((sellValue - costs) * (float)CampaignTime.DaysInYear);

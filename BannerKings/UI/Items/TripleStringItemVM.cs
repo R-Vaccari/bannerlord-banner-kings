@@ -1,4 +1,5 @@
-﻿using TaleWorlds.Core.ViewModelCollection;
+﻿using TaleWorlds.Core.ViewModelCollection.Generic;
+using TaleWorlds.Core.ViewModelCollection.Information;
 using TaleWorlds.Library;
 
 namespace BannerKings.UI.Items

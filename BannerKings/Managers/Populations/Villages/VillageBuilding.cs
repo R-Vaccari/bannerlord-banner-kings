@@ -1,5 +1,6 @@
 ﻿using System;
-using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.CampaignSystem.Settlements.Buildings;
 using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Managers.Populations.Villages

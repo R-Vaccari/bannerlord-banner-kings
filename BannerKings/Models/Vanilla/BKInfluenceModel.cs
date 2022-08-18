@@ -2,7 +2,6 @@
 using BannerKings.Managers.Populations.Villages;
 using BannerKings.Populations;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.SandBox.GameComponents;
 using TaleWorlds.Localization;
 using static BannerKings.Managers.PopulationManager;
 using TaleWorlds.Library;
@@ -11,6 +10,9 @@ using BannerKings.Managers.Education;
 using BannerKings.Managers.Skills;
 using BannerKings.Behaviours;
 using BannerKings.Managers.CampaignStart;
+using TaleWorlds.CampaignSystem.GameComponents;
+using TaleWorlds.CampaignSystem.Roster;
+using TaleWorlds.CampaignSystem.Settlements;
 
 namespace BannerKings.Models
 {

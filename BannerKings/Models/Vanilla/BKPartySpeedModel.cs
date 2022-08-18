@@ -4,13 +4,14 @@ using BannerKings.Managers.Education;
 using BannerKings.Managers.Education.Lifestyles;
 using BannerKings.Managers.Skills;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.SandBox.GameComponents.Map;
+using TaleWorlds.CampaignSystem.GameComponents;
+using TaleWorlds.CampaignSystem.Party;
+using TaleWorlds.CampaignSystem.Roster;
 
 namespace BannerKings.Models.Vanilla
 {
     public class BKPartySpeedModel : DefaultPartySpeedCalculatingModel
     {
-
         public override ExplainedNumber CalculateFinalSpeed(MobileParty mobileParty, ExplainedNumber finalSpeed)
         {
             ExplainedNumber baseResult = base.CalculateFinalSpeed(mobileParty, finalSpeed);

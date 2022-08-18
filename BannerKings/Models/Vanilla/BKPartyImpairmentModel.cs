@@ -1,16 +1,16 @@
 ﻿using BannerKings.Managers.Education;
 using BannerKings.Managers.Skills;
-using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.SandBox.GameComponents.Map;
+using TaleWorlds.CampaignSystem.GameComponents;
+using TaleWorlds.CampaignSystem.Party;
 
 namespace BannerKings.Models.Vanilla
 {
     public class BKPartyImpairmentModel : DefaultPartyImpairmentModel
     {
 
-        public override float GetDisorganizedStateDuration(MobileParty party, bool isSiegeOrRaid)
+        public override float GetDisorganizedStateDuration(MobileParty party)
         {
-            float result = base.GetDisorganizedStateDuration(party, isSiegeOrRaid);
+            float result = base.GetDisorganizedStateDuration(party);
             if (party.LeaderHero != null)
             {
                 EducationData data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(party.LeaderHero);

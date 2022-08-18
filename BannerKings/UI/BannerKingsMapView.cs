@@ -5,8 +5,9 @@ using BannerKings.UI.Panels;
 using SandBox.View.Map;
 using System;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Engine.GauntletUI;
-using TaleWorlds.Engine.Screens;
+using TaleWorlds.ScreenSystem;
 
 namespace BannerKings.UI.Windows
 {

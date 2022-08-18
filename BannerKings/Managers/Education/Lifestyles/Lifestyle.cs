@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -69,7 +70,7 @@ namespace BannerKings.Managers.Education.Lifestyles
             investedFocus += 1;
             progress = 0f;
             if (hero == Hero.MainHero) 
-                InformationManager.AddQuickInformation(new TextObject("{=!}You have received the {PERK} perk from the {LIFESTYLE} lifestyle.")
+                MBInformationManager.AddQuickInformation(new TextObject("{=!}You have received the {PERK} perk from the {LIFESTYLE} lifestyle.")
                             .SetTextVariable("PERK", perk.Name)
                             .SetTextVariable("LIFESTYLE", Name));
         } 

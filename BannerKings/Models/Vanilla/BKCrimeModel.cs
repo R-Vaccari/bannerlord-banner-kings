@@ -1,7 +1,7 @@
 ﻿using BannerKings.Behaviours;
 using BannerKings.Managers.CampaignStart;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.SandBox.GameComponents.Map;
+using TaleWorlds.CampaignSystem.GameComponents;
 
 namespace BannerKings.Models.Vanilla
 {

@@ -4,6 +4,7 @@ using BannerKings.Managers.Education.Lifestyles;
 using System;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
+using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.Core;
 
 namespace BannerKings.Behaviours
@@ -14,7 +15,7 @@ namespace BannerKings.Behaviours
         {
             CampaignEvents.ConversationEnded.AddNonSerializedListener(this, new Action<CharacterObject>(OnConversationEnded));
             CampaignEvents.WeeklyTickEvent.AddNonSerializedListener(this, new Action(OnWeeklyTick));
-            CampaignEvents.HeroGainedSkill.AddNonSerializedListener(this, new Action<Hero, SkillObject, bool, int, bool>(OnHeroGainedSkill));
+            CampaignEvents.HeroGainedSkill.AddNonSerializedListener(this, new Action<Hero, SkillObject, int, bool>(OnHeroGainedSkill));
         }
 
         public override void SyncData(IDataStore dataStore)
@@ -34,7 +35,7 @@ namespace BannerKings.Behaviours
             }
         }
 
-        public void OnHeroGainedSkill(Hero hero, SkillObject skill, bool hasNewPerk, int change = 1, bool shouldNotify = true)
+        public void OnHeroGainedSkill(Hero hero, SkillObject skill, int change = 1, bool shouldNotify = true)
         {
             if (BannerKingsConfig.Instance.EducationManager == null) return;
 

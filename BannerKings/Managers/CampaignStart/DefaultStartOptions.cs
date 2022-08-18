@@ -8,6 +8,9 @@ using System.Linq;
 using TaleWorlds.CampaignSystem.Actions;
 using Helpers;
 using BannerKings.Managers.Skills;
+using TaleWorlds.CampaignSystem.Party;
+using TaleWorlds.CampaignSystem.Roster;
+using TaleWorlds.CampaignSystem.Settlements;
 
 namespace BannerKings.Managers.CampaignStart
 {
@@ -168,7 +171,7 @@ namespace BannerKings.Managers.CampaignStart
                     party.ItemRoster.AddToCounts(mule, 2);
 
                     int goodsValue = 0;
-                    foreach (ItemObject itemObject in TaleWorlds.CampaignSystem.Items.AllTradeGoods)
+                    foreach (ItemObject itemObject in TaleWorlds.CampaignSystem.Extensions.Items.AllTradeGoods)
                         if (!itemObject.IsFood && goodsValue < 1200)
                         {
                             int num2 = (int)(1f * (10f / 13f) / itemObject.Value * MBRandom.RandomFloat);

@@ -1,17 +1,12 @@
 ﻿using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.SandBox.GameComponents.Map;
+using TaleWorlds.CampaignSystem.GameComponents;
+using TaleWorlds.CampaignSystem.Settlements;
 
 namespace BannerKings.Models.Vanilla
 {
     public class BKNotableSpawnModel : DefaultNotableSpawnModel
     {
 
-        public override int GetTargetNotableCountForSettlement(Settlement settlement, Occupation occupation)
-        {
-            if (!settlement.IsCastle) return base.GetTargetNotableCountForSettlement(settlement, occupation);
-            if (occupation == Occupation.Headman)
-                return 1;
-            return 0;
-        }
+        public override int GetTargetNotableCountForSettlement(Settlement settlement, Occupation occupation) => base.GetTargetNotableCountForSettlement(settlement, occupation);
     }
 }

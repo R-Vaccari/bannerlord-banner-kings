@@ -64,10 +64,10 @@ namespace BannerKings.Managers
 
         public CouncilMember GetHeroPosition(Hero hero)
         {
-            if (hero.IsNoble && (hero.Clan == null || hero.Clan.Kingdom == null) || hero.IsChild ||
+            if (hero.IsLord && (hero.Clan == null || hero.Clan.Kingdom == null) || hero.IsChild ||
                 hero.IsDead) return null;
             Kingdom kingdom = null;
-            if ((hero.IsNoble || hero.IsWanderer) && hero.Clan != null) kingdom = hero.Clan.Kingdom;
+            if ((hero.IsLord || hero.IsWanderer) && hero.Clan != null) kingdom = hero.Clan.Kingdom;
             else if (hero.CurrentSettlement != null && hero.CurrentSettlement.OwnerClan != null) 
                 kingdom = hero.CurrentSettlement.OwnerClan.Kingdom;
 
@@ -126,7 +126,7 @@ namespace BannerKings.Managers
             if (action.ActionTaker == null) return;
 
             if (action.ActionTaker == Hero.MainHero)
-                InformationManager.AddQuickInformation(new TextObject("{=!}{OWNER} has appointed you as their {POSITION}.")
+                MBInformationManager.AddQuickInformation(new TextObject("{=!}{OWNER} has appointed you as their {POSITION}.")
                     .SetTextVariable("OWNER", action.Council.Owner.Name)
                     .SetTextVariable("POSITION", action.TargetPosition.GetName()), 
                     0, action.Council.Owner.CharacterObject, "event:/ui/notification/relation");

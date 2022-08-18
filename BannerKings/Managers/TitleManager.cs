@@ -9,6 +9,7 @@ using System.Text;
 using System.Xml;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
+using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -124,7 +125,7 @@ namespace BannerKings.Managers
                     .ToString()));
         }
 
-        public bool IsHeroKnighted(Hero hero) => hero.IsNoble && IsHeroTitleHolder(hero);
+        public bool IsHeroKnighted(Hero hero) => hero.IsLord && IsHeroTitleHolder(hero);
         public FeudalTitle GetImmediateSuzerain(FeudalTitle target)
         {
             FeudalTitle result = null;
@@ -287,7 +288,7 @@ namespace BannerKings.Managers
             ChangeRelationAction.ApplyRelationChangeBetweenHeroes(action.ActionTaker, action.Title.deJure, (int)Math.Min(-5f, (float)new BKTitleModel().GetRelationImpact(action.Title) * -0.1f), true);
 
             if (action.Title.deJure == Hero.MainHero)
-                InformationManager.AddQuickInformation(new TextObject("{=!}{CLAIMANT} is building a claim on your title, {TITLE}.")
+                MBInformationManager.AddQuickInformation(new TextObject("{=!}{CLAIMANT} is building a claim on your title, {TITLE}.")
                     .SetTextVariable("CLAIMANT", claimant.Name)
                     .SetTextVariable("TITLE", action.Title.FullName));
         }
@@ -341,7 +342,7 @@ namespace BannerKings.Managers
 
             action.ActionTaker.ChangeHeroGold(-(int)action.Gold);
             GainKingdomInfluenceAction.ApplyForDefault(action.ActionTaker, -action.Influence);
-            InformationManager.AddQuickInformation(new TextObject("{=!}The {TITLE} has been founded by {FOUNDER}.")
+            MBInformationManager.AddQuickInformation(new TextObject("{=!}The {TITLE} has been founded by {FOUNDER}.")
                     .SetTextVariable("FOUNDER", action.ActionTaker.Name)
                     .SetTextVariable("TITLE", title.FullName),
                     0, null, "event:/ui/notification/relation");
@@ -357,7 +358,7 @@ namespace BannerKings.Managers
                 .SetTextVariable("TITLE", action.Title.FullName)
                 .ToString()));
             if (title.deJure == Hero.MainHero)
-                InformationManager.AddQuickInformation(new TextObject("{=!}{USURPER} has usurped your title, {TITLE}.")
+                MBInformationManager.AddQuickInformation(new TextObject("{=!}{USURPER} has usurped your title, {TITLE}.")
                     .SetTextVariable("USURPER", usurper.Name)
                     .SetTextVariable("TITLE", action.Title.FullName));
            

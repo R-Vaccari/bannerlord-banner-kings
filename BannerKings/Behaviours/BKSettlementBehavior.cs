@@ -11,11 +11,16 @@ using TaleWorlds.ObjectSystem;
 using static BannerKings.Managers.PopulationManager;
 using HarmonyLib;
 using BannerKings.Populations;
-using TaleWorlds.CampaignSystem.SandBox.CampaignBehaviors;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Populations.Villages;
 using BannerKings.Components;
 using BannerKings.Models;
+using TaleWorlds.CampaignSystem.Party;
+using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.CampaignSystem.CampaignBehaviors;
+using TaleWorlds.CampaignSystem.Settlements.Buildings;
+using TaleWorlds.CampaignSystem.Roster;
+using TaleWorlds.CampaignSystem.Settlements.Workshops;
 
 namespace BannerKings.Behaviors
 {
@@ -126,7 +131,7 @@ namespace BannerKings.Behaviors
         private void OnSettlementEntered(MobileParty party, Settlement target, Hero hero)
         {
             if (party != null && party.IsLordParty && target.OwnerClan != null && party.LeaderHero == target.OwnerClan.Leader)
-                if ((!target.IsVillage && target.Town.Governor == null) || (target.IsVillage && target.Village.MarketTown.Governor == null))
+                if ((!target.IsVillage && target.Town.Governor == null) || (target.IsVillage && target.Village.TradeBound.Town.Governor == null))
                     BannerKingsConfig.Instance.AI.SettlementManagement(target);
         }
 
@@ -361,71 +366,6 @@ namespace BannerKings.Behaviors
     namespace Patches
     {
 
-
-        [HarmonyPatch(typeof(UrbanCharactersCampaignBehavior), "SpawnNotablesIfNeeded")]
-        class SpawnNotablesIfNeededPatch
-        {
-            static bool Prefix(Settlement settlement)
-            {
-                List<Occupation> list = new List<Occupation>();
-                if (settlement.IsTown)
-                {
-                    list = new List<Occupation>
-                    {
-                        Occupation.GangLeader,
-                        Occupation.Artisan,
-                        Occupation.Merchant
-                    };
-                }
-                else if (settlement.IsVillage)
-                {
-                    list = new List<Occupation>
-                    {
-                        Occupation.RuralNotable,
-                        Occupation.Headman
-                    };
-                } else if (settlement.IsCastle)
-                {
-                    list = new List<Occupation>
-                    {
-                        Occupation.Headman
-                    };
-                }
-                float randomFloat = MBRandom.RandomFloat;
-                int num = 0;
-                foreach (Occupation occupation in list)
-                    num += Campaign.Current.Models.NotableSpawnModel.GetTargetNotableCountForSettlement(settlement, occupation);
-                
-                int count = settlement.Notables.Count;
-                float num2 = settlement.Notables.Any<Hero>() ? ((float)(num - settlement.Notables.Count) / (float)num) : 1f;
-                num2 *= MathF.Pow(num2, 0.36f);
-                if (randomFloat <= num2 && count < num)
-                {
-                    List<Occupation> list2 = new List<Occupation>();
-                    foreach (Occupation occupation2 in list)
-                    {
-                        int num3 = 0;
-                        using (List<Hero>.Enumerator enumerator2 = settlement.Notables.GetEnumerator())
-                        {
-                            while (enumerator2.MoveNext())
-                                if (enumerator2.Current.CharacterObject.Occupation == occupation2)
-                                    num3++;
-                        }
-                        int targetNotableCountForSettlement = Campaign.Current.Models.NotableSpawnModel.GetTargetNotableCountForSettlement(settlement, occupation2);
-                        if (num3 < targetNotableCountForSettlement)
-                            list2.Add(occupation2);
-                        
-                    }
-                    if (list2.Count > 0)
-                        EnterSettlementAction.ApplyForCharacterOnly(HeroCreator.CreateHeroAtOccupation(list2.GetRandomElement<Occupation>(), settlement), settlement);
-                    
-                }
-
-                return false;
-            }
-        }
-
-       
 
         [HarmonyPatch(typeof(SellPrisonersAction), "ApplyForAllPrisoners")]
         class ApplyAllPrisionersPatch

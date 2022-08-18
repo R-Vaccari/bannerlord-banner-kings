@@ -1,8 +1,7 @@
 ﻿using BannerKings.Managers.Education;
 using BannerKings.Managers.Skills;
-using SandBox;
+using SandBox.GameComponents;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade;
 
 namespace BannerKings.Models.Vanilla

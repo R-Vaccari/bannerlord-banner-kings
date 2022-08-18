@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.SandBox.GameComponents;
+﻿using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.GameComponents;
 
 namespace BannerKings.Models.Vanilla
 {

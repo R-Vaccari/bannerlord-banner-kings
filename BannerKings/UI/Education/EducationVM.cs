@@ -5,6 +5,7 @@ using BannerKings.Managers.Education.Lifestyles;
 using System;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.ViewModelCollection;
 using TaleWorlds.CampaignSystem.ViewModelCollection.CharacterDeveloper;
 using TaleWorlds.Core;
@@ -179,9 +180,9 @@ namespace BannerKings.UI.Education
                         new ImageIdentifier(CampaignUIHelper.GetCharacterCode(hero.CharacterObject)),
                         hero.IsFriend(Hero.MainHero) || hero.Clan == Clan.PlayerClan, settlementString));
                 }
-                    
 
-            InformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(new TextObject("{=!}Choose Language").ToString(),
+
+            MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(new TextObject("{=!}Choose Language").ToString(),
                 new TextObject("{=!}Select a language you would like to learn. Learning a language requires an instructor from your court, and different people have different teaching skills. A courtier must have a good opinion of you in order to be available. Learning languages is easier when they are intelligible with your native language.").ToString(), 
                 elements, true, 1,
                 GameTexts.FindText("str_done").ToString(), string.Empty,
@@ -218,7 +219,7 @@ namespace BannerKings.UI.Education
                         BannerKingsConfig.Instance.EducationManager.CanRead(book, hero), 
                         book.Description.ToString()));
 
-            InformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(new TextObject("{=!}Choose Book").ToString(),
+            MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(new TextObject("{=!}Choose Book").ToString(),
                 new TextObject("{=!}Select what book you would like to read. Options may be disabled due to language barrier, or lack of Literate perk.").ToString(), elements, true, 1,
                 GameTexts.FindText("str_done").ToString(), string.Empty, 
                 delegate (List<InquiryElement> x)
@@ -255,7 +256,7 @@ namespace BannerKings.UI.Education
                         lf.CanLearn(hero),
                         lf.Description.ToString()));
 
-            InformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(new TextObject("{=!}Choose Lifestyle").ToString(),
+            MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(new TextObject("{=!}Choose Lifestyle").ToString(),
                new TextObject("{=!}Select a lifestyle you would like to adopt. Picking a lifestyle will undo the progress of the lifestyle you are currently learning, if any. Each lifestyle is based on 2 skills, and you need at least 150 profficiency in each skill to adopt it.").ToString(), elements, true, 1,
                GameTexts.FindText("str_done").ToString(), string.Empty,
                delegate (List<InquiryElement> x)

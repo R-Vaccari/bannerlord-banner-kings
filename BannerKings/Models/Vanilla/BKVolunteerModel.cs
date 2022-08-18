@@ -5,16 +5,18 @@ using BannerKings.Populations;
 using Helpers;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.SandBox.GameComponents.Map;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using static BannerKings.Managers.PopulationManager;
 using static BannerKings.Managers.Policies.BKDraftPolicy;
+using TaleWorlds.CampaignSystem.GameComponents;
+using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.CampaignSystem.CharacterDevelopment;
 
 namespace BannerKings.Models.Vanilla
 {
-    class BKVolunteerModel : DefaultVolunteerProductionModel
+    class BKVolunteerModel : DefaultVolunteerModel
     {
 
         public override bool CanHaveRecruits(Hero hero)

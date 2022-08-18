@@ -1,6 +1,7 @@
 ﻿using BannerKings.Managers.Court;
 using BannerKings.Managers.Titles;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Models.BKModels

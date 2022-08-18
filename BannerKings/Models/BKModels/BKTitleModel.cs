@@ -7,6 +7,7 @@ using TaleWorlds.Localization;
 using System.Linq;
 using BannerKings.Managers.Education;
 using BannerKings.Managers.Skills;
+using TaleWorlds.CampaignSystem.Settlements;
 
 namespace BannerKings.Models.BKModels
 {
@@ -495,9 +496,7 @@ namespace BannerKings.Models.BKModels
             return result;
         }
 
-        public ExplainedNumber CalculateEffect(Settlement settlement)
-        {
-            return new ExplainedNumber();
-        }
+        public ExplainedNumber CalculateEffect(Settlement settlement) => new ExplainedNumber();
+        
     }
 }
