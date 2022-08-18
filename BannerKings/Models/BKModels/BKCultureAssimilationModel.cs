@@ -6,7 +6,7 @@ using TaleWorlds.Localization;
 
 namespace BannerKings.Models
 {
-    class BKCultureAssimilationModel : ICultureModel
+    public class BKCultureAssimilationModel : ICultureModel
     {
         public ExplainedNumber CalculateEffect(Settlement settlement)
         {

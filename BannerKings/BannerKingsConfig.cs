@@ -50,6 +50,8 @@ namespace BannerKings
         public BKWorkshopModel WorkshopModel { get; } = new BKWorkshopModel();
         public BKAdministrativeModel AdministrativeModel { get; } = new BKAdministrativeModel();
         public BKSmithingModel SmithingModel { get; } = new BKSmithingModel();
+        public BKCultureAcceptanceModel CultureAcceptanceModel { get; } = new BKCultureAcceptanceModel();
+        public BKCultureAssimilationModel CultureAssimilationModel { get; } = new BKCultureAssimilationModel();
 
         public void Initialize()
         {

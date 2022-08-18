@@ -422,28 +422,69 @@ namespace BannerKings.Populations
         internal override void Update(PopulationData data)
         {
             SettlementOwner = data.Settlement.Owner;
-            BKCultureAssimilationModel assimModel = (BKCultureAssimilationModel)BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(BKCultureAssimilationModel));
-            BKCultureAcceptanceModel accModel = (BKCultureAcceptanceModel)BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(BKCultureAcceptanceModel));
-            HashSet<CultureDataClass> toDelete = new HashSet<CultureDataClass>();
 
+
+            BalanceCultures(data);
+            CultureObject dominant = DominantCulture;
+            if (dominant.BasicTroop != null && dominant.MilitiaSpearman != null)
+            {
+                data.Settlement.Culture = dominant;
+                if (data.Settlement.Notables != null && data.Settlement.Notables.Count > 0)
+                    foreach (Hero notable in data.Settlement.Notables)
+                        notable.Culture = dominant;
+            }
+        }
+
+        private void BalanceCultures(PopulationData data)
+        {
+            HashSet<CultureDataClass> toDelete = new HashSet<CultureDataClass>();
             float foreignerShare = 0f;
+
             foreach (CultureDataClass cultureData in cultures)
             {
-                cultureData.Acceptance += accModel.CalculateEffect(data.Settlement, cultureData).ResultNumber;
-                cultureData.Assimilation += assimModel.CalculateEffect(data.Settlement, cultureData).ResultNumber;
                 if (cultureData.Culture != settlementOwner.Culture && cultureData.Assimilation <= 0.01)
+                {
                     toDelete.Add(cultureData);
+                    continue;
+                }
 
-                if (cultureData.Culture != settlementOwner.Culture && cultureData.Culture != data.Settlement.Culture)
-                    foreignerShare += cultureData.Assimilation;
+                if (IsForeigner(data, cultureData)) foreignerShare += cultureData.Assimilation;
+                else
+                {
+                    cultureData.Acceptance += BannerKingsConfig.Instance.CultureAcceptanceModel.CalculateEffect(data.Settlement, cultureData).ResultNumber;
+                    cultureData.Assimilation += BannerKingsConfig.Instance.CultureAssimilationModel.CalculateEffect(data.Settlement, cultureData).ResultNumber;
+                }
             }
 
             if (toDelete.Count > 0)
                 foreach (CultureDataClass cultureData in toDelete)
-                cultures.Remove(cultureData);
+                    cultures.Remove(cultureData);
+            
+            float totalAssim = 0f;
+            foreach (CultureDataClass cultureData in cultures) totalAssim += cultureData.Assimilation;
 
-            float foreignerTarget = data.Foreigner.ResultNumber;
-            if (foreignerShare < foreignerTarget)
+            if (totalAssim != 1f)
+            {
+                float diff = totalAssim - 1f;
+                float foreignerTarget = data.Foreigner.ResultNumber;
+
+                List<(CultureDataClass, float)> candidates = new List<(CultureDataClass, float)>();
+                foreach (CultureDataClass cultureData in cultures)
+                    if (cultureData.Assimilation > diff)
+                    {
+                        float value = cultureData.Assimilation;
+                        if (foreignerShare > foreignerTarget && IsForeigner(data, cultureData)) value *= 10f;
+
+                        candidates.Add(new(cultureData, value));
+                    }
+
+                CultureDataClass result = MBRandom.ChooseWeighted(candidates);
+                result.Assimilation += diff;
+            }
+
+
+
+            /*if (foreignerShare < foreignerTarget)
             {
                 float random = MBRandom.RandomFloatRanged(foreignerTarget - foreignerShare);
                 IEnumerable<CultureObject> presentCultures = from cultureClass in this.cultures select cultureClass.Culture;
@@ -459,18 +500,12 @@ namespace BannerKings.Populations
                             cultureData.Assimilation -= random;
                             break;
                         }
-                }     
-            }
-
-            CultureObject dominant = DominantCulture;
-            if (dominant.BasicTroop != null && dominant.MilitiaSpearman != null)
-            {
-                data.Settlement.Culture = dominant;
-                if (data.Settlement.Notables != null && data.Settlement.Notables.Count > 0)
-                    foreach (Hero notable in data.Settlement.Notables)
-                        notable.Culture = dominant;
-            }
+                }
+            }*/
         }
+
+        private bool IsForeigner(PopulationData data, CultureDataClass cultureData) => 
+            cultureData.Culture != settlementOwner.Culture && cultureData.Culture != data.Settlement.Culture;
     }
 
     public class CultureDataClass

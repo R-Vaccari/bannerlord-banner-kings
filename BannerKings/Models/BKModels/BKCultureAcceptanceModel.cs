@@ -6,7 +6,7 @@ using TaleWorlds.CampaignSystem.Settlements;
 
 namespace BannerKings.Models
 {
-    class BKCultureAcceptanceModel : ICultureModel
+    public class BKCultureAcceptanceModel : ICultureModel
     {
         public ExplainedNumber CalculateEffect(Settlement settlement)
         {
