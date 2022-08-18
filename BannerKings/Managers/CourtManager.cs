@@ -43,6 +43,8 @@ namespace BannerKings.Managers
             return (int)(maxEffect * competence);
         }
 
+        public void CreateCouncil(Clan clan) => Councils.Add(clan, new CouncilData(clan));
+
         public CouncilData GetCouncil(Hero hero)
         {
             Clan clan = hero.Clan;

@@ -36,7 +36,7 @@
 											  <ItemTemplate>
 												<Widget WidthSizePolicy="Fixed" HeightSizePolicy="StretchToParent" DoNotPassEventsToChildren="false" SuggestedWidth="!Card.Width" MarginLeft="5" MarginRight="5" MarginTop="5" MarginBottom="5">
 												  <Children>
-													<CraftingPopupCardButtonWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" DoNotPassEventsToChildren="true" Brush="Crafting.Order.Card" IsEnabled="true" IsSelected="@IsSelected" PropertiesContainer="Content\CardMiddle\PropertiesContainer" Command.Click="ExecuteSelectOption" UpdateChildrenStates="true">
+													<CardSelectionPopupButtonWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" DoNotPassEventsToChildren="true" Brush="Crafting.Order.Card" IsEnabled="true" IsSelected="@IsSelected" PropertiesContainer="Content\CardMiddle\PropertiesContainer" Command.Click="ExecuteSelectOption" UpdateChildrenStates="true">
 													  <Children>
 														<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Sprite="StdAssets\Popup\scrollable_field_gradient"/>
 
@@ -108,7 +108,7 @@
 														  </Children>
 														</Widget>
 													  </Children>
-													</CraftingPopupCardButtonWidget>
+													</CardSelectionPopupButtonWidget>
 													
 		
 													<HintWidget DataSource="{Hint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" SuggestedWidth="100" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" />

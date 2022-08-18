@@ -7,7 +7,6 @@ using BannerKings.Models.Vanilla;
 using BannerKings.Populations;
 using HarmonyLib;
 using Helpers;
-using SandBox.View.Map;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -69,19 +68,6 @@ namespace BannerKings
                     }
 
                     return true;
-                }
-            }
-        }
-
-        namespace Map
-        {
-            [HarmonyPatch(typeof(MapScreen), "OnInitialize")]
-            public static class MapScreenOnInitializePatch
-            {
-                private static void Postfix()
-                {
-                    BannerKingsConfig.Instance.ReligionsManager.PostInitialize();
-                    BannerKingsConfig.Instance.EducationManager.InitializeEducationsIfNeeded();
                 }
             }
         }

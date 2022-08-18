@@ -24,13 +24,6 @@ namespace BannerKings.Managers
             Educations = new Dictionary<Hero, EducationData>();
         }
 
-        public void InitializeEducationsIfNeeded()
-        {
-            if (!Educations.IsEmpty()) return;
-
-            foreach (Hero hero in Hero.AllAliveHeroes) InitHeroEducation(hero);
-        }
-
         public EducationData InitHeroEducation(Hero hero)
         {
             if (Educations.ContainsKey(hero)) return null;

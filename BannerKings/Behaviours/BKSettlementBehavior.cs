@@ -338,15 +338,7 @@ namespace BannerKings.Behaviors
 
         private void OnSessionLaunched(CampaignGameStarter campaignGameStarter)
         {
-            if (BannerKingsConfig.Instance.PolicyManager == null || BannerKingsConfig.Instance.TitleManager == null)
-                BannerKingsConfig.Instance.InitManagers();
-
-            foreach (Settlement settlement in Settlement.All)
-                if (BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
-                {
-                    PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
-                    settlement.Culture = data.CultureData.DominantCulture;
-                }
+           
 
             BuildingType retinueType = MBObjectManager.Instance.GetObjectTypeList<BuildingType>().FirstOrDefault(x => x == Utils.Helpers._buildingCastleRetinue);
             if (retinueType == null)

@@ -2,7 +2,6 @@
 using BannerKings.Managers.Populations.Villages;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
-using BannerKings.Models;
 using BannerKings.Populations;
 using BannerKings.UI.Notifications;
 using BannerKings.UI.Windows;
@@ -212,7 +211,7 @@ namespace BannerKings.UI
         }
 
         [HarmonyPatch(typeof(SettlementProjectVM))]
-        internal class CharacterCreationCultureStagePatch
+        internal class SettlementProjectVMPatch
         {
             [HarmonyPostfix]
             [HarmonyPatch("Building", MethodType.Setter)]
@@ -312,13 +311,9 @@ namespace BannerKings.UI
                     BindingFlags.Instance | BindingFlags.NonPublic);
                 _affectedSkillMap.SetValue(__instance, new Dictionary<SkillObject, Tuple<int, int>>());
 
-                PropertyInfo GainGroups = __instance
-                    .GetType()
-                    .GetProperty("GainGroups",
-                    BindingFlags.Instance | BindingFlags.Public);
-                GainGroups.SetValue(__instance, new MBBindingList<CharacterCreationGainGroupItemVM>());
 
-
+                __instance.GainGroups = new MBBindingList<CharacterCreationGainGroupItemVM>();
+                __instance.GainedTraits = new MBBindingList<EncyclopediaTraitItemVM>();
                 foreach (CharacterAttribute attributeObj in BKAttributes.AllAttributes)
                 {
                     __instance.GainGroups.Add(new CharacterCreationGainGroupItemVM(attributeObj, characterCreation, currentIndex));

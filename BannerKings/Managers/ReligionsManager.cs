@@ -88,6 +88,22 @@ namespace BannerKings.Managers
             }
         }
 
+        public void PostInitialize()
+        {
+            foreach (Religion rel in Religions.Keys.ToList())
+            {
+                Faith faith = DefaultFaiths.Instance.GetById(rel.Faith.GetId());
+                List<CharacterObject> presets = CharacterObject.All.ToList().FindAll(x => x.Occupation == Occupation.Preacher
+                && x.IsTemplate && x.StringId.Contains("bannerkings") && x.StringId.Contains(faith.GetId()));
+                foreach (CharacterObject preset in presets)
+                {
+                    int number = int.Parse(preset.StringId[preset.StringId.Length - 1].ToString());
+                    faith.AddPreset(number, preset);
+                }
+                rel.PostInitialize(faith);
+            }
+        }
+
         public void ShowPopup()
         {
             if (GetHeroReligion(Hero.MainHero) != null) return;
@@ -128,21 +144,7 @@ namespace BannerKings.Managers
             else return null;
         }
 
-        public void PostInitialize()
-        {
-            foreach (Religion rel in Religions.Keys.ToList())
-            {
-                Faith faith = DefaultFaiths.Instance.GetById(rel.Faith.GetId());
-                List<CharacterObject> presets = CharacterObject.All.ToList().FindAll(x => x.Occupation == Occupation.Preacher
-                && x.IsTemplate && x.StringId.Contains("bannerkings") && x.StringId.Contains(faith.GetId()));
-                foreach (CharacterObject preset in presets)
-                {
-                    int number = int.Parse(preset.StringId[preset.StringId.Length - 1].ToString());
-                    faith.AddPreset(number, preset);
-                }
-                rel.PostInitialize(faith);
-            }
-        }
+    
 
         public List<Religion> GetReligions()
         {

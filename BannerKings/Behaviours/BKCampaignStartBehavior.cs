@@ -1,4 +1,5 @@
-﻿using BannerKings.Managers.CampaignStart;
+﻿using BannerKings.Managers;
+using BannerKings.Managers.CampaignStart;
 using BannerKings.UI;
 using Helpers;
 using System;
@@ -30,8 +31,8 @@ namespace BannerKings.Behaviours
         public override void RegisterEvents()
         {
             CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, OnSessionLaunched);
-            CampaignEvents.OnCharacterCreationIsOverEvent.AddNonSerializedListener(this, new Action(OnCharacterCreationOver));
-            CampaignEvents.OnGameLoadFinishedEvent.AddNonSerializedListener(this, new Action(OnGameLoaded));
+            CampaignEvents.OnCharacterCreationIsOverEvent.AddNonSerializedListener(this, OnCharacterCreationOver);
+            CampaignEvents.OnGameLoadFinishedEvent.AddNonSerializedListener(this, OnGameLoaded);
         }
 
         public override void SyncData(IDataStore dataStore)
@@ -89,14 +90,32 @@ namespace BannerKings.Behaviours
 
         private void OnGameLoaded()
         {
+            InitializeData();
             if (!hasSeenInquiry) ShowInquiry();
         }
 
         private void OnCharacterCreationOver() 
         {
-            
+            InitializeData();
             UIManager.Instance.ShowWindow("campaignStart");
         } 
+
+        private void InitializeData()
+        {
+            if (!hasSeenInquiry)
+            {
+                BannerKingsConfig.Instance.InitManagers();
+                foreach (Settlement settlement in Settlement.All)
+                    PopulationManager.InitializeSettlementPops(settlement);
+
+                foreach (Clan clan in Clan.All)
+                    if (!clan.IsEliminated && !clan.IsBanditFaction)
+                        BannerKingsConfig.Instance.CourtManager.CreateCouncil(clan);
+
+                foreach (Hero hero in Hero.AllAliveHeroes)
+                    BannerKingsConfig.Instance.EducationManager.InitHeroEducation(hero);
+            }
+        }
 
         private void ShowInquiry()
         {

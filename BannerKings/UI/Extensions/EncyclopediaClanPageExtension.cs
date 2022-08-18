@@ -10,7 +10,7 @@ namespace BannerKings.UI.Extensions
     internal class EncyclopediaClanPageExtension : PrefabExtensionInsertPatch
     {
         public override InsertType Type => InsertType.Child;
-        public override int Index => 5;
+        public override int Index => 12;
 
         private List<XmlNode> nodes;
 

@@ -3,7 +3,6 @@ using BannerKings.Managers.Institutions.Religions.Faiths.Rites;
 using BannerKings.Models.BKModels;
 using HarmonyLib;
 using SandBox.CampaignBehaviors;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,7 +12,6 @@ using TaleWorlds.CampaignSystem.Conversation;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
-using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Behaviours
@@ -24,9 +22,10 @@ namespace BannerKings.Behaviours
         private Rite selectedRite;
         public override void RegisterEvents()
         {
-            CampaignEvents.DailyTickEvent.AddNonSerializedListener(this, new Action(DailyTick));
-            CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, new Action<CampaignGameStarter>(OnSessionLaunched));
-            CampaignEvents.SettlementEntered.AddNonSerializedListener(this, new Action<MobileParty, Settlement, Hero>(OnSettlementEntered));
+            CampaignEvents.OnGameLoadedEvent.AddNonSerializedListener(this, OnGameLoaded);
+            CampaignEvents.DailyTickEvent.AddNonSerializedListener(this, DailyTick);
+            CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, OnSessionLaunched);
+            CampaignEvents.SettlementEntered.AddNonSerializedListener(this, (OnSettlementEntered);
             CampaignEvents.HeroKilledEvent.AddNonSerializedListener(this, OnHeroKilled);
             //CampaignEvents.DailyTickSettlementEvent.AddNonSerializedListener(this, new Action<Settlement>(DailySettlementTick));
         }
@@ -38,6 +37,11 @@ namespace BannerKings.Behaviours
         private void OnSessionLaunched(CampaignGameStarter starter)
         {
             AddDialogue(starter);
+        }
+
+        private void OnGameLoaded(CampaignGameStarter starter)
+        {
+            BannerKingsConfig.Instance.ReligionsManager.PostInitialize();
         }
 
         private void OnHeroKilled(Hero victim, Hero killer, KillCharacterAction.KillCharacterActionDetail detail, bool showNotification = true)
