@@ -2,28 +2,29 @@
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Settlements;
 
-namespace BannerKings.Models.Vanilla;
-
-public class BKWallHitpointModel : DefaultWallHitPointCalculationModel
+namespace BannerKings.Models.Vanilla
 {
-    public override float CalculateMaximumWallHitPoint(Town town)
+    public class BKWallHitpointModel : DefaultWallHitPointCalculationModel
     {
-        var result = base.CalculateMaximumWallHitPoint(town);
-
-        if (town.OwnerClan != null)
+        public override float CalculateMaximumWallHitPoint(Town town)
         {
-            var leader = town.OwnerClan.Leader;
-            if (leader != null)
+            var result = base.CalculateMaximumWallHitPoint(town);
+
+            if (town.OwnerClan != null)
             {
-                var data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(leader);
-                if (data.HasPerk(BKPerks.Instance.SiegePlanner))
+                var leader = town.OwnerClan.Leader;
+                if (leader != null)
                 {
-                    result *= 1.25f;
+                    var data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(leader);
+                    if (data.HasPerk(BKPerks.Instance.SiegePlanner))
+                    {
+                        result *= 1.25f;
+                    }
                 }
             }
+
+
+            return result;
         }
-
-
-        return result;
     }
 }

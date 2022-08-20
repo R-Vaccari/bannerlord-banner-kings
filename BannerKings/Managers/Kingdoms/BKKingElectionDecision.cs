@@ -1,25 +1,26 @@
 ﻿using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Election;
 
-namespace BannerKings.Managers.Kingdoms;
-
-public class BKKingElectionDecision : KingSelectionKingdomDecision
+namespace BannerKings.Managers.Kingdoms
 {
-    public BKKingElectionDecision(Clan proposerClan, Clan clanToExclude = null) : base(proposerClan, clanToExclude)
+    public class BKKingElectionDecision : KingSelectionKingdomDecision
     {
-    }
-
-    public override void ApplyChosenOutcome(DecisionOutcome chosenOutcome)
-    {
-        base.ApplyChosenOutcome(chosenOutcome);
-        var title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(Kingdom);
-        if (title != null)
+        public BKKingElectionDecision(Clan proposerClan, Clan clanToExclude = null) : base(proposerClan, clanToExclude)
         {
-            var deJure = title.deJure;
-            var king = ((KingSelectionDecisionOutcome) chosenOutcome).King;
-            if (deJure != king)
+        }
+
+        public override void ApplyChosenOutcome(DecisionOutcome chosenOutcome)
+        {
+            base.ApplyChosenOutcome(chosenOutcome);
+            var title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(Kingdom);
+            if (title != null)
             {
-                BannerKingsConfig.Instance.TitleManager.InheritTitle(deJure, king, title);
+                var deJure = title.deJure;
+                var king = ((KingSelectionDecisionOutcome) chosenOutcome).King;
+                if (deJure != king)
+                {
+                    BannerKingsConfig.Instance.TitleManager.InheritTitle(deJure, king, title);
+                }
             }
         }
     }

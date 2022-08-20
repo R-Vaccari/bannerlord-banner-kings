@@ -3,114 +3,115 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 
-namespace BannerKings.UI.Crafting;
-
-public class ArmorCraftingVM : ViewModel
+namespace BannerKings.UI.Crafting
 {
-    public enum ItemType
+    public class ArmorCraftingVM : ViewModel
     {
-        BodyArmor,
-        Barding,
-        Shield,
-        Ammo
-    }
-
-    private MBBindingList<ArmorItemVM> armors;
-    private ArmorItemVM currentItem;
-    private readonly CraftingMixin mixin;
-    private ArmorCraftingSortController sortController;
-
-    public ArmorCraftingVM(CraftingMixin mixin)
-    {
-        this.mixin = mixin;
-        armors = new MBBindingList<ArmorItemVM>();
-        SortController = new ArmorCraftingSortController();
-    }
-
-    public Hero Hero => mixin.Hero;
-
-    [DataSourceProperty]
-    public ArmorCraftingSortController SortController
-    {
-        get => sortController;
-        set
+        public enum ItemType
         {
-            if (value != sortController)
+            BodyArmor,
+            Barding,
+            Shield,
+            Ammo
+        }
+
+        private MBBindingList<ArmorItemVM> armors;
+        private ArmorItemVM currentItem;
+        private readonly CraftingMixin mixin;
+        private ArmorCraftingSortController sortController;
+
+        public ArmorCraftingVM(CraftingMixin mixin)
+        {
+            this.mixin = mixin;
+            armors = new MBBindingList<ArmorItemVM>();
+            SortController = new ArmorCraftingSortController();
+        }
+
+        public Hero Hero => mixin.Hero;
+
+        [DataSourceProperty]
+        public ArmorCraftingSortController SortController
+        {
+            get => sortController;
+            set
             {
-                sortController = value;
-                OnPropertyChangedWithValue(value);
+                if (value != sortController)
+                {
+                    sortController = value;
+                    OnPropertyChangedWithValue(value);
+                }
             }
         }
-    }
 
-    [DataSourceProperty]
-    public ArmorItemVM CurrentItem
-    {
-        get => currentItem;
-        set
+        [DataSourceProperty]
+        public ArmorItemVM CurrentItem
         {
-            if (value != currentItem)
+            get => currentItem;
+            set
             {
-                currentItem = value;
-                OnPropertyChangedWithValue(value);
-                mixin.OnRefresh();
+                if (value != currentItem)
+                {
+                    currentItem = value;
+                    OnPropertyChangedWithValue(value);
+                    mixin.OnRefresh();
+                }
             }
         }
-    }
 
-    [DataSourceProperty]
-    public MBBindingList<ArmorItemVM> Armors
-    {
-        get => armors;
-        set
+        [DataSourceProperty]
+        public MBBindingList<ArmorItemVM> Armors
         {
-            if (value != armors)
+            get => armors;
+            set
             {
-                armors = value;
-                OnPropertyChangedWithValue(value);
+                if (value != armors)
+                {
+                    armors = value;
+                    OnPropertyChangedWithValue(value);
+                }
             }
         }
-    }
 
-    public override void RefreshValues()
-    {
-        base.RefreshValues();
-        Armors.Clear();
-
-        foreach (var item in Game.Current.ObjectManager.GetObjectTypeList<ItemObject>())
+        public override void RefreshValues()
         {
-            if (item.IsAnimal || item.IsTradeGood || item.IsMountable || item.IsCraftedWeapon || item.IsBannerItem ||
-                item.IsFood || item.NotMerchandise ||
-                (item.HasWeaponComponent && (item.WeaponComponent.PrimaryWeapon.IsRangedWeapon ||
-                                             item.WeaponComponent.PrimaryWeapon.IsMeleeWeapon)))
+            base.RefreshValues();
+            Armors.Clear();
+
+            foreach (var item in Game.Current.ObjectManager.GetObjectTypeList<ItemObject>())
             {
-                continue;
+                if (item.IsAnimal || item.IsTradeGood || item.IsMountable || item.IsCraftedWeapon || item.IsBannerItem ||
+                    item.IsFood || item.NotMerchandise ||
+                    (item.HasWeaponComponent && (item.WeaponComponent.PrimaryWeapon.IsRangedWeapon ||
+                                                 item.WeaponComponent.PrimaryWeapon.IsMeleeWeapon)))
+                {
+                    continue;
+                }
+
+                Armors.Add(new ArmorItemVM(this, item, GetItemType(item)));
             }
 
-            Armors.Add(new ArmorItemVM(this, item, GetItemType(item)));
+            SortController.SetListToControl(Armors);
+            CurrentItem = Armors[0];
         }
 
-        SortController.SetListToControl(Armors);
-        CurrentItem = Armors[0];
-    }
-
-    public ItemType GetItemType(ItemObject item)
-    {
-        if (item.HasArmorComponent)
+        public ItemType GetItemType(ItemObject item)
         {
-            if (item.ItemType == ItemObject.ItemTypeEnum.HorseHarness)
+            if (item.HasArmorComponent)
             {
-                return ItemType.Barding;
+                if (item.ItemType == ItemObject.ItemTypeEnum.HorseHarness)
+                {
+                    return ItemType.Barding;
+                }
+
+                return ItemType.BodyArmor;
             }
 
-            return ItemType.BodyArmor;
-        }
+            if (item.HasWeaponComponent && item.WeaponComponent.PrimaryWeapon.IsShield)
+            {
+                return ItemType.Shield;
+            }
 
-        if (item.HasWeaponComponent && item.WeaponComponent.PrimaryWeapon.IsShield)
-        {
-            return ItemType.Shield;
+            return ItemType.Ammo;
         }
-
-        return ItemType.Ammo;
     }
 }

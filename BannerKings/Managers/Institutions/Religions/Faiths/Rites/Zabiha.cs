@@ -2,16 +2,17 @@
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
 
-namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites;
-
-public class Zabiha : Offering
+namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
 {
-    public Zabiha() : base(MBObjectManager.Instance.GetObject<ItemObject>(x => x.StringId == "cow"), 20)
+    public class Zabiha : Offering
     {
-    }
+        public Zabiha() : base(MBObjectManager.Instance.GetObject<ItemObject>(x => x.StringId == "cow"), 20)
+        {
+        }
 
-    public override TextObject GetName()
-    {
-        return new("{=!}Zabiha");
+        public override TextObject GetName()
+        {
+            return new("{=!}Zabiha");
+        }
     }
 }

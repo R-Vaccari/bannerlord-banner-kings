@@ -2,31 +2,32 @@
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 
-namespace BannerKings.Models.Vanilla;
-
-public class BKClanTierModel : DefaultClanTierModel
+namespace BannerKings.Models.Vanilla
 {
-    public override int GetPartyLimitForTier(Clan clan, int clanTierToCheck)
+    public class BKClanTierModel : DefaultClanTierModel
     {
-        var result = base.GetPartyLimitForTier(clan, clanTierToCheck);
-        if (BannerKingsConfig.Instance.TitleManager != null && BannerKingsConfig.Instance.CourtManager != null)
+        public override int GetPartyLimitForTier(Clan clan, int clanTierToCheck)
         {
-            var title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(clan.Leader);
-            if (title != null)
+            var result = base.GetPartyLimitForTier(clan, clanTierToCheck);
+            if (BannerKingsConfig.Instance.TitleManager != null && BannerKingsConfig.Instance.CourtManager != null)
             {
-                result += 5 - (int) title.type;
+                var title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(clan.Leader);
+                if (title != null)
+                {
+                    result += 5 - (int) title.type;
+                }
             }
+
+            return result;
         }
 
-        return result;
-    }
+        public override int GetCompanionLimit(Clan clan)
+        {
+            var result = base.GetCompanionLimit(clan);
 
-    public override int GetCompanionLimit(Clan clan)
-    {
-        var result = base.GetCompanionLimit(clan);
-
-        result += BannerKingsConfig.Instance.CourtManager.GetCouncilEffectInteger(clan.Leader,
-            CouncilPosition.Chancellor, 4f);
-        return result;
+            result += BannerKingsConfig.Instance.CourtManager.GetCouncilEffectInteger(clan.Leader,
+                CouncilPosition.Chancellor, 4f);
+            return result;
+        }
     }
 }

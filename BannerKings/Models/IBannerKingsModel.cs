@@ -1,9 +1,10 @@
 ﻿using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 
-namespace BannerKings.Models;
-
-public interface IBannerKingsModel
+namespace BannerKings.Models
 {
-    public abstract ExplainedNumber CalculateEffect(Settlement settlement);
+    public interface IBannerKingsModel
+    {
+        public abstract ExplainedNumber CalculateEffect(Settlement settlement);
+    }
 }

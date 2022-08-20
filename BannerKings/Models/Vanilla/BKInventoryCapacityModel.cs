@@ -3,28 +3,29 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Party;
 
-namespace BannerKings.Models.Vanilla;
-
-public class BKInventoryCapacityModel : DefaultInventoryCapacityModel
+namespace BannerKings.Models.Vanilla
 {
-    public override ExplainedNumber CalculateInventoryCapacity(MobileParty mobileParty,
-        bool includeDescriptions = false, int additionalTroops = 0, int additionalSpareMounts = 0,
-        int additionalPackAnimals = 0, bool includeFollowers = false)
+    public class BKInventoryCapacityModel : DefaultInventoryCapacityModel
     {
-        var result = base.CalculateInventoryCapacity(mobileParty, includeDescriptions, additionalTroops,
-            additionalSpareMounts, additionalPackAnimals, includeFollowers);
-
-        var leader = mobileParty.LeaderHero;
-        if (leader != null)
+        public override ExplainedNumber CalculateInventoryCapacity(MobileParty mobileParty,
+            bool includeDescriptions = false, int additionalTroops = 0, int additionalSpareMounts = 0,
+            int additionalPackAnimals = 0, bool includeFollowers = false)
         {
-            var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(leader);
-            if (education.HasPerk(BKPerks.Instance.CaravaneerStrider))
+            var result = base.CalculateInventoryCapacity(mobileParty, includeDescriptions, additionalTroops,
+                additionalSpareMounts, additionalPackAnimals, includeFollowers);
+
+            var leader = mobileParty.LeaderHero;
+            if (leader != null)
             {
-                result.Add(mobileParty.Party.NumberOfPackAnimals * 20f, BKPerks.Instance.CaravaneerStrider.Name);
+                var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(leader);
+                if (education.HasPerk(BKPerks.Instance.CaravaneerStrider))
+                {
+                    result.Add(mobileParty.Party.NumberOfPackAnimals * 20f, BKPerks.Instance.CaravaneerStrider.Name);
+                }
             }
+
+
+            return result;
         }
-
-
-        return result;
     }
 }

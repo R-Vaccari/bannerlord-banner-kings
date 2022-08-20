@@ -3,27 +3,28 @@ using TaleWorlds.CampaignSystem.TournamentGames;
 using TaleWorlds.Core;
 using TaleWorlds.SaveSystem;
 
-namespace BannerKings.Managers.Populations.Tournament;
-
-public class BannerKingsTournament : FightTournamentGame
+namespace BannerKings.Managers.Populations.Tournament
 {
-    [SaveableField(100)] private TournamentData data;
-
-    public BannerKingsTournament(Town town, TournamentData data) : base(town)
+    public class BannerKingsTournament : FightTournamentGame
     {
-        this.data = data;
-    }
+        [SaveableField(100)] private TournamentData data;
 
-    protected override ItemObject GetTournamentPrize(bool includePlayer, int lastRecordedNobleCountForTournamentPrize)
-    {
-        var popData = BannerKingsConfig.Instance.PopulationManager.GetPopData(Town.Settlement);
-        var tournament = popData.TournamentData;
-        if (tournament != null)
+        public BannerKingsTournament(Town town, TournamentData data) : base(town)
         {
-            data = tournament;
-            return tournament.Prize;
+            this.data = data;
         }
 
-        return base.GetTournamentPrize(includePlayer, lastRecordedNobleCountForTournamentPrize);
+        protected override ItemObject GetTournamentPrize(bool includePlayer, int lastRecordedNobleCountForTournamentPrize)
+        {
+            var popData = BannerKingsConfig.Instance.PopulationManager.GetPopData(Town.Settlement);
+            var tournament = popData.TournamentData;
+            if (tournament != null)
+            {
+                data = tournament;
+                return tournament.Prize;
+            }
+
+            return base.GetTournamentPrize(includePlayer, lastRecordedNobleCountForTournamentPrize);
+        }
     }
 }

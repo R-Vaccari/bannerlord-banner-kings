@@ -3,26 +3,27 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Party;
 
-namespace BannerKings.Models.Vanilla;
-
-public class BKPartyConsumptionModel : DefaultMobilePartyFoodConsumptionModel
+namespace BannerKings.Models.Vanilla
 {
-    public override ExplainedNumber CalculateDailyFoodConsumptionf(MobileParty party, ExplainedNumber baseConsumption)
+    public class BKPartyConsumptionModel : DefaultMobilePartyFoodConsumptionModel
     {
-        var result = base.CalculateDailyFoodConsumptionf(party, baseConsumption);
-        if (party.Army != null && party.SiegeEvent != null)
+        public override ExplainedNumber CalculateDailyFoodConsumptionf(MobileParty party, ExplainedNumber baseConsumption)
         {
-            var leader = party.Army.LeaderParty.LeaderHero;
-            if (leader != null)
+            var result = base.CalculateDailyFoodConsumptionf(party, baseConsumption);
+            if (party.Army != null && party.SiegeEvent != null)
             {
-                var data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(leader);
-                if (data.HasPerk(BKPerks.Instance.SiegeOverseer))
+                var leader = party.Army.LeaderParty.LeaderHero;
+                if (leader != null)
                 {
-                    result.AddFactor(-0.15f, BKPerks.Instance.SiegeOverseer.Name);
+                    var data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(leader);
+                    if (data.HasPerk(BKPerks.Instance.SiegeOverseer))
+                    {
+                        result.AddFactor(-0.15f, BKPerks.Instance.SiegeOverseer.Name);
+                    }
                 }
             }
-        }
 
-        return result;
+            return result;
+        }
     }
 }

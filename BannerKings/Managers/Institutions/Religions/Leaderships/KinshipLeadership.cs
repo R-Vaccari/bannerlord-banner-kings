@@ -1,17 +1,18 @@
 ﻿using TaleWorlds.Localization;
 
-namespace BannerKings.Managers.Institutions.Religions.Leaderships;
-
-public class KinshipLeadership : DescentralizedLeadership
+namespace BannerKings.Managers.Institutions.Religions.Leaderships
 {
-    public override TextObject GetHint()
+    public class KinshipLeadership : DescentralizedLeadership
     {
-        return new(
-            "{=!}Kinship religions have their religions leaders dictated by the landed clans that adhere to the faith. Each clan is responsable for appointing a proeminent preacher from among their fiefs.");
-    }
+        public override TextObject GetHint()
+        {
+            return new(
+                "{=!}Kinship religions have their religions leaders dictated by the landed clans that adhere to the faith. Each clan is responsable for appointing a proeminent preacher from among their fiefs.");
+        }
 
-    public override TextObject GetName()
-    {
-        return new("{=!}Kinship");
+        public override TextObject GetName()
+        {
+            return new("{=!}Kinship");
+        }
     }
 }

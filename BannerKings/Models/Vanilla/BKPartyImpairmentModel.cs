@@ -2,22 +2,23 @@
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Party;
 
-namespace BannerKings.Models.Vanilla;
-
-public class BKPartyImpairmentModel : DefaultPartyImpairmentModel
+namespace BannerKings.Models.Vanilla
 {
-    public override float GetDisorganizedStateDuration(MobileParty party)
+    public class BKPartyImpairmentModel : DefaultPartyImpairmentModel
     {
-        var result = base.GetDisorganizedStateDuration(party);
-        if (party.LeaderHero != null)
+        public override float GetDisorganizedStateDuration(MobileParty party)
         {
-            var data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(party.LeaderHero);
-            if (data.HasPerk(BKPerks.Instance.OutlawKidnapper))
+            var result = base.GetDisorganizedStateDuration(party);
+            if (party.LeaderHero != null)
             {
-                result *= 0.7f;
+                var data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(party.LeaderHero);
+                if (data.HasPerk(BKPerks.Instance.OutlawKidnapper))
+                {
+                    result *= 0.7f;
+                }
             }
-        }
 
-        return result;
+            return result;
+        }
     }
 }

@@ -5,30 +5,31 @@ using TaleWorlds.CampaignSystem.ViewModelCollection.GameMenu.TownManagement;
 using TaleWorlds.Core.ViewModelCollection.Information;
 using TaleWorlds.Library;
 
-namespace BannerKings.UI.Court;
-
-internal class CouncilCandidateVM : SettlementGovernorSelectionItemVM
+namespace BannerKings.UI.Court
 {
-    private BasicTooltipViewModel courtHint;
-
-    public CouncilCandidateVM(Hero member, Action<SettlementGovernorSelectionItemVM> onSelection,
-        CouncilPosition position, float competence) : base(member, onSelection)
+    internal class CouncilCandidateVM : SettlementGovernorSelectionItemVM
     {
-        GovernorHint =
-            new BasicTooltipViewModel(() => UIHelper.GetHeroGovernorEffectsTooltip(member, position, competence));
-        CourtHint = new BasicTooltipViewModel(() => UIHelper.GetHeroCourtTooltip(member));
-    }
+        private BasicTooltipViewModel courtHint;
 
-    [DataSourceProperty]
-    public BasicTooltipViewModel CourtHint
-    {
-        get => courtHint;
-        set
+        public CouncilCandidateVM(Hero member, Action<SettlementGovernorSelectionItemVM> onSelection,
+            CouncilPosition position, float competence) : base(member, onSelection)
         {
-            if (value != courtHint)
+            GovernorHint =
+                new BasicTooltipViewModel(() => UIHelper.GetHeroGovernorEffectsTooltip(member, position, competence));
+            CourtHint = new BasicTooltipViewModel(() => UIHelper.GetHeroCourtTooltip(member));
+        }
+
+        [DataSourceProperty]
+        public BasicTooltipViewModel CourtHint
+        {
+            get => courtHint;
+            set
             {
-                courtHint = value;
-                OnPropertyChangedWithValue(value);
+                if (value != courtHint)
+                {
+                    courtHint = value;
+                    OnPropertyChangedWithValue(value);
+                }
             }
         }
     }

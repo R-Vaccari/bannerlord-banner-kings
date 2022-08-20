@@ -5,60 +5,61 @@ using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core.ViewModelCollection.Selector;
 using TaleWorlds.SaveSystem;
 
-namespace BannerKings.Managers.Policies;
-
-internal class BKGarrisonPolicy : BannerKingsPolicy
+namespace BannerKings.Managers.Policies
 {
-    public enum GarrisonPolicy
+    internal class BKGarrisonPolicy : BannerKingsPolicy
     {
-        Standard,
-        Enlistment,
-        Dischargement
-    }
-
-    public BKGarrisonPolicy(GarrisonPolicy policy, Settlement settlement) : base(settlement, (int) policy)
-    {
-        Policy = policy;
-    }
-
-    [SaveableProperty(3)] public GarrisonPolicy Policy { get; private set; }
-
-    public override string GetIdentifier()
-    {
-        return "garrison";
-    }
-
-    public override string GetHint(int value)
-    {
-        if (value == (int) GarrisonPolicy.Dischargement)
+        public enum GarrisonPolicy
         {
-            return "Discharge a garrison member on a daily basis from duty. Slows down garrison trainning.";
+            Standard,
+            Enlistment,
+            Dischargement
         }
 
-        if (value == (int) GarrisonPolicy.Enlistment)
+        public BKGarrisonPolicy(GarrisonPolicy policy, Settlement settlement) : base(settlement, (int) policy)
         {
-            return
-                "Increase the quantity of auto recruited garrison soldiers, as well as provide more trainning. Increases adm. costs.";
+            Policy = policy;
         }
 
-        return "Standard garrison policy, no particular effect.";
-    }
+        [SaveableProperty(3)] public GarrisonPolicy Policy { get; private set; }
 
-    public override void OnChange(SelectorVM<BKItemVM> obj)
-    {
-        if (obj.SelectedItem != null)
+        public override string GetIdentifier()
         {
-            var vm = obj.GetCurrentItem();
-            Policy = (GarrisonPolicy) vm.value;
-            Selected = vm.value;
-            BannerKingsConfig.Instance.PolicyManager.UpdateSettlementPolicy(Settlement, this);
+            return "garrison";
         }
-    }
 
-    public override IEnumerable<Enum> GetPolicies()
-    {
-        yield return GarrisonPolicy.Standard;
-        yield return GarrisonPolicy.Enlistment;
-        yield return GarrisonPolicy.Dischargement;
+        public override string GetHint(int value)
+        {
+            if (value == (int) GarrisonPolicy.Dischargement)
+            {
+                return "Discharge a garrison member on a daily basis from duty. Slows down garrison trainning.";
+            }
+
+            if (value == (int) GarrisonPolicy.Enlistment)
+            {
+                return
+                    "Increase the quantity of auto recruited garrison soldiers, as well as provide more trainning. Increases adm. costs.";
+            }
+
+            return "Standard garrison policy, no particular effect.";
+        }
+
+        public override void OnChange(SelectorVM<BKItemVM> obj)
+        {
+            if (obj.SelectedItem != null)
+            {
+                var vm = obj.GetCurrentItem();
+                Policy = (GarrisonPolicy) vm.value;
+                Selected = vm.value;
+                BannerKingsConfig.Instance.PolicyManager.UpdateSettlementPolicy(Settlement, this);
+            }
+        }
+
+        public override IEnumerable<Enum> GetPolicies()
+        {
+            yield return GarrisonPolicy.Standard;
+            yield return GarrisonPolicy.Enlistment;
+            yield return GarrisonPolicy.Dischargement;
+        }
     }
 }

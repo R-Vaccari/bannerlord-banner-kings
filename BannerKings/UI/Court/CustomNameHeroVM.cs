@@ -2,29 +2,30 @@
 using TaleWorlds.CampaignSystem.ViewModelCollection;
 using TaleWorlds.Localization;
 
-namespace BannerKings.UI.Court;
-
-public class CustomNameHeroVM : HeroVM
+namespace BannerKings.UI.Court
 {
-    private readonly bool fullName;
-    private readonly TextObject positionName;
-
-    public CustomNameHeroVM(Hero hero, TextObject positionName, bool fullName = false) : base(hero)
+    public class CustomNameHeroVM : HeroVM
     {
-        this.positionName = positionName;
-        this.fullName = fullName;
-        RefreshValues();
-    }
+        private readonly bool fullName;
+        private readonly TextObject positionName;
 
-    public override void RefreshValues()
-    {
-        base.RefreshValues();
-        if (Hero != null)
+        public CustomNameHeroVM(Hero hero, TextObject positionName, bool fullName = false) : base(hero)
         {
-            NameText = new TextObject("{=!}{POSITION_NAME} {HERO}")
-                .SetTextVariable("POSITION_NAME", positionName)
-                .SetTextVariable("HERO", fullName ? Hero.Name : Hero.FirstName)
-                .ToString();
+            this.positionName = positionName;
+            this.fullName = fullName;
+            RefreshValues();
+        }
+
+        public override void RefreshValues()
+        {
+            base.RefreshValues();
+            if (Hero != null)
+            {
+                NameText = new TextObject("{=!}{POSITION_NAME} {HERO}")
+                    .SetTextVariable("POSITION_NAME", positionName)
+                    .SetTextVariable("HERO", fullName ? Hero.Name : Hero.FirstName)
+                    .ToString();
+            }
         }
     }
 }

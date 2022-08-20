@@ -1,11 +1,12 @@
 ﻿using TaleWorlds.CampaignSystem.ViewModelCollection.Map.MapNotificationTypes;
 
-namespace BannerKings.UI.Notifications;
-
-public class DemesneLimitNotificationVM : MapNotificationItemBaseVM
+namespace BannerKings.UI.Notifications
 {
-    public DemesneLimitNotificationVM(DemesneLimitNotification data) : base(data)
+    public class DemesneLimitNotificationVM : MapNotificationItemBaseVM
     {
-        NotificationIdentifier = "settlementownerchanged";
+        public DemesneLimitNotificationVM(DemesneLimitNotification data) : base(data)
+        {
+            NotificationIdentifier = "settlementownerchanged";
+        }
     }
 }

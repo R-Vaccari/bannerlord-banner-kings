@@ -1,12 +1,13 @@
 ﻿using System;
 using BannerKings.Managers.Populations;
 
-namespace BannerKings.Managers.Kingdoms;
-
-public class KingdomData : BannerKingsData
+namespace BannerKings.Managers.Kingdoms
 {
-    internal override void Update(PopulationData data)
+    public class KingdomData : BannerKingsData
     {
-        throw new NotImplementedException();
+        internal override void Update(PopulationData data)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -5,75 +5,76 @@ using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.Siege;
 using TaleWorlds.Core;
 
-namespace BannerKings.Models.Vanilla;
-
-public class BKSiegeEventModel : DefaultSiegeEventModel
+namespace BannerKings.Models.Vanilla
 {
-    public override float GetConstructionProgressPerHour(SiegeEngineType type, SiegeEvent siegeEvent,
-        ISiegeEventSide side)
+    public class BKSiegeEventModel : DefaultSiegeEventModel
     {
-        var result = base.GetConstructionProgressPerHour(type, siegeEvent, side);
-        var effectiveSiegePartyForSide = GetEffectiveSiegePartyForSide(siegeEvent, side.BattleSide);
-        if (effectiveSiegePartyForSide != null && effectiveSiegePartyForSide.LeaderHero != null)
+        public override float GetConstructionProgressPerHour(SiegeEngineType type, SiegeEvent siegeEvent,
+            ISiegeEventSide side)
         {
-            var data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(effectiveSiegePartyForSide
-                .LeaderHero);
-            if (data.HasPerk(BKPerks.Instance.SiegeOverseer))
+            var result = base.GetConstructionProgressPerHour(type, siegeEvent, side);
+            var effectiveSiegePartyForSide = GetEffectiveSiegePartyForSide(siegeEvent, side.BattleSide);
+            if (effectiveSiegePartyForSide != null && effectiveSiegePartyForSide.LeaderHero != null)
             {
-                result *= 1.2f;
+                var data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(effectiveSiegePartyForSide
+                    .LeaderHero);
+                if (data.HasPerk(BKPerks.Instance.SiegeOverseer))
+                {
+                    result *= 1.2f;
+                }
             }
+
+            return result;
         }
 
-        return result;
-    }
-
-    public override IEnumerable<SiegeEngineType> GetPrebuiltSiegeEnginesOfSettlement(Settlement settlement)
-    {
-        var baseResult = new List<SiegeEngineType>(base.GetPrebuiltSiegeEnginesOfSettlement(settlement));
-        if (settlement.OwnerClan != null)
+        public override IEnumerable<SiegeEngineType> GetPrebuiltSiegeEnginesOfSettlement(Settlement settlement)
         {
-            var data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(settlement.Owner);
-            if (data.Perks.Contains(BKPerks.Instance.CivilEngineer))
+            var baseResult = new List<SiegeEngineType>(base.GetPrebuiltSiegeEnginesOfSettlement(settlement));
+            if (settlement.OwnerClan != null)
             {
-                baseResult.Add(DefaultSiegeEngineTypes.Catapult);
+                var data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(settlement.Owner);
+                if (data.Perks.Contains(BKPerks.Instance.CivilEngineer))
+                {
+                    baseResult.Add(DefaultSiegeEngineTypes.Catapult);
+                }
             }
+
+            return baseResult;
         }
 
-        return baseResult;
-    }
-
-    public override IEnumerable<SiegeEngineType> GetPrebuiltSiegeEnginesOfSiegeCamp(BesiegerCamp besiegerCamp)
-    {
-        var baseResult = new List<SiegeEngineType>(base.GetPrebuiltSiegeEnginesOfSiegeCamp(besiegerCamp));
-        if (besiegerCamp.BesiegerParty.LeaderHero != null)
+        public override IEnumerable<SiegeEngineType> GetPrebuiltSiegeEnginesOfSiegeCamp(BesiegerCamp besiegerCamp)
         {
-            var data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(besiegerCamp.BesiegerParty
-                .LeaderHero);
-            if (data.Perks.Contains(BKPerks.Instance.SiegeEngineer))
+            var baseResult = new List<SiegeEngineType>(base.GetPrebuiltSiegeEnginesOfSiegeCamp(besiegerCamp));
+            if (besiegerCamp.BesiegerParty.LeaderHero != null)
             {
-                baseResult.Add(DefaultSiegeEngineTypes.Ballista);
+                var data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(besiegerCamp.BesiegerParty
+                    .LeaderHero);
+                if (data.Perks.Contains(BKPerks.Instance.SiegeEngineer))
+                {
+                    baseResult.Add(DefaultSiegeEngineTypes.Ballista);
+                }
             }
+
+            return baseResult;
         }
 
-        return baseResult;
-    }
-
-    public override float GetSiegeEngineDamage(SiegeEvent siegeEvent, BattleSideEnum battleSide,
-        SiegeEngineType siegeEngine, SiegeBombardTargets target)
-    {
-        var baseResult = base.GetSiegeEngineDamage(siegeEvent, battleSide, siegeEngine, target);
-        var party = GetEffectiveSiegePartyForSide(siegeEvent, battleSide);
-
-        if (party != null && party.LeaderHero != null)
+        public override float GetSiegeEngineDamage(SiegeEvent siegeEvent, BattleSideEnum battleSide,
+            SiegeEngineType siegeEngine, SiegeBombardTargets target)
         {
-            var data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(party.LeaderHero);
-            if (battleSide == BattleSideEnum.Attacker && target == SiegeBombardTargets.Wall &&
-                data.Perks.Contains(BKPerks.Instance.SiegeEngineer))
-            {
-                baseResult *= 1.1f;
-            }
-        }
+            var baseResult = base.GetSiegeEngineDamage(siegeEvent, battleSide, siegeEngine, target);
+            var party = GetEffectiveSiegePartyForSide(siegeEvent, battleSide);
 
-        return baseResult;
+            if (party != null && party.LeaderHero != null)
+            {
+                var data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(party.LeaderHero);
+                if (battleSide == BattleSideEnum.Attacker && target == SiegeBombardTargets.Wall &&
+                    data.Perks.Contains(BKPerks.Instance.SiegeEngineer))
+                {
+                    baseResult *= 1.1f;
+                }
+            }
+
+            return baseResult;
+        }
     }
 }

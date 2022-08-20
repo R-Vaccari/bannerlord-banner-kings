@@ -5,32 +5,33 @@ using TaleWorlds.CampaignSystem.ViewModelCollection.GameMenu.TownManagement;
 using TaleWorlds.Core.ViewModelCollection.Information;
 using TaleWorlds.Library;
 
-namespace BannerKings.UI.Religion;
-
-public class ReligionMemberVM : SettlementGovernorSelectionItemVM
+namespace BannerKings.UI.Religion
 {
-    private BasicTooltipViewModel religionHint;
-
-    public ReligionMemberVM(Clergyman clergyman, Action<SettlementGovernorSelectionItemVM> onSelection) : base(
-        clergyman.Hero, onSelection)
+    public class ReligionMemberVM : SettlementGovernorSelectionItemVM
     {
-    }
+        private BasicTooltipViewModel religionHint;
 
-    public ReligionMemberVM(Hero hero, Action<SettlementGovernorSelectionItemVM> onSelection) : base(hero, onSelection)
-    {
-    }
-
-
-    [DataSourceProperty]
-    public BasicTooltipViewModel ReligionHint
-    {
-        get => religionHint;
-        set
+        public ReligionMemberVM(Clergyman clergyman, Action<SettlementGovernorSelectionItemVM> onSelection) : base(
+            clergyman.Hero, onSelection)
         {
-            if (value != religionHint)
+        }
+
+        public ReligionMemberVM(Hero hero, Action<SettlementGovernorSelectionItemVM> onSelection) : base(hero, onSelection)
+        {
+        }
+
+
+        [DataSourceProperty]
+        public BasicTooltipViewModel ReligionHint
+        {
+            get => religionHint;
+            set
             {
-                religionHint = value;
-                OnPropertyChangedWithValue(value);
+                if (value != religionHint)
+                {
+                    religionHint = value;
+                    OnPropertyChangedWithValue(value);
+                }
             }
         }
     }

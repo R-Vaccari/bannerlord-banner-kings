@@ -5,71 +5,72 @@ using BannerKings.UI.Items;
 using TaleWorlds.Core.ViewModelCollection.Selector;
 using TaleWorlds.Library;
 
-namespace BannerKings.UI;
-
-public class BannerKingsViewModel : ViewModel
+namespace BannerKings.UI
 {
-    protected PopulationData data;
-    protected bool selected;
-
-    public BannerKingsViewModel(PopulationData data, bool selected)
+    public class BannerKingsViewModel : ViewModel
     {
-        this.data = data;
-        this.selected = selected;
-    }
+        protected PopulationData data;
+        protected bool selected;
 
-    [DataSourceProperty] public bool HasTown => !IsVillage;
-
-    [DataSourceProperty] public bool IsVillage => data != null && data.Settlement.IsVillage;
-
-
-    [DataSourceProperty]
-    public bool IsSelected
-    {
-        get => selected;
-        set
+        public BannerKingsViewModel(PopulationData data, bool selected)
         {
-            if (value != selected)
-            {
-                selected = value;
-                if (value)
-                {
-                    RefreshValues();
-                }
+            this.data = data;
+            this.selected = selected;
+        }
 
-                OnPropertyChangedWithValue(value);
+        [DataSourceProperty] public bool HasTown => !IsVillage;
+
+        [DataSourceProperty] public bool IsVillage => data != null && data.Settlement.IsVillage;
+
+
+        [DataSourceProperty]
+        public bool IsSelected
+        {
+            get => selected;
+            set
+            {
+                if (value != selected)
+                {
+                    selected = value;
+                    if (value)
+                    {
+                        RefreshValues();
+                    }
+
+                    OnPropertyChangedWithValue(value);
+                }
             }
         }
-    }
 
-    protected string FormatValue(float value)
-    {
-        return (value * 100f).ToString("0.00") + '%';
-    }
-
-    protected string FormatDays(float value)
-    {
-        return value.ToString("0");
-    }
-
-    protected SelectorVM<BKItemVM> GetSelector(BannerKingsPolicy policy, Action<SelectorVM<BKItemVM>> action)
-    {
-        var selector = new SelectorVM<BKItemVM>(0, action);
-        selector.SetOnChangeAction(null);
-        var i = 0;
-        foreach (var enumValue in policy.GetPolicies())
+        protected string FormatValue(float value)
         {
-            var item = new BKItemVM(enumValue, true, policy.GetHint(i));
-            selector.AddItem(item);
-            i++;
+            return (value * 100f).ToString("0.00") + '%';
         }
 
+        protected string FormatDays(float value)
+        {
+            return value.ToString("0");
+        }
 
-        return selector;
-    }
+        protected SelectorVM<BKItemVM> GetSelector(BannerKingsPolicy policy, Action<SelectorVM<BKItemVM>> action)
+        {
+            var selector = new SelectorVM<BKItemVM>(0, action);
+            selector.SetOnChangeAction(null);
+            var i = 0;
+            foreach (var enumValue in policy.GetPolicies())
+            {
+                var item = new BKItemVM(enumValue, true, policy.GetHint(i));
+                selector.AddItem(item);
+                i++;
+            }
 
-    public void ExecuteClose()
-    {
-        UIManager.Instance.CloseUI();
+
+            return selector;
+        }
+
+        public void ExecuteClose()
+        {
+            UIManager.Instance.CloseUI();
+        }
     }
 }

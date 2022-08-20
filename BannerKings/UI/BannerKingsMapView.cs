@@ -12,88 +12,89 @@ using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Engine.GauntletUI;
 using TaleWorlds.ScreenSystem;
 
-namespace BannerKings.UI;
-
-public class BannerKingsMapView : MapView
+namespace BannerKings.UI
 {
-    private BannerKingsViewModel datasource;
-    public string id;
-    private GauntletLayer layer;
-
-    public BannerKingsMapView(string id)
+    public class BannerKingsMapView : MapView
     {
-        this.id = id;
-        CreateLayout();
-    }
+        private BannerKingsViewModel datasource;
+        public string id;
+        private GauntletLayer layer;
 
-    protected override void CreateLayout()
-    {
-        base.CreateLayout();
-        layer = new GauntletLayer(550);
-        var tuple = GetVM(id);
-        datasource = tuple.Item1;
-        layer.LoadMovie(tuple.Item2, datasource);
-
-        layer.InputRestrictions.SetInputRestrictions(false);
-        MapScreen.Instance.AddLayer(layer);
-        ScreenManager.TrySetFocus(layer);
-    }
-
-    private (BannerKingsViewModel, string) GetVM(string id)
-    {
-        PopulationData data = null;
-        if (Settlement.CurrentSettlement != null)
+        public BannerKingsMapView(string id)
         {
-            data = BannerKingsConfig.Instance.PopulationManager.GetPopData(Settlement.CurrentSettlement);
+            this.id = id;
+            CreateLayout();
         }
 
-        if (id == "population")
+        protected override void CreateLayout()
         {
+            base.CreateLayout();
+            layer = new GauntletLayer(550);
+            var tuple = GetVM(id);
+            datasource = tuple.Item1;
+            layer.LoadMovie(tuple.Item2, datasource);
+
+            layer.InputRestrictions.SetInputRestrictions(false);
+            MapScreen.Instance.AddLayer(layer);
+            ScreenManager.TrySetFocus(layer);
+        }
+
+        private (BannerKingsViewModel, string) GetVM(string id)
+        {
+            PopulationData data = null;
+            if (Settlement.CurrentSettlement != null)
+            {
+                data = BannerKingsConfig.Instance.PopulationManager.GetPopData(Settlement.CurrentSettlement);
+            }
+
+            if (id == "population")
+            {
+                return (new PopulationVM(data), "PopulationWindow");
+            }
+
+            if (id == "guild")
+            {
+                return (new GuildVM(data), "GuildWindow");
+            }
+
+            if (id == "vilage_project")
+            {
+                return (new VillageProjectVM(data), "VillageProjectWindow");
+            }
+
+            if (id == "titles")
+            {
+                var title = BannerKingsConfig.Instance.TitleManager.GetTitle(Settlement.CurrentSettlement);
+                if (title == null)
+                {
+                    title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(Clan.PlayerClan.Kingdom);
+                }
+
+                return (new DemesneHierarchyVM(title.sovereign != null ? title.sovereign : title, Clan.PlayerClan.Kingdom),
+                    "TitlesWindow");
+            }
+
+            if (id == "religions")
+            {
+                return (new ReligionVM(data), "ReligionWindow");
+            }
+
+            if (id == "campaignStart")
+            {
+                return new ValueTuple<BannerKingsViewModel, string>(new CampaignStartVM(), "CampaignStartPopup");
+            }
+
             return (new PopulationVM(data), "PopulationWindow");
         }
 
-        if (id == "guild")
+        public void Close()
         {
-            return (new GuildVM(data), "GuildWindow");
+            MapScreen.Instance.RemoveLayer(layer);
         }
 
-        if (id == "vilage_project")
+        public void Refresh()
         {
-            return (new VillageProjectVM(data), "VillageProjectWindow");
+            datasource.RefreshValues();
         }
-
-        if (id == "titles")
-        {
-            var title = BannerKingsConfig.Instance.TitleManager.GetTitle(Settlement.CurrentSettlement);
-            if (title == null)
-            {
-                title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(Clan.PlayerClan.Kingdom);
-            }
-
-            return (new DemesneHierarchyVM(title.sovereign != null ? title.sovereign : title, Clan.PlayerClan.Kingdom),
-                "TitlesWindow");
-        }
-
-        if (id == "religions")
-        {
-            return (new ReligionVM(data), "ReligionWindow");
-        }
-
-        if (id == "campaignStart")
-        {
-            return new ValueTuple<BannerKingsViewModel, string>(new CampaignStartVM(), "CampaignStartPopup");
-        }
-
-        return (new PopulationVM(data), "PopulationWindow");
-    }
-
-    public void Close()
-    {
-        MapScreen.Instance.RemoveLayer(layer);
-    }
-
-    public void Refresh()
-    {
-        datasource.RefreshValues();
     }
 }

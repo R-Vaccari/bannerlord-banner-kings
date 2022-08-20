@@ -5,92 +5,93 @@ using TaleWorlds.CampaignSystem.ViewModelCollection.ClanManagement;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace BannerKings.UI.Extensions;
-
-[ViewModelMixin("SetSelectedCategory")]
-internal class ClanManagementMixin : BaseViewModelMixin<ClanManagementVM>
+namespace BannerKings.UI.Extensions
 {
-    //private BasicTooltipViewModel pietyHint;
-    private readonly ClanManagementVM clanManagement;
-    private bool courtSelected, financesVisible;
-    private CourtVM courtVM;
-
-    public ClanManagementMixin(ClanManagementVM vm) : base(vm)
+    [ViewModelMixin("SetSelectedCategory")]
+    internal class ClanManagementMixin : BaseViewModelMixin<ClanManagementVM>
     {
-        clanManagement = vm;
-        courtVM = new CourtVM(false);
-        FinancesVisible = true;
-    }
+        //private BasicTooltipViewModel pietyHint;
+        private readonly ClanManagementVM clanManagement;
+        private bool courtSelected, financesVisible;
+        private CourtVM courtVM;
 
-    [DataSourceProperty] public string CourtText => new TextObject("{=!}Court").ToString();
-
-    [DataSourceProperty]
-    public bool FinancesVisible
-    {
-        get => financesVisible;
-        set
+        public ClanManagementMixin(ClanManagementVM vm) : base(vm)
         {
-            if (value != financesVisible)
+            clanManagement = vm;
+            courtVM = new CourtVM(false);
+            FinancesVisible = true;
+        }
+
+        [DataSourceProperty] public string CourtText => new TextObject("{=!}Court").ToString();
+
+        [DataSourceProperty]
+        public bool FinancesVisible
+        {
+            get => financesVisible;
+            set
             {
-                financesVisible = value;
-                ViewModel!.OnPropertyChangedWithValue(value);
+                if (value != financesVisible)
+                {
+                    financesVisible = value;
+                    ViewModel!.OnPropertyChangedWithValue(value);
+                }
             }
         }
-    }
 
-    [DataSourceProperty]
-    public bool CourtSelected
-    {
-        get => courtSelected;
-        set
+        [DataSourceProperty]
+        public bool CourtSelected
         {
-            if (value != courtSelected)
+            get => courtSelected;
+            set
             {
-                courtSelected = value;
-                FinancesVisible = !value;
-                ViewModel!.OnPropertyChangedWithValue(value);
+                if (value != courtSelected)
+                {
+                    courtSelected = value;
+                    FinancesVisible = !value;
+                    ViewModel!.OnPropertyChangedWithValue(value);
+                }
             }
         }
-    }
 
-    [DataSourceProperty]
-    public CourtVM Court
-    {
-        get => courtVM;
-        set
+        [DataSourceProperty]
+        public CourtVM Court
         {
-            if (value != courtVM)
+            get => courtVM;
+            set
             {
-                courtVM = value;
-                ViewModel!.OnPropertyChangedWithValue(value);
+                if (value != courtVM)
+                {
+                    courtVM = value;
+                    ViewModel!.OnPropertyChangedWithValue(value);
+                }
             }
         }
-    }
 
-    public override void OnRefresh()
-    {
-        courtVM.RefreshValues();
-        if (clanManagement.IsMembersSelected || clanManagement.IsPartiesSelected || clanManagement.IsFiefsSelected ||
-            clanManagement.IsIncomeSelected)
+        public override void OnRefresh()
         {
-            Court.IsSelected = false;
-            CourtSelected = false;
+            courtVM.RefreshValues();
+            if (clanManagement.IsMembersSelected || clanManagement.IsPartiesSelected || clanManagement.IsFiefsSelected ||
+                clanManagement.IsIncomeSelected)
+            {
+                Court.IsSelected = false;
+                CourtSelected = false;
+            }
         }
-    }
 
-    [DataSourceMethod]
-    public void SelectCourt()
-    {
-        clanManagement.ClanMembers.IsSelected = false;
-        clanManagement.ClanParties.IsSelected = false;
-        clanManagement.ClanFiefs.IsSelected = false;
-        clanManagement.ClanIncome.IsSelected = false;
+        [DataSourceMethod]
+        public void SelectCourt()
+        {
+            clanManagement.ClanMembers.IsSelected = false;
+            clanManagement.ClanParties.IsSelected = false;
+            clanManagement.ClanFiefs.IsSelected = false;
+            clanManagement.ClanIncome.IsSelected = false;
 
-        clanManagement.IsMembersSelected = false;
-        clanManagement.IsPartiesSelected = false;
-        clanManagement.IsFiefsSelected = false;
-        clanManagement.IsIncomeSelected = false;
-        Court.IsSelected = true;
-        CourtSelected = true;
+            clanManagement.IsMembersSelected = false;
+            clanManagement.IsPartiesSelected = false;
+            clanManagement.IsFiefsSelected = false;
+            clanManagement.IsIncomeSelected = false;
+            Court.IsSelected = true;
+            CourtSelected = true;
+        }
     }
 }

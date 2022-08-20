@@ -13,196 +13,197 @@ using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using static BannerKings.Managers.PopulationManager;
 
-namespace BannerKings.Models.Vanilla;
-
-public class BKProsperityModel : DefaultSettlementProsperityModel
+namespace BannerKings.Models.Vanilla
 {
-    private static readonly float STABILITY_FACTOR = 5f;
-
-
-    private static readonly TextObject FoodShortageText = new("{=qTFKvGSg}Food Shortage");
-    private static readonly TextObject ProsperityFromMarketText = new("{=RNT5hMVb}Goods From Market");
-    private static readonly TextObject Governor = new("{=Fa2nKXxI}Governor");
-    private static readonly TextObject HousingCostsText = new("{=ByRAgJy4}Housing Costs");
-
-    public override ExplainedNumber CalculateHearthChange(Village village, bool includeDescriptions = false)
+    public class BKProsperityModel : DefaultSettlementProsperityModel
     {
-        var baseResult = base.CalculateHearthChange(village);
-        //if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(village.Settlement))
-        // new BKGrowthModel().CalculateHearthGrowth(village, ref baseResult);
+        private static readonly float STABILITY_FACTOR = 5f;
 
-        var data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(village.Settlement.Owner);
-        if (data.HasPerk(BKPerks.Instance.CivilCultivator))
+
+        private static readonly TextObject FoodShortageText = new("{=qTFKvGSg}Food Shortage");
+        private static readonly TextObject ProsperityFromMarketText = new("{=RNT5hMVb}Goods From Market");
+        private static readonly TextObject Governor = new("{=Fa2nKXxI}Governor");
+        private static readonly TextObject HousingCostsText = new("{=ByRAgJy4}Housing Costs");
+
+        public override ExplainedNumber CalculateHearthChange(Village village, bool includeDescriptions = false)
         {
-            baseResult.Add(1f, BKPerks.Instance.CivilCultivator.Name);
+            var baseResult = base.CalculateHearthChange(village);
+            //if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(village.Settlement))
+            // new BKGrowthModel().CalculateHearthGrowth(village, ref baseResult);
+
+            var data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(village.Settlement.Owner);
+            if (data.HasPerk(BKPerks.Instance.CivilCultivator))
+            {
+                baseResult.Add(1f, BKPerks.Instance.CivilCultivator.Name);
+            }
+
+            return baseResult;
         }
 
-        return baseResult;
-    }
-
-    public override ExplainedNumber CalculateProsperityChange(Town fortification, bool includeDescriptions = false)
-    {
-        var baseResult = base.CalculateProsperityChange(fortification, includeDescriptions);
-        if (BannerKingsConfig.Instance.PopulationManager != null &&
-            BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(fortification.Settlement))
+        public override ExplainedNumber CalculateProsperityChange(Town fortification, bool includeDescriptions = false)
         {
-            var explainedNumber = new ExplainedNumber(0f, true);
-            var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(fortification.Settlement);
-            var craftsmen = data.GetTypeCount(PopType.Craftsmen);
-            explainedNumber.Add(craftsmen * 0.0005f, new TextObject("Craftsmen output"));
-            var slaves = data.GetTypeCount(PopType.Slaves);
-            explainedNumber.Add(slaves * -0.0001f, new TextObject("Slave population"));
-
-            if (BannerKingsConfig.Instance.PopulationManager.PopSurplusExists(fortification.Settlement, PopType.Slaves,
-                    true))
+            var baseResult = base.CalculateProsperityChange(fortification, includeDescriptions);
+            if (BannerKingsConfig.Instance.PopulationManager != null &&
+                BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(fortification.Settlement))
             {
-                explainedNumber.Add(slaves * -0.0003f, new TextObject("Slave surplus"));
-            }
+                var explainedNumber = new ExplainedNumber(0f, true);
+                var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(fortification.Settlement);
+                var craftsmen = data.GetTypeCount(PopType.Craftsmen);
+                explainedNumber.Add(craftsmen * 0.0005f, new TextObject("Craftsmen output"));
+                var slaves = data.GetTypeCount(PopType.Slaves);
+                explainedNumber.Add(slaves * -0.0001f, new TextObject("Slave population"));
 
-            var factor = data.Stability - 1f + data.Stability;
-            var stabilityImpact = STABILITY_FACTOR * factor;
-            explainedNumber.Add(stabilityImpact, new TextObject("Stability impact"));
-
-            var foodLimitForBonus = (int) (fortification.FoodStocksUpperLimit() * 0.8f);
-            if (fortification.FoodStocks >= foodLimitForBonus)
-            {
-                explainedNumber.Add(0.5f, new TextObject("Well fed populace"));
-            }
-            else if (fortification.Settlement.IsStarving)
-            {
-                var starvation = stabilityImpact;
-                if (starvation > 0f)
+                if (BannerKingsConfig.Instance.PopulationManager.PopSurplusExists(fortification.Settlement, PopType.Slaves,
+                        true))
                 {
-                    starvation *= -0.5f;
+                    explainedNumber.Add(slaves * -0.0003f, new TextObject("Slave surplus"));
                 }
 
-                if (stabilityImpact <= 0f && stabilityImpact > -1f)
+                var factor = data.Stability - 1f + data.Stability;
+                var stabilityImpact = STABILITY_FACTOR * factor;
+                explainedNumber.Add(stabilityImpact, new TextObject("Stability impact"));
+
+                var foodLimitForBonus = (int) (fortification.FoodStocksUpperLimit() * 0.8f);
+                if (fortification.FoodStocks >= foodLimitForBonus)
                 {
-                    starvation = -1f;
+                    explainedNumber.Add(0.5f, new TextObject("Well fed populace"));
                 }
-
-                explainedNumber.Add(starvation, FoodShortageText);
-            }
-
-            var houseCost = fortification.Prosperity < 1500f
-                ? 6f - (fortification.Prosperity / 250f - 1f)
-                : fortification.Prosperity >= 6000f
-                    ? -1f + fortification.Prosperity / 3000f * -1f
-                    : 0f;
-            explainedNumber.Add(houseCost, HousingCostsText);
-
-            if (fortification.IsTown)
-            {
-                var num3 = fortification.SoldItems.Sum(delegate(Town.SellLog x)
+                else if (fortification.Settlement.IsStarving)
                 {
-                    if (x.Category.Properties != ItemCategory.Property.BonusToProsperity)
+                    var starvation = stabilityImpact;
+                    if (starvation > 0f)
                     {
-                        return 0;
+                        starvation *= -0.5f;
                     }
 
-                    return x.Number;
-                });
-                if (num3 > 0)
-                {
-                    explainedNumber.Add(num3 * 0.1f, ProsperityFromMarketText);
+                    if (stabilityImpact <= 0f && stabilityImpact > -1f)
+                    {
+                        starvation = -1f;
+                    }
+
+                    explainedNumber.Add(starvation, FoodShortageText);
                 }
 
-                float merchantGold = fortification.Gold;
-                var merchantEffect = merchantGold < 20000f ? merchantGold / 10000f - 2f :
-                    merchantGold >= 200000f ? MathF.Min(200000f * 0.000005f - 1f, 2f) : 0f;
-                explainedNumber.Add(merchantEffect, new TextObject("Merchants wealth"));
-            }
+                var houseCost = fortification.Prosperity < 1500f
+                    ? 6f - (fortification.Prosperity / 250f - 1f)
+                    : fortification.Prosperity >= 6000f
+                        ? -1f + fortification.Prosperity / 3000f * -1f
+                        : 0f;
+                explainedNumber.Add(houseCost, HousingCostsText);
 
-            if (fortification.Governor != null)
-            {
-                float skill = fortification.Governor.GetSkillValue(DefaultSkills.Steward);
-                explainedNumber.Add(MathF.Min(skill * 0.001f, 1.5f), Governor);
-            }
-
-            PerkHelper.AddPerkBonusForTown(DefaultPerks.Medicine.PristineStreets, fortification, ref explainedNumber);
-            PerkHelper.AddPerkBonusForTown(DefaultPerks.Riding.Veterinary, fortification, ref explainedNumber);
-            if (PerkHelper.GetPerkValueForTown(DefaultPerks.Engineering.Apprenticeship, fortification))
-            {
-                var num4 = 0f;
-                foreach (var building in from x in fortification.Buildings
-                         where !x.BuildingType.IsDefaultProject && x.CurrentLevel > 0
-                         select x)
+                if (fortification.IsTown)
                 {
-                    num4 += DefaultPerks.Engineering.Apprenticeship.SecondaryBonus;
+                    var num3 = fortification.SoldItems.Sum(delegate(Town.SellLog x)
+                    {
+                        if (x.Category.Properties != ItemCategory.Property.BonusToProsperity)
+                        {
+                            return 0;
+                        }
+
+                        return x.Number;
+                    });
+                    if (num3 > 0)
+                    {
+                        explainedNumber.Add(num3 * 0.1f, ProsperityFromMarketText);
+                    }
+
+                    float merchantGold = fortification.Gold;
+                    var merchantEffect = merchantGold < 20000f ? merchantGold / 10000f - 2f :
+                        merchantGold >= 200000f ? MathF.Min(200000f * 0.000005f - 1f, 2f) : 0f;
+                    explainedNumber.Add(merchantEffect, new TextObject("Merchants wealth"));
                 }
 
-                if (num4 > 0f && explainedNumber.ResultNumber > 0f)
+                if (fortification.Governor != null)
                 {
-                    explainedNumber.AddFactor(num4, DefaultPerks.Engineering.Apprenticeship.Name);
-                }
-            }
-
-            if (fortification.BuildingsInProgress.IsEmpty())
-            {
-                BuildingHelper.AddDefaultDailyBonus(fortification, BuildingEffectEnum.ProsperityDaily,
-                    ref explainedNumber);
-            }
-
-            foreach (var building2 in fortification.Buildings)
-            {
-                var buildingEffectAmount = building2.GetBuildingEffectAmount(BuildingEffectEnum.Prosperity);
-                if (!building2.BuildingType.IsDefaultProject && buildingEffectAmount > 0f)
-                {
-                    explainedNumber.Add(buildingEffectAmount, building2.Name);
+                    float skill = fortification.Governor.GetSkillValue(DefaultSkills.Steward);
+                    explainedNumber.Add(MathF.Min(skill * 0.001f, 1.5f), Governor);
                 }
 
-                if (building2.BuildingType == DefaultBuildingTypes.SettlementAquaducts ||
-                    building2.BuildingType == DefaultBuildingTypes.CastleGranary ||
-                    building2.BuildingType == DefaultBuildingTypes.SettlementGranary)
+                PerkHelper.AddPerkBonusForTown(DefaultPerks.Medicine.PristineStreets, fortification, ref explainedNumber);
+                PerkHelper.AddPerkBonusForTown(DefaultPerks.Riding.Veterinary, fortification, ref explainedNumber);
+                if (PerkHelper.GetPerkValueForTown(DefaultPerks.Engineering.Apprenticeship, fortification))
                 {
-                    PerkHelper.AddPerkBonusForTown(DefaultPerks.Medicine.CleanInfrastructure, fortification,
+                    var num4 = 0f;
+                    foreach (var building in from x in fortification.Buildings
+                             where !x.BuildingType.IsDefaultProject && x.CurrentLevel > 0
+                             select x)
+                    {
+                        num4 += DefaultPerks.Engineering.Apprenticeship.SecondaryBonus;
+                    }
+
+                    if (num4 > 0f && explainedNumber.ResultNumber > 0f)
+                    {
+                        explainedNumber.AddFactor(num4, DefaultPerks.Engineering.Apprenticeship.Name);
+                    }
+                }
+
+                if (fortification.BuildingsInProgress.IsEmpty())
+                {
+                    BuildingHelper.AddDefaultDailyBonus(fortification, BuildingEffectEnum.ProsperityDaily,
                         ref explainedNumber);
                 }
+
+                foreach (var building2 in fortification.Buildings)
+                {
+                    var buildingEffectAmount = building2.GetBuildingEffectAmount(BuildingEffectEnum.Prosperity);
+                    if (!building2.BuildingType.IsDefaultProject && buildingEffectAmount > 0f)
+                    {
+                        explainedNumber.Add(buildingEffectAmount, building2.Name);
+                    }
+
+                    if (building2.BuildingType == DefaultBuildingTypes.SettlementAquaducts ||
+                        building2.BuildingType == DefaultBuildingTypes.CastleGranary ||
+                        building2.BuildingType == DefaultBuildingTypes.SettlementGranary)
+                    {
+                        PerkHelper.AddPerkBonusForTown(DefaultPerks.Medicine.CleanInfrastructure, fortification,
+                            ref explainedNumber);
+                    }
+                }
+
+                if (fortification.IsTown && !fortification.CurrentBuilding.IsCurrentlyDefault &&
+                    fortification.Governor != null && fortification.Governor.GetPerkValue(DefaultPerks.Trade.TrickleDown))
+                {
+                    explainedNumber.Add(DefaultPerks.Trade.TrickleDown.SecondaryBonus, DefaultPerks.Trade.TrickleDown.Name);
+                }
+
+                if (fortification.Settlement.OwnerClan.Kingdom != null)
+                {
+                    if (fortification.Settlement.OwnerClan.Kingdom.ActivePolicies.Contains(DefaultPolicies.RoadTolls))
+                    {
+                        explainedNumber.Add(-0.2f, DefaultPolicies.RoadTolls.Name);
+                    }
+
+                    if (fortification.Settlement.OwnerClan.Kingdom.RulingClan == fortification.Settlement.OwnerClan &&
+                        fortification.Settlement.OwnerClan.Kingdom.ActivePolicies.Contains(DefaultPolicies.ImperialTowns))
+                    {
+                        explainedNumber.Add(1f, DefaultPolicies.ImperialTowns.Name);
+                    }
+
+                    if (fortification.Settlement.OwnerClan.Kingdom.ActivePolicies.Contains(DefaultPolicies.CrownDuty))
+                    {
+                        explainedNumber.Add(-1f, DefaultPolicies.CrownDuty.Name);
+                    }
+
+                    if (fortification.Settlement.OwnerClan.Kingdom.ActivePolicies.Contains(DefaultPolicies.WarTax))
+                    {
+                        explainedNumber.Add(-1f, DefaultPolicies.WarTax.Name);
+                    }
+                }
+
+                GetSettlementProsperityChangeDueToIssues(fortification.Settlement, ref explainedNumber);
+
+                BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref explainedNumber,
+                    fortification.OwnerClan.Leader, CouncilPosition.Steward, 1f, false);
+                return explainedNumber;
             }
 
-            if (fortification.IsTown && !fortification.CurrentBuilding.IsCurrentlyDefault &&
-                fortification.Governor != null && fortification.Governor.GetPerkValue(DefaultPerks.Trade.TrickleDown))
-            {
-                explainedNumber.Add(DefaultPerks.Trade.TrickleDown.SecondaryBonus, DefaultPerks.Trade.TrickleDown.Name);
-            }
-
-            if (fortification.Settlement.OwnerClan.Kingdom != null)
-            {
-                if (fortification.Settlement.OwnerClan.Kingdom.ActivePolicies.Contains(DefaultPolicies.RoadTolls))
-                {
-                    explainedNumber.Add(-0.2f, DefaultPolicies.RoadTolls.Name);
-                }
-
-                if (fortification.Settlement.OwnerClan.Kingdom.RulingClan == fortification.Settlement.OwnerClan &&
-                    fortification.Settlement.OwnerClan.Kingdom.ActivePolicies.Contains(DefaultPolicies.ImperialTowns))
-                {
-                    explainedNumber.Add(1f, DefaultPolicies.ImperialTowns.Name);
-                }
-
-                if (fortification.Settlement.OwnerClan.Kingdom.ActivePolicies.Contains(DefaultPolicies.CrownDuty))
-                {
-                    explainedNumber.Add(-1f, DefaultPolicies.CrownDuty.Name);
-                }
-
-                if (fortification.Settlement.OwnerClan.Kingdom.ActivePolicies.Contains(DefaultPolicies.WarTax))
-                {
-                    explainedNumber.Add(-1f, DefaultPolicies.WarTax.Name);
-                }
-            }
-
-            GetSettlementProsperityChangeDueToIssues(fortification.Settlement, ref explainedNumber);
-
-            BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref explainedNumber,
-                fortification.OwnerClan.Leader, CouncilPosition.Steward, 1f, false);
-            return explainedNumber;
+            return baseResult;
         }
 
-        return baseResult;
-    }
-
-    private void GetSettlementProsperityChangeDueToIssues(Settlement settlement, ref ExplainedNumber result)
-    {
-        Campaign.Current.Models.IssueModel.GetIssueEffectsOfSettlement(DefaultIssueEffects.SettlementProsperity,
-            settlement, ref result);
+        private void GetSettlementProsperityChangeDueToIssues(Settlement settlement, ref ExplainedNumber result)
+        {
+            Campaign.Current.Models.IssueModel.GetIssueEffectsOfSettlement(DefaultIssueEffects.SettlementProsperity,
+                settlement, ref result);
+        }
     }
 }

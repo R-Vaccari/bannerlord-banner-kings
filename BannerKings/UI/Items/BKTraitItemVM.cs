@@ -2,64 +2,65 @@
 using TaleWorlds.Core.ViewModelCollection.Information;
 using TaleWorlds.Library;
 
-namespace BannerKings.UI.Items;
-
-public class BKTraitItemVM : ViewModel
+namespace BannerKings.UI.Items
 {
-    private readonly TraitObject _traitObj;
-    private HintViewModel _hint;
-    private string _traitId;
-    private int _value;
-
-    public BKTraitItemVM(TraitObject traitObj, bool positive)
+    public class BKTraitItemVM : ViewModel
     {
-        _traitObj = traitObj;
-        TraitId = traitObj.StringId;
-        Value = positive ? 2 : -2;
-        Hint = new HintViewModel(traitObj.Description);
-    }
+        private readonly TraitObject _traitObj;
+        private HintViewModel _hint;
+        private string _traitId;
+        private int _value;
 
-    [DataSourceProperty] public string Name => _traitObj.Name.ToString();
-
-    [DataSourceProperty]
-    public string TraitId
-    {
-        get => _traitId;
-        set
+        public BKTraitItemVM(TraitObject traitObj, bool positive)
         {
-            if (value != _traitId)
+            _traitObj = traitObj;
+            TraitId = traitObj.StringId;
+            Value = positive ? 2 : -2;
+            Hint = new HintViewModel(traitObj.Description);
+        }
+
+        [DataSourceProperty] public string Name => _traitObj.Name.ToString();
+
+        [DataSourceProperty]
+        public string TraitId
+        {
+            get => _traitId;
+            set
             {
-                _traitId = value;
-                OnPropertyChangedWithValue(value);
+                if (value != _traitId)
+                {
+                    _traitId = value;
+                    OnPropertyChangedWithValue(value);
+                }
             }
         }
-    }
 
 
-    [DataSourceProperty]
-    public HintViewModel Hint
-    {
-        get => _hint;
-        set
+        [DataSourceProperty]
+        public HintViewModel Hint
         {
-            if (value != _hint)
+            get => _hint;
+            set
             {
-                _hint = value;
-                OnPropertyChangedWithValue(value);
+                if (value != _hint)
+                {
+                    _hint = value;
+                    OnPropertyChangedWithValue(value);
+                }
             }
         }
-    }
 
-    [DataSourceProperty]
-    public int Value
-    {
-        get => _value;
-        set
+        [DataSourceProperty]
+        public int Value
         {
-            if (value != _value)
+            get => _value;
+            set
             {
-                _value = value;
-                OnPropertyChangedWithValue(value);
+                if (value != _value)
+                {
+                    _value = value;
+                    OnPropertyChangedWithValue(value);
+                }
             }
         }
     }

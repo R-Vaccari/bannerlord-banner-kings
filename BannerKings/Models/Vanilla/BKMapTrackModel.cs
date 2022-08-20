@@ -2,22 +2,23 @@
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Party;
 
-namespace BannerKings.Models.Vanilla;
-
-public class BKMapTrackModel : DefaultMapTrackModel
+namespace BannerKings.Models.Vanilla
 {
-    public override int GetTrackLife(MobileParty mobileParty)
+    public class BKMapTrackModel : DefaultMapTrackModel
     {
-        float baseResult = base.GetTrackLife(mobileParty);
-        if (mobileParty.LeaderHero != null)
+        public override int GetTrackLife(MobileParty mobileParty)
         {
-            var data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(mobileParty.LeaderHero);
-            if (data.Perks.Contains(BKPerks.Instance.FianRanger))
+            float baseResult = base.GetTrackLife(mobileParty);
+            if (mobileParty.LeaderHero != null)
             {
-                baseResult *= 0.2f;
+                var data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(mobileParty.LeaderHero);
+                if (data.Perks.Contains(BKPerks.Instance.FianRanger))
+                {
+                    baseResult *= 0.2f;
+                }
             }
-        }
 
-        return (int) baseResult;
+            return (int) baseResult;
+        }
     }
 }

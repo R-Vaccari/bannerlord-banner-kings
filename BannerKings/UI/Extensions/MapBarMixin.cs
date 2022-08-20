@@ -6,74 +6,75 @@ using TaleWorlds.CampaignSystem.ViewModelCollection.Map.MapBar;
 using TaleWorlds.Core.ViewModelCollection.Information;
 using TaleWorlds.Library;
 
-namespace BannerKings.UI.Extensions;
-
-[ViewModelMixin("UpdatePlayerInfo")]
-internal class MapBarMixin : BaseViewModelMixin<MapInfoVM>
+namespace BannerKings.UI.Extensions
 {
-    private int piety;
-    private string pietyAbbr;
-    private BasicTooltipViewModel pietyHint;
-
-    public MapBarMixin(MapInfoVM vm) : base(vm)
+    [ViewModelMixin("UpdatePlayerInfo")]
+    internal class MapBarMixin : BaseViewModelMixin<MapInfoVM>
     {
-        Piety = 0;
-    }
+        private int piety;
+        private string pietyAbbr;
+        private BasicTooltipViewModel pietyHint;
 
-    [DataSourceProperty]
-    public int Piety
-    {
-        get => piety;
-        set
+        public MapBarMixin(MapInfoVM vm) : base(vm)
         {
-            if (value != piety)
+            Piety = 0;
+        }
+
+        [DataSourceProperty]
+        public int Piety
+        {
+            get => piety;
+            set
             {
-                piety = value;
-                ViewModel!.OnPropertyChangedWithValue(value);
+                if (value != piety)
+                {
+                    piety = value;
+                    ViewModel!.OnPropertyChangedWithValue(value);
+                }
             }
         }
-    }
 
 
-    [DataSourceProperty]
-    public string PietyWithAbbrText
-    {
-        get => pietyAbbr;
-        set
+        [DataSourceProperty]
+        public string PietyWithAbbrText
         {
-            if (value != pietyAbbr)
+            get => pietyAbbr;
+            set
             {
-                pietyAbbr = value;
-                ViewModel!.OnPropertyChangedWithValue(value);
+                if (value != pietyAbbr)
+                {
+                    pietyAbbr = value;
+                    ViewModel!.OnPropertyChangedWithValue(value);
+                }
             }
         }
-    }
 
-    [DataSourceProperty]
-    public BasicTooltipViewModel PietyHint
-    {
-        get => pietyHint;
-        set
+        [DataSourceProperty]
+        public BasicTooltipViewModel PietyHint
         {
-            if (value != pietyHint)
+            get => pietyHint;
+            set
             {
-                pietyHint = value;
-                ViewModel!.OnPropertyChangedWithValue(value);
+                if (value != pietyHint)
+                {
+                    pietyHint = value;
+                    ViewModel!.OnPropertyChangedWithValue(value);
+                }
             }
         }
-    }
 
-    public override void OnRefresh()
-    {
-        if (BannerKingsConfig.Instance.ReligionsManager == null)
+        public override void OnRefresh()
         {
-            return;
-        }
+            if (BannerKingsConfig.Instance.ReligionsManager == null)
+            {
+                return;
+            }
 
-        var rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(Hero.MainHero);
-        Piety = (int) BannerKingsConfig.Instance.ReligionsManager.GetPiety(rel, Hero.MainHero);
-        PietyHint = new BasicTooltipViewModel(() => UIHelper.GetPietyTooltip(rel, Hero.MainHero, Piety));
-        PietyWithAbbrText = CampaignUIHelper.GetAbbreviatedValueTextFromValue(Piety);
-        //if (rel == null) return;
+            var rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(Hero.MainHero);
+            Piety = (int) BannerKingsConfig.Instance.ReligionsManager.GetPiety(rel, Hero.MainHero);
+            PietyHint = new BasicTooltipViewModel(() => UIHelper.GetPietyTooltip(rel, Hero.MainHero, Piety));
+            PietyWithAbbrText = CampaignUIHelper.GetAbbreviatedValueTextFromValue(Piety);
+            //if (rel == null) return;
+        }
     }
 }

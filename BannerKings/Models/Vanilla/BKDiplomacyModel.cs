@@ -1,5 +1,6 @@
-﻿namespace BannerKings.Models.Vanilla;
-
+﻿namespace BannerKings.Models.Vanilla
+{
+}
 
 
 /*class BKDiplomacyModel : DefaultDiplomacyModel

@@ -1,8 +1,9 @@
 ﻿using TaleWorlds.CampaignSystem;
 
-namespace BannerKings.Models;
-
-internal interface IReligionModel : IBannerKingsModel
+namespace BannerKings.Models
 {
-    public ExplainedNumber CalculateEffect(Hero hero);
+    internal interface IReligionModel : IBannerKingsModel
+    {
+        public ExplainedNumber CalculateEffect(Hero hero);
+    }
 }

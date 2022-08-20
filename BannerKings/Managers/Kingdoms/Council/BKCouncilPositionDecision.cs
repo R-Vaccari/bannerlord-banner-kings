@@ -11,221 +11,222 @@ using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.SaveSystem;
 
-namespace BannerKings.Managers.Kingdoms.Council;
-
-public class BKCouncilPositionDecision : KingdomDecision
+namespace BannerKings.Managers.Kingdoms.Council
 {
-    public BKCouncilPositionDecision(Clan proposerClan, CouncilData data, CouncilMember position) : base(proposerClan)
+    public class BKCouncilPositionDecision : KingdomDecision
     {
-        Data = data;
-        Position = position;
-        Religion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(proposerClan.Leader);
-        IsEnforced = true;
-    }
-
-    [SaveableProperty(99)] protected CouncilData Data { get; set; }
-
-    [SaveableProperty(98)] protected CouncilMember Position { get; set; }
-
-    [SaveableProperty(97)] protected Religion Religion { get; set; }
-
-    public override bool IsKingsVoteAllowed => false;
-
-    public override void ApplyChosenOutcome(DecisionOutcome chosenOutcome)
-    {
-        Position.Member = ((CouncilPositionDecisionOutcome) chosenOutcome).Candidate;
-    }
-
-
-    public override void ApplySecondaryEffects(List<DecisionOutcome> possibleOutcomes, DecisionOutcome chosenOutcome)
-    {
-    }
-
-    public override Clan DetermineChooser()
-    {
-        return Kingdom.RulingClan;
-    }
-
-    protected override int GetInfluenceCostOfSupportInternal(Supporter.SupportWeights supportWeight)
-    {
-        switch (supportWeight)
+        public BKCouncilPositionDecision(Clan proposerClan, CouncilData data, CouncilMember position) : base(proposerClan)
         {
-            case Supporter.SupportWeights.Choose:
-            case Supporter.SupportWeights.StayNeutral:
-                return 0;
-            case Supporter.SupportWeights.SlightlyFavor:
-                return 10;
-            case Supporter.SupportWeights.StronglyFavor:
-                return 30;
-            case Supporter.SupportWeights.FullyPush:
-                return 50;
-            default:
-                throw new ArgumentOutOfRangeException("supportWeight", supportWeight, null);
+            Data = data;
+            Position = position;
+            Religion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(proposerClan.Leader);
+            IsEnforced = true;
         }
-    }
 
+        [SaveableProperty(99)] protected CouncilData Data { get; set; }
 
-    public override IEnumerable<DecisionOutcome> DetermineInitialCandidates()
-    {
-        foreach (var hero in Data.GetAvailableHeroes())
+        [SaveableProperty(98)] protected CouncilMember Position { get; set; }
+
+        [SaveableProperty(97)] protected Religion Religion { get; set; }
+
+        public override bool IsKingsVoteAllowed => false;
+
+        public override void ApplyChosenOutcome(DecisionOutcome chosenOutcome)
         {
-            if (Position.IsValidCandidate(hero))
+            Position.Member = ((CouncilPositionDecisionOutcome) chosenOutcome).Candidate;
+        }
+
+
+        public override void ApplySecondaryEffects(List<DecisionOutcome> possibleOutcomes, DecisionOutcome chosenOutcome)
+        {
+        }
+
+        public override Clan DetermineChooser()
+        {
+            return Kingdom.RulingClan;
+        }
+
+        protected override int GetInfluenceCostOfSupportInternal(Supporter.SupportWeights supportWeight)
+        {
+            switch (supportWeight)
             {
-                yield return new CouncilPositionDecisionOutcome(hero);
+                case Supporter.SupportWeights.Choose:
+                case Supporter.SupportWeights.StayNeutral:
+                    return 0;
+                case Supporter.SupportWeights.SlightlyFavor:
+                    return 10;
+                case Supporter.SupportWeights.StronglyFavor:
+                    return 30;
+                case Supporter.SupportWeights.FullyPush:
+                    return 50;
+                default:
+                    throw new ArgumentOutOfRangeException("supportWeight", supportWeight, null);
             }
         }
-    }
 
-    public override void DetermineSponsors(List<DecisionOutcome> possibleOutcomes)
-    {
-        foreach (var decisionOutcome in possibleOutcomes)
+
+        public override IEnumerable<DecisionOutcome> DetermineInitialCandidates()
         {
-            var candidate = ((CouncilPositionDecisionOutcome) decisionOutcome).Candidate;
-            if (candidate.IsLord && candidate.Clan != null)
+            foreach (var hero in Data.GetAvailableHeroes())
             {
-                decisionOutcome.SetSponsor(candidate.Clan);
-            }
-        }
-    }
-
-    public override float DetermineSupport(Clan clan, DecisionOutcome possibleOutcome)
-    {
-        var result = 2f;
-        var candidate = ((CouncilPositionDecisionOutcome) possibleOutcome).Candidate;
-
-        result += Data.GetCompetence(candidate, Position.Position) * 4f;
-        if (Religion != null)
-        {
-            var candidateReligion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(candidate);
-            if (candidateReligion != Religion)
-            {
-                var stance = FaithStance.Untolerated;
-                if (candidateReligion != null)
+                if (Position.IsValidCandidate(hero))
                 {
-                    stance = Religion.Faith.GetStance(candidateReligion.Faith);
-                }
-
-                if (stance == FaithStance.Untolerated)
-                {
-                    result -= 1.5f;
-                }
-                else if (stance == FaithStance.Hostile)
-                {
-                    result -= 4f;
+                    yield return new CouncilPositionDecisionOutcome(hero);
                 }
             }
         }
 
-        result += ProposerClan.Leader.GetRelation(candidate) * 0.02f;
-        if (!candidate.IsLord)
+        public override void DetermineSponsors(List<DecisionOutcome> possibleOutcomes)
         {
-            result -= 1f;
+            foreach (var decisionOutcome in possibleOutcomes)
+            {
+                var candidate = ((CouncilPositionDecisionOutcome) decisionOutcome).Candidate;
+                if (candidate.IsLord && candidate.Clan != null)
+                {
+                    decisionOutcome.SetSponsor(candidate.Clan);
+                }
+            }
         }
 
-        return MathF.Clamp(result, -3f, 8f);
-    }
-
-    public override TextObject GetChooseDescription()
-    {
-        var textObject =
-            new TextObject(
-                "{=!}As the sovereign of {KINGDOM}, you must decide whether to approve this contract change or not.");
-        textObject.SetTextVariable("KINGDOM", Kingdom.Name);
-        return textObject;
-    }
-
-    public override TextObject GetChooseTitle()
-    {
-        return new TextObject("{=!}Choose the next council member to occupy the position of {POSITION}")
-            .SetTextVariable("POSITION", Position.GetName());
-    }
-
-    public override TextObject GetChosenOutcomeText(DecisionOutcome chosenOutcome, SupportStatus supportStatus,
-        bool isShortVersion = false)
-    {
-        var candidate = ((CouncilPositionDecisionOutcome) chosenOutcome).Candidate;
-        var textObject = new TextObject("{=!}The{KINGDOM} has chosen {NAME} as their new council member.")
-            .SetTextVariable("KINGDOM", Kingdom.Name)
-            .SetTextVariable("NAME", candidate.Name);
-        return textObject;
-    }
-
-    public override TextObject GetGeneralTitle()
-    {
-        return new TextObject("{=!}Council member for position {POSITION}")
-            .SetTextVariable("POSITION", Position.GetName());
-    }
-
-
-    public override int GetProposalInfluenceCost()
-    {
-        return 0;
-    }
-
-    public override DecisionOutcome GetQueriedDecisionOutcome(List<DecisionOutcome> possibleOutcomes)
-    {
-        return (from k in possibleOutcomes
-            orderby k.Merit descending
-            select k).ToList().FirstOrDefault();
-    }
-
-    public override TextObject GetSecondaryEffects()
-    {
-        return null;
-    }
-
-    protected override bool CanProposerClanChangeOpinion()
-    {
-        return true;
-    }
-
-    public override TextObject GetSupportDescription()
-    {
-        return new TextObject(
-                "{=!}{KINGDOM_NAME} will decide who will occupy the position of {POSITION}. You can pick your stance regarding this decision.")
-            .SetTextVariable("KINGDOM_NAME", Kingdom.Name)
-            .SetTextVariable("POSITION", Position.GetName());
-    }
-
-    public override TextObject GetSupportTitle()
-    {
-        return new TextObject("{=!}Choose the next council member to occupy the position of {POSITION}")
-            .SetTextVariable("POSITION", Position.GetName());
-    }
-
-    public override bool IsAllowed()
-    {
-        return Data != null && Position != null;
-    }
-
-    public class CouncilPositionDecisionOutcome : DecisionOutcome
-    {
-        public CouncilPositionDecisionOutcome(Hero candidate)
+        public override float DetermineSupport(Clan clan, DecisionOutcome possibleOutcome)
         {
-            Candidate = candidate;
+            var result = 2f;
+            var candidate = ((CouncilPositionDecisionOutcome) possibleOutcome).Candidate;
+
+            result += Data.GetCompetence(candidate, Position.Position) * 4f;
+            if (Religion != null)
+            {
+                var candidateReligion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(candidate);
+                if (candidateReligion != Religion)
+                {
+                    var stance = FaithStance.Untolerated;
+                    if (candidateReligion != null)
+                    {
+                        stance = Religion.Faith.GetStance(candidateReligion.Faith);
+                    }
+
+                    if (stance == FaithStance.Untolerated)
+                    {
+                        result -= 1.5f;
+                    }
+                    else if (stance == FaithStance.Hostile)
+                    {
+                        result -= 4f;
+                    }
+                }
+            }
+
+            result += ProposerClan.Leader.GetRelation(candidate) * 0.02f;
+            if (!candidate.IsLord)
+            {
+                result -= 1f;
+            }
+
+            return MathF.Clamp(result, -3f, 8f);
         }
 
-        [SaveableProperty(200)] public Hero Candidate { get; }
-
-        public override TextObject GetDecisionTitle()
+        public override TextObject GetChooseDescription()
         {
-            return Candidate.Name;
+            var textObject =
+                new TextObject(
+                    "{=!}As the sovereign of {KINGDOM}, you must decide whether to approve this contract change or not.");
+            textObject.SetTextVariable("KINGDOM", Kingdom.Name);
+            return textObject;
         }
 
-        public override TextObject GetDecisionDescription()
+        public override TextObject GetChooseTitle()
         {
-            return new TextObject("{=!}{NAME} should be appointed")
-                .SetTextVariable("NAME", Candidate.Name);
+            return new TextObject("{=!}Choose the next council member to occupy the position of {POSITION}")
+                .SetTextVariable("POSITION", Position.GetName());
         }
 
-        public override string GetDecisionLink()
+        public override TextObject GetChosenOutcomeText(DecisionOutcome chosenOutcome, SupportStatus supportStatus,
+            bool isShortVersion = false)
+        {
+            var candidate = ((CouncilPositionDecisionOutcome) chosenOutcome).Candidate;
+            var textObject = new TextObject("{=!}The{KINGDOM} has chosen {NAME} as their new council member.")
+                .SetTextVariable("KINGDOM", Kingdom.Name)
+                .SetTextVariable("NAME", candidate.Name);
+            return textObject;
+        }
+
+        public override TextObject GetGeneralTitle()
+        {
+            return new TextObject("{=!}Council member for position {POSITION}")
+                .SetTextVariable("POSITION", Position.GetName());
+        }
+
+
+        public override int GetProposalInfluenceCost()
+        {
+            return 0;
+        }
+
+        public override DecisionOutcome GetQueriedDecisionOutcome(List<DecisionOutcome> possibleOutcomes)
+        {
+            return (from k in possibleOutcomes
+                orderby k.Merit descending
+                select k).ToList().FirstOrDefault();
+        }
+
+        public override TextObject GetSecondaryEffects()
         {
             return null;
         }
 
-        public override ImageIdentifier GetDecisionImageIdentifier()
+        protected override bool CanProposerClanChangeOpinion()
         {
-            return null;
+            return true;
+        }
+
+        public override TextObject GetSupportDescription()
+        {
+            return new TextObject(
+                    "{=!}{KINGDOM_NAME} will decide who will occupy the position of {POSITION}. You can pick your stance regarding this decision.")
+                .SetTextVariable("KINGDOM_NAME", Kingdom.Name)
+                .SetTextVariable("POSITION", Position.GetName());
+        }
+
+        public override TextObject GetSupportTitle()
+        {
+            return new TextObject("{=!}Choose the next council member to occupy the position of {POSITION}")
+                .SetTextVariable("POSITION", Position.GetName());
+        }
+
+        public override bool IsAllowed()
+        {
+            return Data != null && Position != null;
+        }
+
+        public class CouncilPositionDecisionOutcome : DecisionOutcome
+        {
+            public CouncilPositionDecisionOutcome(Hero candidate)
+            {
+                Candidate = candidate;
+            }
+
+            [SaveableProperty(200)] public Hero Candidate { get; }
+
+            public override TextObject GetDecisionTitle()
+            {
+                return Candidate.Name;
+            }
+
+            public override TextObject GetDecisionDescription()
+            {
+                return new TextObject("{=!}{NAME} should be appointed")
+                    .SetTextVariable("NAME", Candidate.Name);
+            }
+
+            public override string GetDecisionLink()
+            {
+                return null;
+            }
+
+            public override ImageIdentifier GetDecisionImageIdentifier()
+            {
+                return null;
+            }
         }
     }
 }

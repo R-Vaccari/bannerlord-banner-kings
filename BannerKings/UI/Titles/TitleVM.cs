@@ -9,136 +9,137 @@ using TaleWorlds.Core.ViewModelCollection.Information;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace BannerKings.UI.Titles;
-
-public class TitleVM : ViewModel
+namespace BannerKings.UI.Titles
 {
-    private MBBindingList<DecisionElement> decisions;
-    private BasicTooltipViewModel hint;
-    private ImageIdentifierVM imageIdentifier;
-    private readonly FeudalTitle title;
-
-    public TitleVM(FeudalTitle title)
+    public class TitleVM : ViewModel
     {
-        this.title = title;
-        decisions = new MBBindingList<DecisionElement>();
-        RefreshValues();
-    }
+        private MBBindingList<DecisionElement> decisions;
+        private BasicTooltipViewModel hint;
+        private ImageIdentifierVM imageIdentifier;
+        private readonly FeudalTitle title;
 
-    [DataSourceProperty]
-    public MBBindingList<DecisionElement> Decisions
-    {
-        get => decisions;
-        set
+        public TitleVM(FeudalTitle title)
         {
-            if (value != decisions)
+            this.title = title;
+            decisions = new MBBindingList<DecisionElement>();
+            RefreshValues();
+        }
+
+        [DataSourceProperty]
+        public MBBindingList<DecisionElement> Decisions
+        {
+            get => decisions;
+            set
             {
-                decisions = value;
-                OnPropertyChangedWithValue(value);
+                if (value != decisions)
+                {
+                    decisions = value;
+                    OnPropertyChangedWithValue(value);
+                }
             }
         }
-    }
 
 
-    [DataSourceProperty]
-    public BasicTooltipViewModel Hint
-    {
-        get => hint;
-        set
+        [DataSourceProperty]
+        public BasicTooltipViewModel Hint
         {
-            if (value != hint)
+            get => hint;
+            set
             {
-                hint = value;
-                OnPropertyChangedWithValue(value);
+                if (value != hint)
+                {
+                    hint = value;
+                    OnPropertyChangedWithValue(value);
+                }
             }
         }
-    }
 
-    [DataSourceProperty]
-    public ImageIdentifierVM ImageIdentifier
-    {
-        get => imageIdentifier;
-        set
+        [DataSourceProperty]
+        public ImageIdentifierVM ImageIdentifier
         {
-            if (value != imageIdentifier)
+            get => imageIdentifier;
+            set
             {
-                imageIdentifier = value;
-                OnPropertyChangedWithValue(value);
+                if (value != imageIdentifier)
+                {
+                    imageIdentifier = value;
+                    OnPropertyChangedWithValue(value);
+                }
             }
         }
-    }
 
-    [DataSourceProperty] public string NameText => title.FullName.ToString();
+        [DataSourceProperty] public string NameText => title.FullName.ToString();
 
-    public override void RefreshValues()
-    {
-        base.RefreshValues();
-        Decisions.Clear();
-
-
-        if (title != null)
+        public override void RefreshValues()
         {
-            var model = BannerKingsConfig.Instance.Models.First(x => x is BKTitleModel) as BKTitleModel;
-            var characterCode = CharacterCode.CreateFrom(title.deJure.CharacterObject);
-            ImageIdentifier = new ImageIdentifierVM(characterCode);
+            base.RefreshValues();
+            Decisions.Clear();
 
-            var actions = new List<TitleAction>();
-            var usurpData = model.GetAction(ActionType.Usurp, title, Hero.MainHero);
-            if (title.GetHeroClaim(Hero.MainHero) != ClaimType.None)
-            {
-                var usurpButton = new DecisionElement().SetAsButtonOption(new TextObject("{=!}Usurp").ToString(),
-                    () => UIHelper.ShowActionPopup(usurpData, this));
-                usurpButton.Enabled = usurpData.Possible;
-                Decisions.Add(usurpButton);
-            }
 
-            var claimAction = model.GetAction(ActionType.Claim, title, Hero.MainHero);
-            if (claimAction.Possible)
+            if (title != null)
             {
-                var claimButton = new DecisionElement().SetAsButtonOption(new TextObject("{=!}Claim").ToString(),
-                    () => UIHelper.ShowActionPopup(claimAction, this));
-                claimButton.Enabled = claimAction.Possible;
-                Decisions.Add(claimButton);
-            }
+                var model = BannerKingsConfig.Instance.Models.First(x => x is BKTitleModel) as BKTitleModel;
+                var characterCode = CharacterCode.CreateFrom(title.deJure.CharacterObject);
+                ImageIdentifier = new ImageIdentifierVM(characterCode);
 
-            var grantData = model.GetAction(ActionType.Grant, title, Hero.MainHero);
-            if (grantData.Possible)
-            {
-                var grantButton = new DecisionElement().SetAsButtonOption(new TextObject("{=!}Grant").ToString(),
-                    () => UIHelper.ShowActionPopup(grantData, this));
-                grantButton.Enabled = grantData.Possible;
-                Decisions.Add(grantButton);
-            }
+                var actions = new List<TitleAction>();
+                var usurpData = model.GetAction(ActionType.Usurp, title, Hero.MainHero);
+                if (title.GetHeroClaim(Hero.MainHero) != ClaimType.None)
+                {
+                    var usurpButton = new DecisionElement().SetAsButtonOption(new TextObject("{=!}Usurp").ToString(),
+                        () => UIHelper.ShowActionPopup(usurpData, this));
+                    usurpButton.Enabled = usurpData.Possible;
+                    Decisions.Add(usurpButton);
+                }
 
-            var revokeData = model.GetAction(ActionType.Revoke, title, Hero.MainHero);
-            if (revokeData.Possible)
-            {
-                var revokeButton = new DecisionElement().SetAsButtonOption(new TextObject("{=!}Revoke").ToString(),
-                    () => UIHelper.ShowActionPopup(revokeData, this));
-                revokeButton.Enabled = revokeData.Possible;
-                Decisions.Add(revokeButton);
-            }
+                var claimAction = model.GetAction(ActionType.Claim, title, Hero.MainHero);
+                if (claimAction.Possible)
+                {
+                    var claimButton = new DecisionElement().SetAsButtonOption(new TextObject("{=!}Claim").ToString(),
+                        () => UIHelper.ShowActionPopup(claimAction, this));
+                    claimButton.Enabled = claimAction.Possible;
+                    Decisions.Add(claimButton);
+                }
 
-            if (title.deJure != Hero.MainHero)
-            {
-                actions.Add(usurpData);
-                actions.Add(claimAction);
-                actions.Add(revokeData);
-            }
-            else
-            {
-                actions.Add(grantData);
-            }
+                var grantData = model.GetAction(ActionType.Grant, title, Hero.MainHero);
+                if (grantData.Possible)
+                {
+                    var grantButton = new DecisionElement().SetAsButtonOption(new TextObject("{=!}Grant").ToString(),
+                        () => UIHelper.ShowActionPopup(grantData, this));
+                    grantButton.Enabled = grantData.Possible;
+                    Decisions.Add(grantButton);
+                }
 
-            Hint = new BasicTooltipViewModel(() => UIHelper.GetTitleTooltip(title, actions));
+                var revokeData = model.GetAction(ActionType.Revoke, title, Hero.MainHero);
+                if (revokeData.Possible)
+                {
+                    var revokeButton = new DecisionElement().SetAsButtonOption(new TextObject("{=!}Revoke").ToString(),
+                        () => UIHelper.ShowActionPopup(revokeData, this));
+                    revokeButton.Enabled = revokeData.Possible;
+                    Decisions.Add(revokeButton);
+                }
+
+                if (title.deJure != Hero.MainHero)
+                {
+                    actions.Add(usurpData);
+                    actions.Add(claimAction);
+                    actions.Add(revokeData);
+                }
+                else
+                {
+                    actions.Add(grantData);
+                }
+
+                Hint = new BasicTooltipViewModel(() => UIHelper.GetTitleTooltip(title, actions));
+            }
         }
-    }
 
-    public void ExecuteLink()
-    {
-        if (title.deJure != null)
+        public void ExecuteLink()
         {
-            Campaign.Current.EncyclopediaManager.GoToLink(title.deJure.EncyclopediaLink);
+            if (title.deJure != null)
+            {
+                Campaign.Current.EncyclopediaManager.GoToLink(title.deJure.EncyclopediaLink);
+            }
         }
     }
 }

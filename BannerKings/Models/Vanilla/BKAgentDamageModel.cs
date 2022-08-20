@@ -5,85 +5,86 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade;
 
-namespace BannerKings.Models.Vanilla;
-
-public class BKAgentDamageModel : SandboxAgentApplyDamageModel
+namespace BannerKings.Models.Vanilla
 {
-    public override float CalculateDamage(in AttackInformation attackInformation, in AttackCollisionData collisionData,
-        in MissionWeapon weapon, float baseDamage)
+    public class BKAgentDamageModel : SandboxAgentApplyDamageModel
     {
-        var baseResult = base.CalculateDamage(in attackInformation, in collisionData, in weapon, baseDamage);
-        var aggressor = attackInformation.AttackerAgentCharacter as CharacterObject;
-        var aggressorCaptain = attackInformation.AttackerCaptainCharacter as CharacterObject;
-        var victim = attackInformation.VictimAgentCharacter as CharacterObject;
-        var victimCaptain = attackInformation.VictimCaptainCharacter as CharacterObject;
-
-        var agressorUsage = weapon.CurrentUsageItem;
-
-        if (agressorUsage != null && aggressor != null)
+        public override float CalculateDamage(in AttackInformation attackInformation, in AttackCollisionData collisionData,
+            in MissionWeapon weapon, float baseDamage)
         {
-            if (aggressorCaptain != null && aggressorCaptain.IsHero)
+            var baseResult = base.CalculateDamage(in attackInformation, in collisionData, in weapon, baseDamage);
+            var aggressor = attackInformation.AttackerAgentCharacter as CharacterObject;
+            var aggressorCaptain = attackInformation.AttackerCaptainCharacter as CharacterObject;
+            var victim = attackInformation.VictimAgentCharacter as CharacterObject;
+            var victimCaptain = attackInformation.VictimCaptainCharacter as CharacterObject;
+
+            var agressorUsage = weapon.CurrentUsageItem;
+
+            if (agressorUsage != null && aggressor != null)
             {
-                var data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(aggressorCaptain.HeroObject);
-                if (collisionData.StrikeType == 1) // thrust
+                if (aggressorCaptain != null && aggressorCaptain.IsHero)
                 {
-                    if (aggressor.IsMounted && data.HasPerk(BKPerks.Instance.CataphractKlibanophoros))
+                    var data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(aggressorCaptain.HeroObject);
+                    if (collisionData.StrikeType == 1) // thrust
                     {
-                        baseResult *= 1.06f;
+                        if (aggressor.IsMounted && data.HasPerk(BKPerks.Instance.CataphractKlibanophoros))
+                        {
+                            baseResult *= 1.06f;
+                        }
+                    }
+                }
+
+                if (aggressor.HeroObject != null)
+                {
+                    var data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(aggressor.HeroObject);
+                    if (agressorUsage.RelevantSkill == DefaultSkills.Bow && collisionData.CollisionBoneIndex != -1)
+                    {
+                        if (data.HasPerk(BKPerks.Instance.FianRanger))
+                        {
+                            baseResult *= 1.08f;
+                        }
+                    }
+
+
+                    if (agressorUsage.RelevantSkill == DefaultSkills.TwoHanded &&
+                        !attackInformation.DoesAttackerHaveMountAgent)
+                    {
+                        if (data.HasPerk(BKPerks.Instance.FianFennid))
+                        {
+                            baseResult *= 1.1f;
+                        }
+                    }
+
+                    if (aggressor.IsMounted && data.Lifestyle == DefaultLifestyles.Instance.Fian)
+                    {
+                        baseResult *= 1f - DefaultLifestyles.Instance.Fian.SecondEffect * 0.1f;
+                    }
+
+                    if (aggressor.IsMounted && data.HasPerk(BKPerks.Instance.CataphractAdaptiveTactics) &&
+                        (agressorUsage.RelevantSkill == DefaultSkills.Bow
+                         || agressorUsage.RelevantSkill == DefaultSkills.OneHanded ||
+                         agressorUsage.RelevantSkill == DefaultSkills.Polearm))
+                    {
+                        baseResult *= 1.05f;
                     }
                 }
             }
 
-            if (aggressor.HeroObject != null)
+            if (victim != null)
             {
-                var data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(aggressor.HeroObject);
-                if (agressorUsage.RelevantSkill == DefaultSkills.Bow && collisionData.CollisionBoneIndex != -1)
+                if (victim.IsMounted && victimCaptain != null && victimCaptain.IsHero)
                 {
-                    if (data.HasPerk(BKPerks.Instance.FianRanger))
+                    var victimCaptainHero = victimCaptain.HeroObject;
+                    var data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(victimCaptainHero);
+                    if (data.HasPerk(BKPerks.Instance.CataphractKlibanophoros))
                     {
-                        baseResult *= 1.08f;
+                        baseResult *= 0.95f;
                     }
-                }
-
-
-                if (agressorUsage.RelevantSkill == DefaultSkills.TwoHanded &&
-                    !attackInformation.DoesAttackerHaveMountAgent)
-                {
-                    if (data.HasPerk(BKPerks.Instance.FianFennid))
-                    {
-                        baseResult *= 1.1f;
-                    }
-                }
-
-                if (aggressor.IsMounted && data.Lifestyle == DefaultLifestyles.Instance.Fian)
-                {
-                    baseResult *= 1f - DefaultLifestyles.Instance.Fian.SecondEffect * 0.1f;
-                }
-
-                if (aggressor.IsMounted && data.HasPerk(BKPerks.Instance.CataphractAdaptiveTactics) &&
-                    (agressorUsage.RelevantSkill == DefaultSkills.Bow
-                     || agressorUsage.RelevantSkill == DefaultSkills.OneHanded ||
-                     agressorUsage.RelevantSkill == DefaultSkills.Polearm))
-                {
-                    baseResult *= 1.05f;
                 }
             }
+
+
+            return baseResult;
         }
-
-        if (victim != null)
-        {
-            if (victim.IsMounted && victimCaptain != null && victimCaptain.IsHero)
-            {
-                var victimCaptainHero = victimCaptain.HeroObject;
-                var data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(victimCaptainHero);
-                if (data.HasPerk(BKPerks.Instance.CataphractKlibanophoros))
-                {
-                    baseResult *= 0.95f;
-                }
-            }
-        }
-
-
-        return baseResult;
     }
 }

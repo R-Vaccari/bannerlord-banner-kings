@@ -2,9 +2,10 @@
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 
-namespace BannerKings.Models;
-
-public interface ICultureModel : IBannerKingsModel
+namespace BannerKings.Models
 {
-    public ExplainedNumber CalculateEffect(Settlement settlement, CultureDataClass data);
+    public interface ICultureModel : IBannerKingsModel
+    {
+        public ExplainedNumber CalculateEffect(Settlement settlement, CultureDataClass data);
+    }
 }

@@ -1,112 +1,113 @@
 ﻿using System.Collections.Generic;
 using TaleWorlds.SaveSystem;
 
-namespace BannerKings.Managers.Titles;
-
-public class FeudalContract
+namespace BannerKings.Managers.Titles
 {
-    public FeudalContract(Dictionary<FeudalDuties, float> duties, List<FeudalRights> rights, GovernmentType government,
-        SuccessionType succession, InheritanceType inheritance, GenderLaw genderLaw)
+    public class FeudalContract
     {
-        Duties = duties;
-        Rights = rights;
-        Government = government;
-        Succession = succession;
-        Inheritance = inheritance;
-        GenderLaw = genderLaw;
+        public FeudalContract(Dictionary<FeudalDuties, float> duties, List<FeudalRights> rights, GovernmentType government,
+            SuccessionType succession, InheritanceType inheritance, GenderLaw genderLaw)
+        {
+            Duties = duties;
+            Rights = rights;
+            Government = government;
+            Succession = succession;
+            Inheritance = inheritance;
+            GenderLaw = genderLaw;
+        }
+
+        [SaveableProperty(1)] public Dictionary<FeudalDuties, float> Duties { get; }
+
+        [SaveableProperty(2)] public List<FeudalRights> Rights { get; }
+
+        [SaveableProperty(3)] public GovernmentType Government { get; private set; }
+
+        [SaveableProperty(4)] public SuccessionType Succession { get; private set; }
+
+        [SaveableProperty(5)] public InheritanceType Inheritance { get; private set; }
+
+        [SaveableProperty(6)] public GenderLaw GenderLaw { get; private set; }
+
+        public void ChangeGovernment(GovernmentType governmentType)
+        {
+            Government = governmentType;
+        }
+
+        public void ChangeSuccession(SuccessionType successionType)
+        {
+            Succession = successionType;
+        }
+
+        public void ChangeInheritance(InheritanceType inheritanceType)
+        {
+            Inheritance = inheritanceType;
+        }
+
+        public void ChangeGenderLaw(GenderLaw genderLaw)
+        {
+            GenderLaw = genderLaw;
+        }
     }
 
-    [SaveableProperty(1)] public Dictionary<FeudalDuties, float> Duties { get; }
-
-    [SaveableProperty(2)] public List<FeudalRights> Rights { get; }
-
-    [SaveableProperty(3)] public GovernmentType Government { get; private set; }
-
-    [SaveableProperty(4)] public SuccessionType Succession { get; private set; }
-
-    [SaveableProperty(5)] public InheritanceType Inheritance { get; private set; }
-
-    [SaveableProperty(6)] public GenderLaw GenderLaw { get; private set; }
-
-    public void ChangeGovernment(GovernmentType governmentType)
+    public enum FeudalDuties
     {
-        Government = governmentType;
+        Ransom,
+        Taxation,
+        Auxilium
     }
 
-    public void ChangeSuccession(SuccessionType successionType)
+    public enum FeudalRights
     {
-        Succession = successionType;
+        Absolute_Land_Rights,
+        Conquest_Rights,
+        Enfoeffement_Rights,
+        Assistance_Rights,
+        Army_Compensation_Rights
     }
 
-    public void ChangeInheritance(InheritanceType inheritanceType)
+    public enum CasusBelli
     {
-        Inheritance = inheritanceType;
+        None,
+        Conquest,
+        Provocation,
+        Lawful_Claim,
+        Imperial_Reconquest
     }
 
-    public void ChangeGenderLaw(GenderLaw genderLaw)
+    public enum LegitimacyType
     {
-        GenderLaw = genderLaw;
+        Lawful,
+        Lawful_Foreigner,
+        Unlawful,
+        Unlawful_Foreigner
     }
-}
 
-public enum FeudalDuties
-{
-    Ransom,
-    Taxation,
-    Auxilium
-}
+    public enum SuccessionType
+    {
+        Hereditary_Monarchy,
+        Elective_Monarchy,
+        Imperial,
+        Republic
+    }
 
-public enum FeudalRights
-{
-    Absolute_Land_Rights,
-    Conquest_Rights,
-    Enfoeffement_Rights,
-    Assistance_Rights,
-    Army_Compensation_Rights
-}
+    public enum InheritanceType
+    {
+        Primogeniture,
+        Ultimogeniture,
+        Seniority
+    }
 
-public enum CasusBelli
-{
-    None,
-    Conquest,
-    Provocation,
-    Lawful_Claim,
-    Imperial_Reconquest
-}
+    public enum GenderLaw
+    {
+        Agnatic,
+        Cognatic
+    }
 
-public enum LegitimacyType
-{
-    Lawful,
-    Lawful_Foreigner,
-    Unlawful,
-    Unlawful_Foreigner
-}
-
-public enum SuccessionType
-{
-    Hereditary_Monarchy,
-    Elective_Monarchy,
-    Imperial,
-    Republic
-}
-
-public enum InheritanceType
-{
-    Primogeniture,
-    Ultimogeniture,
-    Seniority
-}
-
-public enum GenderLaw
-{
-    Agnatic,
-    Cognatic
-}
-
-public enum GovernmentType
-{
-    Feudal,
-    Tribal,
-    Imperial,
-    Republic
+    public enum GovernmentType
+    {
+        Feudal,
+        Tribal,
+        Imperial,
+        Republic
+    }
 }

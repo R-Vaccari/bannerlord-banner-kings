@@ -4,74 +4,75 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 
-namespace BannerKings.UI.CampaignStart;
-
-public class CampaignStartVM : BannerKingsViewModel
+namespace BannerKings.UI.CampaignStart
 {
-    private MBBindingList<StartOptionVM> options;
-    private StartOptionVM selected;
-
-    public CampaignStartVM() : base(null, false)
+    public class CampaignStartVM : BannerKingsViewModel
     {
-        options = new MBBindingList<StartOptionVM>();
-        RefreshValues();
-    }
+        private MBBindingList<StartOptionVM> options;
+        private StartOptionVM selected;
 
-    [DataSourceProperty] public string ConfirmText => GameTexts.FindText("str_accept").ToString();
-
-    [DataSourceProperty]
-    public StartOptionVM Selected
-    {
-        get => selected;
-        set
+        public CampaignStartVM() : base(null, false)
         {
-            if (value != selected)
+            options = new MBBindingList<StartOptionVM>();
+            RefreshValues();
+        }
+
+        [DataSourceProperty] public string ConfirmText => GameTexts.FindText("str_accept").ToString();
+
+        [DataSourceProperty]
+        public StartOptionVM Selected
+        {
+            get => selected;
+            set
             {
-                selected = value;
-                OnPropertyChangedWithValue(value);
+                if (value != selected)
+                {
+                    selected = value;
+                    OnPropertyChangedWithValue(value);
+                }
             }
         }
-    }
 
-    [DataSourceProperty]
-    public MBBindingList<StartOptionVM> Options
-    {
-        get => options;
-        set
+        [DataSourceProperty]
+        public MBBindingList<StartOptionVM> Options
         {
-            if (value != options)
+            get => options;
+            set
             {
-                options = value;
-                OnPropertyChangedWithValue(value);
+                if (value != options)
+                {
+                    options = value;
+                    OnPropertyChangedWithValue(value);
+                }
             }
         }
-    }
 
-    public override void RefreshValues()
-    {
-        base.RefreshValues();
-        Options.Clear();
-
-        foreach (var option in DefaultStartOptions.Instance.All)
+        public override void RefreshValues()
         {
-            Options.Add(new StartOptionVM(option, OnSelectOption));
-        }
-    }
+            base.RefreshValues();
+            Options.Clear();
 
-    public void ExecuteFinish()
-    {
-        Campaign.Current.GetCampaignBehavior<BKCampaignStartBehavior>().SetStartOption(Selected.Option);
-        ExecuteClose();
-    }
-
-    public void OnSelectOption(StartOptionVM option)
-    {
-        if (Selected != null)
-        {
-            Selected.IsSelected = false;
+            foreach (var option in DefaultStartOptions.Instance.All)
+            {
+                Options.Add(new StartOptionVM(option, OnSelectOption));
+            }
         }
 
-        Selected = option;
-        Selected.IsSelected = true;
+        public void ExecuteFinish()
+        {
+            Campaign.Current.GetCampaignBehavior<BKCampaignStartBehavior>().SetStartOption(Selected.Option);
+            ExecuteClose();
+        }
+
+        public void OnSelectOption(StartOptionVM option)
+        {
+            if (Selected != null)
+            {
+                Selected.IsSelected = false;
+            }
+
+            Selected = option;
+            Selected.IsSelected = true;
+        }
     }
 }

@@ -1,6 +1,7 @@
-﻿namespace BannerKings.Managers.Populations;
-
-public abstract class BannerKingsData
+﻿namespace BannerKings.Managers.Populations
 {
-    internal abstract void Update(PopulationData data = null);
+    public abstract class BannerKingsData
+    {
+        internal abstract void Update(PopulationData data = null);
+    }
 }

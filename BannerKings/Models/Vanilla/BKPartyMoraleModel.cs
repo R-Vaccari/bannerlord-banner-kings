@@ -5,29 +5,30 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Party;
 
-namespace BannerKings.Models.Vanilla;
-
-public class BKPartyMoraleModel : DefaultPartyMoraleModel
+namespace BannerKings.Models.Vanilla
 {
-    public override ExplainedNumber GetEffectivePartyMorale(MobileParty mobileParty, bool includeDescription = false)
+    public class BKPartyMoraleModel : DefaultPartyMoraleModel
     {
-        var result = base.GetEffectivePartyMorale(mobileParty, includeDescription);
-
-        if (mobileParty.Owner == Hero.MainHero && Campaign.Current.GetCampaignBehavior<BKCampaignStartBehavior>()
-                .HasDebuff(DefaultStartOptions.Instance.Mercenary))
+        public override ExplainedNumber GetEffectivePartyMorale(MobileParty mobileParty, bool includeDescription = false)
         {
-            result.Add(-20f, DefaultStartOptions.Instance.Mercenary.Name);
-        }
+            var result = base.GetEffectivePartyMorale(mobileParty, includeDescription);
 
-        if (mobileParty.LeaderHero != null)
-        {
-            var data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(mobileParty.LeaderHero);
-            if (data.Perks.Contains(BKPerks.Instance.AugustCommander))
+            if (mobileParty.Owner == Hero.MainHero && Campaign.Current.GetCampaignBehavior<BKCampaignStartBehavior>()
+                    .HasDebuff(DefaultStartOptions.Instance.Mercenary))
             {
-                result.Add(3f, BKPerks.Instance.AugustCommander.Name);
+                result.Add(-20f, DefaultStartOptions.Instance.Mercenary.Name);
             }
-        }
 
-        return result;
+            if (mobileParty.LeaderHero != null)
+            {
+                var data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(mobileParty.LeaderHero);
+                if (data.Perks.Contains(BKPerks.Instance.AugustCommander))
+                {
+                    result.Add(3f, BKPerks.Instance.AugustCommander.Name);
+                }
+            }
+
+            return result;
+        }
     }
 }

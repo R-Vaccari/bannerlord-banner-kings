@@ -1,26 +1,27 @@
 using System;
 
-namespace BannerKings.Utils;
-
-public class GenericSingleton<T> : IDisposable where T : class, new()
+namespace BannerKings.Utils
 {
-    private static T _instance;
-
-    public static T Instance
+    public class GenericSingleton<T> : IDisposable where T : class, new()
     {
-        get
+        private static T _instance;
+
+        public static T Instance
         {
-            if (_instance == null)
+            get
             {
-                _instance = new T();
+                if (_instance == null)
+                {
+                    _instance = new T();
+                }
+
+                return _instance;
             }
-
-            return _instance;
         }
-    }
 
-    public virtual void Dispose()
-    {
-        _instance = null;
+        public virtual void Dispose()
+        {
+            _instance = null;
+        }
     }
 }

@@ -1,15 +1,16 @@
 ﻿using TaleWorlds.CampaignSystem.Settlements;
 
-namespace BannerKings.Managers.Institutions;
-
-public abstract class LandedInstitution : Institution
+namespace BannerKings.Managers.Institutions
 {
-    protected Settlement settlement;
-
-    public LandedInstitution(Settlement settlement)
+    public abstract class LandedInstitution : Institution
     {
-        this.settlement = settlement;
-    }
+        protected Settlement settlement;
 
-    public Settlement Settlement => settlement;
+        public LandedInstitution(Settlement settlement)
+        {
+            this.settlement = settlement;
+        }
+
+        public Settlement Settlement => settlement;
+    }
 }
