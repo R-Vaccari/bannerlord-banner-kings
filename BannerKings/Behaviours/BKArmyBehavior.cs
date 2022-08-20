@@ -3,9 +3,7 @@ using BannerKings.Managers.Titles;
 using BannerKings.Models;
 using HarmonyLib;
 using Helpers;
-using System;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.Map;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Settlements;
 
@@ -18,15 +16,18 @@ namespace BannerKings.Behaviours
 
         public override void RegisterEvents()
         {
-            CampaignEvents.OnPartyJoinedArmyEvent.AddNonSerializedListener(this, new Action<MobileParty>(this.OnPartyJoinedArmyEvent));
-            CampaignEvents.ArmyCreated.AddNonSerializedListener(this, new Action<Army>(this.OnArmyCreated));
-            CampaignEvents.ArmyDispersed.AddNonSerializedListener(this, new Action<Army, Army.ArmyDispersionReason, bool>(this.OnArmyDispersed));
-            CampaignEvents.AiHourlyTickEvent.AddNonSerializedListener(this, new Action<MobileParty, PartyThinkParams>(this.AiHourlyTick));
+            CampaignEvents.OnPartyJoinedArmyEvent.AddNonSerializedListener(this, OnPartyJoinedArmyEvent);
+            CampaignEvents.ArmyCreated.AddNonSerializedListener(this, OnArmyCreated);
+            CampaignEvents.ArmyDispersed.AddNonSerializedListener(this, OnArmyDispersed);
+            CampaignEvents.AiHourlyTickEvent.AddNonSerializedListener(this, AiHourlyTick);
         }
 
         public override void SyncData(IDataStore dataStore)
         {
-            if (BannerKingsConfig.Instance.wipeData) playerArmyDuty = null;
+            if (BannerKingsConfig.Instance.wipeData)
+            {
+                playerArmyDuty = null;
+            }
 
             dataStore.SyncData("bannerkings-military-duty", ref playerArmyDuty);
             dataStore.SyncData("bannerkings-military-duty-time", ref lastDutyTime);
@@ -34,90 +35,130 @@ namespace BannerKings.Behaviours
 
         public void OnPartyJoinedArmyEvent(MobileParty party)
         {
-            Kingdom playerKingdom = Clan.PlayerClan.Kingdom;
+            var playerKingdom = Clan.PlayerClan.Kingdom;
             if (playerKingdom == null || playerKingdom != party.LeaderHero.Clan.Kingdom ||
                 BannerKingsConfig.Instance.TitleManager == null || party == MobileParty.MainParty)
+            {
                 return;
+            }
 
-            FeudalTitle playerTitle = BannerKingsConfig.Instance.TitleManager.GetHighestTitleWithinFaction(Hero.MainHero, playerKingdom);
+            var playerTitle =
+                BannerKingsConfig.Instance.TitleManager.GetHighestTitleWithinFaction(Hero.MainHero, playerKingdom);
             if (playerTitle != null)
-                this.EvaluateSummonPlayer(playerTitle, party.Army, party);
+            {
+                EvaluateSummonPlayer(playerTitle, party.Army, party);
+            }
         }
 
         public void OnArmyDispersed(Army army, Army.ArmyDispersionReason reason, bool isPlayersArmy)
         {
-
-            MobileParty leaderParty = army.LeaderParty;
-            Kingdom playerKingdom = Clan.PlayerClan.Kingdom;
+            var leaderParty = army.LeaderParty;
+            var playerKingdom = Clan.PlayerClan.Kingdom;
             if (playerKingdom == null || playerKingdom != army.Kingdom || playerArmyDuty == null ||
                 BannerKingsConfig.Instance.TitleManager == null || leaderParty == MobileParty.MainParty)
+            {
                 return;
+            }
 
             if (army.LeaderParty == playerArmyDuty.Party || army.Parties.Contains(playerArmyDuty.Party))
             {
                 playerArmyDuty.Finish();
                 playerArmyDuty = null;
                 lastDutyTime = CampaignTime.Now;
-            }   
+            }
         }
 
         public void OnArmyCreated(Army army)
         {
-
-            MobileParty leaderParty = army.LeaderParty;
-            Kingdom playerKingdom = Clan.PlayerClan.Kingdom;
+            var leaderParty = army.LeaderParty;
+            var playerKingdom = Clan.PlayerClan.Kingdom;
             if (playerKingdom == null || playerKingdom != leaderParty.LeaderHero.Clan.Kingdom ||
                 BannerKingsConfig.Instance.TitleManager == null || leaderParty == MobileParty.MainParty)
+            {
                 return;
+            }
 
-            FeudalTitle playerTitle = BannerKingsConfig.Instance.TitleManager.GetHighestTitleWithinFaction(Hero.MainHero, playerKingdom);
+            var playerTitle =
+                BannerKingsConfig.Instance.TitleManager.GetHighestTitleWithinFaction(Hero.MainHero, playerKingdom);
             if (playerTitle != null)
-                this.EvaluateSummonPlayer(playerTitle, army);
+            {
+                EvaluateSummonPlayer(playerTitle, army);
+            }
         }
 
         private void EvaluateSummonPlayer(FeudalTitle playerTitle, Army army, MobileParty joinningParty = null)
         {
-            FeudalContract contract = playerTitle.contract;
-            if (contract == null || !contract.Duties.ContainsKey(FeudalDuties.Auxilium)) return;
-            float completion = contract.Duties[FeudalDuties.Auxilium];
+            var contract = playerTitle.contract;
+            if (contract == null || !contract.Duties.ContainsKey(FeudalDuties.Auxilium))
+            {
+                return;
+            }
 
-            FeudalTitle suzerain = BannerKingsConfig.Instance.TitleManager.GetImmediateSuzerain(playerTitle);
-            if (suzerain == null) return;
-            if (Hero.MainHero.IsPrisoner) return;
+            var completion = contract.Duties[FeudalDuties.Auxilium];
 
-            MobileParty suzerainParty = this.EvaluateSuzerainParty(army, suzerain.deJure, joinningParty);
+            var suzerain = BannerKingsConfig.Instance.TitleManager.GetImmediateSuzerain(playerTitle);
+            if (suzerain == null)
+            {
+                return;
+            }
+
+            if (Hero.MainHero.IsPrisoner)
+            {
+                return;
+            }
+
+            var suzerainParty = EvaluateSuzerainParty(army, suzerain.deJure, joinningParty);
             if (suzerainParty != null && playerArmyDuty == null && lastDutyTime.ElapsedWeeksUntilNow >= 1f)
             {
-                float days = 2f;
-                Settlement settlement = SettlementHelper.FindNearestSettlement((Settlement x) => x.IsFortification || x.IsVillage, army.AiBehaviorObject);
-                BKArmyBehavior.playerArmyDuty = new AuxiliumDuty(CampaignTime.DaysFromNow(days), suzerainParty, completion, settlement, army.Name);
+                var days = 2f;
+                var settlement =
+                    SettlementHelper.FindNearestSettlement(x => x.IsFortification || x.IsVillage,
+                        army.AiBehaviorObject);
+                playerArmyDuty = new AuxiliumDuty(CampaignTime.DaysFromNow(days), suzerainParty, completion, settlement,
+                    army.Name);
             }
         }
 
         private MobileParty EvaluateSuzerainParty(Army army, Hero target, MobileParty joinningParty = null)
         {
             MobileParty suzerainParty = null;
-            MobileParty leaderParty = army.LeaderParty;
+            var leaderParty = army.LeaderParty;
             if (leaderParty.LeaderHero == target)
+            {
                 suzerainParty = leaderParty;
+            }
             else if (joinningParty != null && joinningParty.LeaderHero == target)
+            {
                 suzerainParty = joinningParty;
-            else foreach (MobileParty party in army.Parties)
+            }
+            else
+            {
+                foreach (var party in army.Parties)
+                {
                     if (party.LeaderHero == target)
+                    {
                         suzerainParty = party;
+                    }
+                }
+            }
 
             return suzerainParty;
         }
 
         public void AiHourlyTick(MobileParty mobileParty, PartyThinkParams p)
         {
-            if (mobileParty.IsMilitia || mobileParty.IsCaravan || mobileParty.IsVillager || 
+            if (mobileParty.IsMilitia || mobileParty.IsCaravan || mobileParty.IsVillager ||
                 mobileParty.IsBandit || !mobileParty.MapFaction.IsKingdomFaction)
+            {
                 return;
+            }
 
-            if (playerArmyDuty == null || mobileParty != playerArmyDuty.Party) return;
+            if (playerArmyDuty == null || mobileParty != playerArmyDuty.Party)
+            {
+                return;
+            }
 
-            Army army = mobileParty.Army;
+            var army = mobileParty.Army;
             if (army == null)
             {
                 playerArmyDuty.Finish();
@@ -132,11 +173,12 @@ namespace BannerKings.Behaviours
     namespace Patches
     {
         [HarmonyPatch(typeof(Kingdom), "CreateArmy")]
-        class CreateArmyPatch
+        internal class CreateArmyPatch
         {
-            static bool Prefix(Hero armyLeader, Settlement targetSettlement, Army.ArmyTypes selectedArmyType) => 
-                new BKArmyManagementModel().CanCreateArmy(armyLeader);
-            
+            private static bool Prefix(Hero armyLeader, Settlement targetSettlement, Army.ArmyTypes selectedArmyType)
+            {
+                return new BKArmyManagementModel().CanCreateArmy(armyLeader);
+            }
         }
     }
 }

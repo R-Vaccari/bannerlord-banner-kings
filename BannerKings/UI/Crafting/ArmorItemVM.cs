@@ -4,178 +4,187 @@ using TaleWorlds.Core.ViewModelCollection.Information;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace BannerKings.UI.Crafting
+namespace BannerKings.UI.Crafting;
+
+public class ArmorItemVM : BannerKingsViewModel
 {
-    public class ArmorItemVM : BannerKingsViewModel
+    private readonly ArmorCraftingVM armorCrafting;
+    private readonly int stamina;
+    private BasicTooltipViewModel hint;
+    private ImageIdentifierVM visual;
+
+    public ArmorItemVM(ArmorCraftingVM armorCrafting, ItemObject item, ArmorCraftingVM.ItemType type) : base(null,
+        false)
     {
-		private ArmorCraftingVM armorCrafting;
-        private ItemObject item;
-		private ImageIdentifierVM visual;
-		private BasicTooltipViewModel hint;
-		private ArmorCraftingVM.ItemType type;
-		private int difficulty, stamina;
+        this.armorCrafting = armorCrafting;
+        Item = item;
+        Visual = new ImageIdentifierVM(item);
+        Hint = new BasicTooltipViewModel(() => GetHint());
+        stamina = BannerKingsConfig.Instance.SmithingModel.CalculateArmorStamina(item, armorCrafting.Hero);
+        Difficulty = BannerKingsConfig.Instance.SmithingModel.CalculateArmorDifficulty(item);
+        ItemType = type;
+    }
 
-		public ArmorItemVM(ArmorCraftingVM armorCrafting, ItemObject item, ArmorCraftingVM.ItemType type) : base(null, false)
-        {
-			this.armorCrafting = armorCrafting;
-            this.item = item;
-			Visual = new ImageIdentifierVM(item, "");
-			Hint = new BasicTooltipViewModel(() => GetHint());
-			stamina = BannerKingsConfig.Instance.SmithingModel.CalculateArmorStamina(item, armorCrafting.Hero);
-			difficulty = BannerKingsConfig.Instance.SmithingModel.CalculateArmorDifficulty(item);
-			this.type = type;
-		}
+    [DataSourceProperty] public string ItemName => Item.Name.ToString();
 
-        public override void RefreshValues()
-        {
-            base.RefreshValues();
-			
-		}
+    [DataSourceProperty] public ArmorCraftingVM.ItemType ItemType { get; }
 
-		public void ExecuteSelection()
+    [DataSourceProperty]
+    public string ItemTypeText =>
+        GameTexts.FindText("str_bk_crafting_itemtype", ItemType.ToString().ToLower()).ToString();
+
+    [DataSourceProperty] public ItemObject Item { get; }
+
+    [DataSourceProperty]
+    public string ValueText => new TextObject("{=!}{GOLD} denarii")
+        .SetTextVariable("GOLD", Item.Value)
+        .ToString();
+
+    [DataSourceProperty] public int Difficulty { get; }
+
+    [DataSourceProperty]
+    public string DifficultyText => Difficulty + " " + GameTexts.FindText("str_crafting_difficulty");
+
+    [DataSourceProperty] public string StaminaText => stamina + " " + new TextObject("{=!}Stamina");
+
+    [DataSourceProperty]
+    public BasicTooltipViewModel Hint
+    {
+        get => hint;
+        set
         {
-			armorCrafting.CurrentItem = this;
+            if (value != hint)
+            {
+                hint = value;
+                OnPropertyChangedWithValue(value);
+            }
+        }
+    }
+
+    [DataSourceProperty]
+    public ImageIdentifierVM Visual
+    {
+        get => visual;
+        set
+        {
+            if (value != visual)
+            {
+                visual = value;
+                OnPropertyChangedWithValue(value);
+            }
+        }
+    }
+
+    public override void RefreshValues()
+    {
+        base.RefreshValues();
+    }
+
+    public void ExecuteSelection()
+    {
+        armorCrafting.CurrentItem = this;
+    }
+
+    private List<TooltipProperty> GetHint()
+    {
+        var list = new List<TooltipProperty>
+        {
+            new("", Item.Name.ToString(), 0, false, TooltipProperty.TooltipPropertyFlags.Title)
+        };
+
+
+        MBTextManager.SetTextVariable("LEFT", GameTexts.FindText("str_tooltip_label_type"));
+        list.Add(new TooltipProperty(GameTexts.FindText("str_LEFT_ONLY").ToString(), GameTexts
+            .FindText("str_inventory_type_" + (int) Item.ItemType)
+            .ToString(), 0));
+
+
+        if (Item.Culture != null)
+        {
+            MBTextManager.SetTextVariable("LEFT", GameTexts.FindText("str_culture"));
+            list.Add(new TooltipProperty(GameTexts.FindText("str_LEFT_ONLY").ToString(), Item.Culture.Name.ToString(),
+                0));
         }
 
-		private List<TooltipProperty> GetHint()
+        MBTextManager.SetTextVariable("LEFT", GameTexts.FindText("str_value"));
+        list.Add(new TooltipProperty(GameTexts.FindText("str_LEFT_ONLY").ToString(), Item.Value.ToString(), 0));
+
+        MBTextManager.SetTextVariable("LEFT", GameTexts.FindText("str_value"));
+        list.Add(new TooltipProperty("Tier", Item.Tierf.ToString(), 0));
+
+        MBTextManager.SetTextVariable("LEFT", GameTexts.FindText("str_crafting_stat", "Weight"));
+        list.Add(new TooltipProperty(GameTexts.FindText("str_LEFT_ONLY").ToString().Replace(":", ""),
+            Item.Weight.ToString(), 0));
+
+        if (Item.HasArmorComponent)
         {
-			List<TooltipProperty> list = new List<TooltipProperty>
-			{
-				new TooltipProperty("", item.Name.ToString(), 0, false, TooltipProperty.TooltipPropertyFlags.Title)
-			};
+            MBTextManager.SetTextVariable("LEFT", new TextObject("{=!}Material"));
+            list.Add(new TooltipProperty(GameTexts.FindText("str_LEFT_ONLY").ToString(),
+                Item.ArmorComponent.MaterialType.ToString(), 0));
 
 
-			MBTextManager.SetTextVariable("LEFT", GameTexts.FindText("str_tooltip_label_type"));
-			list.Add(new TooltipProperty(GameTexts.FindText("str_LEFT_ONLY").ToString(), GameTexts.FindText("str_inventory_type_" + (int)item.ItemType)
-				.ToString(), 0));
+            UIHelper.TooltipAddEmptyLine(list);
+            list.Add(new TooltipProperty(new TextObject("{=!}Armor").ToString(), " ", 0));
+            UIHelper.TooltipAddSeperator(list);
+
+            MBTextManager.SetTextVariable("LEFT", GameTexts.FindText("str_inventory_head_armor"));
+            list.Add(new TooltipProperty(GameTexts.FindText("str_LEFT_ONLY").ToString(),
+                Item.ArmorComponent.HeadArmor.ToString(), 0));
+
+            MBTextManager.SetTextVariable("LEFT", GameTexts.FindText("str_inventory_body_armor"));
+            list.Add(new TooltipProperty(GameTexts.FindText("str_LEFT_ONLY").ToString(),
+                Item.ArmorComponent.BodyArmor.ToString(), 0));
+
+            MBTextManager.SetTextVariable("LEFT", GameTexts.FindText("str_inventory_leg_armor"));
+            list.Add(new TooltipProperty(GameTexts.FindText("str_LEFT_ONLY").ToString(),
+                Item.ArmorComponent.LegArmor.ToString(), 0));
+
+            MBTextManager.SetTextVariable("LEFT", GameTexts.FindText("str_inventory_arm_armor"));
+            list.Add(new TooltipProperty(GameTexts.FindText("str_LEFT_ONLY").ToString(),
+                Item.ArmorComponent.ArmArmor.ToString(), 0));
+        }
 
 
-			if (item.Culture != null)
-			{
-				MBTextManager.SetTextVariable("LEFT", GameTexts.FindText("str_culture"));
-				list.Add(new TooltipProperty(GameTexts.FindText("str_LEFT_ONLY").ToString(), item.Culture.Name.ToString(), 0));
-			}
+        UIHelper.TooltipAddEmptyLine(list);
+        list.Add(new TooltipProperty(GameTexts.FindText("str_crafting").ToString(), " ", 0));
+        UIHelper.TooltipAddSeperator(list);
 
-			MBTextManager.SetTextVariable("LEFT", GameTexts.FindText("str_value"));
-			list.Add(new TooltipProperty(GameTexts.FindText("str_LEFT_ONLY").ToString(), item.Value.ToString(), 0));
 
-			MBTextManager.SetTextVariable("LEFT", GameTexts.FindText("str_value"));
-			list.Add(new TooltipProperty("Tier", item.Tierf.ToString(), 0));
+        MBTextManager.SetTextVariable("LEFT", GameTexts.FindText("str_crafting_difficulty"));
+        list.Add(new TooltipProperty(GameTexts.FindText("str_LEFT_ONLY").ToString(), Difficulty.ToString(), 0));
+        list.Add(new TooltipProperty(new TextObject("{=!}Stamina").ToString(), stamina.ToString(), 0));
+        list.Add(new TooltipProperty(new TextObject("{=!}Botching Chance").ToString(),
+            FormatValue(
+                BannerKingsConfig.Instance.SmithingModel.CalculateBotchingChance(armorCrafting.Hero, Difficulty)), 0));
 
-			MBTextManager.SetTextVariable("LEFT", GameTexts.FindText("str_crafting_stat", "Weight"));
-			list.Add(new TooltipProperty(GameTexts.FindText("str_LEFT_ONLY").ToString().Replace(":", ""), item.Weight.ToString(), 0));
 
-			if (item.HasArmorComponent)
+        UIHelper.TooltipAddEmptyLine(list);
+        list.Add(new TooltipProperty(new TextObject("{=!}Materials").ToString(), " ", 0));
+        UIHelper.TooltipAddSeperator(list);
+
+        var materials = BannerKingsConfig.Instance.SmithingModel.GetCraftingInputForArmor(Item);
+        for (var l = 0; l < 11; l++)
+        {
+            if (materials[l] == 0)
             {
-				MBTextManager.SetTextVariable("LEFT", new TextObject("{=!}Material"));
-				list.Add(new TooltipProperty(GameTexts.FindText("str_LEFT_ONLY").ToString(), item.ArmorComponent.MaterialType.ToString(), 0));
+                continue;
+            }
 
-
-
-				UIHelper.TooltipAddEmptyLine(list);
-				list.Add(new TooltipProperty(new TextObject("{=!}Armor").ToString(), " ", 0));
-				UIHelper.TooltipAddSeperator(list);
-
-				MBTextManager.SetTextVariable("LEFT", GameTexts.FindText("str_inventory_head_armor"));
-				list.Add(new TooltipProperty(GameTexts.FindText("str_LEFT_ONLY").ToString(), item.ArmorComponent.HeadArmor.ToString(), 0));
-
-				MBTextManager.SetTextVariable("LEFT", GameTexts.FindText("str_inventory_body_armor"));
-				list.Add(new TooltipProperty(GameTexts.FindText("str_LEFT_ONLY").ToString(), item.ArmorComponent.BodyArmor.ToString(), 0));
-
-				MBTextManager.SetTextVariable("LEFT", GameTexts.FindText("str_inventory_leg_armor"));
-				list.Add(new TooltipProperty(GameTexts.FindText("str_LEFT_ONLY").ToString(), item.ArmorComponent.LegArmor.ToString(), 0));
-
-				MBTextManager.SetTextVariable("LEFT", GameTexts.FindText("str_inventory_arm_armor"));
-				list.Add(new TooltipProperty(GameTexts.FindText("str_LEFT_ONLY").ToString(), item.ArmorComponent.ArmArmor.ToString(), 0));
-			}
-			
-
-
-
-			UIHelper.TooltipAddEmptyLine(list);
-			list.Add(new TooltipProperty(GameTexts.FindText("str_crafting").ToString(), " ", 0));
-			UIHelper.TooltipAddSeperator(list);
-
-
-			MBTextManager.SetTextVariable("LEFT", GameTexts.FindText("str_crafting_difficulty"));
-			list.Add(new TooltipProperty(GameTexts.FindText("str_LEFT_ONLY").ToString(), difficulty.ToString(), 0));
-			list.Add(new TooltipProperty(new TextObject("{=!}Stamina").ToString(), stamina.ToString(), 0));
-			list.Add(new TooltipProperty(new TextObject("{=!}Botching Chance").ToString(),
-				FormatValue(BannerKingsConfig.Instance.SmithingModel.CalculateBotchingChance(armorCrafting.Hero, difficulty)), 0));
-
-
-			UIHelper.TooltipAddEmptyLine(list);
-			list.Add(new TooltipProperty(new TextObject("{=!}Materials").ToString(), " ", 0));
-			UIHelper.TooltipAddSeperator(list);
-
-			int[] materials = BannerKingsConfig.Instance.SmithingModel.GetCraftingInputForArmor(item);
-			for (int l = 0; l < 11; l++)
+            string name;
+            if (l < 9)
             {
-				if (materials[l] == 0) continue;
+                name = BannerKingsConfig.Instance.SmithingModel.GetCraftingMaterialItem((CraftingMaterials) l).Name
+                    .ToString();
+            }
+            else
+            {
+                name = GameTexts.FindText("str_item_category", l == 9 ? "leather" : "linen").ToString();
+            }
 
-				string name;
-				if (l < 9) name = BannerKingsConfig.Instance.SmithingModel.GetCraftingMaterialItem((CraftingMaterials)l).Name.ToString();
-				else name = GameTexts.FindText("str_item_category", l == 9 ? "leather" : "linen").ToString();
-
-				list.Add(new TooltipProperty(name, materials[l].ToString(), 0));
-			}
+            list.Add(new TooltipProperty(name, materials[l].ToString(), 0));
+        }
 
 
-			return list;
-		}
-
-		[DataSourceProperty]
-		public string ItemName => item.Name.ToString();
-
-		[DataSourceProperty]
-		public ArmorCraftingVM.ItemType ItemType => type;
-
-		[DataSourceProperty]
-		public string ItemTypeText => GameTexts.FindText("str_bk_crafting_itemtype", type.ToString().ToLower()).ToString();
-
-		[DataSourceProperty]
-		public ItemObject Item => item;
-
-		[DataSourceProperty]
-		public string ValueText => new TextObject("{=!}{GOLD} denarii")
-			.SetTextVariable("GOLD", item.Value)
-			.ToString();
-
-		[DataSourceProperty]
-		public int Difficulty => difficulty;
-
-		[DataSourceProperty]
-		public string DifficultyText =>  difficulty.ToString() + " " + GameTexts.FindText("str_crafting_difficulty").ToString();
-
-		[DataSourceProperty]
-		public string StaminaText => stamina.ToString() + " " + new TextObject("{=!}Stamina").ToString()  ;
-
-		[DataSourceProperty]
-		public BasicTooltipViewModel Hint
-		{
-			get => hint;
-			set
-			{
-				if (value != hint)
-				{
-					hint = value;
-					OnPropertyChangedWithValue(value, "Hint");
-				}
-			}
-		}
-
-		[DataSourceProperty]
-		public ImageIdentifierVM Visual
-		{
-			get => visual;
-			set
-			{
-				if (value != visual)
-				{
-					visual = value;
-					OnPropertyChangedWithValue(value, "Visual");
-				}
-			}
-		}
-	}
+        return list;
+    }
 }

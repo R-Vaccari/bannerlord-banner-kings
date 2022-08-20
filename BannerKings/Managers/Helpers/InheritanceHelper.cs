@@ -1,10 +1,9 @@
-﻿using BannerKings.Actions;
-using BannerKings.Managers.Titles;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using BannerKings.Actions;
+using BannerKings.Managers.Titles;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
-using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
@@ -14,7 +13,8 @@ namespace BannerKings.Managers.Helpers
     {
         public static void ApplyInheritanceAllTitles(List<FeudalTitle> titles, Hero victim)
         {
-            Dictionary<InheritanceType, List<FeudalTitle>> inheritanceDic = new Dictionary<InheritanceType, List<FeudalTitle>>();
+            Dictionary<InheritanceType, List<FeudalTitle>> inheritanceDic =
+                new Dictionary<InheritanceType, List<FeudalTitle>>();
             List<FeudalTitle> noContracts = new List<FeudalTitle>();
             FeudalTitle highest = null;
 
@@ -31,14 +31,15 @@ namespace BannerKings.Managers.Helpers
                 {
                     InheritanceType inheritance = title.contract.Inheritance;
                     if (!inheritanceDic.ContainsKey(inheritance))
-                        inheritanceDic.Add(inheritance, new List<FeudalTitle>() { title });
+                        inheritanceDic.Add(inheritance, new List<FeudalTitle>() {title});
                     else inheritanceDic[inheritance].Add(title);
                 }
                 else noContracts.Add(title);
             }
-            
+
             List<Hero> candidates = GetCandidates(victim.Clan, victim);
-            Hero mainHeir = GetHeirInternal(highest.contract.Inheritance, highest.contract.GenderLaw, victim, candidates);
+            Hero mainHeir = GetHeirInternal(highest.contract.Inheritance, highest.contract.GenderLaw, victim,
+                candidates);
             List<FeudalTitle> mainHeirTitles = new List<FeudalTitle>();
             Dictionary<Hero, List<FeudalTitle>> secondaryHeirs = new Dictionary<Hero, List<FeudalTitle>>();
             foreach (KeyValuePair<InheritanceType, List<FeudalTitle>> pair in inheritanceDic)
@@ -50,7 +51,7 @@ namespace BannerKings.Managers.Helpers
                     if (heir != mainHeir)
                         t.AddClaim(mainHeir, ClaimType.Clan_Split, true);
                 }
-                    
+
                 if (heir != mainHeir)
                     secondaryHeirs.Add(heir, pair.Value);
             }
@@ -60,10 +61,11 @@ namespace BannerKings.Managers.Helpers
             if (secondaryHeirs.Count > 0)
                 foreach (KeyValuePair<Hero, List<FeudalTitle>> pair in secondaryHeirs)
                 {
-                    if (pair.Value.Any(x => x.fief != null && !x.fief.IsVillage && x.DeFacto.Clan == victim.Clan)) 
+                    if (pair.Value.Any(x => x.fief != null && !x.fief.IsVillage && x.DeFacto.Clan == victim.Clan))
                     {
                         List<FeudalTitle> landed = pair.Value.FindAll(x => x.fief != null && !x.fief.IsVillage);
-                        Clan newClan = ClanActions.CreateNewClan(pair.Key, landed[0].fief, pair.Key.StringId + "_split_clan");
+                        Clan newClan = ClanActions.CreateNewClan(pair.Key, landed[0].fief,
+                            pair.Key.StringId + "_split_clan");
 
                         foreach (FeudalTitle t in mainHeirTitles)
                             t.AddClaim(newClan.Leader, ClaimType.Clan_Split, true);
@@ -78,60 +80,62 @@ namespace BannerKings.Managers.Helpers
                         if (victim.Clan.Kingdom != null)
                             ChangeKingdomAction.ApplyByJoinToKingdom(newClan, victim.Clan.Kingdom);
 
-                        InformationManager.DisplayMessage(new InformationMessage(new TextObject("{=!}The {NEW} has branched off from {ORIGINAL} due to inheritance laws.")
-                            .SetTextVariable("NEW", newClan.Name)
-                            .SetTextVariable("ORIGINAL", victim.Clan.Name)
-                            .ToString()));
+                        InformationManager.DisplayMessage(new InformationMessage(
+                            new TextObject("{=!}The {NEW} has branched off from {ORIGINAL} due to inheritance laws.")
+                                .SetTextVariable("NEW", newClan.Name)
+                                .SetTextVariable("ORIGINAL", victim.Clan.Name)
+                                .ToString()));
                     }
                 }
         }
 
-       /* public static void ApplyInheritance(FeudalTitle title, Hero victim)
-        {
-            Clan clan = victim.Clan;
-            if (title != null)
-            {
-                List<Hero> candidates = GetCandidates(victim.Clan, victim);
-                Hero heir = null;
-                SuccessionType succession = title.contract.Succession;
-                InheritanceType inheritance = title.contract.Inheritance;
+        /* public static void ApplyInheritance(FeudalTitle title, Hero victim)
+         {
+             Clan clan = victim.Clan;
+             if (title != null)
+             {
+                 List<Hero> candidates = GetCandidates(victim.Clan, victim);
+                 Hero heir = null;
+                 SuccessionType succession = title.contract.Succession;
+                 InheritanceType inheritance = title.contract.Inheritance;
+ 
+                 Kingdom kingdom = clan.Kingdom;
+                 if (kingdom != null)
+                 {
+                     if (succession == SuccessionType.Imperial && clan == kingdom.RulingClan)
+                         return;
+                 }
+                 
+                 if (inheritance == InheritanceType.Primogeniture)
+                     heir = ApplyPrimogeniture(title.contract.GenderLaw, victim, candidates);
+                 else if (inheritance == InheritanceType.Ultimogeniture)
+                     heir = ApplyUltimogeniture(title, victim, candidates);
+                 else heir = ApplySeniority(title, victim, candidates);
+ 
+                 if (heir != null)
+                 {
+                     ChangeClanLeaderAction.ApplyWithSelectedNewLeader(victim.Clan, heir);
+                     BannerKingsConfig.Instance.TitleManager.InheritTitle(victim, heir, title);
+                     if (Clan.PlayerClan == heir.Clan)
+                         InformationManager.AddQuickInformation(new TextObject("{=!}{HEIR} has rightfully inherited the {TITLE}")
+                             .SetTextVariable("HEIR", heir.Name)
+                             .SetTextVariable("TITLE", title.FullName));
+ 
+                     return;
+                 }
+             }
+             
+             ChangeClanLeaderAction.ApplyWithoutSelectedNewLeader(clan);
+         } */
 
-                Kingdom kingdom = clan.Kingdom;
-                if (kingdom != null)
-                {
-                    if (succession == SuccessionType.Imperial && clan == kingdom.RulingClan)
-                        return;
-                }
-                
-                if (inheritance == InheritanceType.Primogeniture)
-                    heir = ApplyPrimogeniture(title.contract.GenderLaw, victim, candidates);
-                else if (inheritance == InheritanceType.Ultimogeniture)
-                    heir = ApplyUltimogeniture(title, victim, candidates);
-                else heir = ApplySeniority(title, victim, candidates);
-
-                if (heir != null)
-                {
-                    ChangeClanLeaderAction.ApplyWithSelectedNewLeader(victim.Clan, heir);
-                    BannerKingsConfig.Instance.TitleManager.InheritTitle(victim, heir, title);
-                    if (Clan.PlayerClan == heir.Clan)
-                        InformationManager.AddQuickInformation(new TextObject("{=!}{HEIR} has rightfully inherited the {TITLE}")
-                            .SetTextVariable("HEIR", heir.Name)
-                            .SetTextVariable("TITLE", title.FullName));
-
-                    return;
-                }
-            }
-            
-            ChangeClanLeaderAction.ApplyWithoutSelectedNewLeader(clan);
-        } */
-
-        private static Hero GetHeirInternal(InheritanceType type, GenderLaw genderLaw, Hero victim, List<Hero> candidates)
+        private static Hero GetHeirInternal(InheritanceType type, GenderLaw genderLaw, Hero victim,
+            List<Hero> candidates)
         {
             if (type == InheritanceType.Primogeniture)
                 return ApplyPrimogeniture(genderLaw, victim, candidates);
             else if (type == InheritanceType.Ultimogeniture)
                 return ApplyUltimogeniture(genderLaw, victim, candidates);
-            
+
             return ApplySeniority(genderLaw, victim, candidates);
         }
 
@@ -195,6 +199,7 @@ namespace BannerKings.Managers.Helpers
             return heir;
         }
 
-        private static bool IsFamily(Hero victim, Hero x) => x.Father == victim || x.Mother == victim || x.Spouse == victim || x.Siblings.Contains(victim);
+        private static bool IsFamily(Hero victim, Hero x) => x.Father == victim || x.Mother == victim ||
+                                                             x.Spouse == victim || x.Siblings.Contains(victim);
     }
 }

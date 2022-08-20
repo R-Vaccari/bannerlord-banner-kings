@@ -3,80 +3,78 @@ using TaleWorlds.Core;
 using TaleWorlds.Core.ViewModelCollection.Information;
 using TaleWorlds.Library;
 
-namespace BannerKings.UI.Crafting
+namespace BannerKings.UI.Crafting;
+
+public class ExtraMaterialItemVM : ViewModel
 {
-    public class ExtraMaterialItemVM : ViewModel
+    private HintViewModel hint;
+    private int resourceChange, resourceAmount;
+    private ImageIdentifierVM visual;
+
+    public ExtraMaterialItemVM(ItemObject material)
     {
-        private ItemObject material;
-		private ImageIdentifierVM visual;
-		private int resourceChange, resourceAmount;
-		private HintViewModel hint;
+        Material = material;
+        Visual = new ImageIdentifierVM(material);
+        ResourceAmount = PartyBase.MainParty.ItemRoster.GetItemNumber(material);
+        ResourceHint = new HintViewModel(material.Name);
+    }
 
-		public ExtraMaterialItemVM(ItemObject material)
+    public ItemObject Material { get; }
+
+    [DataSourceProperty]
+    public HintViewModel ResourceHint
+    {
+        get => hint;
+        set
         {
-            this.material = material;
-			Visual = new ImageIdentifierVM(material, "");
-			ResourceAmount = PartyBase.MainParty.ItemRoster.GetItemNumber(material);
-			ResourceHint = new HintViewModel(material.Name, null);
-		}
+            if (value != hint)
+            {
+                hint = value;
+                OnPropertyChangedWithValue(value);
+            }
+        }
+    }
 
-		public ItemObject Material => material;
+    [DataSourceProperty]
+    public int ResourceAmount
+    {
+        get => resourceAmount;
+        set
+        {
+            if (value != resourceAmount)
+            {
+                resourceAmount = value;
+                OnPropertyChangedWithValue(value);
+            }
+        }
+    }
 
-		[DataSourceProperty]
-		public HintViewModel ResourceHint
-		{
-			get => hint;
-			set
-			{
-				if (value != hint)
-				{
-					hint = value;
-					OnPropertyChangedWithValue(value, "ResourceHint");
-				}
-			}
-		}
+    [DataSourceProperty]
+    public int ResourceChangeAmount
+    {
+        get => resourceChange;
 
-		[DataSourceProperty]
-		public int ResourceAmount
-		{
-			get => resourceAmount;
-			set
-			{
-				if (value != resourceAmount)
-				{
-					resourceAmount = value;
-					OnPropertyChangedWithValue(value, "ResourceAmount");
-				}
-			}
-		}
+        set
+        {
+            if (value != resourceChange)
+            {
+                resourceChange = value;
+                OnPropertyChangedWithValue(value);
+            }
+        }
+    }
 
-		[DataSourceProperty]
-		public int ResourceChangeAmount
-		{
-			get => resourceChange;
-			
-			set
-			{
-				if (value != resourceChange)
-				{
-					resourceChange = value;
-					OnPropertyChangedWithValue(value, "ResourceChangeAmount");
-				}
-			}
-		}
-
-		[DataSourceProperty]
-		public ImageIdentifierVM Visual
-		{
-			get => visual;
-			set
-			{
-				if (value != visual)
-				{
-					visual = value;
-					OnPropertyChangedWithValue(value, "Visual");
-				}
-			}
-		}
-	}
+    [DataSourceProperty]
+    public ImageIdentifierVM Visual
+    {
+        get => visual;
+        set
+        {
+            if (value != visual)
+            {
+                visual = value;
+                OnPropertyChangedWithValue(value);
+            }
+        }
+    }
 }

@@ -1,30 +1,19 @@
 ﻿using TaleWorlds.CampaignSystem;
 using TaleWorlds.SaveSystem;
 
-namespace BannerKings.Managers.Institutions.Religions
+namespace BannerKings.Managers.Institutions.Religions;
+
+public class Clergyman
 {
-    public class Clergyman
+    [SaveableField(2)] private float piety;
+
+    public Clergyman(Hero hero, int rank)
     {
-        [SaveableField(1)]
-        private Hero hero;
-
-        [SaveableField(2)]
-        private float piety;
-
-        [SaveableField(3)]
-        private int rank;
-
-        public Clergyman(Hero hero, int rank)
-        {
-            this.hero = hero;
-            this.rank = rank;
-        }
-
-        public Hero Hero => hero;
-        public int Rank
-        {
-            get => rank;
-            set => rank = value;
-        }
+        Hero = hero;
+        Rank = rank;
     }
+
+    [field: SaveableField(1)] public Hero Hero { get; }
+
+    [field: SaveableField(3)] public int Rank { get; set; }
 }

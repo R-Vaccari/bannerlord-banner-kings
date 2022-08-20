@@ -1,74 +1,77 @@
-﻿using BannerKings.Managers.Education.Lifestyles;
-using System;
+﻿using System;
+using BannerKings.Managers.Education.Lifestyles;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Localization;
 
-namespace BannerKings.Managers.CampaignStart
+namespace BannerKings.Managers.CampaignStart;
+
+public class StartOption : BannerKingsObject
 {
-    public class StartOption : BannerKingsObject
+    public StartOption(string id) : base(id)
     {
-        private TextObject shortDescription;
-        private int gold;
-        private int food;
-        private int troops;
-        private int morale;
-        private float influence;
-        private float criminal;
-        private CultureObject culture;
-        private Lifestyle lifestyle;
-        private Action action;
-        public StartOption(string id) : base(id)
+    }
+
+    public TextObject ShortDescription { get; private set; }
+
+    public int Gold { get; private set; }
+
+    public int Food { get; private set; }
+
+    public int Troops { get; private set; }
+
+    public int Morale { get; private set; }
+
+    public float Influence { get; private set; }
+
+    public bool IsCriminal => Criminal > 0f;
+    public float Criminal { get; private set; }
+
+    public CultureObject Culture { get; private set; }
+
+    public Lifestyle Lifestyle { get; private set; }
+
+    public Action Action { get; private set; }
+
+    public override bool Equals(object obj)
+    {
+        if (obj is StartOption)
         {
+            return StringId == (obj as StartOption).StringId;
         }
 
-        public override bool Equals(object obj)
-        {
-            if (obj is StartOption) return StringId == (obj as StartOption).StringId;
-            return base.Equals(obj);
-        }
+        return base.Equals(obj);
+    }
 
-        public void Initialize(TextObject name, TextObject description, TextObject shortDescription, int gold, int food, int troops, int morale, float influence, 
-            Action action, float criminal = 0f, CultureObject culture = null, Lifestyle lifestyle = null)
-        {
-            Initialize(name, description);
-            this.shortDescription = shortDescription;
-            this.gold = gold;
-            this.food = food;
-            this.troops = troops;
-            this.morale = morale;
-            this.influence = influence;
-            this.action = action;
-            this.criminal = criminal;
-            this.culture = culture;
-            this.lifestyle = lifestyle;
-        }
+    public void Initialize(TextObject name, TextObject description, TextObject shortDescription, int gold, int food,
+        int troops, int morale, float influence,
+        Action action, float criminal = 0f, CultureObject culture = null, Lifestyle lifestyle = null)
+    {
+        Initialize(name, description);
+        this.ShortDescription = shortDescription;
+        this.Gold = gold;
+        this.Food = food;
+        this.Troops = troops;
+        this.Morale = morale;
+        this.Influence = influence;
+        this.Action = action;
+        this.Criminal = criminal;
+        this.Culture = culture;
+        this.Lifestyle = lifestyle;
+    }
 
-        public void PostInitialize()
-        {
-            StartOption so = DefaultStartOptions.Instance.GetById(StringId);
-            name = so.name;
-            description = so.description;
-            shortDescription = so.shortDescription;
-            gold = so.gold;
-            food = so.food;
-            troops = so.troops;
-            morale = so.morale;
-            influence = so.influence;
-            criminal = so.criminal;
-            culture = so.culture;
-            lifestyle = so.lifestyle;
-        }
-
-        public TextObject ShortDescription => shortDescription;
-        public int Gold => gold;
-        public int Food => food;
-        public int Troops => troops;
-        public int Morale => morale;
-        public float Influence => influence;
-        public bool IsCriminal => criminal > 0f;
-        public float Criminal => criminal;
-        public CultureObject Culture => culture;
-        public Lifestyle Lifestyle => lifestyle;
-        public Action Action => action;
+    public void PostInitialize()
+    {
+        var so = DefaultStartOptions.Instance.GetById(StringId);
+        name = so.name;
+        description = so.description;
+        ShortDescription = so.ShortDescription;
+        Gold = so.Gold;
+        Food = so.Food;
+        Troops = so.Troops;
+        Morale = so.Morale;
+        Influence = so.Influence;
+        Criminal = so.Criminal;
+        Culture = so.Culture;
+        Lifestyle = so.Lifestyle;
     }
 }

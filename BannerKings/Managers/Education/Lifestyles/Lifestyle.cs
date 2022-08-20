@@ -6,86 +6,108 @@ using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.SaveSystem;
 
-namespace BannerKings.Managers.Education.Lifestyles
+namespace BannerKings.Managers.Education.Lifestyles;
+
+public class Lifestyle : BannerKingsObject
 {
-    public class Lifestyle : BannerKingsObject
+    private TextObject effects;
+
+    private List<PerkObject> perks;
+
+    public Lifestyle(string id) : base(id)
     {
-        [SaveableField(100)]
-        private float progress;
+        Progress = 0f;
+        InvestedFocus = 0;
+    }
 
-        [SaveableField(101)]
-        private int investedFocus;
-        private CultureObject culture;
-        private SkillObject firstSkill;
-        private SkillObject secondSkill;
-        private List<PerkObject> perks;
-        private TextObject effects;
-        private float firstEffect, secondEffect;
+    public float NecessarySkillForFocus => 80f * (InvestedFocus + 1f);
 
-        public Lifestyle(string id) : base(id)
+
+    [field: SaveableField(101)] public int InvestedFocus { get; private set; }
+
+    [field: SaveableField(100)] public float Progress { get; private set; }
+
+    public CultureObject Culture { get; private set; }
+
+    public TextObject PassiveEffects =>
+        effects.SetTextVariable("EFFECT1", FirstEffect).SetTextVariable("EFFECT2", SecondEffect);
+
+    public float FirstEffect { get; private set; }
+
+    public float SecondEffect { get; private set; }
+
+    public SkillObject FirstSkill { get; private set; }
+
+    public SkillObject SecondSkill { get; private set; }
+
+    public MBReadOnlyList<PerkObject> Perks => perks.GetReadOnlyList();
+
+    public override bool Equals(object obj)
+    {
+        if (obj is Lifestyle)
         {
-            progress = 0f;
-            investedFocus = 0;
+            return StringId == (obj as Lifestyle).StringId;
         }
 
-        public override bool Equals(object obj)
+        return base.Equals(obj);
+    }
+
+    public static Lifestyle CreateLifestyle(Lifestyle lf)
+    {
+        var lifestyle = new Lifestyle(lf.StringId);
+        lifestyle.Initialize(lf.Name, lf.Description, lf.FirstSkill, lf.SecondSkill, new List<PerkObject>(lf.Perks),
+            lf.PassiveEffects,
+            lf.FirstEffect, lf.SecondEffect, lf.Culture);
+        return lifestyle;
+    }
+
+    public void Initialize(TextObject name, TextObject description, SkillObject firstSkill, SkillObject secondSkill,
+        List<PerkObject> perks, TextObject effects, float firstEffect, float secondEffect, CultureObject culture = null)
+    {
+        Initialize(name, description);
+        this.FirstSkill = firstSkill;
+        this.SecondSkill = secondSkill;
+        this.perks = perks;
+        this.effects = effects;
+        this.FirstEffect = firstEffect;
+        this.SecondEffect = secondEffect;
+        this.Culture = culture;
+    }
+
+    public bool CanLearn(Hero hero)
+    {
+        return (Culture == null || hero.Culture == Culture) && hero.GetSkillValue(FirstSkill) >= 15
+                                                            && hero.GetSkillValue(SecondSkill) >= 15;
+    }
+
+    public bool CanInvestFocus(Hero hero)
+    {
+        return Progress >= 1f && perks.Count >= InvestedFocus + 1 &&
+               hero.GetSkillValue(FirstSkill) + hero.GetSkillValue(SecondSkill) >= NecessarySkillForFocus;
+    }
+
+    public void InvestFocus(EducationData data, Hero hero, bool cheat = false)
+    {
+        if (!cheat)
         {
-            if (obj is Lifestyle) return StringId == (obj as Lifestyle).StringId;
-            return base.Equals(obj);
+            hero.HeroDeveloper.UnspentFocusPoints -= 1;
         }
 
-        public static Lifestyle CreateLifestyle(Lifestyle lf)
+        var perk = perks[InvestedFocus];
+        data.AddPerk(perk);
+        InvestedFocus += 1;
+        Progress = 0f;
+        if (hero == Hero.MainHero)
         {
-            Lifestyle lifestyle = new Lifestyle(lf.StringId);
-            lifestyle.Initialize(lf.Name, lf.Description, lf.FirstSkill, lf.SecondSkill, new List<PerkObject>(lf.Perks), lf.PassiveEffects,
-                    lf.FirstEffect, lf.SecondEffect, lf.Culture);
-            return lifestyle;
+            MBInformationManager.AddQuickInformation(
+                new TextObject("{=!}You have received the {PERK} perk from the {LIFESTYLE} lifestyle.")
+                    .SetTextVariable("PERK", perk.Name)
+                    .SetTextVariable("LIFESTYLE", Name));
         }
+    }
 
-        public void Initialize(TextObject name, TextObject description, SkillObject firstSkill, SkillObject secondSkill,
-            List<PerkObject> perks, TextObject effects, float firstEffect, float secondEffect, CultureObject culture = null)
-        {
-            Initialize(name, description);
-            this.firstSkill = firstSkill;
-            this.secondSkill = secondSkill;
-            this.perks = perks;
-            this.effects = effects;
-            this.firstEffect = firstEffect;
-            this.secondEffect = secondEffect;
-            this.culture = culture;
-
-        }
-
-        public float NecessarySkillForFocus => 80f * (investedFocus + 1f);
-
-        public bool CanLearn(Hero hero) => (culture == null || hero.Culture == culture) && hero.GetSkillValue(firstSkill) >= 15
-            && hero.GetSkillValue(secondSkill) >= 15;
-        public bool CanInvestFocus(Hero hero) => progress >= 1f && perks.Count >= investedFocus + 1 && 
-            (hero.GetSkillValue(firstSkill) + hero.GetSkillValue(secondSkill) >= NecessarySkillForFocus);
-        public void InvestFocus(EducationData data, Hero hero, bool cheat = false) 
-        {
-            if (!cheat) hero.HeroDeveloper.UnspentFocusPoints -= 1;
-            PerkObject perk = perks[investedFocus];
-            data.AddPerk(perk);
-            investedFocus += 1;
-            progress = 0f;
-            if (hero == Hero.MainHero) 
-                MBInformationManager.AddQuickInformation(new TextObject("{=!}You have received the {PERK} perk from the {LIFESTYLE} lifestyle.")
-                            .SetTextVariable("PERK", perk.Name)
-                            .SetTextVariable("LIFESTYLE", Name));
-        } 
-
-        public void AddProgress(float progress) => this.progress = MBMath.ClampFloat(this.progress + progress, 0f, 1f);
-        
-
-        public int InvestedFocus => investedFocus;
-        public float Progress => progress;
-        public CultureObject Culture => culture;
-        public TextObject PassiveEffects => effects.SetTextVariable("EFFECT1", firstEffect).SetTextVariable("EFFECT2", secondEffect);
-        public float FirstEffect => firstEffect;
-        public float SecondEffect => secondEffect;
-        public SkillObject FirstSkill => firstSkill;
-        public SkillObject SecondSkill => secondSkill;
-        public MBReadOnlyList<PerkObject> Perks => perks.GetReadOnlyList();
+    public void AddProgress(float progress)
+    {
+        this.Progress = MBMath.ClampFloat(this.Progress + progress, 0f, 1f);
     }
 }

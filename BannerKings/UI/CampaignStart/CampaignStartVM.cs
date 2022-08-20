@@ -1,75 +1,77 @@
 ﻿using BannerKings.Behaviours;
 using BannerKings.Managers.CampaignStart;
-using System;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 
-namespace BannerKings.UI.CampaignStart
+namespace BannerKings.UI.CampaignStart;
+
+public class CampaignStartVM : BannerKingsViewModel
 {
-    public class CampaignStartVM : BannerKingsViewModel
+    private MBBindingList<StartOptionVM> options;
+    private StartOptionVM selected;
+
+    public CampaignStartVM() : base(null, false)
     {
-        private MBBindingList<StartOptionVM> options;
-        private StartOptionVM selected;
+        options = new MBBindingList<StartOptionVM>();
+        RefreshValues();
+    }
 
-        public CampaignStartVM() : base(null, false)
+    [DataSourceProperty] public string ConfirmText => GameTexts.FindText("str_accept").ToString();
+
+    [DataSourceProperty]
+    public StartOptionVM Selected
+    {
+        get => selected;
+        set
         {
-            options = new MBBindingList<StartOptionVM>();
-            RefreshValues();
-        }
-
-        public override void RefreshValues()
-        {
-            base.RefreshValues();
-            Options.Clear();
-
-            foreach (StartOption option in DefaultStartOptions.Instance.All)
-                Options.Add(new StartOptionVM(option, new Action<StartOptionVM>(OnSelectOption)));
-        }
-
-        public void ExecuteFinish()
-        {
-            Campaign.Current.GetCampaignBehavior<BKCampaignStartBehavior>().SetStartOption(Selected.Option);
-            ExecuteClose();
-        }
-
-        public void OnSelectOption(StartOptionVM option)
-        {
-            if (Selected != null) Selected.IsSelected = false;
-
-            Selected = option;
-            Selected.IsSelected = true;
-        }
-
-        [DataSourceProperty]
-        public string ConfirmText => GameTexts.FindText("str_accept").ToString();
-
-        [DataSourceProperty]
-        public StartOptionVM Selected
-        {
-            get => selected;
-            set
+            if (value != selected)
             {
-                if (value != selected)
-                {
-                    selected = value;
-                    OnPropertyChangedWithValue(value, "Selected");
-                }
+                selected = value;
+                OnPropertyChangedWithValue(value);
             }
         }
+    }
 
-        [DataSourceProperty]
-        public MBBindingList<StartOptionVM> Options
+    [DataSourceProperty]
+    public MBBindingList<StartOptionVM> Options
+    {
+        get => options;
+        set
         {
-            get => options;
-            set
+            if (value != options)
             {
-                if (value != options)
-                {
-                    options = value;
-                    OnPropertyChangedWithValue(value, "Options");
-                }
+                options = value;
+                OnPropertyChangedWithValue(value);
             }
         }
+    }
+
+    public override void RefreshValues()
+    {
+        base.RefreshValues();
+        Options.Clear();
+
+        foreach (var option in DefaultStartOptions.Instance.All)
+        {
+            Options.Add(new StartOptionVM(option, OnSelectOption));
+        }
+    }
+
+    public void ExecuteFinish()
+    {
+        Campaign.Current.GetCampaignBehavior<BKCampaignStartBehavior>().SetStartOption(Selected.Option);
+        ExecuteClose();
+    }
+
+    public void OnSelectOption(StartOptionVM option)
+    {
+        if (Selected != null)
+        {
+            Selected.IsSelected = false;
+        }
+
+        Selected = option;
+        Selected.IsSelected = true;
     }
 }

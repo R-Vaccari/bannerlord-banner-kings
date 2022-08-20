@@ -1,12 +1,17 @@
-﻿using System;
-using TaleWorlds.Localization;
+﻿using TaleWorlds.Localization;
 
-namespace BannerKings.Managers.Institutions.Religions.Leaderships
+namespace BannerKings.Managers.Institutions.Religions.Leaderships;
+
+public class AutocephalousLeadership : DescentralizedLeadership
 {
-    public class AutocephalousLeadership : DescentralizedLeadership
+    public override TextObject GetHint()
     {
-        public override TextObject GetHint() => new TextObject("{=!}Autocephalous religions are organized based on secular kingdoms. Each kingdom will have it's own head of faith, tying the spiritual power to the material sovereigns.");
+        return new(
+            "{=!}Autocephalous religions are organized based on secular kingdoms. Each kingdom will have it's own head of faith, tying the spiritual power to the material sovereigns.");
+    }
 
-        public override TextObject GetName() => new TextObject("{=!}Autocephalous");
+    public override TextObject GetName()
+    {
+        return new("{=!}Autocephalous");
     }
 }

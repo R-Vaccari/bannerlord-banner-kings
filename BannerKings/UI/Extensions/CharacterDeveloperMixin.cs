@@ -5,83 +5,83 @@ using TaleWorlds.CampaignSystem.ViewModelCollection.CharacterDeveloper;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace BannerKings.UI.Extensions
+namespace BannerKings.UI.Extensions;
+
+[ViewModelMixin("RefreshValues")]
+internal class CharacterDeveloperMixin : BaseViewModelMixin<CharacterDeveloperVM>
 {
-    [ViewModelMixin("RefreshValues")]
-    internal class CharacterDeveloperMixin : BaseViewModelMixin<CharacterDeveloperVM>
+    //private BasicTooltipViewModel pietyHint;
+    private readonly CharacterDeveloperVM characterDeveloper;
+    private string educationText;
+    private EducationVM educationVM;
+    private bool visible;
+
+    public CharacterDeveloperMixin(CharacterDeveloperVM vm) : base(vm)
     {
-		//private BasicTooltipViewModel pietyHint;
-		private CharacterDeveloperVM characterDeveloper;
-		private EducationVM educationVM;
-		private bool visible;
-		private string educationText;
-		public CharacterDeveloperMixin(CharacterDeveloperVM vm) : base(vm)
-        {
-			EducationVisible = false;
-			characterDeveloper = vm;
-		}
+        EducationVisible = false;
+        characterDeveloper = vm;
+    }
 
-        public override void OnRefresh()
+    [DataSourceProperty]
+    public EducationVM Education
+    {
+        get => educationVM;
+        set
         {
-			EducationText = new TextObject("{=!}Education").ToString();
-			Education = new EducationVM(characterDeveloper.CurrentCharacter.Hero, characterDeveloper);
-			Education.RefreshValues();
-		}
-
-		[DataSourceMethod]
-		public void OpenEducation()
-        {
-			EducationVisible = true;
-			OnRefresh();
+            if (value != educationVM)
+            {
+                educationVM = value;
+                ViewModel!.OnPropertyChangedWithValue(value);
+            }
         }
+    }
 
-		[DataSourceMethod]
-		public void CloseEducation()
-		{
-			EducationVisible = false;
-			OnRefresh();
-		}
-
-		[DataSourceProperty]
-		public EducationVM Education
-		{
-			get => educationVM;
-			set
-			{
-				if (value != educationVM)
-				{
-					educationVM = value;
-					ViewModel!.OnPropertyChangedWithValue(value, "Education");
-				}
-			}
-		}
-
-		[DataSourceProperty]
-		public bool EducationVisible
+    [DataSourceProperty]
+    public bool EducationVisible
+    {
+        get => visible;
+        set
         {
-			get => visible;
-			set
-			{
-				if (value != visible)
-				{
-					visible = value;
-					ViewModel!.OnPropertyChangedWithValue(value, "EducationVisible");
-				}
-			}
-		}
+            if (value != visible)
+            {
+                visible = value;
+                ViewModel!.OnPropertyChangedWithValue(value);
+            }
+        }
+    }
 
-		[DataSourceProperty]
-		public string EducationText
-		{
-			get => educationText;
-			set
-			{
-				if (value != this.educationText)
-				{
-					this.educationText = value;
-					ViewModel!.OnPropertyChangedWithValue(value, "EducationText");
-				}
-			}
-		}
-	}
+    [DataSourceProperty]
+    public string EducationText
+    {
+        get => educationText;
+        set
+        {
+            if (value != educationText)
+            {
+                educationText = value;
+                ViewModel!.OnPropertyChangedWithValue(value);
+            }
+        }
+    }
+
+    public override void OnRefresh()
+    {
+        EducationText = new TextObject("{=!}Education").ToString();
+        Education = new EducationVM(characterDeveloper.CurrentCharacter.Hero, characterDeveloper);
+        Education.RefreshValues();
+    }
+
+    [DataSourceMethod]
+    public void OpenEducation()
+    {
+        EducationVisible = true;
+        OnRefresh();
+    }
+
+    [DataSourceMethod]
+    public void CloseEducation()
+    {
+        EducationVisible = false;
+        OnRefresh();
+    }
 }

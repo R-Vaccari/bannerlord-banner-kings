@@ -8,10 +8,10 @@ namespace BannerKings
     {
         public class InformationElement : ViewModel
         {
-            private string description, value;
             private HintViewModel _hint;
+            private string description, value;
 
-            public InformationElement(string description, string value, string hintText) 
+            public InformationElement(string description, string value, string hintText)
             {
                 this.description = description;
                 this.value = value;
@@ -28,7 +28,7 @@ namespace BannerKings
                     if (value != description)
                     {
                         description = value;
-                        OnPropertyChangedWithValue(value, "Description");
+                        OnPropertyChangedWithValue(value);
                     }
                 }
             }
@@ -42,7 +42,7 @@ namespace BannerKings
                     if (value != this.value)
                     {
                         this.value = value;
-                        OnPropertyChangedWithValue(value, "Value");
+                        OnPropertyChangedWithValue(value);
                     }
                 }
             }

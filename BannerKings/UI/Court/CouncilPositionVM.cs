@@ -1,35 +1,39 @@
-﻿using BannerKings.Managers.Court;
-using System;
+﻿using System;
+using BannerKings.Managers.Court;
 using TaleWorlds.CampaignSystem.ViewModelCollection;
 using TaleWorlds.Library;
 
-namespace BannerKings.UI.Items
+namespace BannerKings.UI.Items;
+
+public class CouncilPositionVM : HeroVM
 {
-    public class CouncilPositionVM : HeroVM
+    private readonly CouncilMember position;
+    private readonly Action<string> setId;
+    private readonly Action<string> updatePosition;
+
+    public CouncilPositionVM(CouncilMember position, Action<string> setId, Action<string> updatePosition) : base(
+        position.Member)
     {
+        this.position = position;
+        this.setId = setId;
+        this.updatePosition = updatePosition;
+    }
 
-        private CouncilMember position;
-        private Action<string> setId, updatePosition;
-        public CouncilPositionVM(CouncilMember position, Action<string> setId, Action<string> updatePosition) : base(position.Member)
+    [DataSourceProperty] public string Title => position.GetName().ToString();
+
+    private void SetId()
+    {
+        if (setId != null)
         {
-            this.position = position;
-            this.setId = setId;
-            this.updatePosition = updatePosition;
+            setId(position.Position.ToString());
         }
+    }
 
-        private void SetId()
+    private void UpdatePosition()
+    {
+        if (updatePosition != null)
         {
-            if (setId != null)
-                setId(position.Position.ToString());
+            updatePosition(position.Position.ToString());
         }
-
-        private void UpdatePosition()
-        {
-            if (updatePosition != null)
-                updatePosition(position.Position.ToString());
-        }
-
-        [DataSourceProperty]
-        public string Title => position.GetName().ToString();
     }
 }
