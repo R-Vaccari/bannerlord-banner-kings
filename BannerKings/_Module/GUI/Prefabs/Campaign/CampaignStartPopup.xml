@@ -1,147 +1,147 @@
 <Prefab>
-<Constants>
-	<Constant Name="Popup.Width" Value="1370" />
-	<Constant Name="Popup.Height" Value="680" />
-	<Constant Name="Card.Width" Value="196" />
-	<Constant Name="Card.Inner.Vertical.Margin" Value="2" />
-	<Constant Name="Card.Inner.Horizontal.Margin" Value="2" />
-</Constants>
-<Variables>
-</Variables>
-<VisualDefinitions>
-</VisualDefinitions>
-<Window>
-	<Widget Id="CraftingOrderPopup" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent">
-		<Children>
+	<Constants>
+		<Constant Name="Popup.Width" Value="1370" />
+		<Constant Name="Popup.Height" Value="680" />
+		<Constant Name="Card.Width" Value="196" />
+		<Constant Name="Card.Inner.Vertical.Margin" Value="2" />
+		<Constant Name="Card.Inner.Horizontal.Margin" Value="2" />
+	</Constants>
+	<Variables>
+	</Variables>
+	<VisualDefinitions>
+	</VisualDefinitions>
+	<Window>
+		<Widget Id="CraftingOrderPopup" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent">
+			<Children>
 
-			<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Sprite="BlankWhiteSquare_9" Color="#000000FF" AlphaFactor="0.6" />
+				<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Sprite="BlankWhiteSquare_9" Color="#000000FF" AlphaFactor="0.6" />
 
-			<Widget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="!Popup.Width" SuggestedHeight="!Popup.Height" VerticalAlignment="Center" HorizontalAlignment="Center">
-				<Children>
-					<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginTop="35" MarginRight="35">
-						<Children>
-							<ImageWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Sprite="StdAssets\Popup\order_popup_canvas" />
-							<ImageWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Sprite="StdAssets\Popup\canvas_gradient" />
-							<ImageWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginLeft="-20" MarginTop="-20" MarginRight="-20" MarginBottom="-20" Sprite="frame_9" />
-							
-							<!-- <TextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" SuggestedHeight="45" HorizontalAlignment="Center" MarginTop="10" Text="@OrderCountText" Brush="InventoryHeaderFontBrush" Brush.FontSize="34" /> -->
-						
-							<ScrollablePanel WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginTop="60" MarginBottom="60" MarginLeft="40" MarginRight="40" HorizontalAlignment="Center" ClipRect="ClipRect" InnerPanel="ClipRect\OrderList" HorizontalScrollbar="HorizontalScrollbar" AutoHideScrollBars="true" Sprite="scrollable_field_9" Color="#FFFFFFFF">
-								<Children>
-									<Widget Id="ClipRect" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginTop="7" MarginBottom="7" MarginLeft="9" MarginRight="9" ClipContents="true">
-									  <Children>
-										<ListPanel Id="OrderList" WidthSizePolicy="CoverChildren" HeightSizePolicy="StretchToParent" StackLayout.LayoutMethod="VerticalBottomToTop">
-										  <Children>
-											<ListPanel DataSource="{Options}" WidthSizePolicy="CoverChildren" HeightSizePolicy="StretchToParent" StackLayout.LayoutMethod="HorizontalLeftToRight">
-											  <ItemTemplate>
-												<Widget WidthSizePolicy="Fixed" HeightSizePolicy="StretchToParent" DoNotPassEventsToChildren="false" SuggestedWidth="!Card.Width" MarginLeft="5" MarginRight="5" MarginTop="5" MarginBottom="5">
-												  <Children>
-													<CardSelectionPopupButtonWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" DoNotPassEventsToChildren="true" Brush="Crafting.Order.Card" IsEnabled="true" IsSelected="@IsSelected" PropertiesContainer="Content\CardMiddle\PropertiesContainer" Command.Click="ExecuteSelectOption" UpdateChildrenStates="true">
-													  <Children>
-														<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Sprite="StdAssets\Popup\scrollable_field_gradient"/>
+				<Widget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="!Popup.Width" SuggestedHeight="!Popup.Height" VerticalAlignment="Center" HorizontalAlignment="Center">
+					<Children>
+						<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginTop="35" MarginRight="35">
+							<Children>
+								<ImageWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Sprite="StdAssets\Popup\order_popup_canvas" />
+								<ImageWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Sprite="StdAssets\Popup\canvas_gradient" />
+								<ImageWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginLeft="-20" MarginTop="-20" MarginRight="-20" MarginBottom="-20" Sprite="frame_9" />
 
-														<ListPanel Id="Content" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginTop="!Card.Inner.Vertical.Margin" MarginBottom="!Card.Inner.Vertical.Margin" MarginLeft="!Card.Inner.Horizontal.Margin" MarginRight="!Card.Inner.Horizontal.Margin" StackLayout.LayoutMethod="VerticalBottomToTop"  UpdateChildrenStates="true">
-														  <Children>
-														  
-														    <TextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="48" Brush="Crafting.Order.Card.Header" MarginTop="8" Text="@Name" />
+								<!-- <TextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" SuggestedHeight="45" HorizontalAlignment="Center" MarginTop="10" Text="@OrderCountText" Brush="InventoryHeaderFontBrush" Brush.FontSize="34" /> -->
 
-															<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="2" MarginLeft="15" MarginRight="15" MarginTop="4" MarginBottom="2" Sprite="BlankWhiteSquare_9" Color="#F09A29FF" />
-
-															<TextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" SuggestedHeight="22" MarginTop="15" MarginRight="4" MarginLeft="4" VerticalAlignment="Center" Brush="Crafting.Order.Price.Value" Brush.FontSize="22" Text="@ShortDescription"/>
-
-																																													
-														  </Children>
-														</ListPanel>
-														
-														<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" VerticalAlignment="Bottom" MarginBottom="10">
-														  <Children>
-														  
-														    <Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" VerticalAlignment="Top" SuggestedHeight="2" MarginLeft="15" MarginRight="15" MarginTop="2" MarginBottom="6" Sprite="BlankWhiteSquare_9" Color="#F09A29FF" />
-
-														     <GridWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" VerticalAlignment="Bottom" DefaultCellWidth="95" DefaultCellHeight="40" ColumnCount="2" LayoutImp="GridLayout">
-															  <Children>
-															  
-																<ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" SuggestedHeight="32" MarginLeft="5" MarginTop="5" HorizontalAlignment="Center" StackLayout.LayoutMethod="HorizontalLeftToRight">
-																  <Children>
-																	<TextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" SuggestedHeight="32" VerticalAlignment="Center" Brush="Crafting.Order.Price.Value" Text="@Gold"/>
-																	<ImageWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="30" SuggestedHeight="30" VerticalAlignment="Center" Sprite="General\Icons\Coin@2x" />
-																  </Children>
-																</ListPanel>
-																
-																<ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" SuggestedHeight="32" MarginLeft="5" MarginTop="5" HorizontalAlignment="Center" StackLayout.LayoutMethod="HorizontalLeftToRight">
-																  <Children>
-																	<TextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" SuggestedHeight="32" VerticalAlignment="Center" Brush="Crafting.Order.Price.Value" Text="@Influence"/>
-																	<ImageWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="30" SuggestedHeight="30" VerticalAlignment="Center" Sprite="General\Icons\Influence@2x" />
-																  </Children>
-																</ListPanel>
-																
-																<ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" SuggestedHeight="32" MarginLeft="5" MarginTop="5" HorizontalAlignment="Center" StackLayout.LayoutMethod="HorizontalLeftToRight">
-																  <Children>
-																	<TextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" SuggestedHeight="32" VerticalAlignment="Center" Brush="Crafting.Order.Price.Value" Text="@Food"/>
-																	<ImageWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="30" SuggestedHeight="30" VerticalAlignment="Center" Sprite="General\Icons\Food@2x" />
-																  </Children>
-																</ListPanel>
-																
-																<ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" SuggestedHeight="32" MarginLeft="5" MarginTop="5" HorizontalAlignment="Center" StackLayout.LayoutMethod="HorizontalLeftToRight">
-																  <Children>
-																	<TextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" SuggestedHeight="32" VerticalAlignment="Center" Brush="Crafting.Order.Price.Value" Text="@Troops"/>
-																	<ImageWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="30" SuggestedHeight="30" VerticalAlignment="Center" Sprite="General\Icons\Party@2x" />
-																  </Children>
-																</ListPanel>
-																
-																<ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" SuggestedHeight="32" MarginLeft="5" MarginTop="5" HorizontalAlignment="Center" StackLayout.LayoutMethod="HorizontalLeftToRight">
-																  <Children>
-																	<TextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" SuggestedHeight="32" VerticalAlignment="Center" Brush="Crafting.Order.Price.Value" Text="@Morale"/>
-																	<ImageWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="30" SuggestedHeight="30" VerticalAlignment="Center" Sprite="General\Icons\Morale@2x" />
-																  </Children>
-																</ListPanel>
-																
-																<ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" SuggestedHeight="32" MarginLeft="5" MarginTop="5" HorizontalAlignment="Center" StackLayout.LayoutMethod="HorizontalLeftToRight">
-																  <Children>
-																	<TextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" SuggestedHeight="32" VerticalAlignment="Center" Brush="Crafting.Order.Price.Value" Text="@Criminal"/>
-																	<ImageWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="30" SuggestedHeight="30" VerticalAlignment="Center" Sprite="SPGeneral\MapOverlay\Settlement\icon_crime" />
-																  </Children>
-																</ListPanel>
-															  
-															  </Children>
-															</GridWidget>
-														  </Children>
-														</Widget>
-													  </Children>
-													</CardSelectionPopupButtonWidget>
-													
-		
-													<HintWidget DataSource="{Hint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" SuggestedWidth="100" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" />
-												  </Children>
-												</Widget>
-											  </ItemTemplate>
-											</ListPanel>
-										  </Children>
-										</ListPanel>                      
-									  </Children>
-									</Widget>
-			  
-								<ScrollbarWidget Id="HorizontalScrollbar" WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="6" HorizontalAlignment="Center" VerticalAlignment="Bottom" MarginLeft="15" MarginRight="15" MarginBottom="5" AlignmentAxis="Horizontal" Handle="HorizontalScrollbarHandle" MaxValue="100" MinValue="0">
+								<ScrollablePanel WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginTop="60" MarginBottom="60" MarginLeft="40" MarginRight="40" HorizontalAlignment="Center" ClipRect="ClipRect" InnerPanel="ClipRect\OrderList" HorizontalScrollbar="HorizontalScrollbar" AutoHideScrollBars="true" Sprite="scrollable_field_9" Color="#FFFFFFFF">
 									<Children>
-										<Widget WidthSizePolicy="Fixed" HeightSizePolicy="StretchToParent" SuggestedWidth="6" HorizontalAlignment="Center" Sprite="BlankWhiteSquare_9" AlphaFactor="0.2" Color="#5a4033FF" />
-										<ImageWidget Id="HorizontalScrollbarHandle" WidthSizePolicy="Fixed" HeightSizePolicy="StretchToParent" SuggestedWidth="10" MarginTop="1" MarginBottom="1" HorizontalAlignment="Center" Brush="FaceGen.Scrollbar.Handle" />
+										<Widget Id="ClipRect" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginTop="7" MarginBottom="7" MarginLeft="9" MarginRight="9" ClipContents="true">
+											<Children>
+												<ListPanel Id="OrderList" WidthSizePolicy="CoverChildren" HeightSizePolicy="StretchToParent" StackLayout.LayoutMethod="VerticalBottomToTop">
+													<Children>
+														<ListPanel DataSource="{Options}" WidthSizePolicy="CoverChildren" HeightSizePolicy="StretchToParent" StackLayout.LayoutMethod="HorizontalLeftToRight">
+															<ItemTemplate>
+																<Widget WidthSizePolicy="Fixed" HeightSizePolicy="StretchToParent" DoNotPassEventsToChildren="false" SuggestedWidth="!Card.Width" MarginLeft="5" MarginRight="5" MarginTop="5" MarginBottom="5">
+																	<Children>
+																		<CardSelectionPopupButtonWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" DoNotPassEventsToChildren="true" Brush="Crafting.Order.Card" IsEnabled="true" IsSelected="@IsSelected" PropertiesContainer="Content\CardMiddle\PropertiesContainer" Command.Click="ExecuteSelectOption" UpdateChildrenStates="true">
+																			<Children>
+																				<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Sprite="StdAssets\Popup\scrollable_field_gradient"/>
+
+																				<ListPanel Id="Content" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginTop="!Card.Inner.Vertical.Margin" MarginBottom="!Card.Inner.Vertical.Margin" MarginLeft="!Card.Inner.Horizontal.Margin" MarginRight="!Card.Inner.Horizontal.Margin" StackLayout.LayoutMethod="VerticalBottomToTop"  UpdateChildrenStates="true">
+																					<Children>
+
+																						<TextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="48" Brush="Crafting.Order.Card.Header" MarginTop="8" Text="@Name" />
+
+																						<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="2" MarginLeft="15" MarginRight="15" MarginTop="4" MarginBottom="2" Sprite="BlankWhiteSquare_9" Color="#F09A29FF" />
+
+																						<TextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" SuggestedHeight="22" MarginTop="15" MarginRight="4" MarginLeft="4" VerticalAlignment="Center" Brush="Crafting.Order.Price.Value" Brush.FontSize="22" Text="@ShortDescription"/>
+
+
+																					</Children>
+																				</ListPanel>
+
+																				<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" VerticalAlignment="Bottom" MarginBottom="10">
+																					<Children>
+
+																						<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" VerticalAlignment="Top" SuggestedHeight="2" MarginLeft="15" MarginRight="15" MarginTop="2" MarginBottom="6" Sprite="BlankWhiteSquare_9" Color="#F09A29FF" />
+
+																						<GridWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" VerticalAlignment="Bottom" DefaultCellWidth="95" DefaultCellHeight="40" ColumnCount="2" LayoutImp="GridLayout">
+																							<Children>
+
+																								<ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" SuggestedHeight="32" MarginLeft="5" MarginTop="5" HorizontalAlignment="Center" StackLayout.LayoutMethod="HorizontalLeftToRight">
+																									<Children>
+																										<TextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" SuggestedHeight="32" VerticalAlignment="Center" Brush="Crafting.Order.Price.Value" Text="@Gold"/>
+																										<ImageWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="30" SuggestedHeight="30" VerticalAlignment="Center" Sprite="General\Icons\Coin@2x" />
+																									</Children>
+																								</ListPanel>
+
+																								<ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" SuggestedHeight="32" MarginLeft="5" MarginTop="5" HorizontalAlignment="Center" StackLayout.LayoutMethod="HorizontalLeftToRight">
+																									<Children>
+																										<TextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" SuggestedHeight="32" VerticalAlignment="Center" Brush="Crafting.Order.Price.Value" Text="@Influence"/>
+																										<ImageWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="30" SuggestedHeight="30" VerticalAlignment="Center" Sprite="General\Icons\Influence@2x" />
+																									</Children>
+																								</ListPanel>
+
+																								<ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" SuggestedHeight="32" MarginLeft="5" MarginTop="5" HorizontalAlignment="Center" StackLayout.LayoutMethod="HorizontalLeftToRight">
+																									<Children>
+																										<TextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" SuggestedHeight="32" VerticalAlignment="Center" Brush="Crafting.Order.Price.Value" Text="@Food"/>
+																										<ImageWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="30" SuggestedHeight="30" VerticalAlignment="Center" Sprite="General\Icons\Food@2x" />
+																									</Children>
+																								</ListPanel>
+
+																								<ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" SuggestedHeight="32" MarginLeft="5" MarginTop="5" HorizontalAlignment="Center" StackLayout.LayoutMethod="HorizontalLeftToRight">
+																									<Children>
+																										<TextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" SuggestedHeight="32" VerticalAlignment="Center" Brush="Crafting.Order.Price.Value" Text="@Troops"/>
+																										<ImageWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="30" SuggestedHeight="30" VerticalAlignment="Center" Sprite="General\Icons\Party@2x" />
+																									</Children>
+																								</ListPanel>
+
+																								<ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" SuggestedHeight="32" MarginLeft="5" MarginTop="5" HorizontalAlignment="Center" StackLayout.LayoutMethod="HorizontalLeftToRight">
+																									<Children>
+																										<TextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" SuggestedHeight="32" VerticalAlignment="Center" Brush="Crafting.Order.Price.Value" Text="@Morale"/>
+																										<ImageWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="30" SuggestedHeight="30" VerticalAlignment="Center" Sprite="General\Icons\Morale@2x" />
+																									</Children>
+																								</ListPanel>
+
+																								<ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" SuggestedHeight="32" MarginLeft="5" MarginTop="5" HorizontalAlignment="Center" StackLayout.LayoutMethod="HorizontalLeftToRight">
+																									<Children>
+																										<TextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" SuggestedHeight="32" VerticalAlignment="Center" Brush="Crafting.Order.Price.Value" Text="@Criminal"/>
+																										<ImageWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="30" SuggestedHeight="30" VerticalAlignment="Center" Sprite="SPGeneral\MapOverlay\Settlement\icon_crime" />
+																									</Children>
+																								</ListPanel>
+
+																							</Children>
+																						</GridWidget>
+																					</Children>
+																				</Widget>
+																			</Children>
+																		</CardSelectionPopupButtonWidget>
+
+
+																		<HintWidget DataSource="{Hint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" SuggestedWidth="100" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" />
+																	</Children>
+																</Widget>
+															</ItemTemplate>
+														</ListPanel>
+													</Children>
+												</ListPanel>
+											</Children>
+										</Widget>
+
+										<ScrollbarWidget Id="HorizontalScrollbar" WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="6" HorizontalAlignment="Center" VerticalAlignment="Bottom" MarginLeft="15" MarginRight="15" MarginBottom="5" AlignmentAxis="Horizontal" Handle="HorizontalScrollbarHandle" MaxValue="100" MinValue="0">
+											<Children>
+												<Widget WidthSizePolicy="Fixed" HeightSizePolicy="StretchToParent" SuggestedWidth="6" HorizontalAlignment="Center" Sprite="BlankWhiteSquare_9" AlphaFactor="0.2" Color="#5a4033FF" />
+												<ImageWidget Id="HorizontalScrollbarHandle" WidthSizePolicy="Fixed" HeightSizePolicy="StretchToParent" SuggestedWidth="10" MarginTop="1" MarginBottom="1" HorizontalAlignment="Center" Brush="FaceGen.Scrollbar.Handle" />
+											</Children>
+										</ScrollbarWidget>
+
 									</Children>
-								</ScrollbarWidget>
-			
-								</Children>                
-							</ScrollablePanel>
-							
-							<ButtonWidget  DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" HorizontalAlignment="Center" VerticalAlignment="Bottom" MarginBottom="15" SuggestedWidth="120" SuggestedHeight="40" Brush="ButtonBrush2" Command.Click="ExecuteFinish" UpdateChildrenStates="true">
-							  <Children>
-								<TextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginTop="3" Brush="Clan.TabControl.Text" Text="@ConfirmText" />
-							  </Children>
-							</ButtonWidget>
-							
-						</Children>
-					</Widget>
-				</Children>
-			</Widget>
-		</Children>
-	</Widget>
-</Window>
+								</ScrollablePanel>
+
+								<ButtonWidget  DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" HorizontalAlignment="Center" VerticalAlignment="Bottom" MarginBottom="15" SuggestedWidth="120" SuggestedHeight="40" Brush="ButtonBrush2" Command.Click="ExecuteFinish" UpdateChildrenStates="true">
+									<Children>
+										<TextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginTop="3" Brush="Clan.TabControl.Text" Text="@ConfirmText" />
+									</Children>
+								</ButtonWidget>
+
+							</Children>
+						</Widget>
+					</Children>
+				</Widget>
+			</Children>
+		</Widget>
+	</Window>
 </Prefab>

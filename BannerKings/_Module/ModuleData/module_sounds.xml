@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <base xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" type="module_sound">
-  <module_sounds>
-  <!--
+	<module_sounds>
+		<!--
   sound_categories are:
 	mission_ambient_bed
 	mission_ambient_3d_big
@@ -39,10 +39,6 @@
 			eventRef.Play();
 		}
   -->
-  
-    <module_sound name="example/combat/hit" is_2d="true" sound_category="mission_combat" path="example_sound_modders.ogg" />
-    <module_sound name="example/voice/charge" sound_category="mission_voice_shout" path="example_sound_modders.ogg" />
-    <module_sound name="example/voice/whisper" sound_category="mission_voice_trivial" path="example_sound_modders.ogg" />
-  </module_sounds>
+	</module_sounds>
 
 </base>
