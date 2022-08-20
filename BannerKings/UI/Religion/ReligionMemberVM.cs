@@ -5,7 +5,7 @@ using TaleWorlds.CampaignSystem.ViewModelCollection.GameMenu.TownManagement;
 using TaleWorlds.Core.ViewModelCollection.Information;
 using TaleWorlds.Library;
 
-namespace BannerKings.UI.Items;
+namespace BannerKings.UI.Religion;
 
 public class ReligionMemberVM : SettlementGovernorSelectionItemVM
 {

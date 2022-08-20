@@ -1,6 +1,6 @@
 ﻿using System.Linq;
+using BannerKings.Managers.Populations;
 using BannerKings.Models.BKModels;
-using BannerKings.Populations;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.SaveSystem;

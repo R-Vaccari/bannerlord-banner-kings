@@ -1,11 +1,11 @@
-﻿using BannerKings.Managers.Institutions.Religions;
-using BannerKings.Managers.Institutions.Religions.Doctrines;
-using BannerKings.Populations;
+﻿using BannerKings.Managers.Institutions.Religions.Doctrines;
+using BannerKings.Managers.Populations;
 using BannerKings.UI.Items;
+using BannerKings.UI.Items.UI;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace BannerKings.UI.Panels;
+namespace BannerKings.UI.Religion;
 
 internal class ReligionVM : BannerKingsViewModel
 {
@@ -14,7 +14,7 @@ internal class ReligionVM : BannerKingsViewModel
     private MBBindingList<InformationElement> courtInfo;
     private MBBindingList<ReligionElementVM> doctrines;
     private MBBindingList<ReligionMemberVM> faithful;
-    private readonly Religion religion;
+    private readonly Managers.Institutions.Religions.Religion religion;
     private MBBindingList<ReligionElementVM> secondaryDivinities;
     private MBBindingList<BKTraitItemVM> virtues;
 

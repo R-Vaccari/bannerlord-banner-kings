@@ -10,7 +10,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace BannerKings.UI.Windows;
+namespace BannerKings.UI.Titles;
 
 public class DemesneHierarchyVM : BannerKingsViewModel
 {

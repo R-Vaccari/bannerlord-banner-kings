@@ -59,7 +59,7 @@ public class BKSettlementActions : CampaignBehaviorBase
             }, true);
 
         campaignGameStarter.AddWaitGameMenu("bannerkings_wait_train_guards",
-            "{=!}You are trainning the guards in {CURRENT_SETTLEMENT}.",
+            "{=!}You are training the guards in {CURRENT_SETTLEMENT}.",
             MenuWaitInit,
             MenuTrainGuardActionPeasantCondition,
             MenuActionConsequenceWithGold,

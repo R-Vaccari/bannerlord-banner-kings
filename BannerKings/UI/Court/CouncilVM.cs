@@ -12,7 +12,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace BannerKings.UI.Items;
+namespace BannerKings.UI.Court;
 
 public class CouncilVM : SettlementGovernorSelectionVM
 {

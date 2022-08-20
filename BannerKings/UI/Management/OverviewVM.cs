@@ -1,13 +1,14 @@
-﻿using BannerKings.Models;
-using BannerKings.Models.Populations;
-using BannerKings.Populations;
+﻿using BannerKings.Managers.Populations;
+using BannerKings.Models.BKModels;
+using BannerKings.UI.Items;
+using BannerKings.UI.Items.UI;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace BannerKings.UI;
+namespace BannerKings.UI.Management;
 
 public class OverviewVM : BannerKingsViewModel
 {

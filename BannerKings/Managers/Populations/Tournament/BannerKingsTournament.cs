@@ -1,5 +1,4 @@
-﻿using BannerKings.Populations;
-using TaleWorlds.CampaignSystem.Settlements;
+﻿using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.TournamentGames;
 using TaleWorlds.Core;
 using TaleWorlds.SaveSystem;

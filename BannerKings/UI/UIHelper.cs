@@ -74,7 +74,7 @@ public static class UIHelper
         return text;
     }
 
-    public static List<TooltipProperty> GetPietyTooltip(Religion rel, Hero hero, int piety)
+    public static List<TooltipProperty> GetPietyTooltip(Managers.Institutions.Religions.Religion rel, Hero hero, int piety)
     {
         var model = (BKPietyModel) BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(BKPietyModel));
         var tooltipForAccumulatingProperty =

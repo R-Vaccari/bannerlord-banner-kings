@@ -1,5 +1,5 @@
 ﻿using System;
-using BannerKings.Populations;
+using BannerKings.Managers.Populations;
 
 namespace BannerKings.Managers.Kingdoms;
 

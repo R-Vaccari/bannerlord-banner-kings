@@ -7,7 +7,6 @@ using BannerKings.Managers.Populations.Villages;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
 using BannerKings.UI.Notifications;
-using BannerKings.UI.Windows;
 using HarmonyLib;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;

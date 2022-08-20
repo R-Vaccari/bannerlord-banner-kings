@@ -5,8 +5,7 @@ using Bannerlord.UIExtenderEx.Prefabs2;
 
 namespace BannerKings.UI.Extensions;
 
-[PrefabExtension("CharacterDeveloper", "descendant::Widget/Children/ListPanel[1]/Children/Widget[1]/Children",
-    "CharacterDeveloper")]
+[PrefabExtension("CharacterDeveloper", "descendant::Widget/Children/ListPanel[1]/Children/Widget[1]/Children", "CharacterDeveloper")]
 internal class CharacterDeveloperEducationExtension : PrefabExtensionInsertPatch
 {
     private readonly List<XmlNode> nodes;

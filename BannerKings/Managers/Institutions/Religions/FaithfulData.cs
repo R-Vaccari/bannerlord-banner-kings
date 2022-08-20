@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using BannerKings.Managers.Institutions.Religions.Faiths.Rites;
-using BannerKings.Populations;
+using BannerKings.Managers.Populations;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.SaveSystem;
 

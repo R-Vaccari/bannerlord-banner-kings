@@ -3,7 +3,7 @@ using BannerKings.Managers.Court;
 using TaleWorlds.CampaignSystem.ViewModelCollection;
 using TaleWorlds.Library;
 
-namespace BannerKings.UI.Items;
+namespace BannerKings.UI.Court;
 
 public class CouncilPositionVM : HeroVM
 {

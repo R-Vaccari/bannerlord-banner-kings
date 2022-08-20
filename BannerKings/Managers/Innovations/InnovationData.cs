@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
+using BannerKings.Managers.Populations;
 using BannerKings.Managers.Skills;
-using BannerKings.Populations;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Library;

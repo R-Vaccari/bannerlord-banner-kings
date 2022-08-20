@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace BannerKings.Managers.Institutions.Religions;
+namespace BannerKings.Managers.Institutions.Religions.Leaderships;
 
 public abstract class DescentralizedLeadership : ReligiousLeadership
 {

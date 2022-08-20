@@ -1,6 +1,6 @@
 ﻿using BannerKings.Managers.Duties;
 using BannerKings.Managers.Titles;
-using BannerKings.Models;
+using BannerKings.Models.Vanilla;
 using HarmonyLib;
 using Helpers;
 using TaleWorlds.CampaignSystem;

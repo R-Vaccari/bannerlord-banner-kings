@@ -2,13 +2,14 @@
 using System.Linq;
 using BannerKings.Managers.Titles;
 using BannerKings.Models.BKModels;
+using BannerKings.UI.Items;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Core.ViewModelCollection.Information;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace BannerKings.UI.Items;
+namespace BannerKings.UI.Titles;
 
 public class TitleVM : ViewModel
 {

@@ -1,4 +1,4 @@
-﻿namespace BannerKings.Models;
+﻿namespace BannerKings.Models.Vanilla;
 
 
 

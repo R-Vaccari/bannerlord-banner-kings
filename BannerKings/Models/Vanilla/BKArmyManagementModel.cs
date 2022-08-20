@@ -5,7 +5,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Party;
 
-namespace BannerKings.Models;
+namespace BannerKings.Models.Vanilla;
 
 public class BKArmyManagementModel : DefaultArmyManagementCalculationModel
 {

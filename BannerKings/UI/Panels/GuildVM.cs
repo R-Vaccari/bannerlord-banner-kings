@@ -1,5 +1,6 @@
 ﻿using BannerKings.Managers.Institutions.Guilds;
-using BannerKings.Populations;
+using BannerKings.Managers.Populations;
+using BannerKings.UI.Items.UI;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 

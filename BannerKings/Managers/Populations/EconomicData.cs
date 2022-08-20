@@ -1,6 +1,6 @@
 ﻿using BannerKings.Managers.Institutions.Guilds;
 using BannerKings.Models;
-using BannerKings.Populations;
+using BannerKings.Models.Vanilla;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;

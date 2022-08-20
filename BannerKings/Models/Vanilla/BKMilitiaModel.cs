@@ -1,8 +1,8 @@
 ﻿using BannerKings.Managers.Court;
 using BannerKings.Managers.Policies;
+using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Villages;
 using BannerKings.Managers.Titles;
-using BannerKings.Populations;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -10,7 +10,7 @@ using TaleWorlds.Localization;
 using static BannerKings.Managers.PopulationManager;
 using static BannerKings.Managers.Policies.BKMilitiaPolicy;
 
-namespace BannerKings.Models;
+namespace BannerKings.Models.Vanilla;
 
 public class BKMilitiaModel : DefaultSettlementMilitiaModel
 {

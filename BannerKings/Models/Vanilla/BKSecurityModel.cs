@@ -8,7 +8,7 @@ using TaleWorlds.Localization;
 using static BannerKings.Managers.Policies.BKCriminalPolicy;
 using static BannerKings.Managers.Policies.BKWorkforcePolicy;
 
-namespace BannerKings.Models;
+namespace BannerKings.Models.Vanilla;
 
 internal class BKSecurityModel : DefaultSettlementSecurityModel
 {

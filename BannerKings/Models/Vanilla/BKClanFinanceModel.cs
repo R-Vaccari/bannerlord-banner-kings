@@ -7,7 +7,7 @@ using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace BannerKings.Models;
+namespace BannerKings.Models.Vanilla;
 
 public class BKClanFinanceModel : DefaultClanFinanceModel
 {

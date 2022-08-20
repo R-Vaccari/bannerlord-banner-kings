@@ -2,7 +2,7 @@
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace BannerKings
+namespace BannerKings.UI.Items
 {
     namespace UI
     {

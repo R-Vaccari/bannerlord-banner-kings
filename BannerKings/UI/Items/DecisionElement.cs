@@ -3,7 +3,7 @@ using TaleWorlds.Core.ViewModelCollection.Information;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace BannerKings.UI;
+namespace BannerKings.UI.Items;
 
 // Token: 0x02000020 RID: 32
 public class DecisionElement : ViewModel

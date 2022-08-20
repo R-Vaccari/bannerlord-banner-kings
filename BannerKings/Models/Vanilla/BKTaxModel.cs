@@ -1,7 +1,8 @@
 ﻿using BannerKings.Managers.Court;
 using BannerKings.Managers.Policies;
+using BannerKings.Managers.Populations;
 using BannerKings.Managers.Titles;
-using BannerKings.Populations;
+using BannerKings.Models.BKModels;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.GameComponents;
@@ -12,7 +13,7 @@ using TaleWorlds.Localization;
 using static BannerKings.Managers.Policies.BKTaxPolicy;
 using static BannerKings.Managers.PopulationManager;
 
-namespace BannerKings.Models;
+namespace BannerKings.Models.Vanilla;
 
 public class BKTaxModel : DefaultSettlementTaxModel
 {

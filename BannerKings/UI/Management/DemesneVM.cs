@@ -1,16 +1,17 @@
 ﻿using BannerKings.Managers.Kingdoms.Contract;
 using BannerKings.Managers.Policies;
+using BannerKings.Managers.Populations;
 using BannerKings.Managers.Titles;
-using BannerKings.Models;
-using BannerKings.Populations;
+using BannerKings.Models.BKModels;
 using BannerKings.UI.Items;
+using BannerKings.UI.Items.UI;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.ViewModelCollection;
 using TaleWorlds.Core.ViewModelCollection.Selector;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace BannerKings.UI;
+namespace BannerKings.UI.Management;
 
 public class DemesneVM : BannerKingsViewModel
 {

@@ -1,9 +1,9 @@
-﻿using BannerKings.Populations;
+﻿using BannerKings.Managers.Populations;
 using TaleWorlds.Core.ViewModelCollection.Information;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace BannerKings
+namespace BannerKings.UI.Items
 {
     namespace UI
     {

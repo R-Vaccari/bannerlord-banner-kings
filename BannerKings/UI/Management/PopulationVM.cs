@@ -1,10 +1,10 @@
-﻿using BannerKings.Populations;
+﻿using BannerKings.Managers.Populations;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Library;
 
-namespace BannerKings
+namespace BannerKings.UI.Management
 {
-    namespace UI.Panels
+    namespace BannerKings.UI.Panels
     {
         public class PopulationVM : BannerKingsViewModel
         {

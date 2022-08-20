@@ -4,7 +4,7 @@ using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera;
+namespace BannerKings.Managers.Institutions.Religions.Faiths.Empire;
 
 public class DarusosianFaith : MonotheisticFaith
 {

@@ -1,4 +1,4 @@
-﻿using BannerKings.Populations;
+﻿using BannerKings.Managers.Populations;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.SaveSystem;
 

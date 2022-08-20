@@ -1,5 +1,5 @@
 ﻿using BannerKings.UI.Court;
-using BannerKings.UI.Windows;
+using BannerKings.UI.Titles;
 using Bannerlord.UIExtenderEx.Attributes;
 using Bannerlord.UIExtenderEx.ViewModels;
 using TaleWorlds.CampaignSystem.ViewModelCollection.KingdomManagement;

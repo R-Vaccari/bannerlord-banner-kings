@@ -4,12 +4,11 @@ using System.Linq;
 using BannerKings.Managers.Innovations;
 using BannerKings.Managers.Institutions.Guilds;
 using BannerKings.Managers.Institutions.Religions;
-using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Villages;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
-using BannerKings.Models;
-using BannerKings.Models.Populations;
+using BannerKings.Models.BKModels;
+using BannerKings.Models.Vanilla;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -20,7 +19,7 @@ using TaleWorlds.SaveSystem;
 using static BannerKings.Managers.PopulationManager;
 using static BannerKings.Managers.Policies.BKWorkforcePolicy;
 
-namespace BannerKings.Populations;
+namespace BannerKings.Managers.Populations;
 
 public class PopulationData : BannerKingsData
 {

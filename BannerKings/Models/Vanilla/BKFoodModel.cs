@@ -1,4 +1,4 @@
-﻿using BannerKings.Populations;
+﻿using BannerKings.Managers.Populations;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.ComponentInterfaces;
@@ -11,7 +11,7 @@ using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using static BannerKings.Managers.PopulationManager;
 
-namespace BannerKings.Models;
+namespace BannerKings.Models.Vanilla;
 
 internal class BKFoodModel : SettlementFoodModel
 {

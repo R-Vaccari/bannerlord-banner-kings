@@ -2,6 +2,7 @@
 using System.Linq;
 using BannerKings.Managers.Court;
 using BannerKings.UI.Items;
+using BannerKings.UI.Items.UI;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CampaignBehaviors;
 using TaleWorlds.CampaignSystem.ViewModelCollection;

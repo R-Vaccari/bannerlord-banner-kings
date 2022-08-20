@@ -2,7 +2,7 @@
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Localization;
 
-namespace BannerKings.Models.Populations;
+namespace BannerKings.Models.BKModels;
 
 public class BKForeignerModel : IBannerKingsModel
 {

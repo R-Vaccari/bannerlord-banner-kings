@@ -5,7 +5,7 @@ using BannerKings.Components;
 using BannerKings.Managers;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Populations.Villages;
-using BannerKings.Models;
+using BannerKings.Models.Vanilla;
 using HarmonyLib;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
@@ -20,7 +20,7 @@ using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
 using static BannerKings.Managers.PopulationManager;
 
-namespace BannerKings.Behaviors
+namespace BannerKings.Behaviours
 {
     public class BKSettlementBehavior : CampaignBehaviorBase
     {

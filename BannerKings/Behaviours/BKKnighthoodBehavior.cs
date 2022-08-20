@@ -17,7 +17,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace BannerKings.Behaviors
+namespace BannerKings.Behaviours
 {
     public class BKKnighthoodBehavior : CampaignBehaviorBase
     {

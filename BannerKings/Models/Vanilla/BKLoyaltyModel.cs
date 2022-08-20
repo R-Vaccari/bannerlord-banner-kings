@@ -16,7 +16,7 @@ using static BannerKings.Managers.Policies.BKCriminalPolicy;
 using static BannerKings.Managers.Policies.BKTaxPolicy;
 using static BannerKings.Managers.PopulationManager;
 
-namespace BannerKings.Models;
+namespace BannerKings.Models.Vanilla;
 
 internal class BKLoyaltyModel : DefaultSettlementLoyaltyModel
 {

@@ -1,6 +1,6 @@
 ﻿using System;
 using BannerKings.Managers.Policies;
-using BannerKings.Populations;
+using BannerKings.Managers.Populations;
 using BannerKings.UI.Items;
 using TaleWorlds.Core.ViewModelCollection.Selector;
 using TaleWorlds.Library;

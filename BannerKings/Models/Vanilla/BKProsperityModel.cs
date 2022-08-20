@@ -13,7 +13,7 @@ using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using static BannerKings.Managers.PopulationManager;
 
-namespace BannerKings.Models;
+namespace BannerKings.Models.Vanilla;
 
 public class BKProsperityModel : DefaultSettlementProsperityModel
 {

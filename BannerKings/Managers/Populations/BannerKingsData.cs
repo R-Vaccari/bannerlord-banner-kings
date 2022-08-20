@@ -1,4 +1,4 @@
-﻿namespace BannerKings.Populations;
+﻿namespace BannerKings.Managers.Populations;
 
 public abstract class BannerKingsData
 {

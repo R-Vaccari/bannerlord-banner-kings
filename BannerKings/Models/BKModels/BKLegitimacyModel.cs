@@ -2,7 +2,7 @@
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 
-namespace BannerKings.Models;
+namespace BannerKings.Models.BKModels;
 
 public class BKLegitimacyModel : IBannerKingsModel
 {

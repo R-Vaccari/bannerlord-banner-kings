@@ -1,9 +1,10 @@
 ﻿using System.Linq;
 using System.Text;
 using BannerKings.Managers.Policies;
-using BannerKings.Models;
-using BannerKings.Populations;
+using BannerKings.Managers.Populations;
+using BannerKings.Models.Vanilla;
 using BannerKings.UI.Items;
+using BannerKings.UI.Items.UI;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Inventory;
 using TaleWorlds.CampaignSystem.Roster;
@@ -15,7 +16,7 @@ using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using static BannerKings.Managers.PopulationManager;
 
-namespace BannerKings.UI;
+namespace BannerKings.UI.Management;
 
 public class EconomyVM : BannerKingsViewModel
 {

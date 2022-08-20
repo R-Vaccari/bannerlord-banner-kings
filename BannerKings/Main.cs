@@ -1,5 +1,4 @@
-﻿using BannerKings.Behaviors;
-using BannerKings.Behaviours;
+﻿using BannerKings.Behaviours;
 using BannerKings.Managers.Innovations;
 using BannerKings.Managers.Items;
 using BannerKings.Managers.Kingdoms.Policies;

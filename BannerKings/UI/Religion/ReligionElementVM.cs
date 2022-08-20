@@ -2,7 +2,7 @@
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace BannerKings.UI.Items;
+namespace BannerKings.UI.Religion;
 
 public class ReligionElementVM : ViewModel
 {

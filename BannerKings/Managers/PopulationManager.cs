@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using BannerKings.Managers.Institutions.Guilds;
 using BannerKings.Managers.Items;
+using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Villages;
-using BannerKings.Populations;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Settlements;

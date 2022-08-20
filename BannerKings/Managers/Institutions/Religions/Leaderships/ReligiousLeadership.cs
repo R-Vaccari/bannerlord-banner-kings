@@ -1,6 +1,6 @@
 ﻿using TaleWorlds.Localization;
 
-namespace BannerKings.Managers.Institutions.Religions;
+namespace BannerKings.Managers.Institutions.Religions.Leaderships;
 
 public abstract class ReligiousLeadership
 {

@@ -1,14 +1,18 @@
 ﻿using System;
-using BannerKings.Populations;
+using BannerKings.Managers.Populations;
 using BannerKings.UI.CampaignStart;
+using BannerKings.UI.Management;
+using BannerKings.UI.Management.BannerKings.UI.Panels;
 using BannerKings.UI.Panels;
+using BannerKings.UI.Religion;
+using BannerKings.UI.Titles;
 using SandBox.View.Map;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Engine.GauntletUI;
 using TaleWorlds.ScreenSystem;
 
-namespace BannerKings.UI.Windows;
+namespace BannerKings.UI;
 
 public class BannerKingsMapView : MapView
 {

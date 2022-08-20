@@ -1,7 +1,7 @@
 ﻿using System;
 using BannerKings.Managers;
+using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Villages;
-using BannerKings.Populations;
 using Helpers;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
@@ -9,7 +9,7 @@ using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 
-namespace BannerKings.Models;
+namespace BannerKings.Models.Vanilla;
 
 internal class BKVillageProductionModel : DefaultVillageProductionCalculatorModel
 {

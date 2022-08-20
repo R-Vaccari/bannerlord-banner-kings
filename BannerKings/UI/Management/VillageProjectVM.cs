@@ -1,14 +1,15 @@
 ﻿using System.Text;
+using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Villages;
-using BannerKings.Models;
-using BannerKings.Populations;
+using BannerKings.Models.Vanilla;
+using BannerKings.UI.Items.UI;
 using TaleWorlds.CampaignSystem.Settlements.Buildings;
 using TaleWorlds.CampaignSystem.ViewModelCollection.GameMenu.TownManagement;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace BannerKings.UI.Panels;
+namespace BannerKings.UI.Management;
 
 public class VillageProjectVM : BannerKingsViewModel
 {

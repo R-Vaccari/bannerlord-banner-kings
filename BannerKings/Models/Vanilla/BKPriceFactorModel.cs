@@ -2,7 +2,7 @@
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 
-namespace BannerKings.Models;
+namespace BannerKings.Models.Vanilla;
 
 public class BKPriceFactorModel : DefaultTradeItemPriceFactorModel
 {

@@ -1,7 +1,7 @@
 ﻿using BannerKings.Managers.Titles;
 using TaleWorlds.Library;
 
-namespace BannerKings.UI.Items;
+namespace BannerKings.UI.Titles;
 
 public class TitleElementVM : ViewModel
 {

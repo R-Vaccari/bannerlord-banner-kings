@@ -1,10 +1,10 @@
-﻿using BannerKings.Populations;
+﻿using BannerKings.Managers.Populations;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 
-namespace BannerKings.Models;
+namespace BannerKings.Models.BKModels;
 
 public class BKCultureAssimilationModel : ICultureModel
 {
