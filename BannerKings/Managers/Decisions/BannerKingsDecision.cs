@@ -1,28 +1,26 @@
 ﻿using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.SaveSystem;
 
-namespace BannerKings.Managers.Decisions
+namespace BannerKings.Managers.Decisions;
+
+public abstract class BannerKingsDecision
 {
-    public abstract class BannerKingsDecision
+    public BannerKingsDecision(Settlement settlement, bool enabled)
     {
-        [SaveableProperty(1)]
-        public Settlement Settlement { get; private set; }
+        Settlement = settlement;
+        Enabled = enabled;
+    }
 
-        [SaveableProperty(2)]
-        public bool Enabled { get; set; }
+    [SaveableProperty(1)] public Settlement Settlement { get; }
 
-        public BannerKingsDecision(Settlement settlement, bool enabled)
-        {
-            Settlement = settlement;
-            Enabled = enabled;
-        }
+    [SaveableProperty(2)] public bool Enabled { get; set; }
 
-        public abstract string GetHint();
-        public abstract string GetName();
-        public abstract string GetIdentifier();
-        public void OnChange(bool value)
-        {
-            Enabled = value;
-        }
+    public abstract string GetHint();
+    public abstract string GetName();
+    public abstract string GetIdentifier();
+
+    public void OnChange(bool value)
+    {
+        Enabled = value;
     }
 }

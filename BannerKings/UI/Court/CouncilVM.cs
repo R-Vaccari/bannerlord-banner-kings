@@ -1,111 +1,139 @@
-﻿using BannerKings.Managers.Court;
-using BannerKings.Models.BKModels;
-using Helpers;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using BannerKings.Managers.Court;
+using BannerKings.Models.BKModels;
+using Helpers;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.ViewModelCollection;
 using TaleWorlds.CampaignSystem.ViewModelCollection.GameMenu.TownManagement;
 using TaleWorlds.Core;
-using TaleWorlds.Core.ViewModelCollection;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace BannerKings.UI.Items
+namespace BannerKings.UI.Court;
+
+public class CouncilVM : SettlementGovernorSelectionVM
 {
-    public class CouncilVM : SettlementGovernorSelectionVM
+    private readonly CouncilData council;
+    private readonly List<Hero> courtMembers;
+    private readonly Action<Hero> onDone;
+
+    public CouncilVM(Action<Hero> onDone, CouncilData council, CouncilPosition position, List<Hero> courtMembers) :
+        base(null, onDone)
     {
-        private Action<Hero> onDone;
-        private CouncilData council;
-        private List<Hero> courtMembers;
-        public CouncilPosition Position { get; set; }
+        this.onDone = onDone;
+        this.council = council;
+        Position = position;
+        this.courtMembers = courtMembers;
+        RefreshValues();
+    }
 
-        public CouncilVM(Action<Hero> onDone, CouncilData council, CouncilPosition position, List<Hero> courtMembers) : base(null, onDone)
+    public CouncilPosition Position { get; set; }
+
+    public override void RefreshValues()
+    {
+        base.RefreshValues();
+        var currentCouncil = council.GetMembers();
+        var newList = new MBBindingList<SettlementGovernorSelectionItemVM>();
+        newList.Add(AvailableGovernors[0]);
+        var councilPosition = council.GetCouncilMember(Position);
+        foreach (var hero in courtMembers)
         {
-            this.onDone = onDone;
-            this.council = council;
-            Position = position;
-            this.courtMembers = courtMembers;
-            RefreshValues();
-        }
-
-        public override void RefreshValues()
-        {
-            base.RefreshValues();
-            List<Hero> currentCouncil = council.GetMembers();
-            MBBindingList<SettlementGovernorSelectionItemVM> newList = new MBBindingList<SettlementGovernorSelectionItemVM>();
-            newList.Add(AvailableGovernors[0]);
-            CouncilMember councilPosition = council.GetCouncilMember(Position);
-            foreach (Hero hero in courtMembers)
-                if (!currentCouncil.Contains(hero) && hero.IsAlive && !hero.IsChild && councilPosition.IsValidCandidate(hero))
-                    newList.Add(new CouncilCandidateVM(hero, OnSelection,
-                                    Position, council.GetCompetence(hero, Position)));
-
-            AvailableGovernors = newList;
-        }
-
-        public void ShowOptions()
-        {
-            List<InquiryElement> options = new List<InquiryElement>();
-            if (council.Owner == Hero.MainHero)
+            if (!currentCouncil.Contains(hero) && hero.IsAlive && !hero.IsChild &&
+                councilPosition.IsValidCandidate(hero))
             {
-                foreach (SettlementGovernorSelectionItemVM vm in AvailableGovernors)
-                {
-                    ImageIdentifier image = null;
-                    string name = "None";
-                    string hint = "";
-                    if (vm.Governor != null)
-                    {
-                        image = new ImageIdentifier(CampaignUIHelper.GetCharacterCode(vm.Governor.CharacterObject));
-                        name = vm.Governor.Name.ToString();
-                        StringBuilder sb = new StringBuilder(GameTexts.FindText("str_tooltip_label_type").ToString() + ": " + 
-                            HeroHelper.GetCharacterTypeName(vm.Governor).ToString());
-                        sb.AppendLine(new TextObject("{=!}Competence:").ToString() + council.GetCompetence(vm.Governor, Position));
-                        hint = sb.ToString(); 
-                    }
+                newList.Add(new CouncilCandidateVM(hero, OnSelection,
+                    Position, council.GetCompetence(hero, Position)));
+            }
+        }
 
-                    options.Add(new InquiryElement(vm.Governor, name, image, true, hint));
+        AvailableGovernors = newList;
+    }
+
+    public void ShowOptions()
+    {
+        var options = new List<InquiryElement>();
+        if (council.Owner == Hero.MainHero)
+        {
+            foreach (var vm in AvailableGovernors)
+            {
+                ImageIdentifier image = null;
+                var name = "None";
+                var hint = "";
+                if (vm.Governor != null)
+                {
+                    image = new ImageIdentifier(CampaignUIHelper.GetCharacterCode(vm.Governor.CharacterObject));
+                    name = vm.Governor.Name.ToString();
+                    var sb = new StringBuilder(GameTexts.FindText("str_tooltip_label_type") + ": " +
+                                               HeroHelper.GetCharacterTypeName(vm.Governor));
+                    sb.AppendLine(new TextObject("{=!}Competence:").ToString() +
+                                  council.GetCompetence(vm.Governor, Position));
+                    hint = sb.ToString();
                 }
 
-                BKCouncilModel model = (BKCouncilModel)BannerKingsConfig.Instance.Models.First(x => x is BKCouncilModel);
-                MBInformationManager.ShowMultiSelectionInquiry(
-                        new MultiSelectionInquiryData(
-                            new TextObject("{=!}Select Councillor").ToString(),
-                            new TextObject("{=!}Select who you would like to fill this position.").ToString(),
-                            options, true, 1, GameTexts.FindText("str_done").ToString(), string.Empty,
-                            delegate (List<InquiryElement> x)
-                            {
-                                Hero requester = (Hero?)x[0].Identifier;
-                                CouncilMember position = council.AllPositions.FirstOrDefault(x => x.Position == Position);
-                                CouncilAction action = null;
-                                if (requester != null) action = model.GetAction(CouncilActionType.REQUEST, council, requester, position, null, true);
-                                else if (position.Member != null) action = model.GetAction(CouncilActionType.RELINQUISH, council, requester, position);
-
-                                if (action != null) 
-                                {
-                                    action.TakeAction();
-                                    onDone(requester);
-                                } 
-                            }, null, string.Empty));
-            } else
-            {
-                CouncilMember target = council.AllPositions.FirstOrDefault(x => x.Position == Position);
-                if (target == null) return;
-
-                CouncilAction action;
-                BKCouncilModel model = (BKCouncilModel)BannerKingsConfig.Instance.Models.First(x => x is BKCouncilModel);
-                if (target.Member == Hero.MainHero) action = model.GetAction(CouncilActionType.RELINQUISH, council, Hero.MainHero, target);
-                else if (council.GetHeroPosition(Hero.MainHero) == null || target.Member == null) action = model.GetAction(CouncilActionType.REQUEST, council, Hero.MainHero, target);
-                else  action = model.GetAction(CouncilActionType.SWAP, council, Hero.MainHero, target, council.GetHeroPosition(Hero.MainHero));
-
-                UIHelper.ShowActionPopup(action, this);
+                options.Add(new InquiryElement(vm.Governor, name, image, true, hint));
             }
-            
-        }
 
-        private void OnSelection(SettlementGovernorSelectionItemVM item) => onDone(item.Governor);
-        
+            var model = (BKCouncilModel) BannerKingsConfig.Instance.Models.First(x => x is BKCouncilModel);
+            MBInformationManager.ShowMultiSelectionInquiry(
+                new MultiSelectionInquiryData(
+                    new TextObject("{=!}Select Councillor").ToString(),
+                    new TextObject("{=!}Select who you would like to fill this position.").ToString(),
+                    options, true, 1, GameTexts.FindText("str_done").ToString(), string.Empty,
+                    delegate(List<InquiryElement> x)
+                    {
+                        var requester = (Hero?) x[0].Identifier;
+                        var position = council.AllPositions.FirstOrDefault(x => x.Position == Position);
+                        CouncilAction action = null;
+                        if (requester != null)
+                        {
+                            action = model.GetAction(CouncilActionType.REQUEST, council, requester, position, null,
+                                true);
+                        }
+                        else if (position.Member != null)
+                        {
+                            action = model.GetAction(CouncilActionType.RELINQUISH, council, requester, position);
+                        }
+
+                        if (action != null)
+                        {
+                            action.TakeAction();
+                            onDone(requester);
+                        }
+                    }, null, string.Empty));
+        }
+        else
+        {
+            var target = council.AllPositions.FirstOrDefault(x => x.Position == Position);
+            if (target == null)
+            {
+                return;
+            }
+
+            CouncilAction action;
+            var model = (BKCouncilModel) BannerKingsConfig.Instance.Models.First(x => x is BKCouncilModel);
+            if (target.Member == Hero.MainHero)
+            {
+                action = model.GetAction(CouncilActionType.RELINQUISH, council, Hero.MainHero, target);
+            }
+            else if (council.GetHeroPosition(Hero.MainHero) == null || target.Member == null)
+            {
+                action = model.GetAction(CouncilActionType.REQUEST, council, Hero.MainHero, target);
+            }
+            else
+            {
+                action = model.GetAction(CouncilActionType.SWAP, council, Hero.MainHero, target,
+                    council.GetHeroPosition(Hero.MainHero));
+            }
+
+            UIHelper.ShowActionPopup(action, this);
+        }
+    }
+
+    private void OnSelection(SettlementGovernorSelectionItemVM item)
+    {
+        onDone(item.Governor);
     }
 }

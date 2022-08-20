@@ -1,83 +1,96 @@
-﻿using BannerKings.Managers.Innovations;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using BannerKings.Managers.Innovations;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.SaveSystem;
 
-namespace BannerKings.Managers
+namespace BannerKings.Managers;
+
+public class InnovationsManager
 {
-    public class InnovationsManager
+    public InnovationsManager()
     {
-        [SaveableProperty(1)]
-        private Dictionary<CultureObject, InnovationData> Innovations { get; set; }
+        Innovations = new Dictionary<CultureObject, InnovationData>();
+        InitializeInnovations();
+    }
 
-        public InnovationsManager()
-        {
-            Innovations = new Dictionary<CultureObject, InnovationData>();
-            InitializeInnovations();
-        }
+    [SaveableProperty(1)] private Dictionary<CultureObject, InnovationData> Innovations { get; }
 
-        private void InitializeInnovations()
+    private void InitializeInnovations()
+    {
+        foreach (var culture in Game.Current.ObjectManager.GetObjectTypeList<CultureObject>())
         {
-            foreach (CultureObject culture in Game.Current.ObjectManager.GetObjectTypeList<CultureObject>())
+            if (culture.IsBandit || !culture.IsInitialized)
             {
-                if (culture.IsBandit || !culture.IsInitialized) continue;
+                continue;
+            }
 
-                Innovations.Add(culture, new InnovationData(new List<Innovation>(), culture));
-                foreach (Innovation innovation in DefaultInnovations.Instance.All)
+            Innovations.Add(culture, new InnovationData(new List<Innovation>(), culture));
+            foreach (var innovation in DefaultInnovations.Instance.All)
+            {
+                if (innovation.Culture == null || innovation.Culture == culture)
                 {
-                    if (innovation.Culture == null || innovation.Culture == culture)
-                    {
-                        Innovation newInnov = new Innovation(innovation.StringId);
-                        newInnov.Initialize(innovation.Name, innovation.Description, innovation.Effects,
-                            innovation.RequiredProgress, innovation.Culture, innovation.Requirement);
+                    var newInnov = new Innovation(innovation.StringId);
+                    newInnov.Initialize(innovation.Name, innovation.Description, innovation.Effects,
+                        innovation.RequiredProgress, innovation.Culture, innovation.Requirement);
 
-                        Innovations[culture].AddInnovation(newInnov);
-                    }
+                    Innovations[culture].AddInnovation(newInnov);
                 }
             }
         }
+    }
 
-        public void PostInitialize()
+    public void PostInitialize()
+    {
+        foreach (var data in Innovations.Values)
         {
-            foreach (InnovationData data in Innovations.Values)
-                data.PostInitialize();
+            data.PostInitialize();
+        }
+    }
+
+    public void UpdateInnovations()
+    {
+        foreach (var data in Innovations.Values)
+        {
+            data.Update();
+        }
+    }
+
+
+    public void AddSettlementResearch(Settlement settlement)
+    {
+        if (Innovations.ContainsKey(settlement.Culture))
+        {
+            var data = Innovations[settlement.Culture];
+            data.AddResearch(BannerKingsConfig.Instance.InnovationsModel.CalculateSettlementResearch(settlement)
+                .ResultNumber);
+        }
+    }
+
+    public InnovationData GetInnovationData(CultureObject culture)
+    {
+        InnovationData data = null;
+        if (Innovations.ContainsKey(culture))
+        {
+            data = Innovations[culture];
         }
 
-        public void UpdateInnovations()
-        {
-            foreach (InnovationData data in Innovations.Values)
-                data.Update();
-        }
+        return data;
+    }
 
-
-        public void AddSettlementResearch(Settlement settlement)
+    public MBReadOnlyList<Innovation> GetInnovations(CultureObject culture)
+    {
+        var list = new List<Innovation>();
+        if (Innovations.ContainsKey(culture))
         {
-            if (Innovations.ContainsKey(settlement.Culture))
+            foreach (var innov in Innovations[culture].Innovations)
             {
-                InnovationData data = Innovations[settlement.Culture];
-                data.AddResearch(BannerKingsConfig.Instance.InnovationsModel.CalculateSettlementResearch(settlement).ResultNumber);
+                list.Add(innov);
             }
-            
         }
 
-        public InnovationData GetInnovationData(CultureObject culture)
-        {
-            InnovationData data = null;
-            if (Innovations.ContainsKey(culture)) data = Innovations[culture];
-            return data;
-        }
-
-        public MBReadOnlyList<Innovation> GetInnovations(CultureObject culture)
-        {
-            List<Innovation> list = new List<Innovation>();
-            if (Innovations.ContainsKey(culture))
-                foreach (Innovation innov in Innovations[culture].Innovations)
-                    list.Add(innov);
-
-            return list.GetReadOnlyList();
-        }
+        return list.GetReadOnlyList();
     }
 }

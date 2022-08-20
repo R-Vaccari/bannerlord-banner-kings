@@ -1,55 +1,63 @@
-﻿using BannerKings.UI.Items;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using BannerKings.UI.Items;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core.ViewModelCollection.Selector;
 using TaleWorlds.SaveSystem;
 
-namespace BannerKings.Managers.Policies
+namespace BannerKings.Managers.Policies;
+
+internal class BKDraftPolicy : BannerKingsPolicy
 {
-    class BKDraftPolicy : BannerKingsPolicy
+    public enum DraftPolicy
     {
-        public override string GetIdentifier() => "draft";
+        Standard,
+        Conscription,
+        Demobilization
+    }
 
-        [SaveableProperty(3)]
-        public DraftPolicy Policy { get; private set; }
-        public BKDraftPolicy(DraftPolicy policy, Settlement settlement) : base(settlement, (int)policy)
+    public BKDraftPolicy(DraftPolicy policy, Settlement settlement) : base(settlement, (int) policy)
+    {
+        Policy = policy;
+    }
+
+    [SaveableProperty(3)] public DraftPolicy Policy { get; private set; }
+
+    public override string GetIdentifier()
+    {
+        return "draft";
+    }
+
+    public override string GetHint(int value)
+    {
+        if (value == (int) DraftPolicy.Conscription)
         {
-            Policy = policy;
+            return "Extend conscription of the populace, replenishing recruitment slots faster. Increases adm. costs.";
         }
 
-        public override string GetHint(int value)
+        if (value == (int) DraftPolicy.Demobilization)
         {
-            if (value == (int)DraftPolicy.Conscription)
-                return "Extend conscription of the populace, replenishing recruitment slots faster. Increases adm. costs.";
-            if (value == (int)DraftPolicy.Demobilization)
-                return "Slow down conscription of new recruits. Slight boost to population growth.";
-            return "Standard drafting policy, no particular effect.";
+            return "Slow down conscription of new recruits. Slight boost to population growth.";
         }
 
-        public override void OnChange(SelectorVM<BKItemVM> obj)
-        {
-            if (obj.SelectedItem != null)
-            {
-                BKItemVM vm = obj.GetCurrentItem();
-                Policy = (DraftPolicy)vm.value;
-                Selected = vm.value;
-                BannerKingsConfig.Instance.PolicyManager.UpdateSettlementPolicy(Settlement, this);
-            }
-        }
+        return "Standard drafting policy, no particular effect.";
+    }
 
-        public enum DraftPolicy
+    public override void OnChange(SelectorVM<BKItemVM> obj)
+    {
+        if (obj.SelectedItem != null)
         {
-            Standard,
-            Conscription,
-            Demobilization
+            var vm = obj.GetCurrentItem();
+            Policy = (DraftPolicy) vm.value;
+            Selected = vm.value;
+            BannerKingsConfig.Instance.PolicyManager.UpdateSettlementPolicy(Settlement, this);
         }
+    }
 
-        public override IEnumerable<Enum> GetPolicies()
-        {
-            yield return DraftPolicy.Standard;
-            yield return DraftPolicy.Conscription;
-            yield return DraftPolicy.Demobilization;
-        }
+    public override IEnumerable<Enum> GetPolicies()
+    {
+        yield return DraftPolicy.Standard;
+        yield return DraftPolicy.Conscription;
+        yield return DraftPolicy.Demobilization;
     }
 }

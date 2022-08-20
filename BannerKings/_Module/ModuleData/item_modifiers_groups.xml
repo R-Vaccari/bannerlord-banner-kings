@@ -8,14 +8,14 @@
 		<ItemModifier id="cracked_goods" probability="10"/>
 		<ItemModifier id="no_modifier" probability="40"/>
 	</ItemModifierGroup>
-	
+
 	<ItemModifierGroup id="consumables">
 		<ItemModifier id="quality_consumable" probability="7"/>
 		<ItemModifier id="fine_consumable" probability="15"/>
 		<ItemModifier id="poor_consumable" probability="18"/>
 		<ItemModifier id="no_modifier" probability="60"/>
 	</ItemModifierGroup>
-	
+
 	<ItemModifierGroup id="animals">
 		<ItemModifier id="purebred_animal" probability="3"/>
 		<ItemModifier id="strong_animal" probability="11"/>

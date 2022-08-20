@@ -1,27 +1,24 @@
 ﻿using TaleWorlds.Localization;
-using TaleWorlds.SaveSystem;
 
-namespace BannerKings.Managers.Institutions.Religions
+namespace BannerKings.Managers.Institutions.Religions.Leaderships;
+
+public abstract class ReligiousLeadership
 {
-    public abstract class ReligiousLeadership
+    public abstract void Initialize(Religion religion);
+
+    public abstract TextObject GetName();
+
+    public abstract TextObject GetHint();
+
+    public void ChangeClergymanRank(Religion religion, Clergyman clergyman, int newRank)
     {
-
-        public abstract void Initialize(Religion religion);
-
-        public abstract TextObject GetName();
-
-        public abstract TextObject GetHint();
-
-        public void ChangeClergymanRank(Religion religion, Clergyman clergyman, int newRank)
-        {
-            TextObject firstName = clergyman.Hero.FirstName;
-            TextObject fullName = new TextObject("{=!}{RELIGIOUS_TITLE} {NAME}")
-                .SetTextVariable("RELIGIOUS_TITLE", religion.Faith.GetRankTitle(newRank))
-                .SetTextVariable("NAME", firstName);
-            clergyman.Hero.SetName(fullName, firstName);
-            clergyman.Rank = newRank;
-        }
-
-        public abstract bool IsLeader(Clergyman clergyman);
+        var firstName = clergyman.Hero.FirstName;
+        var fullName = new TextObject("{=!}{RELIGIOUS_TITLE} {NAME}")
+            .SetTextVariable("RELIGIOUS_TITLE", religion.Faith.GetRankTitle(newRank))
+            .SetTextVariable("NAME", firstName);
+        clergyman.Hero.SetName(fullName, firstName);
+        clergyman.Rank = newRank;
     }
+
+    public abstract bool IsLeader(Clergyman clergyman);
 }

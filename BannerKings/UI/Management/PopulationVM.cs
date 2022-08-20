@@ -1,25 +1,22 @@
-﻿using BannerKings.Populations;
-using System;
-using TaleWorlds.CampaignSystem;
+﻿using BannerKings.Managers.Populations;
 using TaleWorlds.CampaignSystem.Settlements;
-using TaleWorlds.Core;
 using TaleWorlds.Library;
 
-namespace BannerKings
+namespace BannerKings.UI.Management
 {
-    namespace UI.Panels
+    namespace BannerKings.UI.Panels
     {
         public class PopulationVM : BannerKingsViewModel
         {
-            private OverviewVM overviewVM;
-            private EconomyVM economyVM;
-            private DemesneVM demesneVM;
-            private MilitaryVM militaryVM;
-            private Settlement settlement;
-            private bool _isOverviewSelected;
-            private bool _isEconomySelected;
             private bool _isDemesneSelected;
+            private bool _isEconomySelected;
             private bool _isMilitarySelected;
+            private bool _isOverviewSelected;
+            private DemesneVM demesneVM;
+            private EconomyVM economyVM;
+            private MilitaryVM militaryVM;
+            private OverviewVM overviewVM;
+            private readonly Settlement settlement;
 
             public PopulationVM(PopulationData data) : base(data, true)
             {
@@ -30,49 +27,10 @@ namespace BannerKings
                 militaryVM = new MilitaryVM(data, settlement, false);
             }
 
-            public override void RefreshValues()
-            {
-                base.RefreshValues();
-            }
-
-            public void SetSelectedCategory(int index)
-            {
-                OverView.IsSelected = false;
-                Economy.IsSelected = false;
-                Demesne.IsSelected = false;
-                IsOverviewSelected = false;
-                IsEconomySelected = false;
-                IsDemesneSelected = false;
-                IsMilitarySelected = false;
-                Military.IsSelected = false;
-                if (index == 0)
-                {
-                    OverView.IsSelected = true;
-                    IsOverviewSelected = true;
-                }
-                else if (index == 1)
-                {
-                    Economy.IsSelected = true;
-                    IsEconomySelected = true;
-                }   
-                else if (index == 2)
-                {
-                    Demesne.IsSelected = true;
-                    IsDemesneSelected = true;
-                }
-                else if (index == 3)
-                {
-                    Military.IsSelected = true;
-                    IsMilitarySelected = true;
-                }
-
-                RefreshValues();
-            }
-
             [DataSourceProperty]
             public OverviewVM OverView
             {
-                get => overviewVM;     
+                get => overviewVM;
                 set
                 {
                     if (value != overviewVM)
@@ -181,14 +139,53 @@ namespace BannerKings
                 }
             }
 
+            public override void RefreshValues()
+            {
+                base.RefreshValues();
+            }
+
+            public void SetSelectedCategory(int index)
+            {
+                OverView.IsSelected = false;
+                Economy.IsSelected = false;
+                Demesne.IsSelected = false;
+                IsOverviewSelected = false;
+                IsEconomySelected = false;
+                IsDemesneSelected = false;
+                IsMilitarySelected = false;
+                Military.IsSelected = false;
+                if (index == 0)
+                {
+                    OverView.IsSelected = true;
+                    IsOverviewSelected = true;
+                }
+                else if (index == 1)
+                {
+                    Economy.IsSelected = true;
+                    IsEconomySelected = true;
+                }
+                else if (index == 2)
+                {
+                    Demesne.IsSelected = true;
+                    IsDemesneSelected = true;
+                }
+                else if (index == 3)
+                {
+                    Military.IsSelected = true;
+                    IsMilitarySelected = true;
+                }
+
+                RefreshValues();
+            }
+
             public void ExecuteClose()
             {
-                InformationManager.DisplayMessage(new InformationMessage(String
+                InformationManager.DisplayMessage(new InformationMessage(string
                     .Format("Policies updated for {0}", settlement.Name)));
                 militaryVM.OnFinalize();
                 economyVM.OnFinalize();
                 UIManager.Instance.CloseUI();
             }
         }
-    } 
+    }
 }

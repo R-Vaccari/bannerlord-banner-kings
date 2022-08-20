@@ -1,163 +1,238 @@
-﻿using BannerKings.Managers.Court;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
+using BannerKings.Managers.Court;
+using BannerKings.Managers.Institutions.Religions.Leaderships;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Actions;
+using TaleWorlds.Core;
 using TaleWorlds.Localization;
 using TaleWorlds.SaveSystem;
-using System.Linq;
-using TaleWorlds.CampaignSystem.Actions;
-using BannerKings.Managers.Institutions.Religions;
-using BannerKings.Managers.Institutions.Religions.Leaderships;
-using TaleWorlds.Core;
 
-namespace BannerKings.Managers
+namespace BannerKings.Managers;
+
+public class CourtManager
 {
-    public class CourtManager
+    public static readonly int ON_FIRED_RELATION = -12;
+    public static readonly int ON_REJECTED_RELATION = -6;
+    public static readonly int ON_HIRED_RELATION = 6;
+
+    public CourtManager(Dictionary<Clan, CouncilData> councils)
     {
-        [SaveableProperty(1)]
-        private Dictionary<Clan, CouncilData> Councils { get; set; }
+        Councils = councils;
+    }
 
-        public static readonly int ON_FIRED_RELATION = -12;
-        public static readonly int ON_REJECTED_RELATION = -6;
-        public static readonly int ON_HIRED_RELATION = 6;
+    [SaveableProperty(1)] private Dictionary<Clan, CouncilData> Councils { get; }
 
-        public CourtManager(Dictionary<Clan, CouncilData> councils)
+    public void ApplyCouncilEffect(ref ExplainedNumber result, Hero settlementOwner, CouncilPosition position,
+        float maxEffect, bool factor)
+    {
+        var council = GetCouncil(settlementOwner);
+        var competence = council.GetCompetence(position);
+        if (competence != 0f)
         {
-            Councils = councils;
-        }
-
-        public void ApplyCouncilEffect(ref ExplainedNumber result, Hero settlementOwner, CouncilPosition position, float maxEffect, bool factor)
-        {
-            CouncilData council = GetCouncil(settlementOwner);
-            float competence = council.GetCompetence(position);
-            if (competence != 0f)
+            if (!factor)
             {
-                if (!factor) result.Add(maxEffect * competence, new TextObject("{=!}Council effect"));
-                else result.AddFactor(maxEffect * competence, new TextObject("{=!}Council effect"));
+                result.Add(maxEffect * competence, new TextObject("{=!}Council effect"));
+            }
+            else
+            {
+                result.AddFactor(maxEffect * competence, new TextObject("{=!}Council effect"));
             }
         }
+    }
 
-        public int GetCouncilEffectInteger(Hero settlementOwner, CouncilPosition position, float maxEffect)
+    public int GetCouncilEffectInteger(Hero settlementOwner, CouncilPosition position, float maxEffect)
+    {
+        var council = GetCouncil(settlementOwner);
+        var competence = council.GetCompetence(position);
+        return (int) (maxEffect * competence);
+    }
+
+    public void CreateCouncil(Clan clan)
+    {
+        Councils.Add(clan, new CouncilData(clan));
+    }
+
+    public CouncilData GetCouncil(Hero hero)
+    {
+        var clan = hero.Clan;
+        if (Councils.ContainsKey(clan))
         {
-            CouncilData council = GetCouncil(settlementOwner);
-            float competence = council.GetCompetence(position);
-            return (int)(maxEffect * competence);
+            return Councils[clan];
         }
 
-        public void CreateCouncil(Clan clan) => Councils.Add(clan, new CouncilData(clan));
+        var council = new CouncilData(clan);
+        Councils.Add(clan, council);
+        return council;
+    }
 
-        public CouncilData GetCouncil(Hero hero)
+    public CouncilData GetCouncil(Clan clan)
+    {
+        if (Councils.ContainsKey(clan))
         {
-            Clan clan = hero.Clan;
-            if (Councils.ContainsKey(clan))
-                return Councils[clan];
-            CouncilData council = new CouncilData(clan);
-            Councils.Add(clan, council);
-            return council;
+            return Councils[clan];
         }
 
-        public CouncilData GetCouncil(Clan clan)
+        var council = new CouncilData(clan);
+        Councils.Add(clan, council);
+        return council;
+    }
+
+    public CouncilMember GetHeroPosition(Hero hero)
+    {
+        if ((hero.IsLord && (hero.Clan == null || hero.Clan.Kingdom == null)) || hero.IsChild ||
+            hero.IsDead)
         {
-            if (Councils.ContainsKey(clan))
-                return Councils[clan];
-            CouncilData council = new CouncilData(clan);
-            Councils.Add(clan, council);
-            return council;
-        }
-
-        public CouncilMember GetHeroPosition(Hero hero)
-        {
-            if (hero.IsLord && (hero.Clan == null || hero.Clan.Kingdom == null) || hero.IsChild ||
-                hero.IsDead) return null;
-            Kingdom kingdom = null;
-            if ((hero.IsLord || hero.IsWanderer) && hero.Clan != null) kingdom = hero.Clan.Kingdom;
-            else if (hero.CurrentSettlement != null && hero.CurrentSettlement.OwnerClan != null) 
-                kingdom = hero.CurrentSettlement.OwnerClan.Kingdom;
-
-            Clan targetClan = null;
-            if (kingdom != null)
-            {
-                List<Clan> clans = Councils.Keys.ToList();
-                foreach (Clan clan in clans)
-                    if (Councils[clan].GetMembers().Contains(hero))
-                    {
-                        targetClan = clan;
-                        break;
-                    }
-            }
-
-            if (targetClan != null)
-                return Councils[targetClan].GetHeroPosition(hero);
-
             return null;
         }
 
-        public int GetCouncilloursCount(Clan clan) => GetCouncil(clan.Leader).GetOccupiedPositions().Count;
-
-        public void UpdateCouncil(Clan clan)
+        Kingdom kingdom = null;
+        if ((hero.IsLord || hero.IsWanderer) && hero.Clan != null)
         {
-            CouncilData data = GetCouncil(clan.Leader);
-            data.Update(null);
+            kingdom = hero.Clan.Kingdom;
+        }
+        else if (hero.CurrentSettlement != null && hero.CurrentSettlement.OwnerClan != null)
+        {
+            kingdom = hero.CurrentSettlement.OwnerClan.Kingdom;
         }
 
-        private void CheckReligionRankChange(CouncilAction action)
+        Clan targetClan = null;
+        if (kingdom != null)
         {
-            Religion rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(action.Council.Owner);
-            if (rel != null && rel.Leadership.GetType() == typeof(KinshipLeadership) && action.TargetPosition.Position == CouncilPosition.Spiritual)
+            var clans = Councils.Keys.ToList();
+            foreach (var clan in clans)
             {
-                Hero currentClergyman = action.TargetPosition.Member;
-                if (currentClergyman != null)
-                    rel.Leadership.ChangeClergymanRank(rel, BannerKingsConfig.Instance.ReligionsManager.GetClergymanFromHeroHero(currentClergyman),
-                        rel.Faith.GetIdealRank(currentClergyman.CurrentSettlement != null ? currentClergyman.CurrentSettlement : currentClergyman.BornSettlement,
-                        false));
-
-                Hero newClergyman = action.ActionTaker;
-                if (newClergyman != null)
-                    rel.Leadership.ChangeClergymanRank(rel, BannerKingsConfig.Instance.ReligionsManager.GetClergymanFromHeroHero(newClergyman),
-                            rel.Faith.GetMaxClergyRank());
+                if (Councils[clan].GetMembers().Contains(hero))
+                {
+                    targetClan = clan;
+                    break;
+                }
             }
         }
 
-        public void AddHeroToCouncil(CouncilAction action)
+        if (targetClan != null)
         {
-            if (action.TargetPosition == null || action.ActionTaker == null || !action.Possible) return;
+            return Councils[targetClan].GetHeroPosition(hero);
+        }
 
-            if (action.TargetPosition.Member != null)
-                ChangeRelationAction.ApplyRelationChangeBetweenHeroes(action.Council.Owner, action.TargetPosition.Member, ON_FIRED_RELATION);
+        return null;
+    }
 
-            CheckReligionRankChange(action);
-            if (action.ActionTaker == null) return;
+    public int GetCouncilloursCount(Clan clan)
+    {
+        return GetCouncil(clan.Leader).GetOccupiedPositions().Count;
+    }
 
-            if (action.ActionTaker == Hero.MainHero)
-                MBInformationManager.AddQuickInformation(new TextObject("{=!}{OWNER} has appointed you as their {POSITION}.")
+    public void UpdateCouncil(Clan clan)
+    {
+        var data = GetCouncil(clan.Leader);
+        data.Update(null);
+    }
+
+    private void CheckReligionRankChange(CouncilAction action)
+    {
+        var rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(action.Council.Owner);
+        if (rel != null && rel.Leadership.GetType() == typeof(KinshipLeadership) &&
+            action.TargetPosition.Position == CouncilPosition.Spiritual)
+        {
+            var currentClergyman = action.TargetPosition.Member;
+            if (currentClergyman != null)
+            {
+                rel.Leadership.ChangeClergymanRank(rel,
+                    BannerKingsConfig.Instance.ReligionsManager.GetClergymanFromHeroHero(currentClergyman),
+                    rel.Faith.GetIdealRank(
+                        currentClergyman.CurrentSettlement != null
+                            ? currentClergyman.CurrentSettlement
+                            : currentClergyman.BornSettlement,
+                        false));
+            }
+
+            var newClergyman = action.ActionTaker;
+            if (newClergyman != null)
+            {
+                rel.Leadership.ChangeClergymanRank(rel,
+                    BannerKingsConfig.Instance.ReligionsManager.GetClergymanFromHeroHero(newClergyman),
+                    rel.Faith.GetMaxClergyRank());
+            }
+        }
+    }
+
+    public void AddHeroToCouncil(CouncilAction action)
+    {
+        if (action.TargetPosition == null || action.ActionTaker == null || !action.Possible)
+        {
+            return;
+        }
+
+        if (action.TargetPosition.Member != null)
+        {
+            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(action.Council.Owner, action.TargetPosition.Member,
+                ON_FIRED_RELATION);
+        }
+
+        CheckReligionRankChange(action);
+        if (action.ActionTaker == null)
+        {
+            return;
+        }
+
+        if (action.ActionTaker == Hero.MainHero)
+        {
+            MBInformationManager.AddQuickInformation(
+                new TextObject("{=!}{OWNER} has appointed you as their {POSITION}.")
                     .SetTextVariable("OWNER", action.Council.Owner.Name)
-                    .SetTextVariable("POSITION", action.TargetPosition.GetName()), 
-                    0, action.Council.Owner.CharacterObject, "event:/ui/notification/relation");
-
-            action.TargetPosition.Member = action.ActionTaker;
-            if (action.ActionTaker.Clan != null) GainKingdomInfluenceAction.ApplyForDefault(action.ActionTaker, -action.Influence);
-            else if (action.ActionTaker.IsNotable) action.ActionTaker.AddPower(-action.Influence);
-            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(action.Council.Owner, action.ActionTaker, ON_HIRED_RELATION);
+                    .SetTextVariable("POSITION", action.TargetPosition.GetName()),
+                0, action.Council.Owner.CharacterObject, "event:/ui/notification/relation");
         }
 
-        public void SwapCouncilPositions(CouncilAction action)
+        action.TargetPosition.Member = action.ActionTaker;
+        if (action.ActionTaker.Clan != null)
         {
-            if (action.TargetPosition == null || action.ActionTaker == null || !action.Possible || action.CurrentPosition == null) return;
-
-            Hero currentCouncilman = action.TargetPosition.Member;
-            action.CurrentPosition.Member = currentCouncilman;
-            action.TargetPosition.Member = action.ActionTaker;
-            if (action.ActionTaker.Clan != null) GainKingdomInfluenceAction.ApplyForDefault(action.ActionTaker, -action.Influence);
-            else if (action.ActionTaker.IsNotable) action.ActionTaker.AddPower(-action.Influence);
-            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(action.TargetPosition.Clan.Leader, action.ActionTaker, ON_HIRED_RELATION);
+            GainKingdomInfluenceAction.ApplyForDefault(action.ActionTaker, -action.Influence);
         }
-
-        public void RelinquishCouncilPosition(CouncilAction action)
+        else if (action.ActionTaker.IsNotable)
         {
-            if (action.TargetPosition == null || !action.Possible) return;
-
-            CheckReligionRankChange(action);
-            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(action.Council.Owner, action.TargetPosition.Member, ON_FIRED_RELATION);
-            action.TargetPosition.Member = null;
+            action.ActionTaker.AddPower(-action.Influence);
         }
+
+        ChangeRelationAction.ApplyRelationChangeBetweenHeroes(action.Council.Owner, action.ActionTaker,
+            ON_HIRED_RELATION);
+    }
+
+    public void SwapCouncilPositions(CouncilAction action)
+    {
+        if (action.TargetPosition == null || action.ActionTaker == null || !action.Possible ||
+            action.CurrentPosition == null)
+        {
+            return;
+        }
+
+        var currentCouncilman = action.TargetPosition.Member;
+        action.CurrentPosition.Member = currentCouncilman;
+        action.TargetPosition.Member = action.ActionTaker;
+        if (action.ActionTaker.Clan != null)
+        {
+            GainKingdomInfluenceAction.ApplyForDefault(action.ActionTaker, -action.Influence);
+        }
+        else if (action.ActionTaker.IsNotable)
+        {
+            action.ActionTaker.AddPower(-action.Influence);
+        }
+
+        ChangeRelationAction.ApplyRelationChangeBetweenHeroes(action.TargetPosition.Clan.Leader, action.ActionTaker,
+            ON_HIRED_RELATION);
+    }
+
+    public void RelinquishCouncilPosition(CouncilAction action)
+    {
+        if (action.TargetPosition == null || !action.Possible)
+        {
+            return;
+        }
+
+        CheckReligionRankChange(action);
+        ChangeRelationAction.ApplyRelationChangeBetweenHeroes(action.Council.Owner, action.TargetPosition.Member,
+            ON_FIRED_RELATION);
+        action.TargetPosition.Member = null;
     }
 }

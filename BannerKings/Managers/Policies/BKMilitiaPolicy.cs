@@ -1,53 +1,63 @@
-﻿using BannerKings.UI.Items;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using BannerKings.UI.Items;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core.ViewModelCollection.Selector;
 using TaleWorlds.SaveSystem;
 
-namespace BannerKings.Managers.Policies
+namespace BannerKings.Managers.Policies;
+
+internal class BKMilitiaPolicy : BannerKingsPolicy
 {
-    class BKMilitiaPolicy : BannerKingsPolicy
+    public enum MilitiaPolicy
     {
-        public override string GetIdentifier() => "militia";
+        Balanced,
+        Melee,
+        Ranged
+    }
 
-        [SaveableProperty(3)]
-        public MilitiaPolicy Policy { get; private set; }
-        public BKMilitiaPolicy(MilitiaPolicy policy, Settlement settlement) : base(settlement, (int)policy)
-        {
-            Policy = policy;
-        }
-        public override string GetHint(int value)
-        {
-            if (value == (int)MilitiaPolicy.Melee)
-                return "Focus three fourths of the militia as melee troops.";
-            if (value == (int)MilitiaPolicy.Ranged)
-                return "Focus three fourths of the militia as ranged troops.";
-            return "Split militia equally between ranged and melee troops.";
-        }
+    public BKMilitiaPolicy(MilitiaPolicy policy, Settlement settlement) : base(settlement, (int) policy)
+    {
+        Policy = policy;
+    }
 
-        public override void OnChange(SelectorVM<BKItemVM> obj)
+    [SaveableProperty(3)] public MilitiaPolicy Policy { get; private set; }
+
+    public override string GetIdentifier()
+    {
+        return "militia";
+    }
+
+    public override string GetHint(int value)
+    {
+        if (value == (int) MilitiaPolicy.Melee)
         {
-            if (obj.SelectedItem != null)
-            {
-                BKItemVM vm = obj.GetCurrentItem();
-                Policy = (MilitiaPolicy)vm.value;
-                Selected = vm.value;
-                BannerKingsConfig.Instance.PolicyManager.UpdateSettlementPolicy(Settlement, this);
-            }
+            return "Focus three fourths of the militia as melee troops.";
         }
 
-        public enum MilitiaPolicy
+        if (value == (int) MilitiaPolicy.Ranged)
         {
-            Balanced,
-            Melee,
-            Ranged
+            return "Focus three fourths of the militia as ranged troops.";
         }
-        public override IEnumerable<Enum> GetPolicies()
+
+        return "Split militia equally between ranged and melee troops.";
+    }
+
+    public override void OnChange(SelectorVM<BKItemVM> obj)
+    {
+        if (obj.SelectedItem != null)
         {
-            yield return MilitiaPolicy.Balanced;
-            yield return MilitiaPolicy.Melee;
-            yield return MilitiaPolicy.Ranged;
+            var vm = obj.GetCurrentItem();
+            Policy = (MilitiaPolicy) vm.value;
+            Selected = vm.value;
+            BannerKingsConfig.Instance.PolicyManager.UpdateSettlementPolicy(Settlement, this);
         }
+    }
+
+    public override IEnumerable<Enum> GetPolicies()
+    {
+        yield return MilitiaPolicy.Balanced;
+        yield return MilitiaPolicy.Melee;
+        yield return MilitiaPolicy.Ranged;
     }
 }

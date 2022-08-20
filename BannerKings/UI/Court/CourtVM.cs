@@ -1,10 +1,8 @@
-﻿using BannerKings.Managers.Court;
-using BannerKings.Managers.Education.Languages;
-using BannerKings.Managers.Institutions.Religions;
-using BannerKings.UI.Items;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
+using BannerKings.Managers.Court;
+using BannerKings.UI.Items;
+using BannerKings.UI.Items.UI;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CampaignBehaviors;
 using TaleWorlds.CampaignSystem.ViewModelCollection;
@@ -14,364 +12,406 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace BannerKings.UI.Court
+namespace BannerKings.UI.Court;
+
+internal class CourtVM : BannerKingsViewModel
 {
-    class CourtVM : BannerKingsViewModel
+    private MBBindingList<CouncilPositionVM> corePositions, royalPositions;
+    private readonly CouncilData council;
+    private CouncilPosition councilPosition;
+    private CouncilVM councilVM;
+    private MBBindingList<InformationElement> courtInfo, privilegesInfo, courtierInfo;
+    private CharacterVM currentCharacter;
+    private MBBindingList<ClanLordItemVM> family, courtiers;
+    private bool isRoyal;
+    private string positionName, positionDescription, positionEffects;
+
+    private readonly ITeleportationCampaignBehavior teleportationBehavior =
+        Campaign.Current.GetCampaignBehavior<ITeleportationCampaignBehavior>();
+
+    public CourtVM(bool royal) : base(null, false)
     {
-        private MBBindingList<ClanLordItemVM> family, courtiers;
-		private CouncilVM councilVM;
-		private CouncilData council;
-		private CouncilPosition councilPosition;
-		private bool isRoyal;
-		private MBBindingList<CouncilPositionVM> corePositions, royalPositions;
-		private MBBindingList<InformationElement> courtInfo, privilegesInfo, courtierInfo;
-		private CharacterVM currentCharacter;
-		private string positionName, positionDescription, positionEffects;
-
-		private ITeleportationCampaignBehavior teleportationBehavior = Campaign.Current.GetCampaignBehavior<ITeleportationCampaignBehavior>();
-
-		public CourtVM(bool royal) : base(null, false)
+        if (!royal)
         {
-			if (!royal) council = BannerKingsConfig.Instance.CourtManager.GetCouncil(Hero.MainHero);
-			else if (Clan.PlayerClan.Kingdom != null) council = BannerKingsConfig.Instance.CourtManager.GetCouncil(Clan.PlayerClan.Kingdom.Leader);
-			family = new MBBindingList<ClanLordItemVM>();
-			courtiers = new MBBindingList<ClanLordItemVM>();
-			corePositions = new MBBindingList<CouncilPositionVM>();
-			royalPositions = new MBBindingList<CouncilPositionVM>();
-			courtInfo = new MBBindingList<InformationElement>();
-			courtierInfo = new MBBindingList<InformationElement>();
-			privilegesInfo = new MBBindingList<InformationElement>();
-			councilPosition = CouncilPosition.Marshall;
-			isRoyal = royal;
-			currentCharacter = new CharacterVM(Hero.MainHero, null);
-		}
-
-        public override void RefreshValues()
+            council = BannerKingsConfig.Instance.CourtManager.GetCouncil(Hero.MainHero);
+        }
+        else if (Clan.PlayerClan.Kingdom != null)
         {
-            base.RefreshValues();
-			Family.Clear();
-			Courtiers.Clear();
-			CourtInfo.Clear();
-			CorePositions.Clear();
-			RoyalPositions.Clear();
-			CourtierInfo.Clear();
-			PrivilegesInfo.Clear();
-			List<Hero> heroes = council.GetCourtMembers();
-			CouncilVM = new CouncilVM(new Action<Hero>(SetCouncilMember), council, councilPosition, heroes);
-
-			foreach (Hero hero in heroes)
-			{
-				if (hero.Spouse == council.Owner || council.Owner.Children.Contains(hero) || council.Owner.Siblings.Contains(hero) ||
-					council.Owner.Father == hero || council.Owner.Mother == hero)
-					Family.Add(new ClanLordItemVM(hero, teleportationBehavior, null, new Action<ClanLordItemVM>(SetCurrentCharacter), 
-						OnRequestRecall, OnRequestRecall));
-				else Courtiers.Add(new ClanLordItemVM(hero, teleportationBehavior, null, new Action<ClanLordItemVM>(SetCurrentCharacter),
-					OnRequestRecall, OnRequestRecall));
-
-			}
-
-			CourtInfo.Add(new InformationElement("Administrative costs:", FormatValue(council.AdministrativeCosts),
-				"Costs associated with payment of council members, deducted on all your fiefs' revenues."));
-
-			(bool, string) royalExplanation = BannerKingsConfig.Instance.CouncilModel.IsCouncilRoyal(council.Owner.Clan);
-			IsRoyal = royalExplanation.Item1;
-			CourtInfo.Add(new InformationElement(new TextObject("{=!}Crown council:").ToString(), 
-				GameTexts.FindText(royalExplanation.Item1 ? "str_yes" : "str_no").ToString(), royalExplanation.Item2));
-
-			Religion rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(council.Owner);
-			CourtInfo.Add(new InformationElement(new TextObject("{=!}Court Religion:").ToString(),
-				rel != null ? rel.GetName().ToString() : GameTexts.FindText("role", "None").ToString(), 
-				new TextObject("{=!}This council's owner's faith. Candidates for religious positions must adhere to the same faith. Other council positions may be affected by the faith's doctrines.").ToString()));
-
-			CourtInfo.Add(new InformationElement(new TextObject("{=!}Court Language:").ToString(),
-				BannerKingsConfig.Instance.EducationManager.GetNativeLanguage(council.Owner).Name.ToString(),
-				new TextObject("{=!}This council's owner's language. Courtiers that do not speak the language may feel alienated.").ToString()));
-
-			foreach (CouncilMember position in council.Positions)
-            {
-				if (position.Clan == null) position.Clan = council.Owner.Clan;
-				CorePositions.Add(new CouncilPositionVM(position, new Action<string>(SetId), new Action<string>(UpdatePositionTexts)));
-			}
-				
-
-			if (IsRoyal)
-				foreach (CouncilMember position in council.RoyalPositions)
-                {
-					if (position.Clan == null) position.Clan = council.Owner.Clan;
-					RoyalPositions.Add(new CouncilPositionVM(position, new Action<string>(SetId), new Action<string>(UpdatePositionTexts)));
-				}
-
-			CouncilMember member = council.GetMemberFromPosition(councilPosition);
-			if (member != null)
-			{
-				positionName = member.GetName().ToString();
-				positionDescription = member.GetDescription().ToString();
-				positionEffects = member.GetEffects().ToString();
-
-				foreach (CouncilPrivileges privilege in member.GetPrivileges())
-					PrivilegesInfo.Add(new InformationElement(GameTexts.FindText("str_bk_council_privilege", privilege.ToString().ToLower()).ToString(),
-						string.Empty,
-						GameTexts.FindText("str_bk_council_privilege_description", privilege.ToString().ToLower()).ToString()));
-			}
-
-			if (currentCharacter != null)
-            {
-				CourtierInfo.Add(new InformationElement(GameTexts.FindText("str_enc_sf_occupation").ToString(), 
-					CampaignUIHelper.GetHeroOccupationName(currentCharacter.Hero).ToString(), string.Empty));
-
-				string positionString = GameTexts.FindText("role", "None").ToString();
-				CouncilMember heroPosition = council.GetHeroPosition(currentCharacter.Hero);
-				if (heroPosition != null) positionString = heroPosition.GetName().ToString();
-				else if (currentCharacter.Hero == council.Owner) positionString = GameTexts.FindText("role", "ClanLeader").ToString();
-				CourtierInfo.Add(new InformationElement(new TextObject("{=!}Council Position:").ToString(), positionString, string.Empty));
-
-				string languagesString = "";
-				foreach (KeyValuePair<Language, float> pair in BannerKingsConfig.Instance.EducationManager.GetHeroEducation(currentCharacter.Hero).Languages)
-					languagesString += new TextObject("{=!}{LANGUAGE} ({COMPETENCE}),")
-						.SetTextVariable("LANGUAGE", pair.Key.Name)
-						.SetTextVariable("COMPETENCE", UIHelper.GetLanguageFluencyText(pair.Value));
-				CourtierInfo.Add(new InformationElement(new TextObject("{=!}Languages:").ToString(), languagesString.Remove(languagesString.Length - 1), string.Empty));
-			}
-			
-		}
-
-		private void OnRequestRecall()
-        {
-
+            council = BannerKingsConfig.Instance.CourtManager.GetCouncil(Clan.PlayerClan.Kingdom.Leader);
         }
 
-		private void UpdatePositionTexts(string id)
+        family = new MBBindingList<ClanLordItemVM>();
+        courtiers = new MBBindingList<ClanLordItemVM>();
+        corePositions = new MBBindingList<CouncilPositionVM>();
+        royalPositions = new MBBindingList<CouncilPositionVM>();
+        courtInfo = new MBBindingList<InformationElement>();
+        courtierInfo = new MBBindingList<InformationElement>();
+        privilegesInfo = new MBBindingList<InformationElement>();
+        councilPosition = CouncilPosition.Marshall;
+        isRoyal = royal;
+        currentCharacter = new CharacterVM(Hero.MainHero, null);
+    }
+
+    [DataSourceProperty] public string FamilyText => GameTexts.FindText("str_family_group").ToString();
+
+    [DataSourceProperty] public string CourtiersText => new TextObject("{=!}Courtiers").ToString();
+
+    [DataSourceProperty] public string EffectsText => new TextObject("{=!}Effects").ToString();
+
+    [DataSourceProperty] public string PrivilegesText => new TextObject("{=bk_privileges}Privileges").ToString();
+
+    [DataSourceProperty]
+    public string CurrentEffectsDescriptionText
+    {
+        get => positionEffects;
+        set
         {
-			CouncilMember member = council.GetMemberFromPosition((CouncilPosition)Enum.Parse(typeof(CouncilPosition), id));
-			if (member != null)
+            if (value != positionEffects)
             {
-				CurrentPositionNameText = member.GetName().ToString();
-				CurrentPositionDescriptionText = member.GetDescription().ToString();
-				CurrentEffectsDescriptionText = member.GetEffects().ToString();
-				PrivilegesInfo.Clear();
-				foreach (CouncilPrivileges privilege in member.GetPrivileges())
-					PrivilegesInfo.Add(new InformationElement(GameTexts.FindText("str_bk_council_privilege", privilege.ToString().ToLower()).ToString(),
-						string.Empty,
-						GameTexts.FindText("str_bk_council_privilege_description", privilege.ToString().ToLower()).ToString()));
-			}
-		}
+                positionEffects = value;
+                OnPropertyChangedWithValue(value);
+            }
+        }
+    }
 
-		private void SetId(string id)
-		{
-			CouncilPosition newPosition = (CouncilPosition)Enum.Parse(typeof(CouncilPosition), id);
-			if (councilPosition != newPosition)
-			{
-				councilPosition = newPosition;
-				CouncilVM.Position = newPosition;
-				RefreshValues();
-			}
-			CouncilVM.ShowOptions();
-		}
-
-		private void SetCouncilMember(Hero member)
-		{
-			council.GetMemberFromPosition(councilPosition).Member = member;
-			RefreshValues();
-		}
-
-		private void SetCurrentCharacter(ClanLordItemVM vm)
+    [DataSourceProperty]
+    public string CurrentPositionNameText
+    {
+        get => positionName;
+        set
         {
-			CurrentCharacter = new CharacterVM(vm.GetHero(), null);
-			RefreshValues();
-		}
+            if (value != positionName)
+            {
+                positionName = value;
+                OnPropertyChangedWithValue(value);
+            }
+        }
+    }
 
-		[DataSourceProperty]
-		public string FamilyText => GameTexts.FindText("str_family_group", null).ToString();
+    [DataSourceProperty]
+    public string CurrentPositionDescriptionText
+    {
+        get => positionDescription;
+        set
+        {
+            if (value != positionDescription)
+            {
+                positionDescription = value;
+                OnPropertyChangedWithValue(value);
+            }
+        }
+    }
 
-		[DataSourceProperty]
-		public string CourtiersText => new TextObject("{=!}Courtiers").ToString();
+    [DataSourceProperty]
+    public bool IsRoyal
+    {
+        get => isRoyal;
+        set
+        {
+            if (value != isRoyal)
+            {
+                isRoyal = value;
+                OnPropertyChangedWithValue(value);
+            }
+        }
+    }
 
-		[DataSourceProperty]
-		public string EffectsText => new TextObject("{=!}Effects").ToString();
+    [DataSourceProperty]
+    public CharacterVM CurrentCharacter
+    {
+        get => currentCharacter;
+        set
+        {
+            if (value != currentCharacter)
+            {
+                currentCharacter = value;
+                OnPropertyChangedWithValue(value);
+            }
+        }
+    }
 
-		[DataSourceProperty]
-		public string PrivilegesText => new TextObject("{=bk_privileges}Privileges").ToString(); 
+    [DataSourceProperty]
+    public CouncilVM CouncilVM
+    {
+        get => councilVM;
+        set
+        {
+            if (value != councilVM)
+            {
+                councilVM = value;
+                OnPropertyChangedWithValue(value);
+            }
+        }
+    }
 
-		[DataSourceProperty]
-		public string CurrentEffectsDescriptionText
-		{
-			get => positionEffects;
-			set
-			{
-				if (value != positionEffects)
-				{
-					positionEffects = value;
-					OnPropertyChangedWithValue(value, "CurrentEffectsDescriptionText");
-				}
-			}
-		}
+    [DataSourceProperty]
+    public MBBindingList<ClanLordItemVM> Family
+    {
+        get => family;
+        set
+        {
+            if (value != family)
+            {
+                family = value;
+                OnPropertyChangedWithValue(value);
+            }
+        }
+    }
 
-		[DataSourceProperty]
-		public string CurrentPositionNameText
-		{
-			get => positionName;
-			set
-			{
-				if (value != positionName)
-				{
-					positionName = value;
-					OnPropertyChangedWithValue(value, "CurrentPositionNameText");
-				}
-			}
-		}
+    [DataSourceProperty]
+    public MBBindingList<ClanLordItemVM> Courtiers
+    {
+        get => courtiers;
+        set
+        {
+            if (value != courtiers)
+            {
+                courtiers = value;
+                OnPropertyChangedWithValue(value);
+            }
+        }
+    }
 
-		[DataSourceProperty]
-		public string CurrentPositionDescriptionText
-		{
-			get => positionDescription;
-			set
-			{
-				if (value != positionDescription)
-				{
-					positionDescription = value;
-					OnPropertyChangedWithValue(value, "CurrentPositionDescriptionText");
-				}
-			}
-		}
+    [DataSourceProperty]
+    public MBBindingList<InformationElement> PrivilegesInfo
+    {
+        get => privilegesInfo;
+        set
+        {
+            if (value != privilegesInfo)
+            {
+                privilegesInfo = value;
+                OnPropertyChangedWithValue(value);
+            }
+        }
+    }
 
-		[DataSourceProperty]
-		public bool IsRoyal
-		{
-			get => isRoyal;
-			set
-			{
-				if (value != isRoyal)
-				{
-					isRoyal = value;
-					OnPropertyChangedWithValue(value, "IsRoyal");
-				}
-			}
-		}
+    [DataSourceProperty]
+    public MBBindingList<InformationElement> CourtierInfo
+    {
+        get => courtierInfo;
+        set
+        {
+            if (value != courtierInfo)
+            {
+                courtierInfo = value;
+                OnPropertyChangedWithValue(value);
+            }
+        }
+    }
 
-		[DataSourceProperty]
-		public CharacterVM CurrentCharacter
-		{
-			get => currentCharacter;
-			set
-			{
-				if (value != currentCharacter)
-				{
-					currentCharacter = value;
-					OnPropertyChangedWithValue(value, "CurrentCharacter");
-				}
-			}
-		}
+    [DataSourceProperty]
+    public MBBindingList<InformationElement> CourtInfo
+    {
+        get => courtInfo;
+        set
+        {
+            if (value != courtInfo)
+            {
+                courtInfo = value;
+                OnPropertyChangedWithValue(value);
+            }
+        }
+    }
 
-		[DataSourceProperty]
-		public CouncilVM CouncilVM
-		{
-			get => this.councilVM;
-			set
-			{
-				if (value != this.councilVM)
-				{
-					this.councilVM = value;
-					base.OnPropertyChangedWithValue(value, "CouncilVM");
-				}
-			}
-		}
+    [DataSourceProperty]
+    public MBBindingList<CouncilPositionVM> CorePositions
+    {
+        get => corePositions;
+        set
+        {
+            if (value != corePositions)
+            {
+                corePositions = value;
+                OnPropertyChangedWithValue(value);
+            }
+        }
+    }
 
-		[DataSourceProperty]
-		public MBBindingList<ClanLordItemVM> Family
-		{
-			get => family;
-			set
-			{
-				if (value != family)
-				{
-					family = value;
-					OnPropertyChangedWithValue(value, "Family");
-				}
-			}
-		}
+    [DataSourceProperty]
+    public MBBindingList<CouncilPositionVM> RoyalPositions
+    {
+        get => royalPositions;
+        set
+        {
+            if (value != royalPositions)
+            {
+                royalPositions = value;
+                OnPropertyChangedWithValue(value);
+            }
+        }
+    }
 
-		[DataSourceProperty]
-		public MBBindingList<ClanLordItemVM> Courtiers
-		{
-			get => courtiers;
-			set
-			{
-				if (value != courtiers)
-				{
-					courtiers = value;
-					OnPropertyChangedWithValue(value, "Courtiers");
-				}
-			}
-		}
+    public override void RefreshValues()
+    {
+        base.RefreshValues();
+        Family.Clear();
+        Courtiers.Clear();
+        CourtInfo.Clear();
+        CorePositions.Clear();
+        RoyalPositions.Clear();
+        CourtierInfo.Clear();
+        PrivilegesInfo.Clear();
+        var heroes = council.GetCourtMembers();
+        CouncilVM = new CouncilVM(SetCouncilMember, council, councilPosition, heroes);
 
-		[DataSourceProperty]
-		public MBBindingList<InformationElement> PrivilegesInfo
-		{
-			get => privilegesInfo;
-			set
-			{
-				if (value != privilegesInfo)
-				{
-					privilegesInfo = value;
-					OnPropertyChangedWithValue(value, "PrivilegesInfo");
-				}
-			}
-		}
+        foreach (var hero in heroes)
+        {
+            if (hero.Spouse == council.Owner || council.Owner.Children.Contains(hero) ||
+                council.Owner.Siblings.Contains(hero) ||
+                council.Owner.Father == hero || council.Owner.Mother == hero)
+            {
+                Family.Add(new ClanLordItemVM(hero, teleportationBehavior, null, SetCurrentCharacter,
+                    OnRequestRecall, OnRequestRecall));
+            }
+            else
+            {
+                Courtiers.Add(new ClanLordItemVM(hero, teleportationBehavior, null, SetCurrentCharacter,
+                    OnRequestRecall, OnRequestRecall));
+            }
+        }
 
-		[DataSourceProperty]
-		public MBBindingList<InformationElement> CourtierInfo
-		{
-			get => courtierInfo;
-			set
-			{
-				if (value != courtierInfo)
-				{
-					courtierInfo = value;
-					OnPropertyChangedWithValue(value, "CourtierInfo");
-				}
-			}
-		}
+        CourtInfo.Add(new InformationElement("Administrative costs:", FormatValue(council.AdministrativeCosts),
+            "Costs associated with payment of council members, deducted on all your fiefs' revenues."));
 
-		[DataSourceProperty]
-		public MBBindingList<InformationElement> CourtInfo
-		{
-			get => courtInfo;
-			set
-			{
-				if (value != courtInfo)
-				{
-					courtInfo = value;
-					OnPropertyChangedWithValue(value, "CourtInfo");
-				}
-			}
-		}
+        var royalExplanation = BannerKingsConfig.Instance.CouncilModel.IsCouncilRoyal(council.Owner.Clan);
+        IsRoyal = royalExplanation.Item1;
+        CourtInfo.Add(new InformationElement(new TextObject("{=!}Crown council:").ToString(),
+            GameTexts.FindText(royalExplanation.Item1 ? "str_yes" : "str_no").ToString(), royalExplanation.Item2));
 
-		[DataSourceProperty]
-		public MBBindingList<CouncilPositionVM> CorePositions
-		{
-			get => corePositions;
-			set
-			{
-				if (value != corePositions)
-				{
-					corePositions = value;
-					OnPropertyChangedWithValue(value, "CorePositions");
-				}
-			}
-		}
+        var rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(council.Owner);
+        CourtInfo.Add(new InformationElement(new TextObject("{=!}Court Religion:").ToString(),
+            rel != null ? rel.GetName().ToString() : GameTexts.FindText("role", "None").ToString(),
+            new TextObject(
+                    "{=!}This council's owner's faith. Candidates for religious positions must adhere to the same faith. Other council positions may be affected by the faith's doctrines.")
+                .ToString()));
 
-		[DataSourceProperty]
-		public MBBindingList<CouncilPositionVM> RoyalPositions
-		{
-			get => royalPositions;
-			set
-			{
-				if (value != royalPositions)
-				{
-					royalPositions = value;
-					OnPropertyChangedWithValue(value, "RoyalPositions");
-				}
-			}
-		}
-	}
+        CourtInfo.Add(new InformationElement(new TextObject("{=!}Court Language:").ToString(),
+            BannerKingsConfig.Instance.EducationManager.GetNativeLanguage(council.Owner).Name.ToString(),
+            new TextObject(
+                    "{=!}This council's owner's language. Courtiers that do not speak the language may feel alienated.")
+                .ToString()));
+
+        foreach (var position in council.Positions)
+        {
+            if (position.Clan == null)
+            {
+                position.Clan = council.Owner.Clan;
+            }
+
+            CorePositions.Add(new CouncilPositionVM(position, SetId, UpdatePositionTexts));
+        }
+
+
+        if (IsRoyal)
+        {
+            foreach (var position in council.RoyalPositions)
+            {
+                if (position.Clan == null)
+                {
+                    position.Clan = council.Owner.Clan;
+                }
+
+                RoyalPositions.Add(new CouncilPositionVM(position, SetId, UpdatePositionTexts));
+            }
+        }
+
+        var member = council.GetMemberFromPosition(councilPosition);
+        if (member != null)
+        {
+            positionName = member.GetName().ToString();
+            positionDescription = member.GetDescription().ToString();
+            positionEffects = member.GetEffects().ToString();
+
+            foreach (var privilege in member.GetPrivileges())
+            {
+                PrivilegesInfo.Add(new InformationElement(
+                    GameTexts.FindText("str_bk_council_privilege", privilege.ToString().ToLower()).ToString(),
+                    string.Empty,
+                    GameTexts.FindText("str_bk_council_privilege_description", privilege.ToString().ToLower())
+                        .ToString()));
+            }
+        }
+
+        if (currentCharacter != null)
+        {
+            CourtierInfo.Add(new InformationElement(GameTexts.FindText("str_enc_sf_occupation").ToString(),
+                CampaignUIHelper.GetHeroOccupationName(currentCharacter.Hero), string.Empty));
+
+            var positionString = GameTexts.FindText("role", "None").ToString();
+            var heroPosition = council.GetHeroPosition(currentCharacter.Hero);
+            if (heroPosition != null)
+            {
+                positionString = heroPosition.GetName().ToString();
+            }
+            else if (currentCharacter.Hero == council.Owner)
+            {
+                positionString = GameTexts.FindText("role", "ClanLeader").ToString();
+            }
+
+            CourtierInfo.Add(new InformationElement(new TextObject("{=!}Council Position:").ToString(), positionString,
+                string.Empty));
+
+            var languagesString = "";
+            foreach (var pair in BannerKingsConfig.Instance.EducationManager.GetHeroEducation(currentCharacter.Hero)
+                         .Languages)
+            {
+                languagesString += new TextObject("{=!}{LANGUAGE} ({COMPETENCE}),")
+                    .SetTextVariable("LANGUAGE", pair.Key.Name)
+                    .SetTextVariable("COMPETENCE", UIHelper.GetLanguageFluencyText(pair.Value));
+            }
+
+            CourtierInfo.Add(new InformationElement(new TextObject("{=!}Languages:").ToString(),
+                languagesString.Remove(languagesString.Length - 1), string.Empty));
+        }
+    }
+
+    private void OnRequestRecall()
+    {
+    }
+
+    private void UpdatePositionTexts(string id)
+    {
+        var member = council.GetMemberFromPosition((CouncilPosition) Enum.Parse(typeof(CouncilPosition), id));
+        if (member != null)
+        {
+            CurrentPositionNameText = member.GetName().ToString();
+            CurrentPositionDescriptionText = member.GetDescription().ToString();
+            CurrentEffectsDescriptionText = member.GetEffects().ToString();
+            PrivilegesInfo.Clear();
+            foreach (var privilege in member.GetPrivileges())
+            {
+                PrivilegesInfo.Add(new InformationElement(
+                    GameTexts.FindText("str_bk_council_privilege", privilege.ToString().ToLower()).ToString(),
+                    string.Empty,
+                    GameTexts.FindText("str_bk_council_privilege_description", privilege.ToString().ToLower())
+                        .ToString()));
+            }
+        }
+    }
+
+    private void SetId(string id)
+    {
+        var newPosition = (CouncilPosition) Enum.Parse(typeof(CouncilPosition), id);
+        if (councilPosition != newPosition)
+        {
+            councilPosition = newPosition;
+            CouncilVM.Position = newPosition;
+            RefreshValues();
+        }
+
+        CouncilVM.ShowOptions();
+    }
+
+    private void SetCouncilMember(Hero member)
+    {
+        council.GetMemberFromPosition(councilPosition).Member = member;
+        RefreshValues();
+    }
+
+    private void SetCurrentCharacter(ClanLordItemVM vm)
+    {
+        CurrentCharacter = new CharacterVM(vm.GetHero(), null);
+        RefreshValues();
+    }
 }
