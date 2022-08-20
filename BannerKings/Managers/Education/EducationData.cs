@@ -12,6 +12,7 @@ using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Managers.Education
 {
+
     public class EducationData : BannerKingsData
     {
         private const float LANGUAGE_RATE = 1f / (CampaignTime.DaysInYear * 5f);
@@ -211,7 +212,7 @@ namespace BannerKings.Managers.Education
                 hero.AddSkillXp(BKSkills.Instance.Scholarship, 200);
             }
 
-            hero.AddSkillXp(BKSkills.Instance.Scholarship, MBMath.ClampInt((int) result, 2, 10));
+            hero.AddSkillXp(BKSkills.Instance.Scholarship, MBMath.ClampInt((int)result, 2, 10));
         }
 
         public void GainBookReading(BookType book, float rate)
@@ -235,7 +236,7 @@ namespace BannerKings.Managers.Education
                 hero.AddSkillXp(BKSkills.Instance.Scholarship, 200);
             }
 
-            hero.AddSkillXp(BKSkills.Instance.Scholarship, MBMath.ClampInt((int) result, 2, 10));
+            hero.AddSkillXp(BKSkills.Instance.Scholarship, MBMath.ClampInt((int)result, 2, 10));
         }
 
         internal override void Update(PopulationData data)
