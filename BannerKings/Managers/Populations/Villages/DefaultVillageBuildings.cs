@@ -67,11 +67,6 @@ public class DefaultVillageBuildings : DefaultTypeInitializer<DefaultVillageBuil
         }
     }
 
-    internal BuildingType GetById(BuildingType buildingType)
-    {
-        throw new NotImplementedException();
-    }
-
 
     public override void Initialize()
     {

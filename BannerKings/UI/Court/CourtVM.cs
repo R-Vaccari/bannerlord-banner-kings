@@ -3,6 +3,7 @@ using System.Linq;
 using BannerKings.Managers.Court;
 using BannerKings.UI.Items;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.CampaignBehaviors;
 using TaleWorlds.CampaignSystem.ViewModelCollection;
 using TaleWorlds.CampaignSystem.ViewModelCollection.CharacterDeveloper;
 using TaleWorlds.CampaignSystem.ViewModelCollection.ClanManagement;
@@ -23,6 +24,9 @@ internal class CourtVM : BannerKingsViewModel
     private MBBindingList<ClanLordItemVM> family, courtiers;
     private bool isRoyal;
     private string positionName, positionDescription, positionEffects;
+
+    private readonly ITeleportationCampaignBehavior teleportationBehavior =
+        Campaign.Current.GetCampaignBehavior<ITeleportationCampaignBehavior>();
 
     public CourtVM(bool royal) : base(null, false)
     {
@@ -256,11 +260,13 @@ internal class CourtVM : BannerKingsViewModel
                 council.Owner.Siblings.Contains(hero) ||
                 council.Owner.Father == hero || council.Owner.Mother == hero)
             {
-                Family.Add(new ClanLordItemVM(hero, null, null, SetCurrentCharacter, null, null));
+                Family.Add(new ClanLordItemVM(hero, teleportationBehavior, null, SetCurrentCharacter,
+                    OnRequestRecall, OnRequestRecall));
             }
             else
             {
-                Courtiers.Add(new ClanLordItemVM(hero, null, null, SetCurrentCharacter, null, null));
+                Courtiers.Add(new ClanLordItemVM(hero, teleportationBehavior, null, SetCurrentCharacter,
+                    OnRequestRecall, OnRequestRecall));
             }
         }
 
@@ -357,6 +363,10 @@ internal class CourtVM : BannerKingsViewModel
             CourtierInfo.Add(new InformationElement(new TextObject("{=!}Languages:").ToString(),
                 languagesString.Remove(languagesString.Length - 1), string.Empty));
         }
+    }
+
+    private void OnRequestRecall()
+    {
     }
 
     private void UpdatePositionTexts(string id)
