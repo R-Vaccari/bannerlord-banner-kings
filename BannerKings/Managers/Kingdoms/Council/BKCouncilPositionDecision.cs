@@ -205,7 +205,7 @@ namespace BannerKings.Managers.Kingdoms.Council
                 Candidate = candidate;
             }
 
-            [SaveableProperty(200)] public Hero Candidate { get; }
+            [SaveableProperty(200)] public Hero Candidate { get; set; }
 
             public override TextObject GetDecisionTitle()
             {

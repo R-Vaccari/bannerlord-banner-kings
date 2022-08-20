@@ -16,7 +16,7 @@ namespace BannerKings.Managers
             InitializeInnovations();
         }
 
-        [SaveableProperty(1)] private Dictionary<CultureObject, InnovationData> Innovations { get; }
+        [SaveableProperty(1)] private Dictionary<CultureObject, InnovationData> Innovations { get; set; }
 
         private void InitializeInnovations()
         {

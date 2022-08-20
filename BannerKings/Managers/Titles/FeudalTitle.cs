@@ -27,17 +27,17 @@ namespace BannerKings.Managers.Titles
             deJureDrift = new Dictionary<FeudalTitle, float>();
         }
 
-        [SaveableProperty(1)] public TitleType type { get; }
+        [SaveableProperty(1)] public TitleType type { get; set; }
 
-        [SaveableProperty(2)] public Settlement fief { get; }
+        [SaveableProperty(2)] public Settlement fief { get; set; }
 
-        [SaveableProperty(3)] public List<FeudalTitle> vassals { get; }
+        [SaveableProperty(3)] public List<FeudalTitle> vassals { get; set; }
 
         [SaveableProperty(4)] public Hero deJure { get; internal set; }
 
         [SaveableProperty(5)] public Hero deFacto { get; internal set; }
 
-        [SaveableProperty(6)] private TextObject name { get; }
+        [SaveableProperty(6)] private TextObject name { get; set; }
 
         [SaveableProperty(7)] public TextObject shortName { get; private set; }
 
@@ -45,7 +45,7 @@ namespace BannerKings.Managers.Titles
 
         [SaveableProperty(9)] public FeudalTitle sovereign { get; private set; }
 
-        [SaveableProperty(10)] public FeudalContract contract { get; }
+        [SaveableProperty(10)] public FeudalContract contract { get; set; }
 
         [SaveableProperty(11)] private Dictionary<Hero, ClaimType> claims { get; set; }
 

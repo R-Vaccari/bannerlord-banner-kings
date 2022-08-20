@@ -28,9 +28,9 @@ namespace BannerKings.Managers
             RefreshCaches();
         }
 
-        [SaveableProperty(1)] private Dictionary<FeudalTitle, Hero> Titles { get; }
+        [SaveableProperty(1)] private Dictionary<FeudalTitle, Hero> Titles { get; set; }
 
-        [SaveableProperty(2)] private Dictionary<Kingdom, FeudalTitle> Kingdoms { get; }
+        [SaveableProperty(2)] private Dictionary<Kingdom, FeudalTitle> Kingdoms { get; set; }
 
         [SaveableProperty(3)] public bool Knighthood { get; set; } = true;
 

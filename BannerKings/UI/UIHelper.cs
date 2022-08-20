@@ -279,7 +279,7 @@ namespace BannerKings.UI
                 AddActionHint(ref list, action);
             }
 
-            if (title.DeJureDrifts.Count() > 0)
+            if (title.DeJureDrifts.Any())
             {
                 TooltipAddEmptyLine(list);
                 list.Add(new TooltipProperty(new TextObject("{=!}De Jure Drifts").ToString(), " ", 0));

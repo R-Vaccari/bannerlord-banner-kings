@@ -809,7 +809,7 @@ namespace BannerKings.Utils
             if (nobleRecruit.UpgradeTargets != null)
             {
                 var currentUpgrades = nobleRecruit.UpgradeTargets;
-                while (currentUpgrades != null && currentUpgrades.Count() > 0)
+                while (currentUpgrades != null && currentUpgrades.Any())
                 {
                     var upgrade = currentUpgrades[0];
                     if (upgrade == character)

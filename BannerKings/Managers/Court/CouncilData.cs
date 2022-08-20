@@ -29,7 +29,7 @@ namespace BannerKings.Managers.Court
             royalMembers = new List<CouncilMember>();
         }
 
-        [SaveableProperty(1)] private Clan clan { get; }
+        [SaveableProperty(1)] private Clan clan { get; set; }
 
         [SaveableProperty(2)] private List<CouncilMember> members { get; set; }
 
@@ -574,14 +574,7 @@ namespace BannerKings.Managers.Court
 
         public CouncilMember GetCouncilMember(CouncilPosition position)
         {
-            CouncilMember result = null;
-            result = members.FirstOrDefault(x => x.Position == position);
-            if (result == null)
-            {
-                result = royalMembers.FirstOrDefault(x => x.Position == position);
-            }
-
-            return result;
+            return  members.FirstOrDefault(x => x.Position == position) ?? royalMembers.FirstOrDefault(x => x.Position == position);
         }
     }
 
@@ -597,7 +590,7 @@ namespace BannerKings.Managers.Court
 
         [SaveableProperty(1)] private Hero member { get; set; }
 
-        [SaveableProperty(2)] private CouncilPosition position { get; }
+        [SaveableProperty(2)] private CouncilPosition position { get; set; }
 
         [SaveableProperty(3)] private bool isRoyal { get; set; }
 

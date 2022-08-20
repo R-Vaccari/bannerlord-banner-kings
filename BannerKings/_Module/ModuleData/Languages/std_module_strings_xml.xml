@@ -4,12 +4,10 @@
 		<tag language="English" />
 	</tags>
 	<strings>
-
 		<string id="bk_crafting_itemtype_bodyarmor" text="Body Armors" />
 		<string id="bk_crafting_itemtype_barding" text="Bardings" />
 		<string id="bk_crafting_itemtype_shield" text="Shields" />
 		<string id="bk_crafting_itemtype_ammo" text="Ammos" />
-
 
 		<string id="bk_modifier_purebred" text="Poor {ITEMNAME}" />
 		<string id="bk_modifier_strong" text="Strong {ITEMNAME}" />
@@ -36,7 +34,6 @@
 		<string id="bk_council_privilege_noble_exclusive_description" text="This position is an important one and therefore must only be filled by nobles. Notables from settlements are not acceptable." />
 		<string id="bk_council_privilege_army_privilege_description" text="This position confers the councillor irrevocable ability to raise armies." />
 
-
 		<string id="bk_council_description_marshall" text="The {NAME} oversees the military administration of the realm. They are responsible for the efficiency of settlement defenses and drafting of the population." />
 		<string id="bk_council_description_steward" text="{NAME} are responsible for the well-being of finances and trade. They improve the economic prospects and prosperity of fiefs." />
 		<string id="bk_council_description_chancellor" text="{NAME} represent their lord in matters of diplomacy. They improve relations with the lord's peers and vassals." />
@@ -46,14 +43,11 @@
 
 		<string id="bk_spiritual_guide" text="Spiritual Guide" />
 
-
 		<string id="bk_council_marshall_effects" text="Settlement militia +1{BREAK}Settlement militarism +1% flat{BREAK}Settlement draft efficiencty +25% flat" />
 		<string id="bk_council_steward_effects" text="Settlement prosperity +1{BREAK}Settlement production efficiency +15% flat{BREAK}Settlement caravan attractiveness +15% flat" />
 		<string id="bk_council_chancellor_effects" text="Settlement loyalty +1{BREAK}Vassal limit +1{BREAK}Disagreements impact -20%" />
 		<string id="bk_council_spymaster_effects" text="Settlement security +1{BREAK}Settlement autonomy -3% flat{BREAK}" />
 		<string id="bk_council_spiritual_effects" text="" />
-
-
 
 		<string id="bk_council_marshall_empire" text="Domesticus" />
 		<string id="bk_council_marshall_sturgia" text="Domesticus" />
@@ -126,7 +120,6 @@
 		<string id="bk_council_spiritual_guide_royal_aserai" text="Domesticus" />
 
 		<string id="bk_council_elder_royal_battania" text="Seanar" />
-
 
 		<string id="bk_skill_scholarship_learn" text="Actively be studying for an education. Read books." />
 		<string id="bk_skill_theology_learn" text="Interact with divinities through oaths, sacrifices or blessings. Curse and cure curses." />

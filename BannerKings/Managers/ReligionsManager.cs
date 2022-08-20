@@ -20,7 +20,7 @@ namespace BannerKings.Managers
             InitializeReligions();
         }
 
-        [SaveableProperty(1)] private Dictionary<Religion, Dictionary<Hero, FaithfulData>> Religions { get; }
+        [SaveableProperty(1)] private Dictionary<Religion, Dictionary<Hero, FaithfulData>> Religions { get; set; }
 
         public void InitializeReligions()
         {

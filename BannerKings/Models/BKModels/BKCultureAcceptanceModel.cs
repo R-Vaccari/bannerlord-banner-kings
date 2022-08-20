@@ -35,7 +35,7 @@ namespace BannerKings.Models.BKModels
                     var peace = true;
                     if (clan.Kingdom != null)
                     {
-                        peace = FactionManager.GetEnemyFactions(clan.Kingdom).Count() > 0;
+                        peace = FactionManager.GetEnemyFactions(clan.Kingdom).Any();
                     }
 
                     result.Add(peace ? 0.02f : -0.02f, new TextObject(peace ? "Peace" : "War"));

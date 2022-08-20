@@ -54,17 +54,17 @@ namespace BannerKings.Managers.Populations
 
         [SaveableProperty(2)] private float stability { get; set; }
 
-        [SaveableProperty(3)] private Settlement settlement { get; }
+        [SaveableProperty(3)] private Settlement settlement { get; set; }
 
-        [SaveableProperty(4)] private CultureData cultureData { get; }
+        [SaveableProperty(4)] private CultureData cultureData { get; set; }
 
-        [SaveableProperty(5)] private VillageData villageData { get; }
+        [SaveableProperty(5)] private VillageData villageData { get; set; }
 
-        [SaveableProperty(6)] private LandData landData { get; }
+        [SaveableProperty(6)] private LandData landData { get; set; }
 
-        [SaveableProperty(7)] private MilitaryData militaryData { get; }
+        [SaveableProperty(7)] private MilitaryData militaryData { get; set; }
 
-        [SaveableProperty(8)] private EconomicData economicData { get; }
+        [SaveableProperty(8)] private EconomicData economicData { get; set; }
 
         [SaveableProperty(9)] private TournamentData tournamentData { get; set; }
 
@@ -377,7 +377,7 @@ namespace BannerKings.Managers.Populations
             this.cultures = cultures;
         }
 
-        [SaveableProperty(1)] private List<CultureDataClass> cultures { get; }
+        [SaveableProperty(1)] private List<CultureDataClass> cultures { get; set; }
 
         [SaveableProperty(2)] private Hero settlementOwner { get; set; }
 
@@ -606,7 +606,7 @@ namespace BannerKings.Managers.Populations
             this.acceptance = acceptance;
         }
 
-        [SaveableProperty(1)] private CultureObject culture { get; }
+        [SaveableProperty(1)] private CultureObject culture { get; set; }
 
         [SaveableProperty(2)] private float assimilation { get; set; }
 
@@ -641,9 +641,9 @@ namespace BannerKings.Managers.Populations
             inProgress = new Queue<Building>();
         }
 
-        [SaveableProperty(1)] private Village village { get; }
+        [SaveableProperty(1)] private Village village { get; set; }
 
-        [SaveableProperty(2)] private List<VillageBuilding> buildings { get; }
+        [SaveableProperty(2)] private List<VillageBuilding> buildings { get; set; }
 
         [SaveableProperty(5)] private Queue<Building> inProgress { get; set; }
 
@@ -689,7 +689,7 @@ namespace BannerKings.Managers.Populations
             set => inProgress = value;
         }
 
-        public bool IsCurrentlyBuilding => BuildingsInProgress.Count() > 0;
+        public bool IsCurrentlyBuilding => BuildingsInProgress.Any();
 
         public float Construction =>
             new BKConstructionModel().CalculateVillageConstruction(village.Settlement).ResultNumber;
@@ -730,7 +730,7 @@ namespace BannerKings.Managers.Populations
         internal override void Update(PopulationData data)
         {
             var current = CurrentBuilding;
-            if (current != null && BuildingsInProgress.Count() > 0)
+            if (current != null && BuildingsInProgress.Any())
             {
                 if (BuildingsInProgress.Peek().BuildingType.StringId == current.BuildingType.StringId)
                 {
@@ -763,7 +763,7 @@ namespace BannerKings.Managers.Populations
             Init(data.TotalPop);
         }
 
-        [SaveableProperty(1)] private PopulationData data { get; }
+        [SaveableProperty(1)] private PopulationData data { get; set; }
 
         [SaveableProperty(2)] private float farmland { get; set; }
 
@@ -775,7 +775,7 @@ namespace BannerKings.Managers.Populations
 
         [SaveableProperty(6)] private float terrainDifficulty { get; set; }
 
-        [SaveableProperty(7)] private float[] composition { get; }
+        [SaveableProperty(7)] private float[] composition { get; set; }
 
         public TerrainType Terrain => Campaign.Current.MapSceneWrapper.GetTerrainTypeAtPosition(data.Settlement.Position2D);
 
@@ -1072,7 +1072,7 @@ namespace BannerKings.Managers.Populations
             active = true;
         }
 
-        [SaveableProperty(1)] private ItemRoster roster { get; }
+        [SaveableProperty(1)] private ItemRoster roster { get; set; }
 
         [SaveableProperty(2)] private ItemObject prize { get; set; }
 

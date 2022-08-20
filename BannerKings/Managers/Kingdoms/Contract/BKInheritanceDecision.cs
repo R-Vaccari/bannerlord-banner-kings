@@ -19,7 +19,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
             this.inheritanceType = inheritanceType;
         }
 
-        [SaveableProperty(100)] private InheritanceType inheritanceType { get; }
+        [SaveableProperty(100)] private InheritanceType inheritanceType { get; set; }
 
         public override void ApplyChosenOutcome(DecisionOutcome chosenOutcome)
         {
@@ -229,7 +229,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
         public override bool IsAllowed()
         {
             var kingdom = ProposerClan.Kingdom;
-            if (kingdom == null || FactionManager.GetEnemyKingdoms(kingdom).Count() > 0)
+            if (kingdom == null || FactionManager.GetEnemyKingdoms(kingdom).Any())
             {
                 return false;
             }
@@ -244,7 +244,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
                 ShouldDecisionBeEnforced = shouldBeEnforced;
             }
 
-            [SaveableProperty(200)] public bool ShouldDecisionBeEnforced { get; }
+            [SaveableProperty(200)] public bool ShouldDecisionBeEnforced { get; set; }
 
 
             public override TextObject GetDecisionTitle()

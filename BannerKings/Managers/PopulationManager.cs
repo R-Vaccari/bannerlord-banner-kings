@@ -40,9 +40,9 @@ namespace BannerKings.Managers
             Caravans = caravans;
         }
 
-        [SaveableProperty(1)] private Dictionary<Settlement, PopulationData> Populations { get; }
+        [SaveableProperty(1)] private Dictionary<Settlement, PopulationData> Populations { get; set; }
 
-        [SaveableProperty(2)] private List<MobileParty> Caravans { get; }
+        [SaveableProperty(2)] private List<MobileParty> Caravans { get; set; }
 
         public MBReadOnlyList<MobileParty> AllParties => Caravans.GetReadOnlyList();
 
@@ -131,7 +131,6 @@ namespace BannerKings.Managers
                 Caravans.Remove(party);
             }
         }
-
 
         public List<(ItemObject, float)> GetProductions(VillageData villageData)
         {
@@ -228,7 +227,6 @@ namespace BannerKings.Managers
                 explainedNumber.AddFactor(level * 0.05f);
             }
         }
-
 
         public static void InitializeSettlementPops(Settlement settlement)
         {

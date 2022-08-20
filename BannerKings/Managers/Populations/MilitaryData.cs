@@ -20,13 +20,13 @@ namespace BannerKings.Managers.Populations
             engines = new List<SiegeEngineType>();
         }
 
-        [SaveableProperty(1)] private Settlement settlement { get; }
+        [SaveableProperty(1)] private Settlement settlement { get; set; }
 
         [SaveableProperty(2)] private int peasantManpower { get; set; }
 
         [SaveableProperty(3)] private int nobleManpower { get; set; }
 
-        [SaveableProperty(4)] private List<SiegeEngineType> engines { get; }
+        [SaveableProperty(4)] private List<SiegeEngineType> engines { get; set; }
 
         public int Manpower => peasantManpower + nobleManpower;
         public int PeasantManpower => peasantManpower;

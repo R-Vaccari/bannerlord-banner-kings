@@ -18,12 +18,11 @@ namespace BannerKings
 
         protected override void OnGameStart(Game game, IGameStarter gameStarter)
         {
-            if (game.GameType is not Campaign)
+            if (gameStarter is not CampaignGameStarter campaignStarter)
             {
                 return;
             }
-
-            var campaignStarter = (CampaignGameStarter) gameStarter;
+            
             campaignStarter.AddBehavior(new BKSettlementBehavior());
             campaignStarter.AddBehavior(new BKEducationBehavior());
             campaignStarter.AddBehavior(new BKSettlementActions());

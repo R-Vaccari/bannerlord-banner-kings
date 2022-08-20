@@ -13,7 +13,7 @@ namespace BannerKings.Managers.Populations.Villages
             this.village = village;
         }
 
-        [SaveableProperty(1)] private Village village { get; }
+        [SaveableProperty(1)] private Village village { get; set; }
 
         public Village Village => village;
 

@@ -19,9 +19,9 @@ namespace BannerKings.Managers
             SettlementPolicies = POLICIES;
         }
 
-        [SaveableProperty(1)] private Dictionary<Settlement, List<BannerKingsDecision>> SettlementDecisions { get; }
+        [SaveableProperty(1)] private Dictionary<Settlement, List<BannerKingsDecision>> SettlementDecisions { get; set; }
 
-        [SaveableProperty(2)] private Dictionary<Settlement, List<BannerKingsPolicy>> SettlementPolicies { get; }
+        [SaveableProperty(2)] private Dictionary<Settlement, List<BannerKingsPolicy>> SettlementPolicies { get; set; }
 
         private IEnumerable<string> TownDecisions
         {
