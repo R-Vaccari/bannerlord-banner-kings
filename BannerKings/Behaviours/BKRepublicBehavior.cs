@@ -2,53 +2,54 @@
 using BannerKings.Managers.Titles;
 using TaleWorlds.CampaignSystem;
 
-namespace BannerKings.Behaviours;
-
-public class BKRepublicBehavior : CampaignBehaviorBase
+namespace BannerKings.Behaviours
 {
-    public override void RegisterEvents()
+    public class BKRepublicBehavior : CampaignBehaviorBase
     {
-        CampaignEvents.DailyTickEvent.AddNonSerializedListener(this, DailyTick);
-    }
-
-    public override void SyncData(IDataStore dataStore)
-    {
-    }
-
-
-    private void DailyTick()
-    {
-        var now = CampaignTime.Now;
-        var day = now.GetDayOfYear;
-        if (day != 1)
+        public override void RegisterEvents()
         {
-            return;
+            CampaignEvents.DailyTickEvent.AddNonSerializedListener(this, DailyTick);
         }
 
-        foreach (var kingdom in Kingdom.All)
+        public override void SyncData(IDataStore dataStore)
         {
-            var title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
-            if (title == null || title.contract == null)
+        }
+
+
+        private void DailyTick()
+        {
+            var now = CampaignTime.Now;
+            var day = now.GetDayOfYear;
+            if (day != 1)
             {
                 return;
             }
 
-            var government = title.contract.Government;
-            if (government == GovernmentType.Republic)
+            foreach (var kingdom in Kingdom.All)
             {
-                var inElection = false;
-                foreach (var decision in kingdom.UnresolvedDecisions)
+                var title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
+                if (title == null || title.contract == null)
                 {
-                    if (decision is RepublicElectionDecision)
-                    {
-                        inElection = true;
-                        break;
-                    }
+                    return;
                 }
 
-                if (!inElection && kingdom.Clans.Count > 2)
+                var government = title.contract.Government;
+                if (government == GovernmentType.Republic)
                 {
-                    kingdom.AddDecision(new RepublicElectionDecision(kingdom.RulingClan, kingdom.RulingClan), true);
+                    var inElection = false;
+                    foreach (var decision in kingdom.UnresolvedDecisions)
+                    {
+                        if (decision is RepublicElectionDecision)
+                        {
+                            inElection = true;
+                            break;
+                        }
+                    }
+
+                    if (!inElection && kingdom.Clans.Count > 2)
+                    {
+                        kingdom.AddDecision(new RepublicElectionDecision(kingdom.RulingClan, kingdom.RulingClan), true);
+                    }
                 }
             }
         }

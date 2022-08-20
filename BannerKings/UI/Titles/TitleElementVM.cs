@@ -1,58 +1,59 @@
 ﻿using BannerKings.Managers.Titles;
 using TaleWorlds.Library;
 
-namespace BannerKings.UI.Titles;
-
-public class TitleElementVM : ViewModel
+namespace BannerKings.UI.Titles
 {
-    private MBBindingList<TitleElementVM> branch;
-    private TitleVM title;
-
-    public TitleElementVM(FeudalTitle title)
+    public class TitleElementVM : ViewModel
     {
-        Branch = new MBBindingList<TitleElementVM>();
-        Title = new TitleVM(title);
-        if (title.vassals != null)
+        private MBBindingList<TitleElementVM> branch;
+        private TitleVM title;
+
+        public TitleElementVM(FeudalTitle title)
         {
-            foreach (var vassal in title.vassals)
+            Branch = new MBBindingList<TitleElementVM>();
+            Title = new TitleVM(title);
+            if (title.vassals != null)
             {
-                Branch.Add(new TitleElementVM(vassal));
+                foreach (var vassal in title.vassals)
+                {
+                    Branch.Add(new TitleElementVM(vassal));
+                }
             }
         }
-    }
 
-    [DataSourceProperty]
-    public MBBindingList<TitleElementVM> Branch
-    {
-        get => branch;
-        set
+        [DataSourceProperty]
+        public MBBindingList<TitleElementVM> Branch
         {
-            if (value != branch)
+            get => branch;
+            set
             {
-                branch = value;
-                OnPropertyChangedWithValue(value);
+                if (value != branch)
+                {
+                    branch = value;
+                    OnPropertyChangedWithValue(value);
+                }
             }
         }
-    }
 
-    [DataSourceProperty]
-    public TitleVM Title
-    {
-        get => title;
-        set
+        [DataSourceProperty]
+        public TitleVM Title
         {
-            if (value != title)
+            get => title;
+            set
             {
-                title = value;
-                OnPropertyChangedWithValue(value);
+                if (value != title)
+                {
+                    title = value;
+                    OnPropertyChangedWithValue(value);
+                }
             }
         }
-    }
 
-    public override void RefreshValues()
-    {
-        base.RefreshValues();
-        Branch.ApplyActionOnAllItems(delegate(TitleElementVM x) { x.RefreshValues(); });
-        Title.RefreshValues();
+        public override void RefreshValues()
+        {
+            base.RefreshValues();
+            Branch.ApplyActionOnAllItems(delegate(TitleElementVM x) { x.RefreshValues(); });
+            Title.RefreshValues();
+        }
     }
 }

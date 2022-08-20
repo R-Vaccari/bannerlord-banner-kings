@@ -1,21 +1,22 @@
-﻿namespace BannerKings.Managers.Institutions.Religions.Leaderships;
-
-public abstract class CentralizedLeadership : ReligiousLeadership
+﻿namespace BannerKings.Managers.Institutions.Religions.Leaderships
 {
-    private Clergyman clergyman;
-
-    public Clergyman Leader
+    public abstract class CentralizedLeadership : ReligiousLeadership
     {
-        get
+        private Clergyman clergyman;
+
+        public Clergyman Leader
         {
-            if (clergyman == null)
+            get
             {
-                clergyman = DecideNewLeader();
+                if (clergyman == null)
+                {
+                    clergyman = DecideNewLeader();
+                }
+
+                return clergyman;
             }
-
-            return clergyman;
         }
-    }
 
-    public abstract Clergyman DecideNewLeader();
+        public abstract Clergyman DecideNewLeader();
+    }
 }

@@ -7,161 +7,162 @@ using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.SaveSystem;
 
-namespace BannerKings.Managers.Innovations;
-
-public class InnovationData : BannerKingsData
+namespace BannerKings.Managers.Innovations
 {
-    [SaveableField(5)] private readonly CultureObject culture;
-
-    [SaveableField(4)] private readonly List<Innovation> innovations;
-
-    [SaveableField(1)] private float research;
-
-    public InnovationData(List<Innovation> innovations, CultureObject culture)
+    public class InnovationData : BannerKingsData
     {
-        this.innovations = innovations;
-        this.culture = culture;
-    }
+        [SaveableField(5)] private readonly CultureObject culture;
 
-    [field: SaveableField(2)] public Clan CulturalHead { get; private set; }
+        [SaveableField(4)] private readonly List<Innovation> innovations;
 
-    [field: SaveableField(3)] public Innovation Fascination { get; private set; }
+        [SaveableField(1)] private float research;
 
-    public MBReadOnlyList<Innovation> Innovations => innovations.GetReadOnlyList();
-
-    public void PostInitialize()
-    {
-        if (Fascination != null)
+        public InnovationData(List<Innovation> innovations, CultureObject culture)
         {
-            var fasc = DefaultInnovations.Instance.GetById(Fascination);
-            Fascination.Initialize(fasc.Name, fasc.Description, fasc.Effects, fasc.RequiredProgress, fasc.Culture,
-                fasc.Requirement);
+            this.innovations = innovations;
+            this.culture = culture;
         }
 
-        foreach (var innovation in innovations)
-        {
-            var innov = DefaultInnovations.Instance.GetById(innovation);
-            innovation.Initialize(innov.Name, innov.Description, innov.Effects, innov.RequiredProgress, innov.Culture,
-                innov.Requirement);
-        }
-    }
+        [field: SaveableField(2)] public Clan CulturalHead { get; private set; }
 
-    public bool HasFinishedInnovation(Innovation innovation)
-    {
-        if (innovations.Contains(innovation))
+        [field: SaveableField(3)] public Innovation Fascination { get; private set; }
+
+        public MBReadOnlyList<Innovation> Innovations => innovations.GetReadOnlyList();
+
+        public void PostInitialize()
         {
-            foreach (var i in innovations)
+            if (Fascination != null)
             {
-                if (i == innovation)
+                var fasc = DefaultInnovations.Instance.GetById(Fascination);
+                Fascination.Initialize(fasc.Name, fasc.Description, fasc.Effects, fasc.RequiredProgress, fasc.Culture,
+                    fasc.Requirement);
+            }
+
+            foreach (var innovation in innovations)
+            {
+                var innov = DefaultInnovations.Instance.GetById(innovation);
+                innovation.Initialize(innov.Name, innov.Description, innov.Effects, innov.RequiredProgress, innov.Culture,
+                    innov.Requirement);
+            }
+        }
+
+        public bool HasFinishedInnovation(Innovation innovation)
+        {
+            if (innovations.Contains(innovation))
+            {
+                foreach (var i in innovations)
                 {
-                    return i.Finished;
+                    if (i == innovation)
+                    {
+                        return i.Finished;
+                    }
                 }
             }
+
+            return false;
         }
 
-        return false;
-    }
-
-    public bool CanAssumeCulturalHead(Clan clan)
-    {
-        var renown = 0f;
-        if (CulturalHead != null)
+        public bool CanAssumeCulturalHead(Clan clan)
         {
-            renown = CulturalHead.Renown;
-        }
-
-        return clan.Culture == culture && clan != CulturalHead && clan.Renown > renown;
-    }
-
-    public bool CanChangeFascination(Clan clan, Innovation fascination)
-    {
-        return clan == CulturalHead && !fascination.Finished && fascination != this.Fascination;
-    }
-
-    public void AssumeCulturalHead(Clan clan)
-    {
-        CulturalHead = clan;
-        if (culture == Clan.PlayerClan.Culture)
-        {
-            MBInformationManager.AddQuickInformation(
-                new TextObject("{=!}The {CLAN} has assumed the role of cultural head of the {CULTURE} culture.")
-                    .SetTextVariable("CLAN", clan.Name)
-                    .SetTextVariable("CULTURE", culture.Name), 0, null, "event:/ui/notification/relation");
-        }
-    }
-
-    public void ChangeFascination(Innovation fascination)
-    {
-        this.Fascination = fascination;
-        if (culture == Clan.PlayerClan.Culture)
-        {
-            MBInformationManager.AddQuickInformation(
-                new TextObject("{=!}The {CULTURE} is now fascinated by the {FASCINATION} innovation.")
-                    .SetTextVariable("FASCINATION", fascination.Name)
-                    .SetTextVariable("CULTURE", culture.Name), 0, null, "event:/ui/notification/relation");
-        }
-    }
-
-    public void SetFascination(Innovation innovation)
-    {
-        Fascination = innovation;
-    }
-
-    public void AddInnovation(Innovation innov)
-    {
-        innovations.Add(innov);
-    }
-
-    public void AddResearch(float points)
-    {
-        research += points;
-    }
-
-    internal override void Update(PopulationData data = null)
-    {
-        if (CulturalHead == null)
-        {
-            var clans = new List<Clan>(Clan.All).FindAll(x =>
-                !x.IsEliminated && x.Culture == culture && x.Leader != null);
-            if (clans.Count > 0)
+            var renown = 0f;
+            if (CulturalHead != null)
             {
-                clans.Sort((x, y) => y.Renown.CompareTo(x.Renown));
-                AssumeCulturalHead(clans[0]);
+                renown = CulturalHead.Renown;
+            }
+
+            return clan.Culture == culture && clan != CulturalHead && clan.Renown > renown;
+        }
+
+        public bool CanChangeFascination(Clan clan, Innovation fascination)
+        {
+            return clan == CulturalHead && !fascination.Finished && fascination != this.Fascination;
+        }
+
+        public void AssumeCulturalHead(Clan clan)
+        {
+            CulturalHead = clan;
+            if (culture == Clan.PlayerClan.Culture)
+            {
+                MBInformationManager.AddQuickInformation(
+                    new TextObject("{=!}The {CLAN} has assumed the role of cultural head of the {CULTURE} culture.")
+                        .SetTextVariable("CLAN", clan.Name)
+                        .SetTextVariable("CULTURE", culture.Name), 0, null, "event:/ui/notification/relation");
             }
         }
 
-        if (CulturalHead == null)
+        public void ChangeFascination(Innovation fascination)
         {
-            return;
+            this.Fascination = fascination;
+            if (culture == Clan.PlayerClan.Culture)
+            {
+                MBInformationManager.AddQuickInformation(
+                    new TextObject("{=!}The {CULTURE} is now fascinated by the {FASCINATION} innovation.")
+                        .SetTextVariable("FASCINATION", fascination.Name)
+                        .SetTextVariable("CULTURE", culture.Name), 0, null, "event:/ui/notification/relation");
+            }
         }
 
-        var unfinished = innovations.FindAll(x => !x.Finished);
-        if (unfinished.Count > 0)
+        public void SetFascination(Innovation innovation)
         {
-            if (Fascination == null)
-            {
-                ChangeFascination(unfinished.GetRandomElement());
-            }
+            Fascination = innovation;
+        }
 
-            for (var i = 0; i < 10; i++)
+        public void AddInnovation(Innovation innov)
+        {
+            innovations.Add(innov);
+        }
+
+        public void AddResearch(float points)
+        {
+            research += points;
+        }
+
+        internal override void Update(PopulationData data = null)
+        {
+            if (CulturalHead == null)
             {
-                var random = unfinished.GetRandomElement();
-                var result = research * 0.1f;
-                if (random == Fascination)
+                var clans = new List<Clan>(Clan.All).FindAll(x =>
+                    !x.IsEliminated && x.Culture == culture && x.Leader != null);
+                if (clans.Count > 0)
                 {
-                    var toAdd = 1.1f;
-                    if (CulturalHead.Leader.GetPerkValue(BKPerks.Instance.ScholarshipWellRead))
+                    clans.Sort((x, y) => y.Renown.CompareTo(x.Renown));
+                    AssumeCulturalHead(clans[0]);
+                }
+            }
+
+            if (CulturalHead == null)
+            {
+                return;
+            }
+
+            var unfinished = innovations.FindAll(x => !x.Finished);
+            if (unfinished.Count > 0)
+            {
+                if (Fascination == null)
+                {
+                    ChangeFascination(unfinished.GetRandomElement());
+                }
+
+                for (var i = 0; i < 10; i++)
+                {
+                    var random = unfinished.GetRandomElement();
+                    var result = research * 0.1f;
+                    if (random == Fascination)
                     {
-                        toAdd += 0.2f;
+                        var toAdd = 1.1f;
+                        if (CulturalHead.Leader.GetPerkValue(BKPerks.Instance.ScholarshipWellRead))
+                        {
+                            toAdd += 0.2f;
+                        }
+
+                        result *= toAdd;
                     }
 
-                    result *= toAdd;
+                    random.AddProgress(result);
                 }
-
-                random.AddProgress(result);
             }
-        }
 
-        research = 0f;
+            research = 0f;
+        }
     }
 }

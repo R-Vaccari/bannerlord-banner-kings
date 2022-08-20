@@ -4,60 +4,61 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Localization;
 
-namespace BannerKings.Models.BKModels;
-
-public class BKCultureAcceptanceModel : ICultureModel
+namespace BannerKings.Models.BKModels
 {
-    public ExplainedNumber CalculateEffect(Settlement settlement)
+    public class BKCultureAcceptanceModel : ICultureModel
     {
-        var result = new ExplainedNumber(0f);
-
-        return result;
-    }
-
-    public ExplainedNumber CalculateEffect(Settlement settlement, CultureDataClass data)
-    {
-        var result = new ExplainedNumber(0f);
-        var dataCulture = data.Culture;
-        if (dataCulture == settlement.Owner.Culture)
+        public ExplainedNumber CalculateEffect(Settlement settlement)
         {
-            if (data.Acceptance == 1f)
-            {
-                return result;
-            }
+            var result = new ExplainedNumber(0f);
 
+            return result;
+        }
+
+        public ExplainedNumber CalculateEffect(Settlement settlement, CultureDataClass data)
+        {
+            var result = new ExplainedNumber(0f);
+            var dataCulture = data.Culture;
             if (dataCulture == settlement.Owner.Culture)
             {
-                var stability = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement).Stability;
-                result.Add((stability - 0.5f) * 0.1f, new TextObject("Stability"));
-
-                var clan = settlement.OwnerClan;
-                var peace = true;
-                if (clan.Kingdom != null)
+                if (data.Acceptance == 1f)
                 {
-                    peace = FactionManager.GetEnemyFactions(clan.Kingdom).Count() > 0;
+                    return result;
                 }
 
-                result.Add(peace ? 0.02f : -0.02f, new TextObject(peace ? "Peace" : "War"));
+                if (dataCulture == settlement.Owner.Culture)
+                {
+                    var stability = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement).Stability;
+                    result.Add((stability - 0.5f) * 0.1f, new TextObject("Stability"));
+
+                    var clan = settlement.OwnerClan;
+                    var peace = true;
+                    if (clan.Kingdom != null)
+                    {
+                        peace = FactionManager.GetEnemyFactions(clan.Kingdom).Count() > 0;
+                    }
+
+                    result.Add(peace ? 0.02f : -0.02f, new TextObject(peace ? "Peace" : "War"));
+                }
+
+                if (dataCulture == settlement.Culture)
+                {
+                    result.Add(0.02f, new TextObject("Dominant culture"));
+                }
+            }
+            else
+            {
+                if (data.Acceptance > data.Assimilation)
+                {
+                    result.Add(-0.02f);
+                }
+                else if (data.Acceptance < data.Assimilation)
+                {
+                    result.Add(0.02f);
+                }
             }
 
-            if (dataCulture == settlement.Culture)
-            {
-                result.Add(0.02f, new TextObject("Dominant culture"));
-            }
+            return result;
         }
-        else
-        {
-            if (data.Acceptance > data.Assimilation)
-            {
-                result.Add(-0.02f);
-            }
-            else if (data.Acceptance < data.Assimilation)
-            {
-                result.Add(0.02f);
-            }
-        }
-
-        return result;
     }
 }

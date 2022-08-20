@@ -4,89 +4,90 @@ using System.Linq;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 
-namespace BannerKings.Managers.Institutions.Guilds;
-
-public class GuildType
+namespace BannerKings.Managers.Institutions.Guilds
 {
-    public GuildType(GuildTrade trade)
+    public class GuildType
     {
-        Trade = trade;
-    }
-
-    public TextObject Name
-    {
-        get
+        public GuildType(GuildTrade trade)
         {
-            TextObject result = null;
-            switch (Trade)
-            {
-                case GuildTrade.Merchants:
-                    result = new TextObject("{=!}Merchants Guild");
-                    break;
-                case GuildTrade.Masons:
-                    result = new TextObject("{=!}Masons Guild");
-                    break;
-                default:
-                    result = new TextObject("{=!}Metalsmiths Guild");
-                    break;
-            }
-
-            return result;
+            Trade = trade;
         }
-    }
 
-    public TextObject Description
-    {
-        get
+        public TextObject Name
         {
-            TextObject result = null;
-            switch (Trade)
+            get
             {
-                case GuildTrade.Merchants:
-                    result = new TextObject();
+                TextObject result = null;
+                switch (Trade)
+                {
+                    case GuildTrade.Merchants:
+                        result = new TextObject("{=!}Merchants Guild");
+                        break;
+                    case GuildTrade.Masons:
+                        result = new TextObject("{=!}Masons Guild");
+                        break;
+                    default:
+                        result = new TextObject("{=!}Metalsmiths Guild");
+                        break;
+                }
 
-                    break;
-                case GuildTrade.Masons:
-                    result = new TextObject();
-                    break;
-                default:
-                    result = new TextObject();
-                    break;
+                return result;
             }
-
-            return result;
         }
-    }
 
-    public IEnumerable<ValueTuple<ItemObject, float>> Productions
-    {
-        get
+        public TextObject Description
         {
-            IEnumerable<ValueTuple<ItemObject, float>> result = null;
-            switch (Trade)
+            get
             {
-                case GuildTrade.Metalworkers:
-                    result = new List<ValueTuple<ItemObject, float>>
-                    {
-                        (Game.Current.ObjectManager.GetObjectTypeList<ItemObject>().First(x => x.StringId == "tools"),
-                            1f)
-                    };
-                    break;
-                default:
-                    result = new List<ValueTuple<ItemObject, float>>();
-                    break;
-            }
+                TextObject result = null;
+                switch (Trade)
+                {
+                    case GuildTrade.Merchants:
+                        result = new TextObject();
 
-            return result;
+                        break;
+                    case GuildTrade.Masons:
+                        result = new TextObject();
+                        break;
+                    default:
+                        result = new TextObject();
+                        break;
+                }
+
+                return result;
+            }
         }
+
+        public IEnumerable<ValueTuple<ItemObject, float>> Productions
+        {
+            get
+            {
+                IEnumerable<ValueTuple<ItemObject, float>> result = null;
+                switch (Trade)
+                {
+                    case GuildTrade.Metalworkers:
+                        result = new List<ValueTuple<ItemObject, float>>
+                        {
+                            (Game.Current.ObjectManager.GetObjectTypeList<ItemObject>().First(x => x.StringId == "tools"),
+                                1f)
+                        };
+                        break;
+                    default:
+                        result = new List<ValueTuple<ItemObject, float>>();
+                        break;
+                }
+
+                return result;
+            }
+        }
+
+        public GuildTrade Trade { get; }
     }
 
-    public GuildTrade Trade { get; }
-}
-
-public enum GuildTrade
-{
-    Merchants,
-    Masons,
-    Metalworkers
+    public enum GuildTrade
+    {
+        Merchants,
+        Masons,
+        Metalworkers
+    }
 }

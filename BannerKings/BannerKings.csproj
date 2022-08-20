@@ -3,7 +3,7 @@
 		<Version>1.8.0</Version>
 		<TargetFramework>net472</TargetFramework>
 		<Platforms>x64</Platforms>
-		<LangVersion>10.0</LangVersion>
+		<LangVersion>9.0</LangVersion>
 		<Nullable>annotations</Nullable>
 		<ModuleName>$(MSBuildProjectName)</ModuleName>
 		<GameFolder>$(BANNERLORD_GAME_DIR)</GameFolder>

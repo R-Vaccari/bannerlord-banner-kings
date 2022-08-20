@@ -4,50 +4,51 @@ using BannerKings.UI.Items.UI;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 
-namespace BannerKings.UI.Panels;
-
-public class GuildVM : BannerKingsViewModel
+namespace BannerKings.UI.Panels
 {
-    private readonly Guild guild;
-    private MBBindingList<InformationElement> guildInfo;
-
-    public GuildVM(PopulationData data) : base(data, true)
+    public class GuildVM : BannerKingsViewModel
     {
-        guild = data.EconomicData.Guild;
-        guildInfo = new MBBindingList<InformationElement>();
-    }
+        private readonly Guild guild;
+        private MBBindingList<InformationElement> guildInfo;
 
-    [DataSourceProperty]
-    public ImageIdentifierVM GuildMaster => new(CharacterCode.CreateFrom(guild.Leader.CharacterObject));
-
-    [DataSourceProperty] public string GuildMasterName => "Guildmaster " + guild.Leader.Name;
-
-    [DataSourceProperty]
-    public MBBindingList<InformationElement> GuildInfo
-    {
-        get => guildInfo;
-        set
+        public GuildVM(PopulationData data) : base(data, true)
         {
-            if (value != guildInfo)
+            guild = data.EconomicData.Guild;
+            guildInfo = new MBBindingList<InformationElement>();
+        }
+
+        [DataSourceProperty]
+        public ImageIdentifierVM GuildMaster => new(CharacterCode.CreateFrom(guild.Leader.CharacterObject));
+
+        [DataSourceProperty] public string GuildMasterName => "Guildmaster " + guild.Leader.Name;
+
+        [DataSourceProperty]
+        public MBBindingList<InformationElement> GuildInfo
+        {
+            get => guildInfo;
+            set
             {
-                guildInfo = value;
-                OnPropertyChangedWithValue(value);
+                if (value != guildInfo)
+                {
+                    guildInfo = value;
+                    OnPropertyChangedWithValue(value);
+                }
             }
         }
-    }
 
-    public override void RefreshValues()
-    {
-        base.RefreshValues();
-        GuildInfo.Clear();
-        GuildInfo.Add(new InformationElement("Capital:", guild.Capital.ToString(),
-            "This guild's financial resources"));
-        GuildInfo.Add(new InformationElement("Influence:", guild.Influence.ToString(),
-            "Soft power this guild has, allowing them to call in favors and make demands"));
-    }
+        public override void RefreshValues()
+        {
+            base.RefreshValues();
+            GuildInfo.Clear();
+            GuildInfo.Add(new InformationElement("Capital:", guild.Capital.ToString(),
+                "This guild's financial resources"));
+            GuildInfo.Add(new InformationElement("Influence:", guild.Influence.ToString(),
+                "Soft power this guild has, allowing them to call in favors and make demands"));
+        }
 
-    public void ExecuteClose()
-    {
-        UIManager.Instance.CloseUI();
+        public void ExecuteClose()
+        {
+            UIManager.Instance.CloseUI();
+        }
     }
 }

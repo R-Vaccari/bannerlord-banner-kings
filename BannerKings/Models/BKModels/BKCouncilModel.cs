@@ -4,191 +4,99 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Localization;
 
-namespace BannerKings.Models.BKModels;
-
-public class BKCouncilModel : IBannerKingsModel
+namespace BannerKings.Models.BKModels
 {
-    public ExplainedNumber CalculateEffect(Settlement settlement)
+    public class BKCouncilModel : IBannerKingsModel
     {
-        return new ExplainedNumber();
-    }
-
-
-    public (bool, string) IsCouncilRoyal(Clan clan)
-    {
-        var explanation = new TextObject("{=!}Legal crown council.");
-
-        var kingdom = clan.Kingdom;
-        if (kingdom == null)
+        public ExplainedNumber CalculateEffect(Settlement settlement)
         {
-            explanation = new TextObject("{=!}No kingdom.");
-            return new ValueTuple<bool, string>(false, explanation.ToString());
+            return new ExplainedNumber();
         }
 
-        if (clan.Kingdom.RulingClan != clan)
+
+        public (bool, string) IsCouncilRoyal(Clan clan)
         {
-            explanation = new TextObject("{=!}Not the ruling clan.");
-            return new ValueTuple<bool, string>(false, explanation.ToString());
+            var explanation = new TextObject("{=!}Legal crown council.");
+
+            var kingdom = clan.Kingdom;
+            if (kingdom == null)
+            {
+                explanation = new TextObject("{=!}No kingdom.");
+                return new ValueTuple<bool, string>(false, explanation.ToString());
+            }
+
+            if (clan.Kingdom.RulingClan != clan)
+            {
+                explanation = new TextObject("{=!}Not the ruling clan.");
+                return new ValueTuple<bool, string>(false, explanation.ToString());
+            }
+
+            var sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
+            if (sovereign == null)
+            {
+                explanation = new TextObject("{=!}Does not hold faction's sovereign title.");
+                return new ValueTuple<bool, string>(false, explanation.ToString());
+            }
+
+            return new ValueTuple<bool, string>(true, explanation.ToString());
         }
 
-        var sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
-        if (sovereign == null)
+        public bool WillAcceptAction(CouncilAction action, Hero hero)
         {
-            explanation = new TextObject("{=!}Does not hold faction's sovereign title.");
-            return new ValueTuple<bool, string>(false, explanation.ToString());
+            if (action.Type != CouncilActionType.REQUEST)
+            {
+                return true;
+            }
+
+            return action.Possible;
         }
 
-        return new ValueTuple<bool, string>(true, explanation.ToString());
-    }
 
-    public bool WillAcceptAction(CouncilAction action, Hero hero)
-    {
-        if (action.Type != CouncilActionType.REQUEST)
+        public CouncilAction GetAction(CouncilActionType type, CouncilData council, Hero requester,
+            CouncilMember targetPosition, CouncilMember currentPosition = null,
+            bool appointed = false)
         {
-            return true;
+            if (type == CouncilActionType.REQUEST)
+            {
+                return GetRequest(type, council, requester, targetPosition, currentPosition, appointed);
+            }
+
+            if (type == CouncilActionType.RELINQUISH)
+            {
+                return GetRelinquish(type, council, requester, currentPosition, targetPosition, appointed);
+            }
+
+            return GetSwap(type, council, requester, targetPosition, currentPosition, appointed);
         }
 
-        return action.Possible;
-    }
 
-
-    public CouncilAction GetAction(CouncilActionType type, CouncilData council, Hero requester,
-        CouncilMember targetPosition, CouncilMember currentPosition = null,
-        bool appointed = false)
-    {
-        if (type == CouncilActionType.REQUEST)
+        private CouncilAction GetSwap(CouncilActionType type, CouncilData council, Hero requester,
+            CouncilMember targetPosition, CouncilMember currentPosition = null, bool appointed = false)
         {
-            return GetRequest(type, council, requester, targetPosition, currentPosition, appointed);
-        }
+            var action = new CouncilAction(type, requester, targetPosition, currentPosition, council);
+            action.Influence = GetInfluenceCost(type, targetPosition);
 
-        if (type == CouncilActionType.RELINQUISH)
-        {
-            return GetRelinquish(type, council, requester, currentPosition, targetPosition, appointed);
-        }
-
-        return GetSwap(type, council, requester, targetPosition, currentPosition, appointed);
-    }
-
-
-    private CouncilAction GetSwap(CouncilActionType type, CouncilData council, Hero requester,
-        CouncilMember targetPosition, CouncilMember currentPosition = null, bool appointed = false)
-    {
-        var action = new CouncilAction(type, requester, targetPosition, currentPosition, council);
-        action.Influence = GetInfluenceCost(type, targetPosition);
-
-        if (currentPosition == null || currentPosition.Member != requester)
-        {
-            action.Possible = false;
-            action.Reason = new TextObject("{=!}Not part of the council.");
-            return action;
-        }
-
-        if (!targetPosition.IsValidCandidate(requester))
-        {
-            action.Possible = false;
-            action.Reason = new TextObject("{=!}Not a valid candidate.");
-            return action;
-        }
-
-        if (requester.Clan != null && requester.Clan.Influence < action.Influence)
-        {
-            action.Possible = false;
-            action.Reason = new TextObject("{=!}Not enough influence.");
-            return action;
-        }
-
-        if (targetPosition.IsCorePosition(targetPosition.Position))
-        {
-            if (requester.Clan != null && !requester.Clan.Kingdom.Leader.IsFriend(requester))
+            if (currentPosition == null || currentPosition.Member != requester)
             {
                 action.Possible = false;
-                action.Reason = new TextObject("{=!}Not trustworthy enough for this position.");
+                action.Reason = new TextObject("{=!}Not part of the council.");
                 return action;
             }
 
-            if (council.GetCompetence(requester, targetPosition.Position) < 0.5f)
+            if (!targetPosition.IsValidCandidate(requester))
             {
                 action.Possible = false;
-                action.Reason = new TextObject("{=!}Not competent enough for this position.");
-                return action;
-            }
-        }
-
-        if (targetPosition.Member != null)
-        {
-            var candidateDesire = GetDesirability(requester, council, targetPosition);
-            var currentDesire = GetDesirability(targetPosition.Member, council, targetPosition);
-            if (currentDesire > candidateDesire)
-            {
-                action.Possible = false;
-                action.Reason = new TextObject("{=!}Not a better candidate than current councillor.");
-                return action;
-            }
-        }
-
-        action.Possible = true;
-        action.Reason = new TextObject("{=!}Action can be taken.");
-        return action;
-    }
-
-    private CouncilAction GetRelinquish(CouncilActionType type, CouncilData council, Hero requester,
-        CouncilMember currentPosition, CouncilMember targetPosition = null, bool appointed = false)
-    {
-        var action = new CouncilAction(type, requester, targetPosition, currentPosition, council);
-        action.Influence = GetInfluenceCost(type, targetPosition);
-
-        if (requester != null)
-        {
-            if (targetPosition == null)
-            {
-                action.Possible = false;
-                action.Reason = new TextObject("{=!}No position to be relinquished.");
+                action.Reason = new TextObject("{=!}Not a valid candidate.");
                 return action;
             }
 
-            if (targetPosition.Member != requester)
+            if (requester.Clan != null && requester.Clan.Influence < action.Influence)
             {
                 action.Possible = false;
-                action.Reason = new TextObject("{=!}Not current councilman of the position.");
+                action.Reason = new TextObject("{=!}Not enough influence.");
                 return action;
             }
-        }
 
-        action.Possible = true;
-        action.Reason = new TextObject("{=!}Action can be taken.");
-        return action;
-    }
-
-    private CouncilAction GetRequest(CouncilActionType type, CouncilData council, Hero requester,
-        CouncilMember targetPosition, CouncilMember currentPosition = null, bool appointed = false)
-    {
-        var action = new CouncilAction(type, requester, targetPosition, currentPosition, council);
-        action.Influence = appointed ? 0f : GetInfluenceCost(type, targetPosition);
-
-        if (currentPosition != null && currentPosition.Member == requester)
-        {
-            action.Possible = false;
-            action.Reason = new TextObject("{=!}Already part of the council.");
-            return action;
-        }
-
-        if (!targetPosition.IsValidCandidate(requester))
-        {
-            action.Possible = false;
-            action.Reason = new TextObject("{=!}Not a valid candidate.");
-            return action;
-        }
-
-        if (requester.Clan != null && requester.Clan.Influence < action.Influence)
-        {
-            action.Possible = false;
-            action.Reason = new TextObject("{=!}Not enough influence.");
-            return action;
-        }
-
-
-        if (!appointed)
-        {
             if (targetPosition.IsCorePosition(targetPosition.Position))
             {
                 if (requester.Clan != null && !requester.Clan.Kingdom.Leader.IsFriend(requester))
@@ -217,54 +125,147 @@ public class BKCouncilModel : IBannerKingsModel
                     return action;
                 }
             }
+
+            action.Possible = true;
+            action.Reason = new TextObject("{=!}Action can be taken.");
+            return action;
         }
 
-        action.Possible = true;
-        action.Reason = new TextObject("{=!}Action can be taken.");
-        return action;
-    }
-
-    public float GetDesirability(Hero candidate, CouncilData council, CouncilMember position)
-    {
-        float titleWeight = 0;
-        var competence = council.GetCompetence(candidate, position.Position);
-        var relation = council.Owner.GetRelation(candidate) * 0.01f;
-        if (candidate.Clan == council.Owner.Clan)
+        private CouncilAction GetRelinquish(CouncilActionType type, CouncilData council, Hero requester,
+            CouncilMember currentPosition, CouncilMember targetPosition = null, bool appointed = false)
         {
-            relation -= 0.2f;
-        }
+            var action = new CouncilAction(type, requester, targetPosition, currentPosition, council);
+            action.Influence = GetInfluenceCost(type, targetPosition);
 
-        var title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(candidate);
-        if (title != null)
-        {
-            titleWeight = 4 - (int) title.type;
-        }
-
-        return (titleWeight + competence + relation) / 3f;
-    }
-
-    public int GetInfluenceCost(CouncilActionType type, CouncilMember targetPosition)
-    {
-        if (type == CouncilActionType.REQUEST)
-        {
-            if (targetPosition.Member != null)
+            if (requester != null)
             {
-                return 100;
+                if (targetPosition == null)
+                {
+                    action.Possible = false;
+                    action.Reason = new TextObject("{=!}No position to be relinquished.");
+                    return action;
+                }
+
+                if (targetPosition.Member != requester)
+                {
+                    action.Possible = false;
+                    action.Reason = new TextObject("{=!}Not current councilman of the position.");
+                    return action;
+                }
             }
 
-            return 50;
+            action.Possible = true;
+            action.Reason = new TextObject("{=!}Action can be taken.");
+            return action;
         }
 
-        if (type == CouncilActionType.RELINQUISH)
+        private CouncilAction GetRequest(CouncilActionType type, CouncilData council, Hero requester,
+            CouncilMember targetPosition, CouncilMember currentPosition = null, bool appointed = false)
         {
-            return 0;
+            var action = new CouncilAction(type, requester, targetPosition, currentPosition, council);
+            action.Influence = appointed ? 0f : GetInfluenceCost(type, targetPosition);
+
+            if (currentPosition != null && currentPosition.Member == requester)
+            {
+                action.Possible = false;
+                action.Reason = new TextObject("{=!}Already part of the council.");
+                return action;
+            }
+
+            if (!targetPosition.IsValidCandidate(requester))
+            {
+                action.Possible = false;
+                action.Reason = new TextObject("{=!}Not a valid candidate.");
+                return action;
+            }
+
+            if (requester.Clan != null && requester.Clan.Influence < action.Influence)
+            {
+                action.Possible = false;
+                action.Reason = new TextObject("{=!}Not enough influence.");
+                return action;
+            }
+
+
+            if (!appointed)
+            {
+                if (targetPosition.IsCorePosition(targetPosition.Position))
+                {
+                    if (requester.Clan != null && !requester.Clan.Kingdom.Leader.IsFriend(requester))
+                    {
+                        action.Possible = false;
+                        action.Reason = new TextObject("{=!}Not trustworthy enough for this position.");
+                        return action;
+                    }
+
+                    if (council.GetCompetence(requester, targetPosition.Position) < 0.5f)
+                    {
+                        action.Possible = false;
+                        action.Reason = new TextObject("{=!}Not competent enough for this position.");
+                        return action;
+                    }
+                }
+
+                if (targetPosition.Member != null)
+                {
+                    var candidateDesire = GetDesirability(requester, council, targetPosition);
+                    var currentDesire = GetDesirability(targetPosition.Member, council, targetPosition);
+                    if (currentDesire > candidateDesire)
+                    {
+                        action.Possible = false;
+                        action.Reason = new TextObject("{=!}Not a better candidate than current councillor.");
+                        return action;
+                    }
+                }
+            }
+
+            action.Possible = true;
+            action.Reason = new TextObject("{=!}Action can be taken.");
+            return action;
         }
 
-        if (targetPosition.Member != null)
+        public float GetDesirability(Hero candidate, CouncilData council, CouncilMember position)
         {
-            return 50;
+            float titleWeight = 0;
+            var competence = council.GetCompetence(candidate, position.Position);
+            var relation = council.Owner.GetRelation(candidate) * 0.01f;
+            if (candidate.Clan == council.Owner.Clan)
+            {
+                relation -= 0.2f;
+            }
+
+            var title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(candidate);
+            if (title != null)
+            {
+                titleWeight = 4 - (int) title.type;
+            }
+
+            return (titleWeight + competence + relation) / 3f;
         }
 
-        return 10;
+        public int GetInfluenceCost(CouncilActionType type, CouncilMember targetPosition)
+        {
+            if (type == CouncilActionType.REQUEST)
+            {
+                if (targetPosition.Member != null)
+                {
+                    return 100;
+                }
+
+                return 50;
+            }
+
+            if (type == CouncilActionType.RELINQUISH)
+            {
+                return 0;
+            }
+
+            if (targetPosition.Member != null)
+            {
+                return 50;
+            }
+
+            return 10;
+        }
     }
 }

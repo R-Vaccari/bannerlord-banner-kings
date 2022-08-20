@@ -5,83 +5,84 @@ using TaleWorlds.CampaignSystem.ViewModelCollection.CharacterDeveloper;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace BannerKings.UI.Extensions;
-
-[ViewModelMixin("RefreshValues")]
-internal class CharacterDeveloperMixin : BaseViewModelMixin<CharacterDeveloperVM>
+namespace BannerKings.UI.Extensions
 {
-    //private BasicTooltipViewModel pietyHint;
-    private readonly CharacterDeveloperVM characterDeveloper;
-    private string educationText;
-    private EducationVM educationVM;
-    private bool visible;
-
-    public CharacterDeveloperMixin(CharacterDeveloperVM vm) : base(vm)
+    [ViewModelMixin("RefreshValues")]
+    internal class CharacterDeveloperMixin : BaseViewModelMixin<CharacterDeveloperVM>
     {
-        EducationVisible = false;
-        characterDeveloper = vm;
-    }
+        //private BasicTooltipViewModel pietyHint;
+        private readonly CharacterDeveloperVM characterDeveloper;
+        private string educationText;
+        private EducationVM educationVM;
+        private bool visible;
 
-    [DataSourceProperty]
-    public EducationVM Education
-    {
-        get => educationVM;
-        set
+        public CharacterDeveloperMixin(CharacterDeveloperVM vm) : base(vm)
         {
-            if (value != educationVM)
+            EducationVisible = false;
+            characterDeveloper = vm;
+        }
+
+        [DataSourceProperty]
+        public EducationVM Education
+        {
+            get => educationVM;
+            set
             {
-                educationVM = value;
-                ViewModel!.OnPropertyChangedWithValue(value);
+                if (value != educationVM)
+                {
+                    educationVM = value;
+                    ViewModel!.OnPropertyChangedWithValue(value);
+                }
             }
         }
-    }
 
-    [DataSourceProperty]
-    public bool EducationVisible
-    {
-        get => visible;
-        set
+        [DataSourceProperty]
+        public bool EducationVisible
         {
-            if (value != visible)
+            get => visible;
+            set
             {
-                visible = value;
-                ViewModel!.OnPropertyChangedWithValue(value);
+                if (value != visible)
+                {
+                    visible = value;
+                    ViewModel!.OnPropertyChangedWithValue(value);
+                }
             }
         }
-    }
 
-    [DataSourceProperty]
-    public string EducationText
-    {
-        get => educationText;
-        set
+        [DataSourceProperty]
+        public string EducationText
         {
-            if (value != educationText)
+            get => educationText;
+            set
             {
-                educationText = value;
-                ViewModel!.OnPropertyChangedWithValue(value);
+                if (value != educationText)
+                {
+                    educationText = value;
+                    ViewModel!.OnPropertyChangedWithValue(value);
+                }
             }
         }
-    }
 
-    public override void OnRefresh()
-    {
-        EducationText = new TextObject("{=!}Education").ToString();
-        Education = new EducationVM(characterDeveloper.CurrentCharacter.Hero, characterDeveloper);
-        Education.RefreshValues();
-    }
+        public override void OnRefresh()
+        {
+            EducationText = new TextObject("{=!}Education").ToString();
+            Education = new EducationVM(characterDeveloper.CurrentCharacter.Hero, characterDeveloper);
+            Education.RefreshValues();
+        }
 
-    [DataSourceMethod]
-    public void OpenEducation()
-    {
-        EducationVisible = true;
-        OnRefresh();
-    }
+        [DataSourceMethod]
+        public void OpenEducation()
+        {
+            EducationVisible = true;
+            OnRefresh();
+        }
 
-    [DataSourceMethod]
-    public void CloseEducation()
-    {
-        EducationVisible = false;
-        OnRefresh();
+        [DataSourceMethod]
+        public void CloseEducation()
+        {
+            EducationVisible = false;
+            OnRefresh();
+        }
     }
 }

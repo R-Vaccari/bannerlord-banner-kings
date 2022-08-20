@@ -3,29 +3,30 @@ using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Settlements;
 using static BannerKings.Managers.Policies.BKGarrisonPolicy;
 
-namespace BannerKings.Models.Vanilla;
-
-public class BKGarrisonXpModel : DefaultDailyTroopXpBonusModel
+namespace BannerKings.Models.Vanilla
 {
-    public override float CalculateGarrisonXpBonusMultiplier(Town town)
+    public class BKGarrisonXpModel : DefaultDailyTroopXpBonusModel
     {
-        var baseResult = base.CalculateGarrisonXpBonusMultiplier(town);
-        if (BannerKingsConfig.Instance.PopulationManager != null &&
-            BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
+        public override float CalculateGarrisonXpBonusMultiplier(Town town)
         {
-            var garrison =
-                ((BKGarrisonPolicy) BannerKingsConfig.Instance.PolicyManager.GetPolicy(town.Settlement, "garrison"))
-                .Policy;
-            if (garrison == GarrisonPolicy.Dischargement)
+            var baseResult = base.CalculateGarrisonXpBonusMultiplier(town);
+            if (BannerKingsConfig.Instance.PopulationManager != null &&
+                BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
             {
-                baseResult *= 0.7f;
+                var garrison =
+                    ((BKGarrisonPolicy) BannerKingsConfig.Instance.PolicyManager.GetPolicy(town.Settlement, "garrison"))
+                    .Policy;
+                if (garrison == GarrisonPolicy.Dischargement)
+                {
+                    baseResult *= 0.7f;
+                }
+                else if (garrison == GarrisonPolicy.Enlistment)
+                {
+                    baseResult *= 1.3f;
+                }
             }
-            else if (garrison == GarrisonPolicy.Enlistment)
-            {
-                baseResult *= 1.3f;
-            }
-        }
 
-        return baseResult;
+            return baseResult;
+        }
     }
 }

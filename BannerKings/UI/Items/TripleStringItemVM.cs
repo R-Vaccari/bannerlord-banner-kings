@@ -2,15 +2,16 @@
 using TaleWorlds.Core.ViewModelCollection.Information;
 using TaleWorlds.Library;
 
-namespace BannerKings.UI.Items;
-
-public class TripleStringItemVM : StringPairItemVM
+namespace BannerKings.UI.Items
 {
-    public TripleStringItemVM(string definition, string value, string value2, BasicTooltipViewModel hint = null) : base(
-        definition, value, hint)
+    public class TripleStringItemVM : StringPairItemVM
     {
-        SecondValue = value2;
-    }
+        public TripleStringItemVM(string definition, string value, string value2, BasicTooltipViewModel hint = null) : base(
+            definition, value, hint)
+        {
+            SecondValue = value2;
+        }
 
-    [DataSourceProperty] public string SecondValue { get; }
+        [DataSourceProperty] public string SecondValue { get; }
+    }
 }

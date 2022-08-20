@@ -10,163 +10,164 @@ using TaleWorlds.Localization;
 using static BannerKings.Managers.PopulationManager;
 using static BannerKings.Managers.Policies.BKMilitiaPolicy;
 
-namespace BannerKings.Models.Vanilla;
-
-public class BKMilitiaModel : DefaultSettlementMilitiaModel
+namespace BannerKings.Models.Vanilla
 {
-    public override void CalculateMilitiaSpawnRate(Settlement settlement, out float meleeTroopRate,
-        out float rangedTroopRate)
+    public class BKMilitiaModel : DefaultSettlementMilitiaModel
     {
-        if (BannerKingsConfig.Instance.PolicyManager != null)
+        public override void CalculateMilitiaSpawnRate(Settlement settlement, out float meleeTroopRate,
+            out float rangedTroopRate)
         {
-            var policy = ((BKMilitiaPolicy) BannerKingsConfig.Instance.PolicyManager.GetPolicy(settlement, "militia"))
-                .Policy;
-            if (policy == MilitiaPolicy.Melee)
+            if (BannerKingsConfig.Instance.PolicyManager != null)
             {
-                meleeTroopRate = 0.75f;
-                rangedTroopRate = 0.25f;
-            }
-            else if (policy == MilitiaPolicy.Ranged)
-            {
-                meleeTroopRate = 0.25f;
-                rangedTroopRate = 0.75f;
+                var policy = ((BKMilitiaPolicy) BannerKingsConfig.Instance.PolicyManager.GetPolicy(settlement, "militia"))
+                    .Policy;
+                if (policy == MilitiaPolicy.Melee)
+                {
+                    meleeTroopRate = 0.75f;
+                    rangedTroopRate = 0.25f;
+                }
+                else if (policy == MilitiaPolicy.Ranged)
+                {
+                    meleeTroopRate = 0.25f;
+                    rangedTroopRate = 0.75f;
+                }
+                else
+                {
+                    base.CalculateMilitiaSpawnRate(settlement, out meleeTroopRate, out rangedTroopRate);
+                }
             }
             else
             {
                 base.CalculateMilitiaSpawnRate(settlement, out meleeTroopRate, out rangedTroopRate);
             }
         }
-        else
+
+        public override ExplainedNumber CalculateMilitiaChange(Settlement settlement, bool includeDescriptions = false)
         {
-            base.CalculateMilitiaSpawnRate(settlement, out meleeTroopRate, out rangedTroopRate);
-        }
-    }
-
-    public override ExplainedNumber CalculateMilitiaChange(Settlement settlement, bool includeDescriptions = false)
-    {
-        var baseResult = base.CalculateMilitiaChange(settlement, includeDescriptions);
-        if (BannerKingsConfig.Instance.PopulationManager != null &&
-            BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
-        {
-            var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
-            var serfs = data.GetTypeCount(PopType.Serfs);
-            var maxMilitia = GetMilitiaLimit(data, settlement).ResultNumber;
-            var filledCapacity = settlement.IsVillage
-                ? settlement.Village.Militia / maxMilitia
-                : settlement.Town.Militia / maxMilitia;
-            var baseGrowth = serfs * 0.0025f;
-
-            if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(settlement, "decision_militia_encourage"))
+            var baseResult = base.CalculateMilitiaChange(settlement, includeDescriptions);
+            if (BannerKingsConfig.Instance.PopulationManager != null &&
+                BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
             {
-                baseResult.Add(baseGrowth * (1f - 1f * filledCapacity), new TextObject("Conscription policy"));
-            }
-            else if (filledCapacity > 1f)
-            {
-                baseResult.Add(baseGrowth * -1f * filledCapacity, new TextObject("Over supported limit"));
-            }
+                var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
+                var serfs = data.GetTypeCount(PopType.Serfs);
+                var maxMilitia = GetMilitiaLimit(data, settlement).ResultNumber;
+                var filledCapacity = settlement.IsVillage
+                    ? settlement.Village.Militia / maxMilitia
+                    : settlement.Town.Militia / maxMilitia;
+                var baseGrowth = serfs * 0.0025f;
 
-            var villageData = data.VillageData;
-            if (villageData != null)
-            {
-                float trainning = villageData.GetBuildingLevel(DefaultVillageBuildings.Instance.TrainningGrounds);
-                if (trainning > 0)
+                if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(settlement, "decision_militia_encourage"))
                 {
-                    baseResult.Add(trainning == 1 ? 0.2f : trainning == 2 ? 0.5f : 1f,
-                        new TextObject("{=BkTiRPT4}Training Fields"));
+                    baseResult.Add(baseGrowth * (1f - 1f * filledCapacity), new TextObject("Conscription policy"));
+                }
+                else if (filledCapacity > 1f)
+                {
+                    baseResult.Add(baseGrowth * -1f * filledCapacity, new TextObject("Over supported limit"));
+                }
+
+                var villageData = data.VillageData;
+                if (villageData != null)
+                {
+                    float trainning = villageData.GetBuildingLevel(DefaultVillageBuildings.Instance.TrainningGrounds);
+                    if (trainning > 0)
+                    {
+                        baseResult.Add(trainning == 1 ? 0.2f : trainning == 2 ? 0.5f : 1f,
+                            new TextObject("{=BkTiRPT4}Training Fields"));
+                    }
+                }
+
+                BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref baseResult, settlement.OwnerClan.Leader,
+                    CouncilPosition.Marshall, 1f, false);
+            }
+
+            return baseResult;
+        }
+
+        public ExplainedNumber GetMilitiaLimit(PopulationData data, Settlement settlement)
+        {
+            var result = new ExplainedNumber(0f, true);
+            result.Add(data.TotalPop * 0.1f, new TextObject("{=!}Total population"));
+
+            if (settlement.IsCastle)
+            {
+                result.Add(200f, new TextObject("{=!}Castle"));
+            }
+            else if (settlement.IsVillage)
+            {
+                result.Add(20f, new TextObject("{=!}Village"));
+            }
+            else
+            {
+                result.Add(100f, new TextObject("{=!}Town"));
+            }
+
+            return result;
+        }
+
+        public override float CalculateEliteMilitiaSpawnChance(Settlement settlement)
+        {
+            var baseResult = +(settlement.IsTown ? 0.12f : 0.20f);
+            if (BannerKingsConfig.Instance.PopulationManager != null &&
+                BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
+            {
+                var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
+                if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(settlement, "decision_militia_subsidize"))
+                {
+                    baseResult += 0.12f;
+                }
+
+                var government = BannerKingsConfig.Instance.TitleManager.GetSettlementGovernment(settlement);
+                if (government == GovernmentType.Tribal)
+                {
+                    baseResult += 0.08f;
+                }
+
+                var villageData = data.VillageData;
+                if (villageData != null)
+                {
+                    float warehouse = villageData.GetBuildingLevel(DefaultVillageBuildings.Instance.Warehouse);
+                    if (warehouse > 0)
+                    {
+                        baseResult += 0.04f * warehouse;
+                    }
                 }
             }
 
-            BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref baseResult, settlement.OwnerClan.Leader,
-                CouncilPosition.Marshall, 1f, false);
+            return baseResult;
         }
 
-        return baseResult;
-    }
-
-    public ExplainedNumber GetMilitiaLimit(PopulationData data, Settlement settlement)
-    {
-        var result = new ExplainedNumber(0f, true);
-        result.Add(data.TotalPop * 0.1f, new TextObject("{=!}Total population"));
-
-        if (settlement.IsCastle)
+        public ExplainedNumber MilitiaSpawnChanceExplained(Settlement settlement)
         {
-            result.Add(200f, new TextObject("{=!}Castle"));
-        }
-        else if (settlement.IsVillage)
-        {
-            result.Add(20f, new TextObject("{=!}Village"));
-        }
-        else
-        {
-            result.Add(100f, new TextObject("{=!}Town"));
-        }
-
-        return result;
-    }
-
-    public override float CalculateEliteMilitiaSpawnChance(Settlement settlement)
-    {
-        var baseResult = +(settlement.IsTown ? 0.12f : 0.20f);
-        if (BannerKingsConfig.Instance.PopulationManager != null &&
-            BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
-        {
-            var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
-            if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(settlement, "decision_militia_subsidize"))
+            var result =
+                new ExplainedNumber(base.CalculateEliteMilitiaSpawnChance(settlement) + (settlement.IsTown ? 0.12f : 0.20f),
+                    true);
+            if (BannerKingsConfig.Instance.PopulationManager != null &&
+                BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
             {
-                baseResult += 0.12f;
-            }
-
-            var government = BannerKingsConfig.Instance.TitleManager.GetSettlementGovernment(settlement);
-            if (government == GovernmentType.Tribal)
-            {
-                baseResult += 0.08f;
-            }
-
-            var villageData = data.VillageData;
-            if (villageData != null)
-            {
-                float warehouse = villageData.GetBuildingLevel(DefaultVillageBuildings.Instance.Warehouse);
-                if (warehouse > 0)
+                var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
+                if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(settlement, "decision_militia_subsidize"))
                 {
-                    baseResult += 0.04f * warehouse;
+                    result.Add(0.12f, new TextObject("{=!}Subsidize militia"));
+                }
+
+                var government = BannerKingsConfig.Instance.TitleManager.GetSettlementGovernment(settlement);
+                if (government == GovernmentType.Tribal)
+                {
+                    result.Add(0.08f, new TextObject("{=!}Government"));
+                }
+
+                var villageData = data.VillageData;
+                if (villageData != null)
+                {
+                    float warehouse = villageData.GetBuildingLevel(DefaultVillageBuildings.Instance.Warehouse);
+                    if (warehouse > 0)
+                    {
+                        result.Add(0.04f * warehouse, DefaultVillageBuildings.Instance.Warehouse.Name);
+                    }
                 }
             }
+
+            return result;
         }
-
-        return baseResult;
-    }
-
-    public ExplainedNumber MilitiaSpawnChanceExplained(Settlement settlement)
-    {
-        var result =
-            new ExplainedNumber(base.CalculateEliteMilitiaSpawnChance(settlement) + (settlement.IsTown ? 0.12f : 0.20f),
-                true);
-        if (BannerKingsConfig.Instance.PopulationManager != null &&
-            BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
-        {
-            var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
-            if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(settlement, "decision_militia_subsidize"))
-            {
-                result.Add(0.12f, new TextObject("{=!}Subsidize militia"));
-            }
-
-            var government = BannerKingsConfig.Instance.TitleManager.GetSettlementGovernment(settlement);
-            if (government == GovernmentType.Tribal)
-            {
-                result.Add(0.08f, new TextObject("{=!}Government"));
-            }
-
-            var villageData = data.VillageData;
-            if (villageData != null)
-            {
-                float warehouse = villageData.GetBuildingLevel(DefaultVillageBuildings.Instance.Warehouse);
-                if (warehouse > 0)
-                {
-                    result.Add(0.04f * warehouse, DefaultVillageBuildings.Instance.Warehouse.Name);
-                }
-            }
-        }
-
-        return result;
     }
 }

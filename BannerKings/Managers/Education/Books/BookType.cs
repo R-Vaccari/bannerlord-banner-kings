@@ -3,62 +3,63 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 
-namespace BannerKings.Managers.Education.Books;
-
-public class BookType : BannerKingsObject
+namespace BannerKings.Managers.Education.Books
 {
-    public BookType(string id) : base(id)
+    public class BookType : BannerKingsObject
     {
-    }
-
-    public ItemObject Item { get; private set; }
-
-    public Language Language { get; private set; }
-
-    public SkillObject Skill { get; private set; }
-
-    public BookUse Use { get; private set; }
-
-    public void Initialize(ItemObject bookItem, TextObject description, Language language, BookUse bookUse,
-        SkillObject skill = null)
-    {
-        Initialize(null, description);
-        this.Item = bookItem;
-        this.description = description;
-        this.Language = language;
-        this.Use = bookUse;
-        this.Skill = skill;
-    }
-
-    public void FinishBook(Hero hero)
-    {
-        if (Skill == null)
+        public BookType(string id) : base(id)
         {
-            return;
         }
 
-        if (Use == BookUse.Skillbook)
+        public ItemObject Item { get; private set; }
+
+        public Language Language { get; private set; }
+
+        public SkillObject Skill { get; private set; }
+
+        public BookUse Use { get; private set; }
+
+        public void Initialize(ItemObject bookItem, TextObject description, Language language, BookUse bookUse,
+            SkillObject skill = null)
         {
-            hero.AddSkillXp(Skill, 1500f);
+            Initialize(null, description);
+            this.Item = bookItem;
+            this.description = description;
+            this.Language = language;
+            this.Use = bookUse;
+            this.Skill = skill;
         }
-        else
+
+        public void FinishBook(Hero hero)
         {
-            hero.AddSkillXp(Skill, 300f);
-            if (hero.HeroDeveloper.CanAddFocusToSkill(Skill))
+            if (Skill == null)
             {
-                hero.HeroDeveloper.AddFocus(Skill, 1);
+                return;
+            }
+
+            if (Use == BookUse.Skillbook)
+            {
+                hero.AddSkillXp(Skill, 1500f);
             }
             else
             {
-                hero.AddSkillXp(Skill, 1000f);
+                hero.AddSkillXp(Skill, 300f);
+                if (hero.HeroDeveloper.CanAddFocusToSkill(Skill))
+                {
+                    hero.HeroDeveloper.AddFocus(Skill, 1);
+                }
+                else
+                {
+                    hero.AddSkillXp(Skill, 1000f);
+                }
             }
         }
     }
-}
 
-public enum BookUse
-{
-    Skillbook,
-    Focusbook,
-    Dictionary
+    public enum BookUse
+    {
+        Skillbook,
+        Focusbook,
+        Dictionary
+    }
 }

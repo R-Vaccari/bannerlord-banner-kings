@@ -8,60 +8,61 @@ using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using static BannerKings.Managers.Policies.BKGarrisonPolicy;
 
-namespace BannerKings.Models.Vanilla;
-
-public class BKGarrisonModel : DefaultSettlementGarrisonModel
+namespace BannerKings.Models.Vanilla
 {
-    public override ExplainedNumber CalculateGarrisonChange(Settlement settlement, bool includeDescriptions = false)
+    public class BKGarrisonModel : DefaultSettlementGarrisonModel
     {
-        var baseResult = base.CalculateGarrisonChange(settlement, includeDescriptions);
-        if (BannerKingsConfig.Instance.PopulationManager != null &&
-            BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
+        public override ExplainedNumber CalculateGarrisonChange(Settlement settlement, bool includeDescriptions = false)
         {
-            var garrison =
-                ((BKGarrisonPolicy) BannerKingsConfig.Instance.PolicyManager.GetPolicy(settlement, "garrison")).Policy;
-            if (garrison == GarrisonPolicy.Dischargement)
+            var baseResult = base.CalculateGarrisonChange(settlement, includeDescriptions);
+            if (BannerKingsConfig.Instance.PopulationManager != null &&
+                BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
             {
-                baseResult.Add(-1f, new TextObject("{=!}Garrison policy"));
+                var garrison =
+                    ((BKGarrisonPolicy) BannerKingsConfig.Instance.PolicyManager.GetPolicy(settlement, "garrison")).Policy;
+                if (garrison == GarrisonPolicy.Dischargement)
+                {
+                    baseResult.Add(-1f, new TextObject("{=!}Garrison policy"));
+                }
+                else if (garrison == GarrisonPolicy.Enlistment)
+                {
+                    baseResult.Add(1f, new TextObject("{=!}Garrison policy"));
+                }
             }
-            else if (garrison == GarrisonPolicy.Enlistment)
-            {
-                baseResult.Add(1f, new TextObject("{=!}Garrison policy"));
-            }
+
+            return baseResult;
         }
 
-        return baseResult;
-    }
-
-    public override int FindNumberOfTroopsToLeaveToGarrison(MobileParty mobileParty, Settlement settlement)
-    {
-        var result = base.FindNumberOfTroopsToLeaveToGarrison(mobileParty, settlement);
-        if (result > 0)
+        public override int FindNumberOfTroopsToLeaveToGarrison(MobileParty mobileParty, Settlement settlement)
         {
-            var kingdom = settlement.OwnerClan.Kingdom;
-            if (kingdom != null)
+            var result = base.FindNumberOfTroopsToLeaveToGarrison(mobileParty, settlement);
+            if (result > 0)
             {
-                float enemies = FactionManager.GetEnemyKingdoms(kingdom).Count();
-                var strength = 0f;
-                if (settlement.Town != null && settlement.Town.GarrisonParty != null)
+                var kingdom = settlement.OwnerClan.Kingdom;
+                if (kingdom != null)
                 {
-                    strength = settlement.Town.GarrisonParty.MemberRoster.TotalManCount;
-                }
+                    float enemies = FactionManager.GetEnemyKingdoms(kingdom).Count();
+                    var strength = 0f;
+                    if (settlement.Town != null && settlement.Town.GarrisonParty != null)
+                    {
+                        strength = settlement.Town.GarrisonParty.MemberRoster.TotalManCount;
+                    }
 
-                if (strength > 500)
-                {
-                    return 0;
-                }
+                    if (strength > 500)
+                    {
+                        return 0;
+                    }
 
-                if (enemies == 0)
-                {
-                    return 0;
-                }
+                    if (enemies == 0)
+                    {
+                        return 0;
+                    }
 
-                return (int) MathF.Max(result / 10f - enemies, 0f);
+                    return (int) MathF.Max(result / 10f - enemies, 0f);
+                }
             }
-        }
 
-        return result;
+            return result;
+        }
     }
 }

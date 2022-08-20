@@ -4,25 +4,26 @@ using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.MapEvents;
 using TaleWorlds.CampaignSystem.Party;
 
-namespace BannerKings.Models.Vanilla;
-
-public class BKBattleSimulationModel : DefaultCombatSimulationModel
+namespace BannerKings.Models.Vanilla
 {
-    public override int SimulateHit(CharacterObject strikerTroop, CharacterObject struckTroop, PartyBase strikerParty,
-        PartyBase struckParty, float strikerAdvantage, MapEvent battle)
+    public class BKBattleSimulationModel : DefaultCombatSimulationModel
     {
-        var result = base.SimulateHit(strikerTroop, struckTroop, strikerParty, struckParty, strikerAdvantage, battle);
-        var leader = strikerParty.LeaderHero;
-        if (leader != null)
+        public override int SimulateHit(CharacterObject strikerTroop, CharacterObject struckTroop, PartyBase strikerParty,
+            PartyBase struckParty, float strikerAdvantage, MapEvent battle)
         {
-            var data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(leader);
-            if (data.HasPerk(BKPerks.Instance.SiegePlanner) && strikerParty.SiegeEvent != null &&
-                strikerTroop.IsInfantry && strikerTroop.IsRanged)
+            var result = base.SimulateHit(strikerTroop, struckTroop, strikerParty, struckParty, strikerAdvantage, battle);
+            var leader = strikerParty.LeaderHero;
+            if (leader != null)
             {
-                result = (int) (result * 1.15f);
+                var data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(leader);
+                if (data.HasPerk(BKPerks.Instance.SiegePlanner) && strikerParty.SiegeEvent != null &&
+                    strikerTroop.IsInfantry && strikerTroop.IsRanged)
+                {
+                    result = (int) (result * 1.15f);
+                }
             }
-        }
 
-        return result;
+            return result;
+        }
     }
 }

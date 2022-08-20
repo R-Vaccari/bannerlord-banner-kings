@@ -5,98 +5,99 @@ using TaleWorlds.CampaignSystem.Election;
 using TaleWorlds.Localization;
 using TaleWorlds.SaveSystem;
 
-namespace BannerKings.Managers.Kingdoms.Contract;
-
-public abstract class BKContractDecision : KingdomDecision
+namespace BannerKings.Managers.Kingdoms.Contract
 {
-    public BKContractDecision(Clan proposerClan, FeudalTitle title) : base(proposerClan)
+    public abstract class BKContractDecision : KingdomDecision
     {
-        Title = title;
-    }
+        public BKContractDecision(Clan proposerClan, FeudalTitle title) : base(proposerClan)
+        {
+            Title = title;
+        }
 
-    [SaveableProperty(99)] protected FeudalTitle Title { get; set; }
+        [SaveableProperty(99)] protected FeudalTitle Title { get; set; }
 
-    public abstract float CalculateKingdomSupport(Kingdom kingdom);
+        public abstract float CalculateKingdomSupport(Kingdom kingdom);
 
-    public override void ApplyChosenOutcome(DecisionOutcome chosenOutcome)
-    {
-    }
+        public override void ApplyChosenOutcome(DecisionOutcome chosenOutcome)
+        {
+        }
 
-    public override void ApplySecondaryEffects(List<DecisionOutcome> possibleOutcomes, DecisionOutcome chosenOutcome)
-    {
-    }
+        public override void ApplySecondaryEffects(List<DecisionOutcome> possibleOutcomes, DecisionOutcome chosenOutcome)
+        {
+        }
 
-    public override Clan DetermineChooser()
-    {
-        return Kingdom.RulingClan;
-    }
+        public override Clan DetermineChooser()
+        {
+            return Kingdom.RulingClan;
+        }
 
-    public override IEnumerable<DecisionOutcome> DetermineInitialCandidates()
-    {
-        yield break;
-    }
+        public override IEnumerable<DecisionOutcome> DetermineInitialCandidates()
+        {
+            yield break;
+        }
 
-    public override void DetermineSponsors(List<DecisionOutcome> possibleOutcomes)
-    {
-    }
+        public override void DetermineSponsors(List<DecisionOutcome> possibleOutcomes)
+        {
+        }
 
-    public override float DetermineSupport(Clan clan, DecisionOutcome possibleOutcome)
-    {
-        return 0;
-    }
+        public override float DetermineSupport(Clan clan, DecisionOutcome possibleOutcome)
+        {
+            return 0;
+        }
 
-    public override TextObject GetChooseDescription()
-    {
-        var textObject =
-            new TextObject(
-                "{=!}As the sovereign of {KINGDOM}, you must decide whether to approve this contract change or not.");
-        textObject.SetTextVariable("KINGDOM", Kingdom.Name);
-        return textObject;
-    }
+        public override TextObject GetChooseDescription()
+        {
+            var textObject =
+                new TextObject(
+                    "{=!}As the sovereign of {KINGDOM}, you must decide whether to approve this contract change or not.");
+            textObject.SetTextVariable("KINGDOM", Kingdom.Name);
+            return textObject;
+        }
 
-    public override TextObject GetChooseTitle()
-    {
-        return null;
-    }
+        public override TextObject GetChooseTitle()
+        {
+            return null;
+        }
 
-    public override TextObject GetChosenOutcomeText(DecisionOutcome chosenOutcome, SupportStatus supportStatus,
-        bool isShortVersion = false)
-    {
-        return null;
-    }
+        public override TextObject GetChosenOutcomeText(DecisionOutcome chosenOutcome, SupportStatus supportStatus,
+            bool isShortVersion = false)
+        {
+            return null;
+        }
 
-    public override TextObject GetGeneralTitle()
-    {
-        return null;
-    }
+        public override TextObject GetGeneralTitle()
+        {
+            return null;
+        }
 
-    public override int GetProposalInfluenceCost()
-    {
-        return 0;
-    }
+        public override int GetProposalInfluenceCost()
+        {
+            return 0;
+        }
 
-    public override DecisionOutcome GetQueriedDecisionOutcome(List<DecisionOutcome> possibleOutcomes)
-    {
-        return null;
-    }
+        public override DecisionOutcome GetQueriedDecisionOutcome(List<DecisionOutcome> possibleOutcomes)
+        {
+            return null;
+        }
 
-    public override TextObject GetSecondaryEffects()
-    {
-        return null;
-    }
+        public override TextObject GetSecondaryEffects()
+        {
+            return null;
+        }
 
-    public override TextObject GetSupportDescription()
-    {
-        return null;
-    }
+        public override TextObject GetSupportDescription()
+        {
+            return null;
+        }
 
-    public override TextObject GetSupportTitle()
-    {
-        return null;
-    }
+        public override TextObject GetSupportTitle()
+        {
+            return null;
+        }
 
-    public override bool IsAllowed()
-    {
-        return Title != null && Title.contract != null;
+        public override bool IsAllowed()
+        {
+            return Title != null && Title.contract != null;
+        }
     }
 }

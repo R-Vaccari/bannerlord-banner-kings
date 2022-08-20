@@ -3,19 +3,20 @@ using BannerKings.Managers.CampaignStart;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 
-namespace BannerKings.Models.Vanilla;
-
-public class BKCrimeModel : DefaultCrimeModel
+namespace BannerKings.Models.Vanilla
 {
-    public override ExplainedNumber GetDailyCrimeRatingChange(IFaction faction, bool includeDescriptions = false)
+    public class BKCrimeModel : DefaultCrimeModel
     {
-        var result = base.GetDailyCrimeRatingChange(faction, includeDescriptions);
-        if (Campaign.Current.GetCampaignBehavior<BKCampaignStartBehavior>()
-            .HasDebuff(DefaultStartOptions.Instance.Outlaw))
+        public override ExplainedNumber GetDailyCrimeRatingChange(IFaction faction, bool includeDescriptions = false)
         {
-            return new ExplainedNumber(0f, includeDescriptions, DefaultStartOptions.Instance.Outlaw.Name);
-        }
+            var result = base.GetDailyCrimeRatingChange(faction, includeDescriptions);
+            if (Campaign.Current.GetCampaignBehavior<BKCampaignStartBehavior>()
+                .HasDebuff(DefaultStartOptions.Instance.Outlaw))
+            {
+                return new ExplainedNumber(0f, includeDescriptions, DefaultStartOptions.Instance.Outlaw.Name);
+            }
 
-        return result;
+            return result;
+        }
     }
 }

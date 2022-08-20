@@ -2,39 +2,40 @@
 using System.Linq;
 using TaleWorlds.ObjectSystem;
 
-namespace BannerKings;
-
-public abstract class DefaultTypeInitializer<T, X>
-    where T : new()
-    where X : MBObjectBase
+namespace BannerKings
 {
-    public static T Instance => ConfigHolder.CONFIG;
-
-    public abstract IEnumerable<X> All { get; }
-    public abstract void Initialize();
-
-    public X GetById(X input)
+    public abstract class DefaultTypeInitializer<T, X>
+        where T : new()
+        where X : MBObjectBase
     {
-        if (input != null)
+        public static T Instance => ConfigHolder.CONFIG;
+
+        public abstract IEnumerable<X> All { get; }
+        public abstract void Initialize();
+
+        public X GetById(X input)
         {
-            return All.FirstOrDefault(x => x.StringId == input.StringId);
+            if (input != null)
+            {
+                return All.FirstOrDefault(x => x.StringId == input.StringId);
+            }
+
+            return null;
         }
 
-        return null;
-    }
-
-    public X GetById(string input)
-    {
-        if (input != null)
+        public X GetById(string input)
         {
-            return All.FirstOrDefault(x => x.StringId == input);
+            if (input != null)
+            {
+                return All.FirstOrDefault(x => x.StringId == input);
+            }
+
+            return null;
         }
 
-        return null;
-    }
-
-    internal struct ConfigHolder
-    {
-        public static T CONFIG = new();
+        internal struct ConfigHolder
+        {
+            public static T CONFIG = new();
+        }
     }
 }

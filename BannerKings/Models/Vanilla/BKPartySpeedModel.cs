@@ -6,61 +6,62 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Party;
 
-namespace BannerKings.Models.Vanilla;
-
-public class BKPartySpeedModel : DefaultPartySpeedCalculatingModel
+namespace BannerKings.Models.Vanilla
 {
-    public override ExplainedNumber CalculateFinalSpeed(MobileParty mobileParty, ExplainedNumber finalSpeed)
+    public class BKPartySpeedModel : DefaultPartySpeedCalculatingModel
     {
-        var baseResult = base.CalculateFinalSpeed(mobileParty, finalSpeed);
-        if (mobileParty.LeaderHero != null)
+        public override ExplainedNumber CalculateFinalSpeed(MobileParty mobileParty, ExplainedNumber finalSpeed)
         {
-            var data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(mobileParty.LeaderHero);
-            if (data.HasPerk(BKPerks.Instance.FianHighlander))
+            var baseResult = base.CalculateFinalSpeed(mobileParty, finalSpeed);
+            if (mobileParty.LeaderHero != null)
             {
-                baseResult.AddFactor(0.05f, BKPerks.Instance.FianHighlander.Name);
-            }
-
-            if (data.HasPerk(BKPerks.Instance.CaravaneerStrider))
-            {
-                baseResult.AddFactor(0.03f, BKPerks.Instance.CaravaneerStrider.Name);
-            }
-
-            if (Campaign.Current.IsNight && data.HasPerk(BKPerks.Instance.OutlawNightPredator))
-            {
-                baseResult.AddFactor(0.06f, BKPerks.Instance.OutlawNightPredator.Name);
-            }
-
-            if (data.Lifestyle != null && data.Lifestyle.Equals(DefaultLifestyles.Instance.Outlaw))
-            {
-                var count = 0;
-                foreach (var element in mobileParty.MemberRoster.GetTroopRoster())
+                var data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(mobileParty.LeaderHero);
+                if (data.HasPerk(BKPerks.Instance.FianHighlander))
                 {
-                    if (element.Character.IsHero || element.Character.Occupation == Occupation.Bandit)
-                    {
-                        count += element.Number;
-                    }
+                    baseResult.AddFactor(0.05f, BKPerks.Instance.FianHighlander.Name);
                 }
 
-                baseResult.AddFactor(count / mobileParty.MemberRoster.TotalManCount * 0.1f, data.Lifestyle.Name);
-            }
-        }
+                if (data.HasPerk(BKPerks.Instance.CaravaneerStrider))
+                {
+                    baseResult.AddFactor(0.03f, BKPerks.Instance.CaravaneerStrider.Name);
+                }
 
-        if (mobileParty.IsCaravan && mobileParty.Owner != null)
-        {
-            var data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(mobileParty.Owner);
-            if (Campaign.Current.IsDay && data.HasPerk(BKPerks.Instance.CaravaneerDealer))
+                if (Campaign.Current.IsNight && data.HasPerk(BKPerks.Instance.OutlawNightPredator))
+                {
+                    baseResult.AddFactor(0.06f, BKPerks.Instance.OutlawNightPredator.Name);
+                }
+
+                if (data.Lifestyle != null && data.Lifestyle.Equals(DefaultLifestyles.Instance.Outlaw))
+                {
+                    var count = 0;
+                    foreach (var element in mobileParty.MemberRoster.GetTroopRoster())
+                    {
+                        if (element.Character.IsHero || element.Character.Occupation == Occupation.Bandit)
+                        {
+                            count += element.Number;
+                        }
+                    }
+
+                    baseResult.AddFactor(count / mobileParty.MemberRoster.TotalManCount * 0.1f, data.Lifestyle.Name);
+                }
+            }
+
+            if (mobileParty.IsCaravan && mobileParty.Owner != null)
             {
-                baseResult.AddFactor(0.04f, BKPerks.Instance.FianHighlander.Name);
+                var data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(mobileParty.Owner);
+                if (Campaign.Current.IsDay && data.HasPerk(BKPerks.Instance.CaravaneerDealer))
+                {
+                    baseResult.AddFactor(0.04f, BKPerks.Instance.FianHighlander.Name);
+                }
             }
-        }
 
-        if (mobileParty.LeaderHero == Hero.MainHero && Campaign.Current.GetCampaignBehavior<BKCampaignStartBehavior>()
-                .HasDebuff(DefaultStartOptions.Instance.Caravaneer))
-        {
-            baseResult.AddFactor(-0.05f, DefaultStartOptions.Instance.Caravaneer.Name);
-        }
+            if (mobileParty.LeaderHero == Hero.MainHero && Campaign.Current.GetCampaignBehavior<BKCampaignStartBehavior>()
+                    .HasDebuff(DefaultStartOptions.Instance.Caravaneer))
+            {
+                baseResult.AddFactor(-0.05f, DefaultStartOptions.Instance.Caravaneer.Name);
+            }
 
-        return baseResult;
+            return baseResult;
+        }
     }
 }

@@ -6,125 +6,126 @@ using TaleWorlds.CampaignSystem.ViewModelCollection.KingdomManagement;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace BannerKings.UI.Extensions;
-
-[ViewModelMixin("SetSelectedCategory")]
-internal class KingdomManagementMixin : BaseViewModelMixin<KingdomManagementVM>
+namespace BannerKings.UI.Extensions
 {
-    private bool courtSelected, demesneSelected;
-    private CourtVM courtVM;
-    private DemesneHierarchyVM demesneVM;
-    private readonly KingdomManagementVM kingdomManagement;
-
-    public KingdomManagementMixin(KingdomManagementVM vm) : base(vm)
+    [ViewModelMixin("SetSelectedCategory")]
+    internal class KingdomManagementMixin : BaseViewModelMixin<KingdomManagementVM>
     {
-        kingdomManagement = vm;
-        courtVM = new CourtVM(true);
-        demesneVM = new DemesneHierarchyVM(BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(vm.Kingdom),
-            vm.Kingdom);
-    }
+        private bool courtSelected, demesneSelected;
+        private CourtVM courtVM;
+        private DemesneHierarchyVM demesneVM;
+        private readonly KingdomManagementVM kingdomManagement;
 
-
-    [DataSourceProperty] public string DemesneText => new TextObject("{=!}Crown Demesne").ToString();
-
-    [DataSourceProperty] public string CourtText => new TextObject("{=!}Court").ToString();
-
-    [DataSourceProperty]
-    public bool DemesneSelected
-    {
-        get => demesneSelected;
-        set
+        public KingdomManagementMixin(KingdomManagementVM vm) : base(vm)
         {
-            if (value != demesneSelected)
+            kingdomManagement = vm;
+            courtVM = new CourtVM(true);
+            demesneVM = new DemesneHierarchyVM(BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(vm.Kingdom),
+                vm.Kingdom);
+        }
+
+
+        [DataSourceProperty] public string DemesneText => new TextObject("{=!}Crown Demesne").ToString();
+
+        [DataSourceProperty] public string CourtText => new TextObject("{=!}Court").ToString();
+
+        [DataSourceProperty]
+        public bool DemesneSelected
+        {
+            get => demesneSelected;
+            set
             {
-                demesneSelected = value;
-                ViewModel!.OnPropertyChangedWithValue(value);
+                if (value != demesneSelected)
+                {
+                    demesneSelected = value;
+                    ViewModel!.OnPropertyChangedWithValue(value);
+                }
             }
         }
-    }
 
-    [DataSourceProperty]
-    public bool CourtSelected
-    {
-        get => courtSelected;
-        set
+        [DataSourceProperty]
+        public bool CourtSelected
         {
-            if (value != courtSelected)
+            get => courtSelected;
+            set
             {
-                courtSelected = value;
-                ViewModel!.OnPropertyChangedWithValue(value);
+                if (value != courtSelected)
+                {
+                    courtSelected = value;
+                    ViewModel!.OnPropertyChangedWithValue(value);
+                }
             }
         }
-    }
 
-    [DataSourceProperty]
-    public CourtVM Court
-    {
-        get => courtVM;
-        set
+        [DataSourceProperty]
+        public CourtVM Court
         {
-            if (value != courtVM)
+            get => courtVM;
+            set
             {
-                courtVM = value;
-                ViewModel!.OnPropertyChangedWithValue(value);
+                if (value != courtVM)
+                {
+                    courtVM = value;
+                    ViewModel!.OnPropertyChangedWithValue(value);
+                }
             }
         }
-    }
 
-    [DataSourceProperty]
-    public DemesneHierarchyVM Demesne
-    {
-        get => demesneVM;
-        set
+        [DataSourceProperty]
+        public DemesneHierarchyVM Demesne
         {
-            if (value != demesneVM)
+            get => demesneVM;
+            set
             {
-                demesneVM = value;
-                ViewModel!.OnPropertyChangedWithValue(value);
+                if (value != demesneVM)
+                {
+                    demesneVM = value;
+                    ViewModel!.OnPropertyChangedWithValue(value);
+                }
             }
         }
-    }
 
-    public override void OnRefresh()
-    {
-        courtVM.RefreshValues();
-        if (kingdomManagement.Clan.Show || kingdomManagement.Settlement.Show || kingdomManagement.Policy.Show ||
-            kingdomManagement.Army.Show || kingdomManagement.Diplomacy.Show)
+        public override void OnRefresh()
         {
-            Court.IsSelected = false;
-            CourtSelected = false;
+            courtVM.RefreshValues();
+            if (kingdomManagement.Clan.Show || kingdomManagement.Settlement.Show || kingdomManagement.Policy.Show ||
+                kingdomManagement.Army.Show || kingdomManagement.Diplomacy.Show)
+            {
+                Court.IsSelected = false;
+                CourtSelected = false;
+                DemesneSelected = false;
+                Demesne.IsSelected = false;
+            }
+        }
+
+        [DataSourceMethod]
+        public void SelectCourt()
+        {
+            kingdomManagement.Clan.Show = false;
+            kingdomManagement.Settlement.Show = false;
+            kingdomManagement.Policy.Show = false;
+            kingdomManagement.Army.Show = false;
+            kingdomManagement.Diplomacy.Show = false;
+
             DemesneSelected = false;
             Demesne.IsSelected = false;
+            Court.IsSelected = true;
+            CourtSelected = true;
         }
-    }
 
-    [DataSourceMethod]
-    public void SelectCourt()
-    {
-        kingdomManagement.Clan.Show = false;
-        kingdomManagement.Settlement.Show = false;
-        kingdomManagement.Policy.Show = false;
-        kingdomManagement.Army.Show = false;
-        kingdomManagement.Diplomacy.Show = false;
+        [DataSourceMethod]
+        public void SelectDemesne()
+        {
+            kingdomManagement.Clan.Show = false;
+            kingdomManagement.Settlement.Show = false;
+            kingdomManagement.Policy.Show = false;
+            kingdomManagement.Army.Show = false;
+            kingdomManagement.Diplomacy.Show = false;
 
-        DemesneSelected = false;
-        Demesne.IsSelected = false;
-        Court.IsSelected = true;
-        CourtSelected = true;
-    }
-
-    [DataSourceMethod]
-    public void SelectDemesne()
-    {
-        kingdomManagement.Clan.Show = false;
-        kingdomManagement.Settlement.Show = false;
-        kingdomManagement.Policy.Show = false;
-        kingdomManagement.Army.Show = false;
-        kingdomManagement.Diplomacy.Show = false;
-
-        DemesneSelected = true;
-        Demesne.IsSelected = true;
-        Court.IsSelected = false;
-        CourtSelected = false;
+            DemesneSelected = true;
+            Demesne.IsSelected = true;
+            Court.IsSelected = false;
+            CourtSelected = false;
+        }
     }
 }

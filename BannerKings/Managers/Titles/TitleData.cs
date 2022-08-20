@@ -5,72 +5,73 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.SaveSystem;
 
-namespace BannerKings.Managers.Titles;
-
-public class TitleData : BannerKingsData
+namespace BannerKings.Managers.Titles
 {
-    public TitleData(FeudalTitle title)
+    public class TitleData : BannerKingsData
     {
-        this.title = title;
-    }
-
-    [SaveableProperty(1)] private FeudalTitle title { get; set; }
-
-    public FeudalTitle Title => title;
-
-    internal override void Update(PopulationData data)
-    {
-        if (title == null)
+        public TitleData(FeudalTitle title)
         {
-            title = BannerKingsConfig.Instance.TitleManager.GetTitle(data.Settlement);
+            this.title = title;
         }
 
-        if (title == null)
-        {
-            return;
-        }
+        [SaveableProperty(1)] private FeudalTitle title { get; set; }
 
-        title.CleanClaims();
-        title.TickClaims();
-        AITick(data.Settlement.Owner);
-    }
+        public FeudalTitle Title => title;
 
-    private void AITick(Hero owner)
-    {
-        if (owner == Hero.MainHero || owner == title.deJure)
+        internal override void Update(PopulationData data)
         {
-            return;
-        }
-
-        if ((owner.IsFriend(title.deJure) && owner.Clan.Kingdom == title.deJure.Clan.Kingdom)
-            || owner.Clan == title.deJure.Clan)
-        {
-            return;
-        }
-
-        var random = MBRandom.RandomFloatRanged(0f, 1f);
-        if (random >= 0.2f)
-        {
-            return;
-        }
-
-        var model = BannerKingsConfig.Instance.Models.First(x => x is BKTitleModel) as BKTitleModel;
-        var claimAction = model.GetAction(ActionType.Claim, title, owner);
-        if (claimAction.Possible)
-        {
-            var knight = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(title.deJure).Count() == 1 &&
-                         title.type == TitleType.Lordship;
-            if (owner.Clan.Kingdom == null || owner.Clan.Kingdom != title.deJure.Clan.Kingdom || !knight)
+            if (title == null)
             {
-                claimAction.TakeAction(null);
+                title = BannerKingsConfig.Instance.TitleManager.GetTitle(data.Settlement);
             }
-        }
-        else
-        {
-            var usurpAction = model.GetAction(ActionType.Usurp, title, owner);
-            if (usurpAction.Possible)
+
+            if (title == null)
             {
-                usurpAction.TakeAction(null);
+                return;
+            }
+
+            title.CleanClaims();
+            title.TickClaims();
+            AITick(data.Settlement.Owner);
+        }
+
+        private void AITick(Hero owner)
+        {
+            if (owner == Hero.MainHero || owner == title.deJure)
+            {
+                return;
+            }
+
+            if ((owner.IsFriend(title.deJure) && owner.Clan.Kingdom == title.deJure.Clan.Kingdom)
+                || owner.Clan == title.deJure.Clan)
+            {
+                return;
+            }
+
+            var random = MBRandom.RandomFloatRanged(0f, 1f);
+            if (random >= 0.2f)
+            {
+                return;
+            }
+
+            var model = BannerKingsConfig.Instance.Models.First(x => x is BKTitleModel) as BKTitleModel;
+            var claimAction = model.GetAction(ActionType.Claim, title, owner);
+            if (claimAction.Possible)
+            {
+                var knight = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(title.deJure).Count() == 1 &&
+                             title.type == TitleType.Lordship;
+                if (owner.Clan.Kingdom == null || owner.Clan.Kingdom != title.deJure.Clan.Kingdom || !knight)
+                {
+                    claimAction.TakeAction(null);
+                }
+            }
+            else
+            {
+                var usurpAction = model.GetAction(ActionType.Usurp, title, owner);
+                if (usurpAction.Possible)
+                {
+                    usurpAction.TakeAction(null);
+                }
             }
         }
     }
