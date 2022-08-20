@@ -170,9 +170,8 @@ namespace BannerKings.Managers.Titles
 
         public override bool Equals(object obj)
         {
-            if (obj is FeudalTitle)
+            if (obj is FeudalTitle target)
             {
-                var target = (FeudalTitle) obj;
                 return fief != null ? fief == target.fief : name == target.name;
             }
 

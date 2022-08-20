@@ -235,15 +235,15 @@ namespace BannerKings.Behaviours
             {
                 var decisions = kingdom.UnresolvedDecisions.ToList();
                 var bkDecision = decisions.FirstOrDefault(x =>
-                    x is BKSettlementClaimantDecision && (x as SettlementClaimantDecision).Settlement == settlement);
+                    x is BKSettlementClaimantDecision decision && decision.Settlement == settlement);
                 if (bkDecision != null)
                 {
                     return;
                 }
 
                 var vanillaDecision = decisions.FirstOrDefault(x =>
-                    x is SettlementClaimantDecision && !(x is BKSettlementClaimantDecision) &&
-                    (x as SettlementClaimantDecision).Settlement == settlement);
+                    x is SettlementClaimantDecision decision && !(decision is BKSettlementClaimantDecision) &&
+                    decision.Settlement == settlement);
                 if (vanillaDecision != null)
                 {
                     kingdom.RemoveDecision(vanillaDecision);
@@ -389,7 +389,7 @@ namespace BannerKings.Behaviours
                 {
                     var decisions = kingdom.UnresolvedDecisions.ToList();
                     var decision = decisions.FirstOrDefault(x =>
-                        x is SettlementClaimantDecision && (x as SettlementClaimantDecision).Settlement == settlement);
+                        x is SettlementClaimantDecision claimantDecision && claimantDecision.Settlement == settlement);
                     if (decision != null)
                     {
                         kingdom.RemoveDecision(decision);

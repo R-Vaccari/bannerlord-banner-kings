@@ -37,7 +37,7 @@ namespace BannerKings.Models.BKModels
                 if (settlement.OwnerClan.Leader == Hero.MainHero)
                 {
                     InformationManager.DisplayMessage(
-                        new InformationMessage(string.Format("Population is starving at {0}!", settlement.Name)));
+                        new InformationMessage($"Population is starving at {settlement.Name}!"));
                 }
             }
 

@@ -64,8 +64,6 @@ namespace BannerKings.Managers.Kingdoms
             {
                 yield return new KingSelectionDecisionOutcome(keyValuePair.Key.Leader);
             }
-
-            IEnumerator<KeyValuePair<Clan, float>> enumerator2 = null;
         }
 
         public override float CalculateMeritOfOutcome(DecisionOutcome candidateOutcome)

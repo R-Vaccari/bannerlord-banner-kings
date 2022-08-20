@@ -351,8 +351,8 @@ namespace BannerKings.UI.Management
                 var tournamentManager = Campaign.Current.TournamentManager;
                 tournamentManager.AddTournament(Campaign.Current.Models.TournamentModel.CreateTournament(settlement.Town));
                 Hero.MainHero.ChangeHeroGold(-5000);
-                InformationManager.DisplayMessage(new InformationMessage(string
-                        .Format("Tournament started with prize: {0}", data.TournamentData.Prize.Name),
+                InformationManager.DisplayMessage(new InformationMessage(
+                    $"Tournament started with prize: {data.TournamentData.Prize.Name}",
                     "event:/ui/notification/coins_negative"));
             }
         }

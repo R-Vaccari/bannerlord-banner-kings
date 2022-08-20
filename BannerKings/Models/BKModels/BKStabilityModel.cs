@@ -71,7 +71,6 @@ namespace BannerKings.Models.BKModels
             var result = new ExplainedNumber(0f, true);
             result.LimitMin(0f);
             result.LimitMax(1f);
-            var support = 0f;
             var totalPower = 0f;
             foreach (var notable in settlement.Notables)
             {

@@ -51,7 +51,7 @@ namespace BannerKings
             }
 
             BannerKingsConfig.Instance.wipeData = true;
-            return string.Format("{0} parties destroyed.", count);
+            return $"{count} parties destroyed.";
         }
 
         [CommandLineFunctionality.CommandLineArgumentFunction("give_title", "bannerkings")]
@@ -78,13 +78,13 @@ namespace BannerKings
             var title = BannerKingsConfig.Instance.TitleManager.GetTitleByName(array[0].Trim());
             if (title == null)
             {
-                return string.Format("No title found with name {0}", array[0]);
+                return $"No title found with name {array[0]}";
             }
 
             var hero = Hero.AllAliveHeroes.FirstOrDefault(x => x.Name != null && x.Name.ToString() == array[1].Trim());
             if (hero == null)
             {
-                return string.Format("No hero found with name {0}", array[1]);
+                return $"No hero found with name {array[1]}";
             }
 
             BannerKingsConfig.Instance.TitleManager.InheritTitle(title.deJure, hero, title);
@@ -102,10 +102,10 @@ namespace BannerKings
             }
             else
             {
-                return string.Format("{0} is not a number.", strings[0]);
+                return $"{strings[0]} is not a number.";
             }
 
-            return string.Format("{0} piety added to Main player.", piety);
+            return $"{piety} piety added to Main player.";
         }
 
         [CommandLineFunctionality.CommandLineArgumentFunction("disable_knighthood", "bannerkings")]

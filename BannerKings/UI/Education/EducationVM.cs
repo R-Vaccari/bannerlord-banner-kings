@@ -24,7 +24,7 @@ namespace BannerKings.UI.Education
             lifestyleProgressInfo;
 
         private bool canAddFocus;
-        private EducationData data;
+        private new EducationData data;
         private readonly CharacterDeveloperVM developerVM;
         private readonly Hero hero;
         private MBBindingList<PerkVM> perks;
