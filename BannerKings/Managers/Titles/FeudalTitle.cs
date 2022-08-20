@@ -12,8 +12,7 @@ namespace BannerKings.Managers.Titles
 {
     public class FeudalTitle
     {
-        public FeudalTitle(TitleType type, Settlement fief, List<FeudalTitle> vassals, Hero deJure, Hero deFacto,
-            string name, FeudalContract contract)
+        public FeudalTitle(TitleType type, Settlement fief, List<FeudalTitle> vassals, Hero deJure, Hero deFacto, string name, FeudalContract contract)
         {
             this.type = type;
             this.fief = fief;
@@ -178,9 +177,14 @@ namespace BannerKings.Managers.Titles
             return base.Equals(obj);
         }
 
-        public void SetName(TextObject shortname)
+        public override int GetHashCode()
         {
-            shortName = shortname;
+            return base.GetHashCode();
+        }
+
+        public void SetName(TextObject shortName)
+        {
+            this.shortName = shortName;
         }
 
         public void TickClaims()

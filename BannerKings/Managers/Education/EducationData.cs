@@ -31,7 +31,7 @@ namespace BannerKings.Managers.Education
             this.hero = hero;
             this.languages = languages;
             books = new Dictionary<BookType, float>();
-            this.Lifestyle = lifestyle != null ? Lifestyle.CreateLifestyle(lifestyle) : null;
+            Lifestyle = lifestyle != null ? Lifestyle.CreateLifestyle(lifestyle) : null;
             CurrentBook = null;
             CurrentLanguage = null;
             LanguageInstructor = null;
@@ -172,7 +172,7 @@ namespace BannerKings.Managers.Education
         {
             if (lifestyle != null)
             {
-                this.Lifestyle = Lifestyle.CreateLifestyle(lifestyle);
+                Lifestyle = Lifestyle.CreateLifestyle(lifestyle);
             }
         }
 

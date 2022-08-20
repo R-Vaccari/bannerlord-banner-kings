@@ -51,6 +51,11 @@ namespace BannerKings.Managers.Education.Lifestyles
             return base.Equals(obj);
         }
 
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
         public static Lifestyle CreateLifestyle(Lifestyle lf)
         {
             var lifestyle = new Lifestyle(lf.StringId);
@@ -61,13 +66,13 @@ namespace BannerKings.Managers.Education.Lifestyles
         public void Initialize(TextObject name, TextObject description, SkillObject firstSkill, SkillObject secondSkill, List<PerkObject> perks, TextObject effects, float firstEffect, float secondEffect, CultureObject culture = null)
         {
             Initialize(name, description);
-            this.FirstSkill = firstSkill;
-            this.SecondSkill = secondSkill;
+            FirstSkill = firstSkill;
+            SecondSkill = secondSkill;
             this.perks = perks;
             this.effects = effects;
-            this.FirstEffect = firstEffect;
-            this.SecondEffect = secondEffect;
-            this.Culture = culture;
+            FirstEffect = firstEffect;
+            SecondEffect = secondEffect;
+            Culture = culture;
         }
 
         public bool CanLearn(Hero hero)
@@ -104,7 +109,7 @@ namespace BannerKings.Managers.Education.Lifestyles
 
         public void AddProgress(float progress)
         {
-            this.Progress = MBMath.ClampFloat(this.Progress + progress, 0f, 1f);
+            Progress = MBMath.ClampFloat(Progress + progress, 0f, 1f);
         }
     }
 }

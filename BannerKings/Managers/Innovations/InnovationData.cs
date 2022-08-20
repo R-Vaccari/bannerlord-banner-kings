@@ -75,7 +75,7 @@ namespace BannerKings.Managers.Innovations
 
         public bool CanChangeFascination(Clan clan, Innovation fascination)
         {
-            return clan == CulturalHead && !fascination.Finished && fascination != this.Fascination;
+            return clan == CulturalHead && !fascination.Finished && fascination != Fascination;
         }
 
         public void AssumeCulturalHead(Clan clan)
@@ -92,7 +92,7 @@ namespace BannerKings.Managers.Innovations
 
         public void ChangeFascination(Innovation fascination)
         {
-            this.Fascination = fascination;
+            Fascination = fascination;
             if (culture == Clan.PlayerClan.Culture)
             {
                 MBInformationManager.AddQuickInformation(

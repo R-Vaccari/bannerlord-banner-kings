@@ -10,8 +10,7 @@ namespace BannerKings.Models.BKModels
 {
     public class BKGrowthModel : IGrowthModel
     {
-        private static readonly float POP_GROWTH_FACTOR = 0.005f;
-        private static readonly float SLAVE_GROWTH_FACTOR = 0.0015f;
+        private const float POP_GROWTH_FACTOR = 0.005f;
 
         public ExplainedNumber CalculateEffect(Settlement settlement, PopulationData data)
         {
@@ -24,8 +23,7 @@ namespace BannerKings.Models.BKModels
                 {
                     if (popClass.type != PopType.Slaves)
                     {
-                        result.Add(popClass.count * POP_GROWTH_FACTOR * (1f - filledCapacity),
-                            new TextObject("{0} growth"));
+                        result.Add(popClass.count * POP_GROWTH_FACTOR * (1f - filledCapacity), new TextObject("{0} growth"));
                     }
                 });
             }
@@ -36,18 +34,18 @@ namespace BannerKings.Models.BKModels
                 result.Add(starvation, new TextObject("Starvation"));
                 if (settlement.OwnerClan.Leader == Hero.MainHero)
                 {
-                    InformationManager.DisplayMessage(
-                        new InformationMessage($"Population is starving at {settlement.Name}!"));
+                    InformationManager.DisplayMessage(new InformationMessage($"Population is starving at {settlement.Name}!"));
                 }
             }
 
-            if (!settlement.IsVillage)
+            if (settlement.IsVillage)
             {
-                if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(settlement, "draft",
-                        (int) DraftPolicy.Demobilization))
-                {
-                    result.AddFactor(0.05f, new TextObject("Draft policy"));
-                }
+                return result;
+            }
+
+            if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(settlement, "draft", (int) DraftPolicy.Demobilization))
+            {
+                result.AddFactor(0.05f, new TextObject("Draft policy"));
             }
 
             return result;

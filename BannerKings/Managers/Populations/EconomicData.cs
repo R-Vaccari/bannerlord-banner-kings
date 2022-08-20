@@ -1,5 +1,4 @@
 ﻿using BannerKings.Managers.Institutions.Guilds;
-using BannerKings.Models;
 using BannerKings.Models.Vanilla;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;

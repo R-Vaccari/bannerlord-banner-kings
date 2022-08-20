@@ -2,7 +2,6 @@
 using System.Linq;
 using BannerKings.Managers;
 using BannerKings.Managers.Court;
-using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Institutions.Religions.Faiths;
 using BannerKings.Managers.Titles;
 using BannerKings.Models.BKModels;

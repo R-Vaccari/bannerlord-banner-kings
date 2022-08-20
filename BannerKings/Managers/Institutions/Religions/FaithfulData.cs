@@ -14,7 +14,7 @@ namespace BannerKings.Managers.Institutions.Religions
 
         public FaithfulData(float piety)
         {
-            this.Piety = piety;
+            Piety = piety;
             Blessing = null;
             performedRites = new Dictionary<RiteType, CampaignTime>();
         }
@@ -30,12 +30,12 @@ namespace BannerKings.Managers.Institutions.Religions
 
         public void AddPiety(float piety)
         {
-            this.Piety += piety;
+            Piety += piety;
         }
 
         public void AddBlessing(Divinity blessing)
         {
-            this.Blessing = blessing;
+            Blessing = blessing;
         }
 
         public bool HasTimePassedForRite(RiteType type, float years)

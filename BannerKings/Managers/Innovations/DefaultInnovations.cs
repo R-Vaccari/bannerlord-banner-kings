@@ -7,7 +7,6 @@ namespace BannerKings.Managers.Innovations
 {
     public class DefaultInnovations : DefaultTypeInitializer<DefaultInnovations, Innovation>
     {
-        private Innovation sewers;
         public Innovation HeavyPlough { get; private set; }
 
         public Innovation ThreeFieldsSystem { get; private set; }
