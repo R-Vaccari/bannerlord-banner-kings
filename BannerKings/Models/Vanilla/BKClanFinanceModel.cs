@@ -3,12 +3,13 @@ using BannerKings.Managers.Education;
 using BannerKings.Managers.Education.Lifestyles;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
-using BannerKings.Populations;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.SandBox.GameComponents;
+using TaleWorlds.CampaignSystem.GameComponents;
+using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.CampaignSystem.Settlements.Workshops;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
@@ -72,7 +73,7 @@ namespace BannerKings.Models
 				
 
 
-			Dictionary<Clan, List<FeudalTitle>> dictionary = BannerKingsConfig.Instance.TitleManager.CalculateVassalClanTitles(clan);
+			Dictionary<Clan, List<FeudalTitle>> dictionary = BannerKingsConfig.Instance.TitleManager.CalculateVassals(clan);
 			if (dictionary.Count >= 0)
             {
 				foreach (KeyValuePair<Clan, List<FeudalTitle>> pair in dictionary)
@@ -140,7 +141,7 @@ namespace BannerKings.Models
 				foreach (CouncilMember position in data.GetOccupiedPositions())
 				{
 					result.Add(-position.DueWage, new TextObject("{=!}Council wage to {NAME}").SetTextVariable("NAME", position.Member.Name));
-					if (applyWithdrawals && !position.Member.IsNoble)
+					if (applyWithdrawals && !position.Member.IsLord)
 						position.Member.Gold += position.DueWage;
 				}
 
@@ -155,7 +156,7 @@ namespace BannerKings.Models
 			if (deJureKingdom == null || deJureKingdom != clan.Kingdom) return;
 
 			float amount = 0f;
-			Dictionary<Clan, List<FeudalTitle>> dictionary = BannerKingsConfig.Instance.TitleManager.CalculateVassalClanTitles(suzerain.deJure.Clan, clan);
+			Dictionary<Clan, List<FeudalTitle>> dictionary = BannerKingsConfig.Instance.TitleManager.CalculateVassals(suzerain.deJure.Clan, clan);
 			foreach (FeudalTitle title in dictionary[clan])
 				amount += (int)title.dueTax;
 

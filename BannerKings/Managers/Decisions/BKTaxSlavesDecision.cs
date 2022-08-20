@@ -1,4 +1,4 @@
-﻿using TaleWorlds.CampaignSystem;
+﻿using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Decisions

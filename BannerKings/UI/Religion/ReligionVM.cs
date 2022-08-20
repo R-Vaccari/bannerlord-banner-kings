@@ -4,6 +4,7 @@ using BannerKings.Populations;
 using BannerKings.UI.Items;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 

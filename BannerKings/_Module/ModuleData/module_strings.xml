@@ -2,6 +2,12 @@
 <base xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" type="string">
 	<strings>
 	
+		<string id="str_bk_crafting_itemtype.bodyarmor" text="{=bk_crafting_itemtype_bodyarmor}Body Armors" />
+		<string id="str_bk_crafting_itemtype.barding" text="{=bk_crafting_itemtype_barding}Bardings" />
+		<string id="str_bk_crafting_itemtype.shield" text="{=bk_crafting_itemtype_shield}Shields" />
+		<string id="str_bk_crafting_itemtype.ammo" text="{=bk_crafting_itemtype_ammo}Ammos" />
+	
+	
 		<string id="str_bk_council_privilege.low_wage" text="{=bk_council_privilege_low_wage}Low Wage" />
 		<string id="str_bk_council_privilege.mid_wage" text="{=bk_council_privilege_mid_wage}Wage" />
 		<string id="str_bk_council_privilege.high_wage" text="{=bk_council_privilege_high_wage}High Wage" />
@@ -28,10 +34,10 @@
 		<string id="str_bk_council_description_elder" text="{=bk_council_description_elder}The {NAME} represent the caste of respected aged leaders in a tribal society. Their presence increases the influence of a sovereign over the common people." />
 	
 		
-		<string id="str_bk_council_marshall_effects" text="{=bk_council_marshall_effects}Settlement militia +1\\nSettlement militarism +1% flat\\nSettlement draft efficiencty +25% flat" />
-		<string id="str_bk_council_steward_effects" text="{=bk_council_steward_effects}Settlement prosperity +1\nSettlement production efficiency +15% flat\nSettlement caravan attractiveness +15% flat" />
-		<string id="str_bk_council_chancellor_effects" text="{=bk_council_chancellor_effects}Settlement loyalty +1\nVassal limit +1\nDisagreements impact -20%" />
-		<string id="str_bk_council_spymaster_effects" text="{=bk_council_spymaster_effects}Settlement security +1" />
+		<string id="str_bk_council_marshall_effects" text="{=bk_council_marshall_effects}Settlement militia +1{BREAK}Settlement militarism +1% flat{BREAK}Settlement draft efficiencty +25% flat" />
+		<string id="str_bk_council_steward_effects" text="{=bk_council_steward_effects}Settlement prosperity +1{BREAK}Settlement production efficiency +15% flat{BREAK}Settlement caravan attractiveness +15% flat" />
+		<string id="str_bk_council_chancellor_effects" text="{=bk_council_chancellor_effects}Settlement loyalty +1{BREAK}Vassal limit +1{BREAK}Disagreements impact -20%" />
+		<string id="str_bk_council_spymaster_effects" text="{=bk_council_spymaster_effects}Settlement security +1{BREAK}Settlement autonomy -3% flat{BREAK}" />
 		<string id="str_bk_council_spiritual_effects" text="{=bk_council_spiritual_effects}" />
 	
 	

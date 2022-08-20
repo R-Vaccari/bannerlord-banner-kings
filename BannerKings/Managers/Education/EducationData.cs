@@ -7,8 +7,8 @@ using TaleWorlds.Library;
 using TaleWorlds.CampaignSystem;
 using BannerKings.Managers.Skills;
 using TaleWorlds.SaveSystem;
-using TaleWorlds.Core;
 using TaleWorlds.Localization;
+using TaleWorlds.CampaignSystem.CharacterDevelopment;
 
 namespace BannerKings.Managers.Education
 {

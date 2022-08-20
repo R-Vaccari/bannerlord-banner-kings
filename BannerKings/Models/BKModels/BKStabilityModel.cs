@@ -4,6 +4,7 @@ using BannerKings.Managers.Titles;
 using BannerKings.Populations;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 
@@ -11,6 +12,10 @@ namespace BannerKings.Models
 {
     public class BKStabilityModel : IBannerKingsModel
     {
+        public bool IsHeroOverDemesneLimit(Hero hero) => CalculateCurrentDemesne(hero.Clan).ResultNumber > CalculateDemesneLimit(hero).ResultNumber;
+        public bool IsHeroOverUnlandedDemesneLimit(Hero hero) => CalculateCurrentUnlandedDemesne(hero.Clan).ResultNumber > CalculateUnlandedDemesneLimit(hero).ResultNumber;
+        public bool IsHeroOverVassalLimit(Hero hero) => CalculateCurrentVassals(hero.Clan).ResultNumber > CalculateVassalLimit(hero).ResultNumber;
+
         public ExplainedNumber CalculateAutonomyEffect(Settlement settlement, float stability, float autonomy)
         {
             ExplainedNumber result = new ExplainedNumber();
@@ -154,11 +159,9 @@ namespace BannerKings.Models
             Hero leader = clan.Leader;
             foreach (FeudalTitle title in BannerKingsConfig.Instance.TitleManager.GetAllDeJure(leader))
             {
-                float value = 0f;
-                if (title.type == TitleType.Dukedom) value = 0.5f;
-                else if (title.type <= TitleType.Kingdom) value = 1f;
-                else if (title.type <= TitleType.Empire) value = 1.5f;
+                if (title.fief != null) continue;
 
+                float value = GetUnlandedDemesneWight(title.type);
                 if (value != 0f)
                     result.Add(value, new TextObject("{=!}{TITLE}")
                         .SetTextVariable("SETTLEMENT", title.FullName));
@@ -187,6 +190,32 @@ namespace BannerKings.Models
             return result;
         }
 
+        public float GetTitleScore(FeudalTitle title)
+        {
+            if (title.fief != null) return GetSettlementDemesneWight(title.fief);
+            else return GetUnlandedDemesneWight(title.type);
+        }
+
+        public float GetUnlandedDemesneWight(TitleType type)
+        {
+            float value;
+            if (type == TitleType.Dukedom) value = 0.5f;
+            else if (type <= TitleType.Kingdom) value = 1f;
+            else value = 1.5f;
+
+            return value;
+        }
+
+        public float GetSettlementDemesneWight(Settlement settlement)
+        {
+            float value;
+            if (settlement.IsTown) value = 2f;
+            else if (settlement.IsCastle) value = 1f;
+            else value = 0.5f;
+
+            return value;
+        }
+
         public ExplainedNumber CalculateCurrentDemesne(Clan clan)
         {
             ExplainedNumber result = new ExplainedNumber(0f, true);
@@ -195,11 +224,7 @@ namespace BannerKings.Models
             Hero leader = clan.Leader;
             foreach (Settlement settlement in clan.Settlements)
             {
-                float value;
-                if (settlement.IsTown) value = 2f;
-                else if (settlement.IsCastle) value = 1f;
-                else value = 0.5f;
-
+                float value = GetSettlementDemesneWight(settlement);
                 bool deJure = false;
                 FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement);
                 if (title != null)
@@ -237,8 +262,12 @@ namespace BannerKings.Models
                     if (deJure == null || deJure == leader) continue;
 
                     if (deJure.Clan == leader.Clan) result.Add(0.5f, deJure.Name);
-                    else if (BannerKingsConfig.Instance.TitleManager.CalculateHeroSuzerain(deJure).deJure == leader)
-                        result.Add(1f, deJure.Name);
+                    else
+                    {
+                        FeudalTitle suzerain = BannerKingsConfig.Instance.TitleManager.CalculateHeroSuzerain(deJure);
+                        if (suzerain != null && suzerain.deJure == leader)
+                            result.Add(1f, deJure.Name);
+                    }
                 }
             }
 

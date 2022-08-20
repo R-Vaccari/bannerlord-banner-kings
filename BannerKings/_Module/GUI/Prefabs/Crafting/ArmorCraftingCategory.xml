@@ -76,14 +76,9 @@
 
                         <ListPanel Id="SmeltableItemList" DataSource="{Armors}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" StackLayout.LayoutMethod="VerticalBottomToTop">
                           <ItemTemplate>
-
-                            <ButtonWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="80" Brush="Smelting.Tuple" Command.Click="ExecuteSelection" Command.HoverBegin="ExecuteShowItemTooltip" Command.HoverEnd="ExecuteHideItemTooltip" IsSelected="@IsSelected">
+                            <ButtonWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="80" Brush="Smelting.Tuple" Command.Click="ExecuteSelection" IsSelected="@IsSelected">
                               <Children>
 
-                                <!--Transfer Button-->
-                                <!--ButtonWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="37" SuggestedHeight="46.5" VerticalAlignment="Center" Brush="Smelting.Transfer.Button" Command.Click="ExecuteToggleSelection" IsSelected="@IsSelected"/-->
-
-                                <!--Item Visual-->
                                 <Widget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="122" SuggestedHeight="66" HorizontalAlignment="Left" VerticalAlignment="Center" MarginLeft="23" Sprite="Crafting\crafting_popup_portrait">
                                   <Children>
                                     <ImageIdentifierWidget DataSource="{Visual}" DoNotAcceptEvents="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="112" SuggestedHeight="51" HorizontalAlignment="Center" VerticalAlignment="Top" MarginTop="3" AdditionalArgs="@AdditionalArgs" ImageId="@Id" ImageTypeCode="@ImageTypeCode" LoadingIconWidget="LoadingIconWidget">
@@ -94,19 +89,13 @@
 									<HintWidget DataSource="{Hint}" DoNotAcceptEvents="true" HeightSizePolicy ="StretchToParent" WidthSizePolicy="StretchToParent" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint"/>
                                   </Children>
                                 </Widget>
-
-                                <!--Item Name-->
+								
                                 <RichTextWidget IsDisabled="true" DoNotAcceptEvents="true" WidthSizePolicy="Fixed" HeightSizePolicy="StretchToParent" SuggestedWidth="150" HorizontalAlignment="Left" VerticalAlignment="Center" MarginLeft="180" Brush="Smelting.Tuple.Text" Text="@ItemName" Brush.TextHorizontalAlignment="Left"/>
+                               
+							    <RichTextWidget IsDisabled="true" DoNotAcceptEvents="true" WidthSizePolicy="Fixed" HeightSizePolicy="StretchToParent" SuggestedWidth="150" HorizontalAlignment="Right" VerticalAlignment="Center" Text="@ItemTypeText" Brush="Smelting.Tuple.Text" Brush.TextHorizontalAlignment="Center" MarginRight="12" />
 
-                                <ButtonWidget IsSelected="@IsLocked" ButtonType="Toggle" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="20" SuggestedHeight="20" HorizontalAlignment="Left" VerticalAlignment="Center" PositionXOffset="5" Brush="Smelting.Lock">
-                                  <Children>
-                                    <HintWidget DoNotAcceptEvents="true" DataSource="{LockHint}" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent"/>
-                                  </Children>
-                                </ButtonWidget>
-                                
                               </Children>
                             </ButtonWidget>
-                            
                           </ItemTemplate>
                         </ListPanel>
 
@@ -137,3 +126,51 @@
     </Widget>
   </Window>
 </Prefab>
+
+
+<!--<Widget WidthSizePolicy=\"Fixed\" HeightSizePolicy=\"CoverChildren\" SuggestedWidth=\"918\" HorizontalAlignment=\"Left\" VerticalAlignment=\"Center\" MarginLeft=\"179\" MarginTop=\"20\" MarginBottom=\"150\" IsVisible=\"@IsInArmorMode\" MinHeight=\"287\">
+	<Children>
+		<Widget WidthSizePolicy = \"Fixed\" HeightSizePolicy = \"Fixed\" SuggestedWidth = \"1053\" SuggestedHeight = \"4\" HorizontalAlignment = \"Center\" VerticalAlignment = \"Top\" Sprite = \"Crafting\\left_field_frame\" />
+		<Widget DataSource = \"{ArmorCrafting}\" WidthSizePolicy = \"Fixed\" HeightSizePolicy = \"CoverChildren\" SuggestedWidth = \"1053\" HorizontalAlignment = \"Center\" MarginTop = \"4\" Sprite = \"Crafting\\left_field_canvas\" Color = \"#000000FF\" MinHeight = \"287\" >
+			<Children>
+				<Widget DataSource = \"{CurrentItem}\" WidthSizePolicy = \"StretchToParent\" HeightSizePolicy = \"CoverChildren\" HorizontalAlignment = \"Center\" VerticalAlignment = \"Center\" MarginBottom = \"60\" MarginTop = \"60\" >
+					<Children>
+						<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" StackLayout.LayoutMethod="HorizontalLeftToRight">
+							<Children>
+							
+								<ImageIdentifierWidget DataSource = \\"{Visual}\\" DoNotAcceptEvents = \\"true\\" WidthSizePolicy = \\"Fixed\\" HeightSizePolicy = \\"Fixed\\" SuggestedWidth = \\"224\\" SuggestedHeight = \\"102\\" HorizontalAlignment = \\"Center\\" VerticalAlignment = \\"Center\\" AdditionalArgs = \\"@AdditionalArgs\\" ImageId = \\"@Id\\" ImageTypeCode = \\"@ImageTypeCode\\" LoadingIconWidget = \\"LoadingIconWidget\\" >
+									<Children>
+										<Standard.CircleLoadingWidget HorizontalAlignment = \\"Center\\" VerticalAlignment = \\"Center\\" Id = \\"LoadingIconWidget\\" /> 
+									</Children> 
+								</ImageIdentifierWidget> 
+								
+								
+								<ListPanel WidthSizePolicy=\"StretchToParent\" HeightSizePolicy=\"CoverChildren\" HorizontalAlignment=\"Center\" StackLayout.LayoutMethod=\"VerticalBottomToTop\">
+								  <Children>
+									<TextWidget WidthSizePolicy=\"StretchToParent\" HeightSizePolicy=\"CoverChildren\" HorizontalAlignment=\"Center\" VerticalAlignment=\"Top\" Text=\"@ItemName\" />
+									<TextWidget WidthSizePolicy=\"StretchToParent\" HeightSizePolicy=\"CoverChildren\" HorizontalAlignment=\"Left\" VerticalAlignment=\"Center\" Text=\"@ValueText\" Brush=\"Refinement.Tuple.Text\"/> 									
+									<TextWidget WidthSizePolicy=\"StretchToParent\" HeightSizePolicy=\"CoverChildren\" HorizontalAlignment=\"Left\" VerticalAlignment=\"Center\" Text=\"@DifficultyText\" Brush=\"Refinement.Tuple.Text\"/> 	
+									<TextWidget WidthSizePolicy=\"StretchToParent\" HeightSizePolicy=\"CoverChildren\" HorizontalAlignment=\"Left\" VerticalAlignment=\"Center\" Text=\"@StaminaText\" Brush=\"Refinement.Tuple.Text\"/> 	
+								  </Children>
+								</ListPanel>
+								
+							</Children>
+						</ListPanel>
+					</Children>
+				</Widget>
+			</Children>
+		</Widget>
+	<Widget WidthSizePolicy = \"Fixed\" HeightSizePolicy = \"Fixed\" SuggestedWidth = \"1053\" SuggestedHeight = \"4\" HorizontalAlignment = \"Center\" VerticalAlignment = \"Bottom\" Sprite = \"Crafting\\left_field_frame\" VerticalFlip = \"true\" />
+	</Children></Widget> 
+	
+	
+	
+	
+	
+	
+	<Widget WidthSizePolicy=\"Fixed\" HeightSizePolicy=\"CoverChildren\" SuggestedWidth=\"918\" HorizontalAlignment=\"Left\" VerticalAlignment=\"Center\" MarginLeft=\"179\" MarginTop=\"20\" MarginBottom=\"150\" IsVisible=\"@IsInArmorMode\" MinHeight=\"287\"><Children><Widget WidthSizePolicy = \"Fixed\" HeightSizePolicy = \"Fixed\" SuggestedWidth = \"1053\" SuggestedHeight = \"4\" HorizontalAlignment = \"Center\" VerticalAlignment = \"Top\" Sprite = \"Crafting\\left_field_frame\" /><Widget DataSource = \"{ArmorCrafting}\" WidthSizePolicy = \"Fixed\" HeightSizePolicy = \"CoverChildren\" SuggestedWidth = \"1053\" HorizontalAlignment = \"Center\" MarginTop = \"4\" Sprite = \"Crafting\\left_field_canvas\" Color = \"#000000FF\" MinHeight = \"287\" ><Children><Widget DataSource = \"{CurrentItem}\" WidthSizePolicy = \"StretchToParent\" HeightSizePolicy = \"CoverChildren\" HorizontalAlignment = \"Center\" VerticalAlignment = \"Center\" MarginBottom = \"60\" MarginTop = \"60\" ><Children><ListPanel WidthSizePolicy=\"StretchToParent\" HeightSizePolicy=\"CoverChildren\" HorizontalAlignment=\"Center\" StackLayout.LayoutMethod=\"HorizontalLeftToRight\"><Children><ImageIdentifierWidget DataSource = \"{Visual}\" DoNotAcceptEvents = \"true\" WidthSizePolicy = \"Fixed\" HeightSizePolicy = \"Fixed\" SuggestedWidth = \"224\" SuggestedHeight = \"102\" HorizontalAlignment = \"Center\" VerticalAlignment = \"Center\" AdditionalArgs = \"@AdditionalArgs\" ImageId = \"@Id\" ImageTypeCode = \"@ImageTypeCode\" LoadingIconWidget = \"LoadingIconWidget\" ><Children><Standard.CircleLoadingWidget HorizontalAlignment = \"Center\" VerticalAlignment = \"Center\" Id = \"LoadingIconWidget\" /> </Children> </ImageIdentifierWidget> <ListPanel WidthSizePolicy=\"StretchToParent\" HeightSizePolicy=\"CoverChildren\" HorizontalAlignment=\"Center\" StackLayout.LayoutMethod=\"VerticalBottomToTop\"><Children><TextWidget WidthSizePolicy=\"StretchToParent\" HeightSizePolicy=\"CoverChildren\" HorizontalAlignment=\"Center\" VerticalAlignment=\"Top\" Text=\"@ItemName\" /><TextWidget WidthSizePolicy=\"StretchToParent\" HeightSizePolicy=\"CoverChildren\" HorizontalAlignment=\"Left\" VerticalAlignment=\"Center\" Text=\"@ValueText\" Brush=\"Refinement.Tuple.Text\"/> 									<TextWidget WidthSizePolicy=\"StretchToParent\" HeightSizePolicy=\"CoverChildren\" HorizontalAlignment=\"Left\" VerticalAlignment=\"Center\" Text=\"@DifficultyText\" Brush=\"Refinement.Tuple.Text\"/> 	<TextWidget WidthSizePolicy=\"StretchToParent\" HeightSizePolicy=\"CoverChildren\" HorizontalAlignment=\"Left\" VerticalAlignment=\"Center\" Text=\"@StaminaText\" Brush=\"Refinement.Tuple.Text\"/> 	</Children></ListPanel></Children></ListPanel></Children></Widget></Children></Widget><Widget WidthSizePolicy = \"Fixed\" HeightSizePolicy = \"Fixed\" SuggestedWidth = \"1053\" SuggestedHeight = \"4\" HorizontalAlignment = \"Center\" VerticalAlignment = \"Bottom\" Sprite = \"Crafting\\left_field_frame\" VerticalFlip = \"true\" /></Children></Widget>
+	
+	
+	
+	
+	-->

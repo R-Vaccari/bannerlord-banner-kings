@@ -22,7 +22,7 @@ namespace BannerKings.Behaviours
         {
             if (!howlPlayed)
             {
-                InformationManager.AddQuickInformation(new TextObject("{=!}{HERO} is inspired by the spirits!")
+                MBInformationManager.AddQuickInformation(new TextObject("{=!}{HERO} is inspired by the spirits!")
                 .SetTextVariable("HERO", Hero.MainHero.Name), 0, Hero.MainHero.CharacterObject, "religions/wolfhowl");
 
                 int index = SoundEvent.GetEventIdFromString("religions/wolfhowl");

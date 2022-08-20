@@ -2,11 +2,10 @@
 using BannerKings.Managers.Populations.Villages;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
-using BannerKings.Models;
 using BannerKings.Populations;
+using BannerKings.UI.Notifications;
 using BannerKings.UI.Windows;
 using HarmonyLib;
-using SandBox.View.Map;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,16 +13,24 @@ using System.Reflection;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.CharacterCreationContent;
+using TaleWorlds.CampaignSystem.CharacterDevelopment;
+using TaleWorlds.CampaignSystem.Extensions;
+using TaleWorlds.CampaignSystem.Party;
+using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.CampaignSystem.Settlements.Buildings;
 using TaleWorlds.CampaignSystem.ViewModelCollection;
 using TaleWorlds.CampaignSystem.ViewModelCollection.CharacterCreation;
 using TaleWorlds.CampaignSystem.ViewModelCollection.CharacterDeveloper;
 using TaleWorlds.CampaignSystem.ViewModelCollection.Education;
-using TaleWorlds.CampaignSystem.ViewModelCollection.Encyclopedia.EncyclopediaItems;
-using TaleWorlds.CampaignSystem.ViewModelCollection.GameMenu;
+using TaleWorlds.CampaignSystem.ViewModelCollection.Encyclopedia.Items;
+using TaleWorlds.CampaignSystem.ViewModelCollection.GameMenu.Recruitment;
 using TaleWorlds.CampaignSystem.ViewModelCollection.GameMenu.TownManagement;
-using TaleWorlds.CampaignSystem.ViewModelCollection.KingdomManagement.KingdomDecision;
+using TaleWorlds.CampaignSystem.ViewModelCollection.KingdomManagement.Policies;
+using TaleWorlds.CampaignSystem.ViewModelCollection.Map;
 using TaleWorlds.Core;
 using TaleWorlds.Core.ViewModelCollection;
+using TaleWorlds.Core.ViewModelCollection.Generic;
+using TaleWorlds.Core.ViewModelCollection.Information;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.MountAndBlade.GauntletUI.Widgets;
@@ -52,12 +59,9 @@ namespace BannerKings.UI
 
         public void ShowWindow(string id)
         {
-            if (MapScreen.Instance != null)
-            {
-                if (mapView == null) mapView = new BannerKingsMapView(id);
-                else if (mapView.id != id) mapView = new BannerKingsMapView(id);
-                mapView.Refresh();
-            }
+            if (mapView == null) mapView = new BannerKingsMapView(id);
+            else if (mapView.id != id) mapView = new BannerKingsMapView(id);
+            mapView.Refresh();
         }
 
         public void CloseUI()
@@ -72,6 +76,19 @@ namespace BannerKings.UI
 
     namespace Patches
     {
+
+        [HarmonyPatch(typeof(MapNotificationVM), "PopulateTypeDictionary")]
+        class PopulateNotificationsPatch
+        {
+            static void Postfix(MapNotificationVM __instance)
+            {
+                Dictionary<Type, Type> dic = (Dictionary<Type, Type>)__instance.GetType().GetField("_itemConstructors", BindingFlags.Instance | BindingFlags.NonPublic)
+                    .GetValue(__instance);
+                dic.Add(typeof(DemesneLimitNotification), typeof(DemesneLimitNotificationVM));
+                dic.Add(typeof(UnlandedDemesneLimitNotification), typeof(DemesneLimitNotificationVM));
+            }
+        }
+
         [HarmonyPatch(typeof(SettlementGovernorSelectionVM))]
         internal class AvailableGovernorsPatch
         {
@@ -94,7 +111,7 @@ namespace BannerKings.UI
             [HarmonyPatch("Name", MethodType.Getter)]
             internal static void GetterPostfix(Hero __instance, ref TextObject __result)
             {
-                if (__instance.IsNoble && BannerKingsConfig.Instance.TitleManager != null)
+                if (__instance.IsLord && BannerKingsConfig.Instance.TitleManager != null)
                 {
                     Kingdom kingdom = __instance.Clan != null ? __instance.Clan.Kingdom : null;
                     FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(__instance);
@@ -194,7 +211,7 @@ namespace BannerKings.UI
         }
 
         [HarmonyPatch(typeof(SettlementProjectVM))]
-        internal class CharacterCreationCultureStagePatch
+        internal class SettlementProjectVMPatch
         {
             [HarmonyPostfix]
             [HarmonyPatch("Building", MethodType.Setter)]
@@ -294,13 +311,9 @@ namespace BannerKings.UI
                     BindingFlags.Instance | BindingFlags.NonPublic);
                 _affectedSkillMap.SetValue(__instance, new Dictionary<SkillObject, Tuple<int, int>>());
 
-                PropertyInfo GainGroups = __instance
-                    .GetType()
-                    .GetProperty("GainGroups",
-                    BindingFlags.Instance | BindingFlags.Public);
-                GainGroups.SetValue(__instance, new MBBindingList<CharacterCreationGainGroupItemVM>());
 
-
+                __instance.GainGroups = new MBBindingList<CharacterCreationGainGroupItemVM>();
+                __instance.GainedTraits = new MBBindingList<EncyclopediaTraitItemVM>();
                 foreach (CharacterAttribute attributeObj in BKAttributes.AllAttributes)
                 {
                     __instance.GainGroups.Add(new CharacterCreationGainGroupItemVM(attributeObj, characterCreation, currentIndex));
@@ -451,13 +464,8 @@ namespace BannerKings.UI
                         __instance.LocalDevelopmentList.Add(selectedItem.Building);
                     }
                     else if (__instance.LocalDevelopmentList.Exists(d => d == selectedItem.Building))
-                    {
                         __instance.LocalDevelopmentList.Remove(selectedItem.Building);
-                    }
-                    else
-                    {
-                        __instance.LocalDevelopmentList.Add(selectedItem.Building);
-                    }
+                    else __instance.LocalDevelopmentList.Add(selectedItem.Building);
                 }
                 else
                 {
@@ -468,13 +476,10 @@ namespace BannerKings.UI
                 MethodInfo refresh = __instance.GetType().GetMethod("RefreshDevelopmentsQueueIndex", BindingFlags.Instance | BindingFlags.NonPublic);
                 refresh.Invoke(__instance, null);
                 if (__instance.LocalDevelopmentList.Count == 0)
-                {
                     __instance.CurrentSelectedProject = __instance.CurrentDailyDefault;
-                }
                 else if (selectedItem != __instance.CurrentSelectedProject)
-                {
                     __instance.CurrentSelectedProject = selectedItem;
-                }
+                
                 FieldInfo fi = __instance.GetType().GetField("_onAnyChangeInQueue", BindingFlags.Instance | BindingFlags.NonPublic);
                 Action onAnyChangeInQueue = (Action)fi.GetValue(__instance);
                 if (onAnyChangeInQueue != null)

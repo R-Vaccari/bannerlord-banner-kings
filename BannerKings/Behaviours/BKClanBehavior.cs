@@ -8,8 +8,12 @@ using System.Linq;
 using System.Reflection;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
-using TaleWorlds.CampaignSystem.SandBox.CampaignBehaviors;
-using TaleWorlds.CampaignSystem.SandBox.GameComponents;
+using TaleWorlds.CampaignSystem.CampaignBehaviors;
+using TaleWorlds.CampaignSystem.CharacterDevelopment;
+using TaleWorlds.CampaignSystem.GameComponents;
+using TaleWorlds.CampaignSystem.Party;
+using TaleWorlds.CampaignSystem.Party.PartyComponents;
+using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -100,10 +104,10 @@ namespace BannerKings.Behaviours
         {
             if (role != SkillEffect.PerkRole.None)
             {
-                if (role == SkillEffect.PerkRole.Scout) return party.Scout == null;
-                else if (role == SkillEffect.PerkRole.Engineer) return party.Engineer == null;
-                else if (role == SkillEffect.PerkRole.Quartermaster) return party.Quartermaster == null;
-                else if (role == SkillEffect.PerkRole.Surgeon) return party.Surgeon == null;
+                if (role == SkillEffect.PerkRole.Scout) return party.EffectiveScout == party.LeaderHero || party.EffectiveScout == null;
+                else if (role == SkillEffect.PerkRole.Engineer) return party.EffectiveEngineer == party.LeaderHero || party.EffectiveEngineer == null;
+                else if (role == SkillEffect.PerkRole.Quartermaster) return party.EffectiveQuartermaster == party.LeaderHero || party.EffectiveQuartermaster == null;
+                else if (role == SkillEffect.PerkRole.Surgeon) return party.EffectiveSurgeon == party.LeaderHero || party.EffectiveSurgeon == null;
             }
             return true;
         }
@@ -111,10 +115,10 @@ namespace BannerKings.Behaviours
         private void AssignToRole(MobileParty party, SkillEffect.PerkRole role, Hero hero)
         {
             AddHeroToPartyAction.Apply(hero, party, false);
-            if (role == SkillEffect.PerkRole.Scout && party.Scout == null) party.SetPartyScout(hero);
-            else if (role == SkillEffect.PerkRole.Engineer && party.Engineer == null) party.SetPartyEngineer(hero);
-            else if (role == SkillEffect.PerkRole.Quartermaster && party.Quartermaster == null) party.SetPartyQuartermaster(hero);
-            else if (role == SkillEffect.PerkRole.Surgeon && party.Surgeon == null) party.SetPartySurgeon(hero); 
+            if (role == SkillEffect.PerkRole.Scout && party.EffectiveScout != party.LeaderHero) party.SetPartyScout(hero);
+            else if (role == SkillEffect.PerkRole.Engineer && party.EffectiveEngineer != party.LeaderHero) party.SetPartyEngineer(hero);
+            else if (role == SkillEffect.PerkRole.Quartermaster && party.EffectiveQuartermaster != party.LeaderHero) party.SetPartyQuartermaster(hero);
+            else if (role == SkillEffect.PerkRole.Surgeon && party.EffectiveSurgeon != party.LeaderHero) party.SetPartySurgeon(hero); 
         }
 
         private void EvaluateRecruitCompanion(Clan clan)
@@ -129,10 +133,10 @@ namespace BannerKings.Behaviours
 
             List<(SkillEffect.PerkRole, float)> candidates = new List<(SkillEffect.PerkRole, float)>();
 
-            if (mobileParty.Scout == null) candidates.Add(new(SkillEffect.PerkRole.Scout, 1f));
-            if (mobileParty.Surgeon == null) candidates.Add(new(SkillEffect.PerkRole.Surgeon, 1f));
-            if (mobileParty.Engineer == null) candidates.Add(new(SkillEffect.PerkRole.Engineer, 1f));
-            if (mobileParty.Quartermaster == null) candidates.Add(new(SkillEffect.PerkRole.Quartermaster, 1f));
+            if (IsRoleFree(mobileParty, SkillEffect.PerkRole.Scout)) candidates.Add(new(SkillEffect.PerkRole.Scout, 1f));
+            if (IsRoleFree(mobileParty, SkillEffect.PerkRole.Surgeon)) candidates.Add(new(SkillEffect.PerkRole.Surgeon, 1f));
+            if (IsRoleFree(mobileParty, SkillEffect.PerkRole.Engineer)) candidates.Add(new(SkillEffect.PerkRole.Engineer, 1f));
+            if (IsRoleFree(mobileParty, SkillEffect.PerkRole.Quartermaster)) candidates.Add(new(SkillEffect.PerkRole.Quartermaster, 1f));
 
             if (candidates.Count == 0) return;
 
@@ -176,7 +180,7 @@ namespace BannerKings.Behaviours
                                                     select e;
             if (source == null) return null;
             MBEquipmentRoster roster = (from e in source where e.EquipmentCulture == clan.Culture select e).ToList()
-                .GetRandomElementWithPredicate(x => noble ? x.IsMediumNobleEquipmentTemplate : x.StringId.Contains("bannerkings_companion"));
+                .GetRandomElementWithPredicate(x => noble ? x.HasEquipmentFlags(EquipmentFlags.IsMediumTemplate) : x.StringId.Contains("bannerkings_companion"));
 
             if (roster == null) return null;
 
@@ -224,13 +228,13 @@ namespace BannerKings.Behaviours
                                                         select e;
                 if (source == null) return;
                 MBEquipmentRoster roster = (from e in source
-                                            where e.IsMediumNobleEquipmentTemplate
+                                            where e.HasEquipmentFlags(EquipmentFlags.IsMediumTemplate)
                                             select e into x
                                             orderby MBRandom.RandomInt()
                                             select x).FirstOrDefault();
                 if (roster == null) return;
 
-                float price = GetPrice(village.Village.MarketTown.Settlement, roster);
+                float price = GetPrice(village.Village.Bound, roster);
                 if (clan.Leader.Gold >= price * 2f)
                 {
                     Hero hero = HeroCreator.CreateSpecialHero(template, settlement, clan, null,

@@ -18,6 +18,9 @@ using BannerKings.Managers.Institutions.Guilds;
 using BannerKings.Managers.Education;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Innovations;
+using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.CampaignSystem.Settlements.Buildings;
+using TaleWorlds.CampaignSystem.Roster;
 
 namespace BannerKings.Populations
 {
@@ -280,7 +283,7 @@ namespace BannerKings.Populations
         internal override void Update(PopulationData data)
         {
             BKGrowthModel model = (BKGrowthModel)BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(BKGrowthModel));
-            int growthFactor = (int)model.CalculateEffect(this.settlement, this).ResultNumber;
+            int growthFactor = (int)model.CalculateEffect(settlement, this).ResultNumber;
             UpdatePopulation(settlement, growthFactor, PopType.None);
             BKStabilityModel stabilityModel = (BKStabilityModel)BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(BKStabilityModel));
             Stability += stabilityModel.CalculateEffect(settlement).ResultNumber;
@@ -419,28 +422,69 @@ namespace BannerKings.Populations
         internal override void Update(PopulationData data)
         {
             SettlementOwner = data.Settlement.Owner;
-            BKCultureAssimilationModel assimModel = (BKCultureAssimilationModel)BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(BKCultureAssimilationModel));
-            BKCultureAcceptanceModel accModel = (BKCultureAcceptanceModel)BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(BKCultureAcceptanceModel));
-            HashSet<CultureDataClass> toDelete = new HashSet<CultureDataClass>();
 
+
+            BalanceCultures(data);
+            CultureObject dominant = DominantCulture;
+            if (dominant.BasicTroop != null && dominant.MilitiaSpearman != null)
+            {
+                data.Settlement.Culture = dominant;
+                if (data.Settlement.Notables != null && data.Settlement.Notables.Count > 0)
+                    foreach (Hero notable in data.Settlement.Notables)
+                        notable.Culture = dominant;
+            }
+        }
+
+        private void BalanceCultures(PopulationData data)
+        {
+            HashSet<CultureDataClass> toDelete = new HashSet<CultureDataClass>();
             float foreignerShare = 0f;
+
             foreach (CultureDataClass cultureData in cultures)
             {
-                cultureData.Acceptance += accModel.CalculateEffect(data.Settlement, cultureData).ResultNumber;
-                cultureData.Assimilation += assimModel.CalculateEffect(data.Settlement, cultureData).ResultNumber;
                 if (cultureData.Culture != settlementOwner.Culture && cultureData.Assimilation <= 0.01)
+                {
                     toDelete.Add(cultureData);
+                    continue;
+                }
 
-                if (cultureData.Culture != settlementOwner.Culture && cultureData.Culture != data.Settlement.Culture)
-                    foreignerShare += cultureData.Assimilation;
+                if (IsForeigner(data, cultureData)) foreignerShare += cultureData.Assimilation;
+                else
+                {
+                    cultureData.Acceptance += BannerKingsConfig.Instance.CultureAcceptanceModel.CalculateEffect(data.Settlement, cultureData).ResultNumber;
+                    cultureData.Assimilation += BannerKingsConfig.Instance.CultureAssimilationModel.CalculateEffect(data.Settlement, cultureData).ResultNumber;
+                }
             }
 
             if (toDelete.Count > 0)
                 foreach (CultureDataClass cultureData in toDelete)
-                cultures.Remove(cultureData);
+                    cultures.Remove(cultureData);
+            
+            float totalAssim = 0f;
+            foreach (CultureDataClass cultureData in cultures) totalAssim += cultureData.Assimilation;
 
-            float foreignerTarget = data.Foreigner.ResultNumber;
-            if (foreignerShare < foreignerTarget)
+            if (totalAssim != 1f)
+            {
+                float diff = totalAssim - 1f;
+                float foreignerTarget = data.Foreigner.ResultNumber;
+
+                List<(CultureDataClass, float)> candidates = new List<(CultureDataClass, float)>();
+                foreach (CultureDataClass cultureData in cultures)
+                    if (cultureData.Assimilation > diff)
+                    {
+                        float value = cultureData.Assimilation;
+                        if (foreignerShare > foreignerTarget && IsForeigner(data, cultureData)) value *= 10f;
+
+                        candidates.Add(new(cultureData, value));
+                    }
+
+                CultureDataClass result = MBRandom.ChooseWeighted(candidates);
+                result.Assimilation += diff;
+            }
+
+
+
+            /*if (foreignerShare < foreignerTarget)
             {
                 float random = MBRandom.RandomFloatRanged(foreignerTarget - foreignerShare);
                 IEnumerable<CultureObject> presentCultures = from cultureClass in this.cultures select cultureClass.Culture;
@@ -456,18 +500,12 @@ namespace BannerKings.Populations
                             cultureData.Assimilation -= random;
                             break;
                         }
-                }     
-            }
-
-            CultureObject dominant = DominantCulture;
-            if (dominant.BasicTroop != null && dominant.MilitiaSpearman != null)
-            {
-                data.Settlement.Culture = dominant;
-                if (data.Settlement.Notables != null && data.Settlement.Notables.Count > 0)
-                    foreach (Hero notable in data.Settlement.Notables)
-                        notable.Culture = dominant;
-            }
+                }
+            }*/
         }
+
+        private bool IsForeigner(PopulationData data, CultureDataClass cultureData) => 
+            cultureData.Culture != settlementOwner.Culture && cultureData.Culture != data.Settlement.Culture;
     }
 
     public class CultureDataClass
@@ -517,12 +555,6 @@ namespace BannerKings.Populations
         [SaveableProperty(2)]
         List<VillageBuilding> buildings { get; set; }
 
-        [SaveableProperty(3)]
-        VillageBuilding current { get; set; }
-
-        [SaveableProperty(4)]
-        VillageBuilding currentDefault { get; set; }
-
         [SaveableProperty(5)]
         Queue<Building> inProgress { get; set; }
 
@@ -531,7 +563,7 @@ namespace BannerKings.Populations
             this.village = village;
             buildings = new List<VillageBuilding>();
             foreach (BuildingType type in DefaultVillageBuildings.VillageBuildings(village))
-                buildings.Add(new VillageBuilding(type, village.MarketTown, village));
+                buildings.Add(new VillageBuilding(type, village.Bound.Town, village));
             inProgress = new Queue<Building>();
         }
 
@@ -550,45 +582,11 @@ namespace BannerKings.Populations
 
         public void ReInitializeBuildings()
         {
-            List<VillageBuilding> toAdd = new List<VillageBuilding>();
-            foreach (VillageBuilding b in buildings)
-            {
-                if (b.Explanation == null)
-                {
-                    string id = b.BuildingType.StringId;
-                    BuildingType type = DefaultVillageBuildings.Instance.All()
-                        .FirstOrDefault(x => x.StringId == id);
-                    if (type != null)
-                        toAdd.Add(new VillageBuilding(type, Village.MarketTown, Village,
-                            b.BuildingProgress, b.CurrentLevel));
-                }  
-            }
+            foreach (VillageBuilding building in buildings)
+                building.PostInitialize();
 
-            if (toAdd.Count > 0)
-            {
-                buildings.Clear();
-                foreach (VillageBuilding b in toAdd)
-                    buildings.Add(b);
-            }
-
-            List<VillageBuilding> toAddQueue = new List<VillageBuilding>();
-            foreach (VillageBuilding b in inProgress)
-                if (b.Explanation == null)
-                {
-                    string id = b.BuildingType.StringId;
-                    BuildingType type = DefaultVillageBuildings.Instance.All()
-                        .FirstOrDefault(x => x.StringId == id);
-                    if (type != null)
-                        toAddQueue.Add(new VillageBuilding(type, Village.MarketTown, Village,
-                            b.BuildingProgress, b.CurrentLevel));
-                }
-
-            if (toAddQueue.Count > 0)
-            {
-                inProgress.Clear();
-                foreach (VillageBuilding b in toAddQueue)
-                    inProgress.Enqueue(b);
-            }
+            foreach (VillageBuilding building in inProgress)
+                building.PostInitialize();
         }
 
         public Village Village => village;
@@ -690,9 +688,9 @@ namespace BannerKings.Populations
 
         private void Init(int totalPops)
         {
-            float farmRatio = 0f;
-            float pastureRatio = 0f;
-            float woodRatio = 0f;
+            float farmRatio;
+            float pastureRatio;
+            float woodRatio;
             if (Terrain == TerrainType.Desert)
             {
                 fertility = 0.5f;
@@ -805,7 +803,7 @@ namespace BannerKings.Populations
 
         public float GetAcreOutput(string type)
         {
-            float result = 0f;
+            float result;
             if (type == "farmland") result = 0.018f;
             else if (type == "pasture") result = 0.006f;
             else result = 0.0012f;

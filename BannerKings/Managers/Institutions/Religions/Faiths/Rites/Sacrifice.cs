@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
+using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.CampaignSystem.ViewModelCollection;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
@@ -27,7 +28,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
                     options.Add(new InquiryElement(hero, hero.Name.ToString(), new ImageIdentifier(CampaignUIHelper.GetCharacterCode(element.Character))));
                 }
 
-            InformationManager.ShowMultiSelectionInquiry(
+            MBInformationManager.ShowMultiSelectionInquiry(
                         new MultiSelectionInquiryData(
                             GetName().ToString(),
                             GetDescription().ToString(),
@@ -47,7 +48,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
             if (inputReligion != null && inputReligion == actionTakerReligion) return;
             float piety = GetPietyReward();
             KillCharacterAction.ApplyByExecution(input, actionTaker, false);
-            InformationManager.AddQuickInformation(new TextObject("{=!}{SACRIFICE} was ritually sacrificed by {HERO}.")
+            MBInformationManager.AddQuickInformation(new TextObject("{=!}{SACRIFICE} was ritually sacrificed by {HERO}.")
                     .SetTextVariable("HERO", actionTaker.Name)
                     .SetTextVariable("SACRIFICE", input.Name), 
                     0, actionTaker.CharacterObject, "event:/ui/notification/relation");

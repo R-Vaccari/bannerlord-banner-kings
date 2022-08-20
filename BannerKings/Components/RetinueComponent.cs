@@ -4,6 +4,8 @@ using static BannerKings.Managers.PopulationManager;
 using TaleWorlds.SaveSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.Core;
+using TaleWorlds.CampaignSystem.Party;
+using TaleWorlds.CampaignSystem.Settlements;
 
 namespace BannerKings.Components
 {

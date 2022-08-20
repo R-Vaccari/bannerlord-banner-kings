@@ -1,4 +1,6 @@
 ﻿using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Party;
+using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Localization;
 using TaleWorlds.SaveSystem;
 using static BannerKings.Managers.PopulationManager;
@@ -26,7 +28,7 @@ namespace BannerKings.Components
             {
                 mobileParty.SetPartyUsedByQuest(true);
                 mobileParty.Party.Visuals.SetMapIconAsDirty();
-                mobileParty.SetInititave(0.5f, 1f, float.MaxValue);
+                mobileParty.SetInitiative(0.5f, 1f, float.MaxValue);
                 mobileParty.ShouldJoinPlayerBattles = true;
                 mobileParty.Aggressiveness = 0.1f;
                 mobileParty.SetMoveEscortParty(escortTarget);

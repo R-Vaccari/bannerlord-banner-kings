@@ -1,4 +1,4 @@
-﻿using TaleWorlds.Core.ViewModelCollection;
+﻿using TaleWorlds.Core.ViewModelCollection.Information;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
@@ -9,7 +9,7 @@ namespace BannerKings
         public class InformationElement : ViewModel
         {
             private string description, value;
-            private HintViewModel _hint { get; set; }
+            private HintViewModel _hint;
 
             public InformationElement(string description, string value, string hintText) 
             {

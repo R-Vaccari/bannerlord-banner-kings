@@ -1,10 +1,12 @@
 ﻿using BannerKings.Managers.Policies;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.SandBox.GameComponents;
 using TaleWorlds.Localization;
 using System.Linq;
 using static BannerKings.Managers.Policies.BKGarrisonPolicy;
 using TaleWorlds.Library;
+using TaleWorlds.CampaignSystem.GameComponents;
+using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.CampaignSystem.Party;
 
 namespace BannerKings.Models.Vanilla
 {

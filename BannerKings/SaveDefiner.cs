@@ -1,5 +1,6 @@
 ﻿using BannerKings.Components;
 using BannerKings.Managers;
+using BannerKings.Managers.CampaignStart;
 using BannerKings.Managers.Court;
 using BannerKings.Managers.Decisions;
 using BannerKings.Managers.Duties;
@@ -24,6 +25,9 @@ using BannerKings.Managers.Titles;
 using BannerKings.Populations;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.CharacterDevelopment;
+using TaleWorlds.CampaignSystem.Roster;
+using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.SaveSystem;
 using static BannerKings.Managers.Policies.BKCriminalPolicy;
 using static BannerKings.Managers.Policies.BKDraftPolicy;
@@ -141,6 +145,7 @@ namespace BannerKings
             AddClassDefinition(typeof(InnovationData), 94);
             AddClassDefinition(typeof(InnovationsManager), 95);
             AddClassDefinition(typeof(BannerKingsObject), 96);
+            AddClassDefinition(typeof(StartOption), 97);
         }
 
         protected override void DefineContainerDefinitions()

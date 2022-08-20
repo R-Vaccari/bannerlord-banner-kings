@@ -12,6 +12,7 @@ using TaleWorlds.Localization;
 using BannerKings.Managers.Education;
 using BannerKings.Managers.Skills;
 using TaleWorlds.CampaignSystem.Actions;
+using TaleWorlds.CampaignSystem.Settlements;
 
 namespace BannerKings.Managers.Court
 {
@@ -213,7 +214,7 @@ namespace BannerKings.Managers.Court
                 if (hero == null) continue;
                 if (!currentMembers.Contains(hero) && hero.IsAlive && !hero.IsChild)
                 {
-                    if (lordsOnly && hero.IsNoble)
+                    if (lordsOnly && hero.IsLord)
                         available.Add(hero);
                     else available.Add(hero);
                 }   
@@ -459,7 +460,8 @@ namespace BannerKings.Managers.Court
         public TextObject GetName() => GameTexts.FindText("str_bk_council_" + position.ToString().ToLower() + (isRoyal ? "_royal" : ""),Culture.StringId);
         public TextObject GetDescription() => GameTexts.FindText("str_bk_council_description_" + position.ToString().ToLower())
             .SetTextVariable("NAME", GetName());
-        public TextObject GetEffects() => GameTexts.FindText("str_bk_council_" + position.ToString().ToLower() + "_effects");
+        public TextObject GetEffects() => GameTexts.FindText("str_bk_council_" + position.ToString().ToLower() + "_effects")
+            .SetTextVariable("BREAK", "\n");
 
         public bool IsValidCandidate(Hero candidate)
         {

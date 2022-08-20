@@ -2,11 +2,15 @@
 using BannerKings.Managers.Education.Lifestyles;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Skills;
+using BannerKings.Managers.Titles;
 using BannerKings.Populations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.CharacterDevelopment;
+using TaleWorlds.CampaignSystem.Party;
+using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using static BannerKings.Managers.Policies.BKTaxPolicy;
 using static BannerKings.Managers.Policies.BKWorkforcePolicy;
@@ -15,6 +19,103 @@ namespace BannerKings.Managers.AI
 {
     public class AIBehavior
     {
+        public FeudalTitle ChooseTitleToGive(Hero giver, float diff, bool landed = true)
+        {
+            List<FeudalTitle> titles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(giver);
+            List<(FeudalTitle, float)> candidates = new List<(FeudalTitle, float)>();
+
+            foreach (FeudalTitle title in titles)
+            {
+                if (landed && (title.fief == null || title.deFacto != giver)) continue;
+                else if (!landed && title.fief != null) continue;
+
+                float value = BannerKingsConfig.Instance.StabilityModel.GetTitleScore(title);
+                if (value > diff) continue;
+
+                if (title.type == TitleType.Lordship && BannerKingsConfig.Instance.StabilityModel.IsHeroOverVassalLimit(giver))
+                    continue;
+
+                TitleAction action = BannerKingsConfig.Instance.TitleModel.GetAction(ActionType.Grant, title, giver);
+                if (action.Possible) candidates.Add(new(title, value));
+            }
+
+            return MBRandom.ChooseWeighted(candidates);
+        }
+
+        public Hero ChooseVassalToGiftUnlandedTitle(Hero giver, FeudalTitle titleToGive)
+        {
+            Dictionary<Clan, List<FeudalTitle>> vassals = BannerKingsConfig.Instance.TitleManager.CalculateVassals(giver.Clan);
+            List<(Hero, float)> candidates = new List<(Hero, float)>();
+
+            foreach(KeyValuePair<Clan, List<FeudalTitle>> pair in vassals)
+            {
+                Hero leader = pair.Key.Leader;
+                if (BannerKingsConfig.Instance.StabilityModel.IsHeroOverUnlandedDemesneLimit(leader)) continue;
+
+                float score = 100;
+                score += giver.GetRelation(leader);
+                if (pair.Value.Count > 0)
+                {
+                    TitleType type = titleToGive.type;
+                    foreach (FeudalTitle title in pair.Value)
+                    {
+                        if (title.type == type) score -= 60;
+                        else if (title.type < type) score -= 120;
+                        else if (titleToGive.vassals.Contains(title)) score += 40;
+                    }   
+                }
+
+                if (BannerKingsConfig.Instance.TitleModel.GetGrantCandidates(giver).Contains(leader))
+                    candidates.Add(new (leader, score));
+            }
+
+            return MBRandom.ChooseWeighted(candidates);
+        }
+
+        public Hero ChooseVassalToGiftLandedTitle(Hero giver, FeudalTitle titleToGive)
+        {
+            List<(Hero, float)> candidates = new List<(Hero, float)>();
+
+            if (titleToGive.type != TitleType.Lordship)
+            {
+                Dictionary<Clan, List<FeudalTitle>> vassals = BannerKingsConfig.Instance.TitleManager.CalculateVassals(giver.Clan);
+                foreach (KeyValuePair<Clan, List<FeudalTitle>> pair in vassals)
+                {
+                    Hero leader = pair.Key.Leader;
+                    if (BannerKingsConfig.Instance.StabilityModel.IsHeroOverUnlandedDemesneLimit(leader)) continue;
+
+                    float score = 100;
+                    score += giver.GetRelation(leader);
+                    if (pair.Value.Count > 0)
+                    {
+                        TitleType type = titleToGive.type;
+                        foreach (FeudalTitle title in pair.Value)
+                        {
+                            if (title.type == type) score -= 60;
+                            else if (title.type < type) score -= 120;
+                            else if (titleToGive.vassals.Contains(title)) score += 40;
+                        }
+                    }
+
+                    if (BannerKingsConfig.Instance.TitleModel.GetGrantCandidates(giver).Contains(leader))
+                        candidates.Add(new(leader, score));
+                }
+            } 
+            else
+            {
+                foreach (Hero companion in giver.Clan.Companions)
+                {
+                    float score = 100;
+                    score += companion.GetSkillValue(DefaultSkills.Leadership);
+                    score += companion.GetSkillValue(DefaultSkills.Tactics);
+
+                    candidates.Add(new(companion, score));
+                }
+            }
+
+
+            return MBRandom.ChooseWeighted(candidates);
+        }
 
         public Lifestyle ChooseLifestyle(Hero hero)
         {
@@ -183,7 +284,7 @@ namespace BannerKings.Managers.AI
                 foreach (BannerKingsDecision dec in changedDecisions)
                     BannerKingsConfig.Instance.PolicyManager.UpdateSettlementDecision(target, dec);
             }
-            else if (target.IsVillage && target.Village.MarketTown.Governor != null)
+            else if (target.IsVillage && target.Village.Bound.Town.Governor != null)
             {
                 VillageData villageData = BannerKingsConfig.Instance.PopulationManager.GetPopData(target).VillageData;
                 villageData.StartRandomProject();

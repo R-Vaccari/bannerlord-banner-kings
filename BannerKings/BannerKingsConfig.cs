@@ -19,6 +19,8 @@ using TaleWorlds.CampaignSystem;
 using BannerKings.Managers.AI;
 using BannerKings.Managers.Education.Lifestyles;
 using BannerKings.Models.Vanilla;
+using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.CampaignSystem.Party;
 
 namespace BannerKings
 {
@@ -47,10 +49,13 @@ namespace BannerKings
         public BKEconomyModel EconomyModel { get; } = new BKEconomyModel();
         public BKWorkshopModel WorkshopModel { get; } = new BKWorkshopModel();
         public BKAdministrativeModel AdministrativeModel { get; } = new BKAdministrativeModel();
+        public BKSmithingModel SmithingModel { get; } = new BKSmithingModel();
+        public BKCultureAcceptanceModel CultureAcceptanceModel { get; } = new BKCultureAcceptanceModel();
+        public BKCultureAssimilationModel CultureAssimilationModel { get; } = new BKCultureAssimilationModel();
 
         public void Initialize()
         {
-            DefaultVillageBuildings.Instance.Init();
+            DefaultVillageBuildings.Instance.Initialize();
             DefaultDivinities.Instance.Initialize();
             DefaultFaiths.Instance.Initialize();
             DefaultDoctrines.Instance.Initialize();
@@ -75,10 +80,9 @@ namespace BannerKings
         {
             Initialize();
             PopulationManager = new PopulationManager(new Dictionary<Settlement, PopulationData>(), new List<MobileParty>());
-            PopulationManager.ReInitBuildings();
             PolicyManager = new PolicyManager(new Dictionary<Settlement, List<BannerKingsDecision>>(), new Dictionary<Settlement,
             List<BannerKingsPolicy>>());
-            TitleManager = new TitleManager(new Dictionary<FeudalTitle, Hero>(), new Dictionary<Hero, List<FeudalTitle>>(), new Dictionary<Kingdom, FeudalTitle>());
+            TitleManager = new TitleManager(new Dictionary<FeudalTitle, Hero>(), new Dictionary<Kingdom, FeudalTitle>());
             CourtManager = new CourtManager(new Dictionary<Clan, CouncilData>());
             ReligionsManager = new ReligionsManager();
             EducationManager = new EducationManager();
@@ -90,10 +94,9 @@ namespace BannerKings
         {
             Initialize();
             PopulationManager = populationManager;
-            PopulationManager.ReInitBuildings();
             PolicyManager = policyManager;
             TitleManager = titleManager;
-            titleManager.RefreshDeJure();
+            titleManager.RefreshCaches();
             CourtManager = court;
             ReligionsManager = religions != null ? religions : new ReligionsManager();
             EducationManager = educations != null ? educations : new EducationManager();

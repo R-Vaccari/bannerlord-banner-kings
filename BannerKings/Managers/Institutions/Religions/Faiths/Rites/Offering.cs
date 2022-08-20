@@ -1,5 +1,6 @@
 ﻿using BannerKings.Managers.Skills;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -20,7 +21,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
         public override void Complete(Hero actionTaker)
         {
             actionTaker.PartyBelongedTo.ItemRoster.AddToCounts(input, -inputCount);
-            InformationManager.AddQuickInformation(new TextObject("{=!}{OFFERING} was ritually offered by {HERO}.")
+            MBInformationManager.AddQuickInformation(new TextObject("{=!}{OFFERING} was ritually offered by {HERO}.")
                     .SetTextVariable("HERO", actionTaker.Name)
                     .SetTextVariable("OFFERING", input.Name),
                     0, actionTaker.CharacterObject, "event:/ui/notification/relation");

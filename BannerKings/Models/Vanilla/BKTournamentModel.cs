@@ -1,7 +1,8 @@
 ﻿using BannerKings.Managers.Populations.Tournament;
 using BannerKings.Populations;
-using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.SandBox.GameComponents;
+using TaleWorlds.CampaignSystem.GameComponents;
+using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.CampaignSystem.TournamentGames;
 
 namespace BannerKings.Models.Vanilla
 {

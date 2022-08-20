@@ -1,6 +1,7 @@
 ﻿using BannerKings.Managers.Skills;
 using BannerKings.Populations;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Models.BKModels

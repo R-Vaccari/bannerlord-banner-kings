@@ -79,7 +79,7 @@ namespace BannerKings.Managers.Kingdoms.Council
             foreach (DecisionOutcome decisionOutcome in possibleOutcomes)
             {
                 Hero candidate = ((CouncilPositionDecisionOutcome)decisionOutcome).Candidate;
-                if (candidate.IsNoble && candidate.Clan != null)
+                if (candidate.IsLord && candidate.Clan != null)
                     decisionOutcome.SetSponsor(candidate.Clan);
             }
         }
@@ -105,7 +105,7 @@ namespace BannerKings.Managers.Kingdoms.Council
             }
 
             result += ProposerClan.Leader.GetRelation(candidate) * 0.02f;
-            if (!candidate.IsNoble)
+            if (!candidate.IsLord)
                 result -= 1f;
 
             return MathF.Clamp(result, -3f, 8f);

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -27,6 +28,12 @@ namespace BannerKings.Managers.Education.Lifestyles
             investedFocus = 0;
         }
 
+        public override bool Equals(object obj)
+        {
+            if (obj is Lifestyle) return StringId == (obj as Lifestyle).StringId;
+            return base.Equals(obj);
+        }
+
         public static Lifestyle CreateLifestyle(Lifestyle lf)
         {
             Lifestyle lifestyle = new Lifestyle(lf.StringId);
@@ -49,27 +56,21 @@ namespace BannerKings.Managers.Education.Lifestyles
 
         }
 
-        public void loadFix(float progress = 0f, int focus = 0)
-        {
-            this.progress = progress;
-            this.investedFocus = focus;
-        }
-
         public float NecessarySkillForFocus => 80f * (investedFocus + 1f);
 
         public bool CanLearn(Hero hero) => (culture == null || hero.Culture == culture) && hero.GetSkillValue(firstSkill) >= 15
             && hero.GetSkillValue(secondSkill) >= 15;
         public bool CanInvestFocus(Hero hero) => progress >= 1f && perks.Count >= investedFocus + 1 && 
             (hero.GetSkillValue(firstSkill) + hero.GetSkillValue(secondSkill) >= NecessarySkillForFocus);
-        public void InvestFocus(EducationData data, Hero hero) 
+        public void InvestFocus(EducationData data, Hero hero, bool cheat = false) 
         {
-            hero.HeroDeveloper.UnspentFocusPoints -= 1;
+            if (!cheat) hero.HeroDeveloper.UnspentFocusPoints -= 1;
             PerkObject perk = perks[investedFocus];
             data.AddPerk(perk);
             investedFocus += 1;
             progress = 0f;
             if (hero == Hero.MainHero) 
-                InformationManager.AddQuickInformation(new TextObject("{=!}You have received the {PERK} perk from the {LIFESTYLE} lifestyle.")
+                MBInformationManager.AddQuickInformation(new TextObject("{=!}You have received the {PERK} perk from the {LIFESTYLE} lifestyle.")
                             .SetTextVariable("PERK", perk.Name)
                             .SetTextVariable("LIFESTYLE", Name));
         } 

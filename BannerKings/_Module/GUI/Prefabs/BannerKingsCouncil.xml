@@ -30,7 +30,24 @@
 					
 					<GridWidget Id="CoreGrid" DataSource="{CorePositions}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" MarginTop="20" HorizontalAlignment="Center" SuggestedHeight="350" DefaultCellWidth="190" DefaultCellHeight="150" ColumnCount="5"  >
 					  <ItemTemplate>
-						<ListPanel WidthSizePolicy="Fixed" HeightSizePolicy="CoverChildren" SuggestedWidth="180" HorizontalAlignment="Center" VerticalAlignment="Top" StackLayout.LayoutMethod="VerticalBottomToTop">
+					  
+						<ToggleButtonWidget Id="GovernorSelectionButton" DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="191" SuggestedHeight="140" HorizontalAlignment="Left" Brush="TownManagement.Governor" UpdateChildrenStates="true" GamepadNavigationIndex="0" IsEnabled="true">
+							<Children>
+
+								<ImageWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="69" SuggestedHeight="69" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="TownManagement.Governor.PlusButton" IsHidden="@HasGovernor" />
+								<ImageIdentifierWidget Id="ElementImage" DataSource="{ImageIdentifier}" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" HorizontalAlignment="Center" MarginLeft="3" MarginRight="3" MarginTop="3" MarginBottom="3" AdditionalArgs="@AdditionalArgs" ImageId="@Id" ImageTypeCode="@ImageTypeCode" />
+								<TextWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="250" SuggestedHeight="30" HorizontalAlignment="Center" VerticalAlignment="Bottom" PositionYOffset="40" Brush="Encyclopedia.SubPage.Element.Name.Text" Brush.FontSize="25" Text="@NameText" />
+								<HintWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" />
+								<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Sprite="BlankWhiteSquare" Color="#00000099" IsHidden="false"/>
+
+							</Children>
+						</ToggleButtonWidget>
+						
+					  </ItemTemplate>
+					</GridWidget>
+					
+					
+					<!-- <ListPanel WidthSizePolicy="Fixed" HeightSizePolicy="CoverChildren" SuggestedWidth="180" HorizontalAlignment="Center" VerticalAlignment="Top" StackLayout.LayoutMethod="VerticalBottomToTop">
 						  <Children>
 							<ListPanel WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="180" StackLayout.LayoutMethod="HorizontalLeftToRight" DoNotAcceptEvents="true">
 							  <Children>
@@ -48,9 +65,7 @@
 							  </Children>
 							</ToggleWidget>
 						  </Children>
-						</ListPanel>
-					  </ItemTemplate>
-					</GridWidget>
+						</ListPanel> -->
 					
 					
 					<GridWidget Id="RoyalGrid" IsHidden="@IsRoyal" DataSource="{RoyalPositions}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" MarginRight="100" MarginLeft="100" HorizontalAlignment="Center" SuggestedHeight="350" DefaultCellWidth="190" DefaultCellHeight="150" ColumnCount="4" MarginTop="50" >

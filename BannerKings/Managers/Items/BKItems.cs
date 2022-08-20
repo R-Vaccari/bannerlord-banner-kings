@@ -141,8 +141,7 @@ namespace BannerKings.Managers.Items
 
         static void InitializeTradeGood(ItemObject item, TextObject name, string meshName, ItemCategory category, int value, float weight, ItemObject.ItemTypeEnum itemType, bool isFood = false)
         {
-            MethodInfo method = item.GetType().GetMethod("InitializeTradeGood", BindingFlags.Static | BindingFlags.NonPublic);
-            method.Invoke(null, new object[] { item, name, meshName, category, value, weight, itemType, isFood });
+            ItemObject.InitializeTradeGood(item, name, meshName, category, value, weight, itemType, isFood);
         }
     }
 }

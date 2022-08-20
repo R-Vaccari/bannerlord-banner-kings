@@ -1,13 +1,148 @@
-﻿using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.SandBox.CampaignBehaviors;
-using TaleWorlds.CampaignSystem.SandBox.GameComponents.Map;
+﻿using BannerKings.Managers.Education;
+using BannerKings.Managers.Education.Lifestyles;
+using BannerKings.Managers.Skills;
+using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.CampaignBehaviors;
+using TaleWorlds.CampaignSystem.GameComponents;
+using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
+using static TaleWorlds.Core.ArmorComponent;
 
 namespace BannerKings.Models.Vanilla
 {
     public class BKSmithingModel : DefaultSmithingModel
     {
+        public ExplainedNumber GetSmithingHourlyPrice(Settlement settlement, Hero hero)
+        {
+            ExplainedNumber result = new ExplainedNumber(50f, true);
+
+            float prosperity = settlement.Prosperity / 5000f;
+            if (prosperity >= 1f) result.Add(prosperity, GameTexts.FindText("str_prosperity"));
+
+            if (hero.Clan.Tier > 0) result.AddFactor(hero.Clan.Tier * 0.1f, GameTexts.FindText("str_clan"));
+
+            EducationData education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(hero);
+            if (education.HasPerk(BKPerks.Instance.ArtisanSmith))
+                result.AddFactor(-0.15f, BKPerks.Instance.ArtisanSmith.Name);
+
+            return result;
+        }
+
+        public int GetModifierForCraftedItem(ItemObject item, Hero hero)
+        {
+            int result = 0;
+
+
+            EducationData education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(hero);
+            if (education.HasPerk(BKPerks.Instance.ArtisanCraftsman) && MBRandom.RandomFloat <= 0.05f)
+                result += 1;
+
+            return result;
+        }
+
+
+        public float CalculateBotchingChance(Hero hero, int difficulty)
+        {
+            float chance = (float)difficulty / hero.GetSkillValue(DefaultSkills.Crafting) + 1;
+            EducationData education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(hero);
+            if (education.Lifestyle == DefaultLifestyles.Instance.Artisan)
+                chance -= 0.1f;
+
+            return MBMath.ClampFloat(chance, 0f, 0.9f);
+        }
+
+        public int CalculateArmorStamina(ItemObject item, Hero hero)
+        {
+            float result = 0;
+            result += item.Weight * 5f;
+            result += item.Tierf * 5f;
+
+            if (item.HasArmorComponent)
+            {
+                if (item.ItemType == ItemObject.ItemTypeEnum.BodyArmor) result += 50f;
+                else if (item.ItemType == ItemObject.ItemTypeEnum.HeadArmor) result += 30f;
+                else result += 10f;
+
+                if (item.ArmorComponent.MaterialType == ArmorMaterialTypes.Plate) result += 40f;
+                else if (item.ArmorComponent.MaterialType == ArmorMaterialTypes.Chainmail) result += 25f;
+                else result += 10f;
+            }
+
+            EducationData education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(hero);
+            if (education.HasPerk(BKPerks.Instance.ArtisanSmith))
+                result *= 0.9f;
+
+            return MBMath.ClampInt((int)result, 10, 300);
+        }
+
+
+        public int CalculateArmorDifficulty(ItemObject item)
+        {
+            float result = item.Tierf * 20f;
+            if (item.HasArmorComponent)
+            {
+                if (item.ItemType == ItemObject.ItemTypeEnum.BodyArmor || item.ItemType == ItemObject.ItemTypeEnum.HorseHarness) result *= 1.5f;
+                else if (item.ItemType == ItemObject.ItemTypeEnum.HeadArmor) result *= 1.2f;
+
+                if (item.ArmorComponent.MaterialType == ArmorMaterialTypes.Plate) result *= 1.4f;
+                else if (item.ArmorComponent.MaterialType == ArmorMaterialTypes.Chainmail) result *= 1.25f;
+                else if (item.ArmorComponent.MaterialType == ArmorMaterialTypes.Leather) result *= 1.1f;
+            }
+
+            return MBMath.ClampInt((int)result, 10, 300);
+        }
+
+
+        public int[] GetCraftingInputForArmor(ItemObject item)
+        {
+            int[] result = new int[11];
+
+            if (item.HasArmorComponent)
+            {
+                ArmorMaterialTypes material = item.ArmorComponent.MaterialType;
+                if (material == ArmorMaterialTypes.Chainmail || material == ArmorMaterialTypes.Plate)
+                {
+                    int ingots = (int)((item.Weight * 0.8f) / 0.5f);
+                    CraftingMaterials mainMaterial;
+
+                    if (item.Tierf < 4f)
+                    {
+                        mainMaterial = CraftingMaterials.Iron3;
+                        result[10] = 1;
+                    }
+                    else
+                    {
+                        result[9] = 1;
+                        if (item.Tierf < 5f) mainMaterial = CraftingMaterials.Iron4;
+                        else if (item.Tierf < 6f) mainMaterial = CraftingMaterials.Iron5;
+                        else mainMaterial = CraftingMaterials.Iron6;
+                    }
+
+                    int mainMaterialIndex = (int)mainMaterial;
+                    result[mainMaterialIndex] = (int)(ingots * 0.9f);
+                    result[mainMaterialIndex - 1] = (int)(ingots * 0.1f);
+                }
+                else if (material == ArmorMaterialTypes.Leather) result[9] = MBMath.ClampInt((int)(item.Weight / 10f), 1, 100);
+                else if (material == ArmorMaterialTypes.Cloth) result[10] = 1;
+            } else if (item.HasWeaponComponent)
+            {
+                
+                if (item.WeaponComponent.PrimaryWeapon.IsShield)
+                {
+                    result[7] = 1;
+                    if (item.WeaponComponent.PrimaryWeapon.PhysicsMaterial == "shield_metal")
+                        result[4] = (int)((item.Weight * 0.5f) / 0.5f); ;
+                    
+                } else
+                {
+                    result[7] = 1;
+                    result[3] = 1;
+                }
+            }           
+
+            return result;
+        }
 
         public override int[] GetSmeltingOutputForItem(ItemObject item)
         {

@@ -1,8 +1,8 @@
 ﻿using BannerKings.UI.Items;
 using System;
 using System.Collections.Generic;
-using TaleWorlds.CampaignSystem;
-using TaleWorlds.Core.ViewModelCollection;
+using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.Core.ViewModelCollection.Selector;
 using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Managers.Policies

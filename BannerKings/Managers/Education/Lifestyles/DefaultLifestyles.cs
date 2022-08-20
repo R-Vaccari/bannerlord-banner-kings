@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -11,7 +12,7 @@ namespace BannerKings.Managers.Education.Lifestyles
     public class DefaultLifestyles : DefaultTypeInitializer<DefaultLifestyles, Lifestyle>
     {
         private Lifestyle fian, cataphract, diplomat, august, siegeEngineer, civilAdministrator, caravaneer, outlaw, mercenary, 
-            kheshig, varyag;
+            kheshig, varyag, artisan;
 
         public Lifestyle Fian => fian;
         public Lifestyle Diplomat => diplomat;
@@ -22,6 +23,8 @@ namespace BannerKings.Managers.Education.Lifestyles
         public Lifestyle Outlaw => outlaw;
         public Lifestyle Caravaneer => caravaneer;
         public Lifestyle Mercenary => mercenary;
+        public Lifestyle Artisan => artisan;
+
         public override void Initialize()
         {
             MBReadOnlyList<CultureObject> cultures = Game.Current.ObjectManager.GetObjectTypeList<CultureObject>();
@@ -72,16 +75,22 @@ namespace BannerKings.Managers.Education.Lifestyles
             caravaneer = new Lifestyle("lifestyle_caravaneer");
             caravaneer.Initialize(new TextObject("{=!}Caravaneer"), new TextObject("{=!}"),
                 DefaultSkills.Trade, DefaultSkills.Scouting, 
-                new List<PerkObject>() { BKPerks.Instance.CaravaneerStrider, BKPerks.Instance.CaravaneerDealer, BKPerks.Instance.CaravaneerEntrepeneur },
+                new List<PerkObject>() { BKPerks.Instance.CaravaneerStrider, BKPerks.Instance.CaravaneerDealer,  },
                 new TextObject("{=!}Reduced trade penalty by {EFFECT1}%\nReduced speed during nighttime by {EFFECT2}%"),
-                20f, 8f);
+                10f, 8f);
+
+            artisan = new Lifestyle("lifestyle_artisan");
+            artisan.Initialize(new TextObject("{=!}Artisan"), new TextObject("{=!}"),
+                DefaultSkills.Crafting, DefaultSkills.Trade, new List<PerkObject>() { BKPerks.Instance.ArtisanEntrepeneur },
+                new TextObject("{=!}Chance of botching items when smithing reduced by {EFFECT1}%\n{EFFECT2}%"),
+                10f, 8f);
 
             outlaw = new Lifestyle("lifestyle_outlaw");
             outlaw.Initialize(new TextObject("{=!}Outlaw"), new TextObject("{=!}"),
                 DefaultSkills.Roguery, DefaultSkills.Scouting,
                 new List<PerkObject>() { BKPerks.Instance.OutlawKidnapper, BKPerks.Instance.OutlawPlunderer,
                 BKPerks.Instance.OutlawNightPredator, BKPerks.Instance.OutlawUnderworldKing },
-                new TextObject("{=!}Bandit troops are {EFFECT1}% faster on map\nRandomly lose relations with heroes that disapprove criminality when entering dialogue"),
+                new TextObject("{=!}Bandit troops are {EFFECT1}% faster on map\nRandomly lose relations with heroes that disapprove criminality when leaving dialogue"),
                 10f, 8f);
 
             mercenary = new Lifestyle("lifestyle_mercenary");
@@ -101,6 +110,8 @@ namespace BannerKings.Managers.Education.Lifestyles
                 DefaultSkills.Leadership, DefaultSkills.Roguery, new List<PerkObject>() { },
                 new TextObject("{=!}Reduced demesne weight of towns by {EFFECT1}%\nSettlement stability reduced by {EFFECT2}%"),
                 20f, 8f);
+
+           
         }
 
         public override IEnumerable<Lifestyle> All

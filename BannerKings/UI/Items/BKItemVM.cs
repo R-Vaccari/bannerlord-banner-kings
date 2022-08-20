@@ -1,5 +1,6 @@
 ﻿using System;
-using TaleWorlds.Core.ViewModelCollection;
+using TaleWorlds.Core.ViewModelCollection.Information;
+using TaleWorlds.Core.ViewModelCollection.Selector;
 using TaleWorlds.Localization;
 
 namespace BannerKings.UI.Items

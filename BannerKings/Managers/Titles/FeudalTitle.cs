@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
+using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.SaveSystem;
 
@@ -178,7 +180,7 @@ namespace BannerKings.Managers.Titles
             if (OngoingClaims.ContainsKey(hero))
                 OngoingClaims.Remove(hero);
             if (hero == Hero.MainHero)
-                InformationManager.AddQuickInformation(new TextObject("{=!}You now have a claim on the {TITLE}")
+                MBInformationManager.AddQuickInformation(new TextObject("{=!}You now have a claim on the {TITLE}")
                             .SetTextVariable("TITLE", FullName));
         }
 

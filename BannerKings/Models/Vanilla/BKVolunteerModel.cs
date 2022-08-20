@@ -5,16 +5,18 @@ using BannerKings.Populations;
 using Helpers;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.SandBox.GameComponents.Map;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using static BannerKings.Managers.PopulationManager;
 using static BannerKings.Managers.Policies.BKDraftPolicy;
+using TaleWorlds.CampaignSystem.GameComponents;
+using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.CampaignSystem.CharacterDevelopment;
 
 namespace BannerKings.Models.Vanilla
 {
-    class BKVolunteerModel : DefaultVolunteerProductionModel
+    class BKVolunteerModel : DefaultVolunteerModel
     {
 
         public override bool CanHaveRecruits(Hero hero)
@@ -71,7 +73,7 @@ namespace BannerKings.Models.Vanilla
 
                 if (hero.VolunteerTypes != null)
                     if (hero.VolunteerTypes[index] != null && hero.VolunteerTypes[index].IsMounted &&
-                        PerkHelper.GetPerkValueForTown(DefaultPerks.Riding.CavalryTactics, settlement.IsVillage ? settlement.Village.TradeBound.Town : settlement.Town))
+                        PerkHelper.GetPerkValueForTown(DefaultPerks.Riding.CavalryTactics, settlement.IsVillage ? settlement.Village.Bound.Town : settlement.Town))
                         explainedNumber.AddFactor(DefaultPerks.Riding.CavalryTactics.PrimaryBonus * 0.01f, DefaultPerks.Riding.CavalryTactics.PrimaryDescription);
 
                 BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref explainedNumber, settlement.OwnerClan.Leader, CouncilPosition.Marshall, 0.25f, true);

@@ -1,5 +1,6 @@
 ﻿using BannerKings.Managers.Policies;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 
@@ -13,7 +14,7 @@ namespace BannerKings.Models
             ExplainedNumber baseResult = new ExplainedNumber(0.12f, true);
             baseResult.LimitMin(0f);
 
-            Hero governor = settlement.IsVillage ? settlement.Village.MarketTown.Governor : settlement.Town.Governor;
+            Hero governor = settlement.IsVillage ? settlement.Village.Bound.Town.Governor : settlement.Town.Governor;
             if (governor != null)
             {
                 int skill = governor.GetSkillValue(DefaultSkills.Steward);

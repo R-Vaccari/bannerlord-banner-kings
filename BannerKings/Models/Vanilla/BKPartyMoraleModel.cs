@@ -1,7 +1,10 @@
-﻿using BannerKings.Managers.Education;
+﻿using BannerKings.Behaviours;
+using BannerKings.Managers.CampaignStart;
+using BannerKings.Managers.Education;
 using BannerKings.Managers.Skills;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.SandBox.GameComponents.Party;
+using TaleWorlds.CampaignSystem.GameComponents;
+using TaleWorlds.CampaignSystem.Party;
 
 namespace BannerKings.Models.Vanilla
 {
@@ -11,6 +14,9 @@ namespace BannerKings.Models.Vanilla
         public override ExplainedNumber GetEffectivePartyMorale(MobileParty mobileParty, bool includeDescription = false)
         {
             ExplainedNumber result = base.GetEffectivePartyMorale(mobileParty, includeDescription);
+
+            if (mobileParty.Owner == Hero.MainHero && Campaign.Current.GetCampaignBehavior<BKCampaignStartBehavior>().HasDebuff(DefaultStartOptions.Instance.Mercenary))
+                result.Add(-20f, DefaultStartOptions.Instance.Mercenary.Name);
 
             if (mobileParty.LeaderHero != null)
             {

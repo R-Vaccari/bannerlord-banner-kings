@@ -70,7 +70,7 @@ namespace BannerKings.Managers.Innovations
         {
             culturalHead = clan;
             if (culture == Clan.PlayerClan.Culture)
-                InformationManager.AddQuickInformation(new TextObject("{=!}The {CLAN} has assumed the role of cultural head of the {CULTURE} culture.")
+                MBInformationManager.AddQuickInformation(new TextObject("{=!}The {CLAN} has assumed the role of cultural head of the {CULTURE} culture.")
                             .SetTextVariable("CLAN", clan.Name)
                             .SetTextVariable("CULTURE", culture.Name), 0, null, "event:/ui/notification/relation");
         }
@@ -78,8 +78,8 @@ namespace BannerKings.Managers.Innovations
         public void ChangeFascination(Innovation fascination)
         {
             this.fascination = fascination;
-            if (culture == Clan.PlayerClan.Culture) 
-                InformationManager.AddQuickInformation(new TextObject("{=!}The {CULTURE} is now fascinated by the {FASCINATION} innovation.")
+            if (culture == Clan.PlayerClan.Culture)
+                MBInformationManager.AddQuickInformation(new TextObject("{=!}The {CULTURE} is now fascinated by the {FASCINATION} innovation.")
                             .SetTextVariable("FASCINATION", fascination.Name)
                             .SetTextVariable("CULTURE", culture.Name), 0, null, "event:/ui/notification/relation");
         }

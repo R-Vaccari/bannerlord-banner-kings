@@ -14,6 +14,12 @@ using SandBox;
 using System.Linq;
 using BannerKings.Managers.Titles;
 using BannerKings.Actions;
+using SandBox.CampaignBehaviors;
+using TaleWorlds.CampaignSystem.Roster;
+using TaleWorlds.CampaignSystem.Party;
+using TaleWorlds.CampaignSystem.Conversation;
+using TaleWorlds.CampaignSystem.Encounters;
+using TaleWorlds.CampaignSystem.Settlements;
 
 namespace BannerKings.Behaviors
 {
@@ -87,7 +93,7 @@ namespace BannerKings.Behaviors
         private void CreateClan(Hero hero, Clan originalClan, FeudalTitle title, TextObject name = null)
         {
             Clan newClan = ClanActions.CreateNewClan(hero, title.fief, hero.StringId + "_knight_clan", name, 150f, true);
-            if (newClan != null) InformationManager.AddQuickInformation(new TextObject("{=!}The {NEW} has been formed by {HERO}, previously a knight of {ORIGINAL}.")
+            if (newClan != null) MBInformationManager.AddQuickInformation(new TextObject("{=!}The {NEW} has been formed by {HERO}, previously a knight of {ORIGINAL}.")
                             .SetTextVariable("NEW", hero.Clan.Name)
                             .SetTextVariable("HERO", hero.Name)
                             .SetTextVariable("ORIGINAL", originalClan.Name));
@@ -213,7 +219,7 @@ namespace BannerKings.Behaviors
             return Hero.MainHero.Gold >= 5000;
         }
 
-        private void GrantKnighthoodOnConsequence() => InformationManager
+        private void GrantKnighthoodOnConsequence() => MBInformationManager
             .ShowMultiSelectionInquiry(new MultiSelectionInquiryData(new TextObject("{=!}Select the fief you would like to give away").ToString(), 
                 string.Empty, lordshipsToGive, false, 1, 
                 GameTexts.FindText("str_done", null).ToString(), string.Empty, 
@@ -251,7 +257,7 @@ namespace BannerKings.Behaviors
         [HarmonyPatch(typeof(Hero), "SetHeroEncyclopediaTextAndLinks")]
         class HeroDescriptionPatch
         {
-            static void Postfix(ref string __result, Hero o)
+            static void Postfix(ref TextObject __result, Hero o)
             {
                 List<FeudalTitle> titles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(o);
                 if (titles != null && titles.Count > 0)
@@ -271,7 +277,9 @@ namespace BannerKings.Behaviors
                             desc += string.Format(" and {0} of {1}", Utils.Helpers.GetTitleHonorary(title.type, government, false), title.shortName);
                         current = title;
                     }
-                    __result = __result + Environment.NewLine + desc;
+                    __result = new TextObject("{=!}{RESULT}\n{DESCRIPTION}")
+                        .SetTextVariable("RESULT", __result.ToString())
+                        .SetTextVariable("DESCRIPTION", desc);
                 }
             }
         }
@@ -295,7 +303,7 @@ namespace BannerKings.Behaviors
         [HarmonyPatch(typeof(ClanPartiesVM), "ExecuteCreateNewParty")]
         class ClanCreatePartyPatch
         {
-            static bool Prefix(ClanPartiesVM __instance, Clan ____faction, Func<Hero, Settlement> ____getSettlementOfGovernor)
+            static bool Prefix(ClanPartiesVM __instance, Clan ____faction)
             {
                 if (!BannerKingsConfig.Instance.TitleManager.Knighthood) return true;
 
@@ -319,7 +327,7 @@ namespace BannerKings.Behaviors
                                 hint = new TextObject("{=aFYwbosi}This hero is already leading a party.", null).ToString();
                             else if (hero.PartyBelongedTo != null && hero.PartyBelongedTo.LeaderHero != Hero.MainHero)
                                 hint = new TextObject("{=FjJi1DJb}This hero is already a part of an another party.", null).ToString();
-                            else if (____getSettlementOfGovernor(hero) != null)
+                            else if (hero.GovernorOf != null)
                                 hint = new TextObject("{=Hz8XO8wk}Governors cannot lead a mobile party and be a governor at the same time.", null).ToString();
                             else if (hero.HeroState == Hero.CharacterStates.Disabled)
                                 hint = new TextObject("{=slzfQzl3}This hero is lost", null).ToString();
@@ -335,11 +343,11 @@ namespace BannerKings.Behaviors
                     if (list.Count > 0)
                     {
                         MethodInfo method = __instance.GetType().GetMethod("OnNewPartySelectionOver", BindingFlags.NonPublic | BindingFlags.Instance);
-                        InformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(new TextObject("{=0Q4Xo2BQ}Select the Leader of the New Party", null).ToString(),
+                        MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(new TextObject("{=0Q4Xo2BQ}Select the Leader of the New Party", null).ToString(),
                             string.Empty, list, true, 1, GameTexts.FindText("str_done", null).ToString(), "", new Action<List<InquiryElement>>(delegate (List<InquiryElement> x) { method.Invoke(__instance, new object[] { x }); }),
                             new Action<List<InquiryElement>>(delegate (List<InquiryElement> x) { method.Invoke(__instance, new object[] { x }); }), ""), false);
                     }
-                    else InformationManager.AddQuickInformation(new TextObject("{=qZvNIVGV}There is no one available in your clan who can lead a party right now.", null), 0, null, "");
+                    else MBInformationManager.AddQuickInformation(new TextObject("{=qZvNIVGV}There is no one available in your clan who can lead a party right now.", null), 0, null, "");
                 }
 
                 return false;

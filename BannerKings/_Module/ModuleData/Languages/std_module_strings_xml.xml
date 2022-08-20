@@ -4,6 +4,12 @@
 		<tag language="English" />
 	</tags>
 	<strings>
+	
+		<string id="bk_crafting_itemtype_bodyarmor" text="Body Armors" />
+		<string id="bk_crafting_itemtype_barding" text="Bardings" />
+		<string id="bk_crafting_itemtype_shield" text="Shields" />
+		<string id="bk_crafting_itemtype_ammo" text="Ammos" />
+	
 		
 		<string id="bk_modifier_purebred" text="Poor {ITEMNAME}" />
 		<string id="bk_modifier_strong" text="Strong {ITEMNAME}" />
@@ -41,10 +47,10 @@
 		<string id="bk_spiritual_guide" text="Spiritual Guide" />
 		
 		
-		<string id="bk_council_marshall_effects" text="Settlement militia +1\\nSettlement militarism +1% flat\\nSettlement draft efficiencty +25% flat" />
-		<string id="bk_council_steward_effects" text="Settlement prosperity +1\nSettlement production efficiency +15% flat\nSettlement caravan attractiveness +15% flat" />
-		<string id="bk_council_chancellor_effects" text="Settlement loyalty +1\nVassal limit +1\nDisagreements impact -20%" />
-		<string id="bk_council_spymaster_effects" text="Settlement security +1" />
+		<string id="bk_council_marshall_effects" text="Settlement militia +1{BREAK}Settlement militarism +1% flat{BREAK}Settlement draft efficiencty +25% flat" />
+		<string id="bk_council_steward_effects" text="Settlement prosperity +1{BREAK}Settlement production efficiency +15% flat{BREAK}Settlement caravan attractiveness +15% flat" />
+		<string id="bk_council_chancellor_effects" text="Settlement loyalty +1{BREAK}Vassal limit +1{BREAK}Disagreements impact -20%" />
+		<string id="bk_council_spymaster_effects" text="Settlement security +1{BREAK}Settlement autonomy -3% flat{BREAK}" />
 		<string id="bk_council_spiritual_effects" text="" />
 		
 		

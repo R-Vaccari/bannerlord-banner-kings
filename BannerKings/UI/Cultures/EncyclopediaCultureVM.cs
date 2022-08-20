@@ -10,6 +10,10 @@ using TaleWorlds.Localization;
 using System.Linq;
 using Bannerlord.UIExtenderEx.Attributes;
 using System.Collections.Generic;
+using TaleWorlds.Core.ViewModelCollection.Generic;
+using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.Core.ViewModelCollection.Information;
+using TaleWorlds.CampaignSystem.CharacterDevelopment;
 
 namespace BannerKings.UI.Cultures
 {
@@ -131,7 +135,7 @@ namespace BannerKings.UI.Cultures
                                innovationData.CanChangeFascination(Clan.PlayerClan, innovation),
                                innovation.Description.ToString()));
 
-                InformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(new TextObject("{=!}Choose Fascination").ToString(),
+                MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(new TextObject("{=!}Choose Fascination").ToString(),
                     new TextObject("{=!}The cultural fascination is an innovation that progresses faster than others.").ToString(),
                     elements, true, 1,
                     GameTexts.FindText("str_done").ToString(), string.Empty,

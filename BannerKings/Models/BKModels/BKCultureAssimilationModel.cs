@@ -1,11 +1,12 @@
 ﻿using BannerKings.Populations;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Models
 {
-    class BKCultureAssimilationModel : ICultureModel
+    public class BKCultureAssimilationModel : ICultureModel
     {
         public ExplainedNumber CalculateEffect(Settlement settlement)
         {
@@ -22,7 +23,7 @@ namespace BannerKings.Models
                 if (!settlement.IsVillage && settlement.Town != null)
                     baseResult.Add(0.005f * (1f * (settlement.Town.Security * 0.01f)), new TextObject("Security effect"));
 
-                Hero governor = settlement.IsVillage ? settlement.Village.TradeBound.Town.Governor : settlement.Town.Governor;
+                Hero governor = settlement.IsVillage ? settlement.Village.Bound.Town.Governor : settlement.Town.Governor;
                 if (governor != null)
                 {
                     int skill = governor.GetSkillValue(DefaultSkills.Steward);
@@ -61,7 +62,7 @@ namespace BannerKings.Models
                         if (!settlement.IsVillage && settlement.Town != null)
                             result.Add(0.005f * (1f * (settlement.Town.Security * 0.01f)), new TextObject("Security effect"));
 
-                        Hero governor = settlement.IsVillage ? settlement.Village.TradeBound.Town.Governor : settlement.Town.Governor;
+                        Hero governor = settlement.IsVillage ? settlement.Village.Bound.Town.Governor : settlement.Town.Governor;
                         if (governor != null)
                         {
                             int skill = governor.GetSkillValue(DefaultSkills.Steward);

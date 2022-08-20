@@ -2,13 +2,17 @@
 using BannerKings.Managers.Populations.Villages;
 using BannerKings.Populations;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.SandBox.GameComponents;
 using TaleWorlds.Localization;
 using static BannerKings.Managers.PopulationManager;
 using TaleWorlds.Library;
 using BannerKings.Managers.Titles;
 using BannerKings.Managers.Education;
 using BannerKings.Managers.Skills;
+using BannerKings.Behaviours;
+using BannerKings.Managers.CampaignStart;
+using TaleWorlds.CampaignSystem.GameComponents;
+using TaleWorlds.CampaignSystem.Roster;
+using TaleWorlds.CampaignSystem.Settlements;
 
 namespace BannerKings.Models
 {
@@ -21,6 +25,9 @@ namespace BannerKings.Models
         public override ExplainedNumber CalculateInfluenceChange(Clan clan, bool includeDescriptions = false)
         {
             ExplainedNumber baseResult = base.CalculateInfluenceChange(clan, includeDescriptions);
+
+            if (clan == Clan.PlayerClan && Campaign.Current.GetCampaignBehavior<BKCampaignStartBehavior>().HasDebuff(DefaultStartOptions.Instance.IndebtedLord))
+                baseResult.Add(-5f, DefaultStartOptions.Instance.IndebtedLord.Name);
 
             float generalSupport = 0f;
             float generalAutonomy = 0f;

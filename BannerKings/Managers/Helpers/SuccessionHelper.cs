@@ -42,7 +42,7 @@ namespace BannerKings.Managers.Helpers
                         kingdom.RemoveDecision(decision);
 
                     if (Clan.PlayerClan.Kingdom != null && Clan.PlayerClan.Kingdom == victim.Clan.Kingdom)
-                        InformationManager.AddQuickInformation(new TextObject("{=!}{HEIR} has rightfully inherited the {TITLE}")
+                        MBInformationManager.AddQuickInformation(new TextObject("{=!}{HEIR} has rightfully inherited the {TITLE}")
                             .SetTextVariable("HEIR", heir.Name)
                             .SetTextVariable("TITLE", title.FullName), 0, heir.CharacterObject);
                     
@@ -107,7 +107,7 @@ namespace BannerKings.Managers.Helpers
                 if (clan != victim.Clan)
                     candidates.Add(new ValueTuple<Hero, float>(clan.Leader, CalculateHeirPreference(victim, clan.Leader)));
                 else foreach (Hero familyMember in clan.Heroes)
-                        if (!familyMember.IsChild && familyMember.IsAlive && (familyMember.IsNoble || familyMember.IsMinorFactionHero))
+                        if (!familyMember.IsChild && familyMember.IsAlive && (familyMember.IsLord || familyMember.IsMinorFactionHero))
                         {
                             if (familyMember == victim && !includeLeader) continue;
                             candidates.Add(new ValueTuple<Hero, float>(clan.Leader, CalculateHeirPreference(victim, clan.Leader)));

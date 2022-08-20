@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.SaveSystem;
@@ -21,13 +22,6 @@ namespace BannerKings.Managers
         public EducationManager()
         {
             Educations = new Dictionary<Hero, EducationData>();
-        }
-
-        public void InitializeEducationsIfNeeded()
-        {
-            if (!Educations.IsEmpty()) return;
-
-            foreach (Hero hero in Hero.AllAliveHeroes) InitHeroEducation(hero);
         }
 
         public EducationData InitHeroEducation(Hero hero)
@@ -66,12 +60,14 @@ namespace BannerKings.Managers
         public Language GetNativeLanguage(CultureObject culture)
         {
             Language native = DefaultLanguages.Instance.All.FirstOrDefault(x => x.Culture == culture);
+            if (native == null) native = DefaultLanguages.Instance.Calradian;
+
             return native;
         }
 
         public Language GetNativeLanguage(Hero hero)
         {
-            Language native = DefaultLanguages.Instance.All.FirstOrDefault(x => x.Culture == hero.Culture);
+            Language native = GetNativeLanguage(hero.Culture);
             if (Educations.ContainsKey(hero))
             {
                 if (!Educations[hero].Languages.ContainsKey(native))
@@ -154,6 +150,15 @@ namespace BannerKings.Managers
         {
             if (Educations.ContainsKey(hero))
                 Educations[hero].SetCurrentLifestyle(lf);
+        }
+
+        public void SetStartOptionLifestyle(Hero hero, Lifestyle lf)
+        {
+            if (Educations.ContainsKey(hero))
+            {
+                Educations[hero].SetCurrentLifestyle(lf);
+                Educations[hero].Lifestyle.InvestFocus(Educations[hero], hero, true);
+            }   
         }
 
         public MBReadOnlyList<Lifestyle> GetLearnableLifestyles(Hero hero)

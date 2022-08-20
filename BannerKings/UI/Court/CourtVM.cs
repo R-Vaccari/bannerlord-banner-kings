@@ -60,8 +60,8 @@ namespace BannerKings.UI.Court
 			{
 				if (hero.Spouse == council.Owner || council.Owner.Children.Contains(hero) || council.Owner.Siblings.Contains(hero) ||
 					council.Owner.Father == hero || council.Owner.Mother == hero)
-					Family.Add(new ClanLordItemVM(hero, new Action<ClanLordItemVM>(SetCurrentCharacter)));
-				else Courtiers.Add(new ClanLordItemVM(hero, new Action<ClanLordItemVM>(SetCurrentCharacter)));
+					Family.Add(new ClanLordItemVM(hero, null, null, new Action<ClanLordItemVM>(SetCurrentCharacter), null, null));
+				else Courtiers.Add(new ClanLordItemVM(hero, null, null, new Action<ClanLordItemVM>(SetCurrentCharacter), null, null));
 
 			}
 

@@ -1,11 +1,13 @@
-﻿using BannerKings.Components;
-using BannerKings.Managers.Institutions.Guilds;
+﻿using BannerKings.Managers.Institutions.Guilds;
 using BannerKings.Managers.Items;
 using BannerKings.Managers.Populations.Villages;
 using BannerKings.Populations;
 using System;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Party;
+using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.CampaignSystem.Settlements.Buildings;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.SaveSystem;
@@ -26,6 +28,13 @@ namespace BannerKings.Managers
         {
             Populations = pops;
             Caravans = caravans;
+        }
+
+        public void PostInitialize()
+        {
+            foreach (PopulationData data in Populations.Values)
+                if (data.VillageData != null)
+                    data.VillageData.ReInitializeBuildings();
         }
 
         public bool IsSettlementPopulated(Settlement settlement)
@@ -140,12 +149,7 @@ namespace BannerKings.Managers
             if (level > 0) explainedNumber.AddFactor(level * 0.05f);
         }
 
-        public void ReInitBuildings()
-        {
-            foreach (PopulationData data in Populations.Values)
-                if (data.VillageData != null)
-                    data.VillageData.ReInitializeBuildings();
-        }
+        
 
         public static void InitializeSettlementPops(Settlement settlement)
         {

@@ -7,7 +7,9 @@ using BannerKings.Managers.Titles;
 using BannerKings.Populations;
 using System;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.SandBox.GameComponents;
+using TaleWorlds.CampaignSystem.CharacterDevelopment;
+using TaleWorlds.CampaignSystem.GameComponents;
+using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -194,8 +196,8 @@ namespace BannerKings.Models
                 if (settlement.Owner.GetPerkValue(BKPerks.Instance.LordshipEconomicAdministration))
                     result.Add(0.1f, BKPerks.Instance.CivilManufacturer.Name);
 
-                if (education.HasPerk(BKPerks.Instance.CaravaneerEntrepeneur))
-                    result.Add(0.1f, BKPerks.Instance.CaravaneerEntrepeneur.Name);
+                if (education.HasPerk(BKPerks.Instance.ArtisanEntrepeneur))
+                    result.Add(0.1f, BKPerks.Instance.ArtisanEntrepeneur.Name);
             }
 
             InnovationData innovations = BannerKingsConfig.Instance.InnovationsManager.GetInnovationData(settlement.Culture);

@@ -2,11 +2,11 @@
 using BannerKings.Managers.Policies;
 using System.Collections.Generic;
 using System.Linq;
-using TaleWorlds.CampaignSystem;
 using TaleWorlds.SaveSystem;
 using static BannerKings.Managers.Policies.BKGarrisonPolicy;
 using static BannerKings.Managers.Policies.BKMilitiaPolicy;
 using static BannerKings.Managers.Policies.BKCriminalPolicy;
+using TaleWorlds.CampaignSystem.Settlements;
 
 namespace BannerKings.Managers
 {

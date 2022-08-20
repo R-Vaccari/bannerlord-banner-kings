@@ -1,15 +1,16 @@
 ﻿using BannerKings.Managers.Education;
 using BannerKings.Managers.Skills;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.SandBox.GameComponents.Map;
+using TaleWorlds.CampaignSystem.GameComponents;
+using TaleWorlds.CampaignSystem.Party;
 
 namespace BannerKings.Models.Vanilla
 {
     public class BKPartyConsumptionModel : DefaultMobilePartyFoodConsumptionModel
     {
-        public override ExplainedNumber CalculateDailyFoodConsumptionf(MobileParty party, bool includeDescription = false)
+        public override ExplainedNumber CalculateDailyFoodConsumptionf(MobileParty party, ExplainedNumber baseConsumption)
         {
-            ExplainedNumber result = base.CalculateDailyFoodConsumptionf(party, includeDescription);
+            ExplainedNumber result = base.CalculateDailyFoodConsumptionf(party, baseConsumption);
             if (party.Army != null && party.SiegeEvent != null)
             {
                 Hero leader = party.Army.LeaderParty.LeaderHero;

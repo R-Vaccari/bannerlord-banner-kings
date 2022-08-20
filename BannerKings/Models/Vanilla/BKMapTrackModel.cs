@@ -1,7 +1,7 @@
 ﻿using BannerKings.Managers.Education;
 using BannerKings.Managers.Skills;
-using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.SandBox.GameComponents.Map;
+using TaleWorlds.CampaignSystem.GameComponents;
+using TaleWorlds.CampaignSystem.Party;
 
 namespace BannerKings.Models.Vanilla
 {

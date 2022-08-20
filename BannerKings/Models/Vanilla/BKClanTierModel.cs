@@ -1,7 +1,7 @@
 ﻿using BannerKings.Managers.Court;
 using BannerKings.Managers.Titles;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.SandBox.GameComponents;
+using TaleWorlds.CampaignSystem.GameComponents;
 
 namespace BannerKings.Models.Vanilla
 {

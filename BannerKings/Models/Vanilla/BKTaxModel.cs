@@ -4,7 +4,8 @@ using BannerKings.Managers.Titles;
 using BannerKings.Populations;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
-using TaleWorlds.CampaignSystem.SandBox.GameComponents;
+using TaleWorlds.CampaignSystem.GameComponents;
+using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -13,7 +14,7 @@ using static BannerKings.Managers.PopulationManager;
 
 namespace BannerKings.Models
 {
-    class BKTaxModel : DefaultSettlementTaxModel
+    public class BKTaxModel : DefaultSettlementTaxModel
     {
         public static readonly float NOBLE_OUTPUT = 4.2f;
         public static readonly float CRAFTSMEN_OUTPUT = 1.2f;
@@ -71,6 +72,7 @@ namespace BannerKings.Models
 
         public override int CalculateVillageTaxFromIncome(Village village, int marketIncome)
         {
+
             double baseResult = marketIncome * 0.7;
             if (BannerKingsConfig.Instance.PolicyManager != null)
             {

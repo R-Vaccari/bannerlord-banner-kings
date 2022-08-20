@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
+using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.SaveSystem;
@@ -91,7 +92,7 @@ namespace BannerKings.Managers.Institutions.Religions
                 return clergyman;
             }
 
-            throw new BannerKingsException("");
+            throw new BannerKingsException(string.Format("No preset found for faith with id [{0}] at clergy rank [{1}]", faith.GetId(), rank));
         }
 
         public Hero GenerateClergymanHero(CharacterObject preset, Settlement settlement, int rank)
