@@ -2,13 +2,13 @@
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Party;
 
-namespace BannerKings.Models.Vanilla
-{
-    public class BKTroopUpgradeModel : DefaultPartyTroopUpgradeModel
-    {
+namespace BannerKings.Models.Vanilla;
 
-        public override int GetXpCostForUpgrade(PartyBase party, CharacterObject characterObject, CharacterObject upgradeTarget) =>
-            (int)(base.GetXpCostForUpgrade(party, characterObject, upgradeTarget) * 2f);
-        
+public class BKTroopUpgradeModel : DefaultPartyTroopUpgradeModel
+{
+    public override int GetXpCostForUpgrade(PartyBase party, CharacterObject characterObject,
+        CharacterObject upgradeTarget)
+    {
+        return (int) (base.GetXpCostForUpgrade(party, characterObject, upgradeTarget) * 2f);
     }
 }

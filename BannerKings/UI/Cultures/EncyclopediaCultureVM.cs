@@ -1,242 +1,269 @@
-﻿using BannerKings.Managers.Education.Languages;
+﻿using System.Collections.Generic;
 using BannerKings.Managers.Innovations;
-using BannerKings.Populations;
 using BannerKings.UI.Items;
+using Bannerlord.UIExtenderEx.Attributes;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
-using TaleWorlds.Core.ViewModelCollection;
+using TaleWorlds.Core.ViewModelCollection.Generic;
+using TaleWorlds.Core.ViewModelCollection.Information;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
-using System.Linq;
-using Bannerlord.UIExtenderEx.Attributes;
-using System.Collections.Generic;
-using TaleWorlds.Core.ViewModelCollection.Generic;
-using TaleWorlds.CampaignSystem.Settlements;
-using TaleWorlds.Core.ViewModelCollection.Information;
-using TaleWorlds.CampaignSystem.CharacterDevelopment;
 
-namespace BannerKings.UI.Cultures
+namespace BannerKings.UI.Cultures;
+
+public class EncyclopediaCultureVM : BannerKingsViewModel
 {
-    public class EncyclopediaCultureVM : BannerKingsViewModel
+    private bool assumeHead, changeFascination;
+    private readonly CultureObject culture;
+    private string description;
+    private MBBindingList<StringPairItemVM> information, traits;
+    private MBBindingList<TripleStringItemVM> innovations;
+
+    public EncyclopediaCultureVM(CultureObject culture) : base(null, false)
     {
-        private CultureObject culture;
-        private MBBindingList<StringPairItemVM> information, traits;
-        private MBBindingList<TripleStringItemVM> innovations;
-        private bool assumeHead, changeFascination;
-        private string description;
+        this.culture = culture;
+        information = new MBBindingList<StringPairItemVM>();
+        traits = new MBBindingList<StringPairItemVM>();
+        innovations = new MBBindingList<TripleStringItemVM>();
+        assumeHead = false;
+        changeFascination = false;
+        RefreshValues();
+    }
 
-        public EncyclopediaCultureVM(CultureObject culture) : base(null, false)
+    [DataSourceProperty] public string AssumeCultureHeadText => new TextObject("{=!}Culture Head").ToString();
+
+    public string ChangeFascinationText => new TextObject("{=!}Fascination").ToString();
+
+    [DataSourceProperty]
+    public bool ChangeFascinationPossible
+    {
+        get => changeFascination;
+        set
         {
-            this.culture = culture;
-            information = new MBBindingList<StringPairItemVM>();
-            traits = new MBBindingList<StringPairItemVM>();
-            innovations = new MBBindingList<TripleStringItemVM>();
-            assumeHead = false;
-            changeFascination = false;
-            RefreshValues();
-        }
-
-        public override void RefreshValues()
-        {
-            base.RefreshValues();
-            Information.Clear();
-            Traits.Clear();
-            Innovations.Clear();
-
-            Description = GameTexts.FindText("str_culture_description", culture.StringId).ToString();
-
-            int settlements = 0;
-            int population = 0;
-            foreach (Settlement settlement in Settlement.All)
+            if (value != changeFascination)
             {
-                if (settlement.Culture != culture) continue;
-                settlements++;
-                PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
-                if (data != null) population += data.TotalPop;
+                changeFascination = value;
+                OnPropertyChangedWithValue(value);
+            }
+        }
+    }
+
+    [DataSourceProperty]
+    public bool AssumeHeadPossible
+    {
+        get => assumeHead;
+        set
+        {
+            if (value != assumeHead)
+            {
+                assumeHead = value;
+                OnPropertyChangedWithValue(value);
+            }
+        }
+    }
+
+    [DataSourceProperty]
+    public string Description
+    {
+        get => description;
+        set
+        {
+            if (value != description)
+            {
+                description = value;
+                OnPropertyChangedWithValue(value);
+            }
+        }
+    }
+
+    [DataSourceProperty]
+    public MBBindingList<StringPairItemVM> Information
+    {
+        get => information;
+        set
+        {
+            if (value != information)
+            {
+                information = value;
+                OnPropertyChangedWithValue(value);
+            }
+        }
+    }
+
+    [DataSourceProperty]
+    public MBBindingList<TripleStringItemVM> Innovations
+    {
+        get => innovations;
+        set
+        {
+            if (value != innovations)
+            {
+                innovations = value;
+                OnPropertyChangedWithValue(value);
+            }
+        }
+    }
+
+    [DataSourceProperty]
+    public MBBindingList<StringPairItemVM> Traits
+    {
+        get => traits;
+        set
+        {
+            if (value != traits)
+            {
+                traits = value;
+                OnPropertyChangedWithValue(value);
+            }
+        }
+    }
+
+    public override void RefreshValues()
+    {
+        base.RefreshValues();
+        Information.Clear();
+        Traits.Clear();
+        Innovations.Clear();
+
+        Description = GameTexts.FindText("str_culture_description", culture.StringId).ToString();
+
+        var settlements = 0;
+        var population = 0;
+        foreach (var settlement in Settlement.All)
+        {
+            if (settlement.Culture != culture)
+            {
+                continue;
             }
 
-            Language language = BannerKingsConfig.Instance.EducationManager.GetNativeLanguage(culture);
-
-            Information.Add(new StringPairItemVM(new TextObject("{=!}Population:").ToString(),
-                    population.ToString(), null));
-
-            if (language != null) Information.Add(new StringPairItemVM(new TextObject("{=!}Language:").ToString(),
-                    language.Name.ToString(), new BasicTooltipViewModel(() => language.Description.ToString())));
-
-            Information.Add(new StringPairItemVM(new TextObject("{=!}Settlements:").ToString(),
-                    settlements.ToString(), null));
-
-            foreach (FeatObject trait in culture.GetCulturalFeats())
-                Traits.Add(new StringPairItemVM(string.Empty,
-                    trait.Description.ToString(), null));
-
-            InnovationData innovationData = BannerKingsConfig.Instance.InnovationsManager.GetInnovationData(culture);
-            if (innovationData != null)
+            settlements++;
+            var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
+            if (data != null)
             {
+                population += data.TotalPop;
+            }
+        }
 
-                if (innovationData.CulturalHead != null) Information.Add(new StringPairItemVM(new TextObject("{=!}Cultural Head:").ToString(),
-                    innovationData.CulturalHead.Name.ToString(), null));
+        var language = BannerKingsConfig.Instance.EducationManager.GetNativeLanguage(culture);
 
-                if (innovationData.Fascination != null) Information.Add(new StringPairItemVM(new TextObject("{=!}Cultural Fascination:").ToString(),
-                    innovationData.Fascination.Name.ToString(), new BasicTooltipViewModel(() => innovationData.Fascination.Description.ToString())));
+        Information.Add(new StringPairItemVM(new TextObject("{=!}Population:").ToString(),
+            population.ToString()));
 
-                ChangeFascinationPossible = innovationData.CulturalHead == Clan.PlayerClan;
-                AssumeHeadPossible = innovationData.CanAssumeCulturalHead(Clan.PlayerClan);
+        if (language != null)
+        {
+            Information.Add(new StringPairItemVM(new TextObject("{=!}Language:").ToString(),
+                language.Name.ToString(), new BasicTooltipViewModel(() => language.Description.ToString())));
+        }
 
-                ExplainedNumber research = new ExplainedNumber(0f, true);
-                foreach (Settlement settlement in Settlement.All)
+        Information.Add(new StringPairItemVM(new TextObject("{=!}Settlements:").ToString(),
+            settlements.ToString()));
+
+        foreach (var trait in culture.GetCulturalFeats())
+        {
+            Traits.Add(new StringPairItemVM(string.Empty,
+                trait.Description.ToString()));
+        }
+
+        var innovationData = BannerKingsConfig.Instance.InnovationsManager.GetInnovationData(culture);
+        if (innovationData != null)
+        {
+            if (innovationData.CulturalHead != null)
+            {
+                Information.Add(new StringPairItemVM(new TextObject("{=!}Cultural Head:").ToString(),
+                    innovationData.CulturalHead.Name.ToString()));
+            }
+
+            if (innovationData.Fascination != null)
+            {
+                Information.Add(new StringPairItemVM(new TextObject("{=!}Cultural Fascination:").ToString(),
+                    innovationData.Fascination.Name.ToString(),
+                    new BasicTooltipViewModel(() => innovationData.Fascination.Description.ToString())));
+            }
+
+            ChangeFascinationPossible = innovationData.CulturalHead == Clan.PlayerClan;
+            AssumeHeadPossible = innovationData.CanAssumeCulturalHead(Clan.PlayerClan);
+
+            var research = new ExplainedNumber(0f, true);
+            foreach (var settlement in Settlement.All)
+            {
+                if (settlement.Culture != culture)
                 {
-                    if (settlement.Culture != culture) continue;
-                    research.Add(BannerKingsConfig.Instance.InnovationsModel.CalculateSettlementResearch(settlement).ResultNumber, settlement.Name);
+                    continue;
                 }
 
-                Information.Add(new StringPairItemVM(new TextObject("{=!}Research (Daily):").ToString(),
-                    research.ResultNumber.ToString("0.00"), new BasicTooltipViewModel(() => research.GetExplanations())));
+                research.Add(
+                    BannerKingsConfig.Instance.InnovationsModel.CalculateSettlementResearch(settlement).ResultNumber,
+                    settlement.Name);
+            }
 
-                foreach (Innovation innovation in innovationData.Innovations)
-                    Innovations.Add(new TripleStringItemVM(innovation.Name.ToString(),
-                        innovation.Effects.ToString(),
-                        new TextObject("{=!}{CURRENT}/{REQUIRED} ({PERCENTAGE})")
+            Information.Add(new StringPairItemVM(new TextObject("{=!}Research (Daily):").ToString(),
+                research.ResultNumber.ToString("0.00"), new BasicTooltipViewModel(() => research.GetExplanations())));
+
+            foreach (var innovation in innovationData.Innovations)
+            {
+                Innovations.Add(new TripleStringItemVM(innovation.Name.ToString(),
+                    innovation.Effects.ToString(),
+                    new TextObject("{=!}{CURRENT}/{REQUIRED} ({PERCENTAGE})")
                         .SetTextVariable("CURRENT", innovation.CurrentProgress.ToString("0.00"))
                         .SetTextVariable("REQUIRED", innovation.RequiredProgress)
-                        .SetTextVariable("PERCENTAGE", FormatValue(innovation.CurrentProgress / innovation.RequiredProgress))
+                        .SetTextVariable("PERCENTAGE",
+                            FormatValue(innovation.CurrentProgress / innovation.RequiredProgress))
                         .ToString(),
-                        new BasicTooltipViewModel(() => innovation.Description.ToString())));
+                    new BasicTooltipViewModel(() => innovation.Description.ToString())));
             }
         }
+    }
 
-        [DataSourceMethod]
-        private void AssumeCultureHead()
+    [DataSourceMethod]
+    private void AssumeCultureHead()
+    {
+        var innovationData = BannerKingsConfig.Instance.InnovationsManager.GetInnovationData(culture);
+        if (innovationData != null)
         {
-            InnovationData innovationData = BannerKingsConfig.Instance.InnovationsManager.GetInnovationData(culture);
-            if (innovationData != null)
-            {
-                InformationManager.ShowInquiry(new InquiryData(new TextObject("{=!}Culture Head").ToString(),
-                    new TextObject("{=!}Assume the position of culture head.").ToString(), true, true,
-                    GameTexts.FindText("str_confirm").ToString(),
-                    GameTexts.FindText("str_cancel").ToString(),
-                    () => innovationData.AssumeCulturalHead(Clan.PlayerClan),
-                    null
-                    ));
-            }
+            InformationManager.ShowInquiry(new InquiryData(new TextObject("{=!}Culture Head").ToString(),
+                new TextObject("{=!}Assume the position of culture head.").ToString(), true, true,
+                GameTexts.FindText("str_confirm").ToString(),
+                GameTexts.FindText("str_cancel").ToString(),
+                () => innovationData.AssumeCulturalHead(Clan.PlayerClan),
+                null
+            ));
         }
+    }
 
-        [DataSourceMethod]
-        private void ChangeFascination()
+    [DataSourceMethod]
+    private void ChangeFascination()
+    {
+        var innovationData = BannerKingsConfig.Instance.InnovationsManager.GetInnovationData(culture);
+        if (innovationData != null)
         {
-            InnovationData innovationData = BannerKingsConfig.Instance.InnovationsManager.GetInnovationData(culture);
-            if (innovationData != null)
+            var elements = new List<InquiryElement>();
+            foreach (var innovation in innovationData.Innovations)
             {
-                List<InquiryElement> elements = new List<InquiryElement>();
-                foreach (Innovation innovation in innovationData.Innovations)
-                    elements.Add(new InquiryElement(innovation,
-                               innovation.Name.ToString(),
-                               null,
-                               innovationData.CanChangeFascination(Clan.PlayerClan, innovation),
-                               innovation.Description.ToString()));
+                elements.Add(new InquiryElement(innovation,
+                    innovation.Name.ToString(),
+                    null,
+                    innovationData.CanChangeFascination(Clan.PlayerClan, innovation),
+                    innovation.Description.ToString()));
+            }
 
-                MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(new TextObject("{=!}Choose Fascination").ToString(),
-                    new TextObject("{=!}The cultural fascination is an innovation that progresses faster than others.").ToString(),
-                    elements, true, 1,
-                    GameTexts.FindText("str_done").ToString(), string.Empty,
-                    delegate (List<InquiryElement> x)
+            MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
+                new TextObject("{=!}Choose Fascination").ToString(),
+                new TextObject("{=!}The cultural fascination is an innovation that progresses faster than others.")
+                    .ToString(),
+                elements, true, 1,
+                GameTexts.FindText("str_done").ToString(), string.Empty,
+                delegate(List<InquiryElement> x)
+                {
+                    var innov = (Innovation) x[0].Identifier;
+                    if (innov == null)
                     {
-                        Innovation innov = (Innovation)x[0].Identifier;
-                        if (innov == null) return;
+                        return;
+                    }
 
-                        innovationData.ChangeFascination(innov);
-                        RefreshValues();
-                    }, null));
-            }
-        }
-
-        [DataSourceProperty]
-        public string AssumeCultureHeadText => new TextObject("{=!}Culture Head").ToString();
-
-        public string ChangeFascinationText => new TextObject("{=!}Fascination").ToString();
-
-        [DataSourceProperty]
-        public bool ChangeFascinationPossible
-        {
-            get => changeFascination;
-            set
-            {
-                if (value != changeFascination)
-                {
-                    changeFascination = value;
-                    OnPropertyChangedWithValue(value, "ChangeFascinationPossible");
-                }
-            }
-        }
-
-        [DataSourceProperty]
-        public bool AssumeHeadPossible
-        {
-            get => assumeHead;
-            set
-            {
-                if (value != assumeHead)
-                {
-                    assumeHead = value;
-                    OnPropertyChangedWithValue(value, "AssumeHeadPossible");
-                }
-            }
-        }
-
-        [DataSourceProperty]
-        public string Description
-        {
-            get => description;
-            set
-            {
-                if (value != description)
-                {
-                    description = value;
-                    OnPropertyChangedWithValue(value, "Description");
-                }
-            }
-        }
-
-        [DataSourceProperty]
-        public MBBindingList<StringPairItemVM> Information
-        {
-            get => information;
-            set
-            {
-                if (value != information)
-                {
-                    information = value;
-                    OnPropertyChangedWithValue(value, "Information");
-                }
-            }
-        }
-
-        [DataSourceProperty]
-        public MBBindingList<TripleStringItemVM> Innovations
-        {
-            get => innovations;
-            set
-            {
-                if (value != innovations)
-                {
-                    innovations = value;
-                    OnPropertyChangedWithValue(value, "Innovations");
-                }
-            }
-        }
-
-        [DataSourceProperty]
-        public MBBindingList<StringPairItemVM> Traits
-        {
-            get => traits;
-            set
-            {
-                if (value != traits)
-                {
-                    traits = value;
-                    OnPropertyChangedWithValue(value, "Traits");
-                }
-            }
+                    innovationData.ChangeFascination(innov);
+                    RefreshValues();
+                }, null));
         }
     }
 }

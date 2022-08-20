@@ -1,147 +1,168 @@
 ﻿using System.Collections.Generic;
-using System.Reflection;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 
-namespace BannerKings.Managers.Items
+namespace BannerKings.Managers.Items;
+
+public class BKItems : DefaultTypeInitializer<BKItems, ItemObject>
 {
-    public class BKItems : DefaultTypeInitializer<BKItems, ItemObject>
+    public ItemObject BookHeartsDesire { get; private set; }
+
+    public ItemObject BookSiege { get; private set; }
+
+    public ItemObject BookStrategikon { get; private set; }
+
+    public ItemObject BookLeadership { get; private set; }
+
+    public ItemObject BookTrade { get; private set; }
+
+    public ItemObject BookDictionary { get; private set; }
+
+    public ItemObject BookMounted { get; private set; }
+
+    public ItemObject BookOneHanded { get; private set; }
+
+    public ItemObject BookTwoHanded { get; private set; }
+
+    public ItemObject BookPolearm { get; private set; }
+
+    public ItemObject BookCrossbow { get; private set; }
+
+    public ItemObject BookBow { get; private set; }
+
+    public ItemObject Apple { get; private set; }
+
+    public ItemObject Bread { get; private set; }
+
+    public ItemObject Pie { get; private set; }
+
+    public ItemObject Carrot { get; private set; }
+
+    public ItemObject Orange { get; private set; }
+
+    public override IEnumerable<ItemObject> All
     {
-        private ItemObject apple, orange, bread, pie, carrot, bookHeartsDesire, bookSiege, bookStrategikon,
-            bookLeadership, bookTrade, bookDictionary, bookMounted, bookOneHanded, bookTwoHanded, bookPolearm, bookCrossbow,
-            bookBow;
-
-        public ItemObject BookHeartsDesire => bookHeartsDesire;
-        public ItemObject BookSiege => bookSiege;
-        public ItemObject BookStrategikon => bookStrategikon;
-        public ItemObject BookLeadership => bookLeadership;
-        public ItemObject BookTrade => bookTrade;
-        public ItemObject BookDictionary => bookDictionary;
-        public ItemObject BookMounted => bookMounted;
-        public ItemObject BookOneHanded => bookOneHanded;
-        public ItemObject BookTwoHanded => bookTwoHanded;
-        public ItemObject BookPolearm => bookPolearm;
-        public ItemObject BookCrossbow => bookCrossbow;
-        public ItemObject BookBow => bookBow;
-
-        public ItemObject Apple => apple;
-        public ItemObject Bread => bread;
-        public ItemObject Pie => pie;
-        public ItemObject Carrot => carrot;
-        public ItemObject Orange => orange;
-
-        public override IEnumerable<ItemObject> All
+        get
         {
-            get
-            {
-                yield return BookHeartsDesire;
-                yield return BookSiege;
-                yield return BookStrategikon;
-                yield return BookLeadership;
-                yield return BookTrade;
-                yield return BookDictionary;
-                yield return BookMounted;
-                yield return BookOneHanded;
-                yield return BookTwoHanded;
-                yield return BookPolearm;
-                yield return BookCrossbow;
-                yield return BookBow;
-                yield return Apple;
-            }
+            yield return BookHeartsDesire;
+            yield return BookSiege;
+            yield return BookStrategikon;
+            yield return BookLeadership;
+            yield return BookTrade;
+            yield return BookDictionary;
+            yield return BookMounted;
+            yield return BookOneHanded;
+            yield return BookTwoHanded;
+            yield return BookPolearm;
+            yield return BookCrossbow;
+            yield return BookBow;
+            yield return Apple;
         }
+    }
 
-        public override void Initialize()
-        {
-            apple = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("apple"));
-            InitializeTradeGood(apple,
-                new TextObject("{=bk_item_apple}Apples{@Plural}baskets of apples\\@}", null), "foods_basket_apple",
-                BKItemCategories.Instance.Apple, 5, 10f, ItemObject.ItemTypeEnum.Goods, true);
+    public override void Initialize()
+    {
+        Apple = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("apple"));
+        InitializeTradeGood(Apple,
+            new TextObject("{=bk_item_apple}Apples{@Plural}baskets of apples\\@}"), "foods_basket_apple",
+            BKItemCategories.Instance.Apple, 5, 10f, ItemObject.ItemTypeEnum.Goods, true);
 
-            orange = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("orange"));
-            InitializeTradeGood(orange,
-                new TextObject("{=bk_item_orange}Oranges{@Plural}baskets of oranges\\@}", null), "foods_orange_basket",
-                BKItemCategories.Instance.Apple, 5, 10f, ItemObject.ItemTypeEnum.Goods, true);
+        Orange = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("orange"));
+        InitializeTradeGood(Orange,
+            new TextObject("{=bk_item_orange}Oranges{@Plural}baskets of oranges\\@}"), "foods_orange_basket",
+            BKItemCategories.Instance.Apple, 5, 10f, ItemObject.ItemTypeEnum.Goods, true);
 
-            bread = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("bread"));
-            InitializeTradeGood(bread,
-                new TextObject("{=bk_item_bread}Bread{@Plural}loathes of bread\\@}", null), "merchandise_bread",
-                BKItemCategories.Instance.Apple, 5, 10f, ItemObject.ItemTypeEnum.Goods, true);
+        Bread = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("bread"));
+        InitializeTradeGood(Bread,
+            new TextObject("{=bk_item_bread}Bread{@Plural}loathes of bread\\@}"), "merchandise_bread",
+            BKItemCategories.Instance.Apple, 5, 10f, ItemObject.ItemTypeEnum.Goods, true);
 
-            pie = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("pie"));
-            InitializeTradeGood(pie,
-                new TextObject("{=bk_item_pie}Pie{@Plural}baskets of pies\\@}", null), "kitchen_pie",
-                BKItemCategories.Instance.Apple, 5, 10f, ItemObject.ItemTypeEnum.Goods, true);
+        Pie = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("pie"));
+        InitializeTradeGood(Pie,
+            new TextObject("{=bk_item_pie}Pie{@Plural}baskets of pies\\@}"), "kitchen_pie",
+            BKItemCategories.Instance.Apple, 5, 10f, ItemObject.ItemTypeEnum.Goods, true);
 
-            carrot = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("carrot"));
-            InitializeTradeGood(carrot,
-                new TextObject("{=bk_item_carrot}Carrots{@Plural}baskets of carrots\\@}", null), "foods_carrots_basket",
-                BKItemCategories.Instance.Apple, 5, 10f, ItemObject.ItemTypeEnum.Goods, true);
+        Carrot = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("carrot"));
+        InitializeTradeGood(Carrot,
+            new TextObject("{=bk_item_carrot}Carrots{@Plural}baskets of carrots\\@}"), "foods_carrots_basket",
+            BKItemCategories.Instance.Apple, 5, 10f, ItemObject.ItemTypeEnum.Goods, true);
 
 
-            bookHeartsDesire = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("book_hearts_desire"));
-            InitializeTradeGood(bookHeartsDesire,
-                new TextObject("{=!}Heart's Desire{@Plural}collection of Heart's Desire books{\\@}", null), "lib_book_closed_a",
-                BKItemCategories.Instance.Book, 300000, 1f, ItemObject.ItemTypeEnum.Goods);
+        BookHeartsDesire = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("book_hearts_desire"));
+        InitializeTradeGood(BookHeartsDesire,
+            new TextObject("{=!}Heart's Desire{@Plural}collection of Heart's Desire books{\\@}"), "lib_book_closed_a",
+            BKItemCategories.Instance.Book, 300000, 1f, ItemObject.ItemTypeEnum.Goods);
 
-            bookSiege = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("book_siege"));
-            InitializeTradeGood(bookSiege,
-                new TextObject("{=!}Parangelmata Poliorcetica{@Plural}collection of Parangelmata Poliorcetica books{\\@}", null), "lib_book_closed_b",
-                BKItemCategories.Instance.Book, 700000, 1.5f, ItemObject.ItemTypeEnum.Goods);
+        BookSiege = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("book_siege"));
+        InitializeTradeGood(BookSiege,
+            new TextObject("{=!}Parangelmata Poliorcetica{@Plural}collection of Parangelmata Poliorcetica books{\\@}"),
+            "lib_book_closed_b",
+            BKItemCategories.Instance.Book, 700000, 1.5f, ItemObject.ItemTypeEnum.Goods);
 
-            bookStrategikon = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("book_tactics"));
-            InitializeTradeGood(bookStrategikon,
-                new TextObject("{=!}Strategikon{@Plural}collection of Strategikon books{\\@}", null), "lib_book_closed_b",
-                BKItemCategories.Instance.Book, 700000, 1.5f, ItemObject.ItemTypeEnum.Goods);
+        BookStrategikon = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("book_tactics"));
+        InitializeTradeGood(BookStrategikon,
+            new TextObject("{=!}Strategikon{@Plural}collection of Strategikon books{\\@}"), "lib_book_closed_b",
+            BKItemCategories.Instance.Book, 700000, 1.5f, ItemObject.ItemTypeEnum.Goods);
 
-            bookLeadership = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("book_leadership"));
-            InitializeTradeGood(bookLeadership,
-                new TextObject("{=!}De Re Militari{@Plural}collection of De Re Militari books{\\@}", null), "lib_book_closed_b",
-                BKItemCategories.Instance.Book, 700000, 1.5f, ItemObject.ItemTypeEnum.Goods);
+        BookLeadership = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("book_leadership"));
+        InitializeTradeGood(BookLeadership,
+            new TextObject("{=!}De Re Militari{@Plural}collection of De Re Militari books{\\@}"), "lib_book_closed_b",
+            BKItemCategories.Instance.Book, 700000, 1.5f, ItemObject.ItemTypeEnum.Goods);
 
-            bookTrade = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("book_trade"));
-            InitializeTradeGood(bookTrade,
-                new TextObject("{=!}A Treatise on the Value of Things{@Plural}collection of A Treatise on the Value of Things books{\\@}", null), "lib_book_closed_b",
-                BKItemCategories.Instance.Book, 700000, 1.5f, ItemObject.ItemTypeEnum.Goods);
+        BookTrade = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("book_trade"));
+        InitializeTradeGood(BookTrade,
+            new TextObject(
+                "{=!}A Treatise on the Value of Things{@Plural}collection of A Treatise on the Value of Things books{\\@}"),
+            "lib_book_closed_b",
+            BKItemCategories.Instance.Book, 700000, 1.5f, ItemObject.ItemTypeEnum.Goods);
 
-            bookMounted = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("book_mounted"));
-            InitializeTradeGood(bookMounted,
-                new TextObject("{=!}The Green Knight{@Plural}collection of The Green Knight books{\\@}", null), "lib_book_closed_b",
-                BKItemCategories.Instance.Book, 700000, 1.5f, ItemObject.ItemTypeEnum.Goods);
+        BookMounted = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("book_mounted"));
+        InitializeTradeGood(BookMounted,
+            new TextObject("{=!}The Green Knight{@Plural}collection of The Green Knight books{\\@}"),
+            "lib_book_closed_b",
+            BKItemCategories.Instance.Book, 700000, 1.5f, ItemObject.ItemTypeEnum.Goods);
 
-            bookDictionary = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("book_dictionary"));
-            InitializeTradeGood(bookDictionary,
-                new TextObject("{=!}Dictionarium Calradium{@Plural}collection of Dictionarium Calradium books{\\@}", null), "lib_book_closed_c",
-                BKItemCategories.Instance.Book, 500000, 2.5f, ItemObject.ItemTypeEnum.Goods);
+        BookDictionary = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("book_dictionary"));
+        InitializeTradeGood(BookDictionary,
+            new TextObject("{=!}Dictionarium Calradium{@Plural}collection of Dictionarium Calradium books{\\@}"),
+            "lib_book_closed_c",
+            BKItemCategories.Instance.Book, 500000, 2.5f, ItemObject.ItemTypeEnum.Goods);
 
-            bookOneHanded = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("book_oneHanded"));
-            InitializeTradeGood(bookOneHanded,
-                new TextObject("{=!}Royal Armouries Ms. I.33{@Plural}collection of Royal Armouries Ms. I.33{\\@}", null), "lib_book_closed_b",
-                BKItemCategories.Instance.Book, 700000, 1.5f, ItemObject.ItemTypeEnum.Goods);
+        BookOneHanded = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("book_oneHanded"));
+        InitializeTradeGood(BookOneHanded,
+            new TextObject("{=!}Royal Armouries Ms. I.33{@Plural}collection of Royal Armouries Ms. I.33{\\@}"),
+            "lib_book_closed_b",
+            BKItemCategories.Instance.Book, 700000, 1.5f, ItemObject.ItemTypeEnum.Goods);
 
-            bookTwoHanded = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("book_twoHanded"));
-            InitializeTradeGood(bookTwoHanded,
-                new TextObject("{=!}Rìghfénnid{@Plural}collection of Rìghfénnid{\\@}", null), "lib_book_closed_b",
-                BKItemCategories.Instance.Book, 700000, 1.5f, ItemObject.ItemTypeEnum.Goods);
+        BookTwoHanded = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("book_twoHanded"));
+        InitializeTradeGood(BookTwoHanded,
+            new TextObject("{=!}Rìghfénnid{@Plural}collection of Rìghfénnid{\\@}"), "lib_book_closed_b",
+            BKItemCategories.Instance.Book, 700000, 1.5f, ItemObject.ItemTypeEnum.Goods);
 
-            bookCrossbow = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("book_crossbow"));
-            InitializeTradeGood(bookCrossbow,
-                new TextObject("{=!}Origin and Mechanics of the Crossbow{@Plural}collection of Origin and Mechanics of the Crossbow{\\@}", null), "lib_book_closed_b",
-                BKItemCategories.Instance.Book, 700000, 1.5f, ItemObject.ItemTypeEnum.Goods);
+        BookCrossbow = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("book_crossbow"));
+        InitializeTradeGood(BookCrossbow,
+            new TextObject(
+                "{=!}Origin and Mechanics of the Crossbow{@Plural}collection of Origin and Mechanics of the Crossbow{\\@}"),
+            "lib_book_closed_b",
+            BKItemCategories.Instance.Book, 700000, 1.5f, ItemObject.ItemTypeEnum.Goods);
 
-            bookBow = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("book_bow"));
-            InitializeTradeGood(bookBow,
-                new TextObject("{=!}The History of Calradian Archery{@Plural}collection of The History of Calradian Archery{\\@}", null), "lib_book_closed_b",
-                BKItemCategories.Instance.Book, 700000, 1.5f, ItemObject.ItemTypeEnum.Goods);
+        BookBow = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("book_bow"));
+        InitializeTradeGood(BookBow,
+            new TextObject(
+                "{=!}The History of Calradian Archery{@Plural}collection of The History of Calradian Archery{\\@}"),
+            "lib_book_closed_b",
+            BKItemCategories.Instance.Book, 700000, 1.5f, ItemObject.ItemTypeEnum.Goods);
 
-            bookPolearm = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("book_polearm"));
-            InitializeTradeGood(bookPolearm,
-                new TextObject("{=!}Lycaron debate of 1074{@Plural}collection of Lycaron debate of 1074y{\\@}", null), "lib_book_closed_b",
-                BKItemCategories.Instance.Book, 700000, 1.5f, ItemObject.ItemTypeEnum.Goods);
-        }
+        BookPolearm = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("book_polearm"));
+        InitializeTradeGood(BookPolearm,
+            new TextObject("{=!}Lycaron debate of 1074{@Plural}collection of Lycaron debate of 1074y{\\@}"),
+            "lib_book_closed_b",
+            BKItemCategories.Instance.Book, 700000, 1.5f, ItemObject.ItemTypeEnum.Goods);
+    }
 
-        static void InitializeTradeGood(ItemObject item, TextObject name, string meshName, ItemCategory category, int value, float weight, ItemObject.ItemTypeEnum itemType, bool isFood = false)
-        {
-            ItemObject.InitializeTradeGood(item, name, meshName, category, value, weight, itemType, isFood);
-        }
+    private static void InitializeTradeGood(ItemObject item, TextObject name, string meshName, ItemCategory category,
+        int value, float weight, ItemObject.ItemTypeEnum itemType, bool isFood = false)
+    {
+        ItemObject.InitializeTradeGood(item, name, meshName, category, value, weight, itemType, isFood);
     }
 }

@@ -1,29 +1,33 @@
 ﻿using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
 
-namespace BannerKings
+namespace BannerKings;
+
+public abstract class BannerKingsObject : MBObjectBase
 {
-    public abstract class BannerKingsObject : MBObjectBase
+    protected TextObject description;
+    protected TextObject name;
+
+    public BannerKingsObject(string id) : base(id)
     {
-        protected TextObject name;
-        protected TextObject description;
+    }
 
-        public BannerKingsObject(string id) : base(id)
+    public TextObject Name => name;
+    public TextObject Description => description;
+
+    protected void Initialize(TextObject name, TextObject description)
+    {
+        this.name = name;
+        this.description = description;
+    }
+
+    public override bool Equals(object obj)
+    {
+        if (obj is BannerKingsObject)
         {
+            return ((BannerKingsObject) obj).StringId == StringId;
         }
 
-        protected void Initialize(TextObject name, TextObject description)
-        {
-            this.name = name;
-            this.description = description;
-        }
-        public TextObject Name => name;
-        public TextObject Description => description;
-
-        public override bool Equals(object obj)
-        {
-            if (obj is BannerKingsObject) return ((BannerKingsObject) obj).StringId == StringId;
-            return base.Equals(obj);
-        }
+        return base.Equals(obj);
     }
 }

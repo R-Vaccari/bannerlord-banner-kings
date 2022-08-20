@@ -1,44 +1,48 @@
-﻿using BannerKings.Managers.Education;
-using BannerKings.Managers.Populations.Villages;
+﻿using BannerKings.Managers.Populations.Villages;
 using BannerKings.Managers.Skills;
-using BannerKings.Populations;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.MapEvents;
-using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Settlements;
 
-namespace BannerKings.Models.Vanilla
+namespace BannerKings.Models.Vanilla;
+
+public class BKRaidModel : DefaultRaidModel
 {
-    public class BKRaidModel : DefaultRaidModel
+    public override float CalculateHitDamage(MapEventSide attackerSide, float settlementHitPoints)
     {
-
-        public override float CalculateHitDamage(MapEventSide attackerSide, float settlementHitPoints)
+        var result = base.CalculateHitDamage(attackerSide, settlementHitPoints);
+        var attacker = attackerSide.LeaderParty;
+        if (attacker != null && attacker.LeaderHero != null)
         {
-            float result = base.CalculateHitDamage(attackerSide, settlementHitPoints);
-            PartyBase attacker = attackerSide.LeaderParty;
-            if (attacker != null && attacker.LeaderHero != null)
+            var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(attacker.LeaderHero);
+            if (education.HasPerk(BKPerks.Instance.OutlawPlunderer))
             {
-                EducationData education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(attacker.LeaderHero);
-                if (education.HasPerk(BKPerks.Instance.OutlawPlunderer))
-                    result *= 1.15f;
+                result *= 1.15f;
             }
-
-
-            MapEventSide defender = attackerSide.MapEvent.DefenderSide;
-            Settlement settlement = null;
-            if (defender.Parties != null && defender.Parties.Count > 0)
-                settlement = defender.Parties[0].Party.Settlement;
-
-            if (settlement != null)
-                if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
-                {
-                    VillageData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement).VillageData;
-                    int palisade = data.GetBuildingLevel(DefaultVillageBuildings.Instance.Palisade);
-                    if (palisade > 0)
-                        result *= (1f - (0.12f * palisade));
-                }
-
-            return result;
         }
+
+
+        var defender = attackerSide.MapEvent.DefenderSide;
+        Settlement settlement = null;
+        if (defender.Parties != null && defender.Parties.Count > 0)
+        {
+            settlement = defender.Parties[0].Party.Settlement;
+        }
+
+        if (settlement != null)
+        {
+            if (BannerKingsConfig.Instance.PopulationManager != null &&
+                BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
+            {
+                var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement).VillageData;
+                var palisade = data.GetBuildingLevel(DefaultVillageBuildings.Instance.Palisade);
+                if (palisade > 0)
+                {
+                    result *= 1f - 0.12f * palisade;
+                }
+            }
+        }
+
+        return result;
     }
 }

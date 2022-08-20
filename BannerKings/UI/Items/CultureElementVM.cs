@@ -1,15 +1,15 @@
-﻿using BannerKings.Populations;
+﻿using BannerKings.Managers.Populations;
 using TaleWorlds.Core.ViewModelCollection.Information;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace BannerKings
+namespace BannerKings.UI.Items
 {
     namespace UI
     {
         public class CultureElementVM : BannerKingsViewModel
         {
-            private CultureDataClass dataClass;
+            private readonly CultureDataClass dataClass;
 
             public CultureElementVM(PopulationData data, CultureDataClass dataClass) : base(data, false)
             {
@@ -17,17 +17,13 @@ namespace BannerKings
             }
 
 
-            [DataSourceProperty]
-            public string Name => dataClass.Culture.Name.ToString();
+            [DataSourceProperty] public string Name => dataClass.Culture.Name.ToString();
 
-            [DataSourceProperty]
-            public string Acceptance => FormatValue(dataClass.Acceptance);
+            [DataSourceProperty] public string Acceptance => FormatValue(dataClass.Acceptance);
 
-            [DataSourceProperty]
-            public string Assimilation => FormatValue(dataClass.Assimilation);
+            [DataSourceProperty] public string Assimilation => FormatValue(dataClass.Assimilation);
 
-            [DataSourceProperty]
-            public HintViewModel Hint => new HintViewModel(new TextObject());
+            [DataSourceProperty] public HintViewModel Hint => new(new TextObject());
         }
     }
 }

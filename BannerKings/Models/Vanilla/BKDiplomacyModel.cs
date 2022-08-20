@@ -1,11 +1,9 @@
-﻿using TaleWorlds.CampaignSystem;
-using TaleWorlds.Localization;
+﻿namespace BannerKings.Models.Vanilla;
 
-namespace BannerKings.Models
+
+
+/*class BKDiplomacyModel : DefaultDiplomacyModel
 {
-    /*class BKDiplomacyModel : DefaultDiplomacyModel
-    {
 
-  
-    }*/
-}
+
+}*/

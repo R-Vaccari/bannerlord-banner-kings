@@ -2,35 +2,41 @@
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.ObjectSystem;
 
-namespace BannerKings.Managers.Institutions
+namespace BannerKings.Managers.Institutions;
+
+public abstract class Institution : MBObjectBase
 {
-    public abstract class Institution : MBObjectBase
+    protected Dictionary<Hero, float> favors;
+    protected float influence;
+
+    protected Institution()
     {
-        protected float influence;
-        protected Dictionary<Hero, float> favors;
+        favors = new Dictionary<Hero, float>();
+    }
 
-        protected Institution()
+    public float Influence => influence;
+
+    public abstract void Destroy();
+
+    public float GetFavor(Hero hero)
+    {
+        if (favors.ContainsKey(hero))
         {
-            favors = new Dictionary<Hero, float>();
+            return favors[hero];
         }
 
-        public float Influence => influence;
+        return 0f;
+    }
 
-        public abstract void Destroy();
-
-        public float GetFavor(Hero hero)
+    public void AddFavor(Hero hero, float favor)
+    {
+        if (favors.ContainsKey(hero))
         {
-            if (favors.ContainsKey(hero))
-                return favors[hero];
-            return 0f;
+            favors[hero] += favor;
         }
-
-        public void AddFavor(Hero hero, float favor)
+        else
         {
-            if (favors.ContainsKey(hero))
-                favors[hero] += favor;
-            else favors.Add(hero, favor);
+            favors.Add(hero, favor);
         }
-
     }
 }

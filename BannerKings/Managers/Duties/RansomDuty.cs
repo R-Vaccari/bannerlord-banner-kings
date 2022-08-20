@@ -7,48 +7,55 @@ using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.SaveSystem;
 
-namespace BannerKings.Managers.Duties
+namespace BannerKings.Managers.Duties;
+
+public class RansomDuty : BannerKingsDuty
 {
-    public class RansomDuty : BannerKingsDuty
+    public RansomDuty(CampaignTime dueTime, Hero owner, float completion) : base(dueTime, FeudalDuties.Ransom,
+        completion)
     {
-        [SaveableProperty(4)]
-        public Hero DebtOwner { get; private set; }
+        DebtOwner = owner;
+    }
 
-        public RansomDuty(CampaignTime dueTime, Hero owner, float completion) : base(dueTime, FeudalDuties.Ransom, completion)
+    [SaveableProperty(4)] public Hero DebtOwner { get; }
+
+    public override void Finish()
+    {
+        string result = null;
+        if (Hero.MainHero.Gold >= Completion)
         {
-            DebtOwner = owner;
+            GiveGoldAction.ApplyBetweenCharacters(Hero.MainHero, DebtOwner, (int) Completion);
+            result = new TextObject(
+                    "{SUZERAIN} holds your oath of ransom aid fulfilled. You have payed {RANSOM} gold and your liege is satisfied.")
+                .ToString();
+        }
+        else
+        {
+            result = new TextObject(
+                    "You have failed to fulfill your duty of ransom assistance to {SUZERAIN}. As a result, your clan's reputation has suffered, and your liege is unsatisfied.")
+                .ToString();
         }
 
-        public override void Finish()
-        {
-            string result = null;
-            if (Hero.MainHero.Gold >= Completion)
-            {
-                GiveGoldAction.ApplyBetweenCharacters(Hero.MainHero, DebtOwner, (int)Completion);
-                result = new TextObject("{SUZERAIN} holds your oath of ransom aid fulfilled. You have payed {RANSOM} gold and your liege is satisfied.").ToString();
-            } else
-            {
-                result = new TextObject("You have failed to fulfill your duty of ransom assistance to {SUZERAIN}. As a result, your clan's reputation has suffered, and your liege is unsatisfied.").ToString();
-            }
+        BKRansomBehavior.playerRansomDuty = null;
+        InformationManager.ShowInquiry(new InquiryData("Duty of Ransom Aid", result,
+            true, false, GameTexts.FindText("str_done").ToString(), null, null, null), true);
+    }
 
-            BKRansomBehavior.playerRansomDuty = null;
-            InformationManager.ShowInquiry(new InquiryData("Duty of Ransom Aid", result,
-                    true, false, GameTexts.FindText("str_done").ToString(), null, null, null), true);
+    public override void Tick()
+    {
+        GameTexts.SetVariable("SUZERAIN", DebtOwner.Name);
+        GameTexts.SetVariable("RANSOM", Completion);
+        var remaining = DueTime.RemainingDaysFromNow;
+        if (remaining > 0)
+        {
+            Finish();
         }
 
-        public override void Tick()
-        {
-            GameTexts.SetVariable("SUZERAIN", DebtOwner.Name);
-            GameTexts.SetVariable("RANSOM", Completion);
-            float remaining = DueTime.RemainingDaysFromNow;
-            if (remaining > 0) Finish();
-
-            GameTexts.SetVariable("REMAINING", Completion);
-            InformationManager.ShowInquiry(new InquiryData("Duty of Ransom Aid", new TextObject("{=!} Your suzerain, {SUZERAIN}, has requested that you fulfill your contract obligations and pay him {RANSOM} gold in order to compensate their ransom. You have {REMAINING} days left to pay it.").ToString(),
-                    true, true, "Pay Immediatly", "Withhold For a Day", delegate
-                    {
-                        Finish();
-                    }, null));
-        }
+        GameTexts.SetVariable("REMAINING", Completion);
+        InformationManager.ShowInquiry(new InquiryData("Duty of Ransom Aid",
+            new TextObject(
+                    "{=!} Your suzerain, {SUZERAIN}, has requested that you fulfill your contract obligations and pay him {RANSOM} gold in order to compensate their ransom. You have {REMAINING} days left to pay it.")
+                .ToString(),
+            true, true, "Pay Immediatly", "Withhold For a Day", delegate { Finish(); }, null));
     }
 }

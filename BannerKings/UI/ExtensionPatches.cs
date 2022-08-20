@@ -1,24 +1,22 @@
-﻿
-namespace BannerKings.UI
+﻿namespace BannerKings.UI;
+
+internal class ExtensionPatches
 {
-    internal class ExtensionPatches
+    /*
+    [PrefabExtension("ClanScreen", "descendant::Widget[@Id='ClanScreenWidget']/Children/OptionsTabToggle", "ClanScreen")]
+    internal class AppendExamplePatch : PrefabExtensionInsertPatch
     {
-        /*
-        [PrefabExtension("ClanScreen", "descendant::Widget[@Id='ClanScreenWidget']/Children/OptionsTabToggle", "ClanScreen")]
-        internal class AppendExamplePatch : PrefabExtensionInsertPatch
+        public override InsertType Type => InsertType.Append;
+
+        private XmlDocument document;
+
+        public TestPrefabExtensionReplacePatch()
         {
-            public override InsertType Type => InsertType.Append;
+            document = new XmlDocument();
+            document.LoadXml("<OptionsTabToggle Id=\"AppendedTabToggle\"/>");
+        }
 
-            private XmlDocument document;
-
-            public TestPrefabExtensionReplacePatch()
-            {
-                document = new XmlDocument();
-                document.LoadXml("<OptionsTabToggle Id=\"AppendedTabToggle\"/>");
-            }
-
-            [PrefabExtensionXmlNode]
-            public XmlNode GetPatchContent() => document.DocumentElement;
-        } */
-    }
+        [PrefabExtensionXmlNode]
+        public XmlNode GetPatchContent() => document.DocumentElement;
+    } */
 }

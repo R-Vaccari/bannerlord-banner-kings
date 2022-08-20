@@ -1,16 +1,12 @@
-﻿using BannerKings.Managers.Education;
-using BannerKings.Managers.Helpers;
-using BannerKings.Managers.Populations;
-using BannerKings.Managers.Skills;
-using BannerKings.Managers.Titles;
-using BannerKings.Models.Vanilla;
-using BannerKings.Populations;
-using HarmonyLib;
-using Helpers;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using BannerKings.Managers.Helpers;
+using BannerKings.Managers.Skills;
+using BannerKings.Models.Vanilla;
+using HarmonyLib;
+using Helpers;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.CampaignBehaviors;
@@ -20,7 +16,6 @@ using TaleWorlds.CampaignSystem.Extensions;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Issues;
 using TaleWorlds.CampaignSystem.Party;
-using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.Settlements.Workshops;
 using TaleWorlds.Core;
@@ -41,27 +36,32 @@ namespace BannerKings
         namespace Recruitment
         {
             [HarmonyPatch(typeof(RecruitmentCampaignBehavior), "ApplyInternal")]
-            class RecruitmentApplyInternalPatch
+            internal class RecruitmentApplyInternalPatch
             {
-                static void Postfix(MobileParty side1Party, Settlement settlement, Hero individual, CharacterObject troop, int number, int bitCode, RecruitmentCampaignBehavior.RecruitingDetail detail)
+                private static void Postfix(MobileParty side1Party, Settlement settlement, Hero individual,
+                    CharacterObject troop, int number, int bitCode, RecruitmentCampaignBehavior.RecruitingDetail detail)
                 {
-
-                    if (settlement == null) return;
-                    if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
+                    if (settlement == null)
                     {
-                        PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
+                        return;
+                    }
+
+                    if (BannerKingsConfig.Instance.PopulationManager != null &&
+                        BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
+                    {
+                        var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
                         data.MilitaryData.DeduceManpower(data, number, troop);
                     }
                 }
             }
 
             [HarmonyPatch(typeof(DefaultVolunteerModel), "GetDailyVolunteerProductionProbability")]
-            class GetDailyVolunteerProductionProbabilityPatch
+            internal class GetDailyVolunteerProductionProbabilityPatch
             {
-                static bool Prefix(Hero hero, int index, Settlement settlement, ref float __result)
+                private static bool Prefix(Hero hero, int index, Settlement settlement, ref float __result)
                 {
-
-                    if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
+                    if (BannerKingsConfig.Instance.PopulationManager != null &&
+                        BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
                     {
                         __result = new BKVolunteerModel().GetDraftEfficiency(hero, index, settlement).ResultNumber;
                         return false;
@@ -74,46 +74,60 @@ namespace BannerKings
 
         namespace Fixes
         {
-
             // Fix crash on wanderer same gender child born
             [HarmonyPatch(typeof(NameGenerator), "GenerateHeroFullName")]
-            class NameGeneratorPatch
+            internal class NameGeneratorPatch
             {
-                static bool Prefix(ref TextObject __result, Hero hero, TextObject heroFirstName, bool useDeterministicValues = true)
+                private static bool Prefix(ref TextObject __result, Hero hero, TextObject heroFirstName,
+                    bool useDeterministicValues = true)
                 {
+                    var parent = hero.IsFemale ? hero.Mother : hero.Father;
+                    if (parent == null)
+                    {
+                        return true;
+                    }
 
-                    Hero parent = hero.IsFemale ? hero.Mother : hero.Father;
-                    if (parent == null) return true;
                     if (BannerKingsConfig.Instance.TitleManager.IsHeroKnighted(parent) && hero.IsWanderer)
                     {
-                        TextObject textObject = heroFirstName;
+                        var textObject = heroFirstName;
                         textObject.SetTextVariable("FEMALE", hero.IsFemale ? 1 : 0);
-                        textObject.SetTextVariable("IMPERIAL", (hero.Culture.StringId == "empire") ? 1 : 0);
-                        textObject.SetTextVariable("COASTAL", (hero.Culture.StringId == "empire" || hero.Culture.StringId == "vlandia") ? 1 : 0);
-                        textObject.SetTextVariable("NORTHERN", (hero.Culture.StringId == "battania" || hero.Culture.StringId == "sturgia") ? 1 : 0);
+                        textObject.SetTextVariable("IMPERIAL", hero.Culture.StringId == "empire" ? 1 : 0);
+                        textObject.SetTextVariable("COASTAL",
+                            hero.Culture.StringId == "empire" || hero.Culture.StringId == "vlandia" ? 1 : 0);
+                        textObject.SetTextVariable("NORTHERN",
+                            hero.Culture.StringId == "battania" || hero.Culture.StringId == "sturgia" ? 1 : 0);
                         textObject.SetCharacterProperties("HERO", hero.CharacterObject);
                         textObject.SetTextVariable("FIRSTNAME", heroFirstName);
                         __result = textObject;
                         return false;
                     }
+
                     return true;
                 }
             }
 
             [HarmonyPatch(typeof(TownMarketData))]
-            class TownItemPricePatch
+            internal class TownItemPricePatch
             {
-
                 [HarmonyPrefix]
-                [HarmonyPatch("GetPrice", new Type[] { typeof(EquipmentElement), typeof(MobileParty), typeof(bool), typeof(PartyBase) })]
-                static bool Prefix2(TownMarketData __instance, ref int __result, EquipmentElement itemRosterElement, MobileParty tradingParty = null, bool isSelling = false, PartyBase merchantParty = null)
+                [HarmonyPatch("GetPrice", typeof(EquipmentElement), typeof(MobileParty), typeof(bool),
+                    typeof(PartyBase))]
+                private static bool Prefix2(TownMarketData __instance, ref int __result,
+                    EquipmentElement itemRosterElement, MobileParty tradingParty = null, bool isSelling = false,
+                    PartyBase merchantParty = null)
                 {
-                    if (itemRosterElement.Item == null) __result = 0;
+                    if (itemRosterElement.Item == null)
+                    {
+                        __result = 0;
+                    }
                     else
                     {
-                        ItemData categoryData = __instance.GetCategoryData(itemRosterElement.Item.GetItemCategory());
-                        __result = Campaign.Current.Models.TradeItemPriceFactorModel.GetPrice(itemRosterElement, tradingParty, merchantParty, isSelling, (float)categoryData.InStoreValue, categoryData.Supply, categoryData.Demand);
+                        var categoryData = __instance.GetCategoryData(itemRosterElement.Item.GetItemCategory());
+                        __result = Campaign.Current.Models.TradeItemPriceFactorModel.GetPrice(itemRosterElement,
+                            tradingParty, merchantParty, isSelling, categoryData.InStoreValue, categoryData.Supply,
+                            categoryData.Demand);
                     }
+
                     return false;
                 }
             }
@@ -154,12 +168,14 @@ namespace BannerKings
 
 
             [HarmonyPatch(typeof(Hero), "CanHaveQuestsOrIssues")]
-            class CanHaveQuestsOrIssuesPatch
+            internal class CanHaveQuestsOrIssuesPatch
             {
-                static bool Prefix(Hero __instance, ref bool __result)
+                private static bool Prefix(Hero __instance, ref bool __result)
                 {
                     if (__instance.Issue != null)
+                    {
                         return false;
+                    }
 
                     __result = __instance.IsActive && __instance.IsAlive;
                     CampaignEventDispatcher.Instance.CanHaveQuestsOrIssues(__instance, ref __result);
@@ -169,13 +185,14 @@ namespace BannerKings
             }
 
             [HarmonyPatch(typeof(VillageNeedsToolsIssue), "IssueStayAliveConditions")]
-            class VillageIssueStayAliveConditionsPatch
+            internal class VillageIssueStayAliveConditionsPatch
             {
-                static bool Prefix(CaravanAmbushIssue __instance, ref bool __result)
+                private static bool Prefix(CaravanAmbushIssue __instance, ref bool __result)
                 {
                     if (__instance.IssueOwner != null)
                     {
-                        if (__instance.IssueOwner.CurrentSettlement == null || !__instance.IssueOwner.CurrentSettlement.IsVillage)
+                        if (__instance.IssueOwner.CurrentSettlement == null ||
+                            !__instance.IssueOwner.CurrentSettlement.IsVillage)
                         {
                             __result = false;
                             return false;
@@ -192,29 +209,32 @@ namespace BannerKings
             }
 
             [HarmonyPatch(typeof(CaravanAmbushIssue), "IssueStayAliveConditions")]
-            class CaravanIssueStayAliveConditionsPatch
+            internal class CaravanIssueStayAliveConditionsPatch
             {
-                static bool Prefix(CaravanAmbushIssue __instance, ref bool __result)
+                private static bool Prefix(CaravanAmbushIssue __instance, ref bool __result)
                 {
                     if (__instance.IssueOwner != null)
+                    {
                         if (__instance.IssueOwner.OwnedCaravans == null || __instance.IssueOwner.MapFaction == null)
                         {
                             __result = false;
                             return false;
                         }
+                    }
 
                     return true;
                 }
             }
 
             [HarmonyPatch(typeof(LandLordNeedsManualLaborersIssue), "IssueStayAliveConditions")]
-            class LaborersIssueStayAliveConditionsPatch
+            internal class LaborersIssueStayAliveConditionsPatch
             {
-                static bool Prefix(LandLordNeedsManualLaborersIssue __instance, ref bool __result)
+                private static bool Prefix(LandLordNeedsManualLaborersIssue __instance, ref bool __result)
                 {
                     if (__instance.IssueOwner != null)
                     {
-                        if (__instance.IssueOwner.CurrentSettlement == null || !__instance.IssueOwner.CurrentSettlement.IsVillage)
+                        if (__instance.IssueOwner.CurrentSettlement == null ||
+                            !__instance.IssueOwner.CurrentSettlement.IsVillage)
                         {
                             __result = false;
                             return false;
@@ -231,9 +251,9 @@ namespace BannerKings
             }
 
             [HarmonyPatch(typeof(EscortMerchantCaravanIssueBehavior), "ConditionsHold")]
-            class EscortCaravanConditionsHoldPatch
+            internal class EscortCaravanConditionsHoldPatch
             {
-                static bool Prefix(Hero issueGiver, ref bool __result)
+                private static bool Prefix(Hero issueGiver, ref bool __result)
                 {
                     if (issueGiver.CurrentSettlement == null || issueGiver.CurrentSettlement.IsVillage)
                     {
@@ -246,11 +266,12 @@ namespace BannerKings
             }
 
             [HarmonyPatch(typeof(EscortMerchantCaravanIssue), "IssueStayAliveConditions")]
-            class EscortCaravanIssueStayAliveConditionsPatch
+            internal class EscortCaravanIssueStayAliveConditionsPatch
             {
-                static bool Prefix(EscortMerchantCaravanIssue __instance, ref bool __result)
+                private static bool Prefix(EscortMerchantCaravanIssue __instance, ref bool __result)
                 {
-                    if (__instance.IssueOwner.CurrentSettlement == null || __instance.IssueOwner.CurrentSettlement.IsVillage)
+                    if (__instance.IssueOwner.CurrentSettlement == null ||
+                        __instance.IssueOwner.CurrentSettlement.IsVillage)
                     {
                         __result = false;
                         return false;
@@ -262,26 +283,29 @@ namespace BannerKings
 
 
             [HarmonyPatch(typeof(DefaultPartyMoraleModel), "CalculateFoodVarietyMoraleBonus")]
-            class CalculateFoodVarietyMoraleBonusPatch
+            internal class CalculateFoodVarietyMoraleBonusPatch
             {
-                static bool Prefix(MobileParty party, ref ExplainedNumber result)
+                private static bool Prefix(MobileParty party, ref ExplainedNumber result)
                 {
-                    float num = MBMath.ClampFloat(party.ItemRoster.FoodVariety - 5f, -5f, 5f);
-                    if (num != 0f && (num >= 0f || party.LeaderHero == null || !party.LeaderHero.GetPerkValue(DefaultPerks.Steward.Spartan)))
+                    var num = MBMath.ClampFloat(party.ItemRoster.FoodVariety - 5f, -5f, 5f);
+                    if (num != 0f && (num >= 0f || party.LeaderHero == null ||
+                                      !party.LeaderHero.GetPerkValue(DefaultPerks.Steward.Spartan)))
                     {
-                        if (num > 0f && party.HasPerk(DefaultPerks.Steward.Gourmet, false))
+                        if (num > 0f && party.HasPerk(DefaultPerks.Steward.Gourmet))
                         {
-                            result.Add(num * DefaultPerks.Steward.Gourmet.PrimaryBonus, DefaultPerks.Steward.Gourmet.Name, null);
+                            result.Add(num * DefaultPerks.Steward.Gourmet.PrimaryBonus,
+                                DefaultPerks.Steward.Gourmet.Name);
                             return false;
                         }
-                        result.Add(num, GameTexts.FindText("str_food_bonus_morale", null), null);
+
+                        result.Add(num, GameTexts.FindText("str_food_bonus_morale"));
                     }
 
-                    float totalModifiers = 0f;
-                    float modifierRate = 0f;
-                    foreach (ItemRosterElement element in party.ItemRoster.ToList().FindAll(x => x.EquipmentElement.Item.IsFood))
+                    var totalModifiers = 0f;
+                    var modifierRate = 0f;
+                    foreach (var element in party.ItemRoster.ToList().FindAll(x => x.EquipmentElement.Item.IsFood))
                     {
-                        ItemModifier modifier = element.EquipmentElement.ItemModifier;
+                        var modifier = element.EquipmentElement.ItemModifier;
                         if (modifier != null)
                         {
                             totalModifiers++;
@@ -289,7 +313,11 @@ namespace BannerKings
                         }
                     }
 
-                    if (modifierRate != 0f) result.Add(MBMath.ClampFloat(modifierRate / totalModifiers, -5f, 5f), new TextObject("{=!}Food quality"));
+                    if (modifierRate != 0f)
+                    {
+                        result.Add(MBMath.ClampFloat(modifierRate / totalModifiers, -5f, 5f),
+                            new TextObject("{=!}Food quality"));
+                    }
 
                     return false;
                 }
@@ -299,36 +327,40 @@ namespace BannerKings
 
         namespace Government
         {
-
             [HarmonyPatch(typeof(KingdomPolicyDecision), "IsAllowed")]
-            class PolicyIsAllowedPatch
+            internal class PolicyIsAllowedPatch
             {
-                static bool Prefix(ref bool __result, KingdomPolicyDecision __instance)
+                private static bool Prefix(ref bool __result, KingdomPolicyDecision __instance)
                 {
                     if (BannerKingsConfig.Instance.TitleManager != null)
                     {
-                        FeudalTitle sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(__instance.Kingdom);
+                        var sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(__instance.Kingdom);
                         if (sovereign != null)
                         {
-                            __result = !PolicyHelper.GetForbiddenGovernmentPolicies(sovereign.contract.Government).Contains(__instance.Policy);
+                            __result = !PolicyHelper.GetForbiddenGovernmentPolicies(sovereign.contract.Government)
+                                .Contains(__instance.Policy);
                             return false;
                         }
                     }
+
                     return true;
                 }
             }
 
             [HarmonyPatch(typeof(KingSelectionKingdomDecision), "ApplyChosenOutcome")]
-            class ApplyChosenOutcomePatch
+            internal class ApplyChosenOutcomePatch
             {
-                static void Postfix(KingSelectionKingdomDecision __instance, DecisionOutcome chosenOutcome)
+                private static void Postfix(KingSelectionKingdomDecision __instance, DecisionOutcome chosenOutcome)
                 {
-                    FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(__instance.Kingdom);
+                    var title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(__instance.Kingdom);
                     if (title != null)
                     {
-                        Hero deJure = title.deJure;
-                        Hero king = ((KingSelectionDecisionOutcome)chosenOutcome).King;
-                        if (deJure != king) BannerKingsConfig.Instance.TitleManager.InheritTitle(deJure, king, title);
+                        var deJure = title.deJure;
+                        var king = ((KingSelectionDecisionOutcome) chosenOutcome).King;
+                        if (deJure != king)
+                        {
+                            BannerKingsConfig.Instance.TitleManager.InheritTitle(deJure, king, title);
+                        }
                     }
                 }
             }
@@ -337,93 +369,114 @@ namespace BannerKings
 
         namespace Economy
         {
-
             [HarmonyPatch(typeof(NotablesCampaignBehavior), "BalanceGoldAndPowerOfNotable")]
-            class BalanceGoldAndPowerOfNotablePatch
+            internal class BalanceGoldAndPowerOfNotablePatch
             {
-                static bool Prefix(Hero notable)
+                private static bool Prefix(Hero notable)
                 {
                     if (notable.Gold > 10500)
                     {
-                        int num = (notable.Gold - 10000) / 500;
+                        var num = (notable.Gold - 10000) / 500;
                         GiveGoldAction.ApplyBetweenCharacters(notable, null, num * 500, true);
-                        notable.AddPower((float)num);
+                        notable.AddPower(num);
                         return false;
                     }
+
                     return true;
                 }
             }
 
             [HarmonyPatch(typeof(WorkshopsCampaignBehavior), "ProduceOutput")]
-            class WorkshopProduceOutputPatch
+            internal class WorkshopProduceOutputPatch
             {
-                static bool Prefix(ItemObject outputItem, Town town, Workshop workshop, int count, bool doNotEffectCapital)
+                private static bool Prefix(ItemObject outputItem, Town town, Workshop workshop, int count,
+                    bool doNotEffectCapital)
                 {
-                    if (BannerKingsConfig.Instance.PopulationManager == null || !BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
-                        return true;
-
-                    EconomicData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement).EconomicData;
-                    ItemModifierGroup modifierGroup;
-                    if (outputItem.IsFood) modifierGroup = Game.Current.ObjectManager.GetObject<ItemModifierGroup>("consumables");
-                    else if (outputItem.IsAnimal) modifierGroup = Game.Current.ObjectManager.GetObject<ItemModifierGroup>("animals");
-                    else modifierGroup = Game.Current.ObjectManager.GetObject<ItemModifierGroup>("goods");
-
-
-                    float result = data.ProductionQuality.ResultNumber;
-                    if (workshop.Owner != null)
+                    if (BannerKingsConfig.Instance.PopulationManager == null ||
+                        !BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
                     {
-                        EducationData education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(workshop.Owner);
-                        if (education.HasPerk(BKPerks.Instance.ArtisanCraftsman))
-                            result += 0.05f;
+                        return true;
+                    }
+
+                    var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement).EconomicData;
+                    ItemModifierGroup modifierGroup;
+                    if (outputItem.IsFood)
+                    {
+                        modifierGroup = Game.Current.ObjectManager.GetObject<ItemModifierGroup>("consumables");
+                    }
+                    else if (outputItem.IsAnimal)
+                    {
+                        modifierGroup = Game.Current.ObjectManager.GetObject<ItemModifierGroup>("animals");
+                    }
+                    else
+                    {
+                        modifierGroup = Game.Current.ObjectManager.GetObject<ItemModifierGroup>("goods");
                     }
 
 
-                    ItemModifier modifier = modifierGroup.GetRandomModifierWithTarget();
-                    int itemPrice = (int)(town.GetItemPrice(outputItem, null, false) * modifier.PriceMultiplier);
-                    town.Owner.ItemRoster.AddToCounts(new EquipmentElement(outputItem, modifier, null, false), count);
+                    var result = data.ProductionQuality.ResultNumber;
+                    if (workshop.Owner != null)
+                    {
+                        var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(workshop.Owner);
+                        if (education.HasPerk(BKPerks.Instance.ArtisanCraftsman))
+                        {
+                            result += 0.05f;
+                        }
+                    }
+
+
+                    var modifier = modifierGroup.GetRandomModifierWithTarget();
+                    var itemPrice = (int) (town.GetItemPrice(outputItem) * modifier.PriceMultiplier);
+                    town.Owner.ItemRoster.AddToCounts(new EquipmentElement(outputItem, modifier), count);
                     if (Campaign.Current.GameStarted && !doNotEffectCapital)
                     {
-                        int num = MathF.Min(1000, itemPrice) * count;
+                        var num = MathF.Min(1000, itemPrice) * count;
                         workshop.ChangeGold(num);
                         town.ChangeGold(-num);
                     }
+
                     CampaignEventDispatcher.Instance.OnItemProduced(outputItem, town.Owner.Settlement, count);
                     return false;
                 }
             }
 
             [HarmonyPatch(typeof(Workshop), "Expense", MethodType.Getter)]
-            class WorkshopExpensePatch
+            internal class WorkshopExpensePatch
             {
-                static bool Prefix(Workshop __instance, ref int __result)
+                private static bool Prefix(Workshop __instance, ref int __result)
                 {
-                    __result = (int)(__instance.Settlement.Prosperity * 0.01f +
-                    Campaign.Current.Models.WorkshopModel.GetDailyExpense(__instance.Level));
+                    __result = (int) (__instance.Settlement.Prosperity * 0.01f +
+                                      Campaign.Current.Models.WorkshopModel.GetDailyExpense(__instance.Level));
                     return false;
                 }
             }
 
             [HarmonyPatch(typeof(HeroHelper), "StartRecruitingMoneyLimit")]
-            class StartRecruitingMoneyLimitPatch
+            internal class StartRecruitingMoneyLimitPatch
             {
-                static bool Prefix(Hero hero, ref float __result)
+                private static bool Prefix(Hero hero, ref float __result)
                 {
                     __result = 50f;
                     if (hero.PartyBelongedTo != null)
+                    {
                         __result += 1000f;
+                    }
+
                     return false;
                 }
             }
 
             [HarmonyPatch(typeof(CaravansCampaignBehavior), "GetTradeScoreForTown")]
-            class GetTradeScoreForTownPatch
+            internal class GetTradeScoreForTownPatch
             {
-                static void Postfix(ref float __result, MobileParty caravanParty, Town town, CampaignTime lastHomeVisitTimeOfCaravan,
+                private static void Postfix(ref float __result, MobileParty caravanParty, Town town,
+                    CampaignTime lastHomeVisitTimeOfCaravan,
                     float caravanFullness, bool distanceCut)
                 {
-                    if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
+                    if (BannerKingsConfig.Instance.PopulationManager != null &&
+                        BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
                     {
-                        PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
+                        var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
                         __result *= data.EconomicData.CaravanAttraction.ResultNumber;
                     }
                 }
@@ -431,61 +484,74 @@ namespace BannerKings
 
 
             [HarmonyPatch(typeof(SellGoodsForTradeAction), "ApplyInternal")]
-            class SellGoodsPatch
+            internal class SellGoodsPatch
             {
-                static bool Prefix(object[] __args)
+                private static bool Prefix(object[] __args)
                 {
-                    Settlement settlement = (Settlement)__args[0];
-                    MobileParty mobileParty = (MobileParty)__args[1];
+                    var settlement = (Settlement) __args[0];
+                    var mobileParty = (MobileParty) __args[1];
                     if (settlement != null && mobileParty != null)
+                    {
                         if (settlement.IsTown && mobileParty.IsVillager)
                         {
-                            Town component = settlement.Town;
-                            List<ValueTuple<EquipmentElement, int>> list = new List<ValueTuple<EquipmentElement, int>>();
-                            int num = 10000;
+                            var component = settlement.Town;
+                            var list = new List<ValueTuple<EquipmentElement, int>>();
+                            var num = 10000;
                             ItemObject itemObject = null;
-                            for (int i = 0; i < mobileParty.ItemRoster.Count; i++)
+                            for (var i = 0; i < mobileParty.ItemRoster.Count; i++)
                             {
-                                ItemRosterElement elementCopyAtIndex = mobileParty.ItemRoster.GetElementCopyAtIndex(i);
-                                if (elementCopyAtIndex.EquipmentElement.Item.ItemCategory == DefaultItemCategories.PackAnimal && elementCopyAtIndex.EquipmentElement.Item.Value < num)
+                                var elementCopyAtIndex = mobileParty.ItemRoster.GetElementCopyAtIndex(i);
+                                if (elementCopyAtIndex.EquipmentElement.Item.ItemCategory ==
+                                    DefaultItemCategories.PackAnimal &&
+                                    elementCopyAtIndex.EquipmentElement.Item.Value < num)
                                 {
                                     num = elementCopyAtIndex.EquipmentElement.Item.Value;
                                     itemObject = elementCopyAtIndex.EquipmentElement.Item;
                                 }
                             }
-                            for (int j = mobileParty.ItemRoster.Count - 1; j >= 0; j--)
+
+                            for (var j = mobileParty.ItemRoster.Count - 1; j >= 0; j--)
                             {
-                                ItemRosterElement elementCopyAtIndex2 = mobileParty.ItemRoster.GetElementCopyAtIndex(j);
-                                int itemPrice = component.GetItemPrice(elementCopyAtIndex2.EquipmentElement, mobileParty, true);
-                                int num2 = mobileParty.ItemRoster.GetElementNumber(j);
+                                var elementCopyAtIndex2 = mobileParty.ItemRoster.GetElementCopyAtIndex(j);
+                                var itemPrice = component.GetItemPrice(elementCopyAtIndex2.EquipmentElement,
+                                    mobileParty, true);
+                                var num2 = mobileParty.ItemRoster.GetElementNumber(j);
                                 if (elementCopyAtIndex2.EquipmentElement.Item == itemObject)
                                 {
-                                    int num3 = (int)(0.5f * (float)mobileParty.MemberRoster.TotalManCount) + 2;
+                                    var num3 = (int) (0.5f * mobileParty.MemberRoster.TotalManCount) + 2;
                                     num2 -= num3;
 
                                     if (itemObject.StringId == "mule")
-                                        num2 -= (int)(mobileParty.MemberRoster.TotalManCount * 0.1f);
+                                    {
+                                        num2 -= (int) (mobileParty.MemberRoster.TotalManCount * 0.1f);
+                                    }
                                 }
+
                                 if (num2 > 0)
                                 {
-                                    int num4 = MathF.Min(num2, component.Gold / itemPrice);
+                                    var num4 = MathF.Min(num2, component.Gold / itemPrice);
                                     if (num4 > 0)
                                     {
                                         mobileParty.PartyTradeGold += num4 * itemPrice;
-                                        EquipmentElement equipmentElement = elementCopyAtIndex2.EquipmentElement;
+                                        var equipmentElement = elementCopyAtIndex2.EquipmentElement;
                                         component.ChangeGold(-num4 * itemPrice);
                                         settlement.ItemRoster.AddToCounts(equipmentElement, num4);
                                         mobileParty.ItemRoster.AddToCounts(equipmentElement, -num4);
-                                        list.Add(new ValueTuple<EquipmentElement, int>(new EquipmentElement(equipmentElement.Item), num4));
+                                        list.Add(new ValueTuple<EquipmentElement, int>(
+                                            new EquipmentElement(equipmentElement.Item), num4));
                                     }
                                 }
                             }
 
                             if (!list.IsEmpty())
-                                CampaignEventDispatcher.Instance.OnCaravanTransactionCompleted(mobileParty, component, list);
+                            {
+                                CampaignEventDispatcher.Instance.OnCaravanTransactionCompleted(mobileParty, component,
+                                    list);
+                            }
 
                             return false;
                         }
+                    }
 
                     return true;
                 }
@@ -494,21 +560,21 @@ namespace BannerKings
 
             //Mules
             [HarmonyPatch(typeof(VillagerCampaignBehavior), "MoveItemsToVillagerParty")]
-            class VillagerMoveItemsPatch
+            internal class VillagerMoveItemsPatch
             {
-                static bool Prefix(Village village, MobileParty villagerParty)
+                private static bool Prefix(Village village, MobileParty villagerParty)
                 {
-                    ItemObject mule = MBObjectManager.Instance.GetObject<ItemObject>(x => x.StringId == "mule");
-                    int muleCount = (int)(villagerParty.MemberRoster.TotalManCount * 0.1f);
+                    var mule = MBObjectManager.Instance.GetObject<ItemObject>(x => x.StringId == "mule");
+                    var muleCount = (int) (villagerParty.MemberRoster.TotalManCount * 0.1f);
                     villagerParty.ItemRoster.AddToCounts(mule, muleCount);
-                    ItemRoster itemRoster = village.Settlement.ItemRoster;
-                    float num = villagerParty.InventoryCapacity - villagerParty.ItemRoster.TotalWeight;
-                    for (int i = 0; i < 4; i++)
+                    var itemRoster = village.Settlement.ItemRoster;
+                    var num = villagerParty.InventoryCapacity - villagerParty.ItemRoster.TotalWeight;
+                    for (var i = 0; i < 4; i++)
                     {
-                        foreach (ItemRosterElement itemRosterElement in itemRoster)
+                        foreach (var itemRosterElement in itemRoster)
                         {
-                            ItemObject item = itemRosterElement.EquipmentElement.Item;
-                            int num2 = MBRandom.RoundRandomized(itemRosterElement.Amount * 0.2f);
+                            var item = itemRosterElement.EquipmentElement.Item;
+                            var num2 = MBRandom.RoundRandomized(itemRosterElement.Amount * 0.2f);
                             if (num2 > 0)
                             {
                                 if (!item.HasHorseComponent && item.Weight * num2 > num)
@@ -519,15 +585,18 @@ namespace BannerKings
                                         continue;
                                     }
                                 }
+
                                 if (!item.HasHorseComponent)
                                 {
                                     num -= num2 * item.Weight;
                                 }
+
                                 villagerParty.Party.ItemRoster.AddToCounts(itemRosterElement.EquipmentElement, num2);
                                 itemRoster.AddToCounts(itemRosterElement.EquipmentElement, -num2);
                             }
                         }
                     }
+
                     return false;
                 }
             }
@@ -535,30 +604,41 @@ namespace BannerKings
 
             //Add gold to village and consume some of it, do not reset gold
             [HarmonyPatch(typeof(VillagerCampaignBehavior), "OnSettlementEntered")]
-            class VillagerSettlementEnterPatch
+            internal class VillagerSettlementEnterPatch
             {
-                static bool Prefix(ref Dictionary<MobileParty, List<Settlement>> ____previouslyChangedVillagerTargetsDueToEnemyOnWay, MobileParty mobileParty, Settlement settlement, Hero hero)
+                private static bool Prefix(
+                    ref Dictionary<MobileParty, List<Settlement>> ____previouslyChangedVillagerTargetsDueToEnemyOnWay,
+                    MobileParty mobileParty, Settlement settlement, Hero hero)
                 {
-                    if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
+                    if (BannerKingsConfig.Instance.PopulationManager != null &&
+                        BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
                     {
-
                         if (mobileParty != null && mobileParty.IsActive && mobileParty.IsVillager)
                         {
                             ____previouslyChangedVillagerTargetsDueToEnemyOnWay[mobileParty].Clear();
                             if (settlement.IsTown)
+                            {
                                 SellGoodsForTradeAction.ApplyByVillagerTrade(settlement, mobileParty);
+                            }
 
                             if (settlement.IsVillage)
                             {
-                                int tax = Campaign.Current.Models.SettlementTaxModel.CalculateVillageTaxFromIncome(mobileParty.HomeSettlement.Village, mobileParty.PartyTradeGold);
+                                var tax = Campaign.Current.Models.SettlementTaxModel.CalculateVillageTaxFromIncome(
+                                    mobileParty.HomeSettlement.Village, mobileParty.PartyTradeGold);
                                 float remainder = mobileParty.PartyTradeGold - tax;
-                                mobileParty.HomeSettlement.Village.ChangeGold((int)(remainder * 0.5f));
+                                mobileParty.HomeSettlement.Village.ChangeGold((int) (remainder * 0.5f));
                                 mobileParty.PartyTradeGold = 0;
                                 mobileParty.HomeSettlement.Village.TradeTaxAccumulated += tax;
                             }
-                            if (settlement.IsTown && settlement.Town.Governor != null && settlement.Town.Governor.GetPerkValue(DefaultPerks.Trade.DistributedGoods))
-                                settlement.Town.TradeTaxAccumulated += MathF.Round(DefaultPerks.Trade.DistributedGoods.SecondaryBonus);
+
+                            if (settlement.IsTown && settlement.Town.Governor != null &&
+                                settlement.Town.Governor.GetPerkValue(DefaultPerks.Trade.DistributedGoods))
+                            {
+                                settlement.Town.TradeTaxAccumulated +=
+                                    MathF.Round(DefaultPerks.Trade.DistributedGoods.SecondaryBonus);
+                            }
                         }
+
                         return false;
                     }
 
@@ -569,40 +649,49 @@ namespace BannerKings
 
             // Impact prosperity
             [HarmonyPatch(typeof(ChangeOwnerOfWorkshopAction), "ApplyInternal")]
-            class BankruptcyPatch
+            internal class BankruptcyPatch
             {
-                static void Postfix(Workshop workshop, Hero newOwner, WorkshopType workshopType, int capital, bool upgradable, int cost, TextObject customName, ChangeOwnerOfWorkshopAction.ChangeOwnerOfWorkshopDetail detail)
+                private static void Postfix(Workshop workshop, Hero newOwner, WorkshopType workshopType, int capital,
+                    bool upgradable, int cost, TextObject customName,
+                    ChangeOwnerOfWorkshopAction.ChangeOwnerOfWorkshopDetail detail)
                 {
-                    Settlement settlement = workshop.Settlement;
+                    var settlement = workshop.Settlement;
                     settlement.Prosperity -= 50f;
                 }
             }
 
             // Added productions
             [HarmonyPatch(typeof(VillageGoodProductionCampaignBehavior), "TickGoodProduction")]
-            class TickGoodProductionPatch
+            internal class TickGoodProductionPatch
             {
-                static bool Prefix(Village village, bool initialProductionForTowns)
+                private static bool Prefix(Village village, bool initialProductionForTowns)
                 {
-
-                    if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(village.Settlement))
+                    if (BannerKingsConfig.Instance.PopulationManager != null &&
+                        BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(village.Settlement))
                     {
-
-                        List<(ItemObject, float)> productions = BannerKingsConfig.Instance.PopulationManager.GetProductions(BannerKingsConfig.Instance.PopulationManager.GetPopData(village.Settlement).VillageData);
-                        foreach (ValueTuple<ItemObject, float> valueTuple in productions)
+                        var productions = BannerKingsConfig.Instance.PopulationManager.GetProductions(BannerKingsConfig
+                            .Instance.PopulationManager.GetPopData(village.Settlement).VillageData);
+                        foreach (var valueTuple in productions)
                         {
-                            ItemObject item = valueTuple.Item1;
-                            int num = MBRandom.RoundRandomized(Campaign.Current.Models.VillageProductionCalculatorModel.CalculateDailyProductionAmount(village, valueTuple.Item1));
+                            var item = valueTuple.Item1;
+                            var num = MBRandom.RoundRandomized(
+                                Campaign.Current.Models.VillageProductionCalculatorModel.CalculateDailyProductionAmount(
+                                    village, valueTuple.Item1));
                             if (num > 0)
                             {
                                 if (!initialProductionForTowns)
                                 {
                                     village.Owner.ItemRoster.AddToCounts(item, num);
-                                    CampaignEventDispatcher.Instance.OnItemProduced(item, village.Owner.Settlement, num);
+                                    CampaignEventDispatcher.Instance.OnItemProduced(item, village.Owner.Settlement,
+                                        num);
                                 }
-                                else village.Bound.ItemRoster.AddToCounts(item, num);
+                                else
+                                {
+                                    village.Bound.ItemRoster.AddToCounts(item, num);
+                                }
                             }
                         }
+
                         return false;
                     }
 
@@ -613,56 +702,72 @@ namespace BannerKings
 
             // Retain behavior of original while updating satisfaction parameters
             [HarmonyPatch(typeof(ItemConsumptionBehavior), "MakeConsumption")]
-            class ItemConsumptionPatch
+            internal class ItemConsumptionPatch
             {
-                static bool Prefix(Town town, Dictionary<ItemCategory, float> categoryDemand, Dictionary<ItemCategory, int> saleLog)
+                private static bool Prefix(Town town, Dictionary<ItemCategory, float> categoryDemand,
+                    Dictionary<ItemCategory, int> saleLog)
                 {
-                    if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
+                    if (BannerKingsConfig.Instance.PopulationManager != null &&
+                        BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
                     {
                         saleLog.Clear();
-                        TownMarketData marketData = town.MarketData;
-                        ItemRoster itemRoster = town.Owner.ItemRoster;
-                        PopulationData popData = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
-                        for (int i = itemRoster.Count - 1; i >= 0; i--)
+                        var marketData = town.MarketData;
+                        var itemRoster = town.Owner.ItemRoster;
+                        var popData = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
+                        for (var i = itemRoster.Count - 1; i >= 0; i--)
                         {
-                            ItemRosterElement elementCopyAtIndex = itemRoster.GetElementCopyAtIndex(i);
-                            ItemObject item = elementCopyAtIndex.EquipmentElement.Item;
-                            int amount = elementCopyAtIndex.Amount;
-                            ItemCategory itemCategory = item.GetItemCategory();
-                            float demand = categoryDemand[itemCategory];
+                            var elementCopyAtIndex = itemRoster.GetElementCopyAtIndex(i);
+                            var item = elementCopyAtIndex.EquipmentElement.Item;
+                            var amount = elementCopyAtIndex.Amount;
+                            var itemCategory = item.GetItemCategory();
+                            var demand = categoryDemand[itemCategory];
 
-                            IEnumerable<ItemConsumptionBehavior> behaviors = Campaign.Current.GetCampaignBehaviors<ItemConsumptionBehavior>();
-                            MethodInfo dynMethod = behaviors.First().GetType().GetMethod("CalculateBudget", BindingFlags.NonPublic | BindingFlags.Static);
-                            float num = (float)dynMethod.Invoke(null, new object[] { town, demand, itemCategory });
+                            var behaviors = Campaign.Current.GetCampaignBehaviors<ItemConsumptionBehavior>();
+                            var dynMethod = behaviors.First().GetType().GetMethod("CalculateBudget",
+                                BindingFlags.NonPublic | BindingFlags.Static);
+                            var num = (float) dynMethod.Invoke(null, new object[] {town, demand, itemCategory});
                             if (num > 0.01f)
                             {
-                                int price = marketData.GetPrice(item);
-                                float desiredAmount = num / price;
+                                var price = marketData.GetPrice(item);
+                                var desiredAmount = num / price;
                                 if (desiredAmount > amount)
+                                {
                                     desiredAmount = amount;
+                                }
 
 
                                 if (item.IsFood && town.FoodStocks <= town.FoodStocksUpperLimit() * 0.1f)
                                 {
-                                    float requiredFood = town.FoodChange * -1f;
+                                    var requiredFood = town.FoodChange * -1f;
                                     if (amount > requiredFood)
+                                    {
                                         desiredAmount += requiredFood + 1f;
-                                    else desiredAmount += amount;
+                                    }
+                                    else
+                                    {
+                                        desiredAmount += amount;
+                                    }
                                 }
 
-                                int finalAmount = MBRandom.RoundRandomized(desiredAmount);
-                                ConsumptionType type = Utils.Helpers.GetTradeGoodConsumptionType(item);
+                                var finalAmount = MBRandom.RoundRandomized(desiredAmount);
+                                var type = Utils.Helpers.GetTradeGoodConsumptionType(item);
                                 if (finalAmount > amount)
                                 {
                                     finalAmount = amount;
-                                    if (type != ConsumptionType.None) popData.EconomicData.UpdateSatisfaction(type, -0.0015f);
+                                    if (type != ConsumptionType.None)
+                                    {
+                                        popData.EconomicData.UpdateSatisfaction(type, -0.0015f);
+                                    }
                                 }
-                                else if (type != ConsumptionType.None) popData.EconomicData.UpdateSatisfaction(type, 0.001f);
+                                else if (type != ConsumptionType.None)
+                                {
+                                    popData.EconomicData.UpdateSatisfaction(type, 0.001f);
+                                }
 
                                 itemRoster.AddToCounts(elementCopyAtIndex.EquipmentElement, -finalAmount);
                                 categoryDemand[itemCategory] = num - desiredAmount * price;
                                 town.ChangeGold(finalAmount * price);
-                                int num4 = 0;
+                                var num4 = 0;
                                 saleLog.TryGetValue(itemCategory, out num4);
                                 saleLog[itemCategory] = num4 + finalAmount;
                             }
@@ -670,26 +775,42 @@ namespace BannerKings
 
                         if (town.FoodStocks <= town.FoodStocksUpperLimit() * 0.05f && town.Settlement.Stash != null)
                         {
-                            List<ItemRosterElement> elements = new List<ItemRosterElement>();
-                            foreach (ItemRosterElement element in town.Settlement.Stash)
-                                if (element.EquipmentElement.Item != null && element.EquipmentElement.Item.ItemCategory.Properties == ItemCategory.Property.BonusToFoodStores)
-                                    elements.Add(element);
-
-                            foreach (ItemRosterElement element in elements)
+                            var elements = new List<ItemRosterElement>();
+                            foreach (var element in town.Settlement.Stash)
                             {
-                                ItemCategory category = element.EquipmentElement.Item.ItemCategory;
+                                if (element.EquipmentElement.Item != null &&
+                                    element.EquipmentElement.Item.ItemCategory.Properties ==
+                                    ItemCategory.Property.BonusToFoodStores)
+                                {
+                                    elements.Add(element);
+                                }
+                            }
+
+                            foreach (var element in elements)
+                            {
+                                var category = element.EquipmentElement.Item.ItemCategory;
                                 if (saleLog.ContainsKey(category))
+                                {
                                     saleLog[category] += element.Amount;
-                                else saleLog.Add(category, element.Amount);
+                                }
+                                else
+                                {
+                                    saleLog.Add(category, element.Amount);
+                                }
+
                                 town.Settlement.Stash.Remove(element);
                             }
                         }
 
 
-                        List<Town.SellLog> list = new List<Town.SellLog>();
-                        foreach (KeyValuePair<ItemCategory, int> keyValuePair in saleLog)
+                        var list = new List<Town.SellLog>();
+                        foreach (var keyValuePair in saleLog)
+                        {
                             if (keyValuePair.Value > 0)
+                            {
                                 list.Add(new Town.SellLog(keyValuePair.Key, keyValuePair.Value));
+                            }
+                        }
 
                         town.SetSoldItems(list);
                         return false;

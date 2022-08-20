@@ -1,43 +1,42 @@
-﻿using BannerKings.Populations;
+﻿using BannerKings.Managers.Populations;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.SaveSystem;
 
-namespace BannerKings.Managers.Institutions.Religions
+namespace BannerKings.Managers.Institutions.Religions;
+
+public class ReligionData : BannerKingsData
 {
-    public class ReligionData : BannerKingsData
+    [SaveableField(2)] private Clergyman clergyman;
+
+    public ReligionData(Religion religion, Settlement settlement)
     {
-        [SaveableField(1)]
-        private Settlement settlement;
+        Religion = religion;
+        Settlement = settlement;
+    }
 
-        [SaveableField(2)]
-        private Clergyman clergyman;
+    [field: SaveableField(3)] public Religion Religion { get; }
 
-        [SaveableField(3)]
-        private Religion religion;
+    [field: SaveableField(1)] public Settlement Settlement { get; }
 
-        public ReligionData(Religion religion, Settlement settlement)
+    public Clergyman Clergyman
+    {
+        get
         {
-            this.religion = religion;
-            this.settlement = settlement;
-        }
-
-        public Religion Religion => religion;
-        public Settlement Settlement => settlement;
-
-        public Clergyman Clergyman
-        {
-            get
-            {
-                if (clergyman == null) clergyman = religion.GenerateClergyman(settlement);
-                return clergyman;
-            }
-        }
-
-        internal override void Update(PopulationData data)
-        {
-            clergyman = religion.GetClergyman(data.Settlement);
             if (clergyman == null)
-                clergyman = religion.GenerateClergyman(settlement);
+            {
+                clergyman = Religion.GenerateClergyman(Settlement);
+            }
+
+            return clergyman;
+        }
+    }
+
+    internal override void Update(PopulationData data)
+    {
+        clergyman = Religion.GetClergyman(data.Settlement);
+        if (clergyman == null)
+        {
+            clergyman = Religion.GenerateClergyman(Settlement);
         }
     }
 }

@@ -1,30 +1,31 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace BannerKings.Managers.Institutions.Religions
+namespace BannerKings.Managers.Institutions.Religions.Leaderships;
+
+public abstract class DescentralizedLeadership : ReligiousLeadership
 {
-    public abstract class DescentralizedLeadership : ReligiousLeadership
+    public override void Initialize(Religion religion)
     {
-        public DescentralizedLeadership()
+    }
+
+    public List<Clergyman> GetLeaders(Religion religion)
+    {
+        var list = new List<Clergyman>();
+        var max = religion.Faith.GetMaxClergyRank();
+        foreach (var clergyman in religion.Clergy.Values.ToList())
         {
-            
+            if (clergyman.Rank == max)
+            {
+                list.Add(clergyman);
+            }
         }
 
-        public override void Initialize(Religion religion)
-        {
+        return list;
+    }
 
-        }
-
-        public List<Clergyman> GetLeaders(Religion religion)
-        {
-            List<Clergyman> list = new List<Clergyman>();
-            int max = religion.Faith.GetMaxClergyRank();
-            foreach (Clergyman clergyman in religion.Clergy.Values.ToList())
-                if (clergyman.Rank == max)
-                    list.Add(clergyman);
-            return list;
-        }
-
-        public override bool IsLeader(Clergyman clergyman) => false;
+    public override bool IsLeader(Clergyman clergyman)
+    {
+        return false;
     }
 }

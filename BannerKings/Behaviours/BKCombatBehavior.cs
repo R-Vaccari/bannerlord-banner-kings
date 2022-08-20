@@ -4,35 +4,35 @@ using TaleWorlds.Engine;
 using TaleWorlds.Localization;
 using TaleWorlds.MountAndBlade;
 
-namespace BannerKings.Behaviours
+namespace BannerKings.Behaviours;
+
+public class BKCombatBehavior : CampaignBehaviorBase
 {
-    public class BKCombatBehavior : CampaignBehaviorBase
+    private bool howlPlayed;
+
+    public override void RegisterEvents()
     {
-        private bool howlPlayed = false;
-        public override void RegisterEvents()
-        {
-            CampaignEvents.MissionTickEvent.AddNonSerializedListener(this, OnMissionTick);
-        }
+        CampaignEvents.MissionTickEvent.AddNonSerializedListener(this, OnMissionTick);
+    }
 
-        public override void SyncData(IDataStore dataStore)
-        {
-        }
+    public override void SyncData(IDataStore dataStore)
+    {
+    }
 
-        private void OnMissionTick(float dt)
+    private void OnMissionTick(float dt)
+    {
+        if (!howlPlayed)
         {
-            if (!howlPlayed)
-            {
-                MBInformationManager.AddQuickInformation(new TextObject("{=!}{HERO} is inspired by the spirits!")
+            MBInformationManager.AddQuickInformation(new TextObject("{=!}{HERO} is inspired by the spirits!")
                 .SetTextVariable("HERO", Hero.MainHero.Name), 0, Hero.MainHero.CharacterObject, "religions/wolfhowl");
 
-                int index = SoundEvent.GetEventIdFromString("religions/wolfhowl");
-                SoundEvent eventRef = SoundEvent.CreateEvent(index, Mission.Current.Scene);//get a reference to sound and update parameters later.
-                eventRef.SetPosition(Mission.Current.MainAgent.Position);
-                eventRef.PlayInPosition(Mission.Current.MainAgent.Position);
-                howlPlayed = true;
-            }
-            
-            
+            var index = SoundEvent.GetEventIdFromString("religions/wolfhowl");
+            var eventRef =
+                SoundEvent.CreateEvent(index,
+                    Mission.Current.Scene); //get a reference to sound and update parameters later.
+            eventRef.SetPosition(Mission.Current.MainAgent.Position);
+            eventRef.PlayInPosition(Mission.Current.MainAgent.Position);
+            howlPlayed = true;
         }
     }
 }

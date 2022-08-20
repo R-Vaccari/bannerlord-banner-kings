@@ -2,37 +2,38 @@
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace BannerKings.Managers.Institutions.Religions.Faiths
+namespace BannerKings.Managers.Institutions.Religions.Faiths;
+
+public class FaithGroup
 {
-    public class FaithGroup
+    private readonly List<Faith> members;
+
+    public FaithGroup(TextObject name, TextObject description)
     {
-        private List<Faith> members;
+        Name = name;
+        Description = description;
+        members = new List<Faith>();
+    }
 
-        private TextObject name;
+    public TextObject Name { get; }
 
-        private TextObject description;
+    public TextObject Description { get; }
 
-        public FaithGroup(TextObject name, TextObject description)
+    public MBReadOnlyList<Faith> Members => members.GetReadOnlyList();
+
+    public void AddMember(Faith faith)
+    {
+        if (!members.Contains(faith))
         {
-            this.name = name;
-            this.description = description;
-            members = new List<Faith>();
+            members.Add(faith);
         }
+    }
 
-        public TextObject Name => name;
-        public TextObject Description => description;
-        public MBReadOnlyList<Faith> Members => members.GetReadOnlyList();
-
-        public void AddMember(Faith faith)
+    public void RemoveMember(Faith faith)
+    {
+        if (members.Contains(faith))
         {
-            if (!members.Contains(faith))
-                members.Add(faith);
-        }
-
-        public void RemoveMember(Faith faith)
-        {
-            if (members.Contains(faith))
-                members.Remove(faith);
+            members.Remove(faith);
         }
     }
 }
