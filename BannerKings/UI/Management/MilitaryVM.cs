@@ -235,7 +235,7 @@ namespace BannerKings.UI.Management
                 SiegeInfo.Add(new InformationElement("Storage Limit:", settlement.Town.FoodStocksUpperLimit().ToString(),
                     "The amount of food this settlement is capable of storing."));
                 SiegeInfo.Add(new InformationElement("Estimated Holdout:",
-                    string.Format("{0} Days", data.MilitaryData.Holdout),
+                    $"{data.MilitaryData.Holdout} Days",
                     "How long this settlement will take to start starving in case of a siege."));
 
                 var sb = new StringBuilder();
@@ -285,20 +285,20 @@ namespace BannerKings.UI.Management
                                 if (lord == Hero.MainHero)
                                 {
                                     InformationManager.DisplayMessage(new InformationMessage(
-                                        string.Format("{0} men raised as militia at {1}!", menCount, settlement.Name)));
+                                        $"{menCount} men raised as militia at {settlement.Name}!"));
                                 }
                             }
                         }
                         else if (lord == Hero.MainHero)
                         {
                             InformationManager.DisplayMessage(
-                                new InformationMessage(string.Format("Militia already raised from {0}", settlement.Name)));
+                                new InformationMessage($"Militia already raised from {settlement.Name}"));
                         }
                     }
                     else if (lord == Hero.MainHero)
                     {
                         InformationManager.DisplayMessage(new InformationMessage(
-                            string.Format("Not enough men available to raise militia at {0}", settlement.Name)));
+                            $"Not enough men available to raise militia at {settlement.Name}"));
                     }
                 }, new TextObject("Raise the current militia of this village."));
             }

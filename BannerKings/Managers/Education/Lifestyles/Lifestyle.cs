@@ -29,8 +29,7 @@ namespace BannerKings.Managers.Education.Lifestyles
 
         public CultureObject Culture { get; private set; }
 
-        public TextObject PassiveEffects =>
-            effects.SetTextVariable("EFFECT1", FirstEffect).SetTextVariable("EFFECT2", SecondEffect);
+        public TextObject PassiveEffects => effects.SetTextVariable("EFFECT1", FirstEffect).SetTextVariable("EFFECT2", SecondEffect);
 
         public float FirstEffect { get; private set; }
 
@@ -44,9 +43,9 @@ namespace BannerKings.Managers.Education.Lifestyles
 
         public override bool Equals(object obj)
         {
-            if (obj is Lifestyle)
+            if (obj is Lifestyle lifestyle)
             {
-                return StringId == (obj as Lifestyle).StringId;
+                return StringId == lifestyle.StringId;
             }
 
             return base.Equals(obj);
@@ -55,14 +54,11 @@ namespace BannerKings.Managers.Education.Lifestyles
         public static Lifestyle CreateLifestyle(Lifestyle lf)
         {
             var lifestyle = new Lifestyle(lf.StringId);
-            lifestyle.Initialize(lf.Name, lf.Description, lf.FirstSkill, lf.SecondSkill, new List<PerkObject>(lf.Perks),
-                lf.PassiveEffects,
-                lf.FirstEffect, lf.SecondEffect, lf.Culture);
+            lifestyle.Initialize(lf.Name, lf.Description, lf.FirstSkill, lf.SecondSkill, new List<PerkObject>(lf.Perks), lf.PassiveEffects, lf.FirstEffect, lf.SecondEffect, lf.Culture);
             return lifestyle;
         }
 
-        public void Initialize(TextObject name, TextObject description, SkillObject firstSkill, SkillObject secondSkill,
-            List<PerkObject> perks, TextObject effects, float firstEffect, float secondEffect, CultureObject culture = null)
+        public void Initialize(TextObject name, TextObject description, SkillObject firstSkill, SkillObject secondSkill, List<PerkObject> perks, TextObject effects, float firstEffect, float secondEffect, CultureObject culture = null)
         {
             Initialize(name, description);
             this.FirstSkill = firstSkill;

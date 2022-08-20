@@ -39,7 +39,7 @@ namespace BannerKings.Components
 
         public static MobileParty CreateRetinue(Settlement origin)
         {
-            var retinue = CreateParty(string.Format("bk_retinue_{0}", origin.Name), origin);
+            var retinue = CreateParty($"bk_retinue_{origin.Name}", origin);
             retinue.InitializeMobilePartyAtPosition(origin.Culture.DefaultPartyTemplate, origin.GatePosition);
             EnterSettlementAction.ApplyForParty(retinue, origin);
             GiveFood(ref retinue);

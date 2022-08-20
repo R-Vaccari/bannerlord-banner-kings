@@ -16,7 +16,7 @@ namespace BannerKings.UI.Management
         private MBBindingList<PopulationInfoVM> classesList;
         private MBBindingList<InformationElement> cultureInfo;
         private MBBindingList<CultureElementVM> culturesList;
-        private PopulationData data;
+        private new PopulationData data;
         private DecisionElement foreignerToogle;
         private readonly Settlement settlement;
         private MBBindingList<InformationElement> statsInfo;

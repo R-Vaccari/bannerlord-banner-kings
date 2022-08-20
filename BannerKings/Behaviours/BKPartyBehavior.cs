@@ -45,9 +45,8 @@ namespace BannerKings.Behaviours
                     return;
                 }
 
-                if (component is MilitiaComponent)
+                if (component is MilitiaComponent militiaComponent)
                 {
-                    var militiaComponent = (MilitiaComponent) component;
                     var behavior = militiaComponent.Behavior;
                     if (behavior == AiBehavior.EscortParty)
                     {

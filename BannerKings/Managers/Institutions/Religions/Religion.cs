@@ -129,9 +129,8 @@ namespace BannerKings.Managers.Institutions.Religions
 
         public override bool Equals(object obj)
         {
-            if (obj is Religion)
+            if (obj is Religion rel)
             {
-                var rel = (Religion) obj;
                 return Faith.GetId() == rel.Faith.GetId();
             }
 

@@ -43,7 +43,7 @@ namespace BannerKings.Components
 
         public static void CreateMilitiaEscort(Settlement origin, MobileParty escortTarget, MobileParty reference)
         {
-            var caravan = CreateParty(string.Format("bk_raisedmilitia_{0}", origin), origin, escortTarget);
+            var caravan = CreateParty($"bk_raisedmilitia_{origin}", origin, escortTarget);
             caravan.InitializeMobilePartyAtPosition(reference.MemberRoster, reference.PrisonRoster, origin.GatePosition);
             caravan.SetMoveEscortParty(escortTarget);
             reference.MemberRoster.RemoveIf(roster => roster.Number > 0);

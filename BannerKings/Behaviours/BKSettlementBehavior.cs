@@ -325,7 +325,7 @@ namespace BannerKings.Behaviours
                         if (retinues.Count > 0)
                         {
                             retinue = retinues.FirstOrDefault(x =>
-                                x.StringId.Contains(string.Format("bk_retinue_{0}", settlement.Name)));
+                                x.StringId.Contains($"bk_retinue_{settlement.Name}"));
                         }
 
                         if (retinue == null)

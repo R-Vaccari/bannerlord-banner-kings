@@ -39,9 +39,6 @@ namespace BannerKings.Managers
 
             languages.Add(native, 1f);
 
-            Lifestyle mastery = null;
-            var masteryProgress = 0f;
-
             if (hero.IsNotable)
             {
                 if (!languages.ContainsKey(DefaultLanguages.Instance.Calradian) && MBRandom.RandomFloat <= 0.15f)

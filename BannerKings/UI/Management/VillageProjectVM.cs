@@ -145,7 +145,7 @@ namespace BannerKings.UI.Management
             }
         }
 
-        public void ExecuteClose()
+        public new void ExecuteClose()
         {
             UIManager.Instance.CloseUI();
         }

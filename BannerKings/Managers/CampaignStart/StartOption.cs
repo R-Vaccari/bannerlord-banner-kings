@@ -34,9 +34,9 @@ namespace BannerKings.Managers.CampaignStart
 
         public override bool Equals(object obj)
         {
-            if (obj is StartOption)
+            if (obj is StartOption option)
             {
-                return StringId == (obj as StartOption).StringId;
+                return StringId == option.StringId;
             }
 
             return base.Equals(obj);

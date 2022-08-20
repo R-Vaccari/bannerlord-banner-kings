@@ -101,22 +101,12 @@ namespace BannerKings.Managers
             }
             catch (Exception ex)
             {
-                var cause = "Exception in Banner Kings GetPopData method. ";
-                string objInfo = null;
-                if (settlement != null)
-                {
-                    objInfo = string.Format("Name [{0}], Id [{1}], Culture [{2}].", settlement.Name, settlement.StringId,
-                        settlement.Culture);
-                }
-                else
-                {
-                    objInfo = "Null settlement.";
-                }
+                const string cause = "Exception in Banner Kings GetPopData method. ";
+                var objInfo = settlement != null ? $"Name [{settlement.Name}], Id [{settlement.StringId}], Culture [{settlement.Culture}]."
+                    : "Null settlement.";
 
                 throw new BannerKingsException(cause + objInfo, ex);
             }
-
-            return null;
         }
 
         public void AddSettlementData(Settlement settlement, PopulationData data)

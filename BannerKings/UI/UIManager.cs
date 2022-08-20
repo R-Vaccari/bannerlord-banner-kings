@@ -139,7 +139,7 @@ namespace BannerKings.UI
                             .GetField("_name", BindingFlags.Instance | BindingFlags.NonPublic)
                             .GetValue(__instance);
                         __result = new TextObject(name + ", " +
-                                                  string.Format("{0} of {1}", honorary, title.shortName));
+                                                  $"{honorary} of {title.shortName}");
                     }
                 }
             }

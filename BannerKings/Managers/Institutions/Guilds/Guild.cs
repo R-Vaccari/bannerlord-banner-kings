@@ -31,7 +31,7 @@ namespace BannerKings.Managers.Institutions.Guilds
             }
         }
 
-        public float Influence
+        public new float Influence
         {
             get
             {
