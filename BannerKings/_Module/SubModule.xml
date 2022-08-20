@@ -25,6 +25,9 @@
     </SubModule>
   </SubModules>
   <Xmls>
+    <XmlNode>                
+		<XmlName id="GameText" path="module_strings"/>
+	</XmlNode>  
 	<XmlNode>
 		<XmlName id="EquipmentRosters" path="equipment_sets"/>
 		<IncludedGameTypes>
