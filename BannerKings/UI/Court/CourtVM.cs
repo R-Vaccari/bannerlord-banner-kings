@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.CampaignBehaviors;
 using TaleWorlds.CampaignSystem.ViewModelCollection;
 using TaleWorlds.CampaignSystem.ViewModelCollection.CharacterDeveloper;
 using TaleWorlds.CampaignSystem.ViewModelCollection.ClanManagement;
@@ -26,6 +27,8 @@ namespace BannerKings.UI.Court
 		private MBBindingList<InformationElement> courtInfo, privilegesInfo, courtierInfo;
 		private CharacterVM currentCharacter;
 		private string positionName, positionDescription, positionEffects;
+
+		private ITeleportationCampaignBehavior teleportationBehavior = Campaign.Current.GetCampaignBehavior<ITeleportationCampaignBehavior>();
 
 		public CourtVM(bool royal) : base(null, false)
         {
@@ -60,8 +63,10 @@ namespace BannerKings.UI.Court
 			{
 				if (hero.Spouse == council.Owner || council.Owner.Children.Contains(hero) || council.Owner.Siblings.Contains(hero) ||
 					council.Owner.Father == hero || council.Owner.Mother == hero)
-					Family.Add(new ClanLordItemVM(hero, null, null, new Action<ClanLordItemVM>(SetCurrentCharacter), null, null));
-				else Courtiers.Add(new ClanLordItemVM(hero, null, null, new Action<ClanLordItemVM>(SetCurrentCharacter), null, null));
+					Family.Add(new ClanLordItemVM(hero, teleportationBehavior, null, new Action<ClanLordItemVM>(SetCurrentCharacter), 
+						OnRequestRecall, OnRequestRecall));
+				else Courtiers.Add(new ClanLordItemVM(hero, teleportationBehavior, null, new Action<ClanLordItemVM>(SetCurrentCharacter),
+					OnRequestRecall, OnRequestRecall));
 
 			}
 
@@ -129,6 +134,11 @@ namespace BannerKings.UI.Court
 			}
 			
 		}
+
+		private void OnRequestRecall()
+        {
+
+        }
 
 		private void UpdatePositionTexts(string id)
         {

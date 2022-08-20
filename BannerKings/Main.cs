@@ -5,7 +5,6 @@ using BannerKings.Models.Vanilla;
 using HarmonyLib;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
-using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 using Bannerlord.UIExtenderEx;
 using BannerKings.Managers.Skills;
