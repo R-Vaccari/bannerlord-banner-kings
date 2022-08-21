@@ -21,7 +21,7 @@ namespace BannerKings.Managers
             Educations = new Dictionary<Hero, EducationData>();
         }
 
-        [SaveableProperty(1)] private Dictionary<Hero, EducationData> Educations { get; }
+        [SaveableProperty(1)] private Dictionary<Hero, EducationData> Educations { get; set; }
 
         public EducationData InitHeroEducation(Hero hero)
         {
@@ -38,9 +38,6 @@ namespace BannerKings.Managers
             }
 
             languages.Add(native, 1f);
-
-            Lifestyle mastery = null;
-            var masteryProgress = 0f;
 
             if (hero.IsNotable)
             {

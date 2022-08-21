@@ -70,7 +70,7 @@ namespace BannerKings.Utils
         public static TextObject GetClassName(PopType type, CultureObject culture)
         {
             var cultureModifier = '_' + culture.StringId;
-            var id = string.Format("pop_class_{0}{1}", type.ToString().ToLower(), cultureModifier);
+            var id = $"pop_class_{type.ToString().ToLower()}{cultureModifier}";
             var text = type.ToString();
             if (type == PopType.Serfs)
             {
@@ -125,7 +125,7 @@ namespace BannerKings.Utils
                 }
             }
 
-            var finalResult = string.Format("{{={0}}}{1}", id, text);
+            var finalResult = $"{{={id}}}{text}";
             return new TextObject(finalResult);
         }
 
@@ -809,7 +809,7 @@ namespace BannerKings.Utils
             if (nobleRecruit.UpgradeTargets != null)
             {
                 var currentUpgrades = nobleRecruit.UpgradeTargets;
-                while (currentUpgrades != null && currentUpgrades.Count() > 0)
+                while (currentUpgrades != null && currentUpgrades.Any())
                 {
                     var upgrade = currentUpgrades[0];
                     if (upgrade == character)

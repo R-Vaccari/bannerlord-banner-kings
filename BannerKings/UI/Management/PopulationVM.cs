@@ -178,10 +178,9 @@ namespace BannerKings.UI.Management
                 RefreshValues();
             }
 
-            public void ExecuteClose()
+            public new void ExecuteClose()
             {
-                InformationManager.DisplayMessage(new InformationMessage(string
-                    .Format("Policies updated for {0}", settlement.Name)));
+                InformationManager.DisplayMessage(new InformationMessage($"Policies updated for {settlement.Name}"));
                 militaryVM.OnFinalize();
                 economyVM.OnFinalize();
                 UIManager.Instance.CloseUI();

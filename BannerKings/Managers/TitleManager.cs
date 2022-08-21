@@ -28,9 +28,9 @@ namespace BannerKings.Managers
             RefreshCaches();
         }
 
-        [SaveableProperty(1)] private Dictionary<FeudalTitle, Hero> Titles { get; }
+        [SaveableProperty(1)] private Dictionary<FeudalTitle, Hero> Titles { get; set; }
 
-        [SaveableProperty(2)] private Dictionary<Kingdom, FeudalTitle> Kingdoms { get; }
+        [SaveableProperty(2)] private Dictionary<Kingdom, FeudalTitle> Kingdoms { get; set; }
 
         [SaveableProperty(3)] public bool Knighthood { get; set; } = true;
 
@@ -108,8 +108,7 @@ namespace BannerKings.Managers
                 string objInfo = null;
                 if (settlement != null)
                 {
-                    objInfo = string.Format("Name [{0}], Id [{1}], Culture [{2}].", settlement.Name, settlement.StringId,
-                        settlement.Culture);
+                    objInfo = $"Name [{settlement.Name}], Id [{settlement.StringId}], Culture [{settlement.Culture}].";
                 }
                 else
                 {
@@ -714,8 +713,7 @@ namespace BannerKings.Managers
                 string objInfo = null;
                 if (faction != null)
                 {
-                    objInfo = string.Format("Name [{0}], Id [{1}], Culture [{2}].", faction.Name, faction.StringId,
-                        faction.Culture);
+                    objInfo = $"Name [{faction.Name}], Id [{faction.StringId}], Culture [{faction.Culture}].";
                 }
                 else
                 {
@@ -994,7 +992,7 @@ namespace BannerKings.Managers
 
             var description = BannerKingsConfig.Instance.TitleManager.GetContractText(sovereign);
             InformationManager.ShowInquiry(new InquiryData(
-                string.Format("Enfoeffement Contract for {0}", sovereign.FullName),
+                $"Enfoeffement Contract for {sovereign.FullName}",
                 description, true, false, buttonString, "", null, null));
         }
 
@@ -1036,10 +1034,9 @@ namespace BannerKings.Managers
         public string GetContractText(FeudalTitle title)
         {
             var contract = title.contract;
-            var sb = new StringBuilder(string.Format(
-                "You, {0}, formally accept to be henceforth bound to the {1}, fulfill your duties as well as uphold your rights," +
-                " what can not be undone by means other than abdication of all rights and lands associated with the contract, treachery, or death.",
-                Hero.MainHero.Name, title.FullName));
+            var sb = new StringBuilder(
+                $"You, {Hero.MainHero.Name}, formally accept to be henceforth bound to the {title.FullName}, fulfill your duties as well as uphold your rights," +
+                " what can not be undone by means other than abdication of all rights and lands associated with the contract, treachery, or death.");
             sb.Append(Environment.NewLine);
             sb.Append("   ");
             sb.Append(Environment.NewLine);

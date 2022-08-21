@@ -9,7 +9,7 @@ namespace BannerKings.UI.CampaignStart
     public class CampaignStartVM : BannerKingsViewModel
     {
         private MBBindingList<StartOptionVM> options;
-        private StartOptionVM selected;
+        private new StartOptionVM selected;
 
         public CampaignStartVM() : base(null, false)
         {

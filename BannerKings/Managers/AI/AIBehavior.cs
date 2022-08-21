@@ -279,7 +279,7 @@ namespace BannerKings.Managers.AI
         {
             var kingdom = clan.Kingdom;
             return data.Stability >= 0.5f && data.NotableSupport.ResultNumber >= 0.5f && kingdom != null &&
-                   FactionManager.GetEnemyFactions(kingdom).Count() > 0 && clan.Influence > 50f * clan.Tier;
+                   FactionManager.GetEnemyFactions(kingdom).Any() && clan.Influence > 50f * clan.Tier;
         }
 
         public void SettlementManagement(Settlement target)
@@ -351,7 +351,7 @@ namespace BannerKings.Managers.AI
                 if (kingdom != null)
                 {
                     var enemies = FactionManager.GetEnemyKingdoms(kingdom);
-                    var atWar = enemies.Count() > 0;
+                    var atWar = enemies.Any();
 
                     if (target.Owner.GetTraitLevel(DefaultTraits.Calculating) > 0)
                     {

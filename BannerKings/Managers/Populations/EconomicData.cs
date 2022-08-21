@@ -1,5 +1,4 @@
 ﻿using BannerKings.Managers.Institutions.Guilds;
-using BannerKings.Models;
 using BannerKings.Models.Vanilla;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -12,8 +11,7 @@ namespace BannerKings.Managers.Populations
 {
     public class EconomicData : BannerKingsData
     {
-        public EconomicData(Settlement settlement,
-            Guild guild = null)
+        public EconomicData(Settlement settlement, Guild guild = null)
         {
             this.settlement = settlement;
             this.guild = guild;
@@ -21,11 +19,11 @@ namespace BannerKings.Managers.Populations
             stateSlaves = MBRandom.RandomFloatRanged(0.4f, 0.6f);
         }
 
-        [SaveableProperty(1)] private Settlement settlement { get; }
+        [SaveableProperty(1)] private Settlement settlement { get; set; }
 
         private Guild guild { get; set; }
 
-        [SaveableProperty(2)] private float[] satisfactions { get; }
+        [SaveableProperty(2)] private float[] satisfactions { get; set; }
 
         [SaveableProperty(3)] private float stateSlaves { get; set; }
 

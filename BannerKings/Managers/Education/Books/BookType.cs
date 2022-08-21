@@ -23,11 +23,11 @@ namespace BannerKings.Managers.Education.Books
             SkillObject skill = null)
         {
             Initialize(null, description);
-            this.Item = bookItem;
+            Item = bookItem;
             this.description = description;
-            this.Language = language;
-            this.Use = bookUse;
-            this.Skill = skill;
+            Language = language;
+            Use = bookUse;
+            Skill = skill;
         }
 
         public void FinishBook(Hero hero)

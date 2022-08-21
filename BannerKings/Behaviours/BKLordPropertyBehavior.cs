@@ -35,7 +35,7 @@ namespace BannerKings.Behaviours
             var kingdom = lord.Clan.Kingdom;
             if (lord == Hero.MainHero || kingdom == null || target.OwnerClan == null ||
                 target.OwnerClan.Kingdom != kingdom ||
-                FactionManager.GetEnemyKingdoms(kingdom).Count() > 0)
+                FactionManager.GetEnemyKingdoms(kingdom).Any())
             {
                 return;
             }

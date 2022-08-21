@@ -25,10 +25,10 @@ namespace BannerKings.Managers.Innovations
             CultureObject culture = null, Innovation requirement = null)
         {
             Initialize(name, description);
-            this.Effects = effects;
-            this.RequiredProgress = requiredProgress;
-            this.Culture = culture;
-            this.Requirement = requirement;
+            Effects = effects;
+            RequiredProgress = requiredProgress;
+            Culture = culture;
+            Requirement = requirement;
         }
 
         public void AddProgress(float points)

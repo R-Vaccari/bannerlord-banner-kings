@@ -15,7 +15,7 @@ namespace BannerKings.Managers.Policies
             Selected = selected;
         }
 
-        [SaveableProperty(1)] public Settlement Settlement { get; }
+        [SaveableProperty(1)] public Settlement Settlement { get; set; }
 
         [SaveableProperty(2)] public int Selected { get; protected set; }
 

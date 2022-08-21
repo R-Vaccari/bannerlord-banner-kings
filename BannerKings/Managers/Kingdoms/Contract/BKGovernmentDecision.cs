@@ -13,13 +13,12 @@ namespace BannerKings.Managers.Kingdoms.Contract
 {
     public class BKGovernmentDecision : BKContractDecision
     {
-        public BKGovernmentDecision(Clan proposerClan, GovernmentType governmentType, FeudalTitle title) : base(
-            proposerClan, title)
+        public BKGovernmentDecision(Clan proposerClan, GovernmentType governmentType, FeudalTitle title) : base(proposerClan, title)
         {
             this.governmentType = governmentType;
         }
 
-        [SaveableProperty(100)] private GovernmentType governmentType { get; }
+        [SaveableProperty(100)] private GovernmentType governmentType { get; set; }
 
         public override void ApplyChosenOutcome(DecisionOutcome chosenOutcome)
         {
@@ -317,7 +316,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
         public override bool IsAllowed()
         {
             var kingdom = ProposerClan.Kingdom;
-            if (kingdom == null || FactionManager.GetEnemyKingdoms(kingdom).Count() > 0)
+            if (kingdom == null || FactionManager.GetEnemyKingdoms(kingdom).Any())
             {
                 return false;
             }
@@ -332,7 +331,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
                 ShouldDecisionBeEnforced = shouldBeEnforced;
             }
 
-            [SaveableProperty(200)] public bool ShouldDecisionBeEnforced { get; }
+            [SaveableProperty(200)] public bool ShouldDecisionBeEnforced { get; set; }
 
 
             public override TextObject GetDecisionTitle()

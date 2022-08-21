@@ -472,7 +472,7 @@ namespace BannerKings.Behaviours
                     var war = false;
                     if (clan.Kingdom != null)
                     {
-                        war = FactionManager.GetEnemyKingdoms(clan.Kingdom).Count() > 0;
+                        war = FactionManager.GetEnemyKingdoms(clan.Kingdom).Any();
                     }
 
                     var income = Campaign.Current.Models.ClanFinanceModel.CalculateClanIncome(clan).ResultNumber *

@@ -8,17 +8,14 @@ namespace BannerKings.Managers.Institutions.Religions
 {
     public class FaithfulData : BannerKingsData
     {
-        private Hero curse;
-
         [SaveableField(4)] private CampaignTime lastBlessing;
 
         [SaveableField(3)] private readonly Dictionary<RiteType, CampaignTime> performedRites;
 
         public FaithfulData(float piety)
         {
-            this.Piety = piety;
+            Piety = piety;
             Blessing = null;
-            curse = null;
             performedRites = new Dictionary<RiteType, CampaignTime>();
         }
 
@@ -27,29 +24,18 @@ namespace BannerKings.Managers.Institutions.Religions
 
         public float BlessingYearsWindow => 2f;
 
-        public bool CanReceiveBlessing
-        {
-            get
-            {
-                if (lastBlessing == null)
-                {
-                    lastBlessing = CampaignTime.Never;
-                }
-
-                return lastBlessing.ElapsedYearsUntilNow >= BlessingYearsWindow;
-            }
-        }
+        public bool CanReceiveBlessing => lastBlessing.ElapsedYearsUntilNow >= BlessingYearsWindow;
 
         [field: SaveableField(1)] public float Piety { get; private set; }
 
         public void AddPiety(float piety)
         {
-            this.Piety += piety;
+            Piety += piety;
         }
 
         public void AddBlessing(Divinity blessing)
         {
-            this.Blessing = blessing;
+            Blessing = blessing;
         }
 
         public bool HasTimePassedForRite(RiteType type, float years)

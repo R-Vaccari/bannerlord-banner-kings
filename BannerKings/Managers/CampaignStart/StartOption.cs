@@ -34,29 +34,32 @@ namespace BannerKings.Managers.CampaignStart
 
         public override bool Equals(object obj)
         {
-            if (obj is StartOption)
+            if (obj is StartOption option)
             {
-                return StringId == (obj as StartOption).StringId;
+                return StringId == option.StringId;
             }
 
             return base.Equals(obj);
         }
 
-        public void Initialize(TextObject name, TextObject description, TextObject shortDescription, int gold, int food,
-            int troops, int morale, float influence,
-            Action action, float criminal = 0f, CultureObject culture = null, Lifestyle lifestyle = null)
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
+        public void Initialize(TextObject name, TextObject description, TextObject shortDescription, int gold, int food, int troops, int morale, float influence, Action action, float criminal = 0f, CultureObject culture = null, Lifestyle lifestyle = null)
         {
             Initialize(name, description);
-            this.ShortDescription = shortDescription;
-            this.Gold = gold;
-            this.Food = food;
-            this.Troops = troops;
-            this.Morale = morale;
-            this.Influence = influence;
-            this.Action = action;
-            this.Criminal = criminal;
-            this.Culture = culture;
-            this.Lifestyle = lifestyle;
+            ShortDescription = shortDescription;
+            Gold = gold;
+            Food = food;
+            Troops = troops;
+            Morale = morale;
+            Influence = influence;
+            Action = action;
+            Criminal = criminal;
+            Culture = culture;
+            Lifestyle = lifestyle;
         }
 
         public void PostInitialize()

@@ -19,7 +19,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
             successionType = governmentType;
         }
 
-        [SaveableProperty(100)] private SuccessionType successionType { get; }
+        [SaveableProperty(100)] private SuccessionType successionType { get; set; }
 
         public override void ApplyChosenOutcome(DecisionOutcome chosenOutcome)
         {
@@ -248,7 +248,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
         public override bool IsAllowed()
         {
             var kingdom = ProposerClan.Kingdom;
-            if (kingdom == null || FactionManager.GetEnemyKingdoms(kingdom).Count() > 0)
+            if (kingdom == null || FactionManager.GetEnemyKingdoms(kingdom).Any())
             {
                 return false;
             }
@@ -263,7 +263,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
                 ShouldDecisionBeEnforced = shouldBeEnforced;
             }
 
-            [SaveableProperty(200)] public bool ShouldDecisionBeEnforced { get; }
+            [SaveableProperty(200)] public bool ShouldDecisionBeEnforced { get; set; }
 
 
             public override TextObject GetDecisionTitle()

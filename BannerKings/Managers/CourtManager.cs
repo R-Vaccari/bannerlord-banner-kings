@@ -21,7 +21,7 @@ namespace BannerKings.Managers
             Councils = councils;
         }
 
-        [SaveableProperty(1)] private Dictionary<Clan, CouncilData> Councils { get; }
+        [SaveableProperty(1)] private Dictionary<Clan, CouncilData> Councils { get; set; }
 
         public void ApplyCouncilEffect(ref ExplainedNumber result, Hero settlementOwner, CouncilPosition position,
             float maxEffect, bool factor)

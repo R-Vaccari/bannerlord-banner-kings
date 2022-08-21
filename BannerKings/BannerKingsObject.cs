@@ -23,12 +23,17 @@ namespace BannerKings
 
         public override bool Equals(object obj)
         {
-            if (obj is BannerKingsObject)
+            if (obj is BannerKingsObject kingsObject)
             {
-                return ((BannerKingsObject) obj).StringId == StringId;
+                return kingsObject.StringId == StringId;
             }
 
             return base.Equals(obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
         }
     }
 }

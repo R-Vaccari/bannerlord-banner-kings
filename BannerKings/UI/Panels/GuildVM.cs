@@ -46,7 +46,7 @@ namespace BannerKings.UI.Panels
                 "Soft power this guild has, allowing them to call in favors and make demands"));
         }
 
-        public void ExecuteClose()
+        public new void ExecuteClose()
         {
             UIManager.Instance.CloseUI();
         }

@@ -17,11 +17,10 @@ namespace BannerKings.Managers.Education.Languages
 
         public MBReadOnlyDictionary<Language, float> Inteligible => inteligible.GetReadOnlyDictionary();
 
-        public void Initialize(TextObject name, TextObject description, CultureObject culture,
-            Dictionary<Language, float> inteligible)
+        public void Initialize(TextObject name, TextObject description, CultureObject culture, Dictionary<Language, float> inteligible)
         {
             Initialize(name, description);
-            this.Culture = culture;
+            Culture = culture;
             this.inteligible = inteligible;
         }
     }

@@ -29,8 +29,7 @@ namespace BannerKings.Managers.Education.Lifestyles
 
         public CultureObject Culture { get; private set; }
 
-        public TextObject PassiveEffects =>
-            effects.SetTextVariable("EFFECT1", FirstEffect).SetTextVariable("EFFECT2", SecondEffect);
+        public TextObject PassiveEffects => effects.SetTextVariable("EFFECT1", FirstEffect).SetTextVariable("EFFECT2", SecondEffect);
 
         public float FirstEffect { get; private set; }
 
@@ -44,34 +43,36 @@ namespace BannerKings.Managers.Education.Lifestyles
 
         public override bool Equals(object obj)
         {
-            if (obj is Lifestyle)
+            if (obj is Lifestyle lifestyle)
             {
-                return StringId == (obj as Lifestyle).StringId;
+                return StringId == lifestyle.StringId;
             }
 
             return base.Equals(obj);
         }
 
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
         public static Lifestyle CreateLifestyle(Lifestyle lf)
         {
             var lifestyle = new Lifestyle(lf.StringId);
-            lifestyle.Initialize(lf.Name, lf.Description, lf.FirstSkill, lf.SecondSkill, new List<PerkObject>(lf.Perks),
-                lf.PassiveEffects,
-                lf.FirstEffect, lf.SecondEffect, lf.Culture);
+            lifestyle.Initialize(lf.Name, lf.Description, lf.FirstSkill, lf.SecondSkill, new List<PerkObject>(lf.Perks), lf.PassiveEffects, lf.FirstEffect, lf.SecondEffect, lf.Culture);
             return lifestyle;
         }
 
-        public void Initialize(TextObject name, TextObject description, SkillObject firstSkill, SkillObject secondSkill,
-            List<PerkObject> perks, TextObject effects, float firstEffect, float secondEffect, CultureObject culture = null)
+        public void Initialize(TextObject name, TextObject description, SkillObject firstSkill, SkillObject secondSkill, List<PerkObject> perks, TextObject effects, float firstEffect, float secondEffect, CultureObject culture = null)
         {
             Initialize(name, description);
-            this.FirstSkill = firstSkill;
-            this.SecondSkill = secondSkill;
+            FirstSkill = firstSkill;
+            SecondSkill = secondSkill;
             this.perks = perks;
             this.effects = effects;
-            this.FirstEffect = firstEffect;
-            this.SecondEffect = secondEffect;
-            this.Culture = culture;
+            FirstEffect = firstEffect;
+            SecondEffect = secondEffect;
+            Culture = culture;
         }
 
         public bool CanLearn(Hero hero)
@@ -108,7 +109,7 @@ namespace BannerKings.Managers.Education.Lifestyles
 
         public void AddProgress(float progress)
         {
-            this.Progress = MBMath.ClampFloat(this.Progress + progress, 0f, 1f);
+            Progress = MBMath.ClampFloat(Progress + progress, 0f, 1f);
         }
     }
 }

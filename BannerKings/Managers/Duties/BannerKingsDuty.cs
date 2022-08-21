@@ -13,11 +13,11 @@ namespace BannerKings.Managers.Duties
             Type = type;
         }
 
-        [SaveableProperty(1)] public float Completion { get; }
+        [SaveableProperty(1)] public float Completion { get; set; }
 
         [SaveableProperty(2)] public CampaignTime DueTime { get; protected set; }
 
-        [SaveableProperty(3)] public FeudalDuties Type { get; }
+        [SaveableProperty(3)] public FeudalDuties Type { get; set; }
 
         public abstract void Tick();
         public abstract void Finish();

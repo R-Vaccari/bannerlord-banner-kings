@@ -167,7 +167,7 @@ namespace BannerKings
              } */
 
 
-            [HarmonyPatch(typeof(Hero), "CanHaveQuestsOrIssues")]
+            [HarmonyPatch(typeof(Hero), nameof(Hero.CanHaveQuestsOrIssues))]
             internal class CanHaveQuestsOrIssuesPatch
             {
                 private static bool Prefix(Hero __instance, ref bool __result)

@@ -40,9 +40,9 @@ namespace BannerKings.Managers
             Caravans = caravans;
         }
 
-        [SaveableProperty(1)] private Dictionary<Settlement, PopulationData> Populations { get; }
+        [SaveableProperty(1)] private Dictionary<Settlement, PopulationData> Populations { get; set; }
 
-        [SaveableProperty(2)] private List<MobileParty> Caravans { get; }
+        [SaveableProperty(2)] private List<MobileParty> Caravans { get; set; }
 
         public MBReadOnlyList<MobileParty> AllParties => Caravans.GetReadOnlyList();
 
@@ -101,22 +101,12 @@ namespace BannerKings.Managers
             }
             catch (Exception ex)
             {
-                var cause = "Exception in Banner Kings GetPopData method. ";
-                string objInfo = null;
-                if (settlement != null)
-                {
-                    objInfo = string.Format("Name [{0}], Id [{1}], Culture [{2}].", settlement.Name, settlement.StringId,
-                        settlement.Culture);
-                }
-                else
-                {
-                    objInfo = "Null settlement.";
-                }
+                const string cause = "Exception in Banner Kings GetPopData method. ";
+                var objInfo = settlement != null ? $"Name [{settlement.Name}], Id [{settlement.StringId}], Culture [{settlement.Culture}]."
+                    : "Null settlement.";
 
                 throw new BannerKingsException(cause + objInfo, ex);
             }
-
-            return null;
         }
 
         public void AddSettlementData(Settlement settlement, PopulationData data)
@@ -141,7 +131,6 @@ namespace BannerKings.Managers
                 Caravans.Remove(party);
             }
         }
-
 
         public List<(ItemObject, float)> GetProductions(VillageData villageData)
         {
@@ -238,7 +227,6 @@ namespace BannerKings.Managers
                 explainedNumber.AddFactor(level * 0.05f);
             }
         }
-
 
         public static void InitializeSettlementPops(Settlement settlement)
         {

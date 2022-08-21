@@ -15,9 +15,9 @@ namespace BannerKings.Managers.Kingdoms
             this.conquestRights = conquestRights;
         }
 
-        [SaveableProperty(200)] private List<Clan> participants { get; }
+        [SaveableProperty(200)] private List<Clan> participants { get; set; }
 
-        [SaveableProperty(201)] private bool conquestRights { get; }
+        [SaveableProperty(201)] private bool conquestRights { get; set; }
 
         public override IEnumerable<DecisionOutcome> DetermineInitialCandidates()
         {

@@ -16,9 +16,9 @@ namespace BannerKings.Managers.Titles
             GenderLaw = genderLaw;
         }
 
-        [SaveableProperty(1)] public Dictionary<FeudalDuties, float> Duties { get; }
+        [SaveableProperty(1)] public Dictionary<FeudalDuties, float> Duties { get; set; }
 
-        [SaveableProperty(2)] public List<FeudalRights> Rights { get; }
+        [SaveableProperty(2)] public List<FeudalRights> Rights { get; set; }
 
         [SaveableProperty(3)] public GovernmentType Government { get; private set; }
 

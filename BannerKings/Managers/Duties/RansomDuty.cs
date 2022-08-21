@@ -17,7 +17,7 @@ namespace BannerKings.Managers.Duties
             DebtOwner = owner;
         }
 
-        [SaveableProperty(4)] public Hero DebtOwner { get; }
+        [SaveableProperty(4)] public Hero DebtOwner { get; set; }
 
         public override void Finish()
         {

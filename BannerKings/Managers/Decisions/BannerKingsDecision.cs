@@ -11,7 +11,7 @@ namespace BannerKings.Managers.Decisions
             Enabled = enabled;
         }
 
-        [SaveableProperty(1)] public Settlement Settlement { get; }
+        [SaveableProperty(1)] public Settlement Settlement { get; set; }
 
         [SaveableProperty(2)] public bool Enabled { get; set; }
 

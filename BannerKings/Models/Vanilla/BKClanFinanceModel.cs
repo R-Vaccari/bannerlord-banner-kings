@@ -107,7 +107,7 @@ namespace BannerKings.Models.Vanilla
             }
 
             if (!clan.IsUnderMercenaryService && clan.Kingdom != null &&
-                FactionManager.GetEnemyKingdoms(clan.Kingdom).Count() > 0)
+                FactionManager.GetEnemyKingdoms(clan.Kingdom).Any())
             {
                 var title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
                 if (title != null && title.contract != null &&

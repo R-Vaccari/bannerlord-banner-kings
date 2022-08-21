@@ -1,42 +1,36 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
+
 <Concepts>
-
-
 	<string title="{=!}Education"
-	id="str_bk_education"
-	group="BannerKings"
-	link_id="BK_EDUCATION_LINK"
-	text="{=!}Every {CHARACTER_LINK} has the ability to educate themselves. Educations are composed of {BK_BOOKS_LINK}s, {BK_LANGUAGES_LINK}s and {BK_LIFESTYLES_LINK}s. Progressing in any of these will increase your Scholarship skill and allow you access to it's unique perks." />
+	        id="str_bk_education"
+	        group="BannerKings"
+	        link_id="BK_EDUCATION_LINK"
+	        text="{=!}Every {CHARACTER_LINK} has the ability to educate themselves. Educations are composed of {BK_BOOKS_LINK}s, {BK_LANGUAGES_LINK}s and {BK_LIFESTYLES_LINK}s. Progressing in any of these will increase your Scholarship skill and allow you access to it's unique perks." />
 
 	<string title="{=!}Book"
-	id="str_bk_education"
-	group="BannerKings"
-	link_id="BK_BOOKS_LINK"
-	text="{=!}Books can be found through specialized sellers that can be found in town keeps throughout the continent. They do not stay in the same place for long. Books are written in a specific {BK_LANGUAGES_LINK} and are associated with a {CHARACTER_LINK} skill. Your ability to understand the language will determine how quickly you can read the book. You can acquire a copy of Dictionarium Calradium to be able to read any book, although in very slow manner. Books can be either Skill books or Focus books, mostly the latter. Skill books provide a big amount of experience in their associated skill. Focus books provide less skill, but provide a focus point in that skill. If the skill's focus is already maxed out, the point is instead transformed into more skill experience." />
+	        id="str_bk_education"
+	        group="BannerKings"
+	        link_id="BK_BOOKS_LINK"
+	        text="{=!}Books can be found through specialized sellers that can be found in town keeps throughout the continent. They do not stay in the same place for long. Books are written in a specific {BK_LANGUAGES_LINK} and are associated with a {CHARACTER_LINK} skill. Your ability to understand the language will determine how quickly you can read the book. You can acquire a copy of Dictionarium Calradium to be able to read any book, although in very slow manner. Books can be either Skill books or Focus books, mostly the latter. Skill books provide a big amount of experience in their associated skill. Focus books provide less skill, but provide a focus point in that skill. If the skill's focus is already maxed out, the point is instead transformed into more skill experience." />
 
 	<string title="{=!}Language"
-	id="str_bk_education"
-	group="BannerKings"
-	link_id="BK_LANGUAGES_LINK"
-	text="{=!}" />
+	        id="str_bk_education"
+	        group="BannerKings"
+	        link_id="BK_LANGUAGES_LINK"
+	        text="{=!}" />
 
 	<string title="{=!}Lifestyle"
-	id="str_bk_education"
-	group="BannerKings"
-	link_id="BK_LIFESTYLES_LINK"
-	text="{=!}" />
-
-
-
-
-
+	        id="str_bk_education"
+	        group="BannerKings"
+	        link_id="BK_LIFESTYLES_LINK"
+	        text="{=!}" />
 
 	<!--<string title="{=klZnvb15}Character" id="str_game_objects_character" group="GameObjects" link_id="CHARACTER_LINK" text="{=OC4yVKKJ}The game represents political or military leaders and other key people as unique characters. Characters have relations with other characters. Characters have {SKILLS_LINK} and traits. Characters may belong to Clans. Characters come from a culture." />
 
   <string title="{=03mPaWum}Kingdom" id="str_game_objects_kingdom" group="GameObjects" link_id="KINGDOM_LINK" text="{=MfqnNIhi}Kingdoms are entities whose legitimacy to rule and hold land is generally accepted by the populace and other kingdoms. Kingdoms are governed by {KINGDOMLAWS_LINK}. Kingdoms have Clans ." />
 
   <string title="{=PUjDWe5j}Culture" id="str_game_objects_culture" group="GameObjects" link_id="CULTURE_LINK" text="{=ZKH5MZNf}Although there is a plethora of cultural niches and traditions in Calradia, the game groups these into several main cultures. Each culture has its own architectural style and traditional clothing." />
-   Party 
+    
   <string title="{=qnxJYAs7}Party" id="str_game_objects_party" group="GameObjects" link_id="PARTY_LINK" text="{=vlvaF8qF}Parties are made up of troops and {CHARACTER_LINK}s and can travel around the map. Party travel speed depends on a number of factors. Generally bigger parties are slower because they are more likely to lose marching order or get clogged in choke points. Parties that are overburdened by carrying too many goods also get slower. You can increase party speed by keeping horses in the inventory." />
 
   <string title="{=j12VrGKz}Army" id="str_game_objects_army" group="GameObjects" link_id="ARMY_LINK" text="{=1b9N5akV}Parties can be assembled together to form armies. Armies have an advantage over singular parties since they can hold a greater number of troops and display better coordination. The leader of an army will have to set it up first by spending {INFLUENCE_LINK}. Each army has an {ARMYCOHESION_LINK} stat which is crucial to its operation. An army will be disbanded automatically if its cohesion drops too low." />

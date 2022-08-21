@@ -25,7 +25,7 @@ namespace BannerKings.Managers.Duties
                 true, false, "Understood", null, null, null));
         }
 
-        [SaveableProperty(4)] public MobileParty Party { get; }
+        [SaveableProperty(4)] public MobileParty Party { get; set; }
 
         [SaveableProperty(5)] private int RunnedHours { get; set; }
 
