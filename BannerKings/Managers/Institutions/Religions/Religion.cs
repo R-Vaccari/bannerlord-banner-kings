@@ -20,8 +20,7 @@ namespace BannerKings.Managers.Institutions.Religions
 
         [SaveableField(4)] private readonly List<CultureObject> favoredCultures;
 
-        public Religion(Settlement settlement, Faith faith, ReligiousLeadership leadership,
-            List<CultureObject> favoredCultures, List<string> doctrineIds) : base(settlement)
+        public Religion(Settlement settlement, Faith faith, ReligiousLeadership leadership, List<CultureObject> favoredCultures, List<string> doctrineIds) : base(settlement)
         {
             clergy = new Dictionary<Settlement, Clergyman>();
             Leadership = leadership;

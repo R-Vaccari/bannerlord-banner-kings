@@ -36,7 +36,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Nullable" Version="1.3.0" PrivateAssets="all" IncludeAssets="runtime; build; native; contentfiles; analyzers; buildtransitive" />
-		<PackageReference Include="IsExternalInit" Version="1.0.2" PrivateAssets="all" IncludeAssets ="runtime; build; native; contentfiles; analyzers; buildtransitive" />
+		<PackageReference Include="IsExternalInit" Version="1.0.2" PrivateAssets="all" IncludeAssets="runtime; build; native; contentfiles; analyzers; buildtransitive" />
 		<PackageReference Include="Bannerlord.BuildResources" Version="1.0.1.68 " PrivateAssets="all" IncludeAssets="runtime; build; native; contentfiles; analyzers; buildtransitive" />
 		<PackageReference Include="Lib.Harmony" Version="2.2.1" IncludeAssets="compile" />
 		<PackageReference Include="Harmony.Extensions" Version="3.1.0.61" PrivateAssets="all" IncludeAssets="runtime; build; native; contentfiles; analyzers; buildtransitive" />

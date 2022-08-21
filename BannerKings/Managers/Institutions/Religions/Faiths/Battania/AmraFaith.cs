@@ -11,12 +11,12 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Battania
     {
         public override TextObject GetFaithName()
         {
-            return new("{=!}Amra Ollamh");
+            return new TextObject("{=!}Amra Ollamh");
         }
 
         public override TextObject GetFaithDescription()
         {
-            return new(
+            return new TextObject(
                 "{=!}The creed of the Amra Ollamh, “that which is wondrous and great” - is the long-standing folkloric tradition of the people who dwell up the Uchalion plateau. Though outsiders are wont to confuse the Amra Ollamh as little more than tales of goblins, sprites, fair folk and woodland monsters - the creed itself is in fact a deeply involved cultural institution meant to instill the youth of Battania with the lessons of their forebears by way of colloquial metaphor. The Brithem, law-speakers and judges, more than often related to the headmen of their village, maintain traditions whilst the women of the Bandrui preach these tales to children with the hopes of driving them to boldness and hopeful ambitions later on in life. Cattle raiding, braggadocious dueling bouts, and no small amount of criminal activity paired with lessons of mercy make up much of what is learnt by those who follow the Amra Ollamh. Those seeking greater insight into the spiritual matters of the Battanians are more likely to be dissuaded by Brithem lawspeakers, so as not to intrude upon the more esoteric matters handled by the practitioners of the Derwyddon arts.");
         }
 
@@ -313,7 +313,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Battania
 
         public override TextObject GetMainDivinitiesDescription()
         {
-            return new("{=!}Great Spirits");
+            return new TextObject("{=!}Great Spirits");
         }
 
         public override int GetMaxClergyRank()
@@ -343,33 +343,33 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Battania
 
         public override TextObject GetSecondaryDivinitiesDescription()
         {
-            return new("{=!}Spirits");
+            return new TextObject("{=!}Spirits");
         }
 
         public override TextObject GetBlessingAction()
         {
-            return new("{=!}I would like to swear an oath to the spirits.");
+            return new TextObject("{=!}I would like to swear an oath to the spirits.");
         }
 
         public override TextObject GetBlessingQuestion()
         {
-            return new(
+            return new TextObject(
                 "{=!}And what spirits would ye be bound to? Those of wolves and warriors whose savagery are unmatched, or the spirits of Uchalion, who breathe fire into our hearts to fight the enemy?");
         }
 
         public override TextObject GetBlessingConfirmQuestion()
         {
-            return new("{=!}Be ye sure of that. Only a fool would break an oath with the spirits.");
+            return new TextObject("{=!}Be ye sure of that. Only a fool would break an oath with the spirits.");
         }
 
         public override TextObject GetBlessingQuickInformation()
         {
-            return new("{=!}{HERO} has sworn an oath to the {DIVINITY} spirits.");
+            return new TextObject("{=!}{HERO} has sworn an oath to the {DIVINITY} spirits.");
         }
 
         public override TextObject GetBlessingActionName()
         {
-            return new("{=!}pledge an oath to.");
+            return new TextObject("{=!}pledge an oath to.");
         }
     }
 }

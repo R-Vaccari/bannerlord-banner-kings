@@ -11,7 +11,7 @@ namespace BannerKings.Models.BKModels
     {
         public ExplainedNumber CalculateEffect(Settlement settlement)
         {
-            return new();
+            return new ExplainedNumber();
         }
 
         public ExplainedNumber CalculateLessionCost(Hero student, Hero instructor)

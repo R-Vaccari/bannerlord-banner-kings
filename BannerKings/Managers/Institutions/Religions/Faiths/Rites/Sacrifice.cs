@@ -90,12 +90,12 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
 
         public override TextObject GetDescription()
         {
-            return new("{=!}Sacrifice {HERO} to prove your devotion.");
+            return new TextObject("{=!}Sacrifice {HERO} to prove your devotion.");
         }
 
         public override TextObject GetName()
         {
-            return new("{=!}Human Sacrifice");
+            return new TextObject("{=!}Human Sacrifice");
         }
 
         public override RiteType GetRiteType()

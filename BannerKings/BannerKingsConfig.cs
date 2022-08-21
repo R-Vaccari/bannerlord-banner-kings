@@ -79,11 +79,8 @@ namespace BannerKings
         public void InitManagers()
         {
             Initialize();
-            PopulationManager =
-                new PopulationManager(new Dictionary<Settlement, PopulationData>(), new List<MobileParty>());
-            PolicyManager = new PolicyManager(new Dictionary<Settlement, List<BannerKingsDecision>>(),
-                new Dictionary<Settlement,
-                    List<BannerKingsPolicy>>());
+            PopulationManager = new PopulationManager(new Dictionary<Settlement, PopulationData>(), new List<MobileParty>());
+            PolicyManager = new PolicyManager(new Dictionary<Settlement, List<BannerKingsDecision>>(), new Dictionary<Settlement, List<BannerKingsPolicy>>());
             TitleManager = new TitleManager(new Dictionary<FeudalTitle, Hero>(), new Dictionary<Kingdom, FeudalTitle>());
             CourtManager = new CourtManager(new Dictionary<Clan, CouncilData>());
             ReligionsManager = new ReligionsManager();
@@ -91,9 +88,7 @@ namespace BannerKings
             InnovationsManager = new InnovationsManager();
         }
 
-        public void InitManagers(PopulationManager populationManager, PolicyManager policyManager,
-            TitleManager titleManager, CourtManager court,
-            ReligionsManager religions, EducationManager educations, InnovationsManager innovations)
+        public void InitManagers(PopulationManager populationManager, PolicyManager policyManager, TitleManager titleManager, CourtManager court, ReligionsManager religions, EducationManager educations, InnovationsManager innovations)
         {
             Initialize();
             PopulationManager = populationManager;
