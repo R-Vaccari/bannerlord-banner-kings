@@ -232,26 +232,20 @@ namespace BannerKings.Behaviours
 
         private Settlement GetTownToTravel(Settlement origin)
         {
-            if (origin.OwnerClan != null)
+            var kingdom = origin.OwnerClan?.Kingdom;
+            if (kingdom?.Settlements != null && kingdom.Settlements.Count > 1)
             {
-                var kingdom = origin.OwnerClan.Kingdom;
-                if (kingdom != null)
+                var list = new List<ValueTuple<Settlement, float>>();
+                foreach (var settlement in kingdom.Settlements)
                 {
-                    if (kingdom.Settlements != null && kingdom.Settlements.Count > 1)
+                    if (settlement.IsTown && settlement != origin)
                     {
-                        var list = new List<ValueTuple<Settlement, float>>();
-                        foreach (var settlement in kingdom.Settlements)
-                        {
-                            if (settlement.IsTown && settlement != origin)
-                            {
-                                list.Add(new ValueTuple<Settlement, float>(settlement, 1f));
-                            }
-                        }
-
-                        var target = MBRandom.ChooseWeighted(list);
-                        return target;
+                        list.Add(new ValueTuple<Settlement, float>(settlement, 1f));
                     }
                 }
+
+                var target = MBRandom.ChooseWeighted(list);
+                return target;
             }
 
             return null;

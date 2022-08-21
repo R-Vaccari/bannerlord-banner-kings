@@ -6,8 +6,7 @@ namespace BannerKings.Managers.Institutions.Religions.Doctrines
 {
     public class Doctrine : BannerKingsObject
     {
-        public Doctrine(string id, TextObject name, TextObject description,
-            TextObject effects, List<string> incompatibleDoctrines) : base(id)
+        public Doctrine(string id, TextObject name, TextObject description, TextObject effects, List<string> incompatibleDoctrines) : base(id)
         {
             this.name = name;
             this.description = description;

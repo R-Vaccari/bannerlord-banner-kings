@@ -83,15 +83,12 @@ namespace BannerKings.Models.Vanilla
                     explainedNumber.AddFactor(0.2f, new TextObject("Cantons kingdom policy"));
                 }
 
-                if (hero.VolunteerTypes != null)
+                if (hero.VolunteerTypes?[index] != null && hero.VolunteerTypes[index].IsMounted &&
+                    PerkHelper.GetPerkValueForTown(DefaultPerks.Riding.CavalryTactics,
+                        settlement.IsVillage ? settlement.Village.Bound.Town : settlement.Town))
                 {
-                    if (hero.VolunteerTypes[index] != null && hero.VolunteerTypes[index].IsMounted &&
-                        PerkHelper.GetPerkValueForTown(DefaultPerks.Riding.CavalryTactics,
-                            settlement.IsVillage ? settlement.Village.Bound.Town : settlement.Town))
-                    {
-                        explainedNumber.AddFactor(DefaultPerks.Riding.CavalryTactics.PrimaryBonus * 0.01f,
-                            DefaultPerks.Riding.CavalryTactics.PrimaryDescription);
-                    }
+                    explainedNumber.AddFactor(DefaultPerks.Riding.CavalryTactics.PrimaryBonus * 0.01f,
+                        DefaultPerks.Riding.CavalryTactics.PrimaryDescription);
                 }
 
                 BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref explainedNumber, settlement.OwnerClan.Leader,

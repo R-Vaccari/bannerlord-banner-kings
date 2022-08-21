@@ -174,13 +174,15 @@ namespace BannerKings.Behaviours
                 var wkModel = (BKWorkshopModel) Campaign.Current.Models.WorkshopModel;
                 foreach (var wk in town.Workshops)
                 {
-                    if (wk.IsRunning && wk.Owner.IsNotable)
+                    if (!wk.IsRunning || !wk.Owner.IsNotable)
                     {
-                        var gold = Campaign.Current.Models.ClanFinanceModel.CalculateOwnerIncomeFromWorkshop(wk);
-                        gold -= (int) (wkModel.CalculateWorkshopTax(wk.Settlement, wk.Owner).ResultNumber * gold);
-                        wk.Owner.ChangeHeroGold(gold);
-                        wk.ChangeGold(-gold);
+                        continue;
                     }
+
+                    var gold = Campaign.Current.Models.ClanFinanceModel.CalculateOwnerIncomeFromWorkshop(wk);
+                    gold -= (int) (wkModel.CalculateWorkshopTax(wk.Settlement, wk.Owner).ResultNumber * gold);
+                    wk.Owner.ChangeHeroGold(gold);
+                    wk.ChangeGold(-gold);
                 }
 
                 var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement).LandData;
@@ -191,17 +193,9 @@ namespace BannerKings.Behaviours
                     var items = new HashSet<ItemObject>();
                     if (town.Villages.Count > 0)
                     {
-                        foreach (var vil in town.Villages)
+                        foreach (var tuple in from vil in town.Villages select BannerKingsConfig.Instance.PopulationManager.GetPopData(vil.Settlement).VillageData into vilData from tuple in BannerKingsConfig.Instance.PopulationManager.GetProductions(vilData) where tuple.Item1.IsTradeGood && !tuple.Item1.IsFood select tuple)
                         {
-                            var vilData = BannerKingsConfig.Instance.PopulationManager.GetPopData(vil.Settlement)
-                                .VillageData;
-                            foreach (var tuple in BannerKingsConfig.Instance.PopulationManager.GetProductions(vilData))
-                            {
-                                if (tuple.Item1.IsTradeGood && !tuple.Item1.IsFood)
-                                {
-                                    items.Add(tuple.Item1);
-                                }
-                            }
+                            items.Add(tuple.Item1);
                         }
                     }
 
@@ -219,21 +213,15 @@ namespace BannerKings.Behaviours
                     var items = new HashSet<ItemObject>();
                     if (town.Villages.Count > 0)
                     {
-                        foreach (var vil in town.Villages)
+                        foreach (var tuple in town.Villages.Select(vil => BannerKingsConfig.Instance.PopulationManager.GetPopData(vil.Settlement).VillageData).SelectMany(vilData => BannerKingsConfig.Instance.PopulationManager.GetProductions(vilData)))
                         {
-                            var vilData = BannerKingsConfig.Instance.PopulationManager.GetPopData(vil.Settlement)
-                                .VillageData;
-                            foreach (var tuple in BannerKingsConfig.Instance.PopulationManager.GetProductions(vilData))
-                            {
-                                items.Add(tuple.Item1);
-                            }
+                            items.Add(tuple.Item1);
                         }
                     }
 
                     var foodModel = (BKFoodModel) Campaign.Current.Models.SettlementFoodModel;
                     var popData = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
-                    var excess = foodModel.GetPopulationFoodProduction(popData, town).ResultNumber - 10
-                        - foodModel.GetPopulationFoodConsumption(popData).ResultNumber;
+                    var excess = foodModel.GetPopulationFoodProduction(popData, town).ResultNumber - 10 - foodModel.GetPopulationFoodConsumption(popData).ResultNumber;
                     //float pasturePorportion = data.Pastureland / data.Acreage;
 
                     var farmFood = MBMath.ClampFloat(data.Farmland * data.GetAcreOutput("farmland"), 0f, excess);
@@ -271,71 +259,47 @@ namespace BannerKings.Behaviours
             {
                 //SetNotables(settlement);
                 //UpdateVolunteers(settlement);
-                if (settlement.Town != null && settlement.Town.GarrisonParty != null)
+                if (settlement.Town == null || settlement.Town.GarrisonParty == null)
                 {
-                    foreach (var castleBuilding in settlement.Town.Buildings)
-                    {
-                        if (Utils.Helpers._buildingCastleRetinue != null &&
-                            castleBuilding.BuildingType == Utils.Helpers._buildingCastleRetinue)
-                        {
-                            var garrison = settlement.Town.GarrisonParty;
-                            if (garrison.MemberRoster != null && garrison.MemberRoster.Count > 0)
-                            {
-                                var elements = garrison.MemberRoster.GetTroopRoster();
-                                var currentRetinue = 0;
-                                foreach (var soldierElement in elements)
-                                {
-                                    if (Utils.Helpers.IsRetinueTroop(soldierElement.Character, settlement.Culture))
-                                    {
-                                        currentRetinue += soldierElement.Number;
-                                    }
-                                }
+                    return;
+                }
 
-                                var maxRetinue = castleBuilding.CurrentLevel == 1 ? 20 :
-                                    castleBuilding.CurrentLevel == 2 ? 40 : 60;
-                                if (currentRetinue < maxRetinue)
-                                {
-                                    if (garrison.MemberRoster.Count < garrison.Party.PartySizeLimit)
-                                    {
-                                        garrison.MemberRoster.AddToCounts(settlement.Culture.EliteBasicTroop, 1);
-                                    }
-                                }
-                            }
-                        }
-                    }
+                foreach (var garrison in from castleBuilding in settlement.Town.Buildings where Utils.Helpers._buildingCastleRetinue != null && castleBuilding.BuildingType == Utils.Helpers._buildingCastleRetinue let garrison = settlement.Town.GarrisonParty where garrison.MemberRoster != null && garrison.MemberRoster.Count > 0 let elements = garrison.MemberRoster.GetTroopRoster() let currentRetinue = elements.Where(soldierElement => Utils.Helpers.IsRetinueTroop(soldierElement.Character, settlement.Culture)).Sum(soldierElement => soldierElement.Number) let maxRetinue = castleBuilding.CurrentLevel == 1 ? 20 : castleBuilding.CurrentLevel == 2 ? 40 : 60 where currentRetinue < maxRetinue where garrison.MemberRoster.Count < garrison.Party.PartySizeLimit select garrison)
+                {
+                    garrison.MemberRoster.AddToCounts(settlement.Culture.EliteBasicTroop, 1);
+                }
 
-
-                    if (settlement.Town.FoodStocks <= settlement.Town.FoodStocksUpperLimit() * 0.05f &&
-                        settlement.Town.Settlement.Stash != null)
-                    {
-                        ConsumeStash(settlement);
-                    }
+                if (settlement.Town.FoodStocks <= settlement.Town.FoodStocksUpperLimit() * 0.05f &&
+                    settlement.Town.Settlement.Stash != null)
+                {
+                    ConsumeStash(settlement);
                 }
             }
             else if (settlement.IsVillage)
             {
                 var villageData = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement).VillageData;
-                if (villageData != null)
+                if (villageData == null)
                 {
-                    float manor = villageData.GetBuildingLevel(DefaultVillageBuildings.Instance.Manor);
-                    if (manor > 0)
-                    {
-                        var retinues = BannerKingsConfig.Instance.PopulationManager.AllParties;
-                        MobileParty retinue = null;
-                        if (retinues.Count > 0)
-                        {
-                            retinue = retinues.FirstOrDefault(x =>
-                                x.StringId.Contains($"bk_retinue_{settlement.Name}"));
-                        }
-
-                        if (retinue == null)
-                        {
-                            retinue = RetinueComponent.CreateRetinue(settlement);
-                        }
-
-                        (retinue.PartyComponent as RetinueComponent).DailyTick(manor);
-                    }
+                    return;
                 }
+
+                float manor = villageData.GetBuildingLevel(DefaultVillageBuildings.Instance.Manor);
+                if (!(manor > 0))
+                {
+                    return;
+                }
+
+                var retinues = BannerKingsConfig.Instance.PopulationManager.AllParties;
+                MobileParty retinue = null;
+                if (retinues.Count > 0)
+                {
+                    retinue = retinues.FirstOrDefault(x =>
+                        x.StringId.Contains($"bk_retinue_{settlement.Name}"));
+                }
+
+                retinue ??= RetinueComponent.CreateRetinue(settlement);
+
+                (retinue.PartyComponent as RetinueComponent).DailyTick(manor);
             }
         }
 
@@ -367,12 +331,8 @@ namespace BannerKings.Behaviours
         private void TickRotting(Settlement settlement)
         {
             var party = settlement.Party;
-            if (party == null)
-            {
-                return;
-            }
 
-            var roster = party.ItemRoster;
+            var roster = party?.ItemRoster;
             if (roster == null)
             {
                 return;
@@ -381,14 +341,7 @@ namespace BannerKings.Behaviours
             var maxStorage = 1000f;
             if (settlement.Town != null)
             {
-                foreach (var b in settlement.Town.Buildings)
-                {
-                    if (b.BuildingType == DefaultBuildingTypes.CastleGranary ||
-                        b.BuildingType == DefaultBuildingTypes.SettlementGranary)
-                    {
-                        maxStorage += b.CurrentLevel * 5000f;
-                    }
-                }
+                maxStorage += settlement.Town.Buildings.Where(b => b.BuildingType == DefaultBuildingTypes.CastleGranary || b.BuildingType == DefaultBuildingTypes.SettlementGranary).Sum(b => b.CurrentLevel * 5000f);
             }
 
             RotRosterFood(roster, maxStorage);
@@ -400,36 +353,30 @@ namespace BannerKings.Behaviours
 
         private void RotRosterFood(ItemRoster roster, float maxStorage)
         {
-            if (roster.TotalFood > maxStorage)
+            if (!(roster.TotalFood > maxStorage))
             {
-                var toRot = (int) (roster.TotalFood * 0.01f);
-                foreach (var element in roster.ToList().FindAll(x => x.EquipmentElement.Item != null &&
-                                                                     x.EquipmentElement.Item.ItemCategory.Properties ==
-                                                                     ItemCategory.Property.BonusToFoodStores))
-                {
-                    if (toRot <= 0)
-                    {
-                        break;
-                    }
+                return;
+            }
 
-                    var result = (int) MathF.Min(MBRandom.RandomFloatRanged(10f, toRot), (float) element.Amount);
-                    roster.AddToCounts(element.EquipmentElement, -result);
-                    toRot -= result;
+            var toRot = (int) (roster.TotalFood * 0.01f);
+            foreach (var element in roster.ToList().FindAll(x => x.EquipmentElement.Item != null &&
+                                                                 x.EquipmentElement.Item.ItemCategory.Properties ==
+                                                                 ItemCategory.Property.BonusToFoodStores))
+            {
+                if (toRot <= 0)
+                {
+                    break;
                 }
+
+                var result = (int) MathF.Min(MBRandom.RandomFloatRanged(10f, toRot), (float) element.Amount);
+                roster.AddToCounts(element.EquipmentElement, -result);
+                toRot -= result;
             }
         }
 
         private void ConsumeStash(Settlement settlement)
         {
-            var elements = new List<ItemRosterElement>();
-            foreach (var element in settlement.Stash)
-            {
-                if (element.EquipmentElement.Item != null && element.EquipmentElement.Item.ItemCategory.Properties ==
-                    ItemCategory.Property.BonusToFoodStores)
-                {
-                    elements.Add(element);
-                }
-            }
+            var elements = settlement.Stash.Where(element => element.EquipmentElement.Item != null && element.EquipmentElement.Item.ItemCategory.Properties == ItemCategory.Property.BonusToFoodStores).ToList();
 
             var food = 0;
             foreach (var element in elements)
@@ -447,13 +394,11 @@ namespace BannerKings.Behaviours
 
         private void OnSessionLaunched(CampaignGameStarter campaignGameStarter)
         {
-            var retinueType = MBObjectManager.Instance.GetObjectTypeList<BuildingType>()
-                .FirstOrDefault(x => x == Utils.Helpers._buildingCastleRetinue);
+            var retinueType = MBObjectManager.Instance.GetObjectTypeList<BuildingType>().FirstOrDefault(x => x == Utils.Helpers._buildingCastleRetinue);
             if (retinueType == null)
             {
                 Utils.Helpers._buildingCastleRetinue.Initialize(new TextObject("{=!}Retinue Barracks"),
-                    new TextObject(
-                        "{=!}Barracks for the castle retinue, a group of elite soldiers. The retinue is added to the garrison over time, up to a limit of 20, 40 or 60 (building level)."),
+                    new TextObject("{=!}Barracks for the castle retinue, a group of elite soldiers. The retinue is added to the garrison over time, up to a limit of 20, 40 or 60 (building level)."),
                     new[]
                     {
                         1000,
@@ -471,31 +416,28 @@ namespace BannerKings.Behaviours
         [HarmonyPatch(typeof(SellPrisonersAction), "ApplyForAllPrisoners")]
         internal class ApplyAllPrisionersPatch
         {
-            private static bool Prefix(MobileParty sellerParty, TroopRoster prisoners, Settlement currentSettlement,
-                bool applyGoldChange = true)
+            private static bool Prefix(MobileParty sellerParty, TroopRoster prisoners, Settlement currentSettlement, bool applyGoldChange = true)
             {
-                if (currentSettlement != null && (currentSettlement.IsCastle || currentSettlement.IsTown) &&
-                    BannerKingsConfig.Instance.PopulationManager != null &&
-                    BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(currentSettlement))
+                if (currentSettlement == null || (!currentSettlement.IsCastle && !currentSettlement.IsTown) || BannerKingsConfig.Instance.PopulationManager == null || !BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(currentSettlement))
                 {
-                    if (!currentSettlement.IsVillage && !currentSettlement.IsTown && !currentSettlement.IsCastle)
-                    {
-                        return true;
-                    }
+                    return true;
+                }
 
-                    var policy =
-                        (BKCriminalPolicy) BannerKingsConfig.Instance.PolicyManager.GetPolicy(currentSettlement,
-                            "criminal");
-                    if (policy.Policy == BKCriminalPolicy.CriminalPolicy.Enslavement)
+                if (!currentSettlement.IsVillage && !currentSettlement.IsTown && !currentSettlement.IsCastle)
+                {
+                    return true;
+                }
+
+                var policy = (BKCriminalPolicy) BannerKingsConfig.Instance.PolicyManager.GetPolicy(currentSettlement, "criminal");
+                switch (policy.Policy)
+                {
+                    case BKCriminalPolicy.CriminalPolicy.Enslavement:
                     {
                         var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(currentSettlement);
-                        if (data != null)
-                        {
-                            data.UpdatePopType(PopType.Slaves, Utils.Helpers.GetRosterCount(prisoners));
-                        }
+                        data?.UpdatePopType(PopType.Slaves, Utils.Helpers.GetRosterCount(prisoners));
+                        break;
                     }
-
-                    else if (policy.Policy == BKCriminalPolicy.CriminalPolicy.Forgiveness)
+                    case BKCriminalPolicy.CriminalPolicy.Forgiveness:
                     {
                         var dic = new Dictionary<CultureObject, int>();
                         foreach (var element in prisoners.GetTroopRoster())
@@ -523,22 +465,24 @@ namespace BannerKings.Behaviours
 
                         foreach (var pair in dic)
                         {
-                            if (Settlement.All.Any(x => x.Culture == pair.Key))
+                            if (!Settlement.All.Any(x => x.Culture == pair.Key))
+                            {
+                                continue;
+                            }
+
                             {
                                 var random = Settlement.All.FirstOrDefault(x => x.Culture == pair.Key);
-                                if (random != null &&
-                                    BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(random))
+                                if (random != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(random))
                                 {
-                                    BannerKingsConfig.Instance.PopulationManager.GetPopData(random)
-                                        .UpdatePopType(PopType.Serfs, pair.Value);
+                                    BannerKingsConfig.Instance.PopulationManager.GetPopData(random).UpdatePopType(PopType.Serfs, pair.Value);
                                 }
                             }
                         }
+
+                        break;
                     }
-                    else
-                    {
+                    default:
                         return false;
-                    }
                 }
 
                 return true;
@@ -550,9 +494,7 @@ namespace BannerKings.Behaviours
         {
             private static bool Prefix(MobileParty sellerParty, TroopRoster prisoners, Settlement currentSettlement)
             {
-                if (currentSettlement != null &&
-                    (currentSettlement.IsCastle || currentSettlement.IsTown) &
-                    (BannerKingsConfig.Instance.PopulationManager != null) &&
+                if (currentSettlement != null && (currentSettlement.IsCastle || currentSettlement.IsTown) & (BannerKingsConfig.Instance.PopulationManager != null) &&
                     BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(currentSettlement))
                 {
                     if (!currentSettlement.IsVillage && !currentSettlement.IsTown && !currentSettlement.IsCastle)
@@ -560,64 +502,66 @@ namespace BannerKings.Behaviours
                         return true;
                     }
 
-                    var policy =
-                        (BKCriminalPolicy) BannerKingsConfig.Instance.PolicyManager.GetPolicy(currentSettlement,
-                            "criminal");
-                    if (policy.Policy == BKCriminalPolicy.CriminalPolicy.Enslavement)
+                    var policy = (BKCriminalPolicy) BannerKingsConfig.Instance.PolicyManager.GetPolicy(currentSettlement, "criminal");
+                    switch (policy.Policy)
                     {
-                        var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(currentSettlement);
-                        if (data != null)
+                        case BKCriminalPolicy.CriminalPolicy.Enslavement:
                         {
-                            data.UpdatePopType(PopType.Slaves, Utils.Helpers.GetRosterCount(prisoners));
+                            var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(currentSettlement);
+                            data?.UpdatePopType(PopType.Slaves, Utils.Helpers.GetRosterCount(prisoners));
+                            break;
                         }
-                    }
-                    else if (policy.Policy == BKCriminalPolicy.CriminalPolicy.Forgiveness)
-                    {
-                        var dic = new Dictionary<CultureObject, int>();
-                        foreach (var element in prisoners.GetTroopRoster())
+                        case BKCriminalPolicy.CriminalPolicy.Forgiveness:
                         {
-                            if (element.Character.Occupation == Occupation.Bandit)
+                            var dic = new Dictionary<CultureObject, int>();
+                            foreach (var element in prisoners.GetTroopRoster())
                             {
-                                continue;
-                            }
-
-                            var culture = element.Character.Culture;
-                            if (culture == null)
-                            {
-                                continue;
-                            }
-
-                            if (dic.ContainsKey(culture))
-                            {
-                                dic[culture] += element.Number;
-                            }
-                            else
-                            {
-                                dic.Add(culture, element.Number);
-                            }
-                        }
-
-                        foreach (var pair in dic)
-                        {
-                            if (Settlement.All.Any(x => x.Culture == pair.Key))
-                            {
-                                var random = Settlement.All.FirstOrDefault(x => x.Culture == pair.Key);
-                                if (random != null &&
-                                    BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(random))
+                                if (element.Character.Occupation == Occupation.Bandit)
                                 {
-                                    var data =
-                                        BannerKingsConfig.Instance.PopulationManager.GetPopData(currentSettlement);
-                                    if (data != null)
-                                    {
-                                        data.UpdatePopType(PopType.Serfs, pair.Value);
-                                    }
+                                    continue;
+                                }
+
+                                var culture = element.Character.Culture;
+                                if (culture == null)
+                                {
+                                    continue;
+                                }
+
+                                if (dic.ContainsKey(culture))
+                                {
+                                    dic[culture] += element.Number;
+                                }
+                                else
+                                {
+                                    dic.Add(culture, element.Number);
                                 }
                             }
+
+                            foreach (var pair in dic)
+                            {
+                                if (!Settlement.All.Any(x => x.Culture == pair.Key))
+                                {
+                                    continue;
+                                }
+
+                                {
+                                    var random = Settlement.All.FirstOrDefault(x => x.Culture == pair.Key);
+                                    if (random == null ||
+                                        !BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(random))
+                                    {
+                                        continue;
+                                    }
+
+                                    var data =
+                                        BannerKingsConfig.Instance.PopulationManager.GetPopData(currentSettlement);
+                                    data?.UpdatePopType(PopType.Serfs, pair.Value);
+                                }
+                            }
+
+                            break;
                         }
-                    }
-                    else
-                    {
-                        return false;
+                        default:
+                            return false;
                     }
                 }
 
@@ -631,23 +575,18 @@ namespace BannerKings.Behaviours
         {
             private static bool Prefix(ref Town __instance, ref int __result)
             {
-                if (BannerKingsConfig.Instance.PopulationManager != null &&
-                    BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(__instance.Settlement))
+                if (BannerKingsConfig.Instance.PopulationManager == null || !BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(__instance.Settlement))
                 {
-                    var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(__instance.Settlement);
-                    var total = data.TotalPop;
-                    var result = (int) (total / 6.5f);
-
-                    __result = (int) (Campaign.Current.Models.SettlementFoodModel.FoodStocksUpperLimit +
-                                      (__instance.IsCastle
-                                          ? Campaign.Current.Models.SettlementFoodModel.CastleFoodStockUpperLimitBonus
-                                          : 0) +
-                                      __instance.GetEffectOfBuildings(BuildingEffectEnum.Foodstock) +
-                                      result);
-                    return false;
+                    return true;
                 }
 
-                return true;
+                var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(__instance.Settlement);
+                var total = data.TotalPop;
+                var result = (int) (total / 6.5f);
+
+                __result = (int) (Campaign.Current.Models.SettlementFoodModel.FoodStocksUpperLimit + (__instance.IsCastle ? Campaign.Current.Models.SettlementFoodModel.CastleFoodStockUpperLimitBonus : 0) + __instance.GetEffectOfBuildings(BuildingEffectEnum.Foodstock) + result);
+                return false;
+
             }
         }
 
@@ -657,8 +596,7 @@ namespace BannerKings.Behaviours
             private static void Postfix()
             {
                 Utils.Helpers._buildingCastleRetinue.Initialize(new TextObject("{=!}Retinue Barracks"),
-                    new TextObject(
-                        "{=!}Barracks for the castle retinue, a group of elite soldiers. The retinue is added to the garrison over time, up to a limit of 20, 40 or 60 (building level)."),
+                    new TextObject("{=!}Barracks for the castle retinue, a group of elite soldiers. The retinue is added to the garrison over time, up to a limit of 20, 40 or 60 (building level)."),
                     new[]
                     {
                         800,

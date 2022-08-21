@@ -539,13 +539,10 @@ namespace BannerKings.Behaviours
         private static bool IsCriminal(Clan ownerClan)
         {
             var criminal = false;
-            if (ownerClan != null)
+            var kingdom = ownerClan?.Kingdom;
+            if (kingdom != null)
             {
-                var kingdom = ownerClan.Kingdom;
-                if (kingdom != null)
-                {
-                    criminal = kingdom.MainHeroCrimeRating > 0;
-                }
+                criminal = kingdom.MainHeroCrimeRating > 0;
             }
 
             return criminal;
@@ -619,14 +616,11 @@ namespace BannerKings.Behaviours
             var criminal = false;
             var huntingRight = false;
             var clan = Settlement.CurrentSettlement.OwnerClan;
-            if (clan != null)
+            var kingdom = clan?.Kingdom;
+            if (kingdom != null)
             {
-                var kingdom = clan.Kingdom;
-                if (kingdom != null)
-                {
-                    criminal = kingdom.MainHeroCrimeRating > 0;
-                    huntingRight = kingdom.HasPolicy(DefaultPolicies.HuntingRights);
-                }
+                criminal = kingdom.MainHeroCrimeRating > 0;
+                huntingRight = kingdom.HasPolicy(DefaultPolicies.HuntingRights);
             }
 
             return !IsWounded() && !criminal && (huntingRight || Settlement.CurrentSettlement.OwnerClan == Clan.PlayerClan);

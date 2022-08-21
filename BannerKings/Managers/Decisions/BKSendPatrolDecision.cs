@@ -11,9 +11,7 @@ namespace BannerKings.Managers.Decisions
 
         public override string GetHint()
         {
-            return new TextObject(
-                    "{=!}Send out small patrols to stop criminals. Patrols are cavalry-focused and require a at least 100 strong garrison")
-                .ToString();
+            return new TextObject("{=!}Send out small patrols to stop criminals. Patrols are cavalry-focused and require a at least 100 strong garrison").ToString();
         }
 
         public override string GetIdentifier()

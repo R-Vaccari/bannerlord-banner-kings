@@ -13,12 +13,12 @@ namespace BannerKings.Managers.Helpers
     {
         public static void ApplyInheritanceAllTitles(List<FeudalTitle> titles, Hero victim)
         {
-            Dictionary<InheritanceType, List<FeudalTitle>> inheritanceDic =
+            var inheritanceDic =
                 new Dictionary<InheritanceType, List<FeudalTitle>>();
-            List<FeudalTitle> noContracts = new List<FeudalTitle>();
+            var noContracts = new List<FeudalTitle>();
             FeudalTitle highest = null;
 
-            foreach (FeudalTitle title in titles)
+            foreach (var title in titles)
             {
                 if (highest != null)
                 {
@@ -29,7 +29,7 @@ namespace BannerKings.Managers.Helpers
 
                 if (title.contract != null)
                 {
-                    InheritanceType inheritance = title.contract.Inheritance;
+                    var inheritance = title.contract.Inheritance;
                     if (!inheritanceDic.ContainsKey(inheritance))
                         inheritanceDic.Add(inheritance, new List<FeudalTitle>() {title});
                     else inheritanceDic[inheritance].Add(title);
@@ -37,15 +37,15 @@ namespace BannerKings.Managers.Helpers
                 else noContracts.Add(title);
             }
 
-            List<Hero> candidates = GetCandidates(victim.Clan, victim);
-            Hero mainHeir = GetHeirInternal(highest.contract.Inheritance, highest.contract.GenderLaw, victim,
+            var candidates = GetCandidates(victim.Clan, victim);
+            var mainHeir = GetHeirInternal(highest.contract.Inheritance, highest.contract.GenderLaw, victim,
                 candidates);
-            List<FeudalTitle> mainHeirTitles = new List<FeudalTitle>();
-            Dictionary<Hero, List<FeudalTitle>> secondaryHeirs = new Dictionary<Hero, List<FeudalTitle>>();
-            foreach (KeyValuePair<InheritanceType, List<FeudalTitle>> pair in inheritanceDic)
+            var mainHeirTitles = new List<FeudalTitle>();
+            var secondaryHeirs = new Dictionary<Hero, List<FeudalTitle>>();
+            foreach (var pair in inheritanceDic)
             {
-                Hero heir = GetHeirInternal(pair.Key, highest.contract.GenderLaw, victim, candidates);
-                foreach (FeudalTitle t in pair.Value)
+                var heir = GetHeirInternal(pair.Key, highest.contract.GenderLaw, victim, candidates);
+                foreach (var t in pair.Value)
                 {
                     BannerKingsConfig.Instance.TitleManager.InheritTitle(victim, heir, t);
                     if (heir != mainHeir)
@@ -59,21 +59,21 @@ namespace BannerKings.Managers.Helpers
             if (mainHeir != null) ChangeClanLeaderAction.ApplyWithSelectedNewLeader(victim.Clan, mainHeir);
 
             if (secondaryHeirs.Count > 0)
-                foreach (KeyValuePair<Hero, List<FeudalTitle>> pair in secondaryHeirs)
+                foreach (var pair in secondaryHeirs)
                 {
                     if (pair.Value.Any(x => x.fief != null && !x.fief.IsVillage && x.DeFacto.Clan == victim.Clan))
                     {
-                        List<FeudalTitle> landed = pair.Value.FindAll(x => x.fief != null && !x.fief.IsVillage);
-                        Clan newClan = ClanActions.CreateNewClan(pair.Key, landed[0].fief,
+                        var landed = pair.Value.FindAll(x => x.fief != null && !x.fief.IsVillage);
+                        var newClan = ClanActions.CreateNewClan(pair.Key, landed[0].fief,
                             pair.Key.StringId + "_split_clan");
 
-                        foreach (FeudalTitle t in mainHeirTitles)
+                        foreach (var t in mainHeirTitles)
                             t.AddClaim(newClan.Leader, ClaimType.Clan_Split, true);
 
-                        foreach (FeudalTitle t in pair.Value)
+                        foreach (var t in pair.Value)
                             t.AddClaim(mainHeir, ClaimType.Clan_Split, true);
 
-                        foreach (FeudalTitle t in landed)
+                        foreach (var t in landed)
                             if (t.DeFacto.Clan == victim.Clan)
                                 ChangeOwnerOfSettlementAction.ApplyByGift(t.fief, newClan.Leader);
 
@@ -141,8 +141,8 @@ namespace BannerKings.Managers.Helpers
 
         private static List<Hero> GetCandidates(Clan clan, Hero victim)
         {
-            List<Hero> candidates = new List<Hero>();
-            foreach (Hero x in clan.Heroes)
+            var candidates = new List<Hero>();
+            foreach (var x in clan.Heroes)
                 if (!x.IsChild && x != victim && x.IsAlive && (x.Occupation == Occupation.Lord || x.IsMinorFactionHero))
                     candidates.Add(x);
             return candidates;

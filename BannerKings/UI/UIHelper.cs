@@ -23,22 +23,13 @@ namespace BannerKings.UI
     {
         public static TextObject GetLanguageFluencyText(float fluency)
         {
-            TextObject text = null;
-            switch (fluency)
+            var text = fluency switch
             {
-                case >= 0.9f:
-                    text = new TextObject("{=!}Fluent");
-                    break;
-                case >= 0.5f:
-                    text = new TextObject("{=!}Capable");
-                    break;
-                case >= 0.1f:
-                    text = new TextObject("{=!}Novice");
-                    break;
-                default:
-                    text = new TextObject("{=!}Incompetent");
-                    break;
-            }
+                >= 0.9f => new TextObject("{=!}Fluent"),
+                >= 0.5f => new TextObject("{=!}Capable"),
+                >= 0.1f => new TextObject("{=!}Novice"),
+                _ => new TextObject("{=!}Incompetent")
+            };
 
             return text;
         }
@@ -233,10 +224,7 @@ namespace BannerKings.UI
                 GameTexts.FindText("str_selection_widget_cancel").ToString(), delegate
                 {
                     action.TakeAction(receiver);
-                    if (vm != null)
-                    {
-                        vm.RefreshValues();
-                    }
+                    vm?.RefreshValues();
                 }, null, string.Empty));
         }
 

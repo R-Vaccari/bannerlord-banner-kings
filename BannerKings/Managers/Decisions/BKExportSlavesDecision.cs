@@ -11,8 +11,7 @@ namespace BannerKings.Managers.Decisions
 
         public override string GetHint()
         {
-            return new TextObject(
-                "{=!}Slave caravans will be formed when the share of slave population is large enough").ToString();
+            return new TextObject("{=!}Slave caravans will be formed when the share of slave population is large enough").ToString();
         }
 
         public override string GetIdentifier()

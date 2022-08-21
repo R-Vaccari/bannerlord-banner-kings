@@ -191,12 +191,11 @@ namespace BannerKings.UI.Management
                             decision.OnChange(value);
                             RefreshValues();
                         }, new TextObject(decision.GetHint()));
-                    switch (decision.GetIdentifier())
+                    foreignerToogle = decision.GetIdentifier() switch
                     {
-                        case "decision_foreigner_ban":
-                            foreignerToogle = vm;
-                            break;
-                    }
+                        "decision_foreigner_ban" => vm,
+                        _ => foreignerToogle
+                    };
                 }
             }
         }

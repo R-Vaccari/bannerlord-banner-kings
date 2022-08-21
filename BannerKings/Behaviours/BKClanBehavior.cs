@@ -143,7 +143,7 @@ namespace BannerKings.Behaviours
 
                 if (clan.WarPartyComponents.Count > 0)
                 {
-                    WarPartyComponent warParty =
+                    var warParty =
                         clan.WarPartyComponents.GetRandomElementWithPredicate(x => IsRoleFree(x.MobileParty, role));
                     if (warParty != null)
                     {

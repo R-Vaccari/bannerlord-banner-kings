@@ -12,34 +12,17 @@ namespace BannerKings.Models.Vanilla
     {
         public override int GetCharacterWage(int tier)
         {
-            int result;
-            switch (tier)
+            var result = tier switch
             {
-                case 0:
-                    result = 3;
-                    break;
-                case 1:
-                    result = 6;
-                    break;
-                case 2:
-                    result = 10;
-                    break;
-                case 3:
-                    result = 15;
-                    break;
-                case 4:
-                    result = 26;
-                    break;
-                case 5:
-                    result = 38;
-                    break;
-                case 6:
-                    result = 50;
-                    break;
-                default:
-                    result = 60;
-                    break;
-            }
+                0 => 3,
+                1 => 6,
+                2 => 10,
+                3 => 15,
+                4 => 26,
+                5 => 38,
+                6 => 50,
+                _ => 60
+            };
 
             return result;
         }

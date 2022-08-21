@@ -8,7 +8,7 @@ namespace BannerKings
         protected TextObject description;
         protected TextObject name;
 
-        public BannerKingsObject(string id) : base(id)
+        protected BannerKingsObject(string id) : base(id)
         {
         }
 

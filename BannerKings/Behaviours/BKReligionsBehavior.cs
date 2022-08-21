@@ -213,10 +213,7 @@ namespace BannerKings.Behaviours
             starter.AddPlayerLine("bk_rite_confirm", "bk_rite_confirm", "lord_talk_ask_something", "{=!}See it done.",
                 null, () =>
                 {
-                    if (selectedRite != null)
-                    {
-                        selectedRite.Complete(Hero.MainHero);
-                    }
+                    selectedRite?.Complete(Hero.MainHero);
                 });
             starter.AddPlayerLine("bk_rite_confirm", "bk_rite_confirm", "lord_talk_ask_something",
                 "{=D33fIGQe}Never mind.",

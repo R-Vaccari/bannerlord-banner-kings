@@ -106,24 +106,15 @@ namespace BannerKings.Managers
             var decisions = new List<BannerKingsDecision>();
             if (settlement.IsVillage)
             {
-                foreach (var id in VillageDecisions)
-                {
-                    decisions.Add(GenerateDecision(settlement, id));
-                }
+                decisions.AddRange(VillageDecisions.Select(id => GenerateDecision(settlement, id)));
             }
             else if (settlement.IsCastle)
             {
-                foreach (var id in CastleDecisions)
-                {
-                    decisions.Add(GenerateDecision(settlement, id));
-                }
+                decisions.AddRange(CastleDecisions.Select(id => GenerateDecision(settlement, id)));
             }
             else if (settlement.IsTown)
             {
-                foreach (var id in TownDecisions)
-                {
-                    decisions.Add(GenerateDecision(settlement, id));
-                }
+                decisions.AddRange(TownDecisions.Select(id => GenerateDecision(settlement, id)));
             }
 
             SettlementDecisions.Add(settlement, decisions);

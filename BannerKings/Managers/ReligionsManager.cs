@@ -54,13 +54,10 @@ namespace BannerKings.Managers
             rels.Add(darusosianReligion);
             rels.Add(vlandiaReligion);
 
-            foreach (var rel in rels)
+            foreach (var rel in rels.Where(rel => !Religions.ContainsKey(rel)))
             {
-                if (!Religions.ContainsKey(rel))
-                {
-                    Religions.Add(rel, new Dictionary<Hero, FaithfulData>());
-                    InitializeFaithfulHeroes(rel);
-                }
+                Religions.Add(rel, new Dictionary<Hero, FaithfulData>());
+                InitializeFaithfulHeroes(rel);
             }
         }
 
@@ -168,38 +165,29 @@ namespace BannerKings.Managers
         public FaithfulData GetFaithfulData(Hero hero)
         {
             var rel = GetHeroReligion(hero);
-            if (rel != null)
-            {
-                return Religions[rel][hero];
-            }
-
-            return null;
+            return rel != null ? Religions[rel][hero] : null;
         }
 
 
         public List<Religion> GetReligions()
         {
-            var religions = new List<Religion>();
-            foreach (var rel in Religions.Keys)
-            {
-                religions.Add(rel);
-            }
-
-            return religions;
+            return Religions.Keys.ToList();
         }
 
         public void AddBlessing(Divinity divinity, Hero hero, Religion religion, bool notify = false)
         {
-            if (Religions[religion].ContainsKey(hero))
+            if (!Religions[religion].ContainsKey(hero))
             {
-                Religions[religion][hero].AddBlessing(divinity);
-                if (notify)
-                {
-                    MBInformationManager.AddQuickInformation(religion.Faith.GetBlessingQuickInformation()
-                            .SetTextVariable("HERO", hero.Name)
-                            .SetTextVariable("DIVINITY", divinity.Name),
-                        0, hero.CharacterObject, "event:/ui/notification/relation");
-                }
+                return;
+            }
+
+            Religions[religion][hero].AddBlessing(divinity);
+            if (notify)
+            {
+                MBInformationManager.AddQuickInformation(religion.Faith.GetBlessingQuickInformation()
+                        .SetTextVariable("HERO", hero.Name)
+                        .SetTextVariable("DIVINITY", divinity.Name),
+                    0, hero.CharacterObject, "event:/ui/notification/relation");
             }
         }
 
@@ -211,41 +199,29 @@ namespace BannerKings.Managers
         public List<Hero> GetFaithfulHeroes(Religion religion)
         {
             var heroes = new List<Hero>();
-            if (Religions.ContainsKey(religion))
+            if (!Religions.ContainsKey(religion))
             {
-                foreach (var hero in Religions[religion].Keys.ToList())
-                {
-                    heroes.Add(hero);
-                }
+                return heroes;
             }
+
+            heroes.AddRange(Religions[religion].Keys.ToList());
 
             return heroes;
         }
 
         public Religion GetIdealReligion(CultureObject culture)
         {
-            foreach (var rel in Religions.Keys.ToList())
-            {
-                if (rel.MainCulture == culture)
-                {
-                    return rel;
-                }
-            }
-
-            return null;
+            return Religions.Keys.ToList().FirstOrDefault(rel => rel.MainCulture == culture);
         }
 
         public bool IsReligionMember(Hero hero, Religion religion)
         {
-            if (Religions.ContainsKey(religion))
+            if (!Religions.ContainsKey(religion))
             {
-                if (Religions[religion].ContainsKey(hero))
-                {
-                    return true;
-                }
+                return false;
             }
 
-            return false;
+            return Religions[religion].ContainsKey(hero);
         }
 
         public void RemoveHero(Hero hero)
@@ -321,44 +297,17 @@ namespace BannerKings.Managers
 
         public bool IsPreacher(Hero hero)
         {
-            foreach (var rel in Religions.Keys.ToList())
-            foreach (var clergy in rel.Clergy.Values.ToList())
-            {
-                if (clergy.Hero == hero)
-                {
-                    return true;
-                }
-            }
-
-            return false;
+            return Religions.Keys.ToList().SelectMany(rel => rel.Clergy.Values.ToList()).Any(clergy => clergy.Hero == hero);
         }
 
         public Clergyman GetClergymanFromHeroHero(Hero hero)
         {
-            foreach (var rel in Religions.Keys.ToList())
-            foreach (var clergy in rel.Clergy.Values.ToList())
-            {
-                if (clergy.Hero == hero)
-                {
-                    return clergy;
-                }
-            }
-
-            return null;
+            return Religions.Keys.ToList().SelectMany(rel => rel.Clergy.Values.ToList()).FirstOrDefault(clergy => clergy.Hero == hero);
         }
 
         public Religion GetClergymanReligion(Clergyman clergyman)
         {
-            foreach (var rel in Religions.Keys.ToList())
-            foreach (var clergy in rel.Clergy.Values.ToList())
-            {
-                if (clergy == clergyman)
-                {
-                    return rel;
-                }
-            }
-
-            return null;
+            return (from rel in Religions.Keys.ToList() from clergy in rel.Clergy.Values.ToList() where clergy == clergyman select rel).FirstOrDefault();
         }
     }
 }

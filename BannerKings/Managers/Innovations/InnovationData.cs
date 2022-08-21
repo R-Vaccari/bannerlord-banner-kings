@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Skills;
 using TaleWorlds.CampaignSystem;
@@ -34,32 +35,19 @@ namespace BannerKings.Managers.Innovations
             if (Fascination != null)
             {
                 var fasc = DefaultInnovations.Instance.GetById(Fascination);
-                Fascination.Initialize(fasc.Name, fasc.Description, fasc.Effects, fasc.RequiredProgress, fasc.Culture,
-                    fasc.Requirement);
+                Fascination.Initialize(fasc.Name, fasc.Description, fasc.Effects, fasc.RequiredProgress, fasc.Culture, fasc.Requirement);
             }
 
             foreach (var innovation in innovations)
             {
                 var innov = DefaultInnovations.Instance.GetById(innovation);
-                innovation.Initialize(innov.Name, innov.Description, innov.Effects, innov.RequiredProgress, innov.Culture,
-                    innov.Requirement);
+                innovation.Initialize(innov.Name, innov.Description, innov.Effects, innov.RequiredProgress, innov.Culture, innov.Requirement);
             }
         }
 
         public bool HasFinishedInnovation(Innovation innovation)
         {
-            if (innovations.Contains(innovation))
-            {
-                foreach (var i in innovations)
-                {
-                    if (i == innovation)
-                    {
-                        return i.Finished;
-                    }
-                }
-            }
-
-            return false;
+            return innovations.Contains(innovation) && (from i in innovations where i == innovation select i.Finished).FirstOrDefault();
         }
 
         public bool CanAssumeCulturalHead(Clan clan)

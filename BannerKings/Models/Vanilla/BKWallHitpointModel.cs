@@ -10,16 +10,13 @@ namespace BannerKings.Models.Vanilla
         {
             var result = base.CalculateMaximumWallHitPoint(town);
 
-            if (town.OwnerClan != null)
+            var leader = town.OwnerClan?.Leader;
+            if (leader != null)
             {
-                var leader = town.OwnerClan.Leader;
-                if (leader != null)
+                var data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(leader);
+                if (data.HasPerk(BKPerks.Instance.SiegePlanner))
                 {
-                    var data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(leader);
-                    if (data.HasPerk(BKPerks.Instance.SiegePlanner))
-                    {
-                        result *= 1.25f;
-                    }
+                    result *= 1.25f;
                 }
             }
 

@@ -602,10 +602,7 @@ namespace BannerKings.UI
                 var fi = __instance.GetType()
                     .GetField("_onAnyChangeInQueue", BindingFlags.Instance | BindingFlags.NonPublic);
                 var onAnyChangeInQueue = (Action) fi.GetValue(__instance);
-                if (onAnyChangeInQueue != null)
-                {
-                    onAnyChangeInQueue.Invoke();
-                }
+                onAnyChangeInQueue?.Invoke();
 
                 return false;
             }

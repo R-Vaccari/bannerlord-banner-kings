@@ -65,21 +65,15 @@ namespace BannerKings.Managers.Education.Languages
 
         public Dictionary<Language, float> GetIntelligibles(Language language)
         {
-            switch (language.StringId)
+            return language.StringId switch
             {
-                case "language_battanian":
-                    return new Dictionary<Language, float> {{Vakken, 0.15f}, {Calradian, 0.1f}};
-                case "language_vlandic":
-                    return new Dictionary<Language, float> {{Calradian, 0.15f}};
-                case "language_sturgian":
-                    return new Dictionary<Language, float> {{Vakken, 0.1f}};
-                case "language_calradian":
-                    return new Dictionary<Language, float> {{Vlandic, 0.1f}, {Battanian, 0.1f}};
-                case "language_vakken":
-                    return new Dictionary<Language, float> {{Battanian, 0.15f}, {Sturgian, 0.1f}};
-                default:
-                    return new Dictionary<Language, float>();
-            }
+                "language_battanian" => new Dictionary<Language, float> {{Vakken, 0.15f}, {Calradian, 0.1f}},
+                "language_vlandic" => new Dictionary<Language, float> {{Calradian, 0.15f}},
+                "language_sturgian" => new Dictionary<Language, float> {{Vakken, 0.1f}},
+                "language_calradian" => new Dictionary<Language, float> {{Vlandic, 0.1f}, {Battanian, 0.1f}},
+                "language_vakken" => new Dictionary<Language, float> {{Battanian, 0.15f}, {Sturgian, 0.1f}},
+                _ => new Dictionary<Language, float>()
+            };
         }
     }
 }
