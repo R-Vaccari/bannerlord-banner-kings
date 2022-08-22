@@ -31,6 +31,7 @@ namespace BannerKings.Behaviours
         private PopulationManager populationManager;
         private ReligionsManager religionsManager;
         private TitleManager titleManager;
+        private GoalManager goalsManager;
 
         public override void RegisterEvents()
         {
@@ -52,6 +53,7 @@ namespace BannerKings.Behaviours
                 religionsManager = BannerKingsConfig.Instance.ReligionsManager;
                 educationsManager = BannerKingsConfig.Instance.EducationManager;
                 innovationsManager = BannerKingsConfig.Instance.InnovationsManager;
+                goalsManager = BannerKingsConfig.Instance.GoalManager;
             }
 
             if (BannerKingsConfig.Instance.wipeData)
@@ -63,6 +65,7 @@ namespace BannerKings.Behaviours
                 religionsManager = null;
                 educationsManager = null;
                 innovationsManager = null;
+                goalsManager = null;
             }
 
             dataStore.SyncData("bannerkings-populations", ref populationManager);
@@ -72,11 +75,11 @@ namespace BannerKings.Behaviours
             dataStore.SyncData("bannerkings-religions", ref religionsManager);
             dataStore.SyncData("bannerkings-educations", ref educationsManager);
             dataStore.SyncData("bannerkings-innovations", ref innovationsManager);
+            dataStore.SyncData("bannerkings-goals", ref goalsManager);
 
             if (dataStore.IsLoading && populationManager != null)
             {
-                BannerKingsConfig.Instance.InitManagers(populationManager, policyManager,
-                    titleManager, courtManager, religionsManager, educationsManager, innovationsManager);
+                BannerKingsConfig.Instance.InitManagers(populationManager, policyManager, titleManager, courtManager, religionsManager, educationsManager, innovationsManager, goalsManager);
             }
         }
 
@@ -91,12 +94,9 @@ namespace BannerKings.Behaviours
             BannerKingsConfig.Instance.PolicyManager.InitializeSettlement(settlement);
         }
 
-        private void OnSiegeAftermath(MobileParty attackerParty, Settlement settlement,
-            SiegeAftermathCampaignBehavior.SiegeAftermath aftermathType, Clan previousSettlementOwner,
-            Dictionary<MobileParty, float> partyContributions)
+        private void OnSiegeAftermath(MobileParty attackerParty, Settlement settlement, SiegeAftermathCampaignBehavior.SiegeAftermath aftermathType, Clan previousSettlementOwner, Dictionary<MobileParty, float> partyContributions)
         {
-            if (aftermathType == SiegeAftermathCampaignBehavior.SiegeAftermath.ShowMercy || settlement == null ||
-                settlement.Town == null ||
+            if (aftermathType == SiegeAftermathCampaignBehavior.SiegeAftermath.ShowMercy || settlement?.Town == null ||
                 BannerKingsConfig.Instance.PopulationManager == null ||
                 !BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
             {
@@ -104,23 +104,11 @@ namespace BannerKings.Behaviours
             }
 
             var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
-            float shareToKill;
-            if (aftermathType == SiegeAftermathCampaignBehavior.SiegeAftermath.Pillage)
-            {
-                shareToKill = MBRandom.RandomFloatRanged(0.1f, 0.16f);
-            }
-            else
-            {
-                shareToKill = MBRandom.RandomFloatRanged(0.16f, 0.24f);
-            }
+            var shareToKill = aftermathType == SiegeAftermathCampaignBehavior.SiegeAftermath.Pillage ? MBRandom.RandomFloatRanged(0.1f, 0.16f) : MBRandom.RandomFloatRanged(0.16f, 0.24f);
 
             var killTotal = (int) (data.TotalPop * shareToKill);
             var lognum = killTotal;
-            var weights = new List<(PopType, float)>();
-            foreach (var pair in GetDesiredPopTypes(settlement))
-            {
-                weights.Add(new ValueTuple<PopType, float>(pair.Key, pair.Value[0]));
-            }
+            var weights = GetDesiredPopTypes(settlement).Select(pair => new ValueTuple<PopType, float>(pair.Key, pair.Value[0])).ToList();
 
             if (killTotal <= 0)
             {
@@ -145,14 +133,15 @@ namespace BannerKings.Behaviours
 
         private void OnSettlementEntered(MobileParty party, Settlement target, Hero hero)
         {
-            if (party != null && party.IsLordParty && target.OwnerClan != null &&
-                party.LeaderHero == target.OwnerClan.Leader)
+            if (party is not {IsLordParty: true} || target.OwnerClan == null || party.LeaderHero != target.OwnerClan.Leader)
             {
-                if ((!target.IsVillage && target.Town.Governor == null) ||
-                    (target.IsVillage && target.Village.Bound.Town.Governor == null))
-                {
-                    BannerKingsConfig.Instance.AI.SettlementManagement(target);
-                }
+                return;
+            }
+
+            if ((!target.IsVillage && target.Town.Governor == null) ||
+                (target.IsVillage && target.Village.Bound.Town.Governor == null))
+            {
+                BannerKingsConfig.Instance.AI.SettlementManagement(target);
             }
         }
 
@@ -259,7 +248,7 @@ namespace BannerKings.Behaviours
             {
                 //SetNotables(settlement);
                 //UpdateVolunteers(settlement);
-                if (settlement.Town == null || settlement.Town.GarrisonParty == null)
+                if (settlement.Town?.GarrisonParty == null)
                 {
                     return;
                 }
@@ -318,8 +307,7 @@ namespace BannerKings.Behaviours
                 if (town.OwnerClan.Leader == Hero.MainHero)
                 {
                     InformationManager.DisplayMessage(new InformationMessage(
-                        new TextObject(
-                                "You have been charged {GOLD} for the excess production of {ITEM}, now in your stash at {CASTLE}.")
+                        new TextObject("You have been charged {GOLD} for the excess production of {ITEM}, now in your stash at {CASTLE}.")
                             .SetTextVariable("GOLD", itemFinalPrice)
                             .SetTextVariable("ITEM", item.Name)
                             .SetTextVariable("CASTLE", town.Name)

@@ -12,7 +12,6 @@ using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Managers.Education
 {
-
     public class EducationData : BannerKingsData
     {
         private const float LANGUAGE_RATE = 1f / (CampaignTime.DaysInYear * 5f);
@@ -44,10 +43,7 @@ namespace BannerKings.Managers.Education
         {
             get
             {
-                if (gainedPerks == null)
-                {
-                    gainedPerks = new List<PerkObject>();
-                }
+                gainedPerks ??= new List<PerkObject>();
 
                 return gainedPerks.GetReadOnlyList();
             }
@@ -264,10 +260,7 @@ namespace BannerKings.Managers.Education
                 }
             }
 
-            if (Lifestyle != null)
-            {
-                Lifestyle.AddProgress(StandartLifestyleProgress);
-            }
+            Lifestyle?.AddProgress(StandartLifestyleProgress);
         }
     }
 }

@@ -257,17 +257,15 @@ namespace BannerKings.Behaviours
             }
 
             var lordships = titles.FindAll(x => x.type == TitleType.Lordship);
-            if (lordships.Count == 0)
+            switch (lordships.Count)
             {
-                hintText = new TextObject(
-                    "{=!}You do not legally own any lordship that could be given to land a new vassal.");
-                return false;
-            }
-
-            if (lordships.Count == 1)
-            {
-                hintText = new TextObject("{=!}You cannot grant away your only lordship.");
-                return false;
+                case 0:
+                    hintText = new TextObject(
+                        "{=!}You do not legally own any lordship that could be given to land a new vassal.");
+                    return false;
+                case 1:
+                    hintText = new TextObject("{=!}You cannot grant away your only lordship.");
+                    return false;
             }
 
             var influence = BannerKingsConfig.Instance.TitleModel.GetGrantKnighthoodCost(Hero.MainHero);
@@ -341,7 +339,7 @@ namespace BannerKings.Behaviours
             private static void Postfix(ref TextObject __result, Hero o)
             {
                 var titles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(o);
-                if (titles != null && titles.Count > 0)
+                if (titles is {Count: > 0})
                 {
                     var desc = "";
                     FeudalTitle current = null;
@@ -453,26 +451,32 @@ namespace BannerKings.Behaviours
                                         "{=Hz8XO8wk}Governors cannot lead a mobile party and be a governor at the same time.")
                                     .ToString();
                             }
-                            else if (hero.HeroState == Hero.CharacterStates.Disabled)
+                            else switch (hero.HeroState)
                             {
-                                hint = new TextObject("{=slzfQzl3}This hero is lost").ToString();
-                            }
-                            else if (hero.HeroState == Hero.CharacterStates.Fugitive)
-                            {
-                                hint = new TextObject(
-                                        "{=dD3kRDHi}This hero is a fugitive and running from their captors. They will be available after some time.")
-                                    .ToString();
-                            }
-                            else if (!Utils.Helpers.IsCloseFamily(hero, Hero.MainHero) &&
-                                     !BannerKingsConfig.Instance.TitleManager.IsHeroKnighted(hero))
-                            {
-                                hint = new TextObject(
-                                        "A hero must be knighted and granted land before being able to raise a personal retinue. You may bestow knighthood by talking to them.")
-                                    .ToString();
-                            }
-                            else
-                            {
-                                isEnabled = true;
+                                case Hero.CharacterStates.Disabled:
+                                    hint = new TextObject("{=slzfQzl3}This hero is lost").ToString();
+                                    break;
+                                case Hero.CharacterStates.Fugitive:
+                                    hint = new TextObject(
+                                            "{=dD3kRDHi}This hero is a fugitive and running from their captors. They will be available after some time.")
+                                        .ToString();
+                                    break;
+                                default:
+                                {
+                                    if (!Utils.Helpers.IsCloseFamily(hero, Hero.MainHero) &&
+                                        !BannerKingsConfig.Instance.TitleManager.IsHeroKnighted(hero))
+                                    {
+                                        hint = new TextObject(
+                                                "A hero must be knighted and granted land before being able to raise a personal retinue. You may bestow knighthood by talking to them.")
+                                            .ToString();
+                                    }
+                                    else
+                                    {
+                                        isEnabled = true;
+                                    }
+
+                                    break;
+                                }
                             }
 
                             list.Add(new InquiryElement(hero, hero.Name.ToString(),

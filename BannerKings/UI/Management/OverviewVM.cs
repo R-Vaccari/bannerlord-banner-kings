@@ -111,7 +111,7 @@ namespace BannerKings.UI.Management
             CultureList.Clear();
             CultureInfo.Clear();
             StatsInfo.Clear();
-            if (data != null && data.Classes != null)
+            if (data is {Classes: { }})
             {
                 data.Classes.ForEach(popClass => PopList
                     .Add(new PopulationInfoVM(Utils.Helpers.GetClassName(popClass.type, settlement.Culture).ToString(),

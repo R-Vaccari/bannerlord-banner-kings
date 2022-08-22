@@ -4,38 +4,31 @@ using TaleWorlds.ObjectSystem;
 
 namespace BannerKings
 {
-    public abstract class DefaultTypeInitializer<T, X>
-        where T : new()
-        where X : MBObjectBase
+    public abstract class DefaultTypeInitializer<TDefaultTypeInitializer, TMBObjectBase> where TDefaultTypeInitializer : new() where TMBObjectBase : MBObjectBase
     {
-        public static T Instance => ConfigHolder.CONFIG;
+        public static TDefaultTypeInitializer Instance => ConfigHolder.CONFIG;
 
-        public abstract IEnumerable<X> All { get; }
+        public abstract IEnumerable<TMBObjectBase> All { get; }
+
         public abstract void Initialize();
 
-        public X GetById(X input)
+        public TMBObjectBase GetById(TMBObjectBase input)
         {
-            if (input != null)
-            {
-                return All.FirstOrDefault(x => x.StringId == input.StringId);
-            }
-
-            return null;
+            return input != null 
+                ? All.FirstOrDefault(x => x.StringId == input.StringId) 
+                : null;
         }
 
-        public X GetById(string input)
+        public TMBObjectBase GetById(string input)
         {
-            if (input != null)
-            {
-                return All.FirstOrDefault(x => x.StringId == input);
-            }
-
-            return null;
+            return input != null 
+                ? All.FirstOrDefault(x => x.StringId == input) 
+                : null;
         }
 
-        internal struct ConfigHolder
+        private struct ConfigHolder
         {
-            public static T CONFIG = new();
+            public static TDefaultTypeInitializer CONFIG = new();
         }
     }
 }

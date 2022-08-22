@@ -125,7 +125,7 @@ namespace BannerKings.UI.Titles
             base.RefreshValues();
             Decisions.Clear();
 
-            if (title == null || title.contract == null)
+            if (title?.contract == null)
             {
                 return;
             }
@@ -254,7 +254,7 @@ namespace BannerKings.UI.Titles
                         new TextObject(
                             "{=!}Select a {LAW} to be voted on. Starting an election costs {INFLUENCE} influence.");
                     description.SetTextVariable("LAW", law);
-                    var cost = decision != null ? decision.GetInfluenceCost(null) : 0;
+                    var cost = decision?.GetInfluenceCost(null) ?? 0;
                     description.SetTextVariable("INFLUENCE", cost);
 
                     if (kingdom != null && options.Count > 0 && decision != null)

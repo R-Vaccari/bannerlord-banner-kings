@@ -71,30 +71,30 @@ namespace BannerKings.Models.Vanilla
 
             if (item.HasArmorComponent)
             {
-                if (item.ItemType == ItemObject.ItemTypeEnum.BodyArmor)
+                switch (item.ItemType)
                 {
-                    result += 50f;
-                }
-                else if (item.ItemType == ItemObject.ItemTypeEnum.HeadArmor)
-                {
-                    result += 30f;
-                }
-                else
-                {
-                    result += 10f;
+                    case ItemObject.ItemTypeEnum.BodyArmor:
+                        result += 50f;
+                        break;
+                    case ItemObject.ItemTypeEnum.HeadArmor:
+                        result += 30f;
+                        break;
+                    default:
+                        result += 10f;
+                        break;
                 }
 
-                if (item.ArmorComponent.MaterialType == ArmorMaterialTypes.Plate)
+                switch (item.ArmorComponent.MaterialType)
                 {
-                    result += 40f;
-                }
-                else if (item.ArmorComponent.MaterialType == ArmorMaterialTypes.Chainmail)
-                {
-                    result += 25f;
-                }
-                else
-                {
-                    result += 10f;
+                    case ArmorMaterialTypes.Plate:
+                        result += 40f;
+                        break;
+                    case ArmorMaterialTypes.Chainmail:
+                        result += 25f;
+                        break;
+                    default:
+                        result += 10f;
+                        break;
                 }
             }
 
@@ -113,27 +113,27 @@ namespace BannerKings.Models.Vanilla
             var result = item.Tierf * 20f;
             if (item.HasArmorComponent)
             {
-                if (item.ItemType == ItemObject.ItemTypeEnum.BodyArmor ||
-                    item.ItemType == ItemObject.ItemTypeEnum.HorseHarness)
+                switch (item.ItemType)
                 {
-                    result *= 1.5f;
-                }
-                else if (item.ItemType == ItemObject.ItemTypeEnum.HeadArmor)
-                {
-                    result *= 1.2f;
+                    case ItemObject.ItemTypeEnum.BodyArmor or ItemObject.ItemTypeEnum.HorseHarness:
+                        result *= 1.5f;
+                        break;
+                    case ItemObject.ItemTypeEnum.HeadArmor:
+                        result *= 1.2f;
+                        break;
                 }
 
-                if (item.ArmorComponent.MaterialType == ArmorMaterialTypes.Plate)
+                switch (item.ArmorComponent.MaterialType)
                 {
-                    result *= 1.4f;
-                }
-                else if (item.ArmorComponent.MaterialType == ArmorMaterialTypes.Chainmail)
-                {
-                    result *= 1.25f;
-                }
-                else if (item.ArmorComponent.MaterialType == ArmorMaterialTypes.Leather)
-                {
-                    result *= 1.1f;
+                    case ArmorMaterialTypes.Plate:
+                        result *= 1.4f;
+                        break;
+                    case ArmorMaterialTypes.Chainmail:
+                        result *= 1.25f;
+                        break;
+                    case ArmorMaterialTypes.Leather:
+                        result *= 1.1f;
+                        break;
                 }
             }
 
@@ -148,44 +148,46 @@ namespace BannerKings.Models.Vanilla
             if (item.HasArmorComponent)
             {
                 var material = item.ArmorComponent.MaterialType;
-                if (material == ArmorMaterialTypes.Chainmail || material == ArmorMaterialTypes.Plate)
+                switch (material)
                 {
-                    var ingots = (int) (item.Weight * 0.8f / 0.5f);
-                    CraftingMaterials mainMaterial;
+                    case ArmorMaterialTypes.Chainmail or ArmorMaterialTypes.Plate:
+                    {
+                        var ingots = (int) (item.Weight * 0.8f / 0.5f);
+                        CraftingMaterials mainMaterial;
 
-                    if (item.Tierf < 4f)
-                    {
-                        mainMaterial = CraftingMaterials.Iron3;
-                        result[10] = 1;
-                    }
-                    else
-                    {
-                        result[9] = 1;
-                        if (item.Tierf < 5f)
+                        if (item.Tierf < 4f)
                         {
-                            mainMaterial = CraftingMaterials.Iron4;
-                        }
-                        else if (item.Tierf < 6f)
-                        {
-                            mainMaterial = CraftingMaterials.Iron5;
+                            mainMaterial = CraftingMaterials.Iron3;
+                            result[10] = 1;
                         }
                         else
                         {
-                            mainMaterial = CraftingMaterials.Iron6;
+                            result[9] = 1;
+                            switch (item.Tierf)
+                            {
+                                case < 5f:
+                                    mainMaterial = CraftingMaterials.Iron4;
+                                    break;
+                                case < 6f:
+                                    mainMaterial = CraftingMaterials.Iron5;
+                                    break;
+                                default:
+                                    mainMaterial = CraftingMaterials.Iron6;
+                                    break;
+                            }
                         }
-                    }
 
-                    var mainMaterialIndex = (int) mainMaterial;
-                    result[mainMaterialIndex] = (int) (ingots * 0.9f);
-                    result[mainMaterialIndex - 1] = (int) (ingots * 0.1f);
-                }
-                else if (material == ArmorMaterialTypes.Leather)
-                {
-                    result[9] = MBMath.ClampInt((int) (item.Weight / 10f), 1, 100);
-                }
-                else if (material == ArmorMaterialTypes.Cloth)
-                {
-                    result[10] = 1;
+                        var mainMaterialIndex = (int) mainMaterial;
+                        result[mainMaterialIndex] = (int) (ingots * 0.9f);
+                        result[mainMaterialIndex - 1] = (int) (ingots * 0.1f);
+                        break;
+                    }
+                    case ArmorMaterialTypes.Leather:
+                        result[9] = MBMath.ClampInt((int) (item.Weight / 10f), 1, 100);
+                        break;
+                    case ArmorMaterialTypes.Cloth:
+                        result[10] = 1;
+                        break;
                 }
             }
             else if (item.HasWeaponComponent)
@@ -216,13 +218,13 @@ namespace BannerKings.Models.Vanilla
             var metalCount = 0;
             for (var i = 0; i < result.Length; i++)
             {
-                if (i >= 2 && i <= 6)
+                if (i is >= 2 and <= 6)
                 {
                     metalCount += result[i];
                 }
             }
 
-            if (item.WeaponComponent != null && item.WeaponComponent.PrimaryWeapon != null)
+            if (item.WeaponComponent is {PrimaryWeapon: { }})
             {
                 var metalCap = GetMetalMax(item.WeaponComponent.PrimaryWeapon.WeaponClass);
                 if (metalCount > 0 && metalCap > 0)
@@ -231,7 +233,7 @@ namespace BannerKings.Models.Vanilla
                     {
                         for (var i = 0; i < result.Length; i++)
                         {
-                            if (i >= 2 && i <= 6 && result[i] > 0 && metalCount > metalCap)
+                            if (i is >= 2 and <= 6 && result[i] > 0 && metalCount > metalCap)
                             {
                                 result[i]--;
                                 metalCount--;
@@ -257,28 +259,17 @@ namespace BannerKings.Models.Vanilla
 
         public int GetMetalMax(WeaponClass weaponClass)
         {
-            if (weaponClass == WeaponClass.Dagger || weaponClass == WeaponClass.ThrowingAxe ||
-                weaponClass == WeaponClass.ThrowingKnife || weaponClass == WeaponClass.Crossbow ||
-                weaponClass == WeaponClass.SmallShield)
+            switch (weaponClass)
             {
-                return 1;
+                case WeaponClass.Dagger or WeaponClass.ThrowingAxe or WeaponClass.ThrowingKnife or WeaponClass.Crossbow or WeaponClass.SmallShield:
+                    return 1;
+                case WeaponClass.OneHandedSword or WeaponClass.LowGripPolearm or WeaponClass.TwoHandedPolearm or WeaponClass.OneHandedPolearm or WeaponClass.OneHandedAxe or WeaponClass.Mace or WeaponClass.LargeShield or WeaponClass.Pick:
+                    return 2;
+                case WeaponClass.TwoHandedAxe or WeaponClass.TwoHandedMace or WeaponClass.TwoHandedSword:
+                    return 3;
+                default:
+                    return -1;
             }
-
-            if (weaponClass == WeaponClass.OneHandedSword || weaponClass == WeaponClass.LowGripPolearm ||
-                weaponClass == WeaponClass.TwoHandedPolearm || weaponClass == WeaponClass.OneHandedPolearm ||
-                weaponClass == WeaponClass.OneHandedAxe || weaponClass == WeaponClass.Mace ||
-                weaponClass == WeaponClass.LargeShield || weaponClass == WeaponClass.Pick)
-            {
-                return 2;
-            }
-
-            if (weaponClass == WeaponClass.TwoHandedAxe || weaponClass == WeaponClass.TwoHandedMace ||
-                weaponClass == WeaponClass.TwoHandedSword)
-            {
-                return 3;
-            }
-
-            return -1;
         }
 
 
@@ -287,18 +278,17 @@ namespace BannerKings.Models.Vanilla
             var max = Campaign.Current.GetCampaignBehavior<ICraftingCampaignBehavior>().GetMaxHeroCraftingStamina(hero);
             var result = base.GetEnergyCostForSmithing(item, hero);
 
-            if (item.WeaponComponent != null && item.WeaponComponent.PrimaryWeapon != null)
+            if (item.WeaponComponent is {PrimaryWeapon: { }})
             {
                 var weaponClass = item.WeaponComponent.PrimaryWeapon.WeaponClass;
-                if (weaponClass == WeaponClass.TwoHandedAxe || weaponClass == WeaponClass.TwoHandedMace ||
-                    weaponClass == WeaponClass.TwoHandedSword)
+                switch (weaponClass)
                 {
-                    result = (int) (result * 1.5f);
-                }
-                else if (weaponClass == WeaponClass.OneHandedSword || weaponClass == WeaponClass.OneHandedAxe ||
-                         weaponClass == WeaponClass.Mace)
-                {
-                    result = (int) (result * 1.2f);
+                    case WeaponClass.TwoHandedAxe or WeaponClass.TwoHandedMace or WeaponClass.TwoHandedSword:
+                        result = (int) (result * 1.5f);
+                        break;
+                    case WeaponClass.OneHandedSword or WeaponClass.OneHandedAxe or WeaponClass.Mace:
+                        result = (int) (result * 1.2f);
+                        break;
                 }
             }
 

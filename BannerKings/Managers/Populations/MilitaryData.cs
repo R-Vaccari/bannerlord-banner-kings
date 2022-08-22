@@ -37,7 +37,7 @@ namespace BannerKings.Managers.Populations
             get
             {
                 var number = new ExplainedNumber(0f);
-                if (settlement.Notables != null && settlement.Notables.Count > 0)
+                if (settlement.Notables is {Count: > 0})
                 {
                     number = new BKVolunteerModel().GetDraftEfficiency(settlement.Notables[0], 2, settlement);
                 }

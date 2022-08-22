@@ -97,7 +97,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
 
         public override bool IsAllowed()
         {
-            return Title != null && Title.contract != null;
+            return Title is {contract: { }};
         }
     }
 }

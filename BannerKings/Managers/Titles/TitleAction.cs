@@ -21,7 +21,7 @@ namespace BannerKings.Managers.Titles
 
         public bool IsHostile()
         {
-            return Type == ActionType.Usurp || Type == ActionType.Claim || Type == ActionType.Revoke;
+            return Type is ActionType.Usurp or ActionType.Claim or ActionType.Revoke;
         }
 
         public void SetTile(FeudalTitle title)
@@ -41,25 +41,23 @@ namespace BannerKings.Managers.Titles
                 return;
             }
 
-            if (Type == ActionType.Usurp)
+            switch (Type)
             {
-                BannerKingsConfig.Instance.TitleManager.UsurpTitle(Title.deJure, this);
-            }
-            else if (Type == ActionType.Claim)
-            {
-                BannerKingsConfig.Instance.TitleManager.AddOngoingClaim(this);
-            }
-            else if (Type == ActionType.Revoke)
-            {
-                BannerKingsConfig.Instance.TitleManager.RevokeTitle(this);
-            }
-            else if (Type == ActionType.Found)
-            {
-                BannerKingsConfig.Instance.TitleManager.FoundKingdom(this);
-            }
-            else
-            {
-                BannerKingsConfig.Instance.TitleManager.GrantTitle(this, receiver);
+                case ActionType.Usurp:
+                    BannerKingsConfig.Instance.TitleManager.UsurpTitle(Title.deJure, this);
+                    break;
+                case ActionType.Claim:
+                    BannerKingsConfig.Instance.TitleManager.AddOngoingClaim(this);
+                    break;
+                case ActionType.Revoke:
+                    BannerKingsConfig.Instance.TitleManager.RevokeTitle(this);
+                    break;
+                case ActionType.Found:
+                    BannerKingsConfig.Instance.TitleManager.FoundKingdom(this);
+                    break;
+                default:
+                    BannerKingsConfig.Instance.TitleManager.GrantTitle(this, receiver);
+                    break;
             }
         }
     }

@@ -121,10 +121,7 @@ namespace BannerKings.UI.Items
 
         public void OnPress()
         {
-            if (OnPressAction != null)
-            {
-                OnPressAction();
-            }
+            OnPressAction?.Invoke();
         }
 
         public DecisionElement SetAsTitle(string title, TextObject hintText = null)

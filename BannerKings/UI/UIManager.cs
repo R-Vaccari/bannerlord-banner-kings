@@ -123,7 +123,7 @@ namespace BannerKings.UI
             {
                 if (__instance.IsLord && BannerKingsConfig.Instance.TitleManager != null)
                 {
-                    var kingdom = __instance.Clan != null ? __instance.Clan.Kingdom : null;
+                    var kingdom = __instance.Clan?.Kingdom;
                     var title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(__instance);
                     if (title != null)
                     {
@@ -184,17 +184,17 @@ namespace BannerKings.UI
             private static bool Prefix(SkillIconVisualWidget __instance, string value)
             {
                 var text = value;
-                if (value == "Lordship")
+                switch (value)
                 {
-                    text = "leadership";
-                }
-                else if (value == "Scholarship")
-                {
-                    text = "Steward";
-                }
-                else if (value == "Theology")
-                {
-                    text = "charm";
+                    case "Lordship":
+                        text = "leadership";
+                        break;
+                    case "Scholarship":
+                        text = "Steward";
+                        break;
+                    case "Theology":
+                        text = "charm";
+                        break;
                 }
 
                 var skillId = __instance.GetType().GetField("_skillId", BindingFlags.Instance | BindingFlags.NonPublic);
@@ -223,7 +223,7 @@ namespace BannerKings.UI
 
                 var title =
                     BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(Hero.MainHero.MapFaction as Kingdom);
-                if (title == null || title.contract == null)
+                if (title?.contract == null)
                 {
                     return;
                 }
@@ -267,47 +267,38 @@ namespace BannerKings.UI
             internal static void SetterPostfix(SettlementProjectVM __instance, Building value)
             {
                 var code = value != null ? value.BuildingType.StringId.ToLower() : "";
-                if (code == "bannerkings_palisade")
+                switch (code)
                 {
-                    code = "building_fortifications";
-                }
-                else if (code == "bannerkings_trainning")
-                {
-                    code = "building_settlement_militia_barracks";
-                }
-                else if (code == "bannerkings_manor")
-                {
-                    code = "building_castle_castallans_office";
-                }
-                else if (code == "bannerkings_bakery" || code == "bannerkings_butter" ||
-                         code == "bannerkings_daily_pasture")
-                {
-                    code = "building_settlement_granary";
-                }
-                else if (code == "bannerkings_mining")
-                {
-                    code = "building_siege_workshop";
-                }
-                else if (code == "bannerkings_farming" || code == "bannerkings_daily_farm")
-                {
-                    code = "building_settlement_lime_kilns";
-                }
-                else if (code == "bannerkings_sawmill" || code == "bannerkings_tannery" ||
-                         code == "bannerkings_blacksmith")
-                {
-                    code = "building_castle_workshops";
-                }
-                else if (code == "bannerkings_daily_woods" || code == "bannerkings_fishing")
-                {
-                    code = "building_irrigation";
-                }
-                else if (code == "bannerkings_warehouse")
-                {
-                    code = "building_settlement_garrison_barracks";
-                }
-                else if (code == "bannerkings_courier")
-                {
-                    code = "building_castle_lime_kilns";
+                    case "bannerkings_palisade":
+                        code = "building_fortifications";
+                        break;
+                    case "bannerkings_trainning":
+                        code = "building_settlement_militia_barracks";
+                        break;
+                    case "bannerkings_manor":
+                        code = "building_castle_castallans_office";
+                        break;
+                    case "bannerkings_bakery" or "bannerkings_butter" or "bannerkings_daily_pasture":
+                        code = "building_settlement_granary";
+                        break;
+                    case "bannerkings_mining":
+                        code = "building_siege_workshop";
+                        break;
+                    case "bannerkings_farming" or "bannerkings_daily_farm":
+                        code = "building_settlement_lime_kilns";
+                        break;
+                    case "bannerkings_sawmill" or "bannerkings_tannery" or "bannerkings_blacksmith":
+                        code = "building_castle_workshops";
+                        break;
+                    case "bannerkings_daily_woods" or "bannerkings_fishing":
+                        code = "building_irrigation";
+                        break;
+                    case "bannerkings_warehouse":
+                        code = "building_settlement_garrison_barracks";
+                        break;
+                    case "bannerkings_courier":
+                        code = "building_castle_lime_kilns";
+                        break;
                 }
 
                 __instance.VisualCode = code;

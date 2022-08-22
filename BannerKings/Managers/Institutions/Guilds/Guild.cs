@@ -123,7 +123,7 @@ namespace BannerKings.Managers.Institutions.Guilds
 
         public static bool IsSuitable(Hero notable)
         {
-            return (notable.Occupation == Occupation.Merchant || notable.Occupation == Occupation.Artisan)
+            return notable.Occupation is Occupation.Merchant or Occupation.Artisan
                    && notable.Power >= 400f;
         }
 

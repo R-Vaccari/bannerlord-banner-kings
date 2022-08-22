@@ -59,10 +59,7 @@ namespace BannerKings.Behaviours
 
             if (dataStore.IsLoading)
             {
-                if (bookSellers == null)
-                {
-                    bookSellers = new Dictionary<Hero, ItemRoster>();
-                }
+                bookSellers ??= new Dictionary<Hero, ItemRoster>();
             }
         }
 
@@ -170,7 +167,7 @@ namespace BannerKings.Behaviours
 
                 var town = Town.AllTowns.GetRandomElementWithPredicate(x => !currentSettlements.Contains(x.Settlement)
                                                                             && x.Culture == character.Culture);
-                if (town == null || town.Settlement == null)
+                if (town?.Settlement == null)
                 {
                     continue;
                 }

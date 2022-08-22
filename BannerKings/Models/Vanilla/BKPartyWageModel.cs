@@ -31,7 +31,7 @@ namespace BannerKings.Models.Vanilla
         {
             var result = base.GetTotalWage(mobileParty, includeDescriptions);
 
-            var leader = mobileParty.LeaderHero != null ? mobileParty.LeaderHero : mobileParty.Owner;
+            var leader = mobileParty.LeaderHero ?? mobileParty.Owner;
             if (leader != null)
             {
                 var totalCulture = 0f;
@@ -121,8 +121,8 @@ namespace BannerKings.Models.Vanilla
 
                 if (buyerHero.Clan != null)
                 {
-                    if (buyerHero.CurrentSettlement != null && buyerHero.CurrentSettlement.OwnerClan != null
-                                                            && buyerHero.CurrentSettlement.OwnerClan == buyerHero.Clan)
+                    if (buyerHero.CurrentSettlement is {OwnerClan: { }} 
+                        && buyerHero.CurrentSettlement.OwnerClan == buyerHero.Clan)
                     {
                         result.AddFactor(-0.15f);
                     }
@@ -142,13 +142,14 @@ namespace BannerKings.Models.Vanilla
                         result.AddFactor(-0.1f, GameTexts.FindText("str_kingdom"));
                     }
 
-                    if (buyerHero.Clan.Tier >= 4)
+                    switch (buyerHero.Clan.Tier)
                     {
-                        result.AddFactor((buyerHero.Clan.Tier - 3) * 0.05f);
-                    }
-                    else if (buyerHero.Clan.Tier <= 1)
-                    {
-                        result.AddFactor((buyerHero.Clan.Tier - 2) * 0.05f);
+                        case >= 4:
+                            result.AddFactor((buyerHero.Clan.Tier - 3) * 0.05f);
+                            break;
+                        case <= 1:
+                            result.AddFactor((buyerHero.Clan.Tier - 2) * 0.05f);
+                            break;
                     }
                 }
             }

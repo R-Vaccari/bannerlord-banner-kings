@@ -23,18 +23,12 @@ namespace BannerKings.UI.Court
 
         private void SetId()
         {
-            if (setId != null)
-            {
-                setId(position.Position.ToString());
-            }
+            setId?.Invoke(position.Position.ToString());
         }
 
         private void UpdatePosition()
         {
-            if (updatePosition != null)
-            {
-                updatePosition(position.Position.ToString());
-            }
+            updatePosition?.Invoke(position.Position.ToString());
         }
     }
 }

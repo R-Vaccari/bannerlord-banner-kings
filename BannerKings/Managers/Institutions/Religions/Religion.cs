@@ -75,12 +75,7 @@ namespace BannerKings.Managers.Institutions.Religions
 
         public Clergyman GetClergyman(Settlement settlement)
         {
-            if (clergy.ContainsKey(settlement))
-            {
-                return clergy[settlement];
-            }
-
-            return null;
+            return clergy.ContainsKey(settlement) ? clergy[settlement] : null;
         }
 
         public Clergyman GenerateClergyman(Settlement settlement)

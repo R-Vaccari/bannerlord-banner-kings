@@ -9,6 +9,8 @@ using BannerKings.Managers.Education;
 using BannerKings.Managers.Education.Books;
 using BannerKings.Managers.Education.Languages;
 using BannerKings.Managers.Education.Lifestyles;
+using BannerKings.Managers.Goals;
+using BannerKings.Managers.Goals.Decisions;
 using BannerKings.Managers.Innovations;
 using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Institutions.Religions.Faiths;
@@ -145,6 +147,13 @@ namespace BannerKings
             AddClassDefinition(typeof(InnovationsManager), 95);
             AddClassDefinition(typeof(BannerKingsObject), 96);
             AddClassDefinition(typeof(StartOption), 97);
+            #region Goals
+            AddClassDefinition(typeof(GoalManager), 98);
+            AddClassDefinition(typeof(GoalData), 99);
+            AddClassDefinition(typeof(Goal), 100);
+            AddClassDefinition(typeof(GoalUpdateType), 101);
+            AddClassDefinition(typeof(GreaterBattaniaGoal), 102);
+            #endregion Goals
         }
 
         protected override void DefineContainerDefinitions()

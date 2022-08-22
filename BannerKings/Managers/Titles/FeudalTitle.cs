@@ -249,14 +249,14 @@ namespace BannerKings.Managers.Titles
                 deJureDrift.Add(newSovereign, 0f);
             }
 
-            if (deJureDrift[newSovereign] >= 1f)
+            switch (deJureDrift[newSovereign])
             {
-                DriftTitle(newSovereign);
-            }
-
-            else if (deJureDrift[newSovereign] < 0f)
-            {
-                deJureDrift[newSovereign] = 0f;
+                case >= 1f:
+                    DriftTitle(newSovereign);
+                    break;
+                case < 0f:
+                    deJureDrift[newSovereign] = 0f;
+                    break;
             }
         }
 
@@ -390,7 +390,7 @@ namespace BannerKings.Managers.Titles
         public void SetSovereign(FeudalTitle sovereign)
         {
             this.sovereign = sovereign;
-            if (vassals != null && vassals.Count > 0)
+            if (vassals is {Count: > 0})
             {
                 foreach (var vassal in vassals)
                 {
@@ -402,7 +402,7 @@ namespace BannerKings.Managers.Titles
         public void ChangeContract(GovernmentType government)
         {
             contract.ChangeGovernment(government);
-            if (vassals != null && vassals.Count > 0)
+            if (vassals is {Count: > 0})
             {
                 foreach (var vassal in vassals)
                 {
@@ -414,7 +414,7 @@ namespace BannerKings.Managers.Titles
         public void ChangeContract(SuccessionType succession)
         {
             contract.ChangeSuccession(succession);
-            if (vassals != null && vassals.Count > 0)
+            if (vassals is {Count: > 0})
             {
                 foreach (var vassal in vassals)
                 {
@@ -426,7 +426,7 @@ namespace BannerKings.Managers.Titles
         public void ChangeContract(InheritanceType inheritance)
         {
             contract.ChangeInheritance(inheritance);
-            if (vassals != null && vassals.Count > 0)
+            if (vassals is {Count: > 0})
             {
                 foreach (var vassal in vassals)
                 {
@@ -438,7 +438,7 @@ namespace BannerKings.Managers.Titles
         public void ChangeContract(GenderLaw genderLaw)
         {
             contract.ChangeGenderLaw(genderLaw);
-            if (vassals != null && vassals.Count > 0)
+            if (vassals is {Count: > 0})
             {
                 foreach (var vassal in vassals)
                 {

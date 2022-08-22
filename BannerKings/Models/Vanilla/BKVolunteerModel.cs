@@ -77,7 +77,7 @@ namespace BannerKings.Models.Vanilla
                 var baseNumber = 0.75f * MathF.Clamp(MathF.Pow(num, index + 1), 0f, 1f);
                 var explainedNumber = new ExplainedNumber(baseNumber, true);
                 var clan = hero.Clan;
-                if ((clan != null ? clan.Kingdom : null) != null &&
+                if (clan?.Kingdom != null &&
                     hero.Clan.Kingdom.ActivePolicies.Contains(DefaultPolicies.Cantons))
                 {
                     explainedNumber.AddFactor(0.2f, new TextObject("Cantons kingdom policy"));
@@ -95,13 +95,14 @@ namespace BannerKings.Models.Vanilla
                     CouncilPosition.Marshall, 0.25f, true);
                 var draftPolicy = ((BKDraftPolicy) BannerKingsConfig.Instance.PolicyManager.GetPolicy(settlement, "draft"))
                     .Policy;
-                if (draftPolicy == DraftPolicy.Conscription)
+                switch (draftPolicy)
                 {
-                    explainedNumber.Add(0.15f, new TextObject("{=!}Draft policy"));
-                }
-                else if (draftPolicy == DraftPolicy.Demobilization)
-                {
-                    explainedNumber.Add(-0.15f, new TextObject("{=!}Draft policy"));
+                    case DraftPolicy.Conscription:
+                        explainedNumber.Add(0.15f, new TextObject("{=!}Draft policy"));
+                        break;
+                    case DraftPolicy.Demobilization:
+                        explainedNumber.Add(-0.15f, new TextObject("{=!}Draft policy"));
+                        break;
                 }
 
                 var government = BannerKingsConfig.Instance.TitleManager.GetSettlementGovernment(settlement);
@@ -132,22 +133,17 @@ namespace BannerKings.Models.Vanilla
 
         public float GetClassMilitarism(PopType type)
         {
-            if (type == PopType.Serfs)
+            switch (type)
             {
-                return 0.1f;
+                case PopType.Serfs:
+                    return 0.1f;
+                case PopType.Craftsmen:
+                    return 0.03f;
+                case PopType.Nobles:
+                    return 0.12f;
+                default:
+                    return 0;
             }
-
-            if (type == PopType.Craftsmen)
-            {
-                return 0.03f;
-            }
-
-            if (type == PopType.Nobles)
-            {
-                return 0.12f;
-            }
-
-            return 0;
         }
     }
 }

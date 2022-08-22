@@ -75,13 +75,14 @@ namespace BannerKings.Models.Vanilla
 
                 var taxType = ((BKTaxPolicy) BannerKingsConfig.Instance.PolicyManager.GetPolicy(town.Settlement, "tax"))
                     .Policy;
-                if (taxType == TaxType.Low)
+                switch (taxType)
                 {
-                    baseResult.AddFactor(-0.15f, new TextObject("Tax policy"));
-                }
-                else if (taxType == TaxType.High)
-                {
-                    baseResult.AddFactor(0.15f, new TextObject("Tax policy"));
+                    case TaxType.Low:
+                        baseResult.AddFactor(-0.15f, new TextObject("Tax policy"));
+                        break;
+                    case TaxType.High:
+                        baseResult.AddFactor(0.15f, new TextObject("Tax policy"));
+                        break;
                 }
 
                 var legitimacy = (LegitimacyType) new BKLegitimacyModel().CalculateEffect(town.Settlement).ResultNumber;
@@ -114,25 +115,28 @@ namespace BannerKings.Models.Vanilla
             {
                 var taxType = ((BKTaxPolicy) BannerKingsConfig.Instance.PolicyManager.GetPolicy(village.Settlement, "tax"))
                     .Policy;
-                if (taxType == TaxType.High)
+                switch (taxType)
                 {
-                    baseResult = marketIncome * 9f;
-                }
-                else if (taxType == TaxType.Low)
-                {
-                    baseResult = marketIncome * 0.5f;
-                }
-                else if (taxType == TaxType.Exemption && marketIncome > 0)
-                {
-                    baseResult = 0;
-                    var random = MBRandom.RandomInt(1, 100);
-                    if (random <= 33 && village.Settlement.Notables != null)
+                    case TaxType.High:
+                        baseResult = marketIncome * 9f;
+                        break;
+                    case TaxType.Low:
+                        baseResult = marketIncome * 0.5f;
+                        break;
+                    case TaxType.Exemption when marketIncome > 0:
                     {
-                        var notable = village.Settlement.Notables.GetRandomElement();
-                        if (notable != null)
+                        baseResult = 0;
+                        var random = MBRandom.RandomInt(1, 100);
+                        if (random <= 33 && village.Settlement.Notables != null)
                         {
-                            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(village.Settlement.Owner, notable, 1);
+                            var notable = village.Settlement.Notables.GetRandomElement();
+                            if (notable != null)
+                            {
+                                ChangeRelationAction.ApplyRelationChangeBetweenHeroes(village.Settlement.Owner, notable, 1);
+                            }
                         }
+
+                        break;
                     }
                 }
 
@@ -169,7 +173,7 @@ namespace BannerKings.Models.Vanilla
         private void CalculateDueTax(PopulationData data, float result)
         {
             var titleData = data.TitleData;
-            if (titleData == null || titleData.Title == null)
+            if (titleData?.Title == null)
             {
                 return;
             }

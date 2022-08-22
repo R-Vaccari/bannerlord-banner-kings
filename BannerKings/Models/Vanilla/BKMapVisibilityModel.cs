@@ -12,7 +12,7 @@ namespace BannerKings.Models.Vanilla
         {
             var result = base.GetPartySpottingDifficulty(spottingParty, party);
 
-            if (party != null && party.LeaderHero != null &&
+            if (party is {LeaderHero: { }} &&
                 Campaign.Current.MapSceneWrapper.GetFaceTerrainType(party.CurrentNavigationFace) == TerrainType.Forest)
             {
                 var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(party.LeaderHero);

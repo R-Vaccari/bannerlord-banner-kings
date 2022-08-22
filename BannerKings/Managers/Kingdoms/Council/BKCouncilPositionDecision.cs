@@ -105,13 +105,14 @@ namespace BannerKings.Managers.Kingdoms.Council
                         stance = Religion.Faith.GetStance(candidateReligion.Faith);
                     }
 
-                    if (stance == FaithStance.Untolerated)
+                    switch (stance)
                     {
-                        result -= 1.5f;
-                    }
-                    else if (stance == FaithStance.Hostile)
-                    {
-                        result -= 4f;
+                        case FaithStance.Untolerated:
+                            result -= 1.5f;
+                            break;
+                        case FaithStance.Hostile:
+                            result -= 4f;
+                            break;
                     }
                 }
             }

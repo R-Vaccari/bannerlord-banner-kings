@@ -14,7 +14,7 @@ namespace BannerKings.Managers.Institutions.Religions
             Name = name;
             Description = description;
             Effects = effects;
-            SecondaryTitle = secondaryTitle != null ? secondaryTitle : new TextObject();
+            SecondaryTitle = secondaryTitle ?? new TextObject();
             BlessingCost = blessingCost;
         }
 

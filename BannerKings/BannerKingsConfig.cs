@@ -6,6 +6,7 @@ using BannerKings.Managers.Decisions;
 using BannerKings.Managers.Education.Books;
 using BannerKings.Managers.Education.Languages;
 using BannerKings.Managers.Education.Lifestyles;
+using BannerKings.Managers.Goals;
 using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Institutions.Religions.Doctrines;
 using BannerKings.Managers.Institutions.Religions.Faiths;
@@ -35,6 +36,7 @@ namespace BannerKings
         public ReligionsManager ReligionsManager { get; private set; }
         public EducationManager EducationManager { get; private set; }
         public InnovationsManager InnovationsManager { get; private set; }
+        public GoalManager GoalManager { get; private set; }
 
         public BKInfluenceModel InfluenceModel { get; } = new();
         public BKTitleModel TitleModel { get; } = new();
@@ -53,16 +55,16 @@ namespace BannerKings
 
         public static BannerKingsConfig Instance => ConfigHolder.CONFIG;
 
-        public void Initialize()
+        private void Initialize()
         {
             DefaultVillageBuildings.Instance.Initialize();
             DefaultDivinities.Instance.Initialize();
             DefaultFaiths.Instance.Initialize();
             DefaultDoctrines.Instance.Initialize();
-
             DefaultLanguages.Instance.Initialize();
             DefaultBookTypes.Instance.Initialize();
             DefaultLifestyles.Instance.Initialize();
+            DefaultGoals.Instance.Initialize();
 
             Models.Add(new BKCultureAssimilationModel());
             Models.Add(new BKCultureAcceptanceModel());
@@ -79,6 +81,7 @@ namespace BannerKings
         public void InitManagers()
         {
             Initialize();
+
             PopulationManager = new PopulationManager(new Dictionary<Settlement, PopulationData>(), new List<MobileParty>());
             PolicyManager = new PolicyManager(new Dictionary<Settlement, List<BannerKingsDecision>>(), new Dictionary<Settlement, List<BannerKingsPolicy>>());
             TitleManager = new TitleManager(new Dictionary<FeudalTitle, Hero>(), new Dictionary<Kingdom, FeudalTitle>());
@@ -86,22 +89,25 @@ namespace BannerKings
             ReligionsManager = new ReligionsManager();
             EducationManager = new EducationManager();
             InnovationsManager = new InnovationsManager();
+            GoalManager = new GoalManager();
         }
 
-        public void InitManagers(PopulationManager populationManager, PolicyManager policyManager, TitleManager titleManager, CourtManager court, ReligionsManager religions, EducationManager educations, InnovationsManager innovations)
+        public void InitManagers(PopulationManager populationManager, PolicyManager policyManager, TitleManager titleManager, CourtManager court, ReligionsManager religions, EducationManager educations, InnovationsManager innovations, GoalManager goals)
         {
             Initialize();
+
             PopulationManager = populationManager;
             PolicyManager = policyManager;
             TitleManager = titleManager;
             titleManager.RefreshCaches();
             CourtManager = court;
-            ReligionsManager = religions != null ? religions : new ReligionsManager();
-            EducationManager = educations != null ? educations : new EducationManager();
-            InnovationsManager = innovations != null ? innovations : new InnovationsManager();
+            ReligionsManager = religions ?? new ReligionsManager();
+            EducationManager = educations ?? new EducationManager();
+            InnovationsManager = innovations ?? new InnovationsManager();
+            GoalManager = goals ?? new GoalManager();
         }
 
-        internal struct ConfigHolder
+        private struct ConfigHolder
         {
             public static BannerKingsConfig CONFIG = new();
         }

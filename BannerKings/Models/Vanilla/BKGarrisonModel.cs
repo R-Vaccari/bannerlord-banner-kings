@@ -20,13 +20,14 @@ namespace BannerKings.Models.Vanilla
             {
                 var garrison =
                     ((BKGarrisonPolicy) BannerKingsConfig.Instance.PolicyManager.GetPolicy(settlement, "garrison")).Policy;
-                if (garrison == GarrisonPolicy.Dischargement)
+                switch (garrison)
                 {
-                    baseResult.Add(-1f, new TextObject("{=!}Garrison policy"));
-                }
-                else if (garrison == GarrisonPolicy.Enlistment)
-                {
-                    baseResult.Add(1f, new TextObject("{=!}Garrison policy"));
+                    case GarrisonPolicy.Dischargement:
+                        baseResult.Add(-1f, new TextObject("{=!}Garrison policy"));
+                        break;
+                    case GarrisonPolicy.Enlistment:
+                        baseResult.Add(1f, new TextObject("{=!}Garrison policy"));
+                        break;
                 }
             }
 
@@ -43,7 +44,7 @@ namespace BannerKings.Models.Vanilla
                 {
                     float enemies = FactionManager.GetEnemyKingdoms(kingdom).Count();
                     var strength = 0f;
-                    if (settlement.Town != null && settlement.Town.GarrisonParty != null)
+                    if (settlement.Town is {GarrisonParty: { }})
                     {
                         strength = settlement.Town.GarrisonParty.MemberRoster.TotalManCount;
                     }

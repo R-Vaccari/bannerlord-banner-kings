@@ -20,12 +20,14 @@ namespace BannerKings.Managers.Court
             Hero spiritual = null)
         {
             this.clan = clan;
-            members = new List<CouncilMember>();
-            members.Add(new CouncilMember(marshall, CouncilPosition.Marshall, clan));
-            members.Add(new CouncilMember(chancellor, CouncilPosition.Chancellor, clan));
-            members.Add(new CouncilMember(steward, CouncilPosition.Steward, clan));
-            members.Add(new CouncilMember(spymaster, CouncilPosition.Spymaster, clan));
-            members.Add(new CouncilMember(spiritual, CouncilPosition.Spiritual, clan));
+            members = new List<CouncilMember>
+            {
+                new CouncilMember(marshall, CouncilPosition.Marshall, clan),
+                new CouncilMember(chancellor, CouncilPosition.Chancellor, clan),
+                new CouncilMember(steward, CouncilPosition.Steward, clan),
+                new CouncilMember(spymaster, CouncilPosition.Spymaster, clan),
+                new CouncilMember(spiritual, CouncilPosition.Spiritual, clan)
+            };
             royalMembers = new List<CouncilMember>();
         }
 
@@ -322,20 +324,21 @@ namespace BannerKings.Managers.Court
             }
 
             var sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(clan.Kingdom);
-            if (sovereign == null || sovereign.contract == null)
+            if (sovereign?.contract == null)
             {
                 return positions;
             }
 
             var government = sovereign.contract.Government;
 
-            if (government == GovernmentType.Imperial)
+            switch (government)
             {
-                positions.Add(new CouncilMember(null, CouncilPosition.Prince, clan));
-            }
-            else if (government == GovernmentType.Feudal)
-            {
-                positions.Add(new CouncilMember(null, CouncilPosition.Constable, clan));
+                case GovernmentType.Imperial:
+                    positions.Add(new CouncilMember(null, CouncilPosition.Prince, clan));
+                    break;
+                case GovernmentType.Feudal:
+                    positions.Add(new CouncilMember(null, CouncilPosition.Constable, clan));
+                    break;
             }
 
             if (clan.Kingdom.Culture == Utils.Helpers.GetCulture("vlandia"))
@@ -397,7 +400,7 @@ namespace BannerKings.Managers.Court
             var heroes = new List<Hero>();
 
             var members = clan.Heroes;
-            if (members != null && members.Count > 0)
+            if (members is {Count: > 0})
             {
                 foreach (var member in members)
                 {
@@ -411,7 +414,7 @@ namespace BannerKings.Managers.Court
             if (BannerKingsConfig.Instance.TitleManager.IsHeroTitleHolder(Owner))
             {
                 var vassals = BannerKingsConfig.Instance.TitleManager.GetVassals(Owner);
-                if (vassals != null && vassals.Count > 0)
+                if (vassals is {Count: > 0})
                 {
                     foreach (var vassal in vassals)
                     {
@@ -423,7 +426,7 @@ namespace BannerKings.Managers.Court
                 }
 
                 var highest = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(Owner);
-                if (highest != null && highest.IsSovereignLevel && clan.Kingdom != null)
+                if (highest is {IsSovereignLevel: true} && clan.Kingdom != null)
                 {
                     foreach (var clan in clan.Kingdom.Clans)
                     {
@@ -436,13 +439,13 @@ namespace BannerKings.Managers.Court
             }
 
             var towns = this.clan.Fiefs;
-            if (towns != null && towns.Count > 0)
+            if (towns is {Count: > 0})
             {
                 var rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(clan.Leader);
                 foreach (var town in towns)
                 {
                     var notables = town.Settlement.Notables;
-                    if (notables != null && notables.Count > 0)
+                    if (notables is {Count: > 0})
                     {
                         foreach (var notable in notables)
                         {
@@ -456,7 +459,7 @@ namespace BannerKings.Managers.Court
                     foreach (var village in town.Villages)
                     {
                         var villageNotables = village.Settlement.Notables;
-                        if (villageNotables != null && villageNotables.Count > 0)
+                        if (villageNotables is {Count: > 0})
                         {
                             foreach (var notable in villageNotables)
                             {
@@ -648,25 +651,24 @@ namespace BannerKings.Managers.Court
                     var secondarySkill = 0f;
 
                     targetCap += 15 * (member.GetAttributeValue(DefaultCharacterAttributes.Intelligence) - 5);
-                    if (position == CouncilPosition.Marshall)
+                    switch (position)
                     {
-                        primarySkill = member.GetSkillValue(DefaultSkills.Leadership);
-                        secondarySkill = member.GetSkillValue(DefaultSkills.Tactics);
-                    }
-                    else if (position == CouncilPosition.Chancellor)
-                    {
-                        primarySkill = member.GetSkillValue(DefaultSkills.Charm);
-                        secondarySkill = member.GetSkillValue(DefaultSkills.Charm);
-                    }
-                    else if (position == CouncilPosition.Steward)
-                    {
-                        primarySkill = member.GetSkillValue(DefaultSkills.Steward);
-                        secondarySkill = member.GetSkillValue(DefaultSkills.Trade);
-                    }
-                    else if (position == CouncilPosition.Spymaster)
-                    {
-                        primarySkill = member.GetSkillValue(DefaultSkills.Roguery);
-                        secondarySkill = member.GetSkillValue(DefaultSkills.Scouting);
+                        case CouncilPosition.Marshall:
+                            primarySkill = member.GetSkillValue(DefaultSkills.Leadership);
+                            secondarySkill = member.GetSkillValue(DefaultSkills.Tactics);
+                            break;
+                        case CouncilPosition.Chancellor:
+                            primarySkill = member.GetSkillValue(DefaultSkills.Charm);
+                            secondarySkill = member.GetSkillValue(DefaultSkills.Charm);
+                            break;
+                        case CouncilPosition.Steward:
+                            primarySkill = member.GetSkillValue(DefaultSkills.Steward);
+                            secondarySkill = member.GetSkillValue(DefaultSkills.Trade);
+                            break;
+                        case CouncilPosition.Spymaster:
+                            primarySkill = member.GetSkillValue(DefaultSkills.Roguery);
+                            secondarySkill = member.GetSkillValue(DefaultSkills.Scouting);
+                            break;
                     }
 
                     return MBMath.ClampFloat((primarySkill + secondarySkill / 2) / targetCap, 0f, 1f);
@@ -696,19 +698,17 @@ namespace BannerKings.Managers.Court
 
         public bool IsValidCandidate(Hero candidate)
         {
-            if (candidate.Clan != null && candidate.Clan.IsUnderMercenaryService)
+            if (candidate.Clan is {IsUnderMercenaryService: true})
             {
                 return false;
             }
 
-            if (position == CouncilPosition.Spiritual)
+            switch (position)
             {
-                return BannerKingsConfig.Instance.ReligionsManager.IsPreacher(candidate);
-            }
-
-            if (position == CouncilPosition.Elder)
-            {
-                return candidate.Culture == Culture && candidate.Age >= 50;
+                case CouncilPosition.Spiritual:
+                    return BannerKingsConfig.Instance.ReligionsManager.IsPreacher(candidate);
+                case CouncilPosition.Elder:
+                    return candidate.Culture == Culture && candidate.Age >= 50;
             }
 
             if (IsRoyal && IsCorePosition(position))
@@ -747,24 +747,23 @@ namespace BannerKings.Managers.Court
 
         public bool IsCorePosition(CouncilPosition position)
         {
-            return position == CouncilPosition.Marshall || position == CouncilPosition.Steward ||
-                   position == CouncilPosition.Spymaster || position == CouncilPosition.Chancellor;
+            return position is CouncilPosition.Marshall or CouncilPosition.Steward or CouncilPosition.Spymaster or CouncilPosition.Chancellor;
         }
 
         public IEnumerable<CouncilPrivileges> GetPrivileges()
         {
             var adm = AdministrativeCosts();
-            if (adm > 0.03f)
+            switch (adm)
             {
-                yield return CouncilPrivileges.HIGH_WAGE;
-            }
-            else if (adm > 0.01f)
-            {
-                yield return CouncilPrivileges.MID_WAGE;
-            }
-            else if (adm > 0f)
-            {
-                yield return CouncilPrivileges.LOW_WAGE;
+                case > 0.03f:
+                    yield return CouncilPrivileges.HIGH_WAGE;
+                    break;
+                case > 0.01f:
+                    yield return CouncilPrivileges.MID_WAGE;
+                    break;
+                case > 0f:
+                    yield return CouncilPrivileges.LOW_WAGE;
+                    break;
             }
 
             if (position == CouncilPosition.Spiritual)
@@ -778,13 +777,14 @@ namespace BannerKings.Managers.Court
             }
 
             var influence = InfluenceCosts();
-            if (influence >= 0.05f)
+            switch (influence)
             {
-                yield return CouncilPrivileges.HIGH_INFLUENCE;
-            }
-            else if (influence > 0f)
-            {
-                yield return CouncilPrivileges.INFLUENCE;
+                case >= 0.05f:
+                    yield return CouncilPrivileges.HIGH_INFLUENCE;
+                    break;
+                case > 0f:
+                    yield return CouncilPrivileges.INFLUENCE;
+                    break;
             }
 
             if (position == CouncilPosition.Marshall && IsRoyal)

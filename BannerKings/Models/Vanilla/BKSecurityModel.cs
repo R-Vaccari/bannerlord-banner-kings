@@ -39,13 +39,14 @@ namespace BannerKings.Models.Vanilla
                 var criminal =
                     ((BKCriminalPolicy) BannerKingsConfig.Instance.PolicyManager.GetPolicy(town.Settlement, "criminal"))
                     .Policy;
-                if (criminal == CriminalPolicy.Execution)
+                switch (criminal)
                 {
-                    baseResult.Add(0.5f, new TextObject("Criminal policy"));
-                }
-                else if (criminal == CriminalPolicy.Forgiveness)
-                {
-                    baseResult.Add(1f, new TextObject("Criminal policy"));
+                    case CriminalPolicy.Execution:
+                        baseResult.Add(0.5f, new TextObject("Criminal policy"));
+                        break;
+                    case CriminalPolicy.Forgiveness:
+                        baseResult.Add(1f, new TextObject("Criminal policy"));
+                        break;
                 }
 
                 var government = BannerKingsConfig.Instance.TitleManager.GetSettlementGovernment(town.Settlement);

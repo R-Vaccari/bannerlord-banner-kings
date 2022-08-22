@@ -21,19 +21,19 @@ namespace BannerKings.Models.Vanilla
             {
                 var policy = ((BKMilitiaPolicy) BannerKingsConfig.Instance.PolicyManager.GetPolicy(settlement, "militia"))
                     .Policy;
-                if (policy == MilitiaPolicy.Melee)
+                switch (policy)
                 {
-                    meleeTroopRate = 0.75f;
-                    rangedTroopRate = 0.25f;
-                }
-                else if (policy == MilitiaPolicy.Ranged)
-                {
-                    meleeTroopRate = 0.25f;
-                    rangedTroopRate = 0.75f;
-                }
-                else
-                {
-                    base.CalculateMilitiaSpawnRate(settlement, out meleeTroopRate, out rangedTroopRate);
+                    case MilitiaPolicy.Melee:
+                        meleeTroopRate = 0.75f;
+                        rangedTroopRate = 0.25f;
+                        break;
+                    case MilitiaPolicy.Ranged:
+                        meleeTroopRate = 0.25f;
+                        rangedTroopRate = 0.75f;
+                        break;
+                    default:
+                        base.CalculateMilitiaSpawnRate(settlement, out meleeTroopRate, out rangedTroopRate);
+                        break;
                 }
             }
             else

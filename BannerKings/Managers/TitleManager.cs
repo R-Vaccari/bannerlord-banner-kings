@@ -133,12 +133,9 @@ namespace BannerKings.Managers
         {
             var type = GovernmentType.Feudal;
             var title = GetTitle(settlement);
-            if (title != null)
+            if (title?.contract != null)
             {
-                if (title.contract != null)
-                {
-                    type = title.contract.Government;
-                }
+                type = title.contract.Government;
             }
 
             return type;
@@ -297,7 +294,7 @@ namespace BannerKings.Managers
 
             foreach (var title in suzerainTitles)
             {
-                if (title.vassals != null && title.vassals.Count > 0)
+                if (title.vassals is {Count: > 0})
                 {
                     foreach (var vassal in title.vassals)
                     {
@@ -540,7 +537,7 @@ namespace BannerKings.Managers
             }
 
             var sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(newKingdom);
-            if (sovereign == null || sovereign.contract == null)
+            if (sovereign?.contract == null)
             {
                 return;
             }
@@ -727,12 +724,7 @@ namespace BannerKings.Managers
         public FeudalTitle GetSovereignFromSettlement(Settlement settlement)
         {
             var title = GetTitle(settlement);
-            if (title != null)
-            {
-                return title.sovereign;
-            }
-
-            return null;
+            return title?.sovereign;
         }
 
         public List<FeudalTitle> GetVassals(TitleType threshold, Hero lord)
@@ -905,7 +897,7 @@ namespace BannerKings.Managers
                         continue;
                     }
 
-                    if (settlement.OwnerClan != null && settlement.OwnerClan.Leader != null &&
+                    if (settlement.OwnerClan is {Leader: { }} &&
                         (settlement.IsTown || settlement.IsCastle))
                     {
                         CreateLandedTitle(settlement,
@@ -953,9 +945,8 @@ namespace BannerKings.Managers
             }
 
             ExecuteOwnershipChange(settlement.Owner, newOwner, title, false);
-            if (!settlement.IsVillage && settlement.BoundVillages != null && settlement.BoundVillages.Count > 0 &&
-                title.vassals != null &&
-                title.vassals.Count > 0)
+            if (!settlement.IsVillage && settlement.BoundVillages is {Count: > 0} &&
+                title.vassals is {Count: > 0})
             {
                 foreach (var lordship in title.vassals.Where(y => y.type == TitleType.Lordship))
                 {
@@ -985,7 +976,7 @@ namespace BannerKings.Managers
             }
 
             var sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
-            if (sovereign == null || sovereign.contract == null)
+            if (sovereign?.contract == null)
             {
                 return;
             }
@@ -1018,12 +1009,9 @@ namespace BannerKings.Managers
                     }
 
                     var suzerain3 = GetImmediateSuzerain(suzerain2);
-                    if (suzerain3 != null)
+                    if (suzerain3 is {type: TitleType.Dukedom})
                     {
-                        if (suzerain3.type == TitleType.Dukedom)
-                        {
-                            return suzerain3;
-                        }
+                        return suzerain3;
                     }
                 }
             }
@@ -1066,17 +1054,17 @@ namespace BannerKings.Managers
         {
             GameTexts.SetVariable("DUTY_FACTOR", (factor * 100f).ToString("0") + '%');
             string text = null;
-            if (duty == FeudalDuties.Taxation)
+            switch (duty)
             {
-                text = "You are due {DUTY_FACTOR} of your fiefs' income to your suzerain.";
-            }
-            else if (duty == FeudalDuties.Auxilium)
-            {
-                text = "You are obliged to militarily participate in armies, for {DUTY_FACTOR} of their durations.";
-            }
-            else
-            {
-                text = "You are obliged to contribute to {DUTY_FACTOR} of your suzerain's ransom.";
+                case FeudalDuties.Taxation:
+                    text = "You are due {DUTY_FACTOR} of your fiefs' income to your suzerain.";
+                    break;
+                case FeudalDuties.Auxilium:
+                    text = "You are obliged to militarily participate in armies, for {DUTY_FACTOR} of their durations.";
+                    break;
+                default:
+                    text = "You are obliged to contribute to {DUTY_FACTOR} of your suzerain's ransom.";
+                    break;
             }
 
             return new TextObject(text).ToString();
@@ -1084,78 +1072,68 @@ namespace BannerKings.Managers
 
         private string GetRightString(FeudalRights right)
         {
-            if (right == FeudalRights.Absolute_Land_Rights)
+            switch (right)
             {
-                return "You are entitled to ownership of any conquered lands whose title you own.";
+                case FeudalRights.Absolute_Land_Rights:
+                    return "You are entitled to ownership of any conquered lands whose title you own.";
+                case FeudalRights.Enfoeffement_Rights:
+                    return "You are entitled to be granted land in case you have none, whenever possible.";
+                case FeudalRights.Conquest_Rights:
+                    return "You are entitled to the ownership of any lands you conquered by yourself.";
+                default:
+                    return "";
             }
-
-            if (right == FeudalRights.Enfoeffement_Rights)
-            {
-                return "You are entitled to be granted land in case you have none, whenever possible.";
-            }
-
-            if (right == FeudalRights.Conquest_Rights)
-            {
-                return "You are entitled to the ownership of any lands you conquered by yourself.";
-            }
-
-            return "";
         }
 
         private FeudalContract GenerateContract(string type)
         {
-            if (type == "imperial")
+            switch (type)
             {
-                return new FeudalContract(new Dictionary<FeudalDuties, float>
-                    {
-                        {FeudalDuties.Ransom, 0.10f},
-                        {FeudalDuties.Taxation, 0.4f}
-                    }, new List<FeudalRights>
-                    {
-                        FeudalRights.Assistance_Rights,
-                        FeudalRights.Army_Compensation_Rights
-                    }, GovernmentType.Imperial, SuccessionType.Imperial,
-                    InheritanceType.Primogeniture, GenderLaw.Agnatic);
+                case "imperial":
+                    return new FeudalContract(new Dictionary<FeudalDuties, float>
+                        {
+                            {FeudalDuties.Ransom, 0.10f},
+                            {FeudalDuties.Taxation, 0.4f}
+                        }, new List<FeudalRights>
+                        {
+                            FeudalRights.Assistance_Rights,
+                            FeudalRights.Army_Compensation_Rights
+                        }, GovernmentType.Imperial, SuccessionType.Imperial,
+                        InheritanceType.Primogeniture, GenderLaw.Agnatic);
+                case "tribal":
+                    return new FeudalContract(new Dictionary<FeudalDuties, float>
+                        {
+                            {FeudalDuties.Taxation, 0.125f},
+                            {FeudalDuties.Auxilium, 0.66f}
+                        }, new List<FeudalRights>
+                        {
+                            FeudalRights.Conquest_Rights,
+                            FeudalRights.Absolute_Land_Rights
+                        }, GovernmentType.Tribal, SuccessionType.Elective_Monarchy,
+                        InheritanceType.Seniority, GenderLaw.Agnatic);
+                case "republic":
+                    return new FeudalContract(new Dictionary<FeudalDuties, float>
+                        {
+                            {FeudalDuties.Ransom, 0.10f},
+                            {FeudalDuties.Taxation, 0.4f}
+                        }, new List<FeudalRights>
+                        {
+                            FeudalRights.Assistance_Rights,
+                            FeudalRights.Army_Compensation_Rights
+                        }, GovernmentType.Republic, SuccessionType.Republic,
+                        InheritanceType.Primogeniture, GenderLaw.Cognatic);
+                default:
+                    return new FeudalContract(new Dictionary<FeudalDuties, float>
+                        {
+                            {FeudalDuties.Ransom, 0.20f},
+                            {FeudalDuties.Auxilium, 0.4f}
+                        }, new List<FeudalRights>
+                        {
+                            FeudalRights.Absolute_Land_Rights,
+                            FeudalRights.Enfoeffement_Rights
+                        }, GovernmentType.Feudal, SuccessionType.Hereditary_Monarchy,
+                        InheritanceType.Primogeniture, GenderLaw.Agnatic);
             }
-
-            if (type == "tribal")
-            {
-                return new FeudalContract(new Dictionary<FeudalDuties, float>
-                    {
-                        {FeudalDuties.Taxation, 0.125f},
-                        {FeudalDuties.Auxilium, 0.66f}
-                    }, new List<FeudalRights>
-                    {
-                        FeudalRights.Conquest_Rights,
-                        FeudalRights.Absolute_Land_Rights
-                    }, GovernmentType.Tribal, SuccessionType.Elective_Monarchy,
-                    InheritanceType.Seniority, GenderLaw.Agnatic);
-            }
-
-            if (type == "republic")
-            {
-                return new FeudalContract(new Dictionary<FeudalDuties, float>
-                    {
-                        {FeudalDuties.Ransom, 0.10f},
-                        {FeudalDuties.Taxation, 0.4f}
-                    }, new List<FeudalRights>
-                    {
-                        FeudalRights.Assistance_Rights,
-                        FeudalRights.Army_Compensation_Rights
-                    }, GovernmentType.Republic, SuccessionType.Republic,
-                    InheritanceType.Primogeniture, GenderLaw.Cognatic);
-            }
-
-            return new FeudalContract(new Dictionary<FeudalDuties, float>
-                {
-                    {FeudalDuties.Ransom, 0.20f},
-                    {FeudalDuties.Auxilium, 0.4f}
-                }, new List<FeudalRights>
-                {
-                    FeudalRights.Absolute_Land_Rights,
-                    FeudalRights.Enfoeffement_Rights
-                }, GovernmentType.Feudal, SuccessionType.Hereditary_Monarchy,
-                InheritanceType.Primogeniture, GenderLaw.Agnatic);
         }
 
         private FeudalTitle CreateKingdom(Hero deJure, Kingdom faction, TitleType type, List<FeudalTitle> vassals,

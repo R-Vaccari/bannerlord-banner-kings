@@ -61,9 +61,9 @@ namespace BannerKings.Managers.Helpers
             if (secondaryHeirs.Count > 0)
                 foreach (var pair in secondaryHeirs)
                 {
-                    if (pair.Value.Any(x => x.fief != null && !x.fief.IsVillage && x.DeFacto.Clan == victim.Clan))
+                    if (pair.Value.Any(x => x.fief is {IsVillage: false} && x.DeFacto.Clan == victim.Clan))
                     {
-                        var landed = pair.Value.FindAll(x => x.fief != null && !x.fief.IsVillage);
+                        var landed = pair.Value.FindAll(x => x.fief is {IsVillage: false});
                         var newClan = ClanActions.CreateNewClan(pair.Key, landed[0].fief,
                             pair.Key.StringId + "_split_clan");
 
@@ -131,12 +131,15 @@ namespace BannerKings.Managers.Helpers
         private static Hero GetHeirInternal(InheritanceType type, GenderLaw genderLaw, Hero victim,
             List<Hero> candidates)
         {
-            if (type == InheritanceType.Primogeniture)
-                return ApplyPrimogeniture(genderLaw, victim, candidates);
-            else if (type == InheritanceType.Ultimogeniture)
-                return ApplyUltimogeniture(genderLaw, victim, candidates);
-
-            return ApplySeniority(genderLaw, victim, candidates);
+            switch (type)
+            {
+                case InheritanceType.Primogeniture:
+                    return ApplyPrimogeniture(genderLaw, victim, candidates);
+                case InheritanceType.Ultimogeniture:
+                    return ApplyUltimogeniture(genderLaw, victim, candidates);
+                default:
+                    return ApplySeniority(genderLaw, victim, candidates);
+            }
         }
 
         private static List<Hero> GetCandidates(Clan clan, Hero victim)

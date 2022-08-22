@@ -23,17 +23,17 @@ namespace BannerKings.Managers.Court
 
         public override void TakeAction(Hero receiver = null)
         {
-            if (Type == CouncilActionType.REQUEST)
+            switch (Type)
             {
-                BannerKingsConfig.Instance.CourtManager.AddHeroToCouncil(this);
-            }
-            else if (Type == CouncilActionType.SWAP)
-            {
-                BannerKingsConfig.Instance.CourtManager.SwapCouncilPositions(this);
-            }
-            else
-            {
-                BannerKingsConfig.Instance.CourtManager.RelinquishCouncilPosition(this);
+                case CouncilActionType.REQUEST:
+                    BannerKingsConfig.Instance.CourtManager.AddHeroToCouncil(this);
+                    break;
+                case CouncilActionType.SWAP:
+                    BannerKingsConfig.Instance.CourtManager.SwapCouncilPositions(this);
+                    break;
+                default:
+                    BannerKingsConfig.Instance.CourtManager.RelinquishCouncilPosition(this);
+                    break;
             }
         }
 

@@ -87,7 +87,7 @@ namespace BannerKings.Models.Vanilla
 
             // ------- Other factors ---------
             var ownerClan = town.Settlement.OwnerClan;
-            if ((ownerClan != null ? ownerClan.Kingdom : null) != null &&
+            if (ownerClan?.Kingdom != null &&
                 town.Settlement.OwnerClan.Kingdom.ActivePolicies.Contains(DefaultPolicies.HuntingRights))
             {
                 result.Add(2f, DefaultPolicies.HuntingRights.Name);
@@ -194,13 +194,14 @@ namespace BannerKings.Models.Vanilla
                 }
 
                 float season = CampaignTime.Now.GetSeasonOfYear;
-                if (season == 3f)
+                switch (season)
                 {
-                    result.AddFactor(-0.2f, GameTexts.FindText("str_date_format_" + season));
-                }
-                else if (season == 1f)
-                {
-                    result.AddFactor(0.05f, GameTexts.FindText("str_date_format_" + season));
+                    case 3f:
+                        result.AddFactor(-0.2f, GameTexts.FindText("str_date_format_" + season));
+                        break;
+                    case 1f:
+                        result.AddFactor(0.05f, GameTexts.FindText("str_date_format_" + season));
+                        break;
                 }
 
                 Building b = null;
@@ -214,7 +215,7 @@ namespace BannerKings.Models.Vanilla
                     }
                 }
 
-                if (b != null && b.CurrentLevel > 0)
+                if (b is {CurrentLevel: > 0})
                 {
                     result.AddFactor(MathF.Round(b.CurrentLevel * (town.IsCastle ? 0.5f : 0.3f)), b.Name);
                 }

@@ -36,8 +36,7 @@ namespace BannerKings.Models.Vanilla
             if (BannerKingsConfig.Instance.PopulationManager != null &&
                 BannerKingsConfig.Instance.PopulationManager.IsPopulationParty(party.MobileParty))
             {
-                if (party.MobileParty.PartyComponent != null &&
-                    party.MobileParty.PartyComponent is PopulationPartyComponent)
+                if (party.MobileParty.PartyComponent is PopulationPartyComponent)
                 {
                     baseResult.Add(50f);
                 }

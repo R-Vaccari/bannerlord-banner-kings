@@ -45,17 +45,22 @@ namespace BannerKings.Models.Vanilla
 
                 var tax = (BannerKingsConfig.Instance.PolicyManager.GetPolicy(town.Settlement, "tax") as BKTaxPolicy)
                     .Policy;
-                if (tax == TaxType.Low)
+                switch (tax)
                 {
-                    var fraction1 = data.GetCurrentTypeFraction(PopType.Craftsmen);
-                    var fraction2 = data.GetCurrentTypeFraction(PopType.Serfs) * 0.8f;
-                    baseResult.Add((fraction1 + fraction2) * LOYALTY_FACTOR, new TextObject("Low tax policy"));
-                }
-                else if (tax == TaxType.High)
-                {
-                    var fraction1 = data.GetCurrentTypeFraction(PopType.Craftsmen);
-                    var fraction2 = data.GetCurrentTypeFraction(PopType.Serfs) * 0.8f;
-                    baseResult.Add((fraction1 + fraction2) * LOYALTY_FACTOR * -1f, new TextObject("High tax policy"));
+                    case TaxType.Low:
+                    {
+                        var fraction1 = data.GetCurrentTypeFraction(PopType.Craftsmen);
+                        var fraction2 = data.GetCurrentTypeFraction(PopType.Serfs) * 0.8f;
+                        baseResult.Add((fraction1 + fraction2) * LOYALTY_FACTOR, new TextObject("Low tax policy"));
+                        break;
+                    }
+                    case TaxType.High:
+                    {
+                        var fraction1 = data.GetCurrentTypeFraction(PopType.Craftsmen);
+                        var fraction2 = data.GetCurrentTypeFraction(PopType.Serfs) * 0.8f;
+                        baseResult.Add((fraction1 + fraction2) * LOYALTY_FACTOR * -1f, new TextObject("High tax policy"));
+                        break;
+                    }
                 }
 
                 if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(town.Settlement, "decision_slaves_tax"))
@@ -68,33 +73,38 @@ namespace BannerKings.Models.Vanilla
                 var crime =
                     (BannerKingsConfig.Instance.PolicyManager.GetPolicy(town.Settlement, "criminal") as BKCriminalPolicy)
                     .Policy;
-                if (crime == CriminalPolicy.Execution)
+                switch (crime)
                 {
-                    var value = 0f;
-                    if (data.CultureData.DominantCulture == town.Owner.Culture)
+                    case CriminalPolicy.Execution:
                     {
-                        value = 0.3f;
-                    }
-                    else
-                    {
-                        value = -0.3f;
-                    }
+                        var value = 0f;
+                        if (data.CultureData.DominantCulture == town.Owner.Culture)
+                        {
+                            value = 0.3f;
+                        }
+                        else
+                        {
+                            value = -0.3f;
+                        }
 
-                    baseResult.Add(value, new TextObject("{=!}Criminal policy"));
-                }
-                else if (crime == CriminalPolicy.Forgiveness)
-                {
-                    var value = 0f;
-                    if (data.CultureData.DominantCulture != town.Owner.Culture)
-                    {
-                        value = 0.3f;
+                        baseResult.Add(value, new TextObject("{=!}Criminal policy"));
+                        break;
                     }
-                    else
+                    case CriminalPolicy.Forgiveness:
                     {
-                        value = -0.3f;
-                    }
+                        var value = 0f;
+                        if (data.CultureData.DominantCulture != town.Owner.Culture)
+                        {
+                            value = 0.3f;
+                        }
+                        else
+                        {
+                            value = -0.3f;
+                        }
 
-                    baseResult.Add(value, new TextObject("{=!}Criminal policy"));
+                        baseResult.Add(value, new TextObject("{=!}Criminal policy"));
+                        break;
+                    }
                 }
 
                 if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(town.Settlement, "decision_ration"))

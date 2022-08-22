@@ -13,7 +13,7 @@ namespace BannerKings.Models.Vanilla
         {
             var explainedNumber = new ExplainedNumber(0f);
             var currentSettlement = companion.CurrentSettlement;
-            var town = currentSettlement != null ? currentSettlement.Town : null;
+            var town = currentSettlement?.Town;
             if (town == null)
             {
                 town = SettlementHelper.FindNearestTown().Town;

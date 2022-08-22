@@ -94,7 +94,7 @@ namespace BannerKings.Models.BKModels
             result.LimitMax(1f);
 
             result.Add(1f - stability, new TextObject("{=!}Stability"));
-            if (settlement.Town != null && settlement.Town.Governor != null && settlement.Town.Governor.IsNotable)
+            if (settlement.Town is {Governor: {IsNotable: true}})
             {
                 result.Add(0.2f, new TextObject("{=!}Notable governor"));
             }
@@ -162,21 +162,20 @@ namespace BannerKings.Models.BKModels
                 var legitimacyType = (LegitimacyType) BannerKingsConfig.Instance.Models
                     .First(x => x.GetType() == typeof(BKLegitimacyModel))
                     .CalculateEffect(settlement).ResultNumber;
-                if (legitimacyType == LegitimacyType.Lawful)
+                switch (legitimacyType)
                 {
-                    legitimacy = 0.1f;
-                }
-                else if (legitimacyType == LegitimacyType.Lawful_Foreigner)
-                {
-                    legitimacy = 0.05f;
-                }
-                else if (legitimacyType == LegitimacyType.Unlawful)
-                {
-                    legitimacy = -0.05f;
-                }
-                else
-                {
-                    legitimacy = -0.1f;
+                    case LegitimacyType.Lawful:
+                        legitimacy = 0.1f;
+                        break;
+                    case LegitimacyType.Lawful_Foreigner:
+                        legitimacy = 0.05f;
+                        break;
+                    case LegitimacyType.Unlawful:
+                        legitimacy = -0.05f;
+                        break;
+                    default:
+                        legitimacy = -0.1f;
+                        break;
                 }
 
                 var government = BannerKingsConfig.Instance.TitleManager.GetSettlementGovernment(settlement);
@@ -225,7 +224,7 @@ namespace BannerKings.Models.BKModels
             result.Add(hero.Clan.Tier / 3f, GameTexts.FindText("str_clan_tier_bonus"));
 
             var title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(hero);
-            if (title != null && title.type <= TitleType.Kingdom)
+            if (title is {type: <= TitleType.Kingdom})
             {
                 var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(hero);
                 if (education.HasPerk(BKPerks.Instance.AugustKingOfKings))
@@ -251,17 +250,17 @@ namespace BannerKings.Models.BKModels
         public float GetUnlandedDemesneWight(TitleType type)
         {
             float value;
-            if (type == TitleType.Dukedom)
+            switch (type)
             {
-                value = 0.5f;
-            }
-            else if (type <= TitleType.Kingdom)
-            {
-                value = 1f;
-            }
-            else
-            {
-                value = 1.5f;
+                case TitleType.Dukedom:
+                    value = 0.5f;
+                    break;
+                case <= TitleType.Kingdom:
+                    value = 1f;
+                    break;
+                default:
+                    value = 1.5f;
+                    break;
             }
 
             return value;
@@ -374,25 +373,23 @@ namespace BannerKings.Models.BKModels
                 var bonus = 0f;
                 if (title.type != TitleType.Lordship)
                 {
-                    if (title.type == TitleType.Barony)
+                    switch (title.type)
                     {
-                        bonus = 0.5f;
-                    }
-                    else if (title.type == TitleType.County)
-                    {
-                        bonus = 1f;
-                    }
-                    else if (title.type == TitleType.Dukedom)
-                    {
-                        bonus = 3f;
-                    }
-                    else if (title.type == TitleType.Kingdom)
-                    {
-                        bonus = 6f;
-                    }
-                    else
-                    {
-                        bonus = 10f;
+                        case TitleType.Barony:
+                            bonus = 0.5f;
+                            break;
+                        case TitleType.County:
+                            bonus = 1f;
+                            break;
+                        case TitleType.Dukedom:
+                            bonus = 3f;
+                            break;
+                        case TitleType.Kingdom:
+                            bonus = 6f;
+                            break;
+                        default:
+                            bonus = 10f;
+                            break;
                     }
                 }
 
@@ -424,33 +421,35 @@ namespace BannerKings.Models.BKModels
                 var bonus = 0f;
                 if (title.type != TitleType.Lordship)
                 {
-                    if (title.type == TitleType.Barony)
+                    switch (title.type)
                     {
-                        bonus = 0.5f;
-                    }
-                    else if (title.type == TitleType.County)
-                    {
-                        bonus = 1f;
-                    }
-                    else if (title.type == TitleType.Dukedom)
-                    {
-                        bonus = 1.5f;
-                    }
-                    else
-                    {
-                        if (title.type == TitleType.Kingdom)
+                        case TitleType.Barony:
+                            bonus = 0.5f;
+                            break;
+                        case TitleType.County:
+                            bonus = 1f;
+                            break;
+                        case TitleType.Dukedom:
+                            bonus = 1.5f;
+                            break;
+                        default:
                         {
-                            bonus = 3f;
-                        }
-                        else
-                        {
-                            bonus = 4f;
-                        }
+                            if (title.type == TitleType.Kingdom)
+                            {
+                                bonus = 3f;
+                            }
+                            else
+                            {
+                                bonus = 4f;
+                            }
 
-                        var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(hero);
-                        if (education.HasPerk(BKPerks.Instance.AugustKingOfKings))
-                        {
-                            result.Add(2f, BKPerks.Instance.AugustKingOfKings.Name);
+                            var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(hero);
+                            if (education.HasPerk(BKPerks.Instance.AugustKingOfKings))
+                            {
+                                result.Add(2f, BKPerks.Instance.AugustKingOfKings.Name);
+                            }
+
+                            break;
                         }
                     }
                 }

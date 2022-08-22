@@ -95,51 +95,60 @@ namespace BannerKings.Components
             data.UpdatePopType(type, count);
             var roster = new TroopRoster(party.Party);
             roster.AddToCounts(civilian, count);
-            if (type == PopType.Serfs)
+            switch (type)
             {
-                if (origin.Culture.MilitiaPartyTemplate != null)
+                case PopType.Serfs:
                 {
-                    foreach (var stack in origin.Culture.MilitiaPartyTemplate.Stacks)
+                    if (origin.Culture.MilitiaPartyTemplate != null)
                     {
-                        var soldier = stack.Character;
-                        if (soldier != null)
+                        foreach (var stack in origin.Culture.MilitiaPartyTemplate.Stacks)
                         {
-                            roster.AddToCounts(soldier,
-                                GetCountToAdd(roster.TotalRegulars, soldier.Tier, soldier.IsRanged));
+                            var soldier = stack.Character;
+                            if (soldier != null)
+                            {
+                                roster.AddToCounts(soldier,
+                                    GetCountToAdd(roster.TotalRegulars, soldier.Tier, soldier.IsRanged));
+                            }
                         }
                     }
+
+                    break;
                 }
-            }
-            else if (type == PopType.Craftsmen)
-            {
-                if (origin.Culture.CaravanPartyTemplate != null)
+                case PopType.Craftsmen:
                 {
-                    foreach (var stack in origin.Culture.MilitiaPartyTemplate.Stacks)
+                    if (origin.Culture.CaravanPartyTemplate != null)
                     {
-                        var soldier = stack.Character;
-                        if (soldier != null)
+                        foreach (var stack in origin.Culture.MilitiaPartyTemplate.Stacks)
                         {
-                            roster.AddToCounts(soldier,
-                                GetCountToAdd(roster.TotalRegulars, soldier.Tier, soldier.IsRanged));
+                            var soldier = stack.Character;
+                            if (soldier != null)
+                            {
+                                roster.AddToCounts(soldier,
+                                    GetCountToAdd(roster.TotalRegulars, soldier.Tier, soldier.IsRanged));
+                            }
                         }
                     }
+
+                    break;
                 }
-            }
-            else if (type == PopType.Nobles)
-            {
-                var template = MBObjectManager.Instance.GetObjectTypeList<PartyTemplateObject>()
-                    .FirstOrDefault(x => x.StringId == "populations_mercenary_generic_elite");
-                if (template != null)
+                case PopType.Nobles:
                 {
-                    foreach (var stack in template.Stacks)
+                    var template = MBObjectManager.Instance.GetObjectTypeList<PartyTemplateObject>()
+                        .FirstOrDefault(x => x.StringId == "populations_mercenary_generic_elite");
+                    if (template != null)
                     {
-                        var soldier = stack.Character;
-                        if (soldier != null)
+                        foreach (var stack in template.Stacks)
                         {
-                            roster.AddToCounts(soldier,
-                                GetCountToAdd(roster.TotalRegulars, soldier.Tier, soldier.IsRanged));
+                            var soldier = stack.Character;
+                            if (soldier != null)
+                            {
+                                roster.AddToCounts(soldier,
+                                    GetCountToAdd(roster.TotalRegulars, soldier.Tier, soldier.IsRanged));
+                            }
                         }
                     }
+
+                    break;
                 }
             }
 
@@ -221,21 +230,25 @@ namespace BannerKings.Components
                 var goods = new List<ValueTuple<ItemObject, float>>();
                 foreach (var item in Items.AllTradeGoods)
                 {
-                    if (type == PopType.Nobles)
+                    switch (type)
                     {
-                        if (item.StringId == "silver" || item.StringId == "jewelry" || item.StringId == "spice"
-                            || item.StringId == "velvet" || item.StringId == "fur")
+                        case PopType.Nobles:
                         {
-                            goods.Add(new ValueTuple<ItemObject, float>(item, 1f * (10f / partySize) / item.Value));
+                            if (item.StringId is "silver" or "jewelry" or "spice" or "velvet" or "fur")
+                            {
+                                goods.Add(new ValueTuple<ItemObject, float>(item, 1f * (10f / partySize) / item.Value));
+                            }
+
+                            break;
                         }
-                    }
-                    else if (type == PopType.Craftsmen)
-                    {
-                        if (item.StringId == "wool" || item.StringId == "pottery" || item.StringId == "cotton" ||
-                            item.StringId == "flax" || item.StringId == "linen" || item.StringId == "leather" ||
-                            item.StringId == "tools")
+                        case PopType.Craftsmen:
                         {
-                            goods.Add(new ValueTuple<ItemObject, float>(item, 1f * (10f / partySize) / item.Value));
+                            if (item.StringId is "wool" or "pottery" or "cotton" or "flax" or "linen" or "leather" or "tools")
+                            {
+                                goods.Add(new ValueTuple<ItemObject, float>(item, 1f * (10f / partySize) / item.Value));
+                            }
+
+                            break;
                         }
                     }
 

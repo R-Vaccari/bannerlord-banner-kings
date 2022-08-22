@@ -30,18 +30,16 @@ namespace BannerKings.Managers.Policies
 
         public override string GetHint(int value)
         {
-            if (value == (int) GarrisonPolicy.Dischargement)
+            switch (value)
             {
-                return "Discharge a garrison member on a daily basis from duty. Slows down garrison trainning.";
+                case (int) GarrisonPolicy.Dischargement:
+                    return "Discharge a garrison member on a daily basis from duty. Slows down garrison trainning.";
+                case (int) GarrisonPolicy.Enlistment:
+                    return
+                        "Increase the quantity of auto recruited garrison soldiers, as well as provide more trainning. Increases adm. costs.";
+                default:
+                    return "Standard garrison policy, no particular effect.";
             }
-
-            if (value == (int) GarrisonPolicy.Enlistment)
-            {
-                return
-                    "Increase the quantity of auto recruited garrison soldiers, as well as provide more trainning. Increases adm. costs.";
-            }
-
-            return "Standard garrison policy, no particular effect.";
         }
 
         public override void OnChange(SelectorVM<BKItemVM> obj)

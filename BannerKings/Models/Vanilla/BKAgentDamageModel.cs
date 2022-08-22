@@ -22,7 +22,7 @@ namespace BannerKings.Models.Vanilla
 
             if (agressorUsage != null && aggressor != null)
             {
-                if (aggressorCaptain != null && aggressorCaptain.IsHero)
+                if (aggressorCaptain is {IsHero: true})
                 {
                     var data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(aggressorCaptain.HeroObject);
                     if (collisionData.StrikeType == 1) // thrust
@@ -72,7 +72,7 @@ namespace BannerKings.Models.Vanilla
 
             if (victim != null)
             {
-                if (victim.IsMounted && victimCaptain != null && victimCaptain.IsHero)
+                if (victim.IsMounted && victimCaptain is {IsHero: true})
                 {
                     var victimCaptainHero = victimCaptain.HeroObject;
                     var data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(victimCaptainHero);

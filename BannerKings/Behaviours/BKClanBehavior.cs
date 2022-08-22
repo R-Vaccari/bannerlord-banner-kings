@@ -100,8 +100,7 @@ namespace BannerKings.Behaviours
         {
             foreach (var companion in clan.Companions)
             {
-                if (companion.IsPrisoner || !companion.IsReady || companion.PartyBelongedTo == null ||
-                    companion.PartyBelongedTo.LeaderHero == null)
+                if (companion.IsPrisoner || !companion.IsReady || companion.PartyBelongedTo?.LeaderHero == null)
                 {
                     continue;
                 }
@@ -160,24 +159,16 @@ namespace BannerKings.Behaviours
         {
             if (role != PerkRole.None)
             {
-                if (role == PerkRole.Scout)
+                switch (role)
                 {
-                    return party.EffectiveScout == party.LeaderHero || party.EffectiveScout == null;
-                }
-
-                if (role == PerkRole.Engineer)
-                {
-                    return party.EffectiveEngineer == party.LeaderHero || party.EffectiveEngineer == null;
-                }
-
-                if (role == PerkRole.Quartermaster)
-                {
-                    return party.EffectiveQuartermaster == party.LeaderHero || party.EffectiveQuartermaster == null;
-                }
-
-                if (role == PerkRole.Surgeon)
-                {
-                    return party.EffectiveSurgeon == party.LeaderHero || party.EffectiveSurgeon == null;
+                    case PerkRole.Scout:
+                        return party.EffectiveScout == party.LeaderHero || party.EffectiveScout == null;
+                    case PerkRole.Engineer:
+                        return party.EffectiveEngineer == party.LeaderHero || party.EffectiveEngineer == null;
+                    case PerkRole.Quartermaster:
+                        return party.EffectiveQuartermaster == party.LeaderHero || party.EffectiveQuartermaster == null;
+                    case PerkRole.Surgeon:
+                        return party.EffectiveSurgeon == party.LeaderHero || party.EffectiveSurgeon == null;
                 }
             }
 
@@ -187,21 +178,20 @@ namespace BannerKings.Behaviours
         private void AssignToRole(MobileParty party, PerkRole role, Hero hero)
         {
             AddHeroToPartyAction.Apply(hero, party, false);
-            if (role == PerkRole.Scout && party.EffectiveScout != party.LeaderHero)
+            switch (role)
             {
-                party.SetPartyScout(hero);
-            }
-            else if (role == PerkRole.Engineer && party.EffectiveEngineer != party.LeaderHero)
-            {
-                party.SetPartyEngineer(hero);
-            }
-            else if (role == PerkRole.Quartermaster && party.EffectiveQuartermaster != party.LeaderHero)
-            {
-                party.SetPartyQuartermaster(hero);
-            }
-            else if (role == PerkRole.Surgeon && party.EffectiveSurgeon != party.LeaderHero)
-            {
-                party.SetPartySurgeon(hero);
+                case PerkRole.Scout when party.EffectiveScout != party.LeaderHero:
+                    party.SetPartyScout(hero);
+                    break;
+                case PerkRole.Engineer when party.EffectiveEngineer != party.LeaderHero:
+                    party.SetPartyEngineer(hero);
+                    break;
+                case PerkRole.Quartermaster when party.EffectiveQuartermaster != party.LeaderHero:
+                    party.SetPartyQuartermaster(hero);
+                    break;
+                case PerkRole.Surgeon when party.EffectiveSurgeon != party.LeaderHero:
+                    party.SetPartySurgeon(hero);
+                    break;
             }
         }
 
@@ -214,7 +204,7 @@ namespace BannerKings.Behaviours
             }
 
             var warParty = clan.WarPartyComponents.FirstOrDefault(x => x.Leader == clan.Leader);
-            if (warParty == null || warParty.MobileParty == null)
+            if (warParty?.MobileParty == null)
             {
                 return;
             }
@@ -486,7 +476,7 @@ namespace BannerKings.Behaviours
                             {
                                 var title =
                                     BannerKingsConfig.Instance.TitleManager.GetHighestTitle(partyComponent.Leader);
-                                if (title != null && title.fief != null)
+                                if (title is {fief: { }})
                                 {
                                     knights++;
                                     var limit = 0f;
@@ -525,7 +515,7 @@ namespace BannerKings.Behaviours
         {
             private static bool Prefix(Clan clan)
             {
-                if (clan.MapFaction != null && clan.MapFaction.IsKingdomFaction)
+                if (clan.MapFaction is {IsKingdomFaction: true})
                 {
                     var enemies = FactionManager.GetEnemyKingdoms(clan.Kingdom);
                     foreach (var settlement in clan.Settlements)
@@ -557,7 +547,7 @@ namespace BannerKings.Behaviours
                 if (BannerKingsConfig.Instance.TitleManager != null)
                 {
                     var title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(clan.Leader);
-                    return title != null && title.contract != null &&
+                    return title is {contract: { }} &&
                            title.contract.Rights.Contains(FeudalRights.Assistance_Rights);
                 }
 
@@ -598,7 +588,7 @@ namespace BannerKings.Behaviours
                     {
                         var garrisonParty = town.GarrisonParty;
 
-                        if (garrisonParty != null && garrisonParty.IsActive)
+                        if (garrisonParty is {IsActive: true})
                         {
                             var wage = (int) calculateWage.Invoke(model,
                                 new object[] {garrisonParty, clan.Gold, applyWithdrawals});
@@ -748,8 +738,7 @@ namespace BannerKings.Behaviours
             private static int CalculateVillageIncome(ref ExplainedNumber goldChange, Village village, Clan clan,
                 bool applyWithdrawals)
             {
-                var total = village.VillageState == Village.VillageStates.Looted ||
-                            village.VillageState == Village.VillageStates.BeingRaided
+                var total = village.VillageState is Village.VillageStates.Looted or Village.VillageStates.BeingRaided
                     ? 0
                     : (int) (village.TradeTaxAccumulated / 5f);
                 var num2 = total;
@@ -759,7 +748,7 @@ namespace BannerKings.Behaviours
                     total += (int) (-(float) total * 0.05f);
                 }
 
-                if (village.Bound.Town != null && village.Bound.Town.Governor != null &&
+                if (village.Bound.Town is {Governor: { }} &&
                     village.Bound.Town.Governor.GetPerkValue(DefaultPerks.Scouting.ForestKin))
                 {
                     total += MathF.Round(total * DefaultPerks.Scouting.ForestKin.SecondaryBonus * 0.01f);
@@ -774,7 +763,7 @@ namespace BannerKings.Behaviours
                 else
                 {
                     var town = bound.Town;
-                    flag = (town != null ? town.Governor : null) != null;
+                    flag = town?.Governor != null;
                 }
 
                 if (flag && village.Bound.Town.Governor.GetPerkValue(DefaultPerks.Steward.Logistician))
@@ -793,8 +782,7 @@ namespace BannerKings.Behaviours
                     if (!village.IsOwnerUnassigned && village.Settlement.OwnerClan != clan)
                     {
                         var policyTotal =
-                            village.VillageState == Village.VillageStates.Looted ||
-                            village.VillageState == Village.VillageStates.BeingRaided
+                            village.VillageState is Village.VillageStates.Looted or Village.VillageStates.BeingRaided
                                 ? 0
                                 : (int) (village.TradeTaxAccumulated / 5f);
                         total += (int) (policyTotal * 0.05f);

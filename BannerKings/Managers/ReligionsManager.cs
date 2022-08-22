@@ -29,7 +29,7 @@ namespace BannerKings.Managers
             var imperial = Utils.Helpers.GetCulture("empire");
             var battania = Utils.Helpers.GetCulture("battania");
             var vlandia = Utils.Helpers.GetCulture("vlandia");
-            var rels = new List<Religion>();
+
             var aseraiReligion = new Religion(null,
                 DefaultFaiths.Instance.AseraCode, new KinshipLeadership(),
                 new List<CultureObject> {aserai, khuzait, imperial},
@@ -49,15 +49,19 @@ namespace BannerKings.Managers
                 DefaultFaiths.Instance.Canticles, new HierocraticLeadership(),
                 new List<CultureObject> {vlandia},
                 new List<string> {"sacrifice", "literalism", "childbirth"});
-            rels.Add(aseraiReligion);
-            rels.Add(battaniaReligion);
-            rels.Add(darusosianReligion);
-            rels.Add(vlandiaReligion);
 
-            foreach (var rel in rels.Where(rel => !Religions.ContainsKey(rel)))
+            var religions = new List<Religion>
             {
-                Religions.Add(rel, new Dictionary<Hero, FaithfulData>());
-                InitializeFaithfulHeroes(rel);
+                aseraiReligion,
+                battaniaReligion,
+                darusosianReligion,
+                vlandiaReligion
+            };
+
+            foreach (var religion in religions.Where(rel => !Religions.ContainsKey(rel)))
+            {
+                Religions.Add(religion, new Dictionary<Hero, FaithfulData>());
+                InitializeFaithfulHeroes(religion);
             }
         }
 
@@ -78,11 +82,11 @@ namespace BannerKings.Managers
                     {
                         kingdom = hero.Clan.Kingdom;
                     }
-                    else if (hero.IsNotable && hero.CurrentSettlement != null && hero.CurrentSettlement.OwnerClan != null)
+                    else if (hero.IsNotable && hero.CurrentSettlement is {OwnerClan: { }})
                     {
                         kingdom = hero.CurrentSettlement.OwnerClan.Kingdom;
                     }
-                    else if (hero.IsWanderer && hero.BornSettlement != null && hero.BornSettlement.OwnerClan != null)
+                    else if (hero.IsWanderer && hero.BornSettlement is {OwnerClan: { }})
                     {
                         kingdom = hero.BornSettlement.OwnerClan.Kingdom;
                     }
@@ -102,10 +106,7 @@ namespace BannerKings.Managers
             foreach (var rel in Religions.Keys.ToList())
             {
                 var faith = DefaultFaiths.Instance.GetById(rel.Faith.GetId());
-                var presets = CharacterObject.All.ToList().FindAll(x => x.Occupation == Occupation.Preacher
-                                                                        && x.IsTemplate &&
-                                                                        x.StringId.Contains("bannerkings") &&
-                                                                        x.StringId.Contains(faith.GetId()));
+                var presets = CharacterObject.All.ToList().FindAll(x => x.Occupation == Occupation.Preacher && x.IsTemplate && x.StringId.Contains("bannerkings") && x.StringId.Contains(faith.GetId()));
                 foreach (var preset in presets)
                 {
                     var number = int.Parse(preset.StringId[preset.StringId.Length - 1].ToString());
@@ -123,21 +124,15 @@ namespace BannerKings.Managers
                 return;
             }
 
-            var elements = new List<InquiryElement>();
-            foreach (var religion in Religions.Keys.ToList())
-            {
-                elements.Add(new InquiryElement(religion,
-                    new TextObject("{=!}{RELIGION} - {PIETY} piety")
-                        .SetTextVariable("RELIGION", religion.Faith.GetFaithName())
-                        .SetTextVariable("PIETY", GetPiety(religion))
-                        .ToString(),
-                    null, true, religion.Faith.GetFaithDescription().ToString()));
-            }
+            var elements = Religions.Keys.ToList()
+                .Select(religion => new InquiryElement(religion, new TextObject("{=!}{RELIGION} - {PIETY} piety").SetTextVariable("RELIGION", religion.Faith.GetFaithName())
+                    .SetTextVariable("PIETY", GetPiety(religion))
+                    .ToString(), null, true, religion.Faith.GetFaithDescription().ToString()))
+                .ToList();
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                 new TextObject("{=!}Your faith").ToString(),
-                new TextObject(
-                        "{=!}You look up to the skies and realize there must be something more. You feel there must be a higher purpose for yourself, and people expect you to defend a certain faith. Upholding your cultural forefathers' faith would be considered most pious. Similarly, following a faith that accepts your culture would be pious, however not as much as your true ancestry. Alternatively, having a completely different faith is possible, though a less walked path. What is your faith?")
+                new TextObject("{=!}You look up to the skies and realize there must be something more. You feel there must be a higher purpose for yourself, and people expect you to defend a certain faith. Upholding your cultural forefathers' faith would be considered most pious. Similarly, following a faith that accepts your culture would be pious, however not as much as your true ancestry. Alternatively, having a completely different faith is possible, though a less walked path. What is your faith?")
                     .ToString(),
                 elements, true, 1,
                 GameTexts.FindText("str_done").ToString(), string.Empty, delegate(List<InquiryElement> element)

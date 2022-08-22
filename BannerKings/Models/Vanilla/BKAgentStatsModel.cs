@@ -14,7 +14,7 @@ namespace BannerKings.Models.Vanilla
             //WeaponComponentData weaponComponentData = (!missionWeapon.Equals(MissionWeapon.Invalid)) ? agent.Equipment[missionWeapon.CurrentUsageIndex].CurrentUsageItem  : null;
             if (agent.Character != null)
             {
-                if (agent.Formation != null && agent.Formation.Captain != null && agent.Formation.Captain.IsHero)
+                if (agent.Formation is {Captain: {IsHero: true}})
                 {
                     var captain = (agent.Formation.Captain.Character as CharacterObject).HeroObject;
                     var data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(captain);

@@ -45,7 +45,7 @@ namespace BannerKings.Behaviours
             }
 
             var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(hero);
-            if (education == null || education.Lifestyle == null)
+            if (education?.Lifestyle == null)
             {
                 return;
             }

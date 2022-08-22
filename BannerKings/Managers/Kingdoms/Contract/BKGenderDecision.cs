@@ -73,10 +73,10 @@ namespace BannerKings.Managers.Kingdoms.Contract
                       2f * clan.Leader.GetTraitLevel(DefaultTraits.Authoritarian);
             var num2 = 0f;
             var sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(Kingdom);
-            if (sovereign != null && sovereign.contract != null)
+            if (sovereign is {contract: { }})
             {
                 var government = sovereign.contract.Government;
-                if (government == GovernmentType.Tribal || government == GovernmentType.Republic)
+                if (government is GovernmentType.Tribal or GovernmentType.Republic)
                 {
                     num2++;
                 }
@@ -136,16 +136,16 @@ namespace BannerKings.Managers.Kingdoms.Contract
             else
             {
                 textObject.SetTextVariable("POLICY_SUPPORT", "{=bqEO389P}This decision caused a split in the council.");
-                if (supportStatus == SupportStatus.Majority)
+                switch (supportStatus)
                 {
-                    textObject.SetTextVariable("POLICY_SUPPORT",
-                        "{=3W67kdtc}This decision had the support of the council.");
-                }
-
-                if (supportStatus == SupportStatus.Minority)
-                {
-                    textObject.SetTextVariable("POLICY_SUPPORT",
-                        "{=b6MgRYlM}This decision was rejected by the support of the council.");
+                    case SupportStatus.Majority:
+                        textObject.SetTextVariable("POLICY_SUPPORT",
+                            "{=3W67kdtc}This decision had the support of the council.");
+                        break;
+                    case SupportStatus.Minority:
+                        textObject.SetTextVariable("POLICY_SUPPORT",
+                            "{=b6MgRYlM}This decision was rejected by the support of the council.");
+                        break;
                 }
             }
 

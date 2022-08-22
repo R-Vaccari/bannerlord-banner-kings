@@ -27,13 +27,14 @@ namespace BannerKings.Managers.Helpers
             if (title != null && !list.IsEmpty() && title.sovereign == null)
             {
                 var succession = title.contract.Succession;
-                if (succession == SuccessionType.Hereditary_Monarchy)
+                switch (succession)
                 {
-                    heir = ApplyHereditarySuccession(list, victim, kingdom);
-                }
-                else if (succession == SuccessionType.Imperial)
-                {
-                    heir = ApplyImperialSuccession(list, victim, kingdom);
+                    case SuccessionType.Hereditary_Monarchy:
+                        heir = ApplyHereditarySuccession(list, victim, kingdom);
+                        break;
+                    case SuccessionType.Imperial:
+                        heir = ApplyImperialSuccession(list, victim, kingdom);
+                        break;
                 }
 
                 if (heir != null && applyEffects)
@@ -64,41 +65,40 @@ namespace BannerKings.Managers.Helpers
 
         public static IEnumerable<SuccessionType> GetValidSuccessions(GovernmentType government)
         {
-            if (government == GovernmentType.Feudal)
+            switch (government)
             {
-                yield return SuccessionType.Hereditary_Monarchy;
-                yield return SuccessionType.Elective_Monarchy;
-                yield break;
+                case GovernmentType.Feudal:
+                    yield return SuccessionType.Hereditary_Monarchy;
+                    yield return SuccessionType.Elective_Monarchy;
+                    yield break;
+                case GovernmentType.Imperial:
+                    yield return SuccessionType.Imperial;
+                    yield break;
+                case GovernmentType.Republic:
+                    yield return SuccessionType.Republic;
+                    yield break;
+                default:
+                    yield return SuccessionType.Elective_Monarchy;
+                    yield return SuccessionType.Hereditary_Monarchy;
+                    break;
             }
-
-            if (government == GovernmentType.Imperial)
-            {
-                yield return SuccessionType.Imperial;
-                yield break;
-            }
-
-            if (government == GovernmentType.Republic)
-            {
-                yield return SuccessionType.Republic;
-                yield break;
-            }
-
-            yield return SuccessionType.Elective_Monarchy;
-            yield return SuccessionType.Hereditary_Monarchy;
         }
 
         private static void ApplyVanillaSuccession(List<Clan> list, Hero victim, Kingdom kingdom)
         {
-            if (list.Count > 1)
+            switch (list.Count)
             {
-                var clanToExclude = victim.Clan.Leader == victim || victim.Clan.Leader == null ? victim.Clan : null;
-                kingdom.AddDecision(new BKKingElectionDecision(victim.Clan, clanToExclude), true);
-            }
-            else if (list.Count == 1)
-            {
-                Type.GetType("TaleWorlds.CampaignSystem.Actions.ChangeRulingClanAction, TaleWorlds.CampaignSystem")
-                    .GetMethod("Apply", BindingFlags.Public | BindingFlags.Static)
-                    .Invoke(null, new object[] {kingdom, list.First()});
+                case > 1:
+                {
+                    var clanToExclude = victim.Clan.Leader == victim || victim.Clan.Leader == null ? victim.Clan : null;
+                    kingdom.AddDecision(new BKKingElectionDecision(victim.Clan, clanToExclude), true);
+                    break;
+                }
+                case 1:
+                    Type.GetType("TaleWorlds.CampaignSystem.Actions.ChangeRulingClanAction, TaleWorlds.CampaignSystem")
+                        .GetMethod("Apply", BindingFlags.Public | BindingFlags.Static)
+                        .Invoke(null, new object[] {kingdom, list.First()});
+                    break;
             }
         }
 

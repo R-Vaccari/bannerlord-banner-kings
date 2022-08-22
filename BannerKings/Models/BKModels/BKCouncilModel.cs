@@ -56,17 +56,15 @@ namespace BannerKings.Models.BKModels
             CouncilMember targetPosition, CouncilMember currentPosition = null,
             bool appointed = false)
         {
-            if (type == CouncilActionType.REQUEST)
+            switch (type)
             {
-                return GetRequest(type, council, requester, targetPosition, currentPosition, appointed);
+                case CouncilActionType.REQUEST:
+                    return GetRequest(type, council, requester, targetPosition, currentPosition, appointed);
+                case CouncilActionType.RELINQUISH:
+                    return GetRelinquish(type, council, requester, currentPosition, targetPosition, appointed);
+                default:
+                    return GetSwap(type, council, requester, targetPosition, currentPosition, appointed);
             }
-
-            if (type == CouncilActionType.RELINQUISH)
-            {
-                return GetRelinquish(type, council, requester, currentPosition, targetPosition, appointed);
-            }
-
-            return GetSwap(type, council, requester, targetPosition, currentPosition, appointed);
         }
 
 
@@ -245,19 +243,14 @@ namespace BannerKings.Models.BKModels
 
         public int GetInfluenceCost(CouncilActionType type, CouncilMember targetPosition)
         {
-            if (type == CouncilActionType.REQUEST)
+            switch (type)
             {
-                if (targetPosition.Member != null)
-                {
+                case CouncilActionType.REQUEST when targetPosition.Member != null:
                     return 100;
-                }
-
-                return 50;
-            }
-
-            if (type == CouncilActionType.RELINQUISH)
-            {
-                return 0;
+                case CouncilActionType.REQUEST:
+                    return 50;
+                case CouncilActionType.RELINQUISH:
+                    return 0;
             }
 
             if (targetPosition.Member != null)

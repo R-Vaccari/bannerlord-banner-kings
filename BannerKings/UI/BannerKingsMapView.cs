@@ -47,44 +47,32 @@ namespace BannerKings.UI
                 data = BannerKingsConfig.Instance.PopulationManager.GetPopData(Settlement.CurrentSettlement);
             }
 
-            if (id == "population")
+            switch (id)
             {
-                return (new PopulationVM(data), "PopulationWindow");
-            }
-
-            if (id == "guild")
-            {
-                return (new GuildVM(data), "GuildWindow");
-            }
-
-            if (id == "vilage_project")
-            {
-                return (new VillageProjectVM(data), "VillageProjectWindow");
-            }
-
-            if (id == "titles")
-            {
-                var title = BannerKingsConfig.Instance.TitleManager.GetTitle(Settlement.CurrentSettlement);
-                if (title == null)
+                case "population":
+                    return (new PopulationVM(data), "PopulationWindow");
+                case "guild":
+                    return (new GuildVM(data), "GuildWindow");
+                case "vilage_project":
+                    return (new VillageProjectVM(data), "VillageProjectWindow");
+                case "titles":
                 {
-                    title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(Clan.PlayerClan.Kingdom);
+                    var title = BannerKingsConfig.Instance.TitleManager.GetTitle(Settlement.CurrentSettlement);
+                    if (title == null)
+                    {
+                        title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(Clan.PlayerClan.Kingdom);
+                    }
+
+                    return (new DemesneHierarchyVM(title.sovereign ?? title, Clan.PlayerClan.Kingdom),
+                        "TitlesWindow");
                 }
-
-                return (new DemesneHierarchyVM(title.sovereign != null ? title.sovereign : title, Clan.PlayerClan.Kingdom),
-                    "TitlesWindow");
+                case "religions":
+                    return (new ReligionVM(data), "ReligionWindow");
+                case "campaignStart":
+                    return new ValueTuple<BannerKingsViewModel, string>(new CampaignStartVM(), "CampaignStartPopup");
+                default:
+                    return (new PopulationVM(data), "PopulationWindow");
             }
-
-            if (id == "religions")
-            {
-                return (new ReligionVM(data), "ReligionWindow");
-            }
-
-            if (id == "campaignStart")
-            {
-                return new ValueTuple<BannerKingsViewModel, string>(new CampaignStartVM(), "CampaignStartPopup");
-            }
-
-            return (new PopulationVM(data), "PopulationWindow");
         }
 
         public void Close()

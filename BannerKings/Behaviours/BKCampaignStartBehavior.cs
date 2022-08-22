@@ -72,7 +72,7 @@ namespace BannerKings.Behaviours
             if (option.IsCriminal)
             {
                 var settlement =
-                    SettlementHelper.FindNearestSettlement(x => x.OwnerClan != null && x.OwnerClan.Kingdom != null);
+                    SettlementHelper.FindNearestSettlement(x => x.OwnerClan is {Kingdom: { }});
                 ChangeCrimeRatingAction.Apply(settlement.OwnerClan.Kingdom, option.Criminal);
             }
 

@@ -30,21 +30,20 @@ namespace BannerKings.Models.Vanilla
             if (title != null)
             {
                 var government = title.contract.Government;
-                if (government == GovernmentType.Republic)
+                switch (government)
                 {
-                    result.Add(0.4f, new TextObject("Government"));
-                }
-                else if (government == GovernmentType.Feudal)
-                {
-                    result.Add(0.2f, new TextObject("Government"));
-                }
-                else if (government == GovernmentType.Tribal)
-                {
-                    result.Add(0.1f, new TextObject("Government"));
-                }
-                else if (government == GovernmentType.Imperial)
-                {
-                    result.Add(0.05f, new TextObject("Government"));
+                    case GovernmentType.Republic:
+                        result.Add(0.4f, new TextObject("Government"));
+                        break;
+                    case GovernmentType.Feudal:
+                        result.Add(0.2f, new TextObject("Government"));
+                        break;
+                    case GovernmentType.Tribal:
+                        result.Add(0.1f, new TextObject("Government"));
+                        break;
+                    case GovernmentType.Imperial:
+                        result.Add(0.05f, new TextObject("Government"));
+                        break;
                 }
             }
 
@@ -204,21 +203,21 @@ namespace BannerKings.Models.Vanilla
 
                 var prosperity = 0.5f + town.Prosperity * 0.00012f;
                 var baseResult = 0f;
-                if (type == ConsumptionType.Luxury)
+                switch (type)
                 {
-                    baseResult += nobles * 15f;
-                    baseResult += craftsmen * 3f;
-                }
-                else if (type == ConsumptionType.Industrial)
-                {
-                    baseResult += craftsmen * 10f;
-                    baseResult += serfs * 0.2f;
-                }
-                else
-                {
-                    baseResult += nobles * 1f;
-                    baseResult += craftsmen * 1f;
-                    baseResult += serfs * 0.40f;
+                    case ConsumptionType.Luxury:
+                        baseResult += nobles * 15f;
+                        baseResult += craftsmen * 3f;
+                        break;
+                    case ConsumptionType.Industrial:
+                        baseResult += craftsmen * 10f;
+                        baseResult += serfs * 0.2f;
+                        break;
+                    default:
+                        baseResult += nobles * 1f;
+                        baseResult += craftsmen * 1f;
+                        baseResult += serfs * 0.40f;
+                        break;
                 }
 
                 var num = MathF.Max(0f, baseResult * prosperity + extraProsperity);
@@ -278,17 +277,17 @@ namespace BannerKings.Models.Vanilla
             {
                 var taxtype = (BannerKingsConfig.Instance.PolicyManager.GetPolicy(town.Settlement, "tax") as BKTaxPolicy)
                     .Policy;
-                if (taxtype == TaxType.Standard)
+                switch (taxtype)
                 {
-                    tax = 0.7f;
-                }
-                else if (taxtype == TaxType.High)
-                {
-                    tax = 0.65f;
-                }
-                else
-                {
-                    tax = 0.85f;
+                    case TaxType.Standard:
+                        tax = 0.7f;
+                        break;
+                    case TaxType.High:
+                        tax = 0.65f;
+                        break;
+                    default:
+                        tax = 0.85f;
+                        break;
                 }
             }
 

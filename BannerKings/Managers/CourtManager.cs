@@ -80,7 +80,7 @@ namespace BannerKings.Managers
 
         public CouncilMember GetHeroPosition(Hero hero)
         {
-            if ((hero.IsLord && (hero.Clan == null || hero.Clan.Kingdom == null)) || hero.IsChild ||
+            if ((hero.IsLord && (hero.Clan?.Kingdom == null)) || hero.IsChild ||
                 hero.IsDead)
             {
                 return null;
@@ -91,7 +91,7 @@ namespace BannerKings.Managers
             {
                 kingdom = hero.Clan.Kingdom;
             }
-            else if (hero.CurrentSettlement != null && hero.CurrentSettlement.OwnerClan != null)
+            else if (hero.CurrentSettlement is {OwnerClan: { }})
             {
                 kingdom = hero.CurrentSettlement.OwnerClan.Kingdom;
             }
@@ -141,9 +141,7 @@ namespace BannerKings.Managers
                     rel.Leadership.ChangeClergymanRank(rel,
                         BannerKingsConfig.Instance.ReligionsManager.GetClergymanFromHeroHero(currentClergyman),
                         rel.Faith.GetIdealRank(
-                            currentClergyman.CurrentSettlement != null
-                                ? currentClergyman.CurrentSettlement
-                                : currentClergyman.BornSettlement,
+                            currentClergyman.CurrentSettlement ?? currentClergyman.BornSettlement,
                             false));
                 }
 
