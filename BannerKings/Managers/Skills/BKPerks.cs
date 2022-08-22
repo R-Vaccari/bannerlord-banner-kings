@@ -203,6 +203,7 @@ namespace BannerKings.Managers.Skills
         private void InitializePerks()
         {
             #region Fian
+
             FianHighlander = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleFianHighlander"));
             LifestylePerks.Add(FianHighlander);
             FianHighlander.InitializeNew("{=!}Highlander", null, 80, null,
@@ -622,7 +623,8 @@ namespace BannerKings.Managers.Skills
             ScholarshipLiterate.InitializeNew("{=!}Literate", BKSkills.Instance.Scholarship, GetTierCost(1), null,
                 "{=!}Allows reading books", 
                 SkillEffect.PerkRole.Personal, 0f,
-                SkillEffect.EffectIncrementType.Invalid, string.Empty,
+                SkillEffect.EffectIncrementType.Invalid, 
+                string.Empty,
                 SkillEffect.PerkRole.None, 0f,
                 SkillEffect.EffectIncrementType.Invalid);
 
