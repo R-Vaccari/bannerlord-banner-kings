@@ -63,7 +63,10 @@ namespace BannerKings.Behaviours
 
         private void UpdateVolunteers(Settlement settlement)
         {
-            if (settlement.Notables.Count == 0 || settlement.Notables[0].IsDead) return;
+            if (settlement.Notables.Count == 0 || settlement.Notables[0].IsDead)
+            {
+                return;
+            }
 
             var hero = settlement.Notables[0];
             if (!hero.CanHaveRecruits)
