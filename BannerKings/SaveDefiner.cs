@@ -9,8 +9,6 @@ using BannerKings.Managers.Education;
 using BannerKings.Managers.Education.Books;
 using BannerKings.Managers.Education.Languages;
 using BannerKings.Managers.Education.Lifestyles;
-using BannerKings.Managers.Goals;
-using BannerKings.Managers.Goals.Decisions;
 using BannerKings.Managers.Innovations;
 using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Institutions.Religions.Faiths;

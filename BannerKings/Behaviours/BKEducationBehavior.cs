@@ -3,7 +3,6 @@ using System.Linq;
 using BannerKings.Managers.Education.Books;
 using BannerKings.Managers.Skills;
 using HarmonyLib;
-using HarmonyLib.BUTR.Extensions;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;

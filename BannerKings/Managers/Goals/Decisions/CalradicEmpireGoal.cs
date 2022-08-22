@@ -7,7 +7,6 @@ using TaleWorlds.CampaignSystem.Extensions;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
-using TaleWorlds.LinQuick;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Goals.Decisions
