@@ -51,28 +51,36 @@ namespace BannerKings.UI.Extensions
         }
 
         [DataSourceProperty]
-        public string EducationText
-        {
-            get => educationText;
-            set
-            {
-                if (value != educationText)
-                {
-                    educationText = value;
-                    ViewModel!.OnPropertyChangedWithValue(value);
-                }
-            }
-        }
+        public string EducationText => new TextObject("{=!}Education").ToString();
+
+        [DataSourceProperty]
+        public string DecisionsText => new TextObject("{=!}Decisions").ToString();
+
+        [DataSourceProperty]
+        public string FaithText => new TextObject("{=!}Faith").ToString();
 
         public override void OnRefresh()
         {
-            EducationText = new TextObject("{=!}Education").ToString();
             Education = new EducationVM(characterDeveloper.CurrentCharacter.Hero, characterDeveloper);
             Education.RefreshValues();
         }
 
         [DataSourceMethod]
         public void OpenEducation()
+        {
+            EducationVisible = true;
+            OnRefresh();
+        }
+
+        [DataSourceMethod]
+        public void OpenFaith()
+        {
+            EducationVisible = true;
+            OnRefresh();
+        }
+
+        [DataSourceMethod]
+        public void OpenDecisions()
         {
             EducationVisible = true;
             OnRefresh();
