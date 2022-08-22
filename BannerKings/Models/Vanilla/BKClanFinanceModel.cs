@@ -14,11 +14,13 @@ namespace BannerKings.Models.Vanilla
         public override ExplainedNumber CalculateClanGoldChange(Clan clan, bool includeDescriptions = false, bool applyWithdrawals = false)
         {
             var baseResult = base.CalculateClanGoldChange(clan, true, applyWithdrawals);
-            if (BannerKingsConfig.Instance.TitleManager != null)
+            if (BannerKingsConfig.Instance.TitleManager == null)
             {
-                CalculateClanExpenseInternal(clan, ref baseResult, applyWithdrawals);
-                CalculateClanIncomeInternal(clan, ref baseResult, applyWithdrawals);
+                return baseResult;
             }
+
+            CalculateClanExpenseInternal(clan, ref baseResult, applyWithdrawals);
+            CalculateClanIncomeInternal(clan, ref baseResult, applyWithdrawals);
 
             return baseResult;
         }
@@ -88,12 +90,7 @@ namespace BannerKings.Models.Vanilla
                         continue;
                     }
 
-                    var amount = 0f;
-                    foreach (var title in pair.Value)
-                    {
-                        amount += (int) title.dueTax;
-                    }
-
+                    var amount = pair.Value.Aggregate(0f, (current, title) => current + (int) title.dueTax);
                     result.Add(amount, new TextObject("{=!}Taxes from {CLAN}").SetTextVariable("CLAN", pair.Key.Name));
                 }
             }
