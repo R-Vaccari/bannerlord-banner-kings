@@ -21,7 +21,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Vlandia
 
         public override TextObject GetClergyForbiddenAnswer(int rank)
         {
-            TextObject text = rank switch
+            var text = rank switch
             {
                 3 => new TextObject(
                     "{=!}I fear this is lost upon the younger generation of goliards, and not considered by the scriveners of the priory; but the desecration of text and the perversion of the past. Sack your cities, purge your foes; but do not let them die nameless. Do not burn their libraries. Do not whip them until they swear oaths forsaking their bloodlines."),
@@ -36,7 +36,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Vlandia
 
         public override TextObject GetClergyForbiddenAnswerLast(int rank)
         {
-            TextObject text = rank switch
+            var text = rank switch
             {
                 3 => new TextObject(
                     "{=!}The tragic state of Vlandia is that we are many people who have all too often forgotten our many homelands, in favor of venerating our united purpose. Nothing is forbidden if one wishes to be known in history; but it is a blasphemy to destroy history to be known in legend. "),
@@ -51,7 +51,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Vlandia
 
         public override TextObject GetClergyGreeting(int rank)
         {
-            TextObject text = rank switch
+            var text = rank switch
             {
                 3 => new TextObject(
                     "{=!}Is there something that I can say or do to be of use to you, young master? Our time in this world is short indeed, and mine all the shorter by virtue - or perhaps malus - of my age. Did you come to greet an old master and learn the way of the Canticles? If so, I beg you find a goliard - my voice does not carry with gusto as theirs does, and my words may seem withered by comparison. "),
@@ -68,7 +68,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Vlandia
 
         public override TextObject GetClergyGreetingInducted(int rank)
         {
-            TextObject text = rank switch
+            var text = rank switch
             {
                 3 => new TextObject(
                     "{=!}Ah yes, another soul upon the path towards eternity; seeking glory and remembrance within the Canticles. The years grow long, and yet I feel all the shorter for them. Time bends the elderly with the weight of their deeds. What do you wish to share with me, and why is it me that you seek over scriveners and goliards?"),
@@ -174,7 +174,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Vlandia
 
         public override TextObject GetClergyPreachingAnswer(int rank)
         {
-            TextObject text = rank switch
+            var text = rank switch
             {
                 3 => new TextObject(
                     "{=!}I do not preach, I merely illuminate. I have penned the Canticles since I first arrived on the continent as a child, a war orphan in the homeland who found comfort only in the cold embrace of a cloister. I was a goliard, a true firebrand once; and a scrivener when time demanded it of me."),
@@ -189,7 +189,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Vlandia
 
         public override TextObject GetClergyPreachingAnswerLast(int rank)
         {
-            TextObject text = rank switch
+            var text = rank switch
             {
                 3 => new TextObject(
                     "{=!}I fought, I killed, I was a legend in the making - as all men would claim to be in hubris. But my hands ached upon a sword hilt; far more than when I gripped a quill. And thus I illuminate, even still in my sunset days."),
@@ -204,7 +204,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Vlandia
 
         public override TextObject GetClergyProveFaith(int rank)
         {
-            TextObject text = rank switch
+            var text = rank switch
             {
                 3 => new TextObject(
                     "{=!}In my youth I would tell you that to be sung of requires violence and glorious deeds; but wiser now I say you need only be patient. Our faith - if one can call it a faith beyond that which we put in our peers - is one of syncretism and patience. We speak of the Heavens, the Otherworld, the Sight, all manner of tenets absorbed from lands we’ve conquered and fought upon."),
@@ -219,7 +219,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Vlandia
 
         public override TextObject GetClergyProveFaithLast(int rank)
         {
-            TextObject text = rank switch
+            var text = rank switch
             {
                 3 => new TextObject(
                     "{=!}All things we accept as truth, though not of importance when compared to the legacy we leave upon this world. If you wish to prove your faith, go forth with an open mind and a patient heart; if you are to be a legend worthy of the Canticles, fate shall provide you the chance. "),
@@ -274,7 +274,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Vlandia
 
         public override TextObject GetRankTitle(int rank)
         {
-            TextObject text = rank switch
+            var text = rank switch
             {
                 3 => new TextObject("{=!}Elder Illuminator"),
                 2 => new TextObject("{=!}Scrivener"),

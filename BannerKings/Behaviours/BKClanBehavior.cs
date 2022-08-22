@@ -98,9 +98,15 @@ namespace BannerKings.Behaviours
 
         private void SetCompanionParty(Clan clan)
         {
+            if (clan.Companions == null || clan.Companions.Count == 0) return;
+
             foreach (var companion in clan.Companions)
             {
-                if (companion.IsPrisoner || !companion.IsReady || companion.PartyBelongedTo?.LeaderHero == null)
+
+                if (companion == null) continue;
+
+                if (!companion.IsWanderer || companion.IsPrisoner || !companion.IsReady || companion.PartyBelongedTo == null ||
+                    companion.PartyBelongedTo.LeaderHero == null)
                 {
                     continue;
                 }

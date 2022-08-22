@@ -8,7 +8,9 @@ namespace BannerKings.Models.Vanilla
     {
         public override int GetTargetNotableCountForSettlement(Settlement settlement, Occupation occupation)
         {
-            return base.GetTargetNotableCountForSettlement(settlement, occupation);
+            return settlement.IsCastle && occupation == Occupation.Headman
+                ? 1
+                : base.GetTargetNotableCountForSettlement(settlement, occupation);
         }
     }
 }

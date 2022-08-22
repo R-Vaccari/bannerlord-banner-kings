@@ -547,7 +547,7 @@ namespace BannerKings.Models.BKModels
 
         public int GetRelationImpact(FeudalTitle title)
         {
-            int result = title.type switch
+            var result = title.type switch
             {
                 TitleType.Lordship => MBRandom.RandomInt(5, 10),
                 TitleType.Barony => MBRandom.RandomInt(15, 25),
@@ -567,7 +567,7 @@ namespace BannerKings.Models.BKModels
                 return 2000;
             }
 
-            int result = title.type switch
+            var result = title.type switch
             {
                 TitleType.Lordship => 100,
                 TitleType.Barony => 200,

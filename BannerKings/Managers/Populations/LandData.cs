@@ -168,7 +168,7 @@ namespace BannerKings.Managers.Populations
 
         public float GetAcreOutput(string type)
         {
-            float result = type switch
+            var result = type switch
             {
                 "farmland" => 0.018f,
                 "pasture" => 0.006f,

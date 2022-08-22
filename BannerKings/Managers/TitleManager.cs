@@ -1057,7 +1057,7 @@ namespace BannerKings.Managers
         private string GetDutyString(FeudalDuties duty, float factor)
         {
             GameTexts.SetVariable("DUTY_FACTOR", (factor * 100f).ToString("0") + '%');
-            string text = duty switch
+            var text = duty switch
             {
                 FeudalDuties.Taxation => "You are due {DUTY_FACTOR} of your fiefs' income to your suzerain.",
                 FeudalDuties.Auxilium =>
