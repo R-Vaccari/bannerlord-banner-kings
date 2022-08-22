@@ -1,7 +1,10 @@
-﻿using BannerKings.UI.Education;
+﻿using BannerKings.Managers.Goals;
+using BannerKings.UI.Education;
 using Bannerlord.UIExtenderEx.Attributes;
 using Bannerlord.UIExtenderEx.ViewModels;
+using System.Collections.Generic;
 using TaleWorlds.CampaignSystem.ViewModelCollection.CharacterDeveloper;
+using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
@@ -75,14 +78,39 @@ namespace BannerKings.UI.Extensions
         [DataSourceMethod]
         public void OpenFaith()
         {
-            EducationVisible = true;
             OnRefresh();
         }
 
         [DataSourceMethod]
         public void OpenDecisions()
         {
-            EducationVisible = true;
+            List<InquiryElement> options = new List<InquiryElement>();
+            foreach (Goal goal in DefaultGoals.Instance.All)
+            {
+                if (goal.IsAvailable())
+                {
+                    List<TextObject> reasons; 
+                    bool enabled = goal.IsFulfilled(out reasons);
+
+                    options.Add(new InquiryElement(goal,
+                        goal.Name.ToString(),
+                        null,
+                        enabled,
+                        enabled ? goal.Description.ToString() : reasons[0].ToString()));
+                }
+            }
+
+
+            MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
+                            new TextObject("{=!}Decisions").ToString(),
+                            new TextObject("{=!}Choose a personal decision to take.").ToString(),
+                            options, true, 1, GameTexts.FindText("str_done").ToString(), string.Empty,
+                            delegate (List<InquiryElement> x)
+                            {
+                                Goal result = (Goal)x[0].Identifier;
+                                result.ApplyGoal();
+                            }, null, string.Empty));
+
             OnRefresh();
         }
 
