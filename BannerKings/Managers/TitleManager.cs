@@ -147,8 +147,8 @@ namespace BannerKings.Managers
             {
                 InformationManager.DisplayMessage(new InformationMessage(
                     new TextObject("{=!}The {CLAN} has knighted {KNIGHT}.")
-                        .SetTextVariable("CLAN", grantor.Clan.Name)
-                        .SetTextVariable("KNIGHT", knight.Name)
+                        .SetTextVariable("CLAN", grantor.Clan.EncyclopediaLinkWithName)
+                        .SetTextVariable("KNIGHT", knight.EncyclopediaLinkWithName)
                         .ToString()));
             }
         }
@@ -378,7 +378,7 @@ namespace BannerKings.Managers
             {
                 MBInformationManager.AddQuickInformation(
                     new TextObject("{=!}{CLAIMANT} is building a claim on your title, {TITLE}.")
-                        .SetTextVariable("CLAIMANT", claimant.Name)
+                        .SetTextVariable("CLAIMANT", claimant.EncyclopediaLinkWithName)
                         .SetTextVariable("TITLE", action.Title.FullName));
             }
         }
@@ -388,7 +388,7 @@ namespace BannerKings.Managers
             var currentOwner = action.Title.deJure;
             InformationManager.DisplayMessage(new InformationMessage(
                 new TextObject("{=!}{REVOKER} has revoked the {TITLE}.")
-                    .SetTextVariable("REVOKER", action.ActionTaker.Name)
+                    .SetTextVariable("REVOKER", action.ActionTaker.EncyclopediaLinkWithName)
                     .SetTextVariable("TITLE", action.Title.FullName)
                     .ToString()));
             var impact = new BKTitleModel().GetRelationImpact(action.Title);
@@ -448,7 +448,7 @@ namespace BannerKings.Managers
             action.ActionTaker.ChangeHeroGold(-(int) action.Gold);
             GainKingdomInfluenceAction.ApplyForDefault(action.ActionTaker, -action.Influence);
             MBInformationManager.AddQuickInformation(new TextObject("{=!}The {TITLE} has been founded by {FOUNDER}.")
-                    .SetTextVariable("FOUNDER", action.ActionTaker.Name)
+                    .SetTextVariable("FOUNDER", action.ActionTaker.EncyclopediaLinkWithName)
                     .SetTextVariable("TITLE", title.FullName),
                 0, null, "event:/ui/notification/relation");
             action.ActionTaker.AddSkillXp(BKSkills.Instance.Lordship, BannerKingsConfig.Instance.TitleModel.GetSkillReward(action.Title, action.Type));
@@ -468,7 +468,7 @@ namespace BannerKings.Managers
             action.ActionTaker.ChangeHeroGold(-(int) action.Gold);
             GainKingdomInfluenceAction.ApplyForDefault(action.ActionTaker, -action.Influence);
             MBInformationManager.AddQuickInformation(new TextObject("{=!}The {TITLE} has been founded by {FOUNDER}.")
-                    .SetTextVariable("FOUNDER", action.ActionTaker.Name)
+                    .SetTextVariable("FOUNDER", action.ActionTaker.EncyclopediaLinkWithName)
                     .SetTextVariable("TITLE", title.FullName),
                 0, null, "event:/ui/notification/relation");
             action.ActionTaker.AddSkillXp(BKSkills.Instance.Lordship, BannerKingsConfig.Instance.TitleModel.GetSkillReward(action.Title, action.Type));
@@ -480,13 +480,13 @@ namespace BannerKings.Managers
             var title = action.Title;
             InformationManager.DisplayMessage(new InformationMessage(
                 new TextObject("{=!}{USURPER} has usurped the {TITLE}.")
-                    .SetTextVariable("USURPER", usurper.Name)
+                    .SetTextVariable("USURPER", usurper.EncyclopediaLinkWithName)
                     .SetTextVariable("TITLE", action.Title.FullName)
                     .ToString()));
             if (title.deJure == Hero.MainHero)
             {
                 MBInformationManager.AddQuickInformation(new TextObject("{=!}{USURPER} has usurped your title, {TITLE}.")
-                    .SetTextVariable("USURPER", usurper.Name)
+                    .SetTextVariable("USURPER", usurper.EncyclopediaLinkWithName)
                     .SetTextVariable("TITLE", action.Title.FullName));
             }
 
@@ -497,13 +497,15 @@ namespace BannerKings.Managers
             {
                 foreach (var clan in kingdom.Clans)
                 {
-                    if (clan != oldOwner.Clan && clan != usurper.Clan && !clan.IsUnderMercenaryService)
+                    if (clan == oldOwner.Clan || clan == usurper.Clan || clan.IsUnderMercenaryService)
                     {
-                        var random = MBRandom.RandomInt(1, 100);
-                        if (random <= 10)
-                        {
-                            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(usurper, oldOwner, (int) (impact * 0.3f));
-                        }
+                        continue;
+                    }
+
+                    var random = MBRandom.RandomInt(1, 100);
+                    if (random <= 10)
+                    {
+                        ChangeRelationAction.ApplyRelationChangeBetweenHeroes(usurper, oldOwner, (int) (impact * 0.3f));
                     }
                 }
             }
@@ -527,8 +529,7 @@ namespace BannerKings.Managers
             title.AddClaim(oldOwner, ClaimType.Previous_Owner, true);
             ExecuteOwnershipChange(oldOwner, usurper, title, true);
 
-            action.ActionTaker.AddSkillXp(BKSkills.Instance.Lordship,
-                BannerKingsConfig.Instance.TitleModel.GetSkillReward(action.Title, action.Type));
+            action.ActionTaker.AddSkillXp(BKSkills.Instance.Lordship, BannerKingsConfig.Instance.TitleModel.GetSkillReward(action.Title, action.Type));
 
             //OwnershipNotification notification = new OwnershipNotification(title, new TextObject(string.Format("You are now the rightful owner to {0}", title.name)));
             //Campaign.Current.CampaignInformationManager.NewMapNoticeAdded(notification);
@@ -585,9 +586,7 @@ namespace BannerKings.Managers
                     GameTexts.SetVariable("FIEF", lordship.FullName);
                     GameTexts.SetVariable("SOVEREIGN", sovereign.FullName);
                     InformationManager.ShowInquiry(new InquiryData("Enfoeffement Right",
-                        new TextObject(
-                                "You have been generously granted the {FIEF} as part of your vassal rights to the {SOVEREIGN}.")
-                            .ToString(),
+                        new TextObject("You have been generously granted the {FIEF} as part of your vassal rights to the {SOVEREIGN}.").ToString(),
                         true, false, GameTexts.FindText("str_done").ToString(), null, null, null));
                 }
             }
