@@ -23,20 +23,6 @@ namespace BannerKings.Managers.Skills
             300
         };
 
-        private PerkObject lordshipTraditionalist;
-
-        private PerkObject lordshipAdaptive;
-
-        private PerkObject lordshipAccolade;
-
-        private PerkObject lordshipManorLord;
-
-        private PerkObject lordshipMilitaryAdministration;
-
-        private PerkObject lordshipClaimant;
-
-        private PerkObject lordshipPatron;
-
         public HashSet<PerkObject> LifestylePerks { get; } = new();
 
         #region Fian
@@ -148,6 +134,20 @@ namespace BannerKings.Managers.Skills
         #region Lordship
 
         public PerkObject LordshipEconomicAdministration { get; private set; }
+
+        public PerkObject LordshipTraditionalist { get; private set; }
+
+        public PerkObject LordshipAdaptive { get; private set; }
+
+        public PerkObject LordshipAccolade { get; private set; }
+
+        public PerkObject LordshipManorLord { get; private set; }
+
+        public PerkObject LordshipMilitaryAdministration { get; private set; }
+
+        public PerkObject LordshipClaimant { get; private set; }
+
+        public PerkObject LordshipPatron { get; private set; }
 
         #endregion Lordship
 
@@ -538,10 +538,10 @@ namespace BannerKings.Managers.Skills
 
             #region Lordship
 
-            lordshipTraditionalist = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LordshipTraditionalist"));
-            lordshipAdaptive = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LordshipAdaptive"));
-            lordshipTraditionalist.InitializeNew("{=!}Traditionalist", BKSkills.Instance.Lordship, GetTierCost(1),
-                lordshipAdaptive,
+            LordshipTraditionalist = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LordshipTraditionalist"));
+            LordshipAdaptive = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LordshipAdaptive"));
+            LordshipTraditionalist.InitializeNew("{=!}Traditionalist", BKSkills.Instance.Lordship, GetTierCost(1),
+                LordshipAdaptive,
                 "{=!}Increased cultural assimilation speed by 10%",
                 SkillEffect.PerkRole.Ruler, 0.1f,
                 SkillEffect.EffectIncrementType.AddFactor,
@@ -549,18 +549,18 @@ namespace BannerKings.Managers.Skills
                 SkillEffect.PerkRole.Ruler, 1f,
                 SkillEffect.EffectIncrementType.Add);
 
-            lordshipAdaptive.InitializeNew("{=!}Adaptive", BKSkills.Instance.Lordship, GetTierCost(1),
-                lordshipTraditionalist,
-                "{=!}Reduced loyalty onus from different cultures by 15%",
+            LordshipAdaptive.InitializeNew("{=!}Adaptive", BKSkills.Instance.Lordship, GetTierCost(1),
+                LordshipTraditionalist,
+                "{=!}Reduced loyalty bonus from different cultures by 15%",
                 SkillEffect.PerkRole.Ruler, 0.1f,
                 SkillEffect.EffectIncrementType.Add,
                 "{=!}Increased settlement stability target by flat 2%",
                 SkillEffect.PerkRole.Ruler, 1f,
                 SkillEffect.EffectIncrementType.Add);
 
-            lordshipAccolade = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LordshipAccolade"));
-            lordshipManorLord = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LordshipManorLord"));
-            lordshipAccolade.InitializeNew("{=!}Accolade", BKSkills.Instance.Lordship, GetTierCost(2), lordshipManorLord,
+            LordshipAccolade = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LordshipAccolade"));
+            LordshipManorLord = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LordshipManorLord"));
+            LordshipAccolade.InitializeNew("{=!}Accolade", BKSkills.Instance.Lordship, GetTierCost(2), LordshipManorLord,
                 "{=!}Knighting requires 15% less influence",
                 SkillEffect.PerkRole.Ruler, -0.15f,
                 SkillEffect.EffectIncrementType.AddFactor,
@@ -568,7 +568,7 @@ namespace BannerKings.Managers.Skills
                 SkillEffect.PerkRole.Ruler, 1f,
                 SkillEffect.EffectIncrementType.Add);
 
-            lordshipManorLord.InitializeNew("{=!}Manor Lord", BKSkills.Instance.Lordship, GetTierCost(2), lordshipAccolade,
+            LordshipManorLord.InitializeNew("{=!}Manor Lord", BKSkills.Instance.Lordship, GetTierCost(2), LordshipAccolade,
                 "{=!}Villages weigh 20% less in demesne limit",
                 SkillEffect.PerkRole.Ruler, -0.20f,
                 SkillEffect.EffectIncrementType.AddFactor,
@@ -576,9 +576,9 @@ namespace BannerKings.Managers.Skills
                 SkillEffect.PerkRole.ClanLeader, 0.2f,
                 SkillEffect.EffectIncrementType.Add);
 
-            lordshipMilitaryAdministration = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LordshipMilitaryAdministration"));
+            LordshipMilitaryAdministration = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LordshipMilitaryAdministration"));
             LordshipEconomicAdministration = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LordshipEconomicAdministration"));
-            lordshipMilitaryAdministration.InitializeNew("{=!}Military Administration", BKSkills.Instance.Lordship,
+            LordshipMilitaryAdministration.InitializeNew("{=!}Military Administration", BKSkills.Instance.Lordship,
                 GetTierCost(3), LordshipEconomicAdministration,
                 "{=!}Increased settlement militarism in settlements by flat 2%",
                 SkillEffect.PerkRole.Ruler, 0.02f,
@@ -588,7 +588,7 @@ namespace BannerKings.Managers.Skills
                 SkillEffect.EffectIncrementType.AddFactor);
 
             LordshipEconomicAdministration.InitializeNew("{=!}Economic Administration", BKSkills.Instance.Lordship,
-                GetTierCost(3), lordshipMilitaryAdministration,
+                GetTierCost(3), LordshipMilitaryAdministration,
                 "{=!}Increased settlement production efficiency by 10%",
                 SkillEffect.PerkRole.Ruler, 0.2f,
                 SkillEffect.EffectIncrementType.AddFactor,
@@ -596,9 +596,9 @@ namespace BannerKings.Managers.Skills
                 SkillEffect.PerkRole.Ruler, 0.1f,
                 SkillEffect.EffectIncrementType.AddFactor);
 
-            lordshipClaimant = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LordshipClaimant"));
-            lordshipPatron = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LordshipPatron"));
-            lordshipClaimant.InitializeNew("{=!}Claimant", BKSkills.Instance.Lordship, GetTierCost(4), lordshipPatron,
+            LordshipClaimant = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LordshipClaimant"));
+            LordshipPatron = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LordshipPatron"));
+            LordshipClaimant.InitializeNew("{=!}Claimant", BKSkills.Instance.Lordship, GetTierCost(4), LordshipPatron,
                 "{=!}Claims are built 30% faster",
                 SkillEffect.PerkRole.Ruler, 0.3f,
                 SkillEffect.EffectIncrementType.AddFactor,
@@ -606,7 +606,7 @@ namespace BannerKings.Managers.Skills
                 SkillEffect.PerkRole.Ruler, 0.05f,
                 SkillEffect.EffectIncrementType.AddFactor);
 
-            lordshipPatron.InitializeNew("{=!}Patron", BKSkills.Instance.Lordship, GetTierCost(4), lordshipClaimant,
+            LordshipPatron.InitializeNew("{=!}Patron", BKSkills.Instance.Lordship, GetTierCost(4), LordshipClaimant,
                 "{=!}Grating titles yields renown",
                 SkillEffect.PerkRole.Ruler, 0.2f,
                 SkillEffect.EffectIncrementType.AddFactor,

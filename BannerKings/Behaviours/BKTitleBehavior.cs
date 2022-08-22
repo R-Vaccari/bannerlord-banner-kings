@@ -132,12 +132,14 @@ namespace BannerKings.Behaviours
 
         private void CheckOverVassalLimit(Hero hero)
         {
-            if (BannerKingsConfig.Instance.StabilityModel.IsHeroOverVassalLimit(hero))
+            if (!BannerKingsConfig.Instance.StabilityModel.IsHeroOverVassalLimit(hero))
             {
-                if (hero == Hero.MainHero)
-                {
-                    Campaign.Current.CampaignInformationManager.NewMapNoticeAdded(new VassalLimitNotification());
-                }
+                return;
+            }
+
+            if (hero == Hero.MainHero)
+            {
+                Campaign.Current.CampaignInformationManager.NewMapNoticeAdded(new VassalLimitNotification());
             }
         }
 

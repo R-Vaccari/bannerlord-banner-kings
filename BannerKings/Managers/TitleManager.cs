@@ -134,8 +134,15 @@ namespace BannerKings.Managers
         public void GrantKnighthood(FeudalTitle title, Hero knight, Hero grantor)
         {
             var action = BannerKingsConfig.Instance.TitleModel.GetAction(ActionType.Grant, title, grantor);
+
             action.Influence = -BannerKingsConfig.Instance.TitleModel.GetGrantKnighthoodCost(grantor).ResultNumber;
+            if (grantor.GetPerkValue(BKPerks.Instance.LordshipAccolade))
+            {
+                action.Influence *= 0.15f;
+            }
+
             action.TakeAction(knight);
+
             if (grantor == Hero.MainHero)
             {
                 GiveGoldAction.ApplyBetweenCharacters(grantor, knight, 5000);

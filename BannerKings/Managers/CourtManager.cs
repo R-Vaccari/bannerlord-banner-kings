@@ -80,7 +80,7 @@ namespace BannerKings.Managers
 
         public CouncilMember GetHeroPosition(Hero hero)
         {
-            if ((hero.IsLord && (hero.Clan?.Kingdom == null)) || hero.IsChild ||
+            if ((hero.IsLord && hero.Clan?.Kingdom == null) || hero.IsChild ||
                 hero.IsDead)
             {
                 return null;

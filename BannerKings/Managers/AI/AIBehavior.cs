@@ -27,7 +27,7 @@ namespace BannerKings.Managers.AI
             {
                 switch (landed)
                 {
-                    case true when (title.fief == null || title.deFacto != giver):
+                    case true when title.fief == null || title.deFacto != giver:
                     case false when title.fief != null:
                         continue;
                 }

@@ -97,9 +97,9 @@ namespace BannerKings.UI
             stlmtSlaves.AddToCounts(CharacterObject.All.FirstOrDefault(x => x.StringId == "looter"), count);
             PartyScreenManager.OpenScreenAsLoot(TroopRoster.CreateDummyTroopRoster(), stlmtSlaves,
                 Settlement.CurrentSettlement.Name, 0,
-                delegate(PartyBase partyBase, TroopRoster leftMemberRoster, TroopRoster leftPrisonRoster,
-                    PartyBase rightOwnerParty, TroopRoster rightMemberRoster, TroopRoster rightPrisonRoster,
-                    bool fromCancel)
+                delegate(PartyBase _, TroopRoster _, TroopRoster leftPrisonRoster,
+                    PartyBase _, TroopRoster _, TroopRoster rightPrisonRoster,
+                    bool _)
                 {
                     if (leftPrisonRoster.TotalHeroes > 0)
                     {
@@ -282,7 +282,7 @@ namespace BannerKings.UI
                 }
             }
 
-            if (title.OngoingClaims.Count() + title.Claims.Count() > 0)
+            if (title.OngoingClaims.Count + title.Claims.Count > 0)
             {
                 TooltipAddEmptyLine(list);
                 list.Add(new TooltipProperty(new TextObject("{=!}Claimants").ToString(), " ", 0));

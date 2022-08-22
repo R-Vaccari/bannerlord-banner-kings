@@ -143,7 +143,7 @@ namespace BannerKings.Behaviours
             campaignGameStarter.AddWaitGameMenu("bannerkings_wait_crafting",
                 "{=!}You are working on the smith for {CRAFTING_HOURS} hours. The current hourly rate of this smith is: {CRAFTING_RATE} {GOLD_ICON}.{CRAFTING_EXPLANATION}",
                 MenuWaitInit,
-                c => true,
+                _ => true,
                 MenuActionConsequenceNeutral,
                 TickWaitCrafting, GameMenu.MenuAndOptionType.WaitMenuShowProgressAndHoursOption,
                 GameOverlays.MenuOverlayType.SettlementWithBoth);

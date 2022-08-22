@@ -324,8 +324,8 @@ namespace BannerKings.UI.Education
                         i <= data.Lifestyle.InvestedFocus,
                         PerkVM.PerkAlternativeType.NoAlternative,
                         null, null,
-                        p => gainedPerks.Contains(perk),
-                        p => data.Lifestyle.InvestedFocus == i - 1));
+                        _ => gainedPerks.Contains(perk),
+                        _ => data.Lifestyle.InvestedFocus == i - 1));
                 }
             }
         }
