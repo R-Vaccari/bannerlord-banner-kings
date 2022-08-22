@@ -25,14 +25,11 @@ namespace BannerKings.Managers.AI
 
             foreach (var title in titles)
             {
-                if (landed && (title.fief == null || title.deFacto != giver))
+                switch (landed)
                 {
-                    continue;
-                }
-
-                if (!landed && title.fief != null)
-                {
-                    continue;
+                    case true when (title.fief == null || title.deFacto != giver):
+                    case false when title.fief != null:
+                        continue;
                 }
 
                 var value = BannerKingsConfig.Instance.StabilityModel.GetTitleScore(title);
@@ -190,35 +187,43 @@ namespace BannerKings.Managers.AI
             var mercenaryWeight = hero.GetTraitLevel(DefaultTraits.RogueSkills) - hero.GetTraitLevel(DefaultTraits.Honor);
 
             var occupation = hero.Occupation;
-            if (occupation == Occupation.Lord)
+            switch (occupation)
             {
-                politicianWeight += 2;
-                warriorWeight += 3;
-
-                if (!hero.Clan.IsMinorFaction)
+                case Occupation.Lord:
                 {
-                    mercenaryWeight = 0;
-                }
+                    politicianWeight += 2;
+                    warriorWeight += 3;
 
-                healerWeight -= 1;
-            }
-            else if (occupation == Occupation.Wanderer)
-            {
-                warriorWeight += 4;
-                mercenaryWeight += 1;
-            }
-            else if (hero.IsNotable)
-            {
-                if (occupation == Occupation.GangLeader)
+                    if (!hero.Clan.IsMinorFaction)
+                    {
+                        mercenaryWeight = 0;
+                    }
+
+                    healerWeight -= 1;
+                    break;
+                }
+                case Occupation.Wanderer:
+                    warriorWeight += 4;
+                    mercenaryWeight += 1;
+                    break;
+                default:
                 {
-                    rogueWeight += 2;
+                    if (hero.IsNotable)
+                    {
+                        if (occupation == Occupation.GangLeader)
+                        {
+                            rogueWeight += 2;
+                        }
+
+                        mercenaryWeight += 4;
+
+                        politicianWeight = 0;
+                        warriorWeight = 0;
+                        mercenaryWeight = 0;
+                    }
+
+                    break;
                 }
-
-                mercenaryWeight += 4;
-
-                politicianWeight = 0;
-                warriorWeight = 0;
-                mercenaryWeight = 0;
             }
 
 
@@ -252,7 +257,7 @@ namespace BannerKings.Managers.AI
                 }
                 else if (first == DefaultSkills.Roguery || second == DefaultSkills.Roguery)
                 {
-                    if (hero.Clan != null && hero.Clan.IsMinorFaction)
+                    if (hero.Clan is {IsMinorFaction: true})
                     {
                         tuple.Item2 += mercenaryWeight;
                     }
@@ -300,7 +305,7 @@ namespace BannerKings.Managers.AI
             var changedDecisions = new List<BannerKingsDecision>();
 
             var town = target.Town;
-            if (town != null && town.Governor != null)
+            if (town is {Governor: { }})
             {
                 if (town.FoodStocks < town.FoodStocksUpperLimit() * 0.2f && town.FoodChange < 0f)
                 {
@@ -365,20 +370,13 @@ namespace BannerKings.Managers.AI
 
                 var criminal = (BKCriminalPolicy) BannerKingsConfig.Instance.PolicyManager.GetPolicy(target, "criminal");
                 var mercy = target.Owner.GetTraitLevel(DefaultTraits.Mercy);
-                BKCriminalPolicy targetCriminal = null;
 
-                if (mercy > 0)
+                BKCriminalPolicy targetCriminal = mercy switch
                 {
-                    targetCriminal = new BKCriminalPolicy(BKCriminalPolicy.CriminalPolicy.Forgiveness, target);
-                }
-                else if (mercy < 0)
-                {
-                    targetCriminal = new BKCriminalPolicy(BKCriminalPolicy.CriminalPolicy.Execution, target);
-                }
-                else
-                {
-                    targetCriminal = new BKCriminalPolicy(BKCriminalPolicy.CriminalPolicy.Enslavement, target);
-                }
+                    > 0 => new BKCriminalPolicy(BKCriminalPolicy.CriminalPolicy.Forgiveness, target),
+                    < 0 => new BKCriminalPolicy(BKCriminalPolicy.CriminalPolicy.Execution, target),
+                    _ => new BKCriminalPolicy(BKCriminalPolicy.CriminalPolicy.Enslavement, target)
+                };
 
                 if (targetCriminal.Policy != criminal.Policy)
                 {
@@ -399,8 +397,7 @@ namespace BannerKings.Managers.AI
                 changedDecisions.Add(taxSlavesDecision);
 
                 var workforce = (BKWorkforcePolicy) BannerKingsConfig.Instance.PolicyManager.GetPolicy(target, "workforce");
-                var workforcePolicies = new List<ValueTuple<WorkforcePolicy, float>>();
-                workforcePolicies.Add((WorkforcePolicy.None, 1f));
+                var workforcePolicies = new List<ValueTuple<WorkforcePolicy, float>> {(WorkforcePolicy.None, 1f)};
                 var saturation = BannerKingsConfig.Instance.PopulationManager.GetPopData(target).LandData
                     .WorkforceSaturation;
                 if (saturation > 1f)
@@ -426,13 +423,14 @@ namespace BannerKings.Managers.AI
                 var villageData = BannerKingsConfig.Instance.PopulationManager.GetPopData(target).VillageData;
                 villageData.StartRandomProject();
                 var hearths = target.Village.Hearth;
-                if (hearths < 300f)
+                switch (hearths)
                 {
-                    UpdateTaxPolicy(-1, target);
-                }
-                else if (hearths > 1000f)
-                {
-                    UpdateTaxPolicy(1, target);
+                    case < 300f:
+                        UpdateTaxPolicy(-1, target);
+                        break;
+                    case > 1000f:
+                        UpdateTaxPolicy(1, target);
+                        break;
                 }
             }
         }

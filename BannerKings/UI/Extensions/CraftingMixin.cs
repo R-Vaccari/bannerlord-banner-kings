@@ -361,10 +361,7 @@ namespace BannerKings.UI.Extensions
             armorCrafting.RefreshValues();
 
             var onItemRefreshed = crafting.OnItemRefreshed;
-            if (onItemRefreshed != null)
-            {
-                onItemRefreshed(false);
-            }
+            onItemRefreshed?.Invoke(false);
         }
 
         [DataSourceMethod]

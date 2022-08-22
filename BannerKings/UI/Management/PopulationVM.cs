@@ -154,25 +154,24 @@ namespace BannerKings.UI.Management
                 IsDemesneSelected = false;
                 IsMilitarySelected = false;
                 Military.IsSelected = false;
-                if (index == 0)
+                switch (index)
                 {
-                    OverView.IsSelected = true;
-                    IsOverviewSelected = true;
-                }
-                else if (index == 1)
-                {
-                    Economy.IsSelected = true;
-                    IsEconomySelected = true;
-                }
-                else if (index == 2)
-                {
-                    Demesne.IsSelected = true;
-                    IsDemesneSelected = true;
-                }
-                else if (index == 3)
-                {
-                    Military.IsSelected = true;
-                    IsMilitarySelected = true;
+                    case 0:
+                        OverView.IsSelected = true;
+                        IsOverviewSelected = true;
+                        break;
+                    case 1:
+                        Economy.IsSelected = true;
+                        IsEconomySelected = true;
+                        break;
+                    case 2:
+                        Demesne.IsSelected = true;
+                        IsDemesneSelected = true;
+                        break;
+                    case 3:
+                        Military.IsSelected = true;
+                        IsMilitarySelected = true;
+                        break;
                 }
 
                 RefreshValues();

@@ -59,32 +59,43 @@ namespace BannerKings.Managers.Kingdoms.Contract
             if (newGovernment)
             {
                 var succession = Title.contract.Succession;
-                if (governmentType == GovernmentType.Imperial)
+                switch (governmentType)
                 {
-                    if (succession != SuccessionType.Imperial)
+                    case GovernmentType.Imperial:
                     {
-                        succession = SuccessionType.Imperial;
+                        if (succession != SuccessionType.Imperial)
+                        {
+                            succession = SuccessionType.Imperial;
+                        }
+
+                        break;
                     }
-                }
-                else if (governmentType == GovernmentType.Feudal)
-                {
-                    if (succession != SuccessionType.Elective_Monarchy && succession != SuccessionType.Hereditary_Monarchy)
+                    case GovernmentType.Feudal:
                     {
-                        succession = SuccessionType.Hereditary_Monarchy;
+                        if (succession != SuccessionType.Elective_Monarchy && succession != SuccessionType.Hereditary_Monarchy)
+                        {
+                            succession = SuccessionType.Hereditary_Monarchy;
+                        }
+
+                        break;
                     }
-                }
-                else if (governmentType == GovernmentType.Tribal)
-                {
-                    if (succession != SuccessionType.Elective_Monarchy && succession != SuccessionType.Hereditary_Monarchy)
+                    case GovernmentType.Tribal:
                     {
-                        succession = SuccessionType.Elective_Monarchy;
+                        if (succession != SuccessionType.Elective_Monarchy && succession != SuccessionType.Hereditary_Monarchy)
+                        {
+                            succession = SuccessionType.Elective_Monarchy;
+                        }
+
+                        break;
                     }
-                }
-                else if (governmentType == GovernmentType.Republic)
-                {
-                    if (succession != SuccessionType.Republic)
+                    case GovernmentType.Republic:
                     {
-                        succession = SuccessionType.Republic;
+                        if (succession != SuccessionType.Republic)
+                        {
+                            succession = SuccessionType.Republic;
+                        }
+
+                        break;
                     }
                 }
 
@@ -99,32 +110,43 @@ namespace BannerKings.Managers.Kingdoms.Contract
         {
             TextObject effects = null;
             var succession = Title.contract.Succession;
-            if (governmentType == GovernmentType.Imperial)
+            switch (governmentType)
             {
-                if (succession != SuccessionType.Imperial)
+                case GovernmentType.Imperial:
                 {
-                    effects = new TextObject("{=!}Succession will be changed to Imperial succession.");
+                    if (succession != SuccessionType.Imperial)
+                    {
+                        effects = new TextObject("{=!}Succession will be changed to Imperial succession.");
+                    }
+
+                    break;
                 }
-            }
-            else if (governmentType == GovernmentType.Feudal)
-            {
-                if (succession != SuccessionType.Elective_Monarchy && succession != SuccessionType.Hereditary_Monarchy)
+                case GovernmentType.Feudal:
                 {
-                    effects = new TextObject("{=!}Succession will be changed to Hereditary Monarchy succession.");
+                    if (succession != SuccessionType.Elective_Monarchy && succession != SuccessionType.Hereditary_Monarchy)
+                    {
+                        effects = new TextObject("{=!}Succession will be changed to Hereditary Monarchy succession.");
+                    }
+
+                    break;
                 }
-            }
-            else if (governmentType == GovernmentType.Tribal)
-            {
-                if (succession != SuccessionType.Elective_Monarchy && succession != SuccessionType.Hereditary_Monarchy)
+                case GovernmentType.Tribal:
                 {
-                    effects = new TextObject("{=!}Succession will be changed to Elective Monarchy succession.");
+                    if (succession != SuccessionType.Elective_Monarchy && succession != SuccessionType.Hereditary_Monarchy)
+                    {
+                        effects = new TextObject("{=!}Succession will be changed to Elective Monarchy succession.");
+                    }
+
+                    break;
                 }
-            }
-            else if (governmentType == GovernmentType.Republic)
-            {
-                if (succession != SuccessionType.Republic)
+                case GovernmentType.Republic:
                 {
-                    effects = new TextObject("{=!}Succession will be changed to Republican succession.");
+                    if (succession != SuccessionType.Republic)
+                    {
+                        effects = new TextObject("{=!}Succession will be changed to Republican succession.");
+                    }
+
+                    break;
                 }
             }
 
@@ -174,13 +196,14 @@ namespace BannerKings.Managers.Kingdoms.Contract
 
             if (clan == Kingdom.RulingClan)
             {
-                if (governmentType == GovernmentType.Imperial && policyDecisionOutcome.ShouldDecisionBeEnforced)
+                switch (governmentType)
                 {
-                    num4 += 2f;
-                }
-                else if (governmentType == GovernmentType.Republic && policyDecisionOutcome.ShouldDecisionBeEnforced)
-                {
-                    num4 -= 2f;
+                    case GovernmentType.Imperial when policyDecisionOutcome.ShouldDecisionBeEnforced:
+                        num4 += 2f;
+                        break;
+                    case GovernmentType.Republic when policyDecisionOutcome.ShouldDecisionBeEnforced:
+                        num4 -= 2f;
+                        break;
                 }
             }
 
@@ -199,22 +222,13 @@ namespace BannerKings.Managers.Kingdoms.Contract
 
         private float[] GetWeights()
         {
-            if (governmentType == GovernmentType.Imperial)
+            return governmentType switch
             {
-                return new[] {3f, 1f, -2f};
-            }
-
-            if (governmentType == GovernmentType.Tribal)
-            {
-                return new[] {-1f, 2f, -1f};
-            }
-
-            if (governmentType == GovernmentType.Feudal)
-            {
-                return new[] {1f, 2f, -1f};
-            }
-
-            return new[] {-3f, 1.5f, 3f};
+                GovernmentType.Imperial => new[] {3f, 1f, -2f},
+                GovernmentType.Tribal => new[] {-1f, 2f, -1f},
+                GovernmentType.Feudal => new[] {1f, 2f, -1f},
+                _ => new[] {-3f, 1.5f, 3f}
+            };
         }
 
         public override TextObject GetChooseDescription()
@@ -261,16 +275,16 @@ namespace BannerKings.Managers.Kingdoms.Contract
             else
             {
                 textObject.SetTextVariable("POLICY_SUPPORT", "{=bqEO389P}This decision caused a split in the council.");
-                if (supportStatus == SupportStatus.Majority)
+                switch (supportStatus)
                 {
-                    textObject.SetTextVariable("POLICY_SUPPORT",
-                        "{=3W67kdtc}This decision had the support of the council.");
-                }
-
-                if (supportStatus == SupportStatus.Minority)
-                {
-                    textObject.SetTextVariable("POLICY_SUPPORT",
-                        "{=b6MgRYlM}This decision was rejected by the support of the council.");
+                    case SupportStatus.Majority:
+                        textObject.SetTextVariable("POLICY_SUPPORT",
+                            "{=3W67kdtc}This decision had the support of the council.");
+                        break;
+                    case SupportStatus.Minority:
+                        textObject.SetTextVariable("POLICY_SUPPORT",
+                            "{=b6MgRYlM}This decision was rejected by the support of the council.");
+                        break;
                 }
             }
 

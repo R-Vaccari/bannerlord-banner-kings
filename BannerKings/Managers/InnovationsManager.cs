@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using BannerKings.Managers.Innovations;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -20,24 +21,20 @@ namespace BannerKings.Managers
 
         private void InitializeInnovations()
         {
-            foreach (var culture in Game.Current.ObjectManager.GetObjectTypeList<CultureObject>())
+            foreach (var culture in Game.Current.ObjectManager.GetObjectTypeList<CultureObject>().Where(culture => !culture.IsBandit && culture.IsInitialized))
             {
-                if (culture.IsBandit || !culture.IsInitialized)
-                {
-                    continue;
-                }
-
                 Innovations.Add(culture, new InnovationData(new List<Innovation>(), culture));
                 foreach (var innovation in DefaultInnovations.Instance.All)
                 {
-                    if (innovation.Culture == null || innovation.Culture == culture)
+                    if (innovation.Culture != null && innovation.Culture != culture)
                     {
-                        var newInnov = new Innovation(innovation.StringId);
-                        newInnov.Initialize(innovation.Name, innovation.Description, innovation.Effects,
-                            innovation.RequiredProgress, innovation.Culture, innovation.Requirement);
-
-                        Innovations[culture].AddInnovation(newInnov);
+                        continue;
                     }
+
+                    var newInnovation = new Innovation(innovation.StringId);
+                    newInnovation.Initialize(innovation.Name, innovation.Description, innovation.Effects, innovation.RequiredProgress, innovation.Culture, innovation.Requirement);
+
+                    Innovations[culture].AddInnovation(newInnovation);
                 }
             }
         }
@@ -61,12 +58,13 @@ namespace BannerKings.Managers
 
         public void AddSettlementResearch(Settlement settlement)
         {
-            if (Innovations.ContainsKey(settlement.Culture))
+            if (!Innovations.ContainsKey(settlement.Culture))
             {
-                var data = Innovations[settlement.Culture];
-                data.AddResearch(BannerKingsConfig.Instance.InnovationsModel.CalculateSettlementResearch(settlement)
-                    .ResultNumber);
+                return;
             }
+
+            var data = Innovations[settlement.Culture];
+            data.AddResearch(BannerKingsConfig.Instance.InnovationsModel.CalculateSettlementResearch(settlement).ResultNumber);
         }
 
         public InnovationData GetInnovationData(CultureObject culture)
@@ -83,13 +81,12 @@ namespace BannerKings.Managers
         public MBReadOnlyList<Innovation> GetInnovations(CultureObject culture)
         {
             var list = new List<Innovation>();
-            if (Innovations.ContainsKey(culture))
+            if (!Innovations.ContainsKey(culture))
             {
-                foreach (var innov in Innovations[culture].Innovations)
-                {
-                    list.Add(innov);
-                }
+                return list.GetReadOnlyList();
             }
+
+            list.AddRange(Innovations[culture].Innovations);
 
             return list.GetReadOnlyList();
         }

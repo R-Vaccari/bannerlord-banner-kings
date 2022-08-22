@@ -5,7 +5,7 @@ namespace BannerKings.Managers.Decisions
 {
     public abstract class BannerKingsDecision
     {
-        public BannerKingsDecision(Settlement settlement, bool enabled)
+        protected BannerKingsDecision(Settlement settlement, bool enabled)
         {
             Settlement = settlement;
             Enabled = enabled;

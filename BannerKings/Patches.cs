@@ -93,9 +93,9 @@ namespace BannerKings
                         textObject.SetTextVariable("FEMALE", hero.IsFemale ? 1 : 0);
                         textObject.SetTextVariable("IMPERIAL", hero.Culture.StringId == "empire" ? 1 : 0);
                         textObject.SetTextVariable("COASTAL",
-                            hero.Culture.StringId == "empire" || hero.Culture.StringId == "vlandia" ? 1 : 0);
+                            hero.Culture.StringId is "empire" or "vlandia" ? 1 : 0);
                         textObject.SetTextVariable("NORTHERN",
-                            hero.Culture.StringId == "battania" || hero.Culture.StringId == "sturgia" ? 1 : 0);
+                            hero.Culture.StringId is "battania" or "sturgia" ? 1 : 0);
                         textObject.SetCharacterProperties("HERO", hero.CharacterObject);
                         textObject.SetTextVariable("FIRSTNAME", heroFirstName);
                         __result = textObject;
@@ -613,7 +613,7 @@ namespace BannerKings
                     if (BannerKingsConfig.Instance.PopulationManager != null &&
                         BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
                     {
-                        if (mobileParty != null && mobileParty.IsActive && mobileParty.IsVillager)
+                        if (mobileParty is {IsActive: true, IsVillager: true})
                         {
                             ____previouslyChangedVillagerTargetsDueToEnemyOnWay[mobileParty].Clear();
                             if (settlement.IsTown)

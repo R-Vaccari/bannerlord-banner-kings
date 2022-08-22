@@ -12,13 +12,10 @@ namespace BannerKings.Models.Vanilla
             if (BannerKingsConfig.Instance.PopulationManager != null)
             {
                 var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
-                if (data != null)
+                var tournamentData = data?.TournamentData;
+                if (tournamentData != null)
                 {
-                    var tournamentData = data.TournamentData;
-                    if (tournamentData != null)
-                    {
-                        return new BannerKingsTournament(town, tournamentData);
-                    }
+                    return new BannerKingsTournament(town, tournamentData);
                 }
             }
 

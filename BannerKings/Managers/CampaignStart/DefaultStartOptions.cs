@@ -77,7 +77,7 @@ namespace BannerKings.Managers.CampaignStart
                     }
 
                     var settlement =
-                        SettlementHelper.FindNearestSettlement(x => x.OwnerClan != null && x.OwnerClan.Kingdom != null);
+                        SettlementHelper.FindNearestSettlement(x => x.OwnerClan is {Kingdom: { }});
                     var kingdom = settlement.OwnerClan.Kingdom;
                     if (kingdom == null)
                     {
@@ -131,26 +131,15 @@ namespace BannerKings.Managers.CampaignStart
                     var templateName = "looters_template";
 
                     var culture = Hero.MainHero.Culture;
-                    if (culture.StringId == "sturgia")
+                    templateName = culture.StringId switch
                     {
-                        templateName = "sea_raiders_template";
-                    }
-                    else if (culture.StringId == "battania")
-                    {
-                        templateName = "forest_bandits_template";
-                    }
-                    else if (culture.StringId == "aserai")
-                    {
-                        templateName = "desert_bandits_template";
-                    }
-                    else if (culture.StringId == "khuzait")
-                    {
-                        templateName = "steppe_bandits_template";
-                    }
-                    else if (culture.StringId == "vlandia")
-                    {
-                        templateName = "mountain_bandits_template";
-                    }
+                        "sturgia" => "sea_raiders_template",
+                        "battania" => "forest_bandits_template",
+                        "aserai" => "desert_bandits_template",
+                        "khuzait" => "steppe_bandits_template",
+                        "vlandia" => "mountain_bandits_template",
+                        _ => templateName
+                    };
 
                     var template = templates.First(x => x.StringId == templateName);
                     var roster = MobileParty.MainParty.MemberRoster;

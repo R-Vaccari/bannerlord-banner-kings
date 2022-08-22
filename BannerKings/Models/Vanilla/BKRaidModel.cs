@@ -12,7 +12,7 @@ namespace BannerKings.Models.Vanilla
         {
             var result = base.CalculateHitDamage(attackerSide, settlementHitPoints);
             var attacker = attackerSide.LeaderParty;
-            if (attacker != null && attacker.LeaderHero != null)
+            if (attacker is {LeaderHero: { }})
             {
                 var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(attacker.LeaderHero);
                 if (education.HasPerk(BKPerks.Instance.OutlawPlunderer))
@@ -24,7 +24,7 @@ namespace BannerKings.Models.Vanilla
 
             var defender = attackerSide.MapEvent.DefenderSide;
             Settlement settlement = null;
-            if (defender.Parties != null && defender.Parties.Count > 0)
+            if (defender.Parties is {Count: > 0})
             {
                 settlement = defender.Parties[0].Party.Settlement;
             }

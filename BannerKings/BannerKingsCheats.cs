@@ -27,10 +27,7 @@ namespace BannerKings
             }
 
             var civillians = MBObjectManager.Instance.GetObjectTypeList<CharacterObject>().ToList()
-                .FindAll(x => x.StringId.Contains("craftsman_") || x.StringId == "noble_empire" ||
-                              x.StringId == "noble_vlandia" ||
-                              x.StringId == "noble_sturgia" || x.StringId == "noble_aserai" ||
-                              x.StringId == "noble_khuzait" || x.StringId == "noble_battania");
+                .FindAll(x => x.StringId.Contains("craftsman_") || x.StringId is "noble_empire" or "noble_vlandia" or "noble_sturgia" or "noble_aserai" or "noble_khuzait" or "noble_battania");
 
             foreach (var party in MobileParty.All)
             {

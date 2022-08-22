@@ -30,7 +30,7 @@ namespace BannerKings.Behaviours
             EndCaptivityDetail detail)
         {
             var playerKingdom = Clan.PlayerClan.Kingdom;
-            var releasedKingdom = released.Clan != null ? released.Clan.Kingdom : null;
+            var releasedKingdom = released.Clan?.Kingdom;
             if (detail != EndCaptivityDetail.Ransom || playerKingdom == null || releasedKingdom == null ||
                 playerKingdom != releasedKingdom || BannerKingsConfig.Instance.TitleManager == null)
             {

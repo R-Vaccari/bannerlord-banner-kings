@@ -36,8 +36,7 @@ namespace BannerKings.UI.Court
         {
             base.RefreshValues();
             var currentCouncil = council.GetMembers();
-            var newList = new MBBindingList<SettlementGovernorSelectionItemVM>();
-            newList.Add(AvailableGovernors[0]);
+            var newList = new MBBindingList<SettlementGovernorSelectionItemVM> {AvailableGovernors[0]};
             var councilPosition = council.GetCouncilMember(Position);
             foreach (var hero in courtMembers)
             {

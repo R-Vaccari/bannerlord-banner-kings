@@ -76,7 +76,7 @@ namespace BannerKings.Models.Vanilla
                         starvation *= -0.5f;
                     }
 
-                    if (stabilityImpact <= 0f && stabilityImpact > -1f)
+                    if (stabilityImpact is <= 0f and > -1f)
                     {
                         starvation = -1f;
                     }

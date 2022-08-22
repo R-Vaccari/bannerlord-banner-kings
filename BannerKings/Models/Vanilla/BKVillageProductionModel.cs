@@ -135,17 +135,17 @@ namespace BannerKings.Models.Vanilla
             var result = new ExplainedNumber();
             result.LimitMin(0f);
             result.LimitMax(200f);
-            if (serfs < 0f || float.IsNaN(serfs))
+            if (serfs is < 0f or Single.NaN)
             {
                 serfs = 1f;
             }
 
-            if (slaves < 0f || float.IsNaN(slaves))
+            if (slaves is < 0f or Single.NaN)
             {
                 slaves = 1f;
             }
 
-            if (item.StringId == "hardwood" || item.StringId == "fur")
+            if (item.StringId is "hardwood" or "fur")
             {
                 var acres = data.Woodland;
                 var maxWorkforce = acres / data.GetRequiredLabor("wood");
@@ -185,8 +185,7 @@ namespace BannerKings.Models.Vanilla
             {
                 result.Add(serfs * (item.IsFood ? BOOSTED_PRODUCTION : PRODUCTION));
                 result.Add(slaves *
-                           (item.StringId == "clay" || item.StringId == "iron" || item.StringId == "salt" ||
-                            item.StringId == "silver"
+                           (item.StringId is "clay" or "iron" or "salt" or "silver"
                                ? BOOSTED_PRODUCTION
                                : PRODUCTION));
             }

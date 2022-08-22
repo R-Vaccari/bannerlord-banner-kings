@@ -338,10 +338,12 @@ namespace BannerKings.UI.Education
             }
 
             var results = BannerKingsConfig.Instance.EducationManager.GetAvailableLanguagesToLearn(hero);
-            var elements = new List<InquiryElement>();
-            elements.Add(new InquiryElement(new ValueTuple<Language, Hero>(),
-                new TextObject("{=!}None").ToString(),
-                null));
+            var elements = new List<InquiryElement>
+            {
+                new InquiryElement(new ValueTuple<Language, Hero>(),
+                    new TextObject("{=!}None").ToString(),
+                    null)
+            };
 
             foreach (var tuple in results)
             {
@@ -399,10 +401,12 @@ namespace BannerKings.UI.Education
             }
 
             var books = BannerKingsConfig.Instance.EducationManager.GetAvailableBooks(hero.PartyBelongedTo);
-            var elements = new List<InquiryElement>();
-            elements.Add(new InquiryElement(null,
-                new TextObject("{=!}None").ToString(),
-                null));
+            var elements = new List<InquiryElement>
+            {
+                new InquiryElement(null,
+                    new TextObject("{=!}None").ToString(),
+                    null)
+            };
 
             foreach (var book in books)
             {
@@ -449,10 +453,12 @@ namespace BannerKings.UI.Education
         private void SelectLifestyle()
         {
             var lfs = BannerKingsConfig.Instance.EducationManager.GetViableLifestyles(hero);
-            var elements = new List<InquiryElement>();
-            elements.Add(new InquiryElement(null,
-                new TextObject("{=!}None").ToString(),
-                null));
+            var elements = new List<InquiryElement>
+            {
+                new InquiryElement(null,
+                    new TextObject("{=!}None").ToString(),
+                    null)
+            };
 
             foreach (var lf in lfs)
             {

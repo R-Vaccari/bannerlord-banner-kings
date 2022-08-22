@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using BannerKings.Managers;
 using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Institutions.Religions.Faiths.Rites;
 using BannerKings.Models.BKModels;
@@ -17,6 +18,8 @@ namespace BannerKings.Behaviours
 {
     public class BKReligionsBehavior : CampaignBehaviorBase
     {
+        private static ReligionsManager ReligionsManager => BannerKingsConfig.Instance.ReligionsManager;
+
         private Divinity selectedDivinity;
         private Rite selectedRite;
 
@@ -41,24 +44,21 @@ namespace BannerKings.Behaviours
 
         private void OnGameLoaded(CampaignGameStarter starter)
         {
-            BannerKingsConfig.Instance.ReligionsManager.PostInitialize();
+            ReligionsManager.PostInitialize();
         }
 
-        private void OnHeroKilled(Hero victim, Hero killer, KillCharacterAction.KillCharacterActionDetail detail,
-            bool showNotification = true)
+        private void OnHeroKilled(Hero victim, Hero killer, KillCharacterAction.KillCharacterActionDetail detail, bool showNotification = true)
         {
-            BannerKingsConfig.Instance.ReligionsManager.RemoveHero(victim);
+            ReligionsManager.RemoveHero(victim);
         }
 
         private void DailyTick()
         {
-            var model = (BKPietyModel) BannerKingsConfig.Instance.Models.First(x =>
-                x.GetType() == typeof(BKPietyModel));
-            foreach (var religion in BannerKingsConfig.Instance.ReligionsManager.GetReligions())
-            foreach (var hero in BannerKingsConfig.Instance.ReligionsManager.GetFaithfulHeroes(religion))
+            var model = (BKPietyModel) BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(BKPietyModel));
+            foreach (var religion in ReligionsManager.GetReligions())
+            foreach (var hero in ReligionsManager.GetFaithfulHeroes(religion))
             {
-                BannerKingsConfig.Instance.ReligionsManager.AddPiety(religion, hero,
-                    model.CalculateEffect(hero).ResultNumber);
+                ReligionsManager.AddPiety(religion, hero, model.CalculateEffect(hero).ResultNumber);
             }
         }
 
@@ -68,15 +68,13 @@ namespace BannerKings.Behaviours
 
         private void OnSettlementEntered(MobileParty party, Settlement target, Hero hero)
         {
-            if (hero != Hero.MainHero || target.Town == null ||
-                BannerKingsConfig.Instance.PopulationManager == null ||
-                !BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(target))
+            if (hero != Hero.MainHero || target.Town == null || BannerKingsConfig.Instance.PopulationManager == null || !BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(target))
             {
                 return;
             }
 
             var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(target).ReligionData;
-            if (data == null || data.Clergyman == null)
+            if (data?.Clergyman == null)
             {
                 return;
             }
@@ -213,10 +211,7 @@ namespace BannerKings.Behaviours
             starter.AddPlayerLine("bk_rite_confirm", "bk_rite_confirm", "hero_main_options", "{=!}See it done.",
                 null, () =>
                 {
-                    if (selectedRite != null)
-                    {
-                        selectedRite.Complete(Hero.MainHero);
-                    }
+                    selectedRite?.Complete(Hero.MainHero);
                 });
             starter.AddPlayerLine("bk_rite_confirm", "bk_rite_confirm", "hero_main_options",
                 "{=D33fIGQe}Never mind.",
@@ -225,10 +220,9 @@ namespace BannerKings.Behaviours
 
         private bool InductionOnClickable(out TextObject hintText)
         {
-            var clergyman =
-                BannerKingsConfig.Instance.ReligionsManager.GetClergymanFromHeroHero(Hero.OneToOneConversationHero);
-            var religion = BannerKingsConfig.Instance.ReligionsManager.GetClergymanReligion(clergyman);
-            var playerReligion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(Hero.MainHero);
+            var clergyman = ReligionsManager.GetClergymanFromHeroHero(Hero.OneToOneConversationHero);
+            var religion = ReligionsManager.GetClergymanReligion(clergyman);
+            var playerReligion = ReligionsManager.GetHeroReligion(Hero.MainHero);
 
             if (playerReligion.Faith.GetId() == religion.Faith.GetId())
             {
@@ -252,21 +246,14 @@ namespace BannerKings.Behaviours
 
         private void BlessingPositiveAnswerOnConsequence()
         {
-            var list = new List<InquiryElement>();
-            var religion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(Hero.MainHero);
-            var piety = BannerKingsConfig.Instance.ReligionsManager.GetPiety(religion, Hero.MainHero);
+            var religion = ReligionsManager.GetHeroReligion(Hero.MainHero);
+            var piety = ReligionsManager.GetPiety(religion, Hero.MainHero);
 
-            foreach (var div in religion.Faith.GetSecondaryDivinities())
-            {
-                list.Add(new InquiryElement(div,
-                    div.Name.ToString(),
-                    null,
-                    piety >= div.BlessingCost,
-                    new TextObject("{=!}{DESCRIPTION}\n{EFFECTS}")
-                        .SetTextVariable("DESCRIPTION", div.Description)
-                        .SetTextVariable("EFFECTS", div.Effects)
-                        .ToString()));
-            }
+            var list = religion.Faith.GetSecondaryDivinities()
+                .Select(div => new InquiryElement(div, div.Name.ToString(), null, piety >= div.BlessingCost, new TextObject("{=!}{DESCRIPTION}\n{EFFECTS}").SetTextVariable("DESCRIPTION", div.Description)
+                    .SetTextVariable("EFFECTS", div.Effects)
+                    .ToString()))
+                .ToList();
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                 religion.Faith.GetSecondaryDivinitiesDescription().ToString(),
@@ -289,17 +276,16 @@ namespace BannerKings.Behaviours
         private void BlessingConfirmOnConsequence()
         {
             var clergyman =
-                BannerKingsConfig.Instance.ReligionsManager.GetClergymanFromHeroHero(Hero.OneToOneConversationHero);
-            var religion = BannerKingsConfig.Instance.ReligionsManager.GetClergymanReligion(clergyman);
-            BannerKingsConfig.Instance.ReligionsManager.AddBlessing(selectedDivinity, Hero.MainHero, religion);
+                ReligionsManager.GetClergymanFromHeroHero(Hero.OneToOneConversationHero);
+            var religion = ReligionsManager.GetClergymanReligion(clergyman);
+            ReligionsManager.AddBlessing(selectedDivinity, Hero.MainHero, religion);
         }
 
         private bool BlessingOnClickable(out TextObject hintText)
         {
-            var clergyman =
-                BannerKingsConfig.Instance.ReligionsManager.GetClergymanFromHeroHero(Hero.OneToOneConversationHero);
-            var religion = BannerKingsConfig.Instance.ReligionsManager.GetClergymanReligion(clergyman);
-            var playerReligion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(Hero.MainHero);
+            var clergyman = ReligionsManager.GetClergymanFromHeroHero(Hero.OneToOneConversationHero);
+            var religion = ReligionsManager.GetClergymanReligion(clergyman);
+            var playerReligion = ReligionsManager.GetHeroReligion(Hero.MainHero);
 
             if (religion.Faith.GetId() != playerReligion.Faith.GetId())
             {
@@ -308,7 +294,7 @@ namespace BannerKings.Behaviours
                 return false;
             }
 
-            var piety = BannerKingsConfig.Instance.ReligionsManager.GetPiety(playerReligion, Hero.MainHero);
+            var piety = ReligionsManager.GetPiety(playerReligion, Hero.MainHero);
             var minPiety = 500f;
             var anyPossible = false;
             foreach (var divinity in religion.Faith.GetSecondaryDivinities())
@@ -339,8 +325,8 @@ namespace BannerKings.Behaviours
         private void BlessingOnConsequence()
         {
             var clergyman =
-                BannerKingsConfig.Instance.ReligionsManager.GetClergymanFromHeroHero(Hero.OneToOneConversationHero);
-            var religion = BannerKingsConfig.Instance.ReligionsManager.GetClergymanReligion(clergyman);
+                ReligionsManager.GetClergymanFromHeroHero(Hero.OneToOneConversationHero);
+            var religion = ReligionsManager.GetClergymanReligion(clergyman);
 
             MBTextManager.SetTextVariable("CLERGYMAN_BLESSING_CONFIRM", religion.Faith.GetBlessingConfirmQuestion());
             MBTextManager.SetTextVariable("CLERGYMAN_BLESSING_QUESTION", religion.Faith.GetBlessingQuestion());
@@ -349,9 +335,9 @@ namespace BannerKings.Behaviours
         private bool RitesOnClickable(out TextObject hintText)
         {
             var clergyman =
-                BannerKingsConfig.Instance.ReligionsManager.GetClergymanFromHeroHero(Hero.OneToOneConversationHero);
-            var religion = BannerKingsConfig.Instance.ReligionsManager.GetClergymanReligion(clergyman);
-            var playerReligion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(Hero.MainHero);
+                ReligionsManager.GetClergymanFromHeroHero(Hero.OneToOneConversationHero);
+            var religion = ReligionsManager.GetClergymanReligion(clergyman);
+            var playerReligion = ReligionsManager.GetHeroReligion(Hero.MainHero);
 
             if (religion.Faith.GetId() != playerReligion.Faith.GetId())
             {
@@ -360,16 +346,7 @@ namespace BannerKings.Behaviours
                 return false;
             }
 
-            var anyPossible = false;
-            foreach (var rite in religion.Rites)
-            {
-                if (rite.MeetsCondition(Hero.MainHero))
-                {
-                    anyPossible = true;
-                    break;
-                }
-            }
-
+            var anyPossible = religion.Rites.Any(rite => rite.MeetsCondition(Hero.MainHero));
             if (!anyPossible)
             {
                 hintText = new TextObject("{=!}No rite is currently possible to perform.");
@@ -382,15 +359,10 @@ namespace BannerKings.Behaviours
 
         private void RitesPositiveAnswerOnConsequence()
         {
-            var list = new List<InquiryElement>();
-            var religion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(Hero.MainHero);
-            var piety = BannerKingsConfig.Instance.ReligionsManager.GetPiety(religion, Hero.MainHero);
+            var religion = ReligionsManager.GetHeroReligion(Hero.MainHero);
+            var piety = ReligionsManager.GetPiety(religion, Hero.MainHero);
 
-            foreach (var rite in religion.Rites)
-            {
-                list.Add(new InquiryElement(rite, rite.GetName().ToString(), null, rite.MeetsCondition(Hero.MainHero),
-                    rite.GetDescription().ToString()));
-            }
+            var list = religion.Rites.Select(rite => new InquiryElement(rite, rite.GetName().ToString(), null, rite.MeetsCondition(Hero.MainHero), rite.GetDescription().ToString())).ToList();
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                 religion.Faith.GetSecondaryDivinitiesDescription().ToString(),
@@ -409,9 +381,8 @@ namespace BannerKings.Behaviours
 
         private void RitesOnConsequence()
         {
-            var clergyman =
-                BannerKingsConfig.Instance.ReligionsManager.GetClergymanFromHeroHero(Hero.OneToOneConversationHero);
-            var religion = BannerKingsConfig.Instance.ReligionsManager.GetClergymanReligion(clergyman);
+            var clergyman = ReligionsManager.GetClergymanFromHeroHero(Hero.OneToOneConversationHero);
+            var religion = ReligionsManager.GetClergymanReligion(clergyman);
 
             var faithText = new TextObject("{=!}{FAITH} teaches us that we may perform {RITES}.");
             var riteText =
@@ -434,46 +405,49 @@ namespace BannerKings.Behaviours
         private bool CanPerformRite(RiteType rite)
         {
             var possible = false;
-            var clergyman =
-                BannerKingsConfig.Instance.ReligionsManager.GetClergymanFromHeroHero(Hero.OneToOneConversationHero);
-            if (clergyman != null)
+            var clergyman = ReligionsManager.GetClergymanFromHeroHero(Hero.OneToOneConversationHero);
+            if (clergyman == null)
             {
-                var religion = BannerKingsConfig.Instance.ReligionsManager.GetClergymanReligion(clergyman);
-                if (religion != null)
-                {
-                    possible = religion.Rites.Any(x => x.GetRiteType() == rite);
-                }
+                return false;
+            }
+
+            var religion = ReligionsManager.GetClergymanReligion(clergyman);
+            if (religion != null)
+            {
+                possible = religion.Rites.Any(x => x.GetRiteType() == rite);
             }
 
             return possible;
         }
 
-        private bool IsPreacher()
+        private static bool IsPreacher()
         {
             return Hero.OneToOneConversationHero.IsPreacher &&
                    BannerKingsConfig.Instance.ReligionsManager != null &&
-                   BannerKingsConfig.Instance.ReligionsManager.IsPreacher(Hero.OneToOneConversationHero);
+                   ReligionsManager.IsPreacher(Hero.OneToOneConversationHero);
         }
 
         private bool OnConditionClergymanGreeting()
         {
-            if (IsPreacher())
+            if (!IsPreacher())
             {
-                InitializePreacherTexts();
-                return true;
+                return false;
             }
 
-            return false;
+            InitializePreacherTexts();
+            return true;
+
         }
 
         private void InitializePreacherTexts()
         {
             var clergyman =
-                BannerKingsConfig.Instance.ReligionsManager.GetClergymanFromHeroHero(Hero.OneToOneConversationHero);
-            var religion = BannerKingsConfig.Instance.ReligionsManager.GetClergymanReligion(clergyman);
-            var greeting = BannerKingsConfig.Instance.ReligionsManager.IsReligionMember(Hero.MainHero, religion)
+                ReligionsManager.GetClergymanFromHeroHero(Hero.OneToOneConversationHero);
+            var religion = ReligionsManager.GetClergymanReligion(clergyman);
+            var greeting = ReligionsManager.IsReligionMember(Hero.MainHero, religion)
                 ? religion.Faith.GetClergyGreetingInducted(clergyman.Rank)
                 : religion.Faith.GetClergyGreeting(clergyman.Rank);
+
             MBTextManager.SetTextVariable("CLERGYMAN_GREETING", greeting);
             MBTextManager.SetTextVariable("CLERGYMAN_PREACHING",
                 religion.Faith.GetClergyPreachingAnswer(clergyman.Rank));
@@ -495,89 +469,83 @@ namespace BannerKings.Behaviours
 
     namespace Patches
     {
-        /*[HarmonyPatch(typeof(Hero), "IsNotable", MethodType.Getter)]
-        class IsNotablePatch
-        {
-            static void Postfix(Hero __instance, ref bool __result)
-            {
-                if (BannerKingsConfig.Instance.ReligionsManager != null && __instance.IsPreacher && BannerKingsConfig.Instance.ReligionsManager.IsPreacher(__instance))
-                {
-                    Religion religion = BannerKingsConfig.Instance.ReligionsManager.GetClergymanReligion(BannerKingsConfig.Instance.ReligionsManager.GetClergymanFromHeroHero(__instance));
-                    __result = religion.Doctrines.Contains("druidism");
-                }
-            }
-        } */
-
-
-        [HarmonyPatch(typeof(LordConversationsCampaignBehavior),
-            "conversation_puritan_preacher_introduction_on_condition")]
+        [HarmonyPatch(typeof(LordConversationsCampaignBehavior), "conversation_puritan_preacher_introduction_on_condition")]
         internal class PuritanPreacherPatch
         {
             private static void Postfix(ref bool __result)
             {
-                if (BannerKingsConfig.Instance.ReligionsManager != null)
+                if (BannerKingsConfig.Instance.ReligionsManager == null)
                 {
-                    if (Hero.OneToOneConversationHero.IsPreacher)
-                    {
-                        var bannerKings =
-                            BannerKingsConfig.Instance.ReligionsManager.IsPreacher(Hero.OneToOneConversationHero);
-                        __result = !bannerKings;
-                    }
+                    return;
                 }
+
+                if (!Hero.OneToOneConversationHero.IsPreacher)
+                {
+                    return;
+                }
+
+                var bannerKings = BannerKingsConfig.Instance.ReligionsManager.IsPreacher(Hero.OneToOneConversationHero);
+                __result = !bannerKings;
             }
         }
 
-        [HarmonyPatch(typeof(LordConversationsCampaignBehavior),
-            "conversation_minor_faction_preacher_introduction_on_condition")]
+        [HarmonyPatch(typeof(LordConversationsCampaignBehavior), "conversation_minor_faction_preacher_introduction_on_condition")]
         internal class MinorFactionPreacherPatch
         {
             private static void Postfix(ref bool __result)
             {
-                if (BannerKingsConfig.Instance.ReligionsManager != null)
+                if (BannerKingsConfig.Instance.ReligionsManager == null)
                 {
-                    if (Hero.OneToOneConversationHero.IsPreacher)
-                    {
-                        var bannerKings =
-                            BannerKingsConfig.Instance.ReligionsManager.IsPreacher(Hero.OneToOneConversationHero);
-                        __result = !bannerKings;
-                    }
+                    return;
                 }
+
+                if (!Hero.OneToOneConversationHero.IsPreacher)
+                {
+                    return;
+                }
+
+                var bannerKings = BannerKingsConfig.Instance.ReligionsManager.IsPreacher(Hero.OneToOneConversationHero);
+                __result = !bannerKings;
             }
         }
 
-        [HarmonyPatch(typeof(LordConversationsCampaignBehavior),
-            "conversation_mystic_preacher_introduction_on_condition")]
+        [HarmonyPatch(typeof(LordConversationsCampaignBehavior), "conversation_mystic_preacher_introduction_on_condition")]
         internal class MysticPreacherPatch
         {
             private static void Postfix(ref bool __result)
             {
-                if (BannerKingsConfig.Instance.ReligionsManager != null)
+                if (BannerKingsConfig.Instance.ReligionsManager == null)
                 {
-                    if (Hero.OneToOneConversationHero.IsPreacher)
-                    {
-                        var bannerKings =
-                            BannerKingsConfig.Instance.ReligionsManager.IsPreacher(Hero.OneToOneConversationHero);
-                        __result = !bannerKings;
-                    }
+                    return;
                 }
+
+                if (!Hero.OneToOneConversationHero.IsPreacher)
+                {
+                    return;
+                }
+
+                var bannerKings = BannerKingsConfig.Instance.ReligionsManager.IsPreacher(Hero.OneToOneConversationHero);
+                __result = !bannerKings;
             }
         }
 
-        [HarmonyPatch(typeof(LordConversationsCampaignBehavior),
-            "conversation_messianic_preacher_introduction_on_condition")]
+        [HarmonyPatch(typeof(LordConversationsCampaignBehavior), "conversation_messianic_preacher_introduction_on_condition")]
         internal class MessianicPatch
         {
             private static void Postfix(ref bool __result)
             {
-                if (BannerKingsConfig.Instance.ReligionsManager != null)
+                if (BannerKingsConfig.Instance.ReligionsManager == null)
                 {
-                    if (Hero.OneToOneConversationHero.IsPreacher)
-                    {
-                        var bannerKings =
-                            BannerKingsConfig.Instance.ReligionsManager.IsPreacher(Hero.OneToOneConversationHero);
-                        __result = !bannerKings;
-                    }
+                    return;
                 }
+
+                if (!Hero.OneToOneConversationHero.IsPreacher)
+                {
+                    return;
+                }
+
+                var bannerKings = BannerKingsConfig.Instance.ReligionsManager.IsPreacher(Hero.OneToOneConversationHero);
+                __result = !bannerKings;
             }
         }
     }

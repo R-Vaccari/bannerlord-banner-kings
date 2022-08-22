@@ -14,7 +14,7 @@ namespace BannerKings.Models.Vanilla
         {
             var result = base.GetConstructionProgressPerHour(type, siegeEvent, side);
             var effectiveSiegePartyForSide = GetEffectiveSiegePartyForSide(siegeEvent, side.BattleSide);
-            if (effectiveSiegePartyForSide != null && effectiveSiegePartyForSide.LeaderHero != null)
+            if (effectiveSiegePartyForSide is {LeaderHero: { }})
             {
                 var data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(effectiveSiegePartyForSide
                     .LeaderHero);
@@ -64,7 +64,7 @@ namespace BannerKings.Models.Vanilla
             var baseResult = base.GetSiegeEngineDamage(siegeEvent, battleSide, siegeEngine, target);
             var party = GetEffectiveSiegePartyForSide(siegeEvent, battleSide);
 
-            if (party != null && party.LeaderHero != null)
+            if (party is {LeaderHero: { }})
             {
                 var data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(party.LeaderHero);
                 if (battleSide == BattleSideEnum.Attacker && target == SiegeBombardTargets.Wall &&

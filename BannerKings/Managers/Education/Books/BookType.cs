@@ -19,8 +19,7 @@ namespace BannerKings.Managers.Education.Books
 
         public BookUse Use { get; private set; }
 
-        public void Initialize(ItemObject bookItem, TextObject description, Language language, BookUse bookUse,
-            SkillObject skill = null)
+        public void Initialize(ItemObject bookItem, TextObject description, Language language, BookUse bookUse, SkillObject skill = null)
         {
             Initialize(null, description);
             Item = bookItem;

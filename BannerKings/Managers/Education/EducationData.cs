@@ -12,7 +12,6 @@ using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Managers.Education
 {
-
     public class EducationData : BannerKingsData
     {
         private const float LANGUAGE_RATE = 1f / (CampaignTime.DaysInYear * 5f);
@@ -44,10 +43,7 @@ namespace BannerKings.Managers.Education
         {
             get
             {
-                if (gainedPerks == null)
-                {
-                    gainedPerks = new List<PerkObject>();
-                }
+                gainedPerks ??= new List<PerkObject>();
 
                 return gainedPerks.GetReadOnlyList();
             }
@@ -90,12 +86,9 @@ namespace BannerKings.Managers.Education
         public MBReadOnlyDictionary<Language, float> Languages => languages.GetReadOnlyDictionary();
         public MBReadOnlyDictionary<BookType, float> Books => books.GetReadOnlyDictionary();
 
-        public ExplainedNumber CurrentLanguageLearningRate =>
-            BannerKingsConfig.Instance.EducationModel.CalculateLanguageLearningRate(hero, LanguageInstructor,
-                CurrentLanguage);
+        public ExplainedNumber CurrentLanguageLearningRate => BannerKingsConfig.Instance.EducationModel.CalculateLanguageLearningRate(hero, LanguageInstructor, CurrentLanguage);
 
-        public ExplainedNumber CurrentBookReadingRate =>
-            BannerKingsConfig.Instance.EducationModel.CalculateBookReadingRate(CurrentBook, hero);
+        public ExplainedNumber CurrentBookReadingRate => BannerKingsConfig.Instance.EducationModel.CalculateBookReadingRate(CurrentBook, hero);
 
         public float StandartLifestyleProgress => 1f / (CampaignTime.DaysInYear * 6f);
 
@@ -105,9 +98,7 @@ namespace BannerKings.Managers.Education
 
             if (lf != null)
             {
-                Lifestyle.Initialize(lf.Name, lf.Description, lf.FirstSkill, lf.SecondSkill, new List<PerkObject>(lf.Perks),
-                    lf.PassiveEffects,
-                    lf.FirstEffect, lf.SecondEffect, lf.Culture);
+                Lifestyle.Initialize(lf.Name, lf.Description, lf.FirstSkill, lf.SecondSkill, new List<PerkObject>(lf.Perks), lf.PassiveEffects, lf.FirstEffect, lf.SecondEffect, lf.Culture);
             }
 
 
@@ -269,10 +260,7 @@ namespace BannerKings.Managers.Education
                 }
             }
 
-            if (Lifestyle != null)
-            {
-                Lifestyle.AddProgress(StandartLifestyleProgress);
-            }
+            Lifestyle?.AddProgress(StandartLifestyleProgress);
         }
     }
 }

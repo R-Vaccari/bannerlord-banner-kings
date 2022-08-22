@@ -11,9 +11,7 @@ namespace BannerKings.Managers.Decisions
 
         public override string GetHint()
         {
-            return new TextObject(
-                    "{=!}Send out a handful of horsemen to scout a large area around the settlement and report enemy movement activities")
-                .ToString();
+            return new TextObject("{=!}Send out a handful of horsemen to scout a large area around the settlement and report enemy movement activities").ToString();
         }
 
         public override string GetIdentifier()

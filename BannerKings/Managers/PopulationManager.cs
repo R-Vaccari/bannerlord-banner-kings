@@ -50,10 +50,7 @@ namespace BannerKings.Managers
         {
             foreach (var data in Populations.Values)
             {
-                if (data.VillageData != null)
-                {
-                    data.VillageData.ReInitializeBuildings();
-                }
+                data.VillageData?.ReInitializeBuildings();
             }
         }
 
@@ -319,7 +316,7 @@ namespace BannerKings.Managers
             if (settlement.IsTown)
             {
                 var prosperityFactor = 0.0001f * settlement.Prosperity + 1f;
-                if (settlement.Owner != null && settlement.Owner.IsFactionLeader)
+                if (settlement.Owner is {IsFactionLeader: true})
                 {
                     prosperityFactor *= 1.2f;
                 }

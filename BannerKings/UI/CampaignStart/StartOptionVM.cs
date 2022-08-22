@@ -59,11 +59,10 @@ namespace BannerKings.UI.CampaignStart
         {
             var list = new List<TooltipProperty>
             {
-                new(string.Empty, Option.Name.ToString(), 0, false, TooltipProperty.TooltipPropertyFlags.Title)
+                new(string.Empty, Option.Name.ToString(), 0, false, TooltipProperty.TooltipPropertyFlags.Title),
+                new TooltipProperty(string.Empty, Option.Description.ToString(), 0, false,
+                    TooltipProperty.TooltipPropertyFlags.MultiLine)
             };
-
-            list.Add(new TooltipProperty(string.Empty, Option.Description.ToString(), 0, false,
-                TooltipProperty.TooltipPropertyFlags.MultiLine));
 
             UIHelper.TooltipAddEmptyLine(list);
             list.Add(new TooltipProperty(new TextObject("{=!}Stats").ToString(), " ", 0));

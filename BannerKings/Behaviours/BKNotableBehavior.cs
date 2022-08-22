@@ -252,7 +252,7 @@ namespace BannerKings.Behaviours
         {
             private static bool Prefix(Town __instance)
             {
-                if (__instance.Governor != null && __instance.Governor.IsNotable)
+                if (__instance.Governor is {IsNotable: true})
                 {
                     __instance.Loyalty += __instance.LoyaltyChange;
                     __instance.Security += __instance.SecurityChange;

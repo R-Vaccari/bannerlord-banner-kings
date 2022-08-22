@@ -31,11 +31,7 @@ namespace BannerKings.Managers
             }
 
             var languages = new Dictionary<Language, float>();
-            var native = DefaultLanguages.Instance.All.FirstOrDefault(x => x.Culture == hero.Culture);
-            if (native == null)
-            {
-                native = DefaultLanguages.Instance.Calradian;
-            }
+            var native = DefaultLanguages.Instance.All.FirstOrDefault(x => x.Culture == hero.Culture) ?? DefaultLanguages.Instance.Calradian;
 
             languages.Add(native, 1f);
 
@@ -47,7 +43,7 @@ namespace BannerKings.Managers
                 }
             }
 
-            if (hero.Occupation == Occupation.Lord || hero.Occupation == Occupation.Wanderer)
+            if (hero.Occupation is Occupation.Lord or Occupation.Wanderer)
             {
             }
 
@@ -115,7 +111,7 @@ namespace BannerKings.Managers
         public MBReadOnlyList<ValueTuple<Language, Hero>> GetAvailableLanguagesToLearn(Hero hero)
         {
             var list = new List<(Language, Hero)>();
-            if (hero == null || hero.Clan == null || hero.Occupation != Occupation.Lord)
+            if (hero?.Clan == null || hero.Occupation != Occupation.Lord)
             {
                 goto RETURN;
             }
@@ -169,8 +165,7 @@ namespace BannerKings.Managers
                 return false;
             }
 
-            return hero.GetPerkValue(BKPerks.Instance.ScholarshipLiterate) && BannerKingsConfig.Instance.EducationModel
-                .CalculateBookReadingRate(book, hero).ResultNumber >= 0.2f;
+            return hero.GetPerkValue(BKPerks.Instance.ScholarshipLiterate) && BannerKingsConfig.Instance.EducationModel.CalculateBookReadingRate(book, hero).ResultNumber >= 0.2f;
         }
 
         public void RemoveHero(Hero hero)
@@ -231,16 +226,7 @@ namespace BannerKings.Managers
 
         public MBReadOnlyList<Lifestyle> GetViableLifestyles(Hero hero)
         {
-            var list = new List<Lifestyle>();
-            foreach (var lf in DefaultLifestyles.Instance.All)
-            {
-                if (lf.Culture == null || lf.Culture == hero.Culture)
-                {
-                    list.Add(lf);
-                }
-            }
-
-            return list.GetReadOnlyList();
+            return DefaultLifestyles.Instance.All.Where(lf => lf.Culture == null || lf.Culture == hero.Culture).ToList().GetReadOnlyList();
         }
 
         public MBReadOnlyList<BookType> GetAvailableBooks(MobileParty party)
@@ -248,39 +234,42 @@ namespace BannerKings.Managers
             var list = new List<BookType>();
             if (party == null)
             {
-                goto RETURN;
+                return list.GetReadOnlyList();
             }
 
             foreach (var element in party.ItemRoster)
             {
-                if (element.EquipmentElement.Item != null && element.EquipmentElement.Item.StringId.Contains("book"))
+                if (element.EquipmentElement.Item == null || !element.EquipmentElement.Item.StringId.Contains("book"))
                 {
-                    var type = DefaultBookTypes.Instance.All.FirstOrDefault(x => x.Item == element.EquipmentElement.Item);
-                    if (type != null && !list.Contains(type))
-                    {
-                        list.Add(type);
-                    }
+                    continue;
+                }
+
+                var type = DefaultBookTypes.Instance.All.FirstOrDefault(x => x.Item == element.EquipmentElement.Item);
+                if (type != null && !list.Contains(type))
+                {
+                    list.Add(type);
                 }
             }
 
-            if (party.CurrentSettlement != null && party.LeaderHero != null &&
-                party.CurrentSettlement.OwnerClan == party.LeaderHero.Clan)
+            if (party.CurrentSettlement == null || party.LeaderHero == null || party.CurrentSettlement.OwnerClan != party.LeaderHero.Clan)
             {
-                foreach (var element in party.CurrentSettlement.Stash)
+                return list.GetReadOnlyList();
+            }
+            
+            foreach (var element in party.CurrentSettlement.Stash)
+            {
+                if (element.EquipmentElement.Item == null || !element.EquipmentElement.Item.StringId.Contains("book"))
                 {
-                    if (element.EquipmentElement.Item != null && element.EquipmentElement.Item.StringId.Contains("book"))
-                    {
-                        var type = DefaultBookTypes.Instance.All.FirstOrDefault(
-                            x => x.Item == element.EquipmentElement.Item);
-                        if (type != null && !list.Contains(type))
-                        {
-                            list.Add(type);
-                        }
-                    }
+                    continue;
+                }
+
+                var type = DefaultBookTypes.Instance.All.FirstOrDefault(x => x.Item == element.EquipmentElement.Item);
+                if (type != null && !list.Contains(type))
+                {
+                    list.Add(type);
                 }
             }
 
-            RETURN:
             return list.GetReadOnlyList();
         }
     }

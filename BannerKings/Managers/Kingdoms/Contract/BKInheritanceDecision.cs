@@ -118,17 +118,12 @@ namespace BannerKings.Managers.Kingdoms.Contract
 
         private float[] GetWeights()
         {
-            if (inheritanceType == InheritanceType.Primogeniture)
+            return inheritanceType switch
             {
-                return new[] {4f, 2f, -2f};
-            }
-
-            if (inheritanceType == InheritanceType.Ultimogeniture)
-            {
-                return new[] {-1f, 1f, 2f};
-            }
-
-            return new[] {-3f, 2f, 5f};
+                InheritanceType.Primogeniture => new[] {4f, 2f, -2f},
+                InheritanceType.Ultimogeniture => new[] {-1f, 1f, 2f},
+                _ => new[] {-3f, 2f, 5f}
+            };
         }
 
         public override TextObject GetChooseDescription()
@@ -175,16 +170,16 @@ namespace BannerKings.Managers.Kingdoms.Contract
             else
             {
                 textObject.SetTextVariable("POLICY_SUPPORT", "{=bqEO389P}This decision caused a split in the council.");
-                if (supportStatus == SupportStatus.Majority)
+                switch (supportStatus)
                 {
-                    textObject.SetTextVariable("POLICY_SUPPORT",
-                        "{=3W67kdtc}This decision had the support of the council.");
-                }
-
-                if (supportStatus == SupportStatus.Minority)
-                {
-                    textObject.SetTextVariable("POLICY_SUPPORT",
-                        "{=b6MgRYlM}This decision was rejected by the support of the council.");
+                    case SupportStatus.Majority:
+                        textObject.SetTextVariable("POLICY_SUPPORT",
+                            "{=3W67kdtc}This decision had the support of the council.");
+                        break;
+                    case SupportStatus.Minority:
+                        textObject.SetTextVariable("POLICY_SUPPORT",
+                            "{=b6MgRYlM}This decision was rejected by the support of the council.");
+                        break;
                 }
             }
 

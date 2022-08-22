@@ -106,24 +106,15 @@ namespace BannerKings.Managers
             var decisions = new List<BannerKingsDecision>();
             if (settlement.IsVillage)
             {
-                foreach (var id in VillageDecisions)
-                {
-                    decisions.Add(GenerateDecision(settlement, id));
-                }
+                decisions.AddRange(VillageDecisions.Select(id => GenerateDecision(settlement, id)));
             }
             else if (settlement.IsCastle)
             {
-                foreach (var id in CastleDecisions)
-                {
-                    decisions.Add(GenerateDecision(settlement, id));
-                }
+                decisions.AddRange(CastleDecisions.Select(id => GenerateDecision(settlement, id)));
             }
             else if (settlement.IsTown)
             {
-                foreach (var id in TownDecisions)
-                {
-                    decisions.Add(GenerateDecision(settlement, id));
-                }
+                decisions.AddRange(TownDecisions.Select(id => GenerateDecision(settlement, id)));
             }
 
             SettlementDecisions.Add(settlement, decisions);
@@ -185,8 +176,7 @@ namespace BannerKings.Managers
             else
             {
                 result = GeneratePolicy(settlement, policyType);
-                var set = new List<BannerKingsPolicy>();
-                set.Add(result);
+                var set = new List<BannerKingsPolicy> {result};
                 SettlementPolicies.Add(settlement, set);
             }
 
@@ -200,72 +190,30 @@ namespace BannerKings.Managers
 
         public BannerKingsDecision GenerateDecision(Settlement settlement, string policyType)
         {
-            if (policyType == "decision_militia_subsidize")
+            return policyType switch
             {
-                return new BKSubsidizeMilitiaDecision(settlement, false);
-            }
-
-            if (policyType == "decision_militia_encourage")
-            {
-                return new BKEncourageMilitiaDecision(settlement, false);
-            }
-
-            if (policyType == "decision_ration")
-            {
-                return new BKRationDecision(settlement, false);
-            }
-
-            if (policyType == "decision_tariff_exempt")
-            {
-                return new BKExemptTariffDecision(settlement, false);
-            }
-
-            if (policyType == "decision_foreigner_ban")
-            {
-                return new BKBanForeignersDecision(settlement, false);
-            }
-
-            if (policyType == "decision_slaves_tax")
-            {
-                return new BKTaxSlavesDecision(settlement, false);
-            }
-
-            if (policyType == "decision_mercantilism")
-            {
-                return new BKEncourageMercantilism(settlement, false);
-            }
-
-            return new BKExportSlavesDecision(settlement, true);
+                "decision_militia_subsidize" => new BKSubsidizeMilitiaDecision(settlement, false),
+                "decision_militia_encourage" => new BKEncourageMilitiaDecision(settlement, false),
+                "decision_ration" => new BKRationDecision(settlement, false),
+                "decision_tariff_exempt" => new BKExemptTariffDecision(settlement, false),
+                "decision_foreigner_ban" => new BKBanForeignersDecision(settlement, false),
+                "decision_slaves_tax" => new BKTaxSlavesDecision(settlement, false),
+                "decision_mercantilism" => new BKEncourageMercantilism(settlement, false),
+                _ => new BKExportSlavesDecision(settlement, true)
+            };
         }
 
         public BannerKingsPolicy GeneratePolicy(Settlement settlement, string policyType)
         {
-            if (policyType == "garrison")
+            return policyType switch
             {
-                return new BKGarrisonPolicy(GarrisonPolicy.Standard, settlement);
-            }
-
-            if (policyType == "militia")
-            {
-                return new BKMilitiaPolicy(MilitiaPolicy.Balanced, settlement);
-            }
-
-            if (policyType == "tax")
-            {
-                return new BKTaxPolicy(BKTaxPolicy.TaxType.Standard, settlement);
-            }
-
-            if (policyType == "workforce")
-            {
-                return new BKWorkforcePolicy(BKWorkforcePolicy.WorkforcePolicy.None, settlement);
-            }
-
-            if (policyType == "draft")
-            {
-                return new BKDraftPolicy(BKDraftPolicy.DraftPolicy.Standard, settlement);
-            }
-
-            return new BKCriminalPolicy(CriminalPolicy.Enslavement, settlement);
+                "garrison" => new BKGarrisonPolicy(GarrisonPolicy.Standard, settlement),
+                "militia" => new BKMilitiaPolicy(MilitiaPolicy.Balanced, settlement),
+                "tax" => new BKTaxPolicy(BKTaxPolicy.TaxType.Standard, settlement),
+                "workforce" => new BKWorkforcePolicy(BKWorkforcePolicy.WorkforcePolicy.None, settlement),
+                "draft" => new BKDraftPolicy(BKDraftPolicy.DraftPolicy.Standard, settlement),
+                _ => new BKCriminalPolicy(CriminalPolicy.Enslavement, settlement)
+            };
         }
 
         private void AddSettlementPolicy(Settlement settlement)
@@ -305,7 +253,7 @@ namespace BannerKings.Managers
                 decision = SettlementDecisions[settlement].FirstOrDefault(x => x.GetIdentifier() == type);
             }
 
-            return decision != null ? decision.Enabled : false;
+            return decision?.Enabled ?? false;
         }
 
         public void UpdateSettlementDecision(Settlement settlement, BannerKingsDecision decision)

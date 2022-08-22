@@ -110,7 +110,7 @@ namespace BannerKings.Models.Vanilla
                 FactionManager.GetEnemyKingdoms(clan.Kingdom).Any())
             {
                 var title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
-                if (title != null && title.contract != null &&
+                if (title is {contract: { }} &&
                     title.contract.Rights.Contains(FeudalRights.Army_Compensation_Rights))
                 {
                     var model = new DefaultClanFinanceModel();

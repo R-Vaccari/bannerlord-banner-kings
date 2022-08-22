@@ -305,13 +305,15 @@ namespace BannerKings.Behaviours
                     skill += settlement.Town.Security * 0.001f;
                     if (random <= skill)
                     {
-                        var skills = new List<(SkillObject, float)>();
-                        skills.Add(new ValueTuple<SkillObject, float>(DefaultSkills.OneHanded, 10f));
-                        skills.Add(new ValueTuple<SkillObject, float>(DefaultSkills.TwoHanded, 2f));
-                        skills.Add(new ValueTuple<SkillObject, float>(DefaultSkills.Polearm, 8f));
-                        skills.Add(new ValueTuple<SkillObject, float>(DefaultSkills.Bow, 4f));
-                        skills.Add(new ValueTuple<SkillObject, float>(DefaultSkills.Crossbow, 4f));
-                        skills.Add(new ValueTuple<SkillObject, float>(DefaultSkills.Athletics, 2f));
+                        var skills = new List<(SkillObject, float)>
+                        {
+                            new ValueTuple<SkillObject, float>(DefaultSkills.OneHanded, 10f),
+                            new ValueTuple<SkillObject, float>(DefaultSkills.TwoHanded, 2f),
+                            new ValueTuple<SkillObject, float>(DefaultSkills.Polearm, 8f),
+                            new ValueTuple<SkillObject, float>(DefaultSkills.Bow, 4f),
+                            new ValueTuple<SkillObject, float>(DefaultSkills.Crossbow, 4f),
+                            new ValueTuple<SkillObject, float>(DefaultSkills.Athletics, 2f)
+                        };
 
                         var target = MBRandom.ChooseWeighted(skills);
                         GameTexts.SetVariable("SKILL", target.Name);
@@ -393,12 +395,14 @@ namespace BannerKings.Behaviours
                     var skill = 0.15f;
                     if (random <= skill)
                     {
-                        var skills = new List<(SkillObject, float)>();
-                        skills.Add(new ValueTuple<SkillObject, float>(DefaultSkills.Leadership, 10f));
-                        skills.Add(new ValueTuple<SkillObject, float>(DefaultSkills.OneHanded, 2f));
-                        skills.Add(new ValueTuple<SkillObject, float>(DefaultSkills.Polearm, 2f));
-                        skills.Add(new ValueTuple<SkillObject, float>(DefaultSkills.Bow, 2f));
-                        skills.Add(new ValueTuple<SkillObject, float>(DefaultSkills.Crossbow, 2f));
+                        var skills = new List<(SkillObject, float)>
+                        {
+                            new ValueTuple<SkillObject, float>(DefaultSkills.Leadership, 10f),
+                            new ValueTuple<SkillObject, float>(DefaultSkills.OneHanded, 2f),
+                            new ValueTuple<SkillObject, float>(DefaultSkills.Polearm, 2f),
+                            new ValueTuple<SkillObject, float>(DefaultSkills.Bow, 2f),
+                            new ValueTuple<SkillObject, float>(DefaultSkills.Crossbow, 2f)
+                        };
 
                         var target = MBRandom.ChooseWeighted(skills);
                         GameTexts.SetVariable("SKILL", target.Name);
@@ -423,19 +427,12 @@ namespace BannerKings.Behaviours
                 var settlement = Settlement.CurrentSettlement;
                 var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement).LandData;
                 var woodland = data.Woodland;
-                var game = "";
-                if (woodland >= 50000)
+                var game = woodland switch
                 {
-                    game = new TextObject("{=!}Bountiful").ToString();
-                }
-                else if (woodland >= 25000)
-                {
-                    game = new TextObject("{=!}Mediocre").ToString();
-                }
-                else
-                {
-                    game = new TextObject("{=!}Poor").ToString();
-                }
+                    >= 50000 => new TextObject("{=!}Bountiful").ToString(),
+                    >= 25000 => new TextObject("{=!}Mediocre").ToString(),
+                    _ => new TextObject("{=!}Poor").ToString()
+                };
 
                 GameTexts.SetVariable("HUNTING_GAME", game);
                 if (args.MenuContext.GameMenu.Progress != progress)
@@ -445,10 +442,12 @@ namespace BannerKings.Behaviours
                     if (random <= chance)
                     {
                         actionHuntGame += 1;
-                        var skills = new List<(SkillObject, float)>();
-                        skills.Add(new ValueTuple<SkillObject, float>(DefaultSkills.Bow, 10f));
-                        skills.Add(new ValueTuple<SkillObject, float>(DefaultSkills.Crossbow, 5f));
-                        skills.Add(new ValueTuple<SkillObject, float>(DefaultSkills.Athletics, 8f));
+                        var skills = new List<(SkillObject, float)>
+                        {
+                            new ValueTuple<SkillObject, float>(DefaultSkills.Bow, 10f),
+                            new ValueTuple<SkillObject, float>(DefaultSkills.Crossbow, 5f),
+                            new ValueTuple<SkillObject, float>(DefaultSkills.Athletics, 8f)
+                        };
 
                         var target = MBRandom.ChooseWeighted(skills);
                         GameTexts.SetVariable("SKILL", target.Name);
@@ -539,13 +538,10 @@ namespace BannerKings.Behaviours
         private static bool IsCriminal(Clan ownerClan)
         {
             var criminal = false;
-            if (ownerClan != null)
+            var kingdom = ownerClan?.Kingdom;
+            if (kingdom != null)
             {
-                var kingdom = ownerClan.Kingdom;
-                if (kingdom != null)
-                {
-                    criminal = kingdom.MainHeroCrimeRating > 0;
-                }
+                criminal = kingdom.MainHeroCrimeRating > 0;
             }
 
             return criminal;
@@ -619,14 +615,11 @@ namespace BannerKings.Behaviours
             var criminal = false;
             var huntingRight = false;
             var clan = Settlement.CurrentSettlement.OwnerClan;
-            if (clan != null)
+            var kingdom = clan?.Kingdom;
+            if (kingdom != null)
             {
-                var kingdom = clan.Kingdom;
-                if (kingdom != null)
-                {
-                    criminal = kingdom.MainHeroCrimeRating > 0;
-                    huntingRight = kingdom.HasPolicy(DefaultPolicies.HuntingRights);
-                }
+                criminal = kingdom.MainHeroCrimeRating > 0;
+                huntingRight = kingdom.HasPolicy(DefaultPolicies.HuntingRights);
             }
 
             return !IsWounded() && !criminal && (huntingRight || Settlement.CurrentSettlement.OwnerClan == Clan.PlayerClan);

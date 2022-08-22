@@ -21,8 +21,7 @@ namespace BannerKings.Managers.Innovations
 
         public TextObject Effects { get; private set; }
 
-        public void Initialize(TextObject name, TextObject description, TextObject effects, float requiredProgress = 1000f,
-            CultureObject culture = null, Innovation requirement = null)
+        public void Initialize(TextObject name, TextObject description, TextObject effects, float requiredProgress = 1000f, CultureObject culture = null, Innovation requirement = null)
         {
             Initialize(name, description);
             Effects = effects;

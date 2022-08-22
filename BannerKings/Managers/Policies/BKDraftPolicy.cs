@@ -30,17 +30,14 @@ namespace BannerKings.Managers.Policies
 
         public override string GetHint(int value)
         {
-            if (value == (int) DraftPolicy.Conscription)
+            return value switch
             {
-                return "Extend conscription of the populace, replenishing recruitment slots faster. Increases adm. costs.";
-            }
-
-            if (value == (int) DraftPolicy.Demobilization)
-            {
-                return "Slow down conscription of new recruits. Slight boost to population growth.";
-            }
-
-            return "Standard drafting policy, no particular effect.";
+                (int) DraftPolicy.Conscription =>
+                    "Extend conscription of the populace, replenishing recruitment slots faster. Increases adm. costs.",
+                (int) DraftPolicy.Demobilization =>
+                    "Slow down conscription of new recruits. Slight boost to population growth.",
+                _ => "Standard drafting policy, no particular effect."
+            };
         }
 
         public override void OnChange(SelectorVM<BKItemVM> obj)

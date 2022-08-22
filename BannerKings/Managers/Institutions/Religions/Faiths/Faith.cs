@@ -33,16 +33,12 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
         public FaithGroup FaithGroup => faithGroup;
         public Divinity MainGod => mainGod;
 
-        protected void Initialize(Divinity mainGod, Dictionary<TraitObject, bool> traits, FaithGroup faithGroup,
-            List<Rite> rites = null)
+        protected void Initialize(Divinity mainGod, Dictionary<TraitObject, bool> traits, FaithGroup faithGroup, List<Rite> rites = null)
         {
             this.mainGod = mainGod;
             this.traits = traits;
             this.faithGroup = faithGroup;
-            if (rites == null)
-            {
-                rites = new List<Rite>();
-            }
+            rites ??= new List<Rite>();
 
             this.rites = rites;
         }

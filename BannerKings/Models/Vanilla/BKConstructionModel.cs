@@ -197,7 +197,7 @@ namespace BannerKings.Models.Vanilla
             {
                 var currentSettlement = town.Governor.CurrentSettlement;
 
-                if ((currentSettlement != null ? currentSettlement.Town : null) == town)
+                if (currentSettlement?.Town == town)
                 {
                     SkillHelper.AddSkillBonusForTown(DefaultSkills.Engineering,
                         DefaultSkillEffects.TownProjectBuildingBonus, town, ref result);
@@ -272,21 +272,25 @@ namespace BannerKings.Models.Vanilla
                 result.AddFactor(DefaultCulturalFeats.BattanianConstructionFeat.EffectBonus, CultureText);
             }
 
-            if (town.Loyalty >= 75f)
+            switch (town.Loyalty)
             {
-                var num6 = MBMath.Map(town.Loyalty, 75f, 100f, 0f, 20f);
-                var value2 = result.ResultNumber * (num6 / 100f);
-                result.Add(value2, HighLoyaltyBonusText);
-            }
-            else if (town.Loyalty > 25f && town.Loyalty <= 50f)
-            {
-                var num7 = MBMath.Map(town.Loyalty, 25f, 50f, 50f, 0f);
-                var num8 = result.ResultNumber * (num7 / 100f);
-                result.Add(-num8, LowLoyaltyPenaltyText);
-            }
-            else if (town.Loyalty <= 25f)
-            {
-                result.Add(-result.ResultNumber, VeryLowLoyaltyPenaltyText);
+                case >= 75f:
+                {
+                    var num6 = MBMath.Map(town.Loyalty, 75f, 100f, 0f, 20f);
+                    var value2 = result.ResultNumber * (num6 / 100f);
+                    result.Add(value2, HighLoyaltyBonusText);
+                    break;
+                }
+                case > 25f and <= 50f:
+                {
+                    var num7 = MBMath.Map(town.Loyalty, 25f, 50f, 50f, 0f);
+                    var num8 = result.ResultNumber * (num7 / 100f);
+                    result.Add(-num8, LowLoyaltyPenaltyText);
+                    break;
+                }
+                case <= 25f:
+                    result.Add(-result.ResultNumber, VeryLowLoyaltyPenaltyText);
+                    break;
             }
 
             result.LimitMin(0f);

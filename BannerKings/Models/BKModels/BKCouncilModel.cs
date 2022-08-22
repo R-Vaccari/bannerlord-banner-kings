@@ -56,25 +56,24 @@ namespace BannerKings.Models.BKModels
             CouncilMember targetPosition, CouncilMember currentPosition = null,
             bool appointed = false)
         {
-            if (type == CouncilActionType.REQUEST)
+            return type switch
             {
-                return GetRequest(type, council, requester, targetPosition, currentPosition, appointed);
-            }
-
-            if (type == CouncilActionType.RELINQUISH)
-            {
-                return GetRelinquish(type, council, requester, currentPosition, targetPosition, appointed);
-            }
-
-            return GetSwap(type, council, requester, targetPosition, currentPosition, appointed);
+                CouncilActionType.REQUEST => GetRequest(type, council, requester, targetPosition, currentPosition,
+                    appointed),
+                CouncilActionType.RELINQUISH => GetRelinquish(type, council, requester, currentPosition, targetPosition,
+                    appointed),
+                _ => GetSwap(type, council, requester, targetPosition, currentPosition, appointed)
+            };
         }
 
 
         private CouncilAction GetSwap(CouncilActionType type, CouncilData council, Hero requester,
             CouncilMember targetPosition, CouncilMember currentPosition = null, bool appointed = false)
         {
-            var action = new CouncilAction(type, requester, targetPosition, currentPosition, council);
-            action.Influence = GetInfluenceCost(type, targetPosition);
+            var action = new CouncilAction(type, requester, targetPosition, currentPosition, council)
+            {
+                Influence = GetInfluenceCost(type, targetPosition)
+            };
 
             if (currentPosition == null || currentPosition.Member != requester)
             {
@@ -134,8 +133,10 @@ namespace BannerKings.Models.BKModels
         private CouncilAction GetRelinquish(CouncilActionType type, CouncilData council, Hero requester,
             CouncilMember currentPosition, CouncilMember targetPosition = null, bool appointed = false)
         {
-            var action = new CouncilAction(type, requester, targetPosition, currentPosition, council);
-            action.Influence = GetInfluenceCost(type, targetPosition);
+            var action = new CouncilAction(type, requester, targetPosition, currentPosition, council)
+            {
+                Influence = GetInfluenceCost(type, targetPosition)
+            };
 
             if (requester != null)
             {
@@ -162,8 +163,10 @@ namespace BannerKings.Models.BKModels
         private CouncilAction GetRequest(CouncilActionType type, CouncilData council, Hero requester,
             CouncilMember targetPosition, CouncilMember currentPosition = null, bool appointed = false)
         {
-            var action = new CouncilAction(type, requester, targetPosition, currentPosition, council);
-            action.Influence = appointed ? 0f : GetInfluenceCost(type, targetPosition);
+            var action = new CouncilAction(type, requester, targetPosition, currentPosition, council)
+            {
+                Influence = appointed ? 0f : GetInfluenceCost(type, targetPosition)
+            };
 
             if (currentPosition != null && currentPosition.Member == requester)
             {
@@ -245,19 +248,14 @@ namespace BannerKings.Models.BKModels
 
         public int GetInfluenceCost(CouncilActionType type, CouncilMember targetPosition)
         {
-            if (type == CouncilActionType.REQUEST)
+            switch (type)
             {
-                if (targetPosition.Member != null)
-                {
+                case CouncilActionType.REQUEST when targetPosition.Member != null:
                     return 100;
-                }
-
-                return 50;
-            }
-
-            if (type == CouncilActionType.RELINQUISH)
-            {
-                return 0;
+                case CouncilActionType.REQUEST:
+                    return 50;
+                case CouncilActionType.RELINQUISH:
+                    return 0;
             }
 
             if (targetPosition.Member != null)

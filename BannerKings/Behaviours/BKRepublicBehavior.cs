@@ -28,7 +28,7 @@ namespace BannerKings.Behaviours
             foreach (var kingdom in Kingdom.All)
             {
                 var title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
-                if (title == null || title.contract == null)
+                if (title?.contract == null)
                 {
                     return;
                 }

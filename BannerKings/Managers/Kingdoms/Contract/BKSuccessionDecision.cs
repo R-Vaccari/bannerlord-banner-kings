@@ -132,22 +132,13 @@ namespace BannerKings.Managers.Kingdoms.Contract
 
         private float[] GetWeights()
         {
-            if (successionType == SuccessionType.Hereditary_Monarchy)
+            return successionType switch
             {
-                return new[] {1f, 3f, -2f};
-            }
-
-            if (successionType == SuccessionType.Elective_Monarchy)
-            {
-                return new[] {-1f, 5f, 1f};
-            }
-
-            if (successionType == SuccessionType.Imperial)
-            {
-                return new[] {5f, -2f, -1f};
-            }
-
-            return new[] {-3f, 1f, 5f};
+                SuccessionType.Hereditary_Monarchy => new[] {1f, 3f, -2f},
+                SuccessionType.Elective_Monarchy => new[] {-1f, 5f, 1f},
+                SuccessionType.Imperial => new[] {5f, -2f, -1f},
+                _ => new[] {-3f, 1f, 5f}
+            };
         }
 
         public override TextObject GetChooseDescription()
@@ -194,16 +185,16 @@ namespace BannerKings.Managers.Kingdoms.Contract
             else
             {
                 textObject.SetTextVariable("POLICY_SUPPORT", "{=bqEO389P}This decision caused a split in the council.");
-                if (supportStatus == SupportStatus.Majority)
+                switch (supportStatus)
                 {
-                    textObject.SetTextVariable("POLICY_SUPPORT",
-                        "{=3W67kdtc}This decision had the support of the council.");
-                }
-
-                if (supportStatus == SupportStatus.Minority)
-                {
-                    textObject.SetTextVariable("POLICY_SUPPORT",
-                        "{=b6MgRYlM}This decision was rejected by the support of the council.");
+                    case SupportStatus.Majority:
+                        textObject.SetTextVariable("POLICY_SUPPORT",
+                            "{=3W67kdtc}This decision had the support of the council.");
+                        break;
+                    case SupportStatus.Minority:
+                        textObject.SetTextVariable("POLICY_SUPPORT",
+                            "{=b6MgRYlM}This decision was rejected by the support of the council.");
+                        break;
                 }
             }
 

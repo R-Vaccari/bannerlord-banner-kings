@@ -298,11 +298,8 @@ namespace BannerKings.UI.Management
             if (title != null)
             {
                 var kingdom = data.Settlement.OwnerClan.Kingdom;
-                if (kingdom != null)
-                {
-                    kingdom.AddDecision(new BKGovernmentDecision(data.Settlement.OwnerClan, GovernmentType.Imperial,
-                        title));
-                }
+                kingdom?.AddDecision(new BKGovernmentDecision(data.Settlement.OwnerClan, GovernmentType.Imperial,
+                    title));
             }
         }
     }

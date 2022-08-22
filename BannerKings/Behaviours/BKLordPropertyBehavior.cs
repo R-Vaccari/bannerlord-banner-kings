@@ -26,7 +26,7 @@ namespace BannerKings.Behaviours
 
         private void OnSettlementEntered(MobileParty party, Settlement target, Hero hero)
         {
-            if (party == null || party.LeaderHero == null || !party.IsLordParty)
+            if (party?.LeaderHero == null || !party.IsLordParty)
             {
                 return;
             }
@@ -95,7 +95,7 @@ namespace BannerKings.Behaviours
             [HarmonyPatch("SpawnCaravan", MethodType.Normal)]
             private static bool SpawnCaravan(Hero hero, bool initialSpawn = false)
             {
-                return hero.CurrentSettlement != null && hero.CurrentSettlement.IsTown;
+                return hero.CurrentSettlement is {IsTown: true};
             }
         }
 

@@ -1,5 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <strings>
+	<string id="str_bk_common.placeholder" text="{=bk_common_placeholder}Placeholder" />
+
+	<!-- region Condition Failure Reason Texts -->
+	<string id="str_bk_condition.has_enough_gold" text="{=bk_condition_has_enough_gold}{HERO.LINK} has not enough Denar. {?PAYER.GENDER}she{?}he{\\?} needs at least {AMOUNT} {GOLD_ICON}." />
+	<string id="str_bk_condition.is_part_of_clan" text="{=bk_condition_is_part_of_clan}{HERO.LINK} is not part of {CLAN_LINK}." />
+	<string id="str_bk_condition.is_part_of_any_clan" text="{=bk_condition_is_part_of_any_clan}{HERO.LINK} is not part of a clan." />
+	<string id="str_bk_condition.is_part_of_kingdom" text="{=bk_condition_is_part_of_kingdom}{HERO.LINK} is not part of {KINGDOM_LINK}." />
+	<string id="str_bk_condition.is_part_of_any_kingdom" text="{=bk_condition_is_part_of_any_kingdom}{HERO.LINK} is not part of a kingdom." />
+	<string id="str_bk_condition.is_part_of_settlement" text="{=bk_condition_is_part_of_settlement}{HERO.LINK} is not part of {SETTLEMENT_LINK}." />
+	<string id="str_bk_condition.is_part_of_any_settlement" text="{=bk_condition_is_part_of_any_settlement}{HERO.LINK} is not part of a settlement." />
+	<!-- endregion Condition Failure Reason Texts -->
+
 	<string id="str_bk_crafting_itemtype.bodyarmor" text="{=bk_crafting_itemtype_bodyarmor}Body Armors" />
 	<string id="str_bk_crafting_itemtype.barding" text="{=bk_crafting_itemtype_barding}Bardings" />
 	<string id="str_bk_crafting_itemtype.shield" text="{=bk_crafting_itemtype_shield}Shields" />

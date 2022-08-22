@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using BannerKings.Managers;
 using BannerKings.Managers.CampaignStart;
 using BannerKings.UI;
@@ -71,7 +72,7 @@ namespace BannerKings.Behaviours
             if (option.IsCriminal)
             {
                 var settlement =
-                    SettlementHelper.FindNearestSettlement(x => x.OwnerClan != null && x.OwnerClan.Kingdom != null);
+                    SettlementHelper.FindNearestSettlement(x => x.OwnerClan is {Kingdom: { }});
                 ChangeCrimeRatingAction.Apply(settlement.OwnerClan.Kingdom, option.Criminal);
             }
 
@@ -124,32 +125,28 @@ namespace BannerKings.Behaviours
 
         private void InitializeData()
         {
-            if (!hasSeenInquiry)
+            if (hasSeenInquiry)
             {
-                BannerKingsConfig.Instance.InitManagers();
-                foreach (var settlement in Settlement.All)
-                {
-                    if (settlement.IsVillage || settlement.IsTown || settlement.IsCastle)
-                    {
-                        PopulationManager.InitializeSettlementPops(settlement);
-                    }
-                }
-
-                foreach (var clan in Clan.All)
-                {
-                    if (!clan.IsEliminated && !clan.IsBanditFaction)
-                    {
-                        BannerKingsConfig.Instance.CourtManager.CreateCouncil(clan);
-                    }
-                }
-
-                foreach (var hero in Hero.AllAliveHeroes)
-                {
-                    BannerKingsConfig.Instance.EducationManager.InitHeroEducation(hero);
-                }
-
-                BannerKingsConfig.Instance.ReligionsManager.PostInitialize();
+                return;
             }
+
+            BannerKingsConfig.Instance.InitManagers();
+            foreach (var settlement in Settlement.All.Where(settlement => settlement.IsVillage || settlement.IsTown || settlement.IsCastle))
+            {
+                PopulationManager.InitializeSettlementPops(settlement);
+            }
+
+            foreach (var clan in Clan.All.Where(clan => !clan.IsEliminated && !clan.IsBanditFaction))
+            {
+                BannerKingsConfig.Instance.CourtManager.CreateCouncil(clan);
+            }
+
+            foreach (var hero in Hero.AllAliveHeroes)
+            {
+                BannerKingsConfig.Instance.EducationManager.InitHeroEducation(hero);
+            }
+
+            BannerKingsConfig.Instance.ReligionsManager.PostInitialize();
         }
 
         private void ShowInquiry()
@@ -262,9 +259,7 @@ namespace BannerKings.Behaviours
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                 new TextObject("{=!}Banner Kings").ToString(),
-                new TextObject(
-                        "{=!}Welcome to the Banner Kings mod. BK is a comprehensive mod that alters and expands various of Bannerlord's non combat systems. Below are some topics you can learn more about the impacts of the mod. You can later revisit these topics in the Concepts part of Bannerlord's encyclopedia. Visit the mod page for Discord and donation links - support is only provided through Discord. Have fun!")
-                    .ToString(),
+                new TextObject("{=!}Welcome to the Banner Kings mod. BK is a comprehensive mod that alters and expands various of Bannerlord's non combat systems. Below are some topics you can learn more about the impacts of the mod. You can later revisit these topics in the Concepts part of Bannerlord's encyclopedia. Visit the mod page for Discord and donation links - support is only provided through Discord. Have fun!").ToString(),
                 elements,
                 true,
                 1,

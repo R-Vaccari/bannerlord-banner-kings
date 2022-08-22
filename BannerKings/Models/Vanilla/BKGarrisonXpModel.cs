@@ -16,13 +16,14 @@ namespace BannerKings.Models.Vanilla
                 var garrison =
                     ((BKGarrisonPolicy) BannerKingsConfig.Instance.PolicyManager.GetPolicy(town.Settlement, "garrison"))
                     .Policy;
-                if (garrison == GarrisonPolicy.Dischargement)
+                switch (garrison)
                 {
-                    baseResult *= 0.7f;
-                }
-                else if (garrison == GarrisonPolicy.Enlistment)
-                {
-                    baseResult *= 1.3f;
+                    case GarrisonPolicy.Dischargement:
+                        baseResult *= 0.7f;
+                        break;
+                    case GarrisonPolicy.Enlistment:
+                        baseResult *= 1.3f;
+                        break;
                 }
             }
 

@@ -27,7 +27,7 @@ namespace BannerKings.Behaviours
 
             var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
             var tournament = data.TournamentData;
-            if (tournament != null && tournament.Active)
+            if (tournament is {Active: true})
             {
                 float price = town.MarketData.GetPrice(prize);
                 var renown = -10f;

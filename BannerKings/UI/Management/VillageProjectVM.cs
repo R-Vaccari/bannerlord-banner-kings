@@ -117,7 +117,7 @@ namespace BannerKings.UI.Management
                 villageData.BuildingsInProgress.Clear();
                 var localDevelopmentList = Projects.LocalDevelopmentList;
                 var building = Projects.CurrentDailyDefault?.Building;
-                if (localDevelopmentList != null && localDevelopmentList.Count > 0)
+                if (localDevelopmentList is {Count: > 0})
                 {
                     foreach (VillageBuilding building2 in localDevelopmentList)
                     {

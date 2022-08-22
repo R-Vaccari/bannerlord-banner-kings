@@ -17,19 +17,12 @@ namespace BannerKings.Managers.Institutions.Guilds
         {
             get
             {
-                TextObject result = null;
-                switch (Trade)
+                var result = Trade switch
                 {
-                    case GuildTrade.Merchants:
-                        result = new TextObject("{=!}Merchants Guild");
-                        break;
-                    case GuildTrade.Masons:
-                        result = new TextObject("{=!}Masons Guild");
-                        break;
-                    default:
-                        result = new TextObject("{=!}Metalsmiths Guild");
-                        break;
-                }
+                    GuildTrade.Merchants => new TextObject("{=!}Merchants Guild"),
+                    GuildTrade.Masons => new TextObject("{=!}Masons Guild"),
+                    _ => new TextObject("{=!}Metalsmiths Guild")
+                };
 
                 return result;
             }
@@ -39,20 +32,12 @@ namespace BannerKings.Managers.Institutions.Guilds
         {
             get
             {
-                TextObject result = null;
-                switch (Trade)
+                var result = Trade switch
                 {
-                    case GuildTrade.Merchants:
-                        result = new TextObject();
-
-                        break;
-                    case GuildTrade.Masons:
-                        result = new TextObject();
-                        break;
-                    default:
-                        result = new TextObject();
-                        break;
-                }
+                    GuildTrade.Merchants => new TextObject(),
+                    GuildTrade.Masons => new TextObject(),
+                    _ => new TextObject()
+                };
 
                 return result;
             }
@@ -62,20 +47,15 @@ namespace BannerKings.Managers.Institutions.Guilds
         {
             get
             {
-                IEnumerable<ValueTuple<ItemObject, float>> result = null;
-                switch (Trade)
+                IEnumerable<ValueTuple<ItemObject, float>> result = Trade switch
                 {
-                    case GuildTrade.Metalworkers:
-                        result = new List<ValueTuple<ItemObject, float>>
-                        {
-                            (Game.Current.ObjectManager.GetObjectTypeList<ItemObject>().First(x => x.StringId == "tools"),
-                                1f)
-                        };
-                        break;
-                    default:
-                        result = new List<ValueTuple<ItemObject, float>>();
-                        break;
-                }
+                    GuildTrade.Metalworkers => new List<ValueTuple<ItemObject, float>>
+                    {
+                        (Game.Current.ObjectManager.GetObjectTypeList<ItemObject>().First(x => x.StringId == "tools"),
+                            1f)
+                    },
+                    _ => new List<ValueTuple<ItemObject, float>>()
+                };
 
                 return result;
             }

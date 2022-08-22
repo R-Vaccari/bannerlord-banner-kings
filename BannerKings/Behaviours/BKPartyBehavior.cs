@@ -28,13 +28,17 @@ namespace BannerKings.Behaviours
 
         private void HourlyTickParty(MobileParty party)
         {
-            if (party != null && BannerKingsConfig.Instance.PopulationManager != null &&
-                BannerKingsConfig.Instance.PopulationManager.IsPopulationParty(party))
+            if (party == null || BannerKingsConfig.Instance.PopulationManager == null || !BannerKingsConfig.Instance.PopulationManager.IsPopulationParty(party))
             {
-                var component = (PopulationPartyComponent) party.PartyComponent;
-                var target = component._target;
+                return;
+            }
 
-                if (component is RetinueComponent)
+            var component = (PopulationPartyComponent) party.PartyComponent;
+            var target = component._target;
+
+            switch (component)
+            {
+                case RetinueComponent:
                 {
                     if (party.CurrentSettlement == null)
                     {
@@ -44,8 +48,7 @@ namespace BannerKings.Behaviours
                     party.SetMoveModeHold();
                     return;
                 }
-
-                if (component is MilitiaComponent militiaComponent)
+                case MilitiaComponent militiaComponent:
                 {
                     var behavior = militiaComponent.Behavior;
                     if (behavior == AiBehavior.EscortParty)
@@ -59,22 +62,24 @@ namespace BannerKings.Behaviours
 
                     return;
                 }
+            }
 
-                if (target != null)
+            if (target != null)
+            {
+                var distance = Campaign.Current.Models.MapDistanceModel.GetDistance(party, target);
+                if (distance <= 10f)
                 {
-                    var distance = Campaign.Current.Models.MapDistanceModel.GetDistance(party, target);
-                    if (distance <= 10f)
-                    {
-                        EnterSettlementAction.ApplyForParty(party, target);
-                    }
+                    EnterSettlementAction.ApplyForParty(party, target);
+                }
 
-                    else
+                else
+                {
+                    switch (target.IsVillage)
                     {
-                        if (target.IsVillage)
+                        case true:
                         {
                             party.Ai.SetAIState(AIState.VisitingVillage);
-                            if (target.Village.VillageState == Village.VillageStates.Looted ||
-                                target.Village.VillageState == Village.VillageStates.BeingRaided)
+                            if (target.Village.VillageState is Village.VillageStates.Looted or Village.VillageStates.BeingRaided)
                             {
                                 party.SetMoveModeHold();
                             }
@@ -83,8 +88,10 @@ namespace BannerKings.Behaviours
                                 party.Ai.SetAIState(AIState.VisitingVillage);
                                 party.SetMoveGoToSettlement(target);
                             }
+
+                            break;
                         }
-                        else if (!target.IsVillage)
+                        case false:
                         {
                             party.Ai.SetAIState(AIState.VisitingNearbyTown);
                             if (!target.IsUnderSiege)
@@ -96,14 +103,16 @@ namespace BannerKings.Behaviours
                             {
                                 party.SetMoveModeHold();
                             }
+
+                            break;
                         }
                     }
                 }
-                else if (target == null)
-                {
-                    DestroyPartyAction.Apply(null, party);
-                    BannerKingsConfig.Instance.PopulationManager.RemoveCaravan(party);
-                }
+            }
+            else if (target == null)
+            {
+                DestroyPartyAction.Apply(null, party);
+                BannerKingsConfig.Instance.PopulationManager.RemoveCaravan(party);
             }
         }
 
@@ -117,19 +126,8 @@ namespace BannerKings.Behaviours
             if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(settlement, "decision_slaves_export") &&
                 DecideSendSlaveCaravan(settlement))
             {
-                Village target = null;
                 var villages = settlement.BoundVillages;
-                foreach (var village in villages)
-                {
-                    if (village.Settlement != null &&
-                        BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(village.Settlement) &&
-                        !BannerKingsConfig.Instance.PopulationManager.PopSurplusExists(village.Settlement,
-                            PopType.Slaves))
-                    {
-                        target = village;
-                        break;
-                    }
-                }
+                var target = villages.FirstOrDefault(village => village.Settlement != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(village.Settlement) && !BannerKingsConfig.Instance.PopulationManager.PopSurplusExists(village.Settlement, PopType.Slaves));
 
                 if (target != null)
                 {
@@ -138,70 +136,79 @@ namespace BannerKings.Behaviours
             }
 
             // Send Travellers
-            if (settlement.IsTown)
+            if (!settlement.IsTown)
+            {
+                return;
+            }
+
             {
                 var random = MBRandom.RandomInt(1, 100);
-                if (random <= 5)
+                if (random > 5)
                 {
-                    var target = GetTownToTravel(settlement);
-                    if (target != null)
-                    {
-                        if (BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(target) &&
-                            BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
-                        {
-                            SendTravellerParty(settlement, target);
-                        }
-                    }
+                    return;
+                }
+
+                var target = GetTownToTravel(settlement);
+                if (target == null)
+                {
+                    return;
+                }
+
+                if (BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(target) &&
+                    BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
+                {
+                    SendTravellerParty(settlement, target);
                 }
             }
         }
 
         private void OnSettlementEntered(MobileParty party, Settlement target, Hero hero)
         {
-            if (party != null && BannerKingsConfig.Instance.PopulationManager != null)
+            if (party == null || BannerKingsConfig.Instance.PopulationManager == null)
             {
-                if (BannerKingsConfig.Instance.PopulationManager.IsPopulationParty(party))
+                return;
+            }
+
+            if (!BannerKingsConfig.Instance.PopulationManager.IsPopulationParty(party))
+            {
+                return;
+            }
+
+            var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(target);
+            var component = (PopulationPartyComponent) party.PartyComponent;
+
+            if (component is MilitiaComponent && target.IsVillage)
+            {
+                foreach (var element in party.MemberRoster.GetTroopRoster())
                 {
-                    var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(target);
-                    var component = (PopulationPartyComponent) party.PartyComponent;
+                    target.MilitiaPartyComponent.MobileParty.MemberRoster.AddToCounts(element.Character,
+                        element.Number);
+                }
 
-                    if (component is MilitiaComponent && target.IsVillage)
+                if (party.PrisonRoster.TotalRegulars > 0)
+                {
+                    foreach (var element in party.PrisonRoster.GetTroopRoster().Where(element => !element.Character.IsHero))
                     {
-                        foreach (var element in party.MemberRoster.GetTroopRoster())
-                        {
-                            target.MilitiaPartyComponent.MobileParty.MemberRoster.AddToCounts(element.Character,
-                                element.Number);
-                        }
-
-                        if (party.PrisonRoster.TotalRegulars > 0)
-                        {
-                            foreach (var element in party.PrisonRoster.GetTroopRoster())
-                            {
-                                if (!element.Character.IsHero)
-                                {
-                                    data.UpdatePopType(PopType.Slaves, element.Number);
-                                }
-                            }
-                        }
+                        data.UpdatePopType(PopType.Slaves, element.Number);
                     }
-
-                    if (component.slaveCaravan)
-                    {
-                        var slaves = Utils.Helpers.GetRosterCount(party.PrisonRoster);
-                        data.UpdatePopType(PopType.Slaves, slaves);
-                    }
-                    else if (component.popType != PopType.None)
-                    {
-                        var filter = component.popType == PopType.Serfs ? "villager" :
-                            component.popType == PopType.Craftsmen ? "craftsman" : "noble";
-                        var pops = Utils.Helpers.GetRosterCount(party.MemberRoster, filter);
-                        data.UpdatePopType(component.popType, pops);
-                    }
-
-                    DestroyPartyAction.Apply(null, party);
-                    BannerKingsConfig.Instance.PopulationManager.RemoveCaravan(party);
                 }
             }
+
+            if (component.slaveCaravan)
+            {
+                var slaves = Utils.Helpers.GetRosterCount(party.PrisonRoster);
+                data.UpdatePopType(PopType.Slaves, slaves);
+            }
+            else if (component.popType != PopType.None)
+            {
+                var filter = component.popType == PopType.Serfs ? "villager" :
+                    component.popType == PopType.Craftsmen ? "craftsman" : "noble";
+                var pops = Utils.Helpers.GetRosterCount(party.MemberRoster, filter);
+                data.UpdatePopType(component.popType, pops);
+            }
+
+            DestroyPartyAction.Apply(null, party);
+            BannerKingsConfig.Instance.PopulationManager.RemoveCaravan(party);
         }
 
         private void OnMobilePartyDestroyed(MobileParty mobileParty, PartyBase destroyerParty)
@@ -215,46 +222,26 @@ namespace BannerKings.Behaviours
 
         private bool DecideSendSlaveCaravan(Settlement settlement)
         {
-            if (settlement.IsTown && settlement.Town != null)
+            if (!settlement.IsTown || settlement.Town == null)
             {
-                var villages = settlement.BoundVillages;
-                if (villages != null && villages.Count > 0)
-                {
-                    if (BannerKingsConfig.Instance.PopulationManager.PopSurplusExists(settlement, PopType.Slaves))
-                    {
-                        return true;
-                    }
-                }
+                return false;
             }
 
-            return false;
+            var villages = settlement.BoundVillages;
+            return villages is {Count: > 0} && BannerKingsConfig.Instance.PopulationManager.PopSurplusExists(settlement, PopType.Slaves);
         }
 
         private Settlement GetTownToTravel(Settlement origin)
         {
-            if (origin.OwnerClan != null)
+            var kingdom = origin.OwnerClan?.Kingdom;
+            if (kingdom?.Settlements == null || kingdom.Settlements.Count <= 1)
             {
-                var kingdom = origin.OwnerClan.Kingdom;
-                if (kingdom != null)
-                {
-                    if (kingdom.Settlements != null && kingdom.Settlements.Count > 1)
-                    {
-                        var list = new List<ValueTuple<Settlement, float>>();
-                        foreach (var settlement in kingdom.Settlements)
-                        {
-                            if (settlement.IsTown && settlement != origin)
-                            {
-                                list.Add(new ValueTuple<Settlement, float>(settlement, 1f));
-                            }
-                        }
-
-                        var target = MBRandom.ChooseWeighted(list);
-                        return target;
-                    }
-                }
+                return null;
             }
 
-            return null;
+            var list = (from settlement in kingdom.Settlements where settlement.IsTown && settlement != origin select new ValueTuple<Settlement, float>(settlement, 1f)).ToList();
+
+            return MBRandom.ChooseWeighted(list);
         }
 
         private void SendTravellerParty(Settlement origin, Settlement target)
@@ -264,30 +251,29 @@ namespace BannerKings.Behaviours
             CharacterObject civilian;
             PopType type;
             int count;
-            string name;
-            if (random < 60)
+            switch (random)
             {
-                civilian = MBObjectManager.Instance.GetObjectTypeList<CharacterObject>()
-                    .FirstOrDefault(x => x.StringId == "villager_" + origin.Culture.StringId);
-                count = MBRandom.RandomInt(30, 70);
-                type = PopType.Serfs;
-            }
-            else if (random < 90)
-            {
-                civilian = MBObjectManager.Instance.GetObjectTypeList<CharacterObject>()
-                    .FirstOrDefault(x => x.StringId == "craftsman_" + origin.Culture.StringId);
-                count = MBRandom.RandomInt(15, 30);
-                type = PopType.Craftsmen;
-            }
-            else
-            {
-                civilian = MBObjectManager.Instance.GetObjectTypeList<CharacterObject>()
-                    .FirstOrDefault(x => x.StringId == "noble_" + origin.Culture.StringId);
-                count = MBRandom.RandomInt(10, 15);
-                type = PopType.Nobles;
+                case < 60:
+                    civilian = MBObjectManager.Instance.GetObjectTypeList<CharacterObject>()
+                        .FirstOrDefault(x => x.StringId == "villager_" + origin.Culture.StringId);
+                    count = MBRandom.RandomInt(30, 70);
+                    type = PopType.Serfs;
+                    break;
+                case < 90:
+                    civilian = MBObjectManager.Instance.GetObjectTypeList<CharacterObject>()
+                        .FirstOrDefault(x => x.StringId == "craftsman_" + origin.Culture.StringId);
+                    count = MBRandom.RandomInt(15, 30);
+                    type = PopType.Craftsmen;
+                    break;
+                default:
+                    civilian = MBObjectManager.Instance.GetObjectTypeList<CharacterObject>()
+                        .FirstOrDefault(x => x.StringId == "noble_" + origin.Culture.StringId);
+                    count = MBRandom.RandomInt(10, 15);
+                    type = PopType.Nobles;
+                    break;
             }
 
-            name = "Travelling " + Utils.Helpers.GetClassName(type, origin.Culture) + " from {0}";
+            var name = "Travelling " + Utils.Helpers.GetClassName(type, origin.Culture) + " from {0}";
 
             if (civilian != null)
             {
@@ -302,8 +288,7 @@ namespace BannerKings.Behaviours
             var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(origin);
             var slaves = (int) (data.GetTypeCount(PopType.Slaves) * 0.005d);
             data.UpdatePopType(PopType.Slaves, (int) (slaves * -1f));
-            PopulationPartyComponent.CreateSlaveCaravan("slavecaravan_", origin, target.Settlement,
-                "Slave Caravan from {0}", slaves);
+            PopulationPartyComponent.CreateSlaveCaravan("slavecaravan_", origin, target.Settlement, "Slave Caravan from {0}", slaves);
         }
 
         private void OnSessionLaunched(CampaignGameStarter campaignGameStarter)
@@ -378,12 +363,14 @@ namespace BannerKings.Behaviours
         private bool IsTravellerParty(PartyBase party)
         {
             var value = false;
-            if (party != null && party.MobileParty != null)
+            if (party is not {MobileParty: { }})
             {
-                if (BannerKingsConfig.Instance.PopulationManager.IsPopulationParty(party.MobileParty))
-                {
-                    value = true;
-                }
+                return false;
+            }
+
+            if (BannerKingsConfig.Instance.PopulationManager.IsPopulationParty(party.MobileParty))
+            {
+                value = true;
             }
 
             return value;
@@ -393,13 +380,15 @@ namespace BannerKings.Behaviours
         {
             var value = false;
             var party = PlayerEncounter.EncounteredParty;
-            if (IsTravellerParty(party))
+            if (!IsTravellerParty(party))
             {
-                var component = (PopulationPartyComponent) party.MobileParty.PartyComponent;
-                if (component.popType == PopType.Serfs)
-                {
-                    value = true;
-                }
+                return false;
+            }
+
+            var component = (PopulationPartyComponent) party.MobileParty.PartyComponent;
+            if (component.popType == PopType.Serfs)
+            {
+                value = true;
             }
 
             return value;
@@ -408,33 +397,39 @@ namespace BannerKings.Behaviours
         private void raised_militia_retreat_on_consequence()
         {
             var party = PlayerEncounter.EncounteredParty;
-            if (IsTravellerParty(party))
+            if (!IsTravellerParty(party))
             {
-                var component = (MilitiaComponent) party.MobileParty.PartyComponent;
-                component.Behavior = AiBehavior.GoToSettlement;
+                return;
             }
+
+            var component = (MilitiaComponent) party.MobileParty.PartyComponent;
+            component.Behavior = AiBehavior.GoToSettlement;
         }
 
         private void raised_militia_follow_on_consequence()
         {
             var party = PlayerEncounter.EncounteredParty;
-            if (IsTravellerParty(party))
+            if (!IsTravellerParty(party))
             {
-                var component = (MilitiaComponent) party.MobileParty.PartyComponent;
-                component.Behavior = AiBehavior.EscortParty;
+                return;
             }
+
+            var component = (MilitiaComponent) party.MobileParty.PartyComponent;
+            component.Behavior = AiBehavior.EscortParty;
         }
 
         private bool raised_militia_start_on_condition()
         {
             var value = false;
             var party = PlayerEncounter.EncounteredParty;
-            if (IsTravellerParty(party))
+            if (!IsTravellerParty(party))
             {
-                if (party.MobileParty.PartyComponent is MilitiaComponent)
-                {
-                    value = true;
-                }
+                return value;
+            }
+
+            if (party.MobileParty.PartyComponent is MilitiaComponent)
+            {
+                value = true;
             }
 
             return value;
@@ -444,12 +439,14 @@ namespace BannerKings.Behaviours
         {
             var value = false;
             var party = PlayerEncounter.EncounteredParty;
-            if (IsTravellerParty(party))
+            if (!IsTravellerParty(party))
             {
-                if (party.MobileParty.PartyComponent is MilitiaComponent && party.Owner == Hero.MainHero)
-                {
-                    value = true;
-                }
+                return false;
+            }
+
+            if (party.MobileParty.PartyComponent is MilitiaComponent && party.Owner == Hero.MainHero)
+            {
+                value = true;
             }
 
             return value;
@@ -459,13 +456,15 @@ namespace BannerKings.Behaviours
         {
             var value = false;
             var party = PlayerEncounter.EncounteredParty;
-            if (IsTravellerParty(party))
+            if (!IsTravellerParty(party))
             {
-                var component = (PopulationPartyComponent) party.MobileParty.PartyComponent;
-                if (component.popType == PopType.Craftsmen)
-                {
-                    value = true;
-                }
+                return false;
+            }
+
+            var component = (PopulationPartyComponent) party.MobileParty.PartyComponent;
+            if (component.popType == PopType.Craftsmen)
+            {
+                value = true;
             }
 
             return value;
@@ -475,13 +474,15 @@ namespace BannerKings.Behaviours
         {
             var value = false;
             var party = PlayerEncounter.EncounteredParty;
-            if (IsTravellerParty(party))
+            if (!IsTravellerParty(party))
             {
-                var component = (PopulationPartyComponent) party.MobileParty.PartyComponent;
-                if (component.popType == PopType.Nobles)
-                {
-                    value = true;
-                }
+                return false;
+            }
+
+            var component = (PopulationPartyComponent) party.MobileParty.PartyComponent;
+            if (component.popType == PopType.Nobles)
+            {
+                value = true;
             }
 
             return value;
@@ -491,17 +492,19 @@ namespace BannerKings.Behaviours
         {
             var value = false;
             var party = PlayerEncounter.EncounteredParty;
-            if (IsTravellerParty(party))
+            if (!IsTravellerParty(party))
             {
-                var component = (PopulationPartyComponent) party.MobileParty.PartyComponent;
-                var partyKingdom = component.OriginSettlement.OwnerClan.Kingdom;
-                if (partyKingdom != null)
+                return false;
+            }
+
+            var component = (PopulationPartyComponent) party.MobileParty.PartyComponent;
+            var partyKingdom = component.OriginSettlement.OwnerClan.Kingdom;
+            if (partyKingdom != null)
+            {
+                if (Hero.MainHero.Clan.Kingdom == null ||
+                    component.OriginSettlement.OwnerClan.Kingdom != Hero.MainHero.Clan.Kingdom)
                 {
-                    if (Hero.MainHero.Clan.Kingdom == null ||
-                        component.OriginSettlement.OwnerClan.Kingdom != Hero.MainHero.Clan.Kingdom)
-                    {
-                        value = true;
-                    }
+                    value = true;
                 }
             }
 
@@ -512,18 +515,22 @@ namespace BannerKings.Behaviours
         {
             var value = false;
             var party = PlayerEncounter.EncounteredParty;
-            if (IsTravellerParty(party))
+            if (!IsTravellerParty(party))
             {
-                var component = (PopulationPartyComponent) party.MobileParty.PartyComponent;
-                var partyKingdom = component.OriginSettlement.OwnerClan.Kingdom;
-                if (partyKingdom != null && component.slaveCaravan)
-                {
-                    if (Hero.MainHero.Clan.Kingdom == null ||
-                        component.OriginSettlement.OwnerClan.Kingdom != Hero.MainHero.Clan.Kingdom)
-                    {
-                        value = true;
-                    }
-                }
+                return false;
+            }
+
+            var component = (PopulationPartyComponent) party.MobileParty.PartyComponent;
+            var partyKingdom = component.OriginSettlement.OwnerClan.Kingdom;
+            if (partyKingdom == null || !component.slaveCaravan)
+            {
+                return false;
+            }
+
+            if (Hero.MainHero.Clan.Kingdom == null ||
+                component.OriginSettlement.OwnerClan.Kingdom != Hero.MainHero.Clan.Kingdom)
+            {
+                value = true;
             }
 
             return value;
@@ -533,17 +540,17 @@ namespace BannerKings.Behaviours
         {
             var value = false;
             var party = PlayerEncounter.EncounteredParty;
-            if (IsTravellerParty(party))
+            if (!IsTravellerParty(party))
             {
-                var component = (PopulationPartyComponent) party.MobileParty.PartyComponent;
-                var partyKingdom = component.OriginSettlement.OwnerClan.Kingdom;
-                var heroKingdom = Hero.MainHero.Clan.Kingdom;
-                if (component.slaveCaravan &&
-                    ((partyKingdom != null && heroKingdom != null && partyKingdom == heroKingdom)
-                     || component.OriginSettlement.OwnerClan == Hero.MainHero.Clan))
-                {
-                    value = true;
-                }
+                return false;
+            }
+
+            var component = (PopulationPartyComponent) party.MobileParty.PartyComponent;
+            var partyKingdom = component.OriginSettlement.OwnerClan.Kingdom;
+            var heroKingdom = Hero.MainHero.Clan.Kingdom;
+            if (component.slaveCaravan && ((partyKingdom != null && heroKingdom != null && partyKingdom == heroKingdom) || component.OriginSettlement.OwnerClan == Hero.MainHero.Clan))
+            {
+                value = true;
             }
 
             return value;
