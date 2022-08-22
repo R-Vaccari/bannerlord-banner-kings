@@ -88,9 +88,9 @@ namespace BannerKings.Behaviours
                 "{=!}{CLERGYMAN_GREETING}",
                 OnConditionClergymanGreeting, null);
 
-            starter.AddPlayerLine("bk_question_preaching", "lord_talk_ask_something_2", "bk_preacher_asked_preaching",
+            starter.AddPlayerLine("bk_question_preaching", "hero_main_options", "bk_preacher_asked_preaching",
                 "{=!}What are you preaching?",
-                IsPreacher, null);
+                OnConditionClergymanGreeting, null);
 
             starter.AddDialogLine("bk_answer_preaching_1", "bk_preacher_asked_preaching",
                 "bk_preacher_asked_preaching_last",
@@ -98,12 +98,12 @@ namespace BannerKings.Behaviours
                 IsPreacher, null);
 
             starter.AddDialogLine("bk_answer_preaching_2", "bk_preacher_asked_preaching_last",
-                "lord_talk_ask_something",
+                "hero_main_options",
                 "{=!}{CLERGYMAN_PREACHING_LAST}",
                 IsPreacher, null);
 
 
-            starter.AddPlayerLine("bk_question_faith", "lord_talk_ask_something_2", "bk_preacher_asked_faith",
+            starter.AddPlayerLine("bk_question_faith", "hero_main_options", "bk_preacher_asked_faith",
                 "{=!}How do I prove my faith?",
                 IsPreacher, null);
 
@@ -111,12 +111,12 @@ namespace BannerKings.Behaviours
                 "{=!}{CLERGYMAN_FAITH}",
                 IsPreacher, null);
 
-            starter.AddDialogLine("bk_answer_faith_2", "bk_preacher_asked_faith_last", "lord_talk_ask_something",
+            starter.AddDialogLine("bk_answer_faith_2", "bk_preacher_asked_faith_last", "hero_main_options",
                 "{=!}{CLERGYMAN_FAITH_LAST}",
                 IsPreacher, null);
 
 
-            starter.AddPlayerLine("bk_question_faith_forbidden", "lord_talk_ask_something_2",
+            starter.AddPlayerLine("bk_question_faith_forbidden", "hero_main_options",
                 "bk_preacher_asked_faith_forbidden",
                 "{=!}What is forbidden to the faith?",
                 IsPreacher, null);
@@ -127,11 +127,11 @@ namespace BannerKings.Behaviours
                 IsPreacher, null);
 
             starter.AddDialogLine("bk_answer_faith_forbidden_2", "bk_preacher_asked_faith_forbidden_last",
-                "lord_talk_ask_something",
+                "hero_main_options",
                 "{=!}{CLERGYMAN_FAITH__FORBIDDEN_LAST}",
                 IsPreacher, null);
 
-            starter.AddPlayerLine("bk_question_induction", "lord_talk_ask_something_2", "bk_preacher_asked_induction",
+            starter.AddPlayerLine("bk_question_induction", "hero_main_options", "bk_preacher_asked_induction",
                 "{=!}I would like to be inducted.",
                 IsPreacher,
                 null, 100,
@@ -143,12 +143,12 @@ namespace BannerKings.Behaviours
                 IsPreacher, null);
 
             starter.AddDialogLine("bk_answer_induction_2", "bk_preacher_asked_induction_last",
-                "lord_talk_ask_something",
+                "hero_main_options",
                 "{=!}{CLERGYMAN_INDUCTION_LAST}",
                 IsPreacher, null);
 
 
-            starter.AddPlayerLine("bk_question_boon", "lord_talk_ask_something_2", "bk_preacher_asked_boon",
+            starter.AddPlayerLine("bk_question_boon", "hero_main_options", "bk_preacher_asked_boon",
                 "{=!}{CLERGYMAN_BLESSING_ACTION}",
                 IsPreacher,
                 BlessingOnConsequence,
@@ -164,22 +164,22 @@ namespace BannerKings.Behaviours
                 null);
 
             starter.AddPlayerLine("bk_preacher_asked_boon_answer", "bk_preacher_asked_boon_answer",
-                "lord_talk_ask_something",
+                "hero_main_options",
                 "{=D33fIGQe}Never mind.", null, null);
 
             starter.AddDialogLine("bk_boon_confirm", "bk_boon_confirm", "bk_boon_confirm",
                 "{=!}{CLERGYMAN_BLESSING_CONFIRM}",
                 null, null);
 
-            starter.AddPlayerLine("bk_boon_confirm", "bk_boon_confirm", "lord_talk_ask_something", "{=!}See it done.",
+            starter.AddPlayerLine("bk_boon_confirm", "bk_boon_confirm", "hero_main_options", "{=!}See it done.",
                 () => selectedDivinity != null, BlessingConfirmOnConsequence);
 
-            starter.AddPlayerLine("bk_boon_confirm", "bk_boon_confirm", "lord_talk_ask_something",
+            starter.AddPlayerLine("bk_boon_confirm", "bk_boon_confirm", "hero_main_options",
                 "{=D33fIGQe}Never mind.",
                 null, null);
 
 
-            starter.AddPlayerLine("bk_question_rite", "lord_talk_ask_something_2", "bk_preacher_asked_rites",
+            starter.AddPlayerLine("bk_question_rite", "hero_main_options", "bk_preacher_asked_rites",
                 "{=!}I would like to perform a rite.",
                 IsPreacher,
                 RitesOnConsequence,
@@ -191,7 +191,7 @@ namespace BannerKings.Behaviours
                 null,
                 RitesPositiveAnswerOnConsequence);
 
-            starter.AddDialogLine("bk_answer_rite_impossible", "bk_preacher_asked_rites", "lord_talk_ask_something",
+            starter.AddDialogLine("bk_answer_rite_impossible", "bk_preacher_asked_rites", "hero_main_options",
                 "{=!}I am afraid that won't be possible.",
                 IsPreacher,
                 null);
@@ -201,19 +201,19 @@ namespace BannerKings.Behaviours
                 null);
 
             starter.AddPlayerLine("bk_preacher_asked_rites_answer", "bk_preacher_asked_rites_answer",
-                "lord_talk_ask_something",
+                "hero_main_options",
                 "{=D33fIGQe}Never mind.", null,
                 null);
 
             starter.AddDialogLine("bk_rite_confirm", "bk_rite_confirm", "bk_rite_confirm",
                 "{=!}{CLERGYMAN_RITE_CONFIRM}",
                 null, null);
-            starter.AddPlayerLine("bk_rite_confirm", "bk_rite_confirm", "lord_talk_ask_something", "{=!}See it done.",
+            starter.AddPlayerLine("bk_rite_confirm", "bk_rite_confirm", "hero_main_options", "{=!}See it done.",
                 null, () =>
                 {
                     selectedRite?.Complete(Hero.MainHero);
                 });
-            starter.AddPlayerLine("bk_rite_confirm", "bk_rite_confirm", "lord_talk_ask_something",
+            starter.AddPlayerLine("bk_rite_confirm", "bk_rite_confirm", "hero_main_options",
                 "{=D33fIGQe}Never mind.",
                 null, null);
         }
