@@ -5,7 +5,7 @@
 		<TargetFramework>net472</TargetFramework>
 		<Platforms>x64</Platforms>
 		<LangVersion>9.0</LangVersion>
-		<Nullable>false</Nullable>
+		<Nullable>disable</Nullable>
 		<ModuleId>$(MSBuildProjectName)</ModuleId>
 		<ModuleName>$(MSBuildProjectName)</ModuleName>
 		<GameFolder>$(BANNERLORD_GAME_DIR)</GameFolder>
