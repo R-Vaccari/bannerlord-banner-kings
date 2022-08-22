@@ -3,6 +3,7 @@ using System.Linq;
 using BannerKings.Managers.Education.Books;
 using BannerKings.Managers.Skills;
 using HarmonyLib;
+using HarmonyLib.BUTR.Extensions;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
@@ -65,49 +66,49 @@ namespace BannerKings.Behaviours
 
         private void OnPerkOpened(Hero hero, PerkObject perk)
         {
-            if (perk.AlternativePerk != null && !hero.GetPerkValue(perk.AlternativePerk))
+            if (perk.AlternativePerk == null || hero.GetPerkValue(perk.AlternativePerk))
             {
-                if (perk == BKPerks.Instance.ScholarshipMechanic || perk == BKPerks.Instance.ScholarshipMechanic ||
-                    perk == BKPerks.Instance.ScholarshipMechanic || perk == BKPerks.Instance.ScholarshipMechanic)
+                return;
+            }
+
+            if (perk == BKPerks.Instance.ScholarshipMechanic || perk == BKPerks.Instance.ScholarshipMechanic || perk == BKPerks.Instance.ScholarshipMechanic || perk == BKPerks.Instance.ScholarshipMechanic)
+            {
+                InformationManager.ShowInquiry(new InquiryData(new TextObject("{=!}Double Perks").ToString(),
+                    new TextObject("{=!}From now on, double perks will be yielded for the {SKILL} skill. The perks will be rewarded after closing the Character tab with 'Done', not immediatly after selecting them.")
+                        .SetTextVariable("SKILL", perk.Skill.Name)
+                        .ToString(),
+                    true, false,
+                    GameTexts.FindText("str_selection_widget_accept").ToString(),
+                    string.Empty,
+                    null, null, string.Empty));
+            }
+            else
+            {
+                var skill = perk.Skill;
+                if ((skill != DefaultSkills.Engineering || !hero.GetPerkValue(BKPerks.Instance.ScholarshipMechanic)) && (skill != DefaultSkills.Steward || !hero.GetPerkValue(BKPerks.Instance.ScholarshipAccountant)) && (skill != DefaultSkills.Medicine || !hero.GetPerkValue(BKPerks.Instance.ScholarshipNaturalScientist)) && (skill != DefaultSkills.Trade || !hero.GetPerkValue(BKPerks.Instance.ScholarshipTreasurer)))
                 {
-                    InformationManager.ShowInquiry(new InquiryData(new TextObject("{=!}Double Perks").ToString(),
-                        new TextObject(
-                                "{=!}From now on, double perks will be yielded for the {SKILL} skill. The perks will be rewarded after closing the Character tab with 'Done', not immediatly after selecting them.")
-                            .SetTextVariable("SKILL", perk.Skill.Name)
-                            .ToString(),
-                        true, false,
-                        GameTexts.FindText("str_selection_widget_accept").ToString(),
-                        string.Empty,
-                        null, null, string.Empty));
+                    return;
                 }
-                else
-                {
-                    var skill = perk.Skill;
-                    if ((skill == DefaultSkills.Engineering &&
-                         hero.GetPerkValue(BKPerks.Instance.ScholarshipMechanic)) || (skill == DefaultSkills.Steward &&
-                            hero.GetPerkValue(BKPerks.Instance.ScholarshipAccountant))
-                        || (skill == DefaultSkills.Medicine &&
-                            hero.GetPerkValue(BKPerks.Instance.ScholarshipNaturalScientist)) ||
-                        (skill == DefaultSkills.Trade && hero.GetPerkValue(BKPerks.Instance.ScholarshipTreasurer)))
-                    {
-                        hero.HeroDeveloper.AddPerk(perk.AlternativePerk);
-                        MBInformationManager.AddQuickInformation(
-                            new TextObject("{=!}You have received the {PERK} as a double perk yield reward.")
-                                .SetTextVariable("PERK", perk.AlternativePerk.Name));
-                    }
-                }
+
+                hero.HeroDeveloper.AddPerk(perk.AlternativePerk);
+                MBInformationManager.AddQuickInformation(new TextObject("{=!}You have received the {PERK} as a double perk yield reward.")
+                    .SetTextVariable("PERK", perk.AlternativePerk.Name));
             }
         }
 
         private void OnDailyTick(Hero hero)
         {
             BannerKingsConfig.Instance.EducationManager.UpdateHeroData(hero);
-            if (hero.IsSpecial && hero.Template.StringId.Contains("bannerkings_bookseller_"))
+            ApplyScholarshipBedTimeStoryEffect(hero);
+
+            if (!hero.IsSpecial || !hero.Template.StringId.Contains("bannerkings_bookseller_"))
             {
-                if (!bookSellers.ContainsKey(hero))
-                {
-                    bookSellers.Add(hero, GetStartingBooks(hero.Culture));
-                }
+                return;
+            }
+
+            if (!bookSellers.ContainsKey(hero))
+            {
+                bookSellers.Add(hero, GetStartingBooks(hero.Culture));
             }
         }
 
@@ -122,10 +123,12 @@ namespace BannerKings.Behaviours
         private void OnHeroComesOfAge(Hero hero)
         {
             BannerKingsConfig.Instance.EducationManager.InitHeroEducation(hero);
+
+            ApplyScholarshipTutorEffect(hero);
+            ApplyScholarshipTeacherEffect(hero);
         }
 
-        private void OnHeroKilled(Hero victim, Hero killer, KillCharacterAction.KillCharacterActionDetail detail,
-            bool showNotification = true)
+        private void OnHeroKilled(Hero victim, Hero killer, KillCharacterAction.KillCharacterActionDetail detail, bool showNotification = true)
         {
             if (bookSellers.ContainsKey(victim))
             {
@@ -292,6 +295,45 @@ namespace BannerKings.Behaviours
             return Hero.OneToOneConversationHero.IsSpecial &&
                    Hero.OneToOneConversationHero.CharacterObject.OriginalCharacter.StringId.Contains(
                        "bannerkings_bookseller");
+        }
+
+        private static void ApplyScholarshipBedTimeStoryEffect(Hero hero)
+        {
+            if (!hero.GetPerkValue(BKPerks.Instance.ScholarshipBedTimeStory))
+            {
+                return;
+            }
+
+            var skillObjects = Game.Current.ObjectManager.GetObjectTypeList<SkillObject>();
+
+            var companions = hero.CompanionsInParty;
+            foreach (var companion in companions)
+            {
+                var randomSkill = skillObjects.GetRandomElement();
+
+                companion.AddSkillXp(randomSkill, MBRandom.RandomFloatRanged(1, 4));
+            }
+        }
+
+        private static void ApplyScholarshipTutorEffect(Hero hero)
+        {
+            hero.HeroDeveloper.UnspentAttributePoints += hero.Clan.Heroes.Count(clanHero => hero.GetPerkValue(BKPerks.Instance.ScholarshipTutor));
+        }
+
+        private static void ApplyScholarshipTeacherEffect(Hero hero)
+        {
+            var additionalFocusPoints = 0;
+            if (hero.Father.GetPerkValue(BKPerks.Instance.ScholarshipTeacher))
+            {
+                additionalFocusPoints += 1;
+            }
+
+            if (hero.Mother.GetPerkValue(BKPerks.Instance.ScholarshipTeacher))
+            {
+                additionalFocusPoints += 1;
+            }
+
+            hero.HeroDeveloper.UnspentFocusPoints += additionalFocusPoints;
         }
     }
 

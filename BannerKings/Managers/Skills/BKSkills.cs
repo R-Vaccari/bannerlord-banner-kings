@@ -1,10 +1,13 @@
-﻿using TaleWorlds.Core;
+﻿using System.Collections.Generic;
+using TaleWorlds.Core;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Skills
 {
-    public class BKSkills
+    public class BKSkills : DefaultTypeInitializer<BKSkills, SkillObject>
     {
+        public override IEnumerable<SkillObject> All => Game.Current.ObjectManager.GetObjectTypeList<SkillObject>();
+
         public SkillObject Scholarship { get; private set; }
 
         public SkillObject Theology { get; private set; }
@@ -13,19 +16,17 @@ namespace BannerKings.Managers.Skills
 
         public static BKSkills Instance => ConfigHolder.CONFIG;
 
-        public void Initialize()
+        public override void Initialize()
         {
             Scholarship = Game.Current.ObjectManager.RegisterPresumedObject(new SkillObject("Scholarship"));
             Scholarship.Initialize(new TextObject("{=!}Scholarship"),
-                    new TextObject(
-                        "{=!}Reading and writting competence as well as knowledge over literary and legal matters."),
+                    new TextObject("{=!}Reading and writting competence as well as knowledge over literary and legal matters."),
                     SkillObject.SkillTypeEnum.Personal)
                 .SetAttribute(BKAttributes.Instance.Wisdom);
 
             Theology = Game.Current.ObjectManager.RegisterPresumedObject(new SkillObject("Theology"));
             Theology.Initialize(new TextObject("{=!}Theology"),
-                    new TextObject(
-                        "{=!}Understanding over spiritual matters. Normally reserved for preachers and the most pious faithful."),
+                    new TextObject("{=!}Understanding over spiritual matters. Normally reserved for preachers and the most pious faithful."),
                     SkillObject.SkillTypeEnum.Personal)
                 .SetAttribute(BKAttributes.Instance.Wisdom);
 
@@ -36,7 +37,7 @@ namespace BannerKings.Managers.Skills
                 .SetAttribute(BKAttributes.Instance.Wisdom);
         }
 
-        internal struct ConfigHolder
+        private struct ConfigHolder
         {
             public static BKSkills CONFIG = new();
         }

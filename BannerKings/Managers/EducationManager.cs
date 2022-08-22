@@ -49,6 +49,7 @@ namespace BannerKings.Managers
 
             var data = new EducationData(hero, languages);
             Educations.Add(hero, data);
+
             return data;
         }
 
