@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Localization;
 
@@ -11,6 +12,15 @@ namespace BannerKings.Managers.Goals
         internal Goal(string stringId, GoalUpdateType goalUpdateType) : base(stringId)
         {
             this.goalUpdateType = goalUpdateType;
+        }
+
+        internal List<TextObject> FailedReasons
+        {
+            get
+            {
+                IsFulfilled(out var failedReasons);
+                return failedReasons;
+            }
         }
 
         internal abstract bool IsAvailable();
