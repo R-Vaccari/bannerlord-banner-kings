@@ -51,7 +51,7 @@ namespace BannerKings.Managers.Goals.Decisions
 
         internal override bool IsAvailable()
         {
-            return BannerKingsConfig.Instance.TitleManager.GetTitleByStringId("title_greater_battania") != null;
+            return BannerKingsConfig.Instance.TitleManager.GetTitleByStringId("title_greater_battania") == null;
         }
 
         internal override bool IsFulfilled(out List<TextObject> failedReasons)
