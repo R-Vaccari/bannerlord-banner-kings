@@ -38,7 +38,7 @@ namespace BannerKings.Managers.Titles
 
         [SaveableProperty(5)] public Hero deFacto { get; internal set; }
 
-        [SaveableProperty(6)] private TextObject name { get; }
+        [SaveableProperty(6)] private TextObject name { get; set; }
 
         [SaveableProperty(7)] public TextObject shortName { get; private set; }
 
@@ -54,7 +54,7 @@ namespace BannerKings.Managers.Titles
 
         [SaveableProperty(13)] private Dictionary<FeudalTitle, float> deJureDrift { get; set; }
 
-        [SaveableProperty(14)] private string stringId { get; }
+        [SaveableProperty(14)] private string stringId { get; set; }
 
         public Dictionary<FeudalTitle, float> DeJureDrifts
         {
