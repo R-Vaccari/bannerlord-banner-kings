@@ -22,7 +22,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
 
         public override TextObject GetClergyForbiddenAnswer(int rank)
         {
-            TextObject text = rank switch
+            var text = rank switch
             {
                 4 => new TextObject(
                     "{=!}Do not be as a glutton or a beast; neither hoarding nor bloodlust should color your life. If you take justice into your hands you may find yourself forever grasping for more - allow your betters to guide you as an elder sibling should; do not kill prisoners who have wronged you without their say. But do not reveal yourself to be lax or limp of arm either; for justice will often be your task."),
@@ -39,7 +39,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
 
         public override TextObject GetClergyForbiddenAnswerLast(int rank)
         {
-            TextObject text = rank switch
+            var text = rank switch
             {
                 4 => new TextObject(
                     "{=!}…And in weakness, do not allow others to usurp your station. Rebellion, sedition, betrayal - anathema to the Code of Asera. Brother shall not strike against brother, least of all by a knife in the back or by rousing a mob with vicious words or common strife. Suffer not rebellion, for to allow it to foment in the first place speaks to the immensity of your failings. All the pointless bloodshed which may come from such will tarnish you eternal, such that you may find yourself denied Heaven - condemned to an agony of your own making."),
@@ -56,7 +56,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
 
         public override TextObject GetClergyGreeting(int rank)
         {
-            TextObject text = rank switch
+            var text = rank switch
             {
                 4 => new TextObject(
                     "{=!}Know that I tolerate your presence on behalf of my blooded siblings in the Banu, and though you may desire to coax me with honeyed words or threats of coercion - know also that I am beyond your grasp. I am the Murshid of [Placename], and my word guides the Sultanate by the reading of the Code of Asera. Speak truthfully and with no deceit, lest I denounce your lineage and see them flayed to the last."),
@@ -73,7 +73,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
 
         public override TextObject GetClergyGreetingInducted(int rank)
         {
-            TextObject text = rank switch
+            var text = rank switch
             {
                 4 => new TextObject(
                     "{=!}Blessings of paradise and the Heavens upon you, blooded sibling. You come before the Murshid of [Placename], a guide to the Sultanate and of kin to the Banu. Surely you know that I am a busy man who must contend with matters of state whilst consulting the Code of Asera. What is it that I may do for you while I have this single moment to offer?"),
@@ -194,7 +194,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
 
         public override TextObject GetClergyPreachingAnswer(int rank)
         {
-            TextObject text = rank switch
+            var text = rank switch
             {
                 4 => new TextObject(
                     "{=!}I offer my sage counsel to the kin of the Banu, to guide them upon the paths walked by Asera of old. I grant them the means of pilgrimage - for only when one knows the deepest wisdom and learned truths of the Code of Asera may they truly strive for self-improvement."),
@@ -211,7 +211,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
 
         public override TextObject GetClergyPreachingAnswerLast(int rank)
         {
-            TextObject text = rank switch
+            var text = rank switch
             {
                 4 => new TextObject(
                     "{=!}I ensure they remember that they are as siblings to the lowliest beggar or the most jackal-thirsting Jawwal marauder; that they must always express love towards that which is good and revile the roguery that leads the soul towards wicked deeds."),
@@ -228,7 +228,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
 
         public override TextObject GetClergyProveFaith(int rank)
         {
-            TextObject text = rank switch
+            var text = rank switch
             {
                 4 => new TextObject(
                     "{=!}You come before me, like a wriggling eel slithering to a master archer and asking to learn to wield the bow. I shall speak plainly to you, for my time is short and my station vaunted. When you see that which is evil, you must change it by whatever force you can - if not your hands, then your heart, if not your heart, then your words."),
@@ -245,7 +245,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
 
         public override TextObject GetClergyProveFaithLast(int rank)
         {
-            TextObject text = rank switch
+            var text = rank switch
             {
                 4 => new TextObject(
                     "{=!}Seek to improve the lives of even the least of your people and you shall make kings of them all; and know that should you find yourself poorer and your servants richer that you are a better sibling than many of your blood. You can only hope then that they shall follow your example, follow the Code of Asera, and spread this prosperity to all."),
@@ -297,7 +297,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
 
         public override TextObject GetRankTitle(int rank)
         {
-            TextObject text = rank switch
+            var text = rank switch
             {
                 4 => new TextObject("{=!}Murshid"),
                 3 => new TextObject("{=!}Imam"),
