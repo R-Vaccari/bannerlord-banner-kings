@@ -23,18 +23,31 @@ namespace BannerKings.Managers.Helpers
                 if (highest != null)
                 {
                     if (title.type < highest.type)
+                    {
                         highest = title;
+                    }
                 }
-                else highest = title;
+                else
+                {
+                    highest = title;
+                }
 
                 if (title.contract != null)
                 {
                     var inheritance = title.contract.Inheritance;
                     if (!inheritanceDic.ContainsKey(inheritance))
+                    {
                         inheritanceDic.Add(inheritance, new List<FeudalTitle>() {title});
-                    else inheritanceDic[inheritance].Add(title);
+                    }
+                    else
+                    {
+                        inheritanceDic[inheritance].Add(title);
+                    }
                 }
-                else noContracts.Add(title);
+                else
+                {
+                    noContracts.Add(title);
+                }
             }
 
             var candidates = GetCandidates(victim.Clan, victim);
@@ -49,16 +62,24 @@ namespace BannerKings.Managers.Helpers
                 {
                     BannerKingsConfig.Instance.TitleManager.InheritTitle(victim, heir, t);
                     if (heir != mainHeir)
+                    {
                         t.AddClaim(mainHeir, ClaimType.Clan_Split, true);
+                    }
                 }
 
                 if (heir != mainHeir)
+                {
                     secondaryHeirs.Add(heir, pair.Value);
+                }
             }
 
-            if (mainHeir != null) ChangeClanLeaderAction.ApplyWithSelectedNewLeader(victim.Clan, mainHeir);
+            if (mainHeir != null)
+            {
+                ChangeClanLeaderAction.ApplyWithSelectedNewLeader(victim.Clan, mainHeir);
+            }
 
             if (secondaryHeirs.Count > 0)
+            {
                 foreach (var pair in secondaryHeirs)
                 {
                     if (pair.Value.Any(x => x.fief is {IsVillage: false} && x.DeFacto.Clan == victim.Clan))
@@ -75,10 +96,14 @@ namespace BannerKings.Managers.Helpers
 
                         foreach (var t in landed)
                             if (t.DeFacto.Clan == victim.Clan)
+                            {
                                 ChangeOwnerOfSettlementAction.ApplyByGift(t.fief, newClan.Leader);
+                            }
 
                         if (victim.Clan.Kingdom != null)
+                        {
                             ChangeKingdomAction.ApplyByJoinToKingdom(newClan, victim.Clan.Kingdom);
+                        }
 
                         InformationManager.DisplayMessage(new InformationMessage(
                             new TextObject("{=!}The {NEW} has branched off from {ORIGINAL} due to inheritance laws.")
@@ -87,6 +112,7 @@ namespace BannerKings.Managers.Helpers
                                 .ToString()));
                     }
                 }
+            }
         }
 
         /* public static void ApplyInheritance(FeudalTitle title, Hero victim)
@@ -144,7 +170,10 @@ namespace BannerKings.Managers.Helpers
             var candidates = new List<Hero>();
             foreach (var x in clan.Heroes)
                 if (!x.IsChild && x != victim && x.IsAlive && (x.Occupation == Occupation.Lord || x.IsMinorFactionHero))
+                {
                     candidates.Add(x);
+                }
+
             return candidates;
         }
 
@@ -155,10 +184,15 @@ namespace BannerKings.Managers.Helpers
             if (genderLaw == GenderLaw.Agnatic)
             {
                 heir = candidates.FirstOrDefault(x => !x.IsFemale);
-                if (heir == null) heir = candidates.FirstOrDefault();
+                if (heir == null)
+                {
+                    heir = candidates.FirstOrDefault();
+                }
             }
             else
+            {
                 heir = candidates.FirstOrDefault();
+            }
 
             return heir;
         }
@@ -170,13 +204,20 @@ namespace BannerKings.Managers.Helpers
             if (genderLaw == GenderLaw.Agnatic)
             {
                 heir = candidates.FirstOrDefault(x => !x.IsFemale && IsFamily(victim, x));
-                if (heir == null) heir = candidates.FirstOrDefault(x => IsFamily(victim, x));
+                if (heir == null)
+                {
+                    heir = candidates.FirstOrDefault(x => IsFamily(victim, x));
+                }
             }
             else
+            {
                 heir = candidates.FirstOrDefault(x => IsFamily(victim, x));
+            }
 
             if (heir == null && candidates.Count > 0)
+            {
                 heir = candidates[0];
+            }
 
             return heir;
         }
@@ -188,13 +229,20 @@ namespace BannerKings.Managers.Helpers
             if (genderLaw == GenderLaw.Agnatic)
             {
                 heir = candidates.FirstOrDefault(x => !x.IsFemale && IsFamily(victim, x));
-                if (heir == null) heir = candidates.FirstOrDefault(x => IsFamily(victim, x));
+                if (heir == null)
+                {
+                    heir = candidates.FirstOrDefault(x => IsFamily(victim, x));
+                }
             }
             else
+            {
                 heir = candidates.FirstOrDefault(x => IsFamily(victim, x));
+            }
 
             if (heir == null && candidates.Count > 0)
+            {
                 heir = candidates[0];
+            }
 
             return heir;
         }

@@ -241,7 +241,7 @@ namespace BannerKings.Models.BKModels
 
         public float GetUnlandedDemesneWight(TitleType type)
         {
-            float value = type switch
+            var value = type switch
             {
                 TitleType.Dukedom => 0.5f,
                 <= TitleType.Kingdom => 1f,

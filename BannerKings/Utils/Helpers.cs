@@ -136,7 +136,7 @@ namespace BannerKings.Utils
 
         public static string GetGovernmentDescription(GovernmentType type)
         {
-            TextObject text = type switch
+            var text = type switch
             {
                 GovernmentType.Imperial => new TextObject(
                     "{=!}An Imperial government is a highly centralized one. Policies favor the ruling clan at the expense of vassals. A strong leadership that sees it's vassals more as administrators than lords."),
@@ -153,7 +153,7 @@ namespace BannerKings.Utils
 
         public static string GetSuccessionTypeDescription(SuccessionType type)
         {
-            TextObject text = type switch
+            var text = type switch
             {
                 SuccessionType.Elective_Monarchy => new TextObject(
                     "{=!}In elective monarchies, the ruler is chosen from the realm's dynasties, and rules until death or abdication. Elections take place and all dynasties are able to vote when a new leader is required."),
@@ -170,7 +170,7 @@ namespace BannerKings.Utils
 
         public static string GetSuccessionTypeName(SuccessionType type)
         {
-            TextObject text = type switch
+            var text = type switch
             {
                 SuccessionType.Elective_Monarchy => new TextObject("{=!}Elective Monarchy"),
                 SuccessionType.Hereditary_Monarchy => new TextObject("{=!}Hereditary Monarchy"),
@@ -183,7 +183,7 @@ namespace BannerKings.Utils
 
         public static string GetInheritanceDescription(InheritanceType type)
         {
-            TextObject text = type switch
+            var text = type switch
             {
                 InheritanceType.Primogeniture => new TextObject(
                     "{=!}Primogeniture favors blood family of eldest age. Clan members not related by blood are last resort."),
@@ -216,7 +216,7 @@ namespace BannerKings.Utils
         public static string GetClassHint(PopType type, CultureObject culture)
         {
             var name = GetClassName(type, culture).ToString();
-            string description = type switch
+            var description = type switch
             {
                 PopType.Nobles =>
                     " represent the free, wealthy and influential members of society. They pay very high taxes and increase your influence as a lord.",

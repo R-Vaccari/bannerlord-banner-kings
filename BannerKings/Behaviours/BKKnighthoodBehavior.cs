@@ -451,31 +451,34 @@ namespace BannerKings.Behaviours
                                         "{=Hz8XO8wk}Governors cannot lead a mobile party and be a governor at the same time.")
                                     .ToString();
                             }
-                            else switch (hero.HeroState)
+                            else
                             {
-                                case Hero.CharacterStates.Disabled:
-                                    hint = new TextObject("{=slzfQzl3}This hero is lost").ToString();
-                                    break;
-                                case Hero.CharacterStates.Fugitive:
-                                    hint = new TextObject(
-                                            "{=dD3kRDHi}This hero is a fugitive and running from their captors. They will be available after some time.")
-                                        .ToString();
-                                    break;
-                                default:
+                                switch (hero.HeroState)
                                 {
-                                    if (!Utils.Helpers.IsCloseFamily(hero, Hero.MainHero) &&
-                                        !BannerKingsConfig.Instance.TitleManager.IsHeroKnighted(hero))
-                                    {
+                                    case Hero.CharacterStates.Disabled:
+                                        hint = new TextObject("{=slzfQzl3}This hero is lost").ToString();
+                                        break;
+                                    case Hero.CharacterStates.Fugitive:
                                         hint = new TextObject(
-                                                "A hero must be knighted and granted land before being able to raise a personal retinue. You may bestow knighthood by talking to them.")
+                                                "{=dD3kRDHi}This hero is a fugitive and running from their captors. They will be available after some time.")
                                             .ToString();
-                                    }
-                                    else
+                                        break;
+                                    default:
                                     {
-                                        isEnabled = true;
-                                    }
+                                        if (!Utils.Helpers.IsCloseFamily(hero, Hero.MainHero) &&
+                                            !BannerKingsConfig.Instance.TitleManager.IsHeroKnighted(hero))
+                                        {
+                                            hint = new TextObject(
+                                                    "A hero must be knighted and granted land before being able to raise a personal retinue. You may bestow knighthood by talking to them.")
+                                                .ToString();
+                                        }
+                                        else
+                                        {
+                                            isEnabled = true;
+                                        }
 
-                                    break;
+                                        break;
+                                    }
                                 }
                             }
 

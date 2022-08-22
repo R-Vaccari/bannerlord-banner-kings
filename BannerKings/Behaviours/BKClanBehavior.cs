@@ -98,18 +98,22 @@ namespace BannerKings.Behaviours
 
         private void SetCompanionParty(Clan clan)
         {
-            if (clan.Companions == null || clan.Companions.Count == 0) return;
+            if (clan.Companions == null || clan.Companions.Count == 0)
+            {
+                return;
+            }
 
             foreach (var companion in clan.Companions)
             {
-
                 if (companion.IsPrisoner || !companion.IsReady || companion.PartyBelongedTo?.LeaderHero == null)
+                {
+                    if (companion == null)
+                    {
+                        continue;
+                    }
+                }
 
-
-                if (companion == null) continue;
-
-                if (!companion.IsWanderer || companion.IsPrisoner || !companion.IsReady || companion.PartyBelongedTo == null ||
-                    companion.PartyBelongedTo.LeaderHero == null)
+                if (!companion.IsWanderer || companion.IsPrisoner || !companion.IsReady || companion.PartyBelongedTo?.LeaderHero == null)
 
                 {
                     continue;
@@ -149,37 +153,40 @@ namespace BannerKings.Behaviours
                 }
 
 
-                if (clan.WarPartyComponents.Count > 0)
+                if (clan.WarPartyComponents.Count <= 0)
                 {
-                    var warParty =
-                        clan.WarPartyComponents.GetRandomElementWithPredicate(x => IsRoleFree(x.MobileParty, role));
-                    if (warParty != null)
-                    {
-                        AssignToRole(warParty.MobileParty, role, companion);
-                    }
-                    else
-                    {
-                        AssignToRole(clan.WarPartyComponents.GetRandomElement().MobileParty, PerkRole.None, companion);
-                    }
+                    continue;
+                }
+
+                var warParty = clan.WarPartyComponents.GetRandomElementWithPredicate(x => IsRoleFree(x.MobileParty, role));
+                if (warParty != null)
+                {
+                    AssignToRole(warParty.MobileParty, role, companion);
+                }
+                else
+                {
+                    AssignToRole(clan.WarPartyComponents.GetRandomElement().MobileParty, PerkRole.None, companion);
                 }
             }
         }
 
         private bool IsRoleFree(MobileParty party, PerkRole role)
         {
-            if (role != PerkRole.None)
+            if (role == PerkRole.None)
             {
-                switch (role)
-                {
-                    case PerkRole.Scout:
-                        return party.EffectiveScout == party.LeaderHero || party.EffectiveScout == null;
-                    case PerkRole.Engineer:
-                        return party.EffectiveEngineer == party.LeaderHero || party.EffectiveEngineer == null;
-                    case PerkRole.Quartermaster:
-                        return party.EffectiveQuartermaster == party.LeaderHero || party.EffectiveQuartermaster == null;
-                    case PerkRole.Surgeon:
-                        return party.EffectiveSurgeon == party.LeaderHero || party.EffectiveSurgeon == null;
-                }
+                return true;
+            }
+
+            switch (role)
+            {
+                case PerkRole.Scout:
+                    return party.EffectiveScout == party.LeaderHero || party.EffectiveScout == null;
+                case PerkRole.Engineer:
+                    return party.EffectiveEngineer == party.LeaderHero || party.EffectiveEngineer == null;
+                case PerkRole.Quartermaster:
+                    return party.EffectiveQuartermaster == party.LeaderHero || party.EffectiveQuartermaster == null;
+                case PerkRole.Surgeon:
+                    return party.EffectiveSurgeon == party.LeaderHero || party.EffectiveSurgeon == null;
             }
 
             return true;
