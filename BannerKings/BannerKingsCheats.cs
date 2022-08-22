@@ -95,6 +95,11 @@ namespace BannerKings
         [CommandLineFunctionality.CommandLineArgumentFunction("add_piety", "bannerkings")]
         public static string AddPiety(List<string> strings)
         {
+            if (strings == null || strings.Count == 0)
+            {
+                return "Format is \"bannerkings.add_piety [Quantity]";
+            }
+
             float piety;
             if (float.TryParse(strings[0], out piety))
             {
