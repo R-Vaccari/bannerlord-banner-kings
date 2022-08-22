@@ -55,6 +55,9 @@ namespace BannerKings.Managers.Titles
                 case ActionType.Found:
                     BannerKingsConfig.Instance.TitleManager.FoundKingdom(this);
                     break;
+                case ActionType.Grant:
+                case ActionType.Destroy:
+                case ActionType.Create:
                 default:
                     BannerKingsConfig.Instance.TitleManager.GrantTitle(this, receiver);
                     break;

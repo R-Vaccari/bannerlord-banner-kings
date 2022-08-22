@@ -190,44 +190,30 @@ namespace BannerKings.Managers
 
         public BannerKingsDecision GenerateDecision(Settlement settlement, string policyType)
         {
-            switch (policyType)
+            return policyType switch
             {
-                case "decision_militia_subsidize":
-                    return new BKSubsidizeMilitiaDecision(settlement, false);
-                case "decision_militia_encourage":
-                    return new BKEncourageMilitiaDecision(settlement, false);
-                case "decision_ration":
-                    return new BKRationDecision(settlement, false);
-                case "decision_tariff_exempt":
-                    return new BKExemptTariffDecision(settlement, false);
-                case "decision_foreigner_ban":
-                    return new BKBanForeignersDecision(settlement, false);
-                case "decision_slaves_tax":
-                    return new BKTaxSlavesDecision(settlement, false);
-                case "decision_mercantilism":
-                    return new BKEncourageMercantilism(settlement, false);
-                default:
-                    return new BKExportSlavesDecision(settlement, true);
-            }
+                "decision_militia_subsidize" => new BKSubsidizeMilitiaDecision(settlement, false),
+                "decision_militia_encourage" => new BKEncourageMilitiaDecision(settlement, false),
+                "decision_ration" => new BKRationDecision(settlement, false),
+                "decision_tariff_exempt" => new BKExemptTariffDecision(settlement, false),
+                "decision_foreigner_ban" => new BKBanForeignersDecision(settlement, false),
+                "decision_slaves_tax" => new BKTaxSlavesDecision(settlement, false),
+                "decision_mercantilism" => new BKEncourageMercantilism(settlement, false),
+                _ => new BKExportSlavesDecision(settlement, true)
+            };
         }
 
         public BannerKingsPolicy GeneratePolicy(Settlement settlement, string policyType)
         {
-            switch (policyType)
+            return policyType switch
             {
-                case "garrison":
-                    return new BKGarrisonPolicy(GarrisonPolicy.Standard, settlement);
-                case "militia":
-                    return new BKMilitiaPolicy(MilitiaPolicy.Balanced, settlement);
-                case "tax":
-                    return new BKTaxPolicy(BKTaxPolicy.TaxType.Standard, settlement);
-                case "workforce":
-                    return new BKWorkforcePolicy(BKWorkforcePolicy.WorkforcePolicy.None, settlement);
-                case "draft":
-                    return new BKDraftPolicy(BKDraftPolicy.DraftPolicy.Standard, settlement);
-                default:
-                    return new BKCriminalPolicy(CriminalPolicy.Enslavement, settlement);
-            }
+                "garrison" => new BKGarrisonPolicy(GarrisonPolicy.Standard, settlement),
+                "militia" => new BKMilitiaPolicy(MilitiaPolicy.Balanced, settlement),
+                "tax" => new BKTaxPolicy(BKTaxPolicy.TaxType.Standard, settlement),
+                "workforce" => new BKWorkforcePolicy(BKWorkforcePolicy.WorkforcePolicy.None, settlement),
+                "draft" => new BKDraftPolicy(BKDraftPolicy.DraftPolicy.Standard, settlement),
+                _ => new BKCriminalPolicy(CriminalPolicy.Enslavement, settlement)
+            };
         }
 
         private void AddSettlementPolicy(Settlement settlement)

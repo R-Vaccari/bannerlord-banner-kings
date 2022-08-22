@@ -131,15 +131,12 @@ namespace BannerKings.Managers.Helpers
         private static Hero GetHeirInternal(InheritanceType type, GenderLaw genderLaw, Hero victim,
             List<Hero> candidates)
         {
-            switch (type)
+            return type switch
             {
-                case InheritanceType.Primogeniture:
-                    return ApplyPrimogeniture(genderLaw, victim, candidates);
-                case InheritanceType.Ultimogeniture:
-                    return ApplyUltimogeniture(genderLaw, victim, candidates);
-                default:
-                    return ApplySeniority(genderLaw, victim, candidates);
-            }
+                InheritanceType.Primogeniture => ApplyPrimogeniture(genderLaw, victim, candidates),
+                InheritanceType.Ultimogeniture => ApplyUltimogeniture(genderLaw, victim, candidates),
+                _ => ApplySeniority(genderLaw, victim, candidates)
+            };
         }
 
         private static List<Hero> GetCandidates(Clan clan, Hero victim)

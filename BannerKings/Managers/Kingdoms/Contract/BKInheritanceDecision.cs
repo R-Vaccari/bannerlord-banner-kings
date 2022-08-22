@@ -118,15 +118,12 @@ namespace BannerKings.Managers.Kingdoms.Contract
 
         private float[] GetWeights()
         {
-            switch (inheritanceType)
+            return inheritanceType switch
             {
-                case InheritanceType.Primogeniture:
-                    return new[] {4f, 2f, -2f};
-                case InheritanceType.Ultimogeniture:
-                    return new[] {-1f, 1f, 2f};
-                default:
-                    return new[] {-3f, 2f, 5f};
-            }
+                InheritanceType.Primogeniture => new[] {4f, 2f, -2f},
+                InheritanceType.Ultimogeniture => new[] {-1f, 1f, 2f},
+                _ => new[] {-3f, 2f, 5f}
+            };
         }
 
         public override TextObject GetChooseDescription()

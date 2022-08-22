@@ -24,21 +24,13 @@ namespace BannerKings.Models.BKModels
 
             if (highest is {type: < TitleType.Barony})
             {
-                switch (highest.type)
+                extra = highest.type switch
                 {
-                    case TitleType.County:
-                        extra = 30f;
-                        break;
-                    case TitleType.Dukedom:
-                        extra = 60f;
-                        break;
-                    case TitleType.Kingdom:
-                        extra = 100f;
-                        break;
-                    default:
-                        extra = 180f;
-                        break;
-                }
+                    TitleType.County => 30f,
+                    TitleType.Dukedom => 60f,
+                    TitleType.Kingdom => 100f,
+                    _ => 180f
+                };
             }
 
             if (extra != 0f)
@@ -51,14 +43,12 @@ namespace BannerKings.Models.BKModels
 
         public TitleAction GetFoundKingdom(Kingdom faction, Hero founder)
         {
-            var foundAction = new TitleAction(ActionType.Found, null, founder);
-            foundAction.Gold = 500000 +
-                               BannerKingsConfig.Instance.ClanFinanceModel.CalculateClanIncome(founder.Clan).ResultNumber *
-                               CampaignTime.DaysInYear;
-            foundAction.Influence = 1000 + BannerKingsConfig.Instance.InfluenceModel.CalculateInfluenceChange(founder.Clan)
-                    .ResultNumber *
-                CampaignTime.DaysInYear * 0.1f;
-            foundAction.Renown = 100;
+            var foundAction = new TitleAction(ActionType.Found, null, founder)
+            {
+                Gold = 500000 + BannerKingsConfig.Instance.ClanFinanceModel.CalculateClanIncome(founder.Clan).ResultNumber * CampaignTime.DaysInYear,
+                Influence = 1000 + BannerKingsConfig.Instance.InfluenceModel.CalculateInfluenceChange(founder.Clan).ResultNumber * CampaignTime.DaysInYear * 0.1f,
+                Renown = 100
+            };
 
             if (faction == null)
             {
@@ -119,25 +109,23 @@ namespace BannerKings.Models.BKModels
 
         public TitleAction GetAction(ActionType type, FeudalTitle title, Hero taker, Hero receiver = null)
         {
-            switch (type)
+            return type switch
             {
-                case ActionType.Usurp:
-                    return GetUsurp(title, taker);
-                case ActionType.Revoke:
-                    return GetRevoke(title, taker);
-                case ActionType.Claim:
-                    return GetClaim(title, taker);
-                default:
-                    return GetGrant(title, taker);
-            }
+                ActionType.Usurp => GetUsurp(title, taker),
+                ActionType.Revoke => GetRevoke(title, taker),
+                ActionType.Claim => GetClaim(title, taker),
+                _ => GetGrant(title, taker)
+            };
         }
 
         private TitleAction GetClaim(FeudalTitle title, Hero claimant)
         {
-            var claimAction = new TitleAction(ActionType.Claim, title, claimant);
-            claimAction.Gold = GetGoldUsurpCost(title) * 0.1f;
-            claimAction.Influence = GetInfluenceUsurpCost(title) * 0.2f;
-            claimAction.Renown = GetRenownUsurpCost(title) * 0.2f;
+            var claimAction = new TitleAction(ActionType.Claim, title, claimant)
+            {
+                Gold = GetGoldUsurpCost(title) * 0.1f,
+                Influence = GetInfluenceUsurpCost(title) * 0.2f,
+                Renown = GetRenownUsurpCost(title) * 0.2f
+            };
             var possibleClaimants = GetClaimants(title);
 
             if (title.deJure == claimant)
@@ -377,10 +365,12 @@ namespace BannerKings.Models.BKModels
 
         public TitleAction GetUsurp(FeudalTitle title, Hero usurper)
         {
-            var usurpData = new TitleAction(ActionType.Usurp, title, usurper);
-            usurpData.Gold = GetGoldUsurpCost(title);
-            usurpData.Influence = GetInfluenceUsurpCost(title);
-            usurpData.Renown = GetRenownUsurpCost(title);
+            var usurpData = new TitleAction(ActionType.Usurp, title, usurper)
+            {
+                Gold = GetGoldUsurpCost(title),
+                Influence = GetInfluenceUsurpCost(title),
+                Renown = GetRenownUsurpCost(title)
+            };
             if (title.deJure == usurper)
             {
                 usurpData.Possible = false;
@@ -557,28 +547,15 @@ namespace BannerKings.Models.BKModels
 
         public int GetRelationImpact(FeudalTitle title)
         {
-            int result;
-            switch (title.type)
+            int result = title.type switch
             {
-                case TitleType.Lordship:
-                    result = MBRandom.RandomInt(5, 10);
-                    break;
-                case TitleType.Barony:
-                    result = MBRandom.RandomInt(15, 25);
-                    break;
-                case TitleType.County:
-                    result = MBRandom.RandomInt(30, 40);
-                    break;
-                case TitleType.Dukedom:
-                    result = MBRandom.RandomInt(45, 55);
-                    break;
-                case TitleType.Kingdom:
-                    result = MBRandom.RandomInt(80, 90);
-                    break;
-                default:
-                    result = MBRandom.RandomInt(120, 150);
-                    break;
-            }
+                TitleType.Lordship => MBRandom.RandomInt(5, 10),
+                TitleType.Barony => MBRandom.RandomInt(15, 25),
+                TitleType.County => MBRandom.RandomInt(30, 40),
+                TitleType.Dukedom => MBRandom.RandomInt(45, 55),
+                TitleType.Kingdom => MBRandom.RandomInt(80, 90),
+                _ => MBRandom.RandomInt(120, 150)
+            };
 
             return -result;
         }
@@ -590,28 +567,15 @@ namespace BannerKings.Models.BKModels
                 return 2000;
             }
 
-            int result;
-            switch (title.type)
+            int result = title.type switch
             {
-                case TitleType.Lordship:
-                    result = 100;
-                    break;
-                case TitleType.Barony:
-                    result = 200;
-                    break;
-                case TitleType.County:
-                    result = 300;
-                    break;
-                case TitleType.Dukedom:
-                    result = 500;
-                    break;
-                case TitleType.Kingdom:
-                    result = 1000;
-                    break;
-                default:
-                    result = 1500;
-                    break;
-            }
+                TitleType.Lordship => 100,
+                TitleType.Barony => 200,
+                TitleType.County => 300,
+                TitleType.Dukedom => 500,
+                TitleType.Kingdom => 1000,
+                _ => 1500
+            };
 
             return result;
         }

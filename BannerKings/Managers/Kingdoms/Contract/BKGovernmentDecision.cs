@@ -222,17 +222,13 @@ namespace BannerKings.Managers.Kingdoms.Contract
 
         private float[] GetWeights()
         {
-            switch (governmentType)
+            return governmentType switch
             {
-                case GovernmentType.Imperial:
-                    return new[] {3f, 1f, -2f};
-                case GovernmentType.Tribal:
-                    return new[] {-1f, 2f, -1f};
-                case GovernmentType.Feudal:
-                    return new[] {1f, 2f, -1f};
-                default:
-                    return new[] {-3f, 1.5f, 3f};
-            }
+                GovernmentType.Imperial => new[] {3f, 1f, -2f},
+                GovernmentType.Tribal => new[] {-1f, 2f, -1f},
+                GovernmentType.Feudal => new[] {1f, 2f, -1f},
+                _ => new[] {-3f, 1.5f, 3f}
+            };
         }
 
         public override TextObject GetChooseDescription()

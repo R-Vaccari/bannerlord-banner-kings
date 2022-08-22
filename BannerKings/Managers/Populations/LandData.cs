@@ -158,32 +158,22 @@ namespace BannerKings.Managers.Populations
 
         public float GetRequiredLabor(string type)
         {
-            switch (type)
+            return type switch
             {
-                case "farmland":
-                    return 4f;
-                case "pasture":
-                    return 8f;
-                default:
-                    return 10f;
-            }
+                "farmland" => 4f,
+                "pasture" => 8f,
+                _ => 10f
+            };
         }
 
         public float GetAcreOutput(string type)
         {
-            float result;
-            switch (type)
+            float result = type switch
             {
-                case "farmland":
-                    result = 0.018f;
-                    break;
-                case "pasture":
-                    result = 0.006f;
-                    break;
-                default:
-                    result = 0.0012f;
-                    break;
-            }
+                "farmland" => 0.018f,
+                "pasture" => 0.006f,
+                _ => 0.0012f
+            };
 
             Hero owner = null;
             if (data.Settlement.OwnerClan != null)

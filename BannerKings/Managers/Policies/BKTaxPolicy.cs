@@ -31,22 +31,17 @@ namespace BannerKings.Managers.Policies
 
         public override string GetHint(int value)
         {
-            switch (value)
+            return value switch
             {
-                case (int) TaxType.High when !Settlement.IsVillage:
-                    return "Yield more tax from the population, at the cost of decreased loyalty.";
-                case (int) TaxType.High:
-                    return "Yield more tax from the population, but reduce growth.";
-                case (int) TaxType.Low when !Settlement.IsVillage:
-                    return
-                        "Reduce tax burden on the population, diminishing your profit but increasing their support towards you.";
-                case (int) TaxType.Low:
-                    return "Reduce tax burden on the population, encouraging new settlers.";
-                case (int) TaxType.Exemption:
-                    return "Fully exempt notables from taxes, improving their attitude towards you";
-                default:
-                    return "Standard tax of the land, with no particular repercussions";
-            }
+                (int) TaxType.High when !Settlement.IsVillage =>
+                    "Yield more tax from the population, at the cost of decreased loyalty.",
+                (int) TaxType.High => "Yield more tax from the population, but reduce growth.",
+                (int) TaxType.Low when !Settlement.IsVillage =>
+                    "Reduce tax burden on the population, diminishing your profit but increasing their support towards you.",
+                (int) TaxType.Low => "Reduce tax burden on the population, encouraging new settlers.",
+                (int) TaxType.Exemption => "Fully exempt notables from taxes, improving their attitude towards you",
+                _ => "Standard tax of the land, with no particular repercussions"
+            };
         }
 
         public override void OnChange(SelectorVM<BKItemVM> obj)

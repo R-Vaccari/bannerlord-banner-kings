@@ -71,31 +71,19 @@ namespace BannerKings.Models.Vanilla
 
             if (item.HasArmorComponent)
             {
-                switch (item.ItemType)
+                result += item.ItemType switch
                 {
-                    case ItemObject.ItemTypeEnum.BodyArmor:
-                        result += 50f;
-                        break;
-                    case ItemObject.ItemTypeEnum.HeadArmor:
-                        result += 30f;
-                        break;
-                    default:
-                        result += 10f;
-                        break;
-                }
+                    ItemObject.ItemTypeEnum.BodyArmor => 50f,
+                    ItemObject.ItemTypeEnum.HeadArmor => 30f,
+                    _ => 10f
+                };
 
-                switch (item.ArmorComponent.MaterialType)
+                result += item.ArmorComponent.MaterialType switch
                 {
-                    case ArmorMaterialTypes.Plate:
-                        result += 40f;
-                        break;
-                    case ArmorMaterialTypes.Chainmail:
-                        result += 25f;
-                        break;
-                    default:
-                        result += 10f;
-                        break;
-                }
+                    ArmorMaterialTypes.Plate => 40f,
+                    ArmorMaterialTypes.Chainmail => 25f,
+                    _ => 10f
+                };
             }
 
             var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(hero);
@@ -163,18 +151,12 @@ namespace BannerKings.Models.Vanilla
                         else
                         {
                             result[9] = 1;
-                            switch (item.Tierf)
+                            mainMaterial = item.Tierf switch
                             {
-                                case < 5f:
-                                    mainMaterial = CraftingMaterials.Iron4;
-                                    break;
-                                case < 6f:
-                                    mainMaterial = CraftingMaterials.Iron5;
-                                    break;
-                                default:
-                                    mainMaterial = CraftingMaterials.Iron6;
-                                    break;
-                            }
+                                < 5f => CraftingMaterials.Iron4,
+                                < 6f => CraftingMaterials.Iron5,
+                                _ => CraftingMaterials.Iron6
+                            };
                         }
 
                         var mainMaterialIndex = (int) mainMaterial;
@@ -259,17 +241,16 @@ namespace BannerKings.Models.Vanilla
 
         public int GetMetalMax(WeaponClass weaponClass)
         {
-            switch (weaponClass)
+            return weaponClass switch
             {
-                case WeaponClass.Dagger or WeaponClass.ThrowingAxe or WeaponClass.ThrowingKnife or WeaponClass.Crossbow or WeaponClass.SmallShield:
-                    return 1;
-                case WeaponClass.OneHandedSword or WeaponClass.LowGripPolearm or WeaponClass.TwoHandedPolearm or WeaponClass.OneHandedPolearm or WeaponClass.OneHandedAxe or WeaponClass.Mace or WeaponClass.LargeShield or WeaponClass.Pick:
-                    return 2;
-                case WeaponClass.TwoHandedAxe or WeaponClass.TwoHandedMace or WeaponClass.TwoHandedSword:
-                    return 3;
-                default:
-                    return -1;
-            }
+                WeaponClass.Dagger or WeaponClass.ThrowingAxe or WeaponClass.ThrowingKnife or WeaponClass.Crossbow
+                    or WeaponClass.SmallShield => 1,
+                WeaponClass.OneHandedSword or WeaponClass.LowGripPolearm or WeaponClass.TwoHandedPolearm
+                    or WeaponClass.OneHandedPolearm or WeaponClass.OneHandedAxe or WeaponClass.Mace
+                    or WeaponClass.LargeShield or WeaponClass.Pick => 2,
+                WeaponClass.TwoHandedAxe or WeaponClass.TwoHandedMace or WeaponClass.TwoHandedSword => 3,
+                _ => -1
+            };
         }
 
 
@@ -281,15 +262,13 @@ namespace BannerKings.Models.Vanilla
             if (item.WeaponComponent is {PrimaryWeapon: { }})
             {
                 var weaponClass = item.WeaponComponent.PrimaryWeapon.WeaponClass;
-                switch (weaponClass)
+                result = weaponClass switch
                 {
-                    case WeaponClass.TwoHandedAxe or WeaponClass.TwoHandedMace or WeaponClass.TwoHandedSword:
-                        result = (int) (result * 1.5f);
-                        break;
-                    case WeaponClass.OneHandedSword or WeaponClass.OneHandedAxe or WeaponClass.Mace:
-                        result = (int) (result * 1.2f);
-                        break;
-                }
+                    WeaponClass.TwoHandedAxe or WeaponClass.TwoHandedMace or WeaponClass.TwoHandedSword =>
+                        (int) (result * 1.5f),
+                    WeaponClass.OneHandedSword or WeaponClass.OneHandedAxe or WeaponClass.Mace => (int) (result * 1.2f),
+                    _ => result
+                };
             }
 
             return MBMath.ClampInt(result, 15, max);

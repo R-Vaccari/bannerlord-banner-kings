@@ -56,23 +56,24 @@ namespace BannerKings.Models.BKModels
             CouncilMember targetPosition, CouncilMember currentPosition = null,
             bool appointed = false)
         {
-            switch (type)
+            return type switch
             {
-                case CouncilActionType.REQUEST:
-                    return GetRequest(type, council, requester, targetPosition, currentPosition, appointed);
-                case CouncilActionType.RELINQUISH:
-                    return GetRelinquish(type, council, requester, currentPosition, targetPosition, appointed);
-                default:
-                    return GetSwap(type, council, requester, targetPosition, currentPosition, appointed);
-            }
+                CouncilActionType.REQUEST => GetRequest(type, council, requester, targetPosition, currentPosition,
+                    appointed),
+                CouncilActionType.RELINQUISH => GetRelinquish(type, council, requester, currentPosition, targetPosition,
+                    appointed),
+                _ => GetSwap(type, council, requester, targetPosition, currentPosition, appointed)
+            };
         }
 
 
         private CouncilAction GetSwap(CouncilActionType type, CouncilData council, Hero requester,
             CouncilMember targetPosition, CouncilMember currentPosition = null, bool appointed = false)
         {
-            var action = new CouncilAction(type, requester, targetPosition, currentPosition, council);
-            action.Influence = GetInfluenceCost(type, targetPosition);
+            var action = new CouncilAction(type, requester, targetPosition, currentPosition, council)
+            {
+                Influence = GetInfluenceCost(type, targetPosition)
+            };
 
             if (currentPosition == null || currentPosition.Member != requester)
             {
@@ -132,8 +133,10 @@ namespace BannerKings.Models.BKModels
         private CouncilAction GetRelinquish(CouncilActionType type, CouncilData council, Hero requester,
             CouncilMember currentPosition, CouncilMember targetPosition = null, bool appointed = false)
         {
-            var action = new CouncilAction(type, requester, targetPosition, currentPosition, council);
-            action.Influence = GetInfluenceCost(type, targetPosition);
+            var action = new CouncilAction(type, requester, targetPosition, currentPosition, council)
+            {
+                Influence = GetInfluenceCost(type, targetPosition)
+            };
 
             if (requester != null)
             {
@@ -160,8 +163,10 @@ namespace BannerKings.Models.BKModels
         private CouncilAction GetRequest(CouncilActionType type, CouncilData council, Hero requester,
             CouncilMember targetPosition, CouncilMember currentPosition = null, bool appointed = false)
         {
-            var action = new CouncilAction(type, requester, targetPosition, currentPosition, council);
-            action.Influence = appointed ? 0f : GetInfluenceCost(type, targetPosition);
+            var action = new CouncilAction(type, requester, targetPosition, currentPosition, council)
+            {
+                Influence = appointed ? 0f : GetInfluenceCost(type, targetPosition)
+            };
 
             if (currentPosition != null && currentPosition.Member == requester)
             {

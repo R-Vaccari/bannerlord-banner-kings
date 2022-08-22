@@ -277,18 +277,12 @@ namespace BannerKings.Models.Vanilla
             {
                 var taxtype = (BannerKingsConfig.Instance.PolicyManager.GetPolicy(town.Settlement, "tax") as BKTaxPolicy)
                     .Policy;
-                switch (taxtype)
+                tax = taxtype switch
                 {
-                    case TaxType.Standard:
-                        tax = 0.7f;
-                        break;
-                    case TaxType.High:
-                        tax = 0.65f;
-                        break;
-                    default:
-                        tax = 0.85f;
-                        break;
-                }
+                    TaxType.Standard => 0.7f,
+                    TaxType.High => 0.65f,
+                    _ => 0.85f
+                };
             }
 
             var efficiency = data.EconomicData.ProductionEfficiency.ResultNumber;

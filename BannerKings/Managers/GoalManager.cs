@@ -23,7 +23,7 @@ namespace BannerKings.Managers
 
         private void UpdateGoals(IEnumerable<Goal> goals)
         {
-            foreach (var goal in goals.Where(goal => goal.IsFulfilled()))
+            foreach (var goal in goals.Where(goal => goal.IsFulfilled(out var failedReasons)))
             {
                 var fulfiller = goal.GetFulfiller();
                 if (fulfiller is null)
@@ -33,26 +33,13 @@ namespace BannerKings.Managers
 
                 if (fulfiller.IsPlayer())
                 {
-                    ShowDecisionUI(goal);
+                    goal.ShowInquiry();
                 }
                 else
                 {
-                    DoAiDecision(goal);
+                    goal.DoAiDecision();
                 }
             }
-        }
-
-        private void ShowDecisionUI(Goal goal)
-        {
-            //TODO: Show UI, so Player can make his decision.
-            var decisionText = goal.GetDecisionText();
-            goal.ApplyGoal();
-        }
-
-        private void DoAiDecision(Goal goal)
-        {
-            //TODO: Let AI make his decision.
-            goal.ApplyGoal();
         }
     }
 }

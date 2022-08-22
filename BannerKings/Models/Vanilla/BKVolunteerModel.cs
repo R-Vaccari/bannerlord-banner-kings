@@ -133,17 +133,13 @@ namespace BannerKings.Models.Vanilla
 
         public float GetClassMilitarism(PopType type)
         {
-            switch (type)
+            return type switch
             {
-                case PopType.Serfs:
-                    return 0.1f;
-                case PopType.Craftsmen:
-                    return 0.03f;
-                case PopType.Nobles:
-                    return 0.12f;
-                default:
-                    return 0;
-            }
+                PopType.Serfs => 0.1f,
+                PopType.Craftsmen => 0.03f,
+                PopType.Nobles => 0.12f,
+                _ => 0
+            };
         }
     }
 }

@@ -331,17 +331,13 @@ namespace BannerKings.UI
 
         private static TextObject GetActionText(ActionType type)
         {
-            switch (type)
+            return type switch
             {
-                case ActionType.Usurp:
-                    return new TextObject("{=!}Usurp");
-                case ActionType.Revoke:
-                    return new TextObject("{=!}Revoke");
-                case ActionType.Claim:
-                    return new TextObject("{=!}Claim");
-                default:
-                    return new TextObject("{=!}Grant");
-            }
+                ActionType.Usurp => new TextObject("{=!}Usurp"),
+                ActionType.Revoke => new TextObject("{=!}Revoke"),
+                ActionType.Claim => new TextObject("{=!}Claim"),
+                _ => new TextObject("{=!}Grant")
+            };
         }
 
         private static void AddActionHint(ref List<TooltipProperty> list, TitleAction action)

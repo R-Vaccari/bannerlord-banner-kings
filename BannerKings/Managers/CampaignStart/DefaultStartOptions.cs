@@ -131,24 +131,15 @@ namespace BannerKings.Managers.CampaignStart
                     var templateName = "looters_template";
 
                     var culture = Hero.MainHero.Culture;
-                    switch (culture.StringId)
+                    templateName = culture.StringId switch
                     {
-                        case "sturgia":
-                            templateName = "sea_raiders_template";
-                            break;
-                        case "battania":
-                            templateName = "forest_bandits_template";
-                            break;
-                        case "aserai":
-                            templateName = "desert_bandits_template";
-                            break;
-                        case "khuzait":
-                            templateName = "steppe_bandits_template";
-                            break;
-                        case "vlandia":
-                            templateName = "mountain_bandits_template";
-                            break;
-                    }
+                        "sturgia" => "sea_raiders_template",
+                        "battania" => "forest_bandits_template",
+                        "aserai" => "desert_bandits_template",
+                        "khuzait" => "steppe_bandits_template",
+                        "vlandia" => "mountain_bandits_template",
+                        _ => templateName
+                    };
 
                     var template = templates.First(x => x.StringId == templateName);
                     var roster = MobileParty.MainParty.MemberRoster;

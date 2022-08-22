@@ -66,8 +66,6 @@ namespace BannerKings.Managers.Populations
 
         [SaveableProperty(12)] private ReligionData religionData { get; set; }
 
-        [SaveableProperty(13)] private GoalData goalData { get; set; }
-
         public CultureData CultureData => cultureData;
         public MilitaryData MilitaryData => militaryData;
         public LandData LandData => landData;
@@ -80,7 +78,6 @@ namespace BannerKings.Managers.Populations
         public TitleData TitleData => titleData;
         public ReligionData ReligionData => religionData;
         public VillageData VillageData => villageData;
-        public GoalData GoalData => goalData;
 
         public ExplainedNumber Foreigner => new BKForeignerModel().CalculateEffect(settlement);
 
@@ -100,8 +97,7 @@ namespace BannerKings.Managers.Populations
         {
             get
             {
-                var model = (BKGrowthModel) BannerKingsConfig.Instance.Models.First(x =>
-                    x.GetType() == typeof(BKGrowthModel));
+                var model = (BKGrowthModel) BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(BKGrowthModel));
                 return model.CalculateEffect(settlement, this);
             }
         }

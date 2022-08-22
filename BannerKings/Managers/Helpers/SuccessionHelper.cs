@@ -27,15 +27,12 @@ namespace BannerKings.Managers.Helpers
             if (title != null && !list.IsEmpty() && title.sovereign == null)
             {
                 var succession = title.contract.Succession;
-                switch (succession)
+                heir = succession switch
                 {
-                    case SuccessionType.Hereditary_Monarchy:
-                        heir = ApplyHereditarySuccession(list, victim, kingdom);
-                        break;
-                    case SuccessionType.Imperial:
-                        heir = ApplyImperialSuccession(list, victim, kingdom);
-                        break;
-                }
+                    SuccessionType.Hereditary_Monarchy => ApplyHereditarySuccession(list, victim, kingdom),
+                    SuccessionType.Imperial => ApplyImperialSuccession(list, victim, kingdom),
+                    _ => heir
+                };
 
                 if (heir != null && applyEffects)
                 {

@@ -8,5 +8,15 @@ namespace BannerKings.Utils.Extensions
         {
             return hero.StringId == Hero.MainHero.StringId;
         }
+
+        internal static bool IsClanLeader(this Hero hero)
+        {
+            return hero.Clan?.Leader == hero;
+        }
+
+        internal static bool IsKingdomLeader(this Hero hero)
+        {
+            return hero.Clan?.Kingdom?.Leader == hero;
+        }
     }
 }

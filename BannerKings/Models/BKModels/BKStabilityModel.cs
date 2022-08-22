@@ -162,21 +162,13 @@ namespace BannerKings.Models.BKModels
                 var legitimacyType = (LegitimacyType) BannerKingsConfig.Instance.Models
                     .First(x => x.GetType() == typeof(BKLegitimacyModel))
                     .CalculateEffect(settlement).ResultNumber;
-                switch (legitimacyType)
+                legitimacy = legitimacyType switch
                 {
-                    case LegitimacyType.Lawful:
-                        legitimacy = 0.1f;
-                        break;
-                    case LegitimacyType.Lawful_Foreigner:
-                        legitimacy = 0.05f;
-                        break;
-                    case LegitimacyType.Unlawful:
-                        legitimacy = -0.05f;
-                        break;
-                    default:
-                        legitimacy = -0.1f;
-                        break;
-                }
+                    LegitimacyType.Lawful => 0.1f,
+                    LegitimacyType.Lawful_Foreigner => 0.05f,
+                    LegitimacyType.Unlawful => -0.05f,
+                    _ => -0.1f
+                };
 
                 var government = BannerKingsConfig.Instance.TitleManager.GetSettlementGovernment(settlement);
                 if (government == GovernmentType.Feudal)
@@ -249,19 +241,12 @@ namespace BannerKings.Models.BKModels
 
         public float GetUnlandedDemesneWight(TitleType type)
         {
-            float value;
-            switch (type)
+            float value = type switch
             {
-                case TitleType.Dukedom:
-                    value = 0.5f;
-                    break;
-                case <= TitleType.Kingdom:
-                    value = 1f;
-                    break;
-                default:
-                    value = 1.5f;
-                    break;
-            }
+                TitleType.Dukedom => 0.5f,
+                <= TitleType.Kingdom => 1f,
+                _ => 1.5f
+            };
 
             return value;
         }
@@ -373,24 +358,14 @@ namespace BannerKings.Models.BKModels
                 var bonus = 0f;
                 if (title.type != TitleType.Lordship)
                 {
-                    switch (title.type)
+                    bonus = title.type switch
                     {
-                        case TitleType.Barony:
-                            bonus = 0.5f;
-                            break;
-                        case TitleType.County:
-                            bonus = 1f;
-                            break;
-                        case TitleType.Dukedom:
-                            bonus = 3f;
-                            break;
-                        case TitleType.Kingdom:
-                            bonus = 6f;
-                            break;
-                        default:
-                            bonus = 10f;
-                            break;
-                    }
+                        TitleType.Barony => 0.5f,
+                        TitleType.County => 1f,
+                        TitleType.Dukedom => 3f,
+                        TitleType.Kingdom => 6f,
+                        _ => 10f
+                    };
                 }
 
                 if (bonus > 0f)

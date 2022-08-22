@@ -1,4 +1,5 @@
-﻿using TaleWorlds.CampaignSystem;
+﻿using System.Collections.Generic;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Goals
@@ -12,12 +13,16 @@ namespace BannerKings.Managers.Goals
             this.goalUpdateType = goalUpdateType;
         }
 
-        internal abstract bool IsFulfilled();
+        internal abstract bool IsAvailable();
+
+        internal abstract bool IsFulfilled(out List<TextObject> failedReasons);
 
         internal abstract Hero GetFulfiller();
 
-        internal abstract TextObject GetDecisionText();
+        internal abstract void ShowInquiry();
 
         internal abstract void ApplyGoal();
+
+        public abstract void DoAiDecision();
     }
 }

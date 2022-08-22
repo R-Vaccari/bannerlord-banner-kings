@@ -136,96 +136,62 @@ namespace BannerKings.Utils
 
         public static string GetGovernmentDescription(GovernmentType type)
         {
-            TextObject text = null;
-            switch (type)
+            TextObject text = type switch
             {
-                case GovernmentType.Imperial:
-                    text = new TextObject(
-                        "{=!}An Imperial government is a highly centralized one. Policies favor the ruling clan at the expense of vassals. A strong leadership that sees it's vassals more as administrators than lords.");
-                    break;
-                case GovernmentType.Tribal:
-                    text = new TextObject(
-                        "{=!}The Tribal association is the most descentralized government. Policies to favor the ruling clan are unwelcome, and every lord is a 'king' or 'queen' in their own right.");
-                    break;
-                case GovernmentType.Republic:
-                    text = new TextObject(
-                        "{=!}Republics are firmly setup to avoid the accumulation of power. Every clan is given a chance to rule, and though are able to have a few political advantages, the state is always the priority.");
-                    break;
-                default:
-                    text = new TextObject(
-                        "{=!}Feudal societies can be seen as the midway between tribals and imperials. Although the ruling clan accumulates privileges, and often cannot be easily removed from the throne, lords and their rightful property need to be respected.");
-                    break;
-            }
+                GovernmentType.Imperial => new TextObject(
+                    "{=!}An Imperial government is a highly centralized one. Policies favor the ruling clan at the expense of vassals. A strong leadership that sees it's vassals more as administrators than lords."),
+                GovernmentType.Tribal => new TextObject(
+                    "{=!}The Tribal association is the most descentralized government. Policies to favor the ruling clan are unwelcome, and every lord is a 'king' or 'queen' in their own right."),
+                GovernmentType.Republic => new TextObject(
+                    "{=!}Republics are firmly setup to avoid the accumulation of power. Every clan is given a chance to rule, and though are able to have a few political advantages, the state is always the priority."),
+                _ => new TextObject(
+                    "{=!}Feudal societies can be seen as the midway between tribals and imperials. Although the ruling clan accumulates privileges, and often cannot be easily removed from the throne, lords and their rightful property need to be respected.")
+            };
 
             return text.ToString();
         }
 
         public static string GetSuccessionTypeDescription(SuccessionType type)
         {
-            TextObject text = null;
-            switch (type)
+            TextObject text = type switch
             {
-                case SuccessionType.Elective_Monarchy:
-                    text = new TextObject(
-                        "{=!}In elective monarchies, the ruler is chosen from the realm's dynasties, and rules until death or abdication. Elections take place and all dynasties are able to vote when a new leader is required.");
-                    break;
-                case SuccessionType.Hereditary_Monarchy:
-                    text = new TextObject(
-                        "{=!}In hereditary monarchies, the monarch is always the ruling dynasty's leader. No election takes place, and the realm does not change leadership without extraordinary measures.");
-                    break;
-                case SuccessionType.Imperial:
-                    text = new TextObject(
-                        "{=!}Imperial successions are completely dictated by the emperor/empress. They will choose from most competent members in their family, as well as other family leaders. Imperial succession values age, family prestigy, military and administration skills. No election takes place.");
-                    break;
-                default:
-                    text = new TextObject(
-                        "{=!}Republican successions ensure the power is never concentrated. Each year, a new ruler is chosen from the realm's dynasties. The previous ruler is strickly forbidden to participate. Age, family prestige and administration skills are sought after in candidates.");
-                    break;
-            }
+                SuccessionType.Elective_Monarchy => new TextObject(
+                    "{=!}In elective monarchies, the ruler is chosen from the realm's dynasties, and rules until death or abdication. Elections take place and all dynasties are able to vote when a new leader is required."),
+                SuccessionType.Hereditary_Monarchy => new TextObject(
+                    "{=!}In hereditary monarchies, the monarch is always the ruling dynasty's leader. No election takes place, and the realm does not change leadership without extraordinary measures."),
+                SuccessionType.Imperial => new TextObject(
+                    "{=!}Imperial successions are completely dictated by the emperor/empress. They will choose from most competent members in their family, as well as other family leaders. Imperial succession values age, family prestigy, military and administration skills. No election takes place."),
+                _ => new TextObject(
+                    "{=!}Republican successions ensure the power is never concentrated. Each year, a new ruler is chosen from the realm's dynasties. The previous ruler is strickly forbidden to participate. Age, family prestige and administration skills are sought after in candidates.")
+            };
 
             return text.ToString();
         }
 
         public static string GetSuccessionTypeName(SuccessionType type)
         {
-            TextObject text = null;
-            switch (type)
+            TextObject text = type switch
             {
-                case SuccessionType.Elective_Monarchy:
-                    text = new TextObject("{=!}Elective Monarchy");
-                    break;
-                case SuccessionType.Hereditary_Monarchy:
-                    text = new TextObject("{=!}Hereditary Monarchy");
-                    break;
-                case SuccessionType.Imperial:
-                    text = new TextObject("{=!}Imperial");
-                    break;
-                default:
-                    text = new TextObject("{=!}Republican");
-                    break;
-            }
+                SuccessionType.Elective_Monarchy => new TextObject("{=!}Elective Monarchy"),
+                SuccessionType.Hereditary_Monarchy => new TextObject("{=!}Hereditary Monarchy"),
+                SuccessionType.Imperial => new TextObject("{=!}Imperial"),
+                _ => new TextObject("{=!}Republican")
+            };
 
             return text.ToString();
         }
 
         public static string GetInheritanceDescription(InheritanceType type)
         {
-            TextObject text = null;
-            switch (type)
+            TextObject text = type switch
             {
-                case InheritanceType.Primogeniture:
-                    text = new TextObject(
-                        "{=!}Primogeniture favors blood family of eldest age. Clan members not related by blood are last resort.");
-                    break;
-                case InheritanceType.Seniority:
-                    text = new TextObject(
-                        "{=!}Seniority favors those of more advanced age in the clan, regardless of blood connections.");
-                    break;
-                default:
-                    text = new TextObject(
-                        "{=!}Ultimogeniture favors the youngest in the clan, as well as blood family. Clan members not related by blood are last resort.");
-                    break;
-            }
+                InheritanceType.Primogeniture => new TextObject(
+                    "{=!}Primogeniture favors blood family of eldest age. Clan members not related by blood are last resort."),
+                InheritanceType.Seniority => new TextObject(
+                    "{=!}Seniority favors those of more advanced age in the clan, regardless of blood connections."),
+                _ => new TextObject(
+                    "{=!}Ultimogeniture favors the youngest in the clan, as well as blood family. Clan members not related by blood are last resort.")
+            };
 
             return text.ToString();
         }
@@ -250,43 +216,33 @@ namespace BannerKings.Utils
         public static string GetClassHint(PopType type, CultureObject culture)
         {
             var name = GetClassName(type, culture).ToString();
-            string description;
-            switch (type)
+            string description = type switch
             {
-                case PopType.Nobles:
-                    description =
-                        " represent the free, wealthy and influential members of society. They pay very high taxes and increase your influence as a lord.";
-                    break;
-                case PopType.Craftsmen:
-                    description =
-                        " are free people of trade, such as merchants, engineers and blacksmiths. Somewhat wealthy, free but not high status people. Craftsmen pay a significant amount of taxes and their presence boosts economical development. Their skills can also be hired to significantly boost construction projects.";
-                    break;
-                case PopType.Serfs:
-                    description =
-                        " are the lowest class that possess some sort of freedom. Unable to attain specialized skills such as those of craftsmen, these people represent the agricultural workforce. They also pay tax over the profit of their production excess.";
-                    break;
-                default:
-                    description =
-                        " are those destituted: criminals, prisioners unworthy of a ransom, and those unlucky to be born into slavery. Slaves do the hard manual labor across settlements, such as building and mining. They themselves pay no tax as they are unable to have posessions, but their labor generates income gathered as tax from their masters.";
-                    break;
-            }
+                PopType.Nobles =>
+                    " represent the free, wealthy and influential members of society. They pay very high taxes and increase your influence as a lord.",
+                PopType.Craftsmen =>
+                    " are free people of trade, such as merchants, engineers and blacksmiths. Somewhat wealthy, free but not high status people. Craftsmen pay a significant amount of taxes and their presence boosts economical development. Their skills can also be hired to significantly boost construction projects.",
+                PopType.Serfs =>
+                    " are the lowest class that possess some sort of freedom. Unable to attain specialized skills such as those of craftsmen, these people represent the agricultural workforce. They also pay tax over the profit of their production excess.",
+                _ =>
+                    " are those destituted: criminals, prisioners unworthy of a ransom, and those unlucky to be born into slavery. Slaves do the hard manual labor across settlements, such as building and mining. They themselves pay no tax as they are unable to have posessions, but their labor generates income gathered as tax from their masters."
+            };
 
             return name + description;
         }
 
         public static string GetConsumptionHint(ConsumptionType type)
         {
-            switch (type)
+            return type switch
             {
-                case ConsumptionType.Luxury:
-                    return "Satisfaction over availability of products such as jewelry, velvets and fur.";
-                case ConsumptionType.Industrial:
-                    return "Satisfaction over availability of manufacturing products such as leather, clay and tools.";
-                case ConsumptionType.General:
-                    return "Satisfaction over availability of various products, including military equipment and horses.";
-                default:
-                    return "Satisfaction over availability of food types.";
-            }
+                ConsumptionType.Luxury =>
+                    "Satisfaction over availability of products such as jewelry, velvets and fur.",
+                ConsumptionType.Industrial =>
+                    "Satisfaction over availability of manufacturing products such as leather, clay and tools.",
+                ConsumptionType.General =>
+                    "Satisfaction over availability of various products, including military equipment and horses.",
+                _ => "Satisfaction over availability of food types."
+            };
         }
 
         public static string GetTitleHonorary(TitleType type, GovernmentType government, bool female,
@@ -665,21 +621,13 @@ namespace BannerKings.Utils
 
             if (title == null)
             {
-                switch (type)
+                title = type switch
                 {
-                    case GovernmentType.Feudal:
-                        title = new TextObject("{=!}Kingdom");
-                        break;
-                    case GovernmentType.Tribal:
-                        title = new TextObject("{=!}High Kingship");
-                        break;
-                    case GovernmentType.Imperial:
-                        title = new TextObject("{=!}Empire");
-                        break;
-                    default:
-                        title = new TextObject("{=!}Republic");
-                        break;
-                }
+                    GovernmentType.Feudal => new TextObject("{=!}Kingdom"),
+                    GovernmentType.Tribal => new TextObject("{=!}High Kingship"),
+                    GovernmentType.Imperial => new TextObject("{=!}Empire"),
+                    _ => new TextObject("{=!}Republic")
+                };
             }
 
             return title.ToString();
@@ -727,15 +675,12 @@ namespace BannerKings.Utils
                     {
                         if (government == GovernmentType.Tribal)
                         {
-                            switch (type)
+                            title = type switch
                             {
-                                case TitleType.Kingdom:
-                                    title = new TextObject("{=!}High-Kingdom");
-                                    break;
-                                case TitleType.Dukedom:
-                                    title = new TextObject("{=!}Petty Kingdom");
-                                    break;
-                            }
+                                TitleType.Kingdom => new TextObject("{=!}High-Kingdom"),
+                                TitleType.Dukedom => new TextObject("{=!}Petty Kingdom"),
+                                _ => title
+                            };
                         }
 
                         break;
@@ -743,27 +688,14 @@ namespace BannerKings.Utils
                 }
             }
 
-            if (title == null)
+            title ??= type switch
             {
-                switch (type)
-                {
-                    case TitleType.Kingdom:
-                        title = new TextObject("{=!}Kingdom");
-                        break;
-                    case TitleType.Dukedom:
-                        title = new TextObject("{=!}Dukedom");
-                        break;
-                    case TitleType.County:
-                        title = new TextObject("{=!}County");
-                        break;
-                    case TitleType.Barony:
-                        title = new TextObject("{=!}Barony");
-                        break;
-                    default:
-                        title = new TextObject("{=!}Lordship");
-                        break;
-                }
-            }
+                TitleType.Kingdom => new TextObject("{=!}Kingdom"),
+                TitleType.Dukedom => new TextObject("{=!}Dukedom"),
+                TitleType.County => new TextObject("{=!}County"),
+                TitleType.Barony => new TextObject("{=!}Barony"),
+                _ => new TextObject("{=!}Lordship")
+            };
 
 
             return title.ToString();

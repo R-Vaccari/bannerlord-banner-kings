@@ -132,17 +132,13 @@ namespace BannerKings.Managers.Kingdoms.Contract
 
         private float[] GetWeights()
         {
-            switch (successionType)
+            return successionType switch
             {
-                case SuccessionType.Hereditary_Monarchy:
-                    return new[] {1f, 3f, -2f};
-                case SuccessionType.Elective_Monarchy:
-                    return new[] {-1f, 5f, 1f};
-                case SuccessionType.Imperial:
-                    return new[] {5f, -2f, -1f};
-                default:
-                    return new[] {-3f, 1f, 5f};
-            }
+                SuccessionType.Hereditary_Monarchy => new[] {1f, 3f, -2f},
+                SuccessionType.Elective_Monarchy => new[] {-1f, 5f, 1f},
+                SuccessionType.Imperial => new[] {5f, -2f, -1f},
+                _ => new[] {-3f, 1f, 5f}
+            };
         }
 
         public override TextObject GetChooseDescription()

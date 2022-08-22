@@ -427,19 +427,12 @@ namespace BannerKings.Behaviours
                 var settlement = Settlement.CurrentSettlement;
                 var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement).LandData;
                 var woodland = data.Woodland;
-                var game = "";
-                switch (woodland)
+                var game = woodland switch
                 {
-                    case >= 50000:
-                        game = new TextObject("{=!}Bountiful").ToString();
-                        break;
-                    case >= 25000:
-                        game = new TextObject("{=!}Mediocre").ToString();
-                        break;
-                    default:
-                        game = new TextObject("{=!}Poor").ToString();
-                        break;
-                }
+                    >= 50000 => new TextObject("{=!}Bountiful").ToString(),
+                    >= 25000 => new TextObject("{=!}Mediocre").ToString(),
+                    _ => new TextObject("{=!}Poor").ToString()
+                };
 
                 GameTexts.SetVariable("HUNTING_GAME", game);
                 if (args.MenuContext.GameMenu.Progress != progress)

@@ -289,9 +289,7 @@ namespace BannerKings.Behaviours
                             GameTexts.SetVariable("SETTLEMENT", settlement.Name);
                             InformationManager.ShowInquiry(new InquiryData(
                                 new TextObject("Conquest Right - Election").ToString(),
-                                new TextObject(
-                                        "By contract law, you and the participants of {ARMY} will compete in election for the ownership of {SETTLEMENT}.")
-                                    .ToString(),
+                                new TextObject("By contract law, you and the participants of {ARMY} will compete in election for the ownership of {SETTLEMENT}.").ToString(),
                                 true, false, GameTexts.FindText("str_done").ToString(), null, null, null), true);
                         }
 

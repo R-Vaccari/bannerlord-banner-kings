@@ -370,20 +370,13 @@ namespace BannerKings.Managers.AI
 
                 var criminal = (BKCriminalPolicy) BannerKingsConfig.Instance.PolicyManager.GetPolicy(target, "criminal");
                 var mercy = target.Owner.GetTraitLevel(DefaultTraits.Mercy);
-                BKCriminalPolicy targetCriminal = null;
 
-                switch (mercy)
+                BKCriminalPolicy targetCriminal = mercy switch
                 {
-                    case > 0:
-                        targetCriminal = new BKCriminalPolicy(BKCriminalPolicy.CriminalPolicy.Forgiveness, target);
-                        break;
-                    case < 0:
-                        targetCriminal = new BKCriminalPolicy(BKCriminalPolicy.CriminalPolicy.Execution, target);
-                        break;
-                    default:
-                        targetCriminal = new BKCriminalPolicy(BKCriminalPolicy.CriminalPolicy.Enslavement, target);
-                        break;
-                }
+                    > 0 => new BKCriminalPolicy(BKCriminalPolicy.CriminalPolicy.Forgiveness, target),
+                    < 0 => new BKCriminalPolicy(BKCriminalPolicy.CriminalPolicy.Execution, target),
+                    _ => new BKCriminalPolicy(BKCriminalPolicy.CriminalPolicy.Enslavement, target)
+                };
 
                 if (targetCriminal.Policy != criminal.Policy)
                 {
