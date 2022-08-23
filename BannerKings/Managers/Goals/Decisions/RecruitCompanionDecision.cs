@@ -19,7 +19,6 @@ namespace BannerKings.Managers.Goals.Decisions
 
         public RecruitCompanionDecision() : base("goal_recruit_companion_decision", GoalUpdateType.Manual)
         {
-
             var name = new TextObject("{=!}Recruit Companion");
             var description = new TextObject("{!=}Select a type of companion to recruit");
 
@@ -64,14 +63,11 @@ namespace BannerKings.Managers.Goals.Decisions
 
             if (companionTypes.All(ct => gold < ct.GoldCost && influence < ct.InfluenceCost))
             {
-                failedReasons.AddRange(companionTypes.Select(companionType => 
-                    new TextObject("{=!}A {COMPANION_NAME} can't be afforded. {GOLD}{GOLD_ICON} and {INFLUENCE}{INFLUENCE_ICON} is needed.")
-                        .SetTextVariable("COMPANION_NAME", companionType.Name)
-                        .SetTextVariable("GOLD", companionType.GoldCost)
-                        .SetTextVariable("INFLUENCE", companionType.InfluenceCost)));
+                failedReasons.Add(new TextObject("{!=}You can't afford any companion."));
             }
 
-            return failedReasons.IsEmpty();
+            return true;
+            //return failedReasons.IsEmpty();
         }
 
         internal override Hero GetFulfiller()
