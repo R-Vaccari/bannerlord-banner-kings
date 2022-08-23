@@ -158,15 +158,8 @@ namespace BannerKings
             ConstructContainerDefinition(typeof(List<VillageBuilding>));
             ConstructContainerDefinition(typeof(List<CultureDataClass>));
             ConstructContainerDefinition(typeof(Dictionary<Settlement, PopulationData>));
-            ConstructContainerDefinition(typeof(List<BKDecision<Settlement>>));
-            ConstructContainerDefinition(typeof(List<BKDecision<Hero>>));
-            ConstructContainerDefinition(typeof(List<BKSettlementDecision>));
             ConstructContainerDefinition(typeof(List<BannerKingsPolicy>));
             ConstructContainerDefinition(typeof(Dictionary<Settlement, List<BannerKingsPolicy>>));
-            ConstructContainerDefinition(typeof(Dictionary<Settlement, List<BKDecision<Settlement>>>));
-            ConstructContainerDefinition(typeof(Dictionary<Settlement, List<BKSettlementDecision>>));
-            ConstructContainerDefinition(typeof(Dictionary<Hero, List<BKDecision<Hero>>>));
-            ConstructContainerDefinition(typeof(Dictionary<Hero, List<BKLordDecision>>));
             ConstructContainerDefinition(typeof(Dictionary<FeudalTitle, Hero>));
             ConstructContainerDefinition(typeof(Dictionary<Kingdom, FeudalTitle>));
             ConstructContainerDefinition(typeof(List<FeudalTitle>));
@@ -191,6 +184,16 @@ namespace BannerKings
             ConstructContainerDefinition(typeof(Dictionary<Hero, float>));
             ConstructContainerDefinition(typeof(List<Innovation>));
             ConstructContainerDefinition(typeof(Dictionary<CultureObject, InnovationData>));
+
+            ConstructContainerDefinition(typeof(List<BKDecision<Settlement>>));
+            ConstructContainerDefinition(typeof(List<BKSettlementDecision>));
+            ConstructContainerDefinition(typeof(Dictionary<Settlement, List<BKDecision<Settlement>>>));
+            ConstructContainerDefinition(typeof(Dictionary<Settlement, List<BKSettlementDecision>>));
+
+            ConstructContainerDefinition(typeof(List<BKDecision<Hero>>));
+            ConstructContainerDefinition(typeof(List<BKLordDecision>));
+            ConstructContainerDefinition(typeof(Dictionary<Hero, List<BKDecision<Hero>>>));
+            ConstructContainerDefinition(typeof(Dictionary<Hero, List<BKLordDecision>>));
         }
     }
 }

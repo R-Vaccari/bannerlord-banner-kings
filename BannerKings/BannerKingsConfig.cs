@@ -64,7 +64,6 @@ namespace BannerKings
             DefaultLanguages.Instance.Initialize();
             DefaultBookTypes.Instance.Initialize();
             DefaultLifestyles.Instance.Initialize();
-            DefaultGoals.Instance.Initialize();
 
             Models.Add(new BKCultureAssimilationModel());
             Models.Add(new BKCultureAcceptanceModel());
@@ -89,7 +88,9 @@ namespace BannerKings
             ReligionsManager = new ReligionsManager();
             EducationManager = new EducationManager();
             InnovationsManager = new InnovationsManager();
+
             GoalManager = new GoalManager();
+            DefaultGoals.Instance.Initialize();
         }
 
         public void InitManagers(PopulationManager populationManager, PolicyManager policyManager, TitleManager titleManager, CourtManager court, ReligionsManager religions, EducationManager educations, InnovationsManager innovations, GoalManager goals)
