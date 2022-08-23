@@ -18,8 +18,8 @@ namespace BannerKings.Behaviours
         {
             CampaignEvents.OnCharacterCreationIsOverEvent.AddNonSerializedListener(this, OnCreationEnded);
             CampaignEvents.OnGameLoadedEvent.AddNonSerializedListener(this, OnGameLoaded);
-            CampaignEvents.DailyTickHeroEvent.AddNonSerializedListener(this, OnDailyTickHeroEvent);
-            CampaignEvents.DailyTickSettlementEvent.AddNonSerializedListener(this, OnDailyTickSettlementEvent);
+            //CampaignEvents.DailyTickHeroEvent.AddNonSerializedListener(this, OnDailyTickHeroEvent);
+            //CampaignEvents.DailyTickSettlementEvent.AddNonSerializedListener(this, OnDailyTickSettlementEvent);
         }
 
         private void OnCreationEnded()
