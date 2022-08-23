@@ -2,6 +2,7 @@
 using BannerKings.Managers.Populations;
 using BannerKings.UI.Items;
 using BannerKings.UI.Items.UI;
+using TaleWorlds.Core.ViewModelCollection.Selector;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
@@ -14,9 +15,22 @@ namespace BannerKings.UI.Religion
         private MBBindingList<InformationElement> courtInfo;
         private MBBindingList<ReligionElementVM> doctrines;
         private MBBindingList<ReligionMemberVM> faithful;
-        private readonly Managers.Institutions.Religions.Religion religion;
+        private Managers.Institutions.Religions.Religion religion;
         private MBBindingList<ReligionElementVM> secondaryDivinities;
         private MBBindingList<BKTraitItemVM> virtues;
+        private SelectorVM<ReligionSelectorItemVM> selector;
+
+        public ReligionVM(Managers.Institutions.Religions.Religion religion) : base(null, true)
+        {
+            this.religion = religion;
+            courtInfo = new MBBindingList<InformationElement>();
+            Clergymen = new MBBindingList<ReligionMemberVM>();
+            Faithful = new MBBindingList<ReligionMemberVM>();
+            Virtues = new MBBindingList<BKTraitItemVM>();
+            Doctrines = new MBBindingList<ReligionElementVM>();
+            Aspects = new MBBindingList<ReligionElementVM>();
+            SecondaryDivinities = new MBBindingList<ReligionElementVM>();
+        }
 
         public ReligionVM(PopulationData data) : base(data, true)
         {
@@ -28,6 +42,20 @@ namespace BannerKings.UI.Religion
             Doctrines = new MBBindingList<ReligionElementVM>();
             Aspects = new MBBindingList<ReligionElementVM>();
             SecondaryDivinities = new MBBindingList<ReligionElementVM>();
+        }
+
+        [DataSourceProperty]
+        public SelectorVM<ReligionSelectorItemVM> Selector
+        {
+            get => selector;
+            set
+            {
+                if (value != selector)
+                {
+                    selector = value;
+                    OnPropertyChangedWithValue(value);
+                }
+            }
         }
 
         [DataSourceProperty] public string ClergymenText => new TextObject("{=!}Clergymen").ToString();
@@ -162,6 +190,23 @@ namespace BannerKings.UI.Religion
             Doctrines.Clear();
             Aspects.Clear();
 
+            int selectedIndex = 0;
+            Selector = new SelectorVM<ReligionSelectorItemVM>(0, null);
+            int i = 0;
+            foreach (var religion in BannerKingsConfig.Instance.ReligionsManager.GetReligions())
+            {
+                var item = new ReligionSelectorItemVM(religion, religion.Faith != this.religion.Faith);
+                if (religion.Faith == this.religion.Faith) selectedIndex = i;
+                selector.AddItem(item);
+                i++;
+            }
+            Selector.SelectedIndex = selectedIndex;
+            Selector.SetOnChangeAction(delegate (SelectorVM<ReligionSelectorItemVM> obj)
+            {
+                religion = obj.SelectedItem.Religion;
+                RefreshValues();
+            });
+
             foreach (var clgm in religion.Clergy.Values)
             {
                 Clergymen.Add(new ReligionMemberVM(clgm, null));
@@ -189,7 +234,7 @@ namespace BannerKings.UI.Religion
             foreach (var divinity in religion.Faith.GetSecondaryDivinities())
             {
                 SecondaryDivinities.Add(new ReligionElementVM(divinity.SecondaryTitle, divinity.Name,
-                    divinity.Description));
+                    divinity.Description, divinity.Effects));
             }
 
             Aspects.Add(new ReligionElementVM(new TextObject("{=!}Leadership"), religion.Leadership.GetName(),

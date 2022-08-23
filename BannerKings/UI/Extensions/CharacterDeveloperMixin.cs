@@ -1,5 +1,6 @@
 ﻿using BannerKings.Managers.Goals;
 using BannerKings.UI.Education;
+using BannerKings.UI.Religion;
 using Bannerlord.UIExtenderEx.Attributes;
 using Bannerlord.UIExtenderEx.ViewModels;
 using System.Collections.Generic;
@@ -15,13 +16,14 @@ namespace BannerKings.UI.Extensions
     {
         //private BasicTooltipViewModel pietyHint;
         private readonly CharacterDeveloperVM characterDeveloper;
-        private string educationText;
         private EducationVM educationVM;
-        private bool visible;
+        private ReligionVM religionVM;
+        private bool educationVisible, religionVisible;
 
         public CharacterDeveloperMixin(CharacterDeveloperVM vm) : base(vm)
         {
             EducationVisible = false;
+            ReligionVisible = false;
             characterDeveloper = vm;
         }
 
@@ -40,14 +42,42 @@ namespace BannerKings.UI.Extensions
         }
 
         [DataSourceProperty]
-        public bool EducationVisible
+        public ReligionVM Religion
         {
-            get => visible;
+            get => religionVM;
             set
             {
-                if (value != visible)
+                if (value != religionVM)
                 {
-                    visible = value;
+                    religionVM = value;
+                    ViewModel!.OnPropertyChangedWithValue(value);
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public bool EducationVisible
+        {
+            get => educationVisible;
+            set
+            {
+                if (value != educationVisible)
+                {
+                    educationVisible = value;
+                    ViewModel!.OnPropertyChangedWithValue(value);
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public bool ReligionVisible
+        {
+            get => religionVisible;
+            set
+            {
+                if (value != religionVisible)
+                {
+                    religionVisible = value;
                     ViewModel!.OnPropertyChangedWithValue(value);
                 }
             }
@@ -66,18 +96,24 @@ namespace BannerKings.UI.Extensions
         {
             Education = new EducationVM(characterDeveloper.CurrentCharacter.Hero, characterDeveloper);
             Education.RefreshValues();
+            Religion = new ReligionVM(BannerKingsConfig.Instance.ReligionsManager
+                .GetHeroReligion(characterDeveloper.CurrentCharacter.Hero));
+            Religion.RefreshValues();
         }
 
         [DataSourceMethod]
         public void OpenEducation()
         {
             EducationVisible = true;
+            ReligionVisible = false;
             OnRefresh();
         }
 
         [DataSourceMethod]
         public void OpenFaith()
         {
+            ReligionVisible = true;
+            EducationVisible = false;
             OnRefresh();
         }
 
@@ -118,6 +154,13 @@ namespace BannerKings.UI.Extensions
         public void CloseEducation()
         {
             EducationVisible = false;
+            OnRefresh();
+        }
+
+        [DataSourceMethod]
+        public void CloseFaith()
+        {
+            ReligionVisible = false;
             OnRefresh();
         }
     }

@@ -20,7 +20,10 @@ namespace BannerKings.UI.Extensions
             var firstChild = new XmlDocument();
             firstChild.LoadXml("<EducationInspectPopup/>");
 
-            nodes = new List<XmlNode> { list, firstChild };
+            var religion = new XmlDocument();
+            religion.LoadXml("<ReligionPopup/>");
+
+            nodes = new List<XmlNode> { list, firstChild, religion };
         }
 
         public override InsertType Type => InsertType.Child;
