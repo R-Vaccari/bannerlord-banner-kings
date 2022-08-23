@@ -298,22 +298,22 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Empire
 
         public override TextObject GetBlessingAction()
         {
-            throw new NotImplementedException();
+            return new TextObject("{=!}I would like to medidate upon the Martyr.");
         }
 
         public override TextObject GetBlessingQuestion()
         {
-            throw new NotImplementedException();
+            return new TextObject("{=!}How so? Would you like to medidate upon the Cult and our line of hallowed emperors? Or would you pray for guidance from the Triad?");
         }
 
         public override TextObject GetBlessingConfirmQuestion()
         {
-            throw new NotImplementedException();
+            return new TextObject("{=!}Assert your will for guidance. The study of the Martyr and the gods is not to be taken lightly.");
         }
 
         public override TextObject GetBlessingQuickInformation()
         {
-            throw new NotImplementedException();
+            return new TextObject("{=!}I would like to medidate upon the Martyr.");
         }
 
         public override TextObject GetBlessingActionName()
