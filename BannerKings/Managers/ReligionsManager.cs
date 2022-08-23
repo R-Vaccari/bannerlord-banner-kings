@@ -186,6 +186,11 @@ namespace BannerKings.Managers
             }
         }
 
+        public Religion GetReligionById(string id)
+        {
+            return Religions.FirstOrDefault(pair => pair.Key.Faith.GetId() == id).Key;
+        }
+
         public Religion GetHeroReligion(Hero hero)
         {
             return Religions.FirstOrDefault(pair => pair.Value.ContainsKey(hero)).Key;

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Titles;
 using BannerKings.Utils.Extensions;
 using TaleWorlds.CampaignSystem;
@@ -56,6 +57,7 @@ namespace BannerKings.Managers.Goals.Decisions
             var referenceSettlement = settlements.First();
             var referenceHero = referenceSettlement.Owner;
             var (gold, influence) = GetCosts(referenceHero);
+            CultureObject culture = Utils.Helpers.GetCulture("battania");
 
             if (!IsAvailable())
             {
@@ -68,19 +70,38 @@ namespace BannerKings.Managers.Goals.Decisions
                 failedReasons.Add(failedReason);
             }
 
-            if (!referenceHero.IsKingdomLeader() || referenceHero.Clan.Kingdom.StringId != "battania")
+            if (referenceHero.Culture != culture)
             {
-                var kingdom = Campaign.Current.Kingdoms.FirstOrDefault(k => k.StringId == "battania");
-                if (kingdom == null)
+                failedReasons.Add(new TextObject("{!=}You are not part of the {CULTURE} culture.")
+                        .SetTextVariable("CULTURE", culture.EncyclopediaText));
+            }
+
+            var battaniaKingdom = Campaign.Current.Kingdoms.FirstOrDefault(k => k.StringId == "battania");
+            if (battaniaKingdom != null)
+            {
+                if (battaniaKingdom.Leader != referenceHero)
                 {
-                    failedReasons.Add(new TextObject("{!=}The {KINGDOM} kingdom does not exist")
-                        .SetTextVariable("KINGDOM", GameTexts.FindText("str_adjective_for_faction", "battania")));
+                    failedReasons.Add(new TextObject("{!=}You're not the leader of {KINGDOM}.")
+                        .SetTextVariable("KINGDOM", battaniaKingdom.EncyclopediaLinkWithName));
                 }
-                else
+            }
+
+            if (referenceHero.Clan.Kingdom != null)
+            {
+                // if Battania does not exist, culture must be Battanian.
+                if (referenceHero.Clan.Kingdom.Culture != culture)
                 {
-                    failedReasons.Add(new TextObject("{!=}You're not the leader of {KINGDOM}")
-                        .SetTextVariable("KINGDOM", kingdom.EncyclopediaLinkWithName));
+                    failedReasons.Add(new TextObject("{!=}Your kingdom is not part of {CULTURE} culture.")
+                        .SetTextVariable("CULTURE", culture.EncyclopediaText));
                 }
+            }
+
+            Religion religion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(referenceHero);
+            if (religion == null || religion.Faith.GetId() != "amra")
+            {
+                Religion amra = BannerKingsConfig.Instance.ReligionsManager.GetReligionById("amra");
+                failedReasons.Add(new TextObject("{!=}You do not adhere to the {RELIGION} faith.")
+                        .SetTextVariable("RELIGION", amra.Faith.GetFaithName()));
             }
 
             failedReasons.AddRange
