@@ -37,7 +37,7 @@ namespace BannerKings.UI.Crafting
 
         [DataSourceProperty]
         public string ValueText => new TextObject("{=!}{GOLD} denarii")
-            .SetTextVariable("GOLD", Item.Value)
+            .SetTextVariable("GOLD", $"{Item.Value:n0}")
             .ToString();
 
         [DataSourceProperty] public int Difficulty { get; }

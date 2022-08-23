@@ -21,7 +21,7 @@ namespace BannerKings.Managers.Goals.Decisions
         public RecruitCompanionDecision() : base("goal_recruit_companion_decision", GoalUpdateType.Manual)
         {
             var name = new TextObject("{=!}Recruit Companion");
-            var description = new TextObject("{!=}Select a type of companion to recruit.");
+            var description = new TextObject("{=!}Select a type of companion to recruit.");
 
             Initialize(name, description);
 
@@ -95,11 +95,11 @@ namespace BannerKings.Managers.Goals.Decisions
             failedReasons = new List<TextObject>();
 
             var gold = GetFulfiller().Gold;
-            var influence = GetFulfiller().Clan?.Influence;
+            var influence = GetFulfiller().Clan?.Influence ?? 0f;
 
             if (companionTypes.All(ct => gold < ct.GoldCost && influence < ct.InfluenceCost))
             {
-                failedReasons.Add(new TextObject("{!=}You can't afford any companion."));
+                failedReasons.Add(new TextObject("{=!}You can't afford any companion."));
             }
 
             return true;
@@ -116,7 +116,7 @@ namespace BannerKings.Managers.Goals.Decisions
             IsFulfilled(out var failedReasons);
 
             var gold = GetFulfiller().Gold;
-            var influence = GetFulfiller().Clan?.Influence;
+            var influence = GetFulfiller().Clan?.Influence ?? 0f;
 
             var options = new List<InquiryElement>();
             foreach (var companionType in companionTypes)
@@ -132,7 +132,11 @@ namespace BannerKings.Managers.Goals.Decisions
                 }
                 else if (!enabled)
                 {
-                    hint = failedReasons[0].ToString();
+                    hint = new TextObject("{=!} You can't afford the cost:\n{GOLD}{GOLD_ICON}\n{INFLUENCE}{INFLUENCE_ICON}.")
+                        .SetTextVariable("GOLD", $"{companionType.GoldCost:n0}")
+                        .SetTextVariable("INFLUENCE", $"{companionType.InfluenceCost:n0}")
+                        .SetTextVariable("INFLUENCE_ICON", "{=!}<img src=\"General\\Icons\\Influence@2x\" extend=\"7\">")
+                        .ToString();
                 }
 
                 options.Add(new InquiryElement(companionType, companionType.Name, null, enabled, hint));

@@ -134,7 +134,7 @@ namespace BannerKings.UI.Extensions
                 var hint = goal.Description.ToString();
                 if (!enabled)
                 {
-                    foreach (TextObject reason in reasons)
+                    foreach (var reason in reasons)
                     {
                         hint = hint + Environment.NewLine + reason.ToString();
                     }

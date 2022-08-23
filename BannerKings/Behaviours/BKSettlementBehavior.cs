@@ -308,7 +308,7 @@ namespace BannerKings.Behaviours
                 {
                     InformationManager.DisplayMessage(new InformationMessage(
                         new TextObject("You have been charged {GOLD} for the excess production of {ITEM}, now in your stash at {CASTLE}.")
-                            .SetTextVariable("GOLD", itemFinalPrice)
+                            .SetTextVariable("GOLD", $"{itemFinalPrice:n0}")
                             .SetTextVariable("ITEM", item.Name)
                             .SetTextVariable("CASTLE", town.Name)
                             .ToString()));

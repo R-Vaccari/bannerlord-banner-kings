@@ -18,7 +18,7 @@ namespace BannerKings.Managers.Goals.Decisions
         public GreaterBattaniaGoal() : base("goal_greater_battania", GoalUpdateType.Settlement)
         {
             var name = new TextObject("{=!}Unite Greater Battania");
-            var description = new TextObject("{!=}Unite the old Battanian lands back into a greater realm. To the West, the rascal Vlandians have taken the valley of Llyn Modris and called it 'Ocs Hall'. To the East, the bloodthristy Imperials submitted Epicrotea to their domination. The threat of Battanian extermination grows stronger with enemies all around aiming for it's lands. You must bring all battanian and formerly battanian towns and castles under control of your realm.");
+            var description = new TextObject("{=!}Unite the old Battanian lands back into a greater realm. To the West, the rascal Vlandians have taken the valley of Llyn Modris and called it 'Ocs Hall'. To the East, the bloodthristy Imperials submitted Epicrotea to their domination. The threat of Battanian extermination grows stronger with enemies all around aiming for it's lands. You must bring all battanian and formerly battanian towns and castles under control of your realm.");
 
             Initialize(name, description);
 
@@ -56,7 +56,7 @@ namespace BannerKings.Managers.Goals.Decisions
             var referenceSettlement = settlements.First();
             var referenceHero = referenceSettlement.Owner;
             var (gold, influence) = GetCosts(referenceHero);
-            CultureObject culture = Utils.Helpers.GetCulture("battania");
+            var culture = Utils.Helpers.GetCulture("battania");
 
             if (!IsAvailable())
             {
@@ -68,60 +68,61 @@ namespace BannerKings.Managers.Goals.Decisions
 
                 failedReasons.Add(failedReason);
             }
-
-            if (referenceHero.Culture != culture)
+            else
             {
-                failedReasons.Add(new TextObject("{!=}You are not part of the {CULTURE} culture.")
-                        .SetTextVariable("CULTURE", culture.EncyclopediaText));
-            }
-
-            var battaniaKingdom = Campaign.Current.Kingdoms.FirstOrDefault(k => k.StringId == "battania");
-            if (battaniaKingdom != null)
-            {
-                if (battaniaKingdom.Leader != referenceHero)
+                if (referenceHero.Gold < gold)
                 {
-                    failedReasons.Add(new TextObject("{!=}You're not the leader of {KINGDOM}.")
+                    failedReasons.Add(new TextObject("{=!}You need at least {GOLD}{GOLD_ICON}")
+                        .SetTextVariable("GOLD", $"{gold:n0}"));
+                }
+
+                if (referenceHero.Clan.Influence < influence)
+                {
+                    failedReasons.Add(new TextObject("{=!}You need at least {INFLUENCE}{INFLUENCE_ICON}")
+                        .SetTextVariable("INFLUENCE", $"{influence:n0}")
+                        .SetTextVariable("INFLUENCE_ICON", "{=!}<img src=\"General\\Icons\\Influence@2x\" extend=\"7\">"));
+                }
+
+                if (referenceHero.Culture != culture)
+                {
+                    failedReasons.Add(new TextObject("{=!}You are not part of {CULTURE} culture.")
+                        .SetTextVariable("CULTURE", culture.EncyclopediaText));
+                }
+
+                var battaniaKingdom = Campaign.Current.Kingdoms.FirstOrDefault(k => k.StringId == "battania");
+                if (battaniaKingdom != null && battaniaKingdom.Leader != referenceHero)
+                {
+                    failedReasons.Add(new TextObject("{=!}You're not the leader of {KINGDOM}.")
                         .SetTextVariable("KINGDOM", battaniaKingdom.EncyclopediaLinkWithName));
-                }
-            }
-
-            if (referenceHero.Clan.Kingdom != null)
-            {
-                // if Battania does not exist, culture must be Battanian.
-                if (referenceHero.Clan.Kingdom.Culture != culture)
+                } 
+                else if (referenceHero.Clan.Kingdom != null && referenceHero.Clan.Kingdom.Culture != culture)
                 {
-                    failedReasons.Add(new TextObject("{!=}Your kingdom is not part of {CULTURE} culture.")
+                    //If Battania does not exist, culture must be Battanian.
+                    failedReasons.Add(new TextObject("{=!}Your kingdom is not part of {CULTURE} culture.")
                         .SetTextVariable("CULTURE", culture.EncyclopediaText));
                 }
-            }
+                else
+                {
+                    failedReasons.Add(new TextObject("{=!}You are not leader of a kingdom with {CULTURE} culture.")
+                        .SetTextVariable("CULTURE", culture.EncyclopediaText));
+                }
 
-            Religion religion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(referenceHero);
-            if (religion == null || religion.Faith.GetId() != "amra")
-            {
-                Religion amra = BannerKingsConfig.Instance.ReligionsManager.GetReligionById("amra");
-                failedReasons.Add(new TextObject("{!=}You do not adhere to the {RELIGION} faith.")
+                var religion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(referenceHero);
+                if (religion == null || religion.Faith.GetId() != "amra")
+                {
+                    var amra = BannerKingsConfig.Instance.ReligionsManager.GetReligionById("amra");
+                    failedReasons.Add(new TextObject("{=!}You do not adhere to the {RELIGION} faith.")
                         .SetTextVariable("RELIGION", amra.Faith.GetFaithName()));
-            }
+                }
 
-            failedReasons.AddRange
-            (
-                from settlement in settlements
-                let title = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement)
-                where title.deFacto.MapFaction != referenceHero.MapFaction
-                select new TextObject("{=!}No one of your kingdom is de Facto for {SETTLEMENT}")
-                    .SetTextVariable("SETTLEMENT", settlement.EncyclopediaLinkWithName)
-            );
-
-            if (referenceHero.Gold < gold)
-            {
-                failedReasons.Add(new TextObject("{=!}You need at least {GOLD}{GOLD_ICON}.")
-                    .SetTextVariable("GOLD", gold));
-            }
-
-            if (referenceHero.Clan.Influence < influence)
-            {
-                failedReasons.Add(new TextObject("{=!}You need at least {INFLUENCE}{INFLUENCE_ICON}.")
-                    .SetTextVariable("INFLUENCE", influence));
+                failedReasons.AddRange
+                (
+                    from settlement in settlements
+                    let title = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement)
+                    where title.deFacto.MapFaction != referenceHero.MapFaction
+                    select new TextObject("{=!}Your kingdom is not de facto ruler of {SETTLEMENT}")
+                        .SetTextVariable("SETTLEMENT", settlement.EncyclopediaLinkWithName)
+                );
             }
 
             return failedReasons.IsEmpty();
@@ -145,6 +146,7 @@ namespace BannerKings.Managers.Goals.Decisions
                         .SetTextVariable("TITLE", name)
                         .SetTextVariable("GOLD", gold)
                         .SetTextVariable("INFLUENCE", influence)
+                        .SetTextVariable("INFLUENCE_ICON", "{=!}<img src=\"General\\Icons\\Influence@2x\" extend=\"7\">")
                         .SetTextVariable("RENOWN", 100)
                         .ToString(),
                     true, 

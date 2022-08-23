@@ -190,9 +190,9 @@ namespace BannerKings.UI.Religion
             Doctrines.Clear();
             Aspects.Clear();
 
-            int selectedIndex = 0;
+            var selectedIndex = 0;
             Selector = new SelectorVM<ReligionSelectorItemVM>(0, null);
-            int i = 0;
+            var i = 0;
             foreach (var religion in BannerKingsConfig.Instance.ReligionsManager.GetReligions())
             {
                 var item = new ReligionSelectorItemVM(religion, religion.Faith != this.religion?.Faith);
