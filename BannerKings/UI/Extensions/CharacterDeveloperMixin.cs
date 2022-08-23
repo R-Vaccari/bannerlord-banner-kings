@@ -5,6 +5,7 @@ using Bannerlord.UIExtenderEx.Attributes;
 using Bannerlord.UIExtenderEx.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using TaleWorlds.CampaignSystem.ViewModelCollection.CharacterDeveloper;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
@@ -122,22 +123,19 @@ namespace BannerKings.UI.Extensions
         public void OpenDecisions()
         {
             var options = new List<InquiryElement>();
+
             foreach (var goal in DefaultGoals.Instance.All)
             {
+                var enabled = goal.IsFulfilled(out var reasons);
+                var hint = goal.Description.ToString();
+
                 if (!goal.IsAvailable())
                 {
-                    continue;
-                }
-
-                List<TextObject> reasons;
-                var enabled = goal.IsFulfilled(out reasons);
-                var hint = goal.Description.ToString();
-                if (!enabled)
+                    enabled = false;
+                } 
+                else if (!enabled)
                 {
-                    foreach (var reason in reasons)
-                    {
-                        hint = hint + Environment.NewLine + reason.ToString();
-                    }
+                    hint = reasons.Aggregate(hint, (current, reason) => current + Environment.NewLine + reason);
                 }
 
                 options.Add(new InquiryElement(goal,
