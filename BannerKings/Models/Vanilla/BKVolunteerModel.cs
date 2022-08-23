@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using BannerKings.Managers.Court;
+﻿using BannerKings.Managers.Court;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Titles;
 using Helpers;
@@ -68,8 +67,8 @@ namespace BannerKings.Models.Vanilla
                 {
                     num2 += town.IsTown
                         ? (town.Settlement.Prosperity < 3000f ? 1 : town.Settlement.Prosperity < 6000f ? 2 : 3) +
-                          town.Villages.Count()
-                        : town.Villages.Count();
+                          town.Villages.Count
+                        : town.Villages.Count;
                 }
 
                 var num3 = num2 < 46 ? num2 / 46f * (num2 / 46f) : 1f;

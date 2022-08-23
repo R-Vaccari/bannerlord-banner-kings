@@ -41,7 +41,7 @@ namespace BannerKings.Managers.Populations
 
                 if (inProgress != null && !inProgress.IsEmpty())
                 {
-                    building = (VillageBuilding?) inProgress.Peek();
+                    building = (VillageBuilding) inProgress.Peek();
                 }
 
                 return building ?? CurrentDefault;

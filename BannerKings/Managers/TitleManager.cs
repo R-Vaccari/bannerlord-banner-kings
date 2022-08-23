@@ -134,8 +134,15 @@ namespace BannerKings.Managers
         public void GrantKnighthood(FeudalTitle title, Hero knight, Hero grantor)
         {
             var action = BannerKingsConfig.Instance.TitleModel.GetAction(ActionType.Grant, title, grantor);
+
             action.Influence = -BannerKingsConfig.Instance.TitleModel.GetGrantKnighthoodCost(grantor).ResultNumber;
+            if (grantor.GetPerkValue(BKPerks.Instance.LordshipAccolade))
+            {
+                action.Influence *= 0.15f;
+            }
+
             action.TakeAction(knight);
+
             if (grantor == Hero.MainHero)
             {
                 GiveGoldAction.ApplyBetweenCharacters(grantor, knight, 5000);
@@ -840,8 +847,7 @@ namespace BannerKings.Managers
 
                                 var settlementNameCounty = county.Attributes["settlement"].Value;
                                 var deJureNameCounty = county.Attributes["deJure"].Value;
-                                var settlementCounty =
-                                    Settlement.All.FirstOrDefault(x => x.Name.ToString() == settlementNameCounty);
+                                var settlementCounty = Settlement.All.FirstOrDefault(x => x.Name.ToString() == settlementNameCounty);
                                 var deJureCounty = GetDeJure(deJureNameCounty, settlementCounty);
                                 var vassalsCounty = new List<FeudalTitle>();
 
@@ -856,29 +862,25 @@ namespace BannerKings.Managers
 
                                         var settlementNameBarony = barony.Attributes["settlement"].Value;
                                         var deJureIdBarony = barony.Attributes["deJure"].Value;
-                                        var settlementBarony =
-                                            Settlement.All.FirstOrDefault(x => x.Name.ToString() == settlementNameBarony);
+                                        var settlementBarony = Settlement.All.FirstOrDefault(x => x.Name.ToString() == settlementNameBarony);
                                         var deJureBarony = GetDeJure(deJureIdBarony, settlementBarony);
                                         if (settlementBarony != null)
                                         {
-                                            vassalsCounty.Add(CreateLandedTitle(settlementBarony, deJureBarony,
-                                                TitleType.Barony, contract));
+                                            vassalsCounty.Add(CreateLandedTitle(settlementBarony, deJureBarony, TitleType.Barony, contract));
                                         }
                                     }
                                 }
 
                                 if (settlementCounty != null)
                                 {
-                                    vassalsDuchy.Add(CreateLandedTitle(settlementCounty, deJureCounty, TitleType.County,
-                                        contract, vassalsCounty));
+                                    vassalsDuchy.Add(CreateLandedTitle(settlementCounty, deJureCounty, TitleType.County, contract, vassalsCounty));
                                 }
                             }
                         }
 
                         if (deJureDuchy != null && vassalsDuchy.Count > 0)
                         {
-                            vassalsKingdom.Add(CreateUnlandedTitle(deJureDuchy, TitleType.Dukedom, vassalsDuchy,
-                                dukedomName, contract));
+                            vassalsKingdom.Add(CreateUnlandedTitle(deJureDuchy, TitleType.Dukedom, vassalsDuchy, dukedomName, contract));
                         }
                     }
                 }
@@ -993,34 +995,34 @@ namespace BannerKings.Managers
 
         public FeudalTitle GetDuchy(FeudalTitle title)
         {
-            var duchies = Titles.Keys.Where(x =>
-                x.type == TitleType.Dukedom && x.sovereign != null && x.sovereign == title.sovereign);
+            var duchies = Titles.Keys.Where(x => x.type == TitleType.Dukedom && x.sovereign != null && x.sovereign == title.sovereign);
 
             var suzerain1 = GetImmediateSuzerain(title);
-            if (suzerain1 != null)
+            if (suzerain1 == null)
             {
-                if (suzerain1.type == TitleType.Dukedom)
-                {
-                    return suzerain1;
-                }
-
-                var suzerain2 = GetImmediateSuzerain(suzerain1);
-                if (suzerain2 != null)
-                {
-                    if (suzerain2.type == TitleType.Dukedom)
-                    {
-                        return suzerain2;
-                    }
-
-                    var suzerain3 = GetImmediateSuzerain(suzerain2);
-                    if (suzerain3 is {type: TitleType.Dukedom})
-                    {
-                        return suzerain3;
-                    }
-                }
+                return null;
             }
 
-            return null;
+            if (suzerain1.type == TitleType.Dukedom)
+            {
+                return suzerain1;
+            }
+
+            var suzerain2 = GetImmediateSuzerain(suzerain1);
+            if (suzerain2 == null)
+            {
+                return null;
+            }
+
+            if (suzerain2.type == TitleType.Dukedom)
+            {
+                return suzerain2;
+            }
+
+            var suzerain3 = GetImmediateSuzerain(suzerain2);
+            return suzerain3 is {type: TitleType.Dukedom} 
+                ? suzerain3 
+                : null;
         }
 
         public string GetContractText(FeudalTitle title)

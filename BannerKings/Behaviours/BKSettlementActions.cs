@@ -143,7 +143,7 @@ namespace BannerKings.Behaviours
             campaignGameStarter.AddWaitGameMenu("bannerkings_wait_crafting",
                 "{=!}You are working on the smith for {CRAFTING_HOURS} hours. The current hourly rate of this smith is: {CRAFTING_RATE} {GOLD_ICON}.{CRAFTING_EXPLANATION}",
                 MenuWaitInit,
-                c => true,
+                _ => true,
                 MenuActionConsequenceNeutral,
                 TickWaitCrafting, GameMenu.MenuAndOptionType.WaitMenuShowProgressAndHoursOption,
                 GameOverlays.MenuOverlayType.SettlementWithBoth);
@@ -358,7 +358,7 @@ namespace BannerKings.Behaviours
                     {
                         main.AddSkillXp(BKSkills.Instance.Scholarship, 5f);
                         GiveGoldAction.ApplyBetweenCharacters(Hero.MainHero, seller,
-                            (int) BannerKingsConfig.Instance.EducationModel.CalculateLessionCost(Hero.MainHero, seller)
+                            (int) BannerKingsConfig.Instance.EducationModel.CalculateLessonsCost(Hero.MainHero, seller)
                                 .ResultNumber);
                         InformationManager.DisplayMessage(new InformationMessage(
                             new TextObject("{=!}You have improved your {SKILL} skill during your current action.")
@@ -579,7 +579,7 @@ namespace BannerKings.Behaviours
             {
                 MBTextManager.SetTextVariable("SCHOLARSHIP_TUTOR", seller.Name);
                 MBTextManager.SetTextVariable("SCHOLARSHIP_GOLD", BannerKingsConfig.Instance.EducationModel
-                    .CalculateLessionCost(Hero.MainHero,
+                    .CalculateLessonsCost(Hero.MainHero,
                         seller).ResultNumber.ToString());
             }
 

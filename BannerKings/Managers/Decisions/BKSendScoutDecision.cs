@@ -3,7 +3,7 @@ using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Decisions
 {
-    public class BKSendScoutDecision : BannerKingsDecision
+    public class BKSendScoutDecision : BKSettlementDecision
     {
         public BKSendScoutDecision(Settlement settlement, bool enabled) : base(settlement, enabled)
         {

@@ -83,7 +83,7 @@ namespace BannerKings.UI.Court
                         options, true, 1, GameTexts.FindText("str_done").ToString(), string.Empty,
                         delegate(List<InquiryElement> x)
                         {
-                            var requester = (Hero?) x[0].Identifier;
+                            var requester = (Hero) x[0].Identifier;
                             var position = council.AllPositions.FirstOrDefault(x => x.Position == Position);
                             CouncilAction action = null;
                             if (requester != null)

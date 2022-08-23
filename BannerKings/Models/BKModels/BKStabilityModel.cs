@@ -318,14 +318,8 @@ namespace BannerKings.Models.BKModels
                     continue;
                 }
 
-                foreach (var vassal in title.vassals)
+                foreach (var deJure in title.vassals.Select(vassal => vassal.deJure).Where(deJure => deJure != null && deJure != leader))
                 {
-                    var deJure = vassal.deJure;
-                    if (deJure == null || deJure == leader)
-                    {
-                        continue;
-                    }
-
                     if (deJure.Clan == leader.Clan)
                     {
                         result.Add(0.5f, deJure.Name);
@@ -390,49 +384,55 @@ namespace BannerKings.Models.BKModels
             result.LimitMax(20f);
             result.Add(hero.Clan.Tier / 2f, GameTexts.FindText("str_clan_tier_bonus"));
 
-            var title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(hero);
-            if (title != null)
+            if (hero.GetPerkValue(BKPerks.Instance.LordshipAccolade))
             {
-                var bonus = 0f;
-                if (title.type != TitleType.Lordship)
+                result.Add(1f, new TextObject("{PERK_NAME}")
+                    .SetTextVariable("PERK_NAME", BKPerks.Instance.LordshipAccolade.Name));
+            }
+
+            var title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(hero);
+            if (title == null)
+            {
+                return result;
+            }
+
+            var bonus = 0f;
+            if (title.type != TitleType.Lordship)
+            {
+                switch (title.type)
                 {
-                    switch (title.type)
+                    case TitleType.Barony:
+                        bonus = 0.5f;
+                        break;
+                    case TitleType.County:
+                        bonus = 1f;
+                        break;
+                    case TitleType.Dukedom:
+                        bonus = 1.5f;
+                        break;
+                    case TitleType.Empire:
+                    case TitleType.Kingdom:
+                    case TitleType.Lordship:
+                    default:
                     {
-                        case TitleType.Barony:
-                            bonus = 0.5f;
-                            break;
-                        case TitleType.County:
-                            bonus = 1f;
-                            break;
-                        case TitleType.Dukedom:
-                            bonus = 1.5f;
-                            break;
-                        default:
+                        bonus = title.type == TitleType.Kingdom 
+                            ? 3f 
+                            : 4f;
+
+                        var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(hero);
+                        if (education.HasPerk(BKPerks.Instance.AugustKingOfKings))
                         {
-                            if (title.type == TitleType.Kingdom)
-                            {
-                                bonus = 3f;
-                            }
-                            else
-                            {
-                                bonus = 4f;
-                            }
-
-                            var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(hero);
-                            if (education.HasPerk(BKPerks.Instance.AugustKingOfKings))
-                            {
-                                result.Add(2f, BKPerks.Instance.AugustKingOfKings.Name);
-                            }
-
-                            break;
+                            result.Add(2f, BKPerks.Instance.AugustKingOfKings.Name);
                         }
+
+                        break;
                     }
                 }
+            }
 
-                if (bonus > 0f)
-                {
-                    result.Add(bonus, new TextObject("Highest title level"));
-                }
+            if (bonus > 0f)
+            {
+                result.Add(bonus, new TextObject("Highest title level"));
             }
 
             return result;

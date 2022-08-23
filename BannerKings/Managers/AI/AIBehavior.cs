@@ -27,7 +27,7 @@ namespace BannerKings.Managers.AI
             {
                 switch (landed)
                 {
-                    case true when (title.fief == null || title.deFacto != giver):
+                    case true when title.fief == null || title.deFacto != giver:
                     case false when title.fief != null:
                         continue;
                 }
@@ -302,7 +302,7 @@ namespace BannerKings.Managers.AI
 
             var kingdom = target.OwnerClan.Kingdom;
             var currentDecisions = BannerKingsConfig.Instance.PolicyManager.GetDefaultDecisions(target);
-            var changedDecisions = new List<BannerKingsDecision>();
+            var changedDecisions = new List<BKSettlementDecision>();
 
             var town = target.Town;
             if (town is {Governor: { }})

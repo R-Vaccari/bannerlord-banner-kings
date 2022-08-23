@@ -11,42 +11,37 @@ using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Goals.Decisions
 {
-    internal class GreaterBattaniaGoal : Goal
+    internal class CalradicEmpireGoal : Goal
     {
         private readonly List<Settlement> settlements;
 
-        public GreaterBattaniaGoal() : base("goal_greater_battania", GoalUpdateType.Settlement)
+        public CalradicEmpireGoal() : base("goal_calradic_empire", GoalUpdateType.Settlement)
         {
-            var name = new TextObject("{=!}Greater Battania");
-            var description = new TextObject("{!=}Found Greater Battania");
+            var name = new TextObject("{=!}Calradic Empire");
+            var description = new TextObject("{!=}Found Calradic Empire");
 
             Initialize(name, description);
 
-            var settlementStringIds = new List<string>
+            var duchyStringIds = new List<string>
             {
-                "town_B1",
-                "town_B2",
-                "town_B3",
-                "town_B4",
-                "town_B5",
-                "castle_B1",
-                "castle_B2",
-                "castle_B3",
-                "castle_B4",
-                "castle_B5",
-                "castle_B6",
-                "castle_B7",
-                "castle_B8",
-                "town_V2",
-                "town_EN1"
+                "Lakonia",
+                "Nevys",
+                "Myzead",
+                "Gavys",
+                "Perassica",
+                "Aria",
+                "Ornia",
+                "Sethys",
+                "Calsea",
+                "Tanaesis"
             };
-
-            settlements = Campaign.Current.Settlements.Where(s => settlementStringIds.Contains(s.StringId)).ToList();
+            
+            settlements = BannerKingsConfig.Instance.TitleManager.GetAllTitlesByType(TitleType.Dukedom).Where(t => duchyStringIds.Contains(t.shortName.ToString())).Select(t => t.fief).ToList();
         }
 
         internal override bool IsAvailable()
         {
-            return BannerKingsConfig.Instance.TitleManager.GetTitleByStringId("title_greater_battania") == null;
+            return BannerKingsConfig.Instance.TitleManager.GetTitleByStringId("title_calradic_empire") == null;
         }
 
         internal override bool IsFulfilled(out List<TextObject> failedReasons)
@@ -59,7 +54,7 @@ namespace BannerKings.Managers.Goals.Decisions
 
             if (!IsAvailable())
             {
-                var title = BannerKingsConfig.Instance.TitleManager.GetTitleByStringId("title_greater_battania");
+                var title = BannerKingsConfig.Instance.TitleManager.GetTitleByStringId("title_calradic_empire");
 
                 var failedReason = new TextObject("{=!}This title is already founded! de Jure is {DE_JURE.LINK} and de Facto is {DE_FACTO.LINK}.");
                 failedReason.SetCharacterProperties("DE_JURE", title.deJure.CharacterObject);
@@ -68,11 +63,15 @@ namespace BannerKings.Managers.Goals.Decisions
                 failedReasons.Add(failedReason);
             }
 
-            if (referenceHero.Clan.Kingdom.StringId != "Battania" || !referenceHero.IsKingdomLeader())
+            var imperialKingdomsStringIds = new List<string>
             {
-                var kingdom = Campaign.Current.Kingdoms.First(k => k.StringId == "Battania");
-                failedReasons.Add(new TextObject("{!=}You're not the leader of {KINGDOM}")
-                    .SetTextVariable("KINGDOM", kingdom.EncyclopediaLinkWithName));
+                "westernEmpire",
+                "easternEmpire",
+                "northernEmpire"
+            };
+            if (imperialKingdomsStringIds.All(k => k != referenceHero.Clan.Kingdom.StringId) || !referenceHero.IsKingdomLeader())
+            {
+                failedReasons.Add(new TextObject("{!=}You're not the leader of an Imperial Kingdom."));
             }
 
             failedReasons.AddRange
@@ -142,7 +141,7 @@ namespace BannerKings.Managers.Goals.Decisions
                 Renown = 100
             };
 
-            BannerKingsConfig.Instance.TitleManager.FoundEmpire(foundAction, "title_greater_battania");
+            BannerKingsConfig.Instance.TitleManager.FoundEmpire(foundAction, "title_calradic_empire");
         }
 
         public override void DoAiDecision()

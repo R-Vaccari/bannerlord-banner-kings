@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.Core;
@@ -24,21 +23,19 @@ namespace BannerKings.Managers.Skills
             300
         };
 
-        private PerkObject lordshipTraditionalist,
-            lordshipAdaptive,
-            lordshipAccolade,
-            lordshipManorLord,
-            lordshipMilitaryAdministration,
-            lordshipClaimant,
-            lordshipPatron;
-
         public HashSet<PerkObject> LifestylePerks { get; } = new();
+
+        #region Fian
 
         public PerkObject FianHighlander { get; private set; }
 
         public PerkObject FianRanger { get; private set; }
 
         public PerkObject FianFennid { get; private set; }
+
+        #endregion Fian
+
+        #region Civil
 
         public PerkObject CivilEngineer { get; private set; }
 
@@ -48,12 +45,19 @@ namespace BannerKings.Managers.Skills
 
         public PerkObject CivilOverseer { get; private set; }
 
+        #endregion Civil
+
+        #region Siege
 
         public PerkObject SiegeEngineer { get; private set; }
 
         public PerkObject SiegePlanner { get; private set; }
 
         public PerkObject SiegeOverseer { get; private set; }
+
+        #endregion Siege
+
+        #region August
 
         public PerkObject AugustCommander { get; private set; }
 
@@ -63,11 +67,19 @@ namespace BannerKings.Managers.Skills
 
         public PerkObject AugustKingOfKings { get; private set; }
 
+        #endregion August
+
+        #region Cataphract
+
         public PerkObject CataphractEquites { get; private set; }
 
         public PerkObject CataphractAdaptiveTactics { get; private set; }
 
         public PerkObject CataphractKlibanophoros { get; private set; }
+
+        #endregion Cataphract
+
+        #region Caravaneer
 
         public PerkObject CaravaneerStrider { get; private set; }
 
@@ -75,12 +87,19 @@ namespace BannerKings.Managers.Skills
 
         public PerkObject CaravaneerOutsideConnections { get; private set; }
 
+        #endregion Caravaneer
+
+        #region Artisan
+
         public PerkObject ArtisanSmith { get; private set; }
 
         public PerkObject ArtisanCraftsman { get; private set; }
 
         public PerkObject ArtisanEntrepeneur { get; private set; }
 
+        #endregion Artisan
+
+        #region Outlaw
 
         public PerkObject OutlawKidnapper { get; private set; }
 
@@ -90,11 +109,19 @@ namespace BannerKings.Managers.Skills
 
         public PerkObject OutlawUnderworldKing { get; private set; }
 
+        #endregion Outlaw
+
+        #region Kheshig
+
         public PerkObject KheshigKhorchin { get; }
 
         public PerkObject KheshigTorguud { get; }
 
         public PerkObject KheshigKhevtuul { get; }
+
+        #endregion Kheshig
+
+        #region Mercenary
 
         public PerkObject MercenaryLocalConnections { get; private set; }
 
@@ -102,8 +129,29 @@ namespace BannerKings.Managers.Skills
 
         public PerkObject MercenaryFamousSellswords { get; private set; }
 
+        #endregion Mercenary
+
+        #region Lordship
 
         public PerkObject LordshipEconomicAdministration { get; private set; }
+
+        public PerkObject LordshipTraditionalist { get; private set; }
+
+        public PerkObject LordshipAdaptive { get; private set; }
+
+        public PerkObject LordshipAccolade { get; private set; }
+
+        public PerkObject LordshipManorLord { get; private set; }
+
+        public PerkObject LordshipMilitaryAdministration { get; private set; }
+
+        public PerkObject LordshipClaimant { get; private set; }
+
+        public PerkObject LordshipPatron { get; private set; }
+
+        #endregion Lordship
+
+        #region  Scholarship
 
         public PerkObject ScholarshipLiterate { get; private set; }
 
@@ -133,10 +181,28 @@ namespace BannerKings.Managers.Skills
 
         public PerkObject ScholarshipMagnumOpus { get; private set; }
 
-        public override IEnumerable<PerkObject> All => throw new NotImplementedException();
+        #endregion  Scholarship
+
+        public override IEnumerable<PerkObject> All
+        {
+            get
+            {
+                foreach (var perkObject in Game.Current.ObjectManager.GetObjectTypeList<PerkObject>())
+                {
+                    yield return perkObject;
+                }
+
+                foreach (var lifestylePerk in LifestylePerks)
+                {
+                    yield return lifestylePerk;
+                }
+            }
+        }
 
         private void InitializePerks()
         {
+            #region Fian
+
             FianHighlander = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleFianHighlander"));
             LifestylePerks.Add(FianHighlander);
             FianHighlander.InitializeNew("{=!}Highlander", null, 80, null,
@@ -167,6 +233,10 @@ namespace BannerKings.Managers.Skills
                 SkillEffect.PerkRole.Personal, 0.03f,
                 SkillEffect.EffectIncrementType.AddFactor);
 
+            #endregion Fian
+
+            #region Civil
+
             CivilEngineer = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleCivilEngineer"));
             LifestylePerks.Add(CivilEngineer);
             CivilEngineer.InitializeNew("{=!}Civil Engineer", null, 80, null,
@@ -188,9 +258,7 @@ namespace BannerKings.Managers.Skills
                 SkillEffect.EffectIncrementType.AddFactor);
 
             CivilOverseer = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleCivilOverseer"));
-            CivilManufacturer =
-                Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleCivilManufacturer"));
-
+            CivilManufacturer = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleCivilManufacturer"));
             LifestylePerks.Add(CivilOverseer);
             CivilOverseer.InitializeNew("{=!}Overseer", null, 320, null,
                 "{=!}Stability increases by flat 5%.",
@@ -209,6 +277,9 @@ namespace BannerKings.Managers.Skills
                 SkillEffect.PerkRole.Personal, 0.03f,
                 SkillEffect.EffectIncrementType.AddFactor);
 
+            #endregion Civil
+
+            #region Siege
 
             SiegeEngineer = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleSiegeEngineer"));
             LifestylePerks.Add(SiegeEngineer);
@@ -240,6 +311,9 @@ namespace BannerKings.Managers.Skills
                 SkillEffect.PerkRole.Personal, 0.03f,
                 SkillEffect.EffectIncrementType.AddFactor);
 
+            #endregion Siege
+
+            #region August
 
             AugustCommander = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleAugustCommander"));
             LifestylePerks.Add(AugustCommander);
@@ -250,7 +324,6 @@ namespace BannerKings.Managers.Skills
                 "{=!}Increases party morale by flat 3%.",
                 SkillEffect.PerkRole.Personal, 0.03f,
                 SkillEffect.EffectIncrementType.AddFactor);
-
 
             AugustDeFacto = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleAugustDeFacto"));
             LifestylePerks.Add(AugustDeFacto);
@@ -272,8 +345,7 @@ namespace BannerKings.Managers.Skills
                 SkillEffect.PerkRole.Personal, 0.03f,
                 SkillEffect.EffectIncrementType.AddFactor);
 
-            AugustKingOfKings =
-                Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleAugustKingOfKings"));
+            AugustKingOfKings = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleAugustKingOfKings"));
             LifestylePerks.Add(AugustKingOfKings);
             AugustKingOfKings.InitializeNew("{=!}King of Kings", null, 320, null,
                 "{=!}If king level or higher, increase vassal limit by 2.",
@@ -283,9 +355,11 @@ namespace BannerKings.Managers.Skills
                 SkillEffect.PerkRole.Personal, 0.03f,
                 SkillEffect.EffectIncrementType.AddFactor);
 
+            #endregion August
 
-            CataphractEquites =
-                Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleCataphractEquites"));
+            #region Cataphract
+
+            CataphractEquites = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleCataphractEquites"));
             LifestylePerks.Add(CataphractEquites);
             CataphractEquites.InitializeNew("{=!}Equites", null, 80, null,
                 "{=!}You and troops in your formation deal 10% more charge damage.",
@@ -295,9 +369,7 @@ namespace BannerKings.Managers.Skills
                 SkillEffect.PerkRole.Personal, 0.03f,
                 SkillEffect.EffectIncrementType.AddFactor);
 
-
-            CataphractAdaptiveTactics =
-                Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleCataphractAdaptiveTactics"));
+            CataphractAdaptiveTactics = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleCataphractAdaptiveTactics"));
             LifestylePerks.Add(CataphractAdaptiveTactics);
             CataphractAdaptiveTactics.InitializeNew("{=!}Adaptive Tactics", null, 160, null,
                 "{=!}Increased damage on horseback with polearms, sidearms and bows by 5%.",
@@ -307,8 +379,7 @@ namespace BannerKings.Managers.Skills
                 SkillEffect.PerkRole.Captain, 8f,
                 SkillEffect.EffectIncrementType.AddFactor);
 
-            CataphractKlibanophoros =
-                Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleCataphractKlibanophori"));
+            CataphractKlibanophoros = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleCataphractKlibanophori"));
             LifestylePerks.Add(CataphractKlibanophoros);
             CataphractKlibanophoros.InitializeNew("{=!}Klibanophori", null, 240, null,
                 "{=!}You and troops in your formation receive 5% less damange when mounted.",
@@ -318,9 +389,11 @@ namespace BannerKings.Managers.Skills
                 SkillEffect.PerkRole.Personal, 0.03f,
                 SkillEffect.EffectIncrementType.AddFactor);
 
+            #endregion Cataphract
 
-            CaravaneerStrider =
-                Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleCaravaneerStrider"));
+            #region Caravaneer
+
+            CaravaneerStrider = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleCaravaneerStrider"));
             LifestylePerks.Add(CaravaneerStrider);
             CaravaneerStrider.InitializeNew("{=!}Strider", null, 80, null,
                 "{=!}Increases your movement speed by 3%.",
@@ -330,9 +403,7 @@ namespace BannerKings.Managers.Skills
                 SkillEffect.PerkRole.PartyLeader, 20f,
                 SkillEffect.EffectIncrementType.AddFactor);
 
-
-            CaravaneerDealer =
-                Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleCaravaneerDealer"));
+            CaravaneerDealer = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleCaravaneerDealer"));
             LifestylePerks.Add(CaravaneerDealer);
             CaravaneerDealer.InitializeNew("{=!}Dealer", null, 150, null,
                 "{=!}Caravan wages are reduced by 10%.",
@@ -342,8 +413,7 @@ namespace BannerKings.Managers.Skills
                 SkillEffect.PerkRole.PartyOwner, 8f,
                 SkillEffect.EffectIncrementType.AddFactor);
 
-            CaravaneerOutsideConnections =
-                Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleCaravaneerOutsideConnections"));
+            CaravaneerOutsideConnections = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleCaravaneerOutsideConnections"));
             CaravaneerOutsideConnections.InitializeNew("{=!}Outside Connections", null, 240, null,
                 "{=!}Your caravans have 5% less trade penalty.",
                 SkillEffect.PerkRole.PartyOwner, 5f,
@@ -352,6 +422,9 @@ namespace BannerKings.Managers.Skills
                 SkillEffect.PerkRole.PartyOwner, 5f,
                 SkillEffect.EffectIncrementType.AddFactor);
 
+            #endregion Caravaneer
+
+            #region Artisan
 
             ArtisanSmith = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleArtisanSmith"));
             ArtisanSmith.InitializeNew("{=!}Smith", null, 80, null,
@@ -362,8 +435,7 @@ namespace BannerKings.Managers.Skills
                 SkillEffect.PerkRole.Personal, 15f,
                 SkillEffect.EffectIncrementType.AddFactor);
 
-            ArtisanCraftsman =
-                Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleArtisanCraftsman"));
+            ArtisanCraftsman = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleArtisanCraftsman"));
             ArtisanCraftsman.InitializeNew("{=!}Craftsman", null, 160, null,
                 "{=!}Your workshops have 5% increase in production quality.",
                 SkillEffect.PerkRole.ClanLeader, 5f,
@@ -372,8 +444,7 @@ namespace BannerKings.Managers.Skills
                 SkillEffect.PerkRole.Personal, 5f,
                 SkillEffect.EffectIncrementType.AddFactor);
 
-            ArtisanEntrepeneur =
-                Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleArtisanEntrepeneur"));
+            ArtisanEntrepeneur = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleArtisanEntrepeneur"));
             ArtisanEntrepeneur.InitializeNew("{=!}Entrepeneur", null, 240, null,
                 "{=!}Increased settlement production efficiency by flat 10%.",
                 SkillEffect.PerkRole.ClanLeader, 10f,
@@ -382,6 +453,9 @@ namespace BannerKings.Managers.Skills
                 SkillEffect.PerkRole.ClanLeader, 20f,
                 SkillEffect.EffectIncrementType.AddFactor);
 
+            #endregion Artisan
+
+            #region Outlaw
 
             OutlawKidnapper = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleOutlawKidnapper"));
             LifestylePerks.Add(OutlawKidnapper);
@@ -393,7 +467,6 @@ namespace BannerKings.Managers.Skills
                 SkillEffect.PerkRole.Personal, 0.03f,
                 SkillEffect.EffectIncrementType.AddFactor);
 
-
             OutlawPlunderer = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleOutlawPlunderer"));
             LifestylePerks.Add(OutlawPlunderer);
             OutlawPlunderer.InitializeNew("{=!}Infamous Plunderer", null, 160, null,
@@ -404,8 +477,7 @@ namespace BannerKings.Managers.Skills
                 SkillEffect.PerkRole.Captain, 8f,
                 SkillEffect.EffectIncrementType.AddFactor);
 
-            OutlawNightPredator =
-                Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleOutlawNightPredator"));
+            OutlawNightPredator = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleOutlawNightPredator"));
             LifestylePerks.Add(OutlawNightPredator);
             OutlawNightPredator.InitializeNew("{=!}Night Predator", null, 240, null,
                 "{=!}Your party is 50% harder to spot in forests.",
@@ -415,8 +487,7 @@ namespace BannerKings.Managers.Skills
                 SkillEffect.PerkRole.Personal, 20f,
                 SkillEffect.EffectIncrementType.AddFactor);
 
-            OutlawUnderworldKing =
-                Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleOutlawUnderworldKing"));
+            OutlawUnderworldKing = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleOutlawUnderworldKing"));
             LifestylePerks.Add(OutlawUnderworldKing);
             OutlawUnderworldKing.InitializeNew("{=!}Underworld King", null, 320, null,
                 "{=!}Killing bandit leaders yields renown.",
@@ -426,9 +497,11 @@ namespace BannerKings.Managers.Skills
                 SkillEffect.PerkRole.Personal, 20f,
                 SkillEffect.EffectIncrementType.AddFactor);
 
+            #endregion Outlaw
 
-            MercenaryLocalConnections =
-                Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleMercenaryLocalConnections"));
+            #region Mercenary
+
+            MercenaryLocalConnections = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleMercenaryLocalConnections"));
             LifestylePerks.Add(MercenaryLocalConnections);
             MercenaryLocalConnections.InitializeNew("{=!}Local Connections", null, 80, null,
                 "{=!}While serving as mercenary, gain the ability to recruit from local minor factions in towns.",
@@ -438,9 +511,7 @@ namespace BannerKings.Managers.Skills
                 SkillEffect.PerkRole.Personal, 0.03f,
                 SkillEffect.EffectIncrementType.AddFactor);
 
-
-            MercenaryRansacker =
-                Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleMercenaryRansacker"));
+            MercenaryRansacker = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleMercenaryRansacker"));
             MercenaryRansacker.InitializeNew("{=!}Ransacker", null, 160, null,
                 "{=!}Gain 10% more share of loot in victories.",
                 SkillEffect.PerkRole.PartyOwner, 10f,
@@ -449,8 +520,7 @@ namespace BannerKings.Managers.Skills
                 SkillEffect.PerkRole.Captain, 8f,
                 SkillEffect.EffectIncrementType.AddFactor);
 
-            MercenaryFamousSellswords =
-                Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleMercenarySellswords"));
+            MercenaryFamousSellswords = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleMercenarySellswords"));
             MercenaryFamousSellswords.InitializeNew("{=!}Famous Sellswords", null, 240, null,
                 "{=!}Influence award for army participation increased by 30%.",
                 SkillEffect.PerkRole.Personal, 10f,
@@ -458,19 +528,20 @@ namespace BannerKings.Managers.Skills
                 "{=!}Renown award for victories increased by 20%.",
                 SkillEffect.PerkRole.Personal, 20f,
                 SkillEffect.EffectIncrementType.AddFactor);
-        }
 
+            #endregion Mercenary
+        }
 
         public override void Initialize()
         {
             InitializePerks();
 
-            lordshipTraditionalist =
-                Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LordshipTraditionalist"));
-            lordshipAdaptive = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LordshipAdaptive"));
+            #region Lordship
 
-            lordshipTraditionalist.InitializeNew("{=!}Traditionalist", BKSkills.Instance.Lordship, GetTierCost(1),
-                lordshipAdaptive,
+            LordshipTraditionalist = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LordshipTraditionalist"));
+            LordshipAdaptive = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LordshipAdaptive"));
+            LordshipTraditionalist.InitializeNew("{=!}Traditionalist", BKSkills.Instance.Lordship, GetTierCost(1),
+                LordshipAdaptive,
                 "{=!}Increased cultural assimilation speed by 10%",
                 SkillEffect.PerkRole.Ruler, 0.1f,
                 SkillEffect.EffectIncrementType.AddFactor,
@@ -478,19 +549,18 @@ namespace BannerKings.Managers.Skills
                 SkillEffect.PerkRole.Ruler, 1f,
                 SkillEffect.EffectIncrementType.Add);
 
-            lordshipAdaptive.InitializeNew("{=!}Adaptive", BKSkills.Instance.Lordship, GetTierCost(1),
-                lordshipTraditionalist,
-                "{=!}Reduced loyalty onus from different cultures by 15%",
+            LordshipAdaptive.InitializeNew("{=!}Adaptive", BKSkills.Instance.Lordship, GetTierCost(1),
+                LordshipTraditionalist,
+                "{=!}Reduced loyalty bonus from different cultures by 15%",
                 SkillEffect.PerkRole.Ruler, 0.1f,
                 SkillEffect.EffectIncrementType.Add,
                 "{=!}Increased settlement stability target by flat 2%",
                 SkillEffect.PerkRole.Ruler, 1f,
                 SkillEffect.EffectIncrementType.Add);
 
-            lordshipAccolade = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LordshipAccolade"));
-            lordshipManorLord = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LordshipManorLord"));
-
-            lordshipAccolade.InitializeNew("{=!}Accolade", BKSkills.Instance.Lordship, GetTierCost(2), lordshipManorLord,
+            LordshipAccolade = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LordshipAccolade"));
+            LordshipManorLord = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LordshipManorLord"));
+            LordshipAccolade.InitializeNew("{=!}Accolade", BKSkills.Instance.Lordship, GetTierCost(2), LordshipManorLord,
                 "{=!}Knighting requires 15% less influence",
                 SkillEffect.PerkRole.Ruler, -0.15f,
                 SkillEffect.EffectIncrementType.AddFactor,
@@ -498,7 +568,7 @@ namespace BannerKings.Managers.Skills
                 SkillEffect.PerkRole.Ruler, 1f,
                 SkillEffect.EffectIncrementType.Add);
 
-            lordshipManorLord.InitializeNew("{=!}Manor Lord", BKSkills.Instance.Lordship, GetTierCost(2), lordshipAccolade,
+            LordshipManorLord.InitializeNew("{=!}Manor Lord", BKSkills.Instance.Lordship, GetTierCost(2), LordshipAccolade,
                 "{=!}Villages weigh 20% less in demesne limit",
                 SkillEffect.PerkRole.Ruler, -0.20f,
                 SkillEffect.EffectIncrementType.AddFactor,
@@ -506,12 +576,9 @@ namespace BannerKings.Managers.Skills
                 SkillEffect.PerkRole.ClanLeader, 0.2f,
                 SkillEffect.EffectIncrementType.Add);
 
-            lordshipMilitaryAdministration =
-                Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LordshipMilitaryAdministration"));
-            LordshipEconomicAdministration =
-                Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LordshipEconomicAdministration"));
-
-            lordshipMilitaryAdministration.InitializeNew("{=!}Military Administration", BKSkills.Instance.Lordship,
+            LordshipMilitaryAdministration = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LordshipMilitaryAdministration"));
+            LordshipEconomicAdministration = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LordshipEconomicAdministration"));
+            LordshipMilitaryAdministration.InitializeNew("{=!}Military Administration", BKSkills.Instance.Lordship,
                 GetTierCost(3), LordshipEconomicAdministration,
                 "{=!}Increased settlement militarism in settlements by flat 2%",
                 SkillEffect.PerkRole.Ruler, 0.02f,
@@ -521,7 +588,7 @@ namespace BannerKings.Managers.Skills
                 SkillEffect.EffectIncrementType.AddFactor);
 
             LordshipEconomicAdministration.InitializeNew("{=!}Economic Administration", BKSkills.Instance.Lordship,
-                GetTierCost(3), lordshipMilitaryAdministration,
+                GetTierCost(3), LordshipMilitaryAdministration,
                 "{=!}Increased settlement production efficiency by 10%",
                 SkillEffect.PerkRole.Ruler, 0.2f,
                 SkillEffect.EffectIncrementType.AddFactor,
@@ -529,10 +596,9 @@ namespace BannerKings.Managers.Skills
                 SkillEffect.PerkRole.Ruler, 0.1f,
                 SkillEffect.EffectIncrementType.AddFactor);
 
-            lordshipClaimant = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LordshipClaimant"));
-            lordshipPatron = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LordshipPatron"));
-
-            lordshipClaimant.InitializeNew("{=!}Claimant", BKSkills.Instance.Lordship, GetTierCost(4), lordshipPatron,
+            LordshipClaimant = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LordshipClaimant"));
+            LordshipPatron = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LordshipPatron"));
+            LordshipClaimant.InitializeNew("{=!}Claimant", BKSkills.Instance.Lordship, GetTierCost(4), LordshipPatron,
                 "{=!}Claims are built 30% faster",
                 SkillEffect.PerkRole.Ruler, 0.3f,
                 SkillEffect.EffectIncrementType.AddFactor,
@@ -540,7 +606,7 @@ namespace BannerKings.Managers.Skills
                 SkillEffect.PerkRole.Ruler, 0.05f,
                 SkillEffect.EffectIncrementType.AddFactor);
 
-            lordshipPatron.InitializeNew("{=!}Patron", BKSkills.Instance.Lordship, GetTierCost(4), lordshipClaimant,
+            LordshipPatron.InitializeNew("{=!}Patron", BKSkills.Instance.Lordship, GetTierCost(4), LordshipClaimant,
                 "{=!}Grating titles yields renown",
                 SkillEffect.PerkRole.Ruler, 0.2f,
                 SkillEffect.EffectIncrementType.AddFactor,
@@ -548,16 +614,20 @@ namespace BannerKings.Managers.Skills
                 SkillEffect.PerkRole.Ruler, 0.1f,
                 SkillEffect.EffectIncrementType.AddFactor);
 
+            #endregion Lordship
+
+            #region Scholarship
 
             ScholarshipLiterate = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("ScholarshipLiterate"));
             ScholarshipLiterate.InitializeNew("{=!}Literate", BKSkills.Instance.Scholarship, GetTierCost(1), null,
-                "{=!}Allows reading books", SkillEffect.PerkRole.Personal, 0f,
-                SkillEffect.EffectIncrementType.Invalid, string.Empty,
+                "{=!}Allows reading books", 
+                SkillEffect.PerkRole.Personal, 0f,
+                SkillEffect.EffectIncrementType.Invalid, 
+                string.Empty,
                 SkillEffect.PerkRole.None, 0f,
                 SkillEffect.EffectIncrementType.Invalid);
 
-            ScholarshipAvidLearner =
-                Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("ScholarshipLearner"));
+            ScholarshipAvidLearner = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("ScholarshipLearner"));
             ScholarshipAvidLearner.InitializeNew("{=!}Avid Learner", BKSkills.Instance.Scholarship, GetTierCost(2), null,
                 "{=!}Increase language learning rate",
                 SkillEffect.PerkRole.Personal, 20f,
@@ -584,11 +654,8 @@ namespace BannerKings.Managers.Skills
                 SkillEffect.PerkRole.Personal, 10f,
                 SkillEffect.EffectIncrementType.AddFactor);
 
-
+            ScholarshipAccountant = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("ScholarshipAccountant"));
             ScholarshipMechanic = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("ScholarshipMechanic"));
-            ScholarshipAccountant =
-                Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("ScholarshipAccountant"));
-
             ScholarshipMechanic.InitializeNew("{=!}Mechanic", BKSkills.Instance.Scholarship, GetTierCost(5),
                 ScholarshipAccountant,
                 "{=!}Engineering skill tree yields both perks rather than 1",
@@ -597,7 +664,6 @@ namespace BannerKings.Managers.Skills
                 string.Empty,
                 SkillEffect.PerkRole.None, 0f,
                 SkillEffect.EffectIncrementType.Invalid);
-
 
             ScholarshipAccountant.InitializeNew("{=!}Accountant", BKSkills.Instance.Scholarship, GetTierCost(5),
                 ScholarshipMechanic,
@@ -625,9 +691,8 @@ namespace BannerKings.Managers.Skills
                 "{=!}Language limit is increased by 1",
                 SkillEffect.PerkRole.Personal, 1f,
                 SkillEffect.EffectIncrementType.Add);
-
-            ScholarshipPeerReview =
-                Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("ScholarshipPeerReview"));
+             
+            ScholarshipPeerReview = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("ScholarshipPeerReview"));
             ScholarshipPeerReview.InitializeNew("{=!}Peer Review", BKSkills.Instance.Scholarship, GetTierCost(8), null,
                 "{=!}Clan settlements yield more research points",
                 SkillEffect.PerkRole.Personal, 20f,
@@ -636,21 +701,17 @@ namespace BannerKings.Managers.Skills
                 SkillEffect.PerkRole.Personal, 100f,
                 SkillEffect.EffectIncrementType.AddFactor);
 
-            ScholarshipBedTimeStory =
-                Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("ScholarshipBedTimeStory"));
+            ScholarshipBedTimeStory = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("ScholarshipBedTimeStory"));
             ScholarshipBedTimeStory.InitializeNew("{=!}Bed Time Story", BKSkills.Instance.Scholarship, GetTierCost(9), null,
                 "{=!}Daily experience points in random skill for companions and family in party",
                 SkillEffect.PerkRole.PartyLeader, 10f,
                 SkillEffect.EffectIncrementType.Add,
-                "",
+                string.Empty,
                 SkillEffect.PerkRole.Personal, 100f,
                 SkillEffect.EffectIncrementType.AddFactor);
 
-            ScholarshipTreasurer =
-                Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("ScholarshipTreasurer"));
-            ScholarshipNaturalScientist =
-                Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("ScholarshipNaturalScientist"));
-
+            ScholarshipTreasurer = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("ScholarshipTreasurer"));
+            ScholarshipNaturalScientist = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("ScholarshipNaturalScientist"));
             ScholarshipTreasurer.InitializeNew("{=!}Treasurer", BKSkills.Instance.Scholarship, GetTierCost(10),
                 ScholarshipNaturalScientist,
                 "{=!}Trade skill tree yields both perks rather than 1",
@@ -677,8 +738,7 @@ namespace BannerKings.Managers.Skills
                 SkillEffect.PerkRole.None, 0f,
                 SkillEffect.EffectIncrementType.Invalid);
 
-            ScholarshipMagnumOpus =
-                Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("ScholarshipMagnumOpus"));
+            ScholarshipMagnumOpus = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("ScholarshipMagnumOpus"));
             ScholarshipMagnumOpus.InitializeNew("{=!}Magnum Opus", BKSkills.Instance.Scholarship, GetTierCost(11), null,
                 "{=!}+0.2% experience gain for every skill point in Scholarship above 230",
                 SkillEffect.PerkRole.Personal, 0.2f,
@@ -686,10 +746,10 @@ namespace BannerKings.Managers.Skills
                 "{=!}Focus points add 50% more learning limit",
                 SkillEffect.PerkRole.Personal, 50f,
                 SkillEffect.EffectIncrementType.AddFactor);
+            #endregion Scholarship
         }
 
-
-        private int GetTierCost(int tierIndex)
+        private static int GetTierCost(int tierIndex)
         {
             return Requirements[tierIndex - 1];
         }

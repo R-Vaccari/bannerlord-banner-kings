@@ -7,14 +7,20 @@ namespace BannerKings.Managers.Goals
     {
         public override IEnumerable<Goal> All
         {
-            get { yield return GreaterBattania; }
+            get
+            {
+                yield return GreaterBattania;
+                yield return CalradicEmpireGoal;
+            }
         }
 
         public Goal GreaterBattania { get; private set; }
+        public Goal CalradicEmpireGoal { get; private set; }
 
         public override void Initialize()
         {
             GreaterBattania = new GreaterBattaniaGoal();
+            CalradicEmpireGoal = new CalradicEmpireGoal();
         }
     }
 }

@@ -327,25 +327,27 @@ namespace BannerKings.Managers.Titles
 
         public void DriftTitle(FeudalTitle newSovereign, bool notify = true)
         {
-            if (type == TitleType.Dukedom && newSovereign.IsSovereignLevel)
+            if (type != TitleType.Dukedom || !newSovereign.IsSovereignLevel)
             {
-                sovereign.vassals.Remove(this);
-                SetSovereign(newSovereign);
-                newSovereign.vassals.Add(this);
+                return;
+            }
 
-                ChangeContract(newSovereign.contract.Government);
-                ChangeContract(newSovereign.contract.Succession);
-                ChangeContract(newSovereign.contract.Inheritance);
-                ChangeContract(newSovereign.contract.GenderLaw);
+            sovereign.vassals.Remove(this);
+            SetSovereign(newSovereign);
+            newSovereign.vassals.Add(this);
 
-                if (notify)
-                {
-                    InformationManager.DisplayMessage(new InformationMessage(
-                        new TextObject("{=!}{TITLE} has drifted into a legal part of {SOVEREIGN}")
-                            .SetTextVariable("TITLE", FullName)
-                            .SetTextVariable("SOVEREIGN", newSovereign.FullName)
-                            .ToString()));
-                }
+            ChangeContract(newSovereign.contract.Government);
+            ChangeContract(newSovereign.contract.Succession);
+            ChangeContract(newSovereign.contract.Inheritance);
+            ChangeContract(newSovereign.contract.GenderLaw);
+
+            if (notify)
+            {
+                InformationManager.DisplayMessage(new InformationMessage(
+                    new TextObject("{=!}{TITLE} has drifted into a legal part of {SOVEREIGN}")
+                        .SetTextVariable("TITLE", FullName)
+                        .SetTextVariable("SOVEREIGN", newSovereign.FullName)
+                        .ToString()));
             }
         }
 

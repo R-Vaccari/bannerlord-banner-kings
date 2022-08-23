@@ -19,12 +19,12 @@ namespace BannerKings.Models.Vanilla
                 .ResultNumber;
         }
 
-        public ExplainedNumber CalculateLearningRate(Hero hero, int attributeValue, int focusValue, int skillValue,
-            int characterLevel, TextObject attributeName, bool includeDescriptions = false)
+        public ExplainedNumber CalculateLearningRate(Hero hero, int attributeValue, int focusValue, int skillValue, int characterLevel, TextObject attributeName, bool includeDescriptions = false)
         {
             var result = new ExplainedNumber(1.25f, includeDescriptions);
             result.AddFactor(0.4f * attributeValue, attributeName);
             result.AddFactor(focusValue * 1f, new TextObject("{=MRktqZwu}Skill Focus"));
+
             var num = MathF.Round(CalculateLearningLimit(hero, attributeValue, focusValue, null).ResultNumber);
             if (skillValue > num)
             {
@@ -34,8 +34,7 @@ namespace BannerKings.Models.Vanilla
 
             if (hero.GetPerkValue(BKPerks.Instance.ScholarshipMagnumOpus))
             {
-                result.Add(0.02f * hero.GetSkillValue(BKSkills.Instance.Scholarship) - 230,
-                    BKPerks.Instance.ScholarshipMagnumOpus.Name);
+                result.Add(0.02f * hero.GetSkillValue(BKSkills.Instance.Scholarship) - 230, BKPerks.Instance.ScholarshipMagnumOpus.Name);
             }
 
             result.LimitMin(0.05f);
@@ -51,8 +50,7 @@ namespace BannerKings.Models.Vanilla
             return baseResult;
         }
 
-        public ExplainedNumber CalculateLearningLimit(Hero hero, int attributeValue, int focusValue,
-            TextObject attributeName, bool includeDescriptions = false)
+        public ExplainedNumber CalculateLearningLimit(Hero hero, int attributeValue, int focusValue, TextObject attributeName, bool includeDescriptions = false)
         {
             var baseResult = base.CalculateLearningLimit(attributeValue, focusValue, attributeName, includeDescriptions);
             if (hero.GetPerkValue(BKPerks.Instance.ScholarshipMagnumOpus))

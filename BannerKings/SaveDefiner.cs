@@ -9,8 +9,6 @@ using BannerKings.Managers.Education;
 using BannerKings.Managers.Education.Books;
 using BannerKings.Managers.Education.Languages;
 using BannerKings.Managers.Education.Lifestyles;
-using BannerKings.Managers.Goals;
-using BannerKings.Managers.Goals.Decisions;
 using BannerKings.Managers.Innovations;
 using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Institutions.Religions.Faiths;
@@ -57,7 +55,7 @@ namespace BannerKings
             AddClassDefinition(typeof(EconomicData), 5);
             AddClassDefinition(typeof(LandData), 6);
             AddClassDefinition(typeof(PopulationData), 7);
-            AddClassDefinition(typeof(BannerKingsDecision), 8);
+            AddClassDefinition(typeof(BKDecision<Settlement>), 8);
             AddClassDefinition(typeof(BannerKingsPolicy), 9);
             AddEnumDefinition(typeof(TaxType), 10);
             AddEnumDefinition(typeof(MilitiaPolicy), 11);
@@ -148,6 +146,10 @@ namespace BannerKings
             AddClassDefinition(typeof(BannerKingsObject), 96);
             AddClassDefinition(typeof(StartOption), 97);
             AddClassDefinition(typeof(GoalManager), 98);
+            AddClassDefinition(typeof(BKDecision<>), 99);
+            AddClassDefinition(typeof(BKDecision<Hero>), 100);
+            AddClassDefinition(typeof(BKSettlementDecision), 101);
+            AddClassDefinition(typeof(BKLordDecision), 102);
         }
 
         protected override void DefineContainerDefinitions()
@@ -156,10 +158,15 @@ namespace BannerKings
             ConstructContainerDefinition(typeof(List<VillageBuilding>));
             ConstructContainerDefinition(typeof(List<CultureDataClass>));
             ConstructContainerDefinition(typeof(Dictionary<Settlement, PopulationData>));
-            ConstructContainerDefinition(typeof(List<BannerKingsDecision>));
+            ConstructContainerDefinition(typeof(List<BKDecision<Settlement>>));
+            ConstructContainerDefinition(typeof(List<BKDecision<Hero>>));
+            ConstructContainerDefinition(typeof(List<BKSettlementDecision>));
             ConstructContainerDefinition(typeof(List<BannerKingsPolicy>));
             ConstructContainerDefinition(typeof(Dictionary<Settlement, List<BannerKingsPolicy>>));
-            ConstructContainerDefinition(typeof(Dictionary<Settlement, List<BannerKingsDecision>>));
+            ConstructContainerDefinition(typeof(Dictionary<Settlement, List<BKDecision<Settlement>>>));
+            ConstructContainerDefinition(typeof(Dictionary<Settlement, List<BKSettlementDecision>>));
+            ConstructContainerDefinition(typeof(Dictionary<Hero, List<BKDecision<Hero>>>));
+            ConstructContainerDefinition(typeof(Dictionary<Hero, List<BKLordDecision>>));
             ConstructContainerDefinition(typeof(Dictionary<FeudalTitle, Hero>));
             ConstructContainerDefinition(typeof(Dictionary<Kingdom, FeudalTitle>));
             ConstructContainerDefinition(typeof(List<FeudalTitle>));

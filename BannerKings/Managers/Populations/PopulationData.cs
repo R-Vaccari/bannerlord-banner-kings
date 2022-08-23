@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using BannerKings.Managers.Goals;
 using BannerKings.Managers.Institutions.Guilds;
 using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Titles;

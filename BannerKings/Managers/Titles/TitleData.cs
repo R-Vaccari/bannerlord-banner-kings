@@ -58,8 +58,7 @@ namespace BannerKings.Managers.Titles
             var claimAction = model.GetAction(ActionType.Claim, title, owner);
             if (claimAction.Possible)
             {
-                var knight = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(title.deJure).Count() == 1 &&
-                             title.type == TitleType.Lordship;
+                var knight = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(title.deJure).Count == 1 && title.type == TitleType.Lordship;
                 if (owner.Clan.Kingdom == null || owner.Clan.Kingdom != title.deJure.Clan.Kingdom || !knight)
                 {
                     claimAction.TakeAction(null);

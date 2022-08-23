@@ -13,26 +13,29 @@ namespace BannerKings.Models.BKModels
             var result = new ExplainedNumber(0f, true);
             result.LimitMin(0f);
             result.LimitMax(1f);
+
             var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
-            if (data != null)
+            if (data == null)
             {
-                var nobles = data.GetTypeCount(PopulationManager.PopType.Nobles);
-                var craftsmen = data.GetTypeCount(PopulationManager.PopType.Craftsmen);
+                return result;
+            }
 
-                if (nobles > 0)
-                {
-                    result.Add(nobles / 100000f, new TextObject("{=!}Nobles"));
-                }
+            var nobles = data.GetTypeCount(PopulationManager.PopType.Nobles);
+            var craftsmen = data.GetTypeCount(PopulationManager.PopType.Craftsmen);
 
-                if (craftsmen > 0)
-                {
-                    result.Add(craftsmen / 150000f, new TextObject("{=!}Craftsmen"));
-                }
+            if (nobles > 0)
+            {
+                result.Add(nobles / 100000f, new TextObject("{=!}Nobles"));
+            }
 
-                if (settlement.Owner.GetPerkValue(BKPerks.Instance.ScholarshipPeerReview))
-                {
-                    result.AddFactor(0.2f, BKPerks.Instance.ScholarshipPeerReview.Name);
-                }
+            if (craftsmen > 0)
+            {
+                result.Add(craftsmen / 150000f, new TextObject("{=!}Craftsmen"));
+            }
+
+            if (settlement.Owner.GetPerkValue(BKPerks.Instance.ScholarshipPeerReview))
+            {
+                result.AddFactor(0.2f, BKPerks.Instance.ScholarshipPeerReview.Name);
             }
 
             return result;

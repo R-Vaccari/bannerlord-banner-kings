@@ -14,7 +14,7 @@ namespace BannerKings.Models.BKModels
             return new ExplainedNumber();
         }
 
-        public ExplainedNumber CalculateLessionCost(Hero student, Hero instructor)
+        public ExplainedNumber CalculateLessonsCost(Hero student, Hero instructor)
         {
             var result = new ExplainedNumber(1000f, true);
 
@@ -24,9 +24,10 @@ namespace BannerKings.Models.BKModels
         public ExplainedNumber CalculateLanguageLimit(Hero learner)
         {
             var result = new ExplainedNumber(2f, true);
+
             if (learner.GetPerkValue(BKPerks.Instance.ScholarshipAvidLearner))
             {
-                result.Add(2f, BKPerks.Instance.ScholarshipAvidLearner.Name);
+                result.Add(1f, BKPerks.Instance.ScholarshipAvidLearner.Name);
             }
 
             if (learner.GetPerkValue(BKPerks.Instance.ScholarshipBookWorm))
@@ -61,8 +62,7 @@ namespace BannerKings.Models.BKModels
             var dic = native.Inteligible;
             if (dic.ContainsKey(language))
             {
-                result.Add(dic[language], new TextObject("{=!}Intelligibility with {LANGUAGE}")
-                    .SetTextVariable("LANGUAGE", native.Name));
+                result.Add(dic[language], new TextObject("{=!}Intelligibility with {LANGUAGE}").SetTextVariable("LANGUAGE", native.Name));
             }
 
             if (student.GetPerkValue(BKPerks.Instance.ScholarshipAvidLearner))
@@ -82,8 +82,7 @@ namespace BannerKings.Models.BKModels
         public ExplainedNumber CalculateBookReadingRate(BookType book, Hero reader)
         {
             var result = new ExplainedNumber(0f, true);
-            var fluency = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(reader)
-                .GetLanguageFluency(book.Language);
+            var fluency = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(reader).GetLanguageFluency(book.Language);
             result.Add(fluency, new TextObject("{=!}{LANGUAGE} fluency").SetTextVariable("LANGUAGE", book.Language.Name));
 
             var books = BannerKingsConfig.Instance.EducationManager.GetAvailableBooks(reader.PartyBelongedTo);

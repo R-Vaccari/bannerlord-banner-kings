@@ -51,8 +51,7 @@ namespace BannerKings.Managers.Helpers
             }
 
             var candidates = GetCandidates(victim.Clan, victim);
-            var mainHeir = GetHeirInternal(highest.contract.Inheritance, highest.contract.GenderLaw, victim,
-                candidates);
+            var mainHeir = GetHeirInternal(highest.contract.Inheritance, highest.contract.GenderLaw, victim, candidates);
             var mainHeirTitles = new List<FeudalTitle>();
             var secondaryHeirs = new Dictionary<Hero, List<FeudalTitle>>();
             foreach (var pair in inheritanceDic)

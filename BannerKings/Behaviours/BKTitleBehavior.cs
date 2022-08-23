@@ -132,12 +132,14 @@ namespace BannerKings.Behaviours
 
         private void CheckOverVassalLimit(Hero hero)
         {
-            if (BannerKingsConfig.Instance.StabilityModel.IsHeroOverVassalLimit(hero))
+            if (!BannerKingsConfig.Instance.StabilityModel.IsHeroOverVassalLimit(hero))
             {
-                if (hero == Hero.MainHero)
-                {
-                    Campaign.Current.CampaignInformationManager.NewMapNoticeAdded(new VassalLimitNotification());
-                }
+                return;
+            }
+
+            if (hero == Hero.MainHero)
+            {
+                Campaign.Current.CampaignInformationManager.NewMapNoticeAdded(new VassalLimitNotification());
             }
         }
 
@@ -234,9 +236,9 @@ namespace BannerKings.Behaviours
             if (sovereign.contract.Rights.Contains(FeudalRights.Conquest_Rights))
             {
                 var decisions = kingdom.UnresolvedDecisions.ToList();
-                var bkDecision = decisions.FirstOrDefault(x =>
+                var BKSettlementDecision = decisions.FirstOrDefault(x =>
                     x is BKSettlementClaimantDecision decision && decision.Settlement == settlement);
-                if (bkDecision != null)
+                if (BKSettlementDecision != null)
                 {
                     return;
                 }
