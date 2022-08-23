@@ -68,11 +68,19 @@ namespace BannerKings.Managers.Goals.Decisions
                 failedReasons.Add(failedReason);
             }
 
-            if (referenceHero.Clan.Kingdom.StringId != "Battania" || !referenceHero.IsKingdomLeader())
+            if (!referenceHero.IsKingdomLeader() || referenceHero.Clan.Kingdom.StringId != "battania")
             {
-                var kingdom = Campaign.Current.Kingdoms.First(k => k.StringId == "battania");
-                failedReasons.Add(new TextObject("{!=}You're not the leader of {KINGDOM}")
-                    .SetTextVariable("KINGDOM", kingdom.EncyclopediaLinkWithName));
+                var kingdom = Campaign.Current.Kingdoms.FirstOrDefault(k => k.StringId == "battania");
+                if (kingdom == null)
+                {
+                    failedReasons.Add(new TextObject("{!=}The {KINGDOM} kingdom does not exist")
+                        .SetTextVariable("KINGDOM", GameTexts.FindText("str_adjective_for_faction", "battania")));
+                }
+                else
+                {
+                    failedReasons.Add(new TextObject("{!=}You're not the leader of {KINGDOM}")
+                        .SetTextVariable("KINGDOM", kingdom.EncyclopediaLinkWithName));
+                }
             }
 
             failedReasons.AddRange

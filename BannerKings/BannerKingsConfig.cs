@@ -88,9 +88,7 @@ namespace BannerKings
             ReligionsManager = new ReligionsManager();
             EducationManager = new EducationManager();
             InnovationsManager = new InnovationsManager();
-
-            GoalManager = new GoalManager();
-            DefaultGoals.Instance.Initialize();
+            GoalManager = new GoalManager();  
         }
 
         public void InitManagers(PopulationManager populationManager, PolicyManager policyManager, TitleManager titleManager, CourtManager court, ReligionsManager religions, EducationManager educations, InnovationsManager innovations, GoalManager goals)
