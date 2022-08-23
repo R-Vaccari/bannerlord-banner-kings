@@ -1,4 +1,5 @@
 ﻿using BannerKings.Managers;
+using BannerKings.Managers.Goals;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 
@@ -15,8 +16,20 @@ namespace BannerKings.Behaviours
 
         public override void RegisterEvents()
         {
+            CampaignEvents.OnCharacterCreationIsOverEvent.AddNonSerializedListener(this, OnCreationEnded);
+            CampaignEvents.OnGameLoadedEvent.AddNonSerializedListener(this, OnGameLoaded);
             CampaignEvents.DailyTickHeroEvent.AddNonSerializedListener(this, OnDailyTickHeroEvent);
             CampaignEvents.DailyTickSettlementEvent.AddNonSerializedListener(this, OnDailyTickSettlementEvent);
+        }
+
+        private void OnCreationEnded()
+        {
+            DefaultGoals.Instance.Initialize();
+        }
+
+        private void OnGameLoaded(CampaignGameStarter starter)
+        {
+            DefaultGoals.Instance.Initialize();
         }
 
         private void OnDailyTickHeroEvent(Hero hero)
