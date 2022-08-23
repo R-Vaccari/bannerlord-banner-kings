@@ -68,7 +68,7 @@ namespace BannerKings.Managers.Goals.Decisions
                 failedReasons.Add(failedReason);
             }
 
-            if (referenceHero.Clan.Kingdom.StringId != "battania" || !referenceHero.IsKingdomLeader())
+            if (!referenceHero.IsKingdomLeader() || referenceHero.Clan.Kingdom.StringId != "battania")
             {
                 var kingdom = Campaign.Current.Kingdoms.FirstOrDefault(k => k.StringId == "battania");
                 if (kingdom == null)
