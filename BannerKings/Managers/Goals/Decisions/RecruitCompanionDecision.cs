@@ -5,6 +5,7 @@ using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.Extensions;
+using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -29,23 +30,25 @@ namespace BannerKings.Managers.Goals.Decisions
                 new("commander", "Commander", "A companion that meets the criteria for a Commander.", 5000, 100,
                     new List<TraitObject> {DefaultTraits.Commander},
                     new List<PerkObject>(),
-                    new List<SkillObject>()),
+                    new List<SkillObject>() { DefaultSkills.Leadership, DefaultSkills.Tactics }),
                 new("thief", "Thief", "A companion that meets the criteria for a Thief.", 5000, 100,
                     new List<TraitObject> {DefaultTraits.Thief},
                     new List<PerkObject>(),
-                    new List<SkillObject>()),
+                    new List<SkillObject>() { DefaultSkills.Roguery }),
                 new("surgeon", "Surgeon", "A companion that meets the criteria for a Surgeon.", 5000, 100,
                     new List<TraitObject> {DefaultTraits.Surgery},
                     new List<PerkObject>(),
-                    new List<SkillObject>()),
+                    new List<SkillObject>() { DefaultSkills.Medicine }),
                 new("caravaneer", "Caravaneer", "A companion that meets the criteria for a Caravaneer.", 5000, 100,
                     new List<TraitObject>{DefaultTraits.Manager},
                     new List<PerkObject>(),
-                    new List<SkillObject>()),
+                    new List<SkillObject>() { DefaultSkills.Steward, DefaultSkills.Scouting }),
                 new("warrior", "Warrior", "A companion that meets the criteria for a Warrior.", 5000, 100,
                     new List<TraitObject> {DefaultTraits.Fighter},
                     new List<PerkObject>(),
-                    new List<SkillObject>())
+                    new List<SkillObject>() { DefaultSkills.OneHanded, DefaultSkills.TwoHanded, DefaultSkills.Polearm,
+                        DefaultSkills.Bow, DefaultSkills.Crossbow, DefaultSkills.Throwing, DefaultSkills.Riding,
+                        DefaultSkills.Athletics})
             };
         }
 
@@ -87,12 +90,24 @@ namespace BannerKings.Managers.Goals.Decisions
             {
                 var companionType = companionTypes[index];
                 var enabled = gold >= companionType.GoldCost && influence >= companionType.InfluenceCost;
+                var hint = companionType.Description;
+
+                var template = GetAdequateCharacter(companionType);
+                if (template == null) 
+                {
+                    enabled = false;
+                    hint = new TextObject("{=!}No candidates of this type available.").ToString();
+                }
+                else if (!enabled)
+                {
+                    hint = failedReasons[0].ToString();
+                }
 
                 options.Add(new InquiryElement(companionType,
                     companionType.Name,
                     null,
                     enabled,
-                    enabled ? companionType.Description : failedReasons[index].ToString()));
+                    hint));
             }
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
@@ -112,62 +127,58 @@ namespace BannerKings.Managers.Goals.Decisions
                 string.Empty));
         }
 
-        internal override void ApplyGoal()
+        private CharacterObject GetAdequateCharacter(CompanionType type)
         {
-            var hero = GetFulfiller();
-
             var possibleTemplates = new List<(CharacterObject template, float weight)>();
-            foreach (var template in hero.Culture.NotableAndWandererTemplates.Where(t => t.Occupation == Occupation.Wanderer))
+            foreach (var template in GetFulfiller().Culture.NotableAndWandererTemplates.Where(t => t.Occupation == Occupation.Wanderer))
             {
                 var weight = 0f;
 
-                foreach (var trait in selectedCompanionType.Traits.Where(trait => template.GetTraitLevel(trait) >= 2))
+                foreach (var trait in type.Traits.Where(trait => template.GetTraitLevel(trait) >= 1))
+                {
+                    weight += template.GetTraitLevel(trait);
+                }
+
+                foreach (var perk in type.Perks.Where(perk => template.GetPerkValue(perk)))
                 {
                     weight++;
                 }
 
-                foreach (var perk in selectedCompanionType.Perks.Where(perk => template.GetPerkValue(perk)))
+                foreach (var skill in type.Skills.Where(skill => template.GetSkillValue(skill) >= 50))
                 {
-                    weight++;
-                }
-
-                foreach (var skill in selectedCompanionType.Skills.Where(skill => template.GetSkillValue(skill) >= 50))
-                {
-                    weight++;
+                    weight += (int)(template.GetSkillValue(skill) / 10f);
                 }
 
                 if (weight > 1f)
                 {
-                    possibleTemplates.Add((template, weight));
+                    possibleTemplates.Add(new (template, weight));
                 }
             }
 
-            if (possibleTemplates.Count == 0)
-            {
-                InformationManager.ShowInquiry
-                (
-                    new InquiryData
-                    (
-                        "Companion Recruitment",
-                        new TextObject("No competent companion was found.").ToString(),
-                        true, 
-                        false, 
-                        GameTexts.FindText("str_accept").ToString(), 
-                        null, 
-                        null, 
-                        null
-                    ),
-                    true
-                );
-            }
+            return MBRandom.ChooseWeighted(possibleTemplates);
+        }
 
-            var characterTemplate = MBRandom.ChooseWeighted(possibleTemplates);
+        internal override void ApplyGoal()
+        {
+            var hero = GetFulfiller();
+            var characterTemplate = GetAdequateCharacter(selectedCompanionType);
 
             var possibleEquipmentRosters = MBObjectManager.Instance.GetObjectTypeList<MBEquipmentRoster>().Where(e => e.EquipmentCulture == hero.Culture).ToList();
             var equipmentRoster = possibleEquipmentRosters.Where(e => e.EquipmentCulture == hero.Culture).ToList().GetRandomElementWithPredicate(x => x.StringId.Contains("bannerkings_companion")) 
                                   ?? possibleEquipmentRosters.Where(e => e.EquipmentCulture == hero.Culture).ToList().GetRandomElementWithPredicate(x => x.HasEquipmentFlags(EquipmentFlags.IsMediumTemplate));
 
-            var companion = HeroCreator.CreateSpecialHero(characterTemplate, null, null, null, Campaign.Current.Models.AgeModel.HeroComesOfAge + MBRandom.RandomInt(30));
+
+            var bornSettlement = Settlement.All.GetRandomElementWithPredicate(x => x.Culture == hero.Culture);
+            if (bornSettlement == null)
+            {
+                bornSettlement = hero.Clan.Settlements.GetRandomElement();
+                if (bornSettlement == null)
+                {
+                    bornSettlement = Settlement.All.GetRandomElement();
+                }
+            }
+
+            var companion = HeroCreator.CreateSpecialHero(characterTemplate, bornSettlement, null, null, Campaign.Current.Models.AgeModel.HeroComesOfAge + MBRandom.RandomInt(12));
             EquipmentHelper.AssignHeroEquipmentFromEquipment(hero, equipmentRoster.AllEquipments.GetRandomElement());
             companion.CompanionOf = hero.Clan;
 
