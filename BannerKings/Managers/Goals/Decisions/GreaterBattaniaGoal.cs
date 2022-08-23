@@ -17,8 +17,8 @@ namespace BannerKings.Managers.Goals.Decisions
 
         public GreaterBattaniaGoal() : base("goal_greater_battania", GoalUpdateType.Settlement)
         {
-            var name = new TextObject("{=!}Greater Battania");
-            var description = new TextObject("{!=}Found Greater Battania");
+            var name = new TextObject("{=!}Unite Greater Battania");
+            var description = new TextObject("{!=}Establish a new empire title. You must bring all battanian towns and castles under control of your kingdom.");
 
             Initialize(name, description);
 
@@ -120,8 +120,8 @@ namespace BannerKings.Managers.Goals.Decisions
             (
                 new InquiryData
                 (
-                    "Founding a new Title",
-                    new TextObject("Do you want to found the title {TITLE}?\nThis will cost you {GOLD}{GOLD_ICON} and {INFLUENCE}{INFLUENCE_ICON}.\nAs a reward your clan will earn {RENOWN} renown.")
+                    "Establish a new Empire",
+                    new TextObject("Do you want to establish the title {TITLE}?\nThis will cost you {GOLD}{GOLD_ICON} and {INFLUENCE}{INFLUENCE_ICON}.\nAs a reward your clan will earn {RENOWN} renown.")
                         .SetTextVariable("TITLE", name)
                         .SetTextVariable("GOLD", gold)
                         .SetTextVariable("INFLUENCE", influence)

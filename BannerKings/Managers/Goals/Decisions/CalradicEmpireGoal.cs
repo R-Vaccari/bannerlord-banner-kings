@@ -17,8 +17,8 @@ namespace BannerKings.Managers.Goals.Decisions
 
         public CalradicEmpireGoal() : base("goal_calradic_empire", GoalUpdateType.Settlement)
         {
-            var name = new TextObject("{=!}Calradic Empire");
-            var description = new TextObject("{!=}Found Calradic Empire");
+            var name = new TextObject("{=!}Reform the Calradic Empire");
+            var description = new TextObject("{!=}Establish a new empire title. You must bring all imperial duchies under control of your kingdom.");
 
             Initialize(name, description);
 
@@ -114,8 +114,8 @@ namespace BannerKings.Managers.Goals.Decisions
             (
                 new InquiryData
                 (
-                    "Founding a new Title",
-                    new TextObject("Do you want to found the title {TITLE}?\nThis will cost you {GOLD}{GOLD_ICON} and {INFLUENCE}{INFLUENCE_ICON}.\nAs a reward your clan will earn {RENOWN} renown.")
+                    "Establish a new Title",
+                    new TextObject("Do you want to establish the title {TITLE}?\nThis will cost you {GOLD}{GOLD_ICON} and {INFLUENCE}{INFLUENCE_ICON}.\nAs a reward your clan will earn {RENOWN} renown.")
                         .SetTextVariable("TITLE", name)
                         .SetTextVariable("GOLD", gold)
                         .SetTextVariable("INFLUENCE", influence)

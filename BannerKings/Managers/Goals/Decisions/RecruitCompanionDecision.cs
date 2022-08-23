@@ -20,7 +20,7 @@ namespace BannerKings.Managers.Goals.Decisions
         public RecruitCompanionDecision() : base("goal_recruit_companion_decision", GoalUpdateType.Manual)
         {
             var name = new TextObject("{=!}Recruit Companion");
-            var description = new TextObject("{!=}Select a type of companion to recruit");
+            var description = new TextObject("{!=}Select a type of companion to recruit.");
 
             Initialize(name, description);
 
