@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
+using TaleWorlds.CampaignSystem.Extensions;
 using TaleWorlds.Core;
+using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
 
@@ -132,7 +134,29 @@ namespace BannerKings.Managers.Goals.Decisions
                     weight++;
                 }
 
-                possibleTemplates.Add((template, weight));
+                if (weight > 1f)
+                {
+                    possibleTemplates.Add((template, weight));
+                }
+            }
+
+            if (possibleTemplates.Count == 0)
+            {
+                InformationManager.ShowInquiry
+                (
+                    new InquiryData
+                    (
+                        "Companion Recruitment",
+                        new TextObject("No competent companion was found.").ToString(),
+                        true, 
+                        false, 
+                        GameTexts.FindText("str_accept").ToString(), 
+                        null, 
+                        null, 
+                        null
+                    ),
+                    true
+                );
             }
 
             var characterTemplate = MBRandom.ChooseWeighted(possibleTemplates);
@@ -144,6 +168,24 @@ namespace BannerKings.Managers.Goals.Decisions
             var companion = HeroCreator.CreateSpecialHero(characterTemplate, null, null, null, Campaign.Current.Models.AgeModel.HeroComesOfAge + MBRandom.RandomInt(30));
             EquipmentHelper.AssignHeroEquipmentFromEquipment(hero, equipmentRoster.AllEquipments.GetRandomElement());
             companion.CompanionOf = hero.Clan;
+
+            var companionFoundMessage = new TextObject("{COMPANION.LINK} was discovered and joined you as companion.");
+            companionFoundMessage.SetCharacterProperties("COMPANION", companion.CharacterObject);
+            InformationManager.ShowInquiry
+            (
+                new InquiryData
+                (
+                    "Companion Recruitment",
+                    companionFoundMessage.ToString(),
+                    true, 
+                    false, 
+                    GameTexts.FindText("str_accept").ToString(), 
+                    null, 
+                    null, 
+                    null
+                ),
+                true
+            );
         }
 
         public override void DoAiDecision()
