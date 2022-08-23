@@ -195,7 +195,7 @@ namespace BannerKings.UI.Religion
             int i = 0;
             foreach (var religion in BannerKingsConfig.Instance.ReligionsManager.GetReligions())
             {
-                var item = new ReligionSelectorItemVM(religion, religion.Faith != this.religion.Faith);
+                var item = new ReligionSelectorItemVM(religion, religion.Faith != this.religion?.Faith);
                 if (religion.Faith == this.religion.Faith) selectedIndex = i;
                 selector.AddItem(item);
                 i++;

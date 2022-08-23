@@ -70,7 +70,7 @@ namespace BannerKings.Managers.Goals.Decisions
 
             if (referenceHero.Clan.Kingdom.StringId != "Battania" || !referenceHero.IsKingdomLeader())
             {
-                var kingdom = Campaign.Current.Kingdoms.First(k => k.StringId == "Battania");
+                var kingdom = Campaign.Current.Kingdoms.First(k => k.StringId == "battania");
                 failedReasons.Add(new TextObject("{!=}You're not the leader of {KINGDOM}")
                     .SetTextVariable("KINGDOM", kingdom.EncyclopediaLinkWithName));
             }

@@ -35,8 +35,11 @@ namespace BannerKings.Managers.Goals.Decisions
                 "Calsea",
                 "Tanaesis"
             };
-            
-            settlements = BannerKingsConfig.Instance.TitleManager.GetAllTitlesByType(TitleType.Dukedom).Where(t => duchyStringIds.Contains(t.shortName.ToString())).Select(t => t.fief).ToList();
+
+            settlements = BannerKingsConfig.Instance.TitleManager.GetAllTitlesByType(TitleType.Dukedom)
+                .Where(t => duchyStringIds.Contains(t.shortName.ToString()))
+                .SelectMany(t => t.vassals.Select(v => v.fief))
+                .ToList();
         }
 
         internal override bool IsAvailable()
@@ -65,9 +68,9 @@ namespace BannerKings.Managers.Goals.Decisions
 
             var imperialKingdomsStringIds = new List<string>
             {
-                "westernEmpire",
-                "easternEmpire",
-                "northernEmpire"
+                "empire",
+                "empire_w",
+                "empire_s"
             };
             if (imperialKingdomsStringIds.All(k => k != referenceHero.Clan.Kingdom.StringId) || !referenceHero.IsKingdomLeader())
             {
