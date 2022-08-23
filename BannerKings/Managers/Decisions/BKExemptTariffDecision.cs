@@ -3,7 +3,7 @@ using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Decisions
 {
-    public class BKExemptTariffDecision : BKSettlementDecision
+    public class BKExemptTariffDecision : BannerKingsDecision
     {
         public BKExemptTariffDecision(Settlement settlement, bool enabled) : base(settlement, enabled)
         {

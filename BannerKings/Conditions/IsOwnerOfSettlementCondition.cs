@@ -23,17 +23,17 @@ namespace BannerKings.Conditions
 
         public Settlement Settlement { get; }
 
-        public bool Apply(Hero hero, out TextObject failedReasonText)
+        public bool Apply(Hero hero, out TextObject? failedReasonText)
         {
             return ApplyInternal(hero, false, out failedReasonText);
         }
 
-        public bool Apply(Clan clan, out TextObject failedReasonText)
+        public bool Apply(Clan clan, out TextObject? failedReasonText)
         {
             return ApplyInternal(clan.Leader, true, out failedReasonText);
         }
 
-        private bool ApplyInternal(Hero hero, bool considerClan, out TextObject failedReasonText)
+        private bool ApplyInternal(Hero hero, bool considerClan, out TextObject? failedReasonText)
         {
             failedReasonText = null;
 

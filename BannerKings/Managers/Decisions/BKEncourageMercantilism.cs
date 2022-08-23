@@ -3,7 +3,7 @@ using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Decisions
 {
-    public class BKEncourageMercantilism : BKSettlementDecision
+    public class BKEncourageMercantilism : BannerKingsDecision
     {
         public BKEncourageMercantilism(Settlement settlement, bool enabled) : base(settlement, enabled)
         {

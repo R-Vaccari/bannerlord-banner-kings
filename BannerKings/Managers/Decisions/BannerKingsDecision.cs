@@ -1,17 +1,17 @@
-﻿using TaleWorlds.ObjectSystem;
+﻿using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Managers.Decisions
 {
-    public abstract class BKDecision<T> where T : MBObjectBase
+    public abstract class BannerKingsDecision
     {
-        protected BKDecision(T referencedObject, bool enabled)
+        protected BannerKingsDecision(Settlement settlement, bool enabled)
         {
-            ReferencedObject = referencedObject;
+            Settlement = settlement;
             Enabled = enabled;
         }
 
-        [SaveableProperty(1)] public T ReferencedObject { get; private set; }
+        [SaveableProperty(1)] public Settlement Settlement { get; set; }
 
         [SaveableProperty(2)] public bool Enabled { get; set; }
 

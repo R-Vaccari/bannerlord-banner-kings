@@ -82,7 +82,7 @@ namespace BannerKings
             Initialize();
 
             PopulationManager = new PopulationManager(new Dictionary<Settlement, PopulationData>(), new List<MobileParty>());
-            PolicyManager = new PolicyManager(new Dictionary<Settlement, List<BKSettlementDecision>>(), new Dictionary<Settlement, List<BannerKingsPolicy>>());
+            PolicyManager = new PolicyManager(new Dictionary<Settlement, List<BannerKingsDecision>>(), new Dictionary<Settlement, List<BannerKingsPolicy>>());
             TitleManager = new TitleManager(new Dictionary<FeudalTitle, Hero>(), new Dictionary<Kingdom, FeudalTitle>());
             CourtManager = new CourtManager(new Dictionary<Clan, CouncilData>());
             ReligionsManager = new ReligionsManager();

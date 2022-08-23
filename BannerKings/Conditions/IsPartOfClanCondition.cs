@@ -22,17 +22,17 @@ namespace BannerKings.Conditions
 
         public Clan Clan { get; }
 
-        public bool Apply(CharacterObject character, out TextObject failedReasonText)
+        public bool Apply(CharacterObject character, out TextObject? failedReasonText)
         {
             return ApplyInternal(character.HeroObject, out failedReasonText);
         }
 
-        public bool Apply(Hero hero, out TextObject failedReasonText)
+        public bool Apply(Hero hero, out TextObject? failedReasonText)
         {
             return ApplyInternal(hero, out failedReasonText);
         }
 
-        private bool ApplyInternal(Hero hero, out TextObject failedReasonText)
+        private bool ApplyInternal(Hero hero, out TextObject? failedReasonText)
         {
             failedReasonText = null;
 
