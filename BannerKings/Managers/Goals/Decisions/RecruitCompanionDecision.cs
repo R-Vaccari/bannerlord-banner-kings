@@ -28,27 +28,60 @@ namespace BannerKings.Managers.Goals.Decisions
             companionTypes = new List<CompanionType>
             {
                 new("commander", "Commander", "A companion that meets the criteria for a Commander.", 5000, 100,
-                    new List<TraitObject> {DefaultTraits.Commander},
+                    new List<TraitObject>
+                    {
+                        DefaultTraits.Commander
+                    },
                     new List<PerkObject>(),
-                    new List<SkillObject>() { DefaultSkills.Leadership, DefaultSkills.Tactics }),
+                    new List<SkillObject>
+                    {
+                        DefaultSkills.Leadership, 
+                        DefaultSkills.Tactics
+                    }),
                 new("thief", "Thief", "A companion that meets the criteria for a Thief.", 5000, 100,
-                    new List<TraitObject> {DefaultTraits.Thief},
+                    new List<TraitObject>
+                    {
+                        DefaultTraits.Thief
+                    },
                     new List<PerkObject>(),
-                    new List<SkillObject>() { DefaultSkills.Roguery }),
+                    new List<SkillObject>
+                    {
+                        DefaultSkills.Roguery
+                    }),
                 new("surgeon", "Surgeon", "A companion that meets the criteria for a Surgeon.", 5000, 100,
-                    new List<TraitObject> {DefaultTraits.Surgery},
+                    new List<TraitObject>
+                    {
+                        DefaultTraits.Surgery
+                    },
                     new List<PerkObject>(),
-                    new List<SkillObject>() { DefaultSkills.Medicine }),
+                    new List<SkillObject>
+                    {
+                        DefaultSkills.Medicine
+                    }),
                 new("caravaneer", "Caravaneer", "A companion that meets the criteria for a Caravaneer.", 5000, 100,
-                    new List<TraitObject>{DefaultTraits.Manager},
+                    new List<TraitObject>
+                    {
+                        DefaultTraits.Manager
+                    },
                     new List<PerkObject>(),
-                    new List<SkillObject>() { DefaultSkills.Steward, DefaultSkills.Scouting }),
+                    new List<SkillObject> { DefaultSkills.Steward, DefaultSkills.Scouting }),
                 new("warrior", "Warrior", "A companion that meets the criteria for a Warrior.", 5000, 100,
-                    new List<TraitObject> {DefaultTraits.Fighter},
+                    new List<TraitObject>
+                    {
+                        DefaultTraits.Fighter
+                    },
                     new List<PerkObject>(),
-                    new List<SkillObject>() { DefaultSkills.OneHanded, DefaultSkills.TwoHanded, DefaultSkills.Polearm,
-                        DefaultSkills.Bow, DefaultSkills.Crossbow, DefaultSkills.Throwing, DefaultSkills.Riding,
-                        DefaultSkills.Athletics})
+                    new List<SkillObject>
+                    { 
+                        DefaultSkills.OneHanded, 
+                        DefaultSkills.TwoHanded, 
+                        DefaultSkills.Polearm,
+                        DefaultSkills.Bow, 
+                        DefaultSkills.Crossbow, 
+                        DefaultSkills.Throwing, 
+                        DefaultSkills.Riding,
+                        DefaultSkills.Athletics
+                    })
             };
         }
 
@@ -86,14 +119,13 @@ namespace BannerKings.Managers.Goals.Decisions
             var influence = GetFulfiller().Clan?.Influence;
 
             var options = new List<InquiryElement>();
-            for (var index = 0; index < companionTypes.Count; index++)
+            foreach (var companionType in companionTypes)
             {
-                var companionType = companionTypes[index];
                 var enabled = gold >= companionType.GoldCost && influence >= companionType.InfluenceCost;
                 var hint = companionType.Description;
 
                 var template = GetAdequateCharacter(companionType);
-                if (template == null) 
+                if (template is null) 
                 {
                     enabled = false;
                     hint = new TextObject("{=!}No candidates of this type available.").ToString();
@@ -103,11 +135,7 @@ namespace BannerKings.Managers.Goals.Decisions
                     hint = failedReasons[0].ToString();
                 }
 
-                options.Add(new InquiryElement(companionType,
-                    companionType.Name,
-                    null,
-                    enabled,
-                    hint));
+                options.Add(new InquiryElement(companionType, companionType.Name, null, enabled, hint));
             }
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
@@ -118,9 +146,9 @@ namespace BannerKings.Managers.Goals.Decisions
                 1, 
                 GameTexts.FindText("str_done").ToString(),
                 GameTexts.FindText("str_cancel").ToString(),
-                delegate (List<InquiryElement> x)
+                delegate (List<InquiryElement> selectedOptions)
                 {
-                    selectedCompanionType = (CompanionType)x[0].Identifier;
+                    selectedCompanionType = (CompanionType)selectedOptions.First().Identifier;
                     ApplyGoal();
                 }, 
                 null, 
@@ -155,7 +183,11 @@ namespace BannerKings.Managers.Goals.Decisions
                 }
             }
 
-            return MBRandom.ChooseWeighted(possibleTemplates);
+            possibleTemplates = possibleTemplates.OrderByDescending(pt => pt.weight).ToList();
+
+            return possibleTemplates.Any()
+                ? possibleTemplates.First().template
+                : null;
         }
 
         internal override void ApplyGoal()
@@ -163,20 +195,17 @@ namespace BannerKings.Managers.Goals.Decisions
             var hero = GetFulfiller();
             var characterTemplate = GetAdequateCharacter(selectedCompanionType);
 
-            var possibleEquipmentRosters = MBObjectManager.Instance.GetObjectTypeList<MBEquipmentRoster>().Where(e => e.EquipmentCulture == hero.Culture).ToList();
-            var equipmentRoster = possibleEquipmentRosters.Where(e => e.EquipmentCulture == hero.Culture).ToList().GetRandomElementWithPredicate(x => x.StringId.Contains("bannerkings_companion")) 
+            var possibleEquipmentRosters = MBObjectManager.Instance.GetObjectTypeList<MBEquipmentRoster>()
+                .Where(e => e.EquipmentCulture == hero.Culture)
+                .ToList();
+
+            var equipmentRoster = possibleEquipmentRosters.Where(e => e.EquipmentCulture == hero.Culture).ToList().GetRandomElementWithPredicate(x => x.StringId.Contains("bannerkings_companion"))
                                   ?? possibleEquipmentRosters.Where(e => e.EquipmentCulture == hero.Culture).ToList().GetRandomElementWithPredicate(x => x.HasEquipmentFlags(EquipmentFlags.IsMediumTemplate));
 
 
-            var bornSettlement = Settlement.All.GetRandomElementWithPredicate(x => x.Culture == hero.Culture);
-            if (bornSettlement == null)
-            {
-                bornSettlement = hero.Clan.Settlements.GetRandomElement();
-                if (bornSettlement == null)
-                {
-                    bornSettlement = Settlement.All.GetRandomElement();
-                }
-            }
+            var bornSettlement = Settlement.All.GetRandomElementWithPredicate(s => s.Culture == hero.Culture) 
+                                 ?? hero.Clan.Settlements.GetRandomElement() 
+                                 ?? Settlement.All.GetRandomElement();
 
             var companion = HeroCreator.CreateSpecialHero(characterTemplate, bornSettlement, null, null, Campaign.Current.Models.AgeModel.HeroComesOfAge + MBRandom.RandomInt(12));
             EquipmentHelper.AssignHeroEquipmentFromEquipment(hero, equipmentRoster.AllEquipments.GetRandomElement());

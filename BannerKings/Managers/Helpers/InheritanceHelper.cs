@@ -13,8 +13,7 @@ namespace BannerKings.Managers.Helpers
     {
         public static void ApplyInheritanceAllTitles(List<FeudalTitle> titles, Hero victim)
         {
-            var inheritanceDic =
-                new Dictionary<InheritanceType, List<FeudalTitle>>();
+            var inheritanceDic = new Dictionary<InheritanceType, List<FeudalTitle>>();
             var noContracts = new List<FeudalTitle>();
             FeudalTitle highest = null;
 
@@ -37,7 +36,7 @@ namespace BannerKings.Managers.Helpers
                     var inheritance = title.contract.Inheritance;
                     if (!inheritanceDic.ContainsKey(inheritance))
                     {
-                        inheritanceDic.Add(inheritance, new List<FeudalTitle>() {title});
+                        inheritanceDic.Add(inheritance, new List<FeudalTitle> {title});
                     }
                     else
                     {
