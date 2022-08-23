@@ -282,12 +282,12 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
 
         public override Divinity GetMainDivinity()
         {
-            throw new NotImplementedException();
+            return mainGod;
         }
 
         public override TextObject GetMainDivinitiesDescription()
         {
-            throw new NotImplementedException();
+            return new TextObject("{=!}Patriarch");
         }
 
         public override int GetMaxClergyRank()
@@ -325,27 +325,27 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
 
         public override TextObject GetBlessingAction()
         {
-            throw new NotImplementedException();
+            return new TextObject("{=!}I would like to study the Code.");
         }
 
         public override TextObject GetBlessingQuestion()
         {
-            throw new NotImplementedException();
+            return new TextObject("{=!}Schools");
         }
 
         public override TextObject GetBlessingConfirmQuestion()
         {
-            throw new NotImplementedException();
+            return new TextObject("{=!}Are you sure?");
         }
 
         public override TextObject GetBlessingQuickInformation()
         {
-            throw new NotImplementedException();
+            return new TextObject("{=!}{HERO} is inspired by the teachings of {DIVINITY} code.");
         }
 
         public override TextObject GetBlessingActionName()
         {
-            throw new NotImplementedException();
+            return new TextObject("{=!}study from.");
         }
     }
 }
