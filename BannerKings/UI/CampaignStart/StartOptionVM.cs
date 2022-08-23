@@ -60,7 +60,7 @@ namespace BannerKings.UI.CampaignStart
             var list = new List<TooltipProperty>
             {
                 new(string.Empty, Option.Name.ToString(), 0, false, TooltipProperty.TooltipPropertyFlags.Title),
-                new TooltipProperty(string.Empty, Option.Description.ToString(), 0, false,
+                new(string.Empty, Option.Description.ToString(), 0, false,
                     TooltipProperty.TooltipPropertyFlags.MultiLine)
             };
 

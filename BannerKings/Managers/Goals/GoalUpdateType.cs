@@ -2,6 +2,7 @@
 {
     internal enum GoalUpdateType
     {
+        Manual,
         Settlement,
         Hero
     }

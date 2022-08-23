@@ -55,7 +55,7 @@ namespace BannerKings.Components
 
         public override Hero PartyOwner => HomeSettlement.OwnerClan.Leader;
 
-        public override TextObject Name => new TextObject(string.Format(_name, HomeSettlement.Name));
+        public override TextObject Name => new(string.Format(_name, HomeSettlement.Name));
 
         public override Settlement HomeSettlement => _target;
 

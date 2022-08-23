@@ -246,9 +246,9 @@ namespace BannerKings.Managers.Populations
                 {
                     var list = new List<(int, float)>
                     {
-                        new ValueTuple<int, float>(0, composition[0]),
-                        new ValueTuple<int, float>(1, composition[1]),
-                        new ValueTuple<int, float>(2, composition[2])
+                        new(0, composition[0]),
+                        new(1, composition[1]),
+                        new(2, composition[2])
                     };
                     var choosen = MBRandom.ChooseWeighted(list);
 
@@ -272,9 +272,9 @@ namespace BannerKings.Managers.Populations
             {
                 var list = new List<(int, float)>
                 {
-                    new ValueTuple<int, float>(0, composition[0]),
-                    new ValueTuple<int, float>(1, composition[1]),
-                    new ValueTuple<int, float>(2, composition[2])
+                    new(0, composition[0]),
+                    new(1, composition[1]),
+                    new(2, composition[2])
                 };
                 var choosen = MBRandom.ChooseWeighted(list);
 

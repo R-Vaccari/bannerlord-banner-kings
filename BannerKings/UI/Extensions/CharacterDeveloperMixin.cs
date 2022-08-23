@@ -84,22 +84,22 @@ namespace BannerKings.UI.Extensions
         [DataSourceMethod]
         public void OpenDecisions()
         {
-            List<InquiryElement> options = new List<InquiryElement>();
-            foreach (Goal goal in DefaultGoals.Instance.All)
+            var options = new List<InquiryElement>();
+            foreach (var goal in DefaultGoals.Instance.All)
             {
-                if (goal.IsAvailable())
+                if (!goal.IsAvailable())
                 {
-                    List<TextObject> reasons; 
-                    bool enabled = goal.IsFulfilled(out reasons);
-
-                    options.Add(new InquiryElement(goal,
-                        goal.Name.ToString(),
-                        null,
-                        enabled,
-                        enabled ? goal.Description.ToString() : reasons[0].ToString()));
+                    continue;
                 }
-            }
 
+                var enabled = goal.IsFulfilled(out var reasons);
+
+                options.Add(new InquiryElement(goal,
+                    goal.Name.ToString(),
+                    null,
+                    enabled,
+                    enabled ? goal.Description.ToString() : reasons[0].ToString()));
+            }
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                             new TextObject("{=!}Decisions").ToString(),
@@ -107,8 +107,8 @@ namespace BannerKings.UI.Extensions
                             options, true, 1, GameTexts.FindText("str_done").ToString(), string.Empty,
                             delegate (List<InquiryElement> x)
                             {
-                                Goal result = (Goal)x[0].Identifier;
-                                result.ApplyGoal();
+                                var result = (Goal)x[0].Identifier;
+                                result.ShowInquiry();
                             }, null, string.Empty));
 
             OnRefresh();

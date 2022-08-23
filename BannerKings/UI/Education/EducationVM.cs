@@ -340,7 +340,7 @@ namespace BannerKings.UI.Education
             var results = BannerKingsConfig.Instance.EducationManager.GetAvailableLanguagesToLearn(hero);
             var elements = new List<InquiryElement>
             {
-                new InquiryElement(new ValueTuple<Language, Hero>(),
+                new(new ValueTuple<Language, Hero>(),
                     new TextObject("{=!}None").ToString(),
                     null)
             };
@@ -403,7 +403,7 @@ namespace BannerKings.UI.Education
             var books = BannerKingsConfig.Instance.EducationManager.GetAvailableBooks(hero.PartyBelongedTo);
             var elements = new List<InquiryElement>
             {
-                new InquiryElement(null,
+                new(null,
                     new TextObject("{=!}None").ToString(),
                     null)
             };
@@ -455,7 +455,7 @@ namespace BannerKings.UI.Education
             var lfs = BannerKingsConfig.Instance.EducationManager.GetViableLifestyles(hero);
             var elements = new List<InquiryElement>
             {
-                new InquiryElement(null,
+                new(null,
                     new TextObject("{=!}None").ToString(),
                     null)
             };

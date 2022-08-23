@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using BannerKings.Managers.Skills;
 using BannerKings.UI;
 using TaleWorlds.CampaignSystem;
@@ -307,12 +306,12 @@ namespace BannerKings.Behaviours
                     {
                         var skills = new List<(SkillObject, float)>
                         {
-                            new ValueTuple<SkillObject, float>(DefaultSkills.OneHanded, 10f),
-                            new ValueTuple<SkillObject, float>(DefaultSkills.TwoHanded, 2f),
-                            new ValueTuple<SkillObject, float>(DefaultSkills.Polearm, 8f),
-                            new ValueTuple<SkillObject, float>(DefaultSkills.Bow, 4f),
-                            new ValueTuple<SkillObject, float>(DefaultSkills.Crossbow, 4f),
-                            new ValueTuple<SkillObject, float>(DefaultSkills.Athletics, 2f)
+                            new(DefaultSkills.OneHanded, 10f),
+                            new(DefaultSkills.TwoHanded, 2f),
+                            new(DefaultSkills.Polearm, 8f),
+                            new(DefaultSkills.Bow, 4f),
+                            new(DefaultSkills.Crossbow, 4f),
+                            new(DefaultSkills.Athletics, 2f)
                         };
 
                         var target = MBRandom.ChooseWeighted(skills);
@@ -397,11 +396,11 @@ namespace BannerKings.Behaviours
                     {
                         var skills = new List<(SkillObject, float)>
                         {
-                            new ValueTuple<SkillObject, float>(DefaultSkills.Leadership, 10f),
-                            new ValueTuple<SkillObject, float>(DefaultSkills.OneHanded, 2f),
-                            new ValueTuple<SkillObject, float>(DefaultSkills.Polearm, 2f),
-                            new ValueTuple<SkillObject, float>(DefaultSkills.Bow, 2f),
-                            new ValueTuple<SkillObject, float>(DefaultSkills.Crossbow, 2f)
+                            new(DefaultSkills.Leadership, 10f),
+                            new(DefaultSkills.OneHanded, 2f),
+                            new(DefaultSkills.Polearm, 2f),
+                            new(DefaultSkills.Bow, 2f),
+                            new(DefaultSkills.Crossbow, 2f)
                         };
 
                         var target = MBRandom.ChooseWeighted(skills);
@@ -444,9 +443,9 @@ namespace BannerKings.Behaviours
                         actionHuntGame += 1;
                         var skills = new List<(SkillObject, float)>
                         {
-                            new ValueTuple<SkillObject, float>(DefaultSkills.Bow, 10f),
-                            new ValueTuple<SkillObject, float>(DefaultSkills.Crossbow, 5f),
-                            new ValueTuple<SkillObject, float>(DefaultSkills.Athletics, 8f)
+                            new(DefaultSkills.Bow, 10f),
+                            new(DefaultSkills.Crossbow, 5f),
+                            new(DefaultSkills.Athletics, 8f)
                         };
 
                         var target = MBRandom.ChooseWeighted(skills);

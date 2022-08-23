@@ -22,11 +22,11 @@ namespace BannerKings.Managers.Court
             this.clan = clan;
             members = new List<CouncilMember>
             {
-                new CouncilMember(marshall, CouncilPosition.Marshall, clan),
-                new CouncilMember(chancellor, CouncilPosition.Chancellor, clan),
-                new CouncilMember(steward, CouncilPosition.Steward, clan),
-                new CouncilMember(spymaster, CouncilPosition.Spymaster, clan),
-                new CouncilMember(spiritual, CouncilPosition.Spiritual, clan)
+                new(marshall, CouncilPosition.Marshall, clan),
+                new(chancellor, CouncilPosition.Chancellor, clan),
+                new(steward, CouncilPosition.Steward, clan),
+                new(spymaster, CouncilPosition.Spymaster, clan),
+                new(spiritual, CouncilPosition.Spiritual, clan)
             };
             royalMembers = new List<CouncilMember>();
         }

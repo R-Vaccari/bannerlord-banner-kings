@@ -97,8 +97,7 @@ namespace BannerKings
                 return "Format is \"bannerkings.add_piety [Quantity]";
             }
 
-            float piety;
-            if (float.TryParse(strings[0], out piety))
+            if (float.TryParse(strings[0], out var piety))
             {
                 BannerKingsConfig.Instance.ReligionsManager.AddPiety(Hero.MainHero, piety);
             }

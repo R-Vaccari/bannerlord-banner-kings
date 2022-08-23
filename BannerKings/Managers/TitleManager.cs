@@ -633,8 +633,7 @@ namespace BannerKings.Managers
         {
             if (DeJuresCache != null)
             {
-                List<FeudalTitle> titleList;
-                DeJuresCache.TryGetValue(hero, out titleList);
+                DeJuresCache.TryGetValue(hero, out var titleList);
                 if (titleList == null)
                 {
                     titleList = new List<FeudalTitle>();

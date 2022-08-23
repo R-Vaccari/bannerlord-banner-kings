@@ -9,19 +9,19 @@ namespace BannerKings.Managers
     {
         private static IEnumerable<Goal> AvailableGoals => DefaultGoals.Instance.All;
 
-        public void UpdateHeroGoals()
+        public static void UpdateHeroGoals()
         {
             var goals = AvailableGoals.Where(goal => goal.goalUpdateType == GoalUpdateType.Hero).ToList();
             UpdateGoals(goals);
         }
 
-        public void UpdateSettlementGoals()
+        public static void UpdateSettlementGoals()
         {
             var goals = AvailableGoals.Where(goal => goal.goalUpdateType == GoalUpdateType.Settlement).ToList();
             UpdateGoals(goals);
         }
 
-        private void UpdateGoals(IEnumerable<Goal> goals)
+        private static void UpdateGoals(IEnumerable<Goal> goals)
         {
             foreach (var goal in goals.Where(goal => goal.IsFulfilled(out var failedReasons)))
             {
