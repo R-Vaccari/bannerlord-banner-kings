@@ -37,7 +37,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
                     options, false, 1, GameTexts.FindText("str_done").ToString(), string.Empty,
                     delegate(List<InquiryElement> x)
                     {
-                        input = (Hero?) x[0].Identifier;
+                        input = (Hero) x[0].Identifier;
                         SetDialogue();
                     }, null, string.Empty));
         }

@@ -12,14 +12,13 @@ namespace BannerKings.Managers
 {
     public class PolicyManager
     {
-        public PolicyManager(Dictionary<Settlement, List<BannerKingsDecision>> DECISIONS,
-            Dictionary<Settlement, List<BannerKingsPolicy>> POLICIES)
+        public PolicyManager(Dictionary<Settlement, List<BKSettlementDecision>> decisions, Dictionary<Settlement, List<BannerKingsPolicy>> policies)
         {
-            SettlementDecisions = DECISIONS;
-            SettlementPolicies = POLICIES;
+            SettlementDecisions = decisions;
+            SettlementPolicies = policies;
         }
 
-        [SaveableProperty(1)] private Dictionary<Settlement, List<BannerKingsDecision>> SettlementDecisions { get; set; }
+        [SaveableProperty(1)] private Dictionary<Settlement, List<BKSettlementDecision>> SettlementDecisions { get; set; }
 
         [SaveableProperty(2)] private Dictionary<Settlement, List<BannerKingsPolicy>> SettlementPolicies { get; set; }
 
@@ -91,7 +90,7 @@ namespace BannerKings.Managers
             return SettlementDecisions.ContainsKey(settlement);
         }
 
-        public List<BannerKingsDecision> GetDefaultDecisions(Settlement settlement)
+        public List<BKSettlementDecision> GetDefaultDecisions(Settlement settlement)
         {
             if (!SettlementDecisions.ContainsKey(settlement))
             {
@@ -103,7 +102,7 @@ namespace BannerKings.Managers
 
         private void InitializeDecisions(Settlement settlement)
         {
-            var decisions = new List<BannerKingsDecision>();
+            var decisions = new List<BKSettlementDecision>();
             if (settlement.IsVillage)
             {
                 decisions.AddRange(VillageDecisions.Select(id => GenerateDecision(settlement, id)));
@@ -122,37 +121,35 @@ namespace BannerKings.Managers
 
         private void InitializePolicies(Settlement settlement)
         {
-            var policies = new List<BannerKingsPolicy>();
-
-            foreach (var id in Policies)
-            {
-                policies.Add(GeneratePolicy(settlement, id));
-            }
+            var policies = Policies.Select(id => GeneratePolicy(settlement, id)).ToList();
 
             SettlementPolicies.Add(settlement, policies);
         }
 
         public int GetActiveCostlyDecisionsNumber(Settlement settlement)
         {
-            if (SettlementDecisions.ContainsKey(settlement))
+            if (!SettlementDecisions.ContainsKey(settlement))
             {
-                var i = 0;
-                foreach (var decision in SettlementDecisions[settlement])
-                {
-                    if (decision.Enabled)
-                    {
-                        var id = decision.GetIdentifier();
-                        if (id != "decision_mercantilism" && id != "decision_slaves_tax" && id != "decision_tariff_exempt")
-                        {
-                            i += 1;
-                        }
-                    }
-                }
-
-                return i;
+                return 0;
             }
 
-            return 0;
+            var i = 0;
+            foreach (var decision in SettlementDecisions[settlement])
+            {
+                if (!decision.Enabled)
+                {
+                    continue;
+                }
+
+                var id = decision.GetIdentifier();
+                if (id != "decision_mercantilism" && id != "decision_slaves_tax" && id != "decision_tariff_exempt")
+                {
+                    i += 1;
+                }
+            }
+
+            return i;
+
         }
 
         public bool IsPolicyEnacted(Settlement settlement, string policyType, int value)
@@ -188,7 +185,7 @@ namespace BannerKings.Managers
             return result;
         }
 
-        public BannerKingsDecision GenerateDecision(Settlement settlement, string policyType)
+        public BKSettlementDecision GenerateDecision(Settlement settlement, string policyType)
         {
             return policyType switch
             {
@@ -223,7 +220,7 @@ namespace BannerKings.Managers
 
         private void AddSettlementDecision(Settlement settlement)
         {
-            SettlementDecisions.Add(settlement, new List<BannerKingsDecision>());
+            SettlementDecisions.Add(settlement, new List<BKSettlementDecision>());
         }
 
         public void UpdateSettlementPolicy(Settlement settlement, BannerKingsPolicy policy)
@@ -247,7 +244,7 @@ namespace BannerKings.Managers
 
         public bool IsDecisionEnacted(Settlement settlement, string type)
         {
-            BannerKingsDecision decision = null;
+            BKSettlementDecision decision = null;
             if (SettlementDecisions.ContainsKey(settlement))
             {
                 decision = SettlementDecisions[settlement].FirstOrDefault(x => x.GetIdentifier() == type);
@@ -256,7 +253,7 @@ namespace BannerKings.Managers
             return decision?.Enabled ?? false;
         }
 
-        public void UpdateSettlementDecision(Settlement settlement, BannerKingsDecision decision)
+        public void UpdateSettlementDecision(Settlement settlement, BKSettlementDecision decision)
         {
             if (SettlementDecisions.ContainsKey(settlement))
             {

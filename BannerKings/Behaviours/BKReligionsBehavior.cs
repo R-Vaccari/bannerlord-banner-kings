@@ -266,7 +266,7 @@ namespace BannerKings.Behaviours
                 GameTexts.FindText("str_done").ToString(), string.Empty,
                 delegate(List<InquiryElement> x)
                 {
-                    var divinity = (Divinity?) x[0].Identifier;
+                    var divinity = (Divinity) x[0].Identifier;
                     selectedDivinity = divinity;
                 },
                 null,
@@ -371,7 +371,7 @@ namespace BannerKings.Behaviours
                 GameTexts.FindText("str_done").ToString(), string.Empty,
                 delegate(List<InquiryElement> x)
                 {
-                    var rite = (Rite?) x[0].Identifier;
+                    var rite = (Rite) x[0].Identifier;
                     selectedRite = rite;
                     rite.Execute(Hero.MainHero);
                 },

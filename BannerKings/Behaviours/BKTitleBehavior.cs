@@ -236,9 +236,9 @@ namespace BannerKings.Behaviours
             if (sovereign.contract.Rights.Contains(FeudalRights.Conquest_Rights))
             {
                 var decisions = kingdom.UnresolvedDecisions.ToList();
-                var bkDecision = decisions.FirstOrDefault(x =>
+                var BKSettlementDecision = decisions.FirstOrDefault(x =>
                     x is BKSettlementClaimantDecision decision && decision.Settlement == settlement);
-                if (bkDecision != null)
+                if (BKSettlementDecision != null)
                 {
                     return;
                 }

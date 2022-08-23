@@ -13,17 +13,17 @@ namespace BannerKings.Conditions
 
         private new static TextObject FailedReasonText => GameTexts.FindText("str_bk_condition.is_part_of_any_clan");
 
-        public bool Apply(CharacterObject character, out TextObject? failedReasonText)
+        public bool Apply(CharacterObject character, out TextObject failedReasonText)
         {
             return ApplyInternal(character.HeroObject, out failedReasonText);
         }
 
-        public bool Apply(Hero hero, out TextObject? failedReasonText)
+        public bool Apply(Hero hero, out TextObject failedReasonText)
         {
             return ApplyInternal(hero, out failedReasonText);
         }
 
-        private bool ApplyInternal(Hero hero, out TextObject? failedReasonText)
+        private bool ApplyInternal(Hero hero, out TextObject failedReasonText)
         {
             failedReasonText = null;
 
