@@ -3,6 +3,7 @@ using BannerKings.UI.Education;
 using BannerKings.UI.Religion;
 using Bannerlord.UIExtenderEx.Attributes;
 using Bannerlord.UIExtenderEx.ViewModels;
+using System;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem.ViewModelCollection.CharacterDeveloper;
 using TaleWorlds.Core;
@@ -128,13 +129,22 @@ namespace BannerKings.UI.Extensions
                     continue;
                 }
 
-                var enabled = goal.IsFulfilled(out var reasons);
+                List<TextObject> reasons;
+                var enabled = goal.IsFulfilled(out reasons);
+                var hint = goal.Description.ToString();
+                if (!enabled)
+                {
+                    foreach (TextObject reason in reasons)
+                    {
+                        hint = hint + Environment.NewLine + reason.ToString();
+                    }
+                }
 
                 options.Add(new InquiryElement(goal,
                     goal.Name.ToString(),
                     null,
                     enabled,
-                    enabled ? goal.Description.ToString() : reasons[0].ToString()));
+                    hint));
             }
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
