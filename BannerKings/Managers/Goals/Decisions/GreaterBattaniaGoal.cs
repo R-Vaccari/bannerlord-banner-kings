@@ -2,7 +2,6 @@
 using System.Linq;
 using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Titles;
-using BannerKings.Utils.Extensions;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Extensions;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -19,7 +18,7 @@ namespace BannerKings.Managers.Goals.Decisions
         public GreaterBattaniaGoal() : base("goal_greater_battania", GoalUpdateType.Settlement)
         {
             var name = new TextObject("{=!}Unite Greater Battania");
-            var description = new TextObject("{!=}Establish a new empire title. You must bring all battanian towns and castles under control of your kingdom.");
+            var description = new TextObject("{!=}Unite the old Battanian lands back into a greater realm. To the West, the rascal Vlandians have taken the valley of Llyn Modris and called it 'Ocs Hall'. To the East, the bloodthristy Imperials submitted Epicrotea to their domination. The threat of Battanian extermination grows stronger with enemies all around aiming for it's lands. You must bring all battanian and formerly battanian towns and castles under control of your realm.");
 
             Initialize(name, description);
 

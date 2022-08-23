@@ -21,6 +21,8 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
         public Faith Darusosian => darusosian;
         public Faith Canticles => canticlesFaith;
 
+        public FaithGroup ImperialGroup => imperialGroup;
+
         public IEnumerable<Faith> All
         {
             get

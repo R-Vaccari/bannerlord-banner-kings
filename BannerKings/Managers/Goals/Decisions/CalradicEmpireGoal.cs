@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using BannerKings.Managers.Institutions.Religions;
+using BannerKings.Managers.Institutions.Religions.Faiths;
 using BannerKings.Managers.Titles;
 using BannerKings.Utils.Extensions;
 using TaleWorlds.CampaignSystem;
@@ -17,8 +19,8 @@ namespace BannerKings.Managers.Goals.Decisions
 
         public CalradicEmpireGoal() : base("goal_calradic_empire", GoalUpdateType.Settlement)
         {
-            var name = new TextObject("{=!}Reform the Calradic Empire");
-            var description = new TextObject("{!=}Establish a new empire title. You must bring all imperial duchies under control of your kingdom.");
+            var name = new TextObject("{=!}Reform the Imperium Calradium");
+            var description = new TextObject("{!=}Reestablish the former Calradian Empire. The Empire spanned most of the continent before emperor Arenicos died without a clear heir. By reforming the empire, you crush the validity of claimants, and ahead of you lies a new path for greatness. You must bring all imperial duchies under control of your realm.");
 
             Initialize(name, description);
 
@@ -54,6 +56,7 @@ namespace BannerKings.Managers.Goals.Decisions
             var referenceSettlement = settlements.First();
             var referenceHero = referenceSettlement.Owner;
             var (gold, influence) = GetCosts(referenceHero);
+            CultureObject culture = Utils.Helpers.GetCulture("empire");
 
             if (!IsAvailable())
             {
@@ -65,6 +68,35 @@ namespace BannerKings.Managers.Goals.Decisions
 
                 failedReasons.Add(failedReason);
             }
+
+
+            if (referenceHero.Culture != culture)
+            {
+                failedReasons.Add(new TextObject("{!=}You are not part of the {CULTURE} culture.")
+                        .SetTextVariable("CULTURE", culture.EncyclopediaText));
+            }
+
+            if (referenceHero.Clan.Kingdom != null)
+            {
+                if (referenceHero.Clan.Kingdom.Culture != culture)
+                {
+                    failedReasons.Add(new TextObject("{!=}Your kingdom is not part of {CULTURE} culture.")
+                        .SetTextVariable("CULTURE", culture.EncyclopediaText));
+                }
+            } 
+            else
+            {
+                failedReasons.Add(new TextObject("{!=}You're not the leader of a faction."));
+            }
+
+            Religion religion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(referenceHero);
+            if (religion == null || religion.Faith.FaithGroup != DefaultFaiths.Instance.ImperialGroup)
+            {
+                Religion amra = BannerKingsConfig.Instance.ReligionsManager.GetReligionById("amra");
+                failedReasons.Add(new TextObject("{!=}You do not adhere to a faith that is part of the {RELIGION} faith group.")
+                        .SetTextVariable("RELIGION", DefaultFaiths.Instance.ImperialGroup.Name));
+            }
+
 
             var imperialKingdomsStringIds = new List<string>
             {
