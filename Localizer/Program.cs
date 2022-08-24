@@ -134,7 +134,7 @@ internal class Program
     {
         var localizationID = GetLocalizationID();
 
-        return (localizationID, text.Replace("{=!}", $"{{={localizationID}}}"));
+        return (localizationID, text.Replace("{=!}", $"{{={GetLocalizationID()}}}"));
     }
 
     private static string GetLocalizationID()

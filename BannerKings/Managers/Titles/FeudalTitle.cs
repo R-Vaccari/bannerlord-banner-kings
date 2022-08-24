@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using BannerKings.Managers.Skills;
 using TaleWorlds.CampaignSystem;
@@ -76,7 +76,7 @@ namespace BannerKings.Managers.Titles
         {
             get
             {
-                var text = new TextObject("{=o2CxfOmBO}{TITLE} of {NAME}");
+                var text = new TextObject("{=!}{TITLE} of {NAME}");
                 text.SetTextVariable("TITLE", Utils.Helpers.GetTitlePrefix(type, contract.Government, deJure.Culture));
                 text.SetTextVariable("NAME", shortName.ToString());
                 return text;
@@ -274,7 +274,7 @@ namespace BannerKings.Managers.Titles
 
             if (hero == Hero.MainHero)
             {
-                MBInformationManager.AddQuickInformation(new TextObject("{=hZPRWbGcJ}You now have a claim on the {TITLE}")
+                MBInformationManager.AddQuickInformation(new TextObject("{=!}You now have a claim on the {TITLE}")
                     .SetTextVariable("TITLE", FullName));
             }
         }
@@ -344,7 +344,7 @@ namespace BannerKings.Managers.Titles
             if (notify)
             {
                 InformationManager.DisplayMessage(new InformationMessage(
-                    new TextObject("{=tgmgDuaOa}{TITLE} has drifted into a legal part of {SOVEREIGN}")
+                    new TextObject("{=!}{TITLE} has drifted into a legal part of {SOVEREIGN}")
                         .SetTextVariable("TITLE", FullName)
                         .SetTextVariable("SOVEREIGN", newSovereign.FullName)
                         .ToString()));

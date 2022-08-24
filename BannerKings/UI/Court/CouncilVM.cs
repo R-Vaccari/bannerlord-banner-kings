@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -67,7 +67,7 @@ namespace BannerKings.UI.Court
                         name = vm.Governor.Name.ToString();
                         var sb = new StringBuilder(GameTexts.FindText("str_tooltip_label_type") + ": " +
                                                    HeroHelper.GetCharacterTypeName(vm.Governor));
-                        sb.AppendLine(new TextObject("{=niNGCxOUH}Competence:").ToString() +
+                        sb.AppendLine(new TextObject("{=!}Competence:").ToString() +
                                       council.GetCompetence(vm.Governor, Position));
                         hint = sb.ToString();
                     }
@@ -78,8 +78,8 @@ namespace BannerKings.UI.Court
                 var model = (BKCouncilModel) BannerKingsConfig.Instance.Models.First(x => x is BKCouncilModel);
                 MBInformationManager.ShowMultiSelectionInquiry(
                     new MultiSelectionInquiryData(
-                        new TextObject("{=OtdtOKxuw}Select Councillor").ToString(),
-                        new TextObject("{=EAcsBNoAZ}Select who you would like to fill this position.").ToString(),
+                        new TextObject("{=!}Select Councillor").ToString(),
+                        new TextObject("{=!}Select who you would like to fill this position.").ToString(),
                         options, true, 1, GameTexts.FindText("str_done").ToString(), string.Empty,
                         delegate(List<InquiryElement> x)
                         {

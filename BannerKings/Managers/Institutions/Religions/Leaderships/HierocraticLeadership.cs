@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Institutions.Religions.Leaderships
@@ -13,12 +13,12 @@ namespace BannerKings.Managers.Institutions.Religions.Leaderships
         public override TextObject GetHint()
         {
             return new TextObject(
-                "{=Jt5XXCqeH}A hierocratic organization is centered around a single head of faith. The head of faith is decided upon the faith's clergymen and not by secular lords. They will decide on all matters regarding faith and the spiritual.");
+                "{=!}A hierocratic organization is centered around a single head of faith. The head of faith is decided upon the faith's clergymen and not by secular lords. They will decide on all matters regarding faith and the spiritual.");
         }
 
         public override TextObject GetName()
         {
-            return new TextObject("{=EeL4Nhtbz}Hierocratic");
+            return new TextObject("{=!}Hierocratic");
         }
 
         public override void Initialize(Religion religion)

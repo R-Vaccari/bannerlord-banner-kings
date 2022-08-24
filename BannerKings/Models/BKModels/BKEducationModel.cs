@@ -1,4 +1,4 @@
-using BannerKings.Managers.Education.Books;
+﻿using BannerKings.Managers.Education.Books;
 using BannerKings.Managers.Education.Languages;
 using BannerKings.Managers.Skills;
 using TaleWorlds.CampaignSystem;
@@ -55,14 +55,14 @@ namespace BannerKings.Models.BKModels
             var teaching = data.GetLanguageFluency(language) - 1f;
             if (!float.IsNaN(teaching) && teaching != 0f)
             {
-                result.AddFactor(teaching, new TextObject("{=TuKejiSf7}Instructor fluency"));
+                result.AddFactor(teaching, new TextObject("{=!}Instructor fluency"));
             }
 
             var native = BannerKingsConfig.Instance.EducationManager.GetNativeLanguage(student);
             var dic = native.Inteligible;
             if (dic.ContainsKey(language))
             {
-                result.Add(dic[language], new TextObject("{=opLAbyiNa}Intelligibility with {LANGUAGE}").SetTextVariable("LANGUAGE", native.Name));
+                result.Add(dic[language], new TextObject("{=!}Intelligibility with {LANGUAGE}").SetTextVariable("LANGUAGE", native.Name));
             }
 
             if (student.GetPerkValue(BKPerks.Instance.ScholarshipAvidLearner))
@@ -73,7 +73,7 @@ namespace BannerKings.Models.BKModels
             var overLimit = data.Languages.Count - CalculateLanguageLimit(student).ResultNumber;
             if (overLimit > 0f)
             {
-                result.AddFactor(-0.33f * overLimit, new TextObject("{=RXTZqNZAP}Over languages limit"));
+                result.AddFactor(-0.33f * overLimit, new TextObject("{=!}Over languages limit"));
             }
 
             return result;
@@ -83,7 +83,7 @@ namespace BannerKings.Models.BKModels
         {
             var result = new ExplainedNumber(0f, true);
             var fluency = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(reader).GetLanguageFluency(book.Language);
-            result.Add(fluency, new TextObject("{=MWVhNQaG1}{LANGUAGE} fluency").SetTextVariable("LANGUAGE", book.Language.Name));
+            result.Add(fluency, new TextObject("{=!}{LANGUAGE} fluency").SetTextVariable("LANGUAGE", book.Language.Name));
 
             var books = BannerKingsConfig.Instance.EducationManager.GetAvailableBooks(reader.PartyBelongedTo);
             if (books.Contains(DefaultBookTypes.Instance.Dictionary))

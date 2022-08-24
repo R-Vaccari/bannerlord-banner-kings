@@ -1,4 +1,4 @@
-using BannerKings.Managers.Court;
+﻿using BannerKings.Managers.Court;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Villages;
@@ -86,19 +86,19 @@ namespace BannerKings.Models.Vanilla
         public ExplainedNumber GetMilitiaLimit(PopulationData data, Settlement settlement)
         {
             var result = new ExplainedNumber(0f, true);
-            result.Add(data.TotalPop * 0.1f, new TextObject("{=YJQWLMSvm}Total population"));
+            result.Add(data.TotalPop * 0.1f, new TextObject("{=!}Total population"));
 
             if (settlement.IsCastle)
             {
-                result.Add(200f, new TextObject("{=rvxpx1UKq}Castle"));
+                result.Add(200f, new TextObject("{=!}Castle"));
             }
             else if (settlement.IsVillage)
             {
-                result.Add(20f, new TextObject("{=N0K5rBnQr}Village"));
+                result.Add(20f, new TextObject("{=!}Village"));
             }
             else
             {
-                result.Add(100f, new TextObject("{=bCKtCqqN6}Town"));
+                result.Add(100f, new TextObject("{=!}Town"));
             }
 
             return result;
@@ -147,13 +147,13 @@ namespace BannerKings.Models.Vanilla
                 var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
                 if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(settlement, "decision_militia_subsidize"))
                 {
-                    result.Add(0.12f, new TextObject("{=f74eTcDDm}Subsidize militia"));
+                    result.Add(0.12f, new TextObject("{=!}Subsidize militia"));
                 }
 
                 var government = BannerKingsConfig.Instance.TitleManager.GetSettlementGovernment(settlement);
                 if (government == GovernmentType.Tribal)
                 {
-                    result.Add(0.08f, new TextObject("{=XQGGPAQPP}Government"));
+                    result.Add(0.08f, new TextObject("{=!}Government"));
                 }
 
                 var villageData = data.VillageData;

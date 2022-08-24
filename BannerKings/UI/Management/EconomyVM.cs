@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using System.Text;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Populations;
@@ -39,7 +39,7 @@ namespace BannerKings.UI.Management
 
         [DataSourceProperty]
         public HintViewModel TournamentHint => new(new TextObject(
-            "{=GJ6ai8JfU}Sponsor a tournament in this town. As the main sponsor, you have to pay 5000 coins for the tournament costs, as well as " +
+            "{=!}Sponsor a tournament in this town. As the main sponsor, you have to pay 5000 coins for the tournament costs, as well as " +
             "provide an adequate prize. Sponsoring games improves population loyalty towards you, and valuable prizes provide renown to your name."));
 
         [DataSourceProperty]
@@ -203,20 +203,20 @@ namespace BannerKings.UI.Management
             var quality = data.EconomicData.ProductionQuality;
             ProductionInfo.Add(new InformationElement(new TextObject("Production Quality:").ToString(),
                 FormatValue(quality.ResultNumber),
-                new TextObject("{=Kg0ZoPAr3}{TEXT}\n{EXPLANATIONS}")
+                new TextObject("{=!}{TEXT}\n{EXPLANATIONS}")
                     .SetTextVariable("TEXT",
                         new TextObject(
-                            "{=GDfWDyHEG}Describes the quality of products produced in this settlement. Higher quality means workshops are more likely to produce goods with positive modifiers, therefore yielding a higher income. Because better products are more expensive, more money is extracted from caravans into market gold and the owner's tariff. This is also a factor in workshop prices."))
+                            "{=!}Describes the quality of products produced in this settlement. Higher quality means workshops are more likely to produce goods with positive modifiers, therefore yielding a higher income. Because better products are more expensive, more money is extracted from caravans into market gold and the owner's tariff. This is also a factor in workshop prices."))
                     .SetTextVariable("EXPLANATIONS", quality.GetExplanations())
                     .ToString()));
 
             var efficiency = data.EconomicData.ProductionEfficiency;
             ProductionInfo.Add(new InformationElement(new TextObject("Production Efficiency:").ToString(),
                 FormatValue(efficiency.ResultNumber),
-                new TextObject("{=Kg0ZoPAr3}{TEXT}\n{EXPLANATIONS}")
+                new TextObject("{=!}{TEXT}\n{EXPLANATIONS}")
                     .SetTextVariable("TEXT",
                         new TextObject(
-                            "{=wGBJ6uvph}The speed at which workshops produce goods, affected by kingdom policies and craftsmen"))
+                            "{=!}The speed at which workshops produce goods, affected by kingdom policies and craftsmen"))
                     .SetTextVariable("EXPLANATIONS", efficiency.GetExplanations())
                     .ToString()));
 
@@ -252,20 +252,20 @@ namespace BannerKings.UI.Management
                 var mercantilism = data.EconomicData.Mercantilism;
                 RevenueInfo.Add(new InformationElement(new TextObject("Mercantilism:").ToString(),
                     FormatValue(mercantilism.ResultNumber),
-                    new TextObject("{=Kg0ZoPAr3}{TEXT}\n{EXPLANATIONS}")
+                    new TextObject("{=!}{TEXT}\n{EXPLANATIONS}")
                         .SetTextVariable("TEXT",
                             new TextObject(
-                                "{=xBO3t8dsQ}Represents how economicaly free craftsmen, tradesmen and guilds are. Increased mercantilism reduces the tax revenue of these, but allows them to accumulate wealth or contribute more to overall prosperity."))
+                                "{=!}Represents how economicaly free craftsmen, tradesmen and guilds are. Increased mercantilism reduces the tax revenue of these, but allows them to accumulate wealth or contribute more to overall prosperity."))
                         .SetTextVariable("EXPLANATIONS", mercantilism.GetExplanations())
                         .ToString()));
 
                 var caravanAttractiveness = data.EconomicData.CaravanAttraction;
                 RevenueInfo.Add(new InformationElement(new TextObject("Caravan Attractiveness:").ToString(),
                     FormatValue(caravanAttractiveness.ResultNumber),
-                    new TextObject("{=Kg0ZoPAr3}{TEXT}\n{EXPLANATIONS}")
+                    new TextObject("{=!}{TEXT}\n{EXPLANATIONS}")
                         .SetTextVariable("TEXT",
                             new TextObject(
-                                "{=TuDoR69Sn}How attractive this town is for caravans. Likelihood of caravan visits are dictated mainly by prices, and attractiveness is a factor added on top of that."))
+                                "{=!}How attractive this town is for caravans. Likelihood of caravan visits are dictated mainly by prices, and attractiveness is a factor added on top of that."))
                         .SetTextVariable("EXPLANATIONS", caravanAttractiveness.GetExplanations())
                         .ToString()));
 
@@ -321,7 +321,7 @@ namespace BannerKings.UI.Management
 
             var admCost = data.EconomicData.AdministrativeCost;
             RevenueInfo.Add(new InformationElement("Administrative Cost:", FormatValue(admCost.ResultNumber),
-                new TextObject("{=Kg0ZoPAr3}{TEXT}\n{EXPLANATIONS}")
+                new TextObject("{=!}{TEXT}\n{EXPLANATIONS}")
                     .SetTextVariable("TEXT",
                         new TextObject(
                             "Costs associated with the settlement administration, including those of active policies and decisions, deducted on tax revenue."))

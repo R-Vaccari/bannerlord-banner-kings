@@ -1,4 +1,4 @@
-using BannerKings.Managers.Populations;
+﻿using BannerKings.Managers.Populations;
 using BannerKings.Models.BKModels;
 using BannerKings.UI.Items;
 using BannerKings.UI.Items.UI;
@@ -123,10 +123,10 @@ namespace BannerKings.UI.Management
 
                 var stability = BannerKingsConfig.Instance.StabilityModel.CalculateStabilityTarget(settlement);
                 StatsInfo.Add(new InformationElement("Stability:", FormatValue(data.Stability),
-                    new TextObject("{=McgPGkj02}{TEXT}\nTarget: {TARGET}\n{EXPLANATIONS}")
+                    new TextObject("{=!}{TEXT}\nTarget: {TARGET}\n{EXPLANATIONS}")
                         .SetTextVariable("TEXT",
                             new TextObject(
-                                "{=7abJy5w7W}The overall stability of this settlement, affected by security, loyalty, assimilation and whether you are legally entitled to the settlement. Stability is the basis of economic prosperity."))
+                                "{=!}The overall stability of this settlement, affected by security, loyalty, assimilation and whether you are legally entitled to the settlement. Stability is the basis of economic prosperity."))
                         .SetTextVariable("EXPLANATIONS", stability.GetExplanations())
                         .SetTextVariable("TARGET", FormatValue(stability.ResultNumber))
                         .ToString()));
@@ -134,20 +134,20 @@ namespace BannerKings.UI.Management
                 var autonomy =
                     BannerKingsConfig.Instance.StabilityModel.CalculateAutonomyTarget(settlement, data.Stability);
                 StatsInfo.Add(new InformationElement("Autonomy:", FormatValue(data.Autonomy),
-                    new TextObject("{=McgPGkj02}{TEXT}\nTarget: {TARGET}\n{EXPLANATIONS}")
+                    new TextObject("{=!}{TEXT}\nTarget: {TARGET}\n{EXPLANATIONS}")
                         .SetTextVariable("TEXT",
                             new TextObject(
-                                "{=VmZxX6F5o}Autonomy is inversely correlated to stability, therefore less stability equals more autonomy. Higher autonomy will reduce tax revenue while increasing loyalty. Matching culture with the settlement and setting a local notable as governor increases autonomy. Higher autonomy will also slow down assimilation"))
+                                "{=!}Autonomy is inversely correlated to stability, therefore less stability equals more autonomy. Higher autonomy will reduce tax revenue while increasing loyalty. Matching culture with the settlement and setting a local notable as governor increases autonomy. Higher autonomy will also slow down assimilation"))
                         .SetTextVariable("EXPLANATIONS", autonomy.GetExplanations())
                         .SetTextVariable("TARGET", FormatValue(autonomy.ResultNumber))
                         .ToString()));
 
                 var support = data.NotableSupport;
                 StatsInfo.Add(new InformationElement("Notable Support:", FormatValue(support.ResultNumber),
-                    new TextObject("{=9Xj3i0jEX}{TEXT}\n{EXPLANATIONS}")
+                    new TextObject("{=!}{TEXT}\n{EXPLANATIONS}")
                         .SetTextVariable("TEXT",
                             new TextObject(
-                                "{=oCDsKjnTx}Represents how much the local elite supports you. Support of each notable is weighted on their power, meaning that not having the support of a notable that holds most power will result in a small support percentage. Support is gained through better relations with the notables."))
+                                "{=!}Represents how much the local elite supports you. Support of each notable is weighted on their power, meaning that not having the support of a notable that holds most power will result in a small support percentage. Support is gained through better relations with the notables."))
                         .SetTextVariable("EXPLANATIONS", support.GetExplanations())
                         .ToString()));
 
@@ -156,12 +156,12 @@ namespace BannerKings.UI.Management
 
                 var influence = BannerKingsConfig.Instance.InfluenceModel.CalculateSettlementInfluence(settlement, data);
                 StatsInfo.Add(new InformationElement(GameTexts.FindText("str_total_influence").ToString(),
-                    new TextObject("{=nXuUKeCpS}{INFLUENCE}")
+                    new TextObject("{=!}{INFLUENCE}")
                         .SetTextVariable("INFLUENCE", influence.ResultNumber.ToString("0.00"))
                         .ToString(),
-                    new TextObject("{=9Xj3i0jEX}{TEXT}\n{EXPLANATIONS}")
+                    new TextObject("{=!}{TEXT}\n{EXPLANATIONS}")
                         .SetTextVariable("TEXT",
-                            new TextObject("{=FAFN7Xtoi}The amount of influence this settlement provides in your realm."))
+                            new TextObject("{=!}The amount of influence this settlement provides in your realm."))
                         .SetTextVariable("EXPLANATIONS", influence.GetExplanations())
                         .ToString()));
 

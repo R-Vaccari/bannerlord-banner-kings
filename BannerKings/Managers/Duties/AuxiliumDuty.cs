@@ -1,4 +1,4 @@
-using BannerKings.Managers.Titles;
+﻿using BannerKings.Managers.Titles;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.Party;
@@ -47,7 +47,7 @@ namespace BannerKings.Managers.Duties
                 var relation = MBRandom.RandomInt(-12, -5);
                 ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero.MainHero, suzerain, relation, false);
                 result = new TextObject(
-                    "{=yeSXYngUA}You have failed to fulfill your duty of military assistance to {SUZERAIN}. As a result, your clan's renown has suffered, and your relationship with suzerain has changed by {RELATION}.");
+                    "{=!}You have failed to fulfill your duty of military assistance to {SUZERAIN}. As a result, your clan's renown has suffered, and your relationship with suzerain has changed by {RELATION}.");
                 result.SetTextVariable("SUZERAIN", suzerain.Name);
                 result.SetTextVariable("RELATION", relation);
             }
@@ -58,7 +58,7 @@ namespace BannerKings.Managers.Duties
                 var relation = MBRandom.RandomInt(5, 10);
                 ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero.MainHero, suzerain, relation, false);
                 result = new TextObject(
-                    "{=9GbKLb7C6}{SUZERAIN} holds your duty of military aid fulfilled. You have gained {INFLUENCE} and {RELATION} relatin with your suzerain.");
+                    "{=!}{SUZERAIN} holds your duty of military aid fulfilled. You have gained {INFLUENCE} and {RELATION} relatin with your suzerain.");
                 result.SetTextVariable("INFLUENCE", influence);
                 result.SetTextVariable("SUZERAIN", suzerain.Name);
                 result.SetTextVariable("RELATION", relation);

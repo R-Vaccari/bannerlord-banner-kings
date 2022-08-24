@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.Core;
@@ -19,9 +19,9 @@ namespace BannerKings.Managers.Institutions.Guilds
             {
                 var result = Trade switch
                 {
-                    GuildTrade.Merchants => new TextObject("{=0KbMO4i2w}Merchants Guild"),
-                    GuildTrade.Masons => new TextObject("{=cTbebFTDu}Masons Guild"),
-                    _ => new TextObject("{=V91VFxh0F}Metalsmiths Guild")
+                    GuildTrade.Merchants => new TextObject("{=!}Merchants Guild"),
+                    GuildTrade.Masons => new TextObject("{=!}Masons Guild"),
+                    _ => new TextObject("{=!}Metalsmiths Guild")
                 };
 
                 return result;
