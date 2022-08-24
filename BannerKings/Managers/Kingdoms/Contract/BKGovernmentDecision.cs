@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using BannerKings.Managers.Titles;
 using TaleWorlds.CampaignSystem;
@@ -116,7 +116,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
                 {
                     if (succession != SuccessionType.Imperial)
                     {
-                        effects = new TextObject("{=!}Succession will be changed to Imperial succession.");
+                        effects = new TextObject("{=03PFe9K7Y}Succession will be changed to Imperial succession.");
                     }
 
                     break;
@@ -125,7 +125,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
                 {
                     if (succession != SuccessionType.Elective_Monarchy && succession != SuccessionType.Hereditary_Monarchy)
                     {
-                        effects = new TextObject("{=!}Succession will be changed to Hereditary Monarchy succession.");
+                        effects = new TextObject("{=zTxCHt6so}Succession will be changed to Hereditary Monarchy succession.");
                     }
 
                     break;
@@ -134,7 +134,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
                 {
                     if (succession != SuccessionType.Elective_Monarchy && succession != SuccessionType.Hereditary_Monarchy)
                     {
-                        effects = new TextObject("{=!}Succession will be changed to Elective Monarchy succession.");
+                        effects = new TextObject("{=9jLQWFmoB}Succession will be changed to Elective Monarchy succession.");
                     }
 
                     break;
@@ -143,7 +143,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
                 {
                     if (succession != SuccessionType.Republic)
                     {
-                        effects = new TextObject("{=!}Succession will be changed to Republican succession.");
+                        effects = new TextObject("{=JTsbSJju6}Succession will be changed to Republican succession.");
                     }
 
                     break;
@@ -243,7 +243,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
 
         public override TextObject GetChooseTitle()
         {
-            var textObject = new TextObject("{=!}Change government to {GOVERNMENT}");
+            var textObject = new TextObject("{=PpPbX3JdX}Change government to {GOVERNMENT}");
             textObject.SetTextVariable("GOVERNMENT", governmentType.ToString());
             return textObject;
         }
@@ -255,13 +255,13 @@ namespace BannerKings.Managers.Kingdoms.Contract
             var newGovernment = ((GovernmentDecisionOutcome) chosenOutcome).ShouldDecisionBeEnforced;
             if (newGovernment)
             {
-                textObject = new TextObject("{=!}The {KINGDOM}'s government is now {POLICY_DESCRIPTION}. {POLICY_SUPPORT}");
+                textObject = new TextObject("{=dFppbi4eR}The {KINGDOM}'s government is now {POLICY_DESCRIPTION}. {POLICY_SUPPORT}");
             }
             else
             {
                 textObject =
                     new TextObject(
-                        "{=!}The {KINGDOM}'s government will continue to be {POLICY_DESCRIPTION}. {POLICY_SUPPORT}");
+                        "{=BnnkMfCRR}The {KINGDOM}'s government will continue to be {POLICY_DESCRIPTION}. {POLICY_SUPPORT}");
             }
 
 
@@ -311,7 +311,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
         {
             var textObject =
                 new TextObject(
-                    "{=!}{CLAN} proposes a change of government, currently {CURRENT} to {PROPOSED}. You can pick your stance regarding this decision.");
+                    "{=iZM2ThBMX}{CLAN} proposes a change of government, currently {CURRENT} to {PROPOSED}. You can pick your stance regarding this decision.");
 
             textObject.SetTextVariable("CLAN", DetermineChooser().Leader.Name);
             textObject.SetTextVariable("CURRENT",
@@ -322,7 +322,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
 
         public override TextObject GetSupportTitle()
         {
-            var textObject = new TextObject("{=!}Vote to change form of government to {GOVERNMENT}");
+            var textObject = new TextObject("{=PNwg5M1sa}Vote to change form of government to {GOVERNMENT}");
             textObject.SetTextVariable("GOVERNMENT", governmentType.ToString());
             return textObject;
         }

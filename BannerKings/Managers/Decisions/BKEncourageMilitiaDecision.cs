@@ -1,4 +1,4 @@
-﻿using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Decisions
@@ -11,7 +11,7 @@ namespace BannerKings.Managers.Decisions
 
         public override string GetHint()
         {
-            return new TextObject("{=!}Encourage able-bodied men to join the active militia force").ToString();
+            return new TextObject("{=96Po7V0aa}Encourage able-bodied men to join the active militia force").ToString();
         }
 
         public override string GetIdentifier()
@@ -21,7 +21,7 @@ namespace BannerKings.Managers.Decisions
 
         public override string GetName()
         {
-            return new TextObject("{=!}Encourage militia").ToString();
+            return new TextObject("{=NWcNv74ww}Encourage militia").ToString();
         }
     }
 }

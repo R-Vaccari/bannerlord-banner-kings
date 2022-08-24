@@ -1,4 +1,4 @@
-﻿using TaleWorlds.Core;
+using TaleWorlds.Core;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
 
@@ -12,7 +12,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
 
         public override TextObject GetName()
         {
-            return new TextObject("{=!}Zabiha");
+            return new TextObject("{=6EmJozh75}Zabiha");
         }
     }
 }

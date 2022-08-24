@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using BannerKings.Managers.Court;
 using BannerKings.Managers.Institutions.Religions.Leaderships;
@@ -32,11 +32,11 @@ namespace BannerKings.Managers
             {
                 if (!factor)
                 {
-                    result.Add(maxEffect * competence, new TextObject("{=!}Council effect"));
+                    result.Add(maxEffect * competence, new TextObject("{=m2EtZvhAN}Council effect"));
                 }
                 else
                 {
-                    result.AddFactor(maxEffect * competence, new TextObject("{=!}Council effect"));
+                    result.AddFactor(maxEffect * competence, new TextObject("{=m2EtZvhAN}Council effect"));
                 }
             }
         }
@@ -177,7 +177,7 @@ namespace BannerKings.Managers
             if (action.ActionTaker == Hero.MainHero)
             {
                 MBInformationManager.AddQuickInformation(
-                    new TextObject("{=!}{OWNER} has appointed you as their {POSITION}.")
+                    new TextObject("{=Vz4i3VSi5}{OWNER} has appointed you as their {POSITION}.")
                         .SetTextVariable("OWNER", action.Council.Owner.Name)
                         .SetTextVariable("POSITION", action.TargetPosition.GetName()),
                     0, action.Council.Owner.CharacterObject, "event:/ui/notification/relation");

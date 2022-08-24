@@ -1,173 +1,1451 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <base xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" type="string">
-	<tags>
-		<tag language="English" />
-	</tags>
-	<strings>
-		<string id="bk_common_placeholder" text="Placeholder" />
-
-		<!-- region Condition Failure Reason Texts -->
-		<string id="bk_condition_has_enough_gold" text="{HERO.LINK} has not enough Denar. {?PAYER.GENDER}she{?}he{\\?} needs at least {AMOUNT} {GOLD_ICON}." />
-		<string id="bk_condition_is_part_of_clan" text="{HERO.LINK} is not part of {CLAN_LINK}." />
-		<string id="bk_condition_is_part_of_any_clan" text="{HERO.LINK} is not part of a clan." />
-		<string id="bk_condition_is_part_of_kingdom" text="{HERO.LINK} is not part of {KINGDOM_LINK}." />
-		<string id="bk_condition_is_part_of_any_kingdom" text="{HERO.LINK} is not part of a kingdom." />
-		<string id="bk_condition_is_part_of_settlement" text="{HERO.LINK} is not part of {SETTLEMENT_LINK}." />
-		<string id="bk_condition_is_part_of_any_settlement" text="{HERO.LINK} is not part of a settlement." />
-		<!-- endregion Condition Failure Reason Texts -->
-
-		<string id="bk_crafting_itemtype_bodyarmor" text="Body Armors" />
-		<string id="bk_crafting_itemtype_barding" text="Bardings" />
-		<string id="bk_crafting_itemtype_shield" text="Shields" />
-		<string id="bk_crafting_itemtype_ammo" text="Ammos" />
-
-		<string id="bk_modifier_purebred" text="Poor {ITEMNAME}" />
-		<string id="bk_modifier_strong" text="Strong {ITEMNAME}" />
-		<string id="bk_modifier_stubborn" text="Stubborn {ITEMNAME}" />
-		<string id="bk_modifier_anaemic" text="Anaemic {ITEMNAME}" />
-		<string id="bk_modifier_poor" text="Poor {ITEMNAME}" />
-
-		<string id="bk_privileges" text="Privileges" />
-		<string id="bk_council_privilege_low_wage" text="Low Wage" />
-		<string id="bk_council_privilege_mid_wage" text="Wage" />
-		<string id="bk_council_privilege_high_wage" text="High Wage" />
-		<string id="bk_council_privilege_influence" text="Influence" />
-		<string id="bk_council_privilege_high_influence" text="High Influence" />
-		<string id="bk_council_privilege_clergymen_exclusive" text="Clergymen Exclusive" />
-		<string id="bk_council_privilege_noble_exclusive" text="Noble Exclusive" />
-		<string id="bk_council_privilege_army_privilege" text="Army Privilege" />
-
-		<string id="bk_council_privilege_low_wage_description" text="A low daily wage, fit for less important positions in a council." />
-		<string id="bk_council_privilege_mid_wage_description" text="A mediocre wage, used for the main positions in lesser councils, or midling positios in royal councils." />
-		<string id="bk_council_privilege_high_wage_description" text="A distinct daily wage, exlusive to the main positions of greater, royal councils." />
-		<string id="bk_council_privilege_influence_description" text="Councilors with this privilege receive extra influence (or Power, if notable)." />
-		<string id="bk_council_privilege_high_influence_description" text="Councilors with this privilege receive a great boost of influence to their clans." />
-		<string id="bk_council_privilege_clergymen_exclusive_description" text="This position may only be filled by clergymen of the clan or kingdom's faith." />
-		<string id="bk_council_privilege_noble_exclusive_description" text="This position is an important one and therefore must only be filled by nobles. Notables from settlements are not acceptable." />
-		<string id="bk_council_privilege_army_privilege_description" text="This position confers the councilor irrevocable ability to raise armies." />
-
-		<string id="bk_council_description_marshall" text="The {NAME} oversees the military administration of the realm. They are responsible for the efficiency of settlement defenses and drafting of the population." />
-		<string id="bk_council_description_steward" text="{NAME} are responsible for the well-being of finances and trade. They improve the economic prospects and prosperity of fiefs." />
-		<string id="bk_council_description_chancellor" text="{NAME} represent their lord in matters of diplomacy. They improve relations with the lord's peers and vassals." />
-		<string id="bk_council_description_spymaster" text="Responsible for security and skullduggery, the {NAME} handle the dirty side of a council's duties. They are responsible for personal security of their lord, as well as dealing with criminal activities, including carrying them out." />
-		<string id="bk_council_description_spiritual" text="The {NAME} is the representative of faith within a lord's inner circle. Their duty is to be a bridge between the material and spiritual powers, and make certain their suzerain adheres to the faith's principles." />
-		<string id="bk_council_description_elder" text="The {NAME} represent the caste of respected aged leaders in a tribal society. Their presence increases the influence of a sovereign over the common people." />
-
-		<string id="bk_spiritual_guide" text="Spiritual Guide" />
-
-		<string id="bk_council_marshall_effects" text="Settlement militia +1{BREAK}Settlement militarism +1% flat{BREAK}Settlement draft efficiencty +25% flat" />
-		<string id="bk_council_steward_effects" text="Settlement prosperity +1{BREAK}Settlement production efficiency +15% flat{BREAK}Settlement caravan attractiveness +15% flat" />
-		<string id="bk_council_chancellor_effects" text="Settlement loyalty +1{BREAK}Vassal limit +1{BREAK}Disagreements impact -20%" />
-		<string id="bk_council_spymaster_effects" text="Settlement security +1{BREAK}Settlement autonomy -3% flat{BREAK}" />
-		<string id="bk_council_spiritual_effects" text="" />
-
-		<string id="bk_council_marshall_empire" text="Domesticus" />
-		<string id="bk_council_marshall_sturgia" text="Domesticus" />
-		<string id="bk_council_marshall_battania" text="Marasgal" />
-		<string id="bk_council_marshall_vlandia" text="Marshal" />
-		<string id="bk_council_marshall_khuzait" text="Jagutu-iin Darga" />
-		<string id="bk_council_marshall_aserai" text="Domesticus" />
-
-		<string id="bk_council_marshall_royal_empire" text="Magister Domesticus" />
-		<string id="bk_council_marshall_royal_sturgia" text="Domesticus" />
-		<string id="bk_council_marshall_royal_battania" text="Ard Marasgal" />
-		<string id="bk_council_marshall_royal_vlandia" text="Grand Marshal" />
-		<string id="bk_council_marshall_royal_khuzait" text="Tumetu-iin Noyan" />
-		<string id="bk_council_marshall_royal_aserai" text="Domesticus" />
-
-		<string id="bk_council_steward_empire" text="Comes Largitionum" />
-		<string id="bk_council_steward_sturgia" text="Domesticus" />
-		<string id="bk_council_steward_battania" text="Sheumarlan" />
-		<string id="bk_council_steward_vlandia" text="Steward" />
-		<string id="bk_council_steward_khuzait" text="Domesticus" />
-		<string id="bk_council_steward_aserai" text="Domesticus" />
-
-		<string id="bk_council_steward_royal_empire" text="Comes Sacrarum Largitionum" />
-		<string id="bk_council_steward_royal_sturgia" text="Domesticus" />
-		<string id="bk_council_steward_royal_battania" text="Ard Sheumarlan" />
-		<string id="bk_council_steward_royal_vlandia" text="High Steward" />
-		<string id="bk_council_steward_royal_khuzait" text="Cherbi" />
-		<string id="bk_council_steward_royal_aserai" text="Domesticus" />
-
-		<string id="bk_council_chancellor_empire" text="Cancellarius" />
-		<string id="bk_council_chancellor_sturgia" text="Domesticus" />
-		<string id="bk_council_chancellor_battania" text="Seansalair" />
-		<string id="bk_council_chancellor_vlandia" text="Chancellor" />
-		<string id="bk_council_chancellor_khuzait" text="Domesticus" />
-		<string id="bk_council_chancellor_aserai" text="Domesticus" />
-
-		<string id="bk_council_chancellor_royal_empire" text="Magister Cancellarius" />
-		<string id="bk_council_chancellor_royal_sturgia" text="Domesticus" />
-		<string id="bk_council_chancellor_royal_battania" text="Ard Seansalair" />
-		<string id="bk_council_chancellor_royal_vlandia" text="High Chancellor" />
-		<string id="bk_council_chancellor_royal_khuzait" text="Cherbi" />
-		<string id="bk_council_chancellor_royal_aserai" text="Domesticus" />
-
-		<string id="bk_council_spymaster_empire" text="Custodis" />
-		<string id="bk_council_spymaster_sturgia" text="Domesticus" />
-		<string id="bk_council_spymaster_battania" text="Treòraiche" />
-		<string id="bk_council_spymaster_vlandia" text="Spymaster" />
-		<string id="bk_council_spymaster_khuzait" text="Khevtuul" />
-		<string id="bk_council_spymaster_aserai" text="Domesticus" />
-
-		<string id="bk_council_spymaster_royal_empire" text="Magister Officiorum" />
-		<string id="bk_council_spymaster_royal_sturgia" text="Domesticus" />
-		<string id="bk_council_spymaster_royal_battania" text="Ard Treòraiche" />
-		<string id="bk_council_spymaster_royal_vlandia" text="Grand Spymaster" />
-		<string id="bk_council_spymaster_royal_khuzait" text="Cherbi" />
-		<string id="bk_council_spymaster_royal_aserai" text="Domesticus" />
-
-		<string id="bk_council_spiritual_guide_empire" text="Custodis" />
-		<string id="bk_council_spiritual_guide_sturgia" text="Domesticus" />
-		<string id="bk_council_spiritual_guide_battania" text="Draoidh" />
-		<string id="bk_council_spiritual_guide_vlandia" text="Seneschal" />
-		<string id="bk_council_spiritual_guide_khuzait" text="Khevtuul" />
-		<string id="bk_council_spiritual_guide_aserai" text="Domesticus" />
-
-		<string id="bk_council_spiritual_guide_royal_empire" text="Magister Officiorum" />
-		<string id="bk_council_spiritual_guide_royal_sturgia" text="Domesticus" />
-		<string id="bk_council_spiritual_guide_royal_battania" text="Ard Draoidh" />
-		<string id="bk_council_spiritual_guide_royal_vlandia" text="High Seneschal" />
-		<string id="bk_council_spiritual_guide_royal_khuzait" text="Cherbi" />
-		<string id="bk_council_spiritual_guide_royal_aserai" text="Domesticus" />
-
-		<string id="bk_council_elder_royal_battania" text="Seanar" />
-
-		<string id="bk_skill_scholarship_learn" text="Actively be studying for an education. Read books." />
-		<string id="bk_skill_theology_learn" text="Interact with divinities through oaths, sacrifices or blessings. Curse and cure curses." />
-		<string id="bk_skill_lordship_learn" text="Fulfill duties. Complete actions with titles such as claiming, granting or usurping." />
-		<string id="pop_class_nobles" text="Nobles" />
-		<string id="pop_class_craftsmen" text="Craftsmen" />
-		<string id="pop_class_serfs" text="Serfs" />
-		<string id="pop_class_slaves" text="Slaves" />
-
-		<string id="pop_class_serfs_sturgia" text="Lowmen" />
-		<string id="pop_class_serfs_empire" text="Commoners" />
-		<string id="pop_class_serfs_aserai" text="Commoners" />
-		<string id="pop_class_serfs_battania" text="Freemen" />
-		<string id="pop_class_serfs_khuzait" text="Nomads" />
-		<string id="pop_class_serfs_vlandia" text="Serfs" />
-
-		<string id="pop_class_slaves_sturgia" text="Thralls" />
-		<string id="pop_class_slaves_aserai" text="Mameluke" />
-		<string id="pop_class_slaves_vlandia" text="Slaves" />
-		<string id="pop_class_slaves_battania" text="Slaves" />
-		<string id="pop_class_slaves_empire" text="Slaves" />
-		<string id="pop_class_slaves_khuzait" text="Slaves" />
-
-		<string id="pop_class_craftsmen_battania" text="Artisans" />
-		<string id="pop_class_craftsmen_khuzait" text="Artisans" />
-		<string id="pop_class_craftsmen_vlandia" text="Craftsmen" />
-		<string id="pop_class_craftsmen_empire" text="Craftsmen" />
-		<string id="pop_class_craftsmen_sturgia" text="Craftsmen" />
-		<string id="pop_class_craftsmen_aserai" text="Craftsmen" />
-
-		<string id="pop_class_nobles_empire" text="Nobiles" />
-		<string id="pop_class_nobles_sturgia" text="Knyaz" />
-		<string id="pop_class_nobles_vlandia" text="Ealdormen" />
-		<string id="pop_class_nobles_battania" text="Nobles" />
-		<string id="pop_class_nobles_aserai" text="Nobles" />
-		<string id="pop_class_nobles_khuzait" text="Nobles" />
-
-	</strings>
+  <tags>
+    <tag language="English" />
+  </tags>
+  <strings>
+    <string id="bk_common_placeholder" text="Placeholder" />
+    <!-- region Condition Failure Reason Texts -->
+    <string id="bk_condition_has_enough_gold" text="{HERO.LINK} has not enough Denar. {?PAYER.GENDER}she{?}he{\\?} needs at least {AMOUNT} {GOLD_ICON}." />
+    <string id="bk_condition_is_part_of_clan" text="{HERO.LINK} is not part of {CLAN_LINK}." />
+    <string id="bk_condition_is_part_of_any_clan" text="{HERO.LINK} is not part of a clan." />
+    <string id="bk_condition_is_part_of_kingdom" text="{HERO.LINK} is not part of {KINGDOM_LINK}." />
+    <string id="bk_condition_is_part_of_any_kingdom" text="{HERO.LINK} is not part of a kingdom." />
+    <string id="bk_condition_is_part_of_settlement" text="{HERO.LINK} is not part of {SETTLEMENT_LINK}." />
+    <string id="bk_condition_is_part_of_any_settlement" text="{HERO.LINK} is not part of a settlement." />
+    <!-- endregion Condition Failure Reason Texts -->
+    <string id="bk_crafting_itemtype_bodyarmor" text="Body Armors" />
+    <string id="bk_crafting_itemtype_barding" text="Bardings" />
+    <string id="bk_crafting_itemtype_shield" text="Shields" />
+    <string id="bk_crafting_itemtype_ammo" text="Ammos" />
+    <string id="bk_modifier_purebred" text="Poor {ITEMNAME}" />
+    <string id="bk_modifier_strong" text="Strong {ITEMNAME}" />
+    <string id="bk_modifier_stubborn" text="Stubborn {ITEMNAME}" />
+    <string id="bk_modifier_anaemic" text="Anaemic {ITEMNAME}" />
+    <string id="bk_modifier_poor" text="Poor {ITEMNAME}" />
+    <string id="bk_privileges" text="Privileges" />
+    <string id="bk_council_privilege_low_wage" text="Low Wage" />
+    <string id="bk_council_privilege_mid_wage" text="Wage" />
+    <string id="bk_council_privilege_high_wage" text="High Wage" />
+    <string id="bk_council_privilege_influence" text="Influence" />
+    <string id="bk_council_privilege_high_influence" text="High Influence" />
+    <string id="bk_council_privilege_clergymen_exclusive" text="Clergymen Exclusive" />
+    <string id="bk_council_privilege_noble_exclusive" text="Noble Exclusive" />
+    <string id="bk_council_privilege_army_privilege" text="Army Privilege" />
+    <string id="bk_council_privilege_low_wage_description" text="A low daily wage, fit for less important positions in a council." />
+    <string id="bk_council_privilege_mid_wage_description" text="A mediocre wage, used for the main positions in lesser councils, or midling positios in royal councils." />
+    <string id="bk_council_privilege_high_wage_description" text="A distinct daily wage, exlusive to the main positions of greater, royal councils." />
+    <string id="bk_council_privilege_influence_description" text="Councilors with this privilege receive extra influence (or Power, if notable)." />
+    <string id="bk_council_privilege_high_influence_description" text="Councilors with this privilege receive a great boost of influence to their clans." />
+    <string id="bk_council_privilege_clergymen_exclusive_description" text="This position may only be filled by clergymen of the clan or kingdom's faith." />
+    <string id="bk_council_privilege_noble_exclusive_description" text="This position is an important one and therefore must only be filled by nobles. Notables from settlements are not acceptable." />
+    <string id="bk_council_privilege_army_privilege_description" text="This position confers the councilor irrevocable ability to raise armies." />
+    <string id="bk_council_description_marshall" text="The {NAME} oversees the military administration of the realm. They are responsible for the efficiency of settlement defenses and drafting of the population." />
+    <string id="bk_council_description_steward" text="{NAME} are responsible for the well-being of finances and trade. They improve the economic prospects and prosperity of fiefs." />
+    <string id="bk_council_description_chancellor" text="{NAME} represent their lord in matters of diplomacy. They improve relations with the lord's peers and vassals." />
+    <string id="bk_council_description_spymaster" text="Responsible for security and skullduggery, the {NAME} handle the dirty side of a council's duties. They are responsible for personal security of their lord, as well as dealing with criminal activities, including carrying them out." />
+    <string id="bk_council_description_spiritual" text="The {NAME} is the representative of faith within a lord's inner circle. Their duty is to be a bridge between the material and spiritual powers, and make certain their suzerain adheres to the faith's principles." />
+    <string id="bk_council_description_elder" text="The {NAME} represent the caste of respected aged leaders in a tribal society. Their presence increases the influence of a sovereign over the common people." />
+    <string id="bk_spiritual_guide" text="Spiritual Guide" />
+    <string id="bk_council_marshall_effects" text="Settlement militia +1{BREAK}Settlement militarism +1% flat{BREAK}Settlement draft efficiencty +25% flat" />
+    <string id="bk_council_steward_effects" text="Settlement prosperity +1{BREAK}Settlement production efficiency +15% flat{BREAK}Settlement caravan attractiveness +15% flat" />
+    <string id="bk_council_chancellor_effects" text="Settlement loyalty +1{BREAK}Vassal limit +1{BREAK}Disagreements impact -20%" />
+    <string id="bk_council_spymaster_effects" text="Settlement security +1{BREAK}Settlement autonomy -3% flat{BREAK}" />
+    <string id="bk_council_spiritual_effects" text="" />
+    <string id="bk_council_marshall_empire" text="Domesticus" />
+    <string id="bk_council_marshall_sturgia" text="Domesticus" />
+    <string id="bk_council_marshall_battania" text="Marasgal" />
+    <string id="bk_council_marshall_vlandia" text="Marshal" />
+    <string id="bk_council_marshall_khuzait" text="Jagutu-iin Darga" />
+    <string id="bk_council_marshall_aserai" text="Domesticus" />
+    <string id="bk_council_marshall_royal_empire" text="Magister Domesticus" />
+    <string id="bk_council_marshall_royal_sturgia" text="Domesticus" />
+    <string id="bk_council_marshall_royal_battania" text="Ard Marasgal" />
+    <string id="bk_council_marshall_royal_vlandia" text="Grand Marshal" />
+    <string id="bk_council_marshall_royal_khuzait" text="Tumetu-iin Noyan" />
+    <string id="bk_council_marshall_royal_aserai" text="Domesticus" />
+    <string id="bk_council_steward_empire" text="Comes Largitionum" />
+    <string id="bk_council_steward_sturgia" text="Domesticus" />
+    <string id="bk_council_steward_battania" text="Sheumarlan" />
+    <string id="bk_council_steward_vlandia" text="Steward" />
+    <string id="bk_council_steward_khuzait" text="Domesticus" />
+    <string id="bk_council_steward_aserai" text="Domesticus" />
+    <string id="bk_council_steward_royal_empire" text="Comes Sacrarum Largitionum" />
+    <string id="bk_council_steward_royal_sturgia" text="Domesticus" />
+    <string id="bk_council_steward_royal_battania" text="Ard Sheumarlan" />
+    <string id="bk_council_steward_royal_vlandia" text="High Steward" />
+    <string id="bk_council_steward_royal_khuzait" text="Cherbi" />
+    <string id="bk_council_steward_royal_aserai" text="Domesticus" />
+    <string id="bk_council_chancellor_empire" text="Cancellarius" />
+    <string id="bk_council_chancellor_sturgia" text="Domesticus" />
+    <string id="bk_council_chancellor_battania" text="Seansalair" />
+    <string id="bk_council_chancellor_vlandia" text="Chancellor" />
+    <string id="bk_council_chancellor_khuzait" text="Domesticus" />
+    <string id="bk_council_chancellor_aserai" text="Domesticus" />
+    <string id="bk_council_chancellor_royal_empire" text="Magister Cancellarius" />
+    <string id="bk_council_chancellor_royal_sturgia" text="Domesticus" />
+    <string id="bk_council_chancellor_royal_battania" text="Ard Seansalair" />
+    <string id="bk_council_chancellor_royal_vlandia" text="High Chancellor" />
+    <string id="bk_council_chancellor_royal_khuzait" text="Cherbi" />
+    <string id="bk_council_chancellor_royal_aserai" text="Domesticus" />
+    <string id="bk_council_spymaster_empire" text="Custodis" />
+    <string id="bk_council_spymaster_sturgia" text="Domesticus" />
+    <string id="bk_council_spymaster_battania" text="Treòraiche" />
+    <string id="bk_council_spymaster_vlandia" text="Spymaster" />
+    <string id="bk_council_spymaster_khuzait" text="Khevtuul" />
+    <string id="bk_council_spymaster_aserai" text="Domesticus" />
+    <string id="bk_council_spymaster_royal_empire" text="Magister Officiorum" />
+    <string id="bk_council_spymaster_royal_sturgia" text="Domesticus" />
+    <string id="bk_council_spymaster_royal_battania" text="Ard Treòraiche" />
+    <string id="bk_council_spymaster_royal_vlandia" text="Grand Spymaster" />
+    <string id="bk_council_spymaster_royal_khuzait" text="Cherbi" />
+    <string id="bk_council_spymaster_royal_aserai" text="Domesticus" />
+    <string id="bk_council_spiritual_guide_empire" text="Custodis" />
+    <string id="bk_council_spiritual_guide_sturgia" text="Domesticus" />
+    <string id="bk_council_spiritual_guide_battania" text="Draoidh" />
+    <string id="bk_council_spiritual_guide_vlandia" text="Seneschal" />
+    <string id="bk_council_spiritual_guide_khuzait" text="Khevtuul" />
+    <string id="bk_council_spiritual_guide_aserai" text="Domesticus" />
+    <string id="bk_council_spiritual_guide_royal_empire" text="Magister Officiorum" />
+    <string id="bk_council_spiritual_guide_royal_sturgia" text="Domesticus" />
+    <string id="bk_council_spiritual_guide_royal_battania" text="Ard Draoidh" />
+    <string id="bk_council_spiritual_guide_royal_vlandia" text="High Seneschal" />
+    <string id="bk_council_spiritual_guide_royal_khuzait" text="Cherbi" />
+    <string id="bk_council_spiritual_guide_royal_aserai" text="Domesticus" />
+    <string id="bk_council_elder_royal_battania" text="Seanar" />
+    <string id="bk_skill_scholarship_learn" text="Actively be studying for an education. Read books." />
+    <string id="bk_skill_theology_learn" text="Interact with divinities through oaths, sacrifices or blessings. Curse and cure curses." />
+    <string id="bk_skill_lordship_learn" text="Fulfill duties. Complete actions with titles such as claiming, granting or usurping." />
+    <string id="pop_class_nobles" text="Nobles" />
+    <string id="pop_class_craftsmen" text="Craftsmen" />
+    <string id="pop_class_serfs" text="Serfs" />
+    <string id="pop_class_slaves" text="Slaves" />
+    <string id="pop_class_serfs_sturgia" text="Lowmen" />
+    <string id="pop_class_serfs_empire" text="Commoners" />
+    <string id="pop_class_serfs_aserai" text="Commoners" />
+    <string id="pop_class_serfs_battania" text="Freemen" />
+    <string id="pop_class_serfs_khuzait" text="Nomads" />
+    <string id="pop_class_serfs_vlandia" text="Serfs" />
+    <string id="pop_class_slaves_sturgia" text="Thralls" />
+    <string id="pop_class_slaves_aserai" text="Mameluke" />
+    <string id="pop_class_slaves_vlandia" text="Slaves" />
+    <string id="pop_class_slaves_battania" text="Slaves" />
+    <string id="pop_class_slaves_empire" text="Slaves" />
+    <string id="pop_class_slaves_khuzait" text="Slaves" />
+    <string id="pop_class_craftsmen_battania" text="Artisans" />
+    <string id="pop_class_craftsmen_khuzait" text="Artisans" />
+    <string id="pop_class_craftsmen_vlandia" text="Craftsmen" />
+    <string id="pop_class_craftsmen_empire" text="Craftsmen" />
+    <string id="pop_class_craftsmen_sturgia" text="Craftsmen" />
+    <string id="pop_class_craftsmen_aserai" text="Craftsmen" />
+    <string id="pop_class_nobles_empire" text="Nobiles" />
+    <string id="pop_class_nobles_sturgia" text="Knyaz" />
+    <string id="pop_class_nobles_vlandia" text="Ealdormen" />
+    <string id="pop_class_nobles_battania" text="Nobles" />
+    <string id="pop_class_nobles_aserai" text="Nobles" />
+    <string id="pop_class_nobles_khuzait" text="Nobles" />
+    <string id="15dY4G6vB" text="Food quality" />
+    <string id="gAOSquJNH" text="Religions" />
+    <string id="Kbga4C7tK" text="Learn about the novel faiths in the continent." />
+    <string id="VZ9dh9PVH" text="Settlement Management" />
+    <string id="SLVDGOXsD" text="In Banner Kings, settlement management is several layers more in depth than vanilla. Settlemetns have many new interconnected factors such as Mercantilism, Militarism, Stability, Autonomy, and others, making settlement management way more intricate than choosing a new town project every few weeks or so. They also have several new policies (multi choice options) and decisions (true/false options) that it's owner may manage. You can check all this information in Demesne Management tab in your settlements - all of the fields have tooltips with further explanations." />
+    <string id="8VNmQRuwx" text="Learn about the extensive changes to settlements." />
+    <string id="r3RoUxHEG" text="Game Balance - Skills" />
+    <string id="wr9nGzs3k" text="Banner Kings introduces a new Attribute - Wisdom - as well as 3 new skills: Scholarship, Lordship and Theology. These new skills provide new ways to acquire experience and level up. On top of that, skill modifiers are changed. For starters, the minimum experience gain is now 5% rather than 0%. This means that the vanilla game would block you from learning skills past a certain past - this is not the case anymore. You can always keep learning, albeit very slowly." />
+    <string id="DsP1ggQQe" text="Learn about the new skills and experience gainning changes." />
+    <string id="aYOjUrZBb" text="Game Balance - Soft Limits" />
+    <string id="1zOCJ1spY" text="Among the many new stats tracking heroes and settlements are the Demesne Limit and Vassal Limit features. These act as soft limits respectively for fief ownership and vassal clans / knights under you. The limits set the point of diminishing returns. Going over it too much will eventually lead to negative returns. Effectively, Demesne Limit makes you incapable to hold an indeterminate amount of fiefs - you will only be able to efficiently manage a few - while vassal limit makes oversized kingdoms increasingly unviable to manage. The vanilla game sets no limit to how much land or people you control - those limits severely restrict these abilities." />
+    <string id="R96bK8J2q" text="Learn about the new soft limits that significantly prevent snowballing or overgrowing." />
+    <string id="hOdyZJFyN" text="Game Balance - AI Finances &amp; War" />
+    <string id="NB5k0yBcy" text="In Banner Kings, AI lords now have much more dynamic financial lives. AI clans will buy caravans and workshops in similar manner to player. The same costs, incomes and restrictions apply.\nOver time, this means AI clans will build several sources of income, allowing them to grow bigger and stronger, or have reserves then losing their settlements.\nAnother major change is that AI will now save money during peace time. Lords will roam the world with small parties - enough to not get consistently captured by bandits - saving their reserves for war time. As a consequence of that, settlements train their volunteers - when war time comes, armies will be immediatly drafted and made mostly of quality troops instead of recruits.\nLastly, notables will now financially aid the clans they are supporters of. This creates a flow of currency from notables to lords, making them a more active part of wartimes." />
+    <string id="9aykPg48W" text="Learn about the expansions to AI financial decisions that make the game more dynamic." />
+    <string id="YsgWSb7ge" text="Game Balance - Settlement Food" />
+    <string id="S4ENuXwGK" text="Food is extensively reworked. Food in settlemetns is now produced and consumed in the hundreds by the day - every single person in the population eats, in a similar rate to your soldiers. Food in settlements is now dictated by settlement acreage and it's workforce. The settlement needs acres ready to work and people - serfs and slaves - to work on them. Settlements will no longer starve with markets full of food - the population will buy off the market stocks when production does not meed demand, meaning true starvating will only start when markets are completely out of food. Food stocks are much higher, based on population. Excess food in stocks will rot. If the limit is reached, the population sells food items to the market instead of the food simply disappearing. Food can be manually dumped into the settlement by stocking the Stack with food - it will only be consumed when the normal reserves are very low." />
+    <string id="wBr9mTaeT" text="Learn about the expansions to AI financial decisions that make the game more dynamic." />
+    <string id="XLBgkVfex" text="Economy" />
+    <string id="oqFjn04xO" text="In Banner Kings, the economy landscape is quite different.\nDemand is generated by population in settlements, and therefore much more dynamic than before as population classes fluctuate, and each class has different demands.\nTrade goods have modifiers such as 'fine', 'masterwork' or 'crude', what opens new possibilities in terms of profit.\nManufactured items are on average quite more expensive, making workshops and caravans significantly more profitable.\nWorkshops owners now pay taxes to the settlement owner.\nSettlement market gold no longer resets on a daily basis - settlements can accumulate large amounts of gold, or go bankrupt, hence need some time to recover." />
+    <string id="Nb9O1oFjN" text="Learn about the various improvements over the economy system." />
+    <string id="yVGM6BXj3" text="Economy - Villages" />
+    <string id="UzRwRBU38" text="Villages produce income by selling their production outputs. Villages will now produce based on population workforce, as well as available acreage, if fitting. For example, agricultural productions are limited by the amount of acres available and their production capacity - even if you have extra workers, the fields can only produce so much.\nAs a result, villages can produce much more income than before. This is extra relevant for Knighthood, which you can read more about in the articles below." />
+    <string id="2jycAyczw" text="Learn about the various improvements over the economy system." />
+    <string id="uBLUdPJZB" text="Educations" />
+    <string id="1QifX1bnh" text="Learn about the novel education system and it's aspects." />
+    <string id="4hT6ckaZ2" text="Titles" />
+    <string id="sjYjM0vWv" text="In Banner Kings, legal titles exist in what is called Demesne (domain) Hierarchy. Titles may be landed or not. Landed titles are directly attached to a fief - lordships are village titles, baronies are castle titles, counties are town titles. Above these are unlanded titles, such as dukedoms and kingdoms. The hierarchy stablishes suzerain-vassal relationships between the title holders. Holding a title has several impacts, mainly affecting your Vassal Limit and Demesne Limit, that limit your number of vassal clans &amp; knights, and your limit of fiefs, respectively. Every faction at game start has a kingdom-level title that represents them. This title is passed on to successive leaders of the faction, in different forms, depending on the title's Succession law." />
+    <string id="xVDXpBERB" text="Learn about the novel titles and their usages." />
+    <string id="hzXtKPKnq" text="Titles - Laws" />
+    <string id="tnitGTaqi" text="Titles are also composed of laws, duties and rights, that together form the contract. All titles in the same hierarchy have the same contract. All titles have Succession, Inheritance, Government and Gender laws. Succession describes how the faction leadership is inherited, while Inheritance describes the clans' leadership inheritance. Government has various passive effects on settlements as well as dictate what kingdom policies are possible, and sometimes restricts the other laws. Gender law describes the preference for a certain gender in terms of granting knighthood, faction succession and clan inheritance." />
+    <string id="7B2eZeYGQ" text="Learn more about the various laws that compose titles." />
+    <string id="LyEbiZSE3" text="Titles - Duties &amp; Rights" />
+    <string id="7fwg0Vngs" text="Titles are also composed of laws, duties and rights, that together form the contract. All titles in the same hierarchy have the same contract. Duties and Rights are fulfilled between vassal and suzerain. Your suzerain is the title holder of the title directly above your highest title. Say you have a dukedom title - in the hierarchy, the dukedom is under a kingdom. The kingdom title holder will be your suzerain, and you their vassal. Vassals fulfill Duties such as paying taxes, or participating in armies (the player is coerced to participate, with renown penalties). Suzerains fulfill rights such as granting titles or financial aids in certain circunstances." />
+    <string id="Wi3q9kqfn" text="Learn about the duties and rights between vassals and suzerains." />
+    <string id="nEMte0XE4" text="Knighthood &amp; Dynamic Clans" />
+    <string id="xghgwzDfk" text="In Banner Kings, companions are no longer able to raise clan parties. Instead, they can be knighted, a process that involves spending influence and denars. Once knighted, they can raise a party. It also requires a lordship title, who the knight will receive and use it's income to pay their own party - you only pay for those led by your family members. Knights can eventualy grow as lords and found their own clan. Knights are used by the AI, meaning many new lords are travelling on the map, and eventually many new clans sprout. The player may try to stop their own knights from creating clans." />
+    <string id="jy97K6cAh" text="Learn about the new lords on the map, knights." />
+    <string id="2MA71Kvhw" text="Councils" />
+    <string id="UyZWLcRpt" text="Learn about the novel clan and royal councils." />
+    <string id="VrEDqVfz6" text="Innovations" />
+    <string id="0F1vdXH15" text="Learn about the novel cultural innovations." />
+    <string id="tg6FbFiNT" text="Smithing" />
+    <string id="HN0cBYaSr" text="Learn about the various changes that fix smithing as an exploit and expand it's uses." />
+    <string id="BfJN9hrzM" text="Banner Kings" />
+    <string id="oMLzOrGDV" text="Welcome to the Banner Kings mod. BK is a comprehensive mod that alters and expands various of Bannerlord's non combat systems. Below are some topics you can learn more about the impacts of the mod. You can later revisit these topics in the Concepts part of Bannerlord's encyclopedia. Visit the mod page for Discord and donation links - support is only provided through Discord. Have fun!" />
+    <string id="uTk8Vwp57" text="{A0}" />
+    <string id="Wr4Ff5x4G" text="{A0}" />
+    <string id="bRuYUNBuG" text="{HERO} is inspired by the spirits!" />
+    <string id="wPfBWBqXS" text="Double Perks" />
+    <string id="as1Oqgs1t" text="From now on, double perks will be yielded for the {SKILL} skill. The perks will be rewarded after closing the Character tab with 'Done', not immediatly after selecting them." />
+    <string id="Y7rDGWjZQ" text="You have received the {PERK} as a double perk yield reward." />
+    <string id="0wGwmCmdK" text="I would like to buy a book." />
+    <string id="OUAc2H655" text="I humbly ask of you to release me of my duties in the {CLAN}. I shall remain as your vassal and loyal friend." />
+    <string id="w9PTDWxEJ" text="I request of you to release me of my duties in the {CLAN}. It is time for me to lead my own family." />
+    <string id="3TzA2b2Ew" text="I demand of you to release me of the {CLAN}. It is time we part ways." />
+    <string id="8ir7Oiy2Y" text="The {NEW} has been formed by {HERO}, previously a knight of {ORIGINAL}." />
+    <string id="4N0gerXLX" text="Your Clan Tier needs to be at least {TIER}." />
+    <string id="neOcpvcCH" text="Before bestowing knighthood, you need to be formally part of a kingdom." />
+    <string id="A8yj3uz8v" text="You do not legally own any title." />
+    <string id="oCHtJRrXN" text="You do not legally own any lordship that could be given to land a new vassal." />
+    <string id="ne7KoMpn5" text="You cannot grant away your only lordship." />
+    <string id="TVJJOduxF" text="Bestowing knighthood requires {INFLUENCE} influence to legitimize your new vassal.\n{EXPLANATIONS}" />
+    <string id="drBwQzTXi" text="Bestowing knighthood requires {GOLD} gold to give your vassal financial security." />
+    <string id="u05uWxk9D" text="Select the fief you would like to give away" />
+    <string id="6RkH7t0ge" text="{RESULT}\n{DESCRIPTION}" />
+    <string id="N2AVstaMk" text="The {CLAN} now own {WORKSHOP} at {TOWN}." />
+    <string id="ZHCs0C9Yr" text="Give me your slaves and gear, or else!" />
+    <string id="PeRrAsru6" text="Follow my company." />
+    <string id="vRd265yRO" text="You may go home." />
+    <string id="2dAcVyazp" text="{CLERGYMAN_GREETING}" />
+    <string id="uhtBSmdSF" text="What are you preaching?" />
+    <string id="UssFzPkbe" text="{CLERGYMAN_PREACHING}" />
+    <string id="bObQTYghq" text="{CLERGYMAN_PREACHING_LAST}" />
+    <string id="PnxC3PWiN" text="How do I prove my faith?" />
+    <string id="6x45U0Wkn" text="{CLERGYMAN_FAITH}" />
+    <string id="cHbZW3g6X" text="{CLERGYMAN_FAITH_LAST}" />
+    <string id="saE1hpc8U" text="What is forbidden to the faith?" />
+    <string id="ZyuZmNxTC" text="{CLERGYMAN_FAITH_FORBIDDEN}" />
+    <string id="noLJ03hjL" text="{CLERGYMAN_FAITH__FORBIDDEN_LAST}" />
+    <string id="ZQuXmkctx" text="I would like to be inducted." />
+    <string id="9jvqgj6s6" text="{CLERGYMAN_INDUCTION}" />
+    <string id="FKqKvgiB7" text="{CLERGYMAN_INDUCTION_LAST}" />
+    <string id="aQifSgQGC" text="{CLERGYMAN_BLESSING_ACTION}" />
+    <string id="9q42JHsKK" text="{CLERGYMAN_BLESSING_QUESTION}" />
+    <string id="5YR0ZTzwg" text="I have decided." />
+    <string id="beMW6QnFj" text="{CLERGYMAN_BLESSING_CONFIRM}" />
+    <string id="daGKCL6ZM" text="See it done." />
+    <string id="gemWHUDTq" text="I would like to perform a rite." />
+    <string id="Zaogfgd3b" text="{CLERGYMAN_RITE}" />
+    <string id="EmTgKfamB" text="I am afraid that won't be possible." />
+    <string id="jKBiM0909" text="I have decided." />
+    <string id="AVdNCE2ig" text="{CLERGYMAN_RITE_CONFIRM}" />
+    <string id="qwkwg5tXa" text="See it done." />
+    <string id="Ss1QNUCiR" text="Already an adherent of this faith." />
+    <string id="qdsxqXsi0" text="{POSSIBLE}. Changing faiths will significantly impact your clan's renown. Your piety in the new faith will be zero. Lords of {CURRENT_FAITH} faith may disapprove your change." />
+    <string id="0eJtLc0U1" text="{DESCRIPTION}\n{EFFECTS}" />
+    <string id="E0U8oZqbd" text="Select which of the {SECONDARIES} you would like to {BLESSING_ACTION}." />
+    <string id="7VtrFL6xm" text="You do not adhere to the {FAITH} faith." />
+    <string id="BpmBxfGYv" text="Not enough piety to receive any blessing (minimum {PIETY} piety)." />
+    <string id="dTGQdS3rq" text="Expend your piety in exchange of a blessing or inspiration." />
+    <string id="Sgdszfq2A" text="You do not adhere to the {FAITH} faith." />
+    <string id="4WbV5Jdr1" text="No rite is currently possible to perform." />
+    <string id="K9pfnigk2" text="Perform a rite such as an offering in exchange for piety." />
+    <string id="wYpfP7yJP" text="{FAITH} teaches us that we may perform {RITES}." />
+    <string id="Ks8JinBMZ" text="Certainly, {HERO}. Remember that proving your devotion is a life-long process. Once a rite is done, some time is needed before it may be consummated again. {RITES}" />
+    <string id="CXkE5V990" text="You are serving as a guard in {CURRENT_SETTLEMENT}." />
+    <string id="ZpCQSy742" text="You are training the guards in {CURRENT_SETTLEMENT}." />
+    <string id="ZLpmFWERi" text="You are hunting in the region of {CURRENT_SETTLEMENT}. Game quantity in this region is {HUNTING_GAME}." />
+    <string id="vLgnKa4g5" text="You are meeting with the high society of {CURRENT_SETTLEMENT}." />
+    <string id="aSRqbPT9a" text="You are studying scholarship with {SCHOLARSHIP_TUTOR}. The instruction costs {SCHOLARSHIP_GOLD} per hour." />
+    <string id="tDTHa8GY0" text="You are working on the smith for {CRAFTING_HOURS} hours. The current hourly rate of this smith is: {CRAFTING_RATE} {GOLD_ICON}.{CRAFTING_EXPLANATION}" />
+    <string id="BRdN9XiS7" text="Study scholarship" />
+    <string id="xptxaA9uv" text="Transfer slaves" />
+    <string id="sEBSrmFV4" text="Meet nobility" />
+    <string id="0sjo8MsGV" text="Serve as guard" />
+    <string id="r9kc4juaN" text="Train guards" />
+    <string id="jgXJkCcay" text="Go hunting" />
+    <string id="atU6z8jRC" text="Banner Kings" />
+    <string id="RaHF8gPVK" text="Demesne management" />
+    <string id="bHsfVqB1f" text="Demesne hierarchy" />
+    <string id="9Lof5g7Ay" text="{RELIGION_NAME}" />
+    <string id="x3ypuzc67" text="{GUILD_NAME}" />
+    <string id="aoDqKSU5a" text="Take an action" />
+    <string id="5H48ZHWPB" text="Banner Kings" />
+    <string id="vVV7VAE4u" text="Banner Kings" />
+    <string id="JsYFH4Tnp" text="Village Projects" />
+    <string id="FmLGX8OFr" text="Not a town!" />
+    <string id="GzxoaPZRV" text="You have been hurt in your current action." />
+    <string id="5hKjMp7Qo" text="You have improved your {SKILL} skill during your current action." />
+    <string id="nfXR9BzJ0" text="You have improved your {SKILL} skill during your current action." />
+    <string id="fV578J9wi" text="You have stopped your current action because the instructor has left the settlement." />
+    <string id="6c51EFnjd" text="You have improved your {SKILL} skill during your current action." />
+    <string id="7ZavfonWb" text="Bountiful" />
+    <string id="ACdyLWbmt" text="Mediocre" />
+    <string id="EqxO6N3G3" text="Poor" />
+    <string id="hZ6ptAMPJ" text="You have have caught an animal and improved your {SKILL} skill while hunting." />
+    <string id="MaqrKXqnO" text="You have improved your {SKILL} skill and gained {INFLUENCE} influence while meeting with nobles." />
+    <string id="sEZz23eyF" text="You have stopped your current action due to health conditions." />
+    <string id="D1PJnpgYw" text="Banner Kings" />
+    <string id="UkXExgZ2E" text="{NUMBER} people have been killed in the siege aftermath of {SETTLEMENT}." />
+    <string id="ABkogajGO" text="Retinue Barracks" />
+    <string id="CUxUuwfwZ" text="Barracks for the castle retinue, a group of elite soldiers. The retinue is added to the garrison over time, up to a limit of 20, 40 or 60 (building level)." />
+    <string id="tyC8iqofi" text="Retinue Barracks" />
+    <string id="NhVZkVXNx" text="Barracks for the castle retinue, a group of elite soldiers. The retinue is added to the garrison over time, up to a limit of 20, 40 or 60 (building level)." />
+    <string id="rGROzdVsa" text="the conquering army" />
+    <string id="mGnT85kuQ" text="Council effect" />
+    <string id="d3qzWFOqs" text="Council effect" />
+    <string id="EmSSrNcJk" text="{OWNER} has appointed you as their {POSITION}." />
+    <string id="9aHDBh0Mk" text="{RELIGION} - {PIETY} piety" />
+    <string id="en1OG24xS" text="Your faith" />
+    <string id="c9qBbfgpn" text="You look up to the skies and realize there must be something more. You feel there must be a higher purpose for yourself, and people expect you to defend a certain faith. Upholding your cultural forefathers' faith would be considered most pious. Similarly, following a faith that accepts your culture would be pious, however not as much as your true ancestry. Alternatively, having a completely different faith is possible, though a less walked path. What is your faith?" />
+    <string id="nrjkNtqRh" text="{HERO} has recieved {PIETY} piety." />
+    <string id="PzBJK0ato" text="{HERO} has recieved {PIETY} piety." />
+    <string id="3i3HW7CQN" text="The {CLAN} has knighted {KNIGHT}." />
+    <string id="ghXRvswrb" text="{CLAIMANT} is building a claim on your title, {TITLE}." />
+    <string id="E9BYrERLv" text="{REVOKER} has revoked the {TITLE}." />
+    <string id="1MJMsHn6m" text="The {TITLE} has been founded by {FOUNDER}." />
+    <string id="dbfpU5D5W" text="The {TITLE} has been founded by {FOUNDER}." />
+    <string id="uPm96RWEm" text="{USURPER} has usurped the {TITLE}." />
+    <string id="wEtTS7OPe" text="{USURPER} has usurped your title, {TITLE}." />
+    <string id="OEtRWxB9b" text="Fluent" />
+    <string id="d77nfTHxK" text="Capable" />
+    <string id="KH8Khy4tF" text="Novice" />
+    <string id="hUxFomH2q" text="Incompetent" />
+    <string id="bhuvQ8zRm" text="Monotheism" />
+    <string id="PMrQ4UNWr" text="Polytheism" />
+    <string id="bJLxwRGmZ" text="Monotheism" />
+    <string id="kCXjMozuj" text="Polytheism" />
+    <string id="tiqnifmu4" text="You do not currently adhere to any faith" />
+    <string id="Y8RaqREjb" text="You are following the {FAITH} faith" />
+    <string id="3E729HQKS" text="Grant this title away to {RECEIVER}, making them the legal owner of it. If the receiver is in your kingdom and the title is landed (attached to a fief), they will also receive the direct ownership of that fief and it's revenue. Granting a title provides positive relations with the receiver." />
+    <string id="9rLr5a16e" text="Grant" />
+    <string id="QFAzqsJDG" text="Grant {TITLE}" />
+    <string id="k1x0JBL9h" text="Select a lord who you would like to grant this title to." />
+    <string id="S6d6YNnFu" text="Revoking transfers the legal ownership of a vassal's title to the suzerain. The revoking restrictions are associated with the title's government type." />
+    <string id="XzqiSY06G" text="Revoke" />
+    <string id="cki9t0u1t" text="Claiming this title sets a legal precedence for you to legally own it, thus allowing it to be usurped. A claim takes 1 year to build. Claims last until they are pressed or until it's owner dies." />
+    <string id="QCu6VX2rf" text="Claim" />
+    <string id="0yTrsBZ5R" text="Press your claim and usurp this title from it's owner, making you the lawful ruler of this title. Usurping from lords within your kingdom degrades your clan's reputation." />
+    <string id="G2MLJqwUg" text="Usurp" />
+    <string id="O63c7a8xJ" text="Will accept: {ANSWER}" />
+    <string id="bKu4wWrpM" text="{NO}.\n{REASON}" />
+    <string id="jniqeemr3" text="Request your liege to grant you this position in the council. This action will cost {INFLUENCE} influence.\n\n{ACCEPT}" />
+    <string id="Zgp9AfiHC" text="Request" />
+    <string id="A7PPQbnrR" text="Request to swap your current position with {COUNCILMAN} position of {POSITION}. This action will cost {INFLUENCE} influence.\n\n{ACCEPT}" />
+    <string id="mW45pc4Ms" text="Swap" />
+    <string id="DB8KJJx5j" text="Relinquish your position in the council. It will cost no influence and exempt you of any council privileges.\n\n{ACCEPT}" />
+    <string id="AbtgegU3A" text="Relinquish" />
+    <string id="isWX1wcM6" text="Settlement" />
+    <string id="3es4xFSDT" text="Titles" />
+    <string id="fSr8EeWTM" text="De Jure Drifts" />
+    <string id="aAK777T2a" text="{PERCENTAGE} complete." />
+    <string id="ncB4H9KQz" text="Claimants" />
+    <string id="eN2XiWOLW" text="{DAYS} days left to build claim." />
+    <string id="oSOXdw398" text="Possible Claimants" />
+    <string id="wyHGTgUrJ" text="Previous title owner" />
+    <string id="aKmLSgc5p" text="Fabricated claim" />
+    <string id="fuBgNTQd4" text="Usurp" />
+    <string id="HDjQzy4SJ" text="Revoke" />
+    <string id="SbZ8vsGk7" text="Claim" />
+    <string id="X6W0ZLD6p" text="Grant" />
+    <string id="mt7bh31Xo" text="Reason" />
+    <string id="eZU8myZh8" text="Gold" />
+    <string id="dmwQN7MwC" text="{GOLD} coins." />
+    <string id="P81RSm4vC" text="Influence" />
+    <string id="VrUp548XW" text="{INFLUENCE} influence." />
+    <string id="ZpU4nOvDS" text="Influence" />
+    <string id="5E8u6zLQ3" text="{RENOWN} renown." />
+    <string id="Q1daCqLjM" text="Settlement" />
+    <string id="ziALyPzMh" text="Titles" />
+    <string id="Q9BiDyMZX" text="Competence" />
+    <string id="bAF3fC6jX" text="Settlement Effects" />
+    <string id="8paciCQnw" text="An Imperial government is a highly centralized one. Policies favor the ruling clan at the expense of vassals. A strong leadership that sees it's vassals more as administrators than lords." />
+    <string id="BBf5KDyf2" text="The Tribal association is the most descentralized government. Policies to favor the ruling clan are unwelcome, and every lord is a 'king' or 'queen' in their own right." />
+    <string id="24J83cFS4" text="Republics are firmly setup to avoid the accumulation of power. Every clan is given a chance to rule, and though are able to have a few political advantages, the state is always the priority." />
+    <string id="XPJ8PUDwT" text="Feudal societies can be seen as the midway between tribals and imperials. Although the ruling clan accumulates privileges, and often cannot be easily removed from the throne, lords and their rightful property need to be respected." />
+    <string id="q04GHWmdf" text="In elective monarchies, the ruler is chosen from the realm's dynasties, and rules until death or abdication. Elections take place and all dynasties are able to vote when a new leader is required." />
+    <string id="rKvNJYU2W" text="In hereditary monarchies, the monarch is always the ruling dynasty's leader. No election takes place, and the realm does not change leadership without extraordinary measures." />
+    <string id="XndpM8wsP" text="Imperial successions are completely dictated by the emperor/empress. They will choose from most competent members in their family, as well as other family leaders. Imperial succession values age, family prestigy, military and administration skills. No election takes place." />
+    <string id="xWxSPcSGz" text="Republican successions ensure the power is never concentrated. Each year, a new ruler is chosen from the realm's dynasties. The previous ruler is strickly forbidden to participate. Age, family prestige and administration skills are sought after in candidates." />
+    <string id="aUyrvD6vE" text="Elective Monarchy" />
+    <string id="bZm3UQ5Y6" text="Hereditary Monarchy" />
+    <string id="8iwkLraPh" text="Imperial" />
+    <string id="XjprWTKoa" text="Republican" />
+    <string id="TQSZNMNSc" text="Primogeniture favors blood family of eldest age. Clan members not related by blood are last resort." />
+    <string id="JQMA95LJo" text="Seniority favors those of more advanced age in the clan, regardless of blood connections." />
+    <string id="3WMWtvG9x" text="Ultimogeniture favors the youngest in the clan, as well as blood family. Clan members not related by blood are last resort." />
+    <string id="tdxvetcrc" text="Agnatic law favors males. Although females are not completely excluded, they will only be chosen in case a male candidate is not present." />
+    <string id="i7qn3UdS8" text="Cognatic law sees no distinction between both genders. Candidates are choosen stricly on their merits, as per the context requires." />
+    <string id="3f3n5YLQJ" text="Ard-Banrigh" />
+    <string id="eqxx7JFhN" text="{MALE}Ard-Rìgh{?}Queen{\\?}" />
+    <string id="My2gVaCBO" text="Banrigh" />
+    <string id="jbB8WhaKQ" text="{MALE}Rìgh{?}Queen{\\?}" />
+    <string id="XRvyOxBfV" text="Bantiarna" />
+    <string id="o4PPTwmWM" text="{MALE}Mormaer{?}Queen{\\?}" />
+    <string id="ifkjDk2iD" text="Thaoiseach" />
+    <string id="9vv1yZaKs" text="{MALE}Toisiche{?}Queen{\\?}" />
+    <string id="C35EdUu1i" text="Baintighearna" />
+    <string id="51kd5Odtk" text="{MALE}Tighearna{?}Queen{\\?}" />
+    <string id="D8zawY8G0" text="Principissa" />
+    <string id="orO4k108J" text="Princeps" />
+    <string id="EZ5YgaBPC" text="Regina" />
+    <string id="sfrxre1ik" text="{MALE}Rex{?}Queen{\\?}" />
+    <string id="zX2x995Qg" text="Ducissa" />
+    <string id="SwnyZgO3p" text="{MALE}Dux{?}Queen{\\?}" />
+    <string id="9M4pXbFF3" text="Cometessa" />
+    <string id="7PLTXBszq" text="{MALE}Conte{?}Queen{\\?}" />
+    <string id="5urp742Hm" text="Baronessa" />
+    <string id="qL42Z2oYE" text="{MALE}Baro{?}Queen{\\?}" />
+    <string id="0mzauvUJW" text="Domina" />
+    <string id="Cz9wE3M4F" text="{MALE}Dominus{?}Queen{\\?}" />
+    <string id="8vEBT7S8U" text="Sultana" />
+    <string id="ZbWZmBpfX" text="{MALE}Sultan{?}Queen{\\?}" />
+    <string id="JTRmQYA8b" text="Emira" />
+    <string id="thtR4Scku" text="{MALE}Emir{?}Queen{\\?}" />
+    <string id="yYpY9nKNp" text="Shaykah" />
+    <string id="eHffsCd3v" text="{MALE}Sheikh{?}Queen{\\?}" />
+    <string id="kucrgPsdy" text="Walia" />
+    <string id="WVFzNkbZ3" text="{MALE}Wali{?}Queen{\\?}" />
+    <string id="nfddL7y6R" text="Beghum" />
+    <string id="txZtjptTn" text="{MALE}Mawlaa{?}Queen{\\?}" />
+    <string id="JpE58pgp6" text="Khatun" />
+    <string id="UmcbVKWFF" text="{MALE}Khagan{?}Queen{\\?}" />
+    <string id="NdxMsUvsw" text="Bekhi" />
+    <string id="mRWo2kK3A" text="{MALE}Baghatur{?}Queen{\\?}" />
+    <string id="YgvUMoQ9k" text="Khanum" />
+    <string id="mVhuwikRk" text="{MALE}Khan{?}Queen{\\?}" />
+    <string id="bHEx2coZf" text="Begum" />
+    <string id="EMuCSF32G" text="{MALE}Bey{?}Queen{\\?}" />
+    <string id="WtTKP2xR5" text="Khatagtai" />
+    <string id="vb1WRXWs9" text="{MALE}Erxem{?}Queen{\\?}" />
+    <string id="e1tBGSibr" text="Velikaya Knyaginya" />
+    <string id="iCr1tHsRT" text="{MALE}Velikiy Knyaz{?}Queen{\\?}" />
+    <string id="2krXkYKFL" text="Knyaginya" />
+    <string id="MsoUEppqD" text="{MALE}Knyaz{?}Queen{\\?}" />
+    <string id="JjLDgcmD0" text="Boyarina" />
+    <string id="OeYk4vSQe" text="{MALE}Boyar{?}Queen{\\?}" />
+    <string id="8EaAGatc9" text="Voivodina" />
+    <string id="Y8cFpfiyW" text="{MALE}Voivode{?}Queen{\\?}" />
+    <string id="Ww1qiRLTn" text="Gospoda" />
+    <string id="7cL8ERJpf" text="{MALE}Gospodin{?}Queen{\\?}" />
+    <string id="8LFA3VbJj" text="Queen" />
+    <string id="1s9bRsAO4" text="{MALE}King{?}Queen{\\?}" />
+    <string id="ypSqGGsiK" text="Duchess" />
+    <string id="4TXN8HikT" text="{MALE}Duke{?}Duchess{\\?}" />
+    <string id="tMCPFWWnB" text="Countess" />
+    <string id="WyXtLCSSw" text="{MALE}Count{?}Countess{\\?}" />
+    <string id="638UOukwx" text="Baroness" />
+    <string id="Qoj5E2uVy" text="{MALE}Baron{?}Baroness{\\?}" />
+    <string id="Xn3y2epXX" text="Lady" />
+    <string id="a5y5NTYR5" text="{MALE}Lord{?}Lady{\\?}" />
+    <string id="rA4SxcmXp" text="Grand-Principality" />
+    <string id="1i1fNXLHW" text="Kingdom" />
+    <string id="pfH0BrGOU" text="High Kingship" />
+    <string id="YaazaXP3E" text="Empire" />
+    <string id="21C8qzkUA" text="Republic" />
+    <string id="wQgnGmFxn" text="Grand-Principality" />
+    <string id="ytshTPjXj" text="Principality" />
+    <string id="CPUPYxE1b" text="Boyardom" />
+    <string id="c4mdis4G3" text="Voivodeship" />
+    <string id="Kj5Rasgo1" text="Gospodin" />
+    <string id="7VVbW1DvK" text="Sultanate" />
+    <string id="7e5ekBawT" text="Emirate" />
+    <string id="bzZRqDhAX" text="Sheikhdom" />
+    <string id="GrpvacfJN" text="High-Kingdom" />
+    <string id="2Xxtcb6pA" text="Petty Kingdom" />
+    <string id="bztZ5WX7G" text="Kingdom" />
+    <string id="oBYDZ5mBP" text="Dukedom" />
+    <string id="kb7wOBMCL" text="County" />
+    <string id="tD5U0wfaj" text="Barony" />
+    <string id="E7wotXQhg" text="Lordship" />
+    <string id="bMrbo8moi" text="Adventurer" />
+    <string id="7bLM4BABP" text="A free spirit, you are roaming the continent without constraints, or a clear objective. The world is for the taking, will you take your share?" />
+    <string id="8XDLgmndb" text="Vanilla start. No troops, goods or any benefits." />
+    <string id="NPYapNF25" text="Indebted Lord" />
+    <string id="UNxOZNzzZ" text="After a series of inherited problems and bad decisions, you find yourself in debt. Thankfuly, you are a landed lord, with income from your Lordship. A food supply and a small retinue accompany you, though their loyalty will be tested by the lack of denars..." />
+    <string id="GF0LY2JDK" text="Start as a lord in a kingdom, with a Lordship title. No settlement income or influence for 5 years. The village you own can be managed by you, and you will receive it's income after 5 years. Gain Scholarship skill." />
+    <string id="He5GThJgM" text="Mercenary" />
+    <string id="nak9rLDtc" text="You serve as a free mercenary company, roaming around the continent in search of employment. After a long period of joblessness, you find your company in the verge of collapse, with little morale, food and finances." />
+    <string id="p0VSpQheL" text="Start with a mercenary band, in desperate need for plundering gold and food. Party morale reduced for 5 years. Mercenary lifestyle is kickstarted as part of your education." />
+    <string id="7PDXb8Xfk" text="Outlaw" />
+    <string id="dcQ2AWj4w" text="Lacking in morals, you assemble a party of like-minded brigands, making a living out stealing and plundering. Your efforts, however, have not gone unnoticed by the local authorities." />
+    <string id="i9BnuXOUF" text="Start with a outlaw band, in desperate need for plundering gold and food. Criminal rating does not reduce for 5 years. Outlaw lifestyle is kickstarted as part of your education." />
+    <string id="PVi2NG5PX" text="Robbed Caravaneer" />
+    <string id="jdjeCrp5U" text="Your caravan has been recently harassed by criminals - most of your belongings are lost, and certainly all your denars. A few goods, mules and wounded soldiers remain." />
+    <string id="apUuJ09nJ" text="Start with a wounded caravan, some food, mules and goods. Party speed is reduced by 5% for 5 years. Caravaneer lifestyle is kickstarted as part of your education." />
+    <string id="pPADwS4o0" text="You improved relations with {HERO} due to {PERK} lifestyle perk." />
+    <string id="aOJbWgo8f" text="Council Position Request" />
+    <string id="H0BUVC7W6" text="{REQUESTER} requests the position of {POSITION} in your council." />
+    <string id="NUQCvJLkC" text="Foreigners that refuse to assimilate will be gradually forced to leave the settlement" />
+    <string id="m6fd819DD" text="Ban foreigners" />
+    <string id="3z2T5fj5q" text="Extend exemptions to artisans and guilds, improving their output efficiency while decreasing state revenue." />
+    <string id="qXdSRnhaS" text="Encourage mercantilism" />
+    <string id="ABhczm4W2" text="Encourage able-bodied men to join the active militia force" />
+    <string id="HH00Tq9VZ" text="Encourage militia" />
+    <string id="Dq3RgbhhG" text="Exempt merchants from tariffs, reducing prices and attracting caravans" />
+    <string id="6ZQFiPsw8" text="Tariffs exemption" />
+    <string id="02eEW8Qy4" text="Slave caravans will be formed when the share of slave population is large enough" />
+    <string id="ncpKhJmD9" text="Allow slaves to be exported" />
+    <string id="souQEPG5Z" text="Food consumption reduced through enforced rationing. Decreases loyalty, with double effect if settlement is not besieged. Increases adm. costs." />
+    <string id="39aTviNAS" text="Enforce food rationing" />
+    <string id="asjP9OkMP" text="Send out small patrols to stop criminals. Patrols are cavalry-focused and require a at least 100 strong garrison" />
+    <string id="qU9utn3tc" text="Send out patrols" />
+    <string id="Yswjkp407" text="Send out a handful of horsemen to scout a large area around the settlement and report enemy movement activities" />
+    <string id="HoRHRFJth" text="Send out scouts" />
+    <string id="9RjeMs4Y5" text="Improve militia quality by subsidizing their equipment and training" />
+    <string id="ZgeEgsjGP" text="Subsidize the militia" />
+    <string id="amGheyKwk" text="Privately owned slaves' work will be taxed by the state, according to the tax policy, generating extra revenue. Slave owners will be dissatisfied." />
+    <string id="WWLnVhqLv" text="Tax private slaves" />
+    <string id="DKTY71nd0" text="You have failed to fulfill your duty of military assistance to {SUZERAIN}. As a result, your clan's renown has suffered, and your relationship with suzerain has changed by {RELATION}." />
+    <string id="v5UJcnqRj" text="{SUZERAIN} holds your duty of military aid fulfilled. You have gained {INFLUENCE} and {RELATION} relatin with your suzerain." />
+    <string id="DBbxhGNSp" text=" Your suzerain, {SUZERAIN}, has requested that you fulfill your contract obligations and pay him {RANSOM} gold in order to compensate their ransom. You have {REMAINING} days left to pay it." />
+    <string id="L4b39UMUG" text="The {NEW} has branched off from {ORIGINAL} due to inheritance laws." />
+    <string id="fdJ7bbgMi" text="{HEIR} has rightfully inherited the {TITLE}" />
+    <string id="N4ojeeR1x" text="{HEIR} has rightfully inherited the {TITLE}" />
+    <string id="PmHeB7871" text="Heavy Plough" />
+    <string id="J9piTKoxA" text="Heavy plough used for tougher terrain." />
+    <string id="txVpdy1KG" text="Increased farmland acreage output by 8%" />
+    <string id="nfhcb0XeC" text="3 Fields System" />
+    <string id="ShnEcAtwD" text="Crop rotation system using 3 separate types of crops simultaneously." />
+    <string id="O2y3JaRBu" text="Increased farmland acreage output by 25%" />
+    <string id="D3jwm4JY7" text="Public Works" />
+    <string id="F1UsdFZne" text="Focused efforts on public infrastructure by the state allow further development of new and existing buildings." />
+    <string id="acMjnHant" text="Expands Infrastructure limit in settlements by flat 3" />
+    <string id="zBWcSAwQJ" text="Cranes" />
+    <string id="8NNN2Oi9r" text="Mechanismis capable of vertically carrying high volumes or weight of material. Cranes significantly increase production output by adding productivity to construction sites and trade hubs." />
+    <string id="DTmx6ZTG9" text="Improves construction projects speed (12%)\nIncreases production efficiency (6%)" />
+    <string id="Z7wSWSZwH" text="Wheelbarrow" />
+    <string id="NFN5urR9u" text="The wheelbarrow is a goods transporting tool that allows a person to carry bigger weights with less efforts. It can be applied in a variety of situations, such as carrying ore out of mines, building material to constructions and grain sacks out of farms." />
+    <string id="nVLsSHBe5" text="Increases production efficiency (6%)" />
+    <string id="P47Xh3ZEG" text="Blast Furnace" />
+    <string id="REhmQ57jQ" text="Blast furnaces efficiently transform iron ore into cast iron. This flexibe alloy can be easily shaped into different forms and products, thus making the furnaces an essential industrial appliance." />
+    <string id="Q35dbxfrE" text="Increases production efficiency (15%)" />
+    <string id="BxNOkxkbc" text="The {CLAN} has assumed the role of cultural head of the {CULTURE} culture." />
+    <string id="k2zWZPS4E" text="The {CULTURE} is now fascinated by the {FASCINATION} innovation." />
+    <string id="r7dh1jrax" text="Heart's Desire{@Plural}collection of Heart's Desire books{\\@}" />
+    <string id="Lkp9aXKDp" text="Parangelmata Poliorcetica{@Plural}collection of Parangelmata Poliorcetica books{\\@}" />
+    <string id="Vx9Kqs5EL" text="Strategikon{@Plural}collection of Strategikon books{\\@}" />
+    <string id="H7XrvO5ZD" text="De Re Militari{@Plural}collection of De Re Militari books{\\@}" />
+    <string id="ksLjrsmpA" text="A Treatise on the Value of Things{@Plural}collection of A Treatise on the Value of Things books{\\@}" />
+    <string id="bChggsgwT" text="The Green Knight{@Plural}collection of The Green Knight books{\\@}" />
+    <string id="amcuBmdKq" text="Dictionarium Calradium{@Plural}collection of Dictionarium Calradium books{\\@}" />
+    <string id="LAOYchKd4" text="Royal Armouries Ms. I.33{@Plural}collection of Royal Armouries Ms. I.33{\\@}" />
+    <string id="s8HtsWAvr" text="Rìghfénnid{@Plural}collection of Rìghfénnid{\\@}" />
+    <string id="DJFaafhn5" text="Origin and Mechanics of the Crossbow{@Plural}collection of Origin and Mechanics of the Crossbow{\\@}" />
+    <string id="bbkMsy5Hb" text="The History of Calradian Archery{@Plural}collection of The History of Calradian Archery{\\@}" />
+    <string id="1i9Lt5yPZ" text="Lycaron debate of 1074{@Plural}collection of Lycaron debate of 1074y{\\@}" />
+    <string id="LuQAyjE2B" text="Privileged Knighthood" />
+    <string id="wUUbvSw96" text="Knights of cultures different to the kingdom's culture will no longer be accepted. Knights with demesne of kingdom culture will recieve a special tithe, helping them sustein their retinues." />
+    <string id="MBRYyABeX" text="restricting knighthood to only their cultural peers" />
+    <string id="a4SR8w3aM" text="Cultural restriction for knighthood\nKnight rank lords recieve 10% extra income" />
+    <string id="LanvuuaPr" text="Limited Army Privilege" />
+    <string id="SdxwaOw2m" text="Armies can no longer be gathered by lords of rank lower than Duke." />
+    <string id="VHv9WFBwg" text="restricting knighthood to only their cultural peers" />
+    <string id="TNdBoZn17" text="Only lords with Duke title or higher may create armies\nArmy influence costs increased by 30%\nLords in army but not leading it receive 50% more influence" />
+    <string id="RqSNJEnKF" text="Choose the next Grand-Prince of the {KINGDOM_NAME} Republic" />
+    <string id="2bxVWueJ1" text="{KINGDOM_NAME} Republic will decide who will be elected Grand-Prince. You can pick your stance regarding this decision." />
+    <string id="GfMRjz6pH" text="Choose the next Grand-Prince of the {KINGDOM_NAME} Republic" />
+    <string id="Ra690zbYp" text="{HERO} has formed a {GUILD} at {TOWN}." />
+    <string id="XVQFcepOk" text="Wisdom" />
+    <string id="m4TqTn0ZO" text="Wisdom represents your world knowledge and competence to deal with skills that require deep learning." />
+    <string id="rCtxs7b0i" text="WIS" />
+    <string id="SyxcgUmHR" text="Highlander" />
+    <string id="g6UGX5swK" text="Increases your movement speed by 5%." />
+    <string id="8giGzQM2A" text="Increases your swing speed with two handed swords by 6%." />
+    <string id="LmfxeCZEG" text="Ranger" />
+    <string id="w8QDayPU7" text="Fénnid" />
+    <string id="AFY4Smeqp" text="Civil Engineer" />
+    <string id="XzTUWADbz" text="Settlements have an additional catapult during siege start." />
+    <string id="59zH6CNPP" text="Workforce yields 20% extra construction." />
+    <string id="atDpd05Rk" text="Cultivator" />
+    <string id="BbFz0Tx8W" text="Agricultural yield increases by flat 5%." />
+    <string id="sYXrv36qH" text="Village hearth growth increases by 1." />
+    <string id="YcALGhv8W" text="Overseer" />
+    <string id="Q9nWCGQf5" text="Stability increases by flat 5%." />
+    <string id="PwEg49thv" text="Increases infrastructure limit by flat 5." />
+    <string id="BioWWK37U" text="Manufacturer" />
+    <string id="7ZViBDVTU" text="Production efficiency increases by flat 15%." />
+    <string id="nh3jnd5XU" text="Production quality increases by flat 10%." />
+    <string id="odfv8Bx4T" text="Siege Engineer" />
+    <string id="CvJgHC3rt" text="Get a pre-built ballista as attacker during siege." />
+    <string id="E72oq1z3n" text="Damage to walls increased by 10% during siege." />
+    <string id="TnehDejQx" text="Siege Planner" />
+    <string id="udruL0HX2" text="Ranged infantry deals 15% more damage in siege simulations." />
+    <string id="gsOu28O4Q" text="Siege Overseer" />
+    <string id="uUb12bibk" text="Army consumes 15% less food during sieges, either attacking or defending." />
+    <string id="h6Ws4T3kV" text="Commander" />
+    <string id="JMKCo3cjM" text="Increases party morale by flat 3%." />
+    <string id="YynbSvPKz" text="De Facto" />
+    <string id="9tshRWE3a" text="Settlement autonomy reduced by flat 3%." />
+    <string id="Rz64W6oeD" text="Randomly receive positive relations with a councillour." />
+    <string id="vOv87Tw7c" text="De Jure" />
+    <string id="kDF2Gcert" text="Demesne limit increased by 1." />
+    <string id="bsXDkMAxc" text="Title actions cost / yield 5% less / more denarii and influence." />
+    <string id="mXnVLXkyy" text="King of Kings" />
+    <string id="3xWddTqdE" text="If king level or higher, increase vassal limit by 2." />
+    <string id="DPaSfJUc4" text="If king level or higher, increase unlanded demesne limit by 1." />
+    <string id="EmKySNhOE" text="Equites" />
+    <string id="0YmQtRtMN" text="You and troops in your formation deal 10% more charge damage." />
+    <string id="mSUSZbfCx" text="Mounted troops cost 10% less denarii maintenance." />
+    <string id="GjN7O2A3z" text="Adaptive Tactics" />
+    <string id="7zx8NwYzn" text="Increased damage on horseback with polearms, sidearms and bows by 5%." />
+    <string id="6yvwCjcc9" text="You and troops in your formation have 8% more maneuvering." />
+    <string id="c3TJUbt30" text="Klibanophori" />
+    <string id="BM99G325L" text="You and troops in your formation receive 5% less damange when mounted." />
+    <string id="saXYrRwvK" text="You and troops in your formation deal 6% extra thrust damage when mounted." />
+    <string id="RBXxXBV15" text="Strider" />
+    <string id="ezJJQC5bP" text="Increases your movement speed by 3%." />
+    <string id="MiUi6jTfD" text="Dealer" />
+    <string id="NKtHM0LhQ" text="Caravan wages are reduced by 10%." />
+    <string id="9ZnBTNQvy" text="Your caravans move 4% faster during daytime." />
+    <string id="mT2VVeJWB" text="Outside Connections" />
+    <string id="wn36vMWRU" text="Your caravans have 5% less trade penalty." />
+    <string id="HGEm5BhEo" text="Randomly gain relations with merchants where your caravans trade." />
+    <string id="ZJynNfQHK" text="Smith" />
+    <string id="g67sLH0Lk" text="Crafting items costs 10% less energy." />
+    <string id="YTB05w130" text="Smithy hourly cost is 15% cheaper." />
+    <string id="0uVwKQmcX" text="Craftsman" />
+    <string id="LbD4LncTf" text="Your workshops have 5% increase in production quality." />
+    <string id="0kZJB9Pa1" text="You are 5% more likely to craft an item with a better modifier." />
+    <string id="MEs5gCBwY" text="Entrepeneur" />
+    <string id="Bksqbm0y6" text="Increased settlement production efficiency by flat 10%." />
+    <string id="BANNq8FVY" text="You pay 20% less workshop taxes to other clans. Your settlements tax others' workshops 20% more." />
+    <string id="9tvFkTh8s" text="Kidnapper" />
+    <string id="E840tc3LB" text="30% better deals reansoming lords." />
+    <string id="Xi37N2dKR" text="Decreases the duration of the disorganized state after breaking sieges and raids by 30%." />
+    <string id="AmthMSNya" text="Infamous Plunderer" />
+    <string id="0fVd4o6qF" text="Bandit troops in your party yield influence." />
+    <string id="am3BTwVdZ" text="Raiding villages is 15% faster." />
+    <string id="eETgF4Kup" text="Night Predator" />
+    <string id="4OiWn804q" text="Your party is 50% harder to spot in forests." />
+    <string id="whemtV9b7" text="Increased nighttime movement by 6%." />
+    <string id="LOisc87jo" text="Underworld King" />
+    <string id="84khPVOWN" text="Killing bandit leaders yields renown." />
+    <string id="Km1a1yk4x" text="Local Connections" />
+    <string id="SPmqMtXFm" text="While serving as mercenary, gain the ability to recruit from local minor factions in towns." />
+    <string id="Jsdqev9kg" text="Recruiting mercenary troops is 10% cheaper." />
+    <string id="hDJifk2sW" text="Ransacker" />
+    <string id="40Uo0NaMt" text="Gain 10% more share of loot in victories." />
+    <string id="WwPpPzx9X" text="Raiding villages is 15% faster." />
+    <string id="TUiQH0LR9" text="Famous Sellswords" />
+    <string id="Uv4u5YSuz" text="Influence award for army participation increased by 30%." />
+    <string id="9x9E6jz9M" text="Renown award for victories increased by 20%." />
+    <string id="ABUEciXfg" text="Traditionalist" />
+    <string id="sVZtA7tkR" text="Piety gain is increased by +0.2 daily." />
+    <string id="iJmi1BFUY" text="Religious notables' volunteers may be recruited." />
+    <string id="sqPR9MNjE" text="Traditionalist" />
+    <string id="HN3SNjroM" text="Blessings last a season longer." />
+    <string id="hGwb700vw" text="Blessings cost 10% less piety." />
+    <string id="78C8fhLqX" text="Traditionalist" />
+    <string id="ByyzxQgQK" text="Children receive 1 extra Wisdom when becoming adults." />
+    <string id="PD0aikPE6" text="Daily experience points in Theology for companions and family in party." />
+    <string id="BCB7zsCiR" text="Preacher" />
+    <string id="W7fb4LkTB" text="Settlement religious tensions reduced by X%." />
+    <string id="mDpouKCLs" text="Settlement conversion speed increased by X%." />
+    <string id="TB8VEDLwh" text="Rites Of Passage" />
+    <string id="56aY06Gkv" text="Rites can be performed again 1 season sooner." />
+    <string id="xou7m8uqu" text="Rites yield 5 renown." />
+    <string id="nN2f5hXEU" text="Preacher" />
+    <string id="HzLaZqvnn" text="Randomly receive relations with religious notables in your settlements." />
+    <string id="HpUCbRvHh" text="Some unspecified settlement impact" />
+    <string id="HXR0Qqv1P" text="Traditionalist" />
+    <string id="jXtLbQE2X" text="Increased cultural assimilation speed by 10%" />
+    <string id="y0B33O3D6" text="Increased militarism in assimilated settlements by flat 1%" />
+    <string id="8g5Xubjyg" text="Adaptive" />
+    <string id="zaDs3Vz6T" text="Reduced loyalty bonus from different cultures by 15%" />
+    <string id="0H7pcJYU7" text="Increased settlement stability target by flat 2%" />
+    <string id="gpARfshnZ" text="Accolade" />
+    <string id="VYeijUMJw" text="Knighting requires 15% less influence" />
+    <string id="rSMPLAUnt" text="Vassal limit increased by 1" />
+    <string id="QmaeSg2DK" text="Manor Lord" />
+    <string id="QWUjb0Neb" text="Villages weigh 20% less in demesne limit" />
+    <string id="RdfkJhJ1a" text="Manors provide extra flat 0.2 influence" />
+    <string id="Pw34LOD5J" text="Military Administration" />
+    <string id="7SnQyKGg3" text="Increased settlement militarism in settlements by flat 2%" />
+    <string id="yFA09ztz5" text="Increased settlement drafting speed by 20%" />
+    <string id="ugc2Tz2BN" text="Economic Administration" />
+    <string id="CbBqK3bCw" text="Increased settlement production efficiency by 10%" />
+    <string id="C3J5BiQ5N" text="Increased settlement production quality by 5%" />
+    <string id="A2MVeC5Gs" text="Claimant" />
+    <string id="j9zyRWY7q" text="Claims are built 30% faster" />
+    <string id="jjOXOgDia" text="Hostile actions (claim, usurp &amp; revoke) are 5% cheaper" />
+    <string id="hXYX0xCW0" text="Patron" />
+    <string id="Xh8ihJX4x" text="Grating titles yields renown" />
+    <string id="4RaSnROBf" text="Amicable actions (grant, negotiate) yield more positive relation" />
+    <string id="DYEEVpJpu" text="Literate" />
+    <string id="NF7ikGWzg" text="Allows reading books" />
+    <string id="9U26d4M1p" text="Avid Learner" />
+    <string id="ogopcQsdu" text="Increase language learning rate" />
+    <string id="yJau1uh6g" text="Language limit is increased by 1" />
+    <string id="pbwfT66CK" text="Tutor" />
+    <string id="m68qKhKuK" text="Additional attribute point to clan children coming of age." />
+    <string id="VJDDcCVBF" text="Extra experience gain for companions and family members in party" />
+    <string id="n1Kc7NcMa" text="Well Read" />
+    <string id="knQGc0hcJ" text="Increased reading rates for books" />
+    <string id="h0NEadGTz" text="Cultural fascination progresses faster" />
+    <string id="Vvqkv7BhQ" text="Mechanic" />
+    <string id="SgjU4Q9o6" text="Engineering skill tree yields both perks rather than 1" />
+    <string id="9i2oTAOyS" text="Accountant" />
+    <string id="oxToBwQ86" text="Stewardship skill tree yields both perks rather than 1" />
+    <string id="Y2DZjMomD" text="Teacher" />
+    <string id="rGwU7ciW7" text="Additional focus points to children coming of age" />
+    <string id="xAJsjyzkF" text="Book Worm" />
+    <string id="AG0FZygic" text="Increased reading rates for books" />
+    <string id="uxfY3f7qd" text="Language limit is increased by 1" />
+    <string id="SkrVBRzEf" text="Peer Review" />
+    <string id="UGLd4s1Pk" text="Clan settlements yield more research points" />
+    <string id="1zcN55q46" text="Books yield double skill experience" />
+    <string id="zkFKWEHuW" text="Bed Time Story" />
+    <string id="DXgAVx9bt" text="Daily experience points in random skill for companions and family in party" />
+    <string id="U8G533LVC" text="Treasurer" />
+    <string id="1hR0qbYpu" text="Trade skill tree yields both perks rather than 1" />
+    <string id="sMedFogWR" text="Natural Scientist" />
+    <string id="YRJ0KERhw" text="Medicine skill tree yields both perks rather than 1" />
+    <string id="24xUbc8UD" text="Polyglot" />
+    <string id="CN1dmjFgV" text="Language limit is increased by 2" />
+    <string id="hTi3ZH6yh" text="Language learning is significantly increased" />
+    <string id="9GmF3whV6" text="Magnum Opus" />
+    <string id="sJtkAW4xJ" text="+0.2% experience gain for every skill point in Scholarship above 230" />
+    <string id="HMBPboE2H" text="Focus points add 50% more learning limit" />
+    <string id="pxbeEwdqN" text="Scholarship" />
+    <string id="3HyMVqCVy" text="Reading and writting competence as well as knowledge over literary and legal matters." />
+    <string id="TYLhULUNv" text="Theology" />
+    <string id="sRDPvvqJ6" text="Understanding over spiritual matters. Normally reserved for preachers and the most pious faithful." />
+    <string id="6dScCi5zf" text="Lordship" />
+    <string id="tFtBiXvPn" text="Ability to deal with legal administration of titles and feudal contracts." />
+    <string id="vZkoNOk7V" text="{TITLE} of {NAME}" />
+    <string id="pvxmJkvzW" text="You now have a claim on the {TITLE}" />
+    <string id="mk2vLQ7b7" text="{TITLE} has drifted into a legal part of {SOVEREIGN}" />
+    <string id="34AxHV7zH" text="Active decisions" />
+    <string id="rQh62TAT5" text="Legal crown council." />
+    <string id="j2FLu3cno" text="No kingdom." />
+    <string id="nkHdCsXns" text="Not the ruling clan." />
+    <string id="ZCD2tYSAe" text="Does not hold faction's sovereign title." />
+    <string id="n2DoMK7ZN" text="Not part of the council." />
+    <string id="nfCe9TJp4" text="Not a valid candidate." />
+    <string id="WJoeq0Wzj" text="Not enough influence." />
+    <string id="GYMG70JJv" text="Not trustworthy enough for this position." />
+    <string id="kpcfHhxZs" text="Not competent enough for this position." />
+    <string id="aQGUJPput" text="Not a better candidate than current councillor." />
+    <string id="ovurSQF5y" text="Action can be taken." />
+    <string id="HMtFB6dX6" text="No position to be relinquished." />
+    <string id="zt7RXOZ3x" text="Not current councilman of the position." />
+    <string id="TQEdFOHu2" text="Action can be taken." />
+    <string id="K70QO9FJ3" text="Already part of the council." />
+    <string id="xN8Po9ZAn" text="Not a valid candidate." />
+    <string id="TncERNuhE" text="Not enough influence." />
+    <string id="seiaMF76n" text="Not trustworthy enough for this position." />
+    <string id="zvyoT7mPa" text="Not competent enough for this position." />
+    <string id="dVrJOkzHe" text="Not a better candidate than current councillor." />
+    <string id="JGn5ecHrP" text="Action can be taken." />
+    <string id="FZdOgVHzi" text="Instructor fluency" />
+    <string id="nz1AtfeqS" text="Intelligibility with {LANGUAGE}" />
+    <string id="qbS9pSSvq" text="Over languages limit" />
+    <string id="JGfOX9yp4" text="{LANGUAGE} fluency" />
+    <string id="GH8NgnUpO" text="Nobles" />
+    <string id="qNswf7mof" text="Craftsmen" />
+    <string id="gD1q51byY" text="Stability" />
+    <string id="xLTttaJ84" text="Notable governor" />
+    <string id="Df9K7M38o" text="Notable support" />
+    <string id="PVvFR2Ey7" text="Demesne over limit by {POINTS}" />
+    <string id="HmQUhEPxD" text="Government" />
+    <string id="JtYFBrLyk" text="{TITLE}" />
+    <string id="7hOZusCKZ" text="{SETTLEMENT}{DEJURE}" />
+    <string id="bKjdOXAsH" text="Highest title level" />
+    <string id="RwX8MiJpm" text="No kingdom." />
+    <string id="pz44kwhqC" text="Faction sovereign title already exists." />
+    <string id="KHf2PvxuU" text="Not leader of current faction." />
+    <string id="2h0CSOaML" text="Cannot found a kingdom while already being a de Jure sovereign." />
+    <string id="20QwBsgnF" text="Cannot found a kingdom without a de Jure duke level title." />
+    <string id="NTnP66f5z" text="Cannot found a kingdom for a faction with less than 3 clans." />
+    <string id="q7D5k8V0e" text="You lack the required resources." />
+    <string id="4c7cBM9zt" text="Kingdom can be founded." />
+    <string id="AmQtgSeQH" text="Already legal owner." />
+    <string id="5VfjxXnQR" text="Not a possible claimant." />
+    <string id="Thjj4J6qn" text="Already building a claim." />
+    <string id="FURpSKNCn" text="Already a claimant." />
+    <string id="v0HW67BeB" text="Owner is in same clan." />
+    <string id="bAAdLvhYP" text="Not possible to claim a knight's lordship within your faction." />
+    <string id="fEqXDngVP" text="Not possible to claim lordships without owning it's suzerain title." />
+    <string id="24N4Z3wMC" text="Missing required resources." />
+    <string id="MjrvegheE" text="You may claim this title." />
+    <string id="JhLZNmnax" text="Already legal owner." />
+    <string id="BWaBN5oOY" text="Can not revoke a title of a lord outside your realm." />
+    <string id="8tHETzZKL" text="Tribal government does not allow revoking." />
+    <string id="Usa6CFdsh" text="Republics can only revoke duke titles." />
+    <string id="bGRZMGi62" text="Not de Jure faction leader." />
+    <string id="HU4bapYgk" text="Not de Jure faction leader." />
+    <string id="eBietHUeW" text="Not a direct vassal." />
+    <string id="igNEJ5VtF" text="Can not revoke from a lord of superior hierarchy." />
+    <string id="fWMU4FMZY" text="You may grant away this title." />
+    <string id="mb4SbRU7F" text="Not legal owner." />
+    <string id="ZUAdvrCDF" text="Not actual owner of landed title." />
+    <string id="orvzCATAH" text="No valid candidates in kingdom." />
+    <string id="17KsrPnYq" text="Not possible to grant one's main title." />
+    <string id="3JrKUg2ar" text="You may grant away this title." />
+    <string id="9278dmN32" text="Already legal owner." />
+    <string id="yYt4BDfmf" text="No clan." />
+    <string id="CBbpfb2xK" text="You may claim this title." />
+    <string id="M4FRPS10R" text="Clan tier is insufficient." />
+    <string id="x1YzAEaqk" text="Missing required resources." />
+    <string id="H2yV5pJLB" text="Must be faction leader to usurp highest title in hierarchy." />
+    <string id="hKA34HfPf" text="No rightful claim." />
+    <string id="DbBYLiwK9" text="Taxes from {WORKSHOP} at {TOWN}" />
+    <string id="iiMjx5tEE" text="Aid from {NOTABLE}" />
+    <string id="yKHDvUvGb" text="Taxes from {CLAN}" />
+    <string id="Xukv26vsU" text="Army compensation rights" />
+    <string id="FWgM0kaSx" text="Councillor role" />
+    <string id="FxKXM2Mp3" text="Lifestyle" />
+    <string id="e0R6K7zso" text="{WORKSHOP} taxes to {CLAN}" />
+    <string id="iovzuvd8L" text="Council wage to {NAME}" />
+    <string id="FZcrAJHVq" text="Taxes to {SUZERAIN}" />
+    <string id="dD8VVgUzf" text="Total population" />
+    <string id="EeshX3sYm" text="Workforce" />
+    <string id="5mtYtHYRq" text="Encourage mercantilism decision" />
+    <string id="kjTQyOx1d" text="Government" />
+    <string id="s6wJNcvkk" text="Mercantilism" />
+    <string id="9CboXYMEm" text="Mecantilism" />
+    <string id="U1KfzcWbC" text="Caravan attraction" />
+    <string id="q9kDqwk7i" text="Mercantilism" />
+    <string id="5hJbbdVxs" text="Militarism" />
+    <string id="F0JqRDN4b" text="Population Consumption" />
+    <string id="Ys1tMA5fV" text="Population Production" />
+    <string id="1RD3kgTtZ" text="Market consumption" />
+    <string id="Vsb5sGzpZ" text="Enforce rations decision" />
+    <string id="ssLAv6XEn" text="Castle rations" />
+    <string id="Cogcd6OQU" text="Farmlands" />
+    <string id="pDydLnM9W" text="Pasturelands" />
+    <string id="wQQNDjQwj" text="Woodlands" />
+    <string id="AJxfsTmCx" text="Fertility" />
+    <string id="14ntsfokt" text="Workforce Saturation" />
+    <string id="MALabSJ8E" text="Garrison policy" />
+    <string id="G0QQG8cMU" text="Garrison policy" />
+    <string id="2H5qDVimM" text="Aid from {NOTABLE}" />
+    <string id="i5bHxH7P1" text="Councillor role" />
+    <string id="QnNqcmKHy" text="Overall notable support" />
+    <string id="kq94QoxpX" text="Overall settlement autonomy" />
+    <string id="OzcFCPtxM" text="Manor" />
+    <string id="ocNjHYuQv" text="Criminal policy" />
+    <string id="hwurqvWcH" text="Criminal policy" />
+    <string id="Hnt4adRvD" text="Enforce rations decision" />
+    <string id="Dv33NJSoc" text="Government" />
+    <string id="tXOiosVEc" text="Total population" />
+    <string id="zxy7JAKzw" text="Castle" />
+    <string id="6c2KP1HQh" text="Village" />
+    <string id="2zNG22WEM" text="Town" />
+    <string id="Edn3Lz5Et" text="Subsidize militia" />
+    <string id="KxSfRTu3f" text="Government" />
+    <string id="v1HGumeCm" text="Government" />
+    <string id="Ux6CfC18c" text="{CLASS} output" />
+    <string id="MvYCGPuXC" text="{CLASS} output" />
+    <string id="UrP0Xch5t" text="{CLASS} output" />
+    <string id="nr3OwuB8n" text="{CLASS} output" />
+    <string id="EqO5LYVYi" text="Legitimiacy" />
+    <string id="HzQA8YxEH" text="Autonomy" />
+    <string id="BJDHmuNjg" text="Draft policy" />
+    <string id="n6z9CGW2R" text="Draft policy" />
+    <string id="HmPgWbF65" text="Government" />
+    <string id="dkdquAsU7" text="Stats" />
+    <string id="PMXK9qapg" text="Criminal" />
+    <string id="7R7vR2mwW" text="Competence:" />
+    <string id="6nXbqjuQA" text="Select Councillor" />
+    <string id="EYqqs8VXM" text="Select who you would like to fill this position." />
+    <string id="7AF2gU6DN" text="Courtiers" />
+    <string id="hr7nUdnWL" text="Effects" />
+    <string id="00LUMM4mP" text="Crown council:" />
+    <string id="twWuwjmFG" text="Court Religion:" />
+    <string id="rvArvAJON" text="This council's owner's faith. Candidates for religious positions must adhere to the same faith. Other council positions may be affected by the faith's doctrines." />
+    <string id="ohKOT99rs" text="Court Language:" />
+    <string id="4Ab2cMoQB" text="This council's owner's language. Courtiers that do not speak the language may feel alienated." />
+    <string id="0XwNvTJeD" text="Council Position:" />
+    <string id="7Nw1vx421" text="{LANGUAGE} ({COMPETENCE})," />
+    <string id="konzDRaME" text="Languages:" />
+    <string id="tzLVvPM20" text="{POSITION_NAME} {HERO}" />
+    <string id="rmdEOPi9i" text="{GOLD} denarii" />
+    <string id="uWjPZWGDX" text="Stamina" />
+    <string id="JH6eyQMDK" text="Material" />
+    <string id="OOqmRvGKc" text="Armor" />
+    <string id="aFNo6MUaF" text="Stamina" />
+    <string id="TMZS1hH97" text="Botching Chance" />
+    <string id="LxXwRJXD0" text="Materials" />
+    <string id="aSrZzu7VY" text="Culture Head" />
+    <string id="TixWopCKS" text="Fascination" />
+    <string id="aydQp6Qdv" text="Population:" />
+    <string id="VjxJnpEdF" text="Language:" />
+    <string id="sdwhoHMCo" text="Settlements:" />
+    <string id="xGy5yb3Rn" text="Cultural Head:" />
+    <string id="sMSD8J539" text="Cultural Fascination:" />
+    <string id="ZBrzefyV4" text="Research (Daily):" />
+    <string id="2M00pLaAc" text="{CURRENT}/{REQUIRED} ({PERCENTAGE})" />
+    <string id="dm6zFqFwb" text="Culture Head" />
+    <string id="YuXtJJD0w" text="Assume the position of culture head." />
+    <string id="rpfTD346k" text="Choose Fascination" />
+    <string id="k93BFBGqu" text="The cultural fascination is an innovation that progresses faster than others." />
+    <string id="8Ja4jxuNT" text="Languages" />
+    <string id="fXYWevGcr" text="Known Languages" />
+    <string id="WYjgVbxHr" text="Current Language" />
+    <string id="1m0CNOaQq" text="Choose Language" />
+    <string id="EJ7mK3h2c" text="Books" />
+    <string id="t193j3sfR" text="Current Book" />
+    <string id="RCP7EnsYz" text="Choose Book" />
+    <string id="Oh2z1qtN2" text="Books Read" />
+    <string id="bULfPDjc8" text="Lifestyle" />
+    <string id="XjBjscHuV" text="Choose Lifestyle" />
+    <string id="yfaQyY7No" text="Invest Focus" />
+    <string id="XtAgbiWSE" text="No books read yet" />
+    <string id="hS2cA4KgO" text="Books need to be in your inventory or the current settlement's Stash in order to be readable. To start reading you need to be literate and either have a dictionary or have a minimum understanding of it's language." />
+    <string id="e7qhSBp3q" text="Not currently reading any book" />
+    <string id="dKRr8GUhB" text="Books need to be in your inventory or the current settlement's Stash in order to be readable. To start reading you need to be literate and either have a dictionary or have a minimum understanding of it's language." />
+    <string id="vYgo14CXb" text="Name:" />
+    <string id="ZPzS13j17" text="Progress:" />
+    <string id="EMTNp8Ga5" text="How close you are to finishing the book." />
+    <string id="kM0PrPJLs" text="Reading rate:" />
+    <string id="TnozbQxCO" text="Language:" />
+    <string id="3pkpBAKVg" text="Not currently learning any language" />
+    <string id="diZwJBKAG" text="Languages may be taught by your courtiers that have a good fluency, so long they understand it more than you. Languages can be actively studied on the settlement the courtier is located at." />
+    <string id="o34vki93K" text="Name:" />
+    <string id="Fv73JPkvv" text="Fluency:" />
+    <string id="u21CPnk9a" text="How close you are to speaking the language effortlessly." />
+    <string id="weyQ69J6O" text="Learning Rate:" />
+    <string id="qZFD731St" text="Instructor:" />
+    <string id="5eTGHroO8" text="None (in a mobile party)" />
+    <string id="iNqTXfAFz" text="Instructor Location:" />
+    <string id="OreQVhwV8" text="Active learning can be done at the instructor's location." />
+    <string id="ZqreM1gJo" text="Languages limit:" />
+    <string id="kZ6hDKG07" text="No lifestyle currently adopted" />
+    <string id="K6SpwQkXt" text="Languages may be taught by your courtiers that have a good fluency, so long they understand it more than you. Languages can be actively studied on the settlement the courtier is located at." />
+    <string id="RptzRbHvV" text="Lifestyle:" />
+    <string id="1jMAf7P4G" text="Necessary skill:" />
+    <string id="mS52hNm9z" text="Necessary skill amount in either lifestyle skill to enable next focus investment and perk unlock." />
+    <string id="AT6t2FmCi" text="Invested focus:" />
+    <string id="hV0NpsRgA" text="Progress:" />
+    <string id="rwvqh1U6U" text="Current progress in this stage. Once progress hits 100% and you have the necessary skill threshold, you can invest your next focus point in exchange for the next lifestyle perk." />
+    <string id="yEyEDX5UD" text="First skill:" />
+    <string id="s2PwmRUMT" text="Second skill:" />
+    <string id="O8XpoqbVk" text="None" />
+    <string id="7GzfQ8rdD" text="None (in a mobile party)" />
+    <string id="84x4hBTME" text="Choose Language" />
+    <string id="XTmdqNwEF" text="Select a language you would like to learn. Learning a language requires an instructor from your court, and different people have different teaching skills. A courtier must have a good opinion of you in order to be available. Learning languages is easier when they are intelligible with your native language." />
+    <string id="qx2Wy94T2" text="{HERO} is now learning {LANGUAGE} from {INSTRUCTOR}." />
+    <string id="GKvLuWMia" text="{HERO} stopped learning any languages." />
+    <string id="rA5woqTX8" text="None" />
+    <string id="SZA22LjRx" text="Choose Book" />
+    <string id="6oc6CyWzj" text="Select what book you would like to read. Options may be disabled due to language barrier, or lack of Literate perk." />
+    <string id="ZgOF3H4er" text="{HERO} is now reading {BOOK}." />
+    <string id="uVjOPtyhE" text="{HERO} stopped reading any books." />
+    <string id="mMQyUK7cO" text="None" />
+    <string id="HeexUvOEo" text="Choose Lifestyle" />
+    <string id="gxtOBF8Lj" text="Select a lifestyle you would like to adopt. Picking a lifestyle will undo the progress of the lifestyle you are currently learning, if any. Each lifestyle is based on 2 skills, and you need at least 150 profficiency in each skill to adopt it." />
+    <string id="eTWMfjLet" text="{HERO} has adopted the {LIFESTYLE} lifestyle." />
+    <string id="QANYXKYsD" text="{HERO} is not following any lifestyle." />
+    <string id="cQPZEp59m" text="Education" />
+    <string id="230qKYv05" text="Decisions" />
+    <string id="Ah7YsbcNL" text="Faith" />
+    <string id="gUtLh7O6r" text="Decisions" />
+    <string id="8L5J65vJj" text="Choose a personal decision to take." />
+    <string id="jTKynOpXn" text="Court" />
+    <string id="Semaht7s5" text="Craft" />
+    <string id="danTb81yE" text="Hours spent for all actions: {HOURS} hours." />
+    <string id="SbeXGWdB2" text="{HERO} has botched {ITEM}!" />
+    <string id="oQp6oibfy" text=" with {QUALITY} quality" />
+    <string id="ON1hRf1W9" text="{HERO} has crafted {ITEM}{QUALITY}." />
+    <string id="tx34tm6e3" text="Knights" />
+    <string id="xLgXrJvVc" text="Companions" />
+    <string id="kQCHqp5VJ" text="Council" />
+    <string id="sYkikyYdv" text="Faith:" />
+    <string id="DsYknEVdF" text="Owned Caravans:" />
+    <string id="UMo8nVEJR" text="Owned Workshops:" />
+    <string id="husNdhmRu" text="Title Level:" />
+    <string id="nq0L3PVSv" text="Income:" />
+    <string id="RnG674Ob6" text="Expenses:" />
+    <string id="PVDbTVMb5" text="Crown Demesne" />
+    <string id="RAwO0jVtr" text="Court" />
+    <string id="sqdUFvQxB" text="Demesne limit describes how many settlements you may own without negative implications. Different settlement types have different weights, villages being the lowest, towns being the highest. Being over the limit reduces stability across all your settlements. Owning a settlement's title will reduce it's weight." />
+    <string id="MVPK4iq2X" text="Unlanded demesne limit describes how many unlanded titles you may own. Unlanded titles are titles such as dukedoms and kingdoms - titles not directly associated with a settlement. Dukedoms have the lowest weight while empires have the biggest. Being over the limit progressively reduces relations with your vassals." />
+    <string id="eDKX36XXL" text="Vassal limit is how many vassals you may have without negative consequences. Vassals are clans whose highest title are under your own (ie, a barony title under your county title, or knight clans with a single lordship) or knights in your clan. Knights only weight 0.5 towards the limit, while clan leaders weight 1. Companions and family members do not count. Being over the limit progressively reduces your influence gain." />
+    <string id="SOcdxK0t5" text="Sponsor a tournament in this town. As the main sponsor, you have to pay 5000 coins for the tournament costs, as well as " />
+    <string id="QkOVG3SuY" text="{TEXT}\n{EXPLANATIONS}" />
+    <string id="JHAsNLD7D" text="Describes the quality of products produced in this settlement. Higher quality means workshops are more likely to produce goods with positive modifiers, therefore yielding a higher income. Because better products are more expensive, more money is extracted from caravans into market gold and the owner's tariff. This is also a factor in workshop prices." />
+    <string id="OT2tPhfNt" text="{TEXT}\n{EXPLANATIONS}" />
+    <string id="8itq3Ee16" text="The speed at which workshops produce goods, affected by kingdom policies and craftsmen" />
+    <string id="BhZTMLxPw" text="{TEXT}\n{EXPLANATIONS}" />
+    <string id="32fZsKVpS" text="Represents how economicaly free craftsmen, tradesmen and guilds are. Increased mercantilism reduces the tax revenue of these, but allows them to accumulate wealth or contribute more to overall prosperity." />
+    <string id="GVZOMRaWU" text="{TEXT}\n{EXPLANATIONS}" />
+    <string id="1EOhwVnNe" text="How attractive this town is for caravans. Likelihood of caravan visits are dictated mainly by prices, and attractiveness is a factor added on top of that." />
+    <string id="cBcNPc91T" text="{TEXT}\n{EXPLANATIONS}" />
+    <string id="Hq79VVmDg" text="{TEXT}\n{EXPLANATIONS}" />
+    <string id="YX3uqPo1c" text="The maximum number of militiamen this settlement can support, based on it's population." />
+    <string id="fDSkGoFzD" text="{TEXT}\n{EXPLANATIONS}" />
+    <string id="KLT2GpgMk" text="Chance of militiamen being spawned as veterans instead of recruits." />
+    <string id="pgigjqSp3" text="The total manpower of nobles plus peasants." />
+    <string id="5vYQehPa5" text="Manpower from noble population. Noble militarism is higher, but nobles often are less numerous. These are drafted as noble recruits." />
+    <string id="RKRa0eqwf" text="Manpower from serf and craftsmen classes. These are drafted as cultural non-noble recruits." />
+    <string id="vKVAn5Ono" text="{TEXT}\n{EXPLANATIONS}" />
+    <string id="ANYm1WUSf" text="How much the population is willing or able to militarily serve. Militarism increases the manpower caps." />
+    <string id="vL6bDVc1p" text="{TEXT}\n{EXPLANATIONS}" />
+    <string id="zOHxEgw3Q" text="How quickly volunteer availability in notables replenishes." />
+    <string id="qnQG7C6f7" text="{TEXT}\nTarget: {TARGET}\n{EXPLANATIONS}" />
+    <string id="5vcMb1vi1" text="The overall stability of this settlement, affected by security, loyalty, assimilation and whether you are legally entitled to the settlement. Stability is the basis of economic prosperity." />
+    <string id="RSdi617jA" text="{TEXT}\nTarget: {TARGET}\n{EXPLANATIONS}" />
+    <string id="abqaNZh0b" text="Autonomy is inversely correlated to stability, therefore less stability equals more autonomy. Higher autonomy will reduce tax revenue while increasing loyalty. Matching culture with the settlement and setting a local notable as governor increases autonomy. Higher autonomy will also slow down assimilation" />
+    <string id="5wGV1Z6ku" text="{TEXT}\n{EXPLANATIONS}" />
+    <string id="f11hc46Ft" text="Represents how much the local elite supports you. Support of each notable is weighted on their power, meaning that not having the support of a notable that holds most power will result in a small support percentage. Support is gained through better relations with the notables." />
+    <string id="oVAV9h2St" text="{INFLUENCE}" />
+    <string id="TT55RBYzw" text="{TEXT}\n{EXPLANATIONS}" />
+    <string id="AHUUEYcRE" text="The amount of influence this settlement provides in your realm." />
+    <string id="hWAe0yrbT" text="Projects at {VILLAGE_NAME}" />
+    <string id="VUPV1yfE5" text="You have too many unlanded titles." />
+    <string id="K0jdOpGSL" text="Over Title Limit" />
+    <string id="cBc4vPgFp" text="You have more fiefs than you can manage." />
+    <string id="HE0vNEnXS" text="You have more vassals than you can manage." />
+    <string id="TZW3eTnz0" text="Clergymen" />
+    <string id="VV7sRSUw1" text="Faithful" />
+    <string id="5buhKseia" text="Faith Group" />
+    <string id="0zmBx0awQ" text="Virtues" />
+    <string id="URHDUU5aA" text="Doctrines" />
+    <string id="uuZwgMWJN" text="Aspects" />
+    <string id="x8rDXJ21J" text="Leadership" />
+    <string id="Bhodouw2w" text="Faith Group" />
+    <string id="NPFKitBOv" text="Faith" />
+    <string id="nwrXXap39" text="Culture" />
+    <string id="EXNzQD6k9" text="The main culture associated with this faith." />
+    <string id="2YECshTUB" text="Contract" />
+    <string id="gZH3o3UO3" text="Review this kingdom's contract, signed by lords that join it." />
+    <string id="vcYd7ehZU" text="Found Kingdom" />
+    <string id="wn9PfMwJA" text="Review this kingdom's contract, signed by lords that join it." />
+    <string id="FqxwF0yqz" text="Government" />
+    <string id="LNmU5UVrd" text="Propose a change in government structure, altering the allowed succession forms and aspects of settlement governance. Depending on the government choice, an appropriate succession type will be enforced as well." />
+    <string id="fSM6nTePJ" text="Succession" />
+    <string id="fBrFvotNX" text="Propose a change in the realm's succession, altering how the next sovereign is chosen." />
+    <string id="rqCJDE021" text="Inheritance" />
+    <string id="HFVBgtvjy" text="Propose a change in clan inheritances, that is, who becomes the clan leader once the leader dies." />
+    <string id="BvebeSGnb" text="Gender Law" />
+    <string id="BxHduf5kA" text="Propose a change in gender laws, dictating whether males and females are viewed equally in various aspects." />
+    <string id="rY6BUtRdz" text="Founding a new Kingdom" />
+    <string id="ivSNr3JLh" text="Founding Dukedoms" />
+    <string id="HS6mM6u7g" text="Select up to 3 dukedoms that will compose your kingdom. The kingdom's contract will follow the first dukedom's contract. Dukedom titles from other clans in the faction may be included as well." />
+    <string id="VLf2rixkR" text="Select a {LAW} to be voted on. Starting an election costs {INFLUENCE} influence." />
+    <string id="H2FRq5AQf" text="{LAW} - ({SUPPORT}% support)" />
+    <string id="GVCV6FCPn" text="{LAW} - ({SUPPORT}% support)" />
+    <string id="FSx2yhucQ" text="{LAW} - ({SUPPORT}% support)" />
+    <string id="A1uzEuyjC" text="{LAW} - ({SUPPORT}% support)" />
+    <string id="2X4kBueLb" text="Usurp" />
+    <string id="Bkiy3vhJJ" text="Claim" />
+    <string id="0jFjHUVaS" text="Grant" />
+    <string id="UFNyoZ9Py" text="Revoke" />
+    <string id="X5jy9bKTj" text="Vlandic" />
+    <string id="AG7wbNQ8z" text="Aseran" />
+    <string id="VuyX9rX9u" text="Fian" />
+    <string id="wkTmfa5Yh" text="Battanian settlements have +{EFFECT1} militia\nReduced damage by {EFFECT2}% when mounted" />
+    <string id="M1kOMotDT" text="Cataphract" />
+    <string id="R7OMYMvRN" text="Increased renown from victories by {EFFECT1}%\n" />
+    <string id="CeaBfpxmb" text="Diplomat" />
+    <string id="T41qsFPbd" text="August" />
+    <string id="RLdVwqWOX" text="1 knight less is counted towards vassal limit\nTrade penalty increased by {EFFECT2}%" />
+    <string id="1GXTtq5qM" text="Siege Engineer" />
+    <string id="AzJXfYvWY" text="Civil Administrator" />
+    <string id="cLv2Pye4m" text="Reduced demesne weight of towns by {EFFECT1}%\nParty size reduced by {EFFECT2}" />
+    <string id="OSZcNkY6C" text="Caravaneer" />
+    <string id="FruoB5HAY" text="Reduced trade penalty by {EFFECT1}%\nReduced speed during nighttime by {EFFECT2}%" />
+    <string id="520SQ6E5t" text="Artisan" />
+    <string id="WozLAdwuN" text="Chance of botching items when smithing reduced by {EFFECT1}%\n{EFFECT2}%" />
+    <string id="QtPXXzMbA" text="Outlaw" />
+    <string id="udtXWaER5" text="Bandit troops are {EFFECT1}% faster on map\nRandomly lose relations with heroes that disapprove criminality when leaving dialogue" />
+    <string id="rQXW1SfO6" text="Mercenary" />
+    <string id="GFXnzNKO4" text="Reduced demesne weight of towns by {EFFECT1}%\nSettlement stability reduced by {EFFECT2}%" />
+    <string id="Lcnsd83DY" text="Kheshig" />
+    <string id="irgMNynw9" text="Reduced demesne weight of towns by {EFFECT1}%\nSettlement stability reduced by {EFFECT2}%" />
+    <string id="KkDY8aJAq" text="Varyag" />
+    <string id="HRWuujc9h" text="Reduced demesne weight of towns by {EFFECT1}%\nSettlement stability reduced by {EFFECT2}%" />
+    <string id="HrspzNcjq" text="You have received the {PERK} perk from the {LIFESTYLE} lifestyle." />
+    <string id="xiSqexGS2" text="Reform the Imperium Calradium" />
+    <string id="qsCMbsRyF" text="Reestablish the former Calradian Empire. The Empire spanned most of the continent before emperor Arenicos died without a clear heir. By reforming the empire, you crush the validity of claimants, and ahead of you lies a new path for greatness. You must bring all imperial duchies under control of your realm." />
+    <string id="r97pCMMbH" text="This title is already founded! De Jure is {DE_JURE.LINK} and de Facto is {DE_FACTO.LINK}." />
+    <string id="RUHwQ0z2a" text="You need at least {GOLD}{GOLD_ICON}" />
+    <string id="sfgg1nfdq" text="You need at least {INFLUENCE}{INFLUENCE_ICON}" />
+    <string id="LBdeBZt0A" text="You are not part of {CULTURE} culture." />
+    <string id="LfqCWUT46" text="You're not the leader of an Imperial Kingdom." />
+    <string id="MtXTtQmqM" text="Your kingdom is not part of {CULTURE} culture." />
+    <string id="puSx3syYs" text="You are not leader of a kingdom with {CULTURE} culture." />
+    <string id="G0pj6bAbt" text="You do not adhere to a faith that is part of the {RELIGION} faith group." />
+    <string id="UyXPfjEar" text="Your kingdom is not de facto ruler of {SETTLEMENT}" />
+    <string id="FF2qmhOv8" text="Unite Greater Battania" />
+    <string id="nmREkuQzs" text="Unite the old Battanian lands back into a greater realm. To the West, the rascal Vlandians have taken the valley of Llyn Modris and called it 'Ocs Hall'. To the East, the bloodthristy Imperials submitted Epicrotea to their domination. The threat of Battanian extermination grows stronger with enemies all around aiming for it's lands. You must bring all battanian and formerly battanian towns and castles under control of your realm." />
+    <string id="tPsDgXMRJ" text="This title is already founded! de Jure is {DE_JURE.LINK} and de Facto is {DE_FACTO.LINK}." />
+    <string id="5bbPNDsFs" text="You need at least {GOLD}{GOLD_ICON}" />
+    <string id="rSevLNyU6" text="You need at least {INFLUENCE}{INFLUENCE_ICON}" />
+    <string id="uvJKRTsDs" text="You are not part of {CULTURE} culture." />
+    <string id="rMyOnAKXJ" text="You're not the leader of {KINGDOM}." />
+    <string id="RY4ybW7AX" text="Your kingdom is not part of {CULTURE} culture." />
+    <string id="pB0G0LvTw" text="You are not leader of a kingdom with {CULTURE} culture." />
+    <string id="sthUMokXD" text="You do not adhere to the {RELIGION} faith." />
+    <string id="ED591Zgei" text="Your kingdom is not de facto ruler of {SETTLEMENT}" />
+    <string id="2qKp9Hh5U" text="Recruit Companion" />
+    <string id="2BpZMoWOy" text="Select a type of companion to recruit." />
+    <string id="wM3QHz88e" text="You can't afford any companion." />
+    <string id="ymFVuHLx3" text="No candidates of this type available." />
+    <string id="zoq1NG1SM" text=" You can't afford the cost:\n{GOLD}{GOLD_ICON}\n{INFLUENCE}{INFLUENCE_ICON}." />
+    <string id="OvOT6OWNA" text="Companions" />
+    <string id="SAMut975r" text="Choose a companion to recruit." />
+    <string id="TCXnH31bP" text="Merchants Guild" />
+    <string id="NpEDAUSXW" text="Masons Guild" />
+    <string id="yff4MSscb" text="Metalsmiths Guild" />
+    <string id="rYTTUO8D9" text="Asera the Patriarch" />
+    <string id="TtXNsSCJJ" text="First of his line, the legendary patriarch united the various badw tribes of the Nahasa and the coastal Behr al-Yeshm into the lawful confederacy of the Aserai Sultanate. Asera was deified by his deeds and the codes of law which allowed him to establish dominion and settle his people from the Jabal Tamar to the Jabal Ashab. Asera is that which all followers of his Code seek to live up to; though most followers will accept that the words of Asera are transcribed to benefit the bloodlines which followed him. Thus one can only ever seek to live as Asera did, and to know only their success upon arrival in Paradise." />
+    <string id="wy4jYftAB" text="Damma-Siddiq" />
+    <string id="Wm7rqtTC1" text="Descended from those who dedicated themselves to the Code of Asera but who were married into the true bloodlines of Asera’s descendents are known as the Damma-Siddiq; those of truthful blood. It is through their reforms, compromises, and bold rhetoric that marriage may allow even those born outside the Sultanate to come to be viewed as being of the blood of Asera - albeit through legalism and spirit." />
+    <string id="VxFWZDf3R" text="School" />
+    <string id="QXuDxveY1" text="Ibn-Zakaa" />
+    <string id="PuwNRBKd8" text="Only the direct line of Asera’s sons can claim to be Ibn-Zakaa; to be born a Pure Son. Such claims have led to kinstrife and civil war in the past, with daughters being viewed as a dead end to a pure line, and many a ‘lesser son’ made eunuch as means of societal control. In the modern age, the Ibn-Zakaa are far more enlightened, viewing themselves not as deserving of a divinely appointed respect but rather in the light of those who have much to prove to be worthy in the eyes of their progenitor." />
+    <string id="H2TmEzEhj" text="School" />
+    <string id="ZHschDits" text="Rashuqqalih" />
+    <string id="s9URU779s" text="The schools of philosophy preached by the Rashuqqalih practitioners of the Code, are concerned foremost with matters of righteousness and societal elegance. To be of the blood of Asera is to be bound to the morals of a mortal man made legendary, and thus matters of failure and mortal flaws must be treated with compassion. The most famous practitioner of the Rashuqqalih school was Queen Eshora, who brought several nomadic badw tribes into the Sultanate by accepting their adherence to tradition as a thing to be celebrated, rather than as a matter to consider them a distasteful other." />
+    <string id="wbVkphFKb" text="School" />
+    <string id="RpxFSyFMY" text="Sluagh Aos’An" />
+    <string id="soYqWQfyS" text="Constituting the major heavenly divine of the Battanians are those known as the Slaugh Aos’An - the Host of Noble Folk who reign between darkened clouds and watch over humanity with starlight torches. Seldom petitioned, as they are viewed as capricious entities; the Slaugh Aos’An are said to visit Battania during the changing of the seasons and to witness the birth of those ordained by fate to bring about weal and doom to the land. To make an oath under the auspices of the Slaugh Aos’An is to be bound to the letter or the spirit of one’s words; never more and never both. To break such an oath is to invite all of fate to conspire towards your end, and to know no peace in Heaven nor Hell." />
+    <string id="EKn9Lt2EP" text="Na Sidhfir" />
+    <string id="wVjD0yZeJ" text="Those deemed to have won the favor of the Slaugh Aos’An and the love of the Battanian people for more than a generation may be vaunted into the ranks of the Na Sidhfir - the Immortal Men of the Woods. Occupying a position equally heroic and tragic, the grand figures of the Na Sidhfir are claimed to be tireless and exhausted entities - unable to rest so long as they are remembered, but too self-absorbed to allow their songs to go unsung. Derwyddon practitioners claim the Na Sidhfir possess the bodies of Wolfskins, allowing them to rest and ravage away from the heavenly realms." />
+    <string id="hZfmy19RG" text="Bonus in forest autosimulated battles\nAbility to freely recruit forest bandit parties into your own" />
+    <string id="iGhojGShU" text="Ancestor Spirits" />
+    <string id="eGm9gJ2eG" text="Dymhna Sidset" />
+    <string id="mn5Bhq0ch" text="Patient devils, the Dymhna Sidset are the stuff of children’s parables and ill told tales around campfires. They are the spittal on a rabid dog’s lips, the rage of a mother bear seeking a misplaced cub, the cold biting steel that strikes only in betrayal. Though the attempted Calradification of the Uchalion Plateau could not purge this pagan belief set entirely, it did compartmentalize and mangle its body of rituals. Giants, ghosts, and many an unseen shade were changed from beings of tale and legend to “patient devils” by the whims of the Empire. In recent years, some have sought to venerate the Dymhna Sidset; viewing them instead as aspects of rebellion and irredentism." />
+    <string id="hKy2udyMi" text="Faster raiding of non-Battanian villages\nRenown gain for raiding non-Battanians\nPiety gain for conquering Battanian settlements owned by non-Battanians" />
+    <string id="8Mq54J4b2" text="Natural Spirits" />
+    <string id="8eGfCpGNk" text="Martyr Darusos" />
+    <string id="Nj8PJW9bD" text="Born in a period of relative internal peace and outward expansion, Darusos was a young emperor who allegedly sought reformations within the Calradic Empire before being betrayed by his closest generals and crucified upon a sacred fig tree in the imperial gardens of Lycaron. Those devoted to Darusos view him as having achieved the rite of the divus in his dying hours, achieving immortality and awaiting those who seek to practice his reforms in the heavenly realms." />
+    <string id="xE9HxDbXR" text="Imperial Cult" />
+    <string id="suUTNXXG7" text="Though there has long been an imperial cult in the Calradic Empire, it grew in popularity in the generations after Darusos’s murder. Emperors were deified, made to stand alongside their own gods as peers. During the waning generations of the united empire many would proclaim themselves god-emperor, or other divinely appointed titles; the rite of the divus can only transubstantiate an emperor upon their death. Thus the last truly ordained imperial cult is that which preaches the words of Arenicos Divus; though upstart branches have begun for an inevitable worship of Ira Divus." />
+    <string id="h8FhuLF0e" text="Cult" />
+    <string id="MzSMXyvSw" text="Lycaronian Triad" />
+    <string id="KPfCknMvZ" text="The Empire has long held its own pantheon of divine entities which rule over all aspects of mortal life and which are appeased by means of ritual sacrifice, festival activities, and prayers for absolution. Within the Darusosian Martyrdom, the locally vaunted Lycaronian Triad is held above all other eternal divinities and viewed as adjacent to mortal emperors risen to divinity by the rites of the divus. Iovis, the Sky-Father reigns as the henotheistic patriarch who traditionally dwells upon Mount Erithrys. He is accompanied by Astaronia, his bride who represents that which must be protected by the machinations of imperial might; and by his daughter Mesnona who was born from the ego of Iovis and who grants insight to mortal petitioners." />
+    <string id="psCVNMDfP" text="Gods" />
+    <string id="Eggy6b3dq" text="Lai Vlandia" />
+    <string id="K6TaPbSup" text="The Canticles sung in stanza and deed within the Lai Vlandia speak to the grand narrative of the modern age; couplets detailing tales of adventure and romance, of peasant heroes and baronial lords. All modern men are viewed as participants within the Lai Vlandia; regardless of their wishes, so long as they know that Vlandia exists. The songs are often written in such a way that one may make known their beliefs and views on the subject by means of intonation; whilst the tomes depicting the tales are renown for their strange marginalia which often descend into comic flourishes where lesser scriveners depict their favored and reviled characters as strange creatures or grotesque beasts." />
+    <string id="H3D6hWWy5" text="Ribaldi Cant" />
+    <string id="3U6RvVB0u" text="Those who buck against the perceived hegemony of the Lai Vlandia, be they peasant rebels or upstart lords, will claim piety by way of the Ribaldi Cant. Though traditionalists will note the Cant is but a deviation of the illuminated manuscripts and oral tales of the pre-Calradic Vlandian culture, modern adherents claim the Cant to be the methodology of rebels, wanderers, rascals, and conquerors. Subtlety is seldom found, and parables and morality plays are all too commonly twisted to back the ideology of the teller. As such the works depicted therein are often viewed as satire or crude witticisms, but few cloisters will deny their worth. They are part of the Lai Vlandia, and thus the Canticles, regardless of their desires. " />
+    <string id="pkFipfn9e" text="Saga" />
+    <string id="oPBvQPxTe" text="Meridional Cantigan" />
+    <string id="k9e5Nvnsb" text="The vitriolic and zealous among the modern Vlandians have as of late begun singing the Meridional Cantigan and marching towards the Southlands in a belligerent crusade. Claiming to be a reprisal of a song sung before the days of Osrac Iron-Arm, these goliard warrior-poets speak the harsh rhymes of their ancient conqueror patriarchs and wayward followers. They seek truth in deed, to be worthy of a completed song for an era; to serve in harmony with the Canticles, the Lai Vlandia, and to be remembered in illuminations befitting those enshrined in legend." />
+    <string id="vXoWXBuSu" text="Saga" />
+    <string id="ND34jfaod" text="{RELIGIOUS_TITLE} {NAME}" />
+    <string id="RU5XjYZ1P" text="As the sovereign of {KINGDOM}, you must decide whether to approve this contract change or not." />
+    <string id="vaKma2HsK" text="Change government to {GOVERNMENT}" />
+    <string id="u5YT6XqL8" text="The {KINGDOM}'s government is now {POLICY_DESCRIPTION}. {POLICY_SUPPORT}" />
+    <string id="BiLCNqhvj" text="The {KINGDOM}'s government will continue to be {POLICY_DESCRIPTION}. {POLICY_SUPPORT}" />
+    <string id="bFEMKBgBS" text="{CLAN} proposes a change of government, currently {CURRENT} to {PROPOSED}. You can pick your stance regarding this decision." />
+    <string id="oUrSq4t2u" text="Vote to change of realm's gender law to {GOVERNMENT}" />
+    <string id="CtRb2Qz2D" text="Succession will be changed to Imperial succession." />
+    <string id="MXntDKY9v" text="Succession will be changed to Hereditary Monarchy succession." />
+    <string id="TAFH2ibeA" text="Succession will be changed to Elective Monarchy succession." />
+    <string id="39keKAqJX" text="Succession will be changed to Republican succession." />
+    <string id="f3o3u4SUD" text="Change government to {GOVERNMENT}" />
+    <string id="ptRJQrfFN" text="The {KINGDOM}'s government is now {POLICY_DESCRIPTION}. {POLICY_SUPPORT}" />
+    <string id="2Do94FeJa" text="The {KINGDOM}'s government will continue to be {POLICY_DESCRIPTION}. {POLICY_SUPPORT}" />
+    <string id="74NsnSjZW" text="{CLAN} proposes a change of government, currently {CURRENT} to {PROPOSED}. You can pick your stance regarding this decision." />
+    <string id="i7bSAC9F9" text="Vote to change form of government to {GOVERNMENT}" />
+    <string id="fEvqbUiKK" text="Change government to {GOVERNMENT}" />
+    <string id="WJK1m9vza" text="The {KINGDOM}'s government is now {POLICY_DESCRIPTION}. {POLICY_SUPPORT}" />
+    <string id="cWnWas6jQ" text="The {KINGDOM}'s government will continue to be {POLICY_DESCRIPTION}. {POLICY_SUPPORT}" />
+    <string id="fcEFCUe16" text="{CLAN} proposes a change of government, currently {CURRENT} to {PROPOSED}. You can pick your stance regarding this decision." />
+    <string id="7xYrz1WP9" text="Vote to change realm clans' inheritance to {GOVERNMENT}" />
+    <string id="yBuYDZqeF" text="Change government to {GOVERNMENT}" />
+    <string id="Xj405jhZC" text="The {KINGDOM}'s government is now {POLICY_DESCRIPTION}. {POLICY_SUPPORT}" />
+    <string id="aEmwpZhRx" text="The {KINGDOM}'s government will continue to be {POLICY_DESCRIPTION}. {POLICY_SUPPORT}" />
+    <string id="m34vRDL43" text="{CLAN} proposes a change of government, currently {CURRENT} to {PROPOSED}. You can pick your stance regarding this decision." />
+    <string id="pERo1u3R8" text="Vote to change realm's succession to {GOVERNMENT}" />
+    <string id="5mOHKpZwC" text="As the sovereign of {KINGDOM}, you must decide whether to approve this contract change or not." />
+    <string id="jC56j0L0X" text="Choose the next council member to occupy the position of {POSITION}" />
+    <string id="8svrisCJ5" text="The{KINGDOM} has chosen {NAME} as their new council member." />
+    <string id="orcoX3TwA" text="Council member for position {POSITION}" />
+    <string id="OjdwZ0UhK" text="{KINGDOM_NAME} will decide who will occupy the position of {POSITION}. You can pick your stance regarding this decision." />
+    <string id="bXeYw5dA6" text="Choose the next council member to occupy the position of {POSITION}" />
+    <string id="qFfEnF3VA" text="{NAME} should be appointed" />
+    <string id="uvtFJCtZx" text="Limited Army Privilege" />
+    <string id="d8WrCE2qv" text="The privilege of raising armies will be limited to lords of duke level or superior, as well as the crown Marshal." />
+    <string id="O6JUbu6ca" text="limiting the privilege to raise armies" />
+    <string id="Cp1qwckBx" text="Only crown Marhsal or lords with Duke title or higher may create armies\nArmy influence costs increased by 30%\nArmy members receive 50% more influence" />
+    <string id="Am6JbN60Q" text="Manor" />
+    <string id="D9dCTxkYP" text="Manor house, the lord's home and center of the village. A manor house allows the housing of a small retinue in the village (15, 30, 45 men). Increases influence from nobles (15%, 30%, 50%)." />
+    <string id="K9dNStp3X" text="Palisade" />
+    <string id="6UaFarCtv" text="A set of wooden stakes placed around the village like a wall. Reduces raiding speed (12%, 24%, 36%)." />
+    <string id="6osKYiFQZ" text="Trainning Grounds" />
+    <string id="peOVPmz0J" text="Stablish a zone dedicated for trainning, as well as it's required equipments, where locals can train basic military arts. Increases militia production (0.2, 0.5, 1.0)." />
+    <string id="jpEPVaLdy" text="Arms Warehouse" />
+    <string id="UMUOJ3zzu" text="Construct a warehouse dedicated to keep military equipment as well as provide their maintenance. Improves militia quality (4%, 8%, 12%)." />
+    <string id="zxXwpKomP" text="Courier Post" />
+    <string id="wY6es8kZp" text="Set up a dedicate courier post that will inform you of any relevant activity in and around your demesne. Enables information messages regardless of your distance." />
+    <string id="oWCzN9XVa" text="Bakery" />
+    <string id="Ux8poYOXO" text="Supply tools and space for a local bakery, allowing serfs to turn wheat into bread. Adds bread as production good." />
+    <string id="8vKcce2YE" text="Mining Infrastructure" />
+    <string id="sfKYamA2U" text="Build mining equipment and infrastructure to improve working conditions in local mines. Increases ore production (5%, 10%, 15%)." />
+    <string id="Xzyis8fOg" text="Animal Housing" />
+    <string id="iw1wEDMd4" text="Invest on infrastructure for animal housing and grazing, yielding more from your pasture lands. Increases live animals production (5%, 10%, 15%)." />
+    <string id="CBAgTWygW" text="Farming Infrastructure" />
+    <string id="jzT7bLNOf" text="Provide farming equipment and stablish systems to maximise land productivity. Increases farm goods production (5%, 10%, 15%)." />
+    <string id="Gs09HrBxe" text="Sawmill" />
+    <string id="ZgvbwcUw7" text="Build a sawmill, improving the speed and quality of log cutting into usable hardwood. Increases hardwood production (5%, 10%, 15%)." />
+    <string id="FpQ1TA6qW" text="Butter Mill" />
+    <string id="q8G3wMUZC" text="Construct specialized buildings for churning local cattle milk into butter, a highly sought after food amongst lords." />
+    <string id="svwJO78jd" text="Fur Tannery" />
+    <string id="QZXfBNuu0" text="Construct specialized buildings for tanning hides, turning these into leather. Adds leather to production." />
+    <string id="KDNHKHro3" text="Fish Farm" />
+    <string id="5iute7cWq" text="Build controlled fish growing zones, supplying extra fish to the village. Increases fish production (5%, 10%, 15%)." />
+    <string id="nmHY52UE2" text="Smith" />
+    <string id="GiVQd7FuZ" text="Stablish a local blacksmith, supplying the village with metal products. Adds tools to production." />
+    <string id="dSLWrAix5" text="Production" />
+    <string id="gM401TwOA" text="Focus the population's effort in productivity, not expanding land or changing it's type. While this option is not active, productivity output is reduced." />
+    <string id="7T8aVNPqo" text="Farmland" />
+    <string id="iKuUCcfO0" text="Focus efforts on creating new arable acres, used for farming purposes. More farming acres increase output of farming goods." />
+    <string id="drmrGeDXU" text="Pastureland" />
+    <string id="UpFrdo5U1" text="Focus efforts on creating new acres of pasture, where cattle and animals graze and thrive. More pasture acres increase output of animals and animal products." />
+    <string id="OaDXp8fVp" text="Woodland" />
+    <string id="MoGDvRGNx" text="Focus efforts on turning acres into woodlands. Acres of woodland allow more higher yields of logs and berries, as well as help the land not becoming overfarmed or grazed." />
+    <string id="9RoYUUYsr" text="Druidism" />
+    <string id="qyq5NKNxe" text="Clergy is considered part of the Druid caste, who represent the spiritual power, but are also involved in political, material affairs. In a way, druids are a form of lesser nobility and cannot be excluded from political affairs." />
+    <string id="wOs0xeXtC" text="Preachers provide noble troops\nNo religious council advisor causes daily influence loss" />
+    <string id="zKgLmkNjy" text="Animism" />
+    <string id="EW9P7vXOz" text="Spirits inhabit everywhere in this world, hidden in plain sight. Under the earth, flowing along rivers or bound to animals or trees, spirits can be anywhere. It is the duty of the faithful to not harm the balance of the material world with the spiritual world, which are often one and the same." />
+    <string id="NJXH2JVEb" text="Woodland acreage provides piety\nReduced baseline fervor" />
+    <string id="RbKURMYdi" text="Communal Faith" />
+    <string id="omiB2vhLy" text="Legalism" />
+    <string id="VueSDJJ7x" text="Without laws, man is but beast. The wisdom of previous generations is preserved through law, which must be followed to the letter." />
+    <string id="XQDekMnRb" text="Heathens can not fill council positions\n+1 to vassal limit for each personal virtue" />
+    <string id="fpqqEEDVk" text="Heathen Taxation" />
+    <string id="Z6M2D2i8Y" text="Non believers are tolerated, but only through their financial subjugation. They are not trusted for service." />
+    <string id="vXbUXDU4Z" text="Heathen population yields extra tax\nReduced militarism in predominantly heathen settlements" />
+    <string id="p7UbcQcHG" text="Pastorialism" />
+    <string id="EOgVn46MD" text="Non believers are tolerated, but only through their financial subjugation. They are not trusted for service." />
+    <string id="4RHo2tqXd" text="Pasture and farmland acreage are more productive\nReduced militia and drafting efficiency" />
+    <string id="f7c03g9zZ" text="Honored Childbirth" />
+    <string id="ALjFk9X5e" text="Birth of children and the spread of the family are seen as a blessing. The more children we bear, more will defend and honor our ways of life in the future." />
+    <string id="ozcvqMdjp" text="Clan renown is increased every time a child is born\nIncreased fertility" />
+    <string id="mEPS9eF6n" text="Pacifism" />
+    <string id="7fs2EpL8X" text="Peace is our most valued treasure. Unlike warmongering beasts, we cherish thriving through cooperation and hard work." />
+    <string id="4nfLk1AkF" text="Increased stability in settlements\nPiety maluses while participating in wars and declaring wars" />
+    <string id="LSQVGOLm8" text="Literalism" />
+    <string id="4mNM97Z9R" text="It is only through our holy texts that we can uphold our values and faith." />
+    <string id="juQSJwf6g" text="High scholarship provides piety, illiteracy reduces piety" />
+    <string id="Hm1zgcA4k" text="Human Sacrifices" />
+    <string id="QLCGX4O5M" text="Worthy opponents are deserving of a better death than commoners in the battlefield. We can prove our devotion by ritually sacrificing them." />
+    <string id="eHuE86DGN" text="Allows the Human Sacrifice rite" />
+    <string id="dObCVaoDi" text="Aseran Faiths" />
+    <string id="eJk2WJqVo" text="Those that believe in Asera as the true and only prohpet." />
+    <string id="t65D6Z8b3" text="Derwyddon Faiths" />
+    <string id="dJ2p0Tm4L" text="The faiths in the true old Calradian gods." />
+    <string id="ebG8CKY9k" text="Calradian Faiths" />
+    <string id="znxirqRLt" text="The Imperial Calradian faiths." />
+    <string id="jjf0vFEOS" text="Vlandic Faiths" />
+    <string id="kUbm5bbuS" text="The faiths brought through the seas by the Vlandic peoples." />
+    <string id="o4pczga85" text="Autocephalous religions are organized based on secular kingdoms. Each kingdom will have it's own head of faith, tying the spiritual power to the material sovereigns." />
+    <string id="67TnGYhmd" text="Autocephalous" />
+    <string id="HuyKxEF8e" text="Autonomous religions do not have any sort of hierarchy for their spiritual guides. Even though different kinds of clergymen can exist, they are equally considered a 'head of faith' on their own right." />
+    <string id="ZO1LR1hOb" text="Autonomous" />
+    <string id="Rja21q2OE" text="A hierocratic organization is centered around a single head of faith. The head of faith is decided upon the faith's clergymen and not by secular lords. They will decide on all matters regarding faith and the spiritual." />
+    <string id="qaCnqKcM9" text="Hierocratic" />
+    <string id="JipZGmZxS" text="Kinship religions have their religions leaders dictated by the landed clans that adhere to the faith. Each clan is responsable for appointing a proeminent preacher from among their fiefs." />
+    <string id="NqwiEXAdv" text="Kinship" />
+    <string id="XYwkfLTAi" text="{RELIGIOUS_TITLE} {NAME}" />
+    <string id="OiLNcoH6v" text="Code of Asera" />
+    <string id="YKnL1Qp65" text="Founded by the immediate sons of the legendary patriarch of the Southlands, the Code of Asera forms the basis of philosophy, art and law among the members of the confederated Aserai tribes. All tribesmen of the Aserai who do not wander as bedouin, are assumed to be followers of the Code of Asera - though only those who seek to study the intricacies of the mythic patrilineal bloodline and its influence upon the world are celebrated and viewed as Sons of Asera; a facet of colloquial nomenclature meant to force camaraderie as all members of the Sultanate make claim to being descendants of Asera. Faqir, akhund, imams, and mushid make up the various levels of clergy who preach the Code and seek to apply its nuanced legalisms and rites to the Southlands. As a whole, those who follow the Code of Asera place an emphasis on charity between communities, vengeance against those who defy precedent or tradition, and mercy given in kindness with justice forced if kindness is scorned." />
+    <string id="VdUvMFLKA" text="Do not be as a glutton or a beast; neither hoarding nor bloodlust should color your life. If you take justice into your hands you may find yourself forever grasping for more - allow your betters to guide you as an elder sibling should; do not kill prisoners who have wronged you without their say. But do not reveal yourself to be lax or limp of arm either; for justice will often be your task." />
+    <string id="W04cC4tvb" text="You must never betray the blood of your blood, to do so is to spit upon the Code. If you are called to serve the Aserai, you must shed blood for their cause - at least once, so as to show that you honor your siblings even should you disagree with their choices. You must ensure any who serve you do not suffer the ravages of conflict without justice on your lips and a safe bastion for them to find reprieve in." />
+    <string id="C8GKUTVxk" text="…A curious question; though I suppose I would know the deeper answers to this. Few are the faqir or even imam who are as studied in the various things so easily lost in transcription or by cause of would-be sultans seeking to justify their cruelty. The Code does not abide warring between Sons, a facet easily lost and ignored but a point of shame that could tarnish many of our leaders." />
+    <string id="4TZUj5fQs" text="It is wise to ask this - we dwell in uncertain times. Greed and rage cloud the hearts of many. Do no harm to the other Sons of Asera; the villagers should never fear your blade in these lands. Do not rob them of their wealth, even if the Sultan demands it - you must be charitable, you are their sibling." />
+    <string id="uaDJjtPda" text="…And in weakness, do not allow others to usurp your station. Rebellion, sedition, betrayal - anathema to the Code of Asera. Brother shall not strike against brother, least of all by a knife in the back or by rousing a mob with vicious words or common strife. Suffer not rebellion, for to allow it to foment in the first place speaks to the immensity of your failings. All the pointless bloodshed which may come from such will tarnish you eternal, such that you may find yourself denied Heaven - condemned to an agony of your own making." />
+    <string id="srfjBWJ4W" text="Be mindful also of the company you keep, for though all among the Aserai are as brothers - and even the Jawwal and Bedouin are as our cousins; those beyond our blood lineage may not understand your purpose. They may lead you from the path, away from the Code; away from the good of the Aserai. But perhaps I speak this in fear - the long toll of the Empire upon our culture." />
+    <string id="AAL5i4LqX" text="To not seek vengeance against those who have attacked your holdings, besieged your homes, murdered your people - is a greater shame. No doctrine of peace can outweigh the Code of Asera in this regard. Many such debts need to be paid, and it is horrifying that our rulers so often choose to forget this. The serpent which bites you and slithers away does not leave you in peace; only when the serpent is crushed, maimed, unable to bite you again does it depart in peace." />
+    <string id="9yNS3WxqT" text="When you are called by your brothers, you must come to them; you must serve beside them, you must never fail them if it is in your power. Know also that keeping the company of those outside the Code of Asera will surely corrupt you - you are your brother’s keeper, and they in turn yours. For good or for ill." />
+    <string id="bSG91BSiJ" text="Know that I tolerate your presence on behalf of my blooded siblings in the Banu, and though you may desire to coax me with honeyed words or threats of coercion - know also that I am beyond your grasp. I am the Murshid of [Placename], and my word guides the Sultanate by the reading of the Code of Asera. Speak truthfully and with no deceit, lest I denounce your lineage and see them flayed to the last." />
+    <string id="ZFuW5gSq1" text="Peace be upon you, outlander. May you walk with the safety of Asera while you dwell in the company of his sons - and while you walk the lands where his Code is law. I am an Imam of the Aserai, and I bid you hospitality expecting it fully in kind. Is there something I may do for our mutual good?" />
+    <string id="Sn4ejbNg1" text="Peace be to you, outlander. You do not carry yourself as a Son of Asera, so I shall forgive your ignorance - provided you come here in search of wisdom. I am an Akhund, a scholar of the Code of Asera, the guiding truth of the southlands. If you come here with a clouded heart, there is little I can offer you." />
+    <string id="tRUBFGDTS" text="Peace be to you, outlander. May you be welcomed in the lands of the Sons of Asera. May you enter here in kindness, but know that we do court the ignorant." />
+    <string id="uAqp6aqUa" text="Blessings of paradise and the Heavens upon you, blooded sibling. You come before the Murshid of [Placename], a guide to the Sultanate and of kin to the Banu. Surely you know that I am a busy man who must contend with matters of state whilst consulting the Code of Asera. What is it that I may do for you while I have this single moment to offer?" />
+    <string id="xNkJd3BHs" text="Mashaera, blood of my blood. It is good to see you are alive and that you are in good health; for the world is rife with conflict beyond our brotherhood and little is to be held as certain. Are you here on pilgrimage or duty, in good tidings or ill news? How may this humble Imam be of service to his sibling?" />
+    <string id="6PV2xSTjP" text="Peace be upon you, my kin. Have you come to study the Code of Asera? I shall grant you what wisdom I have gleaned in my long hours of study, but as your brother I must tell you that I find myself more ignorant the more I realize the breadth of what there is still yet to learn." />
+    <string id="iLBdTifvY" text="Peace be upon you and may you be favored by Asera, my kin. What may this humble faqir do for you on this glorious day?" />
+    <string id="prVbA6cfm" text="Mashaera, blood of my blood. It is good to see you are alive and that you are in good health; for the world is rife with conflict beyond our brotherhood and little is to be held as certain. Are you here on pilgrimage or duty, in good tidings or ill news? How may this humble Imam be of service to his sibling?" />
+    <string id="EacLuOEdV" text="Peace be upon you, my kin. Have you come to study the Code of Asera? I shall grant you what wisdom I have gleaned in my long hours of study, but as your brother I must tell you that I find myself more ignorant the more I realize the breadth of what there is still yet to learn." />
+    <string id="eUqeNe4aw" text="Alas, you are no Son of Asera and thus you could never truly follow the Code of Asera. Not in any way that I could fathom. There may be precedent for one beyond our blood to successfully follow the code, but for this you should seek out an Akhund; a scholar of the faith." />
+    <string id="2v6eJSoo4" text="You think that it would go unnoticed how the folk here cringe at your visage? How your name is whispered with scornful lips? Are they mislead about you? Perhaps, perhaps. We shall see." />
+    <string id="2UivK41oR" text="You are known to me and to this village; not as a savior or as a good soul, but as one of us. You are humble, perhaps because you lack the boldness to pursue being charitable - or perhaps just the means. I do not know, and I do not judge." />
+    <string id="RdeWq3f9K" text="Mashaera, blood of my blood. It is good to see you are alive and that you are in good health; for the world is rife with conflict beyond our brotherhood and little is to be held as certain. Are you here on pilgrimage or duty, in good tidings or ill news? How may this humble Imam be of service to his sibling?" />
+    <string id="bbpYYBXHx" text="Peace be upon you, my kin. Have you come to study the Code of Asera? I shall grant you what wisdom I have gleaned in my long hours of study, but as your brother I must tell you that I find myself more ignorant the more I realize the breadth of what there is still yet to learn." />
+    <string id="4xZEbehoZ" text="I wish you well in such pursuits, and that you live a life of peace wherever this path may take you." />
+    <string id="5z4rYoXU5" text="If you wish to be made a follower of the Code of Asera, you must treat these people as you would a sibling - you must cherish them, exalt them, protect them and educate them. Show them your better nature and I shall perform upon you our rites of induction." />
+    <string id="HpJr7PnwM" text="I welcome you, my kin - blood of my blood. May you go in peace and bring honor to his legacy." />
+    <string id="zukZ8PtkO" text="I offer my sage counsel to the kin of the Banu, to guide them upon the paths walked by Asera of old. I grant them the means of pilgrimage - for only when one knows the deepest wisdom and learned truths of the Code of Asera may they truly strive for self-improvement." />
+    <string id="9VVsBbqLt" text="I preach the glory of Asera, our progenitor of legend. I preach lessons learned from the treasury of wisdom he has granted us as his children. I preach that the Aserai shall reign in happiness and in sorrow, so long as we remain as brothers within the Banu confederacies." />
+    <string id="oq3ZoP5d2" text="I preach that which is hidden in poetics of Nahasi dialects and in the riddles of converts stolen away by Darshi slavers in generations past. I seek to unravel the mysteries of all that Asera asked of his sons - to truly understand charity, devotion, and the cost of peace even in these times of eschatological turmoil." />
+    <string id="deMhrTk0M" text="I preach the Code of Asera, the backbone of our society, the soul of our nation. For we are all Sons of Asera in these lands, and it is through the patriarch’s example that we go forth in honor and bring glory to his legacy." />
+    <string id="WzLxRhgJy" text="I ensure they remember that they are as siblings to the lowliest beggar or the most jackal-thirsting Jawwal marauder; that they must always express love towards that which is good and revile the roguery that leads the soul towards wicked deeds." />
+    <string id="KbULxhx1C" text="I preach that our future shall be as luminous as the sun and as enduring as the Nahasa, so long as we remain united, so long as we are charitable, so long as we welcome even the Jawwal to embrace the Code as their own guiding path in life!" />
+    <string id="hXTMVZQpp" text="I preach that we should question the nature of goodness and of wisdom; for a good man would not claim to be wise, and a wise man not claim to be good." />
+    <string id="x65UaCJXE" text="We are those who adhere to tradition but know also the struggle to move beyond the belligerence of the past - we are no Jawwal, after all." />
+    <string id="JRkLdBcwr" text="You come before me, like a wriggling eel slithering to a master archer and asking to learn to wield the bow. I shall speak plainly to you, for my time is short and my station vaunted. When you see that which is evil, you must change it by whatever force you can - if not your hands, then your heart, if not your heart, then your words." />
+    <string id="JYuHyyq9r" text="A common question among the devout and misguided alike; for how can one truly be assured they walk the righteous path? We know not until the end comes and we are weighed against the deeds of our progenitor; but I shall guide you with what wisdom I can." />
+    <string id="to1f44RSd" text="Consider your actions and why it is you perform them. If you are of influence, do you wield this power for the good of your siblings or do you take it for your own aggrandizement? When your people starve, do you feast? Do you turn to the sword? Is blood spilled for bread gained a worthy trade?" />
+    <string id="VfsqjcDCt" text="It does my heart kindly to hear you wish to prove your faith. We live in an age of lip service by most - though I hold no blame to the common man for this; they show their adherence and their faith in their daily labors. If you wish to prove your faith and your adherence to doctrine, you must be a soul who knows peace and who adheres to hierarchy." />
+    <string id="cxKj5cOMx" text="Seek to improve the lives of even the least of your people and you shall make kings of them all; and know that should you find yourself poorer and your servants richer that you are a better sibling than many of your blood. You can only hope then that they shall follow your example, follow the Code of Asera, and spread this prosperity to all." />
+    <string id="N45F2Buff" text="Foremost in my viewing, as a man of the cities of our lands; is the act of almsgiving. We are as keepers to our brothers, to our sisters and siblings; and only a cruel soul would let the blood of their blood starve.You are only as pure as the lowest among us, and thus you purify yourself of sin when you seek to uplift the whole of the Aserai." />
+    <string id="As7QwEkzi" text="If you seek to prove your faith, you must internalize the Code of Asera - you must learn and accept that you are but one of his Sons - and you must seek to bring forth a better world for your children to inherit. Prove your faith by making that world. Time will tell if the image in your mind is truly an embodiment of the Code’s doctrines or merely self-indulgence." />
+    <string id="Mqws1Pzuz" text="Release your prisoners if you no longer war with their masters; or give them to your master for they shall know better. Choose peace when your enemies desire it; let them lick their wounds and if they strike you again, punish them with biting steel and the shame of their recidivism." />
+    <string id="2hCC3iuaW" text="Patriarch" />
+    <string id="rbvGXLC85" text="Murshid" />
+    <string id="rNeHHEhOV" text="Imam" />
+    <string id="3KMM8nm6P" text="Akhund" />
+    <string id="E5mBzVDsE" text="Faqir" />
+    <string id="bjzEeEBpo" text="Schools" />
+    <string id="BpNoBisD7" text="I would like to study the Code." />
+    <string id="uuvuguNW6" text="Schools" />
+    <string id="pu9fvi4Ra" text="Are you sure?" />
+    <string id="kppYp7LnA" text="{HERO} is inspired by the teachings of {DIVINITY} code." />
+    <string id="6jBa3bmXP" text="study from." />
+    <string id="GADf3GLre" text="Amra Ollamh" />
+    <string id="Qz0n0JFU8" text="The creed of the Amra Ollamh, “that which is wondrous and great” - is the long-standing folkloric tradition of the people who dwell up the Uchalion plateau. Though outsiders are wont to confuse the Amra Ollamh as little more than tales of goblins, sprites, fair folk and woodland monsters - the creed itself is in fact a deeply involved cultural institution meant to instill the youth of Battania with the lessons of their forebears by way of colloquial metaphor. The Brithem, law-speakers and judges, more than often related to the headmen of their village, maintain traditions whilst the women of the Bandrui preach these tales to children with the hopes of driving them to boldness and hopeful ambitions later on in life. Cattle raiding, braggadocious dueling bouts, and no small amount of criminal activity paired with lessons of mercy make up much of what is learnt by those who follow the Amra Ollamh. Those seeking greater insight into the spiritual matters of the Battanians are more likely to be dissuaded by Brithem lawspeakers, so as not to intrude upon the more esoteric matters handled by the practitioners of the Derwyddon arts." />
+    <string id="vZ9CGpUVR" text="No respect shall ever come to those who bend the knee willingly, and least of all to the foreign upstarts who gnaw upon our holdings. Those who strike upon our wildling sons, wolfskin or otherwise, put our future in danger as a people." />
+    <string id="jTRTT8OZ3" text="Were you to lick the boot of Vlandian, Sturgian or make yourself a lackey to the Empire, I’d see you personally whipped raw and thrown into the salted waters of the Bay of Varcheg! If you strike down the wildlings and the wolfskins you run the risk of butchering the blooded leaders of Battania’s next generation - so sharpen your teeth against them as you are wont, but take not their heads." />
+    <string id="TpOwRCrSJ" text="In truth, anything which would show you to be lacking in cleverness and the means to make mischief will show you to be a failure under the creed of the Amrah Ollamh." />
+    <string id="S4tjQDH90" text="Suffer no humiliation and no slander towards our people, towards your Bandrui and Brithem alike. We are all one Battania, and if you see us sundered you best see us forged anew with haste. Otherwise you’d deserve a fate far fouler than what any draoith could conjure up. I’d personally suggest ye get slathered in honey, your limbs snapped, and thrown into a craggy pit to be feasted on by boars.But you wouldn’t be such a craven to tempt that fate, now would ye {NAME}?" />
+    <string id="jA8GpOSZj" text="Oh aye? What brings you before this Brithem judge? Lost your favorite cattle, perhaps scrape your knee on your way up the Uchalion? If you come seeking satisfaction, you’re better off finding it in a Vlandian brothel or in some imperial parlor succoring down milk-of-the-poppy. My judgment is not meant to bring you anything you couldn’t take for yourself, and my law-speaking is for the Battanian people not whatever matter of wild hound you were born to be." />
+    <string id="S4wDJRKFB" text="Am I to have words thee, {NAME}? And if so, are they to be kind ones? Do you come to me in the hopes that I might slather a bride in mud so her wiles are not driven to hysteria by the invisible probings of the fair folk? Mayhaps you heard tales of the Brandui like myself and how we will put a gimlet eye on rivals for a price - oh aye, make their loins shrivel up like a gooseberry and produce only half-wit sons? You best speak your part quick, I’ve no time for the fool courting of foreign folk.You best watch your words too, there’s nary a man in this land who wouldn’t stab you in the gizzard to win my approval." />
+    <string id="E2PmWFm2F" text="You will be converted" />
+    <string id="f4Df0G2zW" text="Not enough roquery" />
+    <string id="rOsJ5406V" text="Unaccepted culture" />
+    <string id="QgVPPUA6R" text="Croseo, kinsfolk. How does this season upon the Uchalion greet ye? Have you drunk of the Llyn Tywal lately? Bloodied the noses of Vlandian dogsbodies and Sturgian wastrels? You stand here upon our blessed soil and have fool’s pride enough to come upon your Brithem brethren and act his equal - so I must assume you make your ancestors proud or you’ve stones enough to stand in my eyeline and bluff!" />
+    <string id="U7VUmRc5M" text="Croseo, you child of the Uchalion. Have you looked upon the Morcomb in recent days? Have you glutted yourself on the fish of the River Fiur? Bashed the teeth in of any southern fool who’d claim themselves emperor of all they survey? You stand before me on blessed soil and you speak to the Bandrui as though you were a Brithem or mormaer lordling - so I assume you’ve cause to bid for my counsel. Lest ye be a fool, though to be a fool can be a blessed thing.Fool’s have the chance to leave their foolishness behind, after all." />
+    <string id="ENVnQggKu" text="Bah! Would you like to know what the difference between you and a rock might be? A rock might cut a silhouette making me think it a Battanian hiding in shadows. You’ve not the guile, the gut, or the making of a merry mischief maker. You may as well come to me as a Temean senator with a formal inquest pleading: “Oh honored Brithem, take me ‘pon the comhdhail and see me cherished by all the true kindred of the Uchalion.”" />
+    <string id="kCTknQxK4" text="Da Iawn, {NAME}. Rare is it that I look upon one such as yourself and feel pride, and ne’er do I look upon one such as yourself and feel humility! But tis the wisest of men who speaks least and I’ve made myself the fool in your presence; good humor that. Truly your heart beats for Battania, a soul ever the envy of any mormaer or fian gone gallowglass or made to fight upon the highland fields. Blessed this is; a kindness this is." />
+    <string id="bj7SdkzWB" text="Now you have the look of someone I wouldn’t spit upon. There’s a glint in the eye, something at the corner of your lips - you’ve got the capacity to act as a true Battanian should. Shameful that your blood might have been muddled with the conquest of many a foe; but a Battanian heart beats true in defiance of such origins." />
+    <string id="r8oZs7pSE" text="You’re a lout, a fool and were it not for the laws of hospitality which I choose to honor I’d bash your teeth in with a rock. You want to be inducted as a follower of the Amra Ollamh, best find yourself a Brithem who can tell you to sod off as I’ve only words to share so disparaging they’d rouse your grandmother from her grave and see her slap sense into that thick head of yours. Bah!" />
+    <string id="5V5YxiuLV" text="Da Iawn, {NAME}. Mind me and grant me the courtesy of a moment in stunned silence, for not since the ancient rebel queens of the hill clans which warred with the Laconians and Dryatics before the damnable Calradoi came ashore; have I had the knowledge to know of one whose heart beats so true for Battania. Envious I am, for those who cannot do must surely teach and I know all too well that I shall carry your name ‘pon my lips for many a year to come.You’ve the guile of a rogue and the cadence of one who is worthy of legend.May the mormaer blush at your mention and the fian wish they were half the man you’re being denies by being." />
+    <string id="dZ3QULpdY" text="Wise of ye to come to me rather than a Brithem - they’d feed you pretty words and think to marry you off to some mruigfher with more denars than chest hairs who’d ne’er considered a freeborn maid such as yourself could be more than a bride. Clever girl. I pray that your cunning lasts, for this is a cruel age filled with many a petulant dog who’d deny you the right of gutting him like a trout just by malus of your breasts." />
+    <string id="ko3DJQH8E" text="Get out of my sight until you’ve got stones enough to be worthy of it. I’d excuse this if you were a child or at least born of the highlands; but you’re just wasting my time with that slackened look about your face!" />
+    <string id="JeeBNjCDg" text="I’ll honor your desire to be formally recognized by a britherm, and when next the comhdhail is gathered I shall speak your praises as one bound to the creed of the Amra Ollamh. You shall be as the creed is known, of the greatest and most wonderous - a teacher who leads by example. Aros yn wir, aros yn ffyddlon;[charactername].Stay true, stay faithful; look homeward and ensure that Battania is ne’er forgotten -be it by scars or song.In living glory or storied tale." />
+    <string id="OqujXxwGE" text="I’ll honor your desire. Swear upon your integrity, upon your mettle and might, that you will shepherd the next generation of Battanians - that you will carry on our traditions, lead by example, take what you desire and give back in kind. There are no oaths I can bind you to, no words that shall suffice - keep the swearing within your heart and may it strangle you bitterly should you break it. A fo ben, bid bont, {NAME}.Be a bridge for our people. Never forget to look homeward." />
+    <string id="NxN1aeMjf" text="Get out my sight, you’re no true Battanian and even if you thought yourself one tis the work of a Brithem to judge a man of their mettle - for the Bandrui see true all your flaws and I’m not liable to sully the oaths of our folk for such a tarnished soul as ye. I’ve seen pig iron blades of greater worth than your bleary being. Get ye gone before I rouse the village and see you chased by hounds to the edge of the Uchalion!" />
+    <string id="W2CYeUENj" text="So aye, I’ll honor you this induction. When next the comhdhail is called I’ll shame every britherm from Bog Beth to Claig Ban with tales of your deed and how easily you came to embody the creed of the Amra Ollamh. Aros yn wir, aros yn ffyddlon; {NAME}.Ye magnificent one. Stay true, stay faithful, and may you become storied among our folk until none dare seek to take the highlands from her trueborn children." />
+    <string id="ZRUyg94J5" text="So aye, I’ll honor your desire. You’ve the quality of one who knows their mettle and who deals in sword arms and battered egos with ease. Such is the rite of any trueborn Battanian. May you lead by example, may you inspire many more to prove their mischief and make mercy theirs to distribute. I’ve no oaths to bind you, and no words nor hollow praise shall suffice - so I bid you swear within your heart that you shall honor the Amra Ollamh and that should you betray it, may it trammel you beneath a crushing stone. A fo ben, bid bont, {NAME}.Look homeward, but do not be bound to its petty whims..You’ve the means for greatness.Seize them." />
+    <string id="0Zbxta8YR" text="My judgment and discernment is a matter of the Amra Ollamh, for I am a teacher who speaks of the great cycles of our people - from the giant’s seat of the lower Rhennod to the riverlands of the Ircara! ‘Tis true, many a land has been lost to fool imperials and bastard-born Nordlanders playing at Sturgians; but a Battanian heart beats ever true. I shepherd our tales, our traditions; ensure the young know how they’re meant to act and that the old don’t forget their place." />
+    <string id="7vcFFy21P" text="I carry the soul of our people with my words and I weave our spirit into our actions; for I am a Bandrui and this is my purpose. Be they a child born upon the Ailta Druin or left to a cruel winter’s chill on the Rock of Glanys, it is my voice that guides the next generation of our people to glory! ‘Tis my voice more than any other that tells the tale of our finest hunters, of clever lords in wolfskin mien, or highland rebels cutting the gristle from the gullets of imperial soft bodies. ‘Tis sad, the state of the Uchalion and her people.In elder days my circle would dwell in sacred groves and offer counsel to heroes and high kings - now we languish in walls of stone, beset by foreign hedge knights, Sturgian raiders, and whatever mess the Empire sees fit to view itself as." />
+    <string id="4M811eQgj" text="You might hear tell that our lot are charlatans bickering on about river nymphs and sea dragons - but allegory and metaphor aren’t words belonging only to toga-shriven scribes. And there’s more to this world than you or I have the Sight to simply dismiss after all. But to answer your question, and to say it right, I’ll say just this: I am that which judges a true Battanian of their worth.To see that they make mischief and might alike enough to please their grandfather’s grandfathers in the heavenly hereafter.Ne’er are there more an Uchalion born Battanian than those who follow the creed of the Amra Ollamh." />
+    <string id="EheQMw12d" text="A cruel humiliation, to be one who touches upon the mysterious and grants counsel now reduced to the stuff of gossiping washerwomen and charlatan knaves in search of river nymphs to bed and lindworms to slay. Allegory and metaphor lost to those who view our lands as savage and backward as their own prejudices. But I’ll speak true and quick then, for you’ve not come for my screed. I am that which guides a Battanian to know their truth.To see their heart beats in rhythm with the cycles of creation, that they know might and mischief enough to please the unseen and to court the joy of their ancestors long displaced.Ne’er are there more an Uchalion born Battanian than those who are guided by the Amra Ollamh." />
+    <string id="TZjyHM2sa" text="‘Tis both no simple thing and a thing that couldn’t be simpler; not that I wish to speak in riddles. Save that nonsense for the draoithe. If you want to prove your mettle, you must simply be a Battanian. Of course, to be Battanian is a tarnished thing in our current state - too many folk wrongly think they know what it means. If you wish to prove yourself wise in the Amra Ollamh, you must make yourself known for your cunning and your guile." />
+    <string id="1tBeSXbB2" text="Supposing you’re seeking a fate higher than a bóaire ‘pon the highlands, there are ways and means you could show yourself a true Battanian. First matter of that, of course, is to be a Battanian - be ye tarnished or true by the many foes which nip upon our borderlands with the ravening greed of thieving children. Assuming you can manage to be born right of our blood, ‘tis a simple task to follow. Gather yourself a throng of right - minded Battanians and make yours a name to be sung and feared." />
+    <string id="pwom92WAB" text="Make a name for yourself which is held in the fear of landed lords and in the whimsical romance of young dreamers. Raid cattle from those without the mettle to keep them safe, and make lords both Battanian and foreign fear your blade but know your charity. You’ll prove your faith by shepherding tomorrow for the Battanian people; with cattle, with iron, and were you of a more legendary portent - by stealing back what others have stolen from us!" />
+    <string id="nxgnn0W7F" text="Don yourself the wolfskins if you’ve the mind for tradition; take that which can be yours by right of might, honor no landed claim - Battanians and beasts alike may graze where they deign to. Bring iron to the forges and the folk of Battania so youngbloods might dream of blades to someday hold in more than their errant wishes! And were you truly to be guided by the Amra Ollamh, you’d cast the Vlandian, Sturgian, and imperial dogs from our land.Preferably off the side of a cliff, but none shall be picky so long as they’re made to flee in fear of your wrath." />
+    <string id="dNXWn2bjC" text="Great Spirits" />
+    <string id="HM2f6v1a4" text="Brithem" />
+    <string id="3wOD5jML9" text="Bandrui" />
+    <string id="tWRv7DiCG" text="Spirits" />
+    <string id="xhMuVTm19" text="I would like to swear an oath to the spirits." />
+    <string id="cPxm01WQc" text="And what spirits would ye be bound to? Those of wolves and warriors whose savagery are unmatched, or the spirits of Uchalion, who breathe fire into our hearts to fight the enemy?" />
+    <string id="P4Ovrooq9" text="Be ye sure of that. Only a fool would break an oath with the spirits." />
+    <string id="fcjamFLQd" text="{HERO} has sworn an oath to the {DIVINITY} spirits." />
+    <string id="oup0xfMzP" text="pledge an oath to." />
+    <string id="wszcS40OR" text="Darusosian Martyrdom" />
+    <string id="1ZTv0askN" text="Though the Calradic Empire had long possessed an imperial cult to venerate Emperors who were deemed to be “deliverers” and “saviors” of the civilized world, during the latter years prior to the schism and inerrenegrum the practice of viewing all emperors as god-emperors had become vulgorously commonplace. It was during this period that doctrines and reforms attributed to the teenage Emperor Darusos, a figure infamously denied the rite of the divus by the generals who usurped him, were uncovered. Viewed as a divine Martyr, rebels and lesser cults throughout the Empire began to preach his teachings and claim that the divinity of the imperial line was inherent; that the rite of the divus was a formality at best or a means of vaunting false emperors to positions of divine power. Now worshiped throughout the Southern Empire and in hidden cells of far flung holdings, the Darusosian Martyrdom preach the divine mandate that enshrines the rulership of the line of Arenicos. Lay flamines, their purer superiors of the Flamines Castus, and the figurehead of the Rex Sacrarum of Lycaron, collect alms and absolve the sins of petty mortal ambition to those who seek to walk the path of the Martyr." />
+    <string id="S3PK8xHmj" text="I’ve no qualms over many a mortal failing, but if you are to bind thine self to the throne of the Martyr and seek to untwist your soul of sin - you must serve none save for another Darusosian Martyr. Be it Rhagaea Pethros, the Divine Heir Ira Pethros; or any other who may yet emerge immaculate - you must serve only the ends of our Empire. Seek not to burden thyself with a hoard of filthy lucre, for denars shall twist thine soul to marred, mangled ends." />
+    <string id="6x6MRsExZ" text="Be not one who acts unbenignantly, for we servants within the Darusosian Martyrdom need be graceful in our deeds. Do not sully your house with cohorts or spouses who were born of upstart states or pagan cultures who deny the will of the Martyr." />
+    <string id="KxOdw1TtY" text="Only a blind man would look upon the state of the Empire and think it saved. If you wish to remain in the good graces of the Darusosian Martyrdom, you should not seek to usurp the whims of the imperial throne. Should you be blessed to serve the house of Pethros, allow them to grant you territories - never make demands of them. If you fail to provide donations and services to our clergy, this too shall be noticed and your reputation shall fall." />
+    <string id="8PkoTfYGn" text="Give generously to the Martyrdom, for to do otherwise is to see patrician and plebeian alike suffer unjustly. Thou knowest also that many a foul upstart seeks to further denigrate our Empire. They must be rent asunder, their holdings broken, their deviant crowns shattered beneath our bootheels.Knoweth your purpose in our faith shall ever be as a cudgel and a bulwark.Lest you stumble across a mystery that transfixes thine mind, thou shall know peace only at our duty’s end." />
+    <string id="F65qMZXBn" text="Do not allow our enemies to remain comfortable in their belligerent stagnancy. Be as a scourge to the Embers of the Flame, but take not the heads of their heresiarch masters - they must learn penance upon the path to re-entering the Martyr’s good graces." />
+    <string id="hPAhJsAAj" text="If the Empire goes to war against usurpers or savages, you must join and do your part. If you fail to act in service to the Calradic ideals of the Empire, you shall be acting in heresy against the will of Darusos, Arenicos, and all others who have been deified by their deeds on the throne." />
+    <string id="iP922jtfg" text="Oh, thou’rt of a kind to think they may posture before the Rex Sacrarum? Set thine eyes upon my personage with a coy and feigned humility? For what foul purpose doth thou think this shall profit them? To come before me so discourteously, as if I were some mere member of the lay flamines meant to play scenes of betrayal like some fool goliard of the upstart borderland principalities? Glory be to Darusos, for he was not spared or given mercy from unclean company which sought beyond their station and it seems now that I am to be tested in the same unkind way." />
+    <string id="3xeDexjsK" text="May you find the mercy not granted to the Martyr, {NAME}, for I have none to spare. You have the bearings and reputation of those who profit from the suffering of the Empire; a carrion beast treating our glorious nation as though it were a bloated carcass. The Martyr may yet save the soul of turncoats, rogues, blackguards and insurgents - but do not think me one so willing to stain my hands at your expense." />
+    <string id="Mg9wYzQ45" text="You have the look of one who has… defied the imperial acts of Calraditas. You do not carry yourself in a Calradic manner, nor way - I do not suppose you hold the Martyr, Darusos, in your heart? I apologize for my pejorative tone, I would offer you succor and hospitality for sake of commensality but I fear my words would offend you. Or rather, they would drive you to shameful sorrow or to mock a Martyr - dead by savage hands.I would not do you such an unkindness.Pray, forgive me. I shan’t go on unless you desire it.You may help yourself to wine and bread if you would like; never let it be said the lay flamen of[settlementname] has forgotten the virtues." />
+    <string id="AZTn68Fme" text="Too often am I beset by the impudent rabble, souls defiled and piteous in their plight. To know your company, it seems a wise kindness. Thou’rt in search of clarity, of purpose; - one provided not by honeyed tongue nor second face - but one which would make thee dear to the Martyr and all we have sought to save. Speak thy part, {NAME}. Indulge thyself in terms most honorable.I shall receive thee, should our purposes coalesce." />
+    <string id="Q4u6rYrqW" text="May you find the mercy not granted to the Martyr, {NAME}, for I have none to spare. You have the bearings and reputation of those who profit from the suffering of the Empire; a carrion beast treating our glorious nation as though it were a bloated carcass. The Martyr may yet save the soul of turncoats, rogues, blackguards and insurgents - but do not think me one so willing to stain my hands at your expense." />
+    <string id="C3FQRXHnR" text="Ave, citizen - and welcome. May I offer you wine and bread in commensality? I wish you hospitality and grace whilst under the auspices of the Empire. I am but the humble lay flamen of [settlementname], devoted to the service of those who anoint the Martyr Darusos and who accept the auctoritas divus of the imperial line. If you are friend, I bid you allow me offer you succor and comfort; if you are yet to accept the Martyr into your heart, pray allow me to elucidate.You shall know no regret save for time spent in ignorance of a beatific truth." />
+    <string id="JxL4wkF5h" text="Peace be upon you, my kin. Have you come to study the Code of Asera? I shall grant you what wisdom I have gleaned in my long hours of study, but as your brother I must tell you that I find myself more ignorant the more I realize the breadth of what there is still yet to learn." />
+    <string id="BdrSAfA6Q" text="Alas, you are no Son of Asera and thus you could never truly follow the Code of Asera. Not in any way that I could fathom. There may be precedent for one beyond our blood to successfully follow the code, but for this you should seek out an Akhund; a scholar of the faith." />
+    <string id="MBkpf99Zc" text="You think that it would go unnoticed how the folk here cringe at your visage? How your name is whispered with scornful lips? Are they mislead about you? Perhaps, perhaps. We shall see." />
+    <string id="LLGjYZY3a" text="You are known to me and to this village; not as a savior or as a good soul, but as one of us. You are humble, perhaps because you lack the boldness to pursue being charitable - or perhaps just the means. I do not know, and I do not judge." />
+    <string id="PntmwkKZi" text="Peace be upon you, my kin. Have you come to study the Code of Asera? I shall grant you what wisdom I have gleaned in my long hours of study, but as your brother I must tell you that I find myself more ignorant the more I realize the breadth of what there is still yet to learn." />
+    <string id="UOPHN6ABY" text="I wish you well in such pursuits, and that you live a life of peace wherever this path may take you." />
+    <string id="tv1y2tdSi" text="If you wish to be made a follower of the Code of Asera, you must treat these people as you would a sibling - you must cherish them, exalt them, protect them and educate them. Show them your better nature and I shall perform upon you our rites of induction." />
+    <string id="vSTYpW4kb" text="I welcome you, my kin - blood of my blood. May you go in peace and bring honor to his legacy." />
+    <string id="6BwUR5vhw" text="Mine is the voice that speaks for the Martyr’s will, alas only in mournful penitentials. I wear this mantle by my own volition, for overlong have there been aspiring tyrants who sought to further usurp his mandates by way of vile machinations. Seldom am I to preach, for mine is the role to contemplate the mysteries of creation as glanced by Darusos as he was made eternal through the rites of divus.Fret not, for though I hold all the myriad gods of our Empire - both those liberated from savage cultures and those brought with us from our ancestral birthplace - I am that which holds the Martyr above all others." />
+    <string id="HxoVJnjX0" text="I preach the doctrines of Darusos, our Emperor betrayed in his youth by the vile treachery of his generals. A child, wise beyond his years and graced with the beatific sight of Heaven; he sought to see the Empire reign as a place of order where patrician and plebeian alike need not suffer fear. He would see us fed, watered, and granted the joys that we are due - and if not for the craven workings of sellswords and tyrant upstarts, he would have reigned one thousand years." />
+    <string id="Pg0kS6rQr" text="Lo, for I preach the tragedy of the Martyr Darusos, an Emperor betrayed in his youth by the cruel ambitions of his generals. He was targeted, for even the most oathbound man can be made a craven sellsword when they gaze upon the throne of an Empire. Darusos was a goodly sort, he wept for the Palaics and the Vakken, he wrote an elegy for the Perassic League in their fading days. He saw the Empire as united in soul and in spirit, undone from within only by the actions of wicked men. It was for this that Darusos was crucified upon a sacred fig tree and set ablaze - all his aspirations but kindling… Take heart, for this is the sermon of a Martyr - not merely one of a man." />
+    <string id="qZrqetWso" text="‘Tis my desire to spread the denied transpositions of the Martyr to the licentious masses of our age. To absolve our Empire the foul stains of hubristic usurpers, and to see seized with thine own hands a fate where the line betwixt Darusos to Arenicos, and beyond to Rhagaea Pethros and Ira Pethros may undergo the rite of divus before tragedy may befall them. I preach that the god - emperors of old who claimed deified rank, clutched at such power only through the long gaze of history.By candlelight mine eyes have gleaned that such heights are not unattainable, that within the mysteries and doctrine of Darusos, sits the illustrious path to Heaven that man may tread without departing the mortal coil." />
+    <string id="6XLHsGxqR" text="But no. Betrayed by his generals, spat upon by the Senate, and mocked by his honor guard - Darusos was crucified to a sacred fig tree and burnt to cinders. His great works and scribed doctrines set ablaze with him. As one of the Flamines Castus, I seek to purify those who have walked a path of sin and shame.For the Martyr knows that the failings of those who betrayed them were born from human frailty -they feared change, and in their fear enacted change as fearsome as any other.None of us are immaculate, but there are some who may become pure and unsullied such as I.Pray then, that you may become like me." />
+    <string id="hRs5n6aiA" text="The imperial line was enshrined upon the throne by a hand most divine during its origins, and thus though Darusos was murdered by militants - his words could not be silenced. Though upstarts like Lucon Osticos and Garios Comnos would seek to usurp the mandate of heaven, consider that the late Emperor Arenicos Pethros was a man-made-divine who was Martyred in a similar fashion. It is only through Empress Rhagaea Pethros and the heir Ira Pethros - that this holy line continues. History should not repeat itself further.No more heroes of our Empire need die for the vanity of lesser men or savage nationals.Darusos awaits us in heaven, and paradise is awarded to those who seek to better the lives of his citizens, and enact the reforms he was denied in life." />
+    <string id="f1nmVPyND" text="Ahh, ‘tis wisdom and arrogance that thou shalt seek the Rex Sacrarum for elucidation. What is thine intent, to seek one wise beyond the ken of an age and bid they preach the rote doctrine of the lay flamines? Thoust have no need to be coy, nor ignorant, nor false. I shall speak and do so with courtesy - for this is what the Martyr would have of me. Perilous is the hour and heretics run rife through our Empire.Scourge those who cling to the Augeo Sophica or the Parens Patriae, shame their leaders; see them seized by brutish hands befitting brutish miens such as theirs.Let not their disarray see our fiefs fall to the avaricious hearts of lesser, wayward men." />
+    <string id="QQB652HX5" text="Purity comes at a cost. Though I would not ask you to make a pauper of yourself, know that denars have led far too many upon an unrighteous path. Donate your wealth to the Martyrdom, free yourself from the burdens of silver and gold. Give food to the needy, see our soldiers fed so we may endure the long siege we suffer upon our ideals. Make yourself known and friend to others within the ranks of the Flamines Castus, gain an audience and supplicate yourself before the Rex Sacrarum. " />
+    <string id="D0ZFBcOqf" text="Alas we are beset by foes who desire what they think is best for the soul of our Empire. Converting the upstarts of the Augeo Sophica cult or the Parens Patriae movement. Members of the Northern and Western breakaway territories need to be put to the sword, for they have sought to sunder the imperial line and represent daggers waiting in shadows so long as they yet live…" />
+    <string id="hjsiJA7Ck" text="I would suffice to bid you take arms against the Embers of the Flame, they preach a false doctrine and grant hospitality to those who would see us destroyed. Their workings dishonor the Martyr - and should you shackle their heresiarch, I would see them brought before me. So they might know their lowly place… Mine are matters of far higher importance, thou shalt not impress me.Court the patricians and the flamines; sully not mine hours with vainglorious pursuits." />
+    <string id="8LSJhbaCa" text="Bring high ranking officers and soldiers from the upstart states and once tamed cultures to heel; see them gifted to our cause so they might learn their place once more. And most importantly, I beg you, ensure that Lycaron does not fall into enemy hands - for should it be destroyed we may see all records of Darusos lost." />
+    <string id="EDCribt0s" text="But pardon my words, for you might think me a brute calling you to hear the clarion call of a crusade. Nay, this is not my intent. In truth you could do much by providing food to the garrisons of our imperial holdings, disposing of looters who prey upon the downtrodden, and diminishing the number of disreputable blackguards from the Embers of the Flame - who dare speak the Martyr’s name in vanity." />
+    <string id="sfZW5t4ay" text="Great Spirits" />
+    <string id="AqgNuDPVO" text="Rex Sacrarum" />
+    <string id="8n0Ne6jqM" text="Flamines Castus" />
+    <string id="cVAhsVTks" text="Flamines" />
+    <string id="o992rc5fB" text="Cults" />
+    <string id="FwLZBkNFC" text="I would like to medidate upon the Martyr." />
+    <string id="GBuJp4eWz" text="How so? Would you like to medidate upon the Cult and our line of hallowed emperors? Or would you pray for guidance from the Triad?" />
+    <string id="BKWpdzCDt" text="Assert your will for guidance. The study of the Martyr and the gods is not to be taken lightly." />
+    <string id="d9bB3gQNm" text="I would like to medidate upon the Martyr." />
+    <string id="kgwjAedmF" text="{OFFERING} was ritually offered by {HERO}." />
+    <string id="zu1SYYULO" text="The fate of {HERO} was sealed once they dared draw sword on us. Affirm the rite and we shall rejoice upon the glory we bathe ourselves in as the enemy bleeds!" />
+    <string id="RxNwA5uhg" text="{SACRIFICE} was ritually sacrificed by {HERO}." />
+    <string id="VG85V4SRa" text="Sacrifice {HERO} to prove your devotion." />
+    <string id="RihSxSaaG" text="Human Sacrifice" />
+    <string id="TQBcrntw7" text="The fate of {HERO} was sealed once they dared draw sword on us. Let us rejoice upon the glory we bathe ourselves in as the enemy bleeds!" />
+    <string id="Tjz8N2bF4" text="The fate of {HERO} was sealed once they dared draw sword on us. Affirm the rite and we shall rejoice upon the glory we bathe ourselves in as the enemy bleeds!" />
+    <string id="c475YeTSA" text="Zabiha" />
+    <string id="UnvCLCOQx" text="The Canticles" />
+    <string id="vwZq8n70h" text="I fear this is lost upon the younger generation of goliards, and not considered by the scriveners of the priory; but the desecration of text and the perversion of the past. Sack your cities, purge your foes; but do not let them die nameless. Do not burn their libraries. Do not whip them until they swear oaths forsaking their bloodlines." />
+    <string id="B3kUV1xe3" text="n truth, nothing. History is based upon fact and truth, the Canticles tells such precedent with the storyteller’s embellishment. Villains are as necessary as heroes when they are a matter of tales. Were you to be a kinslayer, a raider, a plunderer or a butcher of our own folk you would be hated - but you would be remembered.." />
+    <string id="paZGsWY0a" text="Cravens are unworthy of legend, and servants undefined by their merit will be forgotten by the passage of time. Little is forbidden upon the path to remembrance, should one not care if they are held as villain or savior when the victors write of the age. But a peacemaker is little remembered when war comes calling, and a courtier must deal in honeyed words rather than glorious deeds" />
+    <string id="oPjRgYiHo" text="The tragic state of Vlandia is that we are many people who have all too often forgotten our many homelands, in favor of venerating our united purpose. Nothing is forbidden if one wishes to be known in history; but it is a blasphemy to destroy history to be known in legend. " />
+    <string id="yd2U69Nfw" text="I would ask though, that you pursue your place in the saga with a kind heart; there are ample enemies enough in the ranks of the gentry and beyond our borders. We’ve little need for more souls of monstrous heart. " />
+    <string id="Ha7F2Vrs8" text="You will not be shunned or excommunicated by falling into humility and servile unimportance; you will simply be unworthy of remembrance. An epithet upon your grave plank will be all you deserve then, a name that will fade and molder within a generation." />
+    <string id="Oa47E3aY7" text="Is there something that I can say or do to be of use to you, young master? Our time in this world is short indeed, and mine all the shorter by virtue - or perhaps malus - of my age. Did you come to greet an old master and learn the way of the Canticles? If so, I beg you find a goliard - my voice does not carry with gusto as theirs does, and my words may seem withered by comparison. " />
+    <string id="ofXUfFiuP" text="Stranger if you were led to me for the services of a town scribe, know that I work only in vellum and that unless you have procured me wax tablets all your own, there is little scrivener can offer you in terms of an education. It is not my job nor responsibility to tend to the illiterate, for I pen the Canticles and lest you somehow be a notable beyond my knowing - I see no cause to enshrine your name in such sacred work." />
+    <string id="OzR0vYYW9" text="Hmm? Oh yes, greetings. I feel as though I know you, or perhaps if not you then the deeds of one much like you stranger. You bear an uncanny resemblance to one whose deeds have reached the likes of we humble scriveners. I cannot be certain if I have penned your name or face in silverpoint, but I would be pleased to make your acquaintance should you be that soul. It would be my sacred honor, stranger, to know you." />
+    <string id="Zbx39hgPi" text="Hark, thy nameless and forgotten soul! Come wit and make yourself known such that you might dwell in my mind and be more than but a dim candle among bon fires! Do you not look upon the world and think yourself a lesser than your neighbors? Sons and daughters - children even! The young and the old make themselves worthy of praise, and yet among them you remain unworthy of pen and purpose. Do you not wish to be remembered?" />
+    <string id="Vmw3Gy2JW" text="Ah yes, another soul upon the path towards eternity; seeking glory and remembrance within the Canticles. The years grow long, and yet I feel all the shorter for them. Time bends the elderly with the weight of their deeds. What do you wish to share with me, and why is it me that you seek over scriveners and goliards?" />
+    <string id="hXwvysHBA" text="O soul, how goes your tale? Worthy of telling, or on the ascent to such I am sure. Hero or villain, king or killer, I welcome you. Let us speak openly and in full truth, and may we be judged for our words amongst the whole of the Canticles." />
+    <string id="Ext864QyF" text="Hail to this one, and may all know their tale! Their name is spoken of, it is whispered and it is sung on wagging tongues - by goliard and troubadour alike! But are they hero or are they villain? A knave, a rake, a blaggard or a savior mayhaps? The Canticles are not yet written in full, the song not yet ended - but does that haunt you or inspire you? How history will see you known?" />
+    <string id="sOv2sv2oQ" text="Rare have been the days in my life that royals and kingkillers, emperors and sultans would come to speak to me. It has happened before, my words offered little comfort. Powerful rulers seek always to control how they are viewed, how they will be remembered; and in pursuit of eternity they damn themselves by neglecting the present. Your deeds and influence are those which will be penned in our grand works as a culture; but I pray that you do not forget that you live only in this age." />
+    <string id="uA5wcLkGc" text="I have heard of you, even seen the proper pigments used by one who may have potential to be my successor. Their work venerates you, and yet you do not know their name as they know yours. As I know yours." />
+    <string id="YS0VgtmpF" text="For what purpose do you think this shall bring you comfort? You are young in the eyes of the saga; potential abounds around you. Fate shall give you what it is you require, and you - if you are bold - shall take up that which you desire." />
+    <string id="scpLTUmLB" text="I am made elevated by your presence, for yours is a name sung upon many a verse within the Canticles. The young novices have ground many a gall nut to properly pen your deeds, and though I have seen your face in silverpoint before I know now how to better see it illuminated." />
+    <string id="cxDRD0EH4" text="O soul, know that I have heard your name already and recognize you by your mien. It is a kindness in the Canticles, to have one’s reputation precede them. Your name is penned in my volumes where appropriate and important." />
+    <string id="ctFTG12nB" text="I applaud your desire, but you are not unique in this tale. Not yet. You are one of countless many who look upon their place in history and fear being forgotten. You could turn back now, take love and heart in a liminal existence. But should you desire to be known and to be sung of, you must first prove yourself worthy of my ink." />
+    <string id="mSmbZvi2k" text="Do you think me the fool, o hero? I know well your name, and you are known well to the people. That you think you need be inducted to be part of our tales is both insult and strange courtesy; for you are an important player upon our world’s stage. But if you deign to think you need my approval than so be it. I shall see your name illuminated upon fine vellum, and when word of your deeds reaches the ears of others upon the path, I shall see it penned." />
+    <string id="em5W1w8RG" text="I know your tale, there is value in hearing it but perhaps not yet in speaking it. Take no offense, you are worth more to the people than the escapades of a fishwife of Merroc or the rumors of a downtrodden swamp thug upon the Ebor. I shall pen your name within the tales of this age, a bit player for the moment - but such tertiary cast have a way of finding favoritism with those who seek to place themselves in the shoes of one they can imagine.fight." />
+    <string id="gVxEHO98y" text="Would you now? Bold of you to ask, bolder still to think you have the stones for it. You are an untested soul, your saga perhaps barely begun or as of yet unworthy of an audience. You are far from a Wilund the Bold or an Oca the Conqueror. I will not anoint you upon this path until you have a name worthy of a scrivener’s pen." />
+    <string id="kqp1umMqD" text="That you, someday, shall age and wither as I have. Your grave will come to claim you, as it claims us all. I prithee, live your life so that you inspire the best in those who come after you. Let your legacy be one worth following in heart, not pursued by iron and bloodshed." />
+    <string id="si3jNiUFB" text="Have you considered that perhaps when our hands and songs can convey only the small glimpses of the liminal upon vellum, that what is forgotten in the faith of the eternal is more beautiful? That it may yet rest, in Heavens or places fouler? That your name, should it rise ever higher, may be cursed or spoken for as long as our texts yet live? What glory you seek in this life may not follow you to the next. But very well, you are anointed upon our pages. May this bring you peace and allow you time to seek comforts more deeply personal." />
+    <string id="v3X9PkJBn" text="I will remember your name for we have shared these words, but I fade with the hours from my autumn into winter; and what comfort you may hold by being known to an Elder Illuminator is a small thing to cherish when compared to being sung in a bard’s song." />
+    <string id="Gn1fdmOvB" text="That you think you need the approval of a humble scrivener to be formally inducted into the Canticles is a courtesy unnecessary but greatly appreciated; for now my own name shall play a role beyond merely a rubricator in the grand tales of this age. " />
+    <string id="iBkrJo8k5" text="Were you a soul of middling ambitions this could be comfort to you; but were you that, you’d not find yourself so bound within the fate of an era. You are part of the Canticles now, go forward in momentum; change the stars to make your fate one all shall know. Go in boldness. " />
+    <string id="c7HxhmQja" text="Compete in tournaments, serve a lord well, participate in a war and make yourself the leader of a true clan - not a mere rabble mob. Once you are known to more than just yourself, once I hear tell of you in tales, I shall see you named among the cast of characters for this age." />
+    <string id="TVDRBAK4i" text="May you rise or may you fall, always and unto eternity. Savior or villain, royal or thrall; we await the fate that comes at the song’s end." />
+    <string id="q0FguFAKD" text="You shall be the imagined persona of many a child picked last in games of stick fight. Make yourself more known, rise your station and change your stars; in time you may yet find yourself worthy of tale." />
+    <string id="MYQaerpFn" text="Find victory within a tournament, kidnap a haughty noble, put a bastard’s head to the chopping block, or become known to the folk of Vlandia for good or for ill. Only then will I see fit to have your name illuminated in the margins of our tale." />
+    <string id="qmKW9WdqO" text="I do not preach, I merely illuminate. I have penned the Canticles since I first arrived on the continent as a child, a war orphan in the homeland who found comfort only in the cold embrace of a cloister. I was a goliard, a true firebrand once; and a scrivener when time demanded it of me." />
+    <string id="45CBKBgpA" text="I do not preach, stranger. I pen the Canticles, the compounded histories of our myriad people - of our wars, our epics, our tragedies and our sorrows. While young goliards boast in the cities of our kingdom, I am but a scrivener and have resigned myself to a priory where I might best illuminate the tales of the land by my own hand." />
+    <string id="vHxFd0RUR" text="Preach? Do not think me some imperial dog quibbling over their penitential! I do not preach, I sing of the Canticles. I tell the tales of our ancestors and our contemporaries, of those worthy of song and those who carry the song ever upon their lips." />
+    <string id="gZ38HgQxj" text="I fought, I killed, I was a legend in the making - as all men would claim to be in hubris. But my hands ached upon a sword hilt; far more than when I gripped a quill. And thus I illuminate, even still in my sunset days." />
+    <string id="GdWRcrWtD" text="It is a humble post, and those who recite the tales by rote are seldom worthy of the annals themselves - but those who pen them are granted the privilege of signing their names, and thus we shall be remembered as those who carried the song. " />
+    <string id="28PERRp3K" text="Preach, bah! A Vlandian does not preach, they embody the epic and embolden themselves to actions - to pursuits grander than those who came before them!" />
+    <string id="H9awUKGVV" text="In my youth I would tell you that to be sung of requires violence and glorious deeds; but wiser now I say you need only be patient. Our faith - if one can call it a faith beyond that which we put in our peers - is one of syncretism and patience. We speak of the Heavens, the Otherworld, the Sight, all manner of tenets absorbed from lands we’ve conquered and fought upon." />
+    <string id="ySTUeMF9n" text="Prove your… Perhaps you do not understand the nature of the Canticles? You are a player upon this stage, a character within the tale; all who live are. Whether you are to be tertiary, secondary; villain or protagonist, is a matter of those who pen the page and the nature of your deeds. If you wish to be exalted by history and sung of in the Canticles, you must spread your influence far and wide." />
+    <string id="xO8aMdLbp" text="f you wish to be enshrined within the tales and songs of the Vlandian people, you must embody those who came before you and learn from their deeds. You must then prove your mettle and that you are not a mere follower upon the path, but a being worthy of being sung in the Canticles of the nation. Knights and kings, barons and bandits; all will fade with time if they do not give cause for their memory to be known." />
+    <string id="1zqPjswOi" text="All things we accept as truth, though not of importance when compared to the legacy we leave upon this world. If you wish to prove your faith, go forth with an open mind and a patient heart; if you are to be a legend worthy of the Canticles, fate shall provide you the chance. " />
+    <string id="h5y5gXxp2" text="You must be known, for good or for ill; by deeds worthy of remembrance. Vlandia celebrates warfare and the mercenary life for many reasons, but foremost among them for many is that a sellsword is far more memorable than a money lender or a basket weaver. If you wish to prove your place is more worthy of the song, perform bold deeds. " />
+    <string id="vPwQ8QDEO" text="If you wish to prove your mettle, you must compete with the deeds of old for the good of our people. Conquer, raid, play at court; make yourself known - live a life both bold and notorious! Better you have ten thousand enemies who remember your name than a single cherished friend whose memory of you will die with them." />
+    <string id="TAQdYJtgD" text="Great Saga" />
+    <string id="RkJQBGzUs" text="Elder Illuminator" />
+    <string id="ErKsLdy70" text="Scrivener" />
+    <string id="h1T8e8dER" text="Goliard" />
+    <string id="O6oFiBhOr" text="Sagas" />
+    <string id="zUgRx2gTt" text="Induction is possible." />
+    <string id="fmhchJHyL" text="Insufficient clan tier (min. 3)" />
+    <string id="pcivPxZho" text="I would like to medidate on one of the sagas." />
+    <string id="GfStufUhQ" text="And which one of sacred sagas, of heroes past and renowned, would you like to medidate upon?" />
+    <string id="Wm1ygxnDH" text="Are you sure? If so, you shall take these teachings deep into your heart. Let your soul sing for the anguished fallen, and hope one day you may join them in the Canticles!" />
+    <string id="RVnTThg4y" text="{HERO} is now medidating on the {DIVINITY} saga." />
+    <string id="0Hp0exAbZ" text="medidate upon." />
+  </strings>
 </base>

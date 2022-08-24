@@ -1,4 +1,4 @@
-﻿using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Decisions
@@ -11,7 +11,7 @@ namespace BannerKings.Managers.Decisions
 
         public override string GetHint()
         {
-            return new TextObject("{=!}Send out a handful of horsemen to scout a large area around the settlement and report enemy movement activities").ToString();
+            return new TextObject("{=dn1GTi5X3}Send out a handful of horsemen to scout a large area around the settlement and report enemy movement activities").ToString();
         }
 
         public override string GetIdentifier()
@@ -21,7 +21,7 @@ namespace BannerKings.Managers.Decisions
 
         public override string GetName()
         {
-            return new TextObject("{=!}Send out scouts").ToString();
+            return new TextObject("{=m9jP10UGv}Send out scouts").ToString();
         }
     }
 }

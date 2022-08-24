@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using BannerKings.Managers.Titles;
 using TaleWorlds.CampaignSystem;
@@ -153,7 +153,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
 
         public override TextObject GetChooseTitle()
         {
-            var textObject = new TextObject("{=!}Change government to {GOVERNMENT}");
+            var textObject = new TextObject("{=HGiQxF52L}Change government to {GOVERNMENT}");
             textObject.SetTextVariable("GOVERNMENT", successionType.ToString());
             return textObject;
         }
@@ -165,13 +165,13 @@ namespace BannerKings.Managers.Kingdoms.Contract
             var newGovernment = ((SuccessionDecisionOutcome) chosenOutcome).ShouldDecisionBeEnforced;
             if (newGovernment)
             {
-                textObject = new TextObject("{=!}The {KINGDOM}'s government is now {POLICY_DESCRIPTION}. {POLICY_SUPPORT}");
+                textObject = new TextObject("{=2xgjSnnpZ}The {KINGDOM}'s government is now {POLICY_DESCRIPTION}. {POLICY_SUPPORT}");
             }
             else
             {
                 textObject =
                     new TextObject(
-                        "{=!}The {KINGDOM}'s government will continue to be {POLICY_DESCRIPTION}. {POLICY_SUPPORT}");
+                        "{=5c2mCULpN}The {KINGDOM}'s government will continue to be {POLICY_DESCRIPTION}. {POLICY_SUPPORT}");
             }
 
 
@@ -220,7 +220,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
         {
             var textObject =
                 new TextObject(
-                    "{=!}{CLAN} proposes a change of government, currently {CURRENT} to {PROPOSED}. You can pick your stance regarding this decision.");
+                    "{=RuEKM4Osz}{CLAN} proposes a change of government, currently {CURRENT} to {PROPOSED}. You can pick your stance regarding this decision.");
 
             textObject.SetTextVariable("CLAN", DetermineChooser().Leader.Name);
             textObject.SetTextVariable("CURRENT",
@@ -231,7 +231,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
 
         public override TextObject GetSupportTitle()
         {
-            var textObject = new TextObject("{=!}Vote to change realm's succession to {GOVERNMENT}");
+            var textObject = new TextObject("{=Esa2wGJO4}Vote to change realm's succession to {GOVERNMENT}");
             textObject.SetTextVariable("GOVERNMENT", successionType.ToString());
             return textObject;
         }
