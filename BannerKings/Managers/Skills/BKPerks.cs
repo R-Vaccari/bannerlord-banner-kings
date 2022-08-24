@@ -183,6 +183,17 @@ namespace BannerKings.Managers.Skills
 
         #endregion  Scholarship
 
+        #region  Theology
+
+        public PerkObject TheologyFaithful { get; private set; }
+        public PerkObject TheologyBlessed { get; private set; }
+        public PerkObject TheologyReligiousTeachings { get; private set; }
+        public PerkObject TheologyRitesOfPassage { get; private set; }
+        public PerkObject TheologyPreacher { get; private set; }
+        public PerkObject TheologyLithurgy { get; private set; }
+
+        #endregion  Theology
+
         public override IEnumerable<PerkObject> All
         {
             get
@@ -535,6 +546,71 @@ namespace BannerKings.Managers.Skills
         public override void Initialize()
         {
             InitializePerks();
+
+            #region Theology
+
+            TheologyFaithful = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("TheologyFaithful"));
+            TheologyFaithful.InitializeNew("{=!}Traditionalist", BKSkills.Instance.Lordship, GetTierCost(1),
+                LordshipAdaptive,
+                "{=!}Piety gain is increased by +0.2 daily.",
+                SkillEffect.PerkRole.Personal, 0.2f,
+                SkillEffect.EffectIncrementType.Add,
+                "{=!}Religious notables' volunteers may be recruited.",
+                SkillEffect.PerkRole.Ruler, 1f,
+                SkillEffect.EffectIncrementType.Add);
+
+            TheologyBlessed = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("TheologyBlessed"));
+            TheologyBlessed.InitializeNew("{=!}Traditionalist", BKSkills.Instance.Lordship, GetTierCost(2),
+                LordshipAdaptive,
+                "{=!}Blessings last a season longer.",
+                SkillEffect.PerkRole.Personal, 0.2f,
+                SkillEffect.EffectIncrementType.Add,
+                "{=!}Blessings cost 10% less piety.",
+                SkillEffect.PerkRole.Ruler, 1f,
+                SkillEffect.EffectIncrementType.Add);
+
+            TheologyReligiousTeachings = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("TheologyReligiousTeachings"));
+            TheologyReligiousTeachings.InitializeNew("{=!}Traditionalist", BKSkills.Instance.Lordship, GetTierCost(3),
+                LordshipAdaptive,
+                "{=!}Children receive 1 extra Wisdom when becoming adults.",
+                SkillEffect.PerkRole.Personal, 0.2f,
+                SkillEffect.EffectIncrementType.Add,
+                "{=!}Daily experience points in Theology for companions and family in party.",
+                SkillEffect.PerkRole.Ruler, 1f,
+                SkillEffect.EffectIncrementType.Add);
+
+            TheologyRitesOfPassage = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("TheologyRitesOfPassage"));
+            TheologyPreacher = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("TheologyPreacher"));
+
+            TheologyPreacher.InitializeNew("{=!}Preacher", BKSkills.Instance.Lordship, GetTierCost(4),
+                TheologyRitesOfPassage,
+                "{=!}Settlement religious tensions reduced by X%.",
+                SkillEffect.PerkRole.Personal, 0.2f,
+                SkillEffect.EffectIncrementType.Add,
+                "{=!}Settlement conversion speed increased by X%.",
+                SkillEffect.PerkRole.Ruler, 1f,
+                SkillEffect.EffectIncrementType.Add);
+
+            TheologyRitesOfPassage.InitializeNew("{=!}Rites Of Passage", BKSkills.Instance.Lordship, GetTierCost(4),
+                TheologyPreacher,
+                "{=!}Rites can be performed again 1 season sooner.",
+                SkillEffect.PerkRole.Personal, 0.2f,
+                SkillEffect.EffectIncrementType.Add,
+                "{=!}Rites yield 5 renown.",
+                SkillEffect.PerkRole.Ruler, 1f,
+                SkillEffect.EffectIncrementType.Add);
+
+            TheologyLithurgy = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("TheologyLithurgy"));
+            TheologyLithurgy.InitializeNew("{=!}Preacher", BKSkills.Instance.Lordship, GetTierCost(5),
+                LordshipAdaptive,
+                "{=!}Randomly receive relations with religious notables in your settlements.",
+                SkillEffect.PerkRole.Personal, 0.2f,
+                SkillEffect.EffectIncrementType.Add,
+                "{=!}Some unspecified settlement impact",
+                SkillEffect.PerkRole.Ruler, 1f,
+                SkillEffect.EffectIncrementType.Add);
+
+            #endregion Theology
 
             #region Lordship
 
