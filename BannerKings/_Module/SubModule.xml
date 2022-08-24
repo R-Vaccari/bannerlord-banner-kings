@@ -39,7 +39,7 @@
 	</SubModules>
 	<Xmls>
 		<XmlNode>
-			<XmlName id="GameText" path="module_strings"/>
+			<XmlName id="GameText" path="gt_common"/>
 		</XmlNode>
 		<XmlNode>
 			<XmlName id="EquipmentRosters" path="equipment_sets"/>
