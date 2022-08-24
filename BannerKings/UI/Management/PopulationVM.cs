@@ -31,7 +31,7 @@ namespace BannerKings.UI.Management
                 militaryVM = new MilitaryVM(data, settlement, false);
                 religionVM = new ReligionVM(data, settlement, false);
                 IsOverviewSelected = true;
-                IsReligionAvailable = data.ReligionData != null;
+                IsReligionAvailable = data.ReligionData == null || data.ReligionData.Religions == null;
             }
 
             [DataSourceProperty]

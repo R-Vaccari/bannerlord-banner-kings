@@ -107,13 +107,10 @@ namespace BannerKings.UI.Management
             base.RefreshValues();
             
 
-
-            if (data.ReligionData == null)
+            if (data.ReligionData == null || data.ReligionData.Religions == null)
             {
                 return;
             }
-
-
 
             PopList.Clear();
             ReligionList.Clear();
