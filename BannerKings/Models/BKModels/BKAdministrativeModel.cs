@@ -1,4 +1,4 @@
-﻿using BannerKings.Managers.Policies;
+using BannerKings.Managers.Policies;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
@@ -46,7 +46,7 @@ namespace BannerKings.Models.BKModels
             }
 
             float decisions = BannerKingsConfig.Instance.PolicyManager.GetActiveCostlyDecisionsNumber(settlement);
-            baseResult.Add(0.025f * decisions, new TextObject("{=!}Active decisions"));
+            baseResult.Add(0.025f * decisions, new TextObject("{=xKcVLpMQb}Active decisions"));
 
             return baseResult;
         }

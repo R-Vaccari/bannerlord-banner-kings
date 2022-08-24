@@ -1,4 +1,4 @@
-﻿using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Decisions
@@ -11,7 +11,7 @@ namespace BannerKings.Managers.Decisions
 
         public override string GetHint()
         {
-            return new TextObject("{=!}Extend exemptions to artisans and guilds, improving their output efficiency while decreasing state revenue.").ToString();
+            return new TextObject("{=HGtTMAzDt}Extend exemptions to artisans and guilds, improving their output efficiency while decreasing state revenue.").ToString();
         }
 
         public override string GetIdentifier()
@@ -21,7 +21,7 @@ namespace BannerKings.Managers.Decisions
 
         public override string GetName()
         {
-            return new TextObject("{=!}Encourage mercantilism").ToString();
+            return new TextObject("{=c5hugcMGu}Encourage mercantilism").ToString();
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -316,7 +316,7 @@ namespace BannerKings
                     if (modifierRate != 0f)
                     {
                         result.Add(MBMath.ClampFloat(modifierRate / totalModifiers, -5f, 5f),
-                            new TextObject("{=!}Food quality"));
+                            new TextObject("{=OM3iyDWeV}Food quality"));
                     }
 
                     return false;

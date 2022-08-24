@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
@@ -53,11 +53,11 @@ namespace BannerKings.Managers.Education.Languages
                 cultures.First(x => x.StringId == "sturgia"), GetIntelligibles(Sturgian));
             Khuzait.Initialize(new TextObject("{=sZLd6VHi}Khuzait"), new TextObject(),
                 cultures.First(x => x.StringId == "khuzait"), GetIntelligibles(Khuzait));
-            Vlandic.Initialize(new TextObject("{=!}Vlandic"), new TextObject(),
+            Vlandic.Initialize(new TextObject("{=afH0MgUNK}Vlandic"), new TextObject(),
                 cultures.First(x => x.StringId == "vlandia"), GetIntelligibles(Vlandic));
             Calradian.Initialize(new TextObject("{=jKviMpbP}Calradian"), new TextObject(),
                 cultures.First(x => x.StringId == "empire"), GetIntelligibles(Calradian));
-            Aseran.Initialize(new TextObject("{=!}Aseran"), new TextObject(), cultures.First(x => x.StringId == "aserai"),
+            Aseran.Initialize(new TextObject("{=WdUvRU19x}Aseran"), new TextObject(), cultures.First(x => x.StringId == "aserai"),
                 GetIntelligibles(Aseran));
             Vakken.Initialize(new TextObject("{=bHh03ob0}Vakken"), new TextObject(),
                 cultures.First(x => x.StringId == "vakken"), GetIntelligibles(Vakken));

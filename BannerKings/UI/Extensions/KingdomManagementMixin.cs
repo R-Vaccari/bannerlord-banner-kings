@@ -1,4 +1,4 @@
-﻿using BannerKings.UI.Court;
+using BannerKings.UI.Court;
 using BannerKings.UI.Titles;
 using Bannerlord.UIExtenderEx.Attributes;
 using Bannerlord.UIExtenderEx.ViewModels;
@@ -25,9 +25,9 @@ namespace BannerKings.UI.Extensions
         }
 
 
-        [DataSourceProperty] public string DemesneText => new TextObject("{=!}Crown Demesne").ToString();
+        [DataSourceProperty] public string DemesneText => new TextObject("{=Qfbq72zey}Crown Demesne").ToString();
 
-        [DataSourceProperty] public string CourtText => new TextObject("{=!}Court").ToString();
+        [DataSourceProperty] public string CourtText => new TextObject("{=4X2A8tVjO}Court").ToString();
 
         [DataSourceProperty]
         public bool DemesneSelected

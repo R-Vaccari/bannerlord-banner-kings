@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using BannerKings.Behaviours;
 using BannerKings.UI.Crafting;
 using Bannerlord.UIExtenderEx.Attributes;
@@ -53,7 +53,7 @@ namespace BannerKings.UI.Extensions
         private int CurrentEnergy =>
             BannerKingsConfig.Instance.SmithingModel.CalculateArmorStamina(armorCrafting.CurrentItem.Item, Hero);
 
-        [DataSourceProperty] public string ArmorText => new TextObject("{=!}Craft").ToString();
+        [DataSourceProperty] public string ArmorText => new TextObject("{=vpz0m5Sza}Craft").ToString();
 
 
         [DataSourceProperty]
@@ -147,7 +147,7 @@ namespace BannerKings.UI.Extensions
                 spentStamina = startingStamina - heroVm.CurrentStamina;
             }
 
-            HoursSpentText = new TextObject("{=!}Hours spent for all actions: {HOURS} hours.")
+            HoursSpentText = new TextObject("{=CVKJd1EOh}Hours spent for all actions: {HOURS} hours.")
                 .SetTextVariable("HOURS", GetSpentHours().ToString("0.0"))
                 .ToString();
 
@@ -192,7 +192,7 @@ namespace BannerKings.UI.Extensions
                     armorCrafting.CurrentItem.Difficulty);
                 if (MBRandom.RandomFloat < botchChance)
                 {
-                    MBInformationManager.AddQuickInformation(new TextObject("{=!}{HERO} has botched {ITEM}!")
+                    MBInformationManager.AddQuickInformation(new TextObject("{=7DxSadpqp}{HERO} has botched {ITEM}!")
                             .SetTextVariable("HERO", crafting.CurrentCraftingHero.Hero.Name)
                             .SetTextVariable("ITEM", item.Name),
                         0, null, "event:/ui/notification/relation");
@@ -221,12 +221,12 @@ namespace BannerKings.UI.Extensions
                     if (modifier != null)
                     {
                         qualityText =
-                            new TextObject("{=!} with {QUALITY} quality").SetTextVariable("QUALITY", modifier.Name);
+                            new TextObject("{=LouRacbhu} with {QUALITY} quality").SetTextVariable("QUALITY", modifier.Name);
                         element.SetModifier(modifier);
                     }
                 }
 
-                MBInformationManager.AddQuickInformation(new TextObject("{=!}{HERO} has crafted {ITEM}{QUALITY}.")
+                MBInformationManager.AddQuickInformation(new TextObject("{=Fzq5XuABH}{HERO} has crafted {ITEM}{QUALITY}.")
                         .SetTextVariable("HERO", crafting.CurrentCraftingHero.Hero.Name)
                         .SetTextVariable("ITEM", item.Name)
                         .SetTextVariable("QUALITY", qualityText),
