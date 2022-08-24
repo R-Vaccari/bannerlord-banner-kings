@@ -5,8 +5,12 @@ namespace Localizer;
 
 internal class Program
 {
+    private static List<string> UsedLocalizationIDs;
+
     private static void Main(string[] args)
     {
+        UsedLocalizationIDs = new List<string>();
+
         Console.WriteLine("Enter path to source folder:");
         var sourceFolder = Console.ReadLine();
 
@@ -30,6 +34,7 @@ internal class Program
             return;
         }
 
+        LoadUsedLocalizationIDs(localizationFile);
         LocalizeTexts(localizationFile, files);
     }
 
@@ -37,6 +42,28 @@ internal class Program
     {
         Console.WriteLine(message);
         Console.ReadKey();
+    }
+
+    private static void LoadUsedLocalizationIDs(string localizationFile)
+    {
+        var localizationDocument = new XmlDocument();
+        localizationDocument.Load(localizationFile);
+
+        var stringNodes = localizationDocument.SelectNodes("/base/strings");
+        if (stringNodes is null || stringNodes.Count == 0)
+        {
+            return;
+        }
+
+        foreach (XmlNode stringNode in stringNodes)
+        {
+            if (stringNode is null)
+            {
+                continue;
+            }
+
+            UsedLocalizationIDs.Add(stringNode.Attributes!["id"]?.Value!);
+        }
     }
 
     private static void LocalizeTexts(string localizationFile, IEnumerable<string> files)
@@ -102,7 +129,11 @@ internal class Program
             chars[i] = allowedChars[random.Next(0, allowedChars.Length)];
         }
 
-        return new string(chars);
+        var guid = new string(chars);
+
+        return UsedLocalizationIDs.Contains(guid)
+            ? GetLocalizationID() 
+            : guid;
     }
 
     private static void AddTextToLocalization(XmlDocument localizationDocument, string localizationID, string localizedText)
