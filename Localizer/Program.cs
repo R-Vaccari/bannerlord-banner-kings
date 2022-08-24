@@ -91,16 +91,21 @@ internal class Program
         var localizationDocument = new XmlDocument();
         localizationDocument.Load(localizationFile);
 
-        foreach (var file in files)
+        var filesToLocalize = files.ToList();
+
+        var texts = new List<string>();
+        foreach (var file in filesToLocalize)
         {
-            var texts = GetTextsToLocalize(file);
+            texts.AddRange(GetTextsToLocalize(file));
+        }
+
+        texts.RemoveAll(t => string.IsNullOrWhiteSpace(t) || t.Contains("img src="));
+        texts = texts.Distinct().ToList();
+
+        foreach (var file in filesToLocalize)
+        {
             foreach (var text in texts)
             {
-                if (string.IsNullOrWhiteSpace(text) || text.Contains("img src="))
-                {
-                    continue;
-                }
-
                 var textToLocalize = $"{{=!}}{text}";
                 var localizedText = GetLocalizedText(textToLocalize);
 
