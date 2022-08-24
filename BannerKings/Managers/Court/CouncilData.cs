@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using BannerKings.Managers.Populations;
@@ -202,7 +202,7 @@ namespace BannerKings.Managers.Court
                     if (Owner == Hero.MainHero)
                     {
                         InformationManager.DisplayMessage(new InformationMessage(
-                            new TextObject("{=!}You improved relations with {HERO} due to {PERK} lifestyle perk.")
+                            new TextObject("{=7jngaYni}You improved relations with {HERO} due to {PERK} lifestyle perk.")
                                 .SetTextVariable("HERO", random.Name)
                                 .SetTextVariable("PERK", BKPerks.Instance.AugustDeFacto.Name)
                                 .ToString()));
@@ -304,8 +304,8 @@ namespace BannerKings.Managers.Court
             }
 
             /* bool answer = false;
-                   InformationManager.ShowInquiry(new InquiryData(new TextObject("{=!}Council Position Request").ToString(),
-                       new TextObject("{=!}{REQUESTER} requests the position of {POSITION} in your council.")
+                   InformationManager.ShowInquiry(new InquiryData(new TextObject("{=gx7gsdXv}Council Position Request").ToString(),
+                       new TextObject("{=J4tyW4RX}{REQUESTER} requests the position of {POSITION} in your council.")
                        .SetTextVariable("REQUESTER", action.ActionTaker.EncyclopediaLinkWithName)
                        .SetTextVariable("POSITION", action.TargetPosition.GetName()).ToString(),
                    action.Possible, true, GameTexts.FindText("str_selection_widget_accept").ToString(),

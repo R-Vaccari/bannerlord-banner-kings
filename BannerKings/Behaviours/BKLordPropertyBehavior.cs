@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using HarmonyLib;
 using SandBox.CampaignBehaviors;
 using TaleWorlds.CampaignSystem;
@@ -58,7 +58,7 @@ namespace BannerKings.Behaviours
                         if (kingdom == Clan.PlayerClan.Kingdom)
                         {
                             InformationManager.DisplayMessage(new InformationMessage(
-                                new TextObject("{=!}The {CLAN} now own {WORKSHOP} at {TOWN}.")
+                                new TextObject("{=YT699N2D}The {CLAN} now own {WORKSHOP} at {TOWN}.")
                                     .SetTextVariable("CLAN", lord.Clan.Name)
                                     .SetTextVariable("WORKSHOP", random.Name)
                                     .SetTextVariable("TOWN", random.Settlement.Name)

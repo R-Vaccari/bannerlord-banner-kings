@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using BannerKings.Managers.Helpers;
 using BannerKings.Managers.Kingdoms.Contract;
@@ -131,14 +131,14 @@ namespace BannerKings.UI.Titles
             }
 
             var allSetup = kingdom != null && kingdom == BannerKingsConfig.Instance.TitleManager.GetTitleFaction(title);
-            var contractButton = new DecisionElement().SetAsButtonOption(new TextObject("{=!}Contract").ToString(),
+            var contractButton = new DecisionElement().SetAsButtonOption(new TextObject("{=REbfqwzK}Contract").ToString(),
                 () => BannerKingsConfig.Instance.TitleManager.ShowContract(kingdom.Leader,
                     GameTexts.FindText("str_done").ToString()),
-                new TextObject("{=!}Review this kingdom's contract, signed by lords that join it."));
+                new TextObject("{=OVW7fbPR}Review this kingdom's contract, signed by lords that join it."));
             contractButton.Enabled = allSetup;
-            var foundButton = new DecisionElement().SetAsButtonOption(new TextObject("{=!}Found Kingdom").ToString(),
+            var foundButton = new DecisionElement().SetAsButtonOption(new TextObject("{=uWyZP699}Found Kingdom").ToString(),
                 ShowFoundKingdom,
-                new TextObject("{=!}Review this kingdom's contract, signed by lords that join it."));
+                new TextObject("{=OVW7fbPR}Review this kingdom's contract, signed by lords that join it."));
             foundButton.Enabled = allSetup;
 
 
@@ -147,8 +147,8 @@ namespace BannerKings.UI.Titles
                 governments.Count >= 1
                     ? new BKGovernmentDecision(Clan.PlayerClan, (GovernmentType) governments[0].Identifier, title)
                     : null,
-                new TextObject("{=!}Government").ToString(),
-                new TextObject("{=!}Propose a change in government structure, altering the allowed succession forms and aspects of settlement governance. Depending on the government choice, an appropriate succession type will be enforced as well."));
+                new TextObject("{=zYUOYyYe}Government").ToString(),
+                new TextObject("{=YAhdAg6X}Propose a change in government structure, altering the allowed succession forms and aspects of settlement governance. Depending on the government choice, an appropriate succession type will be enforced as well."));
             governmentButton.Enabled = allSetup && governments.Count >= 1;
 
             var successions = GetSuccessions();
@@ -156,8 +156,8 @@ namespace BannerKings.UI.Titles
                 successions.Count >= 1
                     ? new BKSuccessionDecision(Clan.PlayerClan, (SuccessionType) successions[0].Identifier, title)
                     : null,
-                new TextObject("{=!}Succession").ToString(),
-                new TextObject("{=!}Propose a change in the realm's succession, altering how the next sovereign is chosen."));
+                new TextObject("{=tJABdExQ}Succession").ToString(),
+                new TextObject("{=CLuQYQ3Z}Propose a change in the realm's succession, altering how the next sovereign is chosen."));
             successionButton.Enabled = allSetup && successions.Count >= 1 &&
                                        title.contract.Government != GovernmentType.Imperial &&
                                        title.contract.Government != GovernmentType.Republic;
@@ -167,8 +167,8 @@ namespace BannerKings.UI.Titles
                 inheritances.Count >= 1
                     ? new BKInheritanceDecision(Clan.PlayerClan, (InheritanceType) inheritances[0].Identifier, title)
                     : null,
-                new TextObject("{=!}Inheritance").ToString(),
-                new TextObject("{=!}Propose a change in clan inheritances, that is, who becomes the clan leader once the leader dies."));
+                new TextObject("{=HEgd8gHV}Inheritance").ToString(),
+                new TextObject("{=FcGqOWKr}Propose a change in clan inheritances, that is, who becomes the clan leader once the leader dies."));
             inheritanceButton.Enabled = allSetup && inheritances.Count >= 1;
 
             var genderLaws = GetGenderLaws();
@@ -176,8 +176,8 @@ namespace BannerKings.UI.Titles
                 genderLaws.Count >= 1
                     ? new BKGenderDecision(Clan.PlayerClan, (GenderLaw) genderLaws[0].Identifier, title)
                     : null,
-                new TextObject("{=!}Gender Law").ToString(),
-                new TextObject("{=!}Propose a change in gender laws, dictating whether males and females are viewed equally in various aspects."));
+                new TextObject("{=Z9PXbOxp}Gender Law").ToString(),
+                new TextObject("{=jiXDMukJ}Propose a change in gender laws, dictating whether males and females are viewed equally in various aspects."));
             genderButton.Enabled = allSetup && genderLaws.Count >= 1;
 
             Contract = contractButton;
@@ -191,7 +191,7 @@ namespace BannerKings.UI.Titles
         private void ShowFoundKingdom()
         {
             var action = BannerKingsConfig.Instance.TitleModel.GetFoundKingdom(Clan.PlayerClan.Kingdom, Hero.MainHero);
-            InformationManager.ShowInquiry(new InquiryData(new TextObject("{=!}Founding a new Kingdom").ToString(),
+            InformationManager.ShowInquiry(new InquiryData(new TextObject("{=HHV5AcYM}Founding a new Kingdom").ToString(),
                 new TextObject("Found a new title for your kingdom. The title will legitimize your position and allow the de Jure domain of the kingdom to expand through de Jure drift of dukedoms, as well as extend your influence as a suzerain. Founding a title would increase your clan's renown by {RENOWN}. \n \nCosts: {GOLD} {GOLD_ICON}, {INFLUENCE} {INFLUENCE_ICON} \n\nCan form kingdom: {POSSIBLE} \n\nExplanation: {REASON}")
                     .SetTextVariable("POSSIBLE", GameTexts.FindText(action.Possible ? "str_yes" : "str_no"))
                     .SetTextVariable("GOLD", $"{(int)action.Gold:n0}")
@@ -208,8 +208,8 @@ namespace BannerKings.UI.Titles
                     var duchies = (from clan in kingdom.Clans from dukedom in BannerKingsConfig.Instance.TitleManager.GetAllDeJure(clan.Leader).FindAll(x => x.type == TitleType.Dukedom) select new InquiryElement(dukedom, dukedom.FullName.ToString(), null)).ToList();
 
                     MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                        new TextObject("{=!}Founding Dukedoms").ToString(),
-                        new TextObject("{=!}Select up to 3 dukedoms that will compose your kingdom. The kingdom's contract will follow the first dukedom's contract. Dukedom titles from other clans in the faction may be included as well.").ToString(),
+                        new TextObject("{=Ap6B7HBr}Founding Dukedoms").ToString(),
+                        new TextObject("{=BD0YAg83}Select up to 3 dukedoms that will compose your kingdom. The kingdom's contract will follow the first dukedom's contract. Dukedom titles from other clans in the faction may be included as well.").ToString(),
                         duchies,
                         true,
                         3,
@@ -232,7 +232,7 @@ namespace BannerKings.UI.Titles
             return new DecisionElement()
                 .SetAsButtonOption(law, delegate
                 {
-                    var description = new TextObject("{=!}Select a {LAW} to be voted on. Starting an election costs {INFLUENCE} influence.");
+                    var description = new TextObject("{=R14aKDKV}Select a {LAW} to be voted on. Starting an election costs {INFLUENCE} influence.");
                     description.SetTextVariable("LAW", law);
                     var cost = decision?.GetInfluenceCost(null) ?? 0;
                     description.SetTextVariable("INFLUENCE", cost);
@@ -271,7 +271,7 @@ namespace BannerKings.UI.Titles
                 if (kingdom != null && type != title.contract.GenderLaw)
                 {
                     var decision = new BKGenderDecision(Clan.PlayerClan, type, title);
-                    var text = new TextObject("{=!}{LAW} - ({SUPPORT}% support)");
+                    var text = new TextObject("{=18iFAOr6}{LAW} - ({SUPPORT}% support)");
                     text.SetTextVariable("LAW", type.ToString());
                     text.SetTextVariable("SUPPORT", decision.CalculateKingdomSupport(kingdom));
                     laws.Add(new InquiryElement(type, text.ToString(), null, true,
@@ -290,7 +290,7 @@ namespace BannerKings.UI.Titles
                 if (kingdom != null && type != title.contract.Inheritance)
                 {
                     var decision = new BKInheritanceDecision(Clan.PlayerClan, type, title);
-                    var text = new TextObject("{=!}{LAW} - ({SUPPORT}% support)");
+                    var text = new TextObject("{=18iFAOr6}{LAW} - ({SUPPORT}% support)");
                     text.SetTextVariable("LAW", type.ToString());
                     text.SetTextVariable("SUPPORT", decision.CalculateKingdomSupport(kingdom));
                     laws.Add(new InquiryElement(type, text.ToString(), null, true,
@@ -309,7 +309,7 @@ namespace BannerKings.UI.Titles
                 if (kingdom != null && type != title.contract.Succession)
                 {
                     var decision = new BKSuccessionDecision(Clan.PlayerClan, type, title);
-                    var text = new TextObject("{=!}{LAW} - ({SUPPORT}% support)");
+                    var text = new TextObject("{=18iFAOr6}{LAW} - ({SUPPORT}% support)");
                     text.SetTextVariable("LAW", Utils.Helpers.GetSuccessionTypeName(type));
                     text.SetTextVariable("SUPPORT", decision.CalculateKingdomSupport(kingdom));
                     laws.Add(new InquiryElement(type, text.ToString(), null, true,
@@ -328,7 +328,7 @@ namespace BannerKings.UI.Titles
                 if (kingdom != null && type != title.contract.Government)
                 {
                     var decision = new BKGovernmentDecision(Clan.PlayerClan, type, title);
-                    var text = new TextObject("{=!}{LAW} - ({SUPPORT}% support)");
+                    var text = new TextObject("{=18iFAOr6}{LAW} - ({SUPPORT}% support)");
                     text.SetTextVariable("LAW", type.ToString());
                     text.SetTextVariable("SUPPORT", decision.CalculateKingdomSupport(kingdom));
                     laws.Add(new InquiryElement(type, text.ToString(), null, true,

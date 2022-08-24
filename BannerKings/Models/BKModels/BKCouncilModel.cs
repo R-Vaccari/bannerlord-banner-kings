@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using BannerKings.Managers.Court;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -16,25 +16,25 @@ namespace BannerKings.Models.BKModels
 
         public (bool, string) IsCouncilRoyal(Clan clan)
         {
-            var explanation = new TextObject("{=!}Legal crown council.");
+            var explanation = new TextObject("{=zkRR3aPM}Legal crown council.");
 
             var kingdom = clan.Kingdom;
             if (kingdom == null)
             {
-                explanation = new TextObject("{=!}No kingdom.");
+                explanation = new TextObject("{=gTRy30AK}No kingdom.");
                 return new ValueTuple<bool, string>(false, explanation.ToString());
             }
 
             if (clan.Kingdom.RulingClan != clan)
             {
-                explanation = new TextObject("{=!}Not the ruling clan.");
+                explanation = new TextObject("{=83hco1bS}Not the ruling clan.");
                 return new ValueTuple<bool, string>(false, explanation.ToString());
             }
 
             var sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
             if (sovereign == null)
             {
-                explanation = new TextObject("{=!}Does not hold faction's sovereign title.");
+                explanation = new TextObject("{=UhUffa6R}Does not hold faction's sovereign title.");
                 return new ValueTuple<bool, string>(false, explanation.ToString());
             }
 
@@ -78,21 +78,21 @@ namespace BannerKings.Models.BKModels
             if (currentPosition == null || currentPosition.Member != requester)
             {
                 action.Possible = false;
-                action.Reason = new TextObject("{=!}Not part of the council.");
+                action.Reason = new TextObject("{=Ret7uXvj}Not part of the council.");
                 return action;
             }
 
             if (!targetPosition.IsValidCandidate(requester))
             {
                 action.Possible = false;
-                action.Reason = new TextObject("{=!}Not a valid candidate.");
+                action.Reason = new TextObject("{=MpVwUc24}Not a valid candidate.");
                 return action;
             }
 
             if (requester.Clan != null && requester.Clan.Influence < action.Influence)
             {
                 action.Possible = false;
-                action.Reason = new TextObject("{=!}Not enough influence.");
+                action.Reason = new TextObject("{=CWC6rZd7}Not enough influence.");
                 return action;
             }
 
@@ -101,14 +101,14 @@ namespace BannerKings.Models.BKModels
                 if (requester.Clan != null && !requester.Clan.Kingdom.Leader.IsFriend(requester))
                 {
                     action.Possible = false;
-                    action.Reason = new TextObject("{=!}Not trustworthy enough for this position.");
+                    action.Reason = new TextObject("{=J96WGurF}Not trustworthy enough for this position.");
                     return action;
                 }
 
                 if (council.GetCompetence(requester, targetPosition.Position) < 0.5f)
                 {
                     action.Possible = false;
-                    action.Reason = new TextObject("{=!}Not competent enough for this position.");
+                    action.Reason = new TextObject("{=X9gZGDZk}Not competent enough for this position.");
                     return action;
                 }
             }
@@ -120,13 +120,13 @@ namespace BannerKings.Models.BKModels
                 if (currentDesire > candidateDesire)
                 {
                     action.Possible = false;
-                    action.Reason = new TextObject("{=!}Not a better candidate than current councillor.");
+                    action.Reason = new TextObject("{=H7Q8gp72}Not a better candidate than current councillor.");
                     return action;
                 }
             }
 
             action.Possible = true;
-            action.Reason = new TextObject("{=!}Action can be taken.");
+            action.Reason = new TextObject("{=padKY9k2}Action can be taken.");
             return action;
         }
 
@@ -143,20 +143,20 @@ namespace BannerKings.Models.BKModels
                 if (targetPosition == null)
                 {
                     action.Possible = false;
-                    action.Reason = new TextObject("{=!}No position to be relinquished.");
+                    action.Reason = new TextObject("{=BvyvaZdc}No position to be relinquished.");
                     return action;
                 }
 
                 if (targetPosition.Member != requester)
                 {
                     action.Possible = false;
-                    action.Reason = new TextObject("{=!}Not current councilman of the position.");
+                    action.Reason = new TextObject("{=8QZV5dx8}Not current councilman of the position.");
                     return action;
                 }
             }
 
             action.Possible = true;
-            action.Reason = new TextObject("{=!}Action can be taken.");
+            action.Reason = new TextObject("{=padKY9k2}Action can be taken.");
             return action;
         }
 
@@ -171,21 +171,21 @@ namespace BannerKings.Models.BKModels
             if (currentPosition != null && currentPosition.Member == requester)
             {
                 action.Possible = false;
-                action.Reason = new TextObject("{=!}Already part of the council.");
+                action.Reason = new TextObject("{=6bztJebe}Already part of the council.");
                 return action;
             }
 
             if (!targetPosition.IsValidCandidate(requester))
             {
                 action.Possible = false;
-                action.Reason = new TextObject("{=!}Not a valid candidate.");
+                action.Reason = new TextObject("{=MpVwUc24}Not a valid candidate.");
                 return action;
             }
 
             if (requester.Clan != null && requester.Clan.Influence < action.Influence)
             {
                 action.Possible = false;
-                action.Reason = new TextObject("{=!}Not enough influence.");
+                action.Reason = new TextObject("{=CWC6rZd7}Not enough influence.");
                 return action;
             }
 
@@ -197,14 +197,14 @@ namespace BannerKings.Models.BKModels
                     if (requester.Clan != null && !requester.Clan.Kingdom.Leader.IsFriend(requester))
                     {
                         action.Possible = false;
-                        action.Reason = new TextObject("{=!}Not trustworthy enough for this position.");
+                        action.Reason = new TextObject("{=J96WGurF}Not trustworthy enough for this position.");
                         return action;
                     }
 
                     if (council.GetCompetence(requester, targetPosition.Position) < 0.5f)
                     {
                         action.Possible = false;
-                        action.Reason = new TextObject("{=!}Not competent enough for this position.");
+                        action.Reason = new TextObject("{=X9gZGDZk}Not competent enough for this position.");
                         return action;
                     }
                 }
@@ -216,14 +216,14 @@ namespace BannerKings.Models.BKModels
                     if (currentDesire > candidateDesire)
                     {
                         action.Possible = false;
-                        action.Reason = new TextObject("{=!}Not a better candidate than current councillor.");
+                        action.Reason = new TextObject("{=H7Q8gp72}Not a better candidate than current councillor.");
                         return action;
                     }
                 }
             }
 
             action.Possible = true;
-            action.Reason = new TextObject("{=!}Action can be taken.");
+            action.Reason = new TextObject("{=padKY9k2}Action can be taken.");
             return action;
         }
 

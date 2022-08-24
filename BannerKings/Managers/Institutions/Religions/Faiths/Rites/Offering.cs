@@ -1,4 +1,4 @@
-﻿using BannerKings.Managers.Skills;
+using BannerKings.Managers.Skills;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
@@ -20,7 +20,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
         public override void Complete(Hero actionTaker)
         {
             actionTaker.PartyBelongedTo.ItemRoster.AddToCounts(input, -inputCount);
-            MBInformationManager.AddQuickInformation(new TextObject("{=!}{OFFERING} was ritually offered by {HERO}.")
+            MBInformationManager.AddQuickInformation(new TextObject("{=eOoFTCQg}{OFFERING} was ritually offered by {HERO}.")
                     .SetTextVariable("HERO", actionTaker.Name)
                     .SetTextVariable("OFFERING", input.Name),
                 0, actionTaker.CharacterObject, "event:/ui/notification/relation");
@@ -91,7 +91,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
         {
             MBTextManager.SetTextVariable("CLERGYMAN_RITE_CONFIRM",
                 new TextObject(
-                        "{=!}The fate of {HERO} was sealed once they dared draw sword on us. Affirm the rite and we shall rejoice upon the glory we bathe ourselves in as the enemy bleeds!")
+                        "{=B9qA3tM1}The fate of {HERO} was sealed once they dared draw sword on us. Affirm the rite and we shall rejoice upon the glory we bathe ourselves in as the enemy bleeds!")
                     .SetTextVariable("HERO", input.Name));
         }
     }

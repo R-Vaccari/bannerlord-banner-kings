@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using BannerKings.Managers.Innovations;
 using BannerKings.UI.Items;
 using Bannerlord.UIExtenderEx.Attributes;
@@ -31,9 +31,9 @@ namespace BannerKings.UI.Cultures
             RefreshValues();
         }
 
-        [DataSourceProperty] public string AssumeCultureHeadText => new TextObject("{=!}Culture Head").ToString();
+        [DataSourceProperty] public string AssumeCultureHeadText => new TextObject("{=GLyw7eiD}Culture Head").ToString();
 
-        public string ChangeFascinationText => new TextObject("{=!}Fascination").ToString();
+        public string ChangeFascinationText => new TextObject("{=FGyCcHxJ}Fascination").ToString();
 
         [DataSourceProperty]
         public bool ChangeFascinationPossible
@@ -147,16 +147,16 @@ namespace BannerKings.UI.Cultures
 
             var language = BannerKingsConfig.Instance.EducationManager.GetNativeLanguage(culture);
 
-            Information.Add(new StringPairItemVM(new TextObject("{=!}Population:").ToString(),
+            Information.Add(new StringPairItemVM(new TextObject("{=8b6SkxG9}Population:").ToString(),
                 population.ToString()));
 
             if (language != null)
             {
-                Information.Add(new StringPairItemVM(new TextObject("{=!}Language:").ToString(),
+                Information.Add(new StringPairItemVM(new TextObject("{=PaKzVyRG}Language:").ToString(),
                     language.Name.ToString(), new BasicTooltipViewModel(() => language.Description.ToString())));
             }
 
-            Information.Add(new StringPairItemVM(new TextObject("{=!}Settlements:").ToString(),
+            Information.Add(new StringPairItemVM(new TextObject("{=y9Aq42ua}Settlements:").ToString(),
                 settlements.ToString()));
 
             foreach (var trait in culture.GetCulturalFeats())
@@ -170,13 +170,13 @@ namespace BannerKings.UI.Cultures
             {
                 if (innovationData.CulturalHead != null)
                 {
-                    Information.Add(new StringPairItemVM(new TextObject("{=!}Cultural Head:").ToString(),
+                    Information.Add(new StringPairItemVM(new TextObject("{=A0890puZ}Cultural Head:").ToString(),
                         innovationData.CulturalHead.Name.ToString()));
                 }
 
                 if (innovationData.Fascination != null)
                 {
-                    Information.Add(new StringPairItemVM(new TextObject("{=!}Cultural Fascination:").ToString(),
+                    Information.Add(new StringPairItemVM(new TextObject("{=6HdMfyYT}Cultural Fascination:").ToString(),
                         innovationData.Fascination.Name.ToString(),
                         new BasicTooltipViewModel(() => innovationData.Fascination.Description.ToString())));
                 }
@@ -197,14 +197,14 @@ namespace BannerKings.UI.Cultures
                         settlement.Name);
                 }
 
-                Information.Add(new StringPairItemVM(new TextObject("{=!}Research (Daily):").ToString(),
+                Information.Add(new StringPairItemVM(new TextObject("{=DyhgVusS}Research (Daily):").ToString(),
                     research.ResultNumber.ToString("0.00"), new BasicTooltipViewModel(() => research.GetExplanations())));
 
                 foreach (var innovation in innovationData.Innovations)
                 {
                     Innovations.Add(new TripleStringItemVM(innovation.Name.ToString(),
                         innovation.Effects.ToString(),
-                        new TextObject("{=!}{CURRENT}/{REQUIRED} ({PERCENTAGE})")
+                        new TextObject("{=0rVVt8T6}{CURRENT}/{REQUIRED} ({PERCENTAGE})")
                             .SetTextVariable("CURRENT", innovation.CurrentProgress.ToString("0.00"))
                             .SetTextVariable("REQUIRED", innovation.RequiredProgress)
                             .SetTextVariable("PERCENTAGE",
@@ -221,8 +221,8 @@ namespace BannerKings.UI.Cultures
             var innovationData = BannerKingsConfig.Instance.InnovationsManager.GetInnovationData(culture);
             if (innovationData != null)
             {
-                InformationManager.ShowInquiry(new InquiryData(new TextObject("{=!}Culture Head").ToString(),
-                    new TextObject("{=!}Assume the position of culture head.").ToString(), true, true,
+                InformationManager.ShowInquiry(new InquiryData(new TextObject("{=GLyw7eiD}Culture Head").ToString(),
+                    new TextObject("{=sfRuyHJj}Assume the position of culture head.").ToString(), true, true,
                     GameTexts.FindText("str_confirm").ToString(),
                     GameTexts.FindText("str_cancel").ToString(),
                     () => innovationData.AssumeCulturalHead(Clan.PlayerClan),
@@ -248,8 +248,8 @@ namespace BannerKings.UI.Cultures
                 }
 
                 MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                    new TextObject("{=!}Choose Fascination").ToString(),
-                    new TextObject("{=!}The cultural fascination is an innovation that progresses faster than others.")
+                    new TextObject("{=rv2OUFk2}Choose Fascination").ToString(),
+                    new TextObject("{=uFvAeNGQ}The cultural fascination is an innovation that progresses faster than others.")
                         .ToString(),
                     elements, true, 1,
                     GameTexts.FindText("str_done").ToString(), string.Empty,

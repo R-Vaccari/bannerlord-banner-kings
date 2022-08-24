@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using BannerKings.Managers.Education.Books;
 using BannerKings.Managers.Skills;
@@ -72,8 +72,8 @@ namespace BannerKings.Behaviours
 
             if (perk == BKPerks.Instance.ScholarshipMechanic || perk == BKPerks.Instance.ScholarshipMechanic || perk == BKPerks.Instance.ScholarshipMechanic || perk == BKPerks.Instance.ScholarshipMechanic)
             {
-                InformationManager.ShowInquiry(new InquiryData(new TextObject("{=!}Double Perks").ToString(),
-                    new TextObject("{=!}From now on, double perks will be yielded for the {SKILL} skill. The perks will be rewarded after closing the Character tab with 'Done', not immediatly after selecting them.")
+                InformationManager.ShowInquiry(new InquiryData(new TextObject("{=jovQGkGE}Double Perks").ToString(),
+                    new TextObject("{=aRgFF2bz}From now on, double perks will be yielded for the {SKILL} skill. The perks will be rewarded after closing the Character tab with 'Done', not immediatly after selecting them.")
                         .SetTextVariable("SKILL", perk.Skill.Name)
                         .ToString(),
                     true, false,
@@ -90,7 +90,7 @@ namespace BannerKings.Behaviours
                 }
 
                 hero.HeroDeveloper.AddPerk(perk.AlternativePerk);
-                MBInformationManager.AddQuickInformation(new TextObject("{=!}You have received the {PERK} as a double perk yield reward.")
+                MBInformationManager.AddQuickInformation(new TextObject("{=fg27J28j}You have received the {PERK} as a double perk yield reward.")
                     .SetTextVariable("PERK", perk.AlternativePerk.Name));
             }
         }
@@ -233,7 +233,7 @@ namespace BannerKings.Behaviours
         private void AddDialogue(CampaignGameStarter starter)
         {
             starter.AddPlayerLine("bk_question_preaching", "lord_talk_ask_something_2", "lord_talk_ask_something",
-                "{=!}I would like to buy a book.",
+                "{=c0UpkBnJ}I would like to buy a book.",
                 IsBookSeller,
                 OnBuyBookConsequence);
 

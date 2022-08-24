@@ -1,4 +1,4 @@
-﻿using BannerKings.Behaviours;
+using BannerKings.Behaviours;
 using BannerKings.Managers.CampaignStart;
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Villages;
@@ -65,7 +65,7 @@ namespace BannerKings.Models.Vanilla
                             if (notable.SupporterOf == clan && notable.Gold > 5000)
                             {
                                 baseResult.Add(-1f,
-                                    new TextObject("{=!}Aid from {NOTABLE}").SetTextVariable("NOTABLE", notable.Name));
+                                    new TextObject("{=PfCL67Qx}Aid from {NOTABLE}").SetTextVariable("NOTABLE", notable.Name));
                             }
                         }
                     }
@@ -98,7 +98,7 @@ namespace BannerKings.Models.Vanilla
                 if (position != null)
                 {
                     baseResult.Add(position.IsCorePosition(position.Position) ? 1f : 0.5f,
-                        new TextObject("{=!}Councillor role"));
+                        new TextObject("{=MsAYmzrZ}Councillor role"));
                 }
             }
 
@@ -108,12 +108,12 @@ namespace BannerKings.Models.Vanilla
                 var finalAutonomy = MBMath.ClampFloat(generalAutonomy / i, -0.5f, 0f);
                 if (finalSupport != 0f)
                 {
-                    baseResult.AddFactor(finalSupport, new TextObject("{=!}Overall notable support"));
+                    baseResult.AddFactor(finalSupport, new TextObject("{=GidN9Xkm}Overall notable support"));
                 }
 
                 if (finalAutonomy != 0f)
                 {
-                    baseResult.AddFactor(finalAutonomy, new TextObject("{=!}Overall settlement autonomy"));
+                    baseResult.AddFactor(finalAutonomy, new TextObject("{=5pNQsAxi}Overall settlement autonomy"));
                 }
             }
 
@@ -134,7 +134,7 @@ namespace BannerKings.Models.Vanilla
                 float manor = villageData.GetBuildingLevel(DefaultVillageBuildings.Instance.Manor);
                 if (manor > 0)
                 {
-                    settlementResult.AddFactor(manor == 3 ? 0.5f : manor * 0.15f, new TextObject("{=!}Manor"));
+                    settlementResult.AddFactor(manor == 3 ? 0.5f : manor * 0.15f, new TextObject("{=3prbVyq5}Manor"));
                 }
             }
 
