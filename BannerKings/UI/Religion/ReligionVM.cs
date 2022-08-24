@@ -34,7 +34,9 @@ namespace BannerKings.UI.Religion
 
         public ReligionVM(PopulationData data) : base(data, true)
         {
-            religion = data.ReligionData.Religion;
+            //TODO: Basileus
+            //religion = data.ReligionData.Religion;
+            religion = data.ReligionData.DominantReligion;
             courtInfo = new MBBindingList<InformationElement>();
             Clergymen = new MBBindingList<ReligionMemberVM>();
             Faithful = new MBBindingList<ReligionMemberVM>();

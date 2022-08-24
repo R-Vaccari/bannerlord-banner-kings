@@ -656,20 +656,20 @@ namespace BannerKings.Behaviours
         {
             args.optionLeaveType = GameMenuOption.LeaveType.RansomAndBribe;
 
-            var hasFaith = false;
-            if (BannerKingsConfig.Instance.PopulationManager != null &&
-                BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(Settlement.CurrentSettlement))
+            if (BannerKingsConfig.Instance.PopulationManager == null || !BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(Settlement.CurrentSettlement))
             {
-                var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(Settlement.CurrentSettlement)
-                    .ReligionData;
-                hasFaith = data != null;
-                if (data != null)
-                {
-                    MBTextManager.SetTextVariable("RELIGION_NAME", data.Religion.Faith.GetFaithName());
-                }
+                return false;
             }
 
-            return hasFaith;
+            var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(Settlement.CurrentSettlement).ReligionData;
+            if (data != null)
+            {
+                //TODO: Basileus
+                //MBTextManager.SetTextVariable("RELIGION_NAME", data.Religion.Faith.GetFaithName());
+                MBTextManager.SetTextVariable("RELIGION_NAME", data.DominantReligion.Faith.GetFaithName());
+            }
+
+            return data != null;
         }
 
         private static bool MenuCourtCondition(MenuCallbackArgs args)
