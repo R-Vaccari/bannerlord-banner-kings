@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.Core;
@@ -101,7 +101,7 @@ namespace BannerKings.Managers.Education.Lifestyles
             if (hero == Hero.MainHero)
             {
                 MBInformationManager.AddQuickInformation(
-                    new TextObject("{=jAn2zxooy}You have received the {PERK} perk from the {LIFESTYLE} lifestyle.")
+                    new TextObject("{=!}You have received the {PERK} perk from the {LIFESTYLE} lifestyle.")
                         .SetTextVariable("PERK", perk.Name)
                         .SetTextVariable("LIFESTYLE", Name));
             }

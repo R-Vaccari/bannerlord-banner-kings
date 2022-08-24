@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Skills;
@@ -72,7 +72,7 @@ namespace BannerKings.Managers.Innovations
             if (culture == Clan.PlayerClan.Culture)
             {
                 MBInformationManager.AddQuickInformation(
-                    new TextObject("{=VZo8ivDj4}The {CLAN} has assumed the role of cultural head of the {CULTURE} culture.")
+                    new TextObject("{=!}The {CLAN} has assumed the role of cultural head of the {CULTURE} culture.")
                         .SetTextVariable("CLAN", clan.Name)
                         .SetTextVariable("CULTURE", culture.Name), 0, null, "event:/ui/notification/relation");
             }
@@ -84,7 +84,7 @@ namespace BannerKings.Managers.Innovations
             if (culture == Clan.PlayerClan.Culture)
             {
                 MBInformationManager.AddQuickInformation(
-                    new TextObject("{=fa1dfoGRM}The {CULTURE} is now fascinated by the {FASCINATION} innovation.")
+                    new TextObject("{=!}The {CULTURE} is now fascinated by the {FASCINATION} innovation.")
                         .SetTextVariable("FASCINATION", fascination.Name)
                         .SetTextVariable("CULTURE", culture.Name), 0, null, "event:/ui/notification/relation");
             }

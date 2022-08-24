@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using BannerKings.Managers.Policies;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
@@ -23,10 +23,10 @@ namespace BannerKings.Models.Vanilla
                 switch (garrison)
                 {
                     case GarrisonPolicy.Dischargement:
-                        baseResult.Add(-1f, new TextObject("{=FS1Wdj52B}Garrison policy"));
+                        baseResult.Add(-1f, new TextObject("{=!}Garrison policy"));
                         break;
                     case GarrisonPolicy.Enlistment:
-                        baseResult.Add(1f, new TextObject("{=FS1Wdj52B}Garrison policy"));
+                        baseResult.Add(1f, new TextObject("{=!}Garrison policy"));
                         break;
                 }
             }

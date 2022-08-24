@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using BannerKings.Components;
 using HarmonyLib;
@@ -332,7 +332,7 @@ namespace BannerKings.Behaviours
                 delegate { PlayerEncounter.LeaveEncounter = true; });
 
             starter.AddPlayerLine("slavecaravan_party_threat", "slavecaravan_party_greeting", "slavecaravan_threat",
-                new TextObject("{=KzmKwFrMy}Give me your slaves and gear, or else!").ToString(),
+                new TextObject("{=!}Give me your slaves and gear, or else!").ToString(),
                 slavecaravan_neutral_on_condition,
                 null);
 
@@ -345,12 +345,12 @@ namespace BannerKings.Behaviours
                 raised_militia_start_on_condition, null);
 
             starter.AddPlayerLine("raised_militia_party_follow", "raised_militia_greeting", "raised_militia_order",
-                new TextObject("{=CTTs2ZLos}Follow my company.").ToString(),
+                new TextObject("{=!}Follow my company.").ToString(),
                 raised_militia_order_on_condition,
                 raised_militia_follow_on_consequence);
 
             starter.AddPlayerLine("raised_militia_party_retreat", "raised_militia_greeting", "raised_militia_order",
-                new TextObject("{=PTGZdK0KV}You may go home.").ToString(),
+                new TextObject("{=!}You may go home.").ToString(),
                 raised_militia_order_on_condition,
                 raised_militia_retreat_on_consequence);
 

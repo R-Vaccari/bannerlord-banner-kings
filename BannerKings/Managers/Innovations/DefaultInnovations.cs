@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
@@ -37,43 +37,43 @@ namespace BannerKings.Managers.Innovations
             var cultures = Game.Current.ObjectManager.GetObjectTypeList<CultureObject>();
 
             HeavyPlough = new Innovation("innovation_heavy_plough");
-            HeavyPlough.Initialize(new TextObject("{=kbvkhp2iW}Heavy Plough"),
-                new TextObject("{=y16PMW5Ad}Heavy plough used for tougher terrain."),
-                new TextObject("{=5xpqeivu8}Increased farmland acreage output by 8%"),
+            HeavyPlough.Initialize(new TextObject("{=!}Heavy Plough"),
+                new TextObject("{=!}Heavy plough used for tougher terrain."),
+                new TextObject("{=!}Increased farmland acreage output by 8%"),
                 800f);
 
             ThreeFieldsSystem = new Innovation("innovation_three_field_system");
-            ThreeFieldsSystem.Initialize(new TextObject("{=XkJY8ezjk}3 Fields System"),
-                new TextObject("{=rfzjqQUhu}Crop rotation system using 3 separate types of crops simultaneously."),
-                new TextObject("{=bddzOg7uX}Increased farmland acreage output by 25%"),
+            ThreeFieldsSystem.Initialize(new TextObject("{=!}3 Fields System"),
+                new TextObject("{=!}Crop rotation system using 3 separate types of crops simultaneously."),
+                new TextObject("{=!}Increased farmland acreage output by 25%"),
                 1200f);
 
             PublicWorks = new Innovation("innovation_public_works");
-            PublicWorks.Initialize(new TextObject("{=bgTfNMMqt}Public Works"),
+            PublicWorks.Initialize(new TextObject("{=!}Public Works"),
                 new TextObject(
-                    "{=OQC6cB3St}Focused efforts on public infrastructure by the state allow further development of new and existing buildings."),
-                new TextObject("{=RfDGDdKZB}Expands Infrastructure limit in settlements by flat 3"),
+                    "{=!}Focused efforts on public infrastructure by the state allow further development of new and existing buildings."),
+                new TextObject("{=!}Expands Infrastructure limit in settlements by flat 3"),
                 2000f);
 
             Cranes = new Innovation("innovation_cranes");
-            Cranes.Initialize(new TextObject("{=kTMd3DEZL}Cranes"),
+            Cranes.Initialize(new TextObject("{=!}Cranes"),
                 new TextObject(
-                    "{=dYprEo211}Mechanismis capable of vertically carrying high volumes or weight of material. Cranes significantly increase production output by adding productivity to construction sites and trade hubs."),
-                new TextObject("{=78gbLMhNm}Improves construction projects speed (12%)\nIncreases production efficiency (6%)"),
+                    "{=!}Mechanismis capable of vertically carrying high volumes or weight of material. Cranes significantly increase production output by adding productivity to construction sites and trade hubs."),
+                new TextObject("{=!}Improves construction projects speed (12%)\nIncreases production efficiency (6%)"),
                 3000f);
 
             Wheelbarrow = new Innovation("innovation_wheelbarrow");
-            Wheelbarrow.Initialize(new TextObject("{=Oepa78x5C}Wheelbarrow"),
+            Wheelbarrow.Initialize(new TextObject("{=!}Wheelbarrow"),
                 new TextObject(
-                    "{=F0uT3Q285}The wheelbarrow is a goods transporting tool that allows a person to carry bigger weights with less efforts. It can be applied in a variety of situations, such as carrying ore out of mines, building material to constructions and grain sacks out of farms."),
-                new TextObject("{=HEXPEnnPx}Increases production efficiency (6%)"),
+                    "{=!}The wheelbarrow is a goods transporting tool that allows a person to carry bigger weights with less efforts. It can be applied in a variety of situations, such as carrying ore out of mines, building material to constructions and grain sacks out of farms."),
+                new TextObject("{=!}Increases production efficiency (6%)"),
                 1500f);
 
             BlastFurnace = new Innovation("innovation_blast_furnace");
-            BlastFurnace.Initialize(new TextObject("{=bevbyDwn0}Blast Furnace"),
+            BlastFurnace.Initialize(new TextObject("{=!}Blast Furnace"),
                 new TextObject(
-                    "{=QmM4xLH8Z}Blast furnaces efficiently transform iron ore into cast iron. This flexibe alloy can be easily shaped into different forms and products, thus making the furnaces an essential industrial appliance."),
-                new TextObject("{=dxigRwpDY}Increases production efficiency (15%)"),
+                    "{=!}Blast furnaces efficiently transform iron ore into cast iron. This flexibe alloy can be easily shaped into different forms and products, thus making the furnaces an essential industrial appliance."),
+                new TextObject("{=!}Increases production efficiency (15%)"),
                 5000f);
         }
     }

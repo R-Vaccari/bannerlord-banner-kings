@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
 using TaleWorlds.CampaignSystem;
@@ -93,10 +93,10 @@ namespace BannerKings.Models.BKModels
             result.LimitMin(0f);
             result.LimitMax(1f);
 
-            result.Add(1f - stability, new TextObject("{=7shK1UzUM}Stability"));
+            result.Add(1f - stability, new TextObject("{=!}Stability"));
             if (settlement.Town is {Governor: {IsNotable: true}})
             {
-                result.Add(0.2f, new TextObject("{=0gUfOn5FT}Notable governor"));
+                result.Add(0.2f, new TextObject("{=!}Notable governor"));
             }
 
             if (settlement.Culture == settlement.Owner.Culture)
@@ -142,7 +142,7 @@ namespace BannerKings.Models.BKModels
                 result.Add(loyalty / 5f, new TextObject("Loyalty"));
                 result.Add(assimilation / 5f, new TextObject("Cultural assimilation"));
                 result.Add(averageSatisfaction / 5f, new TextObject("Produce satisfactions"));
-                result.Add(data.NotableSupport.ResultNumber / 5f, new TextObject("{=x04cr7pvX}Notable support"));
+                result.Add(data.NotableSupport.ResultNumber / 5f, new TextObject("{=!}Notable support"));
 
                 var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(town.OwnerClan.Leader);
                 if (education.Perks.Contains(BKPerks.Instance.CivilOverseer))
@@ -154,7 +154,7 @@ namespace BannerKings.Models.BKModels
                 var currentDemesne = CalculateCurrentDemesne(settlement.OwnerClan).ResultNumber;
                 if (currentDemesne > demesneLimit)
                 {
-                    result.Add((demesneLimit - currentDemesne) * 0.18f, new TextObject("{=GrQc52vk3}Demesne over limit by {POINTS}")
+                    result.Add((demesneLimit - currentDemesne) * 0.18f, new TextObject("{=!}Demesne over limit by {POINTS}")
                         .SetTextVariable("POINTS", demesneLimit - currentDemesne));
                 }
 
@@ -173,7 +173,7 @@ namespace BannerKings.Models.BKModels
                 var government = BannerKingsConfig.Instance.TitleManager.GetSettlementGovernment(settlement);
                 if (government == GovernmentType.Feudal)
                 {
-                    result.Add(0.05f, new TextObject("{=GVkC53var}Government"));
+                    result.Add(0.05f, new TextObject("{=!}Government"));
                 }
 
                 result.Add(legitimacy, new TextObject("Legitimacy"));
@@ -199,7 +199,7 @@ namespace BannerKings.Models.BKModels
                 var value = GetUnlandedDemesneWight(title.type);
                 if (value != 0f)
                 {
-                    result.Add(value, new TextObject("{=UFUVMJZY7}{TITLE}")
+                    result.Add(value, new TextObject("{=!}{TITLE}")
                         .SetTextVariable("SETTLEMENT", title.FullName));
                 }
             }
@@ -296,7 +296,7 @@ namespace BannerKings.Models.BKModels
 
                 if (value != 0f)
                 {
-                    result.Add(value, new TextObject("{=Z9FE37XRJ}{SETTLEMENT}{DEJURE}")
+                    result.Add(value, new TextObject("{=!}{SETTLEMENT}{DEJURE}")
                         .SetTextVariable("SETTLEMENT", settlement.Name)
                         .SetTextVariable("DEJURE", deJure ? "(de Jure)" : ""));
                 }

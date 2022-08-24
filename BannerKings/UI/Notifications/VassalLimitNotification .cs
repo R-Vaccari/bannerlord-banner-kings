@@ -1,11 +1,11 @@
-using TaleWorlds.Core;
+﻿using TaleWorlds.Core;
 using TaleWorlds.Localization;
 
 namespace BannerKings.UI.Notifications
 {
     public class VassalLimitNotification : InformationData
     {
-        public VassalLimitNotification() : base(new TextObject("{=psricsGRn}You have more vassals than you can manage."))
+        public VassalLimitNotification() : base(new TextObject("{=!}You have more vassals than you can manage."))
         {
         }
 

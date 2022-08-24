@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using BannerKings.Managers.Skills;
 using BannerKings.UI;
 using TaleWorlds.CampaignSystem;
@@ -38,7 +38,7 @@ namespace BannerKings.Behaviours
             // ------- WAIT MENUS --------
 
             campaignGameStarter.AddWaitGameMenu("bannerkings_wait_guard",
-                "{=HWDMx2GQ2}You are serving as a guard in {CURRENT_SETTLEMENT}.",
+                "{=!}You are serving as a guard in {CURRENT_SETTLEMENT}.",
                 MenuWaitInit,
                 MenuGuardActionPeasantCondition,
                 MenuActionConsequenceWithGold,
@@ -58,7 +58,7 @@ namespace BannerKings.Behaviours
                 }, true);
 
             campaignGameStarter.AddWaitGameMenu("bannerkings_wait_train_guards",
-                "{=yNaPkQF3U}You are training the guards in {CURRENT_SETTLEMENT}.",
+                "{=!}You are training the guards in {CURRENT_SETTLEMENT}.",
                 MenuWaitInit,
                 MenuTrainGuardActionPeasantCondition,
                 MenuActionConsequenceWithGold,
@@ -79,7 +79,7 @@ namespace BannerKings.Behaviours
 
 
             campaignGameStarter.AddWaitGameMenu("bannerkings_wait_hunt",
-                "{=gsKSMAavO}You are hunting in the region of {CURRENT_SETTLEMENT}. Game quantity in this region is {HUNTING_GAME}.",
+                "{=!}You are hunting in the region of {CURRENT_SETTLEMENT}. Game quantity in this region is {HUNTING_GAME}.",
                 MenuWaitInit,
                 MenuHuntingActionCondition,
                 MenuActionHuntingConsequence,
@@ -99,7 +99,7 @@ namespace BannerKings.Behaviours
                 }, true);
 
             campaignGameStarter.AddWaitGameMenu("bannerkings_wait_meet_nobility",
-                "{=yYB0pjHeX}You are meeting with the high society of {CURRENT_SETTLEMENT}.",
+                "{=!}You are meeting with the high society of {CURRENT_SETTLEMENT}.",
                 MenuWaitInit,
                 MenuMeetNobilityActionCondition,
                 MenuActionMeetNobilityConsequence,
@@ -119,7 +119,7 @@ namespace BannerKings.Behaviours
                 }, true);
 
             campaignGameStarter.AddWaitGameMenu("bannerkings_wait_study",
-                "{=LYrX2AVXO}You are studying scholarship with {SCHOLARSHIP_TUTOR}. The instruction costs {SCHOLARSHIP_GOLD} per hour.",
+                "{=!}You are studying scholarship with {SCHOLARSHIP_TUTOR}. The instruction costs {SCHOLARSHIP_GOLD} per hour.",
                 MenuWaitInit,
                 MenuActionStudyCondition,
                 MenuActionConsequenceNeutral,
@@ -140,7 +140,7 @@ namespace BannerKings.Behaviours
 
 
             campaignGameStarter.AddWaitGameMenu("bannerkings_wait_crafting",
-                "{=uSKd42rqU}You are working on the smith for {CRAFTING_HOURS} hours. The current hourly rate of this smith is: {CRAFTING_RATE} {GOLD_ICON}.{CRAFTING_EXPLANATION}",
+                "{=!}You are working on the smith for {CRAFTING_HOURS} hours. The current hourly rate of this smith is: {CRAFTING_RATE} {GOLD_ICON}.{CRAFTING_EXPLANATION}",
                 MenuWaitInit,
                 _ => true,
                 MenuActionConsequenceNeutral,
@@ -150,22 +150,22 @@ namespace BannerKings.Behaviours
 
             // ------- ACTIONS --------
 
-            campaignGameStarter.AddGameMenuOption("bannerkings_actions", "action_study", "{=kpPWSwPgy}Study scholarship",
+            campaignGameStarter.AddGameMenuOption("bannerkings_actions", "action_study", "{=!}Study scholarship",
                 MenuActionStudyCondition, delegate { GameMenu.SwitchToMenu("bannerkings_wait_study"); });
 
-            campaignGameStarter.AddGameMenuOption("bannerkings_actions", "action_slave_transfer", "{=OaqPk7P80}Transfer slaves",
+            campaignGameStarter.AddGameMenuOption("bannerkings_actions", "action_slave_transfer", "{=!}Transfer slaves",
                 MenuSlavesActionCondition, delegate { UIHelper.ShowSlaveTransferScreen(); });
 
-            campaignGameStarter.AddGameMenuOption("bannerkings_actions", "action_meet_nobility", "{=WKyJjgG8S}Meet nobility",
+            campaignGameStarter.AddGameMenuOption("bannerkings_actions", "action_meet_nobility", "{=!}Meet nobility",
                 MenuMeetNobilityActionCondition, delegate { GameMenu.SwitchToMenu("bannerkings_wait_meet_nobility"); });
 
-            campaignGameStarter.AddGameMenuOption("bannerkings_actions", "action_guard", "{=0P4Bg79dY}Serve as guard",
+            campaignGameStarter.AddGameMenuOption("bannerkings_actions", "action_guard", "{=!}Serve as guard",
                 MenuGuardActionPeasantCondition, delegate { GameMenu.SwitchToMenu("bannerkings_wait_guard"); });
 
-            campaignGameStarter.AddGameMenuOption("bannerkings_actions", "action_train_guards", "{=yBXVcXMqG}Train guards",
+            campaignGameStarter.AddGameMenuOption("bannerkings_actions", "action_train_guards", "{=!}Train guards",
                 MenuTrainGuardActionPeasantCondition, delegate { GameMenu.SwitchToMenu("bannerkings_wait_train_guards"); });
 
-            campaignGameStarter.AddGameMenuOption("bannerkings_actions", "action_hunt", "{=bLHqjG2jg}Go hunting",
+            campaignGameStarter.AddGameMenuOption("bannerkings_actions", "action_hunt", "{=!}Go hunting",
                 MenuHuntingActionCondition, delegate { GameMenu.SwitchToMenu("bannerkings_wait_hunt"); });
 
             campaignGameStarter.AddGameMenuOption("bannerkings_actions", "bannerkings_leave", "{=3sRdGQou}Leave",
@@ -178,7 +178,7 @@ namespace BannerKings.Behaviours
 
             // ------- TOWN --------
 
-            campaignGameStarter.AddGameMenuOption("town", "bannerkings_submenu", "{=G6VgLPTuV}Banner Kings",
+            campaignGameStarter.AddGameMenuOption("town", "bannerkings_submenu", "{=!}Banner Kings",
                 delegate(MenuCallbackArgs x)
                 {
                     x.optionLeaveType = GameMenuOption.LeaveType.Submenu;
@@ -187,24 +187,24 @@ namespace BannerKings.Behaviours
                 },
                 delegate { GameMenu.SwitchToMenu("bannerkings"); }, false, 4);
 
-            campaignGameStarter.AddGameMenuOption("bannerkings", "manage_demesne", "{=TEvDOGUXg}Demesne management",
+            campaignGameStarter.AddGameMenuOption("bannerkings", "manage_demesne", "{=!}Demesne management",
                 MenuSettlementManageCondition,
                 MenuSettlementManageConsequence);
 
-            campaignGameStarter.AddGameMenuOption("bannerkings", "manage_titles", "{=dVnk1bDfZ}Demesne hierarchy",
+            campaignGameStarter.AddGameMenuOption("bannerkings", "manage_titles", "{=!}Demesne hierarchy",
                 MenuTitlesCondition,
                 MenuTitlesConsequence);
 
-            campaignGameStarter.AddGameMenuOption("bannerkings", "manage_faith", "{=yQgwDorqP}{RELIGION_NAME}",
+            campaignGameStarter.AddGameMenuOption("bannerkings", "manage_faith", "{=!}{RELIGION_NAME}",
                 MenuFaithCondition,
                 MenuFaithConsequence);
 
-            campaignGameStarter.AddGameMenuOption("bannerkings", "manage_guild", "{=O46opkEwC}{GUILD_NAME}",
+            campaignGameStarter.AddGameMenuOption("bannerkings", "manage_guild", "{=!}{GUILD_NAME}",
                 MenuGuildCondition,
                 MenuGuildManageConsequence);
 
 
-            campaignGameStarter.AddGameMenuOption("bannerkings", "bannerkings_action", "{=pZCwT8MLH}Take an action",
+            campaignGameStarter.AddGameMenuOption("bannerkings", "bannerkings_action", "{=!}Take an action",
                 delegate(MenuCallbackArgs args)
                 {
                     args.optionLeaveType = GameMenuOption.LeaveType.Wait;
@@ -228,7 +228,7 @@ namespace BannerKings.Behaviours
             // ------- CASTLE --------
 
 
-            campaignGameStarter.AddGameMenuOption("castle", "bannerkings_castle_submenu", "{=G6VgLPTuV}Banner Kings",
+            campaignGameStarter.AddGameMenuOption("castle", "bannerkings_castle_submenu", "{=!}Banner Kings",
                 delegate(MenuCallbackArgs x)
                 {
                     x.optionLeaveType = GameMenuOption.LeaveType.Submenu;
@@ -246,7 +246,7 @@ namespace BannerKings.Behaviours
             // ------- VILLAGE --------
 
 
-            campaignGameStarter.AddGameMenuOption("village", "bannerkings_village_submenu", "{=G6VgLPTuV}Banner Kings",
+            campaignGameStarter.AddGameMenuOption("village", "bannerkings_village_submenu", "{=!}Banner Kings",
                 delegate(MenuCallbackArgs x)
                 {
                     x.optionLeaveType = GameMenuOption.LeaveType.Submenu;
@@ -255,7 +255,7 @@ namespace BannerKings.Behaviours
                 },
                 delegate { GameMenu.SwitchToMenu("bannerkings"); }, false, 2);
 
-            campaignGameStarter.AddGameMenuOption("bannerkings", "manage_projects", "{=ERoXRAOLD}Village Projects",
+            campaignGameStarter.AddGameMenuOption("bannerkings", "manage_projects", "{=!}Village Projects",
                 MenuVillageBuildingCondition,
                 MenuVillageProjectsConsequence, false, 2);
         }
@@ -286,7 +286,7 @@ namespace BannerKings.Behaviours
                     {
                         InformationManager.DisplayMessage(
                             new InformationMessage(
-                                new TextObject("{=xjQmLbD0u}Not a town!").ToString()));
+                                new TextObject("{=!}Not a town!").ToString()));
                         Hero.MainHero.HitPoints -= MBRandom.RandomInt(3, 10);
                         return;
                     }
@@ -296,7 +296,7 @@ namespace BannerKings.Behaviours
                     {
                         InformationManager.DisplayMessage(
                             new InformationMessage(
-                                new TextObject("{=ibF0RpPuz}You have been hurt in your current action.").ToString()));
+                                new TextObject("{=!}You have been hurt in your current action.").ToString()));
                         Hero.MainHero.HitPoints -= MBRandom.RandomInt(3, 10);
                     }
 
@@ -319,7 +319,7 @@ namespace BannerKings.Behaviours
                         Hero.MainHero.AddSkillXp(target, MBRandom.RandomFloatRanged(10f, 25f));
                         InformationManager.DisplayMessage(
                             new InformationMessage(
-                                new TextObject("{=nqZvwnHwo}You have improved your {SKILL} skill during your current action.")
+                                new TextObject("{=!}You have improved your {SKILL} skill during your current action.")
                                     .ToString()));
                     }
                 }
@@ -360,7 +360,7 @@ namespace BannerKings.Behaviours
                             (int) BannerKingsConfig.Instance.EducationModel.CalculateLessonsCost(Hero.MainHero, seller)
                                 .ResultNumber);
                         InformationManager.DisplayMessage(new InformationMessage(
-                            new TextObject("{=nqZvwnHwo}You have improved your {SKILL} skill during your current action.")
+                            new TextObject("{=!}You have improved your {SKILL} skill during your current action.")
                                 .SetTextVariable("SKILL", BKSkills.Instance.Scholarship.Name)
                                 .ToString()));
                     }
@@ -368,7 +368,7 @@ namespace BannerKings.Behaviours
                     {
                         InformationManager.DisplayMessage(new InformationMessage(
                             new TextObject(
-                                    "{=4jju0bmKH}You have stopped your current action because the instructor has left the settlement.")
+                                    "{=!}You have stopped your current action because the instructor has left the settlement.")
                                 .ToString()));
                         GameMenu.SwitchToMenu("bannerkings_actions");
                     }
@@ -408,7 +408,7 @@ namespace BannerKings.Behaviours
                         Hero.MainHero.AddSkillXp(target, MBRandom.RandomFloatRanged(10f, 25f));
                         InformationManager.DisplayMessage(
                             new InformationMessage(
-                                new TextObject("{=nqZvwnHwo}You have improved your {SKILL} skill during your current action.")
+                                new TextObject("{=!}You have improved your {SKILL} skill during your current action.")
                                     .ToString()));
                     }
                 }
@@ -428,9 +428,9 @@ namespace BannerKings.Behaviours
                 var woodland = data.Woodland;
                 var game = woodland switch
                 {
-                    >= 50000 => new TextObject("{=jpWwdPMLu}Bountiful").ToString(),
-                    >= 25000 => new TextObject("{=FhpMkXQRe}Mediocre").ToString(),
-                    _ => new TextObject("{=FHqANczpH}Poor").ToString()
+                    >= 50000 => new TextObject("{=!}Bountiful").ToString(),
+                    >= 25000 => new TextObject("{=!}Mediocre").ToString(),
+                    _ => new TextObject("{=!}Poor").ToString()
                 };
 
                 GameTexts.SetVariable("HUNTING_GAME", game);
@@ -454,7 +454,7 @@ namespace BannerKings.Behaviours
                         InformationManager.DisplayMessage(
                             new InformationMessage(
                                 new TextObject(
-                                        "{=1r2uYDKRg}You have have caught an animal and improved your {SKILL} skill while hunting.")
+                                        "{=!}You have have caught an animal and improved your {SKILL} skill while hunting.")
                                     .ToString()));
                     }
                 }
@@ -503,7 +503,7 @@ namespace BannerKings.Behaviours
                         Hero.MainHero.AddSkillXp(DefaultSkills.Charm, MBRandom.RandomFloatRanged(10f, 25f));
                         InformationManager.DisplayMessage(new InformationMessage(
                             new TextObject(
-                                    "{=KsCtrO1od}You have improved your {SKILL} skill and gained {INFLUENCE} influence while meeting with nobles.")
+                                    "{=!}You have improved your {SKILL} skill and gained {INFLUENCE} influence while meeting with nobles.")
                                 .ToString()));
                     }
                 }
@@ -516,7 +516,7 @@ namespace BannerKings.Behaviours
             {
                 InformationManager.DisplayMessage(
                     new InformationMessage(
-                        new TextObject("{=aZ7xj6yG6}You have stopped your current action due to health conditions.").ToString()));
+                        new TextObject("{=!}You have stopped your current action due to health conditions.").ToString()));
                 GameMenu.SwitchToMenu("bannerkings_actions");
             }
         }
@@ -821,7 +821,7 @@ namespace BannerKings.Behaviours
 
         public static void MenuBannerKingsInit(MenuCallbackArgs args)
         {
-            args.MenuTitle = new TextObject("{=G6VgLPTuV}Banner Kings");
+            args.MenuTitle = new TextObject("{=!}Banner Kings");
         }
     }
 }

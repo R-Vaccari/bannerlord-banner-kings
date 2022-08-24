@@ -1,4 +1,4 @@
-using TaleWorlds.CampaignSystem.Settlements;
+﻿using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Decisions
@@ -11,7 +11,7 @@ namespace BannerKings.Managers.Decisions
 
         public override string GetHint()
         {
-            return new TextObject("{=9A46Pmdbk}Exempt merchants from tariffs, reducing prices and attracting caravans").ToString();
+            return new TextObject("{=!}Exempt merchants from tariffs, reducing prices and attracting caravans").ToString();
         }
 
         public override string GetIdentifier()
@@ -21,7 +21,7 @@ namespace BannerKings.Managers.Decisions
 
         public override string GetName()
         {
-            return new TextObject("{=2D6uCFHeh}Tariffs exemption").ToString();
+            return new TextObject("{=!}Tariffs exemption").ToString();
         }
     }
 }
