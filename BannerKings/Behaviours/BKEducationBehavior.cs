@@ -322,12 +322,12 @@ namespace BannerKings.Behaviours
         private static void ApplyScholarshipTeacherEffect(Hero hero)
         {
             var additionalFocusPoints = 0;
-            if (hero.Father.GetPerkValue(BKPerks.Instance.ScholarshipTeacher))
+            if (hero.Father?.GetPerkValue(BKPerks.Instance.ScholarshipTeacher) == true)
             {
                 additionalFocusPoints += 1;
             }
 
-            if (hero.Mother.GetPerkValue(BKPerks.Instance.ScholarshipTeacher))
+            if (hero.Mother?.GetPerkValue(BKPerks.Instance.ScholarshipTeacher) == true)
             {
                 additionalFocusPoints += 1;
             }
