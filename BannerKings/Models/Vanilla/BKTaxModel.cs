@@ -78,10 +78,10 @@ namespace BannerKings.Models.Vanilla
                 switch (taxType)
                 {
                     case TaxType.Low:
-                        baseResult.AddFactor(-0.15f, new TextObject("Tax policy"));
+                        baseResult.AddFactor(-0.15f, new TextObject("{=L7QhNa6a}Tax policy"));
                         break;
                     case TaxType.High:
-                        baseResult.AddFactor(0.15f, new TextObject("Tax policy"));
+                        baseResult.AddFactor(0.15f, new TextObject("{=L7QhNa6a}Tax policy"));
                         break;
                 }
 
@@ -92,7 +92,7 @@ namespace BannerKings.Models.Vanilla
                 }
 
                 var admCost = new BKAdministrativeModel().CalculateEffect(town.Settlement).ResultNumber;
-                baseResult.AddFactor(admCost * -1f, new TextObject("Administrative costs"));
+                baseResult.AddFactor(admCost * -1f, new TextObject("{=y1sBiOKa}Administrative costs"));
 
                 if (baseResult.ResultNumber > 0f)
                 {
@@ -102,7 +102,7 @@ namespace BannerKings.Models.Vanilla
                 CalculateDueTax(data, baseResult.ResultNumber);
                 CalculateDueWages(BannerKingsConfig.Instance.CourtManager.GetCouncil(town.Settlement.OwnerClan),
                     baseResult.ResultNumber);
-                baseResult.AddFactor(admCost * -1f, new TextObject("Administrative costs"));
+                baseResult.AddFactor(admCost * -1f, new TextObject("{=y1sBiOKa}Administrative costs"));
             }
 
             return baseResult;

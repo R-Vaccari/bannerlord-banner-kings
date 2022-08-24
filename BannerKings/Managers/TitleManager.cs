@@ -542,9 +542,6 @@ namespace BannerKings.Managers
             ExecuteOwnershipChange(oldOwner, usurper, title, true);
 
             action.ActionTaker.AddSkillXp(BKSkills.Instance.Lordship, BannerKingsConfig.Instance.TitleModel.GetSkillReward(action.Title, action.Type));
-
-            //OwnershipNotification notification = new OwnershipNotification(title, new TextObject(string.Format("You are now the rightful owner to {0}", title.name)));
-            //Campaign.Current.CampaignInformationManager.NewMapNoticeAdded(notification);
         }
 
         public void GiveLordshipOnKingdomJoin(Kingdom newKingdom, Clan clan, bool force = false)
@@ -598,7 +595,7 @@ namespace BannerKings.Managers
                     GameTexts.SetVariable("FIEF", lordship.FullName);
                     GameTexts.SetVariable("SOVEREIGN", sovereign.FullName);
                     InformationManager.ShowInquiry(new InquiryData("Enfoeffement Right",
-                        new TextObject("You have been generously granted the {FIEF} as part of your vassal rights to the {SOVEREIGN}.").ToString(),
+                        new TextObject("{=pmmxMLmr}You have been generously granted the {FIEF} as part of your vassal rights to the {SOVEREIGN}.").ToString(),
                         true, false, GameTexts.FindText("str_done").ToString(), null, null, null));
                 }
             }
@@ -1065,10 +1062,9 @@ namespace BannerKings.Managers
             GameTexts.SetVariable("DUTY_FACTOR", (factor * 100f).ToString("0") + '%');
             var text = duty switch
             {
-                FeudalDuties.Taxation => "You are due {DUTY_FACTOR} of your fiefs' income to your suzerain.",
-                FeudalDuties.Auxilium =>
-                    "You are obliged to militarily participate in armies, for {DUTY_FACTOR} of their durations.",
-                _ => "You are obliged to contribute to {DUTY_FACTOR} of your suzerain's ransom."
+                FeudalDuties.Taxation => "{=wWpgZ1QE}You are due {DUTY_FACTOR} of your fiefs' income to your suzerain.",
+                FeudalDuties.Auxilium => "{=kk4HK4wg}You are obliged to militarily participate in armies, for {DUTY_FACTOR} of their durations.",
+                _ => "{=bcVxdc0x}You are obliged to contribute to {DUTY_FACTOR} of your suzerain's ransom."
             };
 
             return new TextObject(text).ToString();
@@ -1078,13 +1074,10 @@ namespace BannerKings.Managers
         {
             return right switch
             {
-                FeudalRights.Absolute_Land_Rights =>
-                    "You are entitled to ownership of any conquered lands whose title you own.",
-                FeudalRights.Enfoeffement_Rights =>
-                    "You are entitled to be granted land in case you have none, whenever possible.",
-                FeudalRights.Conquest_Rights =>
-                    "You are entitled to the ownership of any lands you conquered by yourself.",
-                _ => ""
+                FeudalRights.Absolute_Land_Rights => "{=pmw8kEKb}You are entitled to ownership of any conquered lands whose title you own.",
+                FeudalRights.Enfoeffement_Rights => "{=kEvL0vNU}You are entitled to be granted land in case you have none, whenever possible.",
+                FeudalRights.Conquest_Rights => "{=7TCkYXav}You are entitled to the ownership of any lands you conquered by yourself.",
+                _ => "{=!}"
             };
         }
 

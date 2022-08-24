@@ -105,98 +105,101 @@ namespace BannerKings.UI.Management
         public override void RefreshValues()
         {
             base.RefreshValues();
-            var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
-            this.data = data;
+            
+            var data = this.data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
+
             PopList.Clear();
             CultureList.Clear();
             CultureInfo.Clear();
             StatsInfo.Clear();
-            if (data is {Classes: { }})
+
+            if (data is not {Classes: { }})
             {
-                data.Classes.ForEach(popClass => PopList
-                    .Add(new PopulationInfoVM(Utils.Helpers.GetClassName(popClass.type, settlement.Culture).ToString(),
-                        popClass.count,
-                        Utils.Helpers.GetClassHint(popClass.type, settlement.Culture))));
+                return;
+            }
 
-                data.CultureData.Cultures.ForEach(culture => CultureList
-                    .Add(new CultureElementVM(data, culture)));
+            data.Classes.ForEach(popClass => PopList
+                .Add(new PopulationInfoVM(Utils.Helpers.GetClassName(popClass.type, settlement.Culture).ToString(),
+                    popClass.count,
+                    Utils.Helpers.GetClassHint(popClass.type, settlement.Culture))));
 
-                var stability = BannerKingsConfig.Instance.StabilityModel.CalculateStabilityTarget(settlement);
-                StatsInfo.Add(new InformationElement("Stability:", FormatValue(data.Stability),
-                    new TextObject("{=Uw3xBMKd}{TEXT}\nTarget: {TARGET}\n{EXPLANATIONS}")
-                        .SetTextVariable("TEXT",
-                            new TextObject(
-                                "{=MKfkuKiS}The overall stability of this settlement, affected by security, loyalty, assimilation and whether you are legally entitled to the settlement. Stability is the basis of economic prosperity."))
-                        .SetTextVariable("EXPLANATIONS", stability.GetExplanations())
-                        .SetTextVariable("TARGET", FormatValue(stability.ResultNumber))
-                        .ToString()));
+            data.CultureData.Cultures.ForEach(culture => CultureList
+                .Add(new CultureElementVM(data, culture)));
 
-                var autonomy =
-                    BannerKingsConfig.Instance.StabilityModel.CalculateAutonomyTarget(settlement, data.Stability);
-                StatsInfo.Add(new InformationElement("Autonomy:", FormatValue(data.Autonomy),
-                    new TextObject("{=Uw3xBMKd}{TEXT}\nTarget: {TARGET}\n{EXPLANATIONS}")
-                        .SetTextVariable("TEXT",
-                            new TextObject(
-                                "{=xMsWoSnL}Autonomy is inversely correlated to stability, therefore less stability equals more autonomy. Higher autonomy will reduce tax revenue while increasing loyalty. Matching culture with the settlement and setting a local notable as governor increases autonomy. Higher autonomy will also slow down assimilation"))
-                        .SetTextVariable("EXPLANATIONS", autonomy.GetExplanations())
-                        .SetTextVariable("TARGET", FormatValue(autonomy.ResultNumber))
-                        .ToString()));
+            var stability = BannerKingsConfig.Instance.StabilityModel.CalculateStabilityTarget(settlement);
+            StatsInfo.Add(new InformationElement("Stability:", $"{data.Stability:P}",
+                new TextObject("{=Uw3xBMKd}{TEXT}\nTarget: {TARGET}\n{EXPLANATIONS}")
+                    .SetTextVariable("TEXT",
+                        new TextObject(
+                            "{=MKfkuKiS}The overall stability of this settlement, affected by security, loyalty, assimilation and whether you are legally entitled to the settlement. Stability is the basis of economic prosperity."))
+                    .SetTextVariable("EXPLANATIONS", stability.GetExplanations())
+                    .SetTextVariable("TARGET", FormatValue(stability.ResultNumber))
+                    .ToString()));
 
-                var support = data.NotableSupport;
-                StatsInfo.Add(new InformationElement("Notable Support:", FormatValue(support.ResultNumber),
-                    new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
-                        .SetTextVariable("TEXT",
-                            new TextObject(
-                                "{=mVTYGkNP}Represents how much the local elite supports you. Support of each notable is weighted on their power, meaning that not having the support of a notable that holds most power will result in a small support percentage. Support is gained through better relations with the notables."))
-                        .SetTextVariable("EXPLANATIONS", support.GetExplanations())
-                        .ToString()));
+            var autonomy = BannerKingsConfig.Instance.StabilityModel.CalculateAutonomyTarget(settlement, data.Stability);
+            StatsInfo.Add(new InformationElement("Autonomy:", $"{data.Autonomy:P}",
+                new TextObject("{=Uw3xBMKd}{TEXT}\nTarget: {TARGET}\n{EXPLANATIONS}")
+                    .SetTextVariable("TEXT",
+                        new TextObject(
+                            "{=xMsWoSnL}Autonomy is inversely correlated to stability, therefore less stability equals more autonomy. Higher autonomy will reduce tax revenue while increasing loyalty. Matching culture with the settlement and setting a local notable as governor increases autonomy. Higher autonomy will also slow down assimilation"))
+                    .SetTextVariable("EXPLANATIONS", autonomy.GetExplanations())
+                    .SetTextVariable("TARGET", FormatValue(autonomy.ResultNumber))
+                    .ToString()));
 
-                StatsInfo.Add(new InformationElement("Total Population:", data.TotalPop.ToString(),
-                    "Number of people present in this settlement and surrounding regions."));
+            var support = data.NotableSupport;
+            StatsInfo.Add(new InformationElement("Notable Support:", $"{support.ResultNumber:P}",
+                new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
+                    .SetTextVariable("TEXT",
+                        new TextObject(
+                            "{=mVTYGkNP}Represents how much the local elite supports you. Support of each notable is weighted on their power, meaning that not having the support of a notable that holds most power will result in a small support percentage. Support is gained through better relations with the notables."))
+                    .SetTextVariable("EXPLANATIONS", support.GetExplanations())
+                    .ToString()));
 
-                var influence = BannerKingsConfig.Instance.InfluenceModel.CalculateSettlementInfluence(settlement, data);
-                StatsInfo.Add(new InformationElement(GameTexts.FindText("str_total_influence").ToString(),
-                    new TextObject("{=YrCRA6CA}{INFLUENCE}")
-                        .SetTextVariable("INFLUENCE", influence.ResultNumber.ToString("0.00"))
-                        .ToString(),
-                    new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
-                        .SetTextVariable("TEXT",
-                            new TextObject("{=8mSDgwhX}The amount of influence this settlement provides in your realm."))
-                        .SetTextVariable("EXPLANATIONS", influence.GetExplanations())
-                        .ToString()));
+            StatsInfo.Add(new InformationElement("Total Population:", $"{data.TotalPop:n0}",
+                "Number of people present in this settlement and surrounding regions."));
 
-                StatsInfo.Add(new InformationElement("Population Growth:",
-                    new BKGrowthModel().CalculateEffect(settlement, data).ResultNumber.ToString(),
-                    "The population growth of your settlement on a daily basis, distributed among the classes."));
-                StatsInfo.Add(new InformationElement("Foreigner Ratio:",
-                    FormatValue(new BKForeignerModel().CalculateEffect(settlement).ResultNumber),
-                    "Merchant and freemen foreigners that refuse to be assimilated, but have a living in this settlement."));
+            var influence = BannerKingsConfig.Instance.InfluenceModel.CalculateSettlementInfluence(settlement, data);
+            StatsInfo.Add(new InformationElement(GameTexts.FindText("str_total_influence").ToString(),
+                new TextObject("{=YrCRA6CA}{INFLUENCE}")
+                    .SetTextVariable("INFLUENCE", influence.ResultNumber.ToString("0.00"))
+                    .ToString(),
+                new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
+                    .SetTextVariable("TEXT",
+                        new TextObject("{=8mSDgwhX}The amount of influence this settlement provides in your realm."))
+                    .SetTextVariable("EXPLANATIONS", influence.GetExplanations())
+                    .ToString()));
 
-                CultureInfo.Add(new InformationElement("Dominant Culture:",
-                    data.CultureData.DominantCulture.Name.ToString(),
-                    "The most assimilated culture in this settlement, and considered the legal culture."));
-                CultureInfo.Add(new InformationElement("Cultural Acceptance:",
-                    FormatValue(data.CultureData.GetAcceptance(Hero.MainHero.Culture)),
-                    "How accepted your culture is towards the general populace. A culture first needs to be accepted to be assimilated into."));
-                CultureInfo.Add(new InformationElement("Cultural Assimilation:",
-                    FormatValue(data.CultureData.GetAssimilation(Hero.MainHero.Culture)),
-                    "Percentage of the population that shares culture with you. Assimilating foreign settlements requires a competent governor that shares your culture."));
+            StatsInfo.Add(new InformationElement("Population Growth:",
+                $"{new BKGrowthModel().CalculateEffect(settlement, data).ResultNumber:P}",
+                "The population growth of your settlement on a daily basis, distributed among the classes."));
+            StatsInfo.Add(new InformationElement("Foreigner Ratio:",
+                FormatValue(new BKForeignerModel().CalculateEffect(settlement).ResultNumber),
+                "Merchant and freemen foreigners that refuse to be assimilated, but have a living in this settlement."));
 
-                var decisions = BannerKingsConfig.Instance.PolicyManager.GetDefaultDecisions(settlement);
-                foreach (var decision in decisions)
-                {
-                    var vm = new DecisionElement()
-                        .SetAsBooleanOption(decision.GetName(), decision.Enabled, delegate(bool value)
-                        {
-                            decision.OnChange(value);
-                            RefreshValues();
-                        }, new TextObject(decision.GetHint()));
-                    foreignerToogle = decision.GetIdentifier() switch
+            CultureInfo.Add(new InformationElement("Dominant Culture:",
+                data.CultureData.DominantCulture.Name.ToString(),
+                "The most assimilated culture in this settlement, and considered the legal culture."));
+            CultureInfo.Add(new InformationElement("Cultural Acceptance:",
+                $"{data.CultureData.GetAcceptance(Hero.MainHero.Culture):P}",
+                "How accepted your culture is towards the general populace. A culture first needs to be accepted to be assimilated into."));
+            CultureInfo.Add(new InformationElement("Cultural Assimilation:",
+                $"{data.CultureData.GetAssimilation(Hero.MainHero.Culture):P}",
+                "Percentage of the population that shares culture with you. Assimilating foreign settlements requires a competent governor that shares your culture."));
+
+            var decisions = BannerKingsConfig.Instance.PolicyManager.GetDefaultDecisions(settlement);
+            foreach (var decision in decisions)
+            {
+                var vm = new DecisionElement()
+                    .SetAsBooleanOption(decision.GetName(), decision.Enabled, delegate(bool value)
                     {
-                        "decision_foreigner_ban" => vm,
-                        _ => foreignerToogle
-                    };
-                }
+                        decision.OnChange(value);
+                        RefreshValues();
+                    }, new TextObject(decision.GetHint()));
+                foreignerToogle = decision.GetIdentifier() switch
+                {
+                    "decision_foreigner_ban" => vm,
+                    _ => foreignerToogle
+                };
             }
         }
     }

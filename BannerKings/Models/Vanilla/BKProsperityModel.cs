@@ -51,12 +51,12 @@ namespace BannerKings.Models.Vanilla
                 var craftsmen = data.GetTypeCount(PopType.Craftsmen);
                 explainedNumber.Add(craftsmen * 0.0005f, new TextObject("Craftsmen output"));
                 var slaves = data.GetTypeCount(PopType.Slaves);
-                explainedNumber.Add(slaves * -0.0001f, new TextObject("Slave population"));
+                explainedNumber.Add(slaves * -0.0001f, new TextObject("{=FJSfBwzp}Slave population"));
 
                 if (BannerKingsConfig.Instance.PopulationManager.PopSurplusExists(fortification.Settlement, PopType.Slaves,
                         true))
                 {
-                    explainedNumber.Add(slaves * -0.0003f, new TextObject("Slave surplus"));
+                    explainedNumber.Add(slaves * -0.0003f, new TextObject("{=y9jGiPQw}Slave surplus"));
                 }
 
                 var factor = data.Stability - 1f + data.Stability;
@@ -66,7 +66,7 @@ namespace BannerKings.Models.Vanilla
                 var foodLimitForBonus = (int) (fortification.FoodStocksUpperLimit() * 0.8f);
                 if (fortification.FoodStocks >= foodLimitForBonus)
                 {
-                    explainedNumber.Add(0.5f, new TextObject("Well fed populace"));
+                    explainedNumber.Add(0.5f, new TextObject("{=9Jyv5XNX}Well fed populace"));
                 }
                 else if (fortification.Settlement.IsStarving)
                 {
@@ -110,7 +110,7 @@ namespace BannerKings.Models.Vanilla
                     float merchantGold = fortification.Gold;
                     var merchantEffect = merchantGold < 20000f ? merchantGold / 10000f - 2f :
                         merchantGold >= 200000f ? MathF.Min(200000f * 0.000005f - 1f, 2f) : 0f;
-                    explainedNumber.Add(merchantEffect, new TextObject("Merchants wealth"));
+                    explainedNumber.Add(merchantEffect, new TextObject("{=Crsf0YLd}Merchants wealth"));
                 }
 
                 if (fortification.Governor != null)

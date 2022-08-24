@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using BannerKings.Managers.Populations;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -38,12 +38,12 @@ namespace BannerKings.Models.BKModels
                         peace = FactionManager.GetEnemyFactions(clan.Kingdom).Any();
                     }
 
-                    result.Add(peace ? 0.02f : -0.02f, new TextObject(peace ? "Peace" : "War"));
+                    result.Add(peace ? 0.02f : -0.02f, new TextObject(peace ? "{=zgK5zVkQ}Peace" : "{=Ypfy9D3P}War"));
                 }
 
                 if (dataCulture == settlement.Culture)
                 {
-                    result.Add(0.02f, new TextObject("Dominant culture"));
+                    result.Add(0.02f, new TextObject("{=djkEJ9wB}Dominant culture"));
                 }
             }
             else

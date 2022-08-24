@@ -41,7 +41,7 @@ namespace BannerKings.Models.Vanilla
                 var slaves = data.GetTypeCount(PopType.Slaves);
                 var surplusExists =
                     BannerKingsConfig.Instance.PopulationManager.PopSurplusExists(town.Settlement, PopType.Slaves, true);
-                baseResult.Add(slaves * SLAVE_LOYALTY, new TextObject("Slave population"));
+                baseResult.Add(slaves * SLAVE_LOYALTY, new TextObject("{=FJSfBwzp}Slave population"));
 
                 var tax = (BannerKingsConfig.Instance.PolicyManager.GetPolicy(town.Settlement, "tax") as BKTaxPolicy)
                     .Policy;
@@ -51,14 +51,14 @@ namespace BannerKings.Models.Vanilla
                     {
                         var fraction1 = data.GetCurrentTypeFraction(PopType.Craftsmen);
                         var fraction2 = data.GetCurrentTypeFraction(PopType.Serfs) * 0.8f;
-                        baseResult.Add((fraction1 + fraction2) * LOYALTY_FACTOR, new TextObject("Low tax policy"));
+                        baseResult.Add((fraction1 + fraction2) * LOYALTY_FACTOR, new TextObject("{=j6AoAS6n}Low tax policy"));
                         break;
                     }
                     case TaxType.High:
                     {
                         var fraction1 = data.GetCurrentTypeFraction(PopType.Craftsmen);
                         var fraction2 = data.GetCurrentTypeFraction(PopType.Serfs) * 0.8f;
-                        baseResult.Add((fraction1 + fraction2) * LOYALTY_FACTOR * -1f, new TextObject("High tax policy"));
+                        baseResult.Add((fraction1 + fraction2) * LOYALTY_FACTOR * -1f, new TextObject("{=EhHXS8PN}High tax policy"));
                         break;
                     }
                 }
@@ -67,7 +67,7 @@ namespace BannerKings.Models.Vanilla
                 {
                     var factor = tax == TaxType.Low ? 1.5f : tax == TaxType.Standard ? 2f : 2.5f;
                     var privateSlaves = 1f - data.EconomicData.StateSlaves;
-                    baseResult.Add(privateSlaves * -factor, new TextObject("Tax private slaves decision"));
+                    baseResult.Add(privateSlaves * -factor, new TextObject("{=AQDh5jHA}Tax private slaves decision"));
                 }
 
                 var crime =
@@ -196,7 +196,7 @@ namespace BannerKings.Models.Vanilla
                 var assim = data.CultureData.GetAssimilation(town.Owner.Culture);
                 var factor = assim - 1f + assim;
                 var result = LOYALTY_FACTOR * factor;
-                explainedNumber.Add(result, new TextObject("Cultural Assimilation"));
+                explainedNumber.Add(result, new TextObject("{=D3trXTDz}Cultural Assimilation"));
 
                 if (town.Governor != null)
                 {
@@ -291,7 +291,7 @@ namespace BannerKings.Models.Vanilla
             var foodLimitForBonus = (int) (town.FoodStocksUpperLimit() * 0.8f);
             if (town.FoodStocks >= foodLimitForBonus)
             {
-                explainedNumber.Add(0.5f, new TextObject("Well fed populace"));
+                explainedNumber.Add(0.5f, new TextObject("{=9Jyv5XNX}Well fed populace"));
             }
             else if (town.Settlement.IsStarving)
             {

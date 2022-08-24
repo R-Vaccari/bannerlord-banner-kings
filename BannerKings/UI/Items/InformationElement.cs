@@ -1,4 +1,4 @@
-﻿using TaleWorlds.Core.ViewModelCollection.Information;
+using TaleWorlds.Core.ViewModelCollection.Information;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
@@ -15,7 +15,7 @@ namespace BannerKings.UI.Items
             {
                 this.description = description;
                 this.value = value;
-                Hint = new HintViewModel(new TextObject(hintText));
+                Hint = new HintViewModel(new TextObject("{=!}" + hintText));
             }
 
 

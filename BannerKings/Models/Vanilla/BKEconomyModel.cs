@@ -74,7 +74,7 @@ namespace BannerKings.Models.Vanilla
             if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(settlement, "workforce",
                     (int) WorkforcePolicy.Martial_Law))
             {
-                result.Add(-0.30f, new TextObject("Martial Law policy"));
+                result.Add(-0.30f, new TextObject("{=7cFbhefJ}Martial Law policy"));
             }
 
             var mercantilism = data.EconomicData.Mercantilism.ResultNumber;

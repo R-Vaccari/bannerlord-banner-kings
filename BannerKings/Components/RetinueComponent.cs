@@ -1,4 +1,4 @@
-﻿using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -20,7 +20,7 @@ namespace BannerKings.Components
 
         public override Hero PartyOwner => HomeSettlement.OwnerClan.Leader;
 
-        public override TextObject Name => new TextObject("Retinue from {SETTLEMENT}")
+        public override TextObject Name => new TextObject("{=MNYnLSej}Retinue from {SETTLEMENT}")
             .SetTextVariable("SETTLEMENT", HomeSettlement.Name);
 
         public override Settlement HomeSettlement => _target;

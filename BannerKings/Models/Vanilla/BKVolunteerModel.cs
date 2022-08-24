@@ -79,7 +79,7 @@ namespace BannerKings.Models.Vanilla
                 if (clan?.Kingdom != null &&
                     hero.Clan.Kingdom.ActivePolicies.Contains(DefaultPolicies.Cantons))
                 {
-                    explainedNumber.AddFactor(0.2f, new TextObject("Cantons kingdom policy"));
+                    explainedNumber.AddFactor(0.2f, new TextObject("{=zGx6c77M}Cantons kingdom policy"));
                 }
 
                 if (hero.VolunteerTypes?[index] != null && hero.VolunteerTypes[index].IsMounted &&
@@ -123,7 +123,7 @@ namespace BannerKings.Models.Vanilla
             var craftsmenMilitarism = GetClassMilitarism(PopType.Craftsmen);
             var nobleMilitarism = GetClassMilitarism(PopType.Nobles);
 
-            explainedNumber.Add((serfMilitarism + craftsmenMilitarism + nobleMilitarism) / 3f, new TextObject("Base"));
+            explainedNumber.Add((serfMilitarism + craftsmenMilitarism + nobleMilitarism) / 3f, new TextObject("{=AaNeOd9n}Base"));
 
             BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref explainedNumber, settlement.OwnerClan.Leader,
                 CouncilPosition.Marshall, 0.03f, false);

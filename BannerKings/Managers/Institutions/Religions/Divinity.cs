@@ -1,4 +1,4 @@
-﻿using TaleWorlds.Localization;
+using TaleWorlds.Localization;
 using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Managers.Institutions.Religions
@@ -14,7 +14,7 @@ namespace BannerKings.Managers.Institutions.Religions
             Name = name;
             Description = description;
             Effects = effects;
-            SecondaryTitle = secondaryTitle ?? new TextObject();
+            SecondaryTitle = secondaryTitle ?? new TextObject("{=!}");
             BlessingCost = blessingCost;
         }
 

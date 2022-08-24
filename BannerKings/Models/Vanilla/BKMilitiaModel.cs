@@ -58,11 +58,11 @@ namespace BannerKings.Models.Vanilla
 
                 if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(settlement, "decision_militia_encourage"))
                 {
-                    baseResult.Add(baseGrowth * (1f - 1f * filledCapacity), new TextObject("Conscription policy"));
+                    baseResult.Add(baseGrowth * (1f - 1f * filledCapacity), new TextObject("{=1aq83aPr}Conscription policy"));
                 }
                 else if (filledCapacity > 1f)
                 {
-                    baseResult.Add(baseGrowth * -1f * filledCapacity, new TextObject("Over supported limit"));
+                    baseResult.Add(baseGrowth * -1f * filledCapacity, new TextObject("{=0atu0kiG}Over supported limit"));
                 }
 
                 var villageData = data.VillageData;

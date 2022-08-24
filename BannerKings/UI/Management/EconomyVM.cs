@@ -38,9 +38,8 @@ namespace BannerKings.UI.Management
         }
 
         [DataSourceProperty]
-        public HintViewModel TournamentHint => new(new TextObject(
-            "{=VeMSE94s}Sponsor a tournament in this town. As the main sponsor, you have to pay 5000 coins for the tournament costs, as well as " +
-            "provide an adequate prize. Sponsoring games improves population loyalty towards you, and valuable prizes provide renown to your name."));
+        public HintViewModel TournamentHint => new(new TextObject("{=VeMSE94s}Sponsor a tournament in this town. As the main sponsor, you have to pay 5000 coins for the tournament costs, as well as " +
+                                                                  "provide an adequate prize. Sponsoring games improves population loyalty towards you, and valuable prizes provide renown to your name."));
 
         [DataSourceProperty]
         public bool TournamentAvailable
@@ -189,20 +188,19 @@ namespace BannerKings.UI.Management
             RevenueInfo.Clear();
             SatisfactionInfo.Clear();
 
-            ProductionInfo.Add(new InformationElement(new TextObject("Merchants' Revenue:").ToString(),
-                data.EconomicData.MerchantRevenue.ToString(),
-                new TextObject("Daily revenue of local merchants, based on slave workforce and production efficiency.")
+            ProductionInfo.Add(new InformationElement(new TextObject("{=GZooOyxK}Merchants' Revenue:").ToString(),
+                $"{data.EconomicData.MerchantRevenue:n0}",
+                new TextObject("{=rcApyg1K}Daily revenue of local merchants, based on slave workforce and production efficiency.")
                     .ToString()));
 
-            ProductionInfo.Add(new InformationElement(new TextObject("State Slaves:").ToString(),
-                FormatValue(data.EconomicData.StateSlaves),
-                new TextObject(
-                        "Percentage of slaves in this settlement that are state-owned and therefore used for state purposes such as building projects.")
+            ProductionInfo.Add(new InformationElement(new TextObject("{=NnOoYOTC}State Slaves:").ToString(),
+                $"{data.EconomicData.StateSlaves:P}",
+                new TextObject("{=yJzJMg5Z}Percentage of slaves in this settlement that are state-owned and therefore used for state purposes such as building projects.")
                     .ToString()));
 
             var quality = data.EconomicData.ProductionQuality;
-            ProductionInfo.Add(new InformationElement(new TextObject("Production Quality:").ToString(),
-                FormatValue(quality.ResultNumber),
+            ProductionInfo.Add(new InformationElement(new TextObject("{=6gaLfex6}Production Quality:").ToString(),
+                $"{quality.ResultNumber:P}",
                 new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
                     .SetTextVariable("TEXT",
                         new TextObject(
@@ -211,12 +209,11 @@ namespace BannerKings.UI.Management
                     .ToString()));
 
             var efficiency = data.EconomicData.ProductionEfficiency;
-            ProductionInfo.Add(new InformationElement(new TextObject("Production Efficiency:").ToString(),
-                FormatValue(efficiency.ResultNumber),
+            ProductionInfo.Add(new InformationElement(new TextObject("{=oJKPne1U}Production Efficiency:").ToString(),
+                $"{efficiency.ResultNumber:P}",
                 new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
                     .SetTextVariable("TEXT",
-                        new TextObject(
-                            "{=0z7FL2oe}The speed at which workshops produce goods, affected by kingdom policies and craftsmen"))
+                        new TextObject("{=0z7FL2oe}The speed at which workshops produce goods, affected by kingdom policies and craftsmen"))
                     .SetTextVariable("EXPLANATIONS", efficiency.GetExplanations())
                     .ToString()));
 
@@ -235,37 +232,34 @@ namespace BannerKings.UI.Management
 
                 sb.Remove(sb.Length - 2, 1);
                 var productionString = sb.ToString();
-                ProductionInfo.Add(new InformationElement(new TextObject("Goods Production:").ToString(),
-                    productionQuantity + " (Daily)",
-                    new TextObject(
-                            "How much the local population can progress with construction projects, on a daily basis.")
+                ProductionInfo.Add(new InformationElement(new TextObject("{=S2teOBN3}Goods Production:").ToString(),
+                    $"{productionQuantity:n0} (Daily)",
+                    new TextObject("{=Gm0F8o7L}How much the local population can progress with construction projects, on a daily basis.")
                         .ToString()));
-                ProductionInfo.Add(new InformationElement(new TextObject("Items Produced:").ToString(), productionString,
-                    new TextObject("Goods locally produced by the population.").ToString()));
+                ProductionInfo.Add(new InformationElement(new TextObject("{=hmtRGrpt}Items Produced:").ToString(), productionString,
+                    new TextObject("{=0RAPEDaT}Goods locally produced by the population.").ToString()));
             }
             else
             {
-                RevenueInfo.Add(new InformationElement(new TextObject("Tariff:").ToString(),
-                    FormatValue(data.EconomicData.Tariff),
-                    new TextObject("Percentage of an item's value charged as tax when sold.").ToString()));
+                RevenueInfo.Add(new InformationElement(new TextObject("{=Re0UyaL5}Tariff:").ToString(),
+                    $"{data.EconomicData.Tariff:P}",
+                    new TextObject("{=UgD3or79}Percentage of an item's value charged as tax when sold.").ToString()));
 
                 var mercantilism = data.EconomicData.Mercantilism;
                 RevenueInfo.Add(new InformationElement(new TextObject("Mercantilism:").ToString(),
-                    FormatValue(mercantilism.ResultNumber),
+                    $"{mercantilism.ResultNumber:P}",
                     new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
                         .SetTextVariable("TEXT",
-                            new TextObject(
-                                "{=tOk3vpRY}Represents how economicaly free craftsmen, tradesmen and guilds are. Increased mercantilism reduces the tax revenue of these, but allows them to accumulate wealth or contribute more to overall prosperity."))
+                            new TextObject("{=tOk3vpRY}Represents how economicaly free craftsmen, tradesmen and guilds are. Increased mercantilism reduces the tax revenue of these, but allows them to accumulate wealth or contribute more to overall prosperity."))
                         .SetTextVariable("EXPLANATIONS", mercantilism.GetExplanations())
                         .ToString()));
 
                 var caravanAttractiveness = data.EconomicData.CaravanAttraction;
-                RevenueInfo.Add(new InformationElement(new TextObject("Caravan Attractiveness:").ToString(),
-                    FormatValue(caravanAttractiveness.ResultNumber),
+                RevenueInfo.Add(new InformationElement(new TextObject("{=O9p6A7yD}Caravan Attractiveness:").ToString(),
+                    $"{caravanAttractiveness.ResultNumber:P}",
                     new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
                         .SetTextVariable("TEXT",
-                            new TextObject(
-                                "{=GDiY2iFh}How attractive this town is for caravans. Likelihood of caravan visits are dictated mainly by prices, and attractiveness is a factor added on top of that."))
+                            new TextObject("{=GDiY2iFh}How attractive this town is for caravans. Likelihood of caravan visits are dictated mainly by prices, and attractiveness is a factor added on top of that."))
                         .SetTextVariable("EXPLANATIONS", caravanAttractiveness.GetExplanations())
                         .ToString()));
 
@@ -320,11 +314,10 @@ namespace BannerKings.UI.Management
             }
 
             var admCost = data.EconomicData.AdministrativeCost;
-            RevenueInfo.Add(new InformationElement("Administrative Cost:", FormatValue(admCost.ResultNumber),
+            RevenueInfo.Add(new InformationElement("{=MhzdyoWG}Administrative Cost:", $"{admCost.ResultNumber:P}",
                 new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
                     .SetTextVariable("TEXT",
-                        new TextObject(
-                            "Costs associated with the settlement administration, including those of active policies and decisions, deducted on tax revenue."))
+                        new TextObject("{=ay7jnvEJ}Costs associated with the settlement administration, including those of active policies and decisions, deducted on tax revenue."))
                     .SetTextVariable("EXPLANATIONS", admCost.GetExplanations())
                     .ToString()));
 

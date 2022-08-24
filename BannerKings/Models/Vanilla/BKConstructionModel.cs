@@ -61,10 +61,10 @@ namespace BannerKings.Models.Vanilla
             var result = new ExplainedNumber(0f, true);
             var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
             var serfs = data.GetTypeCount(PopType.Serfs);
-            result.Add(serfs * SERF_CONSTRUCTION, new TextObject("Serfs"));
+            result.Add(serfs * SERF_CONSTRUCTION, new TextObject("{=jH7cWD5r}Serfs"));
 
             var slaves = data.GetTypeCount(PopType.Slaves);
-            result.Add(slaves * SLAVE_CONSTRUCTION, new TextObject("Slaves"));
+            result.Add(slaves * SLAVE_CONSTRUCTION, new TextObject("{=8xhVr4rK}Slaves"));
 
             return result;
         }
@@ -147,7 +147,7 @@ namespace BannerKings.Models.Vanilla
         {
             var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
             result.Add(GetWorkforce(town.Settlement), new TextObject("{=8EX6VriS}Workforce"));
-            result.Add(3f, new TextObject("Base"));
+            result.Add(3f, new TextObject("{=AaNeOd9n}Base"));
 
             var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(town.OwnerClan.Leader);
             if (education.Perks.Contains(BKPerks.Instance.CivilEngineer))

@@ -23,20 +23,20 @@ namespace BannerKings.Models.BKModels
                     effect = 0.20f;
                 }
 
-                baseResult.Add(effect, new TextObject("Governor stewardship"));
+                baseResult.Add(effect, new TextObject("{=PBzKaQYS}Governor stewardship"));
             }
 
 
             var work = (BKWorkforcePolicy) BannerKingsConfig.Instance.PolicyManager.GetPolicy(settlement, "workforce");
             if (work.Policy != BKWorkforcePolicy.WorkforcePolicy.None)
             {
-                baseResult.Add(0.04f, new TextObject("Workforce policy"));
+                baseResult.Add(0.04f, new TextObject("{=MBHftZmv}Workforce policy"));
             }
 
             var draft = (BKDraftPolicy) BannerKingsConfig.Instance.PolicyManager.GetPolicy(settlement, "draft");
             if (draft.Policy == BKDraftPolicy.DraftPolicy.Conscription)
             {
-                baseResult.Add(0.04f, new TextObject("Conscription policy"));
+                baseResult.Add(0.04f, new TextObject("{=1aq83aPr}Conscription policy"));
             }
 
             var garrison = (BKGarrisonPolicy) BannerKingsConfig.Instance.PolicyManager.GetPolicy(settlement, "garrison");

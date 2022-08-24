@@ -1,4 +1,4 @@
-﻿using BannerKings.Managers.Populations;
+using BannerKings.Managers.Populations;
 using TaleWorlds.Core.ViewModelCollection.Information;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -19,11 +19,11 @@ namespace BannerKings.UI.Items
 
             [DataSourceProperty] public string Name => dataClass.Culture.Name.ToString();
 
-            [DataSourceProperty] public string Acceptance => FormatValue(dataClass.Acceptance);
+            [DataSourceProperty] public string Acceptance => $"{dataClass.Acceptance:P}";
 
-            [DataSourceProperty] public string Assimilation => FormatValue(dataClass.Assimilation);
+            [DataSourceProperty] public string Assimilation => $"{dataClass.Assimilation:P}";
 
-            [DataSourceProperty] public HintViewModel Hint => new(new TextObject());
+            [DataSourceProperty] public HintViewModel Hint => new(new TextObject("{=!}"));
         }
     }
 }

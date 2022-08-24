@@ -79,14 +79,12 @@ namespace BannerKings.Behaviours
                 if (hero.IsFriend(Hero.MainHero))
                 {
                     requestText =
-                        new TextObject(
-                            "{=adCAG0nk}I humbly ask of you to release me of my duties in the {CLAN}. I shall remain as your vassal and loyal friend.");
+                        new TextObject("{=adCAG0nk}I humbly ask of you to release me of my duties in the {CLAN}. I shall remain as your vassal and loyal friend.");
                 }
                 else if (hero.IsEnemy(Hero.MainHero))
                 {
                     requestText =
-                        new TextObject(
-                            "{=KwjG1wou}I request of you to release me of my duties in the {CLAN}. It is time for me to lead my own family.");
+                        new TextObject("{=KwjG1wou}I request of you to release me of my duties in the {CLAN}. It is time for me to lead my own family.");
                 }
                 else
                 {
@@ -98,9 +96,8 @@ namespace BannerKings.Behaviours
 
                 var cost = BannerKingsConfig.Instance.InfluenceModel.GetRejectKnighthoodCost(originalClan);
                 InformationManager.ShowInquiry(new InquiryData(
-                    new TextObject("The clan of {HERO}").SetTextVariable("HERO", hero.Name).ToString(),
-                    new TextObject(
-                            "{GREETING} {PLAYER}, {TEXT}\nRejecting their request would cost {INFLUENCE} influence.")
+                    new TextObject("{=VE2h1JQz}The clan of {HERO}").SetTextVariable("HERO", hero.Name).ToString(),
+                    new TextObject("{=MQtSCDgK}{GREETING} {PLAYER}, {TEXT}\nRejecting their request would cost {INFLUENCE} influence.")
                         .SetTextVariable("GREETING",
                             GameTexts.FindText(Hero.MainHero.IsFemale ? "str_my_lady" : "str_my_lord"))
                         .SetTextVariable("PLAYER", Hero.MainHero.Name)
@@ -152,8 +149,7 @@ namespace BannerKings.Behaviours
         private void AddDialog(CampaignGameStarter starter)
         {
             var knighthoodSb = new StringBuilder();
-            knighthoodSb.Append(
-                "By knighting, you are granting this person nobility and they will be bound to you as your vassal by the standard contract of the kingdom. A lordship must be given away to seal the contract.");
+            knighthoodSb.Append("By knighting, you are granting this person nobility and they will be bound to you as your vassal by the standard contract of the kingdom. A lordship must be given away to seal the contract.");
             knighthoodSb.Append(Environment.NewLine);
             knighthoodSb.Append(" ");
             knighthoodSb.Append(Environment.NewLine);
@@ -244,8 +240,7 @@ namespace BannerKings.Behaviours
             var kingdom = Clan.PlayerClan.Kingdom;
             if (kingdom == null)
             {
-                hintText = new TextObject(
-                    "{=gM4TtJCf}Before bestowing knighthood, you need to be formally part of a kingdom.");
+                hintText = new TextObject("{=gM4TtJCf}Before bestowing knighthood, you need to be formally part of a kingdom.");
                 return false;
             }
 
@@ -260,8 +255,7 @@ namespace BannerKings.Behaviours
             switch (lordships.Count)
             {
                 case 0:
-                    hintText = new TextObject(
-                        "{=s0ngHATj}You do not legally own any lordship that could be given to land a new vassal.");
+                    hintText = new TextObject("{=s0ngHATj}You do not legally own any lordship that could be given to land a new vassal.");
                     return false;
                 case 1:
                     hintText = new TextObject("{=x23XkFM4}You cannot grant away your only lordship.");
@@ -271,16 +265,14 @@ namespace BannerKings.Behaviours
             var influence = BannerKingsConfig.Instance.TitleModel.GetGrantKnighthoodCost(Hero.MainHero);
             if (Clan.PlayerClan.Influence < influence.ResultNumber)
             {
-                hintText = new TextObject(
-                        "{=rFXuWbdQ}Bestowing knighthood requires {INFLUENCE} influence to legitimize your new vassal.\n{EXPLANATIONS}")
+                hintText = new TextObject("{=rFXuWbdQ}Bestowing knighthood requires {INFLUENCE} influence to legitimize your new vassal.\n{EXPLANATIONS}")
                     .SetTextVariable("INFLUENCE", influence.ResultNumber)
                     .SetTextVariable("EXPLANATIONS", influence.GetExplanations());
                 return false;
             }
 
 
-            hintText = new TextObject(
-                "{=hN2Eynzu}Bestowing knighthood requires {GOLD} gold to give your vassal financial security.");
+            hintText = new TextObject("{=hN2Eynzu}Bestowing knighthood requires {GOLD} gold to give your vassal financial security.");
             hintText.SetTextVariable("GOLD", 5000);
 
             return Hero.MainHero.Gold >= 5000;
@@ -427,13 +419,11 @@ namespace BannerKings.Behaviours
                             var hint = (string) hintMethod.Invoke(__instance, new object[] {hero});
                             if (hero.PartyBelongedToAsPrisoner != null)
                             {
-                                hint = new TextObject(
-                                    "{=A2qwGxzR}You cannot assign a prisoner member as a new party leader").ToString();
+                                hint = new TextObject("{=A2qwGxzR}You cannot assign a prisoner member as a new party leader").ToString();
                             }
                             else if (hero.IsReleased)
                             {
-                                hint = new TextObject(
-                                        "{=XX95HPvL}This hero has just escaped from captors and will be available after some time.")
+                                hint = new TextObject("{=XX95HPvL}This hero has just escaped from captors and will be available after some time.")
                                     .ToString();
                             }
                             else if (hero.PartyBelongedTo != null && hero.PartyBelongedTo.LeaderHero == hero)
@@ -447,8 +437,7 @@ namespace BannerKings.Behaviours
                             }
                             else if (hero.GovernorOf != null)
                             {
-                                hint = new TextObject(
-                                        "{=RND66CoK}Governors cannot lead a mobile party and be a governor at the same time.")
+                                hint = new TextObject("{=RND66CoK}Governors cannot lead a mobile party and be a governor at the same time.")
                                     .ToString();
                             }
                             else
@@ -459,8 +448,7 @@ namespace BannerKings.Behaviours
                                         hint = new TextObject("{=MiVV06Yo}This hero is lost").ToString();
                                         break;
                                     case Hero.CharacterStates.Fugitive:
-                                        hint = new TextObject(
-                                                "{=iWxEQVYg}This hero is a fugitive and running from their captors. They will be available after some time.")
+                                        hint = new TextObject("{=iWxEQVYg}This hero is a fugitive and running from their captors. They will be available after some time.")
                                             .ToString();
                                         break;
                                     default:
@@ -468,8 +456,7 @@ namespace BannerKings.Behaviours
                                         if (!Utils.Helpers.IsCloseFamily(hero, Hero.MainHero) &&
                                             !BannerKingsConfig.Instance.TitleManager.IsHeroKnighted(hero))
                                         {
-                                            hint = new TextObject(
-                                                    "A hero must be knighted and granted land before being able to raise a personal retinue. You may bestow knighthood by talking to them.")
+                                            hint = new TextObject("{=H48rhfyZ}A hero must be knighted and granted land before being able to raise a personal retinue. You may bestow knighthood by talking to them.")
                                                 .ToString();
                                         }
                                         else
@@ -500,8 +487,7 @@ namespace BannerKings.Behaviours
                     }
                     else
                     {
-                        MBInformationManager.AddQuickInformation(new TextObject(
-                            "{=WGo5MzOB}There is no one available in your clan who can lead a party right now."));
+                        MBInformationManager.AddQuickInformation(new TextObject("{=WGo5MzOB}There is no one available in your clan who can lead a party right now."));
                     }
                 }
 

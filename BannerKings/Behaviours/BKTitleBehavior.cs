@@ -290,8 +290,8 @@ namespace BannerKings.Behaviours
 
                             GameTexts.SetVariable("SETTLEMENT", settlement.Name);
                             InformationManager.ShowInquiry(new InquiryData(
-                                new TextObject("Conquest Right - Election").ToString(),
-                                new TextObject("By contract law, you and the participants of {ARMY} will compete in election for the ownership of {SETTLEMENT}.").ToString(),
+                                new TextObject("{=fG4nhQtn}Conquest Right - Election").ToString(),
+                                new TextObject("{=i1XurmS0}By contract law, you and the participants of {ARMY} will compete in election for the ownership of {SETTLEMENT}.").ToString(),
                                 true, false, GameTexts.FindText("str_done").ToString(), null, null, null), true);
                         }
 
@@ -377,9 +377,8 @@ namespace BannerKings.Behaviours
                                 {
                                     GameTexts.SetVariable("SETTLEMENT", settlement.Name);
                                     InformationManager.ShowInquiry(new InquiryData(
-                                        new TextObject("Absolute Land Right").ToString(),
-                                        new TextObject(
-                                                "By contract law, you have been awarded the ownership of {SETTLEMENT} due to your legal right to this fief.")
+                                        new TextObject("{=Rc5gU5bS}Absolute Land Right").ToString(),
+                                        new TextObject("{=AuEhA2EB}By contract law, you have been awarded the ownership of {SETTLEMENT} due to your legal right to this fief.")
                                             .ToString(),
                                         true, false, GameTexts.FindText("str_done").ToString(), null, null, null), true);
                                 }
@@ -427,9 +426,8 @@ namespace BannerKings.Behaviours
                     if (capturerHero == Hero.MainHero)
                     {
                         GameTexts.SetVariable("SETTLEMENT", settlement.Name);
-                        InformationManager.ShowInquiry(new InquiryData(new TextObject("Conquest Right").ToString(),
-                            new TextObject(
-                                    "By contract law, you have been awarded the ownership of {SETTLEMENT} due to you conquering it.")
+                        InformationManager.ShowInquiry(new InquiryData(new TextObject("{Conquest Right").ToString(),
+                            new TextObject("{=FKMakM2V}By contract law, you have been awarded the ownership of {SETTLEMENT} due to you conquering it.")
                                 .ToString(),
                             true, false, GameTexts.FindText("str_done").ToString(), null, null, null), true);
                     }

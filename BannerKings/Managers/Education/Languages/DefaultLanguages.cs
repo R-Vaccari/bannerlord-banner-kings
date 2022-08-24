@@ -47,19 +47,19 @@ namespace BannerKings.Managers.Education.Languages
             Aseran = new Language("language_aseran");
             Vakken = new Language("language_vakken");
 
-            Battanian.Initialize(new TextObject("{=tRp08jyH}Battanian"), new TextObject(),
+            Battanian.Initialize(new TextObject("{=tRp08jyH}Battanian"), new TextObject("{=!}"),
                 cultures.First(x => x.StringId == "battania"), GetIntelligibles(Battanian));
-            Sturgian.Initialize(new TextObject("{=VtNL32g2}Sturgian"), new TextObject(),
+            Sturgian.Initialize(new TextObject("{=VtNL32g2}Sturgian"), new TextObject("{=!}"),
                 cultures.First(x => x.StringId == "sturgia"), GetIntelligibles(Sturgian));
-            Khuzait.Initialize(new TextObject("{=ZdFBNgoJ}Khuzait"), new TextObject(),
+            Khuzait.Initialize(new TextObject("{=ZdFBNgoJ}Khuzait"), new TextObject("{=!}"),
                 cultures.First(x => x.StringId == "khuzait"), GetIntelligibles(Khuzait));
-            Vlandic.Initialize(new TextObject("{=6FGQ31TM}Vlandic"), new TextObject(),
+            Vlandic.Initialize(new TextObject("{=6FGQ31TM}Vlandic"), new TextObject("{=!}"),
                 cultures.First(x => x.StringId == "vlandia"), GetIntelligibles(Vlandic));
-            Calradian.Initialize(new TextObject("{=NWqkTdMt}Calradian"), new TextObject(),
+            Calradian.Initialize(new TextObject("{=NWqkTdMt}Calradian"), new TextObject("{=!}"),
                 cultures.First(x => x.StringId == "empire"), GetIntelligibles(Calradian));
-            Aseran.Initialize(new TextObject("{=UAeorLSO}Aseran"), new TextObject(), cultures.First(x => x.StringId == "aserai"),
+            Aseran.Initialize(new TextObject("{=UAeorLSO}Aseran"), new TextObject("{=!}"), cultures.First(x => x.StringId == "aserai"),
                 GetIntelligibles(Aseran));
-            Vakken.Initialize(new TextObject("{=brxz2SmN}Vakken"), new TextObject(),
+            Vakken.Initialize(new TextObject("{=brxz2SmN}Vakken"), new TextObject("{=!}"),
                 cultures.First(x => x.StringId == "vakken"), GetIntelligibles(Vakken));
         }
 

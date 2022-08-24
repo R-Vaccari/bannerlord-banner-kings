@@ -202,7 +202,7 @@ namespace BannerKings.UI.Extensions
                 }
 
                 var element = new EquipmentElement(item);
-                var qualityText = new TextObject();
+                var qualityText = new TextObject("{=!}");
                 if ((item.HasWeaponComponent && item.WeaponComponent.ItemModifierGroup != null) ||
                     (item.HasArmorComponent && item.ArmorComponent.ItemModifierGroup != null))
                 {

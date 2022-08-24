@@ -124,8 +124,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
             //MBTextManager.SetTextVariable("CLERGYMAN_RITE_CONFIRM", new TextObject("{=eTqH0eDT}The fate of {HERO} was sealed once they dared draw sword on us. Let us rejoice upon the glory we bathe ourselves in as the enemy bleeds!")
             //   .SetTextVariable("HERO", input.Name), false);
             MBTextManager.SetTextVariable("CLERGYMAN_RITE_CONFIRM",
-                new TextObject(
-                        "{=uSMsxDP1}The fate of {HERO} was sealed once they dared draw sword on us. Affirm the rite and we shall rejoice upon the glory we bathe ourselves in as the enemy bleeds!")
+                new TextObject("{=uSMsxDP1}The fate of {HERO} was sealed once they dared draw sword on us. Affirm the rite and we shall rejoice upon the glory we bathe ourselves in as the enemy bleeds!")
                     .SetTextVariable("HERO", input.Name));
         }
     }

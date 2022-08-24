@@ -238,8 +238,7 @@ namespace BannerKings.Behaviours
                 return false;
             }
 
-            hintText = new TextObject(
-                    "{=y1NsVyOH}{POSSIBLE}. Changing faiths will significantly impact your clan's renown. Your piety in the new faith will be zero. Lords of {CURRENT_FAITH} faith may disapprove your change.")
+            hintText = new TextObject("{=y1NsVyOH}{POSSIBLE}. Changing faiths will significantly impact your clan's renown. Your piety in the new faith will be zero. Lords of {CURRENT_FAITH} faith may disapprove your change.")
                 .SetTextVariable("POSSIBLE", result.Item2)
                 .SetTextVariable("CURRENT_FAITH", playerReligion.Faith.GetFaithName());
             return true;
@@ -387,8 +386,7 @@ namespace BannerKings.Behaviours
 
             var faithText = new TextObject("{=eV3uOZCw}{FAITH} teaches us that we may perform {RITES}.");
             var riteText =
-                new TextObject(
-                        "{=1b08dLC7}Certainly, {HERO}. Remember that proving your devotion is a life-long process. Once a rite is done, some time is needed before it may be consummated again. {RITES}")
+                new TextObject("{=1b08dLC7}Certainly, {HERO}. Remember that proving your devotion is a life-long process. Once a rite is done, some time is needed before it may be consummated again. {RITES}")
                     .SetTextVariable("HERO", Hero.MainHero.Name);
 
             var sb = new StringBuilder();

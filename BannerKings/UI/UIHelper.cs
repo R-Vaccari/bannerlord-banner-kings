@@ -68,7 +68,7 @@ namespace BannerKings.UI
         {
             var model = (BKPietyModel) BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(BKPietyModel));
             var tooltipForAccumulatingProperty =
-                CampaignUIHelper.GetTooltipForAccumulatingProperty(new TextObject("Piety").ToString(), piety,
+                CampaignUIHelper.GetTooltipForAccumulatingProperty(new TextObject("{=0EVuzzOU}Piety").ToString(), piety,
                     model.CalculateEffect(hero));
 
             TextObject relText = null;
@@ -137,8 +137,7 @@ namespace BannerKings.UI
                 {
                     case ActionType.Grant:
                     {
-                        description = new TextObject(
-                            "{=d4p6yHON}Grant this title away to {RECEIVER}, making them the legal owner of it. If the receiver is in your kingdom and the title is landed (attached to a fief), they will also receive the direct ownership of that fief and it's revenue. Granting a title provides positive relations with the receiver.");
+                        description = new TextObject("{=d4p6yHON}Grant this title away to {RECEIVER}, making them the legal owner of it. If the receiver is in your kingdom and the title is landed (attached to a fief), they will also receive the direct ownership of that fief and it's revenue. Granting a title provides positive relations with the receiver.");
                         affirmativeText = new TextObject("{=dugq4xHo}Grant");
                         var options = new List<InquiryElement>();
                         foreach (var hero in BannerKingsConfig.Instance.TitleModel.GetGrantCandidates(titleAction.ActionTaker))
@@ -161,20 +160,17 @@ namespace BannerKings.UI
                     }
                     case ActionType.Revoke:
                         description =
-                            new TextObject(
-                                "{=2kxQvCVb}Revoking transfers the legal ownership of a vassal's title to the suzerain. The revoking restrictions are associated with the title's government type.");
+                            new TextObject("{=2kxQvCVb}Revoking transfers the legal ownership of a vassal's title to the suzerain. The revoking restrictions are associated with the title's government type.");
                         affirmativeText = new TextObject("{=iLpAKttu}Revoke");
                         break;
                     case ActionType.Claim:
                         description =
-                            new TextObject(
-                                "{=BSX8rvCS}Claiming this title sets a legal precedence for you to legally own it, thus allowing it to be usurped. A claim takes 1 year to build. Claims last until they are pressed or until it's owner dies.");
+                            new TextObject("{=BSX8rvCS}Claiming this title sets a legal precedence for you to legally own it, thus allowing it to be usurped. A claim takes 1 year to build. Claims last until they are pressed or until it's owner dies.");
                         affirmativeText = new TextObject("{=6hY9WysN}Claim");
                         break;
                     default:
                         description =
-                            new TextObject(
-                                "{=6cxTA139}Press your claim and usurp this title from it's owner, making you the lawful ruler of this title. Usurping from lords within your kingdom degrades your clan's reputation.");
+                            new TextObject("{=6cxTA139}Press your claim and usurp this title from it's owner, making you the lawful ruler of this title. Usurping from lords within your kingdom degrades your clan's reputation.");
                         affirmativeText = new TextObject("{=L3Jzg76z}Usurp");
                         break;
                 }
@@ -201,8 +197,7 @@ namespace BannerKings.UI
                         break;
                     case CouncilActionType.SWAP:
                         description =
-                            new TextObject(
-                                    "{=ZYyxmOv9}Request to swap your current position with {COUNCILMAN} position of {POSITION}. This action will cost {INFLUENCE} influence.\n\n{ACCEPT}")
+                            new TextObject("{=ZYyxmOv9}Request to swap your current position with {COUNCILMAN} position of {POSITION}. This action will cost {INFLUENCE} influence.\n\n{ACCEPT}")
                                 .SetTextVariable("COUNCILMAN", councilAction.TargetPosition.Member.Name)
                                 .SetTextVariable("POSITION", councilAction.TargetPosition.GetName())
                                 .SetTextVariable("INFLUENCE", councilAction.Influence)
@@ -211,8 +206,7 @@ namespace BannerKings.UI
                         break;
                     default:
                         description =
-                            new TextObject(
-                                    "{=yYVE3O3p}Relinquish your position in the council. It will cost no influence and exempt you of any council privileges.\n\n{ACCEPT}")
+                            new TextObject("{=yYVE3O3p}Relinquish your position in the council. It will cost no influence and exempt you of any council privileges.\n\n{ACCEPT}")
                                 .SetTextVariable("ACCEPT", accept);
                         affirmativeText = new TextObject("{=RPyfAkfV}Relinquish");
                         break;
@@ -312,7 +306,7 @@ namespace BannerKings.UI
                 TooltipAddSeperator(list);
                 foreach (var claimant in claimants)
                 {
-                    list.Add(new TooltipProperty(claimant.Name.ToString(), new TextObject().ToString(), 0));
+                    list.Add(new TooltipProperty(claimant.Name.ToString(), new TextObject("{=!}").ToString(), 0));
                 }
             }
 
