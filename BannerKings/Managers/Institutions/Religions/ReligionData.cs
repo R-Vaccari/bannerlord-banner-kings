@@ -76,8 +76,8 @@ namespace BannerKings.Managers.Institutions.Religions
 
 
             var dominantWeight = weightDictionary[dominant];
-            var proportion = dominantWeight / totalWeight;
-            var diff = proportion - Religions[dominant];
+            var dominantProportion = dominantWeight / totalWeight;
+            var diff = dominantProportion - Religions[dominant];
             if (diff is 0f or float.NaN)
             {
                 return;
@@ -91,7 +91,8 @@ namespace BannerKings.Managers.Institutions.Religions
                     continue;
                 }
 
-                candidates.Add(new (pair.Key, pair.Value));
+                // non-dominant religions have higher change of being affected when have more proportion
+                candidates.Add(new (pair.Key, pair.Value / totalWeight));
             }
 
             var target = MBRandom.ChooseWeighted(candidates);
