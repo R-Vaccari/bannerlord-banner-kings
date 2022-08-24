@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using BannerKings.Managers;
 using BannerKings.Managers.Court;
@@ -25,10 +25,10 @@ namespace BannerKings.UI
         {
             var text = fluency switch
             {
-                >= 0.9f => new TextObject("{=!}Fluent"),
-                >= 0.5f => new TextObject("{=!}Capable"),
-                >= 0.1f => new TextObject("{=!}Novice"),
-                _ => new TextObject("{=!}Incompetent")
+                >= 0.9f => new TextObject("{=B4bC92QGu}Fluent"),
+                >= 0.5f => new TextObject("{=Qx9go09mF}Capable"),
+                >= 0.1f => new TextObject("{=ULtExkaAh}Novice"),
+                _ => new TextObject("{=LKBAyhVnK}Incompetent")
             };
 
             return text;
@@ -39,11 +39,11 @@ namespace BannerKings.UI
             TextObject text = null;
             if (faith is MonotheisticFaith)
             {
-                text = new TextObject("{=!}Monotheism");
+                text = new TextObject("{=whdTs3PfO}Monotheism");
             }
             else
             {
-                text = new TextObject("{=!}Polytheism");
+                text = new TextObject("{=VTMCw9B4J}Polytheism");
             }
 
             return text;
@@ -54,11 +54,11 @@ namespace BannerKings.UI
             TextObject text = null;
             if (faith is MonotheisticFaith)
             {
-                text = new TextObject("{=!}Monotheism");
+                text = new TextObject("{=whdTs3PfO}Monotheism");
             }
             else
             {
-                text = new TextObject("{=!}Polytheism");
+                text = new TextObject("{=VTMCw9B4J}Polytheism");
             }
 
             return text;
@@ -74,11 +74,11 @@ namespace BannerKings.UI
             TextObject relText = null;
             if (rel == null)
             {
-                relText = new TextObject("{=!}You do not currently adhere to any faith");
+                relText = new TextObject("{=SHAi0O67R}You do not currently adhere to any faith");
             }
             else
             {
-                relText = new TextObject("{=!}You are following the {FAITH} faith")
+                relText = new TextObject("{=K3WjFfFW4}You are following the {FAITH} faith")
                     .SetTextVariable("FAITH", rel.Faith.GetFaithName());
             }
 
@@ -138,8 +138,8 @@ namespace BannerKings.UI
                     case ActionType.Grant:
                     {
                         description = new TextObject(
-                            "{=!}Grant this title away to {RECEIVER}, making them the legal owner of it. If the receiver is in your kingdom and the title is landed (attached to a fief), they will also receive the direct ownership of that fief and it's revenue. Granting a title provides positive relations with the receiver.");
-                        affirmativeText = new TextObject("{=!}Grant");
+                            "{=8x54gx82h}Grant this title away to {RECEIVER}, making them the legal owner of it. If the receiver is in your kingdom and the title is landed (attached to a fief), they will also receive the direct ownership of that fief and it's revenue. Granting a title provides positive relations with the receiver.");
+                        affirmativeText = new TextObject("{=zXvQezeVU}Grant");
                         var options = new List<InquiryElement>();
                         foreach (var hero in BannerKingsConfig.Instance.TitleModel.GetGrantCandidates(titleAction.ActionTaker))
                         {
@@ -149,8 +149,8 @@ namespace BannerKings.UI
 
 
                         MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                            new TextObject("{=!}Grant {TITLE}").SetTextVariable("TITLE", titleAction.Title.FullName).ToString(),
-                            new TextObject("{=!}Select a lord who you would like to grant this title to.").ToString(),
+                            new TextObject("{=zXvQezeVU}Grant {TITLE}").SetTextVariable("TITLE", titleAction.Title.FullName).ToString(),
+                            new TextObject("{=56nQa2WnT}Select a lord who you would like to grant this title to.").ToString(),
                             options, true, 1, GameTexts.FindText("str_done").ToString(), string.Empty,
                             delegate(List<InquiryElement> x)
                             {
@@ -162,30 +162,30 @@ namespace BannerKings.UI
                     case ActionType.Revoke:
                         description =
                             new TextObject(
-                                "{=!}Revoking transfers the legal ownership of a vassal's title to the suzerain. The revoking restrictions are associated with the title's government type.");
-                        affirmativeText = new TextObject("{=!}Revoke");
+                                "{=Yyv576Oe0}Revoking transfers the legal ownership of a vassal's title to the suzerain. The revoking restrictions are associated with the title's government type.");
+                        affirmativeText = new TextObject("{=kFODZ14pP}Revoke");
                         break;
                     case ActionType.Claim:
                         description =
                             new TextObject(
-                                "{=!}Claiming this title sets a legal precedence for you to legally own it, thus allowing it to be usurped. A claim takes 1 year to build. Claims last until they are pressed or until it's owner dies.");
-                        affirmativeText = new TextObject("{=!}Claim");
+                                "{=nc6G0skrz}Claiming this title sets a legal precedence for you to legally own it, thus allowing it to be usurped. A claim takes 1 year to build. Claims last until they are pressed or until it's owner dies.");
+                        affirmativeText = new TextObject("{=f31wZDqZN}Claim");
                         break;
                     default:
                         description =
                             new TextObject(
-                                "{=!}Press your claim and usurp this title from it's owner, making you the lawful ruler of this title. Usurping from lords within your kingdom degrades your clan's reputation.");
-                        affirmativeText = new TextObject("{=!}Usurp");
+                                "{=P8ELrL5fp}Press your claim and usurp this title from it's owner, making you the lawful ruler of this title. Usurping from lords within your kingdom degrades your clan's reputation.");
+                        affirmativeText = new TextObject("{=nOkpYWf8Y}Usurp");
                         break;
                 }
             }
             else
             {
                 var councilAction = (CouncilAction) action;
-                var accept = new TextObject("{=!}Will accept: {ANSWER}")
+                var accept = new TextObject("{=EX1JiEEQ0}Will accept: {ANSWER}")
                     .SetTextVariable("ANSWER", councilAction.Possible
                         ? GameTexts.FindText("str_yes")
-                        : new TextObject("{=!}{NO}.\n{REASON}")
+                        : new TextObject("{=2rDiM9Z10}{NO}.\n{REASON}")
                             .SetTextVariable("NO", GameTexts.FindText("str_no"))
                             .SetTextVariable("REASON", councilAction.Reason));
 
@@ -194,27 +194,27 @@ namespace BannerKings.UI
                     case CouncilActionType.REQUEST:
                         description =
                             new TextObject(
-                                    "{=!}Request your liege to grant you this position in the council. This action will cost {INFLUENCE} influence.\n\n{ACCEPT}")
+                                    "{=fpdJNypDv}Request your liege to grant you this position in the council. This action will cost {INFLUENCE} influence.\n\n{ACCEPT}")
                                 .SetTextVariable("INFLUENCE", councilAction.Influence)
                                 .SetTextVariable("ACCEPT", accept);
-                        affirmativeText = new TextObject("{=!}Request");
+                        affirmativeText = new TextObject("{=TGcPcZq6J}Request");
                         break;
                     case CouncilActionType.SWAP:
                         description =
                             new TextObject(
-                                    "{=!}Request to swap your current position with {COUNCILMAN} position of {POSITION}. This action will cost {INFLUENCE} influence.\n\n{ACCEPT}")
+                                    "{=TGcPcZq6J}Request to swap your current position with {COUNCILMAN} position of {POSITION}. This action will cost {INFLUENCE} influence.\n\n{ACCEPT}")
                                 .SetTextVariable("COUNCILMAN", councilAction.TargetPosition.Member.Name)
                                 .SetTextVariable("POSITION", councilAction.TargetPosition.GetName())
                                 .SetTextVariable("INFLUENCE", councilAction.Influence)
                                 .SetTextVariable("ACCEPT", accept);
-                        affirmativeText = new TextObject("{=!}Swap");
+                        affirmativeText = new TextObject("{=zdfenwzFx}Swap");
                         break;
                     default:
                         description =
                             new TextObject(
-                                    "{=!}Relinquish your position in the council. It will cost no influence and exempt you of any council privileges.\n\n{ACCEPT}")
+                                    "{=cVNYed8wi}Relinquish your position in the council. It will cost no influence and exempt you of any council privileges.\n\n{ACCEPT}")
                                 .SetTextVariable("ACCEPT", accept);
-                        affirmativeText = new TextObject("{=!}Relinquish");
+                        affirmativeText = new TextObject("{=FucLR55Rz}Relinquish");
                         break;
                 }
             }
@@ -247,7 +247,7 @@ namespace BannerKings.UI
 
             if (hero.CurrentSettlement != null)
             {
-                list.Add(new TooltipProperty(new TextObject("{=!}Settlement").ToString(),
+                list.Add(new TooltipProperty(new TextObject("{=xr4rZCg8T}Settlement").ToString(),
                     hero.CurrentSettlement.Name.ToString(), 0));
             }
 
@@ -255,7 +255,7 @@ namespace BannerKings.UI
             if (titles.Count > 0)
             {
                 TooltipAddEmptyLine(list);
-                list.Add(new TooltipProperty(new TextObject("{=!}Titles").ToString(), " ", 0));
+                list.Add(new TooltipProperty(new TextObject("{=yQsgHsYtX}Titles").ToString(), " ", 0));
                 TooltipAddSeperator(list);
                 foreach (var t in titles)
                 {
@@ -271,12 +271,12 @@ namespace BannerKings.UI
             if (title.DeJureDrifts.Any())
             {
                 TooltipAddEmptyLine(list);
-                list.Add(new TooltipProperty(new TextObject("{=!}De Jure Drifts").ToString(), " ", 0));
+                list.Add(new TooltipProperty(new TextObject("{=ZC93Uos5U}De Jure Drifts").ToString(), " ", 0));
                 TooltipAddSeperator(list);
 
                 foreach (var pair in title.DeJureDrifts)
                 {
-                    list.Add(new TooltipProperty(pair.Key.FullName.ToString(), new TextObject("{=!}{PERCENTAGE} complete.")
+                    list.Add(new TooltipProperty(pair.Key.FullName.ToString(), new TextObject("{=ndiTQ6ejj}{PERCENTAGE} complete.")
                         .SetTextVariable("PERCENTAGE", (pair.Value * 100f).ToString("0.000") + '%')
                         .ToString(), 0));
                 }
@@ -285,12 +285,12 @@ namespace BannerKings.UI
             if (title.OngoingClaims.Count + title.Claims.Count > 0)
             {
                 TooltipAddEmptyLine(list);
-                list.Add(new TooltipProperty(new TextObject("{=!}Claimants").ToString(), " ", 0));
+                list.Add(new TooltipProperty(new TextObject("{=f31wZDqZN}Claimants").ToString(), " ", 0));
                 TooltipAddSeperator(list);
                 foreach (var pair in title.OngoingClaims)
                 {
                     list.Add(new TooltipProperty(pair.Key.Name.ToString(),
-                        new TextObject("{=!}{DAYS} days left to build claim.")
+                        new TextObject("{=jeEZwyLXC}{DAYS} days left to build claim.")
                             .SetTextVariable("DAYS", pair.Value.RemainingDaysFromNow)
                             .ToString(), 0));
                 }
@@ -308,7 +308,7 @@ namespace BannerKings.UI
             if (claimants is {Count: > 0})
             {
                 TooltipAddEmptyLine(list);
-                list.Add(new TooltipProperty(new TextObject("{=!}Possible Claimants").ToString(), " ", 0));
+                list.Add(new TooltipProperty(new TextObject("{=P7Qmu6nDp}Possible Claimants").ToString(), " ", 0));
                 TooltipAddSeperator(list);
                 foreach (var claimant in claimants)
                 {
@@ -323,20 +323,20 @@ namespace BannerKings.UI
         {
             if (type == ClaimType.Previous_Owner)
             {
-                return new TextObject("{=!}Previous title owner");
+                return new TextObject("{=uiEiGX8JU}Previous title owner");
             }
 
-            return new TextObject("{=!}Fabricated claim");
+            return new TextObject("{=k9es7ExxL}Fabricated claim");
         }
 
         private static TextObject GetActionText(ActionType type)
         {
             return type switch
             {
-                ActionType.Usurp => new TextObject("{=!}Usurp"),
-                ActionType.Revoke => new TextObject("{=!}Revoke"),
-                ActionType.Claim => new TextObject("{=!}Claim"),
-                _ => new TextObject("{=!}Grant")
+                ActionType.Usurp => new TextObject("{=nOkpYWf8Y}Usurp"),
+                ActionType.Revoke => new TextObject("{=kFODZ14pP}Revoke"),
+                ActionType.Claim => new TextObject("{=f31wZDqZN}Claim"),
+                _ => new TextObject("{=zXvQezeVU}Grant")
             };
         }
 
@@ -346,26 +346,26 @@ namespace BannerKings.UI
             list.Add(new TooltipProperty(GetActionText(action.Type).ToString(), " ", 0));
             TooltipAddSeperator(list);
 
-            list.Add(new TooltipProperty(new TextObject("{=!}Reason").ToString(), action.Reason.ToString(), 0));
+            list.Add(new TooltipProperty(new TextObject("{=Xg26byHOq}Reason").ToString(), action.Reason.ToString(), 0));
             if (action.Gold > 0)
             {
-                list.Add(new TooltipProperty(new TextObject("{=!}Gold").ToString(), new TextObject("{=!}{GOLD} coins.")
+                list.Add(new TooltipProperty(new TextObject("{=Eh6ZMnHjA}Gold").ToString(), new TextObject("{=4QfPW39zr}{GOLD} coins.")
                     .SetTextVariable("GOLD", action.Gold.ToString("0.0"))
                     .ToString(), 0));
             }
 
             if (action.Influence > 0)
             {
-                list.Add(new TooltipProperty(new TextObject("{=!}Influence").ToString(),
-                    new TextObject("{=!}{INFLUENCE} influence.")
+                list.Add(new TooltipProperty(new TextObject("{=nGW0CT3Te}Influence").ToString(),
+                    new TextObject("{=zowhiYHx0}{INFLUENCE} influence.")
                         .SetTextVariable("INFLUENCE", action.Influence.ToString("0.0"))
                         .ToString(), 0));
             }
 
             if (action.Renown > 0)
             {
-                list.Add(new TooltipProperty(new TextObject("{=!}Influence").ToString(),
-                    new TextObject("{=!}{RENOWN} renown.")
+                list.Add(new TooltipProperty(new TextObject("{=nGW0CT3Te}Influence").ToString(),
+                    new TextObject("{=zKFLAsYp9}{RENOWN} renown.")
                         .SetTextVariable("RENOWN", action.Renown.ToString("0.0"))
                         .ToString(), 0));
             }
@@ -387,7 +387,7 @@ namespace BannerKings.UI
 
             if (hero.CurrentSettlement != null)
             {
-                list.Add(new TooltipProperty(new TextObject("{=!}Settlement").ToString(),
+                list.Add(new TooltipProperty(new TextObject("{=xr4rZCg8T}Settlement").ToString(),
                     hero.CurrentSettlement.Name.ToString(), 0));
             }
 
@@ -395,7 +395,7 @@ namespace BannerKings.UI
             if (titles.Count > 0)
             {
                 TooltipAddEmptyLine(list);
-                list.Add(new TooltipProperty(new TextObject("{=!}Titles").ToString(), " ", 0));
+                list.Add(new TooltipProperty(new TextObject("{=yQsgHsYtX}Titles").ToString(), " ", 0));
                 TooltipAddSeperator(list);
                 foreach (var title in titles)
                 {
@@ -465,10 +465,10 @@ namespace BannerKings.UI
             MBTextManager.SetTextVariable("LEFT", GameTexts.FindText("str_tooltip_label_type"));
             var definition2 = GameTexts.FindText("str_LEFT_ONLY").ToString();
             list.Add(new TooltipProperty(definition2, HeroHelper.GetCharacterTypeName(hero).ToString(), 0));
-            list.Add(new TooltipProperty(new TextObject("{=!}Competence").ToString(), FormatValue(competence * 100f), 0));
+            list.Add(new TooltipProperty(new TextObject("{=Fgdx9gg8k}Competence").ToString(), FormatValue(competence * 100f), 0));
 
             TooltipAddEmptyLine(list);
-            list.Add(new TooltipProperty(new TextObject("{=!}Settlement Effects").ToString(), " ", 0));
+            list.Add(new TooltipProperty(new TextObject("{=xr4rZCg8T}Settlement Effects").ToString(), " ", 0));
 
             TooltipAddEmptyLine(list);
             return list;

@@ -12,8 +12,7 @@ namespace BannerKings.Managers.Institutions.Religions
 
         public ReligionData(Religion religion, Settlement settlement)
         {
-            Religions = new Dictionary<Religion, float>();
-            Religions.Add(religion, 1f);
+            Religions = new Dictionary<Religion, float> {{religion, 1f}};
             Settlement = settlement;
         }
 
@@ -25,14 +24,10 @@ namespace BannerKings.Managers.Institutions.Religions
         {
             get
             {
-                var eligible = new List<(Religion, float)>();
-                foreach (var rel in Religions)
-                {
-                    eligible.Add((rel.Key, rel.Value));
-                }
+                var eligible = Religions.Select(rel => (rel.Key, rel.Value));
+                eligible = eligible.OrderByDescending(pair => pair.Value);
 
-                eligible.OrderByDescending(pair => pair.Item2);
-                return eligible[0].Item1;
+                return eligible.FirstOrDefault().Key;
             }
         }
 
@@ -53,16 +48,13 @@ namespace BannerKings.Managers.Institutions.Religions
         {
             var dominant = DominantReligion;
 
-            clergyman = dominant.GetClergyman(data.Settlement);
-            if (clergyman == null)
-            {
-                clergyman = dominant.GenerateClergyman(Settlement);
-            }
+            clergyman = dominant.GetClergyman(data.Settlement) ?? dominant.GenerateClergyman(Settlement);
         }
 
         private (Religion, float) AddOwnerReligion(Religion dominant)
         {
-
+            //TODO: Basileus
+            return default;
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using BannerKings.Managers.Goals;
+using BannerKings.Managers.Goals;
 using BannerKings.UI.Education;
 using BannerKings.UI.Religion;
 using Bannerlord.UIExtenderEx.Attributes;
@@ -86,13 +86,13 @@ namespace BannerKings.UI.Extensions
         }
 
         [DataSourceProperty]
-        public string EducationText => new TextObject("{=!}Education").ToString();
+        public string EducationText => new TextObject("{=mJYvRxx3c}Education").ToString();
 
         [DataSourceProperty]
-        public string DecisionsText => new TextObject("{=!}Decisions").ToString();
+        public string DecisionsText => new TextObject("{=eEJR3y8EH}Decisions").ToString();
 
         [DataSourceProperty]
-        public string FaithText => new TextObject("{=!}Faith").ToString();
+        public string FaithText => new TextObject("{=bKbguoLuH}Faith").ToString();
 
         public override void OnRefresh()
         {
@@ -146,8 +146,8 @@ namespace BannerKings.UI.Extensions
             }
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                            new TextObject("{=!}Decisions").ToString(),
-                            new TextObject("{=!}Choose a personal decision to take.").ToString(),
+                            new TextObject("{=eEJR3y8EH}Decisions").ToString(),
+                            new TextObject("{=mdchgZXSV}Choose a personal decision to take.").ToString(),
                             options, true, 1, GameTexts.FindText("str_done").ToString(), string.Empty,
                             delegate (List<InquiryElement> x)
                             {

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using BannerKings.Managers.AI;
 using BannerKings.Managers.Helpers;
@@ -285,7 +285,7 @@ namespace BannerKings.Behaviours
                             }
                             else
                             {
-                                GameTexts.SetVariable("ARMY", new TextObject("{=!}the conquering army"));
+                                GameTexts.SetVariable("ARMY", new TextObject("{=tqZZmnEUt}the conquering army"));
                             }
 
                             GameTexts.SetVariable("SETTLEMENT", settlement.Name);

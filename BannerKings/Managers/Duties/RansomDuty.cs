@@ -1,4 +1,4 @@
-﻿using BannerKings.Behaviours;
+using BannerKings.Behaviours;
 using BannerKings.Managers.Titles;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
@@ -54,7 +54,7 @@ namespace BannerKings.Managers.Duties
             GameTexts.SetVariable("REMAINING", Completion);
             InformationManager.ShowInquiry(new InquiryData("Duty of Ransom Aid",
                 new TextObject(
-                        "{=!} Your suzerain, {SUZERAIN}, has requested that you fulfill your contract obligations and pay him {RANSOM} gold in order to compensate their ransom. You have {REMAINING} days left to pay it.")
+                        "{=XGpWkg7Gs} Your suzerain, {SUZERAIN}, has requested that you fulfill your contract obligations and pay him {RANSOM} gold in order to compensate their ransom. You have {REMAINING} days left to pay it.")
                     .ToString(),
                 true, true, "Pay Immediatly", "Withhold For a Day", delegate { Finish(); }, null));
         }
