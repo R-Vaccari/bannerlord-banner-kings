@@ -18,6 +18,7 @@ namespace BannerKings.UI.Management
         private DecisionElement foreignerToogle;
         private readonly Settlement settlement;
         private MBBindingList<InformationElement> statsInfo;
+       
 
         public ReligionVM(PopulationData data, Settlement _settlement, bool _isSelected) : base(data, true)
         {
@@ -28,6 +29,8 @@ namespace BannerKings.UI.Management
             settlement = _settlement;
             RefreshValues();
         }
+
+       
 
         [DataSourceProperty]
         public DecisionElement ForeignerToogle
@@ -102,8 +105,16 @@ namespace BannerKings.UI.Management
         public override void RefreshValues()
         {
             base.RefreshValues();
-            var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
-            this.data = data;
+            
+
+
+            if (data.ReligionData == null)
+            {
+                return;
+            }
+
+
+
             PopList.Clear();
             ReligionList.Clear();
             CultureInfo.Clear();
