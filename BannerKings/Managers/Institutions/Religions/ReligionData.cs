@@ -115,6 +115,11 @@ namespace BannerKings.Managers.Institutions.Religions
                 AddOwnerReligion();
             }
 
+            if (dominant == null)
+            {
+                return;
+            }
+
             if (Religions.Count > 1)
             {
                 BalanceReligions(dominant);
