@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using BannerKings.Managers.Institutions.Religions.Faiths;
 using BannerKings.Managers.Institutions.Religions.Faiths.Rites;
@@ -56,8 +56,9 @@ namespace BannerKings.Managers.Institutions.Religions
 
         public MBReadOnlyList<CultureObject> FavoredCultures => favoredCultures.GetReadOnlyList();
 
-        [SaveableField(6)] private ExplainedNumber fervorCache;
+        [SaveableField(6)] private ExplainedNumber fervorCache = new ExplainedNumber(0f);
         public ExplainedNumber Fervor => fervorCache;
+            
 
         public void UpdateFervor()
         {
@@ -112,7 +113,7 @@ namespace BannerKings.Managers.Institutions.Religions
         {
             var hero = HeroCreator.CreateSpecialHero(preset, settlement);
             var firstName = hero.FirstName;
-            var fullName = new TextObject("{=y7HKioptX}{RELIGIOUS_TITLE} {NAME}")
+            var fullName = new TextObject("{=!}{RELIGIOUS_TITLE} {NAME}")
                 .SetTextVariable("RELIGIOUS_TITLE", Faith.GetRankTitle(rank))
                 .SetTextVariable("NAME", firstName);
             hero.SetName(fullName, firstName);

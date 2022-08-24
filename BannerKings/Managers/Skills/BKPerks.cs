@@ -550,7 +550,7 @@ namespace BannerKings.Managers.Skills
             #region Theology
 
             TheologyFaithful = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("TheologyFaithful"));
-            TheologyFaithful.InitializeNew("{=kGwNAXMVR}Traditionalist", BKSkills.Instance.Lordship, GetTierCost(1),
+            TheologyFaithful.InitializeNew("{=!}Faithful", BKSkills.Instance.Lordship, GetTierCost(1),
                 LordshipAdaptive,
                 "{=kGwNAXMVR}Piety gain is increased by +0.2 daily.",
                 SkillEffect.PerkRole.Personal, 0.2f,
@@ -560,7 +560,7 @@ namespace BannerKings.Managers.Skills
                 SkillEffect.EffectIncrementType.Add);
 
             TheologyBlessed = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("TheologyBlessed"));
-            TheologyBlessed.InitializeNew("{=kGwNAXMVR}Traditionalist", BKSkills.Instance.Lordship, GetTierCost(2),
+            TheologyBlessed.InitializeNew("{=!}Blessed", BKSkills.Instance.Lordship, GetTierCost(2),
                 LordshipAdaptive,
                 "{=kGwNAXMVR}Blessings last a season longer.",
                 SkillEffect.PerkRole.Personal, 0.2f,
@@ -570,7 +570,7 @@ namespace BannerKings.Managers.Skills
                 SkillEffect.EffectIncrementType.Add);
 
             TheologyReligiousTeachings = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("TheologyReligiousTeachings"));
-            TheologyReligiousTeachings.InitializeNew("{=kGwNAXMVR}Traditionalist", BKSkills.Instance.Lordship, GetTierCost(3),
+            TheologyReligiousTeachings.InitializeNew("{=!}Religious Teachings", BKSkills.Instance.Lordship, GetTierCost(3),
                 LordshipAdaptive,
                 "{=kGwNAXMVR}Children receive 1 extra Wisdom when becoming adults.",
                 SkillEffect.PerkRole.Personal, 0.2f,
@@ -587,7 +587,7 @@ namespace BannerKings.Managers.Skills
                 "{=kGwNAXMVR}Settlement religious tensions reduced by X%.",
                 SkillEffect.PerkRole.Personal, 0.2f,
                 SkillEffect.EffectIncrementType.Add,
-                "{=kGwNAXMVR}Settlement conversion speed increased by X%.",
+                "{=kGwNAXMVR}Settlement conversion speed increased by 5%.",
                 SkillEffect.PerkRole.Ruler, 1f,
                 SkillEffect.EffectIncrementType.Add);
 
@@ -602,7 +602,7 @@ namespace BannerKings.Managers.Skills
 
             TheologyLithurgy = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("TheologyLithurgy"));
             TheologyLithurgy.InitializeNew("{=kGwNAXMVR}Preacher", BKSkills.Instance.Lordship, GetTierCost(5),
-                LordshipAdaptive,
+                null,
                 "{=kGwNAXMVR}Randomly receive relations with religious notables in your settlements.",
                 SkillEffect.PerkRole.Personal, 0.2f,
                 SkillEffect.EffectIncrementType.Add,

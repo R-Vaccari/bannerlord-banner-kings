@@ -1,8 +1,10 @@
 ﻿using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Populations;
+using BannerKings.Managers.Skills;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
+using TaleWorlds.Localization;
 
 namespace BannerKings.Models.BKModels
 {
@@ -10,7 +12,7 @@ namespace BannerKings.Models.BKModels
     {
         public ExplainedNumber CalculateFervor(Religion religion)
         {
-            ExplainedNumber result = new ExplainedNumber(0f, true);
+            ExplainedNumber result = new ExplainedNumber(5f, true);
 
             float villages = 0f;
             float castles = 0f;
@@ -81,10 +83,68 @@ namespace BannerKings.Models.BKModels
             return 0f;
         }
 
-        public ExplainedNumber CalculateReligionConversion(Religion religion, Settlement settlement)
+        public ExplainedNumber CalculateReligionWeight(Religion religion, Settlement settlement)
         {
             ExplainedNumber result = new ExplainedNumber(0f, true);
+            result.Add(religion.Fervor.ResultNumber * 100f, new TextObject("{=!}Fervor"));
 
+            Hero owner = null;
+            if (settlement.OwnerClan != null)
+            {
+                owner = settlement.OwnerClan.Leader;
+            }
+
+            if (owner != null)
+            {
+                Religion rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(owner);
+                if (rel != null && rel == religion)
+                {
+                    result.AddFactor(30f, new TextObject("{=!}Owner's faith"));
+                }
+
+                if (owner.GetPerkValue(BKPerks.Instance.TheologyPreacher))
+                {
+                    result.AddFactor(0.05f, BKPerks.Instance.TheologyPreacher.Name);
+                }
+            }
+
+            return result;
+        }
+
+        public ExplainedNumber CalculateReligionConversion(Religion religion, Settlement settlement, float diff)
+        {
+            ExplainedNumber result = new ExplainedNumber(0f, true);
+            if (diff > 0f)
+            {
+                result.LimitMax(diff);
+            }
+            else
+            {
+                result.LimitMin(diff);
+                result.AddFactor(-1f);
+            }
+
+            result.Add(religion.Fervor.ResultNumber, new TextObject("{=!}Fervor"));
+
+            Hero owner = null;
+            if (settlement.OwnerClan != null)
+            {
+                owner = settlement.OwnerClan.Leader;
+            }
+
+            if (owner != null)
+            {
+                Religion rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(owner);
+                if (rel != null && rel == religion)
+                {
+                    result.AddFactor(0.1f, new TextObject("{=!}Owner's faith"));
+                }
+
+                if (owner.GetPerkValue(BKPerks.Instance.TheologyPreacher))
+                {
+                    result.AddFactor(0.05f, BKPerks.Instance.TheologyPreacher.Name);
+                }
+            }
 
             return result;
         }
