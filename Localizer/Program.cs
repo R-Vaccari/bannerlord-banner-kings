@@ -13,7 +13,7 @@ internal class Program
         _usedLocalizationIDs = new List<string>();
         _random = new Random();
 
-        Console.WriteLine("Enter path to source folder:");
+        Console.WriteLine("Path to Source folder:");
         var sourceFolder = Console.ReadLine();
 
         if (!Directory.Exists(sourceFolder))
@@ -29,6 +29,8 @@ internal class Program
             return;
         }
 
+        var allLocalizationFiles = GetAllLocalizationFiles(localizationFile);
+
         var files = Directory.GetFiles(sourceFolder, "*.cs", SearchOption.AllDirectories);
         if (files.Length == 0)
         {
@@ -36,7 +38,7 @@ internal class Program
             return;
         }
 
-        LoadUsedLocalizationIDs(localizationFile);
+        LoadUsedLocalizationIDs(allLocalizationFiles);
         LocalizeTexts(localizationFile, files);
     }
 
@@ -46,25 +48,41 @@ internal class Program
         Console.ReadKey();
     }
 
-    private static void LoadUsedLocalizationIDs(string localizationFile)
+    private static IEnumerable<string> GetAllLocalizationFiles(string localizationFile)
     {
-        var localizationDocument = new XmlDocument();
-        localizationDocument.Load(localizationFile);
-
-        var stringNodes = localizationDocument.SelectNodes("/base/strings");
-        if (stringNodes is null || stringNodes.Count == 0)
+        Console.WriteLine("Path to Modules folder:");
+        var modulesFolder = Console.ReadLine();
+        if (!Directory.Exists(modulesFolder))
         {
-            return;
+            Console.WriteLine("Directory does not exist. External IDs won't be considered.");
+            return new[] {localizationFile};
         }
 
-        foreach (XmlNode stringNode in stringNodes)
+        return new[] {localizationFile}.Concat(Directory.GetFiles(modulesFolder, "std_module_strings_xml.xml", SearchOption.AllDirectories));
+    }
+
+    private static void LoadUsedLocalizationIDs(IEnumerable<string> localizationFiles)
+    {
+        foreach (var localizationFile in localizationFiles)
         {
-            if (stringNode is null)
+            var localizationDocument = new XmlDocument();
+            localizationDocument.Load(localizationFile);
+
+            var stringNodes = localizationDocument.SelectNodes("/base/strings");
+            if (stringNodes is null || stringNodes.Count == 0)
             {
-                continue;
+                return;
             }
 
-            _usedLocalizationIDs.Add(stringNode.Attributes!["id"]?.Value!);
+            foreach (XmlNode stringNode in stringNodes)
+            {
+                if (stringNode is null)
+                {
+                    continue;
+                }
+
+                _usedLocalizationIDs.Add(stringNode.Attributes!["id"]?.Value!);
+            }
         }
     }
 
