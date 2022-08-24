@@ -144,7 +144,7 @@ namespace BannerKings.Managers.Goals.Decisions
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                 new TextObject("{=C2u2kCntq}Companions").ToString(),
-                new TextObject("{=QjvJKDDb3}Choose a companion to recruit.").ToString(),
+                GameTexts.FindText("str_bk_placeholder").ToString(),
                 options, 
                 true, 
                 1, 
