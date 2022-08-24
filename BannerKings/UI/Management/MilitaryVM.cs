@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using System.Text;
 using BannerKings.Components;
 using BannerKings.Managers.Policies;
@@ -189,43 +189,43 @@ namespace BannerKings.UI.Management
 
             var militiaCap = new BKMilitiaModel().GetMilitiaLimit(data, settlement);
             DefenseInfo.Add(new InformationElement("Militia Cap:", militiaCap.ResultNumber.ToString(),
-                new TextObject("{=iu533RmaU}{TEXT}\n{EXPLANATIONS}")
+                new TextObject("{=!}{TEXT}\n{EXPLANATIONS}")
                     .SetTextVariable("TEXT",
                         new TextObject(
-                            "{=eB3GCjH7j}The maximum number of militiamen this settlement can support, based on it's population."))
+                            "{=!}The maximum number of militiamen this settlement can support, based on it's population."))
                     .SetTextVariable("EXPLANATIONS", militiaCap.GetExplanations())
                     .ToString()));
 
             var militiaQuality = new BKMilitiaModel().MilitiaSpawnChanceExplained(settlement);
             DefenseInfo.Add(new InformationElement("Militia Quality:", FormatValue(militiaQuality.ResultNumber),
-                new TextObject("{=iu533RmaU}{TEXT}\n{EXPLANATIONS}")
+                new TextObject("{=!}{TEXT}\n{EXPLANATIONS}")
                     .SetTextVariable("TEXT",
-                        new TextObject("{=D275CYRn4}Chance of militiamen being spawned as veterans instead of recruits."))
+                        new TextObject("{=!}Chance of militiamen being spawned as veterans instead of recruits."))
                     .SetTextVariable("EXPLANATIONS", militiaQuality.GetExplanations())
                     .ToString()));
 
             ManpowerInfo.Add(new InformationElement("Manpower:", data.MilitaryData.Manpower.ToString(),
-                new TextObject("{=DskDLOdAV}The total manpower of nobles plus peasants.").ToString()));
+                new TextObject("{=!}The total manpower of nobles plus peasants.").ToString()));
             ManpowerInfo.Add(new InformationElement("Noble Manpower:", data.MilitaryData.NobleManpower.ToString(),
                 new TextObject(
-                        "{=XSf2TfvD9}Manpower from noble population. Noble militarism is higher, but nobles often are less numerous. These are drafted as noble recruits.")
+                        "{=!}Manpower from noble population. Noble militarism is higher, but nobles often are less numerous. These are drafted as noble recruits.")
                     .ToString()));
             ManpowerInfo.Add(new InformationElement("Peasant Manpower:", data.MilitaryData.PeasantManpower.ToString(),
                 new TextObject(
-                        "{=jHBzME2u8}Manpower from serf and craftsmen classes. These are drafted as cultural non-noble recruits.")
+                        "{=!}Manpower from serf and craftsmen classes. These are drafted as cultural non-noble recruits.")
                     .ToString()));
             ManpowerInfo.Add(new InformationElement("Militarism:", FormatValue(data.MilitaryData.Militarism.ResultNumber),
-                new TextObject("{=iu533RmaU}{TEXT}\n{EXPLANATIONS}")
+                new TextObject("{=!}{TEXT}\n{EXPLANATIONS}")
                     .SetTextVariable("TEXT",
                         new TextObject(
-                            "{=mxbUOP8vA}How much the population is willing or able to militarily serve. Militarism increases the manpower caps."))
+                            "{=!}How much the population is willing or able to militarily serve. Militarism increases the manpower caps."))
                     .SetTextVariable("EXPLANATIONS", data.MilitaryData.Militarism.GetExplanations())
                     .ToString()));
             ManpowerInfo.Add(new InformationElement("Draft Efficiency:",
                 FormatValue(data.MilitaryData.DraftEfficiency.ResultNumber),
-                new TextObject("{=iu533RmaU}{TEXT}\n{EXPLANATIONS}")
+                new TextObject("{=!}{TEXT}\n{EXPLANATIONS}")
                     .SetTextVariable("TEXT",
-                        new TextObject("{=Qn9NMsK7B}How quickly volunteer availability in notables replenishes."))
+                        new TextObject("{=!}How quickly volunteer availability in notables replenishes."))
                     .SetTextVariable("EXPLANATIONS", data.MilitaryData.DraftEfficiency.GetExplanations())
                     .ToString()));
 

@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Institutions.Religions.Leaderships
@@ -8,12 +8,12 @@ namespace BannerKings.Managers.Institutions.Religions.Leaderships
         public override TextObject GetHint()
         {
             return new TextObject(
-                "{=KO2rpZeYg}Autonomous religions do not have any sort of hierarchy for their spiritual guides. Even though different kinds of clergymen can exist, they are equally considered a 'head of faith' on their own right.");
+                "{=!}Autonomous religions do not have any sort of hierarchy for their spiritual guides. Even though different kinds of clergymen can exist, they are equally considered a 'head of faith' on their own right.");
         }
 
         public override TextObject GetName()
         {
-            return new TextObject("{=oVupVLPSK}Autonomous");
+            return new TextObject("{=!}Autonomous");
         }
 
         public List<Clergyman> GetLeaders()

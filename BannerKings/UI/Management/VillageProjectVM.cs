@@ -1,4 +1,4 @@
-using System.Text;
+﻿using System.Text;
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Villages;
 using BannerKings.Models.Vanilla;
@@ -27,7 +27,7 @@ namespace BannerKings.UI.Management
             villageData = this.data.VillageData;
         }
 
-        [DataSourceProperty] public string Title => new TextObject("{=aaQOh2t9Z}Projects at {VILLAGE_NAME}").ToString();
+        [DataSourceProperty] public string Title => new TextObject("{=!}Projects at {VILLAGE_NAME}").ToString();
 
         [DataSourceProperty]
         public SettlementProjectSelectionVM Projects

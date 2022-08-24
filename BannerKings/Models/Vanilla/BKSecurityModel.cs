@@ -1,4 +1,4 @@
-using BannerKings.Managers.Court;
+﻿using BannerKings.Managers.Court;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Titles;
 using TaleWorlds.CampaignSystem;
@@ -52,7 +52,7 @@ namespace BannerKings.Models.Vanilla
                 var government = BannerKingsConfig.Instance.TitleManager.GetSettlementGovernment(town.Settlement);
                 if (government == GovernmentType.Imperial)
                 {
-                    baseResult.Add(1f, new TextObject("{=1DDO4yeEO}Government"));
+                    baseResult.Add(1f, new TextObject("{=!}Government"));
                 }
 
                 BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref baseResult, town.OwnerClan.Leader,

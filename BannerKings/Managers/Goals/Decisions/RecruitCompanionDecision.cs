@@ -1,4 +1,4 @@
-using Helpers;
+﻿using Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,8 +20,8 @@ namespace BannerKings.Managers.Goals.Decisions
 
         public RecruitCompanionDecision() : base("goal_recruit_companion_decision", GoalUpdateType.Manual)
         {
-            var name = new TextObject("{=kWfxTaEM8}Recruit Companion");
-            var description = new TextObject("{=hjFoneGs6}Select a type of companion to recruit.");
+            var name = new TextObject("{=!}Recruit Companion");
+            var description = new TextObject("{=!}Select a type of companion to recruit.");
 
             Initialize(name, description);
 
@@ -99,7 +99,7 @@ namespace BannerKings.Managers.Goals.Decisions
 
             if (companionTypes.All(ct => gold < ct.GoldCost && influence < ct.InfluenceCost))
             {
-                failedReasons.Add(new TextObject("{=uhqE4Vb3g}You can't afford any companion."));
+                failedReasons.Add(new TextObject("{=!}You can't afford any companion."));
             }
 
             return true;
@@ -128,11 +128,11 @@ namespace BannerKings.Managers.Goals.Decisions
                 if (template is null) 
                 {
                     enabled = false;
-                    hint = new TextObject("{=h0T4d84mq}No candidates of this type available.").ToString();
+                    hint = new TextObject("{=!}No candidates of this type available.").ToString();
                 }
                 else if (!enabled)
                 {
-                    hint = new TextObject("{=0FTcYEBEp} You can't afford the cost:\n{GOLD}{GOLD_ICON}\n{INFLUENCE}{INFLUENCE_ICON}.")
+                    hint = new TextObject("{=!} You can't afford the cost:\n{GOLD}{GOLD_ICON}\n{INFLUENCE}{INFLUENCE_ICON}.")
                         .SetTextVariable("GOLD", $"{companionType.GoldCost:n0}")
                         .SetTextVariable("INFLUENCE", $"{companionType.InfluenceCost:n0}")
                         .SetTextVariable("INFLUENCE_ICON", "<img src=\"General\\Icons\\Influence@2x\" extend=\"7\">")
@@ -143,8 +143,8 @@ namespace BannerKings.Managers.Goals.Decisions
             }
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                new TextObject("{=7GfaygYAG}Companions").ToString(),
-                new TextObject("{=p78dxndLD}Choose a companion to recruit.").ToString(),
+                new TextObject("{=!}Companions").ToString(),
+                new TextObject("{=!}Choose a companion to recruit.").ToString(),
                 options, 
                 true, 
                 1, 

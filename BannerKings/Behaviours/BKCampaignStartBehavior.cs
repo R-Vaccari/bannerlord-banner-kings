@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using BannerKings.Managers;
 using BannerKings.Managers.CampaignStart;
@@ -153,113 +153,113 @@ namespace BannerKings.Behaviours
         {
             hasSeenInquiry = true;
             var elements = new List<InquiryElement>();
-            var religions = new LearningElement(new TextObject("{=1eaxdFFfV}Religions"),
+            var religions = new LearningElement(new TextObject("{=!}Religions"),
                 new TextObject("{=!}"),
-                new TextObject("{=XBqrkysT9}Learn about the novel faiths in the continent."));
+                new TextObject("{=!}Learn about the novel faiths in the continent."));
             elements.Add(new InquiryElement(religions, religions.Name.ToString(), null, true, religions.Hint.ToString()));
 
-            var settlements = new LearningElement(new TextObject("{=RwPDYGwRj}Settlement Management"),
+            var settlements = new LearningElement(new TextObject("{=!}Settlement Management"),
                 new TextObject(
-                    "{=QURQmdxM3}In Banner Kings, settlement management is several layers more in depth than vanilla. Settlemetns have many new interconnected factors such as Mercantilism, Militarism, Stability, Autonomy, and others, making settlement management way more intricate than choosing a new town project every few weeks or so. They also have several new policies (multi choice options) and decisions (true/false options) that it's owner may manage. You can check all this information in Demesne Management tab in your settlements - all of the fields have tooltips with further explanations."),
-                new TextObject("{=PYFsjXgOg}Learn about the extensive changes to settlements."));
+                    "{=!}In Banner Kings, settlement management is several layers more in depth than vanilla. Settlemetns have many new interconnected factors such as Mercantilism, Militarism, Stability, Autonomy, and others, making settlement management way more intricate than choosing a new town project every few weeks or so. They also have several new policies (multi choice options) and decisions (true/false options) that it's owner may manage. You can check all this information in Demesne Management tab in your settlements - all of the fields have tooltips with further explanations."),
+                new TextObject("{=!}Learn about the extensive changes to settlements."));
             elements.Add(new InquiryElement(settlements, settlements.Name.ToString(), null, true,
                 settlements.Hint.ToString()));
 
-            var skills = new LearningElement(new TextObject("{=t56JGyOFV}Game Balance - Skills"),
+            var skills = new LearningElement(new TextObject("{=!}Game Balance - Skills"),
                 new TextObject(
-                    "{=8Vv8NP243}Banner Kings introduces a new Attribute - Wisdom - as well as 3 new skills: Scholarship, Lordship and Theology. These new skills provide new ways to acquire experience and level up. On top of that, skill modifiers are changed. For starters, the minimum experience gain is now 5% rather than 0%. This means that the vanilla game would block you from learning skills past a certain past - this is not the case anymore. You can always keep learning, albeit very slowly."),
-                new TextObject("{=ioMVDmZBr}Learn about the new skills and experience gainning changes."));
+                    "{=!}Banner Kings introduces a new Attribute - Wisdom - as well as 3 new skills: Scholarship, Lordship and Theology. These new skills provide new ways to acquire experience and level up. On top of that, skill modifiers are changed. For starters, the minimum experience gain is now 5% rather than 0%. This means that the vanilla game would block you from learning skills past a certain past - this is not the case anymore. You can always keep learning, albeit very slowly."),
+                new TextObject("{=!}Learn about the new skills and experience gainning changes."));
             elements.Add(new InquiryElement(skills, skills.Name.ToString(), null, true, skills.Hint.ToString()));
 
-            var softLimits = new LearningElement(new TextObject("{=bkOSoLYVz}Game Balance - Soft Limits"),
+            var softLimits = new LearningElement(new TextObject("{=!}Game Balance - Soft Limits"),
                 new TextObject(
-                    "{=VnChrymHM}Among the many new stats tracking heroes and settlements are the Demesne Limit and Vassal Limit features. These act as soft limits respectively for fief ownership and vassal clans / knights under you. The limits set the point of diminishing returns. Going over it too much will eventually lead to negative returns. Effectively, Demesne Limit makes you incapable to hold an indeterminate amount of fiefs - you will only be able to efficiently manage a few - while vassal limit makes oversized kingdoms increasingly unviable to manage. The vanilla game sets no limit to how much land or people you control - those limits severely restrict these abilities."),
+                    "{=!}Among the many new stats tracking heroes and settlements are the Demesne Limit and Vassal Limit features. These act as soft limits respectively for fief ownership and vassal clans / knights under you. The limits set the point of diminishing returns. Going over it too much will eventually lead to negative returns. Effectively, Demesne Limit makes you incapable to hold an indeterminate amount of fiefs - you will only be able to efficiently manage a few - while vassal limit makes oversized kingdoms increasingly unviable to manage. The vanilla game sets no limit to how much land or people you control - those limits severely restrict these abilities."),
                 new TextObject(
-                    "{=1B7FXJPfs}Learn about the new soft limits that significantly prevent snowballing or overgrowing."));
+                    "{=!}Learn about the new soft limits that significantly prevent snowballing or overgrowing."));
             elements.Add(new InquiryElement(softLimits, softLimits.Name.ToString(), null, true,
                 softLimits.Hint.ToString()));
 
-            var aiFinances = new LearningElement(new TextObject("{=oMjUn9NEM}Game Balance - AI Finances & War"),
+            var aiFinances = new LearningElement(new TextObject("{=!}Game Balance - AI Finances & War"),
                 new TextObject(
-                    "{=x03ya09Bn}In Banner Kings, AI lords now have much more dynamic financial lives. AI clans will buy caravans and workshops in similar manner to player. The same costs, incomes and restrictions apply.\nOver time, this means AI clans will build several sources of income, allowing them to grow bigger and stronger, or have reserves then losing their settlements.\nAnother major change is that AI will now save money during peace time. Lords will roam the world with small parties - enough to not get consistently captured by bandits - saving their reserves for war time. As a consequence of that, settlements train their volunteers - when war time comes, armies will be immediatly drafted and made mostly of quality troops instead of recruits.\nLastly, notables will now financially aid the clans they are supporters of. This creates a flow of currency from notables to lords, making them a more active part of wartimes."),
+                    "{=!}In Banner Kings, AI lords now have much more dynamic financial lives. AI clans will buy caravans and workshops in similar manner to player. The same costs, incomes and restrictions apply.\nOver time, this means AI clans will build several sources of income, allowing them to grow bigger and stronger, or have reserves then losing their settlements.\nAnother major change is that AI will now save money during peace time. Lords will roam the world with small parties - enough to not get consistently captured by bandits - saving their reserves for war time. As a consequence of that, settlements train their volunteers - when war time comes, armies will be immediatly drafted and made mostly of quality troops instead of recruits.\nLastly, notables will now financially aid the clans they are supporters of. This creates a flow of currency from notables to lords, making them a more active part of wartimes."),
                 new TextObject(
-                    "{=XiKbgUFaM}Learn about the expansions to AI financial decisions that make the game more dynamic."));
+                    "{=!}Learn about the expansions to AI financial decisions that make the game more dynamic."));
             elements.Add(new InquiryElement(aiFinances, aiFinances.Name.ToString(), null, true,
                 aiFinances.Hint.ToString()));
 
-            var food = new LearningElement(new TextObject("{=KFXfeAv9c}Game Balance - Settlement Food"),
+            var food = new LearningElement(new TextObject("{=!}Game Balance - Settlement Food"),
                 new TextObject(
-                    "{=dw7H5OtZX}Food is extensively reworked. Food in settlemetns is now produced and consumed in the hundreds by the day - every single person in the population eats, in a similar rate to your soldiers. Food in settlements is now dictated by settlement acreage and it's workforce. The settlement needs acres ready to work and people - serfs and slaves - to work on them. Settlements will no longer starve with markets full of food - the population will buy off the market stocks when production does not meed demand, meaning true starvating will only start when markets are completely out of food. Food stocks are much higher, based on population. Excess food in stocks will rot. If the limit is reached, the population sells food items to the market instead of the food simply disappearing. Food can be manually dumped into the settlement by stocking the Stack with food - it will only be consumed when the normal reserves are very low."),
+                    "{=!}Food is extensively reworked. Food in settlemetns is now produced and consumed in the hundreds by the day - every single person in the population eats, in a similar rate to your soldiers. Food in settlements is now dictated by settlement acreage and it's workforce. The settlement needs acres ready to work and people - serfs and slaves - to work on them. Settlements will no longer starve with markets full of food - the population will buy off the market stocks when production does not meed demand, meaning true starvating will only start when markets are completely out of food. Food stocks are much higher, based on population. Excess food in stocks will rot. If the limit is reached, the population sells food items to the market instead of the food simply disappearing. Food can be manually dumped into the settlement by stocking the Stack with food - it will only be consumed when the normal reserves are very low."),
                 new TextObject(
-                    "{=XiKbgUFaM}Learn about the expansions to AI financial decisions that make the game more dynamic."));
+                    "{=!}Learn about the expansions to AI financial decisions that make the game more dynamic."));
             elements.Add(new InquiryElement(food, food.Name.ToString(), null, true, food.Hint.ToString()));
 
-            var economy = new LearningElement(new TextObject("{=LgPYXbbW9}Economy"),
+            var economy = new LearningElement(new TextObject("{=!}Economy"),
                 new TextObject(
-                    "{=FstUV363C}In Banner Kings, the economy landscape is quite different.\nDemand is generated by population in settlements, and therefore much more dynamic than before as population classes fluctuate, and each class has different demands.\nTrade goods have modifiers such as 'fine', 'masterwork' or 'crude', what opens new possibilities in terms of profit.\nManufactured items are on average quite more expensive, making workshops and caravans significantly more profitable.\nWorkshops owners now pay taxes to the settlement owner.\nSettlement market gold no longer resets on a daily basis - settlements can accumulate large amounts of gold, or go bankrupt, hence need some time to recover."),
-                new TextObject("{=Wtn30sHDZ}Learn about the various improvements over the economy system."));
+                    "{=!}In Banner Kings, the economy landscape is quite different.\nDemand is generated by population in settlements, and therefore much more dynamic than before as population classes fluctuate, and each class has different demands.\nTrade goods have modifiers such as 'fine', 'masterwork' or 'crude', what opens new possibilities in terms of profit.\nManufactured items are on average quite more expensive, making workshops and caravans significantly more profitable.\nWorkshops owners now pay taxes to the settlement owner.\nSettlement market gold no longer resets on a daily basis - settlements can accumulate large amounts of gold, or go bankrupt, hence need some time to recover."),
+                new TextObject("{=!}Learn about the various improvements over the economy system."));
             elements.Add(new InquiryElement(economy, economy.Name.ToString(), null, true, economy.Hint.ToString()));
 
-            var economyVillages = new LearningElement(new TextObject("{=LgPYXbbW9}Economy - Villages"),
+            var economyVillages = new LearningElement(new TextObject("{=!}Economy - Villages"),
                 new TextObject(
-                    "{=KBhQmHWeF}Villages produce income by selling their production outputs. Villages will now produce based on population workforce, as well as available acreage, if fitting. For example, agricultural productions are limited by the amount of acres available and their production capacity - even if you have extra workers, the fields can only produce so much.\nAs a result, villages can produce much more income than before. This is extra relevant for Knighthood, which you can read more about in the articles below."),
-                new TextObject("{=Wtn30sHDZ}Learn about the various improvements over the economy system."));
+                    "{=!}Villages produce income by selling their production outputs. Villages will now produce based on population workforce, as well as available acreage, if fitting. For example, agricultural productions are limited by the amount of acres available and their production capacity - even if you have extra workers, the fields can only produce so much.\nAs a result, villages can produce much more income than before. This is extra relevant for Knighthood, which you can read more about in the articles below."),
+                new TextObject("{=!}Learn about the various improvements over the economy system."));
             elements.Add(new InquiryElement(economyVillages, economyVillages.Name.ToString(), null, true,
                 economyVillages.Hint.ToString()));
 
 
-            var education = new LearningElement(new TextObject("{=ggAtq9K16}Educations"),
+            var education = new LearningElement(new TextObject("{=!}Educations"),
                 new TextObject("{=!}"),
-                new TextObject("{=hEnR9ux6G}Learn about the novel education system and it's aspects."));
+                new TextObject("{=!}Learn about the novel education system and it's aspects."));
             elements.Add(new InquiryElement(education, education.Name.ToString(), null, true, education.Hint.ToString()));
 
-            var titles = new LearningElement(new TextObject("{=bXjy3wtVa}Titles"),
+            var titles = new LearningElement(new TextObject("{=!}Titles"),
                 new TextObject(
-                    "{=sbgBMiM2n}In Banner Kings, legal titles exist in what is called Demesne (domain) Hierarchy. Titles may be landed or not. Landed titles are directly attached to a fief - lordships are village titles, baronies are castle titles, counties are town titles. Above these are unlanded titles, such as dukedoms and kingdoms. The hierarchy stablishes suzerain-vassal relationships between the title holders. Holding a title has several impacts, mainly affecting your Vassal Limit and Demesne Limit, that limit your number of vassal clans & knights, and your limit of fiefs, respectively. Every faction at game start has a kingdom-level title that represents them. This title is passed on to successive leaders of the faction, in different forms, depending on the title's Succession law."),
-                new TextObject("{=xG0BAqnY4}Learn about the novel titles and their usages."));
+                    "{=!}In Banner Kings, legal titles exist in what is called Demesne (domain) Hierarchy. Titles may be landed or not. Landed titles are directly attached to a fief - lordships are village titles, baronies are castle titles, counties are town titles. Above these are unlanded titles, such as dukedoms and kingdoms. The hierarchy stablishes suzerain-vassal relationships between the title holders. Holding a title has several impacts, mainly affecting your Vassal Limit and Demesne Limit, that limit your number of vassal clans & knights, and your limit of fiefs, respectively. Every faction at game start has a kingdom-level title that represents them. This title is passed on to successive leaders of the faction, in different forms, depending on the title's Succession law."),
+                new TextObject("{=!}Learn about the novel titles and their usages."));
             elements.Add(new InquiryElement(titles, titles.Name.ToString(), null, true, titles.Hint.ToString()));
 
-            var titleLaws = new LearningElement(new TextObject("{=bXjy3wtVa}Titles - Laws"),
+            var titleLaws = new LearningElement(new TextObject("{=!}Titles - Laws"),
                 new TextObject(
-                    "{=bXjy3wtVa}Titles are also composed of laws, duties and rights, that together form the contract. All titles in the same hierarchy have the same contract. All titles have Succession, Inheritance, Government and Gender laws. Succession describes how the faction leadership is inherited, while Inheritance describes the clans' leadership inheritance. Government has various passive effects on settlements as well as dictate what kingdom policies are possible, and sometimes restricts the other laws. Gender law describes the preference for a certain gender in terms of granting knighthood, faction succession and clan inheritance."),
-                new TextObject("{=kd6NE076F}Learn more about the various laws that compose titles."));
+                    "{=!}Titles are also composed of laws, duties and rights, that together form the contract. All titles in the same hierarchy have the same contract. All titles have Succession, Inheritance, Government and Gender laws. Succession describes how the faction leadership is inherited, while Inheritance describes the clans' leadership inheritance. Government has various passive effects on settlements as well as dictate what kingdom policies are possible, and sometimes restricts the other laws. Gender law describes the preference for a certain gender in terms of granting knighthood, faction succession and clan inheritance."),
+                new TextObject("{=!}Learn more about the various laws that compose titles."));
             elements.Add(new InquiryElement(titleLaws, titleLaws.Name.ToString(), null, true, titleLaws.Hint.ToString()));
 
-            var titleDutiesRights = new LearningElement(new TextObject("{=bXjy3wtVa}Titles - Duties & Rights"),
+            var titleDutiesRights = new LearningElement(new TextObject("{=!}Titles - Duties & Rights"),
                 new TextObject(
-                    "{=bXjy3wtVa}Titles are also composed of laws, duties and rights, that together form the contract. All titles in the same hierarchy have the same contract. Duties and Rights are fulfilled between vassal and suzerain. Your suzerain is the title holder of the title directly above your highest title. Say you have a dukedom title - in the hierarchy, the dukedom is under a kingdom. The kingdom title holder will be your suzerain, and you their vassal. Vassals fulfill Duties such as paying taxes, or participating in armies (the player is coerced to participate, with renown penalties). Suzerains fulfill rights such as granting titles or financial aids in certain circunstances."),
-                new TextObject("{=bvsUZZOO5}Learn about the duties and rights between vassals and suzerains."));
+                    "{=!}Titles are also composed of laws, duties and rights, that together form the contract. All titles in the same hierarchy have the same contract. Duties and Rights are fulfilled between vassal and suzerain. Your suzerain is the title holder of the title directly above your highest title. Say you have a dukedom title - in the hierarchy, the dukedom is under a kingdom. The kingdom title holder will be your suzerain, and you their vassal. Vassals fulfill Duties such as paying taxes, or participating in armies (the player is coerced to participate, with renown penalties). Suzerains fulfill rights such as granting titles or financial aids in certain circunstances."),
+                new TextObject("{=!}Learn about the duties and rights between vassals and suzerains."));
             elements.Add(new InquiryElement(titleDutiesRights, titleDutiesRights.Name.ToString(), null, true,
                 titleDutiesRights.Hint.ToString()));
 
-            var knighthood = new LearningElement(new TextObject("{=2s05PYndd}Knighthood & Dynamic Clans"),
+            var knighthood = new LearningElement(new TextObject("{=!}Knighthood & Dynamic Clans"),
                 new TextObject(
-                    "{=tGpWKbN5y}In Banner Kings, companions are no longer able to raise clan parties. Instead, they can be knighted, a process that involves spending influence and denars. Once knighted, they can raise a party. It also requires a lordship title, who the knight will receive and use it's income to pay their own party - you only pay for those led by your family members. Knights can eventualy grow as lords and found their own clan. Knights are used by the AI, meaning many new lords are travelling on the map, and eventually many new clans sprout. The player may try to stop their own knights from creating clans."),
-                new TextObject("{=F7EyZRY0g}Learn about the new lords on the map, knights."));
+                    "{=!}In Banner Kings, companions are no longer able to raise clan parties. Instead, they can be knighted, a process that involves spending influence and denars. Once knighted, they can raise a party. It also requires a lordship title, who the knight will receive and use it's income to pay their own party - you only pay for those led by your family members. Knights can eventualy grow as lords and found their own clan. Knights are used by the AI, meaning many new lords are travelling on the map, and eventually many new clans sprout. The player may try to stop their own knights from creating clans."),
+                new TextObject("{=!}Learn about the new lords on the map, knights."));
             elements.Add(new InquiryElement(knighthood, knighthood.Name.ToString(), null, true,
                 knighthood.Hint.ToString()));
 
-            var councils = new LearningElement(new TextObject("{=Gf5xR3sCH}Councils"),
+            var councils = new LearningElement(new TextObject("{=!}Councils"),
                 new TextObject("{=!}"),
-                new TextObject("{=ALACQM2pm}Learn about the novel clan and royal councils."));
+                new TextObject("{=!}Learn about the novel clan and royal councils."));
             elements.Add(new InquiryElement(councils, councils.Name.ToString(), null, true, councils.Hint.ToString()));
 
-            var innovations = new LearningElement(new TextObject("{=LzGTmiff2}Innovations"),
+            var innovations = new LearningElement(new TextObject("{=!}Innovations"),
                 new TextObject("{=!}"),
-                new TextObject("{=q2L8i7HyT}Learn about the novel cultural innovations."));
+                new TextObject("{=!}Learn about the novel cultural innovations."));
             elements.Add(new InquiryElement(innovations, innovations.Name.ToString(), null, true,
                 innovations.Hint.ToString()));
 
-            var smithing = new LearningElement(new TextObject("{=E1kJCjp7B}Smithing"),
+            var smithing = new LearningElement(new TextObject("{=!}Smithing"),
                 new TextObject("{=!}"),
                 new TextObject(
-                    "{=f4pSU3Suh}Learn about the various changes that fix smithing as an exploit and expand it's uses."));
+                    "{=!}Learn about the various changes that fix smithing as an exploit and expand it's uses."));
             elements.Add(new InquiryElement(smithing, smithing.Name.ToString(), null, true, smithing.Hint.ToString()));
 
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                new TextObject("{=z4q3Ud91M}Banner Kings").ToString(),
-                new TextObject("{=HoCpqDAAW}Welcome to the Banner Kings mod. BK is a comprehensive mod that alters and expands various of Bannerlord's non combat systems. Below are some topics you can learn more about the impacts of the mod. You can later revisit these topics in the Concepts part of Bannerlord's encyclopedia. Visit the mod page for Discord and donation links - support is only provided through Discord. Have fun!").ToString(),
+                new TextObject("{=!}Banner Kings").ToString(),
+                new TextObject("{=!}Welcome to the Banner Kings mod. BK is a comprehensive mod that alters and expands various of Bannerlord's non combat systems. Below are some topics you can learn more about the impacts of the mod. You can later revisit these topics in the Concepts part of Bannerlord's encyclopedia. Visit the mod page for Discord and donation links - support is only provided through Discord. Have fun!").ToString(),
                 elements,
                 true,
                 1,

@@ -1,4 +1,4 @@
-using TaleWorlds.CampaignSystem;
+﻿using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.ViewModelCollection;
 using TaleWorlds.Localization;
 
@@ -21,7 +21,7 @@ namespace BannerKings.UI.Court
             base.RefreshValues();
             if (Hero != null)
             {
-                NameText = new TextObject("{=ujLA1NYPR}{POSITION_NAME} {HERO}")
+                NameText = new TextObject("{=!}{POSITION_NAME} {HERO}")
                     .SetTextVariable("POSITION_NAME", positionName)
                     .SetTextVariable("HERO", fullName ? Hero.Name : Hero.FirstName)
                     .ToString();

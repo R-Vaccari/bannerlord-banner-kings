@@ -1,4 +1,4 @@
-using BannerKings.Managers;
+﻿using BannerKings.Managers;
 using BannerKings.Managers.Skills;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -25,12 +25,12 @@ namespace BannerKings.Models.BKModels
 
             if (nobles > 0)
             {
-                result.Add(nobles / 100000f, new TextObject("{=FCAM8faQx}Nobles"));
+                result.Add(nobles / 100000f, new TextObject("{=!}Nobles"));
             }
 
             if (craftsmen > 0)
             {
-                result.Add(craftsmen / 150000f, new TextObject("{=kixu99uOS}Craftsmen"));
+                result.Add(craftsmen / 150000f, new TextObject("{=!}Craftsmen"));
             }
 
             if (settlement.Owner.GetPerkValue(BKPerks.Instance.ScholarshipPeerReview))

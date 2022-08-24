@@ -1,4 +1,4 @@
-using BannerKings.Managers.Court;
+﻿using BannerKings.Managers.Court;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Titles;
 using Helpers;
@@ -97,17 +97,17 @@ namespace BannerKings.Models.Vanilla
                 switch (draftPolicy)
                 {
                     case DraftPolicy.Conscription:
-                        explainedNumber.Add(0.15f, new TextObject("{=LdCBS2VEm}Draft policy"));
+                        explainedNumber.Add(0.15f, new TextObject("{=!}Draft policy"));
                         break;
                     case DraftPolicy.Demobilization:
-                        explainedNumber.Add(-0.15f, new TextObject("{=LdCBS2VEm}Draft policy"));
+                        explainedNumber.Add(-0.15f, new TextObject("{=!}Draft policy"));
                         break;
                 }
 
                 var government = BannerKingsConfig.Instance.TitleManager.GetSettlementGovernment(settlement);
                 if (government == GovernmentType.Tribal)
                 {
-                    explainedNumber.AddFactor(0.2f, new TextObject("{=JLDTWxD9r}Government"));
+                    explainedNumber.AddFactor(0.2f, new TextObject("{=!}Government"));
                 }
 
                 return explainedNumber;

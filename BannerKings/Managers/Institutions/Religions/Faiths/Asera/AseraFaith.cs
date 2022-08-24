@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Library;
@@ -10,13 +10,13 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
     {
         public override TextObject GetFaithName()
         {
-            return new TextObject("{=6YyJrgChg}Code of Asera");
+            return new TextObject("{=!}Code of Asera");
         }
 
         public override TextObject GetFaithDescription()
         {
             return new TextObject(
-                "{=k7gdniQ4A}Founded by the immediate sons of the legendary patriarch of the Southlands, the Code of Asera forms the basis of philosophy, art and law among the members of the confederated Aserai tribes. All tribesmen of the Aserai who do not wander as bedouin, are assumed to be followers of the Code of Asera - though only those who seek to study the intricacies of the mythic patrilineal bloodline and its influence upon the world are celebrated and viewed as Sons of Asera; a facet of colloquial nomenclature meant to force camaraderie as all members of the Sultanate make claim to being descendants of Asera. Faqir, akhund, imams, and mushid make up the various levels of clergy who preach the Code and seek to apply its nuanced legalisms and rites to the Southlands. As a whole, those who follow the Code of Asera place an emphasis on charity between communities, vengeance against those who defy precedent or tradition, and mercy given in kindness with justice forced if kindness is scorned.");
+                "{=!}Founded by the immediate sons of the legendary patriarch of the Southlands, the Code of Asera forms the basis of philosophy, art and law among the members of the confederated Aserai tribes. All tribesmen of the Aserai who do not wander as bedouin, are assumed to be followers of the Code of Asera - though only those who seek to study the intricacies of the mythic patrilineal bloodline and its influence upon the world are celebrated and viewed as Sons of Asera; a facet of colloquial nomenclature meant to force camaraderie as all members of the Sultanate make claim to being descendants of Asera. Faqir, akhund, imams, and mushid make up the various levels of clergy who preach the Code and seek to apply its nuanced legalisms and rites to the Southlands. As a whole, those who follow the Code of Asera place an emphasis on charity between communities, vengeance against those who defy precedent or tradition, and mercy given in kindness with justice forced if kindness is scorned.");
         }
 
 
@@ -25,13 +25,13 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
             var text = rank switch
             {
                 4 => new TextObject(
-                    "{=4e9cC0kYQ}Do not be as a glutton or a beast; neither hoarding nor bloodlust should color your life. If you take justice into your hands you may find yourself forever grasping for more - allow your betters to guide you as an elder sibling should; do not kill prisoners who have wronged you without their say. But do not reveal yourself to be lax or limp of arm either; for justice will often be your task."),
+                    "{=!}Do not be as a glutton or a beast; neither hoarding nor bloodlust should color your life. If you take justice into your hands you may find yourself forever grasping for more - allow your betters to guide you as an elder sibling should; do not kill prisoners who have wronged you without their say. But do not reveal yourself to be lax or limp of arm either; for justice will often be your task."),
                 3 => new TextObject(
-                    "{=i1Rkm6WPT}You must never betray the blood of your blood, to do so is to spit upon the Code. If you are called to serve the Aserai, you must shed blood for their cause - at least once, so as to show that you honor your siblings even should you disagree with their choices. You must ensure any who serve you do not suffer the ravages of conflict without justice on your lips and a safe bastion for them to find reprieve in."),
+                    "{=!}You must never betray the blood of your blood, to do so is to spit upon the Code. If you are called to serve the Aserai, you must shed blood for their cause - at least once, so as to show that you honor your siblings even should you disagree with their choices. You must ensure any who serve you do not suffer the ravages of conflict without justice on your lips and a safe bastion for them to find reprieve in."),
                 2 => new TextObject(
-                    "{=XHeVvTdi6}…A curious question; though I suppose I would know the deeper answers to this. Few are the faqir or even imam who are as studied in the various things so easily lost in transcription or by cause of would-be sultans seeking to justify their cruelty. The Code does not abide warring between Sons, a facet easily lost and ignored but a point of shame that could tarnish many of our leaders."),
+                    "{=!}…A curious question; though I suppose I would know the deeper answers to this. Few are the faqir or even imam who are as studied in the various things so easily lost in transcription or by cause of would-be sultans seeking to justify their cruelty. The Code does not abide warring between Sons, a facet easily lost and ignored but a point of shame that could tarnish many of our leaders."),
                 _ => new TextObject(
-                    "{=KkURAWmEe}It is wise to ask this - we dwell in uncertain times. Greed and rage cloud the hearts of many. Do no harm to the other Sons of Asera; the villagers should never fear your blade in these lands. Do not rob them of their wealth, even if the Sultan demands it - you must be charitable, you are their sibling.")
+                    "{=!}It is wise to ask this - we dwell in uncertain times. Greed and rage cloud the hearts of many. Do no harm to the other Sons of Asera; the villagers should never fear your blade in these lands. Do not rob them of their wealth, even if the Sultan demands it - you must be charitable, you are their sibling.")
             };
 
             return text;
@@ -42,13 +42,13 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
             var text = rank switch
             {
                 4 => new TextObject(
-                    "{=tQSXaLtV8}…And in weakness, do not allow others to usurp your station. Rebellion, sedition, betrayal - anathema to the Code of Asera. Brother shall not strike against brother, least of all by a knife in the back or by rousing a mob with vicious words or common strife. Suffer not rebellion, for to allow it to foment in the first place speaks to the immensity of your failings. All the pointless bloodshed which may come from such will tarnish you eternal, such that you may find yourself denied Heaven - condemned to an agony of your own making."),
+                    "{=!}…And in weakness, do not allow others to usurp your station. Rebellion, sedition, betrayal - anathema to the Code of Asera. Brother shall not strike against brother, least of all by a knife in the back or by rousing a mob with vicious words or common strife. Suffer not rebellion, for to allow it to foment in the first place speaks to the immensity of your failings. All the pointless bloodshed which may come from such will tarnish you eternal, such that you may find yourself denied Heaven - condemned to an agony of your own making."),
                 3 => new TextObject(
-                    "{=FtxBYABDc}Be mindful also of the company you keep, for though all among the Aserai are as brothers - and even the Jawwal and Bedouin are as our cousins; those beyond our blood lineage may not understand your purpose. They may lead you from the path, away from the Code; away from the good of the Aserai. But perhaps I speak this in fear - the long toll of the Empire upon our culture."),
+                    "{=!}Be mindful also of the company you keep, for though all among the Aserai are as brothers - and even the Jawwal and Bedouin are as our cousins; those beyond our blood lineage may not understand your purpose. They may lead you from the path, away from the Code; away from the good of the Aserai. But perhaps I speak this in fear - the long toll of the Empire upon our culture."),
                 2 => new TextObject(
-                    "{=nJVepo91N}To not seek vengeance against those who have attacked your holdings, besieged your homes, murdered your people - is a greater shame. No doctrine of peace can outweigh the Code of Asera in this regard. Many such debts need to be paid, and it is horrifying that our rulers so often choose to forget this. The serpent which bites you and slithers away does not leave you in peace; only when the serpent is crushed, maimed, unable to bite you again does it depart in peace."),
+                    "{=!}To not seek vengeance against those who have attacked your holdings, besieged your homes, murdered your people - is a greater shame. No doctrine of peace can outweigh the Code of Asera in this regard. Many such debts need to be paid, and it is horrifying that our rulers so often choose to forget this. The serpent which bites you and slithers away does not leave you in peace; only when the serpent is crushed, maimed, unable to bite you again does it depart in peace."),
                 _ => new TextObject(
-                    "{=HpqnzrHnR}When you are called by your brothers, you must come to them; you must serve beside them, you must never fail them if it is in your power. Know also that keeping the company of those outside the Code of Asera will surely corrupt you - you are your brother’s keeper, and they in turn yours. For good or for ill.")
+                    "{=!}When you are called by your brothers, you must come to them; you must serve beside them, you must never fail them if it is in your power. Know also that keeping the company of those outside the Code of Asera will surely corrupt you - you are your brother’s keeper, and they in turn yours. For good or for ill.")
             };
 
             return text;
@@ -59,13 +59,13 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
             var text = rank switch
             {
                 4 => new TextObject(
-                    "{=afPKDm2Se}Know that I tolerate your presence on behalf of my blooded siblings in the Banu, and though you may desire to coax me with honeyed words or threats of coercion - know also that I am beyond your grasp. I am the Murshid of [Placename], and my word guides the Sultanate by the reading of the Code of Asera. Speak truthfully and with no deceit, lest I denounce your lineage and see them flayed to the last."),
+                    "{=!}Know that I tolerate your presence on behalf of my blooded siblings in the Banu, and though you may desire to coax me with honeyed words or threats of coercion - know also that I am beyond your grasp. I am the Murshid of [Placename], and my word guides the Sultanate by the reading of the Code of Asera. Speak truthfully and with no deceit, lest I denounce your lineage and see them flayed to the last."),
                 3 => new TextObject(
-                    "{=PdmbfNFp4}Peace be upon you, outlander. May you walk with the safety of Asera while you dwell in the company of his sons - and while you walk the lands where his Code is law. I am an Imam of the Aserai, and I bid you hospitality expecting it fully in kind. Is there something I may do for our mutual good?"),
+                    "{=!}Peace be upon you, outlander. May you walk with the safety of Asera while you dwell in the company of his sons - and while you walk the lands where his Code is law. I am an Imam of the Aserai, and I bid you hospitality expecting it fully in kind. Is there something I may do for our mutual good?"),
                 2 => new TextObject(
-                    "{=YgdfaHgYf}Peace be to you, outlander. You do not carry yourself as a Son of Asera, so I shall forgive your ignorance - provided you come here in search of wisdom. I am an Akhund, a scholar of the Code of Asera, the guiding truth of the southlands. If you come here with a clouded heart, there is little I can offer you."),
+                    "{=!}Peace be to you, outlander. You do not carry yourself as a Son of Asera, so I shall forgive your ignorance - provided you come here in search of wisdom. I am an Akhund, a scholar of the Code of Asera, the guiding truth of the southlands. If you come here with a clouded heart, there is little I can offer you."),
                 _ => new TextObject(
-                    "{=gE0WHLSJh}Peace be to you, outlander. May you be welcomed in the lands of the Sons of Asera. May you enter here in kindness, but know that we do court the ignorant.")
+                    "{=!}Peace be to you, outlander. May you be welcomed in the lands of the Sons of Asera. May you enter here in kindness, but know that we do court the ignorant.")
             };
 
             return text;
@@ -76,13 +76,13 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
             var text = rank switch
             {
                 4 => new TextObject(
-                    "{=v5C3kEmcZ}Blessings of paradise and the Heavens upon you, blooded sibling. You come before the Murshid of [Placename], a guide to the Sultanate and of kin to the Banu. Surely you know that I am a busy man who must contend with matters of state whilst consulting the Code of Asera. What is it that I may do for you while I have this single moment to offer?"),
+                    "{=!}Blessings of paradise and the Heavens upon you, blooded sibling. You come before the Murshid of [Placename], a guide to the Sultanate and of kin to the Banu. Surely you know that I am a busy man who must contend with matters of state whilst consulting the Code of Asera. What is it that I may do for you while I have this single moment to offer?"),
                 3 => new TextObject(
-                    "{=ZMjSL1nwt}Mashaera, blood of my blood. It is good to see you are alive and that you are in good health; for the world is rife with conflict beyond our brotherhood and little is to be held as certain. Are you here on pilgrimage or duty, in good tidings or ill news? How may this humble Imam be of service to his sibling?"),
+                    "{=!}Mashaera, blood of my blood. It is good to see you are alive and that you are in good health; for the world is rife with conflict beyond our brotherhood and little is to be held as certain. Are you here on pilgrimage or duty, in good tidings or ill news? How may this humble Imam be of service to his sibling?"),
                 2 => new TextObject(
-                    "{=vYytmDDKp}Peace be upon you, my kin. Have you come to study the Code of Asera? I shall grant you what wisdom I have gleaned in my long hours of study, but as your brother I must tell you that I find myself more ignorant the more I realize the breadth of what there is still yet to learn."),
+                    "{=!}Peace be upon you, my kin. Have you come to study the Code of Asera? I shall grant you what wisdom I have gleaned in my long hours of study, but as your brother I must tell you that I find myself more ignorant the more I realize the breadth of what there is still yet to learn."),
                 _ => new TextObject(
-                    "{=xLTygCsYc}Peace be upon you and may you be favored by Asera, my kin. What may this humble faqir do for you on this glorious day?")
+                    "{=!}Peace be upon you and may you be favored by Asera, my kin. What may this humble faqir do for you on this glorious day?")
             };
 
             return text;
@@ -97,11 +97,11 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
                     break;
                 case 3:
                     text = new TextObject(
-                        "{=ZMjSL1nwt}Mashaera, blood of my blood. It is good to see you are alive and that you are in good health; for the world is rife with conflict beyond our brotherhood and little is to be held as certain. Are you here on pilgrimage or duty, in good tidings or ill news? How may this humble Imam be of service to his sibling?");
+                        "{=!}Mashaera, blood of my blood. It is good to see you are alive and that you are in good health; for the world is rife with conflict beyond our brotherhood and little is to be held as certain. Are you here on pilgrimage or duty, in good tidings or ill news? How may this humble Imam be of service to his sibling?");
                     break;
                 case 2:
                     text = new TextObject(
-                        "{=vYytmDDKp}Peace be upon you, my kin. Have you come to study the Code of Asera? I shall grant you what wisdom I have gleaned in my long hours of study, but as your brother I must tell you that I find myself more ignorant the more I realize the breadth of what there is still yet to learn.");
+                        "{=!}Peace be upon you, my kin. Have you come to study the Code of Asera? I shall grant you what wisdom I have gleaned in my long hours of study, but as your brother I must tell you that I find myself more ignorant the more I realize the breadth of what there is still yet to learn.");
                     break;
                 default:
                 {
@@ -114,7 +114,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
                     if (Hero.MainHero.Culture != Utils.Helpers.GetCulture("aserai"))
                     {
                         text = new TextObject(
-                            "{=joFMJood3}Alas, you are no Son of Asera and thus you could never truly follow the Code of Asera. Not in any way that I could fathom. There may be precedent for one beyond our blood to successfully follow the code, but for this you should seek out an Akhund; a scholar of the faith.");
+                            "{=!}Alas, you are no Son of Asera and thus you could never truly follow the Code of Asera. Not in any way that I could fathom. There may be precedent for one beyond our blood to successfully follow the code, but for this you should seek out an Akhund; a scholar of the faith.");
                     }
 
                     float relation = 0;
@@ -127,9 +127,9 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
                     text = medium switch
                     {
                         < 0 => new TextObject(
-                            "{=dUvJQgrEx}You think that it would go unnoticed how the folk here cringe at your visage? How your name is whispered with scornful lips? Are they mislead about you? Perhaps, perhaps. We shall see."),
+                            "{=!}You think that it would go unnoticed how the folk here cringe at your visage? How your name is whispered with scornful lips? Are they mislead about you? Perhaps, perhaps. We shall see."),
                         < 20 => new TextObject(
-                            "{=jyg5e3aRX}You are known to me and to this village; not as a savior or as a good soul, but as one of us. You are humble, perhaps because you lack the boldness to pursue being charitable - or perhaps just the means. I do not know, and I do not judge."),
+                            "{=!}You are known to me and to this village; not as a savior or as a good soul, but as one of us. You are humble, perhaps because you lack the boldness to pursue being charitable - or perhaps just the means. I do not know, and I do not judge."),
                         _ => text
                     };
 
@@ -149,11 +149,11 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
                     break;
                 case 3:
                     text = new TextObject(
-                        "{=ZMjSL1nwt}Mashaera, blood of my blood. It is good to see you are alive and that you are in good health; for the world is rife with conflict beyond our brotherhood and little is to be held as certain. Are you here on pilgrimage or duty, in good tidings or ill news? How may this humble Imam be of service to his sibling?");
+                        "{=!}Mashaera, blood of my blood. It is good to see you are alive and that you are in good health; for the world is rife with conflict beyond our brotherhood and little is to be held as certain. Are you here on pilgrimage or duty, in good tidings or ill news? How may this humble Imam be of service to his sibling?");
                     break;
                 case 2:
                     text = new TextObject(
-                        "{=vYytmDDKp}Peace be upon you, my kin. Have you come to study the Code of Asera? I shall grant you what wisdom I have gleaned in my long hours of study, but as your brother I must tell you that I find myself more ignorant the more I realize the breadth of what there is still yet to learn.");
+                        "{=!}Peace be upon you, my kin. Have you come to study the Code of Asera? I shall grant you what wisdom I have gleaned in my long hours of study, but as your brother I must tell you that I find myself more ignorant the more I realize the breadth of what there is still yet to learn.");
                     break;
                 default:
                 {
@@ -166,7 +166,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
                     if (Hero.MainHero.Culture != Utils.Helpers.GetCulture("aserai"))
                     {
                         text = new TextObject(
-                            "{=4B0ywUmLn}I wish you well in such pursuits, and that you live a life of peace wherever this path may take you.");
+                            "{=!}I wish you well in such pursuits, and that you live a life of peace wherever this path may take you.");
                     }
 
                     float relation = 0;
@@ -179,9 +179,9 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
                     text = medium switch
                     {
                         < 0 => new TextObject(
-                            "{=UuaisTvdq}If you wish to be made a follower of the Code of Asera, you must treat these people as you would a sibling - you must cherish them, exalt them, protect them and educate them. Show them your better nature and I shall perform upon you our rites of induction."),
+                            "{=!}If you wish to be made a follower of the Code of Asera, you must treat these people as you would a sibling - you must cherish them, exalt them, protect them and educate them. Show them your better nature and I shall perform upon you our rites of induction."),
                         < 20 => new TextObject(
-                            "{=e0BePV8qs}I welcome you, my kin - blood of my blood. May you go in peace and bring honor to his legacy."),
+                            "{=!}I welcome you, my kin - blood of my blood. May you go in peace and bring honor to his legacy."),
                         _ => new TextObject("{=!}")
                     };
 
@@ -197,13 +197,13 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
             var text = rank switch
             {
                 4 => new TextObject(
-                    "{=9FAQvUNFG}I offer my sage counsel to the kin of the Banu, to guide them upon the paths walked by Asera of old. I grant them the means of pilgrimage - for only when one knows the deepest wisdom and learned truths of the Code of Asera may they truly strive for self-improvement."),
+                    "{=!}I offer my sage counsel to the kin of the Banu, to guide them upon the paths walked by Asera of old. I grant them the means of pilgrimage - for only when one knows the deepest wisdom and learned truths of the Code of Asera may they truly strive for self-improvement."),
                 3 => new TextObject(
-                    "{=WnASxPqWo}I preach the glory of Asera, our progenitor of legend. I preach lessons learned from the treasury of wisdom he has granted us as his children. I preach that the Aserai shall reign in happiness and in sorrow, so long as we remain as brothers within the Banu confederacies."),
+                    "{=!}I preach the glory of Asera, our progenitor of legend. I preach lessons learned from the treasury of wisdom he has granted us as his children. I preach that the Aserai shall reign in happiness and in sorrow, so long as we remain as brothers within the Banu confederacies."),
                 2 => new TextObject(
-                    "{=S0k2g5QN3}I preach that which is hidden in poetics of Nahasi dialects and in the riddles of converts stolen away by Darshi slavers in generations past. I seek to unravel the mysteries of all that Asera asked of his sons - to truly understand charity, devotion, and the cost of peace even in these times of eschatological turmoil."),
+                    "{=!}I preach that which is hidden in poetics of Nahasi dialects and in the riddles of converts stolen away by Darshi slavers in generations past. I seek to unravel the mysteries of all that Asera asked of his sons - to truly understand charity, devotion, and the cost of peace even in these times of eschatological turmoil."),
                 _ => new TextObject(
-                    "{=N4YK6ChNC}I preach the Code of Asera, the backbone of our society, the soul of our nation. For we are all Sons of Asera in these lands, and it is through the patriarch’s example that we go forth in honor and bring glory to his legacy.")
+                    "{=!}I preach the Code of Asera, the backbone of our society, the soul of our nation. For we are all Sons of Asera in these lands, and it is through the patriarch’s example that we go forth in honor and bring glory to his legacy.")
             };
 
             return text;
@@ -214,13 +214,13 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
             var text = rank switch
             {
                 4 => new TextObject(
-                    "{=JybY3uqGn}I ensure they remember that they are as siblings to the lowliest beggar or the most jackal-thirsting Jawwal marauder; that they must always express love towards that which is good and revile the roguery that leads the soul towards wicked deeds."),
+                    "{=!}I ensure they remember that they are as siblings to the lowliest beggar or the most jackal-thirsting Jawwal marauder; that they must always express love towards that which is good and revile the roguery that leads the soul towards wicked deeds."),
                 3 => new TextObject(
-                    "{=LU5Y1eexn}I preach that our future shall be as luminous as the sun and as enduring as the Nahasa, so long as we remain united, so long as we are charitable, so long as we welcome even the Jawwal to embrace the Code as their own guiding path in life!"),
+                    "{=!}I preach that our future shall be as luminous as the sun and as enduring as the Nahasa, so long as we remain united, so long as we are charitable, so long as we welcome even the Jawwal to embrace the Code as their own guiding path in life!"),
                 2 => new TextObject(
-                    "{=WY7BHbncM}I preach that we should question the nature of goodness and of wisdom; for a good man would not claim to be wise, and a wise man not claim to be good."),
+                    "{=!}I preach that we should question the nature of goodness and of wisdom; for a good man would not claim to be wise, and a wise man not claim to be good."),
                 _ => new TextObject(
-                    "{=GegHK5Arx}We are those who adhere to tradition but know also the struggle to move beyond the belligerence of the past - we are no Jawwal, after all.")
+                    "{=!}We are those who adhere to tradition but know also the struggle to move beyond the belligerence of the past - we are no Jawwal, after all.")
             };
 
             return text;
@@ -231,13 +231,13 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
             var text = rank switch
             {
                 4 => new TextObject(
-                    "{=0S1Kxgkw8}You come before me, like a wriggling eel slithering to a master archer and asking to learn to wield the bow. I shall speak plainly to you, for my time is short and my station vaunted. When you see that which is evil, you must change it by whatever force you can - if not your hands, then your heart, if not your heart, then your words."),
+                    "{=!}You come before me, like a wriggling eel slithering to a master archer and asking to learn to wield the bow. I shall speak plainly to you, for my time is short and my station vaunted. When you see that which is evil, you must change it by whatever force you can - if not your hands, then your heart, if not your heart, then your words."),
                 3 => new TextObject(
-                    "{=mM6sevMGu}A common question among the devout and misguided alike; for how can one truly be assured they walk the righteous path? We know not until the end comes and we are weighed against the deeds of our progenitor; but I shall guide you with what wisdom I can."),
+                    "{=!}A common question among the devout and misguided alike; for how can one truly be assured they walk the righteous path? We know not until the end comes and we are weighed against the deeds of our progenitor; but I shall guide you with what wisdom I can."),
                 2 => new TextObject(
-                    "{=xYUqFSonW}Consider your actions and why it is you perform them. If you are of influence, do you wield this power for the good of your siblings or do you take it for your own aggrandizement? When your people starve, do you feast? Do you turn to the sword? Is blood spilled for bread gained a worthy trade?"),
+                    "{=!}Consider your actions and why it is you perform them. If you are of influence, do you wield this power for the good of your siblings or do you take it for your own aggrandizement? When your people starve, do you feast? Do you turn to the sword? Is blood spilled for bread gained a worthy trade?"),
                 _ => new TextObject(
-                    "{=NiK8pjJ3B}It does my heart kindly to hear you wish to prove your faith. We live in an age of lip service by most - though I hold no blame to the common man for this; they show their adherence and their faith in their daily labors. If you wish to prove your faith and your adherence to doctrine, you must be a soul who knows peace and who adheres to hierarchy.")
+                    "{=!}It does my heart kindly to hear you wish to prove your faith. We live in an age of lip service by most - though I hold no blame to the common man for this; they show their adherence and their faith in their daily labors. If you wish to prove your faith and your adherence to doctrine, you must be a soul who knows peace and who adheres to hierarchy.")
             };
 
             return text;
@@ -248,13 +248,13 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
             var text = rank switch
             {
                 4 => new TextObject(
-                    "{=9VF1sngCD}Seek to improve the lives of even the least of your people and you shall make kings of them all; and know that should you find yourself poorer and your servants richer that you are a better sibling than many of your blood. You can only hope then that they shall follow your example, follow the Code of Asera, and spread this prosperity to all."),
+                    "{=!}Seek to improve the lives of even the least of your people and you shall make kings of them all; and know that should you find yourself poorer and your servants richer that you are a better sibling than many of your blood. You can only hope then that they shall follow your example, follow the Code of Asera, and spread this prosperity to all."),
                 3 => new TextObject(
-                    "{=MHP06Sraw}Foremost in my viewing, as a man of the cities of our lands; is the act of almsgiving. We are as keepers to our brothers, to our sisters and siblings; and only a cruel soul would let the blood of their blood starve.You are only as pure as the lowest among us, and thus you purify yourself of sin when you seek to uplift the whole of the Aserai."),
+                    "{=!}Foremost in my viewing, as a man of the cities of our lands; is the act of almsgiving. We are as keepers to our brothers, to our sisters and siblings; and only a cruel soul would let the blood of their blood starve.You are only as pure as the lowest among us, and thus you purify yourself of sin when you seek to uplift the whole of the Aserai."),
                 2 => new TextObject(
-                    "{=xYhKWCk9b}If you seek to prove your faith, you must internalize the Code of Asera - you must learn and accept that you are but one of his Sons - and you must seek to bring forth a better world for your children to inherit. Prove your faith by making that world. Time will tell if the image in your mind is truly an embodiment of the Code’s doctrines or merely self-indulgence."),
+                    "{=!}If you seek to prove your faith, you must internalize the Code of Asera - you must learn and accept that you are but one of his Sons - and you must seek to bring forth a better world for your children to inherit. Prove your faith by making that world. Time will tell if the image in your mind is truly an embodiment of the Code’s doctrines or merely self-indulgence."),
                 _ => new TextObject(
-                    "{=txpd0U7ht}Release your prisoners if you no longer war with their masters; or give them to your master for they shall know better. Choose peace when your enemies desire it; let them lick their wounds and if they strike you again, punish them with biting steel and the shame of their recidivism.")
+                    "{=!}Release your prisoners if you no longer war with their masters; or give them to your master for they shall know better. Choose peace when your enemies desire it; let them lick their wounds and if they strike you again, punish them with biting steel and the shame of their recidivism.")
             };
 
             return text;
@@ -287,7 +287,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
 
         public override TextObject GetMainDivinitiesDescription()
         {
-            return new TextObject("{=PgMStBoMs}Patriarch");
+            return new TextObject("{=!}Patriarch");
         }
 
         public override int GetMaxClergyRank()
@@ -299,10 +299,10 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
         {
             var text = rank switch
             {
-                4 => new TextObject("{=wUZagKpuk}Murshid"),
-                3 => new TextObject("{=a5F1c7NgX}Imam"),
-                2 => new TextObject("{=5mZLnePfL}Akhund"),
-                _ => new TextObject("{=PUeGrbXzx}Faqir")
+                4 => new TextObject("{=!}Murshid"),
+                3 => new TextObject("{=!}Imam"),
+                2 => new TextObject("{=!}Akhund"),
+                _ => new TextObject("{=!}Faqir")
             };
 
             return text;
@@ -315,7 +315,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
 
         public override TextObject GetSecondaryDivinitiesDescription()
         {
-            return new TextObject("{=4XkyWYj87}Schools");
+            return new TextObject("{=!}Schools");
         }
 
         public override (bool, TextObject) GetInductionAllowed(Hero hero, int rank)
@@ -325,27 +325,27 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
 
         public override TextObject GetBlessingAction()
         {
-            return new TextObject("{=VxzEySBnC}I would like to study the Code.");
+            return new TextObject("{=!}I would like to study the Code.");
         }
 
         public override TextObject GetBlessingQuestion()
         {
-            return new TextObject("{=4XkyWYj87}Schools");
+            return new TextObject("{=!}Schools");
         }
 
         public override TextObject GetBlessingConfirmQuestion()
         {
-            return new TextObject("{=Q15OTStBi}Are you sure?");
+            return new TextObject("{=!}Are you sure?");
         }
 
         public override TextObject GetBlessingQuickInformation()
         {
-            return new TextObject("{=zwnomG7JY}{HERO} is inspired by the teachings of {DIVINITY} code.");
+            return new TextObject("{=!}{HERO} is inspired by the teachings of {DIVINITY} code.");
         }
 
         public override TextObject GetBlessingActionName()
         {
-            return new TextObject("{=PO6G4Ym7L}study from.");
+            return new TextObject("{=!}study from.");
         }
     }
 }

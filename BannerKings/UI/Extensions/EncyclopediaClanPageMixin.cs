@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using BannerKings.Managers.Titles;
 using BannerKings.UI.Court;
 using BannerKings.UI.Cultures;
@@ -34,11 +34,11 @@ namespace BannerKings.UI.Extensions
 
         [DataSourceProperty] public string CultureText => GameTexts.FindText("str_culture").ToString();
 
-        [DataSourceProperty] public string KnightsText => new TextObject("{=heVfOcmPk}Knights").ToString();
+        [DataSourceProperty] public string KnightsText => new TextObject("{=!}Knights").ToString();
 
-        [DataSourceProperty] public string CompanionsText => new TextObject("{=9xUcThREr}Companions").ToString();
+        [DataSourceProperty] public string CompanionsText => new TextObject("{=!}Companions").ToString();
 
-        [DataSourceProperty] public string CouncilText => new TextObject("{=31Bir3ORm}Council").ToString();
+        [DataSourceProperty] public string CouncilText => new TextObject("{=!}Council").ToString();
 
         [DataSourceProperty]
         public EncyclopediaCultureVM CultureInfo
@@ -192,28 +192,28 @@ namespace BannerKings.UI.Extensions
 
                 if (rel != null)
                 {
-                    clanPageVM.ClanInfo.Add(new StringPairItemVM(new TextObject("{=aHWGADq3r}Faith:").ToString(),
+                    clanPageVM.ClanInfo.Add(new StringPairItemVM(new TextObject("{=!}Faith:").ToString(),
                         rel.Faith.GetFaithName().ToString()));
                 }
 
-                clanPageVM.ClanInfo.Add(new StringPairItemVM(new TextObject("{=PbqrDxsvm}Owned Caravans:").ToString(),
+                clanPageVM.ClanInfo.Add(new StringPairItemVM(new TextObject("{=!}Owned Caravans:").ToString(),
                     caravans.ToString()));
 
-                clanPageVM.ClanInfo.Add(new StringPairItemVM(new TextObject("{=CH3ngtePK}Owned Workshops:").ToString(),
+                clanPageVM.ClanInfo.Add(new StringPairItemVM(new TextObject("{=!}Owned Workshops:").ToString(),
                     workshops.ToString()));
 
                 if (highestTitle != null)
                 {
-                    clanPageVM.ClanInfo.Add(new StringPairItemVM(new TextObject("{=76JmCjj0B}Title Level:").ToString(),
+                    clanPageVM.ClanInfo.Add(new StringPairItemVM(new TextObject("{=!}Title Level:").ToString(),
                         highestTitle));
                 }
 
                 var income = BannerKingsConfig.Instance.ClanFinanceModel.CalculateClanIncome(clan, true);
-                clanPageVM.ClanInfo.Add(new StringPairItemVM(new TextObject("{=7H7SE3CoF}Income:").ToString(),
+                clanPageVM.ClanInfo.Add(new StringPairItemVM(new TextObject("{=!}Income:").ToString(),
                     income.ResultNumber.ToString(), new BasicTooltipViewModel(() => income.GetExplanations())));
 
                 var expenses = BannerKingsConfig.Instance.ClanFinanceModel.CalculateClanExpenses(clan, true);
-                clanPageVM.ClanInfo.Add(new StringPairItemVM(new TextObject("{=vsC7JVUDs}Expenses:").ToString(),
+                clanPageVM.ClanInfo.Add(new StringPairItemVM(new TextObject("{=!}Expenses:").ToString(),
                     expenses.ResultNumber.ToString(), new BasicTooltipViewModel(() => expenses.GetExplanations())));
 
                 addedFields = true;
