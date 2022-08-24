@@ -25,14 +25,12 @@ namespace BannerKings.Managers.Duties
             if (Hero.MainHero.Gold >= Completion)
             {
                 GiveGoldAction.ApplyBetweenCharacters(Hero.MainHero, DebtOwner, (int) Completion);
-                result = new TextObject(
-                        "{SUZERAIN} holds your oath of ransom aid fulfilled. You have payed {RANSOM} gold and your liege is satisfied.")
+                result = new TextObject("{SUZERAIN} holds your oath of ransom aid fulfilled. You have payed {RANSOM} gold and your liege is satisfied.")
                     .ToString();
             }
             else
             {
-                result = new TextObject(
-                        "You have failed to fulfill your duty of ransom assistance to {SUZERAIN}. As a result, your clan's reputation has suffered, and your liege is unsatisfied.")
+                result = new TextObject("You have failed to fulfill your duty of ransom assistance to {SUZERAIN}. As a result, your clan's reputation has suffered, and your liege is unsatisfied.")
                     .ToString();
             }
 
@@ -53,8 +51,7 @@ namespace BannerKings.Managers.Duties
 
             GameTexts.SetVariable("REMAINING", Completion);
             InformationManager.ShowInquiry(new InquiryData("Duty of Ransom Aid",
-                new TextObject(
-                        "{=gpJ7OAnJ} Your suzerain, {SUZERAIN}, has requested that you fulfill your contract obligations and pay him {RANSOM} gold in order to compensate their ransom. You have {REMAINING} days left to pay it.")
+                new TextObject("{=gpJ7OAnJ}Your suzerain, {SUZERAIN}, has requested that you fulfill your contract obligations and pay him {RANSOM} gold in order to compensate their ransom. You have {REMAINING} days left to pay it.")
                     .ToString(),
                 true, true, "Pay Immediatly", "Withhold For a Day", delegate { Finish(); }, null));
         }

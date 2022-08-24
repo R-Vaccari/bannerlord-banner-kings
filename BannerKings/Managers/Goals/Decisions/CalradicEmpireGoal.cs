@@ -1,9 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
-using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Institutions.Religions.Faiths;
 using BannerKings.Managers.Titles;
-using BannerKings.Utils.Extensions;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Extensions;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -20,7 +18,7 @@ namespace BannerKings.Managers.Goals.Decisions
         public CalradicEmpireGoal() : base("goal_calradic_empire", GoalUpdateType.Settlement)
         {
             var name = new TextObject("{=7xOAyzWR}Reform the Imperium Calradium");
-            var description = new TextObject("{=h5yHKkaR}Reestablish the former Calradian Empire. The Empire spanned most of the continent before emperor Arenicos died without a clear heir. By reforming the empire, you crush the validity of claimants, and ahead of you lies a new path for greatness. You must bring all imperial duchies under control of your realm.");
+            var description = new TextObject("{=h5yHKkaR}Reestablish the former Calradian Empire. The Empire spanned most of the continent before emperor Arenicos died without a clear heir. By reforming the empire, you crush the validity of claimants, and ahead of you lies a new path for greatness. You must bring all imperial duchies under control of your realm.\n\n");
 
             Initialize(name, description);
 

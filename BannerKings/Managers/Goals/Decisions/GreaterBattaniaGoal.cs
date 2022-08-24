@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Titles;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Extensions;
@@ -18,7 +17,7 @@ namespace BannerKings.Managers.Goals.Decisions
         public GreaterBattaniaGoal() : base("goal_greater_battania", GoalUpdateType.Settlement)
         {
             var name = new TextObject("{=y7Zt7v7R}Unite Greater Battania");
-            var description = new TextObject("{=O9JdgSka}Unite the old Battanian lands back into a greater realm. To the West, the rascal Vlandians have taken the valley of Llyn Modris and called it 'Ocs Hall'. To the East, the bloodthristy Imperials submitted Epicrotea to their domination. The threat of Battanian extermination grows stronger with enemies all around aiming for it's lands. You must bring all battanian and formerly battanian towns and castles under control of your realm.");
+            var description = new TextObject("{=O9JdgSka}Unite the old Battanian lands back into a greater realm. To the West, the rascal Vlandians have taken the valley of Llyn Modris and called it 'Ocs Hall'. To the East, the bloodthristy Imperials submitted Epicrotea to their domination. The threat of Battanian extermination grows stronger with enemies all around aiming for it's lands. You must bring all battanian and formerly battanian towns and castles under control of your realm.\n\n");
 
             Initialize(name, description);
 

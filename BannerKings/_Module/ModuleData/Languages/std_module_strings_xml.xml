@@ -330,7 +330,7 @@
 		<string id="nDkVZPhh" text="Tax private slaves" />
 		<string id="egsWqUht" text="You have failed to fulfill your duty of military assistance to {SUZERAIN}. As a result, your clan's renown has suffered, and your relationship with suzerain has changed by {RELATION}." />
 		<string id="tZRbqbsX" text="{SUZERAIN} holds your duty of military aid fulfilled. You have gained {INFLUENCE} and {RELATION} relatin with your suzerain." />
-		<string id="gpJ7OAnJ" text=" Your suzerain, {SUZERAIN}, has requested that you fulfill your contract obligations and pay him {RANSOM} gold in order to compensate their ransom. You have {REMAINING} days left to pay it." />
+		<string id="gpJ7OAnJ" text="Your suzerain, {SUZERAIN}, has requested that you fulfill your contract obligations and pay him {RANSOM} gold in order to compensate their ransom. You have {REMAINING} days left to pay it." />
 		<string id="QX68kiDy" text="The {NEW} has branched off from {ORIGINAL} due to inheritance laws." />
 		<string id="NxbrTVJ2" text="{HEIR} has rightfully inherited the {TITLE}" />
 		<string id="JtVSLxTM" text="Heavy Plough" />
@@ -812,7 +812,7 @@
 		<string id="jhTKWz1U" text="Varyag" />
 		<string id="snsTB9f0" text="You have received the {PERK} perk from the {LIFESTYLE} lifestyle." />
 		<string id="7xOAyzWR" text="Reform the Imperium Calradium" />
-		<string id="h5yHKkaR" text="Reestablish the former Calradian Empire. The Empire spanned most of the continent before emperor Arenicos died without a clear heir. By reforming the empire, you crush the validity of claimants, and ahead of you lies a new path for greatness. You must bring all imperial duchies under control of your realm." />
+		<string id="h5yHKkaR" text="Reestablish the former Calradian Empire. The Empire spanned most of the continent before emperor Arenicos died without a clear heir. By reforming the empire, you crush the validity of claimants, and ahead of you lies a new path for greatness. You must bring all imperial duchies under control of your realm.\n\n" />
 		<string id="qPqoX2iZ" text="This title is already founded! De Jure is {DE_JURE.LINK} and de Facto is {DE_FACTO.LINK}." />
 		<string id="sKBcd5nS" text="You need at least {GOLD}{GOLD_ICON}" />
 		<string id="6RCohQZv" text="You need at least {INFLUENCE}{INFLUENCE_ICON}" />
@@ -823,7 +823,7 @@
 		<string id="05cWQHY8" text="You do not adhere to a faith that is part of the {RELIGION} faith group." />
 		<string id="94PCT08D" text="Your kingdom is not de facto ruler of {SETTLEMENT}" />
 		<string id="y7Zt7v7R" text="Unite Greater Battania" />
-		<string id="O9JdgSka" text="Unite the old Battanian lands back into a greater realm. To the West, the rascal Vlandians have taken the valley of Llyn Modris and called it 'Ocs Hall'. To the East, the bloodthristy Imperials submitted Epicrotea to their domination. The threat of Battanian extermination grows stronger with enemies all around aiming for it's lands. You must bring all battanian and formerly battanian towns and castles under control of your realm." />
+		<string id="O9JdgSka" text="Unite the old Battanian lands back into a greater realm. To the West, the rascal Vlandians have taken the valley of Llyn Modris and called it 'Ocs Hall'. To the East, the bloodthristy Imperials submitted Epicrotea to their domination. The threat of Battanian extermination grows stronger with enemies all around aiming for it's lands. You must bring all battanian and formerly battanian towns and castles under control of your realm.\n\n" />
 		<string id="rN6YZGzG" text="This title is already founded! de Jure is {DE_JURE.LINK} and de Facto is {DE_FACTO.LINK}." />
 		<string id="aTp3pwTc" text="You're not the leader of {KINGDOM}." />
 		<string id="iHEjXAcE" text="You do not adhere to the {RELIGION} faith." />
@@ -831,7 +831,7 @@
 		<string id="UzVF4jps" text="Select a type of companion to recruit." />
 		<string id="JSToGDmb" text="You can't afford any companion." />
 		<string id="rq4ZNACr" text="No candidates of this type available." />
-		<string id="u1aN7hHf" text=" You can't afford the cost:\n{GOLD}{GOLD_ICON}\n{INFLUENCE}{INFLUENCE_ICON}." />
+		<string id="u1aN7hHf" text="You can't afford the cost: {GOLD}{GOLD_ICON} + {INFLUENCE}{INFLUENCE_ICON}" />
 		<string id="16j0bNi9" text="Merchants Guild" />
 		<string id="dWaFry84" text="Masons Guild" />
 		<string id="krjTACeT" text="Metalsmiths Guild" />
