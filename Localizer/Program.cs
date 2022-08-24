@@ -5,11 +5,13 @@ namespace Localizer;
 
 internal class Program
 {
-    private static List<string> UsedLocalizationIDs;
+    private static List<string> _usedLocalizationIDs = null!;
+    private static Random _random = null!;
 
     private static void Main(string[] args)
     {
-        UsedLocalizationIDs = new List<string>();
+        _usedLocalizationIDs = new List<string>();
+        _random = new Random();
 
         Console.WriteLine("Enter path to source folder:");
         var sourceFolder = Console.ReadLine();
@@ -62,7 +64,7 @@ internal class Program
                 continue;
             }
 
-            UsedLocalizationIDs.Add(stringNode.Attributes!["id"]?.Value!);
+            _usedLocalizationIDs.Add(stringNode.Attributes!["id"]?.Value!);
         }
     }
 
@@ -120,18 +122,16 @@ internal class Program
     private static string GetLocalizationID()
     {
         const string allowedChars = "ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz0123456789";
-
-        var random = new Random();
         var chars = new char[9];
 
         for (var i = 0; i < 9; i++)
         {
-            chars[i] = allowedChars[random.Next(0, allowedChars.Length)];
+            chars[i] = allowedChars[_random.Next(0, allowedChars.Length)];
         }
 
         var guid = new string(chars);
 
-        return UsedLocalizationIDs.Contains(guid)
+        return _usedLocalizationIDs.Contains(guid)
             ? GetLocalizationID() 
             : guid;
     }
