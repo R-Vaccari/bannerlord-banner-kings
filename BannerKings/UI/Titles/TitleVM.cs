@@ -86,7 +86,7 @@ namespace BannerKings.UI.Titles
                 var usurpData = model.GetAction(ActionType.Usurp, title, Hero.MainHero);
                 if (title.GetHeroClaim(Hero.MainHero) != ClaimType.None)
                 {
-                    var usurpButton = new DecisionElement().SetAsButtonOption(new TextObject("{=THzxMLuz3}Usurp").ToString(),
+                    var usurpButton = new DecisionElement().SetAsButtonOption(new TextObject("{=XiBpnkBpr}Usurp").ToString(),
                         () => UIHelper.ShowActionPopup(usurpData, this));
                     usurpButton.Enabled = usurpData.Possible;
                     Decisions.Add(usurpButton);
@@ -95,7 +95,7 @@ namespace BannerKings.UI.Titles
                 var claimAction = model.GetAction(ActionType.Claim, title, Hero.MainHero);
                 if (claimAction.Possible)
                 {
-                    var claimButton = new DecisionElement().SetAsButtonOption(new TextObject("{=WU211eL1P}Claim").ToString(),
+                    var claimButton = new DecisionElement().SetAsButtonOption(new TextObject("{=e20OnXiC3}Claim").ToString(),
                         () => UIHelper.ShowActionPopup(claimAction, this));
                     claimButton.Enabled = claimAction.Possible;
                     Decisions.Add(claimButton);
@@ -104,7 +104,7 @@ namespace BannerKings.UI.Titles
                 var grantData = model.GetAction(ActionType.Grant, title, Hero.MainHero);
                 if (grantData.Possible)
                 {
-                    var grantButton = new DecisionElement().SetAsButtonOption(new TextObject("{=CPfNESB6c}Grant").ToString(),
+                    var grantButton = new DecisionElement().SetAsButtonOption(new TextObject("{=VieVZdKJd}Grant").ToString(),
                         () => UIHelper.ShowActionPopup(grantData, this));
                     grantButton.Enabled = grantData.Possible;
                     Decisions.Add(grantButton);
@@ -113,7 +113,7 @@ namespace BannerKings.UI.Titles
                 var revokeData = model.GetAction(ActionType.Revoke, title, Hero.MainHero);
                 if (revokeData.Possible)
                 {
-                    var revokeButton = new DecisionElement().SetAsButtonOption(new TextObject("{=WKNSrJro7}Revoke").ToString(),
+                    var revokeButton = new DecisionElement().SetAsButtonOption(new TextObject("{=swOt7jrtt}Revoke").ToString(),
                         () => UIHelper.ShowActionPopup(revokeData, this));
                     revokeButton.Enabled = revokeData.Possible;
                     Decisions.Add(revokeButton);

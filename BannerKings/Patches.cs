@@ -316,7 +316,7 @@ namespace BannerKings
                     if (modifierRate != 0f)
                     {
                         result.Add(MBMath.ClampFloat(modifierRate / totalModifiers, -5f, 5f),
-                            new TextObject("{=OM3iyDWeV}Food quality"));
+                            new TextObject("{=229NSL5Ph}Food quality"));
                     }
 
                     return false;

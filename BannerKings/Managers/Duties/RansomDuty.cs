@@ -54,7 +54,7 @@ namespace BannerKings.Managers.Duties
             GameTexts.SetVariable("REMAINING", Completion);
             InformationManager.ShowInquiry(new InquiryData("Duty of Ransom Aid",
                 new TextObject(
-                        "{=XGpWkg7Gs} Your suzerain, {SUZERAIN}, has requested that you fulfill your contract obligations and pay him {RANSOM} gold in order to compensate their ransom. You have {REMAINING} days left to pay it.")
+                        "{=oU97uPcyp} Your suzerain, {SUZERAIN}, has requested that you fulfill your contract obligations and pay him {RANSOM} gold in order to compensate their ransom. You have {REMAINING} days left to pay it.")
                     .ToString(),
                 true, true, "Pay Immediatly", "Withhold For a Day", delegate { Finish(); }, null));
         }

@@ -33,7 +33,7 @@ namespace BannerKings.Models.Vanilla
             result.LimitMin(0f);
             result.LimitMax(50f);
             var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
-            result.Add(data.TotalPop / 1200f, new TextObject("{=fo3p73b5s}Total population"));
+            result.Add(data.TotalPop / 1200f, new TextObject("{=cknf20XdV}Total population"));
 
             if (settlement.OwnerClan != null)
             {
@@ -146,7 +146,7 @@ namespace BannerKings.Models.Vanilla
         private int CalculateDailyConstructionPowerInternal(Town town, ref ExplainedNumber result, bool omitBoost = false)
         {
             var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
-            result.Add(GetWorkforce(town.Settlement), new TextObject("{=kkgOstLQ7}Workforce"));
+            result.Add(GetWorkforce(town.Settlement), new TextObject("{=KFLDnCgX3}Workforce"));
             result.Add(3f, new TextObject("Base"));
 
             var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(town.OwnerClan.Leader);

@@ -46,7 +46,7 @@ namespace BannerKings.Models.BKModels
             }
 
             float decisions = BannerKingsConfig.Instance.PolicyManager.GetActiveCostlyDecisionsNumber(settlement);
-            baseResult.Add(0.025f * decisions, new TextObject("{=xKcVLpMQb}Active decisions"));
+            baseResult.Add(0.025f * decisions, new TextObject("{=qMfsDhTy1}Active decisions"));
 
             return baseResult;
         }

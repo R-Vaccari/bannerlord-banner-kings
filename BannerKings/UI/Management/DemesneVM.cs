@@ -191,7 +191,7 @@ namespace BannerKings.UI.Management
                     new TextObject("{TEXT}\nCurrent demesne:\n{CURRENT}\n \nLimit:\n{LIMIT}")
                         .SetTextVariable("TEXT",
                             new TextObject(
-                                "{=XA0uX2iC9}Demesne limit describes how many settlements you may own without negative implications. Different settlement types have different weights, villages being the lowest, towns being the highest. Being over the limit reduces stability across all your settlements. Owning a settlement's title will reduce it's weight."))
+                                "{=TEJqTcjeo}Demesne limit describes how many settlements you may own without negative implications. Different settlement types have different weights, villages being the lowest, towns being the highest. Being over the limit reduces stability across all your settlements. Owning a settlement's title will reduce it's weight."))
                         .SetTextVariable("CURRENT", currentDemesne.GetExplanations())
                         .SetTextVariable("LIMIT", demesneCap.GetExplanations())
                         .ToString()));
@@ -206,7 +206,7 @@ namespace BannerKings.UI.Management
                     new TextObject("{TEXT}\nCurrent demesne:\n{CURRENT}\n \nLimit:\n{LIMIT}")
                         .SetTextVariable("TEXT",
                             new TextObject(
-                                "{=W6Q99Hx8c}Unlanded demesne limit describes how many unlanded titles you may own. Unlanded titles are titles such as dukedoms and kingdoms - titles not directly associated with a settlement. Dukedoms have the lowest weight while empires have the biggest. Being over the limit progressively reduces relations with your vassals."))
+                                "{=yqYUPyU4B}Unlanded demesne limit describes how many unlanded titles you may own. Unlanded titles are titles such as dukedoms and kingdoms - titles not directly associated with a settlement. Dukedoms have the lowest weight while empires have the biggest. Being over the limit progressively reduces relations with your vassals."))
                         .SetTextVariable("CURRENT", currentUnlandedDemesne.GetExplanations())
                         .SetTextVariable("LIMIT", unlandedDemesneCap.GetExplanations())
                         .ToString()));
@@ -219,7 +219,7 @@ namespace BannerKings.UI.Management
                     new TextObject("{TEXT}\nCurrent vassals:\n{CURRENT}\n \nLimit:\n{LIMIT}")
                         .SetTextVariable("TEXT",
                             new TextObject(
-                                "{=KfTS4KbHO}Vassal limit is how many vassals you may have without negative consequences. Vassals are clans whose highest title are under your own (ie, a barony title under your county title, or knight clans with a single lordship) or knights in your clan. Knights only weight 0.5 towards the limit, while clan leaders weight 1. Companions and family members do not count. Being over the limit progressively reduces your influence gain."))
+                                "{=ntQARi9Mi}Vassal limit is how many vassals you may have without negative consequences. Vassals are clans whose highest title are under your own (ie, a barony title under your county title, or knight clans with a single lordship) or knights in your clan. Knights only weight 0.5 towards the limit, while clan leaders weight 1. Companions and family members do not count. Being over the limit progressively reduces your influence gain."))
                         .SetTextVariable("CURRENT", currentVassals.GetExplanations())
                         .SetTextVariable("LIMIT", vassalsCap.GetExplanations())
                         .ToString()));

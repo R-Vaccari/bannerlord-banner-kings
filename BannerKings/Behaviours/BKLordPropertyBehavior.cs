@@ -58,7 +58,7 @@ namespace BannerKings.Behaviours
                         if (kingdom == Clan.PlayerClan.Kingdom)
                         {
                             InformationManager.DisplayMessage(new InformationMessage(
-                                new TextObject("{=xWq9shSjE}The {CLAN} now own {WORKSHOP} at {TOWN}.")
+                                new TextObject("{=eSPyjJsf2}The {CLAN} now own {WORKSHOP} at {TOWN}.")
                                     .SetTextVariable("CLAN", lord.Clan.Name)
                                     .SetTextVariable("WORKSHOP", random.Name)
                                     .SetTextVariable("TOWN", random.Settlement.Name)

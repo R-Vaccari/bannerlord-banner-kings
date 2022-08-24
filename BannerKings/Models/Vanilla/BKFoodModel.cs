@@ -44,8 +44,8 @@ namespace BannerKings.Models.Vanilla
             // ------- Pops / Prosperity consumption ---------
             var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
 
-            result.Add(GetPopulationFoodConsumption(data).ResultNumber, new TextObject("{=vmJyMgjtc}Population Consumption"));
-            result.Add(GetPopulationFoodProduction(data, town).ResultNumber, new TextObject("{=VFMfAWUTo}Population Production"));
+            result.Add(GetPopulationFoodConsumption(data).ResultNumber, new TextObject("{=zQp3AQ4mU}Population Consumption"));
+            result.Add(GetPopulationFoodProduction(data, town).ResultNumber, new TextObject("{=wN8ZFoLM9}Population Production"));
 
             //float prosperityImpact = -town.Owner.Settlement.Prosperity / (town.IsCastle ? 400f : 120f);
             //result.Add(prosperityImpact, new TextObject("Prosperity effect"), null);
@@ -107,7 +107,7 @@ namespace BannerKings.Models.Vanilla
                 }
             }
 
-            result.Add(marketConsumption, new TextObject("{=H9NTwYXUR}Market consumption"));
+            result.Add(marketConsumption, new TextObject("{=4WyhpxjW5}Market consumption"));
 
             GetSettlementFoodChangeDueToIssues(town, ref result);
             return result;
@@ -157,12 +157,12 @@ namespace BannerKings.Models.Vanilla
 
             if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(data.Settlement, "decision_ration"))
             {
-                result.AddFactor(-0.4f, new TextObject("{=Q60qY9UHf}Enforce rations decision"));
+                result.AddFactor(-0.4f, new TextObject("{=YnXdZmBCP}Enforce rations decision"));
             }
 
             if (data.Settlement.IsCastle)
             {
-                result.AddFactor(-0.1f, new TextObject("{=JzhMS6o3E}Castle rations"));
+                result.AddFactor(-0.1f, new TextObject("{=0YDLsujdx}Castle rations"));
             }
 
             return result;
@@ -176,21 +176,21 @@ namespace BannerKings.Models.Vanilla
             if (!town.IsUnderSiege)
             {
                 var landData = data.LandData;
-                result.Add(landData.Farmland * landData.GetAcreOutput("farmland"), new TextObject("{=FdaitZ3mp}Farmlands"));
-                result.Add(landData.Pastureland * landData.GetAcreOutput("pasture"), new TextObject("{=LGgZqnVWv}Pasturelands"));
-                result.Add(landData.Woodland * landData.GetAcreOutput("wood"), new TextObject("{=LtHcxFc9m}Woodlands"));
+                result.Add(landData.Farmland * landData.GetAcreOutput("farmland"), new TextObject("{=DMQ8epRa2}Farmlands"));
+                result.Add(landData.Pastureland * landData.GetAcreOutput("pasture"), new TextObject("{=ORNAEZXOa}Pasturelands"));
+                result.Add(landData.Woodland * landData.GetAcreOutput("wood"), new TextObject("{=LxWGQ3i9r}Woodlands"));
                 var fertility = landData.Fertility - 1f;
                 if (fertility != 0f)
                 {
                     var toDeduce = result.ResultNumber * fertility;
-                    result.Add(toDeduce, new TextObject("{=nuDvn9ZJT}Fertility"));
+                    result.Add(toDeduce, new TextObject("{=77WgZQzq8}Fertility"));
                 }
 
                 var saturation = MBMath.ClampFloat(landData.WorkforceSaturation, 0f, 1f) - 1f;
                 if (saturation != 0f)
                 {
                     var toDeduce = result.ResultNumber * saturation;
-                    result.Add(toDeduce, new TextObject("{=C3zMHusj5}Workforce Saturation"));
+                    result.Add(toDeduce, new TextObject("{=q1kNHXEyK}Workforce Saturation"));
                 }
 
                 float season = CampaignTime.Now.GetSeasonOfYear;

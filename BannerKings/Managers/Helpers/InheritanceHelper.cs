@@ -104,7 +104,7 @@ namespace BannerKings.Managers.Helpers
                         }
 
                         InformationManager.DisplayMessage(new InformationMessage(
-                            new TextObject("{=auKSRKVgv}The {NEW} has branched off from {ORIGINAL} due to inheritance laws.")
+                            new TextObject("{=WWfefVv0z}The {NEW} has branched off from {ORIGINAL} due to inheritance laws.")
                                 .SetTextVariable("NEW", newClan.Name)
                                 .SetTextVariable("ORIGINAL", victim.Clan.Name)
                                 .ToString()));
@@ -141,7 +141,7 @@ namespace BannerKings.Managers.Helpers
                      ChangeClanLeaderAction.ApplyWithSelectedNewLeader(victim.Clan, heir);
                      BannerKingsConfig.Instance.TitleManager.InheritTitle(victim, heir, title);
                      if (Clan.PlayerClan == heir.Clan)
-                         InformationManager.AddQuickInformation(new TextObject("{=R4VYj5p8q}{HEIR} has rightfully inherited the {TITLE}")
+                         InformationManager.AddQuickInformation(new TextObject("{=qwTB8HqnY}{HEIR} has rightfully inherited the {TITLE}")
                              .SetTextVariable("HEIR", heir.Name)
                              .SetTextVariable("TITLE", title.FullName));
     

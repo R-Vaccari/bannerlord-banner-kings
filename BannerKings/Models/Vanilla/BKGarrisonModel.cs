@@ -23,10 +23,10 @@ namespace BannerKings.Models.Vanilla
                 switch (garrison)
                 {
                     case GarrisonPolicy.Dischargement:
-                        baseResult.Add(-1f, new TextObject("{=FS1Wdj52B}Garrison policy"));
+                        baseResult.Add(-1f, new TextObject("{=prm0pXs5m}Garrison policy"));
                         break;
                     case GarrisonPolicy.Enlistment:
-                        baseResult.Add(1f, new TextObject("{=FS1Wdj52B}Garrison policy"));
+                        baseResult.Add(1f, new TextObject("{=prm0pXs5m}Garrison policy"));
                         break;
                 }
             }

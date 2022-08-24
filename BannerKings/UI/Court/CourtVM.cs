@@ -53,9 +53,9 @@ namespace BannerKings.UI.Court
 
         [DataSourceProperty] public string FamilyText => GameTexts.FindText("str_family_group").ToString();
 
-        [DataSourceProperty] public string CourtiersText => new TextObject("{=DYaJTO3Xy}Courtiers").ToString();
+        [DataSourceProperty] public string CourtiersText => new TextObject("{=JX18BUJks}Courtiers").ToString();
 
-        [DataSourceProperty] public string EffectsText => new TextObject("{=1fhKZBbrp}Effects").ToString();
+        [DataSourceProperty] public string EffectsText => new TextObject("{=aromyBA8J}Effects").ToString();
 
         [DataSourceProperty] public string PrivilegesText => new TextObject("{=bk_privileges}Privileges").ToString();
 
@@ -275,20 +275,20 @@ namespace BannerKings.UI.Court
 
             var royalExplanation = BannerKingsConfig.Instance.CouncilModel.IsCouncilRoyal(council.Owner.Clan);
             IsRoyal = royalExplanation.Item1;
-            CourtInfo.Add(new InformationElement(new TextObject("{=fJt107RaO}Crown council:").ToString(),
+            CourtInfo.Add(new InformationElement(new TextObject("{=9qmdhsSFg}Crown council:").ToString(),
                 GameTexts.FindText(royalExplanation.Item1 ? "str_yes" : "str_no").ToString(), royalExplanation.Item2));
 
             var rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(council.Owner);
-            CourtInfo.Add(new InformationElement(new TextObject("{=MwD5Nths1}Court Religion:").ToString(),
+            CourtInfo.Add(new InformationElement(new TextObject("{=AdmpziKCp}Court Religion:").ToString(),
                 rel != null ? rel.GetName().ToString() : GameTexts.FindText("role", "None").ToString(),
                 new TextObject(
-                        "{=tvptaSGJO}This council's owner's faith. Candidates for religious positions must adhere to the same faith. Other council positions may be affected by the faith's doctrines.")
+                        "{=f54tkMvSR}This council's owner's faith. Candidates for religious positions must adhere to the same faith. Other council positions may be affected by the faith's doctrines.")
                     .ToString()));
 
-            CourtInfo.Add(new InformationElement(new TextObject("{=9FT9UuRme}Court Language:").ToString(),
+            CourtInfo.Add(new InformationElement(new TextObject("{=3JXNTfD8i}Court Language:").ToString(),
                 BannerKingsConfig.Instance.EducationManager.GetNativeLanguage(council.Owner).Name.ToString(),
                 new TextObject(
-                        "{=JeePTqT3s}This council's owner's language. Courtiers that do not speak the language may feel alienated.")
+                        "{=7bFizW9aL}This council's owner's language. Courtiers that do not speak the language may feel alienated.")
                     .ToString()));
 
             foreach (var position in council.Positions)
@@ -348,19 +348,19 @@ namespace BannerKings.UI.Court
                     positionString = GameTexts.FindText("role", "ClanLeader").ToString();
                 }
 
-                CourtierInfo.Add(new InformationElement(new TextObject("{=isFWUWCYN}Council Position:").ToString(), positionString,
+                CourtierInfo.Add(new InformationElement(new TextObject("{=N0vY0onhi}Council Position:").ToString(), positionString,
                     string.Empty));
 
                 var languagesString = "";
                 foreach (var pair in BannerKingsConfig.Instance.EducationManager.GetHeroEducation(currentCharacter.Hero)
                              .Languages)
                 {
-                    languagesString += new TextObject("{=rPZRVfqVV}{LANGUAGE} ({COMPETENCE}),")
+                    languagesString += new TextObject("{=kNOve9OCi}{LANGUAGE} ({COMPETENCE}),")
                         .SetTextVariable("LANGUAGE", pair.Key.Name)
                         .SetTextVariable("COMPETENCE", UIHelper.GetLanguageFluencyText(pair.Value));
                 }
 
-                CourtierInfo.Add(new InformationElement(new TextObject("{=ArCZsNtbS}Languages:").ToString(),
+                CourtierInfo.Add(new InformationElement(new TextObject("{=FkXB8VeZQ}Languages:").ToString(),
                     languagesString.Remove(languagesString.Length - 1), string.Empty));
             }
         }

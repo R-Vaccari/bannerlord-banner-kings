@@ -65,7 +65,7 @@ namespace BannerKings.UI.CampaignStart
             };
 
             UIHelper.TooltipAddEmptyLine(list);
-            list.Add(new TooltipProperty(new TextObject("{=nCf63SeHk}Stats").ToString(), " ", 0));
+            list.Add(new TooltipProperty(new TextObject("{=3tW7XECCz}Stats").ToString(), " ", 0));
             UIHelper.TooltipAddSeperator(list);
 
             MBTextManager.SetTextVariable("LEFT", GameTexts.FindText("str_gold"));
@@ -83,7 +83,7 @@ namespace BannerKings.UI.CampaignStart
             MBTextManager.SetTextVariable("LEFT", GameTexts.FindText("str_party_morale"));
             list.Add(new TooltipProperty(GameTexts.FindText("str_LEFT_ONLY").ToString(), Morale, 0));
 
-            list.Add(new TooltipProperty(new TextObject("{=GdwkCKUEZ}Criminal").ToString(), Criminal, 0));
+            list.Add(new TooltipProperty(new TextObject("{=QsAcFn537}Criminal").ToString(), Criminal, 0));
 
             return list;
         }

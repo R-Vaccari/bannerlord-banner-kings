@@ -12,7 +12,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
 
         public override TextObject GetName()
         {
-            return new TextObject("{=UO47hvgg6}Zabiha");
+            return new TextObject("{=sLUagtwZW}Zabiha");
         }
     }
 }

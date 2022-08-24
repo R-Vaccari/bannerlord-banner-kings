@@ -87,7 +87,7 @@ namespace BannerKings.Models.Vanilla
                             value = -0.3f;
                         }
 
-                        baseResult.Add(value, new TextObject("{=HwMBjhpdP}Criminal policy"));
+                        baseResult.Add(value, new TextObject("{=5QdTKYeXm}Criminal policy"));
                         break;
                     }
                     case CriminalPolicy.Forgiveness:
@@ -102,7 +102,7 @@ namespace BannerKings.Models.Vanilla
                             value = -0.3f;
                         }
 
-                        baseResult.Add(value, new TextObject("{=HwMBjhpdP}Criminal policy"));
+                        baseResult.Add(value, new TextObject("{=5QdTKYeXm}Criminal policy"));
                         break;
                     }
                 }
@@ -110,13 +110,13 @@ namespace BannerKings.Models.Vanilla
                 if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(town.Settlement, "decision_ration"))
                 {
                     baseResult.Add(town.IsUnderSiege || town.FoodStocks >= town.FoodStocksUpperLimit() * 0.1f ? -2f : -4f,
-                        new TextObject("{=heAYDdyXQ}Enforce rations decision"));
+                        new TextObject("{=K52sqxS5R}Enforce rations decision"));
                 }
 
                 var government = BannerKingsConfig.Instance.TitleManager.GetSettlementGovernment(town.Settlement);
                 if (government == GovernmentType.Republic)
                 {
-                    baseResult.Add(1f, new TextObject("{=Za8A8fsWX}Government"));
+                    baseResult.Add(1f, new TextObject("{=GUDuUu0hG}Government"));
                 }
 
                 baseResult.Add(2f * data.Autonomy, new TextObject("Autonomy"));

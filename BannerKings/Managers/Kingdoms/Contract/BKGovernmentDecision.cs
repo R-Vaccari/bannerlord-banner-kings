@@ -116,7 +116,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
                 {
                     if (succession != SuccessionType.Imperial)
                     {
-                        effects = new TextObject("{=bTfzwdNx2}Succession will be changed to Imperial succession.");
+                        effects = new TextObject("{=NvC36QFsr}Succession will be changed to Imperial succession.");
                     }
 
                     break;
@@ -125,7 +125,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
                 {
                     if (succession != SuccessionType.Elective_Monarchy && succession != SuccessionType.Hereditary_Monarchy)
                     {
-                        effects = new TextObject("{=fphaZNBjq}Succession will be changed to Hereditary Monarchy succession.");
+                        effects = new TextObject("{=DYStzuaYW}Succession will be changed to Hereditary Monarchy succession.");
                     }
 
                     break;
@@ -134,7 +134,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
                 {
                     if (succession != SuccessionType.Elective_Monarchy && succession != SuccessionType.Hereditary_Monarchy)
                     {
-                        effects = new TextObject("{=kkT03jYv2}Succession will be changed to Elective Monarchy succession.");
+                        effects = new TextObject("{=SnJmZoCxX}Succession will be changed to Elective Monarchy succession.");
                     }
 
                     break;
@@ -143,7 +143,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
                 {
                     if (succession != SuccessionType.Republic)
                     {
-                        effects = new TextObject("{=ca81wGibJ}Succession will be changed to Republican succession.");
+                        effects = new TextObject("{=NjQCjYh19}Succession will be changed to Republican succession.");
                     }
 
                     break;
@@ -243,7 +243,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
 
         public override TextObject GetChooseTitle()
         {
-            var textObject = new TextObject("{=cPfypZ4WR}Change government to {GOVERNMENT}");
+            var textObject = new TextObject("{=voKz3aTn1}Change government to {GOVERNMENT}");
             textObject.SetTextVariable("GOVERNMENT", governmentType.ToString());
             return textObject;
         }
@@ -255,13 +255,13 @@ namespace BannerKings.Managers.Kingdoms.Contract
             var newGovernment = ((GovernmentDecisionOutcome) chosenOutcome).ShouldDecisionBeEnforced;
             if (newGovernment)
             {
-                textObject = new TextObject("{=TKkZcusUh}The {KINGDOM}'s government is now {POLICY_DESCRIPTION}. {POLICY_SUPPORT}");
+                textObject = new TextObject("{=57PK9zjR0}The {KINGDOM}'s government is now {POLICY_DESCRIPTION}. {POLICY_SUPPORT}");
             }
             else
             {
                 textObject =
                     new TextObject(
-                        "{=dzjQOX53J}The {KINGDOM}'s government will continue to be {POLICY_DESCRIPTION}. {POLICY_SUPPORT}");
+                        "{=zsTiGNXXn}The {KINGDOM}'s government will continue to be {POLICY_DESCRIPTION}. {POLICY_SUPPORT}");
             }
 
 
@@ -311,7 +311,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
         {
             var textObject =
                 new TextObject(
-                    "{=VBpButL8Z}{CLAN} proposes a change of government, currently {CURRENT} to {PROPOSED}. You can pick your stance regarding this decision.");
+                    "{=Mgr4TP9k7}{CLAN} proposes a change of government, currently {CURRENT} to {PROPOSED}. You can pick your stance regarding this decision.");
 
             textObject.SetTextVariable("CLAN", DetermineChooser().Leader.Name);
             textObject.SetTextVariable("CURRENT",
@@ -322,7 +322,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
 
         public override TextObject GetSupportTitle()
         {
-            var textObject = new TextObject("{=738hZHwes}Vote to change form of government to {GOVERNMENT}");
+            var textObject = new TextObject("{=vcRAtgOCv}Vote to change form of government to {GOVERNMENT}");
             textObject.SetTextVariable("GOVERNMENT", governmentType.ToString());
             return textObject;
         }

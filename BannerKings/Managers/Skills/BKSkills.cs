@@ -19,20 +19,20 @@ namespace BannerKings.Managers.Skills
         public override void Initialize()
         {
             Scholarship = Game.Current.ObjectManager.RegisterPresumedObject(new SkillObject("Scholarship"));
-            Scholarship.Initialize(new TextObject("{=D0sgpFT5w}Scholarship"),
-                    new TextObject("{=Gxjk3XPiC}Reading and writting competence as well as knowledge over literary and legal matters."),
+            Scholarship.Initialize(new TextObject("{=vfp8kzB4k}Scholarship"),
+                    new TextObject("{=AK6XaECvO}Reading and writting competence as well as knowledge over literary and legal matters."),
                     SkillObject.SkillTypeEnum.Personal)
                 .SetAttribute(BKAttributes.Instance.Wisdom);
 
             Theology = Game.Current.ObjectManager.RegisterPresumedObject(new SkillObject("Theology"));
-            Theology.Initialize(new TextObject("{=sUVDddsqR}Theology"),
-                    new TextObject("{=k5sz6rE6x}Understanding over spiritual matters. Normally reserved for preachers and the most pious faithful."),
+            Theology.Initialize(new TextObject("{=5XOq4J0wh}Theology"),
+                    new TextObject("{=pqAxqa0Jt}Understanding over spiritual matters. Normally reserved for preachers and the most pious faithful."),
                     SkillObject.SkillTypeEnum.Personal)
                 .SetAttribute(BKAttributes.Instance.Wisdom);
 
             Lordship = Game.Current.ObjectManager.RegisterPresumedObject(new SkillObject("Lordship"));
-            Lordship.Initialize(new TextObject("{=ofVha23vb}Lordship"),
-                    new TextObject("{=5GnYzjFJA}Ability to deal with legal administration of titles and feudal contracts."),
+            Lordship.Initialize(new TextObject("{=fM8vJDS0J}Lordship"),
+                    new TextObject("{=XmwkJiRZD}Ability to deal with legal administration of titles and feudal contracts."),
                     SkillObject.SkillTypeEnum.Personal)
                 .SetAttribute(BKAttributes.Instance.Wisdom);
         }

@@ -25,12 +25,12 @@ namespace BannerKings.Models.BKModels
 
             if (nobles > 0)
             {
-                result.Add(nobles / 100000f, new TextObject("{=v1Gk4emTS}Nobles"));
+                result.Add(nobles / 100000f, new TextObject("{=AAZZeZJFw}Nobles"));
             }
 
             if (craftsmen > 0)
             {
-                result.Add(craftsmen / 150000f, new TextObject("{=OhVAiyDJo}Craftsmen"));
+                result.Add(craftsmen / 150000f, new TextObject("{=FMuNEucAw}Craftsmen"));
             }
 
             if (settlement.Owner.GetPerkValue(BKPerks.Instance.ScholarshipPeerReview))

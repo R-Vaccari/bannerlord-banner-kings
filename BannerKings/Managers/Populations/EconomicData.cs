@@ -92,7 +92,7 @@ namespace BannerKings.Managers.Populations
                 {
                     guild = new Guild(settlement, notable, Guild.GetSuitableTrade(settlement, notable));
                     notable.AddPower(-100f);
-                    InformationManager.DisplayMessage(new InformationMessage(new TextObject("{=AhHa6OOuc}{HERO} has formed a {GUILD} at {TOWN}.")
+                    InformationManager.DisplayMessage(new InformationMessage(new TextObject("{=B4cfFVCCC}{HERO} has formed a {GUILD} at {TOWN}.")
                         .SetTextVariable("HERO", notable.Name)
                         .SetTextVariable("GUILD", guild.GuildType.Name)
                         .SetTextVariable("TOWN", settlement.Name)
