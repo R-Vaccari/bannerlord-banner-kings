@@ -1,4 +1,4 @@
-﻿using BannerKings.Managers.Court;
+using BannerKings.Managers.Court;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Titles;
@@ -52,25 +52,25 @@ namespace BannerKings.Models.Vanilla
                 if (nobles > 0f)
                 {
                     baseResult.Add(MBMath.ClampFloat(nobles * NOBLE_OUTPUT, 0f, 50000f),
-                        new TextObject("{=!}{CLASS} output").SetTextVariable("CLASS", "Nobles"));
+                        new TextObject("{=Pp69jXRrv}{CLASS} output").SetTextVariable("CLASS", "Nobles"));
                 }
 
                 if (craftsmen > 0f)
                 {
                     baseResult.Add(MBMath.ClampFloat(craftsmen * CRAFTSMEN_OUTPUT, 0f, 50000f),
-                        new TextObject("{=!}{CLASS} output").SetTextVariable("CLASS", "Craftsmen"));
+                        new TextObject("{=Pp69jXRrv}{CLASS} output").SetTextVariable("CLASS", "Craftsmen"));
                 }
 
                 if (serfs > 0f)
                 {
                     baseResult.Add(MBMath.ClampFloat(serfs * SERF_OUTPUT, 0f, 50000f),
-                        new TextObject("{=!}{CLASS} output").SetTextVariable("CLASS", "Serfs"));
+                        new TextObject("{=Pp69jXRrv}{CLASS} output").SetTextVariable("CLASS", "Serfs"));
                 }
 
                 if (slaves > 0f)
                 {
                     baseResult.Add(MBMath.ClampFloat(slaves * SLAVE_OUTPUT, 0f, 50000f),
-                        new TextObject("{=!}{CLASS} output").SetTextVariable("CLASS", "Slaves"));
+                        new TextObject("{=Pp69jXRrv}{CLASS} output").SetTextVariable("CLASS", "Slaves"));
                 }
 
                 var taxType = ((BKTaxPolicy) BannerKingsConfig.Instance.PolicyManager.GetPolicy(town.Settlement, "tax"))
@@ -88,7 +88,7 @@ namespace BannerKings.Models.Vanilla
                 var legitimacy = (LegitimacyType) new BKLegitimacyModel().CalculateEffect(town.Settlement).ResultNumber;
                 if (legitimacy == LegitimacyType.Lawful)
                 {
-                    baseResult.AddFactor(0.05f, new TextObject("{=!}Legitimiacy"));
+                    baseResult.AddFactor(0.05f, new TextObject("{=1KRxK2dwH}Legitimiacy"));
                 }
 
                 var admCost = new BKAdministrativeModel().CalculateEffect(town.Settlement).ResultNumber;
@@ -96,7 +96,7 @@ namespace BannerKings.Models.Vanilla
 
                 if (baseResult.ResultNumber > 0f)
                 {
-                    baseResult.AddFactor(-0.6f * data.Autonomy, new TextObject("{=!}Autonomy"));
+                    baseResult.AddFactor(-0.6f * data.Autonomy, new TextObject("{=JeSJ9EfDu}Autonomy"));
                 }
 
                 CalculateDueTax(data, baseResult.ResultNumber);

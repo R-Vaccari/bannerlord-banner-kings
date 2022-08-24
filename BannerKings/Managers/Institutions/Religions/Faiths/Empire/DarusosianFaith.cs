@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Library;
@@ -10,13 +10,13 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Empire
     {
         public override TextObject GetFaithName()
         {
-            return new TextObject("{=!}Darusosian Martyrdom");
+            return new TextObject("{=PODjjyyrJ}Darusosian Martyrdom");
         }
 
         public override TextObject GetFaithDescription()
         {
             return new TextObject(
-                "{=!}Though the Calradic Empire had long possessed an imperial cult to venerate Emperors who were deemed to be “deliverers” and “saviors” of the civilized world, during the latter years prior to the schism and inerrenegrum the practice of viewing all emperors as god-emperors had become vulgorously commonplace. It was during this period that doctrines and reforms attributed to the teenage Emperor Darusos, a figure infamously denied the rite of the divus by the generals who usurped him, were uncovered. Viewed as a divine Martyr, rebels and lesser cults throughout the Empire began to preach his teachings and claim that the divinity of the imperial line was inherent; that the rite of the divus was a formality at best or a means of vaunting false emperors to positions of divine power. Now worshiped throughout the Southern Empire and in hidden cells of far flung holdings, the Darusosian Martyrdom preach the divine mandate that enshrines the rulership of the line of Arenicos. Lay flamines, their purer superiors of the Flamines Castus, and the figurehead of the Rex Sacrarum of Lycaron, collect alms and absolve the sins of petty mortal ambition to those who seek to walk the path of the Martyr.");
+                "{=GUjDVOhg7}Though the Calradic Empire had long possessed an imperial cult to venerate Emperors who were deemed to be “deliverers” and “saviors” of the civilized world, during the latter years prior to the schism and inerrenegrum the practice of viewing all emperors as god-emperors had become vulgorously commonplace. It was during this period that doctrines and reforms attributed to the teenage Emperor Darusos, a figure infamously denied the rite of the divus by the generals who usurped him, were uncovered. Viewed as a divine Martyr, rebels and lesser cults throughout the Empire began to preach his teachings and claim that the divinity of the imperial line was inherent; that the rite of the divus was a formality at best or a means of vaunting false emperors to positions of divine power. Now worshiped throughout the Southern Empire and in hidden cells of far flung holdings, the Darusosian Martyrdom preach the divine mandate that enshrines the rulership of the line of Arenicos. Lay flamines, their purer superiors of the Flamines Castus, and the figurehead of the Rex Sacrarum of Lycaron, collect alms and absolve the sins of petty mortal ambition to those who seek to walk the path of the Martyr.");
         }
 
 
@@ -25,11 +25,11 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Empire
             var text = rank switch
             {
                 3 => new TextObject(
-                    "{=!}I’ve no qualms over many a mortal failing, but if you are to bind thine self to the throne of the Martyr and seek to untwist your soul of sin - you must serve none save for another Darusosian Martyr. Be it Rhagaea Pethros, the Divine Heir Ira Pethros; or any other who may yet emerge immaculate - you must serve only the ends of our Empire. Seek not to burden thyself with a hoard of filthy lucre, for denars shall twist thine soul to marred, mangled ends."),
+                    "{=VGjpHQNBE}I’ve no qualms over many a mortal failing, but if you are to bind thine self to the throne of the Martyr and seek to untwist your soul of sin - you must serve none save for another Darusosian Martyr. Be it Rhagaea Pethros, the Divine Heir Ira Pethros; or any other who may yet emerge immaculate - you must serve only the ends of our Empire. Seek not to burden thyself with a hoard of filthy lucre, for denars shall twist thine soul to marred, mangled ends."),
                 2 => new TextObject(
-                    "{=!}Be not one who acts unbenignantly, for we servants within the Darusosian Martyrdom need be graceful in our deeds. Do not sully your house with cohorts or spouses who were born of upstart states or pagan cultures who deny the will of the Martyr."),
+                    "{=ZhYFp68Z0}Be not one who acts unbenignantly, for we servants within the Darusosian Martyrdom need be graceful in our deeds. Do not sully your house with cohorts or spouses who were born of upstart states or pagan cultures who deny the will of the Martyr."),
                 _ => new TextObject(
-                    "{=!}Only a blind man would look upon the state of the Empire and think it saved. If you wish to remain in the good graces of the Darusosian Martyrdom, you should not seek to usurp the whims of the imperial throne. Should you be blessed to serve the house of Pethros, allow them to grant you territories - never make demands of them. If you fail to provide donations and services to our clergy, this too shall be noticed and your reputation shall fall.")
+                    "{=HH23AmwVW}Only a blind man would look upon the state of the Empire and think it saved. If you wish to remain in the good graces of the Darusosian Martyrdom, you should not seek to usurp the whims of the imperial throne. Should you be blessed to serve the house of Pethros, allow them to grant you territories - never make demands of them. If you fail to provide donations and services to our clergy, this too shall be noticed and your reputation shall fall.")
             };
 
             return text;
@@ -40,11 +40,11 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Empire
             var text = rank switch
             {
                 3 => new TextObject(
-                    "{=!}Give generously to the Martyrdom, for to do otherwise is to see patrician and plebeian alike suffer unjustly. Thou knowest also that many a foul upstart seeks to further denigrate our Empire. They must be rent asunder, their holdings broken, their deviant crowns shattered beneath our bootheels.Knoweth your purpose in our faith shall ever be as a cudgel and a bulwark.Lest you stumble across a mystery that transfixes thine mind, thou shall know peace only at our duty’s end."),
+                    "{=HLLTFf9Kv}Give generously to the Martyrdom, for to do otherwise is to see patrician and plebeian alike suffer unjustly. Thou knowest also that many a foul upstart seeks to further denigrate our Empire. They must be rent asunder, their holdings broken, their deviant crowns shattered beneath our bootheels.Knoweth your purpose in our faith shall ever be as a cudgel and a bulwark.Lest you stumble across a mystery that transfixes thine mind, thou shall know peace only at our duty’s end."),
                 2 => new TextObject(
-                    "{=!}Do not allow our enemies to remain comfortable in their belligerent stagnancy. Be as a scourge to the Embers of the Flame, but take not the heads of their heresiarch masters - they must learn penance upon the path to re-entering the Martyr’s good graces."),
+                    "{=vsqsb1Jfw}Do not allow our enemies to remain comfortable in their belligerent stagnancy. Be as a scourge to the Embers of the Flame, but take not the heads of their heresiarch masters - they must learn penance upon the path to re-entering the Martyr’s good graces."),
                 _ => new TextObject(
-                    "{=!}If the Empire goes to war against usurpers or savages, you must join and do your part. If you fail to act in service to the Calradic ideals of the Empire, you shall be acting in heresy against the will of Darusos, Arenicos, and all others who have been deified by their deeds on the throne.")
+                    "{=sTq3xgTkh}If the Empire goes to war against usurpers or savages, you must join and do your part. If you fail to act in service to the Calradic ideals of the Empire, you shall be acting in heresy against the will of Darusos, Arenicos, and all others who have been deified by their deeds on the throne.")
             };
 
             return text;
@@ -55,12 +55,12 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Empire
             var text = rank switch
             {
                 3 => new TextObject(
-                    "{=!}Oh, thou’rt of a kind to think they may posture before the Rex Sacrarum? Set thine eyes upon my personage with a coy and feigned humility? For what foul purpose doth thou think this shall profit them? To come before me so discourteously, as if I were some mere member of the lay flamines meant to play scenes of betrayal like some fool goliard of the upstart borderland principalities? Glory be to Darusos, for he was not spared or given mercy from unclean company which sought beyond their station and it seems now that I am to be tested in the same unkind way."),
+                    "{=n298UHGH6}Oh, thou’rt of a kind to think they may posture before the Rex Sacrarum? Set thine eyes upon my personage with a coy and feigned humility? For what foul purpose doth thou think this shall profit them? To come before me so discourteously, as if I were some mere member of the lay flamines meant to play scenes of betrayal like some fool goliard of the upstart borderland principalities? Glory be to Darusos, for he was not spared or given mercy from unclean company which sought beyond their station and it seems now that I am to be tested in the same unkind way."),
                 2 => new TextObject(
-                        "{=!}May you find the mercy not granted to the Martyr, {NAME}, for I have none to spare. You have the bearings and reputation of those who profit from the suffering of the Empire; a carrion beast treating our glorious nation as though it were a bloated carcass. The Martyr may yet save the soul of turncoats, rogues, blackguards and insurgents - but do not think me one so willing to stain my hands at your expense.")
+                        "{=xCY4NSqqN}May you find the mercy not granted to the Martyr, {NAME}, for I have none to spare. You have the bearings and reputation of those who profit from the suffering of the Empire; a carrion beast treating our glorious nation as though it were a bloated carcass. The Martyr may yet save the soul of turncoats, rogues, blackguards and insurgents - but do not think me one so willing to stain my hands at your expense.")
                     .SetTextVariable("NAME", Hero.MainHero.Name),
                 _ => new TextObject(
-                    "{=!}You have the look of one who has… defied the imperial acts of Calraditas. You do not carry yourself in a Calradic manner, nor way - I do not suppose you hold the Martyr, Darusos, in your heart? I apologize for my pejorative tone, I would offer you succor and hospitality for sake of commensality but I fear my words would offend you. Or rather, they would drive you to shameful sorrow or to mock a Martyr - dead by savage hands.I would not do you such an unkindness.Pray, forgive me. I shan’t go on unless you desire it.You may help yourself to wine and bread if you would like; never let it be said the lay flamen of[settlementname] has forgotten the virtues.")
+                    "{=ZP8LSVmL8}You have the look of one who has… defied the imperial acts of Calraditas. You do not carry yourself in a Calradic manner, nor way - I do not suppose you hold the Martyr, Darusos, in your heart? I apologize for my pejorative tone, I would offer you succor and hospitality for sake of commensality but I fear my words would offend you. Or rather, they would drive you to shameful sorrow or to mock a Martyr - dead by savage hands.I would not do you such an unkindness.Pray, forgive me. I shan’t go on unless you desire it.You may help yourself to wine and bread if you would like; never let it be said the lay flamen of[settlementname] has forgotten the virtues.")
             };
 
             return text;
@@ -71,13 +71,13 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Empire
             var text = rank switch
             {
                 3 => new TextObject(
-                        "{=!}Too often am I beset by the impudent rabble, souls defiled and piteous in their plight. To know your company, it seems a wise kindness. Thou’rt in search of clarity, of purpose; - one provided not by honeyed tongue nor second face - but one which would make thee dear to the Martyr and all we have sought to save. Speak thy part, {NAME}. Indulge thyself in terms most honorable.I shall receive thee, should our purposes coalesce.")
+                        "{=qyvHv0ChX}Too often am I beset by the impudent rabble, souls defiled and piteous in their plight. To know your company, it seems a wise kindness. Thou’rt in search of clarity, of purpose; - one provided not by honeyed tongue nor second face - but one which would make thee dear to the Martyr and all we have sought to save. Speak thy part, {NAME}. Indulge thyself in terms most honorable.I shall receive thee, should our purposes coalesce.")
                     .SetTextVariable("NAME", Hero.MainHero.Name),
                 2 => new TextObject(
-                        "{=!}May you find the mercy not granted to the Martyr, {NAME}, for I have none to spare. You have the bearings and reputation of those who profit from the suffering of the Empire; a carrion beast treating our glorious nation as though it were a bloated carcass. The Martyr may yet save the soul of turncoats, rogues, blackguards and insurgents - but do not think me one so willing to stain my hands at your expense.")
+                        "{=xCY4NSqqN}May you find the mercy not granted to the Martyr, {NAME}, for I have none to spare. You have the bearings and reputation of those who profit from the suffering of the Empire; a carrion beast treating our glorious nation as though it were a bloated carcass. The Martyr may yet save the soul of turncoats, rogues, blackguards and insurgents - but do not think me one so willing to stain my hands at your expense.")
                     .SetTextVariable("NAME", Hero.MainHero.Name),
                 _ => new TextObject(
-                    "{=!}Ave, citizen - and welcome. May I offer you wine and bread in commensality? I wish you hospitality and grace whilst under the auspices of the Empire. I am but the humble lay flamen of [settlementname], devoted to the service of those who anoint the Martyr Darusos and who accept the auctoritas divus of the imperial line. If you are friend, I bid you allow me offer you succor and comfort; if you are yet to accept the Martyr into your heart, pray allow me to elucidate.You shall know no regret save for time spent in ignorance of a beatific truth.")
+                    "{=jB4B0rMUi}Ave, citizen - and welcome. May I offer you wine and bread in commensality? I wish you hospitality and grace whilst under the auspices of the Empire. I am but the humble lay flamen of [settlementname], devoted to the service of those who anoint the Martyr Darusos and who accept the auctoritas divus of the imperial line. If you are friend, I bid you allow me offer you succor and comfort; if you are yet to accept the Martyr into your heart, pray allow me to elucidate.You shall know no regret save for time spent in ignorance of a beatific truth.")
             };
 
             return text;
@@ -90,7 +90,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Empire
             if (rank == 2)
             {
                 text = new TextObject(
-                    "{=!}Peace be upon you, my kin. Have you come to study the Code of Asera? I shall grant you what wisdom I have gleaned in my long hours of study, but as your brother I must tell you that I find myself more ignorant the more I realize the breadth of what there is still yet to learn.");
+                    "{=GDRRw7BOK}Peace be upon you, my kin. Have you come to study the Code of Asera? I shall grant you what wisdom I have gleaned in my long hours of study, but as your brother I must tell you that I find myself more ignorant the more I realize the breadth of what there is still yet to learn.");
             }
             else
             {
@@ -103,7 +103,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Empire
                 if (Hero.MainHero.Culture != Utils.Helpers.GetCulture("aserai"))
                 {
                     text = new TextObject(
-                        "{=!}Alas, you are no Son of Asera and thus you could never truly follow the Code of Asera. Not in any way that I could fathom. There may be precedent for one beyond our blood to successfully follow the code, but for this you should seek out an Akhund; a scholar of the faith.");
+                        "{=4iZ1kVV4N}Alas, you are no Son of Asera and thus you could never truly follow the Code of Asera. Not in any way that I could fathom. There may be precedent for one beyond our blood to successfully follow the code, but for this you should seek out an Akhund; a scholar of the faith.");
                 }
 
                 float relation = 0;
@@ -116,9 +116,9 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Empire
                 text = medium switch
                 {
                     < 0 => new TextObject(
-                        "{=!}You think that it would go unnoticed how the folk here cringe at your visage? How your name is whispered with scornful lips? Are they mislead about you? Perhaps, perhaps. We shall see."),
+                        "{=waxMySrZr}You think that it would go unnoticed how the folk here cringe at your visage? How your name is whispered with scornful lips? Are they mislead about you? Perhaps, perhaps. We shall see."),
                     < 20 => new TextObject(
-                        "{=!}You are known to me and to this village; not as a savior or as a good soul, but as one of us. You are humble, perhaps because you lack the boldness to pursue being charitable - or perhaps just the means. I do not know, and I do not judge."),
+                        "{=VZ8jD3Jhu}You are known to me and to this village; not as a savior or as a good soul, but as one of us. You are humble, perhaps because you lack the boldness to pursue being charitable - or perhaps just the means. I do not know, and I do not judge."),
                     _ => text
                 };
             }
@@ -133,7 +133,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Empire
             if (rank == 2)
             {
                 text = new TextObject(
-                    "{=!}Peace be upon you, my kin. Have you come to study the Code of Asera? I shall grant you what wisdom I have gleaned in my long hours of study, but as your brother I must tell you that I find myself more ignorant the more I realize the breadth of what there is still yet to learn.");
+                    "{=GDRRw7BOK}Peace be upon you, my kin. Have you come to study the Code of Asera? I shall grant you what wisdom I have gleaned in my long hours of study, but as your brother I must tell you that I find myself more ignorant the more I realize the breadth of what there is still yet to learn.");
             }
             else
             {
@@ -146,7 +146,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Empire
                 if (Hero.MainHero.Culture != Utils.Helpers.GetCulture("aserai"))
                 {
                     text = new TextObject(
-                        "{=!}I wish you well in such pursuits, and that you live a life of peace wherever this path may take you.");
+                        "{=Hw6NpceDi}I wish you well in such pursuits, and that you live a life of peace wherever this path may take you.");
                 }
 
                 float relation = 0;
@@ -159,9 +159,9 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Empire
                 text = medium switch
                 {
                     < 0 => new TextObject(
-                        "{=!}If you wish to be made a follower of the Code of Asera, you must treat these people as you would a sibling - you must cherish them, exalt them, protect them and educate them. Show them your better nature and I shall perform upon you our rites of induction."),
+                        "{=HKncBTcRv}If you wish to be made a follower of the Code of Asera, you must treat these people as you would a sibling - you must cherish them, exalt them, protect them and educate them. Show them your better nature and I shall perform upon you our rites of induction."),
                     < 20 => new TextObject(
-                        "{=!}I welcome you, my kin - blood of my blood. May you go in peace and bring honor to his legacy."),
+                        "{=sVOsYS48f}I welcome you, my kin - blood of my blood. May you go in peace and bring honor to his legacy."),
                     _ => new TextObject("{=!}")
                 };
             }
@@ -174,11 +174,11 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Empire
             var text = rank switch
             {
                 3 => new TextObject(
-                    "{=!}Mine is the voice that speaks for the Martyr’s will, alas only in mournful penitentials. I wear this mantle by my own volition, for overlong have there been aspiring tyrants who sought to further usurp his mandates by way of vile machinations. Seldom am I to preach, for mine is the role to contemplate the mysteries of creation as glanced by Darusos as he was made eternal through the rites of divus.Fret not, for though I hold all the myriad gods of our Empire - both those liberated from savage cultures and those brought with us from our ancestral birthplace - I am that which holds the Martyr above all others."),
+                    "{=NDzRFMyYh}Mine is the voice that speaks for the Martyr’s will, alas only in mournful penitentials. I wear this mantle by my own volition, for overlong have there been aspiring tyrants who sought to further usurp his mandates by way of vile machinations. Seldom am I to preach, for mine is the role to contemplate the mysteries of creation as glanced by Darusos as he was made eternal through the rites of divus.Fret not, for though I hold all the myriad gods of our Empire - both those liberated from savage cultures and those brought with us from our ancestral birthplace - I am that which holds the Martyr above all others."),
                 2 => new TextObject(
-                    "{=!}I preach the doctrines of Darusos, our Emperor betrayed in his youth by the vile treachery of his generals. A child, wise beyond his years and graced with the beatific sight of Heaven; he sought to see the Empire reign as a place of order where patrician and plebeian alike need not suffer fear. He would see us fed, watered, and granted the joys that we are due - and if not for the craven workings of sellswords and tyrant upstarts, he would have reigned one thousand years."),
+                    "{=YX90ojVGA}I preach the doctrines of Darusos, our Emperor betrayed in his youth by the vile treachery of his generals. A child, wise beyond his years and graced with the beatific sight of Heaven; he sought to see the Empire reign as a place of order where patrician and plebeian alike need not suffer fear. He would see us fed, watered, and granted the joys that we are due - and if not for the craven workings of sellswords and tyrant upstarts, he would have reigned one thousand years."),
                 _ => new TextObject(
-                    "{=!}Lo, for I preach the tragedy of the Martyr Darusos, an Emperor betrayed in his youth by the cruel ambitions of his generals. He was targeted, for even the most oathbound man can be made a craven sellsword when they gaze upon the throne of an Empire. Darusos was a goodly sort, he wept for the Palaics and the Vakken, he wrote an elegy for the Perassic League in their fading days. He saw the Empire as united in soul and in spirit, undone from within only by the actions of wicked men. It was for this that Darusos was crucified upon a sacred fig tree and set ablaze - all his aspirations but kindling… Take heart, for this is the sermon of a Martyr - not merely one of a man.")
+                    "{=yPfM0qYed}Lo, for I preach the tragedy of the Martyr Darusos, an Emperor betrayed in his youth by the cruel ambitions of his generals. He was targeted, for even the most oathbound man can be made a craven sellsword when they gaze upon the throne of an Empire. Darusos was a goodly sort, he wept for the Palaics and the Vakken, he wrote an elegy for the Perassic League in their fading days. He saw the Empire as united in soul and in spirit, undone from within only by the actions of wicked men. It was for this that Darusos was crucified upon a sacred fig tree and set ablaze - all his aspirations but kindling… Take heart, for this is the sermon of a Martyr - not merely one of a man.")
             };
 
             return text;
@@ -189,11 +189,11 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Empire
             var text = rank switch
             {
                 3 => new TextObject(
-                    "{=!}‘Tis my desire to spread the denied transpositions of the Martyr to the licentious masses of our age. To absolve our Empire the foul stains of hubristic usurpers, and to see seized with thine own hands a fate where the line betwixt Darusos to Arenicos, and beyond to Rhagaea Pethros and Ira Pethros may undergo the rite of divus before tragedy may befall them. I preach that the god - emperors of old who claimed deified rank, clutched at such power only through the long gaze of history.By candlelight mine eyes have gleaned that such heights are not unattainable, that within the mysteries and doctrine of Darusos, sits the illustrious path to Heaven that man may tread without departing the mortal coil."),
+                    "{=th1OhjsSr}‘Tis my desire to spread the denied transpositions of the Martyr to the licentious masses of our age. To absolve our Empire the foul stains of hubristic usurpers, and to see seized with thine own hands a fate where the line betwixt Darusos to Arenicos, and beyond to Rhagaea Pethros and Ira Pethros may undergo the rite of divus before tragedy may befall them. I preach that the god - emperors of old who claimed deified rank, clutched at such power only through the long gaze of history.By candlelight mine eyes have gleaned that such heights are not unattainable, that within the mysteries and doctrine of Darusos, sits the illustrious path to Heaven that man may tread without departing the mortal coil."),
                 2 => new TextObject(
-                    "{=!}But no. Betrayed by his generals, spat upon by the Senate, and mocked by his honor guard - Darusos was crucified to a sacred fig tree and burnt to cinders. His great works and scribed doctrines set ablaze with him. As one of the Flamines Castus, I seek to purify those who have walked a path of sin and shame.For the Martyr knows that the failings of those who betrayed them were born from human frailty -they feared change, and in their fear enacted change as fearsome as any other.None of us are immaculate, but there are some who may become pure and unsullied such as I.Pray then, that you may become like me."),
+                    "{=7mPi5EzwQ}But no. Betrayed by his generals, spat upon by the Senate, and mocked by his honor guard - Darusos was crucified to a sacred fig tree and burnt to cinders. His great works and scribed doctrines set ablaze with him. As one of the Flamines Castus, I seek to purify those who have walked a path of sin and shame.For the Martyr knows that the failings of those who betrayed them were born from human frailty -they feared change, and in their fear enacted change as fearsome as any other.None of us are immaculate, but there are some who may become pure and unsullied such as I.Pray then, that you may become like me."),
                 _ => new TextObject(
-                    "{=!}The imperial line was enshrined upon the throne by a hand most divine during its origins, and thus though Darusos was murdered by militants - his words could not be silenced. Though upstarts like Lucon Osticos and Garios Comnos would seek to usurp the mandate of heaven, consider that the late Emperor Arenicos Pethros was a man-made-divine who was Martyred in a similar fashion. It is only through Empress Rhagaea Pethros and the heir Ira Pethros - that this holy line continues. History should not repeat itself further.No more heroes of our Empire need die for the vanity of lesser men or savage nationals.Darusos awaits us in heaven, and paradise is awarded to those who seek to better the lives of his citizens, and enact the reforms he was denied in life.")
+                    "{=c4Qy1ACfA}The imperial line was enshrined upon the throne by a hand most divine during its origins, and thus though Darusos was murdered by militants - his words could not be silenced. Though upstarts like Lucon Osticos and Garios Comnos would seek to usurp the mandate of heaven, consider that the late Emperor Arenicos Pethros was a man-made-divine who was Martyred in a similar fashion. It is only through Empress Rhagaea Pethros and the heir Ira Pethros - that this holy line continues. History should not repeat itself further.No more heroes of our Empire need die for the vanity of lesser men or savage nationals.Darusos awaits us in heaven, and paradise is awarded to those who seek to better the lives of his citizens, and enact the reforms he was denied in life.")
             };
 
             return text;
@@ -204,11 +204,11 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Empire
             var text = rank switch
             {
                 3 => new TextObject(
-                    "{=!}Ahh, ‘tis wisdom and arrogance that thou shalt seek the Rex Sacrarum for elucidation. What is thine intent, to seek one wise beyond the ken of an age and bid they preach the rote doctrine of the lay flamines? Thoust have no need to be coy, nor ignorant, nor false. I shall speak and do so with courtesy - for this is what the Martyr would have of me. Perilous is the hour and heretics run rife through our Empire.Scourge those who cling to the Augeo Sophica or the Parens Patriae, shame their leaders; see them seized by brutish hands befitting brutish miens such as theirs.Let not their disarray see our fiefs fall to the avaricious hearts of lesser, wayward men."),
+                    "{=uxgghZUYA}Ahh, ‘tis wisdom and arrogance that thou shalt seek the Rex Sacrarum for elucidation. What is thine intent, to seek one wise beyond the ken of an age and bid they preach the rote doctrine of the lay flamines? Thoust have no need to be coy, nor ignorant, nor false. I shall speak and do so with courtesy - for this is what the Martyr would have of me. Perilous is the hour and heretics run rife through our Empire.Scourge those who cling to the Augeo Sophica or the Parens Patriae, shame their leaders; see them seized by brutish hands befitting brutish miens such as theirs.Let not their disarray see our fiefs fall to the avaricious hearts of lesser, wayward men."),
                 2 => new TextObject(
-                    "{=!}Purity comes at a cost. Though I would not ask you to make a pauper of yourself, know that denars have led far too many upon an unrighteous path. Donate your wealth to the Martyrdom, free yourself from the burdens of silver and gold. Give food to the needy, see our soldiers fed so we may endure the long siege we suffer upon our ideals. Make yourself known and friend to others within the ranks of the Flamines Castus, gain an audience and supplicate yourself before the Rex Sacrarum. "),
+                    "{=CYHWLem0Y}Purity comes at a cost. Though I would not ask you to make a pauper of yourself, know that denars have led far too many upon an unrighteous path. Donate your wealth to the Martyrdom, free yourself from the burdens of silver and gold. Give food to the needy, see our soldiers fed so we may endure the long siege we suffer upon our ideals. Make yourself known and friend to others within the ranks of the Flamines Castus, gain an audience and supplicate yourself before the Rex Sacrarum. "),
                 _ => new TextObject(
-                    "{=!}Alas we are beset by foes who desire what they think is best for the soul of our Empire. Converting the upstarts of the Augeo Sophica cult or the Parens Patriae movement. Members of the Northern and Western breakaway territories need to be put to the sword, for they have sought to sunder the imperial line and represent daggers waiting in shadows so long as they yet live…")
+                    "{=WTp6oXdeM}Alas we are beset by foes who desire what they think is best for the soul of our Empire. Converting the upstarts of the Augeo Sophica cult or the Parens Patriae movement. Members of the Northern and Western breakaway territories need to be put to the sword, for they have sought to sunder the imperial line and represent daggers waiting in shadows so long as they yet live…")
             };
 
             return text;
@@ -219,11 +219,11 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Empire
             var text = rank switch
             {
                 3 => new TextObject(
-                    "{=!}I would suffice to bid you take arms against the Embers of the Flame, they preach a false doctrine and grant hospitality to those who would see us destroyed. Their workings dishonor the Martyr - and should you shackle their heresiarch, I would see them brought before me. So they might know their lowly place… Mine are matters of far higher importance, thou shalt not impress me.Court the patricians and the flamines; sully not mine hours with vainglorious pursuits."),
+                    "{=6iVL2CJ4d}I would suffice to bid you take arms against the Embers of the Flame, they preach a false doctrine and grant hospitality to those who would see us destroyed. Their workings dishonor the Martyr - and should you shackle their heresiarch, I would see them brought before me. So they might know their lowly place… Mine are matters of far higher importance, thou shalt not impress me.Court the patricians and the flamines; sully not mine hours with vainglorious pursuits."),
                 2 => new TextObject(
-                    "{=!}Bring high ranking officers and soldiers from the upstart states and once tamed cultures to heel; see them gifted to our cause so they might learn their place once more. And most importantly, I beg you, ensure that Lycaron does not fall into enemy hands - for should it be destroyed we may see all records of Darusos lost."),
+                    "{=AcLqtX63F}Bring high ranking officers and soldiers from the upstart states and once tamed cultures to heel; see them gifted to our cause so they might learn their place once more. And most importantly, I beg you, ensure that Lycaron does not fall into enemy hands - for should it be destroyed we may see all records of Darusos lost."),
                 _ => new TextObject(
-                    "{=!}But pardon my words, for you might think me a brute calling you to hear the clarion call of a crusade. Nay, this is not my intent. In truth you could do much by providing food to the garrisons of our imperial holdings, disposing of looters who prey upon the downtrodden, and diminishing the number of disreputable blackguards from the Embers of the Flame - who dare speak the Martyr’s name in vanity.")
+                    "{=1JeFVBv9y}But pardon my words, for you might think me a brute calling you to hear the clarion call of a crusade. Nay, this is not my intent. In truth you could do much by providing food to the garrisons of our imperial holdings, disposing of looters who prey upon the downtrodden, and diminishing the number of disreputable blackguards from the Embers of the Flame - who dare speak the Martyr’s name in vanity.")
             };
 
             return text;
@@ -261,7 +261,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Empire
 
         public override TextObject GetMainDivinitiesDescription()
         {
-            return new TextObject("{=!}Great Spirits");
+            return new TextObject("{=6uZqwNrdV}Great Spirits");
         }
 
         public override int GetMaxClergyRank()
@@ -273,9 +273,9 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Empire
         {
             var text = rank switch
             {
-                3 => new TextObject("{=!}Rex Sacrarum"),
-                2 => new TextObject("{=!}Flamines Castus"),
-                _ => new TextObject("{=!}Flamines")
+                3 => new TextObject("{=Fss83iYGE}Rex Sacrarum"),
+                2 => new TextObject("{=knZdeH2BN}Flamines Castus"),
+                _ => new TextObject("{=fV9omwOzH}Flamines")
             };
 
             return text;
@@ -288,7 +288,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Empire
 
         public override TextObject GetSecondaryDivinitiesDescription()
         {
-            return new TextObject("{=!}Cults");
+            return new TextObject("{=qYNsNE8Kh}Cults");
         }
 
         public override (bool, TextObject) GetInductionAllowed(Hero hero, int rank)
@@ -298,22 +298,22 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Empire
 
         public override TextObject GetBlessingAction()
         {
-            return new TextObject("{=!}I would like to medidate upon the Martyr.");
+            return new TextObject("{=E8esYSwck}I would like to medidate upon the Martyr.");
         }
 
         public override TextObject GetBlessingQuestion()
         {
-            return new TextObject("{=!}How so? Would you like to medidate upon the Cult and our line of hallowed emperors? Or would you pray for guidance from the Triad?");
+            return new TextObject("{=hjCfqaGoS}How so? Would you like to medidate upon the Cult and our line of hallowed emperors? Or would you pray for guidance from the Triad?");
         }
 
         public override TextObject GetBlessingConfirmQuestion()
         {
-            return new TextObject("{=!}Assert your will for guidance. The study of the Martyr and the gods is not to be taken lightly.");
+            return new TextObject("{=tiB3hBZJq}Assert your will for guidance. The study of the Martyr and the gods is not to be taken lightly.");
         }
 
         public override TextObject GetBlessingQuickInformation()
         {
-            return new TextObject("{=!}I would like to medidate upon the Martyr.");
+            return new TextObject("{=E8esYSwck}I would like to medidate upon the Martyr.");
         }
 
         public override TextObject GetBlessingActionName()

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
@@ -35,7 +35,7 @@ namespace BannerKings.Models.BKModels
 
             if (extra != 0f)
             {
-                result.Add(extra, new TextObject("{=!}Highest title level"));
+                result.Add(extra, new TextObject("{=jYrmRCM4x}Highest title level"));
             }
 
             return result;
@@ -53,7 +53,7 @@ namespace BannerKings.Models.BKModels
             if (faction == null)
             {
                 foundAction.Possible = false;
-                foundAction.Reason = new TextObject("{=!}No kingdom.");
+                foundAction.Reason = new TextObject("{=qz1z1S50F}No kingdom.");
                 return foundAction;
             }
 
@@ -61,14 +61,14 @@ namespace BannerKings.Models.BKModels
             if (title != null)
             {
                 foundAction.Possible = false;
-                foundAction.Reason = new TextObject("{=!}Faction sovereign title already exists.");
+                foundAction.Reason = new TextObject("{=urhbfnsjP}Faction sovereign title already exists.");
                 return foundAction;
             }
 
             if (faction.Leader != founder)
             {
                 foundAction.Possible = false;
-                foundAction.Reason = new TextObject("{=!}Not leader of current faction.");
+                foundAction.Reason = new TextObject("{=XO6GhQowA}Not leader of current faction.");
                 return foundAction;
             }
 
@@ -76,33 +76,33 @@ namespace BannerKings.Models.BKModels
             if (titles.Any(x => x.type <= TitleType.Kingdom))
             {
                 foundAction.Possible = false;
-                foundAction.Reason = new TextObject("{=!}Cannot found a kingdom while already being a de Jure sovereign.");
+                foundAction.Reason = new TextObject("{=A0yfKc2im}Cannot found a kingdom while already being a de Jure sovereign.");
                 return foundAction;
             }
 
             if (!titles.Any(x => x.type <= TitleType.Dukedom))
             {
                 foundAction.Possible = false;
-                foundAction.Reason = new TextObject("{=!}Cannot found a kingdom without a de Jure duke level title.");
+                foundAction.Reason = new TextObject("{=jN2YKUyxG}Cannot found a kingdom without a de Jure duke level title.");
                 return foundAction;
             }
 
             if (faction.Clans.Count < 3)
             {
                 foundAction.Possible = false;
-                foundAction.Reason = new TextObject("{=!}Cannot found a kingdom for a faction with less than 3 clans.");
+                foundAction.Reason = new TextObject("{=xw6V1zX6b}Cannot found a kingdom for a faction with less than 3 clans.");
                 return foundAction;
             }
 
             if (founder.Gold < foundAction.Gold || founder.Clan.Influence < foundAction.Influence)
             {
                 foundAction.Possible = false;
-                foundAction.Reason = new TextObject("{=!}You lack the required resources.");
+                foundAction.Reason = new TextObject("{=CZSUuPzJU}You lack the required resources.");
                 return foundAction;
             }
 
             foundAction.Possible = true;
-            foundAction.Reason = new TextObject("{=!}Kingdom can be founded.");
+            foundAction.Reason = new TextObject("{=xNv58iEMS}Kingdom can be founded.");
             ApplyDiscounts(foundAction);
             return foundAction;
         }
@@ -131,14 +131,14 @@ namespace BannerKings.Models.BKModels
             if (title.deJure == claimant)
             {
                 claimAction.Possible = false;
-                claimAction.Reason = new TextObject("{=!}Already legal owner.");
+                claimAction.Reason = new TextObject("{=LrMnVe7jG}Already legal owner.");
                 return claimAction;
             }
 
             if (!possibleClaimants.Contains(claimant))
             {
                 claimAction.Possible = false;
-                claimAction.Reason = new TextObject("{=!}Not a possible claimant.");
+                claimAction.Reason = new TextObject("{=L7CZoHJ86}Not a possible claimant.");
                 return claimAction;
             }
 
@@ -146,21 +146,21 @@ namespace BannerKings.Models.BKModels
             if (claimType == ClaimType.Ongoing)
             {
                 claimAction.Possible = false;
-                claimAction.Reason = new TextObject("{=!}Already building a claim.");
+                claimAction.Reason = new TextObject("{=jccC3zsk4}Already building a claim.");
                 return claimAction;
             }
 
             if (claimType != ClaimType.None)
             {
                 claimAction.Possible = false;
-                claimAction.Reason = new TextObject("{=!}Already a claimant.");
+                claimAction.Reason = new TextObject("{=VmtXwjbVE}Already a claimant.");
                 return claimAction;
             }
 
             if (title.deJure.Clan == claimant.Clan)
             {
                 claimAction.Possible = false;
-                claimAction.Reason = new TextObject("{=!}Owner is in same clan.");
+                claimAction.Reason = new TextObject("{=bRcMKk3FK}Owner is in same clan.");
                 return claimAction;
             }
 
@@ -172,7 +172,7 @@ namespace BannerKings.Models.BKModels
                 {
                     claimAction.Possible = false;
                     claimAction.Reason =
-                        new TextObject("{=!}Not possible to claim a knight's lordship within your faction.");
+                        new TextObject("{=1HXv8HEKj}Not possible to claim a knight's lordship within your faction.");
                     return claimAction;
                 }
 
@@ -181,7 +181,7 @@ namespace BannerKings.Models.BKModels
                 {
                     claimAction.Possible = false;
                     claimAction.Reason =
-                        new TextObject("{=!}Not possible to claim lordships without owning it's suzerain title.");
+                        new TextObject("{=mKCz07qdW}Not possible to claim lordships without owning it's suzerain title.");
                     return claimAction;
                 }
             }
@@ -189,12 +189,12 @@ namespace BannerKings.Models.BKModels
             if (claimant.Gold < claimAction.Gold || claimant.Clan.Influence < claimAction.Influence)
             {
                 claimAction.Possible = false;
-                claimAction.Reason = new TextObject("{=!}Missing required resources.");
+                claimAction.Reason = new TextObject("{=dGuUaAxPP}Missing required resources.");
                 return claimAction;
             }
 
             claimAction.Possible = true;
-            claimAction.Reason = new TextObject("{=!}You may claim this title.");
+            claimAction.Reason = new TextObject("{=Dp469UwPN}You may claim this title.");
             ApplyDiscounts(claimAction);
 
             return claimAction;
@@ -214,7 +214,7 @@ namespace BannerKings.Models.BKModels
             if (title.deJure == revoker)
             {
                 revokeAction.Possible = false;
-                revokeAction.Reason = new TextObject("{=!}Already legal owner.");
+                revokeAction.Reason = new TextObject("{=LrMnVe7jG}Already legal owner.");
                 return revokeAction;
             }
 
@@ -222,7 +222,7 @@ namespace BannerKings.Models.BKModels
             if (revokerKingdom == null || revokerKingdom != title.deJure.Clan.Kingdom)
             {
                 revokeAction.Possible = false;
-                revokeAction.Reason = new TextObject("{=!}Can not revoke a title of a lord outside your realm.");
+                revokeAction.Reason = new TextObject("{=AkRyayJZT}Can not revoke a title of a lord outside your realm.");
                 return revokeAction;
             }
 
@@ -231,11 +231,11 @@ namespace BannerKings.Models.BKModels
             {
                 case GovernmentType.Tribal:
                     revokeAction.Possible = false;
-                    revokeAction.Reason = new TextObject("{=!}Tribal government does not allow revoking.");
+                    revokeAction.Reason = new TextObject("{=LJbadOOtQ}Tribal government does not allow revoking.");
                     return revokeAction;
                 case GovernmentType.Republic when title.type != TitleType.Dukedom:
                     revokeAction.Possible = false;
-                    revokeAction.Reason = new TextObject("{=!}Republics can only revoke duke titles.");
+                    revokeAction.Reason = new TextObject("{=C8f2RD8om}Republics can only revoke duke titles.");
                     return revokeAction;
                 case GovernmentType.Republic:
                 {
@@ -243,7 +243,7 @@ namespace BannerKings.Models.BKModels
                     if (revoker != sovereign.deJure)
                     {
                         revokeAction.Possible = false;
-                        revokeAction.Reason = new TextObject("{=!}Not de Jure faction leader.");
+                        revokeAction.Reason = new TextObject("{=Vs3Boce7k}Not de Jure faction leader.");
                         return revokeAction;
                     }
 
@@ -255,7 +255,7 @@ namespace BannerKings.Models.BKModels
                     if (sovereign == null || revoker != sovereign.deJure)
                     {
                         revokeAction.Possible = false;
-                        revokeAction.Reason = new TextObject("{=!}Not de Jure faction leader.");
+                        revokeAction.Reason = new TextObject("{=Vs3Boce7k}Not de Jure faction leader.");
                         return revokeAction;
                     }
 
@@ -283,7 +283,7 @@ namespace BannerKings.Models.BKModels
                     if (!vassal)
                     {
                         revokeAction.Possible = false;
-                        revokeAction.Reason = new TextObject("{=!}Not a direct vassal.");
+                        revokeAction.Reason = new TextObject("{=5C7ydG5ni}Not a direct vassal.");
                         return revokeAction;
                     }
 
@@ -298,12 +298,12 @@ namespace BannerKings.Models.BKModels
             if (targetHighest.type <= revokerHighest.type)
             {
                 revokeAction.Possible = false;
-                revokeAction.Reason = new TextObject("{=!}Can not revoke from a lord of superior hierarchy.");
+                revokeAction.Reason = new TextObject("{=xAz7Sr2eG}Can not revoke from a lord of superior hierarchy.");
                 return revokeAction;
             }
 
             revokeAction.Possible = true;
-            revokeAction.Reason = new TextObject("{=!}You may grant away this title.");
+            revokeAction.Reason = new TextObject("{=Y26KtE89J}You may grant away this title.");
             ApplyDiscounts(revokeAction);
             return revokeAction;
         }
@@ -322,7 +322,7 @@ namespace BannerKings.Models.BKModels
             if (title.deJure != grantor)
             {
                 grantAction.Possible = false;
-                grantAction.Reason = new TextObject("{=!}Not legal owner.");
+                grantAction.Reason = new TextObject("{=fmRsSi1rA}Not legal owner.");
                 return grantAction;
             }
 
@@ -332,7 +332,7 @@ namespace BannerKings.Models.BKModels
                 if (deFacto != grantor)
                 {
                     grantAction.Possible = false;
-                    grantAction.Reason = new TextObject("{=!}Not actual owner of landed title.");
+                    grantAction.Reason = new TextObject("{=cLgwyynZf}Not actual owner of landed title.");
                     return grantAction;
                 }
             }
@@ -343,7 +343,7 @@ namespace BannerKings.Models.BKModels
                 if (candidates.Count == 0)
                 {
                     grantAction.Possible = false;
-                    grantAction.Reason = new TextObject("{=!}No valid candidates in kingdom.");
+                    grantAction.Reason = new TextObject("{=q8F3x1Y3h}No valid candidates in kingdom.");
                     return grantAction;
                 }
             }
@@ -352,13 +352,13 @@ namespace BannerKings.Models.BKModels
             if (highest == title)
             {
                 grantAction.Possible = false;
-                grantAction.Reason = new TextObject("{=!}Not possible to grant one's main title.");
+                grantAction.Reason = new TextObject("{=5pxRru8Cr}Not possible to grant one's main title.");
                 return grantAction;
             }
 
             grantAction.Possible = true;
             grantAction.Influence = GetInfluenceUsurpCost(title) * 0.33f;
-            grantAction.Reason = new TextObject("{=!}You may grant away this title.");
+            grantAction.Reason = new TextObject("{=Y26KtE89J}You may grant away this title.");
             ApplyDiscounts(grantAction);
             return grantAction;
         }
@@ -374,14 +374,14 @@ namespace BannerKings.Models.BKModels
             if (title.deJure == usurper)
             {
                 usurpData.Possible = false;
-                usurpData.Reason = new TextObject("{=!}Already legal owner.");
+                usurpData.Reason = new TextObject("{=LrMnVe7jG}Already legal owner.");
                 return usurpData;
             }
 
             if (usurper.Clan == null)
             {
                 usurpData.Possible = false;
-                usurpData.Reason = new TextObject("{=!}No clan.");
+                usurpData.Reason = new TextObject("{=mpnfCAAvQ}No clan.");
                 return usurpData;
             }
 
@@ -389,21 +389,21 @@ namespace BannerKings.Models.BKModels
             if (type != ClaimType.None && type != ClaimType.Ongoing)
             {
                 usurpData.Possible = true;
-                usurpData.Reason = new TextObject("{=!}You may claim this title.");
+                usurpData.Reason = new TextObject("{=Dp469UwPN}You may claim this title.");
 
                 var titleLevel = (int) title.type;
                 var clanTier = usurper.Clan.Tier;
                 if (clanTier < 2 || (titleLevel <= 2 && clanTier < 4))
                 {
                     usurpData.Possible = false;
-                    usurpData.Reason = new TextObject("{=!}Clan tier is insufficient.");
+                    usurpData.Reason = new TextObject("{=WccGNWPV0}Clan tier is insufficient.");
                     return usurpData;
                 }
 
                 if (usurper.Gold < usurpData.Gold || usurper.Clan.Influence < usurpData.Influence)
                 {
                     usurpData.Possible = false;
-                    usurpData.Reason = new TextObject("{=!}Missing required resources.");
+                    usurpData.Reason = new TextObject("{=dGuUaAxPP}Missing required resources.");
                     return usurpData;
                 }
 
@@ -414,7 +414,7 @@ namespace BannerKings.Models.BKModels
                     {
                         usurpData.Possible = false;
                         usurpData.Reason =
-                            new TextObject("{=!}Must be faction leader to usurp highest title in hierarchy.");
+                            new TextObject("{=0RxY93B1k}Must be faction leader to usurp highest title in hierarchy.");
                         return usurpData;
                     }
                 }
@@ -423,7 +423,7 @@ namespace BannerKings.Models.BKModels
             }
 
             usurpData.Possible = false;
-            usurpData.Reason = new TextObject("{=!}No rightful claim.");
+            usurpData.Reason = new TextObject("{=cb5Hky7Fh}No rightful claim.");
 
             ApplyDiscounts(usurpData);
 

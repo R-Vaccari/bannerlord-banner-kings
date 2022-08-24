@@ -713,7 +713,7 @@ namespace BannerKings.Behaviours
                             }
                         }
 
-                        goldChange.Add(result, new TextObject("{=!}{A0}"), village.Name);
+                        goldChange.Add(result, new TextObject("{=u36WOTiF4}{A0}"), village.Name);
                     }
 
                     foreach (var lordship in lordships)
@@ -731,7 +731,7 @@ namespace BannerKings.Behaviours
                             }
                             else
                             {
-                                goldChange.Add(result, new TextObject("{=!}{A0}"), village.Name);
+                                goldChange.Add(result, new TextObject("{=u36WOTiF4}{A0}"), village.Name);
                             }
                         }
                     }

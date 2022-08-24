@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
@@ -21,7 +21,7 @@ namespace BannerKings.Managers.Kingdoms
 
         public override TextObject GetChooseTitle()
         {
-            var textObject = new TextObject("{=!}Choose the next Grand-Prince of the {KINGDOM_NAME} Republic");
+            var textObject = new TextObject("{=KbNft8DYe}Choose the next Grand-Prince of the {KINGDOM_NAME} Republic");
             textObject.SetTextVariable("KINGDOM_NAME", Kingdom.Name);
             return textObject;
         }
@@ -30,14 +30,14 @@ namespace BannerKings.Managers.Kingdoms
         {
             var textObject =
                 new TextObject(
-                    "{=!}{KINGDOM_NAME} Republic will decide who will be elected Grand-Prince. You can pick your stance regarding this decision.");
+                    "{=Q77RCfULC}{KINGDOM_NAME} Republic will decide who will be elected Grand-Prince. You can pick your stance regarding this decision.");
             textObject.SetTextVariable("KINGDOM_NAME", Kingdom.Name);
             return textObject;
         }
 
         public override TextObject GetChooseDescription()
         {
-            var textObject = new TextObject("{=!}Choose the next Grand-Prince of the {KINGDOM_NAME} Republic");
+            var textObject = new TextObject("{=KbNft8DYe}Choose the next Grand-Prince of the {KINGDOM_NAME} Republic");
             textObject.SetTextVariable("KINGDOM_NAME", Kingdom.Name);
             return textObject;
         }

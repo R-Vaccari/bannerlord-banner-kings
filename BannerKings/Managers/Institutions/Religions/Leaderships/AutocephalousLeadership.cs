@@ -1,4 +1,4 @@
-﻿using TaleWorlds.Localization;
+using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Institutions.Religions.Leaderships
 {
@@ -7,12 +7,12 @@ namespace BannerKings.Managers.Institutions.Religions.Leaderships
         public override TextObject GetHint()
         {
             return new TextObject(
-                "{=!}Autocephalous religions are organized based on secular kingdoms. Each kingdom will have it's own head of faith, tying the spiritual power to the material sovereigns.");
+                "{=7EPOrusCV}Autocephalous religions are organized based on secular kingdoms. Each kingdom will have it's own head of faith, tying the spiritual power to the material sovereigns.");
         }
 
         public override TextObject GetName()
         {
-            return new TextObject("{=!}Autocephalous");
+            return new TextObject("{=veZMEmWAS}Autocephalous");
         }
     }
 }

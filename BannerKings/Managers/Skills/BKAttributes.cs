@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
@@ -25,10 +25,10 @@ namespace BannerKings.Managers.Skills
         public void Initialize()
         {
             Wisdom = Game.Current.ObjectManager.RegisterPresumedObject(new CharacterAttribute("wisdom"));
-            Wisdom.Initialize(new TextObject("{=!}Wisdom"),
+            Wisdom.Initialize(new TextObject("{=m7dJvKKwM}Wisdom"),
                 new TextObject(
-                    "{=!}Wisdom represents your world knowledge and competence to deal with skills that require deep learning."),
-                new TextObject("{=!}WIS"));
+                    "{=m7dJvKKwM}Wisdom represents your world knowledge and competence to deal with skills that require deep learning."),
+                new TextObject("{=6bL4wbQn9}WIS"));
         }
 
         internal struct ConfigHolder

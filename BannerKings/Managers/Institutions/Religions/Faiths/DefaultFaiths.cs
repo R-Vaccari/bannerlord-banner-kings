@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using BannerKings.Managers.Institutions.Religions.Faiths.Asera;
 using BannerKings.Managers.Institutions.Religions.Faiths.Battania;
 using BannerKings.Managers.Institutions.Religions.Faiths.Empire;
@@ -38,8 +38,8 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
 
         public void Initialize()
         {
-            aseraGroup = new FaithGroup(new TextObject("{=!}Aseran Faiths"),
-                new TextObject("{=!}Those that believe in Asera as the true and only prohpet."));
+            aseraGroup = new FaithGroup(new TextObject("{=arQSG5hAV}Aseran Faiths"),
+                new TextObject("{=4UPMogbjP}Those that believe in Asera as the true and only prohpet."));
             aseraCode = new AseraFaith();
 
             Rite zabiha = new Zabiha();
@@ -56,8 +56,8 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
                 },
                 aseraGroup, new List<Rite> {zabiha});
 
-            battaniaGroup = new FaithGroup(new TextObject("{=!}Derwyddon Faiths"),
-                new TextObject("{=!}The faiths in the true old Calradian gods."));
+            battaniaGroup = new FaithGroup(new TextObject("{=eQoTvJZXC}Derwyddon Faiths"),
+                new TextObject("{=XUJ61YAei}The faiths in the true old Calradian gods."));
             amraFaith = new AmraFaith();
 
             Rite ironOffering = new Offering(DefaultItems.IronOre, 100);
@@ -71,8 +71,8 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
                 battaniaGroup, new List<Rite> {ironOffering});
 
 
-            imperialGroup = new FaithGroup(new TextObject("{=!}Calradian Faiths"),
-                new TextObject("{=!}The Imperial Calradian faiths."));
+            imperialGroup = new FaithGroup(new TextObject("{=T27jnM8Jg}Calradian Faiths"),
+                new TextObject("{=Zz2MLaUe3}The Imperial Calradian faiths."));
             darusosian = new DarusosianFaith();
 
             darusosian.Initialize(DefaultDivinities.Instance.DarusosianMain,
@@ -86,8 +86,8 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
                 imperialGroup);
 
 
-            vlandiaGroup = new FaithGroup(new TextObject("{=!}Vlandic Faiths"),
-                new TextObject("{=!}The faiths brought through the seas by the Vlandic peoples."));
+            vlandiaGroup = new FaithGroup(new TextObject("{=jWHrELoh6}Vlandic Faiths"),
+                new TextObject("{=6wivVzGE2}The faiths brought through the seas by the Vlandic peoples."));
             canticlesFaith = new CanticlesFaith();
             canticlesFaith.Initialize(DefaultDivinities.Instance.VlandiaMain,
                 new List<Divinity>

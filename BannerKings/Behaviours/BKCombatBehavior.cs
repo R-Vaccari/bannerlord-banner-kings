@@ -1,4 +1,4 @@
-﻿using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Engine;
 using TaleWorlds.Localization;
@@ -23,7 +23,7 @@ namespace BannerKings.Behaviours
         {
             if (!howlPlayed)
             {
-                MBInformationManager.AddQuickInformation(new TextObject("{=!}{HERO} is inspired by the spirits!")
+                MBInformationManager.AddQuickInformation(new TextObject("{=s5bNOfWZQ}{HERO} is inspired by the spirits!")
                     .SetTextVariable("HERO", Hero.MainHero.Name), 0, Hero.MainHero.CharacterObject, "religions/wolfhowl");
 
                 var index = SoundEvent.GetEventIdFromString("religions/wolfhowl");

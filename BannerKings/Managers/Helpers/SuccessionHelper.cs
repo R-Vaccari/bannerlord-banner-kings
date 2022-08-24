@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -50,7 +50,7 @@ namespace BannerKings.Managers.Helpers
                     if (Clan.PlayerClan.Kingdom != null && Clan.PlayerClan.Kingdom == victim.Clan.Kingdom)
                     {
                         MBInformationManager.AddQuickInformation(
-                            new TextObject("{=!}{HEIR} has rightfully inherited the {TITLE}")
+                            new TextObject("{=h7agKOozh}{HEIR} has rightfully inherited the {TITLE}")
                                 .SetTextVariable("HEIR", heir.Name)
                                 .SetTextVariable("TITLE", title.FullName), 0, heir.CharacterObject);
                     }

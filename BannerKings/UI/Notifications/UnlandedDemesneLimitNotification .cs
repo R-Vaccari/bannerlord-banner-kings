@@ -1,11 +1,11 @@
-﻿using TaleWorlds.Core;
+using TaleWorlds.Core;
 using TaleWorlds.Localization;
 
 namespace BannerKings.UI.Notifications
 {
     public class DemesneLimitNotification : InformationData
     {
-        public DemesneLimitNotification() : base(new TextObject("{=!}You have more fiefs than you can manage."))
+        public DemesneLimitNotification() : base(new TextObject("{=1ud36OGK6}You have more fiefs than you can manage."))
         {
         }
 

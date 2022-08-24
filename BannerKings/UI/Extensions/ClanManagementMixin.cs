@@ -1,4 +1,4 @@
-﻿using BannerKings.UI.Court;
+using BannerKings.UI.Court;
 using Bannerlord.UIExtenderEx.Attributes;
 using Bannerlord.UIExtenderEx.ViewModels;
 using TaleWorlds.CampaignSystem.ViewModelCollection.ClanManagement;
@@ -22,7 +22,7 @@ namespace BannerKings.UI.Extensions
             FinancesVisible = true;
         }
 
-        [DataSourceProperty] public string CourtText => new TextObject("{=!}Court").ToString();
+        [DataSourceProperty] public string CourtText => new TextObject("{=HAu8TySmJ}Court").ToString();
 
         [DataSourceProperty]
         public bool FinancesVisible
