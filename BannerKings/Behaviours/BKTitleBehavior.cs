@@ -285,7 +285,7 @@ namespace BannerKings.Behaviours
                             }
                             else
                             {
-                                GameTexts.SetVariable("ARMY", new TextObject("{=0KQDYFDh}the conquering army"));
+                                GameTexts.SetVariable("ARMY", new TextObject("{=FaUbxgHO}the conquering army"));
                             }
 
                             GameTexts.SetVariable("SETTLEMENT", settlement.Name);

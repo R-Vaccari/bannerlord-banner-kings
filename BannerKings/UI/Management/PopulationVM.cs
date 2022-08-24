@@ -1,4 +1,4 @@
-﻿using BannerKings.Managers.Populations;
+using BannerKings.Managers.Populations;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -33,19 +33,19 @@ namespace BannerKings.UI.Management
             }
 
             [DataSourceProperty]
-            public string OverViewText = new TextObject("{=!}Overview").ToString();
+            public string OverViewText = new TextObject("{=W4xpFozW}Overview").ToString();
 
             [DataSourceProperty]
-            public string EconomyText = new TextObject("{=!}Economy").ToString();
+            public string EconomyText = new TextObject("{=2oJQ4Snn}Economy").ToString();
 
             [DataSourceProperty]
-            public string MilitaryText = new TextObject("{=!}Military").ToString();
+            public string MilitaryText = new TextObject("{=7ELr3vXm}Military").ToString();
 
             [DataSourceProperty]
-            public string DemesneText = new TextObject("{=!}Demesne").ToString();
+            public string DemesneText = new TextObject("{=6QMDGRSt}Demesne").ToString();
 
             [DataSourceProperty]
-            public string ReligionText = new TextObject("{=!}Religion").ToString();
+            public string ReligionText = new TextObject("{=XYZ6qwT0}Religion").ToString();
 
             [DataSourceProperty]
             public OverviewVM OverView

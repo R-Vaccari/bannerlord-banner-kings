@@ -10,7 +10,7 @@ namespace BannerKings.Managers.Decisions
         }
 
         public override string GetHint()
-        { return new TextObject("{=meWjCM4c}Improve militia quality by subsidizing their equipment and training").ToString();
+        { return new TextObject("{=4WBR3jvK}Improve militia quality by subsidizing their equipment and training").ToString();
         }
 
         public override string GetIdentifier()
@@ -20,7 +20,7 @@ namespace BannerKings.Managers.Decisions
 
         public override string GetName()
         {
-            return new TextObject("{=DvV6OBry}Subsidize the militia").ToString();
+            return new TextObject("{=OyJ4NDWX}Subsidize the militia").ToString();
         }
     }
 }

@@ -21,11 +21,11 @@ namespace BannerKings.Models.Vanilla
         private const float SLAVE_CONSTRUCTION = 0.015f;
         private const float SERF_CONSTRUCTION = 0.010f;
         private readonly TextObject CultureText = GameTexts.FindText("str_culture");
-        private readonly TextObject HighLoyaltyBonusText = new("{=aSniKUJv}High Loyalty");
-        private readonly TextObject LowLoyaltyPenaltyText = new("{=SJ2qsRdF}Low Loyalty");
+        private readonly TextObject HighLoyaltyBonusText = new("{=fNiANUo4}High Loyalty");
+        private readonly TextObject LowLoyaltyPenaltyText = new("{=fETzfZzS}Low Loyalty");
 
-        private readonly TextObject ProductionFromMarketText = new("{=vaZDJGMx}Construction from Market");
-        private readonly TextObject VeryLowLoyaltyPenaltyText = new("{=CcQzFnpN}Very Low Loyalty");
+        private readonly TextObject ProductionFromMarketText = new("{=usk5UNRE}Construction from Market");
+        private readonly TextObject VeryLowLoyaltyPenaltyText = new("{=2KOc0Wmu}Very Low Loyalty");
 
         public ExplainedNumber CalculateInfrastructureLimit(Settlement settlement)
         {
@@ -33,7 +33,7 @@ namespace BannerKings.Models.Vanilla
             result.LimitMin(0f);
             result.LimitMax(50f);
             var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
-            result.Add(data.TotalPop / 1200f, new TextObject("{=0vJkgxxD}Total population"));
+            result.Add(data.TotalPop / 1200f, new TextObject("{=bLbvfBnb}Total population"));
 
             if (settlement.OwnerClan != null)
             {
@@ -146,7 +146,7 @@ namespace BannerKings.Models.Vanilla
         private int CalculateDailyConstructionPowerInternal(Town town, ref ExplainedNumber result, bool omitBoost = false)
         {
             var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
-            result.Add(GetWorkforce(town.Settlement), new TextObject("{=E0QjF7eV}Workforce"));
+            result.Add(GetWorkforce(town.Settlement), new TextObject("{=8EX6VriS}Workforce"));
             result.Add(3f, new TextObject("Base"));
 
             var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(town.OwnerClan.Leader);

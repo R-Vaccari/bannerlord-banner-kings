@@ -11,7 +11,7 @@ namespace BannerKings.Managers.Decisions
 
         public override string GetHint()
         {
-            return new TextObject("{=GPTssvZe}Exempt merchants from tariffs, reducing prices and attracting caravans").ToString();
+            return new TextObject("{=zsQgCCoS}Exempt merchants from tariffs, reducing prices and attracting caravans").ToString();
         }
 
         public override string GetIdentifier()
@@ -21,7 +21,7 @@ namespace BannerKings.Managers.Decisions
 
         public override string GetName()
         {
-            return new TextObject("{=kEEO9Jj1}Tariffs exemption").ToString();
+            return new TextObject("{=cpsR3aMg}Tariffs exemption").ToString();
         }
     }
 }

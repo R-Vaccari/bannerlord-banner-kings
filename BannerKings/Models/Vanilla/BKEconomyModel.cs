@@ -49,7 +49,7 @@ namespace BannerKings.Models.Vanilla
 
             if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(settlement, "decision_mercantilism"))
             {
-                result.Add(0.1f, new TextObject("{=witDxxvC}Encourage mercantilism decision"));
+                result.Add(0.1f, new TextObject("{=OdpuFusm}Encourage mercantilism decision"));
             }
 
             return result;
@@ -83,7 +83,7 @@ namespace BannerKings.Models.Vanilla
             var government = BannerKingsConfig.Instance.TitleManager.GetSettlementGovernment(settlement);
             if (government == GovernmentType.Feudal)
             {
-                result.AddFactor(0.15f, new TextObject("{=zYUOYyYe}Government"));
+                result.AddFactor(0.15f, new TextObject("{=PSrEtF5L}Government"));
             }
 
             if (settlement.OwnerClan != null)
@@ -136,7 +136,7 @@ namespace BannerKings.Models.Vanilla
             result.LimitMin(0f);
             result.LimitMax(2f);
 
-            result.Add((CalculateEffect(settlement).ResultNumber - 0.4f) * 0.5f, new TextObject("{=XWQuZNyU}Mercantilism"));
+            result.Add((CalculateEffect(settlement).ResultNumber - 0.4f) * 0.5f, new TextObject("{=5eHCGMEK}Mercantilism"));
 
             if (settlement.OwnerClan != null)
             {
@@ -168,9 +168,9 @@ namespace BannerKings.Models.Vanilla
             if (settlement != null)
             {
                 var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
-                cost.AddFactor(1f - data.EconomicData.Mercantilism.ResultNumber, new TextObject("{=2nEcsN31}Mecantilism"));
+                cost.AddFactor(1f - data.EconomicData.Mercantilism.ResultNumber, new TextObject("{=ciXU8Ews}Mecantilism"));
                 cost.AddFactor(data.EconomicData.CaravanAttraction.ResultNumber - 1f,
-                    new TextObject("{=xHwR364q}Caravan attraction"));
+                    new TextObject("{=FK7QzVtM}Caravan attraction"));
             }
 
             return cost;
@@ -181,8 +181,8 @@ namespace BannerKings.Models.Vanilla
             var result = new ExplainedNumber(1f, true);
 
             var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
-            result.Add(data.EconomicData.Mercantilism.ResultNumber / 2f, new TextObject("{=XWQuZNyU}Mercantilism"));
-            result.AddFactor(data.MilitaryData.Militarism.ResultNumber * -1f, new TextObject("{=1oUWHK2A}Militarism"));
+            result.Add(data.EconomicData.Mercantilism.ResultNumber / 2f, new TextObject("{=5eHCGMEK}Mercantilism"));
+            result.AddFactor(data.MilitaryData.Militarism.ResultNumber * -1f, new TextObject("{=m66LFb9g}Militarism"));
 
             BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref result, settlement.OwnerClan.Leader,
                 CouncilPosition.Steward, 0.15f, true);

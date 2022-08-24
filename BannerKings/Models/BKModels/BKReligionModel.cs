@@ -86,7 +86,7 @@ namespace BannerKings.Models.BKModels
         public ExplainedNumber CalculateReligionWeight(Religion religion, Settlement settlement)
         {
             ExplainedNumber result = new ExplainedNumber(0f, true);
-            result.Add(religion.Fervor.ResultNumber * 100f, new TextObject("{=SFQVeLPa}Fervor"));
+            result.Add(religion.Fervor.ResultNumber * 100f, new TextObject("{=AfsRi9wL}Fervor"));
 
             Hero owner = null;
             if (settlement.OwnerClan != null)
@@ -99,7 +99,7 @@ namespace BannerKings.Models.BKModels
                 Religion rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(owner);
                 if (rel != null && rel == religion)
                 {
-                    result.AddFactor(30f, new TextObject("{=JfDwUuNh}Owner's faith"));
+                    result.AddFactor(30f, new TextObject("{=tKhBP7mF}Owner's faith"));
                 }
 
                 if (owner.GetPerkValue(BKPerks.Instance.TheologyPreacher))
@@ -124,7 +124,7 @@ namespace BannerKings.Models.BKModels
                 result.AddFactor(-1f);
             }
 
-            result.Add(religion.Fervor.ResultNumber, new TextObject("{=SFQVeLPa}Fervor"));
+            result.Add(religion.Fervor.ResultNumber, new TextObject("{=AfsRi9wL}Fervor"));
 
             Hero owner = null;
             if (settlement.OwnerClan != null)
@@ -137,7 +137,7 @@ namespace BannerKings.Models.BKModels
                 Religion rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(owner);
                 if (rel != null && rel == religion)
                 {
-                    result.AddFactor(0.1f, new TextObject("{=JfDwUuNh}Owner's faith"));
+                    result.AddFactor(0.1f, new TextObject("{=tKhBP7mF}Owner's faith"));
                 }
 
                 if (owner.GetPerkValue(BKPerks.Instance.TheologyPreacher))

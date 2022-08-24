@@ -59,7 +59,7 @@ namespace BannerKings.Models.Vanilla
                     if (wk.IsRunning && wk.Owner != clan.Leader && wk.WorkshopType.StringId != "artisans")
                     {
                         result.Add(base.CalculateOwnerIncomeFromWorkshop(wk) * wkModel.CalculateWorkshopTax(town.Settlement, wk.Owner).ResultNumber,
-                            new TextObject("{=SVcoWsmL}Taxes from {WORKSHOP} at {TOWN}")
+                            new TextObject("{=RBCrujCo}Taxes from {WORKSHOP} at {TOWN}")
                                 .SetTextVariable("WORKSHOP", wk.Name)
                                 .SetTextVariable("TOWN", town.Name));
                     }
@@ -72,7 +72,7 @@ namespace BannerKings.Models.Vanilla
 
                 foreach (var notable in town.Settlement.Notables.Where(notable => notable.SupporterOf == clan && notable.Gold > 5000))
                 {
-                    result.Add(200f, new TextObject("{=PfCL67Qx}Aid from {NOTABLE}").SetTextVariable("NOTABLE", notable.Name));
+                    result.Add(200f, new TextObject("{=WDHTvasY}Aid from {NOTABLE}").SetTextVariable("NOTABLE", notable.Name));
                     if (applyWithdrawals)
                     {
                         notable.Gold -= 200;
@@ -91,7 +91,7 @@ namespace BannerKings.Models.Vanilla
                     }
 
                     var amount = pair.Value.Aggregate(0f, (current, title) => current + (int) title.dueTax);
-                    result.Add(amount, new TextObject("{=UhK7e2r2}Taxes from {CLAN}").SetTextVariable("CLAN", pair.Key.Name));
+                    result.Add(amount, new TextObject("{=6keRYbQa}Taxes from {CLAN}").SetTextVariable("CLAN", pair.Key.Name));
                 }
             }
 
@@ -122,7 +122,7 @@ namespace BannerKings.Models.Vanilla
                             kingdom.KingdomBudgetWallet -= (int) payment;
                         }
 
-                        result.Add(payment, new TextObject("{=cfkcpO2r}Army compensation rights"));
+                        result.Add(payment, new TextObject("{=r1iYHSWx}Army compensation rights"));
                     }
                 }
             }
@@ -130,7 +130,7 @@ namespace BannerKings.Models.Vanilla
             var position = BannerKingsConfig.Instance.CourtManager.GetHeroPosition(clan.Leader);
             if (position != null)
             {
-                result.Add(position.DueWage, new TextObject("{=MsAYmzrZ}Councillor role"));
+                result.Add(position.DueWage, new TextObject("{=WvhXhUFS}Councillor role"));
             }
         }
 
@@ -145,7 +145,7 @@ namespace BannerKings.Models.Vanilla
             var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(clan.Leader);
             if (education.Lifestyle == DefaultLifestyles.Instance.Mercenary)
             {
-                goldChange.Add((int) (num * 0.15f), new TextObject("{=z3W3FYbv}Lifestyle"));
+                goldChange.Add((int) (num * 0.15f), new TextObject("{=tYO5xwVe}Lifestyle"));
             }
         }
 
@@ -161,7 +161,7 @@ namespace BannerKings.Models.Vanilla
 
                 var tax = wkModel.CalculateWorkshopTax(wk.Settlement, clan.Leader).ResultNumber;
                 result.Add(base.CalculateOwnerIncomeFromWorkshop(wk) * -tax,
-                    new TextObject("{=MEH5N0xZ}{WORKSHOP} taxes to {CLAN}")
+                    new TextObject("{=FTx77EBz}{WORKSHOP} taxes to {CLAN}")
                         .SetTextVariable("WORKSHOP", wk.Name)
                         .SetTextVariable("CLAN", wk.Settlement.OwnerClan.Name));
             }
@@ -172,7 +172,7 @@ namespace BannerKings.Models.Vanilla
                 foreach (var position in data.GetOccupiedPositions())
                 {
                     result.Add(-position.DueWage,
-                        new TextObject("{=pjM1GKgA}Council wage to {NAME}").SetTextVariable("NAME", position.Member.Name));
+                        new TextObject("{=wm92ApfD}Council wage to {NAME}").SetTextVariable("NAME", position.Member.Name));
                     if (applyWithdrawals && !position.Member.IsLord)
                     {
                         position.Member.Gold += position.DueWage;
@@ -201,7 +201,7 @@ namespace BannerKings.Models.Vanilla
             var dictionary = BannerKingsConfig.Instance.TitleManager.CalculateVassals(suzerain.deJure.Clan, clan);
             var amount = dictionary[clan].Aggregate(0f, (current, title) => current + (int) title.dueTax);
 
-            result.Add(-amount, new TextObject("{=nV8O61Mf}Taxes to {SUZERAIN}").SetTextVariable("SUZERAIN", suzerain.deJure.Name));
+            result.Add(-amount, new TextObject("{=rU692V1m}Taxes to {SUZERAIN}").SetTextVariable("SUZERAIN", suzerain.deJure.Name));
         }
     }
 }

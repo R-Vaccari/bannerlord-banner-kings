@@ -53,7 +53,7 @@ namespace BannerKings.UI.Extensions
         private int CurrentEnergy =>
             BannerKingsConfig.Instance.SmithingModel.CalculateArmorStamina(armorCrafting.CurrentItem.Item, Hero);
 
-        [DataSourceProperty] public string ArmorText => new TextObject("{=rsdAxJdT}Craft").ToString();
+        [DataSourceProperty] public string ArmorText => new TextObject("{=h40bm0cG}Craft").ToString();
 
 
         [DataSourceProperty]
@@ -147,7 +147,7 @@ namespace BannerKings.UI.Extensions
                 spentStamina = startingStamina - heroVm.CurrentStamina;
             }
 
-            HoursSpentText = new TextObject("{=wMOCBtCq}Hours spent for all actions: {HOURS} hours.")
+            HoursSpentText = new TextObject("{=G1NUDN2i}Hours spent for all actions: {HOURS} hours.")
                 .SetTextVariable("HOURS", GetSpentHours().ToString("0.0"))
                 .ToString();
 
@@ -192,7 +192,7 @@ namespace BannerKings.UI.Extensions
                     armorCrafting.CurrentItem.Difficulty);
                 if (MBRandom.RandomFloat < botchChance)
                 {
-                    MBInformationManager.AddQuickInformation(new TextObject("{=3wcqZ5O8}{HERO} has botched {ITEM}!")
+                    MBInformationManager.AddQuickInformation(new TextObject("{=A15k4LQS}{HERO} has botched {ITEM}!")
                             .SetTextVariable("HERO", crafting.CurrentCraftingHero.Hero.Name)
                             .SetTextVariable("ITEM", item.Name),
                         0, null, "event:/ui/notification/relation");
@@ -221,12 +221,12 @@ namespace BannerKings.UI.Extensions
                     if (modifier != null)
                     {
                         qualityText =
-                            new TextObject("{=82ruBEdC} with {QUALITY} quality").SetTextVariable("QUALITY", modifier.Name);
+                            new TextObject("{=hap0LfbT} with {QUALITY} quality").SetTextVariable("QUALITY", modifier.Name);
                         element.SetModifier(modifier);
                     }
                 }
 
-                MBInformationManager.AddQuickInformation(new TextObject("{=9yxcQHnL}{HERO} has crafted {ITEM}{QUALITY}.")
+                MBInformationManager.AddQuickInformation(new TextObject("{=NKVUJKQk}{HERO} has crafted {ITEM}{QUALITY}.")
                         .SetTextVariable("HERO", crafting.CurrentCraftingHero.Hero.Name)
                         .SetTextVariable("ITEM", item.Name)
                         .SetTextVariable("QUALITY", qualityText),
@@ -285,7 +285,7 @@ namespace BannerKings.UI.Extensions
                     if (crafting.MainActionHint != null)
                     {
                         crafting.MainActionHint = new BasicTooltipViewModel(() =>
-                            new TextObject("{=PRE5RKpp}You must rest and spend time before you can do this action.")
+                            new TextObject("{=KvHqmTsq}You must rest and spend time before you can do this action.")
                                 .ToString());
                     }
                 }
@@ -295,7 +295,7 @@ namespace BannerKings.UI.Extensions
                     if (crafting.MainActionHint != null)
                     {
                         crafting.MainActionHint = new BasicTooltipViewModel(() =>
-                            new TextObject("{=gduqxfck}You don't have all required materials!").ToString());
+                            new TextObject("{=XiyJ9WrW}You don't have all required materials!").ToString());
                     }
                 }
                 else

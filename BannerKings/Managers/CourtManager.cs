@@ -32,11 +32,11 @@ namespace BannerKings.Managers
             {
                 if (!factor)
                 {
-                    result.Add(maxEffect * competence, new TextObject("{=r78sMfze}Council effect"));
+                    result.Add(maxEffect * competence, new TextObject("{=5TbiMahb}Council effect"));
                 }
                 else
                 {
-                    result.AddFactor(maxEffect * competence, new TextObject("{=r78sMfze}Council effect"));
+                    result.AddFactor(maxEffect * competence, new TextObject("{=5TbiMahb}Council effect"));
                 }
             }
         }
@@ -177,7 +177,7 @@ namespace BannerKings.Managers
             if (action.ActionTaker == Hero.MainHero)
             {
                 MBInformationManager.AddQuickInformation(
-                    new TextObject("{=5oPavGc1}{OWNER} has appointed you as their {POSITION}.")
+                    new TextObject("{=f2V1XRaf}{OWNER} has appointed you as their {POSITION}.")
                         .SetTextVariable("OWNER", action.Council.Owner.Name)
                         .SetTextVariable("POSITION", action.TargetPosition.GetName()),
                     0, action.Council.Owner.CharacterObject, "event:/ui/notification/relation");

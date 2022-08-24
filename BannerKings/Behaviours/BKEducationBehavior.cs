@@ -72,8 +72,8 @@ namespace BannerKings.Behaviours
 
             if (perk == BKPerks.Instance.ScholarshipMechanic || perk == BKPerks.Instance.ScholarshipMechanic || perk == BKPerks.Instance.ScholarshipMechanic || perk == BKPerks.Instance.ScholarshipMechanic)
             {
-                InformationManager.ShowInquiry(new InquiryData(new TextObject("{=jovQGkGE}Double Perks").ToString(),
-                    new TextObject("{=aRgFF2bz}From now on, double perks will be yielded for the {SKILL} skill. The perks will be rewarded after closing the Character tab with 'Done', not immediatly after selecting them.")
+                InformationManager.ShowInquiry(new InquiryData(new TextObject("{=Vjg2DuT1}Double Perks").ToString(),
+                    new TextObject("{=eodABOkZ}From now on, double perks will be yielded for the {SKILL} skill. The perks will be rewarded after closing the Character tab with 'Done', not immediatly after selecting them.")
                         .SetTextVariable("SKILL", perk.Skill.Name)
                         .ToString(),
                     true, false,
@@ -90,7 +90,7 @@ namespace BannerKings.Behaviours
                 }
 
                 hero.HeroDeveloper.AddPerk(perk.AlternativePerk);
-                MBInformationManager.AddQuickInformation(new TextObject("{=fg27J28j}You have received the {PERK} as a double perk yield reward.")
+                MBInformationManager.AddQuickInformation(new TextObject("{=nk8mBkVd}You have received the {PERK} as a double perk yield reward.")
                     .SetTextVariable("PERK", perk.AlternativePerk.Name));
             }
         }
@@ -233,13 +233,13 @@ namespace BannerKings.Behaviours
         private void AddDialogue(CampaignGameStarter starter)
         {
             starter.AddPlayerLine("bk_question_preaching", "lord_talk_ask_something_2", "lord_talk_ask_something",
-                "{=c0UpkBnJ}I would like to buy a book.",
+                "{=yKxDFTQ3}I would like to buy a book.",
                 IsBookSeller,
                 OnBuyBookConsequence);
 
 
             starter.AddPlayerLine("lord_meet_player_response3", "lord_meet_player_response", "lord_introduction",
-                "{=NmGJs7yB}My name is {PLAYER.NAME}, {?CONVERSATION_NPC.GENDER}madam{?}sir{\\?}. May I ask your name?." +
+                "{=SY7Aa5Xe}My name is {PLAYER.NAME}, {?CONVERSATION_NPC.GENDER}madam{?}sir{\\?}. May I ask your name?." +
                 " (You ask in {NPC_LANGUAGE})",
                 OnMeetLanguageCondition,
                 OnMeetLanguageConsequence);

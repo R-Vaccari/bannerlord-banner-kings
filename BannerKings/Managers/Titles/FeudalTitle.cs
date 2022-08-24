@@ -76,7 +76,7 @@ namespace BannerKings.Managers.Titles
         {
             get
             {
-                var text = new TextObject("{=3mUEiAaw}{TITLE} of {NAME}");
+                var text = new TextObject("{=wMius2i9}{TITLE} of {NAME}");
                 text.SetTextVariable("TITLE", Utils.Helpers.GetTitlePrefix(type, contract.Government, deJure.Culture));
                 text.SetTextVariable("NAME", shortName.ToString());
                 return text;
@@ -274,7 +274,7 @@ namespace BannerKings.Managers.Titles
 
             if (hero == Hero.MainHero)
             {
-                MBInformationManager.AddQuickInformation(new TextObject("{=eJkhhBpp}You now have a claim on the {TITLE}")
+                MBInformationManager.AddQuickInformation(new TextObject("{=bdsY7u3H}You now have a claim on the {TITLE}")
                     .SetTextVariable("TITLE", FullName));
             }
         }
@@ -344,7 +344,7 @@ namespace BannerKings.Managers.Titles
             if (notify)
             {
                 InformationManager.DisplayMessage(new InformationMessage(
-                    new TextObject("{=Ab12FmRw}{TITLE} has drifted into a legal part of {SOVEREIGN}")
+                    new TextObject("{=5ryn9tJc}{TITLE} has drifted into a legal part of {SOVEREIGN}")
                         .SetTextVariable("TITLE", FullName)
                         .SetTextVariable("SOVEREIGN", newSovereign.FullName)
                         .ToString()));

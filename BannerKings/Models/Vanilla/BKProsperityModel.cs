@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using BannerKings.Managers.Court;
 using BannerKings.Managers.Skills;
 using Helpers;
@@ -20,10 +20,10 @@ namespace BannerKings.Models.Vanilla
         private static readonly float STABILITY_FACTOR = 5f;
 
 
-        private static readonly TextObject FoodShortageText = new("{=qTFKvGSg}Food Shortage");
-        private static readonly TextObject ProsperityFromMarketText = new("{=RNT5hMVb}Goods From Market");
-        private static readonly TextObject Governor = new("{=Fa2nKXxI}Governor");
-        private static readonly TextObject HousingCostsText = new("{=ByRAgJy4}Housing Costs");
+        private static readonly TextObject FoodShortageText = new("{=7Ttux0dr}Food Shortage");
+        private static readonly TextObject ProsperityFromMarketText = new("{=3kMgpxc0}Goods From Market");
+        private static readonly TextObject Governor = new("{=DyZdcwa4}Governor");
+        private static readonly TextObject HousingCostsText = new("{=zYjK6Kzb}Housing Costs");
 
         public override ExplainedNumber CalculateHearthChange(Village village, bool includeDescriptions = false)
         {

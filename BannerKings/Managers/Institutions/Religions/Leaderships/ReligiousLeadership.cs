@@ -13,7 +13,7 @@ namespace BannerKings.Managers.Institutions.Religions.Leaderships
         public void ChangeClergymanRank(Religion religion, Clergyman clergyman, int newRank)
         {
             var firstName = clergyman.Hero.FirstName;
-            var fullName = new TextObject("{=mLS7caOY}{RELIGIOUS_TITLE} {NAME}")
+            var fullName = new TextObject("{=6MHqUBXt}{RELIGIOUS_TITLE} {NAME}")
                 .SetTextVariable("RELIGIOUS_TITLE", religion.Faith.GetRankTitle(newRank))
                 .SetTextVariable("NAME", firstName);
             clergyman.Hero.SetName(fullName, firstName);

@@ -80,18 +80,18 @@ namespace BannerKings.Behaviours
                 {
                     requestText =
                         new TextObject(
-                            "{=fmKzCKRF}I humbly ask of you to release me of my duties in the {CLAN}. I shall remain as your vassal and loyal friend.");
+                            "{=adCAG0nk}I humbly ask of you to release me of my duties in the {CLAN}. I shall remain as your vassal and loyal friend.");
                 }
                 else if (hero.IsEnemy(Hero.MainHero))
                 {
                     requestText =
                         new TextObject(
-                            "{=z7AO3rf0}I request of you to release me of my duties in the {CLAN}. It is time for me to lead my own family.");
+                            "{=KwjG1wou}I request of you to release me of my duties in the {CLAN}. It is time for me to lead my own family.");
                 }
                 else
                 {
                     requestText =
-                        new TextObject("{=8Nr6WY1r}I demand of you to release me of the {CLAN}. It is time we part ways.");
+                        new TextObject("{=PDD36QvM}I demand of you to release me of the {CLAN}. It is time we part ways.");
                 }
 
                 requestText = requestText.SetTextVariable("CLAN", originalClan.Name);
@@ -129,7 +129,7 @@ namespace BannerKings.Behaviours
             if (newClan != null)
             {
                 MBInformationManager.AddQuickInformation(
-                    new TextObject("{=pMxRRceY}The {NEW} has been formed by {HERO}, previously a knight of {ORIGINAL}.")
+                    new TextObject("{=YjtnRj9r}The {NEW} has been formed by {HERO}, previously a knight of {ORIGINAL}.")
                         .SetTextVariable("NEW", hero.Clan.Name)
                         .SetTextVariable("HERO", hero.Name)
                         .SetTextVariable("ORIGINAL", originalClan.Name));
@@ -236,7 +236,7 @@ namespace BannerKings.Behaviours
             var tier = Clan.PlayerClan.Tier;
             if (tier < 2)
             {
-                hintText = new TextObject("{=oYketmxV}Your Clan Tier needs to be at least {TIER}.");
+                hintText = new TextObject("{=NeMhiUW8}Your Clan Tier needs to be at least {TIER}.");
                 hintText.SetTextVariable("TIER", 2);
                 return false;
             }
@@ -245,14 +245,14 @@ namespace BannerKings.Behaviours
             if (kingdom == null)
             {
                 hintText = new TextObject(
-                    "{=PxJL2uqw}Before bestowing knighthood, you need to be formally part of a kingdom.");
+                    "{=gM4TtJCf}Before bestowing knighthood, you need to be formally part of a kingdom.");
                 return false;
             }
 
             var titles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(Hero.MainHero);
             if (titles.Count == 0)
             {
-                hintText = new TextObject("{=VeqXVrwH}You do not legally own any title.");
+                hintText = new TextObject("{=vNwX2dhL}You do not legally own any title.");
                 return false;
             }
 
@@ -261,10 +261,10 @@ namespace BannerKings.Behaviours
             {
                 case 0:
                     hintText = new TextObject(
-                        "{=ucK0XAzW}You do not legally own any lordship that could be given to land a new vassal.");
+                        "{=s0ngHATj}You do not legally own any lordship that could be given to land a new vassal.");
                     return false;
                 case 1:
-                    hintText = new TextObject("{=dmkfGBGX}You cannot grant away your only lordship.");
+                    hintText = new TextObject("{=x23XkFM4}You cannot grant away your only lordship.");
                     return false;
             }
 
@@ -272,7 +272,7 @@ namespace BannerKings.Behaviours
             if (Clan.PlayerClan.Influence < influence.ResultNumber)
             {
                 hintText = new TextObject(
-                        "{=aVrjQrz5}Bestowing knighthood requires {INFLUENCE} influence to legitimize your new vassal.\n{EXPLANATIONS}")
+                        "{=rFXuWbdQ}Bestowing knighthood requires {INFLUENCE} influence to legitimize your new vassal.\n{EXPLANATIONS}")
                     .SetTextVariable("INFLUENCE", influence.ResultNumber)
                     .SetTextVariable("EXPLANATIONS", influence.GetExplanations());
                 return false;
@@ -280,7 +280,7 @@ namespace BannerKings.Behaviours
 
 
             hintText = new TextObject(
-                "{=fA5wxHD7}Bestowing knighthood requires {GOLD} gold to give your vassal financial security.");
+                "{=hN2Eynzu}Bestowing knighthood requires {GOLD} gold to give your vassal financial security.");
             hintText.SetTextVariable("GOLD", 5000);
 
             return Hero.MainHero.Gold >= 5000;
@@ -290,7 +290,7 @@ namespace BannerKings.Behaviours
         {
             MBInformationManager
                 .ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                    new TextObject("{=mcuQb68P}Select the fief you would like to give away").ToString(),
+                    new TextObject("{=7Azss01g}Select the fief you would like to give away").ToString(),
                     string.Empty, lordshipsToGive, false, 1,
                     GameTexts.FindText("str_done").ToString(), string.Empty,
                     delegate(List<InquiryElement> list)
@@ -370,7 +370,7 @@ namespace BannerKings.Behaviours
                         current = title;
                     }
 
-                    __result = new TextObject("{=8wrRKKqU}{RESULT}\n{DESCRIPTION}")
+                    __result = new TextObject("{=3Ug0Pp5p}{RESULT}\n{DESCRIPTION}")
                         .SetTextVariable("RESULT", __result.ToString())
                         .SetTextVariable("DESCRIPTION", desc);
                 }
@@ -428,27 +428,27 @@ namespace BannerKings.Behaviours
                             if (hero.PartyBelongedToAsPrisoner != null)
                             {
                                 hint = new TextObject(
-                                    "{=vOojEcIf}You cannot assign a prisoner member as a new party leader").ToString();
+                                    "{=A2qwGxzR}You cannot assign a prisoner member as a new party leader").ToString();
                             }
                             else if (hero.IsReleased)
                             {
                                 hint = new TextObject(
-                                        "{=OhNYkblK}This hero has just escaped from captors and will be available after some time.")
+                                        "{=XX95HPvL}This hero has just escaped from captors and will be available after some time.")
                                     .ToString();
                             }
                             else if (hero.PartyBelongedTo != null && hero.PartyBelongedTo.LeaderHero == hero)
                             {
-                                hint = new TextObject("{=aFYwbosi}This hero is already leading a party.").ToString();
+                                hint = new TextObject("{=DKZjQeN1}This hero is already leading a party.").ToString();
                             }
                             else if (hero.PartyBelongedTo != null && hero.PartyBelongedTo.LeaderHero != Hero.MainHero)
                             {
-                                hint = new TextObject("{=FjJi1DJb}This hero is already a part of an another party.")
+                                hint = new TextObject("{=P11B5nA2}This hero is already a part of an another party.")
                                     .ToString();
                             }
                             else if (hero.GovernorOf != null)
                             {
                                 hint = new TextObject(
-                                        "{=Hz8XO8wk}Governors cannot lead a mobile party and be a governor at the same time.")
+                                        "{=RND66CoK}Governors cannot lead a mobile party and be a governor at the same time.")
                                     .ToString();
                             }
                             else
@@ -456,11 +456,11 @@ namespace BannerKings.Behaviours
                                 switch (hero.HeroState)
                                 {
                                     case Hero.CharacterStates.Disabled:
-                                        hint = new TextObject("{=slzfQzl3}This hero is lost").ToString();
+                                        hint = new TextObject("{=MiVV06Yo}This hero is lost").ToString();
                                         break;
                                     case Hero.CharacterStates.Fugitive:
                                         hint = new TextObject(
-                                                "{=dD3kRDHi}This hero is a fugitive and running from their captors. They will be available after some time.")
+                                                "{=iWxEQVYg}This hero is a fugitive and running from their captors. They will be available after some time.")
                                             .ToString();
                                         break;
                                     default:
@@ -493,7 +493,7 @@ namespace BannerKings.Behaviours
                         var method = __instance.GetType().GetMethod("OnNewPartySelectionOver",
                             BindingFlags.NonPublic | BindingFlags.Instance);
                         MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                            new TextObject("{=0Q4Xo2BQ}Select the Leader of the New Party").ToString(),
+                            new TextObject("{=pyhP5yWu}Select the Leader of the New Party").ToString(),
                             string.Empty, list, true, 1, GameTexts.FindText("str_done").ToString(), "",
                             delegate(List<InquiryElement> x) { method.Invoke(__instance, new object[] {x}); },
                             delegate(List<InquiryElement> x) { method.Invoke(__instance, new object[] {x}); }));
@@ -501,7 +501,7 @@ namespace BannerKings.Behaviours
                     else
                     {
                         MBInformationManager.AddQuickInformation(new TextObject(
-                            "{=qZvNIVGV}There is no one available in your clan who can lead a party right now."));
+                            "{=WGo5MzOB}There is no one available in your clan who can lead a party right now."));
                     }
                 }
 

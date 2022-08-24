@@ -34,11 +34,11 @@ namespace BannerKings.UI.Extensions
 
         [DataSourceProperty] public string CultureText => GameTexts.FindText("str_culture").ToString();
 
-        [DataSourceProperty] public string KnightsText => new TextObject("{=E4ih5Aug}Knights").ToString();
+        [DataSourceProperty] public string KnightsText => new TextObject("{=ph4LMn6k}Knights").ToString();
 
-        [DataSourceProperty] public string CompanionsText => new TextObject("{=qWWMtdZv}Companions").ToString();
+        [DataSourceProperty] public string CompanionsText => new TextObject("{=a3G31iZ0}Companions").ToString();
 
-        [DataSourceProperty] public string CouncilText => new TextObject("{=efB4buSr}Council").ToString();
+        [DataSourceProperty] public string CouncilText => new TextObject("{=mUaJDjqO}Council").ToString();
 
         [DataSourceProperty]
         public EncyclopediaCultureVM CultureInfo
@@ -178,11 +178,11 @@ namespace BannerKings.UI.Extensions
             {
                 var rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(clan.Leader);
 
-                GameTexts.SetVariable("LEFT", new TextObject("{=tTLvo8sM}Clan Tier").ToString());
+                GameTexts.SetVariable("LEFT", new TextObject("{=t9cmsSU1}Clan Tier").ToString());
                 clanPageVM.ClanInfo.Add(new StringPairItemVM(GameTexts.FindText("str_LEFT_colon").ToString(),
                     clan.Tier.ToString()));
 
-                GameTexts.SetVariable("LEFT", new TextObject("{=ODEnkg0o}Clan Strength").ToString());
+                GameTexts.SetVariable("LEFT", new TextObject("{=d9qmQEZh}Clan Strength").ToString());
                 clanPageVM.ClanInfo.Add(new StringPairItemVM(GameTexts.FindText("str_LEFT_colon").ToString(),
                     clan.TotalStrength.ToString("F0")));
 
@@ -192,28 +192,28 @@ namespace BannerKings.UI.Extensions
 
                 if (rel != null)
                 {
-                    clanPageVM.ClanInfo.Add(new StringPairItemVM(new TextObject("{=PJndLuHZ}Faith:").ToString(),
+                    clanPageVM.ClanInfo.Add(new StringPairItemVM(new TextObject("{=OKw2P9m1}Faith:").ToString(),
                         rel.Faith.GetFaithName().ToString()));
                 }
 
-                clanPageVM.ClanInfo.Add(new StringPairItemVM(new TextObject("{=KSkeXrC8}Owned Caravans:").ToString(),
+                clanPageVM.ClanInfo.Add(new StringPairItemVM(new TextObject("{=K7hq6hSE}Owned Caravans:").ToString(),
                     caravans.ToString()));
 
-                clanPageVM.ClanInfo.Add(new StringPairItemVM(new TextObject("{=JKDptSUf}Owned Workshops:").ToString(),
+                clanPageVM.ClanInfo.Add(new StringPairItemVM(new TextObject("{=2qcNKU3J}Owned Workshops:").ToString(),
                     workshops.ToString()));
 
                 if (highestTitle != null)
                 {
-                    clanPageVM.ClanInfo.Add(new StringPairItemVM(new TextObject("{=YB8uFstV}Title Level:").ToString(),
+                    clanPageVM.ClanInfo.Add(new StringPairItemVM(new TextObject("{=jQa22yjg}Title Level:").ToString(),
                         highestTitle));
                 }
 
                 var income = BannerKingsConfig.Instance.ClanFinanceModel.CalculateClanIncome(clan, true);
-                clanPageVM.ClanInfo.Add(new StringPairItemVM(new TextObject("{=m2zv7fkG}Income:").ToString(),
+                clanPageVM.ClanInfo.Add(new StringPairItemVM(new TextObject("{=43UgU7C4}Income:").ToString(),
                     income.ResultNumber.ToString(), new BasicTooltipViewModel(() => income.GetExplanations())));
 
                 var expenses = BannerKingsConfig.Instance.ClanFinanceModel.CalculateClanExpenses(clan, true);
-                clanPageVM.ClanInfo.Add(new StringPairItemVM(new TextObject("{=5mBb34Yx}Expenses:").ToString(),
+                clanPageVM.ClanInfo.Add(new StringPairItemVM(new TextObject("{=Locuup55}Expenses:").ToString(),
                     expenses.ResultNumber.ToString(), new BasicTooltipViewModel(() => expenses.GetExplanations())));
 
                 addedFields = true;

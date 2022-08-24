@@ -58,7 +58,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
 
             var piety = GetPietyReward();
             KillCharacterAction.ApplyByExecution(input, actionTaker, false);
-            MBInformationManager.AddQuickInformation(new TextObject("{=1Pd15en6}{SACRIFICE} was ritually sacrificed by {HERO}.")
+            MBInformationManager.AddQuickInformation(new TextObject("{=d8ecHZ0P}{SACRIFICE} was ritually sacrificed by {HERO}.")
                     .SetTextVariable("HERO", actionTaker.Name)
                     .SetTextVariable("SACRIFICE", input.Name),
                 0, actionTaker.CharacterObject, "event:/ui/notification/relation");
@@ -90,12 +90,12 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
 
         public override TextObject GetDescription()
         {
-            return new TextObject("{=tZNgwDzm}Sacrifice {HERO} to prove your devotion.");
+            return new TextObject("{=Tj9rCUmw}Sacrifice {HERO} to prove your devotion.");
         }
 
         public override TextObject GetName()
         {
-            return new TextObject("{=S16u75fq}Human Sacrifice");
+            return new TextObject("{=0aY6zmgK}Human Sacrifice");
         }
 
         public override RiteType GetRiteType()
@@ -121,11 +121,11 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
 
         public override void SetDialogue()
         {
-            //MBTextManager.SetTextVariable("CLERGYMAN_RITE_CONFIRM", new TextObject("{=qYri12um}The fate of {HERO} was sealed once they dared draw sword on us. Let us rejoice upon the glory we bathe ourselves in as the enemy bleeds!")
+            //MBTextManager.SetTextVariable("CLERGYMAN_RITE_CONFIRM", new TextObject("{=eTqH0eDT}The fate of {HERO} was sealed once they dared draw sword on us. Let us rejoice upon the glory we bathe ourselves in as the enemy bleeds!")
             //   .SetTextVariable("HERO", input.Name), false);
             MBTextManager.SetTextVariable("CLERGYMAN_RITE_CONFIRM",
                 new TextObject(
-                        "{=B9qA3tM1}The fate of {HERO} was sealed once they dared draw sword on us. Affirm the rite and we shall rejoice upon the glory we bathe ourselves in as the enemy bleeds!")
+                        "{=uSMsxDP1}The fate of {HERO} was sealed once they dared draw sword on us. Affirm the rite and we shall rejoice upon the glory we bathe ourselves in as the enemy bleeds!")
                     .SetTextVariable("HERO", input.Name));
         }
     }

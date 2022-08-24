@@ -11,7 +11,7 @@ namespace BannerKings.Managers.Decisions
 
         public override string GetHint()
         {
-            return new TextObject("{=NrbDrcP9}Privately owned slaves' work will be taxed by the state, according to the tax policy, generating extra revenue. Slave owners will be dissatisfied.").ToString();
+            return new TextObject("{=5Wpq8YxN}Privately owned slaves' work will be taxed by the state, according to the tax policy, generating extra revenue. Slave owners will be dissatisfied.").ToString();
         }
 
         public override string GetIdentifier()
@@ -21,7 +21,7 @@ namespace BannerKings.Managers.Decisions
 
         public override string GetName()
         {
-            return new TextObject("{=nDkVZPhh}Tax private slaves").ToString();
+            return new TextObject("{=qGB6RG9a}Tax private slaves").ToString();
         }
     }
 }

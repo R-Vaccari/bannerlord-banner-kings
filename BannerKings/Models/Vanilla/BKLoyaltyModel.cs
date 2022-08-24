@@ -24,10 +24,10 @@ namespace BannerKings.Models.Vanilla
         private static readonly float LOYALTY_FACTOR = 4f;
 
         private static readonly TextObject StarvingText = GameTexts.FindText("str_starving");
-        private static readonly TextObject CultureText = new("{=YjoXyFDX}Owner Culture");
+        private static readonly TextObject CultureText = new("{=LHFoaUGo}Owner Culture");
         private static readonly TextObject NotableText = GameTexts.FindText("str_notable_relations");
-        private static readonly TextObject ParadePerkBonus = new("{=8aior6PH}Parade perk bonus");
-        private static readonly TextObject GovernorCultureText = new("{=5Vo8dJub}Governor's Culture");
+        private static readonly TextObject ParadePerkBonus = new("{=fZYeszid}Parade perk bonus");
+        private static readonly TextObject GovernorCultureText = new("{=fVeD8UC2}Governor's Culture");
         private static readonly TextObject SecurityText = GameTexts.FindText("str_security");
         private static readonly TextObject LoyaltyDriftText = GameTexts.FindText("str_loyalty_drift");
 
@@ -87,7 +87,7 @@ namespace BannerKings.Models.Vanilla
                             value = -0.3f;
                         }
 
-                        baseResult.Add(value, new TextObject("{=ktLGGswx}Criminal policy"));
+                        baseResult.Add(value, new TextObject("{=qyjqPWxJ}Criminal policy"));
                         break;
                     }
                     case CriminalPolicy.Forgiveness:
@@ -102,7 +102,7 @@ namespace BannerKings.Models.Vanilla
                             value = -0.3f;
                         }
 
-                        baseResult.Add(value, new TextObject("{=ktLGGswx}Criminal policy"));
+                        baseResult.Add(value, new TextObject("{=qyjqPWxJ}Criminal policy"));
                         break;
                     }
                 }
@@ -110,13 +110,13 @@ namespace BannerKings.Models.Vanilla
                 if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(town.Settlement, "decision_ration"))
                 {
                     baseResult.Add(town.IsUnderSiege || town.FoodStocks >= town.FoodStocksUpperLimit() * 0.1f ? -2f : -4f,
-                        new TextObject("{=bj2w3cMs}Enforce rations decision"));
+                        new TextObject("{=w6bLP4DB}Enforce rations decision"));
                 }
 
                 var government = BannerKingsConfig.Instance.TitleManager.GetSettlementGovernment(town.Settlement);
                 if (government == GovernmentType.Republic)
                 {
-                    baseResult.Add(1f, new TextObject("{=zYUOYyYe}Government"));
+                    baseResult.Add(1f, new TextObject("{=PSrEtF5L}Government"));
                 }
 
                 baseResult.Add(2f * data.Autonomy, new TextObject("Autonomy"));

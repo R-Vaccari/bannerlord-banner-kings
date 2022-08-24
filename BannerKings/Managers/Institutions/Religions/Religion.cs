@@ -113,7 +113,7 @@ namespace BannerKings.Managers.Institutions.Religions
         {
             var hero = HeroCreator.CreateSpecialHero(preset, settlement);
             var firstName = hero.FirstName;
-            var fullName = new TextObject("{=mLS7caOY}{RELIGIOUS_TITLE} {NAME}")
+            var fullName = new TextObject("{=6MHqUBXt}{RELIGIOUS_TITLE} {NAME}")
                 .SetTextVariable("RELIGIOUS_TITLE", Faith.GetRankTitle(rank))
                 .SetTextVariable("NAME", firstName);
             hero.SetName(fullName, firstName);

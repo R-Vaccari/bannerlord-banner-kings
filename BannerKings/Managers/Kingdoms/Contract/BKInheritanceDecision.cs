@@ -130,7 +130,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
         {
             var textObject =
                 new TextObject(
-                    "{=0EqPRs21}As {?IS_FEMALE}queen{?}king{\\?} you must decide whether to enforce the policy of {POLICY_NAME}.");
+                    "{=mXcErd03}As {?IS_FEMALE}queen{?}king{\\?} you must decide whether to enforce the policy of {POLICY_NAME}.");
             textObject.SetTextVariable("IS_FEMALE", DetermineChooser().Leader.IsFemale ? 1 : 0);
             textObject.SetTextVariable("POLICY_NAME", inheritanceType.ToString());
             return textObject;
@@ -138,7 +138,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
 
         public override TextObject GetChooseTitle()
         {
-            var textObject = new TextObject("{=VZEJRjyN}Change government to {GOVERNMENT}");
+            var textObject = new TextObject("{=iZ6VfHe6}Change government to {GOVERNMENT}");
             textObject.SetTextVariable("GOVERNMENT", inheritanceType.ToString());
             return textObject;
         }
@@ -150,13 +150,13 @@ namespace BannerKings.Managers.Kingdoms.Contract
             var newGovernment = ((InheritanceDecisionOutcome) chosenOutcome).ShouldDecisionBeEnforced;
             if (newGovernment)
             {
-                textObject = new TextObject("{=W870ZLix}The {KINGDOM}'s government is now {POLICY_DESCRIPTION}. {POLICY_SUPPORT}");
+                textObject = new TextObject("{=u0mnqvO2}The {KINGDOM}'s government is now {POLICY_DESCRIPTION}. {POLICY_SUPPORT}");
             }
             else
             {
                 textObject =
                     new TextObject(
-                        "{=P8Rcho7Y}The {KINGDOM}'s government will continue to be {POLICY_DESCRIPTION}. {POLICY_SUPPORT}");
+                        "{=ikYX00pK}The {KINGDOM}'s government will continue to be {POLICY_DESCRIPTION}. {POLICY_SUPPORT}");
             }
 
 
@@ -169,16 +169,16 @@ namespace BannerKings.Managers.Kingdoms.Contract
             }
             else
             {
-                textObject.SetTextVariable("POLICY_SUPPORT", "{=bqEO389P}This decision caused a split in the council.");
+                textObject.SetTextVariable("POLICY_SUPPORT", "{=74XdPqxc}This decision caused a split in the council.");
                 switch (supportStatus)
                 {
                     case SupportStatus.Majority:
                         textObject.SetTextVariable("POLICY_SUPPORT",
-                            "{=3W67kdtc}This decision had the support of the council.");
+                            "{=VPH5EBOT}This decision had the support of the council.");
                         break;
                     case SupportStatus.Minority:
                         textObject.SetTextVariable("POLICY_SUPPORT",
-                            "{=b6MgRYlM}This decision was rejected by the support of the council.");
+                            "{=PnCak8E1}This decision was rejected by the support of the council.");
                         break;
                 }
             }
@@ -205,7 +205,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
         {
             var textObject =
                 new TextObject(
-                    "{=iXfLh4YN}{CLAN} proposes a change of government, currently {CURRENT} to {PROPOSED}. You can pick your stance regarding this decision.");
+                    "{=JjgGFcCt}{CLAN} proposes a change of government, currently {CURRENT} to {PROPOSED}. You can pick your stance regarding this decision.");
 
             textObject.SetTextVariable("CLAN", DetermineChooser().Leader.Name);
             textObject.SetTextVariable("CURRENT",
@@ -216,7 +216,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
 
         public override TextObject GetSupportTitle()
         {
-            var textObject = new TextObject("{=XSZDzBiK}Vote to change realm clans' inheritance to {GOVERNMENT}");
+            var textObject = new TextObject("{=f5Sz1HSM}Vote to change realm clans' inheritance to {GOVERNMENT}");
             textObject.SetTextVariable("GOVERNMENT", inheritanceType.ToString());
             return textObject;
         }
@@ -244,7 +244,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
 
             public override TextObject GetDecisionTitle()
             {
-                var textObject = new TextObject("{=kakxnaN5}{?SUPPORT}Yes{?}No{\\?}");
+                var textObject = new TextObject("{=DJRboTyg}{?SUPPORT}Yes{?}No{\\?}");
                 textObject.SetTextVariable("SUPPORT", ShouldDecisionBeEnforced ? 1 : 0);
                 return textObject;
             }
@@ -253,10 +253,10 @@ namespace BannerKings.Managers.Kingdoms.Contract
             {
                 if (ShouldDecisionBeEnforced)
                 {
-                    return new TextObject("{=pWyxaauF}We support this proposal");
+                    return new TextObject("{=WEJOxOj8}We support this proposal");
                 }
 
-                return new TextObject("{=BktSNgY4}We oppose this proposal");
+                return new TextObject("{=zfUqKqW2}We oppose this proposal");
             }
 
             public override string GetDecisionLink()

@@ -52,7 +52,7 @@ namespace BannerKings.Models.Vanilla
                 var government = BannerKingsConfig.Instance.TitleManager.GetSettlementGovernment(town.Settlement);
                 if (government == GovernmentType.Imperial)
                 {
-                    baseResult.Add(1f, new TextObject("{=zYUOYyYe}Government"));
+                    baseResult.Add(1f, new TextObject("{=PSrEtF5L}Government"));
                 }
 
                 BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref baseResult, town.OwnerClan.Leader,

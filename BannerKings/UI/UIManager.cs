@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -160,7 +160,7 @@ namespace BannerKings.UI
                     true);
                 __instance.LearningLimitTooltip = new BasicTooltipViewModel(() =>
                     CampaignUIHelper.GetTooltipForAccumulatingPropertyWithResult(
-                        new TextObject("{=YT9giTet}Learning Limit").ToString(), explainedNumber.ResultNumber,
+                        new TextObject("{=fTKqtNxB}Learning Limit").ToString(), explainedNumber.ResultNumber,
                         ref explainedNumber));
             }
         }

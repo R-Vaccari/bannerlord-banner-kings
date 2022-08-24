@@ -72,7 +72,7 @@ namespace BannerKings.Models.Vanilla
                     if (trainning > 0)
                     {
                         baseResult.Add(trainning == 1 ? 0.2f : trainning == 2 ? 0.5f : 1f,
-                            new TextObject("{=BkTiRPT4}Training Fields"));
+                            new TextObject("{=c6pesaYL}Training Fields"));
                     }
                 }
 
@@ -86,19 +86,19 @@ namespace BannerKings.Models.Vanilla
         public ExplainedNumber GetMilitiaLimit(PopulationData data, Settlement settlement)
         {
             var result = new ExplainedNumber(0f, true);
-            result.Add(data.TotalPop * 0.1f, new TextObject("{=0vJkgxxD}Total population"));
+            result.Add(data.TotalPop * 0.1f, new TextObject("{=bLbvfBnb}Total population"));
 
             if (settlement.IsCastle)
             {
-                result.Add(200f, new TextObject("{=MWrd7f9M}Castle"));
+                result.Add(200f, new TextObject("{=UPhMZ859}Castle"));
             }
             else if (settlement.IsVillage)
             {
-                result.Add(20f, new TextObject("{=4aOGk6Sv}Village"));
+                result.Add(20f, new TextObject("{=esr9rn30}Village"));
             }
             else
             {
-                result.Add(100f, new TextObject("{=QNYKQVCT}Town"));
+                result.Add(100f, new TextObject("{=FO8mvaZJ}Town"));
             }
 
             return result;
@@ -147,13 +147,13 @@ namespace BannerKings.Models.Vanilla
                 var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
                 if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(settlement, "decision_militia_subsidize"))
                 {
-                    result.Add(0.12f, new TextObject("{=2hnRMdeN}Subsidize militia"));
+                    result.Add(0.12f, new TextObject("{=nPBwLDwE}Subsidize militia"));
                 }
 
                 var government = BannerKingsConfig.Instance.TitleManager.GetSettlementGovernment(settlement);
                 if (government == GovernmentType.Tribal)
                 {
-                    result.Add(0.08f, new TextObject("{=zYUOYyYe}Government"));
+                    result.Add(0.08f, new TextObject("{=PSrEtF5L}Government"));
                 }
 
                 var villageData = data.VillageData;

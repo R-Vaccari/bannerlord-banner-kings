@@ -11,7 +11,7 @@ namespace BannerKings.Managers.Decisions
 
         public override string GetHint()
         {
-            return new TextObject("{=Wp6ieDUh}Food consumption reduced through enforced rationing. Decreases loyalty, with double effect if settlement is not besieged. Increases adm. costs.").ToString();
+            return new TextObject("{=Bp5YdLju}Food consumption reduced through enforced rationing. Decreases loyalty, with double effect if settlement is not besieged. Increases adm. costs.").ToString();
         }
 
         public override string GetIdentifier()
@@ -21,7 +21,7 @@ namespace BannerKings.Managers.Decisions
 
         public override string GetName()
         {
-            return new TextObject("{=0GRWqixb}Enforce food rationing").ToString();
+            return new TextObject("{=8OmoZNnS}Enforce food rationing").ToString();
         }
     }
 }

@@ -60,20 +60,20 @@ namespace BannerKings.UI.Religion
             }
         }
 
-        [DataSourceProperty] public string ClergymenText => new TextObject("{=ZisikqmO}Clergymen").ToString();
+        [DataSourceProperty] public string ClergymenText => new TextObject("{=GbMZ6V8B}Clergymen").ToString();
 
-        [DataSourceProperty] public string FaithfulText => new TextObject("{=CfTricEo}Faithful").ToString();
+        [DataSourceProperty] public string FaithfulText => new TextObject("{=mnpTkVYf}Faithful").ToString();
 
-        [DataSourceProperty] public string GroupText => new TextObject("{=PJndLuHZ}Faith Group").ToString();
+        [DataSourceProperty] public string GroupText => new TextObject("{=OKw2P9m1}Faith Group").ToString();
 
-        [DataSourceProperty] public string VirtuesText => new TextObject("{=gBHgoAsV}Virtues").ToString();
+        [DataSourceProperty] public string VirtuesText => new TextObject("{=p6itQbf8}Virtues").ToString();
 
         [DataSourceProperty]
         public string SecondaryDivinitiesText => religion.Faith.GetSecondaryDivinitiesDescription().ToString();
 
-        [DataSourceProperty] public string DoctrinesText => new TextObject("{=NU0zRk3k}Doctrines").ToString();
+        [DataSourceProperty] public string DoctrinesText => new TextObject("{=BKLacKdC}Doctrines").ToString();
 
-        [DataSourceProperty] public string AspectsText => new TextObject("{=umZYzWxw}Aspects").ToString();
+        [DataSourceProperty] public string AspectsText => new TextObject("{=1sKJS1JR}Aspects").ToString();
 
         [DataSourceProperty] public string Name => religion.Faith.GetFaithName().ToString();
 
@@ -239,16 +239,16 @@ namespace BannerKings.UI.Religion
                     divinity.Description, divinity.Effects));
             }
 
-            Aspects.Add(new ReligionElementVM(new TextObject("{=KqfRG5kd}Leadership"), religion.Leadership.GetName(),
+            Aspects.Add(new ReligionElementVM(new TextObject("{=FRaCMrgt}Leadership"), religion.Leadership.GetName(),
                 religion.Leadership.GetHint()));
             Aspects.Add(new ReligionElementVM(religion.Faith.GetMainDivinitiesDescription(),
                 religion.Faith.GetMainDivinity().Name, religion.Faith.GetMainDivinity().Description));
-            Aspects.Add(new ReligionElementVM(new TextObject("{=PJndLuHZ}Faith Group"), religion.Faith.FaithGroup.Name,
+            Aspects.Add(new ReligionElementVM(new TextObject("{=OKw2P9m1}Faith Group"), religion.Faith.FaithGroup.Name,
                 religion.Faith.FaithGroup.Description));
-            Aspects.Add(new ReligionElementVM(new TextObject("{=PJndLuHZ}Faith"), UIHelper.GetFaithTypeName(religion.Faith),
+            Aspects.Add(new ReligionElementVM(new TextObject("{=OKw2P9m1}Faith"), UIHelper.GetFaithTypeName(religion.Faith),
                 UIHelper.GetFaithTypeDescription(religion.Faith)));
-            Aspects.Add(new ReligionElementVM(new TextObject("{=B1V7kvNY}Culture"), religion.MainCulture.Name,
-                new TextObject("{=1WVR0w6X}The main culture associated with this faith.")));
+            Aspects.Add(new ReligionElementVM(new TextObject("{=EjTxnGJp}Culture"), religion.MainCulture.Name,
+                new TextObject("{=6NYxLhjH}The main culture associated with this faith.")));
         }
     }
 }

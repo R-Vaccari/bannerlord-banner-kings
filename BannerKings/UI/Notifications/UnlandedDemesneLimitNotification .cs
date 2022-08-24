@@ -5,7 +5,7 @@ namespace BannerKings.UI.Notifications
 {
     public class DemesneLimitNotification : InformationData
     {
-        public DemesneLimitNotification() : base(new TextObject("{=cv4dbvGs}You have more fiefs than you can manage."))
+        public DemesneLimitNotification() : base(new TextObject("{=nESsP3qL}You have more fiefs than you can manage."))
         {
         }
 

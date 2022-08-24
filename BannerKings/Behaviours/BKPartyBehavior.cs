@@ -311,12 +311,12 @@ namespace BannerKings.Behaviours
 
 
             starter.AddPlayerLine("traveller_party_loot", "traveller_party_greeting", "close_window",
-                new TextObject("{=XaPMUJV0}Whatever you have, I'm taking it. Surrender or die!").ToString(),
+                new TextObject("{=dOcj05n6}Whatever you have, I'm taking it. Surrender or die!").ToString(),
                 traveller_aggression_on_condition,
                 delegate { PlayerEncounter.Current.IsEnemy = true; });
 
             starter.AddPlayerLine("traveller_party_leave", "traveller_party_greeting", "close_window",
-                new TextObject("{=dialog_end_nice}Carry on, then. Farewell.").ToString(), null,
+                new TextObject("{=zhRJeYOY}Carry on, then. Farewell.").ToString(), null,
                 delegate { PlayerEncounter.LeaveEncounter = true; });
 
             starter.AddDialogLine("slavecaravan_friend_party_start", "start", "slavecaravan_party_greeting",
@@ -328,11 +328,11 @@ namespace BannerKings.Behaviours
                 slavecaravan_neutral_on_condition, null);
 
             starter.AddPlayerLine("slavecaravan_party_leave", "slavecaravan_party_greeting", "close_window",
-                new TextObject("{=dialog_end_nice}Carry on, then. Farewell.").ToString(), null,
+                new TextObject("{=zhRJeYOY}Carry on, then. Farewell.").ToString(), null,
                 delegate { PlayerEncounter.LeaveEncounter = true; });
 
             starter.AddPlayerLine("slavecaravan_party_threat", "slavecaravan_party_greeting", "slavecaravan_threat",
-                new TextObject("{=oPVWEDiW}Give me your slaves and gear, or else!").ToString(),
+                new TextObject("{=Nk8tSdcu}Give me your slaves and gear, or else!").ToString(),
                 slavecaravan_neutral_on_condition,
                 null);
 
@@ -345,12 +345,12 @@ namespace BannerKings.Behaviours
                 raised_militia_start_on_condition, null);
 
             starter.AddPlayerLine("raised_militia_party_follow", "raised_militia_greeting", "raised_militia_order",
-                new TextObject("{=ho3oS05d}Follow my company.").ToString(),
+                new TextObject("{=Hvi96rXx}Follow my company.").ToString(),
                 raised_militia_order_on_condition,
                 raised_militia_follow_on_consequence);
 
             starter.AddPlayerLine("raised_militia_party_retreat", "raised_militia_greeting", "raised_militia_order",
-                new TextObject("{=Xcmd9hvV}You may go home.").ToString(),
+                new TextObject("{=xPvsVw4b}You may go home.").ToString(),
                 raised_militia_order_on_condition,
                 raised_militia_retreat_on_consequence);
 

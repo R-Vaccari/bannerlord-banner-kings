@@ -601,7 +601,7 @@ namespace BannerKings.Behaviours
                                 new object[] {garrisonParty, clan.Gold, applyWithdrawals});
                             if (wage > 0)
                             {
-                                goldChange.Add(-wage, new TextObject("{=iPDOLbi3}Party wages {A0}"),
+                                goldChange.Add(-wage, new TextObject("{=tqCSk7ya}Party wages {A0}"),
                                     garrisonParty.Name);
                             }
                         }
@@ -651,7 +651,7 @@ namespace BannerKings.Behaviours
                             if (BannerKingsConfig.Instance.TitleManager.GetHighestTitle(mobileParty.LeaderHero) == null)
                             {
                                 goldChange.Add(((ExplainedNumber) array[2]).ResultNumber,
-                                    new TextObject("{=iPDOLbi3}Party wages {A0}"), mobileParty.Name);
+                                    new TextObject("{=tqCSk7ya}Party wages {A0}"), mobileParty.Name);
                             }
                             else
                             {
@@ -713,7 +713,7 @@ namespace BannerKings.Behaviours
                             }
                         }
 
-                        goldChange.Add(result, new TextObject("{=r5Cafawk}{A0}"), village.Name);
+                        goldChange.Add(result, new TextObject("{=OtUhpj1p}{A0}"), village.Name);
                     }
 
                     foreach (var lordship in lordships)
@@ -731,7 +731,7 @@ namespace BannerKings.Behaviours
                             }
                             else
                             {
-                                goldChange.Add(result, new TextObject("{=r5Cafawk}{A0}"), village.Name);
+                                goldChange.Add(result, new TextObject("{=OtUhpj1p}{A0}"), village.Name);
                             }
                         }
                     }

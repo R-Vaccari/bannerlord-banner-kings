@@ -101,7 +101,7 @@ namespace BannerKings.Managers.Education.Lifestyles
             if (hero == Hero.MainHero)
             {
                 MBInformationManager.AddQuickInformation(
-                    new TextObject("{=snsTB9f0}You have received the {PERK} perk from the {LIFESTYLE} lifestyle.")
+                    new TextObject("{=xtrVWoWG}You have received the {PERK} perk from the {LIFESTYLE} lifestyle.")
                         .SetTextVariable("PERK", perk.Name)
                         .SetTextVariable("LIFESTYLE", Name));
             }

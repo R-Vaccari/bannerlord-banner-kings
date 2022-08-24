@@ -86,13 +86,13 @@ namespace BannerKings.UI.Extensions
         }
 
         [DataSourceProperty]
-        public string EducationText => new TextObject("{=aAMvOnQ6}Education").ToString();
+        public string EducationText => new TextObject("{=hntWNxZy}Education").ToString();
 
         [DataSourceProperty]
-        public string DecisionsText => new TextObject("{=HBo5cDUb}Decisions").ToString();
+        public string DecisionsText => new TextObject("{=GMNhGSUb}Decisions").ToString();
 
         [DataSourceProperty]
-        public string FaithText => new TextObject("{=PJndLuHZ}Faith").ToString();
+        public string FaithText => new TextObject("{=OKw2P9m1}Faith").ToString();
 
         public override void OnRefresh()
         {
@@ -146,8 +146,8 @@ namespace BannerKings.UI.Extensions
             }
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                            new TextObject("{=HBo5cDUb}Decisions").ToString(),
-                            new TextObject("{=TiOUtKCv}Choose a personal decision to take.").ToString(),
+                            new TextObject("{=GMNhGSUb}Decisions").ToString(),
+                            new TextObject("{=bn2Ohzow}Choose a personal decision to take.").ToString(),
                             options, true, 1, GameTexts.FindText("str_done").ToString(), string.Empty,
                             delegate (List<InquiryElement> x)
                             {

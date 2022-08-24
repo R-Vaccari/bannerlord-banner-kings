@@ -11,7 +11,7 @@ namespace BannerKings.Managers.Decisions
 
         public override string GetHint()
         {
-            return new TextObject("{=TQm2bvxx}Encourage able-bodied men to join the active militia force").ToString();
+            return new TextObject("{=xngDTGdf}Encourage able-bodied men to join the active militia force").ToString();
         }
 
         public override string GetIdentifier()
@@ -21,7 +21,7 @@ namespace BannerKings.Managers.Decisions
 
         public override string GetName()
         {
-            return new TextObject("{=kk17sUME}Encourage militia").ToString();
+            return new TextObject("{=sOQrvQc9}Encourage militia").ToString();
         }
     }
 }

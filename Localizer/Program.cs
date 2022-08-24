@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Runtime.InteropServices.ComTypes;
+using System.Text.RegularExpressions;
 using System.Xml;
 
 namespace Localizer
@@ -6,11 +7,13 @@ namespace Localizer
     internal class Program
     {
         private static List<string> _usedLocalizationIDs = null!;
+        private static Dictionary<string, string> _existingLocalizations = null!;
         private static Random _random = null!;
 
         private static void Main(string[] args)
         {
             _usedLocalizationIDs = new List<string>();
+            _existingLocalizations = new Dictionary<string, string>();
             _random = new Random();
 
             Console.WriteLine("Path to Source folder:");
@@ -34,9 +37,9 @@ namespace Localizer
                 Exit("std_module_strings_xml.xml not found.");
                 return;
             }
-        
-            var allLocalizationFiles = new[] {localizationFile}.Concat(Directory.GetFiles(modulesFolder.FullName, "std_module_strings_xml.xml", SearchOption.AllDirectories)).ToList();
-            Console.WriteLine($"\nLoaded {allLocalizationFiles.Count} Localization files");
+
+            var allLocalizationFiles = GetAllLocalizationFiles(modulesFolder.FullName);
+            Console.WriteLine($"Loaded {allLocalizationFiles.Count} Localization files");
         
             LoadUsedLocalizationIDs(allLocalizationFiles);
             Console.WriteLine($"Loaded {_usedLocalizationIDs.Count} IDs");
@@ -49,6 +52,9 @@ namespace Localizer
             }
             Console.WriteLine($"Loaded {files.Length} files to localize");
         
+            LoadExistingLocalizations(localizationFile);
+            Console.WriteLine($"\nLoaded {_existingLocalizations.Count} own/existing localizations to reuse");
+
             LocalizeTexts(localizationFile, files);
             Console.WriteLine("\nAll texts got localized! Press any key to exit..");
             Console.ReadKey();
@@ -60,17 +66,51 @@ namespace Localizer
             Console.ReadKey();
         }
 
+        private static void LoadExistingLocalizations(string localizationFile)
+        {
+            var localizationDocument = new XmlDocument();
+            localizationDocument.Load(localizationFile);
+
+            var stringNodes = localizationDocument.SelectNodes("/base/strings/*");
+            if (stringNodes is null || stringNodes.Count == 0)
+            {
+                return;
+            }
+
+            foreach (XmlNode stringNode in stringNodes)
+            {
+                if (stringNode is null)
+                {
+                    continue;
+                }
+
+                _existingLocalizations.Add(stringNode.Attributes!["id"]?.Value!, stringNode.Attributes!["text"]?.Value!);
+            }
+        }
+
+        private static List<string> GetAllLocalizationFiles(string modulesFolder)
+        {
+            var localizationFiles = new List<string>();
+
+            localizationFiles.AddRange(Directory.GetFiles(modulesFolder, "module_strings.xml", SearchOption.AllDirectories).ToList());
+            localizationFiles.AddRange(Directory.GetFiles(modulesFolder, "std_*.xml", SearchOption.AllDirectories).ToList());
+
+            return localizationFiles;
+        }
+
         private static void LoadUsedLocalizationIDs(IEnumerable<string> localizationFiles)
         {
             foreach (var localizationFile in localizationFiles)
             {
+                var fileContent = File.ReadAllText(localizationFile);
+
                 var localizationDocument = new XmlDocument();
-                localizationDocument.Load(localizationFile);
+                localizationDocument.LoadXml(fileContent);
 
                 var stringNodes = localizationDocument.SelectNodes("/base/strings/*");
                 if (stringNodes is null || stringNodes.Count == 0)
                 {
-                    return;
+                    continue;
                 }
 
                 foreach (XmlNode stringNode in stringNodes)
@@ -109,7 +149,7 @@ namespace Localizer
             Console.WriteLine($"Removed {filesToRemove.Count} files without text to localize");
 
             var initialTextCount = texts.Count;
-            Console.WriteLine($"Found {initialTextCount} texts to localize");
+            Console.WriteLine($"Loaded {initialTextCount} texts to localize");
 
             var duplicates = texts.RemoveAll(t => string.IsNullOrWhiteSpace(t) || t.Contains("img src="));
             Console.WriteLine($"Removed {duplicates} bad (empty or image) texts");
@@ -118,6 +158,7 @@ namespace Localizer
             Console.WriteLine($"Removed {initialTextCount - texts.Count} duplicated texts");
 
             Console.WriteLine($"\nLocalizing {texts.Count} texts in {filesToLocalize.Count} files..");
+            var resUsedTexts = 0;
             for (var textIndex = 1; textIndex < texts.Count; textIndex++)
             {
                 if (textIndex % 100 == 0)
@@ -127,7 +168,19 @@ namespace Localizer
 
                 var text = texts[textIndex - 1];
                 var textToLocalize = $"{{=!}}{text}";
-                var localizedText = GetLocalizedText(textToLocalize);
+                (string ID, string Text) localizedText;
+
+                if (_existingLocalizations.ContainsValue(text))
+                {
+                    var localizationID = _existingLocalizations.FirstOrDefault(el => el.Value == text).Key;
+                    localizedText = (localizationID, text.Replace("{=!}", $"{{={localizationID}}}"));
+
+                    resUsedTexts++;
+                }
+                else
+                {
+                    localizedText = GetLocalizedText(textToLocalize);
+                }
 
                 if (string.IsNullOrWhiteSpace(localizedText.Text))
                 {
@@ -140,6 +193,53 @@ namespace Localizer
                 {
                     ReplaceTextInSource(file, textToLocalize, localizedText.Text);
                 }
+            }
+
+            Console.WriteLine($"Reused {resUsedTexts} texts");
+
+            localizationDocument.Save(localizationFile);
+
+            var initialReUseableTexts = _existingLocalizations.Count;
+            RemoveUnusedLocalizations(localizationFile, files);
+            Console.WriteLine($"Removed {initialReUseableTexts - _existingLocalizations.Count} existing localizations, which were not used anymore");
+        }
+
+        private static void RemoveUnusedLocalizations(string localizationFile, IEnumerable<string> files)
+        {
+            var localizationDocument = new XmlDocument();
+            localizationDocument.Load(localizationFile);
+
+            var stringNodes = localizationDocument.SelectNodes("/base/strings/*");
+            if (stringNodes is null || stringNodes.Count == 0)
+            {
+                return;
+            }
+
+            var regex = new Regex("(?<=\"{=).{8}(?=})");
+            var texts = files.Select(File.ReadAllText).ToList();
+            var ids = texts.SelectMany(t => regex.Matches(t).Select(m => m.Value)).ToList();
+
+            var nodesToRemove = new List<XmlNode>();
+            foreach (XmlNode stringNode in stringNodes)
+            {
+                if (stringNode is null)
+                {
+                    continue;
+                }
+
+                var id = stringNode.Attributes!["id"]?.Value!;
+                if (ids.Any(i => i == id))
+                {
+                    continue;
+                }
+
+                _existingLocalizations.Remove(id);
+                nodesToRemove.Add(stringNode);
+            }
+
+            foreach (var xmlNode in nodesToRemove)
+            {
+                localizationDocument.SelectSingleNode("/base/strings")!.RemoveChild(xmlNode);
             }
 
             localizationDocument.Save(localizationFile);

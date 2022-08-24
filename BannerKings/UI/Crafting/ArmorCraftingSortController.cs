@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using TaleWorlds.CampaignSystem.ViewModelCollection;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -120,11 +120,11 @@ namespace BannerKings.UI.Crafting
         }
 
 
-        [DataSourceProperty] public string SortTypeText => new TextObject("{=zMMqgxb1}Type").ToString();
+        [DataSourceProperty] public string SortTypeText => new TextObject("{=K58MoMHA}Type").ToString();
 
-        [DataSourceProperty] public string SortNameText => new TextObject("{=PDdh1sBj}Name").ToString();
+        [DataSourceProperty] public string SortNameText => new TextObject("{=o1Z28eXv}Name").ToString();
 
-        [DataSourceProperty] public string SortYieldText => new TextObject("{=v3OF6vBg}Yield").ToString();
+        [DataSourceProperty] public string SortYieldText => new TextObject("{=ijdxm6U7}Yield").ToString();
 
 
         public void SetListToControl(MBBindingList<ArmorItemVM> listToControl)

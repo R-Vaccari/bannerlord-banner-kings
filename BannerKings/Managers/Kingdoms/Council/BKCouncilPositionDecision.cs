@@ -130,14 +130,14 @@ namespace BannerKings.Managers.Kingdoms.Council
         {
             var textObject =
                 new TextObject(
-                    "{=YURUV6wG}As the sovereign of {KINGDOM}, you must decide whether to approve this contract change or not.");
+                    "{=atiwRMmv}As the sovereign of {KINGDOM}, you must decide whether to approve this contract change or not.");
             textObject.SetTextVariable("KINGDOM", Kingdom.Name);
             return textObject;
         }
 
         public override TextObject GetChooseTitle()
         {
-            return new TextObject("{=bJ5tB7O6}Choose the next council member to occupy the position of {POSITION}")
+            return new TextObject("{=dqEO1Ug4}Choose the next council member to occupy the position of {POSITION}")
                 .SetTextVariable("POSITION", Position.GetName());
         }
 
@@ -145,7 +145,7 @@ namespace BannerKings.Managers.Kingdoms.Council
             bool isShortVersion = false)
         {
             var candidate = ((CouncilPositionDecisionOutcome) chosenOutcome).Candidate;
-            var textObject = new TextObject("{=zANaOHp8}The{KINGDOM} has chosen {NAME} as their new council member.")
+            var textObject = new TextObject("{=F9pSY7uQ}The{KINGDOM} has chosen {NAME} as their new council member.")
                 .SetTextVariable("KINGDOM", Kingdom.Name)
                 .SetTextVariable("NAME", candidate.Name);
             return textObject;
@@ -153,7 +153,7 @@ namespace BannerKings.Managers.Kingdoms.Council
 
         public override TextObject GetGeneralTitle()
         {
-            return new TextObject("{=efB4buSr}Council member for position {POSITION}")
+            return new TextObject("{=mUaJDjqO}Council member for position {POSITION}")
                 .SetTextVariable("POSITION", Position.GetName());
         }
 
@@ -183,14 +183,14 @@ namespace BannerKings.Managers.Kingdoms.Council
         public override TextObject GetSupportDescription()
         {
             return new TextObject(
-                    "{=MMOgeOfR}{KINGDOM_NAME} will decide who will occupy the position of {POSITION}. You can pick your stance regarding this decision.")
+                    "{=Hj6NHtbc}{KINGDOM_NAME} will decide who will occupy the position of {POSITION}. You can pick your stance regarding this decision.")
                 .SetTextVariable("KINGDOM_NAME", Kingdom.Name)
                 .SetTextVariable("POSITION", Position.GetName());
         }
 
         public override TextObject GetSupportTitle()
         {
-            return new TextObject("{=bJ5tB7O6}Choose the next council member to occupy the position of {POSITION}")
+            return new TextObject("{=dqEO1Ug4}Choose the next council member to occupy the position of {POSITION}")
                 .SetTextVariable("POSITION", Position.GetName());
         }
 
@@ -215,7 +215,7 @@ namespace BannerKings.Managers.Kingdoms.Council
 
             public override TextObject GetDecisionDescription()
             {
-                return new TextObject("{=QZA4hMKa}{NAME} should be appointed")
+                return new TextObject("{=01waap2L}{NAME} should be appointed")
                     .SetTextVariable("NAME", Candidate.Name);
             }
 

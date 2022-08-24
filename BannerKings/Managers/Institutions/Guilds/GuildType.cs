@@ -19,9 +19,9 @@ namespace BannerKings.Managers.Institutions.Guilds
             {
                 var result = Trade switch
                 {
-                    GuildTrade.Merchants => new TextObject("{=16j0bNi9}Merchants Guild"),
-                    GuildTrade.Masons => new TextObject("{=dWaFry84}Masons Guild"),
-                    _ => new TextObject("{=krjTACeT}Metalsmiths Guild")
+                    GuildTrade.Merchants => new TextObject("{=z69WpCc8}Merchants Guild"),
+                    GuildTrade.Masons => new TextObject("{=qLVinLay}Masons Guild"),
+                    _ => new TextObject("{=VPDXcJu7}Metalsmiths Guild")
                 };
 
                 return result;

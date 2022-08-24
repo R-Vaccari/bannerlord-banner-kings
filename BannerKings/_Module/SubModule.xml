@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 
-<Module xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/BUTR/Bannerlord.XmlSchemas/master/SubModule.xsd">
+<Module xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/BUTR/Bannerlord.XmlSchemas/master/SubModule.xsd">
 	<Id value="$modulename$" />
 	<Name value="$modulename$" />
 	<Version value="v$version$" />
-	<Official value="false"/>
+	<Official value="false" />
 	<DefaultModule value="true" />
 	<ModuleCategory value="Singleplayer" />
 	<DependedModules>
@@ -39,37 +39,37 @@
 	</SubModules>
 	<Xmls>
 		<XmlNode>
-			<XmlName id="GameText" path="gt_common"/>
+			<XmlName id="GameText" path="gt_common" />
 		</XmlNode>
 		<XmlNode>
-			<XmlName id="EquipmentRosters" path="equipment_sets"/>
+			<XmlName id="EquipmentRosters" path="equipment_sets" />
 			<IncludedGameTypes>
-				<GameType value="Campaign"/>
-				<GameType value="CampaignStoryMode"/>
-				<GameType value="CustomGame"/>
+				<GameType value="Campaign" />
+				<GameType value="CampaignStoryMode" />
+				<GameType value="CustomGame" />
 			</IncludedGameTypes>
 		</XmlNode>
 		<XmlNode>
-			<XmlName path="civillians" id="NPCCharacters"/>
+			<XmlName id="NPCCharacters" path="civillians" />
 			<IncludedGameTypes>
-				<GameType value="Campaign"/>
-				<GameType value="CampaignStoryMode"/>
-				<GameType value="CustomGame"/>
+				<GameType value="Campaign" />
+				<GameType value="CampaignStoryMode" />
+				<GameType value="CustomGame" />
 			</IncludedGameTypes>
 		</XmlNode>
 		<XmlNode>
-			<XmlName path="partyTemplates" id="partyTemplates"/>
+			<XmlName id="partyTemplates" path="partyTemplates" />
 			<IncludedGameTypes>
-				<GameType value="Campaign"/>
-				<GameType value="CampaignStoryMode"/>
-				<GameType value="CustomGame"/>
+				<GameType value="Campaign" />
+				<GameType value="CampaignStoryMode" />
+				<GameType value="CustomGame" />
 			</IncludedGameTypes>
 		</XmlNode>
 		<XmlNode>
-			<XmlName id="ItemModifiers" path="item_modifiers"/>
+			<XmlName id="ItemModifiers" path="item_modifiers" />
 		</XmlNode>
 		<XmlNode>
-			<XmlName id="ItemModifierGroups" path="item_modifiers_groups"/>
+			<XmlName id="ItemModifierGroups" path="item_modifiers_groups" />
 		</XmlNode>
 	</Xmls>
 </Module>

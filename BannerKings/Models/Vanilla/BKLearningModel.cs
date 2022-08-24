@@ -1,4 +1,4 @@
-﻿using BannerKings.Managers.Skills;
+using BannerKings.Managers.Skills;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.Core;
@@ -23,13 +23,13 @@ namespace BannerKings.Models.Vanilla
         {
             var result = new ExplainedNumber(1.25f, includeDescriptions);
             result.AddFactor(0.4f * attributeValue, attributeName);
-            result.AddFactor(focusValue * 1f, new TextObject("{=MRktqZwu}Skill Focus"));
+            result.AddFactor(focusValue * 1f, new TextObject("{=fa3Dmxdo}Skill Focus"));
 
             var num = MathF.Round(CalculateLearningLimit(hero, attributeValue, focusValue, null).ResultNumber);
             if (skillValue > num)
             {
                 var num2 = skillValue - num;
-                result.AddFactor(-1f - 0.1f * num2, new TextObject("{=bcA7ZuyO}Learning Limit Exceeded"));
+                result.AddFactor(-1f - 0.1f * num2, new TextObject("{=fTKqtNxB}Learning Limit Exceeded"));
             }
 
             if (hero.GetPerkValue(BKPerks.Instance.ScholarshipMagnumOpus))

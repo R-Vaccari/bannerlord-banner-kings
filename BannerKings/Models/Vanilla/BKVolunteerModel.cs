@@ -97,17 +97,17 @@ namespace BannerKings.Models.Vanilla
                 switch (draftPolicy)
                 {
                     case DraftPolicy.Conscription:
-                        explainedNumber.Add(0.15f, new TextObject("{=TXkZ3s9a}Draft policy"));
+                        explainedNumber.Add(0.15f, new TextObject("{=2z4YQTuu}Draft policy"));
                         break;
                     case DraftPolicy.Demobilization:
-                        explainedNumber.Add(-0.15f, new TextObject("{=TXkZ3s9a}Draft policy"));
+                        explainedNumber.Add(-0.15f, new TextObject("{=2z4YQTuu}Draft policy"));
                         break;
                 }
 
                 var government = BannerKingsConfig.Instance.TitleManager.GetSettlementGovernment(settlement);
                 if (government == GovernmentType.Tribal)
                 {
-                    explainedNumber.AddFactor(0.2f, new TextObject("{=zYUOYyYe}Government"));
+                    explainedNumber.AddFactor(0.2f, new TextObject("{=PSrEtF5L}Government"));
                 }
 
                 return explainedNumber;
