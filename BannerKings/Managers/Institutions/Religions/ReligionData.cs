@@ -1,5 +1,4 @@
-﻿using System;
-using BannerKings.Managers.Populations;
+﻿using BannerKings.Managers.Populations;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
@@ -15,12 +14,12 @@ namespace BannerKings.Managers.Institutions.Religions
 
         public ReligionData(Religion religion, Settlement settlement)
         {
-            Religions = new Dictionary<Religion, float>();
-            Religions.Add(religion, 1f);
+            Religions = new Dictionary<Religion, float> {{religion, 1f}};
             Settlement = settlement;
         }
 
-        [field: SaveableField(3)] public Dictionary<Religion, float> Religions { get; }
+        [field: SaveableField(3)]
+        public Dictionary<Religion, float> Religions { get; }
 
         [field: SaveableField(1)] public Settlement Settlement { get; }
 
@@ -29,12 +28,17 @@ namespace BannerKings.Managers.Institutions.Religions
             get
             {
                 var eligible = new List<(Religion, float)>();
+                if (Religions is null)
+                {
+                    return null;
+                }
+
                 foreach (var rel in Religions)
                 {
                     eligible.Add((rel.Key, rel.Value));
                 }
 
-                eligible.OrderByDescending(pair => pair.Item2);
+                eligible = eligible.OrderByDescending(pair => pair.Item2).ToList();
                 return eligible[0].Item1;
             }
         }
@@ -43,7 +47,7 @@ namespace BannerKings.Managers.Institutions.Religions
         {
             get
             {
-                if (clergyman == null)
+                if (clergyman == null && DominantReligion != null)
                 {
                     clergyman = DominantReligion.GenerateClergyman(Settlement);
                 }
@@ -119,7 +123,10 @@ namespace BannerKings.Managers.Institutions.Religions
 
             BalanceReligions(dominant);
 
-            clergyman = dominant.GetClergyman(data.Settlement) ?? dominant.GenerateClergyman(Settlement);
+            if (dominant != null)
+            {
+                clergyman = dominant.GetClergyman(data.Settlement) ?? dominant.GenerateClergyman(Settlement);
+            }
         }
 
     }

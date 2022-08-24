@@ -662,14 +662,15 @@ namespace BannerKings.Behaviours
             }
 
             var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(Settlement.CurrentSettlement).ReligionData;
-            if (data != null)
+            if (data == null)
             {
-                //TODO: Basileus
-                //MBTextManager.SetTextVariable("RELIGION_NAME", data.Religion.Faith.GetFaithName());
-                MBTextManager.SetTextVariable("RELIGION_NAME", data.DominantReligion.Faith.GetFaithName());
+                return false;
             }
 
-            return data != null;
+            var faith = data.DominantReligion?.Faith;
+            MBTextManager.SetTextVariable("RELIGION_NAME", faith is null ? "{=!}No Faith available" : faith.GetFaithName());
+
+            return true;
         }
 
         private static bool MenuCourtCondition(MenuCallbackArgs args)

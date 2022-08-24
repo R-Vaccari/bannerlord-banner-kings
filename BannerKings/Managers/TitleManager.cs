@@ -274,10 +274,12 @@ namespace BannerKings.Managers
             return result;
         } */
 
+
+
         public Dictionary<Clan, List<FeudalTitle>> CalculateVassals(Clan suzerainClan, Clan clanToIgnore = null)
         {
             var clans = new Dictionary<Clan, List<FeudalTitle>>();
-            var kingdom = suzerainClan.Kingdom;
+            var kingdom = suzerainClan?.Kingdom;
             if (kingdom == null || suzerainClan == null)
             {
                 return clans;
@@ -291,35 +293,38 @@ namespace BannerKings.Managers
 
             foreach (var title in suzerainTitles)
             {
-                if (title.vassals is {Count: > 0})
+                if (title.vassals is not {Count: > 0})
                 {
-                    foreach (var vassal in title.vassals)
+                    continue;
+                }
+
+                foreach (var vassal in title.vassals)
+                {
+                    if (vassal.deJure.Clan == suzerainClan || (clanToIgnore != null && vassal.deJure.Clan != clanToIgnore))
                     {
-                        if (vassal.deJure.Clan == suzerainClan ||
-                            (clanToIgnore != null && vassal.deJure.Clan != clanToIgnore))
-                        {
-                            continue;
-                        }
+                        continue;
+                    }
 
-                        var vassalSuzerain = CalculateHeroSuzerain(vassal.deJure);
-                        if (vassalSuzerain == null)
-                        {
-                            continue;
-                        }
+                    var vassalSuzerain = CalculateHeroSuzerain(vassal.deJure);
+                    if (vassalSuzerain == null)
+                    {
+                        continue;
+                    }
 
-                        var suzerainDeJureClan = vassalSuzerain.deJure.Clan;
-                        if (suzerainDeJureClan == suzerainClan)
-                        {
-                            var vassalDeJureClan = vassal.deJure.Clan;
-                            if (!clans.ContainsKey(vassalDeJureClan))
-                            {
-                                clans.Add(vassalDeJureClan, new List<FeudalTitle> {vassal});
-                            }
-                            else
-                            {
-                                clans[vassalDeJureClan].Add(title);
-                            }
-                        }
+                    var suzerainDeJureClan = vassalSuzerain.deJure.Clan;
+                    if (suzerainDeJureClan != suzerainClan)
+                    {
+                        continue;
+                    }
+
+                    var vassalDeJureClan = vassal.deJure.Clan;
+                    if (!clans.ContainsKey(vassalDeJureClan))
+                    {
+                        clans.Add(vassalDeJureClan, new List<FeudalTitle> {vassal});
+                    }
+                    else
+                    {
+                        clans[vassalDeJureClan].Add(title);
                     }
                 }
             }

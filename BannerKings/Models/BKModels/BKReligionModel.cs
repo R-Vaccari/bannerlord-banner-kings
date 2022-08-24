@@ -1,5 +1,4 @@
 using BannerKings.Managers.Institutions.Religions;
-using BannerKings.Managers.Populations;
 using BannerKings.Managers.Skills;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -20,27 +19,31 @@ namespace BannerKings.Models.BKModels
             foreach (var settlement in Settlement.All)
             {
                 var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
-                if (data != null && data.ReligionData != null)
+                if (data?.ReligionData == null)
                 {
-                    var rel = data.ReligionData.DominantReligion;
-                    if (rel == religion)
-                    {
-                        var value = GetSettlementFervorWeight(settlement);
-                        if (settlement.IsVillage)
-                        {
-                            villages += value;
-                        }
+                    continue;
+                }
 
-                        if (settlement.IsCastle)
-                        {
-                            castles += value;
-                        }
+                var rel = data.ReligionData.DominantReligion;
+                if (rel != religion)
+                {
+                    continue;
+                }
 
-                        if (settlement.IsTown)
-                        {
-                            towns += value;
-                        }
-                    }
+                var value = GetSettlementFervorWeight(settlement);
+                if (settlement.IsVillage)
+                {
+                    villages += value;
+                }
+
+                if (settlement.IsCastle)
+                {
+                    castles += value;
+                }
+
+                if (settlement.IsTown)
+                {
+                    towns += value;
                 }
             }
 

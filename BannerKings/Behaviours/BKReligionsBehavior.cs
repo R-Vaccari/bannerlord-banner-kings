@@ -76,12 +76,11 @@ namespace BannerKings.Behaviours
             }
 
             var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(target).ReligionData;
-            if (data?.Clergyman == null)
-            {
-                return;
-            }
 
-            Utils.Helpers.AddSellerToKeep(data.Clergyman.Hero, target);
+            if (data?.Clergyman != null)
+            {
+                Utils.Helpers.AddSellerToKeep(data.Clergyman.Hero, target);
+            }
         }
 
         private void AddDialogue(CampaignGameStarter starter)
