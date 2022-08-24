@@ -279,7 +279,6 @@
     <string id="OiE6eD87f" text="Not a town!" />
     <string id="2M1BgZpXv" text="You have been hurt in your current action." />
     <string id="oC0L7PULv" text="You have improved your {SKILL} skill during your current action." />
-    <string id="Tu19gsuVk" text="&lt;img src=\" />
     <string id="3MFM6ms6x" text="You have improved your {SKILL} skill during your current action." />
     <string id="RssfAgOpA" text="You have stopped your current action because the instructor has left the settlement." />
     <string id="MCzxPUFQw" text="You have improved your {SKILL} skill during your current action." />
@@ -287,7 +286,6 @@
     <string id="piFgnP3oq" text="Mediocre" />
     <string id="poQqCBxEn" text="Poor" />
     <string id="7bLFWC16W" text="You have have caught an animal and improved your {SKILL} skill while hunting." />
-    <string id="ZL6YupAOv" text="&lt;img src=\" />
     <string id="436PdeGOS" text="You have improved your {SKILL} skill and gained {INFLUENCE} influence while meeting with nobles." />
     <string id="CwFbYZTDA" text="You have stopped your current action due to health conditions." />
     <string id="iDMS0KKQe" text="Banner Kings" />
@@ -1029,8 +1027,6 @@
     <string id="KUwmRfo9v" text="Gender Law" />
     <string id="OZBL8VXHg" text="Propose a change in gender laws, dictating whether males and females are viewed equally in various aspects." />
     <string id="SgAJ0MvWN" text="Founding a new Kingdom" />
-    <string id="BX73AzR0u" text="&lt;img src=\" />
-    <string id="Zy8KEJ9ef" text="&lt;img src=\" />
     <string id="xuCNRDQBH" text="Founding Dukedoms" />
     <string id="7xo4Sn8dc" text="Select up to 3 dukedoms that will compose your kingdom. The kingdom's contract will follow the first dukedom's contract. Dukedom titles from other clans in the faction may be included as well." />
     <string id="hxdu7wnH6" text="Select a {LAW} to be voted on. Starting an election costs {INFLUENCE} influence." />
@@ -1086,33 +1082,28 @@
     <string id="m1HaRAPZa" text="This title is already founded! De Jure is {DE_JURE.LINK} and de Facto is {DE_FACTO.LINK}." />
     <string id="PdZynLrLF" text="You need at least {GOLD}{GOLD_ICON}" />
     <string id="n61gfuAZa" text="You need at least {INFLUENCE}{INFLUENCE_ICON}" />
-    <string id="QRtdoFiyj" text="&lt;img src=\" />
     <string id="RgMTaWusx" text="You are not part of {CULTURE} culture." />
     <string id="D3TWPGcaF" text="You're not the leader of an Imperial Kingdom." />
     <string id="EQkmrQhtn" text="Your kingdom is not part of {CULTURE} culture." />
     <string id="E0OhqzumM" text="You are not leader of a kingdom with {CULTURE} culture." />
     <string id="sNEXS8SGQ" text="You do not adhere to a faith that is part of the {RELIGION} faith group." />
     <string id="rim4EqKTm" text="Your kingdom is not de facto ruler of {SETTLEMENT}" />
-    <string id="fGXOCyzA7" text="&lt;img src=\" />
     <string id="iYZ7UH9hB" text="Unite Greater Battania" />
     <string id="fNCbfdyDT" text="Unite the old Battanian lands back into a greater realm. To the West, the rascal Vlandians have taken the valley of Llyn Modris and called it 'Ocs Hall'. To the East, the bloodthristy Imperials submitted Epicrotea to their domination. The threat of Battanian extermination grows stronger with enemies all around aiming for it's lands. You must bring all battanian and formerly battanian towns and castles under control of your realm." />
     <string id="yJNnqgzAs" text="This title is already founded! de Jure is {DE_JURE.LINK} and de Facto is {DE_FACTO.LINK}." />
     <string id="XoPyvWOyJ" text="You need at least {GOLD}{GOLD_ICON}" />
     <string id="Wt89LbfmC" text="You need at least {INFLUENCE}{INFLUENCE_ICON}" />
-    <string id="dcHZ2e509" text="&lt;img src=\" />
     <string id="er9nsXSU4" text="You are not part of {CULTURE} culture." />
     <string id="DAVkHQDEq" text="You're not the leader of {KINGDOM}." />
     <string id="dqscd4jTc" text="Your kingdom is not part of {CULTURE} culture." />
     <string id="exFiNAiuO" text="You are not leader of a kingdom with {CULTURE} culture." />
     <string id="cAHroMrfO" text="You do not adhere to the {RELIGION} faith." />
     <string id="CJoe9xkuN" text="Your kingdom is not de facto ruler of {SETTLEMENT}" />
-    <string id="7r5h1QLFs" text="&lt;img src=\" />
     <string id="n26zCCNpE" text="Recruit Companion" />
     <string id="UujNRzzLY" text="Select a type of companion to recruit." />
     <string id="Bid0yVmGU" text="You can't afford any companion." />
     <string id="vkODtuGzc" text="No candidates of this type available." />
     <string id="Vh3M5MDHS" text=" You can't afford the cost:\n{GOLD}{GOLD_ICON}\n{INFLUENCE}{INFLUENCE_ICON}." />
-    <string id="7qE6Hhyuu" text="&lt;img src=\" />
     <string id="8SVzjyPyh" text="Companions" />
     <string id="hxGV39E1P" text="Choose a companion to recruit." />
     <string id="w9J1aG6d7" text="Merchants Guild" />

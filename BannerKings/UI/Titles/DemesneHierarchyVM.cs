@@ -195,9 +195,9 @@ namespace BannerKings.UI.Titles
                 new TextObject("Found a new title for your kingdom. The title will legitimize your position and allow the de Jure domain of the kingdom to expand through de Jure drift of dukedoms, as well as extend your influence as a suzerain. Founding a title would increase your clan's renown by {RENOWN}. \n \nCosts: {GOLD} {GOLD_ICON}, {INFLUENCE} {INFLUENCE_ICON} \n\nCan form kingdom: {POSSIBLE} \n\nExplanation: {REASON}")
                     .SetTextVariable("POSSIBLE", GameTexts.FindText(action.Possible ? "str_yes" : "str_no"))
                     .SetTextVariable("GOLD", $"{(int)action.Gold:n0}")
-                    .SetTextVariable("GOLD_ICON", "{=VhzhOftmn}<img src=\"General\\Icons\\Coin@2x\" extend=\"8\">")
+                    .SetTextVariable("GOLD_ICON", "<img src=\"General\\Icons\\Coin@2x\" extend=\"8\">")
                     .SetTextVariable("INFLUENCE", (int) action.Influence)
-                    .SetTextVariable("INFLUENCE_ICON", "{=VhzhOftmn}<img src=\"General\\Icons\\Influence@2x\" extend=\"7\">")
+                    .SetTextVariable("INFLUENCE_ICON", "<img src=\"General\\Icons\\Influence@2x\" extend=\"7\">")
                     .SetTextVariable("RENOWN", action.Renown)
                     .SetTextVariable("REASON", action.Reason)
                     .ToString(),

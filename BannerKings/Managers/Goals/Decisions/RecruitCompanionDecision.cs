@@ -135,7 +135,7 @@ namespace BannerKings.Managers.Goals.Decisions
                     hint = new TextObject("{=9n6QbEVhp} You can't afford the cost:\n{GOLD}{GOLD_ICON}\n{INFLUENCE}{INFLUENCE_ICON}.")
                         .SetTextVariable("GOLD", $"{companionType.GoldCost:n0}")
                         .SetTextVariable("INFLUENCE", $"{companionType.InfluenceCost:n0}")
-                        .SetTextVariable("INFLUENCE_ICON", "{=kCMvVcdtt}<img src=\"General\\Icons\\Influence@2x\" extend=\"7\">")
+                        .SetTextVariable("INFLUENCE_ICON", "<img src=\"General\\Icons\\Influence@2x\" extend=\"7\">")
                         .ToString();
                 }
 

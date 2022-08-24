@@ -80,7 +80,7 @@ namespace BannerKings.Managers.Goals.Decisions
                 {
                     failedReasons.Add(new TextObject("{=vY62gCnyg}You need at least {INFLUENCE}{INFLUENCE_ICON}")
                         .SetTextVariable("INFLUENCE", $"{influence:n0}")
-                        .SetTextVariable("INFLUENCE_ICON", "{=0F5UFAvtR}<img src=\"General\\Icons\\Influence@2x\" extend=\"7\">"));
+                        .SetTextVariable("INFLUENCE_ICON", "<img src=\"General\\Icons\\Influence@2x\" extend=\"7\">"));
                 }
 
                 if (referenceHero.Culture != culture)
@@ -145,7 +145,7 @@ namespace BannerKings.Managers.Goals.Decisions
                         .SetTextVariable("TITLE", name)
                         .SetTextVariable("GOLD", gold)
                         .SetTextVariable("INFLUENCE", influence)
-                        .SetTextVariable("INFLUENCE_ICON", "{=0F5UFAvtR}<img src=\"General\\Icons\\Influence@2x\" extend=\"7\">")
+                        .SetTextVariable("INFLUENCE_ICON", "}<img src=\"General\\Icons\\Influence@2x\" extend=\"7\">")
                         .SetTextVariable("RENOWN", 100)
                         .ToString(),
                     true, 
