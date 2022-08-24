@@ -173,8 +173,7 @@ namespace BannerKings.UI.Crafting
                 string name;
                 if (l < 9)
                 {
-                    name = BannerKingsConfig.Instance.SmithingModel.GetCraftingMaterialItem((CraftingMaterials) l).Name
-                        .ToString();
+                    name = BannerKingsConfig.Instance.SmithingModel.GetCraftingMaterialItem((CraftingMaterials) l).Name.ToString();
                 }
                 else
                 {

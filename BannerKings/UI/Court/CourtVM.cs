@@ -327,8 +327,7 @@ namespace BannerKings.UI.Court
                     PrivilegesInfo.Add(new InformationElement(
                         GameTexts.FindText("str_bk_council_privilege", privilege.ToString().ToLower()).ToString(),
                         string.Empty,
-                        GameTexts.FindText("str_bk_council_privilege_description", privilege.ToString().ToLower())
-                            .ToString()));
+                        GameTexts.FindText("str_bk_council_privilege_description", privilege.ToString().ToLower()).ToString()));
                 }
             }
 
@@ -383,8 +382,7 @@ namespace BannerKings.UI.Court
                     PrivilegesInfo.Add(new InformationElement(
                         GameTexts.FindText("str_bk_council_privilege", privilege.ToString().ToLower()).ToString(),
                         string.Empty,
-                        GameTexts.FindText("str_bk_council_privilege_description", privilege.ToString().ToLower())
-                            .ToString()));
+                        GameTexts.FindText("str_bk_council_privilege_description", privilege.ToString().ToLower()).ToString()));
                 }
             }
         }

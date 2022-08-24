@@ -1,8 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
+
 <NPCCharacters>
 
 
-	<NPCCharacter id="bannerkings_bookseller_battania" name="{=!}{FIRSTNAME} the Loremaster" default_group="Infantry" age="65" voice="softspoken" is_template="true" is_hero="false" culture="Culture.battania" occupation="Special">
+	<NPCCharacter id="bannerkings_bookseller_battania" name="{=!}{FIRSTNAME} the Loremaster" default_group="Infantry"
+	              age="65" voice="softspoken" is_template="true" is_hero="false" culture="Culture.battania"
+	              occupation="Special">
 		<face>
 			<face_key_template value="BodyProperty.villager_battania" />
 		</face>
@@ -30,7 +33,9 @@
 		</Equipments>
 	</NPCCharacter>
 
-	<NPCCharacter id="bannerkings_bookseller_empire" name="{=yr5pa0hs}{FIRSTNAME}, the Book Keeper" default_group="Infantry" age="65" voice="softspoken" is_template="true" is_hero="false" culture="Culture.empire" occupation="Special">
+	<NPCCharacter id="bannerkings_bookseller_empire" name="{=yr5pa0hs}{FIRSTNAME}, the Book Keeper"
+	              default_group="Infantry" age="65" voice="softspoken" is_template="true" is_hero="false"
+	              culture="Culture.empire" occupation="Special">
 		<face>
 			<face_key_template value="BodyProperty.villager_empire" />
 		</face>
@@ -54,7 +59,9 @@
 		</Equipments>
 	</NPCCharacter>
 
-	<NPCCharacter id="bannerkings_bookseller_vlandia" name="{=yr5pa0hs}{FIRSTNAME}, the Wise" default_group="Infantry" age="65" voice="softspoken" is_template="true" is_hero="false" culture="Culture.vlandia" occupation="Special">
+	<NPCCharacter id="bannerkings_bookseller_vlandia" name="{=yr5pa0hs}{FIRSTNAME}, the Wise" default_group="Infantry"
+	              age="65" voice="softspoken" is_template="true" is_hero="false" culture="Culture.vlandia"
+	              occupation="Special">
 		<face>
 			<face_key_template value="BodyProperty.villager_vlandia" />
 		</face>
@@ -80,7 +87,9 @@
 		</Equipments>
 	</NPCCharacter>
 
-	<NPCCharacter id="bannerkings_preacher_amra_1" name="{=yr5pa0hs}{HERO.FIRSTNAME}" voice="softspoken" age="40" is_template="true" is_female="true" default_group="Infantry" is_hero="false" culture="Culture.battania" occupation="Preacher">
+	<NPCCharacter id="bannerkings_preacher_amra_1" name="{=yr5pa0hs}{HERO.FIRSTNAME}" voice="softspoken" age="40"
+	              is_template="true" is_female="true" default_group="Infantry" is_hero="false" culture="Culture.battania"
+	              occupation="Preacher">
 		<face>
 			<face_key_template value="BodyProperty.villager_battania" />
 		</face>
@@ -138,7 +147,9 @@
 		</Equipments>
 	</NPCCharacter>
 
-	<NPCCharacter id="bannerkings_preacher_amra_2" name="{=yr5pa0hs}{HERO.FIRSTNAME}" voice="softspoken" age="55" is_template="true" default_group="Infantry" is_hero="false" culture="Culture.battania" occupation="Preacher">
+	<NPCCharacter id="bannerkings_preacher_amra_2" name="{=yr5pa0hs}{HERO.FIRSTNAME}" voice="softspoken" age="55"
+	              is_template="true" default_group="Infantry" is_hero="false" culture="Culture.battania"
+	              occupation="Preacher">
 		<face>
 			<face_key_template value="BodyProperty.villager_battania" />
 		</face>
@@ -197,7 +208,9 @@
 	</NPCCharacter>
 
 
-	<NPCCharacter id="bannerkings_preacher_canticles_1" name="{=yr5pa0hs}{HERO.FIRSTNAME}" voice="softspoken" age="55" is_template="true" default_group="Infantry" is_hero="false" culture="Culture.vlandia" occupation="Preacher">
+	<NPCCharacter id="bannerkings_preacher_canticles_1" name="{=yr5pa0hs}{HERO.FIRSTNAME}" voice="softspoken" age="55"
+	              is_template="true" default_group="Infantry" is_hero="false" culture="Culture.vlandia"
+	              occupation="Preacher">
 		<face>
 			<face_key_template value="BodyProperty.villager_vlandia" />
 		</face>
@@ -221,7 +234,9 @@
 		</Equipments>
 	</NPCCharacter>
 
-	<NPCCharacter id="bannerkings_preacher_canticles_2" name="{=yr5pa0hs}{HERO.FIRSTNAME}" voice="softspoken" age="55" is_template="true" default_group="Infantry" is_hero="false" culture="Culture.vlandia" occupation="Preacher">
+	<NPCCharacter id="bannerkings_preacher_canticles_2" name="{=yr5pa0hs}{HERO.FIRSTNAME}" voice="softspoken" age="55"
+	              is_template="true" default_group="Infantry" is_hero="false" culture="Culture.vlandia"
+	              occupation="Preacher">
 		<face>
 			<face_key_template value="BodyProperty.villager_vlandia" />
 		</face>
@@ -246,8 +261,9 @@
 	</NPCCharacter>
 
 
-
-	<NPCCharacter id="bannerkings_preacher_canticles_3" name="{=yr5pa0hs}{HERO.FIRSTNAME}" voice="softspoken" age="55" is_template="true" default_group="Infantry" is_hero="false" culture="Culture.vlandia" occupation="Preacher">
+	<NPCCharacter id="bannerkings_preacher_canticles_3" name="{=yr5pa0hs}{HERO.FIRSTNAME}" voice="softspoken" age="55"
+	              is_template="true" default_group="Infantry" is_hero="false" culture="Culture.vlandia"
+	              occupation="Preacher">
 		<face>
 			<face_key_template value="BodyProperty.villager_vlandia" />
 		</face>
@@ -272,7 +288,9 @@
 	</NPCCharacter>
 
 
-	<NPCCharacter id="bannerkings_preacher_darusosian_1" name="{=yr5pa0hs}{HERO.FIRSTNAME}" voice="softspoken" age="55" is_template="true" default_group="Infantry" is_hero="false" culture="Culture.empire" occupation="Preacher">
+	<NPCCharacter id="bannerkings_preacher_darusosian_1" name="{=yr5pa0hs}{HERO.FIRSTNAME}" voice="softspoken" age="55"
+	              is_template="true" default_group="Infantry" is_hero="false" culture="Culture.empire"
+	              occupation="Preacher">
 		<face>
 			<face_key_template value="BodyProperty.villager_empire" />
 		</face>
@@ -296,7 +314,9 @@
 		</Equipments>
 	</NPCCharacter>
 
-	<NPCCharacter id="bannerkings_preacher_darusosian_2" name="{=yr5pa0hs}{HERO.FIRSTNAME}" voice="softspoken" age="55" is_template="true" default_group="Infantry" is_hero="false" culture="Culture.empire" occupation="Preacher">
+	<NPCCharacter id="bannerkings_preacher_darusosian_2" name="{=yr5pa0hs}{HERO.FIRSTNAME}" voice="softspoken" age="55"
+	              is_template="true" default_group="Infantry" is_hero="false" culture="Culture.empire"
+	              occupation="Preacher">
 		<face>
 			<face_key_template value="BodyProperty.villager_empire" />
 		</face>
@@ -321,8 +341,9 @@
 	</NPCCharacter>
 
 
-
-	<NPCCharacter id="bannerkings_preacher_darusosian_3" name="{=yr5pa0hs}{HERO.FIRSTNAME}" voice="softspoken" age="55" is_template="true" default_group="Infantry" is_hero="false" culture="Culture.empire" occupation="Preacher">
+	<NPCCharacter id="bannerkings_preacher_darusosian_3" name="{=yr5pa0hs}{HERO.FIRSTNAME}" voice="softspoken" age="55"
+	              is_template="true" default_group="Infantry" is_hero="false" culture="Culture.empire"
+	              occupation="Preacher">
 		<face>
 			<face_key_template value="BodyProperty.villager_empire" />
 		</face>
@@ -347,7 +368,9 @@
 	</NPCCharacter>
 
 
-	<NPCCharacter id="bannerkings_preacher_asera_1" name="{=yr5pa0hs}{HERO.FIRSTNAME}" voice="softspoken" age="28" is_template="true" default_group="Infantry" is_hero="false" culture="Culture.aserai" occupation="Preacher">
+	<NPCCharacter id="bannerkings_preacher_asera_1" name="{=yr5pa0hs}{HERO.FIRSTNAME}" voice="softspoken" age="28"
+	              is_template="true" default_group="Infantry" is_hero="false" culture="Culture.aserai"
+	              occupation="Preacher">
 		<face>
 			<face_key_template value="BodyProperty.villager_aserai" />
 		</face>
@@ -398,7 +421,9 @@
 	</NPCCharacter>
 
 
-	<NPCCharacter id="bannerkings_preacher_asera_2" name="{=yr5pa0hs}{HERO.FIRSTNAME}" voice="softspoken" age="28" is_template="true" default_group="Infantry" is_hero="false" culture="Culture.aserai" occupation="Preacher">
+	<NPCCharacter id="bannerkings_preacher_asera_2" name="{=yr5pa0hs}{HERO.FIRSTNAME}" voice="softspoken" age="28"
+	              is_template="true" default_group="Infantry" is_hero="false" culture="Culture.aserai"
+	              occupation="Preacher">
 		<face>
 			<face_key_template value="BodyProperty.villager_aserai" />
 		</face>
@@ -448,7 +473,9 @@
 		</Equipments>
 	</NPCCharacter>
 
-	<NPCCharacter id="bannerkings_preacher_asera_3" name="{=yr5pa0hs}{HERO.FIRSTNAME}" voice="softspoken" age="28" is_template="true" default_group="Infantry" is_hero="false" culture="Culture.aserai" occupation="Preacher">
+	<NPCCharacter id="bannerkings_preacher_asera_3" name="{=yr5pa0hs}{HERO.FIRSTNAME}" voice="softspoken" age="28"
+	              is_template="true" default_group="Infantry" is_hero="false" culture="Culture.aserai"
+	              occupation="Preacher">
 		<face>
 			<face_key_template value="BodyProperty.villager_aserai" />
 		</face>
@@ -500,24 +527,24 @@
 
 
 	<NPCCharacter id="craftsman_empire"
-				  default_group="Infantry"
-				  level="1"
-				  name="{=!}Empire Craftsman"
-				  occupation="Villager"
-				  culture="Culture.empire"
-				  skill_template="SkillSet.infantry_heavyinfantry_level1_template_skills">
+	              default_group="Infantry"
+	              level="1"
+	              name="{=!}Empire Craftsman"
+	              occupation="Villager"
+	              culture="Culture.empire"
+	              skill_template="SkillSet.infantry_heavyinfantry_level1_template_skills">
 		<face>
 			<!--face_key value="0009013000000000000000000000000000000000000000000000000000000000000a00050000000000000000000000000000000000000000fffffffffc880000" max_value="001cffffc000390ffff88affaa9efffffffffffffff7ffffffff9ffffffffffa0007effff7ffffff000000000000000000000000000000000000000001509181" /-->
 			<BodyProperties version="4"
-							age="25.57"
-							weight="0.3164"
-							build="0.2485"
-							key="00052008000000010070030000001603003300110010200000000001010000000144501304010000000000000000000000000000000000000000000010880000" />
+			                age="25.57"
+			                weight="0.3164"
+			                build="0.2485"
+			                key="00052008000000010070030000001603003300110010200000000001010000000144501304010000000000000000000000000000000000000000000010880000" />
 			<BodyPropertiesMax version="4"
-							   age="69.94"
-							   weight="0.9923"
-							   build="0.7052"
-							   key="0010F80FC000370FFFFFEFEFFEEFFF7EEEFFFFFFFEF7EFFEFFFFFFFFFEFFFFFF07CBF0780CFFFFEF000000000000000000000000000000000000000061809105" />
+			                   age="69.94"
+			                   weight="0.9923"
+			                   build="0.7052"
+			                   key="0010F80FC000370FFFFFEFEFFEEFFF7EEEFFFFFFFEF7EFFEFFFFFFFFFEFFFFFF07CBF0780CFFFFEF000000000000000000000000000000000000000061809105" />
 		</face>
 		<skills></skills>
 		<Equipments>
@@ -566,40 +593,40 @@
 	</NPCCharacter>
 
 	<NPCCharacter id="noble_empire"
-				  default_group="Cavalry"
-				  level="1"
-				  name="{=!}Empire Nobile"
-				  occupation="Villager"
-				  culture="Culture.empire"
-				  skill_template="SkillSet.infantry_heavyinfantry_level1_template_skills">
+	              default_group="Cavalry"
+	              level="1"
+	              name="{=!}Empire Nobile"
+	              occupation="Villager"
+	              culture="Culture.empire"
+	              skill_template="SkillSet.infantry_heavyinfantry_level1_template_skills">
 		<face>
 			<!--face_key value="0009013000000000000000000000000000000000000000000000000000000000000a00050000000000000000000000000000000000000000fffffffffc880000" max_value="001cffffc000390ffff88affaa9efffffffffffffff7ffffffff9ffffffffffa0007effff7ffffff000000000000000000000000000000000000000001509181" /-->
 			<BodyProperties version="4"
-							age="40.57"
-							weight="0.3164"
-							build="0.2485"
-							key="00052008000000010070030000001603003300110010200000000001010000000144501304010000000000000000000000000000000000000000000010880000" />
+			                age="40.57"
+			                weight="0.3164"
+			                build="0.2485"
+			                key="00052008000000010070030000001603003300110010200000000001010000000144501304010000000000000000000000000000000000000000000010880000" />
 			<BodyPropertiesMax version="4"
-							   age="72.94"
-							   weight="0.9923"
-							   build="0.7052"
-							   key="0010F80FC000370FFFFFEFEFFEEFFF7EEEFFFFFFFEF7EFFEFFFFFFFFFEFFFFFF07CBF0780CFFFFEF000000000000000000000000000000000000000061809105" />
+			                   age="72.94"
+			                   weight="0.9923"
+			                   build="0.7052"
+			                   key="0010F80FC000370FFFFFEFEFFEEFFF7EEEFFFFFFFEF7EFFEFFFFFFFFFEFFFFFF07CBF0780CFFFFEF000000000000000000000000000000000000000061809105" />
 		</face>
 		<skills>
 			<skill id="Athletics"
-				   value="60" />
+			       value="60" />
 			<skill id="Riding"
-				   value="110" />
+			       value="110" />
 			<skill id="OneHanded"
-				   value="120" />
+			       value="120" />
 			<skill id="TwoHanded"
-				   value="60" />
+			       value="60" />
 			<skill id="Polearm"
-				   value="60" />
+			       value="60" />
 			<skill id="Bow"
-				   value="40" />
+			       value="40" />
 			<skill id="Crossbow"
-				   value="50" />
+			       value="50" />
 		</skills>
 		<Equipments>
 			<EquipmentRoster>
@@ -657,29 +684,27 @@
 
 
 	<NPCCharacter id="craftsman_vlandia"
-				  default_group="Infantry"
-				  level="1"
-				  name="{=!}Vlandia Craftsman"
-				  occupation="Villager"
-				  culture="Culture.vlandia"
-				  skill_template="SkillSet.infantry_heavyinfantry_level1_template_skills">
+	              default_group="Infantry"
+	              level="1"
+	              name="{=!}Vlandia Craftsman"
+	              occupation="Villager"
+	              culture="Culture.vlandia"
+	              skill_template="SkillSet.infantry_heavyinfantry_level1_template_skills">
 		<face>
 			<!--face_key value="0009013000000000000000000000000000000000000000000000000000000000000a00050000000000000000000000000000000000000000fffffffffc880000" max_value="001cffffc000390ffff88affaa9efffffffffffffff7ffffffff9ffffffffffa0007effff7ffffff000000000000000000000000000000000000000001509181" /-->
 			<BodyProperties version="4"
-							age="24.29"
-							weight="0.162"
-							build="0.3657"
-							key="00000007800000800160000000114151100471100000100021111101800101000055200305111101000000000000000000000000000000000000000000A00000" />
+			                age="24.29"
+			                weight="0.162"
+			                build="0.3657"
+			                key="00000007800000800160000000114151100471100000100021111101800101000055200305111101000000000000000000000000000000000000000000A00000" />
 			<BodyPropertiesMax version="4"
-							   age="67.62"
-							   weight="0.733"
-							   build="0.6651"
-							   key="0013C80E40003406EF8FFFFFEEEEFEFDEFFE8EEFEEE6EEEDEDFFEEEE8EFEFFFE07BAB0780BEFEEEF000000000000000000000000000000000000000067789105" />
+			                   age="67.62"
+			                   weight="0.733"
+			                   build="0.6651"
+			                   key="0013C80E40003406EF8FFFFFEEEEFEFDEFFE8EEFEEE6EEEDEDFFEEEE8EFEFFFE07BAB0780BEFEEEF000000000000000000000000000000000000000067789105" />
 		</face>
 		<skills></skills>
 		<Equipments>
-
-
 
 
 			<EquipmentRoster>
@@ -758,40 +783,40 @@
 	</NPCCharacter>
 
 	<NPCCharacter id="noble_vlandia"
-				  default_group="Cavalry"
-				  level="1"
-				  name="{=!}Vlandia Noble"
-				  occupation="Villager"
-				  culture="Culture.vlandia"
-				  skill_template="SkillSet.infantry_heavyinfantry_level1_template_skills">
+	              default_group="Cavalry"
+	              level="1"
+	              name="{=!}Vlandia Noble"
+	              occupation="Villager"
+	              culture="Culture.vlandia"
+	              skill_template="SkillSet.infantry_heavyinfantry_level1_template_skills">
 		<face>
 			<!--face_key value="0009013000000000000000000000000000000000000000000000000000000000000a00050000000000000000000000000000000000000000fffffffffc880000" max_value="001cffffc000390ffff88affaa9efffffffffffffff7ffffffff9ffffffffffa0007effff7ffffff000000000000000000000000000000000000000001509181" /-->
 			<BodyProperties version="4"
-							age="35.29"
-							weight="0.162"
-							build="0.3657"
-							key="00000007800000800160000000114151100471100000100021111101800101000055200305111101000000000000000000000000000000000000000000A00000" />
+			                age="35.29"
+			                weight="0.162"
+			                build="0.3657"
+			                key="00000007800000800160000000114151100471100000100021111101800101000055200305111101000000000000000000000000000000000000000000A00000" />
 			<BodyPropertiesMax version="4"
-							   age="72.62"
-							   weight="0.733"
-							   build="0.6651"
-							   key="0013C80E40003406EF8FFFFFEEEEFEFDEFFE8EEFEEE6EEEDEDFFEEEE8EFEFFFE07BAB0780BEFEEEF000000000000000000000000000000000000000067789105" />
+			                   age="72.62"
+			                   weight="0.733"
+			                   build="0.6651"
+			                   key="0013C80E40003406EF8FFFFFEEEEFEFDEFFE8EEFEEE6EEEDEDFFEEEE8EFEFFFE07BAB0780BEFEEEF000000000000000000000000000000000000000067789105" />
 		</face>
 		<skills>
 			<skill id="Athletics"
-				   value="60" />
+			       value="60" />
 			<skill id="Riding"
-				   value="110" />
+			       value="110" />
 			<skill id="OneHanded"
-				   value="120" />
+			       value="120" />
 			<skill id="TwoHanded"
-				   value="60" />
+			       value="60" />
 			<skill id="Polearm"
-				   value="60" />
+			       value="60" />
 			<skill id="Bow"
-				   value="40" />
+			       value="40" />
 			<skill id="Crossbow"
-				   value="50" />
+			       value="50" />
 		</skills>
 		<Equipments>
 			<EquipmentRoster>
@@ -846,24 +871,24 @@
 	</NPCCharacter>
 
 	<NPCCharacter id="craftsman_sturgia"
-				  default_group="Infantry"
-				  level="1"
-				  name="{=!}Sturgia Craftsman"
-				  occupation="Villager"
-				  culture="Culture.sturgia"
-				  skill_template="SkillSet.infantry_heavyinfantry_level1_template_skills">
+	              default_group="Infantry"
+	              level="1"
+	              name="{=!}Sturgia Craftsman"
+	              occupation="Villager"
+	              culture="Culture.sturgia"
+	              skill_template="SkillSet.infantry_heavyinfantry_level1_template_skills">
 		<face>
 			<!--face_key value="0009013000000000000000000000000000000000000000000000000000000000000a00050000000000000000000000000000000000000000fffffffffc880000" max_value="001cffffc000390ffff88affaa9efffffffffffffff7ffffffff9ffffffffffa0007effff7ffffff000000000000000000000000000000000000000001509181" /-->
 			<BodyProperties version="4"
-							age="40.03"
-							weight="0.1867"
-							build="0.2423"
-							key="00000400000002412110000001211010010411111010002221111001301101000064300306112000000000000000000000000000000000000000000000D00000" />
+			                age="40.03"
+			                weight="0.1867"
+			                build="0.2423"
+			                key="00000400000002412110000001211010010411111010002221111001301101000064300306112000000000000000000000000000000000000000000000D00000" />
 			<BodyPropertiesMax version="4"
-							   age="78.04"
-							   weight="0.9336"
-							   build="0.9244"
-							   key="0008F00C40003690FEFEEFFEBBBFFFFFFFFFFF979EF8FFFEFFFFFFEFFFEFFFFE08EEE0890EFFFFFF000000000000000000000000000000000000000077C89105" />
+			                   age="78.04"
+			                   weight="0.9336"
+			                   build="0.9244"
+			                   key="0008F00C40003690FEFEEFFEBBBFFFFFFFFFFF979EF8FFFEFFFFFFEFFFEFFFFE08EEE0890EFFFFFF000000000000000000000000000000000000000077C89105" />
 		</face>
 		<skills></skills>
 		<Equipments>
@@ -945,40 +970,40 @@
 
 
 	<NPCCharacter id="noble_sturgia"
-				  default_group="Cavalry"
-				  level="1"
-				  name="{=!}Sturgia Noble"
-				  occupation="Villager"
-				  culture="Culture.sturgia"
-				  skill_template="SkillSet.infantry_heavyinfantry_level1_template_skills">
+	              default_group="Cavalry"
+	              level="1"
+	              name="{=!}Sturgia Noble"
+	              occupation="Villager"
+	              culture="Culture.sturgia"
+	              skill_template="SkillSet.infantry_heavyinfantry_level1_template_skills">
 		<face>
 			<!--face_key value="0009013000000000000000000000000000000000000000000000000000000000000a00050000000000000000000000000000000000000000fffffffffc880000" max_value="001cffffc000390ffff88affaa9efffffffffffffff7ffffffff9ffffffffffa0007effff7ffffff000000000000000000000000000000000000000001509181" /-->
 			<BodyProperties version="4"
-							age="40.03"
-							weight="0.1867"
-							build="0.2423"
-							key="00000400000002412110000001211010010411111010002221111001301101000064300306112000000000000000000000000000000000000000000000D00000" />
+			                age="40.03"
+			                weight="0.1867"
+			                build="0.2423"
+			                key="00000400000002412110000001211010010411111010002221111001301101000064300306112000000000000000000000000000000000000000000000D00000" />
 			<BodyPropertiesMax version="4"
-							   age="78.04"
-							   weight="0.9336"
-							   build="0.9244"
-							   key="0008F00C40003690FEFEEFFEBBBFFFFFFFFFFF979EF8FFFEFFFFFFEFFFEFFFFE08EEE0890EFFFFFF000000000000000000000000000000000000000077C89105" />
+			                   age="78.04"
+			                   weight="0.9336"
+			                   build="0.9244"
+			                   key="0008F00C40003690FEFEEFFEBBBFFFFFFFFFFF979EF8FFFEFFFFFFEFFFEFFFFE08EEE0890EFFFFFF000000000000000000000000000000000000000077C89105" />
 		</face>
 		<skills>
 			<skill id="Athletics"
-				   value="60" />
+			       value="60" />
 			<skill id="Riding"
-				   value="110" />
+			       value="110" />
 			<skill id="OneHanded"
-				   value="120" />
+			       value="120" />
 			<skill id="TwoHanded"
-				   value="60" />
+			       value="60" />
 			<skill id="Polearm"
-				   value="60" />
+			       value="60" />
 			<skill id="Bow"
-				   value="40" />
+			       value="40" />
 			<skill id="Crossbow"
-				   value="50" />
+			       value="50" />
 		</skills>
 		<Equipments>
 			<EquipmentRoster>
@@ -1064,24 +1089,24 @@
 	</NPCCharacter>
 
 	<NPCCharacter id="craftsman_battania"
-				  default_group="Infantry"
-				  level="1"
-				  name="{=!}Battania Craftsman"
-				  occupation="Villager"
-				  culture="Culture.battania"
-				  skill_template="SkillSet.infantry_heavyinfantry_level1_template_skills">
+	              default_group="Infantry"
+	              level="1"
+	              name="{=!}Battania Craftsman"
+	              occupation="Villager"
+	              culture="Culture.battania"
+	              skill_template="SkillSet.infantry_heavyinfantry_level1_template_skills">
 		<face>
 			<!--face_key value="0009013000000000000000000000000000000000000000000000000000000000000a00050000000000000000000000000000000000000000fffffffffc880000" max_value="001cffffc000390ffff88affaa9efffffffffffffff7ffffffff9ffffffffffa0007effff7ffffff000000000000000000000000000000000000000001509181" /-->
 			<BodyProperties version="4"
-							age="40.29"
-							weight="0.162"
-							build="0.3657"
-							key="00000004000002C00160000000116151100771100000100021111101800101000055200305111101000000000000000000000000000000000000000000A00000" />
+			                age="40.29"
+			                weight="0.162"
+			                build="0.3657"
+			                key="00000004000002C00160000000116151100771100000100021111101800101000055200305111101000000000000000000000000000000000000000000A00000" />
 			<BodyPropertiesMax version="4"
-							   age="74.57"
-							   weight="0.9954"
-							   build="0.9645"
-							   key="0008C80A400035D4FF9FEEFFFFEEEEFEF9FF8EFFEFF7FFFFFEEFEFEE97FEFFEE08FEF0890FEEEFEE000000000000000000000000000000000000000001F89105" />
+			                   age="74.57"
+			                   weight="0.9954"
+			                   build="0.9645"
+			                   key="0008C80A400035D4FF9FEEFFFFEEEEFEF9FF8EFFEFF7FFFFFEEFEFEE97FEFFEE08FEF0890FEEEFEE000000000000000000000000000000000000000001F89105" />
 		</face>
 		<skills></skills>
 		<Equipments>
@@ -1163,40 +1188,40 @@
 
 
 	<NPCCharacter id="noble_battania"
-				  default_group="Infantry"
-				  level="1"
-				  name="{=!}Battania Noble"
-				  occupation="Villager"
-				  culture="Culture.battania"
-				  skill_template="SkillSet.infantry_heavyinfantry_level1_template_skills">
+	              default_group="Infantry"
+	              level="1"
+	              name="{=!}Battania Noble"
+	              occupation="Villager"
+	              culture="Culture.battania"
+	              skill_template="SkillSet.infantry_heavyinfantry_level1_template_skills">
 		<face>
 			<!--face_key value="0009013000000000000000000000000000000000000000000000000000000000000a00050000000000000000000000000000000000000000fffffffffc880000" max_value="001cffffc000390ffff88affaa9efffffffffffffff7ffffffff9ffffffffffa0007effff7ffffff000000000000000000000000000000000000000001509181" /-->
 			<BodyProperties version="4"
-							age="40.29"
-							weight="0.162"
-							build="0.3657"
-							key="00000004000002C00160000000116151100771100000100021111101800101000055200305111101000000000000000000000000000000000000000000A00000" />
+			                age="40.29"
+			                weight="0.162"
+			                build="0.3657"
+			                key="00000004000002C00160000000116151100771100000100021111101800101000055200305111101000000000000000000000000000000000000000000A00000" />
 			<BodyPropertiesMax version="4"
-							   age="74.57"
-							   weight="0.9954"
-							   build="0.9645"
-							   key="0008C80A400035D4FF9FEEFFFFEEEEFEF9FF8EFFEFF7FFFFFEEFEFEE97FEFFEE08FEF0890FEEEFEE000000000000000000000000000000000000000001F89105" />
+			                   age="74.57"
+			                   weight="0.9954"
+			                   build="0.9645"
+			                   key="0008C80A400035D4FF9FEEFFFFEEEEFEF9FF8EFFEFF7FFFFFEEFEFEE97FEFFEE08FEF0890FEEEFEE000000000000000000000000000000000000000001F89105" />
 		</face>
 		<skills>
 			<skill id="Athletics"
-				   value="60" />
+			       value="60" />
 			<skill id="Riding"
-				   value="110" />
+			       value="110" />
 			<skill id="OneHanded"
-				   value="120" />
+			       value="120" />
 			<skill id="TwoHanded"
-				   value="60" />
+			       value="60" />
 			<skill id="Polearm"
-				   value="60" />
+			       value="60" />
 			<skill id="Bow"
-				   value="40" />
+			       value="40" />
 			<skill id="Crossbow"
-				   value="50" />
+			       value="50" />
 		</skills>
 		<Equipments>
 			<EquipmentRoster>
@@ -1293,24 +1318,24 @@
 	</NPCCharacter>
 
 	<NPCCharacter id="craftsman_khuzait"
-				 default_group="Cavalry"
-				 level="1"
-				 name="{=!}Khuzait Craftsman"
-				 occupation="Villager"
-				 culture="Culture.khuzait"
-				 skill_template="SkillSet.infantry_heavyinfantry_level1_template_skills">
+	              default_group="Cavalry"
+	              level="1"
+	              name="{=!}Khuzait Craftsman"
+	              occupation="Villager"
+	              culture="Culture.khuzait"
+	              skill_template="SkillSet.infantry_heavyinfantry_level1_template_skills">
 		<face>
 			<!--face_key value="0009013000000000000000000000000000000000000000000000000000000000000a00050000000000000000000000000000000000000000fffffffffc880000" max_value="001cffffc000390ffff88affaa9efffffffffffffff7ffffffff9ffffffffffa0007effff7ffffff000000000000000000000000000000000000000001509181" /-->
 			<BodyProperties version="4"
-							age="22.49"
-							weight="0.0417"
-							build="0.0324"
-							key="000DC40D800005C6507011122CB700080603060883A8010100000000800001000000100300001000000000000000000000000000000000000000000006000000" />
+			                age="22.49"
+			                weight="0.0417"
+			                build="0.0324"
+			                key="000DC40D800005C6507011122CB700080603060883A8010100000000800001000000100300001000000000000000000000000000000000000000000006000000" />
 			<BodyPropertiesMax version="4"
-							   age="66.85"
-							   weight="0.9182"
-							   build="0.5231"
-							   key="001EFC0FC00038D4FFFBCEFEEFFE9E6FEFFEFFEFFEEFEFFFEFFEEFFF898EFEFA0698E06809FFFFFF000000000000000000000000000000000000000079209100" />
+			                   age="66.85"
+			                   weight="0.9182"
+			                   build="0.5231"
+			                   key="001EFC0FC00038D4FFFBCEFEEFFE9E6FEFFEFFEFFEEFEFFFEFFEEFFF898EFEFA0698E06809FFFFFF000000000000000000000000000000000000000079209100" />
 		</face>
 		<skills></skills>
 		<Equipments>
@@ -1395,43 +1420,43 @@
 
 
 	<NPCCharacter id="noble_khuzait"
-				  default_group="Cavalry"
-				  level="1"
-				  name="{=!}Khuzait Noble"
-				  occupation="Villager"
-				  culture="Culture.khuzait"
-				  skill_template="SkillSet.infantry_heavyinfantry_level1_template_skills">
+	              default_group="Cavalry"
+	              level="1"
+	              name="{=!}Khuzait Noble"
+	              occupation="Villager"
+	              culture="Culture.khuzait"
+	              skill_template="SkillSet.infantry_heavyinfantry_level1_template_skills">
 		<face>
 			<!--face_key value="0009013000000000000000000000000000000000000000000000000000000000000a00050000000000000000000000000000000000000000fffffffffc880000" max_value="001cffffc000390ffff88affaa9efffffffffffffff7ffffffff9ffffffffffa0007effff7ffffff000000000000000000000000000000000000000001509181" /-->
 			<BodyProperties version="4"
-							age="40.49"
-							weight="0.0417"
-							build="0.0324"
-							key="000DC40D800005C6507011122CB700080603060883A8010100000000800001000000100300001000000000000000000000000000000000000000000006000000" />
+			                age="40.49"
+			                weight="0.0417"
+			                build="0.0324"
+			                key="000DC40D800005C6507011122CB700080603060883A8010100000000800001000000100300001000000000000000000000000000000000000000000006000000" />
 			<BodyPropertiesMax version="4"
-							   age="66.85"
-							   weight="0.9182"
-							   build="0.5231"
-							   key="001EFC0FC00038D4FFFBCEFEEFFE9E6FEFFEFFEFFEEFEFFFEFFEEFFF898EFEFA0698E06809FFFFFF000000000000000000000000000000000000000079209100" />
+			                   age="66.85"
+			                   weight="0.9182"
+			                   build="0.5231"
+			                   key="001EFC0FC00038D4FFFBCEFEEFFE9E6FEFFEFFEFFEEFEFFFEFFEEFFF898EFEFA0698E06809FFFFFF000000000000000000000000000000000000000079209100" />
 		</face>
 		<skills>
 			<skill id="Athletics"
-				   value="60" />
+			       value="60" />
 			<skill id="Riding"
-				   value="110" />
+			       value="110" />
 			<skill id="OneHanded"
-				   value="120" />
+			       value="120" />
 			<skill id="TwoHanded"
-				   value="60" />
+			       value="60" />
 			<skill id="Polearm"
-				   value="60" />
+			       value="60" />
 			<skill id="Bow"
-				   value="40" />
+			       value="40" />
 			<skill id="Crossbow"
-				   value="50" />
+			       value="50" />
 		</skills>
 		<Equipments>
-			<EquipmentRoster >
+			<EquipmentRoster>
 				<equipment slot="Item0" id="Item.khuzait_sword_4_t4" />
 				<equipment slot="Head" id="Item.decorated_nomad_cap" />
 				<equipment slot="Cape" id="Item.ao_durkhan_tassled_necklace" />
@@ -1526,26 +1551,25 @@
 	</NPCCharacter>
 
 
-
 	<NPCCharacter id="craftsman_aserai"
-				  default_group="Infantry"
-				  level="1"
-				  name="{=!}Aserai Craftsman"
-				  occupation="Villager"
-				  culture="Culture.aserai"
-				  skill_template="SkillSet.infantry_heavyinfantry_level1_template_skills">
+	              default_group="Infantry"
+	              level="1"
+	              name="{=!}Aserai Craftsman"
+	              occupation="Villager"
+	              culture="Culture.aserai"
+	              skill_template="SkillSet.infantry_heavyinfantry_level1_template_skills">
 		<face>
 			<!--face_key value="0009013000000000000000000000000000000000000000000000000000000000000a00050000000000000000000000000000000000000000fffffffffc880000" max_value="001cffffc000390ffff88affaa9efffffffffffffff7ffffffff9ffffffffffa0007effff7ffffff000000000000000000000000000000000000000001509181" /-->
 			<BodyProperties version="4"
-							age="22.69"
-							weight="0.304"
-							build="0.3225"
-							key="001EA40C400000000100110121111110053000001111000000000001480101330125501302100000000000000000000000000000000000000000000000401000" />
+			                age="22.69"
+			                weight="0.304"
+			                build="0.3225"
+			                key="001EA40C400000000100110121111110053000001111000000000001480101330125501302100000000000000000000000000000000000000000000000401000" />
 			<BodyPropertiesMax version="4"
-							   age="71.09"
-							   weight="0.5725"
-							   build="0.7299"
-							   key="0034FC0FC0003A5ADFEEEFEFEEEEFFFFEFF8FFEEFF88FFFFFFFFFFEF8EFEFFFE07BB90780BEEEFFF00000000000000000000000000000000000000006F809105" />
+			                   age="71.09"
+			                   weight="0.5725"
+			                   build="0.7299"
+			                   key="0034FC0FC0003A5ADFEEEFEFEEEEFFFFEFF8FFEEFF88FFFFFFFFFFEF8EFEFFFE07BB90780BEEEFFF00000000000000000000000000000000000000006F809105" />
 		</face>
 		<skills></skills>
 		<Equipments>
@@ -1627,40 +1651,40 @@
 
 
 	<NPCCharacter id="noble_aserai"
-				  default_group="Cavalry"
-				  level="1"
-				  name="{=!}Aserai Noble"
-				  occupation="Villager"
-				  culture="Culture.aserai"
-				  skill_template="SkillSet.infantry_heavyinfantry_level1_template_skills">
+	              default_group="Cavalry"
+	              level="1"
+	              name="{=!}Aserai Noble"
+	              occupation="Villager"
+	              culture="Culture.aserai"
+	              skill_template="SkillSet.infantry_heavyinfantry_level1_template_skills">
 		<face>
 			<!--face_key value="0009013000000000000000000000000000000000000000000000000000000000000a00050000000000000000000000000000000000000000fffffffffc880000" max_value="001cffffc000390ffff88affaa9efffffffffffffff7ffffffff9ffffffffffa0007effff7ffffff000000000000000000000000000000000000000001509181" /-->
 			<BodyProperties version="4"
-							age="40.69"
-							weight="0.304"
-							build="0.3225"
-							key="001EA40C400000000100110121111110053000001111000000000001480101330125501302100000000000000000000000000000000000000000000000401000" />
+			                age="40.69"
+			                weight="0.304"
+			                build="0.3225"
+			                key="001EA40C400000000100110121111110053000001111000000000001480101330125501302100000000000000000000000000000000000000000000000401000" />
 			<BodyPropertiesMax version="4"
-							   age="71.09"
-							   weight="0.5725"
-							   build="0.7299"
-							   key="0034FC0FC0003A5ADFEEEFEFEEEEFFFFEFF8FFEEFF88FFFFFFFFFFEF8EFEFFFE07BB90780BEEEFFF00000000000000000000000000000000000000006F809105" />
+			                   age="71.09"
+			                   weight="0.5725"
+			                   build="0.7299"
+			                   key="0034FC0FC0003A5ADFEEEFEFEEEEFFFFEFF8FFEEFF88FFFFFFFFFFEF8EFEFFFE07BB90780BEEEFFF00000000000000000000000000000000000000006F809105" />
 		</face>
 		<skills>
 			<skill id="Athletics"
-				   value="60" />
+			       value="60" />
 			<skill id="Riding"
-				   value="110" />
+			       value="110" />
 			<skill id="OneHanded"
-				   value="120" />
+			       value="120" />
 			<skill id="TwoHanded"
-				   value="60" />
+			       value="60" />
 			<skill id="Polearm"
-				   value="60" />
+			       value="60" />
 			<skill id="Bow"
-				   value="40" />
+			       value="40" />
 			<skill id="Crossbow"
-				   value="50" />
+			       value="50" />
 		</skills>
 		<Equipments>
 			<EquipmentRoster>

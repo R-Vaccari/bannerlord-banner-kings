@@ -1,7 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
+
 <WorkshopTypes>
-	<WorkshopType id="bakery" name="{=!}Bakery" equipment_cost="2000" frequency="2" jobname="{=!}Baker" description="{=!}The bakery specializes in producing bread, a highly sought after product, out of grain. It also produces delicious buttery pies.">
-		<Meshes sign_mesh_name="shop_sign_merchantbakery" shop_prop_mesh_name_1="shop_prop_merchantflour_a" shop_prop_mesh_name_2="shop_prop_merchantflour_b" shop_prop_mesh_name_3_1="shop_prop_merchantflour_c" shop_prop_mesh_name_4="Shop_prop_merchantbakery_d" shop_prop_mesh_name_5="Shop_prop_merchantbakery_e" shop_prop_mesh_name_6="Shop_prop_merchantbakery_f" />
+	<WorkshopType id="bakery" name="{=!}Bakery" equipment_cost="2000" frequency="2" jobname="{=!}Baker"
+	              description="{=!}The bakery specializes in producing bread, a highly sought after product, out of grain. It also produces delicious buttery pies.">
+		<Meshes sign_mesh_name="shop_sign_merchantbakery" shop_prop_mesh_name_1="shop_prop_merchantflour_a"
+		        shop_prop_mesh_name_2="shop_prop_merchantflour_b" shop_prop_mesh_name_3_1="shop_prop_merchantflour_c"
+		        shop_prop_mesh_name_4="Shop_prop_merchantbakery_d" shop_prop_mesh_name_5="Shop_prop_merchantbakery_e"
+		        shop_prop_mesh_name_6="Shop_prop_merchantbakery_f" />
 		<Production conversion_speed="20">
 			<Inputs>
 				<Input input_item="grain" />
@@ -20,8 +25,13 @@
 		</Production>
 	</WorkshopType>
 
-	<WorkshopType id="fletcher" name="{=!}Fletcher" equipment_cost="3000" frequency="1" jobname="{=!}Fletcher" description="{=!}The fletcher makes both ranged weapons and their ammunitions. High-end bows and crossbows are produced at a higher rate.">
-		<Meshes sign_mesh_name="shop_sign_merchantsmithing" shop_prop_mesh_name_1="shop_prop_merchantsmithing_a" shop_prop_mesh_name_2="shop_prop_merchantsmithing_b" shop_prop_mesh_name_3_1="shop_prop_merchantweapons_melee_c" shop_prop_mesh_name_4="shop_prop_merchantarmory_heavy_c" shop_prop_mesh_name_5="shop_prop_merchantsmithing_d" shop_prop_mesh_name_6="shop_prop_merchantsmithing_e" />
+	<WorkshopType id="fletcher" name="{=!}Fletcher" equipment_cost="3000" frequency="1" jobname="{=!}Fletcher"
+	              description="{=!}The fletcher makes both ranged weapons and their ammunitions. High-end bows and crossbows are produced at a higher rate.">
+		<Meshes sign_mesh_name="shop_sign_merchantsmithing" shop_prop_mesh_name_1="shop_prop_merchantsmithing_a"
+		        shop_prop_mesh_name_2="shop_prop_merchantsmithing_b"
+		        shop_prop_mesh_name_3_1="shop_prop_merchantweapons_melee_c"
+		        shop_prop_mesh_name_4="shop_prop_merchantarmory_heavy_c" shop_prop_mesh_name_5="shop_prop_merchantsmithing_d"
+		        shop_prop_mesh_name_6="shop_prop_merchantsmithing_e" />
 		<Production conversion_speed="0.8">
 			<Inputs>
 				<Input input_item="hardwood" />
@@ -76,8 +86,13 @@
 		</Production>
 	</WorkshopType>
 
-	<WorkshopType id="armorsmithy" name="{=!}Armorsmithy" equipment_cost="4000" frequency="1" jobname="{=!}Armorsmith" description="{=!}The armorsmithy is a smithy specialized in soldier armor and cavalry barding. The smithy produces high-end gear at a higher rate.">
-		<Meshes sign_mesh_name="shop_sign_merchantsmithing" shop_prop_mesh_name_1="shop_prop_merchantsmithing_a" shop_prop_mesh_name_2="shop_prop_merchantsmithing_b" shop_prop_mesh_name_3_1="shop_prop_merchantweapons_melee_c" shop_prop_mesh_name_4="shop_prop_merchantarmory_heavy_c" shop_prop_mesh_name_5="shop_prop_merchantsmithing_d" shop_prop_mesh_name_6="shop_prop_merchantsmithing_e" />
+	<WorkshopType id="armorsmithy" name="{=!}Armorsmithy" equipment_cost="4000" frequency="1" jobname="{=!}Armorsmith"
+	              description="{=!}The armorsmithy is a smithy specialized in soldier armor and cavalry barding. The smithy produces high-end gear at a higher rate.">
+		<Meshes sign_mesh_name="shop_sign_merchantsmithing" shop_prop_mesh_name_1="shop_prop_merchantsmithing_a"
+		        shop_prop_mesh_name_2="shop_prop_merchantsmithing_b"
+		        shop_prop_mesh_name_3_1="shop_prop_merchantweapons_melee_c"
+		        shop_prop_mesh_name_4="shop_prop_merchantarmory_heavy_c" shop_prop_mesh_name_5="shop_prop_merchantsmithing_d"
+		        shop_prop_mesh_name_6="shop_prop_merchantsmithing_e" />
 		<Production conversion_speed="0.8">
 			<Inputs>
 				<Input input_item="leather" />
@@ -106,7 +121,7 @@
 		<Production conversion_speed="1.0">
 			<Inputs>
 				<Input input_item="leather" />
-				<Input input_item="iron" input_count="2"/>
+				<Input input_item="iron" input_count="2" />
 			</Inputs>
 			<Outputs>
 				<Output output="ItemCategory.ultra_armor" />

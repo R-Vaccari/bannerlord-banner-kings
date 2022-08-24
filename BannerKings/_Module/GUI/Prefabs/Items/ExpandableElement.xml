@@ -1,29 +1,45 @@
 <Prefab>
 	<Constants>
 
-		<Constant Name="Encyclopedia.SubPage.Element.Width" BrushName="Encyclopedia.SubPage.Element" BrushLayer="Default" BrushValueType="Width"/>
-		<Constant Name="Encyclopedia.SubPage.Element.Height" BrushName="Encyclopedia.SubPage.Element" BrushLayer="Default" BrushValueType="Height"/>
+		<Constant Name="Encyclopedia.SubPage.Element.Width" BrushName="Encyclopedia.SubPage.Element" BrushLayer="Default"
+		          BrushValueType="Width" />
+		<Constant Name="Encyclopedia.SubPage.Element.Height" BrushName="Encyclopedia.SubPage.Element" BrushLayer="Default"
+		          BrushValueType="Height" />
 
-		<Constant Name="Encyclopedia.CharacterTree.Line.Height" BrushName="Encyclopedia.CharacterTree.Line" BrushLayer="Default" BrushValueType="Height"/>
+		<Constant Name="Encyclopedia.CharacterTree.Line.Height" BrushName="Encyclopedia.CharacterTree.Line"
+		          BrushLayer="Default" BrushValueType="Height" />
 
-		<Constant Name="IconAlpha" Value="0.7"/>
+		<Constant Name="IconAlpha" Value="0.7" />
 	</Constants>
 	<Window>
-		<Widget HeightSizePolicy ="CoverChildren" WidthSizePolicy="CoverChildren" VerticalAlignment="Center" HorizontalAlignment="Center" >
+		<Widget HeightSizePolicy="CoverChildren" WidthSizePolicy="CoverChildren" VerticalAlignment="Center"
+		        HorizontalAlignment="Center">
 			<Children>
 
-				<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" StackLayout.LayoutMethod="VerticalBottomToTop" MarginLeft="25" MarginRight="25" DoNotAcceptEvents="true">
+				<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent"
+				           StackLayout.LayoutMethod="VerticalBottomToTop" MarginLeft="25" MarginRight="25" DoNotAcceptEvents="true">
 					<Children>
 
-						<EncyclopediaDivider MarginTop="50" Parameter.Title="@Title" Parameter.ItemList="..\ElementsGrid"/>
+						<EncyclopediaDivider MarginTop="50" Parameter.Title="@Title" Parameter.ItemList="..\ElementsGrid" />
 
-						<GridWidget Id="ElementsGrid" DataSource="{Elements}" WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedWidth="350" SuggestedHeight="350" DefaultCellWidth="100" DefaultCellHeight="100" ColumnCount="9" MarginTop="10" >
+						<GridWidget Id="ElementsGrid" DataSource="{Elements}" WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed"
+						            SuggestedWidth="350" SuggestedHeight="350" DefaultCellWidth="100" DefaultCellHeight="100"
+						            ColumnCount="9" MarginTop="10">
 							<ItemTemplate>
-								<ButtonWidget DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedHeight="80" SuggestedWidth="100" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="Encyclopedia.SubPage.Element" Command.Click="ExecuteLink" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint">
+								<ButtonWidget DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed"
+								              SuggestedHeight="80" SuggestedWidth="100" HorizontalAlignment="Center" VerticalAlignment="Center"
+								              Brush="Encyclopedia.SubPage.Element" Command.Click="ExecuteLink"
+								              Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint">
 									<Children>
-										<ImageIdentifierWidget DataSource="{Visual}" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" AdditionalArgs="@AdditionalArgs" ImageId="@Id" ImageTypeCode="@ImageTypeCode" OverlayTextureScale="!ScaleFactor" MarginRight="3" MarginLeft="3" MarginBottom="3" MarginTop="3" />
-										<HintWidget DataSource="{ReligionHint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" IsDisabled="true" />
-										<TextWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="117" SuggestedHeight="30" VerticalAlignment="Bottom" HorizontalAlignment="Center" PositionYOffset="34" Brush="TownManagement.GovernorPopup.Name.Text" Text="@Name" />
+										<ImageIdentifierWidget DataSource="{Visual}" WidthSizePolicy="StretchToParent"
+										                       HeightSizePolicy="StretchToParent" AdditionalArgs="@AdditionalArgs" ImageId="@Id"
+										                       ImageTypeCode="@ImageTypeCode" OverlayTextureScale="!ScaleFactor" MarginRight="3"
+										                       MarginLeft="3" MarginBottom="3" MarginTop="3" />
+										<HintWidget DataSource="{ReligionHint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent"
+										            Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" IsDisabled="true" />
+										<TextWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="117" SuggestedHeight="30"
+										            VerticalAlignment="Bottom" HorizontalAlignment="Center" PositionYOffset="34"
+										            Brush="TownManagement.GovernorPopup.Name.Text" Text="@Name" />
 									</Children>
 								</ButtonWidget>
 							</ItemTemplate>
