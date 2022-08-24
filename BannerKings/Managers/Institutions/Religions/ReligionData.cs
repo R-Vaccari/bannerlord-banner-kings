@@ -19,7 +19,7 @@ namespace BannerKings.Managers.Institutions.Religions
         }
 
         [field: SaveableField(3)]
-        public Dictionary<Religion, float> Religions { get; }
+        public Dictionary<Religion, float> Religions { get; private set; }
 
         [field: SaveableField(1)] public Settlement Settlement { get; }
 
@@ -106,6 +106,31 @@ namespace BannerKings.Managers.Institutions.Religions
         internal override void Update(PopulationData data)
         {
             var dominant = DominantReligion;
+            if (dominant == null)
+            {
+                InitializeReligions();
+            } 
+            else
+            {
+                AddOwnerReligion();
+            }
+
+            if (Religions.Count > 1)
+            {
+                BalanceReligions(dominant);
+            }
+
+            clergyman = dominant.GetClergyman(data.Settlement) ?? dominant.GenerateClergyman(Settlement);
+        }
+
+        private void InitializeReligions()
+        {
+            Religions = new Dictionary<Religion, float>();
+            AddOwnerReligion();
+        }
+
+        private void AddOwnerReligion()
+        {
             Hero owner = null;
             if (Settlement.OwnerClan != null)
             {
@@ -125,18 +150,6 @@ namespace BannerKings.Managers.Institutions.Religions
                     Religions.Add(rel, value);
                 }
             }
-
-            if (Religions.Count > 1)
-            {
-                BalanceReligions(dominant);
-            }
-            
-
-            if (dominant != null)
-            {
-                clergyman = dominant.GetClergyman(data.Settlement) ?? dominant.GenerateClergyman(Settlement);
-            }
         }
-
     }
 }
