@@ -135,12 +135,12 @@ namespace BannerKings.Models.Vanilla
             var result = new ExplainedNumber();
             result.LimitMin(0f);
             result.LimitMax(200f);
-            if (serfs is < 0f or Single.NaN)
+            if (serfs is < 0f or float.NaN)
             {
                 serfs = 1f;
             }
 
-            if (slaves is < 0f or Single.NaN)
+            if (slaves is < 0f or float.NaN)
             {
                 slaves = 1f;
             }

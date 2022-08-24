@@ -133,7 +133,7 @@ namespace BannerKings.Managers
             foreach (var pair in Religions)
             {
                 var heroes = pair.Value.Keys.ToList();
-                foreach (Hero hero in heroes)
+                foreach (var hero in heroes)
                 {
                     HeroesCache.Add(hero, pair.Key);
                 }

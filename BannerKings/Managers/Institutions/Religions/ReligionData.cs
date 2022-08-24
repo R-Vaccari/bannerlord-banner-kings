@@ -1,4 +1,5 @@
-﻿using BannerKings.Managers.Populations;
+﻿using System;
+using BannerKings.Managers.Populations;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
@@ -53,10 +54,15 @@ namespace BannerKings.Managers.Institutions.Religions
 
         private void BalanceReligions(Religion dominant)
         {
-            List<(Religion, float)> candidates = new List<(Religion, float)>();
-            Dictionary<Religion, float> weightDictionary = new Dictionary<Religion, float>();
+            if (dominant is null)
+            {
+                return;
+            }
 
-            float totalWeight = 0f;
+            var candidates = new List<(Religion, float)>();
+            var weightDictionary = new Dictionary<Religion, float>();
+
+            var totalWeight = 0f;
             foreach (var pair in Religions)
             {
                 var weight = BannerKingsConfig.Instance.ReligionModel.CalculateReligionWeight(pair.Key, Settlement).ResultNumber;
@@ -66,25 +72,31 @@ namespace BannerKings.Managers.Institutions.Religions
 
 
             var dominantWeight = weightDictionary[dominant];
-            float proportion = dominantWeight / totalWeight;
-            float diff = proportion - Religions[dominant];
-            if (diff != 0f)
+            var proportion = dominantWeight / totalWeight;
+            var diff = proportion - Religions[dominant];
+            if (diff is 0f or float.NaN)
             {
-                float conversion = BannerKingsConfig.Instance.ReligionModel.CalculateReligionConversion(dominant, Settlement, diff).ResultNumber;
-                foreach (var pair in weightDictionary)
+                return;
+            }
+            
+            var conversion = BannerKingsConfig.Instance.ReligionModel.CalculateReligionConversion(dominant, Settlement, diff).ResultNumber;
+            foreach (var pair in weightDictionary)
+            {
+                if (pair.Key == dominant)
                 {
-                    if (pair.Key == dominant)
-                    {
-                        continue;
-                    }
-
-                    candidates.Add(new (pair.Key, pair.Value));
+                    continue;
                 }
 
-                Religion target = MBRandom.ChooseWeighted(candidates);
-                Religions[dominant] += conversion;
+                candidates.Add(new (pair.Key, pair.Value));
+            }
+
+            var target = MBRandom.ChooseWeighted(candidates);
+            if (target is not null)
+            {
                 Religions[target] -= conversion;
             }
+
+            Religions[dominant] += conversion;
         }
 
         internal override void Update(PopulationData data)
@@ -98,7 +110,7 @@ namespace BannerKings.Managers.Institutions.Religions
 
             if (owner != null)
             {
-                Religion rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(owner);
+                var rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(owner);
                 if (rel != null && !Religions.ContainsKey(rel))
                 {
                     Religions.Add(rel, 0.001f);
@@ -107,11 +119,7 @@ namespace BannerKings.Managers.Institutions.Religions
 
             BalanceReligions(dominant);
 
-            clergyman = dominant.GetClergyman(data.Settlement);
-            if (clergyman == null)
-            {
-                clergyman = dominant.GenerateClergyman(Settlement);
-            }
+            clergyman = dominant.GetClergyman(data.Settlement) ?? dominant.GenerateClergyman(Settlement);
         }
 
     }

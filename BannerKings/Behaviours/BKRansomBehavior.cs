@@ -12,8 +12,7 @@ namespace BannerKings.Behaviours
 
         public override void RegisterEvents()
         {
-            CampaignEvents.HeroPrisonerReleased.AddNonSerializedListener(this,
-                OnHeroPrisonerReleased);
+            CampaignEvents.HeroPrisonerReleased.AddNonSerializedListener(this, OnHeroPrisonerReleased);
         }
 
         public override void SyncData(IDataStore dataStore)
@@ -26,8 +25,7 @@ namespace BannerKings.Behaviours
             dataStore.SyncData("bannerkings-ransom-duty", ref playerRansomDuty);
         }
 
-        private void OnHeroPrisonerReleased(Hero released, PartyBase releasedFrom, IFaction capturer,
-            EndCaptivityDetail detail)
+        private void OnHeroPrisonerReleased(Hero released, PartyBase releasedFrom, IFaction capturer, EndCaptivityDetail detail)
         {
             var playerKingdom = Clan.PlayerClan.Kingdom;
             var releasedKingdom = released.Clan?.Kingdom;

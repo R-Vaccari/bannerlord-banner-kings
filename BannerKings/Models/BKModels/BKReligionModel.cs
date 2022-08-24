@@ -12,20 +12,20 @@ namespace BannerKings.Models.BKModels
     {
         public ExplainedNumber CalculateFervor(Religion religion)
         {
-            ExplainedNumber result = new ExplainedNumber(5f, true);
+            var result = new ExplainedNumber(5f, true);
 
-            float villages = 0f;
-            float castles = 0f;
-            float towns = 0f;
-            foreach (Settlement settlement in Settlement.All)
+            var villages = 0f;
+            var castles = 0f;
+            var towns = 0f;
+            foreach (var settlement in Settlement.All)
             {
-                PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
+                var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
                 if (data != null && data.ReligionData != null)
                 {
-                    Religion rel = data.ReligionData.DominantReligion;
+                    var rel = data.ReligionData.DominantReligion;
                     if (rel == religion)
                     {
-                        float value = GetSettlementFervorWeight(settlement);
+                        var value = GetSettlementFervorWeight(settlement);
                         if (settlement.IsVillage)
                         {
                             villages += value;
@@ -48,10 +48,10 @@ namespace BannerKings.Models.BKModels
             result.Add(castles, GameTexts.FindText("str_castles"));
             result.Add(villages, GameTexts.FindText("str_villages"));
 
-            float clans = 0f;
-            foreach (Clan clan in Clan.All)
+            var clans = 0f;
+            foreach (var clan in Clan.All)
             {
-                Religion rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(clan.Leader);
+                var rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(clan.Leader);
                 if (rel == religion)
                 {
                     clans += 0.01f;
@@ -85,7 +85,7 @@ namespace BannerKings.Models.BKModels
 
         public ExplainedNumber CalculateReligionWeight(Religion religion, Settlement settlement)
         {
-            ExplainedNumber result = new ExplainedNumber(0f, true);
+            var result = new ExplainedNumber(0f, true);
             result.Add(religion.Fervor.ResultNumber * 100f, new TextObject("{=AfsRi9wL}Fervor"));
 
             Hero owner = null;
@@ -96,7 +96,7 @@ namespace BannerKings.Models.BKModels
 
             if (owner != null)
             {
-                Religion rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(owner);
+                var rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(owner);
                 if (rel != null && rel == religion)
                 {
                     result.AddFactor(30f, new TextObject("{=tKhBP7mF}Owner's faith"));
@@ -113,7 +113,7 @@ namespace BannerKings.Models.BKModels
 
         public ExplainedNumber CalculateReligionConversion(Religion religion, Settlement settlement, float diff)
         {
-            ExplainedNumber result = new ExplainedNumber(0f, true);
+            var result = new ExplainedNumber(0f, true);
             if (diff > 0f)
             {
                 result.LimitMax(diff);
@@ -134,7 +134,7 @@ namespace BannerKings.Models.BKModels
 
             if (owner != null)
             {
-                Religion rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(owner);
+                var rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(owner);
                 if (rel != null && rel == religion)
                 {
                     result.AddFactor(0.1f, new TextObject("{=tKhBP7mF}Owner's faith"));
