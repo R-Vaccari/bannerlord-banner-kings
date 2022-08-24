@@ -54,8 +54,14 @@ namespace BannerKings.Models.BKModels
             var clans = 0f;
             foreach (var clan in Clan.All)
             {
+                if (clan.IsBanditFaction || clan.IsEliminated || clan.Leader == null)
+                {
+                    continue;
+                }
+
+
                 var rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(clan.Leader);
-                if (rel == religion)
+                if (rel != null && rel == religion)
                 {
                     clans += 0.01f;
                 }

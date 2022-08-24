@@ -38,6 +38,12 @@ namespace BannerKings.Managers.Institutions.Religions
                     eligible.Add((rel.Key, rel.Value));
                 }
 
+                if (eligible.Count == 0)
+                {
+                    // in case owner has no faith
+                    return null;
+                }
+
                 eligible = eligible.OrderByDescending(pair => pair.Item2).ToList();
                 return eligible[0].Item1;
             }
