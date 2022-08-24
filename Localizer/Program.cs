@@ -49,6 +49,11 @@ internal class Program
             var texts = GetTextsToLocalize(file);
             foreach (var text in texts)
             {
+                if (string.IsNullOrWhiteSpace(text) || text.Contains("img src="))
+                {
+                    continue;
+                }
+
                 var textToLocalize = $"{{=!}}{text}";
                 var localizedText = GetLocalizedText(textToLocalize);
 
