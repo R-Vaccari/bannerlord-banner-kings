@@ -30,6 +30,7 @@ using TaleWorlds.Core.ViewModelCollection.Information;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.MountAndBlade.GauntletUI.Widgets;
+using MathF = TaleWorlds.Library.MathF;
 
 namespace BannerKings.UI
 {

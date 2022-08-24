@@ -11,6 +11,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Engine.GauntletUI;
 using TaleWorlds.ScreenSystem;
+using ReligionVM = BannerKings.UI.Religion.ReligionVM;
 
 namespace BannerKings.UI
 {
