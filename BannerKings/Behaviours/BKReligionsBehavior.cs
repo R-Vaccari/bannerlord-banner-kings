@@ -54,12 +54,15 @@ namespace BannerKings.Behaviours
 
         private void DailyTick()
         {
-            var model = (BKPietyModel) BannerKingsConfig.Instance.Models.First(x => x.GetType() == typeof(BKPietyModel));
             foreach (var religion in ReligionsManager.GetReligions())
-            foreach (var hero in ReligionsManager.GetFaithfulHeroes(religion))
             {
-                ReligionsManager.AddPiety(religion, hero, model.CalculateEffect(hero).ResultNumber);
+                religion.UpdateFervor();
+                foreach (var hero in ReligionsManager.GetFaithfulHeroes(religion))
+                {
+                    ReligionsManager.AddPiety(religion, hero, BannerKingsConfig.Instance.PietyModel.CalculateEffect(hero).ResultNumber);
+                }
             }
+            
         }
 
         private void DailySettlementTick(Settlement settlement)

@@ -22,6 +22,8 @@ namespace BannerKings.Managers
 
         [SaveableProperty(1)] private Dictionary<Religion, Dictionary<Hero, FaithfulData>> Religions { get; set; }
 
+        private Dictionary<Hero, Religion> HeroesCache { get; set; }
+
         public void InitializeReligions()
         {
             var aserai = Utils.Helpers.GetCulture("aserai");
@@ -63,6 +65,8 @@ namespace BannerKings.Managers
                 Religions.Add(religion, new Dictionary<Hero, FaithfulData>());
                 InitializeFaithfulHeroes(religion);
             }
+
+            RefreshCaches();
         }
 
         public void InitializeFaithfulHeroes(Religion rel)
@@ -114,6 +118,25 @@ namespace BannerKings.Managers
                 }
 
                 rel.PostInitialize(faith);
+            }
+
+            RefreshCaches();
+        }
+
+        public void RefreshCaches()
+        {
+            if (HeroesCache == null)
+            {
+                HeroesCache = new Dictionary<Hero, Religion>();
+            }
+
+            foreach (var pair in Religions)
+            {
+                var heroes = pair.Value.Keys.ToList();
+                foreach (Hero hero in heroes)
+                {
+                    HeroesCache.Add(hero, pair.Key);
+                }
             }
         }
 
@@ -193,6 +216,10 @@ namespace BannerKings.Managers
 
         public Religion GetHeroReligion(Hero hero)
         {
+            if (HeroesCache != null && HeroesCache.ContainsKey(hero))
+            {
+                return HeroesCache[hero];
+            }
             return Religions.FirstOrDefault(pair => pair.Value.ContainsKey(hero)).Key;
         }
 
