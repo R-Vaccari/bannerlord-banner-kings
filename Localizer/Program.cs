@@ -49,13 +49,20 @@ internal class Program
             var texts = GetTextsToLocalize(file);
             foreach (var text in texts)
             {
-                var textToLocalize = $"\"{{=!}}{text}\"";
+                var textToLocalize = $"{{=!}}{text}";
                 var localizedText = GetLocalizedText(textToLocalize);
 
-                AddTextToLocalization(localizationDocument, localizedText.ID, localizedText.Text);
+                if (string.IsNullOrWhiteSpace(localizedText.Text))
+                {
+                    continue;
+                }
+
+                AddTextToLocalization(localizationDocument, localizedText.ID, text);
                 ReplaceTextInSource(file, textToLocalize, localizedText.Text);
             }
         }
+
+        localizationDocument.Save(localizationFile);
     }
 
     private static IEnumerable<string> GetTextsToLocalize(string file)
@@ -75,7 +82,7 @@ internal class Program
     {
         var localizationID = GetLocalizationID();
 
-        return (localizationID, text.Replace("{=!}", GetLocalizationID()));
+        return (localizationID, text.Replace("{=!}", $"{{={GetLocalizationID()}}}"));
     }
 
     private static string GetLocalizationID()
