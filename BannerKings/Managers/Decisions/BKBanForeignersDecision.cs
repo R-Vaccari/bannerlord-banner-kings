@@ -11,7 +11,7 @@ namespace BannerKings.Managers.Decisions
 
         public override string GetHint()
         {
-            return new TextObject("{=ZDMjukjgD}Foreigners that refuse to assimilate will be gradually forced to leave the settlement").ToString();
+            return new TextObject("{=5i71wtNX}Foreigners that refuse to assimilate will be gradually forced to leave the settlement").ToString();
         }
 
         public override string GetIdentifier()
@@ -21,7 +21,7 @@ namespace BannerKings.Managers.Decisions
 
         public override string GetName()
         {
-            return new TextObject("{=v90DSgEj9}Ban foreigners").ToString();
+            return new TextObject("{=puwDiExd}Ban foreigners").ToString();
         }
     }
 }

@@ -25,10 +25,10 @@ namespace BannerKings.Managers.Skills
         public void Initialize()
         {
             Wisdom = Game.Current.ObjectManager.RegisterPresumedObject(new CharacterAttribute("wisdom"));
-            Wisdom.Initialize(new TextObject("{=m7dJvKKwM}Wisdom"),
+            Wisdom.Initialize(new TextObject("{=AsRURoVx}Wisdom"),
                 new TextObject(
-                    "{=m7dJvKKwM}Wisdom represents your world knowledge and competence to deal with skills that require deep learning."),
-                new TextObject("{=6bL4wbQn9}WIS"));
+                    "{=AsRURoVx}Wisdom represents your world knowledge and competence to deal with skills that require deep learning."),
+                new TextObject("{=KZcP5Ujy}WIS"));
         }
 
         internal struct ConfigHolder

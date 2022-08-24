@@ -11,7 +11,7 @@ namespace BannerKings.Managers.Decisions
 
         public override string GetHint()
         {
-            return new TextObject("{=kzJcXDy9S}Extend exemptions to artisans and guilds, improving their output efficiency while decreasing state revenue.").ToString();
+            return new TextObject("{=fpMf7b82}Extend exemptions to artisans and guilds, improving their output efficiency while decreasing state revenue.").ToString();
         }
 
         public override string GetIdentifier()
@@ -21,7 +21,7 @@ namespace BannerKings.Managers.Decisions
 
         public override string GetName()
         {
-            return new TextObject("{=pYuGG7SAF}Encourage mercantilism").ToString();
+            return new TextObject("{=witDxxvC}Encourage mercantilism").ToString();
         }
     }
 }

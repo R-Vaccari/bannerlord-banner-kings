@@ -49,7 +49,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
         {
             var textObject =
                 new TextObject(
-                    "{=0t33Ykx1N}As the sovereign of {KINGDOM}, you must decide whether to approve this contract change or not.");
+                    "{=YURUV6wG}As the sovereign of {KINGDOM}, you must decide whether to approve this contract change or not.");
             textObject.SetTextVariable("KINGDOM", Kingdom.Name);
             return textObject;
         }

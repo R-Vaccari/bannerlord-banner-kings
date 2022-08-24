@@ -22,7 +22,7 @@ namespace BannerKings.UI.Extensions
             FinancesVisible = true;
         }
 
-        [DataSourceProperty] public string CourtText => new TextObject("{=HAu8TySmJ}Court").ToString();
+        [DataSourceProperty] public string CourtText => new TextObject("{=PtCP8MKz}Court").ToString();
 
         [DataSourceProperty]
         public bool FinancesVisible

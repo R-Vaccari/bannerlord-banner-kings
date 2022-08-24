@@ -125,7 +125,7 @@ namespace BannerKings.Behaviours
             }
 
             InformationManager.DisplayMessage(new InformationMessage(
-                new TextObject("{=oD4gqJxWo}{NUMBER} people have been killed in the siege aftermath of {SETTLEMENT}.")
+                new TextObject("{=PRDrEzOb}{NUMBER} people have been killed in the siege aftermath of {SETTLEMENT}.")
                     .SetTextVariable("NUMBER", lognum)
                     .SetTextVariable("SETTLEMENT", settlement.Name)
                     .ToString()));
@@ -385,8 +385,8 @@ namespace BannerKings.Behaviours
             var retinueType = MBObjectManager.Instance.GetObjectTypeList<BuildingType>().FirstOrDefault(x => x == Utils.Helpers._buildingCastleRetinue);
             if (retinueType == null)
             {
-                Utils.Helpers._buildingCastleRetinue.Initialize(new TextObject("{=CjbRBNLTL}Retinue Barracks"),
-                    new TextObject("{=uPL8z9Tjw}Barracks for the castle retinue, a group of elite soldiers. The retinue is added to the garrison over time, up to a limit of 20, 40 or 60 (building level)."),
+                Utils.Helpers._buildingCastleRetinue.Initialize(new TextObject("{=u6ygweWt}Retinue Barracks"),
+                    new TextObject("{=jW0Y1Smp}Barracks for the castle retinue, a group of elite soldiers. The retinue is added to the garrison over time, up to a limit of 20, 40 or 60 (building level)."),
                     new[]
                     {
                         1000,
@@ -583,8 +583,8 @@ namespace BannerKings.Behaviours
         {
             private static void Postfix()
             {
-                Utils.Helpers._buildingCastleRetinue.Initialize(new TextObject("{=CjbRBNLTL}Retinue Barracks"),
-                    new TextObject("{=uPL8z9Tjw}Barracks for the castle retinue, a group of elite soldiers. The retinue is added to the garrison over time, up to a limit of 20, 40 or 60 (building level)."),
+                Utils.Helpers._buildingCastleRetinue.Initialize(new TextObject("{=u6ygweWt}Retinue Barracks"),
+                    new TextObject("{=jW0Y1Smp}Barracks for the castle retinue, a group of elite soldiers. The retinue is added to the garrison over time, up to a limit of 20, 40 or 60 (building level)."),
                     new[]
                     {
                         800,

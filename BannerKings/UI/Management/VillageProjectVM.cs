@@ -27,7 +27,7 @@ namespace BannerKings.UI.Management
             villageData = this.data.VillageData;
         }
 
-        [DataSourceProperty] public string Title => new TextObject("{=3vSTSpZNt}Projects at {VILLAGE_NAME}").ToString();
+        [DataSourceProperty] public string Title => new TextObject("{=MaZjRhdK}Projects at {VILLAGE_NAME}").ToString();
 
         [DataSourceProperty]
         public SettlementProjectSelectionVM Projects

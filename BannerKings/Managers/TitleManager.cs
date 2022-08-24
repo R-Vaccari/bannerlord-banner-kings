@@ -153,7 +153,7 @@ namespace BannerKings.Managers
             if (Clan.PlayerClan.Kingdom != null && grantor.Clan.Kingdom == Clan.PlayerClan.Kingdom)
             {
                 InformationManager.DisplayMessage(new InformationMessage(
-                    new TextObject("{=eQ2YA9kL2}The {CLAN} has knighted {KNIGHT}.")
+                    new TextObject("{=rZBpU0b8}The {CLAN} has knighted {KNIGHT}.")
                         .SetTextVariable("CLAN", grantor.Clan.EncyclopediaLinkWithName)
                         .SetTextVariable("KNIGHT", knight.EncyclopediaLinkWithName)
                         .ToString()));
@@ -384,7 +384,7 @@ namespace BannerKings.Managers
             if (action.Title.deJure == Hero.MainHero)
             {
                 MBInformationManager.AddQuickInformation(
-                    new TextObject("{=o8S1HBHCm}{CLAIMANT} is building a claim on your title, {TITLE}.")
+                    new TextObject("{=uBCxp45v}{CLAIMANT} is building a claim on your title, {TITLE}.")
                         .SetTextVariable("CLAIMANT", claimant.EncyclopediaLinkWithName)
                         .SetTextVariable("TITLE", action.Title.FullName));
             }
@@ -394,7 +394,7 @@ namespace BannerKings.Managers
         {
             var currentOwner = action.Title.deJure;
             InformationManager.DisplayMessage(new InformationMessage(
-                new TextObject("{=CuLU5TqkV}{REVOKER} has revoked the {TITLE}.")
+                new TextObject("{=jkidSoUX}{REVOKER} has revoked the {TITLE}.")
                     .SetTextVariable("REVOKER", action.ActionTaker.EncyclopediaLinkWithName)
                     .SetTextVariable("TITLE", action.Title.FullName)
                     .ToString()));
@@ -454,7 +454,7 @@ namespace BannerKings.Managers
 
             action.ActionTaker.ChangeHeroGold(-(int) action.Gold);
             GainKingdomInfluenceAction.ApplyForDefault(action.ActionTaker, -action.Influence);
-            MBInformationManager.AddQuickInformation(new TextObject("{=zrgJrjaHf}The {TITLE} has been founded by {FOUNDER}.")
+            MBInformationManager.AddQuickInformation(new TextObject("{=NsruPA3d}The {TITLE} has been founded by {FOUNDER}.")
                     .SetTextVariable("FOUNDER", action.ActionTaker.EncyclopediaLinkWithName)
                     .SetTextVariable("TITLE", title.FullName),
                 0, null, "event:/ui/notification/relation");
@@ -474,7 +474,7 @@ namespace BannerKings.Managers
 
             action.ActionTaker.ChangeHeroGold(-(int) action.Gold);
             GainKingdomInfluenceAction.ApplyForDefault(action.ActionTaker, -action.Influence);
-            MBInformationManager.AddQuickInformation(new TextObject("{=zrgJrjaHf}The {TITLE} has been founded by {FOUNDER}.")
+            MBInformationManager.AddQuickInformation(new TextObject("{=NsruPA3d}The {TITLE} has been founded by {FOUNDER}.")
                     .SetTextVariable("FOUNDER", action.ActionTaker.EncyclopediaLinkWithName)
                     .SetTextVariable("TITLE", title.FullName),
                 0, null, "event:/ui/notification/relation");
@@ -486,13 +486,13 @@ namespace BannerKings.Managers
             var usurper = action.ActionTaker;
             var title = action.Title;
             InformationManager.DisplayMessage(new InformationMessage(
-                new TextObject("{=PjHZGvAa3}{USURPER} has usurped the {TITLE}.")
+                new TextObject("{=eHOKJYTB}{USURPER} has usurped the {TITLE}.")
                     .SetTextVariable("USURPER", usurper.EncyclopediaLinkWithName)
                     .SetTextVariable("TITLE", action.Title.FullName)
                     .ToString()));
             if (title.deJure == Hero.MainHero)
             {
-                MBInformationManager.AddQuickInformation(new TextObject("{=KzcnqX0SZ}{USURPER} has usurped your title, {TITLE}.")
+                MBInformationManager.AddQuickInformation(new TextObject("{=z0EfmtZn}{USURPER} has usurped your title, {TITLE}.")
                     .SetTextVariable("USURPER", usurper.EncyclopediaLinkWithName)
                     .SetTextVariable("TITLE", action.Title.FullName));
             }

@@ -71,19 +71,5 @@
 		<XmlNode>
 			<XmlName id="ItemModifierGroups" path="item_modifiers_groups"/>
 		</XmlNode>
-		<XmlNode>
-			<XmlName id="Concepts" path="concept_strings"/>
-			<IncludedGameTypes>
-				<GameType value = "Campaign"/>
-				<GameType value = "CampaignStoryMode"/>
-			</IncludedGameTypes>
-		</XmlNode>
-		<!--<XmlNode>                
-		<XmlName id="WorkshopTypes" path="workshops"/>
-		<IncludedGameTypes>
-			<GameType value = "Campaign"/>
-			<GameType value = "CampaignStoryMode"/>
-		</IncludedGameTypes>
-	</XmlNode>  -->
 	</Xmls>
 </Module>

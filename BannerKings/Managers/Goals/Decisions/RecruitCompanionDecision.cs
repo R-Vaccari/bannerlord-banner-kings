@@ -20,8 +20,8 @@ namespace BannerKings.Managers.Goals.Decisions
 
         public RecruitCompanionDecision() : base("goal_recruit_companion_decision", GoalUpdateType.Manual)
         {
-            var name = new TextObject("{=eqsg2wTOL}Recruit Companion");
-            var description = new TextObject("{=nqc56xZfx}Select a type of companion to recruit.");
+            var name = new TextObject("{=8MJR95cs}Recruit Companion");
+            var description = new TextObject("{=UzVF4jps}Select a type of companion to recruit.");
 
             Initialize(name, description);
 
@@ -99,7 +99,7 @@ namespace BannerKings.Managers.Goals.Decisions
 
             if (companionTypes.All(ct => gold < ct.GoldCost && influence < ct.InfluenceCost))
             {
-                failedReasons.Add(new TextObject("{=n8NyugMDL}You can't afford any companion."));
+                failedReasons.Add(new TextObject("{=JSToGDmb}You can't afford any companion."));
             }
 
             return true;
@@ -128,11 +128,11 @@ namespace BannerKings.Managers.Goals.Decisions
                 if (template is null) 
                 {
                     enabled = false;
-                    hint = new TextObject("{=e4o2vHGoO}No candidates of this type available.").ToString();
+                    hint = new TextObject("{=rq4ZNACr}No candidates of this type available.").ToString();
                 }
                 else if (!enabled)
                 {
-                    hint = new TextObject("{=PPF6qU2cQ}You can't afford the cost:\n{GOLD}{GOLD_ICON}\n{INFLUENCE}{INFLUENCE_ICON}.")
+                    hint = new TextObject("{=u1aN7hHf} You can't afford the cost:\n{GOLD}{GOLD_ICON}\n{INFLUENCE}{INFLUENCE_ICON}.")
                         .SetTextVariable("GOLD", $"{companionType.GoldCost:n0}")
                         .SetTextVariable("INFLUENCE", $"{companionType.InfluenceCost:n0}")
                         .SetTextVariable("INFLUENCE_ICON", "<img src=\"General\\Icons\\Influence@2x\" extend=\"7\">")
@@ -143,8 +143,8 @@ namespace BannerKings.Managers.Goals.Decisions
             }
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                new TextObject("{=C2u2kCntq}Companions").ToString(),
-                new TextObject("{=QjvJKDDb3}Choose a companion to recruit.").ToString(),
+                new TextObject("{=qWWMtdZv}Companions").ToString(),
+                new TextObject("{=9lKOt71v}Select a companion type to recruit").ToString(),
                 options, 
                 true, 
                 1, 

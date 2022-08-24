@@ -36,7 +36,7 @@ namespace BannerKings.UI.Crafting
         [DataSourceProperty] public ItemObject Item { get; }
 
         [DataSourceProperty]
-        public string ValueText => new TextObject("{=7DVKw1yE1}{GOLD} denarii")
+        public string ValueText => new TextObject("{=qVAXzjox}{GOLD} denarii")
             .SetTextVariable("GOLD", $"{Item.Value:n0}")
             .ToString();
 
@@ -45,7 +45,7 @@ namespace BannerKings.UI.Crafting
         [DataSourceProperty]
         public string DifficultyText => Difficulty + " " + GameTexts.FindText("str_crafting_difficulty");
 
-        [DataSourceProperty] public string StaminaText => stamina + " " + new TextObject("{=odChJRNbS}Stamina");
+        [DataSourceProperty] public string StaminaText => stamina + " " + new TextObject("{=vwK32e2N}Stamina");
 
         [DataSourceProperty]
         public BasicTooltipViewModel Hint
@@ -118,13 +118,13 @@ namespace BannerKings.UI.Crafting
 
             if (Item.HasArmorComponent)
             {
-                MBTextManager.SetTextVariable("LEFT", new TextObject("{=Saue102gw}Material"));
+                MBTextManager.SetTextVariable("LEFT", new TextObject("{=o5nrimP4}Material"));
                 list.Add(new TooltipProperty(GameTexts.FindText("str_LEFT_ONLY").ToString(),
                     Item.ArmorComponent.MaterialType.ToString(), 0));
 
 
                 UIHelper.TooltipAddEmptyLine(list);
-                list.Add(new TooltipProperty(new TextObject("{=RmniQtVRC}Armor").ToString(), " ", 0));
+                list.Add(new TooltipProperty(new TextObject("{=jxGf9nys}Armor").ToString(), " ", 0));
                 UIHelper.TooltipAddSeperator(list);
 
                 MBTextManager.SetTextVariable("LEFT", GameTexts.FindText("str_inventory_head_armor"));
@@ -152,14 +152,14 @@ namespace BannerKings.UI.Crafting
 
             MBTextManager.SetTextVariable("LEFT", GameTexts.FindText("str_crafting_difficulty"));
             list.Add(new TooltipProperty(GameTexts.FindText("str_LEFT_ONLY").ToString(), Difficulty.ToString(), 0));
-            list.Add(new TooltipProperty(new TextObject("{=odChJRNbS}Stamina").ToString(), stamina.ToString(), 0));
-            list.Add(new TooltipProperty(new TextObject("{=o79j5wNxH}Botching Chance").ToString(),
+            list.Add(new TooltipProperty(new TextObject("{=vwK32e2N}Stamina").ToString(), stamina.ToString(), 0));
+            list.Add(new TooltipProperty(new TextObject("{=6j4EFprM}Botching Chance").ToString(),
                 FormatValue(
                     BannerKingsConfig.Instance.SmithingModel.CalculateBotchingChance(armorCrafting.Hero, Difficulty)), 0));
 
 
             UIHelper.TooltipAddEmptyLine(list);
-            list.Add(new TooltipProperty(new TextObject("{=Saue102gw}Materials").ToString(), " ", 0));
+            list.Add(new TooltipProperty(new TextObject("{=o5nrimP4}Materials").ToString(), " ", 0));
             UIHelper.TooltipAddSeperator(list);
 
             var materials = BannerKingsConfig.Instance.SmithingModel.GetCraftingInputForArmor(Item);

@@ -21,7 +21,7 @@ namespace BannerKings.UI.Court
             base.RefreshValues();
             if (Hero != null)
             {
-                NameText = new TextObject("{=DEVNrdWRB}{POSITION_NAME} {HERO}")
+                NameText = new TextObject("{=d8XcskMH}{POSITION_NAME} {HERO}")
                     .SetTextVariable("POSITION_NAME", positionName)
                     .SetTextVariable("HERO", fullName ? Hero.Name : Hero.FirstName)
                     .ToString();

@@ -19,8 +19,8 @@ namespace BannerKings.Managers.Goals.Decisions
 
         public CalradicEmpireGoal() : base("goal_calradic_empire", GoalUpdateType.Settlement)
         {
-            var name = new TextObject("{=h7N9XjgLm}Reform the Imperium Calradium");
-            var description = new TextObject("{=Wfd93DVRT}Reestablish the former Calradian Empire. The Empire spanned most of the continent before emperor Arenicos died without a clear heir. By reforming the empire, you crush the validity of claimants, and ahead of you lies a new path for greatness. You must bring all imperial duchies under control of your realm.");
+            var name = new TextObject("{=7xOAyzWR}Reform the Imperium Calradium");
+            var description = new TextObject("{=h5yHKkaR}Reestablish the former Calradian Empire. The Empire spanned most of the continent before emperor Arenicos died without a clear heir. By reforming the empire, you crush the validity of claimants, and ahead of you lies a new path for greatness. You must bring all imperial duchies under control of your realm.");
 
             Initialize(name, description);
 
@@ -62,7 +62,7 @@ namespace BannerKings.Managers.Goals.Decisions
             {
                 var title = BannerKingsConfig.Instance.TitleManager.GetTitleByStringId("title_calradic_empire");
 
-                var failedReason = new TextObject("{=HG2mj2K4y}This title is already founded! De Jure is {DE_JURE.LINK} and de Facto is {DE_FACTO.LINK}.");
+                var failedReason = new TextObject("{=qPqoX2iZ}This title is already founded! De Jure is {DE_JURE.LINK} and de Facto is {DE_FACTO.LINK}.");
                 failedReason.SetCharacterProperties("DE_JURE", title.deJure.CharacterObject);
                 failedReason.SetCharacterProperties("DE_FACTO", title.DeFacto.CharacterObject);
 
@@ -72,20 +72,20 @@ namespace BannerKings.Managers.Goals.Decisions
             {
                 if (referenceHero.Gold < gold)
                 {
-                    failedReasons.Add(new TextObject("{=8qTaQNmSN}You need at least {GOLD}{GOLD_ICON}")
+                    failedReasons.Add(new TextObject("{=sKBcd5nS}You need at least {GOLD}{GOLD_ICON}")
                         .SetTextVariable("GOLD", $"{gold:n0}"));
                 }
 
                 if (referenceHero.Clan.Influence < influence)
                 {
-                    failedReasons.Add(new TextObject("{=U8uFnvg8o}You need at least {INFLUENCE}{INFLUENCE_ICON}")
+                    failedReasons.Add(new TextObject("{=6RCohQZv}You need at least {INFLUENCE}{INFLUENCE_ICON}")
                         .SetTextVariable("INFLUENCE", $"{influence:n0}")
                         .SetTextVariable("INFLUENCE_ICON", "<img src=\"General\\Icons\\Influence@2x\" extend=\"7\">"));
                 }
 
                 if (referenceHero.Culture != culture)
                 {
-                    failedReasons.Add(new TextObject("{=WKfvVCmCN}You are not part of {CULTURE} culture.")
+                    failedReasons.Add(new TextObject("{=LBmbAtLH}You are not part of {CULTURE} culture.")
                             .SetTextVariable("CULTURE", culture.EncyclopediaText));
                 }
 
@@ -93,16 +93,16 @@ namespace BannerKings.Managers.Goals.Decisions
                 var imperialKingdoms = Campaign.Current.Kingdoms.Where(k => imperialKingdomsStringIds.Contains(k.StringId)).ToList();
                 if (imperialKingdoms.Any() && imperialKingdoms.All(ik => ik.Leader != referenceHero))
                 {
-                    failedReasons.Add(new TextObject("{=ejxPw1Gja}You're not the leader of an Imperial Kingdom."));
+                    failedReasons.Add(new TextObject("{=NbnwU2cF}You're not the leader of an Imperial Kingdom."));
                 }
                 else if (referenceHero.Clan.Kingdom != null && referenceHero.Clan.Kingdom.Culture != culture)
                 {
-                    failedReasons.Add(new TextObject("{=n6AcgV9sr}Your kingdom is not part of {CULTURE} culture.")
+                    failedReasons.Add(new TextObject("{=OySox4ym}Your kingdom is not part of {CULTURE} culture.")
                         .SetTextVariable("CULTURE", culture.EncyclopediaText));
                 }
                 else
                 {
-                    failedReasons.Add(new TextObject("{=12mNSVfst}You are not leader of a kingdom with {CULTURE} culture.")
+                    failedReasons.Add(new TextObject("{=SgM3hxua}You are not leader of a kingdom with {CULTURE} culture.")
                         .SetTextVariable("CULTURE", culture.EncyclopediaText));
                 }
 
@@ -110,7 +110,7 @@ namespace BannerKings.Managers.Goals.Decisions
                 if (religion == null || religion.Faith.FaithGroup != DefaultFaiths.Instance.ImperialGroup)
                 {
                     var amra = BannerKingsConfig.Instance.ReligionsManager.GetReligionById("amra");
-                    failedReasons.Add(new TextObject("{=qPSTK0aht}You do not adhere to a faith that is part of the {RELIGION} faith group.")
+                    failedReasons.Add(new TextObject("{=05cWQHY8}You do not adhere to a faith that is part of the {RELIGION} faith group.")
                         .SetTextVariable("RELIGION", DefaultFaiths.Instance.ImperialGroup.Name));
                 }
 
@@ -119,7 +119,7 @@ namespace BannerKings.Managers.Goals.Decisions
                     from settlement in settlements
                     let title = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement)
                     where title.deFacto.MapFaction != referenceHero.MapFaction
-                    select new TextObject("{=SW9Asy3Tm}Your kingdom is not de facto ruler of {SETTLEMENT}")
+                    select new TextObject("{=94PCT08D}Your kingdom is not de facto ruler of {SETTLEMENT}")
                         .SetTextVariable("SETTLEMENT", settlement.EncyclopediaLinkWithName)
                 );
             }

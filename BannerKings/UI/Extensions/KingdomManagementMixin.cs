@@ -25,9 +25,9 @@ namespace BannerKings.UI.Extensions
         }
 
 
-        [DataSourceProperty] public string DemesneText => new TextObject("{=RkLMsO0sp}Crown Demesne").ToString();
+        [DataSourceProperty] public string DemesneText => new TextObject("{=dCwSqn8Z}Crown Demesne").ToString();
 
-        [DataSourceProperty] public string CourtText => new TextObject("{=SvX8KAWMc}Court").ToString();
+        [DataSourceProperty] public string CourtText => new TextObject("{=PtCP8MKz}Court").ToString();
 
         [DataSourceProperty]
         public bool DemesneSelected

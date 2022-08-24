@@ -11,7 +11,7 @@ namespace BannerKings.Managers.Decisions
 
         public override string GetHint()
         {
-            return new TextObject("{=1jrMMVZNi}Slave caravans will be formed when the share of slave population is large enough").ToString();
+            return new TextObject("{=8tvTd5Bu}Slave caravans will be formed when the share of slave population is large enough").ToString();
         }
 
         public override string GetIdentifier()
@@ -21,7 +21,7 @@ namespace BannerKings.Managers.Decisions
 
         public override string GetName()
         {
-            return new TextObject("{=iR0kiLv4y}Allow slaves to be exported").ToString();
+            return new TextObject("{=2Y5XjALc}Allow slaves to be exported").ToString();
         }
     }
 }

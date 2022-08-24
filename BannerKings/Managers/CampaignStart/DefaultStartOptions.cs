@@ -40,19 +40,19 @@ namespace BannerKings.Managers.CampaignStart
         public override void Initialize()
         {
             Adventurer = new StartOption("start_adventurer");
-            Adventurer.Initialize(new TextObject("{=7aBbnqWmU}Adventurer"),
+            Adventurer.Initialize(new TextObject("{=WZC8VZGR}Adventurer"),
                 new TextObject(
-                    "{=1wG7iFXys}A free spirit, you are roaming the continent without constraints, or a clear objective. The world is for the taking, will you take your share?"),
-                new TextObject("{=GNUDBLQnv}Vanilla start. No troops, goods or any benefits."),
+                    "{=RKF89FKg}A free spirit, you are roaming the continent without constraints, or a clear objective. The world is for the taking, will you take your share?"),
+                new TextObject("{=1AXO1mKf}Vanilla start. No troops, goods or any benefits."),
                 1000, 0, 0, 50, 0f,
                 null);
 
             IndebtedLord = new StartOption("start_lord");
-            IndebtedLord.Initialize(new TextObject("{=xbVbEFCKV}Indebted Lord"),
+            IndebtedLord.Initialize(new TextObject("{=xEwBKtbe}Indebted Lord"),
                 new TextObject(
-                    "{=pwBDNyxUp}After a series of inherited problems and bad decisions, you find yourself in debt. Thankfuly, you are a landed lord, with income from your Lordship. A food supply and a small retinue accompany you, though their loyalty will be tested by the lack of denars..."),
+                    "{=zEpe0NWO}After a series of inherited problems and bad decisions, you find yourself in debt. Thankfuly, you are a landed lord, with income from your Lordship. A food supply and a small retinue accompany you, though their loyalty will be tested by the lack of denars..."),
                 new TextObject(
-                    "{=N77KGtOUA}Start as a lord in a kingdom, with a Lordship title. No settlement income or influence for 5 years. The village you own can be managed by you, and you will receive it's income after 5 years. Gain Scholarship skill."),
+                    "{=QAykTwHC}Start as a lord in a kingdom, with a Lordship title. No settlement income or influence for 5 years. The village you own can be managed by you, and you will receive it's income after 5 years. Gain Scholarship skill."),
                 0, 25, 10, 50, -50f,
                 () =>
                 {
@@ -91,11 +91,11 @@ namespace BannerKings.Managers.CampaignStart
                 });
 
             Mercenary = new StartOption("start_mercenary");
-            Mercenary.Initialize(new TextObject("{=4SPXx7dSR}Mercenary"),
+            Mercenary.Initialize(new TextObject("{=3ix11Qwv}Mercenary"),
                 new TextObject(
-                    "{=b9qFQYGzQ}You serve as a free mercenary company, roaming around the continent in search of employment. After a long period of joblessness, you find your company in the verge of collapse, with little morale, food and finances."),
+                    "{=PhLRnFGh}You serve as a free mercenary company, roaming around the continent in search of employment. After a long period of joblessness, you find your company in the verge of collapse, with little morale, food and finances."),
                 new TextObject(
-                    "{=2itMUtxWt}Start with a mercenary band, in desperate need for plundering gold and food. Party morale reduced for 5 years. Mercenary lifestyle is kickstarted as part of your education."),
+                    "{=skJ5aqrp}Start with a mercenary band, in desperate need for plundering gold and food. Party morale reduced for 5 years. Mercenary lifestyle is kickstarted as part of your education."),
                 250, 0, 22, 30, 0f,
                 () =>
                 {
@@ -117,11 +117,11 @@ namespace BannerKings.Managers.CampaignStart
                 DefaultLifestyles.Instance.Mercenary);
 
             Outlaw = new StartOption("start_outlaw");
-            Outlaw.Initialize(new TextObject("{=f9o62kied}Outlaw"),
+            Outlaw.Initialize(new TextObject("{=oJ71xjMA}Outlaw"),
                 new TextObject(
-                    "{=WrJekEimC}Lacking in morals, you assemble a party of like-minded brigands, making a living out stealing and plundering. Your efforts, however, have not gone unnoticed by the local authorities."),
+                    "{=7uHk6joj}Lacking in morals, you assemble a party of like-minded brigands, making a living out stealing and plundering. Your efforts, however, have not gone unnoticed by the local authorities."),
                 new TextObject(
-                    "{=h0ETYMJzD}Start with a outlaw band, in desperate need for plundering gold and food. Criminal rating does not reduce for 5 years. Outlaw lifestyle is kickstarted as part of your education."),
+                    "{=S4PSBFmL}Start with a outlaw band, in desperate need for plundering gold and food. Criminal rating does not reduce for 5 years. Outlaw lifestyle is kickstarted as part of your education."),
                 50, 2, 15, 50, 0f,
                 () =>
                 {
@@ -163,11 +163,11 @@ namespace BannerKings.Managers.CampaignStart
                 DefaultLifestyles.Instance.Outlaw);
 
             Caravaneer = new StartOption("start_caravaneer");
-            Caravaneer.Initialize(new TextObject("{=ZBWseC7qF}Robbed Caravaneer"),
+            Caravaneer.Initialize(new TextObject("{=3Q2toMmO}Robbed Caravaneer"),
                 new TextObject(
-                    "{=tgdvurnJC}Your caravan has been recently harassed by criminals - most of your belongings are lost, and certainly all your denars. A few goods, mules and wounded soldiers remain."),
+                    "{=2JNtS58q}Your caravan has been recently harassed by criminals - most of your belongings are lost, and certainly all your denars. A few goods, mules and wounded soldiers remain."),
                 new TextObject(
-                    "{=Mx9Ew9nwu}Start with a wounded caravan, some food, mules and goods. Party speed is reduced by 5% for 5 years. Caravaneer lifestyle is kickstarted as part of your education."),
+                    "{=VKT27gmH}Start with a wounded caravan, some food, mules and goods. Party speed is reduced by 5% for 5 years. Caravaneer lifestyle is kickstarted as part of your education."),
                 0, 6, 12, 50, 0f,
                 () =>
                 {
