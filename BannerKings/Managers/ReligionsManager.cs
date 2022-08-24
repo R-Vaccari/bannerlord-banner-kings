@@ -125,17 +125,23 @@ namespace BannerKings.Managers
 
         public void RefreshCaches()
         {
-            if (HeroesCache == null)
-            {
-                HeroesCache = new Dictionary<Hero, Religion>();
-            }
+            HeroesCache ??= new Dictionary<Hero, Religion>();
 
             foreach (var pair in Religions)
             {
                 var heroes = pair.Value.Keys.ToList();
                 foreach (var hero in heroes)
                 {
-                    HeroesCache.Add(hero, pair.Key);
+                    if (!HeroesCache.ContainsKey(hero))
+                    {
+                        HeroesCache.Add(hero, pair.Key);
+                        continue;
+                    }
+
+                    if (!HeroesCache.ContainsValue(pair.Key))
+                    {
+                        HeroesCache[hero] = pair.Key;
+                    }
                 }
             }
         }
