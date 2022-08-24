@@ -20,6 +20,7 @@ namespace BannerKings.UI.Management
             private OverviewVM overviewVM;
             private ReligionVM religionVM;
             private readonly Settlement settlement;
+            private bool isReligionAvailable;
 
             public PopulationVM(PopulationData data) : base(data, true)
             {
@@ -30,6 +31,7 @@ namespace BannerKings.UI.Management
                 militaryVM = new MilitaryVM(data, settlement, false);
                 religionVM = new ReligionVM(data, settlement, false);
                 IsOverviewSelected = true;
+                IsReligionAvailable = data.ReligionData != null;
             }
 
             [DataSourceProperty]
@@ -46,6 +48,20 @@ namespace BannerKings.UI.Management
 
             [DataSourceProperty]
             public string ReligionText = new TextObject("{=XYZ6qwT0}Religion").ToString();
+
+            [DataSourceProperty]
+            public bool IsReligionAvailable
+            {
+                get => isReligionAvailable;
+                set
+                {
+                    if (value != isReligionAvailable)
+                    {
+                        isReligionAvailable = value;
+                        OnPropertyChangedWithValue(value);
+                    }
+                }
+            }
 
             [DataSourceProperty]
             public OverviewVM OverView

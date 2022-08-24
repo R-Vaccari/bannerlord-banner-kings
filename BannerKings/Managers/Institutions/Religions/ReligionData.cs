@@ -113,11 +113,20 @@ namespace BannerKings.Managers.Institutions.Religions
                 var rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(owner);
                 if (rel != null && !Religions.ContainsKey(rel))
                 {
-                    Religions.Add(rel, 0.001f);
+                    float value = 0.001f;
+                    if (Religions.Count == 0)
+                    {
+                        value = 1f;
+                    }
+                    Religions.Add(rel, value);
                 }
             }
 
-            BalanceReligions(dominant);
+            if (Religions.Count > 1)
+            {
+                BalanceReligions(dominant);
+            }
+            
 
             clergyman = dominant.GetClergyman(data.Settlement) ?? dominant.GenerateClergyman(Settlement);
         }
