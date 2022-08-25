@@ -94,9 +94,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
 
         public override TextObject GetChooseDescription()
         {
-            var textObject =
-                new TextObject(
-                    "{=mXcErd03}As {?IS_FEMALE}queen{?}king{\\?} you must decide whether to enforce the policy of {POLICY_NAME}.");
+            var textObject = new TextObject("{=mXcErd03}As {?IS_FEMALE}queen{?}king{\\?} you must decide whether to enforce the policy of {POLICY_NAME}.");
             textObject.SetTextVariable("IS_FEMALE", DetermineChooser().Leader.IsFemale ? 1 : 0);
             textObject.SetTextVariable("POLICY_NAME", genderLaw.ToString());
             return textObject;
@@ -120,15 +118,15 @@ namespace BannerKings.Managers.Kingdoms.Contract
             }
             else
             {
-                textObject =
-                    new TextObject(
-                        "{=ikYX00pK}The {KINGDOM}'s government will continue to be {POLICY_DESCRIPTION}. {POLICY_SUPPORT}");
+                textObject = new TextObject("{=ikYX00pK}The {KINGDOM}'s government will continue to be {POLICY_DESCRIPTION}. {POLICY_SUPPORT}");
             }
 
 
             textObject.SetTextVariable("KINGDOM", Kingdom.InformalName);
             textObject.SetTextVariable("POLICY_DESCRIPTION",
-                newGovernment ? genderLaw.ToString() : Title.contract.Succession.ToString());
+                newGovernment 
+                    ? genderLaw.ToString() 
+                    : Title.contract.Succession.ToString());
             if (isShortVersion || IsSingleClanDecision())
             {
                 textObject.SetTextVariable("POLICY_SUPPORT", TextObject.Empty);
@@ -169,9 +167,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
 
         public override TextObject GetSupportDescription()
         {
-            var textObject =
-                new TextObject(
-                    "{=JjgGFcCt}{CLAN} proposes a change of government, currently {CURRENT} to {PROPOSED}. You can pick your stance regarding this decision.");
+            var textObject = new TextObject("{=JjgGFcCt}{CLAN} proposes a change of government, currently {CURRENT} to {PROPOSED}. You can pick your stance regarding this decision.");
 
             textObject.SetTextVariable("CLAN", DetermineChooser().Leader.Name);
             textObject.SetTextVariable("CURRENT",

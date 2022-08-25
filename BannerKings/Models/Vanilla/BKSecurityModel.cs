@@ -18,7 +18,7 @@ namespace BannerKings.Models.Vanilla
 
             if (town.IsCastle)
             {
-                baseResult.Add(0.5f, new TextObject("Castle security"));
+                baseResult.Add(0.5f, new TextObject("{=UnxSzSGt}Castle security"));
             }
 
             if (BannerKingsConfig.Instance.PopulationManager != null &&
@@ -27,13 +27,13 @@ namespace BannerKings.Models.Vanilla
                 var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
                 var assim = data.CultureData.GetAssimilation(town.Owner.Culture);
                 var assimilation = assim - 1f + assim;
-                baseResult.Add(assimilation, new TextObject("Cultural Assimilation"));
+                baseResult.Add(assimilation, new TextObject("{=D3trXTDz}Cultural Assimilation"));
 
                 if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(town.Settlement, "workforce",
                         (int) WorkforcePolicy.Martial_Law))
                 {
                     var militia = town.Militia / 2;
-                    baseResult.Add(militia * 0.01f, new TextObject("Martial Law policy"));
+                    baseResult.Add(militia * 0.01f, new TextObject("{=7cFbhefJ}Martial Law policy"));
                 }
 
                 var criminal =
@@ -79,7 +79,7 @@ namespace BannerKings.Models.Vanilla
 
             if (num3 == 0)
             {
-                explainedNumber.Add(0.5f, new TextObject("No hideouts nearby"));
+                explainedNumber.Add(0.5f, new TextObject("{=Zy76yFyk}No hideouts nearby"));
             }
         }
     }

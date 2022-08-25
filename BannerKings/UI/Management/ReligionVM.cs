@@ -107,7 +107,7 @@ namespace BannerKings.UI.Management
             base.RefreshValues();
             
 
-            if (data.ReligionData == null || data.ReligionData.Religions == null)
+            if (data.ReligionData?.Religions == null)
             {
                 return;
             }
@@ -133,8 +133,7 @@ namespace BannerKings.UI.Management
                 StatsInfo.Add(new InformationElement("Stability:", FormatValue(data.Stability),
                     new TextObject("{=Uw3xBMKd}{TEXT}\nTarget: {TARGET}\n{EXPLANATIONS}")
                         .SetTextVariable("TEXT",
-                            new TextObject(
-                                "{=MKfkuKiS}The overall stability of this settlement, affected by security, loyalty, assimilation and whether you are legally entitled to the settlement. Stability is the basis of economic prosperity."))
+                            new TextObject("{=MKfkuKiS}The overall stability of this settlement, affected by security, loyalty, assimilation and whether you are legally entitled to the settlement. Stability is the basis of economic prosperity."))
                         .SetTextVariable("EXPLANATIONS", stability.GetExplanations())
                         .SetTextVariable("TARGET", FormatValue(stability.ResultNumber))
                         .ToString()));
@@ -144,23 +143,21 @@ namespace BannerKings.UI.Management
                 StatsInfo.Add(new InformationElement("Autonomy:", FormatValue(data.Autonomy),
                     new TextObject("{=Uw3xBMKd}{TEXT}\nTarget: {TARGET}\n{EXPLANATIONS}")
                         .SetTextVariable("TEXT",
-                            new TextObject(
-                                "{=xMsWoSnL}Autonomy is inversely correlated to stability, therefore less stability equals more autonomy. Higher autonomy will reduce tax revenue while increasing loyalty. Matching culture with the settlement and setting a local notable as governor increases autonomy. Higher autonomy will also slow down assimilation"))
+                            new TextObject("{=xMsWoSnL}Autonomy is inversely correlated to stability, therefore less stability equals more autonomy. Higher autonomy will reduce tax revenue while increasing loyalty. Matching culture with the settlement and setting a local notable as governor increases autonomy. Higher autonomy will also slow down assimilation"))
                         .SetTextVariable("EXPLANATIONS", autonomy.GetExplanations())
                         .SetTextVariable("TARGET", FormatValue(autonomy.ResultNumber))
                         .ToString()));
 
                 var support = data.NotableSupport;
-                StatsInfo.Add(new InformationElement("Notable Support:", FormatValue(support.ResultNumber),
+                StatsInfo.Add(new InformationElement("{=Pn4Pn4cA}Notable Support:", FormatValue(support.ResultNumber),
                     new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
                         .SetTextVariable("TEXT",
-                            new TextObject(
-                                "{=mVTYGkNP}Represents how much the local elite supports you. Support of each notable is weighted on their power, meaning that not having the support of a notable that holds most power will result in a small support percentage. Support is gained through better relations with the notables."))
+                            new TextObject("{=mVTYGkNP}Represents how much the local elite supports you. Support of each notable is weighted on their power, meaning that not having the support of a notable that holds most power will result in a small support percentage. Support is gained through better relations with the notables."))
                         .SetTextVariable("EXPLANATIONS", support.GetExplanations())
                         .ToString()));
 
-                StatsInfo.Add(new InformationElement("Total Population:", data.TotalPop.ToString(),
-                    "Number of people present in this settlement and surrounding regions."));
+                StatsInfo.Add(new InformationElement("{=S6FtRn9F}Total Population:", data.TotalPop.ToString(),
+                    "{=QZEBwVa6}Number of people present in this settlement and surrounding regions."));
 
                 var influence = BannerKingsConfig.Instance.InfluenceModel.CalculateSettlementInfluence(settlement, data);
                 StatsInfo.Add(new InformationElement(GameTexts.FindText("str_total_influence").ToString(),
@@ -173,22 +170,22 @@ namespace BannerKings.UI.Management
                         .SetTextVariable("EXPLANATIONS", influence.GetExplanations())
                         .ToString()));
 
-                StatsInfo.Add(new InformationElement("Population Growth:",
+                StatsInfo.Add(new InformationElement("{=QxLXQ67c}Population Growth:",
                     new BKGrowthModel().CalculateEffect(settlement, data).ResultNumber.ToString(),
-                    "The population growth of your settlement on a daily basis, distributed among the classes."));
-                StatsInfo.Add(new InformationElement("Foreigner Ratio:",
+                    "{=FiU5oGi9}The population growth of your settlement on a daily basis, distributed among the classes."));
+                StatsInfo.Add(new InformationElement("{=J1VG2giN}Foreigner Ratio:",
                     FormatValue(new BKForeignerModel().CalculateEffect(settlement).ResultNumber),
-                    "Merchant and freemen foreigners that refuse to be assimilated, but have a living in this settlement."));
+                    "{=gXeYeB24}Merchant and freemen foreigners that refuse to be assimilated, but have a living in this settlement."));
 
-                CultureInfo.Add(new InformationElement("Dominant Culture:",
+                CultureInfo.Add(new InformationElement("{=M780tFvV}Dominant Culture:",
                     data.CultureData.DominantCulture.Name.ToString(),
-                    "The most assimilated culture in this settlement, and considered the legal culture."));
-                CultureInfo.Add(new InformationElement("Cultural Acceptance:",
+                    "{=8ootTEcK}The most assimilated culture in this settlement, and considered the legal culture."));
+                CultureInfo.Add(new InformationElement("{=1E25AUEt}Cultural Acceptance:",
                     FormatValue(data.CultureData.GetAcceptance(Hero.MainHero.Culture)),
-                    "How accepted your culture is towards the general populace. A culture first needs to be accepted to be assimilated into."));
-                CultureInfo.Add(new InformationElement("Cultural Assimilation:",
+                    "{=O802bj7D}How accepted your culture is towards the general populace. A culture first needs to be accepted to be assimilated into."));
+                CultureInfo.Add(new InformationElement("{=D3trXTDz}Cultural Assimilation:",
                     FormatValue(data.CultureData.GetAssimilation(Hero.MainHero.Culture)),
-                    "Percentage of the population that shares culture with you. Assimilating foreign settlements requires a competent governor that shares your culture."));
+                    "{=G9JO3z4c}Percentage of the population that shares culture with you. Assimilating foreign settlements requires a competent governor that shares your culture."));
 
                 var decisions = BannerKingsConfig.Instance.PolicyManager.GetDefaultDecisions(settlement);
                 foreach (var decision in decisions)

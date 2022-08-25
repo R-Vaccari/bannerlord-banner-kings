@@ -47,9 +47,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
 
         public override TextObject GetChooseDescription()
         {
-            var textObject =
-                new TextObject(
-                    "{=atiwRMmv}As the sovereign of {KINGDOM}, you must decide whether to approve this contract change or not.");
+            var textObject = new TextObject("{=atiwRMmv}As the sovereign of {KINGDOM}, you must decide whether to approve this contract change or not.");
             textObject.SetTextVariable("KINGDOM", Kingdom.Name);
             return textObject;
         }

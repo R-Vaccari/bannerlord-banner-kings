@@ -281,14 +281,12 @@ namespace BannerKings.UI.Court
             var rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(council.Owner);
             CourtInfo.Add(new InformationElement(new TextObject("{=rogo1TDh}Court Religion:").ToString(),
                 rel != null ? rel.GetName().ToString() : GameTexts.FindText("role", "None").ToString(),
-                new TextObject(
-                        "{=u44RLcej}This council's owner's faith. Candidates for religious positions must adhere to the same faith. Other council positions may be affected by the faith's doctrines.")
+                new TextObject("{=u44RLcej}This council's owner's faith. Candidates for religious positions must adhere to the same faith. Other council positions may be affected by the faith's doctrines.")
                     .ToString()));
 
             CourtInfo.Add(new InformationElement(new TextObject("{=qFgTXJKW}Court Language:").ToString(),
                 BannerKingsConfig.Instance.EducationManager.GetNativeLanguage(council.Owner).Name.ToString(),
-                new TextObject(
-                        "{=JeSR0Bu8}This council's owner's language. Courtiers that do not speak the language may feel alienated.")
+                new TextObject("{=JeSR0Bu8}This council's owner's language. Courtiers that do not speak the language may feel alienated.")
                     .ToString()));
 
             foreach (var position in council.Positions)

@@ -24,7 +24,7 @@ namespace BannerKings.Models.BKModels
                 var random2 = 0.005f * MBRandom.RandomFloat;
                 var change = targetStability > stability ? 0.005f + random1 - random2 :
                     targetStability < stability ? -0.005f - random1 + random2 : 0f;
-                result.Add(change, new TextObject());
+                result.Add(change, new TextObject("{=!}"));
             }
             else if (settlement.IsVillage && settlement.Village != null)
             {
@@ -61,7 +61,7 @@ namespace BannerKings.Models.BKModels
             var random2 = 0.005f * MBRandom.RandomFloat;
             var change = targetAutonomy > autonomy ? 0.005f + random1 - random2 :
                 targetAutonomy < autonomy ? -0.005f - random1 + random2 : 0f;
-            result.Add(change, new TextObject());
+            result.Add(change, new TextObject("{=!}"));
 
             return result;
         }
@@ -138,10 +138,10 @@ namespace BannerKings.Models.BKModels
                     averageSatisfaction += satisfaction / 4f;
                 }
 
-                result.Add(sec / 5f, new TextObject("Security"));
-                result.Add(loyalty / 5f, new TextObject("Loyalty"));
-                result.Add(assimilation / 5f, new TextObject("Cultural assimilation"));
-                result.Add(averageSatisfaction / 5f, new TextObject("Produce satisfactions"));
+                result.Add(sec / 5f, new TextObject("{=TfMEfR6C}Security"));
+                result.Add(loyalty / 5f, new TextObject("{=B8Crp0cZ}Loyalty"));
+                result.Add(assimilation / 5f, new TextObject("{=rZOM0Jit}Cultural assimilation"));
+                result.Add(averageSatisfaction / 5f, new TextObject("{=9Etcg2UE}Produce satisfactions"));
                 result.Add(data.NotableSupport.ResultNumber / 5f, new TextObject("{=2VCUxNNq}Notable support"));
 
                 var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(town.OwnerClan.Leader);
@@ -176,7 +176,7 @@ namespace BannerKings.Models.BKModels
                     result.Add(0.05f, new TextObject("{=PSrEtF5L}Government"));
                 }
 
-                result.Add(legitimacy, new TextObject("Legitimacy"));
+                result.Add(legitimacy, new TextObject("{=UqLsS4GV}Legitimacy"));
             }
 
             return result;

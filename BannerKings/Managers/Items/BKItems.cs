@@ -111,8 +111,7 @@ namespace BannerKings.Managers.Items
 
             BookTrade = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("book_trade"));
             InitializeTradeGood(BookTrade,
-                new TextObject(
-                    "{=9V3FBo9c}A Treatise on the Value of Things{@Plural}collection of A Treatise on the Value of Things books{\\@}"),
+                new TextObject("{=9V3FBo9c}A Treatise on the Value of Things{@Plural}collection of A Treatise on the Value of Things books{\\@}"),
                 "lib_book_closed_b",
                 BKItemCategories.Instance.Book, 700000, 1.5f, ItemObject.ItemTypeEnum.Goods);
 
@@ -141,15 +140,13 @@ namespace BannerKings.Managers.Items
 
             BookCrossbow = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("book_crossbow"));
             InitializeTradeGood(BookCrossbow,
-                new TextObject(
-                    "{=b9HdDnYL}Origin and Mechanics of the Crossbow{@Plural}collection of Origin and Mechanics of the Crossbow{\\@}"),
+                new TextObject("{=b9HdDnYL}Origin and Mechanics of the Crossbow{@Plural}collection of Origin and Mechanics of the Crossbow{\\@}"),
                 "lib_book_closed_b",
                 BKItemCategories.Instance.Book, 700000, 1.5f, ItemObject.ItemTypeEnum.Goods);
 
             BookBow = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("book_bow"));
             InitializeTradeGood(BookBow,
-                new TextObject(
-                    "{=DgTSOSYQ}The History of Calradian Archery{@Plural}collection of The History of Calradian Archery{\\@}"),
+                new TextObject("{=DgTSOSYQ}The History of Calradian Archery{@Plural}collection of The History of Calradian Archery{\\@}"),
                 "lib_book_closed_b",
                 BKItemCategories.Instance.Book, 700000, 1.5f, ItemObject.ItemTypeEnum.Goods);
 

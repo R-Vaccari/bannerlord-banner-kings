@@ -194,8 +194,7 @@ namespace BannerKings.UI.Education
             if (data.Books.Count == 0)
             {
                 BooksReadInfo.Add(new InformationElement(new TextObject("{=uovmgGZa}No books read yet").ToString(), string.Empty,
-                    new TextObject(
-                            "{=NvnA9WyM}Books need to be in your inventory or the current settlement's Stash in order to be readable. To start reading you need to be literate and either have a dictionary or have a minimum understanding of it's language.")
+                    new TextObject("{=NvnA9WyM}Books need to be in your inventory or the current settlement's Stash in order to be readable. To start reading you need to be literate and either have a dictionary or have a minimum understanding of it's language.")
                         .ToString()));
             }
             else
@@ -211,8 +210,7 @@ namespace BannerKings.UI.Education
             {
                 CurrentBookInfo.Add(new InformationElement(new TextObject("{=aBaKuACo}Not currently reading any book").ToString(),
                     string.Empty,
-                    new TextObject(
-                            "{=NvnA9WyM}Books need to be in your inventory or the current settlement's Stash in order to be readable. To start reading you need to be literate and either have a dictionary or have a minimum understanding of it's language.")
+                    new TextObject("{=NvnA9WyM}Books need to be in your inventory or the current settlement's Stash in order to be readable. To start reading you need to be literate and either have a dictionary or have a minimum understanding of it's language.")
                         .ToString()));
             }
             else
@@ -238,8 +236,7 @@ namespace BannerKings.UI.Education
             {
                 CurrentLanguageInfo.Add(new InformationElement(
                     new TextObject("{=mGnKu6GO}Not currently learning any language").ToString(), string.Empty,
-                    new TextObject(
-                            "{=KBsVXEtH}Languages may be taught by your courtiers that have a good fluency, so long they understand it more than you. Languages can be actively studied on the settlement the courtier is located at.")
+                    new TextObject("{=KBsVXEtH}Languages may be taught by your courtiers that have a good fluency, so long they understand it more than you. Languages can be actively studied on the settlement the courtier is located at.")
                         .ToString()));
             }
             else
@@ -284,8 +281,7 @@ namespace BannerKings.UI.Education
             {
                 LifestyleProgressInfo.Add(new InformationElement(
                     new TextObject("{=MaV9QBJE}No lifestyle currently adopted").ToString(), string.Empty,
-                    new TextObject(
-                            "{=KBsVXEtH}Languages may be taught by your courtiers that have a good fluency, so long they understand it more than you. Languages can be actively studied on the settlement the courtier is located at.")
+                    new TextObject("{=KBsVXEtH}Languages may be taught by your courtiers that have a good fluency, so long they understand it more than you. Languages can be actively studied on the settlement the courtier is located at.")
                         .ToString()));
             }
             else
@@ -297,16 +293,14 @@ namespace BannerKings.UI.Education
                     string.Empty));
                 LifestyleProgressInfo.Add(new InformationElement(new TextObject("{=WJK9V5ND}Necessary skill:").ToString(),
                     data.Lifestyle.NecessarySkillForFocus.ToString(),
-                    new TextObject(
-                            "{=RBZRv3np}Necessary skill amount in either lifestyle skill to enable next focus investment and perk unlock.")
+                    new TextObject("{=RBZRv3np}Necessary skill amount in either lifestyle skill to enable next focus investment and perk unlock.")
                         .ToString()));
                 LifestyleProgressInfo.Add(new InformationElement(new TextObject("{=yavEq3mq}Invested focus:").ToString(),
                     data.Lifestyle.InvestedFocus.ToString(),
                     string.Empty));
                 LifestyleProgressInfo.Add(new InformationElement(new TextObject("{=4gCw08Kk}Progress:").ToString(),
                     FormatValue(data.Lifestyle.Progress),
-                    new TextObject(
-                            "{=78jQbY8E}Current progress in this stage. Once progress hits 100% and you have the necessary skill threshold, you can invest your next focus point in exchange for the next lifestyle perk.")
+                    new TextObject("{=78jQbY8E}Current progress in this stage. Once progress hits 100% and you have the necessary skill threshold, you can invest your next focus point in exchange for the next lifestyle perk.")
                         .ToString()));
                 LifestyleProgressInfo.Add(new InformationElement(new TextObject("{=ER70o2UR}First skill:").ToString(),
                     data.Lifestyle.FirstSkill.Name.ToString(),
@@ -363,8 +357,7 @@ namespace BannerKings.UI.Education
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                 new TextObject("{=bkoJgoDo}Choose Language").ToString(),
-                new TextObject(
-                        "{=gdCXV7n3}Select a language you would like to learn. Learning a language requires an instructor from your court, and different people have different teaching skills. A courtier must have a good opinion of you in order to be available. Learning languages is easier when they are intelligible with your native language.")
+                new TextObject("{=gdCXV7n3}Select a language you would like to learn. Learning a language requires an instructor from your court, and different people have different teaching skills. A courtier must have a good opinion of you in order to be available. Learning languages is easier when they are intelligible with your native language.")
                     .ToString(),
                 elements, true, 1,
                 GameTexts.FindText("str_done").ToString(), string.Empty,
@@ -422,8 +415,7 @@ namespace BannerKings.UI.Education
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                 new TextObject("{=Y4G7PxXr}Choose Book").ToString(),
-                new TextObject(
-                        "{=pXUyfe6v}Select what book you would like to read. Options may be disabled due to language barrier, or lack of Literate perk.")
+                new TextObject("{=pXUyfe6v}Select what book you would like to read. Options may be disabled due to language barrier, or lack of Literate perk.")
                     .ToString(), elements, true, 1,
                 GameTexts.FindText("str_done").ToString(), string.Empty,
                 delegate(List<InquiryElement> x)
@@ -477,8 +469,7 @@ namespace BannerKings.UI.Education
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                 new TextObject("{=sOT08u5v}Choose Lifestyle").ToString(),
-                new TextObject(
-                        "{=m7YpbtRJ}Select a lifestyle you would like to adopt. Picking a lifestyle will undo the progress of the lifestyle you are currently learning, if any. Each lifestyle is based on 2 skills, and you need at least 150 profficiency in each skill to adopt it.")
+                new TextObject("{=m7YpbtRJ}Select a lifestyle you would like to adopt. Picking a lifestyle will undo the progress of the lifestyle you are currently learning, if any. Each lifestyle is based on 2 skills, and you need at least 150 profficiency in each skill to adopt it.")
                     .ToString(), elements, true, 1,
                 GameTexts.FindText("str_done").ToString(), string.Empty,
                 delegate(List<InquiryElement> x)

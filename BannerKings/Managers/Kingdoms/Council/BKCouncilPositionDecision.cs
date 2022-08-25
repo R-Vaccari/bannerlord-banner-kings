@@ -128,9 +128,7 @@ namespace BannerKings.Managers.Kingdoms.Council
 
         public override TextObject GetChooseDescription()
         {
-            var textObject =
-                new TextObject(
-                    "{=atiwRMmv}As the sovereign of {KINGDOM}, you must decide whether to approve this contract change or not.");
+            var textObject = new TextObject("{=atiwRMmv}As the sovereign of {KINGDOM}, you must decide whether to approve this contract change or not.");
             textObject.SetTextVariable("KINGDOM", Kingdom.Name);
             return textObject;
         }
@@ -182,8 +180,7 @@ namespace BannerKings.Managers.Kingdoms.Council
 
         public override TextObject GetSupportDescription()
         {
-            return new TextObject(
-                    "{=Hj6NHtbc}{KINGDOM_NAME} will decide who will occupy the position of {POSITION}. You can pick your stance regarding this decision.")
+            return new TextObject("{=Hj6NHtbc}{KINGDOM_NAME} will decide who will occupy the position of {POSITION}. You can pick your stance regarding this decision.")
                 .SetTextVariable("KINGDOM_NAME", Kingdom.Name)
                 .SetTextVariable("POSITION", Position.GetName());
         }

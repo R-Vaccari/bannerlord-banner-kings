@@ -39,7 +39,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
 
         public override TextObject GetDescription()
         {
-            return new TextObject("Make an offering of {ITEM}. {COUNT} must be offered for the rite to be fulfilled.")
+            return new TextObject("{=xzyBM00Z}Make an offering of {ITEM}. {COUNT} must be offered for the rite to be fulfilled.")
                 .SetTextVariable("ITEM", input.Name)
                 .SetTextVariable("COUNT", inputCount);
         }
@@ -90,8 +90,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
         public override void SetDialogue()
         {
             MBTextManager.SetTextVariable("CLERGYMAN_RITE_CONFIRM",
-                new TextObject(
-                        "{=uSMsxDP1}The fate of {HERO} was sealed once they dared draw sword on us. Affirm the rite and we shall rejoice upon the glory we bathe ourselves in as the enemy bleeds!")
+                new TextObject("{=uSMsxDP1}The fate of {HERO} was sealed once they dared draw sword on us. Affirm the rite and we shall rejoice upon the glory we bathe ourselves in as the enemy bleeds!")
                     .SetTextVariable("HERO", input.Name));
         }
     }

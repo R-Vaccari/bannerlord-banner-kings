@@ -25,12 +25,12 @@ namespace BannerKings.Managers.Duties
             if (Hero.MainHero.Gold >= Completion)
             {
                 GiveGoldAction.ApplyBetweenCharacters(Hero.MainHero, DebtOwner, (int) Completion);
-                result = new TextObject("{SUZERAIN} holds your oath of ransom aid fulfilled. You have payed {RANSOM} gold and your liege is satisfied.")
+                result = new TextObject("{=f12xFRef}{SUZERAIN} holds your oath of ransom aid fulfilled. You have payed {RANSOM} gold and your liege is satisfied.")
                     .ToString();
             }
             else
             {
-                result = new TextObject("You have failed to fulfill your duty of ransom assistance to {SUZERAIN}. As a result, your clan's reputation has suffered, and your liege is unsatisfied.")
+                result = new TextObject("{=bdhEKkrq}You have failed to fulfill your duty of ransom assistance to {SUZERAIN}. As a result, your clan's reputation has suffered, and your liege is unsatisfied.")
                     .ToString();
             }
 

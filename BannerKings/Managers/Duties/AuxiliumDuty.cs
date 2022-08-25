@@ -46,8 +46,7 @@ namespace BannerKings.Managers.Duties
                 Clan.PlayerClan.Renown -= 30f * (1f - proportion);
                 var relation = MBRandom.RandomInt(-12, -5);
                 ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero.MainHero, suzerain, relation, false);
-                result = new TextObject(
-                    "{=TkkCkCWZ}You have failed to fulfill your duty of military assistance to {SUZERAIN}. As a result, your clan's renown has suffered, and your relationship with suzerain has changed by {RELATION}.");
+                result = new TextObject("{=TkkCkCWZ}You have failed to fulfill your duty of military assistance to {SUZERAIN}. As a result, your clan's renown has suffered, and your relationship with suzerain has changed by {RELATION}.");
                 result.SetTextVariable("SUZERAIN", suzerain.Name);
                 result.SetTextVariable("RELATION", relation);
             }
@@ -57,8 +56,7 @@ namespace BannerKings.Managers.Duties
                 GainKingdomInfluenceAction.ApplyForDefault(Hero.MainHero, influence);
                 var relation = MBRandom.RandomInt(5, 10);
                 ChangeRelationAction.ApplyRelationChangeBetweenHeroes(Hero.MainHero, suzerain, relation, false);
-                result = new TextObject(
-                    "{=8EAqqJ9A}{SUZERAIN} holds your duty of military aid fulfilled. You have gained {INFLUENCE} and {RELATION} relatin with your suzerain.");
+                result = new TextObject("{=8EAqqJ9A}{SUZERAIN} holds your duty of military aid fulfilled. You have gained {INFLUENCE} and {RELATION} relatin with your suzerain.");
                 result.SetTextVariable("INFLUENCE", influence);
                 result.SetTextVariable("SUZERAIN", suzerain.Name);
                 result.SetTextVariable("RELATION", relation);

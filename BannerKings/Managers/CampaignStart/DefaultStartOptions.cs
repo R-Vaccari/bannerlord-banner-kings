@@ -41,18 +41,15 @@ namespace BannerKings.Managers.CampaignStart
         {
             Adventurer = new StartOption("start_adventurer");
             Adventurer.Initialize(new TextObject("{=0VSP2ghD}Adventurer"),
-                new TextObject(
-                    "{=wTcCEBLB}A free spirit, you are roaming the continent without constraints, or a clear objective. The world is for the taking, will you take your share?"),
+                new TextObject("{=wTcCEBLB}A free spirit, you are roaming the continent without constraints, or a clear objective. The world is for the taking, will you take your share?"),
                 new TextObject("{=2fcEecjz}Vanilla start. No troops, goods or any benefits."),
                 1000, 0, 0, 50, 0f,
                 null);
 
             IndebtedLord = new StartOption("start_lord");
             IndebtedLord.Initialize(new TextObject("{=2VoYzCNj}Indebted Lord"),
-                new TextObject(
-                    "{=P1rwCkZJ}After a series of inherited problems and bad decisions, you find yourself in debt. Thankfuly, you are a landed lord, with income from your Lordship. A food supply and a small retinue accompany you, though their loyalty will be tested by the lack of denars..."),
-                new TextObject(
-                    "{=qGzc0y7c}Start as a lord in a kingdom, with a Lordship title. No settlement income or influence for 5 years. The village you own can be managed by you, and you will receive it's income after 5 years. Gain Scholarship skill."),
+                new TextObject("{=P1rwCkZJ}After a series of inherited problems and bad decisions, you find yourself in debt. Thankfuly, you are a landed lord, with income from your Lordship. A food supply and a small retinue accompany you, though their loyalty will be tested by the lack of denars..."),
+                new TextObject("{=qGzc0y7c}Start as a lord in a kingdom, with a Lordship title. No settlement income or influence for 5 years. The village you own can be managed by you, and you will receive it's income after 5 years. Gain Scholarship skill."),
                 0, 25, 10, 50, -50f,
                 () =>
                 {
@@ -92,10 +89,8 @@ namespace BannerKings.Managers.CampaignStart
 
             Mercenary = new StartOption("start_mercenary");
             Mercenary.Initialize(new TextObject("{=kLHXZnLY}Mercenary"),
-                new TextObject(
-                    "{=wcWg3KPt}You serve as a free mercenary company, roaming around the continent in search of employment. After a long period of joblessness, you find your company in the verge of collapse, with little morale, food and finances."),
-                new TextObject(
-                    "{=G2yNVZ9R}Start with a mercenary band, in desperate need for plundering gold and food. Party morale reduced for 5 years. Mercenary lifestyle is kickstarted as part of your education."),
+                new TextObject("{=wcWg3KPt}You serve as a free mercenary company, roaming around the continent in search of employment. After a long period of joblessness, you find your company in the verge of collapse, with little morale, food and finances."),
+                new TextObject("{=G2yNVZ9R}Start with a mercenary band, in desperate need for plundering gold and food. Party morale reduced for 5 years. Mercenary lifestyle is kickstarted as part of your education."),
                 250, 0, 22, 30, 0f,
                 () =>
                 {
@@ -118,10 +113,8 @@ namespace BannerKings.Managers.CampaignStart
 
             Outlaw = new StartOption("start_outlaw");
             Outlaw.Initialize(new TextObject("{=GTYYnH9E}Outlaw"),
-                new TextObject(
-                    "{=YLxp50Ln}Lacking in morals, you assemble a party of like-minded brigands, making a living out stealing and plundering. Your efforts, however, have not gone unnoticed by the local authorities."),
-                new TextObject(
-                    "{=rSAjO3Qg}Start with a outlaw band, in desperate need for plundering gold and food. Criminal rating does not reduce for 5 years. Outlaw lifestyle is kickstarted as part of your education."),
+                new TextObject("{=YLxp50Ln}Lacking in morals, you assemble a party of like-minded brigands, making a living out stealing and plundering. Your efforts, however, have not gone unnoticed by the local authorities."),
+                new TextObject("{=rSAjO3Qg}Start with a outlaw band, in desperate need for plundering gold and food. Criminal rating does not reduce for 5 years. Outlaw lifestyle is kickstarted as part of your education."),
                 50, 2, 15, 50, 0f,
                 () =>
                 {
@@ -164,10 +157,8 @@ namespace BannerKings.Managers.CampaignStart
 
             Caravaneer = new StartOption("start_caravaneer");
             Caravaneer.Initialize(new TextObject("{=2FW79uHM}Robbed Caravaneer"),
-                new TextObject(
-                    "{=L1QFOwvp}Your caravan has been recently harassed by criminals - most of your belongings are lost, and certainly all your denars. A few goods, mules and wounded soldiers remain."),
-                new TextObject(
-                    "{=dSJsWjyR}Start with a wounded caravan, some food, mules and goods. Party speed is reduced by 5% for 5 years. Caravaneer lifestyle is kickstarted as part of your education."),
+                new TextObject("{=L1QFOwvp}Your caravan has been recently harassed by criminals - most of your belongings are lost, and certainly all your denars. A few goods, mules and wounded soldiers remain."),
+                new TextObject("{=dSJsWjyR}Start with a wounded caravan, some food, mules and goods. Party speed is reduced by 5% for 5 years. Caravaneer lifestyle is kickstarted as part of your education."),
                 0, 6, 12, 50, 0f,
                 () =>
                 {
@@ -203,16 +194,18 @@ namespace BannerKings.Managers.CampaignStart
                     var goodsValue = 0;
                     foreach (var itemObject in TaleWorlds.CampaignSystem.Extensions.Items.AllTradeGoods)
                     {
-                        if (!itemObject.IsFood && goodsValue < 1200)
+                        if (itemObject.IsFood || goodsValue >= 1200)
                         {
-                            var num2 = (int) (1f * (10f / 13f) / itemObject.Value * MBRandom.RandomFloat);
-                            if (num2 > 0)
-                            {
-                                party.ItemRoster.AddToCounts(itemObject, num2);
-                            }
-
-                            goodsValue += num2 * itemObject.Value;
+                            continue;
                         }
+
+                        var num2 = (int) (1f * (10f / 13f) / itemObject.Value * MBRandom.RandomFloat);
+                        if (num2 > 0)
+                        {
+                            party.ItemRoster.AddToCounts(itemObject, num2);
+                        }
+
+                        goodsValue += num2 * itemObject.Value;
                     }
                 },
                 0f,

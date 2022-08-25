@@ -126,7 +126,7 @@ namespace BannerKings.Models.Vanilla
             var settlementResult = new ExplainedNumber(0f, true);
             float nobles = data.GetTypeCount(PopType.Nobles);
             settlementResult.Add(MBMath.ClampFloat(nobles * 0.01f, 0f, 12f),
-                new TextObject($"Nobles influence from {settlement.Name}"));
+                new TextObject($"{{=!}}Nobles influence from {settlement.Name}"));
 
             var villageData = data.VillageData;
             if (villageData != null)
@@ -143,7 +143,7 @@ namespace BannerKings.Models.Vanilla
                 var result = settlementResult.ResultNumber;
                 float extra = BannerKingsConfig.Instance.PopulationManager.GetPopCountOverLimit(settlement, PopType.Nobles);
                 settlementResult.Add(MBMath.ClampFloat(extra * -0.01f, result * -0.5f, -0.1f),
-                    new TextObject($"Excess noble population at {settlement.Name}"));
+                    new TextObject($"{{=!}}Excess noble population at {settlement.Name}"));
             }
 
             return settlementResult;

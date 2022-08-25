@@ -28,9 +28,7 @@ namespace BannerKings.Managers.Kingdoms
 
         public override TextObject GetSupportDescription()
         {
-            var textObject =
-                new TextObject(
-                    "{=NOKaWV7r}{KINGDOM_NAME} Republic will decide who will be elected Grand-Prince. You can pick your stance regarding this decision.");
+            var textObject = new TextObject("{=NOKaWV7r}{KINGDOM_NAME} Republic will decide who will be elected Grand-Prince. You can pick your stance regarding this decision.");
             textObject.SetTextVariable("KINGDOM_NAME", Kingdom.Name);
             return textObject;
         }

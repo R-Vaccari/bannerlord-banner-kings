@@ -1,4 +1,4 @@
-﻿using BannerKings.Managers.Populations;
+using BannerKings.Managers.Populations;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Library;
@@ -17,13 +17,13 @@ namespace BannerKings.Models.BKModels
             var result = new ExplainedNumber();
             if (settlement.IsVillage || !settlement.IsStarving)
             {
-                result.Add(5f, new TextObject("Base"));
+                result.Add(5f, new TextObject("{=AaNeOd9n}Base"));
                 var filledCapacity = data.TotalPop / (float) CalculateSettlementCap(settlement);
                 data.Classes.ForEach(popClass =>
                 {
                     if (popClass.type != PopType.Slaves)
                     {
-                        result.Add(popClass.count * POP_GROWTH_FACTOR * (1f - filledCapacity), new TextObject("{0} growth"));
+                        result.Add(popClass.count * POP_GROWTH_FACTOR * (1f - filledCapacity), new TextObject("{=haMOv5Fh}{0} growth"));
                     }
                 });
             }

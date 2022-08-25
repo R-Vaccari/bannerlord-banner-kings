@@ -1,4 +1,4 @@
-﻿using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Localization;
@@ -21,7 +21,7 @@ namespace BannerKings.Components
 
         public override Hero PartyOwner => HomeSettlement.OwnerClan.Leader;
 
-        public override TextObject Name => new TextObject("Raised Militia from {SETTLEMENT}")
+        public override TextObject Name => new TextObject("{=mNwggeSn}Raised Militia from {SETTLEMENT}")
             .SetTextVariable("SETTLEMENT", HomeSettlement.Name);
 
         public override Settlement HomeSettlement => _target;

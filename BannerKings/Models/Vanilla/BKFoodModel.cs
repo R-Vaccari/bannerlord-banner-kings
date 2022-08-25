@@ -47,19 +47,16 @@ namespace BannerKings.Models.Vanilla
             result.Add(GetPopulationFoodConsumption(data).ResultNumber, new TextObject("{=3JzB3jVw}Population Consumption"));
             result.Add(GetPopulationFoodProduction(data, town).ResultNumber, new TextObject("{=AOdwTPTa}Population Production"));
 
-            //float prosperityImpact = -town.Owner.Settlement.Prosperity / (town.IsCastle ? 400f : 120f);
-            //result.Add(prosperityImpact, new TextObject("Prosperity effect"), null);
-
             var garrisonParty = town.GarrisonParty;
             var garrisonConsumption = garrisonParty != null ? garrisonParty.Party.NumberOfAllMembers : 0;
-            result.Add(-garrisonConsumption / NumberOfMenOnGarrisonToEatOneFood, new TextObject("Garrison consumption"));
+            result.Add(-garrisonConsumption / NumberOfMenOnGarrisonToEatOneFood, new TextObject("{=o7W9qvHw}Garrison consumption"));
 
             var prisoners = town.Settlement.Party.NumberOfPrisoners;
-            result.Add(-prisoners / (NumberOfMenOnGarrisonToEatOneFood * 2), new TextObject("Prisoner rations"));
+            result.Add(-prisoners / (NumberOfMenOnGarrisonToEatOneFood * 2), new TextObject("{=S3ntMGX6}Prisoner rations"));
 
             if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(town.Settlement, "decision_militia_encourage"))
             {
-                result.AddFactor(-0.25f, new TextObject("Conscription policy"));
+                result.AddFactor(-0.25f, new TextObject("{=1aq83aPr}Conscription policy"));
             }
 
             if (town.Governor != null)
@@ -130,21 +127,21 @@ namespace BannerKings.Models.Vanilla
             if (citySerfs > 0)
             {
                 var serfConsumption = citySerfs * SERF_FOOD * -1f;
-                result.Add(serfConsumption, new TextObject("Serfs consumption"));
+                result.Add(serfConsumption, new TextObject("{=jH7cWD5r}Serfs consumption"));
             }
 
             var citySlaves = data.GetTypeCount(PopType.Slaves);
             if (citySlaves > 0)
             {
                 var slaveConsumption = citySlaves * SERF_FOOD * -0.5f;
-                result.Add(slaveConsumption, new TextObject("Slaves consumption"));
+                result.Add(slaveConsumption, new TextObject("{=8xhVr4rK}Slaves consumption"));
             }
 
             var cityNobles = data.GetTypeCount(PopType.Nobles);
             if (cityNobles > 0)
             {
                 var nobleConsumption = cityNobles * NOBLE_FOOD;
-                result.Add(nobleConsumption, new TextObject("Nobles consumption"));
+                result.Add(nobleConsumption, new TextObject("{=myyYr6BO}Nobles consumption"));
             }
 
             var cityCraftsmen = data.GetTypeCount(PopType.Craftsmen);

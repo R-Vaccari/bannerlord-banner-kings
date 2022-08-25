@@ -1,4 +1,4 @@
-﻿using BannerKings.Managers.Populations;
+using BannerKings.Managers.Populations;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
@@ -15,14 +15,14 @@ namespace BannerKings.Models.BKModels
 
             if (settlement.Culture != ownerCulture)
             {
-                baseResult.Add(-0.005f, new TextObject("Natural resistance"));
+                baseResult.Add(-0.005f, new TextObject("{=2wOt5txz}Natural resistance"));
                 var random1 = 0.001f * MBRandom.RandomFloat;
                 var random2 = 0.001f * MBRandom.RandomFloat;
-                baseResult.Add(random1 - random2, new TextObject("Random factors"));
+                baseResult.Add(random1 - random2, new TextObject("{=wJV3Gdc1}Random factors"));
 
                 if (!settlement.IsVillage && settlement.Town != null)
                 {
-                    baseResult.Add(0.005f * (1f * (settlement.Town.Security * 0.01f)), new TextObject("Security effect"));
+                    baseResult.Add(0.005f * (1f * (settlement.Town.Security * 0.01f)), new TextObject("{=a2GE4xwy}Security effect"));
                 }
 
                 var governor = settlement.IsVillage ? settlement.Village.Bound.Town.Governor : settlement.Town.Governor;
@@ -35,12 +35,12 @@ namespace BannerKings.Models.BKModels
                         effect = 0.015f;
                     }
 
-                    baseResult.Add(effect, new TextObject("Governor effect"));
+                    baseResult.Add(effect, new TextObject("{=gafTzKhz}Governor effect"));
                 }
             }
             else
             {
-                baseResult.Add(0f, new TextObject("Already assimilated"));
+                baseResult.Add(0f, new TextObject("{=uHDDG1Vq}Already assimilated"));
             }
 
             ;
@@ -63,16 +63,16 @@ namespace BannerKings.Models.BKModels
 
                     if (data.Assimilation < 1f - popData.Foreigner.ResultNumber)
                     {
-                        result.Add(-0.005f, new TextObject("Natural resistance"));
+                        result.Add(-0.005f, new TextObject("{=2wOt5txz}Natural resistance"));
                         var random1 = 0.001f * MBRandom.RandomFloat;
                         var random2 = 0.001f * MBRandom.RandomFloat;
-                        result.Add(random1 - random2, new TextObject("Random factors"));
-                        result.Add(0.005f * acceptance, new TextObject("Cultural acceptance"));
+                        result.Add(random1 - random2, new TextObject("{=wJV3Gdc1}Random factors"));
+                        result.Add(0.005f * acceptance, new TextObject("{=2qB0s9H9}Cultural acceptance"));
 
                         if (!settlement.IsVillage && settlement.Town != null)
                         {
                             result.Add(0.005f * (1f * (settlement.Town.Security * 0.01f)),
-                                new TextObject("Security effect"));
+                                new TextObject("{=a2GE4xwy}Security effect"));
                         }
 
                         var governor = settlement.IsVillage
@@ -87,7 +87,7 @@ namespace BannerKings.Models.BKModels
                                 effect = 0.015f;
                             }
 
-                            result.Add(effect, new TextObject("Governor effect"));
+                            result.Add(effect, new TextObject("{=gafTzKhz}Governor effect"));
                         }
 
                         if (dataCulture == popData.CultureData.DominantCulture)
@@ -97,7 +97,7 @@ namespace BannerKings.Models.BKModels
                     }
                     else if (data.Assimilation < 1f - popData.Foreigner.ResultNumber)
                     {
-                        result.Add(-0.005f, new TextObject("Over limit"));
+                        result.Add(-0.005f, new TextObject("{=HuoR2sGE}Over limit"));
                     }
 
                     else

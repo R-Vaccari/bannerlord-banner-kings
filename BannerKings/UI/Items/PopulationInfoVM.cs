@@ -1,4 +1,4 @@
-﻿using TaleWorlds.Core.ViewModelCollection.Information;
+using TaleWorlds.Core.ViewModelCollection.Information;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
@@ -8,13 +8,14 @@ namespace BannerKings.UI.Items
     {
         public class PopulationInfoVM : ViewModel
         {
-            private string _name, _count;
+            private string _name;
+            private string _count;
 
             public PopulationInfoVM(string name, int count, string hintText)
             {
                 _name = name;
-                _count = count.ToString();
-                Hint = new HintViewModel(new TextObject(hintText));
+                _count = $"{count:n0}";
+                Hint = new HintViewModel(new TextObject("{=!}" + hintText));
             }
 
             private HintViewModel _hint { get; set; }

@@ -188,41 +188,37 @@ namespace BannerKings.UI.Management
             SiegeInfo.Clear();
 
             var militiaCap = new BKMilitiaModel().GetMilitiaLimit(data, settlement);
-            DefenseInfo.Add(new InformationElement("Militia Cap:", militiaCap.ResultNumber.ToString(),
+            DefenseInfo.Add(new InformationElement("{=UADFWZgq}Militia Cap:", $"{militiaCap.ResultNumber:n0}",
                 new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
                     .SetTextVariable("TEXT",
-                        new TextObject(
-                            "{=AyyuwpBd}The maximum number of militiamen this settlement can support, based on it's population."))
+                        new TextObject("{=AyyuwpBd}The maximum number of militiamen this settlement can support, based on it's population."))
                     .SetTextVariable("EXPLANATIONS", militiaCap.GetExplanations())
                     .ToString()));
 
             var militiaQuality = new BKMilitiaModel().MilitiaSpawnChanceExplained(settlement);
-            DefenseInfo.Add(new InformationElement("Militia Quality:", FormatValue(militiaQuality.ResultNumber),
+            DefenseInfo.Add(new InformationElement("{=ROFzvP4W}Militia Quality:", $"{militiaQuality.ResultNumber:P}",
                 new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
                     .SetTextVariable("TEXT",
                         new TextObject("{=xQbPBzgn}Chance of militiamen being spawned as veterans instead of recruits."))
                     .SetTextVariable("EXPLANATIONS", militiaQuality.GetExplanations())
                     .ToString()));
 
-            ManpowerInfo.Add(new InformationElement("Manpower:", data.MilitaryData.Manpower.ToString(),
+            ManpowerInfo.Add(new InformationElement("{=t9sG2dMh}Manpower:", $"{data.MilitaryData.Manpower:n0}",
                 new TextObject("{=MYdkfodC}The total manpower of nobles plus peasants.").ToString()));
-            ManpowerInfo.Add(new InformationElement("Noble Manpower:", data.MilitaryData.NobleManpower.ToString(),
-                new TextObject(
-                        "{=08n0UTDS}Manpower from noble population. Noble militarism is higher, but nobles often are less numerous. These are drafted as noble recruits.")
+            ManpowerInfo.Add(new InformationElement("Noble Manpower:", $"{data.MilitaryData.NobleManpower:n0}",
+                new TextObject("{=08n0UTDS}Manpower from noble population. Noble militarism is higher, but nobles often are less numerous. These are drafted as noble recruits.")
                     .ToString()));
-            ManpowerInfo.Add(new InformationElement("Peasant Manpower:", data.MilitaryData.PeasantManpower.ToString(),
-                new TextObject(
-                        "{=uaEXD3tE}Manpower from serf and craftsmen classes. These are drafted as cultural non-noble recruits.")
+            ManpowerInfo.Add(new InformationElement("{=nkk8no8d}Peasant Manpower:", $"{data.MilitaryData.PeasantManpower:n0}",
+                new TextObject("{=uaEXD3tE}Manpower from serf and craftsmen classes. These are drafted as cultural non-noble recruits.")
                     .ToString()));
-            ManpowerInfo.Add(new InformationElement("Militarism:", FormatValue(data.MilitaryData.Militarism.ResultNumber),
+            ManpowerInfo.Add(new InformationElement("{=4gnA3tsw}Militarism:", $"{data.MilitaryData.Militarism.ResultNumber:P}",
                 new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
                     .SetTextVariable("TEXT",
-                        new TextObject(
-                            "{=MHFeNBXS}How much the population is willing or able to militarily serve. Militarism increases the manpower caps."))
+                        new TextObject("{=MHFeNBXS}How much the population is willing or able to militarily serve. Militarism increases the manpower caps."))
                     .SetTextVariable("EXPLANATIONS", data.MilitaryData.Militarism.GetExplanations())
                     .ToString()));
-            ManpowerInfo.Add(new InformationElement("Draft Efficiency:",
-                FormatValue(data.MilitaryData.DraftEfficiency.ResultNumber),
+            ManpowerInfo.Add(new InformationElement("{=AJMjhhVL}Draft Efficiency:",
+                $"{data.MilitaryData.DraftEfficiency.ResultNumber:P}",
                 new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
                     .SetTextVariable("TEXT",
                         new TextObject("{=g5NdEeBX}How quickly volunteer availability in notables replenishes."))
@@ -245,8 +241,7 @@ namespace BannerKings.UI.Management
                 sb.Append(", ");
                 sb.Append(data.MilitaryData.Trebuchets);
                 sb.Append(" (Ballis., Catap., Treb.)");
-                SiegeInfo.Add(new InformationElement("Engines:", sb.ToString(),
-                    "Pre-built siege engines to defend the walls, in case of siege."));
+                SiegeInfo.Add(new InformationElement("Engines:", sb.ToString(), "Pre-built siege engines to defend the walls, in case of siege."));
 
                 garrisonItem =
                     (BKGarrisonPolicy) BannerKingsConfig.Instance.PolicyManager.GetPolicy(settlement, "garrison");
@@ -273,32 +268,29 @@ namespace BannerKings.UI.Management
                     var lord = settlement.OwnerClan.Leader;
                     if (serfs >= party.MemberRoster.TotalManCount)
                     {
-                        var existingParty =
-                            Campaign.Current.CampaignObjectManager.Find<MobileParty>(x =>
-                                x.StringId == "raisedmilitia_" + settlement);
+                        var existingParty = Campaign.Current.CampaignObjectManager.Find<MobileParty>(x => x.StringId == "raisedmilitia_" + settlement);
                         if (existingParty == null)
                         {
-                            if (party.CurrentSettlement != null && party.CurrentSettlement == settlement)
+                            if (party.CurrentSettlement == null || party.CurrentSettlement != settlement)
                             {
-                                var menCount = party.MemberRoster.TotalManCount;
-                                MilitiaComponent.CreateMilitiaEscort(settlement, Hero.MainHero.PartyBelongedTo, party);
-                                if (lord == Hero.MainHero)
-                                {
-                                    InformationManager.DisplayMessage(new InformationMessage(
-                                        $"{menCount} men raised as militia at {settlement.Name}!"));
-                                }
+                                return;
+                            }
+
+                            var menCount = party.MemberRoster.TotalManCount;
+                            MilitiaComponent.CreateMilitiaEscort(settlement, Hero.MainHero.PartyBelongedTo, party);
+                            if (lord == Hero.MainHero)
+                            {
+                                InformationManager.DisplayMessage(new InformationMessage($"{menCount:n0} men raised as militia at {settlement.Name}!"));
                             }
                         }
                         else if (lord == Hero.MainHero)
                         {
-                            InformationManager.DisplayMessage(
-                                new InformationMessage($"Militia already raised from {settlement.Name}"));
+                            InformationManager.DisplayMessage(new InformationMessage($"Militia already raised from {settlement.Name}"));
                         }
                     }
                     else if (lord == Hero.MainHero)
                     {
-                        InformationManager.DisplayMessage(new InformationMessage(
-                            $"Not enough men available to raise militia at {settlement.Name}"));
+                        InformationManager.DisplayMessage(new InformationMessage($"Not enough men available to raise militia at {settlement.Name}"));
                     }
                 }, new TextObject("Raise the current militia of this village."));
             }

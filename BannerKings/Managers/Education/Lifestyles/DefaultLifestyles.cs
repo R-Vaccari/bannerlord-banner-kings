@@ -57,8 +57,7 @@ namespace BannerKings.Managers.Education.Lifestyles
                 DefaultSkills.TwoHanded,
                 new List<PerkObject>
                     {BKPerks.Instance.FianHighlander, BKPerks.Instance.FianRanger, BKPerks.Instance.FianFennid},
-                new TextObject(
-                    "{=tRp08jyH}Battanian settlements have +{EFFECT1} militia\nReduced damage by {EFFECT2}% when mounted"),
+                new TextObject("{=tRp08jyH}Battanian settlements have +{EFFECT1} militia\nReduced damage by {EFFECT2}% when mounted"),
                 1f, 30f,
                 cultures.FirstOrDefault(x => x.StringId == "battania"));
 
@@ -130,29 +129,25 @@ namespace BannerKings.Managers.Education.Lifestyles
                     BKPerks.Instance.OutlawKidnapper, BKPerks.Instance.OutlawPlunderer,
                     BKPerks.Instance.OutlawNightPredator, BKPerks.Instance.OutlawUnderworldKing
                 },
-                new TextObject(
-                    "{=gkaq9L2T}Bandit troops are {EFFECT1}% faster on map\nRandomly lose relations with heroes that disapprove criminality when leaving dialogue"),
+                new TextObject("{=gkaq9L2T}Bandit troops are {EFFECT1}% faster on map\nRandomly lose relations with heroes that disapprove criminality when leaving dialogue"),
                 10f, 8f);
 
             Mercenary = new Lifestyle("lifestyle_mercenary");
             Mercenary.Initialize(new TextObject("{=kLHXZnLY}Mercenary"), new TextObject("{=!}"),
                 DefaultSkills.Leadership, DefaultSkills.Roguery, new List<PerkObject>(),
-                new TextObject(
-                    "{=mAta6M84}Reduced demesne weight of towns by {EFFECT1}%\nSettlement stability reduced by {EFFECT2}%"),
+                new TextObject("{=mAta6M84}Reduced demesne weight of towns by {EFFECT1}%\nSettlement stability reduced by {EFFECT2}%"),
                 20f, 8f);
 
             kheshig = new Lifestyle("lifestyle_kheshig");
             kheshig.Initialize(new TextObject("{=sccoC5ta}Kheshig"), new TextObject("{=!}"),
                 DefaultSkills.Leadership, DefaultSkills.Roguery, new List<PerkObject>(),
-                new TextObject(
-                    "{=mAta6M84}Reduced demesne weight of towns by {EFFECT1}%\nSettlement stability reduced by {EFFECT2}%"),
+                new TextObject("{=mAta6M84}Reduced demesne weight of towns by {EFFECT1}%\nSettlement stability reduced by {EFFECT2}%"),
                 20f, 8f);
 
             varyag = new Lifestyle("lifestyle_varyag");
             varyag.Initialize(new TextObject("{=4pYayWGi}Varyag"), new TextObject("{=!}"),
                 DefaultSkills.Leadership, DefaultSkills.Roguery, new List<PerkObject>(),
-                new TextObject(
-                    "{=mAta6M84}Reduced demesne weight of towns by {EFFECT1}%\nSettlement stability reduced by {EFFECT2}%"),
+                new TextObject("{=mAta6M84}Reduced demesne weight of towns by {EFFECT1}%\nSettlement stability reduced by {EFFECT2}%"),
                 20f, 8f);
         }
     }

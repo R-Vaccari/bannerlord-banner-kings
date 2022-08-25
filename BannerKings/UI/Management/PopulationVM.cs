@@ -31,23 +31,23 @@ namespace BannerKings.UI.Management
                 militaryVM = new MilitaryVM(data, settlement, false);
                 religionVM = new ReligionVM(data, settlement, false);
                 IsOverviewSelected = true;
-                IsReligionAvailable = data.ReligionData == null || data.ReligionData.Religions == null;
+                IsReligionAvailable = data.ReligionData?.Religions == null;
             }
 
             [DataSourceProperty]
-            public string OverViewText = new TextObject("{=W4xpFozW}Overview").ToString();
+            public string OverViewText => new TextObject("{=W4xpFozW}Overview").ToString();
 
             [DataSourceProperty]
-            public string EconomyText = new TextObject("{=2oJQ4Snn}Economy").ToString();
+            public string EconomyText => new TextObject("{=2oJQ4Snn}Economy").ToString();
 
             [DataSourceProperty]
-            public string MilitaryText = new TextObject("{=7ELr3vXm}Military").ToString();
+            public string MilitaryText => new TextObject("{=7ELr3vXm}Military").ToString();
 
             [DataSourceProperty]
-            public string DemesneText = new TextObject("{=6QMDGRSt}Demesne").ToString();
+            public string DemesneText => new TextObject("{=6QMDGRSt}Demesne").ToString();
 
             [DataSourceProperty]
-            public string ReligionText = new TextObject("{=XYZ6qwT0}Religion").ToString();
+            public string ReligionText => new TextObject("{=XYZ6qwT0}Religion").ToString();
 
             [DataSourceProperty]
             public bool IsReligionAvailable
@@ -220,6 +220,7 @@ namespace BannerKings.UI.Management
                 Military.IsSelected = false;
                 IsReligionSelected = false;
                 Religion.IsSelected = false;
+
                 switch (index)
                 {
                     case 0:

@@ -141,7 +141,7 @@ namespace BannerKings.Managers.Goals.Decisions
                 new InquiryData
                 (
                     "Establish a new Empire",
-                    new TextObject("Do you want to establish the title {TITLE}?\nThis will cost you {GOLD}{GOLD_ICON} and {INFLUENCE}{INFLUENCE_ICON}.\nAs a reward your clan will earn {RENOWN} renown.")
+                    new TextObject("{=qjD2WwBH}Do you want to establish the title {TITLE}?\nThis will cost you {GOLD}{GOLD_ICON} and {INFLUENCE}{INFLUENCE_ICON}.\nAs a reward your clan will earn {RENOWN} renown.")
                         .SetTextVariable("TITLE", name)
                         .SetTextVariable("GOLD", gold)
                         .SetTextVariable("INFLUENCE", influence)

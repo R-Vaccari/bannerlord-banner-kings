@@ -139,8 +139,7 @@ namespace BannerKings.UI
                         var name = (TextObject) __instance.GetType()
                             .GetField("_name", BindingFlags.Instance | BindingFlags.NonPublic)
                             .GetValue(__instance);
-                        __result = new TextObject(name + ", " +
-                                                  $"{honorary} of {title.shortName}");
+                        __result = new TextObject(name + ", " + $"{honorary} of {title.shortName}");
                     }
                 }
             }

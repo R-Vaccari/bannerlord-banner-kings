@@ -52,7 +52,7 @@ namespace Localizer
             Console.WriteLine($"Loaded {files.Length} files to localize");
         
             LoadExistingLocalizations(localizationFile);
-            Console.WriteLine($"\nLoaded {_existingLocalizations.Count} own/existing localizations to reuse");
+            Console.WriteLine($"Loaded {_existingLocalizations.Count} own/existing localizations to reuse");
 
             LocalizeTexts(localizationFile, files);
             Console.WriteLine("\nAll texts got localized! Press any key to exit..");
@@ -76,6 +76,10 @@ namespace Localizer
                 return;
             }
 
+            var duplicatedNodes = new List<XmlNode>();
+            var duplicatedIDs = new List<XmlNode>();
+            var duplicatedTexts = new List<XmlNode>();
+
             foreach (XmlNode stringNode in stringNodes)
             {
                 if (stringNode is null)
@@ -83,8 +87,51 @@ namespace Localizer
                     continue;
                 }
 
-                _existingLocalizations.Add(stringNode.Attributes!["id"]?.Value!, stringNode.Attributes!["text"]?.Value!);
+                var id = stringNode.Attributes!["id"]?.Value!;
+                var text = stringNode.Attributes!["text"]?.Value!;
+
+                if (_existingLocalizations.ContainsKey(id) && _existingLocalizations.ContainsValue(text))
+                {
+                    duplicatedNodes.Add(stringNode);
+                    continue;
+                }
+
+                if (_existingLocalizations.ContainsKey(id) && !_existingLocalizations.ContainsValue(text))
+                {
+                    duplicatedIDs.Add(stringNode);
+                    continue;
+                }
+
+                if (!_existingLocalizations.ContainsKey(id) && _existingLocalizations.ContainsValue(text))
+                {
+                    duplicatedTexts.Add(stringNode);
+                    continue;
+                }
+
+                _existingLocalizations.Add(id, text);
             }
+
+            foreach (var xmlNode in duplicatedNodes)
+            {
+                localizationDocument.SelectSingleNode("/base/strings")!.RemoveChild(xmlNode);
+            }
+            Console.WriteLine($"Fixed {duplicatedNodes.Count} duplicated localizations");
+
+            //foreach (var duplicatedID in duplicatedIDs)
+            //{
+            //    var text = duplicatedID.Attributes!["text"]?.Value!;
+            //    var localizedText = GetLocalizedText($"{{=!}}{text}");
+            //    AddTextToLocalization(localizationDocument, localizedText.ID, localizedText.Text);
+            //}
+            //Console.WriteLine($"Fixed {duplicatedIDs.Count} duplicated IDs");
+
+            //foreach (var duplicatedText in duplicatedTexts)
+            //{
+            //    var localizedText = GetLocalizedText();
+            //}
+            //Console.WriteLine($"Fixed {duplicatedTexts.Count} duplicated texts");
+
+            localizationDocument.Save(localizationFile);
         }
 
         private static List<string> GetAllLocalizationFiles(string modulesFolder)
@@ -129,7 +176,8 @@ namespace Localizer
             var localizationDocument = new XmlDocument();
             localizationDocument.Load(localizationFile);
 
-            var filesToLocalize = files.ToList();
+            var allFilesToLocalize = files.ToList();
+            var filesToLocalize = allFilesToLocalize.ToList();
 
             var filesToRemove = new List<string>();
             var texts = new List<string>();
@@ -145,18 +193,18 @@ namespace Localizer
             }
 
             filesToLocalize.RemoveAll(f => filesToRemove.Contains(f));
-            Console.WriteLine($"Removed {filesToRemove.Count} files without text to localize");
+            Console.WriteLine($"Skipped {filesToRemove.Count} files without text to localize");
 
             var initialTextCount = texts.Count;
             Console.WriteLine($"Loaded {initialTextCount} texts to localize");
 
             var duplicates = texts.RemoveAll(t => string.IsNullOrWhiteSpace(t) || t.Contains("img src="));
-            Console.WriteLine($"Removed {duplicates} bad (empty or image) texts");
+            Console.WriteLine($"Skipped {duplicates} bad (empty or image) texts");
 
             texts = texts.Distinct().ToList();
             Console.WriteLine($"Removed {initialTextCount - texts.Count} duplicated texts");
 
-            Console.WriteLine($"\nLocalizing {texts.Count} texts in {filesToLocalize.Count} files..");
+            Console.WriteLine($"Localizing {texts.Count} texts in {filesToLocalize.Count} files..");
             var resUsedTexts = 0;
             for (var textIndex = 1; textIndex < texts.Count; textIndex++)
             {
@@ -199,7 +247,7 @@ namespace Localizer
             localizationDocument.Save(localizationFile);
 
             var initialReUseableTexts = _existingLocalizations.Count;
-            RemoveUnusedLocalizations(localizationFile, files);
+            RemoveUnusedLocalizations(localizationFile, allFilesToLocalize);
             Console.WriteLine($"Removed {initialReUseableTexts - _existingLocalizations.Count} existing localizations, which were not used anymore");
         }
 

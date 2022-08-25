@@ -367,8 +367,7 @@ namespace BannerKings.Behaviours
                     else
                     {
                         InformationManager.DisplayMessage(new InformationMessage(
-                            new TextObject(
-                                    "{=yLhzjPib}You have stopped your current action because the instructor has left the settlement.")
+                            new TextObject("{=yLhzjPib}You have stopped your current action because the instructor has left the settlement.")
                                 .ToString()));
                         GameMenu.SwitchToMenu("bannerkings_actions");
                     }
@@ -453,8 +452,7 @@ namespace BannerKings.Behaviours
                         Hero.MainHero.AddSkillXp(target, MBRandom.RandomFloatRanged(10f, 25f));
                         InformationManager.DisplayMessage(
                             new InformationMessage(
-                                new TextObject(
-                                        "{=vsOFAeWQ}You have have caught an animal and improved your {SKILL} skill while hunting.")
+                                new TextObject("{=vsOFAeWQ}You have have caught an animal and improved your {SKILL} skill while hunting.")
                                     .ToString()));
                     }
                 }
@@ -502,8 +500,7 @@ namespace BannerKings.Behaviours
                         GameTexts.SetVariable("SKILL", DefaultSkills.Charm.Name);
                         Hero.MainHero.AddSkillXp(DefaultSkills.Charm, MBRandom.RandomFloatRanged(10f, 25f));
                         InformationManager.DisplayMessage(new InformationMessage(
-                            new TextObject(
-                                    "{=mXfR84iG}You have improved your {SKILL} skill and gained {INFLUENCE} influence while meeting with nobles.")
+                            new TextObject("{=mXfR84iG}You have improved your {SKILL} skill and gained {INFLUENCE} influence while meeting with nobles.")
                                 .ToString()));
                     }
                 }
@@ -668,7 +665,7 @@ namespace BannerKings.Behaviours
             }
 
             var faith = data.DominantReligion?.Faith;
-            MBTextManager.SetTextVariable("RELIGION_NAME", faith is null ? "{=!}No Faith available" : faith.GetFaithName());
+            MBTextManager.SetTextVariable("RELIGION_NAME", faith is null ? "{=mVzVY3P9}No Faith available" : faith.GetFaithName());
 
             return true;
         }
