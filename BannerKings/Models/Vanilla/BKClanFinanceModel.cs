@@ -199,9 +199,12 @@ namespace BannerKings.Models.Vanilla
             }
 
             var dictionary = BannerKingsConfig.Instance.TitleManager.CalculateVassals(suzerain.deJure.Clan, clan);
-            var amount = dictionary[clan].Aggregate(0f, (current, title) => current + (int) title.dueTax);
+            if (dictionary.ContainsKey(clan))
+            {
+                var amount = dictionary[clan].Aggregate(0f, (current, title) => current + (int)title.dueTax);
+                result.Add(-amount, new TextObject("{=rU692V1m}Taxes to {SUZERAIN}").SetTextVariable("SUZERAIN", suzerain.deJure.Name));
 
-            result.Add(-amount, new TextObject("{=rU692V1m}Taxes to {SUZERAIN}").SetTextVariable("SUZERAIN", suzerain.deJure.Name));
+            }
         }
     }
 }
