@@ -99,7 +99,7 @@ namespace BannerKings.UI.Extensions
             Education = new EducationVM(characterDeveloper.CurrentCharacter.Hero, characterDeveloper);
             Education.RefreshValues();
             Religion = new ReligionVM(BannerKingsConfig.Instance.ReligionsManager
-                .GetHeroReligion(characterDeveloper.CurrentCharacter.Hero));
+                .GetHeroReligion(characterDeveloper.CurrentCharacter.Hero), characterDeveloper.CurrentCharacter.Hero);
             Religion.RefreshValues();
         }
 

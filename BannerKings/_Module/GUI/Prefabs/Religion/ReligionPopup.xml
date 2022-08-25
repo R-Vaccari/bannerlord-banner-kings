@@ -59,6 +59,9 @@
 																			IsVisible="true" HorizontalAlignment="Center" MarginTop="10"
 																			Parameter.SelectorDataSource="{Selector}" />
 																		<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
+																			HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="20" Text="@HeroFaithText"
+																			MarginTop="5" />
+																		<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
 																			HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="40" Text="@Name"
 																			MarginTop="20" />
 																		<RichTextWidget HeightSizePolicy="CoverChildren" WidthSizePolicy="StretchToParent"

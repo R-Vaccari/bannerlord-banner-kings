@@ -2,6 +2,8 @@ using BannerKings.Managers.Institutions.Religions.Doctrines;
 using BannerKings.Managers.Populations;
 using BannerKings.UI.Items;
 using BannerKings.UI.Items.UI;
+using TaleWorlds.CampaignSystem;
+using TaleWorlds.Core;
 using TaleWorlds.Core.ViewModelCollection.Selector;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -15,14 +17,18 @@ namespace BannerKings.UI.Religion
         private MBBindingList<InformationElement> courtInfo;
         private MBBindingList<ReligionElementVM> doctrines;
         private MBBindingList<ReligionMemberVM> faithful;
-        private Managers.Institutions.Religions.Religion religion;
+        private Managers.Institutions.Religions.Religion heroReligion;
+        private Managers.Institutions.Religions.Religion currentReligion;
         private MBBindingList<ReligionElementVM> secondaryDivinities;
         private MBBindingList<BKTraitItemVM> virtues;
         private SelectorVM<ReligionSelectorItemVM> selector;
+        private Hero hero;
 
-        public ReligionVM(Managers.Institutions.Religions.Religion religion) : base(null, true)
+        public ReligionVM(Managers.Institutions.Religions.Religion heroReligion, Hero hero) : base(null, true)
         {
-            this.religion = religion;
+            this.hero = hero;
+            this.heroReligion = heroReligion;
+            currentReligion = heroReligion;
             courtInfo = new MBBindingList<InformationElement>();
             Clergymen = new MBBindingList<ReligionMemberVM>();
             Faithful = new MBBindingList<ReligionMemberVM>();
@@ -30,11 +36,14 @@ namespace BannerKings.UI.Religion
             Doctrines = new MBBindingList<ReligionElementVM>();
             Aspects = new MBBindingList<ReligionElementVM>();
             SecondaryDivinities = new MBBindingList<ReligionElementVM>();
+            InitializeCurrentReligion();
         }
 
         public ReligionVM(PopulationData data) : base(data, true)
         {
-            religion = data.ReligionData.DominantReligion;
+            hero = Hero.MainHero;
+            heroReligion = data.ReligionData.DominantReligion;
+            currentReligion = heroReligion;
             courtInfo = new MBBindingList<InformationElement>();
             Clergymen = new MBBindingList<ReligionMemberVM>();
             Faithful = new MBBindingList<ReligionMemberVM>();
@@ -42,6 +51,16 @@ namespace BannerKings.UI.Religion
             Doctrines = new MBBindingList<ReligionElementVM>();
             Aspects = new MBBindingList<ReligionElementVM>();
             SecondaryDivinities = new MBBindingList<ReligionElementVM>();
+            InitializeCurrentReligion();
+        }
+
+        private void InitializeCurrentReligion()
+        {
+            currentReligion = BannerKingsConfig.Instance.ReligionsManager.GetIdealReligion(hero.Culture);
+            if (currentReligion == null)
+            {
+                currentReligion = BannerKingsConfig.Instance.ReligionsManager.GetReligions().GetRandomElement();
+            }
         }
 
         [DataSourceProperty]
@@ -58,6 +77,14 @@ namespace BannerKings.UI.Religion
             }
         }
 
+        [DataSourceProperty] public string HeroFaithText => new TextObject("{=!}{HERO} {RELIGION_TEXT}.")
+            .SetTextVariable("HERO", hero.Name)
+            .SetTextVariable("RELIGION_TEXT", heroReligion == null ? 
+            new TextObject("{=!} does not follow any faith") :
+            new TextObject("{=!}is following the {FAITH}")
+            .SetTextVariable("FAITH", heroReligion.Faith.GetFaithName()))
+            .ToString();
+
         [DataSourceProperty] public string ClergymenText => new TextObject("{=GbMZ6V8B}Clergymen").ToString();
 
         [DataSourceProperty] public string FaithfulText => new TextObject("{=mnpTkVYf}Faithful").ToString();
@@ -67,19 +94,19 @@ namespace BannerKings.UI.Religion
         [DataSourceProperty] public string VirtuesText => new TextObject("{=p6itQbf8}Virtues").ToString();
 
         [DataSourceProperty]
-        public string SecondaryDivinitiesText => religion.Faith.GetSecondaryDivinitiesDescription().ToString();
+        public string SecondaryDivinitiesText => currentReligion.Faith.GetSecondaryDivinitiesDescription().ToString();
 
         [DataSourceProperty] public string DoctrinesText => new TextObject("{=BKLacKdC}Doctrines").ToString();
 
         [DataSourceProperty] public string AspectsText => new TextObject("{=1sKJS1JR}Aspects").ToString();
 
-        [DataSourceProperty] public string Name => religion.Faith.GetFaithName().ToString();
+        [DataSourceProperty] public string Name => currentReligion.Faith.GetFaithName().ToString();
 
-        [DataSourceProperty] public string Description => religion.Faith.GetFaithDescription().ToString();
+        [DataSourceProperty] public string Description => currentReligion.Faith.GetFaithDescription().ToString();
 
-        [DataSourceProperty] public string GroupName => religion.Faith.FaithGroup.Name.ToString();
+        [DataSourceProperty] public string GroupName => currentReligion.Faith.FaithGroup.Name.ToString();
 
-        [DataSourceProperty] public string GroupDescription => religion.Faith.FaithGroup.Description.ToString();
+        [DataSourceProperty] public string GroupDescription => currentReligion.Faith.FaithGroup.Description.ToString();
 
 
         [DataSourceProperty]
@@ -195,34 +222,34 @@ namespace BannerKings.UI.Religion
             var i = 0;
             foreach (var religion in BannerKingsConfig.Instance.ReligionsManager.GetReligions())
             {
-                var item = new ReligionSelectorItemVM(religion, religion.Faith != this.religion?.Faith);
-                if (religion.Faith == this.religion.Faith) selectedIndex = i;
+                var item = new ReligionSelectorItemVM(religion, religion.Faith != this.currentReligion?.Faith);
+                if (religion.Faith == this.currentReligion.Faith) selectedIndex = i;
                 selector.AddItem(item);
                 i++;
             }
             Selector.SelectedIndex = selectedIndex;
             Selector.SetOnChangeAction(delegate (SelectorVM<ReligionSelectorItemVM> obj)
             {
-                religion = obj.SelectedItem.Religion;
+                currentReligion = obj.SelectedItem.Religion;
                 RefreshValues();
             });
 
-            foreach (var clgm in religion.Clergy.Values)
+            foreach (var clgm in currentReligion.Clergy.Values)
             {
                 Clergymen.Add(new ReligionMemberVM(clgm, null));
             }
 
-            foreach (var hero in BannerKingsConfig.Instance.ReligionsManager.GetFaithfulHeroes(religion))
+            foreach (var hero in BannerKingsConfig.Instance.ReligionsManager.GetFaithfulHeroes(currentReligion))
             {
                 Faithful.Add(new ReligionMemberVM(hero, null));
             }
 
-            foreach (var pair in religion.Faith.Traits)
+            foreach (var pair in currentReligion.Faith.Traits)
             {
                 Virtues.Add(new BKTraitItemVM(pair.Key, pair.Value));
             }
 
-            foreach (var docString in religion.Doctrines)
+            foreach (var docString in currentReligion.Doctrines)
             {
                 var doctrine = DefaultDoctrines.Instance.GetById(docString);
                 if (doctrine != null)
@@ -231,21 +258,21 @@ namespace BannerKings.UI.Religion
                 }
             }
 
-            foreach (var divinity in religion.Faith.GetSecondaryDivinities())
+            foreach (var divinity in currentReligion.Faith.GetSecondaryDivinities())
             {
                 SecondaryDivinities.Add(new ReligionElementVM(divinity.SecondaryTitle, divinity.Name,
                     divinity.Description, divinity.Effects));
             }
 
-            Aspects.Add(new ReligionElementVM(new TextObject("{=FRaCMrgt}Leadership"), religion.Leadership.GetName(),
-                religion.Leadership.GetHint()));
-            Aspects.Add(new ReligionElementVM(religion.Faith.GetMainDivinitiesDescription(),
-                religion.Faith.GetMainDivinity().Name, religion.Faith.GetMainDivinity().Description));
-            Aspects.Add(new ReligionElementVM(new TextObject("{=OKw2P9m1}Faith Group"), religion.Faith.FaithGroup.Name,
-                religion.Faith.FaithGroup.Description));
-            Aspects.Add(new ReligionElementVM(new TextObject("{=OKw2P9m1}Faith"), UIHelper.GetFaithTypeName(religion.Faith),
-                UIHelper.GetFaithTypeDescription(religion.Faith)));
-            Aspects.Add(new ReligionElementVM(new TextObject("{=EjTxnGJp}Culture"), religion.MainCulture.Name,
+            Aspects.Add(new ReligionElementVM(new TextObject("{=FRaCMrgt}Leadership"), currentReligion.Leadership.GetName(),
+                currentReligion.Leadership.GetHint()));
+            Aspects.Add(new ReligionElementVM(currentReligion.Faith.GetMainDivinitiesDescription(),
+                currentReligion.Faith.GetMainDivinity().Name, currentReligion.Faith.GetMainDivinity().Description));
+            Aspects.Add(new ReligionElementVM(new TextObject("{=OKw2P9m1}Faith Group"), currentReligion.Faith.FaithGroup.Name,
+                currentReligion.Faith.FaithGroup.Description));
+            Aspects.Add(new ReligionElementVM(new TextObject("{=OKw2P9m1}Faith"), UIHelper.GetFaithTypeName(currentReligion.Faith),
+                UIHelper.GetFaithTypeDescription(currentReligion.Faith)));
+            Aspects.Add(new ReligionElementVM(new TextObject("{=EjTxnGJp}Culture"), currentReligion.MainCulture.Name,
                 new TextObject("{=6NYxLhjH}The main culture associated with this faith.")));
         }
     }
