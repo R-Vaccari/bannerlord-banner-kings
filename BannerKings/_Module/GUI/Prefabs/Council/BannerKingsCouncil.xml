@@ -43,7 +43,7 @@
 												<ToggleButtonWidget Id="GovernorSelectionButton" Command.Click="SetId" Command.HoverBegin="UpdatePosition" DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed"
 												                    HeightSizePolicy="Fixed" SuggestedWidth="191" SuggestedHeight="140"
 												                    HorizontalAlignment="Left" Brush="TownManagement.Governor" UpdateChildrenStates="true"
-												                    GamepadNavigationIndex="0" IsEnabled="true">
+												                    GamepadNavigationIndex="0" IsEnabled="@PlayerOwned">
 													<Children>
 
 														<ImageWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="69" SuggestedHeight="69"
@@ -59,7 +59,7 @@
 														<HintWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent"
 														            Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" />
 														<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Sprite="BlankWhiteSquare"
-														        Color="#00000099" IsHidden="false" />
+														        Color="#00000099" IsHidden="@DisableButtons" />
 
 													</Children>
 												</ToggleButtonWidget>
