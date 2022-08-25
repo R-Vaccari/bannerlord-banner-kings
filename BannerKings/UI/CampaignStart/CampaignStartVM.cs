@@ -60,7 +60,8 @@ namespace BannerKings.UI.CampaignStart
 
         public void ExecuteFinish()
         {
-            Campaign.Current.GetCampaignBehavior<BKCampaignStartBehavior>().SetStartOption(Selected.Option);
+            var behavior = Campaign.Current.GetCampaignBehavior<BKCampaignStartBehavior>();
+            behavior.SetStartOption(Selected.Option);
             ExecuteClose();
         }
 

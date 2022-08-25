@@ -77,7 +77,11 @@ namespace BannerKings.Behaviours
                 ChangeCrimeRatingAction.Apply(settlement.OwnerClan.Kingdom, option.Criminal);
             }
 
-            option.Action?.Invoke();
+            if (option.Action != null)
+            {
+                option.Action?.Invoke();
+            }
+
             GainKingdomInfluenceAction.ApplyForDefault(mainHero, option.Influence);
 
             ShowInquiry();
