@@ -77,14 +77,12 @@ namespace BannerKings.Managers.Education.Lifestyles
 
         public bool CanLearn(Hero hero)
         {
-            return (Culture == null || hero.Culture == Culture) && hero.GetSkillValue(FirstSkill) >= 15
-                                                                && hero.GetSkillValue(SecondSkill) >= 15;
+            return (Culture == null || hero.Culture == Culture) && hero.GetSkillValue(FirstSkill) >= 15 && hero.GetSkillValue(SecondSkill) >= 15;
         }
 
         public bool CanInvestFocus(Hero hero)
         {
-            return Progress >= 1f && perks.Count >= InvestedFocus + 1 &&
-                   hero.GetSkillValue(FirstSkill) + hero.GetSkillValue(SecondSkill) >= NecessarySkillForFocus;
+            return Progress >= 1f && perks.Count >= InvestedFocus + 1 && hero.GetSkillValue(FirstSkill) + hero.GetSkillValue(SecondSkill) >= NecessarySkillForFocus;
         }
 
         public void InvestFocus(EducationData data, Hero hero, bool cheat = false)
