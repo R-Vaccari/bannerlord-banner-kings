@@ -40,7 +40,7 @@
 										            SuggestedHeight="350" DefaultCellWidth="190" DefaultCellHeight="150" ColumnCount="5">
 											<ItemTemplate>
 
-												<ToggleButtonWidget Id="GovernorSelectionButton" DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed"
+												<ToggleButtonWidget Id="GovernorSelectionButton" Command.Click="SetId" Command.HoverBegin="UpdatePosition" DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed"
 												                    HeightSizePolicy="Fixed" SuggestedWidth="191" SuggestedHeight="140"
 												                    HorizontalAlignment="Left" Brush="TownManagement.Governor" UpdateChildrenStates="true"
 												                    GamepadNavigationIndex="0" IsEnabled="true">
