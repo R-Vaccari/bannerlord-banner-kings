@@ -113,12 +113,12 @@ namespace BannerKings.Behaviours
 
         private void OnGameCreated(CampaignGameStarter starter)
         {
-            InitializeData();
+            InitializeMainData();
         }
 
         private void OnGameLoaded()
         {
-            InitializeData();
+            InitializeAllData();
             if (!hasSeenInquiry)
             {
                 ShowInquiry();
@@ -127,22 +127,18 @@ namespace BannerKings.Behaviours
 
         private void OnCharacterCreationOver()
         {
+            InitializeAllData();
             UIManager.Instance.ShowWindow("campaignStart");
         }
 
-        private void InitializeData()
+        private void InitializeAllData()
         {
             if (hasSeenInquiry)
             {
                 return;
             }
 
-            BannerKingsConfig.Instance.InitManagers();
-            foreach (var settlement in Settlement.All.Where(settlement => settlement.IsVillage || settlement.IsTown || settlement.IsCastle))
-            {
-                PopulationManager.InitializeSettlementPops(settlement);
-            }
-
+            InitializeMainData();
             foreach (var clan in Clan.All.Where(clan => !clan.IsEliminated && !clan.IsBanditFaction))
             {
                 BannerKingsConfig.Instance.CourtManager.CreateCouncil(clan);
@@ -154,6 +150,15 @@ namespace BannerKings.Behaviours
             }
 
             BannerKingsConfig.Instance.ReligionsManager.PostInitialize();
+        }
+
+        private void InitializeMainData()
+        {
+            BannerKingsConfig.Instance.InitManagers();
+            foreach (var settlement in Settlement.All.Where(settlement => settlement.IsVillage || settlement.IsTown || settlement.IsCastle))
+            {
+                PopulationManager.InitializeSettlementPops(settlement);
+            }
         }
 
         private void ShowInquiry()
