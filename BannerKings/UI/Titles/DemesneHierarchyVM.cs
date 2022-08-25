@@ -15,7 +15,8 @@ namespace BannerKings.UI.Titles
     public class DemesneHierarchyVM : BannerKingsViewModel
     {
         private ImageIdentifierVM banner;
-        private DecisionElement contract, foundKingdom;
+        private DecisionElement contract;
+        private DecisionElement foundKingdom;
         private MBBindingList<DecisionElement> decisions;
         private readonly Kingdom kingdom;
         private string name;
@@ -62,7 +63,6 @@ namespace BannerKings.UI.Titles
                 }
             }
         }
-
 
         [DataSourceProperty]
         public MBBindingList<DecisionElement> Decisions

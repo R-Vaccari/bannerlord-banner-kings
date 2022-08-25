@@ -11,18 +11,21 @@ namespace BannerKings.Managers.Goals
             {
                 yield return GreaterBattania;
                 yield return CalradicEmpireGoal;
+                yield return FoundKingdomGoal;
                 yield return RecruitCompanionDecision;
             }
         }
 
-        public Goal GreaterBattania { get; private set; }
-        public Goal CalradicEmpireGoal { get; private set; }
-        public Goal RecruitCompanionDecision { get; private set; }
+        internal Goal GreaterBattania { get; private set; }
+        internal Goal CalradicEmpireGoal { get; private set; }
+        internal Goal FoundKingdomGoal { get; private set; }
+        internal Goal RecruitCompanionDecision { get; private set; }
 
         public override void Initialize()
         {
             GreaterBattania = new GreaterBattaniaGoal();
             CalradicEmpireGoal = new CalradicEmpireGoal();
+            FoundKingdomGoal = new FoundKingdomGoal();
             RecruitCompanionDecision = new RecruitCompanionDecision();
         }
     }

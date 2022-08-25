@@ -794,6 +794,7 @@
     <string id="6NYxLhjH" text="The main culture associated with this faith." />
     <string id="tpH62HBy" text="Contract" />
     <string id="yRn9AcwU" text="Review this kingdom's contract, signed by lords that join it." />
+    <string id="XbV2136v" text="Review this kingdom's contract, signed by lords that join it.\n\n" />
     <string id="nbV21qZv" text="Found Kingdom" />
     <string id="jeNEcVGi" text="Propose a change in government structure, altering the allowed succession forms and aspects of settlement governance. Depending on the government choice, an appropriate succession type will be enforced as well." />
     <string id="rTUgik07" text="Succession" />
