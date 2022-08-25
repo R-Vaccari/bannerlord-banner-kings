@@ -1191,7 +1191,6 @@
     <string id="PBzKaQYS" text="Governor stewardship" />
     <string id="MBHftZmv" text="Workforce policy" />
     <string id="1aq83aPr" text="Conscription policy" />
-    <string id="cVOU505N" text="Stability" />
     <string id="zgK5zVkQ" text="Peace" />
     <string id="Ypfy9D3P" text="War" />
     <string id="djkEJ9wB" text="Dominant culture" />
@@ -1205,19 +1204,14 @@
     <string id="AaNeOd9n" text="Base" />
     <string id="mgK8aZuj" text="Prosperity" />
     <string id="haMOv5Fh" text="{0} growth" />
-    <string id="2z4YQTuu" text="Draft policy" />
     <string id="TfMEfR6C" text="Security" />
     <string id="B8Crp0cZ" text="Loyalty" />
     <string id="rZOM0Jit" text="Cultural assimilation" />
     <string id="9Etcg2UE" text="Produce satisfactions" />
     <string id="UqLsS4GV" text="Legitimacy" />
-    <string id="Jh6FdJFE" text="Highest title level" />
     <string id="jH7cWD5r" text="Serfs" />
     <string id="8xhVr4rK" text="Slaves" />
-    <string id="PSrEtF5L" text="Government" />
-    <string id="d0YJZ6Z1" text="Craftsmen" />
     <string id="7cFbhefJ" text="Martial Law policy" />
-    <string id="5eHCGMEK" text="Mercantilism" />
     <string id="o7W9qvHw" text="Garrison consumption" />
     <string id="S3ntMGX6" text="Prisoner rations" />
     <string id="myyYr6BO" text="Nobles consumption" />
@@ -1225,14 +1219,12 @@
     <string id="j6AoAS6n" text="Low tax policy" />
     <string id="EhHXS8PN" text="High tax policy" />
     <string id="AQDh5jHA" text="Tax private slaves decision" />
-    <string id="xMsWoSnL" text="Autonomy" />
     <string id="D3trXTDz" text="Cultural Assimilation" />
     <string id="9Jyv5XNX" text="Well fed populace" />
     <string id="0atu0kiG" text="Over supported limit" />
     <string id="y9jGiPQw" text="Slave surplus" />
     <string id="Crsf0YLd" text="Merchants wealth" />
     <string id="UnxSzSGt" text="Castle security" />
-    <string id="qyjqPWxJ" text="Criminal policy" />
     <string id="Zy76yFyk" text="No hideouts nearby" />
     <string id="L7QhNa6a" text="Tax policy" />
     <string id="y1sBiOKa" text="Administrative costs" />
@@ -1306,5 +1298,7 @@
     <string id="5VhaJ732" text="Found a new title for your kingdom. The title will legitimize your position and allow the de Jure domain of the kingdom to expand through de Jure drift of dukedoms, as well as extend your influence as a suzerain. Founding a title would increase your clan's renown by {RENOWN}. \n \nCosts: {GOLD} {GOLD_ICON}, {INFLUENCE} {INFLUENCE_ICON} \n\nCan form kingdom: {POSSIBLE} \n\nExplanation: {REASON}" />
     <string id="qjD2WwBH" text="Do you want to establish the title {TITLE}?\nThis will cost you {GOLD}{GOLD_ICON} and {INFLUENCE}{INFLUENCE_ICON}.\nAs a reward your clan will earn {RENOWN} renown." />
     <string id="xzyBM00Z" text="Make an offering of {ITEM}. {COUNT} must be offered for the rite to be fulfilled." />
+    <string id="juJoP0yu" text="The History of Calradian Archery is a monography of most popular weapon around the continent: bows and arrows. Written by renowned archer, Rovin of Erithrys, the book describes the variety of bows and arrows used across the continent, along with the description of culture favorite variants. Each Calradian culture archery traditions and practical ways to use those in warfare is described in separate chapters. The author also introduces most of bow constructions invented in Calradia, from simplest mountain bows to rather expensive and complicated bows used by the nobility." />
+    <string id="VXKu1ucX" text="Lycaron debate of 1074 is a record of events that occurred during a tournament of Lycaron in local inn. A group of Khan's Guards, entourage of young Khuzait warrior Monchug (who came to Lycaron to take part in the tournament) has gotten into discussion with Vlandian voulgiers serving in local garrison about whos swingeable polearm armament is better. Soon the present Cataphracts of the same garrison joined the discussion, with intention to prove that long, thrust lances are superior. The debate resulted in 12 deaths, 23 injured and maimed and, as declared unanimously by witnesses, was won by Gareth, a local townfolk, who was passing by the inn and entered carrying his trusty rake, to see what all the ruckus is about." />
   </strings>
 </base>

@@ -87,7 +87,7 @@ namespace BannerKings.Managers.Education.Books
             Bow.Initialize
             (
                 BKItems.Instance.BookBow,
-                new TextObject("{=!}The History of Calradian Archery is a monography of most popular weapon around the continent: bows and arrows. Written by renowned archer, Rovin of Erithrys, the book describes the variety of bows and arrows used across the continent, along with the description of culture favorite variants. Each Calradian culture archery traditions and practical ways to use those in warfare is described in separate chapters. The author also introduces most of bow constructions invented in Calradia, from simplest mountain bows to rather expensive and complicated bows used by the nobility."),
+                new TextObject("{=juJoP0yu}The History of Calradian Archery is a monography of most popular weapon around the continent: bows and arrows. Written by renowned archer, Rovin of Erithrys, the book describes the variety of bows and arrows used across the continent, along with the description of culture favorite variants. Each Calradian culture archery traditions and practical ways to use those in warfare is described in separate chapters. The author also introduces most of bow constructions invented in Calradia, from simplest mountain bows to rather expensive and complicated bows used by the nobility."),
                 DefaultLanguages.Instance.Calradian,
                 BookUse.Focusbook,
                 DefaultSkills.Bow
@@ -97,7 +97,7 @@ namespace BannerKings.Managers.Education.Books
             Polearm.Initialize
             (
                 BKItems.Instance.BookPolearm,
-                new TextObject("{=!}Lycaron debate of 1074 is a record of events that occurred during a tournament of Lycaron in local inn. A group of Khan's Guards, entourage of young Khuzait warrior Monchug (who came to Lycaron to take part in the tournament) has gotten into discussion with Vlandian voulgiers serving in local garrison about whos swingeable polearm armament is better. Soon the present Cataphracts of the same garrison joined the discussion, with intention to prove that long, thrust lances are superior. The debate resulted in 12 deaths, 23 injured and maimed and, as declared unanimously by witnesses, was won by Gareth, a local townfolk, who was passing by the inn and entered carrying his trusty rake, to see what all the ruckus is about."),
+                new TextObject("{=VXKu1ucX}Lycaron debate of 1074 is a record of events that occurred during a tournament of Lycaron in local inn. A group of Khan's Guards, entourage of young Khuzait warrior Monchug (who came to Lycaron to take part in the tournament) has gotten into discussion with Vlandian voulgiers serving in local garrison about whos swingeable polearm armament is better. Soon the present Cataphracts of the same garrison joined the discussion, with intention to prove that long, thrust lances are superior. The debate resulted in 12 deaths, 23 injured and maimed and, as declared unanimously by witnesses, was won by Gareth, a local townfolk, who was passing by the inn and entered carrying his trusty rake, to see what all the ruckus is about."),
                 DefaultLanguages.Instance.Calradian,
                 BookUse.Focusbook,
                 DefaultSkills.Bow
