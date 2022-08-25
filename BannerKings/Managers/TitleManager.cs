@@ -273,8 +273,10 @@ namespace BannerKings.Managers
     
             return result;
         } */
-        
-        public Dictionary<Clan, List<FeudalTitle>> CalculateVassals(Clan suzerainClan, Clan clanToIgnore = null)
+
+
+
+        public Dictionary<Clan, List<FeudalTitle>> CalculateVassals(Clan suzerainClan, Clan targetClan = null)
         {
             var clans = new Dictionary<Clan, List<FeudalTitle>>();
             var kingdom = suzerainClan?.Kingdom;
@@ -298,7 +300,7 @@ namespace BannerKings.Managers
 
                 foreach (var vassal in title.vassals)
                 {
-                    if (vassal.deJure.Clan == suzerainClan || (clanToIgnore != null && vassal.deJure.Clan != clanToIgnore))
+                    if (vassal.deJure.Clan == suzerainClan || (targetClan != null && vassal.deJure.Clan != targetClan))
                     {
                         continue;
                     }
