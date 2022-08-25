@@ -63,7 +63,9 @@ namespace BannerKings.Behaviours
 
             var mainHero = Hero.MainHero;
             mainHero.ChangeHeroGold(option.Gold - mainHero.Gold);
+
             AddFood(MobileParty.MainParty, option.Food);
+
             if (option.Lifestyle != null)
             {
                 BannerKingsConfig.Instance.EducationManager.SetStartOptionLifestyle(Hero.MainHero, option.Lifestyle);
@@ -71,8 +73,7 @@ namespace BannerKings.Behaviours
 
             if (option.IsCriminal)
             {
-                var settlement =
-                    SettlementHelper.FindNearestSettlement(x => x.OwnerClan is {Kingdom: { }});
+                var settlement = SettlementHelper.FindNearestSettlement(x => x.OwnerClan is {Kingdom: { }});
                 ChangeCrimeRatingAction.Apply(settlement.OwnerClan.Kingdom, option.Criminal);
             }
 
@@ -89,16 +90,18 @@ namespace BannerKings.Behaviours
             {
                 foreach (var itemObject in Items.All)
                 {
-                    if (itemObject.IsFood && party.Food < limit)
+                    if (!itemObject.IsFood || !(party.Food < limit))
                     {
-                        var num2 = MBRandom.RoundRandomized(party.Party.NumberOfAllMembers *
-                                                            (1f / itemObject.Value) * 16 * MBRandom.RandomFloat *
-                                                            MBRandom.RandomFloat * MBRandom.RandomFloat *
-                                                            MBRandom.RandomFloat);
-                        if (num2 > 0)
-                        {
-                            party.ItemRoster.AddToCounts(itemObject, MBMath.ClampInt(num2, 1, limit - (int) party.Food));
-                        }
+                        continue;
+                    }
+
+                    var num2 = MBRandom.RoundRandomized(party.Party.NumberOfAllMembers *
+                                                        (1f / itemObject.Value) * 16 * MBRandom.RandomFloat *
+                                                        MBRandom.RandomFloat * MBRandom.RandomFloat *
+                                                        MBRandom.RandomFloat);
+                    if (num2 > 0)
+                    {
+                        party.ItemRoster.AddToCounts(itemObject, MBMath.ClampInt(num2, 1, limit - (int) party.Food));
                     }
                 }
             }

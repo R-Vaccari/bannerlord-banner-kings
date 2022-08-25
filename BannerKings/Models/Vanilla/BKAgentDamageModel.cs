@@ -9,18 +9,15 @@ namespace BannerKings.Models.Vanilla
 {
     public class BKAgentDamageModel : SandboxAgentApplyDamageModel
     {
-        public override float CalculateDamage(in AttackInformation attackInformation, in AttackCollisionData collisionData,
-            in MissionWeapon weapon, float baseDamage)
+        public override float CalculateDamage(in AttackInformation attackInformation, in AttackCollisionData collisionData, in MissionWeapon weapon, float baseDamage)
         {
             var baseResult = base.CalculateDamage(in attackInformation, in collisionData, in weapon, baseDamage);
-            var aggressor = attackInformation.AttackerAgentCharacter as CharacterObject;
             var aggressorCaptain = attackInformation.AttackerCaptainCharacter as CharacterObject;
-            var victim = attackInformation.VictimAgentCharacter as CharacterObject;
             var victimCaptain = attackInformation.VictimCaptainCharacter as CharacterObject;
 
             var agressorUsage = weapon.CurrentUsageItem;
 
-            if (agressorUsage != null && aggressor != null)
+            if (agressorUsage != null && attackInformation.AttackerAgentCharacter is CharacterObject aggressor)
             {
                 if (aggressorCaptain is {IsHero: true})
                 {
@@ -46,8 +43,7 @@ namespace BannerKings.Models.Vanilla
                     }
 
 
-                    if (agressorUsage.RelevantSkill == DefaultSkills.TwoHanded &&
-                        !attackInformation.DoesAttackerHaveMountAgent)
+                    if (agressorUsage.RelevantSkill == DefaultSkills.TwoHanded && !attackInformation.DoesAttackerHaveMountAgent)
                     {
                         if (data.HasPerk(BKPerks.Instance.FianFennid))
                         {
@@ -70,7 +66,7 @@ namespace BannerKings.Models.Vanilla
                 }
             }
 
-            if (victim != null)
+            if (attackInformation.VictimAgentCharacter is CharacterObject victim)
             {
                 if (victim.IsMounted && victimCaptain is {IsHero: true})
                 {

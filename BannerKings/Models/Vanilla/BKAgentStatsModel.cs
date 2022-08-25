@@ -12,25 +12,30 @@ namespace BannerKings.Models.Vanilla
             base.UpdateAgentStats(agent, agentDrivenProperties);
             //MissionWeapon missionWeapon = agent.WieldedWeapon;
             //WeaponComponentData weaponComponentData = (!missionWeapon.Equals(MissionWeapon.Invalid)) ? agent.Equipment[missionWeapon.CurrentUsageIndex].CurrentUsageItem  : null;
-            if (agent.Character != null)
+            if (agent.Character == null)
             {
-                if (agent.Formation is {Captain: {IsHero: true}})
-                {
-                    var captain = (agent.Formation.Captain.Character as CharacterObject).HeroObject;
-                    var data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(captain);
-                    if (agent.HasMount && data.HasPerk(BKPerks.Instance.CataphractEquites))
-                    {
-                        agentDrivenProperties.MountChargeDamage *= 1.1f;
-                    }
+                return;
+            }
 
-                    if (agent.HasMount && data.HasPerk(BKPerks.Instance.CataphractAdaptiveTactics))
-                    {
-                        agentDrivenProperties.MountManeuver *= 1.08f;
-                    }
-                }
+            if (agent.Formation is not {Captain: {IsHero: true}})
+            {
+                return;
+            }
+
+            var captain = (agent.Formation.Captain.Character as CharacterObject)?.HeroObject;
+            var data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(captain);
+            if (agent.HasMount && data.HasPerk(BKPerks.Instance.CataphractEquites))
+            {
+                agentDrivenProperties.MountChargeDamage *= 1.1f;
+            }
+
+            if (agent.HasMount && data.HasPerk(BKPerks.Instance.CataphractAdaptiveTactics))
+            {
+                agentDrivenProperties.MountManeuver *= 1.08f;
+            }
 
 
-                /*if (agent.Character.IsHero)
+            /*if (agent.Character.IsHero)
                 {
                     Hero hero = (agent.Character as CharacterObject).HeroObject;
                     EducationData data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(hero);
@@ -40,7 +45,6 @@ namespace BannerKings.Models.Vanilla
                     if (data.HasPerk(BKPerks.Instance.FianHighlander) && weaponComponentData.RelevantSkill == DefaultSkills.TwoHanded && !agent.HasMount && weaponComponentData.WeaponClass == WeaponClass.TwoHandedSword)
                         agentDrivenProperties.SwingSpeedMultiplier *= 1.06f;
                 }*/
-            }
         }
     }
 }

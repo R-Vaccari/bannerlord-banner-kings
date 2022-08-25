@@ -51,7 +51,7 @@ namespace BannerKings.Models.Vanilla
                 var data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(mobileParty.Owner);
                 if (Campaign.Current.IsDay && data.HasPerk(BKPerks.Instance.CaravaneerDealer))
                 {
-                    baseResult.AddFactor(0.04f, BKPerks.Instance.FianHighlander.Name);
+                    baseResult.AddFactor(0.05f, BKPerks.Instance.FianHighlander.Name);
                 }
             }
 
