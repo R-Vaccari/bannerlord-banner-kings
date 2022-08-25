@@ -251,7 +251,16 @@ namespace BannerKings.Managers.Titles
 
             if (!OngoingClaims.ContainsKey(hero))
             {
-                OngoingClaims.Add(hero, CampaignTime.YearsFromNow(1));
+                var claimTime = CampaignTime.YearsFromNow(1);
+
+                var lordshipClaimant = BKPerks.Instance.LordshipClaimant;
+                if (hero.GetPerkValue(lordshipClaimant))
+                {
+                    var reducedClaimTime = claimTime.ToHours - claimTime.ToHours * 0.3f / 100;
+                    claimTime = CampaignTime.HoursFromNow((float)reducedClaimTime);
+                }
+                
+                OngoingClaims.Add(hero, claimTime);
             }
         }
 
@@ -311,13 +320,7 @@ namespace BannerKings.Managers.Titles
             }
 
             toRemove.Clear();
-            foreach (var hero in OngoingClaims.Keys.ToList())
-            {
-                if (hero.IsDead)
-                {
-                    toRemove.Add(hero);
-                }
-            }
+            toRemove.AddRange(OngoingClaims.Keys.ToList().Where(hero => hero.IsDead));
 
             foreach (var hero in toRemove)
             {

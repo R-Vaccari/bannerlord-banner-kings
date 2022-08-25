@@ -1,5 +1,6 @@
 using BannerKings.Managers.Court;
 using BannerKings.Managers.Policies;
+using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
 using Helpers;
 using TaleWorlds.CampaignSystem;
@@ -59,61 +60,63 @@ namespace BannerKings.Models.Vanilla
 
         public ExplainedNumber GetDraftEfficiency(Hero hero, int index, Settlement settlement)
         {
-            if (hero != null)
+            if (hero == null)
             {
-                var num = 0.7f;
-                var num2 = 0;
-                foreach (var town in hero.CurrentSettlement.MapFaction.Fiefs)
-                {
-                    num2 += town.IsTown
-                        ? (town.Settlement.Prosperity < 3000f ? 1 : town.Settlement.Prosperity < 6000f ? 2 : 3) +
-                          town.Villages.Count
-                        : town.Villages.Count;
-                }
-
-                var num3 = num2 < 46 ? num2 / 46f * (num2 / 46f) : 1f;
-                num += hero.CurrentSettlement != null && num3 < 1f ? (1f - num3) * 0.2f : 0f;
-                var baseNumber = 0.75f * MathF.Clamp(MathF.Pow(num, index + 1), 0f, 1f);
-                var explainedNumber = new ExplainedNumber(baseNumber, true);
-                var clan = hero.Clan;
-                if (clan?.Kingdom != null &&
-                    hero.Clan.Kingdom.ActivePolicies.Contains(DefaultPolicies.Cantons))
-                {
-                    explainedNumber.AddFactor(0.2f, new TextObject("{=zGx6c77M}Cantons kingdom policy"));
-                }
-
-                if (hero.VolunteerTypes?[index] != null && hero.VolunteerTypes[index].IsMounted &&
-                    PerkHelper.GetPerkValueForTown(DefaultPerks.Riding.CavalryTactics,
-                        settlement.IsVillage ? settlement.Village.Bound.Town : settlement.Town))
-                {
-                    explainedNumber.AddFactor(DefaultPerks.Riding.CavalryTactics.PrimaryBonus * 0.01f,
-                        DefaultPerks.Riding.CavalryTactics.PrimaryDescription);
-                }
-
-                BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref explainedNumber, settlement.OwnerClan.Leader,
-                    CouncilPosition.Marshall, 0.25f, true);
-                var draftPolicy = ((BKDraftPolicy) BannerKingsConfig.Instance.PolicyManager.GetPolicy(settlement, "draft"))
-                    .Policy;
-                switch (draftPolicy)
-                {
-                    case DraftPolicy.Conscription:
-                        explainedNumber.Add(0.15f, new TextObject("{=2z4YQTuu}Draft policy"));
-                        break;
-                    case DraftPolicy.Demobilization:
-                        explainedNumber.Add(-0.15f, new TextObject("{=2z4YQTuu}Draft policy"));
-                        break;
-                }
-
-                var government = BannerKingsConfig.Instance.TitleManager.GetSettlementGovernment(settlement);
-                if (government == GovernmentType.Tribal)
-                {
-                    explainedNumber.AddFactor(0.2f, new TextObject("{=PSrEtF5L}Government"));
-                }
-
-                return explainedNumber;
+                return new ExplainedNumber(0f);
             }
 
-            return new ExplainedNumber(0f);
+            var num = 0.7f;
+            var num2 = 0;
+            foreach (var town in hero.CurrentSettlement.MapFaction.Fiefs)
+            {
+                num2 += town.IsTown
+                    ? (town.Settlement.Prosperity < 3000f ? 1 : town.Settlement.Prosperity < 6000f ? 2 : 3) +
+                      town.Villages.Count
+                    : town.Villages.Count;
+            }
+
+            var num3 = num2 < 46 ? num2 / 46f * (num2 / 46f) : 1f;
+            num += hero.CurrentSettlement != null && num3 < 1f ? (1f - num3) * 0.2f : 0f;
+            var baseNumber = 0.75f * MathF.Clamp(MathF.Pow(num, index + 1), 0f, 1f);
+            var explainedNumber = new ExplainedNumber(baseNumber, true);
+            var clan = hero.Clan;
+            if (clan?.Kingdom != null && hero.Clan.Kingdom.ActivePolicies.Contains(DefaultPolicies.Cantons))
+            {
+                explainedNumber.AddFactor(0.2f, new TextObject("{=zGx6c77M}Cantons kingdom policy"));
+            }
+
+            if (hero.VolunteerTypes?[index] != null && hero.VolunteerTypes[index].IsMounted && PerkHelper.GetPerkValueForTown(DefaultPerks.Riding.CavalryTactics, settlement.IsVillage ? settlement.Village.Bound.Town : settlement.Town))
+            {
+                explainedNumber.AddFactor(DefaultPerks.Riding.CavalryTactics.PrimaryBonus * 0.01f, DefaultPerks.Riding.CavalryTactics.PrimaryDescription);
+            }
+
+            BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref explainedNumber, settlement.OwnerClan.Leader, CouncilPosition.Marshall, 0.25f, true);
+            
+            var draftPolicy = ((BKDraftPolicy) BannerKingsConfig.Instance.PolicyManager.GetPolicy(settlement, "draft")).Policy;
+            switch (draftPolicy)
+            {
+                case DraftPolicy.Conscription:
+                    explainedNumber.Add(0.15f, new TextObject("{=2z4YQTuu}Draft policy"));
+                    break;
+                case DraftPolicy.Demobilization:
+                    explainedNumber.Add(-0.15f, new TextObject("{=2z4YQTuu}Draft policy"));
+                    break;
+            }
+
+            var government = BannerKingsConfig.Instance.TitleManager.GetSettlementGovernment(settlement);
+            if (government == GovernmentType.Tribal)
+            {
+                explainedNumber.AddFactor(0.2f, new TextObject("{=PSrEtF5L}Government"));
+            }
+
+            var lordshipMilitaryAdministration = BKPerks.Instance.LordshipMilitaryAdministration;
+            if (settlement.Owner.GetPerkValue(lordshipMilitaryAdministration))
+            {
+                explainedNumber.AddFactor(0.2f, lordshipMilitaryAdministration.Name);
+            }
+
+            return explainedNumber;
+
         }
 
         public ExplainedNumber GetMilitarism(Settlement settlement)
@@ -125,8 +128,23 @@ namespace BannerKings.Models.Vanilla
 
             explainedNumber.Add((serfMilitarism + craftsmenMilitarism + nobleMilitarism) / 3f, new TextObject("{=AaNeOd9n}Base"));
 
-            BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref explainedNumber, settlement.OwnerClan.Leader,
-                CouncilPosition.Marshall, 0.03f, false);
+            BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref explainedNumber, settlement.OwnerClan.Leader, CouncilPosition.Marshall, 0.03f, false);
+
+            if (settlement.Culture == settlement.Owner.Culture)
+            {
+                var lordshipTraditionalistPerk = BKPerks.Instance.LordshipTraditionalist;
+                if (settlement.Owner.GetPerkValue(BKPerks.Instance.LordshipTraditionalist))
+                {
+                    explainedNumber.AddFactor(0.01f, lordshipTraditionalistPerk.Name);
+                }
+
+                var lordshipMilitaryAdministration = BKPerks.Instance.LordshipMilitaryAdministration;
+                if (settlement.Owner.GetPerkValue(lordshipMilitaryAdministration))
+                {
+                    explainedNumber.AddFactor(0.02f, lordshipMilitaryAdministration.Name);
+                }
+            }
+
             return explainedNumber;
         }
 

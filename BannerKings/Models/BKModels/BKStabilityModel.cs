@@ -25,11 +25,16 @@ namespace BannerKings.Models.BKModels
                 var change = targetStability > stability ? 0.005f + random1 - random2 :
                     targetStability < stability ? -0.005f - random1 + random2 : 0f;
                 result.Add(change, new TextObject("{=!}"));
+
+                var lordshipAdaptivePerk = BKPerks.Instance.LordshipAdaptive;
+                if (settlement.Owner.GetPerkValue(lordshipAdaptivePerk))
+                {
+                    result.AddFactor(0.04f, lordshipAdaptivePerk.Name);
+                }
             }
             else if (settlement.IsVillage && settlement.Village != null)
             {
-                data.Stability = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement.Village.Bound)
-                    .Stability;
+                data.Stability = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement.Village.Bound).Stability;
             }
 
             return result;
@@ -267,6 +272,12 @@ namespace BannerKings.Models.BKModels
                 value = 0.5f;
             }
 
+            var lordshipManorLord = BKPerks.Instance.LordshipManorLord;
+            if (settlement.Owner.GetPerkValue(lordshipManorLord))
+            {
+                value -= value * 0.2f / 100;
+            }
+
             return value;
         }
 
@@ -386,8 +397,7 @@ namespace BannerKings.Models.BKModels
 
             if (hero.GetPerkValue(BKPerks.Instance.LordshipAccolade))
             {
-                result.Add(1f, new TextObject("{PERK_NAME}")
-                    .SetTextVariable("PERK_NAME", BKPerks.Instance.LordshipAccolade.Name));
+                result.Add(1f, BKPerks.Instance.LordshipAccolade.Name);
             }
 
             var title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(hero);
