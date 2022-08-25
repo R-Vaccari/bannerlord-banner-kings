@@ -55,7 +55,6 @@ namespace BannerKings.Behaviours
         {
             foreach (var religion in ReligionsManager.GetReligions())
             {
-                religion.UpdateFervor();
                 foreach (var hero in ReligionsManager.GetFaithfulHeroes(religion))
                 {
                     ReligionsManager.AddPiety(religion, hero, BannerKingsConfig.Instance.PietyModel.CalculateEffect(hero).ResultNumber);

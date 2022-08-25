@@ -56,14 +56,11 @@ namespace BannerKings.Managers.Institutions.Religions
 
         public MBReadOnlyList<CultureObject> FavoredCultures => favoredCultures.GetReadOnlyList();
 
-        [SaveableField(6)] private ExplainedNumber fervorCache = new ExplainedNumber(0f);
-        public ExplainedNumber Fervor => fervorCache;
+        private ExplainedNumber fervorCache;
+        public ExplainedNumber Fervor => BannerKingsConfig.Instance.ReligionModel.CalculateFervor(this);
+  
+       
             
-
-        public void UpdateFervor()
-        {
-            fervorCache = BannerKingsConfig.Instance.ReligionModel.CalculateFervor(this);
-        }
 
         internal void PostInitialize(Faith faith)
         {

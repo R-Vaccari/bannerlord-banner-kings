@@ -182,6 +182,7 @@ namespace BannerKings
             ConstructContainerDefinition(typeof(Dictionary<Hero, float>));
             ConstructContainerDefinition(typeof(List<Innovation>));
             ConstructContainerDefinition(typeof(Dictionary<CultureObject, InnovationData>));
+            ConstructContainerDefinition(typeof(Dictionary<Religion, float>));
         }
     }
 }
