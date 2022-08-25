@@ -169,15 +169,17 @@ namespace BannerKings.Models.Vanilla
             var data = BannerKingsConfig.Instance.CourtManager.GetCouncil(clan);
             if (data != null)
             {
+                float taxes = 0f;
                 foreach (var position in data.GetOccupiedPositions())
                 {
-                    result.Add(-position.DueWage,
-                        new TextObject("{=wm92ApfD}Council wage to {NAME}").SetTextVariable("NAME", position.Member.Name));
+                    taxes -= position.DueWage;
                     if (applyWithdrawals && !position.Member.IsLord)
                     {
                         position.Member.Gold += position.DueWage;
                     }
                 }
+
+                result.Add(taxes, new TextObject("{=!}Council wages"));
             }
 
 
