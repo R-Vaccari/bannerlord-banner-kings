@@ -272,12 +272,14 @@ namespace BannerKings.UI.Court
                 }
             }
 
-            CourtInfo.Add(new InformationElement("Administrative costs:", FormatValue(council.AdministrativeCosts),
-                "Costs associated with payment of council members, deducted on all your fiefs' revenues."));
+            CourtInfo.Add(new InformationElement(new TextObject("{=!}Administrative costs:").ToString(), 
+                FormatValue(council.AdministrativeCosts),
+                new TextObject("{=!}Costs associated with payment of council members, deducted on all your fiefs' revenues.")
+                .ToString()));
 
             var royalExplanation = BannerKingsConfig.Instance.CouncilModel.IsCouncilRoyal(council.Owner.Clan);
             IsRoyal = royalExplanation.Item1;
-            CourtInfo.Add(new InformationElement(new TextObject("{=MSnF2Lpd}Crown council:").ToString(),
+            /*CourtInfo.Add(new InformationElement(new TextObject("{=MSnF2Lpd}Crown council:").ToString(),
                 GameTexts.FindText(royalExplanation.Item1 ? "str_yes" : "str_no").ToString(), royalExplanation.Item2));
 
             var rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(council.Owner);
@@ -289,7 +291,7 @@ namespace BannerKings.UI.Court
             CourtInfo.Add(new InformationElement(new TextObject("{=qFgTXJKW}Court Language:").ToString(),
                 BannerKingsConfig.Instance.EducationManager.GetNativeLanguage(council.Owner).Name.ToString(),
                 new TextObject("{=JeSR0Bu8}This council's owner's language. Courtiers that do not speak the language may feel alienated.")
-                    .ToString()));
+                    .ToString()));*/
 
             foreach (var position in council.Positions)
             {
@@ -331,6 +333,11 @@ namespace BannerKings.UI.Court
                 }
             }
 
+            RefreshCharacter();
+        }
+
+        private void RefreshCharacter()
+        {
             if (currentCharacter != null)
             {
                 CourtierInfo.Add(new InformationElement(GameTexts.FindText("str_enc_sf_occupation").ToString(),
@@ -409,7 +416,7 @@ namespace BannerKings.UI.Court
         private void SetCurrentCharacter(ClanLordItemVM vm)
         {
             CurrentCharacter = new CharacterVM(vm.GetHero(), null);
-            RefreshValues();
+            RefreshCharacter();
         }
     }
 }
