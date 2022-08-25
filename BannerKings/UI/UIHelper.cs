@@ -231,18 +231,20 @@ namespace BannerKings.UI
             {
                 new("", hero.Name.ToString(), 0, false, TooltipProperty.TooltipPropertyFlags.Title)
             };
+
             MBTextManager.SetTextVariable("LEFT", GameTexts.FindText("str_tooltip_label_relation"));
             var definition = GameTexts.FindText("str_LEFT_ONLY").ToString();
             list.Add(new TooltipProperty(definition, ((int) hero.GetRelationWithPlayer()).ToString(), 0));
+
             MBTextManager.SetTextVariable("LEFT", GameTexts.FindText("str_tooltip_label_type"));
             var definition2 = GameTexts.FindText("str_LEFT_ONLY").ToString();
             list.Add(new TooltipProperty(definition2, GetCorrelation(hero), 0));
+
             list.Add(new TooltipProperty(new TextObject("{=uUmEcuV8}Age").ToString(), hero.Age.ToString(), 0));
 
             if (hero.CurrentSettlement != null)
             {
-                list.Add(new TooltipProperty(new TextObject("{=J6oPqQmt}Settlement").ToString(),
-                    hero.CurrentSettlement.Name.ToString(), 0));
+                list.Add(new TooltipProperty(new TextObject("{=J6oPqQmt}Settlement").ToString(), hero.CurrentSettlement.Name.ToString(), 0));
             }
 
             var titles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(hero);
@@ -251,10 +253,8 @@ namespace BannerKings.UI
                 TooltipAddEmptyLine(list);
                 list.Add(new TooltipProperty(new TextObject("{=2qXtnwSn}Titles").ToString(), " ", 0));
                 TooltipAddSeperator(list);
-                foreach (var t in titles)
-                {
-                    list.Add(new TooltipProperty(t.FullName.ToString(), GetOwnership(hero, t), 0));
-                }
+
+                list.AddRange(titles.Select(t => new TooltipProperty(t.FullName.ToString(), GetOwnership(hero, t), 0)));
             }
 
             foreach (var action in actions)
@@ -281,6 +281,7 @@ namespace BannerKings.UI
                 TooltipAddEmptyLine(list);
                 list.Add(new TooltipProperty(new TextObject("{=6hY9WysN}Claimants").ToString(), " ", 0));
                 TooltipAddSeperator(list);
+
                 foreach (var pair in title.OngoingClaims)
                 {
                     list.Add(new TooltipProperty(pair.Key.Name.ToString(),
@@ -289,26 +290,21 @@ namespace BannerKings.UI
                             .ToString(), 0));
                 }
 
-                foreach (var pair in title.Claims)
-                {
-                    list.Add(new TooltipProperty(pair.Key.Name.ToString(), GetClaimText(pair.Value).ToString(),
-                        0));
-                }
+                list.AddRange(title.Claims.Select(pair => new TooltipProperty(pair.Key.Name.ToString(), GetClaimText(pair.Value).ToString(), 0)));
             }
 
 
-            var claimants =
-                (BannerKingsConfig.Instance.Models.First(x => x is BKTitleModel) as BKTitleModel).GetClaimants(title);
-            if (claimants is {Count: > 0})
+            var claimants = (BannerKingsConfig.Instance.Models.First(x => x is BKTitleModel) as BKTitleModel)?.GetClaimants(title);
+            if (claimants is not {Count: > 0})
             {
-                TooltipAddEmptyLine(list);
-                list.Add(new TooltipProperty(new TextObject("{=nFcAkRcD}Possible Claimants").ToString(), " ", 0));
-                TooltipAddSeperator(list);
-                foreach (var claimant in claimants)
-                {
-                    list.Add(new TooltipProperty(claimant.Name.ToString(), new TextObject("{=!}").ToString(), 0));
-                }
+                return list;
             }
+
+            TooltipAddEmptyLine(list);
+            list.Add(new TooltipProperty(new TextObject("{=nFcAkRcD}Possible Claimants").ToString(), " ", 0));
+            TooltipAddSeperator(list);
+
+            list.AddRange(claimants.Select(claimant => new TooltipProperty(claimant.Name.ToString(), new TextObject("{=!}").ToString(), 0)));
 
             return list;
         }

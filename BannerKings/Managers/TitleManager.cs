@@ -273,9 +273,7 @@ namespace BannerKings.Managers
     
             return result;
         } */
-
-
-
+        
         public Dictionary<Clan, List<FeudalTitle>> CalculateVassals(Clan suzerainClan, Clan clanToIgnore = null)
         {
             var clans = new Dictionary<Clan, List<FeudalTitle>>();
@@ -379,12 +377,19 @@ namespace BannerKings.Managers
         public void AddOngoingClaim(TitleAction action)
         {
             var claimant = action.ActionTaker;
+
+            var lordshipClaimant = BKPerks.Instance.LordshipClaimant;
+            if (claimant.GetPerkValue(lordshipClaimant))
+            {
+                action.Gold -= action.Gold * 0.05f / 100;
+                action.Renown -= action.Renown * 0.05f / 100;
+            }
+
             action.Title.AddOngoingClaim(action.ActionTaker);
             GainKingdomInfluenceAction.ApplyForDefault(claimant, -action.Influence);
             claimant.ChangeHeroGold((int) -action.Gold);
             claimant.Clan.Renown -= action.Renown;
-            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(action.ActionTaker, action.Title.deJure,
-                (int) Math.Min(-5f, new BKTitleModel().GetRelationImpact(action.Title) * -0.1f));
+            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(action.ActionTaker, action.Title.deJure, (int) Math.Min(-5f, new BKTitleModel().GetRelationImpact(action.Title) * -0.1f));
 
             if (action.Title.deJure == Hero.MainHero)
             {
@@ -397,6 +402,14 @@ namespace BannerKings.Managers
 
         public void RevokeTitle(TitleAction action)
         {
+            var lordshipClaimant = BKPerks.Instance.LordshipClaimant;
+            if (action.ActionTaker.GetPerkValue(lordshipClaimant))
+            {
+                action.Gold -= action.Gold * 0.05f / 100;
+                action.Renown -= action.Renown * 0.05f / 100;
+                action.Influence -= action.Influence * 0.05f / 100;
+            }
+
             var currentOwner = action.Title.deJure;
             InformationManager.DisplayMessage(new InformationMessage(
                 new TextObject("{=D50E4DZk}{REVOKER} has revoked the {TITLE}.")
@@ -429,6 +442,7 @@ namespace BannerKings.Managers
         public void GrantTitle(TitleAction action, Hero receiver)
         {
             var grantor = action.ActionTaker;
+
             ExecuteOwnershipChange(grantor, receiver, action.Title, true);
             var kingdom = grantor.Clan.Kingdom;
             if (receiver.Clan.Kingdom != null && receiver.Clan.Kingdom == kingdom)
@@ -436,7 +450,16 @@ namespace BannerKings.Managers
                 ExecuteOwnershipChange(grantor, receiver, action.Title, false);
             }
 
-            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(grantor, receiver, BannerKingsConfig.Instance.TitleModel.GetRelationImpact(action.Title));
+            var relationChange = BannerKingsConfig.Instance.TitleModel.GetRelationImpact(action.Title);
+
+            var lordshipPatron = BKPerks.Instance.LordshipPatron;
+            if (action.ActionTaker.GetPerkValue(lordshipPatron))
+            {
+                action.Renown += 50;
+                relationChange += (int)(relationChange * 0.1f / 100);
+            }
+
+            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(grantor, receiver, relationChange);
             GainKingdomInfluenceAction.ApplyForDefault(grantor, action.Influence);
             grantor.AddSkillXp(BKSkills.Instance.Lordship, BannerKingsConfig.Instance.TitleModel.GetSkillReward(action.Title, action.Type));
 
@@ -489,6 +512,15 @@ namespace BannerKings.Managers
         public void UsurpTitle(Hero oldOwner, TitleAction action)
         {
             var usurper = action.ActionTaker;
+
+            var lordshipClaimant = BKPerks.Instance.LordshipClaimant;
+            if (action.ActionTaker.GetPerkValue(lordshipClaimant))
+            {
+                action.Gold -= action.Gold * 0.05f / 100;
+                action.Renown -= action.Renown * 0.05f / 100;
+                action.Influence -= action.Influence * 0.05f / 100;
+            }
+
             var title = action.Title;
             InformationManager.DisplayMessage(new InformationMessage(
                 new TextObject("{=c9RCCv20}{USURPER} has usurped the {TITLE}.")

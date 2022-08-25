@@ -1,6 +1,7 @@
 using System.Linq;
 using BannerKings.Managers.Court;
 using BannerKings.Managers.Policies;
+using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
 using Helpers;
 using TaleWorlds.CampaignSystem;
@@ -33,100 +34,100 @@ namespace BannerKings.Models.Vanilla
 
         public override ExplainedNumber CalculateLoyaltyChange(Town town, bool includeDescriptions = false)
         {
-            if (BannerKingsConfig.Instance.PopulationManager != null &&
-                BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
+            if (BannerKingsConfig.Instance.PopulationManager == null || !BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
             {
-                var baseResult = CalculateLoyaltyChangeInternal(town, true);
-                var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
-                var slaves = data.GetTypeCount(PopType.Slaves);
-                var surplusExists =
-                    BannerKingsConfig.Instance.PopulationManager.PopSurplusExists(town.Settlement, PopType.Slaves, true);
-                baseResult.Add(slaves * SLAVE_LOYALTY, new TextObject("{=FJSfBwzp}Slave population"));
-
-                var tax = (BannerKingsConfig.Instance.PolicyManager.GetPolicy(town.Settlement, "tax") as BKTaxPolicy)
-                    .Policy;
-                switch (tax)
-                {
-                    case TaxType.Low:
-                    {
-                        var fraction1 = data.GetCurrentTypeFraction(PopType.Craftsmen);
-                        var fraction2 = data.GetCurrentTypeFraction(PopType.Serfs) * 0.8f;
-                        baseResult.Add((fraction1 + fraction2) * LOYALTY_FACTOR, new TextObject("{=j6AoAS6n}Low tax policy"));
-                        break;
-                    }
-                    case TaxType.High:
-                    {
-                        var fraction1 = data.GetCurrentTypeFraction(PopType.Craftsmen);
-                        var fraction2 = data.GetCurrentTypeFraction(PopType.Serfs) * 0.8f;
-                        baseResult.Add((fraction1 + fraction2) * LOYALTY_FACTOR * -1f, new TextObject("{=EhHXS8PN}High tax policy"));
-                        break;
-                    }
-                }
-
-                if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(town.Settlement, "decision_slaves_tax"))
-                {
-                    var factor = tax == TaxType.Low ? 1.5f : tax == TaxType.Standard ? 2f : 2.5f;
-                    var privateSlaves = 1f - data.EconomicData.StateSlaves;
-                    baseResult.Add(privateSlaves * -factor, new TextObject("{=AQDh5jHA}Tax private slaves decision"));
-                }
-
-                var crime =
-                    (BannerKingsConfig.Instance.PolicyManager.GetPolicy(town.Settlement, "criminal") as BKCriminalPolicy)
-                    .Policy;
-                switch (crime)
-                {
-                    case CriminalPolicy.Execution:
-                    {
-                        var value = 0f;
-                        if (data.CultureData.DominantCulture == town.Owner.Culture)
-                        {
-                            value = 0.3f;
-                        }
-                        else
-                        {
-                            value = -0.3f;
-                        }
-
-                        baseResult.Add(value, new TextObject("{=qyjqPWxJ}Criminal policy"));
-                        break;
-                    }
-                    case CriminalPolicy.Forgiveness:
-                    {
-                        var value = 0f;
-                        if (data.CultureData.DominantCulture != town.Owner.Culture)
-                        {
-                            value = 0.3f;
-                        }
-                        else
-                        {
-                            value = -0.3f;
-                        }
-
-                        baseResult.Add(value, new TextObject("{=qyjqPWxJ}Criminal policy"));
-                        break;
-                    }
-                }
-
-                if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(town.Settlement, "decision_ration"))
-                {
-                    baseResult.Add(town.IsUnderSiege || town.FoodStocks >= town.FoodStocksUpperLimit() * 0.1f ? -2f : -4f,
-                        new TextObject("{=w6bLP4DB}Enforce rations decision"));
-                }
-
-                var government = BannerKingsConfig.Instance.TitleManager.GetSettlementGovernment(town.Settlement);
-                if (government == GovernmentType.Republic)
-                {
-                    baseResult.Add(1f, new TextObject("{=PSrEtF5L}Government"));
-                }
-
-                baseResult.Add(2f * data.Autonomy, new TextObject("Autonomy"));
-
-                BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref baseResult, town.OwnerClan.Leader,
-                    CouncilPosition.Chancellor, 1f, false);
-                return baseResult;
+                return base.CalculateLoyaltyChange(town, includeDescriptions);
             }
 
-            return base.CalculateLoyaltyChange(town, includeDescriptions);
+            var baseResult = CalculateLoyaltyChangeInternal(town, true);
+
+            var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
+            var slaves = data.GetTypeCount(PopType.Slaves);
+
+            baseResult.Add(slaves * SLAVE_LOYALTY, new TextObject("{=FJSfBwzp}Slave population"));
+
+            var tax = ((BKTaxPolicy) BannerKingsConfig.Instance.PolicyManager.GetPolicy(town.Settlement, "tax")).Policy;
+            switch (tax)
+            {
+                case TaxType.Low:
+                {
+                    var fraction1 = data.GetCurrentTypeFraction(PopType.Craftsmen);
+                    var fraction2 = data.GetCurrentTypeFraction(PopType.Serfs) * 0.8f;
+                    baseResult.Add((fraction1 + fraction2) * LOYALTY_FACTOR, new TextObject("{=j6AoAS6n}Low tax policy"));
+                    break;
+                }
+                case TaxType.High:
+                {
+                    var fraction1 = data.GetCurrentTypeFraction(PopType.Craftsmen);
+                    var fraction2 = data.GetCurrentTypeFraction(PopType.Serfs) * 0.8f;
+                    baseResult.Add((fraction1 + fraction2) * LOYALTY_FACTOR * -1f, new TextObject("{=EhHXS8PN}High tax policy"));
+                    break;
+                }
+            }
+
+            if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(town.Settlement, "decision_slaves_tax"))
+            {
+                var factor = tax switch
+                {
+                    TaxType.Low => 1.5f,
+                    TaxType.Standard => 2f,
+                    _ => 2.5f
+                };
+                var privateSlaves = 1f - data.EconomicData.StateSlaves;
+                baseResult.Add(privateSlaves * -factor, new TextObject("{=AQDh5jHA}Tax private slaves decision"));
+            }
+
+            var crime = ((BKCriminalPolicy) BannerKingsConfig.Instance.PolicyManager.GetPolicy(town.Settlement, "criminal")).Policy;
+            switch (crime)
+            {
+                case CriminalPolicy.Execution:
+                {
+                    float value;
+                    if (data.CultureData.DominantCulture == town.Owner.Culture)
+                    {
+                        value = 0.3f;
+                    }
+                    else
+                    {
+                        value = -0.3f;
+                    }
+
+                    baseResult.Add(value, new TextObject("{=qyjqPWxJ}Criminal policy"));
+                    break;
+                }
+                case CriminalPolicy.Forgiveness:
+                {
+                    float value;
+                    if (data.CultureData.DominantCulture != town.Owner.Culture)
+                    {
+                        value = 0.3f;
+                    }
+                    else
+                    {
+                        value = -0.3f;
+                    }
+
+                    baseResult.Add(value, new TextObject("{=qyjqPWxJ}Criminal policy"));
+                    break;
+                }
+            }
+
+            if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(town.Settlement, "decision_ration"))
+            {
+                baseResult.Add(town.IsUnderSiege || town.FoodStocks >= town.FoodStocksUpperLimit() * 0.1f ? -2f : -4f, new TextObject("{=w6bLP4DB}Enforce rations decision"));
+            }
+
+            var government = BannerKingsConfig.Instance.TitleManager.GetSettlementGovernment(town.Settlement);
+            if (government == GovernmentType.Republic)
+            {
+                baseResult.Add(1f, new TextObject("{=PSrEtF5L}Government"));
+            }
+
+            baseResult.Add(2f * data.Autonomy, new TextObject("Autonomy"));
+
+            BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref baseResult, town.OwnerClan.Leader, CouncilPosition.Chancellor, 1f, false);
+
+            return baseResult;
         }
 
 
@@ -189,8 +190,7 @@ namespace BannerKings.Models.Vanilla
 
         private void GetSettlementLoyaltyChangeDueToOwnerCulture(Town town, ref ExplainedNumber explainedNumber)
         {
-            if (BannerKingsConfig.Instance.PopulationManager != null &&
-                BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
+            if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
             {
                 var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
                 var assim = data.CultureData.GetAssimilation(town.Owner.Culture);
@@ -198,10 +198,17 @@ namespace BannerKings.Models.Vanilla
                 var result = LOYALTY_FACTOR * factor;
                 explainedNumber.Add(result, new TextObject("{=D3trXTDz}Cultural Assimilation"));
 
-                if (town.Governor != null)
+                if (town.Governor == null)
                 {
-                    explainedNumber.Add(result * (town.Governor.Culture == town.Culture ? 0.1f : -0.1f),
-                        GovernorCultureText);
+                    return;
+                }
+
+                explainedNumber.Add(result * (town.Governor.Culture == town.Culture ? 0.1f : -0.1f), GovernorCultureText);
+
+                var lordshipAdaptivePerk = BKPerks.Instance.LordshipAdaptive;
+                if (town.Culture != town.Governor.Culture && town.Governor.GetPerkValue(lordshipAdaptivePerk))
+                {
+                    explainedNumber.AddFactor(-0.15f, lordshipAdaptivePerk.Name);
                 }
             }
             else if (town.Settlement.OwnerClan.Culture != town.Settlement.Culture) // vanilla behavior

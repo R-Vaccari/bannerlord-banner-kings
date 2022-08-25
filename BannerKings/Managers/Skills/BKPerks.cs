@@ -656,7 +656,7 @@ namespace BannerKings.Managers.Skills
             LordshipEconomicAdministration = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LordshipEconomicAdministration"));
             LordshipMilitaryAdministration.InitializeNew("{=wzJW8mFC}Military Administration", BKSkills.Instance.Lordship,
                 GetTierCost(3), LordshipEconomicAdministration,
-                "{=tqWtfNch}Increased settlement militarism in settlements by flat 2%",
+                "{=tqWtfNch}Increased settlement militarism in settlements by 2%",
                 SkillEffect.PerkRole.Ruler, 0.02f,
                 SkillEffect.EffectIncrementType.Add,
                 "{=6hRejPPe}Increased settlement drafting speed by 20%",

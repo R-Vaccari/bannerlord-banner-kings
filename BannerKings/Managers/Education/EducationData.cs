@@ -151,10 +151,7 @@ namespace BannerKings.Managers.Education
 
         public bool HasPerk(PerkObject perk)
         {
-            if (gainedPerks == null)
-            {
-                gainedPerks = new List<PerkObject>();
-            }
+            gainedPerks ??= new List<PerkObject>();
 
             return gainedPerks.Contains(perk);
         }

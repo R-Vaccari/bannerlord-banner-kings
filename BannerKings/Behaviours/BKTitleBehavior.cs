@@ -70,63 +70,68 @@ namespace BannerKings.Behaviours
 
         private void CheckOverDemesneLimit(Hero hero)
         {
-            if (BannerKingsConfig.Instance.StabilityModel.IsHeroOverDemesneLimit(hero))
+            if (!BannerKingsConfig.Instance.StabilityModel.IsHeroOverDemesneLimit(hero))
             {
-                if (hero == Hero.MainHero)
-                {
-                    Campaign.Current.CampaignInformationManager.NewMapNoticeAdded(new DemesneLimitNotification());
-                    return;
-                }
-
-                if (hero.Clan.Kingdom != null && hero.Clan == hero.Clan.Kingdom.RulingClan)
-                {
-                    var kingdom = hero.Clan.Kingdom;
-                    if (kingdom.UnresolvedDecisions.Any(x => x is SettlementClaimantDecision))
-                    {
-                        return;
-                    }
-                }
-
-                var AI = new AIBehavior();
-                var limit = BannerKingsConfig.Instance.StabilityModel.CalculateDemesneLimit(hero).ResultNumber;
-                var current = BannerKingsConfig.Instance.StabilityModel.CalculateCurrentDemesne(hero.Clan).ResultNumber;
-                var diff = current - limit;
-                if (diff < 0.5f)
-                {
-                    return;
-                }
-
-                var title = AI.ChooseTitleToGive(hero, diff);
-                if (title == null)
-                {
-                    return;
-                }
-
-                var receiver = AI.ChooseVassalToGiftLandedTitle(hero, title);
-                if (receiver == null)
-                {
-                    return;
-                }
-
-                var action = BannerKingsConfig.Instance.TitleModel.GetAction(ActionType.Grant, title, hero);
-                InformationManager.DisplayMessage(new InformationMessage(
-                    new TextObject("{HERO} is giving {TITLE} to {RECEIVER}")
-                        .SetTextVariable("HERO", hero.Name)
-                        .SetTextVariable("TITLE", title.FullName)
-                        .SetTextVariable("RECEIVER", receiver.Name)
-                        .ToString()));
-                BannerKingsConfig.Instance.TitleManager.GrantTitle(action, receiver);
+                return;
             }
+
+            if (hero == Hero.MainHero)
+            {
+                Campaign.Current.CampaignInformationManager.NewMapNoticeAdded(new DemesneLimitNotification());
+                return;
+            }
+
+            if (hero.Clan.Kingdom != null && hero.Clan == hero.Clan.Kingdom.RulingClan)
+            {
+                var kingdom = hero.Clan.Kingdom;
+                if (kingdom.UnresolvedDecisions.Any(x => x is SettlementClaimantDecision))
+                {
+                    return;
+                }
+            }
+
+            var ai = new AIBehavior();
+            var limit = BannerKingsConfig.Instance.StabilityModel.CalculateDemesneLimit(hero).ResultNumber;
+            var current = BannerKingsConfig.Instance.StabilityModel.CalculateCurrentDemesne(hero.Clan).ResultNumber;
+
+            var diff = current - limit;
+            if (diff < 0.5f)
+            {
+                return;
+            }
+
+            var title = ai.ChooseTitleToGive(hero, diff);
+            if (title == null)
+            {
+                return;
+            }
+
+            var receiver = ai.ChooseVassalToGiftLandedTitle(hero, title);
+            if (receiver == null)
+            {
+                return;
+            }
+
+            var action = BannerKingsConfig.Instance.TitleModel.GetAction(ActionType.Grant, title, hero);
+            InformationManager.DisplayMessage(new InformationMessage(
+                new TextObject("{HERO} is giving {TITLE} to {RECEIVER}")
+                    .SetTextVariable("HERO", hero.Name)
+                    .SetTextVariable("TITLE", title.FullName)
+                    .SetTextVariable("RECEIVER", receiver.Name)
+                    .ToString()));
+            BannerKingsConfig.Instance.TitleManager.GrantTitle(action, receiver);
         }
 
         private void CheckOverUnlandedDemesneLimit(Hero hero)
         {
-            if (BannerKingsConfig.Instance.StabilityModel.IsHeroOverUnlandedDemesneLimit(hero))
+            if (!BannerKingsConfig.Instance.StabilityModel.IsHeroOverUnlandedDemesneLimit(hero))
             {
-                if (hero == Hero.MainHero)
-                {
-                    Campaign.Current.CampaignInformationManager.NewMapNoticeAdded(new UnlandedDemesneLimitNotification());
-                }
+                return;
+            }
+
+            if (hero == Hero.MainHero)
+            {
+                Campaign.Current.CampaignInformationManager.NewMapNoticeAdded(new UnlandedDemesneLimitNotification());
             }
         }
 

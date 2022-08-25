@@ -96,7 +96,7 @@ namespace BannerKings.Models.Vanilla
 
                 if (settlement.Owner.GetPerkValue(BKPerks.Instance.LordshipEconomicAdministration))
                 {
-                    result.Add(0.1f, BKPerks.Instance.CivilManufacturer.Name);
+                    result.Add(0.1f, BKPerks.Instance.LordshipEconomicAdministration.Name);
                 }
 
                 if (education.HasPerk(BKPerks.Instance.ArtisanEntrepeneur))
@@ -138,13 +138,21 @@ namespace BannerKings.Models.Vanilla
 
             result.Add((CalculateEffect(settlement).ResultNumber - 0.4f) * 0.5f, new TextObject("{=5eHCGMEK}Mercantilism"));
 
-            if (settlement.OwnerClan != null)
+            var lordshipEconomicAdministration = BKPerks.Instance.LordshipEconomicAdministration;
+            if (settlement.Owner.GetPerkValue(lordshipEconomicAdministration))
             {
-                var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(settlement.Owner);
-                if (education.Perks.Contains(BKPerks.Instance.CivilManufacturer))
-                {
-                    result.Add(0.1f, BKPerks.Instance.CivilManufacturer.Name);
-                }
+                result.AddFactor(0.05f, lordshipEconomicAdministration.Name);
+            }
+
+            if (settlement.OwnerClan == null)
+            {
+                return result;
+            }
+
+            var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(settlement.Owner);
+            if (education.Perks.Contains(BKPerks.Instance.CivilManufacturer))
+            {
+                result.Add(0.1f, BKPerks.Instance.CivilManufacturer.Name);
             }
 
             return result;
