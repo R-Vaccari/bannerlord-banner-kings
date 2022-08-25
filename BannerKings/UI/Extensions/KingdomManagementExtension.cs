@@ -27,7 +27,7 @@ namespace BannerKings.UI.Extensions
     }
 
     [PrefabExtension("KingdomManagement",
-        "descendant::Widget[@VisualDefinition='TopPanel']/Children/KingdomTabControlWidget[1]/Children",
+        "descendant::KingdomTabControlListPanel[1]/Children",
         "KingdomManagement")]
     internal class KingdomManagementExtension2 : PrefabExtensionInsertPatch
     {
