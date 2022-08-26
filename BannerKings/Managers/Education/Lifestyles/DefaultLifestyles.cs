@@ -34,6 +34,8 @@ namespace BannerKings.Managers.Education.Lifestyles
 
         public Lifestyle Artisan { get; private set; }
 
+        public Lifestyle Gladiator { get; private set; }
+
         public override IEnumerable<Lifestyle> All
         {
             get
@@ -43,6 +45,7 @@ namespace BannerKings.Managers.Education.Lifestyles
                 yield return Cataphract;
                 yield return Mercenary;
                 yield return Outlaw;
+                yield return Gladiator;
                 yield return Caravaneer;
                 yield return August;
                 yield return SiegeEngineer;
@@ -143,7 +146,8 @@ namespace BannerKings.Managers.Education.Lifestyles
                 new List<PerkObject>
                 {
                     BKPerks.Instance.CaravaneerStrider,
-                    BKPerks.Instance.CaravaneerDealer
+                    BKPerks.Instance.CaravaneerDealer,
+                    BKPerks.Instance.CaravaneerOutsideConnections
                 },
                 new TextObject("{=1UEN6xUV}Reduced trade penalty by {EFFECT1}%\nReduced speed during nighttime by {EFFECT2}%"),
                 10f,
@@ -155,7 +159,7 @@ namespace BannerKings.Managers.Education.Lifestyles
                 DefaultSkills.Trade, 
                 new List<PerkObject>
                 {
-                    BKPerks.Instance.ArtisanEntrepeneur
+                    BKPerks.Instance.ArtisanSmith, BKPerks.Instance.ArtisanCraftsman, BKPerks.Instance.ArtisanEntrepeneur
                 },
                 new TextObject("{=mV7M6SgW}Chance of botching items when smithing reduced by {EFFECT1}%\n{EFFECT2}%"),
                 10f, 
@@ -215,6 +219,20 @@ namespace BannerKings.Managers.Education.Lifestyles
                 new TextObject("{=mAta6M84}Reduced demesne weight of towns by {EFFECT1}%\nSettlement stability reduced by {EFFECT2}%"),
                 20f,
                 8f);
+
+            Gladiator = new Lifestyle("lifestyle_gladiator");
+            Gladiator.Initialize(new TextObject("{=!}Gladiator"), new TextObject("{=!}"),
+                DefaultSkills.Athletics,
+                DefaultSkills.Riding,
+                new List<PerkObject>
+                {
+                    BKPerks.Instance.GladiatorPromisingAthlete,
+                    BKPerks.Instance.GladiatorTourDeCalradia,
+                    BKPerks.Instance.GladiatorCrowdsFavorite
+                },
+                new TextObject("{=!}Combat experience in tournaments increased by {EFFECT1}%\nTrade penalty increased by {EFFECT2}%"),
+                200f,
+                20f);
         }
     }
 }

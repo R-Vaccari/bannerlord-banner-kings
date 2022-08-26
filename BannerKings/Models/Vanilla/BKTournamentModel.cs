@@ -1,4 +1,7 @@
-﻿using BannerKings.Managers.Populations.Tournament;
+﻿using BannerKings.Managers.Education;
+using BannerKings.Managers.Populations.Tournament;
+using BannerKings.Managers.Skills;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.TournamentGames;
@@ -20,6 +23,36 @@ namespace BannerKings.Models.Vanilla
             }
 
             return base.CreateTournament(town);
+        }
+
+        public override int GetInfluenceReward(Hero winner, Town town)
+        {
+            int result = base.GetInfluenceReward(winner, town);
+            if (winner != null)
+            {
+                EducationData education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(winner);
+                if (education.HasPerk(BKPerks.Instance.GladiatorCrowdsFavorite))
+                {
+                    result += 10;
+                }
+            }
+
+            return result;
+        }
+
+        public override int GetRenownReward(Hero winner, Town town)
+        {
+            int result =  base.GetRenownReward(winner, town);
+            if (winner != null)
+            {
+                EducationData education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(winner);
+                if (education.HasPerk(BKPerks.Instance.GladiatorCrowdsFavorite))
+                {
+                    result += 3;
+                }
+            }
+
+            return result;
         }
     }
 }

@@ -1,4 +1,8 @@
-﻿using TaleWorlds.CampaignSystem.GameComponents;
+﻿using BannerKings.Managers.Education;
+using BannerKings.Managers.Education.Lifestyles;
+using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.GameComponents;
+using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 
@@ -6,16 +10,22 @@ namespace BannerKings.Models.Vanilla
 {
     public class BKPriceFactorModel : DefaultTradeItemPriceFactorModel
     {
-        /* public override int GetPrice(EquipmentElement itemRosterElement, MobileParty clientParty, PartyBase merchant, bool isSelling, float inStoreValue, float supply, float demand)
-         {
-             float baseResult = base.GetPrice(itemRosterElement, clientParty, merchant, isSelling, inStoreValue, supply, demand);
-             if (itemRosterElement.Item.StringId == "mule")
-             {
-                 float penalty = GetTradePenalty(itemRosterElement.Item, clientParty, merchant, isSelling, inStoreValue, supply, demand);
-             }
-                 
-             return (int)baseResult;
-         } */
+        public override float GetTradePenalty(ItemObject item, MobileParty clientParty, PartyBase merchant, bool isSelling, float inStore, float supply, float demand)
+        {
+            float result = base.GetTradePenalty(item, clientParty, merchant, isSelling, inStore, supply, demand);
+
+            if (clientParty != null && clientParty.LeaderHero != null)
+            {
+                Hero leader = clientParty.LeaderHero;
+                EducationData education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(leader);
+                if (education.Lifestyle != null && education.Lifestyle.Equals(DefaultLifestyles.Instance.Gladiator))
+                {
+                    result *= 1.2f;
+                }
+            }
+
+            return result;
+        }
 
         public override float GetBasePriceFactor(ItemCategory itemCategory, float inStoreValue, float supply, float demand,
             bool isSelling, int transferValue)

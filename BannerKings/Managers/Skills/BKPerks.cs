@@ -131,6 +131,17 @@ namespace BannerKings.Managers.Skills
 
         #endregion Mercenary
 
+        #region  Gladiator
+
+        public PerkObject GladiatorPromisingAthlete { get; private set; }
+
+        public PerkObject GladiatorTourDeCalradia { get; private set; }
+
+        public PerkObject GladiatorCrowdsFavorite { get; private set; }
+
+        #endregion  Gladiator
+
+
         #region Lordship
 
         public PerkObject LordshipEconomicAdministration { get; private set; }
@@ -601,6 +612,44 @@ namespace BannerKings.Managers.Skills
                 SkillEffect.EffectIncrementType.AddFactor);
 
             #endregion Mercenary
+
+
+            #region Gladiator
+
+            GladiatorPromisingAthlete = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleGladiatorPromisingAthlete"));
+            GladiatorPromisingAthlete.InitializeNew("{=!}Promising Athlete", null,
+                80,
+                null,
+                "{=!}Gain 30% more profit from bets.",
+                SkillEffect.PerkRole.Personal, 3f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                "{=!}Gain 2 relations with a random notable on tournament victory.",
+                SkillEffect.PerkRole.Personal, 0.03f,
+                SkillEffect.EffectIncrementType.AddFactor);
+
+            GladiatorTourDeCalradia = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleGladiatorTourDeCalradia"));
+            GladiatorTourDeCalradia.InitializeNew("{=!}Tour de Calradia", null,
+                160,
+                null,
+                "{=!}After a tournament is finished, receive a notification of the neartest ongoing tournament.",
+                SkillEffect.PerkRole.Personal, 0f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                "{=ilKDq9f5}Double the amount of betting you can use in tournaments.",
+                SkillEffect.PerkRole.Personal, 0f,
+                SkillEffect.EffectIncrementType.AddFactor);
+
+            GladiatorCrowdsFavorite = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleGladiatorCrowdsFavorite"));
+            GladiatorCrowdsFavorite.InitializeNew("{=!}Crowds' Favorite", null,
+                240,
+                null,
+                "{=!}Gain double renown rewards for tournament victories.",
+                SkillEffect.PerkRole.Personal, 10f,
+                SkillEffect.EffectIncrementType.Add,
+                "{=!}Gain 10 influence from tournament victories.",
+                SkillEffect.PerkRole.Personal, 20f,
+                SkillEffect.EffectIncrementType.AddFactor);
+
+            #endregion Gladiator
         }
 
         public override void Initialize()
