@@ -77,13 +77,18 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
                         ChangeRelationAction.ApplyRelationChangeBetweenHeroes(actionTaker, clan.Leader, relationChangeForExecutingHero, true);
                 }
             }*/
+
+            if (actionTaker.GetPerkValue(BKPerks.Instance.TheologyRitesOfPassage))
+            {
+                actionTaker.Clan.AddRenown(5f);
+            }
         }
 
         public override bool MeetsCondition(Hero hero)
         {
             var data = BannerKingsConfig.Instance.ReligionsManager.GetFaithfulData(hero);
             return hero.IsAlive && !hero.IsChild && !hero.IsPrisoner && hero.PartyBelongedTo != null &&
-                   data != null && data.HasTimePassedForRite(GetRiteType(), GetTimeInterval()) && hero.IsPartyLeader &&
+                   data != null && data.HasTimePassedForRite(GetRiteType(), GetTimeInterval(hero)) && hero.IsPartyLeader &&
                    hero.PartyBelongedTo.PrisonRoster.TotalHeroes > 0;
             ;
         }
@@ -103,9 +108,15 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
             return RiteType.SACRIFICE;
         }
 
-        public override float GetTimeInterval()
+        public override float GetTimeInterval(Hero hero)
         {
-            return 2f;
+            float result = 2f;
+            if (hero.GetPerkValue(BKPerks.Instance.TheologyRitesOfPassage))
+            {
+                result -= 0.25f;
+            }
+
+            return result;
         }
 
         public override float GetPietyReward()

@@ -8,7 +8,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
         public abstract TextObject GetName();
         public abstract TextObject GetDescription();
         public abstract RiteType GetRiteType();
-        public abstract float GetTimeInterval();
+        public abstract float GetTimeInterval(Hero hero);
 
         public abstract void Execute(Hero executor);
         public abstract void SetDialogue();

@@ -666,7 +666,7 @@ namespace BannerKings.Managers.Skills
                 SkillEffect.EffectIncrementType.Add);
 
             TheologyLithurgy = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("TheologyLithurgy"));
-            TheologyLithurgy.InitializeNew("{=9TwjtYhb}Preacher", BKSkills.Instance.Lordship, 
+            TheologyLithurgy.InitializeNew("{=!}Lithurgy", BKSkills.Instance.Lordship, 
                 GetTierCost(5),
                 null,
                 "{=4hNMnjUh}Randomly receive relations with religious notables in your settlements.",

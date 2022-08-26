@@ -28,6 +28,11 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
             var piety = GetPietyReward();
             BannerKingsConfig.Instance.ReligionsManager.AddPiety(actionTaker, piety, true);
             actionTaker.AddSkillXp(BKSkills.Instance.Theology, piety * 1.2f);
+
+            if (actionTaker.GetPerkValue(BKPerks.Instance.TheologyRitesOfPassage))
+            {
+                actionTaker.Clan.AddRenown(5f);
+            }
         }
 
         public override void Execute(Hero executor)
@@ -48,7 +53,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
         {
             var data = BannerKingsConfig.Instance.ReligionsManager.GetFaithfulData(hero);
             var baseResult = hero.IsAlive && !hero.IsChild && !hero.IsPrisoner && hero.PartyBelongedTo != null &&
-                             data != null && data.HasTimePassedForRite(GetRiteType(), GetTimeInterval());
+                             data != null && data.HasTimePassedForRite(GetRiteType(), GetTimeInterval(hero));
             var hasItems = false;
             if (baseResult)
             {
@@ -82,9 +87,15 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
             return RiteType.OFFERING;
         }
 
-        public override float GetTimeInterval()
+        public override float GetTimeInterval(Hero hero)
         {
-            return 2f;
+            float result = 2f;
+            if (hero.GetPerkValue(BKPerks.Instance.TheologyRitesOfPassage))
+            {
+                result -= 0.25f;
+            }
+
+            return result;
         }
 
         public override void SetDialogue()

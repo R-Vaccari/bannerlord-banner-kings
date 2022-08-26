@@ -4,6 +4,8 @@ using System.Reflection;
 using BannerKings.Managers.Skills;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
+using TaleWorlds.CampaignSystem.Party;
+using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.Core;
 
 namespace BannerKings.Behaviours
@@ -12,11 +14,45 @@ namespace BannerKings.Behaviours
     {
         public override void RegisterEvents()
         {
+            CampaignEvents.DailyTickPartyEvent.AddNonSerializedListener(this, OnDailyTickParty);
+            CampaignEvents.HeroComesOfAgeEvent.AddNonSerializedListener(this, OnComesOfAge);
             CampaignEvents.OnGameLoadedEvent.AddNonSerializedListener(this, OnGameLoaded);
         }
 
         public override void SyncData(IDataStore dataStore)
         {
+        }
+
+        private void OnDailyTickParty(MobileParty party)
+        {
+            if (party.HasPerk(BKPerks.Instance.TheologyReligiousTeachings))
+            {
+                foreach (TroopRosterElement element in party.MemberRoster.GetTroopRoster())
+                {
+                    if (element.Character.IsHero)
+                    {
+                        var hero = element.Character.HeroObject;
+                        int skillValue = hero.GetSkillValue(BKSkills.Instance.Theology);
+                        if (skillValue < int.MaxValue)
+                        {
+                            hero.AddSkillXp(BKSkills.Instance.Theology, 2f);
+                        }
+                    }
+                }
+            }
+        }
+
+        private void OnComesOfAge(Hero hero)
+        {
+            if (hero.Father != null && hero.Father.GetPerkValue(BKPerks.Instance.TheologyReligiousTeachings))
+            {
+                hero.HeroDeveloper.AddAttribute(BKAttributes.Instance.Wisdom, 1, false);
+            }
+
+            if (hero.Mother != null && hero.Mother.GetPerkValue(BKPerks.Instance.TheologyReligiousTeachings))
+            {
+                hero.HeroDeveloper.AddAttribute(BKAttributes.Instance.Wisdom, 1, false);
+            }
         }
 
         private void OnGameLoaded(CampaignGameStarter starter)
