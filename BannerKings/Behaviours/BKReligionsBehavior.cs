@@ -249,7 +249,7 @@ namespace BannerKings.Behaviours
             var piety = ReligionsManager.GetPiety(religion, Hero.MainHero);
 
             var list = religion.Faith.GetSecondaryDivinities()
-                .Select(div => new InquiryElement(div, div.Name.ToString(), null, piety >= div.BlessingCost, new TextObject("{=oFfExhaM}{DESCRIPTION}\n{EFFECTS}").SetTextVariable("DESCRIPTION", div.Description)
+                .Select(div => new InquiryElement(div, div.Name.ToString(), null, piety >= div.BlessingCost(Hero.MainHero), new TextObject("{=oFfExhaM}{DESCRIPTION}\n{EFFECTS}").SetTextVariable("DESCRIPTION", div.Description)
                     .SetTextVariable("EFFECTS", div.Effects)
                     .ToString()))
                 .ToList();
@@ -298,15 +298,16 @@ namespace BannerKings.Behaviours
             var anyPossible = false;
             foreach (var divinity in religion.Faith.GetSecondaryDivinities())
             {
-                var optionPossible = piety >= divinity.BlessingCost;
+                var cost = divinity.BlessingCost(Hero.MainHero);
+                var optionPossible = piety >= cost;
                 if (optionPossible)
                 {
                     anyPossible = true;
                 }
 
-                if (divinity.BlessingCost < minPiety)
+                if (cost < minPiety)
                 {
-                    minPiety = divinity.BlessingCost;
+                    minPiety = cost;
                 }
             }
 

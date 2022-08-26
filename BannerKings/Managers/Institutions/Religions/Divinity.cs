@@ -1,31 +1,42 @@
+using BannerKings.Managers.Skills;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.Localization;
 using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Managers.Institutions.Religions
 {
-    public class Divinity
+    public class Divinity : BannerKingsObject
     {
-        [SaveableField(1)] private string id;
+        private int blessingCost;
 
-        public Divinity(string id, TextObject name, TextObject description, TextObject effects,
-            TextObject secondaryTitle = null, int blessingCost = 500)
+        public Divinity(string id) : base(id)
         {
-            this.id = id;
-            Name = name;
-            Description = description;
-            Effects = effects;
-            SecondaryTitle = secondaryTitle ?? new TextObject("{=!}");
-            BlessingCost = blessingCost;
         }
 
-        public int BlessingCost { get; }
+        public void Initialize(TextObject name, TextObject description, TextObject effects,
+            TextObject secondaryTitle = null, int blessingCost = 300)
+        {
+            Initialize(name, description);
+            Effects = effects;
+            SecondaryTitle = secondaryTitle ?? new TextObject("{=!}");
+            this.blessingCost = blessingCost;
+        }
 
-        public TextObject Name { get; }
+        public int BaseBlessingCost => blessingCost;
 
-        public TextObject Description { get; }
+        public int BlessingCost(Hero hero)
+        {
+            float baseCost = blessingCost;
+            if (hero.GetPerkValue(BKPerks.Instance.TheologyBlessed))
+            {
+                baseCost *= 0.9f;
+            }
 
-        public TextObject Effects { get; }
+            return (int)baseCost;
+        }
 
-        public TextObject SecondaryTitle { get; }
+        public TextObject Effects { get; private set; }
+
+        public TextObject SecondaryTitle { get; private set; }
     }
 }

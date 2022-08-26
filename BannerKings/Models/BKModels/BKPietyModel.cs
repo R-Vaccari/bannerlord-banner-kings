@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BannerKings.Managers.Skills;
+using System;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
@@ -9,10 +10,7 @@ namespace BannerKings.Models.BKModels
 {
     public class BKPietyModel : IReligionModel
     {
-        public ExplainedNumber CalculateEffect(Settlement settlement)
-        {
-            throw new NotImplementedException();
-        }
+        public ExplainedNumber CalculateEffect(Settlement settlement) => new ExplainedNumber();
 
         public ExplainedNumber CalculateEffect(Hero hero)
         {
@@ -43,6 +41,11 @@ namespace BannerKings.Models.BKModels
                 if (rel.FavoredCultures.Contains(hero.Culture))
                 {
                     result.Add(0.1f, GameTexts.FindText("str_culture"));
+                }
+
+                if (hero.GetPerkValue(BKPerks.Instance.TheologyFaithful))
+                {
+                    result.Add(0.2f, BKPerks.Instance.TheologyFaithful.Name);
                 }
             }
 

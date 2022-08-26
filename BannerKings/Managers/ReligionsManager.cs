@@ -107,8 +107,9 @@ namespace BannerKings.Managers
 
         public void PostInitialize()
         {
-            foreach (var rel in Religions.Keys.ToList())
+            foreach (var pair in Religions.ToList())
             {
+                var rel = pair.Key;
                 var faith = DefaultFaiths.Instance.GetById(rel.Faith.GetId());
                 var presets = CharacterObject.All.ToList().FindAll(x => x.Occupation == Occupation.Preacher && x.IsTemplate && x.StringId.Contains("bannerkings") && x.StringId.Contains(faith.GetId()));
                 foreach (var preset in presets)
@@ -118,6 +119,11 @@ namespace BannerKings.Managers
                 }
 
                 rel.PostInitialize(faith);
+
+                foreach(var keyPair in pair.Value)
+                {
+                    keyPair.Value.PostInitialize();
+                }
             }
 
             RefreshCaches();
@@ -205,7 +211,7 @@ namespace BannerKings.Managers
                 return;
             }
 
-            Religions[religion][hero].AddBlessing(divinity);
+            Religions[religion][hero].AddBlessing(divinity, hero);
             if (notify)
             {
                 MBInformationManager.AddQuickInformation(religion.Faith.GetBlessingQuickInformation()
