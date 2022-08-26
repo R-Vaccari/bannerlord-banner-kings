@@ -37,13 +37,14 @@ namespace BannerKings.Behaviours
 
         public int GetRosterCost(TroopRoster roster, Hero hero)
         {
-            int cost = 0;
+            float cost = 0;
             foreach (TroopRosterElement element in roster.GetTroopRoster())
             {
-                cost += Campaign.Current.Models.PartyWageModel.GetTroopRecruitmentCost(element.Character, hero);
+                cost += Campaign.Current.Models.PartyWageModel.GetTroopRecruitmentCost(element.Character, hero) 
+                    * (float)element.Number * 5f;
             }
 
-            return cost;
+            return (int)cost;
         }
 
         public TroopRoster GetMercenaryTemplateRoster(PartyTemplateObject template)
@@ -64,7 +65,8 @@ namespace BannerKings.Behaviours
             List<(PartyTemplateObject, TextObject)> templates = new List<(PartyTemplateObject, TextObject)>();
             foreach (Clan clan in Clan.All)
             {
-                if (clan.IsMinorFaction && clan.Culture == town.Culture && clan.DefaultPartyTemplate != null)
+                if (clan.IsMinorFaction && clan.Culture == town.Culture && clan.DefaultPartyTemplate != null
+                    && clan != Clan.PlayerClan)
                 {
                     templates.Add(new (clan.DefaultPartyTemplate, clan.Name));
                 }
@@ -92,7 +94,7 @@ namespace BannerKings.Behaviours
                 lastMercenaryRecruitment = new Dictionary<Town, CampaignTime>();
                 foreach (Town town in Town.AllTowns)
                 {
-                    lastMercenaryRecruitment.Add(town, CampaignTime.Never);
+                    lastMercenaryRecruitment.Add(town, CampaignTime.Now - CampaignTime.Weeks(1f));
                 }
             }
 
@@ -811,8 +813,27 @@ namespace BannerKings.Behaviours
                     .SetTextVariable("GOLD", cost);
 
 
-                elements.Add(new InquiryElement(roster, tuple.Item2.ToString(), identifier, true, hint.ToString()));
+                elements.Add(new InquiryElement(roster, tuple.Item2.ToString(), identifier,
+                    Hero.MainHero.Gold >= cost, hint.ToString()));
             }
+
+            MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
+                new TextObject("{=!}Recruit local mercenaries").ToString(),
+                new TextObject("{=!}Choose a mercenary lance to recruit. Available lances depend on the town's culture. Lances cost different prices and may differ in sizes. Lances become available again after a week after the last is recruited.").ToString(),
+                elements,
+                true,
+                1,
+                GameTexts.FindText("str_ok").ToString(),
+                string.Empty,
+                (List<InquiryElement> List) =>
+                {
+                    TroopRoster roster = (TroopRoster)List[0].Identifier;
+                    Hero.MainHero.ChangeHeroGold(-GetRosterCost(roster, Hero.MainHero));
+                    MobileParty.MainParty.MemberRoster.Add(roster);
+                },
+                null,
+                string.Empty
+                ));
 
             GameMenu.SwitchToMenu("bannerkings");
         }
