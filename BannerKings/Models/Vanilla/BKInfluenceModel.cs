@@ -42,7 +42,7 @@ namespace BannerKings.Models.Vanilla
                 education.Lifestyle.Equals(DefaultLifestyles.Instance.Mercenary))
             {
                 int mercenaryChange = MathF.Ceiling(clan.Influence * (1f / Campaign.Current.Models.ClanFinanceModel.RevenueSmoothenFraction()));
-                baseResult.Add((float)(mercenaryChange * 0.1f), new TextObject("{=!}{LIFESTYLE lifestyle")
+                baseResult.Add((float)(mercenaryChange * 0.1f), new TextObject("{=!}{LIFESTYLE} lifestyle")
                     .SetTextVariable("LIFESTYLE", DefaultLifestyles.Instance.Mercenary.Name));
             }
 
