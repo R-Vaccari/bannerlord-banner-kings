@@ -186,9 +186,9 @@ namespace BannerKings.Managers.Education.Lifestyles
                     BKPerks.Instance.MercenaryRansacker,
                     BKPerks.Instance.MercenaryFamousSellswords
                 },
-                new TextObject("{=mAta6M84}Reduced demesne weight of towns by {EFFECT1}%\nSettlement stability reduced by {EFFECT2}%"),
+                new TextObject("{=mAta6M84}Influence is {EFFECT1}% more profitable as mercenary\nSettlement stability reduced by {EFFECT2}%"),
                 20f, 
-                8f);
+                10f);
 
             Kheshig = new Lifestyle("lifestyle_kheshig");
             Kheshig.Initialize(new TextObject("{=sccoC5ta}Kheshig"), new TextObject("{=!}"),

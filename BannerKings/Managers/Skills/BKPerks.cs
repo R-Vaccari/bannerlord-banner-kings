@@ -582,7 +582,7 @@ namespace BannerKings.Managers.Skills
             MercenaryRansacker.InitializeNew("{=n9ZMPe6w}Ransacker", null, 
                 160, 
                 null,
-                "{=TAfrnnO4}Gain 10% more share of loot in victories.",
+                "{=TAfrnnO4}Killing enemies provides 10% more share battle contribution.",
                 SkillEffect.PerkRole.PartyOwner, 10f,
                 SkillEffect.EffectIncrementType.AddFactor,
                 "{=PawhUHjG}Raiding villages is 15% faster.",

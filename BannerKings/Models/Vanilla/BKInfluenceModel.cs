@@ -1,6 +1,7 @@
 using System;
 using BannerKings.Behaviours;
 using BannerKings.Managers.CampaignStart;
+using BannerKings.Managers.Education.Lifestyles;
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Villages;
 using BannerKings.Managers.Skills;
@@ -30,11 +31,22 @@ namespace BannerKings.Models.Vanilla
                 baseResult.Add(-5f, DefaultStartOptions.Instance.IndebtedLord.Name);
             }
 
+           
+
             var generalSupport = 0f;
             var generalAutonomy = 0f;
             float i = 0;
 
             var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(clan.Leader);
+            if (clan.IsUnderMercenaryService && clan.Leader != null && education.Lifestyle != null &&
+                education.Lifestyle.Equals(DefaultLifestyles.Instance.Mercenary))
+            {
+                int mercenaryChange = MathF.Ceiling(clan.Influence * (1f / Campaign.Current.Models.ClanFinanceModel.RevenueSmoothenFraction()));
+                baseResult.Add((float)(mercenaryChange * 0.1f), new TextObject("{=!}{LIFESTYLE lifestyle")
+                    .SetTextVariable("LIFESTYLE", DefaultLifestyles.Instance.Mercenary.Name));
+            }
+
+
             if (education.HasPerk(BKPerks.Instance.OutlawPlunderer))
             {
                 float bandits = 0;

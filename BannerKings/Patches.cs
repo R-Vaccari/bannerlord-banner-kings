@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using BannerKings.Managers.Education;
 using BannerKings.Managers.Helpers;
 using BannerKings.Managers.Skills;
 using BannerKings.Models.Vanilla;
@@ -15,6 +16,7 @@ using TaleWorlds.CampaignSystem.Election;
 using TaleWorlds.CampaignSystem.Extensions;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Issues;
+using TaleWorlds.CampaignSystem.MapEvents;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.Settlements.Workshops;
@@ -68,6 +70,30 @@ namespace BannerKings
                     }
 
                     return true;
+                }
+            }
+        }
+
+        namespace Perks
+        {
+            [HarmonyPatch(typeof(MapEventParty), "OnTroopKilled")]
+            internal class NameGeneratorPatch
+            {
+                private static void Postfix(MapEventParty __instance, UniqueTroopDescriptor troopSeed)
+                {
+                    Hero leader = __instance.Party.LeaderHero;
+                    if (leader == null)
+                    {
+                        return;
+                    }
+
+                    EducationData education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(leader);
+                    if (education.HasPerk(BKPerks.Instance.MercenaryRansacker) && 
+                        MBRandom.RandomFloat < 0.1f)
+                    {
+                        int contribution = __instance.ContributionToBattle;
+                        AccessTools.Field(__instance.GetType(), "_contributionToBattle").SetValue(__instance, contribution + 1);
+                    }
                 }
             }
         }

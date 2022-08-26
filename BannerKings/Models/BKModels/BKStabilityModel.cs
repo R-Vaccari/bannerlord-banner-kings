@@ -1,4 +1,5 @@
 using System.Linq;
+using BannerKings.Managers.Education.Lifestyles;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
 using TaleWorlds.CampaignSystem;
@@ -153,6 +154,12 @@ namespace BannerKings.Models.BKModels
                 if (education.Perks.Contains(BKPerks.Instance.CivilOverseer))
                 {
                     result.Add(0.05f, BKPerks.Instance.CivilOverseer.Name);
+                }
+
+                if (education.Lifestyle != null && education.Lifestyle.Equals(DefaultLifestyles.Instance.Mercenary))
+                {
+                    result.Add(-0.1f, new TextObject("{=!}{LIFESTYLE lifestyle")
+                        .SetTextVariable("LIFESTYLE", DefaultLifestyles.Instance.Mercenary.Name));
                 }
 
                 var demesneLimit = CalculateDemesneLimit(settlement.Owner).ResultNumber;

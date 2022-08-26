@@ -1,4 +1,5 @@
-﻿using BannerKings.Managers.Skills;
+﻿using BannerKings.Managers.Education;
+using BannerKings.Managers.Skills;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Party;
@@ -109,6 +110,12 @@ namespace BannerKings.Models.Vanilla
 
             if (buyerHero != null)
             {
+                EducationData education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(buyerHero);
+                if (troop.Occupation == Occupation.Mercenary && education.HasPerk(BKPerks.Instance.MercenaryLocalConnections))
+                {
+                    result.AddFactor(-0.1f, BKPerks.Instance.MercenaryLocalConnections.Name);
+                }
+
                 if (Utils.Helpers.IsRetinueTroop(troop))
                 {
                     result.AddFactor(0.20f);

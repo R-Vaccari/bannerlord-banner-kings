@@ -19,6 +19,11 @@ namespace BannerKings.Models.Vanilla
                 {
                     result *= 1.15f;
                 }
+
+                if (education.HasPerk(BKPerks.Instance.MercenaryRansacker))
+                {
+                    result *= 1.15f;
+                }
             }
 
 
