@@ -272,9 +272,9 @@ namespace BannerKings.UI.Court
                 }
             }
 
-            CourtInfo.Add(new InformationElement(new TextObject("{=!}Administrative costs:").ToString(), 
+            CourtInfo.Add(new InformationElement(new TextObject("{=7OQ7dN1T}Administrative costs:").ToString(), 
                 FormatValue(council.AdministrativeCosts),
-                new TextObject("{=!}Costs associated with payment of council members, deducted on all your fiefs' revenues.")
+                new TextObject("{=1zAZjJy9}Costs associated with payment of council members, deducted on all your fiefs' revenues.")
                 .ToString()));
 
             var royalExplanation = BannerKingsConfig.Instance.CouncilModel.IsCouncilRoyal(council.Owner.Clan);

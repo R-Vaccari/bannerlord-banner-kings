@@ -179,7 +179,7 @@ namespace BannerKings.Models.Vanilla
                     }
                 }
 
-                result.Add(taxes, new TextObject("{=!}Council wages"));
+                result.Add(taxes, new TextObject("{=L0Dwod0e}Council wages"));
             }
 
 

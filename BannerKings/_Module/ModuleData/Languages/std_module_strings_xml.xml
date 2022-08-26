@@ -615,7 +615,6 @@
     <string id="WvhXhUFS" text="Councillor role" />
     <string id="tYO5xwVe" text="Lifestyle" />
     <string id="FTx77EBz" text="{WORKSHOP} taxes to {CLAN}" />
-    <string id="wm92ApfD" text="Council wage to {NAME}" />
     <string id="rU692V1m" text="Taxes to {SUZERAIN}" />
     <string id="fNiANUo4" text="High Loyalty" />
     <string id="fETzfZzS" text="Low Loyalty" />
@@ -1301,5 +1300,16 @@
     <string id="xzyBM00Z" text="Make an offering of {ITEM}. {COUNT} must be offered for the rite to be fulfilled." />
     <string id="juJoP0yu" text="The History of Calradian Archery is a monography of most popular weapon around the continent: bows and arrows. Written by renowned archer, Rovin of Erithrys, the book describes the variety of bows and arrows used across the continent, along with the description of culture favorite variants. Each Calradian culture archery traditions and practical ways to use those in warfare is described in separate chapters. The author also introduces most of bow constructions invented in Calradia, from simplest mountain bows to rather expensive and complicated bows used by the nobility." />
     <string id="VXKu1ucX" text="Lycaron debate of 1074 is a record of events that occurred during a tournament of Lycaron in local inn. A group of Khan's Guards, entourage of young Khuzait warrior Monchug (who came to Lycaron to take part in the tournament) has gotten into discussion with Vlandian voulgiers serving in local garrison about whos swingeable polearm armament is better. Soon the present Cataphracts of the same garrison joined the discussion, with intention to prove that long, thrust lances are superior. The debate resulted in 12 deaths, 23 injured and maimed and, as declared unanimously by witnesses, was won by Gareth, a local townfolk, who was passing by the inn and entered carrying his trusty rake, to see what all the ruckus is about." />
+    <string id="B0KoTpr4" text="Recruit local mercenaries" />
+    <string id="ywMJqWA8" text="Recruit {COUNT} of the {NAME} mercenaries. This will cost {GOLD}{GOLD_ICON}" />
+    <string id="Ow7k6t9V" text="Choose a mercenary lance to recruit. Available lances depend on the town's culture. Lances cost different prices and may differ in sizes. Lances become available again after a week after the last is recruited." />
+    <string id="n3FhFzTo" text="Lithurgy" />
+    <string id="cCQO7noU" text="{LIFESTYLE} lifestyle" />
+    <string id="L0Dwod0e" text="Council wages" />
+    <string id="7OQ7dN1T" text="Administrative costs:" />
+    <string id="1zAZjJy9" text="Costs associated with payment of council members, deducted on all your fiefs' revenues." />
+    <string id="diqoFxAm" text="{HERO} {RELIGION_TEXT}." />
+    <string id="JoZGpNrK" text=" does not follow any faith" />
+    <string id="Ckk2iVKQ" text="is following the {FAITH}" />
   </strings>
 </base>
