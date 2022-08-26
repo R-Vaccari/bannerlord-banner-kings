@@ -217,7 +217,7 @@ namespace BannerKings.Behaviours
 
             // ------- ACTIONS --------
 
-            campaignGameStarter.AddGameMenuOption("bannerkings_actions", "action_local_connections", "{=!}Recruit local mercenaries",
+            campaignGameStarter.AddGameMenuOption("bannerkings_actions", "action_local_connections", "{=B0KoTpr4}Recruit local mercenaries",
                 MenuActionLocalConnectionsCondition, MenuActionLocalConnectionsConsequence);
 
             campaignGameStarter.AddGameMenuOption("bannerkings_actions", "action_study", "{=rThJzFpn}Study scholarship",
@@ -807,7 +807,7 @@ namespace BannerKings.Behaviours
                 CharacterCode characterCode = CampaignUIHelper.GetCharacterCode(tuple.Item1.Stacks[0].Character, false);
                 ImageIdentifier identifier = new ImageIdentifier(characterCode);
                 var cost = GetRosterCost(roster, Hero.MainHero);
-                var hint = new TextObject("{=!}Recruit {COUNT} of the {NAME} mercenaries. This will cost {GOLD}{GOLD_ICON}")
+                var hint = new TextObject("{=ywMJqWA8}Recruit {COUNT} of the {NAME} mercenaries. This will cost {GOLD}{GOLD_ICON}")
                     .SetTextVariable("COUNT", roster.TotalManCount)
                     .SetTextVariable("NAME", tuple.Item2)
                     .SetTextVariable("GOLD", cost);
@@ -818,8 +818,8 @@ namespace BannerKings.Behaviours
             }
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                new TextObject("{=!}Recruit local mercenaries").ToString(),
-                new TextObject("{=!}Choose a mercenary lance to recruit. Available lances depend on the town's culture. Lances cost different prices and may differ in sizes. Lances become available again after a week after the last is recruited.").ToString(),
+                new TextObject("{=B0KoTpr4}Recruit local mercenaries").ToString(),
+                new TextObject("{=Ow7k6t9V}Choose a mercenary lance to recruit. Available lances depend on the town's culture. Lances cost different prices and may differ in sizes. Lances become available again after a week after the last is recruited.").ToString(),
                 elements,
                 true,
                 1,

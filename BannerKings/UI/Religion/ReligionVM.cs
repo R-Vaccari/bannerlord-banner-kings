@@ -77,11 +77,11 @@ namespace BannerKings.UI.Religion
             }
         }
 
-        [DataSourceProperty] public string HeroFaithText => new TextObject("{=!}{HERO} {RELIGION_TEXT}.")
+        [DataSourceProperty] public string HeroFaithText => new TextObject("{=diqoFxAm}{HERO} {RELIGION_TEXT}.")
             .SetTextVariable("HERO", hero.Name)
             .SetTextVariable("RELIGION_TEXT", heroReligion == null ? 
-            new TextObject("{=!} does not follow any faith") :
-            new TextObject("{=!}is following the {FAITH}")
+            new TextObject("{=JoZGpNrK} does not follow any faith") :
+            new TextObject("{=Ckk2iVKQ}is following the {FAITH}")
             .SetTextVariable("FAITH", heroReligion.Faith.GetFaithName()))
             .ToString();
 

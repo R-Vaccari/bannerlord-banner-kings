@@ -158,7 +158,7 @@ namespace BannerKings.Models.BKModels
 
                 if (education.Lifestyle != null && education.Lifestyle.Equals(DefaultLifestyles.Instance.Mercenary))
                 {
-                    result.Add(-0.1f, new TextObject("{=!}{LIFESTYLE} lifestyle")
+                    result.Add(-0.1f, new TextObject("{=cCQO7noU}{LIFESTYLE} lifestyle")
                         .SetTextVariable("LIFESTYLE", DefaultLifestyles.Instance.Mercenary.Name));
                 }
 
