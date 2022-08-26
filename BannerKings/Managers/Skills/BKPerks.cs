@@ -210,7 +210,7 @@ namespace BannerKings.Managers.Skills
             }
         }
 
-        private void InitializePerks()
+        private void InitializeLifestylePerks()
         {
             #region Fian
 
@@ -605,7 +605,7 @@ namespace BannerKings.Managers.Skills
 
         public override void Initialize()
         {
-            InitializePerks();
+            InitializeLifestylePerks();
 
             #region Theology
 

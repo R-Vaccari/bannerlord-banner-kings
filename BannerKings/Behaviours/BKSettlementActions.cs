@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using BannerKings.Managers.Education;
 using BannerKings.Managers.Skills;
 using BannerKings.UI;
 using TaleWorlds.CampaignSystem;
@@ -7,7 +8,9 @@ using TaleWorlds.CampaignSystem.Encounters;
 using TaleWorlds.CampaignSystem.GameMenus;
 using TaleWorlds.CampaignSystem.Overlay;
 using TaleWorlds.CampaignSystem.Party;
+using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.CampaignSystem.ViewModelCollection;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -20,6 +23,7 @@ namespace BannerKings.Behaviours
         private static int actionHuntGame;
         private static CampaignTime actionStart = CampaignTime.Now;
         private float totalHours;
+        private Dictionary<Town, CampaignTime> lastMercenaryRecruitment;
 
         public override void RegisterEvents()
         {
@@ -28,10 +32,71 @@ namespace BannerKings.Behaviours
 
         public override void SyncData(IDataStore dataStore)
         {
+            dataStore.SyncData("bannerkings-towns-mercenary-recruitment", ref lastMercenaryRecruitment);
+        }
+
+        public int GetRosterCost(TroopRoster roster, Hero hero)
+        {
+            int cost = 0;
+            foreach (TroopRosterElement element in roster.GetTroopRoster())
+            {
+                cost += Campaign.Current.Models.PartyWageModel.GetTroopRecruitmentCost(element.Character, hero);
+            }
+
+            return cost;
+        }
+
+        public TroopRoster GetMercenaryTemplateRoster(PartyTemplateObject template)
+        {
+            TroopRoster roster = new TroopRoster(null);
+            foreach (PartyTemplateStack stack in template.Stacks)
+            {
+                TroopRosterElement element = new TroopRosterElement(stack.Character);
+                element.Number = stack.MinValue;
+                roster.Add(element);
+            }
+
+            return roster;
+        }
+
+        public List<(PartyTemplateObject, TextObject)> GetLocalMercenaryTemplates(Town town)
+        {
+            List<(PartyTemplateObject, TextObject)> templates = new List<(PartyTemplateObject, TextObject)>();
+            foreach (Clan clan in Clan.All)
+            {
+                if (clan.IsMinorFaction && clan.Culture == town.Culture && clan.DefaultPartyTemplate != null)
+                {
+                    templates.Add(new (clan.DefaultPartyTemplate, clan.Name));
+                }
+            }
+
+            return templates;
+        }
+
+        public bool CanRecruitLocalMercenaries(Hero hero)
+        {
+            EducationData education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(hero);
+            var hasMercenaries = false;
+            if (hero.CurrentSettlement != null && hero.CurrentSettlement.IsTown)
+            {
+                hasMercenaries = GetLocalMercenaryTemplates(hero.CurrentSettlement.Town).Count > 0 &&
+                    lastMercenaryRecruitment[hero.CurrentSettlement.Town].ElapsedWeeksUntilNow >= 1f;
+            }
+            return hasMercenaries && (hero.Clan.IsMinorFaction || education.HasPerk(BKPerks.Instance.MercenaryLocalConnections));
         }
 
         private void OnSessionLaunched(CampaignGameStarter campaignGameStarter)
         {
+            if (lastMercenaryRecruitment == null)
+            {
+                lastMercenaryRecruitment = new Dictionary<Town, CampaignTime>();
+                foreach (Town town in Town.AllTowns)
+                {
+                    lastMercenaryRecruitment.Add(town, CampaignTime.Never);
+                }
+            }
+
+
             campaignGameStarter.AddGameMenu("bannerkings", "Banner Kings", MenuBannerKingsInit);
             campaignGameStarter.AddGameMenu("bannerkings_actions", "Banner Kings", MenuBannerKingsInit);
 
@@ -149,6 +214,9 @@ namespace BannerKings.Behaviours
 
 
             // ------- ACTIONS --------
+
+            campaignGameStarter.AddGameMenuOption("bannerkings_actions", "action_local_connections", "{=!}Recruit local mercenaries",
+                MenuActionLocalConnectionsCondition, MenuActionLocalConnectionsConsequence);
 
             campaignGameStarter.AddGameMenuOption("bannerkings_actions", "action_study", "{=rThJzFpn}Study scholarship",
                 MenuActionStudyCondition, delegate { GameMenu.SwitchToMenu("bannerkings_wait_study"); });
@@ -565,7 +633,14 @@ namespace BannerKings.Behaviours
                    !Settlement.CurrentSettlement.IsVillage;
         }
 
-        private static bool MenuActionStudyCondition(MenuCallbackArgs args)
+        private bool MenuActionLocalConnectionsCondition(MenuCallbackArgs args)
+        {
+            args.optionLeaveType = GameMenuOption.LeaveType.Recruit;
+            var canRecruit = CanRecruitLocalMercenaries(Hero.MainHero);
+            return Settlement.CurrentSettlement.IsTown && canRecruit;
+        }
+
+        private bool MenuActionStudyCondition(MenuCallbackArgs args)
         {
             args.optionLeaveType = GameMenuOption.LeaveType.Wait;
             var seller = Campaign.Current.GetCampaignBehavior<BKEducationBehavior>()
@@ -670,13 +745,6 @@ namespace BannerKings.Behaviours
             return true;
         }
 
-        private static bool MenuCourtCondition(MenuCallbackArgs args)
-        {
-            args.optionLeaveType = GameMenuOption.LeaveType.RansomAndBribe;
-            var currentSettlement = Settlement.CurrentSettlement;
-            return currentSettlement.OwnerClan == Hero.MainHero.Clan && !currentSettlement.IsVillage;
-        }
-
         private static bool MenuTitlesCondition(MenuCallbackArgs args)
         {
             args.optionLeaveType = GameMenuOption.LeaveType.Surrender;
@@ -726,6 +794,29 @@ namespace BannerKings.Behaviours
 
         // -------- CONSEQUENCES ----------
 
+        private void MenuActionLocalConnectionsConsequence(MenuCallbackArgs args)
+        {
+            List<(PartyTemplateObject, TextObject)> templates = GetLocalMercenaryTemplates(Hero.MainHero.CurrentSettlement.Town);
+            List<InquiryElement> elements = new List<InquiryElement>();
+
+            foreach ((PartyTemplateObject, TextObject) tuple in templates)
+            {
+                TroopRoster roster = GetMercenaryTemplateRoster(tuple.Item1);
+                CharacterCode characterCode = CampaignUIHelper.GetCharacterCode(tuple.Item1.Stacks[0].Character, false);
+                ImageIdentifier identifier = new ImageIdentifier(characterCode);
+                var cost = GetRosterCost(roster, Hero.MainHero);
+                var hint = new TextObject("{=!}Recruit {COUNT} of the {NAME} mercenaries. This will cost {GOLD}{GOLD_ICON}")
+                    .SetTextVariable("COUNT", roster.TotalManCount)
+                    .SetTextVariable("NAME", tuple.Item2)
+                    .SetTextVariable("GOLD", cost);
+
+
+                elements.Add(new InquiryElement(roster, tuple.Item2.ToString(), identifier, true, hint.ToString()));
+            }
+
+            GameMenu.SwitchToMenu("bannerkings");
+        }
+
         private static void MenuActionMeetNobilityConsequence(MenuCallbackArgs args)
         {
             var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(Settlement.CurrentSettlement);
@@ -763,10 +854,6 @@ namespace BannerKings.Behaviours
             GameMenu.SwitchToMenu("bannerkings");
         }
 
-        private static void MenuCourtConsequence(MenuCallbackArgs args)
-        {
-            UIManager.Instance.ShowWindow("court");
-        }
 
         private static void MenuSettlementManageConsequence(MenuCallbackArgs args)
         {
