@@ -76,6 +76,27 @@ namespace BannerKings
 
         namespace Perks
         {
+
+            [HarmonyPatch(typeof(DefaultSkillLevelingManager), "OnHeroHealedWhileWaiting")]
+            internal class OnHeroHealedWhileWaitingPatch
+            {
+                private static bool Prefix(DefaultSkillLevelingManager __instance, MobileParty mobileParty, int healingAmount)
+                {
+                    float num = (float)Campaign.Current.Models.PartyHealingModel.GetSkillXpFromHealingTroop(mobileParty.Party);
+                    float num2 = (mobileParty.CurrentSettlement != null && !mobileParty.CurrentSettlement.IsCastle) ? 0.2f : 0.1f;
+                    if (mobileParty.EffectiveSurgeon != null)
+                    {
+                        float surgeon = (float)mobileParty.EffectiveSurgeon.Level;
+                        num *= (float)healingAmount * num2 * (1f + surgeon * 0.1f);
+
+                        AccessTools.Method(__instance.GetType(), "OnPartySkillExercised")
+                            .Invoke(null, new object[] { mobileParty, DefaultSkills.Medicine, num, SkillEffect.PerkRole.Surgeon });
+                    }
+                    
+                    return false;
+                }
+            }
+
             [HarmonyPatch(typeof(MapEventParty), "OnTroopKilled")]
             internal class NameGeneratorPatch
             {
