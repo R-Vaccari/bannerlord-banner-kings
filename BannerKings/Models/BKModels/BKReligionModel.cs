@@ -9,9 +9,15 @@ namespace BannerKings.Models.BKModels
 {
     public class BKReligionModel
     {
+
+        public ExplainedNumber CalculateTensionTarget(Settlement settlement)
+        {
+            return new ExplainedNumber();
+        }
+
         public ExplainedNumber CalculateFervor(Religion religion)
         {
-            var result = new ExplainedNumber(5f, true);
+            var result = new ExplainedNumber(0.05f, true);
 
             var villages = 0f;
             var castles = 0f;

@@ -123,7 +123,7 @@
 									</Children>
 								</ListPanel>
 
-								<GridWidget DataSource="{CultureInfo}" WidthSizePolicy="CoverChildren" HorizontalAlignment="Center"
+								<GridWidget DataSource="{ReligionInfo}" WidthSizePolicy="CoverChildren" HorizontalAlignment="Center"
 								            HeightSizePolicy="CoverChildren" DefaultCellWidth="150" DefaultCellHeight="30" MarginRight="85"
 								            ColumnCount="1" MarginTop="25">
 									<ItemTemplate>

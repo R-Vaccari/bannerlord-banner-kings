@@ -50,7 +50,7 @@
 													</Children>
 												</ButtonWidget>
 												
-												<ButtonWidget IsEnabled="@IsReligionAvailable" DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="160" SuggestedHeight="60" MarginRight="10" MarginLeft="10"  Brush="Header.Tab.Center" Command.Click="SetSelectedCategory" CommandParameter.Click="4" IsSelected="@IsReligionSelected" UpdateChildrenStates="true">
+												<ButtonWidget IsActive="@IsReligionAvailable" DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="160" SuggestedHeight="60" MarginRight="10" MarginLeft="10"  Brush="Header.Tab.Center" Command.Click="SetSelectedCategory" CommandParameter.Click="4" IsSelected="@IsReligionSelected" UpdateChildrenStates="true">
 													<Children>
 														<TextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginTop="3" Brush="Clan.TabControl.Text" Text="@ReligionText" />
 													</Children>
@@ -67,6 +67,7 @@
 										<EconomyPanel DataSource="{Economy}" IsVisible="false" />
 										<DemesnePanel DataSource="{Demesne}" IsVisible="false" />
 										<MilitaryPanel DataSource="{Military}" IsVisible="false" />
+										<ReligionPanel DataSource="{Religion}" IsVisible="false" />
 									</Children>
 								</Widget>
 							</Children>

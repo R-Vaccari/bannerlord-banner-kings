@@ -101,13 +101,13 @@ namespace BannerKings.Behaviours
         [HarmonyPatch(typeof(TournamentBehavior), "GetExpectedDenarsForBet")]
         internal class GetExpectedDenarsForBetlPatch
         {
-            private static void Postfix(ref int result, int bet)
+            private static void Postfix(ref int __result, int bet)
             {
                 EducationData education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(Hero.MainHero);
                 if (education.HasPerk(BKPerks.Instance.GladiatorPromisingAthlete))
                 {
-                    int baseResult = result;
-                    result = (int)(baseResult * 1.3f);
+                    int baseResult = __result;
+                    __result = (int)(baseResult * 1.3f);
                 }
             }
         }
@@ -115,12 +115,12 @@ namespace BannerKings.Behaviours
         [HarmonyPatch(typeof(TournamentBehavior), "GetMaximumBet")]
         internal class GetMaximumBetlPatch
         {
-            private static void Postfix(ref int result)
+            private static void Postfix(ref int __result)
             {
                 EducationData education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(Hero.MainHero);
                 if (education.HasPerk(BKPerks.Instance.GladiatorTourDeCalradia))
                 {
-                    result += 150;
+                    __result += 150;
                 }
             }
         }
