@@ -107,6 +107,7 @@ namespace BannerKings.Models.Vanilla
         public override int GetTroopRecruitmentCost(CharacterObject troop, Hero buyerHero, bool withoutItemCost = false)
         {
             var result = new ExplainedNumber(base.GetTroopRecruitmentCost(troop, buyerHero, withoutItemCost));
+            result.LimitMin(GetCharacterWage(troop.Tier) * 2f);
 
             if (buyerHero != null)
             {
