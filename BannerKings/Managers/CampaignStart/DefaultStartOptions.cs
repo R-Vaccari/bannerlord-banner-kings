@@ -23,7 +23,7 @@ namespace BannerKings.Managers.CampaignStart
 
         public StartOption Caravaneer { get; private set; }
 
-        public StartOption Gladiator { get; }
+        public StartOption Gladiator { get; private set; }
 
         public override IEnumerable<StartOption> All
         {
@@ -34,6 +34,7 @@ namespace BannerKings.Managers.CampaignStart
                 yield return Mercenary;
                 yield return Outlaw;
                 yield return Caravaneer;
+                yield return Gladiator;
             }
         }
 
@@ -211,6 +212,26 @@ namespace BannerKings.Managers.CampaignStart
                 0f,
                 null,
                 DefaultLifestyles.Instance.Caravaneer);
+
+            Gladiator = new StartOption("start_gladiator");
+            Gladiator.Initialize(new TextObject("{=!}Gladiator"),
+                new TextObject("{=!}You are an promising athlete, roaming the world looking for a good fight, gold and glory."),
+                new TextObject("{=!}Start with a couple mercenaries and food. Party size is reduced by 40% for 5 years. Gladiator lifestyle is kickstarted as part of your education."),
+                0, 6, 8, 50, 0f,
+                () =>
+                {
+                    var items = Game.Current.ObjectManager.GetObjectTypeList<ItemObject>();
+
+                    var characters = Game.Current.ObjectManager.GetObjectTypeList<CharacterObject>();
+                    var roster = MobileParty.MainParty.MemberRoster;
+                    roster.AddToCounts(characters.First(x => x.StringId == "mercenary_1"), 4);
+                    roster.AddToCounts(characters.First(x => x.StringId == "mercenary_2"), 4);
+
+                    MobileParty.MainParty.ItemRoster.Add(new ItemRosterElement(items.First(x => x.StringId == "oil"), 2));
+                },
+                0f,
+                null,
+                DefaultLifestyles.Instance.Gladiator);
         }
     }
 }

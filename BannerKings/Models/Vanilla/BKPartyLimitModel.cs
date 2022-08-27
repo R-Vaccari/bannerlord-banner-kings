@@ -1,4 +1,6 @@
-﻿using BannerKings.Components;
+﻿using BannerKings.Behaviours;
+using BannerKings.Components;
+using BannerKings.Managers.CampaignStart;
 using BannerKings.Managers.Skills;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
@@ -29,6 +31,11 @@ namespace BannerKings.Models.Vanilla
                 if (data.Perks.Contains(BKPerks.Instance.AugustCommander))
                 {
                     baseResult.Add(5f, BKPerks.Instance.AugustCommander.Name);
+                }
+
+                if (leader.Clan == Clan.PlayerClan && Campaign.Current.GetCampaignBehavior<BKCampaignStartBehavior>().HasDebuff(DefaultStartOptions.Instance.Gladiator))
+                {
+                    baseResult.AddFactor(-0.4f, DefaultStartOptions.Instance.Gladiator.Name);
                 }
             }
 
