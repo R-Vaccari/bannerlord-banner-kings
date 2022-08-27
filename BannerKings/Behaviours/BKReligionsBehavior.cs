@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using BannerKings.Managers;
+using BannerKings.Managers.Education;
 using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Institutions.Religions.Faiths.Rites;
 using HarmonyLib;
@@ -25,6 +26,8 @@ namespace BannerKings.Behaviours
 
         public override void RegisterEvents()
         {
+            CampaignEvents.HeroCreated.AddNonSerializedListener(this, OnHeroCreated);
+            CampaignEvents.HeroComesOfAgeEvent.AddNonSerializedListener(this, OnHeroComesOfAge);
             CampaignEvents.DailyTickHeroEvent.AddNonSerializedListener(this, OnDailyTickHero);
             CampaignEvents.OnGameLoadedEvent.AddNonSerializedListener(this, OnGameLoaded);
             CampaignEvents.DailyTickEvent.AddNonSerializedListener(this, DailyTick);
@@ -48,9 +51,25 @@ namespace BannerKings.Behaviours
             ReligionsManager.PostInitialize();
         }
 
+        private void OnHeroCreated(Hero hero, bool bornNaturally)
+        {
+            BannerKingsConfig.Instance.ReligionsManager.InitializeHeroFaith(hero);
+        }
+
+        private void OnHeroComesOfAge(Hero hero)
+        {
+            Religion startingReligion = null;
+            if (hero.Clan != null && hero != hero.Clan.Leader)
+            {
+                startingReligion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(hero.Clan.Leader);
+            }
+
+            BannerKingsConfig.Instance.ReligionsManager.InitializeHeroFaith(hero, startingReligion);
+        }
+
         private void OnDailyTickHero(Hero hero)
         {
-            if (hero.IsChild)
+            if (hero.IsChild || hero.Clan != null && hero.Clan == Clan.PlayerClan)
             {
                 return;
             }

@@ -78,31 +78,46 @@ namespace BannerKings.Managers
                     continue;
                 }
 
-                var id = rel.Faith.GetId();
-                if (id == "darusosian")
-                {
-                    Kingdom kingdom = null;
-                    if (hero.Clan != null)
-                    {
-                        kingdom = hero.Clan.Kingdom;
-                    }
-                    else if (hero.IsNotable && hero.CurrentSettlement is {OwnerClan: { }})
-                    {
-                        kingdom = hero.CurrentSettlement.OwnerClan.Kingdom;
-                    }
-                    else if (hero.IsWanderer && hero.BornSettlement is {OwnerClan: { }})
-                    {
-                        kingdom = hero.BornSettlement.OwnerClan.Kingdom;
-                    }
+                InitializeHeroFaith(hero, rel);
+            }
+        }
 
-                    if (kingdom == null || (id == "darusosian" && kingdom.StringId != "empire_s"))
-                    {
-                        continue;
-                    }
+        public void InitializeHeroFaith(Hero hero, Religion rel = null)
+        {
+            if (rel == null)
+            {
+                rel = GetIdealReligion(hero.Culture);
+                if (rel == null)
+                {
+                    return;
+                }
+            }
+
+
+            var id = rel.Faith.GetId();
+            if (id == "darusosian")
+            {
+                Kingdom kingdom = null;
+                if (hero.Clan != null)
+                {
+                    kingdom = hero.Clan.Kingdom;
+                }
+                else if (hero.IsNotable && hero.CurrentSettlement is { OwnerClan: { } })
+                {
+                    kingdom = hero.CurrentSettlement.OwnerClan.Kingdom;
+                }
+                else if (hero.IsWanderer && hero.BornSettlement is { OwnerClan: { } })
+                {
+                    kingdom = hero.BornSettlement.OwnerClan.Kingdom;
                 }
 
-                Religions[rel].Add(hero, new FaithfulData(100f));
+                if (kingdom == null || (id == "darusosian" && kingdom.StringId != "empire_s"))
+                {
+                    return;
+                }
             }
+
+            Religions[rel].Add(hero, new FaithfulData(100f));
         }
 
         public void PostInitialize()
