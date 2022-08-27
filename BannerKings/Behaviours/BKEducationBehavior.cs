@@ -124,10 +124,18 @@ namespace BannerKings.Behaviours
 
         private void OnHeroCreated(Hero hero, bool bornNaturally)
         {
-            BannerKingsConfig.Instance.EducationManager.InitHeroEducation(hero);
+            InitializeEducation(hero);
         }
 
         private void OnHeroComesOfAge(Hero hero)
+        {
+            InitializeEducation(hero, true);
+
+            ApplyScholarshipTutorEffect(hero);
+            ApplyScholarshipTeacherEffect(hero);
+        }
+
+        private void InitializeEducation(Hero hero, bool addExtraLanguages = false)
         {
             Dictionary<Language, float> startingLanguages = null;
             if (hero.Clan != null && hero != hero.Clan.Leader)
@@ -139,24 +147,24 @@ namespace BannerKings.Behaviours
                 var native = BannerKingsConfig.Instance.EducationManager.GetNativeLanguage(hero.Culture);
                 startingLanguages.Add(native, 1f);
 
-                foreach (var tuple in leaderEducation.Languages)
+                if (addExtraLanguages)
                 {
-                    if (tuple.Key == native)
+                    foreach (var tuple in leaderEducation.Languages)
                     {
-                        continue;
-                    }
+                        if (tuple.Key == native)
+                        {
+                            continue;
+                        }
 
-                    if (tuple.Value > 0.5f && MBRandom.RandomFloat < 0.15f)
-                    {
-                        startingLanguages.Add(tuple.Key, MBRandom.RandomFloatRanged(0.5f, tuple.Value));
+                        if (tuple.Value > 0.5f && MBRandom.RandomFloat < 0.15f)
+                        {
+                            startingLanguages.Add(tuple.Key, MBRandom.RandomFloatRanged(0.5f, tuple.Value));
+                        }
                     }
                 }
             }
 
             BannerKingsConfig.Instance.EducationManager.InitHeroEducation(hero, startingLanguages);
-
-            ApplyScholarshipTutorEffect(hero);
-            ApplyScholarshipTeacherEffect(hero);
         }
 
         private void OnHeroKilled(Hero victim, Hero killer, KillCharacterAction.KillCharacterActionDetail detail, bool showNotification = true)

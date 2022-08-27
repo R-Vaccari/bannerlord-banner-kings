@@ -53,10 +53,20 @@ namespace BannerKings.Behaviours
 
         private void OnHeroCreated(Hero hero, bool bornNaturally)
         {
-            BannerKingsConfig.Instance.ReligionsManager.InitializeHeroFaith(hero);
+            InitializeFaith(hero);
         }
 
         private void OnHeroComesOfAge(Hero hero)
+        {
+            if (BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(hero) != null)
+            {
+                return;
+            }
+
+            InitializeFaith(hero);
+        }
+
+        private void InitializeFaith(Hero hero)
         {
             Religion startingReligion = null;
             if (hero.Clan != null && hero != hero.Clan.Leader)
