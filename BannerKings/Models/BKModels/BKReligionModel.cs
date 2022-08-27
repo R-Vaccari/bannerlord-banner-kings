@@ -1,4 +1,5 @@
 using BannerKings.Managers.Institutions.Religions;
+using BannerKings.Managers.Institutions.Religions.Faiths;
 using BannerKings.Managers.Skills;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -9,15 +10,63 @@ namespace BannerKings.Models.BKModels
 {
     public class BKReligionModel
     {
-
-        public ExplainedNumber CalculateTensionTarget(Settlement settlement)
+        public ExplainedNumber CalculateNotableFaithWeightFactor(Settlement settlement, Hero notable)
         {
-            return new ExplainedNumber();
+            ExplainedNumber result = new ExplainedNumber();
+            result.LimitMin(0f);
+            result.LimitMax(1f);
+
+            
+
+            return result;
+        }
+
+        public ExplainedNumber CalculateTensionTarget(ReligionData data)
+        {
+            ExplainedNumber result = new ExplainedNumber();
+            result.LimitMin(0f);
+            result.LimitMax(1f);
+
+            var dominant = data.DominantReligion;
+            var dominantShare = data.Religions[dominant];
+            result.Add(1f - dominantShare, new TextObject("{=!}Dominant faith's share"));
+
+            foreach (var tuple in data.Religions)
+            {
+                var rel = tuple.Key;
+                if (rel == dominant)
+                {
+                    continue;
+                }
+
+                var tensionFactor = GetStanceTensionFactor(dominant.Faith.GetStance(rel.Faith));
+                if (tensionFactor != 0f)
+                {
+                    result.AddFactor(tuple.Value * tensionFactor, rel.Faith.GetFaithName());
+                }
+            }
+
+            return result;
+        }
+
+        private float GetStanceTensionFactor(FaithStance stance)
+        {
+            switch (stance)
+            {
+                case FaithStance.Tolerated:
+                    return 0f;
+                case FaithStance.Hostile:
+                    return 1f;
+                default:
+                    return 0.5f;
+            }
         }
 
         public ExplainedNumber CalculateFervor(Religion religion)
         {
             var result = new ExplainedNumber(0.05f, true);
+            result.LimitMin(0f);
+            result.LimitMax(1f);
 
             var villages = 0f;
             var castles = 0f;
@@ -103,6 +152,20 @@ namespace BannerKings.Models.BKModels
             var result = new ExplainedNumber(0f, true);
             result.Add(religion.Fervor.ResultNumber * 100f, new TextObject("{=AfsRi9wL}Fervor"));
 
+            foreach (var notable in settlement.Notables)
+            {
+                if (notable.IsPreacher)
+                {
+                    continue;
+                }
+
+                Religion rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(notable);
+                if (rel != null && rel == religion)
+                {
+                    result.Add(GetNotableFactor(notable, settlement), notable.Name);
+                }
+            }
+
             Hero owner = null;
             if (settlement.OwnerClan != null)
             {
@@ -114,7 +177,7 @@ namespace BannerKings.Models.BKModels
                 var rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(owner);
                 if (rel != null && rel == religion)
                 {
-                    result.AddFactor(30f, new TextObject("{=tKhBP7mF}Owner's faith"));
+                    result.Add(50f, new TextObject("{=tKhBP7mF}Owner's faith"));
                 }
 
                 if (owner.GetPerkValue(BKPerks.Instance.TheologyPreacher))
@@ -126,9 +189,22 @@ namespace BannerKings.Models.BKModels
             return result;
         }
 
+        public float GetNotableFactor(Hero notable, Settlement settlement)
+        {
+            var totalPower = 0f;
+            foreach (Hero hero in settlement.Notables)
+            {
+                totalPower += hero.Power;
+            }
+
+            return (settlement.Notables.Count * 25f) * (notable.Power / totalPower);
+        }
+
         public ExplainedNumber CalculateReligionConversion(Religion religion, Settlement settlement, float diff)
         {
             var result = new ExplainedNumber(0f, true);
+            result.LimitMin(0f);
+            result.LimitMax(1f);
             if (diff > 0f)
             {
                 result.LimitMax(diff);

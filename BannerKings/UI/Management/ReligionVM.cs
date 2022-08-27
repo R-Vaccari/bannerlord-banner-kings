@@ -1,10 +1,7 @@
 using BannerKings.Managers.Populations;
-using BannerKings.Models.BKModels;
-using BannerKings.UI.Items;
 using BannerKings.UI.Items.UI;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
-using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
@@ -12,7 +9,7 @@ namespace BannerKings.UI.Management
 {
     public class ReligionVM : BannerKingsViewModel
     {
-        private MBBindingList<PopulationInfoVM> classesList;
+        private MBBindingList<InformationElement> notablesList;
         private MBBindingList<InformationElement> cultureInfo;
         private MBBindingList<InformationElement> religionsList;
         private readonly Settlement settlement;
@@ -21,7 +18,7 @@ namespace BannerKings.UI.Management
 
         public ReligionVM(PopulationData data, Settlement _settlement, bool _isSelected) : base(data, _isSelected)
         {
-            classesList = new MBBindingList<PopulationInfoVM>();
+            notablesList = new MBBindingList<InformationElement>();
             religionsList = new MBBindingList<InformationElement>();
             cultureInfo = new MBBindingList<InformationElement>();
             statsInfo = new MBBindingList<InformationElement>();
@@ -29,7 +26,9 @@ namespace BannerKings.UI.Management
             RefreshValues();
         }
 
-       
+        [DataSourceProperty]
+        public string FaithText => new TextObject("{=OKw2P9m1}Faith").ToString();
+
 
         [DataSourceProperty]
         public MBBindingList<InformationElement> ReligionList
@@ -46,14 +45,14 @@ namespace BannerKings.UI.Management
         }
 
         [DataSourceProperty]
-        public MBBindingList<PopulationInfoVM> PopList
+        public MBBindingList<InformationElement> NotablesList
         {
-            get => classesList;
+            get => notablesList;
             set
             {
-                if (value != classesList)
+                if (value != notablesList)
                 {
-                    classesList = value;
+                    notablesList = value;
                     OnPropertyChangedWithValue(value);
                 }
             }
@@ -90,19 +89,18 @@ namespace BannerKings.UI.Management
         public override void RefreshValues()
         {
             base.RefreshValues();
-            
-
             if (data.ReligionData?.Religions == null)
             {
                 return;
             }
 
-            PopList.Clear();
+            NotablesList.Clear();
             ReligionList.Clear();
             ReligionInfo.Clear();
             StatsInfo.Clear();
 
             float totalFaithsWeight = 0f;
+            
             foreach (var pair in data.ReligionData.Religions)
             {
                 totalFaithsWeight += BannerKingsConfig.Instance.ReligionModel.CalculateReligionWeight(pair.Key, settlement)
@@ -116,17 +114,37 @@ namespace BannerKings.UI.Management
                     .SetTextVariable("PRESENCE", FormatValue(pair.Value))
                     .ToString()));
             }
-                
+
+            foreach (var notable in settlement.Notables)
+            {
+                Managers.Institutions.Religions.Religion rel = BannerKingsConfig.Instance.ReligionsManager
+                    .GetHeroReligion(notable);
+
+                if (rel == null)
+                {
+                    continue;
+                }
+
+                float factor = BannerKingsConfig.Instance.ReligionModel.GetNotableFactor(notable, settlement);
+                var result = FormatValue(factor / totalFaithsWeight);
+                NotablesList.Add(new InformationElement(
+                    notable.Name.ToString(),
+                    result,
+                    new TextObject("{=!}{HERO} holds sway over {PERCENTAGE} of the population. Changing their faith would strengthen the new faith's grip in the settlement.")
+                    .SetTextVariable("HERO", notable.Name)
+                    .SetTextVariable("PERCENTAGE", result)
+                    .ToString()));
+            }
 
 
-            StatsInfo.Add(new InformationElement("{=QxLXQ67c}Population Growth:",
-                new BKGrowthModel().CalculateEffect(settlement, data).ResultNumber.ToString(),
-                "{=FiU5oGi9}The population growth of your settlement on a daily basis, distributed among the classes."));
-
-            StatsInfo.Add(new InformationElement("{=J1VG2giN}Foreigner Ratio:",
-                FormatValue(new BKForeignerModel().CalculateEffect(settlement).ResultNumber),
-                "{=gXeYeB24}Merchant and freemen foreigners that refuse to be assimilated, but have a living in this settlement."));
-
+            ExplainedNumber tension = BannerKingsConfig.Instance.ReligionModel.CalculateTensionTarget(data.ReligionData);
+            StatsInfo.Add(new InformationElement(new TextObject("{=!}Religious Tension:").ToString(),
+                FormatValue(tension.ResultNumber),
+                new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
+                    .SetTextVariable("TEXT",
+                        new TextObject("{=!}Tensions between the different faiths in this settlement. The less homogenous the population's faith is, the more tensions there are. Tensions are also affected by the dominant religion's view on the other faiths. Tolerated faiths do not incur extra tensions. Untolerated faiths do, and hostile faiths incur a lot of tension. Religious tensions will significantly affect your settlement's loyalty and performance."))
+                    .SetTextVariable("EXPLANATIONS", tension.GetExplanations())
+                    .ToString()));
 
 
             Managers.Institutions.Religions.Religion dominant = data.ReligionData.DominantReligion;

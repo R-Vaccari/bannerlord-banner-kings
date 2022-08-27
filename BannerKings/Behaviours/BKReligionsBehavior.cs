@@ -11,6 +11,7 @@ using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
+using TaleWorlds.Engine;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Behaviours
@@ -24,6 +25,7 @@ namespace BannerKings.Behaviours
 
         public override void RegisterEvents()
         {
+            CampaignEvents.DailyTickHeroEvent.AddNonSerializedListener(this, OnDailyTickHero);
             CampaignEvents.OnGameLoadedEvent.AddNonSerializedListener(this, OnGameLoaded);
             CampaignEvents.DailyTickEvent.AddNonSerializedListener(this, DailyTick);
             CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, OnSessionLaunched);
@@ -44,6 +46,41 @@ namespace BannerKings.Behaviours
         private void OnGameLoaded(CampaignGameStarter starter)
         {
             ReligionsManager.PostInitialize();
+        }
+
+        private void OnDailyTickHero(Hero hero)
+        {
+            if (hero.IsChild)
+            {
+                return;
+            }
+
+            Religion rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(hero);
+            if (rel == null)
+            {
+
+                if (hero.Clan != null && hero != hero.Clan.Leader)
+                {
+                    Religion leaderRel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(hero.Clan.Leader);
+                    if (leaderRel != null)
+                    {
+                        BannerKingsConfig.Instance.ReligionsManager.AddToReligion(hero, leaderRel, 100f);
+                        return;
+                    }
+                }
+
+
+                AddHeroToIdealReligion(hero);
+            }
+        }
+
+        private void AddHeroToIdealReligion(Hero hero)
+        {
+            Religion ideal = BannerKingsConfig.Instance.ReligionsManager.GetIdealReligion(hero.Culture);
+            if (ideal != null)
+            {
+                BannerKingsConfig.Instance.ReligionsManager.AddToReligion(hero, ideal, 100f);
+            }
         }
 
         private void OnHeroKilled(Hero victim, Hero killer, KillCharacterAction.KillCharacterActionDetail detail, bool showNotification = true)

@@ -152,6 +152,11 @@ namespace BannerKings.Managers
             }
         }
 
+        public void AddToReligion(Hero hero, Religion religion, float piety)
+        {
+            Religions[religion].Add(hero, new FaithfulData(piety));
+        }
+
         public void ShowPopup()
         {
             if (GetHeroReligion(Hero.MainHero) != null)

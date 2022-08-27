@@ -44,11 +44,11 @@
 						           StackLayout.LayoutMethod="VerticalBottomToTop" DoNotAcceptEvents="true">
 							<Children>
 
-								<GridWidget Id="ClassesList" DataSource="{PopList}" WidthSizePolicy="CoverChildren"
+								<GridWidget Id="ClassesList" DataSource="{NotablesList}" WidthSizePolicy="CoverChildren"
 								            HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" DefaultCellWidth="100"
 								            DefaultCellHeight="25" MarginRight="80" ColumnCount="1" MarginTop="40">
 									<ItemTemplate>
-										<PopulationClassElement />
+										<InformationElement />
 									</ItemTemplate>
 								</GridWidget>
 
@@ -116,7 +116,7 @@
 										        Sprite="SPGeneral\TownManagement\horizontal_divider" />
 										<RichTextWidget DoNotAcceptEvents="true" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren"
 										                HorizontalAlignment="Center" VerticalAlignment="Center" Brush="OverlayPopup.ButtonText"
-										                Brush.FontSize="20" Text="Culture" />
+										                Brush.FontSize="20" Text="@FaithText" />
 										<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="7" MarginLeft="5"
 										        MarginRight="5" VerticalAlignment="Bottom" PositionYOffset="7"
 										        Sprite="SPGeneral\TownManagement\horizontal_divider" />
