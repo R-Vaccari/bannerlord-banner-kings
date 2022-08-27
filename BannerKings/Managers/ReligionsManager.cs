@@ -167,9 +167,52 @@ namespace BannerKings.Managers
             }
         }
 
-        public void AddToReligion(Hero hero, Religion religion, float piety)
+        public void ExecuteRemoveHero(Hero hero, bool isConversion = false)
         {
-            Religions[religion].Add(hero, new FaithfulData(piety));
+            var rel = GetHeroReligion(hero);
+            if (rel != null)
+            {
+                Religions[rel].Remove(hero);
+                if (HeroesCache != null)
+                {
+                    HeroesCache.Remove(hero);
+                }
+            }
+        }
+
+        public void ExecuteAddToReligion(Hero hero, Religion religion)
+        {
+            Religions[religion].Add(hero, new FaithfulData(0f));
+            if (HeroesCache != null)
+            {
+                HeroesCache.Add(hero, religion);
+            }
+        }
+
+        public void AddToReligion(Hero hero, Religion religion)
+        {
+            ExecuteRemoveHero(hero);
+            ExecuteAddToReligion(hero, religion);
+
+            if (hero.Clan != null)
+            {
+                if (hero.Clan == Clan.PlayerClan)
+                {
+                    MBInformationManager.AddQuickInformation(new TextObject("{=!}{HERO} has converted to the {FAITH} faith.")
+                            .SetTextVariable("HERO", hero.Name)
+                            .SetTextVariable("FAITH", religion.Faith.GetFaithName()),
+                        0, hero.CharacterObject, "event:/ui/notification/relation");
+                }
+
+                if (hero == hero.Clan.Leader)
+                {
+                    hero.Clan.Renown -= 100f;
+                }
+                else
+                {
+                    hero.Clan.Renown -= 50f;
+                }
+            }
         }
 
         public void ShowPopup()
@@ -181,7 +224,7 @@ namespace BannerKings.Managers
 
             var elements = Religions.Keys.ToList()
                 .Select(religion => new InquiryElement(religion, new TextObject("{=Eu97WkgX}{RELIGION} - {PIETY} piety").SetTextVariable("RELIGION", religion.Faith.GetFaithName())
-                    .SetTextVariable("PIETY", GetPiety(religion))
+                    .SetTextVariable("PIETY", GetStartingPiety(religion))
                     .ToString(), null, true, religion.Faith.GetFaithDescription().ToString()))
                 .ToList();
 
@@ -193,18 +236,23 @@ namespace BannerKings.Managers
                 GameTexts.FindText("str_done").ToString(), string.Empty, delegate(List<InquiryElement> element)
                 {
                     var religion = (Religion) element[0].Identifier;
-                    Religions[religion].Add(Hero.MainHero, new FaithfulData(GetPiety(religion)));
+                    Religions[religion].Add(Hero.MainHero, new FaithfulData(GetStartingPiety(religion)));
                 }, null));
         }
 
-        private int GetPiety(Religion religion)
+        private int GetStartingPiety(Religion religion, Hero hero = null)
         {
+            if (hero == null)
+            {
+                hero = Hero.MainHero;
+            }
+
             var piety = 0;
-            if (religion.MainCulture == Hero.MainHero.Culture)
+            if (religion.MainCulture == hero.Culture)
             {
                 piety = 100;
             }
-            else if (religion.FavoredCultures.Contains(Hero.MainHero.Culture))
+            else if (religion.FavoredCultures.Contains(hero.Culture))
             {
                 piety = 50;
             }
@@ -283,14 +331,7 @@ namespace BannerKings.Managers
             return Religions[religion].ContainsKey(hero);
         }
 
-        public void RemoveHero(Hero hero)
-        {
-            var rel = GetHeroReligion(hero);
-            if (rel != null)
-            {
-                Religions[rel].Remove(hero);
-            }
-        }
+        
 
         public void AddPiety(Religion rel, Hero hero, float piety, bool notifyPlayer = false)
         {

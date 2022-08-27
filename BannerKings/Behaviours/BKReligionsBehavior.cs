@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using BannerKings.Managers;
-using BannerKings.Managers.Education;
 using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Institutions.Religions.Faiths.Rites;
 using HarmonyLib;
@@ -12,7 +11,6 @@ using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
-using TaleWorlds.Engine;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Behaviours
@@ -20,7 +18,6 @@ namespace BannerKings.Behaviours
     public class BKReligionsBehavior : CampaignBehaviorBase
     {
         private static ReligionsManager ReligionsManager => BannerKingsConfig.Instance.ReligionsManager;
-
         private Divinity selectedDivinity;
         private Rite selectedRite;
 
@@ -63,7 +60,7 @@ namespace BannerKings.Behaviours
 
         private void OnHeroComesOfAge(Hero hero)
         {
-            if (BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(hero) != null)
+            if (ReligionsManager.GetHeroReligion(hero) != null)
             {
                 return;
             }
@@ -79,7 +76,7 @@ namespace BannerKings.Behaviours
                 startingReligion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(hero.Clan.Leader);
             }
 
-            BannerKingsConfig.Instance.ReligionsManager.InitializeHeroFaith(hero, startingReligion);
+            ReligionsManager.InitializeHeroFaith(hero, startingReligion);
         }
 
         private void OnDailyTickHero(Hero hero)
@@ -98,7 +95,7 @@ namespace BannerKings.Behaviours
                     Religion leaderRel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(hero.Clan.Leader);
                     if (leaderRel != null)
                     {
-                        BannerKingsConfig.Instance.ReligionsManager.AddToReligion(hero, leaderRel, 100f);
+                        ReligionsManager.AddToReligion(hero, leaderRel);
                         return;
                     }
                 }
@@ -113,13 +110,13 @@ namespace BannerKings.Behaviours
             Religion ideal = BannerKingsConfig.Instance.ReligionsManager.GetIdealReligion(hero.Culture);
             if (ideal != null)
             {
-                BannerKingsConfig.Instance.ReligionsManager.AddToReligion(hero, ideal, 100f);
+                ReligionsManager.AddToReligion(hero, ideal);
             }
         }
 
         private void OnHeroKilled(Hero victim, Hero killer, KillCharacterAction.KillCharacterActionDetail detail, bool showNotification = true)
         {
-            ReligionsManager.RemoveHero(victim);
+            ReligionsManager.ExecuteRemoveHero(victim);
         }
 
         private void DailyTick()
@@ -216,7 +213,7 @@ namespace BannerKings.Behaviours
             starter.AddDialogLine("bk_answer_induction_2", "bk_preacher_asked_induction_last",
                 "hero_main_options",
                 "{=6d9H5id0}{CLERGYMAN_INDUCTION_LAST}",
-                IsPreacher, null);
+                IsPreacher, InductionOnConsequence);
 
 
             starter.AddPlayerLine("bk_question_boon", "hero_main_options", "bk_preacher_asked_boon",
@@ -312,6 +309,13 @@ namespace BannerKings.Behaviours
                 .SetTextVariable("POSSIBLE", result.Item2)
                 .SetTextVariable("CURRENT_FAITH", playerReligion.Faith.GetFaithName());
             return true;
+        }
+
+        private void InductionOnConsequence()
+        {
+            var clergyman = ReligionsManager.GetClergymanFromHeroHero(Hero.OneToOneConversationHero);
+            var religion = ReligionsManager.GetClergymanReligion(clergyman);
+            ReligionsManager.AddToReligion(Hero.MainHero, religion);
         }
 
         private void BlessingPositiveAnswerOnConsequence()
@@ -472,25 +476,8 @@ namespace BannerKings.Behaviours
                 .SetTextVariable("RITES", sb.ToString())));
         }
 
-        private bool CanPerformRite(RiteType rite)
-        {
-            var possible = false;
-            var clergyman = ReligionsManager.GetClergymanFromHeroHero(Hero.OneToOneConversationHero);
-            if (clergyman == null)
-            {
-                return false;
-            }
 
-            var religion = ReligionsManager.GetClergymanReligion(clergyman);
-            if (religion != null)
-            {
-                possible = religion.Rites.Any(x => x.GetRiteType() == rite);
-            }
-
-            return possible;
-        }
-
-        private static bool IsPreacher()
+        private bool IsPreacher()
         {
             return Hero.OneToOneConversationHero.IsPreacher &&
                    BannerKingsConfig.Instance.ReligionsManager != null &&
