@@ -138,7 +138,7 @@ namespace BannerKings.Behaviours
         private void InitializeEducation(Hero hero, bool addExtraLanguages = false)
         {
             Dictionary<Language, float> startingLanguages = null;
-            if (hero.Clan != null && hero != hero.Clan.Leader)
+            if (hero.Clan != null && hero != hero.Clan.Leader && hero.Clan.Leader != null)
             {
                 hero.Culture = hero.Clan.Leader.Culture;
                 startingLanguages = new Dictionary<Language, float>();
