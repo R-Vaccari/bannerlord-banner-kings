@@ -23,12 +23,20 @@ namespace BannerKings.Managers
 
         [SaveableProperty(1)] private Dictionary<Hero, EducationData> Educations { get; set; }
 
-        public EducationData InitHeroEducation(Hero hero)
+        public EducationData InitHeroEducation(Hero hero, Dictionary<Language, float> startingLanguages = null)
         {
             if (Educations.ContainsKey(hero))
             {
                 return null;
             }
+
+            if (startingLanguages != null)
+            {
+                var startData = new EducationData(hero, startingLanguages);
+                Educations.Add(hero, startData);
+                return startData;
+            }
+
 
             var languages = new Dictionary<Language, float>();
             var native = DefaultLanguages.Instance.All.FirstOrDefault(x => x.Culture == hero.Culture) ?? DefaultLanguages.Instance.Calradian;
@@ -41,10 +49,17 @@ namespace BannerKings.Managers
                 {
                     languages.Add(DefaultLanguages.Instance.Calradian, MBRandom.RandomFloatRanged(0.5f, 1f));
                 }
+
+                if (hero.Culture.StringId == "sturgia" && MBRandom.RandomFloat < 0.05f)
+                {
+                    languages.Add(DefaultLanguages.Instance.Vakken, MBRandom.RandomFloatRanged(0.5f, 1f));
+                }
             }
 
-            if (hero.Occupation is Occupation.Lord or Occupation.Wanderer)
+            if (hero.Occupation is Occupation.Wanderer && MBRandom.RandomFloat < 0.1f)
             {
+                languages.Add(DefaultLanguages.Instance.All.ToList().GetRandomElementWithPredicate(x => x != native),
+                    MBRandom.RandomFloatRanged(0.5f, 1f));
             }
 
             var data = new EducationData(hero, languages);

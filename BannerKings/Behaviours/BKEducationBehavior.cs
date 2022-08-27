@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
+using BannerKings.Managers.Education;
 using BannerKings.Managers.Education.Books;
+using BannerKings.Managers.Education.Languages;
 using BannerKings.Managers.Skills;
 using HarmonyLib;
 using TaleWorlds.CampaignSystem;
@@ -24,6 +26,7 @@ namespace BannerKings.Behaviours
 
         public override void RegisterEvents()
         {
+            CampaignEvents.HeroCreated.AddNonSerializedListener(this, OnHeroCreated)
             CampaignEvents.DailyTickHeroEvent.AddNonSerializedListener(this, OnDailyTick);
             CampaignEvents.WeeklyTickEvent.AddNonSerializedListener(this, OnWeeklyTick);
             CampaignEvents.SettlementEntered.AddNonSerializedListener(this, OnSettlementEntered);
@@ -119,9 +122,38 @@ namespace BannerKings.Behaviours
             }
         }
 
-        private void OnHeroComesOfAge(Hero hero)
+        private void OnHeroCreated(Hero hero, bool bornNaturally)
         {
             BannerKingsConfig.Instance.EducationManager.InitHeroEducation(hero);
+        }
+
+        private void OnHeroComesOfAge(Hero hero)
+        {
+            Dictionary<Language, float> startingLanguages = null;
+            if (hero.Clan != null && hero != hero.Clan.Leader)
+            {
+                hero.Culture = hero.Clan.Leader.Culture;
+                startingLanguages = new Dictionary<Language, float>();
+
+                EducationData leaderEducation = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(hero.Clan.Leader);
+                var native = BannerKingsConfig.Instance.EducationManager.GetNativeLanguage(hero.Culture);
+                startingLanguages.Add(native, 1f);
+
+                foreach (var tuple in leaderEducation.Languages)
+                {
+                    if (tuple.Key == native)
+                    {
+                        continue;
+                    }
+
+                    if (tuple.Value > 0.5f && MBRandom.RandomFloat < 0.15f)
+                    {
+                        startingLanguages.Add(tuple.Key, MBRandom.RandomFloatRanged(0.5f, tuple.Value));
+                    }
+                }
+            }
+
+            BannerKingsConfig.Instance.EducationManager.InitHeroEducation(hero, startingLanguages);
 
             ApplyScholarshipTutorEffect(hero);
             ApplyScholarshipTeacherEffect(hero);
