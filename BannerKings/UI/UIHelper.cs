@@ -175,52 +175,21 @@ namespace BannerKings.UI
                         break;
                 }
             }
-            else
-            {
-                var councilAction = (CouncilAction) action;
-                var accept = new TextObject("{=FBYN3zXH}Will accept: {ANSWER}")
-                    .SetTextVariable("ANSWER", councilAction.Possible
-                        ? GameTexts.FindText("str_yes")
-                        : new TextObject("{=ifUNoWEv}{NO}.\n{REASON}")
-                            .SetTextVariable("NO", GameTexts.FindText("str_no"))
-                            .SetTextVariable("REASON", councilAction.Reason));
-
-                switch (councilAction.Type)
-                {
-                    case CouncilActionType.REQUEST:
-                        description =
-                            new TextObject(
-                                    "{=dcDs5auK}Request your liege to grant you this position in the council. This action will cost {INFLUENCE} influence.\n\n{ACCEPT}")
-                                .SetTextVariable("INFLUENCE", councilAction.Influence)
-                                .SetTextVariable("ACCEPT", accept);
-                        affirmativeText = new TextObject("{=ZYyxmOv9}Request");
-                        break;
-                    case CouncilActionType.SWAP:
-                        description =
-                            new TextObject("{=ZYyxmOv9}Request to swap your current position with {COUNCILMAN} position of {POSITION}. This action will cost {INFLUENCE} influence.\n\n{ACCEPT}")
-                                .SetTextVariable("COUNCILMAN", councilAction.TargetPosition.Member.Name)
-                                .SetTextVariable("POSITION", councilAction.TargetPosition.GetName())
-                                .SetTextVariable("INFLUENCE", councilAction.Influence)
-                                .SetTextVariable("ACCEPT", accept);
-                        affirmativeText = new TextObject("{=EquehqVz}Swap");
-                        break;
-                    default:
-                        description =
-                            new TextObject("{=yYVE3O3p}Relinquish your position in the council. It will cost no influence and exempt you of any council privileges.\n\n{ACCEPT}")
-                                .SetTextVariable("ACCEPT", accept);
-                        affirmativeText = new TextObject("{=RPyfAkfV}Relinquish");
-                        break;
-                }
-            }
 
 
-            InformationManager.ShowInquiry(new InquiryData("", description.ToString(),
-                action.Possible, true, affirmativeText.ToString(),
-                GameTexts.FindText("str_selection_widget_cancel").ToString(), delegate
+            InformationManager.ShowInquiry(new InquiryData(string.Empty, 
+                description.ToString(),
+                action.Possible, 
+                true, 
+                affirmativeText.ToString(),
+                GameTexts.FindText("str_selection_widget_cancel").ToString(), 
+                delegate
                 {
                     action.TakeAction(receiver);
                     vm?.RefreshValues();
-                }, null, string.Empty));
+                }, 
+                null, 
+                string.Empty));
         }
 
 

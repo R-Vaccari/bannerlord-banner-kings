@@ -103,32 +103,6 @@ namespace BannerKings.UI.Court
                             }
                         }, null, string.Empty));
             }
-            else
-            {
-                var target = council.AllPositions.FirstOrDefault(x => x.Position == Position);
-                if (target == null)
-                {
-                    return;
-                }
-
-                CouncilAction action;
-                var model = (BKCouncilModel) BannerKingsConfig.Instance.Models.First(x => x is BKCouncilModel);
-                if (target.Member == Hero.MainHero)
-                {
-                    action = model.GetAction(CouncilActionType.RELINQUISH, council, Hero.MainHero, target);
-                }
-                else if (council.GetHeroPosition(Hero.MainHero) == null || target.Member == null)
-                {
-                    action = model.GetAction(CouncilActionType.REQUEST, council, Hero.MainHero, target);
-                }
-                else
-                {
-                    action = model.GetAction(CouncilActionType.SWAP, council, Hero.MainHero, target,
-                        council.GetHeroPosition(Hero.MainHero));
-                }
-
-                UIHelper.ShowActionPopup(action, this);
-            }
         }
 
         private void OnSelection(SettlementGovernorSelectionItemVM item)
