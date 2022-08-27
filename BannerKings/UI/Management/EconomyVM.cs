@@ -314,7 +314,8 @@ namespace BannerKings.UI.Management
             }
 
             var admCost = data.EconomicData.AdministrativeCost;
-            RevenueInfo.Add(new InformationElement("{=MhzdyoWG}Administrative Cost:", $"{admCost.ResultNumber:P}",
+            RevenueInfo.Add(new InformationElement(new TextObject("{=MhzdyoWG}Administrative Cost:").ToString(), 
+                $"{admCost.ResultNumber:P}",
                 new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
                     .SetTextVariable("TEXT",
                         new TextObject("{=ay7jnvEJ}Costs associated with the settlement administration, including those of active policies and decisions, deducted on tax revenue."))

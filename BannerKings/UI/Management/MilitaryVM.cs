@@ -188,7 +188,8 @@ namespace BannerKings.UI.Management
             SiegeInfo.Clear();
 
             var militiaCap = new BKMilitiaModel().GetMilitiaLimit(data, settlement);
-            DefenseInfo.Add(new InformationElement("{=UADFWZgq}Militia Cap:", $"{militiaCap.ResultNumber:n0}",
+            DefenseInfo.Add(new InformationElement(new TextObject("{=UADFWZgq}Militia Cap:").ToString(), 
+                $"{militiaCap.ResultNumber:n0}",
                 new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
                     .SetTextVariable("TEXT",
                         new TextObject("{=AyyuwpBd}The maximum number of militiamen this settlement can support, based on it's population."))
@@ -196,28 +197,38 @@ namespace BannerKings.UI.Management
                     .ToString()));
 
             var militiaQuality = new BKMilitiaModel().MilitiaSpawnChanceExplained(settlement);
-            DefenseInfo.Add(new InformationElement("{=ROFzvP4W}Militia Quality:", $"{militiaQuality.ResultNumber:P}",
+            DefenseInfo.Add(new InformationElement(new TextObject("{=ROFzvP4W}Militia Quality:").ToString(), 
+                $"{militiaQuality.ResultNumber:P}",
                 new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
                     .SetTextVariable("TEXT",
                         new TextObject("{=xQbPBzgn}Chance of militiamen being spawned as veterans instead of recruits."))
                     .SetTextVariable("EXPLANATIONS", militiaQuality.GetExplanations())
                     .ToString()));
 
-            ManpowerInfo.Add(new InformationElement("{=t9sG2dMh}Manpower:", $"{data.MilitaryData.Manpower:n0}",
+            ManpowerInfo.Add(new InformationElement(new TextObject("{=t9sG2dMh}Manpower:").ToString(), 
+                $"{data.MilitaryData.Manpower:n0}",
                 new TextObject("{=MYdkfodC}The total manpower of nobles plus peasants.").ToString()));
-            ManpowerInfo.Add(new InformationElement("Noble Manpower:", $"{data.MilitaryData.NobleManpower:n0}",
+
+            ManpowerInfo.Add(new InformationElement(new TextObject("Noble Manpower:").ToString(), 
+                $"{data.MilitaryData.NobleManpower:n0}",
                 new TextObject("{=08n0UTDS}Manpower from noble population. Noble militarism is higher, but nobles often are less numerous. These are drafted as noble recruits.")
                     .ToString()));
-            ManpowerInfo.Add(new InformationElement("{=nkk8no8d}Peasant Manpower:", $"{data.MilitaryData.PeasantManpower:n0}",
+
+            ManpowerInfo.Add(new InformationElement(new TextObject("{=nkk8no8d}Peasant Manpower:").ToString(), 
+                $"{data.MilitaryData.PeasantManpower:n0}",
                 new TextObject("{=uaEXD3tE}Manpower from serf and craftsmen classes. These are drafted as cultural non-noble recruits.")
                     .ToString()));
-            ManpowerInfo.Add(new InformationElement("{=4gnA3tsw}Militarism:", $"{data.MilitaryData.Militarism.ResultNumber:P}",
+
+
+            ManpowerInfo.Add(new InformationElement(new TextObject("{=4gnA3tsw}Militarism:").ToString(), 
+                $"{data.MilitaryData.Militarism.ResultNumber:P}",
                 new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
                     .SetTextVariable("TEXT",
                         new TextObject("{=MHFeNBXS}How much the population is willing or able to militarily serve. Militarism increases the manpower caps."))
                     .SetTextVariable("EXPLANATIONS", data.MilitaryData.Militarism.GetExplanations())
                     .ToString()));
-            ManpowerInfo.Add(new InformationElement("{=AJMjhhVL}Draft Efficiency:",
+
+            ManpowerInfo.Add(new InformationElement(new TextObject("{=AJMjhhVL}Draft Efficiency:").ToString(),
                 $"{data.MilitaryData.DraftEfficiency.ResultNumber:P}",
                 new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
                     .SetTextVariable("TEXT",
@@ -228,11 +239,12 @@ namespace BannerKings.UI.Management
             var decisions = BannerKingsConfig.Instance.PolicyManager.GetDefaultDecisions(settlement);
             if (HasTown)
             {
-                SiegeInfo.Add(new InformationElement("Storage Limit:", settlement.Town.FoodStocksUpperLimit().ToString(),
-                    "The amount of food this settlement is capable of storing."));
-                SiegeInfo.Add(new InformationElement("Estimated Holdout:",
+                SiegeInfo.Add(new InformationElement(new TextObject("{=!}Storage Limit:").ToString(), settlement.Town.FoodStocksUpperLimit().ToString(),
+                    new TextObject("{=!}The amount of food this settlement is capable of storing.").ToString()));
+
+                SiegeInfo.Add(new InformationElement(new TextObject("{=!}Estimated Holdout:").ToString(),
                     $"{data.MilitaryData.Holdout} Days",
-                    "How long this settlement will take to start starving in case of a siege."));
+                    new TextObject("{=!}How long this settlement will take to start starving in case of a siege.").ToString()));
 
                 var sb = new StringBuilder();
                 sb.Append(data.MilitaryData.Ballistae);
@@ -241,7 +253,8 @@ namespace BannerKings.UI.Management
                 sb.Append(", ");
                 sb.Append(data.MilitaryData.Trebuchets);
                 sb.Append(" (Ballis., Catap., Treb.)");
-                SiegeInfo.Add(new InformationElement("Engines:", sb.ToString(), "Pre-built siege engines to defend the walls, in case of siege."));
+                SiegeInfo.Add(new InformationElement(new TextObject("{=!}Engines:").ToString(), sb.ToString(),
+                    new TextObject("{=!}Pre-built siege engines to defend the walls, in case of siege.").ToString()));
 
                 garrisonItem =
                     (BKGarrisonPolicy) BannerKingsConfig.Instance.PolicyManager.GetPolicy(settlement, "garrison");
