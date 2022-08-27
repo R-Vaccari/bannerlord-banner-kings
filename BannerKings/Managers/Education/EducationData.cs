@@ -133,6 +133,14 @@ namespace BannerKings.Managers.Education
             CurrentBook = book;
         }
 
+        internal void AddLanguageWithProgress(Language language, float progress)
+        {
+            if (language != null && !languages.ContainsKey(language))
+            {
+                languages.Add(language, progress);
+            }
+        }
+
         public void SetCurrentLanguage(Language language, Hero instructor)
         {
             if (language != null && !languages.ContainsKey(language))

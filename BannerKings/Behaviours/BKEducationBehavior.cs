@@ -164,6 +164,26 @@ namespace BannerKings.Behaviours
                 }
             }
 
+            EducationData currentEducation = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(hero);
+            if (currentEducation != null)
+            {
+                if (startingLanguages != null && startingLanguages.Count > 1)
+                {
+                    MBReadOnlyDictionary<Language, float> languages = currentEducation.Languages;
+                    foreach (var tuple in startingLanguages)
+                    {
+                        if (languages.ContainsKey(tuple.Key))
+                        {
+                            continue;
+                        }
+
+                        currentEducation.AddLanguageWithProgress(tuple.Key, tuple.Value);
+                    }
+                   
+                }
+                return;
+            }
+
             BannerKingsConfig.Instance.EducationManager.InitHeroEducation(hero, startingLanguages);
         }
 
