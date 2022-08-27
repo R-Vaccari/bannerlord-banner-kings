@@ -166,8 +166,22 @@ namespace BannerKings.Managers.Goals.Decisions
             {
                 Gold = gold,
                 Influence = influence,
-                Renown = 100
+                Renown = 100,
             };
+            List<FeudalTitle> vassals = new List<FeudalTitle>();
+            IEnumerable<Kingdom> kingdoms = Kingdom.All.ToList().FindAll(x => x.StringId == "empire" ||
+                x.StringId == "empire_w" || x.StringId == "empire_s");
+
+            foreach (var kingdom in kingdoms)
+            {
+                FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
+                if (title != null)
+                {
+                    vassals.Add(title);
+                }
+            }
+
+            foundAction.SetVassals(vassals);
 
             BannerKingsConfig.Instance.TitleManager.FoundEmpire(foundAction, "title_calradic_empire");
         }

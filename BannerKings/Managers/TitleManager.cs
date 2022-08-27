@@ -496,7 +496,6 @@ namespace BannerKings.Managers
             var title = CreateKingdom(action.ActionTaker, action.ActionTaker.Clan.Kingdom, TitleType.Empire, new List<FeudalTitle>(action.Vassals), action.Title.contract, stringId);
             action.ActionTaker.Clan.AddRenown(action.Renown);
 
-            action.Title.DriftTitle(title, false);
             foreach (var vassal in action.Vassals)
             {
                 vassal.DriftTitle(title);

@@ -14,7 +14,7 @@ namespace BannerKings.Managers.Goals.Decisions
         public FoundKingdomGoal() : base("goal_found_kingdom", GoalUpdateType.Hero)
         {
             var name = new TextObject("{=nbV21qZv}Found Kingdom");
-            var description = new TextObject("{=XbV2136v}Review this kingdom's contract, signed by lords that join it.\n\n");
+            var description = new TextObject("{=!}Stablish your own kingdom title. Your faction must be one that is not already represented by a kingdom title.");
             Initialize(name, description);
         }
 
