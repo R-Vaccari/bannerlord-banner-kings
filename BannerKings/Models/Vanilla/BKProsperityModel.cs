@@ -18,8 +18,6 @@ namespace BannerKings.Models.Vanilla
     public class BKProsperityModel : DefaultSettlementProsperityModel
     {
         private static readonly float STABILITY_FACTOR = 5f;
-
-
         private static readonly TextObject FoodShortageText = new("{=7Ttux0dr}Food Shortage");
         private static readonly TextObject ProsperityFromMarketText = new("{=3kMgpxc0}Goods From Market");
         private static readonly TextObject Governor = new("{=DyZdcwa4}Governor");
@@ -35,6 +33,11 @@ namespace BannerKings.Models.Vanilla
             if (data.HasPerk(BKPerks.Instance.CivilCultivator))
             {
                 baseResult.Add(1f, BKPerks.Instance.CivilCultivator.Name);
+            }
+
+            if (data.HasPerk(BKPerks.Instance.RitterPettySuzerain))
+            {
+                baseResult.Add(0.1f, BKPerks.Instance.RitterPettySuzerain.Name);
             }
 
             return baseResult;

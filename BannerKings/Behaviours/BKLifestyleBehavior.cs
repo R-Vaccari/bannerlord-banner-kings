@@ -1,5 +1,7 @@
 ﻿using BannerKings.Managers.AI;
 using BannerKings.Managers.Education.Lifestyles;
+using BannerKings.Managers.Skills;
+using BannerKings.Managers.Titles;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
@@ -75,6 +77,23 @@ namespace BannerKings.Behaviours
                 {
                     education.Lifestyle.InvestFocus(education, hero);
                 }
+
+                if (CampaignTime.Now.GetDayOfSeason == 1 && education.HasPerk(BKPerks.Instance.RitterOathbound))
+                {
+                    if (MBRandom.RandomFloat < 0.25f)
+                    {
+                        GainSuzerainRelation(hero);
+                    }
+                }
+            }
+        }
+
+        private void GainSuzerainRelation(Hero hero)
+        {
+            FeudalTitle title = BannerKingsConfig.Instance.TitleManager.CalculateHeroSuzerain(hero);
+            if (title != null && title.deJure != null && title.deJure != hero && title.deJure.IsAlive)
+            {
+                ChangeRelationAction.ApplyRelationChangeBetweenHeroes(hero, title.deJure, 5);
             }
         }
     }

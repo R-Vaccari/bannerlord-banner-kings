@@ -279,7 +279,7 @@
 																            HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" MarginTop="20"
 																            DoNotAcceptEvents="true" DefaultCellWidth="30" DefaultCellHeight="90" ColumnCount="3">
 																	<ItemTemplate>
-																		<PerkItemWidget DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed"
+																		<PerkItemButtonWidget DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed"
 																			SuggestedWidth="30" SuggestedHeight="86" HorizontalAlignment="Center"
 																			AlternativeType="@AlternativeType" Command.Click="ExecuteStartSelection"
 																			Command.AlternateClick="ExecuteShowPerkConcept" PerkState="@PerkState" Level="@Level"
@@ -307,7 +307,7 @@
 																					HeightSizePolicy="StretchToParent" Command.HoverBegin="ExecuteBeginHint"
 																					Command.HoverEnd="ExecuteEndHint" />
 																			</Children>
-																		</PerkItemWidget>
+																		</PerkItemButtonWidget>
 																	</ItemTemplate>
 																</GridWidget>
 

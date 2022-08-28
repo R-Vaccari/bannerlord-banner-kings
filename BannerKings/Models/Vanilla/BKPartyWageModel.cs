@@ -117,6 +117,11 @@ namespace BannerKings.Models.Vanilla
                     result.AddFactor(-0.1f, BKPerks.Instance.MercenaryLocalConnections.Name);
                 }
 
+                if (troop.IsMounted && education.HasPerk(BKPerks.Instance.RitterOathbound))
+                {
+                    result.AddFactor(-0.15f, BKPerks.Instance.RitterOathbound.Name);
+                }
+
                 if (Utils.Helpers.IsRetinueTroop(troop))
                 {
                     result.AddFactor(0.20f);

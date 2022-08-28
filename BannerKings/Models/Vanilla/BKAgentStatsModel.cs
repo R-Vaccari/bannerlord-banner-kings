@@ -1,12 +1,46 @@
-﻿using BannerKings.Managers.Skills;
+﻿using BannerKings.Managers.Education;
+using BannerKings.Managers.Skills;
 using SandBox.GameComponents;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Party;
+using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade;
 
 namespace BannerKings.Models.Vanilla
 {
     public class BKAgentStatsModel : SandboxAgentStatCalculateModel
     {
+
+        public override float GetEffectiveMaxHealth(Agent agent)
+        {
+            float result = base.GetEffectiveMaxHealth(agent);
+            if (!agent.IsHuman)
+            {
+                Agent riderAgent = agent.RiderAgent;
+                if (riderAgent != null)
+                {
+                    IAgentOriginBase origin = riderAgent.Origin;
+                    if (origin != null)
+                    {
+                        PartyBase partyBase2 = (PartyBase)origin.BattleCombatant;
+                        MobileParty party = (partyBase2 != null) ? partyBase2.MobileParty : null;
+
+                        if (party != null && party.LeaderHero != null)
+                        {
+                            Hero hero = party.LeaderHero;
+                            EducationData education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(hero);
+                            if (education.HasPerk(BKPerks.Instance.RitterIronHorses))
+                            {
+                                result *= 1.1f;
+                            }
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
+
         public override void UpdateAgentStats(Agent agent, AgentDrivenProperties agentDrivenProperties)
         {
             base.UpdateAgentStats(agent, agentDrivenProperties);

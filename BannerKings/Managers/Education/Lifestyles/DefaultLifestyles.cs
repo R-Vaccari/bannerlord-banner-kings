@@ -36,6 +36,8 @@ namespace BannerKings.Managers.Education.Lifestyles
 
         public Lifestyle Gladiator { get; private set; }
 
+        public Lifestyle Ritter { get; private set; }
+
         public override IEnumerable<Lifestyle> All
         {
             get
@@ -233,6 +235,21 @@ namespace BannerKings.Managers.Education.Lifestyles
                 new TextObject("{=!}Combat experience in tournaments increased by {EFFECT1}%\nTrade penalty increased by {EFFECT2}%"),
                 200f,
                 20f);
+
+            Ritter = new Lifestyle("lifestyle_ritter");
+            Ritter.Initialize(new TextObject("{=!}Ritter"), new TextObject("{=!}"),
+                BKSkills.Instance.Lordship,
+                DefaultSkills.Riding,
+                new List<PerkObject>
+                {
+                    BKPerks.Instance.GladiatorPromisingAthlete,
+                    BKPerks.Instance.GladiatorTourDeCalradia,
+                    BKPerks.Instance.GladiatorCrowdsFavorite
+                },
+                new TextObject("{=!}You and melee cavalry in your formation deals 5% more melee damage.{EFFECT1}%\n {EFFECT2}%"),
+                200f,
+                20f, 
+                cultures.First(x => x.StringId == "vlandia"));
         }
     }
 }

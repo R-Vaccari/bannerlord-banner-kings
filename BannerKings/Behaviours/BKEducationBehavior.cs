@@ -156,7 +156,7 @@ namespace BannerKings.Behaviours
                             continue;
                         }
 
-                        if (tuple.Value > 0.5f && MBRandom.RandomFloat < 0.15f)
+                        if (tuple.Value > 0.5f && MBRandom.RandomFloat < 0.15f && !startingLanguages.ContainsKey(tuple.Key))
                         {
                             startingLanguages.Add(tuple.Key, MBRandom.RandomFloatRanged(0.5f, tuple.Value));
                         }

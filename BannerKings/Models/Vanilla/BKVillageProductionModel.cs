@@ -2,6 +2,7 @@
 using BannerKings.Managers;
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Villages;
+using BannerKings.Managers.Skills;
 using Helpers;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
@@ -27,6 +28,7 @@ namespace BannerKings.Models.Vanilla
                 var villageData = data.VillageData;
                 var serfs = data.GetTypeCount(PopulationManager.PopType.Serfs) * 0.85f;
                 float slaves = data.GetTypeCount(PopulationManager.PopType.Slaves);
+                var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(village.Settlement.OwnerClan.Leader);
 
                 var productions = BannerKingsConfig.Instance.PopulationManager.GetProductions(villageData);
                 var totalWeight = 0f;
@@ -88,6 +90,11 @@ namespace BannerKings.Models.Vanilla
                         {
                             PerkHelper.AddPerkBonusForTown(DefaultPerks.Medicine.PerfectHealth, village.Bound.Town,
                                 ref explainedNumber);
+                        }
+
+                        if (village.Bound.IsCastle && education.HasPerk(BKPerks.Instance.RitterIronHorses))
+                        {
+                            explainedNumber.AddFactor(0.1f, BKPerks.Instance.RitterIronHorses.Name);
                         }
 
                         BannerKingsConfig.Instance.PopulationManager.ApplyProductionBuildingEffect(ref explainedNumber,

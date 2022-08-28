@@ -47,6 +47,13 @@ namespace BannerKings.Models.Vanilla
                 var power = sellerHero.Power;
                 var chance = settlement.IsTown ? power * 0.03f : power * 0.05f;
                 var random = MBRandom.RandomFloatRanged(1f, 100f);
+
+                var ownerEducation = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(settlement.OwnerClan.Leader);
+                if (ownerEducation.HasPerk(BKPerks.Instance.RitterPettySuzerain))
+                {
+                    chance *= 1.2f;
+                }
+
                 if (data.MilitaryData.NobleManpower > 0 && chance >= random)
                 {
                     return sellerHero.Culture.EliteBasicTroop;

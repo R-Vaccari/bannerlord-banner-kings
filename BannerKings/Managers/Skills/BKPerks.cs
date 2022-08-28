@@ -142,6 +142,17 @@ namespace BannerKings.Managers.Skills
         #endregion  Gladiator
 
 
+        #region  Ritter
+
+        public PerkObject RitterIronHorses { get; private set; }
+
+        public PerkObject RitterOathbound { get; private set; }
+
+        public PerkObject RitterPettySuzerain { get; private set; }
+
+        #endregion  Ritter
+
+
         #region Lordship
 
         public PerkObject LordshipEconomicAdministration { get; private set; }
@@ -578,7 +589,6 @@ namespace BannerKings.Managers.Skills
             #region Mercenary
 
             MercenaryLocalConnections = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleMercenaryLocalConnections"));
-            LifestylePerks.Add(MercenaryLocalConnections);
             MercenaryLocalConnections.InitializeNew("{=8XeyqTNh}Local Connections", null, 
                 80, 
                 null,
@@ -612,6 +622,43 @@ namespace BannerKings.Managers.Skills
                 SkillEffect.EffectIncrementType.AddFactor);
 
             #endregion Mercenary
+
+            #region Ritter
+
+            RitterIronHorses = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleRitterIronHorses"));
+            RitterIronHorses.InitializeNew("{=!}Iron Horses", null,
+                80,
+                null,
+                "{=jCBbUvHx}Mounts of your commanded troops have 10% more hit points.",
+                SkillEffect.PerkRole.PartyLeader, 3f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                "{=3GsZXXOi}10% production bonus to villages that are bound to castles.",
+                SkillEffect.PerkRole.Personal, 0.03f,
+                SkillEffect.EffectIncrementType.AddFactor);
+
+            RitterOathbound = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleRitterOathbound"));
+            RitterOathbound.InitializeNew("{=!}Oathbound", null,
+                160,
+                null,
+                "{=!}Every season, get a chance of improving relations with your suzerain.",
+                SkillEffect.PerkRole.PartyOwner, 10f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                "{=!}Recruting mounted troops from your settlements is 15% cheaper.",
+                SkillEffect.PerkRole.Captain, 8f,
+                SkillEffect.EffectIncrementType.AddFactor);
+
+            RitterPettySuzerain = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleRitterPettySuzerain"));
+            RitterPettySuzerain.InitializeNew("{=!}Petty Suzerain", null,
+                240,
+                null,
+                "{=!}Village notables are 20% more likely to produce noble troops instead of peasants.",
+                SkillEffect.PerkRole.Personal, 10f,
+                SkillEffect.EffectIncrementType.Add,
+                "{=!}Village hearths increase by +0.1 daily.",
+                SkillEffect.PerkRole.Personal, 20f,
+                SkillEffect.EffectIncrementType.AddFactor);
+
+            #endregion Ritter
 
 
             #region Gladiator

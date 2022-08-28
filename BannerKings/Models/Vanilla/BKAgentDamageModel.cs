@@ -29,6 +29,15 @@ namespace BannerKings.Models.Vanilla
                             baseResult *= 1.06f;
                         }
                     }
+
+                    if (aggressor.IsMounted && data.Lifestyle != null && 
+                        data.Lifestyle == DefaultLifestyles.Instance.Ritter && 
+                        agressorUsage.RelevantSkill != DefaultSkills.Bow && 
+                        agressorUsage.RelevantSkill != DefaultSkills.Crossbow &&
+                        agressorUsage.RelevantSkill != DefaultSkills.Throwing)
+                    {
+                        baseResult *= 1.05f;
+                    }
                 }
 
                 if (aggressor.HeroObject != null)
