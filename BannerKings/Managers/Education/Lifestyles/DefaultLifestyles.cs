@@ -242,13 +242,13 @@ namespace BannerKings.Managers.Education.Lifestyles
                 DefaultSkills.Riding,
                 new List<PerkObject>
                 {
-                    BKPerks.Instance.GladiatorPromisingAthlete,
-                    BKPerks.Instance.GladiatorTourDeCalradia,
-                    BKPerks.Instance.GladiatorCrowdsFavorite
+                    BKPerks.Instance.RitterIronHorses,
+                    BKPerks.Instance.RitterOathbound,
+                    BKPerks.Instance.RitterPettySuzerain
                 },
-                new TextObject("{=!}You and melee cavalry in your formation deals 5% more melee damage.{EFFECT1}%\n {EFFECT2}%"),
-                200f,
-                20f, 
+                new TextObject("{=!}You and melee cavalry in your formation deals {EFFECT1}% more melee damage.{EFFECT1}%\n You and your formation deal {EFFECT2}% less ranged damaged, mounted or otherwise.{EFFECT2}%"),
+                5f,
+                15f, 
                 cultures.First(x => x.StringId == "vlandia"));
         }
     }

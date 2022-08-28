@@ -22,6 +22,7 @@ namespace BannerKings.Models.Vanilla
                 if (aggressorCaptain is {IsHero: true})
                 {
                     var data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(aggressorCaptain.HeroObject);
+
                     if (collisionData.StrikeType == 1) // thrust
                     {
                         if (aggressor.IsMounted && data.HasPerk(BKPerks.Instance.CataphractKlibanophoros))
@@ -30,13 +31,19 @@ namespace BannerKings.Models.Vanilla
                         }
                     }
 
-                    if (aggressor.IsMounted && data.Lifestyle != null && 
-                        data.Lifestyle == DefaultLifestyles.Instance.Ritter && 
-                        agressorUsage.RelevantSkill != DefaultSkills.Bow && 
-                        agressorUsage.RelevantSkill != DefaultSkills.Crossbow &&
-                        agressorUsage.RelevantSkill != DefaultSkills.Throwing)
+                    if (data.Lifestyle != null && data.Lifestyle == DefaultLifestyles.Instance.Ritter)
                     {
-                        baseResult *= 1.05f;
+                        bool notRanged = agressorUsage.RelevantSkill != DefaultSkills.Bow &&
+                            agressorUsage.RelevantSkill != DefaultSkills.Crossbow &&
+                            agressorUsage.RelevantSkill != DefaultSkills.Throwing;
+                        if (notRanged && aggressor.IsMounted)
+                        {
+                            baseResult *= 1.05f;
+                        }
+                        else
+                        {
+                            baseResult *= 0.85f;
+                        }
                     }
                 }
 
