@@ -2,6 +2,7 @@ using System;
 using BannerKings.Behaviours;
 using BannerKings.Managers.CampaignStart;
 using BannerKings.Managers.Education.Lifestyles;
+using BannerKings.Managers.Institutions.Religions.Doctrines;
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Villages;
 using BannerKings.Managers.Skills;
@@ -20,7 +21,6 @@ namespace BannerKings.Models.Vanilla
         {
             return 10f + MathF.Max(CalculateInfluenceChange(clan).ResultNumber, 5f) * 0.025f * CampaignTime.DaysInYear;
         }
-
 
         public override ExplainedNumber CalculateInfluenceChange(Clan clan, bool includeDescriptions = false)
         {
@@ -72,6 +72,17 @@ namespace BannerKings.Models.Vanilla
                 baseResult.Add(bandits * 0.1f, BKPerks.Instance.OutlawPlunderer.Name);
             }
 
+            var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(clan);
+            var religion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(clan.Leader);
+            if (religion != null && clan.Settlements.Count > 0)
+            {
+                if (religion.HasDoctrine(DefaultDoctrines.Instance.Druidism) && 
+                    council.GetMemberFromPosition(Managers.Court.CouncilPosition.Spiritual).Member == null) 
+                {
+                    baseResult.Add(-5f, DefaultDoctrines.Instance.Druidism.Name);
+                }
+            }
+
             foreach (var settlement in clan.Settlements)
             {
                 if (BannerKingsConfig.Instance.PopulationManager == null || !BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
@@ -116,14 +127,12 @@ namespace BannerKings.Models.Vanilla
                 }
             }
 
-            if (BannerKingsConfig.Instance.CourtManager != null)
+            var position = BannerKingsConfig.Instance.CourtManager.GetHeroPosition(clan.Leader);
+            if (position != null)
             {
-                var position = BannerKingsConfig.Instance.CourtManager.GetHeroPosition(clan.Leader);
-                if (position != null)
-                {
-                    baseResult.Add(position.IsCorePosition(position.Position) ? 1f : 0.5f, new TextObject("{=WvhXhUFS}Councillor role"));
-                }
+                baseResult.Add(position.IsCorePosition(position.Position) ? 1f : 0.5f, new TextObject("{=WvhXhUFS}Councillor role"));
             }
+            
 
             if (i > 0)
             {

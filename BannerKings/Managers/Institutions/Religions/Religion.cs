@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using BannerKings.Managers.Institutions.Religions.Doctrines;
 using BannerKings.Managers.Institutions.Religions.Faiths;
 using BannerKings.Managers.Institutions.Religions.Faiths.Rites;
 using BannerKings.Managers.Institutions.Religions.Leaderships;
@@ -52,6 +53,12 @@ namespace BannerKings.Managers.Institutions.Religions
         [field: SaveableField(3)] public Faith Faith { get; private set; }
 
         public MBReadOnlyList<string> Doctrines => doctrineIds.GetReadOnlyList();
+
+        public bool HasDoctrine(Doctrine doctrine)
+        {
+            return doctrineIds.Contains(doctrine.StringId);
+        }
+
         public MBReadOnlyDictionary<Settlement, Clergyman> Clergy => clergy.GetReadOnlyDictionary();
 
         public MBReadOnlyList<CultureObject> FavoredCultures => favoredCultures.GetReadOnlyList();

@@ -12,6 +12,7 @@ using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using static BannerKings.Managers.PopulationManager;
 using static BannerKings.Managers.Policies.BKDraftPolicy;
+using BannerKings.Managers.Institutions.Religions.Doctrines;
 
 namespace BannerKings.Models.Vanilla
 {
@@ -54,9 +55,22 @@ namespace BannerKings.Models.Vanilla
                     chance *= 1.2f;
                 }
 
-                if (data.MilitaryData.NobleManpower > 0 && chance >= random)
+                if (data.MilitaryData.NobleManpower > 0)
                 {
-                    return sellerHero.Culture.EliteBasicTroop;
+
+                    if (sellerHero.IsPreacher && data.ReligionData != null)
+                    {
+                        var religion = data.ReligionData.DominantReligion;
+                        if (religion != null && religion.HasDoctrine(DefaultDoctrines.Instance.Druidism))
+                        {
+                            return sellerHero.Culture.EliteBasicTroop;
+                        }
+                    }
+
+                    if (chance >= random)
+                    {
+                        return sellerHero.Culture.EliteBasicTroop;
+                    }
                 }
 
                 return sellerHero.Culture.BasicTroop;
@@ -120,6 +134,16 @@ namespace BannerKings.Models.Vanilla
             if (settlement.Owner.GetPerkValue(lordshipMilitaryAdministration))
             {
                 explainedNumber.AddFactor(0.2f, lordshipMilitaryAdministration.Name);
+            }
+
+            var religionData = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement).ReligionData;
+            if (religionData != null)
+            {
+                var religion = religionData.DominantReligion;
+                if (religion != null && religion.HasDoctrine(DefaultDoctrines.Instance.Pastoralism))
+                {
+                    explainedNumber.Add(-0.2f, DefaultDoctrines.Instance.Pastoralism.Name);
+                }
             }
 
             return explainedNumber;

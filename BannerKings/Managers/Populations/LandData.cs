@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using BannerKings.Managers.Innovations;
+using BannerKings.Managers.Institutions.Religions.Doctrines;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Populations.Villages;
 using BannerKings.Managers.Skills;
@@ -179,6 +180,18 @@ namespace BannerKings.Managers.Populations
             if (data.Settlement.OwnerClan != null)
             {
                 owner = data.Settlement.Owner;
+            }
+
+            if (data.ReligionData != null)
+            {
+                var religion = data.ReligionData.DominantReligion;
+                if (religion != null && religion.HasDoctrine(DefaultDoctrines.Instance.Pastoralism))
+                {
+                    if (type == "farmland" || type == "pasture")
+                    {
+                        result *= 1.08f;
+                    }
+                }
             }
 
             if (owner != null)

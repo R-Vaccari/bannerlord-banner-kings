@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using BannerKings.Managers.Institutions.Religions.Doctrines;
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
@@ -717,6 +718,16 @@ namespace BannerKings.Managers.Court
             if (candidate.Clan is {IsUnderMercenaryService: true})
             {
                 return false;
+            }
+
+            var clanReligion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(clan.Leader);
+            if (clanReligion != null && clanReligion.HasDoctrine(DefaultDoctrines.Instance.Legalism)) 
+            {
+                var candidateReligion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(candidate);
+                if (candidateReligion == null || candidateReligion != clanReligion)
+                {
+                    return false;
+                }
             }
 
             switch (position)

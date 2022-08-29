@@ -1,4 +1,5 @@
 using BannerKings.Managers.Institutions.Religions;
+using BannerKings.Managers.Institutions.Religions.Doctrines;
 using BannerKings.Managers.Institutions.Religions.Faiths;
 using BannerKings.Managers.Skills;
 using TaleWorlds.CampaignSystem;
@@ -10,17 +11,6 @@ namespace BannerKings.Models.BKModels
 {
     public class BKReligionModel
     {
-        public ExplainedNumber CalculateNotableFaithWeightFactor(Settlement settlement, Hero notable)
-        {
-            ExplainedNumber result = new ExplainedNumber();
-            result.LimitMin(0f);
-            result.LimitMax(1f);
-
-            
-
-            return result;
-        }
-
         public ExplainedNumber CalculateTensionTarget(ReligionData data)
         {
             ExplainedNumber result = new ExplainedNumber();
@@ -123,6 +113,11 @@ namespace BannerKings.Models.BKModels
             }
 
             result.Add(clans, GameTexts.FindText("str_encyclopedia_clans"));
+
+            if (religion.HasDoctrine(DefaultDoctrines.Instance.Animism))
+            {
+                result.Add(-0.05f, DefaultDoctrines.Instance.Animism.Name);
+            }
 
             return result;
         }

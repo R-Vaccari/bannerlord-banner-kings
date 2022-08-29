@@ -1,4 +1,6 @@
-﻿using BannerKings.Managers.Skills;
+﻿using BannerKings.Managers.Institutions.Religions.Doctrines;
+using BannerKings.Managers.Institutions.Religions;
+using BannerKings.Managers.Skills;
 using System;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
@@ -11,6 +13,36 @@ namespace BannerKings.Models.BKModels
     public class BKPietyModel : IReligionModel
     {
         public ExplainedNumber CalculateEffect(Settlement settlement) => new ExplainedNumber();
+
+        public int GetHeroVirtuesCount(Hero hero)
+        {
+            int result = 0;
+            var rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(hero);
+            if (rel != null)
+            {
+                var traits = rel.Faith.Traits;
+                var toCheck = new List<TraitObject>
+                    {DefaultTraits.Honor, DefaultTraits.Calculating, DefaultTraits.Valor, DefaultTraits.Mercy};
+                foreach (var trait in toCheck)
+                {
+                    var traitLevel = hero.GetTraitLevel(trait);
+                    if (traits.ContainsKey(trait) && traitLevel != 0)
+                    {
+                        var target = traits[trait] ? 1 : -1;
+                        if (target > 0)
+                        {
+                            result += traitLevel > 0 ? 1 : 0;
+                        }
+                        else
+                        {
+                            result += -traitLevel < 0 ? 1 : 0;
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
 
         public ExplainedNumber CalculateEffect(Hero hero)
         {
@@ -46,6 +78,20 @@ namespace BannerKings.Models.BKModels
                 if (hero.GetPerkValue(BKPerks.Instance.TheologyFaithful))
                 {
                     result.Add(0.2f, BKPerks.Instance.TheologyFaithful.Name);
+                }
+
+                if (hero.Clan != null && rel.HasDoctrine(DefaultDoctrines.Instance.Animism))
+                {
+                    float acres = 0f;
+                    foreach (Settlement settlement in hero.Clan.Settlements)
+                    {
+                        acres += BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement).LandData.Woodland;
+                    }
+
+                    if (acres != 0f)
+                    {
+                        result.Add(acres / 10000f, DefaultDoctrines.Instance.Animism.Name);
+                    }
                 }
             }
 

@@ -1,6 +1,7 @@
 using System.Linq;
 using BannerKings.Managers.Court;
 using BannerKings.Managers.Education.Lifestyles;
+using BannerKings.Managers.Institutions.Religions.Doctrines;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
 using TaleWorlds.CampaignSystem;
@@ -410,6 +411,16 @@ namespace BannerKings.Models.BKModels
             if (hero.GetPerkValue(BKPerks.Instance.LordshipAccolade))
             {
                 result.Add(1f, BKPerks.Instance.LordshipAccolade.Name);
+            }
+
+            var religion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(hero);
+            if (religion != null && religion.HasDoctrine(DefaultDoctrines.Instance.Legalism))
+            {
+                int virtues = BannerKingsConfig.Instance.PietyModel.GetHeroVirtuesCount(hero);
+                if (virtues > 0)
+                {
+                    result.Add(virtues * 0.5f, DefaultDoctrines.Instance.Legalism.Name);
+                }
             }
 
             var title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(hero);

@@ -61,7 +61,7 @@ namespace BannerKings.Managers.Institutions.Religions.Doctrines
 
             Legalism = new Doctrine("legalism", new TextObject("{=A7pNHzFo}Legalism"),
                 new TextObject("{=OKTdXTNh}Without laws, man is but beast. The wisdom of previous generations is preserved through law, which must be followed to the letter."),
-                new TextObject("{=hhwx3SVn}Heathens can not fill council positions\n+1 to vassal limit for each personal virtue"),
+                new TextObject("{=hhwx3SVn}Heathens can not fill council positions\n+0.5 to vassal limit for each personal virtue"),
                 new List<string>());
 
             HeathenTax = new Doctrine("heathen_tax", new TextObject("{=opRTVAF6}Heathen Taxation"),
@@ -71,7 +71,7 @@ namespace BannerKings.Managers.Institutions.Religions.Doctrines
 
             Pastoralism = new Doctrine("pastorialism", new TextObject("{=XX2xYuzs}Pastorialism"),
                 new TextObject("{=QvoijhLH}Non believers are tolerated, but only through their financial subjugation. They are not trusted for service."),
-                new TextObject("{=nBidhxSN}Pasture and farmland acreage are more productive\nReduced militia and drafting efficiency"),
+                new TextObject("{=nBidhxSN}Pasture and farmland acreage are more productive\nReduced drafting efficiency"),
                 new List<string>());
 
             Childbirth = new Doctrine("childbirth", new TextObject("{=DXNnpp89}Honored Childbirth"),
@@ -81,12 +81,12 @@ namespace BannerKings.Managers.Institutions.Religions.Doctrines
 
             Pacifism = new Doctrine("pacifism", new TextObject("{=555i9sjK}Pacifism"),
                 new TextObject("{=a0e4FBRs}Peace is our most valued treasure. Unlike warmongering beasts, we cherish thriving through cooperation and hard work."),
-                new TextObject("{=Z2at3qd1}Increased stability in settlements\nPiety maluses while participating in wars and declaring wars"),
+                new TextObject("{=Z2at3qd1}Increased stability in settlements\nPiety loss after battles"),
                 new List<string>());
 
             Literalism = new Doctrine("literalism", new TextObject("{=qPcN1VEv}Literalism"),
                 new TextObject("{=0srttZAq}It is only through our holy texts that we can uphold our values and faith."),
-                new TextObject("{=FrtZRbPA}High scholarship provides piety, illiteracy reduces piety"),
+                new TextObject("{=FrtZRbPA}High scholarship provides piety, illiteracy reduces piety\nAdds Court Philosopher to royal councils"),
                 new List<string>());
 
             Sacrifice = new Doctrine("sacrifice", new TextObject("{=DOiR2ymQ}Human Sacrifices"),
