@@ -24,6 +24,11 @@ namespace BannerKings.Models.Vanilla
                 {
                     result *= 1.15f;
                 }
+
+                if (education.HasPerk(BKPerks.Instance.VaryagShieldBrother))
+                {
+                    result *= 1.15f;
+                }
             }
 
 

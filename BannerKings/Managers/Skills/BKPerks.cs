@@ -153,6 +153,17 @@ namespace BannerKings.Managers.Skills
         #endregion  Ritter
 
 
+        #region  Varyag
+
+        public PerkObject VaryagShieldBrother { get; private set; }
+
+        public PerkObject VaryagRecognizedMercenary { get; private set; }
+
+        public PerkObject VaryagDrengr { get; private set; }
+
+        #endregion  Varyag
+
+
         #region Lordship
 
         public PerkObject LordshipEconomicAdministration { get; private set; }
@@ -659,6 +670,44 @@ namespace BannerKings.Managers.Skills
                 SkillEffect.EffectIncrementType.AddFactor);
 
             #endregion Ritter
+
+
+            #region Varyag
+
+            VaryagShieldBrother = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleVaryagShieldBrother"));
+            VaryagShieldBrother.InitializeNew("{=!}Shield Brother", null,
+                80,
+                null,
+                "{=qDJmqZrJ}Infantry troops take 4% less melee damage while in shield wall formation.",
+                SkillEffect.PerkRole.PartyLeader, 3f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                "{=PawhUHjG}Raiding villages is 15% faster",
+                SkillEffect.PerkRole.Personal, 0.03f,
+                SkillEffect.EffectIncrementType.AddFactor);
+
+            VaryagRecognizedMercenary = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleVaryagRecognizedMercenary"));
+            VaryagRecognizedMercenary.InitializeNew("{=!}Recognized Mercenary", null,
+                160,
+                null,
+                "{=!}Influence is 10% more profitable as mercenary.",
+                SkillEffect.PerkRole.PartyOwner, 10f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                "{=!}For every year spent under mercenary service, gain 10 renown.",
+                SkillEffect.PerkRole.Captain, 8f,
+                SkillEffect.EffectIncrementType.AddFactor);
+
+            VaryagDrengr = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleVaryagDrengr"));
+            VaryagDrengr.InitializeNew("{=!}Drengr", null,
+                240,
+                null,
+                "",
+                SkillEffect.PerkRole.Personal, 10f,
+                SkillEffect.EffectIncrementType.Add,
+                "",
+                SkillEffect.PerkRole.Personal, 20f,
+                SkillEffect.EffectIncrementType.AddFactor);
+
+            #endregion Varyag
 
 
             #region Gladiator

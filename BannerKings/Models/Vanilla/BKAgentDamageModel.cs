@@ -82,19 +82,33 @@ namespace BannerKings.Models.Vanilla
                 }
             }
 
+            MissionWeapon missionWeapon = attackInformation.VictimMainHandWeapon;
+            WeaponComponentData victimUsage = missionWeapon.CurrentUsageItem;
+
             if (attackInformation.VictimAgentCharacter is CharacterObject victim)
-            {
-                if (victim.IsMounted && victimCaptain is {IsHero: true})
+            { 
+
+                if (victimCaptain is { IsHero: true })
                 {
                     var victimCaptainHero = victimCaptain.HeroObject;
                     var data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(victimCaptainHero);
-                    if (data.HasPerk(BKPerks.Instance.CataphractKlibanophoros))
+                    if (victim.IsMounted)
                     {
-                        baseResult *= 0.95f;
+                        if (data.HasPerk(BKPerks.Instance.CataphractKlibanophoros))
+                        {
+                            baseResult *= 0.95f;
+                        }
+                    }
+
+                    if (victimUsage != null)
+                    {
+                        if (!victim.IsMounted && victimUsage.IsShield && data.HasPerk(BKPerks.Instance.VaryagShieldBrother))
+                        {
+                            baseResult *= 0.96f;
+                        }
                     }
                 }
             }
-
 
             return baseResult;
         }

@@ -31,19 +31,27 @@ namespace BannerKings.Models.Vanilla
                 baseResult.Add(-5f, DefaultStartOptions.Instance.IndebtedLord.Name);
             }
 
-           
-
             var generalSupport = 0f;
             var generalAutonomy = 0f;
             float i = 0;
 
             var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(clan.Leader);
-            if (clan.IsUnderMercenaryService && clan.Leader != null && education.Lifestyle != null &&
-                education.Lifestyle.Equals(DefaultLifestyles.Instance.Mercenary))
+            if (clan.IsUnderMercenaryService && clan.Leader != null)
             {
                 int mercenaryChange = MathF.Ceiling(clan.Influence * (1f / Campaign.Current.Models.ClanFinanceModel.RevenueSmoothenFraction()));
-                baseResult.Add((float)(mercenaryChange * 0.1f), new TextObject("{=cCQO7noU}{LIFESTYLE} lifestyle")
-                    .SetTextVariable("LIFESTYLE", DefaultLifestyles.Instance.Mercenary.Name));
+                if (mercenaryChange != 0)
+                {
+                    if (education.Lifestyle != null && education.Lifestyle.Equals(DefaultLifestyles.Instance.Mercenary))
+                    {
+                        baseResult.Add((float)(mercenaryChange * 0.2f), new TextObject("{=cCQO7noU}{LIFESTYLE} lifestyle")
+                                        .SetTextVariable("LIFESTYLE", DefaultLifestyles.Instance.Mercenary.Name));
+                    }
+
+                    if (education.HasPerk(BKPerks.Instance.VaryagRecognizedMercenary))
+                    {
+                        baseResult.Add((float)(mercenaryChange * 0.1f), BKPerks.Instance.VaryagRecognizedMercenary.Name);
+                    }
+                }
             }
 
 
