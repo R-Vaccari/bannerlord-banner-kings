@@ -67,77 +67,80 @@
 		<string id="bk_council_chancellor_effects"
 		        text="Settlement loyalty +1{BREAK}Vassal limit +1{BREAK}Disagreements impact -20%" />
 		<string id="bk_council_spymaster_effects" text="Settlement security +1{BREAK}Settlement autonomy -3% flat{BREAK}" />
-		<string id="bk_council_spiritual_effects" text="" />
+		<string id="bk_council_spiritual_effects" text="+0.5 piety daily{BREAK}+5% faith presence in settlements" />
+		<string id="bk_council_castellan_effects" text="+1.5 prosperity to castles" />
+		<string id="bk_council_constable_effects" text="Settlement stability +4% flat" />
+		<string id="bk_council_elder_effects" text="Village hearths +0.2 daily" />
 
 		<string id="bk_council_marshall_empire" text="Domesticus" />
-		<string id="bk_council_marshall_sturgia" text="Domesticus" />
+		<string id="bk_council_marshall_sturgia" text="Marshal" />
 		<string id="bk_council_marshall_battania" text="Marasgal" />
 		<string id="bk_council_marshall_vlandia" text="Marshal" />
 		<string id="bk_council_marshall_khuzait" text="Jagutu-iin Darga" />
-		<string id="bk_council_marshall_aserai" text="Domesticus" />
+		<string id="bk_council_marshall_aserai" text="Marshal" />
 
 		<string id="bk_council_marshall_royal_empire" text="Magister Domesticus" />
-		<string id="bk_council_marshall_royal_sturgia" text="Domesticus" />
+		<string id="bk_council_marshall_royal_sturgia" text="Grand Marshal" />
 		<string id="bk_council_marshall_royal_battania" text="Ard Marasgal" />
 		<string id="bk_council_marshall_royal_vlandia" text="Grand Marshal" />
 		<string id="bk_council_marshall_royal_khuzait" text="Tumetu-iin Noyan" />
-		<string id="bk_council_marshall_royal_aserai" text="Domesticus" />
+		<string id="bk_council_marshall_royal_aserai" text="Grand Marshal" />
 
 		<string id="bk_council_steward_empire" text="Comes Largitionum" />
-		<string id="bk_council_steward_sturgia" text="Domesticus" />
+		<string id="bk_council_steward_sturgia" text="Steward" />
 		<string id="bk_council_steward_battania" text="Sheumarlan" />
 		<string id="bk_council_steward_vlandia" text="Steward" />
-		<string id="bk_council_steward_khuzait" text="Domesticus" />
-		<string id="bk_council_steward_aserai" text="Domesticus" />
+		<string id="bk_council_steward_khuzait" text="Steward" />
+		<string id="bk_council_steward_aserai" text="Steward" />
 
 		<string id="bk_council_steward_royal_empire" text="Comes Sacrarum Largitionum" />
-		<string id="bk_council_steward_royal_sturgia" text="Domesticus" />
+		<string id="bk_council_steward_royal_sturgia" text="High Steward" />
 		<string id="bk_council_steward_royal_battania" text="Ard Sheumarlan" />
 		<string id="bk_council_steward_royal_vlandia" text="High Steward" />
-		<string id="bk_council_steward_royal_khuzait" text="Cherbi" />
-		<string id="bk_council_steward_royal_aserai" text="Domesticus" />
+		<string id="bk_council_steward_royal_khuzait" text="High Steward" />
+		<string id="bk_council_steward_royal_aserai" text="High Steward" />
 
 		<string id="bk_council_chancellor_empire" text="Cancellarius" />
-		<string id="bk_council_chancellor_sturgia" text="Domesticus" />
+		<string id="bk_council_chancellor_sturgia" text="Chancellor" />
 		<string id="bk_council_chancellor_battania" text="Seansalair" />
 		<string id="bk_council_chancellor_vlandia" text="Chancellor" />
-		<string id="bk_council_chancellor_khuzait" text="Domesticus" />
-		<string id="bk_council_chancellor_aserai" text="Domesticus" />
+		<string id="bk_council_chancellor_khuzait" text="Chancellor" />
+		<string id="bk_council_chancellor_aserai" text="Chancellor" />
 
 		<string id="bk_council_chancellor_royal_empire" text="Magister Cancellarius" />
-		<string id="bk_council_chancellor_royal_sturgia" text="Domesticus" />
+		<string id="bk_council_chancellor_royal_sturgia" text="High Chancellor" />
 		<string id="bk_council_chancellor_royal_battania" text="Ard Seansalair" />
 		<string id="bk_council_chancellor_royal_vlandia" text="High Chancellor" />
-		<string id="bk_council_chancellor_royal_khuzait" text="Cherbi" />
-		<string id="bk_council_chancellor_royal_aserai" text="Domesticus" />
+		<string id="bk_council_chancellor_royal_khuzait" text="High Chancellor" />
+		<string id="bk_council_chancellor_royal_aserai" text="High Chancellor" />
 
 		<string id="bk_council_spymaster_empire" text="Custodis" />
-		<string id="bk_council_spymaster_sturgia" text="Domesticus" />
+		<string id="bk_council_spymaster_sturgia" text="Spymaster" />
 		<string id="bk_council_spymaster_battania" text="Treòraiche" />
 		<string id="bk_council_spymaster_vlandia" text="Spymaster" />
 		<string id="bk_council_spymaster_khuzait" text="Khevtuul" />
-		<string id="bk_council_spymaster_aserai" text="Domesticus" />
+		<string id="bk_council_spymaster_aserai" text="Spymaster" />
 
 		<string id="bk_council_spymaster_royal_empire" text="Magister Officiorum" />
-		<string id="bk_council_spymaster_royal_sturgia" text="Domesticus" />
+		<string id="bk_council_spymaster_royal_sturgia" text="Grand Spymaster" />
 		<string id="bk_council_spymaster_royal_battania" text="Ard Treòraiche" />
 		<string id="bk_council_spymaster_royal_vlandia" text="Grand Spymaster" />
 		<string id="bk_council_spymaster_royal_khuzait" text="Cherbi" />
-		<string id="bk_council_spymaster_royal_aserai" text="Domesticus" />
+		<string id="bk_council_spymaster_royal_aserai" text="Grand Spymaster" />
 
-		<string id="bk_council_spiritual_guide_empire" text="Custodis" />
-		<string id="bk_council_spiritual_guide_sturgia" text="Domesticus" />
+		<string id="bk_council_spiritual_guide_empire" text="Seneschal" />
+		<string id="bk_council_spiritual_guide_sturgia" text="Seneschal" />
 		<string id="bk_council_spiritual_guide_battania" text="Draoidh" />
 		<string id="bk_council_spiritual_guide_vlandia" text="Seneschal" />
 		<string id="bk_council_spiritual_guide_khuzait" text="Khevtuul" />
-		<string id="bk_council_spiritual_guide_aserai" text="Domesticus" />
+		<string id="bk_council_spiritual_guide_aserai" text="Seneschal" />
 
-		<string id="bk_council_spiritual_guide_royal_empire" text="Magister Officiorum" />
-		<string id="bk_council_spiritual_guide_royal_sturgia" text="Domesticus" />
+		<string id="bk_council_spiritual_guide_royal_empire" text="High Seneschal" />
+		<string id="bk_council_spiritual_guide_royal_sturgia" text="High Seneschal" />
 		<string id="bk_council_spiritual_guide_royal_battania" text="Ard Draoidh" />
 		<string id="bk_council_spiritual_guide_royal_vlandia" text="High Seneschal" />
 		<string id="bk_council_spiritual_guide_royal_khuzait" text="Cherbi" />
-		<string id="bk_council_spiritual_guide_royal_aserai" text="Domesticus" />
+		<string id="bk_council_spiritual_guide_royal_aserai" text="High Seneschal" />
 
 		<string id="bk_council_elder_royal_battania" text="Seanar" />
 

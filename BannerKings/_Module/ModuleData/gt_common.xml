@@ -56,12 +56,22 @@
 	        text="{=bk_council_chancellor_effects}Settlement loyalty +1{BREAK}Vassal limit +1{BREAK}Disagreements impact -20%" />
 	<string id="str_bk_council_spymaster_effects"
 	        text="{=bk_council_spymaster_effects}Settlement security +1{BREAK}Settlement autonomy -3% flat{BREAK}" />
-	<string id="str_bk_council_spiritual_effects" text="{=bk_council_spiritual_effects}" />
+	<string id="str_bk_council_spiritual_effects" text="{=bk_council_spiritual_effects}+0.5 piety daily{BREAK}+5% faith presence in settlements" />
+	<string id="str_bk_council_castellan_effects" text="{=bk_council_castellan_effects}+1.5 prosperity to castles" />
+	<string id="str_bk_council_constable_effects" text="{=bk_council_constable_effects}Settlement stability +4% flat" />
+	<string id="str_bk_council_elder_effects" text="{=bk_council_elder_effects}Village hearths +0.2 daily" />
 
 	<string id="str_bk_council_marshall.empire" text="{=bk_council_marshall_empire}Domesticus" />
 	<string id="str_bk_council_chancellor.empire" text="{=bk_council_steward_empire}Comes Largitionum" />
 	<string id="str_bk_council_steward.empire" text="{=bk_council_chancellor_empire}Cancellarius" />
 	<string id="str_bk_council_spymaster.empire" text="{=bk_council_spymaster_empire}Custodis" />
+	
+	<string id="str_bk_council_marshall_royal.empire" text="{=bk_council_marshall_royal_empire}Magister Domesticus" />
+	<string id="str_bk_council_chancellor_royal.empire" text="{=bk_council_steward_royal_empire}Magister Cancellarius" />
+	<string id="str_bk_council_steward_royal.empire" text="{=bk_council_chancellor_royal_empire}Comes Sacrarum Largitionum" />
+	<string id="str_bk_council_spymaster_royal.empire" text="{=bk_council_spymaster_royal_empire}Magister Officiorum" />
+	<string id="str_bk_council_spiritual_royal.empire" text="{=bk_council_spiritual_guide_royal_empire}High Seneschal" />
+	
 
 	<string id="str_bk_council_marshall.battania" text="{=bk_council_marshall_battania}Marasgal" />
 	<string id="str_bk_council_chancellor.battania" text="{=bk_council_steward_battania}Sheumarlan" />
@@ -89,19 +99,37 @@
 	<string id="str_bk_council_spiritual_royal.vlandia" text="{=bk_council_spiritual_guide_royal_vlandia}High Seneschal" />
 
 	<string id="str_bk_council_marshall.khuzait" text="{=bk_council_marshall_khuzait}Jagutu-iin Darga" />
-	<string id="str_bk_council_chancellor.khuzait" text="{=bk_council_steward_khuzait}Sheumarlan" />
-	<string id="str_bk_council_steward.khuzait" text="{=bk_council_chancellor_khuzait}Seansalair" />
+	<string id="str_bk_council_chancellor.khuzait" text="{=bk_council_steward_khuzait}Chancellor" />
+	<string id="str_bk_council_steward.khuzait" text="{=bk_council_chancellor_khuzait}Steward" />
 	<string id="str_bk_council_spymaster.khuzait" text="{=bk_council_spymaster_khuzait}Khevtuul" />
+	
+	<string id="str_bk_council_marshall_royal.khuzait" text="{=bk_council_marshall_royal_khuzait}Tumetu-iin Noyan" />
+	<string id="str_bk_council_chancellor_royal.khuzait" text="{=bk_council_chancellor_royal_khuzait}High Chancellor" />
+	<string id="str_bk_council_steward_royal.khuzait" text="{=bk_council_steward_royal_khuzait}High Steward" />
+	<string id="str_bk_council_spymaster_royal.khuzait" text="{=bk_council_spymaster_royal_khuzait}Cherbi" />
+	<string id="str_bk_council_spiritual_royal.khuzait" text="{=bk_council_spiritual_royal_khuzait}High Seneschal" />
 
 	<string id="str_bk_council_marshall.sturgia" text="{=bk_council_marshall_sturgia}Marasgal" />
-	<string id="str_bk_council_chancellor.sturgia" text="{=bk_council_steward_sturgia}Sheumarlan" />
-	<string id="str_bk_council_steward.sturgia" text="{=bk_council_chancellor_sturgia}Seansalair" />
+	<string id="str_bk_council_chancellor.sturgia" text="{=bk_council_steward_sturgia}Chancellor" />
+	<string id="str_bk_council_steward.sturgia" text="{=bk_council_chancellor_sturgia}Steward" />
 	<string id="str_bk_council_spymaster.sturgia" text="{=bk_council_spymaster_sturgia}Treòraiche" />
+	
+	<string id="str_bk_council_marshall_royal.sturgia" text="{=bk_council_marshall_royal_sturgia}Grand Marshal" />
+	<string id="str_bk_council_chancellor_royal.sturgia" text="{=bk_council_chancellor_royal_sturgia}High Chancellor" />
+	<string id="str_bk_council_steward_royal.sturgia" text="{=bk_council_steward_royal_sturgia}High Steward" />
+	<string id="str_bk_council_spymaster_royal.sturgia" text="{=bk_council_spymaster_royal_sturgia}Grand Spymaster" />
+	<string id="str_bk_council_spiritual_royal.sturgia" text="{=bk_council_spiritual_guide_royal_sturgia}High Seneschal" />
 
 	<string id="str_bk_council_marshall.aserai" text="{=bk_council_marshall_aserai}Marasgal" />
-	<string id="str_bk_council_chancellor.aserai" text="{=bk_council_steward_aserai}Sheumarlan" />
-	<string id="str_bk_council_steward.aserai" text="{=bk_council_chancellor_aserai}Seansalair" />
+	<string id="str_bk_council_chancellor.aserai" text="{=bk_council_steward_aserai}Chancellor" />
+	<string id="str_bk_council_steward.aserai" text="{=bk_council_chancellor_aserai}Steward" />
 	<string id="str_bk_council_spymaster.aserai" text="{=bk_council_spymaster_aserai}Treòraiche" />
+	
+	<string id="str_bk_council_marshall_royal.aserai" text="{=bk_council_marshall_royal_aserai}Grand Marshal" />
+	<string id="str_bk_council_chancellor_royal.aserai" text="{=bk_council_chancellor_royal_aserai}High Chancellor" />
+	<string id="str_bk_council_steward_royal.aserai" text="{=bk_council_steward_royal_aserai}High Steward" />
+	<string id="str_bk_council_spymaster_royal.aserai" text="{=bk_council_spymaster_royal_aserai}Grand Spymaster" />
+	<string id="str_bk_council_spiritual_royal.aserai" text="{=bk_council_spiritual_guide_royal_aserai}High Seneschal" />
 
 	<string id="str_bk_spiritual_guide" text="{=bk_spiritual_guide}Spiritual Guide" />
 

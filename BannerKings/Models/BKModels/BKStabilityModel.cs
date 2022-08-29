@@ -1,4 +1,5 @@
 using System.Linq;
+using BannerKings.Managers.Court;
 using BannerKings.Managers.Education.Lifestyles;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
@@ -67,7 +68,8 @@ namespace BannerKings.Models.BKModels
             var random2 = 0.005f * MBRandom.RandomFloat;
             var change = targetAutonomy > autonomy ? 0.005f + random1 - random2 :
                 targetAutonomy < autonomy ? -0.005f - random1 + random2 : 0f;
-            result.Add(change, new TextObject("{=!}"));
+            result.Add(change);
+           
 
             return result;
         }
@@ -187,6 +189,9 @@ namespace BannerKings.Models.BKModels
                 {
                     result.Add(0.05f, new TextObject("{=PSrEtF5L}Government"));
                 }
+
+                BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref result, settlement.OwnerClan.Leader,
+                           CouncilPosition.Castellan, 0.4f, false);
 
                 result.Add(legitimacy, new TextObject("{=UqLsS4GV}Legitimacy"));
             }

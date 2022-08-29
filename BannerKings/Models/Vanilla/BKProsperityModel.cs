@@ -29,7 +29,8 @@ namespace BannerKings.Models.Vanilla
             //if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(village.Settlement))
             // new BKGrowthModel().CalculateHearthGrowth(village, ref baseResult);
 
-            var data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(village.Settlement.Owner);
+            Hero owner = village.Settlement.Owner;
+            var data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(owner);
             if (data.HasPerk(BKPerks.Instance.CivilCultivator))
             {
                 baseResult.Add(1f, BKPerks.Instance.CivilCultivator.Name);
@@ -39,6 +40,13 @@ namespace BannerKings.Models.Vanilla
             {
                 baseResult.Add(0.1f, BKPerks.Instance.RitterPettySuzerain.Name);
             }
+
+            if (owner.Culture.StringId == "battania")
+            {
+                BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref baseResult, owner,
+                          CouncilPosition.Elder, 0.2f, false);
+            }
+           
 
             return baseResult;
         }
@@ -114,6 +122,15 @@ namespace BannerKings.Models.Vanilla
                     var merchantEffect = merchantGold < 20000f ? merchantGold / 10000f - 2f :
                         merchantGold >= 200000f ? MathF.Min(200000f * 0.000005f - 1f, 2f) : 0f;
                     explainedNumber.Add(merchantEffect, new TextObject("{=Crsf0YLd}Merchants wealth"));
+                } 
+                else if (fortification.IsCastle)
+                {
+                    Hero owner = fortification.OwnerClan.Leader;
+                    if (owner.Culture.StringId == "vlandia")
+                    {
+                        BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref explainedNumber, fortification.OwnerClan.Leader,
+                            CouncilPosition.Castellan, 1.5f, false);
+                    }
                 }
 
                 if (fortification.Governor != null)

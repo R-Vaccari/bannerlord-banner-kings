@@ -333,9 +333,9 @@ namespace BannerKings.Managers.Court
 
             switch (government)
             {
-                case GovernmentType.Imperial:
-                    positions.Add(new CouncilMember(null, CouncilPosition.Prince, clan));
-                    break;
+                //case GovernmentType.Imperial:
+                //    positions.Add(new CouncilMember(null, CouncilPosition.Prince, clan));
+                 //   break;
                 case GovernmentType.Feudal:
                     positions.Add(new CouncilMember(null, CouncilPosition.Constable, clan));
                     break;
@@ -668,6 +668,22 @@ namespace BannerKings.Managers.Court
                         case CouncilPosition.Spymaster:
                             primarySkill = member.GetSkillValue(DefaultSkills.Roguery);
                             secondarySkill = member.GetSkillValue(DefaultSkills.Scouting);
+                            break;
+                        case CouncilPosition.Castellan:
+                            primarySkill = member.GetSkillValue(DefaultSkills.Steward);
+                            secondarySkill = member.GetSkillValue(BKSkills.Instance.Lordship);
+                            break;
+                        case CouncilPosition.Spiritual:
+                            primarySkill = member.GetSkillValue(BKSkills.Instance.Theology);
+                            secondarySkill = member.GetSkillValue(BKSkills.Instance.Scholarship);
+                            break;
+                        case CouncilPosition.Constable:
+                            primarySkill = member.GetSkillValue(DefaultSkills.Leadership);
+                            secondarySkill = member.GetSkillValue(DefaultSkills.Steward);
+                            break;
+                        case CouncilPosition.Elder:
+                            primarySkill = member.GetSkillValue(DefaultSkills.Charm);
+                            secondarySkill = member.GetSkillValue(BKSkills.Instance.Scholarship);
                             break;
                     }
 
