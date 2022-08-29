@@ -31,20 +31,36 @@ namespace BannerKings.Models.Vanilla
                         }
                     }
 
-                    if (data.Lifestyle != null && data.Lifestyle == DefaultLifestyles.Instance.Ritter)
+                    if (!aggressor.IsMounted && data.HasPerk(BKPerks.Instance.VaryagDrengr))
                     {
-                        bool notRanged = agressorUsage.RelevantSkill != DefaultSkills.Bow &&
-                            agressorUsage.RelevantSkill != DefaultSkills.Crossbow &&
-                            agressorUsage.RelevantSkill != DefaultSkills.Throwing;
-                        if (notRanged && aggressor.IsMounted)
-                        {
-                            baseResult *= 1.05f;
-                        }
-                        else
-                        {
-                            baseResult *= 0.85f;
-                        }
+                        baseResult *= 1.1f;
                     }
+
+                    if (data.Lifestyle != null)
+                    {
+                        if (data.Lifestyle == DefaultLifestyles.Instance.Ritter)
+                        {
+                            bool notRanged = agressorUsage.RelevantSkill != DefaultSkills.Bow &&
+                                agressorUsage.RelevantSkill != DefaultSkills.Crossbow &&
+                                agressorUsage.RelevantSkill != DefaultSkills.Throwing;
+
+                            if (aggressor.IsMounted)
+                            {
+                                if (notRanged)
+                                {
+                                    baseResult *= 1.05f;
+                                }
+                                else
+                                {
+                                    baseResult *= 0.85f;
+                                }
+                            }
+                        }
+                        else if (data.Lifestyle.Equals(DefaultLifestyles.Instance.Varyag) && aggressor.IsMounted)
+                        {
+                            baseResult *= 0.8f;
+                        }
+                    } 
                 }
 
                 if (aggressor.HeroObject != null)

@@ -55,7 +55,7 @@ namespace BannerKings.Behaviours
             var lf = education.Lifestyle;
             if (skill == lf.FirstSkill || skill == lf.SecondSkill)
             {
-                lf.AddProgress(education.StandartLifestyleProgress);
+                lf.AddProgress(education.StandartLifestyleProgress / 10f);
             }
         }
 
@@ -63,12 +63,21 @@ namespace BannerKings.Behaviours
         {
             foreach (var hero in Hero.AllAliveHeroes)
             {
+                var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(hero);
+                if (CampaignTime.Now.GetDayOfYear == 1 && hero.Clan != null && hero.Clan.IsUnderMercenaryService)
+                {
+                    if (education.HasPerk(BKPerks.Instance.VaryagRecognizedMercenary))
+                    {
+                        hero.Clan.AddRenown(30f);
+                    }
+                }
+
                 if (hero.Clan == Clan.PlayerClan || hero.IsChild)
                 {
                     continue;
                 }
 
-                var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(hero);
+                
                 if (education.Lifestyle == null)
                 {
                     education.SetCurrentLifestyle(new AIBehavior().ChooseLifestyle(hero));

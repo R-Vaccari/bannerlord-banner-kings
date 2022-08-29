@@ -31,19 +31,35 @@ namespace BannerKings.Models.Vanilla
                     baseResult.AddFactor(0.06f, BKPerks.Instance.OutlawNightPredator.Name);
                 }
 
-                if (data.Lifestyle != null && data.Lifestyle.Equals(DefaultLifestyles.Instance.Outlaw))
+                if (data.Lifestyle != null)
                 {
-                    var count = 0;
-                    foreach (var element in mobileParty.MemberRoster.GetTroopRoster())
+                    if (data.Lifestyle.Equals(DefaultLifestyles.Instance.Outlaw))
                     {
-                        if (element.Character.IsHero || element.Character.Occupation == Occupation.Bandit)
+                        var count = 0;
+                        foreach (var element in mobileParty.MemberRoster.GetTroopRoster())
                         {
-                            count += element.Number;
+                            if (element.Character.IsHero || element.Character.Occupation == Occupation.Bandit)
+                            {
+                                count += element.Number;
+                            }
                         }
-                    }
 
-                    baseResult.AddFactor(count / mobileParty.MemberRoster.TotalManCount * 0.1f, data.Lifestyle.Name);
-                }
+                        baseResult.AddFactor(count / mobileParty.MemberRoster.TotalManCount * 0.1f, data.Lifestyle.Name);
+                    }   
+                    else if (data.Lifestyle.Equals(DefaultLifestyles.Instance.Varyag))
+                    {
+                        var count = 0;
+                        foreach (var element in mobileParty.MemberRoster.GetTroopRoster())
+                        {
+                            if (element.Character.IsHero || element.Character.Occupation == Occupation.Bandit)
+                            {
+                                count += element.Number;
+                            }
+                        }
+
+                        baseResult.AddFactor(count / mobileParty.MemberRoster.TotalManCount * 0.08f, data.Lifestyle.Name);
+                    }
+                } 
             }
 
             if (mobileParty.IsCaravan && mobileParty.Owner != null)

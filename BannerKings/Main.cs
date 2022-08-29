@@ -88,6 +88,7 @@ namespace BannerKings
             campaignStarter.AddModel(new BKVolunteerAccessModel());
             campaignStarter.AddModel(new BKBattleRewardModel());
             campaignStarter.AddModel(new BKCombatXpModel());
+            campaignStarter.AddModel(new BKBattleMoraleModel());
             //campaignStarter.LoadGameTexts(BasePath.Name + "Modules/BannerKings/ModuleData/module_strings.xml");
 
             BKAttributes.Instance.Initialize();

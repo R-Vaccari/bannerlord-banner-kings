@@ -212,15 +212,17 @@ namespace BannerKings.Managers.Education.Lifestyles
 
             Varyag = new Lifestyle("lifestyle_varyag");
             Varyag.Initialize(new TextObject("{=4pYayWGi}Varyag"), new TextObject("{=!}"),
-                DefaultSkills.Leadership,
-                DefaultSkills.Roguery,
+                DefaultSkills.Athletics,
+                DefaultSkills.OneHanded,
                 new List<PerkObject>
                 {
-
+                    BKPerks.Instance.VaryagShieldBrother,
+                    BKPerks.Instance.VaryagRecognizedMercenary,
+                    BKPerks.Instance.VaryagDrengr
                 },
-                new TextObject("{=mAta6M84}Reduced demesne weight of towns by {EFFECT1}%\nSettlement stability reduced by {EFFECT2}%"),
-                20f,
-                8f);
+                new TextObject("{=!}Infantry troops are {EFFECT1}% faster on the map\nYou and your formation deal {EFFECT2}% less damage when mounted"),
+                8f,
+                20f);
 
             Gladiator = new Lifestyle("lifestyle_gladiator");
             Gladiator.Initialize(new TextObject("{=!}Gladiator"), new TextObject("{=!}"),
@@ -246,7 +248,7 @@ namespace BannerKings.Managers.Education.Lifestyles
                     BKPerks.Instance.RitterOathbound,
                     BKPerks.Instance.RitterPettySuzerain
                 },
-                new TextObject("{=!}You and melee cavalry in your formation deals {EFFECT1}% more melee damage.{EFFECT1}%\n You and your formation deal {EFFECT2}% less ranged damaged, mounted or otherwise.{EFFECT2}%"),
+                new TextObject("{=!}You and melee cavalry in your formation deals {EFFECT1}% more melee damage.{EFFECT1}%\n You and your formation deal {EFFECT2}% less ranged damaged, mounted or otherwise."),
                 5f,
                 15f, 
                 cultures.First(x => x.StringId == "vlandia"));

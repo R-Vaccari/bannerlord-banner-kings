@@ -692,7 +692,7 @@ namespace BannerKings.Managers.Skills
                 "{=!}Influence is 10% more profitable as mercenary.",
                 SkillEffect.PerkRole.PartyOwner, 10f,
                 SkillEffect.EffectIncrementType.AddFactor,
-                "{=!}For every year spent under mercenary service, gain 10 renown.",
+                "{=!}For every year spent under mercenary service, gain 30 renown.",
                 SkillEffect.PerkRole.Captain, 8f,
                 SkillEffect.EffectIncrementType.AddFactor);
 
@@ -700,10 +700,10 @@ namespace BannerKings.Managers.Skills
             VaryagDrengr.InitializeNew("{=!}Drengr", null,
                 240,
                 null,
-                "",
+                "{=!}Infantry troops in the formation you are leading take 20% less affected by negative morale changes.",
                 SkillEffect.PerkRole.Personal, 10f,
                 SkillEffect.EffectIncrementType.Add,
-                "",
+                "{=XAwb1Yhg}Infantry troops in the formation you are leading have their melee weapon damage increased by 10%.",
                 SkillEffect.PerkRole.Personal, 20f,
                 SkillEffect.EffectIncrementType.AddFactor);
 
