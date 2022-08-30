@@ -445,7 +445,6 @@ namespace BannerKings.Models.BKModels
                         break;
                     case TitleType.Empire:
                     case TitleType.Kingdom:
-                    case TitleType.Lordship:
                     default:
                     {
                         bonus = title.type == TitleType.Kingdom 

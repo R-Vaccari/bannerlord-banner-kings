@@ -103,6 +103,26 @@ namespace BannerKings.Behaviours
             BannerKingsConfig.Instance.EducationManager.UpdateHeroData(hero);
             ApplyScholarshipBedTimeStoryEffect(hero);
 
+
+            if (hero.IsNotable || hero.IsLord)
+            {
+                if (hero.GetSkillValue(BKSkills.Instance.Scholarship) < 30 && MBRandom.RandomFloat < 0.25f)
+                {
+                    hero.AddSkillXp(BKSkills.Instance.Scholarship, 1);
+                }
+
+                if (hero.Clan != null)
+                {
+                    var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(hero.Clan);
+                    var councilMember = council.GetMemberFromPosition(Managers.Court.CouncilPosition.Philosopher);
+                    if (councilMember != null && councilMember.Member != null)
+                    {
+                        float skill = 5 * councilMember.Competence;
+                        hero.AddSkillXp(BKSkills.Instance.Scholarship, (int)skill);
+                    }
+                }
+            }
+
             if (!hero.IsSpecial || !hero.Template.StringId.Contains("bannerkings_bookseller_"))
             {
                 return;

@@ -23,6 +23,23 @@ namespace BannerKings.Managers.Institutions.Religions
 
         [field: SaveableField(1)] public Settlement Settlement { get; }
 
+        public float GetHeathenPercentage(Religion target)
+        {
+            float result = 0f;
+            if (Religions.Count > 0)
+            {
+                foreach (var religion in Religions)
+                {
+                    if (religion.Key != target)
+                    {
+                        result += religion.Value;
+                    }
+                }
+            }
+
+            return result;
+        }
+
         public Religion DominantReligion
         {
             get

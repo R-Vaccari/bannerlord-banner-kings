@@ -1,7 +1,5 @@
 ﻿using BannerKings.Managers.Institutions.Religions.Doctrines;
-using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Skills;
-using System;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
@@ -91,6 +89,19 @@ namespace BannerKings.Models.BKModels
                     if (acres != 0f)
                     {
                         result.Add(acres / 10000f, DefaultDoctrines.Instance.Animism.Name);
+                    }
+                }
+
+                if (rel.HasDoctrine(DefaultDoctrines.Instance.Literalism))
+                {
+                    int skill = hero.GetSkillValue(BKSkills.Instance.Scholarship);
+                    if (!hero.GetPerkValue(BKPerks.Instance.ScholarshipLiterate))
+                    {
+                        result.Add(-0.2f, DefaultDoctrines.Instance.Literalism.Name);
+                    }
+                    else if (skill > 100)
+                    {
+                        result.Add(skill * 0.01f, DefaultDoctrines.Instance.Literalism.Name);
                     }
                 }
             }

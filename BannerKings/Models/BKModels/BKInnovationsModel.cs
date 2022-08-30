@@ -33,10 +33,18 @@ namespace BannerKings.Models.BKModels
                 result.Add(craftsmen / 150000f, new TextObject("{=d0YJZ6Z1}Craftsmen"));
             }
 
-            if (settlement.Owner.GetPerkValue(BKPerks.Instance.ScholarshipPeerReview))
+            if (settlement.Owner != null)
             {
-                result.AddFactor(0.2f, BKPerks.Instance.ScholarshipPeerReview.Name);
+                if (settlement.Owner.GetPerkValue(BKPerks.Instance.ScholarshipPeerReview))
+                {
+                    result.AddFactor(0.2f, BKPerks.Instance.ScholarshipPeerReview.Name);
+                }
+
+                BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref result, settlement.Owner,
+                    Managers.Court.CouncilPosition.Philosopher, 0.05f, true);
+
             }
+            
 
             return result;
         }

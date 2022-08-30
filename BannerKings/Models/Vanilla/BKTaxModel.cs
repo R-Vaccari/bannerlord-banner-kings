@@ -1,4 +1,5 @@
 using BannerKings.Managers.Court;
+using BannerKings.Managers.Institutions.Religions.Doctrines;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Titles;
@@ -72,6 +73,32 @@ namespace BannerKings.Models.Vanilla
                     baseResult.Add(MBMath.ClampFloat(slaves * SLAVE_OUTPUT, 0f, 50000f),
                         new TextObject("{=5mCY3JCP}{CLASS} output").SetTextVariable("CLASS", "Slaves"));
                 }
+
+                var ownerReligion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(town.OwnerClan.Leader);
+                if (data.ReligionData != null && ownerReligion != null && 
+                    ownerReligion.HasDoctrine(DefaultDoctrines.Instance.HeathenTax)
+                {
+                    float heathens = data.ReligionData.GetHeathenPercentage(ownerReligion);
+                    if (heathens != 0f)
+                    {
+                        float result = 0f;
+                        if (nobles > 0f)
+                        {
+                            result += MBMath.ClampFloat(nobles * NOBLE_OUTPUT, 0f, 50000f) * 0.1f;
+                        }
+
+                        if (craftsmen > 0f)
+                        {
+                            result += MBMath.ClampFloat(craftsmen * CRAFTSMEN_OUTPUT, 0f, 50000f) * 0.1f;
+                        }
+
+                        if (serfs > 0f)
+                        {
+                            result += MBMath.ClampFloat(serfs * SERF_OUTPUT, 0f, 50000f) * 0.1f;
+                        }
+
+                        baseResult.Add(result * heathens, DefaultDoctrines.Instance.HeathenTax.Name);
+                    }
 
                 var taxType = ((BKTaxPolicy) BannerKingsConfig.Instance.PolicyManager.GetPolicy(town.Settlement, "tax"))
                     .Policy;

@@ -57,6 +57,12 @@
 		        text="The {NAME} is the representative of faith within a lord's inner circle. Their duty is to be a bridge between the material and spiritual powers, and make certain their suzerain adheres to the faith's principles." />
 		<string id="bk_council_description_elder"
 		        text="The {NAME} represent the caste of respected aged leaders in a tribal society. Their presence increases the influence of a sovereign over the common people." />
+		<string id="bk_council_description_castellan"
+		        text="The {NAME} oversee castles and their administration. They are responsible for their prosperity, assuring constant growth and development of castle demesnes." />
+		<string id="bk_council_description_constable"
+		        text="The {NAME} administrates law enforcement and criminal cases in settlements. Their purpose is to act as a supervisor to guarantee stability of the realm, being a mediator between the crown and governors." />
+		<string id="bk_council_description_philosopher"
+		        text="The {NAME} is responsible for the advancement of the culture and general education of the family. These studied individuals research into innovations, as well as teach their sponsoring family's members subjects such as reading, writting and history." />
 
 		<string id="bk_spiritual_guide" text="Spiritual Guide" />
 
@@ -71,6 +77,24 @@
 		<string id="bk_council_castellan_effects" text="+1.5 prosperity to castles" />
 		<string id="bk_council_constable_effects" text="Settlement stability +4% flat" />
 		<string id="bk_council_elder_effects" text="Village hearths +0.2 daily" />
+		<string id="bk_council_philosopher_effects" text="Settlements provide +5% innovation progress{BREAK}Clan members get 5 daily Scholarship xp" />
+		
+		<string id="bk_council_constable_empire" text="Constable" />
+		<string id="bk_council_constable_sturgia" text="Constable" />
+		<string id="bk_council_constable_battania" text="Conastabal" />
+		<string id="bk_council_constable_vlandia" text="Constable" />
+		<string id="bk_council_constable_khuzait" text="Constable" />
+		<string id="bk_council_constable_aserai" text="Constable" />
+		
+		<string id="bk_council_castellan_vlandia" text="Castellan" />
+		
+		
+		<string id="bk_council_philosopher_empire" text="Philosophus" />
+		<string id="bk_council_philosopher_sturgia" text="Philosopher" />
+		<string id="bk_council_philosopher_battania" text="Feallsanach" />
+		<string id="bk_council_philosopher_vlandia" text="Philosopher" />
+		<string id="bk_council_philosopher_khuzait" text="Philosopher" />
+		<string id="bk_council_philosopher_aserai" text="Philosopher" />
 
 		<string id="bk_council_marshall_empire" text="Domesticus" />
 		<string id="bk_council_marshall_sturgia" text="Marshal" />

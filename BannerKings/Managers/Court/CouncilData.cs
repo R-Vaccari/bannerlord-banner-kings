@@ -324,6 +324,12 @@ namespace BannerKings.Managers.Court
                 return positions;
             }
 
+            var religion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(clan.Leader);
+            if (religion != null && religion.HasDoctrine(DefaultDoctrines.Instance.Literalism))
+            {
+                positions.Add(new CouncilMember(null, CouncilPosition.Philosopher, clan));
+            }
+
             var sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(clan.Kingdom);
             if (sovereign?.contract == null)
             {
@@ -686,6 +692,10 @@ namespace BannerKings.Managers.Court
                             primarySkill = member.GetSkillValue(DefaultSkills.Charm);
                             secondarySkill = member.GetSkillValue(BKSkills.Instance.Scholarship);
                             break;
+                        case CouncilPosition.Philosopher:
+                            primarySkill = member.GetSkillValue(BKSkills.Instance.Scholarship);
+                            secondarySkill = member.GetSkillValue(BKSkills.Instance.Theology);
+                            break;
                     }
 
                     return MBMath.ClampFloat((primarySkill + secondarySkill / 2) / targetCap, 0f, 1f);
@@ -833,6 +843,7 @@ namespace BannerKings.Managers.Court
         Druzina,
         Elder,
         Constable,
+        Philosopher,
         None
     }
 
