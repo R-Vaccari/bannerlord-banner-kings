@@ -2,6 +2,7 @@ using System;
 using BannerKings.Behaviours;
 using BannerKings.Managers.CampaignStart;
 using BannerKings.Managers.Education.Lifestyles;
+using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Institutions.Religions.Doctrines;
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Villages;
@@ -52,6 +53,15 @@ namespace BannerKings.Models.Vanilla
                         baseResult.Add((float)(mercenaryChange * 0.1f), BKPerks.Instance.VaryagRecognizedMercenary.Name);
                     }
                 }
+            }
+
+            if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(clan.Leader, DefaultDivinities.Instance.DarusosianSecondary1))
+            {
+                baseResult.Add(2f, DefaultDivinities.Instance.DarusosianSecondary1.Name);
+            }
+            else if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(clan.Leader, DefaultDivinities.Instance.VlandiaSecondary1))
+            {
+                baseResult.Add(2f, DefaultDivinities.Instance.VlandiaSecondary1.Name);
             }
 
 

@@ -1,9 +1,11 @@
 ﻿using BannerKings.Behaviours;
 using BannerKings.Managers.CampaignStart;
+using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Skills;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Party;
+using TaleWorlds.CampaignSystem.Roster;
 
 namespace BannerKings.Models.Vanilla
 {
@@ -25,6 +27,29 @@ namespace BannerKings.Models.Vanilla
                 if (data.Perks.Contains(BKPerks.Instance.AugustCommander))
                 {
                     result.Add(3f, BKPerks.Instance.AugustCommander.Name);
+                }
+
+                if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(mobileParty.LeaderHero, 
+                    DefaultDivinities.Instance.DarusosianSecondary2))
+                {
+                    result.Add(5f, DefaultDivinities.Instance.DarusosianSecondary2.Name);
+                }
+
+                if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(mobileParty.LeaderHero,
+                    DefaultDivinities.Instance.VlandiaSecondary2))
+                {
+                    float vlandians = 0;
+
+                    foreach (TroopRosterElement element in mobileParty.MemberRoster.GetTroopRoster())
+                    {
+                        if (element.Character.Culture != null && element.Character.Culture.StringId == "vlandia")
+                        {
+                            vlandians += element.Number;
+                        }
+                    }
+
+                    result.Add(10f * (vlandians / (float)mobileParty.MemberRoster.Count), 
+                        DefaultDivinities.Instance.VlandiaSecondary2.Name);
                 }
             }
 

@@ -1,6 +1,7 @@
 using System.Linq;
 using BannerKings.Managers.Court;
 using BannerKings.Managers.Education.Lifestyles;
+using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Institutions.Religions.Doctrines;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
@@ -163,6 +164,12 @@ namespace BannerKings.Models.BKModels
                 {
                     result.Add(-0.1f, new TextObject("{=cCQO7noU}{LIFESTYLE} lifestyle")
                         .SetTextVariable("LIFESTYLE", DefaultLifestyles.Instance.Mercenary.Name));
+                }
+
+                if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(town.OwnerClan.Leader, 
+                    DefaultDivinities.Instance.DarusosianSecondary2))
+                {
+                    result.Add(0.04f, DefaultDivinities.Instance.DarusosianSecondary2.Name);
                 }
 
                 var demesneLimit = CalculateDemesneLimit(settlement.Owner).ResultNumber;

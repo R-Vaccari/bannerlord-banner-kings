@@ -45,12 +45,12 @@ namespace BannerKings.Managers
             var darusosianReligion = new Religion(Settlement.All.First(x => x.StringId == "town_ES4"),
                 DefaultFaiths.Instance.Darusosian, new HierocraticLeadership(),
                 new List<CultureObject> {imperial},
-                new List<string> {"legalism"});
+                new List<string> {"legalism", "childbirth" });
 
             var vlandiaReligion = new Religion(null,
                 DefaultFaiths.Instance.Canticles, new HierocraticLeadership(),
                 new List<CultureObject> {vlandia},
-                new List<string> {"sacrifice", "literalism", "childbirth"});
+                new List<string> {"sacrifice", "literalism"});
 
             var religions = new List<Religion>
             {
@@ -238,6 +238,17 @@ namespace BannerKings.Managers
                     var religion = (Religion) element[0].Identifier;
                     Religions[religion].Add(Hero.MainHero, new FaithfulData(GetStartingPiety(religion)));
                 }, null));
+        }
+
+        public bool HasBlessing(Hero hero, Divinity blessing)
+        {
+            Religion rel = GetHeroReligion(hero);
+            if (rel != null)
+            {
+                return Religions[rel][hero].Blessing == blessing;
+            }
+
+            return false;
         }
 
         private int GetStartingPiety(Religion religion, Hero hero = null)

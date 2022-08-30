@@ -92,13 +92,13 @@ namespace BannerKings.Managers.Institutions.Religions
             DarusosianSecondary1 = new Divinity("darusosian-secondary-1");
             DarusosianSecondary1.Initialize(new TextObject("{=SW29YLBZ}Imperial Cult"),
                 new TextObject("{=XyVMjNNp}Though there has long been an imperial cult in the Calradic Empire, it grew in popularity in the generations after Darusos’s murder. Emperors were deified, made to stand alongside their own gods as peers. During the waning generations of the united empire many would proclaim themselves god-emperor, or other divinely appointed titles; the rite of the divus can only transubstantiate an emperor upon their death. Thus the last truly ordained imperial cult is that which preaches the words of Arenicos Divus; though upstart branches have begun for an inevitable worship of Ira Divus."),
-                new TextObject("{=!}"),
+                new TextObject("{=!}Bonus influence\nEvery season, gain renown for each title part of the Southern Empire"),
                 new TextObject("{=J4D4X2XJ}Cult"));
 
             DarusosianSecondary2 = new Divinity("darusosian-secondary-2");
             DarusosianSecondary2.Initialize(new TextObject("{=JqPzw7PR}Lycaronian Triad"),
                 new TextObject("{=PONMWMm2}The Empire has long held its own pantheon of divine entities which rule over all aspects of mortal life and which are appeased by means of ritual sacrifice, festival activities, and prayers for absolution. Within the Darusosian Martyrdom, the locally vaunted Lycaronian Triad is held above all other eternal divinities and viewed as adjacent to mortal emperors risen to divinity by the rites of the divus. Iovis, the Sky-Father reigns as the henotheistic patriarch who traditionally dwells upon Mount Erithrys. He is accompanied by Astaronia, his bride who represents that which must be protected by the machinations of imperial might; and by his daughter Mesnona who was born from the ego of Iovis and who grants insight to mortal petitioners."),
-                new TextObject("{=!}"),
+                new TextObject("{=!}Settlement stability increased\nParty morale bonus"),
                 new TextObject("{=iE8OCyCv}Gods"));
 
             VlandiaMain = new Divinity("vlandia-main");
@@ -109,13 +109,13 @@ namespace BannerKings.Managers.Institutions.Religions
             VlandiaSecondary1 = new Divinity("vlandia-secondary-1");
             VlandiaSecondary1.Initialize(new TextObject("{=iD6W9AS7}Ribaldi Cant"),
                 new TextObject("{=TLVS4KGV}Those who buck against the perceived hegemony of the Lai Vlandia, be they peasant rebels or upstart lords, will claim piety by way of the Ribaldi Cant. Though traditionalists will note the Cant is but a deviation of the illuminated manuscripts and oral tales of the pre-Calradic Vlandian culture, modern adherents claim the Cant to be the methodology of rebels, wanderers, rascals, and conquerors. Subtlety is seldom found, and parables and morality plays are all too commonly twisted to back the ideology of the teller. As such the works depicted therein are often viewed as satire or crude witticisms, but few cloisters will deny their worth. They are part of the Lai Vlandia, and thus the Canticles, regardless of their desires. "),
-                new TextObject("{=!}"),
+                new TextObject("{=!}Bonus influence\nIncreased faith presence in settlements"),
                 new TextObject("{=neVhyybi}Saga"));
 
             VlandiaSecondary2 = new Divinity("vlandia-secondary-2");
             VlandiaSecondary2.Initialize(new TextObject("{=45TyGZm6}Meridional Cantigan"),
                 new TextObject("{=Wip91rve}The vitriolic and zealous among the modern Vlandians have as of late begun singing the Meridional Cantigan and marching towards the Southlands in a belligerent crusade. Claiming to be a reprisal of a song sung before the days of Osrac Iron-Arm, these goliard warrior-poets speak the harsh rhymes of their ancient conqueror patriarchs and wayward followers. They seek truth in deed, to be worthy of a completed song for an era; to serve in harmony with the Canticles, the Lai Vlandia, and to be remembered in illuminations befitting those enshrined in legend."),
-                new TextObject("{=!}"),
+                new TextObject("{=!}Occasionally receive zealot warriors\nParty morale bonus for vlandian troops"),
                 new TextObject("{=neVhyybi}Saga"));
         }
     }

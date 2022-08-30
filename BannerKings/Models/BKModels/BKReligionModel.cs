@@ -179,6 +179,11 @@ namespace BannerKings.Models.BKModels
                 {
                     result.AddFactor(0.05f, BKPerks.Instance.TheologyPreacher.Name);
                 }
+
+                if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(owner, DefaultDivinities.Instance.VlandiaSecondary1))
+                {
+                    result.AddFactor(0.1f, DefaultDivinities.Instance.VlandiaSecondary1.Name);
+                }
             }
 
             return result;
