@@ -74,13 +74,13 @@ namespace BannerKings.Managers.Institutions.Religions
             AmraSecondary1 = new Divinity("amra-secondary-1");
             AmraSecondary1.Initialize(new TextObject("{=SgShtGNw}Na Sidhfir"),
                 new TextObject("{=oF7u5Z29}Those deemed to have won the favor of the Slaugh Aos’An and the love of the Battanian people for more than a generation may be vaunted into the ranks of the Na Sidhfir - the Immortal Men of the Woods. Occupying a position equally heroic and tragic, the grand figures of the Na Sidhfir are claimed to be tireless and exhausted entities - unable to rest so long as they are remembered, but too self-absorbed to allow their songs to go unsung. Derwyddon practitioners claim the Na Sidhfir possess the bodies of Wolfskins, allowing them to rest and ravage away from the heavenly realms."),
-                new TextObject("{=GgVizsVd}Bonus in forest autosimulated battles\nAbility to freely recruit forest bandit parties into your own"),
+                new TextObject("{=GgVizsVd}Bonus in forest autosimulated battles\nAbility to recruit forest bandit parties under 20 men into your own"),
                 new TextObject("{=oWpMWLs8}Ancestor Spirits"));
 
             AmraSecondary2 = new Divinity("amra-secondary-2");
             AmraSecondary2.Initialize(new TextObject("{=KkYfAdjp}Dymhna Sidset"),
                 new TextObject("{=qhXb37NZ}Patient devils, the Dymhna Sidset are the stuff of children’s parables and ill told tales around campfires. They are the spittal on a rabid dog’s lips, the rage of a mother bear seeking a misplaced cub, the cold biting steel that strikes only in betrayal. Though the attempted Calradification of the Uchalion Plateau could not purge this pagan belief set entirely, it did compartmentalize and mangle its body of rituals. Giants, ghosts, and many an unseen shade were changed from beings of tale and legend to “patient devils” by the whims of the Empire. In recent years, some have sought to venerate the Dymhna Sidset; viewing them instead as aspects of rebellion and irredentism."),
-                new TextObject("{=fJTNgpOj}Faster raiding of non-Battanian villages\nRenown gain for raiding non-Battanians\nPiety gain for conquering Battanian settlements owned by non-Battanians"),
+                new TextObject("{=fJTNgpOj}Faster raiding of non-Battanian villages\nRenown gain for raiding non-Battanians"),
                 new TextObject("{=Lz4WcBZd}Natural Spirits"));
 
 

@@ -1,8 +1,10 @@
-﻿using BannerKings.Managers.Skills;
+﻿using BannerKings.Managers.Institutions.Religions;
+using BannerKings.Managers.Skills;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.MapEvents;
 using TaleWorlds.CampaignSystem.Party;
+using TaleWorlds.Core;
 
 namespace BannerKings.Models.Vanilla
 {
@@ -20,6 +22,16 @@ namespace BannerKings.Models.Vanilla
                     strikerTroop.IsInfantry && strikerTroop.IsRanged)
                 {
                     result = (int) (result * 1.15f);
+                }
+
+                if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(leader, DefaultDivinities.Instance.AmraSecondary1))
+                {
+                    TerrainType faceTerrainType = Campaign.Current.MapSceneWrapper
+                        .GetFaceTerrainType(strikerParty.MobileParty.CurrentNavigationFace);
+                    if (faceTerrainType == TerrainType.Forest)
+                    {
+                        result = (int)(result * 1.08f);
+                    }
                 }
             }
 

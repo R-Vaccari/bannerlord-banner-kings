@@ -4,11 +4,15 @@ using System.Text;
 using BannerKings.Managers;
 using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Institutions.Religions.Faiths.Rites;
+using BannerKings.Managers.Titles;
 using HarmonyLib;
 using SandBox.CampaignBehaviors;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
+using TaleWorlds.CampaignSystem.Encounters;
+using TaleWorlds.CampaignSystem.MapEvents;
 using TaleWorlds.CampaignSystem.Party;
+using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
@@ -23,6 +27,7 @@ namespace BannerKings.Behaviours
 
         public override void RegisterEvents()
         {
+            CampaignEvents.RaidCompletedEvent.AddNonSerializedListener(this, OnRaidCompleted);
             CampaignEvents.HeroCreated.AddNonSerializedListener(this, OnHeroCreated);
             CampaignEvents.HeroComesOfAgeEvent.AddNonSerializedListener(this, OnHeroComesOfAge);
             CampaignEvents.DailyTickHeroEvent.AddNonSerializedListener(this, OnDailyTickHero);
@@ -46,6 +51,26 @@ namespace BannerKings.Behaviours
         private void OnGameLoaded(CampaignGameStarter starter)
         {
             ReligionsManager.PostInitialize();
+        }
+
+        private void OnRaidCompleted(BattleSideEnum winnerSide, MapEvent mapEvent)
+        {
+            foreach (MapEventParty mapEventParty in mapEvent.AttackerSide.Parties)
+            {
+                if (mapEventParty.Party.IsActive)
+                {
+                    MobileParty mobileParty = mapEventParty.Party.MobileParty;
+                    if (mobileParty != null && mobileParty.LeaderHero != null && 
+                        mapEvent.MapEventSettlement.Culture.StringId != "battania")
+                    {
+                        if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(mobileParty.LeaderHero,
+                            DefaultDivinities.Instance.AmraSecondary2))
+                        {
+                            GainRenownAction.Apply(mobileParty.LeaderHero, 10f);
+                        }
+                    }
+                }
+            }
         }
 
         private void OnHeroCreated(Hero hero, bool bornNaturally)
@@ -102,6 +127,32 @@ namespace BannerKings.Behaviours
 
 
                 AddHeroToIdealReligion(hero);
+            } 
+            else
+            {
+                if (CampaignTime.Now.GetDayOfSeason == 1 && BannerKingsConfig.Instance.ReligionsManager.HasBlessing(hero,
+                    DefaultDivinities.Instance.DarusosianSecondary1))
+                {
+                    List<FeudalTitle> titles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(hero);
+                    Kingdom kingdom = Kingdom.All.FirstOrDefault(x => x.StringId == "empire_s");
+                    if (kingdom != null)
+                    {
+                        FeudalTitle empireTitle = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
+                        if (empireTitle != null)
+                        {
+                            float bonus = 0f;
+                            foreach (var title in titles)
+                            {
+                                if (title.sovereign == empireTitle)
+                                {
+                                    bonus += 2f / (float)title.type;
+                                }
+                            }
+
+                            GainRenownAction.Apply(hero, bonus);
+                        }
+                    }
+                }
             }
         }
 
@@ -284,7 +335,54 @@ namespace BannerKings.Behaviours
             starter.AddPlayerLine("bk_rite_confirm", "bk_rite_confirm", "hero_main_options",
                 "{=G4ALCxaA}Never mind.",
                 null, null);
+
+
+            starter.AddPlayerLine("bk_blessing_recruit_battania_bandits", "bandit_attacker", "common_encounter_ultimatum_answer",
+                "{=!}I am oathbound to the Na Sidhfir. As men of the wilds, will you join me?",
+                RecruitBattaniaBanditsOnCondition,
+                RecruitBattaniaBanditsOnConseqence, 
+                100, 
+                null, 
+                null);
+
+
         }
+
+        private bool RecruitBattaniaBanditsOnCondition()
+        {
+            var party = MobileParty.ConversationParty;
+            bool blessed = BannerKingsConfig.Instance.ReligionsManager.HasBlessing(Hero.MainHero, 
+                DefaultDivinities.Instance.AmraSecondary1);
+            return party.IsBandit && party.MapFaction.Culture.StringId == "forest_bandits" && 
+                party.MemberRoster.Count < 21 && blessed;
+        }
+
+        private void RecruitBattaniaBanditsOnConseqence()
+        {
+            List<MobileParty> list = new List<MobileParty>
+            {
+                MobileParty.MainParty
+            };
+            List<MobileParty> list2 = new List<MobileParty>();
+            if (PlayerEncounter.EncounteredMobileParty != null)
+            {
+                list2.Add(PlayerEncounter.EncounteredMobileParty);
+            }
+            if (PlayerEncounter.Current != null)
+            {
+                PlayerEncounter.Current.FindAllNpcPartiesWhoWillJoinEvent(ref list, ref list2);
+            }
+            TroopRoster troopsToJoinPlayerParty = GetTroopsToJoinPlayerParty(list2);
+            PartyScreenManager.OpenScreenAsLoot(troopsToJoinPlayerParty, TroopRoster.CreateDummyTroopRoster(), PlayerEncounter.EncounteredParty.Name, troopsToJoinPlayerParty.TotalManCount, null);
+            for (int i = list2.Count - 1; i >= 0; i--)
+            {
+                MobileParty mobileParty = list2[i];
+                CampaignEventDispatcher.Instance.OnBanditPartyRecruited(mobileParty);
+                DestroyPartyAction.Apply(MobileParty.MainParty.Party, mobileParty);
+            }
+            PlayerEncounter.LeaveEncounter = true;
+        }
+
 
         private bool InductionOnClickable(out TextObject hintText)
         {
@@ -521,6 +619,32 @@ namespace BannerKings.Behaviours
             MBTextManager.SetTextVariable("CLERGYMAN_INDUCTION_LAST",
                 religion.Faith.GetClergyInductionLast(clergyman.Rank));
             MBTextManager.SetTextVariable("CLERGYMAN_BLESSING_ACTION", religion.Faith.GetBlessingAction());
+        }
+
+        private TroopRoster GetTroopsToJoinPlayerParty(List<MobileParty> parties)
+        {
+            TroopRoster troopRoster = TroopRoster.CreateDummyTroopRoster();
+            foreach (MobileParty mobileParty in parties)
+            {
+                if (mobileParty.IsBandit && !mobileParty.IsLordParty)
+                {
+                    for (int i = 0; i < mobileParty.MemberRoster.Count; i++)
+                    {
+                        if (!mobileParty.MemberRoster.GetCharacterAtIndex(i).IsHero)
+                        {
+                            troopRoster.AddToCounts(mobileParty.MemberRoster.GetCharacterAtIndex(i), mobileParty.MemberRoster.GetElementNumber(i), false, 0, 0, true, -1);
+                        }
+                    }
+                    for (int j = 0; j < mobileParty.PrisonRoster.Count; j++)
+                    {
+                        if (!mobileParty.PrisonRoster.GetCharacterAtIndex(j).IsHero)
+                        {
+                            troopRoster.AddToCounts(mobileParty.PrisonRoster.GetCharacterAtIndex(j), mobileParty.PrisonRoster.GetElementNumber(j), false, 0, 0, true, -1);
+                        }
+                    }
+                }
+            }
+            return troopRoster;
         }
     }
 

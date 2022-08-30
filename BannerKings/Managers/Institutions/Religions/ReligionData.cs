@@ -1,4 +1,5 @@
 ﻿using BannerKings.Managers.Populations;
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
@@ -115,13 +116,17 @@ namespace BannerKings.Managers.Institutions.Religions
                 }
 
                 // non-dominant religions have higher change of being affected when have more proportion
-                candidates.Add(new (pair.Key, pair.Value / totalWeight));
+                candidates.Add(new (pair.Key, (pair.Value + 1f) / totalWeight));
             }
 
             var target = MBRandom.ChooseWeighted(candidates);
             if (target is not null)
             {
                 Religions[target] -= conversion;
+                if (Religions[target] <= 0f)
+                {
+                    Religions.Remove(target);
+                }
             }
 
             Religions[dominant] += conversion;
@@ -136,7 +141,7 @@ namespace BannerKings.Managers.Institutions.Religions
             } 
             else
             {
-                AddOwnerReligion();
+                AddHeroesReligion();
             }
 
             if (dominant == null)
@@ -155,10 +160,10 @@ namespace BannerKings.Managers.Institutions.Religions
         private void InitializeReligions()
         {
             Religions = new Dictionary<Religion, float>();
-            AddOwnerReligion();
+            AddHeroesReligion();
         }
 
-        private void AddOwnerReligion()
+        private void AddHeroesReligion()
         {
             Hero owner = null;
             if (Settlement.OwnerClan != null)
@@ -177,6 +182,15 @@ namespace BannerKings.Managers.Institutions.Religions
                         value = 1f;
                     }
                     Religions.Add(rel, value);
+                }
+            }
+
+            foreach (var notable in Settlement.Notables)
+            {
+                var rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(notable);
+                if (!Religions.ContainsKey(rel))
+                {
+                    Religions.Add(rel, 0.001f);
                 }
             }
         }

@@ -1,4 +1,5 @@
-﻿using BannerKings.Managers.Populations.Villages;
+﻿using BannerKings.Managers.Institutions.Religions;
+using BannerKings.Managers.Populations.Villages;
 using BannerKings.Managers.Skills;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.MapEvents;
@@ -31,24 +32,25 @@ namespace BannerKings.Models.Vanilla
                 }
             }
 
-
-            var defender = attackerSide.MapEvent.DefenderSide;
-            Settlement settlement = null;
-            if (defender.Parties is {Count: > 0})
-            {
-                settlement = defender.Parties[0].Party.Settlement;
-            }
-
+            Settlement settlement = attackerSide.MapEvent.MapEventSettlement;
             if (settlement != null)
             {
-                if (BannerKingsConfig.Instance.PopulationManager != null &&
-                    BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
+                if (BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
                 {
                     var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement).VillageData;
                     var palisade = data.GetBuildingLevel(DefaultVillageBuildings.Instance.Palisade);
                     if (palisade > 0)
                     {
                         result *= 1f - 0.12f * palisade;
+                    }
+                }
+
+                if (attacker.LeaderHero != null && settlement.Culture.StringId != "battania")
+                {
+                    if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(attacker.LeaderHero,
+                            DefaultDivinities.Instance.AmraSecondary2))
+                    {
+                        result *= 1.15f;
                     }
                 }
             }

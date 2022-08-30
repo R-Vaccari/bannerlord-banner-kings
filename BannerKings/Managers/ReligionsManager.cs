@@ -191,26 +191,34 @@ namespace BannerKings.Managers
 
         public void AddToReligion(Hero hero, Religion religion)
         {
+            bool conversion = GetHeroReligion(hero) != null;
             ExecuteRemoveHero(hero);
             ExecuteAddToReligion(hero, religion);
 
-            if (hero.Clan != null)
+            if (conversion)
             {
-                if (hero.Clan == Clan.PlayerClan)
+                if (hero.Clan != null)
                 {
-                    MBInformationManager.AddQuickInformation(new TextObject("{=!}{HERO} has converted to the {FAITH} faith.")
-                            .SetTextVariable("HERO", hero.Name)
-                            .SetTextVariable("FAITH", religion.Faith.GetFaithName()),
-                        0, hero.CharacterObject, "event:/ui/notification/relation");
-                }
+                    if (hero.Clan == Clan.PlayerClan)
+                    {
+                        MBInformationManager.AddQuickInformation(new TextObject("{=!}{HERO} has converted to the {FAITH} faith.")
+                                .SetTextVariable("HERO", hero.Name)
+                                .SetTextVariable("FAITH", religion.Faith.GetFaithName()),
+                            0, hero.CharacterObject, "event:/ui/notification/relation");
+                    }
 
-                if (hero == hero.Clan.Leader)
-                {
-                    hero.Clan.Renown -= 100f;
+                    if (hero == hero.Clan.Leader)
+                    {
+                        hero.Clan.Renown -= 100f;
+                    }
+                    else
+                    {
+                        hero.Clan.Renown -= 50f;
+                    }
                 }
-                else
+                else if (hero.IsNotable)
                 {
-                    hero.Clan.Renown -= 50f;
+                    hero.AddPower(-20f);
                 }
             }
         }
