@@ -184,6 +184,12 @@ namespace BannerKings.Models.BKModels
                 {
                     result.AddFactor(0.1f, DefaultDivinities.Instance.VlandiaSecondary1.Name);
                 }
+
+                if (owner.Culture != settlement.Culture && BannerKingsConfig.Instance.ReligionsManager.HasBlessing(owner,
+                    DefaultDivinities.Instance.AseraSecondary3))
+                {
+                    result.AddFactor(0.15f, DefaultDivinities.Instance.AseraSecondary1.Name);
+                }
             }
 
             return result;

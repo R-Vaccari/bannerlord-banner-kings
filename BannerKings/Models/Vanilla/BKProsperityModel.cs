@@ -1,5 +1,6 @@
 using System.Linq;
 using BannerKings.Managers.Court;
+using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Skills;
 using Helpers;
 using TaleWorlds.CampaignSystem;
@@ -45,6 +46,12 @@ namespace BannerKings.Models.Vanilla
             {
                 BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref baseResult, owner,
                           CouncilPosition.Elder, 0.2f, false);
+            }
+
+            if ((village.VillageType == DefaultVillageTypes.DateFarm || village.VillageType == DefaultVillageTypes.DesertHorseRanch) 
+                && BannerKingsConfig.Instance.ReligionsManager.HasBlessing(owner, DefaultDivinities.Instance.AseraSecondary3)) 
+            {
+                baseResult.Add(0.4f, DefaultDivinities.Instance.AseraSecondary3.Name);
             }
            
 

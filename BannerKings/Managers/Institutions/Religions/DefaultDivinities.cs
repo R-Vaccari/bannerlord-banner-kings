@@ -50,19 +50,19 @@ namespace BannerKings.Managers.Institutions.Religions
             AseraSecondary1 = new Divinity("asera-secondary-1");
             AseraSecondary1.Initialize(new TextObject("{=hVrkPEqy}Damma-Siddiq"),
                 new TextObject("{=t5Tahj9q}Descended from those who dedicated themselves to the Code of Asera but who were married into the true bloodlines of Asera’s descendents are known as the Damma-Siddiq; those of truthful blood. It is through their reforms, compromises, and bold rhetoric that marriage may allow even those born outside the Sultanate to come to be viewed as being of the blood of Asera - albeit through legalism and spirit."),
-                new TextObject("{=!}"),
+                new TextObject("{=!}Daily chance of relation gain with a random Aserai Banu\nReduced influence cost for supporting decisions"),
                 new TextObject("{=MBYo3Pjx}School"));
 
             AseraSecondary2 = new Divinity("asera-secondary-2");
             AseraSecondary2.Initialize(new TextObject("{=ROhyHjG4}Ibn-Zakaa"),
                 new TextObject("{=SJzGcJt2}Only the direct line of Asera’s sons can claim to be Ibn-Zakaa; to be born a Pure Son. Such claims have led to kinstrife and civil war in the past, with daughters being viewed as a dead end to a pure line, and many a ‘lesser son’ made eunuch as means of societal control. In the modern age, the Ibn-Zakaa are far more enlightened, viewing themselves not as deserving of a divinely appointed respect but rather in the light of those who have much to prove to be worthy in the eyes of their progenitor."),
-                new TextObject("{=!}"),
+                new TextObject("{=!}Daily renown for running a party of Aserai only\nAserai troops cheaper to recruit"),
                 new TextObject("{=MBYo3Pjx}School"));
 
             AseraSecondary3 = new Divinity("asera-secondary-3");
             AseraSecondary3.Initialize(new TextObject("{=VVfdjejb}Rashuqqalih"),
                 new TextObject("{=0XorBTBT}The schools of philosophy preached by the Rashuqqalih practitioners of the Code, are concerned foremost with matters of righteousness and societal elegance. To be of the blood of Asera is to be bound to the morals of a mortal man made legendary, and thus matters of failure and mortal flaws must be treated with compassion. The most famous practitioner of the Rashuqqalih school was Queen Eshora, who brought several nomadic badw tribes into the Sultanate by accepting their adherence to tradition as a thing to be celebrated, rather than as a matter to consider them a distasteful other."),
-                new TextObject("{=!}"),
+                new TextObject("{=!}Increased faith presence in foreign settlements\nProsperity for date and camel producing villages"),
                 new TextObject("{=MBYo3Pjx}School"));
 
 

@@ -1,4 +1,5 @@
 ﻿using BannerKings.Managers.Education;
+using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Skills;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
@@ -106,7 +107,7 @@ namespace BannerKings.Models.Vanilla
 
         public override int GetTroopRecruitmentCost(CharacterObject troop, Hero buyerHero, bool withoutItemCost = false)
         {
-            var result = new ExplainedNumber(base.GetTroopRecruitmentCost(troop, buyerHero, withoutItemCost));
+            var result = new ExplainedNumber(base.GetTroopRecruitmentCost(troop, buyerHero, withoutItemCost) * 1.4f);
             result.LimitMin(GetCharacterWage(troop.Tier) * 2f);
 
             if (buyerHero != null)
@@ -134,6 +135,13 @@ namespace BannerKings.Models.Vanilla
 
                 if (buyerHero.Clan != null)
                 {
+
+                    if (troop.Culture.StringId == "aserai" && BannerKingsConfig.Instance.ReligionsManager
+                        .HasBlessing(buyerHero, DefaultDivinities.Instance.AseraSecondary2))
+                    {
+                        result.AddFactor(-0.1f);
+                    }
+
                     if (buyerHero.CurrentSettlement is {OwnerClan: { }} 
                         && buyerHero.CurrentSettlement.OwnerClan == buyerHero.Clan)
                     {

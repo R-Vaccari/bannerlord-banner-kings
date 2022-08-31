@@ -107,7 +107,8 @@ namespace BannerKings.Managers.Institutions.Religions
                 return;
             }
             
-            var conversion = BannerKingsConfig.Instance.ReligionModel.CalculateReligionConversion(dominant, Settlement, diff).ResultNumber;
+            var conversion = BannerKingsConfig.Instance.ReligionModel.CalculateReligionConversion(dominant, Settlement, diff).ResultNumber
+                / 100f;
             foreach (var pair in weightDictionary)
             {
                 if (pair.Key == dominant)

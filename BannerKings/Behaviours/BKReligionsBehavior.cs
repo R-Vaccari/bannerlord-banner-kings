@@ -9,6 +9,7 @@ using HarmonyLib;
 using SandBox.CampaignBehaviors;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
+using TaleWorlds.CampaignSystem.Election;
 using TaleWorlds.CampaignSystem.Encounters;
 using TaleWorlds.CampaignSystem.MapEvents;
 using TaleWorlds.CampaignSystem.Party;
@@ -130,6 +131,32 @@ namespace BannerKings.Behaviours
             } 
             else
             {
+                if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(hero,
+                    DefaultDivinities.Instance.AseraSecondary2) && hero.IsPartyLeader)
+                {
+                    int aserai = 0;
+                    foreach (TroopRosterElement element in hero.PartyBelongedTo.MemberRoster.GetTroopRoster())
+                    {
+                        if (element.Character.Culture.StringId == "aserai")
+                        {
+                            aserai += element.Number;
+                        }
+                    }
+
+                    if (aserai == hero.PartyBelongedTo.MemberRoster.TotalManCount)
+                    {
+                        GainRenownAction.Apply(hero, 0.5f);
+                    }
+                }
+
+                if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(hero,
+                    DefaultDivinities.Instance.AseraSecondary1) && MBRandom.RandomFloat < 0.3f) 
+                {
+                    Clan random = Clan.All.GetRandomElementWithPredicate(x => x.Culture.StringId == "aserai" && x != hero.Clan);
+                    ChangeRelationAction.ApplyRelationChangeBetweenHeroes(hero, random.Leader, 2);
+                }
+
+
                 if (CampaignTime.Now.GetDayOfSeason == 1 && BannerKingsConfig.Instance.ReligionsManager.HasBlessing(hero,
                     DefaultDivinities.Instance.DarusosianSecondary1))
                 {
@@ -650,6 +677,21 @@ namespace BannerKings.Behaviours
 
     namespace Patches
     {
+        
+        [HarmonyPatch(typeof(KingdomDecision), "GetInfluenceCostOfSupport")]
+        internal class GetInfluenceCostOfSupportPatch
+        {
+            private static void Postfix(ref int __result, Clan clan, Supporter.SupportWeights supportWeight)
+            {
+                if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(clan.Leader, 
+                    DefaultDivinities.Instance.AseraSecondary1))
+                {
+                    var result = __result;
+                    __result = (int)(result * 0.7f);
+                }
+            }
+        }
+
         [HarmonyPatch(typeof(LordConversationsCampaignBehavior), "conversation_puritan_preacher_introduction_on_condition")]
         internal class PuritanPreacherPatch
         {
