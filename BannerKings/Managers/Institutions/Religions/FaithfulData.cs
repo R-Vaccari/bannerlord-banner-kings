@@ -27,7 +27,7 @@ namespace BannerKings.Managers.Institutions.Religions
         {
             if (Blessing != null)
             {
-                Divinity bless = DefaultDivinities.Instance.GetById(Blessing.StringId);
+                var bless = DefaultDivinities.Instance.GetById(Blessing.StringId);
                 Blessing.Initialize(bless.Name, bless.Description, bless.Effects, bless.SecondaryTitle,
                     bless.BaseBlessingCost);
             }
@@ -39,7 +39,7 @@ namespace BannerKings.Managers.Institutions.Religions
 
         public float GetBlessingYearsWindow(Hero hero)
         {
-            float result = 2f;
+            var result = 2f;
             if (hero.GetPerkValue(BKPerks.Instance.TheologyBlessed))
             {
                 result += 0.25f;

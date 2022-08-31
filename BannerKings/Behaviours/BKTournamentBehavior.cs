@@ -1,4 +1,4 @@
-﻿using BannerKings.Managers.Education;
+using BannerKings.Managers.Education;
 using BannerKings.Managers.Skills;
 using HarmonyLib;
 using Helpers;
@@ -36,22 +36,22 @@ namespace BannerKings.Behaviours
 
             if (participants.Contains(Hero.MainHero.CharacterObject))
             {
-                EducationData education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(Hero.MainHero);
+                var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(Hero.MainHero);
                 if (education.HasPerk(BKPerks.Instance.GladiatorTourDeCalradia))
                 {
-                    Town resultTown = SettlementHelper.FindNearestTown((Settlement s) => 
+                    var resultTown = SettlementHelper.FindNearestTown((Settlement s) => 
                     { 
                         return s.Town.HasTournament; 
                     }, 
                     null
                     ).Town;
 
-                    TournamentGame game = Campaign.Current.TournamentManager.GetTournamentGame(resultTown);
+                    var game = Campaign.Current.TournamentManager.GetTournamentGame(resultTown);
                     if (resultTown != null)
                     {
                         InformationManager.ShowTextInquiry(new TextInquiryData(
-                            new TextObject("{=!}Nearest Tournament").ToString(),
-                            new TextObject("{=!}As a known gladiator, you are informed that {TOWN} holds the nearest tournament match. It's prize is {PRIZE}")
+                            new TextObject("{=HwBPn5so}Nearest Tournament").ToString(),
+                            new TextObject("{=3abzCPc2}As a known gladiator, you are informed that {TOWN} holds the nearest tournament match. It's prize is {PRIZE}")
                             .SetTextVariable("TOWN", resultTown.Name)
                             .SetTextVariable("PRIZE", game.Prize.Name)
                             .ToString(),
@@ -67,7 +67,7 @@ namespace BannerKings.Behaviours
 
                 if (winner == Hero.MainHero.CharacterObject && education.HasPerk(BKPerks.Instance.GladiatorPromisingAthlete))
                 {
-                    Hero notable = town.Settlement.Notables.GetRandomElement();
+                    var notable = town.Settlement.Notables.GetRandomElement();
                     ChangeRelationAction.ApplyPlayerRelation(notable, 2);
                 }
             }
@@ -103,10 +103,10 @@ namespace BannerKings.Behaviours
         {
             private static void Postfix(ref int __result, int bet)
             {
-                EducationData education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(Hero.MainHero);
+                var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(Hero.MainHero);
                 if (education.HasPerk(BKPerks.Instance.GladiatorPromisingAthlete))
                 {
-                    int baseResult = __result;
+                    var baseResult = __result;
                     __result = (int)(baseResult * 1.3f);
                 }
             }
@@ -117,7 +117,7 @@ namespace BannerKings.Behaviours
         {
             private static void Postfix(ref int __result)
             {
-                EducationData education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(Hero.MainHero);
+                var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(Hero.MainHero);
                 if (education.HasPerk(BKPerks.Instance.GladiatorTourDeCalradia))
                 {
                     __result += 150;

@@ -27,10 +27,10 @@ namespace BannerKings.Models.Vanilla
 
         public override int GetInfluenceReward(Hero winner, Town town)
         {
-            int result = base.GetInfluenceReward(winner, town);
+            var result = base.GetInfluenceReward(winner, town);
             if (winner != null)
             {
-                EducationData education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(winner);
+                var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(winner);
                 if (education.HasPerk(BKPerks.Instance.GladiatorCrowdsFavorite))
                 {
                     result += 10;
@@ -42,10 +42,10 @@ namespace BannerKings.Models.Vanilla
 
         public override int GetRenownReward(Hero winner, Town town)
         {
-            int result =  base.GetRenownReward(winner, town);
+            var result =  base.GetRenownReward(winner, town);
             if (winner != null)
             {
-                EducationData education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(winner);
+                var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(winner);
                 if (education.HasPerk(BKPerks.Instance.GladiatorCrowdsFavorite))
                 {
                     result += 3;

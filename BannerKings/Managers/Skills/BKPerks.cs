@@ -637,7 +637,7 @@ namespace BannerKings.Managers.Skills
             #region Ritter
 
             RitterIronHorses = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleRitterIronHorses"));
-            RitterIronHorses.InitializeNew("{=!}Iron Horses", null,
+            RitterIronHorses.InitializeNew("{=x04LSOuu}Iron Horses", null,
                 80,
                 null,
                 "{=jCBbUvHx}Mounts of your commanded troops have 10% more hit points.",
@@ -648,24 +648,24 @@ namespace BannerKings.Managers.Skills
                 SkillEffect.EffectIncrementType.AddFactor);
 
             RitterOathbound = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleRitterOathbound"));
-            RitterOathbound.InitializeNew("{=!}Oathbound", null,
+            RitterOathbound.InitializeNew("{=DrdTH6yF}Oathbound", null,
                 160,
                 null,
-                "{=!}Every season, get a chance of improving relations with your suzerain.",
+                "{=5LgkGVPg}Every season, get a chance of improving relations with your suzerain.",
                 SkillEffect.PerkRole.PartyOwner, 10f,
                 SkillEffect.EffectIncrementType.AddFactor,
-                "{=!}Recruting mounted troops from your settlements is 15% cheaper.",
+                "{=rDHnyE3V}Recruting mounted troops from your settlements is 15% cheaper.",
                 SkillEffect.PerkRole.Captain, 8f,
                 SkillEffect.EffectIncrementType.AddFactor);
 
             RitterPettySuzerain = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleRitterPettySuzerain"));
-            RitterPettySuzerain.InitializeNew("{=!}Petty Suzerain", null,
+            RitterPettySuzerain.InitializeNew("{=zL894U8E}Petty Suzerain", null,
                 240,
                 null,
-                "{=!}Village notables are 20% more likely to produce noble troops instead of peasants.",
+                "{=sYD7tjoy}Village notables are 20% more likely to produce noble troops instead of peasants.",
                 SkillEffect.PerkRole.Personal, 10f,
                 SkillEffect.EffectIncrementType.Add,
-                "{=!}Village hearths increase by +0.1 daily.",
+                "{=fesQ44gc}Village hearths increase by +0.1 daily.",
                 SkillEffect.PerkRole.Personal, 20f,
                 SkillEffect.EffectIncrementType.AddFactor);
 
@@ -675,7 +675,7 @@ namespace BannerKings.Managers.Skills
             #region Varyag
 
             VaryagShieldBrother = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleVaryagShieldBrother"));
-            VaryagShieldBrother.InitializeNew("{=!}Shield Brother", null,
+            VaryagShieldBrother.InitializeNew("{=mYdPGH68}Shield Brother", null,
                 80,
                 null,
                 "{=qDJmqZrJ}Infantry troops take 4% less melee damage while in shield wall formation.",
@@ -686,21 +686,21 @@ namespace BannerKings.Managers.Skills
                 SkillEffect.EffectIncrementType.AddFactor);
 
             VaryagRecognizedMercenary = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleVaryagRecognizedMercenary"));
-            VaryagRecognizedMercenary.InitializeNew("{=!}Recognized Mercenary", null,
+            VaryagRecognizedMercenary.InitializeNew("{=yHe78yMm}Recognized Mercenary", null,
                 160,
                 null,
-                "{=!}Influence is 10% more profitable as mercenary.",
+                "{=Mc2tRSxH}Influence is 10% more profitable as mercenary.",
                 SkillEffect.PerkRole.PartyOwner, 10f,
                 SkillEffect.EffectIncrementType.AddFactor,
-                "{=!}For every year spent under mercenary service, gain 30 renown.",
+                "{=aUGUXnb5}For every year spent under mercenary service, gain 30 renown.",
                 SkillEffect.PerkRole.Captain, 8f,
                 SkillEffect.EffectIncrementType.AddFactor);
 
             VaryagDrengr = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleVaryagDrengr"));
-            VaryagDrengr.InitializeNew("{=!}Drengr", null,
+            VaryagDrengr.InitializeNew("{=ofYg0u8k}Drengr", null,
                 240,
                 null,
-                "{=!}Infantry troops in the formation you are leading take 20% less affected by negative morale changes.",
+                "{=bFJmErzs}Infantry troops in the formation you are leading take 20% less affected by negative morale changes.",
                 SkillEffect.PerkRole.Personal, 10f,
                 SkillEffect.EffectIncrementType.Add,
                 "{=XAwb1Yhg}Infantry troops in the formation you are leading have their melee weapon damage increased by 10%.",
@@ -713,21 +713,21 @@ namespace BannerKings.Managers.Skills
             #region Gladiator
 
             GladiatorPromisingAthlete = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleGladiatorPromisingAthlete"));
-            GladiatorPromisingAthlete.InitializeNew("{=!}Promising Athlete", null,
+            GladiatorPromisingAthlete.InitializeNew("{=TGEbBxLU}Promising Athlete", null,
                 80,
                 null,
-                "{=!}Gain 30% more profit from bets.",
+                "{=kVzwAnmL}Gain 30% more profit from bets.",
                 SkillEffect.PerkRole.Personal, 3f,
                 SkillEffect.EffectIncrementType.AddFactor,
-                "{=!}Gain 2 relations with a random notable on tournament victory.",
+                "{=rjTcZpvc}Gain 2 relations with a random notable on tournament victory.",
                 SkillEffect.PerkRole.Personal, 0.03f,
                 SkillEffect.EffectIncrementType.AddFactor);
 
             GladiatorTourDeCalradia = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleGladiatorTourDeCalradia"));
-            GladiatorTourDeCalradia.InitializeNew("{=!}Tour de Calradia", null,
+            GladiatorTourDeCalradia.InitializeNew("{=eRSMJMDu}Tour de Calradia", null,
                 160,
                 null,
-                "{=!}After a tournament is finished, receive a notification of the neartest ongoing tournament.",
+                "{=eZAQi931}After a tournament is finished, receive a notification of the neartest ongoing tournament.",
                 SkillEffect.PerkRole.Personal, 0f,
                 SkillEffect.EffectIncrementType.AddFactor,
                 "{=ilKDq9f5}Double the amount of betting you can use in tournaments.",
@@ -735,13 +735,13 @@ namespace BannerKings.Managers.Skills
                 SkillEffect.EffectIncrementType.AddFactor);
 
             GladiatorCrowdsFavorite = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleGladiatorCrowdsFavorite"));
-            GladiatorCrowdsFavorite.InitializeNew("{=!}Crowds' Favorite", null,
+            GladiatorCrowdsFavorite.InitializeNew("{=UE5e5Mjz}Crowds' Favorite", null,
                 240,
                 null,
-                "{=!}Gain double renown rewards for tournament victories.",
+                "{=e84fYWSo}Gain double renown rewards for tournament victories.",
                 SkillEffect.PerkRole.Personal, 10f,
                 SkillEffect.EffectIncrementType.Add,
-                "{=!}Gain 10 influence from tournament victories.",
+                "{=Vn7uf9MZ}Gain 10 influence from tournament victories.",
                 SkillEffect.PerkRole.Personal, 20f,
                 SkillEffect.EffectIncrementType.AddFactor);
 

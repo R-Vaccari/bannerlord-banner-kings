@@ -82,11 +82,11 @@ namespace BannerKings
             {
                 private static bool Prefix(DefaultSkillLevelingManager __instance, MobileParty mobileParty, int healingAmount)
                 {
-                    float num = (float)Campaign.Current.Models.PartyHealingModel.GetSkillXpFromHealingTroop(mobileParty.Party);
-                    float num2 = (mobileParty.CurrentSettlement != null && !mobileParty.CurrentSettlement.IsCastle) ? 0.2f : 0.1f;
+                    var num = (float)Campaign.Current.Models.PartyHealingModel.GetSkillXpFromHealingTroop(mobileParty.Party);
+                    var num2 = (mobileParty.CurrentSettlement != null && !mobileParty.CurrentSettlement.IsCastle) ? 0.2f : 0.1f;
                     if (mobileParty.EffectiveSurgeon != null)
                     {
-                        float surgeon = (float)mobileParty.EffectiveSurgeon.Level;
+                        var surgeon = (float)mobileParty.EffectiveSurgeon.Level;
                         num *= (float)healingAmount * num2 * (1f + surgeon * 0.1f);
 
                         AccessTools.Method(__instance.GetType(), "OnPartySkillExercised")
@@ -102,17 +102,17 @@ namespace BannerKings
             {
                 private static void Postfix(MapEventParty __instance, UniqueTroopDescriptor troopSeed)
                 {
-                    Hero leader = __instance.Party.LeaderHero;
+                    var leader = __instance.Party.LeaderHero;
                     if (leader == null)
                     {
                         return;
                     }
 
-                    EducationData education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(leader);
+                    var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(leader);
                     if (education.HasPerk(BKPerks.Instance.MercenaryRansacker) && 
                         MBRandom.RandomFloat < 0.1f)
                     {
-                        int contribution = __instance.ContributionToBattle;
+                        var contribution = __instance.ContributionToBattle;
                         AccessTools.Field(__instance.GetType(), "_contributionToBattle").SetValue(__instance, contribution + 1);
                     }
                 }

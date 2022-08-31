@@ -99,7 +99,7 @@ namespace BannerKings.Behaviours
 
         private void GainSuzerainRelation(Hero hero)
         {
-            FeudalTitle title = BannerKingsConfig.Instance.TitleManager.CalculateHeroSuzerain(hero);
+            var title = BannerKingsConfig.Instance.TitleManager.CalculateHeroSuzerain(hero);
             if (title != null && title.deJure != null && title.deJure != hero && title.deJure.IsAlive)
             {
                 ChangeRelationAction.ApplyRelationChangeBetweenHeroes(hero, title.deJure, 5);

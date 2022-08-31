@@ -27,114 +27,118 @@ namespace BannerKings.Models.Vanilla
         {
             var baseResult = base.CalculateTownTax(town, includeDescriptions);
 
-            if (BannerKingsConfig.Instance.PopulationManager != null &&
-                BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
+            if (BannerKingsConfig.Instance.PopulationManager == null || !BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
             {
-                baseResult.LimitMin(-200000f);
-                baseResult.LimitMax(200000f);
-                var taxSlaves =
-                    BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(town.Settlement, "decision_slaves_tax");
-                var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
-                float nobles = data.GetTypeCount(PopType.Nobles);
-                float craftsmen = data.GetTypeCount(PopType.Nobles);
-                float serfs = data.GetTypeCount(PopType.Nobles);
-                float slaves = data.GetTypeCount(PopType.Slaves);
+                return baseResult;
+            }
 
-                if (craftsmen > 0)
-                {
-                    craftsmen *= 1f - data.EconomicData.Mercantilism.ResultNumber;
-                }
+            baseResult.LimitMin(-200000f);
+            baseResult.LimitMax(200000f);
 
-                if (slaves > 0)
-                {
-                    slaves *= taxSlaves ? 1f : 1f - data.EconomicData.StateSlaves;
-                }
+            var taxSlaves = BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(town.Settlement, "decision_slaves_tax");
+            var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
+            float nobles = data.GetTypeCount(PopType.Nobles);
+            float craftsmen = data.GetTypeCount(PopType.Nobles);
+            float serfs = data.GetTypeCount(PopType.Nobles);
+            float slaves = data.GetTypeCount(PopType.Slaves);
+
+            if (craftsmen > 0)
+            {
+                craftsmen *= 1f - data.EconomicData.Mercantilism.ResultNumber;
+            }
+
+            if (slaves > 0)
+            {
+                slaves *= taxSlaves
+                    ? 1f
+                    : 1f - data.EconomicData.StateSlaves;
+            }
+
+            if (nobles > 0f)
+            {
+                baseResult.Add(MBMath.ClampFloat(nobles * NOBLE_OUTPUT, 0f, 50000f), new TextObject("{=5mCY3JCP}{CLASS} output").SetTextVariable("CLASS", "Nobles"));
+            }
+
+            if (craftsmen > 0f)
+            {
+                baseResult.Add(MBMath.ClampFloat(craftsmen * CRAFTSMEN_OUTPUT, 0f, 50000f), new TextObject("{=5mCY3JCP}{CLASS} output").SetTextVariable("CLASS", "Craftsmen"));
+            }
+
+            if (serfs > 0f)
+            {
+                baseResult.Add(MBMath.ClampFloat(serfs * SERF_OUTPUT, 0f, 50000f), new TextObject("{=5mCY3JCP}{CLASS} output").SetTextVariable("CLASS", "Serfs"));
+            }
+
+            if (slaves > 0f)
+            {
+                baseResult.Add(MBMath.ClampFloat(slaves * SLAVE_OUTPUT, 0f, 50000f), new TextObject("{=5mCY3JCP}{CLASS} output").SetTextVariable("CLASS", "Slaves"));
+            }
+
+            var ownerReligion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(town.OwnerClan.Leader);
+
+            if (data.ReligionData == null || ownerReligion == null || !ownerReligion.HasDoctrine(DefaultDoctrines.Instance.HeathenTax))
+            {
+                return baseResult;
+            }
+
+            var heathens = data.ReligionData.GetHeathenPercentage(ownerReligion);
+
+            if (heathens != 0f)
+            {
+                var result = 0f;
 
                 if (nobles > 0f)
                 {
-                    baseResult.Add(MBMath.ClampFloat(nobles * NOBLE_OUTPUT, 0f, 50000f),
-                        new TextObject("{=5mCY3JCP}{CLASS} output").SetTextVariable("CLASS", "Nobles"));
+                    result += MBMath.ClampFloat(nobles * NOBLE_OUTPUT, 0f, 50000f) * 0.1f;
                 }
 
                 if (craftsmen > 0f)
                 {
-                    baseResult.Add(MBMath.ClampFloat(craftsmen * CRAFTSMEN_OUTPUT, 0f, 50000f),
-                        new TextObject("{=5mCY3JCP}{CLASS} output").SetTextVariable("CLASS", "Craftsmen"));
+                    result += MBMath.ClampFloat(craftsmen * CRAFTSMEN_OUTPUT, 0f, 50000f) * 0.1f;
                 }
 
                 if (serfs > 0f)
                 {
-                    baseResult.Add(MBMath.ClampFloat(serfs * SERF_OUTPUT, 0f, 50000f),
-                        new TextObject("{=5mCY3JCP}{CLASS} output").SetTextVariable("CLASS", "Serfs"));
+                    result += MBMath.ClampFloat(serfs * SERF_OUTPUT, 0f, 50000f) * 0.1f;
                 }
 
-                if (slaves > 0f)
-                {
-                    baseResult.Add(MBMath.ClampFloat(slaves * SLAVE_OUTPUT, 0f, 50000f),
-                        new TextObject("{=5mCY3JCP}{CLASS} output").SetTextVariable("CLASS", "Slaves"));
-                }
-
-                var ownerReligion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(town.OwnerClan.Leader);
-                if (data.ReligionData != null && ownerReligion != null && 
-                    ownerReligion.HasDoctrine(DefaultDoctrines.Instance.HeathenTax)
-                {
-                    float heathens = data.ReligionData.GetHeathenPercentage(ownerReligion);
-                    if (heathens != 0f)
-                    {
-                        float result = 0f;
-                        if (nobles > 0f)
-                        {
-                            result += MBMath.ClampFloat(nobles * NOBLE_OUTPUT, 0f, 50000f) * 0.1f;
-                        }
-
-                        if (craftsmen > 0f)
-                        {
-                            result += MBMath.ClampFloat(craftsmen * CRAFTSMEN_OUTPUT, 0f, 50000f) * 0.1f;
-                        }
-
-                        if (serfs > 0f)
-                        {
-                            result += MBMath.ClampFloat(serfs * SERF_OUTPUT, 0f, 50000f) * 0.1f;
-                        }
-
-                        baseResult.Add(result * heathens, DefaultDoctrines.Instance.HeathenTax.Name);
-                    }
-
-                var taxType = ((BKTaxPolicy) BannerKingsConfig.Instance.PolicyManager.GetPolicy(town.Settlement, "tax"))
-                    .Policy;
-                switch (taxType)
-                {
-                    case TaxType.Low:
-                        baseResult.AddFactor(-0.15f, new TextObject("{=L7QhNa6a}Tax policy"));
-                        break;
-                    case TaxType.High:
-                        baseResult.AddFactor(0.15f, new TextObject("{=L7QhNa6a}Tax policy"));
-                        break;
-                }
-
-                var legitimacy = (LegitimacyType) new BKLegitimacyModel().CalculateEffect(town.Settlement).ResultNumber;
-                if (legitimacy == LegitimacyType.Lawful)
-                {
-                    baseResult.AddFactor(0.05f, new TextObject("{=vSsKP2dz}Legitimiacy"));
-                }
-
-                var admCost = new BKAdministrativeModel().CalculateEffect(town.Settlement).ResultNumber;
-                baseResult.AddFactor(admCost * -1f, new TextObject("{=y1sBiOKa}Administrative costs"));
-
-                if (baseResult.ResultNumber > 0f)
-                {
-                    baseResult.AddFactor(-0.6f * data.Autonomy, new TextObject("{=xMsWoSnL}Autonomy"));
-                }
-
-                CalculateDueTax(data, baseResult.ResultNumber);
-                CalculateDueWages(BannerKingsConfig.Instance.CourtManager.GetCouncil(town.Settlement.OwnerClan),
-                    baseResult.ResultNumber);
-                baseResult.AddFactor(admCost * -1f, new TextObject("{=y1sBiOKa}Administrative costs"));
+                baseResult.Add(result * heathens, DefaultDoctrines.Instance.HeathenTax.Name);
             }
+
+            var taxType = ((BKTaxPolicy) BannerKingsConfig.Instance.PolicyManager.GetPolicy(town.Settlement, "tax")).Policy;
+
+            switch (taxType)
+            {
+                case TaxType.Low:
+                    baseResult.AddFactor(-0.15f, new TextObject("{=L7QhNa6a}Tax policy"));
+
+                    break;
+                case TaxType.High:
+                    baseResult.AddFactor(0.15f, new TextObject("{=L7QhNa6a}Tax policy"));
+
+                    break;
+            }
+
+            var legitimacy = (LegitimacyType) new BKLegitimacyModel().CalculateEffect(town.Settlement).ResultNumber;
+            if (legitimacy == LegitimacyType.Lawful)
+            {
+                baseResult.AddFactor(0.05f, new TextObject("{=vSsKP2dz}Legitimiacy"));
+            }
+
+            var admCost = new BKAdministrativeModel().CalculateEffect(town.Settlement).ResultNumber;
+            baseResult.AddFactor(admCost * -1f, new TextObject("{=y1sBiOKa}Administrative costs"));
+
+            if (baseResult.ResultNumber > 0f)
+            {
+                baseResult.AddFactor(-0.6f * data.Autonomy, new TextObject("{=xMsWoSnL}Autonomy"));
+            }
+
+            CalculateDueTax(data, baseResult.ResultNumber);
+            CalculateDueWages(BannerKingsConfig.Instance.CourtManager.GetCouncil(town.Settlement.OwnerClan), baseResult.ResultNumber);
+            baseResult.AddFactor(admCost * -1f, new TextObject("{=y1sBiOKa}Administrative costs"));
 
             return baseResult;
         }
-
         public override int CalculateVillageTaxFromIncome(Village village, int marketIncome)
         {
             var baseResult = marketIncome * 0.7;
@@ -173,8 +177,7 @@ namespace BannerKings.Models.Vanilla
                     baseResult *= 1f - admCost;
                 }
 
-                CalculateDueTax(BannerKingsConfig.Instance.PopulationManager.GetPopData(village.Settlement),
-                    (float) baseResult);
+                CalculateDueTax(BannerKingsConfig.Instance.PopulationManager.GetPopData(village.Settlement), (float) baseResult);
                 var data = BannerKingsConfig.Instance.CourtManager.GetCouncil(village.Settlement.OwnerClan);
                 if (data != null)
                 {

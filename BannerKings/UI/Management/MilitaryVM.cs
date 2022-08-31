@@ -239,12 +239,12 @@ namespace BannerKings.UI.Management
             var decisions = BannerKingsConfig.Instance.PolicyManager.GetDefaultDecisions(settlement);
             if (HasTown)
             {
-                SiegeInfo.Add(new InformationElement(new TextObject("{=!}Storage Limit:").ToString(), settlement.Town.FoodStocksUpperLimit().ToString(),
-                    new TextObject("{=!}The amount of food this settlement is capable of storing.").ToString()));
+                SiegeInfo.Add(new InformationElement(new TextObject("{=qbHVtQgS}Storage Limit:").ToString(), settlement.Town.FoodStocksUpperLimit().ToString(),
+                    new TextObject("{=scsKRhWJ}The amount of food this settlement is capable of storing.").ToString()));
 
-                SiegeInfo.Add(new InformationElement(new TextObject("{=!}Estimated Holdout:").ToString(),
+                SiegeInfo.Add(new InformationElement(new TextObject("{=GX46BKVV}Estimated Holdout:").ToString(),
                     $"{data.MilitaryData.Holdout} Days",
-                    new TextObject("{=!}How long this settlement will take to start starving in case of a siege.").ToString()));
+                    new TextObject("{=3gN048NJ}How long this settlement will take to start starving in case of a siege.").ToString()));
 
                 var sb = new StringBuilder();
                 sb.Append(data.MilitaryData.Ballistae);
@@ -253,8 +253,8 @@ namespace BannerKings.UI.Management
                 sb.Append(", ");
                 sb.Append(data.MilitaryData.Trebuchets);
                 sb.Append(" (Ballis., Catap., Treb.)");
-                SiegeInfo.Add(new InformationElement(new TextObject("{=!}Engines:").ToString(), sb.ToString(),
-                    new TextObject("{=!}Pre-built siege engines to defend the walls, in case of siege.").ToString()));
+                SiegeInfo.Add(new InformationElement(new TextObject("{=WNz6O64F}Engines:").ToString(), sb.ToString(),
+                    new TextObject("{=FqCCSBHu}Pre-built siege engines to defend the walls, in case of siege.").ToString()));
 
                 garrisonItem =
                     (BKGarrisonPolicy) BannerKingsConfig.Instance.PolicyManager.GetPolicy(settlement, "garrison");

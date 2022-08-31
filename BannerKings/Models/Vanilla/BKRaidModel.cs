@@ -32,7 +32,7 @@ namespace BannerKings.Models.Vanilla
                 }
             }
 
-            Settlement settlement = attackerSide.MapEvent.MapEventSettlement;
+            var settlement = attackerSide.MapEvent.MapEventSettlement;
             if (settlement != null)
             {
                 if (BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))

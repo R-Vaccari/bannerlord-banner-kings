@@ -38,7 +38,7 @@ namespace BannerKings.Behaviours
         public int GetRosterCost(TroopRoster roster, Hero hero)
         {
             float cost = 0;
-            foreach (TroopRosterElement element in roster.GetTroopRoster())
+            foreach (var element in roster.GetTroopRoster())
             {
                 cost += Campaign.Current.Models.PartyWageModel.GetTroopRecruitmentCost(element.Character, hero) 
                     * (float)element.Number * 5f;
@@ -49,10 +49,10 @@ namespace BannerKings.Behaviours
 
         public TroopRoster GetMercenaryTemplateRoster(PartyTemplateObject template)
         {
-            TroopRoster roster = new TroopRoster(null);
-            foreach (PartyTemplateStack stack in template.Stacks)
+            var roster = new TroopRoster(null);
+            foreach (var stack in template.Stacks)
             {
-                TroopRosterElement element = new TroopRosterElement(stack.Character);
+                var element = new TroopRosterElement(stack.Character);
                 element.Number = stack.MinValue;
                 roster.Add(element);
             }
@@ -62,8 +62,8 @@ namespace BannerKings.Behaviours
 
         public List<(PartyTemplateObject, TextObject)> GetLocalMercenaryTemplates(Town town)
         {
-            List<(PartyTemplateObject, TextObject)> templates = new List<(PartyTemplateObject, TextObject)>();
-            foreach (Clan clan in Clan.All)
+            var templates = new List<(PartyTemplateObject, TextObject)>();
+            foreach (var clan in Clan.All)
             {
                 if (clan.IsMinorFaction && clan.Culture == town.Culture && clan.DefaultPartyTemplate != null
                     && clan != Clan.PlayerClan)
@@ -77,7 +77,7 @@ namespace BannerKings.Behaviours
 
         public bool CanRecruitLocalMercenaries(Hero hero)
         {
-            EducationData education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(hero);
+            var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(hero);
             var hasMercenaries = false;
             if (hero.CurrentSettlement != null && hero.CurrentSettlement.IsTown)
             {
@@ -92,7 +92,7 @@ namespace BannerKings.Behaviours
             if (lastMercenaryRecruitment == null)
             {
                 lastMercenaryRecruitment = new Dictionary<Town, CampaignTime>();
-                foreach (Town town in Town.AllTowns)
+                foreach (var town in Town.AllTowns)
                 {
                     lastMercenaryRecruitment.Add(town, CampaignTime.Now - CampaignTime.Weeks(1f));
                 }
@@ -798,14 +798,14 @@ namespace BannerKings.Behaviours
 
         private void MenuActionLocalConnectionsConsequence(MenuCallbackArgs args)
         {
-            List<(PartyTemplateObject, TextObject)> templates = GetLocalMercenaryTemplates(Hero.MainHero.CurrentSettlement.Town);
-            List<InquiryElement> elements = new List<InquiryElement>();
+            var templates = GetLocalMercenaryTemplates(Hero.MainHero.CurrentSettlement.Town);
+            var elements = new List<InquiryElement>();
 
-            foreach ((PartyTemplateObject, TextObject) tuple in templates)
+            foreach (var tuple in templates)
             {
-                TroopRoster roster = GetMercenaryTemplateRoster(tuple.Item1);
-                CharacterCode characterCode = CampaignUIHelper.GetCharacterCode(tuple.Item1.Stacks[0].Character, false);
-                ImageIdentifier identifier = new ImageIdentifier(characterCode);
+                var roster = GetMercenaryTemplateRoster(tuple.Item1);
+                var characterCode = CampaignUIHelper.GetCharacterCode(tuple.Item1.Stacks[0].Character, false);
+                var identifier = new ImageIdentifier(characterCode);
                 var cost = GetRosterCost(roster, Hero.MainHero);
                 var hint = new TextObject("{=ywMJqWA8}Recruit {COUNT} of the {NAME} mercenaries. This will cost {GOLD}{GOLD_ICON}")
                     .SetTextVariable("COUNT", roster.TotalManCount)
@@ -827,7 +827,7 @@ namespace BannerKings.Behaviours
                 string.Empty,
                 (List<InquiryElement> List) =>
                 {
-                    TroopRoster roster = (TroopRoster)List[0].Identifier;
+                    var roster = (TroopRoster)List[0].Identifier;
                     Hero.MainHero.ChangeHeroGold(-GetRosterCost(roster, Hero.MainHero));
                     MobileParty.MainParty.MemberRoster.Add(roster);
                 },

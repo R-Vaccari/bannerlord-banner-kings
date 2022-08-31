@@ -40,7 +40,7 @@ namespace BannerKings.Models.Vanilla
                 {
                     float vlandians = 0;
 
-                    foreach (TroopRosterElement element in mobileParty.MemberRoster.GetTroopRoster())
+                    foreach (var element in mobileParty.MemberRoster.GetTroopRoster())
                     {
                         if (element.Character.Culture != null && element.Character.Culture.StringId == "vlandia")
                         {

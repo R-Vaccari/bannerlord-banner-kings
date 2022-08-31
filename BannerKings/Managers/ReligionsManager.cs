@@ -191,7 +191,7 @@ namespace BannerKings.Managers
 
         public void AddToReligion(Hero hero, Religion religion)
         {
-            bool conversion = GetHeroReligion(hero) != null;
+            var conversion = GetHeroReligion(hero) != null;
             ExecuteRemoveHero(hero);
             ExecuteAddToReligion(hero, religion);
 
@@ -201,7 +201,7 @@ namespace BannerKings.Managers
                 {
                     if (hero.Clan == Clan.PlayerClan)
                     {
-                        MBInformationManager.AddQuickInformation(new TextObject("{=!}{HERO} has converted to the {FAITH} faith.")
+                        MBInformationManager.AddQuickInformation(new TextObject("{=sjy26XtU}{HERO} has converted to the {FAITH} faith.")
                                 .SetTextVariable("HERO", hero.Name)
                                 .SetTextVariable("FAITH", religion.Faith.GetFaithName()),
                             0, hero.CharacterObject, "event:/ui/notification/relation");
@@ -250,7 +250,7 @@ namespace BannerKings.Managers
 
         public bool HasBlessing(Hero hero, Divinity blessing)
         {
-            Religion rel = GetHeroReligion(hero);
+            var rel = GetHeroReligion(hero);
             if (rel != null)
             {
                 return Religions[rel][hero].Blessing == blessing;

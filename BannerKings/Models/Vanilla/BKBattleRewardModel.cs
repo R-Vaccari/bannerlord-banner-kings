@@ -11,12 +11,12 @@ namespace BannerKings.Models.Vanilla
 
         public override ExplainedNumber CalculateRenownGain(PartyBase party, float renownValueOfBattle, float contributionShare)
         {
-            ExplainedNumber result = base.CalculateRenownGain(party, renownValueOfBattle, contributionShare);
+            var result = base.CalculateRenownGain(party, renownValueOfBattle, contributionShare);
 
-            Hero leader = party.LeaderHero;
+            var leader = party.LeaderHero;
             if (leader != null)
             {
-                EducationData education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(leader);
+                var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(leader);
                 if (education.HasPerk(BKPerks.Instance.MercenaryFamousSellswords))
                 {
                     result.AddFactor(0.2f, BKPerks.Instance.MercenaryFamousSellswords.Name);

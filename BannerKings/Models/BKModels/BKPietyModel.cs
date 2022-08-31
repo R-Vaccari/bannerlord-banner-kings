@@ -14,7 +14,7 @@ namespace BannerKings.Models.BKModels
 
         public int GetHeroVirtuesCount(Hero hero)
         {
-            int result = 0;
+            var result = 0;
             var rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(hero);
             if (rel != null)
             {
@@ -80,8 +80,8 @@ namespace BannerKings.Models.BKModels
 
                 if (hero.Clan != null && rel.HasDoctrine(DefaultDoctrines.Instance.Animism))
                 {
-                    float acres = 0f;
-                    foreach (Settlement settlement in hero.Clan.Settlements)
+                    var acres = 0f;
+                    foreach (var settlement in hero.Clan.Settlements)
                     {
                         acres += BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement).LandData.Woodland;
                     }
@@ -94,7 +94,7 @@ namespace BannerKings.Models.BKModels
 
                 if (rel.HasDoctrine(DefaultDoctrines.Instance.Literalism))
                 {
-                    int skill = hero.GetSkillValue(BKSkills.Instance.Scholarship);
+                    var skill = hero.GetSkillValue(BKSkills.Instance.Scholarship);
                     if (!hero.GetPerkValue(BKPerks.Instance.ScholarshipLiterate))
                     {
                         result.Add(-0.2f, DefaultDoctrines.Instance.Literalism.Name);

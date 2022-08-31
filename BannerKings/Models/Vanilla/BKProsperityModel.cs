@@ -29,7 +29,7 @@ namespace BannerKings.Models.Vanilla
             //if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(village.Settlement))
             // new BKGrowthModel().CalculateHearthGrowth(village, ref baseResult);
 
-            Hero owner = village.Settlement.Owner;
+            var owner = village.Settlement.Owner;
             var data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(owner);
             if (data.HasPerk(BKPerks.Instance.CivilCultivator))
             {
@@ -125,7 +125,7 @@ namespace BannerKings.Models.Vanilla
                 } 
                 else if (fortification.IsCastle)
                 {
-                    Hero owner = fortification.OwnerClan.Leader;
+                    var owner = fortification.OwnerClan.Leader;
                     if (owner.Culture.StringId == "vlandia")
                     {
                         BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref explainedNumber, fortification.OwnerClan.Leader,

@@ -176,13 +176,9 @@
     <string id="6hY9WysN" text="Claim" />
     <string id="6cxTA139" text="Press your claim and usurp this title from it's owner, making you the lawful ruler of this title. Usurping from lords within your kingdom degrades your clan's reputation." />
     <string id="L3Jzg76z" text="Usurp" />
-    <string id="FBYN3zXH" text="Will accept: {ANSWER}" />
-    <string id="ifUNoWEv" text="{NO}.\n{REASON}" />
     <string id="dcDs5auK" text="Request your liege to grant you this position in the council. This action will cost {INFLUENCE} influence.\n\n{ACCEPT}" />
     <string id="ZYyxmOv9" text="Request" />
-    <string id="EquehqVz" text="Swap" />
     <string id="yYVE3O3p" text="Relinquish your position in the council. It will cost no influence and exempt you of any council privileges.\n\n{ACCEPT}" />
-    <string id="RPyfAkfV" text="Relinquish" />
     <string id="uUmEcuV8" text="Age" />
     <string id="J6oPqQmt" text="Settlement" />
     <string id="C99O2rGX" text="De Jure Drifts" />
@@ -793,7 +789,6 @@
     <string id="6NYxLhjH" text="The main culture associated with this faith." />
     <string id="tpH62HBy" text="Contract" />
     <string id="yRn9AcwU" text="Review this kingdom's contract, signed by lords that join it." />
-    <string id="XbV2136v" text="Review this kingdom's contract, signed by lords that join it.\n\n" />
     <string id="nbV21qZv" text="Found Kingdom" />
     <string id="jeNEcVGi" text="Propose a change in government structure, altering the allowed succession forms and aspects of settlement governance. Depending on the government choice, an appropriate succession type will be enforced as well." />
     <string id="rTUgik07" text="Succession" />
@@ -1283,18 +1278,7 @@
     <string id="nkk8no8d" text="Peasant Manpower:" />
     <string id="4gnA3tsw" text="Militarism:" />
     <string id="AJMjhhVL" text="Draft Efficiency:" />
-    <string id="Pn4Pn4cA" text="Notable Support:" />
-    <string id="S6FtRn9F" text="Total Population:" />
-    <string id="QZEBwVa6" text="Number of people present in this settlement and surrounding regions." />
-    <string id="QxLXQ67c" text="Population Growth:" />
-    <string id="FiU5oGi9" text="The population growth of your settlement on a daily basis, distributed among the classes." />
-    <string id="J1VG2giN" text="Foreigner Ratio:" />
-    <string id="gXeYeB24" text="Merchant and freemen foreigners that refuse to be assimilated, but have a living in this settlement." />
-    <string id="M780tFvV" text="Dominant Culture:" />
     <string id="8ootTEcK" text="The most assimilated culture in this settlement, and considered the legal culture." />
-    <string id="1E25AUEt" text="Cultural Acceptance:" />
-    <string id="O802bj7D" text="How accepted your culture is towards the general populace. A culture first needs to be accepted to be assimilated into." />
-    <string id="G9JO3z4c" text="Percentage of the population that shares culture with you. Assimilating foreign settlements requires a competent governor that shares your culture." />
     <string id="5VhaJ732" text="Found a new title for your kingdom. The title will legitimize your position and allow the de Jure domain of the kingdom to expand through de Jure drift of dukedoms, as well as extend your influence as a suzerain. Founding a title would increase your clan's renown by {RENOWN}. \n \nCosts: {GOLD} {GOLD_ICON}, {INFLUENCE} {INFLUENCE_ICON} \n\nCan form kingdom: {POSSIBLE} \n\nExplanation: {REASON}" />
     <string id="qjD2WwBH" text="Do you want to establish the title {TITLE}?\nThis will cost you {GOLD}{GOLD_ICON} and {INFLUENCE}{INFLUENCE_ICON}.\nAs a reward your clan will earn {RENOWN} renown." />
     <string id="xzyBM00Z" text="Make an offering of {ITEM}. {COUNT} must be offered for the rite to be fulfilled." />
@@ -1311,5 +1295,65 @@
     <string id="diqoFxAm" text="{HERO} {RELIGION_TEXT}." />
     <string id="JoZGpNrK" text=" does not follow any faith" />
     <string id="Ckk2iVKQ" text="is following the {FAITH}" />
+    <string id="2QtnvGFq" text="I am oathbound to the Na Sidhfir. As men of the wilds, will you join me?" />
+    <string id="HwBPn5so" text="Nearest Tournament" />
+    <string id="3abzCPc2" text="As a known gladiator, you are informed that {TOWN} holds the nearest tournament match. It's prize is {PRIZE}" />
+    <string id="sjy26XtU" text="{HERO} has converted to the {FAITH} faith." />
+    <string id="wTyw0yfR" text="Gladiator" />
+    <string id="ScHHoM2v" text="You are an promising athlete, roaming the world looking for a good fight, gold and glory." />
+    <string id="uUjoaben" text="Start with a couple mercenaries and food. Party size is reduced by 40% for 5 years. Gladiator lifestyle is kickstarted as part of your education." />
+    <string id="x04LSOuu" text="Iron Horses" />
+    <string id="DrdTH6yF" text="Oathbound" />
+    <string id="5LgkGVPg" text="Every season, get a chance of improving relations with your suzerain." />
+    <string id="rDHnyE3V" text="Recruting mounted troops from your settlements is 15% cheaper." />
+    <string id="zL894U8E" text="Petty Suzerain" />
+    <string id="sYD7tjoy" text="Village notables are 20% more likely to produce noble troops instead of peasants." />
+    <string id="fesQ44gc" text="Village hearths increase by +0.1 daily." />
+    <string id="mYdPGH68" text="Shield Brother" />
+    <string id="yHe78yMm" text="Recognized Mercenary" />
+    <string id="Mc2tRSxH" text="Influence is 10% more profitable as mercenary." />
+    <string id="aUGUXnb5" text="For every year spent under mercenary service, gain 30 renown." />
+    <string id="ofYg0u8k" text="Drengr" />
+    <string id="bFJmErzs" text="Infantry troops in the formation you are leading take 20% less affected by negative morale changes." />
+    <string id="TGEbBxLU" text="Promising Athlete" />
+    <string id="kVzwAnmL" text="Gain 30% more profit from bets." />
+    <string id="rjTcZpvc" text="Gain 2 relations with a random notable on tournament victory." />
+    <string id="eRSMJMDu" text="Tour de Calradia" />
+    <string id="eZAQi931" text="After a tournament is finished, receive a notification of the neartest ongoing tournament." />
+    <string id="UE5e5Mjz" text="Crowds' Favorite" />
+    <string id="e84fYWSo" text="Gain double renown rewards for tournament victories." />
+    <string id="Vn7uf9MZ" text="Gain 10 influence from tournament victories." />
+    <string id="SFRmmVms" text="Dominant faith's share" />
+    <string id="qbHVtQgS" text="Storage Limit:" />
+    <string id="scsKRhWJ" text="The amount of food this settlement is capable of storing." />
+    <string id="GX46BKVV" text="Estimated Holdout:" />
+    <string id="3gN048NJ" text="How long this settlement will take to start starving in case of a siege." />
+    <string id="WNz6O64F" text="Engines:" />
+    <string id="FqCCSBHu" text="Pre-built siege engines to defend the walls, in case of siege." />
+    <string id="tJePaqqg" text="{RELIGION}\nPresence: {PRESENCE}" />
+    <string id="GxcNDrXt" text="{HERO} holds sway over {PERCENTAGE} of the population. Changing their faith would strengthen the new faith's grip in the settlement." />
+    <string id="QiyEsZ4L" text="Religious Tension:" />
+    <string id="cz0WGSC1" text="Tensions between the different faiths in this settlement. The less homogenous the population's faith is, the more tensions there are. Tensions are also affected by the dominant religion's view on the other faiths. Tolerated faiths do not incur extra tensions. Untolerated faiths do, and hostile faiths incur a lot of tension. Religious tensions will significantly affect your settlement's loyalty and performance." />
+    <string id="ZcGwd8sq" text="Dominant Faith:" />
+    <string id="gTzbdsBY" text="Faith Presence:" />
+    <string id="STxuNCBU" text="The faith's presence in the settlement. Presence describes how much of the population adheres to the faith. Presence is affected by various factors, such as the faith's fervor, and whether it accepts the culture's settlement or not." />
+    <string id="PUwmzUZy" text="Fervor:" />
+    <string id="ukxmkmQR" text="The faith's fervor. Faiths with more fervor naturally grow to a bigger share of the population. Fervor is based on doctrines, settlements and clans that follow the faith." />
+    <string id="0HiZjcrv" text="Infantry troops are {EFFECT1}% faster on the map\nYou and your formation deal {EFFECT2}% less damage when mounted" />
+    <string id="ycDyfToX" text="Combat experience in tournaments increased by {EFFECT1}%\nTrade penalty increased by {EFFECT2}%" />
+    <string id="axhJNG0M" text="Ritter" />
+    <string id="3Br24ayr" text="You and melee cavalry in your formation deals {EFFECT1}% more melee damage.{EFFECT1}%\n You and your formation deal {EFFECT2}% less ranged damaged, mounted or otherwise." />
+    <string id="Df3Fdnuw" text="Stablish your own kingdom title. Your faction must be one that is not already represented by a kingdom title." />
+    <string id="oBxXQmTb" text="Request Council Position" />
+    <string id="7aLyDGEt" text="Request a position in your suzerain's council." />
+    <string id="SXfiwy0X" text="{DESCRIPTION}\n\n{REASON}" />
+    <string id="oXv9Zi3y" text="Relinquish {POSITION}" />
+    <string id="DwfLTc6R" text="Request {POSITION}" />
+    <string id="tQ5eP9n6" text="Swap to {POSITION}" />
+    <string id="bLxGGL9z" text="Choose a council position to fill. Different positions have different criteria for accepting candidates - some will be entirely blocked off, such as religious positions. Swapping with an existing lord will incur relations penalties." />
+    <string id="LZt31UBY" text="Bonus influence\nEvery season, gain renown for each title part of the Southern Empire" />
+    <string id="hWvSm3Zz" text="Settlement stability increased\nParty morale bonus" />
+    <string id="aP0f2WJp" text="Bonus influence\nIncreased faith presence in settlements" />
+    <string id="uyhPvxs2" text="Occasionally receive zealot warriors\nParty morale bonus for vlandian troops" />
   </strings>
 </base>

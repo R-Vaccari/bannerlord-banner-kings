@@ -110,7 +110,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
 
         public override float GetTimeInterval(Hero hero)
         {
-            float result = 2f;
+            var result = 2f;
             if (hero.GetPerkValue(BKPerks.Instance.TheologyRitesOfPassage))
             {
                 result -= 0.25f;
