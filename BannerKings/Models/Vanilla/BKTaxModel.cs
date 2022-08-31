@@ -75,8 +75,8 @@ namespace BannerKings.Models.Vanilla
                 }
 
                 var ownerReligion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(town.OwnerClan.Leader);
-                if (data.ReligionData != null && ownerReligion != null && 
-                    ownerReligion.HasDoctrine(DefaultDoctrines.Instance.HeathenTax)
+                if (data.ReligionData != null && ownerReligion != null &&
+                    ownerReligion.HasDoctrine(DefaultDoctrines.Instance.HeathenTax))
                 {
                     float heathens = data.ReligionData.GetHeathenPercentage(ownerReligion);
                     if (heathens != 0f)
@@ -100,36 +100,37 @@ namespace BannerKings.Models.Vanilla
                         baseResult.Add(result * heathens, DefaultDoctrines.Instance.HeathenTax.Name);
                     }
 
-                var taxType = ((BKTaxPolicy) BannerKingsConfig.Instance.PolicyManager.GetPolicy(town.Settlement, "tax"))
-                    .Policy;
-                switch (taxType)
-                {
-                    case TaxType.Low:
-                        baseResult.AddFactor(-0.15f, new TextObject("{=L7QhNa6a}Tax policy"));
-                        break;
-                    case TaxType.High:
-                        baseResult.AddFactor(0.15f, new TextObject("{=L7QhNa6a}Tax policy"));
-                        break;
+                    var taxType = ((BKTaxPolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(town.Settlement, "tax"))
+                        .Policy;
+                    switch (taxType)
+                    {
+                        case TaxType.Low:
+                            baseResult.AddFactor(-0.15f, new TextObject("{=L7QhNa6a}Tax policy"));
+                            break;
+                        case TaxType.High:
+                            baseResult.AddFactor(0.15f, new TextObject("{=L7QhNa6a}Tax policy"));
+                            break;
+                    }
+
+                    var legitimacy = (LegitimacyType)new BKLegitimacyModel().CalculateEffect(town.Settlement).ResultNumber;
+                    if (legitimacy == LegitimacyType.Lawful)
+                    {
+                        baseResult.AddFactor(0.05f, new TextObject("{=vSsKP2dz}Legitimiacy"));
+                    }
+
+                    var admCost = new BKAdministrativeModel().CalculateEffect(town.Settlement).ResultNumber;
+                    baseResult.AddFactor(admCost * -1f, new TextObject("{=y1sBiOKa}Administrative costs"));
+
+                    if (baseResult.ResultNumber > 0f)
+                    {
+                        baseResult.AddFactor(-0.6f * data.Autonomy, new TextObject("{=xMsWoSnL}Autonomy"));
+                    }
+
+                    CalculateDueTax(data, baseResult.ResultNumber);
+                    CalculateDueWages(BannerKingsConfig.Instance.CourtManager.GetCouncil(town.Settlement.OwnerClan),
+                        baseResult.ResultNumber);
+                    baseResult.AddFactor(admCost * -1f, new TextObject("{=y1sBiOKa}Administrative costs"));
                 }
-
-                var legitimacy = (LegitimacyType) new BKLegitimacyModel().CalculateEffect(town.Settlement).ResultNumber;
-                if (legitimacy == LegitimacyType.Lawful)
-                {
-                    baseResult.AddFactor(0.05f, new TextObject("{=vSsKP2dz}Legitimiacy"));
-                }
-
-                var admCost = new BKAdministrativeModel().CalculateEffect(town.Settlement).ResultNumber;
-                baseResult.AddFactor(admCost * -1f, new TextObject("{=y1sBiOKa}Administrative costs"));
-
-                if (baseResult.ResultNumber > 0f)
-                {
-                    baseResult.AddFactor(-0.6f * data.Autonomy, new TextObject("{=xMsWoSnL}Autonomy"));
-                }
-
-                CalculateDueTax(data, baseResult.ResultNumber);
-                CalculateDueWages(BannerKingsConfig.Instance.CourtManager.GetCouncil(town.Settlement.OwnerClan),
-                    baseResult.ResultNumber);
-                baseResult.AddFactor(admCost * -1f, new TextObject("{=y1sBiOKa}Administrative costs"));
             }
 
             return baseResult;
