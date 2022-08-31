@@ -131,13 +131,13 @@ namespace BannerKings.Behaviours
                 Campaign.Current.CampaignInformationManager.NewMapNoticeAdded(new UnlandedDemesneLimitNotification());
             }
 
-            Dictionary<Clan, List<FeudalTitle>> vassals = BannerKingsConfig.Instance.TitleManager.CalculateVassals(hero.Clan);
+            var vassals = BannerKingsConfig.Instance.TitleManager.CalculateVassals(hero.Clan);
             if (vassals.Count == 0)
             {
                 return;
             }
 
-            Clan random = vassals.Keys.ToList().GetRandomElement();
+            var random = vassals.Keys.ToList().GetRandomElement();
             ChangeRelationAction.ApplyRelationChangeBetweenHeroes(hero, random.Leader, -2);
 
             var ai = new AIBehavior();

@@ -40,9 +40,9 @@ namespace BannerKings.Models.Vanilla
                     {
                         if (data.Lifestyle == DefaultLifestyles.Instance.Ritter)
                         {
-                            bool notRanged = agressorUsage.RelevantSkill != DefaultSkills.Bow &&
-                                agressorUsage.RelevantSkill != DefaultSkills.Crossbow &&
-                                agressorUsage.RelevantSkill != DefaultSkills.Throwing;
+                            var notRanged = agressorUsage.RelevantSkill != DefaultSkills.Bow &&
+                                            agressorUsage.RelevantSkill != DefaultSkills.Crossbow &&
+                                            agressorUsage.RelevantSkill != DefaultSkills.Throwing;
 
                             if (aggressor.IsMounted)
                             {
@@ -98,8 +98,8 @@ namespace BannerKings.Models.Vanilla
                 }
             }
 
-            MissionWeapon missionWeapon = attackInformation.VictimMainHandWeapon;
-            WeaponComponentData victimUsage = missionWeapon.CurrentUsageItem;
+            var missionWeapon = attackInformation.VictimMainHandWeapon;
+            var victimUsage = missionWeapon.CurrentUsageItem;
 
             if (attackInformation.VictimAgentCharacter is CharacterObject victim)
             { 

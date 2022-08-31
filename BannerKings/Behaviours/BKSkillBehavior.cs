@@ -27,12 +27,12 @@ namespace BannerKings.Behaviours
         {
             if (party.HasPerk(BKPerks.Instance.TheologyReligiousTeachings))
             {
-                foreach (TroopRosterElement element in party.MemberRoster.GetTroopRoster())
+                foreach (var element in party.MemberRoster.GetTroopRoster())
                 {
                     if (element.Character.IsHero)
                     {
                         var hero = element.Character.HeroObject;
-                        int skillValue = hero.GetSkillValue(BKSkills.Instance.Theology);
+                        var skillValue = hero.GetSkillValue(BKSkills.Instance.Theology);
                         if (skillValue < int.MaxValue)
                         {
                             hero.AddSkillXp(BKSkills.Instance.Theology, 2f);

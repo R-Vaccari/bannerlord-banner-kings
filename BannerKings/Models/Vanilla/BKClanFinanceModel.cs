@@ -169,7 +169,7 @@ namespace BannerKings.Models.Vanilla
             var data = BannerKingsConfig.Instance.CourtManager.GetCouncil(clan);
             if (data != null)
             {
-                float taxes = 0f;
+                var taxes = 0f;
                 foreach (var position in data.GetOccupiedPositions())
                 {
                     taxes -= position.DueWage;

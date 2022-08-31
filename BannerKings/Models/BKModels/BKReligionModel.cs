@@ -13,13 +13,13 @@ namespace BannerKings.Models.BKModels
     {
         public ExplainedNumber CalculateTensionTarget(ReligionData data)
         {
-            ExplainedNumber result = new ExplainedNumber();
+            var result = new ExplainedNumber();
             result.LimitMin(0f);
             result.LimitMax(1f);
 
             var dominant = data.DominantReligion;
             var dominantShare = data.Religions[dominant];
-            result.Add(1f - dominantShare, new TextObject("{=!}Dominant faith's share"));
+            result.Add(1f - dominantShare, new TextObject("{=SFRmmVms}Dominant faith's share"));
 
             foreach (var tuple in data.Religions)
             {
@@ -154,7 +154,7 @@ namespace BannerKings.Models.BKModels
                     continue;
                 }
 
-                Religion rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(notable);
+                var rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(notable);
                 if (rel != null && rel == religion)
                 {
                     result.Add(GetNotableFactor(notable, settlement), notable.Name);
@@ -192,7 +192,7 @@ namespace BannerKings.Models.BKModels
         public float GetNotableFactor(Hero notable, Settlement settlement)
         {
             var totalPower = 0f;
-            foreach (Hero hero in settlement.Notables)
+            foreach (var hero in settlement.Notables)
             {
                 totalPower += hero.Power;
             }

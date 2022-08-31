@@ -168,13 +168,13 @@ namespace BannerKings.Managers.Goals.Decisions
                 Influence = influence,
                 Renown = 100,
             };
-            List<FeudalTitle> vassals = new List<FeudalTitle>();
+            var vassals = new List<FeudalTitle>();
             IEnumerable<Kingdom> kingdoms = Kingdom.All.ToList().FindAll(x => x.StringId == "empire" ||
                 x.StringId == "empire_w" || x.StringId == "empire_s");
 
             foreach (var kingdom in kingdoms)
             {
-                FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
+                var title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
                 if (title != null)
                 {
                     vassals.Add(title);

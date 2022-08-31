@@ -423,7 +423,7 @@ namespace BannerKings.Models.BKModels
             var religion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(hero);
             if (religion != null && religion.HasDoctrine(DefaultDoctrines.Instance.Legalism))
             {
-                int virtues = BannerKingsConfig.Instance.PietyModel.GetHeroVirtuesCount(hero);
+                var virtues = BannerKingsConfig.Instance.PietyModel.GetHeroVirtuesCount(hero);
                 if (virtues > 0)
                 {
                     result.Add(virtues * 0.5f, DefaultDoctrines.Instance.Legalism.Name);

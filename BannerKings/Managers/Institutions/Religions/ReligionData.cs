@@ -26,7 +26,7 @@ namespace BannerKings.Managers.Institutions.Religions
 
         public float GetHeathenPercentage(Religion target)
         {
-            float result = 0f;
+            var result = 0f;
             if (Religions.Count > 0)
             {
                 foreach (var religion in Religions)
@@ -176,7 +176,7 @@ namespace BannerKings.Managers.Institutions.Religions
                 var rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(owner);
                 if (rel != null && !Religions.ContainsKey(rel))
                 {
-                    float value = 0.001f;
+                    var value = 0.001f;
                     if (Religions.Count == 0)
                     {
                         value = 1f;

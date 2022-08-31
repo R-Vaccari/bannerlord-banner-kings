@@ -55,11 +55,11 @@ namespace BannerKings.Behaviours
 
         private void OnRaidCompleted(BattleSideEnum winnerSide, MapEvent mapEvent)
         {
-            foreach (MapEventParty mapEventParty in mapEvent.AttackerSide.Parties)
+            foreach (var mapEventParty in mapEvent.AttackerSide.Parties)
             {
                 if (mapEventParty.Party.IsActive)
                 {
-                    MobileParty mobileParty = mapEventParty.Party.MobileParty;
+                    var mobileParty = mapEventParty.Party.MobileParty;
                     if (mobileParty != null && mobileParty.LeaderHero != null && 
                         mapEvent.MapEventSettlement.Culture.StringId != "battania")
                     {
@@ -111,13 +111,13 @@ namespace BannerKings.Behaviours
                 return;
             }
 
-            Religion rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(hero);
+            var rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(hero);
             if (rel == null)
             {
 
                 if (hero.Clan != null && hero != hero.Clan.Leader)
                 {
-                    Religion leaderRel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(hero.Clan.Leader);
+                    var leaderRel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(hero.Clan.Leader);
                     if (leaderRel != null)
                     {
                         ReligionsManager.AddToReligion(hero, leaderRel);
@@ -133,14 +133,14 @@ namespace BannerKings.Behaviours
                 if (CampaignTime.Now.GetDayOfSeason == 1 && BannerKingsConfig.Instance.ReligionsManager.HasBlessing(hero,
                     DefaultDivinities.Instance.DarusosianSecondary1))
                 {
-                    List<FeudalTitle> titles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(hero);
-                    Kingdom kingdom = Kingdom.All.FirstOrDefault(x => x.StringId == "empire_s");
+                    var titles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(hero);
+                    var kingdom = Kingdom.All.FirstOrDefault(x => x.StringId == "empire_s");
                     if (kingdom != null)
                     {
-                        FeudalTitle empireTitle = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
+                        var empireTitle = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
                         if (empireTitle != null)
                         {
-                            float bonus = 0f;
+                            var bonus = 0f;
                             foreach (var title in titles)
                             {
                                 if (title.sovereign == empireTitle)
@@ -158,7 +158,7 @@ namespace BannerKings.Behaviours
 
         private void AddHeroToIdealReligion(Hero hero)
         {
-            Religion ideal = BannerKingsConfig.Instance.ReligionsManager.GetIdealReligion(hero.Culture);
+            var ideal = BannerKingsConfig.Instance.ReligionsManager.GetIdealReligion(hero.Culture);
             if (ideal != null)
             {
                 ReligionsManager.AddToReligion(hero, ideal);
@@ -338,7 +338,7 @@ namespace BannerKings.Behaviours
 
 
             starter.AddPlayerLine("bk_blessing_recruit_battania_bandits", "bandit_attacker", "common_encounter_ultimatum_answer",
-                "{=!}I am oathbound to the Na Sidhfir. As men of the wilds, will you join me?",
+                "{=2QtnvGFq}I am oathbound to the Na Sidhfir. As men of the wilds, will you join me?",
                 RecruitBattaniaBanditsOnCondition,
                 RecruitBattaniaBanditsOnConseqence, 
                 100, 
@@ -351,7 +351,7 @@ namespace BannerKings.Behaviours
         private bool RecruitBattaniaBanditsOnCondition()
         {
             var party = MobileParty.ConversationParty;
-            bool blessed = BannerKingsConfig.Instance.ReligionsManager.HasBlessing(Hero.MainHero, 
+            var blessed = BannerKingsConfig.Instance.ReligionsManager.HasBlessing(Hero.MainHero, 
                 DefaultDivinities.Instance.AmraSecondary1);
             return party.IsBandit && party.MapFaction.Culture.StringId == "forest_bandits" && 
                 party.MemberRoster.Count < 21 && blessed;
@@ -359,11 +359,11 @@ namespace BannerKings.Behaviours
 
         private void RecruitBattaniaBanditsOnConseqence()
         {
-            List<MobileParty> list = new List<MobileParty>
+            var list = new List<MobileParty>
             {
                 MobileParty.MainParty
             };
-            List<MobileParty> list2 = new List<MobileParty>();
+            var list2 = new List<MobileParty>();
             if (PlayerEncounter.EncounteredMobileParty != null)
             {
                 list2.Add(PlayerEncounter.EncounteredMobileParty);
@@ -372,11 +372,11 @@ namespace BannerKings.Behaviours
             {
                 PlayerEncounter.Current.FindAllNpcPartiesWhoWillJoinEvent(ref list, ref list2);
             }
-            TroopRoster troopsToJoinPlayerParty = GetTroopsToJoinPlayerParty(list2);
+            var troopsToJoinPlayerParty = GetTroopsToJoinPlayerParty(list2);
             PartyScreenManager.OpenScreenAsLoot(troopsToJoinPlayerParty, TroopRoster.CreateDummyTroopRoster(), PlayerEncounter.EncounteredParty.Name, troopsToJoinPlayerParty.TotalManCount, null);
-            for (int i = list2.Count - 1; i >= 0; i--)
+            for (var i = list2.Count - 1; i >= 0; i--)
             {
-                MobileParty mobileParty = list2[i];
+                var mobileParty = list2[i];
                 CampaignEventDispatcher.Instance.OnBanditPartyRecruited(mobileParty);
                 DestroyPartyAction.Apply(MobileParty.MainParty.Party, mobileParty);
             }
@@ -623,19 +623,19 @@ namespace BannerKings.Behaviours
 
         private TroopRoster GetTroopsToJoinPlayerParty(List<MobileParty> parties)
         {
-            TroopRoster troopRoster = TroopRoster.CreateDummyTroopRoster();
-            foreach (MobileParty mobileParty in parties)
+            var troopRoster = TroopRoster.CreateDummyTroopRoster();
+            foreach (var mobileParty in parties)
             {
                 if (mobileParty.IsBandit && !mobileParty.IsLordParty)
                 {
-                    for (int i = 0; i < mobileParty.MemberRoster.Count; i++)
+                    for (var i = 0; i < mobileParty.MemberRoster.Count; i++)
                     {
                         if (!mobileParty.MemberRoster.GetCharacterAtIndex(i).IsHero)
                         {
                             troopRoster.AddToCounts(mobileParty.MemberRoster.GetCharacterAtIndex(i), mobileParty.MemberRoster.GetElementNumber(i), false, 0, 0, true, -1);
                         }
                     }
-                    for (int j = 0; j < mobileParty.PrisonRoster.Count; j++)
+                    for (var j = 0; j < mobileParty.PrisonRoster.Count; j++)
                     {
                         if (!mobileParty.PrisonRoster.GetCharacterAtIndex(j).IsHero)
                         {

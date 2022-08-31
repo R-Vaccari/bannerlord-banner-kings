@@ -12,12 +12,12 @@ namespace BannerKings.Models.Vanilla
     {
         public override float GetTradePenalty(ItemObject item, MobileParty clientParty, PartyBase merchant, bool isSelling, float inStore, float supply, float demand)
         {
-            float result = base.GetTradePenalty(item, clientParty, merchant, isSelling, inStore, supply, demand);
+            var result = base.GetTradePenalty(item, clientParty, merchant, isSelling, inStore, supply, demand);
 
             if (clientParty != null && clientParty.LeaderHero != null)
             {
-                Hero leader = clientParty.LeaderHero;
-                EducationData education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(leader);
+                var leader = clientParty.LeaderHero;
+                var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(leader);
                 if (education.Lifestyle != null && education.Lifestyle.Equals(DefaultLifestyles.Instance.Gladiator))
                 {
                     result *= 1.2f;

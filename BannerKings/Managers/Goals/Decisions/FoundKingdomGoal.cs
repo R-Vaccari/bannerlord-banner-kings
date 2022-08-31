@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using BannerKings.Managers.Titles;
@@ -14,7 +14,7 @@ namespace BannerKings.Managers.Goals.Decisions
         public FoundKingdomGoal() : base("goal_found_kingdom", GoalUpdateType.Hero)
         {
             var name = new TextObject("{=nbV21qZv}Found Kingdom");
-            var description = new TextObject("{=!}Stablish your own kingdom title. Your faction must be one that is not already represented by a kingdom title.");
+            var description = new TextObject("{=Df3Fdnuw}Stablish your own kingdom title. Your faction must be one that is not already represented by a kingdom title.");
             Initialize(name, description);
         }
 

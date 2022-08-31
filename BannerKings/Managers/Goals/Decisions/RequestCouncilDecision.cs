@@ -15,8 +15,8 @@ namespace BannerKings.Managers.Goals.Decisions
 
         public RequestCouncilDecision() : base("goal_request_council_decision", GoalUpdateType.Manual)
         {
-            var name = new TextObject("{=!}Request Council Position");
-            var description = new TextObject("{=!}Request a position in your suzerain's council.");
+            var name = new TextObject("{=oBxXQmTb}Request Council Position");
+            var description = new TextObject("{=7aLyDGEt}Request a position in your suzerain's council.");
 
             Initialize(name, description);
         }
@@ -47,7 +47,7 @@ namespace BannerKings.Managers.Goals.Decisions
             foreach (var member in council.AllPositions)
             {
                 TextObject name = null;
-                TextObject hint = new TextObject("{=!}{DESCRIPTION}\n\n{REASON}");
+                var hint = new TextObject("{=SXfiwy0X}{DESCRIPTION}\n\n{REASON}");
                 CouncilAction action;
                 var model = (BKCouncilModel)BannerKingsConfig.Instance.Models.First(x => x is BKCouncilModel);
                 if (member.Member == Hero.MainHero)
@@ -55,7 +55,7 @@ namespace BannerKings.Managers.Goals.Decisions
                     action = model.GetAction(CouncilActionType.RELINQUISH, council, Hero.MainHero, member);
                     hint = hint.SetTextVariable("DESCRIPTION", 
                         new TextObject("{=yYVE3O3p}Relinquish your position in the council. It will cost no influence and exempt you of any council privileges."));
-                    name = new TextObject("{=!}Relinquish {POSITION}")
+                    name = new TextObject("{=oXv9Zi3y}Relinquish {POSITION}")
                        .SetTextVariable("POSITION", member.GetName());
                 }
                 else if (council.GetHeroPosition(Hero.MainHero) == null || member.Member == null)
@@ -63,7 +63,7 @@ namespace BannerKings.Managers.Goals.Decisions
                     action = model.GetAction(CouncilActionType.REQUEST, council, Hero.MainHero, member);
                     hint = hint.SetTextVariable("DESCRIPTION", new TextObject("{=dcDs5auK}Request your liege to grant you this position in the council. This action will cost {INFLUENCE}{INFLUENCE_ICON}.\n\n{ACCEPT}")
                                 .SetTextVariable("INFLUENCE", action.Influence));
-                    name = new TextObject("{=!}Request {POSITION}")
+                    name = new TextObject("{=DwfLTc6R}Request {POSITION}")
                        .SetTextVariable("POSITION", member.GetName());
                 }
                 else
@@ -74,7 +74,7 @@ namespace BannerKings.Managers.Goals.Decisions
                                 .SetTextVariable("COUNCILMAN", action.TargetPosition.Member.Name)
                                 .SetTextVariable("POSITION", action.TargetPosition.GetName())
                                 .SetTextVariable("INFLUENCE", action.Influence));
-                    name = new TextObject("{=!}Swap to {POSITION}")
+                    name = new TextObject("{=tQ5eP9n6}Swap to {POSITION}")
                         .SetTextVariable("POSITION", member.GetName());
                 }
 
@@ -92,8 +92,8 @@ namespace BannerKings.Managers.Goals.Decisions
             }
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                new TextObject("{=!}Request Council Position").ToString(),
-                new TextObject("{=!}Choose a council position to fill. Different positions have different criteria for accepting candidates - some will be entirely blocked off, such as religious positions. Swapping with an existing lord will incur relations penalties.").ToString(),
+                new TextObject("{=oBxXQmTb}Request Council Position").ToString(),
+                new TextObject("{=bLxGGL9z}Choose a council position to fill. Different positions have different criteria for accepting candidates - some will be entirely blocked off, such as religious positions. Swapping with an existing lord will incur relations penalties.").ToString(),
                 options, 
                 true, 
                 1, 

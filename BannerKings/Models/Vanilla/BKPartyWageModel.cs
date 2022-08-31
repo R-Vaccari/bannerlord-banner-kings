@@ -111,7 +111,7 @@ namespace BannerKings.Models.Vanilla
 
             if (buyerHero != null)
             {
-                EducationData education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(buyerHero);
+                var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(buyerHero);
                 if (troop.Occupation == Occupation.Mercenary && education.HasPerk(BKPerks.Instance.MercenaryLocalConnections))
                 {
                     result.AddFactor(-0.1f, BKPerks.Instance.MercenaryLocalConnections.Name);

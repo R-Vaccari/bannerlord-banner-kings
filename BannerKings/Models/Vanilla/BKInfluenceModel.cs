@@ -39,7 +39,7 @@ namespace BannerKings.Models.Vanilla
             var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(clan.Leader);
             if (clan.IsUnderMercenaryService && clan.Leader != null)
             {
-                int mercenaryChange = MathF.Ceiling(clan.Influence * (1f / Campaign.Current.Models.ClanFinanceModel.RevenueSmoothenFraction()));
+                var mercenaryChange = MathF.Ceiling(clan.Influence * (1f / Campaign.Current.Models.ClanFinanceModel.RevenueSmoothenFraction()));
                 if (mercenaryChange != 0)
                 {
                     if (education.Lifestyle != null && education.Lifestyle.Equals(DefaultLifestyles.Instance.Mercenary))

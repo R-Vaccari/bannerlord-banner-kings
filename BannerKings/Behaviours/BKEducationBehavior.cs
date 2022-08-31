@@ -117,7 +117,7 @@ namespace BannerKings.Behaviours
                     var councilMember = council.GetMemberFromPosition(Managers.Court.CouncilPosition.Philosopher);
                     if (councilMember != null && councilMember.Member != null)
                     {
-                        float skill = 5 * councilMember.Competence;
+                        var skill = 5 * councilMember.Competence;
                         hero.AddSkillXp(BKSkills.Instance.Scholarship, (int)skill);
                     }
                 }
@@ -163,7 +163,7 @@ namespace BannerKings.Behaviours
                 hero.Culture = hero.Clan.Leader.Culture;
                 startingLanguages = new Dictionary<Language, float>();
 
-                EducationData leaderEducation = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(hero.Clan.Leader);
+                var leaderEducation = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(hero.Clan.Leader);
                 var native = BannerKingsConfig.Instance.EducationManager.GetNativeLanguage(hero.Culture);
                 startingLanguages.Add(native, 1f);
 
@@ -184,12 +184,12 @@ namespace BannerKings.Behaviours
                 }
             }
 
-            EducationData currentEducation = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(hero);
+            var currentEducation = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(hero);
             if (currentEducation != null)
             {
                 if (startingLanguages != null && startingLanguages.Count > 1)
                 {
-                    MBReadOnlyDictionary<Language, float> languages = currentEducation.Languages;
+                    var languages = currentEducation.Languages;
                     foreach (var tuple in startingLanguages)
                     {
                         if (languages.ContainsKey(tuple.Key))

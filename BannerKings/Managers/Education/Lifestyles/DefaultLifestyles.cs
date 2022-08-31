@@ -220,12 +220,12 @@ namespace BannerKings.Managers.Education.Lifestyles
                     BKPerks.Instance.VaryagRecognizedMercenary,
                     BKPerks.Instance.VaryagDrengr
                 },
-                new TextObject("{=!}Infantry troops are {EFFECT1}% faster on the map\nYou and your formation deal {EFFECT2}% less damage when mounted"),
+                new TextObject("{=0HiZjcrv}Infantry troops are {EFFECT1}% faster on the map\nYou and your formation deal {EFFECT2}% less damage when mounted"),
                 8f,
                 20f);
 
             Gladiator = new Lifestyle("lifestyle_gladiator");
-            Gladiator.Initialize(new TextObject("{=!}Gladiator"), new TextObject("{=!}"),
+            Gladiator.Initialize(new TextObject("{=wTyw0yfR}Gladiator"), new TextObject("{=!}"),
                 DefaultSkills.Athletics,
                 DefaultSkills.Riding,
                 new List<PerkObject>
@@ -234,12 +234,12 @@ namespace BannerKings.Managers.Education.Lifestyles
                     BKPerks.Instance.GladiatorTourDeCalradia,
                     BKPerks.Instance.GladiatorCrowdsFavorite
                 },
-                new TextObject("{=!}Combat experience in tournaments increased by {EFFECT1}%\nTrade penalty increased by {EFFECT2}%"),
+                new TextObject("{=ycDyfToX}Combat experience in tournaments increased by {EFFECT1}%\nTrade penalty increased by {EFFECT2}%"),
                 200f,
                 20f);
 
             Ritter = new Lifestyle("lifestyle_ritter");
-            Ritter.Initialize(new TextObject("{=!}Ritter"), new TextObject("{=!}"),
+            Ritter.Initialize(new TextObject("{=axhJNG0M}Ritter"), new TextObject("{=!}"),
                 BKSkills.Instance.Lordship,
                 DefaultSkills.Riding,
                 new List<PerkObject>
@@ -248,7 +248,7 @@ namespace BannerKings.Managers.Education.Lifestyles
                     BKPerks.Instance.RitterOathbound,
                     BKPerks.Instance.RitterPettySuzerain
                 },
-                new TextObject("{=!}You and melee cavalry in your formation deals {EFFECT1}% more melee damage.{EFFECT1}%\n You and your formation deal {EFFECT2}% less ranged damaged, mounted or otherwise."),
+                new TextObject("{=3Br24ayr}You and melee cavalry in your formation deals {EFFECT1}% more melee damage.{EFFECT1}%\n You and your formation deal {EFFECT2}% less ranged damaged, mounted or otherwise."),
                 5f,
                 15f, 
                 cultures.First(x => x.StringId == "vlandia"));

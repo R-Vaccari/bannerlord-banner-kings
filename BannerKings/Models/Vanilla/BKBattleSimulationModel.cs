@@ -26,8 +26,8 @@ namespace BannerKings.Models.Vanilla
 
                 if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(leader, DefaultDivinities.Instance.AmraSecondary1))
                 {
-                    TerrainType faceTerrainType = Campaign.Current.MapSceneWrapper
-                        .GetFaceTerrainType(strikerParty.MobileParty.CurrentNavigationFace);
+                    var faceTerrainType = Campaign.Current.MapSceneWrapper
+                                                  .GetFaceTerrainType(strikerParty.MobileParty.CurrentNavigationFace);
                     if (faceTerrainType == TerrainType.Forest)
                     {
                         result = (int)(result * 1.08f);

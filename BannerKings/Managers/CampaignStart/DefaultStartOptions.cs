@@ -214,9 +214,9 @@ namespace BannerKings.Managers.CampaignStart
                 DefaultLifestyles.Instance.Caravaneer);
 
             Gladiator = new StartOption("start_gladiator");
-            Gladiator.Initialize(new TextObject("{=!}Gladiator"),
-                new TextObject("{=!}You are an promising athlete, roaming the world looking for a good fight, gold and glory."),
-                new TextObject("{=!}Start with a couple mercenaries and food. Party size is reduced by 40% for 5 years. Gladiator lifestyle is kickstarted as part of your education."),
+            Gladiator.Initialize(new TextObject("{=wTyw0yfR}Gladiator"),
+                new TextObject("{=ScHHoM2v}You are an promising athlete, roaming the world looking for a good fight, gold and glory."),
+                new TextObject("{=uUjoaben}Start with a couple mercenaries and food. Party size is reduced by 40% for 5 years. Gladiator lifestyle is kickstarted as part of your education."),
                 0, 6, 8, 50, 0f,
                 () =>
                 {
