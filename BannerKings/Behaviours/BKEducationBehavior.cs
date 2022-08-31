@@ -37,6 +37,11 @@ namespace BannerKings.Behaviours
             CampaignEvents.PerkOpenedEvent.AddNonSerializedListener(this, OnPerkOpened);
         }
 
+        public List<Hero> GetAllBookSellers()
+        {
+            return bookSellers.Keys.ToList();
+        }
+
         public Hero GetBookSeller(Settlement settlement)
         {
             Hero hero = null;

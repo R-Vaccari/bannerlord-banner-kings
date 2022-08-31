@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
+using BannerKings.Behaviours;
 using BannerKings.Managers.Education;
 using BannerKings.Managers.Education.Books;
 using BannerKings.Managers.Education.Languages;
@@ -28,6 +30,7 @@ namespace BannerKings.UI.Education
         private readonly CharacterDeveloperVM developerVM;
         private readonly Hero hero;
         private MBBindingList<PerkVM> perks;
+        private InformationElement bookSellers;
 
         public EducationVM(Hero hero, CharacterDeveloperVM developerVM) : base(null, false)
         {
@@ -45,6 +48,8 @@ namespace BannerKings.UI.Education
 
         [DataSourceProperty] public bool ChangeBookPossible => hero.PartyBelongedTo != null;
 
+        [DataSourceProperty] public string EducationText => new TextObject("{=!}Education of {HERO}")
+                .SetTextVariable("HERO", hero.Name).ToString();
         [DataSourceProperty] public string LanguagesText => new TextObject("{=KBsVXEtH}Languages").ToString();
 
         [DataSourceProperty] public string KnownLanguagesText => new TextObject("{=Tv2gkkv4}Known Languages").ToString();
@@ -66,6 +71,20 @@ namespace BannerKings.UI.Education
         [DataSourceProperty] public string ChooseLifestyleText => new TextObject("{=sOT08u5v}Choose Lifestyle").ToString();
 
         [DataSourceProperty] public string InvestFocusText => new TextObject("{=kweOwoNY}Invest Focus").ToString();
+
+        [DataSourceProperty]
+        public InformationElement BookSellers
+        {
+            get => bookSellers;
+            set
+            {
+                if (value != bookSellers)
+                {
+                    bookSellers = value;
+                    OnPropertyChangedWithValue(value);
+                }
+            }
+        }
 
         [DataSourceProperty]
         public MBBindingList<PerkVM> Perks
@@ -190,6 +209,16 @@ namespace BannerKings.UI.Education
             LifestyleProgressInfo.Clear();
             Perks.Clear();
             data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(hero);
+
+
+            StringBuilder sb = new StringBuilder();
+            foreach (Hero seller in Campaign.Current.GetCampaignBehavior<BKEducationBehavior>().GetAllBookSellers())
+            {
+                sb.AppendLine(seller.Name.ToString() + ": " + seller.CurrentSettlement.Name.ToString());
+            }
+
+            BookSellers = new InformationElement(new TextObject("{=!}Book Sellers").ToString(), string.Empty, sb.ToString());
+
 
             if (data.Books.Count == 0)
             {

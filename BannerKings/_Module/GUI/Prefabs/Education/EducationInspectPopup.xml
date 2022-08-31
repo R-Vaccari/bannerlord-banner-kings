@@ -44,7 +44,10 @@
 
 																<TextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
 																            HorizontalAlignment="Center" Brush="Encyclopedia.SubPage.Header.Text"
-																            Text="Education of Aedid" MarginBottom="20" />
+																            Text="@EducationText" MarginBottom="8" />
+																			
+																<InformationElement WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" DataSource="{BookSellers}" 
+																HorizontalAlignment="Right" VerticalAlignment="Top" MarginBottom="20" />
 
 																<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
 																           UpdateChildrenStates="true">
