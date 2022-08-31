@@ -54,11 +54,9 @@ namespace BannerKings.Managers.AI
             return MBRandom.ChooseWeighted(candidates);
         }
 
-        public Hero ChooseVassalToGiftUnlandedTitle(Hero giver, FeudalTitle titleToGive)
+        public Hero ChooseVassalToGiftUnlandedTitle(Hero giver, FeudalTitle titleToGive, Dictionary<Clan, List<FeudalTitle>> vassals)
         {
-            var vassals = BannerKingsConfig.Instance.TitleManager.CalculateVassals(giver.Clan);
             var candidates = new List<(Hero, float)>();
-
             foreach (var pair in vassals)
             {
                 var leader = pair.Key.Leader;

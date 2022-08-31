@@ -63,9 +63,12 @@ namespace BannerKings.Behaviours
                 return;
             }
 
-            CheckOverDemesneLimit(hero);
-            CheckOverUnlandedDemesneLimit(hero);
-            CheckOverVassalLimit(hero);
+            if (hero.Clan != null && hero == hero.Clan.Leader)
+            {
+                CheckOverDemesneLimit(hero);
+                CheckOverUnlandedDemesneLimit(hero);
+                CheckOverVassalLimit(hero);
+            }
         }
 
         private void CheckOverDemesneLimit(Hero hero)
@@ -113,12 +116,6 @@ namespace BannerKings.Behaviours
             }
 
             var action = BannerKingsConfig.Instance.TitleModel.GetAction(ActionType.Grant, title, hero);
-            InformationManager.DisplayMessage(new InformationMessage(
-                new TextObject("{HERO} is giving {TITLE} to {RECEIVER}")
-                    .SetTextVariable("HERO", hero.Name)
-                    .SetTextVariable("TITLE", title.FullName)
-                    .SetTextVariable("RECEIVER", receiver.Name)
-                    .ToString()));
             BannerKingsConfig.Instance.TitleManager.GrantTitle(action, receiver);
         }
 
@@ -133,6 +130,35 @@ namespace BannerKings.Behaviours
             {
                 Campaign.Current.CampaignInformationManager.NewMapNoticeAdded(new UnlandedDemesneLimitNotification());
             }
+
+            Dictionary<Clan, List<FeudalTitle>> vassals = BannerKingsConfig.Instance.TitleManager.CalculateVassals(hero.Clan);
+            if (vassals.Count == 0)
+            {
+                return;
+            }
+
+            Clan random = vassals.Keys.ToList().GetRandomElement();
+            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(hero, random.Leader, -2);
+
+            var ai = new AIBehavior();
+            var limit = BannerKingsConfig.Instance.StabilityModel.CalculateUnlandedDemesneLimit(hero).ResultNumber;
+            var current = BannerKingsConfig.Instance.StabilityModel.CalculateCurrentUnlandedDemesne(hero.Clan).ResultNumber;
+
+            var diff = current - limit;
+            var title = ai.ChooseTitleToGive(hero, diff, false);
+            if (title == null || title.type != TitleType.Dukedom)
+            {
+                return;
+            }
+
+            var receiver = ai.ChooseVassalToGiftUnlandedTitle(hero, title, vassals);
+            if (receiver == null)
+            {
+                return;
+            }
+
+            var action = BannerKingsConfig.Instance.TitleModel.GetAction(ActionType.Grant, title, hero);
+            BannerKingsConfig.Instance.TitleManager.GrantTitle(action, receiver);
         }
 
         private void CheckOverVassalLimit(Hero hero)
