@@ -6,7 +6,7 @@
 		<Constant Name="Encyclopedia.SubPage.Element.Height" BrushName="Encyclopedia.SubPage.Element" BrushLayer="Default"
 		          BrushValueType="Height" />
 
-		<Constant Name="Encyclopedia.CharacterTree.Line.Height" BrushName="Encyclopedia.CharacterTree.Line"
+		<Constant Name="Encyclopedia.CharacterTree.Line.Height" BrushName="BannerKings.CharacterTree.Line"
 		          BrushLayer="Default" BrushValueType="Height" />
 
 		<Constant Name="IconAlpha" Value="0.7" />
@@ -15,7 +15,7 @@
 		<EncyclopediaUnitTreeNodeItemWidget HeightSizePolicy="CoverChildren" WidthSizePolicy="CoverChildren" MarginLeft="10"
 		                                    MarginRight="10" ButtonContainer="ButtonContainer"
 		                                    ChildContainer="ChildContainer" LineContainer="LineContainer"
-		                                    LineBrush="Encyclopedia.CharacterTree.Line">
+		                                    LineBrush="BannerKings.CharacterTree.Line" AlternateLineBrush="BannerKings.CharacterTree.Line.Alternative">
 			<Children>
 
 				<ListPanel DataSource="{Title}" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren"
@@ -71,12 +71,10 @@
 					</Children>
 				</ListPanel>
 
-				<Widget Id="LineContainer" DoNotAcceptEvents="true" DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed"
-				        SuggestedWidth="0" HeightSizePolicy="Fixed" SuggestedHeight="!Encyclopedia.CharacterTree.Line.Height"
-				        HorizontalAlignment="Center" MarginTop="134" Sprite="BlankWhiteSquare_9" AlphaFactor="0.5">
-					<Children>
+				<Widget Id="LineContainer" DoNotAcceptEvents="true" DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" SuggestedWidth="0" HeightSizePolicy="Fixed" SuggestedHeight="!Encyclopedia.CharacterTree.Line.Height" HorizontalAlignment="Center" MarginTop="134" Sprite="BlankWhiteSquare_9" AlphaFactor="0.5">
+				  <Children>
 
-					</Children>
+				  </Children>
 				</Widget>
 
 				<ListPanel Id="ChildContainer" DataSource="{Branch}" HeightSizePolicy="CoverChildren"

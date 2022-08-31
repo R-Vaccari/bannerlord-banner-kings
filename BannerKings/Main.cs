@@ -4,11 +4,13 @@ using BannerKings.Managers.Items;
 using BannerKings.Managers.Kingdoms.Policies;
 using BannerKings.Managers.Skills;
 using BannerKings.Models.Vanilla;
+using BannerKings.UI;
 using Bannerlord.UIExtenderEx;
 using HarmonyLib;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade;
+using TaleWorlds.ScreenSystem;
 
 namespace BannerKings
 {
@@ -18,6 +20,7 @@ namespace BannerKings
 
         protected override void OnGameStart(Game game, IGameStarter gameStarter)
         {
+            base.OnGameStart(game, gameStarter);
             if (gameStarter is not CampaignGameStarter campaignStarter)
             {
                 return;
@@ -98,6 +101,10 @@ namespace BannerKings
             BKItems.Instance.Initialize();
             BKPolicies.Instance.Initialize();
             DefaultInnovations.Instance.Initialize();
+
+            var screen = new BannerKingsScreen();
+            ScreenManager.AddGlobalLayer(screen, true);
+            UIManager.Instance.SetScreen(screen);
         }
 
         protected override void OnSubModuleLoad()
@@ -106,6 +113,13 @@ namespace BannerKings
             new Harmony("BannerKings").PatchAll();
             Xtender.Register(typeof(Main).Assembly);
             Xtender.Enable();
+        }
+
+        public override void OnGameEnd(Game game)
+        {
+            base.OnGameEnd(game);
+            UIManager.Instance.BKScreen.OnFinalize();
+            ScreenManager.RemoveGlobalLayer(UIManager.Instance.BKScreen);
         }
     }
 }

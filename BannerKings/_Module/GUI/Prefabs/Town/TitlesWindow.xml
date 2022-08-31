@@ -10,14 +10,10 @@
 	<VisualDefinitions>
 	</VisualDefinitions>
 	<Window>
-		<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" IsActive="true">
+		<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" IsActive="true" Sprite="BlankWhiteSquare_9" Color="#00000088">
 			<Children>
-				<Widget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="1500" SuggestedHeight="1000" HorizontalAlignment="Center" VerticalAlignment="Center" Sprite="BlankWhiteSquare_9" Color="#39291eFF">
+				<Widget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="1500" SuggestedHeight="1000" HorizontalAlignment="Center" VerticalAlignment="Center" Sprite="CharacterDeveloper\AttributePopup\attribute_popup_canvas">
 					<Children>
-
-						<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="625" Sprite="StdAssets\Popup\canvas_gradient" IsEnabled="false" VerticalFlip="true"/>
-						<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="625" Sprite="StdAssets\Popup\canvas_gradient" IsEnabled="false" MarginTop="625" />
-
 
 						<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" StackLayout.LayoutMethod="HorizontalLeftToRight" HorizontalAlignment="Center">
 							<Children>

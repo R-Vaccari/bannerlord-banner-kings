@@ -39,6 +39,9 @@ namespace BannerKings.UI
         private static UIManager instance;
 
         private BannerKingsMapView mapView;
+        public BannerKingsScreen BKScreen { get; private set; }
+
+        public void SetScreen(BannerKingsScreen screen) => BKScreen = screen;
 
         public static UIManager Instance
         {
@@ -72,7 +75,7 @@ namespace BannerKings.UI
         {
             if (mapView != null)
             {
-                mapView.Close();
+                BKScreen.CloseLayer();
                 mapView = null;
             }
         }
