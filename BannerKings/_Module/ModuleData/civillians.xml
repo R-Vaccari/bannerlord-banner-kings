@@ -3,6 +3,87 @@
 <NPCCharacters>
 
 
+  <NPCCharacter id="canticles_zealot_tier4" default_group="Cavalry" level="21" name="{=!}Rider of the Canticles" occupation="Soldier" culture="Culture.vlandia">
+    <face>
+      <face_key_template value="BodyProperty.fighter_vlandia" />
+    </face>
+    <skills>
+      <skill id="Athletics" value="90" />
+      <skill id="Riding" value="100" />
+      <skill id="OneHanded" value="130" />
+      <skill id="TwoHanded" value="60" />
+      <skill id="Polearm" value="110" />
+      <skill id="Bow" value="20" />
+      <skill id="Crossbow" value="20" />
+      <skill id="Throwing" value="15" />
+    </skills>
+    <upgrade_targets>
+    </upgrade_targets>
+    <Equipments>
+      <EquipmentRoster>
+        <equipment slot="Item0" id="Item.vlandia_lance_2_t4" />
+        <equipment slot="Item1" id="Item.western_riders_kite_shield" />
+        <equipment slot="Item2" id="Item.vlandia_axe_2_t4" />
+        <equipment slot="Body" id="Item.vlandia_chainmail" />
+        <equipment slot="Leg" id="Item.empire_horseman_boots" />
+        <equipment slot="Head" id="Item.TV_vlandia_helmet_p" />
+        <equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+        <equipment slot="Cape" id="Item.TV_battania_cloak_m" />
+        <equipment slot="Horse" id="Item.vlandia_horse" />
+        <equipment slot="HorseHarness" id="Item.stripped_leather_harness" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+        <equipment slot="Item0" id="Item.vlandia_lance_2_t4" />
+        <equipment slot="Item1" id="Item.western_riders_kite_shield" />
+        <equipment slot="Item2" id="Item.vlandia_sword_3_t4" />
+        <equipment slot="Body" id="Item.vlandia_chainmail" />
+        <equipment slot="Leg" id="Item.leather_cavalier_boots" />
+        <equipment slot="Head" id="Item.TV_vlandia_helmet_q" />
+        <equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		<equipment slot="Cape" id="Item.TV_battania_cloak_p" />
+        <equipment slot="Horse" id="Item.vlandia_horse" />
+        <equipment slot="HorseHarness" id="Item.stripped_leather_harness" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+        <equipment slot="Item0" id="Item.vlandia_lance_2_t4" />
+        <equipment slot="Item1" id="Item.western_riders_kite_shield" />
+        <equipment slot="Item2" id="Item.vlandia_sword_3_t4" />
+        <equipment slot="Body" id="Item.ao_eorling_plates_over_gambeson" />
+        <equipment slot="Leg" id="Item.leather_cavalier_boots" />
+        <equipment slot="Head" id="Item.visored_helmet_over_padded_cloth" />
+        <equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		<equipment slot="Cape" id="Item.hood" />
+        <equipment slot="Horse" id="Item.vlandia_horse" />
+        <equipment slot="HorseHarness" id="Item.stripped_leather_harness" />
+      </EquipmentRoster>
+	  <EquipmentRoster>
+        <equipment slot="Item0" id="Item.vlandia_lance_2_t4" />
+        <equipment slot="Item1" id="Item.western_riders_kite_shield" />
+        <equipment slot="Item2" id="Item.vlandia_axe_2_t4" />
+        <equipment slot="Body" id="Item.nordic_sloven_over_mail" />
+        <equipment slot="Leg" id="Item.leather_cavalier_boots" />
+        <equipment slot="Head" id="Item.TV_vlandia_helmet_q" />
+        <equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		<equipment slot="Cape" id="Item.TV_vlandia_shoulders_g" />
+        <equipment slot="Horse" id="Item.vlandia_horse" />
+        <equipment slot="HorseHarness" id="Item.stripped_leather_harness" />
+      </EquipmentRoster>
+      <EquipmentRoster>
+        <equipment slot="Item0" id="Item.vlandia_lance_2_t4" />
+        <equipment slot="Item1" id="Item.western_riders_kite_shield" />
+        <equipment slot="Item2" id="Item.vlandia_sword_3_t4" />
+        <equipment slot="Body" id="Item.ao_eorling_plates_over_gambeson" />
+        <equipment slot="Leg" id="Item.leather_cavalier_boots" />
+        <equipment slot="Head" id="Item.visored_helmet_over_padded_cloth" />
+        <equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+        <equipment slot="Horse" id="Item.vlandia_horse" />
+        <equipment slot="HorseHarness" id="Item.stripped_leather_harness" />
+      </EquipmentRoster>
+      <EquipmentSet id="vlandia_troop_civilian_template_t3"
+        civilian="true" />
+    </Equipments>
+  </NPCCharacter>
+
 	<NPCCharacter id="bannerkings_bookseller_battania" name="{=!}{FIRSTNAME} the Loremaster" default_group="Infantry"
 	              age="65" voice="softspoken" is_template="true" is_hero="false" culture="Culture.battania"
 	              occupation="Special">
@@ -59,7 +140,7 @@
 		</Equipments>
 	</NPCCharacter>
 
-	<NPCCharacter id="bannerkings_bookseller_vlandia" name="{=yr5pa0hs}{FIRSTNAME}, the Wise" default_group="Infantry"
+	<NPCCharacter id="bannerkings_bookseller_vlandia" name="{=!}{FIRSTNAME}, the Lamenter" default_group="Infantry"
 	              age="65" voice="softspoken" is_template="true" is_hero="false" culture="Culture.vlandia"
 	              occupation="Special">
 		<face>
@@ -83,6 +164,75 @@
 				<equipment slot="Body" id="Item.monk_robe" />
 				<equipment slot="Cape" id="Item.hood" />
 				<equipment slot="Leg" id="Item.folded_town_boots" />
+			</EquipmentRoster>
+		</Equipments>
+	</NPCCharacter>
+	
+	<NPCCharacter id="bannerkings_bookseller_aserai" name="{=yr5pa0hs}{FIRSTNAME}, the Wise" default_group="Infantry"
+	              age="65" voice="softspoken" is_template="true" is_hero="false" culture="Culture.aserai"
+	              occupation="Special">
+		<face>
+			<face_key_template value="BodyProperty.villager_aserai" />
+		</face>
+		<skills />
+		<Traits>
+			<Trait id="KnightFightingSkills" value="5" />
+			<Trait id="Commander" value="5" />
+			<Trait id="Politician" value="5" />
+			<Trait id="Manager" value="5" />
+			<Trait id="Honor" value="+1" />
+		</Traits>
+		<Equipments>
+			<EquipmentRoster civilian="true">
+				<equipment slot="Body" id="Item.aserai_civil_c" />
+				<equipment slot="Head" id="Item.aserai_civil_c_head" />
+				<equipment slot="Leg" id="Item.folded_town_boots" />
+			</EquipmentRoster>
+		</Equipments>
+	</NPCCharacter>
+	
+	<NPCCharacter id="bannerkings_bookseller_sturgia" name="{=!}{FIRSTNAME}, the Runereader" default_group="Infantry"
+	              age="65" voice="softspoken" is_template="true" is_hero="false" culture="Culture.sturgia"
+	              occupation="Special">
+		<face>
+			<face_key_template value="BodyProperty.villager_sturgia" />
+		</face>
+		<skills />
+		<Traits>
+			<Trait id="KnightFightingSkills" value="5" />
+			<Trait id="Commander" value="5" />
+			<Trait id="Politician" value="5" />
+			<Trait id="Manager" value="5" />
+			<Trait id="Honor" value="+1" />
+		</Traits>
+		<Equipments>
+			<EquipmentRoster civilian="true">
+				<equipment slot="Body" id="Item.northern_tunic" />
+				<equipment slot="Cape" id="Item.scarf" />
+				<equipment slot="Leg" id="Item.folded_town_boots" />
+			</EquipmentRoster>
+		</Equipments>
+	</NPCCharacter>
+	
+	<NPCCharacter id="bannerkings_bookseller_khuzait" name="{=!}{FIRSTNAME}, the Skygazer" default_group="Infantry"
+	              age="65" voice="softspoken" is_template="true" is_hero="false" culture="Culture.khuzait"
+	              occupation="Special">
+		<face>
+			<face_key_template value="BodyProperty.villager_khuzait" />
+		</face>
+		<skills />
+		<Traits>
+			<Trait id="KnightFightingSkills" value="5" />
+			<Trait id="Commander" value="5" />
+			<Trait id="Politician" value="5" />
+			<Trait id="Manager" value="5" />
+			<Trait id="Honor" value="+1" />
+		</Traits>
+		<Equipments>
+			<EquipmentRoster civilian="true">
+				<equipment slot="Body" id="Item.khuzait_civil_coat" />
+				<equipment slot="Head" id="Item.fur_hat" />
+				<equipment slot="Leg" id="Item.leather_shoes" />
 			</EquipmentRoster>
 		</Equipments>
 	</NPCCharacter>

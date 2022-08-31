@@ -16,6 +16,7 @@ using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
+using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Behaviours
@@ -154,6 +155,26 @@ namespace BannerKings.Behaviours
                 {
                     Clan random = Clan.All.GetRandomElementWithPredicate(x => x.Culture.StringId == "aserai" && x != hero.Clan);
                     ChangeRelationAction.ApplyRelationChangeBetweenHeroes(hero, random.Leader, 2);
+                }
+
+                if (hero.IsPartyLeader && MBRandom.RandomFloat < 0.05f && 
+                    BannerKingsConfig.Instance.ReligionsManager.HasBlessing(hero, DefaultDivinities.Instance.VlandiaSecondary2))
+                {
+                    int count = MBRandom.RandomInt(1, 4);
+                    var character = Game.Current.ObjectManager.GetObject<CharacterObject>("canticles_zealot_tier4");
+                    TroopRosterElement element = new TroopRosterElement(character);
+                    element.Number = count;
+                    hero.PartyBelongedTo.MemberRoster.Add(element);
+                    
+                    if (hero == Hero.MainHero)
+                    {
+                        InformationManager.DisplayMessage(
+                            new InformationMessage(new TextObject("{=!}{COUNT} {UNIT} zealots have joined your party!")
+                            .SetTextVariable("COUNT", count)
+                            .SetTextVariable("UNIT", character.Name)
+                            .ToString(), 
+                            Color.ConvertStringToColor("#00CCFF")));
+                    }
                 }
 
 
