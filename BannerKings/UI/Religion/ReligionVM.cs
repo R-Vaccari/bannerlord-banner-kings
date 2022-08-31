@@ -22,6 +22,7 @@ namespace BannerKings.UI.Religion
         private MBBindingList<ReligionElementVM> secondaryDivinities;
         private MBBindingList<BKTraitItemVM> virtues;
         private SelectorVM<ReligionSelectorItemVM> selector;
+        private string name, description, groupName, groupDescription;
         private Hero hero;
 
         public ReligionVM(Managers.Institutions.Religions.Religion heroReligion, Hero hero) : base(null, true)
@@ -100,13 +101,13 @@ namespace BannerKings.UI.Religion
 
         [DataSourceProperty] public string AspectsText => new TextObject("{=1sKJS1JR}Aspects").ToString();
 
-        [DataSourceProperty] public string Name => currentReligion.Faith.GetFaithName().ToString();
+        [DataSourceProperty] public string Name { get => name; set => name = value; }
 
-        [DataSourceProperty] public string Description => currentReligion.Faith.GetFaithDescription().ToString();
+        [DataSourceProperty] public string Description { get => description; set => description = value; }
 
-        [DataSourceProperty] public string GroupName => currentReligion.Faith.FaithGroup.Name.ToString();
+        [DataSourceProperty] public string GroupName { get => groupName; set => groupName = value; }
 
-        [DataSourceProperty] public string GroupDescription => currentReligion.Faith.FaithGroup.Description.ToString();
+        [DataSourceProperty] public string GroupDescription { get => groupDescription; set => groupDescription = value; }
 
 
         [DataSourceProperty]
@@ -216,6 +217,11 @@ namespace BannerKings.UI.Religion
             Virtues.Clear();
             Doctrines.Clear();
             Aspects.Clear();
+
+            Name = currentReligion.Faith.GetFaithName().ToString();
+            Description = currentReligion.Faith.GetFaithDescription().ToString();
+            GroupName = currentReligion.Faith.FaithGroup.Name.ToString();
+            GroupDescription = currentReligion.Faith.FaithGroup.Description.ToString();
 
             var selectedIndex = 0;
             Selector = new SelectorVM<ReligionSelectorItemVM>(0, null);

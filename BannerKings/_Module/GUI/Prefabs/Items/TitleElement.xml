@@ -6,16 +6,16 @@
 		<Constant Name="Encyclopedia.SubPage.Element.Height" BrushName="Encyclopedia.SubPage.Element" BrushLayer="Default"
 		          BrushValueType="Height" />
 
-		<Constant Name="Encyclopedia.CharacterTree.Line.Height" BrushName="BannerKings.CharacterTree.Line"
+		<Constant Name="Encyclopedia.CharacterTree.Line.Height" BrushName="Encyclopedia.CharacterTree.Line"
 		          BrushLayer="Default" BrushValueType="Height" />
 
 		<Constant Name="IconAlpha" Value="0.7" />
 	</Constants>
 	<Window>
-		<EncyclopediaUnitTreeNodeItemWidget HeightSizePolicy="CoverChildren" WidthSizePolicy="CoverChildren" MarginLeft="10"
-		                                    MarginRight="10" ButtonContainer="ButtonContainer"
+		<EncyclopediaUnitTreeNodeItemBrushWidget HeightSizePolicy="CoverChildren" WidthSizePolicy="CoverChildren" MarginLeft="10"
+		                                    MarginRight="10" IsAlternativeUpgrade="@IsAlternativeUpgrade" ButtonContainer="ButtonContainer"
 		                                    ChildContainer="ChildContainer" LineContainer="LineContainer"
-		                                    LineBrush="BannerKings.CharacterTree.Line" AlternateLineBrush="BannerKings.CharacterTree.Line.Alternative">
+		                                    LineBrush="Encyclopedia.CharacterTree.Line" AlternateLineBrush="Encyclopedia.CharacterTree.Line.Alternative">
 			<Children>
 
 				<ListPanel DataSource="{Title}" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren"
@@ -86,6 +86,6 @@
 				</ListPanel>
 
 			</Children>
-		</EncyclopediaUnitTreeNodeItemWidget>
+		</EncyclopediaUnitTreeNodeItemBrushWidget>
 	</Window>
 </Prefab>

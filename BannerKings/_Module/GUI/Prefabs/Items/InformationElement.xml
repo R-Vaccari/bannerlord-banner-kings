@@ -11,7 +11,7 @@
 				           StackLayout.LayoutMethod="HorizontalLeftToRight" MaxHeight="645">
 					<Children>
 						<TextWidget HorizontalAlignment="Left" WidthSizePolicy="CoverChildren" Text="@Description" MarginTop="10"
-						            Brush="Encyclopedia.SubPage.Info.Text" Brush.FontSize="15" />
+						            Brush="Encyclopedia.SubPage.Info.Text" Brush.FontSize="25" />
 						<TextWidget HorizontalAlignment="Center" WidthSizePolicy="CoverChildren" Text="@Value" MarginTop="10"
 						            MarginLeft="5" Brush="TownManagement.Project.Name.Text" />
 					</Children>
