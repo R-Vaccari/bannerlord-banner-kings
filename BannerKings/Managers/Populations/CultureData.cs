@@ -205,28 +205,15 @@ namespace BannerKings.Managers.Populations
                 }
 
                 var result = MBRandom.ChooseWeighted(candidates);
-                result.Assimilation += diff;
-            }
-
-
-            /*if (foreignerShare < foreignerTarget)
-            {
-                float random = MBRandom.RandomFloatRanged(foreignerTarget - foreignerShare);
-                IEnumerable<CultureObject> presentCultures = from cultureClass in this.cultures select cultureClass.Culture;
-                CultureObject randomForeign = MBObjectManager.Instance.GetObjectTypeList<CultureObject>()
-                    .GetRandomElementWithPredicate(x => x != settlementOwner.Culture && x != data.Settlement.Culture && !x.IsBandit
-                    && !presentCultures.Contains(x));
-                if (randomForeign != null)
+                if (result != null)
                 {
-                    cultures.Add(new CultureDataClass(randomForeign, random, random));
-                    foreach (CultureDataClass cultureData in cultures)
-                        if (cultureData.Culture == DominantCulture)
-                        {
-                            cultureData.Assimilation -= random;
-                            break;
-                        }
+                    result.Assimilation += diff;
                 }
-            }*/
+                else
+                {
+                    cultures[0].Assimilation += diff;
+                }
+            }
         }
 
         private bool IsForeigner(PopulationData data, CultureDataClass cultureData)
