@@ -194,7 +194,7 @@
 
 								<ButtonWidget DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed"
 								              HorizontalAlignment="Center" VerticalAlignment="Bottom" MarginBottom="15" SuggestedWidth="120"
-								              SuggestedHeight="40" Brush="ButtonBrush2" Command.Click="ExecuteFinish"
+								              SuggestedHeight="40" Brush="ButtonBrush2" Command.Click="ExecuteFinish" IsEnabled="@CanFinish"
 								              UpdateChildrenStates="true">
 									<Children>
 										<TextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginTop="3"

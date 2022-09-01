@@ -26,13 +26,16 @@ namespace BannerKings.Behaviours
 
         private void OnSettlementEntered(MobileParty mobileParty, Settlement settlement, Hero hero)
         {
-            if (mobileParty.IsCaravan)
+            if (mobileParty != null && mobileParty.IsCaravan && mobileParty.Owner != null && settlement.Notables != null)
             {
                 var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(mobileParty.Owner);
                 if (education.HasPerk(BKPerks.Instance.CaravaneerOutsideConnections) && MBRandom.RandomFloat < 0.1f)
                 {
                     var random = settlement.Notables.GetRandomElement();
-                    ChangeRelationAction.ApplyRelationChangeBetweenHeroes(mobileParty.Owner, random, 2);
+                    if (random != null)
+                    {
+                        ChangeRelationAction.ApplyRelationChangeBetweenHeroes(mobileParty.Owner, random, 2);
+                    }
                 }
             }
         }

@@ -74,7 +74,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
             imperialGroup = new FaithGroup(new TextObject("{=NWqkTdMt}Calradian Faiths"),
                 new TextObject("{=eqvyNpT8}The Imperial Calradian faiths."));
             darusosian = new DarusosianFaith();
-
+            DarusosianExecution darusosianExecution = new DarusosianExecution();
             darusosian.Initialize(DefaultDivinities.Instance.DarusosianMain,
                 new List<Divinity>
                     {DefaultDivinities.Instance.DarusosianSecondary1, DefaultDivinities.Instance.DarusosianSecondary2},
@@ -83,7 +83,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths
                     {DefaultTraits.Honor, true},
                     {DefaultTraits.Mercy, true}
                 },
-                imperialGroup);
+                imperialGroup, new List<Rite>() { darusosianExecution });
 
 
             vlandiaGroup = new FaithGroup(new TextObject("{=6FGQ31TM}Vlandic Faiths"),

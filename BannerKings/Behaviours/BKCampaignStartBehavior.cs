@@ -84,6 +84,7 @@ namespace BannerKings.Behaviours
 
             GainKingdomInfluenceAction.ApplyForDefault(mainHero, option.Influence);
 
+            BannerKingsConfig.Instance.EducationManager.CorrectPlayerEducation();
             ShowInquiry();
         }
 
@@ -113,21 +114,21 @@ namespace BannerKings.Behaviours
 
         private void OnGameCreated(CampaignGameStarter starter)
         {
-            InitializeMainData();
+            InitializeAllData();
         }
 
         private void OnGameLoaded()
         {
-            InitializeAllData();
+            
             if (!hasSeenInquiry)
             {
+                InitializeAllData();
                 ShowInquiry();
             }
         }
 
         private void OnCharacterCreationOver()
         {
-            InitializeAllData();
             UIManager.Instance.ShowWindow("campaignStart");
         }
 

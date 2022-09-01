@@ -20,6 +20,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
     public enum RiteType
     {
         OFFERING,
-        SACRIFICE
+        SACRIFICE,
+        DONATION
     }
 }

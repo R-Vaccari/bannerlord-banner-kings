@@ -68,6 +68,17 @@ namespace BannerKings.Managers
             return data;
         }
 
+        public void CorrectPlayerEducation()
+        {
+            Educations.Remove(Hero.MainHero);
+            var languages = new Dictionary<Language, float>();
+            var native = DefaultLanguages.Instance.All.FirstOrDefault(x => x.Culture == Hero.MainHero.Culture) ?? DefaultLanguages.Instance.Calradian;
+
+            languages.Add(native, 1f);
+            var data = new EducationData(Hero.MainHero, languages);
+            Educations.Add(Hero.MainHero, data);
+        }
+
         public void PostInitialize()
         {
             foreach (var data in Educations.Values.ToList())

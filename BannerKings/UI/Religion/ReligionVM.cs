@@ -22,7 +22,7 @@ namespace BannerKings.UI.Religion
         private MBBindingList<ReligionElementVM> secondaryDivinities;
         private MBBindingList<BKTraitItemVM> virtues;
         private SelectorVM<ReligionSelectorItemVM> selector;
-        private string name, description, groupName, groupDescription;
+        private string name, description, groupName, groupDescription, divinities;
         private Hero hero;
 
         public ReligionVM(Managers.Institutions.Religions.Religion heroReligion, Hero hero) : base(null, true)
@@ -94,20 +94,60 @@ namespace BannerKings.UI.Religion
 
         [DataSourceProperty] public string VirtuesText => new TextObject("{=p6itQbf8}Virtues").ToString();
 
-        [DataSourceProperty]
-        public string SecondaryDivinitiesText => currentReligion.Faith.GetSecondaryDivinitiesDescription().ToString();
-
         [DataSourceProperty] public string DoctrinesText => new TextObject("{=BKLacKdC}Doctrines").ToString();
 
         [DataSourceProperty] public string AspectsText => new TextObject("{=1sKJS1JR}Aspects").ToString();
 
-        [DataSourceProperty] public string Name { get => name; set => name = value; }
+        [DataSourceProperty]
+        public string SecondaryDivinitiesText
+        {
+            get => divinities;
+            set
+            {
+                divinities = value;
+                OnPropertyChangedWithValue(value, "SecondaryDivinitiesText");
+            }
+        }
 
-        [DataSourceProperty] public string Description { get => description; set => description = value; }
+        [DataSourceProperty] public string Name
+        {
+            get => name;
+            set
+            {
+                name = value;
+                OnPropertyChangedWithValue(value, "Name");
+            }
+        }
 
-        [DataSourceProperty] public string GroupName { get => groupName; set => groupName = value; }
+        [DataSourceProperty] public string Description 
+        { 
+            get => description;
+            set 
+            {
+                description = value;
+                OnPropertyChangedWithValue(value, "Description"); 
+            } 
+        }
 
-        [DataSourceProperty] public string GroupDescription { get => groupDescription; set => groupDescription = value; }
+        [DataSourceProperty] public string GroupName
+        {
+            get => groupName;
+            set
+            {
+                groupName = value;
+                OnPropertyChangedWithValue(value, "GroupName");
+            }
+        }
+
+        [DataSourceProperty] public string GroupDescription
+        {
+            get => groupDescription;
+            set
+            {
+                groupDescription = value;
+                OnPropertyChangedWithValue(value, "GroupDescription");
+            }
+        }
 
 
         [DataSourceProperty]
@@ -217,11 +257,13 @@ namespace BannerKings.UI.Religion
             Virtues.Clear();
             Doctrines.Clear();
             Aspects.Clear();
+            SecondaryDivinities.Clear();
 
             Name = currentReligion.Faith.GetFaithName().ToString();
             Description = currentReligion.Faith.GetFaithDescription().ToString();
             GroupName = currentReligion.Faith.FaithGroup.Name.ToString();
             GroupDescription = currentReligion.Faith.FaithGroup.Description.ToString();
+            SecondaryDivinitiesText = currentReligion.Faith.GetSecondaryDivinitiesDescription().ToString();
 
             var selectedIndex = 0;
             Selector = new SelectorVM<ReligionSelectorItemVM>(0, null);

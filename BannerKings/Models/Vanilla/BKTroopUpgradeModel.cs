@@ -11,7 +11,7 @@ namespace BannerKings.Models.Vanilla
             CharacterObject upgradeTarget)
         {
             var result = base.GetXpCostForUpgrade(party, characterObject, upgradeTarget) * 2f;
-            if (party.MobileParty != null && party.MobileParty.LeaderHero != null)
+            if (party != null && party.MobileParty != null && party.MobileParty.LeaderHero != null)
             {
                 var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(party.MobileParty.LeaderHero);
                 if (education.Lifestyle != null && education.Lifestyle.Equals(DefaultLifestyles.Instance.Cataphract))

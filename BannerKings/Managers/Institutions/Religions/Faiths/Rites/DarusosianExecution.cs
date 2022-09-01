@@ -2,13 +2,14 @@ using System.Collections.Generic;
 using BannerKings.Managers.Skills;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
+using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.CampaignSystem.ViewModelCollection;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
 {
-    public class Sacrifice : Rite
+    public class DarusosianExecution : Rite
     {
         private Hero input;
 
@@ -20,14 +21,10 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
             }
 
             var options = new List<InquiryElement>();
-            foreach (var element in executor.PartyBelongedTo.PrisonRoster.GetTroopRoster())
+            foreach (var hero in GetAdequateSacrifices(executor))
             {
-                if (element.Character.IsHero)
-                {
-                    var hero = element.Character.HeroObject;
-                    options.Add(new InquiryElement(hero, hero.Name.ToString(),
-                        new ImageIdentifier(CampaignUIHelper.GetCharacterCode(element.Character))));
-                }
+                options.Add(new InquiryElement(hero, hero.Name.ToString(),
+                    new ImageIdentifier(CampaignUIHelper.GetCharacterCode(hero.CharacterObject))));
             }
 
             MBInformationManager.ShowMultiSelectionInquiry(
@@ -58,7 +55,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
 
             var piety = GetPietyReward();
             KillCharacterAction.ApplyByExecution(input, actionTaker, false);
-            MBInformationManager.AddQuickInformation(new TextObject("{=d8ecHZ0P}{SACRIFICE} was ritually sacrificed by {HERO}.")
+            MBInformationManager.AddQuickInformation(new TextObject("{=!}{SACRIFICE} was executed as a traitor by {HERO}.")
                     .SetTextVariable("HERO", actionTaker.Name)
                     .SetTextVariable("SACRIFICE", input.Name),
                 0, actionTaker.CharacterObject, "event:/ui/notification/relation");
@@ -84,28 +81,52 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
             }
         }
 
+        private List<Hero> GetAdequateSacrifices(Hero hero)
+        {
+            var list = new List<Hero>();    
+            if (hero.IsPartyLeader && hero.PartyBelongedTo.PrisonRoster.TotalHeroes > 0)
+            {
+                foreach (TroopRosterElement element in hero.PartyBelongedTo.PrisonRoster.GetTroopRoster())
+                {
+                    var elementHero = element.Character.HeroObject;
+                    if (elementHero != null && elementHero.Clan != null)
+                    {
+                        var kingdom = elementHero.Clan.Kingdom;
+                        if (kingdom != null && (kingdom.StringId == "empire_w" || kingdom.StringId == "empire"))
+                        {
+                            list.Add(elementHero);
+                        }
+                    }
+                }
+            }
+
+            return list;
+        }
+
         public override bool MeetsCondition(Hero hero)
         {
             var data = BannerKingsConfig.Instance.ReligionsManager.GetFaithfulData(hero);
-            return hero.IsAlive && !hero.IsChild && !hero.IsPrisoner && hero.PartyBelongedTo != null &&
-                   data != null && data.HasTimePassedForRite(GetRiteType(), GetTimeInterval(hero)) && hero.IsPartyLeader &&
-                   hero.PartyBelongedTo.PrisonRoster.TotalHeroes > 0;
-            ;
+            var hasTarget = GetAdequateSacrifices(hero).Count > 0;
+            
+
+            return hero.IsAlive && !hero.IsChild && !hero.IsPrisoner && data != null && 
+                data.HasTimePassedForRite(GetRiteType(), GetTimeInterval(hero)) && hasTarget &&
+                hero.Clan.Kingdom != null && hero.Clan.Kingdom.StringId == "empire_s";
         }
 
         public override TextObject GetDescription()
         {
-            return new TextObject("{=!}Sacrifice a worthy enemy hero to prove your devotion.");
+            return new TextObject("{=!}Execute a traitor to the Empire. Dissedents of the Western and Northern rebels may be executed as punishment for the betrayal of the Empire, the Imperial family and the Triad.");
         }
 
         public override TextObject GetName()
         {
-            return new TextObject("{=0aY6zmgK}Human Sacrifice");
+            return new TextObject("{=!}Execute Traitor");
         }
 
         public override RiteType GetRiteType()
         {
-            return RiteType.SACRIFICE;
+            return RiteType.DONATION;
         }
 
         public override float GetTimeInterval(Hero hero)

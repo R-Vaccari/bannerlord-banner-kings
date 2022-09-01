@@ -19,11 +19,11 @@ namespace BannerKings.Models.Vanilla
                 var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(leader);
                 if (education.Lifestyle != null && education.Lifestyle.Equals(DefaultLifestyles.Instance.Gladiator))
                 {
-                    result *= 1.2f;
+                    result *= 0.8f;
                 }
             }
 
-            if (clientParty.IsCaravan)
+            if (clientParty != null && clientParty.IsCaravan)
             {
                 var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(clientParty.Owner);
                 if (education.HasPerk(BKPerks.Instance.CaravaneerOutsideConnections))

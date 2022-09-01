@@ -10,14 +10,30 @@ namespace BannerKings.UI.CampaignStart
     {
         private MBBindingList<StartOptionVM> options;
         private new StartOptionVM selected;
+        private bool canFinish;
 
         public CampaignStartVM() : base(null, false)
         {
             options = new MBBindingList<StartOptionVM>();
+            CanFinish = false;
             RefreshValues();
         }
 
         [DataSourceProperty] public string ConfirmText => GameTexts.FindText("str_accept").ToString();
+
+        [DataSourceProperty]
+        public bool CanFinish
+        {
+            get => canFinish;
+            set
+            {
+                if (value != canFinish)
+                {
+                    canFinish = value;
+                    OnPropertyChangedWithValue(value);
+                }
+            }
+        }
 
         [DataSourceProperty]
         public StartOptionVM Selected
@@ -72,6 +88,7 @@ namespace BannerKings.UI.CampaignStart
                 Selected.IsSelected = false;
             }
 
+            CanFinish = true;
             Selected = option;
             Selected.IsSelected = true;
         }
