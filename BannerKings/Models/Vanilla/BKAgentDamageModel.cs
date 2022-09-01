@@ -31,9 +31,19 @@ namespace BannerKings.Models.Vanilla
                         }
                     }
 
-                    if (!aggressor.IsMounted && data.HasPerk(BKPerks.Instance.VaryagDrengr))
+                    if (!aggressor.IsMounted)
                     {
-                        baseResult *= 1.1f;
+
+                        if (agressorUsage.WeaponClass == WeaponClass.TwoHandedSword && 
+                            data.HasPerk(BKPerks.Instance.FianHighlander))
+                        {
+                            baseResult *= 1.04f;
+                        }
+
+                        if (data.HasPerk(BKPerks.Instance.VaryagDrengr))
+                        {
+                            baseResult *= 1.1f;
+                        }
                     }
 
                     if (data.Lifestyle != null)

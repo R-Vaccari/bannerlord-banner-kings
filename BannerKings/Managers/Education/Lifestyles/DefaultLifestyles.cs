@@ -42,9 +42,10 @@ namespace BannerKings.Managers.Education.Lifestyles
         {
             get
             {
-                yield return Fian;
-                //yield return Diplomat;
                 yield return Cataphract;
+                yield return Ritter;
+                yield return Fian;
+                yield return Varyag;
                 yield return Mercenary;
                 yield return Outlaw;
                 yield return Gladiator;
@@ -52,8 +53,9 @@ namespace BannerKings.Managers.Education.Lifestyles
                 yield return August;
                 yield return SiegeEngineer;
                 yield return CivilAdministrator;
+                //yield return Diplomat;
                 //yield return Kheshig;
-                //yield return Varyag;
+                //
             }
         }
 
@@ -62,7 +64,8 @@ namespace BannerKings.Managers.Education.Lifestyles
             var cultures = Game.Current.ObjectManager.GetObjectTypeList<CultureObject>();
 
             Fian = new Lifestyle("lifestyle_fian");
-            Fian.Initialize(new TextObject("{=of43diPd}Fian"), new TextObject("{=!}"), 
+            Fian.Initialize(new TextObject("{=of43diPd}Fian"), 
+                new TextObject("{=!}Fians are the epitome of Battanian combat. Long ago, their ancestors discovered that ambushes in the woods with longbows were specially deadly. But if the bow was not enough, a greatsword would do the rest. Ever since, the mastery of longbow and greatswords has been the staple for Battanian nobility, who stills despises the horse as a sign of status."), 
                 DefaultSkills.Bow,
                 DefaultSkills.TwoHanded,
                 new List<PerkObject>
@@ -87,7 +90,7 @@ namespace BannerKings.Managers.Education.Lifestyles
                     BKPerks.Instance.CataphractKlibanophoros
                 },
                 new TextObject("{=y2zNEeT5}Increased renown from victories by {EFFECT1}%\n"),
-                0f, 
+                12f, 
                 0f,
                 cultures.FirstOrDefault(x => x.StringId == "empire"));
 
@@ -139,7 +142,7 @@ namespace BannerKings.Managers.Education.Lifestyles
                 },
                 new TextObject("{=sCxt8vV7}Reduced demesne weight of towns by {EFFECT1}%\nParty size reduced by {EFFECT2}"),
                 20f,
-                8f);
+                15f);
 
             Caravaneer = new Lifestyle("lifestyle_caravaneer");
             Caravaneer.Initialize(new TextObject("{=F5aAvvhD}Caravaneer"), new TextObject("{=!}"),
@@ -161,11 +164,13 @@ namespace BannerKings.Managers.Education.Lifestyles
                 DefaultSkills.Trade, 
                 new List<PerkObject>
                 {
-                    BKPerks.Instance.ArtisanSmith, BKPerks.Instance.ArtisanCraftsman, BKPerks.Instance.ArtisanEntrepeneur
+                    BKPerks.Instance.ArtisanSmith, 
+                    BKPerks.Instance.ArtisanCraftsman, 
+                    BKPerks.Instance.ArtisanEntrepeneur
                 },
-                new TextObject("{=mV7M6SgW}Chance of botching items when smithing reduced by {EFFECT1}%\n{EFFECT2}%"),
+                new TextObject("{=mV7M6SgW}Chance of botching items when smithing reduced by {EFFECT1}%\nRecruiting troops is {EFFECT2}% more expensive"),
                 10f, 
-                8f);
+                15f);
 
             Outlaw = new Lifestyle("lifestyle_outlaw");
             Outlaw.Initialize(new TextObject("{=GTYYnH9E}Outlaw"), new TextObject("{=!}"),
@@ -175,8 +180,7 @@ namespace BannerKings.Managers.Education.Lifestyles
                 {
                     BKPerks.Instance.OutlawKidnapper, 
                     BKPerks.Instance.OutlawPlunderer,
-                    BKPerks.Instance.OutlawNightPredator,
-                    BKPerks.Instance.OutlawUnderworldKing
+                    BKPerks.Instance.OutlawNightPredator
                 },
                 new TextObject("{=gkaq9L2T}Bandit troops are {EFFECT1}% faster on map\nRandomly lose relations with heroes that disapprove criminality when leaving dialogue"),
                 10f, 

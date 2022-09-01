@@ -1,4 +1,4 @@
-﻿using BannerKings.Managers.Education;
+﻿using BannerKings.Managers.Education.Lifestyles;
 using BannerKings.Managers.Skills;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
@@ -20,6 +20,11 @@ namespace BannerKings.Models.Vanilla
                 if (education.HasPerk(BKPerks.Instance.MercenaryFamousSellswords))
                 {
                     result.AddFactor(0.2f, BKPerks.Instance.MercenaryFamousSellswords.Name);
+                }
+
+                if (education.Lifestyle != null && education.Lifestyle.Equals(DefaultLifestyles.Instance.Cataphract))
+                {
+                    result.AddFactor(0.12f, DefaultLifestyles.Instance.Cataphract.Name);
                 }
             }
 

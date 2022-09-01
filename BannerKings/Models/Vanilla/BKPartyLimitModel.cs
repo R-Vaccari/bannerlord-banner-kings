@@ -1,6 +1,7 @@
 ﻿using BannerKings.Behaviours;
 using BannerKings.Components;
 using BannerKings.Managers.CampaignStart;
+using BannerKings.Managers.Education.Lifestyles;
 using BannerKings.Managers.Skills;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
@@ -36,6 +37,11 @@ namespace BannerKings.Models.Vanilla
                 if (leader.Clan == Clan.PlayerClan && Campaign.Current.GetCampaignBehavior<BKCampaignStartBehavior>().HasDebuff(DefaultStartOptions.Instance.Gladiator))
                 {
                     baseResult.AddFactor(-0.4f, DefaultStartOptions.Instance.Gladiator.Name);
+                }
+
+                if (data.Lifestyle != null && data.Lifestyle.Equals(DefaultLifestyles.Instance.CivilAdministrator))
+                {
+                    baseResult.AddFactor(-0.15f, DefaultLifestyles.Instance.CivilAdministrator.Name);
                 }
             }
 

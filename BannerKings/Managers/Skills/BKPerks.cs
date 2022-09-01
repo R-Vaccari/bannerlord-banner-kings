@@ -248,19 +248,17 @@ namespace BannerKings.Managers.Skills
             #region Fian
 
             FianHighlander = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleFianHighlander"));
-            LifestylePerks.Add(FianHighlander);
             FianHighlander.InitializeNew("{=U7W2kGgA}Highlander", null, 
                 80, 
                 null,
                 "{=WgmJfTeR}Increases your movement speed by 5%.",
                 SkillEffect.PerkRole.Personal, 0.05f,
                 SkillEffect.EffectIncrementType.AddFactor,
-                "{=uXKiKZXR}Increases your swing speed with two handed swords by 6%.",
+                "{=!}You and your formation deal 4% more damage with greatswords while on foot.",
                 SkillEffect.PerkRole.Personal, 0.03f,
                 SkillEffect.EffectIncrementType.AddFactor);
 
             FianRanger = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleFianRanger"));
-            LifestylePerks.Add(FianRanger);
             FianRanger.InitializeNew("{=w7GFfrAy}Ranger", null, 
                 160, 
                 null,
@@ -272,11 +270,10 @@ namespace BannerKings.Managers.Skills
                 SkillEffect.EffectIncrementType.AddFactor);
 
             FianFennid = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleFianFennid"));
-            LifestylePerks.Add(FianFennid);
             FianFennid.InitializeNew("{=qvQEEEM4}Fénnid", null, 
                 240, 
                 null,
-                "{=kFGo9afp}Aiming with your bow is 25% faster.",
+                "{=!}You and your formation take aim 10% while on foot.",
                 SkillEffect.PerkRole.Personal, 0.05f,
                 SkillEffect.EffectIncrementType.AddFactor,
                 "{=fxuVYTrJ}Increases your two handed weapon damage by 10%.",

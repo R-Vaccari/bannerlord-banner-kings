@@ -319,14 +319,14 @@ namespace BannerKings.UI.Education
 
                 LifestyleProgressInfo.Add(new InformationElement(new TextObject("{=tYO5xwVe}Lifestyle:").ToString(),
                     data.Lifestyle.Name.ToString(),
-                    string.Empty));
+                    data.Lifestyle.Description.ToString()));
                 LifestyleProgressInfo.Add(new InformationElement(new TextObject("{=WJK9V5ND}Necessary skill:").ToString(),
                     data.Lifestyle.NecessarySkillForFocus.ToString(),
-                    new TextObject("{=RBZRv3np}Necessary skill amount in either lifestyle skill to enable next focus investment and perk unlock.")
+                    new TextObject("{=RBZRv3np}Necessary skill amount to unlock next stage. This is the total amount of both skills combined. You may have the total amount in a single skill, or half of it in each of the lifestyle's skills.")
                         .ToString()));
                 LifestyleProgressInfo.Add(new InformationElement(new TextObject("{=yavEq3mq}Invested focus:").ToString(),
                     data.Lifestyle.InvestedFocus.ToString(),
-                    string.Empty));
+                    new TextObject("{=!}The amount of focus points you have invested. Each focus correlates to one perk gained.").ToString()));
                 LifestyleProgressInfo.Add(new InformationElement(new TextObject("{=4gCw08Kk}Progress:").ToString(),
                     FormatValue(data.Lifestyle.Progress),
                     new TextObject("{=78jQbY8E}Current progress in this stage. Once progress hits 100% and you have the necessary skill threshold, you can invest your next focus point in exchange for the next lifestyle perk.")

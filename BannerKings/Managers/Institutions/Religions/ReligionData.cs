@@ -186,12 +186,15 @@ namespace BannerKings.Managers.Institutions.Religions
                 }
             }
 
-            foreach (var notable in Settlement.Notables)
+            if (Settlement.Notables != null)
             {
-                var rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(notable);
-                if (!Religions.ContainsKey(rel))
+                foreach (var notable in Settlement.Notables)
                 {
-                    Religions.Add(rel, 0.001f);
+                    var rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(notable);
+                    if (rel != null && !Religions.ContainsKey(rel))
+                    {
+                        Religions.Add(rel, 0.001f);
+                    }
                 }
             }
         }
