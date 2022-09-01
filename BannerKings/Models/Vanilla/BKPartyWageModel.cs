@@ -1,4 +1,5 @@
 ﻿using BannerKings.Managers.Education;
+using BannerKings.Managers.Education.Lifestyles;
 using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Skills;
 using TaleWorlds.CampaignSystem;
@@ -90,6 +91,12 @@ namespace BannerKings.Models.Vanilla
                 if (education.HasPerk(BKPerks.Instance.CataphractEquites) && mountedTroops > 0f)
                 {
                     result.AddFactor(mountedTroops * -0.1f, BKPerks.Instance.CataphractEquites.Name);
+                }
+
+                if (mobileParty.SiegeEvent != null && education.Lifestyle != null && 
+                    education.Lifestyle.Equals(DefaultLifestyles.Instance.SiegeEngineer))
+                {
+                    result.AddFactor(-0.3f, DefaultLifestyles.Instance.SiegeEngineer.Name);
                 }
             }
 

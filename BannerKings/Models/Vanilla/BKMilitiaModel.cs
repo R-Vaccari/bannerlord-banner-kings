@@ -9,6 +9,7 @@ using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Localization;
 using static BannerKings.Managers.PopulationManager;
 using static BannerKings.Managers.Policies.BKMilitiaPolicy;
+using BannerKings.Managers.Education.Lifestyles;
 
 namespace BannerKings.Models.Vanilla
 {
@@ -74,6 +75,13 @@ namespace BannerKings.Models.Vanilla
                         baseResult.Add(trainning == 1 ? 0.2f : trainning == 2 ? 0.5f : 1f,
                             new TextObject("{=c6pesaYL}Training Fields"));
                     }
+                }
+
+                var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(settlement.OwnerClan.Leader);
+                if (settlement.Culture.StringId == "battania" && education.Lifestyle != null && 
+                    education.Lifestyle.Equals(DefaultLifestyles.Instance.Fian))
+                {
+                    baseResult.Add(1.5f, DefaultLifestyles.Instance.Fian.Name);
                 }
 
                 BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref baseResult, settlement.OwnerClan.Leader,

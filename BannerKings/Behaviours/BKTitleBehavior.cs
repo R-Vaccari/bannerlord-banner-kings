@@ -3,6 +3,7 @@ using System.Linq;
 using BannerKings.Managers.AI;
 using BannerKings.Managers.Helpers;
 using BannerKings.Managers.Kingdoms;
+using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
 using BannerKings.UI.Notifications;
 using TaleWorlds.CampaignSystem;
@@ -75,6 +76,16 @@ namespace BannerKings.Behaviours
         {
             if (!BannerKingsConfig.Instance.StabilityModel.IsHeroOverDemesneLimit(hero))
             {
+                int xp = 0;
+                foreach (FeudalTitle ownedTitle in BannerKingsConfig.Instance.TitleManager.GetAllDeJure(hero))
+                {
+                    if (ownedTitle.DeFacto == hero)
+                    {
+                        xp++;
+                    }
+                }
+
+                hero.AddSkillXp(BKSkills.Instance.Lordship, xp);
                 return;
             }
 

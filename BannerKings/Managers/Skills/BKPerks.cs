@@ -337,7 +337,6 @@ namespace BannerKings.Managers.Skills
             #region Siege
 
             SiegeEngineer = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleSiegeEngineer"));
-            LifestylePerks.Add(SiegeEngineer);
             SiegeEngineer.InitializeNew("{=brd9F4gY}Siege Engineer", null, 
                 80, 
                 null,
@@ -349,7 +348,6 @@ namespace BannerKings.Managers.Skills
                 SkillEffect.EffectIncrementType.AddFactor);
 
             SiegePlanner = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleSiegePlanner"));
-            LifestylePerks.Add(SiegePlanner);
             SiegePlanner.InitializeNew("{=VyzxZL7T}Siege Planner", null, 
                 160,
                 null,
@@ -361,7 +359,6 @@ namespace BannerKings.Managers.Skills
                 SkillEffect.EffectIncrementType.AddFactor);
 
             SiegeOverseer = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleSiegeOverseer"));
-            LifestylePerks.Add(SiegeOverseer);
             SiegeOverseer.InitializeNew("{=tWvXqDWY}Siege Overseer", null, 
                 240, 
                 null,

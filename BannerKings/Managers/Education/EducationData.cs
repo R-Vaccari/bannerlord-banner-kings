@@ -265,7 +265,11 @@ namespace BannerKings.Managers.Education
                 }
             }
 
-            Lifestyle?.AddProgress(StandartLifestyleProgress);
+            if (Lifestyle != null)
+            {
+                Lifestyle.AddProgress(StandartLifestyleProgress);
+                hero.AddSkillXp(BKSkills.Instance.Scholarship, 1f);
+            }
         }
     }
 }

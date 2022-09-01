@@ -4,6 +4,7 @@ using System.Text;
 using BannerKings.Managers;
 using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Institutions.Religions.Faiths.Rites;
+using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
 using HarmonyLib;
 using SandBox.CampaignBehaviors;
@@ -132,6 +133,13 @@ namespace BannerKings.Behaviours
             } 
             else
             {
+                float piety = BannerKingsConfig.Instance.PietyModel.CalculateEffect(hero).ResultNumber;
+                if (piety > 0f)
+                {
+                    hero.AddSkillXp(BKSkills.Instance.Theology, MathF.Clamp(piety / 2f, 1f, 10f));
+                }
+
+
                 if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(hero,
                     DefaultDivinities.Instance.AseraSecondary2) && hero.IsPartyLeader)
                 {

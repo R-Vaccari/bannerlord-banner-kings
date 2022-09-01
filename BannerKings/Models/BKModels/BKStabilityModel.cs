@@ -121,6 +121,12 @@ namespace BannerKings.Models.BKModels
                 {
                     result.Add(-0.03f, BKPerks.Instance.AugustDeFacto.Name);
                 }
+
+                if (settlement.Culture != settlement.Owner.Culture && education.Lifestyle != null &&
+                    education.Lifestyle.Equals(DefaultLifestyles.Instance.SiegeEngineer))
+                {
+                    result.Add(0.1f, DefaultLifestyles.Instance.SiegeEngineer.Name);
+                }
             }
 
 

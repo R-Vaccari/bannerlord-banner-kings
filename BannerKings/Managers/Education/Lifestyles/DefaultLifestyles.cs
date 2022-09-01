@@ -75,8 +75,8 @@ namespace BannerKings.Managers.Education.Lifestyles
                     BKPerks.Instance.FianFennid
                 },
                 new TextObject("{=tRp08jyH}Battanian settlements have +{EFFECT1} militia\nReduced damage by {EFFECT2}% when mounted"),
-                1f, 
-                30f,
+                1.5f, 
+                25f,
                 cultures.FirstOrDefault(x => x.StringId == "battania"));
 
             Cataphract = new Lifestyle("lifestyle_cataphract");
@@ -126,9 +126,9 @@ namespace BannerKings.Managers.Education.Lifestyles
                     BKPerks.Instance.SiegePlanner,
                     BKPerks.Instance.SiegeOverseer
                 },
-                new TextObject("{=!}"),
-                0f, 
-                0f);
+                new TextObject("{=!}Party expenses are {EFFECT1}% cheaper during sieges\nSettlements of different culture have {EFFECT1}% more autonomy"),
+                30f, 
+                10f);
 
             CivilAdministrator = new Lifestyle("lifestyle_civilAdministrator");
             CivilAdministrator.Initialize(new TextObject("{=EJEkuBZ4}Civil Administrator"), new TextObject("{=!}"),

@@ -76,6 +76,12 @@ namespace BannerKings.Models.Vanilla
                 if (aggressor.HeroObject != null)
                 {
                     var data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(aggressor.HeroObject);
+
+                    if (aggressor.IsMounted && data.Lifestyle != null && data.Lifestyle.Equals(DefaultLifestyles.Instance.Fian))
+                    {
+                        baseResult *= 0.75f;
+                    }
+
                     if (agressorUsage.RelevantSkill == DefaultSkills.Bow && collisionData.CollisionBoneIndex != -1)
                     {
                         if (data.HasPerk(BKPerks.Instance.FianRanger))
