@@ -82,7 +82,8 @@ namespace BannerKings.Managers.Education.Lifestyles
                 cultures.FirstOrDefault(x => x.StringId == "battania"));
 
             Cataphract = new Lifestyle("lifestyle_cataphract");
-            Cataphract.Initialize(new TextObject("{=RWrMBAbv}Cataphract"), new TextObject("{=!}"),
+            Cataphract.Initialize(new TextObject("{=RWrMBAbv}Cataphract"), 
+                new TextObject("{=!}Developed as a tactical necessity, Imperial cataphracts have become the symbol of the Imperial cavalry. Other than smashing through infantry formations, they became a requirement to stand against other heavy cavalry regiments, such as those from the east and south. Though their main weapon is the lance, used for head-on charging, cataphracts also train in skirmishing and mobility drills, adapting to what the battlefield requires, yet not relinquishing their outstanding, heavy equipment."),
                 DefaultSkills.Polearm,
                 DefaultSkills.Riding,
                 new List<PerkObject>
@@ -91,9 +92,9 @@ namespace BannerKings.Managers.Education.Lifestyles
                     BKPerks.Instance.CataphractAdaptiveTactics,
                     BKPerks.Instance.CataphractKlibanophoros
                 },
-                new TextObject("{=y2zNEeT5}Increased renown from victories by {EFFECT1}%\n"),
+                new TextObject("{=y2zNEeT5}Increased renown from victories by {EFFECT1}%\nNon-cavalry units need {EFFECT2}% more experience to upgrade"),
                 12f, 
-                0f,
+                25f,
                 cultures.FirstOrDefault(x => x.StringId == "empire"));
 
             Diplomat = new Lifestyle("lifestyle_diplomat");
@@ -106,7 +107,8 @@ namespace BannerKings.Managers.Education.Lifestyles
                 0f);
 
             August = new Lifestyle("lifestyle_august");
-            August.Initialize(new TextObject("{=wAPqOuBe}August"), new TextObject("{=!}"),
+            August.Initialize(new TextObject("{=wAPqOuBe}August"), 
+                new TextObject("{=!}A term coined by the Imperials, August is a lord that outshines his peers. Not only they are shrewd administrators of their realm, they are also distinguished commanders, directly leading their troops against any threats to their people. August leaders are those forever to be remembered in history as examples of what a true leader ought to be."),
                 DefaultSkills.Leadership, 
                 BKSkills.Instance.Lordship,
                 new List<PerkObject>
@@ -119,7 +121,8 @@ namespace BannerKings.Managers.Education.Lifestyles
                 20f);
 
             SiegeEngineer = new Lifestyle("lifestyle_siegeEngineer");
-            SiegeEngineer.Initialize(new TextObject("{=brd9F4gY}Siege Engineer"), new TextObject("{=!}"),
+            SiegeEngineer.Initialize(new TextObject("{=brd9F4gY}Siege Engineer"), 
+                new TextObject("{=!}Highly sought-after specialists, siege engineers specialize in both defending and taking down enemy settlements. A relatively new art, sieges become more prevalent in the continent as populations gather in towns, and all-out wars break between kingdoms rather than small, tribal raids."),
                 DefaultSkills.Engineering, 
                 DefaultSkills.Tactics,
                 new List<PerkObject>
@@ -133,7 +136,8 @@ namespace BannerKings.Managers.Education.Lifestyles
                 10f);
 
             CivilAdministrator = new Lifestyle("lifestyle_civilAdministrator");
-            CivilAdministrator.Initialize(new TextObject("{=EJEkuBZ4}Civil Administrator"), new TextObject("{=!}"),
+            CivilAdministrator.Initialize(new TextObject("{=EJEkuBZ4}Civil Administrator"), 
+                new TextObject("{=!}"),
                 DefaultSkills.Engineering, DefaultSkills.Steward,
                 new List<PerkObject>
                 {
@@ -147,7 +151,8 @@ namespace BannerKings.Managers.Education.Lifestyles
                 15f);
 
             Caravaneer = new Lifestyle("lifestyle_caravaneer");
-            Caravaneer.Initialize(new TextObject("{=F5aAvvhD}Caravaneer"), new TextObject("{=!}"),
+            Caravaneer.Initialize(new TextObject("{=F5aAvvhD}Caravaneer"), 
+                new TextObject("{=!}"),
                 DefaultSkills.Trade, 
                 DefaultSkills.Scouting,
                 new List<PerkObject>
@@ -189,7 +194,7 @@ namespace BannerKings.Managers.Education.Lifestyles
                 8f);
 
             Mercenary = new Lifestyle("lifestyle_mercenary");
-            Mercenary.Initialize(new TextObject("{=kLHXZnLY}Mercenary"), new TextObject("{=!}"),
+            Mercenary.Initialize(new TextObject("{=kLHXZnLY}Mercenary"), new TextObject("{=!}Mercenaries in the continent have become more and more relevant since the crumbling of the Empire. Ravaged by internal and exterior wars, the Imperial factions rely progressively more on foreign troops, as the populace becomes thinner with every squabbling conflict of Imperial lords and raid from foreigners. Currently, the life of a mercenary may prove quite profitable and prosperous in the continent - if they are to survive."),
                 DefaultSkills.Leadership,
                 DefaultSkills.Roguery, 
                 new List<PerkObject>
@@ -217,7 +222,8 @@ namespace BannerKings.Managers.Education.Lifestyles
                 8f);
 
             Varyag = new Lifestyle("lifestyle_varyag");
-            Varyag.Initialize(new TextObject("{=4pYayWGi}Varyag"), new TextObject("{=!}"),
+            Varyag.Initialize(new TextObject("{=4pYayWGi}Varyag"), 
+                new TextObject("{=!}Varyags are known in Sturgian culture as men of valor, adventure and prestige. These nearly mythical heroes often prove their worth in fierce shieldwall combat. Being individualistic adventurers, they will often serve as mercenaries, raid and plunder others as the opportunities come, though preferably non-Sturgians. Yet, a high moral code is expected of them, when it comes to courage and honor - a varyag afraid of death or that does not keep his word is no true varyag -, and those that follow the unwritten code are considered Drengrs."),
                 DefaultSkills.Athletics,
                 DefaultSkills.OneHanded,
                 new List<PerkObject>
@@ -231,7 +237,8 @@ namespace BannerKings.Managers.Education.Lifestyles
                 20f);
 
             Gladiator = new Lifestyle("lifestyle_gladiator");
-            Gladiator.Initialize(new TextObject("{=wTyw0yfR}Gladiator"), new TextObject("{=!}"),
+            Gladiator.Initialize(new TextObject("{=wTyw0yfR}Gladiator"), 
+                new TextObject("{=!}As a means of entertainement, Imperials have developed the gladiatorial combat in arenas. It is possible this was an adaptation of earlier forms of duels used by the Palaics to judge valor. Nevertheless, the gladiatorial combat became a staple in the empire. Up to this day, an adventurer of little renown can prove his worth in the arenas and draw attention to himself as someone worthy of the lords' attention."),
                 DefaultSkills.Athletics,
                 DefaultSkills.Riding,
                 new List<PerkObject>
@@ -245,7 +252,8 @@ namespace BannerKings.Managers.Education.Lifestyles
                 20f);
 
             Ritter = new Lifestyle("lifestyle_ritter");
-            Ritter.Initialize(new TextObject("{=axhJNG0M}Ritter"), new TextObject("{=!}"),
+            Ritter.Initialize(new TextObject("{=axhJNG0M}Ritter"), 
+                new TextObject("{=!}Vlandians have developed a concept many of them call Ritter, or Reterius as Imperials call it. These are small lords recognized as distinguished soldiers, preferring mounted combat with lances and swords, who tend to their manor demesnes in times of peace. To non-Vlandians, they are best known for the earth-shaking gallop of their cavalry charges."),
                 BKSkills.Instance.Lordship,
                 DefaultSkills.Riding,
                 new List<PerkObject>
@@ -260,8 +268,8 @@ namespace BannerKings.Managers.Education.Lifestyles
                 cultures.First(x => x.StringId == "vlandia"));
 
             Jawwal = new Lifestyle("lifestyle_jawwal");
-            Jawwal.Initialize(new TextObject("{=!}Jawwal"), 
-                new TextObject("{=!}"),
+            Jawwal.Initialize(new TextObject("{=!}Jawwal"),
+                new TextObject("{=!}The Jawwal represent a traditional and conservative way of living in the southern Nahasa dunes. Relying on their camels for mobility, carrying goods and even food, they have mastered survival on the sandy dunes, and are known for raiding and harassing tactics, specially with mounted skirmishing."),
                 DefaultSkills.Throwing,
                 DefaultSkills.Riding,
                 new List<PerkObject>

@@ -399,7 +399,7 @@ namespace BannerKings.Managers.Skills
             JawwalCamelMaster.InitializeNew("{=!}Camel Master", null,
                 160,
                 null,
-                "{=!}You and soldiers in your formation are 8% when mounted in camels.",
+                "{=!}You and soldiers in your formation are 8% faster when mounted in camels.",
                 SkillEffect.PerkRole.Personal, 0.05f,
                 SkillEffect.EffectIncrementType.AddFactor,
                 "{=!}You and soldiers in your formation deal 10% more throwing damage while mounted.",

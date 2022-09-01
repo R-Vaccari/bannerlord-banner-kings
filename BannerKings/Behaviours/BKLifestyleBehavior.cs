@@ -1,10 +1,11 @@
 ﻿using BannerKings.Managers.AI;
 using BannerKings.Managers.Education.Lifestyles;
 using BannerKings.Managers.Skills;
-using BannerKings.Managers.Titles;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
+using TaleWorlds.CampaignSystem.Party;
+using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 
 namespace BannerKings.Behaviours
@@ -13,6 +14,7 @@ namespace BannerKings.Behaviours
     {
         public override void RegisterEvents()
         {
+            CampaignEvents.SettlementEntered.AddNonSerializedListener(this, OnSettlementEntered);
             CampaignEvents.ConversationEnded.AddNonSerializedListener(this, OnConversationEnded);
             CampaignEvents.WeeklyTickEvent.AddNonSerializedListener(this, OnWeeklyTick);
             CampaignEvents.HeroGainedSkill.AddNonSerializedListener(this, OnHeroGainedSkill);
@@ -20,6 +22,19 @@ namespace BannerKings.Behaviours
 
         public override void SyncData(IDataStore dataStore)
         {
+        }
+
+        private void OnSettlementEntered(MobileParty mobileParty, Settlement settlement, Hero hero)
+        {
+            if (mobileParty.IsCaravan)
+            {
+                var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(mobileParty.Owner);
+                if (education.HasPerk(BKPerks.Instance.CaravaneerOutsideConnections) && MBRandom.RandomFloat < 0.1f)
+                {
+                    var random = settlement.Notables.GetRandomElement();
+                    ChangeRelationAction.ApplyRelationChangeBetweenHeroes(mobileParty.Owner, random, 2);
+                }
+            }
         }
 
         private void OnConversationEnded(CharacterObject character)

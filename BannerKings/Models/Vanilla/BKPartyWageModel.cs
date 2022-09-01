@@ -140,6 +140,11 @@ namespace BannerKings.Models.Vanilla
                     result.AddFactor(-0.05f, GameTexts.FindText("str_culture"));
                 }
 
+                if (education.Lifestyle != null && education.Lifestyle.Equals(DefaultLifestyles.Instance.Artisan))
+                {
+                    result.AddFactor(0.15f, DefaultLifestyles.Instance.Artisan.Name);
+                }
+
                 if (buyerHero.Clan != null)
                 {
 

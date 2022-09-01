@@ -1,6 +1,5 @@
-﻿using BannerKings.Managers.Education;
-using BannerKings.Managers.Education.Lifestyles;
-using TaleWorlds.CampaignSystem;
+﻿using BannerKings.Managers.Education.Lifestyles;
+using BannerKings.Managers.Skills;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.Core;
@@ -21,6 +20,15 @@ namespace BannerKings.Models.Vanilla
                 if (education.Lifestyle != null && education.Lifestyle.Equals(DefaultLifestyles.Instance.Gladiator))
                 {
                     result *= 1.2f;
+                }
+            }
+
+            if (clientParty.IsCaravan)
+            {
+                var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(clientParty.Owner);
+                if (education.HasPerk(BKPerks.Instance.CaravaneerOutsideConnections))
+                {
+                    result *= 0.95f;
                 }
             }
 
