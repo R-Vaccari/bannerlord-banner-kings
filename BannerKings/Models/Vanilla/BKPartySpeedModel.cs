@@ -21,6 +21,12 @@ namespace BannerKings.Models.Vanilla
                     baseResult.AddFactor(0.05f, BKPerks.Instance.FianHighlander.Name);
                 }
 
+                var faceTerrainType = Campaign.Current.MapSceneWrapper.GetFaceTerrainType(mobileParty.CurrentNavigationFace);
+                if (faceTerrainType == TaleWorlds.Core.TerrainType.Desert && data.HasPerk(BKPerks.Instance.JawwalDuneRider))
+                {
+                    baseResult.AddFactor(0.8f, BKPerks.Instance.JawwalDuneRider.Name);
+                }
+
                 if (data.HasPerk(BKPerks.Instance.CaravaneerStrider))
                 {
                     baseResult.AddFactor(0.03f, BKPerks.Instance.CaravaneerStrider.Name);

@@ -152,6 +152,16 @@ namespace BannerKings.Managers.Skills
 
         #endregion  Ritter
 
+        #region  Jawwal
+
+        public PerkObject JawwalGhazw { get; private set; }
+
+        public PerkObject JawwalCamelMaster { get; private set; }
+
+        public PerkObject JawwalDuneRider { get; private set; }
+
+        #endregion  Jawwal
+
 
         #region  Varyag
 
@@ -370,6 +380,44 @@ namespace BannerKings.Managers.Skills
                 SkillEffect.EffectIncrementType.AddFactor);
 
             #endregion Siege
+
+
+            #region Jawwal
+
+            JawwalGhazw = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleJawwalGhazw"));
+            JawwalGhazw.InitializeNew("{=!}Ghazw", null,
+                80,
+                null,
+                "{=PawhUHjG}Raiding villages is 15% faster.",
+                SkillEffect.PerkRole.Personal, 0.05f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                "{=!}Camels have 12% more health.",
+                SkillEffect.PerkRole.Personal, 0.03f,
+                SkillEffect.EffectIncrementType.AddFactor);
+
+            JawwalCamelMaster = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleJawwalCamelMaster"));
+            JawwalCamelMaster.InitializeNew("{=!}Camel Master", null,
+                160,
+                null,
+                "{=!}You and soldiers in your formation are 8% when mounted in camels.",
+                SkillEffect.PerkRole.Personal, 0.05f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                "{=!}You and soldiers in your formation deal 10% more throwing damage while mounted.",
+                SkillEffect.PerkRole.Personal, 0.03f,
+                SkillEffect.EffectIncrementType.AddFactor);
+
+            JawwalDuneRider = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleJawwalDuneRider"));
+            JawwalDuneRider.InitializeNew("{=!}Dune Rider", null,
+                240,
+                null,
+                "{=!}You and troops in your formation have 5% chance to dismount riders when hitting with javelins.",
+                SkillEffect.PerkRole.Personal, 0.05f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                "{=!}Party is 8% faster in deserts.",
+                SkillEffect.PerkRole.Personal, 0.03f,
+                SkillEffect.EffectIncrementType.AddFactor);
+
+            #endregion Jawwal
 
             #region August
 

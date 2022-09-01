@@ -6,6 +6,8 @@ namespace BannerKings.Models.Vanilla
 {
     public class BKPartyImpairmentModel : DefaultPartyImpairmentModel
     {
+
+
         public override float GetDisorganizedStateDuration(MobileParty party)
         {
             var result = base.GetDisorganizedStateDuration(party);

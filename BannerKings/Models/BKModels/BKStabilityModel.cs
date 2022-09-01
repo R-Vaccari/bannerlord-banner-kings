@@ -411,6 +411,11 @@ namespace BannerKings.Models.BKModels
                 result.Add(1f, BKPerks.Instance.AugustDeJure.Name);
             }
 
+            if (education.Lifestyle != null && education.Lifestyle.Equals(DefaultLifestyles.Instance.Jawwal))
+            {
+                result.AddFactor(-0.2f, DefaultLifestyles.Instance.Jawwal.Name);
+            }
+
             return result;
         }
 

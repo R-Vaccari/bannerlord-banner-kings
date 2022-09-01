@@ -27,9 +27,20 @@ namespace BannerKings.Models.Vanilla
                         {
                             var hero = party.LeaderHero;
                             var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(hero);
-                            if (education.HasPerk(BKPerks.Instance.RitterIronHorses))
+
+                            if (agent.MountAgent.Monster.StringId == "camel")
                             {
-                                result *= 1.1f;
+                                if (education.HasPerk(BKPerks.Instance.JawwalGhazw))
+                                {
+                                    result *= 1.1f;
+                                }
+
+                            } else
+                            {
+                                if (education.HasPerk(BKPerks.Instance.RitterIronHorses))
+                                {
+                                    result *= 1.1f;
+                                }
                             }
                         }
                     }
@@ -55,20 +66,32 @@ namespace BannerKings.Models.Vanilla
             var captain = (agent.Formation.Captain.Character as CharacterObject)?.HeroObject;
             if (captain != null)
             {
+
                 var data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(captain);
-                if (agent.HasMount && data.HasPerk(BKPerks.Instance.CataphractEquites))
-                {
-                    agentDrivenProperties.MountChargeDamage *= 1.1f;
-                }
 
-                if (agent.HasMount && data.HasPerk(BKPerks.Instance.CataphractAdaptiveTactics))
+                if (agent.HasMount)
                 {
-                    agentDrivenProperties.MountManeuver *= 1.08f;
-                }
+                    if (data.HasPerk(BKPerks.Instance.CataphractEquites))
+                    {
+                        agentDrivenProperties.MountChargeDamage *= 1.1f;
+                    }
 
-                if (agent.HasMount && data.HasPerk(BKPerks.Instance.FianFennid))
+                    if (data.HasPerk(BKPerks.Instance.CataphractAdaptiveTactics))
+                    {
+                        agentDrivenProperties.MountManeuver *= 1.08f;
+                    }
+
+                    if (agent.MountAgent.Monster.StringId == "camel" &&data.HasPerk(BKPerks.Instance.JawwalCamelMaster))
+                    {
+                        agentDrivenProperties.MountSpeed *= 1.08f;
+                    }
+                } 
+                else 
                 {
-                    agentDrivenProperties.ThrustOrRangedReadySpeedMultiplier *= 1.1f;
+                    if (data.HasPerk(BKPerks.Instance.FianFennid))
+                    {
+                        agentDrivenProperties.ThrustOrRangedReadySpeedMultiplier *= 1.1f;
+                    } 
                 }
             }
         }

@@ -15,20 +15,26 @@ namespace BannerKings.Models.Vanilla
             var attacker = attackerSide.LeaderParty;
             if (attacker is {LeaderHero: { }})
             {
+                var reference = result;
                 var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(attacker.LeaderHero);
                 if (education.HasPerk(BKPerks.Instance.OutlawPlunderer))
                 {
-                    result *= 1.15f;
+                    result += (reference * 1.15f - reference);
                 }
 
                 if (education.HasPerk(BKPerks.Instance.MercenaryRansacker))
                 {
-                    result *= 1.15f;
+                    result += (reference * 1.15f - reference);
                 }
 
                 if (education.HasPerk(BKPerks.Instance.VaryagShieldBrother))
                 {
-                    result *= 1.15f;
+                    result += (reference * 1.15f - reference);
+                }
+
+                if (education.HasPerk(BKPerks.Instance.JawwalGhazw))
+                {
+                    result += (reference * 1.15f - reference);
                 }
             }
 

@@ -38,6 +38,8 @@ namespace BannerKings.Managers.Education.Lifestyles
 
         public Lifestyle Ritter { get; private set; }
 
+        public Lifestyle Jawwal { get; private set; }
+
         public override IEnumerable<Lifestyle> All
         {
             get
@@ -126,7 +128,7 @@ namespace BannerKings.Managers.Education.Lifestyles
                     BKPerks.Instance.SiegePlanner,
                     BKPerks.Instance.SiegeOverseer
                 },
-                new TextObject("{=!}Party expenses are {EFFECT1}% cheaper during sieges\nSettlements of different culture have {EFFECT1}% more autonomy"),
+                new TextObject("{=!}Party expenses are {EFFECT1}% cheaper during sieges\nSettlements of different culture have {EFFECT2}% more autonomy"),
                 30f, 
                 10f);
 
@@ -252,10 +254,26 @@ namespace BannerKings.Managers.Education.Lifestyles
                     BKPerks.Instance.RitterOathbound,
                     BKPerks.Instance.RitterPettySuzerain
                 },
-                new TextObject("{=3Br24ayr}You and melee cavalry in your formation deals {EFFECT1}% more melee damage.{EFFECT1}%\n You and your formation deal {EFFECT2}% less ranged damaged, mounted or otherwise."),
+                new TextObject("{=!}You and melee cavalry in your formation deals {EFFECT1}% more melee damage.{EFFECT1}%\nYou and your formation deal {EFFECT2}% less ranged damaged, mounted or otherwise."),
                 5f,
                 15f, 
                 cultures.First(x => x.StringId == "vlandia"));
+
+            Jawwal = new Lifestyle("lifestyle_jawwal");
+            Jawwal.Initialize(new TextObject("{=!}Jawwal"), 
+                new TextObject("{=!}"),
+                DefaultSkills.Throwing,
+                DefaultSkills.Riding,
+                new List<PerkObject>
+                {
+                    BKPerks.Instance.JawwalGhazw,
+                    BKPerks.Instance.JawwalCamelMaster,
+                    BKPerks.Instance.JawwalDuneRider
+                },
+                new TextObject("{=!}Party consumes {EFFECT1}% less food while on deserts\nDemesne limit reduced by {EFFECT2}%"),
+                30f,
+                15f,
+                cultures.First(x => x.StringId == "aserai"));
         }
     }
 }

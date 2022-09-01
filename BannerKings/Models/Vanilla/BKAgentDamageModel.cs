@@ -9,6 +9,25 @@ namespace BannerKings.Models.Vanilla
 {
     public class BKAgentDamageModel : SandboxAgentApplyDamageModel
     {
+
+        public override bool CanWeaponDismount(Agent attackerAgent, WeaponComponentData attackerWeapon, in Blow blow, in AttackCollisionData collisionData)
+        {
+            bool result = base.CanWeaponDismount(attackerAgent, attackerWeapon, blow, collisionData);
+            if (!result && attackerAgent.Formation != null && attackerAgent.Formation.Captain != null && 
+                attackerWeapon.WeaponClass == WeaponClass.Javelin)
+            {
+                var aggressorCaptain = (attackerAgent.Formation.Captain.Character as CharacterObject).HeroObject;
+                var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(aggressorCaptain);
+
+                if (education.HasPerk(BKPerks.Instance.JawwalDuneRider) && MBRandom.RandomFloat < 0.05f)
+                {
+                    return true;
+                }
+            }
+
+            return result;
+        }
+
         public override float CalculateDamage(in AttackInformation attackInformation, in AttackCollisionData collisionData, in MissionWeapon weapon, float baseDamage)
         {
             var baseResult = base.CalculateDamage(in attackInformation, in collisionData, in weapon, baseDamage);
@@ -41,6 +60,14 @@ namespace BannerKings.Models.Vanilla
                         }
 
                         if (data.HasPerk(BKPerks.Instance.VaryagDrengr))
+                        {
+                            baseResult *= 1.1f;
+                        }
+                    } 
+                    else
+                    {
+                        if (agressorUsage.RelevantSkill == DefaultSkills.Throwing && 
+                            data.HasPerk(BKPerks.Instance.JawwalCamelMaster))
                         {
                             baseResult *= 1.1f;
                         }
