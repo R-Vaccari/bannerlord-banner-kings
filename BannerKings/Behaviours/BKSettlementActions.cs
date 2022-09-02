@@ -84,7 +84,7 @@ namespace BannerKings.Behaviours
                 hasMercenaries = GetLocalMercenaryTemplates(hero.CurrentSettlement.Town).Count > 0 &&
                     lastMercenaryRecruitment[hero.CurrentSettlement.Town].ElapsedWeeksUntilNow >= 1f;
             }
-            return hasMercenaries && (hero.Clan.IsMinorFaction || education.HasPerk(BKPerks.Instance.MercenaryLocalConnections));
+            return hasMercenaries && ((hero.Clan.IsMinorFaction && hero != Hero.MainHero) || education.HasPerk(BKPerks.Instance.MercenaryLocalConnections));
         }
 
         private void OnSessionLaunched(CampaignGameStarter campaignGameStarter)
