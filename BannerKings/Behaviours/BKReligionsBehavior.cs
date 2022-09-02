@@ -383,7 +383,7 @@ namespace BannerKings.Behaviours
             starter.AddDialogLine("bk_rite_confirm", "bk_rite_confirm", "bk_rite_confirm",
                 "{=JgeQ3a2u}{CLERGYMAN_RITE_CONFIRM}",
                 null, null);
-            starter.AddPlayerLine("bk_rite_confirm", "bk_rite_confirm", "hero_main_options", "{=LPVNjXpT}See it done.",
+            starter.AddPlayerLine("bk_rite_confirm", "bk_rite_confirm", "hero_leave", "{=LPVNjXpT}See it done.",
                 null, () =>
                 {
                     selectedRite?.Complete(Hero.MainHero);
@@ -566,7 +566,7 @@ namespace BannerKings.Behaviours
             var clergyman =
                 ReligionsManager.GetClergymanFromHeroHero(Hero.OneToOneConversationHero);
             var religion = ReligionsManager.GetClergymanReligion(clergyman);
-            var playerReligion = ReligionsManager.GetHeroReligion(Hero.MainHero);
+            Religion playerReligion = ReligionsManager.GetHeroReligion(Hero.MainHero);
 
             if (religion.Faith.GetId() != playerReligion.Faith.GetId())
             {
@@ -575,7 +575,7 @@ namespace BannerKings.Behaviours
                 return false;
             }
 
-            var anyPossible = religion.Rites.Any(rite => rite.MeetsCondition(Hero.MainHero));
+            bool anyPossible = religion.Rites.Any(rite => rite.MeetsCondition(Hero.MainHero));
             if (!anyPossible)
             {
                 hintText = new TextObject("{=QbUTvLMt}No rite is currently possible to perform.");

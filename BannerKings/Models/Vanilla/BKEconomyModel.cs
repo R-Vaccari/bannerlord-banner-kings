@@ -199,50 +199,42 @@ namespace BannerKings.Models.Vanilla
 
         public override float GetDailyDemandForCategory(Town town, ItemCategory category, int extraProsperity)
         {
-            if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager
-                                                                         .IsSettlementPopulated(town.Settlement)
-                                                                     && category.IsValid && category.StringId != "banner")
+            var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
+            float nobles = data.GetTypeCount(PopType.Nobles);
+            float craftsmen = data.GetTypeCount(PopType.Craftsmen);
+            float serfs = data.GetTypeCount(PopType.Serfs);
+            var type = Utils.Helpers.GetTradeGoodConsumptionType(category);
+
+            var baseResult = 0f;
+            switch (type)
             {
-                var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
-                float nobles = data.GetTypeCount(PopType.Nobles);
-                float craftsmen = data.GetTypeCount(PopType.Craftsmen);
-                float serfs = data.GetTypeCount(PopType.Serfs);
-                var type = Utils.Helpers.GetTradeGoodConsumptionType(category);
-
-                var prosperity = 0.5f + town.Prosperity * 0.00012f;
-                var baseResult = 0f;
-                switch (type)
-                {
-                    case ConsumptionType.Luxury:
-                        baseResult += nobles * 15f;
-                        baseResult += craftsmen * 3f;
-                        break;
-                    case ConsumptionType.Industrial:
-                        baseResult += craftsmen * 10f;
-                        baseResult += serfs * 0.2f;
-                        break;
-                    default:
-                        baseResult += nobles * 1f;
-                        baseResult += craftsmen * 1f;
-                        baseResult += serfs * 0.40f;
-                        break;
-                }
-
-                var num = MathF.Max(0f, baseResult * prosperity + extraProsperity);
-                var num2 = MathF.Max(0f, baseResult * prosperity);
-                var num3 = category.BaseDemand * num;
-                var num4 = category.LuxuryDemand * num2;
-                var result = num3 + num4;
-                if (category.BaseDemand < 1E-08f)
-                {
-                    result = num * 0.01f;
-                }
-
-
-                return result;
+                case ConsumptionType.Luxury:
+                    baseResult += nobles * 15f;
+                    baseResult += craftsmen * 3f;
+                    break;
+                case ConsumptionType.Industrial:
+                    baseResult += craftsmen * 1.5f;
+                    baseResult += serfs * 0.2f;
+                    break;
+                default:
+                    baseResult += nobles * 1f;
+                    baseResult += craftsmen * 1f;
+                    baseResult += serfs * 0.20f;
+                    break;
             }
 
-            return base.GetDailyDemandForCategory(town, category, extraProsperity);
+            var num = MathF.Max(0f, baseResult + (town.Prosperity / 3) + extraProsperity);
+            var num2 = MathF.Max(0f, baseResult + (town.Prosperity / 2));
+            var num3 = category.BaseDemand * num;
+            var num4 = category.LuxuryDemand * num2;
+            var result = num3 + num4;
+            if (category.BaseDemand < 1E-08f)
+            {
+                result = num * 0.01f;
+            }
+
+
+            return result;
         }
 
         public override float GetEstimatedDemandForCategory(Town town, ItemData itemData, ItemCategory category)

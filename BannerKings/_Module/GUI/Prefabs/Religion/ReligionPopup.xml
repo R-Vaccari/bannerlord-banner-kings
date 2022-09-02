@@ -111,7 +111,7 @@
 																			Text="@SecondaryDivinitiesText" MarginBottom="15" />
 																		<GridWidget Id="DivinitiesGrid" DataSource="{SecondaryDivinities}" WidthSizePolicy="StretchToParent"
 																			HeightSizePolicy="CoverChildren" MarginRight="100" MarginLeft="100" HorizontalAlignment="Center"
-																			DefaultCellWidth="350" DefaultCellHeight="120" ColumnCount="2" MarginTop="10">
+																			DefaultCellWidth="350" DefaultCellHeight="200" ColumnCount="2" MarginTop="10">
 																			<ItemTemplate>
 																				<Widget HorizontalAlignment="Center" HeightSizePolicy="StretchToParent"
 																					WidthSizePolicy="StretchToParent" VerticalAlignment="Center" DoNotPassEventsToChildren="true">
@@ -147,7 +147,7 @@
 																			MarginBottom="15" />
 																		<GridWidget Id="DoctrinesGrid" DataSource="{Doctrines}" WidthSizePolicy="StretchToParent"
 																			HeightSizePolicy="CoverChildren" MarginRight="100" MarginLeft="100" HorizontalAlignment="Center"
-																			DefaultCellWidth="350" DefaultCellHeight="120" ColumnCount="2" MarginTop="10">
+																			DefaultCellWidth="350" DefaultCellHeight="200" ColumnCount="2" MarginTop="10">
 																			<ItemTemplate>
 																				<Widget HorizontalAlignment="Center" HeightSizePolicy="StretchToParent"
 																					WidthSizePolicy="StretchToParent" VerticalAlignment="Center" DoNotPassEventsToChildren="true">

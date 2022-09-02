@@ -26,19 +26,19 @@ namespace BannerKings.Managers.Items
             Book.InitializeObject();
 
             Apple = Game.Current.ObjectManager.RegisterPresumedObject(new ItemCategory("apple"));
-            Apple.InitializeObject(true, 10, 0, ItemCategory.Property.BonusToFoodStores);
+            Apple.InitializeObject(true, 20, 0, ItemCategory.Property.BonusToFoodStores);
 
             Orange = Game.Current.ObjectManager.RegisterPresumedObject(new ItemCategory("orange"));
-            Orange.InitializeObject(true, 10, 0, ItemCategory.Property.BonusToFoodStores);
+            Orange.InitializeObject(true, 20, 0, ItemCategory.Property.BonusToFoodStores);
 
             Bread = Game.Current.ObjectManager.RegisterPresumedObject(new ItemCategory("bread"));
-            Bread.InitializeObject(true, 50, 5, ItemCategory.Property.BonusToFoodStores);
+            Bread.InitializeObject(true, 140, 5, ItemCategory.Property.BonusToFoodStores);
 
             Pie = Game.Current.ObjectManager.RegisterPresumedObject(new ItemCategory("pie"));
-            Pie.InitializeObject(true, 20, 10, ItemCategory.Property.BonusToFoodStores);
+            Pie.InitializeObject(true, 20, 30, ItemCategory.Property.BonusToFoodStores);
 
             Carrot = Game.Current.ObjectManager.RegisterPresumedObject(new ItemCategory("carrot"));
-            Carrot.InitializeObject(true, 10, 0, ItemCategory.Property.BonusToFoodStores);
+            Carrot.InitializeObject(true, 20, 0, ItemCategory.Property.BonusToFoodStores);
         }
     }
 }

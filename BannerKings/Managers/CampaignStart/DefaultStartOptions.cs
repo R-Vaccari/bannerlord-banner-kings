@@ -44,7 +44,7 @@ namespace BannerKings.Managers.CampaignStart
             Adventurer.Initialize(new TextObject("{=0VSP2ghD}Adventurer"),
                 new TextObject("{=wTcCEBLB}A free spirit, you are roaming the continent without constraints, or a clear objective. The world is for the taking, will you take your share?"),
                 new TextObject("{=2fcEecjz}Vanilla start. No troops, goods or any benefits."),
-                1000, 0, 0, 50, 0f,
+                1000, 0, 5, 50, 0f,
                 null);
 
             IndebtedLord = new StartOption("start_lord");
@@ -191,23 +191,11 @@ namespace BannerKings.Managers.CampaignStart
 
                     party.ItemRoster.AddToCounts(sumpter, 3);
                     party.ItemRoster.AddToCounts(mule, 2);
-
-                    var goodsValue = 0;
-                    foreach (var itemObject in TaleWorlds.CampaignSystem.Extensions.Items.AllTradeGoods)
-                    {
-                        if (itemObject.IsFood || goodsValue >= 1200)
-                        {
-                            continue;
-                        }
-
-                        var num2 = (int) (1f * (10f / 13f) / itemObject.Value * MBRandom.RandomFloat);
-                        if (num2 > 0)
-                        {
-                            party.ItemRoster.AddToCounts(itemObject, num2);
-                        }
-
-                        goodsValue += num2 * itemObject.Value;
-                    }
+                    party.ItemRoster.AddToCounts(items.First(x => x.StringId == "leather"), 2);
+                    party.ItemRoster.AddToCounts(items.First(x => x.StringId == "pottery"), 3);
+                    party.ItemRoster.AddToCounts(items.First(x => x.StringId == "linen"), 2);
+                    party.ItemRoster.AddToCounts(items.First(x => x.StringId == "spice"), 1);
+                    party.ItemRoster.AddToCounts(items.First(x => x.StringId == "wool"), 4);
                 },
                 0f,
                 null,
@@ -217,7 +205,7 @@ namespace BannerKings.Managers.CampaignStart
             Gladiator.Initialize(new TextObject("{=wTyw0yfR}Gladiator"),
                 new TextObject("{=ScHHoM2v}You are an promising athlete, roaming the world looking for a good fight, gold and glory."),
                 new TextObject("{=uUjoaben}Start with a couple mercenaries and food. Party size is reduced by 40% for 5 years. Gladiator lifestyle is kickstarted as part of your education."),
-                0, 6, 8, 50, 0f,
+                0, 6, 5, 50, 0f,
                 () =>
                 {
                     var items = Game.Current.ObjectManager.GetObjectTypeList<ItemObject>();

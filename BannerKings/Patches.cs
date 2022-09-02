@@ -433,15 +433,19 @@ namespace BannerKings
                 private static bool Prefix(ItemObject outputItem, Town town, Workshop workshop, int count,
                     bool doNotEffectCapital)
                 {
-                    if (BannerKingsConfig.Instance.PopulationManager == null ||
-                        !BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
-                    {
-                        return true;
-                    }
 
-                    var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement).EconomicData;
-                    ItemModifierGroup modifierGroup;
-                    if (outputItem.IsFood)
+                    var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
+
+                    ItemModifierGroup modifierGroup = null;
+                    if (outputItem.ArmorComponent != null)
+                    {
+                        modifierGroup = outputItem.ArmorComponent.ItemModifierGroup;
+                    }
+                    else if (outputItem.WeaponComponent != null)
+                    {
+                        modifierGroup = outputItem.WeaponComponent.ItemModifierGroup;
+                    }
+                    else if (outputItem.IsFood)
                     {
                         modifierGroup = Game.Current.ObjectManager.GetObject<ItemModifierGroup>("consumables");
                     }
@@ -449,13 +453,13 @@ namespace BannerKings
                     {
                         modifierGroup = Game.Current.ObjectManager.GetObject<ItemModifierGroup>("animals");
                     }
-                    else
+                    else if (!outputItem.HasHorseComponent)
                     {
                         modifierGroup = Game.Current.ObjectManager.GetObject<ItemModifierGroup>("goods");
                     }
 
 
-                    var result = data.ProductionQuality.ResultNumber;
+                    var result = data.EconomicData.ProductionQuality.ResultNumber;
                     if (workshop.Owner != null)
                     {
                         var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(workshop.Owner);
@@ -465,9 +469,19 @@ namespace BannerKings
                         }
                     }
 
+                    if (workshop.WorkshopType.StringId == "artisans")
+                    {
+                        count = (int)MathF.Max(1f, count * (data.GetTypeCount(PopType.Craftsmen) / 750f));
+                    }
 
-                    var modifier = modifierGroup.GetRandomModifierWithTarget();
-                    var itemPrice = (int) (town.GetItemPrice(outputItem) * modifier.PriceMultiplier);
+                    var itemPrice = town.GetItemPrice(outputItem);
+                    ItemModifier modifier = null;
+                    if (modifierGroup != null)
+                    {
+                        modifier = modifierGroup.GetRandomModifierWithTarget(result, 0.5f);
+                        itemPrice = (int)(itemPrice * modifier.PriceMultiplier);
+                    }
+
                     town.Owner.ItemRoster.AddToCounts(new EquipmentElement(outputItem, modifier), count);
                     if (Campaign.Current.GameStarted && !doNotEffectCapital)
                     {

@@ -8,8 +8,8 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
 {
     public class Offering : Rite
     {
-        private readonly ItemObject input;
-        private readonly int inputCount;
+        protected readonly ItemObject input;
+        protected readonly int inputCount;
 
         public Offering(ItemObject input, int inputCount)
         {
@@ -20,8 +20,9 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
         public override void Complete(Hero actionTaker)
         {
             actionTaker.PartyBelongedTo.ItemRoster.AddToCounts(input, -inputCount);
-            MBInformationManager.AddQuickInformation(new TextObject("{=YeizfbV3}{OFFERING} was ritually offered by {HERO}.")
+            MBInformationManager.AddQuickInformation(new TextObject("{=!}{COUNT} {OFFERING} was ritually offered by {HERO}.")
                     .SetTextVariable("HERO", actionTaker.Name)
+                    .SetTextVariable("COUNT", inputCount)
                     .SetTextVariable("OFFERING", input.Name),
                 0, actionTaker.CharacterObject, "event:/ui/notification/relation");
 
@@ -37,14 +38,12 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
 
         public override void Execute(Hero executor)
         {
-            if (!MeetsCondition(executor))
-            {
-            }
+            SetDialogue();
         }
 
         public override TextObject GetDescription()
         {
-            return new TextObject("{=xzyBM00Z}Make an offering of {ITEM}. {COUNT} must be offered for the rite to be fulfilled.")
+            return new TextObject("{=!}Make an offering of {COUNT} {ITEM}, as the faith prescribes.")
                 .SetTextVariable("ITEM", input.Name)
                 .SetTextVariable("COUNT", inputCount);
         }
@@ -52,9 +51,9 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
         public override bool MeetsCondition(Hero hero)
         {
             var data = BannerKingsConfig.Instance.ReligionsManager.GetFaithfulData(hero);
-            var baseResult = hero.IsAlive && !hero.IsChild && !hero.IsPrisoner && hero.PartyBelongedTo != null &&
+            bool baseResult = hero.IsAlive && !hero.IsChild && !hero.IsPrisoner && hero.PartyBelongedTo != null &&
                              data != null && data.HasTimePassedForRite(GetRiteType(), GetTimeInterval(hero));
-            var hasItems = false;
+            bool hasItems = false;
             if (baseResult)
             {
                 var roster = hero.PartyBelongedTo.ItemRoster;
@@ -101,8 +100,9 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
         public override void SetDialogue()
         {
             MBTextManager.SetTextVariable("CLERGYMAN_RITE_CONFIRM",
-                new TextObject("{=uSMsxDP1}The fate of {HERO} was sealed once they dared draw sword on us. Affirm the rite and we shall rejoice upon the glory we bathe ourselves in as the enemy bleeds!")
-                    .SetTextVariable("HERO", input.Name));
+                new TextObject("{=!}Will you relinquish {COUNT} {ITEM} to prove your faith?")
+                    .SetTextVariable("COUNT", inputCount)
+                    .SetTextVariable("ITEM", input.Name));
         }
     }
 }
