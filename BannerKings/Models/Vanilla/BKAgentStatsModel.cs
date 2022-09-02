@@ -1,9 +1,7 @@
-﻿using BannerKings.Managers.Education;
-using BannerKings.Managers.Skills;
+﻿using BannerKings.Managers.Skills;
 using SandBox.GameComponents;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Party;
-using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade;
 
 namespace BannerKings.Models.Vanilla
@@ -13,25 +11,36 @@ namespace BannerKings.Models.Vanilla
 
         public override float GetEffectiveMaxHealth(Agent agent)
         {
-            float result = base.GetEffectiveMaxHealth(agent);
+            var result = base.GetEffectiveMaxHealth(agent);
             if (!agent.IsHuman)
             {
-                Agent riderAgent = agent.RiderAgent;
+                var riderAgent = agent.RiderAgent;
                 if (riderAgent != null)
                 {
-                    IAgentOriginBase origin = riderAgent.Origin;
+                    var origin = riderAgent.Origin;
                     if (origin != null)
                     {
-                        PartyBase partyBase2 = (PartyBase)origin.BattleCombatant;
-                        MobileParty party = (partyBase2 != null) ? partyBase2.MobileParty : null;
+                        var partyBase2 = (PartyBase)origin.BattleCombatant;
+                        var party = (partyBase2 != null) ? partyBase2.MobileParty : null;
 
                         if (party != null && party.LeaderHero != null)
                         {
-                            Hero hero = party.LeaderHero;
-                            EducationData education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(hero);
-                            if (education.HasPerk(BKPerks.Instance.RitterIronHorses))
+                            var hero = party.LeaderHero;
+                            var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(hero);
+
+                            if (riderAgent.Monster != null && riderAgent.Monster.StringId == "camel")
                             {
-                                result *= 1.1f;
+                                if (education.HasPerk(BKPerks.Instance.JawwalGhazw))
+                                {
+                                    result *= 1.1f;
+                                }
+
+                            } else
+                            {
+                                if (education.HasPerk(BKPerks.Instance.RitterIronHorses))
+                                {
+                                    result *= 1.1f;
+                                }
                             }
                         }
                     }
@@ -44,8 +53,6 @@ namespace BannerKings.Models.Vanilla
         public override void UpdateAgentStats(Agent agent, AgentDrivenProperties agentDrivenProperties)
         {
             base.UpdateAgentStats(agent, agentDrivenProperties);
-            //MissionWeapon missionWeapon = agent.WieldedWeapon;
-            //WeaponComponentData weaponComponentData = (!missionWeapon.Equals(MissionWeapon.Invalid)) ? agent.Equipment[missionWeapon.CurrentUsageIndex].CurrentUsageItem  : null;
             if (agent.Character == null)
             {
                 return;
@@ -57,28 +64,41 @@ namespace BannerKings.Models.Vanilla
             }
 
             var captain = (agent.Formation.Captain.Character as CharacterObject)?.HeroObject;
-            var data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(captain);
-            if (agent.HasMount && data.HasPerk(BKPerks.Instance.CataphractEquites))
+            if (captain != null)
             {
-                agentDrivenProperties.MountChargeDamage *= 1.1f;
-            }
 
-            if (agent.HasMount && data.HasPerk(BKPerks.Instance.CataphractAdaptiveTactics))
-            {
-                agentDrivenProperties.MountManeuver *= 1.08f;
-            }
+                var data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(captain);
 
-
-            /*if (agent.Character.IsHero)
+                if (agent.HasMount)
                 {
-                    Hero hero = (agent.Character as CharacterObject).HeroObject;
-                    EducationData data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(hero);
-                    if (data.HasPerk(BKPerks.Instance.FianFennid) && weaponComponentData.RelevantSkill == DefaultSkills.Bow)
-                        agentDrivenProperties.ThrustOrRangedReadySpeedMultiplier *= 1.25f;
-    
-                    if (data.HasPerk(BKPerks.Instance.FianHighlander) && weaponComponentData.RelevantSkill == DefaultSkills.TwoHanded && !agent.HasMount && weaponComponentData.WeaponClass == WeaponClass.TwoHandedSword)
-                        agentDrivenProperties.SwingSpeedMultiplier *= 1.06f;
-                }*/
+                    if (data.HasPerk(BKPerks.Instance.CataphractEquites))
+                    {
+                        agentDrivenProperties.MountChargeDamage *= 1.1f;
+                    }
+
+                    if (data.HasPerk(BKPerks.Instance.CataphractAdaptiveTactics))
+                    {
+                        agentDrivenProperties.MountManeuver *= 1.08f;
+                    }
+
+                    if (agent.MountAgent.Monster.StringId == "camel" &&data.HasPerk(BKPerks.Instance.JawwalCamelMaster))
+                    {
+                        agentDrivenProperties.MountSpeed *= 1.08f;
+                    }
+
+                    if (agent.HasMount && data.HasPerk(BKPerks.Instance.KheshigOutrider))
+                    {
+                        agentDrivenProperties.MountSpeed *= 1.05f;
+                    }
+                } 
+                else 
+                {
+                    if (data.HasPerk(BKPerks.Instance.FianFennid))
+                    {
+                        agentDrivenProperties.ThrustOrRangedReadySpeedMultiplier *= 1.1f;
+                    } 
+                }
+            }
         }
     }
 }
