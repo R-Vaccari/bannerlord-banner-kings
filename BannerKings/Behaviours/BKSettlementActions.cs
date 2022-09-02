@@ -545,7 +545,6 @@ namespace BannerKings.Behaviours
                     var costInt = (int) cost.ResultNumber;
                     GameTexts.SetVariable("CRAFTING_RATE", costInt);
                     GameTexts.SetVariable("CRAFTING_EXPLANATION", cost.GetExplanations());
-                    GameTexts.SetVariable("GOLD_ICON", "<img src=\"General\\Icons\\Coin@2x\" extend=\"8\">");
                     GiveGoldAction.ApplyForCharacterToSettlement(Hero.MainHero, Settlement.CurrentSettlement, costInt);
                 }
             }

@@ -85,6 +85,14 @@ namespace BannerKings.Models.Vanilla
                     _ => 10f
                 };
             }
+            else if (item.HasWeaponComponent)
+            {
+                result += item.ItemType switch
+                {
+                    ItemObject.ItemTypeEnum.Shield => 20f,
+                    _ => 40f
+                };
+            }
 
             var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(hero);
             if (education.HasPerk(BKPerks.Instance.ArtisanSmith))
@@ -122,6 +130,17 @@ namespace BannerKings.Models.Vanilla
                     case ArmorMaterialTypes.Leather:
                         result *= 1.1f;
                         break;
+                }
+            }
+            else if (item.HasWeaponComponent)
+            {
+                if (item.ItemType == ItemObject.ItemTypeEnum.Shield)
+                {
+                    result += item.WeaponComponent.PrimaryWeapon.MaxDataValue / 10f;
+                }
+                else if (item.ItemType == ItemObject.ItemTypeEnum.Arrows || item.ItemType == ItemObject.ItemTypeEnum.Bolts)
+                {
+                    result += item.WeaponComponent.PrimaryWeapon.MaxDataValue * item.WeaponComponent.PrimaryWeapon.MissileDamage;
                 }
             }
 
@@ -176,18 +195,25 @@ namespace BannerKings.Models.Vanilla
             {
                 if (item.WeaponComponent.PrimaryWeapon.IsShield)
                 {
-                    result[7] = 1;
+                    result[7] = 2;
                     if (item.WeaponComponent.PrimaryWeapon.PhysicsMaterial == "shield_metal")
                     {
                         result[4] = (int) (item.Weight * 0.5f / 0.5f);
                     }
-
-                    ;
                 }
                 else
                 {
-                    result[7] = 1;
-                    result[3] = 1;
+                    CraftingMaterials mainMaterial;
+                    mainMaterial = item.Tierf switch
+                    {
+                        < 3f => CraftingMaterials.Iron3,
+                        < 4f => CraftingMaterials.Iron4,
+                        < 5f => CraftingMaterials.Iron5,
+                        _ => CraftingMaterials.Iron6
+                    };
+
+                    result[7] = 2;
+                    result[(int)mainMaterial] = 2;
                 }
             }
 
