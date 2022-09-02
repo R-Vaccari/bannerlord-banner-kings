@@ -153,18 +153,18 @@
 		<string id="bk_council_spymaster_royal_aserai" text="Grand Spymaster" />
 
 		<string id="bk_council_spiritual_guide_empire" text="Seneschal" />
-		<string id="bk_council_spiritual_guide_sturgia" text="Seneschal" />
+		<string id="bk_council_spiritual_guide_sturgia" text="Volkhvs" />
 		<string id="bk_council_spiritual_guide_battania" text="Draoidh" />
 		<string id="bk_council_spiritual_guide_vlandia" text="Seneschal" />
-		<string id="bk_council_spiritual_guide_khuzait" text="Khevtuul" />
-		<string id="bk_council_spiritual_guide_aserai" text="Seneschal" />
+		<string id="bk_council_spiritual_guide_khuzait" text="Shaman" />
+		<string id="bk_council_spiritual_guide_aserai" text="Murshid" />
 
 		<string id="bk_council_spiritual_guide_royal_empire" text="High Seneschal" />
-		<string id="bk_council_spiritual_guide_royal_sturgia" text="High Seneschal" />
+		<string id="bk_council_spiritual_guide_royal_sturgia" text="Volkhvs" />
 		<string id="bk_council_spiritual_guide_royal_battania" text="Ard Draoidh" />
 		<string id="bk_council_spiritual_guide_royal_vlandia" text="High Seneschal" />
-		<string id="bk_council_spiritual_guide_royal_khuzait" text="Cherbi" />
-		<string id="bk_council_spiritual_guide_royal_aserai" text="High Seneschal" />
+		<string id="bk_council_spiritual_guide_royal_khuzait" text="Shaman" />
+		<string id="bk_council_spiritual_guide_royal_aserai" text="Murshid" />
 
 		<string id="bk_council_elder_royal_battania" text="Seanar" />
 

@@ -2,6 +2,15 @@
 
 <strings>
 	<string id="str_bk_placeholder" text="{=gaJDVkvHA}Placeholder" />
+	<string id="str_crafting_difficulty" text="{=LuF75ia3}Crafting Difficulty" />
+	
+	<string id="str_bk_condition.has_enough_gold" text="{=bk_condition_has_enough_gold}{HERO.LINK} has not enough Denar. {?PAYER.GENDER}she{?}he{\\?} needs at least {AMOUNT} {GOLD_ICON}." />
+	<string id="str_bk_condition.is_part_of_clan" text="{=bk_condition_is_part_of_clan}{HERO.LINK} is not part of {CLAN_LINK}." />
+	<string id="str_bk_condition.is_part_of_any_clan" text="{=bk_condition_is_part_of_any_clan}{HERO.LINK} is not part of a clan." />
+	<string id="str_bk_condition.is_part_of_kingdom" text="{=bk_condition_is_part_of_kingdom}{HERO.LINK} is not part of {KINGDOM_LINK}." />
+	<string id="str_bk_condition.is_part_of_any_kingdom" text="{=bk_condition_is_part_of_any_kingdom}{HERO.LINK} is not part of a kingdom." />
+	<string id="str_bk_condition.is_part_of_settlement" text="{=bk_condition_is_part_of_settlement}{HERO.LINK} is not part of {SETTLEMENT_LINK}." />
+	<string id="str_bk_condition.is_part_of_any_settlement" text="{=bk_condition_is_part_of_any_settlement}{HERO.LINK} is not part of a settlement." />
 
 	<string id="str_bk_crafting_itemtype.bodyarmor" text="{=bk_crafting_itemtype_bodyarmor}Body Armors" />
 	<string id="str_bk_crafting_itemtype.barding" text="{=bk_crafting_itemtype_barding}Bardings" />
@@ -129,34 +138,37 @@
 	<string id="str_bk_council_chancellor.khuzait" text="{=bk_council_steward_khuzait}Chancellor" />
 	<string id="str_bk_council_steward.khuzait" text="{=bk_council_chancellor_khuzait}Steward" />
 	<string id="str_bk_council_spymaster.khuzait" text="{=bk_council_spymaster_khuzait}Khevtuul" />
+	<string id="str_bk_council_spiritual.khuzait" text="{=bk_council_spiritual_guide_khuzait}Shaman" />
 	
 	<string id="str_bk_council_marshall_royal.khuzait" text="{=bk_council_marshall_royal_khuzait}Tumetu-iin Noyan" />
 	<string id="str_bk_council_chancellor_royal.khuzait" text="{=bk_council_chancellor_royal_khuzait}High Chancellor" />
 	<string id="str_bk_council_steward_royal.khuzait" text="{=bk_council_steward_royal_khuzait}High Steward" />
 	<string id="str_bk_council_spymaster_royal.khuzait" text="{=bk_council_spymaster_royal_khuzait}Cherbi" />
-	<string id="str_bk_council_spiritual_royal.khuzait" text="{=bk_council_spiritual_royal_khuzait}High Seneschal" />
+	<string id="str_bk_council_spiritual_royal.khuzait" text="{=bk_council_spiritual_guide_khuzait}Shaman" />
 
-	<string id="str_bk_council_marshall.sturgia" text="{=bk_council_marshall_sturgia}Marasgal" />
+	<string id="str_bk_council_marshall.sturgia" text="{=bk_council_marshall_sturgia}Marshal" />
 	<string id="str_bk_council_chancellor.sturgia" text="{=bk_council_steward_sturgia}Chancellor" />
 	<string id="str_bk_council_steward.sturgia" text="{=bk_council_chancellor_sturgia}Steward" />
-	<string id="str_bk_council_spymaster.sturgia" text="{=bk_council_spymaster_sturgia}Treòraiche" />
+	<string id="str_bk_council_spymaster.sturgia" text="{=bk_council_spymaster_sturgia}Spymaster" />
+	<string id="str_bk_council_spiritual.sturgia" text="{=bk_council_spiritual_guide_sturgia}Volkhvs" />
 	
 	<string id="str_bk_council_marshall_royal.sturgia" text="{=bk_council_marshall_royal_sturgia}Grand Marshal" />
 	<string id="str_bk_council_chancellor_royal.sturgia" text="{=bk_council_chancellor_royal_sturgia}High Chancellor" />
 	<string id="str_bk_council_steward_royal.sturgia" text="{=bk_council_steward_royal_sturgia}High Steward" />
 	<string id="str_bk_council_spymaster_royal.sturgia" text="{=bk_council_spymaster_royal_sturgia}Grand Spymaster" />
-	<string id="str_bk_council_spiritual_royal.sturgia" text="{=bk_council_spiritual_guide_royal_sturgia}High Seneschal" />
+	<string id="str_bk_council_spiritual_royal.sturgia" text="{=bk_council_spiritual_guide_sturgia}Volkhvs" />
 
-	<string id="str_bk_council_marshall.aserai" text="{=bk_council_marshall_aserai}Marasgal" />
+	<string id="str_bk_council_marshall.aserai" text="{=bk_council_marshall_aserai}Marshal" />
 	<string id="str_bk_council_chancellor.aserai" text="{=bk_council_steward_aserai}Chancellor" />
 	<string id="str_bk_council_steward.aserai" text="{=bk_council_chancellor_aserai}Steward" />
-	<string id="str_bk_council_spymaster.aserai" text="{=bk_council_spymaster_aserai}Treòraiche" />
+	<string id="str_bk_council_spymaster.aserai" text="{=bk_council_spymaster_aserai}Spymaster" />
+	<string id="str_bk_council_spiritual.aserai" text="{=bk_council_spiritual_guide_aserai}Murshid" />
 	
 	<string id="str_bk_council_marshall_royal.aserai" text="{=bk_council_marshall_royal_aserai}Grand Marshal" />
 	<string id="str_bk_council_chancellor_royal.aserai" text="{=bk_council_chancellor_royal_aserai}High Chancellor" />
 	<string id="str_bk_council_steward_royal.aserai" text="{=bk_council_steward_royal_aserai}High Steward" />
 	<string id="str_bk_council_spymaster_royal.aserai" text="{=bk_council_spymaster_royal_aserai}Grand Spymaster" />
-	<string id="str_bk_council_spiritual_royal.aserai" text="{=bk_council_spiritual_guide_royal_aserai}High Seneschal" />
+	<string id="str_bk_council_spiritual_royal.aserai" text="{=bk_council_spiritual_guide_aserai}Murshid" />
 
 	<string id="str_bk_spiritual_guide" text="{=bk_spiritual_guide}Spiritual Guide" />
 
