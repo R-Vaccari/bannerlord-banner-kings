@@ -28,7 +28,7 @@ namespace BannerKings.Models.Vanilla
                             var hero = party.LeaderHero;
                             var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(hero);
 
-                            if (agent.MountAgent.Monster.StringId == "camel")
+                            if (riderAgent.Monster != null && riderAgent.Monster.StringId == "camel")
                             {
                                 if (education.HasPerk(BKPerks.Instance.JawwalGhazw))
                                 {

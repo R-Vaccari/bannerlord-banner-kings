@@ -16,7 +16,7 @@ using BannerKings.Managers.Institutions.Religions.Doctrines;
 
 namespace BannerKings.Models.Vanilla
 {
-    internal class BKVolunteerModel : DefaultVolunteerModel
+    public class BKVolunteerModel : DefaultVolunteerModel
     {
         public override bool CanHaveRecruits(Hero hero)
         {
