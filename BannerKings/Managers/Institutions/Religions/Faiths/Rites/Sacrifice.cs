@@ -82,6 +82,8 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
             {
                 actionTaker.Clan.AddRenown(5f);
             }
+
+            input = null;
         }
 
         public override bool MeetsCondition(Hero hero)
@@ -137,6 +139,12 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
             MBTextManager.SetTextVariable("CLERGYMAN_RITE_CONFIRM",
                 new TextObject("{=uSMsxDP1}The fate of {HERO} was sealed once they dared draw sword on us. Affirm the rite and we shall rejoice upon the glory we bathe ourselves in as the enemy bleeds!")
                     .SetTextVariable("HERO", input.Name));
+        }
+
+        public override TextObject GetRequirementsText(Hero hero)
+        {
+            return new TextObject("{=!}May be performed every {YEARS} years\nRequires a lord from an enemy faction")
+                .SetTextVariable("YEARS", GetTimeInterval(hero));
         }
     }
 }

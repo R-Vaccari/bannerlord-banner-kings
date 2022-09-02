@@ -15,7 +15,7 @@ namespace BannerKings.UI.Religion
         private MBBindingList<ReligionElementVM> aspects;
         private MBBindingList<ReligionMemberVM> clergymen;
         private MBBindingList<InformationElement> courtInfo;
-        private MBBindingList<ReligionElementVM> doctrines;
+        private MBBindingList<ReligionElementVM> doctrines, rites;
         private MBBindingList<ReligionMemberVM> faithful;
         private Managers.Institutions.Religions.Religion heroReligion;
         private Managers.Institutions.Religions.Religion currentReligion;
@@ -35,6 +35,7 @@ namespace BannerKings.UI.Religion
             Faithful = new MBBindingList<ReligionMemberVM>();
             Virtues = new MBBindingList<BKTraitItemVM>();
             Doctrines = new MBBindingList<ReligionElementVM>();
+            Rites = new MBBindingList<ReligionElementVM>();
             Aspects = new MBBindingList<ReligionElementVM>();
             SecondaryDivinities = new MBBindingList<ReligionElementVM>();
             InitializeCurrentReligion();
@@ -50,6 +51,7 @@ namespace BannerKings.UI.Religion
             Faithful = new MBBindingList<ReligionMemberVM>();
             Virtues = new MBBindingList<BKTraitItemVM>();
             Doctrines = new MBBindingList<ReligionElementVM>();
+            Rites = new MBBindingList<ReligionElementVM>();
             Aspects = new MBBindingList<ReligionElementVM>();
             SecondaryDivinities = new MBBindingList<ReligionElementVM>();
             InitializeCurrentReligion();
@@ -97,6 +99,8 @@ namespace BannerKings.UI.Religion
         [DataSourceProperty] public string DoctrinesText => new TextObject("{=BKLacKdC}Doctrines").ToString();
 
         [DataSourceProperty] public string AspectsText => new TextObject("{=1sKJS1JR}Aspects").ToString();
+
+        [DataSourceProperty] public string RitesText => new TextObject("{=!}Rites").ToString();
 
         [DataSourceProperty]
         public string SecondaryDivinitiesText
@@ -207,6 +211,20 @@ namespace BannerKings.UI.Religion
         }
 
         [DataSourceProperty]
+        public MBBindingList<ReligionElementVM> Rites
+        {
+            get => rites;
+            set
+            {
+                if (value != rites)
+                {
+                    rites = value;
+                    OnPropertyChangedWithValue(value);
+                }
+            }
+        }
+
+        [DataSourceProperty]
         public MBBindingList<ReligionMemberVM> Clergymen
         {
             get => clergymen;
@@ -257,6 +275,7 @@ namespace BannerKings.UI.Religion
             Virtues.Clear();
             Doctrines.Clear();
             Aspects.Clear();
+            Rites.Clear();
             SecondaryDivinities.Clear();
 
             Name = currentReligion.Faith.GetFaithName().ToString();
@@ -306,10 +325,17 @@ namespace BannerKings.UI.Religion
                 }
             }
 
+            foreach (var rite in currentReligion.Rites)
+            {
+                Rites.Add(new ReligionElementVM(rite.GetName(), rite.GetDescription(), rite.GetRequirementsText(hero)));
+            }
+
             foreach (var divinity in currentReligion.Faith.GetSecondaryDivinities())
             {
                 SecondaryDivinities.Add(new ReligionElementVM(divinity.SecondaryTitle, divinity.Name,
-                    divinity.Description, divinity.Effects));
+                    new TextObject("{=!}{EFFECTS}\nPiety cost: {COST}")
+                    .SetTextVariable("EFFECTS", divinity.Description)
+                    .SetTextVariable("COST", divinity.BlessingCost(hero)), divinity.Effects));
             }
 
             Aspects.Add(new ReligionElementVM(new TextObject("{=FRaCMrgt}Leadership"), currentReligion.Leadership.GetName(),

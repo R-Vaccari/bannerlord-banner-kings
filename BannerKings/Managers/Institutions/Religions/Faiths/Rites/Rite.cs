@@ -15,6 +15,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
         public abstract float GetPietyReward();
         public abstract bool MeetsCondition(Hero hero);
         public abstract void Complete(Hero actionTaker);
+        public abstract TextObject GetRequirementsText(Hero hero);
     }
 
     public enum RiteType

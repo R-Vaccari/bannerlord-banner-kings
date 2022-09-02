@@ -57,7 +57,7 @@ namespace BannerKings.UI
                         "TitlesWindow");
                 }
                 case "religions":
-                    return (new ReligionVM(data), "ReligionWindow");
+                    return (new ReligionVM(data), "ReligionPopup");
                 case "campaignStart":
                     return new ValueTuple<BannerKingsViewModel, string>(new CampaignStartVM(), "CampaignStartPopup");
                 default:

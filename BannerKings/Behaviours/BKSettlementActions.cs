@@ -265,9 +265,9 @@ namespace BannerKings.Behaviours
                 MenuTitlesCondition,
                 MenuTitlesConsequence);
 
-            campaignGameStarter.AddGameMenuOption("bannerkings", "manage_faith", "{=m5mzZkkS}{RELIGION_NAME}",
-                MenuFaithCondition,
-                MenuFaithConsequence);
+            //campaignGameStarter.AddGameMenuOption("bannerkings", "manage_faith", "{=m5mzZkkS}{RELIGION_NAME}",
+            //    MenuFaithCondition,
+            //    MenuFaithConsequence);
 
             campaignGameStarter.AddGameMenuOption("bannerkings", "manage_guild", "{=sywChwxo}{GUILD_NAME}",
                 MenuGuildCondition,

@@ -104,5 +104,13 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
                     .SetTextVariable("COUNT", inputCount)
                     .SetTextVariable("ITEM", input.Name));
         }
+
+        public override TextObject GetRequirementsText(Hero hero)
+        {
+            return new TextObject("{=!}May be performed every {YEARS} years\nRequires {COUNT} {ITEM}")
+                .SetTextVariable("YEARS", GetTimeInterval(hero))
+                .SetTextVariable("COUNT", inputCount)
+                .SetTextVariable("ITEM", input.Name);
+        }
     }
 }
