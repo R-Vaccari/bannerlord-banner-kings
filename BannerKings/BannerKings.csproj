@@ -9,6 +9,7 @@
 		<ModuleId>$(MSBuildProjectName)</ModuleId>
 		<ModuleName>$(MSBuildProjectName)</ModuleName>
 		<GameFolder>$(BANNERLORD_GAME_DIR)</GameFolder>
+		<BaseOutputPath>D:\SteamLibrary\steamapps\common\Mount &amp; Blade II Bannerlord\Modules\BannerKings\bin\Win64_Shipping_Client</BaseOutputPath>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -29,6 +30,10 @@
 			<Private>False</Private>
 		</Reference>
 		<Reference Include="$(GameFolder)\Modules\StoryMode\bin\Win64_Shipping_Client\*.dll">
+			<HintPath>%(Identity)</HintPath>
+			<Private>False</Private>
+		</Reference>
+		<Reference Include="$(GameFolder)\Modules\CalradiaExpandedKingdoms\bin\Win64_Shipping_Client\*.dll">
 			<HintPath>%(Identity)</HintPath>
 			<Private>False</Private>
 		</Reference>
