@@ -1,10 +1,10 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <Module xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/BUTR/Bannerlord.XmlSchemas/master/SubModule.xsd">
-	<Id value="$modulename$" />
-	<Name value="$modulename$" />
-	<Version value="v$version$" />
+	<Id value="BannerKings" />
+	<Name value="BannerKings" />
+	<Version value="v1.2.0" />
 	<Official value="false" />
 	<DefaultModule value="true" />
 	<ModuleCategory value="Singleplayer" />
@@ -32,9 +32,9 @@
 	<!-- Community Dependency Metadata -->
 	<SubModules>
 		<SubModule>
-			<Name value="$modulename$" />
-			<DLLName value="$modulename$.dll" />
-			<SubModuleClassType value="$modulename$.Main" />
+			<Name value="BannerKings" />
+			<DLLName value="BannerKings.dll" />
+			<SubModuleClassType value="BannerKings.Main" />
 			<Tags />
 		</SubModule>
 	</SubModules>

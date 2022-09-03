@@ -108,7 +108,7 @@ namespace BannerKings.Managers.Goals.Decisions
 
                     if (BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(referenceHero.Clan.Kingdom) == null)
                     {
-                        failedReasons.Add(new TextObject("{=!}Your kingdom has no title associated with. Found a de Jure kingdom title for your faction.");
+                        failedReasons.Add(new TextObject("{=!}Your kingdom has no title associated with it. Found a de Jure kingdom title for your faction."));
                     }
                 } 
                 else
