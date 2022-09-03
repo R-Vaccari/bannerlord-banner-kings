@@ -7,8 +7,10 @@ using BannerKings.Actions;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
 using BannerKings.Models.BKModels;
+using BannerKings.UI.Cutscenes;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
+using TaleWorlds.CampaignSystem.SceneInformationPopupTypes;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
@@ -511,10 +513,7 @@ namespace BannerKings.Managers
 
             action.ActionTaker.ChangeHeroGold(-(int) action.Gold);
             GainKingdomInfluenceAction.ApplyForDefault(action.ActionTaker, -action.Influence);
-            MBInformationManager.AddQuickInformation(new TextObject("{=dFTm4AbE}The {TITLE} has been founded by {FOUNDER}.")
-                    .SetTextVariable("FOUNDER", action.ActionTaker.EncyclopediaLinkWithName)
-                    .SetTextVariable("TITLE", title.FullName),
-                0, null, "event:/ui/notification/relation");
+            MBInformationManager.ShowSceneNotification(new EmpireFoundedScene(kingdom, title));
             action.ActionTaker.AddSkillXp(BKSkills.Instance.Lordship,
                 BannerKingsConfig.Instance.TitleModel.GetSkillReward(TitleType.Empire, action.Type));
         }
