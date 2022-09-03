@@ -1,8 +1,8 @@
 using BannerKings.Managers.Court;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Titles;
+using CalradiaExpandedKingdoms.Models;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Localization;
 using static BannerKings.Managers.Policies.BKCriminalPolicy;

@@ -1,11 +1,8 @@
-using BannerKings.Populations;
-using CalradiaExpandedKingdoms.Models;
 using Helpers;
 using System;
 using System.Linq;
 using BannerKings.Managers.Innovations;
 using BannerKings.Managers.Skills;
-using Helpers;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.GameComponents;
@@ -251,12 +248,21 @@ namespace BannerKings.Models.Vanilla
             }
 
 
-				PerkHelper.AddPerkBonusForTown(DefaultPerks.TwoHanded.Confidence, town, ref result);
-			
-			if (buildingType == DefaultBuildingTypes.SettlementMarketplace || buildingType == DefaultBuildingTypes.SettlementAquaducts || buildingType == DefaultBuildingTypes.SettlementLimeKilns)
-				PerkHelper.AddPerkBonusForTown(DefaultPerks.Trade.SelfMadeMan, town, ref result);
-			
-			float effectOfBuildings = town.GetEffectOfBuildings(BuildingEffectEnum.Construction);
+            var buildingType = town.BuildingsInProgress.IsEmpty() ? null : town.BuildingsInProgress.Peek().BuildingType;
+            if (DefaultBuildingTypes.MilitaryBuildings.Contains(buildingType))
+            {
+                PerkHelper.AddPerkBonusForTown(DefaultPerks.TwoHanded.Confidence, town, ref result);
+            }
+
+            if (buildingType == DefaultBuildingTypes.SettlementMarketplace ||
+                buildingType == DefaultBuildingTypes.SettlementAquaducts ||
+                buildingType == DefaultBuildingTypes.SettlementLimeKilns)
+            {
+                PerkHelper.AddPerkBonusForTown(DefaultPerks.Trade.SelfMadeMan, town, ref result);
+            }
+
+
+            float effectOfBuildings = town.GetEffectOfBuildings(BuildingEffectEnum.Construction);
 			if (effectOfBuildings > 0f)
 				result.Add(effectOfBuildings, GameTexts.FindText("str_building_bonus", null), null);
 			

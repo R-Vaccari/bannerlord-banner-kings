@@ -226,7 +226,7 @@ namespace BannerKings.Utils
             {
                 switch (culture.StringId)
                 {
-                    case "battania" when type == TitleType.Kingdom:
+                    case "battania" or "vagir" when type == TitleType.Kingdom:
                     {
                         title = female 
                             ? new TextObject("{=25sz3WPn}Ard-Banrigh") 
@@ -234,7 +234,7 @@ namespace BannerKings.Utils
 
                         break;
                     }
-                    case "battania" when type == TitleType.Dukedom:
+                    case "battania" or "vagir" when type == TitleType.Dukedom:
                     {
                         title = female 
                             ? new TextObject("{=XLAgsQ0J}Banrigh")
@@ -242,7 +242,7 @@ namespace BannerKings.Utils
 
                         break;
                     }
-                    case "battania" when type == TitleType.County:
+                    case "battania" or "vagir" when type == TitleType.County:
                     {
                         title = female 
                             ? new TextObject("{=FMWNKESs}Bantiarna") 
@@ -250,7 +250,7 @@ namespace BannerKings.Utils
 
                         break;
                     }
-                    case "battania" when type == TitleType.Barony:
+                    case "battania" or "vagir" when type == TitleType.Barony:
                     {
                         title = female 
                             ? new TextObject("{=811sxLhn}Thaoiseach") 
@@ -258,13 +258,13 @@ namespace BannerKings.Utils
 
                         break;
                     }
-                    case "battania" when female:
+                    case "battania" or "vagir" when female:
                         title = new TextObject("{=tD38koMS}Baintighearna");
                         break;
-                    case "battania":
-                        title = new TextObject("{=3TM8VVpZ}{MALE}Tighearna{?}Queen{\\?}");
+                    case "battania" or "vagir":
+                        title = new TextObject("{=!}Tighearna");
                         break;
-                    case "empire" when type == TitleType.Empire:
+                    case "empire" or "republic" when type == TitleType.Empire:
                     {
                         title = female
                             ? new TextObject("{=!}Imperatrix")
@@ -272,7 +272,7 @@ namespace BannerKings.Utils
 
                         break;
                     }
-                    case "empire" when type == TitleType.Kingdom:
+                    case "empire" or "republic" when type == TitleType.Kingdom:
                     {
                         if (government == GovernmentType.Republic)
                         {
@@ -289,7 +289,7 @@ namespace BannerKings.Utils
 
                         break;
                     }
-                    case "empire" when type == TitleType.Dukedom:
+                    case "empire" or "republic" when type == TitleType.Dukedom:
                     {
                         title = female 
                             ? new TextObject("{=5aCrjmFi}Ducissa") 
@@ -297,7 +297,7 @@ namespace BannerKings.Utils
 
                         break;
                     }
-                    case "empire" when type == TitleType.County:
+                    case "empire" or "republic" when type == TitleType.County:
                     {
                         title = female 
                             ? new TextObject("{=ex7NjOtr}Cometessa") 
@@ -305,7 +305,7 @@ namespace BannerKings.Utils
 
                         break;
                     }
-                    case "empire" when type == TitleType.Barony:
+                    case "empire" or "republic" when type == TitleType.Barony:
                     {
                         title = female 
                             ? new TextObject("{=dYq0qGzZ}Baronessa") 
@@ -313,10 +313,10 @@ namespace BannerKings.Utils
 
                         break;
                     }
-                    case "empire" when female:
+                    case "empire" or "republic" when female:
                         title = new TextObject("{=go9MmDKr}Domina");
                         break;
-                    case "empire":
+                    case "empire" or "republic":
                         title = new TextObject("{=rWJjN9N3}{MALE}Dominus{?}Queen{\\?}");
                         break;
                     case "aserai" when type == TitleType.Kingdom:
@@ -357,7 +357,7 @@ namespace BannerKings.Utils
                     case "aserai":
                         title = new TextObject("{=NQiveYfa}{MALE}Mawlaa{?}Queen{\\?}");
                         break;
-                    case "khuzait" when type == TitleType.Kingdom:
+                    case "khuzait" or "rebkhu" when type == TitleType.Kingdom:
                     {
                         title = female 
                             ? new TextObject("{=SdJk1Vpf}Khatun") 
@@ -365,7 +365,7 @@ namespace BannerKings.Utils
 
                         break;
                     }
-                    case "khuzait" when type == TitleType.Dukedom:
+                    case "khuzait" or "rebkhu" when type == TitleType.Dukedom:
                     {
                         title = female 
                             ? new TextObject("{=Mfuxa8SP}Bekhi") 
@@ -373,7 +373,7 @@ namespace BannerKings.Utils
 
                         break;
                     }
-                    case "khuzait" when type == TitleType.County:
+                    case "khuzait" or "rebkhu" when type == TitleType.County:
                     {
                         title = female 
                             ? new TextObject("{=cepkCz19}Khanum") 
@@ -381,7 +381,7 @@ namespace BannerKings.Utils
 
                         break;
                     }
-                    case "khuzait" when type == TitleType.Barony:
+                    case "khuzait" or "rebkhu" when type == TitleType.Barony:
                     {
                         title = female 
                             ? new TextObject("{=Ajj9ptAU}Begum") 
@@ -389,10 +389,10 @@ namespace BannerKings.Utils
 
                         break;
                     }
-                    case "khuzait" when female:
+                    case "khuzait" or "rebkhu" when female:
                         title = new TextObject("{=dB9Rfp6W}Khatagtai");
                         break;
-                    case "khuzait":
+                    case "khuzait" or "rebkhu":
                         title = new TextObject("{=ouUiDOuN}{MALE}Erxem{?}Queen{\\?}");
                         break;
                     case "sturgia" when type == TitleType.Kingdom:
@@ -432,6 +432,44 @@ namespace BannerKings.Utils
                         break;
                     case "sturgia":
                         title = new TextObject("{=E6MmoXHy}{MALE}Gospodin{?}Queen{\\?}");
+                        break;
+                    case "nordling" when type == TitleType.Kingdom:
+                        {
+                            title = female
+                                ? new TextObject("{=!}Dróttning")
+                                : new TextObject("{=!}Konungr");
+
+                            break;
+                        }
+                    case "nordling" when type == TitleType.Dukedom:
+                        {
+                            title = female
+                                ? new TextObject("{=!}Hertogaynja")
+                                : new TextObject("{=!}{MALE}Hertogi");
+
+                            break;
+                        }
+                    case "nordling" when type == TitleType.County:
+                        {
+                            title = female
+                                ? new TextObject("{=!}Hlaefdige")
+                                : new TextObject("{=!}Jarl");
+
+                            break;
+                        }
+                    case "nordling" when type == TitleType.Barony:
+                        {
+                            title = female
+                                ? new TextObject("{=!}Hlaefdige")
+                                : new TextObject("{=!}Thegn");
+
+                            break;
+                        }
+                    case "nordling" when female:
+                        title = new TextObject("{=!}Hlaefdige");
+                        break;
+                    case "nordling":
+                        title = new TextObject("{=!}{MALE}Hlaford");
                         break;
                 }
             }
@@ -546,7 +584,7 @@ namespace BannerKings.Utils
 
                         break;
                     }
-                    case "empire":
+                    case "empire" or "republic":
                     {
                         if (type == TitleType.Empire)
                         {
@@ -554,7 +592,7 @@ namespace BannerKings.Utils
                         }
                         break;
                     }
-                    case "battania":
+                    case "battania" or "vagir":
                     {
                         if (government == GovernmentType.Tribal)
                         {
