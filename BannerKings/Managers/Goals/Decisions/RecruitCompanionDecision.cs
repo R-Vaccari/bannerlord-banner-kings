@@ -25,12 +25,17 @@ namespace BannerKings.Managers.Goals.Decisions
 
             Initialize(name, description);
 
+            var income = BannerKingsConfig.Instance.ClanFinanceModel.CalculateClanIncome(Clan.PlayerClan).ResultNumber;
             companionTypes = new List<CompanionType>
             {
-                new("commander", "Commander", "A companion that meets the criteria for a Commander.", 5000, 100,
+                new("commander", "Commander", "A companion that meets the criteria for a Commander.", 
+                    (int)(5000 + income * CampaignTime.DaysInYear), 
+                    50,
                     new List<TraitObject>
                     {
-                        DefaultTraits.Commander
+                        DefaultTraits.Commander,
+                        DefaultTraits.Manager,
+                        DefaultTraits.SergeantCommandSkills
                     },
                     new List<PerkObject>(),
                     new List<SkillObject>
@@ -38,17 +43,22 @@ namespace BannerKings.Managers.Goals.Decisions
                         DefaultSkills.Leadership, 
                         DefaultSkills.Tactics
                     }),
-                new("thief", "Thief", "A companion that meets the criteria for a Thief.", 5000, 100,
+                new("thief", "Thief", "A companion that meets the criteria for a Thief.",
+                    (int)(5000 + income * CampaignTime.DaysInYear / 2), 
+                    30,
                     new List<TraitObject>
                     {
-                        DefaultTraits.Thief
+                        DefaultTraits.Thief,
+                        DefaultTraits.RogueSkills
                     },
                     new List<PerkObject>(),
                     new List<SkillObject>
                     {
                         DefaultSkills.Roguery
                     }),
-                new("surgeon", "Surgeon", "A companion that meets the criteria for a Surgeon.", 5000, 100,
+                new("surgeon", "Surgeon", "A companion that meets the criteria for a Surgeon.",
+                    (int)(5000 + income * CampaignTime.DaysInYear / 2),
+                    30,
                     new List<TraitObject>
                     {
                         DefaultTraits.Surgery
@@ -58,14 +68,22 @@ namespace BannerKings.Managers.Goals.Decisions
                     {
                         DefaultSkills.Medicine
                     }),
-                new("caravaneer", "Caravaneer", "A companion that meets the criteria for a Caravaneer.", 5000, 100,
+                new("caravaneer", "Caravaneer", "A companion that meets the criteria for a Caravaneer.",
+                    (int)(5000 + income * CampaignTime.DaysInYear / 2),
+                    50,
                     new List<TraitObject>
                     {
-                        DefaultTraits.Manager
+                        DefaultTraits.Manager,
+                        DefaultTraits.DesertScoutSkills,
+                        DefaultTraits.HillScoutSkills,
+                        DefaultTraits.SteppeScoutSkills,
+                        DefaultTraits.WoodsScoutSkills,
                     },
                     new List<PerkObject>(),
                     new List<SkillObject> { DefaultSkills.Steward, DefaultSkills.Scouting }),
-                new("warrior", "Warrior", "A companion that meets the criteria for a Warrior.", 5000, 100,
+                new("warrior", "Warrior", "A companion that meets the criteria for a Warrior.",
+                    (int)(5000 + income * CampaignTime.DaysInYear / 2),
+                    30,
                     new List<TraitObject>
                     {
                         DefaultTraits.Fighter

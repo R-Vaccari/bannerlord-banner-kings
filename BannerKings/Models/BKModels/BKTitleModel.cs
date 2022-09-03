@@ -295,12 +295,16 @@ namespace BannerKings.Models.BKModels
             var revokerHighest = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(revoker);
             var targetHighest = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(title.deJure);
 
-            if (targetHighest.type <= revokerHighest.type)
+            if (revokerHighest != null)
             {
-                revokeAction.Possible = false;
-                revokeAction.Reason = new TextObject("{=1DGBGp8e}Can not revoke from a lord of superior hierarchy.");
-                return revokeAction;
+                if (targetHighest.type <= revokerHighest.type)
+                {
+                    revokeAction.Possible = false;
+                    revokeAction.Reason = new TextObject("{=1DGBGp8e}Can not revoke from a lord of superior hierarchy.");
+                    return revokeAction;
+                }
             }
+            
 
             revokeAction.Possible = true;
             revokeAction.Reason = new TextObject("{=f5Be67QF}You may grant away this title.");
@@ -560,14 +564,14 @@ namespace BannerKings.Models.BKModels
             return -result;
         }
 
-        public int GetSkillReward(FeudalTitle title, ActionType type)
+        public int GetSkillReward(TitleType title, ActionType type)
         {
             if (type == ActionType.Found)
             {
                 return 2000;
             }
 
-            var result = title.type switch
+            var result = title switch
             {
                 TitleType.Lordship => 100,
                 TitleType.Barony => 200,

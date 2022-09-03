@@ -171,7 +171,8 @@ namespace BannerKings.Managers.Goals.Decisions
                 Renown = 100
             };
 
-            BannerKingsConfig.Instance.TitleManager.FoundEmpire(foundAction, "title_greater_battania");
+            BannerKingsConfig.Instance.TitleManager.FoundEmpire(foundAction, new TextObject("{=!}Greater Battania"), 
+                "title_greater_battania");
         }
 
         public override void DoAiDecision()

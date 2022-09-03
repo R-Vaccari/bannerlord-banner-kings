@@ -19,7 +19,7 @@ namespace BannerKings.UI
             var spriteData = UIResourceManager.SpriteData;
             var resourceContext = UIResourceManager.ResourceContext;
             var resourceDepot = UIResourceManager.UIResourceDepot;
-            
+
             categoryDeveloper = spriteData.SpriteCategories["ui_characterdeveloper"];
             categoryDeveloper.Load(resourceContext, resourceDepot);
 
@@ -28,6 +28,14 @@ namespace BannerKings.UI
 
             gauntletLayer = new GauntletLayer(550);
             Layer = (ScreenLayer)gauntletLayer;
+        }
+
+        private void Load()
+        {
+            var resourceContext = UIResourceManager.ResourceContext;
+            var resourceDepot = UIResourceManager.UIResourceDepot;
+            categoryDeveloper.Load(resourceContext, resourceDepot);
+            categoryEncyclopedia.Load(resourceContext, resourceDepot);
         }
 
         public void Refresh()
@@ -41,14 +49,15 @@ namespace BannerKings.UI
             gauntletMovie = gauntletLayer.LoadMovie(xml, vm);
 
             gauntletLayer.InputRestrictions.SetInputRestrictions(false);
-            MapScreen.Instance.AddLayer(gauntletLayer);
-            ScreenManager.TrySetFocus(gauntletLayer);
-            
+            ScreenManager.AddGlobalLayer(this, true);
+            Load();
+            MapScreen.Instance.AddLayer(gauntletLayer);     
         }
 
         public void CloseLayer()
         {
             MapScreen.Instance.RemoveLayer(gauntletLayer);
+            ScreenManager.RemoveGlobalLayer(this);
         }
 
         public void OnFinalize()

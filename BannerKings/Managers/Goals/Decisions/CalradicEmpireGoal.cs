@@ -52,7 +52,7 @@ namespace BannerKings.Managers.Goals.Decisions
             failedReasons = new List<TextObject>();
 
             var referenceSettlement = settlements.First();
-            var referenceHero = referenceSettlement.Owner;
+            var referenceHero = Hero.MainHero;
             var (gold, influence) = GetCosts(referenceHero);
             var culture = Utils.Helpers.GetCulture("empire");
 
@@ -84,7 +84,7 @@ namespace BannerKings.Managers.Goals.Decisions
                 if (referenceHero.Culture != culture)
                 {
                     failedReasons.Add(new TextObject("{=18Dv2nt4}You are not part of {CULTURE} culture.")
-                            .SetTextVariable("CULTURE", culture.EncyclopediaText));
+                            .SetTextVariable("CULTURE", culture.Name));
                 }
 
                 var imperialKingdomsStringIds = new List<string> { "empire", "empire_w", "empire_s" };
@@ -96,12 +96,7 @@ namespace BannerKings.Managers.Goals.Decisions
                 else if (referenceHero.Clan.Kingdom != null && referenceHero.Clan.Kingdom.Culture != culture)
                 {
                     failedReasons.Add(new TextObject("{=4jUw7j4u}Your kingdom is not part of {CULTURE} culture.")
-                        .SetTextVariable("CULTURE", culture.EncyclopediaText));
-                }
-                else
-                {
-                    failedReasons.Add(new TextObject("{=eZZerqfW}You are not leader of a kingdom with {CULTURE} culture.")
-                        .SetTextVariable("CULTURE", culture.EncyclopediaText));
+                        .SetTextVariable("CULTURE", culture.Name));
                 }
 
                 var religion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(referenceHero);
@@ -183,7 +178,8 @@ namespace BannerKings.Managers.Goals.Decisions
 
             foundAction.SetVassals(vassals);
 
-            BannerKingsConfig.Instance.TitleManager.FoundEmpire(foundAction, "title_calradic_empire");
+            BannerKingsConfig.Instance.TitleManager.FoundEmpire(foundAction, new TextObject("{=!}Calradia"), 
+                "title_calradic_empire");
         }
 
         public override void DoAiDecision()

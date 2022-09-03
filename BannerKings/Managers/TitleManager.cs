@@ -212,6 +212,8 @@ namespace BannerKings.Managers
             {
                 Titles.Add(title, title.deJure);
             }
+
+            RefreshCaches();
         }
 
         public FeudalTitle CalculateHeroSuzerain(Hero hero)
@@ -463,7 +465,8 @@ namespace BannerKings.Managers
 
             ChangeRelationAction.ApplyRelationChangeBetweenHeroes(grantor, receiver, relationChange);
             GainKingdomInfluenceAction.ApplyForDefault(grantor, action.Influence);
-            grantor.AddSkillXp(BKSkills.Instance.Lordship, BannerKingsConfig.Instance.TitleModel.GetSkillReward(action.Title, action.Type));
+            grantor.AddSkillXp(BKSkills.Instance.Lordship, 
+                BannerKingsConfig.Instance.TitleModel.GetSkillReward(action.Title.type, action.Type));
 
             if (receiver.CompanionOf != null)
             {
@@ -488,13 +491,18 @@ namespace BannerKings.Managers
                     .SetTextVariable("FOUNDER", action.ActionTaker.EncyclopediaLinkWithName)
                     .SetTextVariable("TITLE", title.FullName),
                 0, null, "event:/ui/notification/relation");
-            action.ActionTaker.AddSkillXp(BKSkills.Instance.Lordship, BannerKingsConfig.Instance.TitleModel.GetSkillReward(action.Title, action.Type));
+            action.ActionTaker.AddSkillXp(BKSkills.Instance.Lordship, 
+                BannerKingsConfig.Instance.TitleModel.GetSkillReward(TitleType.Kingdom, action.Type));
         }
 
-        public void FoundEmpire(TitleAction action, string stringId = null)
+        public void FoundEmpire(TitleAction action, TextObject factionName, string stringId = null)
         {
-            var title = CreateKingdom(action.ActionTaker, action.ActionTaker.Clan.Kingdom, TitleType.Empire, new List<FeudalTitle>(action.Vassals), action.Title.contract, stringId);
+            var kingdom = action.ActionTaker.Clan.Kingdom;
+            kingdom.ChangeKingdomName(factionName, factionName);
+            var title = CreateEmpire(action.ActionTaker, kingdom, new List<FeudalTitle>(action.Vassals), 
+                GenerateContract("imperial"), stringId);
             action.ActionTaker.Clan.AddRenown(action.Renown);
+
 
             foreach (var vassal in action.Vassals)
             {
@@ -507,7 +515,8 @@ namespace BannerKings.Managers
                     .SetTextVariable("FOUNDER", action.ActionTaker.EncyclopediaLinkWithName)
                     .SetTextVariable("TITLE", title.FullName),
                 0, null, "event:/ui/notification/relation");
-            action.ActionTaker.AddSkillXp(BKSkills.Instance.Lordship, BannerKingsConfig.Instance.TitleModel.GetSkillReward(action.Title, action.Type));
+            action.ActionTaker.AddSkillXp(BKSkills.Instance.Lordship,
+                BannerKingsConfig.Instance.TitleModel.GetSkillReward(TitleType.Empire, action.Type));
         }
 
         public void UsurpTitle(Hero oldOwner, TitleAction action)
@@ -574,7 +583,8 @@ namespace BannerKings.Managers
             title.AddClaim(oldOwner, ClaimType.Previous_Owner, true);
             ExecuteOwnershipChange(oldOwner, usurper, title, true);
 
-            action.ActionTaker.AddSkillXp(BKSkills.Instance.Lordship, BannerKingsConfig.Instance.TitleModel.GetSkillReward(action.Title, action.Type));
+            action.ActionTaker.AddSkillXp(BKSkills.Instance.Lordship, 
+                BannerKingsConfig.Instance.TitleModel.GetSkillReward(action.Title.type, action.Type));
         }
 
         public void GiveLordshipOnKingdomJoin(Kingdom newKingdom, Clan clan, bool force = false)
@@ -1140,6 +1150,33 @@ namespace BannerKings.Managers
                     GovernmentType.Feudal, SuccessionType.Hereditary_Monarchy, InheritanceType.Primogeniture,
                     GenderLaw.Agnatic)
             };
+        }
+
+        private FeudalTitle CreateEmpire(Hero deJure, Kingdom faction, List<FeudalTitle> vassals, 
+            FeudalContract contract, string stringId = null)
+        {
+            var title = new FeudalTitle(TitleType.Empire, null, vassals, deJure, faction.Leader,
+                faction.Name.ToString(), contract, stringId);
+            ExecuteAddTitle(title);
+
+            if (Kingdoms.ContainsKey(faction))
+            {
+                Kingdoms.Remove(faction);
+            }
+
+            var list = new List<Kingdom>();
+            foreach (var vassal in vassals)
+            {
+                if (Kingdoms.Any(x => x.Value == vassal))
+                {
+                    list.Add(Kingdoms.First(x => x.Value == vassal).Key);
+                }
+            }
+
+            list.ForEach(x => Kingdoms.Remove(x));
+
+            Kingdoms.Add(faction, title);
+            return title;
         }
 
         private FeudalTitle CreateKingdom(Hero deJure, Kingdom faction, TitleType type, List<FeudalTitle> vassals, FeudalContract contract, string stringId = null)

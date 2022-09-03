@@ -264,6 +264,14 @@ namespace BannerKings.Utils
                     case "battania":
                         title = new TextObject("{=3TM8VVpZ}{MALE}Tighearna{?}Queen{\\?}");
                         break;
+                    case "empire" when type == TitleType.Empire:
+                    {
+                        title = female
+                            ? new TextObject("{=!}Imperatrix")
+                            : new TextObject("{=!}Imperator");
+
+                        break;
+                    }
                     case "empire" when type == TitleType.Kingdom:
                     {
                         if (government == GovernmentType.Republic)
@@ -538,6 +546,14 @@ namespace BannerKings.Utils
 
                         break;
                     }
+                    case "empire":
+                    {
+                        if (type == TitleType.Empire)
+                        {
+                                title = new TextObject("{=!}Imperium");
+                        }
+                        break;
+                    }
                     case "battania":
                     {
                         if (government == GovernmentType.Tribal)
@@ -557,6 +573,7 @@ namespace BannerKings.Utils
 
             title ??= type switch
             {
+                TitleType.Empire => new TextObject("{=!}Empire"),
                 TitleType.Kingdom => new TextObject("{=7x3HJ29f}Kingdom"),
                 TitleType.Dukedom => new TextObject("{=HtWGKBDF}Dukedom"),
                 TitleType.County => new TextObject("{=c6ggHVzS}County"),

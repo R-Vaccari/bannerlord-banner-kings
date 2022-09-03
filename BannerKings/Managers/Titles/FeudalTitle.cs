@@ -330,12 +330,15 @@ namespace BannerKings.Managers.Titles
 
         public void DriftTitle(FeudalTitle newSovereign, bool notify = true)
         {
-            if (type != TitleType.Dukedom || !newSovereign.IsSovereignLevel)
+            if (type > TitleType.Dukedom)
             {
                 return;
             }
 
-            sovereign.vassals.Remove(this);
+            if (sovereign != null && sovereign.vassals.Contains(this))
+            {
+                sovereign.vassals.Remove(this);
+            }
             SetSovereign(newSovereign);
             newSovereign.vassals.Add(this);
 
