@@ -1,7 +1,7 @@
-﻿using BannerKings.Managers.Institutions.Religions;
-using BannerKings.Managers.Skills;
+﻿using BannerKings.Managers.Skills;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
+using TaleWorlds.Library;
 
 namespace BannerKings.Models.Vanilla
 {
@@ -25,18 +25,16 @@ namespace BannerKings.Models.Vanilla
                 }
             }
 
-            // NEED LOGIC TO LIMIT SELLER TO KHUZAIT
             if (sellerHero != null && buyerHero != null)
             {
                 var data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(buyerHero);
-
-                if (data.HasPerk(BKPerks.Instance.KheshigHonorGuard))
+                if (sellerHero.Culture.StringId == "khuzait" && data.HasPerk(BKPerks.Instance.KheshigHonorGuard))
                 {
-                    return result + 1 > 6 ? 6 : result + 1;
+                    return MBMath.ClampInt(result + 1, 0, 6);
                 }
             }
 
-                return result;
+            return result;
         }
     }
 }

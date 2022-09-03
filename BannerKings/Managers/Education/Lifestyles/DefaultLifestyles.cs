@@ -48,6 +48,8 @@ namespace BannerKings.Managers.Education.Lifestyles
                 yield return Ritter;
                 yield return Fian;
                 yield return Varyag;
+                yield return Kheshig;
+                yield return Jawwal;
                 yield return Mercenary;
                 yield return Outlaw;
                 yield return Gladiator;
@@ -55,9 +57,6 @@ namespace BannerKings.Managers.Education.Lifestyles
                 yield return August;
                 yield return SiegeEngineer;
                 yield return CivilAdministrator;
-                //yield return Diplomat;
-                //yield return Kheshig;
-                //
             }
         }
 
@@ -208,7 +207,8 @@ namespace BannerKings.Managers.Education.Lifestyles
                 10f);
 
             Kheshig = new Lifestyle("lifestyle_kheshig");
-            Kheshig.Initialize(new TextObject("{=sccoC5ta}Kheshig"), new TextObject("{=!}"),
+            Kheshig.Initialize(new TextObject("{=sccoC5ta}Kheshig"), 
+                new TextObject("{=!}Kheshig is the way of life adopted by the eastern nomads, as an adaptation to the harsh steppe life. Kheshig travel in large groups of mounted warriors, often with many spare horses and cattle heads. These feed the horde with dairy and meat. They are known for expert mounted archery skirmishing, and merciless raiding. Yet, Kheshig have a profound sense of respect to those born in the steppes, and find honor in serving a strong leader."),
                 DefaultSkills.Riding, 
                 DefaultSkills.Bow, 
                 new List<PerkObject>
@@ -217,9 +217,9 @@ namespace BannerKings.Managers.Education.Lifestyles
                     BKPerks.Instance.KheshigOutrider,
                     BKPerks.Instance.KheshigHonorGuard
                 },
-                new TextObject("{=mAta6M84}Reduced demesne weight of towns by {EFFECT1}%\nSettlement stability reduced by {EFFECT2}%"),
-                20f, 
-                8f);
+                new TextObject("{=!}Party size increased by {EFFECT1}%\nNon-Khuzait troops negatively affect morale by {EFFECT2}%"),
+                15f, 
+                0.5f);
 
             Varyag = new Lifestyle("lifestyle_varyag");
             Varyag.Initialize(new TextObject("{=4pYayWGi}Varyag"), 

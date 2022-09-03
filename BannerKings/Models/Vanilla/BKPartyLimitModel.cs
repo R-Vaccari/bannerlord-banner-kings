@@ -39,15 +39,21 @@ namespace BannerKings.Models.Vanilla
                     baseResult.AddFactor(-0.4f, DefaultStartOptions.Instance.Gladiator.Name);
                 }
 
-                if (data.Lifestyle != null && data.Lifestyle.Equals(DefaultLifestyles.Instance.CivilAdministrator))
+                if (data.Lifestyle != null)
                 {
-                    baseResult.AddFactor(-0.15f, DefaultLifestyles.Instance.CivilAdministrator.Name);
+                    if (data.Lifestyle.Equals(DefaultLifestyles.Instance.CivilAdministrator))
+                    {
+                        baseResult.AddFactor(-0.15f, DefaultLifestyles.Instance.CivilAdministrator.Name);
+                    }
+
+                    if (data.Lifestyle.Equals(DefaultLifestyles.Instance.Kheshig))
+                    {
+                        baseResult.AddFactor(0.15f, DefaultLifestyles.Instance.Kheshig.Name);
+                    }
                 }
             }
 
-
-            if (BannerKingsConfig.Instance.PopulationManager != null &&
-                BannerKingsConfig.Instance.PopulationManager.IsPopulationParty(party.MobileParty))
+            if (BannerKingsConfig.Instance.PopulationManager.IsPopulationParty(party.MobileParty))
             {
                 if (party.MobileParty.PartyComponent is PopulationPartyComponent)
                 {

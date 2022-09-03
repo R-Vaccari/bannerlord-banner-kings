@@ -1,5 +1,6 @@
 ﻿using BannerKings.Behaviours;
 using BannerKings.Managers.CampaignStart;
+using BannerKings.Managers.Education.Lifestyles;
 using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Skills;
 using TaleWorlds.CampaignSystem;
@@ -50,6 +51,21 @@ namespace BannerKings.Models.Vanilla
 
                     result.Add(10f * (vlandians / (float)mobileParty.MemberRoster.Count), 
                         DefaultDivinities.Instance.VlandiaSecondary2.Name);
+                }
+
+                if (data.Lifestyle != null && data.Lifestyle.Equals(DefaultLifestyles.Instance.Kheshig))
+                {
+                    float nonKhuzaits = 0;
+
+                    foreach (var element in mobileParty.MemberRoster.GetTroopRoster())
+                    {
+                        if (element.Character.Culture != null && element.Character.Culture.StringId != "khuzait")
+                        {
+                            nonKhuzaits += element.Number;
+                        }
+                    }
+
+                    result.Add(nonKhuzaits * -0.05f, DefaultLifestyles.Instance.Kheshig.Name);
                 }
             }
 

@@ -113,11 +113,11 @@ namespace BannerKings.Managers.Skills
 
         #region Kheshig
 
-        public PerkObject KheshigKhorchin { get; }
+        public PerkObject KheshigRaider { get; private set; }
 
-        public PerkObject KheshigTorguud { get; }
+        public PerkObject KheshigOutrider { get; private set; }
 
-        public PerkObject KheshigKhevtuul { get; }
+        public PerkObject KheshigHonorGuard { get; private set; }
 
         #endregion Kheshig
 
@@ -291,6 +291,43 @@ namespace BannerKings.Managers.Skills
                 SkillEffect.EffectIncrementType.AddFactor);
 
             #endregion Fian
+
+            #region Kheshig
+
+            KheshigRaider = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleKheshigRaider"));
+            KheshigRaider.InitializeNew("{=!}Raider", null,
+                80,
+                null,
+                "{=!}Cattle heads reduce party food consumption while party is on plains or steppes.",
+                SkillEffect.PerkRole.Personal, 0.05f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                "{=PawhUHjG}Raiding villages is 15% faster.",
+                SkillEffect.PerkRole.Personal, 0.03f,
+                SkillEffect.EffectIncrementType.AddFactor);
+
+            KheshigOutrider = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleKheshigOutrider"));
+            KheshigOutrider.InitializeNew("{=!}Outrider", null,
+                160,
+                null,
+                "{=!}Increase your and your formation's mount speed by 5%.",
+                SkillEffect.PerkRole.Personal, 0.05f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                "{=!}Increase your and your formation's mounted archery damage by 5%.",
+                SkillEffect.PerkRole.Personal, 0.03f,
+                SkillEffect.EffectIncrementType.AddFactor);
+
+            KheshigHonorGuard = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleKheshigHonorGuard"));
+            KheshigHonorGuard.InitializeNew("{=!}Honor Guard", null,
+                240,
+                null,
+                "{=!}Gain 30% more influence for army participation.",
+                SkillEffect.PerkRole.Personal, 0.05f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                "{=!}Increase recruitment level with notables by 1.",
+                SkillEffect.PerkRole.Personal, 0.03f,
+                SkillEffect.EffectIncrementType.AddFactor);
+
+            #endregion Kheshig
 
             #region Civil
 

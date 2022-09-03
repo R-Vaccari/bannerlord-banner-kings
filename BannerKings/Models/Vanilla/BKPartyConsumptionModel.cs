@@ -3,6 +3,7 @@ using BannerKings.Managers.Skills;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Party;
+using TaleWorlds.Core;
 
 namespace BannerKings.Models.Vanilla
 {
@@ -11,25 +12,39 @@ namespace BannerKings.Models.Vanilla
         public override ExplainedNumber CalculateDailyFoodConsumptionf(MobileParty party, ExplainedNumber baseConsumption)
         {
             var result = base.CalculateDailyFoodConsumptionf(party, baseConsumption);
-            if (party.Army != null && party.SiegeEvent != null)
+            var leader = party.LeaderHero;
+
+            if (leader != null)
             {
-                var leader = party.Army.LeaderParty.LeaderHero;
-                if (leader != null)
+                var data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(leader);
+                var faceTerrainType = Campaign.Current.MapSceneWrapper.GetFaceTerrainType(party.CurrentNavigationFace);
+
+                if (data.HasPerk(BKPerks.Instance.KheshigRaider) && faceTerrainType == TerrainType.Plain ||
+                       faceTerrainType == TerrainType.Steppe)
                 {
-                    var data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(leader);
-                    if (data.HasPerk(BKPerks.Instance.SiegeOverseer))
+                    var cow = Game.Current.ObjectManager.GetObject<ItemObject>("cow");
+                    int cattleHeads = party.ItemRoster.GetItemNumber(cow);
+
+                    result.Add(cattleHeads * -0.06f, BKPerks.Instance.KheshigRaider.Name);
+                }
+
+                if (party.Army != null && party.SiegeEvent != null)
+                {
+                    var armyLeader = party.Army.LeaderParty.LeaderHero;
+                    var armyEducation = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(armyLeader);
+                    if (armyEducation.HasPerk(BKPerks.Instance.SiegeOverseer))
                     {
                         result.AddFactor(-0.15f, BKPerks.Instance.SiegeOverseer.Name);
                     }
 
-                    var faceTerrainType = Campaign.Current.MapSceneWrapper.GetFaceTerrainType(party.CurrentNavigationFace);
-                    if (faceTerrainType == TaleWorlds.Core.TerrainType.Desert && data.Lifestyle != null &&
-                        data.Lifestyle.Equals(DefaultLifestyles.Instance.Jawwal))
+                    if (faceTerrainType == TerrainType.Desert && armyEducation.Lifestyle != null &&
+                        armyEducation.Lifestyle.Equals(DefaultLifestyles.Instance.Jawwal))
                     {
                         result.AddFactor(-0.3f, DefaultLifestyles.Instance.Jawwal.Name);
                     }
                 }
             }
+
 
             return result;
         }
