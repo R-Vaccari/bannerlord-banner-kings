@@ -209,13 +209,13 @@ namespace BannerKings.Managers.Education.Lifestyles
 
             Kheshig = new Lifestyle("lifestyle_kheshig");
             Kheshig.Initialize(new TextObject("{=sccoC5ta}Kheshig"), new TextObject("{=!}"),
-                DefaultSkills.Leadership, 
-                DefaultSkills.Roguery, 
+                DefaultSkills.Riding, 
+                DefaultSkills.Bow, 
                 new List<PerkObject>
                 {
-                    BKPerks.Instance.KheshigKhorchin, 
-                    BKPerks.Instance.KheshigTorguud,
-                    BKPerks.Instance.KheshigKhevtuul
+                    BKPerks.Instance.KheshigRaider, 
+                    BKPerks.Instance.KheshigOutrider,
+                    BKPerks.Instance.KheshigHonorGuard
                 },
                 new TextObject("{=mAta6M84}Reduced demesne weight of towns by {EFFECT1}%\nSettlement stability reduced by {EFFECT2}%"),
                 20f, 

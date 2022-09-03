@@ -85,6 +85,11 @@ namespace BannerKings.Models.Vanilla
                     {
                         agentDrivenProperties.MountSpeed *= 1.08f;
                     }
+
+                    if (agent.HasMount && data.HasPerk(BKPerks.Instance.KheshigOutrider))
+                    {
+                        agentDrivenProperties.MountSpeed *= 1.05f;
+                    }
                 } 
                 else 
                 {

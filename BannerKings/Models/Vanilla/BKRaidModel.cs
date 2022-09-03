@@ -36,6 +36,11 @@ namespace BannerKings.Models.Vanilla
                 {
                     result += (reference * 1.15f - reference);
                 }
+
+                if (education.HasPerk(BKPerks.Instance.KheshigRaider))
+                {
+                    result *= 1.15f;
+                }
             }
 
             var settlement = attackerSide.MapEvent.MapEventSettlement;

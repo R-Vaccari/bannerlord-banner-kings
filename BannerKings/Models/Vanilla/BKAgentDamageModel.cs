@@ -50,28 +50,40 @@ namespace BannerKings.Models.Vanilla
                         }
                     }
 
-                    if (!aggressor.IsMounted)
+                    if (data.Lifestyle != null && data.HasPerk(BKPerks.Instance.KheshigOutrider))
                     {
-
-                        if (agressorUsage.WeaponClass == WeaponClass.TwoHandedSword && 
-                            data.HasPerk(BKPerks.Instance.FianHighlander))
+                        if(aggressor.IsMounted && agressorUsage.RelevantSkill == DefaultSkills.Bow)
                         {
-                            baseResult *= 1.04f;
-                        }
-
-                        if (data.HasPerk(BKPerks.Instance.VaryagDrengr))
-                        {
-                            baseResult *= 1.1f;
-                        }
-                    } 
-                    else
-                    {
-                        if (agressorUsage.RelevantSkill == DefaultSkills.Throwing && 
-                            data.HasPerk(BKPerks.Instance.JawwalCamelMaster))
-                        {
-                            baseResult *= 1.1f;
+                            baseResult *= 1.05f;
                         }
                     }
+
+                    if (data.Lifestyle != null && data.Lifestyle == DefaultLifestyles.Instance.Ritter)
+                    {
+                        if (!aggressor.IsMounted)
+                        {
+
+                            if (agressorUsage.WeaponClass == WeaponClass.TwoHandedSword && 
+                                data.HasPerk(BKPerks.Instance.FianHighlander))
+                            {
+                                baseResult *= 1.04f;
+                            }
+
+                            if (data.HasPerk(BKPerks.Instance.VaryagDrengr))
+                            {
+                                baseResult *= 1.1f;
+                            }
+                        } 
+                        else
+                        {
+                            if (agressorUsage.RelevantSkill == DefaultSkills.Throwing && 
+                                data.HasPerk(BKPerks.Instance.JawwalCamelMaster))
+                            {
+                                baseResult *= 1.1f;
+                            }
+                        }
+                    }
+                    
 
                     if (data.Lifestyle != null)
                     {

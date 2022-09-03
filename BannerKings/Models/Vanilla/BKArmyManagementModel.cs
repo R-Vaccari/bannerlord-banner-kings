@@ -55,6 +55,11 @@ namespace BannerKings.Models.Vanilla
                 {
                     result *= 1.3f;
                 }
+
+                if(education.HasPerk(BKPerks.Instance.KheshigHonorGuard))
+                {
+                    result *= 1.3f;
+                }
             }
 
             return result;

@@ -25,7 +25,18 @@ namespace BannerKings.Models.Vanilla
                 }
             }
 
-            return result;
+            // NEED LOGIC TO LIMIT SELLER TO KHUZAIT
+            if (sellerHero != null && buyerHero != null)
+            {
+                var data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(buyerHero);
+
+                if (data.HasPerk(BKPerks.Instance.KheshigHonorGuard))
+                {
+                    return result + 1 > 6 ? 6 : result + 1;
+                }
+            }
+
+                return result;
         }
     }
 }
