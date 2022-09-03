@@ -1,0 +1,186 @@
+<Prefab>
+	<Variables>
+	</Variables>
+	<Constants>
+		<Constant Name="Popup.CloseButton.Width" BrushLayer="Default" BrushName="Popup.CloseButton" BrushValueType="Width" />
+		<Constant Name="Popup.CloseButton.Height" BrushLayer="Default" BrushName="Popup.CloseButton" BrushValueType="Height" />
+	</Constants>
+	<Parameters>
+	</Parameters>
+	<VisualDefinitions>
+	</VisualDefinitions>
+	<Window>
+		<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" IsActive="true"
+		        Sprite="BlankWhiteSquare_9" Color="#00000088">
+			<Children>
+				<Widget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="650" SuggestedHeight="600"
+				        HorizontalAlignment="Center" VerticalAlignment="Center" Sprite="BlankWhiteSquare_9" Color="#39291eFF">
+					<Children>
+						<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" DoNotAcceptEvents="true">
+							<Children>
+								<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent"
+								           StackLayout.LayoutMethod="VerticalBottomToTop" DoNotAcceptEvents="true">
+									<Children>
+
+
+										<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
+										           StackLayout.LayoutMethod="HorizontalLeftToRight" MarginTop="20" DoNotAcceptEvents="true">
+											<Children>
+												<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
+												           StackLayout.LayoutMethod="VerticalBottomToTop" DoNotAcceptEvents="true">
+													<Children>
+
+														<Widget WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" SuggestedHeight="110" MarginTop="20"
+														        HorizontalAlignment="Center" Sprite="StdAssets\top_header">
+															<Children>
+																<ButtonWidget DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed"
+																              SuggestedWidth="170" SuggestedHeight="130" HorizontalAlignment="Center"
+																              VerticalAlignment="Center" Sprite="leader_slot_9" Command.Click="ExecuteLink"
+																              Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint">
+																	<Children>
+																		<!--Hero Clan Banner-->
+																		<!--<MaskedTextureWidget DataSource="{ClanBanner_9}" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="!Banner.Width.Scaled" SuggestedHeight="!Banner.Height.Scaled" HorizontalAlignment="Right" VerticalAlignment="Top" PositionYOffset="15" Brush="Flat.Tuple.Banner.Small.Hero" AdditionalArgs="@AdditionalArgs" ImageId="@Id" ImageTypeCode="@ImageTypeCode" IsDisabled="true" OverlayTextureScale="2.2" />-->
+
+																		<ImageIdentifierWidget DataSource="{GuildMaster}" WidthSizePolicy="StretchToParent"
+																			HeightSizePolicy="StretchToParent" SuggestedHeight="100" MarginLeft="17" MarginRight="18"
+																			MarginTop="17" MarginBottom="18" AdditionalArgs="@AdditionalArgs" ImageId="@Id"
+																			ImageTypeCode="@ImageTypeCode" />
+																	</Children>
+																</ButtonWidget>
+
+																<Widget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="180" SuggestedHeight="140"
+																        Sprite="frame_9" HorizontalAlignment="Center" VerticalAlignment="Center" ExtendLeft="10"
+																        ExtendRight="10" ExtendBottom="0" IsEnabled="false" />
+															</Children>
+														</Widget>
+
+														<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
+														                HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="26"
+														                Text="@GuildMasterName" MarginTop="15" />
+
+
+														<GridWidget DataSource="{GuildInfo}" WidthSizePolicy="CoverChildren" HorizontalAlignment="Center"
+														            HeightSizePolicy="CoverChildren" DefaultCellWidth="150" DefaultCellHeight="30"
+														            MarginRight="100" ColumnCount="1" MarginTop="10">
+															<ItemTemplate>
+																<InformationElement />
+															</ItemTemplate>
+														</GridWidget>
+
+													</Children>
+												</ListPanel>
+
+												<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
+												           StackLayout.LayoutMethod="VerticalBottomToTop">
+													<Children>
+
+														<ButtonWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedHeight="48" SuggestedWidth="200"
+														              MarginTop="15" HorizontalAlignment="Center" VerticalAlignment="Top" Brush="ButtonBrush2"
+														              Command.Click="OnUsurpPress" IsEnabled="@UsurpEnabled">
+															<Children>
+																<HintWidget DataSource="{UsurpHint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
+																            HorizontalAlignment="Center" Command.HoverBegin="ExecuteBeginHint"
+																            Command.HoverEnd="ExecuteEndHint" />
+																<RichTextWidget DoNotAcceptEvents="true" WidthSizePolicy="CoverChildren"
+																	HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center"
+																	Brush="OverlayPopup.ButtonText" Brush.FontSize="20" Text="Usurp Title" />
+															</Children>
+														</ButtonWidget>
+
+														<ButtonWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedHeight="48" SuggestedWidth="200"
+														              MarginTop="10" HorizontalAlignment="Center" VerticalAlignment="Top" Brush="ButtonBrush2"
+														              Command.Click="OnDuchyUsurpPress" IsEnabled="@UsurpDuchyEnabled">
+															<Children>
+																<HintWidget DataSource="{UsurpDuchyHint}" WidthSizePolicy="StretchToParent"
+																            HeightSizePolicy="CoverChildren" HorizontalAlignment="Center"
+																            Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" />
+																<RichTextWidget DoNotAcceptEvents="true" WidthSizePolicy="CoverChildren"
+																	HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center"
+																	Brush="OverlayPopup.ButtonText" Brush.FontSize="20" Text="Usurp Duchy" />
+															</Children>
+														</ButtonWidget>
+
+														<ButtonWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedHeight="48" SuggestedWidth="200"
+														              MarginTop="10" HorizontalAlignment="Center" VerticalAlignment="Top" Brush="ButtonBrush2"
+														              Command.Click="OnSuzerainPress">
+															<Children>
+																<HintWidget DataSource="{ManumissionButtonHint}" WidthSizePolicy="StretchToParent"
+																            HeightSizePolicy="CoverChildren" HorizontalAlignment="Center"
+																            Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" />
+																<RichTextWidget DoNotAcceptEvents="true" WidthSizePolicy="CoverChildren"
+																	HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center"
+																	Brush="OverlayPopup.ButtonText" Brush.FontSize="20" Text="My Suzerain" />
+															</Children>
+														</ButtonWidget>
+
+														<ButtonWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedHeight="48" SuggestedWidth="200"
+														              MarginTop="10" HorizontalAlignment="Center" VerticalAlignment="Top" Brush="ButtonBrush2"
+														              Command.Click="OnVassalsPress">
+															<Children>
+																<HintWidget DataSource="{ManumissionButtonHint}" WidthSizePolicy="StretchToParent"
+																            HeightSizePolicy="CoverChildren" HorizontalAlignment="Center"
+																            Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" />
+																<RichTextWidget DoNotAcceptEvents="true" WidthSizePolicy="CoverChildren"
+																	HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center"
+																	Brush="OverlayPopup.ButtonText" Brush.FontSize="20" Text="My Vassals" />
+															</Children>
+														</ButtonWidget>
+
+														<ButtonWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedHeight="48" SuggestedWidth="200"
+														              MarginTop="10" HorizontalAlignment="Center" VerticalAlignment="Top" Brush="ButtonBrush2"
+														              Command.Click="OnContractPress" IsEnabled="@ContractEnabled">
+															<Children>
+																<HintWidget DataSource="{ManumissionButtonHint}" WidthSizePolicy="StretchToParent"
+																            HeightSizePolicy="CoverChildren" HorizontalAlignment="Center"
+																            Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" />
+																<RichTextWidget DoNotAcceptEvents="true" WidthSizePolicy="CoverChildren"
+																	HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center"
+																	Brush="OverlayPopup.ButtonText" Brush.FontSize="20" Text="Review Contract" />
+															</Children>
+														</ButtonWidget>
+
+													</Children>
+												</ListPanel>
+											</Children>
+										</ListPanel>
+
+										<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed"
+										           StackLayout.LayoutMethod="HorizontalLeftToRight" MarginBottom="15" MarginTop="20" MarginLeft="10"
+										           MarginRight="20" DoNotAcceptEvents="true">
+											<Children>
+												<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" MarginLeft="5" MarginRight="5"
+												        SuggestedHeight="7" VerticalAlignment="Bottom" PositionYOffset="7"
+												        Sprite="SPGeneral\TownManagement\horizontal_divider" />
+												<RichTextWidget DoNotAcceptEvents="true" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren"
+												                HorizontalAlignment="Center" VerticalAlignment="Center" Brush="OverlayPopup.ButtonText"
+												                Brush.FontSize="25" Text="Members" />
+												<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" MarginLeft="5" MarginRight="5"
+												        SuggestedHeight="7" VerticalAlignment="Bottom" PositionYOffset="7"
+												        Sprite="SPGeneral\TownManagement\horizontal_divider" />
+											</Children>
+										</ListPanel>
+
+									</Children>
+								</ListPanel>
+							</Children>
+						</Widget>
+
+						<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="125"
+						        Sprite="StdAssets\Popup\canvas_gradient" IsEnabled="false" VerticalFlip="true" />
+						<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="475"
+						        Sprite="StdAssets\Popup\canvas_gradient" IsEnabled="false" MarginTop="125" />
+
+						<!--Frame Border-->
+						<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Sprite="frame_9" ExtendLeft="18"
+						        ExtendTop="18" ExtendRight="18" ExtendBottom="18" IsEnabled="false" />
+					</Children>
+				</Widget>
+
+				<ButtonWidget Id="CloseButton" Command.Click="ExecuteClose" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed"
+				              SuggestedWidth="!Popup.CloseButton.Width" SuggestedHeight="!Popup.CloseButton.Height"
+				              HorizontalAlignment="Center" VerticalAlignment="Center" MarginLeft="650" MarginBottom="600"
+				              Brush="Popup.CloseButton" IsVisible="true" />
+			</Children>
+		</Widget>
+	</Window>
+</Prefab>

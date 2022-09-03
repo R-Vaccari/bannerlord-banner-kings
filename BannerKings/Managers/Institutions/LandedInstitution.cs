@@ -1,8 +1,8 @@
-﻿using TaleWorlds.CampaignSystem;
+﻿using TaleWorlds.CampaignSystem.Settlements;
 
 namespace BannerKings.Managers.Institutions
 {
-    public abstract class LandedInstitution
+    public abstract class LandedInstitution : Institution
     {
         protected Settlement settlement;
 
@@ -10,8 +10,6 @@ namespace BannerKings.Managers.Institutions
         {
             this.settlement = settlement;
         }
-
-        public abstract void Destroy();
 
         public Settlement Settlement => settlement;
     }

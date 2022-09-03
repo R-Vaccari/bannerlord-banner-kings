@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <partyTemplates>
-    
-    <MBPartyTemplate id="populations_mercenary_generic_elite">
-        <stacks>
-            <PartyTemplateStack min_value="8" max_value="12" troop="NPCCharacter.mercenary_7" />
-            <PartyTemplateStack min_value="5" max_value="10" troop="NPCCharacter.mercenary_4" />
-            <PartyTemplateStack min_value="8" max_value="10" troop="NPCCharacter.mercenary_8" />
-            <PartyTemplateStack min_value="4" max_value="8" troop="NPCCharacter.mercenary_5" />
-            <PartyTemplateStack min_value="6" max_value="10" troop="NPCCharacter.mercenary_9" />
-            <PartyTemplateStack min_value="6" max_value="10" troop="NPCCharacter.mercenary_6" />
-        </stacks>
-    </MBPartyTemplate>
-    
+
+	<MBPartyTemplate id="populations_mercenary_generic_elite">
+		<stacks>
+			<PartyTemplateStack min_value="8" max_value="12" troop="NPCCharacter.mercenary_7" />
+			<PartyTemplateStack min_value="5" max_value="10" troop="NPCCharacter.mercenary_4" />
+			<PartyTemplateStack min_value="8" max_value="10" troop="NPCCharacter.mercenary_8" />
+			<PartyTemplateStack min_value="4" max_value="8" troop="NPCCharacter.mercenary_5" />
+			<PartyTemplateStack min_value="6" max_value="10" troop="NPCCharacter.mercenary_9" />
+			<PartyTemplateStack min_value="6" max_value="10" troop="NPCCharacter.mercenary_6" />
+		</stacks>
+	</MBPartyTemplate>
+
 </partyTemplates>

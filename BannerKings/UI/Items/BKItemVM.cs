@@ -1,18 +1,20 @@
-﻿using System;
-using TaleWorlds.Core.ViewModelCollection;
-using static BannerKings.Managers.PolicyManager;
+using System;
+using TaleWorlds.Core.ViewModelCollection.Information;
+using TaleWorlds.Core.ViewModelCollection.Selector;
+using TaleWorlds.Localization;
 
 namespace BannerKings.UI.Items
 {
     public class BKItemVM : SelectorItemVM
     {
-        public int value { get; private set; }
         public BKItemVM(Enum policy, bool isAvailable, string hint) : base("")
         {
-            this.value = (int)(object)policy;
-            base.StringItem = policy.ToString().Replace("_", " ");
-            base.CanBeSelected = isAvailable;
-            base.Hint = new HintViewModel(new TaleWorlds.Localization.TextObject(hint));
+            value = (int) (object) policy;
+            StringItem = policy.ToString().Replace("_", " ");
+            CanBeSelected = isAvailable;
+            Hint = new HintViewModel(new TextObject("{=!}" + hint));
         }
+
+        public int value { get; }
     }
 }

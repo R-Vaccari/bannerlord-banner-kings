@@ -1,46 +1,52 @@
-﻿using BannerKings.Managers.Policies;
+using BannerKings.Managers.Policies;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 
-namespace BannerKings.Models
+namespace BannerKings.Models.BKModels
 {
     public class BKAdministrativeModel : IBannerKingsModel
     {
-       
         public ExplainedNumber CalculateEffect(Settlement settlement)
         {
-            ExplainedNumber baseResult = new ExplainedNumber(0.12f, true);
+            var baseResult = new ExplainedNumber(0.12f, true);
             baseResult.LimitMin(0f);
 
-            Hero governor = settlement.IsVillage ? settlement.Village.MarketTown.Governor : settlement.Town.Governor;
+            var governor = settlement.IsVillage ? settlement.Village.Bound.Town.Governor : settlement.Town.Governor;
             if (governor != null)
             {
-                int skill = governor.GetSkillValue(DefaultSkills.Steward);
-                float effect = (float)skill * -0.0005f;
+                var skill = governor.GetSkillValue(DefaultSkills.Steward);
+                var effect = skill * -0.0005f;
                 if (effect > 0.20f)
+                {
                     effect = 0.20f;
-                baseResult.Add(effect, new TextObject("Governor stewardship"));
+                }
+
+                baseResult.Add(effect, new TextObject("{=PBzKaQYS}Governor stewardship"));
             }
 
 
-            BKWorkforcePolicy work = (BKWorkforcePolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(settlement, "workforce");
+            var work = (BKWorkforcePolicy) BannerKingsConfig.Instance.PolicyManager.GetPolicy(settlement, "workforce");
             if (work.Policy != BKWorkforcePolicy.WorkforcePolicy.None)
-                baseResult.Add(0.04f, new TextObject("Workforce policy"));
+            {
+                baseResult.Add(0.04f, new TextObject("{=MBHftZmv}Workforce policy"));
+            }
 
-            BKDraftPolicy draft = (BKDraftPolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(settlement, "draft");
+            var draft = (BKDraftPolicy) BannerKingsConfig.Instance.PolicyManager.GetPolicy(settlement, "draft");
             if (draft.Policy == BKDraftPolicy.DraftPolicy.Conscription)
-                baseResult.Add(0.04f, new TextObject("Conscription policy"));
+            {
+                baseResult.Add(0.04f, new TextObject("{=1aq83aPr}Conscription policy"));
+            }
 
-            BKGarrisonPolicy garrison = (BKGarrisonPolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(settlement, "garrison");
+            var garrison = (BKGarrisonPolicy) BannerKingsConfig.Instance.PolicyManager.GetPolicy(settlement, "garrison");
             if (garrison.Policy == BKGarrisonPolicy.GarrisonPolicy.Enlistment)
+            {
                 baseResult.Add(0.04f, new TextObject("Garrison policy"));
+            }
 
             float decisions = BannerKingsConfig.Instance.PolicyManager.GetActiveCostlyDecisionsNumber(settlement);
-            baseResult.Add(0.025f * decisions, new TextObject("{=!}Active decisions"));
-
-            baseResult.Add(BannerKingsConfig.Instance.CourtManager.GetCouncil(settlement.OwnerClan).AdministrativeCosts,
-                new TextObject("{=!}Council costs"));
+            baseResult.Add(0.025f * decisions, new TextObject("{=fBhajAND}Active decisions"));
 
             return baseResult;
         }

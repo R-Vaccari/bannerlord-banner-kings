@@ -1,0 +1,141 @@
+<Prefab>
+	<Constants>
+		<Constant Name="Clan.Header.Width" BrushLayer="Default" BrushName="Clan.Header" BrushValueType="Width" />
+		<Constant Name="Clan.Header.Height" BrushLayer="Default" BrushName="Clan.Header" BrushValueType="Height" />
+
+		<Constant Name="Clan.Management.Collapser.Width" BrushLayer="Default" BrushName="Clan.Management.Collapser"
+		          BrushValueType="Width" />
+		<Constant Name="Clan.Management.Collapser.Height" BrushLayer="Default" BrushName="Clan.Management.Collapser"
+		          BrushValueType="Height" />
+
+		<Constant Name="Clan.Management.LeftTuple.Width" BrushLayer="Default" BrushName="Clan.Management.LeftTuple"
+		          BrushValueType="Width" />
+		<Constant Name="Clan.Management.LeftTuple.Height" BrushLayer="Default" BrushName="Clan.Management.LeftTuple"
+		          BrushValueType="Height" />
+
+		<Constant Name="Clan.Management.LeftTupleLocked.Width" BrushLayer="Default"
+		          BrushName="Clan.Management.LeftTupleLocked" BrushValueType="Width" />
+		<Constant Name="Clan.Management.LeftTupleLocked.Height" BrushLayer="Default"
+		          BrushName="Clan.Management.LeftTupleLocked" BrushValueType="Height" />
+
+		<Constant Name="Scroll.Header.Width" BrushLayer="Default" BrushName="Scroll.Header" BrushValueType="Width" />
+		<Constant Name="Scroll.Header.Height" BrushLayer="Default" BrushName="Scroll.Header" BrushValueType="Height" />
+
+		<Constant Name="Popup.CloseButton.Width" BrushLayer="Default" BrushName="Popup.CloseButton" BrushValueType="Width" />
+		<Constant Name="Popup.CloseButton.Height" BrushLayer="Default" BrushName="Popup.CloseButton" BrushValueType="Height" />
+	</Constants>
+	<VisualDefinitions>
+		<VisualDefinition Name="LeftPanel" EaseIn="true" TransitionDuration="0.45">
+			<VisualState PositionXOffset="-27" State="Default" />
+		</VisualDefinition>
+		<VisualDefinition Name="RightPanel" EaseIn="true" TransitionDuration="0.45">
+			<VisualState PositionXOffset="0" State="Default" />
+		</VisualDefinition>
+	</VisualDefinitions>
+
+	<Window>
+		<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" IsVisible="@IsSelected"
+		        DoNotAcceptEvents="true">
+			<Children>
+				<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent"
+				           StackLayout.LayoutMethod="HorizontalLeftToRight" DoNotAcceptEvents="true">
+					<Children>
+						<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" SuggestedWidth="290"
+						           StackLayout.LayoutMethod="VerticalBottomToTop" DoNotAcceptEvents="true">
+							<Children>
+
+								<GridWidget Id="ClassesList" DataSource="{PopList}" WidthSizePolicy="CoverChildren"
+								            HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" DefaultCellWidth="100"
+								            DefaultCellHeight="25" MarginRight="80" ColumnCount="1" MarginTop="40">
+									<ItemTemplate>
+										<PopulationClassElement />
+									</ItemTemplate>
+								</GridWidget>
+
+								<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed"
+								           StackLayout.LayoutMethod="HorizontalLeftToRight" MarginBottom="15" MarginTop="30" MarginLeft="25"
+								           MarginRight="25" DoNotAcceptEvents="true">
+									<Children>
+										<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="7" MarginLeft="5"
+										        MarginRight="5" VerticalAlignment="Bottom" PositionYOffset="7"
+										        Sprite="SPGeneral\TownManagement\horizontal_divider" />
+										<RichTextWidget DoNotAcceptEvents="true" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren"
+										                HorizontalAlignment="Center" VerticalAlignment="Center" Brush="OverlayPopup.ButtonText"
+										                Brush.FontSize="20" Text="Population" />
+										<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="7" MarginLeft="5"
+										        MarginRight="5" VerticalAlignment="Bottom" PositionYOffset="7"
+										        Sprite="SPGeneral\TownManagement\horizontal_divider" />
+									</Children>
+								</ListPanel>
+
+								<GridWidget DataSource="{StatsInfo}" WidthSizePolicy="CoverChildren" HorizontalAlignment="Left" MarginLeft="50"
+								            HeightSizePolicy="CoverChildren" DefaultCellWidth="150" DefaultCellHeight="30" ColumnCount="1"
+								            MarginTop="25">
+									<ItemTemplate>
+										<InformationElement />
+									</ItemTemplate>
+								</GridWidget>
+
+								<!--<ListPanel WidthSizePolicy="Fixed" HeightSizePolicy="CoverChildren" SuggestedWidth="320" StackLayout.LayoutMethod="HorizontalLeftToRight" MaxHeight="645" MarginTop="20">
+						<Children>
+							<Widget DataSource="{ForeignerToogle}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" VerticalAlignment="Center" UpdateChildrenStates="true" MarginTop="5" MarginBottom="5" MarginLeft="20" MarginRight="20" >
+								<Children>
+									<HintWidget DataSource="{Hint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" />	
+									<RichTextWidget DoNotAcceptEvents="true" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" SuggestedHeight="40" MarginRight="80" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="Encyclopedia.SubPage.Info.Text" Brush.FontSize="20" Text="@Description" />
+									<ButtonWidget  DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="30" SuggestedHeight="30" MarginLeft="35" Brush="SPOptions.Checkbox.Empty.Button" ButtonType="Toggle" IsSelected="@OptionValueAsBoolean" ToggleIndicator="ToggleIndicator" UpdateChildrenStates="true" HorizontalAlignment="Right" VerticalAlignment="Center">
+										<Children>
+											<ImageWidget Id="ToggleIndicator" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Brush="SPOptions.Checkbox.Full.Button" />
+										</Children>
+									</ButtonWidget>
+								</Children>
+							</Widget>
+						</Children>
+					</ListPanel> -->
+
+							</Children>
+						</ListPanel>
+
+						<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
+						           StackLayout.LayoutMethod="VerticalBottomToTop" MaxHeight="645">
+							<Children>
+
+								<GridWidget DataSource="{CultureList}" WidthSizePolicy="CoverChildren" HorizontalAlignment="Center"
+								            HeightSizePolicy="CoverChildren" DefaultCellWidth="100" DefaultCellHeight="25" MarginRight="80"
+								            ColumnCount="1" MarginTop="40">
+									<ItemTemplate>
+										<CultureElement />
+									</ItemTemplate>
+								</GridWidget>
+
+								<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed"
+								           StackLayout.LayoutMethod="HorizontalLeftToRight" MarginBottom="15" MarginTop="25" MarginLeft="25"
+								           MarginRight="25" DoNotAcceptEvents="true">
+									<Children>
+										<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="7" MarginLeft="5"
+										        MarginRight="5" VerticalAlignment="Bottom" PositionYOffset="7"
+										        Sprite="SPGeneral\TownManagement\horizontal_divider" />
+										<RichTextWidget DoNotAcceptEvents="true" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren"
+										                HorizontalAlignment="Center" VerticalAlignment="Center" Brush="OverlayPopup.ButtonText"
+										                Brush.FontSize="20" Text="Culture" />
+										<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="7" MarginLeft="5"
+										        MarginRight="5" VerticalAlignment="Bottom" PositionYOffset="7"
+										        Sprite="SPGeneral\TownManagement\horizontal_divider" />
+									</Children>
+								</ListPanel>
+
+								<GridWidget DataSource="{CultureInfo}" WidthSizePolicy="CoverChildren" HorizontalAlignment="Center"
+								            HeightSizePolicy="CoverChildren" DefaultCellWidth="150" DefaultCellHeight="30" MarginRight="85"
+								            ColumnCount="1" MarginTop="25">
+									<ItemTemplate>
+										<InformationElement />
+									</ItemTemplate>
+								</GridWidget>
+
+							</Children>
+						</ListPanel>
+					</Children>
+				</ListPanel>
+			</Children>
+		</Widget>
+	</Window>
+</Prefab>

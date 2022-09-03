@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LanguageData id="Deutsch" name="Deutsch" subtitle_extension="de" supported_iso="de,deu,ger,de-de,de-at,de-li,de-lu,de-ch" under_development="false">
+	<LanguageFile xml_path="DE/std_module_strings_xml.xml" />
+	<LanguageFile xml_path="DE/common_strings.xml" />
+</LanguageData>

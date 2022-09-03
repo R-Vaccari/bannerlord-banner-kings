@@ -1,15 +1,14 @@
-﻿using BannerKings.Managers.Policies;
-using BannerKings.Populations;
+﻿using System;
+using BannerKings.Managers.Policies;
+using BannerKings.Managers.Populations;
 using BannerKings.UI.Items;
-using System;
-using TaleWorlds.Core.ViewModelCollection;
+using TaleWorlds.Core.ViewModelCollection.Selector;
 using TaleWorlds.Library;
 
 namespace BannerKings.UI
 {
     public class BannerKingsViewModel : ViewModel
     {
-
         protected PopulationData data;
         protected bool selected;
 
@@ -19,46 +18,59 @@ namespace BannerKings.UI
             this.selected = selected;
         }
 
-        protected string FormatValue(float value) => (value * 100f).ToString("0.00") + '%';
-        protected string FormatDays(float value) => (value).ToString("0");
-        protected SelectorVM<BKItemVM> GetSelector(BannerKingsPolicy policy, Action<SelectorVM<BKItemVM>> action)
-        {
-            SelectorVM<BKItemVM> selector = new SelectorVM<BKItemVM>(0, new Action<SelectorVM<BKItemVM>>(action));
-            selector.SetOnChangeAction(null);
-            int i = 0;
-            foreach (Enum enumValue in policy.GetPolicies())
-            {
-                BKItemVM item = new BKItemVM(enumValue, true, policy.GetHint(i));
-                selector.AddItem(item);
-                i++;
-            }
+        [DataSourceProperty] public bool HasTown => !IsVillage;
 
-            
-            return selector;
-        }
+        [DataSourceProperty] public bool IsVillage => data != null && data.Settlement.IsVillage;
 
-        [DataSourceProperty]
-        public bool HasTown => !this.IsVillage;
-
-        [DataSourceProperty]
-        public bool IsVillage => this.data.Settlement.IsVillage;
-        
 
         [DataSourceProperty]
         public bool IsSelected
         {
-            get => this.selected;
+            get => selected;
             set
             {
-                if (value != this.selected)
+                if (value != selected)
                 {
-                    this.selected = value;
-                    if (value) this.RefreshValues();
-                    base.OnPropertyChangedWithValue(value, "IsSelected");
+                    selected = value;
+                    if (value)
+                    {
+                        RefreshValues();
+                    }
+
+                    OnPropertyChangedWithValue(value);
                 }
             }
         }
 
-        public void ExecuteClose() => UIManager.Instance.CloseUI();
+        protected string FormatValue(float value)
+        {
+            return (value * 100f).ToString("0.00") + '%';
+        }
+
+        protected string FormatDays(float value)
+        {
+            return value.ToString("0");
+        }
+
+        protected SelectorVM<BKItemVM> GetSelector(BannerKingsPolicy policy, Action<SelectorVM<BKItemVM>> action)
+        {
+            var selector = new SelectorVM<BKItemVM>(0, action);
+            selector.SetOnChangeAction(null);
+            var i = 0;
+            foreach (var enumValue in policy.GetPolicies())
+            {
+                var item = new BKItemVM(enumValue, true, policy.GetHint(i));
+                selector.AddItem(item);
+                i++;
+            }
+
+
+            return selector;
+        }
+
+        public void ExecuteClose()
+        {
+            UIManager.Instance.CloseUI();
+        }
     }
 }

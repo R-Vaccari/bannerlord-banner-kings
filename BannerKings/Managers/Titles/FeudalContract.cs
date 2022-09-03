@@ -5,39 +5,48 @@ namespace BannerKings.Managers.Titles
 {
     public class FeudalContract
     {
-        [SaveableProperty(1)]
-        public Dictionary<FeudalDuties, float> Duties { get; private set; }
-
-        [SaveableProperty(2)]
-        public List<FeudalRights> Rights { get; private set; }
-
-        [SaveableProperty(3)]
-        public GovernmentType Government { get; private set; }
-
-        [SaveableProperty(4)]
-        public SuccessionType Succession { get; private set; }
-
-        [SaveableProperty(5)]
-        public InheritanceType Inheritance { get; private set; }
-
-        [SaveableProperty(6)]
-        public GenderLaw GenderLaw { get; private set; }
-
         public FeudalContract(Dictionary<FeudalDuties, float> duties, List<FeudalRights> rights, GovernmentType government,
             SuccessionType succession, InheritanceType inheritance, GenderLaw genderLaw)
         {
-            this.Duties = duties;
-            this.Rights = rights;
-            this.Government = government;
-            this.Succession = succession;
-            this.Inheritance = inheritance;
-            this.GenderLaw = genderLaw;
+            Duties = duties;
+            Rights = rights;
+            Government = government;
+            Succession = succession;
+            Inheritance = inheritance;
+            GenderLaw = genderLaw;
         }
 
-        public void ChangeGovernment(GovernmentType governmentType) => this.Government = governmentType;
-        public void ChangeSuccession(SuccessionType successionType) => this.Succession = successionType;
-        public void ChangeInheritance(InheritanceType inheritanceType) => this.Inheritance = inheritanceType;
-        public void ChangeGenderLaw(GenderLaw genderLaw) => this.GenderLaw = genderLaw;
+        [SaveableProperty(1)] public Dictionary<FeudalDuties, float> Duties { get; set; }
+
+        [SaveableProperty(2)] public List<FeudalRights> Rights { get; set; }
+
+        [SaveableProperty(3)] public GovernmentType Government { get; private set; }
+
+        [SaveableProperty(4)] public SuccessionType Succession { get; private set; }
+
+        [SaveableProperty(5)] public InheritanceType Inheritance { get; private set; }
+
+        [SaveableProperty(6)] public GenderLaw GenderLaw { get; private set; }
+
+        public void ChangeGovernment(GovernmentType governmentType)
+        {
+            Government = governmentType;
+        }
+
+        public void ChangeSuccession(SuccessionType successionType)
+        {
+            Succession = successionType;
+        }
+
+        public void ChangeInheritance(InheritanceType inheritanceType)
+        {
+            Inheritance = inheritanceType;
+        }
+
+        public void ChangeGenderLaw(GenderLaw genderLaw)
+        {
+            GenderLaw = genderLaw;
+        }
     }
 
     public enum FeudalDuties

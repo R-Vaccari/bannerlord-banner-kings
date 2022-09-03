@@ -1,27 +1,38 @@
 <Prefab>
-  <Parameters>
-    <Parameter Name="ElementDataSource" DefaultValue="ElementDataSource" />
-    <Parameter Name="IsBig" DefaultValue="false" />
-  </Parameters>
-  <Constants>
-    <Constant Name="Encyclopedia.SubPage.Element.Width" BrushName="Encyclopedia.SubPage.Element" BrushLayer="Default" BrushValueType="Width"/>
-    <Constant Name="Encyclopedia.SubPage.Element.Height" BrushName="Encyclopedia.SubPage.Element" BrushLayer="Default" BrushValueType="Height"/>
-  </Constants>
-  <Window>
-	<Widget WidthSizePolicy="Fixed" HeightSizePolicy="CoverChildren" SuggestedWidth="300" VerticalAlignment="Center" UpdateChildrenStates="true" MarginTop="12" MarginBottom="5" MarginLeft="20" MarginRight="20" >
-		<Children>
-			<ListPanel WidthSizePolicy="Fixed" HeightSizePolicy="CoverChildren" SuggestedWidth="320" StackLayout.LayoutMethod="HorizontalLeftToRight" MaxHeight="645" MarginTop="20">
-				<Children>
-					<HintWidget DataSource="{Hint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" />	
-					<RichTextWidget DoNotAcceptEvents="true" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" SuggestedHeight="40" MarginRight="80" HorizontalAlignment="Left" VerticalAlignment="Center" Brush="Encyclopedia.SubPage.Info.Text" Brush.FontSize="20" Text="@Description" />
-					<ButtonWidget  DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="30" SuggestedHeight="30" MarginLeft="35" Brush="SPOptions.Checkbox.Empty.Button" ButtonType="Toggle" IsSelected="@OptionValueAsBoolean" ToggleIndicator="ToggleIndicator" UpdateChildrenStates="true" HorizontalAlignment="Right" VerticalAlignment="Center">
-						<Children>
-							<ImageWidget Id="ToggleIndicator" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Brush="SPOptions.Checkbox.Full.Button" />
-						</Children>
-					</ButtonWidget>
-				</Children>
-			</ListPanel>
-		</Children>
-	</Widget>
-  </Window>
+	<Parameters>
+		<Parameter Name="ElementDataSource" DefaultValue="ElementDataSource" />
+		<Parameter Name="IsBig" DefaultValue="false" />
+	</Parameters>
+	<Constants>
+		<Constant Name="Encyclopedia.SubPage.Element.Width" BrushName="Encyclopedia.SubPage.Element" BrushLayer="Default"
+		          BrushValueType="Width" />
+		<Constant Name="Encyclopedia.SubPage.Element.Height" BrushName="Encyclopedia.SubPage.Element" BrushLayer="Default"
+		          BrushValueType="Height" />
+	</Constants>
+	<Window>
+		<Widget WidthSizePolicy="Fixed" HeightSizePolicy="CoverChildren" SuggestedWidth="300" VerticalAlignment="Center"
+		        UpdateChildrenStates="true" MarginTop="12" MarginBottom="5" MarginLeft="20" MarginRight="20">
+			<Children>
+				<ListPanel WidthSizePolicy="Fixed" HeightSizePolicy="CoverChildren" SuggestedWidth="320"
+				           StackLayout.LayoutMethod="HorizontalLeftToRight" MaxHeight="645" MarginTop="20">
+					<Children>
+						<HintWidget DataSource="{Hint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
+						            HorizontalAlignment="Center" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" />
+						<RichTextWidget DoNotAcceptEvents="true" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren"
+						                SuggestedHeight="40" MarginRight="80" HorizontalAlignment="Left" VerticalAlignment="Center"
+						                Brush="Encyclopedia.SubPage.Info.Text" Brush.FontSize="20" Text="@Description" />
+						<ButtonWidget DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed"
+						              SuggestedWidth="30" SuggestedHeight="30" MarginLeft="35" Brush="SPOptions.Checkbox.Empty.Button"
+						              ButtonType="Toggle" IsSelected="@OptionValueAsBoolean" ToggleIndicator="ToggleIndicator"
+						              UpdateChildrenStates="true" HorizontalAlignment="Right" VerticalAlignment="Center">
+							<Children>
+								<ImageWidget Id="ToggleIndicator" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent"
+								             Brush="SPOptions.Checkbox.Full.Button" />
+							</Children>
+						</ButtonWidget>
+					</Children>
+				</ListPanel>
+			</Children>
+		</Widget>
+	</Window>
 </Prefab>

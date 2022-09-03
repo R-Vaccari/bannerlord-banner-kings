@@ -1,22 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Titles
 {
-    public class TitleAction
+    public class TitleAction : BannerKingsAction
     {
-        public bool Possible { get; set; }
-        public TextObject Reason { get; set; }
-        public float Gold { get; set; }
-        public float Influence { get; set; }
-        public float Renown { get; set; }
-        public ActionType Type { get; private set; }
-        public FeudalTitle Title { get; private set; }
-        public List<FeudalTitle> Vassals { get; private set; }
-        public Hero ActionTaker { get; private set; }
-
         public TitleAction(ActionType type, FeudalTitle title, Hero actionTaker)
         {
             Type = type;
@@ -25,23 +13,55 @@ namespace BannerKings.Managers.Titles
             Vassals = new List<FeudalTitle>();
         }
 
-        public void SetTile(FeudalTitle title) => Title = title;
+        public float Gold { get; set; }
+        public float Renown { get; set; }
+        public ActionType Type { get; }
+        public FeudalTitle Title { get; private set; }
+        public List<FeudalTitle> Vassals { get; private set; }
 
-        public void SetVassals(List<FeudalTitle> vassals) => Vassals = vassals;
-
-        public void TakeAction(Hero receiver)
+        public bool IsHostile()
         {
-            if (!Possible) return;
+            return Type is ActionType.Usurp or ActionType.Claim or ActionType.Revoke;
+        }
 
-            if (Type == ActionType.Usurp)
-                BannerKingsConfig.Instance.TitleManager.UsurpTitle(this.Title.deJure, this);
-            else if (Type == ActionType.Claim)
-                BannerKingsConfig.Instance.TitleManager.AddOngoingClaim(this);
-            else if (Type == ActionType.Revoke)
-                BannerKingsConfig.Instance.TitleManager.RevokeTitle(this);
-            else if (Type == ActionType.Found)
-                BannerKingsConfig.Instance.TitleManager.FoundKingdom(this);
-            else BannerKingsConfig.Instance.TitleManager.GrantTitle(receiver, this.ActionTaker, this.Title, this.Influence);
+        public void SetTile(FeudalTitle title)
+        {
+            Title = title;
+        }
+
+        public void SetVassals(List<FeudalTitle> vassals)
+        {
+            Vassals = vassals;
+        }
+
+        public override void TakeAction(Hero receiver)
+        {
+            if (!Possible)
+            {
+                return;
+            }
+
+            switch (Type)
+            {
+                case ActionType.Usurp:
+                    BannerKingsConfig.Instance.TitleManager.UsurpTitle(Title.deJure, this);
+                    break;
+                case ActionType.Claim:
+                    BannerKingsConfig.Instance.TitleManager.AddOngoingClaim(this);
+                    break;
+                case ActionType.Revoke:
+                    BannerKingsConfig.Instance.TitleManager.RevokeTitle(this);
+                    break;
+                case ActionType.Found:
+                    BannerKingsConfig.Instance.TitleManager.FoundKingdom(this);
+                    break;
+                case ActionType.Grant:
+                case ActionType.Destroy:
+                case ActionType.Create:
+                default:
+                    BannerKingsConfig.Instance.TitleManager.GrantTitle(this, receiver);
+                    break;
+            }
         }
     }
 

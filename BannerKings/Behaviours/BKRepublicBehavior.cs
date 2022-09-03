@@ -1,9 +1,6 @@
 ﻿using BannerKings.Managers.Kingdoms;
 using BannerKings.Managers.Titles;
-using System;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.Election;
-using static BannerKings.Managers.TitleManager;
 
 namespace BannerKings.Behaviours
 {
@@ -11,7 +8,7 @@ namespace BannerKings.Behaviours
     {
         public override void RegisterEvents()
         {
-            CampaignEvents.DailyTickEvent.AddNonSerializedListener(this, new Action(DailyTick));
+            CampaignEvents.DailyTickEvent.AddNonSerializedListener(this, DailyTick);
         }
 
         public override void SyncData(IDataStore dataStore)
@@ -21,33 +18,40 @@ namespace BannerKings.Behaviours
 
         private void DailyTick()
         {
-
-            CampaignTime now = CampaignTime.Now;
-            int day = now.GetDayOfYear;
-            if (day != 1) return;
-
-            foreach (Kingdom kingdom in Kingdom.All)
+            var now = CampaignTime.Now;
+            var day = now.GetDayOfYear;
+            if (day != 1)
             {
-                FeudalTitle title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
-                if (title == null || title.contract == null) return;
-  
-                GovernmentType government = title.contract.Government;
+                return;
+            }
+
+            foreach (var kingdom in Kingdom.All)
+            {
+                var title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(kingdom);
+                if (title?.contract == null)
+                {
+                    return;
+                }
+
+                var government = title.contract.Government;
                 if (government == GovernmentType.Republic)
                 {
-                    bool inElection = false;
-                    foreach (KingdomDecision decision in kingdom.UnresolvedDecisions)
+                    var inElection = false;
+                    foreach (var decision in kingdom.UnresolvedDecisions)
+                    {
                         if (decision is RepublicElectionDecision)
                         {
                             inElection = true;
                             break;
                         }
-                                    
+                    }
+
                     if (!inElection && kingdom.Clans.Count > 2)
+                    {
                         kingdom.AddDecision(new RepublicElectionDecision(kingdom.RulingClan, kingdom.RulingClan), true);
-                }     
-                
+                    }
+                }
             }
-                 
         }
     }
 }

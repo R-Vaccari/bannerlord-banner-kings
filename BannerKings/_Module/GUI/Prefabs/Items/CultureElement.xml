@@ -1,29 +1,38 @@
 <Prefab>
-  <Parameters>
-    <Parameter Name="ElementDataSource" DefaultValue="ElementDataSource" />
-    <Parameter Name="IsBig" DefaultValue="false" />
-  </Parameters>
-  <Constants>
-    <Constant Name="Encyclopedia.SubPage.Element.Width" BrushName="Encyclopedia.SubPage.Element" BrushLayer="Default" BrushValueType="Width"/>
-    <Constant Name="Encyclopedia.SubPage.Element.Height" BrushName="Encyclopedia.SubPage.Element" BrushLayer="Default" BrushValueType="Height"/>
-  </Constants>
-  <Window>
-	<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" SuggestedWidth="180" VerticalAlignment="Center" UpdateChildrenStates="true">
-		<Children>
-			<HintWidget DataSource="{Hint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" VerticalAlignment="Center" HorizontalAlignment="Center" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" />
-			
-			<ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" SuggestedWidth="200" StackLayout.LayoutMethod="HorizontalLeftToRight" MaxHeight="645">
-				<Children>
+	<Parameters>
+		<Parameter Name="ElementDataSource" DefaultValue="ElementDataSource" />
+		<Parameter Name="IsBig" DefaultValue="false" />
+	</Parameters>
+	<Constants>
+		<Constant Name="Encyclopedia.SubPage.Element.Width" BrushName="Encyclopedia.SubPage.Element" BrushLayer="Default"
+		          BrushValueType="Width" />
+		<Constant Name="Encyclopedia.SubPage.Element.Height" BrushName="Encyclopedia.SubPage.Element" BrushLayer="Default"
+		          BrushValueType="Height" />
+	</Constants>
+	<Window>
+		<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" SuggestedWidth="180"
+		        VerticalAlignment="Center" UpdateChildrenStates="true">
+			<Children>
+				<HintWidget DataSource="{Hint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
+				            VerticalAlignment="Center" HorizontalAlignment="Center" Command.HoverBegin="ExecuteBeginHint"
+				            Command.HoverEnd="ExecuteEndHint" />
 
-					<TextWidget SuggestedWidth="100" HorizontalAlignment="Left" WidthSizePolicy="CoverChildren" Text="@Name"  MarginTop="10" Brush="Encyclopedia.SubPage.Info.Text"/>
+				<ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" SuggestedWidth="200"
+				           StackLayout.LayoutMethod="HorizontalLeftToRight" MaxHeight="645">
+					<Children>
 
-					<TextWidget SuggestedWidth="80" HorizontalAlignment="Right" WidthSizePolicy="CoverChildren" Text="@Acceptance" MarginLeft="10" MarginTop="10" Brush="TownManagement.Project.Name.Text"/>
-					
-					<TextWidget SuggestedWidth="80" HorizontalAlignment="Right" WidthSizePolicy="CoverChildren" Text="@Assimilation" MarginLeft="10" MarginTop="10" Brush="TownManagement.Project.Name.Text"/>
-			
-				</Children>
-			</ListPanel>
-		</Children>
-	</Widget>
-  </Window>
+						<TextWidget SuggestedWidth="100" HorizontalAlignment="Left" WidthSizePolicy="CoverChildren" Text="@Name"
+						            MarginTop="10" Brush="Encyclopedia.SubPage.Info.Text" />
+
+						<TextWidget SuggestedWidth="80" HorizontalAlignment="Right" WidthSizePolicy="CoverChildren" Text="@Acceptance"
+						            MarginLeft="10" MarginTop="10" Brush="TownManagement.Project.Name.Text" />
+
+						<TextWidget SuggestedWidth="80" HorizontalAlignment="Right" WidthSizePolicy="CoverChildren" Text="@Assimilation"
+						            MarginLeft="10" MarginTop="10" Brush="TownManagement.Project.Name.Text" />
+
+					</Children>
+				</ListPanel>
+			</Children>
+		</Widget>
+	</Window>
 </Prefab>

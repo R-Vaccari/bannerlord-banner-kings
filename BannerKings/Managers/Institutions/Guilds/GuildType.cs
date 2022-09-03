@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.Core;
@@ -8,53 +8,37 @@ namespace BannerKings.Managers.Institutions.Guilds
 {
     public class GuildType
     {
-        private GuildTrade trade;
-
         public GuildType(GuildTrade trade)
         {
-            this.trade = trade;
+            Trade = trade;
         }
 
         public TextObject Name
         {
             get
             {
-                TextObject result = null;
-                switch (trade)
+                var result = Trade switch
                 {
-                    case GuildTrade.Merchants:
-                        result = new TextObject("{=!}Merchants Guild");
-                        break;
-                    case GuildTrade.Masons:
-                        result = new TextObject("{=!}Masons Guild");
-                        break;
-                    default:
-                        result = new TextObject("{=!}Metalsmiths Guild");
-                        break;
+                    GuildTrade.Merchants => new TextObject("{=z69WpCc8}Merchants Guild"),
+                    GuildTrade.Masons => new TextObject("{=qLVinLay}Masons Guild"),
+                    _ => new TextObject("{=VPDXcJu7}Metalsmiths Guild")
+                };
 
-                }
                 return result;
             }
         }
+
         public TextObject Description
         {
             get
             {
-                TextObject result = null;
-                switch (trade)
+                var result = Trade switch
                 {
-                    case GuildTrade.Merchants:
-                        result = new TextObject("");
+                    GuildTrade.Merchants => new TextObject("{=!}"),
+                    GuildTrade.Masons => new TextObject("{=!}"),
+                    _ => new TextObject("{=!}")
+                };
 
-                        break;
-                    case GuildTrade.Masons:
-                        result = new TextObject("");
-                        break;
-                    default:
-                        result = new TextObject("");
-                        break;
-
-                }
                 return result;
             }
         }
@@ -63,22 +47,21 @@ namespace BannerKings.Managers.Institutions.Guilds
         {
             get
             {
-                IEnumerable<ValueTuple<ItemObject, float>> result = null;
-                switch (trade)
+                IEnumerable<ValueTuple<ItemObject, float>> result = Trade switch
                 {
-                    case GuildTrade.Metalworkers:
-                        result = new List<ValueTuple<ItemObject, float>>() { { (Game.Current.ObjectManager.GetObjectTypeList<ItemObject>().First(x => x.StringId == "tools"), 1f) } };
-                        break;
-                    default:
-                        result = new List<ValueTuple<ItemObject, float>>();
-                        break;
+                    GuildTrade.Metalworkers => new List<ValueTuple<ItemObject, float>>
+                    {
+                        (Game.Current.ObjectManager.GetObjectTypeList<ItemObject>().First(x => x.StringId == "tools"),
+                            1f)
+                    },
+                    _ => new List<ValueTuple<ItemObject, float>>()
+                };
 
-                }
                 return result;
             }
         }
 
-        public GuildTrade Trade => trade;
+        public GuildTrade Trade { get; }
     }
 
     public enum GuildTrade

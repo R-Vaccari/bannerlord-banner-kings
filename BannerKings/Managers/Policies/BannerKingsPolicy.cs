@@ -1,25 +1,24 @@
-﻿using BannerKings.UI.Items;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using TaleWorlds.CampaignSystem;
-using TaleWorlds.Core.ViewModelCollection;
+using BannerKings.UI.Items;
+using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.Core.ViewModelCollection.Selector;
 using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Managers.Policies
 {
     public abstract class BannerKingsPolicy
     {
-        [SaveableProperty(1)]
-        public Settlement Settlement { get; private set; }
-
-        [SaveableProperty(2)]
-        public int Selected { get; protected set; }
-
         public BannerKingsPolicy(Settlement settlement, int selected)
         {
-            this.Settlement = settlement;
-            this.Selected = selected;
+            Settlement = settlement;
+            Selected = selected;
         }
+
+        [SaveableProperty(1)] public Settlement Settlement { get; set; }
+
+        [SaveableProperty(2)] public int Selected { get; protected set; }
+
         public abstract string GetHint(int value);
         public abstract string GetIdentifier();
         public abstract void OnChange(SelectorVM<BKItemVM> obj);

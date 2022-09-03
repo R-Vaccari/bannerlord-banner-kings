@@ -1,34 +1,34 @@
-﻿using TaleWorlds.Core.ViewModelCollection;
+using TaleWorlds.Core.ViewModelCollection.Information;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace BannerKings
+namespace BannerKings.UI.Items
 {
     namespace UI
     {
         public class InformationElement : ViewModel
         {
-            private string _description, _value;
-            private HintViewModel _hint { get; set; }
+            private HintViewModel _hint;
+            private string description, value;
 
-            public InformationElement(string description, string value, string hintText) 
+            public InformationElement(string description, string value, string hintText)
             {
-                _description = description;
-                _value = value;
-                this.Hint = new HintViewModel(new TextObject(hintText));
+                this.description = description;
+                this.value = value;
+                Hint = new HintViewModel(new TextObject("{=!}" + hintText));
             }
 
 
             [DataSourceProperty]
             public string Description
             {
-                get => _description;
+                get => description;
                 set
                 {
-                    if (value != _description)
+                    if (value != description)
                     {
-                        _description = value;
-                        base.OnPropertyChangedWithValue(value, "Name");
+                        description = value;
+                        OnPropertyChangedWithValue(value);
                     }
                 }
             }
@@ -36,13 +36,13 @@ namespace BannerKings
             [DataSourceProperty]
             public string Value
             {
-                get => _value;
+                get => value;
                 set
                 {
-                    if (value != _value)
+                    if (value != this.value)
                     {
-                        _value = value;
-                        base.OnPropertyChangedWithValue(value, "Count");
+                        this.value = value;
+                        OnPropertyChangedWithValue(value);
                     }
                 }
             }
@@ -56,7 +56,7 @@ namespace BannerKings
                     if (value != _hint)
                     {
                         _hint = value;
-                        base.OnPropertyChangedWithValue(value, "Hint");
+                        OnPropertyChangedWithValue(value);
                     }
                 }
             }

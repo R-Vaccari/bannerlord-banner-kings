@@ -1,276 +1,290 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.CampaignSystem.Settlements.Buildings;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Populations.Villages
 {
-    public class DefaultVillageBuildings
+    public class DefaultVillageBuildings : DefaultTypeInitializer<DefaultVillageBuildings, BuildingType>
     {
-        private BuildingType manor, palisade, trainning, bakery, mining, courier,
-            animalHousing, farming, sawmill, butter, tannery, fishing, blacksmith,
-            warehouse, dailyProduction, dailyFarm, dailyPasture, dailyWoods;
+        public BuildingType Manor { get; private set; }
 
-        public BuildingType Manor => this.manor;
-        public BuildingType Palisade => this.palisade;
-        public BuildingType TrainningGrounds => this.trainning;
-        public BuildingType Warehouse => this.warehouse;
-        public BuildingType Courier => this.courier;
-        public BuildingType Bakery => this.bakery;
-        public BuildingType Mining => this.mining;
-        public BuildingType Farming => this.farming;
-        public BuildingType Sawmill => this.sawmill;
-        public BuildingType AnimalHousing => this.animalHousing;
-        public BuildingType Butter => this.butter;
-        public BuildingType FishFarm => this.fishing;
-        public BuildingType Tannery => this.tannery;
-        public BuildingType Blacksmith => this.blacksmith;
-        public BuildingType DailyProduction => this.dailyProduction;
-        public BuildingType DailyFarm => this.dailyFarm;
-        public BuildingType DailyPasture => this.dailyPasture;
-        public BuildingType DailyWoods => this.dailyWoods;
+        public BuildingType Palisade { get; private set; }
 
-        public static DefaultVillageBuildings Instance => ConfigHolder.CONFIG;
-        
-        internal struct ConfigHolder
+        public BuildingType TrainningGrounds { get; private set; }
+
+        public BuildingType Warehouse { get; private set; }
+
+        public BuildingType Courier { get; private set; }
+
+        public BuildingType Bakery { get; private set; }
+
+        public BuildingType Mining { get; private set; }
+
+        public BuildingType Farming { get; private set; }
+
+        public BuildingType Sawmill { get; private set; }
+
+        public BuildingType AnimalHousing { get; private set; }
+
+        public BuildingType Butter { get; private set; }
+
+        public BuildingType FishFarm { get; private set; }
+
+        public BuildingType Tannery { get; private set; }
+
+        public BuildingType Blacksmith { get; private set; }
+
+        public BuildingType DailyProduction { get; private set; }
+
+        public BuildingType DailyFarm { get; private set; }
+
+        public BuildingType DailyPasture { get; private set; }
+
+        public BuildingType DailyWoods { get; private set; }
+
+        public override IEnumerable<BuildingType> All
         {
-            public static DefaultVillageBuildings CONFIG = new DefaultVillageBuildings();
+            get
+            {
+                yield return Instance.Manor;
+                yield return Instance.Palisade;
+                yield return Instance.TrainningGrounds;
+                yield return Instance.Warehouse;
+                yield return Instance.DailyProduction;
+                yield return Instance.DailyFarm;
+                yield return Instance.DailyPasture;
+                yield return Instance.DailyWoods;
+                yield return Instance.Farming;
+                yield return Instance.Mining;
+                yield return Instance.AnimalHousing;
+                yield return Instance.Sawmill;
+                yield return Instance.FishFarm;
+                yield return Instance.Tannery;
+                yield return Instance.Blacksmith;
+            }
         }
 
-        public void Init()
+
+        public override void Initialize()
         {
-            this.manor = new BuildingType("bannerkings_manor");
-            Game.Current.ObjectManager.RegisterPresumedObject<BuildingType>(manor);
-            this.manor.Initialize(new TextObject("{=!}Manor"), 
-                new TextObject("{=!}Manor house, the lord's home and center of the village. A manor house allows the housing of a small retinue in the village (15, 30, 45 men). Increases influence from nobles (15%, 30%, 50%)."), new int[]
-            {
-                4000,
-                6000,
-                8000
-            }, BuildingLocation.Settlement, new Tuple<BuildingEffectEnum, float, float, float>[]
-            {
-   
-            }, 1);
+            Manor = new BuildingType("bannerkings_manor");
+            Game.Current.ObjectManager.RegisterPresumedObject(Manor);
+            Manor.Initialize(new TextObject("{=UHyznyEy}Manor"),
+                new TextObject("{=UHyznyEy}Manor house, the lord's home and center of the village. A manor house allows the housing of a small retinue in the village (15, 30, 45 men). Increases influence from nobles (15%, 30%, 50%)."),
+                new[]
+                {
+                    4000,
+                    6000,
+                    8000
+                }, BuildingLocation.Settlement, new Tuple<BuildingEffectEnum, float, float, float>[]
+                {
+                });
 
-            this.palisade = new BuildingType("bannerkings_palisade");
-            Game.Current.ObjectManager.RegisterPresumedObject<BuildingType>(palisade);
-            this.palisade.Initialize(new TextObject("{=!}Palisade"), 
-                new TextObject("{=!}A set of wooden stakes placed around the village like a wall. Reduces raiding speed (12%, 24%, 36%)."), new int[]
-            {
-                3000,
-                5000,
-                7000
-            }, BuildingLocation.Settlement, new Tuple<BuildingEffectEnum, float, float, float>[]
-            {
+            Palisade = new BuildingType("bannerkings_palisade");
+            Game.Current.ObjectManager.RegisterPresumedObject(Palisade);
+            Palisade.Initialize(new TextObject("{=JV9JXwnJ}Palisade"),
+                new TextObject("{=wmcdrgpq}A set of wooden stakes placed around the village like a wall. Reduces raiding speed (12%, 24%, 36%)."),
+                new[]
+                {
+                    3000,
+                    5000,
+                    7000
+                }, BuildingLocation.Settlement, new Tuple<BuildingEffectEnum, float, float, float>[]
+                {
+                });
 
-            }, 0);
+            TrainningGrounds = new BuildingType("bannerkings_trainning");
+            Game.Current.ObjectManager.RegisterPresumedObject(TrainningGrounds);
+            TrainningGrounds.Initialize(new TextObject("{=AaYbjkxE}Trainning Grounds"),
+                new TextObject("{=mXUShQJb}Stablish a zone dedicated for trainning, as well as it's required equipments, where locals can train basic military arts. Increases militia production (0.2, 0.5, 1.0)."),
+                new[]
+                {
+                    1500,
+                    2400,
+                    3200
+                }, BuildingLocation.Settlement, new Tuple<BuildingEffectEnum, float, float, float>[]
+                {
+                });
 
-            this.trainning = new BuildingType("bannerkings_trainning");
-            Game.Current.ObjectManager.RegisterPresumedObject<BuildingType>(trainning);
-            this.trainning.Initialize(new TextObject("{=!}Trainning Grounds"), 
-                new TextObject("{=!}Stablish a zone dedicated for trainning, as well as it's required equipments, where locals can train basic military arts. Increases militia production (0.2, 0.5, 1.0)."), new int[]
-            {
-                1500,
-                2400,
-                3200
-            }, BuildingLocation.Settlement, new Tuple<BuildingEffectEnum, float, float, float>[]
-            {
+            Warehouse = new BuildingType("bannerkings_warehouse");
+            Game.Current.ObjectManager.RegisterPresumedObject(Warehouse);
+            Warehouse.Initialize(new TextObject("{=xmxcLt9R}Arms Warehouse"),
+                new TextObject("{=X7fx1TqB}Construct a warehouse dedicated to keep military equipment as well as provide their maintenance. Improves militia quality (4%, 8%, 12%)."),
+                new[]
+                {
+                    2000,
+                    3000,
+                    4000
+                }, BuildingLocation.Settlement, new Tuple<BuildingEffectEnum, float, float, float>[]
+                {
+                });
 
-            }, 0);
+            Game.Current.ObjectManager.RegisterPresumedObject(new BuildingType("bannerkings_warehouse"));
 
-            this.warehouse = new BuildingType("bannerkings_warehouse");
-            Game.Current.ObjectManager.RegisterPresumedObject<BuildingType>(warehouse);
-            this.warehouse.Initialize(new TextObject("{=!}Arms Warehouse"), 
-                new TextObject("{=!}Construct a warehouse dedicated to keep military equipment as well as provide their maintenance. Improves militia quality (4%, 8%, 12%)."), new int[]
-            {
-                2000,
-                3000,
-                4000
-            }, BuildingLocation.Settlement, new Tuple<BuildingEffectEnum, float, float, float>[]
-            {
+            Courier = new BuildingType("bannerkings_courier");
+            Courier.Initialize(new TextObject("{=gxgv5Z2h}Courier Post"),
+                new TextObject("{=i5g9bUkg}Set up a dedicate courier post that will inform you of any relevant activity in and around your demesne. Enables information messages regardless of your distance."),
+                new[]
+                {
+                    1000,
+                    1800,
+                    2500
+                }, BuildingLocation.Settlement, new Tuple<BuildingEffectEnum, float, float, float>[]
+                {
+                });
 
-            }, 0);
+            Bakery = new BuildingType("bannerkings_bakery");
+            Bakery.Initialize(new TextObject("{=cBqEtNeR}Bakery"),
+                new TextObject("{=bHDnFANS}Supply tools and space for a local bakery, allowing serfs to turn wheat into bread. Adds bread as production good."),
+                new[]
+                {
+                    1000,
+                    1800,
+                    2500
+                }, BuildingLocation.Settlement, new Tuple<BuildingEffectEnum, float, float, float>[]
+                {
+                });
 
-            Game.Current.ObjectManager.RegisterPresumedObject<BuildingType>(new BuildingType("bannerkings_warehouse"));
+            Mining = new BuildingType("bannerkings_mining");
+            Game.Current.ObjectManager.RegisterPresumedObject(Mining);
+            Mining.Initialize(new TextObject("{=sTwvtYgY}Mining Infrastructure"),
+                new TextObject("{=tP4PM9zC}Build mining equipment and infrastructure to improve working conditions in local mines. Increases ore production (5%, 10%, 15%)."),
+                new[]
+                {
+                    1500,
+                    2400,
+                    3200
+                }, BuildingLocation.Settlement, new Tuple<BuildingEffectEnum, float, float, float>[]
+                {
+                });
 
-            this.courier = new BuildingType("bannerkings_courier");
-            this.courier.Initialize(new TextObject("{=!}Courier Post"), 
-                new TextObject("{=!}Set up a dedicate courier post that will inform you of any relevant activity in and around your demesne. Enables information messages regardless of your distance."), new int[]
-            {
-                1000,
-                1800,
-                2500
-            }, BuildingLocation.Settlement, new Tuple<BuildingEffectEnum, float, float, float>[]
-            {
-   
-            }, 0);
+            AnimalHousing = new BuildingType("bannerkings_animal_housing");
+            Game.Current.ObjectManager.RegisterPresumedObject(AnimalHousing);
+            AnimalHousing.Initialize(new TextObject("{=W9U0nkST}Animal Housing"),
+                new TextObject("{=SQUxVPch}Invest on infrastructure for animal housing and grazing, yielding more from your pasture lands. Increases live animals production (5%, 10%, 15%)."),
+                new[]
+                {
+                    1500,
+                    2400,
+                    3200
+                }, BuildingLocation.Settlement, new Tuple<BuildingEffectEnum, float, float, float>[]
+                {
+                });
 
-            this.bakery = new BuildingType("bannerkings_bakery");
-            this.bakery.Initialize(new TextObject("{=!}Bakery"), 
-                new TextObject("{=!}Supply tools and space for a local bakery, allowing serfs to turn wheat into bread. Adds bread as production good."), new int[]
-            {
-                1000,
-                1800,
-                2500
-            }, BuildingLocation.Settlement, new Tuple<BuildingEffectEnum, float, float, float>[]
-            {
-  
-            }, 0);
+            Farming = new BuildingType("bannerkings_farming");
+            Game.Current.ObjectManager.RegisterPresumedObject(Farming);
+            Farming.Initialize(new TextObject("{=sORHi0xE}Farming Infrastructure"),
+                new TextObject("{=fSWeTPFb}Provide farming equipment and stablish systems to maximise land productivity. Increases farm goods production (5%, 10%, 15%)."),
+                new[]
+                {
+                    1500,
+                    2400,
+                    3200
+                }, BuildingLocation.Settlement, new Tuple<BuildingEffectEnum, float, float, float>[]
+                {
+                });
 
-            this.mining = new BuildingType("bannerkings_mining");
-            Game.Current.ObjectManager.RegisterPresumedObject<BuildingType>(mining);
-            this.mining.Initialize(new TextObject("{=!}Mining Infrastructure"), 
-                new TextObject("{=!}Build mining equipment and infrastructure to improve working conditions in local mines. Increases ore production (5%, 10%, 15%)."), new int[]
-            {
-                1500,
-                2400,
-                3200
-            }, BuildingLocation.Settlement, new Tuple<BuildingEffectEnum, float, float, float>[]
-            {
- 
-            }, 0);
+            Sawmill = new BuildingType("bannerkings_sawmill");
+            Game.Current.ObjectManager.RegisterPresumedObject(Sawmill);
+            Sawmill.Initialize(new TextObject("{=SBRGqWqH}Sawmill"),
+                new TextObject("{=BcddDtDe}Build a sawmill, improving the speed and quality of log cutting into usable hardwood. Increases hardwood production (5%, 10%, 15%)."),
+                new[]
+                {
+                    1500,
+                    2400,
+                    3200
+                }, BuildingLocation.Settlement, new Tuple<BuildingEffectEnum, float, float, float>[]
+                {
+                });
 
-            this.animalHousing = new BuildingType("bannerkings_animal_housing");
-            Game.Current.ObjectManager.RegisterPresumedObject<BuildingType>(animalHousing);
-            this.animalHousing.Initialize(new TextObject("{=!}Animal Housing"), 
-                new TextObject("{=!}Invest on infrastructure for animal housing and grazing, yielding more from your pasture lands. Increases live animals production (5%, 10%, 15%)."), new int[]
-            {
-                1500,
-                2400,
-                3200
-            }, BuildingLocation.Settlement, new Tuple<BuildingEffectEnum, float, float, float>[]
-            {
-  
-            }, 0);
+            Butter = new BuildingType("bannerkings_butter");
+            Butter.Initialize(new TextObject("{=xWh7ssef}Butter Mill"),
+                new TextObject("{=MQVVOyAC}Construct specialized buildings for churning local cattle milk into butter, a highly sought after food amongst lords."),
+                new[]
+                {
+                    1000,
+                    1800,
+                    2500
+                }, BuildingLocation.Settlement, new Tuple<BuildingEffectEnum, float, float, float>[]
+                {
+                });
 
-            this.farming = new BuildingType("bannerkings_farming");
-            Game.Current.ObjectManager.RegisterPresumedObject<BuildingType>(farming);
-            this.farming.Initialize(new TextObject("{=!}Farming Infrastructure"), 
-                new TextObject("{=!}Provide farming equipment and stablish systems to maximise land productivity. Increases farm goods production (5%, 10%, 15%)."), new int[]
-            {
-                1500,
-                2400,
-                3200
-            }, BuildingLocation.Settlement, new Tuple<BuildingEffectEnum, float, float, float>[]
-            {
-    
-            }, 0);
+            Tannery = new BuildingType("bannerkings_tannery");
+            Tannery.Initialize(new TextObject("{=K3fU8V2V}Fur Tannery"),
+                new TextObject("{=iKGGXTBw}Construct specialized buildings for tanning hides, turning these into leather. Adds leather to production."),
+                new[]
+                {
+                    1500,
+                    2400,
+                    3200
+                }, BuildingLocation.Settlement, new Tuple<BuildingEffectEnum, float, float, float>[]
+                {
+                });
 
-            this.sawmill = new BuildingType("bannerkings_sawmill");
-            Game.Current.ObjectManager.RegisterPresumedObject<BuildingType>(sawmill);
-            this.sawmill.Initialize(new TextObject("{=!}Sawmill"), 
-                new TextObject("{=!}Build a sawmill, improving the speed and quality of log cutting into usable hardwood. Increases hardwood production (5%, 10%, 15%)."), new int[]
-            {
-                1500,
-                2400,
-                3200
-            }, BuildingLocation.Settlement, new Tuple<BuildingEffectEnum, float, float, float>[]
-            {
+            FishFarm = new BuildingType("bannerkings_fishing");
+            FishFarm.Initialize(new TextObject("{=P1r6sHuk}Fish Farm"),
+                new TextObject("{=gv4aBV3O}Build controlled fish growing zones, supplying extra fish to the village. Increases fish production (5%, 10%, 15%)."),
+                new[]
+                {
+                    1500,
+                    2400,
+                    3200
+                }, BuildingLocation.Settlement, new Tuple<BuildingEffectEnum, float, float, float>[]
+                {
+                });
 
-            }, 0);
-
-            this.butter = new BuildingType("bannerkings_butter");
-            this.butter.Initialize(new TextObject("{=!}Butter Mill"), 
-                new TextObject("{=!}Construct specialized buildings for churning local cattle milk into butter, a highly sought after food amongst lords."), new int[]
-            {
-                1000,
-                1800,
-                2500
-            }, BuildingLocation.Settlement, new Tuple<BuildingEffectEnum, float, float, float>[]
-            {
-   
-            }, 0);
-
-            this.tannery = new BuildingType("bannerkings_tannery");
-            this.tannery.Initialize(new TextObject("{=!}Fur Tannery"), 
-                new TextObject("{=!}Construct specialized buildings for tanning hides, turning these into leather. Adds leather to production."), new int[]
-            {
-                1500,
-                2400,
-                3200
-            }, BuildingLocation.Settlement, new Tuple<BuildingEffectEnum, float, float, float>[]
-            {
-    
-            }, 0);
-
-            this.fishing = new BuildingType("bannerkings_fishing");
-            this.fishing.Initialize(new TextObject("{=!}Fish Farm"), 
-                new TextObject("{=!}Build controlled fish growing zones, supplying extra fish to the village. Increases fish production (5%, 10%, 15%)."), new int[]
-            {
-                1500,
-                2400,
-                3200
-            }, BuildingLocation.Settlement, new Tuple<BuildingEffectEnum, float, float, float>[]
-            {
-           
-            }, 0);
-
-            this.blacksmith = new BuildingType("bannerkings_blacksmith");
-            this.blacksmith.Initialize(new TextObject("{=!}Smith"), 
-                new TextObject("{=!}Stablish a local blacksmith, supplying the village with metal products. Adds tools to production."), new int[]
-            {
-                1000,
-                1800,
-                2500
-            }, BuildingLocation.Settlement, new Tuple<BuildingEffectEnum, float, float, float>[]
-            {
-           
-            }, 0);
+            Blacksmith = new BuildingType("bannerkings_blacksmith");
+            Blacksmith.Initialize(new TextObject("{=etbv7s6N}Smith"),
+                new TextObject("{=baTKNtfc}Stablish a local blacksmith, supplying the village with metal products. Adds tools to production."),
+                new[]
+                {
+                    1000,
+                    1800,
+                    2500
+                }, BuildingLocation.Settlement, new Tuple<BuildingEffectEnum, float, float, float>[]
+                {
+                });
 
 
-            this.dailyProduction = new BuildingType("bannerkings_daily_production");
-            Game.Current.ObjectManager.RegisterPresumedObject<BuildingType>(dailyProduction);
-            this.dailyProduction.Initialize(new TextObject("{=!}Production", null), new TextObject("{=!}Focus the population's effort in productivity, not expanding land or changing it's type. While this option is not active, productivity output is reduced.", null), new int[3], BuildingLocation.Daily, new Tuple<BuildingEffectEnum, float, float, float>[]
-            {
+            DailyProduction = new BuildingType("bannerkings_daily_production");
+            Game.Current.ObjectManager.RegisterPresumedObject(DailyProduction);
+            DailyProduction.Initialize(new TextObject("{=eMZikYJ3}Production"),
+                new TextObject("{=PiFWGEUC}Focus the population's effort in productivity, not expanding land or changing it's type. While this option is not active, productivity output is reduced."),
+                new int[3], BuildingLocation.Daily, new Tuple<BuildingEffectEnum, float, float, float>[]
+                {
+                });
 
-            }, 0);
+            DailyFarm = new BuildingType("bannerkings_daily_farm");
+            Game.Current.ObjectManager.RegisterPresumedObject(DailyFarm);
+            DailyFarm.Initialize(new TextObject("{=K4xNbbUN}Farmland"),
+                new TextObject("{=Q3q691if}Focus efforts on creating new arable acres, used for farming purposes. More farming acres increase output of farming goods."),
+                new int[3], BuildingLocation.Daily, new Tuple<BuildingEffectEnum, float, float, float>[]
+                {
+                });
 
-            this.dailyFarm = new BuildingType("bannerkings_daily_farm");
-            Game.Current.ObjectManager.RegisterPresumedObject<BuildingType>(dailyFarm);
-            this.dailyFarm.Initialize(new TextObject("{=!}Farmland", null), new TextObject("{=!}Focus efforts on creating new arable acres, used for farming purposes. More farming acres increase output of farming goods.", null), new int[3], BuildingLocation.Daily, new Tuple<BuildingEffectEnum, float, float, float>[]
-            {
+            DailyPasture = new BuildingType("bannerkings_daily_pasture");
+            Game.Current.ObjectManager.RegisterPresumedObject(DailyPasture);
+            DailyPasture.Initialize(new TextObject("{=WPcgsL9J}Pastureland"),
+                new TextObject("{=nALdPgGX}Focus efforts on creating new acres of pasture, where cattle and animals graze and thrive. More pasture acres increase output of animals and animal products."),
+                new int[3], BuildingLocation.Daily, new Tuple<BuildingEffectEnum, float, float, float>[]
+                {
+                });
 
-            }, 0);
-
-            this.dailyPasture = new BuildingType("bannerkings_daily_pasture");
-            Game.Current.ObjectManager.RegisterPresumedObject<BuildingType>(dailyPasture);
-            this.dailyPasture.Initialize(new TextObject("{=!}Pastureland", null), new TextObject("{=!}Focus efforts on creating new acres of pasture, where cattle and animals graze and thrive. More pasture acres increase output of animals and animal products.", null), new int[3], BuildingLocation.Daily, new Tuple<BuildingEffectEnum, float, float, float>[]
-            {
-
-            }, 0);
-
-            this.dailyWoods = new BuildingType("bannerkings_daily_woods");
-            Game.Current.ObjectManager.RegisterPresumedObject<BuildingType>(dailyWoods);
-            this.dailyWoods.Initialize(new TextObject("{=!}Woodland", null), new TextObject("{=!}Focus efforts on turning acres into woodlands. Acres of woodland allow more higher yields of logs and berries, as well as help the land not becoming overfarmed or grazed.", null), new int[3], BuildingLocation.Daily, new Tuple<BuildingEffectEnum, float, float, float>[]
-            {
-
-            }, 0);
-        }
-
-        public IEnumerable<BuildingType> All()
-        {
-            yield return Instance.Manor;
-            yield return Instance.Palisade;
-            yield return Instance.TrainningGrounds;
-            yield return Instance.Warehouse;
-            yield return Instance.DailyProduction;
-            yield return Instance.DailyFarm;
-            yield return Instance.DailyPasture;
-            yield return Instance.DailyWoods;
-            yield return Instance.Farming;
-            yield return Instance.Mining;
-            yield return Instance.AnimalHousing;
-            yield return Instance.Sawmill;
-            yield return Instance.FishFarm;
-            yield return Instance.Tannery;
-            yield return Instance.Blacksmith;
-            yield break;
+            DailyWoods = new BuildingType("bannerkings_daily_woods");
+            Game.Current.ObjectManager.RegisterPresumedObject(DailyWoods);
+            DailyWoods.Initialize(new TextObject("{=FRAS5TAC}Woodland"),
+                new TextObject("{=1NTssM4Y}Focus efforts on turning acres into woodlands. Acres of woodland allow more higher yields of logs and berries, as well as help the land not becoming overfarmed or grazed."),
+                new int[3], BuildingLocation.Daily, new Tuple<BuildingEffectEnum, float, float, float>[]
+                {
+                });
         }
 
         public static IEnumerable<BuildingType> VillageBuildings(Village village)
         {
-            VillageType type = village.VillageType;
+            var type = village.VillageType;
             yield return Instance.Manor;
             yield return Instance.Palisade;
             yield return Instance.TrainningGrounds;
@@ -279,25 +293,45 @@ namespace BannerKings.Managers.Populations.Villages
             yield return Instance.DailyFarm;
             yield return Instance.DailyPasture;
             yield return Instance.DailyWoods;
-            if (type == DefaultVillageTypes.WheatFarm || type == DefaultVillageTypes.DateFarm || type == DefaultVillageTypes.FlaxPlant ||
-                type == DefaultVillageTypes.SilkPlant || type == DefaultVillageTypes.OliveTrees || type == DefaultVillageTypes.VineYard)
+            if (type == DefaultVillageTypes.WheatFarm || type == DefaultVillageTypes.DateFarm ||
+                type == DefaultVillageTypes.FlaxPlant ||
+                type == DefaultVillageTypes.SilkPlant || type == DefaultVillageTypes.OliveTrees ||
+                type == DefaultVillageTypes.VineYard)
+            {
                 yield return Instance.Farming;
-            else if (type == DefaultVillageTypes.SilverMine || type == DefaultVillageTypes.IronMine || type == DefaultVillageTypes.SaltMine ||
-                type == DefaultVillageTypes.ClayMine)
+            }
+            else if (type == DefaultVillageTypes.SilverMine || type == DefaultVillageTypes.IronMine ||
+                     type == DefaultVillageTypes.SaltMine ||
+                     type == DefaultVillageTypes.ClayMine)
+            {
                 yield return Instance.Mining;
-            else if (type == DefaultVillageTypes.CattleRange || type == DefaultVillageTypes.HogFarm || type == DefaultVillageTypes.SheepFarm ||
-                type == DefaultVillageTypes.BattanianHorseRanch || type == DefaultVillageTypes.DesertHorseRanch || type == DefaultVillageTypes.EuropeHorseRanch
-                || type == DefaultVillageTypes.SteppeHorseRanch || type == DefaultVillageTypes.SturgianHorseRanch || type == DefaultVillageTypes.VlandianHorseRanch)
+            }
+            else if (type == DefaultVillageTypes.CattleRange || type == DefaultVillageTypes.HogFarm ||
+                     type == DefaultVillageTypes.SheepFarm ||
+                     type == DefaultVillageTypes.BattanianHorseRanch || type == DefaultVillageTypes.DesertHorseRanch ||
+                     type == DefaultVillageTypes.EuropeHorseRanch
+                     || type == DefaultVillageTypes.SteppeHorseRanch || type == DefaultVillageTypes.SturgianHorseRanch ||
+                     type == DefaultVillageTypes.VlandianHorseRanch)
+            {
                 yield return Instance.AnimalHousing;
+            }
             else if (type == DefaultVillageTypes.Lumberjack)
+            {
                 yield return Instance.Sawmill;
+            }
             else if (type == DefaultVillageTypes.Fisherman)
+            {
                 yield return Instance.FishFarm;
-            else yield return Instance.Tannery;
+            }
+            else
+            {
+                yield return Instance.Tannery;
+            }
 
             if (type == DefaultVillageTypes.IronMine)
+            {
                 yield return Instance.Blacksmith;
-            yield break;
+            }
         }
     }
 }

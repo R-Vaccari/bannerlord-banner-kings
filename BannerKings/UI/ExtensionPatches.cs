@@ -1,11 +1,4 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace BannerKings.UI
+﻿namespace BannerKings.UI
 {
     internal class ExtensionPatches
     {
@@ -14,15 +7,15 @@ namespace BannerKings.UI
         internal class AppendExamplePatch : PrefabExtensionInsertPatch
         {
             public override InsertType Type => InsertType.Append;
-
+    
             private XmlDocument document;
-
+    
             public TestPrefabExtensionReplacePatch()
             {
                 document = new XmlDocument();
                 document.LoadXml("<OptionsTabToggle Id=\"AppendedTabToggle\"/>");
             }
-
+    
             [PrefabExtensionXmlNode]
             public XmlNode GetPatchContent() => document.DocumentElement;
         } */

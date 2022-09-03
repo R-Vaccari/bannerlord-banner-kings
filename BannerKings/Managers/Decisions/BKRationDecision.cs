@@ -1,4 +1,4 @@
-﻿using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Decisions
@@ -7,13 +7,21 @@ namespace BannerKings.Managers.Decisions
     {
         public BKRationDecision(Settlement settlement, bool enabled) : base(settlement, enabled)
         {
-
         }
 
-        public override string GetHint() => new TextObject("{=!}Food consumption reduced through enforced rationing. Decreases loyalty, with double effect if settlement is not besieged. Increases adm. costs.").ToString();
+        public override string GetHint()
+        {
+            return new TextObject("{=Bp5YdLju}Food consumption reduced through enforced rationing. Decreases loyalty, with double effect if settlement is not besieged. Increases adm. costs.").ToString();
+        }
 
-        public override string GetIdentifier() => "decision_ration";
+        public override string GetIdentifier()
+        {
+            return "decision_ration";
+        }
 
-        public override string GetName() => new TextObject("{=!}Enforce food rationing").ToString();
+        public override string GetName()
+        {
+            return new TextObject("{=8OmoZNnS}Enforce food rationing").ToString();
+        }
     }
 }

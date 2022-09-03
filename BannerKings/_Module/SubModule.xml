@@ -1,53 +1,83 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Module>
-  <Name value="BannerKings" />
-  <Id value="BannerKings" />
-  <Version value="v0.0.1" />
-  <DefaultModule value="false"/>
-  <SingleplayerModule value="true"/>
-  <MultiplayerModule value="false"/>
-  <Official value="false"/>
-  <DependedModules>
-    <DependedModule Id="Bannerlord.Harmony" DependentVersion="v2.1.1.65"/>
-    <DependedModule Id="Native" DependentVersion="e1.6.1"/>
-    <DependedModule Id="SandBoxCore" DependentVersion="e1.6.1"/>
-    <DependedModule Id="Sandbox" DependentVersion="e1.6.1"/>
-    <DependedModule Id="StoryMode" DependentVersion="e1.6.1"/>
-  </DependedModules>
-  <SubModules>
-    <SubModule>
-      <Name value="BannerKings" />
-      <DLLName value="BannerKings.dll" />
-      <SubModuleClassType value="BannerKings.Main" />
-      <Tags>
-        <Tag key="DedicatedServerType" value="none" />
-        <Tag key="IsNoRenderModeElement" value="false" />
-      </Tags>
-    </SubModule>
-  </SubModules>
-  <Xmls>
-    <XmlNode>
-      <XmlName path="civillians" id="NPCCharacters"/>
-      <IncludedGameTypes>
-        <GameType value="Campaign"/>
-        <GameType value="CampaignStoryMode"/>
-        <GameType value="CustomGame"/>
-      </IncludedGameTypes>
-    </XmlNode>
-    <XmlNode>
-      <XmlName path="partyTemplates" id="partyTemplates"/>
-      <IncludedGameTypes>
-        <GameType value="Campaign"/>
-        <GameType value="CampaignStoryMode"/>
-        <GameType value="CustomGame"/>
-      </IncludedGameTypes>
-    </XmlNode>
-	<!--<XmlNode>                
-		<XmlName id="WorkshopTypes" path="workshops"/>
-		<IncludedGameTypes>
-			<GameType value = "Campaign"/>
-			<GameType value = "CampaignStoryMode"/>
-		</IncludedGameTypes>
-	</XmlNode>  -->
-  </Xmls>
+
+<Module xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/BUTR/Bannerlord.XmlSchemas/master/SubModule.xsd">
+	<Id value="BannerKings" />
+	<Name value="BannerKings" />
+	<Version value="v1.2.0" />
+	<Official value="false" />
+	<DefaultModule value="true" />
+	<ModuleCategory value="Singleplayer" />
+	<DependedModules>
+		<DependedModule Id="Bannerlord.Harmony" />
+		<DependedModule Id="Bannerlord.ButterLib" />
+		<DependedModule Id="Bannerlord.UIExtenderEx" />
+		<DependedModule Id="Native" />
+		<DependedModule Id="SandBoxCore" />
+		<DependedModule Id="Sandbox" />
+		<DependedModule Id="StoryMode" />
+		<DependedModule Id="CustomBattle" />
+	</DependedModules>
+	<!-- Community Dependency Metadata -->
+	<DependedModuleMetadatas>
+		<DependedModuleMetadata id="Bannerlord.Harmony" order="LoadBeforeThis" />
+		<DependedModuleMetadata id="Bannerlord.ButterLib" order="LoadBeforeThis" />
+		<DependedModuleMetadata id="Bannerlord.UIExtenderEx" order="LoadBeforeThis" />
+		<DependedModuleMetadata id="Native" order="LoadBeforeThis" />
+		<DependedModuleMetadata id="SandBoxCore" order="LoadBeforeThis" />
+		<DependedModuleMetadata id="Sandbox" order="LoadBeforeThis" />
+		<DependedModuleMetadata id="StoryMode" order="LoadBeforeThis" />
+		<DependedModuleMetadata id="CustomBattle" order="LoadBeforeThis" />
+	</DependedModuleMetadatas>
+	<!-- Community Dependency Metadata -->
+	<SubModules>
+		<SubModule>
+			<Name value="BannerKings" />
+			<DLLName value="BannerKings.dll" />
+			<SubModuleClassType value="BannerKings.Main" />
+			<Tags />
+		</SubModule>
+	</SubModules>
+	<Xmls>
+		<XmlNode>
+			<XmlName id="GameText" path="gt_common" />
+		</XmlNode>
+		<XmlNode>
+			<XmlName id="EquipmentRosters" path="equipment_sets" />
+			<IncludedGameTypes>
+				<GameType value="Campaign" />
+				<GameType value="CampaignStoryMode" />
+				<GameType value="CustomGame" />
+			</IncludedGameTypes>
+		</XmlNode>
+		<XmlNode>
+			<XmlName id="NPCCharacters" path="civillians" />
+			<IncludedGameTypes>
+				<GameType value="Campaign" />
+				<GameType value="CampaignStoryMode" />
+				<GameType value="CustomGame" />
+			</IncludedGameTypes>
+		</XmlNode>
+		<XmlNode>
+			<XmlName id="partyTemplates" path="partyTemplates" />
+			<IncludedGameTypes>
+				<GameType value="Campaign" />
+				<GameType value="CampaignStoryMode" />
+				<GameType value="CustomGame" />
+			</IncludedGameTypes>
+		</XmlNode>
+		<XmlNode>
+			<XmlName id="Concepts" path="concept_strings" />
+			<IncludedGameTypes>
+				<GameType value="Campaign" />
+				<GameType value="CampaignStoryMode" />
+			</IncludedGameTypes>
+		</XmlNode>
+		<XmlNode>
+			<XmlName id="ItemModifiers" path="item_modifiers" />
+		</XmlNode>
+		<XmlNode>
+			<XmlName id="ItemModifierGroups" path="item_modifiers_groups" />
+		</XmlNode>
+	</Xmls>
 </Module>

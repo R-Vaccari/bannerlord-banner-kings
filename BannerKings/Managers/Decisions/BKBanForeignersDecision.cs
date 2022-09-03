@@ -1,4 +1,4 @@
-﻿using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Decisions
@@ -7,13 +7,21 @@ namespace BannerKings.Managers.Decisions
     {
         public BKBanForeignersDecision(Settlement settlement, bool enabled) : base(settlement, enabled)
         {
-
         }
 
-        public override string GetHint() => new TextObject("{=!}Foreigners that refuse to assimilate will be gradually forced to leave the settlement").ToString();
+        public override string GetHint()
+        {
+            return new TextObject("{=gVG6uhKS}Foreigners that refuse to assimilate will be gradually forced to leave the settlement").ToString();
+        }
 
-        public override string GetIdentifier() => "decision_foreigner_ban";
+        public override string GetIdentifier()
+        {
+            return "decision_foreigner_ban";
+        }
 
-        public override string GetName() => new TextObject("{=!}Ban foreigners").ToString();
+        public override string GetName()
+        {
+            return new TextObject("{=RERzNEww}Ban foreigners").ToString();
+        }
     }
 }

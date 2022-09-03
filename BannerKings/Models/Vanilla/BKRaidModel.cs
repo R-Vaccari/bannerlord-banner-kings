@@ -1,29 +1,70 @@
-﻿using BannerKings.Managers.Populations.Villages;
-using BannerKings.Populations;
-using TaleWorlds.CampaignSystem;
+﻿using BannerKings.Managers.Institutions.Religions;
+using BannerKings.Managers.Populations.Villages;
+using BannerKings.Managers.Skills;
+using TaleWorlds.CampaignSystem.GameComponents;
+using TaleWorlds.CampaignSystem.MapEvents;
+using TaleWorlds.CampaignSystem.Settlements;
 
 namespace BannerKings.Models.Vanilla
 {
-    class BKRaidModel : CalradiaExpandedKingdoms.Models.CEKRaidModel
+    public class BKRaidModel : CalradiaExpandedKingdoms.Models.CEKRaidModel
     {
-
         public override float CalculateHitDamage(MapEventSide attackerSide, float settlementHitPoints)
         {
-            float result = base.CalculateHitDamage(attackerSide, settlementHitPoints);
-            MapEventSide defender = attackerSide.MapEvent.DefenderSide;
-
-            Settlement settlement = null;
-            if (defender.Parties != null && defender.Parties.Count > 0)
-                settlement = defender.Parties[0].Party.Settlement;
-
-            if (settlement != null)
-                if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
+            var result = base.CalculateHitDamage(attackerSide, settlementHitPoints);
+            var attacker = attackerSide.LeaderParty;
+            if (attacker is {LeaderHero: { }})
+            {
+                var reference = result;
+                var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(attacker.LeaderHero);
+                if (education.HasPerk(BKPerks.Instance.OutlawPlunderer))
                 {
-                    VillageData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement).VillageData;
-                    int palisade = data.GetBuildingLevel(DefaultVillageBuildings.Instance.Palisade);
-                    if (palisade > 0)
-                        result *= (1f - (0.12f * palisade));
+                    result += (reference * 1.15f - reference);
                 }
+
+                if (education.HasPerk(BKPerks.Instance.MercenaryRansacker))
+                {
+                    result += (reference * 1.15f - reference);
+                }
+
+                if (education.HasPerk(BKPerks.Instance.VaryagShieldBrother))
+                {
+                    result += (reference * 1.15f - reference);
+                }
+
+                if (education.HasPerk(BKPerks.Instance.JawwalGhazw))
+                {
+                    result += (reference * 1.15f - reference);
+                }
+
+                if (education.HasPerk(BKPerks.Instance.KheshigRaider))
+                {
+                    result *= 1.15f;
+                }
+            }
+
+            var settlement = attackerSide.MapEvent.MapEventSettlement;
+            if (settlement != null)
+            {
+                if (BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
+                {
+                    var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement).VillageData;
+                    var palisade = data.GetBuildingLevel(DefaultVillageBuildings.Instance.Palisade);
+                    if (palisade > 0)
+                    {
+                        result *= 1f - 0.12f * palisade;
+                    }
+                }
+
+                if (attacker.LeaderHero != null && settlement.Culture.StringId != "battania")
+                {
+                    if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(attacker.LeaderHero,
+                            DefaultDivinities.Instance.AmraSecondary2))
+                    {
+                        result *= 1.15f;
+                    }
+                }
+            }
 
             return result;
         }

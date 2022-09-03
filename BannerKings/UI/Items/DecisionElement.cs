@@ -1,135 +1,134 @@
 ﻿using System;
-using TaleWorlds.Core.ViewModelCollection;
+using TaleWorlds.Core.ViewModelCollection.Information;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
-namespace BannerKings.UI
+namespace BannerKings.UI.Items
 {
-	// Token: 0x02000020 RID: 32
-	public class DecisionElement : ViewModel
-	{
-		public int OptionTypeID { get; set; }
-		private HintViewModel hint { get; set; }
-		public string description { get; set; }
-		public bool IsDiscrete { get; set; }
+    // Token: 0x02000020 RID: 32
+    public class DecisionElement : ViewModel
+    {
+        private Action<bool> booleanAction;
 
-		[DataSourceProperty] 
-		public string ButtonName { get; set; }
+        private bool booleanValue;
+        public bool show, enabled;
+        public int OptionTypeID { get; set; }
+        private HintViewModel hint { get; set; }
+        public string description { get; set; }
+        public bool IsDiscrete { get; set; }
 
-		public Action OnPressAction { get; set; }
+        [DataSourceProperty] public string ButtonName { get; set; }
 
-		private bool booleanValue = false;
-		private Action<bool> booleanAction;
-		public bool show, enabled;
+        public Action OnPressAction { get; set; }
 
-		public bool OptionValueAsBoolean
-		{
-			get => this.booleanValue;
-			set
-			{
-				bool flag = value != this.booleanValue;
-				if (flag)
-				{
-					this.booleanValue = value;
-					base.OnPropertyChanged("OptionValueAsBoolean");
-					this.booleanAction(value);
-				}
-			}
-		}
+        public bool OptionValueAsBoolean
+        {
+            get => booleanValue;
+            set
+            {
+                var flag = value != booleanValue;
+                if (flag)
+                {
+                    booleanValue = value;
+                    OnPropertyChanged();
+                    booleanAction(value);
+                }
+            }
+        }
 
 
-		public DecisionElement SetAsBooleanOption(string desc, bool initialValue, Action<bool> onChange, TextObject hintText)
-		{
-			this.Hint = new HintViewModel(hintText);
-			this.OptionTypeID = 1;
-			this.Description = desc;
-			this.booleanValue = initialValue;
-			this.booleanAction = onChange;
-			this.Show = true;
-			this.Enabled = true;
-			return this;
-		}
+        [DataSourceProperty]
+        public HintViewModel Hint
+        {
+            get => hint;
+            set
+            {
+                if (value != hint)
+                {
+                    hint = value;
+                    OnPropertyChangedWithValue(value);
+                }
+            }
+        }
 
-		public DecisionElement SetAsButtonOption(string buttonName, Action onPress, TextObject hintText = null)
-		{
-			this.OptionTypeID = 3;
-			this.ButtonName = buttonName;
-			this.OnPressAction = onPress;
-			this.Hint = new HintViewModel(hintText);
-			this.Show = true;
-			this.Enabled = true;
-			return this;
-		}
+        [DataSourceProperty]
+        public bool Enabled
+        {
+            get => enabled;
+            set
+            {
+                if (value != enabled)
+                {
+                    enabled = value;
+                    OnPropertyChangedWithValue(value);
+                }
+            }
+        }
 
-		 
-		public void OnPress()
-		{
-			if (this.OnPressAction != null) this.OnPressAction();
-		}
+        [DataSourceProperty]
+        public bool Show
+        {
+            get => show;
+            set
+            {
+                if (value != show)
+                {
+                    show = value;
+                    OnPropertyChangedWithValue(value);
+                }
+            }
+        }
 
-		public DecisionElement SetAsTitle(string title, TextObject hintText = null)
-		{
-			this.OptionTypeID = 0;
-			this.Description = title;
-			return this;
-		}
+        [DataSourceProperty]
+        public string Description
+        {
+            get => description;
+            set
+            {
+                if (value != description)
+                {
+                    description = value;
+                    OnPropertyChangedWithValue(value);
+                }
+            }
+        }
 
-		
 
-		[DataSourceProperty]
-		public HintViewModel Hint
-		{
-			get => hint;
-			set
-			{
-				if (value != hint)
-				{
-					hint = value;
-					base.OnPropertyChangedWithValue(value, "Hint");
-				}
-			}
-		}
+        public DecisionElement SetAsBooleanOption(string desc, bool initialValue, Action<bool> onChange,
+            TextObject hintText)
+        {
+            Hint = new HintViewModel(hintText);
+            OptionTypeID = 1;
+            Description = desc;
+            booleanValue = initialValue;
+            booleanAction = onChange;
+            Show = true;
+            Enabled = true;
+            return this;
+        }
 
-		[DataSourceProperty]
-		public bool Enabled
-		{
-			get => enabled;
-			set
-			{
-				if (value != enabled)
-				{
-					enabled = value;
-					base.OnPropertyChangedWithValue(value, "Enabled");
-				}
-			}
-		}
+        public DecisionElement SetAsButtonOption(string buttonName, Action onPress, TextObject hintText = null)
+        {
+            OptionTypeID = 3;
+            ButtonName = buttonName;
+            OnPressAction = onPress;
+            Hint = new HintViewModel(hintText);
+            Show = true;
+            Enabled = true;
+            return this;
+        }
 
-		[DataSourceProperty]
-		public bool Show
-		{
-			get => show;
-			set
-			{
-				if (value != show)
-				{
-					show = value;
-					base.OnPropertyChangedWithValue(value, "Show");
-				}
-			}
-		}
 
-		[DataSourceProperty]
-		public string Description
-		{
-			get => description;
-			set
-			{
-				if (value != description)
-				{
-					description = value;
-					base.OnPropertyChangedWithValue(value, "Description");
-				}
-			}
-		}
-	}
+        public void OnPress()
+        {
+            OnPressAction?.Invoke();
+        }
+
+        public DecisionElement SetAsTitle(string title, TextObject hintText = null)
+        {
+            OptionTypeID = 0;
+            Description = title;
+            return this;
+        }
+    }
 }

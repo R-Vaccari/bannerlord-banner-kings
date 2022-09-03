@@ -1,12 +1,34 @@
-﻿namespace BannerKings
+﻿using System.Collections.Generic;
+using System.Linq;
+using TaleWorlds.ObjectSystem;
+
+namespace BannerKings
 {
-    public abstract class DefaultTypeInitializer<T> where T : new()
+    public abstract class DefaultTypeInitializer<TDefaultTypeInitializer, TMBObjectBase> where TDefaultTypeInitializer : new() where TMBObjectBase : MBObjectBase
     {
+        public static TDefaultTypeInitializer Instance => ConfigHolder.CONFIG;
+
+        public abstract IEnumerable<TMBObjectBase> All { get; }
+
         public abstract void Initialize();
-        public static T Instance => ConfigHolder.CONFIG;
-        internal struct ConfigHolder
+
+        public TMBObjectBase GetById(TMBObjectBase input)
         {
-            public static T CONFIG = new T();
+            return input != null 
+                ? All.FirstOrDefault(x => x.StringId == input.StringId) 
+                : null;
+        }
+
+        public TMBObjectBase GetById(string input)
+        {
+            return input != null 
+                ? All.FirstOrDefault(x => x.StringId == input) 
+                : null;
+        }
+
+        private struct ConfigHolder
+        {
+            public static TDefaultTypeInitializer CONFIG = new();
         }
     }
 }

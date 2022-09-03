@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<strings>
+	<string id="str_bk_placeholder" text="{=gaJDVkvHA}Placeholder" />
+	<string id="str_crafting_difficulty" text="{=LuF75ia3}Crafting Difficulty" />
+	
+	<string id="str_bk_condition.has_enough_gold" text="{=bk_condition_has_enough_gold}{HERO.LINK} has not enough Denar. {?PAYER.GENDER}she{?}he{\\?} needs at least {AMOUNT} {GOLD_ICON}." />
+	<string id="str_bk_condition.is_part_of_clan" text="{=bk_condition_is_part_of_clan}{HERO.LINK} is not part of {CLAN_LINK}." />
+	<string id="str_bk_condition.is_part_of_any_clan" text="{=bk_condition_is_part_of_any_clan}{HERO.LINK} is not part of a clan." />
+	<string id="str_bk_condition.is_part_of_kingdom" text="{=bk_condition_is_part_of_kingdom}{HERO.LINK} is not part of {KINGDOM_LINK}." />
+	<string id="str_bk_condition.is_part_of_any_kingdom" text="{=bk_condition_is_part_of_any_kingdom}{HERO.LINK} is not part of a kingdom." />
+	<string id="str_bk_condition.is_part_of_settlement" text="{=bk_condition_is_part_of_settlement}{HERO.LINK} is not part of {SETTLEMENT_LINK}." />
+	<string id="str_bk_condition.is_part_of_any_settlement" text="{=bk_condition_is_part_of_any_settlement}{HERO.LINK} is not part of a settlement." />
+
+	<string id="str_bk_crafting_itemtype.bodyarmor" text="{=bk_crafting_itemtype_bodyarmor}Body Armors" />
+	<string id="str_bk_crafting_itemtype.barding" text="{=bk_crafting_itemtype_barding}Bardings" />
+	<string id="str_bk_crafting_itemtype.shield" text="{=bk_crafting_itemtype_shield}Shields" />
+	<string id="str_bk_crafting_itemtype.ammo" text="{=bk_crafting_itemtype_ammo}Ammos" />
+
+	<string id="str_bk_council_privilege.low_wage" text="{=bk_council_privilege_low_wage}Low Wage" />
+	<string id="str_bk_council_privilege.mid_wage" text="{=bk_council_privilege_mid_wage}Wage" />
+	<string id="str_bk_council_privilege.high_wage" text="{=bk_council_privilege_high_wage}High Wage" />
+	<string id="str_bk_council_privilege.influence" text="{=bk_council_privilege_influence}Influence" />
+	<string id="str_bk_council_privilege.high_influence" text="{=bk_council_privilege_high_influence}High Influence" />
+	<string id="str_bk_council_privilege.clergymen_exclusive"
+	        text="{=bk_council_privilege_clergymen_exclusive}Clergymen Exclusive" />
+	<string id="str_bk_council_privilege.noble_exclusive" text="{=bk_council_privilege_noble_exclusive}Noble Exclusive" />
+	<string id="str_bk_council_privilege.army_privilege" text="{=bk_council_privilege_army_privilege}Army Privilege" />
+
+	<string id="str_bk_council_privilege_description.low_wage"
+	        text="{=bk_council_privilege_low_wage_description}A low daily wage, fit for less important positions in a council." />
+	<string id="str_bk_council_privilege_description.mid_wage"
+	        text="{=bk_council_privilege_mid_wage_description}A mediocre wage, used for the main positions in lesser councils, or midling positios in royal councils." />
+	<string id="str_bk_council_privilege_description.high_wage"
+	        text="{=bk_council_privilege_high_wage_description}A distinct daily wage, exlusive to the main positions of greater, royal councils." />
+	<string id="str_bk_council_privilege_description.influence"
+	        text="{=bk_council_privilege_influence_description}Councillors with this privilege receive extra influence (or Power, if notable)." />
+	<string id="str_bk_council_privilege_description.high_influence"
+	        text="{=bk_council_privilege_high_influence_description}Councillors with this privilege receive a great boost of influence to their clans" />
+	<string id="str_bk_council_privilege_description.clergymen_exclusive"
+	        text="{=bk_council_privilege_clergymen_exclusive_description}This position may only be filled by clergymen of the clan or kingdom's faith." />
+	<string id="str_bk_council_privilege_description.noble_exclusive"
+	        text="{=bk_council_privilege_noble_exclusive_description}This position is an important one and therefore must only be filled by nobles. Notables from settlements are not acceptable." />
+	<string id="str_bk_council_privilege_description.army_privilege"
+	        text="{=bk_council_privilege_army_privilege_description}This position confers the councillor irrevocable ability to raise armies." />
+
+	<string id="str_bk_council_description_marshall"
+	        text="{=bk_council_description_marshall}The {NAME} oversees the military administration of the realm. They are responsible for the efficiency of settlement defenses and drafting of the population." />
+	<string id="str_bk_council_description_steward"
+	        text="{=bk_council_description_steward}{NAME} are responsible for the well-being of finances and trade. They improve the economic prospects and prosperity of fiefs." />
+	<string id="str_bk_council_description_chancellor"
+	        text="{=bk_council_description_chancellor}{NAME} represent their lord in matters of diplomacy. They improve relations with the lord's peers and vassals." />
+	<string id="str_bk_council_description_spymaster"
+	        text="{=bk_council_description_spymaster}Responsible for security and skullduggery, the {NAME} handle the dirty side of a council's duties. They are responsible for personal security of their lord, as well as dealing with criminal activities, including carrying them out." />
+	<string id="str_bk_council_description_spiritual"
+	        text="{=bk_council_description_spiritual}The {NAME} is the representative of faith within a lord's inner circle. Their duty is to be a bridge between the material and spiritual powers, and make certain their suzerain adheres to the faith's principles." />
+	<string id="str_bk_council_description_elder"
+	        text="{=bk_council_description_elder}The {NAME} represent the caste of respected aged leaders in a tribal society. Their presence increases the influence of a sovereign over the common people." />
+	<string id="str_bk_council_description_castellan"
+	        text="{=bk_council_description_castellan}The {NAME} oversee castles and their administration. They are responsible for their prosperity, assuring constant growth and development of castle demesnes." />
+	<string id="str_bk_council_description_constable"
+	        text="{=bk_council_description_constable}The {NAME} administrates law enforcement and criminal cases in settlements. Their purpose is to act as a supervisor to guarantee stability of the realm, being a mediator between the crown and governors." />
+	<string id="str_bk_council_description_philosopher"
+	        text="{=bk_council_description_philosopher}The {NAME} is responsible for the advancement of the culture and general education of the family. These studied individuals research into innovations, as well as teach their sponsoring family's members subjects such as reading, writting and history." />
+
+
+
+	<string id="str_bk_council_marshall_effects"
+	        text="{=bk_council_marshall_effects}Settlement militia +1{BREAK}Settlement militarism +1% flat{BREAK}Settlement draft efficiencty +25% flat" />
+	<string id="str_bk_council_steward_effects"
+	        text="{=bk_council_steward_effects}Settlement prosperity +1{BREAK}Settlement production efficiency +15% flat{BREAK}Settlement caravan attractiveness +15% flat" />
+	<string id="str_bk_council_chancellor_effects"
+	        text="{=bk_council_chancellor_effects}Settlement loyalty +1{BREAK}Vassal limit +1{BREAK}Disagreements impact -20%" />
+	<string id="str_bk_council_spymaster_effects"
+	        text="{=bk_council_spymaster_effects}Settlement security +1{BREAK}Settlement autonomy -3% flat{BREAK}" />
+	<string id="str_bk_council_spiritual_effects" text="{=bk_council_spiritual_effects}+0.5 piety daily{BREAK}+5% faith presence in settlements" />
+	<string id="str_bk_council_castellan_effects" text="{=bk_council_castellan_effects}+1.5 prosperity to castles" />
+	<string id="str_bk_council_constable_effects" text="{=bk_council_constable_effects}Settlement stability +4% flat" />
+	<string id="str_bk_council_elder_effects" text="{=bk_council_elder_effects}Village hearths +0.2 daily" />
+	<string id="str_bk_council_philosopher_effects" text="{=bk_council_philosopher_effects}Settlements provide +5% innovation progress{BREAK}Clan members get 5 daily Scholarship xp" />
+	
+	
+	<string id="str_bk_council_castellan.vlandia" text="{=bk_council_castellan_vlandia}Castellan" />
+	
+	<string id="str_bk_council_constable.empire" text="{=bk_council_constable_empire}Constable" />
+	<string id="str_bk_council_constable.vlandia" text="{=bk_council_constable_vlandia}Constable" />
+	<string id="str_bk_council_constable.khuzait" text="{=bk_council_constable_khuzait}Constable" />
+	<string id="str_bk_council_constable.aserai" text="{=bk_council_constable_aserai}Constable" />
+	<string id="str_bk_council_constable.sturgia" text="{=bk_council_constable_sturgia}Constable" />
+	<string id="str_bk_council_constable.battania" text="{=bk_council_constable_battania}Conastabal" />
+
+	<string id="str_bk_council_philosopher.empire" text="{=bk_council_philosopher_empire}Philosophus" />
+	<string id="str_bk_council_philosopher.vlandia" text="{=bk_council_philosopher_vlandia}Philosopher" />
+	<string id="str_bk_council_philosopher.khuzait" text="{=bk_council_philosopher_khuzait}Philosopher" />
+	<string id="str_bk_council_philosopher.aserai" text="{=bk_council_philosopher_aserai}Philosopher" />
+	<string id="str_bk_council_philosopher.sturgia" text="{=bk_council_philosopher_sturgia}Philosopher" />
+	<string id="str_bk_council_philosopher.battania" text="{=bk_council_philosopher_battania}Feallsanach" />
+
+
+	<string id="str_bk_council_marshall.empire" text="{=bk_council_marshall_empire}Domesticus" />
+	<string id="str_bk_council_chancellor.empire" text="{=bk_council_steward_empire}Comes Largitionum" />
+	<string id="str_bk_council_steward.empire" text="{=bk_council_chancellor_empire}Cancellarius" />
+	<string id="str_bk_council_spymaster.empire" text="{=bk_council_spymaster_empire}Custodis" />
+	
+	<string id="str_bk_council_marshall_royal.empire" text="{=bk_council_marshall_royal_empire}Magister Domesticus" />
+	<string id="str_bk_council_chancellor_royal.empire" text="{=bk_council_steward_royal_empire}Magister Cancellarius" />
+	<string id="str_bk_council_steward_royal.empire" text="{=bk_council_chancellor_royal_empire}Comes Sacrarum Largitionum" />
+	<string id="str_bk_council_spymaster_royal.empire" text="{=bk_council_spymaster_royal_empire}Magister Officiorum" />
+	<string id="str_bk_council_spiritual_royal.empire" text="{=bk_council_spiritual_guide_royal_empire}High Seneschal" />
+	
+
+	<string id="str_bk_council_marshall.battania" text="{=bk_council_marshall_battania}Marasgal" />
+	<string id="str_bk_council_chancellor.battania" text="{=bk_council_steward_battania}Sheumarlan" />
+	<string id="str_bk_council_steward.battania" text="{=bk_council_chancellor_battania}Seansalair" />
+	<string id="str_bk_council_spymaster.battania" text="{=bk_council_spymaster_battania}Treòraiche" />
+	<string id="str_bk_council_spiritual.battania" text="{=bk_council_spiritual_guide_battania}Draoidh" />
+
+	<string id="str_bk_council_marshall_royal.battania" text="{=bk_council_marshall_royal_battania}Ard Marasgal" />
+	<string id="str_bk_council_chancellor_royal.battania" text="{=bk_council_steward_royal_battania}Ard Sheumarlan" />
+	<string id="str_bk_council_steward_royal.battania" text="{=bk_council_chancellor_royal_battania}Ard Seansalair" />
+	<string id="str_bk_council_spymaster_royal.battania" text="{=bk_council_spymaster_royal_battania}Ard Treòraiche" />
+	<string id="str_bk_council_spiritual_royal.battania" text="{=bk_council_spiritual_guide_royal_battania}Ard Draoidh" />
+	<string id="str_bk_council_elder.battania" text="{=bk_council_elder_royal_battania}Seanar" />
+
+	<string id="str_bk_council_marshall.vlandia" text="{=bk_council_marshall_vlandia}Marshal" />
+	<string id="str_bk_council_chancellor.vlandia" text="{=bk_council_steward_vlandia}Chancellor" />
+	<string id="str_bk_council_steward.vlandia" text="{=bk_council_chancellor_vlandia}Steward" />
+	<string id="str_bk_council_spymaster.vlandia" text="{=bk_council_spymaster_vlandia}Spymaster" />
+	<string id="str_bk_council_spiritual.vlandia" text="{=bk_council_spiritual_guide_vlandia}Seneschal" />
+
+	<string id="str_bk_council_marshall_royal.vlandia" text="{=bk_council_marshall_royal_vlandia}Grand Marshal" />
+	<string id="str_bk_council_chancellor_royal.vlandia" text="{=bk_council_chancellor_royal_vlandia}High Chancellor" />
+	<string id="str_bk_council_steward_royal.vlandia" text="{=bk_council_steward_royal_vlandia}High Steward" />
+	<string id="str_bk_council_spymaster_royal.vlandia" text="{=bk_council_spymaster_royal_vlandia}Grand Spymaster" />
+	<string id="str_bk_council_spiritual_royal.vlandia" text="{=bk_council_spiritual_guide_royal_vlandia}High Seneschal" />
+
+	<string id="str_bk_council_marshall.khuzait" text="{=bk_council_marshall_khuzait}Jagutu-iin Darga" />
+	<string id="str_bk_council_chancellor.khuzait" text="{=bk_council_steward_khuzait}Chancellor" />
+	<string id="str_bk_council_steward.khuzait" text="{=bk_council_chancellor_khuzait}Steward" />
+	<string id="str_bk_council_spymaster.khuzait" text="{=bk_council_spymaster_khuzait}Khevtuul" />
+	<string id="str_bk_council_spiritual.khuzait" text="{=bk_council_spiritual_guide_khuzait}Shaman" />
+	
+	<string id="str_bk_council_marshall_royal.khuzait" text="{=bk_council_marshall_royal_khuzait}Tumetu-iin Noyan" />
+	<string id="str_bk_council_chancellor_royal.khuzait" text="{=bk_council_chancellor_royal_khuzait}High Chancellor" />
+	<string id="str_bk_council_steward_royal.khuzait" text="{=bk_council_steward_royal_khuzait}High Steward" />
+	<string id="str_bk_council_spymaster_royal.khuzait" text="{=bk_council_spymaster_royal_khuzait}Cherbi" />
+	<string id="str_bk_council_spiritual_royal.khuzait" text="{=bk_council_spiritual_guide_khuzait}Shaman" />
+
+	<string id="str_bk_council_marshall.sturgia" text="{=bk_council_marshall_sturgia}Marshal" />
+	<string id="str_bk_council_chancellor.sturgia" text="{=bk_council_steward_sturgia}Chancellor" />
+	<string id="str_bk_council_steward.sturgia" text="{=bk_council_chancellor_sturgia}Steward" />
+	<string id="str_bk_council_spymaster.sturgia" text="{=bk_council_spymaster_sturgia}Spymaster" />
+	<string id="str_bk_council_spiritual.sturgia" text="{=bk_council_spiritual_guide_sturgia}Volkhvs" />
+	
+	<string id="str_bk_council_marshall_royal.sturgia" text="{=bk_council_marshall_royal_sturgia}Grand Marshal" />
+	<string id="str_bk_council_chancellor_royal.sturgia" text="{=bk_council_chancellor_royal_sturgia}High Chancellor" />
+	<string id="str_bk_council_steward_royal.sturgia" text="{=bk_council_steward_royal_sturgia}High Steward" />
+	<string id="str_bk_council_spymaster_royal.sturgia" text="{=bk_council_spymaster_royal_sturgia}Grand Spymaster" />
+	<string id="str_bk_council_spiritual_royal.sturgia" text="{=bk_council_spiritual_guide_sturgia}Volkhvs" />
+
+	<string id="str_bk_council_marshall.aserai" text="{=bk_council_marshall_aserai}Marshal" />
+	<string id="str_bk_council_chancellor.aserai" text="{=bk_council_steward_aserai}Chancellor" />
+	<string id="str_bk_council_steward.aserai" text="{=bk_council_chancellor_aserai}Steward" />
+	<string id="str_bk_council_spymaster.aserai" text="{=bk_council_spymaster_aserai}Spymaster" />
+	<string id="str_bk_council_spiritual.aserai" text="{=bk_council_spiritual_guide_aserai}Murshid" />
+	
+	<string id="str_bk_council_marshall_royal.aserai" text="{=bk_council_marshall_royal_aserai}Grand Marshal" />
+	<string id="str_bk_council_chancellor_royal.aserai" text="{=bk_council_chancellor_royal_aserai}High Chancellor" />
+	<string id="str_bk_council_steward_royal.aserai" text="{=bk_council_steward_royal_aserai}High Steward" />
+	<string id="str_bk_council_spymaster_royal.aserai" text="{=bk_council_spymaster_royal_aserai}Grand Spymaster" />
+	<string id="str_bk_council_spiritual_royal.aserai" text="{=bk_council_spiritual_guide_aserai}Murshid" />
+
+	<string id="str_bk_spiritual_guide" text="{=bk_spiritual_guide}Spiritual Guide" />
+
+	<string id="str_how_to_learn_skill.Scholarship"
+	        text="{=bk_skill_scholarship_learn}Actively be studying for an education. Read books." />
+	<string id="str_how_to_learn_skill.Theology"
+	        text="{=bk_skill_theology_learn}Interact with divinities through oaths, sacrifices or blessings. Curse and cure curses." />
+	<string id="str_how_to_learn_skill.Lordship"
+	        text="{=bk_skill_lordship_learn}Fulfill duties. Complete actions with titles such as claiming, granting or usurping." />
+
+	<string id="str_pop_class_nobles" text="{=pop_class_nobles}Nobles" />
+	<string id="str_pop_class_craftsmen" text="{=pop_class_craftsmen}Craftsmen" />
+	<string id="str_pop_class_serfs" text="{=pop_class_serfs}Serfs" />
+	<string id="str_pop_class_slaves" text="{=pop_class_slaves}Slaves" />
+
+	<string id="str_pop_class_serfs_sturgia" text="{=pop_class_serfs_sturgia}Lowmen" />
+	<string id="str_pop_class_serfs_empire" text="{=pop_class_serfs_empire}Commoners" />
+	<string id="str_pop_class_serfs_aserai" text="{=pop_class_serfs_aserai}Commoners" />
+	<string id="str_pop_class_serfs_battania" text="{=pop_class_serfs_battania}Freemen" />
+	<string id="str_pop_class_serfs_khuzait" text="{=pop_class_serfs_khuzait}Nomads" />
+	<string id="str_pop_class_serfs_vlandia" text="{=pop_class_serfs_vlandia}Serfs" />
+
+	<string id="str_pop_class_slaves_sturgia" text="{=pop_class_slaves_sturgia}hralls" />
+	<string id="str_pop_class_slaves_aserai" text="{=pop_class_slaves_aserai}Mameluke" />
+	<string id="str_pop_class_slaves_vlandia" text="{=pop_class_slaves_vlandia}Slaves" />
+	<string id="str_pop_class_slaves_battania" text="{=pop_class_slaves_battania}Slaves" />
+	<string id="str_pop_class_slaves_empire" text="{=pop_class_slaves_empire}Slaves" />
+	<string id="str_pop_class_slaves_khuzait" text="{=pop_class_slaves_khuzait}Slaves" />
+
+	<string id="str_pop_class_craftsmen_battania" text="{=pop_class_craftsmen_battania}Artisans" />
+	<string id="str_pop_class_craftsmen_khuzait" text="{=pop_class_craftsmen_khuzait}Artisans" />
+	<string id="str_pop_class_craftsmen_vlandia" text="{=pop_class_craftsmen_vlandia}Craftsmen" />
+	<string id="str_pop_class_craftsmen_empire" text="{=pop_class_craftsmen_empire}Craftsmen" />
+	<string id="str_pop_class_craftsmen_sturgia" text="{=pop_class_craftsmen_sturgia}Craftsmen" />
+	<string id="str_pop_class_craftsmen_aserai" text="{=pop_class_craftsmen_aserai}Craftsmen" />
+
+	<string id="str_pop_class_nobles_empire" text="{=pop_class_nobles_empire}Nobiles" />
+	<string id="str_pop_class_nobles_sturgia" text="{=}pop_class_nobles_sturgiaKnyaz" />
+	<string id="str_pop_class_nobles_vlandia" text="{pop_class_nobles_vlandia=}Ealdormen" />
+	<string id="str_pop_class_nobles_battania" text="{=pop_class_nobles_battania}Nobles" />
+	<string id="str_pop_class_nobles_aserai" text="{=pop_class_nobles_aserai}Nobles" />
+	<string id="str_pop_class_nobles_khuzait" text="{=pop_class_nobles_khuzait}Nobles" />
+
+	<string id="str_feudalism_contract_header" text="{=feudalism_contract_header}Enfoeffement Contract for {0}" />
+	<string id="str_feudalism_contract_paragraph"
+	        text="{=str_feudalism_contract_paragraph}You, {0}, formally accept to be henceforth bound to the {1}, fulfill your duties as well as uphold your rights, what can not be undone by means other than abdication of all rights and lands associated with the contract, treachery, or death." />
+	<string id="str_feudalism_contract_duties" text="{=feudalism_contract_duties}Duties" />
+	<string id="str_feudalism_contract_rights" text="{=feudalism_contract_rights}Rights" />
+</strings>
