@@ -17,7 +17,7 @@ namespace BannerKings.Managers.Goals.Decisions
         public GreaterBattaniaGoal() : base("goal_greater_battania", GoalUpdateType.Settlement)
         {
             var name = new TextObject("{=BLugLsWR}Unite Greater Battania");
-            var description = new TextObject("{=DUQdOPOt}Unite the old Battanian lands back into a greater realm. To the West, the rascal Vlandians have taken the valley of Llyn Modris and called it 'Ocs Hall'. To the East, the bloodthristy Imperials submitted Epicrotea to their domination. The threat of Battanian extermination grows stronger with enemies all around aiming for it's lands. You must bring all battanian and formerly battanian towns and castles under control of your realm.\n\n");
+            var description = new TextObject("{=!}Unite the old Battanian lands back into a greater realm. To the West, the rascal Vlandians have taken the valley of Llyn Modris and called it 'Ocs Hall'. To the East, the bloodthristy Imperials submitted Epicrotea to their domination. The threat of Battanian extermination grows stronger with enemies all around aiming for it's lands. You must bring all battanian and formerly battanian towns and castles under control of your realm. The new empire will have a feudal contract with hereditary succcession.\n\n");
 
             Initialize(name, description);
 
@@ -89,21 +89,31 @@ namespace BannerKings.Managers.Goals.Decisions
                 }
 
                 var battaniaKingdom = Campaign.Current.Kingdoms.FirstOrDefault(k => k.StringId == "battania");
-                if (battaniaKingdom != null && battaniaKingdom.Leader != referenceHero)
+                if (battaniaKingdom != null)
                 {
-                    failedReasons.Add(new TextObject("{=NCVPvemT}You're not the leader of {KINGDOM}.")
-                        .SetTextVariable("KINGDOM", battaniaKingdom.EncyclopediaLinkWithName));
-                } 
-                else if (referenceHero.Clan.Kingdom != null && referenceHero.Clan.Kingdom.Culture != culture)
-                {
-                    //If Battania does not exist, culture must be Battanian.
-                    failedReasons.Add(new TextObject("{=4jUw7j4u}Your kingdom is not part of {CULTURE} culture.")
-                        .SetTextVariable("CULTURE", culture.EncyclopediaText));
+                    if (battaniaKingdom.Leader != referenceHero)
+                    {
+                        failedReasons.Add(new TextObject("{=NCVPvemT}You're not the leader of {KINGDOM}.")
+                            .SetTextVariable("KINGDOM", battaniaKingdom.EncyclopediaLinkWithName));
+                    }
                 }
+                else if (referenceHero.Clan.Kingdom != null)
+                {
+                    if (referenceHero.Clan.Kingdom.Culture != culture)
+                    {
+                        //If Battania does not exist, culture must be Battanian.
+                        failedReasons.Add(new TextObject("{=4jUw7j4u}Your kingdom is not part of {CULTURE} culture.")
+                            .SetTextVariable("CULTURE", culture.Name));
+                    }
+
+                    if (BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(referenceHero.Clan.Kingdom) == null)
+                    {
+                        failedReasons.Add(new TextObject("{=!}Your kingdom has no title associated with. Found a de Jure kingdom title for your faction.");
+                    }
+                } 
                 else
                 {
-                    failedReasons.Add(new TextObject("{=eZZerqfW}You are not leader of a kingdom with {CULTURE} culture.")
-                        .SetTextVariable("CULTURE", culture.EncyclopediaText));
+                    failedReasons.Add(new TextObject("{=!}You are not a faction leader."));
                 }
 
                 var religion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(referenceHero);
@@ -170,6 +180,28 @@ namespace BannerKings.Managers.Goals.Decisions
                 Influence = influence,
                 Renown = 100
             };
+
+            var vassals = new List<FeudalTitle>();
+            Kingdom battania = Kingdom.All.ToList().FirstOrDefault(x => x.StringId == "battania");
+
+            if (battania != null)
+            {
+                var title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(battania);
+                if (title != null)
+                {
+                    vassals.Add(title);
+                }
+            } 
+            else
+            {
+                var title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(founder.Clan.Kingdom);
+                if (title != null)
+                {
+                    vassals.Add(title);
+                }
+            }
+
+            foundAction.SetVassals(vassals);
 
             BannerKingsConfig.Instance.TitleManager.FoundEmpire(foundAction, new TextObject("{=!}Greater Battania"), 
                 "title_greater_battania");

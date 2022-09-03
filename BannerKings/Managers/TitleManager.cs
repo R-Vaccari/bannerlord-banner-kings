@@ -497,12 +497,12 @@ namespace BannerKings.Managers
                 BannerKingsConfig.Instance.TitleModel.GetSkillReward(TitleType.Kingdom, action.Type));
         }
 
-        public void FoundEmpire(TitleAction action, TextObject factionName, string stringId = null)
+        public void FoundEmpire(TitleAction action, TextObject factionName, string stringId = null, string contractType = null)
         {
             var kingdom = action.ActionTaker.Clan.Kingdom;
             kingdom.ChangeKingdomName(factionName, factionName);
             var title = CreateEmpire(action.ActionTaker, kingdom, new List<FeudalTitle>(action.Vassals), 
-                GenerateContract("imperial"), stringId);
+                GenerateContract(contractType), stringId);
             action.ActionTaker.Clan.AddRenown(action.Renown);
 
 
