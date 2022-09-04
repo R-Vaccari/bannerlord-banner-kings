@@ -105,6 +105,12 @@ namespace BannerKings.Behaviours
 
         private void OnDailyTick(Hero hero)
         {
+
+            if (hero == null)
+            {
+                return;
+            }
+
             BannerKingsConfig.Instance.EducationManager.UpdateHeroData(hero);
             ApplyScholarshipBedTimeStoryEffect(hero);
 

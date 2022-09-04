@@ -108,7 +108,7 @@ namespace BannerKings.Behaviours
 
         private void OnDailyTickHero(Hero hero)
         {
-            if (hero.IsChild || hero.Clan != null && hero.Clan == Clan.PlayerClan)
+            if (hero == null || hero.IsChild || hero.Clan != null && hero.Clan == Clan.PlayerClan)
             {
                 return;
             }
