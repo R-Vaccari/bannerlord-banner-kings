@@ -24,12 +24,12 @@ namespace BannerKings.Behaviours
 
         private void OnCreationEnded()
         {
-            DefaultGoals.Instance.Initialize();
+            
         }
 
         private void OnGameLoaded(CampaignGameStarter starter)
         {
-            DefaultGoals.Instance.Initialize();
+
         }
 
         private void OnDailyTickHeroEvent(Hero hero)

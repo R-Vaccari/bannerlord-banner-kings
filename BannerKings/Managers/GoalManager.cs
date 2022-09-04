@@ -7,7 +7,17 @@ namespace BannerKings.Managers
 {
     public class GoalManager
     {
+        public GoalManager()
+        {
+            PostInitialize();
+        }
+
         private static IEnumerable<Goal> AvailableGoals => DefaultGoals.Instance.All;
+
+        public void PostInitialize()
+        {
+            DefaultGoals.Instance.Initialize();
+        }
 
         public static void UpdateHeroGoals()
         {

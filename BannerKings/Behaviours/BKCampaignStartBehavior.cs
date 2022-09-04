@@ -54,6 +54,7 @@ namespace BannerKings.Behaviours
         private void OnSessionLaunched(CampaignGameStarter starter)
         {
             DefaultStartOptions.Instance.Initialize();
+            BannerKingsConfig.Instance.InitManagers();
         }
 
         public void SetStartOption(StartOption option)
@@ -125,6 +126,8 @@ namespace BannerKings.Behaviours
                 InitializeAllData();
                 ShowInquiry();
             }
+
+            PostInitialize();
         }
 
         private void OnCharacterCreationOver()
@@ -139,7 +142,11 @@ namespace BannerKings.Behaviours
                 return;
             }
 
-            InitializeMainData();
+            foreach (var settlement in Settlement.All.Where(settlement => settlement.IsVillage || settlement.IsTown || settlement.IsCastle))
+            {
+                PopulationManager.InitializeSettlementPops(settlement);
+            }
+
             foreach (var clan in Clan.All.Where(clan => !clan.IsEliminated && !clan.IsBanditFaction))
             {
                 BannerKingsConfig.Instance.CourtManager.CreateCouncil(clan);
@@ -153,13 +160,12 @@ namespace BannerKings.Behaviours
             BannerKingsConfig.Instance.ReligionsManager.PostInitialize();
         }
 
-        private void InitializeMainData()
+        private void PostInitialize()
         {
-            BannerKingsConfig.Instance.InitManagers();
-            foreach (var settlement in Settlement.All.Where(settlement => settlement.IsVillage || settlement.IsTown || settlement.IsCastle))
-            {
-                PopulationManager.InitializeSettlementPops(settlement);
-            }
+            BannerKingsConfig.Instance.EducationManager.PostInitialize();
+            BannerKingsConfig.Instance.InnovationsManager.PostInitialize();
+            BannerKingsConfig.Instance.ReligionsManager.PostInitialize();
+            BannerKingsConfig.Instance.GoalManager.PostInitialize();
         }
 
         private void ShowInquiry()

@@ -77,15 +77,17 @@ namespace BannerKings.Behaviours
             dataStore.SyncData("bannerkings-innovations", ref innovationsManager);
             dataStore.SyncData("bannerkings-goals", ref goalsManager);
 
-            if (dataStore.IsLoading && populationManager != null)
+            if (dataStore.IsLoading)
             {
-                BannerKingsConfig.Instance.InitManagers(populationManager, policyManager, titleManager, courtManager, religionsManager, educationsManager, innovationsManager, goalsManager);
+                if (populationManager != null)
+                {
+                    BannerKingsConfig.Instance.InitManagers(populationManager, policyManager, titleManager, courtManager, religionsManager, educationsManager, innovationsManager, goalsManager);
+                }
             }
         }
 
         private void OnGameLoaded(CampaignGameStarter starter)
         {
-            BannerKingsConfig.Instance.PopulationManager.PostInitialize();
         }
 
         private void TickSettlementData(Settlement settlement)
