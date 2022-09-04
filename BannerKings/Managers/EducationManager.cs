@@ -199,6 +199,13 @@ namespace BannerKings.Managers
         {
             if (Educations.ContainsKey(hero))
             {
+                foreach (var education in Educations)
+                {
+                    if (education.Value.LanguageInstructor == hero)
+                    {
+                        education.Value.SetCurrentLanguage(null, null);
+                    }
+                }
                 Educations.Remove(hero);
             }
         }

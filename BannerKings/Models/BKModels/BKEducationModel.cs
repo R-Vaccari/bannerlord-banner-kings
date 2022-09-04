@@ -51,12 +51,20 @@ namespace BannerKings.Models.BKModels
 
             result.Add(student.GetSkillValue(BKSkills.Instance.Scholarship) * 0.01f, BKSkills.Instance.Scholarship.Name);
 
-            var data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(instructor);
-            var teaching = data.GetLanguageFluency(language) - 1f;
-            if (!float.IsNaN(teaching) && teaching != 0f)
+            if (instructor != null)
             {
-                result.AddFactor(teaching, new TextObject("{=nNESSaBb}Instructor fluency"));
+                var data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(instructor);
+                var teaching = data.GetLanguageFluency(language) - 1f;
+                if (!float.IsNaN(teaching) && teaching != 0f)
+                {
+                    result.AddFactor(teaching, new TextObject("{=nNESSaBb}Instructor fluency"));
+                }
+            } 
+            else
+            {
+                return new ExplainedNumber(0f);
             }
+           
 
             var native = BannerKingsConfig.Instance.EducationManager.GetNativeLanguage(student);
             var dic = native.Inteligible;
