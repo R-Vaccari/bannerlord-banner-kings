@@ -120,10 +120,8 @@ namespace BannerKings.Behaviours
 
         private void OnGameLoaded()
         {
-            
             if (!hasSeenInquiry)
             {
-                InitializeAllData();
                 ShowInquiry();
             }
 
@@ -142,6 +140,7 @@ namespace BannerKings.Behaviours
                 return;
             }
 
+            BannerKingsConfig.Instance.InitManagers();
             foreach (var settlement in Settlement.All.Where(settlement => settlement.IsVillage || settlement.IsTown || settlement.IsCastle))
             {
                 PopulationManager.InitializeSettlementPops(settlement);
