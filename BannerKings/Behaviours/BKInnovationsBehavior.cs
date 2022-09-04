@@ -28,7 +28,7 @@ namespace BannerKings.Behaviours
 
         private void OnGameLoaded(CampaignGameStarter campaignGameStarter)
         {
-            BannerKingsConfig.Instance.InnovationsManager.PostInitialize();
+            
         }
     }
 }

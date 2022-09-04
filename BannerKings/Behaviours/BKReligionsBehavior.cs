@@ -53,7 +53,6 @@ namespace BannerKings.Behaviours
 
         private void OnGameLoaded(CampaignGameStarter starter)
         {
-            ReligionsManager.PostInitialize();
         }
 
         private void OnRaidCompleted(BattleSideEnum winnerSide, MapEvent mapEvent)

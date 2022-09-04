@@ -307,7 +307,7 @@ namespace BannerKings.Behaviours
 
         private void OnGameLoaded(CampaignGameStarter campaignGameStarter)
         {
-            BannerKingsConfig.Instance.EducationManager.PostInitialize();
+           
         }
 
         private void OnSessionLaunched(CampaignGameStarter campaignGameStarter)
