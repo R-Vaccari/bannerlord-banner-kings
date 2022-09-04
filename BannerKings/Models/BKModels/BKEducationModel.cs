@@ -78,7 +78,8 @@ namespace BannerKings.Models.BKModels
                 result.AddFactor(0.2f, BKPerks.Instance.ScholarshipAvidLearner.Name);
             }
 
-            var overLimit = data.Languages.Count - CalculateLanguageLimit(student).ResultNumber;
+            var studentData = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(student);
+            var overLimit = studentData.Languages.Count - CalculateLanguageLimit(student).ResultNumber;
             if (overLimit > 0f)
             {
                 result.AddFactor(-0.33f * overLimit, new TextObject("{=1ssSRbe5}Over languages limit"));
