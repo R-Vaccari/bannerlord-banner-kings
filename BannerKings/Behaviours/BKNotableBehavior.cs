@@ -148,6 +148,8 @@ namespace BannerKings.Behaviours
 
     namespace Patches
     {
+
+
         [HarmonyPatch(typeof(SettlementHelper), "SpawnNotablesIfNeeded")]
         internal class SpawnNotablesIfNeededPatch
         {

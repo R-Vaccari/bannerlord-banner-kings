@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using BannerKings.Managers.Institutions.Religions.Doctrines;
 using BannerKings.Managers.Institutions.Religions.Faiths;
 using BannerKings.Managers.Institutions.Religions.Faiths.Rites;
@@ -149,6 +150,22 @@ namespace BannerKings.Managers.Institutions.Religions
             }
 
             var character = Faith.GetPreset(rank);
+            var title = Faith.GetRankTitle(rank);
+            Hero preacher = settlement.HeroesWithoutParty.FirstOrDefault(x => x.IsPreacher && x.Name.ToString().Contains(title.ToString()));
+            if (preacher != null)
+            {
+                var clergyman = new Clergyman(preacher, rank);
+                if (!clergy.ContainsKey(settlement))
+                {
+                    clergy.Add(settlement, clergyman);
+                }
+                else
+                {
+                    clergy[settlement] = clergyman;
+                }
+                return clergyman;
+            }
+
             if (character != null)
             {
                 var hero = GenerateClergymanHero(character, settlement, rank);

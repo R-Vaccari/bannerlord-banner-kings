@@ -161,6 +161,7 @@ namespace BannerKings.Behaviours
 
         private void PostInitialize()
         {
+            BannerKingsConfig.Instance.PopulationManager.PostInitialize();
             BannerKingsConfig.Instance.EducationManager.PostInitialize();
             BannerKingsConfig.Instance.InnovationsManager.PostInitialize();
             BannerKingsConfig.Instance.ReligionsManager.PostInitialize();

@@ -120,7 +120,10 @@ namespace BannerKings.Behaviours
                             }
 
                             notable.AddPower(-10000f);
-                            LeaveSettlementAction.ApplyForCharacterOnly(notable);
+                            if (notable.CurrentSettlement != null)
+                            {
+                                LeaveSettlementAction.ApplyForCharacterOnly(notable);
+                            }
                             if (notable.IsAlive)
                             {
                                 KillCharacterAction.ApplyByRemove(notable);
@@ -525,23 +528,31 @@ namespace BannerKings.Behaviours
             var clergyman = ReligionsManager.GetClergymanFromHeroHero(Hero.OneToOneConversationHero);
             var religion = ReligionsManager.GetClergymanReligion(clergyman);
             var playerReligion = ReligionsManager.GetHeroReligion(Hero.MainHero);
-
-            if (playerReligion.Faith.GetId() == religion.Faith.GetId())
+            TextObject faithText = new TextObject();
+            if (playerReligion != null)
             {
-                hintText = new TextObject("{=ProkogUg}Already an adherent of this faith.");
-                return false;
+                if (playerReligion.Faith.GetId() == religion.Faith.GetId())
+                {
+                    hintText = new TextObject("{=ProkogUg}Already an adherent of this faith.");
+                    return false;
+                }
+                faithText = new TextObject("{=!}Lords of {CURRENT_FAITH} faith may disapprove your change")
+                .SetTextVariable("CURRENT_FAITH", playerReligion.Faith.GetFaithName());
             }
+            
 
             var result = religion.Faith.GetInductionAllowed(Hero.MainHero, clergyman.Rank);
             if (!result.Item1)
             {
                 hintText = result.Item2;
                 return false;
+
+                
             }
 
-            hintText = new TextObject("{=y1NsVyOH}{POSSIBLE}. Changing faiths will significantly impact your clan's renown. Your piety in the new faith will be zero. Lords of {CURRENT_FAITH} faith may disapprove your change.")
+            hintText = new TextObject("{=!}{POSSIBLE}. Changing faiths will significantly impact your clan's renown, if you are converting from another faith. Your piety in the new faith will be zero. {FAITH_TEXT}")
                 .SetTextVariable("POSSIBLE", result.Item2)
-                .SetTextVariable("CURRENT_FAITH", playerReligion.Faith.GetFaithName());
+                .SetTextVariable("FAITH_TEXT", faithText);
             return true;
         }
 
@@ -595,30 +606,36 @@ namespace BannerKings.Behaviours
             var religion = ReligionsManager.GetClergymanReligion(clergyman);
             var playerReligion = ReligionsManager.GetHeroReligion(Hero.MainHero);
 
-            if (religion.Faith.GetId() != playerReligion.Faith.GetId())
+
+            if (playerReligion == null || religion.Faith.GetId() != playerReligion.Faith.GetId())
             {
                 hintText = new TextObject("{=vE0bYBmL}You do not adhere to the {FAITH} faith.")
                     .SetTextVariable("FAITH", religion.Faith.GetFaithName());
                 return false;
             }
 
-            var piety = ReligionsManager.GetPiety(playerReligion, Hero.MainHero);
-            var minPiety = 500f;
             var anyPossible = false;
-            foreach (var divinity in religion.Faith.GetSecondaryDivinities())
+            var minPiety = 300f;
+            if (playerReligion != null)
             {
-                var cost = divinity.BlessingCost(Hero.MainHero);
-                var optionPossible = piety >= cost;
-                if (optionPossible)
+                var piety = ReligionsManager.GetPiety(playerReligion, Hero.MainHero);
+                
+                foreach (var divinity in religion.Faith.GetSecondaryDivinities())
                 {
-                    anyPossible = true;
-                }
+                    var cost = divinity.BlessingCost(Hero.MainHero);
+                    var optionPossible = piety >= cost;
+                    if (optionPossible)
+                    {
+                        anyPossible = true;
+                    }
 
-                if (cost < minPiety)
-                {
-                    minPiety = cost;
+                    if (cost < minPiety)
+                    {
+                        minPiety = cost;
+                    }
                 }
             }
+
 
             if (!anyPossible)
             {
@@ -648,7 +665,7 @@ namespace BannerKings.Behaviours
             var religion = ReligionsManager.GetClergymanReligion(clergyman);
             Religion playerReligion = ReligionsManager.GetHeroReligion(Hero.MainHero);
 
-            if (religion.Faith.GetId() != playerReligion.Faith.GetId())
+            if (playerReligion == null || religion.Faith.GetId() != playerReligion.Faith.GetId())
             {
                 hintText = new TextObject("{=vE0bYBmL}You do not adhere to the {FAITH} faith.")
                     .SetTextVariable("FAITH", religion.Faith.GetFaithName());
@@ -786,7 +803,9 @@ namespace BannerKings.Behaviours
 
     namespace Patches
     {
+
         
+
         [HarmonyPatch(typeof(KingdomDecision), "GetInfluenceCostOfSupport")]
         internal class GetInfluenceCostOfSupportPatch
         {
