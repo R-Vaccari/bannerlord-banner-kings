@@ -90,7 +90,7 @@ namespace BannerKings.Managers.Education
 
         public ExplainedNumber CurrentBookReadingRate => BannerKingsConfig.Instance.EducationModel.CalculateBookReadingRate(CurrentBook, hero);
 
-        public float StandartLifestyleProgress => 1f;
+        public float StandartLifestyleProgress => 1f / (CampaignTime.DaysInYear * 5f);
 
         public void PostInitialize()
         {
