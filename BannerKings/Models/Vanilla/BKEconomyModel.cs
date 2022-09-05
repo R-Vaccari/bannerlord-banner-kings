@@ -288,7 +288,7 @@ namespace BannerKings.Models.Vanilla
             var efficiency = data.EconomicData.ProductionEfficiency.ResultNumber;
             if (privateSlaves > 0f)
             {
-                return (int) (privateSlaves * tax * efficiency) + 10000;
+                return (int) (privateSlaves * tax * efficiency) + 5000;
             }
 
             return 0;

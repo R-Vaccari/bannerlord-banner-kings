@@ -469,7 +469,7 @@ namespace BannerKings
 
                     if (workshop.WorkshopType.StringId == "artisans")
                     {
-                        count = (int)MathF.Max(1f, count * (data.GetTypeCount(PopType.Craftsmen) / 750f));
+                        count = (int)MathF.Max(1f, count * (data.GetTypeCount(PopType.Craftsmen) / 450f));
                     }
 
                     var itemPrice = town.GetItemPrice(outputItem);
