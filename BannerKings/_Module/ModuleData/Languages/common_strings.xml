@@ -168,11 +168,11 @@
 
 		<string id="bk_council_elder_royal_battania" text="Seanar" />
 
-		<string id="bk_skill_scholarship_learn" text="Actively be studying for an education. Read books." />
+		<string id="bk_skill_scholarship_learn" text="Read books, learn languages, progress in lifestyles. Actively learn with book sellers in their settlements." />
 		<string id="bk_skill_theology_learn"
-		        text="Interact with divinities through oaths, sacrifices or blessings. Curse and cure curses." />
+		        text="Be on a positive piety gain. Perform rites and conversions. Get blessings." />
 		<string id="bk_skill_lordship_learn"
-		        text="Fulfill duties. Complete actions with titles such as claiming, granting or usurping." />
+		        text="Be legal owner of your settlements. Perform title actions such as grant, usurp and found titles." />
 		<string id="pop_class_nobles" text="Nobles" />
 		<string id="pop_class_craftsmen" text="Craftsmen" />
 		<string id="pop_class_serfs" text="Serfs" />

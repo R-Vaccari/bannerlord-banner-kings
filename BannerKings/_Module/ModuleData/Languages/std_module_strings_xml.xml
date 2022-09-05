@@ -354,11 +354,11 @@
     <string id="QVkOr639" text="Increases production efficiency (15%)" />
     <string id="uZPepQjz" text="The {CLAN} has assumed the role of cultural head of the {CULTURE} culture." />
     <string id="Hvt8EySp" text="The {CULTURE} is now fascinated by the {FASCINATION} innovation." />
-    <string id="1MAr0j2J" text="Apples{@Plural}baskets of apples\\@}" />
-    <string id="Krqwsins" text="Oranges{@Plural}baskets of oranges\\@}" />
-    <string id="VJfbLXmi" text="Bread{@Plural}loathes of bread\\@}" />
-    <string id="Qa0dQMOc" text="Pie{@Plural}baskets of pies\\@}" />
-    <string id="C5Xe5MJK" text="Carrots{@Plural}baskets of carrots\\@}" />
+    <string id="1MAr0j2J" text="Apples{@Plural}baskets of apples{\@}" />
+    <string id="Krqwsins" text="Oranges{@Plural}baskets of oranges{\@}" />
+    <string id="VJfbLXmi" text="Bread{@Plural}loaves of bread{\@}" />
+    <string id="Qa0dQMOc" text="Pie{@Plural}baskets of pies{\@}" />
+    <string id="C5Xe5MJK" text="Carrots{@Plural}baskets of carrots{\@}" />
     <string id="hFV7jxHj" text="Heart's Desire{@Plural}collection of Heart's Desire books{\\@}" />
     <string id="JBn6T1dd" text="Parangelmata Poliorcetica{@Plural}collection of Parangelmata Poliorcetica books{\\@}" />
     <string id="jbbauY27" text="Strategikon{@Plural}collection of Strategikon books{\\@}" />
