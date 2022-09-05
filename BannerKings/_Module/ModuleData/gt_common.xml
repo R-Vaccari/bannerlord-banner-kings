@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <strings>
+
+	<string id="str_item_category.apple" text="{=1MAr0j2J}Apples{@Plural}baskets of apples{\@}" />
+	<string id="str_item_category.orange" text="{=Krqwsins}Oranges{@Plural}baskets of oranges{\@}" />
+	<string id="str_item_category.bread" text="{=VJfbLXmi}Bread{@Plural}loaves of bread{\@}" />
+	<string id="str_item_category.pie" text="{=Qa0dQMOc}Pie{@Plural}baskets of pies{\@}" />
+	<string id="str_item_category.carrot" text="{=C5Xe5MJK}Carrots{@Plural}baskets of carrots{\@}" />
+
 	<string id="str_bk_placeholder" text="{=gaJDVkvHA}Placeholder" />
 	<string id="str_crafting_difficulty" text="{=LuF75ia3}Crafting Difficulty" />
 	
@@ -265,11 +272,11 @@
 	<string id="str_bk_spiritual_guide" text="{=bk_spiritual_guide}Spiritual Guide" />
 
 	<string id="str_how_to_learn_skill.Scholarship"
-	        text="{=bk_skill_scholarship_learn}Actively be studying for an education. Read books." />
+	        text="{=bk_skill_scholarship_learn}Read books, learn languages, progress in lifestyles. Actively learn with book sellers in their settlements." />
 	<string id="str_how_to_learn_skill.Theology"
-	        text="{=bk_skill_theology_learn}Interact with divinities through oaths, sacrifices or blessings. Curse and cure curses." />
+	        text="{=bk_skill_theology_learn}Be on a positive piety gain. Perform rites and conversions. Get blessings." />
 	<string id="str_how_to_learn_skill.Lordship"
-	        text="{=bk_skill_lordship_learn}Fulfill duties. Complete actions with titles such as claiming, granting or usurping." />
+	        text="{=bk_skill_lordship_learn}Be legal owner of your settlements. Perform title actions such as grant, usurp and found titles." />
 
 	<string id="str_pop_class_nobles" text="{=pop_class_nobles}Nobles" />
 	<string id="str_pop_class_craftsmen" text="{=pop_class_craftsmen}Craftsmen" />

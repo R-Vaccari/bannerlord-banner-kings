@@ -20,6 +20,33 @@ namespace BannerKings.Managers
             InitializeReligions();
         }
 
+        public void CleanEntries()
+        {
+            var newDic = new Dictionary<Religion, Dictionary<Hero, FaithfulData>>();
+            foreach (var pair in Religions)
+            {
+                if (pair.Key != null && pair.Value != null)
+                {
+                    var newValueDic = new Dictionary<Hero, FaithfulData>();
+                    foreach (var pair2 in pair.Value)
+                    {
+                        if (!newValueDic.ContainsKey(pair2.Key))
+                        {
+                            newValueDic.Add(pair2.Key, pair2.Value);
+                        }
+                    }
+
+                    newDic.Add(pair.Key, newValueDic);
+                }
+            }
+
+            Religions.Clear();
+            foreach (var pair in newDic)
+            {
+                Religions.Add(pair.Key, pair.Value);
+            }
+        }
+
         [SaveableProperty(1)] private Dictionary<Religion, Dictionary<Hero, FaithfulData>> Religions { get; set; }
 
         private Dictionary<Hero, Religion> HeroesCache { get; set; }
@@ -125,6 +152,11 @@ namespace BannerKings.Managers
             foreach (var pair in Religions.ToList())
             {
                 var rel = pair.Key;
+                if (rel == null)
+                {
+                    continue;
+                }
+
                 var faith = DefaultFaiths.Instance.GetById(rel.Faith.GetId());
                 var presets = CharacterObject.All.ToList().FindAll(x => x.Occupation == Occupation.Preacher && x.IsTemplate && x.StringId.Contains("bannerkings") && x.StringId.Contains(faith.GetId()));
                 foreach (var preset in presets)

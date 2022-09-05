@@ -33,7 +33,6 @@ namespace BannerKings.Behaviours
 
         public override void RegisterEvents()
         {
-            CampaignEvents.OnNewGameCreatedEvent.AddNonSerializedListener(this, OnGameCreated);
             CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, OnSessionLaunched);
             CampaignEvents.OnCharacterCreationIsOverEvent.AddNonSerializedListener(this, OnCharacterCreationOver);
             CampaignEvents.OnGameLoadFinishedEvent.AddNonSerializedListener(this, OnGameLoaded);
@@ -54,7 +53,6 @@ namespace BannerKings.Behaviours
         private void OnSessionLaunched(CampaignGameStarter starter)
         {
             DefaultStartOptions.Instance.Initialize();
-            BannerKingsConfig.Instance.InitManagers();
         }
 
         public void SetStartOption(StartOption option)
@@ -84,8 +82,6 @@ namespace BannerKings.Behaviours
             }
 
             GainKingdomInfluenceAction.ApplyForDefault(mainHero, option.Influence);
-
-            InitializeAllData();
             ShowInquiry();
         }
 
@@ -113,60 +109,20 @@ namespace BannerKings.Behaviours
             }
         }
 
-        private void OnGameCreated(CampaignGameStarter starter)
-        {
-            InitializeAllData();
-        }
-
         private void OnGameLoaded()
         {
             if (!hasSeenInquiry)
             {
                 ShowInquiry();
             }
-
-            PostInitialize();
         }
 
         private void OnCharacterCreationOver()
         {
+            
             UIManager.Instance.ShowWindow("campaignStart");
         }
 
-        private void InitializeAllData()
-        {
-            if (hasSeenInquiry)
-            {
-                return;
-            }
-
-            BannerKingsConfig.Instance.InitManagers();
-            foreach (var settlement in Settlement.All.Where(settlement => settlement.IsVillage || settlement.IsTown || settlement.IsCastle))
-            {
-                PopulationManager.InitializeSettlementPops(settlement);
-            }
-
-            foreach (var clan in Clan.All.Where(clan => !clan.IsEliminated && !clan.IsBanditFaction))
-            {
-                BannerKingsConfig.Instance.CourtManager.CreateCouncil(clan);
-            }
-
-            foreach (var hero in Hero.AllAliveHeroes)
-            {
-                BannerKingsConfig.Instance.EducationManager.InitHeroEducation(hero);
-            }
-
-            BannerKingsConfig.Instance.ReligionsManager.PostInitialize();
-        }
-
-        private void PostInitialize()
-        {
-            BannerKingsConfig.Instance.PopulationManager.PostInitialize();
-            BannerKingsConfig.Instance.EducationManager.PostInitialize();
-            BannerKingsConfig.Instance.InnovationsManager.PostInitialize();
-            BannerKingsConfig.Instance.ReligionsManager.PostInitialize();
-            BannerKingsConfig.Instance.GoalManager.PostInitialize();
-        }
 
         private void ShowInquiry()
         {

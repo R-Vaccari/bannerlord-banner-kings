@@ -2,10 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using BannerKings.Managers.Education;
 using BannerKings.Managers.Helpers;
 using BannerKings.Managers.Skills;
-using BannerKings.Models.Vanilla;
 using HarmonyLib;
 using Helpers;
 using TaleWorlds.CampaignSystem;
@@ -471,7 +469,7 @@ namespace BannerKings
 
                     if (workshop.WorkshopType.StringId == "artisans")
                     {
-                        count = (int)MathF.Max(1f, count * (data.GetTypeCount(PopType.Craftsmen) / 750f));
+                        count = (int)MathF.Max(1f, count * (data.GetTypeCount(PopType.Craftsmen) / 450f));
                     }
 
                     var itemPrice = town.GetItemPrice(outputItem);

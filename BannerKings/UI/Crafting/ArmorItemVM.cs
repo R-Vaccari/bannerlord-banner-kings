@@ -99,7 +99,7 @@ namespace BannerKings.UI.Crafting
                 .ToString(), 0));
 
 
-            if (Item.Culture != null)
+            if (Item.Culture != null && Item.Culture.Name != null)
             {
                 MBTextManager.SetTextVariable("LEFT", GameTexts.FindText("str_culture"));
                 list.Add(new TooltipProperty(GameTexts.FindText("str_LEFT_ONLY").ToString(), Item.Culture.Name.ToString(),
