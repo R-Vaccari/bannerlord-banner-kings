@@ -6,6 +6,7 @@ using BannerKings.Managers;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Populations.Villages;
 using BannerKings.Models.Vanilla;
+using BannerKings.UI;
 using HarmonyLib;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
@@ -32,9 +33,12 @@ namespace BannerKings.Behaviours
         private ReligionsManager religionsManager;
         private TitleManager titleManager;
         private GoalManager goalsManager;
+        private bool firstUse = BannerKingsConfig.Instance.FirstUse;
 
         public override void RegisterEvents()
         {
+            CampaignEvents.OnCharacterCreationIsOverEvent.AddNonSerializedListener(this, OnCharacterCreationOver);
+            CampaignEvents.OnNewGameCreatedEvent.AddNonSerializedListener(this, OnGameCreated);
             CampaignEvents.OnGameLoadedEvent.AddNonSerializedListener(this, OnGameLoaded);
             CampaignEvents.OnSiegeAftermathAppliedEvent.AddNonSerializedListener(this, OnSiegeAftermath);
             CampaignEvents.SettlementEntered.AddNonSerializedListener(this, OnSettlementEntered);
@@ -54,6 +58,9 @@ namespace BannerKings.Behaviours
                 educationsManager = BannerKingsConfig.Instance.EducationManager;
                 innovationsManager = BannerKingsConfig.Instance.InnovationsManager;
                 goalsManager = BannerKingsConfig.Instance.GoalManager;
+
+                educationsManager.CleanEntries();
+                religionsManager.CleanEntries();
             }
 
             if (BannerKingsConfig.Instance.wipeData)
@@ -76,18 +83,51 @@ namespace BannerKings.Behaviours
             dataStore.SyncData("bannerkings-educations", ref educationsManager);
             dataStore.SyncData("bannerkings-innovations", ref innovationsManager);
             dataStore.SyncData("bannerkings-goals", ref goalsManager);
+            dataStore.SyncData("bannerkings-first-use", ref firstUse);
 
             if (dataStore.IsLoading)
             {
-                if (populationManager != null)
+                if (firstUse)
+                {
+                    BannerKingsConfig.Instance.InitializeManagersFirstTime();
+                }
+                else
                 {
                     BannerKingsConfig.Instance.InitManagers(populationManager, policyManager, titleManager, courtManager, religionsManager, educationsManager, innovationsManager, goalsManager);
                 }
             }
         }
 
+        private void OnGameCreated(CampaignGameStarter starter)
+        {
+            if (firstUse)
+            {
+                BannerKingsConfig.Instance.InitializeManagersFirstTime();
+            }
+        }
+
         private void OnGameLoaded(CampaignGameStarter starter)
         {
+
+            if (firstUse)
+            {
+                BannerKingsConfig.Instance.InitializeManagersFirstTime();
+            } 
+            else
+            {
+                BannerKingsConfig.Instance.PopulationManager.PostInitialize();
+                BannerKingsConfig.Instance.EducationManager.PostInitialize();
+                BannerKingsConfig.Instance.InnovationsManager.PostInitialize();
+                BannerKingsConfig.Instance.ReligionsManager.PostInitialize();
+                BannerKingsConfig.Instance.GoalManager.PostInitialize();
+            }
+
+            BannerKingsConfig.Instance.ReligionsManager.PostInitialize();
+        }
+
+        private void OnCharacterCreationOver()
+        {
+            BannerKingsConfig.Instance.ReligionsManager.PostInitialize();
         }
 
         private void TickSettlementData(Settlement settlement)

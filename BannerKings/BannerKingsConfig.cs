@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using BannerKings.Managers;
 using BannerKings.Managers.AI;
 using BannerKings.Managers.Court;
@@ -24,6 +25,9 @@ namespace BannerKings
 {
     public class BannerKingsConfig
     {
+
+        public bool FirstUse { get; private set; } = true;
+
         public AIBehavior AI = new();
 
         public HashSet<IBannerKingsModel> Models = new();
@@ -56,6 +60,27 @@ namespace BannerKings
         public BKVolunteerModel VolunteerModel { get; } = new();
 
         public static BannerKingsConfig Instance => ConfigHolder.CONFIG;
+
+        public void InitializeManagersFirstTime()
+        {
+            InitManagers();
+            foreach (var settlement in Settlement.All.Where(settlement => settlement.IsVillage || settlement.IsTown || settlement.IsCastle))
+            {
+                PopulationManager.InitializeSettlementPops(settlement);
+            }
+
+            foreach (var clan in Clan.All.Where(clan => !clan.IsEliminated && !clan.IsBanditFaction))
+            {
+                CourtManager.CreateCouncil(clan);
+            }
+
+            foreach (var hero in Hero.AllAliveHeroes)
+            {
+                EducationManager.InitHeroEducation(hero);
+            }
+
+            FirstUse = false;
+        }
 
         private void Initialize()
         {
@@ -90,7 +115,7 @@ namespace BannerKings
             ReligionsManager = new ReligionsManager();
             EducationManager = new EducationManager();
             InnovationsManager = new InnovationsManager();
-            GoalManager = new GoalManager();  
+            GoalManager = new GoalManager();
         }
 
         public void InitManagers(PopulationManager populationManager, PolicyManager policyManager, TitleManager titleManager, CourtManager court, ReligionsManager religions, EducationManager educations, InnovationsManager innovations, GoalManager goals)

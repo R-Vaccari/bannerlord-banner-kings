@@ -23,6 +23,30 @@ namespace BannerKings.Managers
 
         [SaveableProperty(1)] private Dictionary<Hero, EducationData> Educations { get; set; }
 
+        public void CleanEntries()
+        {
+            var newDic = new Dictionary<Hero, EducationData>();
+            foreach (var pair in Educations)
+            {
+                if (pair.Key != null && pair.Value != null)
+                {
+                    if (!newDic.ContainsKey(pair.Key))
+                    {
+                        newDic.Add(pair.Key, pair.Value);
+                    }
+                }
+            }
+
+            Educations.Clear();
+            foreach (var pair in newDic)
+            {
+                if (!Educations.ContainsKey(pair.Key))
+                {
+                    Educations.Add(pair.Key, pair.Value);
+                }
+            }
+        }
+
         public EducationData InitHeroEducation(Hero hero, Dictionary<Language, float> startingLanguages = null)
         {
             if (Educations.ContainsKey(hero))
