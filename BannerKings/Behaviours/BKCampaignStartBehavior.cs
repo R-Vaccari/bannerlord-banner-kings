@@ -74,7 +74,7 @@ namespace BannerKings.Behaviours
 
             if (option.IsCriminal)
             {
-                var settlement = SettlementHelper.FindNearestSettlement(x => x.OwnerClan is {Kingdom: { }});
+                var settlement = SettlementHelper.FindNearestSettlement(x => x.OwnerClan is { Kingdom: { } });
                 ChangeCrimeRatingAction.Apply(settlement.OwnerClan.Kingdom, option.Criminal);
             }
 
@@ -107,7 +107,7 @@ namespace BannerKings.Behaviours
                                                         MBRandom.RandomFloat);
                     if (num2 > 0)
                     {
-                        party.ItemRoster.AddToCounts(itemObject, MBMath.ClampInt(num2, 1, limit - (int) party.Food));
+                        party.ItemRoster.AddToCounts(itemObject, MBMath.ClampInt(num2, 1, limit - (int)party.Food));
                     }
                 }
             }
@@ -161,6 +161,7 @@ namespace BannerKings.Behaviours
 
         private void PostInitialize()
         {
+            BannerKingsConfig.Instance.PopulationManager.PostInitialize();
             BannerKingsConfig.Instance.EducationManager.PostInitialize();
             BannerKingsConfig.Instance.InnovationsManager.PostInitialize();
             BannerKingsConfig.Instance.ReligionsManager.PostInitialize();
@@ -268,9 +269,9 @@ namespace BannerKings.Behaviours
                 1,
                 GameTexts.FindText("str_ok").ToString(),
                 string.Empty,
-                delegate(List<InquiryElement> list)
+                delegate (List<InquiryElement> list)
                 {
-                    var result = (LearningElement) list[0].Identifier;
+                    var result = (LearningElement)list[0].Identifier;
                     ShowInnerInquiry(result);
                 },
                 delegate { BannerKingsConfig.Instance.ReligionsManager.ShowPopup(); }), true);

@@ -169,11 +169,26 @@ namespace BannerKings.Managers
 
         public void ExecuteRemoveHero(Hero hero, bool isConversion = false)
         {
+
+            
             var rel = GetHeroReligion(hero);
+            if (IsPreacher(hero))
+            {
+                var clergyman = GetClergymanFromHeroHero(hero);
+                if (clergyman != null)
+                {
+                    rel = GetClergymanReligion(clergyman);
+                    rel.RemoveClergyman(clergyman);
+                }
+            }
+
             if (rel != null)
             {
-                Religions[rel].Remove(hero);
-                if (HeroesCache != null)
+                if (Religions[rel].ContainsKey(hero))
+                {
+                    Religions[rel].Remove(hero);
+                } 
+                if (HeroesCache != null && HeroesCache.ContainsKey(hero))
                 {
                     HeroesCache.Remove(hero);
                 }
@@ -187,6 +202,11 @@ namespace BannerKings.Managers
             {
                 HeroesCache.Add(hero, religion);
             }
+        }
+
+        public void AddClergyman(Religion religion, Hero hero, Settlement settlement)
+        {
+            religion.AddClergyman(settlement, hero);
         }
 
         public void AddToReligion(Hero hero, Religion religion)

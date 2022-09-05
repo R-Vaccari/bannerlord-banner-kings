@@ -72,78 +72,23 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Empire
 
         public override TextObject GetClergyInduction(int rank)
         {
-            TextObject text = null;
-
-            if (rank == 2)
+            TextObject text = rank switch
             {
-                text = new TextObject("{=yMvqUQpw}Peace be upon you, my kin. Have you come to study the Code of Asera? I shall grant you what wisdom I have gleaned in my long hours of study, but as your brother I must tell you that I find myself more ignorant the more I realize the breadth of what there is still yet to learn.");
-            }
-            else
-            {
-                var settlement = Settlement.CurrentSettlement;
-                if (settlement == null || !settlement.IsVillage)
-                {
-                    return null;
-                }
-
-                if (Hero.MainHero.Culture != Utils.Helpers.GetCulture("aserai"))
-                {
-                    text = new TextObject("{=byHGTYHh}Alas, you are no Son of Asera and thus you could never truly follow the Code of Asera. Not in any way that I could fathom. There may be precedent for one beyond our blood to successfully follow the code, but for this you should seek out an Akhund; a scholar of the faith.");
-                }
-
-                float relation = 0;
-                foreach (var notable in settlement.Notables)
-                {
-                    relation += notable.GetRelation(Hero.MainHero);
-                }
-
-                var medium = relation / settlement.Notables.Count;
-                text = medium switch
-                {
-                    < 0 => new TextObject("{=A06Nfw6t}You think that it would go unnoticed how the folk here cringe at your visage? How your name is whispered with scornful lips? Are they mislead about you? Perhaps, perhaps. We shall see."),
-                    < 20 => new TextObject("{=CfdXEpue}You are known to me and to this village; not as a savior or as a good soul, but as one of us. You are humble, perhaps because you lack the boldness to pursue being charitable - or perhaps just the means. I do not know, and I do not judge."),
-                    _ => text
-                };
-            }
+                3 or 2 => new TextObject("{=!}{PLAYER_NAME} was it? Yes, yes… You serve our Empire and thus already walk upon a righteous path; but full glad am I to know you seek to open your heart to the sacraments of the Martyr. It is a kindness that you do not seek to rest idle upon the laurels of your current service - some pay only lip service when devotion is required. It warms my soul to see you are not of such company.")
+                .SetTextVariable("PLAYER_NAME", Hero.MainHero.Name),
+                _ => new TextObject("{=!}It is the heart of the epithetical pietas that one who serves our Empire seeks to embrace it at its fullest. You do a great and virtuous kindness, let none question the sacred acts of your honor from this day forward. Know that you move forward in pursuit of the Martyr’s will, in a position where others will yearn for your praise, where your enemies will fail to stand fast against you and your peers.")
+            };
 
             return text;
         }
 
         public override TextObject GetClergyInductionLast(int rank)
         {
-            TextObject text = null;
-
-            if (rank == 2)
+            TextObject text = rank switch
             {
-                text = new TextObject("{=yMvqUQpw}Peace be upon you, my kin. Have you come to study the Code of Asera? I shall grant you what wisdom I have gleaned in my long hours of study, but as your brother I must tell you that I find myself more ignorant the more I realize the breadth of what there is still yet to learn.");
-            }
-            else
-            {
-                var settlement = Settlement.CurrentSettlement;
-                if (settlement == null || !settlement.IsVillage)
-                {
-                    return null;
-                }
-
-                if (Hero.MainHero.Culture != Utils.Helpers.GetCulture("aserai"))
-                {
-                    text = new TextObject("{=mg8AZu6P}I wish you well in such pursuits, and that you live a life of peace wherever this path may take you.");
-                }
-
-                float relation = 0;
-                foreach (var notable in settlement.Notables)
-                {
-                    relation += notable.GetRelation(Hero.MainHero);
-                }
-
-                var medium = relation / settlement.Notables.Count;
-                text = medium switch
-                {
-                    < 0 => new TextObject("{=ZPEn4EDa}If you wish to be made a follower of the Code of Asera, you must treat these people as you would a sibling - you must cherish them, exalt them, protect them and educate them. Show them your better nature and I shall perform upon you our rites of induction."),
-                    < 20 => new TextObject("{=DNpeTcRd}I welcome you, my kin - blood of my blood. May you go in peace and bring honor to his legacy."),
-                    _ => new TextObject("{=!}")
-                };
-            }
+                3 or 2 => new TextObject("{=!}Go forth in the Martyr’s glory, and with his blessing. Embody the ideals of Empire, scourge the wicked and the unclean; lead those with darkened hearts into the light. "),
+                _ => new TextObject("{=!}As you pursue the path of the Martyr and the divinity which has graced us, show kindness where it is deserved and trust only those who eagerly seek to repay it.")
+            };
 
             return text;
         }
@@ -260,7 +205,15 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Empire
 
         public override (bool, TextObject) GetInductionAllowed(Hero hero, int rank)
         {
-            throw new NotImplementedException();
+            var text = new TextObject("{=aSkNfvzG}Induction is possible.");
+            var kingdom = hero.Clan.Kingdom;
+            if (kingdom == null || kingdom.StringId != "empire_s")
+            {
+                text = new TextObject("{=!}Not a member of the Southern Empire.");
+                return new(false, text);
+            }
+
+            return new(true, text);
         }
 
         public override TextObject GetBlessingAction()
@@ -285,7 +238,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Empire
 
         public override TextObject GetBlessingActionName()
         {
-            throw new NotImplementedException();
+            return new TextObject("{=!}medidate upon.");
         }
     }
 }

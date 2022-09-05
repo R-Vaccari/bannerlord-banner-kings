@@ -125,16 +125,19 @@ namespace BannerKings.Behaviours
                 if (hero.Clan != null)
                 {
                     var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(hero.Clan);
-                    var councilMember = council.GetMemberFromPosition(Managers.Court.CouncilPosition.Philosopher);
-                    if (councilMember != null && councilMember.Member != null)
+                    if (council != null)
                     {
-                        var skill = 5 * councilMember.Competence;
-                        hero.AddSkillXp(BKSkills.Instance.Scholarship, (int)skill);
+                        var councilMember = council.GetMemberFromPosition(Managers.Court.CouncilPosition.Philosopher);
+                        if (councilMember != null && councilMember.Member != null)
+                        {
+                            var skill = 5 * councilMember.Competence;
+                            hero.AddSkillXp(BKSkills.Instance.Scholarship, (int)skill);
+                        }
                     }
                 }
             }
 
-            if (!hero.IsSpecial || !hero.Template.StringId.Contains("bannerkings_bookseller_"))
+            if (!hero.IsSpecial || (hero.Template != null && !hero.Template.StringId.Contains("bannerkings_bookseller_")))
             {
                 return;
             }

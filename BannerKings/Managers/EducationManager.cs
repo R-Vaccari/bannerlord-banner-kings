@@ -201,7 +201,8 @@ namespace BannerKings.Managers
             {
                 foreach (var education in Educations)
                 {
-                    if (education.Value.LanguageInstructor == hero)
+                    
+                    if (education.Value != null && education.Value.LanguageInstructor == hero)
                     {
                         education.Value.SetCurrentLanguage(null, null);
                     }
