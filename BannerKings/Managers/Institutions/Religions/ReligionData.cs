@@ -155,7 +155,10 @@ namespace BannerKings.Managers.Institutions.Religions
                 BalanceReligions(dominant);
             }
 
-            clergyman = dominant.GetClergyman(data.Settlement) ?? dominant.GenerateClergyman(Settlement);
+            if (clergyman == null || clergyman.Hero.IsDead)
+            {
+                clergyman = dominant.GetClergyman(data.Settlement);
+            }
         }
 
         private void InitializeReligions()

@@ -4,6 +4,7 @@ using BannerKings.Managers.Institutions.Religions.Doctrines;
 using BannerKings.Managers.Institutions.Religions.Faiths;
 using BannerKings.Managers.Institutions.Religions.Faiths.Rites;
 using BannerKings.Managers.Institutions.Religions.Leaderships;
+using HarmonyLib;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -59,6 +60,28 @@ namespace BannerKings.Managers.Institutions.Religions
             return doctrineIds.Contains(doctrine.StringId);
         }
 
+        public void RemoveClergyman(Clergyman clergyman)
+        {
+            Settlement settlement = null;
+            foreach (var pair in clergy)
+            {
+                if (pair.Key != null && pair.Value != null && pair.Value == clergyman)
+                {
+                    settlement = pair.Key;
+                }
+            }
+
+            if (settlement != null)
+            {
+                clergy.Remove(settlement);
+                List<Hero> notables = (List<Hero>)AccessTools.Field(settlement.GetType(), "_notablesCache").GetValue(settlement);
+                if (notables.Contains(clergyman.Hero))
+                {
+                    notables.Remove(clergyman.Hero);
+                }
+            }
+        }
+
         public MBReadOnlyDictionary<Settlement, Clergyman> Clergy => clergy.GetReadOnlyDictionary();
 
         public MBReadOnlyList<CultureObject> FavoredCultures => favoredCultures.GetReadOnlyList();
@@ -70,6 +93,19 @@ namespace BannerKings.Managers.Institutions.Religions
         internal void PostInitialize(Faith faith)
         {
             Faith = faith;
+        }
+
+        public void AddClergyman(Settlement settlement, Hero hero)
+        {
+            var clergyman = new Clergyman(hero, Faith.GetIdealRank(settlement, settlement == this.settlement));
+            if (clergy.ContainsKey(settlement))
+            {
+                clergy[settlement] = clergyman;
+            }
+            else
+            {
+                clergy.Add(settlement, clergyman);
+            }
         }
 
         public void AddClergyman(Settlement settlement, Clergyman clergyman)
@@ -86,9 +122,24 @@ namespace BannerKings.Managers.Institutions.Religions
 
         public Clergyman GetClergyman(Settlement settlement)
         {
-            return clergy.ContainsKey(settlement) ? clergy[settlement] : null;
-        }
+            if (clergy.ContainsKey(settlement))
+            {
+                var hero = clergy[settlement];
+                if (hero == null || hero.Hero.IsDead)
+                {
+                    hero = GenerateClergyman(settlement);
+                    clergy[settlement] = hero;
+                    return hero;
+                }
 
+                return hero;
+            } else
+            {
+                var hero = GenerateClergyman(settlement);
+                return hero;
+            }
+        }
+        
         public Clergyman GenerateClergyman(Settlement settlement)
         {
             var rank = Faith.GetIdealRank(settlement, settlement == this.settlement);
@@ -103,7 +154,13 @@ namespace BannerKings.Managers.Institutions.Religions
                 var hero = GenerateClergymanHero(character, settlement, rank);
                 EnterSettlementAction.ApplyForCharacterOnly(hero, settlement);
                 var clergyman = new Clergyman(hero, rank);
-                clergy.Add(settlement, clergyman);
+                if (!clergy.ContainsKey(settlement))
+                {
+                    clergy.Add(settlement, clergyman);
+                } else
+                {
+                    clergy[settlement] = clergyman;
+                }
                 return clergyman;
             }
 
