@@ -95,6 +95,12 @@
 	<string id="str_bk_council_constable.aserai" text="{=bk_council_constable_aserai}Constable" />
 	<string id="str_bk_council_constable.sturgia" text="{=bk_council_constable_sturgia}Constable" />
 	<string id="str_bk_council_constable.battania" text="{=bk_council_constable_battania}Conastabal" />
+	<string id="str_bk_council_constable.paleician" text="{=bk_council_constable_empire}Constable" />
+	<string id="str_bk_council_constable.vagir" text="{=bk_council_constable_battania}Conastabal" />
+	<string id="str_bk_council_constable.nordling" text="{=bk_council_constable_empire}Constable" />
+	<string id="str_bk_council_constable.rebkhu" text="{=bk_council_constable_empire}Constable" />
+	<string id="str_bk_council_constable.lyrion" text="{=bk_council_constable_empire}Constable" />
+	<string id="str_bk_council_constable.apolssalian" text="{=bk_council_constable_empire}Constable" />
 
 	<string id="str_bk_council_philosopher.empire" text="{=bk_council_philosopher_empire}Philosophus" />
 	<string id="str_bk_council_philosopher.vlandia" text="{=bk_council_philosopher_vlandia}Philosopher" />
@@ -102,6 +108,12 @@
 	<string id="str_bk_council_philosopher.aserai" text="{=bk_council_philosopher_aserai}Philosopher" />
 	<string id="str_bk_council_philosopher.sturgia" text="{=bk_council_philosopher_sturgia}Philosopher" />
 	<string id="str_bk_council_philosopher.battania" text="{=bk_council_philosopher_battania}Feallsanach" />
+	<string id="str_bk_council_philosopher.paleician" text="{=bk_council_philosopher_vlandia}Philosopher" />
+	<string id="str_bk_council_philosopher.vagir" text="{=bk_council_philosopher_battania}Feallsanach" />
+	<string id="str_bk_council_philosopher.nordling" text="{=bk_council_philosopher_vlandia}Philosopher" />
+	<string id="str_bk_council_philosopher.rebkhu" text="{=bk_council_philosopher_vlandia}Philosopher" />
+	<string id="str_bk_council_philosopher.lyrion" text="{=bk_council_philosopher_vlandia}Philosopher" />
+	<string id="str_bk_council_philosopher.apolssalian" text="{=bk_council_philosopher_vlandia}Philosopher" />
 
 
 	<string id="str_bk_council_marshall.empire" text="{=bk_council_marshall_empire}Domesticus" />
@@ -228,6 +240,18 @@
 	<string id="str_bk_council_steward_royal.rhodok" text="{=bk_council_steward_royal_vlandia}High Steward" />
 	<string id="str_bk_council_spymaster_royal.rhodok" text="{=bk_council_spymaster_royal_vlandia}Grand Spymaster" />
 	<string id="str_bk_council_spiritual_royal.rhodok" text="{=bk_council_spiritual_guide_royal_vlandia}High Seneschal" />
+	
+	<string id="str_bk_council_marshall.paleician" text="{=bk_council_marshall_vlandia}Marshal" />
+	<string id="str_bk_council_chancellor.paleician" text="{=bk_council_steward_vlandia}Chancellor" />
+	<string id="str_bk_council_steward.paleician" text="{=bk_council_chancellor_vlandia}Steward" />
+	<string id="str_bk_council_spymaster.paleician" text="{=bk_council_spymaster_vlandia}Spymaster" />
+	<string id="str_bk_council_spiritual.paleician" text="{=bk_council_spiritual_guide_vlandia}Seneschal" />
+
+	<string id="str_bk_council_marshall_royal.paleician" text="{=bk_council_marshall_royal_vlandia}Grand Marshal" />
+	<string id="str_bk_council_chancellor_royal.paleician" text="{=bk_council_chancellor_royal_vlandia}High Chancellor" />
+	<string id="str_bk_council_steward_royal.paleician" text="{=bk_council_steward_royal_vlandia}High Steward" />
+	<string id="str_bk_council_spymaster_royal.paleician" text="{=bk_council_spymaster_royal_vlandia}Grand Spymaster" />
+	<string id="str_bk_council_spiritual_royal.paleician" text="{=bk_council_spiritual_guide_royal_vlandia}High Seneschal" />
 	
 	
 	<string id="str_bk_council_marshall.lyrion" text="{=bk_council_marshall_aserai}Marshal" />
