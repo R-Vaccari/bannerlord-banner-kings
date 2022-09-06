@@ -58,6 +58,7 @@ namespace BannerKings.Behaviours
                 educationsManager = BannerKingsConfig.Instance.EducationManager;
                 innovationsManager = BannerKingsConfig.Instance.InnovationsManager;
                 goalsManager = BannerKingsConfig.Instance.GoalManager;
+                firstUse = BannerKingsConfig.Instance.FirstUse;
 
                 educationsManager.CleanEntries();
                 religionsManager.CleanEntries();

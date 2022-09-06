@@ -103,9 +103,7 @@ namespace BannerKings
             BKPolicies.Instance.Initialize();
             DefaultInnovations.Instance.Initialize();
 
-            var screen = new BannerKingsScreen();
-            ScreenManager.AddGlobalLayer(screen, true);
-            UIManager.Instance.SetScreen(screen);
+            UIManager.Instance.SetScreen(new BannerKingsScreen());
         }
 
         protected override void OnSubModuleLoad()
@@ -120,7 +118,7 @@ namespace BannerKings
         {
             base.OnGameEnd(game);
             UIManager.Instance.BKScreen.OnFinalize();
-            ScreenManager.RemoveGlobalLayer(UIManager.Instance.BKScreen);
+            //ScreenManager.RemoveGlobalLayer(UIManager.Instance.BKScreen);
         }
     }
 }
