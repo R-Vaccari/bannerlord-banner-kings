@@ -1,4 +1,5 @@
 ﻿using SandBox.View.Map;
+using TaleWorlds.Engine;
 using TaleWorlds.Engine.GauntletUI;
 using TaleWorlds.GauntletUI.Data;
 using TaleWorlds.ScreenSystem;
@@ -28,6 +29,7 @@ namespace BannerKings.UI
 
             gauntletLayer = new GauntletLayer(550);
             Layer = (ScreenLayer)gauntletLayer;
+            ScreenManager.AddGlobalLayer(this, true);
         }
 
         private void Load()
@@ -49,7 +51,6 @@ namespace BannerKings.UI
             gauntletMovie = gauntletLayer.LoadMovie(xml, vm);
 
             gauntletLayer.InputRestrictions.SetInputRestrictions(false);
-            ScreenManager.AddGlobalLayer(this, true);
             Load();
             MapScreen.Instance.AddLayer(gauntletLayer);     
         }
@@ -57,14 +58,15 @@ namespace BannerKings.UI
         public void CloseLayer()
         {
             MapScreen.Instance.RemoveLayer(gauntletLayer);
-            ScreenManager.RemoveGlobalLayer(this);
         }
 
         public void OnFinalize()
         {
             gauntletMovie = null;
             categoryDeveloper.Unload();
+            categoryEncyclopedia.Unload();
             gauntletLayer = null;
+            ScreenManager.RemoveGlobalLayer(this);
         }
     }
 }

@@ -208,111 +208,124 @@
 																			Brush="SPOptions.CollapserLine" />
 																	</Children>
 																</ListPanel>
-
+																
 																<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
-																           StackLayout.LayoutMethod="HorizontalRightToLeft" DoNotAcceptEvents="true" MarginTop="20">
+																           StackLayout.LayoutMethod="VerticalBottomToTop" DoNotAcceptEvents="true" MarginTop="20">
 																	<Children>
+																		
+																		<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
+																			HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="30" Text="@LifestyleNameText"
+																			MarginBottom="15" />
+																		<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
+																			HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="20" Text="@LifestylePassiveText" />
+																			
+																	<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
+																			   StackLayout.LayoutMethod="HorizontalRightToLeft" DoNotAcceptEvents="true" MarginTop="10">
+																		<Children>
 
-																		<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren">
-																			<Children>
-																				<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
-																					StackLayout.LayoutMethod="VerticalBottomToTop" DoNotAcceptEvents="true">
-																					<Children>
-																						<GridWidget DataSource="{LifestyleProgressInfo}" WidthSizePolicy="CoverChildren"
-																							HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" MarginRight="30"
-																							DefaultCellWidth="150" DefaultCellHeight="30" ColumnCount="1">
-																							<ItemTemplate>
-																								<InformationElement />
-																							</ItemTemplate>
-																						</GridWidget>
-																					</Children>
-																				</ListPanel>
-																			</Children>
-																		</Widget>
+																			<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren">
+																				<Children>
+																					<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
+																						StackLayout.LayoutMethod="VerticalBottomToTop" DoNotAcceptEvents="true">
+																						<Children>
+																							<GridWidget DataSource="{LifestyleProgressInfo}" WidthSizePolicy="CoverChildren"
+																								HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" MarginRight="30"
+																								DefaultCellWidth="150" DefaultCellHeight="30" ColumnCount="1">
+																								<ItemTemplate>
+																									<InformationElement />
+																								</ItemTemplate>
+																							</GridWidget>
+																						</Children>
+																					</ListPanel>
+																				</Children>
+																			</Widget>
 
-																		<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren">
-																			<Children>
-																				<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
-																					StackLayout.LayoutMethod="VerticalBottomToTop" DoNotAcceptEvents="true">
-																					<Children>
+																			<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren">
+																				<Children>
+																					<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
+																						StackLayout.LayoutMethod="VerticalBottomToTop" DoNotAcceptEvents="true">
+																						<Children>
 
-																						<GridWidget DataSource="{CurrentLifestyleInfo}" WidthSizePolicy="CoverChildren"
-																							HorizontalAlignment="Center" MarginRight="100" HeightSizePolicy="CoverChildren"
-																							DefaultCellWidth="150" DefaultCellHeight="30" ColumnCount="1">
-																							<ItemTemplate>
-																								<InformationElement />
-																							</ItemTemplate>
-																						</GridWidget>
+																							<GridWidget DataSource="{CurrentLifestyleInfo}" WidthSizePolicy="CoverChildren"
+																								HorizontalAlignment="Center" MarginRight="100" HeightSizePolicy="CoverChildren"
+																								DefaultCellWidth="150" DefaultCellHeight="30" ColumnCount="1">
+																								<ItemTemplate>
+																									<InformationElement />
+																								</ItemTemplate>
+																							</GridWidget>
 
-																						<ButtonWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedHeight="48"
-																							SuggestedWidth="200" MarginTop="20" HorizontalAlignment="Center" VerticalAlignment="Top"
-																							Brush="ButtonBrush2" Command.Click="SelectLifestyle" IsEnabled="true">
-																							<Children>
-																								<HintWidget DataSource="{TournamentHint}" WidthSizePolicy="StretchToParent"
-																									HeightSizePolicy="CoverChildren" HorizontalAlignment="Center"
-																									Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" />
-																								<RichTextWidget DoNotAcceptEvents="true" WidthSizePolicy="CoverChildren"
-																									HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center"
-																									Brush="OverlayPopup.ButtonText" Brush.FontSize="20" Text="@ChooseLifestyleText" />
-																							</Children>
-																						</ButtonWidget>
+																							<ButtonWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedHeight="48"
+																								SuggestedWidth="200" MarginTop="20" HorizontalAlignment="Center" VerticalAlignment="Top"
+																								Brush="ButtonBrush2" Command.Click="SelectLifestyle" IsEnabled="true">
+																								<Children>
+																									<HintWidget DataSource="{TournamentHint}" WidthSizePolicy="StretchToParent"
+																										HeightSizePolicy="CoverChildren" HorizontalAlignment="Center"
+																										Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" />
+																									<RichTextWidget DoNotAcceptEvents="true" WidthSizePolicy="CoverChildren"
+																										HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center"
+																										Brush="OverlayPopup.ButtonText" Brush.FontSize="20" Text="@ChooseLifestyleText" />
+																								</Children>
+																							</ButtonWidget>
 
-																						<ButtonWidget IsEnabled="@CanAddFocus" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed"
-																							SuggestedHeight="48" SuggestedWidth="200" MarginTop="20" HorizontalAlignment="Center"
-																							VerticalAlignment="Top" Brush="ButtonBrush2" Command.Click="InvestFocus">
-																							<Children>
-																								<HintWidget DataSource="{TournamentHint}" WidthSizePolicy="StretchToParent"
-																									HeightSizePolicy="CoverChildren" HorizontalAlignment="Center"
-																									Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" />
-																								<RichTextWidget DoNotAcceptEvents="true" WidthSizePolicy="CoverChildren"
-																									HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center"
-																									Brush="OverlayPopup.ButtonText" Brush.FontSize="20" Text="@InvestFocusText" />
-																							</Children>
-																						</ButtonWidget>
+																							<ButtonWidget IsEnabled="@CanAddFocus" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed"
+																								SuggestedHeight="48" SuggestedWidth="200" MarginTop="20" HorizontalAlignment="Center"
+																								VerticalAlignment="Top" Brush="ButtonBrush2" Command.Click="InvestFocus">
+																								<Children>
+																									<HintWidget DataSource="{TournamentHint}" WidthSizePolicy="StretchToParent"
+																										HeightSizePolicy="CoverChildren" HorizontalAlignment="Center"
+																										Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" />
+																									<RichTextWidget DoNotAcceptEvents="true" WidthSizePolicy="CoverChildren"
+																										HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center"
+																										Brush="OverlayPopup.ButtonText" Brush.FontSize="20" Text="@InvestFocusText" />
+																								</Children>
+																							</ButtonWidget>
 
-																					</Children>
-																				</ListPanel>
-																			</Children>
-																		</Widget>
+																						</Children>
+																					</ListPanel>
+																				</Children>
+																			</Widget>
 
+																		</Children>
+																	</ListPanel>
+
+																	<GridWidget Id="PerksList" DataSource="{Perks}" WidthSizePolicy="StretchToParent"
+																				HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" MarginTop="20"
+																				DoNotAcceptEvents="true" DefaultCellWidth="30" DefaultCellHeight="90" ColumnCount="3">
+																		<ItemTemplate>
+																			<PerkItemButtonWidget DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed"
+																				SuggestedWidth="30" SuggestedHeight="86" HorizontalAlignment="Center"
+																				AlternativeType="@AlternativeType" Command.Click="ExecuteStartSelection"
+																				Command.AlternateClick="ExecuteShowPerkConcept" PerkState="@PerkState" Level="@Level"
+																				PerkVisualWidgetParent="PerkVisualWidgetParent"
+																				PerkVisualWidget="PerkVisualWidgetParent\PerkVisualWidget"
+																				NotEarnedPerkBrush="CharacterDeveloper.NotEarnedPerkBrush"
+																				EarnedNotSelectedPerkBrush="CharacterDeveloper.EarnedNotSelectedPerkBrush"
+																				InSelectionPerkBrush="CharacterDeveloper.InSelectionPerkBrush"
+																				EarnedActivePerkBrush="CharacterDeveloper.EarnedActivePerkBrush"
+																				EarnedNotActivePerkBrush="CharacterDeveloper.EarnedNotActivePerkBrush"
+																				EarnedPreviousPerkNotSelectedPerkBrush="CharacterDeveloper.EarnedNotSelectedFollowingPerk.Brush"
+																				UpdateChildrenStates="true">
+																				<Children>
+
+																					<BrushWidget Id="PerkVisualWidgetParent" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed"
+																						SuggestedWidth="80" SuggestedHeight="86" HorizontalAlignment="Center" VerticalAlignment="Center">
+																						<Children>
+																							<Widget Id="PerkVisualWidget" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed"
+																								SuggestedWidth="30" SuggestedHeight="30" HorizontalAlignment="Center" MarginTop="23"
+																								Sprite="@PerkId" ValueFactor="-100" />
+																						</Children>
+																					</BrushWidget>
+
+																					<HintWidget DataSource="{Hint}" WidthSizePolicy="StretchToParent"
+																						HeightSizePolicy="StretchToParent" Command.HoverBegin="ExecuteBeginHint"
+																						Command.HoverEnd="ExecuteEndHint" />
+																				</Children>
+																			</PerkItemButtonWidget>
+																		</ItemTemplate>
+																	</GridWidget>
+																
 																	</Children>
 																</ListPanel>
-
-																<GridWidget Id="PerksList" DataSource="{Perks}" WidthSizePolicy="StretchToParent"
-																            HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" MarginTop="20"
-																            DoNotAcceptEvents="true" DefaultCellWidth="30" DefaultCellHeight="90" ColumnCount="3">
-																	<ItemTemplate>
-																		<PerkItemButtonWidget DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed"
-																			SuggestedWidth="30" SuggestedHeight="86" HorizontalAlignment="Center"
-																			AlternativeType="@AlternativeType" Command.Click="ExecuteStartSelection"
-																			Command.AlternateClick="ExecuteShowPerkConcept" PerkState="@PerkState" Level="@Level"
-																			PerkVisualWidgetParent="PerkVisualWidgetParent"
-																			PerkVisualWidget="PerkVisualWidgetParent\PerkVisualWidget"
-																			NotEarnedPerkBrush="CharacterDeveloper.NotEarnedPerkBrush"
-																			EarnedNotSelectedPerkBrush="CharacterDeveloper.EarnedNotSelectedPerkBrush"
-																			InSelectionPerkBrush="CharacterDeveloper.InSelectionPerkBrush"
-																			EarnedActivePerkBrush="CharacterDeveloper.EarnedActivePerkBrush"
-																			EarnedNotActivePerkBrush="CharacterDeveloper.EarnedNotActivePerkBrush"
-																			EarnedPreviousPerkNotSelectedPerkBrush="CharacterDeveloper.EarnedNotSelectedFollowingPerk.Brush"
-																			UpdateChildrenStates="true">
-																			<Children>
-
-																				<BrushWidget Id="PerkVisualWidgetParent" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed"
-																					SuggestedWidth="80" SuggestedHeight="86" HorizontalAlignment="Center" VerticalAlignment="Center">
-																					<Children>
-																						<Widget Id="PerkVisualWidget" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed"
-																							SuggestedWidth="30" SuggestedHeight="30" HorizontalAlignment="Center" MarginTop="23"
-																							Sprite="@PerkId" ValueFactor="-100" />
-																					</Children>
-																				</BrushWidget>
-
-																				<HintWidget DataSource="{Hint}" WidthSizePolicy="StretchToParent"
-																					HeightSizePolicy="StretchToParent" Command.HoverBegin="ExecuteBeginHint"
-																					Command.HoverEnd="ExecuteEndHint" />
-																			</Children>
-																		</PerkItemButtonWidget>
-																	</ItemTemplate>
-																</GridWidget>
 
 
 															</Children>

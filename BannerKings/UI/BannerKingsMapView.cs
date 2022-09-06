@@ -25,7 +25,9 @@ namespace BannerKings.UI
         protected override void CreateLayout()
         {
             base.CreateLayout();
+            UIManager.Instance.BKScreen.OnFinalize();
             var tuple = GetVM(id);
+            UIManager.Instance.SetScreen(new BannerKingsScreen());
             UIManager.Instance.BKScreen.LoadLayer(tuple.Item1, tuple.Item2);
         }
 

@@ -469,21 +469,61 @@ namespace BannerKings
 
                     if (workshop.WorkshopType.StringId == "artisans")
                     {
-                        count = (int)MathF.Max(1f, count * (data.GetTypeCount(PopType.Craftsmen) / 450f));
+                        var category = outputItem.ItemCategory;
+                        
+                        if (category == DefaultItemCategories.MeleeWeapons3  || category == DefaultItemCategories.MeleeWeapons2 || 
+                            category == DefaultItemCategories.LightArmor || category == DefaultItemCategories.MediumArmor ||
+                            category == DefaultItemCategories.HorseEquipment2 || category == DefaultItemCategories.HorseEquipment3 ||
+                            category == DefaultItemCategories.RangedWeapons2 || category == DefaultItemCategories.RangedWeapons3 ||
+                            category == DefaultItemCategories.Shield3)
+                        {
+                            count += 6;
+                        }
+
+                        if (category == DefaultItemCategories.MeleeWeapons4 || category ==  DefaultItemCategories.MeleeWeapons5 ||
+                            category ==  DefaultItemCategories.HeavyArmor || category ==  DefaultItemCategories.HorseEquipment4 ||
+                            category == DefaultItemCategories.HorseEquipment5 || category == DefaultItemCategories.RangedWeapons4 ||
+                            category == DefaultItemCategories.Shield5 || category == DefaultItemCategories.Shield4)
+                        {
+                            count += 2;
+                        }
+
+                        if (!outputItem.StringId.Contains("peasant") && (category == DefaultItemCategories.MeleeWeapons1 ||
+                            category == DefaultItemCategories.HorseEquipment || category == DefaultItemCategories.RangedWeapons1))
+                        {
+                            count += 10;
+                        }
+
+                        if (category == DefaultItemCategories.UltraArmor || category == DefaultItemCategories.RangedWeapons5)
+                        {
+                            count += 1;
+                        }
+
+                        count = (int)MathF.Max(1f, count + (data.GetTypeCount(PopType.Craftsmen) / 450f));
+                        if (outputItem.HasArmorComponent || outputItem.HasWeaponComponent || outputItem.HasSaddleComponent)
+                        {
+                            count = (int)(count * 2f);
+                        }
                     }
 
                     var itemPrice = town.GetItemPrice(outputItem);
-                    ItemModifier modifier = null;
-                    if (modifierGroup != null)
+                    int totalValue = 0;
+                    for (int i = 0; i < count; i++)
                     {
-                        modifier = modifierGroup.GetRandomModifierWithTarget(result, 0.5f);
-                        itemPrice = (int)(itemPrice * modifier.PriceMultiplier);
+                        ItemModifier modifier = null;
+                        if (modifierGroup != null)
+                        {
+                            modifier = modifierGroup.GetRandomModifierWithTarget(result, 0.2f);
+                            itemPrice = (int)(itemPrice * modifier.PriceMultiplier);
+                        }
+                        var element = new EquipmentElement(outputItem, modifier);
+                        totalValue += itemPrice;
+                        town.Owner.ItemRoster.AddToCounts(element, 1);
                     }
 
-                    town.Owner.ItemRoster.AddToCounts(new EquipmentElement(outputItem, modifier), count);
-                    if (Campaign.Current.GameStarted && !doNotEffectCapital)
+                    if (Campaign.Current.GameStarted && !doNotEffectCapital && workshop.WorkshopType.StringId != "artisans")
                     {
-                        var num = MathF.Min(1000, itemPrice) * count;
+                        var num = totalValue;
                         workshop.ChangeGold(num);
                         town.ChangeGold(-num);
                     }

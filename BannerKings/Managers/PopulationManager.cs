@@ -225,9 +225,9 @@ namespace BannerKings.Managers
             }
         }
 
-        public static void InitializeSettlementPops(Settlement settlement)
+        public void InitializeSettlementPops(Settlement settlement)
         {
-            if (settlement.StringId.Contains("Ruin") || settlement.StringId.Contains("tutorial"))
+            if (settlement.StringId.Contains("Ruin") || settlement.StringId.Contains("tutorial") || Populations.ContainsKey(settlement))
             {
                 return;
             }
@@ -290,7 +290,7 @@ namespace BannerKings.Managers
             {
                 if (!BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
                 {
-                    InitializeSettlementPops(settlement);
+                    BannerKingsConfig.Instance.PopulationManager.InitializeSettlementPops(settlement);
                 }
                 else
                 {
