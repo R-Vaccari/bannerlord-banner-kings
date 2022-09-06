@@ -6,6 +6,7 @@ using BannerKings.Managers.Helpers;
 using BannerKings.Managers.Populations.Villages;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
+using BannerKings.Models.Vanilla;
 using BannerKings.UI.Notifications;
 using HarmonyLib;
 using TaleWorlds.CampaignSystem;
@@ -16,6 +17,7 @@ using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.Settlements.Buildings;
 using TaleWorlds.CampaignSystem.ViewModelCollection;
+using TaleWorlds.CampaignSystem.ViewModelCollection.ArmyManagement;
 using TaleWorlds.CampaignSystem.ViewModelCollection.CharacterCreation;
 using TaleWorlds.CampaignSystem.ViewModelCollection.CharacterDeveloper;
 using TaleWorlds.CampaignSystem.ViewModelCollection.Education;
@@ -688,5 +690,27 @@ namespace BannerKings.UI
                 }
             }
         }
+
+        [HarmonyPatch(typeof(ArmyManagementVM))]
+        internal class ArmyManagementVMPatch
+        {
+            [HarmonyPostfix]
+            [HarmonyPatch("OnRefresh", MethodType.Normal)]
+            static void Postfix(ArmyManagementVM __instance)
+            {
+                __instance.CanCreateArmy = (float)__instance.TotalCost <= Hero.MainHero.Clan.Influence && __instance.PartiesInCart.Count > 1 &&
+                    new BKArmyManagementModel().CanCreateArmy(Hero.MainHero);
+            }
+
+            [HarmonyPrefix]
+            [HarmonyPatch("ExecuteDone", MethodType.Normal)]
+            static bool Prefix(ArmyManagementVM __instance)
+            {
+                bool canCreate = new BKArmyManagementModel().CanCreateArmy(Hero.MainHero);
+                if (!canCreate) MBInformationManager.AddQuickInformation(new TextObject("{=!}Not crown Marshal or low position in title hierarchy", null), 0, null, "");
+                return canCreate;
+            }
+        }
+
     }
 }
