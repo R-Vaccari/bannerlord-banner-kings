@@ -31,6 +31,7 @@ namespace BannerKings.UI.Education
         private readonly Hero hero;
         private MBBindingList<PerkVM> perks;
         private InformationElement bookSellers;
+        private string lifestyleName, lifestylePassive;
 
         public EducationVM(Hero hero, CharacterDeveloperVM developerVM) : base(null, false)
         {
@@ -71,6 +72,34 @@ namespace BannerKings.UI.Education
         [DataSourceProperty] public string ChooseLifestyleText => new TextObject("{=sOT08u5v}Choose Lifestyle").ToString();
 
         [DataSourceProperty] public string InvestFocusText => new TextObject("{=kweOwoNY}Invest Focus").ToString();
+
+        [DataSourceProperty]
+        public string LifestyleNameText
+        {
+            get => lifestyleName;
+            set
+            {
+                if (value != lifestyleName)
+                {
+                    lifestyleName = value;
+                    OnPropertyChangedWithValue(value);
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public string LifestylePassiveText
+        {
+            get => lifestylePassive;
+            set
+            {
+                if (value != lifestylePassive)
+                {
+                    lifestylePassive = value;
+                    OnPropertyChangedWithValue(value);
+                }
+            }
+        }
 
         [DataSourceProperty]
         public InformationElement BookSellers
@@ -312,14 +341,17 @@ namespace BannerKings.UI.Education
                     new TextObject("{=MaV9QBJE}No lifestyle currently adopted").ToString(), string.Empty,
                     new TextObject("{=KBsVXEtH}Languages may be taught by your courtiers that have a good fluency, so long they understand it more than you. Languages can be actively studied on the settlement the courtier is located at.")
                         .ToString()));
+
+                LifestyleNameText = null;
+                LifestylePassiveText = null;
             }
             else
             {
                 CanAddFocus = data.Lifestyle.CanInvestFocus(hero) && hero.HeroDeveloper.UnspentFocusPoints > 0;
 
-                LifestyleProgressInfo.Add(new InformationElement(new TextObject("{=tYO5xwVe}Lifestyle:").ToString(),
-                    data.Lifestyle.Name.ToString(),
-                    data.Lifestyle.Description.ToString()));
+                LifestyleNameText = data.Lifestyle.Name.ToString();
+                LifestylePassiveText = data.Lifestyle.PassiveEffects.ToString();
+
                 LifestyleProgressInfo.Add(new InformationElement(new TextObject("{=WJK9V5ND}Necessary skill:").ToString(),
                     data.Lifestyle.NecessarySkillForFocus.ToString(),
                     new TextObject("{=RBZRv3np}Necessary skill amount to unlock next stage. This is the total amount of both skills combined. You may have the total amount in a single skill, or half of it in each of the lifestyle's skills.")
