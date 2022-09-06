@@ -80,7 +80,11 @@ namespace BannerKings.Behaviours
                 var attrsDic = (Dictionary<CharacterAttribute, int>) charAttrs.GetType().BaseType
                     .GetField("_attributes", BindingFlags.Instance | BindingFlags.NonPublic)
                     .GetValue(charAttrs);
-                attrsDic.Add(BKAttributes.Instance.Wisdom, 2);
+
+                if(!attrsDic.ContainsKey(BKAttributes.Instance.Wisdom))
+                {
+                    attrsDic.Add(BKAttributes.Instance.Wisdom, 2);
+                }
 
                 var charSkills = (CharacterSkills) skills.GetValue(hero);
                 var skillsDic = (Dictionary<SkillObject, int>) charSkills.GetType().BaseType
@@ -92,9 +96,14 @@ namespace BannerKings.Behaviours
                     continue;
                 }
 
-                skillsDic.Add(BKSkills.Instance.Scholarship, 0);
-                skillsDic.Add(BKSkills.Instance.Theology, 0);
-                skillsDic.Add(BKSkills.Instance.Lordship, 0);
+                if (!skillsDic.ContainsKey(BKSkills.Instance.Scholarship))
+                    skillsDic.Add(BKSkills.Instance.Scholarship, 0);
+                
+                if (!skillsDic.ContainsKey(BKSkills.Instance.Theology))
+                    skillsDic.Add(BKSkills.Instance.Theology, 0);
+
+                if (!skillsDic.ContainsKey(BKSkills.Instance.Lordship))
+                    skillsDic.Add(BKSkills.Instance.Lordship, 0);
             }
         }
     }
