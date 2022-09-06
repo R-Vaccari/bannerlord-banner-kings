@@ -6,7 +6,6 @@ using BannerKings.Managers;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Populations.Villages;
 using BannerKings.Models.Vanilla;
-using BannerKings.UI;
 using HarmonyLib;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
