@@ -2,7 +2,7 @@
 
 <base xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" type="string">
 	<titles autoGenerate="true">
-		<kingdom faction="Vlandia" contract="feudal" deJure="lord_4_1">
+		<kingdom faction="Dryatia" contract="tribal" deJure="lord_4_1">
 			<duchy name="Sargotha" deJure="lord_4_1">
 				<county settlement="Sargot" deJure="lord_4_1">
 					<barony settlement="Talivel Castle" deJure="lord_4_1" />
@@ -62,7 +62,7 @@
 			</duchy>
 		</kingdom>
 
-		<kingdom faction="Sturgia" contract="tribal" deJure="lord_2_1">
+		<kingdom faction="Wandilaz" contract="tribal" deJure="lord_2_1">
 			<duchy name="Kachyar" deJure="lord_2_1">
 				<county settlement="Revyl" deJure="lord_2_17">
 					<barony settlement="Ustokol Castle" deJure="lord_2_17" />
@@ -88,7 +88,7 @@
 		</kingdom>
 
 
-		<kingdom faction="Northern Empire" contract="republic" deJure="lord_1_1">
+		<kingdom faction="Northern Imperium" contract="republic" deJure="lord_1_1">
 			<duchy name="Lakonia" deJure="lord_1_3">
 				<county settlement="Epicrotea" deJure="lord_1_3">
 					<barony settlement="Mecalovea Castle" deJure="lord_1_1" />
@@ -117,7 +117,7 @@
 			</duchy>
 		</kingdom>
 
-		<kingdom faction="Western Empire" contract="imperial" deJure="lord_1_7">
+		<kingdom faction="Western Imperium" contract="imperial" deJure="lord_1_7">
 			<duchy name="Gavys" deJure="lord_1_9">
 				<county settlement="Ortysia" deJure="lord_1_9">
 					<barony settlement="Garontor Castle" deJure="lord_1_9" />
@@ -145,7 +145,7 @@
 			</duchy>
 		</kingdom>
 
-		<kingdom faction="Southern Empire" contract="imperial" deJure="lord_1_14">
+		<kingdom faction="Southern Imperium" contract="imperial" deJure="lord_1_14">
 			<duchy name="Ornia" deJure="lord_1_14">
 				<county settlement="Lycaron" deJure="lord_1_14">
 					<barony settlement="Sestadaim Castle" deJure="lord_1_14" />
@@ -178,7 +178,7 @@
 		</kingdom>
 
 
-		<kingdom faction="Aserai" contract="feudal" deJure="lord_3_1">
+		<kingdom faction="Qutsith Republic" contract="republic" deJure="lord_3_1">
 			<duchy name="Perassia" deJure="lord_3_1">
 				<county settlement="Quyaz" deJure="lord_3_1">
 					<barony settlement="Tubilis Castle" deJure="lord_3_1" />
@@ -214,7 +214,7 @@
 			</duchy>
 		</kingdom>
 
-		<kingdom faction="Khuzait" contract="tribal" deJure="lord_6_1">
+		<kingdom faction="Saka" contract="tribal" deJure="lord_6_1">
 			<duchy name="Kohi Rohini" deJure="lord_6_17">
 				<county settlement="Odokh" deJure="lord_6_17">
 					<barony settlement="Simira Castle" deJure="lord_6_19" />
