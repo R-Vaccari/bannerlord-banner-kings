@@ -101,6 +101,12 @@ namespace BannerKings.Models.Vanilla
                 }
 
                 var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
+
+                if (data == null)
+                {
+                    continue;
+                }
+
                 if (BannerKingsConfig.Instance.AI.AcceptNotableAid(clan, data))
                 {
                     foreach (var notable in data.Settlement.Notables)
@@ -166,6 +172,11 @@ namespace BannerKings.Models.Vanilla
         public ExplainedNumber CalculateSettlementInfluence(Settlement settlement, PopulationData data)
         {
             var settlementResult = new ExplainedNumber(0f, true);
+            if (!settlement.IsVillage && !settlement.IsCastle && !settlement.IsTown)
+            {
+                return settlementResult;
+            }
+
             float nobles = data.GetTypeCount(PopType.Nobles);
             settlementResult.Add(MBMath.ClampFloat(nobles * 0.01f, 0f, 12f), new TextObject($"{{=!}}Nobles influence from {settlement.Name}"));
 

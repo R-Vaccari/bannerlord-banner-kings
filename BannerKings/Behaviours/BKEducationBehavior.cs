@@ -106,7 +106,7 @@ namespace BannerKings.Behaviours
         private void OnDailyTick(Hero hero)
         {
 
-            if (hero == null)
+            if (hero == null || hero.Culture == null)
             {
                 return;
             }
@@ -140,6 +140,11 @@ namespace BannerKings.Behaviours
             if (!hero.IsSpecial || (hero.Template != null && !hero.Template.StringId.Contains("bannerkings_bookseller_")))
             {
                 return;
+            }
+
+            if (bookSellers == null)
+            {
+                bookSellers = new Dictionary<Hero, ItemRoster>();
             }
 
             if (!bookSellers.ContainsKey(hero))
