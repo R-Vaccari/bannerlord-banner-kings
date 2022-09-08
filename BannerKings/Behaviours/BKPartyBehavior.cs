@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using BannerKings.Components;
 using HarmonyLib;
@@ -7,6 +8,7 @@ using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.Encounters;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.CampaignSystem.Siege;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
@@ -23,6 +25,30 @@ namespace BannerKings.Behaviours
             CampaignEvents.SettlementEntered.AddNonSerializedListener(this, OnSettlementEntered);
             CampaignEvents.DailyTickSettlementEvent.AddNonSerializedListener(this, DailySettlementTick);
             CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, OnSessionLaunched);
+            CampaignEvents.OnSiegeEventStartedEvent.AddNonSerializedListener(this, OnSiegeStarted);
+        }
+
+        private void OnSiegeStarted(SiegeEvent siegeEvent) 
+        {
+            if (siegeEvent.BesiegedSettlement == null)
+            {
+                return;
+            }
+
+            var toRemove = new List<MobileParty>();
+            foreach (var party in siegeEvent.BesiegedSettlement.Parties)
+            {
+                if (BannerKingsConfig.Instance.PopulationManager.IsPopulationParty(party))
+                {
+                    toRemove.Add(party);
+                }
+            }
+
+            foreach (var party in toRemove)
+            {
+                DestroyPartyAction.Apply(null, party);
+                BannerKingsConfig.Instance.PopulationManager.RemoveCaravan(party);
+            }
         }
 
         private void HourlyTickParty(MobileParty party)
