@@ -15,7 +15,13 @@ namespace BannerKings.UI.Crafting
         {
             Material = material;
             Visual = new ImageIdentifierVM(material);
-            ResourceAmount = PartyBase.MainParty.ItemRoster.GetItemNumber(material);
+            foreach (ItemRosterElement element in PartyBase.MainParty.ItemRoster)
+            {
+                if (element.EquipmentElement.Item == material)
+                {
+                    ResourceAmount += element.Amount;
+                }
+            }
             ResourceHint = new HintViewModel(material.Name);
         }
 
