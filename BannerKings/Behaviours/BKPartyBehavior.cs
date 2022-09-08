@@ -117,47 +117,39 @@ namespace BannerKings.Behaviours
 
         private void DailySettlementTick(Settlement settlement)
         {
-            if (settlement == null || BannerKingsConfig.Instance.PopulationManager == null)
+            if (settlement == null || !settlement.IsTown)
             {
                 return;
             }
 
             if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(settlement, "decision_slaves_export") &&
-                DecideSendSlaveCaravan(settlement))
+                DecideSendSlaveCaravan(settlement) && !settlement.IsUnderSiege)
             {
                 var villages = settlement.BoundVillages;
-                var target = villages.FirstOrDefault(village => village.Settlement != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(village.Settlement) && !BannerKingsConfig.Instance.PopulationManager.PopSurplusExists(village.Settlement, PopType.Slaves));
+                var villageTarget = villages.FirstOrDefault(village => village.Settlement != null && !BannerKingsConfig.Instance.PopulationManager.PopSurplusExists(village.Settlement, PopType.Slaves));
 
-                if (target != null)
+                if (villageTarget != null)
                 {
-                    SendSlaveCaravan(target);
+                    SendSlaveCaravan(villageTarget);
                 }
             }
 
-            // Send Travellers
-            if (!settlement.IsTown)
+            var random = MBRandom.RandomInt(1, 100);
+            if (random > 5)
             {
                 return;
             }
 
+            var target = GetTownToTravel(settlement);
+            if (target == null)
             {
-                var random = MBRandom.RandomInt(1, 100);
-                if (random > 5)
-                {
-                    return;
-                }
+                return;
+            }
 
-                var target = GetTownToTravel(settlement);
-                if (target == null)
-                {
-                    return;
-                }
-
-                if (BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(target) &&
-                    BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
-                {
-                    SendTravellerParty(settlement, target);
-                }
+            if (BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(target) &&
+                BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
+            {
+                SendTravellerParty(settlement, target);
             }
         }
 
