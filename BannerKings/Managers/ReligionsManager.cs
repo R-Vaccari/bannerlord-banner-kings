@@ -30,7 +30,7 @@ namespace BannerKings.Managers
                     var newValueDic = new Dictionary<Hero, FaithfulData>();
                     foreach (var pair2 in pair.Value)
                     {
-                        if (!newValueDic.ContainsKey(pair2.Key))
+                        if (pair2.Key != null && pair.Value != null && !newValueDic.ContainsKey(pair2.Key))
                         {
                             newValueDic.Add(pair2.Key, pair2.Value);
                         }
@@ -367,11 +367,16 @@ namespace BannerKings.Managers
 
         public Religion GetHeroReligion(Hero hero)
         {
+            if (hero == null)
+            {
+                return null;
+            }
+
             if (HeroesCache != null && HeroesCache.ContainsKey(hero))
             {
                 return HeroesCache[hero];
             }
-            return Religions.FirstOrDefault(pair => pair.Value.ContainsKey(hero)).Key;
+            return Religions.FirstOrDefault(pair => pair.Value != null && pair.Value.ContainsKey(hero)).Key;
         }
 
         public List<Hero> GetFaithfulHeroes(Religion religion)

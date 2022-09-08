@@ -106,7 +106,7 @@ namespace BannerKings.Behaviours
         private void OnDailyTick(Hero hero)
         {
 
-            if (hero == null)
+            if (hero == null || hero.Culture == null)
             {
                 return;
             }
@@ -140,6 +140,11 @@ namespace BannerKings.Behaviours
             if (!hero.IsSpecial || (hero.Template != null && !hero.Template.StringId.Contains("bannerkings_bookseller_")))
             {
                 return;
+            }
+
+            if (bookSellers == null)
+            {
+                bookSellers = new Dictionary<Hero, ItemRoster>();
             }
 
             if (!bookSellers.ContainsKey(hero))
@@ -326,7 +331,7 @@ namespace BannerKings.Behaviours
 
         private void AddDialogue(CampaignGameStarter starter)
         {
-            starter.AddPlayerLine("bk_question_preaching", "lord_talk_ask_something_2", "lord_talk_ask_something",
+            starter.AddPlayerLine("bk_question_preaching", "hero_main_options", "hero_main_options",
                 "{=yKxDFTQ3}I would like to buy a book.",
                 IsBookSeller,
                 OnBuyBookConsequence);

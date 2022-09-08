@@ -131,6 +131,7 @@ namespace BannerKings
             EducationManager = educations ?? new EducationManager();
             InnovationsManager = innovations ?? new InnovationsManager();
             GoalManager = goals ?? new GoalManager();
+            FirstUse = false;
         }
 
         private struct ConfigHolder

@@ -12,6 +12,14 @@
 		<BaseOutputPath>D:\SteamLibrary\steamapps\common\Mount &amp; Blade II Bannerlord\Modules\BannerKings\bin\Win64_Shipping_Client</BaseOutputPath>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+	  <DebugType>embedded</DebugType>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+	  <DebugType>embedded</DebugType>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<Reference Include="$(GameFolder)\bin\Win64_Shipping_Client\TaleWorlds.*.dll" Exclude="$(GameFolder)\bin\Win64_Shipping_Client\TaleWorlds.Native.dll">
 			<HintPath>%(Identity)</HintPath>
