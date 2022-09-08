@@ -331,7 +331,7 @@ namespace BannerKings.Behaviours
 
         private void AddDialogue(CampaignGameStarter starter)
         {
-            starter.AddPlayerLine("bk_question_preaching", "lord_talk_ask_something_2", "lord_talk_ask_something",
+            starter.AddPlayerLine("bk_question_preaching", "hero_main_options", "hero_main_options",
                 "{=yKxDFTQ3}I would like to buy a book.",
                 IsBookSeller,
                 OnBuyBookConsequence);
