@@ -108,7 +108,7 @@ namespace BannerKings.Behaviours
 
         private void OnGameLoaded(CampaignGameStarter starter)
         {
-
+            
             if (!firstUse)
             {
                 BannerKingsConfig.Instance.PopulationManager.PostInitialize();
@@ -116,7 +116,12 @@ namespace BannerKings.Behaviours
                 BannerKingsConfig.Instance.InnovationsManager.PostInitialize();
                 BannerKingsConfig.Instance.ReligionsManager.PostInitialize();
                 BannerKingsConfig.Instance.GoalManager.PostInitialize();
+            } 
+            else
+            {
+                BannerKingsConfig.Instance.InitializeManagersFirstTime();
             }
+
 
             BannerKingsConfig.Instance.ReligionsManager.PostInitialize();
         }
