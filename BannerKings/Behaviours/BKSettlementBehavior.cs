@@ -109,11 +109,7 @@ namespace BannerKings.Behaviours
         private void OnGameLoaded(CampaignGameStarter starter)
         {
 
-            if (firstUse)
-            {
-                BannerKingsConfig.Instance.InitializeManagersFirstTime();
-            } 
-            else
+            if (!firstUse)
             {
                 BannerKingsConfig.Instance.PopulationManager.PostInitialize();
                 BannerKingsConfig.Instance.EducationManager.PostInitialize();

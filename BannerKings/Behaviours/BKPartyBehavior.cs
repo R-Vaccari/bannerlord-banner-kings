@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using BannerKings.Components;
 using HarmonyLib;
@@ -7,6 +8,7 @@ using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.Encounters;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.CampaignSystem.Siege;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
@@ -23,6 +25,30 @@ namespace BannerKings.Behaviours
             CampaignEvents.SettlementEntered.AddNonSerializedListener(this, OnSettlementEntered);
             CampaignEvents.DailyTickSettlementEvent.AddNonSerializedListener(this, DailySettlementTick);
             CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, OnSessionLaunched);
+            CampaignEvents.OnSiegeEventStartedEvent.AddNonSerializedListener(this, OnSiegeStarted);
+        }
+
+        private void OnSiegeStarted(SiegeEvent siegeEvent) 
+        {
+            if (siegeEvent.BesiegedSettlement == null)
+            {
+                return;
+            }
+
+            var toRemove = new List<MobileParty>();
+            foreach (var party in siegeEvent.BesiegedSettlement.Parties)
+            {
+                if (BannerKingsConfig.Instance.PopulationManager.IsPopulationParty(party))
+                {
+                    toRemove.Add(party);
+                }
+            }
+
+            foreach (var party in toRemove)
+            {
+                DestroyPartyAction.Apply(null, party);
+                BannerKingsConfig.Instance.PopulationManager.RemoveCaravan(party);
+            }
         }
 
         private void HourlyTickParty(MobileParty party)
@@ -117,47 +143,39 @@ namespace BannerKings.Behaviours
 
         private void DailySettlementTick(Settlement settlement)
         {
-            if (settlement == null || BannerKingsConfig.Instance.PopulationManager == null)
+            if (settlement == null || !settlement.IsTown)
             {
                 return;
             }
 
             if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(settlement, "decision_slaves_export") &&
-                DecideSendSlaveCaravan(settlement))
+                DecideSendSlaveCaravan(settlement) && !settlement.IsUnderSiege)
             {
                 var villages = settlement.BoundVillages;
-                var target = villages.FirstOrDefault(village => village.Settlement != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(village.Settlement) && !BannerKingsConfig.Instance.PopulationManager.PopSurplusExists(village.Settlement, PopType.Slaves));
+                var villageTarget = villages.FirstOrDefault(village => village.Settlement != null && !BannerKingsConfig.Instance.PopulationManager.PopSurplusExists(village.Settlement, PopType.Slaves));
 
-                if (target != null)
+                if (villageTarget != null)
                 {
-                    SendSlaveCaravan(target);
+                    SendSlaveCaravan(villageTarget);
                 }
             }
 
-            // Send Travellers
-            if (!settlement.IsTown)
+            var random = MBRandom.RandomInt(1, 100);
+            if (random > 5)
             {
                 return;
             }
 
+            var target = GetTownToTravel(settlement);
+            if (target == null)
             {
-                var random = MBRandom.RandomInt(1, 100);
-                if (random > 5)
-                {
-                    return;
-                }
+                return;
+            }
 
-                var target = GetTownToTravel(settlement);
-                if (target == null)
-                {
-                    return;
-                }
-
-                if (BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(target) &&
-                    BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
-                {
-                    SendTravellerParty(settlement, target);
-                }
+            if (BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(target) &&
+                BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
+            {
+                SendTravellerParty(settlement, target);
             }
         }
 
