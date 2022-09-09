@@ -271,7 +271,8 @@ namespace BannerKings.UI.Titles
                                 else
                                 {
                                     GainKingdomInfluenceAction.ApplyForDefault(Hero.MainHero, -cost);
-                                    kingdom.AddDecision((BKContractDecision) x[0].Identifier, true);
+                                    decision.UpdateDecision((int)x[0].Identifier);
+                                    kingdom.AddDecision(decision, true);
                                 }
                             }, null, string.Empty));
                     }

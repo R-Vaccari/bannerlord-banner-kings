@@ -7,6 +7,18 @@
 	<strings>
 		<string id="gaJDVkvHA" text="Placeholder" />
 
+		<string id="bk_primogeniture" text="Primogeniture" />
+		<string id="bk_ultimogeniture" text="Ultimogeniture" />
+		<string id="bk_seniority" text="Seniority" />
+		<string id="bk_republic" text="Republic" />
+		<string id="bk_imperial" text="Imperial" />
+		<string id="bk_feudal" text="Feudal" />
+		<string id="bk_tribal" text="Tribal" />
+		<string id="bk_agnatic" text="Agnatic" />
+		<string id="bk_cognatic" text="Cognatic" />
+		<string id="bk_hereditary_monarchy" text="Hereditary Monarchy" />
+		<string id="bk_elective_monarchy" text="Elective Monarchy" />
+		
 		<string id="bk_crafting_itemtype_bodyarmor" text="Body Armors" />
 		<string id="bk_crafting_itemtype_barding" text="Bardings" />
 		<string id="bk_crafting_itemtype_shield" text="Shields" />
