@@ -321,10 +321,6 @@ namespace BannerKings.Behaviours
             
         }
 
-        private void DailySettlementTick(Settlement settlement)
-        {
-        }
-
         private void OnSettlementEntered(MobileParty party, Settlement target, Hero hero)
         {
             if (hero != Hero.MainHero || target.Town == null || BannerKingsConfig.Instance.PopulationManager == null || !BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(target))

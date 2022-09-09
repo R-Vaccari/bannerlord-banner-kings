@@ -1,6 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
-using BannerKings.Managers;
 using BannerKings.Managers.CampaignStart;
 using BannerKings.UI;
 using Helpers;
@@ -8,7 +6,6 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.Extensions;
 using TaleWorlds.CampaignSystem.Party;
-using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -53,6 +50,24 @@ namespace BannerKings.Behaviours
         private void OnSessionLaunched(CampaignGameStarter starter)
         {
             DefaultStartOptions.Instance.Initialize();
+        }
+
+        private void CheckShowStartOptions()
+        {
+            if (option != null)
+            {
+                return;
+            }
+
+            InformationManager.ShowTextInquiry(new TextInquiryData(
+                new TextObject("{=!}Campaign Start").ToString(),
+                new TextObject("{=!}It seems you have started Banner Kings in a saved game. Would you like to choose a custom start? This will reset your party and inventory - do not choose unless you have just started your campaign.").ToString(),
+                true,
+                true,
+                GameTexts.FindText("str_accept").ToString(),
+                GameTexts.FindText("str_cancel").ToString(),
+                (string s) => UIManager.Instance.ShowWindow("campaignStart"),
+                null));
         }
 
         public void SetStartOption(StartOption option)
@@ -114,12 +129,12 @@ namespace BannerKings.Behaviours
             if (!hasSeenInquiry)
             {
                 ShowInquiry();
+                CheckShowStartOptions();
             }
         }
 
         private void OnCharacterCreationOver()
         {
-            
             UIManager.Instance.ShowWindow("campaignStart");
         }
 
