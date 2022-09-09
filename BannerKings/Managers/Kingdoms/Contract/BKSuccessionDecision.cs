@@ -21,6 +21,10 @@ namespace BannerKings.Managers.Kingdoms.Contract
 
         [SaveableProperty(100)] private SuccessionType successionType { get; set; }
 
+        public override void UpdateDecision(int value)
+        {
+            successionType = (SuccessionType)value;
+        }
         public override void ApplyChosenOutcome(DecisionOutcome chosenOutcome)
         {
             var newGovernment = (chosenOutcome as SuccessionDecisionOutcome).ShouldDecisionBeEnforced;
@@ -145,14 +149,14 @@ namespace BannerKings.Managers.Kingdoms.Contract
         {
             var textObject = new TextObject("{=mXcErd03}As {?IS_FEMALE}queen{?}king{\\?} you must decide whether to enforce the policy of {POLICY_NAME}.");
             textObject.SetTextVariable("IS_FEMALE", DetermineChooser().Leader.IsFemale ? 1 : 0);
-            textObject.SetTextVariable("POLICY_NAME", successionType.ToString());
+            textObject.SetTextVariable("POLICY_NAME", Utils.TextHelper.GetName(successionType));
             return textObject;
         }
 
         public override TextObject GetChooseTitle()
         {
             var textObject = new TextObject("{=iZ6VfHe6}Change government to {GOVERNMENT}");
-            textObject.SetTextVariable("GOVERNMENT", successionType.ToString());
+            textObject.SetTextVariable("GOVERNMENT", Utils.TextHelper.GetName(successionType));
             return textObject;
         }
 
@@ -173,7 +177,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
 
             textObject.SetTextVariable("KINGDOM", Kingdom.InformalName);
             textObject.SetTextVariable("POLICY_DESCRIPTION",
-                newGovernment ? successionType.ToString() : Title.contract.Succession.ToString());
+                newGovernment ? Utils.TextHelper.GetName(successionType) : Utils.TextHelper.GetName(Title.contract.Succession));
             if (isShortVersion || IsSingleClanDecision())
             {
                 textObject.SetTextVariable("POLICY_SUPPORT", TextObject.Empty);
@@ -219,14 +223,14 @@ namespace BannerKings.Managers.Kingdoms.Contract
             textObject.SetTextVariable("CLAN", DetermineChooser().Leader.Name);
             textObject.SetTextVariable("CURRENT",
                 Utils.Helpers.GetGovernmentString(Title.contract.Government, Kingdom.Culture));
-            textObject.SetTextVariable("PROPOSED", successionType.ToString());
+            textObject.SetTextVariable("PROPOSED", Utils.TextHelper.GetName(successionType));
             return textObject;
         }
 
         public override TextObject GetSupportTitle()
         {
             var textObject = new TextObject("{=Sd4K6UiX}Vote to change realm's succession to {GOVERNMENT}");
-            textObject.SetTextVariable("GOVERNMENT", successionType.ToString());
+            textObject.SetTextVariable("GOVERNMENT", Utils.TextHelper.GetName(successionType));
             return textObject;
         }
 

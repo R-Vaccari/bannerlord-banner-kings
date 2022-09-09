@@ -20,6 +20,11 @@ namespace BannerKings.Managers.Kingdoms.Contract
 
         [SaveableProperty(100)] private GovernmentType governmentType { get; set; }
 
+        public override void UpdateDecision(int value)
+        {
+            governmentType = (GovernmentType)value;
+        }
+
         public override void ApplyChosenOutcome(DecisionOutcome chosenOutcome)
         {
             var newGovernment = (chosenOutcome as GovernmentDecisionOutcome).ShouldDecisionBeEnforced;

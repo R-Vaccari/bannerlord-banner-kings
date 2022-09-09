@@ -489,7 +489,7 @@ namespace BannerKings
                         }
 
                         if (!outputItem.StringId.Contains("peasant") && (category == DefaultItemCategories.MeleeWeapons1 ||
-                            category == DefaultItemCategories.HorseEquipment || category == DefaultItemCategories.RangedWeapons1))
+                            category == DefaultItemCategories.RangedWeapons1))
                         {
                             count += 10;
                         }
@@ -514,7 +514,10 @@ namespace BannerKings
                         if (modifierGroup != null)
                         {
                             modifier = modifierGroup.GetRandomModifierWithTarget(result, 0.2f);
-                            itemPrice = (int)(itemPrice * modifier.PriceMultiplier);
+                            if (modifier != null)
+                            {
+                                itemPrice = (int)(itemPrice * modifier.PriceMultiplier);
+                            }
                         }
                         var element = new EquipmentElement(outputItem, modifier);
                         totalValue += itemPrice;

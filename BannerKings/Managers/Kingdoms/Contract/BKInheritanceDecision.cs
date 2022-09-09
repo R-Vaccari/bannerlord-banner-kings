@@ -21,6 +21,11 @@ namespace BannerKings.Managers.Kingdoms.Contract
 
         [SaveableProperty(100)] private InheritanceType inheritanceType { get; set; }
 
+        public override void UpdateDecision(int value)
+        {
+            inheritanceType = (InheritanceType)value;
+        }
+
         public override void ApplyChosenOutcome(DecisionOutcome chosenOutcome)
         {
             var newGovernment = (chosenOutcome as InheritanceDecisionOutcome).ShouldDecisionBeEnforced;

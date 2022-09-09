@@ -2,6 +2,18 @@
 
 <strings>
 
+	<string id="str_bk_primogeniture" text="{=bk_primogeniture}Primogeniture" />
+	<string id="str_bk_ultimogeniture" text="{=bk_ultimogeniture}Ultimogeniture" />
+	<string id="str_bk_seniority" text="{=bk_seniority}Seniority" />
+	<string id="str_bk_republic" text="{=bk_republic}Republic" />
+	<string id="str_bk_imperial" text="{=bk_imperial}Imperial" />
+	<string id="str_bk_feudal" text="{=bk_feudal}Feudal" />
+	<string id="str_bk_tribal" text="{=bk_tribal}Tribal" />
+	<string id="str_bk_agnatic" text="{=bk_agnatic}Agnatic" />
+	<string id="str_bk_cognatic" text="{=bk_cognatic}Cognatic" />
+	<string id="str_bk_hereditary_monarchy" text="{=bk_hereditary_monarchy}Hereditary Monarchy" />
+	<string id="str_bk_elective_monarchy" text="{=bk_elective_monarchy}Elective Monarchy" />
+
 	<string id="str_item_category.apple" text="{=1MAr0j2J}Apples{@Plural}baskets of apples{\@}" />
 	<string id="str_item_category.orange" text="{=Krqwsins}Oranges{@Plural}baskets of oranges{\@}" />
 	<string id="str_item_category.bread" text="{=VJfbLXmi}Bread{@Plural}loaves of bread{\@}" />

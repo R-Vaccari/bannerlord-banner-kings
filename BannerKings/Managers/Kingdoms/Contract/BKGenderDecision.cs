@@ -218,6 +218,11 @@ namespace BannerKings.Managers.Kingdoms.Contract
             return MBMath.ClampFloat(support / clans, 0f, 100f);
         }
 
+        public override void UpdateDecision(int value)
+        {
+            genderLaw = (GenderLaw)value;
+        }
+
         public class GenderLawDecisionOutcome : DecisionOutcome
         {
             public GenderLawDecisionOutcome(bool shouldBeEnforced)
