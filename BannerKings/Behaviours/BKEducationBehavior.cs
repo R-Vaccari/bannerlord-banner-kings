@@ -39,6 +39,11 @@ namespace BannerKings.Behaviours
 
         public List<Hero> GetAllBookSellers()
         {
+            if (bookSellers == null)
+            {
+                bookSellers = new Dictionary<Hero, ItemRoster>();
+            }
+
             return bookSellers.Keys.ToList();
         }
 

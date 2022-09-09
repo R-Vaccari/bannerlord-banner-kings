@@ -97,7 +97,7 @@ namespace BannerKings.Models.Vanilla
             {
 
                 var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
-                if (data == null)
+                if (data == null || settlement.Name == null)
                 {
                     continue;
                 }
