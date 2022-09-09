@@ -465,7 +465,7 @@ namespace BannerKings.Managers
                 relationChange += (int)(relationChange * 0.1f / 100);
             }
 
-            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(grantor, receiver, relationChange);
+            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(grantor, receiver, -relationChange);
             GainKingdomInfluenceAction.ApplyForDefault(grantor, action.Influence);
             grantor.AddSkillXp(BKSkills.Instance.Lordship, 
                 BannerKingsConfig.Instance.TitleModel.GetSkillReward(action.Title.type, action.Type));
