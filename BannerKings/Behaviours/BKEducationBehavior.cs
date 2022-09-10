@@ -39,6 +39,11 @@ namespace BannerKings.Behaviours
 
         public List<Hero> GetAllBookSellers()
         {
+            if (bookSellers == null)
+            {
+                bookSellers = new Dictionary<Hero, ItemRoster>();
+            }
+
             return bookSellers.Keys.ToList();
         }
 
@@ -390,9 +395,10 @@ namespace BannerKings.Behaviours
 
         private bool IsBookSeller()
         {
-            return Hero.OneToOneConversationHero.IsSpecial &&
-                   Hero.OneToOneConversationHero.CharacterObject.OriginalCharacter.StringId.Contains(
-                       "bannerkings_bookseller");
+            return Hero.OneToOneConversationHero != null && Hero.OneToOneConversationHero.IsSpecial &&
+                Hero.OneToOneConversationHero.CharacterObject != null &&
+                Hero.OneToOneConversationHero.CharacterObject.OriginalCharacter != null && 
+                Hero.OneToOneConversationHero.CharacterObject.OriginalCharacter.StringId.Contains("bannerkings_bookseller");
         }
 
         private static void ApplyScholarshipBedTimeStoryEffect(Hero hero)

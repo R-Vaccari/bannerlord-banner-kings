@@ -95,14 +95,9 @@ namespace BannerKings.Models.Vanilla
 
             foreach (var settlement in clan.Settlements)
             {
-                if (BannerKingsConfig.Instance.PopulationManager == null || !BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
-                {
-                    continue;
-                }
 
                 var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
-
-                if (data == null)
+                if (data == null || settlement.Name == null)
                 {
                     continue;
                 }
@@ -125,7 +120,7 @@ namespace BannerKings.Models.Vanilla
 
                 var settlementResult = CalculateSettlementInfluence(settlement, data);
                 baseResult.Add(settlementResult.ResultNumber, settlement.Name);
-                if (!settlement.IsVillage || BannerKingsConfig.Instance.TitleManager == null)
+                if (!settlement.IsVillage)
                 {
                     continue;
                 }
@@ -190,11 +185,15 @@ namespace BannerKings.Models.Vanilla
                 }
             }
 
-            var lordshipManorLord = BKPerks.Instance.LordshipManorLord;
-            if (settlement.Owner.GetPerkValue(lordshipManorLord))
+            var owner = settlement.Owner;
+            if (owner != null)
             {
-                settlementResult.Add(0.2f, lordshipManorLord.Name);
+                if (owner.GetPerkValue(BKPerks.Instance.LordshipManorLord))
+                {
+                    settlementResult.Add(0.2f, BKPerks.Instance.LordshipManorLord.Name);
+                }
             }
+          
 
             if (!BannerKingsConfig.Instance.PopulationManager.PopSurplusExists(settlement, PopType.Nobles, true))
             {

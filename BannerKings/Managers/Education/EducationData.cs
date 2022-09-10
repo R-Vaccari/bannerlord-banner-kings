@@ -30,7 +30,7 @@ namespace BannerKings.Managers.Education
             this.hero = hero;
             this.languages = languages;
             books = new Dictionary<BookType, float>();
-            Lifestyle = lifestyle != null ? Lifestyle.CreateLifestyle(lifestyle) : null;
+            Lifestyle = lifestyle != null ? Lifestyle.CreateLifestyle(lifestyle, this) : null;
             CurrentBook = null;
             CurrentLanguage = null;
             LanguageInstructor = null;
@@ -82,6 +82,17 @@ namespace BannerKings.Managers.Education
         [field: SaveableField(7)] public Hero LanguageInstructor { get; private set; }
 
         [field: SaveableField(4)] public Lifestyle Lifestyle { get; private set; }
+        [field: SaveableField(9)] public float LifestyleProgress { get; private set; }
+
+        public void ResetProgress()
+        {
+            LifestyleProgress = 0f;
+        }
+
+        public void AddProgress(float progress)
+        {
+            LifestyleProgress = MBMath.ClampFloat(LifestyleProgress + progress, 0f, 1f);
+        }
 
         public MBReadOnlyDictionary<Language, float> Languages => languages.GetReadOnlyDictionary();
         public MBReadOnlyDictionary<BookType, float> Books => books.GetReadOnlyDictionary();
@@ -98,7 +109,8 @@ namespace BannerKings.Managers.Education
 
             if (lf != null)
             {
-                Lifestyle.Initialize(lf.Name, lf.Description, lf.FirstSkill, lf.SecondSkill, new List<PerkObject>(lf.Perks), lf.PassiveEffects, lf.FirstEffect, lf.SecondEffect, lf.Culture);
+                Lifestyle.Initialize(lf.Name, lf.Description, lf.FirstSkill, lf.SecondSkill, new List<PerkObject>(lf.Perks), 
+                    lf.PassiveEffects, lf.FirstEffect, lf.SecondEffect, this, lf.Culture);
             }
 
 
@@ -168,7 +180,11 @@ namespace BannerKings.Managers.Education
         {
             if (lifestyle != null)
             {
-                Lifestyle = Lifestyle.CreateLifestyle(lifestyle);
+                Lifestyle = Lifestyle.CreateLifestyle(lifestyle, this);
+            }
+            else
+            {
+                Lifestyle = null;
             }
         }
 
@@ -267,7 +283,7 @@ namespace BannerKings.Managers.Education
 
             if (Lifestyle != null)
             {
-                Lifestyle.AddProgress(StandartLifestyleProgress);
+                AddProgress(StandartLifestyleProgress);
                 hero.AddSkillXp(BKSkills.Instance.Scholarship, 1f);
             }
         }

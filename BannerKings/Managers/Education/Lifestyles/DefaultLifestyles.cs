@@ -78,6 +78,7 @@ namespace BannerKings.Managers.Education.Lifestyles
                 new TextObject("{=tRp08jyH}Battanian settlements have +{EFFECT1} militia\nReduced damage by {EFFECT2}% when mounted"),
                 1.5f, 
                 25f,
+                null,
                 cultures.FirstOrDefault(x => x.StringId == "battania"));
 
             Cataphract = new Lifestyle("lifestyle_cataphract");
@@ -94,6 +95,7 @@ namespace BannerKings.Managers.Education.Lifestyles
                 new TextObject("{=y2zNEeT5}Increased renown from victories by {EFFECT1}%\nNon-cavalry units need {EFFECT2}% more experience to upgrade"),
                 12f, 
                 25f,
+                null,
                 cultures.FirstOrDefault(x => x.StringId == "empire"));
 
             Diplomat = new Lifestyle("lifestyle_diplomat");
@@ -219,7 +221,9 @@ namespace BannerKings.Managers.Education.Lifestyles
                 },
                 new TextObject("{=!}Party size increased by {EFFECT1}%\nNon-Khuzait troops negatively affect morale by {EFFECT2}%"),
                 15f, 
-                0.5f);
+                0.5f,
+                null,
+                cultures.First(x => x.StringId == "khuzait"));
 
             Varyag = new Lifestyle("lifestyle_varyag");
             Varyag.Initialize(new TextObject("{=4pYayWGi}Varyag"), 
@@ -234,7 +238,9 @@ namespace BannerKings.Managers.Education.Lifestyles
                 },
                 new TextObject("{=0HiZjcrv}Infantry troops are {EFFECT1}% faster on the map\nYou and your formation deal {EFFECT2}% less damage when mounted"),
                 8f,
-                20f);
+                20f,
+                null,
+                cultures.First(x => x.StringId == "sturgia"));
 
             Gladiator = new Lifestyle("lifestyle_gladiator");
             Gladiator.Initialize(new TextObject("{=wTyw0yfR}Gladiator"), 
@@ -264,7 +270,8 @@ namespace BannerKings.Managers.Education.Lifestyles
                 },
                 new TextObject("{=!}You and melee cavalry in your formation deals {EFFECT1}% more melee damage.{EFFECT1}%\nYou and your formation deal {EFFECT2}% less ranged damaged, mounted or otherwise."),
                 5f,
-                15f, 
+                15f,
+                null,
                 cultures.First(x => x.StringId == "vlandia"));
 
             Jawwal = new Lifestyle("lifestyle_jawwal");
@@ -281,6 +288,7 @@ namespace BannerKings.Managers.Education.Lifestyles
                 new TextObject("{=!}Party consumes {EFFECT1}% less food while on deserts\nDemesne limit reduced by {EFFECT2}%"),
                 30f,
                 15f,
+                null,
                 cultures.First(x => x.StringId == "aserai"));
         }
     }

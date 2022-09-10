@@ -470,10 +470,16 @@ namespace BannerKings.Managers
                 relationChange += (int)(relationChange * 0.1f / 100);
             }
 
-            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(grantor, receiver, relationChange);
+            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(grantor, receiver, -relationChange);
             GainKingdomInfluenceAction.ApplyForDefault(grantor, action.Influence);
             grantor.AddSkillXp(BKSkills.Instance.Lordship, 
                 BannerKingsConfig.Instance.TitleModel.GetSkillReward(action.Title.type, action.Type));
+
+            var fief = action.Title.fief;
+            if (receiver.Clan.Leader == receiver && fief != null && (fief.IsTown || fief.IsCastle))
+            {
+                ChangeOwnerOfSettlementAction.ApplyByGift(fief, receiver);
+            }
 
             if (receiver.CompanionOf != null)
             {
@@ -1232,12 +1238,12 @@ namespace BannerKings.Managers
                 deJure, settlement.Village.Bound.Owner, settlement.Name.ToString(), contract);
         }
 
-        public IEnumerable<GovernmentType> GetSuccessionTypes()
+        public IEnumerable<SuccessionType> GetSuccessionTypes()
         {
-            yield return GovernmentType.Feudal;
-            yield return GovernmentType.Tribal;
-            yield return GovernmentType.Imperial;
-            yield return GovernmentType.Republic;
+            yield return SuccessionType.Republic;
+            yield return SuccessionType.Hereditary_Monarchy;
+            yield return SuccessionType.Elective_Monarchy;
+            yield return SuccessionType.Imperial;
         }
 
         public IEnumerable<InheritanceType> GetInheritanceTypes()

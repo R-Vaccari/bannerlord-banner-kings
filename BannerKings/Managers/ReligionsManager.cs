@@ -111,6 +111,7 @@ namespace BannerKings.Managers
 
         public void InitializeHeroFaith(Hero hero, Religion rel = null)
         {
+
             if (rel == null)
             {
                 rel = GetIdealReligion(hero.Culture);
@@ -118,6 +119,13 @@ namespace BannerKings.Managers
                 {
                     return;
                 }
+            }
+
+
+            if (Religions[rel].ContainsKey(hero))
+            {
+                RefreshCaches();
+                return;
             }
 
 

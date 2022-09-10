@@ -160,7 +160,7 @@ namespace BannerKings.UI.Titles
                 var governments = GetGovernments();
                 var governmentButton = CreateButton(governments,
                     governments.Count >= 1
-                        ? new BKGovernmentDecision(Clan.PlayerClan, (GovernmentType)governments[0].Identifier, title)
+                        ? new BKGovernmentDecision(kingdom.RulingClan, (GovernmentType)governments[0].Identifier, title)
                         : null,
                     new TextObject("{=PSrEtF5L}Government").ToString(),
                     new TextObject("{=jeNEcVGi}Propose a change in government structure, altering the allowed succession forms and aspects of settlement governance. Depending on the government choice, an appropriate succession type will be enforced as well."));
@@ -271,7 +271,8 @@ namespace BannerKings.UI.Titles
                                 else
                                 {
                                     GainKingdomInfluenceAction.ApplyForDefault(Hero.MainHero, -cost);
-                                    kingdom.AddDecision((BKContractDecision) x[0].Identifier, true);
+                                    decision.UpdateDecision((int)x[0].Identifier);
+                                    kingdom.AddDecision(decision, true);
                                 }
                             }, null, string.Empty));
                     }
