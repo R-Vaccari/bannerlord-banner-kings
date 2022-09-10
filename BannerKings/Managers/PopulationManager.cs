@@ -108,7 +108,11 @@ namespace BannerKings.Managers
 
         public void AddSettlementData(Settlement settlement, PopulationData data)
         {
-            Populations.Add(settlement, data);
+            if(!Populations.ContainsKey((Settlement)settlement))
+            {
+                Populations.Add(settlement, data);
+            }
+            
         }
 
         public bool IsPopulationParty(MobileParty party)

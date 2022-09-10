@@ -404,6 +404,11 @@ namespace BannerKings.Managers
                         .SetTextVariable("CLAIMANT", claimant.EncyclopediaLinkWithName)
                         .SetTextVariable("TITLE", action.Title.FullName));
             }
+
+            if (action.ActionTaker == Hero.MainHero)
+            {
+
+            }
         }
 
         public void RevokeTitle(TitleAction action)

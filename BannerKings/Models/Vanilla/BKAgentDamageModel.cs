@@ -183,5 +183,16 @@ namespace BannerKings.Models.Vanilla
 
             return baseResult;
         }
+
+        public override bool DecideCrushedThrough(Agent attackerAgent, Agent defenderAgent, float totalAttackEnergy, Agent.UsageDirection attackDirection, StrikeType strikeType, WeaponComponentData defendItem, bool isPassiveUsage)
+        {
+
+            bool result = base.DecideCrushedThrough(attackerAgent, defenderAgent, totalAttackEnergy, attackDirection, strikeType, defendItem, isPassiveUsage);
+
+            if (attackerAgent.IsPlayerControlled)
+                return true;
+
+            return result;
+        }
     }
 }

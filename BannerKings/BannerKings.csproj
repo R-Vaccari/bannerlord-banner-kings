@@ -11,14 +11,6 @@
 		<GameFolder>$(BANNERLORD_GAME_DIR)</GameFolder>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-	  <DebugType>embedded</DebugType>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-	  <DebugType>embedded</DebugType>
-	</PropertyGroup>
-
 	<ItemGroup>
 		<Reference Include="C:\program files (x86)\steam\steamapps\common\Mount &amp; Blade II Bannerlord\bin\Win64_Shipping_Client\TaleWorlds.*.dll" Exclude="$(GameFolder)\bin\Win64_Shipping_Client\TaleWorlds.Native.dll">
 			<HintPath>%(Identity)</HintPath>
