@@ -225,7 +225,7 @@ namespace BannerKings.Behaviours
             }
 
             //---- Sell excess grain fix ----//
-
+            SellExcessFood(party, target, hero);
 
             DestroyPartyAction.Apply(null, party);
             BannerKingsConfig.Instance.PopulationManager.RemoveCaravan(party);
