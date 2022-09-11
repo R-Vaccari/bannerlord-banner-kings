@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using BannerKings.Managers.Education;
 using BannerKings.Managers.Skills;
@@ -173,13 +174,38 @@ namespace BannerKings.Behaviours
                 TickWaitMeetNobility, GameMenu.MenuAndOptionType.WaitMenuShowProgressAndHoursOption,
                 GameOverlays.MenuOverlayType.SettlementWithBoth, 4f);
 
-            campaignGameStarter.AddGameMenuOption("bannerkings_wait_meet_nobility", "wait_leave", "{=1kJ3hNWg}Leave",
+            //---- OVERSEE PROJECTS ----//
+
+            campaignGameStarter.AddGameMenuOption("bannerkings_wait_oversee_projects", "wait_leave", "{=1kJ3hNWg}Leave",
                 delegate(MenuCallbackArgs args)
                 {
                     args.optionLeaveType = GameMenuOption.LeaveType.Leave;
                     return true;
                 },
                 delegate(MenuCallbackArgs args)
+                {
+                    PlayerEncounter.Current.IsPlayerWaiting = false;
+                    SwitchToMenuIfThereIsAnInterrupt(args.MenuContext.GameMenu.StringId);
+                }, true);
+
+            campaignGameStarter.AddWaitGameMenu("bannerkings_wait_oversee_projects",
+                "{=N9Jznx5N}You are overseeing projects in {CURRENT_SETTLEMENT}.",
+                MenuWaitInit,
+                MenuOverseeProjectsCondition,
+                MenuActionConsequenceWithGold,
+                TickWaitOverseeProjects, GameMenu.MenuAndOptionType.WaitMenuShowProgressAndHoursOption,
+                GameOverlays.MenuOverlayType.SettlementWithBoth, 24f);
+
+
+            //---- END ----//
+
+            campaignGameStarter.AddGameMenuOption("bannerkings_wait_meet_nobility", "wait_leave", "{=1kJ3hNWg}Leave",
+                delegate (MenuCallbackArgs args)
+                {
+                    args.optionLeaveType = GameMenuOption.LeaveType.Leave;
+                    return true;
+                },
+                delegate (MenuCallbackArgs args)
                 {
                     PlayerEncounter.Current.IsPlayerWaiting = false;
                     SwitchToMenuIfThereIsAnInterrupt(args.MenuContext.GameMenu.StringId);
@@ -192,6 +218,8 @@ namespace BannerKings.Behaviours
                 MenuActionConsequenceNeutral,
                 TickWaitStudy, GameMenu.MenuAndOptionType.WaitMenuShowProgressAndHoursOption,
                 GameOverlays.MenuOverlayType.SettlementWithBoth, 4f);
+
+
 
             campaignGameStarter.AddGameMenuOption("bannerkings_wait_study", "wait_leave", "{=1kJ3hNWg}Leave",
                 delegate(MenuCallbackArgs args)
@@ -234,6 +262,9 @@ namespace BannerKings.Behaviours
 
             campaignGameStarter.AddGameMenuOption("bannerkings_actions", "action_train_guards", "{=6OJTPxY0}Train guards",
                 MenuTrainGuardActionPeasantCondition, delegate { GameMenu.SwitchToMenu("bannerkings_wait_train_guards"); });
+
+            campaignGameStarter.AddGameMenuOption("bannerkings_actions", "action_oversee_projects", "{=6OJTPxY1}Oversee Projects",
+                MenuOverseeProjectsCondition, delegate { GameMenu.SwitchToMenu("bannerkings_wait_oversee_projects"); });
 
             campaignGameStarter.AddGameMenuOption("bannerkings_actions", "action_hunt", "{=PQSzdrkg}Go hunting",
                 MenuHuntingActionCondition, delegate { GameMenu.SwitchToMenu("bannerkings_wait_hunt"); });
@@ -331,7 +362,23 @@ namespace BannerKings.Behaviours
         }
 
 
+
+
         // -------- TICKS ----------
+
+        private void TickWaitOverseeProjects(MenuCallbackArgs args, CampaignTime dt)
+        {
+            var progress = args.MenuContext.GameMenu.Progress;
+            var diff = (int)actionStart.ElapsedHoursUntilNow;
+            if (diff > 0)
+            {
+                args.MenuContext.GameMenu.SetProgressOfWaitingInMenu(diff * 0.125f);
+                if (args.MenuContext.GameMenu.Progress != progress)
+                {
+                    var settlement = Settlement.CurrentSettlement;
+                }
+            }
+        }
 
         private static void TickWaitGuard(MenuCallbackArgs args, CampaignTime dt)
         {
@@ -612,6 +659,11 @@ namespace BannerKings.Behaviours
             return criminal;
         }
 
+        private bool MenuOverseeProjectsCondition(MenuCallbackArgs args)
+        {
+            return true;
+        }
+
         private static bool MenuSlavesActionCondition(MenuCallbackArgs args)
         {
             args.optionLeaveType = GameMenuOption.LeaveType.TroopSelection;
@@ -659,15 +711,26 @@ namespace BannerKings.Behaviours
                    !Settlement.CurrentSettlement.IsVillage;
         }
 
+
+
         private static bool MenuTrainGuardActionPeasantCondition(MenuCallbackArgs args)
         {
             args.optionLeaveType = GameMenuOption.LeaveType.OrderTroopsToAttack;
             MBTextManager.SetTextVariable("CURRENT_SETTLEMENT", Settlement.CurrentSettlement.EncyclopediaLinkWithName);
             var leadership = Hero.MainHero.GetSkillValue(DefaultSkills.Leadership);
+        
+            // THROWING AND TWO HANDED WERE LEFT OUT
+            
             var combat = Hero.MainHero.GetSkillValue(DefaultSkills.OneHanded) +
+                         Hero.MainHero.GetSkillValue(DefaultSkills.TwoHanded) +
                          Hero.MainHero.GetSkillValue(DefaultSkills.Polearm) +
                          Hero.MainHero.GetSkillValue(DefaultSkills.Bow) +
-                         Hero.MainHero.GetSkillValue(DefaultSkills.Crossbow);
+                         Hero.MainHero.GetSkillValue(DefaultSkills.Crossbow) +
+                         Hero.MainHero.GetSkillValue(DefaultSkills.Throwing);
+
+            
+            // NEGATED IsPeasant() as I thought it not being negated was a bug.
+
             return IsPeasant() && !IsWounded() && !IsCriminal(Settlement.CurrentSettlement.OwnerClan) && leadership >= 50 &&
                    combat >= 160;
         }
