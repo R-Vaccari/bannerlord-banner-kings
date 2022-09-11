@@ -6,10 +6,13 @@ using HarmonyLib;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.Encounters;
+using TaleWorlds.CampaignSystem.MapEvents;
 using TaleWorlds.CampaignSystem.Party;
+using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.Siege;
 using TaleWorlds.Core;
+using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
 using static BannerKings.Managers.PopulationManager;
@@ -26,8 +29,19 @@ namespace BannerKings.Behaviours
             CampaignEvents.DailyTickSettlementEvent.AddNonSerializedListener(this, DailySettlementTick);
             CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, OnSessionLaunched);
             CampaignEvents.OnSiegeEventStartedEvent.AddNonSerializedListener(this, OnSiegeStarted);
+            CampaignEvents.OnGameLoadFinishedEvent.AddNonSerializedListener(this, OnGameLoadFinished);
         }
 
+        private void OnGameLoadFinished()
+        {
+            foreach (MobileParty mobileParty in MobileParty.AllLordParties)
+            {
+                if (mobileParty != null && !mobileParty.IsMainParty)
+                {
+                    this.DitchExcessFood(mobileParty);
+                }
+            }
+        }
         private void OnSiegeStarted(SiegeEvent siegeEvent) 
         {
             if (siegeEvent.BesiegedSettlement == null)
@@ -139,6 +153,9 @@ namespace BannerKings.Behaviours
                 DestroyPartyAction.Apply(null, party);
                 BannerKingsConfig.Instance.PopulationManager.RemoveCaravan(party);
             }
+
+            //---- FOOD FIX ----//
+            DitchExcessFood(party);
         }
 
         private void DailySettlementTick(Settlement settlement)
@@ -223,9 +240,6 @@ namespace BannerKings.Behaviours
                 var pops = Utils.Helpers.GetRosterCount(party.MemberRoster, filter);
                 data.UpdatePopType(component.popType, pops);
             }
-
-            //---- Sell excess grain fix ----//
-            SellExcessFood(party, target, hero);
 
             DestroyPartyAction.Apply(null, party);
             BannerKingsConfig.Instance.PopulationManager.RemoveCaravan(party);
@@ -380,44 +394,30 @@ namespace BannerKings.Behaviours
                 null, delegate { PlayerEncounter.LeaveEncounter = true; });
         }
 
-        private void SellExcessFood(MobileParty mobileParty, Settlement settlement, Hero hero)
+        private void DitchExcessFood(MobileParty mobileParty)
         {
-            if (Campaign.Current.GameStarted && mobileParty != null && !FactionManager.IsAtWarAgainstFaction(mobileParty.MapFaction, settlement.MapFaction) && !mobileParty.IsMainParty && mobileParty.IsLordParty && !mobileParty.IsDisbanding && settlement.IsTown)
+            if (Campaign.Current.GameStarted && mobileParty != null && !mobileParty.IsMainParty && mobileParty.IsLordParty && !mobileParty.IsDisbanding)
             {
-                int foodAmountToSell = calculateFoodCountToSell(mobileParty);
-                if (foodAmountToSell == 0) return;
-                foreach (ItemRosterElement subject in mobileParty.ItemRoster)
-                {
-                    int settlementGold = settlement.SettlementComponent.Gold;
-                    if (settlementGold <= 50 || foodAmountToSell <= 0) break;
-                    int amount = subject.Amount;
-                    amount = foodAmountToSell < amount ? foodAmountToSell : amount;
-                    ItemObject item = subject.EquipmentElement.Item;
-                    if (item.IsFood)
-                    {
-                        int itemPrice = settlement.Town.GetItemPrice(subject.EquipmentElement, mobileParty, true);
-                        int amountToSell = ((itemPrice * amount <= settlementGold) ? amount : (settlementGold / itemPrice)) - 25;
-                        if (amountToSell > 0)
-                        {
-                            SellItemsAction.Apply(mobileParty.Party, settlement.Party, subject, amountToSell, settlement);
-                            foodAmountToSell -= amountToSell;
-                        }
-                    }
+                int foodTypes = mobileParty.ItemRoster.FoodVariety;
+                int index = 0;
 
+                while (mobileParty.TotalWeightCarried > mobileParty.InventoryCapacity && index++ < foodTypes * 2)
+                {
+                    foreach (ItemRosterElement subject in mobileParty.ItemRoster)
+                    {
+                        int amount = subject.Amount;
+                        int amount2sell = amount > 100 ? amount : amount / 2;
+                        ItemObject item = subject.EquipmentElement.Item;
+                        if (item.IsFood)
+                        {
+                            mobileParty.ItemRoster.Remove(subject);
+                            if (mobileParty.TotalWeightCarried < mobileParty.InventoryCapacity)
+                                break;
+                        }
+
+                    }
                 }
             }
-        }
-
-        public int calculateFoodCountToSell(MobileParty mobileParty)
-        {
-            float targetDaysToLast = Campaign.Current.Models.PartyFoodBuyingModel.MinimumDaysFoodToLastWhileBuyingFoodFromTown;
-            float currentDaysToLast = (float)mobileParty.TotalFoodAtInventory / -mobileParty.FoodChange;
-            float difference = targetDaysToLast - currentDaysToLast;
-            if (difference < 0f)
-            {
-                return (int)(mobileParty.FoodChange * difference);
-            }
-            return 0;
         }
 
         private bool IsTravellerParty(PartyBase party)
