@@ -11,9 +11,6 @@ namespace BannerKings.Models.Vanilla
     {
         public bool CanCreateArmy(Hero armyLeader)
         {
-            if (armyLeader == Hero.MainHero)
-                return true;
-
 
             if (armyLeader != armyLeader.Clan.Leader)
             {
