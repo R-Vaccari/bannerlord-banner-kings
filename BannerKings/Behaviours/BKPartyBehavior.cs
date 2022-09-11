@@ -224,6 +224,9 @@ namespace BannerKings.Behaviours
                 data.UpdatePopType(component.popType, pops);
             }
 
+            //---- Sell excess grain fix ----//
+
+
             DestroyPartyAction.Apply(null, party);
             BannerKingsConfig.Instance.PopulationManager.RemoveCaravan(party);
         }
@@ -375,6 +378,46 @@ namespace BannerKings.Behaviours
             starter.AddDialogLine("raised_militia_order_response", "raised_militia_order", "close_window",
                 "Aye!",
                 null, delegate { PlayerEncounter.LeaveEncounter = true; });
+        }
+
+        private void SellExcessFood(MobileParty mobileParty, Settlement settlement, Hero hero)
+        {
+            if (Campaign.Current.GameStarted && mobileParty != null && !FactionManager.IsAtWarAgainstFaction(mobileParty.MapFaction, settlement.MapFaction) && !mobileParty.IsMainParty && mobileParty.IsLordParty && !mobileParty.IsDisbanding && settlement.IsTown)
+            {
+                int foodAmountToSell = calculateFoodCountToSell(mobileParty);
+                if (foodAmountToSell == 0) return;
+                foreach (ItemRosterElement subject in mobileParty.ItemRoster)
+                {
+                    int settlementGold = settlement.SettlementComponent.Gold;
+                    if (settlementGold <= 50 || foodAmountToSell <= 0) break;
+                    int amount = subject.Amount;
+                    amount = foodAmountToSell < amount ? foodAmountToSell : amount;
+                    ItemObject item = subject.EquipmentElement.Item;
+                    if (item.IsFood)
+                    {
+                        int itemPrice = settlement.Town.GetItemPrice(subject.EquipmentElement, mobileParty, true);
+                        int amountToSell = ((itemPrice * amount <= settlementGold) ? amount : (settlementGold / itemPrice)) - 25;
+                        if (amountToSell > 0)
+                        {
+                            SellItemsAction.Apply(mobileParty.Party, settlement.Party, subject, amountToSell, settlement);
+                            foodAmountToSell -= amountToSell;
+                        }
+                    }
+
+                }
+            }
+        }
+
+        public int calculateFoodCountToSell(MobileParty mobileParty)
+        {
+            float targetDaysToLast = Campaign.Current.Models.PartyFoodBuyingModel.MinimumDaysFoodToLastWhileBuyingFoodFromTown;
+            float currentDaysToLast = (float)mobileParty.TotalFoodAtInventory / -mobileParty.FoodChange;
+            float difference = targetDaysToLast - currentDaysToLast;
+            if (difference < 0f)
+            {
+                return (int)(mobileParty.FoodChange * difference);
+            }
+            return 0;
         }
 
         private bool IsTravellerParty(PartyBase party)
