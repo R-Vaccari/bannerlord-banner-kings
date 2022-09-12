@@ -706,12 +706,16 @@ namespace BannerKings
                     ref Dictionary<MobileParty, List<Settlement>> ____previouslyChangedVillagerTargetsDueToEnemyOnWay,
                     MobileParty mobileParty, Settlement settlement, Hero hero)
                 {
-                    if (BannerKingsConfig.Instance.PopulationManager != null &&
-                        BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
+                    if (BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
                     {
                         if (mobileParty is {IsActive: true, IsVillager: true})
                         {
-                            ____previouslyChangedVillagerTargetsDueToEnemyOnWay[mobileParty].Clear();
+
+                            if (____previouslyChangedVillagerTargetsDueToEnemyOnWay.ContainsKey(mobileParty))
+                            {
+                                ____previouslyChangedVillagerTargetsDueToEnemyOnWay[mobileParty].Clear();
+                            }
+                            
                             if (settlement.IsTown)
                             {
                                 SellGoodsForTradeAction.ApplyByVillagerTrade(settlement, mobileParty);
