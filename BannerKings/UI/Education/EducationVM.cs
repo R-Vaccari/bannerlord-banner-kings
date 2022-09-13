@@ -243,7 +243,10 @@ namespace BannerKings.UI.Education
             StringBuilder sb = new StringBuilder();
             foreach (Hero seller in Campaign.Current.GetCampaignBehavior<BKEducationBehavior>().GetAllBookSellers())
             {
-                sb.AppendLine(seller.Name.ToString() + ": " + seller.CurrentSettlement.Name.ToString());
+                if (seller.IsAlive && seller.CurrentSettlement != null)
+                {
+                    sb.AppendLine(seller.Name.ToString() + ": " + seller.CurrentSettlement.Name.ToString());
+                }
             }
 
             BookSellers = new InformationElement(new TextObject("{=!}Book Sellers").ToString(), string.Empty, sb.ToString());

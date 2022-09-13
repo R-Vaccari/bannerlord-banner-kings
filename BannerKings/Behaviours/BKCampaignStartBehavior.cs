@@ -59,14 +59,14 @@ namespace BannerKings.Behaviours
                 return;
             }
 
-            InformationManager.ShowTextInquiry(new TextInquiryData(
+            InformationManager.ShowInquiry(new InquiryData(
                 new TextObject("{=!}Campaign Start").ToString(),
                 new TextObject("{=!}It seems you have started Banner Kings in a saved game. Would you like to choose a custom start? This will reset your party and inventory - do not choose unless you have just started your campaign.").ToString(),
                 true,
                 true,
                 GameTexts.FindText("str_accept").ToString(),
                 GameTexts.FindText("str_cancel").ToString(),
-                (string s) => UIManager.Instance.ShowWindow("campaignStart"),
+                () => UIManager.Instance.ShowWindow("campaignStart"),
                 null));
         }
 
@@ -96,8 +96,12 @@ namespace BannerKings.Behaviours
                 option.Action?.Invoke();
             }
 
+            BannerKingsConfig.Instance.EducationManager.CorrectPlayerEducation();
             GainKingdomInfluenceAction.ApplyForDefault(mainHero, option.Influence);
-            ShowInquiry();
+            if (!hasSeenInquiry)
+            {
+                ShowInquiry();
+            }
         }
 
         private void AddFood(MobileParty party, int limit)

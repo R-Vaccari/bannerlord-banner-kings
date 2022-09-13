@@ -256,8 +256,7 @@ namespace BannerKings.Managers.Titles
                 var lordshipClaimant = BKPerks.Instance.LordshipClaimant;
                 if (hero.GetPerkValue(lordshipClaimant))
                 {
-                    var reducedClaimTime = claimTime.ToHours - claimTime.ToHours * 0.3f / 100;
-                    claimTime = CampaignTime.HoursFromNow((float)reducedClaimTime);
+                    claimTime = CampaignTime.DaysFromNow(CampaignTime.DaysInYear * 0.7f);
                 }
                 
                 OngoingClaims.Add(hero, claimTime);
