@@ -150,9 +150,9 @@ namespace BannerKings.Managers.Populations
 
             foreach (var cultureData in cultures)
             {
-                cultureData.Assimilation += BannerKingsConfig.Instance.CultureAssimilationModel
+                cultureData.Assimilation += BannerKingsConfig.Instance.CultureModel
                        .CalculateEffect(data.Settlement, cultureData).ResultNumber;
-                var weight = BannerKingsConfig.Instance.CultureAssimilationModel.CalculateCultureWeight(data.Settlement, cultureData).ResultNumber;
+                var weight = BannerKingsConfig.Instance.CultureModel.CalculateCultureWeight(data.Settlement, cultureData).ResultNumber;
                 totalWeight += weight;
                 weightDictionary.Add(cultureData, weight);
 
@@ -165,7 +165,7 @@ namespace BannerKings.Managers.Populations
 
             var dominant = cultures.First(x => x.Culture == DominantCulture);
             var dominantAssimilation = dominant.Assimilation;
-            var dominantProportion = weightDictionary[dominant] / totalWeight;
+            var dominantProportion = (weightDictionary[dominant] / totalWeight) - data.Foreigner.ResultNumber;
             var diff = dominantProportion - dominantAssimilation;
             if (diff is 0f or float.NaN)
             {

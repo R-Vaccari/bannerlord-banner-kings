@@ -186,7 +186,7 @@ namespace BannerKings.UI.Management
                 var demesneCap = BannerKingsConfig.Instance.StabilityModel.CalculateDemesneLimit(Hero.MainHero);
 
                 GovernmentInfo.Add(new InformationElement(new TextObject("{=02REd9mG}Demesne limit:").ToString(),
-                    $"{currentDemesne.ResultNumber:n0}/{demesneCap.ResultNumber:n0}",
+                    $"{currentDemesne.ResultNumber:n2}/{demesneCap.ResultNumber:n2}",
                     new TextObject("{=dhr9NJoA}{TEXT}\nCurrent demesne:\n{CURRENT}\n \nLimit:\n{LIMIT}")
                         .SetTextVariable("TEXT",
                             new TextObject("{=oHJ6Y66V}Demesne limit describes how many settlements you may own without negative implications. Different settlement types have different weights, villages being the lowest, towns being the highest. Being over the limit reduces stability across all your settlements. Owning a settlement's title will reduce it's weight."))
@@ -198,7 +198,7 @@ namespace BannerKings.UI.Management
                 var unlandedDemesneCap = BannerKingsConfig.Instance.StabilityModel.CalculateUnlandedDemesneLimit(Hero.MainHero);
 
                 GovernmentInfo.Add(new InformationElement(new TextObject("{=8J3DQsNE}Unlanded Demesne limit:").ToString(),
-                    $"{currentUnlandedDemesne.ResultNumber:n0}/{unlandedDemesneCap.ResultNumber:n0}",
+                    $"{currentUnlandedDemesne.ResultNumber:n2}/{unlandedDemesneCap.ResultNumber:n2}",
                     new TextObject("{=dhr9NJoA}{TEXT}\nCurrent demesne:\n{CURRENT}\n \nLimit:\n{LIMIT}")
                         .SetTextVariable("TEXT",
                             new TextObject(
@@ -211,7 +211,7 @@ namespace BannerKings.UI.Management
                 var vassalsCap = BannerKingsConfig.Instance.StabilityModel.CalculateVassalLimit(Hero.MainHero);
 
                 GovernmentInfo.Add(new InformationElement(new TextObject("{=dB5y6tTY}Vassal limit:").ToString(),
-                    $"{currentVassals.ResultNumber:n0}/{vassalsCap.ResultNumber:n0}",
+                    $"{currentVassals.ResultNumber:n2}/{vassalsCap.ResultNumber:n2}",
                     new TextObject("{=Q50amDu9}{TEXT}\nCurrent vassals:\n{CURRENT}\n \nLimit:\n{LIMIT}")
                         .SetTextVariable("TEXT",
                             new TextObject("{=nhBf1JY5}Vassal limit is how many vassals you may have without negative consequences. Vassals are clans whose highest title are under your own (ie, a barony title under your county title, or knight clans with a single lordship) or knights in your clan. Knights only weight 0.5 towards the limit, while clan leaders weight 1. Companions and family members do not count. Being over the limit progressively reduces your influence gain."))

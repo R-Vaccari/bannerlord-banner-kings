@@ -1,6 +1,9 @@
 using BannerKings.Managers.Populations;
+using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.CampaignSystem.Settlements.Buildings;
+using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using static BannerKings.Managers.Policies.BKDraftPolicy;
@@ -14,29 +17,24 @@ namespace BannerKings.Models.BKModels
 
         public ExplainedNumber CalculateEffect(Settlement settlement, PopulationData data)
         {
-            var result = new ExplainedNumber();
-            if (settlement.IsVillage || !settlement.IsStarving)
+            var result = new ExplainedNumber(5f, true);
+
+            var filledCapacity = data.TotalPop / CalculateSettlementCap(settlement, data).ResultNumber;
+            data.Classes.ForEach(popClass =>
             {
-                result.Add(5f, new TextObject("{=AaNeOd9n}Base"));
-                var filledCapacity = data.TotalPop / (float) CalculateSettlementCap(settlement);
-                data.Classes.ForEach(popClass =>
+                if (popClass.type != PopType.Slaves)
                 {
-                    if (popClass.type != PopType.Slaves)
-                    {
-                        result.Add(popClass.count * POP_GROWTH_FACTOR * (1f - filledCapacity), new TextObject("{=haMOv5Fh}{0} growth"));
-                    }
-                });
-            }
-            else if (settlement.IsStarving)
-            {
-                float starvation = -5;
-                starvation += (int) (data.TotalPop * -0.007f);
-                result.Add(starvation, new TextObject("Starvation"));
-                if (settlement.OwnerClan.Leader == Hero.MainHero)
-                {
-                    InformationManager.DisplayMessage(new InformationMessage($"Population is starving at {settlement.Name}!"));
+                    result.Add(popClass.count * POP_GROWTH_FACTOR, new TextObject("{=!}{POPULATION_CLASS} growth")
+                        .SetTextVariable("POPULATION_CLASS", Utils.Helpers.GetClassName(popClass.type, settlement.Culture)));
                 }
+            });
+
+            result.AddFactor(-filledCapacity, new TextObject("{=!}Filled capacity"));
+            if (settlement.IsStarving)
+            {
+                result.AddFactor(-2f, GameTexts.FindText("str_starvation_morale"));
             }
+ 
 
             if (settlement.IsVillage)
             {
@@ -51,41 +49,44 @@ namespace BannerKings.Models.BKModels
             return result;
         }
 
+        public ExplainedNumber CalculateSettlementCap(Settlement settlement, PopulationData data)
+        {
+            var result = new ExplainedNumber(0f, true);
+
+            var land = data.LandData;
+            var farmland = land.GetAcreOutput("farmland") * 20f;
+            result.Add(land.Farmland * farmland, new TextObject("{=zMPm162W}Farmlands"));
+
+            var pasture = land.GetAcreOutput("pasture") * 20f;
+            result.Add(land.Pastureland * pasture, new TextObject("{=ngRhXYj1}Pasturelands"));
+
+            var woods = land.GetAcreOutput("woodland") * 20f;
+            result.Add(land.Woodland * woods, new TextObject("{=qPQ7HKgG}Woodlands"));
+
+            var town = settlement.Town;
+            if (town != null)
+            {
+                if (settlement.IsTown)
+                {
+                    var walls = settlement.Town.Buildings.First(x => x.BuildingType == DefaultBuildingTypes.Fortifications);
+                    result.Add(walls.CurrentLevel * 5000f, DefaultBuildingTypes.Fortifications.Name);
+                }
+                else
+                {
+                    var walls = settlement.Town.Buildings.First(x => x.BuildingType == DefaultBuildingTypes.Wall);
+                    result.Add(walls.CurrentLevel * 1500f, DefaultBuildingTypes.Fortifications.Name);
+                }
+
+                result.Add(settlement.Prosperity / 5f, GameTexts.FindText("str_map_tooltip_prosperity"));
+            }
+
+
+            return result;
+        }
+
         public ExplainedNumber CalculateEffect(Settlement settlement)
         {
             return new ExplainedNumber();
-        }
-
-        public void CalculateHearthGrowth(Village village, ref ExplainedNumber baseResult)
-        {
-            /*
-            PopulationData data = BannerKingsConfig.Instance.PopulationManager.GetPopData(village.Settlement);
-            bool boost = BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(village.Settlement, PolicyManager.PolicyType.POP_GROWTH);
-            int growthFactor = GetDataGrowthFactor(village.Settlement, data, boost, false);
-            float taxFactor = 1f;
-            TaxType tax = BannerKingsConfig.Instance.PolicyManager.GetSettlementTax(village.Settlement);
-            if (tax == TaxType.High)
-                taxFactor = 0.8f;
-            else if (tax == TaxType.Low)
-                taxFactor = 1.2f;
-            else if (tax == TaxType.Exemption)
-                taxFactor = 1.25f;
-    
-            float hearths = MBRandom.RandomFloatRanged(growthFactor / 3, growthFactor / 6) * taxFactor;
-            data.UpdatePopulation(village.Settlement, (int)MBRandom.RandomFloatRanged(hearths * 3f, hearths * 6f), PopType.None);
-            baseResult.Add(hearths, null);
-            */
-        }
-
-        public int CalculateSettlementCap(Settlement settlement)
-        {
-            return settlement.IsTown ? 50000 : settlement.IsCastle ? 8000 : 4000;
-        }
-
-        public float GetSettlementFilledCapacity(Settlement settlement)
-        {
-            var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
-            return data.TotalPop / (float) CalculateSettlementCap(settlement);
         }
     }
 }

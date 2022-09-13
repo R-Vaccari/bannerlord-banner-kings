@@ -131,7 +131,7 @@ namespace BannerKings.UI.Management
             var totalCultureWeight = 0f;
             foreach (var culture in data.CultureData.Cultures)
             {
-                totalCultureWeight += BannerKingsConfig.Instance.CultureAssimilationModel.CalculateCultureWeight(settlement, culture)
+                totalCultureWeight += BannerKingsConfig.Instance.CultureModel.CalculateCultureWeight(settlement, culture)
                     .ResultNumber;
             }
 
@@ -170,7 +170,7 @@ namespace BannerKings.UI.Management
 
             var influence = BannerKingsConfig.Instance.InfluenceModel.CalculateSettlementInfluence(settlement, data);
             StatsInfo.Add(new InformationElement(GameTexts.FindText("str_total_influence").ToString(),
-                new TextObject("{=YrCRA6CA}{INFLUENCE}")
+                new TextObject("{=!}{INFLUENCE}")
                     .SetTextVariable("INFLUENCE", influence.ResultNumber.ToString("0.00"))
                     .ToString(),
                 new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
@@ -179,11 +179,25 @@ namespace BannerKings.UI.Management
                     .SetTextVariable("EXPLANATIONS", influence.GetExplanations())
                     .ToString()));
 
-            StatsInfo.Add(new InformationElement("Population Growth:",
-                $"{new BKGrowthModel().CalculateEffect(settlement, data).ResultNumber:P}",
-                new TextObject("{=!}The population growth of your settlement on a daily basis, distributed among the classes.")
-                .ToString()));
-            StatsInfo.Add(new InformationElement("Foreigner Ratio:",
+            var cap = BannerKingsConfig.Instance.GrowthModel.CalculateSettlementCap(settlement, data);
+            StatsInfo.Add(new InformationElement(new TextObject("{=!}Population Cap:").ToString(),
+                ((int)cap.ResultNumber).ToString(),
+                new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
+                    .SetTextVariable("TEXT",
+                        new TextObject("{=!}The maximum number of people this settlement is capable of having."))
+                    .SetTextVariable("EXPLANATIONS", cap.GetExplanations())
+                    .ToString()));
+
+            var growth = BannerKingsConfig.Instance.GrowthModel.CalculateEffect(settlement, data);
+            StatsInfo.Add(new InformationElement(new TextObject("{=!}Population Growth:").ToString(),
+                ((int)growth.ResultNumber).ToString(),
+                 new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
+                    .SetTextVariable("TEXT",
+                        new TextObject("{=!}The population growth of your settlement on a daily basis, distributed among the classes."))
+                    .SetTextVariable("EXPLANATIONS", growth.GetExplanations())
+                    .ToString()));
+
+            StatsInfo.Add(new InformationElement(new TextObject("{=!}Foreigner Ratio:").ToString(),
                 FormatValue(new BKForeignerModel().CalculateEffect(settlement).ResultNumber),
                 new TextObject("{=!}Merchant and freemen foreigners that refuse to be assimilated, but have a living in this settlement.")
                 .ToString()));
@@ -197,7 +211,7 @@ namespace BannerKings.UI.Management
             var heroCulture = data.CultureData.Cultures.FirstOrDefault(x => x.Culture == Hero.MainHero.Culture);
             if (heroCulture != null)
             {
-                var presence = BannerKingsConfig.Instance.CultureAssimilationModel.CalculateCultureWeight(settlement, heroCulture);
+                var presence = BannerKingsConfig.Instance.CultureModel.CalculateCultureWeight(settlement, heroCulture);
                 CultureInfo.Add(new InformationElement("Cultural Presence:",
                     FormatValue(presence.ResultNumber / totalCultureWeight),
                     new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")

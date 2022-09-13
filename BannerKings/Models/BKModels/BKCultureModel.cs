@@ -25,17 +25,17 @@ namespace BannerKings.Models.BKModels
 
             if (data.Culture == settlement.Culture)
             {
-                result.Add(30f, new TextObject("{=!}Tradition"));
+                result.Add(30f, new TextObject("{=2wOt5txz}Natural resistance"));
             }
 
-            result.Add(data.Assimilation * 50f, new TextObject("{=!}Assimilation"));
+            result.Add(data.Assimilation * 50f, new TextObject("{=D3trXTDz}Cultural Assimilation"));
 
             var owner = settlement.Owner;
             if (owner != null)
             {
                 if (data.Culture == owner.Culture)
                 {
-                    result.Add(10f, new TextObject("{=!}Owner's culture"));
+                    result.Add(10f, new TextObject("{=LHFoaUGo}Owner Culture"));
                 }
             }
 
@@ -54,7 +54,7 @@ namespace BannerKings.Models.BKModels
                     var governor = settlement.Town.Governor;
                     if (data.Culture == governor.Culture)
                     {
-                        result.Add(10f, new TextObject("{=!}Governor"));
+                        result.Add(10f, new TextObject("{=gafTzKhz}Governor effect"));
                     }
                 }
             }
