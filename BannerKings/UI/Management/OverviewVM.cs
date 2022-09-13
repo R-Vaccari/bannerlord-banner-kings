@@ -199,7 +199,7 @@ namespace BannerKings.UI.Management
             {
                 var presence = BannerKingsConfig.Instance.CultureAssimilationModel.CalculateCultureWeight(settlement, heroCulture);
                 CultureInfo.Add(new InformationElement("Cultural Presence:",
-                    FormatValue(presence.ResultNumber),
+                    FormatValue(presence.ResultNumber / totalCultureWeight),
                     new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
                     .SetTextVariable("TEXT",
                         new TextObject("{=!}How present your culture is. Presence is affected by notables and governor following your culture, as well as other factors. This is the percentage that you culture's assimilation will gravitate towards in the settlement."))
@@ -208,13 +208,13 @@ namespace BannerKings.UI.Management
             }
           
 
-            CultureInfo.Add(new InformationElement("Cultural Acceptance:",
+            CultureInfo.Add(new InformationElement(new TextObject("{=!}Cultural Acceptance:").ToString(),
                 $"{data.CultureData.GetAcceptance(Hero.MainHero.Culture):P}",
-                new TextObject("{=!}How accepted your culture is towards the general populace. A culture first needs to be accepted to be assimilated into.")
+                new TextObject("{=!}How accepted your culture is towards the general populace. A culture first needs to be accepted to be assimilated into. Acceptance is gained through a stable reign and competent governor in place.")
                 .ToString()));
-            CultureInfo.Add(new InformationElement("Cultural Assimilation:",
+            CultureInfo.Add(new InformationElement(new TextObject("{=!}Cultural Assimilation:").ToString(),
                 $"{data.CultureData.GetAssimilation(Hero.MainHero.Culture):P}",
-                new TextObject("{=!}Percentage of the population that shares culture with you. Assimilating foreign settlements requires a competent governor that shares your culture.")
+                new TextObject("{=!}Percentage of the population that shares culture with you. Assimilation will drift towards the target set by the cultural presence.")
                 .ToString()));
 
             var decisions = BannerKingsConfig.Instance.PolicyManager.GetDefaultDecisions(settlement);

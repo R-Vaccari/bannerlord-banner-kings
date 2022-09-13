@@ -1,6 +1,4 @@
-﻿using BannerKings.Managers.Institutions.Religions;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
@@ -81,7 +79,7 @@ namespace BannerKings.Managers.Populations
 
             if (dataClass == null)
             {
-                cultures.Add(new CultureDataClass(culture, 0.01f, acceptance));
+                cultures.Add(new CultureDataClass(culture, 0f, acceptance));
             }
             else
             {
@@ -165,8 +163,6 @@ namespace BannerKings.Managers.Populations
                 } 
             }
 
-
-
             var dominant = cultures.First(x => x.Culture == DominantCulture);
             var dominantAssimilation = dominant.Assimilation;
             var dominantProportion = weightDictionary[dominant] / totalWeight;
@@ -176,25 +172,34 @@ namespace BannerKings.Managers.Populations
                 return;
             }
 
-            foreach (var pair in weightDictionary)
+
+            if (diff > 0f)
             {
-                if (pair.Key == dominant)
+                dominant.Assimilation += 0.0025f;
+            }
+            else
+            {
+                foreach (var pair in weightDictionary)
                 {
-                    continue;
+                    if (pair.Key == dominant)
+                    {
+                        continue;
+                    }
+
+                    // non-dominant cultures have higher change of being affected when have more proportion
+                    candidates.Add(new(pair.Key, (pair.Value + 1f) / totalWeight));
                 }
 
-                // non-dominant cultures have higher change of being affected when have more proportion
-                candidates.Add(new(pair.Key, (pair.Value + 1f) / totalWeight));
-            }
 
-
-            var target = MBRandom.ChooseWeighted(candidates);
-            if (target is not null)
-            {
-                target.Assimilation -= 0.005f;
-                if (target.Assimilation <= 0f)
+                var target = MBRandom.ChooseWeighted(candidates);
+                if (target is not null)
                 {
-                    cultures.Remove(target);
+                    target.Assimilation += 0.0025f;
+                    dominant.Assimilation -= 0.0025f;
+                    if (target.Assimilation <= 0f && target.Culture != settlementOwner.Culture)
+                    {
+                        cultures.Remove(target);
+                    }
                 }
             }
         }

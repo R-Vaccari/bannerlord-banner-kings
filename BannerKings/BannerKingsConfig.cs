@@ -58,6 +58,7 @@ namespace BannerKings
         public BKReligionModel ReligionModel { get; } = new();
         public BKPietyModel PietyModel { get; } = new();
         public BKVolunteerModel VolunteerModel { get; } = new();
+        public BKLegitimacyModel LegitimacyModel { get; } = new();
 
         public static BannerKingsConfig Instance => ConfigHolder.CONFIG;
 

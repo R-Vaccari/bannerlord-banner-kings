@@ -1,5 +1,6 @@
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Skills;
+using BannerKings.Managers.Titles;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
@@ -12,7 +13,7 @@ namespace BannerKings.Models.BKModels
 
         public ExplainedNumber CalculateCultureWeight(Settlement settlement, CultureDataClass data)
         {
-            var result = new ExplainedNumber();
+            var result = new ExplainedNumber(0f, true);
 
             foreach (var notable in settlement.Notables)
             {
@@ -42,7 +43,10 @@ namespace BannerKings.Models.BKModels
             {
                 foreach (var village in settlement.BoundVillages)
                 {
-                    result.Add(15f, village.Name);
+                    if (village.Settlement.Culture == data.Culture)
+                    {
+                        result.Add(15f, village.Name);
+                    }
                 }
 
                 if (settlement.Town.Governor != null)
@@ -50,7 +54,7 @@ namespace BannerKings.Models.BKModels
                     var governor = settlement.Town.Governor;
                     if (data.Culture == governor.Culture)
                     {
-                        result.Add(30f, new TextObject("{=!}Owner's culture"));
+                        result.Add(10f, new TextObject("{=!}Governor"));
                     }
                 }
             }
@@ -60,6 +64,12 @@ namespace BannerKings.Models.BKModels
                 {
                     result.Add(20f, settlement.Village.TradeBound.Name);
                 }
+            }
+
+            LegitimacyType legitimacy = (LegitimacyType)BannerKingsConfig.Instance.LegitimacyModel.CalculateEffect(settlement).ResultNumber;
+            if (legitimacy == LegitimacyType.Unlawful || legitimacy == LegitimacyType.Unlawful_Foreigner)
+            {
+                result.Add(-5f, new TextObject("{=!}Unlawful owner"));
             }
 
             return result;
