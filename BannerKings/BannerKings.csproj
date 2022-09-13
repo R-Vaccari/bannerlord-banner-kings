@@ -40,6 +40,10 @@
 			<HintPath>%(Identity)</HintPath>
 			<Private>False</Private>
 		</Reference>
+		<Reference Include="$(GameFolder)\Modules\CA_EagleRising\bin\Win64_Shipping_Client\*.dll">
+			<HintPath>%(Identity)</HintPath>
+			<Private>False</Private>
+		</Reference>
 	</ItemGroup>
 
 	<ItemGroup>
