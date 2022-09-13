@@ -39,6 +39,11 @@ namespace BannerKings.Behaviours
 
         public List<Hero> GetAllBookSellers()
         {
+            if (bookSellers == null)
+            {
+                bookSellers = new Dictionary<Hero, ItemRoster>();
+            }
+
             return bookSellers.Keys.ToList();
         }
 
@@ -331,7 +336,7 @@ namespace BannerKings.Behaviours
 
         private void AddDialogue(CampaignGameStarter starter)
         {
-            starter.AddPlayerLine("bk_question_preaching", "lord_talk_ask_something_2", "lord_talk_ask_something",
+            starter.AddPlayerLine("bk_question_preaching", "hero_main_options", "hero_main_options",
                 "{=yKxDFTQ3}I would like to buy a book.",
                 IsBookSeller,
                 OnBuyBookConsequence);
@@ -390,9 +395,10 @@ namespace BannerKings.Behaviours
 
         private bool IsBookSeller()
         {
-            return Hero.OneToOneConversationHero.IsSpecial &&
-                   Hero.OneToOneConversationHero.CharacterObject.OriginalCharacter.StringId.Contains(
-                       "bannerkings_bookseller");
+            return Hero.OneToOneConversationHero != null && Hero.OneToOneConversationHero.IsSpecial &&
+                Hero.OneToOneConversationHero.CharacterObject != null &&
+                Hero.OneToOneConversationHero.CharacterObject.OriginalCharacter != null && 
+                Hero.OneToOneConversationHero.CharacterObject.OriginalCharacter.StringId.Contains("bannerkings_bookseller");
         }
 
         private static void ApplyScholarshipBedTimeStoryEffect(Hero hero)

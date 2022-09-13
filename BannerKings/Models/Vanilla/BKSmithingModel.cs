@@ -53,7 +53,7 @@ namespace BannerKings.Models.Vanilla
 
         public float CalculateBotchingChance(Hero hero, int difficulty)
         {
-            var chance = (float) difficulty / hero.GetSkillValue(DefaultSkills.Crafting) + 1;
+            var chance = 0.01f * (difficulty - hero.GetSkillValue(DefaultSkills.Crafting));
             var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(hero);
             if (education.Lifestyle == DefaultLifestyles.Instance.Artisan)
             {

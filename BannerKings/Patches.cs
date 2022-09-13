@@ -477,7 +477,7 @@ namespace BannerKings
                             category == DefaultItemCategories.RangedWeapons2 || category == DefaultItemCategories.RangedWeapons3 ||
                             category == DefaultItemCategories.Shield3)
                         {
-                            count += 6;
+                            count += 12;
                         }
 
                         if (category == DefaultItemCategories.MeleeWeapons4 || category ==  DefaultItemCategories.MeleeWeapons5 ||
@@ -485,18 +485,18 @@ namespace BannerKings
                             category == DefaultItemCategories.HorseEquipment5 || category == DefaultItemCategories.RangedWeapons4 ||
                             category == DefaultItemCategories.Shield5 || category == DefaultItemCategories.Shield4)
                         {
-                            count += 2;
+                            count += 8;
                         }
 
                         if (!outputItem.StringId.Contains("peasant") && (category == DefaultItemCategories.MeleeWeapons1 ||
-                            category == DefaultItemCategories.HorseEquipment || category == DefaultItemCategories.RangedWeapons1))
+                            category == DefaultItemCategories.RangedWeapons1))
                         {
                             count += 10;
                         }
 
                         if (category == DefaultItemCategories.UltraArmor || category == DefaultItemCategories.RangedWeapons5)
                         {
-                            count += 1;
+                            count += 4;
                         }
 
                         count = (int)MathF.Max(1f, count + (data.GetTypeCount(PopType.Craftsmen) / 450f));
@@ -514,7 +514,10 @@ namespace BannerKings
                         if (modifierGroup != null)
                         {
                             modifier = modifierGroup.GetRandomModifierWithTarget(result, 0.2f);
-                            itemPrice = (int)(itemPrice * modifier.PriceMultiplier);
+                            if (modifier != null)
+                            {
+                                itemPrice = (int)(itemPrice * modifier.PriceMultiplier);
+                            }
                         }
                         var element = new EquipmentElement(outputItem, modifier);
                         totalValue += itemPrice;
@@ -703,12 +706,16 @@ namespace BannerKings
                     ref Dictionary<MobileParty, List<Settlement>> ____previouslyChangedVillagerTargetsDueToEnemyOnWay,
                     MobileParty mobileParty, Settlement settlement, Hero hero)
                 {
-                    if (BannerKingsConfig.Instance.PopulationManager != null &&
-                        BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
+                    if (BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
                     {
                         if (mobileParty is {IsActive: true, IsVillager: true})
                         {
-                            ____previouslyChangedVillagerTargetsDueToEnemyOnWay[mobileParty].Clear();
+
+                            if (____previouslyChangedVillagerTargetsDueToEnemyOnWay.ContainsKey(mobileParty))
+                            {
+                                ____previouslyChangedVillagerTargetsDueToEnemyOnWay[mobileParty].Clear();
+                            }
+                            
                             if (settlement.IsTown)
                             {
                                 SellGoodsForTradeAction.ApplyByVillagerTrade(settlement, mobileParty);
@@ -819,6 +826,11 @@ namespace BannerKings
                             var dynMethod = behaviors.First().GetType().GetMethod("CalculateBudget",
                                 BindingFlags.NonPublic | BindingFlags.Static);
                             var num = (float) dynMethod.Invoke(null, new object[] {town, demand, itemCategory});
+                            if (item.HasArmorComponent || item.HasWeaponComponent)
+                            {
+                                num = (int)(num * 0.1f);
+                            }
+
                             if (num > 0.01f)
                             {
                                 var price = marketData.GetPrice(item);

@@ -16,6 +16,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
 
         [SaveableProperty(99)] protected FeudalTitle Title { get; set; }
 
+        public abstract void UpdateDecision(int value);
         public abstract float CalculateKingdomSupport(Kingdom kingdom);
 
         public override void ApplyChosenOutcome(DecisionOutcome chosenOutcome)

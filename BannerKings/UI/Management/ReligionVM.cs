@@ -1,6 +1,5 @@
 using BannerKings.Managers.Populations;
 using BannerKings.UI.Items.UI;
-using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;

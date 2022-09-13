@@ -243,7 +243,10 @@ namespace BannerKings.UI.Education
             StringBuilder sb = new StringBuilder();
             foreach (Hero seller in Campaign.Current.GetCampaignBehavior<BKEducationBehavior>().GetAllBookSellers())
             {
-                sb.AppendLine(seller.Name.ToString() + ": " + seller.CurrentSettlement.Name.ToString());
+                if (seller.IsAlive && seller.CurrentSettlement != null)
+                {
+                    sb.AppendLine(seller.Name.ToString() + ": " + seller.CurrentSettlement.Name.ToString());
+                }
             }
 
             BookSellers = new InformationElement(new TextObject("{=!}Book Sellers").ToString(), string.Empty, sb.ToString());
@@ -348,7 +351,6 @@ namespace BannerKings.UI.Education
             else
             {
                 CanAddFocus = data.Lifestyle.CanInvestFocus(hero) && hero.HeroDeveloper.UnspentFocusPoints > 0;
-
                 LifestyleNameText = data.Lifestyle.Name.ToString();
                 LifestylePassiveText = data.Lifestyle.PassiveEffects.ToString();
 
@@ -360,7 +362,7 @@ namespace BannerKings.UI.Education
                     data.Lifestyle.InvestedFocus.ToString(),
                     new TextObject("{=!}The amount of focus points you have invested. Each focus correlates to one perk gained.").ToString()));
                 LifestyleProgressInfo.Add(new InformationElement(new TextObject("{=4gCw08Kk}Progress:").ToString(),
-                    FormatValue(data.Lifestyle.Progress),
+                    FormatValue(data.LifestyleProgress),
                     new TextObject("{=78jQbY8E}Current progress in this stage. Once progress hits 100% and you have the necessary skill threshold, you can invest your next focus point in exchange for the next lifestyle perk.")
                         .ToString()));
                 LifestyleProgressInfo.Add(new InformationElement(new TextObject("{=ER70o2UR}First skill:").ToString(),
@@ -530,7 +532,7 @@ namespace BannerKings.UI.Education
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                 new TextObject("{=sOT08u5v}Choose Lifestyle").ToString(),
-                new TextObject("{=m7YpbtRJ}Select a lifestyle you would like to adopt. Picking a lifestyle will undo the progress of the lifestyle you are currently learning, if any. Each lifestyle is based on 2 skills, and you need at least 150 profficiency in each skill to adopt it.")
+                new TextObject("{=!}Select a lifestyle you would like to adopt. Picking a lifestyle will undo the progress of the lifestyle you are currently learning, if any. Each lifestyle is based on 2 skills, and you need at least 15 profficiency in each skill to adopt it.")
                     .ToString(), elements, true, 1,
                 GameTexts.FindText("str_done").ToString(), string.Empty,
                 delegate(List<InquiryElement> x)

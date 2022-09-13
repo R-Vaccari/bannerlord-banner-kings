@@ -1,13 +1,18 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using BannerKings.Components;
 using HarmonyLib;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.Encounters;
+using TaleWorlds.CampaignSystem.MapEvents;
 using TaleWorlds.CampaignSystem.Party;
+using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.CampaignSystem.Siege;
 using TaleWorlds.Core;
+using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
 using static BannerKings.Managers.PopulationManager;
@@ -23,6 +28,41 @@ namespace BannerKings.Behaviours
             CampaignEvents.SettlementEntered.AddNonSerializedListener(this, OnSettlementEntered);
             CampaignEvents.DailyTickSettlementEvent.AddNonSerializedListener(this, DailySettlementTick);
             CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, OnSessionLaunched);
+            CampaignEvents.OnSiegeEventStartedEvent.AddNonSerializedListener(this, OnSiegeStarted);
+            CampaignEvents.OnGameLoadFinishedEvent.AddNonSerializedListener(this, OnGameLoadFinished);
+        }
+
+        private void OnGameLoadFinished()
+        {
+            foreach (MobileParty mobileParty in MobileParty.AllLordParties)
+            {
+                if (mobileParty != null && !mobileParty.IsMainParty)
+                {
+                    this.DitchExcessFood(mobileParty);
+                }
+            }
+        }
+        private void OnSiegeStarted(SiegeEvent siegeEvent) 
+        {
+            if (siegeEvent.BesiegedSettlement == null)
+            {
+                return;
+            }
+
+            var toRemove = new List<MobileParty>();
+            foreach (var party in siegeEvent.BesiegedSettlement.Parties)
+            {
+                if (BannerKingsConfig.Instance.PopulationManager.IsPopulationParty(party))
+                {
+                    toRemove.Add(party);
+                }
+            }
+
+            foreach (var party in toRemove)
+            {
+                DestroyPartyAction.Apply(null, party);
+                BannerKingsConfig.Instance.PopulationManager.RemoveCaravan(party);
+            }
         }
 
         private void HourlyTickParty(MobileParty party)
@@ -113,51 +153,46 @@ namespace BannerKings.Behaviours
                 DestroyPartyAction.Apply(null, party);
                 BannerKingsConfig.Instance.PopulationManager.RemoveCaravan(party);
             }
+
+            //---- FOOD FIX ----//
+            DitchExcessFood(party);
         }
 
         private void DailySettlementTick(Settlement settlement)
         {
-            if (settlement == null || BannerKingsConfig.Instance.PopulationManager == null)
+            if (settlement == null || !settlement.IsTown)
             {
                 return;
             }
 
             if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(settlement, "decision_slaves_export") &&
-                DecideSendSlaveCaravan(settlement))
+                DecideSendSlaveCaravan(settlement) && !settlement.IsUnderSiege)
             {
                 var villages = settlement.BoundVillages;
-                var target = villages.FirstOrDefault(village => village.Settlement != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(village.Settlement) && !BannerKingsConfig.Instance.PopulationManager.PopSurplusExists(village.Settlement, PopType.Slaves));
+                var villageTarget = villages.FirstOrDefault(village => village.Settlement != null && !BannerKingsConfig.Instance.PopulationManager.PopSurplusExists(village.Settlement, PopType.Slaves));
 
-                if (target != null)
+                if (villageTarget != null)
                 {
-                    SendSlaveCaravan(target);
+                    SendSlaveCaravan(villageTarget);
                 }
             }
 
-            // Send Travellers
-            if (!settlement.IsTown)
+            var random = MBRandom.RandomInt(1, 100);
+            if (random > 5)
             {
                 return;
             }
 
+            var target = GetTownToTravel(settlement);
+            if (target == null)
             {
-                var random = MBRandom.RandomInt(1, 100);
-                if (random > 5)
-                {
-                    return;
-                }
+                return;
+            }
 
-                var target = GetTownToTravel(settlement);
-                if (target == null)
-                {
-                    return;
-                }
-
-                if (BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(target) &&
-                    BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
-                {
-                    SendTravellerParty(settlement, target);
-                }
+            if (BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(target) &&
+                BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
+            {
+                SendTravellerParty(settlement, target);
             }
         }
 
@@ -357,6 +392,32 @@ namespace BannerKings.Behaviours
             starter.AddDialogLine("raised_militia_order_response", "raised_militia_order", "close_window",
                 "Aye!",
                 null, delegate { PlayerEncounter.LeaveEncounter = true; });
+        }
+
+        private void DitchExcessFood(MobileParty mobileParty)
+        {
+            if (Campaign.Current.GameStarted && mobileParty != null && !mobileParty.IsMainParty && mobileParty.IsLordParty && !mobileParty.IsDisbanding)
+            {
+                int foodTypes = mobileParty.ItemRoster.FoodVariety;
+                int index = 0;
+
+                while (mobileParty.TotalWeightCarried > mobileParty.InventoryCapacity && index++ < foodTypes * 2)
+                {
+                    foreach (ItemRosterElement subject in mobileParty.ItemRoster)
+                    {
+                        int amount = subject.Amount;
+                        int amount2sell = amount > 100 ? amount : amount / 2;
+                        ItemObject item = subject.EquipmentElement.Item;
+                        if (item.IsFood)
+                        {
+                            mobileParty.ItemRoster.Remove(subject);
+                            if (mobileParty.TotalWeightCarried < mobileParty.InventoryCapacity)
+                                break;
+                        }
+
+                    }
+                }
+            }
         }
 
         private bool IsTravellerParty(PartyBase party)
