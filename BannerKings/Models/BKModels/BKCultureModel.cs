@@ -7,8 +7,76 @@ using TaleWorlds.Localization;
 
 namespace BannerKings.Models.BKModels
 {
-    public class BKCultureAssimilationModel : ICultureModel
+    public class BKCultureModel : ICultureModel
     {
+
+        public ExplainedNumber CalculateCultureWeight(Settlement settlement, CultureDataClass data)
+        {
+            var result = new ExplainedNumber();
+
+            foreach (var notable in settlement.Notables)
+            {
+                if (notable.Culture == data.Culture)
+                {
+                    result.Add(GetNotableFactor(notable, settlement), notable.Name);
+                }
+            }
+
+            if (data.Culture == settlement.Culture)
+            {
+                result.Add(30f, new TextObject("{=!}Tradition"));
+            }
+
+            result.Add(data.Assimilation * 50f, new TextObject("{=!}Assimilation"));
+
+            var owner = settlement.Owner;
+            if (owner != null)
+            {
+                if (data.Culture == owner.Culture)
+                {
+                    result.Add(10f, new TextObject("{=!}Owner's culture"));
+                }
+            }
+
+            if (settlement.IsTown || settlement.IsCastle)
+            {
+                foreach (var village in settlement.BoundVillages)
+                {
+                    result.Add(15f, village.Name);
+                }
+
+                if (settlement.Town.Governor != null)
+                {
+                    var governor = settlement.Town.Governor;
+                    if (data.Culture == governor.Culture)
+                    {
+                        result.Add(30f, new TextObject("{=!}Owner's culture"));
+                    }
+                }
+            }
+            else if (settlement.IsVillage)
+            {
+                if (data.Culture == settlement.Village.TradeBound.Culture)
+                {
+                    result.Add(20f, settlement.Village.TradeBound.Name);
+                }
+            }
+
+            return result;
+        }
+
+
+        public float GetNotableFactor(Hero notable, Settlement settlement)
+        {
+            var totalPower = 0f;
+            foreach (var hero in settlement.Notables)
+            {
+                totalPower += hero.Power;
+            }
+
+            return (settlement.Notables.Count * 15f) * (notable.Power / totalPower);
+        }
+
         public ExplainedNumber CalculateEffect(Settlement settlement)
         {
             var ownerCulture = settlement.OwnerClan.Culture;

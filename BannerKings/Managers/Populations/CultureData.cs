@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BannerKings.Managers.Institutions.Religions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
@@ -36,7 +37,6 @@ namespace BannerKings.Managers.Populations
                 }
 
                 eligible.OrderByDescending(pair => pair.Item2);
-
                 return eligible[0].Item1;
             }
         }
@@ -81,7 +81,7 @@ namespace BannerKings.Managers.Populations
 
             if (dataClass == null)
             {
-                cultures.Add(new CultureDataClass(culture, 0f, acceptance));
+                cultures.Add(new CultureDataClass(culture, 0.01f, acceptance));
             }
             else
             {
@@ -128,7 +128,6 @@ namespace BannerKings.Managers.Populations
         {
             SettlementOwner = data.Settlement.Owner;
 
-
             BalanceCultures(data);
             var dominant = DominantCulture;
             if (dominant.BasicTroop != null && dominant.MilitiaSpearman != null)
@@ -146,72 +145,56 @@ namespace BannerKings.Managers.Populations
 
         private void BalanceCultures(PopulationData data)
         {
-            var toDelete = new HashSet<CultureDataClass>();
+            var candidates = new List<(CultureDataClass, float)>();
+            var weightDictionary = new Dictionary<CultureDataClass, float>();
+            var totalWeight = 0f;
             var foreignerShare = 0f;
 
             foreach (var cultureData in cultures)
             {
-                if (cultureData.Culture != settlementOwner.Culture && cultureData.Assimilation <= 0.01)
-                {
-                    toDelete.Add(cultureData);
-                    continue;
-                }
+                cultureData.Assimilation += BannerKingsConfig.Instance.CultureAssimilationModel
+                       .CalculateEffect(data.Settlement, cultureData).ResultNumber;
+                var weight = BannerKingsConfig.Instance.CultureAssimilationModel.CalculateCultureWeight(data.Settlement, cultureData).ResultNumber;
+                totalWeight += weight;
+                weightDictionary.Add(cultureData, weight);
+
 
                 if (IsForeigner(data, cultureData))
                 {
-                    foreignerShare += cultureData.Assimilation;
-                }
-                else
-                {
-                    cultureData.Acceptance += BannerKingsConfig.Instance.CultureAcceptanceModel
-                        .CalculateEffect(data.Settlement, cultureData).ResultNumber;
-                    cultureData.Assimilation += BannerKingsConfig.Instance.CultureAssimilationModel
-                        .CalculateEffect(data.Settlement, cultureData).ResultNumber;
-                }
+                    foreignerShare += weight;
+                } 
             }
 
-            if (toDelete.Count > 0)
+
+
+            var dominant = cultures.First(x => x.Culture == DominantCulture);
+            var dominantAssimilation = dominant.Assimilation;
+            var dominantProportion = weightDictionary[dominant] / totalWeight;
+            var diff = dominantProportion - dominantAssimilation;
+            if (diff is 0f or float.NaN)
             {
-                foreach (var cultureData in toDelete)
-                {
-                    cultures.Remove(cultureData);
-                }
+                return;
             }
 
-            var totalAssim = 0f;
-            foreach (var cultureData in cultures)
+            foreach (var pair in weightDictionary)
             {
-                totalAssim += cultureData.Assimilation;
+                if (pair.Key == dominant)
+                {
+                    continue;
+                }
+
+                // non-dominant cultures have higher change of being affected when have more proportion
+                candidates.Add(new(pair.Key, (pair.Value + 1f) / totalWeight));
             }
 
-            if (totalAssim != 1f)
+
+            var target = MBRandom.ChooseWeighted(candidates);
+            if (target is not null)
             {
-                var diff = totalAssim - 1f;
-                var foreignerTarget = data.Foreigner.ResultNumber;
-
-                var candidates = new List<(CultureDataClass, float)>();
-                foreach (var cultureData in cultures)
+                target.Assimilation -= 0.005f;
+                if (target.Assimilation <= 0f)
                 {
-                    if (cultureData.Assimilation > diff)
-                    {
-                        var value = cultureData.Assimilation;
-                        if (foreignerShare > foreignerTarget && IsForeigner(data, cultureData))
-                        {
-                            value *= 10f;
-                        }
-
-                        candidates.Add(new ValueTuple<CultureDataClass, float>(cultureData, value));
-                    }
-                }
-
-                var result = MBRandom.ChooseWeighted(candidates);
-                if (result != null)
-                {
-                    result.Assimilation += diff;
-                }
-                else
-                {
-                    cultures[0].Assimilation += diff;
+                    cultures.Remove(target);
                 }
             }
         }

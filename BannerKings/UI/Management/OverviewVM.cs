@@ -2,6 +2,7 @@ using BannerKings.Managers.Populations;
 using BannerKings.Models.BKModels;
 using BannerKings.UI.Items;
 using BannerKings.UI.Items.UI;
+using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
@@ -126,6 +127,15 @@ namespace BannerKings.UI.Management
             data.CultureData.Cultures.ForEach(culture => CultureList
                 .Add(new CultureElementVM(data, culture)));
 
+
+            var totalCultureWeight = 0f;
+            foreach (var culture in data.CultureData.Cultures)
+            {
+                totalCultureWeight += BannerKingsConfig.Instance.CultureAssimilationModel.CalculateCultureWeight(settlement, culture)
+                    .ResultNumber;
+            }
+
+
             var stability = BannerKingsConfig.Instance.StabilityModel.CalculateStabilityTarget(settlement);
             StatsInfo.Add(new InformationElement("Stability:", $"{data.Stability:P}",
                 new TextObject("{=Uw3xBMKd}{TEXT}\nTarget: {TARGET}\n{EXPLANATIONS}")
@@ -171,20 +181,41 @@ namespace BannerKings.UI.Management
 
             StatsInfo.Add(new InformationElement("Population Growth:",
                 $"{new BKGrowthModel().CalculateEffect(settlement, data).ResultNumber:P}",
-                "The population growth of your settlement on a daily basis, distributed among the classes."));
+                new TextObject("{=!}The population growth of your settlement on a daily basis, distributed among the classes.")
+                .ToString()));
             StatsInfo.Add(new InformationElement("Foreigner Ratio:",
                 FormatValue(new BKForeignerModel().CalculateEffect(settlement).ResultNumber),
-                "Merchant and freemen foreigners that refuse to be assimilated, but have a living in this settlement."));
+                new TextObject("{=!}Merchant and freemen foreigners that refuse to be assimilated, but have a living in this settlement.")
+                .ToString()));
+
 
             CultureInfo.Add(new InformationElement("Dominant Culture:",
                 data.CultureData.DominantCulture.Name.ToString(),
-                "The most assimilated culture in this settlement, and considered the legal culture."));
+                new TextObject("{=!}The most assimilated culture in this settlement, and considered the legal culture.")
+                .ToString()));
+
+            var heroCulture = data.CultureData.Cultures.FirstOrDefault(x => x.Culture == Hero.MainHero.Culture);
+            if (heroCulture != null)
+            {
+                var presence = BannerKingsConfig.Instance.CultureAssimilationModel.CalculateCultureWeight(settlement, heroCulture);
+                CultureInfo.Add(new InformationElement("Cultural Presence:",
+                    FormatValue(presence.ResultNumber),
+                    new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
+                    .SetTextVariable("TEXT",
+                        new TextObject("{=!}How present your culture is. Presence is affected by notables and governor following your culture, as well as other factors. This is the percentage that you culture's assimilation will gravitate towards in the settlement."))
+                    .SetTextVariable("EXPLANATIONS", presence.GetExplanations())
+                    .ToString()));
+            }
+          
+
             CultureInfo.Add(new InformationElement("Cultural Acceptance:",
                 $"{data.CultureData.GetAcceptance(Hero.MainHero.Culture):P}",
-                "How accepted your culture is towards the general populace. A culture first needs to be accepted to be assimilated into."));
+                new TextObject("{=!}How accepted your culture is towards the general populace. A culture first needs to be accepted to be assimilated into.")
+                .ToString()));
             CultureInfo.Add(new InformationElement("Cultural Assimilation:",
                 $"{data.CultureData.GetAssimilation(Hero.MainHero.Culture):P}",
-                "Percentage of the population that shares culture with you. Assimilating foreign settlements requires a competent governor that shares your culture."));
+                new TextObject("{=!}Percentage of the population that shares culture with you. Assimilating foreign settlements requires a competent governor that shares your culture.")
+                .ToString()));
 
             var decisions = BannerKingsConfig.Instance.PolicyManager.GetDefaultDecisions(settlement);
             foreach (var decision in decisions)

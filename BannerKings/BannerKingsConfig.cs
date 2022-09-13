@@ -54,7 +54,7 @@ namespace BannerKings
         public BKAdministrativeModel AdministrativeModel { get; } = new();
         public BKSmithingModel SmithingModel { get; } = new();
         public BKCultureAcceptanceModel CultureAcceptanceModel { get; } = new();
-        public BKCultureAssimilationModel CultureAssimilationModel { get; } = new();
+        public BKCultureModel CultureAssimilationModel { get; } = new();
         public BKReligionModel ReligionModel { get; } = new();
         public BKPietyModel PietyModel { get; } = new();
         public BKVolunteerModel VolunteerModel { get; } = new();
@@ -96,7 +96,7 @@ namespace BannerKings
             DefaultBookTypes.Instance.Initialize();
             DefaultLifestyles.Instance.Initialize();
 
-            Models.Add(new BKCultureAssimilationModel());
+            Models.Add(new BKCultureModel());
             Models.Add(new BKCultureAcceptanceModel());
             Models.Add(new BKAdministrativeModel());
             Models.Add(new BKLegitimacyModel());
