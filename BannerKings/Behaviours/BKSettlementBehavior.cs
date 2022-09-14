@@ -42,7 +42,6 @@ namespace BannerKings.Behaviours
             CampaignEvents.OnSiegeAftermathAppliedEvent.AddNonSerializedListener(this, OnSiegeAftermath);
             CampaignEvents.SettlementEntered.AddNonSerializedListener(this, OnSettlementEntered);
             CampaignEvents.DailyTickSettlementEvent.AddNonSerializedListener(this, DailySettlementTick);
-            CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, OnSessionLaunched);
         }
 
         public override void SyncData(IDataStore dataStore)
@@ -421,24 +420,6 @@ namespace BannerKings.Behaviours
             }
         }
 
-
-        private void OnSessionLaunched(CampaignGameStarter campaignGameStarter)
-        {
-            var retinueType = MBObjectManager.Instance.GetObjectTypeList<BuildingType>().FirstOrDefault(x => x == Utils.Helpers._buildingCastleRetinue);
-            if (retinueType == null)
-            {
-                Utils.Helpers._buildingCastleRetinue.Initialize(new TextObject("{=6HgSqiDc}Retinue Barracks"),
-                    new TextObject("{=UNLMYRGm}Barracks for the castle retinue, a group of elite soldiers. The retinue is added to the garrison over time, up to a limit of 20, 40 or 60 (building level)."),
-                    new[]
-                    {
-                        1000,
-                        1500,
-                        2000
-                    }, BuildingLocation.Castle, new Tuple<BuildingEffectEnum, float, float, float>[]
-                    {
-                    });
-            }
-        }
     }
 
     namespace Patches

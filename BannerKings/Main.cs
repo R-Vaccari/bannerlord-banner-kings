@@ -1,4 +1,5 @@
 ﻿using BannerKings.Behaviours;
+using BannerKings.Managers.Buildings;
 using BannerKings.Managers.Innovations;
 using BannerKings.Managers.Items;
 using BannerKings.Managers.Kingdoms.Policies;
@@ -102,6 +103,7 @@ namespace BannerKings
             BKItems.Instance.Initialize();
             BKPolicies.Instance.Initialize();
             DefaultInnovations.Instance.Initialize();
+            BKBuildings.Instance.Initialize();
 
             UIManager.Instance.SetScreen(new BannerKingsScreen());
         }
