@@ -60,9 +60,13 @@ namespace BannerKings.Models.BKModels
             }
             else if (settlement.IsVillage)
             {
-                if (data.Culture == settlement.Village.TradeBound.Culture)
+                var village = settlement.Village;
+                if (village != null && village.TradeBound != null)
                 {
-                    result.Add(20f, settlement.Village.TradeBound.Name);
+                    if (data.Culture == settlement.Village.TradeBound.Culture)
+                    {
+                        result.Add(20f, settlement.Village.TradeBound.Name);
+                    }
                 }
             }
 
