@@ -17,6 +17,7 @@
 		<DependedModule Id="Sandbox" />
 		<DependedModule Id="StoryMode" />
 		<DependedModule Id="CustomBattle" />
+		<DependedModule Id="CalradiaExpandedKingdoms" />
 	</DependedModules>
 	<!-- Community Dependency Metadata -->
 	<DependedModuleMetadatas>
@@ -28,6 +29,7 @@
 		<DependedModuleMetadata id="Sandbox" order="LoadBeforeThis" />
 		<DependedModuleMetadata id="StoryMode" order="LoadBeforeThis" />
 		<DependedModuleMetadata id="CustomBattle" order="LoadBeforeThis" />
+		<DependedModuleMetadata id="CalradiaExpandedKingdoms" order="LoadBeforeThis" />
 	</DependedModuleMetadatas>
 	<!-- Community Dependency Metadata -->
 	<SubModules>
