@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
@@ -36,7 +35,6 @@ namespace BannerKings.Managers.Populations
                 }
 
                 eligible.OrderByDescending(pair => pair.Item2);
-
                 return eligible[0].Item1;
             }
         }
@@ -128,7 +126,6 @@ namespace BannerKings.Managers.Populations
         {
             SettlementOwner = data.Settlement.Owner;
 
-
             BalanceCultures(data);
             var dominant = DominantCulture;
             if (dominant.BasicTroop != null && dominant.MilitiaSpearman != null)
@@ -146,72 +143,63 @@ namespace BannerKings.Managers.Populations
 
         private void BalanceCultures(PopulationData data)
         {
-            var toDelete = new HashSet<CultureDataClass>();
+            var candidates = new List<(CultureDataClass, float)>();
+            var weightDictionary = new Dictionary<CultureDataClass, float>();
+            var totalWeight = 0f;
             var foreignerShare = 0f;
 
             foreach (var cultureData in cultures)
             {
-                if (cultureData.Culture != settlementOwner.Culture && cultureData.Assimilation <= 0.01)
-                {
-                    toDelete.Add(cultureData);
-                    continue;
-                }
+                cultureData.Assimilation += BannerKingsConfig.Instance.CultureModel
+                       .CalculateEffect(data.Settlement, cultureData).ResultNumber;
+                var weight = BannerKingsConfig.Instance.CultureModel.CalculateCultureWeight(data.Settlement, cultureData).ResultNumber;
+                totalWeight += weight;
+                weightDictionary.Add(cultureData, weight);
+
 
                 if (IsForeigner(data, cultureData))
                 {
-                    foreignerShare += cultureData.Assimilation;
-                }
-                else
-                {
-                    cultureData.Acceptance += BannerKingsConfig.Instance.CultureAcceptanceModel
-                        .CalculateEffect(data.Settlement, cultureData).ResultNumber;
-                    cultureData.Assimilation += BannerKingsConfig.Instance.CultureAssimilationModel
-                        .CalculateEffect(data.Settlement, cultureData).ResultNumber;
-                }
+                    foreignerShare += weight;
+                } 
             }
 
-            if (toDelete.Count > 0)
+            var dominant = cultures.First(x => x.Culture == DominantCulture);
+            var dominantAssimilation = dominant.Assimilation;
+            var dominantProportion = (weightDictionary[dominant] / totalWeight) - data.Foreigner.ResultNumber;
+            var diff = dominantProportion - dominantAssimilation;
+            if (diff is 0f or float.NaN)
             {
-                foreach (var cultureData in toDelete)
-                {
-                    cultures.Remove(cultureData);
-                }
+                return;
             }
 
-            var totalAssim = 0f;
-            foreach (var cultureData in cultures)
+
+            if (diff > 0f)
             {
-                totalAssim += cultureData.Assimilation;
+                dominant.Assimilation += 0.0025f;
             }
-
-            if (totalAssim != 1f)
+            else
             {
-                var diff = totalAssim - 1f;
-                var foreignerTarget = data.Foreigner.ResultNumber;
-
-                var candidates = new List<(CultureDataClass, float)>();
-                foreach (var cultureData in cultures)
+                foreach (var pair in weightDictionary)
                 {
-                    if (cultureData.Assimilation > diff)
+                    if (pair.Key == dominant)
                     {
-                        var value = cultureData.Assimilation;
-                        if (foreignerShare > foreignerTarget && IsForeigner(data, cultureData))
-                        {
-                            value *= 10f;
-                        }
-
-                        candidates.Add(new ValueTuple<CultureDataClass, float>(cultureData, value));
+                        continue;
                     }
+
+                    // non-dominant cultures have higher change of being affected when have more proportion
+                    candidates.Add(new(pair.Key, (pair.Value + 1f) / totalWeight));
                 }
 
-                var result = MBRandom.ChooseWeighted(candidates);
-                if (result != null)
+
+                var target = MBRandom.ChooseWeighted(candidates);
+                if (target is not null)
                 {
-                    result.Assimilation += diff;
-                }
-                else
-                {
-                    cultures[0].Assimilation += diff;
+                    target.Assimilation += 0.0025f;
+                    dominant.Assimilation -= 0.0025f;
+                    if (target.Assimilation <= 0f && target.Culture != settlementOwner.Culture)
+                    {
+                        cultures.Remove(target);
+                    }
                 }
             }
         }

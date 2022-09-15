@@ -117,13 +117,13 @@
 
 
 	<string id="str_bk_council_marshall.empire" text="{=bk_council_marshall_empire}Domesticus" />
-	<string id="str_bk_council_chancellor.empire" text="{=bk_council_steward_empire}Comes Largitionum" />
-	<string id="str_bk_council_steward.empire" text="{=bk_council_chancellor_empire}Cancellarius" />
+	<string id="str_bk_council_chancellor.empire" text="{=bk_council_chancellor_empire}Cancellarius" />
+	<string id="str_bk_council_steward.empire" text="{=bk_council_steward_empire}Praefectus Largitionum" />
 	<string id="str_bk_council_spymaster.empire" text="{=bk_council_spymaster_empire}Custodis" />
 	
 	<string id="str_bk_council_marshall_royal.empire" text="{=bk_council_marshall_royal_empire}Magister Domesticus" />
-	<string id="str_bk_council_chancellor_royal.empire" text="{=bk_council_steward_royal_empire}Magister Cancellarius" />
-	<string id="str_bk_council_steward_royal.empire" text="{=bk_council_chancellor_royal_empire}Comes Sacrarum Largitionum" />
+	<string id="str_bk_council_chancellor_royal.empire" text="{=bk_council_chancellor_royal_empire}Magister Cancellarius" />
+	<string id="str_bk_council_steward_royal.empire" text="{=bk_council_steward_royal_empire}Magister Sacrarum Largitionum" />
 	<string id="str_bk_council_spymaster_royal.empire" text="{=bk_council_spymaster_royal_empire}Magister Officiorum" />
 	<string id="str_bk_council_spiritual_royal.empire" text="{=bk_council_spiritual_guide_royal_empire}High Seneschal" />
 	
@@ -204,23 +204,23 @@
 	<string id="str_pop_class_slaves" text="{=pop_class_slaves}Slaves" />
 
 	<string id="str_pop_class_serfs_sturgia" text="{=pop_class_serfs_sturgia}Lowmen" />
-	<string id="str_pop_class_serfs_empire" text="{=pop_class_serfs_empire}Commoners" />
+	<string id="str_pop_class_serfs_empire" text="{=pop_class_serfs_empire}Coloni" />
 	<string id="str_pop_class_serfs_aserai" text="{=pop_class_serfs_aserai}Commoners" />
 	<string id="str_pop_class_serfs_battania" text="{=pop_class_serfs_battania}Freemen" />
 	<string id="str_pop_class_serfs_khuzait" text="{=pop_class_serfs_khuzait}Nomads" />
 	<string id="str_pop_class_serfs_vlandia" text="{=pop_class_serfs_vlandia}Serfs" />
 
-	<string id="str_pop_class_slaves_sturgia" text="{=pop_class_slaves_sturgia}hralls" />
+	<string id="str_pop_class_slaves_sturgia" text="{=pop_class_slaves_sturgia}Thralls" />
 	<string id="str_pop_class_slaves_aserai" text="{=pop_class_slaves_aserai}Mameluke" />
 	<string id="str_pop_class_slaves_vlandia" text="{=pop_class_slaves_vlandia}Slaves" />
 	<string id="str_pop_class_slaves_battania" text="{=pop_class_slaves_battania}Slaves" />
-	<string id="str_pop_class_slaves_empire" text="{=pop_class_slaves_empire}Slaves" />
+	<string id="str_pop_class_slaves_empire" text="{=pop_class_slaves_empire}Sclavi" />
 	<string id="str_pop_class_slaves_khuzait" text="{=pop_class_slaves_khuzait}Slaves" />
 
 	<string id="str_pop_class_craftsmen_battania" text="{=pop_class_craftsmen_battania}Artisans" />
 	<string id="str_pop_class_craftsmen_khuzait" text="{=pop_class_craftsmen_khuzait}Artisans" />
 	<string id="str_pop_class_craftsmen_vlandia" text="{=pop_class_craftsmen_vlandia}Craftsmen" />
-	<string id="str_pop_class_craftsmen_empire" text="{=pop_class_craftsmen_empire}Craftsmen" />
+	<string id="str_pop_class_craftsmen_empire" text="{=pop_class_craftsmen_empire}Cives" />
 	<string id="str_pop_class_craftsmen_sturgia" text="{=pop_class_craftsmen_sturgia}Craftsmen" />
 	<string id="str_pop_class_craftsmen_aserai" text="{=pop_class_craftsmen_aserai}Craftsmen" />
 

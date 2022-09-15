@@ -96,6 +96,7 @@ namespace BannerKings.Behaviours
                 option.Action?.Invoke();
             }
 
+            BannerKingsConfig.Instance.EducationManager.CorrectPlayerEducation();
             GainKingdomInfluenceAction.ApplyForDefault(mainHero, option.Influence);
             if (!hasSeenInquiry)
             {

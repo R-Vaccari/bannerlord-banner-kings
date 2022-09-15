@@ -268,7 +268,8 @@ namespace BannerKings.Behaviours
         {
             private static bool Prefix(Town __instance)
             {
-                if (__instance.Governor is {IsNotable: true})
+                if (__instance.Governor != null && __instance.Governor is {IsNotable: true} && __instance.OwnerClan != null &&
+                    __instance.OwnerClan.Leader != null)
                 {
                     __instance.Loyalty += __instance.LoyaltyChange;
                     __instance.Security += __instance.SecurityChange;
@@ -295,8 +296,7 @@ namespace BannerKings.Behaviours
                             .Invoke(__instance, null);
                     }
 
-                    else if (__instance.Governor != null &&
-                             __instance.Governor.GetPerkValue(DefaultPerks.Charm.Virile) && MBRandom.RandomFloat < 0.1f)
+                    else if (__instance.Governor.GetPerkValue(DefaultPerks.Charm.Virile) && MBRandom.RandomFloat < 0.1f)
                     {
                         var randomElement = __instance.Settlement.Notables.GetRandomElement();
                         if (randomElement != null)
@@ -306,32 +306,30 @@ namespace BannerKings.Behaviours
                         }
                     }
 
-                    if (__instance.Governor != null)
+                    if (__instance.Governor.GetPerkValue(DefaultPerks.Roguery.WhiteLies) &&
+                        MBRandom.RandomFloat < 0.02f)
                     {
-                        if (__instance.Governor.GetPerkValue(DefaultPerks.Roguery.WhiteLies) &&
-                            MBRandom.RandomFloat < 0.02f)
+                        var randomElement2 = __instance.Settlement.Notables.GetRandomElement();
+                        if (randomElement2 != null)
                         {
-                            var randomElement2 = __instance.Settlement.Notables.GetRandomElement();
-                            if (randomElement2 != null)
-                            {
-                                ChangeRelationAction.ApplyRelationChangeBetweenHeroes(__instance.Governor,
-                                    randomElement2, MathF.Round(DefaultPerks.Roguery.WhiteLies.SecondaryBonus));
-                            }
-                        }
-
-                        if (__instance.Governor.GetPerkValue(DefaultPerks.Roguery.Scarface) &&
-                            MBRandom.RandomFloat < 0.05f)
-                        {
-                            var randomElementWithPredicate =
-                                __instance.Settlement.Notables.GetRandomElementWithPredicate(x => x.IsGangLeader);
-                            if (randomElementWithPredicate != null)
-                            {
-                                ChangeRelationAction.ApplyRelationChangeBetweenHeroes(__instance.Governor,
-                                    randomElementWithPredicate,
-                                    MathF.Round(DefaultPerks.Roguery.Scarface.SecondaryBonus));
-                            }
+                            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(__instance.Governor,
+                                randomElement2, MathF.Round(DefaultPerks.Roguery.WhiteLies.SecondaryBonus));
                         }
                     }
+
+                    if (__instance.Governor.GetPerkValue(DefaultPerks.Roguery.Scarface) &&
+                        MBRandom.RandomFloat < 0.05f)
+                    {
+                        var randomElementWithPredicate =
+                            __instance.Settlement.Notables.GetRandomElementWithPredicate(x => x.IsGangLeader);
+                        if (randomElementWithPredicate != null)
+                        {
+                            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(__instance.Governor,
+                                randomElementWithPredicate,
+                                MathF.Round(DefaultPerks.Roguery.Scarface.SecondaryBonus));
+                        }
+                    }
+                    
 
                     __instance.Owner.Settlement.Prosperity += __instance.ProsperityChange;
                     if (__instance.Owner.Settlement.Prosperity < 0f)

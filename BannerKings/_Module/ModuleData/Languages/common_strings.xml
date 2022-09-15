@@ -122,14 +122,14 @@
 		<string id="bk_council_marshall_royal_khuzait" text="Tumetu-iin Noyan" />
 		<string id="bk_council_marshall_royal_aserai" text="Grand Marshal" />
 
-		<string id="bk_council_steward_empire" text="Comes Largitionum" />
+		<string id="bk_council_steward_empire" text="Praefectus Largitionum" />
 		<string id="bk_council_steward_sturgia" text="Steward" />
 		<string id="bk_council_steward_battania" text="Sheumarlan" />
 		<string id="bk_council_steward_vlandia" text="Steward" />
 		<string id="bk_council_steward_khuzait" text="Steward" />
 		<string id="bk_council_steward_aserai" text="Steward" />
 
-		<string id="bk_council_steward_royal_empire" text="Comes Sacrarum Largitionum" />
+		<string id="bk_council_steward_royal_empire" text="Magister Sacrarum Largitionum" />
 		<string id="bk_council_steward_royal_sturgia" text="High Steward" />
 		<string id="bk_council_steward_royal_battania" text="Ard Sheumarlan" />
 		<string id="bk_council_steward_royal_vlandia" text="High Steward" />
@@ -191,7 +191,7 @@
 		<string id="pop_class_slaves" text="Slaves" />
 
 		<string id="pop_class_serfs_sturgia" text="Lowmen" />
-		<string id="pop_class_serfs_empire" text="Commoners" />
+		<string id="pop_class_serfs_empire" text="Coloni" />
 		<string id="pop_class_serfs_aserai" text="Commoners" />
 		<string id="pop_class_serfs_battania" text="Freemen" />
 		<string id="pop_class_serfs_khuzait" text="Nomads" />
@@ -201,13 +201,13 @@
 		<string id="pop_class_slaves_aserai" text="Mameluke" />
 		<string id="pop_class_slaves_vlandia" text="Slaves" />
 		<string id="pop_class_slaves_battania" text="Slaves" />
-		<string id="pop_class_slaves_empire" text="Slaves" />
+		<string id="pop_class_slaves_empire" text="Sclavi" />
 		<string id="pop_class_slaves_khuzait" text="Slaves" />
 
 		<string id="pop_class_craftsmen_battania" text="Artisans" />
 		<string id="pop_class_craftsmen_khuzait" text="Artisans" />
 		<string id="pop_class_craftsmen_vlandia" text="Craftsmen" />
-		<string id="pop_class_craftsmen_empire" text="Craftsmen" />
+		<string id="pop_class_craftsmen_empire" text="Cives" />
 		<string id="pop_class_craftsmen_sturgia" text="Craftsmen" />
 		<string id="pop_class_craftsmen_aserai" text="Craftsmen" />
 
