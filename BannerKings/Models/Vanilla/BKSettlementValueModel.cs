@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using BannerKings.Models.BKModels;
-using TaleWorlds.CampaignSystem;
+﻿using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Settlements;
 
@@ -13,10 +11,9 @@ namespace BannerKings.Models.Vanilla
             var result = base.CalculateSettlementValueForFaction(settlement, faction);
             if (BannerKingsConfig.Instance.TitleManager != null)
             {
-                var model = (BKTitleModel) BannerKingsConfig.Instance.Models.First(x =>
-                    x.GetType() == typeof(BKTitleModel));
+                var model = BannerKingsConfig.Instance.TitleModel;
                 var title = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement);
-                if (title == null)
+                if (title == null || title.deJure == null || title.deFacto == null)
                 {
                     return result;
                 }
@@ -24,7 +21,7 @@ namespace BannerKings.Models.Vanilla
                 if (title.deJure == title.DeFacto)
                 {
                     result += model.GetGoldUsurpCost(title) * 3f;
-                    if (!settlement.IsVillage)
+                    if (!settlement.IsVillage && settlement.BoundVillages != null)
                     {
                         foreach (var village in settlement.BoundVillages)
                         {
