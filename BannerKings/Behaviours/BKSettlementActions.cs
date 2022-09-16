@@ -615,14 +615,10 @@ namespace BannerKings.Behaviours
         private static bool MenuSlavesActionCondition(MenuCallbackArgs args)
         {
             args.optionLeaveType = GameMenuOption.LeaveType.TroopSelection;
-            return Settlement.CurrentSettlement.OwnerClan == Clan.PlayerClan;
-        }
-
-        private static bool MenuWaitActionPeasantCondition(MenuCallbackArgs args)
-        {
-            args.optionLeaveType = GameMenuOption.LeaveType.Wait;
-            MBTextManager.SetTextVariable("CURRENT_SETTLEMENT", Settlement.CurrentSettlement.EncyclopediaLinkWithName);
-            return IsPeasant();
+            var settlement = Settlement.CurrentSettlement;
+            return settlement.OwnerClan == Clan.PlayerClan || (settlement.IsVillage && 
+                BannerKingsConfig.Instance.TitleManager.GetTitle(settlement).deJure == Hero.MainHero &&
+                settlement.MapFaction == Clan.PlayerClan.MapFaction);
         }
 
         private static bool MenuGuardActionPeasantCondition(MenuCallbackArgs args)
