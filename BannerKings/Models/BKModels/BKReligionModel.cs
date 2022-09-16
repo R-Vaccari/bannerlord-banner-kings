@@ -11,6 +11,40 @@ namespace BannerKings.Models.BKModels
 {
     public class BKReligionModel
     {
+
+        public ExplainedNumber GetConversionInfluenceCost(Hero notable, Hero converter)
+        {
+            var result = new ExplainedNumber(15f, false);
+            result.LimitMin(15f);
+            result.LimitMax(150f);
+
+            result.Add(notable.GetRelation(converter) * -0.1f);
+            result.Add(GetNotableFactor(notable, notable.CurrentSettlement) / 2f);
+
+            var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(notable.CurrentSettlement);
+            var tension = data.ReligionData.Tension;
+            result.AddFactor(tension.ResultNumber);
+
+            return result;
+        }
+
+        public ExplainedNumber GetConversionPietyCost(Hero notable, Hero converter)
+        {
+            var result = new ExplainedNumber(40f, false);
+            result.LimitMin(40f);
+            result.LimitMax(150f);
+
+            result.Add(notable.GetRelation(converter) * -0.1f);
+            result.Add(GetNotableFactor(notable, notable.CurrentSettlement));
+
+            var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(notable.CurrentSettlement);
+            var tension = data.ReligionData.Tension;
+            result.AddFactor(tension.ResultNumber);
+
+            return result;
+        }
+
+
         public ExplainedNumber CalculateTensionTarget(ReligionData data)
         {
             var result = new ExplainedNumber();

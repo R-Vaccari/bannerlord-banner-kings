@@ -463,6 +463,23 @@ namespace BannerKings.Managers
             }
         }
 
+        public float GetPiety(Hero hero)
+        {
+            var rel = GetHeroReligion(hero);
+            if (rel == null || hero == null)
+            {
+                return 0f;
+            }
+
+            var piety = 0f;
+            if (Religions[rel].ContainsKey(hero))
+            {
+                piety = Religions[rel][hero].Piety;
+            }
+
+            return piety;
+        }
+
         public float GetPiety(Religion rel, Hero hero)
         {
             if (rel == null || hero == null)
@@ -476,7 +493,7 @@ namespace BannerKings.Managers
                 piety = Religions[rel][hero].Piety;
             }
 
-            return MBMath.ClampFloat(piety, -1000f, 1000f);
+            return piety;
         }
 
         public bool IsPreacher(Hero hero)

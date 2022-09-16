@@ -11,6 +11,22 @@ namespace BannerKings.Models.BKModels
     public class BKCultureModel : ICultureModel
     {
 
+        public ExplainedNumber GetConversionCost(Hero notable, Hero converter)
+        {
+            var result = new ExplainedNumber(30f, false);
+            result.LimitMin(30f);
+            result.LimitMax(150f);
+
+            result.Add(notable.GetRelation(converter) * -0.1f);
+            result.Add(GetNotableFactor(notable, notable.CurrentSettlement));
+
+            var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(notable.CurrentSettlement);
+            var acceptance = data.CultureData.GetAcceptance(converter.Culture);
+            result.AddFactor(1f - acceptance);
+
+            return result;
+        }
+
         public ExplainedNumber CalculateCultureWeight(Settlement settlement, CultureDataClass data)
         {
             var result = new ExplainedNumber(0f, true);
