@@ -7,6 +7,7 @@ using BannerKings.Managers.Titles;
 using BannerKings.Models.BKModels;
 using Helpers;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -89,12 +90,12 @@ namespace BannerKings.UI
 
         public static void ShowSlaveTransferScreen()
         {
-            var leftMemberRoster = TroopRoster.CreateDummyTroopRoster();
             var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(Settlement.CurrentSettlement);
             var count = (int) (data.GetTypeCount(PopType.Slaves) * data.EconomicData.StateSlaves);
-            var playerPrisonerCount = MobileParty.MainParty.PrisonRoster.TotalRegulars;
+
             var stlmtSlaves = new TroopRoster(null);
             stlmtSlaves.AddToCounts(CharacterObject.All.FirstOrDefault(x => x.StringId == "looter"), count);
+
             PartyScreenManager.OpenScreenAsLoot(TroopRoster.CreateDummyTroopRoster(), stlmtSlaves,
                 Settlement.CurrentSettlement.Name, 0,
                 delegate(PartyBase _, TroopRoster _, TroopRoster leftPrisonRoster,
@@ -121,6 +122,51 @@ namespace BannerKings.UI
 
                     data.UpdatePopType(PopType.Slaves, leftPrisonRoster.TotalRegulars - count, true);
                 });
+        }
+
+        public static void ShowSlaveDonationScreen(Hero notable)
+        {
+            var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(Settlement.CurrentSettlement);
+            var stlmtSlaves = new TroopRoster(null);
+
+            var slavesResult = 0f;
+            PartyScreenManager.OpenScreenAsLoot(TroopRoster.CreateDummyTroopRoster(), stlmtSlaves,
+                Settlement.CurrentSettlement.Name, 0,
+                delegate (PartyBase _, TroopRoster _, TroopRoster leftPrisonRoster,
+                    PartyBase _, TroopRoster _, TroopRoster rightPrisonRoster,
+                    bool _)
+                {
+                    slavesResult = leftPrisonRoster.TotalRegulars;
+                    if (leftPrisonRoster.TotalHeroes > 0)
+                    {
+                        var heroes = new List<CharacterObject>();
+                        foreach (var element in leftPrisonRoster.GetTroopRoster())
+                        {
+                            if (element.Character.IsHero)
+                            {
+                                heroes.Add(element.Character);
+                            }
+                        }
+
+                        foreach (var hero in heroes)
+                        {
+                            leftPrisonRoster.RemoveTroop(hero);
+                            rightPrisonRoster.AddToCounts(hero, 1);
+                        }
+                    }
+
+                    data.UpdatePopType(PopType.Slaves, leftPrisonRoster.TotalRegulars, false);
+                });
+
+            if (slavesResult > 0f)
+            {
+                GainKingdomInfluenceAction.ApplyForDefault(Hero.MainHero, slavesResult * 0.05f);
+                int relation = (int)(slavesResult / 50f);
+                if (relation > 0)
+                {
+                    ChangeRelationAction.ApplyPlayerRelation(notable, relation, false, true);
+                }
+            }
         }
 
         public static void ShowActionPopup(BannerKingsAction action, ViewModel vm = null)

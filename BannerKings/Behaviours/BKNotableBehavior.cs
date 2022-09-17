@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using BannerKings.UI;
 using BannerKings.Utils;
 using HarmonyLib;
 using Helpers;
@@ -9,6 +10,7 @@ using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.CampaignBehaviors;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.CampaignSystem.ViewModelCollection;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -157,6 +159,17 @@ namespace BannerKings.Behaviours
         private void AddDialogue(CampaignGameStarter starter)
         {
 
+            starter.AddPlayerLine("bk_question_give_slaves", "hero_main_options", "bk_answer_give_slaves",
+                "{=!}I would like to offer you slaves.",
+                IsPlayerNotable,
+                delegate { UIHelper.ShowSlaveDonationScreen(Hero.OneToOneConversationHero); });
+
+            starter.AddDialogLine("bk_answer_give_slaves", "bk_answer_give_slaves", "hero_main_options",
+                "{=!}My suzerain, I would be honored. Extra workforce will benefit our community.",
+                ConvertCultureAnswerOnCondition, null);
+
+
+
             starter.AddPlayerLine("bk_question_convert_culture", "hero_main_options", "bk_answer_convert_culture",
                 "{=!}{NOTABLE_CONVERT_CULTURE}",
                 ConvertCultureOnCondition, 
@@ -252,6 +265,14 @@ namespace BannerKings.Behaviours
             return IsPlayerNotable() && IsCultureDifferent();
         }
 
+        private bool ConvertCultureAnswerOnCondition()
+        {
+            MBTextManager.SetTextVariable("NOTABLE_ANSWER_CONVERT_CULTURE",
+                new TextObject("If that is your bidding, I would not deny it. Folks at {SETTLEMENT} might not like this. Over time however, they may accept it."));
+            return IsPlayerNotable();
+        }
+
+
         private bool FaithConvertAnswerOnCondition()
         {
             MBTextManager.SetTextVariable("NOTABLE_ANSWER_CONVERT_FAITH",
@@ -300,9 +321,11 @@ namespace BannerKings.Behaviours
 
         private bool IsPlayerNotable()
         {
-            return Hero.OneToOneConversationHero.IsNotable &&
-                   Hero.OneToOneConversationHero.CurrentSettlement != null &&
-                   Hero.OneToOneConversationHero.CurrentSettlement.OwnerClan == Clan.PlayerClan;
+            var hero = Hero.OneToOneConversationHero;
+            var settlement = hero.CurrentSettlement;
+            return hero.IsNotable && settlement != null && (settlement.OwnerClan == Clan.PlayerClan || 
+                (BannerKingsConfig.Instance.TitleManager.GetTitle(settlement).deJure == Hero.MainHero &&
+                settlement.MapFaction == Clan.PlayerClan.MapFaction));
         }
 
         private bool IsCultureDifferent()

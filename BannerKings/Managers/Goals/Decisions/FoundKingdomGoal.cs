@@ -71,15 +71,18 @@ namespace BannerKings.Managers.Goals.Decisions
             var kingdom = hero.Clan.Kingdom;
             var action = BannerKingsConfig.Instance.TitleModel.GetFoundKingdom(kingdom, hero);
 
-            var duchies =
-            (
-                from clan
-                    in kingdom.Clans
-                from dukedom
-                    in BannerKingsConfig.Instance.TitleManager.GetAllDeJure(hero.Clan.Leader)
-                        .FindAll(x => x.type == TitleType.Dukedom)
-                select new InquiryElement(dukedom, dukedom.FullName.ToString(), null)
-            ).ToList();
+            var duchies = new List<InquiryElement>();
+            foreach (var clan in kingdom.Clans)
+            {
+                var titles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(clan);
+                foreach (var title in titles)
+                {
+                    if (title.type == TitleType.Dukedom)
+                    {
+                        duchies.Add(new InquiryElement(title, title.FullName.ToString(), null));
+                    }
+                }
+            }
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                 new TextObject("{=CSRMOcCm}Founding Dukedoms").ToString(),
