@@ -80,6 +80,8 @@ namespace BannerKings.Managers.Institutions.Religions
             }
         }
 
+        public ExplainedNumber Tension => BannerKingsConfig.Instance.ReligionModel.CalculateTensionTarget(this);
+
         private void BalanceReligions(Religion dominant)
         {
             if (dominant is null)

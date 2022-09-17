@@ -77,13 +77,65 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
             switch (rank)
             {
                 case 4:
-                    break;
+                    {
+                        if (Hero.MainHero.Culture.StringId != "aserai" || Clan.PlayerClan.Tier <= 2)
+                        {
+                            text = new TextObject("{=!}I have neither the time nor the inclination to perform the rites and observe the oaths of one such as you. You grasp far beyond your station by asking this of me. Consult with a faqir or an imam of the cities, learn to know these lands and learn also your place.");
+                            return text;
+                        }
+
+                        if (Clan.PlayerClan.Tier <= 4)
+                        {
+                            text = new TextObject("{=!}Had I the time to do so, I might honor your request and observe the oath you must take to become the blood of my blood - but you lack decorum. Perhaps if you were a wayward prince or a lord of the Jawwal I would consider this my righteous task.");
+                            return text;
+                        }
+
+                        if (Clan.PlayerClan.Tier >= 5)
+                        {
+                            text = new TextObject("{=!}There are few honors I have not known or entertained, but rare is the honor of inducting one such as yourself formally into our brotherhood. You are a good sibling to those whom you share little more than homeland, a steward of the Aserai.");
+                            return text;
+                        }
+
+                        break;
+                    }
                 case 3:
-                    text = new TextObject("{=ws5gbCMX}Mashaera, blood of my blood. It is good to see you are alive and that you are in good health; for the world is rife with conflict beyond our brotherhood and little is to be held as certain. Are you here on pilgrimage or duty, in good tidings or ill news? How may this humble Imam be of service to his sibling?");
-                    break;
+                    {
+                        if (Hero.MainHero.Culture.StringId == "aserai")
+                        {
+                            text = new TextObject("{=!}Forgive my presumption, I thought you were already a follower of the Code of Asera. I celebrate that you have come to find enlightenment and truth, to embrace the warm heart of the patriarch and to accept his guiding lessons. Whether you be a Jawwal come to light, a bedouin ready to rejoin their brothers, or a soul liberated from faiths fouler - know that I welcome you. From this day forth, you shall carry yourself by the Code of Asera; let all the Aserai be as your brothers.");
+                            return text;
+                        }
+
+                        if (Hero.MainHero.Culture.StringId == "empire" || Hero.MainHero.Culture.StringId == "khuzait")
+                        {
+                            text = new TextObject("{=!}It is good to see our neighbors know the importance of the Code of Asera; though I must apologize - perhaps you are a distant kin. The Empire sought to make us as it makes all things; and thus those who share our blood; who share the blood of Asera; may be from lands beyond our own. I welcome you, wayward sibling, in kindness and in good fortune. May you carry the Code of Asera within your heart, may all that are Aserai be as your brothers.");
+                            return text;
+                        }
+
+                        if (Hero.MainHero.Spouse != null && Hero.MainHero.Spouse.Culture.StringId == "aserai")
+                        {
+                            text = new TextObject("{=!}You are of a kind heart to do this for your beloved, for not all from foreign lands would be willing to pursue such enlightenment. Your children will be Sons of Aserai, and by marriage so too are you. Follow the Code of Asera, honor our patriarch and in doing so honor your beloved. You are part of a grand lineage now; go forth unto eternity in peace and in family.");
+                            return text;
+                        }
+
+                        break;
+                    }
                 case 2:
-                    text = new TextObject("{=yMvqUQpw}Peace be upon you, my kin. Have you come to study the Code of Asera? I shall grant you what wisdom I have gleaned in my long hours of study, but as your brother I must tell you that I find myself more ignorant the more I realize the breadth of what there is still yet to learn.");
-                    break;
+                    {
+                        if (Hero.MainHero.Culture.StringId == "aserai")
+                        {
+                            text = new TextObject("{=!}Forgive my presumption, I thought you were already a follower of the Code of Asera. I celebrate that you have come to find enlightenment and truth, to embrace the warm heart of the patriarch and to accept his guiding lessons. Whether you be a Jawwal come to light, a bedouin ready to rejoin their brothers, or a soul liberated from faiths fouler - know that I welcome you. From this day forth, you shall carry yourself by the Code of Asera; let all the Aserai be as your brothers.");
+                            return text;
+                        }
+
+                        if (Hero.MainHero.Culture.StringId == "empire" || Hero.MainHero.Culture.StringId == "khuzait")
+                        {
+                            text = new TextObject("{=!}It is good to see our neighbors know the importance of the Code of Asera; though I must apologize - perhaps you are a distant kin. The Empire sought to make us as it makes all things; and thus those who share our blood; who share the blood of Asera; may be from lands beyond our own. I welcome you, wayward sibling, in kindness and in good fortune. May you carry the Code of Asera within your heart, may all that are Aserai be as your brothers.");
+                            return text;
+                        }
+
+                        break;
+                    }
                 default:
                 {
                     var settlement = Settlement.CurrentSettlement;
@@ -124,13 +176,65 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
             switch (rank)
             {
                 case 4:
-                    break;
+                    {
+                        if (Hero.MainHero.Culture.StringId != "aserai" || Clan.PlayerClan.Tier <= 2)
+                        {
+                            text = new TextObject("{=!}Perhaps someday when you are worthy of my audience, should you still be astray from the Code, I may deign it a kindness to serve as witness to your words.");
+                            return text;
+                        }
+
+                        if (Clan.PlayerClan.Tier <= 4)
+                        {
+                            text = new TextObject("{=!}Find an imam or an akhund, they shall better serve you in this task. ");
+                            return text;
+                        }
+
+                        if (Clan.PlayerClan.Tier >= 5)
+                        {
+                            text = new TextObject("{=!}You are worthier than most to pursue the Code of Asera, and you need only speak this oath to become the blood of my blood: \"I bear witness to the glory of Asera and the grand workings of his sons. I shall follow his code, and all of the Aserai shall be as my brothers.\"I bid you kind passage and glory befitting the power you wield. May you rise all Aserai to new heights, and bring us further into such blessed unity.");
+                            return text;
+                        }
+
+                        break;
+                    }
                 case 3:
-                    text = new TextObject("{=ws5gbCMX}Mashaera, blood of my blood. It is good to see you are alive and that you are in good health; for the world is rife with conflict beyond our brotherhood and little is to be held as certain. Are you here on pilgrimage or duty, in good tidings or ill news? How may this humble Imam be of service to his sibling?");
-                    break;
+                    {
+                        if (Hero.MainHero.Culture.StringId == "aserai")
+                        {
+                            text = new TextObject("{=!}If you wish to become inducted into our faith, you must simply repeat this oath to me: \"I bear witness to the glory of Asera and the grand workings of his sons. I shall follow his code, and all of the Aserai shall be as my brothers.\"");
+                            return text;
+                        }
+
+                        if (Hero.MainHero.Culture.StringId == "empire" || Hero.MainHero.Culture.StringId == "khuzait")
+                        {
+                            text = new TextObject("{=!}If you wish to become inducted into our faith, you must simply repeat this oath to me: \"I bear witness to the glory of Asera and the grand workings of his sons. I shall follow his code, and all of the Aserai shall be as my brothers.\"");
+                            return text;
+                        }
+
+                        if (Hero.MainHero.Spouse != null && Hero.MainHero.Spouse.Culture.StringId == "aserai")
+                        {
+                            text = new TextObject("{=!}If you wish to become inducted into our faith, you must simply repeat this oath to me: \"I bear witness to the glory of Asera and the grand workings of his sons. I shall follow his code, and all of the Aserai shall be as my brothers.\" It is done. I welcome you to our blessed family. Go now to your spouse, be joined in glory and in purpose.");
+                            return text;
+                        }
+
+                        break;
+                    }
                 case 2:
-                    text = new TextObject("{=yMvqUQpw}Peace be upon you, my kin. Have you come to study the Code of Asera? I shall grant you what wisdom I have gleaned in my long hours of study, but as your brother I must tell you that I find myself more ignorant the more I realize the breadth of what there is still yet to learn.");
-                    break;
+                    {
+                        if (Hero.MainHero.Culture.StringId == "aserai")
+                        {
+                            text = new TextObject("{=!}Please repeat this oath and I shall serve as your witness: \"I bear witness to the glory of Asera and the grand workings of his sons. I shall follow his code, and all of the Aserai shall be as my brothers.\"I welcome you upon our blessed path, blood of my blood - my kin so far afield. I embrace you as a sibling, and ask that you depart in peace and glory. May every fortune find you.");
+                            return text;
+                        }
+
+                        if (Hero.MainHero.Culture.StringId == "empire" || Hero.MainHero.Culture.StringId == "khuzait")
+                        {
+                            text = new TextObject("{=!}If you wish to become inducted into our faith, you must simply repeat this oath to me: \"I bear witness to the glory of Asera and the grand workings of his sons. I shall follow his code, and all of the Aserai shall be as my brothers.\"There may be some who question your faith by means of your origin, but know that an adopted son is not unprecedented among the Banu. Know that you are a Son of Asera, a follower of the Code of Asera, and none but you can take this truth away. Go now in peace, blood of my blood.");
+                            return text;
+                        }
+
+                        break;
+                    }
                 default:
                 {
                     var settlement = Settlement.CurrentSettlement;
@@ -142,6 +246,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
                     if (Hero.MainHero.Culture != Utils.Helpers.GetCulture("aserai"))
                     {
                         text = new TextObject("{=mg8AZu6P}I wish you well in such pursuits, and that you live a life of peace wherever this path may take you.");
+                        return text;
                     }
 
                     float relation = 0;
@@ -277,7 +382,105 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Asera
 
         public override (bool, TextObject) GetInductionAllowed(Hero hero, int rank)
         {
-            throw new NotImplementedException();
+            bool possible = true;
+            TextObject text = new TextObject("{=GAuAoQDG}You will be converted");
+            switch (rank)
+            {
+                case 4:
+                    {
+                        if (hero.Culture.StringId != "aserai" || hero.Clan.Tier <= 2)
+                        {
+                            possible = false;
+                            text = new TextObject("{=!}Clan tier is insufficient (less than 3) or not Aserai.");
+                        }
+                        else if (hero.Clan.Tier <= 4)
+                        {
+                            possible = false;
+                            text = new TextObject("{=PsLzYkAz}Clan tier is insufficient.");
+                        }
+                        else if (hero.Clan.Tier >= 5)
+                        {
+                            possible = true;
+                        }
+
+                        break;
+                    }
+                case 3:
+                    {
+                        if (hero.Culture.StringId == "aserai")
+                        {
+                            possible = true;
+                        }
+                        else if (hero.Culture.StringId == "empire" || hero.Culture.StringId == "khuzait")
+                        {
+                            possible = true;
+                        }
+                        else if (hero.Spouse != null && hero.Spouse.Culture.StringId == "aserai")
+                        {
+                            possible = true;
+                        } 
+                        else
+                        {
+                            possible = false;
+                            text = new TextObject("{=!}Not part of Aserai, Imperial or Khuzait cultures, or have a spouse part of them");
+                        }
+
+                        break;
+                    }
+                case 2:
+                    {
+                        if (hero.Culture.StringId == "aserai")
+                        {
+                            possible = true;
+                        }
+                        else if (hero.Culture.StringId == "empire" || hero.Culture.StringId == "khuzait")
+                        {
+                            possible = true;
+                        }
+                        else
+                        {
+                            text = new TextObject("{=!}Not part Aserai, Imperial or Khuzait cultures.");
+                        }
+
+                        break;
+                    }
+                default:
+                    {
+                        var settlement = Settlement.CurrentSettlement;
+
+                        if (hero.Culture != Utils.Helpers.GetCulture("aserai"))
+                        {
+                            possible = false;
+                            text = new TextObject("{=!}Not part of Aserai culture.");
+                        }
+
+                        float relation = 0;
+                        foreach (var notable in settlement.Notables)
+                        {
+                            relation += notable.GetRelation(hero);
+                        }
+
+                        var medium = relation / settlement.Notables.Count;
+                        switch (medium)
+                        {
+                            case < 0: 
+                                {
+                                    possible = false;
+                                    text = new TextObject("{=!}Not enough relations with locals (medium of 20).");
+                                    break;
+                                }
+                            case < 20:
+                                { 
+                                    possible = true;
+                                    break;
+                                }
+                        };
+
+                        break;
+                    }
+            }
+
+            return new(possible, text);
         }
 
         public override TextObject GetBlessingAction()
