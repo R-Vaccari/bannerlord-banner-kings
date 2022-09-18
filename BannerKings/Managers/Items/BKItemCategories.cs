@@ -18,6 +18,8 @@ namespace BannerKings.Managers.Items
 
         public ItemCategory Carrot { get; private set; }
 
+        public ItemCategory Honey { get; private set; }
+
         public override IEnumerable<ItemCategory> All => throw new NotImplementedException();
 
         public override void Initialize()
@@ -39,6 +41,9 @@ namespace BannerKings.Managers.Items
 
             Carrot = Game.Current.ObjectManager.RegisterPresumedObject(new ItemCategory("carrot"));
             Carrot.InitializeObject(true, 20, 0, ItemCategory.Property.BonusToFoodStores);
+
+            Honey = Game.Current.ObjectManager.RegisterPresumedObject(new ItemCategory("honey"));
+            Honey.InitializeObject(true, 30, 40, ItemCategory.Property.BonusToFoodStores);
         }
     }
 }
