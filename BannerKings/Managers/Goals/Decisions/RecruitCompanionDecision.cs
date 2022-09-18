@@ -230,7 +230,7 @@ namespace BannerKings.Managers.Goals.Decisions
                                  ?? Settlement.All.GetRandomElement();
 
             var companion = HeroCreator.CreateSpecialHero(characterTemplate, bornSettlement, null, null, Campaign.Current.Models.AgeModel.HeroComesOfAge + MBRandom.RandomInt(12));
-            EquipmentHelper.AssignHeroEquipmentFromEquipment(hero, equipmentRoster.AllEquipments.GetRandomElement());
+            EquipmentHelper.AssignHeroEquipmentFromEquipment(companion, equipmentRoster.AllEquipments.GetRandomElement());
             companion.CompanionOf = hero.Clan;
 
             var companionFoundMessage = new TextObject("{COMPANION.LINK} was discovered and joined you as companion.");
