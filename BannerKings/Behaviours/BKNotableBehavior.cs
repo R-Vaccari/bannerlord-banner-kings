@@ -207,7 +207,7 @@ namespace BannerKings.Behaviours
             starter.AddPlayerLine("bk_convert_faith_confirm", "bk_convert_faith_confirm", "hero_main_options",
                 "{=LPVNjXpT}See it done.",
                 null,
-                CultureConversionAcceptedConsequence);
+                FaithConversionAcceptedConsequence);
 
             starter.AddPlayerLine("bk_convert_faith_confirm", "bk_convert_faith_confirm", "hero_main_options",
                 "{=G4ALCxaA}Never mind.",
@@ -272,6 +272,28 @@ namespace BannerKings.Behaviours
             return IsPlayerNotable();
         }
 
+        public void ApplyNotableFaithConversion(Hero notable, Hero converter)
+        {
+            var rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(converter);
+            BannerKingsConfig.Instance.ReligionsManager.AddToReligion(notable, rel);   
+
+            var influence = BannerKingsConfig.Instance.ReligionModel.GetConversionInfluenceCost(Hero.OneToOneConversationHero, Hero.MainHero).ResultNumber;
+            var piety = BannerKingsConfig.Instance.ReligionModel.GetConversionPietyCost(Hero.OneToOneConversationHero, Hero.MainHero).ResultNumber;
+            BannerKingsConfig.Instance.ReligionsManager.AddPiety(converter, -piety, true);
+            GainKingdomInfluenceAction.ApplyForDefault(converter, -influence);
+            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(notable, converter, -8);
+            if (converter == Hero.MainHero)
+            {
+                NotificationsHelper.AddQuickNotificationWithSound(new TextObject("{=!}{HERO} has converted to the {FAITH} faith.")
+                    .SetTextVariable("HERO", notable.Name)
+                    .SetTextVariable("FAITH", rel.Faith.GetFaithName()));
+            }
+        }
+
+        private void FaithConversionAcceptedConsequence()
+        {
+            ApplyNotableFaithConversion(Hero.OneToOneConversationHero, Hero.MainHero);
+        }
 
         private bool FaithConvertAnswerOnCondition()
         {
