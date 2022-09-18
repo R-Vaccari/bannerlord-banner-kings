@@ -30,6 +30,9 @@ namespace BannerKings.Managers.Items
 
         public ItemObject BookBow { get; private set; }
 
+        public ItemObject BookThrowing { get; private set; }
+        public ItemObject BookMedicine { get; private set; }
+
         public ItemObject Apple { get; private set; }
 
         public ItemObject Bread { get; private set; }
@@ -39,6 +42,8 @@ namespace BannerKings.Managers.Items
         public ItemObject Carrot { get; private set; }
 
         public ItemObject Orange { get; private set; }
+
+        public ItemObject Honey { get; private set; }
 
         public override IEnumerable<ItemObject> All
         {
@@ -56,7 +61,9 @@ namespace BannerKings.Managers.Items
                 yield return BookPolearm;
                 yield return BookCrossbow;
                 yield return BookBow;
+                yield return BookThrowing;
                 yield return Apple;
+                yield return Honey;
             }
         }
 
@@ -75,17 +82,22 @@ namespace BannerKings.Managers.Items
             Bread = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("bread"));
             InitializeTradeGood(Bread,
                 new TextObject("{=VJfbLXmi}Bread{@Plural}loathes of bread\\@}"), "merchandise_bread",
-                BKItemCategories.Instance.Apple, 5, 10f, ItemObject.ItemTypeEnum.Goods, true);
+                BKItemCategories.Instance.Apple, 20, 10f, ItemObject.ItemTypeEnum.Goods, true);
 
             Pie = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("pie"));
             InitializeTradeGood(Pie,
                 new TextObject("{=Qa0dQMOc}Pie{@Plural}baskets of pies\\@}"), "kitchen_pie",
-                BKItemCategories.Instance.Apple, 5, 10f, ItemObject.ItemTypeEnum.Goods, true);
+                BKItemCategories.Instance.Apple, 30, 10f, ItemObject.ItemTypeEnum.Goods, true);
 
             Carrot = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("carrot"));
             InitializeTradeGood(Carrot,
                 new TextObject("{=C5Xe5MJK}Carrots{@Plural}baskets of carrots\\@}"), "foods_carrots_basket",
                 BKItemCategories.Instance.Apple, 5, 10f, ItemObject.ItemTypeEnum.Goods, true);
+
+            Honey = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("honey"));
+            InitializeTradeGood(Honey,
+                new TextObject("{=1Maj0j6J}Honey{@Plural}barrels of honey{\\@}"), "bd_barrel_a",
+                BKItemCategories.Instance.Honey, 70, 10f, ItemObject.ItemTypeEnum.Goods, true);
 
 
             BookHeartsDesire = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("book_hearts_desire"));
@@ -153,6 +165,18 @@ namespace BannerKings.Managers.Items
             BookPolearm = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("book_polearm"));
             InitializeTradeGood(BookPolearm,
                 new TextObject("{=5v2oKnX6}Lycaron debate of 1074{@Plural}collection of Lycaron debate of 1074y{\\@}"),
+                "lib_book_closed_b",
+                BKItemCategories.Instance.Book, 700000, 1.5f, ItemObject.ItemTypeEnum.Goods);
+
+            BookThrowing = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("book_throwing"));
+            InitializeTradeGood(BookThrowing,
+                new TextObject("{=!}Franceska{@Plural}collection of Franceska{\\@}"),
+                "lib_book_closed_b",
+                BKItemCategories.Instance.Book, 700000, 1.5f, ItemObject.ItemTypeEnum.Goods);
+
+            BookMedicine = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("book_medicine"));
+            InitializeTradeGood(BookMedicine,
+                new TextObject("{=!}Aseran Papyrus{@Plural}collection of Aseran Papyrus{\\@}"),
                 "lib_book_closed_b",
                 BKItemCategories.Instance.Book, 700000, 1.5f, ItemObject.ItemTypeEnum.Goods);
         }

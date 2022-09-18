@@ -14,6 +14,7 @@
 	<string id="str_bk_hereditary_monarchy" text="{=bk_hereditary_monarchy}Hereditary Monarchy" />
 	<string id="str_bk_elective_monarchy" text="{=bk_elective_monarchy}Elective Monarchy" />
 
+	<string id="str_item_category.honey" text="{=1Maj0j6J}Honey{@Plural}barrels of honey{\@}" />
 	<string id="str_item_category.apple" text="{=1MAr0j2J}Apples{@Plural}baskets of apples{\@}" />
 	<string id="str_item_category.orange" text="{=Krqwsins}Oranges{@Plural}baskets of oranges{\@}" />
 	<string id="str_item_category.bread" text="{=VJfbLXmi}Bread{@Plural}loaves of bread{\@}" />

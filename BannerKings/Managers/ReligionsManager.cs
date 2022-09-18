@@ -157,6 +157,7 @@ namespace BannerKings.Managers
 
         public void PostInitialize()
         {
+            DefaultDivinities.Instance.Initialize();
             foreach (var pair in Religions.ToList())
             {
                 var rel = pair.Key;
@@ -366,6 +367,7 @@ namespace BannerKings.Managers
                         .SetTextVariable("DIVINITY", divinity.Name),
                     0, hero.CharacterObject, "event:/ui/notification/relation");
             }
+            AddPiety(religion, hero, -divinity.BlessingCost(hero), notify);
         }
 
         public Religion GetReligionById(string id)
@@ -457,7 +459,7 @@ namespace BannerKings.Managers
 
             if (notifyPlayer && hero == Hero.MainHero)
             {
-                MBInformationManager.AddQuickInformation(new TextObject("{=purf5QPz}{HERO} has recieved {PIETY} piety.")
+                MBInformationManager.AddQuickInformation(new TextObject("{=!}{HERO} piety was changed by {PIETY}.")
                     .SetTextVariable("HERO", hero.Name)
                     .SetTextVariable("PIETY", (int) piety));
             }

@@ -49,7 +49,6 @@
 			<IncludedGameTypes>
 				<GameType value="Campaign" />
 				<GameType value="CampaignStoryMode" />
-				<GameType value="CustomGame" />
 			</IncludedGameTypes>
 		</XmlNode>
 		<XmlNode>
@@ -57,7 +56,6 @@
 			<IncludedGameTypes>
 				<GameType value="Campaign" />
 				<GameType value="CampaignStoryMode" />
-				<GameType value="CustomGame" />
 			</IncludedGameTypes>
 		</XmlNode>
 		<XmlNode>
@@ -65,7 +63,6 @@
 			<IncludedGameTypes>
 				<GameType value="Campaign" />
 				<GameType value="CampaignStoryMode" />
-				<GameType value="CustomGame" />
 			</IncludedGameTypes>
 		</XmlNode>
 		<XmlNode>
@@ -75,6 +72,13 @@
 				<GameType value="CampaignStoryMode" />
 			</IncludedGameTypes>
 		</XmlNode>
+		<XmlNode>                
+			<XmlName id="WorkshopTypes" path="workshops"/>
+			<IncludedGameTypes>
+				<GameType value = "Campaign"/>
+				<GameType value = "CampaignStoryMode"/>
+			</IncludedGameTypes>
+		</XmlNode> 
 		<XmlNode>
 			<XmlName id="ItemModifiers" path="item_modifiers" />
 		</XmlNode>

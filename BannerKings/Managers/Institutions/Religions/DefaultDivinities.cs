@@ -37,6 +37,18 @@ namespace BannerKings.Managers.Institutions.Religions
             get
             {
                 yield return AseraMain;
+                yield return AseraSecondary1;
+                yield return AseraSecondary2;
+                yield return AseraSecondary3;
+                yield return AmraMain;
+                yield return AmraSecondary1;
+                yield return AmraSecondary2;
+                yield return DarusosianMain;
+                yield return DarusosianSecondary1;
+                yield return DarusosianSecondary2;
+                yield return VlandiaMain;
+                yield return VlandiaSecondary1;
+                yield return VlandiaSecondary2;
             }
         }
 
