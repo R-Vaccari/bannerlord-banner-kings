@@ -35,6 +35,17 @@ namespace BannerKings.Models.Vanilla
             return result;
         }
 
+        public override int GetPrice(EquipmentElement itemRosterElement, MobileParty clientParty, PartyBase merchant, bool isSelling, float inStoreValue, float supply, float demand)
+        {
+            int result = base.GetPrice(itemRosterElement, clientParty, merchant, isSelling, inStoreValue, supply, demand);
+            if (itemRosterElement.Item.ItemCategory.IsAnimal)
+            {
+                result += (int)(result * 0.5f);
+            }
+
+            return result;
+        }
+
         public override float GetBasePriceFactor(ItemCategory itemCategory, float inStoreValue, float supply, float demand,
             bool isSelling, int transferValue)
         {

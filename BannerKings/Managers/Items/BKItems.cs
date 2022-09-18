@@ -75,12 +75,12 @@ namespace BannerKings.Managers.Items
             Bread = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("bread"));
             InitializeTradeGood(Bread,
                 new TextObject("{=VJfbLXmi}Bread{@Plural}loathes of bread\\@}"), "merchandise_bread",
-                BKItemCategories.Instance.Apple, 5, 10f, ItemObject.ItemTypeEnum.Goods, true);
+                BKItemCategories.Instance.Apple, 20, 10f, ItemObject.ItemTypeEnum.Goods, true);
 
             Pie = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("pie"));
             InitializeTradeGood(Pie,
                 new TextObject("{=Qa0dQMOc}Pie{@Plural}baskets of pies\\@}"), "kitchen_pie",
-                BKItemCategories.Instance.Apple, 5, 10f, ItemObject.ItemTypeEnum.Goods, true);
+                BKItemCategories.Instance.Apple, 30, 10f, ItemObject.ItemTypeEnum.Goods, true);
 
             Carrot = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("carrot"));
             InitializeTradeGood(Carrot,
