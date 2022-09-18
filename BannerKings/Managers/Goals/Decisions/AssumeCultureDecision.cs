@@ -47,13 +47,24 @@ namespace BannerKings.Managers.Goals.Decisions
 
         internal override bool IsAvailable()
         {
-            return GetCultureOptions().Count > 0 && GetFulfiller().Clan.Renown > 100f;
+            return true;
         }
 
         internal override bool IsFulfilled(out List<TextObject> failedReasons)
         {
             failedReasons = new List<TextObject>();
-            return true;
+
+            if (GetCultureOptions().Count == 0)
+            {
+                failedReasons.Add(new TextObject("{=!}You do not have a settlement, spouse or faction leader with a different culture."));
+            }
+
+            if (GetFulfiller().Clan.Renown < 100f)
+            {
+                failedReasons.Add(new TextObject("{=!}You need at least 100 clan renown."));
+            }
+
+            return failedReasons.IsEmpty();
         }
 
         internal override Hero GetFulfiller()

@@ -157,49 +157,7 @@ namespace BannerKings.UI.Titles
 
             if (Clan.PlayerClan.Kingdom != null)
             {
-                var governments = GetGovernments();
-                var governmentButton = CreateButton(governments,
-                    governments.Count >= 1
-                        ? new BKGovernmentDecision(kingdom.RulingClan, (GovernmentType)governments[0].Identifier, title)
-                        : null,
-                    new TextObject("{=PSrEtF5L}Government").ToString(),
-                    new TextObject("{=jeNEcVGi}Propose a change in government structure, altering the allowed succession forms and aspects of settlement governance. Depending on the government choice, an appropriate succession type will be enforced as well."));
-                governmentButton.Enabled = allSetup && governments.Count >= 1;
-
-                var successions = GetSuccessions();
-                var successionButton = CreateButton(successions,
-                    successions.Count >= 1
-                        ? new BKSuccessionDecision(Clan.PlayerClan, (SuccessionType)successions[0].Identifier, title)
-                        : null,
-                    new TextObject("{=rTUgik07}Succession").ToString(),
-                    new TextObject("{=ie9VdKpd}Propose a change in the realm's succession, altering how the next sovereign is chosen."));
-                successionButton.Enabled = allSetup && successions.Count >= 1 &&
-                                           title.contract.Government != GovernmentType.Imperial &&
-                                           title.contract.Government != GovernmentType.Republic;
-
-                var inheritances = GetInheritances();
-                var inheritanceButton = CreateButton(inheritances,
-                    inheritances.Count >= 1
-                        ? new BKInheritanceDecision(Clan.PlayerClan, (InheritanceType)inheritances[0].Identifier, title)
-                        : null,
-                    new TextObject("{=aELuNrRC}Inheritance").ToString(),
-                    new TextObject("{=PXXY56Vd}Propose a change in clan inheritances, that is, who becomes the clan leader once the leader dies."));
-                inheritanceButton.Enabled = allSetup && inheritances.Count >= 1;
-
-                var genderLaws = GetGenderLaws();
-                var genderButton = CreateButton(genderLaws,
-                    genderLaws.Count >= 1
-                        ? new BKGenderDecision(Clan.PlayerClan, (GenderLaw)genderLaws[0].Identifier, title)
-                        : null,
-                    new TextObject("{=LESrJQvC}Gender Law").ToString(),
-                    new TextObject("{=kXUWrDRZ}Propose a change in gender laws, dictating whether males and females are viewed equally in various aspects."));
-                genderButton.Enabled = allSetup && genderLaws.Count >= 1;
-
-
-                Decisions.Add(governmentButton);
-                Decisions.Add(successionButton);
-                Decisions.Add(inheritanceButton);
-                Decisions.Add(genderButton);
+               
             } 
         }
 

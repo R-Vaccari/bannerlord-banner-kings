@@ -66,7 +66,10 @@ namespace BannerKings.Managers.Education.Books
             Trade.Initialize(BKItems.Instance.BookTrade, new TextObject("{=!}"), DefaultLanguages.Instance.Aseran, BookUse.Focusbook, DefaultSkills.Trade);
 
             Dictionary = new BookType("book_dictionary");
-            Dictionary.Initialize(BKItems.Instance.BookDictionary, new TextObject("{=!}"), DefaultLanguages.Instance.Calradian, BookUse.Dictionary);
+            Dictionary.Initialize(BKItems.Instance.BookDictionary, 
+                new TextObject("{=!}Dictionarium Calradium is a compendium of basic words and syntax of the languages in the continent. Used to further the former Empire's influence on different cultures, it serves any language by comparing it to Calradian, the Imperial language."), 
+                DefaultLanguages.Instance.Calradian, 
+                BookUse.Dictionary);
 
             Mounted = new BookType("book_riding");
             Mounted.Initialize(BKItems.Instance.BookMounted, new TextObject("{=!}"), DefaultLanguages.Instance.Vlandic, BookUse.Focusbook, DefaultSkills.Riding);

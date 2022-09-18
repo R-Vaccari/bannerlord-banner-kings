@@ -10,8 +10,10 @@ namespace BannerKings.Managers.Goals
             get
             {
                 yield return AssumeCulture;
+                yield return AcquireBookDecision;
                 yield return RecruitCompanionDecision;
                 yield return RequestCouncil;
+                yield return ContractChangeDecision;
                 yield return FoundKingdomGoal;
                 yield return CalradicEmpireGoal;
                 yield return GreaterBattania;
@@ -24,6 +26,8 @@ namespace BannerKings.Managers.Goals
         internal Goal FoundKingdomGoal { get; private set; }
         internal Goal RecruitCompanionDecision { get; private set; }
         internal Goal RequestCouncil { get; private set; }
+        internal Goal ContractChangeDecision { get; private set; }
+        internal Goal AcquireBookDecision { get; private set; }
 
         public override void Initialize()
         {
@@ -33,6 +37,8 @@ namespace BannerKings.Managers.Goals
             FoundKingdomGoal = new FoundKingdomGoal();
             RecruitCompanionDecision = new RecruitCompanionDecision();
             RequestCouncil = new RequestCouncilDecision();
+            ContractChangeDecision = new ContractChangeDecision();
+            AcquireBookDecision = new AcquireBookDecision();
         }
     }
 }
