@@ -243,11 +243,12 @@ namespace BannerKings.Behaviours
             Dictionary<ItemCategory, int> desiredAmounts = new Dictionary<ItemCategory, int>();
             ItemRoster itemRoster = town.Owner.ItemRoster;
 
-            desiredAmounts.Add(DefaultItemCategories.UltraArmor, (int)(town.Prosperity / 1000f));
-            desiredAmounts.Add(DefaultItemCategories.HeavyArmor, (int)(town.Prosperity / 500f));
-            desiredAmounts.Add(DefaultItemCategories.MeleeWeapons5, (int)(town.Prosperity / 1000f));
-            desiredAmounts.Add(DefaultItemCategories.MeleeWeapons4, (int)(town.Prosperity / 500f));
-            desiredAmounts.Add(DefaultItemCategories.MeleeWeapons3, (int)(town.Prosperity / 250f));
+            desiredAmounts.Add(DefaultItemCategories.UltraArmor, (int)(town.Prosperity / 750f));
+            desiredAmounts.Add(DefaultItemCategories.HeavyArmor, (int)(town.Prosperity / 400f));
+            desiredAmounts.Add(DefaultItemCategories.MeleeWeapons5, (int)(town.Prosperity / 750f));
+            desiredAmounts.Add(DefaultItemCategories.MeleeWeapons4, (int)(town.Prosperity / 400f));
+            desiredAmounts.Add(DefaultItemCategories.RangedWeapons5, (int)(town.Prosperity / 1500f));
+            desiredAmounts.Add(DefaultItemCategories.RangedWeapons4, (int)(town.Prosperity / 1000f));
 
             var behavior = Campaign.Current.GetCampaignBehavior<WorkshopsCampaignBehavior>();
             var getItem = AccessTools.Method(behavior.GetType(), "GetRandomItemAux", new Type[] { typeof(ItemCategory), typeof(Town) });

@@ -14,7 +14,7 @@ namespace BannerKings.Managers.Goals.Decisions
         public AssumeCultureDecision() : base("goal_assume_cukture_decision", GoalUpdateType.Manual)
         {
             var name = new TextObject("{=!}Assume Culture");
-            var description = new TextObject("{=!}Assume a culture different than your current. Cultures can be assumed from settlements, your spouse or your faction leader. Direct family members will assume the culture as well. Assuming a culture yields a significant negative impact on clan renown.");
+            var description = new TextObject("{=!}Assume a culture different than your current. Cultures can be assumed from settlements, your spouse or your faction leader. Direct family members will assume the culture as well. Assuming a culture yields a significant negative impact on clan renown.\n\n");
 
             Initialize(name, description);
         }

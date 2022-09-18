@@ -603,7 +603,7 @@ namespace BannerKings.Behaviours
             var clergyman =
                 ReligionsManager.GetClergymanFromHeroHero(Hero.OneToOneConversationHero);
             var religion = ReligionsManager.GetClergymanReligion(clergyman);
-            ReligionsManager.AddBlessing(selectedDivinity, Hero.MainHero, religion);
+            ReligionsManager.AddBlessing(selectedDivinity, Hero.MainHero, religion, true);
         }
 
         private bool BlessingOnClickable(out TextObject hintText)
