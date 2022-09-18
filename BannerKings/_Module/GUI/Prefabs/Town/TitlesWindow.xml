@@ -37,31 +37,19 @@
 													</Children>
 												</ButtonWidget>
 
-												<ButtonWidget DataSource="{FoundKingdom}" IsVisible="@Show" IsEnabled="@Enabled" DoNotPassEventsToChildren="true" WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="40" MarginLeft="20" MarginRight="20" MarginTop="20" Brush="ButtonBrush2" Command.Click="OnPress" UpdateChildrenStates="true">
-													<Children>
-														<HintWidget DataSource="{Hint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" />
-														<TextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginTop="3" Brush="Clan.TabControl.Text" Text="@ButtonName" />
-													</Children>
-												</ButtonWidget>
+	
 
 												<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" StackLayout.LayoutMethod="HorizontalLeftToRight" MarginTop="25" MarginLeft="25" MarginRight="25" DoNotAcceptEvents="true">
 													<Children>
 														<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="7" MarginLeft="5" MarginRight="5" VerticalAlignment="Bottom" PositionYOffset="7" Sprite="SPGeneral\TownManagement\horizontal_divider" />
-														<RichTextWidget DoNotAcceptEvents="true" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="OverlayPopup.ButtonText" Brush.FontSize="20" Text="Propose Changes"/>
+														<RichTextWidget DoNotAcceptEvents="true" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="OverlayPopup.ButtonText" Brush.FontSize="20" Text="@DemesneText"/>
 														<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="7" MarginLeft="5" MarginRight="5" VerticalAlignment="Bottom" PositionYOffset="7" Sprite="SPGeneral\TownManagement\horizontal_divider" />
 													</Children>
 												</ListPanel>
 
-												<GridWidget DataSource="{Decisions}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" SuggestedHeight="100" MarginTop="40" MarginLeft="20" MarginRight="20" HorizontalAlignment="Center" DefaultCellWidth="140" DefaultCellHeight="60" ColumnCount="1">
+												<GridWidget DataSource="{TitleInfo}" WidthSizePolicy="StretchToParent" HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" DefaultCellWidth="120" DefaultCellHeight="30" ColumnCount="1" MarginTop="30">
 													<ItemTemplate>
-
-														<ButtonWidget IsVisible="@Show" IsEnabled="@Enabled" DoNotPassEventsToChildren="true" WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="40"  Brush="ButtonBrush2" Command.Click="OnPress" UpdateChildrenStates="true">
-															<Children>
-																<HintWidget DataSource="{Hint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" />
-																<TextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginTop="3" Brush="Clan.TabControl.Text" Text="@ButtonName" />
-															</Children>
-														</ButtonWidget>
-
+														<InformationElement/>
 													</ItemTemplate>
 												</GridWidget>
 
