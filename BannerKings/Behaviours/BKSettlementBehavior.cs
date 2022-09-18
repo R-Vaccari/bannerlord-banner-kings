@@ -20,7 +20,6 @@ using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
 using static BannerKings.Managers.PopulationManager;
-using static TaleWorlds.CampaignSystem.CharacterDevelopment.DefaultPerks;
 
 namespace BannerKings.Behaviours
 {
@@ -261,17 +260,16 @@ namespace BannerKings.Behaviours
                     var category = element.EquipmentElement.Item.ItemCategory; 
                     if (category == pair.Key)
                     {
-                        quantity += element.Amount;
+                        quantity++;
                     }
                 }
 
                 if (quantity < desiredAmounts[pair.Key])
                 {
-                    var diff = pair.Value - quantity;
                     ItemObject item = (ItemObject)getItem.Invoke(behavior, new object[] { pair.Key, town });
                     if (item != null)
                     {
-                        itemRoster.AddToCounts(item, diff);
+                        itemRoster.AddToCounts(item, 1);
                     }
                 }
             }
