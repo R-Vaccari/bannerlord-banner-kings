@@ -47,7 +47,7 @@ namespace BannerKings.Managers.Goals.Decisions
                 failedReasons.Add(new TextObject("{=!}Contract changes can not be proposed during wars."));
             }
 
-            if (Clan.PlayerClan. Kingdom.UnresolvedDecisions.Any(x => x is BKContractDecision))
+            if (Clan.PlayerClan.Kingdom != null && Clan.PlayerClan.Kingdom.UnresolvedDecisions.Any(x => x is BKContractDecision))
             {
                 failedReasons.Add(new TextObject("{=!}A contract-altering proposal is already being voted on."));
             }
