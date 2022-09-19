@@ -184,13 +184,5 @@ namespace BannerKings.Models.Vanilla
             return baseResult;
         }
 
-
-        public override bool DecideCrushedThrough(Agent attackerAgent, Agent defenderAgent, float totalAttackEnergy, Agent.UsageDirection attackDirection, StrikeType strikeType, WeaponComponentData defendItem, bool isPassiveUsage)
-        {
-            if (attackerAgent.IsMainAgent)
-                return true;
-            return base.DecideCrushedThrough(attackerAgent, defenderAgent, totalAttackEnergy, attackDirection, strikeType, defendItem, isPassiveUsage);
-        }
-
     }
 }
