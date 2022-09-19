@@ -5,12 +5,29 @@ using BannerKings.Managers.Skills;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
+using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Models.BKModels
 {
     public class BKReligionModel
     {
+        protected void Try(System.Action method)
+        {
+            try
+            {
+                method();
+            }
+            catch (System.Exception ex)
+            {
+                InformationManager.DisplayMessage(new InformationMessage(ex.Message));
+            }
+            finally
+            {
+                // logging or fixing the null here?
+            }
+        }
+
 
         public ExplainedNumber GetConversionInfluenceCost(Hero notable, Hero converter)
         {
@@ -18,12 +35,24 @@ namespace BannerKings.Models.BKModels
             result.LimitMin(15f);
             result.LimitMax(150f);
 
-            result.Add(notable.GetRelation(converter) * -0.1f);
-            result.Add(GetNotableFactor(notable, notable.CurrentSettlement) / 2f);
+            if (!notable.IsNotable || notable.CurrentSettlement == null)
+            {
+                return new ExplainedNumber(0f);
+            }
 
-            var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(notable.CurrentSettlement);
-            var tension = data.ReligionData.Tension;
-            result.AddFactor(tension.ResultNumber);
+            Try(() =>
+            {
+                result.Add(notable.GetRelation(converter) * -0.1f);
+                result.Add(GetNotableFactor(notable, notable.CurrentSettlement) / 2f);
+                var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(notable.CurrentSettlement);
+
+                if (data != null && data.ReligionData != null)
+                {
+                    var tension = data.ReligionData.Tension;
+                    result.AddFactor(tension.ResultNumber);
+                }
+               
+            });
 
             return result;
         }
@@ -34,12 +63,14 @@ namespace BannerKings.Models.BKModels
             result.LimitMin(40f);
             result.LimitMax(150f);
 
-            result.Add(notable.GetRelation(converter) * -0.1f);
-            result.Add(GetNotableFactor(notable, notable.CurrentSettlement));
-
-            var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(notable.CurrentSettlement);
-            var tension = data.ReligionData.Tension;
-            result.AddFactor(tension.ResultNumber);
+            Try(() =>
+            {
+                result.Add(notable.GetRelation(converter) * -0.1f);
+                result.Add(GetNotableFactor(notable, notable.CurrentSettlement));
+                var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(notable.CurrentSettlement);
+                var tension = data.ReligionData.Tension;
+                result.AddFactor(tension.ResultNumber);
+            });
 
             return result;
         }
@@ -47,11 +78,16 @@ namespace BannerKings.Models.BKModels
 
         public ExplainedNumber CalculateTensionTarget(ReligionData data)
         {
-            var result = new ExplainedNumber();
+            var result = new ExplainedNumber(0f, true);
             result.LimitMin(0f);
             result.LimitMax(1f);
 
             var dominant = data.DominantReligion;
+            if (dominant == null)
+            {
+                return result;
+            }
+
             var dominantShare = data.Religions[dominant];
             result.Add(1f - dominantShare, new TextObject("{=SFRmmVms}Dominant faith's share"));
 
