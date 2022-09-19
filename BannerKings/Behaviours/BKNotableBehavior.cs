@@ -257,9 +257,15 @@ namespace BannerKings.Behaviours
   
         private bool ConvertCultureOnCondition() 
         {
+            var notable = Hero.OneToOneConversationHero;
+            if (!notable.IsNotable || notable.CurrentSettlement == null)
+            {
+                return false;
+            }
+
             MBTextManager.SetTextVariable("NOTABLE_CONVERT_CULTURE", 
                 new TextObject("I would like you to convert to my culture ({INFLUENCE} influence).")
-                .SetTextVariable("INFLUENCE", BannerKingsConfig.Instance.CultureModel.GetConversionCost(Hero.OneToOneConversationHero,
+                .SetTextVariable("INFLUENCE", BannerKingsConfig.Instance.CultureModel.GetConversionCost(notable,
                 Hero.MainHero).ResultNumber.ToString("0")));
             return IsPlayerNotable() && IsCultureDifferent();
         }
@@ -331,11 +337,17 @@ namespace BannerKings.Behaviours
 
         private bool ConvertFaithOnCondition()
         {
+            var notable = Hero.OneToOneConversationHero;
+            if (!notable.IsNotable || notable.CurrentSettlement == null)
+            {
+                return false;
+            }
+
             MBTextManager.SetTextVariable("NOTABLE_CONVERT_FAITH",
                 new TextObject("I would like you to convert to my faith ({INFLUENCE} influence, {PIETY} piety).")
-                .SetTextVariable("INFLUENCE", BannerKingsConfig.Instance.ReligionModel.GetConversionInfluenceCost(Hero.OneToOneConversationHero,
+                .SetTextVariable("INFLUENCE", BannerKingsConfig.Instance.ReligionModel.GetConversionInfluenceCost(notable,
                 Hero.MainHero).ResultNumber.ToString("0"))
-                .SetTextVariable("PIETY", BannerKingsConfig.Instance.ReligionModel.GetConversionPietyCost(Hero.OneToOneConversationHero,
+                .SetTextVariable("PIETY", BannerKingsConfig.Instance.ReligionModel.GetConversionPietyCost(notable,
                 Hero.MainHero).ResultNumber.ToString("0")));
             return IsPlayerNotable() && IsFaithDifferent();
         }

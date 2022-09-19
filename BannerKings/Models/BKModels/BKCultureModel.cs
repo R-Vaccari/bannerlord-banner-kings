@@ -17,6 +17,11 @@ namespace BannerKings.Models.BKModels
             result.LimitMin(30f);
             result.LimitMax(150f);
 
+            if (!notable.IsNotable || notable.CurrentSettlement == null)
+            {
+                return new ExplainedNumber(0f);
+            }
+
             result.Add(notable.GetRelation(converter) * -0.1f);
             result.Add(GetNotableFactor(notable, notable.CurrentSettlement));
 
