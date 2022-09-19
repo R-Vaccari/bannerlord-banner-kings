@@ -14,7 +14,7 @@ namespace BannerKings.Managers.Goals.Decisions
         public AssumeCultureDecision() : base("goal_assume_cukture_decision", GoalUpdateType.Manual)
         {
             var name = new TextObject("{=!}Assume Culture");
-            var description = new TextObject("{=!}Assume a culture different than your current. Cultures can be assumed from settlements, your spouse or your faction leader. Direct family members will assume the culture as well. Assuming a culture yields a significant negative impact on clan renown.");
+            var description = new TextObject("{=!}Assume a culture different than your current. Cultures can be assumed from settlements, your spouse or your faction leader. Direct family members will assume the culture as well. Assuming a culture yields a significant negative impact on clan renown.\n\n");
 
             Initialize(name, description);
         }
@@ -47,13 +47,24 @@ namespace BannerKings.Managers.Goals.Decisions
 
         internal override bool IsAvailable()
         {
-            return GetCultureOptions().Count > 0 && GetFulfiller().Clan.Renown > 100f;
+            return true;
         }
 
         internal override bool IsFulfilled(out List<TextObject> failedReasons)
         {
             failedReasons = new List<TextObject>();
-            return true;
+
+            if (GetCultureOptions().Count == 0)
+            {
+                failedReasons.Add(new TextObject("{=!}You do not have a settlement, spouse or faction leader with a different culture."));
+            }
+
+            if (GetFulfiller().Clan.Renown < 100f)
+            {
+                failedReasons.Add(new TextObject("{=!}You need at least 100 clan renown."));
+            }
+
+            return failedReasons.IsEmpty();
         }
 
         internal override Hero GetFulfiller()

@@ -61,6 +61,17 @@ namespace BannerKings.Behaviours
             return hero;
         }
 
+        public ItemRoster GetBookRoster(Settlement settlement)
+        {
+            var seller = GetBookSeller(settlement);
+            if (seller != null)
+            {
+                return bookSellers[seller];
+            }
+
+            return null;
+        }
+
         public override void SyncData(IDataStore dataStore)
         {
             if (BannerKingsConfig.Instance.wipeData)

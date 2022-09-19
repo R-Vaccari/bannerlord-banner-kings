@@ -10,7 +10,6 @@ using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.CampaignBehaviors;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.Settlements;
-using TaleWorlds.CampaignSystem.ViewModelCollection;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -207,7 +206,7 @@ namespace BannerKings.Behaviours
             starter.AddPlayerLine("bk_convert_faith_confirm", "bk_convert_faith_confirm", "hero_main_options",
                 "{=LPVNjXpT}See it done.",
                 null,
-                CultureConversionAcceptedConsequence);
+                FaithConversionAcceptedConsequence);
 
             starter.AddPlayerLine("bk_convert_faith_confirm", "bk_convert_faith_confirm", "hero_main_options",
                 "{=G4ALCxaA}Never mind.",
@@ -258,9 +257,15 @@ namespace BannerKings.Behaviours
   
         private bool ConvertCultureOnCondition() 
         {
+            var notable = Hero.OneToOneConversationHero;
+            if (!notable.IsNotable || notable.CurrentSettlement == null)
+            {
+                return false;
+            }
+
             MBTextManager.SetTextVariable("NOTABLE_CONVERT_CULTURE", 
                 new TextObject("I would like you to convert to my culture ({INFLUENCE} influence).")
-                .SetTextVariable("INFLUENCE", BannerKingsConfig.Instance.CultureModel.GetConversionCost(Hero.OneToOneConversationHero,
+                .SetTextVariable("INFLUENCE", BannerKingsConfig.Instance.CultureModel.GetConversionCost(notable,
                 Hero.MainHero).ResultNumber.ToString("0")));
             return IsPlayerNotable() && IsCultureDifferent();
         }
@@ -272,6 +277,28 @@ namespace BannerKings.Behaviours
             return IsPlayerNotable();
         }
 
+        public void ApplyNotableFaithConversion(Hero notable, Hero converter)
+        {
+            var rel = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(converter);
+            BannerKingsConfig.Instance.ReligionsManager.AddToReligion(notable, rel);   
+
+            var influence = BannerKingsConfig.Instance.ReligionModel.GetConversionInfluenceCost(Hero.OneToOneConversationHero, Hero.MainHero).ResultNumber;
+            var piety = BannerKingsConfig.Instance.ReligionModel.GetConversionPietyCost(Hero.OneToOneConversationHero, Hero.MainHero).ResultNumber;
+            BannerKingsConfig.Instance.ReligionsManager.AddPiety(converter, -piety, true);
+            GainKingdomInfluenceAction.ApplyForDefault(converter, -influence);
+            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(notable, converter, -8);
+            if (converter == Hero.MainHero)
+            {
+                NotificationsHelper.AddQuickNotificationWithSound(new TextObject("{=!}{HERO} has converted to the {FAITH} faith.")
+                    .SetTextVariable("HERO", notable.Name)
+                    .SetTextVariable("FAITH", rel.Faith.GetFaithName()));
+            }
+        }
+
+        private void FaithConversionAcceptedConsequence()
+        {
+            ApplyNotableFaithConversion(Hero.OneToOneConversationHero, Hero.MainHero);
+        }
 
         private bool FaithConvertAnswerOnCondition()
         {
@@ -310,11 +337,17 @@ namespace BannerKings.Behaviours
 
         private bool ConvertFaithOnCondition()
         {
+            var notable = Hero.OneToOneConversationHero;
+            if (!notable.IsNotable || notable.CurrentSettlement == null)
+            {
+                return false;
+            }
+
             MBTextManager.SetTextVariable("NOTABLE_CONVERT_FAITH",
                 new TextObject("I would like you to convert to my faith ({INFLUENCE} influence, {PIETY} piety).")
-                .SetTextVariable("INFLUENCE", BannerKingsConfig.Instance.ReligionModel.GetConversionInfluenceCost(Hero.OneToOneConversationHero,
+                .SetTextVariable("INFLUENCE", BannerKingsConfig.Instance.ReligionModel.GetConversionInfluenceCost(notable,
                 Hero.MainHero).ResultNumber.ToString("0"))
-                .SetTextVariable("PIETY", BannerKingsConfig.Instance.ReligionModel.GetConversionPietyCost(Hero.OneToOneConversationHero,
+                .SetTextVariable("PIETY", BannerKingsConfig.Instance.ReligionModel.GetConversionPietyCost(notable,
                 Hero.MainHero).ResultNumber.ToString("0")));
             return IsPlayerNotable() && IsFaithDifferent();
         }

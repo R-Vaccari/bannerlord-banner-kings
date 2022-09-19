@@ -134,7 +134,8 @@ namespace BannerKings.Managers
 
         public List<(ItemObject, float)> GetProductions(VillageData villageData)
         {
-            var productions = new List<(ItemObject, float)>(villageData.Village.VillageType.Productions);
+            var type = villageData.Village.VillageType;
+            var productions = new List<(ItemObject, float)>(type.Productions);
 
             float tannery = villageData.GetBuildingLevel(DefaultVillageBuildings.Instance.Tannery);
             if (tannery > 0)
@@ -159,14 +160,18 @@ namespace BannerKings.Managers
                     2f));
             }
 
-            if (villageData.Village.VillageType == DefaultVillageTypes.OliveTrees)
+            if (type == DefaultVillageTypes.OliveTrees)
             {
                 productions.Add(new ValueTuple<ItemObject, float>(BKItems.Instance.Orange, 2f));
             }
-            else if (villageData.Village.VillageType == DefaultVillageTypes.WheatFarm)
+            else if (type == DefaultVillageTypes.WheatFarm)
             {
                 productions.Add(new ValueTuple<ItemObject, float>(BKItems.Instance.Apple, 2f));
                 productions.Add(new ValueTuple<ItemObject, float>(BKItems.Instance.Carrot, 2f));
+            }
+            else if (type == DefaultVillageTypes.Lumberjack || type.StringId == "trapper")
+            {
+                productions.Add(new ValueTuple<ItemObject, float>(BKItems.Instance.Honey, 2f));
             }
 
             productions.Add(new ValueTuple<ItemObject, float>(BKItems.Instance.Bread, 1f));

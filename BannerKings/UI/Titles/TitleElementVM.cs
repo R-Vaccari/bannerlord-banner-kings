@@ -8,15 +8,28 @@ namespace BannerKings.UI.Titles
         private MBBindingList<TitleElementVM> branch;
         private TitleVM title;
 
-        public TitleElementVM(FeudalTitle title)
+        public TitleElementVM(FeudalTitle title, DemesneHierarchyVM hierarchy)
         {
             Branch = new MBBindingList<TitleElementVM>();
             Title = new TitleVM(title);
+
+            if (title.fief != null)
+            {
+                var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(title.fief);
+                hierarchy.Population += data.TotalPop;
+            }
+
             if (title.vassals != null)
             {
                 foreach (var vassal in title.vassals)
                 {
-                    Branch.Add(new TitleElementVM(vassal));
+                    Branch.Add(new TitleElementVM(vassal, hierarchy));
+
+                    if (vassal.fief != null)
+                    {
+                        var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(vassal.fief);
+                        hierarchy.Population += data.TotalPop;
+                    }
                 }
             }
         }
