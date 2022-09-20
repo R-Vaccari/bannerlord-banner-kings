@@ -496,84 +496,94 @@ namespace BannerKings.Behaviours
         {
             private static bool Prefix(Town __instance)
             {
-                if (__instance.Governor != null && __instance.Governor is {IsNotable: true} && __instance.OwnerClan != null &&
-                    __instance.OwnerClan.Leader != null)
-                {
-                    __instance.Loyalty += __instance.LoyaltyChange;
-                    __instance.Security += __instance.SecurityChange;
-                    __instance.FoodStocks += __instance.FoodChange;
-                    if (__instance.FoodStocks < 0f)
+                try{
+                    if (__instance.Governor != null && __instance.Governor is {IsNotable: true} && __instance.OwnerClan != null &&
+                        __instance.OwnerClan.Leader != null)
                     {
-                        __instance.FoodStocks = 0f;
-                        __instance.Owner.RemainingFoodPercentage = -100;
-                    }
-                    else
-                    {
-                        __instance.Owner.RemainingFoodPercentage = 0;
-                    }
+                        __instance.Loyalty += __instance.LoyaltyChange;
+                        __instance.Security += __instance.SecurityChange;
+                        __instance.FoodStocks += __instance.FoodChange;
+                        if (__instance.FoodStocks < 0f)
+                        {
+                            __instance.FoodStocks = 0f;
+                            __instance.Owner.RemainingFoodPercentage = -100;
+                        }
+                        else
+                        {
+                            __instance.Owner.RemainingFoodPercentage = 0;
+                        }
 
-                    if (__instance.FoodStocks > __instance.FoodStocksUpperLimit())
-                    {
-                        __instance.FoodStocks = __instance.FoodStocksUpperLimit();
-                    }
+                        if (__instance.FoodStocks > __instance.FoodStocksUpperLimit())
+                        {
+                            __instance.FoodStocks = __instance.FoodStocksUpperLimit();
+                        }
 
-                    if (!__instance.CurrentBuilding.BuildingType.IsDefaultProject)
-                    {
-                        __instance.GetType().GetMethod("TickCurrentBuilding",
+                        if (!__instance.CurrentBuilding.BuildingType.IsDefaultProject)
+                        {
+                            __instance.GetType().GetMethod("TickCurrentBuilding",
+                                    BindingFlags.Instance | BindingFlags.NonPublic)
+                                .Invoke(__instance, null);
+                        }
+
+                        else if (__instance.Governor.GetPerkValue(DefaultPerks.Charm.Virile) && MBRandom.RandomFloat < 0.1f)
+                        {
+                            var randomElement = __instance.Settlement.Notables.GetRandomElement();
+                            if (randomElement != null)
+                            {
+                                ChangeRelationAction.ApplyRelationChangeBetweenHeroes(__instance.OwnerClan.Leader,
+                                    randomElement, MathF.Round(DefaultPerks.Charm.Virile.SecondaryBonus), false);
+                            }
+                        }
+
+                        if (__instance.Governor.GetPerkValue(DefaultPerks.Roguery.WhiteLies) &&
+                            MBRandom.RandomFloat < 0.02f)
+                        {
+                            var randomElement2 = __instance.Settlement.Notables.GetRandomElement();
+                            if (randomElement2 != null)
+                            {
+                                ChangeRelationAction.ApplyRelationChangeBetweenHeroes(__instance.Governor,
+                                    randomElement2, MathF.Round(DefaultPerks.Roguery.WhiteLies.SecondaryBonus));
+                            }
+                        }
+
+                        if (__instance.Governor.GetPerkValue(DefaultPerks.Roguery.Scarface) &&
+                            MBRandom.RandomFloat < 0.05f)
+                        {
+                            var randomElementWithPredicate =
+                                __instance.Settlement.Notables.GetRandomElementWithPredicate(x => x.IsGangLeader);
+                            if (randomElementWithPredicate != null)
+                            {
+                                ChangeRelationAction.ApplyRelationChangeBetweenHeroes(__instance.Governor,
+                                    randomElementWithPredicate,
+                                    MathF.Round(DefaultPerks.Roguery.Scarface.SecondaryBonus));
+                            }
+                        }
+                        
+
+                        __instance.Owner.Settlement.Prosperity += __instance.ProsperityChange;
+                        if (__instance.Owner.Settlement.Prosperity < 0f)
+                        {
+                            __instance.Owner.Settlement.Prosperity = 0f;
+                        }
+
+                        __instance.GetType().GetMethod("HandleMilitiaAndGarrisonOfSettlementDaily",
+                                BindingFlags.Instance | BindingFlags.NonPublic)
+                            .Invoke(__instance, null);
+                        __instance.GetType().GetMethod("RepairWallsOfSettlementDaily",
                                 BindingFlags.Instance | BindingFlags.NonPublic)
                             .Invoke(__instance, null);
                     }
-
-                    else if (__instance.Governor.GetPerkValue(DefaultPerks.Charm.Virile) && MBRandom.RandomFloat < 0.1f)
-                    {
-                        var randomElement = __instance.Settlement.Notables.GetRandomElement();
-                        if (randomElement != null)
-                        {
-                            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(__instance.OwnerClan.Leader,
-                                randomElement, MathF.Round(DefaultPerks.Charm.Virile.SecondaryBonus), false);
-                        }
                     }
+                catch(System.Exception ex)
+                {
 
-                    if (__instance.Governor.GetPerkValue(DefaultPerks.Roguery.WhiteLies) &&
-                        MBRandom.RandomFloat < 0.02f)
-                    {
-                        var randomElement2 = __instance.Settlement.Notables.GetRandomElement();
-                        if (randomElement2 != null)
-                        {
-                            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(__instance.Governor,
-                                randomElement2, MathF.Round(DefaultPerks.Roguery.WhiteLies.SecondaryBonus));
-                        }
-                    }
-
-                    if (__instance.Governor.GetPerkValue(DefaultPerks.Roguery.Scarface) &&
-                        MBRandom.RandomFloat < 0.05f)
-                    {
-                        var randomElementWithPredicate =
-                            __instance.Settlement.Notables.GetRandomElementWithPredicate(x => x.IsGangLeader);
-                        if (randomElementWithPredicate != null)
-                        {
-                            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(__instance.Governor,
-                                randomElementWithPredicate,
-                                MathF.Round(DefaultPerks.Roguery.Scarface.SecondaryBonus));
-                        }
-                    }
-                    
-
-                    __instance.Owner.Settlement.Prosperity += __instance.ProsperityChange;
-                    if (__instance.Owner.Settlement.Prosperity < 0f)
-                    {
-                        __instance.Owner.Settlement.Prosperity = 0f;
-                    }
-
-                    __instance.GetType().GetMethod("HandleMilitiaAndGarrisonOfSettlementDaily",
-                            BindingFlags.Instance | BindingFlags.NonPublic)
-                        .Invoke(__instance, null);
-                    __instance.GetType().GetMethod("RepairWallsOfSettlementDaily",
-                            BindingFlags.Instance | BindingFlags.NonPublic)
-                        .Invoke(__instance, null);
                 }
-
                 return true;
+            }
+
+            private static System.Exception Finalize()
+            {
+                return  null;
             }
         }
     }
