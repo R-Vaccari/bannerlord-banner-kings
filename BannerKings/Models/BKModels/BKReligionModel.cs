@@ -68,8 +68,12 @@ namespace BannerKings.Models.BKModels
                 result.Add(notable.GetRelation(converter) * -0.1f);
                 result.Add(GetNotableFactor(notable, notable.CurrentSettlement));
                 var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(notable.CurrentSettlement);
-                var tension = data.ReligionData.Tension;
-                result.AddFactor(tension.ResultNumber);
+
+                if (data != null && data.ReligionData != null)
+                {
+                    var tension = data.ReligionData.Tension;
+                    result.AddFactor(tension.ResultNumber);
+                }
             });
 
             return result;
