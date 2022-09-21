@@ -80,9 +80,9 @@ namespace BannerKings.Managers.Helpers
             {
                 foreach (var pair in secondaryHeirs)
                 {
-                    if (pair.Value.Any(x => x.fief is {IsVillage: false} && x.DeFacto.Clan == victim.Clan))
+                    if (pair.Value.Any(x => x.fief != null && x.fief is {IsVillage: false} && x.DeFacto.Clan == victim.Clan))
                     {
-                        var landed = pair.Value.FindAll(x => x.fief is {IsVillage: false});
+                        var landed = pair.Value.FindAll(x => x.fief != null && x.fief is {IsVillage: false});
                         var newClan = ClanActions.CreateNewClan(pair.Key, landed[0].fief,
                             pair.Key.StringId + "_split_clan");
 

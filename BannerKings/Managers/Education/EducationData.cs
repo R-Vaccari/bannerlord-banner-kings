@@ -255,6 +255,19 @@ namespace BannerKings.Managers.Education
         {
             if (LanguageInstructor != null && (LanguageInstructor.IsDead || LanguageInstructor.IsDisabled))
             {
+               
+                if (hero == Hero.MainHero)
+                {
+                    InformationManager.DisplayMessage(
+                        new InformationMessage(
+                        new TextObject("{=!}{HERO} has stopped learning {LANGUAGE}. The instructor {INSTRUCTOR} is unavailable or dead.")
+                        .SetTextVariable("HERO", hero.Name)
+                        .SetTextVariable("LANGUAGE", CurrentLanguage.Name)
+                        .SetTextVariable("INSTRUCTOR", LanguageInstructor.Name)
+                        .ToString()));
+                }
+
+                CurrentLanguage = null;
                 LanguageInstructor = null;
             }
 

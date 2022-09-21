@@ -302,6 +302,7 @@ namespace BannerKings.Behaviours
 
         private bool FaithConvertAnswerOnCondition()
         {
+
             MBTextManager.SetTextVariable("NOTABLE_ANSWER_CONVERT_FAITH",
                 new TextObject("If that is your bidding, I am inclined to accept it. The people {SETTLEMENT} might not like this. Over time however, they may accept it."));
             return IsPlayerNotable();

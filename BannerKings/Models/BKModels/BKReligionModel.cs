@@ -35,13 +35,23 @@ namespace BannerKings.Models.BKModels
             result.LimitMin(15f);
             result.LimitMax(150f);
 
+            if (!notable.IsNotable || notable.CurrentSettlement == null)
+            {
+                return new ExplainedNumber(0f);
+            }
+
             Try(() =>
             {
                 result.Add(notable.GetRelation(converter) * -0.1f);
                 result.Add(GetNotableFactor(notable, notable.CurrentSettlement) / 2f);
                 var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(notable.CurrentSettlement);
-                var tension = data.ReligionData.Tension;
-                result.AddFactor(tension.ResultNumber);
+
+                if (data != null && data.ReligionData != null)
+                {
+                    var tension = data.ReligionData.Tension;
+                    result.AddFactor(tension.ResultNumber);
+                }
+               
             });
 
             return result;
@@ -58,8 +68,12 @@ namespace BannerKings.Models.BKModels
                 result.Add(notable.GetRelation(converter) * -0.1f);
                 result.Add(GetNotableFactor(notable, notable.CurrentSettlement));
                 var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(notable.CurrentSettlement);
-                var tension = data.ReligionData.Tension;
-                result.AddFactor(tension.ResultNumber);
+
+                if (data != null && data.ReligionData != null)
+                {
+                    var tension = data.ReligionData.Tension;
+                    result.AddFactor(tension.ResultNumber);
+                }
             });
 
             return result;
@@ -68,11 +82,16 @@ namespace BannerKings.Models.BKModels
 
         public ExplainedNumber CalculateTensionTarget(ReligionData data)
         {
-            var result = new ExplainedNumber();
+            var result = new ExplainedNumber(0f, true);
             result.LimitMin(0f);
             result.LimitMax(1f);
 
             var dominant = data.DominantReligion;
+            if (dominant == null)
+            {
+                return result;
+            }
+
             var dominantShare = data.Religions[dominant];
             result.Add(1f - dominantShare, new TextObject("{=SFRmmVms}Dominant faith's share"));
 
