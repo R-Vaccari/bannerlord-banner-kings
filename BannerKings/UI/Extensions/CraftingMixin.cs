@@ -177,100 +177,107 @@ namespace BannerKings.UI.Extensions
         [DataSourceMethod]
         public void ExecuteMainActionBK()
         {
-            if (!IsInArmorMode)
+            Util.TryCatch(() =>
             {
-                crafting.ExecuteMainAction();
-            }
-            else
-            {
-                SpendMaterials();
-                var item = armorCrafting.CurrentItem.Item;
-                var staminaSpent = CurrentEnergy;
-
-                var botchChance = BannerKingsConfig.Instance.SmithingModel.CalculateBotchingChance(
-                    crafting.CurrentCraftingHero.Hero,
-                    armorCrafting.CurrentItem.Difficulty);
-                if (MBRandom.RandomFloat < botchChance)
+                if (!IsInArmorMode)
                 {
-                    MBInformationManager.AddQuickInformation(new TextObject("{=A15k4LQS}{HERO} has botched {ITEM}!")
+                    crafting.ExecuteMainAction();
+                }
+                else
+                {
+                    SpendMaterials();
+                    var item = armorCrafting.CurrentItem.Item;
+                    var staminaSpent = CurrentEnergy;
+
+                    var botchChance = BannerKingsConfig.Instance.SmithingModel.CalculateBotchingChance(
+                        crafting.CurrentCraftingHero.Hero,
+                        armorCrafting.CurrentItem.Difficulty);
+                    if (MBRandom.RandomFloat < botchChance)
+                    {
+                        MBInformationManager.AddQuickInformation(new TextObject("{=A15k4LQS}{HERO} has botched {ITEM}!")
+                                .SetTextVariable("HERO", crafting.CurrentCraftingHero.Hero.Name)
+                                .SetTextVariable("ITEM", item.Name),
+                            0, null, "event:/ui/notification/relation");
+
+                        staminaSpent = (int)(staminaSpent * 0.5f);
+                        goto FINISH;
+                    }
+
+                    var element = new EquipmentElement(item);
+                    var qualityText = new TextObject("{=!}");
+                    if ((item.HasWeaponComponent && item.WeaponComponent.ItemModifierGroup != null) ||
+                        (item.HasArmorComponent && item.ArmorComponent.ItemModifierGroup != null))
+                    {
+                        var quality = BannerKingsConfig.Instance.SmithingModel.GetModifierForCraftedItem(item, Hero);
+                        ItemModifierGroup modifierGroup;
+                        if (item.HasWeaponComponent)
+                        {
+                            modifierGroup = item.WeaponComponent.ItemModifierGroup;
+                        }
+                        else
+                        {
+                            modifierGroup = item.ArmorComponent.ItemModifierGroup;
+                        }
+
+                        var modifier = modifierGroup.GetRandomModifierWithTarget(quality);
+                        if (modifier != null)
+                        {
+                            qualityText =
+                                new TextObject("{=hap0LfbT} with {QUALITY} quality").SetTextVariable("QUALITY", modifier.Name);
+                            element.SetModifier(modifier);
+                        }
+                    }
+
+                    MBInformationManager.AddQuickInformation(new TextObject("{=NKVUJKQk}{HERO} has crafted {ITEM}{QUALITY}.")
                             .SetTextVariable("HERO", crafting.CurrentCraftingHero.Hero.Name)
-                            .SetTextVariable("ITEM", item.Name),
+                            .SetTextVariable("ITEM", item.Name)
+                            .SetTextVariable("QUALITY", qualityText),
                         0, null, "event:/ui/notification/relation");
-
-                    staminaSpent = (int) (staminaSpent * 0.5f);
-                    goto FINISH;
-                }
-
-                var element = new EquipmentElement(item);
-                var qualityText = new TextObject("{=!}");
-                if ((item.HasWeaponComponent && item.WeaponComponent.ItemModifierGroup != null) ||
-                    (item.HasArmorComponent && item.ArmorComponent.ItemModifierGroup != null))
-                {
-                    var quality = BannerKingsConfig.Instance.SmithingModel.GetModifierForCraftedItem(item, Hero);
-                    ItemModifierGroup modifierGroup;
-                    if (item.HasWeaponComponent)
-                    {
-                        modifierGroup = item.WeaponComponent.ItemModifierGroup;
-                    }
-                    else
-                    {
-                        modifierGroup = item.ArmorComponent.ItemModifierGroup;
-                    }
-
-                    var modifier = modifierGroup.GetRandomModifierWithTarget(quality);
-                    if (modifier != null)
-                    {
-                        qualityText =
-                            new TextObject("{=hap0LfbT} with {QUALITY} quality").SetTextVariable("QUALITY", modifier.Name);
-                        element.SetModifier(modifier);
-                    }
-                }
-
-                MBInformationManager.AddQuickInformation(new TextObject("{=NKVUJKQk}{HERO} has crafted {ITEM}{QUALITY}.")
-                        .SetTextVariable("HERO", crafting.CurrentCraftingHero.Hero.Name)
-                        .SetTextVariable("ITEM", item.Name)
-                        .SetTextVariable("QUALITY", qualityText),
-                    0, null, "event:/ui/notification/relation");
-                PartyBase.MainParty.ItemRoster.AddToCounts(element, 1);
+                    PartyBase.MainParty.ItemRoster.AddToCounts(element, 1);
 
 
                 FINISH:
-                crafting.CurrentCraftingHero.Hero.AddSkillXp(DefaultSkills.Crafting,
-                    BannerKingsConfig.Instance.SmithingModel.GetSkillXpForSmithingInFreeBuildMode(item));
+                    crafting.CurrentCraftingHero.Hero.AddSkillXp(DefaultSkills.Crafting,
+                        BannerKingsConfig.Instance.SmithingModel.GetSkillXpForSmithingInFreeBuildMode(item));
 
-                Campaign.Current.GetCampaignBehavior<ICraftingCampaignBehavior>()
-                    .SetHeroCraftingStamina(crafting.CurrentCraftingHero.Hero,
-                        (int) crafting.CurrentCraftingHero.CurrentStamina - staminaSpent);
-                crafting.CurrentCraftingHero.RefreshStamina();
+                    Campaign.Current.GetCampaignBehavior<ICraftingCampaignBehavior>()
+                        .SetHeroCraftingStamina(crafting.CurrentCraftingHero.Hero,
+                            (int)crafting.CurrentCraftingHero.CurrentStamina - staminaSpent);
+                    crafting.CurrentCraftingHero.RefreshStamina();
 
-                OnRefresh();
-            }
+                    OnRefresh();
+                }
+            });
+            
         }
 
         private void SpendMaterials()
         {
-            var items = Game.Current.ObjectManager.GetObjectTypeList<ItemObject>();
-            var materials =
-                BannerKingsConfig.Instance.SmithingModel.GetCraftingInputForArmor(armorCrafting.CurrentItem.Item);
-            for (var l = 0; l < 11; l++)
+            Util.TryCatch(() =>
             {
-                if (materials[l] == 0)
+                var items = Game.Current.ObjectManager.GetObjectTypeList<ItemObject>();
+                var materials =
+                    BannerKingsConfig.Instance.SmithingModel.GetCraftingInputForArmor(armorCrafting.CurrentItem.Item);
+                for (var l = 0; l < 11; l++)
                 {
-                    continue;
-                }
+                    if (materials[l] == 0)
+                    {
+                        continue;
+                    }
 
-                ItemObject item;
-                if (l < 9)
-                {
-                    item = BannerKingsConfig.Instance.SmithingModel.GetCraftingMaterialItem((CraftingMaterials) l);
-                }
-                else
-                {
-                    item = items.First(x => x.StringId == (l == 9 ? "leather" : "linen"));
-                }
+                    ItemObject item;
+                    if (l < 9)
+                    {
+                        item = BannerKingsConfig.Instance.SmithingModel.GetCraftingMaterialItem((CraftingMaterials)l);
+                    }
+                    else
+                    {
+                        item = items.First(x => x.StringId == (l == 9 ? "leather" : "linen"));
+                    }
 
-                MobileParty.MainParty.ItemRoster.AddToCounts(item, -materials[l]);
-            }
+                    MobileParty.MainParty.ItemRoster.AddToCounts(item, -materials[l]);
+                }
+            });
         }
 
         public void UpdateMainAction()

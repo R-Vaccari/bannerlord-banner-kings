@@ -160,40 +160,43 @@ namespace BannerKings.Behaviours
 
         private void DailySettlementTick(Settlement settlement)
         {
-            if (settlement == null || !settlement.IsTown)
+            Util.TryCatch(() =>
             {
-                return;
-            }
-
-            if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(settlement, "decision_slaves_export") &&
-                DecideSendSlaveCaravan(settlement) && !settlement.IsUnderSiege)
-            {
-                var villages = settlement.BoundVillages;
-                var villageTarget = villages.FirstOrDefault(village => village.Settlement != null && !BannerKingsConfig.Instance.PopulationManager.PopSurplusExists(village.Settlement, PopType.Slaves));
-
-                if (villageTarget != null)
+                if (settlement == null || !settlement.IsTown)
                 {
-                    SendSlaveCaravan(villageTarget);
+                    return;
                 }
-            }
 
-            var random = MBRandom.RandomInt(1, 100);
-            if (random > 5)
-            {
-                return;
-            }
+                if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(settlement, "decision_slaves_export") &&
+                    DecideSendSlaveCaravan(settlement) && !settlement.IsUnderSiege)
+                {
+                    var villages = settlement.BoundVillages;
+                    var villageTarget = villages.FirstOrDefault(village => village.Settlement != null && !BannerKingsConfig.Instance.PopulationManager.PopSurplusExists(village.Settlement, PopType.Slaves));
 
-            var target = GetTownToTravel(settlement);
-            if (target == null)
-            {
-                return;
-            }
+                    if (villageTarget != null)
+                    {
+                        SendSlaveCaravan(villageTarget);
+                    }
+                }
 
-            if (BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(target) &&
-                BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
-            {
-                SendTravellerParty(settlement, target);
-            }
+                var random = MBRandom.RandomInt(1, 100);
+                if (random > 5)
+                {
+                    return;
+                }
+
+                var target = GetTownToTravel(settlement);
+                if (target == null)
+                {
+                    return;
+                }
+
+                if (BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(target) &&
+                    BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
+                {
+                    SendTravellerParty(settlement, target);
+                }
+            });
         }
 
         private void OnSettlementEntered(MobileParty party, Settlement target, Hero hero)

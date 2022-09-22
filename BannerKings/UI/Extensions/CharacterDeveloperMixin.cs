@@ -96,11 +96,15 @@ namespace BannerKings.UI.Extensions
 
         public override void OnRefresh()
         {
-            Education = new EducationVM(characterDeveloper.CurrentCharacter.Hero, characterDeveloper);
-            Education.RefreshValues();
-            Religion = new ReligionVM(BannerKingsConfig.Instance.ReligionsManager
-                .GetHeroReligion(characterDeveloper.CurrentCharacter.Hero), characterDeveloper.CurrentCharacter.Hero);
-            Religion.RefreshValues();
+            Util.TryCatch(() =>
+            {
+                Education = new EducationVM(characterDeveloper.CurrentCharacter.Hero, characterDeveloper);
+                Education.RefreshValues();
+                Religion = new ReligionVM(BannerKingsConfig.Instance.ReligionsManager
+                    .GetHeroReligion(characterDeveloper.CurrentCharacter.Hero), characterDeveloper.CurrentCharacter.Hero);
+                Religion.RefreshValues();
+            });
+
         }
 
         [DataSourceMethod]
@@ -122,35 +126,38 @@ namespace BannerKings.UI.Extensions
         [DataSourceMethod]
         public void OpenDecisions()
         {
-            var options = new List<InquiryElement>();
-
-            foreach (var goal in DefaultGoals.Instance.All)
+            Util.TryCatch(() =>
             {
-                var enabled = goal.IsFulfilled(out var reasons);
-                var hint = $"{goal.Description}";
+                var options = new List<InquiryElement>();
 
-                if (goal.IsAvailable())
+                foreach (var goal in DefaultGoals.Instance.All)
                 {
-                    hint = reasons.Aggregate(hint, (current, reason) => current + Environment.NewLine + reason);
+                    var enabled = goal.IsFulfilled(out var reasons);
+                    var hint = $"{goal.Description}";
 
-                    options.Add(new InquiryElement(goal,
-                        goal.Name.ToString(),
-                        null,
-                        enabled,
-                        hint));
-                } 
-            }
+                    if (goal.IsAvailable())
+                    {
+                        hint = reasons.Aggregate(hint, (current, reason) => current + Environment.NewLine + reason);
 
-            MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                            new TextObject("{=GMNhGSUb}Decisions").ToString(),
-                            new TextObject("{=bn2Ohzow}Choose a personal decision to take.").ToString(),
-                            options, true, 1, GameTexts.FindText("str_done").ToString(), string.Empty,
-                            delegate (List<InquiryElement> x)
-                            {
-                                var result = (Goal)x[0].Identifier;
-                                result.ShowInquiry();
-                            }, null, string.Empty));
+                        options.Add(new InquiryElement(goal,
+                            goal.Name.ToString(),
+                            null,
+                            enabled,
+                            hint));
+                    }
+                }
 
+                MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
+                                new TextObject("{=GMNhGSUb}Decisions").ToString(),
+                                new TextObject("{=bn2Ohzow}Choose a personal decision to take.").ToString(),
+                                options, true, 1, GameTexts.FindText("str_done").ToString(), string.Empty,
+                                delegate (List<InquiryElement> x)
+                                {
+                                    var result = (Goal)x[0].Identifier;
+                                    result.ShowInquiry();
+                                }, null, string.Empty));
+            });
+            
             OnRefresh();
         }
 

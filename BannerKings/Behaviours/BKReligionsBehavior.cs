@@ -57,82 +57,86 @@ namespace BannerKings.Behaviours
 
         private void OnDailyTickSettlement(Settlement settlement)
         {
-            if (settlement == null || settlement.Notables == null)
+            Util.TryCatch(() =>
             {
-                return;
-            }
-
-            var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
-            if (data != null && data.ReligionData != null)
-            {
-                var religion = data.ReligionData.DominantReligion;
-
-                if (religion != null)
+                if (settlement == null || settlement.Notables == null)
                 {
-                   
-                    List<Hero> toRemove = new List<Hero>();
-                    int count = settlement.Notables.Count(x => x.IsPreacher);
-                    if (count > 1)
-                    {
-                        foreach (var notable in settlement.Notables)
-                        {
-                            if (notable.IsPreacher)
-                            {
-                                var preacher = BannerKingsConfig.Instance.ReligionsManager.IsPreacher(notable);
-                                if (!preacher)
-                                {
-                                    toRemove.Add(notable);
-                                }
-                            }
-                        }
-                    } 
-                    else if (count == 1)
-                    {
-                        var hero = settlement.Notables.First(x => x.IsPreacher);
-                        BannerKingsConfig.Instance.ReligionsManager.AddClergyman(religion, hero, settlement);
-                    }
-
-                    int heroesCount = settlement.HeroesWithoutParty.Count(x => x.IsPreacher);
-                    if (count > 1)
-                    {
-                        foreach (var notable in settlement.HeroesWithoutParty)
-                        {
-                            if (notable.IsPreacher)
-                            {
-                                var preacher = BannerKingsConfig.Instance.ReligionsManager.IsPreacher(notable);
-                                if (!preacher)
-                                {
-                                    toRemove.Add(notable);
-                                }
-                            }
-                        }
-                    }
-
-
-                    if (toRemove.Count > 0)
-                    {
-                        List<Hero> notables = (List<Hero>)AccessTools.Field(settlement.GetType(), "_notablesCache").GetValue(settlement);
-                        foreach (var notable in toRemove)
-                        {
-                            if (notables.Contains(notable))
-                            {
-                                notables.Remove(notable);
-                            }
-
-                            notable.AddPower(-10000f);
-                            if (notable.CurrentSettlement != null)
-                            {
-                                LeaveSettlementAction.ApplyForCharacterOnly(notable);
-                            }
-                            if (notable.IsAlive)
-                            {
-                                KillCharacterAction.ApplyByRemove(notable);
-                            }
-                        }
-                    }
-                   
+                    return;
                 }
-            }
+
+                var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
+                if (data != null && data.ReligionData != null)
+                {
+                    var religion = data.ReligionData.DominantReligion;
+
+                    if (religion != null)
+                    {
+
+                        List<Hero> toRemove = new List<Hero>();
+                        int count = settlement.Notables.Count(x => x.IsPreacher);
+                        if (count > 1)
+                        {
+                            foreach (var notable in settlement.Notables)
+                            {
+                                if (notable.IsPreacher)
+                                {
+                                    var preacher = BannerKingsConfig.Instance.ReligionsManager.IsPreacher(notable);
+                                    if (!preacher)
+                                    {
+                                        toRemove.Add(notable);
+                                    }
+                                }
+                            }
+                        }
+                        else if (count == 1)
+                        {
+                            var hero = settlement.Notables.First(x => x.IsPreacher);
+                            BannerKingsConfig.Instance.ReligionsManager.AddClergyman(religion, hero, settlement);
+                        }
+
+                        int heroesCount = settlement.HeroesWithoutParty.Count(x => x.IsPreacher);
+                        if (count > 1)
+                        {
+                            foreach (var notable in settlement.HeroesWithoutParty)
+                            {
+                                if (notable.IsPreacher)
+                                {
+                                    var preacher = BannerKingsConfig.Instance.ReligionsManager.IsPreacher(notable);
+                                    if (!preacher)
+                                    {
+                                        toRemove.Add(notable);
+                                    }
+                                }
+                            }
+                        }
+
+
+                        if (toRemove.Count > 0)
+                        {
+                            List<Hero> notables = (List<Hero>)AccessTools.Field(settlement.GetType(), "_notablesCache").GetValue(settlement);
+                            foreach (var notable in toRemove)
+                            {
+                                if (notables.Contains(notable))
+                                {
+                                    notables.Remove(notable);
+                                }
+
+                                notable.AddPower(-10000f);
+                                if (notable.CurrentSettlement != null)
+                                {
+                                    LeaveSettlementAction.ApplyForCharacterOnly(notable);
+                                }
+                                if (notable.IsAlive)
+                                {
+                                    KillCharacterAction.ApplyByRemove(notable);
+                                }
+                            }
+                        }
+
+                    }
+                }
+            });
+            
           
 
            
@@ -321,13 +325,17 @@ namespace BannerKings.Behaviours
 
         private void DailyTick()
         {
-            foreach (var religion in ReligionsManager.GetReligions())
+            Util.TryCatch(() =>
             {
-                foreach (var hero in ReligionsManager.GetFaithfulHeroes(religion))
+                foreach (var religion in ReligionsManager.GetReligions())
                 {
-                    ReligionsManager.AddPiety(religion, hero, BannerKingsConfig.Instance.PietyModel.CalculateEffect(hero).ResultNumber);
+                    foreach (var hero in ReligionsManager.GetFaithfulHeroes(religion))
+                    {
+                        ReligionsManager.AddPiety(religion, hero, BannerKingsConfig.Instance.PietyModel.CalculateEffect(hero).ResultNumber);
+                    }
                 }
-            }
+            });
+
             
         }
 
