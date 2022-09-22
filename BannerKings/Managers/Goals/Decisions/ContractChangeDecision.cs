@@ -35,6 +35,7 @@ namespace BannerKings.Managers.Goals.Decisions
             if (!IsAvailable())
             {
                 failedReasons.Add(GameTexts.FindText("str_need_to_be_a_part_of_kingdom"));
+                return false;
             }
 
             if (BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(Clan.PlayerClan.Kingdom) == null)
