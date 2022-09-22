@@ -45,6 +45,14 @@ namespace BannerKings.Managers.Items
 
         public ItemObject Honey { get; private set; }
 
+        public ItemObject Limestone { get; private set; }
+
+        public ItemObject Marble { get; private set; }
+
+        public ItemObject GoldOre { get; private set; }
+
+        public ItemObject GoldIngot { get; private set; }
+
         public override IEnumerable<ItemObject> All
         {
             get
@@ -64,6 +72,10 @@ namespace BannerKings.Managers.Items
                 yield return BookThrowing;
                 yield return Apple;
                 yield return Honey;
+                yield return Limestone;
+                yield return Marble;
+                yield return GoldOre;
+                yield return GoldIngot;
             }
         }
 
@@ -77,27 +89,50 @@ namespace BannerKings.Managers.Items
             Orange = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("orange"));
             InitializeTradeGood(Orange,
                 new TextObject("{=Krqwsins}Oranges{@Plural}baskets of oranges\\@}"), "foods_orange_basket",
-                BKItemCategories.Instance.Apple, 5, 10f, ItemObject.ItemTypeEnum.Goods, true);
+                BKItemCategories.Instance.Orange, 5, 10f, ItemObject.ItemTypeEnum.Goods, true);
 
             Bread = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("bread"));
             InitializeTradeGood(Bread,
                 new TextObject("{=VJfbLXmi}Bread{@Plural}loathes of bread\\@}"), "merchandise_bread",
-                BKItemCategories.Instance.Apple, 20, 10f, ItemObject.ItemTypeEnum.Goods, true);
+                BKItemCategories.Instance.Bread, 20, 10f, ItemObject.ItemTypeEnum.Goods, true);
 
             Pie = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("pie"));
             InitializeTradeGood(Pie,
                 new TextObject("{=Qa0dQMOc}Pie{@Plural}baskets of pies\\@}"), "kitchen_pie",
-                BKItemCategories.Instance.Apple, 30, 10f, ItemObject.ItemTypeEnum.Goods, true);
+                BKItemCategories.Instance.Pie, 30, 10f, ItemObject.ItemTypeEnum.Goods, true);
 
             Carrot = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("carrot"));
             InitializeTradeGood(Carrot,
                 new TextObject("{=C5Xe5MJK}Carrots{@Plural}baskets of carrots\\@}"), "foods_carrots_basket",
-                BKItemCategories.Instance.Apple, 5, 10f, ItemObject.ItemTypeEnum.Goods, true);
+                BKItemCategories.Instance.Carrot, 5, 10f, ItemObject.ItemTypeEnum.Goods, true);
 
             Honey = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("honey"));
             InitializeTradeGood(Honey,
-                new TextObject("{=1Maj0j6J}Honey{@Plural}barrels of honey{\\@}"), "bd_barrel_a",
+                new TextObject("{=1Maj0j6J}Honey{@Plural}barrels of honey{\\@}"), "honey_pot",
                 BKItemCategories.Instance.Honey, 70, 10f, ItemObject.ItemTypeEnum.Goods, true);
+
+            Limestone = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("limestone"));
+            InitializeTradeGood(Limestone,
+                new TextObject("{=!}Limestone{@Plural}blocks of limestone{\\@}"), "silver_ore",
+                BKItemCategories.Instance.Honey, 70, 10f, ItemObject.ItemTypeEnum.Goods);
+
+            Marble = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("marble"));
+            InitializeTradeGood(Marble,
+                new TextObject("{=!}Limestone{@Plural}blocks of limestone{\\@}"), "silver_ore",
+                BKItemCategories.Instance.Honey, 70, 10f, ItemObject.ItemTypeEnum.Goods);
+
+
+            GoldOre = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("gold_ore"));
+            InitializeTradeGood(GoldOre,
+                new TextObject("{=!}Gold Ore{@Plural}sacks of gold ore{\\@}"), "iron_ore",
+                BKItemCategories.Instance.Honey, 70, 10f, ItemObject.ItemTypeEnum.Goods);
+
+            GoldIngot = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("goldingot"));
+            InitializeTradeGood(GoldIngot,
+                new TextObject("{=!}Gold Ore{@Plural}sacks of gold ore{\\@}"), "fine_steel",
+                BKItemCategories.Instance.Honey, 70, 10f, ItemObject.ItemTypeEnum.Goods);
+
+
 
 
             BookHeartsDesire = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("book_hearts_desire"));
