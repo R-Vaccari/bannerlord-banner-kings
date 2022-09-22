@@ -7,6 +7,7 @@ using BannerKings.UI.Items;
 using BannerKings.UI.Items.UI;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.ViewModelCollection;
+using TaleWorlds.Core;
 using TaleWorlds.Core.ViewModelCollection.Selector;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -16,7 +17,7 @@ namespace BannerKings.UI.Management
     public class DemesneVM : BannerKingsViewModel
     {
         private HeroVM deJure;
-        private MBBindingList<InformationElement> demesneInfo, landInfo, terrainInfo, workforceInfo, governmentInfo;
+        private MBBindingList<InformationElement> demesneInfo, landInfo, mineralInfo, terrainInfo, workforceInfo, governmentInfo;
         private readonly FeudalTitle duchy;
         private readonly FeudalTitle title;
         private BKWorkforcePolicy workforceItem;
@@ -31,6 +32,7 @@ namespace BannerKings.UI.Management
                 duchy = BannerKingsConfig.Instance.TitleManager.GetDuchy(this.title);
             }
 
+            mineralInfo = new MBBindingList<InformationElement>();
             demesneInfo = new MBBindingList<InformationElement>();
             governmentInfo = new MBBindingList<InformationElement>();
             landInfo = new MBBindingList<InformationElement>();
@@ -46,6 +48,12 @@ namespace BannerKings.UI.Management
                 foreach (FeudalTitle vassal in title.vassals)
                     if (vassal.fief != null) _vassals.Add(new VassalTitleVM(vassal)); */
         }
+
+        [DataSourceProperty]
+        public string TerrainText => new TextObject("{=!}Terrain").ToString();
+
+        [DataSourceProperty]
+        public string MiningText => new TextObject("{=!}Mining").ToString();
 
         [DataSourceProperty]
         public SelectorVM<BKItemVM> WorkforceSelector
@@ -104,6 +112,20 @@ namespace BannerKings.UI.Management
         }
 
         [DataSourceProperty]
+        public MBBindingList<InformationElement> MineralInfo
+        {
+            get => mineralInfo;
+            set
+            {
+                if (value != mineralInfo)
+                {
+                    mineralInfo = value;
+                    OnPropertyChangedWithValue(value);
+                }
+            }
+        }
+
+        [DataSourceProperty]
         public MBBindingList<InformationElement> GovernmentInfo
         {
             get => governmentInfo;
@@ -155,6 +177,7 @@ namespace BannerKings.UI.Management
             TerrainInfo.Clear();
             WorkforceInfo.Clear();
             GovernmentInfo.Clear();
+            MineralInfo.Clear();
 
             if (title != null)
             {
@@ -260,6 +283,22 @@ namespace BannerKings.UI.Management
                 FormatValue(landData.Difficulty),
                 new TextObject("{=TVp8DsE9}Represents how difficult it is to create new usable acres. Like fertility, depends on terrain, but is not strictly correlated to it")
                     .ToString()));
+
+
+            if (data.MineralData != null)
+            {
+                MineralInfo.Add(new InformationElement(new TextObject("{=!}Mineral Richness:").ToString(),
+                    GameTexts.FindText("str_bk_mineral_richness", data.MineralData.Richness.ToString().ToLower()).ToString(),
+                    new TextObject("{=!}How rich and accessible the land is for mineral extraction. Adequate land will yield returns but at reduced rate. Poor land is hardly worth the exploration effort. Rich lands may be quite profitable.").ToString()));
+
+                foreach (var item in data.MineralData.Compositions)
+                {
+                    MineralInfo.Add(new InformationElement(GameTexts.FindText("str_bk_mineral", item.Key.ToString().ToLower()).ToString(), 
+                        FormatValue(item.Value), 
+                        ""));
+                }
+            }
+
 
             WorkforceInfo.Add(new InformationElement(new TextObject("{=p7yrSOcC}Available Workforce:").ToString(),
                 landData.AvailableWorkForce.ToString(),

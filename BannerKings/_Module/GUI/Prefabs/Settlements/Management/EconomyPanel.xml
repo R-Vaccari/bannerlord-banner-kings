@@ -226,8 +226,8 @@
 												<RichTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" HorizontalAlignment="Left"
 												                SuggestedHeight="5" Brush="TownManagement.Project.Name.Text" Text="Tax policy"
 												                MarginTop="25" />
-												<ClanPartyRoleDropdown DataSource="{TaxSelector}" MarginLeft="50" MarginTop="10"
-												                       HorizontalAlignment="Right" />
+												<Standard.DropdownWithHorizontalControl Parameter.SelectorDataSource="{TaxSelector}" MarginLeft="50" MarginTop="10"
+																						HorizontalAlignment="Right" />
 											</Children>
 										</ListPanel>
 									</Children>
@@ -241,8 +241,8 @@
 												<RichTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" HorizontalAlignment="Left"
 												                SuggestedHeight="5" Brush="TownManagement.Project.Name.Text" Text="Criminal policy"
 												                MarginTop="25" />
-												<ClanPartyRoleDropdown DataSource="{CriminalSelector}" MarginLeft="20" MarginTop="10"
-												                       HorizontalAlignment="Right" />
+												<Standard.DropdownWithHorizontalControl Parameter.SelectorDataSource="{CriminalSelector}" MarginLeft="20" MarginTop="10"
+																						HorizontalAlignment="Right" />
 											</Children>
 										</ListPanel>
 									</Children>

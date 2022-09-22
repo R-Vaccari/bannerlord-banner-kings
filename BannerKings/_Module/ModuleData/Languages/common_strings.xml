@@ -6,6 +6,10 @@
 	</tags>
 	<strings>
 		<string id="gaJDVkvHA" text="Placeholder" />
+		
+		<string id="bk_limestone" text="Limestone" />
+		<string id="bk_gold" text="Gold" />
+		<string id="bk_marble" text="Marble" />
 
 		<string id="bk_primogeniture" text="Primogeniture" />
 		<string id="bk_ultimogeniture" text="Ultimogeniture" />

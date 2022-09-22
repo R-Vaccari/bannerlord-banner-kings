@@ -2,6 +2,18 @@
 
 <strings>
 
+	<string id="str_bk_mineral_richness.rich" text="{=!}Rich" />
+	<string id="str_bk_mineral_richness.adequate" text="{=!}Adequate" />
+	<string id="str_bk_mineral_richness.poor" text="{=!}Poor" />
+
+	<string id="str_bk_mineral.clay" text="{=Zwb65ufG}Clay{@Plural}loads of clay{\@}" />
+	<string id="str_bk_mineral.salt" text="{=IK2IPJi1}Salt{@Plural}sacks of salt{\@}" />
+	<string id="str_bk_mineral.iron" text="{=baFazbmR}Iron{@Plural}loads of iron ore{\@}" />
+	<string id="str_bk_mineral.silver" text="{=jPwa1oOm}Silver{@Plural}loads of silver ore{\@}" />
+	<string id="str_bk_mineral.limestone" text="{=bk_limestone}Limestone" />
+	<string id="str_bk_mineral.gold" text="{=bk_gold}Gold" />
+	<string id="str_bk_mineral.marble" text="{=bk_marble}Marble" />
+
 	<string id="str_bk_primogeniture" text="{=bk_primogeniture}Primogeniture" />
 	<string id="str_bk_ultimogeniture" text="{=bk_ultimogeniture}Ultimogeniture" />
 	<string id="str_bk_seniority" text="{=bk_seniority}Seniority" />
