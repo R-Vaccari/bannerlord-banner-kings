@@ -501,11 +501,6 @@ namespace BannerKings.Behaviours
 
         private void OnClanDestroyed(Clan clan)
         {
-            if (BannerKingsConfig.Instance.TitleManager == null)
-            {
-                return;
-            }
-
             var titles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(clan);
             if (titles.Count > 0)
             {
@@ -516,7 +511,7 @@ namespace BannerKings.Behaviours
                         var suzerain = BannerKingsConfig.Instance.TitleManager.GetImmediateSuzerain(title);
                         if (suzerain.deJure.IsAlive && !clan.Heroes.Contains(suzerain.deJure))
                         {
-                            BannerKingsConfig.Instance.TitleManager.InheritAllTitles(title.deJure, suzerain.deJure);
+                            BannerKingsConfig.Instance.TitleManager.InheritTitle(title.deJure, suzerain.deJure, title);
                             continue;
                         }
                     }
@@ -525,18 +520,16 @@ namespace BannerKings.Behaviours
                     {
                         if (title.sovereign.deJure != title.deJure && title.sovereign.deJure.IsAlive)
                         {
-                            BannerKingsConfig.Instance.TitleManager.InheritAllTitles(title.deJure, title.sovereign.deJure);
+                            BannerKingsConfig.Instance.TitleManager.InheritTitle(title.deJure, title.sovereign.deJure, title);
                             continue;
                         }
                     }
 
-                    if (title.deJure != title.deFacto)
+                    var kingdom = clan.Kingdom;
+                    if (kingdom != null && !kingdom.IsEliminated)
                     {
-                        BannerKingsConfig.Instance.TitleManager.DeactivateDeJure(title);
-                        continue;
+                        BannerKingsConfig.Instance.TitleManager.InheritTitle(title.deJure, kingdom.Leader, title);
                     }
-
-                    BannerKingsConfig.Instance.TitleManager.DeactivateTitle(title);
                 }
             }
         }

@@ -1,5 +1,6 @@
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Skills;
+using BannerKings.Managers.Titles;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
@@ -7,8 +8,110 @@ using TaleWorlds.Localization;
 
 namespace BannerKings.Models.BKModels
 {
-    public class BKCultureAssimilationModel : ICultureModel
+    public class BKCultureModel : ICultureModel
     {
+
+        public ExplainedNumber GetConversionCost(Hero notable, Hero converter)
+        {
+            var result = new ExplainedNumber(30f, false);
+            result.LimitMin(30f);
+            result.LimitMax(150f);
+
+            if (!notable.IsNotable || notable.CurrentSettlement == null)
+            {
+                return new ExplainedNumber(0f);
+            }
+
+            result.Add(notable.GetRelation(converter) * -0.1f);
+            result.Add(GetNotableFactor(notable, notable.CurrentSettlement));
+
+            var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(notable.CurrentSettlement);
+            var acceptance = data.CultureData.GetAcceptance(converter.Culture);
+            result.AddFactor(1f - acceptance);
+
+            return result;
+        }
+
+        public ExplainedNumber CalculateCultureWeight(Settlement settlement, CultureDataClass data)
+        {
+            var result = new ExplainedNumber(0f, true);
+
+            foreach (var notable in settlement.Notables)
+            {
+                if (notable.Culture == data.Culture)
+                {
+                    result.Add(GetNotableFactor(notable, settlement), notable.Name);
+                }
+            }
+
+            if (data.Culture == settlement.Culture)
+            {
+                result.Add(30f, new TextObject("{=2wOt5txz}Natural resistance"));
+            }
+
+            result.Add(data.Assimilation * 50f, new TextObject("{=D3trXTDz}Cultural Assimilation"));
+
+            var owner = settlement.Owner;
+            if (owner != null)
+            {
+                if (data.Culture == owner.Culture)
+                {
+                    result.Add(10f, new TextObject("{=LHFoaUGo}Owner Culture"));
+                }
+            }
+
+            if (settlement.IsTown || settlement.IsCastle)
+            {
+                foreach (var village in settlement.BoundVillages)
+                {
+                    if (village.Settlement.Culture == data.Culture)
+                    {
+                        result.Add(15f, village.Name);
+                    }
+                }
+
+                if (settlement.Town.Governor != null)
+                {
+                    var governor = settlement.Town.Governor;
+                    if (data.Culture == governor.Culture)
+                    {
+                        result.Add(10f, new TextObject("{=gafTzKhz}Governor effect"));
+                    }
+                }
+            }
+            else if (settlement.IsVillage)
+            {
+                var village = settlement.Village;
+                if (village != null && village.TradeBound != null)
+                {
+                    if (data.Culture == settlement.Village.TradeBound.Culture)
+                    {
+                        result.Add(20f, settlement.Village.TradeBound.Name);
+                    }
+                }
+            }
+
+            LegitimacyType legitimacy = (LegitimacyType)BannerKingsConfig.Instance.LegitimacyModel.CalculateEffect(settlement).ResultNumber;
+            if (legitimacy == LegitimacyType.Unlawful || legitimacy == LegitimacyType.Unlawful_Foreigner)
+            {
+                result.Add(-5f, new TextObject("{=!}Unlawful owner"));
+            }
+
+            return result;
+        }
+
+
+        public float GetNotableFactor(Hero notable, Settlement settlement)
+        {
+            var totalPower = 0f;
+            foreach (var hero in settlement.Notables)
+            {
+                totalPower += hero.Power;
+            }
+
+            return (settlement.Notables.Count * 15f) * (notable.Power / totalPower);
+        }
+
         public ExplainedNumber CalculateEffect(Settlement settlement)
         {
             var ownerCulture = settlement.OwnerClan.Culture;

@@ -73,7 +73,7 @@ namespace BannerKings.Behaviours
 
         private void DailyClanTick(Clan clan)
         {
-            if (clan.IsEliminated || clan.IsBanditFaction || clan.Kingdom == null || BannerKingsConfig.Instance.TitleManager == null)
+            if (clan.IsEliminated || clan.IsBanditFaction || clan.Kingdom == null || clan.Leader == null)
             {
                 return;
             }

@@ -293,7 +293,8 @@ namespace BannerKings.Managers.AI
                 return;
             }
 
-            if (target.OwnerClan == Clan.PlayerClan)
+            if (target.OwnerClan == Clan.PlayerClan || (target.MapFaction == Clan.PlayerClan.MapFaction && 
+                target.IsVillage && BannerKingsConfig.Instance.TitleManager.GetTitle(target).deJure == Hero.MainHero))
             {
                 return;
             }

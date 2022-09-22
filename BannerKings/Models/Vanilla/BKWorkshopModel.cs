@@ -19,7 +19,7 @@ namespace BannerKings.Models.Vanilla
 
         public override int GetBuyingCostForPlayer(Workshop workshop)
         {
-            float result = base.GetSellingCost(workshop) + 10000;
+            float result = base.GetSellingCost(workshop);
 
             if (workshop.Settlement != null)
             {
@@ -30,6 +30,7 @@ namespace BannerKings.Models.Vanilla
 
                 foreach (var production in workshop.WorkshopType.Productions)
                 {
+
                     foreach (var input in production.Inputs)
                     {
                         costs += GetCost(items, town, input.Item1, input.Item2);
@@ -45,10 +46,10 @@ namespace BannerKings.Models.Vanilla
                         }
                     }
 
-                    sellValue += outputCost;
+                    sellValue += (int)(outputCost * production.ConversionSpeed);
                 }
 
-                result += (int) ((sellValue - costs) * (float) CampaignTime.DaysInYear);
+                result += (int) ((sellValue - costs - workshop.Expense) * (CampaignTime.DaysInYear / 2f));
                 result *= BannerKingsConfig.Instance.EconomyModel.CalculateProductionQuality(workshop.Settlement)
                     .ResultNumber;
             }

@@ -16,6 +16,7 @@ using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Issues;
 using TaleWorlds.CampaignSystem.MapEvents;
 using TaleWorlds.CampaignSystem.Party;
+using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.Settlements.Workshops;
 using TaleWorlds.Core;
@@ -425,6 +426,99 @@ namespace BannerKings
                 }
             }
 
+            /*[HarmonyPatch(typeof(WorkshopsCampaignBehavior), "GetRandomItemAux")]
+            internal class GetRandomItemAuxPatch
+            {
+                private static void Postfix(ref ItemObject __result, WorkshopsCampaignBehavior __instance, ItemCategory itemCategory, Town townComponent = null)
+                {
+
+                    if (__result == null && itemCategory != DefaultItemCategories.Unassigned)
+                    {
+
+                        Dictionary<ItemCategory, List<ItemObject>> dictionary = (Dictionary<ItemCategory, List<ItemObject>>)AccessTools
+                            .Field(__instance.GetType(), "_itemsInCategory").GetValue(__instance);
+
+                        List<ItemObject> list;
+                        if (!dictionary.TryGetValue(itemCategory, out list))
+                        {
+                            __result = null;
+                            return;
+                        }
+
+                        if (townComponent == null) 
+                        {
+                            __result = dictionary[itemCategory].GetRandomElement();
+                        }
+                        else
+                        {
+                            __result = dictionary[itemCategory].GetRandomElementWithPredicate(x => IsItemPreferredForTown(x, townComponent));
+                        }
+                    }
+                }
+
+                private static bool IsItemPreferredForTown(ItemObject item, Town townComponent)
+                {
+                    return item.Culture == null || item.Culture.StringId == "neutral_culture" || item.Culture == townComponent.Culture;
+                }
+            }
+
+            [HarmonyPatch(typeof(WorkshopsCampaignBehavior), "DetermineTownHasSufficientInputs")]
+            internal class DetermineTownHasSufficientInputsPatch
+            {
+                private static bool Prefix(ref bool __result, WorkshopType.Production production, Town town, out int inputMaterialCost)
+                {
+                    IEnumerable<ValueTuple<ItemCategory, int>> inputs = production.Inputs;
+                    inputMaterialCost = 0;
+                    foreach (ValueTuple<ItemCategory, int> valueTuple in inputs)
+                    {
+                        ItemCategory item = valueTuple.Item1;
+                        int necessaryAmount = valueTuple.Item2;
+                        int foundAmount = 0;
+
+                        ItemRoster itemRoster = town.Owner.ItemRoster;
+                        for (int i = 0; i < itemRoster.Count; i++)
+                        {
+                            ItemRosterElement itemAtIndex = itemRoster.GetElementCopyAtIndex(i);
+                            if (itemAtIndex.EquipmentElement.Item.ItemCategory == item)
+                            {
+                                int elementNumber = itemAtIndex.Amount;
+
+                                if (foundAmount < necessaryAmount)
+                                {
+                                    int diff = necessaryAmount - foundAmount;
+                                    int finalAmount = MathF.Min(diff, elementNumber);
+                                    foundAmount += finalAmount;
+
+                                    var factor = 1f;
+                                    var modifier = itemAtIndex.EquipmentElement.ItemModifier;
+                                    if (modifier != null)
+                                    {
+                                        factor = modifier.PriceMultiplier;
+                                    }
+
+                                    inputMaterialCost += (int)(town.GetItemPrice(itemAtIndex.EquipmentElement.Item) * finalAmount * factor);
+                                }
+
+                                if (foundAmount == necessaryAmount)
+                                {
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (foundAmount < necessaryAmount)
+                        {
+                            __result = false;
+                            return false;
+                        }
+                    }
+
+                    __result = true;
+                    return false;
+                }
+            }*/
+            
+
             [HarmonyPatch(typeof(WorkshopsCampaignBehavior), "ProduceOutput")]
             internal class WorkshopProduceOutputPatch
             {
@@ -433,6 +527,7 @@ namespace BannerKings
                 {
 
                     var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
+                    var category = outputItem.ItemCategory;
 
                     ItemModifierGroup modifierGroup = null;
                     if (outputItem.ArmorComponent != null)
@@ -451,7 +546,7 @@ namespace BannerKings
                     {
                         modifierGroup = Game.Current.ObjectManager.GetObject<ItemModifierGroup>("animals");
                     }
-                    else if (!outputItem.HasHorseComponent)
+                    else if (!outputItem.HasHorseComponent && category != DefaultItemCategories.Iron)
                     {
                         modifierGroup = Game.Current.ObjectManager.GetObject<ItemModifierGroup>("goods");
                     }
@@ -469,36 +564,6 @@ namespace BannerKings
 
                     if (workshop.WorkshopType.StringId == "artisans")
                     {
-                        var category = outputItem.ItemCategory;
-                        
-                        if (category == DefaultItemCategories.MeleeWeapons3  || category == DefaultItemCategories.MeleeWeapons2 || 
-                            category == DefaultItemCategories.LightArmor || category == DefaultItemCategories.MediumArmor ||
-                            category == DefaultItemCategories.HorseEquipment2 || category == DefaultItemCategories.HorseEquipment3 ||
-                            category == DefaultItemCategories.RangedWeapons2 || category == DefaultItemCategories.RangedWeapons3 ||
-                            category == DefaultItemCategories.Shield3)
-                        {
-                            count += 6;
-                        }
-
-                        if (category == DefaultItemCategories.MeleeWeapons4 || category ==  DefaultItemCategories.MeleeWeapons5 ||
-                            category ==  DefaultItemCategories.HeavyArmor || category ==  DefaultItemCategories.HorseEquipment4 ||
-                            category == DefaultItemCategories.HorseEquipment5 || category == DefaultItemCategories.RangedWeapons4 ||
-                            category == DefaultItemCategories.Shield5 || category == DefaultItemCategories.Shield4)
-                        {
-                            count += 2;
-                        }
-
-                        if (!outputItem.StringId.Contains("peasant") && (category == DefaultItemCategories.MeleeWeapons1 ||
-                            category == DefaultItemCategories.HorseEquipment || category == DefaultItemCategories.RangedWeapons1))
-                        {
-                            count += 10;
-                        }
-
-                        if (category == DefaultItemCategories.UltraArmor || category == DefaultItemCategories.RangedWeapons5)
-                        {
-                            count += 1;
-                        }
-
                         count = (int)MathF.Max(1f, count + (data.GetTypeCount(PopType.Craftsmen) / 450f));
                         if (outputItem.HasArmorComponent || outputItem.HasWeaponComponent || outputItem.HasSaddleComponent)
                         {
@@ -514,7 +579,10 @@ namespace BannerKings
                         if (modifierGroup != null)
                         {
                             modifier = modifierGroup.GetRandomModifierWithTarget(result, 0.2f);
-                            itemPrice = (int)(itemPrice * modifier.PriceMultiplier);
+                            if (modifier != null)
+                            {
+                                itemPrice = (int)(itemPrice * modifier.PriceMultiplier);
+                            }
                         }
                         var element = new EquipmentElement(outputItem, modifier);
                         totalValue += itemPrice;
@@ -703,12 +771,16 @@ namespace BannerKings
                     ref Dictionary<MobileParty, List<Settlement>> ____previouslyChangedVillagerTargetsDueToEnemyOnWay,
                     MobileParty mobileParty, Settlement settlement, Hero hero)
                 {
-                    if (BannerKingsConfig.Instance.PopulationManager != null &&
-                        BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
+                    if (BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
                     {
                         if (mobileParty is {IsActive: true, IsVillager: true})
                         {
-                            ____previouslyChangedVillagerTargetsDueToEnemyOnWay[mobileParty].Clear();
+
+                            if (____previouslyChangedVillagerTargetsDueToEnemyOnWay.ContainsKey(mobileParty))
+                            {
+                                ____previouslyChangedVillagerTargetsDueToEnemyOnWay[mobileParty].Clear();
+                            }
+                            
                             if (settlement.IsTown)
                             {
                                 SellGoodsForTradeAction.ApplyByVillagerTrade(settlement, mobileParty);
@@ -819,6 +891,11 @@ namespace BannerKings
                             var dynMethod = behaviors.First().GetType().GetMethod("CalculateBudget",
                                 BindingFlags.NonPublic | BindingFlags.Static);
                             var num = (float) dynMethod.Invoke(null, new object[] {town, demand, itemCategory});
+                            if (item.HasArmorComponent || item.HasWeaponComponent)
+                            {
+                                num = (int)(num * 0.1f);
+                            }
+
                             if (num > 0.01f)
                             {
                                 var price = marketData.GetPrice(item);

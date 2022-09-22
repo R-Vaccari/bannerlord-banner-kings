@@ -192,7 +192,14 @@ namespace BannerKings.Behaviours
 
         private void OnDailyTickHero(Hero hero)
         {
-            if (hero == null || hero.IsChild || hero.Clan != null && hero.Clan == Clan.PlayerClan)
+            if (hero == null || hero.IsChild)
+            {
+                return;
+            }
+
+            TickFaithXp(hero);
+
+            if (hero.Clan != null && hero.Clan == Clan.PlayerClan)
             {
                 return;
             }
@@ -216,13 +223,7 @@ namespace BannerKings.Behaviours
             } 
             else
             {
-                float piety = BannerKingsConfig.Instance.PietyModel.CalculateEffect(hero).ResultNumber;
-                if (piety > 0f)
-                {
-                    hero.AddSkillXp(BKSkills.Instance.Theology, MathF.Clamp(piety / 2f, 1f, 10f));
-                }
-
-
+ 
                 if (BannerKingsConfig.Instance.ReligionsManager.HasBlessing(hero,
                     DefaultDivinities.Instance.AseraSecondary2) && hero.IsPartyLeader)
                 {
@@ -295,6 +296,15 @@ namespace BannerKings.Behaviours
             }
         }
 
+        private void TickFaithXp(Hero hero)
+        {
+            float piety = BannerKingsConfig.Instance.PietyModel.CalculateEffect(hero).ResultNumber;
+            if (piety > 0f)
+            {
+                hero.AddSkillXp(BKSkills.Instance.Theology, MathF.Clamp(piety / 2f, 1f, 10f));
+            }
+        }
+
         private void AddHeroToIdealReligion(Hero hero)
         {
             var ideal = BannerKingsConfig.Instance.ReligionsManager.GetIdealReligion(hero.Culture);
@@ -319,10 +329,6 @@ namespace BannerKings.Behaviours
                 }
             }
             
-        }
-
-        private void DailySettlementTick(Settlement settlement)
-        {
         }
 
         private void OnSettlementEntered(MobileParty party, Settlement target, Hero hero)
@@ -597,7 +603,7 @@ namespace BannerKings.Behaviours
             var clergyman =
                 ReligionsManager.GetClergymanFromHeroHero(Hero.OneToOneConversationHero);
             var religion = ReligionsManager.GetClergymanReligion(clergyman);
-            ReligionsManager.AddBlessing(selectedDivinity, Hero.MainHero, religion);
+            ReligionsManager.AddBlessing(selectedDivinity, Hero.MainHero, religion, true);
         }
 
         private bool BlessingOnClickable(out TextObject hintText)

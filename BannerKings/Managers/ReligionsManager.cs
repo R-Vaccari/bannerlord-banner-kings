@@ -111,6 +111,7 @@ namespace BannerKings.Managers
 
         public void InitializeHeroFaith(Hero hero, Religion rel = null)
         {
+
             if (rel == null)
             {
                 rel = GetIdealReligion(hero.Culture);
@@ -118,6 +119,13 @@ namespace BannerKings.Managers
                 {
                     return;
                 }
+            }
+
+
+            if (Religions[rel].ContainsKey(hero))
+            {
+                RefreshCaches();
+                return;
             }
 
 
@@ -149,6 +157,7 @@ namespace BannerKings.Managers
 
         public void PostInitialize()
         {
+            DefaultDivinities.Instance.Initialize();
             foreach (var pair in Religions.ToList())
             {
                 var rel = pair.Key;
@@ -358,6 +367,7 @@ namespace BannerKings.Managers
                         .SetTextVariable("DIVINITY", divinity.Name),
                     0, hero.CharacterObject, "event:/ui/notification/relation");
             }
+            AddPiety(religion, hero, -divinity.BlessingCost(hero), notify);
         }
 
         public Religion GetReligionById(string id)
@@ -449,10 +459,27 @@ namespace BannerKings.Managers
 
             if (notifyPlayer && hero == Hero.MainHero)
             {
-                MBInformationManager.AddQuickInformation(new TextObject("{=purf5QPz}{HERO} has recieved {PIETY} piety.")
+                MBInformationManager.AddQuickInformation(new TextObject("{=!}{HERO} piety was changed by {PIETY}.")
                     .SetTextVariable("HERO", hero.Name)
                     .SetTextVariable("PIETY", (int) piety));
             }
+        }
+
+        public float GetPiety(Hero hero)
+        {
+            var rel = GetHeroReligion(hero);
+            if (rel == null || hero == null)
+            {
+                return 0f;
+            }
+
+            var piety = 0f;
+            if (Religions[rel].ContainsKey(hero))
+            {
+                piety = Religions[rel][hero].Piety;
+            }
+
+            return piety;
         }
 
         public float GetPiety(Religion rel, Hero hero)
@@ -468,7 +495,7 @@ namespace BannerKings.Managers
                 piety = Religions[rel][hero].Piety;
             }
 
-            return MBMath.ClampFloat(piety, -1000f, 1000f);
+            return piety;
         }
 
         public bool IsPreacher(Hero hero)

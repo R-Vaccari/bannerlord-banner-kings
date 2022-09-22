@@ -204,7 +204,7 @@
 												<RichTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" HorizontalAlignment="Left"
 												                SuggestedHeight="5" Brush="TownManagement.Project.Name.Text" Text="Militia policy"
 												                MarginTop="25" />
-												<ClanPartyRoleDropdown DataSource="{MilitiaSelector}" MarginLeft="35" MarginTop="10"
+												<Standard.DropdownWithHorizontalControl Parameter.SelectorDataSource="{MilitiaSelector}" MarginLeft="35" MarginTop="10"
 												                       HorizontalAlignment="Right" />
 											</Children>
 										</ListPanel>
@@ -220,7 +220,7 @@
 												<RichTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" HorizontalAlignment="Left"
 												                SuggestedHeight="5" Brush="TownManagement.Project.Name.Text" Text="Garrison policy"
 												                MarginTop="25" />
-												<ClanPartyRoleDropdown DataSource="{GarrisonSelector}" MarginLeft="20" MarginTop="10"
+												<Standard.DropdownWithHorizontalControl Parameter.SelectorDataSource="{GarrisonSelector}" MarginLeft="20" MarginTop="10"
 												                       HorizontalAlignment="Right" />
 											</Children>
 										</ListPanel>
@@ -235,7 +235,7 @@
 												<RichTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" HorizontalAlignment="Left"
 												                SuggestedHeight="5" Brush="TownManagement.Project.Name.Text" Text="Drafting policy"
 												                MarginTop="25" />
-												<ClanPartyRoleDropdown DataSource="{DraftSelector}" MarginLeft="24" MarginTop="10"
+												<Standard.DropdownWithHorizontalControl Parameter.SelectorDataSource="{DraftSelector}" MarginLeft="24" MarginTop="10"
 												                       HorizontalAlignment="Right" />
 											</Children>
 										</ListPanel>

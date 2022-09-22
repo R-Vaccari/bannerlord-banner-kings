@@ -54,30 +54,36 @@ namespace BannerKings
         public BKAdministrativeModel AdministrativeModel { get; } = new();
         public BKSmithingModel SmithingModel { get; } = new();
         public BKCultureAcceptanceModel CultureAcceptanceModel { get; } = new();
-        public BKCultureAssimilationModel CultureAssimilationModel { get; } = new();
+        public BKCultureModel CultureModel { get; } = new();
         public BKReligionModel ReligionModel { get; } = new();
         public BKPietyModel PietyModel { get; } = new();
         public BKVolunteerModel VolunteerModel { get; } = new();
+        public BKLegitimacyModel LegitimacyModel { get; } = new();
+        public BKGrowthModel GrowthModel { get; } = new();
 
         public static BannerKingsConfig Instance => ConfigHolder.CONFIG;
 
         public void InitializeManagersFirstTime()
         {
-            InitManagers();
-            foreach (var settlement in Settlement.All.Where(settlement => settlement.IsVillage || settlement.IsTown || settlement.IsCastle))
+            if (FirstUse)
             {
-                PopulationManager.InitializeSettlementPops(settlement);
-            }
+                InitManagers();
+                foreach (var settlement in Settlement.All.Where(settlement => settlement.IsVillage || settlement.IsTown || settlement.IsCastle))
+                {
+                    PopulationManager.InitializeSettlementPops(settlement);
+                }
 
-            foreach (var clan in Clan.All.Where(clan => !clan.IsEliminated && !clan.IsBanditFaction))
-            {
-                CourtManager.CreateCouncil(clan);
-            }
+                foreach (var clan in Clan.All.Where(clan => !clan.IsEliminated && !clan.IsBanditFaction))
+                {
+                    CourtManager.CreateCouncil(clan);
+                }
 
-            foreach (var hero in Hero.AllAliveHeroes)
-            {
-                EducationManager.InitHeroEducation(hero);
+                foreach (var hero in Hero.AllAliveHeroes)
+                {
+                    EducationManager.InitHeroEducation(hero);
+                }
             }
+      
 
             FirstUse = false;
         }
@@ -92,7 +98,7 @@ namespace BannerKings
             DefaultBookTypes.Instance.Initialize();
             DefaultLifestyles.Instance.Initialize();
 
-            Models.Add(new BKCultureAssimilationModel());
+            Models.Add(new BKCultureModel());
             Models.Add(new BKCultureAcceptanceModel());
             Models.Add(new BKAdministrativeModel());
             Models.Add(new BKLegitimacyModel());
@@ -131,6 +137,7 @@ namespace BannerKings
             EducationManager = educations ?? new EducationManager();
             InnovationsManager = innovations ?? new InnovationsManager();
             GoalManager = goals ?? new GoalManager();
+            FirstUse = false;
         }
 
         private struct ConfigHolder
