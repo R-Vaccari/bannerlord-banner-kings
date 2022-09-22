@@ -356,10 +356,16 @@ namespace BannerKings.Behaviours
         private bool IsPlayerNotable()
         {
             var hero = Hero.OneToOneConversationHero;
+            if (hero == null || hero.CurrentSettlement == null)
+            {
+                return false;
+            }
+
             var settlement = hero.CurrentSettlement;
-            return hero.IsNotable && settlement != null && (settlement.OwnerClan == Clan.PlayerClan || 
-                (BannerKingsConfig.Instance.TitleManager.GetTitle(settlement).deJure == Hero.MainHero &&
-                settlement.MapFaction == Clan.PlayerClan.MapFaction));
+            var title = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement);
+
+            return hero.IsNotable && settlement.OwnerClan != null && (settlement.OwnerClan == Clan.PlayerClan || 
+                (title != null && title.deJure == Hero.MainHero && settlement.MapFaction == Clan.PlayerClan.MapFaction));
         }
 
         private bool IsCultureDifferent()
