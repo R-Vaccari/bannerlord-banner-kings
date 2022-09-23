@@ -73,27 +73,31 @@ namespace BannerKings.Behaviours
 
         private void DailyClanTick(Clan clan)
         {
-            if (clan.IsEliminated || clan.IsBanditFaction || clan.Kingdom == null || clan.Leader == null)
+            Util.TryCatch(() =>
             {
-                return;
-            }
+                if (clan.IsEliminated || clan.IsBanditFaction || clan.Kingdom == null || clan.Leader == null)
+                {
+                    return;
+                }
 
-            BannerKingsConfig.Instance.CourtManager.UpdateCouncil(clan);
+                BannerKingsConfig.Instance.CourtManager.UpdateCouncil(clan);
 
-            var councillours = BannerKingsConfig.Instance.CourtManager.GetCouncilloursCount(clan);
-            if (councillours != 0)
-            {
-                clan.Leader.AddSkillXp(BKSkills.Instance.Lordship, councillours * 2f);
-            }
+                var councillours = BannerKingsConfig.Instance.CourtManager.GetCouncilloursCount(clan);
+                if (councillours != 0)
+                {
+                    clan.Leader.AddSkillXp(BKSkills.Instance.Lordship, councillours * 2f);
+                }
 
-            if (clan == Clan.PlayerClan || clan.IsUnderMercenaryService || clan.IsMinorFaction || clan.IsBanditFaction)
-            {
-                return;
-            }
+                if (clan == Clan.PlayerClan || clan.IsUnderMercenaryService || clan.IsMinorFaction || clan.IsBanditFaction)
+                {
+                    return;
+                }
 
-            EvaluateRecruitKnight(clan);
-            EvaluateRecruitCompanion(clan);
-            SetCompanionParty(clan);
+                EvaluateRecruitKnight(clan);
+                EvaluateRecruitCompanion(clan);
+                SetCompanionParty(clan);
+            });
+            
         }
 
         private void SetCompanionParty(Clan clan)

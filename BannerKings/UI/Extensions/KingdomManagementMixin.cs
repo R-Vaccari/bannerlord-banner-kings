@@ -87,15 +87,18 @@ namespace BannerKings.UI.Extensions
 
         public override void OnRefresh()
         {
-            courtVM.RefreshValues();
-            if (kingdomManagement.Clan.Show || kingdomManagement.Settlement.Show || kingdomManagement.Policy.Show ||
-                kingdomManagement.Army.Show || kingdomManagement.Diplomacy.Show)
+            Util.TryCatch(() =>
             {
-                Court.IsSelected = false;
-                CourtSelected = false;
-                DemesneSelected = false;
-                Demesne.IsSelected = false;
-            }
+                courtVM.RefreshValues();
+                if (kingdomManagement.Clan.Show || kingdomManagement.Settlement.Show || kingdomManagement.Policy.Show ||
+                    kingdomManagement.Army.Show || kingdomManagement.Diplomacy.Show)
+                {
+                    Court.IsSelected = false;
+                    CourtSelected = false;
+                    DemesneSelected = false;
+                    Demesne.IsSelected = false;
+                }
+            });
         }
 
         [DataSourceMethod]

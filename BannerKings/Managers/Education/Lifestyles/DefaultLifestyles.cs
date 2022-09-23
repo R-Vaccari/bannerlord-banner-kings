@@ -40,6 +40,8 @@ namespace BannerKings.Managers.Education.Lifestyles
 
         public Lifestyle Jawwal { get; private set; }
 
+        public Lifestyle Warlord { get; private set; }
+
         public override IEnumerable<Lifestyle> All
         {
             get
@@ -57,12 +59,30 @@ namespace BannerKings.Managers.Education.Lifestyles
                 yield return August;
                 yield return SiegeEngineer;
                 yield return CivilAdministrator;
+                yield return Warlord;
             }
         }
 
         public override void Initialize()
         {
             var cultures = Game.Current.ObjectManager.GetObjectTypeList<CultureObject>();
+
+            Warlord = new Lifestyle("lifestyle_warlod");
+
+            Warlord.Initialize(new TextObject("{=of43diPd}Warlord"),
+                new TextObject("{=!}Commander/General Lifestyle"),
+                DefaultSkills.Tactics,
+                DefaultSkills.Leadership,
+                new List<PerkObject>
+                {
+                    BKPerks.Instance.WarlordCaptain,
+                    BKPerks.Instance.WarlordCommander,
+                    BKPerks.Instance.WarlordGeneral
+                },
+                new TextObject("{=tRp08jyH}..."),
+                1.5f,
+                25f);
+
 
             Fian = new Lifestyle("lifestyle_fian");
             Fian.Initialize(new TextObject("{=of43diPd}Fian"), 

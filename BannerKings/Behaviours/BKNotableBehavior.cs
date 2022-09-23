@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using BannerKings.UI;
@@ -47,27 +48,31 @@ namespace BannerKings.Behaviours
 
         private void DailySettlementTick(Settlement settlement)
         {
-            if (settlement.Town == null || settlement.OwnerClan == null)
+            Util.TryCatch(() =>
             {
-                return;
-            }
+                if (settlement.Town == null || settlement.OwnerClan == null)
+                {
+                    return;
+                }
 
-            if (settlement.IsCastle)
-            {
-                SettlementHelper.SpawnNotablesIfNeeded(settlement);
-                UpdateVolunteers(settlement);
-            }
+                if (settlement.IsCastle)
+                {
+                    SettlementHelper.SpawnNotablesIfNeeded(settlement);
+                    UpdateVolunteers(settlement);
+                }
 
-            var governor = settlement.Town.Governor;
-            if (governor == null || !governor.IsNotable)
-            {
-                return;
-            }
+                var governor = settlement.Town.Governor;
+                if (governor == null || !governor.IsNotable)
+                {
+                    return;
+                }
 
-            if (MBRandom.RandomInt(1, 100) < 5)
-            {
-                ChangeRelationAction.ApplyRelationChangeBetweenHeroes(settlement.Town.OwnerClan.Leader, governor, 1);
-            }
+                if (MBRandom.RandomInt(1, 100) < 5)
+                {
+                    ChangeRelationAction.ApplyRelationChangeBetweenHeroes(settlement.Town.OwnerClan.Leader, governor, 1);
+                }
+            });
+           
         }
 
         private void UpdateVolunteers(Settlement settlement)
@@ -470,39 +475,45 @@ namespace BannerKings.Behaviours
         {
             private static bool Prefix(Settlement settlement)
             {
-                if ((settlement.IsTown || settlement.IsCastle) && settlement.Town.Governor != null)
+                Util.TryCatchReturn(() =>
                 {
-                    var governor = settlement.Town.Governor;
-                    if (governor.IsNotable || governor.Clan == null)
+                    
+                    if ((settlement.IsTown || settlement.IsCastle) && settlement.Town.Governor != null)
                     {
-                        if (governor.GetPerkValue(DefaultPerks.Charm.MeaningfulFavors) && MBRandom.RandomFloat < 0.02f)
+                        var governor = settlement.Town.Governor;
+                        if (governor.IsNotable || governor.Clan == null)
                         {
-                            foreach (var hero in settlement.Notables)
+                            if (governor.GetPerkValue(DefaultPerks.Charm.MeaningfulFavors) && MBRandom.RandomFloat < 0.02f)
                             {
-                                if (hero.Power >= 200f)
+                                foreach (var hero in settlement.Notables)
                                 {
-                                    ChangeRelationAction.ApplyRelationChangeBetweenHeroes(settlement.OwnerClan.Leader,
-                                        hero, (int) DefaultPerks.Charm.MeaningfulFavors.SecondaryBonus);
+                                    if (hero.Power >= 200f)
+                                    {
+                                        ChangeRelationAction.ApplyRelationChangeBetweenHeroes(settlement.OwnerClan.Leader,
+                                            hero, (int)DefaultPerks.Charm.MeaningfulFavors.SecondaryBonus);
+                                    }
                                 }
                             }
+
+                            SkillLevelingManager.OnSettlementGoverned(governor, settlement);
+                            return false;
                         }
-
-                        SkillLevelingManager.OnSettlementGoverned(governor, settlement);
-                        return false;
                     }
-                }
 
-                return true;
+                    return true;
+                });
+                return false;
             }
         }
 
         // Fix perk crash due to notable not having a Clan.
         [HarmonyPatch(typeof(Town), "DailyTick")]
-        internal class TownDailyTicktPatch
+        internal class TownDailyTickPatch
         {
             private static bool Prefix(Town __instance)
             {
                 try{
+                    
                     if (__instance.Governor != null && __instance.Governor is {IsNotable: true} && __instance.OwnerClan != null &&
                         __instance.OwnerClan.Leader != null)
                     {
@@ -579,17 +590,34 @@ namespace BannerKings.Behaviours
                                 BindingFlags.Instance | BindingFlags.NonPublic)
                             .Invoke(__instance, null);
                     }
+                    else
+                    {
+                        return false;
                     }
-                catch(System.Exception ex)
+                    return false;
+                }
+                catch(NullReferenceException ex)
                 {
-
+                    Util.PrintGL("Caught NullRef in DailyTick Prefix");
+                }
+                catch(Exception ex)
+                {
                 }
                 return true;
             }
 
-            private static System.Exception Finalize()
+            private static Exception Finalize(Exception __exception)
             {
-                return  null;
+                try
+                {
+                    return null;
+                }
+                catch(Exception ex)
+                {
+                    Util.PrintGL("Caught null ref");
+                    return null;
+                }
+                
             }
         }
     }

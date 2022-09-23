@@ -75,67 +75,72 @@ namespace BannerKings.UI.Titles
             base.RefreshValues();
             Decisions.Clear();
 
-
-            if (title != null)
+            Util.TryCatch(() =>
             {
-                var model = BannerKingsConfig.Instance.Models.First(x => x is BKTitleModel) as BKTitleModel;
-                var characterCode = CharacterCode.CreateFrom(title.deJure.CharacterObject);
-                ImageIdentifier = new ImageIdentifierVM(characterCode);
-
-                var actions = new List<TitleAction>();
-                var usurpData = model.GetAction(ActionType.Usurp, title, Hero.MainHero);
-                if (title.GetHeroClaim(Hero.MainHero) != ClaimType.None)
+                if (title != null)
                 {
-                    var usurpButton = new DecisionElement().SetAsButtonOption(new TextObject("{=L3Jzg76z}Usurp").ToString(),
-                        () => UIHelper.ShowActionPopup(usurpData, this));
-                    usurpButton.Enabled = usurpData.Possible;
-                    Decisions.Add(usurpButton);
-                }
+                    var model = BannerKingsConfig.Instance.Models.First(x => x is BKTitleModel) as BKTitleModel;
+                    var characterCode = CharacterCode.CreateFrom(title.deJure.CharacterObject);
+                    ImageIdentifier = new ImageIdentifierVM(characterCode);
 
-                var claimAction = model.GetAction(ActionType.Claim, title, Hero.MainHero);
-                if (claimAction.Possible)
-                {
-                    var claimButton = new DecisionElement().SetAsButtonOption(new TextObject("{=6hY9WysN}Claim").ToString(),
-                        () => UIHelper.ShowActionPopup(claimAction, this));
-                    claimButton.Enabled = claimAction.Possible;
-                    Decisions.Add(claimButton);
-                }
+                    var actions = new List<TitleAction>();
+                    var usurpData = model.GetAction(ActionType.Usurp, title, Hero.MainHero);
+                    if (title.GetHeroClaim(Hero.MainHero) != ClaimType.None)
+                    {
+                        var usurpButton = new DecisionElement().SetAsButtonOption(new TextObject("{=L3Jzg76z}Usurp").ToString(),
+                            () => UIHelper.ShowActionPopup(usurpData, this));
+                        usurpButton.Enabled = usurpData.Possible;
+                        Decisions.Add(usurpButton);
+                    }
 
-                var grantData = model.GetAction(ActionType.Grant, title, Hero.MainHero);
-                if (grantData.Possible)
-                {
-                    var grantButton = new DecisionElement().SetAsButtonOption(new TextObject("{=dugq4xHo}Grant").ToString(),
-                        () => UIHelper.ShowActionPopup(grantData, this));
-                    grantButton.Enabled = grantData.Possible;
-                    Decisions.Add(grantButton);
-                }
+                    var claimAction = model.GetAction(ActionType.Claim, title, Hero.MainHero);
+                    if (claimAction.Possible)
+                    {
+                        var claimButton = new DecisionElement().SetAsButtonOption(new TextObject("{=6hY9WysN}Claim").ToString(),
+                            () => UIHelper.ShowActionPopup(claimAction, this));
+                        claimButton.Enabled = claimAction.Possible;
+                        Decisions.Add(claimButton);
+                    }
 
-                var revokeData = model.GetAction(ActionType.Revoke, title, Hero.MainHero);
-                if (revokeData.Possible)
-                {
-                    var revokeButton = new DecisionElement().SetAsButtonOption(new TextObject("{=iLpAKttu}Revoke").ToString(),
-                        () => UIHelper.ShowActionPopup(revokeData, this));
-                    revokeButton.Enabled = revokeData.Possible;
-                    Decisions.Add(revokeButton);
-                }
+                    var grantData = model.GetAction(ActionType.Grant, title, Hero.MainHero);
+                    if (grantData.Possible)
+                    {
+                        var grantButton = new DecisionElement().SetAsButtonOption(new TextObject("{=dugq4xHo}Grant").ToString(),
+                            () => UIHelper.ShowActionPopup(grantData, this));
+                        grantButton.Enabled = grantData.Possible;
+                        Decisions.Add(grantButton);
+                    }
 
-                if (title.deJure != Hero.MainHero)
-                {
-                    actions.Add(usurpData);
-                    actions.Add(claimAction);
-                    actions.Add(revokeData);
-                }
-                else
-                {
-                    actions.Add(grantData);
-                }
+                    var revokeData = model.GetAction(ActionType.Revoke, title, Hero.MainHero);
+                    if (revokeData.Possible)
+                    {
+                        var revokeButton = new DecisionElement().SetAsButtonOption(new TextObject("{=iLpAKttu}Revoke").ToString(),
+                            () => UIHelper.ShowActionPopup(revokeData, this));
+                        revokeButton.Enabled = revokeData.Possible;
+                        Decisions.Add(revokeButton);
+                    }
 
-                Hint = new BasicTooltipViewModel(() => UIHelper.GetTitleTooltip(title, actions));
-            }
+                    if (title.deJure != Hero.MainHero)
+                    {
+                        actions.Add(usurpData);
+                        actions.Add(claimAction);
+                        actions.Add(revokeData);
+                    }
+                    else
+                    {
+                        actions.Add(grantData);
+                    }
+
+                    Hint = new BasicTooltipViewModel(() => UIHelper.GetTitleTooltip(title, actions));
+                }
+            });
+
+            
         }
 
         public void ExecuteLink()
         {
+            
             if (title.deJure != null)
             {
                 Campaign.Current.EncyclopediaManager.GoToLink(title.deJure.EncyclopediaLink);

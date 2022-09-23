@@ -61,25 +61,31 @@ namespace BannerKings.UI
 
         public void ShowWindow(string id)
         {
-            if (mapView == null)
+            Util.TryCatch(() =>
             {
-                mapView = new BannerKingsMapView(id);
-            }
-            else if (mapView.id != id)
-            {
-                mapView = new BannerKingsMapView(id);
-            }
+                if (mapView == null)
+                {
+                    mapView = new BannerKingsMapView(id);
+                }
+                else if (mapView.id != id)
+                {
+                    mapView = new BannerKingsMapView(id);
+                }
 
-            mapView.Refresh();
+                mapView.Refresh();
+            });
         }
 
         public void CloseUI()
         {
-            if (mapView != null)
+            Util.TryCatch(() =>
             {
-                BKScreen.CloseLayer();
-                mapView = null;
-            }
+                if (mapView != null)
+                {
+                    BKScreen.CloseLayer();
+                    mapView = null;
+                }
+            });
         }
     }
 
@@ -174,11 +180,14 @@ namespace BannerKings.UI
         {
             private static bool Prefix(CharacterVM __instance)
             {
-                var focus = __instance.GetType()
-                    .GetProperty("OrgUnspentFocusPoints", BindingFlags.Instance | BindingFlags.Public);
-                var value = __instance.GetCharacterDeveloper().UnspentFocusPoints;
-                focus.SetValue(__instance, value);
-                __instance.UnspentCharacterPoints = value;
+                Util.TryCatch(() =>
+                {
+                    var focus = __instance.GetType()
+                        .GetProperty("OrgUnspentFocusPoints", BindingFlags.Instance | BindingFlags.Public);
+                    var value = __instance.GetCharacterDeveloper().UnspentFocusPoints;
+                    focus.SetValue(__instance, value);
+                    __instance.UnspentCharacterPoints = value;
+                });
                 return true;
             }
         }
@@ -213,41 +222,44 @@ namespace BannerKings.UI
 
             private static void Postfix(KingdomPoliciesVM __instance)
             {
-                if (BannerKingsConfig.Instance.TitleManager == null)
+                Util.TryCatch(() =>
                 {
-                    return;
-                }
+                    if (BannerKingsConfig.Instance.TitleManager == null)
+                    {
+                        return;
+                    }
 
-                instance = __instance;
+                    instance = __instance;
 
-                var title =
-                    BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(Hero.MainHero.MapFaction as Kingdom);
-                if (title?.contract == null)
-                {
-                    return;
-                }
+                    var title =
+                        BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(Hero.MainHero.MapFaction as Kingdom);
+                    if (title?.contract == null)
+                    {
+                        return;
+                    }
 
-                var active = __instance.GetType()
-                    .GetMethod("IsPolicyActive", BindingFlags.Instance | BindingFlags.NonPublic);
-                var select = __instance.GetType()
-                    .GetMethod("OnPolicySelect", BindingFlags.Instance | BindingFlags.NonPublic);
+                    var active = __instance.GetType()
+                        .GetMethod("IsPolicyActive", BindingFlags.Instance | BindingFlags.NonPublic);
+                    var select = __instance.GetType()
+                        .GetMethod("OnPolicySelect", BindingFlags.Instance | BindingFlags.NonPublic);
 
 
-                if (title.contract == null)
-                {
-                    return;
-                }
+                    if (title.contract == null)
+                    {
+                        return;
+                    }
 
-                var list = PolicyHelper.GetForbiddenGovernmentPolicies(title.contract.Government);
-                __instance.OtherPolicies.Clear();
-                foreach (var policy2 in from p in PolicyObject.All
-                         where !(bool) active.Invoke(__instance, new object[] {p}) && !list.Contains(p)
-                         select p)
-                {
-                    __instance.OtherPolicies.Add(new KingdomPolicyItemVM(policy2,
-                        delegate(KingdomPolicyItemVM x) { select.Invoke(__instance, new object[] {x}); },
-                        IsPolicyActive));
-                }
+                    var list = PolicyHelper.GetForbiddenGovernmentPolicies(title.contract.Government);
+                    __instance.OtherPolicies.Clear();
+                    foreach (var policy2 in from p in PolicyObject.All
+                                            where !(bool)active.Invoke(__instance, new object[] { p }) && !list.Contains(p)
+                                            select p)
+                    {
+                        __instance.OtherPolicies.Add(new KingdomPolicyItemVM(policy2,
+                            delegate (KingdomPolicyItemVM x) { select.Invoke(__instance, new object[] { x }); },
+                            IsPolicyActive));
+                    }
+                });
             }
 
             private static bool IsPolicyActive(PolicyObject policy)
@@ -416,88 +428,93 @@ namespace BannerKings.UI
         {
             private static bool Prefix(CharacterVM __instance)
             {
-                var inspectAttr = __instance.GetType()
+                Util.TryCatchReturn(() =>
+                {
+                    var inspectAttr = __instance.GetType()
                     .GetMethod("OnInspectAttribute", BindingFlags.Instance | BindingFlags.NonPublic);
-                var addAttr = __instance.GetType()
-                    .GetMethod("OnAddAttributePoint", BindingFlags.Instance | BindingFlags.NonPublic);
-                var startSelection = __instance.GetType()
-                    .GetMethod("OnStartPerkSelection", BindingFlags.Instance | BindingFlags.NonPublic);
+                    var addAttr = __instance.GetType()
+                        .GetMethod("OnAddAttributePoint", BindingFlags.Instance | BindingFlags.NonPublic);
+                    var startSelection = __instance.GetType()
+                        .GetMethod("OnStartPerkSelection", BindingFlags.Instance | BindingFlags.NonPublic);
 
-                __instance.HeroCharacter = new HeroViewModel();
-                __instance.Skills = new MBBindingList<SkillVM>();
-                __instance.Traits = new MBBindingList<EncyclopediaTraitItemVM>();
-                __instance.Attributes.Clear();
-                __instance.HeroCharacter.FillFrom(__instance.Hero);
-                __instance.HeroCharacter.SetEquipment(EquipmentIndex.ArmorItemEndSlot, default);
-                __instance.HeroCharacter.SetEquipment(EquipmentIndex.HorseHarness, default);
-                __instance.HeroCharacter.SetEquipment(EquipmentIndex.NumAllWeaponSlots, default);
+                    __instance.HeroCharacter = new HeroViewModel();
+                    __instance.Skills = new MBBindingList<SkillVM>();
+                    __instance.Traits = new MBBindingList<EncyclopediaTraitItemVM>();
+                    __instance.Attributes.Clear();
+                    __instance.HeroCharacter.FillFrom(__instance.Hero);
+                    __instance.HeroCharacter.SetEquipment(EquipmentIndex.ArmorItemEndSlot, default);
+                    __instance.HeroCharacter.SetEquipment(EquipmentIndex.HorseHarness, default);
+                    __instance.HeroCharacter.SetEquipment(EquipmentIndex.NumAllWeaponSlots, default);
 
-                foreach (var characterAttribute in BKAttributes.AllAttributes)
-                {
-                    var item = new CharacterAttributeItemVM(__instance.Hero,
-                        characterAttribute,
-                        __instance,
-                        delegate(CharacterAttributeItemVM x) { inspectAttr.Invoke(__instance, new object[] {x}); },
-                        delegate(CharacterAttributeItemVM x) { addAttr.Invoke(__instance, new object[] {x}); });
-
-                    __instance.Attributes.Add(item);
-
-                    foreach (var skill2 in characterAttribute.Skills)
+                    foreach (var characterAttribute in BKAttributes.AllAttributes)
                     {
-                        __instance.Skills.Add(new SkillVM(skill2, __instance,
-                            delegate(PerkVM x) { startSelection.Invoke(__instance, new object[] {x}); }));
-                    }
-                }
+                        var item = new CharacterAttributeItemVM(__instance.Hero,
+                            characterAttribute,
+                            __instance,
+                            delegate (CharacterAttributeItemVM x) { inspectAttr.Invoke(__instance, new object[] { x }); },
+                            delegate (CharacterAttributeItemVM x) { addAttr.Invoke(__instance, new object[] { x }); });
 
-                using (var enumerator3 = Skills.All.GetEnumerator())
-                {
-                    while (enumerator3.MoveNext())
-                    {
-                        var skill = enumerator3.Current;
-                        if (__instance.Skills.All(s => s.Skill != skill))
+                        __instance.Attributes.Add(item);
+
+                        foreach (var skill2 in characterAttribute.Skills)
                         {
-                            __instance.Skills.Add(new SkillVM(skill, __instance,
-                                delegate(PerkVM x) { startSelection.Invoke(__instance, new object[] {x}); }));
+                            __instance.Skills.Add(new SkillVM(skill2, __instance,
+                                delegate (PerkVM x) { startSelection.Invoke(__instance, new object[] { x }); }));
                         }
                     }
-                }
 
-                foreach (var skillVM in __instance.Skills)
-                {
-                    skillVM.RefreshWithCurrentValues();
-                }
-
-                foreach (var characterAttributeItemVM in __instance.Attributes)
-                {
-                    characterAttributeItemVM.RefreshWithCurrentValues();
-                }
-
-                __instance.SetCurrentSkill(__instance.Skills[0]);
-                __instance.RefreshCharacterValues();
-                __instance.CharacterStats = new MBBindingList<StringPairItemVM>();
-                if (__instance.Hero.GovernorOf != null)
-                {
-                    GameTexts.SetVariable("SETTLEMENT_NAME", __instance.Hero.GovernorOf.Name.ToString());
-                    __instance.CharacterStats.Add(
-                        new StringPairItemVM(GameTexts.FindText("str_governor_of_label").ToString(), ""));
-                }
-
-                if (MobileParty.MainParty.GetHeroPerkRole(__instance.Hero) != SkillEffect.PerkRole.None)
-                {
-                    __instance.CharacterStats.Add(
-                        new StringPairItemVM(CampaignUIHelper.GetHeroClanRoleText(__instance.Hero, Clan.PlayerClan),
-                            ""));
-                }
-
-                foreach (var traitObject in CampaignUIHelper.GetHeroTraits())
-                {
-                    if (__instance.Hero.GetTraitLevel(traitObject) != 0)
+                    using (var enumerator3 = Skills.All.GetEnumerator())
                     {
-                        __instance.Traits.Add(new EncyclopediaTraitItemVM(traitObject, __instance.Hero));
+                        while (enumerator3.MoveNext())
+                        {
+                            var skill = enumerator3.Current;
+                            if (__instance.Skills.All(s => s.Skill != skill))
+                            {
+                                __instance.Skills.Add(new SkillVM(skill, __instance,
+                                    delegate (PerkVM x) { startSelection.Invoke(__instance, new object[] { x }); }));
+                            }
+                        }
                     }
-                }
 
-                return false;
+                    foreach (var skillVM in __instance.Skills)
+                    {
+                        skillVM.RefreshWithCurrentValues();
+                    }
+
+                    foreach (var characterAttributeItemVM in __instance.Attributes)
+                    {
+                        characterAttributeItemVM.RefreshWithCurrentValues();
+                    }
+
+                    __instance.SetCurrentSkill(__instance.Skills[0]);
+                    __instance.RefreshCharacterValues();
+                    __instance.CharacterStats = new MBBindingList<StringPairItemVM>();
+                    if (__instance.Hero.GovernorOf != null)
+                    {
+                        GameTexts.SetVariable("SETTLEMENT_NAME", __instance.Hero.GovernorOf.Name.ToString());
+                        __instance.CharacterStats.Add(
+                            new StringPairItemVM(GameTexts.FindText("str_governor_of_label").ToString(), ""));
+                    }
+
+                    if (MobileParty.MainParty.GetHeroPerkRole(__instance.Hero) != SkillEffect.PerkRole.None)
+                    {
+                        __instance.CharacterStats.Add(
+                            new StringPairItemVM(CampaignUIHelper.GetHeroClanRoleText(__instance.Hero, Clan.PlayerClan),
+                                ""));
+                    }
+
+                    foreach (var traitObject in CampaignUIHelper.GetHeroTraits())
+                    {
+                        if (__instance.Hero.GetTraitLevel(traitObject) != 0)
+                        {
+                            __instance.Traits.Add(new EncyclopediaTraitItemVM(traitObject, __instance.Hero));
+                        }
+                    }
+
+                    return false;
+                });
+
+                return true;
             }
         }
 
@@ -506,11 +523,18 @@ namespace BannerKings.UI
         {
             private static bool Prefix()
             {
-                var settlement = Settlement.CurrentSettlement;
-                if (!settlement.IsVillage)
+                Util.TryCatchReturn(() =>
                 {
-                    return true;
-                }
+                    var settlement = Settlement.CurrentSettlement;
+                    if (!settlement.IsVillage)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                });
 
                 return false;
             }
@@ -698,8 +722,11 @@ namespace BannerKings.UI
             [HarmonyPatch("OnRefresh", MethodType.Normal)]
             static void Postfix(ArmyManagementVM __instance)
             {
-                __instance.CanCreateArmy = (float)__instance.TotalCost <= Hero.MainHero.Clan.Influence && __instance.PartiesInCart.Count > 1 &&
+                Util.TryCatch(() =>
+                {
+                    __instance.CanCreateArmy = (float)__instance.TotalCost <= Hero.MainHero.Clan.Influence && __instance.PartiesInCart.Count > 1 &&
                     new BKArmyManagementModel().CanCreateArmy(Hero.MainHero);
+                });
             }
 
             [HarmonyPrefix]

@@ -173,6 +173,18 @@ namespace BannerKings.Managers.Skills
 
         #endregion  Varyag
 
+        #region Warlord
+
+        public PerkObject WarlordCaptain { get; private set; }
+
+        public PerkObject WarlordCommander { get; private set; }
+
+        public PerkObject WarlordGeneral { get; private set; }
+
+
+        #endregion Warlord
+
+
 
         #region Lordship
 
@@ -255,6 +267,44 @@ namespace BannerKings.Managers.Skills
 
         private void InitializeLifestylePerks()
         {
+            #region Warlord
+
+            WarlordCaptain = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleWarlordCaptain"));
+            WarlordCaptain.InitializeNew("{=U7W2kGgA}Captain", null,
+                80,
+                null,
+                "{=WgmJfTeR}I....",
+                SkillEffect.PerkRole.Personal, 0.05f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                "{=!}...",
+                SkillEffect.PerkRole.Personal, 0.03f,
+                SkillEffect.EffectIncrementType.AddFactor);
+
+            WarlordCommander = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleWarlordCommander"));
+            WarlordCommander.InitializeNew("{=w7GFfrAy}Commander", null,
+                160,
+                null,
+                "{=ZK5MjmMK}...",
+                SkillEffect.PerkRole.Personal, 0.05f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                "{=RKMxkhwX}...",
+                SkillEffect.PerkRole.Personal, 0.03f,
+                SkillEffect.EffectIncrementType.AddFactor);
+
+            WarlordGeneral = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleWarlordGeneral"));
+            WarlordGeneral.InitializeNew("{=qvQEEEM4}General", null,
+                240,
+                null,
+                "{=!}...",
+                SkillEffect.PerkRole.Personal, 0.05f,
+                SkillEffect.EffectIncrementType.AddFactor,
+                "{=fxuVYTrJ}...",
+                SkillEffect.PerkRole.Personal, 0.03f,
+                SkillEffect.EffectIncrementType.AddFactor);
+
+            #endregion Warlord
+
+
             #region Fian
 
             FianHighlander = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleFianHighlander"));

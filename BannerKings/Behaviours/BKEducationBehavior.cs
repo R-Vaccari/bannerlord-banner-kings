@@ -89,6 +89,10 @@ namespace BannerKings.Behaviours
 
         private void OnPerkOpened(Hero hero, PerkObject perk)
         {
+            Util.TryCatch<Hero>((hero) =>
+            {
+
+            });
             if (perk.AlternativePerk == null || hero.GetPerkValue(perk.AlternativePerk))
             {
                 return;

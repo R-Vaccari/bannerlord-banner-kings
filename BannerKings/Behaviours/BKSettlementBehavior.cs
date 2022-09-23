@@ -44,59 +44,65 @@ namespace BannerKings.Behaviours
             CampaignEvents.SettlementEntered.AddNonSerializedListener(this, OnSettlementEntered);
             CampaignEvents.DailyTickSettlementEvent.AddNonSerializedListener(this, DailySettlementTick);
             CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, OnSessionLaunched);
+
+
         }
 
         public override void SyncData(IDataStore dataStore)
         {
-            if (dataStore.IsSaving)
+            Util.TryCatch(() =>
             {
-                populationManager = BannerKingsConfig.Instance.PopulationManager;
-                policyManager = BannerKingsConfig.Instance.PolicyManager;
-                titleManager = BannerKingsConfig.Instance.TitleManager;
-                courtManager = BannerKingsConfig.Instance.CourtManager;
-                religionsManager = BannerKingsConfig.Instance.ReligionsManager;
-                educationsManager = BannerKingsConfig.Instance.EducationManager;
-                innovationsManager = BannerKingsConfig.Instance.InnovationsManager;
-                goalsManager = BannerKingsConfig.Instance.GoalManager;
-                firstUse = BannerKingsConfig.Instance.FirstUse;
-
-                educationsManager.CleanEntries();
-                religionsManager.CleanEntries();
-            }
-
-            if (BannerKingsConfig.Instance.wipeData)
-            {
-                populationManager = null;
-                policyManager = null;
-                titleManager = null;
-                courtManager = null;
-                religionsManager = null;
-                educationsManager = null;
-                innovationsManager = null;
-                goalsManager = null;
-            }
-
-            dataStore.SyncData("bannerkings-populations", ref populationManager);
-            dataStore.SyncData("bannerkings-titles", ref titleManager);
-            dataStore.SyncData("bannerkings-courts", ref courtManager);
-            dataStore.SyncData("bannerkings-policies", ref policyManager);
-            dataStore.SyncData("bannerkings-religions", ref religionsManager);
-            dataStore.SyncData("bannerkings-educations", ref educationsManager);
-            dataStore.SyncData("bannerkings-innovations", ref innovationsManager);
-            dataStore.SyncData("bannerkings-goals", ref goalsManager);
-            dataStore.SyncData("bannerkings-first-use", ref firstUse);
-
-            if (dataStore.IsLoading)
-            {
-                if (firstUse)
+                if (dataStore.IsSaving)
                 {
-                    BannerKingsConfig.Instance.InitializeManagersFirstTime();
+                    populationManager = BannerKingsConfig.Instance.PopulationManager;
+                    policyManager = BannerKingsConfig.Instance.PolicyManager;
+                    titleManager = BannerKingsConfig.Instance.TitleManager;
+                    courtManager = BannerKingsConfig.Instance.CourtManager;
+                    religionsManager = BannerKingsConfig.Instance.ReligionsManager;
+                    educationsManager = BannerKingsConfig.Instance.EducationManager;
+                    innovationsManager = BannerKingsConfig.Instance.InnovationsManager;
+                    goalsManager = BannerKingsConfig.Instance.GoalManager;
+                    firstUse = BannerKingsConfig.Instance.FirstUse;
+
+                    educationsManager.CleanEntries();
+                    religionsManager.CleanEntries();
                 }
-                else
+
+                if (BannerKingsConfig.Instance.wipeData)
                 {
-                    BannerKingsConfig.Instance.InitManagers(populationManager, policyManager, titleManager, courtManager, religionsManager, educationsManager, innovationsManager, goalsManager);
+                    populationManager = null;
+                    policyManager = null;
+                    titleManager = null;
+                    courtManager = null;
+                    religionsManager = null;
+                    educationsManager = null;
+                    innovationsManager = null;
+                    goalsManager = null;
                 }
-            }
+
+                dataStore.SyncData("bannerkings-populations", ref populationManager);
+                dataStore.SyncData("bannerkings-titles", ref titleManager);
+                dataStore.SyncData("bannerkings-courts", ref courtManager);
+                dataStore.SyncData("bannerkings-policies", ref policyManager);
+                dataStore.SyncData("bannerkings-religions", ref religionsManager);
+                dataStore.SyncData("bannerkings-educations", ref educationsManager);
+                dataStore.SyncData("bannerkings-innovations", ref innovationsManager);
+                dataStore.SyncData("bannerkings-goals", ref goalsManager);
+                dataStore.SyncData("bannerkings-first-use", ref firstUse);
+
+                if (dataStore.IsLoading)
+                {
+                    if (firstUse)
+                    {
+                        BannerKingsConfig.Instance.InitializeManagersFirstTime();
+                    }
+                    else
+                    {
+                        BannerKingsConfig.Instance.InitManagers(populationManager, policyManager, titleManager, courtManager, religionsManager, educationsManager, innovationsManager, goalsManager);
+                    }
+                }
+            });
+            
         }
 
         private void OnGameCreated(CampaignGameStarter starter)
@@ -109,22 +115,25 @@ namespace BannerKings.Behaviours
 
         private void OnGameLoaded(CampaignGameStarter starter)
         {
-            
-            if (!firstUse)
+
+            Util.TryCatch(() =>
             {
-                BannerKingsConfig.Instance.PopulationManager.PostInitialize();
-                BannerKingsConfig.Instance.EducationManager.PostInitialize();
-                BannerKingsConfig.Instance.InnovationsManager.PostInitialize();
+                if (!firstUse)
+                {
+                    BannerKingsConfig.Instance.PopulationManager.PostInitialize();
+                    BannerKingsConfig.Instance.EducationManager.PostInitialize();
+                    BannerKingsConfig.Instance.InnovationsManager.PostInitialize();
+                    BannerKingsConfig.Instance.ReligionsManager.PostInitialize();
+                    BannerKingsConfig.Instance.GoalManager.PostInitialize();
+                }
+                else
+                {
+                    BannerKingsConfig.Instance.InitializeManagersFirstTime();
+                }
+
+
                 BannerKingsConfig.Instance.ReligionsManager.PostInitialize();
-                BannerKingsConfig.Instance.GoalManager.PostInitialize();
-            } 
-            else
-            {
-                BannerKingsConfig.Instance.InitializeManagersFirstTime();
-            }
-
-
-            BannerKingsConfig.Instance.ReligionsManager.PostInitialize();
+            });
         }
 
         private void OnCharacterCreationOver()
@@ -134,8 +143,11 @@ namespace BannerKings.Behaviours
 
         private void TickSettlementData(Settlement settlement)
         {
-            UpdateSettlementPops(settlement);
-            BannerKingsConfig.Instance.PolicyManager.InitializeSettlement(settlement);
+            Util.TryCatch(() =>
+            {
+                UpdateSettlementPops(settlement);
+                BannerKingsConfig.Instance.PolicyManager.InitializeSettlement(settlement);
+            });
         }
 
         private void OnSiegeAftermath(MobileParty attackerParty, Settlement settlement, SiegeAftermathCampaignBehavior.SiegeAftermath aftermathType, Clan previousSettlementOwner, Dictionary<MobileParty, float> partyContributions)

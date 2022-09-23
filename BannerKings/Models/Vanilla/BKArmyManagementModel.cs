@@ -1,4 +1,5 @@
-﻿using BannerKings.Managers.Kingdoms.Policies;
+﻿using BannerKings.Managers.Education.Lifestyles;
+using BannerKings.Managers.Kingdoms.Policies;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
 using TaleWorlds.CampaignSystem;
@@ -16,6 +17,10 @@ namespace BannerKings.Models.Vanilla
             {
                 return false;
             }
+
+            if (BannerKingsConfig.Instance.EducationManager.GetHeroEducation(armyLeader) != null &&
+                BannerKingsConfig.Instance.EducationManager.GetHeroEducation(armyLeader).Lifestyle == DefaultLifestyles.Instance.Warlord)
+                return true;
 
             var kingdom = armyLeader.Clan.Kingdom;
             if (kingdom != null && BannerKingsConfig.Instance.TitleManager != null)
