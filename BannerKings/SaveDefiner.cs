@@ -146,6 +146,9 @@ namespace BannerKings
             AddClassDefinition(typeof(BannerKingsObject), 96);
             AddClassDefinition(typeof(StartOption), 97);
             AddClassDefinition(typeof(GoalManager), 98);
+            AddEnumDefinition(typeof(MineralType), 99);
+            AddClassDefinition(typeof(MineralData), 100);
+            AddEnumDefinition(typeof(MineralRichness), 101);
         }
 
         protected override void DefineContainerDefinitions()
@@ -184,6 +187,7 @@ namespace BannerKings
             ConstructContainerDefinition(typeof(Dictionary<CultureObject, InnovationData>));
             ConstructContainerDefinition(typeof(Dictionary<Religion, float>));
             ConstructContainerDefinition(typeof(Dictionary<Town, CampaignTime>));
+            ConstructContainerDefinition(typeof(Dictionary<MineralType, float>));
         }
     }
 }

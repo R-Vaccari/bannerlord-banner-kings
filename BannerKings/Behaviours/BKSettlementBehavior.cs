@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using BannerKings.Components;
 using BannerKings.Managers;
+using BannerKings.Managers.Buildings;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Villages;
@@ -356,7 +357,7 @@ namespace BannerKings.Behaviours
                     return;
                 }
 
-                foreach (var garrison in from castleBuilding in settlement.Town.Buildings where Utils.Helpers._buildingCastleRetinue != null && castleBuilding.BuildingType == Utils.Helpers._buildingCastleRetinue let garrison = settlement.Town.GarrisonParty where garrison.MemberRoster != null && garrison.MemberRoster.Count > 0 let elements = garrison.MemberRoster.GetTroopRoster() let currentRetinue = elements.Where(soldierElement => Utils.Helpers.IsRetinueTroop(soldierElement.Character, settlement.Culture)).Sum(soldierElement => soldierElement.Number) let maxRetinue = castleBuilding.CurrentLevel == 1 ? 20 : castleBuilding.CurrentLevel == 2 ? 40 : 60 where currentRetinue < maxRetinue where garrison.MemberRoster.Count < garrison.Party.PartySizeLimit select garrison)
+                foreach (var garrison in from castleBuilding in settlement.Town.Buildings where BKBuildings.Instance.CastleRetinue != null && castleBuilding.BuildingType == BKBuildings.Instance.CastleRetinue let garrison = settlement.Town.GarrisonParty where garrison.MemberRoster != null && garrison.MemberRoster.Count > 0 let elements = garrison.MemberRoster.GetTroopRoster() let currentRetinue = elements.Where(soldierElement => Utils.Helpers.IsRetinueTroop(soldierElement.Character, settlement.Culture)).Sum(soldierElement => soldierElement.Number) let maxRetinue = castleBuilding.CurrentLevel == 1 ? 20 : castleBuilding.CurrentLevel == 2 ? 40 : 60 where currentRetinue < maxRetinue where garrison.MemberRoster.Count < garrison.Party.PartySizeLimit select garrison)
                 {
                     garrison.MemberRoster.AddToCounts(settlement.Culture.EliteBasicTroop, 1);
                 }
@@ -672,16 +673,6 @@ namespace BannerKings.Behaviours
         {
             private static void Postfix()
             {
-                Utils.Helpers._buildingCastleRetinue.Initialize(new TextObject("{=6HgSqiDc}Retinue Barracks"),
-                    new TextObject("{=UNLMYRGm}Barracks for the castle retinue, a group of elite soldiers. The retinue is added to the garrison over time, up to a limit of 20, 40 or 60 (building level)."),
-                    new[]
-                    {
-                        800,
-                        1200,
-                        1500
-                    }, BuildingLocation.Castle, new Tuple<BuildingEffectEnum, float, float, float>[]
-                    {
-                    });
             }
         }
     }

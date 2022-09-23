@@ -1,3 +1,4 @@
+using BannerKings.Extensions;
 using System;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -37,6 +38,8 @@ namespace BannerKings.Managers.Populations.Villages
 
         public BuildingType Blacksmith { get; private set; }
 
+        public BuildingType Mines { get; private set; }
+
         public BuildingType DailyProduction { get; private set; }
 
         public BuildingType DailyFarm { get; private set; }
@@ -64,6 +67,7 @@ namespace BannerKings.Managers.Populations.Villages
                 yield return Instance.FishFarm;
                 yield return Instance.Tannery;
                 yield return Instance.Blacksmith;
+                yield return Mines;
             }
         }
 
@@ -157,6 +161,19 @@ namespace BannerKings.Managers.Populations.Villages
                     1500,
                     2400,
                     3200
+                }, BuildingLocation.Settlement, new Tuple<BuildingEffectEnum, float, float, float>[]
+                {
+                });
+
+            Mines = new BuildingType("bannerkings_mines");
+            Game.Current.ObjectManager.RegisterPresumedObject(Mines);
+            Mines.Initialize(new TextObject("{=!}Mines"),
+                new TextObject("{=!}Dig mines for local exploration of mineral resources. Ores will be limited to the local resources available and richness of the ground. Levels increase output of ores."),
+                new[]
+                {
+                    2000,
+                    3000,
+                    4000
                 }, BuildingLocation.Settlement, new Tuple<BuildingEffectEnum, float, float, float>[]
                 {
                 });
@@ -293,44 +310,40 @@ namespace BannerKings.Managers.Populations.Villages
             yield return Instance.DailyFarm;
             yield return Instance.DailyPasture;
             yield return Instance.DailyWoods;
-            if (type == DefaultVillageTypes.WheatFarm || type == DefaultVillageTypes.DateFarm ||
-                type == DefaultVillageTypes.FlaxPlant ||
-                type == DefaultVillageTypes.SilkPlant || type == DefaultVillageTypes.OliveTrees ||
-                type == DefaultVillageTypes.VineYard)
-            {
-                yield return Instance.Farming;
-            }
-            else if (type == DefaultVillageTypes.SilverMine || type == DefaultVillageTypes.IronMine ||
-                     type == DefaultVillageTypes.SaltMine ||
-                     type == DefaultVillageTypes.ClayMine)
+
+            if (village.IsMiningVillage())
             {
                 yield return Instance.Mining;
-            }
-            else if (type == DefaultVillageTypes.CattleRange || type == DefaultVillageTypes.HogFarm ||
-                     type == DefaultVillageTypes.SheepFarm ||
-                     type == DefaultVillageTypes.BattanianHorseRanch || type == DefaultVillageTypes.DesertHorseRanch ||
-                     type == DefaultVillageTypes.EuropeHorseRanch
-                     || type == DefaultVillageTypes.SteppeHorseRanch || type == DefaultVillageTypes.SturgianHorseRanch ||
-                     type == DefaultVillageTypes.VlandianHorseRanch)
-            {
-                yield return Instance.AnimalHousing;
-            }
-            else if (type == DefaultVillageTypes.Lumberjack)
-            {
-                yield return Instance.Sawmill;
-            }
-            else if (type == DefaultVillageTypes.Fisherman)
-            {
-                yield return Instance.FishFarm;
+
+                if (type == DefaultVillageTypes.IronMine)
+                {
+                    yield return Instance.Blacksmith;
+                }
             }
             else
             {
-                yield return Instance.Tannery;
-            }
+                if (village.IsFarmingVillage())
+                {
+                    yield return Instance.Farming;
+                } 
+                else if (village.IsAnimalVillage())
+                {
+                    yield return Instance.AnimalHousing;
+                }
+                else if (type == DefaultVillageTypes.Lumberjack)
+                {
+                    yield return Instance.Sawmill;
+                }
+                else if (type == DefaultVillageTypes.Fisherman)
+                {
+                    yield return Instance.FishFarm;
+                }
+                else
+                {
+                    yield return Instance.Tannery;
+                }
 
-            if (type == DefaultVillageTypes.IronMine)
-            {
-                yield return Instance.Blacksmith;
+                yield return Instance.Mines;
             }
         }
     }

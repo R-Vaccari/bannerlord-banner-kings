@@ -36,19 +36,14 @@ namespace BannerKings.Managers.Populations
             var mineral3 = MineralType.NONE;
             var terrain = Terrain;
 
-            var mineral1Ratio = 0f;
+            var mineral1Ratio = MBRandom.RandomFloatRanged(0.6f, 0.9f);
             var mineral2Ratio = 0f;
             var mineral3Ratio = 0f;
 
             if (Settlement.IsVillage)
             {
                 mineral1 = GetVillageMineral(Settlement.Village);
-                if (mineral1 != MineralType.NONE)
-                {
-                    mineral1Ratio = MBRandom.RandomFloatRanged(0.6f, 0.9f);
-                }
             }
-
 
             if (mineral1 == MineralType.NONE)
             {
@@ -60,14 +55,17 @@ namespace BannerKings.Managers.Populations
 
                 MineralType result = MBRandom.ChooseWeighted(options);
                 mineral1 = result;
-                mineral1Ratio = MBRandom.RandomFloatRanged(0.6f, 0.9f);
             }
 
             if (mineral2 == MineralType.NONE)
             {
                 List<(MineralType, float)> options = new List<(MineralType, float)>();
                 options.Add(new(MineralType.MARBLE, 10f));
-                options.Add(new(MineralType.SILVER, 6f));
+                if (mineral1 != MineralType.SILVER)
+                {
+                    options.Add(new(MineralType.SILVER, 6f));
+                }
+
                 if (mineral1 != MineralType.IRON)
                 {
                     options.Add(new(MineralType.IRON, 20f));
@@ -90,6 +88,16 @@ namespace BannerKings.Managers.Populations
             {
                 var diff = 1f - total;
                 mineral2Ratio += diff;
+            }
+
+            if (mineral1 == MineralType.NONE)
+            {
+                mineral1 = MineralType.LIMESTONE;
+            }
+
+            if (mineral2 == MineralType.NONE || mineral2 == mineral1)
+            {
+                mineral2 = MineralType.MARBLE;
             }
 
             Composition.Add(mineral1, mineral1Ratio);

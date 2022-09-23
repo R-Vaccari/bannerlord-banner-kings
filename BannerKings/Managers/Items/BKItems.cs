@@ -53,6 +53,8 @@ namespace BannerKings.Managers.Items
 
         public ItemObject GoldIngot { get; private set; }
 
+        public ItemObject Gems { get; private set; }
+
         public override IEnumerable<ItemObject> All
         {
             get
@@ -76,6 +78,7 @@ namespace BannerKings.Managers.Items
                 yield return Marble;
                 yield return GoldOre;
                 yield return GoldIngot;
+                yield return Gems;
             }
         }
 
@@ -113,24 +116,29 @@ namespace BannerKings.Managers.Items
 
             Limestone = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("limestone"));
             InitializeTradeGood(Limestone,
-                new TextObject("{=!}Limestone{@Plural}blocks of limestone{\\@}"), "silver_ore",
-                BKItemCategories.Instance.Honey, 70, 10f, ItemObject.ItemTypeEnum.Goods);
+                new TextObject("{=!}Limestone{@Plural}stacks of limestone bricks{\\@}"), "limestone",
+                BKItemCategories.Instance.Limestone, 50, 10f, ItemObject.ItemTypeEnum.Goods);
 
             Marble = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("marble"));
             InitializeTradeGood(Marble,
-                new TextObject("{=!}Limestone{@Plural}blocks of limestone{\\@}"), "silver_ore",
-                BKItemCategories.Instance.Honey, 70, 10f, ItemObject.ItemTypeEnum.Goods);
+                new TextObject("{=!}Marble{@Plural}stacks of marble bricks{\\@}"), "marblestone",
+                BKItemCategories.Instance.Marble, 150, 10f, ItemObject.ItemTypeEnum.Goods);
 
 
             GoldOre = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("gold_ore"));
             InitializeTradeGood(GoldOre,
-                new TextObject("{=!}Gold Ore{@Plural}sacks of gold ore{\\@}"), "iron_ore",
-                BKItemCategories.Instance.Honey, 70, 10f, ItemObject.ItemTypeEnum.Goods);
+                new TextObject("{=!}Gold Ore{@Plural}sacks of gold ore{\\@}"), "goldore",
+                BKItemCategories.Instance.Gold, 400, 10f, ItemObject.ItemTypeEnum.Goods);
 
             GoldIngot = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("goldingot"));
             InitializeTradeGood(GoldIngot,
-                new TextObject("{=!}Gold Ore{@Plural}sacks of gold ore{\\@}"), "fine_steel",
-                BKItemCategories.Instance.Honey, 70, 10f, ItemObject.ItemTypeEnum.Goods);
+                new TextObject("{=!}Gold Ingot{@Plural}stacks of gold ingots{\\@}"), "goldingot",
+                BKItemCategories.Instance.Gold, 1000, 0.5f, ItemObject.ItemTypeEnum.Goods);
+
+            Gems = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("pouchofgems"));
+            InitializeTradeGood(Gems,
+                new TextObject("{=!}Gems{@Plural}pouches of gems{\\@}"), "pouchofgems",
+                BKItemCategories.Instance.Gems, 50000, 1f, ItemObject.ItemTypeEnum.Goods);
 
 
 

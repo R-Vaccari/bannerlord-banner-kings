@@ -111,6 +111,15 @@ namespace BannerKings.Managers.Populations
 
         internal override void Update(PopulationData data)
         {
+
+            foreach (var type in DefaultVillageBuildings.VillageBuildings(village))
+            {
+                if (buildings.FirstOrDefault(x => x.BuildingType == type) == null)
+                {
+                    buildings.Add(new VillageBuilding(type, village.Bound.Town, village));
+                }
+            }
+
             var current = CurrentBuilding;
             if (current != null && BuildingsInProgress.Any())
             {
