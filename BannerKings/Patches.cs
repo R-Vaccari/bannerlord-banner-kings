@@ -829,19 +829,29 @@ namespace BannerKings
             [HarmonyPatch(typeof(VillageGoodProductionCampaignBehavior), "TickGoodProduction")]
             internal class TickGoodProductionPatch
             {
+                private static Dictionary<Village, Dictionary<ItemObject, float>> productionCache = new Dictionary<Village, Dictionary<ItemObject, float>>();
+
                 private static bool Prefix(Village village, bool initialProductionForTowns)
                 {
-                    if (BannerKingsConfig.Instance.PopulationManager != null &&
-                        BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(village.Settlement))
+                    if (BannerKingsConfig.Instance.PopulationManager != null)
                     {
-                        var productions = BannerKingsConfig.Instance.PopulationManager.GetProductions(BannerKingsConfig
-                            .Instance.PopulationManager.GetPopData(village.Settlement).VillageData);
+                        var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(village.Settlement);
+
+                        if (data != null)
+                        {
+                            return true;
+                        }
+
+                        var productions = BannerKingsConfig.Instance.PopulationManager.GetProductions(data);
                         foreach (var valueTuple in productions)
                         {
                             var item = valueTuple.Item1;
-                            var num = MBRandom.RoundRandomized(
-                                Campaign.Current.Models.VillageProductionCalculatorModel.CalculateDailyProductionAmount(
-                                    village, valueTuple.Item1));
+                            var result = Campaign.Current.Models.VillageProductionCalculatorModel.CalculateDailyProductionAmount(
+                                    village, item);
+                            var num = MathF.Floor(result);
+                            var diff = result - num;
+                            num += GetDifferential(village, item, diff);
+
                             if (num > 0)
                             {
                                 if (!initialProductionForTowns)
@@ -861,6 +871,34 @@ namespace BannerKings
                     }
 
                     return true;
+                }
+
+                private static int GetDifferential(Village village, ItemObject item, float diff)
+                {
+                    int result = 0;
+                    if (productionCache.ContainsKey(village))
+                    {
+                        var dic = productionCache[village];
+                        if (dic.ContainsKey(item))
+                        {
+                            dic[item] += diff;
+                            result = MathF.Floor(dic[item]);
+                            if (result >= 1)
+                            {
+                                dic[item] -= result;
+                            }
+                        }
+                        else
+                        {
+                            dic.Add(item, diff);
+                        }
+                    }
+                    else
+                    {
+                        productionCache.Add(village, new Dictionary<ItemObject, float>() { { item, diff } });
+                    }
+
+                    return result;
                 }
             }
 

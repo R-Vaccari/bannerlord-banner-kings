@@ -284,7 +284,7 @@ namespace BannerKings.Behaviours
                 var items = new HashSet<ItemObject>();
                 if (town.Villages.Count > 0)
                 {
-                    foreach (var tuple in from vil in town.Villages select BannerKingsConfig.Instance.PopulationManager.GetPopData(vil.Settlement).VillageData into vilData from tuple in BannerKingsConfig.Instance.PopulationManager.GetProductions(vilData) where tuple.Item1.IsTradeGood && !tuple.Item1.IsFood select tuple)
+                    foreach (var tuple in from vil in town.Villages select BannerKingsConfig.Instance.PopulationManager.GetPopData(vil.Settlement) into popData from tuple in BannerKingsConfig.Instance.PopulationManager.GetProductions(popData) where tuple.Item1.IsTradeGood && !tuple.Item1.IsFood select tuple)
                     {
                         items.Add(tuple.Item1);
                     }
@@ -307,7 +307,7 @@ namespace BannerKings.Behaviours
                 var items = new HashSet<ItemObject>();
                 if (town.Villages.Count > 0)
                 {
-                    foreach (var tuple in town.Villages.Select(vil => BannerKingsConfig.Instance.PopulationManager.GetPopData(vil.Settlement).VillageData).SelectMany(vilData => BannerKingsConfig.Instance.PopulationManager.GetProductions(vilData)))
+                    foreach (var tuple in town.Villages.Select(vil => BannerKingsConfig.Instance.PopulationManager.GetPopData(vil.Settlement)).SelectMany(data => BannerKingsConfig.Instance.PopulationManager.GetProductions(data)))
                     {
                         items.Add(tuple.Item1);
                     }
