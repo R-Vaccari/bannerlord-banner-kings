@@ -114,7 +114,7 @@ namespace BannerKings.Managers.Populations
 
             foreach (var type in DefaultVillageBuildings.VillageBuildings(village))
             {
-                if (buildings.FirstOrDefault(x => x.BuildingType == type) == null)
+                if (buildings.FirstOrDefault(x => x.BuildingType.StringId == type.StringId) == null)
                 {
                     buildings.Add(new VillageBuilding(type, village.Bound.Town, village));
                 }
