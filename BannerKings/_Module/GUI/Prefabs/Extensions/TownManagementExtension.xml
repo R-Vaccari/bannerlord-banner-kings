@@ -36,7 +36,7 @@
 														<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" VerticalAlignment="Top" MarginTop="5" StackLayout.LayoutMethod="VerticalBottomToTop">
 															<Children>
 															
-																<ListPanel DataSource="{Materials}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" MarginTop="50">
+																<!--<ListPanel DataSource="{Materials}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" MarginTop="50">
 																	<ItemTemplate>
 																		<Widget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="95" SuggestedHeight="96" VerticalAlignment="Bottom" DoNotPassEventsToChildren="true">
 																			<Children>
@@ -55,7 +55,7 @@
 																			</Children>
 																		</Widget>
 																	</ItemTemplate>
-																</ListPanel>
+																</ListPanel> -->
 															
 															
 																<!--Projects Title-->
