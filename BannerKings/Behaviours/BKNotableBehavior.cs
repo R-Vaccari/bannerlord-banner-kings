@@ -165,7 +165,7 @@ namespace BannerKings.Behaviours
 
             starter.AddDialogLine("bk_answer_give_slaves", "bk_answer_give_slaves", "hero_main_options",
                 "{=!}My suzerain, I would be honored. Extra workforce will benefit our community.",
-                ConvertCultureAnswerOnCondition, null);
+                 null, null);
 
 
 
