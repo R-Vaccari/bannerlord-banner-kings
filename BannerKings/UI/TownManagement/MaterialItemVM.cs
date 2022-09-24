@@ -24,6 +24,7 @@ namespace BannerKings.UI.TownManagement
                 if (element.EquipmentElement.Item == material)
                 {
                     ResourceAmount += element.Amount;
+                    stash += element.Amount;
                 }
             }
 
@@ -32,6 +33,7 @@ namespace BannerKings.UI.TownManagement
                 if (element.EquipmentElement.Item == material)
                 {
                     ResourceAmount += element.Amount;
+                    market += element.Amount;
                 }
             }
             ResourceHint = new HintViewModel(new TextObject("{=!}{MATERIAL}\n{DESCRIPTION}\nStash: {STASH}\nMarket: {MARKET}")
