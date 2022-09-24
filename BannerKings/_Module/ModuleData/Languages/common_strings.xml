@@ -7,6 +7,12 @@
 	<strings>
 		<string id="gaJDVkvHA" text="Placeholder" />
 		
+		<string id="bk_description_clay" text="With a history nearly as old as hardwood, clay has a long tradition of being used for construction. Being extremely common over the continent, the material provides a stronger base than wood. It can be baked into bricks and thus be very versatile." />
+		<string id="bk_description_marble" text="A rarer and more valuable material than limestone. Marble was discovered by the Imperials as a material soft enough to be carved into sculptures. This trait combined with the material's natural beauty made it very sought after. It is commonly used in more elaborate buildings to convey wealth and power, such as palaces and forums." />
+		
+		<string id="bk_description_hardwood" text="The quintessential building material, one that is used far before man could write about his deeds. Hardwood Serves to build entire structures, but also complement structures made of stronger bases such as clay or limestone bases." />
+		<string id="bk_description_limestone" text="Limestone is a common mineral that serves as a strong material for stone buildings, walls and roads. Despite being common, it's extraction and transportation are significantly more costly than simply using wood or clay." />
+		
 		<string id="bk_limestone" text="Limestone" />
 		<string id="bk_gold" text="Gold" />
 		<string id="bk_marble" text="Marble" />

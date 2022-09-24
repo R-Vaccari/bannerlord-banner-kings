@@ -3,6 +3,7 @@ using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Core.ViewModelCollection.Information;
 using TaleWorlds.Library;
+using TaleWorlds.Localization;
 
 namespace BannerKings.UI.TownManagement
 {
@@ -16,6 +17,16 @@ namespace BannerKings.UI.TownManagement
         {
             Material = material;
             Visual = new ImageIdentifierVM(material);
+            int stash = 0;
+            int market = 0;
+            foreach (ItemRosterElement element in settlement.Stash)
+            {
+                if (element.EquipmentElement.Item == material)
+                {
+                    ResourceAmount += element.Amount;
+                }
+            }
+
             foreach (ItemRosterElement element in settlement.ItemRoster)
             {
                 if (element.EquipmentElement.Item == material)
@@ -23,7 +34,11 @@ namespace BannerKings.UI.TownManagement
                     ResourceAmount += element.Amount;
                 }
             }
-            ResourceHint = new HintViewModel(material.Name);
+            ResourceHint = new HintViewModel(new TextObject("{=!}{MATERIAL}\n{DESCRIPTION}\nStash: {STASH}\nMarket: {MARKET}")
+                .SetTextVariable("MATERIAL", material.Name)
+                .SetTextVariable("STASH", stash)
+                .SetTextVariable("MARKET", market)
+                .SetTextVariable("DESCRIPTION", GameTexts.FindText("str_bk_description", material.StringId)));
         }
 
         public ItemObject Material { get; }
