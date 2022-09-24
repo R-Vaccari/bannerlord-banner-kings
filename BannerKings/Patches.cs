@@ -837,7 +837,7 @@ namespace BannerKings
                     {
                         var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(village.Settlement);
 
-                        if (data != null)
+                        if (data == null)
                         {
                             return true;
                         }
