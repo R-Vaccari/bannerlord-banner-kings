@@ -198,7 +198,6 @@ namespace BannerKings.Models.Vanilla
             if (valid)
             {
                 var acres = data.Pastureland;
-                var maxWorkforce = acres / data.GetRequiredLabor("pasture");
                 result.Add((acres * data.GetAcreOutput("pasture")) / item.HorseComponent.MeatCount);
                 if (item.IsMountable)
                 {
@@ -218,8 +217,8 @@ namespace BannerKings.Models.Vanilla
                 var acres = data.Woodland;
                 var maxWorkforce = acres / data.GetRequiredLabor("wood");
                 var workforce = Math.Min(maxWorkforce, serfs + slaves);
-                result.Add(workforce * data.GetAcreOutput("wood") * 15f);
-                var serfFactor = serfs / workforce;
+                result.Add(workforce * data.GetAcreOutput("wood") * (item.StringId is "hardwood" ? 30f : 15f));
+                var serfFactor = serfs / slaves;
                 if (serfFactor > 0f)
                 {
                     result.AddFactor(serfFactor * 0.5f);
