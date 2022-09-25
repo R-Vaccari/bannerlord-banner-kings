@@ -1,6 +1,8 @@
+using BannerKings.Managers.Buildings;
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
+using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
@@ -77,6 +79,12 @@ namespace BannerKings.Models.BKModels
                     {
                         result.Add(10f, new TextObject("{=gafTzKhz}Governor effect"));
                     }
+                }
+
+                var theater = settlement.Town.Buildings.FirstOrDefault(x => x.BuildingType == BKBuildings.Instance.Theater);
+                if (theater != null && theater.CurrentLevel > 0)
+                {
+                    result.Add(theater.CurrentLevel * 5f, BKBuildings.Instance.Theater.Name);
                 }
             }
             else if (settlement.IsVillage)
