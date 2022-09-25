@@ -6,6 +6,8 @@ using BannerKings.Managers.Kingdoms;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
 using BannerKings.UI.Notifications;
+using HarmonyLib;
+using SandBox.CampaignBehaviors;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.Election;
@@ -235,6 +237,11 @@ namespace BannerKings.Behaviours
 
             var titles = new List<FeudalTitle>(BannerKingsConfig.Instance.TitleManager.GetAllDeJure(victim));
             if (titles.Count == 0)
+            {
+                return;
+            }
+
+            if (victim == Hero.MainHero)
             {
                 return;
             }
@@ -531,6 +538,25 @@ namespace BannerKings.Behaviours
                         BannerKingsConfig.Instance.TitleManager.InheritTitle(title.deJure, kingdom.Leader, title);
                     }
                 }
+            }
+        }
+    }
+
+    namespace Patches
+    {
+        [HarmonyPatch(typeof(HeirSelectionCampaignBehavior), "OnHeirSelectionOver")]
+        internal class OnHeirSelectionOverPatch
+        {
+            private static bool Prefix(List<InquiryElement> element)
+            {
+                Hero newLeader = element.First<InquiryElement>().Identifier as Hero;
+                var titles = new List<FeudalTitle>(BannerKingsConfig.Instance.TitleManager.GetAllDeJure(Hero.MainHero));
+                if (titles.Count > 0)
+                {
+                    BannerKingsConfig.Instance.TitleManager.InheritAllTitles(Hero.MainHero, newLeader);
+                }
+
+                return true;
             }
         }
     }
