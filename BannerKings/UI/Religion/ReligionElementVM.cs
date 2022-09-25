@@ -20,9 +20,9 @@ namespace BannerKings.UI.Religion
 
         [DataSourceProperty] public string Name => name.ToString();
 
-        [DataSourceProperty] public string Description => description.ToString();
+        [DataSourceProperty] public string Description => description != null ? description.ToString() : "";
 
-        [DataSourceProperty] public string Effects => effects?.ToString();
+        [DataSourceProperty] public string Effects => effects != null ? effects.ToString() : "";
 
         [DataSourceProperty] public HintViewModel Hint => new(hint);
     }
