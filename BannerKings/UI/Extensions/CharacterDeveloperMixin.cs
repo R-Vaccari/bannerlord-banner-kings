@@ -126,19 +126,22 @@ namespace BannerKings.UI.Extensions
 
             foreach (var goal in DefaultGoals.Instance.All)
             {
-                var enabled = goal.IsFulfilled(out var reasons);
-                var hint = $"{goal.Description}";
-
                 if (goal.IsAvailable())
                 {
-                    hint = reasons.Aggregate(hint, (current, reason) => current + Environment.NewLine + reason);
+                    var enabled = goal.IsFulfilled(out var reasons);
+                    var hint = $"{goal.Description}";
+
+                    if (!enabled)
+                    {
+                        hint = reasons.Aggregate(hint, (current, reason) => current + Environment.NewLine + reason);
+                    }
 
                     options.Add(new InquiryElement(goal,
                         goal.Name.ToString(),
                         null,
                         enabled,
                         hint));
-                } 
+                }           
             }
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
