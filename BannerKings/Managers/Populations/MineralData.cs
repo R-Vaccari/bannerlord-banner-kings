@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BannerKings.Managers.Items;
+using System;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -27,6 +28,34 @@ namespace BannerKings.Managers.Populations
 
         public TerrainType Terrain => Campaign.Current.MapSceneWrapper != null ? 
             Campaign.Current.MapSceneWrapper.GetTerrainTypeAtPosition(Settlement.Position2D) : TerrainType.Plain;
+
+        public List<ValueTuple<ItemObject, float>> GetLocalMinerals()
+        {
+            var list = new List<ValueTuple<ItemObject, float>>();
+            foreach (var pair in Composition)
+            {
+                list.Add(new (GetItem(pair.Key), pair.Value));
+            }
+
+            return list;
+        }
+
+        public ItemObject GetItem(MineralType type)
+        {
+            var result = type switch
+            {
+                MineralType.IRON => Campaign.Current.ObjectManager.GetObject<ItemObject>("iron"),
+                MineralType.SALT => Campaign.Current.ObjectManager.GetObject<ItemObject>("salt"),
+                MineralType.SILVER => Campaign.Current.ObjectManager.GetObject<ItemObject>("silver"),
+                MineralType.CLAY => Campaign.Current.ObjectManager.GetObject<ItemObject>("clay"),
+                MineralType.LIMESTONE => BKItems.Instance.Limestone,
+                MineralType.MARBLE => BKItems.Instance.Marble,
+                MineralType.GOLD => BKItems.Instance.GoldOre,
+                _ => null
+            };
+
+            return result;
+        }
 
 
         private void Init()

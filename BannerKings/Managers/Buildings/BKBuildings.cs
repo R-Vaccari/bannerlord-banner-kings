@@ -1,13 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements.Buildings;
 using TaleWorlds.Core;
+using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Managers.Buildings
 {
     internal class BKBuildings : DefaultTypeInitializer<BKBuildings, BuildingType>
     {
+
+        public static MBReadOnlyList<BuildingType> AllBuildings
+        {
+            get
+            {
+                var buildings = Campaign.Current.GetType()
+                    .GetProperty("AllBuildingTypes", BindingFlags.Instance | BindingFlags.NonPublic);
+                return (MBReadOnlyList<BuildingType>)buildings.GetValue(Campaign.Current);
+            }
+        }
 
         public BuildingType Mines { get; private set; }
         public BuildingType CastleMines { get; private set; }
@@ -32,30 +45,32 @@ namespace BannerKings.Managers.Buildings
 
             Mines = Game.Current.ObjectManager.RegisterPresumedObject(new BuildingType("building_town_mines"));
             Mines.Initialize(new TextObject("{=!}Mines"),
-                new TextObject("{=!}Dig mines for local exploration of mineral resources. Ores will be limited to the local resources available and richness of the ground. Levels increase output of ores."),
+                new TextObject("{=!}Dig mines for local exploration of mineral resources. Ores will be limited to the local resources available and richness of the ground. Output will be sold to market when possible, or stored in Stash otherwise. Levels increase output of ores."),
                 new[]
                 {
+                    1500,
                     2500,
-                    3500,
-                    5000
+                    4000
                 },
                 BuildingLocation.Settlement,
                 new Tuple<BuildingEffectEnum, float, float, float>[]
                 {
+                    new Tuple<BuildingEffectEnum, float, float, float>(BuildingEffectEnum.Construction, 0.5f, 1f, 1.5f)
                 });
 
             CastleMines = Game.Current.ObjectManager.RegisterPresumedObject(new BuildingType("building_castle_mines"));
             CastleMines.Initialize(new TextObject("{=!}Mines"),
-                new TextObject("{=!}Dig mines for local exploration of mineral resources. Ores will be limited to the local resources available and richness of the ground. Levels increase output of ores."),
+                new TextObject("{=!}Dig mines for local exploration of mineral resources. Ores will be limited to the local resources available and richness of the ground. Output will be sold to market when possible, or stored in Stash otherwise. Levels increase output of ores."),
                 new[]
                 {
+                    1500,
                     2500,
-                    3500,
-                    5000
+                    4000
                 },
                 BuildingLocation.Castle,
                 new Tuple<BuildingEffectEnum, float, float, float>[]
                 {
+                    new Tuple<BuildingEffectEnum, float, float, float>(BuildingEffectEnum.Construction, 0.5f, 1f, 1.5f)
                 });
 
 
@@ -65,12 +80,13 @@ namespace BannerKings.Managers.Buildings
                 new[]
                 {
                     1000,
-                    1500,
-                    2000
+                    2000,
+                    3000
                 }, 
                 BuildingLocation.Castle,
                 new Tuple<BuildingEffectEnum, float, float, float>[]
                 {
+                    new Tuple<BuildingEffectEnum, float, float, float>(BuildingEffectEnum.Construction, 0.5f, 1f, 1.5f)
                 });
 
             Theater = Game.Current.ObjectManager.RegisterPresumedObject(new BuildingType("bk_building_theater"));
@@ -85,6 +101,7 @@ namespace BannerKings.Managers.Buildings
                 BuildingLocation.Settlement,
                 new Tuple<BuildingEffectEnum, float, float, float>[]
                 {
+                    new Tuple<BuildingEffectEnum, float, float, float>(BuildingEffectEnum.Construction, 0.5f, 1f, 1.5f)
                 });
         }
     }

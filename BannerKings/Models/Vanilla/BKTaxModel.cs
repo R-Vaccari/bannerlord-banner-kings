@@ -1,3 +1,5 @@
+using BannerKings.Behaviours;
+using BannerKings.Managers.Buildings;
 using BannerKings.Managers.Court;
 using BannerKings.Managers.Institutions.Religions.Doctrines;
 using BannerKings.Managers.Policies;
@@ -72,6 +74,12 @@ namespace BannerKings.Models.Vanilla
                 {
                     baseResult.Add(MBMath.ClampFloat(slaves * SLAVE_OUTPUT, 0f, 50000f),
                         new TextObject("{=5mCY3JCP}{CLASS} output").SetTextVariable("CLASS", "Slaves"));
+                }
+
+                var mining = Campaign.Current.GetCampaignBehavior<BKBuildingsBehavior>().GetMiningRevenue(town);
+                if (mining > 0)
+                {
+                    baseResult.Add(mining, BKBuildings.Instance.Mines.Name);
                 }
 
                 var ownerReligion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(town.OwnerClan.Leader);

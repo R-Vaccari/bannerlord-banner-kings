@@ -139,6 +139,18 @@ namespace BannerKings.Managers
             var type = villageData.Village.VillageType;
             var productions = new List<(ItemObject, float)>(type.Productions);
 
+            float mines = villageData.GetBuildingLevel(DefaultVillageBuildings.Instance.Mines);
+            if ((mines > 0 || villageData.Village.IsMiningVillage()) && data.MineralData != null)
+            {
+                foreach (var pair in data.MineralData.GetLocalMinerals())
+                {
+                    if (pair.Item1 != null)
+                    {
+                        productions.Add(new(pair.Item1, 0.5f * mines * pair.Item2));
+                    }
+                }
+            }
+
             float tannery = villageData.GetBuildingLevel(DefaultVillageBuildings.Instance.Tannery);
             if (tannery > 0)
             {

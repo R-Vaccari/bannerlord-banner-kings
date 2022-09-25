@@ -325,7 +325,7 @@ namespace BannerKings.Managers.Populations.Villages
                 if (village.IsFarmingVillage())
                 {
                     yield return Instance.Farming;
-                } 
+                }
                 else if (village.IsAnimalVillage())
                 {
                     yield return Instance.AnimalHousing;
