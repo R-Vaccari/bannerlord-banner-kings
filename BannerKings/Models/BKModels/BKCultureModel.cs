@@ -82,7 +82,7 @@ namespace BannerKings.Models.BKModels
                 }
 
                 var theater = settlement.Town.Buildings.FirstOrDefault(x => x.BuildingType == BKBuildings.Instance.Theater);
-                if (theater != null && theater.CurrentLevel > 0)
+                if (theater != null && theater.CurrentLevel > 0 && data.Culture == owner.Culture)
                 {
                     result.Add(theater.CurrentLevel * 5f, BKBuildings.Instance.Theater.Name);
                 }
