@@ -20,6 +20,14 @@ namespace BannerKings.Managers.Items
 
         public ItemCategory Honey { get; private set; }
 
+        public ItemCategory Gold { get; private set; }
+
+        public ItemCategory Limestone { get; private set; }
+
+        public ItemCategory Marble { get; private set; }
+
+        public ItemCategory Gems { get; private set; }
+
         public override IEnumerable<ItemCategory> All => throw new NotImplementedException();
 
         public override void Initialize()
@@ -37,13 +45,25 @@ namespace BannerKings.Managers.Items
             Bread.InitializeObject(true, 140, 5, ItemCategory.Property.BonusToFoodStores);
 
             Pie = Game.Current.ObjectManager.RegisterPresumedObject(new ItemCategory("pie"));
-            Pie.InitializeObject(true, 20, 30, ItemCategory.Property.BonusToFoodStores);
+            Pie.InitializeObject(true, 30, 40, ItemCategory.Property.BonusToFoodStores);
 
             Carrot = Game.Current.ObjectManager.RegisterPresumedObject(new ItemCategory("carrot"));
             Carrot.InitializeObject(true, 20, 0, ItemCategory.Property.BonusToFoodStores);
 
             Honey = Game.Current.ObjectManager.RegisterPresumedObject(new ItemCategory("honey"));
             Honey.InitializeObject(true, 30, 40, ItemCategory.Property.BonusToFoodStores);
+
+            Gold = Game.Current.ObjectManager.RegisterPresumedObject(new ItemCategory("gold"));
+            Gold.InitializeObject(true, 20, 50, ItemCategory.Property.BonusToTax);
+
+            Limestone = Game.Current.ObjectManager.RegisterPresumedObject(new ItemCategory("limestone"));
+            Limestone.InitializeObject(true, 50, 40, ItemCategory.Property.BonusToProduction);
+
+            Marble = Game.Current.ObjectManager.RegisterPresumedObject(new ItemCategory("marble"));
+            Marble.InitializeObject(true, 10, 60, ItemCategory.Property.BonusToProsperity);
+
+            Gems = Game.Current.ObjectManager.RegisterPresumedObject(new ItemCategory("gems"));
+            Gems.InitializeObject(true, 10, 50, ItemCategory.Property.None);
         }
     }
 }

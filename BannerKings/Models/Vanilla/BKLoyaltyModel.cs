@@ -316,8 +316,7 @@ namespace BannerKings.Models.Vanilla
 
         private void GetSettlementLoyaltyChangeDueToProjects(Town town, ref ExplainedNumber explainedNumber)
         {
-            if (town.BuildingsInProgress.IsEmpty() &&
-                town.CurrentDefaultBuilding.BuildingType == DefaultBuildingTypes.FestivalsAndGamesDaily)
+            if (town.BuildingsInProgress.IsEmpty<Building>())
             {
                 BuildingHelper.AddDefaultDailyBonus(town, BuildingEffectEnum.LoyaltyDaily, ref explainedNumber);
             }

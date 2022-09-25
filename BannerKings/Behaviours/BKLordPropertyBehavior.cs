@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using HarmonyLib;
 using SandBox.CampaignBehaviors;
@@ -7,6 +8,7 @@ using TaleWorlds.CampaignSystem.CampaignBehaviors;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Party.PartyComponents;
 using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.CampaignSystem.Settlements.Workshops;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -55,22 +57,46 @@ namespace BannerKings.Behaviours
                     float workshopCost = BannerKingsConfig.Instance.WorkshopModel.GetBuyingCostForPlayer(random);
                     if (ShouldHaveWorkshop(lord, (int) workshopCost))
                     {
-                        if (kingdom == Clan.PlayerClan.Kingdom)
-                        {
-                            InformationManager.DisplayMessage(new InformationMessage(
-                                new TextObject("{=gQYsK1AT}The {CLAN} now own {WORKSHOP} at {TOWN}.")
-                                    .SetTextVariable("CLAN", lord.Clan.Name)
-                                    .SetTextVariable("WORKSHOP", random.Name)
-                                    .SetTextVariable("TOWN", random.Settlement.Name)
-                                    .ToString()));
-                        }
 
-                        ChangeOwnerOfWorkshopAction.ApplyByTrade(random, lord, random.WorkshopType,
-                            Campaign.Current.Models.WorkshopModel.GetInitialCapital(1), true,
-                            (int) workshopCost);
+                        if (random.Owner == Hero.MainHero)
+                        {
+                            InformationManager.ShowInquiry(new InquiryData(new TextObject("{=!}Workshop Acquisition").ToString(),
+                                new TextObject("{=!}The {CLAN} proposes to buy your {WORKSHOP} at {TOWN}. They offer you {GOLD}{GOLD_ICON}")
+                                .SetTextVariable("CLAN", lord.Clan.Name)
+                                .SetTextVariable("WORKSHOP", random.WorkshopType.Name)
+                                .SetTextVariable("TOWN", target.Name)
+                                .SetTextVariable("GOLD", (int)workshopCost).ToString(),
+                                true, 
+                                true,
+                                GameTexts.FindText("str_accept").ToString(),
+                                GameTexts.FindText("str_reject").ToString(),
+                                () => BuyWorkshop(random, lord, kingdom, workshopCost),
+                                null), 
+                                true);
+                        }
+                        else
+                        {
+                            BuyWorkshop(random, lord, kingdom, workshopCost);
+                        }
                     }
                 }
             }
+        }
+
+        private void BuyWorkshop(Workshop wk, Hero buyer, Kingdom kingdom, float cost)
+        {
+            if (kingdom == Clan.PlayerClan.Kingdom)
+            {
+                InformationManager.DisplayMessage(new InformationMessage(
+                    new TextObject("{=gQYsK1AT}The {CLAN} now own {WORKSHOP} at {TOWN}.")
+                        .SetTextVariable("CLAN", buyer.Clan.Name)
+                        .SetTextVariable("WORKSHOP", wk.Name)
+                        .SetTextVariable("TOWN", wk.Settlement.Name)
+                        .ToString()));
+            }
+            ChangeOwnerOfWorkshopAction.ApplyByTrade(wk, buyer, wk.WorkshopType,
+                Campaign.Current.Models.WorkshopModel.GetInitialCapital(1), true,
+                (int)cost);
         }
 
         private bool ShouldHaveCaravan(Hero hero, int cost)

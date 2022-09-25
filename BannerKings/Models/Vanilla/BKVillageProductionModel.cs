@@ -1,4 +1,5 @@
 ﻿using System;
+using BannerKings.Extensions;
 using BannerKings.Managers;
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Villages;
@@ -14,8 +15,8 @@ namespace BannerKings.Models.Vanilla
 {
     internal class BKVillageProductionModel : DefaultVillageProductionCalculatorModel
     {
-        private static readonly float PRODUCTION = 0.00072f;
-        private static readonly float BOOSTED_PRODUCTION = 0.0015f;
+        private static readonly float PRODUCTION = 0.005f;
+        private static readonly float BOOSTED_PRODUCTION = 0.01f;
 
         public override float CalculateDailyProductionAmount(Village village, ItemObject item)
         {
@@ -30,7 +31,7 @@ namespace BannerKings.Models.Vanilla
                 float slaves = data.GetTypeCount(PopulationManager.PopType.Slaves);
                 var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(village.Settlement.OwnerClan.Leader);
 
-                var productions = BannerKingsConfig.Instance.PopulationManager.GetProductions(villageData);
+                var productions = BannerKingsConfig.Instance.PopulationManager.GetProductions(data);
                 var totalWeight = 0f;
                 foreach (var valueTuple in productions)
                 {
@@ -44,7 +45,7 @@ namespace BannerKings.Models.Vanilla
                     if (output == item)
                     {
                         var weight = valueTuple.Item2 / totalWeight;
-                        explainedNumber.Add(GetWorkforceOutput(serfs * weight, slaves * weight, item, data.LandData)
+                        explainedNumber.Add(GetWorkforceOutput(serfs * weight, slaves * weight, item, data)
                             .ResultNumber);
 
                         if (item.IsMountable && item.Tier == ItemObject.ItemTiers.Tier2 &&
@@ -123,9 +124,11 @@ namespace BannerKings.Models.Vanilla
                             }
                         }
 
-                        var production = !villageData.IsCurrentlyBuilding && villageData.CurrentDefault.BuildingType ==
-                            DefaultVillageBuildings.Instance.DailyProduction;
-                        explainedNumber.AddFactor(production ? 0.15f : -0.10f);
+                        if (!villageData.IsCurrentlyBuilding && villageData.CurrentDefault.BuildingType ==
+                            DefaultVillageBuildings.Instance.DailyProduction)
+                        {
+                            explainedNumber.AddFactor(0.15f);
+                        }
 
                         explainedNumber.AddFactor(data.EconomicData.ProductionEfficiency.ResultNumber - 1f);
                     }
@@ -137,7 +140,7 @@ namespace BannerKings.Models.Vanilla
             return base.CalculateDailyProductionAmount(village, item);
         }
 
-        private ExplainedNumber GetWorkforceOutput(float serfs, float slaves, ItemObject item, LandData data)
+        private ExplainedNumber GetWorkforceOutput(float serfs, float slaves, ItemObject item, PopulationData data)
         {
             var result = new ExplainedNumber();
             result.LimitMin(0f);
@@ -152,31 +155,27 @@ namespace BannerKings.Models.Vanilla
                 slaves = 1f;
             }
 
-            if (item.StringId is "hardwood" or "fur")
+            bool woodland = AddWoodlandProcution(ref result, serfs, slaves, item, data.LandData);
+            bool animal = AddAnimalProcution(ref result, serfs, slaves, item, data.LandData);
+            bool farm = AddFarmProcution(ref result, serfs, slaves, item, data.LandData);
+            if (!woodland && !animal && !farm)
             {
-                var acres = data.Woodland;
-                var maxWorkforce = acres / data.GetRequiredLabor("wood");
-                var workforce = Math.Min(maxWorkforce, serfs + slaves);
-                result.Add(workforce * data.GetAcreOutput("wood") * 15f);
-                var serfFactor = serfs / workforce;
-                if (serfFactor > 0f)
-                {
-                    result.AddFactor(serfFactor * 0.5f);
-                }
+                AddGeneralProcution(ref result, serfs, slaves, item, data.LandData);
             }
-            else if ((item.IsAnimal || item.IsMountable) && item.HorseComponent != null)
-            {
-                var acres = data.Pastureland;
-                var maxWorkforce = acres / data.GetRequiredLabor("pasture");
-                var workforce = Math.Min(maxWorkforce, serfs + slaves);
-                result.Add(workforce * data.GetAcreOutput("pasture") * item.HorseComponent.MeatCount);
-                var serfFactor = serfs / workforce;
-                if (serfFactor > 0f)
-                {
-                    result.AddFactor(serfFactor * 0.5f);
-                }
-            }
-            else if (item.IsFood && item.StringId != "fish")
+
+            return result;
+        }
+
+        private void AddGeneralProcution(ref ExplainedNumber result, float serfs, float slaves, ItemObject item, LandData data)
+        {
+            result.Add(serfs * (item.IsFood ? BOOSTED_PRODUCTION : PRODUCTION));
+            result.Add(slaves * (item.IsMineral() ? BOOSTED_PRODUCTION : PRODUCTION));
+        }
+
+        private bool AddFarmProcution(ref ExplainedNumber result, float serfs, float slaves, ItemObject item, LandData data)
+        {
+            bool valid = item.IsFood && item.StringId != "fish";
+            if (valid)
             {
                 var acres = data.Farmland;
                 var maxWorkforce = acres / data.GetRequiredLabor("farmland");
@@ -188,16 +187,46 @@ namespace BannerKings.Models.Vanilla
                     result.AddFactor(serfFactor * 1f);
                 }
             }
-            else
+
+
+            return valid;
+        }
+
+        private bool AddAnimalProcution(ref ExplainedNumber result, float serfs, float slaves, ItemObject item, LandData data)
+        {
+            bool valid = item.IsAnimal || item.IsMountable;
+            if (valid)
             {
-                result.Add(serfs * (item.IsFood ? BOOSTED_PRODUCTION : PRODUCTION));
-                result.Add(slaves *
-                           (item.StringId is "clay" or "iron" or "salt" or "silver"
-                               ? BOOSTED_PRODUCTION
-                               : PRODUCTION));
+                var acres = data.Pastureland;
+                result.Add((acres * data.GetAcreOutput("pasture")) / item.HorseComponent.MeatCount);
+                if (item.IsMountable)
+                {
+                    result.AddFactor(-0.5f);
+                }
             }
 
-            return result;
+
+            return valid;
+        }
+
+        private bool AddWoodlandProcution(ref ExplainedNumber result, float serfs, float slaves, ItemObject item, LandData data)
+        {
+            bool valid = item.StringId is "hardwood" or "fur";
+            if (valid)
+            {
+                var acres = data.Woodland;
+                var maxWorkforce = acres / data.GetRequiredLabor("wood");
+                var workforce = Math.Min(maxWorkforce, serfs + slaves);
+                result.Add(workforce * data.GetAcreOutput("wood") * (item.StringId is "hardwood" ? 30f : 15f));
+                var serfFactor = serfs / slaves;
+                if (serfFactor > 0f)
+                {
+                    result.AddFactor(serfFactor * 0.5f);
+                }
+            }
+
+
+            return valid;
         }
     }
 }

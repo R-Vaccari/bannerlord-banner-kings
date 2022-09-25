@@ -273,12 +273,13 @@ namespace BannerKings.UI
                     "bannerkings_manor" => "building_castle_castallans_office",
                     "bannerkings_bakery" or "bannerkings_butter" or "bannerkings_daily_pasture" =>
                         "building_settlement_granary",
-                    "bannerkings_mining" => "building_siege_workshop",
+                    "bannerkings_mining" or "building_town_mines" or "building_castle_mines" or "bannerkings_mines" => "building_siege_workshop",
                     "bannerkings_farming" or "bannerkings_daily_farm" => "building_settlement_lime_kilns",
-                    "bannerkings_sawmill" or "bannerkings_tannery" or "bannerkings_blacksmith" =>
+                    "bannerkings_sawmill" or "bannerkings_tannery" or "bannerkings_blacksmith" or "bannerkings_daily_production" =>
                         "building_castle_workshops",
                     "bannerkings_daily_woods" or "bannerkings_fishing" => "building_irrigation",
                     "bannerkings_warehouse" => "building_settlement_garrison_barracks",
+                    "bk_building_theater" => "building_settlement_forum",
                     "bannerkings_courier" => "building_castle_lime_kilns",
                     _ => code
                 };

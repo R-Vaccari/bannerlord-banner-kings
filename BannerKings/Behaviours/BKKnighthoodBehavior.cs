@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -176,7 +177,10 @@ namespace BannerKings.Behaviours
 
             starter.AddPlayerLine("companion_grant_knighthood_response_confirm", "companion_knighthood_response",
                 "companion_knighthood_accepted", "Let us decide your fief.",
-                CompanionKnighthoodAcceptedCondition, GrantKnighthoodOnConsequence);
+                null, 
+                GrantKnighthoodOnConsequence,
+                100,
+                CompanionKnighthoodAcceptedClickable);
 
             starter.AddPlayerLine("companion_grant_knighthood_response_cancel", "companion_knighthood_response",
                 "companion_role_pretalk", "Actualy, I would like to discuss this at a later time.",
@@ -199,9 +203,41 @@ namespace BannerKings.Behaviours
                    BannerKingsConfig.Instance.TitleManager.Knighthood;
         }
 
-        private bool CompanionKnighthoodAcceptedCondition()
+        private bool CompanionKnighthoodAcceptedClickable(out TextObject reason)
         {
             lordshipsToGive.Clear();
+            var titles = GetAvailableTitles();
+            foreach (var title in titles)
+            {
+                lordshipsToGive.Add(title);
+            }
+
+
+            if (BannerKingsConfig.Instance.TitleModel.GetGrantKnighthoodCost(Hero.MainHero).ResultNumber > Clan.PlayerClan.Influence)
+            {
+                reason = GameTexts.FindText("str_warning_you_dont_have_enough_influence");
+                return false;
+            }
+
+            if (titles.Count == 0)
+            {
+                reason = new TextObject("{=!}You currently do not lawfully own a lordship that could be given away.");
+                return false;
+            }
+
+            if (titles.Any(x => x.IsEnabled))
+            {
+                reason = new TextObject("{=!}Bestowing knighthood is possible.");
+                return true;
+            }
+
+            reason = new TextObject(titles.First(x => !x.IsEnabled).Hint);
+            return false;
+        }
+
+        private List<InquiryElement> GetAvailableTitles()
+        {
+            var result = new List<InquiryElement>();
             var titles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(Hero.MainHero);
             foreach (var title in titles)
             {
@@ -211,17 +247,11 @@ namespace BannerKings.Behaviours
                 }
 
                 var action = BannerKingsConfig.Instance.TitleModel.GetAction(ActionType.Grant, title, Hero.MainHero);
-                lordshipsToGive.Add(new InquiryElement(title, title.FullName.ToString(), null, action.Possible,
+                result.Add(new InquiryElement(title, title.FullName.ToString(), null, action.Possible,
                     action.Reason.ToString()));
             }
 
-            if (lordshipsToGive.Count == 0)
-            {
-                InformationManager.DisplayMessage(
-                    new InformationMessage("You currently do not lawfully own a lordship that could be given away."));
-            }
-
-            return lordshipsToGive.Count >= 1;
+            return result;
         }
 
         public bool GrantKnighthoodOnClickable(out TextObject hintText)
@@ -244,24 +274,6 @@ namespace BannerKings.Behaviours
                 return false;
             }
 
-            var titles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(Hero.MainHero);
-            if (titles.Count == 0)
-            {
-                hintText = new TextObject("{=vNwX2dhL}You do not legally own any title.");
-                return false;
-            }
-
-            var lordships = titles.FindAll(x => x.type == TitleType.Lordship);
-            switch (lordships.Count)
-            {
-                case 0:
-                    hintText = new TextObject("{=s0ngHATj}You do not legally own any lordship that could be given to land a new vassal.");
-                    return false;
-                case 1:
-                    hintText = new TextObject("{=x23XkFM4}You cannot grant away your only lordship.");
-                    return false;
-            }
-
             var influence = BannerKingsConfig.Instance.TitleModel.GetGrantKnighthoodCost(Hero.MainHero);
             if (Clan.PlayerClan.Influence < influence.ResultNumber)
             {
@@ -271,11 +283,36 @@ namespace BannerKings.Behaviours
                 return false;
             }
 
+            if (Hero.MainHero.Gold < 5000)
+            {
+                hintText = new TextObject("{=hN2Eynzu}Bestowing knighthood requires {GOLD} gold to give your vassal financial security.");
+                hintText.SetTextVariable("GOLD", 5000);
+                return false;
+            }
 
-            hintText = new TextObject("{=hN2Eynzu}Bestowing knighthood requires {GOLD} gold to give your vassal financial security.");
-            hintText.SetTextVariable("GOLD", 5000);
+            var titles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(Hero.MainHero);
+            if (titles.Count == 0)
+            {
+                hintText = new TextObject("{=vNwX2dhL}You do not legally own any title.");
+                return false;
+            }
+           
+            if (titles.Count == 0)
+            {
+                hintText = new TextObject("{=!}You currently do not lawfully own a lordship that could be given away.");
+                return false;
+            }
 
-            return Hero.MainHero.Gold >= 5000;
+            var lordships = GetAvailableTitles();
+            if (lordships.Any(x => x.IsEnabled))
+            {
+                hintText = new TextObject("{=hN2Eynzu}Bestowing knighthood requires {GOLD} gold to give your vassal financial security.");
+                hintText.SetTextVariable("GOLD", 5000);
+                return true;
+            }
+
+            hintText = new TextObject(lordships.First(x => !x.IsEnabled).Hint);
+            return false;
         }
 
         private void GrantKnighthoodOnConsequence()

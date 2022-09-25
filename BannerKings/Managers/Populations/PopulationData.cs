@@ -65,6 +65,8 @@ namespace BannerKings.Managers.Populations
 
         [SaveableProperty(12)] private ReligionData religionData { get; set; }
 
+        [SaveableProperty(13)] private MineralData mineralData { get; set; }
+
         public CultureData CultureData => cultureData;
         public MilitaryData MilitaryData => militaryData;
         public LandData LandData => landData;
@@ -77,6 +79,7 @@ namespace BannerKings.Managers.Populations
         public TitleData TitleData => titleData;
         public ReligionData ReligionData => religionData;
         public VillageData VillageData => villageData;
+        public MineralData MineralData => mineralData;
 
         public ExplainedNumber Foreigner => new BKForeignerModel().CalculateEffect(settlement);
 
@@ -321,6 +324,13 @@ namespace BannerKings.Managers.Populations
 
             titleData ??= new TitleData(BannerKingsConfig.Instance.TitleManager.GetTitle(settlement));
             titleData.Update(this);
+
+            if (mineralData == null)
+            {
+                mineralData = new MineralData(this);
+            }
+
+            mineralData.Update(this);
 
             if (religionData == null)
             {
