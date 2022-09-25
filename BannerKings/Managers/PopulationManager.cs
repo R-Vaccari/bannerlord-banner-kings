@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using BannerKings.Extensions;
 using BannerKings.Managers.Institutions.Guilds;
 using BannerKings.Managers.Items;
 using BannerKings.Managers.Populations;
@@ -132,16 +133,28 @@ namespace BannerKings.Managers
             }
         }
 
-        public List<(ItemObject, float)> GetProductions(VillageData villageData)
+        public List<(ItemObject, float)> GetProductions(PopulationData data)
         {
+            var villageData = data.VillageData;
             var type = villageData.Village.VillageType;
             var productions = new List<(ItemObject, float)>(type.Productions);
+
+            float mines = villageData.GetBuildingLevel(DefaultVillageBuildings.Instance.Mines);
+            if ((mines > 0 || villageData.Village.IsMiningVillage()) && data.MineralData != null)
+            {
+                foreach (var pair in data.MineralData.GetLocalMinerals())
+                {
+                    if (pair.Item1 != null)
+                    {
+                        productions.Add(new(pair.Item1, 0.5f * mines * pair.Item2));
+                    }
+                }
+            }
 
             float tannery = villageData.GetBuildingLevel(DefaultVillageBuildings.Instance.Tannery);
             if (tannery > 0)
             {
-                productions.Add(
-                    new ValueTuple<ItemObject, float>(Game.Current.ObjectManager.GetObject<ItemObject>("leather"),
+                productions.Add(new ValueTuple<ItemObject, float>(Game.Current.ObjectManager.GetObject<ItemObject>("leather"),
                         tannery * 0.5f));
             }
 
@@ -152,12 +165,12 @@ namespace BannerKings.Managers
                     smith * 0.5f));
             }
 
-            if (IsVillageProducingFood(villageData.Village))
+            if (villageData.Village.IsFarmingVillage())
             {
                 productions.Add(
-                    new ValueTuple<ItemObject, float>(Game.Current.ObjectManager.GetObject<ItemObject>("chicken"), 4f));
+                    new ValueTuple<ItemObject, float>(Game.Current.ObjectManager.GetObject<ItemObject>("chicken"), 1f));
                 productions.Add(new ValueTuple<ItemObject, float>(Game.Current.ObjectManager.GetObject<ItemObject>("goose"),
-                    2f));
+                    1f));
             }
 
             if (type == DefaultVillageTypes.OliveTrees)
@@ -202,9 +215,7 @@ namespace BannerKings.Managers
             {
                 buildingType = DefaultVillageBuildings.Instance.AnimalHousing;
             }
-            else if (item.ItemCategory == DefaultItemCategories.Clay || item.ItemCategory == DefaultItemCategories.Iron ||
-                     item.ItemCategory == DefaultItemCategories.Silver
-                     || item.ItemCategory == DefaultItemCategories.Salt)
+            else if (item.IsMineral())
             {
                 buildingType = DefaultVillageBuildings.Instance.Mining;
             }
@@ -212,12 +223,10 @@ namespace BannerKings.Managers
             {
                 buildingType = DefaultVillageBuildings.Instance.Sawmill;
             }
-
             else if (item.ItemCategory == DefaultItemCategories.Fish)
             {
                 buildingType = DefaultVillageBuildings.Instance.FishFarm;
             }
-
             else if (item.ItemCategory == DefaultItemCategories.Grain ||
                      item.ItemCategory == DefaultItemCategories.DateFruit ||
                      item.ItemCategory == DefaultItemCategories.Grape ||

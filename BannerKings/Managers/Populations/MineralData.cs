@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BannerKings.Managers.Items;
+using System;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -28,6 +29,34 @@ namespace BannerKings.Managers.Populations
         public TerrainType Terrain => Campaign.Current.MapSceneWrapper != null ? 
             Campaign.Current.MapSceneWrapper.GetTerrainTypeAtPosition(Settlement.Position2D) : TerrainType.Plain;
 
+        public List<ValueTuple<ItemObject, float>> GetLocalMinerals()
+        {
+            var list = new List<ValueTuple<ItemObject, float>>();
+            foreach (var pair in Composition)
+            {
+                list.Add(new (GetItem(pair.Key), pair.Value));
+            }
+
+            return list;
+        }
+
+        public ItemObject GetItem(MineralType type)
+        {
+            var result = type switch
+            {
+                MineralType.IRON => Campaign.Current.ObjectManager.GetObject<ItemObject>("iron"),
+                MineralType.SALT => Campaign.Current.ObjectManager.GetObject<ItemObject>("salt"),
+                MineralType.SILVER => Campaign.Current.ObjectManager.GetObject<ItemObject>("silver"),
+                MineralType.CLAY => Campaign.Current.ObjectManager.GetObject<ItemObject>("clay"),
+                MineralType.LIMESTONE => BKItems.Instance.Limestone,
+                MineralType.MARBLE => BKItems.Instance.Marble,
+                MineralType.GOLD => BKItems.Instance.GoldOre,
+                _ => null
+            };
+
+            return result;
+        }
+
 
         private void Init()
         {
@@ -36,19 +65,14 @@ namespace BannerKings.Managers.Populations
             var mineral3 = MineralType.NONE;
             var terrain = Terrain;
 
-            var mineral1Ratio = 0f;
+            var mineral1Ratio = MBRandom.RandomFloatRanged(0.6f, 0.9f);
             var mineral2Ratio = 0f;
             var mineral3Ratio = 0f;
 
             if (Settlement.IsVillage)
             {
                 mineral1 = GetVillageMineral(Settlement.Village);
-                if (mineral1 != MineralType.NONE)
-                {
-                    mineral1Ratio = MBRandom.RandomFloatRanged(0.6f, 0.9f);
-                }
             }
-
 
             if (mineral1 == MineralType.NONE)
             {
@@ -60,14 +84,17 @@ namespace BannerKings.Managers.Populations
 
                 MineralType result = MBRandom.ChooseWeighted(options);
                 mineral1 = result;
-                mineral1Ratio = MBRandom.RandomFloatRanged(0.6f, 0.9f);
             }
 
             if (mineral2 == MineralType.NONE)
             {
                 List<(MineralType, float)> options = new List<(MineralType, float)>();
                 options.Add(new(MineralType.MARBLE, 10f));
-                options.Add(new(MineralType.SILVER, 6f));
+                if (mineral1 != MineralType.SILVER)
+                {
+                    options.Add(new(MineralType.SILVER, 6f));
+                }
+
                 if (mineral1 != MineralType.IRON)
                 {
                     options.Add(new(MineralType.IRON, 20f));
@@ -90,6 +117,16 @@ namespace BannerKings.Managers.Populations
             {
                 var diff = 1f - total;
                 mineral2Ratio += diff;
+            }
+
+            if (mineral1 == MineralType.NONE)
+            {
+                mineral1 = MineralType.LIMESTONE;
+            }
+
+            if (mineral2 == MineralType.NONE || mineral2 == mineral1)
+            {
+                mineral2 = MineralType.MARBLE;
             }
 
             Composition.Add(mineral1, mineral1Ratio);

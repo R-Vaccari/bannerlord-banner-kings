@@ -1,3 +1,5 @@
+using BannerKings.Behaviours;
+using BannerKings.Managers.Buildings;
 using BannerKings.Managers.Court;
 using BannerKings.Managers.Institutions.Religions.Doctrines;
 using BannerKings.Managers.Policies;
@@ -74,6 +76,12 @@ namespace BannerKings.Models.Vanilla
                         new TextObject("{=5mCY3JCP}{CLASS} output").SetTextVariable("CLASS", "Slaves"));
                 }
 
+                var mining = Campaign.Current.GetCampaignBehavior<BKBuildingsBehavior>().GetMiningRevenue(town);
+                if (mining > 0)
+                {
+                    baseResult.Add(mining, BKBuildings.Instance.Mines.Name);
+                }
+
                 var ownerReligion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(town.OwnerClan.Leader);
                 if (data.ReligionData != null && ownerReligion != null &&
                     ownerReligion.HasDoctrine(DefaultDoctrines.Instance.HeathenTax))
@@ -98,39 +106,39 @@ namespace BannerKings.Models.Vanilla
                         }
 
                         baseResult.Add(result * heathens, DefaultDoctrines.Instance.HeathenTax.Name);
-                    }
-
-                    var taxType = ((BKTaxPolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(town.Settlement, "tax"))
-                        .Policy;
-                    switch (taxType)
-                    {
-                        case TaxType.Low:
-                            baseResult.AddFactor(-0.15f, new TextObject("{=L7QhNa6a}Tax policy"));
-                            break;
-                        case TaxType.High:
-                            baseResult.AddFactor(0.15f, new TextObject("{=L7QhNa6a}Tax policy"));
-                            break;
-                    }
-
-                    var legitimacy = (LegitimacyType)new BKLegitimacyModel().CalculateEffect(town.Settlement).ResultNumber;
-                    if (legitimacy == LegitimacyType.Lawful)
-                    {
-                        baseResult.AddFactor(0.05f, new TextObject("{=vSsKP2dz}Legitimiacy"));
-                    }
-
-                    var admCost = new BKAdministrativeModel().CalculateEffect(town.Settlement).ResultNumber;
-                    baseResult.AddFactor(admCost * -1f, new TextObject("{=y1sBiOKa}Administrative costs"));
-
-                    if (baseResult.ResultNumber > 0f)
-                    {
-                        baseResult.AddFactor(-0.6f * data.Autonomy, new TextObject("{=xMsWoSnL}Autonomy"));
-                    }
-
-                    CalculateDueTax(data, baseResult.ResultNumber);
-                    CalculateDueWages(BannerKingsConfig.Instance.CourtManager.GetCouncil(town.Settlement.OwnerClan),
-                        baseResult.ResultNumber);
-                    baseResult.AddFactor(admCost * -1f, new TextObject("{=y1sBiOKa}Administrative costs"));
+                    } 
                 }
+
+                var taxType = ((BKTaxPolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(town.Settlement, "tax"))
+                        .Policy;
+                switch (taxType)
+                {
+                    case TaxType.Low:
+                        baseResult.AddFactor(-0.15f, new TextObject("{=L7QhNa6a}Tax policy"));
+                        break;
+                    case TaxType.High:
+                        baseResult.AddFactor(0.15f, new TextObject("{=L7QhNa6a}Tax policy"));
+                        break;
+                }
+
+                var legitimacy = (LegitimacyType)new BKLegitimacyModel().CalculateEffect(town.Settlement).ResultNumber;
+                if (legitimacy == LegitimacyType.Lawful)
+                {
+                    baseResult.AddFactor(0.05f, new TextObject("{=!}Legitimacy"));
+                }
+
+                var admCost = new BKAdministrativeModel().CalculateEffect(town.Settlement).ResultNumber;
+                baseResult.AddFactor(admCost * -1f, new TextObject("{=y1sBiOKa}Administrative costs"));
+
+                if (baseResult.ResultNumber > 0f)
+                {
+                    baseResult.AddFactor(-0.6f * data.Autonomy, new TextObject("{=xMsWoSnL}Autonomy"));
+                }
+
+                CalculateDueTax(data, baseResult.ResultNumber);
+                CalculateDueWages(BannerKingsConfig.Instance.CourtManager.GetCouncil(town.Settlement.OwnerClan),
+                    baseResult.ResultNumber);
+                baseResult.AddFactor(admCost * -1f, new TextObject("{=y1sBiOKa}Administrative costs"));
             }
 
             return baseResult;

@@ -224,7 +224,7 @@ namespace BannerKings.UI.Management
                 var model = new BKVillageProductionModel();
                 var productionQuantity = 0f;
                 var sb = new StringBuilder();
-                foreach (var production in BannerKingsConfig.Instance.PopulationManager.GetProductions(villageData))
+                foreach (var production in BannerKingsConfig.Instance.PopulationManager.GetProductions(data))
                 {
                     sb.Append(production.Item1.Name + ", ");
                     productionQuantity += model.CalculateDailyProductionAmount(villageData.Village, production.Item1);
