@@ -188,6 +188,7 @@ namespace BannerKings
             ConstructContainerDefinition(typeof(Dictionary<Religion, float>));
             ConstructContainerDefinition(typeof(Dictionary<Town, CampaignTime>));
             ConstructContainerDefinition(typeof(Dictionary<MineralType, float>));
+            ConstructContainerDefinition(typeof(Dictionary<Town, int>));
         }
     }
 }

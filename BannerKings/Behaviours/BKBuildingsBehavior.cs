@@ -1,11 +1,9 @@
 ﻿using BannerKings.Managers.Buildings;
 using BannerKings.Managers.Populations.Villages;
-using BannerKings.Managers.Skills;
 using HarmonyLib;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.Extensions;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.Settlements.Buildings;
 using TaleWorlds.Core;
@@ -41,6 +39,16 @@ namespace BannerKings.Behaviours
 
         public int GetMiningRevenue(Town town)
         {
+            if (miningRevenues == null)
+            {
+                miningRevenues = new Dictionary<Town, int>();
+            }
+
+            if (town == null)
+            {
+                return 0;
+            }
+
             if (miningRevenues.ContainsKey(town))
             {
                 return miningRevenues[town];
@@ -74,7 +82,7 @@ namespace BannerKings.Behaviours
             {
                 foreach (var pair in data.MineralData.GetLocalMinerals())
                 {
-                    if (MBRandom.RandomFloat < pair.Item2)
+                    if (MBRandom.RandomFloat * ((int)data.MineralData.Richness + 0.5f) < pair.Item2)
                     {
                         var quantity = building.CurrentLevel;
                         var item = pair.Item1;
