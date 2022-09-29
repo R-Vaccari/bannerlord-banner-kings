@@ -225,14 +225,24 @@ namespace BannerKings.Behaviours
                 return false;
             }
 
-            if (titles.Any(x => x.IsEnabled))
+            if (!titles.Any(x => x.IsEnabled))
             {
-                reason = new TextObject("{=!}Bestowing knighthood is possible.");
-                return true;
+                var first = titles.FirstOrDefault(x => !x.IsEnabled);
+                if (first != null)
+                {
+                    reason = new TextObject(first.Hint);
+                }
+                else
+                {
+                    reason = new TextObject("{=!}You currently do not lawfully own a lordship that could be given away.");
+                }
+                
+                return false;
             }
 
-            reason = new TextObject(titles.First(x => !x.IsEnabled).Hint);
-            return false;
+            reason = new TextObject("{=hN2Eynzu}Bestowing knighthood requires {GOLD} gold to give your vassal financial security.");
+            reason.SetTextVariable("GOLD", 5000);
+            return true;
         }
 
         private List<InquiryElement> GetAvailableTitles()
