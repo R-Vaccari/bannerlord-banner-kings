@@ -586,33 +586,41 @@ namespace BannerKings.Utils
 
         public static bool IsRetinueTroop(CharacterObject character)
         {
-            var nobleRecruit = character.Culture.EliteBasicTroop;
-            if (nobleRecruit.UpgradeTargets == null)
+            var result = false;
+            ExceptionUtils.TryCatch(() =>
             {
-                return false;
-            }
-
-            if (character == nobleRecruit)
-            {
-                return true;
-            }
-
-            if (nobleRecruit.UpgradeTargets != null)
-            {
-                var currentUpgrades = nobleRecruit.UpgradeTargets;
-                while (currentUpgrades != null && currentUpgrades.Any())
+                var nobleRecruit = character.Culture.EliteBasicTroop;
+                if (nobleRecruit.UpgradeTargets == null)
                 {
-                    var upgrade = currentUpgrades[0];
-                    if (upgrade == character)
-                    {
-                        return true;
-                    }
-
-                    currentUpgrades = upgrade.UpgradeTargets;
+                    result = false;
+                    return;
                 }
-            }
 
-            return false;
+                if (character == nobleRecruit)
+                {
+                    result = true;
+                    return;
+                }
+
+                if (nobleRecruit.UpgradeTargets != null)
+                {
+                    var currentUpgrades = nobleRecruit.UpgradeTargets;
+                    while (currentUpgrades != null && currentUpgrades.Any())
+                    {
+                        var upgrade = currentUpgrades[0];
+                        if (upgrade == character)
+                        {
+                            result = true;
+                            return;
+                        }
+
+                        currentUpgrades = upgrade.UpgradeTargets;
+                    }
+                }
+            }, Type.GetType("Helpers").Name);
+
+
+            return result;
         }
 
         public static bool IsRetinueTroop(CharacterObject character, CultureObject settlementCulture)

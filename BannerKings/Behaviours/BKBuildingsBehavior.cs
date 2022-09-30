@@ -1,5 +1,7 @@
-﻿using BannerKings.Managers.Buildings;
+﻿using BannerKings.Managers;
+using BannerKings.Managers.Buildings;
 using BannerKings.Managers.Populations.Villages;
+using BannerKings.Utils;
 using HarmonyLib;
 using System.Collections.Generic;
 using System.Linq;
@@ -66,6 +68,28 @@ namespace BannerKings.Behaviours
         {
             RunMines(town);
             
+        }
+
+        private void RunStuds(Town town)
+        {
+            ExceptionUtils.TryCatch(() =>
+            {
+                if (!town.IsCastle)
+                {
+                    return;
+                }
+
+                var studs = town.Buildings.FirstOrDefault(x => x.BuildingType == BKBuildings.Instance.WarhorseStuds);
+                if (studs == null)
+                {
+                    return;
+                }
+
+                var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
+                var pastures = data.LandData.Pastureland;
+                var horseLimit = (pastures / 10000f) + studs.CurrentLevel * 2f;
+
+            }, GetType().Name);
         }
 
         private void RunMines(Town town)

@@ -1,4 +1,5 @@
 using System.Linq;
+using BannerKings.Managers.Buildings;
 using BannerKings.Managers.Court;
 using BannerKings.Managers.Education.Lifestyles;
 using BannerKings.Managers.Institutions.Religions;
@@ -152,6 +153,12 @@ namespace BannerKings.Models.BKModels
                 foreach (var satisfaction in satisfactions)
                 {
                     averageSatisfaction += satisfaction / 4f;
+                }
+
+                var courthouse = town.Buildings.FirstOrDefault(x => x.BuildingType == BKBuildings.Instance.CourtHouse);
+                if (courthouse != null && courthouse.CurrentLevel > 0)
+                {
+                    result.Add(0.02f * courthouse.CurrentLevel, BKBuildings.Instance.CourtHouse.Name);
                 }
 
                 result.Add(sec / 5f, new TextObject("{=TfMEfR6C}Security"));
