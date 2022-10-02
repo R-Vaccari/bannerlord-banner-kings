@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using BannerKings.Models.BKModels;
+using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
+using TaleWorlds.Library;
 using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Managers.Populations
@@ -143,63 +145,41 @@ namespace BannerKings.Managers.Populations
 
         private void BalanceCultures(PopulationData data)
         {
-            var candidates = new List<(CultureDataClass, float)>();
             var weightDictionary = new Dictionary<CultureDataClass, float>();
             var totalWeight = 0f;
-            var foreignerShare = 0f;
+            var foreignerTotalAssimilation = 0f;
 
             foreach (var cultureData in cultures)
             {
-                cultureData.Assimilation += BannerKingsConfig.Instance.CultureModel
-                       .CalculateEffect(data.Settlement, cultureData).ResultNumber;
-                var weight = BannerKingsConfig.Instance.CultureModel.CalculateCultureWeight(data.Settlement, cultureData).ResultNumber;
-                totalWeight += weight;
-                weightDictionary.Add(cultureData, weight);
-
+                cultureData.Acceptance += new BKCultureAcceptanceModel().CalculateEffect(data.Settlement, cultureData)
+                    .ResultNumber;
 
                 if (IsForeigner(data, cultureData))
                 {
-                    foreignerShare += weight;
-                } 
-            }
-
-            var dominant = cultures.First(x => x.Culture == DominantCulture);
-            var dominantAssimilation = dominant.Assimilation;
-            var dominantProportion = (weightDictionary[dominant] / totalWeight) - data.Foreigner.ResultNumber;
-            var diff = dominantProportion - dominantAssimilation;
-            if (diff is 0f or float.NaN)
-            {
-                return;
-            }
-
-
-            if (diff > 0f)
-            {
-                dominant.Assimilation += 0.0025f;
-            }
-            else
-            {
-                foreach (var pair in weightDictionary)
-                {
-                    if (pair.Key == dominant)
-                    {
-                        continue;
-                    }
-
-                    // non-dominant cultures have higher change of being affected when have more proportion
-                    candidates.Add(new(pair.Key, (pair.Value + 1f) / totalWeight));
+                    foreignerTotalAssimilation += cultureData.Assimilation;
+                    continue;
                 }
 
+                var weight = BannerKingsConfig.Instance.CultureModel.CalculateCultureWeight(data.Settlement, cultureData).ResultNumber;
+                totalWeight += weight;
+                weightDictionary.Add(cultureData, weight);      
+            }
 
-                var target = MBRandom.ChooseWeighted(candidates);
-                if (target is not null)
+            foreach (var cultureData in cultures)
+            {
+                var proportion = weightDictionary[cultureData] / totalWeight;
+                if (proportion < cultureData.Assimilation)
                 {
-                    target.Assimilation += 0.0025f;
-                    dominant.Assimilation -= 0.0025f;
-                    if (target.Assimilation <= 0f && target.Culture != settlementOwner.Culture)
-                    {
-                        cultures.Remove(target);
-                    }
+                    cultureData.Assimilation += MathF.Min(0.01f, cultureData.Assimilation - proportion);
+                }
+                else if (proportion < cultureData.Assimilation)
+                {
+                    cultureData.Assimilation -= MathF.Min(0.01f, cultureData.Assimilation - proportion);
+                }
+
+                if (proportion <= 0f && cultureData.Assimilation <= 0f)
+                {
+                    cultures.Remove(cultureData);
                 }
             }
         }

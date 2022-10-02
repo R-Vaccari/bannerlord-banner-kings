@@ -197,10 +197,10 @@ namespace BannerKings.UI.Management
                     .SetTextVariable("EXPLANATIONS", growth.GetExplanations())
                     .ToString()));
 
-            StatsInfo.Add(new InformationElement(new TextObject("{=!}Foreigner Ratio:").ToString(),
+            /*StatsInfo.Add(new InformationElement(new TextObject("{=!}Foreigner Ratio:").ToString(),
                 FormatValue(new BKForeignerModel().CalculateEffect(settlement).ResultNumber),
                 new TextObject("{=!}Merchant and freemen foreigners that refuse to be assimilated, but have a living in this settlement.")
-                .ToString()));
+                .ToString())); */
 
 
             CultureInfo.Add(new InformationElement("Dominant Culture:",
