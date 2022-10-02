@@ -923,6 +923,11 @@ namespace BannerKings
                             var item = elementCopyAtIndex.EquipmentElement.Item;
                             var amount = elementCopyAtIndex.Amount;
                             var itemCategory = item.GetItemCategory();
+                            if (!categoryDemand.ContainsKey(itemCategory))
+                            {
+                                continue;
+                            }
+
                             var demand = categoryDemand[itemCategory];
 
                             var behaviors = Campaign.Current.GetCampaignBehaviors<ItemConsumptionBehavior>();
