@@ -42,7 +42,7 @@ namespace BannerKings.Managers.Buildings
                 yield return Armory;
                 yield return CourtHouse;
                 yield return WarhorseStuds;
-                yield return DailyAssimilation;
+                //yield return DailyAssimilation;
             }
         }
 
@@ -140,12 +140,12 @@ namespace BannerKings.Managers.Buildings
 
             WarhorseStuds = Game.Current.ObjectManager.RegisterPresumedObject(new BuildingType("bk_building_castle_studs"));
             WarhorseStuds.Initialize(new TextObject("{=!}Warhorse Studs"),
-                new TextObject("{=!}The court house is where townsfolk legally settle their disputes. Conflicts such as property disputes or insults are dealt with by local administration. Increases stability."),
+                new TextObject("{=!}Warhorse studs allow the raising of warhorses in the castle demesne. Horses will be added to the Stash. Their limit is based on local pastureland and studs level."),
                 new[]
                 {
-                    2000,
-                    2600,
-                    3200
+                    1000,
+                    1800,
+                    2400
                 },
                 BuildingLocation.Castle,
                 new Tuple<BuildingEffectEnum, float, float, float>[]

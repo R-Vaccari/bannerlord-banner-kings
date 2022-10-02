@@ -10,6 +10,8 @@ using TaleWorlds.Localization;
 using static BannerKings.Managers.PopulationManager;
 using static BannerKings.Managers.Policies.BKMilitiaPolicy;
 using BannerKings.Managers.Education.Lifestyles;
+using System.Linq;
+using BannerKings.Managers.Buildings;
 
 namespace BannerKings.Models.Vanilla
 {
@@ -112,45 +114,15 @@ namespace BannerKings.Models.Vanilla
             return result;
         }
 
-        public override float CalculateEliteMilitiaSpawnChance(Settlement settlement)
-        {
-            var baseResult = +(settlement.IsTown ? 0.12f : 0.20f);
-            if (BannerKingsConfig.Instance.PopulationManager != null &&
-                BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
-            {
-                var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
-                if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(settlement, "decision_militia_subsidize"))
-                {
-                    baseResult += 0.12f;
-                }
-
-                var government = BannerKingsConfig.Instance.TitleManager.GetSettlementGovernment(settlement);
-                if (government == GovernmentType.Tribal)
-                {
-                    baseResult += 0.08f;
-                }
-
-                var villageData = data.VillageData;
-                if (villageData != null)
-                {
-                    float warehouse = villageData.GetBuildingLevel(DefaultVillageBuildings.Instance.Warehouse);
-                    if (warehouse > 0)
-                    {
-                        baseResult += 0.04f * warehouse;
-                    }
-                }
-            }
-
-            return baseResult;
-        }
-
+        public override float CalculateEliteMilitiaSpawnChance(Settlement settlement) => 
+            MilitiaSpawnChanceExplained(settlement).ResultNumber;
+        
         public ExplainedNumber MilitiaSpawnChanceExplained(Settlement settlement)
         {
             var result =
                 new ExplainedNumber(base.CalculateEliteMilitiaSpawnChance(settlement) + (settlement.IsTown ? 0.12f : 0.20f),
                     true);
-            if (BannerKingsConfig.Instance.PopulationManager != null &&
-                BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
+            if (BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
             {
                 var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
                 if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(settlement, "decision_militia_subsidize"))
@@ -171,6 +143,14 @@ namespace BannerKings.Models.Vanilla
                     if (warehouse > 0)
                     {
                         result.Add(0.04f * warehouse, DefaultVillageBuildings.Instance.Warehouse.Name);
+                    }
+                }
+                else if (settlement.Town != null)
+                {
+                    var armory = settlement.Town.Buildings.FirstOrDefault(x => x.BuildingType == BKBuildings.Instance.Armory);
+                    if (armory != null && armory.CurrentLevel > 0)
+                    {
+                        result.Add(0.04f * armory.CurrentLevel, BKBuildings.Instance.Armory.Name);
                     }
                 }
             }
