@@ -287,8 +287,7 @@ namespace BannerKings.Managers.AI
 
         public void SettlementManagement(Settlement target)
         {
-            if (BannerKingsConfig.Instance.PopulationManager == null ||
-                !BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(target))
+            if (target == null || !BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(target))
             {
                 return;
             }
