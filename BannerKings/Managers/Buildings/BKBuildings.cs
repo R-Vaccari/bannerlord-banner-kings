@@ -29,6 +29,7 @@ namespace BannerKings.Managers.Buildings
         public BuildingType Armory { get; private set; }
         public BuildingType CourtHouse { get; private set; }
         public BuildingType WarhorseStuds { get; private set; }
+        public BuildingType DailyAssimilation { get; private set; }
 
         public override IEnumerable<BuildingType> All
         {
@@ -38,9 +39,10 @@ namespace BannerKings.Managers.Buildings
                 yield return CastleMines;
                 yield return CastleRetinue;
                 yield return Theater;
-               // yield return Armory;
-                //yield return CourtHouse;
-               // yield return WarhorseStuds;
+                yield return Armory;
+                yield return CourtHouse;
+                yield return WarhorseStuds;
+                yield return DailyAssimilation;
             }
         }
 
@@ -145,7 +147,17 @@ namespace BannerKings.Managers.Buildings
                     2600,
                     3200
                 },
-                BuildingLocation.Settlement,
+                BuildingLocation.Castle,
+                new Tuple<BuildingEffectEnum, float, float, float>[]
+                {
+                });
+
+
+            DailyAssimilation = Game.Current.ObjectManager.RegisterPresumedObject(new BuildingType("bk_building_daily_assimilation"));
+            DailyAssimilation.Initialize(new TextObject("{=!}Cultural Assimilation"),
+                new TextObject("{=!}Focus efforts on assimilating local pouplace to your culture. Increases Cultural Presence."),
+                new int[3],
+                BuildingLocation.Daily,
                 new Tuple<BuildingEffectEnum, float, float, float>[]
                 {
                 });

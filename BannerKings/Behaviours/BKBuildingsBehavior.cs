@@ -1,4 +1,5 @@
-﻿using BannerKings.Managers;
+﻿using BannerKings.Extensions;
+using BannerKings.Managers;
 using BannerKings.Managers.Buildings;
 using BannerKings.Managers.Populations.Villages;
 using BannerKings.Utils;
@@ -67,20 +68,20 @@ namespace BannerKings.Behaviours
         private void OnTownDailyTick(Town town)
         {
             RunMines(town);
-            
+            RunStuds(town);
         }
 
         private void RunStuds(Town town)
         {
             ExceptionUtils.TryCatch(() =>
             {
-                if (!town.IsCastle)
+                if (!town.IsCastle || town.Villages.Any(x => x.IsRanchVillage()))
                 {
                     return;
                 }
 
                 var studs = town.Buildings.FirstOrDefault(x => x.BuildingType == BKBuildings.Instance.WarhorseStuds);
-                if (studs == null)
+                if (studs == null || studs.CurrentLevel == 0)
                 {
                     return;
                 }
@@ -88,6 +89,22 @@ namespace BannerKings.Behaviours
                 var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
                 var pastures = data.LandData.Pastureland;
                 var horseLimit = (pastures / 10000f) + studs.CurrentLevel * 2f;
+                var currentHorses = 0;
+
+                foreach (var element in town.Settlement.Stash)
+                {
+                    if (element.EquipmentElement.Item.ItemCategory == DefaultItemCategories.WarHorse)
+                    {
+                        currentHorses += element.Amount;
+                    }
+                }
+
+                if (currentHorses < horseLimit && MBRandom.RandomFloat < 0.02f)
+                {
+                    var horse = Campaign.Current.ObjectManager.GetObjectTypeList<ItemObject>()
+                        .FirstOrDefault(x => x.ItemCategory == DefaultItemCategories.WarHorse && x.Culture == town.Culture);
+                    town.Settlement.Stash.AddToCounts(horse, 1);
+                }
 
             }, GetType().Name);
         }

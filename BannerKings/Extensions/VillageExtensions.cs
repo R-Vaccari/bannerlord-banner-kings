@@ -29,5 +29,14 @@ namespace BannerKings.Extensions
                      type == DefaultVillageTypes.SteppeHorseRanch || type == DefaultVillageTypes.SturgianHorseRanch ||
                      type == DefaultVillageTypes.VlandianHorseRanch;
         }
+
+        public static bool IsRanchVillage(this Village village)
+        {
+            var type = village.VillageType;
+            return type == DefaultVillageTypes.BattanianHorseRanch ||
+                     type == DefaultVillageTypes.DesertHorseRanch || type == DefaultVillageTypes.EuropeHorseRanch ||
+                     type == DefaultVillageTypes.SteppeHorseRanch || type == DefaultVillageTypes.SturgianHorseRanch ||
+                     type == DefaultVillageTypes.VlandianHorseRanch;
+        }
     }
 }

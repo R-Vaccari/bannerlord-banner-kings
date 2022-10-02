@@ -617,7 +617,7 @@ namespace BannerKings.Utils
                         currentUpgrades = upgrade.UpgradeTargets;
                     }
                 }
-            }, Type.GetType("Helpers").Name);
+            }, Type.GetType("BannerKings.Utils.Helpers").Name);
 
 
             return result;
