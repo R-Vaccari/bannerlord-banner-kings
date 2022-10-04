@@ -61,7 +61,9 @@ namespace BannerKings
         public BKLegitimacyModel LegitimacyModel { get; } = new();
         public BKGrowthModel GrowthModel { get; } = new();
         public BKVillageProductionModel VillageProductionModel { get; } = new();
+        public BKProsperityModel ProsperityModel { get; } = new();
         
+
 
         public static BannerKingsConfig Instance => ConfigHolder.CONFIG;
 

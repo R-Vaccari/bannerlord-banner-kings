@@ -43,7 +43,7 @@ namespace BannerKings.Models.BKModels
 
             if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(settlement, "draft", (int) DraftPolicy.Demobilization))
             {
-                result.AddFactor(0.05f, new TextObject("Draft policy"));
+                result.AddFactor(0.05f, new TextObject("{=!}Drafting policy"));
             }
 
             return result;
@@ -52,6 +52,11 @@ namespace BannerKings.Models.BKModels
         public ExplainedNumber CalculateSettlementCap(Settlement settlement, PopulationData data)
         {
             var result = new ExplainedNumber(0f, true);
+
+            if (settlement.IsVillage)
+            {
+                result.Add(settlement.Village.Hearth * 4f, GameTexts.FindText("str_hearths"));
+            }
 
             var land = data.LandData;
             var farmland = land.GetAcreOutput("farmland") * 20f;

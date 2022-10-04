@@ -1,9 +1,24 @@
-﻿using TaleWorlds.CampaignSystem.Settlements;
+﻿using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Settlements;
 
 namespace BannerKings.Extensions
 {
     public static class VillageExtensions
     {
+        public static Hero GetActualOwner(this Village village)
+        {
+            var owner = village.Settlement.Owner;
+            var title = BannerKingsConfig.Instance.TitleManager.GetTitle(village.Settlement);
+            if (title != null && title.deJure != null)
+            {
+                if (village.Settlement.MapFaction == title.deJure.MapFaction)
+                {
+                    owner = title.deJure;
+                }
+            }
+
+            return owner;
+        }
 
         public static bool IsMiningVillage(this Village village)
         {
