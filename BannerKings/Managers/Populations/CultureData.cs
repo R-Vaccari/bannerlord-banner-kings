@@ -1,4 +1,5 @@
 ﻿using BannerKings.Models.BKModels;
+using BannerKings.Utils;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
@@ -126,21 +127,24 @@ namespace BannerKings.Managers.Populations
 
         internal override void Update(PopulationData data)
         {
-            SettlementOwner = data.Settlement.Owner;
-
-            BalanceCultures(data);
-            var dominant = DominantCulture;
-            if (dominant.BasicTroop != null && dominant.MilitiaSpearman != null)
+            ExceptionUtils.TryCatch(() =>
             {
-                data.Settlement.Culture = dominant;
-                if (data.Settlement.Notables is {Count: > 0})
+                SettlementOwner = data.Settlement.Owner;
+
+                BalanceCultures(data);
+                var dominant = DominantCulture;
+                if (dominant.BasicTroop != null && dominant.MilitiaSpearman != null)
                 {
-                    foreach (var notable in data.Settlement.Notables)
+                    data.Settlement.Culture = dominant;
+                    if (data.Settlement.Notables is { Count: > 0 })
                     {
-                        notable.Culture = dominant;
+                        foreach (var notable in data.Settlement.Notables)
+                        {
+                            notable.Culture = dominant;
+                        }
                     }
                 }
-            }
+            }, GetType().Name);
         }
 
         private void BalanceCultures(PopulationData data)
@@ -167,6 +171,11 @@ namespace BannerKings.Managers.Populations
 
             foreach (var cultureData in cultures)
             {
+                if (!weightDictionary.ContainsKey(cultureData))
+                {
+                    continue;
+                }
+
                 var proportion = weightDictionary[cultureData] / totalWeight;
                 if (proportion < cultureData.Assimilation)
                 {
