@@ -166,7 +166,7 @@
 																				   StackLayout.LayoutMethod="VerticalBottomToTop">
 																			<Children>
 																				<RichTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" HorizontalAlignment="Center"
-																								SuggestedHeight="5" Brush="TownManagement.Project.Name.Text" Text="Workforce policy"
+																								SuggestedHeight="5" Brush="TownManagement.Project.Name.Text" Text="@WorkforcePolicyText"
 																								MarginTop="25" />
 																				<Standard.DropdownWithHorizontalControl Parameter.SelectorDataSource="{WorkforceSelector}" MarginTop="10" 
 																														HorizontalAlignment="Center" />

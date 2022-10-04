@@ -38,6 +38,12 @@ namespace BannerKings.UI.Management
         }
 
         [DataSourceProperty]
+        public string TaxPolicyText => new TextObject("{=!}Tax policy").ToString();
+
+        [DataSourceProperty]
+        public string CriminalPolicyText => new TextObject("{=!}Criminal policy").ToString();
+
+        [DataSourceProperty]
         public HintViewModel TournamentHint => new(new TextObject("{=VeMSE94s}Sponsor a tournament in this town. As the main sponsor, you have to pay 5000 coins for the tournament costs, as well as " +
                                                                   "provide an adequate prize. Sponsoring games improves population loyalty towards you, and valuable prizes provide renown to your name."));
 

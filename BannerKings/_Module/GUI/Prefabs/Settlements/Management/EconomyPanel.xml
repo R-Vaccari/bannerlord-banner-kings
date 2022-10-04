@@ -221,10 +221,10 @@
 								<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren">
 									<Children>
 										<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
-										           StackLayout.LayoutMethod="HorizontalLeftToRight">
+										           StackLayout.LayoutMethod="VerticalBottomToTop">
 											<Children>
 												<RichTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" HorizontalAlignment="Left"
-												                SuggestedHeight="5" Brush="TownManagement.Project.Name.Text" Text="Tax policy"
+												                SuggestedHeight="5" Brush="TownManagement.Project.Name.Text" Text="@TaxPolicyText"
 												                MarginTop="25" />
 												<Standard.DropdownWithHorizontalControl Parameter.SelectorDataSource="{TaxSelector}" MarginLeft="50" MarginTop="10"
 																						HorizontalAlignment="Right" />
@@ -236,10 +236,10 @@
 								<Widget WidthSizePolicy="StretchToParent" IsHidden="@IsVillage" HeightSizePolicy="CoverChildren">
 									<Children>
 										<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
-										           StackLayout.LayoutMethod="HorizontalLeftToRight">
+										           StackLayout.LayoutMethod="VerticalBottomToTop">
 											<Children>
 												<RichTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" HorizontalAlignment="Left"
-												                SuggestedHeight="5" Brush="TownManagement.Project.Name.Text" Text="Criminal policy"
+												                SuggestedHeight="5" Brush="TownManagement.Project.Name.Text" Text="@CriminalPolicyText"
 												                MarginTop="25" />
 												<Standard.DropdownWithHorizontalControl Parameter.SelectorDataSource="{CriminalSelector}" MarginLeft="20" MarginTop="10"
 																						HorizontalAlignment="Right" />

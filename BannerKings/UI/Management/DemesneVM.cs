@@ -50,6 +50,9 @@ namespace BannerKings.UI.Management
         }
 
         [DataSourceProperty]
+        public string WorkforcePolicyText => new TextObject("{=!}Workforce policy").ToString();
+
+        [DataSourceProperty]
         public string TerrainText => new TextObject("{=!}Terrain").ToString();
 
         [DataSourceProperty]
