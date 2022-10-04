@@ -40,6 +40,12 @@ namespace BannerKings.Managers.Populations.Villages
 
         public BuildingType Mines { get; private set; }
 
+        public BuildingType Skeps { get; private set; }
+
+        public BuildingType Marketplace { get; private set; }
+
+        public BuildingType TaxOffice { get; private set; }
+
         public BuildingType DailyProduction { get; private set; }
 
         public BuildingType DailyFarm { get; private set; }
@@ -68,6 +74,10 @@ namespace BannerKings.Managers.Populations.Villages
                 yield return Instance.Tannery;
                 yield return Instance.Blacksmith;
                 yield return Mines;
+                yield return Skeps;
+                yield return Marketplace;
+                yield return Bakery;
+                yield return TaxOffice;
             }
         }
 
@@ -265,6 +275,42 @@ namespace BannerKings.Managers.Populations.Villages
                 {
                 });
 
+            Skeps = new BuildingType("bannerkings_skeps");
+            Skeps.Initialize(new TextObject("{=!}Bee Skeps"),
+                new TextObject("{=!}Build skeps for bee colonies. The skeps serve as hives for the bees and allow the farming of honey and wax. Adds honey to production."),
+                new[]
+                {
+                    1000,
+                    1800,
+                    2500
+                }, BuildingLocation.Settlement, new Tuple<BuildingEffectEnum, float, float, float>[]
+                {
+                });
+
+            Marketplace = new BuildingType("bannerkings_marketplace");
+            Marketplace.Initialize(new TextObject("{=zLdXCpne}Marketplace"),
+                new TextObject("{=!}Allow locals to sell off their excess production in the designated marketplace. Travelling merchants and individuals will stop by to trade. Adds village stock consumption and boosts hearth growth."),
+                new[]
+                {
+                    600,
+                    1200,
+                    2000
+                }, BuildingLocation.Settlement, new Tuple<BuildingEffectEnum, float, float, float>[]
+                {
+                });
+
+            TaxOffice = new BuildingType("bannerkings_taxoffice");
+            TaxOffice.Initialize(new TextObject("{=!}Tax Office"),
+                new TextObject("{=!}Collect denar taxes on local artisans and nobles, creating a new revenue stream for the village. If Marketplace is present, items daily consumed from it are also taxed."),
+                new[]
+                {
+                    1500,
+                    2500,
+                    3500
+                }, BuildingLocation.Settlement, new Tuple<BuildingEffectEnum, float, float, float>[]
+                {
+                });
+
 
             DailyProduction = new BuildingType("bannerkings_daily_production");
             Game.Current.ObjectManager.RegisterPresumedObject(DailyProduction);
@@ -310,6 +356,7 @@ namespace BannerKings.Managers.Populations.Villages
             yield return Instance.DailyFarm;
             yield return Instance.DailyPasture;
             yield return Instance.DailyWoods;
+            yield return Instance.Bakery;
 
             if (village.IsMiningVillage())
             {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using BannerKings.Extensions;
 using BannerKings.Managers.Institutions.Guilds;
 using BannerKings.Managers.Items;
@@ -184,10 +185,30 @@ namespace BannerKings.Managers
             }
             else if (type == DefaultVillageTypes.Lumberjack || type.StringId == "trapper")
             {
-                productions.Add(new ValueTuple<ItemObject, float>(BKItems.Instance.Honey, 2f));
+                float honey = 0.5f;
+                float skeps = villageData.GetBuildingLevel(DefaultVillageBuildings.Instance.Skeps);
+                if (skeps > 0)
+                {
+                    honey += 1f * skeps;
+                }
+
+                productions.Add(new ValueTuple<ItemObject, float>(BKItems.Instance.Honey, honey));
             }
 
-            productions.Add(new ValueTuple<ItemObject, float>(BKItems.Instance.Bread, 1f));
+
+            var grainTuple = productions.FirstOrDefault(x => x.Item1 == DefaultItems.Grain);
+            if (grainTuple.Item1 != null)
+            {
+                var bread = grainTuple.Item2 * 0.1f;
+                float bakery = villageData.GetBuildingLevel(DefaultVillageBuildings.Instance.Bakery);
+                if (bakery > 0)
+                {
+                    bread += grainTuple.Item2 * 0.15f;
+                }
+
+                productions.Add(new ValueTuple<ItemObject, float>(BKItems.Instance.Bread, bread));
+            }
+            
 
             return productions;
         }
