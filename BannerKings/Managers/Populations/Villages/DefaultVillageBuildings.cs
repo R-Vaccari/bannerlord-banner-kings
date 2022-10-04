@@ -357,6 +357,8 @@ namespace BannerKings.Managers.Populations.Villages
             yield return Instance.DailyPasture;
             yield return Instance.DailyWoods;
             yield return Instance.Bakery;
+            yield return Instance.Marketplace;
+            yield return Instance.TaxOffice;
 
             if (village.IsMiningVillage())
             {

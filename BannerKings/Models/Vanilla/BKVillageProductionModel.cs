@@ -13,10 +13,23 @@ using TaleWorlds.Core;
 
 namespace BannerKings.Models.Vanilla
 {
-    internal class BKVillageProductionModel : DefaultVillageProductionCalculatorModel
+    public class BKVillageProductionModel : DefaultVillageProductionCalculatorModel
     {
         private static readonly float PRODUCTION = 0.005f;
         private static readonly float BOOSTED_PRODUCTION = 0.01f;
+
+        public ExplainedNumber CalculateProductionsExplained(Village village)
+        {
+            var explainedNumber = new ExplainedNumber(0f, true);
+            var productions = BannerKingsConfig.Instance.PopulationManager
+                .GetProductions(BannerKingsConfig.Instance.PopulationManager.GetPopData(village.Settlement));
+            foreach (var production in productions)
+            {
+                explainedNumber.Add(CalculateDailyProductionAmount(village, production.Item1), production.Item1.Name);
+            }
+
+            return explainedNumber;
+        }
 
         public override float CalculateDailyProductionAmount(Village village, ItemObject item)
         {

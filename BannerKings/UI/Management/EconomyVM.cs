@@ -188,10 +188,7 @@ namespace BannerKings.UI.Management
             RevenueInfo.Clear();
             SatisfactionInfo.Clear();
 
-            ProductionInfo.Add(new InformationElement(new TextObject("{=GZooOyxK}Merchants' Revenue:").ToString(),
-                $"{data.EconomicData.MerchantRevenue:n0}",
-                new TextObject("{=rcApyg1K}Daily revenue of local merchants, based on slave workforce and production efficiency.")
-                    .ToString()));
+           
 
             ProductionInfo.Add(new InformationElement(new TextObject("{=NnOoYOTC}State Slaves:").ToString(),
                 $"{data.EconomicData.StateSlaves:P}",
@@ -221,6 +218,14 @@ namespace BannerKings.UI.Management
             if (IsVillage)
             {
                 var villageData = data.VillageData;
+
+                ProductionInfo.Add(new InformationElement(new TextObject("{=!}Construction:").ToString(),
+                    new TextObject("{=!}{POINTS} (Daily)")
+                    .SetTextVariable("POINTS", villageData.Construction).ToString(),
+                    new TextObject("{=Gm0F8o7L}How much the local population can progress with construction projects, on a daily basis.")
+                        .ToString()));
+
+
                 var model = new BKVillageProductionModel();
                 var productionQuantity = 0f;
                 var sb = new StringBuilder();
@@ -232,15 +237,22 @@ namespace BannerKings.UI.Management
 
                 sb.Remove(sb.Length - 2, 1);
                 var productionString = sb.ToString();
-                ProductionInfo.Add(new InformationElement(new TextObject("{=S2teOBN3}Goods Production:").ToString(),
-                    $"{productionQuantity:n0} (Daily)",
-                    new TextObject("{=Gm0F8o7L}How much the local population can progress with construction projects, on a daily basis.")
-                        .ToString()));
+                ProductionInfo.Add(new InformationElement(new TextObject("{=!}Goods Production:").ToString(),
+                    new TextObject("{=!}{POINTS} (Daily)")
+                    .SetTextVariable("POINTS", productionQuantity)
+                    .ToString(),
+                    new TextObject("{=!}Sum of goods produced on a daily basis, including all the types produced here").ToString()));
+
                 ProductionInfo.Add(new InformationElement(new TextObject("{=hmtRGrpt}Items Produced:").ToString(), productionString,
                     new TextObject("{=0RAPEDaT}Goods locally produced by the population.").ToString()));
             }
             else
             {
+                ProductionInfo.Add(new InformationElement(new TextObject("{=GZooOyxK}Merchants' Revenue:").ToString(),
+                   $"{data.EconomicData.MerchantRevenue:n0}",
+                   new TextObject("{=rcApyg1K}Daily revenue of local merchants, based on slave workforce and production efficiency.")
+                       .ToString()));
+
                 RevenueInfo.Add(new InformationElement(new TextObject("{=Re0UyaL5}Tariff:").ToString(),
                     $"{data.EconomicData.Tariff:P}",
                     new TextObject("{=UgD3or79}Percentage of an item's value charged as tax when sold.").ToString()));
