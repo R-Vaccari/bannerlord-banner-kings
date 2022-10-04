@@ -137,10 +137,9 @@ namespace BannerKings.Models.Vanilla
                             }
                         }
 
-                        if (!villageData.IsCurrentlyBuilding && villageData.CurrentDefault.BuildingType ==
-                            DefaultVillageBuildings.Instance.DailyProduction)
+                        if (villageData.CurrentBuilding.BuildingType.StringId == DefaultVillageBuildings.Instance.DailyProduction.StringId)
                         {
-                            explainedNumber.AddFactor(0.15f);
+                            explainedNumber.AddFactor(0.15f, DefaultVillageBuildings.Instance.DailyProduction.Name);
                         }
 
                         explainedNumber.AddFactor(data.EconomicData.ProductionEfficiency.ResultNumber - 1f);
