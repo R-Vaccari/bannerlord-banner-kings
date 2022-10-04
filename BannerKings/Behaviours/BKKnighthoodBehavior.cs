@@ -311,7 +311,14 @@ namespace BannerKings.Behaviours
                 return true;
             }
 
-            hintText = new TextObject(lordships.First(x => !x.IsEnabled).Hint);
+            if (lordships.Count == 0)
+            {
+                hintText = new TextObject("{=!}You currently do not lawfully own a lordship that could be given away.");
+                return false;
+            }
+
+            var first = lordships.FirstOrDefault(x => !x.IsEnabled);
+            hintText = first != null ? new TextObject(first.Hint) : new TextObject("{=!}You currently do not lawfully own a lordship that could be given away.");
             return false;
         }
 
