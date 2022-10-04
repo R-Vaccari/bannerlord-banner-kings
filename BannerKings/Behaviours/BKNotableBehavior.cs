@@ -496,6 +496,27 @@ namespace BannerKings.Behaviours
             }
         }
 
+        [HarmonyPatch(typeof(Village), "DailyTick")]
+        internal class VillageDailyTicktPatch
+        {
+            private static bool Prefix(Village __instance)
+            {
+                int hearthLevel = __instance.GetHearthLevel();
+                __instance.Hearth += __instance.HearthChange;
+                if (hearthLevel != __instance.GetHearthLevel())
+                {
+                    __instance.Settlement.Party.Visuals.RefreshLevelMask(__instance.Settlement.Party);
+                }
+                if (__instance.Hearth < 10f)
+                {
+                    __instance.Hearth = 10f;
+                }
+
+                __instance.Owner.Settlement.Militia += __instance.MilitiaChange;
+                return false;
+            }
+        }
+
         // Fix perk crash due to notable not having a Clan.
         [HarmonyPatch(typeof(Town), "DailyTick")]
         internal class TownDailyTicktPatch
