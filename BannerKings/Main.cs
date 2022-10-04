@@ -9,10 +9,8 @@ using BannerKings.UI;
 using Bannerlord.UIExtenderEx;
 using HarmonyLib;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.ComponentInterfaces;
 using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade;
-using TaleWorlds.ScreenSystem;
 
 namespace BannerKings
 {

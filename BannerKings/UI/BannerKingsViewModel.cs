@@ -41,6 +41,21 @@ namespace BannerKings.UI
                 }
             }
         }
+        protected string FormatFloatWithSymbols(float value)
+        {
+
+            string formatted = value.ToString("0.00");
+            if (value > 0f)
+            {
+                return '+' + formatted;
+            }
+            else if (value < 0f)
+            {
+                return '-' + formatted;
+            }
+
+            return formatted;
+        }
 
         protected string FormatValue(float value)
         {

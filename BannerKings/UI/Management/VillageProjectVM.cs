@@ -81,7 +81,7 @@ namespace BannerKings.UI.Management
             ProductionInfo.Clear();
             ConstructionInfo.Add(new InformationElement(new TextObject("{=!}Construction:").ToString(), 
                 new TextObject("{=!}{POINTS} (Daily)")
-                    .SetTextVariable("POINTS", villageData.Construction).ToString(),
+                    .SetTextVariable("POINTS", villageData.Construction.ToString("0.00")).ToString(),
                 new TextObject("{=!}How much the local population can progress with construction projects, on a daily basis").ToString()));
 
             ConstructionInfo.Add(new InformationElement(new TextObject("{=!}Current Progress:").ToString(), 
@@ -110,7 +110,7 @@ namespace BannerKings.UI.Management
             var productionExplained = villageData.ProductionsExplained;
             ProductionInfo.Add(new InformationElement(new TextObject("{=!}Goods Production:").ToString(),
                 new TextObject("{=!}{POINTS} (Daily)")
-                .SetTextVariable("POINTS", productionExplained.ResultNumber)
+                .SetTextVariable("POINTS", productionExplained.ResultNumber.ToString("0.00"))
                 .ToString(),
                 new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
                     .SetTextVariable("TEXT",

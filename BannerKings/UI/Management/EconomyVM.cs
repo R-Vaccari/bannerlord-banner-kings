@@ -227,27 +227,28 @@ namespace BannerKings.UI.Management
 
                 ProductionInfo.Add(new InformationElement(new TextObject("{=!}Construction:").ToString(),
                     new TextObject("{=!}{POINTS} (Daily)")
-                    .SetTextVariable("POINTS", villageData.Construction).ToString(),
+                    .SetTextVariable("POINTS", villageData.Construction.ToString("0.00")).ToString(),
                     new TextObject("{=Gm0F8o7L}How much the local population can progress with construction projects, on a daily basis.")
                         .ToString()));
 
-
-                var model = new BKVillageProductionModel();
-                var productionQuantity = 0f;
                 var sb = new StringBuilder();
                 foreach (var production in BannerKingsConfig.Instance.PopulationManager.GetProductions(data))
                 {
                     sb.Append(production.Item1.Name + ", ");
-                    productionQuantity += model.CalculateDailyProductionAmount(villageData.Village, production.Item1);
                 }
 
                 sb.Remove(sb.Length - 2, 1);
                 var productionString = sb.ToString();
+                var productionExplained = villageData.ProductionsExplained;
                 ProductionInfo.Add(new InformationElement(new TextObject("{=!}Goods Production:").ToString(),
                     new TextObject("{=!}{POINTS} (Daily)")
-                    .SetTextVariable("POINTS", productionQuantity)
+                    .SetTextVariable("POINTS", productionExplained.ResultNumber.ToString("0.00"))
                     .ToString(),
-                    new TextObject("{=!}Sum of goods produced on a daily basis, including all the types produced here").ToString()));
+                    new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
+                    .SetTextVariable("TEXT",
+                        new TextObject("{=!}Sum of goods produced on a daily basis, including all the types produced here."))
+                    .SetTextVariable("EXPLANATIONS", productionExplained.GetExplanations())
+                    .ToString()));
 
                 ProductionInfo.Add(new InformationElement(new TextObject("{=hmtRGrpt}Items Produced:").ToString(), productionString,
                     new TextObject("{=0RAPEDaT}Goods locally produced by the population.").ToString()));

@@ -13,7 +13,6 @@ namespace BannerKings.UI.Management
 {
     public class OverviewVM : BannerKingsViewModel
     {
-        private bool _isSelected;
         private MBBindingList<PopulationInfoVM> classesList;
         private MBBindingList<InformationElement> cultureInfo;
         private MBBindingList<CultureElementVM> culturesList;
@@ -29,7 +28,6 @@ namespace BannerKings.UI.Management
             cultureInfo = new MBBindingList<InformationElement>();
             statsInfo = new MBBindingList<InformationElement>();
             settlement = _settlement;
-            this._isSelected = _isSelected;
             RefreshValues();
         }
 
@@ -171,7 +169,7 @@ namespace BannerKings.UI.Management
             {
                 var hearts = BannerKingsConfig.Instance.ProsperityModel.CalculateHearthChange(settlement.Village, true);
                 StatsInfo.Add(new InformationElement(new TextObject("{=!}Hearth Growth:").ToString(),
-                    hearts.ResultNumber.ToString("0.00"),
+                    FormatFloatWithSymbols(hearts.ResultNumber),
                     new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
                         .SetTextVariable("TEXT",
                             new TextObject("{=!}The number of homes in this village. Hearths are used to calculated the population capacity. Each hearth on average houses 4 people. Increasing hearths allows for population to keep growing and thus making the village more productive and relevant."))
@@ -198,7 +196,7 @@ namespace BannerKings.UI.Management
 
             var growth = BannerKingsConfig.Instance.GrowthModel.CalculateEffect(settlement, data);
             StatsInfo.Add(new InformationElement(new TextObject("{=!}Population Growth:").ToString(),
-                ((int)growth.ResultNumber).ToString(),
+                FormatFloatWithSymbols((int)growth.ResultNumber).ToString(),
                  new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
                     .SetTextVariable("TEXT",
                         new TextObject("{=!}The population growth of your settlement on a daily basis, distributed among the classes."))
@@ -207,8 +205,8 @@ namespace BannerKings.UI.Management
 
             var influence = BannerKingsConfig.Instance.InfluenceModel.CalculateSettlementInfluence(settlement, data);
             StatsInfo.Add(new InformationElement(GameTexts.FindText("str_total_influence").ToString(),
-                new TextObject("{=!}{INFLUENCE}")
-                    .SetTextVariable("INFLUENCE", influence.ResultNumber.ToString("0.00"))
+                new TextObject("{=!}{INFLUENCE}{INFLUENCE_ICON}")
+                    .SetTextVariable("INFLUENCE", FormatFloatWithSymbols(influence.ResultNumber))
                     .ToString(),
                 new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
                     .SetTextVariable("TEXT",
