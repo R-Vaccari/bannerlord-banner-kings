@@ -201,7 +201,7 @@
 										<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
 										           StackLayout.LayoutMethod="VerticalBottomToTop">
 											<Children>
-												<RichTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" HorizontalAlignment="Left"
+												<RichTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" HorizontalAlignment="Center"
 												                SuggestedHeight="5" Brush="TownManagement.Project.Name.Text" Text="@MilitiaPolicyText"
 												                MarginTop="25" />
 												<Standard.DropdownWithHorizontalControl Parameter.SelectorDataSource="{MilitiaSelector}" MarginLeft="35" MarginTop="10"
@@ -217,7 +217,7 @@
 										<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
 										           StackLayout.LayoutMethod="VerticalBottomToTop">
 											<Children>
-												<RichTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" HorizontalAlignment="Left"
+												<RichTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" HorizontalAlignment="Center"
 												                SuggestedHeight="5" Brush="TownManagement.Project.Name.Text" Text="@GarrisonPolicyText"
 												                MarginTop="25" />
 												<Standard.DropdownWithHorizontalControl Parameter.SelectorDataSource="{GarrisonSelector}" MarginLeft="20" MarginTop="10"
@@ -232,7 +232,7 @@
 										<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
 										           StackLayout.LayoutMethod="VerticalBottomToTop">
 											<Children>
-												<RichTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" HorizontalAlignment="Left"
+												<RichTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" HorizontalAlignment="Center"
 												                SuggestedHeight="5" Brush="TownManagement.Project.Name.Text" Text="@DraftingPolicyText"
 												                MarginTop="25" />
 												<Standard.DropdownWithHorizontalControl Parameter.SelectorDataSource="{DraftSelector}" MarginLeft="24" MarginTop="10"
