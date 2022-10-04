@@ -4,8 +4,6 @@ using System.Linq;
 using System.Reflection;
 using BannerKings.Extensions;
 using BannerKings.Managers.Helpers;
-using BannerKings.Managers.Populations;
-using BannerKings.Managers.Populations.Villages;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
 using BannerKings.Models.Vanilla;
@@ -283,7 +281,8 @@ namespace BannerKings.UI
                     "bannerkings_daily_woods" or "bannerkings_fishing" => "building_irrigation",
                     "bannerkings_warehouse" or "bk_building_armory" or "building_castle_retinue" => "building_settlement_garrison_barracks",
                     "bk_building_theater" => "building_settlement_forum",
-                    "bannerkings_courier" => "building_castle_lime_kilns",
+                    "bannerkings_marketplace" => "building_settlement_marketplace",
+                    "bannerkings_taxoffice" or "bannerkings_courier" => "building_castle_lime_kilns",
                     _ => code
                 };
 
