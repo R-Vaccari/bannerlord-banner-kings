@@ -211,20 +211,6 @@ namespace BannerKings.Behaviours
             if (settlement.Town != null)
             {
                 var town = settlement.Town;
-                var wkModel = (BKWorkshopModel)Campaign.Current.Models.WorkshopModel;
-                foreach (var wk in town.Workshops)
-                {
-                    if (!wk.IsRunning || !wk.Owner.IsNotable)
-                    {
-                        continue;
-                    }
-
-                    var gold = Campaign.Current.Models.ClanFinanceModel.CalculateOwnerIncomeFromWorkshop(wk);
-                    gold -= (int)(wkModel.CalculateWorkshopTax(wk.Settlement, wk.Owner).ResultNumber * gold);
-                    wk.Owner.ChangeHeroGold(gold);
-                    wk.ChangeGold(-gold);
-                }
-
                 var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement).LandData;
                 HandleItemAvailability(town);
                 HandleExcessWorkforce(data, town);
