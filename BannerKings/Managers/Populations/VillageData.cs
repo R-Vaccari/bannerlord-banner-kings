@@ -90,7 +90,12 @@ namespace BannerKings.Managers.Populations
 
         public int GetBuildingLevel(BuildingType type)
         {
-            Building building = buildings.FirstOrDefault(x => x.BuildingType == type);
+            if (type == null)
+            {
+                return 0;
+            }
+
+            Building building = buildings.FirstOrDefault(x => x.BuildingType.StringId == type.StringId);
             if (building != null)
             {
                 return building.CurrentLevel;
