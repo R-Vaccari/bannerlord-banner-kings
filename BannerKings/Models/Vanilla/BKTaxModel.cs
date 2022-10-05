@@ -162,7 +162,7 @@ namespace BannerKings.Models.Vanilla
                 if (taxOffice > 0)
                 {
                     float nobles = data.GetTypeCount(PopType.Nobles);
-                    float craftsmen = data.GetTypeCount(PopType.Nobles);
+                    float craftsmen = data.GetTypeCount(PopType.Craftsmen);
 
                     if (nobles > 0f)
                     {

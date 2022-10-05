@@ -197,9 +197,12 @@ namespace BannerKings.Models.Vanilla
             return result;
         }
 
-        public override float GetDailyDemandForCategory(Town town, ItemCategory category, int extraProsperity)
+        public override float GetDailyDemandForCategory(Town town, ItemCategory category, int extraProsperity) => 
+            GetCategoryDemand(town.Settlement, category, extraProsperity);
+
+        public float GetCategoryDemand(Settlement settlement, ItemCategory category, int extraProsperity)
         {
-            var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
+            var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
             float nobles = data.GetTypeCount(PopType.Nobles);
             float craftsmen = data.GetTypeCount(PopType.Craftsmen);
             float serfs = data.GetTypeCount(PopType.Serfs);
@@ -223,8 +226,9 @@ namespace BannerKings.Models.Vanilla
                     break;
             }
 
-            var num = MathF.Max(0f, baseResult + (town.Prosperity / 3) + extraProsperity);
-            var num2 = MathF.Max(0f, baseResult + (town.Prosperity / 2));
+            var prosperity = settlement.IsVillage ? settlement.Village.TradeBound.Prosperity : settlement.Town.Prosperity;
+            var num = MathF.Max(0f, baseResult + (prosperity / 3) + extraProsperity);
+            var num2 = MathF.Max(0f, baseResult + (prosperity / 2));
             var num3 = category.BaseDemand * num;
             var num4 = category.LuxuryDemand * num2;
             var result = num3 + num4;
