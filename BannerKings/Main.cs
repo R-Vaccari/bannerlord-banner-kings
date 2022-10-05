@@ -51,7 +51,7 @@ namespace BannerKings
 
             campaignStarter.AddModel(new BKCompanionPrices());
             campaignStarter.AddModel(BannerKingsConfig.Instance.ProsperityModel);
-            campaignStarter.AddModel(new BKTaxModel());
+            campaignStarter.AddModel(BannerKingsConfig.Instance.TaxModel);
             campaignStarter.AddModel(new BKFoodModel());
             campaignStarter.AddModel(new BKConstructionModel());
             campaignStarter.AddModel(new BKMilitiaModel());
