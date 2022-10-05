@@ -4,6 +4,8 @@ using BannerKings.Managers.Education.Lifestyles;
 using BannerKings.Managers.Titles;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
+using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.CampaignSystem.Settlements.Workshops;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
@@ -11,6 +13,8 @@ namespace BannerKings.Models.Vanilla
 {
     public class BKClanFinanceModel : DefaultClanFinanceModel
     {
+        public override int CalculateOwnerIncomeFromWorkshop(Workshop workshop) => workshop.ProfitMade;
+
         public override ExplainedNumber CalculateClanGoldChange(Clan clan, bool includeDescriptions = false, bool applyWithdrawals = false)
         {
             var baseResult = base.CalculateClanGoldChange(clan, true, applyWithdrawals);
@@ -52,16 +56,17 @@ namespace BannerKings.Models.Vanilla
             var kingdom = clan.Kingdom;
             var wkModel = (BKWorkshopModel) Campaign.Current.Models.WorkshopModel;
 
+            int totalWorkshopTaxes = 0;
+            int totalNotablesAids = 0;
+
             foreach (var town in clan.Fiefs)
             {
                 foreach (var wk in town.Workshops)
                 {
                     if (wk.IsRunning && wk.Owner != clan.Leader && wk.WorkshopType.StringId != "artisans")
                     {
-                        result.Add(base.CalculateOwnerIncomeFromWorkshop(wk) * wkModel.CalculateWorkshopTax(town.Settlement, wk.Owner).ResultNumber,
-                            new TextObject("{=RBCrujCo}Taxes from {WORKSHOP} at {TOWN}")
-                                .SetTextVariable("WORKSHOP", wk.Name)
-                                .SetTextVariable("TOWN", town.Name));
+                        totalWorkshopTaxes += (int)(CalculateOwnerIncomeFromWorkshop(wk) * 
+                            wkModel.CalculateWorkshopTax(town.Settlement, wk.Owner).ResultNumber);
                     }
                 }
 
@@ -72,13 +77,26 @@ namespace BannerKings.Models.Vanilla
 
                 foreach (var notable in town.Settlement.Notables.Where(notable => notable.SupporterOf == clan && notable.Gold > 5000))
                 {
-                    result.Add(200f, new TextObject("{=WDHTvasY}Aid from {NOTABLE}").SetTextVariable("NOTABLE", notable.Name));
+                    totalNotablesAids += 200;
                     if (applyWithdrawals)
                     {
                         notable.Gold -= 200;
                     }
                 }
             }
+
+            if (totalWorkshopTaxes > 0)
+            {
+                result.Add(totalWorkshopTaxes,
+                    new TextObject("{=!}Workshop taxes from demesnes"));
+            }
+
+            if (totalNotablesAids > 0)
+            {
+                result.Add(totalNotablesAids,
+                    new TextObject("{=!}Financial aids from supporting notables"));
+            }
+
 
             var dictionary = BannerKingsConfig.Instance.TitleManager.CalculateVassals(clan);
             if (dictionary.Count >= 0)
