@@ -22,7 +22,7 @@ namespace BannerKings.Utils
                     .SetTextVariable("CLASS", className)
                     .ToString(),
                     ex);
-                File.AppendAllText(path + fileName, Environment.NewLine + exception.Message + Environment.NewLine + exception.StackTrace);
+                File.AppendAllText(path + fileName, Environment.NewLine + exception.Message + Environment.NewLine + ex.StackTrace);
                 InformationManager.DisplayMessage(new InformationMessage(
                     new TextObject("{=!}A Banner Kings error was detected. Send the contents of {FILE} from BannerKings module to support channel.")
                     .SetTextVariable("FILE", fileName)
