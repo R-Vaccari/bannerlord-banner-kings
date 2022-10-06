@@ -41,6 +41,10 @@
 	<Xmls>
 		<XmlNode>
 			<XmlName id="GameText" path="gt_common" />
+			<IncludedGameTypes>
+				<GameType value = "Campaign"/>
+				<GameType value = "CampaignStoryMode"/>
+			</IncludedGameTypes>
 		</XmlNode>
 		<XmlNode>
 			<XmlName id="EquipmentRosters" path="equipment_sets" />
