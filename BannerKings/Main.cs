@@ -120,7 +120,11 @@ namespace BannerKings
         public override void OnGameEnd(Game game)
         {
             base.OnGameEnd(game);
-            UIManager.Instance.BKScreen.OnFinalize();
+            if (UIManager.Instance.BKScreen != null)
+            {
+                UIManager.Instance.BKScreen.OnFinalize();
+            }
+            
             //ScreenManager.RemoveGlobalLayer(UIManager.Instance.BKScreen);
         }
     }
