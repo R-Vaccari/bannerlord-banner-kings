@@ -12,6 +12,28 @@ namespace BannerKings.Models.Vanilla
 {
     public class BKWorkshopModel : DefaultWorkshopModel
     {
+
+        public ExplainedNumber GetDailyExpense(Workshop workshop, bool includeDescriptions = false)
+        {
+            var result = new ExplainedNumber(0f, includeDescriptions);
+
+            var labor = workshop.WorkshopType.StringId switch
+            {
+                "silversmithy" => 50f,
+                "velvet_weavery" => 40f,
+                "smithy" => 35f,
+                "tannery" or "wool_weavery" or "linen_weavery" => 25f,
+                _ => 15f
+            };
+
+            result.Add(labor, workshop.WorkshopType.Name);
+            result.Add(workshop.Settlement.Prosperity * 0.005f, GameTexts.FindText("str_prosperity"));
+
+
+            return result;
+        }
+
+
         public override int GetSellingCost(Workshop workshop)
         {
             return base.GetSellingCost(workshop);
@@ -104,7 +126,7 @@ namespace BannerKings.Models.Vanilla
             {
                 result.Add(0.3f);
             }
-            else if (tax.Policy == BKTaxPolicy.TaxType.High)
+            else if (tax.Policy == BKTaxPolicy.TaxType.Standard)
             {
                 result.Add(0.2f);
             }

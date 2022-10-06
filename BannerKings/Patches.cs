@@ -605,8 +605,7 @@ namespace BannerKings
             {
                 private static bool Prefix(Workshop __instance, ref int __result)
                 {
-                    __result = (int) (__instance.Settlement.Prosperity * 0.01f +
-                                      Campaign.Current.Models.WorkshopModel.GetDailyExpense(__instance.Level));
+                    __result = (int)BannerKingsConfig.Instance.WorkshopModel.GetDailyExpense(__instance).ResultNumber;
                     return false;
                 }
             }

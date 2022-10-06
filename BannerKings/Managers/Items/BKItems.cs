@@ -146,7 +146,7 @@ namespace BannerKings.Managers.Items
             BookHeartsDesire = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("book_hearts_desire"));
             InitializeTradeGood(BookHeartsDesire,
                 new TextObject("{=hFV7jxHj}Heart's Desire{@Plural}collection of Heart's Desire books{\\@}"), "lib_book_closed_a",
-                BKItemCategories.Instance.Book, 1000, 1f, ItemObject.ItemTypeEnum.Goods);
+                BKItemCategories.Instance.Book, 750, 1f, ItemObject.ItemTypeEnum.Goods);
 
             BookSiege = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("book_siege"));
             InitializeTradeGood(BookSiege,
