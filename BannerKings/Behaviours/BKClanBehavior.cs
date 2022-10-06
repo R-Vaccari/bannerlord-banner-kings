@@ -489,7 +489,7 @@ namespace BannerKings.Behaviours
                                     var limit = 0f;
                                     if (title.fief.IsVillage)
                                     {
-                                        limit = title.fief.Village.TradeTaxAccumulated;
+                                        limit = BannerKingsConfig.Instance.TaxModel.CalculateVillageTaxFromIncome(title.fief.Village).ResultNumber;
                                     }
                                     else if (title.fief.Town != null)
                                     {
