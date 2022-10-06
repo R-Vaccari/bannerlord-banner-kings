@@ -8,6 +8,7 @@ using BannerKings.Managers.Policies;
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Villages;
 using BannerKings.Models.Vanilla;
+using BannerKings.Utils;
 using HarmonyLib;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
@@ -19,7 +20,6 @@ using TaleWorlds.CampaignSystem.Settlements.Buildings;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
-using TaleWorlds.ObjectSystem;
 using static BannerKings.Managers.PopulationManager;
 
 namespace BannerKings.Behaviours
@@ -211,20 +211,6 @@ namespace BannerKings.Behaviours
             if (settlement.Town != null)
             {
                 var town = settlement.Town;
-                var wkModel = (BKWorkshopModel)Campaign.Current.Models.WorkshopModel;
-                foreach (var wk in town.Workshops)
-                {
-                    if (!wk.IsRunning || !wk.Owner.IsNotable)
-                    {
-                        continue;
-                    }
-
-                    var gold = Campaign.Current.Models.ClanFinanceModel.CalculateOwnerIncomeFromWorkshop(wk);
-                    gold -= (int)(wkModel.CalculateWorkshopTax(wk.Settlement, wk.Owner).ResultNumber * gold);
-                    wk.Owner.ChangeHeroGold(gold);
-                    wk.ChangeGold(-gold);
-                }
-
                 var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement).LandData;
                 HandleItemAvailability(town);
                 HandleExcessWorkforce(data, town);
@@ -234,118 +220,126 @@ namespace BannerKings.Behaviours
 
         private void HandleItemAvailability(Town town)
         {
-            if (!town.IsTown)
+            ExceptionUtils.TryCatch(() =>
             {
-                return;
-            }
-
-            Dictionary<ItemCategory, int> desiredAmounts = new Dictionary<ItemCategory, int>();
-            ItemRoster itemRoster = town.Owner.ItemRoster;
-
-            desiredAmounts.Add(DefaultItemCategories.UltraArmor, (int)(town.Prosperity / 750f));
-            desiredAmounts.Add(DefaultItemCategories.HeavyArmor, (int)(town.Prosperity / 400f));
-            desiredAmounts.Add(DefaultItemCategories.MeleeWeapons5, (int)(town.Prosperity / 750f));
-            desiredAmounts.Add(DefaultItemCategories.MeleeWeapons4, (int)(town.Prosperity / 400f));
-            desiredAmounts.Add(DefaultItemCategories.RangedWeapons5, (int)(town.Prosperity / 1500f));
-            desiredAmounts.Add(DefaultItemCategories.RangedWeapons4, (int)(town.Prosperity / 1000f));
-
-            var behavior = Campaign.Current.GetCampaignBehavior<WorkshopsCampaignBehavior>();
-            var getItem = AccessTools.Method(behavior.GetType(), "GetRandomItemAux", new Type[] { typeof(ItemCategory), typeof(Town) });
-
-            foreach (var pair in desiredAmounts)
-            {
-                var quantity = 0;
-                foreach (ItemRosterElement element in itemRoster)
+                if (!town.IsTown)
                 {
-                    var category = element.EquipmentElement.Item.ItemCategory; 
-                    if (category == pair.Key)
-                    {
-                        quantity++;
-                    }
+                    return;
                 }
 
-                if (quantity < desiredAmounts[pair.Key])
+                Dictionary<ItemCategory, int> desiredAmounts = new Dictionary<ItemCategory, int>();
+                ItemRoster itemRoster = town.Owner.ItemRoster;
+
+                desiredAmounts.Add(DefaultItemCategories.UltraArmor, (int)(town.Prosperity / 750f));
+                desiredAmounts.Add(DefaultItemCategories.HeavyArmor, (int)(town.Prosperity / 400f));
+                desiredAmounts.Add(DefaultItemCategories.MeleeWeapons5, (int)(town.Prosperity / 750f));
+                desiredAmounts.Add(DefaultItemCategories.MeleeWeapons4, (int)(town.Prosperity / 400f));
+                desiredAmounts.Add(DefaultItemCategories.RangedWeapons5, (int)(town.Prosperity / 1500f));
+                desiredAmounts.Add(DefaultItemCategories.RangedWeapons4, (int)(town.Prosperity / 1000f));
+
+                var behavior = Campaign.Current.GetCampaignBehavior<WorkshopsCampaignBehavior>();
+                var getItem = AccessTools.Method(behavior.GetType(), "GetRandomItemAux", new Type[] { typeof(ItemCategory), typeof(Town) });
+
+                foreach (var pair in desiredAmounts)
                 {
-                    ItemObject item = (ItemObject)getItem.Invoke(behavior, new object[] { pair.Key, town });
-                    if (item != null)
+                    var quantity = 0;
+                    foreach (ItemRosterElement element in itemRoster)
                     {
-                        itemRoster.AddToCounts(item, 1);
+                        var category = element.EquipmentElement.Item.ItemCategory;
+                        if (category == pair.Key)
+                        {
+                            quantity++;
+                        }
+                    }
+
+                    if (quantity < desiredAmounts[pair.Key])
+                    {
+                        ItemObject item = (ItemObject)getItem.Invoke(behavior, new object[] { pair.Key, town });
+                        if (item != null)
+                        {
+                            itemRoster.AddToCounts(item, 1);
+                        }
                     }
                 }
-            }
+            }, GetType().Name);
         }
 
 
         private void HandleExcessWorkforce(LandData data, Town town)
         {
-            if (data.WorkforceSaturation > 1f)
+            ExceptionUtils.TryCatch(() =>
             {
-                var workers = data.AvailableWorkForce * (data.WorkforceSaturation - 1f);
-                var items = new HashSet<ItemObject>();
-                if (town.Villages.Count > 0)
+                if (data.WorkforceSaturation > 1f)
                 {
-                    foreach (var tuple in from vil in town.Villages select BannerKingsConfig.Instance.PopulationManager.GetPopData(vil.Settlement) into popData from tuple in BannerKingsConfig.Instance.PopulationManager.GetProductions(popData) where tuple.Item1.IsTradeGood && !tuple.Item1.IsFood select tuple)
+                    var workers = data.AvailableWorkForce * (data.WorkforceSaturation - 1f);
+                    var items = new HashSet<ItemObject>();
+                    if (town.Villages.Count > 0)
                     {
-                        items.Add(tuple.Item1);
+                        foreach (var tuple in from vil in town.Villages select BannerKingsConfig.Instance.PopulationManager.GetPopData(vil.Settlement) into popData from tuple in BannerKingsConfig.Instance.PopulationManager.GetProductions(popData) where tuple.Item1.IsTradeGood && !tuple.Item1.IsFood select tuple)
+                        {
+                            items.Add(tuple.Item1);
+                        }
+                    }
+
+                    if (items.Count > 0)
+                    {
+                        var random = items.GetRandomElementInefficiently();
+                        var itemCount = (int)(workers * 0.01f);
+                        BuyOutput(town, random, itemCount, town.GetItemPrice(random));
                     }
                 }
-
-                if (items.Count > 0)
-                {
-                    var random = items.GetRandomElementInefficiently();
-                    var itemCount = (int)(workers * 0.01f);
-                    BuyOutput(town, random, itemCount, town.GetItemPrice(random));
-                }
-            }
+            }, GetType().Name); 
         }
 
         private void HandleExcessFood(LandData data, Town town)
         {
-
-            if (town.FoodStocks >= town.FoodStocksUpperLimit() - 10)
+            ExceptionUtils.TryCatch(() =>
             {
-                var items = new HashSet<ItemObject>();
-                if (town.Villages.Count > 0)
+                if (town.FoodStocks >= town.FoodStocksUpperLimit() - 10)
                 {
-                    foreach (var tuple in town.Villages.Select(vil => BannerKingsConfig.Instance.PopulationManager.GetPopData(vil.Settlement)).SelectMany(data => BannerKingsConfig.Instance.PopulationManager.GetProductions(data)))
+                    var items = new HashSet<ItemObject>();
+                    if (town.Villages.Count > 0)
                     {
-                        items.Add(tuple.Item1);
+                        foreach (var tuple in town.Villages.Select(vil => BannerKingsConfig.Instance.PopulationManager.GetPopData(vil.Settlement)).SelectMany(data => BannerKingsConfig.Instance.PopulationManager.GetProductions(data)))
+                        {
+                            items.Add(tuple.Item1);
+                        }
+                    }
+
+                    var foodModel = (BKFoodModel)Campaign.Current.Models.SettlementFoodModel;
+                    var popData = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
+                    var excess = foodModel.GetPopulationFoodProduction(popData, town).ResultNumber - 10 - foodModel.GetPopulationFoodConsumption(popData).ResultNumber;
+                    //float pasturePorportion = data.Pastureland / data.Acreage;
+
+                    var farmFood = MBMath.ClampFloat(data.Farmland * data.GetAcreOutput("farmland"), 0f, excess);
+                    if (town.IsCastle)
+                    {
+                        farmFood *= 0.1f;
+                    }
+
+                    while (farmFood > 1f)
+                    {
+                        foreach (var item in items)
+                        {
+                            if (!item.IsFood)
+                            {
+                                continue;
+                            }
+
+                            var count = farmFood > 10f
+                                ? (int)MBMath.ClampFloat(farmFood * MBRandom.RandomFloat, 0f, farmFood)
+                                : (int)farmFood;
+                            if (count == 0)
+                            {
+                                break;
+                            }
+
+                            BuyOutput(town, item, count, town.GetItemPrice(item));
+                            farmFood -= count;
+                        }
                     }
                 }
-
-                var foodModel = (BKFoodModel)Campaign.Current.Models.SettlementFoodModel;
-                var popData = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
-                var excess = foodModel.GetPopulationFoodProduction(popData, town).ResultNumber - 10 - foodModel.GetPopulationFoodConsumption(popData).ResultNumber;
-                //float pasturePorportion = data.Pastureland / data.Acreage;
-
-                var farmFood = MBMath.ClampFloat(data.Farmland * data.GetAcreOutput("farmland"), 0f, excess);
-                if (town.IsCastle)
-                {
-                    farmFood *= 0.1f;
-                }
-
-                while (farmFood > 1f)
-                {
-                    foreach (var item in items)
-                    {
-                        if (!item.IsFood)
-                        {
-                            continue;
-                        }
-
-                        var count = farmFood > 10f
-                            ? (int)MBMath.ClampFloat(farmFood * MBRandom.RandomFloat, 0f, farmFood)
-                            : (int)farmFood;
-                        if (count == 0)
-                        {
-                            break;
-                        }
-
-                        BuyOutput(town, item, count, town.GetItemPrice(item));
-                        farmFood -= count;
-                    }
-                }
-            }
+            }, GetType().Name);
         }
 
         private void TickCastle(Settlement settlement)

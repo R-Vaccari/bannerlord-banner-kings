@@ -11,7 +11,6 @@ using HarmonyLib;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade;
-using TaleWorlds.ScreenSystem;
 
 namespace BannerKings
 {
@@ -51,25 +50,25 @@ namespace BannerKings
             //campaignStarter.AddBehavior(new BKCombatBehavior());
 
             campaignStarter.AddModel(new BKCompanionPrices());
-            campaignStarter.AddModel(new BKProsperityModel());
-            campaignStarter.AddModel(new BKTaxModel());
+            campaignStarter.AddModel(BannerKingsConfig.Instance.ProsperityModel);
+            campaignStarter.AddModel(BannerKingsConfig.Instance.TaxModel);
             campaignStarter.AddModel(new BKFoodModel());
             campaignStarter.AddModel(new BKConstructionModel());
             campaignStarter.AddModel(new BKMilitiaModel());
-            campaignStarter.AddModel(new BKInfluenceModel());
+            campaignStarter.AddModel(BannerKingsConfig.Instance.InfluenceModel);
             campaignStarter.AddModel(new BKLoyaltyModel());
-            campaignStarter.AddModel(new BKVillageProductionModel());
+            campaignStarter.AddModel(BannerKingsConfig.Instance.VillageProductionModel);
             campaignStarter.AddModel(new BKSecurityModel());
             campaignStarter.AddModel(new BKPartyLimitModel());
-            campaignStarter.AddModel(new BKEconomyModel());
+            campaignStarter.AddModel(BannerKingsConfig.Instance.EconomyModel);
             campaignStarter.AddModel(new BKPriceFactorModel());
-            campaignStarter.AddModel(new BKWorkshopModel());
-            campaignStarter.AddModel(new BKClanFinanceModel());
+            campaignStarter.AddModel(BannerKingsConfig.Instance.WorkshopModel);
+            campaignStarter.AddModel(BannerKingsConfig.Instance.ClanFinanceModel);
             campaignStarter.AddModel(new BKArmyManagementModel());
             campaignStarter.AddModel(new BKSiegeEventModel());
             campaignStarter.AddModel(new BKTournamentModel());
             campaignStarter.AddModel(new BKRaidModel());
-            campaignStarter.AddModel(new BKVolunteerModel());
+            campaignStarter.AddModel(BannerKingsConfig.Instance.VolunteerModel);
             campaignStarter.AddModel(new BKNotableSpawnModel());
             campaignStarter.AddModel(new BKGarrisonModel());
             campaignStarter.AddModel(new BKRansomModel());
@@ -78,7 +77,7 @@ namespace BannerKings
             campaignStarter.AddModel(new BKSettlementValueModel());
             campaignStarter.AddModel(new BKNotablePowerModel());
             campaignStarter.AddModel(new BKPartyFoodConsumption());
-            campaignStarter.AddModel(new BKSmithingModel());
+            campaignStarter.AddModel(BannerKingsConfig.Instance.SmithingModel);
             campaignStarter.AddModel(new BKMapTrackModel());
             campaignStarter.AddModel(new BKAgentDamageModel());
             campaignStarter.AddModel(new BKAgentStatsModel());
@@ -121,7 +120,11 @@ namespace BannerKings
         public override void OnGameEnd(Game game)
         {
             base.OnGameEnd(game);
-            UIManager.Instance.BKScreen.OnFinalize();
+            if (UIManager.Instance.BKScreen != null)
+            {
+                UIManager.Instance.BKScreen.OnFinalize();
+            }
+            
             //ScreenManager.RemoveGlobalLayer(UIManager.Instance.BKScreen);
         }
     }

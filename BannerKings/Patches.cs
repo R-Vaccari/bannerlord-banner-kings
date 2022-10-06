@@ -16,7 +16,6 @@ using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Issues;
 using TaleWorlds.CampaignSystem.MapEvents;
 using TaleWorlds.CampaignSystem.Party;
-using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.Settlements.Workshops;
 using TaleWorlds.Core;
@@ -606,8 +605,7 @@ namespace BannerKings
             {
                 private static bool Prefix(Workshop __instance, ref int __result)
                 {
-                    __result = (int) (__instance.Settlement.Prosperity * 0.01f +
-                                      Campaign.Current.Models.WorkshopModel.GetDailyExpense(__instance.Level));
+                    __result = (int)BannerKingsConfig.Instance.WorkshopModel.GetDailyExpense(__instance).ResultNumber;
                     return false;
                 }
             }
@@ -923,6 +921,11 @@ namespace BannerKings
                             var item = elementCopyAtIndex.EquipmentElement.Item;
                             var amount = elementCopyAtIndex.Amount;
                             var itemCategory = item.GetItemCategory();
+                            if (!categoryDemand.ContainsKey(itemCategory))
+                            {
+                                continue;
+                            }
+
                             var demand = categoryDemand[itemCategory];
 
                             var behaviors = Campaign.Current.GetCampaignBehaviors<ItemConsumptionBehavior>();

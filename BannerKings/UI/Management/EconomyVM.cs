@@ -38,6 +38,12 @@ namespace BannerKings.UI.Management
         }
 
         [DataSourceProperty]
+        public string TaxPolicyText => new TextObject("{=!}Tax policy").ToString();
+
+        [DataSourceProperty]
+        public string CriminalPolicyText => new TextObject("{=!}Criminal policy").ToString();
+
+        [DataSourceProperty]
         public HintViewModel TournamentHint => new(new TextObject("{=VeMSE94s}Sponsor a tournament in this town. As the main sponsor, you have to pay 5000 coins for the tournament costs, as well as " +
                                                                   "provide an adequate prize. Sponsoring games improves population loyalty towards you, and valuable prizes provide renown to your name."));
 
@@ -188,10 +194,7 @@ namespace BannerKings.UI.Management
             RevenueInfo.Clear();
             SatisfactionInfo.Clear();
 
-            ProductionInfo.Add(new InformationElement(new TextObject("{=GZooOyxK}Merchants' Revenue:").ToString(),
-                $"{data.EconomicData.MerchantRevenue:n0}",
-                new TextObject("{=rcApyg1K}Daily revenue of local merchants, based on slave workforce and production efficiency.")
-                    .ToString()));
+           
 
             ProductionInfo.Add(new InformationElement(new TextObject("{=NnOoYOTC}State Slaves:").ToString(),
                 $"{data.EconomicData.StateSlaves:P}",
@@ -221,26 +224,52 @@ namespace BannerKings.UI.Management
             if (IsVillage)
             {
                 var villageData = data.VillageData;
-                var model = new BKVillageProductionModel();
-                var productionQuantity = 0f;
+
+                var villageRevenue = BannerKingsConfig.Instance.TaxModel.CalculateVillageTaxFromIncome(villageData.Village);
+                RevenueInfo.Add(new InformationElement(new TextObject("{=!}Village Revenue:").ToString(),
+                    FormatFloatWithSymbols(villageRevenue.ResultNumber),
+                    new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
+                        .SetTextVariable("TEXT",
+                            new TextObject("{=!}The village's revenue output. Most of the revenue in villages is generated through production and selling of products by serfs and slaves. They are taxed through their labor rather than in coin. Nobles and craftsmen however may be taxed in coins through construction of tax offices."))
+                        .SetTextVariable("EXPLANATIONS", villageRevenue.GetExplanations())
+                        .ToString()));
+
+
+                ProductionInfo.Add(new InformationElement(new TextObject("{=!}Construction:").ToString(),
+                    new TextObject("{=!}{POINTS} (Daily)")
+                    .SetTextVariable("POINTS", villageData.Construction.ToString("0.00")).ToString(),
+                    new TextObject("{=Gm0F8o7L}How much the local population can progress with construction projects, on a daily basis.")
+                        .ToString()));
+
                 var sb = new StringBuilder();
                 foreach (var production in BannerKingsConfig.Instance.PopulationManager.GetProductions(data))
                 {
                     sb.Append(production.Item1.Name + ", ");
-                    productionQuantity += model.CalculateDailyProductionAmount(villageData.Village, production.Item1);
                 }
 
                 sb.Remove(sb.Length - 2, 1);
                 var productionString = sb.ToString();
-                ProductionInfo.Add(new InformationElement(new TextObject("{=S2teOBN3}Goods Production:").ToString(),
-                    $"{productionQuantity:n0} (Daily)",
-                    new TextObject("{=Gm0F8o7L}How much the local population can progress with construction projects, on a daily basis.")
-                        .ToString()));
+                var productionExplained = villageData.ProductionsExplained;
+                ProductionInfo.Add(new InformationElement(new TextObject("{=!}Goods Production:").ToString(),
+                    new TextObject("{=!}{POINTS} (Daily)")
+                    .SetTextVariable("POINTS", productionExplained.ResultNumber.ToString("0.00"))
+                    .ToString(),
+                    new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
+                    .SetTextVariable("TEXT",
+                        new TextObject("{=!}Sum of goods produced on a daily basis, including all the types produced here."))
+                    .SetTextVariable("EXPLANATIONS", productionExplained.GetExplanations())
+                    .ToString()));
+
                 ProductionInfo.Add(new InformationElement(new TextObject("{=hmtRGrpt}Items Produced:").ToString(), productionString,
                     new TextObject("{=0RAPEDaT}Goods locally produced by the population.").ToString()));
             }
             else
             {
+                ProductionInfo.Add(new InformationElement(new TextObject("{=GZooOyxK}Merchants' Revenue:").ToString(),
+                   $"{data.EconomicData.MerchantRevenue:n0}",
+                   new TextObject("{=rcApyg1K}Daily revenue of local merchants, based on slave workforce and production efficiency.")
+                       .ToString()));
+
                 RevenueInfo.Add(new InformationElement(new TextObject("{=Re0UyaL5}Tariff:").ToString(),
                     $"{data.EconomicData.Tariff:P}",
                     new TextObject("{=UgD3or79}Percentage of an item's value charged as tax when sold.").ToString()));

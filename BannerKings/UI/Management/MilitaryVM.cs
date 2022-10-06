@@ -39,6 +39,15 @@ namespace BannerKings.UI.Management
         }
 
         [DataSourceProperty]
+        public string MilitiaPolicyText => new TextObject("{=!}Militia policy").ToString();
+
+        [DataSourceProperty]
+        public string GarrisonPolicyText => new TextObject("{=!}Garrison policy").ToString();
+
+        [DataSourceProperty]
+        public string DraftingPolicyText => new TextObject("{=!}Drafting policy").ToString();
+
+        [DataSourceProperty]
         public DecisionElement RaiseMilitiaButton
         {
             get => raiseMilitiaButton;

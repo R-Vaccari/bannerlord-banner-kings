@@ -1,9 +1,13 @@
-﻿using BannerKings.Managers.Buildings;
+﻿using BannerKings.Extensions;
+using BannerKings.Managers.Buildings;
+using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Villages;
+using BannerKings.Utils;
 using HarmonyLib;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Extensions;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.Settlements.Buildings;
 using TaleWorlds.Core;
@@ -17,6 +21,7 @@ namespace BannerKings.Behaviours
 
         public override void RegisterEvents()
         {
+            CampaignEvents.DailyTickSettlementEvent.AddNonSerializedListener(this, OnDailyTickSettlement);
             CampaignEvents.OnCharacterCreationIsOverEvent.AddNonSerializedListener(this, OnCreationOver);
             CampaignEvents.DailyTickTownEvent.AddNonSerializedListener(this, OnTownDailyTick);
             CampaignEvents.OnGameLoadedEvent.AddNonSerializedListener(this, OnGameLoaded);
@@ -62,10 +67,126 @@ namespace BannerKings.Behaviours
             miningRevenues = new Dictionary<Town, int>();
         }
 
+        private void OnDailyTickSettlement(Settlement settlement)
+        {
+            if (!settlement.IsVillage || settlement.Village.VillageState != Village.VillageStates.Normal)
+            {
+                return;
+            }
+
+            var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
+            if (data == null || data.VillageData == null)
+            {
+                return;
+            }
+
+            //RunMarketplace(settlement.Village, data);
+        }
+
+
+        private void RunMarketplace(Village village, PopulationData data)
+        {
+            ExceptionUtils.TryCatch(() =>
+            {
+                if (data.VillageData.GetBuildingLevel(DefaultVillageBuildings.Instance.Marketplace) == 0)
+                {
+                    return;
+                }
+
+                var supply = new Dictionary<ItemCategory, float>();
+                foreach (var element in village.Owner.ItemRoster)
+                {
+                    var item = element.EquipmentElement.Item;
+                    if (item.ItemCategory != null)
+                    {
+                        if (!supply.ContainsKey(item.ItemCategory))
+                        {
+                            supply.Add(item.ItemCategory, element.Amount);
+                        }
+                        else
+                        {
+                            supply[item.ItemCategory] += element.Amount;
+                        }
+                    }
+                }
+
+                int sellQuantity = (int)(village.Hearth / 150f);
+
+                /*var options = new List<(ItemObject, float)>();
+                foreach (ItemCategory category in ItemCategories.All)
+                {
+                    var demand = BannerKingsConfig.Instance.EconomyModel.GetCategoryDemand(village.Settlement, category, 0);
+                    if (supply.ContainsKey(category))
+                    {
+                        demand -= supply[category];
+                    }
+
+                    if (demand > 1f) 
+                    {
+                        var elementToBuy = village.TradeBound.ItemRoster
+                            .GetRandomElementWithPredicate(x => x.EquipmentElement.Item.ItemCategory == category);
+                        if (elementToBuy.EquipmentElement.Item != null)
+                        {
+                            var price = village.TradeBound.Town.GetItemPrice(elementToBuy.EquipmentElement.Item);
+                            if (village.Gold >= price)
+                            {
+                                options.Add(new(elementToBuy.EquipmentElement.Item, demand));
+                            }
+                        }
+                    }
+                }
+
+                var result = MBRandom.ChooseWeighted(options);
+                var resultPrice = village.TradeBound.Town.GetItemPrice(result);
+                village.TradeBound.ItemRoster.AddToCounts(result, -1);
+                village.TradeBound.Town.ChangeGold(resultPrice);
+                village.ChangeGold(-resultPrice);*/
+
+            }, GetType().Name);
+        }
+
         private void OnTownDailyTick(Town town)
         {
             RunMines(town);
-            
+            RunStuds(town);
+        }
+
+        private void RunStuds(Town town)
+        {
+            ExceptionUtils.TryCatch(() =>
+            {
+                if (!town.IsCastle || town.Villages.Any(x => x.IsRanchVillage()))
+                {
+                    return;
+                }
+
+                var studs = town.Buildings.FirstOrDefault(x => x.BuildingType == BKBuildings.Instance.WarhorseStuds);
+                if (studs == null || studs.CurrentLevel == 0)
+                {
+                    return;
+                }
+
+                var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
+                var pastures = data.LandData.Pastureland;
+                var horseLimit = (pastures / 10000f) + studs.CurrentLevel * 2f;
+                var currentHorses = 0;
+
+                foreach (var element in town.Settlement.Stash)
+                {
+                    if (element.EquipmentElement.Item.ItemCategory == DefaultItemCategories.WarHorse)
+                    {
+                        currentHorses += element.Amount;
+                    }
+                }
+
+                if (currentHorses < horseLimit && MBRandom.RandomFloat < 0.02f)
+                {
+                    var horse = Campaign.Current.ObjectManager.GetObjectTypeList<ItemObject>()
+                        .FirstOrDefault(x => x.ItemCategory == DefaultItemCategories.WarHorse && x.Culture == town.Culture);
+                    town.Settlement.Stash.AddToCounts(horse, 1);
+                }
+
+            }, GetType().Name);
         }
 
         private void RunMines(Town town)
@@ -80,6 +201,13 @@ namespace BannerKings.Behaviours
             var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
             if ((building.CurrentLevel > 0) && data.MineralData != null)
             {
+
+
+                if (miningRevenues.ContainsKey(town))
+                {
+                    miningRevenues[town] = 0;
+                }
+
                 foreach (var pair in data.MineralData.GetLocalMinerals())
                 {
                     if (MBRandom.RandomFloat * ((int)data.MineralData.Richness + 0.5f) < pair.Item2)

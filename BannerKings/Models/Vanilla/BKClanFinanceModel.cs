@@ -1,9 +1,12 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using BannerKings.Managers.Education.Lifestyles;
+using BannerKings.Extensions;
 using BannerKings.Managers.Titles;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
+using TaleWorlds.CampaignSystem.Party;
+using TaleWorlds.CampaignSystem.Settlements.Workshops;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
@@ -11,6 +14,50 @@ namespace BannerKings.Models.Vanilla
 {
     public class BKClanFinanceModel : DefaultClanFinanceModel
     {
+        private Dictionary<Workshop, int> workshopTaxes = new Dictionary<Workshop, int>();
+
+        public override int CalculateNotableDailyGoldChange(Hero hero, bool applyWithdrawals)
+        {
+            var totalTaxes = 0;
+            foreach (var wk in hero.OwnedWorkshops)
+            {
+                totalTaxes += wk.TaxExpenses();
+            }
+
+            return base.CalculateNotableDailyGoldChange(hero, applyWithdrawals) - totalTaxes;
+        }
+
+        public override int CalculateOwnerIncomeFromWorkshop(Workshop workshop)
+        {
+            var result = MathF.Max(0, workshop.ProfitMade);
+            var taxes = workshop.TaxExpenses();
+            if (workshopTaxes.ContainsKey(workshop))
+            {
+                workshopTaxes[workshop] = taxes;
+            }
+            else
+            {
+                workshopTaxes.Add(workshop, taxes);
+            }
+
+            return result;
+        }
+
+
+        private int GetWorkshopTaxes(Workshop workshop)
+        {
+            var result = 0;
+            if (workshopTaxes.ContainsKey(workshop))
+            {
+                result = workshopTaxes[workshop];
+            }
+
+            return result;
+        }
+
+
+        public override int CalculateOwnerIncomeFromCaravan(MobileParty caravan) => MathF.Max(0, caravan.PartyTradeGold - 10000);
+
         public override ExplainedNumber CalculateClanGoldChange(Clan clan, bool includeDescriptions = false, bool applyWithdrawals = false)
         {
             var baseResult = base.CalculateClanGoldChange(clan, true, applyWithdrawals);
@@ -52,16 +99,16 @@ namespace BannerKings.Models.Vanilla
             var kingdom = clan.Kingdom;
             var wkModel = (BKWorkshopModel) Campaign.Current.Models.WorkshopModel;
 
+            int totalWorkshopTaxes = 0;
+            int totalNotablesAids = 0;
+
             foreach (var town in clan.Fiefs)
             {
                 foreach (var wk in town.Workshops)
                 {
                     if (wk.IsRunning && wk.Owner != clan.Leader && wk.WorkshopType.StringId != "artisans")
                     {
-                        result.Add(base.CalculateOwnerIncomeFromWorkshop(wk) * wkModel.CalculateWorkshopTax(town.Settlement, wk.Owner).ResultNumber,
-                            new TextObject("{=RBCrujCo}Taxes from {WORKSHOP} at {TOWN}")
-                                .SetTextVariable("WORKSHOP", wk.Name)
-                                .SetTextVariable("TOWN", town.Name));
+                        totalWorkshopTaxes += GetWorkshopTaxes(wk);
                     }
                 }
 
@@ -72,13 +119,26 @@ namespace BannerKings.Models.Vanilla
 
                 foreach (var notable in town.Settlement.Notables.Where(notable => notable.SupporterOf == clan && notable.Gold > 5000))
                 {
-                    result.Add(200f, new TextObject("{=WDHTvasY}Aid from {NOTABLE}").SetTextVariable("NOTABLE", notable.Name));
+                    totalNotablesAids += 200;
                     if (applyWithdrawals)
                     {
                         notable.Gold -= 200;
                     }
                 }
             }
+
+            if (totalWorkshopTaxes > 0)
+            {
+                result.Add(totalWorkshopTaxes,
+                    new TextObject("{=!}Workshop taxes from demesnes"));
+            }
+
+            if (totalNotablesAids > 0)
+            {
+                result.Add(totalNotablesAids,
+                    new TextObject("{=!}Notable aids"));
+            }
+
 
             var dictionary = BannerKingsConfig.Instance.TitleManager.CalculateVassals(clan);
             if (dictionary.Count >= 0)
@@ -134,23 +194,10 @@ namespace BannerKings.Models.Vanilla
             }
         }
 
-        private void AddMercenaryIncome(Clan clan, ref ExplainedNumber goldChange, bool applyWithdrawals)
-        {
-            if (!clan.IsUnderMercenaryService || clan.Leader == null || clan.Kingdom == null)
-            {
-                return;
-            }
-
-            var num = MathF.Ceiling(clan.Influence * (1f / Campaign.Current.Models.ClanFinanceModel.RevenueSmoothenFraction())) * clan.MercenaryAwardMultiplier;
-            var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(clan.Leader);
-            if (education.Lifestyle == DefaultLifestyles.Instance.Mercenary)
-            {
-                goldChange.Add((int) (num * 0.15f), new TextObject("{=tYO5xwVe}Lifestyle"));
-            }
-        }
-
         public void CalculateClanExpenseInternal(Clan clan, ref ExplainedNumber result, bool applyWithdrawals)
         {
+            var totalWorkshopExpenses = 0;
+
             var wkModel = (BKWorkshopModel) Campaign.Current.Models.WorkshopModel;
             foreach (var wk in clan.Leader.OwnedWorkshops)
             {
@@ -159,11 +206,12 @@ namespace BannerKings.Models.Vanilla
                     continue;
                 }
 
-                var tax = wkModel.CalculateWorkshopTax(wk.Settlement, clan.Leader).ResultNumber;
-                result.Add(base.CalculateOwnerIncomeFromWorkshop(wk) * -tax,
-                    new TextObject("{=FTx77EBz}{WORKSHOP} taxes to {CLAN}")
-                        .SetTextVariable("WORKSHOP", wk.Name)
-                        .SetTextVariable("CLAN", wk.Settlement.OwnerClan.Name));
+                totalWorkshopExpenses += GetWorkshopTaxes(wk);
+            }
+
+            if (totalWorkshopExpenses > 0)
+            {
+                result.Add(-totalWorkshopExpenses, new TextObject("{=!}Workshop taxes"));
             }
 
             var data = BannerKingsConfig.Instance.CourtManager.GetCouncil(clan);

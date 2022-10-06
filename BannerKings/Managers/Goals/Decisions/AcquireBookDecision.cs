@@ -63,7 +63,7 @@ namespace BannerKings.Managers.Goals.Decisions
             {
                 var item = element.EquipmentElement.Item;
                 var book = allBooks.FirstOrDefault(x => x.Item == element.EquipmentElement.Item);
-                var price = fulfiller.CurrentSettlement.Town.GetItemPrice(book.Item);
+                var price = book.Item.Value * 1000;
 
                 var hint = $"{book.Description}";
 
@@ -107,7 +107,7 @@ namespace BannerKings.Managers.Goals.Decisions
         {
             var fulfiller = GetFulfiller();
             var price = fulfiller.CurrentSettlement.Town.GetItemPrice(book.Item);
-            fulfiller.ChangeHeroGold(price);
+            fulfiller.ChangeHeroGold(-price);
             fulfiller.PartyBelongedTo.ItemRoster.AddToCounts(book.Item, 1);
         }
 

@@ -2,6 +2,7 @@
 using System.Linq;
 using BannerKings.Managers.Populations.Villages;
 using BannerKings.Models.Vanilla;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.Settlements.Buildings;
 using TaleWorlds.Core;
@@ -32,6 +33,8 @@ namespace BannerKings.Managers.Populations
         public Village Village => village;
 
         public List<VillageBuilding> Buildings => buildings;
+
+        public ExplainedNumber ProductionsExplained => BannerKingsConfig.Instance.VillageProductionModel.CalculateProductionsExplained(village);
 
         public VillageBuilding CurrentBuilding
         {
@@ -87,7 +90,12 @@ namespace BannerKings.Managers.Populations
 
         public int GetBuildingLevel(BuildingType type)
         {
-            Building building = buildings.FirstOrDefault(x => x.BuildingType == type);
+            if (type == null)
+            {
+                return 0;
+            }
+
+            Building building = buildings.FirstOrDefault(x => x.BuildingType.StringId == type.StringId);
             if (building != null)
             {
                 return building.CurrentLevel;

@@ -489,7 +489,7 @@ namespace BannerKings.Behaviours
                                     var limit = 0f;
                                     if (title.fief.IsVillage)
                                     {
-                                        limit = title.fief.Village.TradeTaxAccumulated;
+                                        limit = BannerKingsConfig.Instance.TaxModel.CalculateVillageTaxFromIncome(title.fief.Village).ResultNumber;
                                     }
                                     else if (title.fief.Town != null)
                                     {
@@ -680,6 +680,9 @@ namespace BannerKings.Behaviours
             {
                 if (BannerKingsConfig.Instance.TitleManager != null)
                 {
+
+                    int totalGold = 0;
+
                     var lordships = BannerKingsConfig.Instance.TitleManager
                         .GetAllDeJure(clan)
                         .FindAll(x => x.type == TitleType.Lordship);
@@ -713,7 +716,7 @@ namespace BannerKings.Behaviours
                             }
                         }
 
-                        goldChange.Add(result, new TextObject("{=OtUhpj1p}{A0}"), village.Name);
+                        totalGold += result;
                     }
 
                     foreach (var lordship in lordships)
@@ -731,10 +734,12 @@ namespace BannerKings.Behaviours
                             }
                             else
                             {
-                                goldChange.Add(result, new TextObject("{=OtUhpj1p}{A0}"), village.Name);
+                                totalGold += result;
                             }
                         }
                     }
+
+                    goldChange.Add(totalGold, new TextObject("{=!}Village Demesnes"));
 
                     return false;
                 }
@@ -745,55 +750,11 @@ namespace BannerKings.Behaviours
             private static int CalculateVillageIncome(ref ExplainedNumber goldChange, Village village, Clan clan,
                 bool applyWithdrawals)
             {
-                var total = village.VillageState is Village.VillageStates.Looted or Village.VillageStates.BeingRaided
-                    ? 0
-                    : (int) (village.TradeTaxAccumulated / 5f);
-                var num2 = total;
-                if (clan.Kingdom != null && clan.Kingdom.RulingClan != clan &&
-                    clan.Kingdom.ActivePolicies.Contains(DefaultPolicies.LandTax))
-                {
-                    total += (int) (-(float) total * 0.05f);
-                }
-
-                if (village.Bound.Town is {Governor: { }} &&
-                    village.Bound.Town.Governor.GetPerkValue(DefaultPerks.Scouting.ForestKin))
-                {
-                    total += MathF.Round(total * DefaultPerks.Scouting.ForestKin.SecondaryBonus * 0.01f);
-                }
-
-                var bound = village.Bound;
-                bool flag;
-                if (bound == null)
-                {
-                    flag = null != null;
-                }
-                else
-                {
-                    var town = bound.Town;
-                    flag = town?.Governor != null;
-                }
-
-                if (flag && village.Bound.Town.Governor.GetPerkValue(DefaultPerks.Steward.Logistician))
-                {
-                    total += MathF.Round(total * DefaultPerks.Steward.Logistician.SecondaryBonus * 0.01f);
-                }
+                var total = (int)BannerKingsConfig.Instance.TaxModel.CalculateVillageTaxFromIncome(village).ResultNumber;
 
                 if (applyWithdrawals)
                 {
-                    village.TradeTaxAccumulated -= num2;
-                }
-
-                if (clan.Kingdom != null && clan.Kingdom.RulingClan == clan &&
-                    clan.Kingdom.ActivePolicies.Contains(DefaultPolicies.LandTax))
-                {
-                    if (!village.IsOwnerUnassigned && village.Settlement.OwnerClan != clan)
-                    {
-                        var policyTotal =
-                            village.VillageState is Village.VillageStates.Looted or Village.VillageStates.BeingRaided
-                                ? 0
-                                : (int) (village.TradeTaxAccumulated / 5f);
-                        total += (int) (policyTotal * 0.05f);
-                    }
+                    village.TradeTaxAccumulated -= MathF.Min(village.TradeTaxAccumulated, total);
                 }
 
                 return total;

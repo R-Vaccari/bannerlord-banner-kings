@@ -27,6 +27,9 @@ namespace BannerKings.Managers.Buildings
         public BuildingType CastleRetinue { get; private set; }
         public BuildingType Theater { get; private set; }
         public BuildingType Armory { get; private set; }
+        public BuildingType CourtHouse { get; private set; }
+        public BuildingType WarhorseStuds { get; private set; }
+        public BuildingType DailyAssimilation { get; private set; }
 
         public override IEnumerable<BuildingType> All
         {
@@ -36,7 +39,10 @@ namespace BannerKings.Managers.Buildings
                 yield return CastleMines;
                 yield return CastleRetinue;
                 yield return Theater;
-                //yield return Armory;
+                yield return Armory;
+                yield return CourtHouse;
+                yield return WarhorseStuds;
+                //yield return DailyAssimilation;
             }
         }
 
@@ -86,7 +92,6 @@ namespace BannerKings.Managers.Buildings
                 BuildingLocation.Castle,
                 new Tuple<BuildingEffectEnum, float, float, float>[]
                 {
-                    new Tuple<BuildingEffectEnum, float, float, float>(BuildingEffectEnum.Construction, 0.5f, 1f, 1.5f)
                 });
 
             Theater = Game.Current.ObjectManager.RegisterPresumedObject(new BuildingType("bk_building_theater"));
@@ -94,14 +99,67 @@ namespace BannerKings.Managers.Buildings
                 new TextObject("{=!}A common place for congregation, the theater serves the purpose of strengthening the culture's presence through it's art and stories. Increases cultural presence of owner's culture."),
                 new[]
                 {
-                    1000,
-                    1500,
-                    2000
+                    2000,
+                    3000,
+                    4000
                 },
                 BuildingLocation.Settlement,
                 new Tuple<BuildingEffectEnum, float, float, float>[]
                 {
-                    new Tuple<BuildingEffectEnum, float, float, float>(BuildingEffectEnum.Construction, 0.5f, 1f, 1.5f)
+                    new Tuple<BuildingEffectEnum, float, float, float>(BuildingEffectEnum.Loyalty, 0.2f, 0.5f, 1f)
+                });
+
+            Armory = Game.Current.ObjectManager.RegisterPresumedObject(new BuildingType("bk_building_armory"));
+            Armory.Initialize(new TextObject("{=!}Armory"),
+                new TextObject("{=!}The armory is used to stock and preserve equipment for the town militia. Raises militia quality and provides garrison trainning."),
+                new[]
+                {
+                    1500,
+                    2000,
+                    2500
+                },
+                BuildingLocation.Settlement,
+                new Tuple<BuildingEffectEnum, float, float, float>[]
+                {
+                    new Tuple<BuildingEffectEnum, float, float, float>(BuildingEffectEnum.Experience, 1f, 1f, 1f)
+                });
+
+            CourtHouse = Game.Current.ObjectManager.RegisterPresumedObject(new BuildingType("bk_building_courthouse"));
+            CourtHouse.Initialize(new TextObject("{=!}Court House"),
+                new TextObject("{=!}The court house is where townsfolk legally settle their disputes. Conflicts such as property disputes or insults are dealt with by local administration. Increases stability."),
+                new[]
+                {
+                    2000,
+                    2600,
+                    3200
+                },
+                BuildingLocation.Settlement,
+                new Tuple<BuildingEffectEnum, float, float, float>[]
+                {
+                });
+
+            WarhorseStuds = Game.Current.ObjectManager.RegisterPresumedObject(new BuildingType("bk_building_castle_studs"));
+            WarhorseStuds.Initialize(new TextObject("{=!}Warhorse Studs"),
+                new TextObject("{=!}Warhorse studs allow the raising of warhorses in the castle demesne. Horses will be added to the Stash. Their limit is based on local pastureland and studs level."),
+                new[]
+                {
+                    1000,
+                    1800,
+                    2400
+                },
+                BuildingLocation.Castle,
+                new Tuple<BuildingEffectEnum, float, float, float>[]
+                {
+                });
+
+
+            DailyAssimilation = Game.Current.ObjectManager.RegisterPresumedObject(new BuildingType("bk_building_daily_assimilation"));
+            DailyAssimilation.Initialize(new TextObject("{=!}Cultural Assimilation"),
+                new TextObject("{=!}Focus efforts on assimilating local pouplace to your culture. Increases Cultural Presence."),
+                new int[3],
+                BuildingLocation.Daily,
+                new Tuple<BuildingEffectEnum, float, float, float>[]
+                {
                 });
         }
     }

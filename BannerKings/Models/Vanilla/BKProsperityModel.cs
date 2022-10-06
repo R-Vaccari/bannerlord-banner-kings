@@ -1,6 +1,9 @@
 using System.Linq;
+using BannerKings.Extensions;
 using BannerKings.Managers.Court;
 using BannerKings.Managers.Institutions.Religions;
+using BannerKings.Managers.Policies;
+using BannerKings.Managers.Populations.Villages;
 using BannerKings.Managers.Skills;
 using CalradiaExpandedKingdoms.Models;
 using Helpers;
@@ -13,6 +16,7 @@ using TaleWorlds.CampaignSystem.Settlements.Buildings;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
+using static BannerKings.Managers.Policies.BKTaxPolicy;
 using static BannerKings.Managers.PopulationManager;
 
 namespace BannerKings.Models.Vanilla
@@ -27,18 +31,18 @@ namespace BannerKings.Models.Vanilla
 
         public override ExplainedNumber CalculateHearthChange(Village village, bool includeDescriptions = false)
         {
-            var baseResult = base.CalculateHearthChange(village);
+            var baseResult = base.CalculateHearthChange(village, includeDescriptions);
             //if (BannerKingsConfig.Instance.PopulationManager != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(village.Settlement))
             // new BKGrowthModel().CalculateHearthGrowth(village, ref baseResult);
 
-            var owner = village.Settlement.Owner;
-            var data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(owner);
-            if (data.HasPerk(BKPerks.Instance.CivilCultivator))
+            var owner = village.GetActualOwner();
+            var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(owner);
+            if (education.HasPerk(BKPerks.Instance.CivilCultivator))
             {
                 baseResult.Add(1f, BKPerks.Instance.CivilCultivator.Name);
             }
 
-            if (data.HasPerk(BKPerks.Instance.RitterPettySuzerain))
+            if (education.HasPerk(BKPerks.Instance.RitterPettySuzerain))
             {
                 baseResult.Add(0.1f, BKPerks.Instance.RitterPettySuzerain.Name);
             }
@@ -54,7 +58,35 @@ namespace BannerKings.Models.Vanilla
             {
                 baseResult.Add(0.4f, DefaultDivinities.Instance.AseraSecondary3.Name);
             }
-           
+
+            var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(village.Settlement);
+            if (data != null)
+            {
+                var villageData = data.VillageData;
+                var marketplace = villageData.GetBuildingLevel(DefaultVillageBuildings.Instance.Marketplace);
+                if (marketplace > 0)
+                {
+                    baseResult.Add(0.075f * marketplace, DefaultVillageBuildings.Instance.Marketplace.Name);
+                }
+            }
+
+            var tax = (BKTaxPolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(village.Settlement, "tax");
+            if (tax.Policy != TaxType.Standard)
+            {
+                if (tax.Policy == TaxType.High)
+                {
+                    baseResult.AddFactor(-0.15f, new TextObject("{=EhHXS8PN}High tax policy"));
+                }
+                else if (tax.Policy == TaxType.Low)
+                {
+                    baseResult.AddFactor(0.1f, new TextObject("{=j6AoAS6n}Low tax policy"));
+                }
+                else
+                {
+                    baseResult.AddFactor(0.2f, new TextObject("{=!}Tax exemption policy"));
+                }
+            }
+
 
             return baseResult;
         }

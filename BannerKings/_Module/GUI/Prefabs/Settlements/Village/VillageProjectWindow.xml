@@ -10,10 +10,10 @@
 	<VisualDefinitions>
 	</VisualDefinitions>
 	<Window>
-		<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" IsActive="true">
+		<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" IsActive="true" Sprite="BlankWhiteSquare_9" Color="#00000088">
 			<Children>
-				<Widget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="1045" SuggestedHeight="700"
-				        HorizontalAlignment="Center" VerticalAlignment="Center" Sprite="BlankWhiteSquare_9" Color="#39291eFF">
+				<Widget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="1200" SuggestedHeight="700"
+				        HorizontalAlignment="Center" VerticalAlignment="Center" Sprite="CharacterDeveloper\AttributePopup\attribute_popup_canvas">
 					<Children>
 						<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent">
 							<Children>
@@ -60,47 +60,92 @@
 										<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
 										           StackLayout.LayoutMethod="HorizontalLeftToRight">
 											<Children>
-
-												<ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren"
-												           StackLayout.LayoutMethod="VerticalBottomToTop">
+											
+												<Widget HeightSizePolicy="StretchToParent" WidthSizePolicy="StretchToParent">
 													<Children>
-														<GridWidget DataSource="{AvailableProjects}" WidthSizePolicy="CoverChildren"
-														            HeightSizePolicy="CoverChildren" MarginTop="20" DefaultCellWidth="141"
-														            DefaultCellHeight="145" ColumnCount="4" LayoutImp.VerticalLayoutMethod="TopToBottom">
-															<ItemTemplate>
-																<ButtonWidget DoNotPassEventsToChildren="true" WidthSizePolicy="StretchToParent"
-																              HeightSizePolicy="StretchToParent" Command.HoverBegin="ExecuteSetAsCurrent"
-																              Command.HoverEnd="ExecuteResetCurrent" UpdateChildrenStates="true">
+														<EncyclopediaTroopScrollablePanel  HeightSizePolicy="StretchToParent"
+															  WidthSizePolicy="StretchToParent" InnerPanel="RightSideRect\InnerPanel"
+															  ClipRect="RightSideRect" VerticalAlignment="Center"
+															  HorizontalAlignment="Center"
+															  HorizontalScrollbar="..\RightSideHorizontalScrollbar"
+															  VerticalScrollbar="..\RightSideVerticalScrollbar" PanWithMouseEnabled="true"
+															  AutoHideScrollBars="true">
+															<Children>
+																<Widget Id="RightSideRect" HeightSizePolicy="StretchToParent" WidthSizePolicy="StretchToParent"
+																		HorizontalAlignment="Center" DoNotAcceptEvents="true" ClipContents="true">
 																	<Children>
-																		<DevelopmentItem WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="110"
-																			SuggestedHeight="110" HorizontalAlignment="Center" VerticalAlignment="Top"
-																			Parameter.IsProgressIndicatorEnabled="true" Parameter.UseSmallVisual="true" />
-																	</Children>
-																</ButtonWidget>
-															</ItemTemplate>
-														</GridWidget>
+																		<Widget Id="InnerPanel" HeightSizePolicy="CoverChildren" WidthSizePolicy="CoverChildren"
+																				HorizontalAlignment="Center" IsHidden="@HasErrors">
+																			<Children>
+																				<Widget HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" WidthSizePolicy="CoverChildren" MarginBottom="50">
+																					<Children>
+																						<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" VerticalAlignment="Top" MarginTop="5" StackLayout.LayoutMethod="VerticalBottomToTop">
+																							<Children>
+																							
+																							<GridWidget DataSource="{AvailableProjects}" WidthSizePolicy="CoverChildren"
+																									HeightSizePolicy="CoverChildren" MarginTop="20" HorizontalAlignment="Center" 
+																									DefaultCellWidth="141" DefaultCellHeight="145" ColumnCount="5" 
+																									LayoutImp.VerticalLayoutMethod="TopToBottom">
+																								<ItemTemplate>
+																									<ButtonWidget DoNotPassEventsToChildren="true" WidthSizePolicy="StretchToParent"
+																												  HeightSizePolicy="StretchToParent" Command.HoverBegin="ExecuteSetAsCurrent"
+																												  Command.HoverEnd="ExecuteResetCurrent" UpdateChildrenStates="true">
+																										<Children>
+																											<DevelopmentItem WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="110"
+																												SuggestedHeight="110" HorizontalAlignment="Center" VerticalAlignment="Top"
+																												Parameter.IsProgressIndicatorEnabled="true" Parameter.UseSmallVisual="true" />
+																										</Children>
+																									</ButtonWidget>
+																								</ItemTemplate>
+																							</GridWidget>
 
 
-														<GridWidget DataSource="{DailyDefaultList}" WidthSizePolicy="CoverChildren"
-														            HeightSizePolicy="CoverChildren" MarginTop="10" HorizontalAlignment="Center"
-														            DefaultCellWidth="140" DefaultCellHeight="145" ColumnCount="4"
-														            LayoutImp.VerticalLayoutMethod="TopToBottom">
-															<ItemTemplate>
-																<ButtonWidget DoNotPassEventsToChildren="true" WidthSizePolicy="StretchToParent"
-																              HeightSizePolicy="StretchToParent" PositionYOffset="-5"
-																              Command.Click="ExecuteSetAsActiveDevelopment" Command.HoverBegin="ExecuteSetAsCurrent"
-																              Command.HoverEnd="ExecuteResetCurrent" IsSelected="@IsDefault"
-																              UpdateChildrenStates="true">
-																	<Children>
-																		<DailyDefaultItem WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="110"
-																			SuggestedHeight="110" HorizontalAlignment="Center" VerticalAlignment="Top"
-																			Parameter.UseSmallVisual="true" />
+																							<GridWidget DataSource="{DailyDefaultList}" WidthSizePolicy="CoverChildren"
+																										HeightSizePolicy="CoverChildren" MarginTop="10" HorizontalAlignment="Center"
+																										DefaultCellWidth="140" DefaultCellHeight="145" ColumnCount="4"
+																										LayoutImp.VerticalLayoutMethod="TopToBottom">
+																								<ItemTemplate>
+																									<ButtonWidget DoNotPassEventsToChildren="true" WidthSizePolicy="StretchToParent"
+																												  HeightSizePolicy="StretchToParent" PositionYOffset="-5"
+																												  Command.Click="ExecuteSetAsActiveDevelopment" Command.HoverBegin="ExecuteSetAsCurrent"
+																												  Command.HoverEnd="ExecuteResetCurrent" IsSelected="@IsDefault"
+																												  UpdateChildrenStates="true">
+																										<Children>
+																											<DailyDefaultItem WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="110"
+																												SuggestedHeight="110" HorizontalAlignment="Center" VerticalAlignment="Top"
+																												Parameter.UseSmallVisual="true" />
+																										</Children>
+																									</ButtonWidget>
+																								</ItemTemplate>
+																							</GridWidget>
+																													
+																							</Children>
+																						</ListPanel>
+																					</Children>
+																				</Widget>
+																			</Children>
+																		</Widget>
 																	</Children>
-																</ButtonWidget>
-															</ItemTemplate>
-														</GridWidget>
+																</Widget>
+															</Children>
+														</EncyclopediaTroopScrollablePanel>
+
+														<ScrollbarWidget HeightSizePolicy="StretchToParent" WidthSizePolicy="Fixed" Id="RightSideVerticalScrollbar"
+																				 SuggestedWidth="10" MinValue="0" MaxValue="100" MarginRight="10" MarginBottom="50"
+																				 MarginTop="20" AlignmentAxis="Vertical" HorizontalAlignment="Right" VerticalAlignment="Center"
+																				 Handle="ScrollbarHandle" UpdateChildrenStates="true">
+															<Children>
+																<Widget Id="ScrollbarBed" WidthSizePolicy="Fixed" HeightSizePolicy="StretchToParent" SuggestedWidth="4"
+																		HorizontalAlignment="Center" Sprite="SPGeneral\SPRecruitment\slider_thin_bed_vertical" />
+																<ImageWidget Id="ScrollbarHandle" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" MinHeight="50"
+																			 SuggestedWidth="30" SuggestedHeight="50" HorizontalAlignment="Center"
+																			 Brush="Encyclopedia.Scroll.Handle.Vertical" />
+															</Children>
+														</ScrollbarWidget>
 													</Children>
-												</ListPanel>
+												</Widget>
+
+												
 
 												<ListPanel DataSource="{CurrentSelectedProject}" WidthSizePolicy="Fixed" HeightSizePolicy="StretchToParent"
 												           SuggestedWidth="390" HorizontalAlignment="Right" StackLayout.LayoutMethod="VerticalBottomToTop">
@@ -285,7 +330,7 @@
 
 				<ButtonWidget Id="CloseButton" Command.Click="ExecuteClose" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed"
 				              SuggestedWidth="!Popup.CloseButton.Width" SuggestedHeight="!Popup.CloseButton.Height"
-				              HorizontalAlignment="Center" VerticalAlignment="Center" MarginLeft="1045" MarginBottom="700"
+				              HorizontalAlignment="Center" VerticalAlignment="Center" MarginLeft="1200" MarginBottom="700"
 				              Brush="Popup.CloseButton" IsVisible="true" />
 			</Children>
 		</Widget>

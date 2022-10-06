@@ -1,4 +1,5 @@
-﻿using TaleWorlds.CampaignSystem;
+﻿using BannerKings.Utils;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Settlements;
 
@@ -9,31 +10,36 @@ namespace BannerKings.Models.Vanilla
         public override float CalculateSettlementValueForFaction(Settlement settlement, IFaction faction)
         {
             var result = base.CalculateSettlementValueForFaction(settlement, faction);
-            if (BannerKingsConfig.Instance.TitleManager != null)
+            ExceptionUtils.TryCatch(() =>
             {
-                var model = BannerKingsConfig.Instance.TitleModel;
-                var title = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement);
-                if (title == null || title.deJure == null || title.deFacto == null)
+                if (BannerKingsConfig.Instance.TitleManager != null)
                 {
-                    return result;
-                }
-
-                if (title.deJure == title.DeFacto)
-                {
-                    result += model.GetGoldUsurpCost(title) * 3f;
-                    if (!settlement.IsVillage && settlement.BoundVillages != null)
+                    var model = BannerKingsConfig.Instance.TitleModel;
+                    var title = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement);
+                    if (title == null || title.deJure == null || title.DeFacto == null)
                     {
-                        foreach (var village in settlement.BoundVillages)
+                        return;
+                    }
+
+                    if (title.deJure == title.DeFacto)
+                    {
+                        result += model.GetGoldUsurpCost(title) * 3f;
+                        if (!settlement.IsVillage && settlement.BoundVillages != null)
                         {
-                            var villageTitle = BannerKingsConfig.Instance.TitleManager.GetTitle(village.Settlement);
-                            if (villageTitle != null && villageTitle.deJure == settlement.Owner)
+                            foreach (var village in settlement.BoundVillages)
                             {
-                                result += model.GetGoldUsurpCost(villageTitle) * 3f;
+                                var villageTitle = BannerKingsConfig.Instance.TitleManager.GetTitle(village.Settlement);
+                                if (villageTitle != null && villageTitle.deJure == settlement.Owner)
+                                {
+                                    result += model.GetGoldUsurpCost(villageTitle) * 3f;
+                                }
                             }
                         }
                     }
                 }
-            }
+            },
+            GetType().Name);
+           
 
             return result;
         }

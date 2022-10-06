@@ -34,9 +34,9 @@ namespace BannerKings.Models.BKModels
             return result;
         }
 
-        public ExplainedNumber CalculateCultureWeight(Settlement settlement, CultureDataClass data)
+        public ExplainedNumber CalculateCultureWeight(Settlement settlement, CultureDataClass data, float baseWeight = 0f)
         {
-            var result = new ExplainedNumber(0f, true);
+            var result = new ExplainedNumber(baseWeight, true);
 
             foreach (var notable in settlement.Notables)
             {

@@ -60,6 +60,10 @@ namespace BannerKings
         public BKVolunteerModel VolunteerModel { get; } = new();
         public BKLegitimacyModel LegitimacyModel { get; } = new();
         public BKGrowthModel GrowthModel { get; } = new();
+        public BKVillageProductionModel VillageProductionModel { get; } = new();
+        public BKProsperityModel ProsperityModel { get; } = new();
+        public BKTaxModel TaxModel { get; } = new();
+
 
         public static BannerKingsConfig Instance => ConfigHolder.CONFIG;
 
