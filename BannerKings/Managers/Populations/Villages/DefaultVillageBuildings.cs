@@ -289,7 +289,7 @@ namespace BannerKings.Managers.Populations.Villages
 
             Marketplace = new BuildingType("bannerkings_marketplace");
             Marketplace.Initialize(new TextObject("{=zLdXCpne}Marketplace"),
-                new TextObject("{=!}Allow locals to sell off their excess production in the designated marketplace. Travelling merchants and individuals will stop by to trade. Adds village stock consumption and boosts hearth growth."),
+                new TextObject("{=!}Allow locals to sell off their excess production in the designated marketplace. Travelling merchants and individuals will stop by to trade. Adds village stock consumption (not implemented) and boosts hearth growth."),
                 new[]
                 {
                     600,
@@ -382,6 +382,7 @@ namespace BannerKings.Managers.Populations.Villages
                 else if (type == DefaultVillageTypes.Lumberjack)
                 {
                     yield return Instance.Sawmill;
+                    yield return Instance.Skeps;
                 }
                 else if (type == DefaultVillageTypes.Fisherman)
                 {
@@ -390,6 +391,7 @@ namespace BannerKings.Managers.Populations.Villages
                 else
                 {
                     yield return Instance.Tannery;
+                    yield return Instance.Skeps;
                 }
 
                 yield return Instance.Mines;
