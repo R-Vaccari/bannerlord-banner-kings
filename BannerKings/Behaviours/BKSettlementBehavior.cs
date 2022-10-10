@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using BannerKings.Components;
+using BannerKings.Extensions;
 using BannerKings.Managers;
 using BannerKings.Managers.Buildings;
 using BannerKings.Managers.Policies;
@@ -466,18 +467,18 @@ namespace BannerKings.Behaviours
 
         private void ConsumeStash(Settlement settlement)
         {
-            var elements = settlement.Stash.Where(element => element.EquipmentElement.Item != null && element.EquipmentElement.Item.ItemCategory.Properties == ItemCategory.Property.BonusToFoodStores).ToList();
+            var elements = settlement.Stash.Where(element => element.EquipmentElement.Item != null && element.EquipmentElement.Item.CanBeConsumedAsFood()).ToList();
 
-            var food = 0;
+            float food = 0;
             foreach (var element in elements)
             {
-                food += element.Amount;
+                food += element.Amount * (float)element.EquipmentElement.Item.GetItemFoodValue();
                 settlement.Stash.Remove(element);
             }
 
             if (food > 0)
             {
-                settlement.Town.FoodStocks += food;
+                settlement.Town.FoodStocks += (int)food;
             }
         }
 
