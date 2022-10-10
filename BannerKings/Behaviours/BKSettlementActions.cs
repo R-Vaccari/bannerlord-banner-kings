@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using BannerKings.Extensions;
 using BannerKings.Managers.Education;
 using BannerKings.Managers.Skills;
 using BannerKings.UI;
@@ -616,9 +617,8 @@ namespace BannerKings.Behaviours
         {
             args.optionLeaveType = GameMenuOption.LeaveType.TroopSelection;
             var settlement = Settlement.CurrentSettlement;
-            return settlement.OwnerClan == Clan.PlayerClan || (settlement.IsVillage && 
-                BannerKingsConfig.Instance.TitleManager.GetTitle(settlement).deJure == Hero.MainHero &&
-                settlement.MapFaction == Clan.PlayerClan.MapFaction);
+            var owner = settlement.IsVillage ? settlement.Village.GetActualOwner() : settlement.Owner;
+            return owner == Hero.MainHero;
         }
 
         private static bool MenuGuardActionPeasantCondition(MenuCallbackArgs args)
@@ -752,31 +752,17 @@ namespace BannerKings.Behaviours
         private static bool MenuSettlementManageCondition(MenuCallbackArgs args)
         {
             args.optionLeaveType = GameMenuOption.LeaveType.Manage;
-            var deJure = false;
-            var title = BannerKingsConfig.Instance.TitleManager.GetTitle(Settlement.CurrentSettlement);
-            if (title != null && title.deJure == Hero.MainHero &&
-                Settlement.CurrentSettlement.OwnerClan.Kingdom == Clan.PlayerClan.Kingdom)
-            {
-                deJure = true;
-            }
-
-            return Settlement.CurrentSettlement.OwnerClan == Hero.MainHero.Clan ||
-                   (deJure && Settlement.CurrentSettlement.IsVillage);
+            var settlement = Settlement.CurrentSettlement;
+            var owner = settlement.IsVillage ? settlement.Village.GetActualOwner() : settlement.OwnerClan.Leader;
+            return owner == Hero.MainHero;
         }
 
         private static bool MenuVillageBuildingCondition(MenuCallbackArgs args)
         {
             args.optionLeaveType = GameMenuOption.LeaveType.Manage;
-            var deJure = false;
-            var title = BannerKingsConfig.Instance.TitleManager.GetTitle(Settlement.CurrentSettlement);
-            if (title != null && title.deJure == Hero.MainHero &&
-                Settlement.CurrentSettlement.OwnerClan.Kingdom == Clan.PlayerClan.Kingdom)
-            {
-                deJure = true;
-            }
-
-            return (deJure || Settlement.CurrentSettlement.OwnerClan == Hero.MainHero.Clan) &&
-                   Settlement.CurrentSettlement.IsVillage;
+            var settlement = Settlement.CurrentSettlement;
+            var owner = settlement.IsVillage ? settlement.Village.GetActualOwner() : settlement.OwnerClan.Leader;
+            return owner == Hero.MainHero;
         }
 
         private static bool MenuGuildManageCondition(MenuCallbackArgs args)
