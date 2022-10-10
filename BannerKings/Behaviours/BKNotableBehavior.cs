@@ -523,10 +523,13 @@ namespace BannerKings.Behaviours
         {
             private static bool Prefix(Town __instance)
             {
-                try{
-                    if (__instance.Governor != null && __instance.Governor is {IsNotable: true} && __instance.OwnerClan != null &&
+                var result = true;
+                ExceptionUtils.TryCatch(() =>
+                {
+                    if (__instance.Governor != null && __instance.Governor is { IsNotable: true } && __instance.OwnerClan != null &&
                         __instance.OwnerClan.Leader != null)
                     {
+                        result = false;
                         __instance.Loyalty += __instance.LoyaltyChange;
                         __instance.Security += __instance.SecurityChange;
                         __instance.FoodStocks += __instance.FoodChange;
@@ -544,6 +547,19 @@ namespace BannerKings.Behaviours
                         {
                             __instance.FoodStocks = __instance.FoodStocksUpperLimit();
                         }
+
+                        __instance.Owner.Settlement.Prosperity += __instance.ProsperityChange;
+                        if (__instance.Owner.Settlement.Prosperity < 0f)
+                        {
+                            __instance.Owner.Settlement.Prosperity = 0f;
+                        }
+
+                        __instance.GetType().GetMethod("HandleMilitiaAndGarrisonOfSettlementDaily",
+                                BindingFlags.Instance | BindingFlags.NonPublic)
+                            .Invoke(__instance, null);
+                        __instance.GetType().GetMethod("RepairWallsOfSettlementDaily",
+                                BindingFlags.Instance | BindingFlags.NonPublic)
+                            .Invoke(__instance, null);
 
                         if (!__instance.CurrentBuilding.BuildingType.IsDefaultProject)
                         {
@@ -585,27 +601,13 @@ namespace BannerKings.Behaviours
                                     MathF.Round(DefaultPerks.Roguery.Scarface.SecondaryBonus));
                             }
                         }
-                        
-
-                        __instance.Owner.Settlement.Prosperity += __instance.ProsperityChange;
-                        if (__instance.Owner.Settlement.Prosperity < 0f)
-                        {
-                            __instance.Owner.Settlement.Prosperity = 0f;
-                        }
-
-                        __instance.GetType().GetMethod("HandleMilitiaAndGarrisonOfSettlementDaily",
-                                BindingFlags.Instance | BindingFlags.NonPublic)
-                            .Invoke(__instance, null);
-                        __instance.GetType().GetMethod("RepairWallsOfSettlementDaily",
-                                BindingFlags.Instance | BindingFlags.NonPublic)
-                            .Invoke(__instance, null);
                     }
-                    }
-                catch(System.Exception ex)
-                {
+                }, 
+                "TownDailyTicktPatch",
+                false);
 
-                }
-                return true;
+
+                return result;
             }
 
             private static System.Exception Finalize()
