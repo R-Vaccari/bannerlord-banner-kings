@@ -29,6 +29,11 @@ namespace BannerKings.Behaviours
         {
             var mainRoster = MobileParty.MainParty.ItemRoster;
             var settlement = Hero.MainHero.CurrentSettlement;
+            if (settlement == null)
+            {
+                return;
+            }
+
             foreach (var element in roster)
             {
                 if (!mainRoster.Contains(element))
@@ -67,7 +72,6 @@ namespace BannerKings.Behaviours
                 {
                     roster.Add(element);
                 }
-                
             }
         }
 
