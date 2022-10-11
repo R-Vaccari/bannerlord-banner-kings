@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using BannerKings.Extensions;
 using BannerKings.Managers.Decisions;
 using BannerKings.Managers.Education.Lifestyles;
 using BannerKings.Managers.Policies;
@@ -295,8 +296,8 @@ namespace BannerKings.Managers.AI
                     return;
                 }
 
-                if (target.OwnerClan == Clan.PlayerClan || (target.MapFaction == Clan.PlayerClan.MapFaction &&
-                    target.IsVillage && BannerKingsConfig.Instance.TitleManager.GetTitle(target).deJure == Hero.MainHero))
+                var owner = target.IsVillage ? target.Village.GetActualOwner() : target.OwnerClan.Leader;
+                if (owner.Clan == Clan.PlayerClan)
                 {
                     return;
                 }

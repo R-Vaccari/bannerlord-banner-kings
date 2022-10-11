@@ -11,32 +11,28 @@ namespace BannerKings.Models.Vanilla
     {
         public bool CanCreateArmy(Hero armyLeader)
         {
-
-            if (armyLeader != armyLeader.Clan.Leader)
-            {
-                return false;
-            }
-
             var kingdom = armyLeader.Clan.Kingdom;
-            if (kingdom != null && BannerKingsConfig.Instance.TitleManager != null)
+            if (kingdom != null)
             {
                 var title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(armyLeader);
-                if (title == null || title.type == TitleType.Lordship)
+                if (title != null)
                 {
-                    return false;
-                }
-
-                if (kingdom.ActivePolicies.Contains(BKPolicies.Instance.LimitedArmyPrivilege))
-                {
-                    var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(kingdom.RulingClan);
-                    if (armyLeader != council.Marshall || title.type > TitleType.Dukedom)
+                    if (kingdom.ActivePolicies.Contains(BKPolicies.Instance.LimitedArmyPrivilege))
                     {
-                        return false;
+                        var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(kingdom.RulingClan);
+                        if (title.type <= TitleType.Dukedom || armyLeader == council.Marshall)
+                        {
+                            return true;
+                        }
+                    }
+                    else if (title.type < TitleType.Lordship)
+                    {
+                        return true;
                     }
                 }
             }
 
-            return true;
+            return false;
         }
 
 
@@ -68,6 +64,12 @@ namespace BannerKings.Models.Vanilla
 
         public override int CalculatePartyInfluenceCost(MobileParty armyLeaderParty, MobileParty party)
         {
+            if (party.LeaderHero == null || armyLeaderParty.LeaderHero == null)
+            {
+                return base.AverageCallToArmyCost;
+            }
+
+
             float result = base.CalculatePartyInfluenceCost(armyLeaderParty, party);
             if (BannerKingsConfig.Instance.TitleManager != null)
             {

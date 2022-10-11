@@ -10,7 +10,7 @@ namespace BannerKings.Utils
         private static readonly string path = BasePath.Name + "Modules/BannerKings/";
         private static readonly string fileName = "errorlog.txt";
 
-        public static void TryCatch(Action method, string className)
+        public static void TryCatch(Action method, string className, bool notifty = true)
         {
             try
             {
@@ -23,10 +23,13 @@ namespace BannerKings.Utils
                     .ToString(),
                     ex);
                 File.AppendAllText(path + fileName, Environment.NewLine + exception.Message + Environment.NewLine + ex.StackTrace);
-                InformationManager.DisplayMessage(new InformationMessage(
+                if (notifty)
+                {
+                    InformationManager.DisplayMessage(new InformationMessage(
                     new TextObject("{=!}A Banner Kings error was detected. Send the contents of {FILE} from BannerKings module to support channel.")
                     .SetTextVariable("FILE", fileName)
                     .ToString()));
+                }
             }
         }
     }

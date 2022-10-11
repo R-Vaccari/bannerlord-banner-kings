@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using BannerKings.Extensions;
 using BannerKings.Managers.Helpers;
 using BannerKings.Managers.Skills;
 using HarmonyLib;
@@ -989,9 +990,7 @@ namespace BannerKings
                             var elements = new List<ItemRosterElement>();
                             foreach (var element in town.Settlement.Stash)
                             {
-                                if (element.EquipmentElement.Item != null &&
-                                    element.EquipmentElement.Item.ItemCategory.Properties ==
-                                    ItemCategory.Property.BonusToFoodStores)
+                                if (element.EquipmentElement.Item.CanBeConsumedAsFood())
                                 {
                                     elements.Add(element);
                                 }
@@ -999,7 +998,8 @@ namespace BannerKings
 
                             foreach (var element in elements)
                             {
-                                var category = element.EquipmentElement.Item.ItemCategory;
+                                var item = element.EquipmentElement.Item;
+                                var category = item.ItemCategory;
                                 if (saleLog.ContainsKey(category))
                                 {
                                     saleLog[category] += element.Amount;
@@ -1010,6 +1010,10 @@ namespace BannerKings
                                 }
 
                                 town.Settlement.Stash.Remove(element);
+                                if (item.HasHorseComponent)
+                                {
+                                    town.FoodStocks += item.GetItemFoodValue();
+                                }
                             }
                         }
 
