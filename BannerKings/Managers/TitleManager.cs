@@ -868,6 +868,11 @@ namespace BannerKings.Managers
                 var deJureNameKingdom = kingdom.Attributes["deJure"].Value;
                 var deJureKingdom = GetDeJure(deJureNameKingdom, null);
                 var faction = Kingdom.All.FirstOrDefault(x => x.Name.ToString() == factionName);
+                if (faction == null)
+                {
+                    faction = Kingdom.All.FirstOrDefault(x => x.StringId.ToString() == factionName);
+                }
+
                 var contractType = kingdom.Attributes["contract"].Value;
                 var contract = GenerateContract(contractType);
 
@@ -902,6 +907,11 @@ namespace BannerKings.Managers
                                 var settlementNameCounty = county.Attributes["settlement"].Value;
                                 var deJureNameCounty = county.Attributes["deJure"].Value;
                                 var settlementCounty = Settlement.All.FirstOrDefault(x => x.Name.ToString() == settlementNameCounty);
+                                if (settlementCounty == null)
+                                {
+                                    settlementCounty = Settlement.All.FirstOrDefault(x => x.StringId.ToString() == settlementNameCounty);
+                                }
+
                                 var deJureCounty = GetDeJure(deJureNameCounty, settlementCounty);
                                 var vassalsCounty = new List<FeudalTitle>();
 
@@ -917,6 +927,11 @@ namespace BannerKings.Managers
                                         var settlementNameBarony = barony.Attributes["settlement"].Value;
                                         var deJureIdBarony = barony.Attributes["deJure"].Value;
                                         var settlementBarony = Settlement.All.FirstOrDefault(x => x.Name.ToString() == settlementNameBarony);
+                                        if (settlementBarony == null)
+                                        {
+                                            settlementBarony = Settlement.All.FirstOrDefault(x => x.StringId.ToString() == settlementNameBarony);
+                                        }
+
                                         var deJureBarony = GetDeJure(deJureIdBarony, settlementBarony);
                                         if (settlementBarony != null)
                                         {
