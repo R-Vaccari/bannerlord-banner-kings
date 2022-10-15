@@ -289,10 +289,10 @@ namespace BannerKings.Models.Vanilla
                 };
             }
 
-            var efficiency = data.EconomicData.ProductionEfficiency.ResultNumber;
+            var efficiency = data.EconomicData.ProductionEfficiency.ResultNumber * 1.25f;
             if (privateSlaves > 0f)
             {
-                return (int) (privateSlaves * tax * efficiency) + 5000;
+                return (int) ((privateSlaves * tax * efficiency) + 5000 + (town.Prosperity / 2f));
             }
 
             return 0;
