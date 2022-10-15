@@ -214,7 +214,7 @@ namespace BannerKings.Models.Vanilla
 
                 if (b is {CurrentLevel: > 0})
                 {
-                    result.AddFactor(MathF.Round(b.CurrentLevel * (town.IsCastle ? 0.5f : 0.3f)), b.Name);
+                    result.AddFactor(b.CurrentLevel * (town.IsCastle ? 0.5f : 0.3f), b.Name);
                 }
             }
 
