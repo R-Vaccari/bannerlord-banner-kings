@@ -206,11 +206,27 @@ namespace BannerKings.Managers.Populations
                 UpdatePopType(PopType.Craftsmen, random);
             }
 
+            bool excessNobles = currentDic[PopType.Nobles] > dic[PopType.Nobles][1];
+
             if (currentDic[PopType.Craftsmen] > dic[PopType.Craftsmen][1])
             {
                 var random = MBMath.ClampInt(MBRandom.RandomInt(0, 25), 0, GetTypeCount(PopType.Craftsmen));
                 UpdatePopType(PopType.Craftsmen, -random);
-                UpdatePopType(PopType.Nobles, random);
+                if (!excessNobles)
+                {
+                    UpdatePopType(PopType.Nobles, random);
+                }
+                else
+                {
+                    UpdatePopType(PopType.Serfs, random);
+                }
+            }
+
+            if (excessNobles)
+            {
+                var random = MBMath.ClampInt(MBRandom.RandomInt(0, 25), 0, GetTypeCount(PopType.Nobles));
+                UpdatePopType(PopType.Craftsmen, random);
+                UpdatePopType(PopType.Nobles, -random);
             }
         }
 
@@ -221,16 +237,6 @@ namespace BannerKings.Managers.Populations
                 var desiredTypes = GetDesiredPopTypes(settlement);
                 var typesList = new List<ValueTuple<PopType, float>>();
 
-
-                if (pops < 0)
-                {
-                    var slaveClass = classes.FirstOrDefault(x => x.type == PopType.Slaves);
-                    if (slaveClass is {count: > 0})
-                    {
-                        UpdatePopType(PopType.Slaves, pops);
-                        return;
-                    }
-                }
 
                 classes.ForEach(popClass =>
                 {
