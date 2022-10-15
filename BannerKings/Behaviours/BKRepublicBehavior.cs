@@ -1,5 +1,6 @@
 ﻿using BannerKings.Managers.Kingdoms;
 using BannerKings.Managers.Titles;
+using System.Linq;
 using TaleWorlds.CampaignSystem;
 
 namespace BannerKings.Behaviours
@@ -46,7 +47,7 @@ namespace BannerKings.Behaviours
                         }
                     }
 
-                    if (!inElection && kingdom.Clans.Count > 2)
+                    if (!inElection && kingdom.Clans.Count(x => !x.IsUnderMercenaryService) > 2)
                     {
                         kingdom.AddDecision(new RepublicElectionDecision(kingdom.RulingClan, kingdom.RulingClan), true);
                     }
