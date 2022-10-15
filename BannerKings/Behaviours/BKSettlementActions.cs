@@ -762,7 +762,7 @@ namespace BannerKings.Behaviours
             args.optionLeaveType = GameMenuOption.LeaveType.Manage;
             var settlement = Settlement.CurrentSettlement;
             var owner = settlement.IsVillage ? settlement.Village.GetActualOwner() : settlement.OwnerClan.Leader;
-            return owner == Hero.MainHero;
+            return owner == Hero.MainHero && settlement.IsVillage;
         }
 
         private static bool MenuGuildManageCondition(MenuCallbackArgs args)
