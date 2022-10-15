@@ -227,7 +227,7 @@ namespace BannerKings.UI.Management
 
                 var villageRevenue = BannerKingsConfig.Instance.TaxModel.CalculateVillageTaxFromIncome(villageData.Village);
                 RevenueInfo.Add(new InformationElement(new TextObject("{=!}Village Revenue:").ToString(),
-                    FormatFloatWithSymbols(villageRevenue.ResultNumber),
+                    FormatFloatGain(villageRevenue.ResultNumber),
                     new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
                         .SetTextVariable("TEXT",
                             new TextObject("{=!}The village's revenue output. Most of the revenue in villages is generated through production and selling of products by serfs and slaves. They are taxed through their labor rather than in coin. Nobles and craftsmen however may be taxed in coins through construction of tax offices."))
