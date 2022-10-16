@@ -62,6 +62,7 @@ namespace BannerKings
         public BKVillageProductionModel VillageProductionModel { get; } = new();
         public BKProsperityModel ProsperityModel { get; } = new();
         public BKTaxModel TaxModel { get; } = new();
+        public BKEstatesModel EstatesModel { get; } = new();
 
 
         public static BannerKingsConfig Instance => ConfigHolder.CONFIG;

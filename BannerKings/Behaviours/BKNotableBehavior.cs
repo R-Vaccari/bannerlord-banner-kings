@@ -18,8 +18,12 @@ namespace BannerKings.Behaviours
 {
     public class BKNotableBehavior : CampaignBehaviorBase
     {
+
+
         public override void RegisterEvents()
         {
+            CampaignEvents.OnCharacterCreationIsOverEvent.AddNonSerializedListener(this, OnCreationOver);
+            CampaignEvents.OnGameLoadedEvent.AddNonSerializedListener(this, OnGameLoaded);
             CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, OnSessionLaunched);
             CampaignEvents.OnGovernorChangedEvent.AddNonSerializedListener(this, OnGovernorChanged);
             CampaignEvents.DailyTickSettlementEvent.AddNonSerializedListener(this, DailySettlementTick);
@@ -28,6 +32,17 @@ namespace BannerKings.Behaviours
         public override void SyncData(IDataStore dataStore)
         {
         }
+
+        private void OnGameLoaded(CampaignGameStarter starter)
+        {
+            ExtendVolunteersArray();
+        }
+
+        private void OnCreationOver()
+        {
+            ExtendVolunteersArray();
+        }
+
 
         private void OnSessionLaunched(CampaignGameStarter starter)
         {
@@ -67,6 +82,27 @@ namespace BannerKings.Behaviours
             if (MBRandom.RandomInt(1, 100) < 5)
             {
                 ChangeRelationAction.ApplyRelationChangeBetweenHeroes(settlement.Town.OwnerClan.Leader, governor, 1);
+            }
+        }
+
+        private void ExtendVolunteersArray()
+        {
+            var limit = BannerKingsSettings.Instance.VolunteersLimit;
+            foreach (Hero hero in Hero.AllAliveHeroes)
+            {
+                if (hero.VolunteerTypes.Length != limit)
+                {
+                    var array = new CharacterObject[limit];
+                    for (int i = 0; i < hero.VolunteerTypes.Length; i++)
+                    {
+                        if (i < limit)
+                        {
+                            array[i] = hero.VolunteerTypes[i];
+                        }
+                    }
+
+                    hero.VolunteerTypes = array;
+                }
             }
         }
 
@@ -383,6 +419,21 @@ namespace BannerKings.Behaviours
     namespace Patches
     {
 
+        [HarmonyPatch(typeof(HeroHelper), "GetVolunteerTroopsOfHeroForRecruitment")]
+        internal class GetVolunteerTroopsOfHeroForRecruitmentPatch
+        {
+            private static bool Prefix(Hero hero, ref List<CharacterObject> __result)
+            {
+                List<CharacterObject> list = new List<CharacterObject>();
+                for (int i = 0; i < hero.VolunteerTypes.Length; i++)
+                {
+                    list.Add(hero.VolunteerTypes[i]);
+                }
+                __result = list;
+
+                return false;
+            }
+        }
 
         [HarmonyPatch(typeof(SettlementHelper), "SpawnNotablesIfNeeded")]
         internal class SpawnNotablesIfNeededPatch
