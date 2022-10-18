@@ -36,6 +36,8 @@ namespace BannerKings.Managers.Populations
 
         [SaveableProperty(7)] private float[] composition { get; set; }
 
+        public float[] Composition => composition;
+
         public TerrainType Terrain => Campaign.Current.MapSceneWrapper != null ? 
             Campaign.Current.MapSceneWrapper.GetTerrainTypeAtPosition(data.Settlement.Position2D) : TerrainType.Plain;
 

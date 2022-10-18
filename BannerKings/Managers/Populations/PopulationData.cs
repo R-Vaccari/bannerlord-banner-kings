@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using BannerKings.Managers.Institutions.Guilds;
 using BannerKings.Managers.Institutions.Religions;
+using BannerKings.Managers.Populations.Estates;
 using BannerKings.Managers.Titles;
 using BannerKings.Models.BKModels;
 using TaleWorlds.CampaignSystem;
@@ -66,6 +67,8 @@ namespace BannerKings.Managers.Populations
         [SaveableProperty(12)] private ReligionData religionData { get; set; }
 
         [SaveableProperty(13)] private MineralData mineralData { get; set; }
+
+        public EstateData EstateData { get; private set; }
 
         public CultureData CultureData => cultureData;
         public MilitaryData MilitaryData => militaryData;
@@ -348,6 +351,13 @@ namespace BannerKings.Managers.Populations
             }
 
             religionData?.Update(this);
+
+            if (EstateData == null && BannerKingsConfig.Instance.EstatesModel.CalculateEstatesMaximum(Settlement).ResultNumber > 0)
+            {
+                EstateData = new EstateData(Settlement);
+            }
+
+            EstateData?.Update(this);
         }
     }
 }
