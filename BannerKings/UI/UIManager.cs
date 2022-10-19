@@ -7,6 +7,7 @@ using BannerKings.Managers.Helpers;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
 using BannerKings.Models.Vanilla;
+using BannerKings.Settings;
 using BannerKings.UI.Notifications;
 using HarmonyLib;
 using TaleWorlds.CampaignSystem;
@@ -61,15 +62,12 @@ namespace BannerKings.UI
 
         public void ShowWindow(string id)
         {
-            if (mapView == null)
+            if (mapView != null)
             {
-                mapView = new BannerKingsMapView(id);
-            }
-            else if (mapView.id != id)
-            {
-                mapView = new BannerKingsMapView(id);
+                mapView.Close();
             }
 
+            mapView = new BannerKingsMapView(id);
             mapView.Refresh();
         }
 
@@ -127,7 +125,8 @@ namespace BannerKings.UI
             [HarmonyPatch("Name", MethodType.Getter)]
             internal static void GetterPostfix(Hero __instance, ref TextObject __result)
             {
-                if (__instance.IsLord && BannerKingsConfig.Instance.TitleManager != null)
+                var namingSetting = BannerKingsSettings.Instance.Naming.SelectedValue;
+                if (__instance.IsLord && namingSetting != DefaultSettings.Instance.NamingNoTitles)
                 {
                     var kingdom = __instance.Clan?.Kingdom;
                     var title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(__instance);
@@ -144,7 +143,64 @@ namespace BannerKings.UI
                         var name = (TextObject) __instance.GetType()
                             .GetField("_name", BindingFlags.Instance | BindingFlags.NonPublic)
                             .GetValue(__instance);
-                        __result = new TextObject(name + ", " + $"{honorary} of {title.shortName}");
+
+                        if (namingSetting == DefaultSettings.Instance.NamingFullTitlesSuffixed)
+                        {
+                            __result = new TextObject("{=!}{NAME}, {TITLE} of {SETTLEMENT}")
+                                .SetTextVariable("TITLE", honorary)
+                                .SetTextVariable("NAME", name)
+                                .SetTextVariable("SETTLEMENT", title.shortName);
+                        }
+                        else if (namingSetting == DefaultSettings.Instance.NamingFullTitles)
+                        {
+                            __result = new TextObject("{=!}{TITLE} {NAME} of {SETTLEMENT}")
+                                .SetTextVariable("TITLE", honorary)
+                                .SetTextVariable("NAME", name)
+                                .SetTextVariable("SETTLEMENT", title.shortName);
+                        }
+                        else
+                        {
+                            __result = new TextObject("{=!}{TITLE} {NAME}")
+                                .SetTextVariable("TITLE", honorary)
+                                .SetTextVariable("NAME", name);
+                        }
+                    }
+                    else if (__instance.Clan != null && __instance.Clan.Leader != __instance && BannerKingsSettings.Instance.CloseRelativesNaming)
+                    {
+                        var leader = __instance.Clan.Leader;
+                        var leaderTitle = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(leader);
+                        if (leaderTitle != null)
+                        {
+                            var government = GovernmentType.Feudal;
+                            if (leaderTitle.contract != null)
+                            {
+                                government = leaderTitle.contract.Government;
+                            }
+
+                            var name = (TextObject)__instance.GetType()
+                                .GetField("_name", BindingFlags.Instance | BindingFlags.NonPublic)
+                                .GetValue(__instance);
+
+                            if (leader == __instance.Spouse)
+                            {
+                                var honorary = Utils.Helpers.GetTitleHonorary(leaderTitle.type, government, __instance.IsFemale,
+                                    kingdom != null ? kingdom.Culture : __instance.Culture);
+
+                                __result = new TextObject("{=!}{TITLE} {NAME}")
+                                    .SetTextVariable("TITLE", honorary)
+                                    .SetTextVariable("NAME", name);
+                            }
+                            else if (government != GovernmentType.Republic && leaderTitle.IsSovereignLevel && 
+                                (leader.Children.Contains(__instance) || leader.Siblings.Contains(__instance)))
+                            { 
+                                var honorary = Utils.TextHelper.GetPrinceTitles(government, __instance.IsFemale,
+                                    kingdom != null ? kingdom.Culture : __instance.Culture);
+
+                                __result = new TextObject("{=!}{TITLE} {NAME}")
+                                    .SetTextVariable("TITLE", honorary)
+                                    .SetTextVariable("NAME", name);
+                            }
+                        }
                     }
                 }
             }

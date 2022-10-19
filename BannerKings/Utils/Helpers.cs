@@ -406,7 +406,7 @@ namespace BannerKings.Utils
                     {
                         title = female 
                             ? new TextObject("{=S3kc2bhW}Knyaginya") 
-                            : new TextObject("{=nNV4YbQ7}{MALE}Knyaz{?}Queen{\\?}");
+                            : new TextObject("{=!}Knyaz");
 
                         break;
                     }
