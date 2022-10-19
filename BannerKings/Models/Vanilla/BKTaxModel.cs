@@ -14,8 +14,8 @@ using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
-using static BannerKings.Managers.Policies.BKTaxPolicy;
 using static BannerKings.Managers.PopulationManager;
+using TaxType = BannerKings.Managers.Policies.BKTaxPolicy.TaxType;
 
 namespace BannerKings.Models.Vanilla
 {
@@ -156,27 +156,26 @@ namespace BannerKings.Models.Vanilla
             result.Add(village.TradeTaxAccumulated, new TextObject("{=!}Production sold by villagers"));
 
             var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(village.Settlement);
-            if (data != null && data.VillageData != null)
+            if (data != null && data.VillageData != null && data.EstateData != null)
             {
+                var taxType = ((BKTaxPolicy)BannerKingsConfig.Instance.PolicyManager
+                    .GetPolicy(village.Settlement, "tax")).Policy;
+
+                float nobles = data.GetTypeCount(PopType.Nobles);
+                float craftsmen = data.GetTypeCount(PopType.Craftsmen);
+                foreach (var estate in data.EstateData.Estates)
+                {
+                    nobles -= estate.Nobles;
+                    craftsmen -= estate.Craftsmen;
+
+                    result.Add(estate.GetTaxFromIncome(taxType), estate.Name);
+                }
+
+
                 float taxOffice = data.VillageData.GetBuildingLevel(DefaultVillageBuildings.Instance.TaxOffice);
                 if (taxOffice > 0)
                 {
-                    float nobles = data.GetTypeCount(PopType.Nobles);
-                    float craftsmen = data.GetTypeCount(PopType.Craftsmen);
-
-                    if (nobles > 0f)
-                    {
-                        result.Add(MBMath.ClampFloat(nobles * NOBLE_OUTPUT * (0.33f * taxOffice), 0f, 50000f),
-                            new TextObject("{=5mCY3JCP}{CLASS} output")
-                            .SetTextVariable("CLASS", new TextObject("{=pop_class_nobles}Nobles")));
-                    }
-
-                    if (craftsmen > 0f)
-                    {
-                        result.Add(MBMath.ClampFloat(craftsmen * CRAFTSMEN_OUTPUT * (0.33f * taxOffice), 0f, 50000f),
-                            new TextObject("{=5mCY3JCP}{CLASS} output")
-                            .SetTextVariable("CLASS", new TextObject("{=pop_class_craftsmen}Craftsmen")));
-                    }
+                    AddVillagePopulationTaxes(ref result, nobles, craftsmen, taxOffice, taxType);
                 }
             }
 
@@ -202,18 +201,6 @@ namespace BannerKings.Models.Vanilla
             }
 
 
-            var taxType = ((BKTaxPolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(village.Settlement, "tax"))
-                    .Policy;
-            switch (taxType)
-            {
-                case TaxType.Low:
-                    result.AddFactor(-0.15f, new TextObject("{=L7QhNa6a}Tax policy"));
-                    break;
-                case TaxType.High:
-                    result.AddFactor(0.15f, new TextObject("{=L7QhNa6a}Tax policy"));
-                    break;
-            }
-
             CalculateDueTax(BannerKingsConfig.Instance.PopulationManager.GetPopData(village.Settlement),(float)result.ResultNumber);
 
             var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(village.Settlement.OwnerClan);
@@ -226,50 +213,51 @@ namespace BannerKings.Models.Vanilla
         }
 
 
-
         public override int CalculateVillageTaxFromIncome(Village village, int marketIncome)
         {
-            var baseResult = marketIncome * 0.7;
-           /* if (BannerKingsConfig.Instance.PolicyManager != null)
+            var factor = 0.7f;
+            var taxType = ((BKTaxPolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(village.Settlement, "tax"))
+                   .Policy;
+            switch (taxType)
             {
-                var taxType = ((BKTaxPolicy) BannerKingsConfig.Instance.PolicyManager.GetPolicy(village.Settlement, "tax"))
-                    .Policy;
-                switch (taxType)
-                {
-                    case TaxType.High:
-                        baseResult = marketIncome * 9f;
-                        break;
-                    case TaxType.Low:
-                        baseResult = marketIncome * 0.5f;
-                        break;
-                    case TaxType.Exemption when marketIncome > 0:
-                    {
-                        baseResult = 0;
-                        var random = MBRandom.RandomInt(1, 100);
-                        if (random <= 33 && village.Settlement.Notables != null)
-                        {
-                            var notable = village.Settlement.Notables.GetRandomElement();
-                            if (notable != null)
-                            {
-                                ChangeRelationAction.ApplyRelationChangeBetweenHeroes(village.Settlement.Owner, notable, 1);
-                            }
-                        }
-
-                        break;
-                    }
-                }
-
-                if (baseResult > 0)
-                {
-                    var admCost = new BKAdministrativeModel().CalculateEffect(village.Settlement).ResultNumber;
-                    baseResult *= 1f - admCost;
-                }
-
-               
-            }*/
-
-            return (int) baseResult;
+                case TaxType.Low:
+                    factor = 0.5f;
+                    break;
+                case TaxType.High:
+                    factor = 0.9f;
+                    break;
+            }
+            return (int)factor;
         }
+
+        public void AddVillagePopulationTaxes(ref ExplainedNumber result, float nobles, float craftsmen, float taxOfficeLevel, TaxType taxType)
+        {
+            float taxFactor = 1f;
+            switch (taxType)
+            {
+                case TaxType.Low:
+                    taxFactor = 0.8f;
+                    break;
+                case TaxType.High:
+                    taxFactor = 1.2f;
+                    break;
+            }
+
+            if (nobles > 0f)
+            {
+                result.Add(MBMath.ClampFloat(nobles * NOBLE_OUTPUT * taxFactor * (0.33f * taxOfficeLevel), 0f, 50000f),
+                    new TextObject("{=5mCY3JCP}{CLASS} output")
+                    .SetTextVariable("CLASS", new TextObject("{=pop_class_nobles}Nobles")));
+            }
+
+            if (craftsmen > 0f)
+            {
+                result.Add(MBMath.ClampFloat(craftsmen * CRAFTSMEN_OUTPUT * taxFactor * (0.33f * taxOfficeLevel), 0f, 50000f),
+                    new TextObject("{=5mCY3JCP}{CLASS} output")
+                    .SetTextVariable("CLASS", new TextObject("{=pop_class_craftsmen}Craftsmen")));
+            }
+        }
+
 
         private void CalculateDueWages(CouncilData data, float result)
         {

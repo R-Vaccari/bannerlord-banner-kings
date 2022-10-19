@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using BannerKings.Settings;
 using BannerKings.UI;
 using BannerKings.Utils;
 using HarmonyLib;

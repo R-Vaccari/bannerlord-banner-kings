@@ -1,4 +1,6 @@
-﻿using TaleWorlds.CampaignSystem;
+﻿using BannerKings.Managers.Policies;
+using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.ViewModelCollection.ClanManagement;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -8,9 +10,12 @@ namespace BannerKings.Managers.Populations.Estates
 {
     public class Estate
     {
+        public Estate()
+        {
 
+        }
 
-        private Estate(Hero owner, float farmland, float pastureland, float woodland,
+        public Estate(Hero owner, EstateData data, float farmland, float pastureland, float woodland,
             int serfs, int slaves, int nobles = 0, int craftsmen = 0)
         {
             Owner = owner;
@@ -21,6 +26,7 @@ namespace BannerKings.Managers.Populations.Estates
             Craftsmen = craftsmen;
             Serfs = serfs;
             Slaves = slaves;
+            EstatesData = data;
         }
 
         public static Estate CreateNotableEstate(Hero notable, PopulationData data)
@@ -38,10 +44,21 @@ namespace BannerKings.Managers.Populations.Estates
             float pastureland = acres * composition[1];
             float woodland = acres * composition[2];
 
-            return new Estate(notable, farmland, pastureland, woodland, 0, 0);
+            float totalSerfs = data.GetTypeCount(PopType.Serfs);
+            float totalSlaves = data.GetTypeCount(PopType.Slaves) * (1f - data.EconomicData.StateSlaves);
+
+            int desiredWorkforce = (int)(acres / 2f);
+            float desiredSerfs = (int)(desiredWorkforce * 0.8f);
+            float desiredSlaves = (int)(desiredWorkforce * 0.2f);
+
+            return new Estate(notable, data.EstateData, farmland, pastureland, woodland, 
+                (int)MathF.Min(desiredSerfs, totalSerfs * 0.15f),
+                (int)MathF.Min(desiredSlaves, totalSlaves * 0.25f));
         }
 
         public Hero Owner { get; private set; }
+
+        public TextObject Name => new TextObject("{=!}Estate of {OWNER}").SetTextVariable("OWNER", Owner.Name);
 
         public void SetOwner(Hero newOnwer)
         {
@@ -55,6 +72,31 @@ namespace BannerKings.Managers.Populations.Estates
                     "event:/ui/notification/relation");
             }
         }
+
+
+        public int GetTaxFromIncome(BKTaxPolicy.TaxType taxType)
+        {
+            int result = 0;
+            if (taxType != BKTaxPolicy.TaxType.Exemption)
+            {
+                float factor = 0.45f;
+                switch (taxType)
+                {
+                    case BKTaxPolicy.TaxType.Low:
+                        factor = 0.25f;
+                        break;
+                    case BKTaxPolicy.TaxType.High:
+                        factor = 0.65f;
+                        break;
+                }
+
+                result = (int)(Income.ResultNumber * factor);
+            }
+
+            return result;
+        }
+
+        public ExplainedNumber Income => BannerKingsConfig.Instance.EstatesModel.CalculateEstateIncome(this, true);
 
 
         public EstateData EstatesData { get; private set; }
