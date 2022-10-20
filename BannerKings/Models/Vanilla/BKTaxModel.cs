@@ -227,7 +227,7 @@ namespace BannerKings.Models.Vanilla
                     factor = 0.9f;
                     break;
             }
-            return (int)factor;
+            return (int)(marketIncome * factor);
         }
 
         public void AddVillagePopulationTaxes(ref ExplainedNumber result, float nobles, float craftsmen, float taxOfficeLevel, TaxType taxType)
