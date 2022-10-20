@@ -248,7 +248,7 @@ namespace BannerKings.Managers.Populations
                 var data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(owner);
                 if (data.HasPerk(BKPerks.Instance.CivilCultivator))
                 {
-                    result *= 0.05f;
+                    result *= 1.05f;
                 }
             }
 
@@ -259,12 +259,12 @@ namespace BannerKings.Managers.Populations
                 {
                     if (innovations.HasFinishedInnovation(DefaultInnovations.Instance.HeavyPlough))
                     {
-                        result *= 0.08f;
+                        result *= 1.08f;
                     }
 
                     if (innovations.HasFinishedInnovation(DefaultInnovations.Instance.ThreeFieldsSystem))
                     {
-                        result *= 0.25f;
+                        result *= 1.25f;
                     }
                 }
             }
@@ -277,12 +277,10 @@ namespace BannerKings.Managers.Populations
         {
             if (this.data.Settlement.IsVillage)
             {
-                var villageData = data.VillageData;
-                var construction = this.data.VillageData.Construction;
-                var progress = DifficultyFinal / construction;
-                var type = villageData.CurrentDefault.BuildingType;
+                var type = data.VillageData.CurrentDefault.BuildingType;
                 if (type != DefaultVillageBuildings.Instance.DailyProduction)
                 {
+                    var progress = BannerKingsConfig.Instance.ConstructionModel.CalculateLandExpansion(data, LandExpansionWorkforce).ResultNumber;
                     if (type == DefaultVillageBuildings.Instance.DailyFarm)
                     {
                         this.farmland += progress;
@@ -300,9 +298,7 @@ namespace BannerKings.Managers.Populations
             else if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(this.data.Settlement, "workforce",
                          (int) BKWorkforcePolicy.WorkforcePolicy.Land_Expansion))
             {
-                var laborers = LandExpansionWorkforce;
-                var construction = laborers * 0.010f;
-                var progress = DifficultyFinal / construction;
+                var progress = BannerKingsConfig.Instance.ConstructionModel.CalculateLandExpansion(data, LandExpansionWorkforce).ResultNumber;
 
                 if (progress > 0f)
                 {
@@ -339,10 +335,7 @@ namespace BannerKings.Managers.Populations
                     new(2, composition[2])
                 };
                 var choosen = MBRandom.ChooseWeighted(list);
-
-                var laborers = WorkforceExcess;
-                var construction = laborers * 0.010f;
-                var progress = DifficultyFinal / construction;
+                var progress = BannerKingsConfig.Instance.ConstructionModel.CalculateLandExpansion(data, WorkforceExcess).ResultNumber;
 
                 switch (choosen)
                 {
