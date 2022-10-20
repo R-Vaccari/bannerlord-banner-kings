@@ -1,6 +1,7 @@
 ﻿using System;
 using BannerKings.Managers.Populations;
 using BannerKings.UI.CampaignStart;
+using BannerKings.UI.Estates;
 using BannerKings.UI.Management;
 using BannerKings.UI.Management.BannerKings.UI.Panels;
 using BannerKings.UI.Panels;
@@ -43,6 +44,8 @@ namespace BannerKings.UI
             {
                 case "population":
                     return (new PopulationVM(data), "PopulationWindow");
+                case "estates":
+                    return (new EstatesVM(data), "EstatesWindow");
                 case "guild":
                     return (new GuildVM(data), "GuildWindow");
                 case "vilage_project":

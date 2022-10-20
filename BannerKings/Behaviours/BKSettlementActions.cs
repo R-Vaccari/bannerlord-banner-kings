@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using BannerKings.Extensions;
-using BannerKings.Managers.Education;
 using BannerKings.Managers.Skills;
 using BannerKings.UI;
 using TaleWorlds.CampaignSystem;
@@ -265,6 +264,10 @@ namespace BannerKings.Behaviours
             campaignGameStarter.AddGameMenuOption("bannerkings", "manage_titles", "{=sSyB0ovj}Demesne hierarchy",
                 MenuTitlesCondition,
                 MenuTitlesConsequence);
+
+            campaignGameStarter.AddGameMenuOption("bannerkings", "manage_demesne", "{=!}Estates",
+                MenuEstatesManageCondition,
+                MenuEstatesManageConsequence);
 
             //campaignGameStarter.AddGameMenuOption("bannerkings", "manage_faith", "{=m5mzZkkS}{RELIGION_NAME}",
             //    MenuFaithCondition,
@@ -749,6 +752,14 @@ namespace BannerKings.Behaviours
             return currentSettlement.MapFaction == Hero.MainHero.MapFaction;
         }
 
+        private static bool MenuEstatesManageCondition(MenuCallbackArgs args)
+        {
+            args.optionLeaveType = GameMenuOption.LeaveType.RansomAndBribe;
+            var settlement = Settlement.CurrentSettlement;
+            var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
+            return data.EstateData != null;
+        }
+
         private static bool MenuSettlementManageCondition(MenuCallbackArgs args)
         {
             args.optionLeaveType = GameMenuOption.LeaveType.Manage;
@@ -857,6 +868,10 @@ namespace BannerKings.Behaviours
         }
 
 
+        private static void MenuEstatesManageConsequence(MenuCallbackArgs args)
+        {
+            UIManager.Instance.ShowWindow("estates");
+        }
         private static void MenuSettlementManageConsequence(MenuCallbackArgs args)
         {
             UIManager.Instance.ShowWindow("population");
