@@ -2,6 +2,9 @@
 
 <strings>
 
+	<string id="str_bk_estate_task.Land_Expansion" text="{=bk_land_expansion}Land Expansion" />
+	<string id="str_bk_estate_task.Prodution" text="{=bk_production}Production" />
+
 	<string id="str_bk_description.clay" text="{=bk_description_clay}With a history nearly as old as hardwood, clay has a long tradition of being used for construction. Being extremely common over the continent, the material provides a stronger base than wood. It can be baked into bricks and thus be very versatile." />
 	<string id="str_bk_description.marble" text="{=bk_description_marble}A rarer and more valuable material than limestone. Marble was discovered by the Imperials as a material soft enough to be carved into sculptures. This trait combined with the material's natural beauty made it very sought after. It is commonly used in more elaborate buildings to convey wealth and power, such as palaces and forums." />
 	<string id="str_bk_description.hardwood" text="{=bk_description_hardwood}The quintessential building material, one that is used far before man could write about his deeds. Hardwood Serves to build entire structures, but also complement structures made of stronger bases such as clay or limestone bases." />
