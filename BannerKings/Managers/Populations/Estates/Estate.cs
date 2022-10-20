@@ -1,6 +1,5 @@
 ﻿using BannerKings.Managers.Policies;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.ViewModelCollection.ClanManagement;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -96,6 +95,30 @@ namespace BannerKings.Managers.Populations.Estates
             return result;
         }
 
+        public int GetTaxFromIncome() => (int)(Income.ResultNumber * GetTaxRatio());
+
+        public float GetTaxRatio()
+        {
+            var taxType = ((BKTaxPolicy)BannerKingsConfig.Instance.PolicyManager
+                    .GetPolicy(EstatesData.Settlement, "tax")).Policy;
+
+            float factor = 0.45f;
+            switch (taxType)
+            {
+                case BKTaxPolicy.TaxType.Low:
+                    factor = 0.25f;
+                    break;
+                case BKTaxPolicy.TaxType.High:
+                    factor = 0.65f;
+                    break;
+                case BKTaxPolicy.TaxType.Exemption:
+                    factor = 0f;
+                    break;
+            }
+
+            return factor;
+        }
+
         public ExplainedNumber Income => BannerKingsConfig.Instance.EstatesModel.CalculateEstateIncome(this, true);
 
 
@@ -108,6 +131,13 @@ namespace BannerKings.Managers.Populations.Estates
         public int Craftsmen { get; private set; }
         public int Serfs { get; private set; }
         public int Slaves { get; private set; }
+
+        public EstateTask Task { get; private set; }
+
+        public void Tick()
+        {
+
+        }
 
 
 
@@ -153,6 +183,14 @@ namespace BannerKings.Managers.Populations.Estates
             }
 
             return result;
+        }
+
+
+
+        public enum EstateTask
+        {
+            Prodution,
+            Land_Expansion
         }
     }
 }

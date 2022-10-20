@@ -61,10 +61,17 @@ namespace BannerKings.Models.Vanilla
             var result = new ExplainedNumber(0f, true);
             var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
             var serfs = data.GetTypeCount(PopType.Serfs);
-            result.Add(serfs * SERF_CONSTRUCTION, new TextObject("{=jH7cWD5r}Serfs"));
-
             var slaves = data.GetTypeCount(PopType.Slaves);
-            result.Add(slaves * SLAVE_CONSTRUCTION, new TextObject("{=8xhVr4rK}Slaves"));
+            result.Add(CalculateWorkforceConstruction(serfs, slaves).ResultNumber, new TextObject("{=8EX6VriS}Workforce"));
+
+            return result;
+        }
+
+        public ExplainedNumber CalculateWorkforceConstruction(float serfs, float slaves)
+        {
+            var result = new ExplainedNumber(0f, false);
+            result.Add(serfs * SERF_CONSTRUCTION);
+            result.Add(slaves * SLAVE_CONSTRUCTION);
 
             return result;
         }
