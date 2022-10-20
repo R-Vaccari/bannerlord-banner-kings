@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using BannerKings.Managers.Innovations;
+using BannerKings.Managers.Populations;
 using BannerKings.Managers.Skills;
 using Helpers;
 using TaleWorlds.CampaignSystem;
@@ -72,6 +73,16 @@ namespace BannerKings.Models.Vanilla
             var result = new ExplainedNumber(0f, false);
             result.Add(serfs * SERF_CONSTRUCTION);
             result.Add(slaves * SLAVE_CONSTRUCTION);
+
+            return result;
+        }
+
+        public ExplainedNumber CalculateLandExpansion(PopulationData data, float workforce, bool explanations = false)
+        {
+            var result = new ExplainedNumber(0f, explanations);
+            result.LimitMin(0f);
+            var labor = workforce * 0.010f;
+            result.Add(data.LandData.DifficultyFinal / labor, new TextObject("{=8EX6VriS}Workforce"));
 
             return result;
         }
