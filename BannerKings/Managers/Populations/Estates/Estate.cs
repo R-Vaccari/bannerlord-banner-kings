@@ -1,4 +1,5 @@
 ﻿using BannerKings.Managers.Policies;
+using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
@@ -102,14 +103,14 @@ namespace BannerKings.Managers.Populations.Estates
             var taxType = ((BKTaxPolicy)BannerKingsConfig.Instance.PolicyManager
                     .GetPolicy(EstatesData.Settlement, "tax")).Policy;
 
-            float factor = 0.45f;
+            float factor = 0.3f;
             switch (taxType)
             {
                 case BKTaxPolicy.TaxType.Low:
-                    factor = 0.25f;
+                    factor = 0.15f;
                     break;
                 case BKTaxPolicy.TaxType.High:
-                    factor = 0.65f;
+                    factor = 0.45f;
                     break;
                 case BKTaxPolicy.TaxType.Exemption:
                     factor = 0f;
@@ -132,11 +133,55 @@ namespace BannerKings.Managers.Populations.Estates
         public int Serfs { get; private set; }
         public int Slaves { get; private set; }
 
+        public int LandExpansionWorkforce => (int)((Serfs + Slaves) * 0.5f);
+
+        public int ProductionWorkforce
+        {
+            get
+            {
+                float workforce = Serfs + Slaves;
+                if (Task == EstateTask.Land_Expansion)
+                {
+                    workforce -= LandExpansionWorkforce;
+                }
+
+                return (int)workforce;
+            }
+        }
+ 
+
         public EstateTask Task { get; private set; }
 
-        public void Tick()
+        public void Tick(PopulationData data)
         {
+            if (Task == EstateTask.Land_Expansion)
+            {
+                var progress = BannerKingsConfig.Instance.ConstructionModel.CalculateLandExpansion(data, LandExpansionWorkforce).ResultNumber;
+                if (progress > 0f)
+                {
+                    var composition = data.LandData.Composition;
+                    var list = new List<(int, float)>
+                    {
+                        new(0, composition[0]),
+                        new(1, composition[1]),
+                        new(2, composition[2])
+                    };
+                    var choosen = MBRandom.ChooseWeighted(list);
 
+                    switch (choosen)
+                    {
+                        case 0:
+                            Farmland += progress;
+                            break;
+                        case 1:
+                            Pastureland += progress;
+                            break;
+                        default:
+                            Woodland += progress;
+                            break;
+                    }
+                }
+            }
         }
 
 

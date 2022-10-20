@@ -79,6 +79,7 @@ namespace BannerKings.Managers.Populations.Estates
         {
             foreach (Estate estate in Estates)
             {
+                estate.Tick(data);
                 if (estate.Owner.IsDead)
                 {
                     InheritEstate(estate);
