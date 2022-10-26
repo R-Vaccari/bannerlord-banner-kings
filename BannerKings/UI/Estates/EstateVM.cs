@@ -1,7 +1,9 @@
 ﻿using BannerKings.Managers.Populations.Estates;
 using BannerKings.UI.Items.UI;
 using TaleWorlds.CampaignSystem.ViewModelCollection;
+using TaleWorlds.CampaignSystem.ViewModelCollection.GameMenu.TownManagement;
 using TaleWorlds.Core;
+using TaleWorlds.Core.ViewModelCollection.Information;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using static BannerKings.Managers.PopulationManager;
@@ -10,12 +12,14 @@ namespace BannerKings.UI.Estates
 {
     internal class EstateVM : ViewModel
     {
+        private MBBindingList<TownManagementDescriptionItemVM> mainInfo;
         private ImageIdentifierVM imageIdentifier;
         private MBBindingList<InformationElement> generalInfo;
         public EstateVM(Estate estate)
         {
             Estate = estate;
             generalInfo = new MBBindingList<InformationElement>();
+            MainInfo = new MBBindingList<TownManagementDescriptionItemVM>();
             ImageIdentifier = new ImageIdentifierVM(new ImageIdentifier(CampaignUIHelper.GetCharacterCode(estate.Owner.CharacterObject)));
             RefreshValues();
         }
@@ -26,6 +30,37 @@ namespace BannerKings.UI.Estates
         {
             base.RefreshValues();
             GeneralInfo.Clear();
+            MainInfo.Clear();
+
+            MainInfo.Add(new TownManagementDescriptionItemVM(new TextObject("{=!}Population:"), 
+                Estate.Population, 
+                0,
+                TownManagementDescriptionItemVM.DescriptionType.Loyalty));
+
+            var income = Estate.Income;
+            MainInfo.Add(new TownManagementDescriptionItemVM(new TextObject("{=!}Income:"),
+               (int)income.ResultNumber,
+               0,
+               TownManagementDescriptionItemVM.DescriptionType.Gold,
+               new BasicTooltipViewModel(() => income.GetExplanations())));
+
+
+            var acreage = Estate.AcreageGrowth;
+            MainInfo.Add(new TownManagementDescriptionItemVM(new TextObject("{=!}Acreage:"),
+               (int)Estate.Acreage,
+               (int)acreage.ResultNumber,
+               TownManagementDescriptionItemVM.DescriptionType.Prosperity,
+               new BasicTooltipViewModel(() => acreage.GetExplanations())));
+
+
+            var value = Estate.EstateValue;
+            MainInfo.Add(new TownManagementDescriptionItemVM(new TextObject("{=!}Estate Value:"),
+               (int)value.ResultNumber,
+               0,
+               TownManagementDescriptionItemVM.DescriptionType.Gold,
+               new BasicTooltipViewModel(() => value.GetExplanations())));
+
+
             GeneralInfo.Add(new InformationElement(new TextObject("{=!}Total Population:").ToString(),
                 PopulationText, ""));
 
@@ -34,6 +69,22 @@ namespace BannerKings.UI.Estates
                incomeExplained.ResultNumber.ToString("0"), incomeExplained.GetExplanations()));
 
         }
+
+
+        [DataSourceProperty]
+        public MBBindingList<TownManagementDescriptionItemVM> MainInfo
+        {
+            get => mainInfo;
+            set
+            {
+                if (value != this.mainInfo)
+                {
+                    this.mainInfo = value;
+                    base.OnPropertyChanged("MainInfo");
+                }
+            }
+        }
+
 
         [DataSourceProperty]
         public MBBindingList<InformationElement> GeneralInfo

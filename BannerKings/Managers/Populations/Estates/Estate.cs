@@ -121,7 +121,19 @@ namespace BannerKings.Managers.Populations.Estates
         }
 
         public ExplainedNumber Income => BannerKingsConfig.Instance.EstatesModel.CalculateEstateIncome(this, true);
+        public ExplainedNumber AcrePrice => BannerKingsConfig.Instance.EstatesModel.CalculateAcrePrice(EstatesData.Settlement, true);
+        public ExplainedNumber EstateValue => BannerKingsConfig.Instance.EstatesModel.CalculateEstatePrice(this, true);
+        public ExplainedNumber AcreageGrowth => BannerKingsConfig.Instance.ConstructionModel
+            .CalculateLandExpansion(BannerKingsConfig.Instance.PopulationManager.GetPopData(EstatesData.Settlement), 
+            LandExpansionWorkforce);
 
+        public ExplainedNumber Production => BannerKingsConfig.Instance.EstatesModel.CalculateEstateProduction(this, true);
+
+        public int Population => Nobles + Craftsmen + Workforce;
+
+        public int Workforce => Serfs + Slaves;
+
+        public float Acreage => Farmland + Pastureland + Woodland;
 
         public EstateData EstatesData { get; private set; }
         public float Farmland { get; private set; }

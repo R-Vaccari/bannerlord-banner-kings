@@ -82,7 +82,7 @@ namespace BannerKings.Models.Vanilla
             var result = new ExplainedNumber(0f, explanations);
             result.LimitMin(0f);
             var labor = workforce * 0.010f;
-            result.Add(data.LandData.DifficultyFinal / labor, new TextObject("{=8EX6VriS}Workforce"));
+            result.Add(labor / data.LandData.DifficultyFinal, new TextObject("{=8EX6VriS}Workforce"));
 
             return result;
         }
