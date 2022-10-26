@@ -31,6 +31,15 @@ namespace BannerKings.Settings
         }, selectedIndex: 0);
 
 
+        [SettingProperty("Village Tax Reserves", RequireRestart = false, HintText = "{=!}Leave a fifth of villages' production out of player income. This keeps villages in the player's income summary and so lets them always have an idea of how much villages and estates are producing. These can be manually collected through settlement menus. When disabled, all the income is removed and thus villages and estates have nothing to report most of the time, because their income depends on villagers bringing profit back from towns. Default: false.")]
+        [SettingPropertyGroup("{=!}Economy")]
+        public bool VillageTaxReserves { get; set; } = false;
+
+        [SettingProperty("Realistic Caravan Income", RequireRestart = false, HintText = "{=!}Caravans pose a major risk factor not represented in the game: carrying your profits. With this setting, caravan profits will only be added when they enter a settlement owned by their owner, or where they are situated (ie, notables). Default: true.")]
+        [SettingPropertyGroup("{=!}Economy")]
+        public bool RealisticCaravanIncome { get; set; } = true;
+
+
         // Value is displayed as "X Denars"
         [SettingPropertyInteger("{=!}Volunteers Limit", 6, 20, "0 Volunteers",
             Order = 1, RequireRestart = false, HintText = "{=!}The number of volunteers that notables may have. Requires reloading. Vanilla is 6, default for BK is 10. The recruitable amount is calculated on percentages and thus is always balanced. Recruits will be lost when changing to a smaller limit. Limits can be changed at any point during campaigns.")]

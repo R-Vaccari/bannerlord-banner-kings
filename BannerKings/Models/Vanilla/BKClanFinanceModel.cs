@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reflection;
 using BannerKings.Extensions;
 using BannerKings.Managers.Titles;
+using BannerKings.Settings;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Party;
@@ -56,7 +57,8 @@ namespace BannerKings.Models.Vanilla
         }
 
 
-        public override int CalculateOwnerIncomeFromCaravan(MobileParty caravan) => MathF.Max(0, caravan.PartyTradeGold - 10000);
+        public override int CalculateOwnerIncomeFromCaravan(MobileParty caravan) => 
+            BannerKingsSettings.Instance.RealisticCaravanIncome ? 0 : MathF.Max(0, caravan.PartyTradeGold - 10000);
 
         public override ExplainedNumber CalculateClanGoldChange(Clan clan, bool includeDescriptions = false, bool applyWithdrawals = false)
         {
@@ -66,8 +68,8 @@ namespace BannerKings.Models.Vanilla
                 return baseResult;
             }
 
-            CalculateClanExpenseInternal(clan, ref baseResult, applyWithdrawals);
-            CalculateClanIncomeInternal(clan, ref baseResult, applyWithdrawals);
+            AddExpenses(clan, ref baseResult, applyWithdrawals);
+            AddIncomes(clan, ref baseResult, applyWithdrawals);
 
             return baseResult;
         }
@@ -77,7 +79,7 @@ namespace BannerKings.Models.Vanilla
             var baseResult = base.CalculateClanIncome(clan, includeDescriptions, applyWithdrawals);
             if (BannerKingsConfig.Instance.TitleManager != null)
             {
-                CalculateClanIncomeInternal(clan, ref baseResult, applyWithdrawals);
+                AddIncomes(clan, ref baseResult, applyWithdrawals);
             }
 
             return baseResult;
@@ -88,13 +90,13 @@ namespace BannerKings.Models.Vanilla
             var baseResult = base.CalculateClanExpenses(clan, includeDescriptions, applyWithdrawals);
             if (BannerKingsConfig.Instance.TitleManager != null)
             {
-                CalculateClanExpenseInternal(clan, ref baseResult, applyWithdrawals);
+                AddExpenses(clan, ref baseResult, applyWithdrawals);
             }
 
             return baseResult;
         }
 
-        public void CalculateClanIncomeInternal(Clan clan, ref ExplainedNumber result, bool applyWithdrawals)
+        public void AddIncomes(Clan clan, ref ExplainedNumber result, bool applyWithdrawals)
         {
             var kingdom = clan.Kingdom;
             var wkModel = (BKWorkshopModel) Campaign.Current.Models.WorkshopModel;
@@ -194,7 +196,7 @@ namespace BannerKings.Models.Vanilla
             }
         }
 
-        public void CalculateClanExpenseInternal(Clan clan, ref ExplainedNumber result, bool applyWithdrawals)
+        public void AddExpenses(Clan clan, ref ExplainedNumber result, bool applyWithdrawals)
         {
             var totalWorkshopExpenses = 0;
 
