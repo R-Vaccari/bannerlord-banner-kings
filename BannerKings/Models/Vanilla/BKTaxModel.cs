@@ -165,6 +165,11 @@ namespace BannerKings.Models.Vanilla
                 float craftsmen = data.GetTypeCount(PopType.Craftsmen);
                 foreach (var estate in data.EstateData.Estates)
                 {
+                    if (estate.IsDisabled)
+                    {
+                        continue;
+                    }
+
                     nobles -= estate.Nobles;
                     craftsmen -= estate.Craftsmen;
 

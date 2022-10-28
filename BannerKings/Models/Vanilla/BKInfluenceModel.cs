@@ -169,11 +169,16 @@ namespace BannerKings.Models.Vanilla
             return baseResult;
         }
 
+        public float GetNoblesInfluence(Settlement settlement, float nobles)
+        {
+            return nobles *0.01f;
+        }
+
         public ExplainedNumber CalculateSettlementInfluence(Settlement settlement, PopulationData data)
         {
             var settlementResult = new ExplainedNumber(0f, true);
             float nobles = data.GetTypeCount(PopType.Nobles);
-            settlementResult.Add(MBMath.ClampFloat(nobles * 0.01f, 0f, 12f), new TextObject($"{{=!}}Nobles influence from {settlement.Name}"));
+            settlementResult.Add(MBMath.ClampFloat(GetNoblesInfluence(settlement, nobles), 0f, 12f), new TextObject($"{{=!}}Nobles influence from {settlement.Name}"));
 
             var villageData = data.VillageData;
             if (villageData != null)

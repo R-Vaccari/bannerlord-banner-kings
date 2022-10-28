@@ -1,4 +1,5 @@
-﻿using BannerKings.Managers.Policies;
+﻿using BannerKings.Extensions;
+using BannerKings.Managers.Policies;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
@@ -31,10 +32,7 @@ namespace BannerKings.Managers.Populations.Estates
 
         public static Estate CreateNotableEstate(Hero notable, PopulationData data)
         {
-            if (!notable.IsNotable || notable.CurrentSettlement == null)
-            {
-                return null;
-            }
+
 
             float acreage = data.LandData.Acreage;
             float acres = MBRandom.RandomFloatRanged(BannerKingsConfig.Instance.EstatesModel.MinimumEstateAcreage, 
@@ -58,7 +56,7 @@ namespace BannerKings.Managers.Populations.Estates
 
         public Hero Owner { get; private set; }
 
-        public TextObject Name => new TextObject("{=!}Estate of {OWNER}").SetTextVariable("OWNER", Owner.Name);
+        public TextObject Name => Owner != null ? new TextObject("{=!}Estate of {OWNER}").SetTextVariable("OWNER", Owner.Name) : new TextObject();
 
         public void SetOwner(Hero newOnwer)
         {
@@ -120,18 +118,57 @@ namespace BannerKings.Managers.Populations.Estates
             return factor;
         }
 
+        public bool IsDisabled 
+        { 
+            get
+            {
+                var settlement = EstatesData.Settlement;
+                var fiefOwner = settlement.IsVillage ? settlement.Village.GetActualOwner() : settlement.Owner;
+                return Owner == null || Owner == fiefOwner;
+            } 
+        }
+
         public ExplainedNumber Income => BannerKingsConfig.Instance.EstatesModel.CalculateEstateIncome(this, true);
         public ExplainedNumber AcrePrice => BannerKingsConfig.Instance.EstatesModel.CalculateAcrePrice(EstatesData.Settlement, true);
         public ExplainedNumber EstateValue => BannerKingsConfig.Instance.EstatesModel.CalculateEstatePrice(this, true);
-        public ExplainedNumber AcreageGrowth => BannerKingsConfig.Instance.ConstructionModel
-            .CalculateLandExpansion(BannerKingsConfig.Instance.PopulationManager.GetPopData(EstatesData.Settlement), 
-            LandExpansionWorkforce);
+        public ExplainedNumber AcreageGrowth => Task == EstateTask.Land_Expansion ? BannerKingsConfig.Instance.ConstructionModel
+            .CalculateLandExpansion(BannerKingsConfig.Instance.PopulationManager.GetPopData(EstatesData.Settlement),
+            LandExpansionWorkforce) : new ExplainedNumber(0f);
 
         public ExplainedNumber Production => BannerKingsConfig.Instance.EstatesModel.CalculateEstateProduction(this, true);
 
-        public int Population => Nobles + Craftsmen + Workforce;
+        public int Population => Nobles + Craftsmen + Serfs + Slaves;
 
-        public int Workforce => Serfs + Slaves;
+        public int AvailableWorkForce
+        {
+            get
+            {
+                int toSubtract = 0;
+                if (Task == EstateTask.Land_Expansion)
+                {
+                    toSubtract += LandExpansionWorkforce;
+                }
+
+                return Serfs + Slaves - toSubtract;
+            }
+        }
+
+        public int LandExpansionWorkforce => (int)((Serfs + Slaves) * 0.5f);
+
+        public float WorkforceSaturation
+        {
+            get
+            {
+                var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(EstatesData.Settlement);
+                float available = AvailableWorkForce;
+                var farms = Farmland / data.LandData.GetRequiredLabor("farmland");
+                var pasture = Pastureland / data.LandData.GetRequiredLabor("pasture");
+                return available / (farms + pasture);
+            }
+        }
+
+
+        public float Influence => BannerKingsConfig.Instance.InfluenceModel.GetNoblesInfluence(EstatesData.Settlement, Nobles);
 
         public float Acreage => Farmland + Pastureland + Woodland;
 
@@ -145,30 +182,26 @@ namespace BannerKings.Managers.Populations.Estates
         public int Serfs { get; private set; }
         public int Slaves { get; private set; }
 
-        public int LandExpansionWorkforce => (int)((Serfs + Slaves) * 0.5f);
+     
 
-        public int ProductionWorkforce
-        {
-            get
-            {
-                float workforce = Serfs + Slaves;
-                if (Task == EstateTask.Land_Expansion)
-                {
-                    workforce -= LandExpansionWorkforce;
-                }
 
-                return (int)workforce;
-            }
-        }
+
+        public void ChangeTask(EstateTask task) => Task = task;
  
 
         public EstateTask Task { get; private set; }
 
         public void Tick(PopulationData data)
         {
+            if (IsDisabled)
+            {
+                return;
+            }
+
+
             if (Task == EstateTask.Land_Expansion)
             {
-                var progress = BannerKingsConfig.Instance.ConstructionModel.CalculateLandExpansion(data, LandExpansionWorkforce).ResultNumber;
+                var progress = AcreageGrowth.ResultNumber;
                 if (progress > 0f)
                 {
                     var composition = data.LandData.Composition;

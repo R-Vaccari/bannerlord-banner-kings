@@ -189,7 +189,7 @@ namespace BannerKings.Models.BKModels
             if (settlement.IsVillage)
             {
                 var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(estate.EstatesData.Settlement);
-                float proportion = estate.Workforce / (float)(data.GetTypeCount(PopType.Slaves) + data.GetTypeCount(PopType.Serfs));
+                float proportion = estate.AvailableWorkForce / (float)(data.GetTypeCount(PopType.Slaves) + data.GetTypeCount(PopType.Serfs));
                 float production = BannerKingsConfig.Instance.VillageProductionModel.CalculateProductionsExplained(settlement.Village).ResultNumber;
 
                 result.Add(production * proportion, new TextObject("{=!}Total production proportion"));

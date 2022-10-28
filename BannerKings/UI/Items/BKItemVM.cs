@@ -7,10 +7,10 @@ namespace BannerKings.UI.Items
 {
     public class BKItemVM : SelectorItemVM
     {
-        public BKItemVM(Enum policy, bool isAvailable, string hint) : base("")
+        public BKItemVM(Enum policy, bool isAvailable, string hint, TextObject name = null) : base("")
         {
             value = (int) (object) policy;
-            StringItem = policy.ToString().Replace("_", " ");
+            StringItem = name != null ? name.ToString() : policy.ToString().Replace("_", " ");
             CanBeSelected = isAvailable;
             Hint = new HintViewModel(new TextObject("{=!}" + hint));
         }

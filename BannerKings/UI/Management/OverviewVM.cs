@@ -205,9 +205,7 @@ namespace BannerKings.UI.Management
 
             var influence = BannerKingsConfig.Instance.InfluenceModel.CalculateSettlementInfluence(settlement, data);
             StatsInfo.Add(new InformationElement(GameTexts.FindText("str_total_influence").ToString(),
-                new TextObject("{=!}{INFLUENCE}{INFLUENCE_ICON}")
-                    .SetTextVariable("INFLUENCE", FormatFloatGain(influence.ResultNumber))
-                    .ToString(),
+                FormatFloatGain(influence.ResultNumber),
                 new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
                     .SetTextVariable("TEXT",
                         new TextObject("{=8mSDgwhX}The amount of influence this settlement provides in your realm."))

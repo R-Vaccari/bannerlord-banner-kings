@@ -23,6 +23,11 @@ namespace BannerKings.Managers.Populations.Estates
         {
             foreach (Estate estate in Estates)
             {
+                if (estate.IsDisabled)
+                {
+                    continue;
+                }
+
                 float proportion = estate.GetPopulationClassQuantity(type) / (float)classTotal;
                 int result = (int)(quantity * proportion);
                 estate.AddPopulation(type, result);
@@ -79,6 +84,11 @@ namespace BannerKings.Managers.Populations.Estates
         {
             foreach (Estate estate in Estates)
             {
+                if (estate.IsDisabled) 
+                {
+                    continue;
+                }
+
                 estate.Tick(data);
                 if (estate.Owner.IsDead)
                 {
@@ -100,6 +110,11 @@ namespace BannerKings.Managers.Populations.Estates
                         Estates.Add(Estate.CreateNotableEstate(notable, data));
                     }
                 }
+            }
+
+            if (Estates.Count < BannerKingsConfig.Instance.EstatesModel.CalculateEstatesMaximum(Settlement).ResultNumber)
+            {
+                Estates.Add(Estate.CreateNotableEstate(null, data));
             }
         }
     }

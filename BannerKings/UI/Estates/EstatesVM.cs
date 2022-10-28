@@ -72,12 +72,12 @@ namespace BannerKings.UI.Estates
                 pastureLand -= estate.Pastureland;
                 woodland -= estate.Woodland;
 
-                EstatesList.Add(new EstateVM(estate));
+                EstatesList.Add(new EstateVM(estate, data));
             }
 
             var demesneLands = new Estate(data.Settlement.Owner, estateData, farmland, pastureLand, woodland, serfs,
                 slaves, nobles, craftsmen);
-            DemesneLands = new EstateVM(demesneLands);
+            DemesneLands = new EstateVM(demesneLands, data);
         }
     }
 }
