@@ -7,7 +7,7 @@ using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Managers.Policies
 {
-    internal class BKTaxPolicy : BannerKingsPolicy
+    public class BKTaxPolicy : BannerKingsPolicy
     {
         public enum TaxType
         {

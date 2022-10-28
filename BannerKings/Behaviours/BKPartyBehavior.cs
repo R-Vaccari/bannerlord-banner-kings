@@ -2,13 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using BannerKings.Components;
+using BannerKings.Settings;
 using HarmonyLib;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.Encounters;
-using TaleWorlds.CampaignSystem.MapEvents;
 using TaleWorlds.CampaignSystem.Party;
-using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.Siege;
 using TaleWorlds.Core;
@@ -198,10 +197,32 @@ namespace BannerKings.Behaviours
 
         private void OnSettlementEntered(MobileParty party, Settlement target, Hero hero)
         {
-            if (party == null || BannerKingsConfig.Instance.PopulationManager == null)
+            if (party == null)
             {
                 return;
             }
+
+            if (party.IsCaravan && BannerKingsSettings.Instance.RealisticCaravanIncome)
+            {
+                var caravanOwner = party.Owner;
+                if (target.Owner == caravanOwner || target.HeroesWithoutParty.Contains(caravanOwner) || 
+                    (caravanOwner.PartyBelongedTo != null && target.Parties.Contains(caravanOwner.PartyBelongedTo))) 
+                {
+                    int income = MathF.Max(0, party.PartyTradeGold - 10000);
+                    if (income > 0)
+                    {
+                        GiveGoldAction.ApplyForPartyToCharacter(party.Party, caravanOwner, income);
+                        if (caravanOwner == Hero.MainHero)
+                        {
+                            InformationManager.DisplayMessage(new InformationMessage(
+                                new TextObject("{=!}The {CARAVAN} has deposited you {GOLD}{GOLD_ICON}")
+                                .SetTextVariable("CARAVAN", party.Name)
+                                .SetTextVariable("GOLD", income).ToString()));
+                        }
+                    }
+                }
+            }
+
 
             if (!BannerKingsConfig.Instance.PopulationManager.IsPopulationParty(party))
             {
