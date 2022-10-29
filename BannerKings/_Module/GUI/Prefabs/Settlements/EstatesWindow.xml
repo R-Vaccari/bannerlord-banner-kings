@@ -13,7 +13,6 @@
 				<CharacterDeveloperAttributeInspectionPopupWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed"
 				                                                  SuggestedWidth="750" SuggestedHeight="800"
 				                                                  HorizontalAlignment="Center" VerticalAlignment="Center"
-				                                                  Command.Deactivate="ExecuteStopInspectingCurrentAttribute"
 				                                                  Sprite="CharacterDeveloper\AttributePopup\attribute_popup_canvas">
 					<Children>
 
@@ -103,12 +102,15 @@
 																				 MarginRight="85" StackLayout.LayoutMethod="HorizontalLeftToRight">
 																			<Children>
 																			
-																			  <ImageIdentifierWidget DataSource="{ImageIdentifier}"  WidthSizePolicy="Fixed"
+																			  <Widget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" IsVisible="@IsEnabled">
+																				<Children>
+																					<ImageIdentifierWidget DataSource="{ImageIdentifier}" WidthSizePolicy="Fixed"
 																					   HeightSizePolicy="Fixed" SuggestedWidth="170" SuggestedHeight="130" MarginLeft="17"
 																					   MarginRight="18" MarginTop="17" MarginBottom="18" AdditionalArgs="@AdditionalArgs"
 																					   ImageId="@Id" ImageTypeCode="@ImageTypeCode" />
-																			  
-																					   
+																				</Children>
+																			  </Widget>
+
 																			   <ListPanel DataSource="{MainInfo}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" VerticalAlignment="Top" StackLayout.LayoutMethod="VerticalBottomToTop">
 																					<ItemTemplate>
 
@@ -134,15 +136,19 @@
 																		</ListPanel>
 																		
 																		
-																		<Standard.DropdownWithHorizontalControl IsVisible="@PlayerOwned" Parameter.SelectorDataSource="{TaskSelector}"  MarginTop="10"
-																						HorizontalAlignment="Center" />
+																		<Standard.DropdownWithHorizontalControl Parameter.SelectorDataSource="{TaskSelector}" MarginTop="10"
+																												HorizontalAlignment="Center" IsVisible="@PlayerOwned"  />
+																												
+																		<Standard.DropdownWithHorizontalControl Parameter.SelectorDataSource="{DutySelector}" MarginTop="10"
+																												HorizontalAlignment="Center" IsVisible="@DutyEnabled"  />
 																						
-																		<GridWidget DataSource="{ExtraInfos}" WidthSizePolicy="Fixed" HeightSizePolicy="CoverChildren" VerticalAlignment="Center"
-																					SuggestedWidth="700" HorizontalAlignment="Center" DefaultCellWidth="230" DefaultCellHeight="30" ColumnCount="3">
+																		<GridWidget DataSource="{ExtraInfos}" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" VerticalAlignment="Center"
+																					SuggestedWidth="700" SuggestedHeight="120" HorizontalAlignment="Center" DefaultCellWidth="230" 
+																					DefaultCellHeight="30" ColumnCount="3" IsVisible="@IsEnabled">
 																			<ItemTemplate>
 
 																				<GridWidget WidthSizePolicy="CoverChildren" HorizontalAlignment="Center"
-																							HeightSizePolicy="CoverChildren" DefaultCellWidth="150" DefaultCellHeight="30"
+																							HeightSizePolicy="CoverChildren" DefaultCellWidth="150" DefaultCellHeight="20"
 																							ColumnCount="1" MarginTop="30">
 																					<ItemTemplate>
 																						<InformationElement />
@@ -150,6 +156,41 @@
 																				</GridWidget>
 																			</ItemTemplate>
 																		</GridWidget>
+																		
+																		<ListPanel HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" WidthSizePolicy="CoverChildren"
+																				   StackLayout.LayoutMethod="HorizontalLeftToRight" MarginTop="10">
+																			<Children>
+																			
+																				<ButtonWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedHeight="48" MarginRight="15" MarginLeft="15"
+																							  SuggestedWidth="130" HorizontalAlignment="Center" VerticalAlignment="Bottom"
+																							  Brush="ButtonBrush2" Command.Click="OnTournamentPress">
+																					<Children>
+																						<HintWidget DataSource="{BuyHint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
+																									HorizontalAlignment="Center" Command.HoverBegin="ExecuteBeginHint"
+																									Command.HoverEnd="ExecuteEndHint" />
+																						<RichTextWidget DoNotAcceptEvents="true" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren"
+																										HorizontalAlignment="Center" VerticalAlignment="Center" Brush="OverlayPopup.ButtonText"
+																										Brush.FontSize="20" Text="@BuyText" />
+																					</Children>
+																				</ButtonWidget>
+																				
+																				
+																				<ButtonWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedHeight="48" MarginRight="15" MarginLeft="15"
+																							  SuggestedWidth="130" HorizontalAlignment="Center" VerticalAlignment="Bottom"
+																							  Brush="ButtonBrush2" Command.Click="OnTournamentPress">
+																					<Children>
+																						<HintWidget DataSource="{GrantHint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
+																									HorizontalAlignment="Center" Command.HoverBegin="ExecuteBeginHint"
+																									Command.HoverEnd="ExecuteEndHint" />
+																						<RichTextWidget DoNotAcceptEvents="true" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren"
+																										HorizontalAlignment="Center" VerticalAlignment="Center" Brush="OverlayPopup.ButtonText"
+																										Brush.FontSize="20" Text="@GrantText" />
+																					</Children>
+																				</ButtonWidget>
+
+																				
+																			</Children>
+																		</ListPanel>
 																	</Children>
 																</ListPanel>
 															</Children>

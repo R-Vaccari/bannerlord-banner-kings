@@ -11,6 +11,8 @@
 		<string id="bk_adequate" text="Adequate" />
 		<string id="bk_poor" text="Poor" />
 		
+		<string id="bk_taxation" text="Taxation" />
+		<string id="bk_drafting" text="Drafting" />
 		<string id="bk_land_expansion" text="Land Expansion" />
 		<string id="bk_production" text="Production" />
 		
