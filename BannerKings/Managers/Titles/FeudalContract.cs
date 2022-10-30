@@ -42,7 +42,7 @@ namespace BannerKings.Managers.Titles
                 DemesneLaws.Remove(existingLaw);
             }
 
-            DemesneLaws.Add(existingLaw);
+            DemesneLaws.Add(law.GetCopy());
         }
 
         public void SetLaws(List<DemesneLaw> laws)

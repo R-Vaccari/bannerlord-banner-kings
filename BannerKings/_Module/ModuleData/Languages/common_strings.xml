@@ -7,6 +7,13 @@
 	<strings>
 		<string id="gaJDVkvHA" text="Placeholder" />
 		
+		<string id="bk_law_slave_duties" text="Slave Duties" />
+		<string id="bk_law_serf_duties" text="Serf Duties" />
+		<string id="bk_law_craftsmen_duties" text="Craftsmen Duties" />
+		<string id="bk_law_noble_duties" text="Nobility Duties" />
+		<string id="bk_law_estate_tenure" text="Estate Tenure" />
+		<string id="bk_slavery" text="Slavery" />
+		
 		<string id="bk_rich" text="Rich" />
 		<string id="bk_adequate" text="Adequate" />
 		<string id="bk_poor" text="Poor" />

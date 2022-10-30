@@ -1,5 +1,5 @@
 ﻿using BannerKings.UI.Court;
-using BannerKings.UI.Titles;
+using BannerKings.UI.Kingdoms;
 using Bannerlord.UIExtenderEx.Attributes;
 using Bannerlord.UIExtenderEx.ViewModels;
 using TaleWorlds.CampaignSystem.ViewModelCollection.KingdomManagement;
@@ -13,14 +13,14 @@ namespace BannerKings.UI.Extensions
     {
         private bool courtSelected, demesneSelected;
         private CourtVM courtVM;
-        private DemesneHierarchyVM demesneVM;
+        private KingdomDemesneVM demesneVM;
         private readonly KingdomManagementVM kingdomManagement;
 
         public KingdomManagementMixin(KingdomManagementVM vm) : base(vm)
         {
             kingdomManagement = vm;
             courtVM = new CourtVM(true);
-            demesneVM = new DemesneHierarchyVM(BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(vm.Kingdom),
+            demesneVM = new KingdomDemesneVM(BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(vm.Kingdom),
                 vm.Kingdom);
         }
 
@@ -72,7 +72,7 @@ namespace BannerKings.UI.Extensions
         }
 
         [DataSourceProperty]
-        public DemesneHierarchyVM Demesne
+        public KingdomDemesneVM Demesne
         {
             get => demesneVM;
             set
@@ -87,7 +87,8 @@ namespace BannerKings.UI.Extensions
 
         public override void OnRefresh()
         {
-            courtVM.RefreshValues();
+            Court.RefreshValues();
+            Demesne.RefreshValues();
             if (kingdomManagement.Clan.Show || kingdomManagement.Settlement.Show || kingdomManagement.Policy.Show ||
                 kingdomManagement.Army.Show || kingdomManagement.Diplomacy.Show)
             {

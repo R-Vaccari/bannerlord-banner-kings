@@ -72,14 +72,20 @@ namespace BannerKings.Managers
                 {
                     SettlementCache.Add(title.fief, title);
                 }
+            }
 
+            Knights ??= new Dictionary<Hero, float>();
+        }
+
+        public void InitLaws()
+        {
+            foreach (var title in Titles.Keys.ToList())
+            {
                 if (title.contract.DemesneLaws == null)
                 {
                     title.SetLaws(DefaultDemesneLaws.Instance.GetAdequateLaws(title));
                 }
-            }
-
-            Knights ??= new Dictionary<Hero, float>();
+            }  
         }
 
         public bool IsHeroTitleHolder(Hero hero)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Localization;
 
@@ -30,16 +31,45 @@ namespace BannerKings.Managers.Titles.Laws
         public DemesneLaw DraftingVassalage { get; private set; } = new DemesneLaw("drafting_vassalage");
         public DemesneLaw DraftingFreeContracts { get; private set; } = new DemesneLaw("drafting_free_contracts");
 
-        public override IEnumerable<DemesneLaw> All => throw new NotImplementedException();
+        public override IEnumerable<DemesneLaw> All
+        {
+            get
+            {
+                yield return EstateTenureFeeTail;
+                yield return EstateTenureQuiaEmptores;
+                yield return EstateTenureAllodial;
+                yield return SerfsMilitaryServiceDuties;
+                yield return SerfsAgricultureDuties;
+                yield return SerfsLaxDuties;
+                yield return SlavesHardLabor;
+                yield return SlavesAgricultureDuties;
+                yield return SlavesDomesticDuties;
+                yield return SlaveryVlandia;
+                yield return SlaveryStandard;
+                yield return SlaveryManumission;
+                yield return DraftingHidage;
+                yield return DraftingVassalage;
+                yield return DraftingFreeContracts;
+
+            }
+        }
+
+        public List<DemesneLaw> GetLawsByType(DemesneLawTypes type) => All.ToList().FindAll(x => x.LawType == type);
+
+        public DemesneLaw GetLawByIndex(DemesneLawTypes type, int index)
+        {
+            var law = All.FirstOrDefault(x => x.LawType == type && x.Index == index);
+            return law;
+        }
 
         public List<DemesneLaw> GetAdequateLaws(FeudalTitle title)
         {
             var list = new List<DemesneLaw>();
-            list.Add(DraftingFreeContracts);
-            list.Add(SlaveryStandard);
-            list.Add(SlavesHardLabor);
-            list.Add(SerfsAgricultureDuties);
-            list.Add(EstateTenureFeeTail);
+            list.Add(DraftingFreeContracts.GetCopy());
+            list.Add(SlaveryStandard.GetCopy());
+            list.Add(SlavesHardLabor.GetCopy());
+            list.Add(SerfsAgricultureDuties.GetCopy());
+            list.Add(EstateTenureFeeTail.GetCopy());
 
             return list;
         }
@@ -55,7 +85,8 @@ namespace BannerKings.Managers.Titles.Laws
                 0f,
                 0f,
                 0f,
-                300);
+                300,
+                0);
 
             EstateTenureAllodial.Initialize(new TextObject("{=!}Allodial Tenure"),
                 new TextObject("{=!}The allodial tenure represents the absolute ownership of land. Estate owners have no duties towards fief lords. The absence of taxation and military requirements draws in tenants to these estates."),
@@ -64,7 +95,8 @@ namespace BannerKings.Managers.Titles.Laws
                 0f,
                 0f,
                 0f,
-                300);
+                300,
+                1);
 
             EstateTenureFeeTail.Initialize(new TextObject("{=!}Fee Tail"),
                 new TextObject("{=!}The fee tail tenure dictates that property is inherited exclusively through lawful inheritance or grant."),
@@ -73,7 +105,8 @@ namespace BannerKings.Managers.Titles.Laws
                 0f,
                 0f,
                 0f,
-                300);
+                300,
+                2);
 
             #endregion EstateTenure
 
@@ -89,7 +122,8 @@ namespace BannerKings.Managers.Titles.Laws
                0f,
                0f,
                0f,
-               300);
+               300,
+               0);
 
             SerfsAgricultureDuties.Initialize(new TextObject("{=!}Agricultural Duties"),
                new TextObject("{=!}Tailor the duty laws of {CLASS} towards agriculture. Labor requirements and movement restriction tie the serfs to the land and its productivity. Increased agricultural output.")
@@ -99,7 +133,8 @@ namespace BannerKings.Managers.Titles.Laws
                0f,
                0f,
                0f,
-               300);
+               300,
+               1);
 
             SerfsLaxDuties.Initialize(new TextObject("{=!}Lax Duties"),
                new TextObject("{=!}Lessen the duty burdens of {CLASS}. Reduced duties makes the populace more content and gives them room for prosperity. Reduces output and military contribution.")
@@ -109,7 +144,8 @@ namespace BannerKings.Managers.Titles.Laws
                0f,
                0f,
                0f,
-               300);
+               300,
+               2);
 
             #endregion SerfDuties
 
@@ -123,7 +159,7 @@ namespace BannerKings.Managers.Titles.Laws
                0f,
                0f,
                0f,
-               300);
+               300, 0);
 
             SlavesAgricultureDuties.Initialize(new TextObject("{=!}Agricultural Duties"),
                new TextObject("{=!}Tailor the duty laws of {CLASS} towards agriculture. Labor requirements and movement restriction tie the serfs to the land and its productivity. Increased agricultural output.")
@@ -133,7 +169,8 @@ namespace BannerKings.Managers.Titles.Laws
                0f,
                0f,
                0f,
-               300);
+               300,
+               1);
 
             SlavesDomesticDuties.Initialize(new TextObject("{=!}Domestic Duties"),
                new TextObject("{=!}Tailor the duty laws of {CLASS} towards domestic and skilled labor. Citizen households will often have or want to have slaves for various domestic labors. Enslaved shopkeepers, artisans and professionals provide tax benefits to their owners.")
@@ -143,7 +180,8 @@ namespace BannerKings.Managers.Titles.Laws
                0f,
                0f,
                0f,
-               300);
+               300,
+               2);
 
             #endregion SlaveDuties
 
@@ -156,7 +194,7 @@ namespace BannerKings.Managers.Titles.Laws
                 0f,
                 0f,
                 0f,
-                300);
+                300, 0);
 
             SlaveryVlandia.Initialize(new TextObject("{=!}Vlandic Law"),
                 new TextObject("{=!}The Vlandic tradition on slavery stipulates that Vlandians shall not enslave each other. Slaves are present in small quantities in rural estates. Though Vlandian individuals may become or be born slaves, Vlandian lords are prohibited from purposefuly enslaving them."),
@@ -165,7 +203,8 @@ namespace BannerKings.Managers.Titles.Laws
                 0f,
                 0f,
                 0f,
-                300);
+                300,
+                1);
 
             SlaveryManumission.Initialize(new TextObject("{=!}Manumission"),
                 new TextObject("{=!}The Vlandic tradition on slavery stipulates that Vlandians shall not enslave each other. Slaves are present in small quantities in rural estates. Though Vlandian individuals may become or be born slaves, Vlandian lords are prohibited from purposefuly enslaving them."),
@@ -174,7 +213,8 @@ namespace BannerKings.Managers.Titles.Laws
                 0f,
                 0f,
                 0f,
-                300);
+                300,
+                2);
 
             #endregion Slavery
 
@@ -187,7 +227,7 @@ namespace BannerKings.Managers.Titles.Laws
                 0f,
                 0f,
                 0f,
-                300);
+                300, 0);
 
             DraftingFreeContracts.Initialize(new TextObject("{=!}Free Contracts"),
               new TextObject("{=!}The Imperial or Calradic law stablishes the legal existance of slaves and their ownership. Though they may not be harmed or killed without just cause, the slave trade is rampant and devoid of restrictions. Any person found in debt or captured in battle may be enslaved, and slaves compose the labor force across all settlements."),
@@ -196,7 +236,8 @@ namespace BannerKings.Managers.Titles.Laws
               0f,
               0f,
               0f,
-              300);
+              300,
+              1);
 
             DraftingVassalage.Initialize(new TextObject("{=!}Vassalage"),
               new TextObject("{=!}The Imperial or Calradic law stablishes the legal existance of slaves and their ownership. Though they may not be harmed or killed without just cause, the slave trade is rampant and devoid of restrictions. Any person found in debt or captured in battle may be enslaved, and slaves compose the labor force across all settlements."),
@@ -205,7 +246,8 @@ namespace BannerKings.Managers.Titles.Laws
               0f,
               0f,
               0f,
-              300);
+              300,
+              2);
 
             #endregion Drafting
         }

@@ -81,7 +81,7 @@
 															
 												<GridWidget DataSource="{EstatesList}" WidthSizePolicy="StretchToParent"
 															HeightSizePolicy="CoverChildren" MarginRight="50" MarginLeft="50" HorizontalAlignment="Center"
-															DefaultCellWidth="250" DefaultCellHeight="450" ColumnCount="1" MarginTop="10">
+															DefaultCellWidth="250" DefaultCellHeight="550" ColumnCount="1" MarginTop="10">
 													<ItemTemplate>
 														<Widget HorizontalAlignment="Center" HeightSizePolicy="CoverChildren"
 															WidthSizePolicy="StretchToParent" VerticalAlignment="Center">
@@ -137,10 +137,10 @@
 																		
 																		
 																		<Standard.DropdownWithHorizontalControl Parameter.SelectorDataSource="{TaskSelector}" MarginTop="10"
-																												HorizontalAlignment="Center" IsVisible="@PlayerOwned"  />
+																												HorizontalAlignment="Center" IsEnabled="@PlayerOwned" />
 																												
 																		<Standard.DropdownWithHorizontalControl Parameter.SelectorDataSource="{DutySelector}" MarginTop="10"
-																												HorizontalAlignment="Center" IsVisible="@DutyEnabled"  />
+																												HorizontalAlignment="Center" IsEnabled="@DutyEnabled" />
 																						
 																		<GridWidget DataSource="{ExtraInfos}" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" VerticalAlignment="Center"
 																					SuggestedWidth="700" SuggestedHeight="120" HorizontalAlignment="Center" DefaultCellWidth="230" 
@@ -158,11 +158,11 @@
 																		</GridWidget>
 																		
 																		<ListPanel HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" WidthSizePolicy="CoverChildren"
-																				   StackLayout.LayoutMethod="HorizontalLeftToRight" MarginTop="10">
+																				   StackLayout.LayoutMethod="HorizontalLeftToRight" VerticalAlignment="Center" MarginTop="10">
 																			<Children>
 																			
 																				<ButtonWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedHeight="48" MarginRight="15" MarginLeft="15"
-																							  SuggestedWidth="130" HorizontalAlignment="Center" VerticalAlignment="Bottom"
+																							  SuggestedWidth="130" HorizontalAlignment="Center" VerticalAlignment="Top"
 																							  Brush="ButtonBrush2" Command.Click="OnTournamentPress">
 																					<Children>
 																						<HintWidget DataSource="{BuyHint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
@@ -176,7 +176,7 @@
 																				
 																				
 																				<ButtonWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedHeight="48" MarginRight="15" MarginLeft="15"
-																							  SuggestedWidth="130" HorizontalAlignment="Center" VerticalAlignment="Bottom"
+																							  SuggestedWidth="130" HorizontalAlignment="Center" VerticalAlignment="Top"
 																							  Brush="ButtonBrush2" Command.Click="OnTournamentPress">
 																					<Children>
 																						<HintWidget DataSource="{GrantHint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"

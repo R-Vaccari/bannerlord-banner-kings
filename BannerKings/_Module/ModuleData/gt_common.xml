@@ -2,6 +2,15 @@
 
 <strings>
 
+
+	<string id="str_bk_demesne_law.Slavery" text="{=bk_slavery}Slavery" />
+	<string id="str_bk_demesne_law.Drafting" text="{=bk_drafting}Drafting" />
+	<string id="str_bk_demesne_law.SerfDuties" text="{=bk_law_serf_duties}Serf Duties" />
+	<string id="str_bk_demesne_law.CraftsmenDuties" text="{=bk_law_craftsmen_duties}Craftsmen Duties" />
+	<string id="str_bk_demesne_law.NobleDuties" text="{=bk_law_noble_duties}Nobility Duties" />
+	<string id="str_bk_demesne_law.SlaveDuties" text="{=bk_law_slave_duties}Slave Duties" />
+	<string id="str_bk_demesne_law.EstateTenure" text="{=bk_law_estate_tenure}Estate Tenure" />
+
 	<string id="str_bk_estate_task.Land_Expansion" text="{=bk_land_expansion}Land Expansion" />
 	<string id="str_bk_estate_task.Prodution" text="{=bk_production}Production" />
 

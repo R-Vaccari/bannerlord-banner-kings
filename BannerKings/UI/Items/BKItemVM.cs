@@ -15,6 +15,14 @@ namespace BannerKings.UI.Items
             Hint = new HintViewModel(new TextObject("{=!}" + hint));
         }
 
+        public BKItemVM(int index, bool isAvailable, TextObject hint, TextObject name) : base("")
+        {
+            value = index;
+            StringItem = name.ToString();
+            CanBeSelected = isAvailable;
+            Hint = new HintViewModel(hint);
+        }
+
         public int value { get; }
     }
 }

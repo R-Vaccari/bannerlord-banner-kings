@@ -1,0 +1,33 @@
+<Prefab>
+	<Constants>
+	</Constants>
+	<Window>
+		<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" >
+			<Children>
+				<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
+						   SuggestedWidth="200" StackLayout.LayoutMethod="VerticalBottomToTop" >
+					<Children>
+						<RichTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" HorizontalAlignment="Center"
+										SuggestedHeight="5" Brush="TownManagement.Project.Name.Text" Text="@NameText"
+										MarginTop="25" />
+										
+						<Standard.DropdownWithHorizontalControl Parameter.SelectorDataSource="{Selector}" MarginTop="10" 
+																HorizontalAlignment="Center" />
+																
+						<RichTextWidget HeightSizePolicy="CoverChildren" WidthSizePolicy="StretchToParent" SuggestedWidth="300"
+										Brush="Encyclopedia.SubPage.Info.Text" Text="@DescriptionText" MarginTop="25" MarginLeft="15"
+										MarginRight="25" ClipContents="false" />
+										
+						<RichTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" HorizontalAlignment="Center"
+										SuggestedHeight="5" Brush="TownManagement.Project.Name.Text" Text="@DateHeaderText"
+										MarginTop="25" />
+										
+						<RichTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" HorizontalAlignment="Center"
+										SuggestedHeight="5" Brush="TownManagement.Project.Name.Text" Brush.FontSize="25" Text="@DateText"
+										MarginTop="25" />
+					</Children>
+				</ListPanel>
+			</Children>
+		</Widget>
+	</Window>
+</Prefab>

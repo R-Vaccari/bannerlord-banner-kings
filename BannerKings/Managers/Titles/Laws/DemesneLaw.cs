@@ -11,7 +11,7 @@ namespace BannerKings.Managers.Titles.Laws
         }
 
         public void Initialize(TextObject name, TextObject description, TextObject effects, DemesneLawTypes type,
-            float authoritarian, float egalitarian, float oligarchic, int influenceCost, CultureObject culture = null)
+            float authoritarian, float egalitarian, float oligarchic, int influenceCost, int index, CultureObject culture = null)
         {
             Initialize(name, description);
             Effects = effects;
@@ -21,8 +21,23 @@ namespace BannerKings.Managers.Titles.Laws
             OligarchicWeight = oligarchic;
             InfluenceCost = influenceCost;
             Culture = culture;
+            Index = index;
         }
 
+        public DemesneLaw GetCopy()
+        {
+            var law = new DemesneLaw(StringId);
+            law.Initialize(Name, Description, Effects, LawType,
+                AuthoritarianWeight, EgalitarianWeight, OligarchicWeight,
+                InfluenceCost, Index, Culture);
+            law.SetIssueDate(CampaignTime.Now);
+
+            return law;
+        }
+
+        public int Index { get; private set; }
+
+        public void SetIssueDate(CampaignTime date) => IssueDate = date;
         public CampaignTime IssueDate { get; private set; }
 
         public float AuthoritarianWeight { get; private set; }
