@@ -6,6 +6,7 @@ using System.Xml;
 using BannerKings.Actions;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
+using BannerKings.Managers.Titles.Laws;
 using BannerKings.Models.BKModels;
 using BannerKings.UI.Cutscenes;
 using TaleWorlds.CampaignSystem;
@@ -70,6 +71,11 @@ namespace BannerKings.Managers
                 if (title.fief != null)
                 {
                     SettlementCache.Add(title.fief, title);
+                }
+
+                if (title.contract.DemesneLaws == null)
+                {
+                    title.SetLaws(DefaultDemesneLaws.Instance.GetAdequateLaws(title));
                 }
             }
 
@@ -254,30 +260,6 @@ namespace BannerKings.Managers
 
             return null;
         }
-
-        /*public List<Hero> CalculateVassals(Clan clan)
-        {
-            List<Hero> result = new List<Hero>();
-    
-            Hero leader = clan.Leader;
-            foreach (FeudalTitle title in BannerKingsConfig.Instance.TitleManager.GetAllDeJure(clan))
-            {
-                if (title.vassals == null || title.vassals.Count == 0) continue;
-    
-                foreach (FeudalTitle vassal in title.vassals)
-                {
-                    Hero deJure = vassal.deJure;
-                    if (deJure == null || deJure == leader) continue;
-    
-                    if (deJure.Clan == leader.Clan) result.Add(deJure);
-                    else if (BannerKingsConfig.Instance.TitleManager.CalculateHeroSuzerain(deJure).deJure == leader)
-                        result.Add(deJure);
-                }
-            }
-    
-            return result;
-        } */
-
 
 
         public Dictionary<Clan, List<FeudalTitle>> CalculateVassals(Clan suzerainClan, Clan targetClan = null)
@@ -1151,7 +1133,7 @@ namespace BannerKings.Managers
 
         private FeudalContract GenerateContract(string type)
         {
-            return type switch
+            var contract = type switch
             {
                 "imperial" => new FeudalContract(
                     new Dictionary<FeudalDuties, float> {{FeudalDuties.Ransom, 0.10f}, {FeudalDuties.Taxation, 0.4f}},
@@ -1175,6 +1157,15 @@ namespace BannerKings.Managers
                     GovernmentType.Feudal, SuccessionType.Hereditary_Monarchy, InheritanceType.Primogeniture,
                     GenderLaw.Agnatic)
             };
+
+            return contract;
+        }
+
+        private List<DemesneLaw> GenerateDemesneLaws(FeudalContract contract)
+        {
+            var list = new List<DemesneLaw>();
+
+            return list;
         }
 
         private FeudalTitle CreateEmpire(Hero deJure, Kingdom faction, List<FeudalTitle> vassals, 

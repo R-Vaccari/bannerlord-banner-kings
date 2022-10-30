@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using BannerKings.Managers.Skills;
+using BannerKings.Managers.Titles.Laws;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
@@ -364,6 +365,30 @@ namespace BannerKings.Managers.Titles
                 foreach (var vassal in vassals)
                 {
                     vassal.SetSovereign(sovereign);
+                }
+            }
+        }
+
+        public void SetLaws(List<DemesneLaw> laws)
+        {
+            contract.SetLaws(laws);
+            if (vassals is { Count: > 0 })
+            {
+                foreach (var vassal in vassals)
+                {
+                    vassal.SetLaws(laws);
+                }
+            }
+        }
+
+        public void EnactLaw(DemesneLaw law)
+        {
+            contract.EnactLaw(law);
+            if (vassals is { Count: > 0 })
+            {
+                foreach (var vassal in vassals)
+                {
+                    vassal.EnactLaw(law);
                 }
             }
         }
