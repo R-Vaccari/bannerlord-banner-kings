@@ -12,7 +12,7 @@
 										MarginTop="25" />
 										
 						<Standard.DropdownWithHorizontalControl Parameter.SelectorDataSource="{Selector}" MarginTop="10" 
-																HorizontalAlignment="Center" />
+																HorizontalAlignment="Center" IsEnabled="@Enabled"/>
 																
 						<RichTextWidget HeightSizePolicy="CoverChildren" WidthSizePolicy="StretchToParent" SuggestedWidth="300"
 										Brush="Encyclopedia.SubPage.Info.Text" Text="@DescriptionText" MarginTop="25" MarginLeft="15"

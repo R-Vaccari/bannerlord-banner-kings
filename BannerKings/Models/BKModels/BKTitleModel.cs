@@ -16,6 +16,163 @@ namespace BannerKings.Models.BKModels
             return new ExplainedNumber();
         }
 
+        public ExplainedNumber GetSuccessionHeirScore(Hero currentLeader, Hero candidate, FeudalContract contract, bool explanations = false)
+        {
+            var result = new ExplainedNumber(0f, explanations);
+
+            var succession = contract.Succession;
+            if (succession == SuccessionType.Imperial)
+            {
+                result.Add(currentLeader.GetRelation(candidate) / 3f, new TextObject("{=!}Approval by {HERO}")
+                    .SetTextVariable("HERO", currentLeader.Name));
+
+                result.Add(candidate.Age / 2f, new TextObject("{=!}Age"));
+                result.Add(candidate.GetSkillValue(DefaultSkills.Leadership) * 0.1f, DefaultSkills.Leadership.Name);
+                result.Add(candidate.GetSkillValue(DefaultSkills.Tactics) * 0.1f, DefaultSkills.Tactics.Name);
+                result.Add(candidate.GetSkillValue(BKSkills.Instance.Lordship) * 0.1f, BKSkills.Instance.Lordship.Name);
+                result.Add(candidate.GetSkillValue(DefaultSkills.Charm) * 0.1f, DefaultSkills.Charm.Name);
+
+                if (candidate.Clan == currentLeader.Clan)
+                {
+                    result.Add(0.15f, candidate.Clan.Name);
+                }
+
+                result.AddFactor(candidate.Clan.Tier * 0.05f, GameTexts.FindText("str_clan_tier_bonus"));
+            }
+
+            if (succession == SuccessionType.Republic)
+            {
+                result.Add(Campaign.Current.Models.DiplomacyModel.GetClanStrength(candidate.Clan) / 5, GameTexts.FindText("str_notable_power"));
+                result.Add(candidate.Age / 2f, new TextObject("{=!}Age"));
+                result.Add(candidate.GetSkillValue(DefaultSkills.Leadership) * 0.1f, DefaultSkills.Leadership.Name);
+                result.Add(candidate.GetSkillValue(DefaultSkills.Charm) * 0.1f, DefaultSkills.Charm.Name);
+                result.Add(candidate.GetSkillValue(DefaultSkills.Steward) * 0.1f, DefaultSkills.Steward.Name);
+
+                result.AddFactor(candidate.Clan.Tier * 0.08f, GameTexts.FindText("str_clan_tier_bonus"));
+            }
+
+            if (succession == SuccessionType.Hereditary_Monarchy)
+            {
+                if (GetInheritanceCandidates(currentLeader).Contains(candidate))
+                {
+                    result = GetInheritanceHeirScore(currentLeader, candidate, contract, explanations);
+                }
+            }
+
+            if (succession == SuccessionType.Elective_Monarchy)
+            {
+                var government = contract.Government;
+                if (government == GovernmentType.Tribal)
+                {
+                    result.Add(Campaign.Current.Models.DiplomacyModel.GetClanStrength(candidate.Clan) / 2, GameTexts.FindText("str_notable_power"));
+                }
+
+                if (government == GovernmentType.Feudal)
+                {
+                    result.Add(candidate.GetSkillValue(BKSkills.Instance.Lordship) * 0.1f, BKSkills.Instance.Lordship.Name);
+                }
+            }
+
+            return result;
+        }
+
+        public ExplainedNumber GetInheritanceHeirScore(Hero currentLeader, Hero candidate, FeudalContract contract, bool explanations = false)
+        {
+            var result = new ExplainedNumber(0f, explanations);
+
+            GenderLaw genderLaw = contract.GenderLaw;
+            InheritanceType inheritance = contract.Inheritance;
+            if (inheritance == InheritanceType.Seniority)
+            {
+                result.Add(candidate.Age, new TextObject("{=!}Age"));
+            }
+            else
+            {
+                if (currentLeader.Children.Contains(candidate))
+                {
+                    result.Add(300f, GameTexts.FindText(candidate.IsFemale ? "str_daughter" : "str_son"));
+                }
+                else if (currentLeader.Spouse == candidate)
+                {
+                    result.Add(150f, GameTexts.FindText("str_spouse"));
+                }
+                else if (currentLeader.Siblings.Contains(candidate))
+                {
+                    result.Add(100f, GameTexts.FindText(candidate.IsFemale ? "str_bigsister" : "str_bigbrother"));
+                }
+
+                if (inheritance == InheritanceType.Primogeniture)
+                {
+                    result.Add(candidate.Age, new TextObject("{=!}Age"));
+                }
+
+                if (inheritance == InheritanceType.Ultimogeniture)
+                {
+                    result.Add(-candidate.Age, new TextObject("{=!}Age"));
+                }
+            }
+
+            if (genderLaw == GenderLaw.Agnatic && candidate.IsFemale)
+            {
+                result.AddFactor(-0.9f, GameTexts.FindText("str_bk_agnatic"));
+            }
+
+
+            return result;
+        }
+
+        public List<Hero> GetSuccessionCandidates(Hero currentLeader, FeudalContract contract)
+        {
+            var list = new List<Hero>();
+            var succession = contract.Succession;
+
+            if (succession == SuccessionType.Hereditary_Monarchy)
+            {
+                foreach (Hero hero in GetInheritanceCandidates(currentLeader))
+                {
+                    list.Add(hero);
+                }
+            }
+            else
+            {
+                var clans = new List<Clan>();
+                if (currentLeader.Clan.Kingdom != null)
+                {
+                    clans = (from t in currentLeader.Clan.Kingdom.Clans
+                            where !t.IsEliminated && !t.IsUnderMercenaryService
+                            select t).ToList();
+                }
+
+                foreach (var clan in clans)
+                {
+                    if (clan == currentLeader.Clan)
+                    {
+                        list.AddRange(GetInheritanceCandidates(currentLeader));
+                    }
+                    else
+                    {
+                        list.Add(clan.Leader);
+                    }
+                }
+            }
+
+            return list;
+        }
+
+        public List<Hero> GetInheritanceCandidates(Hero currentLeader)
+        {
+            var list = new List<Hero>();
+            foreach (var x in currentLeader.Clan.Heroes)
+            {
+                if (!x.IsChild && x != currentLeader && x.IsAlive && x.Occupation == Occupation.Lord)
+                {
+                    list.Add(x);
+                }
+            }
+
+            return list;
+        }
+
         public ExplainedNumber GetGrantKnighthoodCost(Hero grantor)
         {
             var result = new ExplainedNumber(120f, true);

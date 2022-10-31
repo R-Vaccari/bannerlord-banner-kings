@@ -1,5 +1,7 @@
-﻿using BannerKings.Managers.Populations;
+﻿using BannerKings.Extensions;
+using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Estates;
+using BannerKings.Managers.Titles.Laws;
 using BannerKings.UI.Items;
 using BannerKings.UI.Items.UI;
 using TaleWorlds.CampaignSystem;
@@ -10,8 +12,6 @@ using TaleWorlds.Core.ViewModelCollection.Information;
 using TaleWorlds.Core.ViewModelCollection.Selector;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
-using TaleWorlds.SaveSystem;
-using static BannerKings.Managers.PopulationManager;
 using static BannerKings.Managers.Populations.Estates.Estate;
 
 namespace BannerKings.UI.Estates
@@ -21,7 +21,10 @@ namespace BannerKings.UI.Estates
         private MBBindingList<TownManagementDescriptionItemVM> mainInfo;
         private MBBindingList<MBBindingList<InformationElement>> extraInfos;
         private ImageIdentifierVM imageIdentifier;
-        private SelectorVM<BKItemVM> taskSelector;
+        private SelectorVM<BKItemVM> taskSelector, dutySelector;
+        private EstateAction grantAction, buyAction, reclaimAction;
+        private HintViewModel buyHint, grantHint, reclaimHint;
+        private bool playerOwned, dutyEnabled;
 
         public EstateVM(Estate estate, PopulationData data) : base(data, true)
         {
@@ -35,6 +38,8 @@ namespace BannerKings.UI.Estates
             {
                 ImageIdentifier = new ImageIdentifierVM(new ImageIdentifier(CampaignUIHelper.GetCharacterCode(estate.Owner.CharacterObject)));
             }
+            DutyEnabled = false;
+            PlayerOwned = false;
 
             RefreshValues();
         }
@@ -45,8 +50,6 @@ namespace BannerKings.UI.Estates
         [DataSourceProperty]
         public bool IsEnabled => !Estate.IsDisabled;
 
-        [DataSourceProperty]
-        public bool PlayerOwned => Estate.Owner == Hero.MainHero && IsEnabled;
 
         public Estate Estate { get; private set; }
 
@@ -58,6 +61,8 @@ namespace BannerKings.UI.Estates
             StatsInfo.Clear();
             MainInfo.Clear();
             ExtraInfos.Clear();
+
+            
 
             MainInfo.Add(new TownManagementDescriptionItemVM(new TextObject("{=!}Population:"), 
                 Estate.Population, 
@@ -87,28 +92,46 @@ namespace BannerKings.UI.Estates
                new BasicTooltipViewModel(() => acreage.GetExplanations())));
 
 
-            /*var value = Estate.EstateValue;
-            MainInfo.Add(new TownManagementDescriptionItemVM(new TextObject("{=!}Estate Value:"),
-               (int)value.ResultNumber,
-               0,
-               TownManagementDescriptionItemVM.DescriptionType.Gold,
-               new BasicTooltipViewModel(() => value.GetExplanations())));*/
+
+            PlayerOwned = Estate.Owner == Hero.MainHero && !IsDisabled;
+
+            TaskSelector = new SelectorVM<BKItemVM>(0, OnTaskChange);
+            TaskSelector.AddItem(new BKItemVM(EstateTask.Prodution, true, "",
+                GameTexts.FindText("str_bk_estate_task", EstateTask.Prodution.ToString())));
+
+            TaskSelector.AddItem(new BKItemVM(EstateTask.Land_Expansion, true, "",
+                GameTexts.FindText("str_bk_estate_task", EstateTask.Land_Expansion.ToString())));
+
+            TaskSelector.SelectedIndex = (int)Estate.Task;
+            TaskSelector.SetOnChangeAction(OnTaskChange);
+
+            var settlement = Estate.EstatesData.Settlement;
+            var title = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement);
+            if (title != null)
+            {
+                var owner = settlement.IsVillage ? settlement.Village.GetActualOwner() : settlement.Owner;
+                DutyEnabled = title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.EstateTenureFeeTail) && owner == Hero.MainHero;
+            }
+            else
+            {
+                DutyEnabled = false;
+            }
+            
+
+            DutySelector = new SelectorVM<BKItemVM>(0, OnDutyChange);
+            DutySelector.AddItem(new BKItemVM(EstateDuty.Taxation, true, "",
+                GameTexts.FindText("str_bk_estate_duty", EstateDuty.Taxation.ToString())));
+
+            DutySelector.AddItem(new BKItemVM(EstateDuty.Military, true, "",
+                GameTexts.FindText("str_bk_estate_duty", EstateDuty.Military.ToString())));
+
+            DutySelector.SelectedIndex = (int)Estate.Duty;
+            DutySelector.SetOnChangeAction(OnDutyChange);
 
 
             if (IsEnabled)
             {
-                TaskSelector = new SelectorVM<BKItemVM>(0, OnTaskChange);
-                TaskSelector.AddItem(new BKItemVM(EstateTask.Prodution, true, "",
-                    GameTexts.FindText("str_bk_estate_task", EstateTask.Prodution.ToString())));
-
-                TaskSelector.AddItem(new BKItemVM(EstateTask.Land_Expansion, true, "",
-                    GameTexts.FindText("str_bk_estate_task", EstateTask.Land_Expansion.ToString())));
-
-                TaskSelector.SelectedIndex = (int)Estate.Task;
-                TaskSelector.SetOnChangeAction(OnTaskChange);
-
-
-
+                
                 LandInfo.Add(new InformationElement(new TextObject("{=!}Farmland:").ToString(),
                    new TextObject("{=!}{ACRES} acres").SetTextVariable("ACRES", Estate.Farmland.ToString("0.00")).ToString(),
                    new TextObject("{=ABrCGWep}Acres in this region used as farmland, the main source of food in most places")
@@ -149,13 +172,14 @@ namespace BannerKings.UI.Estates
                 ExtraInfos.Add(WorkforceInfo);
 
 
-                StatsInfo.Add(new InformationElement(GameTexts.FindText("str_clan_finance_total_income") + ':'.ToString(),
-                    income.ResultNumber.ToString("0"),
-                    income.GetExplanations()));
-
                 StatsInfo.Add(new InformationElement(GameTexts.FindText("str_total_influence").ToString(),
                     FormatFloatGain(Estate.Influence),
                     new TextObject("{=!}Influence from local nobles.").ToString()));
+
+                var tax = Estate.TaxRatio;
+                StatsInfo.Add(new InformationElement(new TextObject("{=!}Tax Rate:").ToString(),
+                    FormatValue(tax.ResultNumber),
+                    tax.GetExplanations()));
 
                 var value = Estate.EstateValue;
                 StatsInfo.Add(new InformationElement(new TextObject("{=!}Estate Value:").ToString(),
@@ -165,6 +189,20 @@ namespace BannerKings.UI.Estates
 
                 ExtraInfos.Add(StatsInfo);
             }
+
+            RefreshActions();
+        }
+
+        private void RefreshActions()
+        {
+            buyAction = BannerKingsConfig.Instance.EstatesModel.GetBuy(Estate, Hero.MainHero);
+            BuyHint = new HintViewModel(new TextObject("{=!}Acquire this property as your own.\n\n{REASON}")
+                .SetTextVariable("REASON", buyAction.Reason));
+
+ 
+            GrantHint = new HintViewModel(new TextObject("{=!}Grant this property to someone. To grant it, you must be it's legal and actual owner. Estates may be granted to companions, making them Sargeants, or to other noble houses.\n\n{REASON}")
+                .SetTextVariable("REASON", buyAction.Reason));
+
         }
 
         private void OnTaskChange(SelectorVM<BKItemVM> obj)
@@ -176,9 +214,27 @@ namespace BannerKings.UI.Estates
             }
         }
 
+        private void OnDutyChange(SelectorVM<BKItemVM> obj)
+        {
+            if (obj.SelectedItem != null)
+            {
+                var vm = obj.GetCurrentItem();
+                Estate.ChangeDuty((EstateDuty)vm.value);
+            }
+        }
+
         public MBBindingList<InformationElement> LandInfo { get; set; }
         public MBBindingList<InformationElement> WorkforceInfo { get; set; }
         public MBBindingList<InformationElement> StatsInfo { get; set; }
+
+        [DataSourceProperty]
+        public string NameText => IsDisabled ? new TextObject("{=!}Vacant Estate").ToString() : Estate.Name.ToString();
+
+        [DataSourceProperty]
+        public string BuyText => new TextObject("{=!}Buy").ToString();
+
+        [DataSourceProperty]
+        public string GrantText => new TextObject("{=dugq4xHo}Grant").ToString();
 
 
         [DataSourceProperty]
@@ -191,6 +247,92 @@ namespace BannerKings.UI.Estates
                 {
                     taskSelector = value;
                     OnPropertyChangedWithValue(value);
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public SelectorVM<BKItemVM> DutySelector
+        {
+            get => dutySelector;
+            set
+            {
+                if (value != dutySelector)
+                {
+                    dutySelector = value;
+                    OnPropertyChangedWithValue(value);
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public bool PlayerOwned
+        {
+            get => playerOwned;
+            set
+            {
+                if (value != playerOwned)
+                {
+                    playerOwned = value;
+                    OnPropertyChanged("PlayerOwned");
+                }
+            }
+        }
+
+
+        [DataSourceProperty]
+        public bool DutyEnabled
+        {
+            get => dutyEnabled;
+            set
+            {
+                if (value != dutyEnabled)
+                {
+                    dutyEnabled = value;
+                    OnPropertyChanged("DutyEnabled");
+                }
+            }
+        }
+
+
+        [DataSourceProperty]
+        public HintViewModel GrantHint
+        {
+            get => grantHint;
+            set
+            {
+                if (value != grantHint)
+                {
+                    grantHint = value;
+                    OnPropertyChanged("GrantHint");
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public HintViewModel BuyHint
+        {
+            get => buyHint;
+            set
+            {
+                if (value != buyHint)
+                {
+                    buyHint = value;
+                    OnPropertyChanged("BuyHint");
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public HintViewModel ReclaimHint
+        {
+            get => reclaimHint;
+            set
+            {
+                if (value != reclaimHint)
+                {
+                    reclaimHint = value;
+                    OnPropertyChanged("ReclaimHint");
                 }
             }
         }
@@ -233,63 +375,5 @@ namespace BannerKings.UI.Estates
                 OnPropertyChanged("ImageIdentifier");
             }
         }
-
-
-        [DataSourceProperty]
-        public string NameText => IsDisabled ? new TextObject("{=!}Vacant Estate").ToString() : Estate.Name.ToString();
-
-
-        [DataSourceProperty]
-        public string AcreageText => new TextObject("{=!}{ACRES} acres")
-            .SetTextVariable("ACRES", Estate.Farmland + Estate.Pastureland + Estate.Woodland)
-            .ToString();
-
-        [DataSourceProperty]
-        public string FarmlandText => new TextObject("{=!}{ACRES} acres").SetTextVariable("ACRES", Estate.Farmland).ToString();
-
-        [DataSourceProperty]
-        public string PasturelandText => new TextObject("{=!}{ACRES} acres").SetTextVariable("ACRES", Estate.Pastureland).ToString();
-
-        [DataSourceProperty]
-        public string WoodlandText => new TextObject("{=!}{ACRES} acres").SetTextVariable("ACRES", Estate.Woodland).ToString();
-
-
-        [DataSourceProperty]
-        public string PopulationText => new TextObject("{=!}{QUANTITY} people")
-         .SetTextVariable("QUANTITY", Estate.Nobles + Estate.Craftsmen + Estate.Serfs + Estate.Slaves)
-         .ToString();
-
-        [DataSourceProperty]
-        public string WorkforceText => new TextObject("{=!}{QUANTITY} workforce")
-        .SetTextVariable("QUANTITY", Estate.Serfs + Estate.Slaves)
-        .ToString();
-
-
-
-        [DataSourceProperty]
-        public string NoblesText => new TextObject("{=!}{QUANTITY} {POPULATION}")
-            .SetTextVariable("QUANTITY", Estate.Nobles)
-            .SetTextVariable("POPULATION", Utils.Helpers.GetClassName(PopType.Nobles, Estate.EstatesData.Settlement.Culture))
-            .ToString();
-
-        [DataSourceProperty]
-        public string CraftsmenText => new TextObject("{=!}{QUANTITY} {POPULATION}")
-           .SetTextVariable("QUANTITY", Estate.Craftsmen)
-           .SetTextVariable("POPULATION", Utils.Helpers.GetClassName(PopType.Craftsmen, Estate.EstatesData.Settlement.Culture))
-           .ToString();
-
-        [DataSourceProperty]
-        public string SerfsText => new TextObject("{=!}{QUANTITY} {POPULATION}")
-           .SetTextVariable("QUANTITY", Estate.Serfs)
-           .SetTextVariable("POPULATION", Utils.Helpers.GetClassName(PopType.Serfs, Estate.EstatesData.Settlement.Culture))
-           .ToString();
-
-        [DataSourceProperty]
-        public string SlavesText => new TextObject("{=!}{QUANTITY} {POPULATION}")
-           .SetTextVariable("QUANTITY", Estate.Slaves)
-           .SetTextVariable("POPULATION", Utils.Helpers.GetClassName(PopType.Slaves, Estate.EstatesData.Settlement.Culture))
-           .ToString();
-
-
     }
 }

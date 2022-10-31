@@ -1,62 +1,109 @@
 <Prefab>
-	<Constants>
-
-		<Constant Name="ScrollableArea.Margin.Bottom" Additive="8" Value="!Kingdom.Item.Tuple.Height" />
-
-		<Constant Name="Clan.Header.Width" BrushLayer="Default" BrushName="Clan.Header" BrushValueType="Width" />
-		<Constant Name="Clan.Header.Height" BrushLayer="Default" BrushName="Clan.Header" BrushValueType="Height" />
-
-		<Constant Name="Clan.Management.Collapser.Width" BrushLayer="Default" BrushName="Clan.Management.Collapser"
-		          BrushValueType="Width" />
-		<Constant Name="Clan.Management.Collapser.Height" BrushLayer="Default" BrushName="Clan.Management.Collapser"
-		          BrushValueType="Height" />
-
-		<Constant Name="Clan.Management.LeftTuple.Width" BrushLayer="Default" BrushName="Clan.Management.LeftTuple"
-		          BrushValueType="Width" />
-		<Constant Name="Clan.Management.LeftTuple.Height" BrushLayer="Default" BrushName="Clan.Management.LeftTuple"
-		          BrushValueType="Height" />
-
-		<Constant Name="Clan.Management.LeftTupleLocked.Width" BrushLayer="Default"
-		          BrushName="Clan.Management.LeftTupleLocked" BrushValueType="Width" />
-		<Constant Name="Clan.Management.LeftTupleLocked.Height" BrushLayer="Default"
-		          BrushName="Clan.Management.LeftTupleLocked" BrushValueType="Height" />
-
-		<Constant Name="Scroll.Header.Width" BrushLayer="Default" BrushName="Scroll.Header" BrushValueType="Width" />
-		<Constant Name="Scroll.Header.Height" BrushLayer="Default" BrushName="Scroll.Header" BrushValueType="Height" />
-
-		<Constant Name="Popup.CloseButton.Width" BrushLayer="Default" BrushName="Popup.CloseButton" BrushValueType="Width" />
-		<Constant Name="Popup.CloseButton.Height" BrushLayer="Default" BrushName="Popup.CloseButton" BrushValueType="Height" />
-
-		<Constant Name="Clan.Item.Tuple.Width" BrushLayer="Default" BrushName="Clan.Item.Tuple" BrushValueType="Width" />
-		<Constant Name="Clan.Item.Tuple.Height" BrushLayer="Default" BrushName="Clan.Item.Tuple" BrushValueType="Height" />
-
-		<Constant Name="Banner.Width" BrushLayer="Default" BrushName="Flat.Tuple.Banner.Small" BrushValueType="Width" />
-		<Constant Name="Banner.Height" BrushLayer="Default" BrushName="Flat.Tuple.Banner.Small" BrushValueType="Height" />
-
-		<Constant Name="Banner.Width.Scaled" MultiplyResult="0.30" Value="!Banner.Width" />
-		<Constant Name="Banner.Height.Scaled" MultiplyResult="0.38" Value="!Banner.Height" />
-	</Constants>
-	<VisualDefinitions>
-		<VisualDefinition Name="LeftPanel" EaseIn="true" TransitionDuration="0.45">
-			<VisualState PositionXOffset="-27" State="Default" />
-		</VisualDefinition>
-		<VisualDefinition Name="RightPanel" EaseIn="true" TransitionDuration="0.45">
-			<VisualState PositionXOffset="0" State="Default" />
-		</VisualDefinition>
-	</VisualDefinitions>
 	<Window>
-		<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" IsVisible="@IsSelected">
+		<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" IsVisible="@IsSelected" IsActive="true">
 			<Children>
+			
+				<ScrollablePanel Id="CouncilScrollablePanel" WidthSizePolicy="CoverChildren" HeightSizePolicy="StretchToParent"
+				                 MarginLeft="3" MarginBottom="3" AutoHideScrollBars="true" ClipRect="Rect"
+				                 InnerPanel="Rect\VerticalList" MouseScrollAxis="Vertical"
+				                 VerticalScrollbar="..\CouncilScrollbar\Scrollbar">
+					<Children>
 
-						<GridWidget DataSource="{Laws}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" VerticalAlignment="Center"
-							SuggestedWidth="700" SuggestedHeight="120" HorizontalAlignment="Center" DefaultCellWidth="700" 
-							DefaultCellHeight="400" ColumnCount="3" MarginRight="150" MarginLeft="150">
-							<ItemTemplate>
-								<DemesneLawTuple />
-							</ItemTemplate>
-						</GridWidget>
+						<Widget Id="Rect" WidthSizePolicy="CoverChildren" HeightSizePolicy="StretchToParent" ClipContents="true">
+							<Children>
+							
+								<ListPanel Id="VerticalList" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" StackLayout.LayoutMethod="VerticalBottomToTop">
+									<Children>
+									
+									
+										<RichTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" MarginTop="25"
+														HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="30" Text="@SuccessionText"
+														MarginBottom="15" />
+					
+										<ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" HorizontalAlignment="Center" SuggestedHeight="150"
+												   VerticalAlignment="Center" StackLayout.LayoutMethod="HorizontalLeftToRight" MarginTop="30" DoNotAcceptEvents="false">
+											<Children>
+											
+												<ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" SuggestedHeight="150"
+														   VerticalAlignment="Bottom" StackLayout.LayoutMethod="VerticalBottomToTop" MarginBottom="29" DoNotAcceptEvents="false">
+													<Children>
+													
+														<RichTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren"
+																		HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="22" Text="@HeirText"
+																		MarginBottom="5" VerticalAlignment="Top"/>
+														
+														<ToggleButtonWidget DataSource="{MainHeir}" DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" HeightSizePolicy="StretchToParent" 
+																VerticalAlignment="Bottom" SuggestedWidth="171" SuggestedHeight="100" MarginRight="2" MarginLeft="2"
+																HorizontalAlignment="Center" Brush="TownManagement.Governor" UpdateChildrenStates="true"
+																GamepadNavigationIndex="0" IsEnabled="true">
+															<Children>
+																<ImageIdentifierWidget Id="ElementImage" DataSource="{ImageIdentifier}" WidthSizePolicy="StretchToParent"
+																					   HeightSizePolicy="StretchToParent" HorizontalAlignment="Center" MarginLeft="3"
+																					   MarginRight="3" MarginTop="3" MarginBottom="3" AdditionalArgs="@AdditionalArgs"
+																					   ImageId="@Id" ImageTypeCode="@ImageTypeCode" />
+																<HintWidget DataSource="{Hint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent"
+																			Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" />
 
+															</Children>
+														</ToggleButtonWidget>
+													
+													</Children>
+												</ListPanel>
+													
+											
+												
+												
+												<GridWidget Id="CoreGrid" DataSource="{Heirs}" WidthSizePolicy="CoverChildren" 
+															HeightSizePolicy="StretchToParent" VerticalAlignment="Bottom" HorizontalAlignment="Center"
+															SuggestedHeight="350" DefaultCellWidth="160" DefaultCellHeight="110" ColumnCount="5">
+													<ItemTemplate>
 
+														<ToggleButtonWidget Id="GovernorSelectionButton" Command.Click="SetId" DoNotPassEventsToChildren="true" 
+																			WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="151" SuggestedHeight="100" MarginRight="2" MarginLeft="2"
+																			HorizontalAlignment="Center" Brush="TownManagement.Governor" UpdateChildrenStates="true"
+																			GamepadNavigationIndex="0" IsEnabled="true">
+															<Children>
+																<ImageIdentifierWidget Id="ElementImage" DataSource="{ImageIdentifier}" WidthSizePolicy="StretchToParent"
+																					   HeightSizePolicy="StretchToParent" HorizontalAlignment="Center" MarginLeft="3"
+																					   MarginRight="3" MarginTop="3" MarginBottom="3" AdditionalArgs="@AdditionalArgs"
+																					   ImageId="@Id" ImageTypeCode="@ImageTypeCode" />
+																<HintWidget DataSource="{Hint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent"
+																			Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" />
+
+															</Children>
+														</ToggleButtonWidget>
+
+													</ItemTemplate>
+												</GridWidget>
+												
+											</Children>
+										</ListPanel>
+										
+										
+										<RichTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" MarginTop="150"
+														HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="30" Text="@LawsText"
+														MarginBottom="15" />
+									
+										<GridWidget DataSource="{Laws}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" VerticalAlignment="Center"
+											SuggestedWidth="700"  HorizontalAlignment="Center" DefaultCellWidth="700" 
+											DefaultCellHeight="400" ColumnCount="3" MarginTop="30" MarginRight="150" MarginLeft="150">
+											<ItemTemplate>
+												<DemesneLawTuple />
+											</ItemTemplate>
+										</GridWidget>
+										
+										
+									</Children>
+								</ListPanel>
+							
+							</Children>
+						</Widget>
+					</Children>
+				</ScrollablePanel>
+
+				<Standard.VerticalScrollbar Id="CouncilScrollbar" HeightSizePolicy="StretchToParent" HorizontalAlignment="Right"
+				                            VerticalAlignment="Bottom" MarginLeft="2" MarginRight="2" MarginBottom="3" />
+				
 			</Children>
 		</Widget>
 	</Window>

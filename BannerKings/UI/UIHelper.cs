@@ -479,6 +479,30 @@ namespace BannerKings.UI
             return list;
         }
 
+        public static List<TooltipProperty> GetHeirTooltip(Hero hero, ExplainedNumber score)
+        {
+            var list = new List<TooltipProperty>
+            {
+                new("", hero.Name.ToString(), 0, false, TooltipProperty.TooltipPropertyFlags.Title)
+            };
+            MBTextManager.SetTextVariable("LEFT", GameTexts.FindText("str_clan"));
+            var definition = GameTexts.FindText("str_LEFT_ONLY").ToString();
+            list.Add(new TooltipProperty(hero.Clan.Name.ToString(), string.Empty, 0));
+            MBTextManager.SetTextVariable("LEFT", GameTexts.FindText("str_tooltip_label_type"));
+            var definition2 = GameTexts.FindText("str_LEFT_ONLY").ToString();
+            list.Add(new TooltipProperty(definition2, HeroHelper.GetCharacterTypeName(hero).ToString(), 0));
+        
+
+            TooltipAddEmptyLine(list);
+            list.Add(new TooltipProperty(new TextObject("{=!}Score").ToString(), " ", 0));
+            TooltipAddSeperator(list);
+            list.Add(new TooltipProperty(new TextObject("{=!}Total").ToString(), score.ResultNumber.ToString("0.00"), 0));
+            list.Add(new TooltipProperty(score.GetExplanations(), string.Empty, 0));
+
+
+            return list;
+        }
+
         private static string FormatValue(float value)
         {
             return value.ToString("0.00") + '%';

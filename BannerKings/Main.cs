@@ -4,6 +4,7 @@ using BannerKings.Managers.Innovations;
 using BannerKings.Managers.Items;
 using BannerKings.Managers.Kingdoms.Policies;
 using BannerKings.Managers.Skills;
+using BannerKings.Managers.Titles.Laws;
 using BannerKings.Models.Vanilla;
 using BannerKings.UI;
 using Bannerlord.UIExtenderEx;
@@ -106,6 +107,7 @@ namespace BannerKings
             BKPolicies.Instance.Initialize();
             DefaultInnovations.Instance.Initialize();
             BKBuildings.Instance.Initialize();
+            DefaultDemesneLaws.Instance.Initialize();
 
             UIManager.Instance.SetScreen(new BannerKingsScreen());
         }

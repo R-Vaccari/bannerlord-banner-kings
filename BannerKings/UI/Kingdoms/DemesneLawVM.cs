@@ -10,15 +10,16 @@ namespace BannerKings.UI.Kingdoms
 {
     public class DemesneLawVM : ViewModel
     {
-        private SelectorVM<BKItemVM> selector;
+        private BannerKingsSelectorVM<BKItemVM> selector;
         private Action<SelectorVM<BKItemVM>> onChange;
         private string nameText, descriptionText, dateText;
+       
 
-        public DemesneLawVM(List<DemesneLaw> options, DemesneLaw law, Action<SelectorVM<BKItemVM>> onChange)
+        public DemesneLawVM(List<DemesneLaw> options, DemesneLaw law, bool isKing, Action<SelectorVM<BKItemVM>> onChange)
         {
             NameText = law.LawType.ToString();
             this.onChange = onChange;
-            Selector = new SelectorVM<BKItemVM>(0, onChange);
+            Selector = new BannerKingsSelectorVM<BKItemVM>(isKing, 0, onChange);
 
             int selected = 0;
             foreach (DemesneLaw option in options)
@@ -47,6 +48,8 @@ namespace BannerKings.UI.Kingdoms
 
         [DataSourceProperty]
         public string DateHeaderText => new TextObject("{=!}Law issued on:").ToString();
+
+      
 
         [DataSourceProperty]
         public string NameText
@@ -91,7 +94,7 @@ namespace BannerKings.UI.Kingdoms
         }
 
         [DataSourceProperty]
-        public SelectorVM<BKItemVM> Selector
+        public BannerKingsSelectorVM<BKItemVM> Selector
         {
             get => selector;
             set
