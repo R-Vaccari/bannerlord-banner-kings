@@ -391,26 +391,9 @@ namespace BannerKings.Managers
 
         public static Dictionary<PopType, float[]> GetDesiredPopTypes(Settlement settlement)
         {
-            var nobleFactor = 1f;
-            var slaveFactor = 1f;
-            var faction = settlement.OwnerClan.Kingdom;
-            if (faction != null)
-            {
-                if (faction.ActivePolicies.Contains(DefaultPolicies.Serfdom))
-                {
-                    slaveFactor -= 0.3f;
-                }
-
-                if (faction.ActivePolicies.Contains(DefaultPolicies.ForgivenessOfDebts))
-                {
-                    slaveFactor -= 0.1f;
-                }
-
-                if (faction.ActivePolicies.Contains(DefaultPolicies.Citizenship))
-                {
-                    nobleFactor += 0.1f;
-                }
-            }
+            var nobleFactor = BannerKingsConfig.Instance.GrowthModel.CalculatePopulationClassDemand(settlement, PopType.Nobles).ResultNumber;
+            var slaveFactor = BannerKingsConfig.Instance.GrowthModel.CalculatePopulationClassDemand(settlement, PopType.Slaves).ResultNumber;
+           
 
             if (settlement.IsCastle)
             {

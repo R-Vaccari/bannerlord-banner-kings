@@ -84,9 +84,9 @@
 														HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="30" Text="@LawsText"
 														MarginBottom="15" />
 														
-										<RichTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" MarginTop="20"
+										<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" MarginTop="20"
 														HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="22" Text="@LawsDescriptionText"
-														MarginBottom="15" />
+														MarginBottom="15"  MarginRight="550" MarginLeft="550"/>
 									
 										<GridWidget DataSource="{Laws}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" VerticalAlignment="Center"
 											SuggestedWidth="700"  HorizontalAlignment="Center" DefaultCellWidth="700" 

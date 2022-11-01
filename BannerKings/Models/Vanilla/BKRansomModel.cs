@@ -2,6 +2,7 @@
 using BannerKings.Managers.Skills;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
+using TaleWorlds.Core;
 using static BannerKings.Managers.Policies.BKCriminalPolicy;
 
 namespace BannerKings.Models.Vanilla
@@ -14,15 +15,17 @@ namespace BannerKings.Models.Vanilla
             if (sellerHero != null)
             {
                 var settlement = sellerHero.CurrentSettlement;
-                if (settlement != null && BannerKingsConfig.Instance.PopulationManager != null
-                                       && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
+                if (settlement != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement) && !prisoner.IsHero)
                 {
-                    var crime =
-                        ((BKCriminalPolicy) BannerKingsConfig.Instance.PolicyManager.GetPolicy(settlement, "criminal"))
+                    var crime =((BKCriminalPolicy) BannerKingsConfig.Instance.PolicyManager.GetPolicy(settlement, "criminal"))
                         .Policy;
-                    if (crime != CriminalPolicy.Enslavement && !prisoner.IsHero)
+                    if (crime == CriminalPolicy.Enslavement)
                     {
-                        return 0;
+                        result = (int)BannerKingsConfig.Instance.GrowthModel.CalculateSlavePrice(settlement).ResultNumber;
+                    }
+                    else
+                    {
+                        result = (int)(result * 0.5f);
                     }
                 }
 

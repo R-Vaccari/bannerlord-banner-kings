@@ -1,4 +1,5 @@
 using BannerKings.Managers.Populations;
+using BannerKings.Managers.Titles.Laws;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -83,6 +84,71 @@ namespace BannerKings.Models.BKModels
 
                 result.Add(settlement.Prosperity / 5f, GameTexts.FindText("str_map_tooltip_prosperity"));
             }
+
+
+            return result;
+        }
+
+        public ExplainedNumber CalculatePopulationClassDemand(Settlement settlement, PopType type, bool explanations = false)
+        {
+            var result = new ExplainedNumber(1f, explanations);
+
+            var faction = settlement.OwnerClan.Kingdom;
+            if (faction != null)
+            {
+                if (type == PopType.Slaves)
+                {
+                    if (faction.ActivePolicies.Contains(DefaultPolicies.Serfdom))
+                    {
+                        result.AddFactor(-0.3f, DefaultPolicies.Serfdom.Name);
+                    }
+
+
+                    if (faction.ActivePolicies.Contains(DefaultPolicies.ForgivenessOfDebts))
+                    {
+                        result.AddFactor(-0.15f, DefaultPolicies.Serfdom.Name);
+                    }
+
+                    var title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(faction);
+                    if (title != null)
+                    {
+                        if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.SlaveryManumission))
+                        {
+                            result.AddFactor(-1f, DefaultDemesneLaws.Instance.SlaveryManumission.Name);
+                        }
+                        else if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.SlaveryVlandia))
+                        {
+                            result.AddFactor(-0.3f, DefaultDemesneLaws.Instance.SlaveryManumission.Name);
+                        }
+                    }
+                }
+                
+                if (type == PopType.Nobles)
+                {
+                    if (faction.ActivePolicies.Contains(DefaultPolicies.Citizenship))
+                    {
+                        result.AddFactor(0.1f, DefaultPolicies.Citizenship.Name);
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        public ExplainedNumber CalculateSlavePrice(Settlement settlement, bool explanations = false)
+        {
+            var result = new ExplainedNumber(150f, explanations);
+
+            result.AddFactor(CalculatePopulationClassDemand(settlement, PopType.Slaves).ResultNumber - 1f,
+                new TextObject("{=!}{FACTION} demand")
+                .SetTextVariable("FACTION", settlement.MapFaction.Name));
+
+            var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
+            var dic = GetDesiredPopTypes(settlement);
+            float fraction = data.GetCurrentTypeFraction(PopType.Slaves);
+            float medium = (dic[PopType.Slaves][0] + dic[PopType.Slaves][1]) / 2f;
+
+            result.AddFactor(medium - fraction, new TextObject("{=!}Local demand"));
 
 
             return result;
