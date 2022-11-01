@@ -173,7 +173,7 @@ namespace BannerKings.Models.Vanilla
                     nobles -= estate.Nobles;
                     craftsmen -= estate.Craftsmen;
 
-                    result.Add(estate.GetTaxFromIncome(taxType), estate.Name);
+                    result.Add(estate.GetTaxFromIncome(), estate.Name);
                 }
 
 

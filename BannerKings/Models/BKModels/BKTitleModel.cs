@@ -145,7 +145,7 @@ namespace BannerKings.Models.BKModels
 
                 foreach (var clan in clans)
                 {
-                    if (clan == currentLeader.Clan)
+                    if (clan == currentLeader.Clan && succession == SuccessionType.Imperial)
                     {
                         list.AddRange(GetInheritanceCandidates(currentLeader));
                     }

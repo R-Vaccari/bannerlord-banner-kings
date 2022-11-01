@@ -22,14 +22,17 @@ using BannerKings.Managers.Kingdoms;
 using BannerKings.Managers.Kingdoms.Contract;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Populations;
+using BannerKings.Managers.Populations.Estates;
 using BannerKings.Managers.Populations.Tournament;
 using BannerKings.Managers.Populations.Villages;
 using BannerKings.Managers.Titles;
+using BannerKings.Managers.Titles.Laws;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.SaveSystem;
+using static BannerKings.Managers.Kingdoms.Contract.BKDemesneLawDecision;
 using static BannerKings.Managers.Policies.BKCriminalPolicy;
 using static BannerKings.Managers.Policies.BKDraftPolicy;
 using static BannerKings.Managers.Policies.BKGarrisonPolicy;
@@ -37,6 +40,7 @@ using static BannerKings.Managers.Policies.BKMilitiaPolicy;
 using static BannerKings.Managers.Policies.BKTaxPolicy;
 using static BannerKings.Managers.Policies.BKWorkforcePolicy;
 using static BannerKings.Managers.PopulationManager;
+using static BannerKings.Managers.Populations.Estates.Estate;
 
 namespace BannerKings
 {
@@ -149,6 +153,13 @@ namespace BannerKings
             AddEnumDefinition(typeof(MineralType), 99);
             AddClassDefinition(typeof(MineralData), 100);
             AddEnumDefinition(typeof(MineralRichness), 101);
+            AddClassDefinition(typeof(DemesneLaw), 102);
+            AddClassDefinition(typeof(Estate), 103);
+            AddClassDefinition(typeof(EstateData), 104);
+            AddEnumDefinition(typeof(EstateDuty), 105);
+            AddEnumDefinition(typeof(EstateTask), 106);
+            AddClassDefinition(typeof(BKDemesneLawDecision), 107);
+
         }
 
         protected override void DefineContainerDefinitions()
@@ -189,6 +200,9 @@ namespace BannerKings
             ConstructContainerDefinition(typeof(Dictionary<Town, CampaignTime>));
             ConstructContainerDefinition(typeof(Dictionary<MineralType, float>));
             ConstructContainerDefinition(typeof(Dictionary<Town, int>));
+            ConstructContainerDefinition(typeof(List<DemesneLaw>));
+            ConstructContainerDefinition(typeof(List<Estate>));
+
         }
     }
 }

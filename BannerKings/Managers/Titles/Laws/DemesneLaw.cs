@@ -1,5 +1,6 @@
 ﻿using TaleWorlds.CampaignSystem;
 using TaleWorlds.Localization;
+using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Managers.Titles.Laws
 {
@@ -38,7 +39,7 @@ namespace BannerKings.Managers.Titles.Laws
         public int Index { get; private set; }
 
         public void SetIssueDate(CampaignTime date) => IssueDate = date;
-        public CampaignTime IssueDate { get; private set; }
+        [SaveableProperty(100)] public CampaignTime IssueDate { get; private set; }
 
         public bool AvailableForVoting => IssueDate.ElapsedYearsUntilNow >= 1f;
 

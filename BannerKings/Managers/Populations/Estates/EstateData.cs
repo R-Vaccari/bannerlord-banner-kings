@@ -2,6 +2,7 @@
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Managers.Populations.Estates
 {
@@ -14,8 +15,8 @@ namespace BannerKings.Managers.Populations.Estates
             Estates = new List<Estate>();
         }
 
-        public Settlement Settlement { get; private set; }
-        public List<Estate> Estates { get; private set; }
+        [SaveableProperty(1)] public Settlement Settlement { get; private set; }
+        [SaveableProperty(2)]  public List<Estate> Estates { get; private set; }
 
         public bool HeroHasEstate(Hero hero) => Estates.Any(x => x.Owner == hero);
 

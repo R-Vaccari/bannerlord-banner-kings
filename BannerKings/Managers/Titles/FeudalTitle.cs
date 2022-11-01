@@ -134,6 +134,11 @@ namespace BannerKings.Managers.Titles
 
         public bool IsSovereignLevel => (int) type <= 1;
 
+        public void PostInitialize()
+        {
+            contract.PostInitialize();
+        }
+
         public override bool Equals(object obj)
         {
             if (obj is FeudalTitle target)

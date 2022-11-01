@@ -68,7 +68,7 @@ namespace BannerKings.Managers.Populations
 
         [SaveableProperty(13)] private MineralData mineralData { get; set; }
 
-        public EstateData EstateData { get; private set; }
+        [SaveableProperty(14)] public EstateData EstateData { get; private set; }
 
         public CultureData CultureData => cultureData;
         public MilitaryData MilitaryData => militaryData;

@@ -124,14 +124,14 @@ namespace BannerKings.Behaviours
                 BannerKingsConfig.Instance.InitializeManagersFirstTime();
             }
 
-            BannerKingsConfig.Instance.TitleManager.InitLaws();
+            BannerKingsConfig.Instance.TitleManager.PostInitialize();
             BannerKingsConfig.Instance.ReligionsManager.PostInitialize();
         }
 
         private void OnCharacterCreationOver()
         {
             BannerKingsConfig.Instance.ReligionsManager.PostInitialize();
-            BannerKingsConfig.Instance.TitleManager.InitLaws();
+            BannerKingsConfig.Instance.TitleManager.PostInitialize();
         }
 
         private void TickSettlementData(Settlement settlement)

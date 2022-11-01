@@ -4,12 +4,15 @@ using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Estates;
 using BannerKings.Managers.Populations.Villages;
 using BannerKings.Managers.Titles.Laws;
+using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 using static BannerKings.Managers.PopulationManager;
+using static BannerKings.Managers.Populations.Estates.Estate;
 
 namespace BannerKings.Models.BKModels
 {
@@ -37,7 +40,7 @@ namespace BannerKings.Models.BKModels
 
         public EstateAction GetGrant(Estate estate, Hero actionTaker, Hero actionTarget)
         {
-            EstateAction action = new EstateAction(estate, actionTaker, ActionType.Grant);
+            EstateAction action = new EstateAction(estate, actionTaker, ActionType.Grant, actionTarget);
 
             var settlement = estate.EstatesData.Settlement;
             var owner = settlement.IsVillage ? settlement.Village.GetActualOwner() : settlement.Owner;
@@ -94,6 +97,15 @@ namespace BannerKings.Models.BKModels
             {
                 action.Possible = false;
                 action.Reason = new TextObject("{=!}Not clan leader.");
+                return action;
+            }
+
+            var candidates = GetGrantCandidates(action);
+            if (!candidates.Contains(actionTarget))
+            {
+                action.Possible = false;
+                action.Reason = new TextObject("{=!}Not a granting candidate. Clan leaders and companions (except under {LAW} law) may be granted to.")
+                    .SetTextVariable("LAW", DefaultDemesneLaws.Instance.EstateTenureQuiaEmptores.Name);
                 return action;
             }
 
@@ -179,6 +191,85 @@ namespace BannerKings.Models.BKModels
             return action;
         }
 
+
+        public List<Hero> GetGrantCandidates(EstateAction action)
+        {
+            List<Hero> list = new List<Hero>();
+
+            var clan = action.ActionTaker.Clan;
+            if (clan != null)
+            {
+
+                var title = BannerKingsConfig.Instance.TitleManager.GetTitle(action.Estate.EstatesData.Settlement);
+                if (title != null && !title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.EstateTenureQuiaEmptores))
+                {
+                    foreach (Hero companion in clan.Companions)
+                    {
+                        list.Add(companion);
+                    }
+                }
+
+                if (clan.Kingdom != null)
+                {
+                    foreach (Clan targetClan in clan.Kingdom.Clans)
+                    {
+                        if (clan != targetClan && !targetClan.IsUnderMercenaryService)
+                        {
+                            list.Add(targetClan.Leader);
+                        }
+                    }
+                }
+            }
+          
+
+            return list;
+        }
+
+
+
+        public ExplainedNumber GetTaxRatio(Estate estate, bool explanations = false)
+        {
+            var result = new ExplainedNumber(0f, explanations);
+            var settlement = estate.EstatesData.Settlement;
+
+            var taxType = ((BKTaxPolicy)BannerKingsConfig.Instance.PolicyManager
+                    .GetPolicy(settlement, "tax")).Policy;
+
+            
+            var title = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement);
+            if (title != null)
+            {
+                if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.EstateTenureAllodial))
+                {
+                    result.AddFactor(-1f, DefaultDemesneLaws.Instance.EstateTenureAllodial.Name);
+                }
+                else if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.EstateTenureFeeTail) && estate.Duty == EstateDuty.Taxation)
+                {
+                    result.Add(0.075f, DefaultDemesneLaws.Instance.EstateTenureFeeTail.Name);
+                }
+            }
+
+            float factor;
+            switch (taxType)
+            {
+                case BKTaxPolicy.TaxType.Low:
+                    factor = 0.15f;
+                    break;
+                case BKTaxPolicy.TaxType.High:
+                    factor = 0.45f;
+                    break;
+                case BKTaxPolicy.TaxType.Exemption:
+                    factor = 0f;
+                    break;
+                default:
+                    factor = 0.3f;
+                    break;
+            }
+
+            result.Add(factor, new TextObject("{=L7QhNa6a}Tax policy"));
+
+            return result;
+        }
 
 
         public ExplainedNumber CalculateEstateProduction(Estate estate, bool explanations = false)

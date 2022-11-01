@@ -1,21 +1,18 @@
 ﻿using BannerKings.Extensions;
 using BannerKings.Managers.Policies;
+using BannerKings.Managers.Titles.Laws;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
+using TaleWorlds.SaveSystem;
 using static BannerKings.Managers.PopulationManager;
 
 namespace BannerKings.Managers.Populations.Estates
 {
     public class Estate
     {
-        public Estate()
-        {
-
-        }
-
         public Estate(Hero owner, EstateData data, float farmland, float pastureland, float woodland,
             int serfs, int slaves, int nobles = 0, int craftsmen = 0)
         {
@@ -32,8 +29,6 @@ namespace BannerKings.Managers.Populations.Estates
 
         public static Estate CreateNotableEstate(Hero notable, PopulationData data)
         {
-
-
             float acreage = data.LandData.Acreage;
             float acres = MBRandom.RandomFloatRanged(BannerKingsConfig.Instance.EstatesModel.MinimumEstateAcreage, 
                 BannerKingsConfig.Instance.EstatesModel.MaximumEstateAcreagePercentage * acreage);
@@ -54,7 +49,7 @@ namespace BannerKings.Managers.Populations.Estates
                 (int)MathF.Min(desiredSlaves, totalSlaves * 0.25f));
         }
 
-        public Hero Owner { get; private set; }
+        [SaveableProperty(1)] public Hero Owner { get; private set; }
 
         public TextObject Name => Owner != null ? new TextObject("{=!}Estate of {OWNER}").SetTextVariable("OWNER", Owner.Name) : new TextObject();
 
@@ -71,52 +66,9 @@ namespace BannerKings.Managers.Populations.Estates
             }
         }
 
+        public int GetTaxFromIncome() => (int)(Income.ResultNumber * TaxRatio.ResultNumber);
 
-        public int GetTaxFromIncome(BKTaxPolicy.TaxType taxType)
-        {
-            int result = 0;
-            if (taxType != BKTaxPolicy.TaxType.Exemption)
-            {
-                float factor = 0.45f;
-                switch (taxType)
-                {
-                    case BKTaxPolicy.TaxType.Low:
-                        factor = 0.25f;
-                        break;
-                    case BKTaxPolicy.TaxType.High:
-                        factor = 0.65f;
-                        break;
-                }
-
-                result = (int)(Income.ResultNumber * factor);
-            }
-
-            return result;
-        }
-
-        public int GetTaxFromIncome() => (int)(Income.ResultNumber * GetTaxRatio());
-
-        public float GetTaxRatio()
-        {
-            var taxType = ((BKTaxPolicy)BannerKingsConfig.Instance.PolicyManager
-                    .GetPolicy(EstatesData.Settlement, "tax")).Policy;
-
-            float factor = 0.3f;
-            switch (taxType)
-            {
-                case BKTaxPolicy.TaxType.Low:
-                    factor = 0.15f;
-                    break;
-                case BKTaxPolicy.TaxType.High:
-                    factor = 0.45f;
-                    break;
-                case BKTaxPolicy.TaxType.Exemption:
-                    factor = 0f;
-                    break;
-            }
-
-            return factor;
-        }
+        public ExplainedNumber TaxRatio => BannerKingsConfig.Instance.EstatesModel.GetTaxRatio(this, true);
 
         public bool IsDisabled 
         { 
@@ -172,24 +124,22 @@ namespace BannerKings.Managers.Populations.Estates
 
         public float Acreage => Farmland + Pastureland + Woodland;
 
-        public EstateData EstatesData { get; private set; }
-        public float Farmland { get; private set; }
-        public float Pastureland { get; private set; }
-        public float Woodland { get; private set; }
+        [SaveableProperty(2)] public EstateData EstatesData { get; private set; }
+        [SaveableProperty(3)] public float Farmland { get; private set; }
+        [SaveableProperty(4)] public float Pastureland { get; private set; }
+        [SaveableProperty(5)] public float Woodland { get; private set; }
 
-        public int Nobles { get; private set; }
-        public int Craftsmen { get; private set; }
-        public int Serfs { get; private set; }
-        public int Slaves { get; private set; }
+        [SaveableProperty(6)] public int Nobles { get; private set; }
+        [SaveableProperty(7)] public int Craftsmen { get; private set; }
+        [SaveableProperty(8)] public int Serfs { get; private set; }
+        [SaveableProperty(9)] public int Slaves { get; private set; }
 
      
-
-
-
         public void ChangeTask(EstateTask task) => Task = task;
- 
+        public void ChangeDuty(EstateDuty duty) => Duty = duty;
 
-        public EstateTask Task { get; private set; }
+        [SaveableProperty(10)] public EstateDuty Duty { get; private set; }
+        [SaveableProperty(11)] public EstateTask Task { get; private set; }
 
         public void Tick(PopulationData data)
         {
@@ -276,6 +226,11 @@ namespace BannerKings.Managers.Populations.Estates
         }
 
 
+        public enum EstateDuty
+        {
+            Taxation,
+            Military
+        }
 
         public enum EstateTask
         {

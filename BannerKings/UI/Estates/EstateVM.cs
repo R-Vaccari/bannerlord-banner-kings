@@ -210,7 +210,7 @@ namespace BannerKings.UI.Estates
             if (obj.SelectedItem != null)
             {
                 var vm = obj.GetCurrentItem();
-                Estate.ChangeTask((EstateTask)vm.value);
+                Estate.ChangeTask((EstateTask)vm.Value);
             }
         }
 
@@ -219,7 +219,7 @@ namespace BannerKings.UI.Estates
             if (obj.SelectedItem != null)
             {
                 var vm = obj.GetCurrentItem();
-                Estate.ChangeDuty((EstateDuty)vm.value);
+                Estate.ChangeDuty((EstateDuty)vm.Value);
             }
         }
 

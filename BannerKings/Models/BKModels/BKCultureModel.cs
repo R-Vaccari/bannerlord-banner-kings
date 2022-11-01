@@ -31,7 +31,7 @@ namespace BannerKings.Models.BKModels
                 }
 
                 var stability = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement).Stability;
-                result.Add((stability - 0.5f) * 0.05f, new TextObject("Stability"));
+                result.Add((stability - 0.5f) * 0.05f, new TextObject("{=!}Stability"));
 
                 var clan = settlement.OwnerClan;
                 var peace = true;

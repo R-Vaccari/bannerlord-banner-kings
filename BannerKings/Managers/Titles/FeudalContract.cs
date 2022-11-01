@@ -32,6 +32,16 @@ namespace BannerKings.Managers.Titles
 
         [SaveableProperty(7)] public List<DemesneLaw> DemesneLaws { get; private set; }
 
+        public void PostInitialize()
+        {
+            foreach (var law in DemesneLaws)
+            {
+                var type = DefaultDemesneLaws.Instance.GetById(law);
+                law.Initialize(type.Name, type.Description, type.Effects, type.LawType, type.AuthoritarianWeight,
+                    type.EgalitarianWeight, type.OligarchicWeight, type.InfluenceCost, type.Index, type.Culture);
+            }
+        }
+
         public DemesneLaw GetLawByType(DemesneLawTypes law) => DemesneLaws.FirstOrDefault(x => x.LawType == law);
 
         public bool IsLawEnacted(DemesneLaw law) => DemesneLaws.Contains(law);

@@ -77,7 +77,7 @@ namespace BannerKings.Managers
             Knights ??= new Dictionary<Hero, float>();
         }
 
-        public void InitLaws()
+        public void PostInitialize()
         {
             foreach (var title in Titles.Keys.ToList())
             {
@@ -85,8 +85,12 @@ namespace BannerKings.Managers
                 {
                     title.SetLaws(DefaultDemesneLaws.Instance.GetAdequateLaws(title));
                 }
-            }  
+
+                title.PostInitialize();
+            }
         }
+
+
 
         public bool IsHeroTitleHolder(Hero hero)
         {
