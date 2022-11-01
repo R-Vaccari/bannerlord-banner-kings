@@ -19,7 +19,7 @@ namespace BannerKings.UI.Kingdoms
         {
             NameText = law.LawType.ToString();
             this.onChange = onChange;
-            Selector = new BannerKingsSelectorVM<BKItemVM>(isKing, 0, onChange);
+            Selector = new BannerKingsSelectorVM<BKItemVM>(isKing, 0, null);
 
             int selected = 0;
             foreach (DemesneLaw option in options)
@@ -34,7 +34,7 @@ namespace BannerKings.UI.Kingdoms
 
                 if (option.Equals(law))
                 {
-                    selected = law.Index;
+                    selected = options.IndexOf(law);
                 }
             }
 

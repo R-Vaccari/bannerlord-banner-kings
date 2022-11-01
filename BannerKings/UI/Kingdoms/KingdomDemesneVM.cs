@@ -89,10 +89,11 @@ namespace BannerKings.UI.Kingdoms
                 if (resultLaw != null && !resultLaw.Equals(currentLaw))
                 {
                     InformationManager.ShowInquiry(new InquiryData(new TextObject("{=!}Enact Law").ToString(),
-                        new TextObject("{=!}Enact the {LAW} law thoughtout the demesne of {TITLE}. The law will be enacted for every title in the hierarchy.\n\nCost: {INFLUENCE}{INFLUENCE_ICON}")
+                        new TextObject("{=!}Enact the {LAW} law thoughtout the demesne of {TITLE}. The law will be enacted for every title in the hierarchy.\n\nCost: {INFLUENCE} {INFLUENCE_ICON}")
                         .SetTextVariable("LAW", resultLaw.Name)
                         .SetTextVariable("TITLE", Title.FullName)
                         .SetTextVariable("INFLUENCE", resultLaw.InfluenceCost)
+                        .SetTextVariable("INFLUENCE_ICON", GameTexts.FindText("str_html_influence_icon"))
                         .ToString(),
                         Hero.MainHero.Clan.Influence >= resultLaw.InfluenceCost,
                         true,
@@ -101,11 +102,13 @@ namespace BannerKings.UI.Kingdoms
                         () =>
                         {
                             Title.EnactLaw(resultLaw, Hero.MainHero);
+                            RefreshValues();
                         },
-                        null));
+                        () => RefreshValues()));
                 }
             }
-                
+
+        
         }
 
         [DataSourceProperty]

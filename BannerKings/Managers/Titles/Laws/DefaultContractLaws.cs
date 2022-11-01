@@ -35,21 +35,21 @@ namespace BannerKings.Managers.Titles.Laws
         {
             get
             {
-                yield return EstateTenureFeeTail;
                 yield return EstateTenureQuiaEmptores;
                 yield return EstateTenureAllodial;
+                yield return EstateTenureFeeTail;
                 yield return SerfsMilitaryServiceDuties;
                 yield return SerfsAgricultureDuties;
                 yield return SerfsLaxDuties;
                 yield return SlavesHardLabor;
                 yield return SlavesAgricultureDuties;
                 yield return SlavesDomesticDuties;
-                yield return SlaveryVlandia;
                 yield return SlaveryStandard;
+                yield return SlaveryVlandia;
                 yield return SlaveryManumission;
                 yield return DraftingHidage;
-                yield return DraftingVassalage;
                 yield return DraftingFreeContracts;
+                yield return DraftingVassalage;
 
             }
         }
@@ -191,18 +191,18 @@ namespace BannerKings.Managers.Titles.Laws
                 new TextObject("{=!}The Imperial or Calradic law stablishes the legal existance of slaves and their ownership. Though they may not be harmed or killed without just cause, the slave trade is rampant and devoid of restrictions. Any person found in debt or captured in battle may be enslaved, and slaves compose the labor force across all settlements."),
                 new TextObject("{=!}"),
                 DemesneLawTypes.Slavery,
-                0f,
-                0f,
-                0f,
+                0.4f,
+                -0.6f,
+                0.3f,
                 300, 0);
 
             SlaveryVlandia.Initialize(new TextObject("{=!}Vlandic Law"),
                 new TextObject("{=!}The Vlandic tradition on slavery stipulates that Vlandians shall not enslave each other. Slaves are present in small quantities in rural estates. Though Vlandian individuals may become or be born slaves, Vlandian lords are prohibited from purposefuly enslaving them."),
                 new TextObject("{=!}"),
                 DemesneLawTypes.Slavery,
-                0f,
-                0f,
-                0f,
+                0.2f,
+                -0.2f,
+                0.5f,
                 300,
                 1);
 
@@ -210,9 +210,9 @@ namespace BannerKings.Managers.Titles.Laws
                 new TextObject("{=!}The Vlandic tradition on slavery stipulates that Vlandians shall not enslave each other. Slaves are present in small quantities in rural estates. Though Vlandian individuals may become or be born slaves, Vlandian lords are prohibited from purposefuly enslaving them."),
                 new TextObject("{=!}"),
                 DemesneLawTypes.Slavery,
-                0f,
-                0f,
-                0f,
+                -0.5f,
+                0.9f,
+                -0.1f,
                 300,
                 2);
 

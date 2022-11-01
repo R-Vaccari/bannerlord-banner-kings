@@ -40,6 +40,8 @@ namespace BannerKings.Managers.Titles.Laws
         public void SetIssueDate(CampaignTime date) => IssueDate = date;
         public CampaignTime IssueDate { get; private set; }
 
+        public bool AvailableForVoting => IssueDate.ElapsedYearsUntilNow >= 1f;
+
         public float AuthoritarianWeight { get; private set; }
         public float EgalitarianWeight { get; private set; }
         public float OligarchicWeight { get; private set; }
