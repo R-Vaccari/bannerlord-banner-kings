@@ -121,6 +121,9 @@ namespace BannerKings.UI.Kingdoms
         public string LawsText => new TextObject("{=!}Laws").ToString();
 
         [DataSourceProperty]
+        public string LawsDescriptionText => new TextObject("{=!}Demesne Laws may be changed a year after they are issued. Changes are made by the sovereign or through votation of the Peers.").ToString();
+
+        [DataSourceProperty]
         public MBBindingList<DemesneLawVM> Laws
         {
             get => laws;
