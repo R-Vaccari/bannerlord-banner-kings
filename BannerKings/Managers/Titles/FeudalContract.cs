@@ -32,6 +32,8 @@ namespace BannerKings.Managers.Titles
 
         [SaveableProperty(7)] public List<DemesneLaw> DemesneLaws { get; private set; }
 
+        public DemesneLaw GetLawByType(DemesneLawTypes law) => DemesneLaws.FirstOrDefault(x => x.LawType == law);
+
         public bool IsLawEnacted(DemesneLaw law) => DemesneLaws.Contains(law);
 
         public void EnactLaw(DemesneLaw law)

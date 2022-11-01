@@ -24,7 +24,8 @@ namespace BannerKings.UI.Kingdoms
             int selected = 0;
             foreach (DemesneLaw option in options)
             {
-                Selector.AddItem(new BKItemVM(option.Index, 
+                Selector.AddItem(new BKItemVM(option.Index,
+                    option.LawType,
                     true,
                     new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
                         .SetTextVariable("TEXT", option.Description)

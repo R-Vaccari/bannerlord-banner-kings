@@ -3,6 +3,7 @@ using System.Linq;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles.Laws;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
@@ -381,8 +382,24 @@ namespace BannerKings.Managers.Titles
             }
         }
 
-        public void EnactLaw(DemesneLaw law)
+        public void EnactLaw(DemesneLaw law, Hero enactor = null)
         {
+            if (enactor != null)
+            {
+                law = law.GetCopy();
+                law.SetIssueDate(CampaignTime.Now);
+                GainKingdomInfluenceAction.ApplyForDefault(enactor, -law.InfluenceCost);
+                if (enactor.MapFaction == Hero.MainHero.MapFaction)
+                {
+                    MBInformationManager.AddQuickInformation(new TextObject("{=!}The {LAW} has been enacted in the {TITLE}.")
+                        .SetTextVariable("LAW", law.Name)
+                        .SetTextVariable("TITLE", FullName),
+                        0,
+                        null,
+                        "event:/ui/notification/relation");
+                }
+            }
+
             contract.EnactLaw(law);
             if (vassals is { Count: > 0 })
             {

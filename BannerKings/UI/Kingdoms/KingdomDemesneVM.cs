@@ -4,7 +4,9 @@ using BannerKings.UI.Items;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.ViewModelCollection;
+using TaleWorlds.Core;
 using TaleWorlds.Core.ViewModelCollection.Selector;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -76,7 +78,34 @@ namespace BannerKings.UI.Kingdoms
 
         private void OnChange(SelectorVM<BKItemVM> obj)
         {
+            if (obj.SelectedItem != null)
+            {
+                var vm = obj.GetCurrentItem();
+                var policyIndex = vm.Value;
+                var lawType = (DemesneLawTypes)vm.Reference;
 
+                var resultLaw = DefaultDemesneLaws.Instance.All.FirstOrDefault(x => x.LawType == lawType && x.Index == policyIndex);
+                var currentLaw = Title.contract.GetLawByType(lawType);
+                if (resultLaw != null && !resultLaw.Equals(currentLaw))
+                {
+                    InformationManager.ShowInquiry(new InquiryData(new TextObject("{=!}Enact Law").ToString(),
+                        new TextObject("{=!}Enact the {LAW} law thoughtout the demesne of {TITLE}. The law will be enacted for every title in the hierarchy.\n\nCost: {INFLUENCE}{INFLUENCE_ICON}")
+                        .SetTextVariable("LAW", resultLaw.Name)
+                        .SetTextVariable("TITLE", Title.FullName)
+                        .SetTextVariable("INFLUENCE", resultLaw.InfluenceCost)
+                        .ToString(),
+                        Hero.MainHero.Clan.Influence >= resultLaw.InfluenceCost,
+                        true,
+                        GameTexts.FindText("str_selection_widget_accept").ToString(),
+                        GameTexts.FindText("str_selection_widget_cancel").ToString(),
+                        () =>
+                        {
+                            Title.EnactLaw(resultLaw, Hero.MainHero);
+                        },
+                        null));
+                }
+            }
+                
         }
 
         [DataSourceProperty]

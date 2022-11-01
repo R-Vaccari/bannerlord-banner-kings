@@ -45,8 +45,8 @@ namespace BannerKings.Managers.Policies
             if (obj.SelectedItem != null)
             {
                 var vm = obj.GetCurrentItem();
-                Policy = (GarrisonPolicy) vm.value;
-                Selected = vm.value;
+                Policy = (GarrisonPolicy) vm.Value;
+                Selected = vm.Value;
                 BannerKingsConfig.Instance.PolicyManager.UpdateSettlementPolicy(Settlement, this);
             }
         }
