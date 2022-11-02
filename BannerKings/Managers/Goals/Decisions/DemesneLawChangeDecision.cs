@@ -86,7 +86,7 @@ namespace BannerKings.Managers.Goals.Decisions
 
                 options.Add(new LawChangeOption(GameTexts.FindText("str_bk_demesne_law", law.LawType.ToString()),
                     new TextObject(),
-                    true,
+                    law.AvailableForVoting,
                     decision, 
                     list));
             }
