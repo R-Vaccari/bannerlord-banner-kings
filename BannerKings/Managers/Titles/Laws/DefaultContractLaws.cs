@@ -82,9 +82,9 @@ namespace BannerKings.Managers.Titles.Laws
                 new TextObject("{=!}As a counter measure for increasingly complex vassalage relations, this laws prohibts the process of subinfeudation."),
                 new TextObject("{=!}Granting estates is banned\nLord party sizes +10%\nEstates cost +25%"),
                 DemesneLawTypes.EstateTenure,
-                0f,
-                0f,
-                0f,
+                0.8f,
+                -0.2f,
+                -0.4f,
                 300,
                 0);
 
@@ -92,9 +92,9 @@ namespace BannerKings.Managers.Titles.Laws
                 new TextObject("{=!}The allodial tenure represents the absolute ownership of land. Estate owners have no duties towards fief lords. The absence of taxation and military requirements draws in tenants to these estates."),
                 new TextObject("{=!}Estate owners do not pay taxes\nImproved hearth growth"),
                 DemesneLawTypes.EstateTenure,
-                0f,
-                0f,
-                0f,
+                -0.2f,
+                0.3f,
+                0.1f,
                 300,
                 1);
 
@@ -102,9 +102,9 @@ namespace BannerKings.Managers.Titles.Laws
                 new TextObject("{=!}The fee tail tenure dictates that property is inherited exclusively through lawful inheritance or grant."),
                 new TextObject("{=!}Buying or selling estates is banned\nAllows choosing estate duty"),
                 DemesneLawTypes.EstateTenure,
-                0f,
-                0f,
-                0f,
+                0.1f,
+                -0.6f,
+                0.7f,
                 300,
                 2);
 
@@ -119,9 +119,9 @@ namespace BannerKings.Managers.Titles.Laws
                .SetTextVariable("CLASS", Utils.Helpers.GetClassName(PopulationManager.PopType.Serfs, Hero.MainHero.Culture)),
                new TextObject("{=!}Serf militarism +3% flat\nSerf militia contribution +20%"),
                DemesneLawTypes.SerfDuties,
-               0f,
-               0f,
-               0f,
+               0.8f,
+               -0.4f,
+               0.6f,
                300,
                0);
 
@@ -130,9 +130,9 @@ namespace BannerKings.Managers.Titles.Laws
                .SetTextVariable("CLASS", Utils.Helpers.GetClassName(PopulationManager.PopType.Serfs, Hero.MainHero.Culture)),
                new TextObject("{=!}Increased production of farm goods in villages and food in castles and towns"),
                DemesneLawTypes.SerfDuties,
-               0f,
-               0f,
-               0f,
+               0.4f,
+               -0.4f,
+               0.5f,
                300,
                1);
 
@@ -141,9 +141,9 @@ namespace BannerKings.Managers.Titles.Laws
                .SetTextVariable("CLASS", Utils.Helpers.GetClassName(PopulationManager.PopType.Serfs, Hero.MainHero.Culture)),
                new TextObject("{=!}Increased settlement prosperity (or Hearths) and loyalty\nReduced agricultural output\nSerf militarism -1.5% flat\nSerf militia contribution -10%"),
                DemesneLawTypes.SerfDuties,
-               0f,
-               0f,
-               0f,
+               -0.5f,
+               0.8f,
+               -0.2f,
                300,
                2);
 
@@ -156,9 +156,9 @@ namespace BannerKings.Managers.Titles.Laws
                .SetTextVariable("SLAVES", Utils.Helpers.GetClassName(PopulationManager.PopType.Serfs, Hero.MainHero.Culture)),
                new TextObject("{=!}Increased production of mining goods\nSlaves contruction contribution +20%"),
                DemesneLawTypes.SlaveDuties,
-               0f,
-               0f,
-               0f,
+               0.4f,
+               -0.8f,
+               0.5f,
                300, 0);
 
             SlavesAgricultureDuties.Initialize(new TextObject("{=!}Agricultural Duties"),
@@ -166,9 +166,9 @@ namespace BannerKings.Managers.Titles.Laws
                .SetTextVariable("SLAVES", Utils.Helpers.GetClassName(PopulationManager.PopType.Serfs, Hero.MainHero.Culture)),
                new TextObject("{=!}Increased production of farm goods in villages and food in castles and towns"),
                DemesneLawTypes.SlaveDuties,
-               0f,
-               0f,
-               0f,
+               0.4f,
+               -0.6f,
+               0.5f,
                300,
                1);
 
@@ -177,9 +177,9 @@ namespace BannerKings.Managers.Titles.Laws
                .SetTextVariable("CLASS", Utils.Helpers.GetClassName(PopulationManager.PopType.Serfs, Hero.MainHero.Culture)),
                new TextObject("{=!}Slave tax output +15%"),
                DemesneLawTypes.SlaveDuties,
-               0f,
-               0f,
-               0f,
+               0.6f,
+               -0.2f,
+               0.3f,
                300,
                2);
 
@@ -221,21 +221,21 @@ namespace BannerKings.Managers.Titles.Laws
             #region Drafting
 
             DraftingHidage.Initialize(new TextObject("{=!}Hidage"),
-                new TextObject("{=!}Under hidage, landowners are expected to provide levies based on their land, calculated as hides.."),
-                new TextObject("{=!}Notables provide volunteers based on their estates or power to ally lords\nRural volunteers are restricted to the kingdom's lords"),
+                new TextObject("{=!}Under hidage, landowners are expected to provide levies based on their land, calculated as hides."),
+                new TextObject("{=!}Notables provide volunteers based on their estates or power to ally lords\nRural volunteers are restricted to the kingdom's lords\nRecruitment prices increased by 50%"),
                 DemesneLawTypes.Drafting,
-                0f,
-                0f,
-                0f,
+                0.3f,
+                0.1f,
+                0.2f,
                 300, 0);
 
             DraftingFreeContracts.Initialize(new TextObject("{=!}Free Contracts"),
               new TextObject("{=!}The Imperial or Calradic law stablishes the legal existance of slaves and their ownership. Though they may not be harmed or killed without just cause, the slave trade is rampant and devoid of restrictions. Any person found in debt or captured in battle may be enslaved, and slaves compose the labor force across all settlements."),
-              new TextObject("{=!}Notables provide volunteers to any neutral or allied lord\nRecruitment prices increased by 50%"),
+              new TextObject("{=!}Notables provide volunteers to any neutral or allied lord\nRecruitment prices increased by 100%"),
               DemesneLawTypes.Drafting,
-              0f,
-              0f,
-              0f,
+              0.1f,
+              0.5f,
+              -0.2f,
               300,
               1);
 
@@ -243,9 +243,9 @@ namespace BannerKings.Managers.Titles.Laws
               new TextObject("{=!}The Imperial or Calradic law stablishes the legal existance of slaves and their ownership. Though they may not be harmed or killed without just cause, the slave trade is rampant and devoid of restrictions. Any person found in debt or captured in battle may be enslaved, and slaves compose the labor force across all settlements."),
               new TextObject("{=!}Notables provide volunteers to their suzerain and armies\nRural volunteers are restricted to the kingdom's lords\nInfluence from settlements reduced by 20%"),
               DemesneLawTypes.Drafting,
-              0f,
-              0f,
-              0f,
+              0.5f,
+              -0.5f,
+              1f,
               300,
               2);
 

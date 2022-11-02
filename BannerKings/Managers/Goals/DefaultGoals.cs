@@ -13,6 +13,7 @@ namespace BannerKings.Managers.Goals
                 yield return AcquireBookDecision;
                 yield return RecruitCompanionDecision;
                 yield return RequestCouncil;
+                yield return DemesneLawChangeDecision;
                 yield return ContractChangeDecision;
                 yield return FoundKingdomGoal;
                 yield return CalradicEmpireGoal;
@@ -28,6 +29,7 @@ namespace BannerKings.Managers.Goals
         internal Goal RequestCouncil { get; private set; }
         internal Goal ContractChangeDecision { get; private set; }
         internal Goal AcquireBookDecision { get; private set; }
+        internal Goal DemesneLawChangeDecision { get; private set; }
 
         public override void Initialize()
         {
@@ -39,6 +41,7 @@ namespace BannerKings.Managers.Goals
             RequestCouncil = new RequestCouncilDecision();
             ContractChangeDecision = new ContractChangeDecision();
             AcquireBookDecision = new AcquireBookDecision();
+            DemesneLawChangeDecision = new DemesneLawChangeDecision();
         }
     }
 }

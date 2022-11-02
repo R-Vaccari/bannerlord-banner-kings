@@ -103,7 +103,7 @@ namespace BannerKings.Managers.Populations.Estates
             {
                 if (notable.IsRuralNotable && !HeroHasEstate(notable))
                 {
-                    var vacantEstate = Estates.FirstOrDefault(x => x.Owner.IsDead && x.Owner.IsRuralNotable);
+                    var vacantEstate = Estates.FirstOrDefault(x => x.Owner != null && x.Owner.IsDead && x.Owner.IsRuralNotable);
                     if (vacantEstate != null)
                     {
                         InheritEstate(vacantEstate, notable);

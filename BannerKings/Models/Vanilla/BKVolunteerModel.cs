@@ -16,6 +16,7 @@ using BannerKings.Managers.Institutions.Religions.Doctrines;
 using BannerKings.Extensions;
 using BannerKings.Managers.Titles.Laws;
 using BannerKings.Settings;
+using System;
 
 namespace BannerKings.Models.Vanilla
 {
@@ -23,7 +24,7 @@ namespace BannerKings.Models.Vanilla
     {
 
         public override int MaximumIndexHeroCanRecruitFromHero(Hero buyerHero, Hero sellerHero, int useValueAsRelation = -101)
-          => (int)CalculateMaximumRecruitmentIndex(buyerHero, sellerHero, useValueAsRelation, false).ResultNumber;
+          => (int)Math.Floor(CalculateMaximumRecruitmentIndex(buyerHero, sellerHero, useValueAsRelation, false).ResultNumber);
 
         public ExplainedNumber CalculateMaximumRecruitmentIndex(Hero buyerHero, Hero sellerHero, int useValueAsRelation = -101, bool explanations = false)
         {
@@ -67,7 +68,7 @@ namespace BannerKings.Models.Vanilla
             if (buyerHero.MapFaction == sellerHero.MapFaction)
             {
                 var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
-                float hides = 0f;
+                float hides;
 
                 if (data.EstateData != null && data.EstateData.HeroHasEstate(sellerHero))
                 {

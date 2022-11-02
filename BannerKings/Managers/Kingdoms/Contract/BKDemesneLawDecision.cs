@@ -11,12 +11,16 @@ using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Managers.Kingdoms.Contract
 {
-    public abstract class BKDemesneLawDecision : KingdomDecision
+    public class BKDemesneLawDecision : KingdomDecision
     {
-        public BKDemesneLawDecision(Clan proposerClan, FeudalTitle title, DemesneLaw currentLaw, DemesneLaw proposedLaw) : base(proposerClan)
+        public BKDemesneLawDecision(Clan proposerClan, FeudalTitle title, DemesneLaw currentLaw) : base(proposerClan)
         {
             Title = title;
             CurrentLaw = currentLaw;
+        }
+
+        public void UpdateDecision(DemesneLaw proposedLaw)
+        {
             ProposedLaw = proposedLaw;
         }
 
@@ -70,11 +74,45 @@ namespace BannerKings.Managers.Kingdoms.Contract
             float egalitatian = 0.6f * (float)clan.Leader.GetTraitLevel(DefaultTraits.Egalitarian) - 0.9f * (float)clan.Leader.GetTraitLevel(DefaultTraits.Oligarchic);
             float oligarchic = 0.6f * (float)clan.Leader.GetTraitLevel(DefaultTraits.Oligarchic) - 0.9f * (float)clan.Leader.GetTraitLevel(DefaultTraits.Egalitarian) - 0.5f * (float)clan.Leader.GetTraitLevel(DefaultTraits.Authoritarian);
             float authoritarian = 0.8f * (float)clan.Leader.GetTraitLevel(DefaultTraits.Authoritarian) - 1.3f * (float)clan.Leader.GetTraitLevel(DefaultTraits.Oligarchic);
+            
+            if (clan.Kingdom.RulingClan == clan)
+            {
+                authoritarian += 1.5f;
+                oligarchic += 0.6f;
+                egalitatian -= 0.6f;
+            }
+
+            if (clan.Culture == Kingdom.Culture)
+            {
+                oligarchic += 0.2f;
+            }
+
+
+            if (clan.Tier <= 2)
+            {
+                egalitatian += 0.4f;
+                oligarchic += 0.1f;
+                authoritarian -= 1f;
+            }
+            else if (clan.Tier <= 4)
+            {
+                oligarchic += 0.5f;
+                authoritarian -= 0.3f;
+                egalitatian -= 0.2f;
+            }
+            else
+            {
+                oligarchic += 1.2f;
+                authoritarian += 0.5f;
+                egalitatian -= 0.6f;
+            }
+            
+            
             float support = outcome.Law.EgalitarianWeight * egalitatian + 
                 outcome.Law.OligarchicWeight * oligarchic + 
                 outcome.Law.AuthoritarianWeight * authoritarian;
 
-            return support;
+            return support * 100;
         }
 
         public override TextObject GetChooseDescription()
@@ -90,6 +128,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
         {
             var law = (chosenOutcome as DemesneLawDecisionOutcome).Law;
             return new TextObject("{=!}The peers of {TITLE} have decided on the {LAW} law.")
+                .SetTextVariable("TITLE", Title.FullName)
                 .SetTextVariable("LAW", law.Name);
         }
 
@@ -112,8 +151,7 @@ namespace BannerKings.Managers.Kingdoms.Contract
         public override TextObject GetSupportTitle() => new TextObject("{=!}Vote for the next {LAW} demesne law")
             .SetTextVariable("LAW", GameTexts.FindText("str_bk_demesne_law", CurrentLaw.LawType.ToString()));
 
-        public override bool IsAllowed() => Title.contract != null && !ProposedLaw.Equals(CurrentLaw) && 
-            ProposerClan.Influence >= ProposedLaw.InfluenceCost;
+        public override bool IsAllowed() => Title.contract != null && !ProposedLaw.Equals(CurrentLaw);
         
 
         public class DemesneLawDecisionOutcome : DecisionOutcome
