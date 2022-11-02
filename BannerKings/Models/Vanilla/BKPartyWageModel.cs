@@ -2,9 +2,11 @@
 using BannerKings.Managers.Education.Lifestyles;
 using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Skills;
+using BannerKings.Managers.Titles.Laws;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Party;
+using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.ObjectSystem;
@@ -119,6 +121,20 @@ namespace BannerKings.Models.Vanilla
 
             if (buyerHero != null)
             {
+                if (buyerHero.CurrentSettlement != null)
+                {
+                    var contract = BannerKingsConfig.Instance.TitleManager.GetTitle(buyerHero.CurrentSettlement).contract;
+                    if (contract.IsLawEnacted(DefaultDemesneLaws.Instance.DraftingFreeContracts))
+                    {
+                        result.Add(1f, DefaultDemesneLaws.Instance.DraftingFreeContracts.Name);
+                    }
+                    else if (contract.IsLawEnacted(DefaultDemesneLaws.Instance.DraftingHidage))
+                    {
+                        result.Add(0.5f, DefaultDemesneLaws.Instance.DraftingHidage.Name);
+                    }
+                }
+
+
                 var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(buyerHero);
                 if (troop.Occupation == Occupation.Mercenary && education.HasPerk(BKPerks.Instance.MercenaryLocalConnections))
                 {
@@ -154,25 +170,10 @@ namespace BannerKings.Models.Vanilla
                         result.AddFactor(-0.1f);
                     }
 
-                    if (buyerHero.CurrentSettlement is {OwnerClan: { }} 
-                        && buyerHero.CurrentSettlement.OwnerClan == buyerHero.Clan)
-                    {
-                        result.AddFactor(-0.15f);
-                    }
-
-                    if (troop.IsInfantry)
-                    {
-                        result.AddFactor(-0.05f);
-                    }
-
                     var buyerKingdom = buyerHero.Clan.Kingdom;
                     if (buyerKingdom != null && troop.Culture != buyerHero.Culture)
                     {
                         result.AddFactor(0.25f, GameTexts.FindText("str_kingdom"));
-                    }
-                    else
-                    {
-                        result.AddFactor(-0.1f, GameTexts.FindText("str_kingdom"));
                     }
 
                     switch (buyerHero.Clan.Tier)
