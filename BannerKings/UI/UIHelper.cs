@@ -479,6 +479,33 @@ namespace BannerKings.UI
             return list;
         }
 
+        public static List<TooltipProperty> GetRecruitToolTip(CharacterObject character, Hero owner, int relation, bool canRecruit)
+        {
+            List<TooltipProperty> list = new List<TooltipProperty>();
+
+            if (!canRecruit)
+            {
+                string text = "";
+                list.Add(new TooltipProperty(text, character.ToString(), 1, false, TooltipProperty.TooltipPropertyFlags.None));
+                list.Add(new TooltipProperty(text, text, -1, false, TooltipProperty.TooltipPropertyFlags.None));
+                GameTexts.SetVariable("LEVEL", character.Level);
+                GameTexts.SetVariable("newline", "\n");
+                list.Add(new TooltipProperty(text, GameTexts.FindText("str_level_with_value", null).ToString(), 0, false, TooltipProperty.TooltipPropertyFlags.None));
+
+                list.Add(new TooltipProperty(text, new TextObject("{=!}You don't have access to this recruit.").ToString(), 0, false, TooltipProperty.TooltipPropertyFlags.None));
+
+                var explanation = BannerKingsConfig.Instance.VolunteerModel.CalculateMaximumRecruitmentIndex(Hero.MainHero, owner, relation, true);
+                TooltipAddEmptyLine(list);
+                list.Add(new TooltipProperty(new TextObject("{=!}Explanations").ToString(), " ", 0));
+                TooltipAddSeperator(list);
+
+                list.Add(new TooltipProperty(text, explanation.GetExplanations(), 0, false, TooltipProperty.TooltipPropertyFlags.None));
+            }
+
+            return list;
+
+        }
+
         public static List<TooltipProperty> GetHeirTooltip(Hero hero, ExplainedNumber score)
         {
             var list = new List<TooltipProperty>

@@ -92,7 +92,6 @@ namespace BannerKings
             campaignStarter.AddModel(new BKPartyImpairmentModel());
             campaignStarter.AddModel(new BKCrimeModel());
             campaignStarter.AddModel(new BKTroopUpgradeModel());
-            campaignStarter.AddModel(new BKVolunteerAccessModel());
             campaignStarter.AddModel(new BKBattleRewardModel());
             campaignStarter.AddModel(new BKCombatXpModel());
             campaignStarter.AddModel(new BKBattleMoraleModel());

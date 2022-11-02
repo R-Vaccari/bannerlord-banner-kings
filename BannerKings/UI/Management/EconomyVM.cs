@@ -2,7 +2,6 @@ using System.Linq;
 using System.Text;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Populations;
-using BannerKings.Models.Vanilla;
 using BannerKings.UI.Items;
 using BannerKings.UI.Items.UI;
 using TaleWorlds.CampaignSystem;

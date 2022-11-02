@@ -20,6 +20,8 @@ namespace BannerKings.Managers.Populations.Estates
 
         public bool HeroHasEstate(Hero hero) => Estates.Any(x => x.Owner == hero);
 
+        public Estate GetHeroEstate(Hero hero) => Estates.FirstOrDefault(x => x.Owner == hero);
+
         public void UpdatePopulation(PopulationManager.PopType type, int quantity, int classTotal)
         {
             foreach (Estate estate in Estates)

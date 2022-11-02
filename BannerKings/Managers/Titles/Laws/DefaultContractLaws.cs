@@ -222,7 +222,7 @@ namespace BannerKings.Managers.Titles.Laws
 
             DraftingHidage.Initialize(new TextObject("{=!}Hidage"),
                 new TextObject("{=!}Under hidage, landowners are expected to provide levies based on their land, calculated as hides.."),
-                new TextObject("{=!}Notables provide volunteers based on their estates or power\nRural volunteers are restricted to the kingdom's lords"),
+                new TextObject("{=!}Notables provide volunteers based on their estates or power to ally lords\nRural volunteers are restricted to the kingdom's lords"),
                 DemesneLawTypes.Drafting,
                 0f,
                 0f,
@@ -241,7 +241,7 @@ namespace BannerKings.Managers.Titles.Laws
 
             DraftingVassalage.Initialize(new TextObject("{=!}Vassalage"),
               new TextObject("{=!}The Imperial or Calradic law stablishes the legal existance of slaves and their ownership. Though they may not be harmed or killed without just cause, the slave trade is rampant and devoid of restrictions. Any person found in debt or captured in battle may be enslaved, and slaves compose the labor force across all settlements."),
-              new TextObject("{=!}Notables provide volunteers to their suzerain and armies\nRural volunteers are restricted to the kingdom's lords"),
+              new TextObject("{=!}Notables provide volunteers to their suzerain and armies\nRural volunteers are restricted to the kingdom's lords\nInfluence from settlements reduced by 20%"),
               DemesneLawTypes.Drafting,
               0f,
               0f,

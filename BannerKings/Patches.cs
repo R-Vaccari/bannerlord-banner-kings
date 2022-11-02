@@ -5,6 +5,7 @@ using System.Reflection;
 using BannerKings.Extensions;
 using BannerKings.Managers.Helpers;
 using BannerKings.Managers.Skills;
+using BannerKings.Settings;
 using HarmonyLib;
 using Helpers;
 using TaleWorlds.CampaignSystem;
@@ -36,9 +37,11 @@ namespace BannerKings
     {
         namespace Recruitment
         {
-            [HarmonyPatch(typeof(RecruitmentCampaignBehavior), "ApplyInternal")]
+            [HarmonyPatch(typeof(RecruitmentCampaignBehavior))]
             internal class RecruitmentApplyInternalPatch
             {
+                [HarmonyPostfix]
+                [HarmonyPatch("ApplyInternal", MethodType.Normal)]
                 private static void Postfix(MobileParty side1Party, Settlement settlement, Hero individual,
                     CharacterObject troop, int number, int bitCode, RecruitmentCampaignBehavior.RecruitingDetail detail)
                 {
@@ -47,12 +50,89 @@ namespace BannerKings
                         return;
                     }
 
-                    if (BannerKingsConfig.Instance.PopulationManager != null &&
-                        BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
+                    if (BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
                     {
                         var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
                         data.MilitaryData.DeduceManpower(data, number, troop);
                     }
+                }
+
+                [HarmonyPrefix]
+                [HarmonyPatch("ApplyInternal", MethodType.Normal)]
+                private static bool Prefix(Settlement settlement)
+                {
+                    if ((settlement.Town != null && !settlement.Town.InRebelliousState && settlement.Notables != null) || 
+                        (settlement.IsVillage && !settlement.Village.Bound.Town.InRebelliousState))
+                    {
+                        foreach (Hero hero in settlement.Notables)
+                        {
+                            if (hero.CanHaveRecruits)
+                            {
+                                bool flag = false;
+                                CharacterObject basicVolunteer = Campaign.Current.Models.VolunteerModel.GetBasicVolunteer(hero);
+                                for (int i = 0; i < BannerKingsSettings.Instance.VolunteersLimit; i++)
+                                {
+                                    if (MBRandom.RandomFloat < Campaign.Current.Models.VolunteerModel.GetDailyVolunteerProductionProbability(hero, i, settlement))
+                                    {
+                                        CharacterObject characterObject = hero.VolunteerTypes[i];
+                                        if (characterObject == null)
+                                        {
+                                            hero.VolunteerTypes[i] = basicVolunteer;
+                                            flag = true;
+                                        }
+                                        else if (characterObject.UpgradeTargets.Length != 0 && characterObject.Tier <= 3)
+                                        {
+                                            float num = MathF.Log(hero.Power / (float)characterObject.Tier, 2f) * 0.01f;
+                                            if (MBRandom.RandomFloat < num)
+                                            {
+                                                hero.VolunteerTypes[i] = characterObject.UpgradeTargets[MBRandom.RandomInt(characterObject.UpgradeTargets.Length)];
+                                                flag = true;
+                                            }
+                                        }
+                                    }
+                                }
+                                if (flag)
+                                {
+                                    CharacterObject[] volunteerTypes = hero.VolunteerTypes;
+                                    for (int j = 1; j < volunteerTypes.Length; j++)
+                                    {
+                                        CharacterObject characterObject2 = volunteerTypes[j];
+                                        if (characterObject2 != null)
+                                        {
+                                            int num2 = 0;
+                                            int num3 = j - 1;
+                                            CharacterObject characterObject3 = volunteerTypes[num3];
+                                            while (num3 >= 0 && (characterObject3 == null || (float)characterObject2.Level + (characterObject2.IsMounted ? 0.5f : 0f) < (float)characterObject3.Level + (characterObject3.IsMounted ? 0.5f : 0f)))
+                                            {
+                                                if (characterObject3 == null)
+                                                {
+                                                    num3--;
+                                                    num2++;
+                                                    if (num3 >= 0)
+                                                    {
+                                                        characterObject3 = volunteerTypes[num3];
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    volunteerTypes[num3 + 1 + num2] = characterObject3;
+                                                    num3--;
+                                                    num2 = 0;
+                                                    if (num3 >= 0)
+                                                    {
+                                                        characterObject3 = volunteerTypes[num3];
+                                                    }
+                                                }
+                                            }
+                                            volunteerTypes[num3 + 1 + num2] = characterObject2;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    return false;
                 }
             }
 
@@ -611,10 +691,12 @@ namespace BannerKings
                 }
             }
 
-            [HarmonyPatch(typeof(HeroHelper), "StartRecruitingMoneyLimit")]
+            [HarmonyPatch(typeof(HeroHelper))]
             internal class StartRecruitingMoneyLimitPatch
             {
-                private static bool Prefix(Hero hero, ref float __result)
+                [HarmonyPrefix]
+                [HarmonyPatch("StartRecruitingMoneyLimit", MethodType.Normal)]
+                private static bool Prefix1(Hero hero, ref float __result)
                 {
                     __result = 50f;
                     if (hero.PartyBelongedTo != null)
@@ -622,6 +704,19 @@ namespace BannerKings
                         __result += 1000f;
                     }
 
+                    return false;
+                }
+
+                [HarmonyPrefix]
+                [HarmonyPatch("GetVolunteerTroopsOfHeroForRecruitment", MethodType.Normal)]
+                private static bool Prefix2(Hero hero, ref List<CharacterObject> __result)
+                {
+                    List<CharacterObject> list = new List<CharacterObject>();
+                    for (int i = 0; i < BannerKingsSettings.Instance.VolunteersLimit; i++)
+                    {
+                        list.Add(hero.VolunteerTypes[i]);
+                    }
+                    __result = list;    
                     return false;
                 }
             }

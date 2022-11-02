@@ -28,10 +28,12 @@
             </Widget>
 
             
-			<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" VerticalAlignment="Top" MarginTop="5" MarginLeft="20" StackLayout.LayoutMethod="VerticalBottomToTop">
+			<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" VerticalAlignment="Top" MarginLeft="20" StackLayout.LayoutMethod="VerticalBottomToTop">
 			  <Children>
 					
-				<ScrollbarWidget HeightSizePolicy ="Fixed" WidthSizePolicy="StretchToParent" Id="VolunteerListScrollbar" SuggestedHeight="8" MinValue="0" MaxValue="100" MarginTop="15" MarginLeft="10" MarginRight="10" MarginBottom="5" AlignmentAxis="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Handle="ScrollbarHandle" UpdateChildrenStates="true" >
+				<ScrollbarWidget HeightSizePolicy ="Fixed" WidthSizePolicy="StretchToParent" Id="VolunteerListScrollbar" SuggestedHeight="15" MinValue="0" MaxValue="100" MarginTop="15" 
+								 MarginLeft="10" MarginRight="10" AlignmentAxis="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Handle="ScrollbarHandle" 
+								 UpdateChildrenStates="true" >
 					<Children>
 						<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="4" VerticalAlignment="Center" Sprite="SPGeneral\SPRecruitment\slider_thin_bed_horizontal" />
 						<ImageWidget Id="ScrollbarHandle" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" MinWidth="153" SuggestedHeight="15" SuggestedWidth="150" VerticalAlignment="Center" Brush="Encyclopedia.Scroll.Handle.Horizontal" />

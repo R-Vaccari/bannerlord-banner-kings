@@ -2,7 +2,6 @@
 using BannerKings.Managers.Skills;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
-using TaleWorlds.Core;
 using static BannerKings.Managers.Policies.BKCriminalPolicy;
 
 namespace BannerKings.Models.Vanilla

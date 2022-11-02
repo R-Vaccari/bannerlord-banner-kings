@@ -239,6 +239,27 @@ namespace BannerKings.UI
             }
         }
 
+        [HarmonyPatch(typeof(RecruitVolunteerTroopVM), "ExecuteBeginHint")]
+        internal class RecruitVolunteerTroopVMHintPatch
+        {
+            private static bool Prefix(RecruitVolunteerTroopVM __instance)
+            {
+                if (__instance.Character != null && !__instance.PlayerHasEnoughRelation)
+                {
+                   
+                    InformationManager.ShowTooltip(typeof(List<TooltipProperty>), new object[]
+                    {
+                        UIHelper.GetRecruitToolTip(__instance.Character, __instance.Owner.OwnerHero, 
+                            Hero.MainHero.GetRelation(__instance.Owner.OwnerHero), false)
+                    });
+
+                    return false;
+                }
+
+                return true;
+            }
+        }
+
         [HarmonyPatch(typeof(SkillIconVisualWidget), "SkillId", MethodType.Setter)]
         internal class SkillIconOnLateUpdatePatch
         {
