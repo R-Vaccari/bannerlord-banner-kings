@@ -5,6 +5,7 @@ using BannerKings.Models.Vanilla;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
+using TaleWorlds.Library;
 using TaleWorlds.SaveSystem;
 using static BannerKings.Managers.PopulationManager;
 
@@ -15,22 +16,34 @@ namespace BannerKings.Managers.Populations
         public MilitaryData(Settlement settlement, int peasantManpower, int nobleManpower)
         {
             this.settlement = settlement;
-            this.peasantManpower = peasantManpower;
-            this.nobleManpower = nobleManpower;
+            this.PeasantManpower = peasantManpower;
+            this.NobleManpower = nobleManpower;
             engines = new List<SiegeEngineType>();
         }
 
         [SaveableProperty(1)] private Settlement settlement { get; set; }
 
-        [SaveableProperty(2)] private int peasantManpower { get; set; }
+        [SaveableProperty(2)] public int PeasantManpower { get; private set; }
 
-        [SaveableProperty(3)] private int nobleManpower { get; set; }
+        [SaveableProperty(3)] public int NobleManpower { get; private set; }
 
         [SaveableProperty(4)] private List<SiegeEngineType> engines { get; set; }
 
-        public int Manpower => peasantManpower + nobleManpower;
-        public int PeasantManpower => peasantManpower;
-        public int NobleManpower => nobleManpower;
+        [SaveableProperty(5)] private Dictionary<PopType, float> Manpowers { get; set; }
+
+        public int GetManpwer(PopType type)
+        {
+            int result = 0;
+            if (Manpowers.ContainsKey(type))
+            {
+                result = (int)Manpowers[type];
+            }
+
+            return result;
+        }
+
+
+        public int Manpower => PeasantManpower + NobleManpower;
 
         public ExplainedNumber DraftEfficiency
         {
@@ -39,14 +52,14 @@ namespace BannerKings.Managers.Populations
                 var number = new ExplainedNumber(0f);
                 if (settlement.Notables is {Count: > 0})
                 {
-                    number = new BKVolunteerModel().GetDraftEfficiency(settlement.Notables[0], 2, settlement);
+                    number = BannerKingsConfig.Instance.VolunteerModel.GetDraftEfficiency(settlement.Notables[0], 2, settlement);
                 }
 
                 return number;
             }
         }
 
-        public ExplainedNumber Militarism => new BKVolunteerModel().GetMilitarism(settlement);
+        public ExplainedNumber Militarism => BannerKingsConfig.Instance.VolunteerModel.GetMilitarism(settlement);
 
         public int Holdout => new BKFoodModel().GetFoodEstimate(settlement, settlement.Town.FoodStocksUpperLimit());
 
@@ -64,91 +77,70 @@ namespace BannerKings.Managers.Populations
         public void DeduceManpower(PopulationData data, int quantity, CharacterObject troop)
         {
             var tier = troop.Tier;
-            var noble = Utils.Helpers.IsRetinueTroop(troop, settlement.Culture);
+            var noble = Utils.Helpers.IsRetinueTroop(troop);
             if (noble)
             {
-                if (nobleManpower >= quantity)
-                {
-                    nobleManpower -= quantity;
-                }
-                else
-                {
-                    nobleManpower = 0;
-                }
-
+                Manpowers[PopType.Nobles] -= quantity;
                 data.UpdatePopType(PopType.Nobles, -quantity);
             }
             else
             {
-                if (tier >= 3 && data.GetTypeCount(PopType.Craftsmen) > quantity)
+                List<ValueTuple<PopType, float>> options = new List<(PopType, float)>();
+                var classes = BannerKingsConfig.Instance.VolunteerModel.GetMilitaryClasses(settlement);
+                foreach (var pair in Manpowers)
                 {
-                    var list = new List<(PopType, float)>();
-                    var mil1 = data.GetCurrentTypeFraction(PopType.Craftsmen);
-                    list.Add(new ValueTuple<PopType, float>(PopType.Craftsmen, mil1));
-                    var mil2 = data.GetCurrentTypeFraction(PopType.Serfs);
-                    list.Add(new ValueTuple<PopType, float>(PopType.Serfs, mil2));
-                    var type = MBRandom.ChooseWeighted(list);
-                    data.UpdatePopType(type, -quantity);
-                }
-                else
-                {
-                    data.UpdatePopType(PopType.Serfs, -quantity);
+                    if (pair.Key == PopType.Nobles)
+                    {
+                        continue;
+                    }
+
+                    float militarism = classes.First(x => x.Item1 == pair.Key).Item2;
+
+                    if (troop.Tier >= 3 && pair.Key == PopType.Craftsmen)
+                    {
+                        militarism *= 1.3f;
+                    }
+
+                    options.Add(new (pair.Key, militarism));
                 }
 
-                if (peasantManpower >= quantity)
-                {
-                    peasantManpower -= quantity;
-                }
-                else
-                {
-                    peasantManpower = 0;
-                }
+                var result = MBRandom.ChooseWeighted(options);
+                Manpowers[result] -= quantity;
+                data.UpdatePopType(result, -quantity);
             }
-
-            nobleManpower = Math.Max(nobleManpower, 0);
-            peasantManpower = Math.Max(peasantManpower, 0);
         }
 
         internal override void Update(PopulationData data)
         {
-            var model = new BKVolunteerModel();
-            var serfMilitarism = model.GetClassMilitarism(PopType.Serfs);
-            float serfs = data.GetTypeCount(PopType.Serfs);
-
-            var craftsmanMilitarism = model.GetClassMilitarism(PopType.Craftsmen);
-            float craftsmen = data.GetTypeCount(PopType.Craftsmen);
-            var peasantCap = (int) (serfs * serfMilitarism + craftsmen * craftsmanMilitarism);
-            var peasantGrowth = (int) (data.Growth.ResultNumber * (serfMilitarism + craftsmanMilitarism));
-            if (peasantGrowth == 0)
+            if (Manpowers == null)
             {
-                peasantGrowth++;
+                Manpowers = new Dictionary<PopType, float>();
             }
 
-            if (peasantManpower > peasantCap)
+            foreach (ValueTuple<PopType, float> tuple in BannerKingsConfig.Instance.VolunteerModel.GetMilitaryClasses(settlement))
             {
-                peasantManpower += (int) (peasantGrowth * -1f);
-            }
-            else if (peasantManpower < peasantCap)
-            {
-                peasantManpower += peasantGrowth;
-            }
+                float militarism = tuple.Item2;
+                PopType type = tuple.Item1;
+                if (!Manpowers.ContainsKey(type))
+                {
+                    var value = 0f;
+                    if (type == PopType.Serfs)
+                    {
+                        value = PeasantManpower;
+                    }
 
-            var nobleMilitarism = model.GetClassMilitarism(PopType.Nobles);
-            float nobles = data.GetTypeCount(PopType.Nobles);
-            var nobleCap = (int) (nobles * nobleMilitarism);
-            var nobleGrowth = (int) (data.Growth.ResultNumber * nobleMilitarism);
-            if (nobleGrowth == 0)
-            {
-                nobleGrowth++;
-            }
+                    if (type == PopType.Nobles)
+                    {
+                        value = NobleManpower;
+                    }
 
-            if (nobleManpower > nobleCap)
-            {
-                nobleManpower += (int) (nobleGrowth * -1f);
-            }
-            else if (nobleManpower < nobleCap)
-            {
-                nobleManpower += nobleGrowth;
+                    Manpowers.Add(type, value);
+                }
+
+                float maxManpower = data.GetTypeCount(type) * militarism;
+                float growth = maxManpower * 0.01f;
+                Manpowers[type] += growth;
+                Manpowers[type] = MathF.Clamp(Manpowers[type], 0f, maxManpower);
             }
         }
     }

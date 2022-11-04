@@ -17,6 +17,7 @@ using BannerKings.Extensions;
 using BannerKings.Managers.Titles.Laws;
 using BannerKings.Settings;
 using System;
+using System.Collections.Generic;
 
 namespace BannerKings.Models.Vanilla
 {
@@ -335,7 +336,11 @@ namespace BannerKings.Models.Vanilla
             var craftsmenMilitarism = GetClassMilitarism(PopType.Craftsmen);
             var nobleMilitarism = GetClassMilitarism(PopType.Nobles);
 
-            explainedNumber.Add((serfMilitarism + craftsmenMilitarism + nobleMilitarism) / 3f, new TextObject("{=AaNeOd9n}Base"));
+            explainedNumber.Add(serfMilitarism, new TextObject("{=pop_class_serfs}Serfs"));
+
+            explainedNumber.Add(serfMilitarism, new TextObject("{=pop_class_craftsmen}Craftsmen"));
+
+            explainedNumber.Add(serfMilitarism, new TextObject("{=pop_class_nobles}Nobles"));
 
             BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref explainedNumber, settlement.OwnerClan.Leader, CouncilPosition.Marshall, 0.03f, false);
 
@@ -355,6 +360,36 @@ namespace BannerKings.Models.Vanilla
             }
 
             return explainedNumber;
+        }
+
+        public List<ValueTuple<PopType, float>> GetMilitaryClasses(Settlement settlement)
+        {
+            var list = new List<ValueTuple<PopType, float>>();
+            float serfFactor = 0.1f;
+            float craftsmenFactor = 0.04f;
+            float nobleFactor = 0.12f;
+
+            if (settlement.OwnerClan != null)
+            {
+                var title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(settlement.OwnerClan.Kingdom);
+                if (title != null)
+                {
+                    if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.SerfsMilitaryServiceDuties))
+                    {
+                        serfFactor += 0.03f;
+
+                    }
+                }
+            }
+
+
+
+            list.Add(new(PopType.Serfs, serfFactor));
+            list.Add(new(PopType.Craftsmen, craftsmenFactor));
+            list.Add(new(PopType.Nobles, nobleFactor));
+
+
+            return list;
         }
 
         public float GetClassMilitarism(PopType type)

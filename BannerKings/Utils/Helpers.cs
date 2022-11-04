@@ -586,63 +586,33 @@ namespace BannerKings.Utils
 
         public static bool IsRetinueTroop(CharacterObject character)
         {
-            var result = false;
-            ExceptionUtils.TryCatch(() =>
-            {
-                var nobleRecruit = character.Culture.EliteBasicTroop;
-                if (nobleRecruit.UpgradeTargets == null)
-                {
-                    result = false;
-                    return;
-                }
-
-                if (character == nobleRecruit)
-                {
-                    result = true;
-                    return;
-                }
-
-                if (nobleRecruit.UpgradeTargets != null)
-                {
-                    var currentUpgrades = nobleRecruit.UpgradeTargets;
-                    while (currentUpgrades != null && currentUpgrades.Any())
-                    {
-                        var upgrade = currentUpgrades[0];
-                        if (upgrade == character)
-                        {
-                            result = true;
-                            return;
-                        }
-
-                        currentUpgrades = upgrade.UpgradeTargets;
-                    }
-                }
-            }, Type.GetType("BannerKings.Utils.Helpers").Name);
-
-
-            return result;
-        }
-
-        public static bool IsRetinueTroop(CharacterObject character, CultureObject settlementCulture)
-        {
-            var culture = character.Culture;
-            var nobleRecruit = culture.EliteBasicTroop;
+            var nobleRecruit = character.Culture.EliteBasicTroop;
+            bool result = false;
 
             if (nobleRecruit.UpgradeTargets == null)
             {
                 return false;
             }
 
-
-            if (culture == settlementCulture)
+            ExceptionUtils.TryCatch(() =>
             {
-                if (character == nobleRecruit || nobleRecruit.UpgradeTargets.Contains(character))
+                while (nobleRecruit.UpgradeTargets != null && nobleRecruit.UpgradeTargets.Count() > 0)
                 {
-                    return true;
+                    result = character == nobleRecruit || nobleRecruit.UpgradeTargets.Contains(character);
+                    if (result)
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        nobleRecruit = nobleRecruit.UpgradeTargets[0];
+                    }
                 }
-            }
+            }, 
+            Type.GetType("BannerKings.Utils.Helpers").Name,
+            false);
 
-            return false;
+            return result;
         }
 
         public static CultureObject GetCulture(string id)
