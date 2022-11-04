@@ -11,7 +11,7 @@ namespace BannerKings.UI.Extensions
     [ViewModelMixin("SetSelectedCategory")]
     internal class KingdomManagementMixin : BaseViewModelMixin<KingdomManagementVM>
     {
-        private bool courtSelected, demesneSelected;
+        private bool courtSelected, demesneSelected, demesneEnabled;
         private CourtVM courtVM;
         private KingdomDemesneVM demesneVM;
         private readonly KingdomManagementVM kingdomManagement;
@@ -20,8 +20,13 @@ namespace BannerKings.UI.Extensions
         {
             kingdomManagement = vm;
             courtVM = new CourtVM(true);
-            demesneVM = new KingdomDemesneVM(BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(vm.Kingdom),
-                vm.Kingdom);
+            var title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(vm.Kingdom);
+            DemesneEnabled = title != null;
+
+            if (DemesneEnabled)
+            {
+                demesneVM = new KingdomDemesneVM(title, vm.Kingdom);
+            }
         }
 
 
@@ -38,6 +43,20 @@ namespace BannerKings.UI.Extensions
                 if (value != demesneSelected)
                 {
                     demesneSelected = value;
+                    ViewModel!.OnPropertyChangedWithValue(value);
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public bool DemesneEnabled
+        {
+            get => demesneEnabled;
+            set
+            {
+                if (value != demesneEnabled)
+                {
+                    demesneEnabled = value;
                     ViewModel!.OnPropertyChangedWithValue(value);
                 }
             }
@@ -88,14 +107,18 @@ namespace BannerKings.UI.Extensions
         public override void OnRefresh()
         {
             Court.RefreshValues();
-            Demesne.RefreshValues();
+            Demesne?.RefreshValues();
             if (kingdomManagement.Clan.Show || kingdomManagement.Settlement.Show || kingdomManagement.Policy.Show ||
                 kingdomManagement.Army.Show || kingdomManagement.Diplomacy.Show)
             {
                 Court.IsSelected = false;
                 CourtSelected = false;
                 DemesneSelected = false;
-                Demesne.IsSelected = false;
+
+                if (Demesne != null)
+                {
+                    Demesne.IsSelected = false;
+                }
             }
         }
 
@@ -117,16 +140,19 @@ namespace BannerKings.UI.Extensions
         [DataSourceMethod]
         public void SelectDemesne()
         {
-            kingdomManagement.Clan.Show = false;
-            kingdomManagement.Settlement.Show = false;
-            kingdomManagement.Policy.Show = false;
-            kingdomManagement.Army.Show = false;
-            kingdomManagement.Diplomacy.Show = false;
+            if (Demesne != null)
+            {
+                kingdomManagement.Clan.Show = false;
+                kingdomManagement.Settlement.Show = false;
+                kingdomManagement.Policy.Show = false;
+                kingdomManagement.Army.Show = false;
+                kingdomManagement.Diplomacy.Show = false;
 
-            DemesneSelected = true;
-            Demesne.IsSelected = true;
-            Court.IsSelected = false;
-            CourtSelected = false;
+                DemesneSelected = true;
+                Demesne.IsSelected = true;
+                Court.IsSelected = false;
+                CourtSelected = false;
+            }
         }
     }
 }
