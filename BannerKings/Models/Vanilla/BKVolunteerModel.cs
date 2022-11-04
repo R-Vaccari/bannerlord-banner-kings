@@ -332,15 +332,12 @@ namespace BannerKings.Models.Vanilla
         public ExplainedNumber GetMilitarism(Settlement settlement)
         {
             var explainedNumber = new ExplainedNumber(0f, true);
-            var serfMilitarism = GetClassMilitarism(PopType.Serfs);
-            var craftsmenMilitarism = GetClassMilitarism(PopType.Craftsmen);
-            var nobleMilitarism = GetClassMilitarism(PopType.Nobles);
 
-            explainedNumber.Add(serfMilitarism, new TextObject("{=pop_class_serfs}Serfs"));
-
-            explainedNumber.Add(serfMilitarism, new TextObject("{=pop_class_craftsmen}Craftsmen"));
-
-            explainedNumber.Add(serfMilitarism, new TextObject("{=pop_class_nobles}Nobles"));
+            var classes = GetMilitaryClasses(settlement);
+            foreach (var tuple in classes)
+            {
+                explainedNumber.Add(tuple.Item2 / classes.Count, Utils.Helpers.GetClassName(tuple.Item1, settlement.Culture));
+            }
 
             BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref explainedNumber, settlement.OwnerClan.Leader, CouncilPosition.Marshall, 0.03f, false);
 
@@ -374,15 +371,42 @@ namespace BannerKings.Models.Vanilla
                 var title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(settlement.OwnerClan.Kingdom);
                 if (title != null)
                 {
+                    if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.SlaveryAserai))
+                    {
+                        list.Add(new(PopType.Slaves, 0.06f));
+                    }
+
+
                     if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.SerfsMilitaryServiceDuties))
                     {
                         serfFactor += 0.03f;
+                    }
+                    else if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.SerfsLaxDuties))
+                    {
+                        serfFactor -= 0.015f;
+                    }
 
+
+                    if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.CraftsmenMilitaryServiceDuties))
+                    {
+                        craftsmenFactor += 0.03f;
+                    }
+                    else if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.CraftsmenLaxDuties))
+                    {
+                        serfFactor -= 0.015f;
+                    }
+
+
+                    if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.NoblesMilitaryServiceDuties))
+                    {
+                        nobleFactor += 0.03f;
+                    }
+                    else if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.NoblesLaxDuties))
+                    {
+                        serfFactor -= 0.015f;
                     }
                 }
             }
-
-
 
             list.Add(new(PopType.Serfs, serfFactor));
             list.Add(new(PopType.Craftsmen, craftsmenFactor));

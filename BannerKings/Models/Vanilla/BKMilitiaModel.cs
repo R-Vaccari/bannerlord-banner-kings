@@ -12,6 +12,7 @@ using static BannerKings.Managers.Policies.BKMilitiaPolicy;
 using BannerKings.Managers.Education.Lifestyles;
 using System.Linq;
 using BannerKings.Managers.Buildings;
+using BannerKings.Managers.Titles.Laws;
 
 namespace BannerKings.Models.Vanilla
 {
@@ -48,11 +49,23 @@ namespace BannerKings.Models.Vanilla
         public override ExplainedNumber CalculateMilitiaChange(Settlement settlement, bool includeDescriptions = false)
         {
             var baseResult = base.CalculateMilitiaChange(settlement, includeDescriptions);
-            if (BannerKingsConfig.Instance.PopulationManager != null &&
-                BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
+            if (BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
             {
                 var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
-                var serfs = data.GetTypeCount(PopType.Serfs);
+                float serfs = data.GetTypeCount(PopType.Serfs);
+
+                if (settlement.OwnerClan != null)
+                {
+                    var sovereign = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(settlement.OwnerClan.Kingdom);
+                    if (sovereign != null)
+                    {
+                        if (sovereign.contract.IsLawEnacted(DefaultDemesneLaws.Instance.SerfsMilitaryServiceDuties))
+                        {
+                            serfs *= 1.2f;
+                        }
+                    }
+                }
+
                 var maxMilitia = GetMilitiaLimit(data, settlement).ResultNumber;
                 var filledCapacity = settlement.IsVillage
                     ? settlement.Village.Militia / maxMilitia
@@ -130,11 +143,29 @@ namespace BannerKings.Models.Vanilla
                     result.Add(0.12f, new TextObject("{=nPBwLDwE}Subsidize militia"));
                 }
 
-                var government = BannerKingsConfig.Instance.TitleManager.GetSettlementGovernment(settlement);
-                if (government == GovernmentType.Tribal)
+                var title = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement);
+                if (title != null)
                 {
-                    result.Add(0.08f, new TextObject("{=PSrEtF5L}Government"));
+                    if (title.contract.Government == GovernmentType.Tribal)
+                    {
+                        result.Add(0.08f, new TextObject("{=PSrEtF5L}Government"));
+                    }
+
+                    var sovereign = title.sovereign;
+                    if (sovereign != null)
+                    {
+                        if (sovereign.contract.IsLawEnacted(DefaultDemesneLaws.Instance.NoblesMilitaryServiceDuties))
+                        {
+                            result.AddFactor(0.15f, DefaultDemesneLaws.Instance.NoblesMilitaryServiceDuties.Name);
+                        }
+
+                        if (sovereign.contract.IsLawEnacted(DefaultDemesneLaws.Instance.CraftsmenMilitaryServiceDuties))
+                        {
+                            result.AddFactor(0.1f, DefaultDemesneLaws.Instance.CraftsmenMilitaryServiceDuties.Name);
+                        }
+                    }
                 }
+                
 
                 var villageData = data.VillageData;
                 if (villageData != null)

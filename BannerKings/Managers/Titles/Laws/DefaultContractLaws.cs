@@ -14,6 +14,15 @@ namespace BannerKings.Managers.Titles.Laws
         public DemesneLaw EstateTenureAllodial { get; private set; } = new DemesneLaw("estate_tenure_allodial");
 
 
+        public DemesneLaw NoblesMilitaryServiceDuties { get; private set; } = new DemesneLaw("nobles_military_service_duties");
+        public DemesneLaw NoblesTaxDuties { get; private set; } = new DemesneLaw("nobles_tax_duties");
+        public DemesneLaw NoblesLaxDuties { get; private set; } = new DemesneLaw("nobles_lax_duties");
+
+
+        public DemesneLaw CraftsmenMilitaryServiceDuties { get; private set; } = new DemesneLaw("craftsmen_military_service_duties");
+        public DemesneLaw CraftsmenTaxDuties { get; private set; } = new DemesneLaw("craftsmen_tax_duties");
+        public DemesneLaw CraftsmenLaxDuties { get; private set; } = new DemesneLaw("craftsmen_lax_duties");
+
         public DemesneLaw SerfsMilitaryServiceDuties { get; private set; } = new DemesneLaw("serfs_military_service_duties");
         public DemesneLaw SerfsAgricultureDuties { get; private set; } = new DemesneLaw("serfs_agriculture_duties");
         public DemesneLaw SerfsLaxDuties { get; private set; } = new DemesneLaw("serfs_lax_duties");
@@ -24,6 +33,7 @@ namespace BannerKings.Managers.Titles.Laws
 
 
         public DemesneLaw SlaveryVlandia { get; private set; } = new DemesneLaw("slavery_vlandia");
+        public DemesneLaw SlaveryAserai { get; private set; } = new DemesneLaw("slavery_aserai");
         public DemesneLaw SlaveryStandard { get; private set; } = new DemesneLaw("slavery_standard");
         public DemesneLaw SlaveryManumission { get; private set; } = new DemesneLaw("slavery_manumission");
 
@@ -38,6 +48,12 @@ namespace BannerKings.Managers.Titles.Laws
                 yield return EstateTenureQuiaEmptores;
                 yield return EstateTenureAllodial;
                 yield return EstateTenureFeeTail;
+                yield return NoblesMilitaryServiceDuties;
+                yield return NoblesTaxDuties;
+                yield return NoblesLaxDuties;
+                yield return CraftsmenMilitaryServiceDuties;
+                yield return CraftsmenTaxDuties;
+                yield return CraftsmenLaxDuties;
                 yield return SerfsMilitaryServiceDuties;
                 yield return SerfsAgricultureDuties;
                 yield return SerfsLaxDuties;
@@ -65,7 +81,43 @@ namespace BannerKings.Managers.Titles.Laws
         public List<DemesneLaw> GetAdequateLaws(FeudalTitle title)
         {
             var list = new List<DemesneLaw>();
-            list.Add(DraftingFreeContracts.GetCopy());
+            var government = title.contract.Government;
+            var faction = BannerKingsConfig.Instance.TitleManager.GetTitleFaction(title.sovereign != null ? title.sovereign : title);
+            CultureObject culture = null;
+            if (faction != null)
+            {
+                culture = faction.Culture;
+            }
+
+            if (government == GovernmentType.Feudal)
+            {
+                list.Add(DraftingVassalage.GetCopy());
+
+                if (culture != null)
+                {
+                    if (culture.StringId == "vlandia")
+                    {
+                        list.Add(SlaveryVlandia.GetCopy());
+                    }
+
+                    if (culture.StringId == "aserai")
+                    {
+
+                    }
+                }
+            } 
+            else if (government == GovernmentType.Tribal)
+            {
+                list.Add(DraftingHidage.GetCopy());
+            }
+            else
+            {
+                list.Add(DraftingFreeContracts.GetCopy());
+            }
+
+
+
+            
             list.Add(SlaveryStandard.GetCopy());
             list.Add(SlavesHardLabor.GetCopy());
             list.Add(SerfsAgricultureDuties.GetCopy());
@@ -76,6 +128,9 @@ namespace BannerKings.Managers.Titles.Laws
 
         public override void Initialize()
         {
+            var cultures = Campaign.Current.ObjectManager.GetObjectTypeList<CultureObject>();
+
+
             #region EstateTenure
 
             EstateTenureQuiaEmptores.Initialize(new TextObject("{=!}Quia Emptores"),
@@ -112,6 +167,83 @@ namespace BannerKings.Managers.Titles.Laws
 
 
 
+            #region NobleDuties
+
+            NoblesMilitaryServiceDuties.Initialize(new TextObject("{=!}Military Duties"),
+               new TextObject("{=!}Tailor the duty laws of {CLASS} towards military service. Extensive requirements of service ensure a bigger manpower pool to protect the realm. Increased class militarism and militia service.")
+               .SetTextVariable("CLASS", Utils.Helpers.GetClassName(PopulationManager.PopType.Nobles, Hero.MainHero.Culture)),
+               new TextObject("{=!}Nobles militarism +4% flat%\nMilitia quality +15%"),
+               DemesneLawTypes.SerfDuties,
+               0.8f,
+               -0.4f,
+               0.6f,
+               300,
+               0);
+
+            NoblesTaxDuties.Initialize(new TextObject("{=!}Tax Duties"),
+               new TextObject("{=!}Tailor the duty laws of {CLASS} towards agriculture. Labor requirements and movement restriction tie the serfs to the land and its productivity. Increased agricultural output.")
+               .SetTextVariable("CLASS", Utils.Helpers.GetClassName(PopulationManager.PopType.Nobles, Hero.MainHero.Culture)),
+               new TextObject("{=!}Increased nobles tax output by 25%"),
+               DemesneLawTypes.SerfDuties,
+               0.4f,
+               -0.4f,
+               0.5f,
+               300,
+               1);
+
+            NoblesLaxDuties.Initialize(new TextObject("{=!}Lax Duties"),
+               new TextObject("{=!}Lessen the duty burdens of {CLASS}. Reduced duties makes the populace more content and gives them room for prosperity. Reduces output and military contribution.")
+               .SetTextVariable("CLASS", Utils.Helpers.GetClassName(PopulationManager.PopType.Nobles, Hero.MainHero.Culture)),
+               new TextObject("{=!}Increased settlement research and influence outputs\nCraftsmen militarism -2% flat\nNobles tax output -40%"),
+               DemesneLawTypes.SerfDuties,
+               -0.5f,
+               0.8f,
+               -0.2f,
+               300,
+               2);
+
+            #endregion NobleDuties
+
+
+            #region CraftsmenDuties
+
+            CraftsmenMilitaryServiceDuties.Initialize(new TextObject("{=!}Military Duties"),
+               new TextObject("{=!}Tailor the duty laws of {CLASS} towards military service. Extensive requirements of service ensure a bigger manpower pool to protect the realm. Increased class militarism and militia service.")
+               .SetTextVariable("CLASS", Utils.Helpers.GetClassName(PopulationManager.PopType.Craftsmen, Hero.MainHero.Culture)),
+               new TextObject("{=!}Craftsmen militarism +3% flat\nMilitia quality +10%"),
+               DemesneLawTypes.SerfDuties,
+               0.8f,
+               -0.4f,
+               0.6f,
+               300,
+               0);
+
+            CraftsmenTaxDuties.Initialize(new TextObject("{=!}Tax Duties"),
+               new TextObject("{=!}Tailor the duty laws of {CLASS} towards taxation. Stricter tax collection and more taxation forms squeeze more denarii out of {CLASS}. Increases tax output.")
+               .SetTextVariable("CLASS", Utils.Helpers.GetClassName(PopulationManager.PopType.Craftsmen, Hero.MainHero.Culture)),
+               new TextObject("{=!}Increased nobles tax output by 35%"),
+               DemesneLawTypes.SerfDuties,
+               0.4f,
+               -0.4f,
+               0.5f,
+               300,
+               1);
+
+            CraftsmenLaxDuties.Initialize(new TextObject("{=!}Lax Duties"),
+               new TextObject("{=!}Lessen the duty burdens of {CLASS}. Reduced duties makes the populace more content and gives them room for prosperity. Reduces output and military contribution.")
+               .SetTextVariable("CLASS", Utils.Helpers.GetClassName(PopulationManager.PopType.Craftsmen, Hero.MainHero.Culture)),
+               new TextObject("{=!}Increased craftsmen prosperity and loyalty\nIncreased production quality +5%\nCraftsmen militarism -1.5% flat\nCraftsmen tax output -40%"),
+               DemesneLawTypes.SerfDuties,
+               -0.5f,
+               0.8f,
+               -0.2f,
+               300,
+               2);
+
+            #endregion CraftsmenDuties
+
+
+
             #region SerfDuties
 
             SerfsMilitaryServiceDuties.Initialize(new TextObject("{=!}Military Duties"),
@@ -126,7 +258,7 @@ namespace BannerKings.Managers.Titles.Laws
                0);
 
             SerfsAgricultureDuties.Initialize(new TextObject("{=!}Agricultural Duties"),
-               new TextObject("{=!}Tailor the duty laws of {CLASS} towards agriculture. Labor requirements and movement restriction tie the serfs to the land and its productivity. Increased agricultural output.")
+               new TextObject("{=!}Tailor the duty laws of {CLASS} towards agriculture. Labor requirements and movement restriction tie the {CLASS} to the land and its productivity. Increased agricultural output.")
                .SetTextVariable("CLASS", Utils.Helpers.GetClassName(PopulationManager.PopType.Serfs, Hero.MainHero.Culture)),
                new TextObject("{=!}Increased production of farm goods in villages and food in castles and towns"),
                DemesneLawTypes.SerfDuties,
@@ -153,7 +285,7 @@ namespace BannerKings.Managers.Titles.Laws
 
             SlavesHardLabor.Initialize(new TextObject("{=!}Hard Labor"),
                new TextObject("{=!}Tailor the duty laws of {CLASS} towards hard labor. Hard labor involves unskilled, undesirable labors such as mining and construction. Increases mining production and settlement construction.")
-               .SetTextVariable("SLAVES", Utils.Helpers.GetClassName(PopulationManager.PopType.Serfs, Hero.MainHero.Culture)),
+               .SetTextVariable("SLAVES", Utils.Helpers.GetClassName(PopulationManager.PopType.Slaves, Hero.MainHero.Culture)),
                new TextObject("{=!}Increased production of mining goods\nSlaves contruction contribution +20%"),
                DemesneLawTypes.SlaveDuties,
                0.4f,
@@ -162,8 +294,8 @@ namespace BannerKings.Managers.Titles.Laws
                300, 0);
 
             SlavesAgricultureDuties.Initialize(new TextObject("{=!}Agricultural Duties"),
-               new TextObject("{=!}Tailor the duty laws of {CLASS} towards agriculture. Labor requirements and movement restriction tie the serfs to the land and its productivity. Increased agricultural output.")
-               .SetTextVariable("SLAVES", Utils.Helpers.GetClassName(PopulationManager.PopType.Serfs, Hero.MainHero.Culture)),
+               new TextObject("{=!}Tailor the duty laws of {CLASS} towards agriculture. Labor requirements and movement restriction tie the {CLASS} to the land and its productivity. Increased agricultural output.")
+               .SetTextVariable("SLAVES", Utils.Helpers.GetClassName(PopulationManager.PopType.Slaves, Hero.MainHero.Culture)),
                new TextObject("{=!}Increased production of farm goods in villages and food in castles and towns"),
                DemesneLawTypes.SlaveDuties,
                0.4f,
@@ -174,7 +306,7 @@ namespace BannerKings.Managers.Titles.Laws
 
             SlavesDomesticDuties.Initialize(new TextObject("{=!}Domestic Duties"),
                new TextObject("{=!}Tailor the duty laws of {CLASS} towards domestic and skilled labor. Citizen households will often have or want to have slaves for various domestic labors. Enslaved shopkeepers, artisans and professionals provide tax benefits to their owners.")
-               .SetTextVariable("CLASS", Utils.Helpers.GetClassName(PopulationManager.PopType.Serfs, Hero.MainHero.Culture)),
+               .SetTextVariable("CLASS", Utils.Helpers.GetClassName(PopulationManager.PopType.Slaves, Hero.MainHero.Culture)),
                new TextObject("{=!}Slave tax output +15%"),
                DemesneLawTypes.SlaveDuties,
                0.6f,
@@ -198,17 +330,29 @@ namespace BannerKings.Managers.Titles.Laws
 
             SlaveryVlandia.Initialize(new TextObject("{=!}Vlandic Law"),
                 new TextObject("{=!}The Vlandic tradition on slavery stipulates that Vlandians shall not enslave each other. Slaves are present in small quantities in rural estates. Though Vlandian individuals may become or be born slaves, Vlandian lords are prohibited from purposefuly enslaving them."),
-                new TextObject("{=!}"),
+                new TextObject("{=!}Slave demand reduced by 30%\nVlandian prisoners cannot be enslaved\n"),
                 DemesneLawTypes.Slavery,
                 0.2f,
                 -0.2f,
                 0.5f,
                 300,
-                1);
+                1,
+                cultures.First(x => x.StringId == "vlandia"));
+
+            SlaveryAserai.Initialize(new TextObject("{=!}Aseran Law"),
+               new TextObject("{=!}The Aserai peoples have a long tradition of slavery. Aserai slaves are no more than a trade good, and as such, demand for them is quite high in the economy. ."),
+               new TextObject("{=!}Slave demand increased by 50%\nSlaves count as military manpower\nSlaves loyalty impact increased by 10%"),
+               DemesneLawTypes.Slavery,
+               0.3f,
+               -0.6f,
+               0.6f,
+               300,
+               1,
+               cultures.First(x => x.StringId == "aserai"));
 
             SlaveryManumission.Initialize(new TextObject("{=!}Manumission"),
                 new TextObject("{=!}The Vlandic tradition on slavery stipulates that Vlandians shall not enslave each other. Slaves are present in small quantities in rural estates. Though Vlandian individuals may become or be born slaves, Vlandian lords are prohibited from purposefuly enslaving them."),
-                new TextObject("{=!}"),
+                new TextObject("{=!}Slave demand reduced by 100%\n"),
                 DemesneLawTypes.Slavery,
                 -0.5f,
                 0.9f,

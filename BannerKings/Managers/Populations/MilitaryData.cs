@@ -16,22 +16,17 @@ namespace BannerKings.Managers.Populations
         public MilitaryData(Settlement settlement, int peasantManpower, int nobleManpower)
         {
             this.settlement = settlement;
-            this.PeasantManpower = peasantManpower;
-            this.NobleManpower = nobleManpower;
             engines = new List<SiegeEngineType>();
+            InitManpowers();
         }
 
         [SaveableProperty(1)] private Settlement settlement { get; set; }
-
-        [SaveableProperty(2)] public int PeasantManpower { get; private set; }
-
-        [SaveableProperty(3)] public int NobleManpower { get; private set; }
 
         [SaveableProperty(4)] private List<SiegeEngineType> engines { get; set; }
 
         [SaveableProperty(5)] private Dictionary<PopType, float> Manpowers { get; set; }
 
-        public int GetManpwer(PopType type)
+        public int GetManpower(PopType type)
         {
             int result = 0;
             if (Manpowers.ContainsKey(type))
@@ -42,8 +37,46 @@ namespace BannerKings.Managers.Populations
             return result;
         }
 
+        public float PeasantManpower
+        {
+            get
+            {
+                InitManpowers();
+                float value = 0f;
+                foreach (var pair in Manpowers)
+                {
+                    if (pair.Key == PopType.Nobles)
+                    {
+                        continue;
+                    }
 
-        public int Manpower => PeasantManpower + NobleManpower;
+                    value += pair.Value;
+                }
+                return value;
+            }
+        }
+
+        public float NobleManpower
+        {
+            get
+            {
+                InitManpowers();
+                float value = 0f;
+                foreach (var pair in Manpowers)
+                {
+                    if (pair.Key != PopType.Nobles)
+                    {
+                        continue;
+                    }
+
+                    value += pair.Value;
+                }
+                return value;
+            }
+        }
+
+
+        public float Manpower => PeasantManpower + NobleManpower;
 
         public ExplainedNumber DraftEfficiency
         {
@@ -76,6 +109,8 @@ namespace BannerKings.Managers.Populations
 
         public void DeduceManpower(PopulationData data, int quantity, CharacterObject troop)
         {
+            InitManpowers();
+
             var tier = troop.Tier;
             var noble = Utils.Helpers.IsRetinueTroop(troop);
             if (noble)
@@ -112,10 +147,7 @@ namespace BannerKings.Managers.Populations
 
         internal override void Update(PopulationData data)
         {
-            if (Manpowers == null)
-            {
-                Manpowers = new Dictionary<PopType, float>();
-            }
+            InitManpowers();
 
             foreach (ValueTuple<PopType, float> tuple in BannerKingsConfig.Instance.VolunteerModel.GetMilitaryClasses(settlement))
             {
@@ -123,24 +155,34 @@ namespace BannerKings.Managers.Populations
                 PopType type = tuple.Item1;
                 if (!Manpowers.ContainsKey(type))
                 {
-                    var value = 0f;
-                    if (type == PopType.Serfs)
-                    {
-                        value = PeasantManpower;
-                    }
-
-                    if (type == PopType.Nobles)
-                    {
-                        value = NobleManpower;
-                    }
-
-                    Manpowers.Add(type, value);
+                    Manpowers.Add(type, data.GetTypeCount(type) * militarism * 0.5f);
                 }
 
                 float maxManpower = data.GetTypeCount(type) * militarism;
                 float growth = maxManpower * 0.01f;
                 Manpowers[type] += growth;
                 Manpowers[type] = MathF.Clamp(Manpowers[type], 0f, maxManpower);
+            }
+        }
+
+        private void InitManpowers()
+        {
+            if (Manpowers == null)
+            {
+                Manpowers = new Dictionary<PopType, float>();
+            }
+
+            if (Manpowers.Count == 0)
+            {
+                var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
+                foreach (ValueTuple<PopType, float> tuple in BannerKingsConfig.Instance.VolunteerModel.GetMilitaryClasses(settlement))
+                {
+                    PopType type = tuple.Item1;
+                    if (!Manpowers.ContainsKey(type))
+                    {
+                        Manpowers.Add(type, data.GetTypeCount(type) * tuple.Item2 * 0.5f);
+                    }
+                }
             }
         }
     }
