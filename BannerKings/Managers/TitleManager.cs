@@ -173,6 +173,8 @@ namespace BannerKings.Managers
                         .SetTextVariable("KNIGHT", knight.EncyclopediaLinkWithName)
                         .ToString()));
             }
+
+            AddKnightInfluence(knight, 0f);
         }
 
         public void GrantKnighthood(Estate estate, Hero knight, Hero grantor)
@@ -191,6 +193,8 @@ namespace BannerKings.Managers
                         .SetTextVariable("KNIGHT", knight.EncyclopediaLinkWithName)
                         .ToString()));
             }
+
+            AddKnightInfluence(knight, 0f);
         }
 
         public bool IsHeroKnighted(Hero hero)
