@@ -9,8 +9,10 @@ using HarmonyLib;
 using SandBox.CampaignBehaviors;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
+using TaleWorlds.CampaignSystem.Conversation;
 using TaleWorlds.CampaignSystem.Encounters;
 using TaleWorlds.CampaignSystem.Party;
+using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.ViewModelCollection;
 using TaleWorlds.CampaignSystem.ViewModelCollection.ClanManagement.Categories;
 using TaleWorlds.Core;
@@ -167,8 +169,8 @@ namespace BannerKings.Behaviours
                         null, 
                         null));
                 }, 
-                100, 
-                null);
+                100,
+                GrantKnighthoodOnClickable);
 
             starter.AddDialogLine("companion_grant_knighthood_response", "companion_knighthood_question",
                 "companion_knighthood_response",
@@ -325,6 +327,39 @@ namespace BannerKings.Behaviours
             }
 
             return result;
+        }
+
+        private bool GrantKnighthoodOnClickable(out TextObject reason)
+        {
+            var knight = Hero.OneToOneConversationHero;
+            var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(Hero.MainHero);
+            if (council != null)
+            {
+                var peerage = council.Peerage;
+                if (!peerage.CanGrantKnighthood)
+                {
+                    reason = new TextObject("{=!}The {CLAN} does not have adequate Peerage to grant knighthood.")
+                        .SetTextVariable("CLAN", Hero.MainHero.Clan.Name);
+                    return false;
+                }
+            }
+
+            if (BannerKingsConfig.Instance.TitleManager.IsKnight(knight))
+            {
+                reason = new TextObject("{=!}{HERO} already holds property or a title and is considered a knight.")
+                        .SetTextVariable("HERO", knight.Name);
+                return false;
+            }
+
+            if (Utils.Helpers.IsCloseFamily(knight, Hero.MainHero))
+            {
+                reason = new TextObject("{=!}{HERO} is close family and in your clan. Their social status mirrors yours as head of family.")
+                        .SetTextVariable("HERO", knight.Name);
+                return false;
+            }
+
+            reason = new TextObject("{=!}Bestowing knighthood is possible.");
+            return true;
         }
 
 
@@ -500,6 +535,40 @@ namespace BannerKings.Behaviours
 
     namespace Patches
     {
+
+        [HarmonyPatch(typeof(CompanionRolesCampaignBehavior))]
+        internal class CompanionDialoguesPatches
+        {
+            [HarmonyPrefix]
+            [HarmonyPatch("companion_fire_on_consequence", MethodType.Normal)]
+            private static bool FireCompanionPrefix()
+            {
+                if (BannerKingsConfig.Instance.TitleManager.IsKnight(Hero.OneToOneConversationHero))
+                {
+
+                    InformationManager.DisplayMessage(new InformationMessage(new TextObject(
+                        "{=!}Not possible to dismiss a knight with property under your service.")
+                        .ToString()));
+                    return false;
+                }
+                
+                return true;
+            }
+
+            [HarmonyPrefix]
+            [HarmonyPatch("fief_grant_answer_consequence", MethodType.Normal)]
+            private static bool GrantPeeragePrefix()
+            {
+                ConversationSentence.SetObjectsToRepeatOver((from x in Hero.MainHero.Clan.Settlements
+                                                             where x.IsTown || x.IsCastle &&
+                                                             BannerKingsConfig.Instance.TitleManager.GetTitle(x).deJure == Hero.MainHero
+                                                             select x).ToList<Settlement>(), 5);
+
+                return false;
+            }
+        }
+
+
         [HarmonyPatch(typeof(LordConversationsCampaignBehavior), "FindSuitableCompanionsToLeadCaravan")]
         internal class SuitableCaravanLeaderPatch
         {
@@ -517,8 +586,7 @@ namespace BannerKings.Behaviours
                     if (heroObject != null && heroObject != Hero.MainHero && heroObject.Clan == Clan.PlayerClan &&
                         heroObject.GovernorOf == null && heroObject.CanLeadParty())
                     {
-                        var title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(heroObject);
-                        if (title == null)
+                        if (!BannerKingsConfig.Instance.TitleManager.IsKnight(heroObject))
                         {
                             list.Add(troopRosterElement.Character);
                         }
@@ -659,7 +727,7 @@ namespace BannerKings.Behaviours
                                     default:
                                     {
                                         if (!Utils.Helpers.IsCloseFamily(hero, Hero.MainHero) &&
-                                            !BannerKingsConfig.Instance.TitleManager.IsHeroKnighted(hero))
+                                            !BannerKingsConfig.Instance.TitleManager.IsKnight(hero))
                                         {
                                             hint = new TextObject("{=H48rhfyZ}A hero must be knighted and granted land before being able to raise a personal retinue. You may bestow knighthood by talking to them.")
                                                 .ToString();
