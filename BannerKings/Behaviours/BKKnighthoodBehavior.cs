@@ -566,6 +566,16 @@ namespace BannerKings.Behaviours
 
                 return false;
             }
+
+            [HarmonyPostfix]
+            [HarmonyPatch("ClanNameSelectionIsDone", MethodType.Normal)]
+            private static void GrantPeerageFinishedPostfix(CompanionRolesCampaignBehavior __instance)
+            {
+                Settlement settlement = (Settlement)AccessTools.Field(__instance.GetType(), "_selectedFief").GetValue(__instance);
+                var title = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement);
+                var action = BannerKingsConfig.Instance.TitleModel.GetAction(ActionType.Grant, title, Hero.MainHero);
+                BannerKingsConfig.Instance.TitleManager.GrantTitle(action, Hero.OneToOneConversationHero);
+            }
         }
 
 
