@@ -159,6 +159,7 @@ namespace BannerKings
             AddEnumDefinition(typeof(EstateDuty), 105);
             AddEnumDefinition(typeof(EstateTask), 106);
             AddClassDefinition(typeof(BKDemesneLawDecision), 107);
+            AddClassDefinition(typeof(Peerage), 108);
 
         }
 

@@ -22,7 +22,10 @@ namespace BannerKings.Managers.Populations.Estates
 
         public override void TakeAction(Hero receiver = null)
         {
-            throw new NotImplementedException();
+            if (Type == ActionType.Grant)
+            {
+                BannerKingsConfig.Instance.TitleManager.GrantEstate(this);
+            }
         }
     }
 

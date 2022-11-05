@@ -1,3 +1,4 @@
+using BannerKings.Extensions;
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Titles.Laws;
 using System.Linq;
@@ -106,7 +107,7 @@ namespace BannerKings.Models.BKModels
 
                     if (faction.ActivePolicies.Contains(DefaultPolicies.ForgivenessOfDebts))
                     {
-                        result.AddFactor(-0.15f, DefaultPolicies.Serfdom.Name);
+                        result.AddFactor(-0.15f, DefaultPolicies.ForgivenessOfDebts.Name);
                     }
 
                     var title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(faction);
@@ -118,7 +119,49 @@ namespace BannerKings.Models.BKModels
                         }
                         else if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.SlaveryVlandia))
                         {
-                            result.AddFactor(-0.3f, DefaultDemesneLaws.Instance.SlaveryManumission.Name);
+                            result.AddFactor(-0.3f, DefaultDemesneLaws.Instance.SlaveryVlandia.Name);
+                        }
+                        else if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.SlaveryAserai))
+                        {
+                            result.AddFactor(0.5f, DefaultDemesneLaws.Instance.SlaveryAserai.Name);
+                        }
+
+
+                        if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.SlavesAgricultureDuties))
+                        {
+                            float factor = -0.2f;
+                            if (settlement.IsVillage)
+                            {
+                                if (settlement.Village.IsFarmingVillage())
+                                {
+                                    factor = 0.3f;
+                                }
+                            }
+
+                            result.Add(result.ResultNumber * factor, DefaultDemesneLaws.Instance.SlavesAgricultureDuties.Name);
+                        }
+                        else if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.SlavesHardLabor)) 
+                        {
+                            float factor = -0.2f;
+                            if (settlement.IsVillage)
+                            {
+                                if (settlement.Village.IsMiningVillage())
+                                {
+                                    factor = 0.3f;
+                                }
+                            }
+
+                            result.Add(result.ResultNumber * factor, DefaultDemesneLaws.Instance.SlavesHardLabor.Name);
+                        }
+                        else
+                        {
+                            float factor = -0.2f;
+                            if (settlement.IsTown)
+                            {
+                                factor = 0.3f;
+                            }
+
+                            result.Add(result.ResultNumber * factor, DefaultDemesneLaws.Instance.SlavesDomesticDuties.Name);
                         }
                     }
                 }

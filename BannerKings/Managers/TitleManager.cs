@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Xml;
 using BannerKings.Actions;
+using BannerKings.Managers.Populations.Estates;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
 using BannerKings.Managers.Titles.Laws;
@@ -11,12 +12,12 @@ using BannerKings.Models.BKModels;
 using BannerKings.UI.Cutscenes;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
-using TaleWorlds.CampaignSystem.SceneInformationPopupTypes;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.SaveSystem;
+using ActionType = BannerKings.Managers.Titles.ActionType;
 
 namespace BannerKings.Managers
 {
@@ -102,6 +103,8 @@ namespace BannerKings.Managers
             return false;
         }
 
+        public bool IsKnight(Hero hero) => Knights.ContainsKey(hero);
+
         public FeudalTitle GetTitle(Settlement settlement)
         {
             try
@@ -152,19 +155,31 @@ namespace BannerKings.Managers
         public void GrantKnighthood(FeudalTitle title, Hero knight, Hero grantor)
         {
             var action = BannerKingsConfig.Instance.TitleModel.GetAction(ActionType.Grant, title, grantor);
-
             action.Influence = -BannerKingsConfig.Instance.TitleModel.GetGrantKnighthoodCost(grantor).ResultNumber;
-            if (grantor.GetPerkValue(BKPerks.Instance.LordshipAccolade))
-            {
-                action.Influence *= 0.15f;
-            }
-
             action.TakeAction(knight);
 
             if (grantor == Hero.MainHero)
             {
                 GiveGoldAction.ApplyBetweenCharacters(grantor, knight, 5000);
             }
+
+            ClanActions.JoinClan(knight, grantor.Clan);
+
+            if (Clan.PlayerClan.Kingdom != null && grantor.Clan.Kingdom == Clan.PlayerClan.Kingdom)
+            {
+                InformationManager.DisplayMessage(new InformationMessage(
+                    new TextObject("{=AyXDhK2V}The {CLAN} has knighted {KNIGHT}.")
+                        .SetTextVariable("CLAN", grantor.Clan.EncyclopediaLinkWithName)
+                        .SetTextVariable("KNIGHT", knight.EncyclopediaLinkWithName)
+                        .ToString()));
+            }
+        }
+
+        public void GrantKnighthood(Estate estate, Hero knight, Hero grantor)
+        {
+            var action = BannerKingsConfig.Instance.EstatesModel.GetGrant(estate, grantor, knight);
+            action.Influence = -BannerKingsConfig.Instance.TitleModel.GetGrantKnighthoodCost(grantor).ResultNumber;
+            action.TakeAction(knight);
 
             ClanActions.JoinClan(knight, grantor.Clan);
 
@@ -214,6 +229,16 @@ namespace BannerKings.Managers
                     else
                     {
                         DeJuresCache.Add(newOwner, new List<FeudalTitle> {title});
+                    }
+
+
+                    if (DeJuresCache[oldOwner].Count == 0)
+                    {
+                        DeJuresCache.Remove(oldOwner);
+                        if (Knights.ContainsKey(oldOwner))
+                        {
+                            Knights.Remove(oldOwner);
+                        }
                     }
                 }
                 else
@@ -442,6 +467,17 @@ namespace BannerKings.Managers
             }
         }
 
+        public void GrantEstate(EstateAction action)
+        {
+            var grantor = action.ActionTaker;
+
+            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(grantor, action.ActionTarget, 15);
+            GainKingdomInfluenceAction.ApplyForDefault(grantor, -action.Influence);
+            grantor.AddSkillXp(BKSkills.Instance.Lordship, 25);
+
+            action.Estate.SetOwner(action.ActionTarget);
+        }
+
         public void GrantTitle(TitleAction action, Hero receiver)
         {
             var grantor = action.ActionTaker;
@@ -458,7 +494,7 @@ namespace BannerKings.Managers
             var lordshipPatron = BKPerks.Instance.LordshipPatron;
             if (action.ActionTaker.GetPerkValue(lordshipPatron))
             {
-                action.Renown += 50;
+                action.Renown += 15;
                 relationChange += (int)(relationChange * 0.1f / 100);
             }
 
@@ -466,6 +502,8 @@ namespace BannerKings.Managers
             GainKingdomInfluenceAction.ApplyForDefault(grantor, action.Influence);
             grantor.AddSkillXp(BKSkills.Instance.Lordship, 
                 BannerKingsConfig.Instance.TitleModel.GetSkillReward(action.Title.type, action.Type));
+
+            GainRenownAction.Apply(grantor, action.Renown);
 
             var fief = action.Title.fief;
             if (receiver.Clan.Leader == receiver && fief != null && (fief.IsTown || fief.IsCastle))

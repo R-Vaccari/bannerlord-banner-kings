@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using BannerKings.Managers.Skills;
@@ -193,6 +194,11 @@ namespace BannerKings.Models.BKModels
             if (extra != 0f)
             {
                 result.Add(extra, new TextObject("{=Jh6FdJFE}Highest title level"));
+            }
+
+            if (grantor.GetPerkValue(BKPerks.Instance.LordshipAccolade))
+            {
+                result.AddFactor(-0.15f, BKPerks.Instance.LordshipAccolade.Name);
             }
 
             return result;

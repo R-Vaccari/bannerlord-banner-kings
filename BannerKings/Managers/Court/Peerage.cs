@@ -2,6 +2,7 @@
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
+using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Managers.Court
 {
@@ -15,6 +16,7 @@ namespace BannerKings.Managers.Court
             CanStartElection = election;
             CanGrantKnighthood = knighthood;
             CanHaveFief = fiefs;
+            CanHaveCouncil = council;
             BoostsVotes = boostsVotes;
         }
 
@@ -42,13 +44,13 @@ namespace BannerKings.Managers.Court
             return new Peerage(new TextObject("{=!}No Peerage"), false, false, false, false, false, false);
         }
 
-        public TextObject Name { get; private set; }
-        public bool CanVote { get; private set; }
-        public bool CanStartElection { get; private set; }
-        public bool CanGrantKnighthood { get; private set; }
-        public bool CanHaveFief { get; private set; }
-        public bool CanHaveCouncil { get; private set; }
-        public bool BoostsVotes { get; private set; }
+        [SaveableProperty(1)] public TextObject Name { get; private set; }
+        [SaveableProperty(2)] public bool CanVote { get; private set; }
+        [SaveableProperty(3)] public bool CanStartElection { get; private set; }
+        [SaveableProperty(4)] public bool CanGrantKnighthood { get; private set; }
+        [SaveableProperty(5)] public bool CanHaveFief { get; private set; }
+        [SaveableProperty(6)] public bool CanHaveCouncil { get; private set; }
+        [SaveableProperty(7)] public bool BoostsVotes { get; private set; }
 
         public TextObject GetRights() => new TextObject("{=!}Voting Allowed: {VOTING}\nElections Allowed: {ELECTIONS}\nKnighthood Granting: {KNIGHT}\nFiefs Allowed: {FIEFS}\nCouncil Allowed: {COUNCIL}")
             .SetTextVariable("VOTING", GetStr(CanVote))

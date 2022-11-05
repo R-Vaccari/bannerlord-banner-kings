@@ -93,12 +93,6 @@ namespace BannerKings.Models.BKModels
                 action.Reason = new TextObject("{=Uw7dMzA4}No clan.");
                 return action;
             }
-            else if (actionTarget != clan.Leader)
-            {
-                action.Possible = false;
-                action.Reason = new TextObject("{=!}Not clan leader.");
-                return action;
-            }
 
             var candidates = GetGrantCandidates(action);
             if (!candidates.Contains(actionTarget))
@@ -352,7 +346,7 @@ namespace BannerKings.Models.BKModels
                 if (taxOffice > 0)
                 {
                     var taxType = ((BKTaxPolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(settlement, "tax")).Policy;
-                    BannerKingsConfig.Instance.TaxModel.AddVillagePopulationTaxes(ref result, estate.Nobles, estate.Craftsmen, 
+                    BannerKingsConfig.Instance.TaxModel.AddVillagePopulationTaxes(ref result, settlement, estate.Nobles, estate.Craftsmen, 
                         taxOffice, taxType);
                 }
             }

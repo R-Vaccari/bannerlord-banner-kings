@@ -23,6 +23,17 @@ namespace BannerKings.Managers
 
         [SaveableProperty(1)] private Dictionary<Clan, CouncilData> Councils { get; set; }
 
+        public void PostInitialize()
+        {
+            foreach (var council in Councils)
+            {
+                if (council.Value.Peerage == null)
+                {
+                    council.Value.SetPeerage(Peerage.GetAdequatePeerage(council.Key));
+                }
+            }
+        }
+
         public void ApplyCouncilEffect(ref ExplainedNumber result, Hero settlementOwner, CouncilPosition position,
             float maxEffect, bool factor)
         {
