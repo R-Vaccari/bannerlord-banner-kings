@@ -30,6 +30,7 @@ namespace BannerKings.Managers.Court
                 new(spiritual, CouncilPosition.Spiritual, clan)
             };
             royalMembers = new List<CouncilMember>();
+            Peerage = Peerage.GetAdequatePeerage(clan);
         }
 
         [SaveableProperty(1)] private Clan clan { get; set; }
@@ -37,6 +38,10 @@ namespace BannerKings.Managers.Court
         [SaveableProperty(2)] private List<CouncilMember> members { get; set; }
 
         [SaveableProperty(3)] private List<CouncilMember> royalMembers { get; set; }
+
+        [SaveableProperty(4)] public Peerage Peerage { get; private set; }
+
+        public void SetPeerage(Peerage peerage) => Peerage = peerage;
 
         public Hero Owner => clan.Leader;
 

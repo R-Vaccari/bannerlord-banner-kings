@@ -118,6 +118,7 @@ namespace BannerKings.Behaviours
                 BannerKingsConfig.Instance.InnovationsManager.PostInitialize();
                 BannerKingsConfig.Instance.ReligionsManager.PostInitialize();
                 BannerKingsConfig.Instance.GoalManager.PostInitialize();
+                BannerKingsConfig.Instance.CourtManager.PostInitialize();
             } 
             else
             {

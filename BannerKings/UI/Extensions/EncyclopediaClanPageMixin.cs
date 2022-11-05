@@ -208,6 +208,12 @@ namespace BannerKings.UI.Extensions
                         highestTitle));
                 }
 
+                if (council.Peerage != null)
+                {
+                    clanPageVM.ClanInfo.Add(new StringPairItemVM(new TextObject("{=!}Peerage:").ToString(),
+                        council.Peerage.Name.ToString(), new BasicTooltipViewModel(() => council.Peerage.GetRights().ToString())));
+                }
+
                 var income = BannerKingsConfig.Instance.ClanFinanceModel.CalculateClanIncome(clan, true);
                 clanPageVM.ClanInfo.Add(new StringPairItemVM(new TextObject("{=43UgU7C4}Income:").ToString(),
                     income.ResultNumber.ToString(), new BasicTooltipViewModel(() => income.GetExplanations())));
