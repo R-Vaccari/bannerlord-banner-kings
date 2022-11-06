@@ -17,7 +17,7 @@ namespace BannerKings.Managers.Populations
         {
             this.settlement = settlement;
             engines = new List<SiegeEngineType>();
-            InitManpowers();
+            Manpowers = new Dictionary<PopType, float>();
         }
 
         [SaveableProperty(1)] private Settlement settlement { get; set; }

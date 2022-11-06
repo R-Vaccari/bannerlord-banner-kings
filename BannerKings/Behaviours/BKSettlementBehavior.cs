@@ -257,8 +257,8 @@ namespace BannerKings.Behaviours
 
                     if (quantity < desiredAmounts[pair.Key])
                     {
-                        ItemObject item = (ItemObject)getItem.Invoke(behavior, new object[] { pair.Key, town });
-                        if (item != null)
+                        EquipmentElement item = (EquipmentElement)getItem.Invoke(behavior, new object[] { pair.Key, town });
+                        if (item.Item != null)
                         {
                             itemRoster.AddToCounts(item, 1);
                         }

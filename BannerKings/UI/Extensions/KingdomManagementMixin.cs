@@ -2,13 +2,14 @@
 using BannerKings.UI.Kingdoms;
 using Bannerlord.UIExtenderEx.Attributes;
 using Bannerlord.UIExtenderEx.ViewModels;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.ViewModelCollection.KingdomManagement;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
 namespace BannerKings.UI.Extensions
 {
-    [ViewModelMixin("SetSelectedCategory")]
+    [ViewModelMixin("RefreshValues")]
     internal class KingdomManagementMixin : BaseViewModelMixin<KingdomManagementVM>
     {
         private bool courtSelected, demesneSelected, demesneEnabled;
@@ -106,6 +107,46 @@ namespace BannerKings.UI.Extensions
 
         public override void OnRefresh()
         {
+            var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(Clan.PlayerClan);
+            if (council != null)
+            {
+                if (council.Peerage != null && !council.Peerage.CanStartElection)
+                {
+                    var policy = kingdomManagement.Policy;
+                    var diplomacy = kingdomManagement.Diplomacy;
+                    var clans = kingdomManagement.Clan;
+                    var fiefs = kingdomManagement.Settlement;
+
+                    var text = new TextObject("{=!}The Peerage of {CLAN} does not allow starting elections.")
+                        .SetTextVariable("CLAN", Clan.PlayerClan.Name);
+
+                    if (policy.CanProposeOrDisavowPolicy)
+                    {
+                        policy.DoneHint.HintText = text;
+                        policy.CanProposeOrDisavowPolicy = false;
+                    }
+                   
+                    if (diplomacy.IsActionEnabled)
+                    {
+                        diplomacy.ActionHint.HintText = text;
+                        diplomacy.IsActionEnabled = false;
+                    }
+                    
+                    if (clans.CanExpelCurrentClan)
+                    {
+                        clans.ExpelHint.HintText = text;
+                        clans.CanExpelCurrentClan = false;
+                    }
+                    
+                    if (fiefs.CanAnnexCurrentSettlement)
+                    {
+                        fiefs.AnnexHint.HintText = text;
+                        fiefs.CanAnnexCurrentSettlement = false;
+                    }
+                }
+            }
+
+
             Court.RefreshValues();
             Demesne?.RefreshValues();
             if (kingdomManagement.Clan.Show || kingdomManagement.Settlement.Show || kingdomManagement.Policy.Show ||

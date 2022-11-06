@@ -1,12 +1,10 @@
-﻿using BannerKings.Managers.Education;
-using BannerKings.Managers.Education.Lifestyles;
+﻿using BannerKings.Managers.Education.Lifestyles;
 using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles.Laws;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Party;
-using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.ObjectSystem;
@@ -15,9 +13,9 @@ namespace BannerKings.Models.Vanilla
 {
     public class BKPartyWageModel : DefaultPartyWageModel
     {
-        public override int GetCharacterWage(int tier)
+        public override int GetCharacterWage(CharacterObject character)
         {
-            var result = tier switch
+            var result = character.Tier switch
             {
                 0 => 3,
                 1 => 6,
@@ -117,7 +115,7 @@ namespace BannerKings.Models.Vanilla
         public override int GetTroopRecruitmentCost(CharacterObject troop, Hero buyerHero, bool withoutItemCost = false)
         {
             var result = new ExplainedNumber(base.GetTroopRecruitmentCost(troop, buyerHero, withoutItemCost) * 1.4f);
-            result.LimitMin(GetCharacterWage(troop.Tier) * 2f);
+            result.LimitMin(GetCharacterWage(troop) * 2f);
 
             if (buyerHero != null)
             {

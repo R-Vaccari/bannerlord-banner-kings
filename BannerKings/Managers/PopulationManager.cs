@@ -95,8 +95,7 @@ namespace BannerKings.Managers
                     return null;
                 }
 
-                InitializeSettlementPops(settlement);
-                return Populations[settlement];
+                return null;
             }
             catch (Exception ex)
             {
@@ -271,7 +270,7 @@ namespace BannerKings.Managers
             }
 
             var popQuantityRef = GetDesiredTotalPop(settlement);
-            var desiredTypes = GetDesiredPopTypes(settlement);
+            var desiredTypes = GetDesiredPopTypes(settlement, true);
             var classes = new List<PopulationClass>();
 
             var nobles = (int) (popQuantityRef *
@@ -326,15 +325,8 @@ namespace BannerKings.Managers
                                      || (settlement.IsVillage && settlement.Village != null)) &&
                 settlement.OwnerClan != null)
             {
-                if (!BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
-                {
-                    BannerKingsConfig.Instance.PopulationManager.InitializeSettlementPops(settlement);
-                }
-                else
-                {
-                    var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
-                    data.Update(null);
-                }
+                var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
+                data.Update(null);
             }
         }
 
@@ -389,11 +381,16 @@ namespace BannerKings.Managers
             return current - max;
         }
 
-        public static Dictionary<PopType, float[]> GetDesiredPopTypes(Settlement settlement)
+        public static Dictionary<PopType, float[]> GetDesiredPopTypes(Settlement settlement, bool firstTime = false)
         {
-            var nobleFactor = BannerKingsConfig.Instance.GrowthModel.CalculatePopulationClassDemand(settlement, PopType.Nobles).ResultNumber;
-            var slaveFactor = BannerKingsConfig.Instance.GrowthModel.CalculatePopulationClassDemand(settlement, PopType.Slaves).ResultNumber;
+            var nobleFactor = 1f;
+            var slaveFactor = 1f;
            
+            if (!firstTime)
+            {
+                nobleFactor = BannerKingsConfig.Instance.GrowthModel.CalculatePopulationClassDemand(settlement, PopType.Nobles).ResultNumber;
+                slaveFactor = BannerKingsConfig.Instance.GrowthModel.CalculatePopulationClassDemand(settlement, PopType.Slaves).ResultNumber;
+            }
 
             if (settlement.IsCastle)
             {

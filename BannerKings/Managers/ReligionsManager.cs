@@ -291,11 +291,17 @@ namespace BannerKings.Managers
                 return;
             }
 
-            var elements = Religions.Keys.ToList()
-                .Select(religion => new InquiryElement(religion, new TextObject("{=Eu97WkgX}{RELIGION} - {PIETY} piety").SetTextVariable("RELIGION", religion.Faith.GetFaithName())
-                    .SetTextVariable("PIETY", GetStartingPiety(religion))
-                    .ToString(), null, true, religion.Faith.GetFaithDescription().ToString()))
-                .ToList();
+            var elements = new List<InquiryElement>();
+            foreach (var religion in Religions.Keys)
+            {
+                elements.Add(new InquiryElement(religion, 
+                    new TextObject("{=Eu97WkgX}{RELIGION} - {PIETY} piety").SetTextVariable("RELIGION", religion.Faith.GetFaithName())
+                    .SetTextVariable("PIETY", GetStartingPiety(religion)).ToString(), 
+                    null, 
+                    true, 
+                    religion.Faith.GetFaithDescription().ToString()));
+            }
+                
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                 new TextObject("{=VrzR1ZzZ}Your faith").ToString(),

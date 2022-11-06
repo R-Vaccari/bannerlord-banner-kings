@@ -1,9 +1,9 @@
 ﻿using MCM.Abstractions.Attributes.v2;
 using MCM.Abstractions.Attributes;
 using TaleWorlds.Localization;
-using MCM.Abstractions.Settings.Base.Global;
-using MCM.Abstractions.Dropdown;
 using MCM.Abstractions.Attributes.v1;
+using MCM.Common;
+using MCM.Abstractions.Base.Global;
 
 namespace BannerKings.Settings
 {
@@ -22,7 +22,7 @@ namespace BannerKings.Settings
         public bool CloseRelativesNaming { get; set; } = true;
 
         [SettingPropertyDropdown("{=!}Title Honorifics", Order = 5, RequireRestart = false, HintText = "{=!}How lords with titles are named. Full titles Suffixed (Default): 'Firstname, Prince of TitleName'; Full titles: 'Prince FirstName of TitleName';  Title Prefixes: 'Prince TitleName'.")]
-        public DropdownDefault<SettingsOption> Naming { get; set; } = new DropdownDefault<SettingsOption>(new SettingsOption[]
+        public Dropdown<SettingsOption> Naming { get; set; } = new Dropdown<SettingsOption>(new SettingsOption[]
         {
             DefaultSettings.Instance.NamingFullTitlesSuffixed,
             DefaultSettings.Instance.NamingFullTitles,

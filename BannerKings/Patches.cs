@@ -20,6 +20,8 @@ using TaleWorlds.CampaignSystem.MapEvents;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.Settlements.Workshops;
+using TaleWorlds.CampaignSystem.ViewModelCollection;
+using TaleWorlds.CampaignSystem.ViewModelCollection.KingdomManagement.Policies;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -42,7 +44,7 @@ namespace BannerKings
             {
                 [HarmonyPostfix]
                 [HarmonyPatch("ApplyInternal", MethodType.Normal)]
-                private static void Postfix(MobileParty side1Party, Settlement settlement, Hero individual,
+                private static void ApplyInternalPostfix(MobileParty side1Party, Settlement settlement, Hero individual,
                     CharacterObject troop, int number, int bitCode, RecruitmentCampaignBehavior.RecruitingDetail detail)
                 {
                     if (settlement == null)
@@ -58,8 +60,8 @@ namespace BannerKings
                 }
 
                 [HarmonyPrefix]
-                [HarmonyPatch("ApplyInternal", MethodType.Normal)]
-                private static bool Prefix(Settlement settlement)
+                [HarmonyPatch("UpdateVolunteersOfNotablesInSettlement", MethodType.Normal)]
+                private static bool UpdateVolunteersPrefix(Settlement settlement)
                 {
                     if ((settlement.Town != null && !settlement.Town.InRebelliousState && settlement.Notables != null) || 
                         (settlement.IsVillage && !settlement.Village.Bound.Town.InRebelliousState))
@@ -70,7 +72,7 @@ namespace BannerKings
                             {
                                 bool flag = false;
                                 CharacterObject basicVolunteer = Campaign.Current.Models.VolunteerModel.GetBasicVolunteer(hero);
-                                for (int i = 0; i < BannerKingsSettings.Instance.VolunteersLimit; i++)
+                                for (int i = 0; i < hero.VolunteerTypes.Length; i++)
                                 {
                                     if (MBRandom.RandomFloat < Campaign.Current.Models.VolunteerModel.GetDailyVolunteerProductionProbability(hero, i, settlement))
                                     {
@@ -147,28 +149,34 @@ namespace BannerKings
             }
         }
 
-        namespace Perks
+        namespace Peerage
         {
-
-            [HarmonyPatch(typeof(DefaultSkillLevelingManager), "OnHeroHealedWhileWaiting")]
-            internal class OnHeroHealedWhileWaitingPatch
+            [HarmonyPatch(typeof(KingdomDecision), "DetermineSupporters")]
+            internal class DetermineSupportersPatch
             {
-                private static bool Prefix(DefaultSkillLevelingManager __instance, MobileParty mobileParty, int healingAmount)
+                private static bool Prefix(KingdomDecision __instance, ref IEnumerable<Supporter> __result)
                 {
-                    var num = (float)Campaign.Current.Models.PartyHealingModel.GetSkillXpFromHealingTroop(mobileParty.Party);
-                    var num2 = (mobileParty.CurrentSettlement != null && !mobileParty.CurrentSettlement.IsCastle) ? 0.2f : 0.1f;
-                    if (mobileParty.EffectiveSurgeon != null)
+                    var list = new List<Supporter>();
+                    foreach (Clan clan in __instance.Kingdom.Clans)
                     {
-                        var surgeon = (float)mobileParty.EffectiveSurgeon.Level;
-                        num *= (float)healingAmount * num2 * (1f + surgeon * 0.1f);
-
-                        AccessTools.Method(__instance.GetType(), "OnPartySkillExercised")
-                            .Invoke(null, new object[] { mobileParty, DefaultSkills.Medicine, num, SkillEffect.PerkRole.Surgeon });
+                        var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(clan);
+                        if (council != null && council.Peerage != null)
+                        {
+                            if (council.Peerage.CanVote)
+                            {
+                                list.Add(new Supporter(clan));
+                            }
+                        }
                     }
-                    
+
+                    __result = list;
                     return false;
                 }
             }
+        }
+
+        namespace Perks
+        {
 
             [HarmonyPatch(typeof(MapEventParty), "OnTroopKilled")]
             internal class NameGeneratorPatch
@@ -236,55 +244,40 @@ namespace BannerKings
                     EquipmentElement itemRosterElement, MobileParty tradingParty = null, bool isSelling = false,
                     PartyBase merchantParty = null)
                 {
-                    if (itemRosterElement.Item == null)
+                    if (itemRosterElement.Item == null || itemRosterElement.Item.ItemCategory == null)
                     {
                         __result = 0;
                     }
                     else
                     {
-                        var categoryData = __instance.GetCategoryData(itemRosterElement.Item.GetItemCategory());
+                        Dictionary<ItemCategory, ItemData> dictionary = (Dictionary<ItemCategory, ItemData>)AccessTools
+                            .Field(__instance.GetType(), "_itemDict")
+                            .GetValue(__instance);
+                        ItemData data;
+                        try
+                        {
+                            if (dictionary.ContainsKey(itemRosterElement.Item.ItemCategory))
+                            {
+                                data = dictionary[itemRosterElement.Item.ItemCategory];
+                            }
+                            else
+                            {
+                                data = default(ItemData);
+                            }
+
+                        } catch (NullReferenceException e)
+                        {
+                            data = default(ItemData);
+                        }
+
                         __result = Campaign.Current.Models.TradeItemPriceFactorModel.GetPrice(itemRosterElement,
-                            tradingParty, merchantParty, isSelling, categoryData.InStoreValue, categoryData.Supply,
-                            categoryData.Demand);
+                            tradingParty, merchantParty, isSelling, data.InStoreValue, data.Supply,
+                            data.Demand);
                     }
 
                     return false;
                 }
             }
-
-            /* [HarmonyPatch(typeof(KingdomDecision), "ShouldBeCancelled")]
-             class ShouldBeCancelledPatch
-             {
-                 static bool Prefix(KingdomDecision __instance, ref bool __result)
-                 {
-
-                     if (__instance is BKCouncilPositionDecision)
-                     {
-                         if (!__instance.IsAllowed())
-                         {
-                             __result = true;
-                             return false;
-                         }
-                         if (__instance.ProposerClan == Clan.PlayerClan)
-                         {
-                             __result = false;
-                             return false;
-                         }
-                         List<DecisionOutcome> list = __instance.NarrowDownCandidates(__instance.DetermineInitialCandidates().ToList<DecisionOutcome>(), 3);
-                         DecisionOutcome queriedDecisionOutcome = __instance.GetQueriedDecisionOutcome(list);
-                         __instance.DetermineSponsors(list);
-                         Supporter.SupportWeights supportWeights;
-                         DecisionOutcome decisionOutcome = __instance.DetermineSupportOption(new Supporter(__instance.ProposerClan), list, out supportWeights, true);
-                         bool flag = __instance.ProposerClan.Influence > (float)__instance.GetInfluenceCostOfSupport(__instance.ProposerClan, Supporter.SupportWeights.SlightlyFavor) * 1.5f;
-                         bool flag2 = list.Any((DecisionOutcome t) => t.SponsorClan != null && t.SponsorClan.IsEliminated);
-                         bool flag3 = supportWeights == Supporter.SupportWeights.StayNeutral || decisionOutcome == null;
-                         bool flag4 = decisionOutcome != queriedDecisionOutcome || (decisionOutcome == queriedDecisionOutcome && flag3);
-                         __result = flag2 || (list.Any((DecisionOutcome t) => t.SponsorClan == __instance.ProposerClan) && !flag);
-                         return false;
-                     }
-                     return true;
-                 }
-             } */
 
 
             [HarmonyPatch(typeof(Hero), nameof(Hero.CanHaveQuestsOrIssues))]
@@ -504,129 +497,36 @@ namespace BannerKings
 
                     return true;
                 }
-            }
-
-            /*[HarmonyPatch(typeof(WorkshopsCampaignBehavior), "GetRandomItemAux")]
-            internal class GetRandomItemAuxPatch
-            {
-                private static void Postfix(ref ItemObject __result, WorkshopsCampaignBehavior __instance, ItemCategory itemCategory, Town townComponent = null)
-                {
-
-                    if (__result == null && itemCategory != DefaultItemCategories.Unassigned)
-                    {
-
-                        Dictionary<ItemCategory, List<ItemObject>> dictionary = (Dictionary<ItemCategory, List<ItemObject>>)AccessTools
-                            .Field(__instance.GetType(), "_itemsInCategory").GetValue(__instance);
-
-                        List<ItemObject> list;
-                        if (!dictionary.TryGetValue(itemCategory, out list))
-                        {
-                            __result = null;
-                            return;
-                        }
-
-                        if (townComponent == null) 
-                        {
-                            __result = dictionary[itemCategory].GetRandomElement();
-                        }
-                        else
-                        {
-                            __result = dictionary[itemCategory].GetRandomElementWithPredicate(x => IsItemPreferredForTown(x, townComponent));
-                        }
-                    }
-                }
-
-                private static bool IsItemPreferredForTown(ItemObject item, Town townComponent)
-                {
-                    return item.Culture == null || item.Culture.StringId == "neutral_culture" || item.Culture == townComponent.Culture;
-                }
-            }
-
-            [HarmonyPatch(typeof(WorkshopsCampaignBehavior), "DetermineTownHasSufficientInputs")]
-            internal class DetermineTownHasSufficientInputsPatch
-            {
-                private static bool Prefix(ref bool __result, WorkshopType.Production production, Town town, out int inputMaterialCost)
-                {
-                    IEnumerable<ValueTuple<ItemCategory, int>> inputs = production.Inputs;
-                    inputMaterialCost = 0;
-                    foreach (ValueTuple<ItemCategory, int> valueTuple in inputs)
-                    {
-                        ItemCategory item = valueTuple.Item1;
-                        int necessaryAmount = valueTuple.Item2;
-                        int foundAmount = 0;
-
-                        ItemRoster itemRoster = town.Owner.ItemRoster;
-                        for (int i = 0; i < itemRoster.Count; i++)
-                        {
-                            ItemRosterElement itemAtIndex = itemRoster.GetElementCopyAtIndex(i);
-                            if (itemAtIndex.EquipmentElement.Item.ItemCategory == item)
-                            {
-                                int elementNumber = itemAtIndex.Amount;
-
-                                if (foundAmount < necessaryAmount)
-                                {
-                                    int diff = necessaryAmount - foundAmount;
-                                    int finalAmount = MathF.Min(diff, elementNumber);
-                                    foundAmount += finalAmount;
-
-                                    var factor = 1f;
-                                    var modifier = itemAtIndex.EquipmentElement.ItemModifier;
-                                    if (modifier != null)
-                                    {
-                                        factor = modifier.PriceMultiplier;
-                                    }
-
-                                    inputMaterialCost += (int)(town.GetItemPrice(itemAtIndex.EquipmentElement.Item) * finalAmount * factor);
-                                }
-
-                                if (foundAmount == necessaryAmount)
-                                {
-                                    break;
-                                }
-                            }
-                        }
-
-                        if (foundAmount < necessaryAmount)
-                        {
-                            __result = false;
-                            return false;
-                        }
-                    }
-
-                    __result = true;
-                    return false;
-                }
-            }*/
-            
+            }  
 
             [HarmonyPatch(typeof(WorkshopsCampaignBehavior), "ProduceOutput")]
             internal class WorkshopProduceOutputPatch
             {
-                private static bool Prefix(ItemObject outputItem, Town town, Workshop workshop, int count,
+                private static bool Prefix(EquipmentElement outputItem, Town town, Workshop workshop, int count,
                     bool doNotEffectCapital)
                 {
 
                     var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
-                    var category = outputItem.ItemCategory;
+                    var category = outputItem.Item.ItemCategory;
 
                     ItemModifierGroup modifierGroup = null;
-                    if (outputItem.ArmorComponent != null)
+                    if (outputItem.Item.ArmorComponent != null)
                     {
-                        modifierGroup = outputItem.ArmorComponent.ItemModifierGroup;
+                        modifierGroup = outputItem.Item.ArmorComponent.ItemModifierGroup;
                     }
-                    else if (outputItem.WeaponComponent != null)
+                    else if (outputItem.Item.WeaponComponent != null)
                     {
-                        modifierGroup = outputItem.WeaponComponent.ItemModifierGroup;
+                        modifierGroup = outputItem.Item.WeaponComponent.ItemModifierGroup;
                     }
-                    else if (outputItem.IsFood)
+                    else if (outputItem.Item.IsFood)
                     {
                         modifierGroup = Game.Current.ObjectManager.GetObject<ItemModifierGroup>("consumables");
                     }
-                    else if (outputItem.IsAnimal)
+                    else if (outputItem.Item.IsAnimal)
                     {
                         modifierGroup = Game.Current.ObjectManager.GetObject<ItemModifierGroup>("animals");
                     }
-                    else if (!outputItem.HasHorseComponent && category != DefaultItemCategories.Iron)
+                    else if (!outputItem.Item.HasHorseComponent && category != DefaultItemCategories.Iron)
                     {
                         modifierGroup = Game.Current.ObjectManager.GetObject<ItemModifierGroup>("goods");
                     }
@@ -645,13 +545,14 @@ namespace BannerKings
                     if (workshop.WorkshopType.StringId == "artisans")
                     {
                         count = (int)MathF.Max(1f, count + (data.GetTypeCount(PopType.Craftsmen) / 450f));
-                        if (outputItem.HasArmorComponent || outputItem.HasWeaponComponent || outputItem.HasSaddleComponent)
+                        if (outputItem.Item.HasArmorComponent || outputItem.Item.HasWeaponComponent || outputItem.Item.HasSaddleComponent)
                         {
                             count = (int)(count * 2f);
                         }
                     }
 
-                    var itemPrice = town.GetItemPrice(outputItem);
+
+                    var itemPrice = town.GetItemPrice(new EquipmentElement(outputItem));
                     int totalValue = 0;
                     for (int i = 0; i < count; i++)
                     {
@@ -664,7 +565,7 @@ namespace BannerKings
                                 itemPrice = (int)(itemPrice * modifier.PriceMultiplier);
                             }
                         }
-                        var element = new EquipmentElement(outputItem, modifier);
+                        var element = new EquipmentElement(outputItem.Item, modifier);
                         totalValue += itemPrice;
                         town.Owner.ItemRoster.AddToCounts(element, 1);
                     }
@@ -676,7 +577,7 @@ namespace BannerKings
                         town.ChangeGold(-num);
                     }
 
-                    CampaignEventDispatcher.Instance.OnItemProduced(outputItem, town.Owner.Settlement, count);
+                    CampaignEventDispatcher.Instance.OnItemProduced(outputItem.Item, town.Owner.Settlement, count);
                     return false;
                 }
             }

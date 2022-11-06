@@ -37,7 +37,7 @@ namespace BannerKings.Managers.Court
                 }
                 else
                 {
-                    return new Peerage(new TextObject("{=!}Knight Peerage"), true, false, false, false, true, true);
+                    return new Peerage(new TextObject("{=!}Lesser Peerage"), true, false, false, false, true, true);
                 }
             }
 

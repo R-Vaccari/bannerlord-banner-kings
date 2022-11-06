@@ -1,27 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <ItemModifierGroups>
-	<ItemModifierGroup id="goods">
-		<ItemModifier id="masterwork_goods" probability="1" />
-		<ItemModifier id="quality_goods" probability="6" />
-		<ItemModifier id="fine_goods" probability="18" />
-		<ItemModifier id="crude_goods" probability="25" />
-		<ItemModifier id="cracked_goods" probability="10" />
-		<ItemModifier id="no_modifier" probability="40" />
-	</ItemModifierGroup>
+	<ItemModifierGroup id="goods" no_modifier_loot_score="50"
+                     no_modifier_production_score="65"/>
 
-	<ItemModifierGroup id="consumables">
-		<ItemModifier id="quality_consumable" probability="7" />
-		<ItemModifier id="fine_consumable" probability="15" />
-		<ItemModifier id="poor_consumable" probability="18" />
-		<ItemModifier id="no_modifier" probability="60" />
-	</ItemModifierGroup>
+	<ItemModifierGroup id="consumables" no_modifier_loot_score="50"
+                     no_modifier_production_score="65"/>
 
-	<ItemModifierGroup id="animals">
-		<ItemModifier id="purebred_animal" probability="3" />
-		<ItemModifier id="strong_animal" probability="11" />
-		<ItemModifier id="stubborn_animal" probability="20" />
-		<ItemModifier id="anaemic_animal" probability="6" />
-		<ItemModifier id="no_modifier" probability="60" />
-	</ItemModifierGroup>
+	<ItemModifierGroup id="animals" no_modifier_loot_score="50" 
+					no_modifier_production_score="65" />
+
 </ItemModifierGroups>

@@ -355,6 +355,13 @@ namespace BannerKings.Behaviours
                 return;
             }
 
+            var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(clan);
+            if (council == null || council.Peerage == null || !council.Peerage.CanGrantKnighthood)
+            {
+                return;
+            }
+
+
             var clanTitles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(clan);
             var title = BannerKingsConfig.Instance.TitleManager.GetTitle(village);
             if (clanTitles.Count == 0 || title == null || !clanTitles.Contains(title) || title.deJure != clan.Leader)

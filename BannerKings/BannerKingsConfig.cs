@@ -14,6 +14,7 @@ using BannerKings.Managers.Policies;
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Villages;
 using BannerKings.Managers.Titles;
+using BannerKings.Managers.Titles.Laws;
 using BannerKings.Models;
 using BannerKings.Models.BKModels;
 using BannerKings.Models.Vanilla;
@@ -103,6 +104,7 @@ namespace BannerKings
             DefaultLanguages.Instance.Initialize();
             DefaultBookTypes.Instance.Initialize();
             DefaultLifestyles.Instance.Initialize();
+            DefaultDemesneLaws.Instance.Initialize();
 
             Models.Add(new BKCultureModel());
             Models.Add(new BKCultureAcceptanceModel());

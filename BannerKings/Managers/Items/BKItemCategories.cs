@@ -33,7 +33,7 @@ namespace BannerKings.Managers.Items
         public override void Initialize()
         {
             Book = Game.Current.ObjectManager.RegisterPresumedObject(new ItemCategory("book"));
-            Book.InitializeObject();
+            Book.InitializeObject(false, 0, 0);
 
             Apple = Game.Current.ObjectManager.RegisterPresumedObject(new ItemCategory("apple"));
             Apple.InitializeObject(true, 20, 0, ItemCategory.Property.BonusToFoodStores);

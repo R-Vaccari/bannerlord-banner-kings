@@ -126,7 +126,8 @@ namespace BannerKings.UI
             internal static void GetterPostfix(Hero __instance, ref TextObject __result)
             {
                 var namingSetting = BannerKingsSettings.Instance.Naming.SelectedValue;
-                if (__instance.IsLord && namingSetting != DefaultSettings.Instance.NamingNoTitles)
+                if (__instance.IsLord && namingSetting != DefaultSettings.Instance.NamingNoTitles &&
+                    BannerKingsConfig.Instance.TitleManager != null)
                 {
                     var kingdom = __instance.Clan?.Kingdom;
                     var title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(__instance);

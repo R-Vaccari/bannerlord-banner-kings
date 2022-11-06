@@ -349,7 +349,7 @@ namespace BannerKings.Behaviours
                 if (args.MenuContext.GameMenu.Progress != progress)
                 {
                     var settlement = Settlement.CurrentSettlement;
-                    float wage = Campaign.Current.Models.PartyWageModel.GetCharacterWage(3);
+                    float wage = 15;
                     wage *= settlement.Prosperity / 8000f;
                     actionGold += wage;
 
@@ -459,7 +459,7 @@ namespace BannerKings.Behaviours
                 if (args.MenuContext.GameMenu.Progress != progress)
                 {
                     var settlement = Settlement.CurrentSettlement;
-                    float wage = Campaign.Current.Models.PartyWageModel.GetCharacterWage(5);
+                    float wage = 38;
                     wage *= settlement.Prosperity / 8000f;
                     actionGold += wage;
 

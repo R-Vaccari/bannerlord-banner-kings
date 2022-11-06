@@ -106,7 +106,6 @@ namespace BannerKings
             BKPolicies.Instance.Initialize();
             DefaultInnovations.Instance.Initialize();
             BKBuildings.Instance.Initialize();
-            DefaultDemesneLaws.Instance.Initialize();
 
             UIManager.Instance.SetScreen(new BannerKingsScreen());
         }

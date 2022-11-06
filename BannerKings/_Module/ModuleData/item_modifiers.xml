@@ -2,19 +2,31 @@
 
 <ItemModifiers>
 
-	<ItemModifier id="masterwork_goods" name="{=8Tal0XIj}Masterwork {ITEMNAME}" price_factor="2.5" />
-	<ItemModifier id="quality_goods" name="{=bAdxUq7s}Quality {ITEMNAME}" price_factor="1.7" />
-	<ItemModifier id="fine_goods" name="{=xeb1b5PQ}Fine {ITEMNAME}" price_factor="1.3" />
-	<ItemModifier id="crude_goods" name="{=RwBOv1Mz}Crude {ITEMNAME}" price_factor="0.8" />
-	<ItemModifier id="cracked_goods" name="{=br0N6SSH}Cracked {ITEMNAME}" price_factor="0.4" />
+	<ItemModifier modifier_group="ItemModifierGroup.goods" id="masterwork_goods" name="{=8Tal0XIj}Masterwork {ITEMNAME}" price_factor="2.5" loot_drop_score="10"
+                production_drop_score="15" />
+	<ItemModifier modifier_group="ItemModifierGroup.goods" id="quality_goods" name="{=bAdxUq7s}Quality {ITEMNAME}" price_factor="1.7"  loot_drop_score="10"
+                production_drop_score="15"/>
+	<ItemModifier modifier_group="ItemModifierGroup.goods" id="fine_goods" name="{=xeb1b5PQ}Fine {ITEMNAME}" price_factor="1.3" loot_drop_score="10"
+                production_drop_score="15"/>
+	<ItemModifier modifier_group="ItemModifierGroup.goods" id="crude_goods" name="{=RwBOv1Mz}Crude {ITEMNAME}" price_factor="0.8" loot_drop_score="10"
+                production_drop_score="15"/>
+	<ItemModifier modifier_group="ItemModifierGroup.goods" id="cracked_goods" name="{=br0N6SSH}Cracked {ITEMNAME}" price_factor="0.4" loot_drop_score="10"
+                production_drop_score="15"/>
 
-	<ItemModifier id="quality_consumable" name="{=bAdxUq7s}Quality {ITEMNAME}" price_factor="1.4" />
-	<ItemModifier id="fine_consumable" name="{=xeb1b5PQ}Fine {ITEMNAME}" price_factor="1.2" />
-	<ItemModifier id="poor_consumable" name="{=bk_modifier_poor}Poor {ITEMNAME}" price_factor="0.7" />
+	<ItemModifier modifier_group="ItemModifierGroup.consumables" id="quality_consumable" name="{=bAdxUq7s}Quality {ITEMNAME}" price_factor="1.4" loot_drop_score="10"
+                production_drop_score="15"/>
+	<ItemModifier modifier_group="ItemModifierGroup.consumables" id="fine_consumable" name="{=xeb1b5PQ}Fine {ITEMNAME}" price_factor="1.2" loot_drop_score="10"
+                production_drop_score="15"/>
+	<ItemModifier modifier_group="ItemModifierGroup.consumables" id="poor_consumable" name="{=bk_modifier_poor}Poor {ITEMNAME}" price_factor="0.7" loot_drop_score="10"
+                production_drop_score="15"/>
 
-	<ItemModifier id="purebred_animal" name="{=bk_modifier_purebred}Purebred {ITEMNAME}" price_factor="1.5" />
-	<ItemModifier id="strong_animal" name="{=bk_modifier_strong}Strong {ITEMNAME}" price_factor="1.2" />
-	<ItemModifier id="stubborn_animal" name="{=bk_modifier_stubborn}Stubborn {ITEMNAME}" price_factor="0.8" />
-	<ItemModifier id="anaemic_animal" name="{=bk_modifier_anaemic}Anaemic {ITEMNAME}" price_factor="0.6" />
+	<ItemModifier modifier_group="ItemModifierGroup.animals" id="purebred_animal" name="{=bk_modifier_purebred}Purebred {ITEMNAME}" price_factor="1.5" loot_drop_score="10"
+                production_drop_score="15"/>
+	<ItemModifier modifier_group="ItemModifierGroup.animals" id="strong_animal" name="{=bk_modifier_strong}Strong {ITEMNAME}" price_factor="1.2" loot_drop_score="10"
+                production_drop_score="15"/>
+	<ItemModifier modifier_group="ItemModifierGroup.animals" id="stubborn_animal" name="{=bk_modifier_stubborn}Stubborn {ITEMNAME}" price_factor="0.8" loot_drop_score="10"
+                production_drop_score="15"/>
+	<ItemModifier modifier_group="ItemModifierGroup.animals" id="anaemic_animal" name="{=bk_modifier_anaemic}Anaemic {ITEMNAME}" price_factor="0.6" loot_drop_score="10"
+                production_drop_score="15"/>
 
 </ItemModifiers>
