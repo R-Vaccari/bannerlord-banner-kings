@@ -23,6 +23,9 @@ using TaleWorlds.CampaignSystem.Settlements.Workshops;
 using TaleWorlds.CampaignSystem.ViewModelCollection;
 using TaleWorlds.CampaignSystem.ViewModelCollection.KingdomManagement.Policies;
 using TaleWorlds.Core;
+using TaleWorlds.GauntletUI;
+using TaleWorlds.GauntletUI.BaseTypes;
+using TaleWorlds.GauntletUI.GamepadNavigation;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
@@ -231,6 +234,16 @@ namespace BannerKings
                     }
 
                     return true;
+                }
+            }
+
+            [HarmonyPatch(typeof(GauntletGamepadNavigationManager), "OnWidgetNavigationStatusChanged")]
+            internal class NavigationPatch
+            {
+                private static bool Prefix(GauntletGamepadNavigationManager __instance, EventManager source, Widget widget)
+                {
+
+                    return false;
                 }
             }
 
