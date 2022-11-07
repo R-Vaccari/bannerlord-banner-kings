@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using BannerKings.Managers.Court;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
 using HarmonyLib;
@@ -29,10 +30,32 @@ namespace BannerKings.Behaviours
             CampaignEvents.HeroPrisonerTaken.AddNonSerializedListener(this, OnHeroPrisonerTaken);
             CampaignEvents.OnHeroGetsBusyEvent.AddNonSerializedListener(this, OnHeroGetsBusy);
             CampaignEvents.HeroKilledEvent.AddNonSerializedListener(this, OnHeroKilled);
+            CampaignEvents.ClanChangedKingdom.AddNonSerializedListener(this, OnClanChangedKingdom);
         }
 
         public override void SyncData(IDataStore dataStore)
         {
+        }
+
+        private void OnClanChangedKingdom(Clan clan, Kingdom oldKingdom, Kingdom newKingdom, ChangeKingdomAction.ChangeKingdomActionDetail detail, bool showNotification = true)
+        {
+            if (newKingdom != null)
+            {
+                var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(clan);
+                if (council != null)
+                {
+                    if (council.Peerage == null || !council.Peerage.CanVote)
+                    {
+                        council.SetPeerage(new Peerage(new TextObject("{=!}Lesser Peerage"), 
+                            true, 
+                            false, 
+                            false, 
+                            false, 
+                            true, 
+                            true));
+                    }
+                }
+            }
         }
 
         private void OnHeroGetsBusy(Hero hero, HeroGetsBusyReasons heroGetsBusyReason)
