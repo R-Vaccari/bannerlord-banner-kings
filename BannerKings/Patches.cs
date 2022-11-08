@@ -626,7 +626,7 @@ namespace BannerKings
                 private static bool Prefix2(Hero hero, ref List<CharacterObject> __result)
                 {
                     List<CharacterObject> list = new List<CharacterObject>();
-                    for (int i = 0; i < BannerKingsSettings.Instance.VolunteersLimit; i++)
+                    for (int i = 0; i < hero.VolunteerTypes.Length; i++)
                     {
                         list.Add(hero.VolunteerTypes[i]);
                     }
