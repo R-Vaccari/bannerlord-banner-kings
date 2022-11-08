@@ -99,21 +99,25 @@ namespace BannerKings.Managers.Populations.Estates
                 }
             }
 
-            foreach (Hero notable in Settlement.Notables)
+            if (Settlement.Notables != null)
             {
-                if (notable.IsRuralNotable && !HeroHasEstate(notable))
+                foreach (Hero notable in Settlement.Notables)
                 {
-                    var vacantEstate = Estates.FirstOrDefault(x => x.Owner != null && x.Owner.IsDead && x.Owner.IsRuralNotable);
-                    if (vacantEstate != null)
+                    if (notable.IsRuralNotable && !HeroHasEstate(notable))
                     {
-                        InheritEstate(vacantEstate, notable);
-                    }
-                    else
-                    {
-                        Estates.Add(Estate.CreateNotableEstate(notable, data));
+                        var vacantEstate = Estates.FirstOrDefault(x => x.Owner != null && x.Owner.IsDead && x.Owner.IsRuralNotable);
+                        if (vacantEstate != null)
+                        {
+                            InheritEstate(vacantEstate, notable);
+                        }
+                        else
+                        {
+                            Estates.Add(Estate.CreateNotableEstate(notable, data));
+                        }
                     }
                 }
             }
+         
 
             if (Estates.Count < BannerKingsConfig.Instance.EstatesModel.CalculateEstatesMaximum(Settlement).ResultNumber)
             {

@@ -62,6 +62,7 @@ namespace BannerKings.Managers.Titles.Laws
                 yield return SlavesDomesticDuties;
                 yield return SlaveryStandard;
                 yield return SlaveryVlandia;
+                yield return SlaveryAserai;
                 yield return SlaveryManumission;
                 yield return DraftingHidage;
                 yield return DraftingFreeContracts;
@@ -89,39 +90,45 @@ namespace BannerKings.Managers.Titles.Laws
                 culture = faction.Culture;
             }
 
+            list.Add(NoblesTaxDuties.GetCopy());
+            list.Add(CraftsmenTaxDuties.GetCopy());
+            list.Add(SerfsAgricultureDuties.GetCopy());
+            list.Add(SlavesHardLabor.GetCopy());
+            
+
+            var slavery = SlaveryStandard.GetCopy();
+            list.Add(slavery);
+
             if (government == GovernmentType.Feudal)
             {
                 list.Add(DraftingVassalage.GetCopy());
+                list.Add(EstateTenureFeeTail.GetCopy());
 
                 if (culture != null)
                 {
                     if (culture.StringId == "vlandia")
                     {
+                        list.Remove(slavery);
                         list.Add(SlaveryVlandia.GetCopy());
                     }
 
                     if (culture.StringId == "aserai")
                     {
-
+                        list.Remove(slavery);
+                        list.Add(SlaveryAserai.GetCopy());
                     }
                 }
             } 
             else if (government == GovernmentType.Tribal)
             {
                 list.Add(DraftingHidage.GetCopy());
+                list.Add(EstateTenureAllodial.GetCopy());
             }
             else
             {
                 list.Add(DraftingFreeContracts.GetCopy());
+                list.Add(EstateTenureFeeTail.GetCopy());
             }
-
-
-
-            
-            list.Add(SlaveryStandard.GetCopy());
-            list.Add(SlavesHardLabor.GetCopy());
-            list.Add(SerfsAgricultureDuties.GetCopy());
-            list.Add(EstateTenureFeeTail.GetCopy());
 
             return list;
         }
