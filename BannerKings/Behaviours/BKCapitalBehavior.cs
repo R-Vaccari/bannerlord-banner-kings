@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.Core;
+using TaleWorlds.Localization;
 
 namespace BannerKings.Behaviours
 {
@@ -24,6 +26,31 @@ namespace BannerKings.Behaviours
             }
         }
 
+        public void ChangeCapital(Kingdom kingdom, Town town)
+        {
+            if (town.MapFaction == kingdom)
+            {
+                if (!capitals.ContainsKey(kingdom))
+                {
+                    capitals.Add(kingdom, town);
+                }
+                else
+                {
+                    capitals[kingdom] = town;
+                }
+
+                if (kingdom == Clan.PlayerClan.Kingdom)
+                {
+                    MBInformationManager.AddQuickInformation(new TextObject("{=!}{CAPITAL} is now the capital of {KINGDOM}")
+                        .SetTextVariable("CAPITAL", town.Name)
+                        .SetTextVariable("KINGDOM", kingdom.Name),
+                        0,
+                        null,
+                        "event:/ui/notification/kingdom_decision");
+                }
+            }
+        }
+
         public Town GetCapital(Kingdom kingdom)
         {
             if (kingdom == null)
@@ -43,17 +70,17 @@ namespace BannerKings.Behaviours
         {
             foreach (var kingdom in Kingdom.All)
             {
-                if (capitals.ContainsKey(kingdom))
+                if (!capitals.ContainsKey(kingdom))
                 {
                     var town = GetIdealCapital(kingdom);
                     if (town != null)
                     {
-                        capitals.Add(kingdom, town);
+                        ChangeCapital(kingdom, town);
                     }
                 }
                 else if (capitals[kingdom].MapFaction != kingdom)
                 {
-                    capitals[kingdom] = GetIdealCapital(kingdom);
+                    ChangeCapital(kingdom, GetIdealCapital(kingdom));
                 }
             }
         }
@@ -85,12 +112,12 @@ namespace BannerKings.Behaviours
 
                 if (town.StringId == GetCapitalId(kingdom))
                 {
-                    score += 1000f;
+                    score += 10000f;
                 }
 
                 candidates.Add(new(town, score));
             }
-
+            result = MBRandom.ChooseWeighted(candidates);
 
             return result;
         }

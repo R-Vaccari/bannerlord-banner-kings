@@ -152,7 +152,7 @@ namespace BannerKings.Models.BKModels
                     {
                         list.AddRange(GetInheritanceCandidates(currentLeader));
                     }
-                    else
+                    else if (clan != currentLeader.Clan)
                     {
                         list.Add(clan.Leader);
                     }
