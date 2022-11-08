@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using BannerKings.Utils;
+using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -85,44 +86,56 @@ namespace BannerKings.Managers.Populations.Estates
 
         internal override void Update(PopulationData data = null)
         {
-            foreach (Estate estate in Estates)
+            ExceptionUtils.TryCatch(() =>
             {
-                if (estate.IsDisabled) 
+                var dead = new List<Estate>();
+                foreach (Estate estate in Estates)
                 {
-                    continue;
+                    if (estate.IsDisabled)
+                    {
+                        continue;
+                    }
+
+                    estate.Tick(data);
+                    if (estate.Owner.IsDead)
+                    {
+                        dead.Add(estate);
+                    }
                 }
 
-                estate.Tick(data);
-                if (estate.Owner.IsDead)
+                foreach (var estate in dead)
                 {
                     InheritEstate(estate);
                 }
-            }
 
-            if (Settlement.Notables != null)
-            {
-                foreach (Hero notable in Settlement.Notables)
+                if (Settlement.Notables != null)
                 {
-                    if (notable.IsRuralNotable && !HeroHasEstate(notable))
+                    foreach (Hero notable in Settlement.Notables)
                     {
-                        var vacantEstate = Estates.FirstOrDefault(x => x.Owner != null && x.Owner.IsDead && x.Owner.IsRuralNotable);
-                        if (vacantEstate != null)
+                        if (notable.IsRuralNotable && !HeroHasEstate(notable))
                         {
-                            InheritEstate(vacantEstate, notable);
-                        }
-                        else
-                        {
-                            Estates.Add(Estate.CreateNotableEstate(notable, data));
+                            var vacantEstate = Estates.FirstOrDefault(x => x.Owner != null && x.Owner.IsDead && x.Owner.IsRuralNotable);
+                            if (vacantEstate != null)
+                            {
+                                InheritEstate(vacantEstate, notable);
+                            }
+                            else
+                            {
+                                Estates.Add(Estate.CreateNotableEstate(notable, data));
+                            }
                         }
                     }
                 }
-            }
-         
 
-            if (Estates.Count < BannerKingsConfig.Instance.EstatesModel.CalculateEstatesMaximum(Settlement).ResultNumber)
-            {
-                Estates.Add(Estate.CreateNotableEstate(null, data));
-            }
+
+                if (Estates.Count < BannerKingsConfig.Instance.EstatesModel.CalculateEstatesMaximum(Settlement).ResultNumber)
+                {
+                    Estates.Add(Estate.CreateNotableEstate(null, data));
+                }
+            }, 
+            this.GetType().Name,
+            false);
+           
         }
     }
 }
