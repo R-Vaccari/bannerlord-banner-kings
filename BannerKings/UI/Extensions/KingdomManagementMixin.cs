@@ -1,4 +1,5 @@
-﻿using BannerKings.UI.Court;
+﻿using BannerKings.Behaviours;
+using BannerKings.UI.Court;
 using BannerKings.UI.Kingdoms;
 using Bannerlord.UIExtenderEx.Attributes;
 using Bannerlord.UIExtenderEx.ViewModels;
@@ -12,7 +13,7 @@ namespace BannerKings.UI.Extensions
     [ViewModelMixin("RefreshValues")]
     internal class KingdomManagementMixin : BaseViewModelMixin<KingdomManagementVM>
     {
-        private bool courtSelected, demesneSelected, demesneEnabled;
+        private bool courtSelected, courtEnabled, demesneSelected, demesneEnabled;
         private CourtVM courtVM;
         private KingdomDemesneVM demesneVM;
         private readonly KingdomManagementVM kingdomManagement;
@@ -28,10 +29,13 @@ namespace BannerKings.UI.Extensions
             {
                 demesneVM = new KingdomDemesneVM(title, vm.Kingdom);
             }
+
+            var capital = Campaign.Current.GetCampaignBehavior<BKCapitalBehavior>().GetCapital(vm.Kingdom);
+            CourtEnabled = capital != null;
         }
 
 
-        [DataSourceProperty] public string DemesneText => new TextObject("{=rktknNYe}Crown Demesne").ToString();
+        [DataSourceProperty] public string DemesneText => new TextObject("{=6QMDGRSt}Demesne").ToString();
 
         [DataSourceProperty] public string CourtText => new TextObject("{=2QGyA46m}Court").ToString();
 
@@ -58,6 +62,20 @@ namespace BannerKings.UI.Extensions
                 if (value != demesneEnabled)
                 {
                     demesneEnabled = value;
+                    ViewModel!.OnPropertyChangedWithValue(value);
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public bool CourtEnabled
+        {
+            get => courtEnabled;
+            set
+            {
+                if (value != courtEnabled)
+                {
+                    courtEnabled = value;
                     ViewModel!.OnPropertyChangedWithValue(value);
                 }
             }
