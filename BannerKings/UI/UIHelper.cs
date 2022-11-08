@@ -523,7 +523,6 @@ namespace BannerKings.UI
             TooltipAddEmptyLine(list);
             list.Add(new TooltipProperty(new TextObject("{=!}Score").ToString(), " ", 0));
             TooltipAddSeperator(list);
-            list.Add(new TooltipProperty(new TextObject("{=!}Total").ToString(), score.ResultNumber.ToString("0.00"), 0));
             list.Add(new TooltipProperty(score.GetExplanations(), string.Empty, 0));
 
 

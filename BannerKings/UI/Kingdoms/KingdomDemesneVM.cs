@@ -54,25 +54,24 @@ namespace BannerKings.UI.Kingdoms
             {
                 var explanation = BannerKingsConfig.Instance.TitleModel.GetSuccessionHeirScore(Kingdom.Leader, hero, Title.contract, true);
                 explanations.Add(hero, explanation);
-
-                if (explanation.ResultNumber > maxScore)
-                {
-                    MainHeir = new HeirVM(hero, explanation);
-                }
             }
 
             var sorted = (from x in explanations
                          orderby x.Value.ResultNumber descending
-                         select x).Take(5);
-            foreach (var pair in sorted)
-            {
-                var hero = pair.Key;
-                if (hero == MainHeir.Hero)
-                {
-                    continue;
-                }
+                         select x).Take(6);
 
-                Heirs.Add(new HeirVM(hero, explanations[hero]));
+            for (int i = 0; i < sorted.Count(); i++)
+            {
+                var hero = sorted.ElementAt(i).Key;
+                var exp = sorted.ElementAt(i).Value;
+                if (i == 0)
+                {
+                    MainHeir = new HeirVM(hero, exp);
+                }
+                else
+                {
+                    Heirs.Add(new HeirVM(hero, exp));
+                }
             }
         }
 
