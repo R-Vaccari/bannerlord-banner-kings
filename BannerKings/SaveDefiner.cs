@@ -204,7 +204,7 @@ namespace BannerKings
             ConstructContainerDefinition(typeof(List<DemesneLaw>));
             ConstructContainerDefinition(typeof(List<Estate>));
             ConstructContainerDefinition(typeof(Dictionary<PopType, float>));
-
+            ConstructContainerDefinition(typeof(Dictionary<Kingdom, Town>));
         }
     }
 }

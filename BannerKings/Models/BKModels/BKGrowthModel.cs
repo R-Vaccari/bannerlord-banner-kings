@@ -1,3 +1,4 @@
+using BannerKings.Behaviours;
 using BannerKings.Extensions;
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Titles.Laws;
@@ -84,6 +85,12 @@ namespace BannerKings.Models.BKModels
                 }
 
                 result.Add(settlement.Prosperity / 5f, GameTexts.FindText("str_map_tooltip_prosperity"));
+
+                var capital = Campaign.Current.GetCampaignBehavior<BKCapitalBehavior>().GetCapital(town.OwnerClan.Kingdom);
+                if (capital == town)
+                {
+                    result.AddFactor(0.4f, new TextObject("{=!}Capital"));
+                }
             }
 
 

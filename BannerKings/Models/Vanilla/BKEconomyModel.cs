@@ -1,3 +1,4 @@
+using BannerKings.Behaviours;
 using BannerKings.Managers.Court;
 using BannerKings.Managers.Innovations;
 using BannerKings.Managers.Policies;
@@ -194,6 +195,28 @@ namespace BannerKings.Models.Vanilla
 
             BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref result, settlement.OwnerClan.Leader,
                 CouncilPosition.Steward, 0.15f, true);
+
+            if (settlement.Town != null)
+            {
+                if (settlement.Town.Gold < 50000)
+                {
+                    float factor = MathF.Clamp(-1f + (settlement.Town.Gold * 0.00001f), -1f, -0.5f);
+                    result.AddFactor(factor, new TextObject("{=!}Market gold"));
+                }
+                else if (settlement.Town.Gold >= 1000000)
+                {
+                    float factor = MathF.Clamp(settlement.Town.Gold / 10000000f, 0.1f, 0.5f);
+                    result.AddFactor(factor, new TextObject("{=!}Market gold"));
+                }
+                
+                var capital = Campaign.Current.GetCampaignBehavior<BKCapitalBehavior>().GetCapital(settlement.OwnerClan.Kingdom);
+                if (capital == settlement.Town)
+                {
+                    result.AddFactor(0.4f, new TextObject("{=!}Capital"));
+                }
+            }
+           
+
             return result;
         }
 
