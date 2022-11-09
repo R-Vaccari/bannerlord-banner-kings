@@ -10,6 +10,7 @@ using System.Numerics;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
+using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using static BannerKings.Managers.PopulationManager;
 using static BannerKings.Managers.Populations.Estates.Estate;
@@ -261,7 +262,6 @@ namespace BannerKings.Models.BKModels
             }
 
             result.Add(factor, new TextObject("{=L7QhNa6a}Tax policy"));
-
             return result;
         }
 
@@ -269,17 +269,18 @@ namespace BannerKings.Models.BKModels
         public ExplainedNumber CalculateEstateProduction(Estate estate, bool explanations = false)
         {
             var result = new ExplainedNumber(0f, explanations);
+            result.LimitMin(0f);
 
             var settlement = estate.EstatesData.Settlement;
             if (settlement.IsVillage)
             {
                 var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(estate.EstatesData.Settlement);
-                float proportion = estate.AvailableWorkForce / (float)(data.GetTypeCount(PopType.Slaves) + data.GetTypeCount(PopType.Serfs));
+                float proportion = MathF.Clamp(estate.AvailableWorkForce / (float)(data.GetTypeCount(PopType.Slaves) + data.GetTypeCount(PopType.Serfs)), 
+                    0f, 1f);
                 float production = BannerKingsConfig.Instance.VillageProductionModel.CalculateProductionsExplained(settlement.Village).ResultNumber;
 
                 result.Add(production * proportion, new TextObject("{=!}Total production proportion"));
             }
-           
 
             return result;
         }
@@ -333,6 +334,7 @@ namespace BannerKings.Models.BKModels
         public ExplainedNumber CalculateEstateIncome(Estate estate, bool explanations = false)
         {
             var result = new ExplainedNumber(0f, explanations);
+            result.LimitMin(0f);
 
             var settlement = estate.EstatesData.Settlement;
             if (settlement.IsVillage)
@@ -359,7 +361,7 @@ namespace BannerKings.Models.BKModels
             float serfs = data.GetTypeCount(Managers.PopulationManager.PopType.Serfs);
             float slaves = data.GetTypeCount(Managers.PopulationManager.PopType.Slaves);
 
-            return (estate.Serfs + estate.Slaves) / (serfs + slaves);
+            return MathF.Clamp((estate.Serfs + estate.Slaves) / (serfs + slaves), 0f, 1f);
         }
     }
 }

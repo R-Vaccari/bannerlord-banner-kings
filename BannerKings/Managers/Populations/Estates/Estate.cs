@@ -1,6 +1,4 @@
 ﻿using BannerKings.Extensions;
-using BannerKings.Managers.Policies;
-using BannerKings.Managers.Titles.Laws;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
@@ -89,7 +87,8 @@ namespace BannerKings.Managers.Populations.Estates
 
         public ExplainedNumber Production => BannerKingsConfig.Instance.EstatesModel.CalculateEstateProduction(this, true);
 
-        public int Population => Nobles + Craftsmen + Serfs + Slaves;
+        public int Population => (int)(MathF.Max(Nobles, 0) + MathF.Max(Craftsmen, 0) +
+            MathF.Max(Serfs, 0) + MathF.Max(Slaves, 0));
 
         public int AvailableWorkForce
         {
@@ -140,9 +139,65 @@ namespace BannerKings.Managers.Populations.Estates
 
         [SaveableProperty(10)] public EstateDuty Duty { get; private set; }
         [SaveableProperty(11)] public EstateTask Task { get; private set; }
+        [SaveableProperty(12)] private Dictionary<PopType, float> Manpowers { get; set; }
+
+        public int GetTypeCount(PopType type)
+        {
+            if (type == PopType.Serfs)
+            {
+                return Serfs;
+            }
+            else if (type == PopType.Slaves)
+            {
+                return Slaves;
+            }
+            else if (type == PopType.Nobles)
+            {
+                return Nobles;
+            }
+            else return Craftsmen;
+        }
+
+        public int GetManpower(PopType type)
+        {
+            if (Manpowers == null)
+            {
+                Manpowers = new Dictionary<PopType, float>();
+            }
+
+            int result = 0;
+            if (Manpowers.ContainsKey(type))
+            {
+                result = (int)Manpowers[type];
+            }
+
+            return result;
+        }
+
+        public void AddManpower(PopType type, float count)
+        {
+            if (Manpowers == null)
+            {
+                Manpowers = new Dictionary<PopType, float>();
+            }
+
+            if (!Manpowers.ContainsKey(type))
+            {
+                Manpowers.Add(type, count);
+            }
+            else
+            {
+                Manpowers[type] += count;
+            }
+        }
 
         public void Tick(PopulationData data)
         {
+            if (Manpowers == null)
+            {
+                Manpowers = new Dictionary<PopType, float>(); 
+            }
+
             if (IsDisabled)
             {
                 return;
@@ -186,18 +241,22 @@ namespace BannerKings.Managers.Populations.Estates
             if (type == PopType.Nobles)
             {
                 Nobles += toAdd;
+                Nobles = MathF.Max(toAdd, Nobles);
             }
             else if (type == PopType.Craftsmen)
             {
                 Craftsmen += toAdd;
+                Craftsmen = MathF.Max(toAdd, Craftsmen);
             }
             else if (type == PopType.Serfs)
             {
                 Serfs += toAdd;
+                Serfs = MathF.Max(toAdd, Serfs);
             }
             else if (type == PopType.Slaves)
             {
                 Slaves += toAdd;
+                Slaves = MathF.Max(toAdd, Slaves);
             }
         }
 

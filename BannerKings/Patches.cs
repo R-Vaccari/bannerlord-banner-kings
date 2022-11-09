@@ -5,7 +5,6 @@ using System.Reflection;
 using BannerKings.Extensions;
 using BannerKings.Managers.Helpers;
 using BannerKings.Managers.Skills;
-using BannerKings.Settings;
 using HarmonyLib;
 using Helpers;
 using TaleWorlds.CampaignSystem;
@@ -20,8 +19,6 @@ using TaleWorlds.CampaignSystem.MapEvents;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.Settlements.Workshops;
-using TaleWorlds.CampaignSystem.ViewModelCollection;
-using TaleWorlds.CampaignSystem.ViewModelCollection.KingdomManagement.Policies;
 using TaleWorlds.Core;
 using TaleWorlds.GauntletUI;
 using TaleWorlds.GauntletUI.BaseTypes;
@@ -55,10 +52,10 @@ namespace BannerKings
                         return;
                     }
 
-                    if (BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
+                    var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
+                    if (data != null)
                     {
-                        var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
-                        data.MilitaryData.DeduceManpower(data, number, troop);
+                        data.MilitaryData.DeduceManpower(data, number, troop, individual);
                     }
                 }
 
@@ -69,12 +66,19 @@ namespace BannerKings
                     if ((settlement.Town != null && !settlement.Town.InRebelliousState && settlement.Notables != null) || 
                         (settlement.IsVillage && !settlement.Village.Bound.Town.InRebelliousState))
                     {
+                        var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
                         foreach (Hero hero in settlement.Notables)
                         {
                             if (hero.CanHaveRecruits)
                             {
                                 bool flag = false;
                                 CharacterObject basicVolunteer = Campaign.Current.Models.VolunteerModel.GetBasicVolunteer(hero);
+                                if (data.MilitaryData.GetNotableManpower(data.MilitaryData.GetCharacterManpowerType(basicVolunteer),
+                                    hero, data.EstateData) < 1f)
+                                {
+                                    continue;
+                                }
+
                                 for (int i = 0; i < hero.VolunteerTypes.Length; i++)
                                 {
                                     if (MBRandom.RandomFloat < Campaign.Current.Models.VolunteerModel.GetDailyVolunteerProductionProbability(hero, i, settlement))
@@ -801,6 +805,10 @@ namespace BannerKings
                                 float remainder = mobileParty.PartyTradeGold - tax;
                                 mobileParty.HomeSettlement.Village.ChangeGold((int) (remainder * 0.5f));
                                 mobileParty.PartyTradeGold = 0;
+                                if (mobileParty.HomeSettlement.Village.TradeTaxAccumulated < 0)
+                                {
+                                    mobileParty.HomeSettlement.Village.TradeTaxAccumulated = 0;
+                                }
                                 mobileParty.HomeSettlement.Village.TradeTaxAccumulated += tax;
                             }
 

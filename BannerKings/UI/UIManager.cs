@@ -389,7 +389,8 @@ namespace BannerKings.UI
                         recruitVolunteerTroopVM.Owner.OwnerHero.VolunteerTypes[recruitVolunteerTroopVM.Index] = null;
                         MobileParty.MainParty.MemberRoster.AddToCounts(recruitVolunteerTroopVM.Character, 1);
                         CampaignEventDispatcher.Instance.OnUnitRecruited(recruitVolunteerTroopVM.Character, 1);
-                        data.MilitaryData.DeduceManpower(data, 1, recruitVolunteerTroopVM.Character);
+                        data.MilitaryData.DeduceManpower(data, 1, recruitVolunteerTroopVM.Character,
+                            recruitVolunteerTroopVM.Owner.OwnerHero);
                         GiveGoldAction.ApplyBetweenCharacters(Hero.MainHero, recruitVolunteerTroopVM.Owner.OwnerHero,
                             recruitVolunteerTroopVM.Cost, true);
                     }

@@ -9,6 +9,7 @@ using BannerKings.Managers.Populations.Villages;
 using BannerKings.Managers.Titles;
 using BannerKings.Managers.Titles.Laws;
 using BannerKings.Models.BKModels;
+using BannerKings.Settings;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.GameComponents;
@@ -187,12 +188,20 @@ namespace BannerKings.Models.Vanilla
         public ExplainedNumber CalculateVillageTaxFromIncome(Village village)
         {
             var result = new ExplainedNumber(0f, true);
+            result.LimitMin(0f);
+            result.LimitMax(10000f);
             if (village.VillageState is Village.VillageStates.Looted or Village.VillageStates.BeingRaided)
             {
                 return result;
             }
 
-            result.Add(village.TradeTaxAccumulated, new TextObject("{=!}Production sold by villagers"));
+            float factor = 1f;
+            if (BannerKingsSettings.Instance.VillageTaxReserves)
+            {
+                factor = 0.8f;
+            }
+
+            result.Add(village.TradeTaxAccumulated * factor, new TextObject("{=!}Production sold by villagers"));
 
             var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(village.Settlement);
             if (data != null && data.VillageData != null && data.EstateData != null)

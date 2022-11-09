@@ -7,6 +7,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.Settlements.Buildings;
 using TaleWorlds.Core;
+using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using static BannerKings.Managers.Policies.BKDraftPolicy;
 using static BannerKings.Managers.PopulationManager;
@@ -188,6 +189,7 @@ namespace BannerKings.Models.BKModels
         public ExplainedNumber CalculateSlavePrice(Settlement settlement, bool explanations = false)
         {
             var result = new ExplainedNumber(150f, explanations);
+            result.LimitMin(0f);
 
             result.AddFactor(CalculatePopulationClassDemand(settlement, PopType.Slaves).ResultNumber - 1f,
                 new TextObject("{=!}{FACTION} demand")
@@ -195,7 +197,7 @@ namespace BannerKings.Models.BKModels
 
             var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
             var dic = GetDesiredPopTypes(settlement);
-            float fraction = data.GetCurrentTypeFraction(PopType.Slaves);
+            float fraction = MathF.Clamp(data.GetCurrentTypeFraction(PopType.Slaves), 0f, 1f);
             float medium = (dic[PopType.Slaves][0] + dic[PopType.Slaves][1]) / 2f;
 
             result.AddFactor(medium - fraction, new TextObject("{=!}Local demand"));
