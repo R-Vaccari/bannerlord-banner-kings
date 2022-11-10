@@ -44,15 +44,28 @@ namespace BannerKings.Behaviours
                 var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(clan);
                 if (council != null)
                 {
-                    if (council.Peerage == null || !council.Peerage.CanVote)
+
+                    if (detail == ChangeKingdomAction.ChangeKingdomActionDetail.JoinKingdom)
                     {
-                        council.SetPeerage(new Peerage(new TextObject("{=!}Lesser Peerage"), 
-                            true, 
-                            false, 
-                            false, 
-                            false, 
-                            true, 
-                            true));
+                        if (council.Peerage == null || !council.Peerage.CanVote)
+                        {
+                            council.SetPeerage(new Peerage(new TextObject("{=!}Lesser Peerage"),
+                                true,
+                                false,
+                                false,
+                                false,
+                                true,
+                                true));
+                        }
+                    }
+
+                    if (detail == ChangeKingdomAction.ChangeKingdomActionDetail.CreateKingdom)
+                    {
+                        if (council.Peerage == null || !council.Peerage.CanStartElection)
+                        {
+                            council.SetPeerage(new Peerage(new TextObject("{=!}Full Peerage"), true, 
+                                true, true, true, true, false));
+                        }
                     }
                 }
             }

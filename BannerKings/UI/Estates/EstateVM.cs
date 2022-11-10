@@ -21,10 +21,10 @@ namespace BannerKings.UI.Estates
         private MBBindingList<TownManagementDescriptionItemVM> mainInfo;
         private MBBindingList<MBBindingList<InformationElement>> extraInfos;
         private ImageIdentifierVM imageIdentifier;
-        private SelectorVM<BKItemVM> taskSelector, dutySelector;
+        private BannerKingsSelectorVM<BKItemVM> taskSelector, dutySelector;
         private EstateAction grantAction, buyAction, reclaimAction;
         private HintViewModel buyHint, grantHint, reclaimHint;
-        private bool playerOwned, dutyEnabled;
+        private bool playerOwned, dutyEnabled, buyVisible, grantVisible, reclaimVisible;
 
         public EstateVM(Estate estate, PopulationData data) : base(data, true)
         {
@@ -95,7 +95,7 @@ namespace BannerKings.UI.Estates
 
             PlayerOwned = Estate.Owner == Hero.MainHero && !IsDisabled;
 
-            TaskSelector = new SelectorVM<BKItemVM>(0, OnTaskChange);
+            TaskSelector = new BannerKingsSelectorVM<BKItemVM>(PlayerOwned, 0, OnTaskChange);
             TaskSelector.AddItem(new BKItemVM(EstateTask.Prodution, true, "",
                 GameTexts.FindText("str_bk_estate_task", EstateTask.Prodution.ToString())));
 
@@ -118,7 +118,7 @@ namespace BannerKings.UI.Estates
             }
             
 
-            DutySelector = new SelectorVM<BKItemVM>(0, OnDutyChange);
+            DutySelector = new BannerKingsSelectorVM<BKItemVM>(DutyEnabled, 0, OnDutyChange);
             DutySelector.AddItem(new BKItemVM(EstateDuty.Taxation, true, "",
                 GameTexts.FindText("str_bk_estate_duty", EstateDuty.Taxation.ToString())));
 
@@ -196,12 +196,17 @@ namespace BannerKings.UI.Estates
         private void RefreshActions()
         {
             buyAction = BannerKingsConfig.Instance.EstatesModel.GetBuy(Estate, Hero.MainHero);
+            BuyVisible = !PlayerOwned;
             BuyHint = new HintViewModel(new TextObject("{=!}Acquire this property as your own.\n\n{REASON}")
                 .SetTextVariable("REASON", buyAction.Reason));
 
- 
-            GrantHint = new HintViewModel(new TextObject("{=!}Grant this property to someone. To grant it, you must be it's legal and actual owner. Estates may be granted to companions, making them Sargeants, or to other noble houses.\n\n{REASON}")
-                .SetTextVariable("REASON", buyAction.Reason));
+            GrantVisible = PlayerOwned;
+            GrantHint = new HintViewModel(new TextObject("{=!}Grant this property to someone. To grant it, you must be it's legal and actual owner. Estates may be used to knight companions by talking to them, or gifted to other noble houses."));
+
+            var settlement = Estate.EstatesData.Settlement;
+            var title = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement);
+            ReclaimVisible = Estate.Owner != null && Hero.MainHero == title.deJure && settlement.MapFaction == Hero.MainHero.MapFaction &&
+                Estate.Owner.MapFaction != Hero.MainHero.MapFaction;
 
         }
 
@@ -238,7 +243,7 @@ namespace BannerKings.UI.Estates
 
 
         [DataSourceProperty]
-        public SelectorVM<BKItemVM> TaskSelector
+        public BannerKingsSelectorVM<BKItemVM> TaskSelector
         {
             get => taskSelector;
             set
@@ -252,7 +257,7 @@ namespace BannerKings.UI.Estates
         }
 
         [DataSourceProperty]
-        public SelectorVM<BKItemVM> DutySelector
+        public BannerKingsSelectorVM<BKItemVM> DutySelector
         {
             get => dutySelector;
             set
@@ -290,6 +295,48 @@ namespace BannerKings.UI.Estates
                 {
                     dutyEnabled = value;
                     OnPropertyChanged("DutyEnabled");
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public bool BuyVisible
+        {
+            get => buyVisible;
+            set
+            {
+                if (value != buyVisible)
+                {
+                    buyVisible = value;
+                    OnPropertyChanged("BuyVisible");
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public bool GrantVisible
+        {
+            get => grantVisible;
+            set
+            {
+                if (value != grantVisible)
+                {
+                    grantVisible = value;
+                    OnPropertyChanged("GrantVisible");
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public bool ReclaimVisible
+        {
+            get => reclaimVisible;
+            set
+            {
+                if (value != reclaimVisible)
+                {
+                    reclaimVisible = value;
+                    OnPropertyChanged("ReclaimVisible");
                 }
             }
         }
