@@ -253,8 +253,10 @@ namespace BannerKings.Models.Vanilla
                 }
             }
 
-
-            CalculateDueTax(BannerKingsConfig.Instance.PopulationManager.GetPopData(village.Settlement),(float)result.ResultNumber);
+            if (data != null)
+            {
+                CalculateDueTax(data, (float)result.ResultNumber);
+            }
 
             var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(village.Settlement.OwnerClan);
             if (council != null)
