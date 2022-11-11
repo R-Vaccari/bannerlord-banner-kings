@@ -19,6 +19,8 @@ using TaleWorlds.CampaignSystem.MapEvents;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.Settlements.Workshops;
+using TaleWorlds.CampaignSystem.ViewModelCollection.KingdomManagement.Decisions;
+using TaleWorlds.CampaignSystem.ViewModelCollection.KingdomManagement.Decisions.ItemTypes;
 using TaleWorlds.Core;
 using TaleWorlds.GauntletUI;
 using TaleWorlds.GauntletUI.BaseTypes;
@@ -158,10 +160,12 @@ namespace BannerKings
 
         namespace Peerage
         {
-            [HarmonyPatch(typeof(KingdomDecision), "DetermineSupporters")]
+            [HarmonyPatch(typeof(KingdomDecision))]
             internal class DetermineSupportersPatch
             {
-                private static bool Prefix(KingdomDecision __instance, ref IEnumerable<Supporter> __result)
+                [HarmonyPrefix]
+                [HarmonyPatch("DetermineSupporters")]
+                private static bool DetermineSupportersPrefix(KingdomDecision __instance, ref IEnumerable<Supporter> __result)
                 {
                     var list = new List<Supporter>();
                     foreach (Clan clan in __instance.Kingdom.Clans)
@@ -177,6 +181,16 @@ namespace BannerKings
                     }
 
                     __result = list;
+                    return false;
+                }
+
+                [HarmonyPrefix]
+                [HarmonyPatch("IsPlayerParticipant", MethodType.Getter)]
+                private static bool IsPlayerParticipantPrefix(KingdomDecision __instance, ref bool __result)
+                {
+                    var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(Clan.PlayerClan);
+                    __result = __instance.Kingdom == Clan.PlayerClan.Kingdom && !Clan.PlayerClan.IsUnderMercenaryService &&
+                        council.Peerage != null && council.Peerage.CanVote;
                     return false;
                 }
             }

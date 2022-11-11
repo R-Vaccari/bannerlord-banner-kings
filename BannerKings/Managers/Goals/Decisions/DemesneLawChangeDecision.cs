@@ -13,7 +13,7 @@ namespace BannerKings.Managers.Goals.Decisions
     {
         private LawChangeOption chosenAction;
 
-        public DemesneLawChangeDecision() : base("goal_contract_change", GoalUpdateType.Manual)
+        public DemesneLawChangeDecision() : base("goal_contract_law_change", GoalUpdateType.Manual)
         {
             var name = new TextObject("{=!}Propose Demesne Law Change");
             var description = new TextObject("{=!}Propose a contract change to your faction's titles.");

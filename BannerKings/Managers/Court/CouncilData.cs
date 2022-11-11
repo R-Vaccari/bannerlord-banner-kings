@@ -44,26 +44,7 @@ namespace BannerKings.Managers.Court
         public void SetPeerage(Peerage peerage)
         {
             Peerage = peerage;
-            if (clan == Clan.PlayerClan)
-            {
-                InformationManager.ShowInquiry(new InquiryData(
-                    peerage.Name.ToString(),
-                    new TextObject("{=!}As part of joinning a realm, the {CLAN} is receiving {PEERAGE}. The family {VOTE}, {ELECTION}, {KNIGHTHOOD}, {FIEF} and {COUNCIL}.")
-                    .SetTextVariable("CLAN", Clan.PlayerClan.Name)
-                    .SetTextVariable("PEERAGE", peerage.Name)
-                    .SetTextVariable("VOTE", peerage.CanVote ? new TextObject("{=!}will be able to vote in elections") : new TextObject("{=!}will not be able to vote on elections"))
-                    .SetTextVariable("ELECTION", peerage.CanStartElection ? new TextObject("{=!}will be able to start elections") : new TextObject("{=!}will not be able to start elections"))
-                    .SetTextVariable("KNIGHTHOOD", peerage.CanGrantKnighthood ? new TextObject("{=!}will be able to grant knighthood") : new TextObject("{=!}will not be able to grant knighthood"))
-                    .SetTextVariable("FIEF", peerage.CanHaveFief ? new TextObject("{=!}will be eligible to be awarded fiefs") : new TextObject("{=!}will not be eligible to be awarded fiefs"))
-                    .SetTextVariable("COUNCIL", peerage.CanHaveCouncil ? new TextObject("{=!}will be able to host a council") : new TextObject("{=!}will not be able to host a council"))
-                    .ToString(),
-                    true,
-                    false,
-                    GameTexts.FindText("str_ok").ToString(),
-                    String.Empty,
-                    null,
-                    null));
-            }
+           
         }
 
         public Hero Owner => clan.Leader;
