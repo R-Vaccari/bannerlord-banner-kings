@@ -65,12 +65,32 @@ namespace BannerKings.Behaviours
                 null);
 
 
-            starter.AddPlayerLine("wanderer_different_clan_response", 
-                "lord_talk_ask_something_2",
-                "wanderer_different_clan_response", 
-                "{=Ymgbv2gV}What's your story again?",
+
+            starter.AddDialogLine("wanderer_different_clan_response_first_time",
+                "wanderer_preintroduction",
+                "wanderer_different_clan_options",
+                "{=!}{WANDERER_OTHER_CLAN}",
                 CompanionOfAnotherClanIntroduction,
                 null);
+
+            starter.AddDialogLine("companion_hire_different_clan", 
+                "companion_hire",
+                "wanderer_different_clan_options",
+                "{=!}{WANDERER_OTHER_CLAN_HIRE}", 
+                () =>
+                {
+                    var clan = Hero.OneToOneConversationHero.Clan;
+                    if (clan != null)
+                    {
+                        MBTextManager.SetTextVariable("WANDERER_OTHER_CLAN_HIRE", new TextObject("{=!}I currently serve the {CLAN} and so I'm not available for hire.")
+                            .SetTextVariable("CLAN", clan.Name));
+                    }
+
+                    return Hero.OneToOneConversationHero.Clan != null && Hero.OneToOneConversationHero.Clan != Clan.PlayerClan;
+                },
+                null, 100, null);
+
+
         }
 
         private bool IsCompanionOfAnotherClan() => CharacterObject.OneToOneConversationCharacter != null && CharacterObject.OneToOneConversationCharacter.IsHero && 
@@ -80,20 +100,24 @@ namespace BannerKings.Behaviours
 
         private bool CompanionOfAnotherClanIntroduction()
         {
-            var clanLeader = Hero.OneToOneConversationHero.Clan.Leader;
-            var purposeText = new TextObject("{=!}What can I help you with?");
-            if (Hero.OneToOneConversationHero.Clan.MapFaction != Clan.PlayerClan.MapFaction)
+            if (Hero.OneToOneConversationHero.Clan != null)
             {
-                purposeText = new TextObject("{=!}So then, what is it?");
-            }
+                var clanLeader = Hero.OneToOneConversationHero.Clan.Leader;
+                var purposeText = new TextObject("{=!}What can I help you with?");
+                if (Hero.OneToOneConversationHero.Clan.MapFaction != Clan.PlayerClan.MapFaction)
+                {
+                    purposeText = new TextObject("{=!}So then, what is it?");
+                }
 
-            MBTextManager.SetTextVariable("WANDERER_OTHER_CLAN", 
-                new TextObject("{=!}I am {HERO}, a servant of the {CLAN}. I am here under business of {LEADER_TEXT}, {LEADER_NAME}. {PURPOSE_TEXT}")
-                .SetTextVariable("HERO", Hero.OneToOneConversationHero.Name)
-                .SetTextVariable("CLAN", Hero.OneToOneConversationHero.Clan.Name)
-                .SetTextVariable("LEADER_TEXT", GameTexts.FindText(clanLeader.IsFemale ? "str_player_salutation_my_lady" : "str_player_salutation_my_lord"))
-                .SetTextVariable("LEADER_NAME", clanLeader.Name)
-                .SetTextVariable("PURPOSE_TEXT", purposeText));
+                MBTextManager.SetTextVariable("WANDERER_OTHER_CLAN",
+                    new TextObject("{=!}I am {HERO}, a servant of the {CLAN}. I am here under business of {LEADER_TEXT}, {LEADER_NAME}. {PURPOSE_TEXT}")
+                    .SetTextVariable("HERO", Hero.OneToOneConversationHero.Name)
+                    .SetTextVariable("CLAN", Hero.OneToOneConversationHero.Clan.Name)
+                    .SetTextVariable("LEADER_TEXT", GameTexts.FindText(clanLeader.IsFemale ? "str_player_salutation_my_lady" : "str_player_salutation_my_lord"))
+                    .SetTextVariable("LEADER_NAME", clanLeader.Name)
+                    .SetTextVariable("PURPOSE_TEXT", purposeText));
+            }
+           
             
             return IsCompanionOfAnotherClan();
         }
@@ -624,17 +648,24 @@ namespace BannerKings.Behaviours
             }
 
 
-            [HarmonyPrefix]
-            [HarmonyPatch("conversation_wanderer_on_condition")]
-            private static bool MeetCompanionPrefix2(ref bool __result)
+            [HarmonyPostfix]
+            [HarmonyPatch("conversation_wanderer_preintroduction_on_condition")]
+            private static void PreIntroductionPostfix(ref bool __result)
             {
-                __result = CharacterObject.OneToOneConversationCharacter != null && 
-                    CharacterObject.OneToOneConversationCharacter.IsHero && 
-                    CharacterObject.OneToOneConversationCharacter.Occupation == Occupation.Wanderer &&
-                    CharacterObject.OneToOneConversationCharacter.HeroObject.HeroState != Hero.CharacterStates.Prisoner &&
-                    Hero.OneToOneConversationHero.Clan == null; ;
+                if (Hero.OneToOneConversationHero.Clan != null && Hero.OneToOneConversationHero.Clan != Clan.PlayerClan)
+                {
+                    __result = false;
+                }
+            }
 
-                return false;
+            [HarmonyPostfix]
+            [HarmonyPatch("conversation_companion_hire_gold_on_condition")]
+            private static void HirePostfix(ref bool __result)
+            {
+                if (Hero.OneToOneConversationHero.Clan != null && Hero.OneToOneConversationHero.Clan != Clan.PlayerClan)
+                {
+                    __result = false;
+                }
             }
         }
 
