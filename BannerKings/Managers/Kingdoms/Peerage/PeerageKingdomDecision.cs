@@ -8,6 +8,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.SaveSystem;
+using static BannerKings.Managers.Kingdoms.Contract.BKGenderDecision;
 
 namespace BannerKings.Managers.Kingdoms.Peerage
 {
@@ -19,6 +20,28 @@ namespace BannerKings.Managers.Kingdoms.Peerage
         public PeerageKingdomDecision(Clan proposerClan, Clan newPeer) : base(proposerClan)
         {
             Peer = newPeer;
+        }
+
+        public float CalculateKingdomSupport(Kingdom kingdom)
+        {
+            var support = 0f;
+            float clans = 0;
+            foreach (var supporter in DetermineSupporters())
+            {
+                var clan = supporter.Clan;
+                if (clan == Clan.PlayerClan)
+                {
+                    support += 100f;
+                }
+                else
+                {
+                    support += DetermineSupport(clan, new PeerageKingdomDecisionOutcome(Peer, true));
+                }
+
+                clans++;
+            }
+
+            return MBMath.ClampFloat(support / clans, 0f, 100f);
         }
 
         public override void ApplyChosenOutcome(DecisionOutcome chosenOutcome)

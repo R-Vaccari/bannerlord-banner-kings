@@ -5,8 +5,8 @@ using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.Core;
+using TaleWorlds.Library;
 using TaleWorlds.Localization;
-using static System.Collections.Specialized.BitVector32;
 
 namespace BannerKings.Managers.Goals.Decisions
 {
@@ -69,14 +69,27 @@ namespace BannerKings.Managers.Goals.Decisions
         internal override void ApplyGoal()
         {
             var decision = new PeerageKingdomDecision(Clan.PlayerClan.Kingdom.RulingClan, Clan.PlayerClan);
-            GainKingdomInfluenceAction.ApplyForDefault(GetFulfiller(), -decision.GetProposalInfluenceCost());
-            Clan.PlayerClan.Kingdom.AddDecision(decision, true);
+            InformationManager.ShowInquiry(new InquiryData(new TextObject("{=!}Request Full Peerage").ToString(),
+                new TextObject("{=!}Request full rights of Peerage. The any existing Peer with voting power may participate in the decision. Current support for the approval of {CLAN}: {SUPPORT}%.")
+                .SetTextVariable("CLAN", GetFulfiller().Clan.Name)
+                .SetTextVariable("SUPPORT", decision.CalculateKingdomSupport(GetFulfiller().Clan.Kingdom) * 100f)
+                .ToString(), 
+                true,
+                true,
+                GameTexts.FindText("str_selection_widget_accept").ToString(),
+                GameTexts.FindText("str_selection_widget_cancel").ToString(),
+                () =>
+                {
+                    GainKingdomInfluenceAction.ApplyForDefault(GetFulfiller(), -decision.GetProposalInfluenceCost());
+                    Clan.PlayerClan.Kingdom.AddDecision(decision, true);
 
-            MBInformationManager.AddQuickInformation(new TextObject("{=!}The Peers of {KINGDOM} will now vote on your request.")
-                .SetTextVariable("KINGDOM", Clan.PlayerClan.Kingdom.Name),
-                0, 
-                null, 
-                "event:/ui/notification/relation");
+                    MBInformationManager.AddQuickInformation(new TextObject("{=!}The Peers of {KINGDOM} will now vote on your request.")
+                        .SetTextVariable("KINGDOM", Clan.PlayerClan.Kingdom.Name),
+                        0,
+                        null,
+                        "event:/ui/notification/relation");
+                },
+                null));
         }
 
         public override void DoAiDecision()
