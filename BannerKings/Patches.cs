@@ -797,45 +797,45 @@ namespace BannerKings
                     ref Dictionary<MobileParty, List<Settlement>> ____previouslyChangedVillagerTargetsDueToEnemyOnWay,
                     MobileParty mobileParty, Settlement settlement, Hero hero)
                 {
-                    if (BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
+                    var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
+                    if (mobileParty is {IsActive: true, IsVillager: true} && data != null && data.EstateData != null)
                     {
-                        if (mobileParty is {IsActive: true, IsVillager: true})
+
+                        if (____previouslyChangedVillagerTargetsDueToEnemyOnWay.ContainsKey(mobileParty))
                         {
-
-                            if (____previouslyChangedVillagerTargetsDueToEnemyOnWay.ContainsKey(mobileParty))
-                            {
-                                ____previouslyChangedVillagerTargetsDueToEnemyOnWay[mobileParty].Clear();
-                            }
+                            ____previouslyChangedVillagerTargetsDueToEnemyOnWay[mobileParty].Clear();
+                        }
                             
-                            if (settlement.IsTown)
+                        if (settlement.IsTown)
+                        {
+                            SellGoodsForTradeAction.ApplyByVillagerTrade(settlement, mobileParty);
+                        }
+
+                        if (settlement.IsVillage)
+                        {
+                            var tax = Campaign.Current.Models.SettlementTaxModel.CalculateVillageTaxFromIncome(
+                                mobileParty.HomeSettlement.Village, mobileParty.PartyTradeGold);
+                            float remainder = mobileParty.PartyTradeGold - tax;
+                            mobileParty.HomeSettlement.Village.ChangeGold((int) (remainder * 0.5f));
+                            mobileParty.PartyTradeGold = 0;
+                            if (mobileParty.HomeSettlement.Village.TradeTaxAccumulated < 0)
                             {
-                                SellGoodsForTradeAction.ApplyByVillagerTrade(settlement, mobileParty);
+                                mobileParty.HomeSettlement.Village.TradeTaxAccumulated = 0;
                             }
 
-                            if (settlement.IsVillage)
-                            {
-                                var tax = Campaign.Current.Models.SettlementTaxModel.CalculateVillageTaxFromIncome(
-                                    mobileParty.HomeSettlement.Village, mobileParty.PartyTradeGold);
-                                float remainder = mobileParty.PartyTradeGold - tax;
-                                mobileParty.HomeSettlement.Village.ChangeGold((int) (remainder * 0.5f));
-                                mobileParty.PartyTradeGold = 0;
-                                if (mobileParty.HomeSettlement.Village.TradeTaxAccumulated < 0)
-                                {
-                                    mobileParty.HomeSettlement.Village.TradeTaxAccumulated = 0;
-                                }
-                                mobileParty.HomeSettlement.Village.TradeTaxAccumulated += tax;
-                            }
+                            data.EstateData.AccumulateTradeTax(data, tax);
+                        }
 
-                            if (settlement.IsTown && settlement.Town.Governor != null &&
-                                settlement.Town.Governor.GetPerkValue(DefaultPerks.Trade.DistributedGoods))
-                            {
-                                settlement.Town.TradeTaxAccumulated +=
-                                    MathF.Round(DefaultPerks.Trade.DistributedGoods.SecondaryBonus);
-                            }
+                        if (settlement.IsTown && settlement.Town.Governor != null &&
+                            settlement.Town.Governor.GetPerkValue(DefaultPerks.Trade.DistributedGoods))
+                        {
+                            settlement.Town.TradeTaxAccumulated +=
+                                MathF.Round(DefaultPerks.Trade.DistributedGoods.SecondaryBonus);
                         }
 
                         return false;
                     }
+
 
                     return true;
                 }

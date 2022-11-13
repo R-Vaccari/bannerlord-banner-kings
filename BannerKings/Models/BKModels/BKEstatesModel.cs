@@ -333,10 +333,10 @@ namespace BannerKings.Models.BKModels
 
         public ExplainedNumber CalculateEstateIncome(Estate estate, bool explanations = false)
         {
-            var result = new ExplainedNumber(0f, explanations);
+            var result = new ExplainedNumber(estate.TaxAccumulated, explanations);
             result.LimitMin(0f);
 
-            var settlement = estate.EstatesData.Settlement;
+            /*var settlement = estate.EstatesData.Settlement;
             if (settlement.IsVillage)
             {
                 var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(estate.EstatesData.Settlement);
@@ -351,7 +351,7 @@ namespace BannerKings.Models.BKModels
                     //BannerKingsConfig.Instance.TaxModel.AddVillagePopulationTaxes(ref result, settlement, estate.Nobles, estate.Craftsmen, 
                      //   taxOffice, taxType);
                 }
-            }
+            }*/
 
             return result;
         }

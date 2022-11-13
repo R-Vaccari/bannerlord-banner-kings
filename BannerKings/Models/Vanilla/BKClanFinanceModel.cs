@@ -56,7 +56,6 @@ namespace BannerKings.Models.Vanilla
             return result;
         }
 
-
         public override int CalculateOwnerIncomeFromCaravan(MobileParty caravan) => 
             BannerKingsSettings.Instance.RealisticCaravanIncome ? 0 : MathF.Max(0, caravan.PartyTradeGold - 10000);
 

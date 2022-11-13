@@ -1,6 +1,7 @@
 ﻿using BannerKings.Extensions;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -62,8 +63,6 @@ namespace BannerKings.Managers.Populations.Estates
             }
         }
 
-        public int GetTaxFromIncome() => (int)(Income.ResultNumber * TaxRatio.ResultNumber);
-
         public ExplainedNumber TaxRatio => BannerKingsConfig.Instance.EstatesModel.GetTaxRatio(this, true);
 
         public bool IsDisabled 
@@ -75,8 +74,6 @@ namespace BannerKings.Managers.Populations.Estates
                 return Owner == null || Owner == fiefOwner;
             } 
         }
-
-        public ExplainedNumber Income => BannerKingsConfig.Instance.EstatesModel.CalculateEstateIncome(this, true);
         public ExplainedNumber AcrePrice => BannerKingsConfig.Instance.EstatesModel.CalculateAcrePrice(EstatesData.Settlement, true);
         public ExplainedNumber EstateValue => BannerKingsConfig.Instance.EstatesModel.CalculateEstatePrice(this, true);
         public ExplainedNumber AcreageGrowth => Task == EstateTask.Land_Expansion ? BannerKingsConfig.Instance.ConstructionModel
@@ -124,7 +121,7 @@ namespace BannerKings.Managers.Populations.Estates
         [SaveableProperty(3)] public float Farmland { get; private set; }
         [SaveableProperty(4)] public float Pastureland { get; private set; }
         [SaveableProperty(5)] public float Woodland { get; private set; }
-
+        [SaveableProperty(6)] public int TaxAccumulated { get; set; } = 0;
 
         [SaveableProperty(8)] public int Serfs { get; private set; }
         [SaveableProperty(9)] public int Slaves { get; private set; }
@@ -136,6 +133,14 @@ namespace BannerKings.Managers.Populations.Estates
         [SaveableProperty(10)] public EstateDuty Duty { get; private set; }
         [SaveableProperty(11)] public EstateTask Task { get; private set; }
         [SaveableProperty(12)] private Dictionary<PopType, float> Manpowers { get; set; }
+
+        public int AddIncomeToHero()
+        {
+            var result = TaxAccumulated;
+            Owner.ChangeHeroGold(TaxAccumulated);
+            TaxAccumulated = 0;
+            return result;
+        }
 
         public int GetTypeCount(PopType type)
         {

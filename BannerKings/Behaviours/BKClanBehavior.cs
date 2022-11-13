@@ -902,9 +902,7 @@ namespace BannerKings.Behaviours
             {
                 if (BannerKingsConfig.Instance.TitleManager != null)
                 {
-
                     int totalGold = 0;
-
                     var lordships = BannerKingsConfig.Instance.TitleManager
                         .GetAllDeJure(clan)
                         .FindAll(x => x.type == TitleType.Lordship);
@@ -977,6 +975,29 @@ namespace BannerKings.Behaviours
                 if (applyWithdrawals)
                 {
                     village.TradeTaxAccumulated -= MathF.Min(village.TradeTaxAccumulated, total);
+
+                    var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(village.Settlement);
+                    if (data != null && data.EstateData != null)
+                    {
+                        var result = 0;
+                        foreach (var estate in data.EstateData.Estates)
+                        {
+                            if (estate.IsDisabled)
+                            {
+                                continue;
+                            }
+
+                            result += estate.AddIncomeToHero();
+                        }
+
+                        if (clan == Clan.PlayerClan)
+                        {
+                            InformationManager.DisplayMessage(new InformationMessage(
+                                new TextObject("{=!}{INCOME} added from estates at {VILLAGE}")
+                                .SetTextVariable("INCOME", result)
+                                .SetTextVariable("VILLAGE", village.Name).ToString()));
+                        }
+                    }
                 }
 
                 return total;

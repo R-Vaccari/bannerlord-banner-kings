@@ -23,6 +23,20 @@ namespace BannerKings.Managers.Populations.Estates
 
         public Estate GetHeroEstate(Hero hero) => Estates.FirstOrDefault(x => x.Owner == hero);
 
+        public void AccumulateTradeTax(PopulationData data, int tradeTax)
+        {
+            int totalDeducted = 0;
+            foreach (Estate estate in Estates)
+            {
+                var result = (int)(tradeTax * (BannerKingsConfig.Instance.EstatesModel.GetEstateWorkforceProportion(estate, data) * 
+                    (1f - estate.TaxRatio.ResultNumber)));
+                totalDeducted += result;
+                estate.TaxAccumulated += result;
+            }
+
+            Settlement.Village.TradeTaxAccumulated += tradeTax - totalDeducted;
+        }
+
         public void UpdatePopulation(PopulationManager.PopType type, int quantity, int classTotal)
         {
             foreach (Estate estate in Estates)
