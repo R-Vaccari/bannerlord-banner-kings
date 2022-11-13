@@ -342,7 +342,7 @@ namespace BannerKings.Behaviours
 
             if (data?.Clergyman != null)
             {
-                Utils.Helpers.AddSellerToKeep(data.Clergyman.Hero, target);
+                Utils.Helpers.AddCharacterToKeep(data.Clergyman.Hero, target);
             }
         }
 

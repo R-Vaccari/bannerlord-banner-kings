@@ -2,12 +2,16 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Xml;
+using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Titles;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.AgentOrigins;
+using TaleWorlds.CampaignSystem.CampaignBehaviors;
 using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.Settlements.Locations;
+using TaleWorlds.CampaignSystem.ViewModelCollection;
+using TaleWorlds.CampaignSystem.ViewModelCollection.CharacterDeveloper;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
@@ -20,13 +24,72 @@ namespace BannerKings.Utils
     {
 
 
-        public static void AddSellerToKeep(Hero seller, Settlement settlement)
+        public static void AddCharacterToKeep(Hero hero, Settlement settlement)
         {
-            var agent = new AgentData(new SimpleAgentOrigin(seller.CharacterObject, 0));
+            var agent = new AgentData(new SimpleAgentOrigin(hero.CharacterObject, 0));
             var locCharacter = new LocationCharacter(agent, SandBoxManager.Instance.AgentBehaviorManager.AddFixedCharacterBehaviors, null, true, LocationCharacter.CharacterRelations.Neutral, null, true);
 
             settlement.LocationComplex.GetLocationWithId("lordshall")
                 .AddLocationCharacters(delegate { return locCharacter; }, settlement.Culture, LocationCharacter.CharacterRelations.Neutral, 1);
+        }
+
+        public static void AddCharacterToKeep(CharacterObject character, Settlement settlement)
+        {
+            var agent = new AgentData(new SimpleAgentOrigin(character, 0));
+            var locCharacter = new LocationCharacter(agent, SandBoxManager.Instance.AgentBehaviorManager.AddFixedCharacterBehaviors, null, true, LocationCharacter.CharacterRelations.Neutral, null, true);
+
+            settlement.LocationComplex.GetLocationWithId("lordshall")
+                .AddLocationCharacters(delegate { return locCharacter; }, settlement.Culture, LocationCharacter.CharacterRelations.Neutral, 1);
+        }
+
+        public static void AddNotableToKeep(Hero notable, Settlement settlement)
+        {
+            var town = settlement.Town;
+            LocationCharacter locationCharacterOfHero2 = town.Settlement.LocationComplex.GetLocationCharacterOfHero(notable);
+            if (locationCharacterOfHero2 != null)
+            {
+                locationCharacterOfHero2.SpecialTargetTag = null;
+
+                Location locationOfCharacter2 = town.Settlement.LocationComplex.GetLocationOfCharacter(notable);
+                town.Settlement.LocationComplex.ChangeLocation(locationCharacterOfHero2, locationOfCharacter2,
+                    settlement.LocationComplex.GetLocationWithId("lordshall"));
+                
+            }
+        }
+
+        public static void AddMusicianToKeep(Settlement settlement)
+        {
+            var agent = new AgentData(new SimpleAgentOrigin(settlement.Culture.Musician, 0));
+            var locCharacter = new LocationCharacter(agent,
+                new LocationCharacter.AddBehaviorsDelegate(SandBoxManager.Instance.AgentBehaviorManager.AddWandererBehaviors),
+                "musician", 
+                true,
+                LocationCharacter.CharacterRelations.Neutral, 
+                ActionSetCode.GenerateActionSetNameWithSuffix(agent.AgentMonster, agent.AgentIsFemale, "_musician"),
+                true, false, null, false, false, true);
+
+            settlement.LocationComplex.GetLocationWithId("lordshall")
+                .AddLocationCharacters(delegate { return locCharacter; },
+                settlement.Culture, 
+                LocationCharacter.CharacterRelations.Neutral, 1);
+
+            var townsmanSuffix = FaceGen.GetMonsterWithSuffix(settlement.Culture.Townsman.Race, "_settlement");
+            var tuple = new Tuple<string, Monster>(ActionSetCode.GenerateActionSetNameWithSuffix(townsmanSuffix, false, "_villager"), townsmanSuffix);
+            var townsman = new LocationCharacter(new AgentData(
+                new SimpleAgentOrigin(settlement.Culture.Townsman, -1, null, default(UniqueTroopDescriptor)))
+                .Monster(tuple.Item2)
+                .Age(MBRandom.RandomInt(30, 60)), 
+                new LocationCharacter.AddBehaviorsDelegate(SandBoxManager.Instance.AgentBehaviorManager.AddOutdoorWandererBehaviors), 
+                null, 
+                false, 
+                LocationCharacter.CharacterRelations.Friendly, 
+                tuple.Item1, 
+                true, false, null, false, false, true);
+
+            settlement.LocationComplex.GetLocationWithId("lordshall")
+               .AddLocationCharacters(delegate { return townsman; },
+               settlement.Culture,
+               LocationCharacter.CharacterRelations.Friendly, 10);
         }
 
 

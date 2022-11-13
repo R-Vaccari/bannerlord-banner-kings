@@ -261,7 +261,7 @@ namespace BannerKings.Behaviours
 
             if (bookSellers.Any(x => x.Key.StayingInSettlement == target) && target.IsTown)
             {
-                Utils.Helpers.AddSellerToKeep(bookSellers.First(x => x.Key.StayingInSettlement == target).Key, target);
+                Utils.Helpers.AddCharacterToKeep(bookSellers.First(x => x.Key.StayingInSettlement == target).Key, target);
             }
         }
 

@@ -10,6 +10,7 @@ namespace BannerKings.Managers.Goals
             get
             {
                 yield return AssumeCulture;
+                yield return OrganizeFeastDecision;
                 yield return AcquireBookDecision;
                 yield return RecruitCompanionDecision;
                 yield return RequestCouncil;
@@ -32,6 +33,7 @@ namespace BannerKings.Managers.Goals
         internal Goal AcquireBookDecision { get; private set; }
         internal Goal DemesneLawChangeDecision { get; private set; }
         internal Goal RequestPeerageDecision { get; private set; }
+        internal Goal OrganizeFeastDecision { get; private set; }
 
         public override void Initialize()
         {
@@ -44,6 +46,7 @@ namespace BannerKings.Managers.Goals
             ContractChangeDecision = new ContractChangeDecision();
             AcquireBookDecision = new AcquireBookDecision();
             DemesneLawChangeDecision = new DemesneLawChangeDecision();
+            OrganizeFeastDecision = new OrganizeFeastDecision();
             RequestPeerageDecision = new RequestPeerageDecision();
         }
     }
