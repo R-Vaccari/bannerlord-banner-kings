@@ -37,6 +37,15 @@ namespace BannerKings.Models.BKModels
             {
                 result.AddFactor(-2f, GameTexts.FindText("str_starvation_morale"));
             }
+
+            if (filledCapacity <= 0.15f)
+            {
+                float factor = 1f;
+                if (filledCapacity <= 0.05f) factor = 3f;
+                if (filledCapacity <= 0.01f) factor = 2f;
+                     
+                result.AddFactor(factor, new TextObject("{=!}Repopulation"));
+            }
  
 
             if (settlement.IsVillage)
