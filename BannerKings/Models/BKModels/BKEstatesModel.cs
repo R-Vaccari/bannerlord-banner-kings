@@ -347,9 +347,9 @@ namespace BannerKings.Models.BKModels
                 float taxOffice = data.VillageData.GetBuildingLevel(DefaultVillageBuildings.Instance.TaxOffice);
                 if (taxOffice > 0)
                 {
-                    var taxType = ((BKTaxPolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(settlement, "tax")).Policy;
-                    BannerKingsConfig.Instance.TaxModel.AddVillagePopulationTaxes(ref result, settlement, estate.Nobles, estate.Craftsmen, 
-                        taxOffice, taxType);
+                    //var taxType = ((BKTaxPolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(settlement, "tax")).Policy;
+                    //BannerKingsConfig.Instance.TaxModel.AddVillagePopulationTaxes(ref result, settlement, estate.Nobles, estate.Craftsmen, 
+                     //   taxOffice, taxType);
                 }
             }
 

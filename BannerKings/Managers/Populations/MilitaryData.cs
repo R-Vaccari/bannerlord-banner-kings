@@ -166,13 +166,14 @@ namespace BannerKings.Managers.Populations
             if (data.EstateData != null)
             {
                 var estate = data.EstateData.GetHeroEstate(notable);
-                if (estate != null)
+                if (estate != null && (type == PopType.Serfs || type == PopType.Slaves))
                 {
                     estate.AddManpower(type, -quantity);
                     estate.AddPopulation(type, -quantity);
                     return;
                 }
             }
+
 
             Manpowers[type] -= quantity;
             data.UpdatePopType(type, -quantity);

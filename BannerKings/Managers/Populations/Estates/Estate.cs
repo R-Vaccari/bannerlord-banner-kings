@@ -18,8 +18,6 @@ namespace BannerKings.Managers.Populations.Estates
             Farmland = farmland;
             Pastureland = pastureland;
             Woodland = woodland;
-            Nobles = nobles;
-            Craftsmen = craftsmen;
             Serfs = serfs;
             Slaves = slaves;
             EstatesData = data;
@@ -87,8 +85,7 @@ namespace BannerKings.Managers.Populations.Estates
 
         public ExplainedNumber Production => BannerKingsConfig.Instance.EstatesModel.CalculateEstateProduction(this, true);
 
-        public int Population => (int)(MathF.Max(Nobles, 0) + MathF.Max(Craftsmen, 0) +
-            MathF.Max(Serfs, 0) + MathF.Max(Slaves, 0));
+        public int Population => MathF.Max(Serfs, 0) + MathF.Max(Slaves, 0);
 
         public int AvailableWorkForce
         {
@@ -119,7 +116,7 @@ namespace BannerKings.Managers.Populations.Estates
         }
 
 
-        public float Influence => BannerKingsConfig.Instance.InfluenceModel.GetNoblesInfluence(EstatesData.Settlement, Nobles);
+        public float Influence => BannerKingsConfig.Instance.InfluenceModel.GetNoblesInfluence(EstatesData.Settlement, 0);
 
         public float Acreage => Farmland + Pastureland + Woodland;
 
@@ -128,8 +125,7 @@ namespace BannerKings.Managers.Populations.Estates
         [SaveableProperty(4)] public float Pastureland { get; private set; }
         [SaveableProperty(5)] public float Woodland { get; private set; }
 
-        [SaveableProperty(6)] public int Nobles { get; private set; }
-        [SaveableProperty(7)] public int Craftsmen { get; private set; }
+
         [SaveableProperty(8)] public int Serfs { get; private set; }
         [SaveableProperty(9)] public int Slaves { get; private set; }
 
@@ -151,11 +147,10 @@ namespace BannerKings.Managers.Populations.Estates
             {
                 return Slaves;
             }
-            else if (type == PopType.Nobles)
+            else
             {
-                return Nobles;
+                return 0;
             }
-            else return Craftsmen;
         }
 
         public int GetManpower(PopType type)
@@ -238,17 +233,7 @@ namespace BannerKings.Managers.Populations.Estates
 
         public void AddPopulation(PopType type, int toAdd)
         {
-            if (type == PopType.Nobles)
-            {
-                Nobles += toAdd;
-                Nobles = MathF.Max(toAdd, Nobles);
-            }
-            else if (type == PopType.Craftsmen)
-            {
-                Craftsmen += toAdd;
-                Craftsmen = MathF.Max(toAdd, Craftsmen);
-            }
-            else if (type == PopType.Serfs)
+            if (type == PopType.Serfs)
             {
                 Serfs += toAdd;
                 Serfs = MathF.Max(toAdd, Serfs);
@@ -263,16 +248,8 @@ namespace BannerKings.Managers.Populations.Estates
         public int GetPopulationClassQuantity(PopType type)
         {
             int result = 0;
-
-            if (type == PopType.Nobles)
-            {
-                result = Nobles;
-            }
-            else if (type == PopType.Craftsmen)
-            {
-                result = Craftsmen;
-            }
-            else if (type == PopType.Serfs)
+            
+            if (type == PopType.Serfs)
             {
                 result = Serfs;
             }
