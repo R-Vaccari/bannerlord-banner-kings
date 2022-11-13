@@ -123,12 +123,5 @@ namespace BannerKings.UI.Items
         {
             OnPressAction?.Invoke();
         }
-
-        public DecisionElement SetAsTitle(string title, TextObject hintText = null)
-        {
-            OptionTypeID = 0;
-            Description = title;
-            return this;
-        }
     }
 }

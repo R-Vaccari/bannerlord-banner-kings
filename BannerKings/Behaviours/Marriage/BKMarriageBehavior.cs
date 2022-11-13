@@ -1,9 +1,10 @@
-﻿using HarmonyLib;
-using Helpers;
+﻿using BannerKings.UI;
+using HarmonyLib;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CampaignBehaviors;
+using TaleWorlds.CampaignSystem.Conversation;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 
@@ -11,7 +12,7 @@ namespace BannerKings.Behaviours.Marriage
 {
     public class BKMarriageBehavior : CampaignBehaviorBase
     {
-        private Dictionary<Hero, List<MarriageOffer>> marriageOffers = new Dictionary<Hero, List<MarriageOffer>>();
+        /*private Dictionary<Hero, List<MarriageOffer>> marriageOffers = new Dictionary<Hero, List<MarriageOffer>>();
 
         public MarriageOffer GetHeroMarriageOffers(Hero proposer, Hero proposed)
         {
@@ -35,7 +36,9 @@ namespace BannerKings.Behaviours.Marriage
             }
 
             return false;
-        }
+        } */
+
+        public bool IsCoupleMatchedByFamily(Hero proposer, Hero proposed) => Romance.GetRomanticLevel(proposer, proposed) == Romance.RomanceLevelEnum.MatchMadeByFamily;
 
         public override void RegisterEvents()
         {
@@ -63,7 +66,7 @@ namespace BannerKings.Behaviours.Marriage
                     return Hero.MainHero.Spouse == null &&
                     Campaign.Current.Models.MarriageModel.IsCoupleSuitableForMarriage(Hero.MainHero, Hero.OneToOneConversationHero) &&
                     !FactionManager.IsAtWarAgainstFaction(Hero.MainHero.MapFaction, Hero.OneToOneConversationHero.MapFaction) &&
-                    !IsHeroOfferAccepted(Hero.MainHero, Hero.OneToOneConversationHero) &&
+                    !IsCoupleMatchedByFamily(Hero.MainHero, Hero.OneToOneConversationHero) &&
                     Hero.OneToOneConversationHero.Clan.Leader != Hero.OneToOneConversationHero;
                 }, 
                 null, 
@@ -136,28 +139,64 @@ namespace BannerKings.Behaviours.Marriage
                 },
                 null);
 
+            starter.AddPlayerLine("lord_propose_marriage_contract", 
+                "lord_talk_speak_diplomacy_2", 
+                "marriage_contract_proposed", 
+                "{=v9tQv4eN}I would like to propose an alliance between our families through marriage.",
+                () =>
+                {
+                    if (Hero.OneToOneConversationHero == null || Hero.OneToOneConversationHero.Clan == null)
+                    {
+                        return false;
+                    }
 
-            starter.AddPlayerLine("bk_marriage_offered_clan_leader",
-               "lord_start_courtship_response_player_offer",
-               "bk_marriage_offered_not_accepted",
-               "{=!}I wish to marry our Houses.",
-               () =>
-               {
-                   if (Hero.OneToOneConversationHero == null || Hero.OneToOneConversationHero.Clan == null)
-                   {
-                       return false;
-                   }
+                    var clan = Hero.OneToOneConversationHero.Clan;
 
-                   return Hero.MainHero.Spouse == null &&
-                   Campaign.Current.Models.MarriageModel.IsCoupleSuitableForMarriage(Hero.MainHero, Hero.OneToOneConversationHero) &&
-                   !FactionManager.IsAtWarAgainstFaction(Hero.MainHero.MapFaction, Hero.OneToOneConversationHero.MapFaction) &&
-                   !IsHeroOfferAccepted(Hero.MainHero, Hero.OneToOneConversationHero) &&
-                   Hero.OneToOneConversationHero.Clan.Leader == Hero.OneToOneConversationHero;
-               },
-               null,
-               120,
+                    return clan != Clan.PlayerClan && clan.Leader == Hero.OneToOneConversationHero && 
+                    !FactionManager.IsAtWarAgainstFaction(Hero.MainHero.MapFaction, Hero.OneToOneConversationHero.MapFaction);
+                },
+                () =>
+                {
+                    UIManager.Instance.ShowWindow("marriage");
+                }, 
+                120, 
+                delegate (out TextObject reason)
+                {
+                    reason = new TextObject("{=!}Marriage candidates are available.");
+
+                    if (!Clan.PlayerClan.Heroes.Any(x => !x.IsChild && x.Spouse == null))
+                    {
+                        reason = new TextObject("{=!}{CLAN} has no available candidates")
+                            .SetTextVariable("CLAN", Clan.PlayerClan.Name);
+                        return false;
+                    }
+
+                    if (!Hero.OneToOneConversationHero.Clan.Heroes.Any(x => !x.IsChild && x.Spouse == null))
+                    {
+                        reason = new TextObject("{=!}{CLAN} has no available candidates")
+                            .SetTextVariable("CLAN", Clan.PlayerClan.Name);
+                        return false;
+                    }
+
+
+                    return true;
+                },
+                null);
+
+            starter.AddDialogLine("marriage_contract_proposed",
+               "marriage_contract_proposed",
+               "marriage_contract_proposed_response",
+               "{=!}I see. Tell me the specifics of your proposal.",
                null,
                null);
+
+            starter.AddPlayerLine("marriage_contract_proposed_response",
+                "marriage_contract_proposed_response",
+                "close_window",
+                "{=D33fIGQe}Never mind.",
+                null,
+                null);
+
         }
     }
 
@@ -175,12 +214,12 @@ namespace BannerKings.Behaviours.Marriage
                 if (__result == true)
                 {
                     __result = Campaign.Current.GetCampaignBehavior<BKMarriageBehavior>()
-                        .IsHeroOfferAccepted(Hero.MainHero, Hero.OneToOneConversationHero);
+                        .IsCoupleMatchedByFamily(Hero.MainHero, Hero.OneToOneConversationHero);
                 }
             }
 
-
-            [HarmonyPrefix]
+            
+            /*[HarmonyPrefix]
             [HarmonyPatch("conversation_propose_spouse_for_player_nomination_on_condition")]
             private static bool PlayerProposePrefix(RomanceCampaignBehavior __instance, ref bool __result)
             {
@@ -203,6 +242,14 @@ namespace BannerKings.Behaviours.Marriage
                     }
                 }
 
+                __result = false;
+                return false;
+            }*/
+
+            [HarmonyPrefix]
+            [HarmonyPatch("conversation_discuss_marriage_alliance_on_condition")]
+            private static bool PlayerProposeAlliancePrefix(RomanceCampaignBehavior __instance, ref bool __result)
+            {
                 __result = false;
                 return false;
             }
