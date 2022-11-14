@@ -63,11 +63,6 @@ namespace BannerKings.UI.Estates
             var estateData = data.EstateData;
             foreach (var estate in estateData.Estates)
             {
-                nobles -= estate.Nobles;
-                craftsmen -= estate.Craftsmen;
-                serfs -= estate.Serfs;
-                slaves -= estate.Slaves;
-
                 farmland -= estate.Farmland;
                 pastureLand -= estate.Pastureland;
                 woodland -= estate.Woodland;

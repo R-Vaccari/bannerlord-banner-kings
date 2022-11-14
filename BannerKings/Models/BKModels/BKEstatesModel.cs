@@ -4,6 +4,7 @@ using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Estates;
 using BannerKings.Managers.Populations.Villages;
 using BannerKings.Managers.Titles.Laws;
+using BannerKings.Utils.Extensions;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -22,6 +23,19 @@ namespace BannerKings.Models.BKModels
         public int MinimumEstateAcreage => 120;
 
         public float MaximumEstateAcreagePercentage => 0.12f;
+
+        public int CalculateEstateGrantRelation(Estate estate, Hero grantor)
+        {
+            int result = 8;
+
+            if (!estate.Owner.IsClanLeader())
+            {
+                result += 10;
+            }
+
+
+            return result;
+        }
 
         public EstateAction GetAction(ActionType type, Estate estate, Hero actionTaker, Hero actionTarget = null)
         {
@@ -53,19 +67,39 @@ namespace BannerKings.Models.BKModels
                 return action;
             }
 
-            if (actionTarget.IsNotable)
+            if (actionTarget != null)
+            {
+                if (actionTarget.IsNotable)
+                {
+                    action.Possible = false;
+                    action.Reason = new TextObject("{=!}Cannot grant to notables.");
+                    return action;
+                }
+
+                if (actionTarget.MapFaction != actionTaker.MapFaction)
+                {
+                    action.Possible = false;
+                    action.Reason = new TextObject("{=!}Cannot grant to foreign lords.");
+                    return action;
+                }
+
+
+                Clan clan = actionTarget.Clan;
+                if (clan == null)
+                {
+                    action.Possible = false;
+                    action.Reason = new TextObject("{=Uw7dMzA4}No clan.");
+                    return action;
+                }
+            }
+            else
             {
                 action.Possible = false;
-                action.Reason = new TextObject("{=!}Cannot grant to notables.");
+                action.Reason = new TextObject("{=!}No defined target for granting.");
                 return action;
             }
 
-            if (actionTarget.MapFaction != actionTaker.MapFaction)
-            {
-                action.Possible = false;
-                action.Reason = new TextObject("{=!}Cannot grant to foreign lords.");
-                return action;
-            }
+            
 
             var title = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement);
             if (title != null)
@@ -87,13 +121,6 @@ namespace BannerKings.Models.BKModels
             }
 
 
-            Clan clan = actionTarget.Clan;
-            if (clan == null)
-            {
-                action.Possible = false;
-                action.Reason = new TextObject("{=Uw7dMzA4}No clan.");
-                return action;
-            }
 
             var candidates = GetGrantCandidates(action);
             if (!candidates.Contains(actionTarget))
@@ -168,6 +195,13 @@ namespace BannerKings.Models.BKModels
             var title = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement);
             if (title != null)
             {
+                if (title.deJure != owner)
+                {
+                    action.Possible = false;
+                    action.Reason = new TextObject("{=!}Cannot buy from an illegal settlement owner. The owner must hold it de jure in order to sell estates.");
+                    return action;
+                }
+
                 if (!title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.EstateTenureAllodial))
                 {
                     if (owner.MapFaction != actionTaker.MapFaction)
@@ -186,6 +220,78 @@ namespace BannerKings.Models.BKModels
             return action;
         }
 
+        public EstateAction GetReclaim(Estate estate, Hero actionTaker)
+        {
+            EstateAction action = new EstateAction(estate, actionTaker, ActionType.Reclaim);
+
+            var settlement = estate.EstatesData.Settlement;
+            var owner = settlement.IsVillage ? settlement.Village.GetActualOwner() : settlement.Owner;
+
+            if (actionTaker != owner)
+            {
+                action.Possible = false;
+                action.Reason = new TextObject("{=!}Not settlement owner.");
+                return action;
+            }
+
+            if (actionTaker == estate.Owner)
+            {
+                action.Possible = false;
+                action.Reason = new TextObject("{=!}Already estate owner.");
+                return action;
+            }
+
+
+            var title = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement);
+            if (title != null)
+            {
+                if (title.deJure != actionTaker)
+                {
+                    action.Possible = false;
+                    action.Reason = new TextObject("{=!}Must be de jure owner to reclaim estates.");
+                    return action;
+                }
+            }
+
+
+            if (estate.Owner != null)
+            {
+                if (estate.Owner.MapFaction == actionTaker.MapFaction)
+                {
+                    action.Possible = false;
+                    action.Reason = new TextObject("{=!}Cannot reclaim an estate from your faction Peers.");
+                    return action;
+                }
+            }
+            else
+            {
+                action.Possible = false;
+                action.Reason = new TextObject("{=!}Cannot reclaim a vacant estate.");
+                return action;
+            }
+
+            int value = (int)estate.EstateValue.ResultNumber;
+            if (actionTaker.Gold < value)
+            {
+                action.Possible = false;
+                action.Reason = GameTexts.FindText("str_warning_you_dont_have_enough_money");
+                return action;
+            }
+
+
+            action.Influence = estate.EstateValue.ResultNumber / 2000f;
+            if (actionTaker.Clan.Influence < action.Influence)
+            {
+                action.Possible = false;
+                action.Reason = GameTexts.FindText("str_decision_not_enough_influence");
+                return action;
+            }
+
+            action.Possible = true;
+            action.Reason = new TextObject("{=bjJ99NEc}Action can be taken.");
+            return action;
+        }
+
 
         public List<Hero> GetGrantCandidates(EstateAction action)
         {
@@ -194,16 +300,6 @@ namespace BannerKings.Models.BKModels
             var clan = action.ActionTaker.Clan;
             if (clan != null)
             {
-
-                var title = BannerKingsConfig.Instance.TitleManager.GetTitle(action.Estate.EstatesData.Settlement);
-                if (title != null && !title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.EstateTenureQuiaEmptores))
-                {
-                    foreach (Hero companion in clan.Companions)
-                    {
-                        list.Add(companion);
-                    }
-                }
-
                 if (clan.Kingdom != null)
                 {
                     foreach (Clan targetClan in clan.Kingdom.Clans)
@@ -287,7 +383,7 @@ namespace BannerKings.Models.BKModels
 
         public ExplainedNumber CalculateAcrePrice(Settlement settlement, bool explanations = false)
         {
-            var result = new ExplainedNumber(500f, explanations);
+            var result = new ExplainedNumber(450f, explanations);
             if (settlement.IsVillage)
             {
                 result.Add(settlement.Village.Hearth * 0.1f, GameTexts.FindText("str_map_tooltip_hearths"));

@@ -137,10 +137,10 @@
 																		
 																		
 																		<Standard.DropdownWithHorizontalControl Parameter.SelectorDataSource="{TaskSelector}" MarginTop="10"
-																												HorizontalAlignment="Center" IsEnabled="@PlayerOwned" />
+																												HorizontalAlignment="Center" IsVisible="@Enabled" />
 																												
 																		<Standard.DropdownWithHorizontalControl Parameter.SelectorDataSource="{DutySelector}" MarginTop="10"
-																												HorizontalAlignment="Center" IsEnabled="@DutyEnabled" />
+																												HorizontalAlignment="Center" IsVisible="@Enabled" />
 																						
 																		<GridWidget DataSource="{ExtraInfos}" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" VerticalAlignment="Center"
 																					SuggestedWidth="700" SuggestedHeight="120" HorizontalAlignment="Center" DefaultCellWidth="230" 
@@ -163,7 +163,7 @@
 																			
 																				<ButtonWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedHeight="48" MarginRight="15" MarginLeft="15"
 																							  SuggestedWidth="130" HorizontalAlignment="Center" VerticalAlignment="Top"
-																							  Brush="ButtonBrush2" Command.Click="OnTournamentPress">
+																							  Brush="ButtonBrush2" Command.Click="ExecuteBuy" IsVisible="@BuyVisible">
 																					<Children>
 																						<HintWidget DataSource="{BuyHint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
 																									HorizontalAlignment="Center" Command.HoverBegin="ExecuteBeginHint"
@@ -177,7 +177,7 @@
 																				
 																				<ButtonWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedHeight="48" MarginRight="15" MarginLeft="15"
 																							  SuggestedWidth="130" HorizontalAlignment="Center" VerticalAlignment="Top"
-																							  Brush="ButtonBrush2" Command.Click="OnTournamentPress">
+																							  Brush="ButtonBrush2" Command.Click="ExecuteGrant" IsVisible="@GrantVisible">
 																					<Children>
 																						<HintWidget DataSource="{GrantHint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
 																									HorizontalAlignment="Center" Command.HoverBegin="ExecuteBeginHint"
@@ -185,6 +185,19 @@
 																						<RichTextWidget DoNotAcceptEvents="true" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren"
 																										HorizontalAlignment="Center" VerticalAlignment="Center" Brush="OverlayPopup.ButtonText"
 																										Brush.FontSize="20" Text="@GrantText" />
+																					</Children>
+																				</ButtonWidget>
+																				
+																				<ButtonWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedHeight="48" MarginRight="15" MarginLeft="15"
+																							  SuggestedWidth="130" HorizontalAlignment="Center" VerticalAlignment="Top"
+																							  Brush="ButtonBrush2" Command.Click="ExecuteReclaim" IsVisible="@ReclaimVisible">
+																					<Children>
+																						<HintWidget DataSource="{GrantHint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
+																									HorizontalAlignment="Center" Command.HoverBegin="ExecuteBeginHint"
+																									Command.HoverEnd="ExecuteEndHint" />
+																						<RichTextWidget DoNotAcceptEvents="true" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren"
+																										HorizontalAlignment="Center" VerticalAlignment="Center" Brush="OverlayPopup.ButtonText"
+																										Brush.FontSize="20" Text="@ReclaimText" />
 																					</Children>
 																				</ButtonWidget>
 

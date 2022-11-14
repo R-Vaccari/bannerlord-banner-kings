@@ -60,8 +60,13 @@ namespace BannerKings.Behaviours
 
         private void OnDailyTickHero(Hero hero)
         {
-            if (hero.IsChild || hero.Occupation != Occupation.Lord || hero.Clan.IsMinorFaction ||
-                !BannerKingsConfig.Instance.TitleManager.IsHeroTitleHolder(hero))
+            if (hero == null)
+            {
+                return;
+            }
+
+            if (hero.IsChild || hero.Occupation != Occupation.Lord || hero.Clan == null ||
+                hero.Clan.IsMinorFaction || !BannerKingsConfig.Instance.TitleManager.IsHeroTitleHolder(hero))
             {
                 return;
             }
