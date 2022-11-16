@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using BannerKings.Behaviours.Feasts;
+using BannerKings.Behaviours.Marriage;
 using BannerKings.Components;
 using BannerKings.Managers;
 using BannerKings.Managers.CampaignStart;
@@ -162,6 +163,7 @@ namespace BannerKings
             AddClassDefinition(typeof(BKDemesneLawDecision), 107);
             AddClassDefinition(typeof(Peerage), 108);
             AddClassDefinition(typeof(Feast), 109);
+            AddClassDefinition(typeof(MarriageContract), 110);
         }
 
         protected override void DefineContainerDefinitions()

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using BannerKings.Behaviours.Marriage;
+using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -39,7 +40,7 @@ namespace BannerKings.Behaviours.Feasts
         }
        
 
-        public void LaunchFeast(Town town, List<Clan> guests)
+        public void LaunchFeast(Town town, List<Clan> guests, MarriageContract marriage = null)
         {
             var feast = new Feast(town.OwnerClan.Leader,
                 guests,
@@ -60,8 +61,7 @@ namespace BannerKings.Behaviours.Feasts
         public void EndFeast(Feast feast, TextObject reason) 
         {
             feast.Finish(reason);
-            feasts.Remove(feast.Town);
-            
+            feasts.Remove(feast.Town);  
         }
 
         private void AddRecord(Feast feast)

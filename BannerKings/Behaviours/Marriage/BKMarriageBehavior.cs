@@ -1,4 +1,5 @@
-﻿using BannerKings.UI;
+﻿using BannerKings.Behaviours.Feasts;
+using BannerKings.UI;
 using HarmonyLib;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +8,7 @@ using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.CampaignBehaviors;
 using TaleWorlds.CampaignSystem.Encounters;
 using TaleWorlds.Core;
+using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Behaviours.Marriage
@@ -40,7 +42,7 @@ namespace BannerKings.Behaviours.Marriage
         } */
 
         private MarriageContract proposedMarriage;
-        private List<Hero> flirtedWith;
+        private List<Hero> flirtedWith = new List<Hero>();
 
         public void SetProposedMarriage(MarriageContract contract)
         {
@@ -56,6 +58,7 @@ namespace BannerKings.Behaviours.Marriage
         public override void SyncData(IDataStore dataStore)
         {
             dataStore.SyncData("bannerkings-heroes-flirted", ref flirtedWith);
+            dataStore.SyncData("bannerkings-player-betrothal", ref proposedMarriage);
 
             if (flirtedWith == null)
             {
@@ -206,10 +209,22 @@ namespace BannerKings.Behaviours.Marriage
 
                     return IsPotentialSpouseBK();
                 }, 
-                null, 
-                120, 
-                null, 
                 null);
+
+            starter.AddPlayerLine("bk_marriage_offered_clan_member_already_flirted",
+               "lord_talk_speak_diplomacy_2",
+               "bk_marriage_offered_not_accepted",
+               "{=cKtJBdPD}I wish to offer my hand in marriage.",
+               () =>
+               {
+                   if (Hero.OneToOneConversationHero == null || Hero.OneToOneConversationHero.Clan == null)
+                   {
+                       return false;
+                   }
+
+                   return IsPotentialSpouseBK() && flirtedWith.Contains(Hero.OneToOneConversationHero);
+               },
+               null);
 
 
             starter.AddDialogLine("lord_start_courtship_response_3",
@@ -398,7 +413,6 @@ namespace BannerKings.Behaviours.Marriage
                              .SetTextVariable("PLAYER", Hero.MainHero.Name)
                              .SetTextVariable("CONFIRMATION", proposedMarriage.ArrangedMarriage ? new TextObject("{=!}Will you confirm this union?")
                              : new TextObject("{=!}Will you confirm this betrothal? Know that we will not take lightly if you do, and yet go back on your word.")));
-
                      }
                  }
 
@@ -434,10 +448,7 @@ namespace BannerKings.Behaviours.Marriage
                () =>
                {
                     MBTextManager.SetTextVariable("PROPOSAL_CONFIRMED",
-                        new TextObject("{=!}It is decided then. {CONFIRMATION}")
-                        .SetTextVariable("PLAYER", Hero.MainHero.Name)
-                        .SetTextVariable("CONFIRMATION", proposedMarriage.ArrangedMarriage ? new TextObject("{=!}Will you confirm this union?")
-                        : new TextObject("{=!}Will you confirm this betrothal? Know that we will not take lightly if you do, and yet go back on your word.")));
+                        new TextObject("{=!}It is decided then. {CONFIRMATION}"));
 
                    return true;
                },
@@ -445,24 +456,30 @@ namespace BannerKings.Behaviours.Marriage
                {
                    if (!proposedMarriage.ArrangedMarriage)
                    {
+                       AnnounceBetrothal();
                        ChangeRomanticStateAction.Apply(Hero.MainHero, proposedMarriage.Proposed, Romance.RomanceLevelEnum.MatchMadeByFamily);
                    }
                    else
                    {
-                       MarriageAction.Apply(proposedMarriage.Proposer, proposedMarriage.Proposed);
                        if (proposedMarriage.Feast)
                        {
-
+                           AnnounceBetrothal();
+                           var town = proposedMarriage.FinalClan.Fiefs.GetRandomElement();
+                           var clanCount = MathF.Min(proposedMarriage.FinalClan.Kingdom.Clans.Count, MBRandom.RandomInt(3, 8));
+                           Campaign.Current.GetCampaignBehavior<BKFeastBehavior>().LaunchFeast(town, 
+                               proposedMarriage.FinalClan.Kingdom.Clans.Take(clanCount).ToList(), 
+                               proposedMarriage);
+                       }
+                       else
+                       {
+                           ApplyMarriageContract();
                        }
 
                        if (proposedMarriage.Alliance)
                        {
-                          
+                           Utils.Helpers.SetAlliance(Clan.PlayerClan, Hero.OneToOneConversationHero.Clan);
                        }
-
-                       proposedMarriage = null;
                    }
-
 
                    if (PlayerEncounter.Current != null)
                    {
@@ -470,6 +487,25 @@ namespace BannerKings.Behaviours.Marriage
                    }
                });
 
+        }
+
+        private void AnnounceBetrothal()
+        {
+            MBInformationManager.AddQuickInformation(new TextObject("{=!}{HERO1} and {HERO2} are now betrothed!")
+                .SetTextVariable("HERO", proposedMarriage.Proposer.Name)
+                .SetTextVariable("HERO2", proposedMarriage.Proposed.Name),
+                100,
+                null,
+                Utils.Helpers.GetKingdomDecisionSound());
+        }
+
+        public void ApplyMarriageContract()
+        {
+            if (proposedMarriage != null)
+            {
+                MarriageAction.Apply(proposedMarriage.Proposer, proposedMarriage.Proposed);
+                proposedMarriage = null;
+            }
         }
 
         private bool IsPotentialSpouseBK() => Hero.MainHero.Spouse == null &&

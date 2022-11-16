@@ -15,7 +15,7 @@ namespace BannerKings.UI.Marriages
         private MBBindingList<Hero> proposerCandidates, proposedCandidates;
         private HeroVM proposedHero, proposerHero;
         private bool proposedSelected, proposerSelected, arrangedMarriage, invertedClan, canInvertClan,
-            alliance, feast;
+            canChangeArrangedMarriage, alliance, feast;
         private DecisionElement invertedClanToggle, arrangedMarriageToggle, allianceToggle, feastToggle;
         private HintViewModel influenceCostHint, dowryValueHint, willAcceptHint,
             proposerSpouseHint, proposedSpouseHint;
@@ -45,7 +45,10 @@ namespace BannerKings.UI.Marriages
                 false,
                 delegate (bool value)
                 {
-                    ArrangedMarriage = value;
+                    if (CanChangeArrangedMarriage)
+                    {
+                        ArrangedMarriage = value;
+                    }
                 }, 
                 new TextObject("{=!}Arrange the marriage without consulting the spouses. While their personal relations are still considered, the to-be-spouses have no power to dictate the marriage result. If you are one of the spouses, this means no Courting phase - the marriage is sealed off right away."));
 
@@ -117,12 +120,20 @@ namespace BannerKings.UI.Marriages
             ProposerSpouseHint = new HintViewModel();
             ProposedSpouseHint = new HintViewModel();
 
+            CanChangeArrangedMarriage = true;
+
             if (ProposerHero != null)
             {
                 var score = BannerKingsConfig.Instance.MarriageModel.GetSpouseScore(ProposerHero.Hero, true);
                 ProposerSpouseValueText = score.ResultNumber.ToString("0");
                 ProposerSpouseHint.HintText = new TextObject("{=!}Spouse value.\n\n{HINT}")
                     .SetTextVariable("HINT", score.GetExplanations());
+
+                if (ProposerHero.Hero != Hero.MainHero)
+                {
+                    ArrangedMarriageToggle.OptionValueAsBoolean = true;
+                    CanChangeArrangedMarriage = false;
+                }
             }
 
             if (ProposedHero != null)
@@ -133,6 +144,7 @@ namespace BannerKings.UI.Marriages
                     .SetTextVariable("HINT", score.GetExplanations());
             }
 
+           
 
             DowryValueText = "0";
             InfluenceCostText = "0";
@@ -172,7 +184,7 @@ namespace BannerKings.UI.Marriages
                 dowryHero = ProposerHero.Hero;
             }
 
-            return dowryHero
+            return dowryHero;
         }
 
         private Clan GetFinalClan()
@@ -261,6 +273,8 @@ namespace BannerKings.UI.Marriages
                 alliance,
                 feast
                 ));
+
+            ExecuteClose();
         }
 
         [DataSourceProperty]
@@ -574,6 +588,20 @@ namespace BannerKings.UI.Marriages
                 if (value != invertedClan)
                 {
                     invertedClan = value;
+                    OnPropertyChangedWithValue(value);
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public bool CanChangeArrangedMarriage
+        {
+            get => canChangeArrangedMarriage;
+            set
+            {
+                if (value != canChangeArrangedMarriage)
+                {
+                    canChangeArrangedMarriage = value;
                     OnPropertyChangedWithValue(value);
                 }
             }

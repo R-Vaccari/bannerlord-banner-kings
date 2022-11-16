@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using BannerKings.Behaviours.Marriage;
+using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
@@ -13,12 +14,13 @@ namespace BannerKings.Behaviours.Feasts
 {
     public class Feast
     {
-        public Feast(Hero host, List<Clan> guests, Town town, CampaignTime endDate)
+        public Feast(Hero host, List<Clan> guests, Town town, CampaignTime endDate, MarriageContract marriageContract = null)
         {
             Host = host;
             Guests = guests;
             Town = town;
             EndDate = endDate;
+            MarriageContract = marriageContract;
         }
 
         public static float FoodConsumptionRatio => 0.5f;
@@ -38,6 +40,8 @@ namespace BannerKings.Behaviours.Feasts
         [SaveableProperty(9)] private float Alcohol { get; set; }
         [SaveableProperty(10)] private float Spices { get; set; }
         [SaveableProperty(11)] private float HostPresence { get; set; }
+
+        [SaveableProperty(12)] public MarriageContract MarriageContract { get; private set; }
 
         public void Tick(bool hourly = true)
         {
@@ -132,6 +136,11 @@ namespace BannerKings.Behaviours.Feasts
             List<TextObject> badComments = GetComplaints();
             float satisfaction = ((FoodQuality / 7f) + (FoodQuantity / 7f) +
                 (FoodVariety / 7f) + (Alcohol / 7f) + (HostPresence / Ticks)) / 5f;
+
+            if (MarriageContract != null)
+            {
+                Campaign.Current.GetCampaignBehavior<BKMarriageBehavior>().ApplyMarriageContract();
+            }
 
 
             foreach (var clan in Guests)

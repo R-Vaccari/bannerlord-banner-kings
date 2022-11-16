@@ -101,24 +101,82 @@
 												
 												
 												<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" StackLayout.LayoutMethod="HorizontalLeftToRight"
-														   MarginTop="40" MarginLeft="35" MarginRight="35">
+														   MarginTop="60" MarginLeft="35" MarginRight="35">
+													<Children>
+												
+														<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" StackLayout.LayoutMethod="VerticalBottomToTop"
+															   MarginTop="20">
+															<Children>
+																<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
+																				HorizontalAlignment="Center" Brush="TownManagement.Project.Name.Text" Brush.FontSize="20" Text="@SpouseHeaderText" />
+																<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren">
+																	<Children>
+																		<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
+																				HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="25" Text="@ProposerSpouseValueText" />
+																		<HintWidget DataSource="{ProposerSpouseHint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed"
+																					SuggestedHeight="25" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" />
+																	</Children>
+																</Widget>
+															</Children>
+														</ListPanel>
+														
+														<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" StackLayout.LayoutMethod="VerticalBottomToTop"
+															   MarginTop="20">
+															<Children>
+																<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
+																				HorizontalAlignment="Center" Brush="TownManagement.Project.Name.Text" Brush.FontSize="20" Text="@WillAcceptHeaderText" />
+																<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren">
+																	<Children>
+																		<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
+																				HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="25" Text="@WillAcceptText" />
+																		<HintWidget DataSource="{WillAcceptHint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed"
+																					SuggestedHeight="25" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" />
+																	</Children>
+																</Widget>
+															</Children>
+														</ListPanel>
+														
+														
+														<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" StackLayout.LayoutMethod="VerticalBottomToTop"
+															   MarginTop="20">
+															<Children>
+																<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
+																				HorizontalAlignment="Center" Brush="TownManagement.Project.Name.Text" Brush.FontSize="20" Text="@SpouseHeaderText" />
+																<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren">
+																	<Children>
+																		<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
+																				HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="25" Text="@ProposedSpouseValueText" />
+																		<HintWidget DataSource="{ProposedSpouseHint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed"
+																					SuggestedHeight="25" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" />
+																	</Children>
+																</Widget>
+															</Children>
+														</ListPanel>
+												
+												
+												
+													</Children>
+												</ListPanel>
+												
+												<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" StackLayout.LayoutMethod="HorizontalLeftToRight"
+														   MarginTop="20" MarginLeft="35" MarginRight="35">
 													<Children>
 													
 														<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" StackLayout.LayoutMethod="VerticalBottomToTop"
 															   MarginTop="20">
 															<Children>
 																<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
-																				HorizontalAlignment="Center" Brush="TownManagement.Project.Name.Text" Brush.FontSize="20" Text="Final Clan" />
+																				HorizontalAlignment="Center" Brush="TownManagement.Project.Name.Text" Brush.FontSize="20" Text="@DowryHeaderText" />
 																<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren">
 																	<Children>
 																		<ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center">
 																			<Children>
-																				<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
+																				<RichTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren"
 																								HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="25" Text="@DowryValueText" />
-																				<Widget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="40" SuggestedHeight="40" HorizontalAlignment="Center" VerticalAlignment="Center" Sprite="General\Icons\Coin@2x" />
+																				<Widget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="30" SuggestedHeight="30" HorizontalAlignment="Center" VerticalAlignment="Center" Sprite="General\Icons\Coin@2x" />
 																			</Children>
 																		</ListPanel>
-																		<HintWidget DataSource="{InfluenceCostHint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed"
+																		<HintWidget DataSource="{DowryValueHint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed"
 																					SuggestedHeight="25" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" />
 																	</Children>
 																</Widget>
@@ -130,13 +188,11 @@
 															   MarginTop="20">
 															<Children>
 																<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
-																				HorizontalAlignment="Center" Brush="TownManagement.Project.Name.Text" Brush.FontSize="20" Text="Final Clan" />
+																				HorizontalAlignment="Center" Brush="TownManagement.Project.Name.Text" Brush.FontSize="20" Text="@ClanHeaderText" />
 																<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren">
 																	<Children>
 																		<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
-																				HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="25" Text="Unclear" />
-																		<HintWidget DataSource="{ProposedHero}" WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed"
-																					SuggestedHeight="25" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" />
+																						HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="25" Text="@FinalClanText" />
 																	</Children>
 																</Widget>
 															</Children>
@@ -147,7 +203,7 @@
 															   MarginTop="20">
 															<Children>
 																<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
-																				HorizontalAlignment="Center" Brush="TownManagement.Project.Name.Text" Brush.FontSize="20" Text="Final Clan" />
+																				HorizontalAlignment="Center" Brush="TownManagement.Project.Name.Text" Brush.FontSize="20" Text="@InfluenceHeaderText" />
 																<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren">
 																	<Children>
 																		<ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center">
@@ -291,7 +347,7 @@
 				
 				<ButtonWidget Id="CloseButton" Command.Click="ExecuteClose" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed"
 				              SuggestedWidth="!Popup.CloseButton.Width" SuggestedHeight="!Popup.CloseButton.Height"
-				              HorizontalAlignment="Center" VerticalAlignment="Center" MarginLeft="1000" MarginBottom="680"
+				              HorizontalAlignment="Center" VerticalAlignment="Center" MarginLeft="900" MarginBottom="600"
 				              Brush="Popup.CloseButton" IsVisible="true" />
 			</Children>
 		</Widget>

@@ -110,7 +110,7 @@ namespace BannerKings.Managers.Goals.Decisions
                 new TextObject("{=!}Organize Feast").ToString(),
                 new TextObject("{=!}Choose where to hold your feast. The feast food and alcohol will be taken from the settlement Stash.").ToString(),
                 list,
-                true,
+                false,
                 1,
                 GameTexts.FindText("str_accept").ToString(),
                 String.Empty,
@@ -122,20 +122,31 @@ namespace BannerKings.Managers.Goals.Decisions
                         new TextObject("{=!}Feast Guests").ToString(),
                         new TextObject("{=!}Choose the guests for your feast. Pick at least 3 different clans from your realm. Mind you, guests will have expectations. They will want food in large variety, of good quality and plentiful. They will also expect a lot of alcohol, and the host to be present.").ToString(),
                         clanList,
-                        true,
+                        false,
                         clanList.Count,
                         GameTexts.FindText("str_accept").ToString(),
                         String.Empty,
                         delegate (List<InquiryElement> list)
                         {
                             guests = new List<Clan>();
-                            foreach (var element in list)
-                            {
-                                Clan clan = (Clan)element.Identifier;
-                                influenceCost += GuestInfluenceCost(clan);
-                                guests.Add(clan);
-                            }
-                            ApplyGoal();
+
+                            InformationManager.ShowInquiry(new InquiryData(null,
+                                null,
+                                true,
+                                true,
+                                null,
+                                null,
+                                () =>
+                                {
+                                    foreach (var element in list)
+                                    {
+                                        Clan clan = (Clan)element.Identifier;
+                                        influenceCost += GuestInfluenceCost(clan);
+                                        guests.Add(clan);
+                                    }
+                                    ApplyGoal();
+                                },
+                                null));
                         },
                         null));
                 },
