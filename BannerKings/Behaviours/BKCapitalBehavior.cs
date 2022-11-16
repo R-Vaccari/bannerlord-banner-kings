@@ -46,7 +46,7 @@ namespace BannerKings.Behaviours
                         .SetTextVariable("KINGDOM", kingdom.Name),
                         0,
                         null,
-                        "event:/ui/notification/kingdom_decision");
+                        Utils.Helpers.GetKingdomDecisionSound());
                 }
             }
         }

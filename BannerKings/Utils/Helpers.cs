@@ -2,16 +2,12 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Xml;
-using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Titles;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.AgentOrigins;
-using TaleWorlds.CampaignSystem.CampaignBehaviors;
 using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.Settlements.Locations;
-using TaleWorlds.CampaignSystem.ViewModelCollection;
-using TaleWorlds.CampaignSystem.ViewModelCollection.CharacterDeveloper;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
@@ -22,7 +18,25 @@ namespace BannerKings.Utils
 {
     public static class Helpers
     {
+        public static void SetAlliance(IFaction faction1, IFaction faction2)
+        {
+            var stance = Clan.PlayerClan.GetStanceWith(Hero.OneToOneConversationHero.Clan);
+            if (stance.IsNeutral)
+            {
+                stance.IsAllied = true;
+                if (faction1 == Hero.MainHero.MapFaction || faction2 == Hero.MainHero.MapFaction)
+                {
+                    MBInformationManager.AddQuickInformation(new TextObject("{=!}The {FACTION1} and {FACTION2} are now allies.")
+                        .SetTextVariable("FACTION1", faction1.Name)
+                        .SetTextVariable("FACTION2", faction2.Name),
+                        100,
+                        null,
+                        GetKingdomDecisionSound());
+                }
+            }
+        }
 
+        internal static string GetKingdomDecisionSound() => "event:/ui/notification/kingdom_decision";
 
         public static void AddCharacterToKeep(Hero hero, Settlement settlement)
         {
@@ -45,15 +59,17 @@ namespace BannerKings.Utils
         public static void AddNotableToKeep(Hero notable, Settlement settlement)
         {
             var town = settlement.Town;
-            LocationCharacter locationCharacterOfHero2 = town.Settlement.LocationComplex.GetLocationCharacterOfHero(notable);
-            if (locationCharacterOfHero2 != null)
+            LocationCharacter locCharacter = town.Settlement.LocationComplex.GetLocationCharacterOfHero(notable);
+            if (locCharacter != null)
             {
-                locationCharacterOfHero2.SpecialTargetTag = null;
+                locCharacter.SpecialTargetTag = null;
 
-                Location locationOfCharacter2 = town.Settlement.LocationComplex.GetLocationOfCharacter(notable);
-                town.Settlement.LocationComplex.ChangeLocation(locationCharacterOfHero2, locationOfCharacter2,
-                    settlement.LocationComplex.GetLocationWithId("lordshall"));
-                
+                Location characterLocation = town.Settlement.LocationComplex.GetLocationOfCharacter(notable);
+                if (characterLocation.StringId != "lordshall")
+                {
+                    town.Settlement.LocationComplex.ChangeLocation(locCharacter, characterLocation,
+                                        settlement.LocationComplex.GetLocationWithId("lordshall"));
+                }
             }
         }
 
