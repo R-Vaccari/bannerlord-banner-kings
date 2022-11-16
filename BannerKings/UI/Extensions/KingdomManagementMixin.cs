@@ -191,7 +191,11 @@ namespace BannerKings.UI.Extensions
             kingdomManagement.Diplomacy.Show = false;
 
             DemesneSelected = false;
-            Demesne.IsSelected = false;
+            if (Demesne != null)
+            {
+                Demesne.IsSelected = false;
+            }
+            
             Court.IsSelected = true;
             CourtSelected = true;
         }
