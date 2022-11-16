@@ -1,4 +1,5 @@
-﻿using BannerKings.UI.Items;
+﻿using BannerKings.Behaviours.Marriage;
+using BannerKings.UI.Items;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.ViewModelCollection;
@@ -13,10 +14,13 @@ namespace BannerKings.UI.Marriages
     {
         private MBBindingList<Hero> proposerCandidates, proposedCandidates;
         private HeroVM proposedHero, proposerHero;
-        private bool proposedSelected, proposerSelected, arrangedMarriage, invertedClan, canInvertClan;
+        private bool proposedSelected, proposerSelected, arrangedMarriage, invertedClan, canInvertClan,
+            alliance, feast;
         private DecisionElement invertedClanToggle, arrangedMarriageToggle, allianceToggle, feastToggle;
-        private HintViewModel influenceCostHint;
-        private string dowryValueText, influenceCostText;
+        private HintViewModel influenceCostHint, dowryValueHint, willAcceptHint,
+            proposerSpouseHint, proposedSpouseHint;
+        private string dowryValueText, influenceCostText, finalClanText, willAcceptText,
+            proposerSpouseText, proposedSpouseText;
 
         public MarriageContractProposalVM(Hero clanLeader) : base(null, true)
         {
@@ -51,7 +55,7 @@ namespace BannerKings.UI.Marriages
                 false,
                 delegate (bool value)
                 {
-                    ArrangedMarriage = value;
+                    alliance = value;
                 },
                 new TextObject("{=!}Arrange the marriage without consulting the spouses. While their personal relations are still considered, the to-be-spouses have no power to dictate the marriage result. If you are one of the spouses, this means no Courting phase - the marriage is sealed off right away."));
 
@@ -60,7 +64,7 @@ namespace BannerKings.UI.Marriages
                 false,
                 delegate (bool value)
                 {
-                    ArrangedMarriage = value;
+                    feast = value;
                 },
                 new TextObject("{=!}Arrange the marriage without consulting the spouses. While their personal relations are still considered, the to-be-spouses have no power to dictate the marriage result. If you are one of the spouses, this means no Courting phase - the marriage is sealed off right away."));
 
@@ -108,21 +112,87 @@ namespace BannerKings.UI.Marriages
                 }
             }
 
-            Clan finalClan = null;
+            ProposerSpouseValueText = "0";
+            ProposedSpouseValueText = "0";
+            ProposerSpouseHint = new HintViewModel();
+            ProposedSpouseHint = new HintViewModel();
+
+            if (ProposerHero != null)
+            {
+                var score = BannerKingsConfig.Instance.MarriageModel.GetSpouseScore(ProposerHero.Hero, true);
+                ProposerSpouseValueText = score.ResultNumber.ToString("0");
+                ProposerSpouseHint.HintText = new TextObject("{=!}Spouse value.\n\n{HINT}")
+                    .SetTextVariable("HINT", score.GetExplanations());
+            }
+
+            if (ProposedHero != null)
+            {
+                var score = BannerKingsConfig.Instance.MarriageModel.GetSpouseScore(ProposedHero.Hero, true);
+                ProposedSpouseValueText = score.ResultNumber.ToString("0");
+                ProposedSpouseHint.HintText = new TextObject("{=!}Spouse value.\n\n{HINT}")
+                    .SetTextVariable("HINT", score.GetExplanations());
+            }
 
 
             DowryValueText = "0";
             InfluenceCostText = "0";
             InfluenceCostHint = new HintViewModel();
+            DowryValueHint = new HintViewModel();
+            FinalClanText = new TextObject("{=!}Unclear").ToString();
+            WillAcceptText = new TextObject("{=!}Unclear").ToString();
+            WillAcceptHint = new HintViewModel();
             if (ProposerHero != null && ProposedHero != null)
             {
-                var influence = BannerKingsConfig.Instance.MarriageModel.GetInfluenceCost(ProposerHero.Hero,
-                    ProposedHero.Hero, finalClan, true);
+               var willAccept = BannerKingsConfig.Instance.MarriageModel.IsMarriageAdequate(ProposerHero.Hero,
+                    ProposedHero.Hero, true);
+                WillAcceptText = GameTexts.FindText(willAccept.ResultNumber >= 1f ? "str_yes" : "str_no").ToString();
+                WillAcceptHint.HintText = new TextObject("{=!}Whether or not their clan will accept this proposal. This is mainly dicatated by the different of value between the spouses, but also influence by their relationship with each other and the clan's trust towards you, as well as other kingdom-related matters, such as matching cultures and faiths.\n\n{REASON}")
+                    .SetTextVariable("REASON", willAccept.GetExplanations());
 
+                Clan finalClan = GetFinalClan();
+                FinalClanText = finalClan.Name.ToString();
+
+                var influence = BannerKingsConfig.Instance.MarriageModel.GetInfluenceCost(ProposedHero.Hero, true);
                 InfluenceCostText = ((int)influence.ResultNumber).ToString();
-                InfluenceCostHint.HintText = new TextObject("{=!}{HINT}")
+                InfluenceCostHint.HintText = new TextObject("{=!}The influence cost associated with this marriage. Influence is associated with the social standing of the other clan. A clan of high standing, such as those leading kingdoms, are valuable marriage targets both within and outside their factions. Thus, the more important a clan is, the more influence is associated with marrying them.\n\n{HINT}")
                     .SetTextVariable("HINT", influence.GetExplanations());
+
+                var dowry = BannerKingsConfig.Instance.MarriageModel.GetDowryValue(GetDowryHero(), ArrangedMarriage, true);
+                DowryValueText = ((int)dowry.ResultNumber).ToString();
+                DowryValueHint.HintText = new TextObject("{=!}The dowry is the financial security provided by the clan that takes in a new family member. It serves to show good will and genuine interest in the marriage by requiring a significant investment in it. Dowries are calculated based on the spouse's value as a family member - their position in the original clan and their usefulness. If a member of your clan is leaving the family to join another, you are owed the dowry.\n\n{HINT}")
+                    .SetTextVariable("HINT", dowry.GetExplanations());
             }
+        }
+
+        private Hero GetDowryHero()
+        {
+            Hero dowryHero = ProposedHero.Hero;
+            if (GetFinalClan() != Clan.PlayerClan)
+            {
+                dowryHero = ProposerHero.Hero;
+            }
+
+            return dowryHero
+        }
+
+        private Clan GetFinalClan()
+        {
+            Clan finalClan = BannerKingsConfig.Instance.MarriageModel.GetClanAfterMarriage(ProposerHero.Hero,
+                                ProposedHero.Hero);
+
+            if (InvertedClan)
+            {
+                if (finalClan == Clan.PlayerClan)
+                {
+                    finalClan = ProposedHero.Hero.Clan;
+                }
+                else
+                {
+                    finalClan = Clan.PlayerClan;
+                }
+            }
+
+            return finalClan;
         }
 
         public void SelectProposer()
@@ -179,6 +249,82 @@ namespace BannerKings.UI.Marriages
                 null));
         }
 
+        private void MakeContract()
+        {
+            Campaign.Current.GetCampaignBehavior<BKMarriageBehavior>().SetProposedMarriage(
+                new MarriageContract(ProposerHero.Hero,
+                ProposedHero.Hero,
+                GetFinalClan(),
+                (int)BannerKingsConfig.Instance.MarriageModel.GetDowryValue(GetDowryHero(), ArrangedMarriage, true).ResultNumber,
+                (int)BannerKingsConfig.Instance.MarriageModel.GetInfluenceCost(ProposedHero.Hero, true).ResultNumber,
+                ArrangedMarriage,
+                alliance,
+                feast
+                ));
+        }
+
+        [DataSourceProperty]
+        public string DowryHeaderText => new TextObject("{=!}Dowry").ToString();
+
+        [DataSourceProperty]
+        public string ClanHeaderText => new TextObject("{=!}Final Clan").ToString();
+
+        [DataSourceProperty]
+        public string InfluenceHeaderText => GameTexts.FindText("str_influence").ToString();
+
+        [DataSourceProperty]
+        public string ConfirmText => GameTexts.FindText("str_accept").ToString();
+
+        [DataSourceProperty]
+        public string WillAcceptHeaderText => new TextObject("{=!}Acceptable").ToString();
+
+        [DataSourceProperty]
+        public string SpouseHeaderText => new TextObject("{=!}Spouse Score").ToString();
+
+
+        [DataSourceProperty]
+        public string ProposerSpouseValueText
+        {
+            get => proposerSpouseText;
+            set
+            {
+                if (value != proposerSpouseText)
+                {
+                    proposerSpouseText = value;
+                    OnPropertyChangedWithValue(value);
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public string ProposedSpouseValueText
+        {
+            get => proposedSpouseText;
+            set
+            {
+                if (value != proposedSpouseText)
+                {
+                    proposedSpouseText = value;
+                    OnPropertyChangedWithValue(value);
+                }
+            }
+        }
+
+
+        [DataSourceProperty]
+        public string FinalClanText
+        {
+            get => finalClanText;
+            set
+            {
+                if (value != finalClanText)
+                {
+                    finalClanText = value;
+                    OnPropertyChangedWithValue(value);
+                }
+            }
+        }
+
 
         [DataSourceProperty]
         public string InfluenceCostText
@@ -203,6 +349,76 @@ namespace BannerKings.UI.Marriages
                 if (value != dowryValueText)
                 {
                     dowryValueText = value;
+                    OnPropertyChangedWithValue(value);
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public string WillAcceptText
+        {
+            get => willAcceptText;
+            set
+            {
+                if (value != willAcceptText)
+                {
+                    willAcceptText = value;
+                    OnPropertyChangedWithValue(value);
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public HintViewModel ProposerSpouseHint
+        {
+            get => proposerSpouseHint;
+            set
+            {
+                if (value != proposerSpouseHint)
+                {
+                    proposerSpouseHint = value;
+                    OnPropertyChangedWithValue(value);
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public HintViewModel ProposedSpouseHint
+        {
+            get => proposedSpouseHint;
+            set
+            {
+                if (value != proposedSpouseHint)
+                {
+                    proposedSpouseHint = value;
+                    OnPropertyChangedWithValue(value);
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public HintViewModel WillAcceptHint
+        {
+            get => willAcceptHint;
+            set
+            {
+                if (value != willAcceptHint)
+                {
+                    willAcceptHint = value;
+                    OnPropertyChangedWithValue(value);
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public HintViewModel DowryValueHint
+        {
+            get => dowryValueHint;
+            set
+            {
+                if (value != dowryValueHint)
+                {
+                    dowryValueHint = value;
                     OnPropertyChangedWithValue(value);
                 }
             }
@@ -347,6 +563,7 @@ namespace BannerKings.UI.Marriages
                 }
             }
         }
+
 
         [DataSourceProperty]
         public bool InvertedClan

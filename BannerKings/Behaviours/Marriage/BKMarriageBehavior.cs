@@ -3,8 +3,9 @@ using HarmonyLib;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.CampaignBehaviors;
-using TaleWorlds.CampaignSystem.Conversation;
+using TaleWorlds.CampaignSystem.Encounters;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 
@@ -38,7 +39,14 @@ namespace BannerKings.Behaviours.Marriage
             return false;
         } */
 
-        public bool IsCoupleMatchedByFamily(Hero proposer, Hero proposed) => Romance.GetRomanticLevel(proposer, proposed) == Romance.RomanceLevelEnum.MatchMadeByFamily;
+        private MarriageContract proposedMarriage;
+        private List<Hero> flirtedWith;
+
+        public void SetProposedMarriage(MarriageContract contract)
+        {
+            proposedMarriage = contract;
+        }
+
 
         public override void RegisterEvents()
         {
@@ -47,11 +55,144 @@ namespace BannerKings.Behaviours.Marriage
 
         public override void SyncData(IDataStore dataStore)
         {
-            
+            dataStore.SyncData("bannerkings-heroes-flirted", ref flirtedWith);
+
+            if (flirtedWith == null)
+            {
+                flirtedWith = new List<Hero>();
+            }
         }
+
+        public bool IsCoupleMatchedByFamily(Hero proposer, Hero proposed) => 
+            Romance.GetRomanticLevel(proposer, proposed) == Romance.RomanceLevelEnum.MatchMadeByFamily && proposedMarriage != null
+            && proposedMarriage.Proposed == proposed;
+
 
         private void OnSessionLaunched(CampaignGameStarter starter)
         {
+
+            starter.AddPlayerLine("lord_special_request_flirt", 
+                "lord_talk_speak_diplomacy_2", 
+                "lord_start_courtship_response", 
+                "{=!}{FLIRTATION_LINE}", 
+                () =>
+                {
+                    if (Hero.MainHero.IsFemale)
+                    {
+                        MBTextManager.SetTextVariable("FLIRTATION_LINE", "{=bjJs0eeB}My lord, I note that you have not yet taken a wife.", false);
+                    }
+                    else
+                    {
+                        MBTextManager.SetTextVariable("FLIRTATION_LINE", "{=v1hC6Aem}My lady, I wish to profess myself your most ardent admirer.", false);
+                    }
+
+                    return Campaign.Current.Models.MarriageModel.IsCoupleSuitableForMarriage(Hero.MainHero, Hero.OneToOneConversationHero) && 
+                    !FactionManager.IsAtWarAgainstFaction(Hero.MainHero.MapFaction, Hero.OneToOneConversationHero.MapFaction) &&
+                    Romance.GetRomanticLevel(Hero.MainHero, Hero.OneToOneConversationHero) == Romance.RomanceLevelEnum.Untested &&
+                    !flirtedWith.Contains(Hero.OneToOneConversationHero);
+                },
+                () => flirtedWith.Add(Hero.OneToOneConversationHero));
+
+            starter.AddDialogLine("lord_start_courtship_response", 
+                "lord_start_courtship_response", 
+                "lord_start_courtship_response_player_offer", 
+                "{=!}{INITIAL_COURTSHIP_REACTION}", 
+                () =>
+                {
+                    if (Romance.GetRomanticLevel(Hero.MainHero, Hero.OneToOneConversationHero) == Romance.RomanceLevelEnum.FailedInPracticalities 
+                    || Romance.GetRomanticLevel(Hero.MainHero, Hero.OneToOneConversationHero) == Romance.RomanceLevelEnum.FailedInCompatibility)
+                    {
+                        return false;
+                    }
+
+                    var hero = Hero.OneToOneConversationHero;
+                    int attraction = Campaign.Current.Models.RomanceModel.GetAttractionValuePercentage(hero, Hero.MainHero);
+
+                    TextObject text = null;
+                    if (attraction >= 0.7)
+                    {
+                        text = new TextObject("{=!}I am delighted to hear. We are currently taking in proposal, as I am yet to be wed...");
+                        ChangeRelationAction.ApplyPlayerRelation(hero, 3, false);
+                    }
+                    else if (attraction <= 0.3)
+                    {
+                        text = new TextObject("{=!}Is that so? I'm afraid I cannot say the same.");
+                    }
+                    else
+                    {
+                        text = new TextObject("{=!}Well, we are currently taking in proposals.");
+                        ChangeRelationAction.ApplyPlayerRelation(hero, -3, false);
+                    }
+
+                    if (hero.GetHeroTraits().Mercy < 0)
+                    {
+                        if (attraction >= 0.7)
+                        {
+                            text = new TextObject("{=!}I see... you look like you have potential.");
+                        }
+                        else if (attraction <= 0.3)
+                        {
+                            text = new TextObject("{=!}That sounded as dumb as you look.");
+                        }
+                        else
+                        {
+                            text = new TextObject("{=!}Thanks... I suppose. Though you'll need more than that to impress me.");
+                        }
+                    }
+                    else if (hero.GetHeroTraits().Honor > 0)
+                    {
+                        if (attraction >= 0.7)
+                        {
+                            text = new TextObject("{=!}I am delighted to hear it. You know, I am still to be wed...");
+                        }
+                        else if (attraction <= 0.3)
+                        {
+                            text = new TextObject("{=!}I am grateful for the compliment. I am afraid I have more important matters to attend to.");
+                        }
+                        else
+                        {
+                            text = new TextObject("{=!}Thank you. I am looking for spouse candidates. You strike me well yourself.");
+                        }
+                    }
+                    else if (hero.GetHeroTraits().Calculating > 0)
+                    {
+                        if (attraction >= 0.7)
+                        {
+                            text = new TextObject("{=!}Indeed. I must say, you strike me well. Perhaps uniting would benefit us mutually.");
+                        }
+                        else if (attraction <= 0.3)
+                        {
+                            text = new TextObject("{=!}I am afraid your play had no effect... I do not believe you and me together would be fruitful.");
+                        }
+                        else
+                        {
+                            text = new TextObject("{=!}Thank you. I am looking for spouse candidates, and will remember your kindness.");
+                        }
+                    }
+                    else if (hero.GetHeroTraits().Generosity > 1)
+                    {
+                        if (attraction >= 0.7)
+                        {
+                            text = new TextObject("{=!}You are most generous, {TITLE}. You look quite well yourself, if I may say.")
+                                .SetTextVariable("TITLE", GameTexts.FindText(Hero.MainHero.IsFemale ? "str_player_salutation_my_lady" : "str_player_salutation_my_lord"));
+                        }
+                        else if (attraction <= 0.3)
+                        {
+                            text = new TextObject("{=!}I am grateful, {HERO}. I can tell you my family is currently seeking out proposals.")
+                                .SetTextVariable("HERO", Hero.MainHero.Name);
+                        }
+                        else
+                        {
+                            text = new TextObject("{=!}You are a kind spirit. We are looking for spouse candidates. Though it is not my place to decide, you strike me as a decent person.");
+                        }
+                    }
+
+                    MBTextManager.SetTextVariable("INITIAL_COURTSHIP_REACTION", text);
+                    return IsPotentialSpouseBK();
+                },
+                null, 100, null);
+
+
             starter.AddPlayerLine("bk_marriage_offered_clan_member", 
                 "lord_start_courtship_response_player_offer", 
                 "bk_marriage_offered_not_accepted",
@@ -63,11 +204,7 @@ namespace BannerKings.Behaviours.Marriage
                         return false;
                     }
 
-                    return Hero.MainHero.Spouse == null &&
-                    Campaign.Current.Models.MarriageModel.IsCoupleSuitableForMarriage(Hero.MainHero, Hero.OneToOneConversationHero) &&
-                    !FactionManager.IsAtWarAgainstFaction(Hero.MainHero.MapFaction, Hero.OneToOneConversationHero.MapFaction) &&
-                    !IsCoupleMatchedByFamily(Hero.MainHero, Hero.OneToOneConversationHero) &&
-                    Hero.OneToOneConversationHero.Clan.Leader != Hero.OneToOneConversationHero;
+                    return IsPotentialSpouseBK();
                 }, 
                 null, 
                 120, 
@@ -76,8 +213,8 @@ namespace BannerKings.Behaviours.Marriage
 
 
             starter.AddDialogLine("lord_start_courtship_response_3",
-                "bk_marriage_offered_not_accepted", 
-                "close_window", 
+                "bk_marriage_offered_not_accepted",
+                "lord_pretalk", 
                 "{=!}{OFFER_NOT_ACCEPTED}", 
                 () =>
                 {
@@ -141,7 +278,7 @@ namespace BannerKings.Behaviours.Marriage
 
             starter.AddPlayerLine("lord_propose_marriage_contract", 
                 "lord_talk_speak_diplomacy_2", 
-                "marriage_contract_proposed", 
+                "propose_marriage_contract", 
                 "{=v9tQv4eN}I would like to propose an alliance between our families through marriage.",
                 () =>
                 {
@@ -183,21 +320,163 @@ namespace BannerKings.Behaviours.Marriage
                 },
                 null);
 
-            starter.AddDialogLine("marriage_contract_proposed",
-               "marriage_contract_proposed",
-               "marriage_contract_proposed_response",
-               "{=!}I see. Tell me the specifics of your proposal.",
+            starter.AddDialogLine("propose_marriage_contract",
+               "propose_marriage_contract",
+               "propose_marriage_contract_response",
+               "{=!}Tell me the specifics of your proposal.",
                null,
                null);
 
-            starter.AddPlayerLine("marriage_contract_proposed_response",
-                "marriage_contract_proposed_response",
-                "close_window",
+            starter.AddPlayerLine("propose_marriage_contract_response",
+               "propose_marriage_contract_response",
+               "marriage_contract_proposed",
+               "{=!}This is my proposal.",
+               null,
+               null);
+
+            starter.AddPlayerLine("propose_marriage_contract_response",
+               "propose_marriage_contract_response",
+               "propose_marriage_contract",
+               "{=!}Let me review my proposal.",
+               null,
+               () => UIManager.Instance.ShowWindow("marriage"));
+
+            starter.AddPlayerLine("propose_marriage_contract_response",
+                "propose_marriage_contract_response",
+                "lord_pretalk",
                 "{=D33fIGQe}Never mind.",
                 null,
                 null);
 
+
+            starter.AddDialogLine("marriage_contract_proposed",
+              "marriage_contract_proposed",
+              "propose_marriage_contract",
+              "{=!}I'm afraid you didn't make an adequate proposal.",
+              () => 
+              {
+                  return proposedMarriage == null;
+              },
+              null);
+
+            starter.AddDialogLine("marriage_contract_proposed",
+              "marriage_contract_proposed",
+              "propose_marriage_contract",
+              "{=!}This proposal is not acceptable. {REJECTION_REASON}",
+              () =>
+              {
+                  bool rejected = true;
+                  bool notNull = proposedMarriage != null;
+                  if (notNull)
+                  {
+                      (TextObject, bool) result = proposedMarriage.IsContractAdequate();
+                      MBTextManager.SetTextVariable("REJECTION_REASON", result.Item1);
+                      rejected = !result.Item2;
+                  }
+                 
+                  return notNull && rejected;
+              },
+              null);
+
+            starter.AddDialogLine("marriage_contract_proposed",
+             "marriage_contract_proposed",
+             "marriage_contract_confirmation",
+             "{=!}{PROPOSAL_ACCEPTED}",
+             () =>
+             {
+                 bool rejected = true;
+                 bool notNull = proposedMarriage != null;
+                 if (notNull)
+                 {
+                     (TextObject, bool) result = proposedMarriage.IsContractAdequate();
+                     rejected = !result.Item2;
+
+                     if (!rejected)
+                     {
+                         MBTextManager.SetTextVariable("PROPOSAL_ACCEPTED", 
+                             new TextObject("{=!}{PLAYER}, I am happy to accept this proposal. {CONFIRMATION}")
+                             .SetTextVariable("PLAYER", Hero.MainHero.Name)
+                             .SetTextVariable("CONFIRMATION", proposedMarriage.ArrangedMarriage ? new TextObject("{=!}Will you confirm this union?")
+                             : new TextObject("{=!}Will you confirm this betrothal? Know that we will not take lightly if you do, and yet go back on your word.")));
+
+                     }
+                 }
+
+                 return notNull && !rejected;
+             },
+             () =>
+             {
+                 if (!proposedMarriage.ArrangedMarriage)
+                 {
+                     ChangeRomanticStateAction.Apply(Hero.MainHero, proposedMarriage.Proposed, Romance.RomanceLevelEnum.MatchMadeByFamily);
+                 }
+             });
+
+            starter.AddPlayerLine("marriage_contract_confirmation",
+               "marriage_contract_confirmation",
+               "marriage_contract_confirmed_by_player",
+               "{=!}I confirm it.",
+               null,
+               () => proposedMarriage.Confirmed = true);
+
+            starter.AddPlayerLine("marriage_contract_confirmation",
+               "marriage_contract_confirmation",
+               "propose_marriage_contract",
+               "{=!}Let me review my proposal.",
+               null,
+               () => UIManager.Instance.ShowWindow("marriage"));
+
+
+            starter.AddDialogLine("marriage_contract_confirmed_by_player",
+               "marriage_contract_confirmed_by_player",
+               "close_window",
+                   "{=!}{PROPOSAL_CONFIRMED}",
+               () =>
+               {
+                    MBTextManager.SetTextVariable("PROPOSAL_CONFIRMED",
+                        new TextObject("{=!}It is decided then. {CONFIRMATION}")
+                        .SetTextVariable("PLAYER", Hero.MainHero.Name)
+                        .SetTextVariable("CONFIRMATION", proposedMarriage.ArrangedMarriage ? new TextObject("{=!}Will you confirm this union?")
+                        : new TextObject("{=!}Will you confirm this betrothal? Know that we will not take lightly if you do, and yet go back on your word.")));
+
+                   return true;
+               },
+               () =>
+               {
+                   if (!proposedMarriage.ArrangedMarriage)
+                   {
+                       ChangeRomanticStateAction.Apply(Hero.MainHero, proposedMarriage.Proposed, Romance.RomanceLevelEnum.MatchMadeByFamily);
+                   }
+                   else
+                   {
+                       MarriageAction.Apply(proposedMarriage.Proposer, proposedMarriage.Proposed);
+                       if (proposedMarriage.Feast)
+                       {
+
+                       }
+
+                       if (proposedMarriage.Alliance)
+                       {
+                          
+                       }
+
+                       proposedMarriage = null;
+                   }
+
+
+                   if (PlayerEncounter.Current != null)
+                   {
+                       PlayerEncounter.LeaveEncounter = true;
+                   }
+               });
+
         }
+
+        private bool IsPotentialSpouseBK() => Hero.MainHero.Spouse == null &&
+                        Campaign.Current.Models.MarriageModel.IsCoupleSuitableForMarriage(Hero.MainHero, Hero.OneToOneConversationHero) &&
+                        !FactionManager.IsAtWarAgainstFaction(Hero.MainHero.MapFaction, Hero.OneToOneConversationHero.MapFaction) &&
+                        !IsCoupleMatchedByFamily(Hero.MainHero, Hero.OneToOneConversationHero) &&
+                        Hero.OneToOneConversationHero.Clan.Leader != Hero.OneToOneConversationHero;
     }
 
     namespace Patches
@@ -218,7 +497,27 @@ namespace BannerKings.Behaviours.Marriage
                 }
             }
 
-            
+            [HarmonyPostfix]
+            [HarmonyPatch("conversation_romance_at_stage_1_discussions_on_condition")]
+            private static void RomanceStage1Postfix(ref bool __result)
+            {
+                if (__result == true)
+                {
+                    __result = Campaign.Current.GetCampaignBehavior<BKMarriageBehavior>()
+                        .IsCoupleMatchedByFamily(Hero.MainHero, Hero.OneToOneConversationHero);
+                }
+            }
+
+            [HarmonyPrefix]
+            [HarmonyPatch("conversation_player_can_open_courtship_on_condition")]
+            private static bool DoNotStartCourtshipPrefix(ref bool __result)
+            {
+                __result = false;
+                return false;
+            }
+
+
+
             /*[HarmonyPrefix]
             [HarmonyPatch("conversation_propose_spouse_for_player_nomination_on_condition")]
             private static bool PlayerProposePrefix(RomanceCampaignBehavior __instance, ref bool __result)

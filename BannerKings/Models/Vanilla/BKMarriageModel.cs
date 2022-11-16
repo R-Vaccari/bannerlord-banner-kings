@@ -1,5 +1,6 @@
 ﻿using BannerKings.Managers.Court;
-using HarmonyLib;
+using BannerKings.Managers.Institutions.Religions.Faiths;
+using BannerKings.Managers.Titles;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.Core;
@@ -22,11 +23,11 @@ namespace BannerKings.Models.Vanilla
 
             if (proposer.Culture != secondHero.Culture)
             {
-                result.AddFactor(-0.1f, GameTexts.FindText("str_culture"));
+                result.Add(-30, GameTexts.FindText("str_culture"));
             }
             else
             {
-                result.AddFactor(0.05f, GameTexts.FindText("str_culture"));
+                result.Add(15f, GameTexts.FindText("str_culture"));
             }
 
             var proposerReligion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(proposer);
@@ -34,17 +35,25 @@ namespace BannerKings.Models.Vanilla
 
             if (proposerReligion != proposedReligion)
             {
-                float factor = -0.1f;
+                float factor = -30f;
                 if (proposerReligion == null || proposedReligion == null)
                 {
-
+                    FaithStance stance = proposedReligion.Faith.GetStance(proposerReligion.Faith);
+                    if (stance == FaithStance.Hostile)
+                    {
+                        factor = -50f;
+                    }
+                    else if (stance == FaithStance.Tolerated)
+                    {
+                        factor = -10f;
+                    }
                 }
 
-                result.AddFactor(factor, new TextObject("{=!}Faith differences"));
+                result.Add(factor, new TextObject("{=!}Faith differences"));
             } 
             else
             {
-                result.AddFactor(0.05f, proposerReligion.Faith.GetFaithName());
+                result.Add(15f, proposerReligion.Faith.GetFaithName());
             }
 
             return result;
@@ -60,25 +69,13 @@ namespace BannerKings.Models.Vanilla
 
             if (clan.Leader == hero)
             {
-                result.AddFactor(0.15f, GameTexts.FindText("role", "ClanLeader"));
+                result.Add(150f, GameTexts.FindText("role", "ClanLeader"));
             }
             else if (title != null)
             {
-                float heirScore = float.MinValue;
-                Hero heir = null;
-                foreach (var candidate in BannerKingsConfig.Instance.TitleModel.GetInheritanceCandidates(clan.Leader))
+                if (IsClanHeir(title, hero))
                 {
-                    var score = BannerKingsConfig.Instance.TitleModel.GetInheritanceHeirScore(clan.Leader, candidate,
-                        title.contract).ResultNumber;
-                    if (score > heirScore)
-                    {
-                        heir = candidate;
-                    }
-                }
-
-                if (heir == hero)
-                {
-                    result.AddFactor(0.1f, new TextObject("{=!}{HERO} is the expected heir to {CLAN}")
+                    result.AddFactor(100, new TextObject("{=!}{HERO} is the expected heir to {CLAN}")
                         .SetTextVariable("HERO", hero.Name)
                         .SetTextVariable("CLAN", clan.Name));
                 }
@@ -87,7 +84,7 @@ namespace BannerKings.Models.Vanilla
             var proposerCouncil = BannerKingsConfig.Instance.CourtManager.GetCouncil(clan);
             if (proposerCouncil.Peerage != null)
             {
-                result.AddFactor(GetPeerageScore(proposerCouncil.Peerage), new TextObject("{=!}{CLAN} Peerage")
+                result.Add(GetPeerageScore(proposerCouncil.Peerage), new TextObject("{=!}{CLAN} Peerage")
                     .SetTextVariable("CLAN", clan.Name));
             }
 
@@ -102,30 +99,35 @@ namespace BannerKings.Models.Vanilla
             return result;
         }
 
-        private float GetPeerageScore(Peerage peerage)
-        {
-            float score = 0f;
-            if (peerage.CanStartElection) score += 0.015f;
-            if (peerage.CanVote) score += 0.01f;
-            if (peerage.CanGrantKnighthood) score += 0.01f;
-            if (peerage.CanHaveFief) score += 0.02f;
-            if (peerage.CanHaveCouncil) score += 0.01f;
-
-            return score;
-        }
-
-        public ExplainedNumber GetDowryValue(Hero spouse, bool explanations = false)
+        public ExplainedNumber GetDowryValue(Hero hero, bool arrangedMarriage = false, bool explanations = false)
         {
             var result = new ExplainedNumber(0f, explanations);
+            result.Add(hero.Level * 1000f, GameTexts.FindText("str_level"));
 
+            var title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(hero.Clan.Leader);
+            if (title != null && IsClanHeir(title, hero))
+            {
+                result.AddFactor(0.5f, new TextObject("{=!}{HERO} is the expected heir to {CLAN}")
+                    .SetTextVariable("HERO", hero.Name)
+                    .SetTextVariable("CLAN", hero.Clan.Name));
+            }
+
+            if (arrangedMarriage)
+            {
+                result.AddFactor(0.4f, new TextObject("{=!}Arranged marriage"));
+            }
+
+            if (hero.IsFemale && !(hero.Age >= 18f && hero.Age <= 45f))
+            {
+                result.AddFactor(-0.4f, new TextObject("{=!}Infertile"));
+            }
 
             return result;
         }
 
-        public ExplainedNumber GetInfluenceCost(Hero proposer, Hero proposed, Clan finalClan, bool explanations = false)
+        public ExplainedNumber GetInfluenceCost(Hero proposed, bool explanations = false)
         {
             var result = new ExplainedNumber(0f, explanations);
-
             result.Add(proposed.Clan.Tier * 20f, proposed.Clan.Name);
 
 
@@ -141,6 +143,36 @@ namespace BannerKings.Models.Vanilla
             }
 
             return result;
+        }
+
+        public bool IsClanHeir(FeudalTitle title, Hero hero)
+        {
+            float heirScore = float.MinValue;
+            Hero heir = null;
+            var clan = hero.Clan;
+            foreach (var candidate in BannerKingsConfig.Instance.TitleModel.GetInheritanceCandidates(clan.Leader))
+            {
+                var score = BannerKingsConfig.Instance.TitleModel.GetInheritanceHeirScore(clan.Leader, candidate,
+                    title.contract).ResultNumber;
+                if (score > heirScore)
+                {
+                    heir = candidate;
+                }
+            }
+
+            return heir == hero;
+        }
+
+        private float GetPeerageScore(Peerage peerage)
+        {
+            float score = 0f;
+            if (peerage.CanStartElection) score += 25f;
+            if (peerage.CanVote) score += 20f;
+            if (peerage.CanGrantKnighthood) score += 20f;
+            if (peerage.CanHaveFief) score += 50f;
+            if (peerage.CanHaveCouncil) score += 20f;
+
+            return score;
         }
     }
 }
