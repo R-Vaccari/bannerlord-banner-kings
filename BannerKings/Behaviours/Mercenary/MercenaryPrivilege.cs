@@ -5,27 +5,27 @@ namespace BannerKings.Behaviours.Mercenary
 {
     internal class MercenaryPrivilege : BannerKingsObject
     {
-        private TextObject availableHint;
-        private TextObject unavailableHint;
-        private Func<bool> isAvailable;
+        private Func<MercenaryCareer, bool> isAvailable;
         public MercenaryPrivilege(string stringId) : base(stringId)
         {
+            Points = 0f;
         }
 
-        public void Initialize(TextObject name, TextObject description, int points, 
-            TextObject availableHint, TextObject unavailableHint, Func<bool> isAvailable)
+        public void Initialize(TextObject name, TextObject description, 
+            TextObject availableHint, TextObject unavailableHint, Func<MercenaryCareer, bool> isAvailable)
         {
             Initialize(name, description);
-            this.availableHint = availableHint;
-            this.unavailableHint = unavailableHint;
-            Points = points;
+            AvailableHint = availableHint;
+            UnAvailableHint = unavailableHint;
+            this.isAvailable = isAvailable;
         }
 
-        public int Points { get; private set; }
-        public TextObject Hint => IsAvailable() ? availableHint : unavailableHint;
+        public float Points { get; private set; }
+        public TextObject AvailableHint { get; private set; }
+        public TextObject UnAvailableHint { get; private set; }
 
 
-        public bool IsAvailable() => isAvailable();
+        public bool IsAvailable(MercenaryCareer career) => isAvailable(career);
 
     }
 }
