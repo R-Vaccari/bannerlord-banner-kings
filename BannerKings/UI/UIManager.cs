@@ -26,6 +26,7 @@ using TaleWorlds.CampaignSystem.ViewModelCollection.Education;
 using TaleWorlds.CampaignSystem.ViewModelCollection.Encyclopedia.Items;
 using TaleWorlds.CampaignSystem.ViewModelCollection.GameMenu.Recruitment;
 using TaleWorlds.CampaignSystem.ViewModelCollection.GameMenu.TownManagement;
+using TaleWorlds.CampaignSystem.ViewModelCollection.KingdomManagement;
 using TaleWorlds.CampaignSystem.ViewModelCollection.KingdomManagement.Policies;
 using TaleWorlds.CampaignSystem.ViewModelCollection.Map;
 using TaleWorlds.Core;
@@ -84,6 +85,7 @@ namespace BannerKings.UI
 
     namespace Patches
     {
+
         [HarmonyPatch(typeof(MapNotificationVM), "PopulateTypeDictionary")]
         internal class PopulateNotificationsPatch
         {
@@ -96,6 +98,16 @@ namespace BannerKings.UI
                 dic.Add(typeof(UnlandedDemesneLimitNotification), typeof(DemesneLimitNotificationVM));
             }
         }
+
+        [HarmonyPatch(typeof(KingdomManagementVM), "SetSelectedCategory")]
+        internal class KingdomManagementRefreshPatch
+        {
+            private static void Postfix(KingdomManagementVM __instance)
+            {
+                __instance.RefreshValues();
+            }
+        }
+
 
         [HarmonyPatch(typeof(SettlementGovernorSelectionVM))]
         internal class AvailableGovernorsPatch
