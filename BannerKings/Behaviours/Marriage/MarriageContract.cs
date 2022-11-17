@@ -1,6 +1,5 @@
 ﻿using BannerKings.Dialogue;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.Core;
 using TaleWorlds.Localization;
 using TaleWorlds.SaveSystem;
 

@@ -23,11 +23,11 @@ namespace BannerKings.Models.Vanilla
 
             if (proposer.Culture != secondHero.Culture)
             {
-                result.Add(-30, GameTexts.FindText("str_culture"));
+                result.Add(-50f, GameTexts.FindText("str_culture"));
             }
             else
             {
-                result.Add(15f, GameTexts.FindText("str_culture"));
+                result.Add(50f, GameTexts.FindText("str_culture"));
             }
 
             var proposerReligion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(proposer);
@@ -35,17 +35,17 @@ namespace BannerKings.Models.Vanilla
 
             if (proposerReligion != proposedReligion)
             {
-                float factor = -30f;
+                float factor = -50f;
                 if (proposerReligion == null || proposedReligion == null)
                 {
                     FaithStance stance = proposedReligion.Faith.GetStance(proposerReligion.Faith);
                     if (stance == FaithStance.Hostile)
                     {
-                        factor = -50f;
+                        factor = -100f;
                     }
                     else if (stance == FaithStance.Tolerated)
                     {
-                        factor = -10f;
+                        factor = -20f;
                     }
                 }
 
@@ -53,7 +53,7 @@ namespace BannerKings.Models.Vanilla
             } 
             else
             {
-                result.Add(15f, proposerReligion.Faith.GetFaithName());
+                result.Add(50f, proposerReligion.Faith.GetFaithName());
             }
 
             return result;
@@ -102,7 +102,9 @@ namespace BannerKings.Models.Vanilla
         public ExplainedNumber GetDowryValue(Hero hero, bool arrangedMarriage = false, bool explanations = false)
         {
             var result = new ExplainedNumber(0f, explanations);
-            result.Add(hero.Level * 1000f, GameTexts.FindText("str_level"));
+
+            result.Add(GetClanTierDowry(hero.Clan.Tier), hero.Clan.Name);
+            result.Add(hero.Level * 2500f, GameTexts.FindText("str_level"));
 
             var title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(hero.Clan.Leader);
             if (title != null && IsClanHeir(title, hero))
@@ -132,6 +134,38 @@ namespace BannerKings.Models.Vanilla
 
 
             return result;
+        }
+
+        private float GetClanTierDowry(int tier)
+        {
+            if (tier < 1)
+            {
+                return 10000;
+            }
+            else if (tier == 1)
+            {
+                return 20000;
+            }
+            else if (tier == 2)
+            {
+                return 35000;
+            }
+            else if (tier == 3)
+            {
+                return 60000;
+            }
+            else if (tier == 4)
+            {
+                return 100000;
+            }
+            else if (tier == 5)
+            {
+                return 180000;
+            }
+            else
+            {
+                return tier * 50000f;
+            }
         }
 
         public override float NpcCoupleMarriageChance(Hero firstHero, Hero secondHero)

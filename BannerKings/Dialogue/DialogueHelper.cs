@@ -28,7 +28,13 @@ namespace BannerKings.Dialogue
                 }
             }
 
-            return MBRandom.ChooseWeighted(candidates).Text;
+            var result = MBRandom.ChooseWeighted(candidates);
+            if (result == null)
+            {
+                result = options.Find(x => x.IsDefault);
+            }
+
+            return result.Text;
         }
 
         internal static List<DialogueOption> GetMarriageInadequateTexts(MarriageContract contract)

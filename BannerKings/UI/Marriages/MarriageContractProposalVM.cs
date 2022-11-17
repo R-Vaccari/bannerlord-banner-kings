@@ -218,8 +218,8 @@ namespace BannerKings.UI.Marriages
             }
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                new TextObject("{=!}").ToString(),
-                null,
+                new TextObject("{=!}Select Spouse").ToString(),
+                new TextObject("{=!}Select the member of your family to be married. If you pick yourself, the final clan cannot be inverted (resulting in you leaving your clan). If you pick another clan member, the marriage will have to be arranged, and take immediate effect, unless a feast is organized, in which case the marriage is postponed to the end of the feast.").ToString(),
                 list,
                 true,
                 1,
@@ -245,8 +245,8 @@ namespace BannerKings.UI.Marriages
             }
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                new TextObject("{=!}").ToString(),
-                null,
+                new TextObject("{=!}Select Spouse").ToString(),
+                new TextObject("{=!}Select the spouse from their clan. Each spouse has a different score, which represents their importance to their family. The marriage will be acceptable or not according to the difference in the score of your proposed spouse and theirs.").ToString(),
                 list,
                 true,
                 1,
