@@ -13,51 +13,54 @@ namespace BannerKings.Managers.Helpers
 {
     public static class SuccessionHelper
     {
-        public static Hero ApplySuccession(FeudalTitle title, Hero victim, Kingdom kingdom, bool applyEffects = true)
+        public static void ApplySovereignSuccession(FeudalTitle title, Hero victim, Kingdom kingdom)
         {
-            var list = new List<Clan>();
-            if (victim.Clan.Kingdom != null)
+            if (title.sovereign != null)
             {
-                list = (from t in victim.Clan.Kingdom.Clans
-                    where !t.IsEliminated && !t.IsUnderMercenaryService
-                    select t).ToList();
+                return;
             }
 
-            Hero heir = null;
-            if (title != null && !list.IsEmpty() && title.sovereign == null)
+            var succession = title.contract.Succession;
+            if (succession != SuccessionType.Hereditary_Monarchy && succession != SuccessionType.Imperial)
             {
-                var succession = title.contract.Succession;
-                heir = succession switch
+                return;
+            }
+
+
+            Hero heir = null;
+            float heirScore = float.MinValue;
+            var candidates = BannerKingsConfig.Instance.TitleModel.GetSuccessionCandidates(victim, title.contract);
+            foreach (Hero hero in candidates)
+            {
+                var result = BannerKingsConfig.Instance.TitleModel.GetSuccessionHeirScore(victim, hero, title.contract);
+                if (result.ResultNumber > heirScore)
                 {
-                    SuccessionType.Hereditary_Monarchy => ApplyHereditarySuccession(list, victim, kingdom),
-                    SuccessionType.Imperial => ApplyImperialSuccession(list, victim, kingdom),
-                    _ => heir
-                };
-
-                if (heir != null && applyEffects)
-                {
-                    BannerKingsConfig.Instance.TitleManager.InheritTitle(title.deJure, heir, title);
-                    Type.GetType("TaleWorlds.CampaignSystem.Actions.ChangeRulingClanAction, TaleWorlds.CampaignSystem")
-                        .GetMethod("Apply", BindingFlags.Public | BindingFlags.Static)
-                        .Invoke(null, new object[] {kingdom, heir.Clan});
-
-                    var decision = kingdom.UnresolvedDecisions.FirstOrDefault(x => x is KingSelectionKingdomDecision);
-                    if (decision != null)
-                    {
-                        kingdom.RemoveDecision(decision);
-                    }
-
-                    if (Clan.PlayerClan.Kingdom != null && Clan.PlayerClan.Kingdom == victim.Clan.Kingdom)
-                    {
-                        MBInformationManager.AddQuickInformation(
-                            new TextObject("{=ytkncUx3}{HEIR} has rightfully inherited the {TITLE}")
-                                .SetTextVariable("HEIR", heir.Name)
-                                .SetTextVariable("TITLE", title.FullName), 0, heir.CharacterObject);
-                    }
+                    heir = hero;
                 }
             }
 
-            return heir;
+            
+            if (heir != null)
+            {
+                BannerKingsConfig.Instance.TitleManager.InheritTitle(title.deJure, heir, title);
+                Type.GetType("TaleWorlds.CampaignSystem.Actions.ChangeRulingClanAction, TaleWorlds.CampaignSystem")
+                    .GetMethod("Apply", BindingFlags.Public | BindingFlags.Static)
+                    .Invoke(null, new object[] {kingdom, heir.Clan});
+
+                var decision = kingdom.UnresolvedDecisions.FirstOrDefault(x => x is KingSelectionKingdomDecision);
+                if (decision != null)
+                {
+                    kingdom.RemoveDecision(decision);
+                }
+
+                if (Clan.PlayerClan.Kingdom != null && Clan.PlayerClan.Kingdom == victim.Clan.Kingdom)
+                {
+                    MBInformationManager.AddQuickInformation(
+                        new TextObject("{=ytkncUx3}{HEIR} has rightfully inherited the {TITLE}")
+                            .SetTextVariable("HEIR", heir.Name)
+                            .SetTextVariable("TITLE", title.FullName), 0, heir.CharacterObject);
+                }
+            }
         }
 
         public static IEnumerable<SuccessionType> GetValidSuccessions(GovernmentType government)

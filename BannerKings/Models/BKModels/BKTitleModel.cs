@@ -76,6 +76,11 @@ namespace BannerKings.Models.BKModels
                 }
             }
 
+            if (candidate.Culture != currentLeader.Clan.Kingdom.Culture)
+            {
+                result.AddFactor(-0.2f, GameTexts.FindText("str_culture"));
+            }
+
             return result;
         }
 
@@ -152,7 +157,7 @@ namespace BannerKings.Models.BKModels
                     {
                         list.AddRange(GetInheritanceCandidates(currentLeader));
                     }
-                    else
+                    else if (clan != currentLeader.Clan)
                     {
                         list.Add(clan.Leader);
                     }

@@ -1,6 +1,7 @@
 using BannerKings.UI.Court;
 using Bannerlord.UIExtenderEx.Attributes;
 using Bannerlord.UIExtenderEx.ViewModels;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.ViewModelCollection.ClanManagement;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -12,7 +13,7 @@ namespace BannerKings.UI.Extensions
     {
         //private BasicTooltipViewModel pietyHint;
         private readonly ClanManagementVM clanManagement;
-        private bool courtSelected, financesVisible;
+        private bool courtSelected, courtEnabled, financesVisible;
         private CourtVM courtVM;
 
         public ClanManagementMixin(ClanManagementVM vm) : base(vm)
@@ -20,6 +21,13 @@ namespace BannerKings.UI.Extensions
             clanManagement = vm;
             courtVM = new CourtVM(false);
             FinancesVisible = true;
+
+            var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(Clan.PlayerClan);
+            CourtEnabled = false;
+            if (council != null && council.Peerage != null)
+            {
+                CourtEnabled = council.Peerage.CanHaveCouncil;
+            }
         }
 
         [DataSourceProperty] public string CourtText => new TextObject("{=2QGyA46m}Court").ToString();
@@ -33,6 +41,20 @@ namespace BannerKings.UI.Extensions
                 if (value != financesVisible)
                 {
                     financesVisible = value;
+                    ViewModel!.OnPropertyChangedWithValue(value);
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public bool CourtEnabled
+        {
+            get => courtEnabled;
+            set
+            {
+                if (value != courtEnabled)
+                {
+                    courtEnabled = value;
                     ViewModel!.OnPropertyChangedWithValue(value);
                 }
             }

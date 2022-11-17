@@ -169,11 +169,8 @@ namespace BannerKings.Models.Vanilla
             return baseResult;
         }
 
-        public float GetNoblesInfluence(Settlement settlement, float nobles)
-        {
-            return nobles *0.01f;
-        }
-
+        public float GetNoblesInfluence(Settlement settlement, float nobles) => MathF.Max(0f, nobles * 0.01f);
+        
         public ExplainedNumber CalculateSettlementInfluence(Settlement settlement, PopulationData data)
         {
             var settlementResult = new ExplainedNumber(0f, true);

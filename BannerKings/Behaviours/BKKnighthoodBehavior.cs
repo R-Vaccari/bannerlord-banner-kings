@@ -456,23 +456,23 @@ namespace BannerKings.Behaviours
             }
 
             var lordships = GetAvailableTitles();
-            if (lordships.Any(x => x.IsEnabled))
-            {
-                hintText = new TextObject("{=hN2Eynzu}Bestowing knighthood requires {GOLD} gold to give your vassal financial security.");
-                hintText.SetTextVariable("GOLD", 5000);
-                return true;
-            }
-
             lordshipsToGive.Clear();
             foreach (var lordship in lordships)
             {
                 lordshipsToGive.Add(lordship);
             }
 
-            if (lordships.Count == 0)
+            if (lordshipsToGive.Count == 0)
             {
                 hintText = new TextObject("{=!}You currently do not lawfully own a lordship.");
                 return false;
+            }
+
+            if (lordships.Any(x => x.IsEnabled))
+            {
+                hintText = new TextObject("{=hN2Eynzu}Bestowing knighthood requires {GOLD} gold to give your vassal financial security.");
+                hintText.SetTextVariable("GOLD", 5000);
+                return true;
             }
 
             var first = lordships.FirstOrDefault(x => !x.IsEnabled);

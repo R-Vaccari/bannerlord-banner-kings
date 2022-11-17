@@ -59,6 +59,15 @@ namespace BannerKings.Managers.Court
             .SetTextVariable("FIEFS", GetStr(CanHaveFief))
             .SetTextVariable("COUNCIL", GetStr(CanHaveCouncil));
 
+        public TextObject PeerageGrantedText() => new TextObject("{=!}The family {VOTE}, {ELECTION}, {KNIGHTHOOD}, {FIEF} and {COUNCIL}.")
+            .SetTextVariable("CLAN", Clan.PlayerClan.Name)
+            .SetTextVariable("PEERAGE", Name)
+            .SetTextVariable("VOTE", CanVote ? new TextObject("{=!}will be able to vote in elections") : new TextObject("{=!}will not be able to vote on elections"))
+            .SetTextVariable("ELECTION", CanStartElection ? new TextObject("{=!}will be able to start elections") : new TextObject("{=!}will not be able to start elections"))
+            .SetTextVariable("KNIGHTHOOD", CanGrantKnighthood ? new TextObject("{=!}will be able to grant knighthood") : new TextObject("{=!}will not be able to grant knighthood"))
+            .SetTextVariable("FIEF", CanHaveFief ? new TextObject("{=!}will be eligible to be awarded fiefs") : new TextObject("{=!}will not be eligible to be awarded fiefs"))
+            .SetTextVariable("COUNCIL", CanHaveCouncil ? new TextObject("{=!}will be able to host a council") : new TextObject("{=!}will not be able to host a council"));
+
         private TextObject GetStr(bool option) => option ? GameTexts.FindText("str_yes") : GameTexts.FindText("str_no");
     }
 }

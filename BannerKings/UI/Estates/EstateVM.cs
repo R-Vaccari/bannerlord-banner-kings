@@ -4,7 +4,10 @@ using BannerKings.Managers.Populations.Estates;
 using BannerKings.Managers.Titles.Laws;
 using BannerKings.UI.Items;
 using BannerKings.UI.Items.UI;
+using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Actions;
+using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.ViewModelCollection;
 using TaleWorlds.CampaignSystem.ViewModelCollection.GameMenu.TownManagement;
 using TaleWorlds.Core;
@@ -21,10 +24,11 @@ namespace BannerKings.UI.Estates
         private MBBindingList<TownManagementDescriptionItemVM> mainInfo;
         private MBBindingList<MBBindingList<InformationElement>> extraInfos;
         private ImageIdentifierVM imageIdentifier;
-        private SelectorVM<BKItemVM> taskSelector, dutySelector;
+        private BannerKingsSelectorVM<BKItemVM> taskSelector, dutySelector;
         private EstateAction grantAction, buyAction, reclaimAction;
         private HintViewModel buyHint, grantHint, reclaimHint;
-        private bool playerOwned, dutyEnabled;
+        private bool playerOwned, dutyEnabled, buyVisible, grantVisible, reclaimVisible;
+        private string nameText;
 
         public EstateVM(Estate estate, PopulationData data) : base(data, true)
         {
@@ -34,10 +38,7 @@ namespace BannerKings.UI.Estates
             StatsInfo = new MBBindingList<InformationElement>();
             MainInfo = new MBBindingList<TownManagementDescriptionItemVM>();
             ExtraInfos = new MBBindingList<MBBindingList<InformationElement>>();
-            if (!IsDisabled) 
-            {
-                ImageIdentifier = new ImageIdentifierVM(new ImageIdentifier(CampaignUIHelper.GetCharacterCode(estate.Owner.CharacterObject)));
-            }
+            
             DutyEnabled = false;
             PlayerOwned = false;
 
@@ -62,26 +63,32 @@ namespace BannerKings.UI.Estates
             MainInfo.Clear();
             ExtraInfos.Clear();
 
-            
+            NameText = IsDisabled ? new TextObject("{=!}Vacant Estate").ToString() : Estate.Name.ToString();
+            if (!IsDisabled)
+            {
+                ImageIdentifier = new ImageIdentifierVM(new ImageIdentifier(CampaignUIHelper.GetCharacterCode(Estate.Owner.CharacterObject)));
+            }
 
             MainInfo.Add(new TownManagementDescriptionItemVM(new TextObject("{=!}Population:"), 
                 Estate.Population, 
                 0,
                 TownManagementDescriptionItemVM.DescriptionType.Loyalty));
 
-            var income = Estate.Income;
-            MainInfo.Add(new TownManagementDescriptionItemVM(new TextObject("{=!}Income:"),
-               (int)income.ResultNumber,
+            var value = Estate.EstateValue;
+            MainInfo.Add(new TownManagementDescriptionItemVM(new TextObject("{=!}Accumulated Tax:"),
+               (int)value.ResultNumber,
                0,
                TownManagementDescriptionItemVM.DescriptionType.Gold,
-               new BasicTooltipViewModel(() => income.GetExplanations())));
+               new BasicTooltipViewModel(() => value.GetExplanations())));
 
-            var production = Estate.Production;
-            MainInfo.Add(new TownManagementDescriptionItemVM(new TextObject("{=!}Production:"),
-               (int)production.ResultNumber,
+            var serfManpower = Estate.GetManpower(Managers.PopulationManager.PopType.Serfs);
+            var slavesManpower = Estate.GetManpower(Managers.PopulationManager.PopType.Serfs);
+            MainInfo.Add(new TownManagementDescriptionItemVM(new TextObject("{=!}Manpower:"),
+               serfManpower + slavesManpower,
                0,
-               TownManagementDescriptionItemVM.DescriptionType.Production,
-               new BasicTooltipViewModel(() => production.GetExplanations())));
+               TownManagementDescriptionItemVM.DescriptionType.Militia,
+               new BasicTooltipViewModel(() => new TextObject("{=!}This estate's manpower, drawn from it's population. This manpower is used to fuel the estate owner's volunteers. When volunteers are recruited from an estate-owner, the manpower is drawn from the estate rather than the overall settlement.")
+               .ToString())));
 
 
             var acreage = Estate.AcreageGrowth;
@@ -95,7 +102,7 @@ namespace BannerKings.UI.Estates
 
             PlayerOwned = Estate.Owner == Hero.MainHero && !IsDisabled;
 
-            TaskSelector = new SelectorVM<BKItemVM>(0, OnTaskChange);
+            TaskSelector = new BannerKingsSelectorVM<BKItemVM>(PlayerOwned, 0, OnTaskChange);
             TaskSelector.AddItem(new BKItemVM(EstateTask.Prodution, true, "",
                 GameTexts.FindText("str_bk_estate_task", EstateTask.Prodution.ToString())));
 
@@ -118,7 +125,7 @@ namespace BannerKings.UI.Estates
             }
             
 
-            DutySelector = new SelectorVM<BKItemVM>(0, OnDutyChange);
+            DutySelector = new BannerKingsSelectorVM<BKItemVM>(DutyEnabled, 0, OnDutyChange);
             DutySelector.AddItem(new BKItemVM(EstateDuty.Taxation, true, "",
                 GameTexts.FindText("str_bk_estate_duty", EstateDuty.Taxation.ToString())));
 
@@ -149,7 +156,7 @@ namespace BannerKings.UI.Estates
 
                 ExtraInfos.Add(LandInfo);
 
-
+                var production = Estate.Production;
                 WorkforceInfo.Add(new InformationElement(new TextObject("{=!}Goods Production:").ToString(),
                     new TextObject("{=!}{POINTS} (Daily)")
                     .SetTextVariable("POINTS", production.ResultNumber.ToString("0.00"))
@@ -181,10 +188,10 @@ namespace BannerKings.UI.Estates
                     FormatValue(tax.ResultNumber),
                     tax.GetExplanations()));
 
-                var value = Estate.EstateValue;
-                StatsInfo.Add(new InformationElement(new TextObject("{=!}Estate Value:").ToString(),
-                    value.ResultNumber.ToString("0"),
-                    value.GetExplanations()));
+                
+                StatsInfo.Add(new InformationElement(new TextObject("{=!}Tax Accumulated:").ToString(),
+                    Estate.TaxAccumulated.ToString("0"),
+                    new TextObject("{=!}The accumulated profits since villagers last brought production revenues back. This is zeroed once the estate owner collects their income.").ToString()));
 
 
                 ExtraInfos.Add(StatsInfo);
@@ -196,13 +203,83 @@ namespace BannerKings.UI.Estates
         private void RefreshActions()
         {
             buyAction = BannerKingsConfig.Instance.EstatesModel.GetBuy(Estate, Hero.MainHero);
+            BuyVisible = !PlayerOwned;
             BuyHint = new HintViewModel(new TextObject("{=!}Acquire this property as your own.\n\n{REASON}")
                 .SetTextVariable("REASON", buyAction.Reason));
 
- 
-            GrantHint = new HintViewModel(new TextObject("{=!}Grant this property to someone. To grant it, you must be it's legal and actual owner. Estates may be granted to companions, making them Sargeants, or to other noble houses.\n\n{REASON}")
-                .SetTextVariable("REASON", buyAction.Reason));
+            grantAction = BannerKingsConfig.Instance.EstatesModel.GetGrant(Estate, Hero.MainHero, null);
+            GrantVisible = PlayerOwned;
+            GrantHint = new HintViewModel(new TextObject("{=!}Grant this property to someone. To grant it, you must be it's legal and actual owner. Estates may be used to knight companions by talking to them, or gifted to other noble houses."));
 
+            reclaimAction = BannerKingsConfig.Instance.EstatesModel.GetReclaim(Estate, Hero.MainHero);
+            var settlement = Estate.EstatesData.Settlement;
+            var title = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement);
+            ReclaimVisible = Estate.Owner != null && Hero.MainHero == title.deJure && settlement.MapFaction == Hero.MainHero.MapFaction &&
+                Estate.Owner.MapFaction != Hero.MainHero.MapFaction;
+
+        }
+
+        private void ExecuteBuy()
+        {
+            if (buyAction.Possible)
+            {
+                var seller = Estate.Owner;
+                if (seller == null)
+                {
+                    seller = BannerKingsConfig.Instance.TitleManager.GetTitle(Estate.EstatesData.Settlement).deJure;
+                }
+
+                GiveGoldAction.ApplyBetweenCharacters(Hero.MainHero, seller, (int)Estate.EstateValue.ResultNumber);
+                Estate.SetOwner(Hero.MainHero);
+                RefreshValues();
+            } 
+        }
+
+        private void ExecuteGrant()
+        {
+            var kingdom = Clan.PlayerClan.Kingdom;
+            if (kingdom != null)
+            {
+                var list = new List<InquiryElement>();
+                foreach (var hero in BannerKingsConfig.Instance.EstatesModel.GetGrantCandidates(grantAction))
+                {
+                    var action = BannerKingsConfig.Instance.EstatesModel.GetGrant(Estate, Hero.MainHero, hero);
+                    list.Add(new InquiryElement(hero,
+                        hero.Name.ToString(),
+                        new ImageIdentifier(CampaignUIHelper.GetCharacterCode(hero.CharacterObject, true)),
+                        action.Possible,
+                        action.Reason.ToString()));
+                }
+
+                MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
+                    new TextObject("{=!}Grant Estate").ToString(),
+                    new TextObject("{=!}Grant this estate to another person. By granting them ownership, they will owe the estate's income and access to manpower. Taxes may still be applied.").ToString(),
+                    list,
+                    true,
+                    1,
+                    GameTexts.FindText("str_accept").ToString(),
+                    string.Empty,
+                    delegate (List<InquiryElement> list)
+                    {
+                        var hero = (Hero)list[0].Identifier;
+                        Estate.SetOwner(hero);
+                        ChangeRelationAction.ApplyPlayerRelation(hero,
+                            BannerKingsConfig.Instance.EstatesModel.CalculateEstateGrantRelation(Estate, Hero.MainHero));
+                        RefreshValues();
+                    },
+                    null));
+            } 
+        }
+
+        private void ExecuteReclaim()
+        {
+            if (reclaimAction.Possible)
+            {
+                ChangeRelationAction.ApplyPlayerRelation(Estate.Owner,
+                            -BannerKingsConfig.Instance.EstatesModel.CalculateEstateGrantRelation(Estate, Hero.MainHero));
+                Estate.SetOwner(Hero.MainHero);
+                RefreshValues();
+            }
         }
 
         private void OnTaskChange(SelectorVM<BKItemVM> obj)
@@ -228,7 +305,19 @@ namespace BannerKings.UI.Estates
         public MBBindingList<InformationElement> StatsInfo { get; set; }
 
         [DataSourceProperty]
-        public string NameText => IsDisabled ? new TextObject("{=!}Vacant Estate").ToString() : Estate.Name.ToString();
+        public string NameText 
+        {
+            get => nameText;
+            set
+            {
+                if (value != nameText)
+                {
+                    nameText = value;
+                    OnPropertyChangedWithValue(value);
+                }
+            }
+        }
+     
 
         [DataSourceProperty]
         public string BuyText => new TextObject("{=!}Buy").ToString();
@@ -238,7 +327,7 @@ namespace BannerKings.UI.Estates
 
 
         [DataSourceProperty]
-        public SelectorVM<BKItemVM> TaskSelector
+        public BannerKingsSelectorVM<BKItemVM> TaskSelector
         {
             get => taskSelector;
             set
@@ -252,7 +341,7 @@ namespace BannerKings.UI.Estates
         }
 
         [DataSourceProperty]
-        public SelectorVM<BKItemVM> DutySelector
+        public BannerKingsSelectorVM<BKItemVM> DutySelector
         {
             get => dutySelector;
             set
@@ -290,6 +379,48 @@ namespace BannerKings.UI.Estates
                 {
                     dutyEnabled = value;
                     OnPropertyChanged("DutyEnabled");
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public bool BuyVisible
+        {
+            get => buyVisible;
+            set
+            {
+                if (value != buyVisible)
+                {
+                    buyVisible = value;
+                    OnPropertyChanged("BuyVisible");
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public bool GrantVisible
+        {
+            get => grantVisible;
+            set
+            {
+                if (value != grantVisible)
+                {
+                    grantVisible = value;
+                    OnPropertyChanged("GrantVisible");
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public bool ReclaimVisible
+        {
+            get => reclaimVisible;
+            set
+            {
+                if (value != reclaimVisible)
+                {
+                    reclaimVisible = value;
+                    OnPropertyChanged("ReclaimVisible");
                 }
             }
         }

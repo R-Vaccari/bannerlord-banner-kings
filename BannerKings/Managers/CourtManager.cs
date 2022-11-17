@@ -5,6 +5,7 @@ using BannerKings.Managers.Institutions.Religions.Leaderships;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.Core;
+using TaleWorlds.LinQuick;
 using TaleWorlds.Localization;
 using TaleWorlds.SaveSystem;
 
@@ -61,6 +62,11 @@ namespace BannerKings.Managers
 
         public void CreateCouncil(Clan clan)
         {
+            if (Councils.ContainsKey(clan))
+            {
+                return;
+            }
+
             Councils.Add(clan, new CouncilData(clan));
         }
 

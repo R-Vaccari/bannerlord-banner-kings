@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using BannerKings.Behaviours.Feasts;
+using BannerKings.Behaviours.Marriage;
 using BannerKings.Components;
 using BannerKings.Managers;
 using BannerKings.Managers.CampaignStart;
@@ -160,7 +162,8 @@ namespace BannerKings
             AddEnumDefinition(typeof(EstateTask), 106);
             AddClassDefinition(typeof(BKDemesneLawDecision), 107);
             AddClassDefinition(typeof(Peerage), 108);
-
+            AddClassDefinition(typeof(Feast), 109);
+            AddClassDefinition(typeof(MarriageContract), 110);
         }
 
         protected override void DefineContainerDefinitions()
@@ -204,7 +207,9 @@ namespace BannerKings
             ConstructContainerDefinition(typeof(List<DemesneLaw>));
             ConstructContainerDefinition(typeof(List<Estate>));
             ConstructContainerDefinition(typeof(Dictionary<PopType, float>));
-
+            ConstructContainerDefinition(typeof(Dictionary<Kingdom, Town>));
+            ConstructContainerDefinition(typeof(Dictionary<Town, Feast>));
+            
         }
     }
 }

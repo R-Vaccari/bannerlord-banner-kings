@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using BannerKings.Utils;
+using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -21,6 +22,20 @@ namespace BannerKings.Managers.Populations.Estates
         public bool HeroHasEstate(Hero hero) => Estates.Any(x => x.Owner == hero);
 
         public Estate GetHeroEstate(Hero hero) => Estates.FirstOrDefault(x => x.Owner == hero);
+
+        public void AccumulateTradeTax(PopulationData data, int tradeTax)
+        {
+            int totalDeducted = 0;
+            foreach (Estate estate in Estates)
+            {
+                var result = (int)(tradeTax * (BannerKingsConfig.Instance.EstatesModel.GetEstateWorkforceProportion(estate, data) * 
+                    (1f - estate.TaxRatio.ResultNumber)));
+                totalDeducted += result;
+                estate.TaxAccumulated += result;
+            }
+
+            Settlement.Village.TradeTaxAccumulated += tradeTax - totalDeducted;
+        }
 
         public void UpdatePopulation(PopulationManager.PopType type, int quantity, int classTotal)
         {
@@ -85,40 +100,56 @@ namespace BannerKings.Managers.Populations.Estates
 
         internal override void Update(PopulationData data = null)
         {
-            foreach (Estate estate in Estates)
+            ExceptionUtils.TryCatch(() =>
             {
-                if (estate.IsDisabled) 
+                var dead = new List<Estate>();
+                foreach (Estate estate in Estates)
                 {
-                    continue;
+                    if (estate.IsDisabled)
+                    {
+                        continue;
+                    }
+
+                    estate.Tick(data);
+                    if (estate.Owner.IsDead)
+                    {
+                        dead.Add(estate);
+                    }
                 }
 
-                estate.Tick(data);
-                if (estate.Owner.IsDead)
+                foreach (var estate in dead)
                 {
                     InheritEstate(estate);
                 }
-            }
 
-            foreach (Hero notable in Settlement.Notables)
-            {
-                if (notable.IsRuralNotable && !HeroHasEstate(notable))
+                if (Settlement.Notables != null)
                 {
-                    var vacantEstate = Estates.FirstOrDefault(x => x.Owner != null && x.Owner.IsDead && x.Owner.IsRuralNotable);
-                    if (vacantEstate != null)
+                    foreach (Hero notable in Settlement.Notables)
                     {
-                        InheritEstate(vacantEstate, notable);
-                    }
-                    else
-                    {
-                        Estates.Add(Estate.CreateNotableEstate(notable, data));
+                        if (notable.IsRuralNotable && !HeroHasEstate(notable))
+                        {
+                            var vacantEstate = Estates.FirstOrDefault(x => x.Owner != null && x.Owner.IsDead && x.Owner.IsRuralNotable);
+                            if (vacantEstate != null)
+                            {
+                                InheritEstate(vacantEstate, notable);
+                            }
+                            else
+                            {
+                                Estates.Add(Estate.CreateNotableEstate(notable, data));
+                            }
+                        }
                     }
                 }
-            }
 
-            if (Estates.Count < BannerKingsConfig.Instance.EstatesModel.CalculateEstatesMaximum(Settlement).ResultNumber)
-            {
-                Estates.Add(Estate.CreateNotableEstate(null, data));
-            }
+
+                if (Estates.Count < BannerKingsConfig.Instance.EstatesModel.CalculateEstatesMaximum(Settlement).ResultNumber)
+                {
+                    Estates.Add(Estate.CreateNotableEstate(null, data));
+                }
+            }, 
+            this.GetType().Name,
+            false);
+           
         }
     }
 }

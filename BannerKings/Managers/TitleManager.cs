@@ -82,7 +82,7 @@ namespace BannerKings.Managers
         {
             foreach (var title in Titles.Keys.ToList())
             {
-                if (title.contract.DemesneLaws == null)
+                if (title.contract.DemesneLaws == null || title.contract.DemesneLaws.Count == 0)
                 {
                     title.SetLaws(DefaultDemesneLaws.Instance.GetAdequateLaws(title));
                 }
@@ -90,8 +90,6 @@ namespace BannerKings.Managers
                 title.PostInitialize();
             }
         }
-
-
 
         public bool IsHeroTitleHolder(Hero hero)
         {

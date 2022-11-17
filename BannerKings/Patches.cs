@@ -5,7 +5,6 @@ using System.Reflection;
 using BannerKings.Extensions;
 using BannerKings.Managers.Helpers;
 using BannerKings.Managers.Skills;
-using BannerKings.Settings;
 using HarmonyLib;
 using Helpers;
 using TaleWorlds.CampaignSystem;
@@ -20,9 +19,12 @@ using TaleWorlds.CampaignSystem.MapEvents;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.Settlements.Workshops;
-using TaleWorlds.CampaignSystem.ViewModelCollection;
-using TaleWorlds.CampaignSystem.ViewModelCollection.KingdomManagement.Policies;
+using TaleWorlds.CampaignSystem.ViewModelCollection.KingdomManagement.Decisions;
+using TaleWorlds.CampaignSystem.ViewModelCollection.KingdomManagement.Decisions.ItemTypes;
 using TaleWorlds.Core;
+using TaleWorlds.GauntletUI;
+using TaleWorlds.GauntletUI.BaseTypes;
+using TaleWorlds.GauntletUI.GamepadNavigation;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
@@ -52,10 +54,10 @@ namespace BannerKings
                         return;
                     }
 
-                    if (BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
+                    var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
+                    if (data != null)
                     {
-                        var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
-                        data.MilitaryData.DeduceManpower(data, number, troop);
+                        data.MilitaryData.DeduceManpower(data, number, troop, individual);
                     }
                 }
 
@@ -66,12 +68,19 @@ namespace BannerKings
                     if ((settlement.Town != null && !settlement.Town.InRebelliousState && settlement.Notables != null) || 
                         (settlement.IsVillage && !settlement.Village.Bound.Town.InRebelliousState))
                     {
+                        var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
                         foreach (Hero hero in settlement.Notables)
                         {
                             if (hero.CanHaveRecruits)
                             {
                                 bool flag = false;
                                 CharacterObject basicVolunteer = Campaign.Current.Models.VolunteerModel.GetBasicVolunteer(hero);
+                                if (data.MilitaryData.GetNotableManpower(data.MilitaryData.GetCharacterManpowerType(basicVolunteer),
+                                    hero, data.EstateData) < 1f)
+                                {
+                                    continue;
+                                }
+
                                 for (int i = 0; i < hero.VolunteerTypes.Length; i++)
                                 {
                                     if (MBRandom.RandomFloat < Campaign.Current.Models.VolunteerModel.GetDailyVolunteerProductionProbability(hero, i, settlement))
@@ -151,10 +160,12 @@ namespace BannerKings
 
         namespace Peerage
         {
-            [HarmonyPatch(typeof(KingdomDecision), "DetermineSupporters")]
+            [HarmonyPatch(typeof(KingdomDecision))]
             internal class DetermineSupportersPatch
             {
-                private static bool Prefix(KingdomDecision __instance, ref IEnumerable<Supporter> __result)
+                [HarmonyPrefix]
+                [HarmonyPatch("DetermineSupporters")]
+                private static bool DetermineSupportersPrefix(KingdomDecision __instance, ref IEnumerable<Supporter> __result)
                 {
                     var list = new List<Supporter>();
                     foreach (Clan clan in __instance.Kingdom.Clans)
@@ -170,6 +181,16 @@ namespace BannerKings
                     }
 
                     __result = list;
+                    return false;
+                }
+
+                [HarmonyPrefix]
+                [HarmonyPatch("IsPlayerParticipant", MethodType.Getter)]
+                private static bool IsPlayerParticipantPrefix(KingdomDecision __instance, ref bool __result)
+                {
+                    var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(Clan.PlayerClan);
+                    __result = __instance.Kingdom == Clan.PlayerClan.Kingdom && !Clan.PlayerClan.IsUnderMercenaryService &&
+                        council.Peerage != null && council.Peerage.CanVote;
                     return false;
                 }
             }
@@ -231,6 +252,16 @@ namespace BannerKings
                     }
 
                     return true;
+                }
+            }
+
+            [HarmonyPatch(typeof(GauntletGamepadNavigationManager), "OnWidgetNavigationStatusChanged")]
+            internal class NavigationPatch
+            {
+                private static bool Prefix(GauntletGamepadNavigationManager __instance, EventManager source, Widget widget)
+                {
+
+                    return false;
                 }
             }
 
@@ -613,7 +644,7 @@ namespace BannerKings
                 private static bool Prefix2(Hero hero, ref List<CharacterObject> __result)
                 {
                     List<CharacterObject> list = new List<CharacterObject>();
-                    for (int i = 0; i < BannerKingsSettings.Instance.VolunteersLimit; i++)
+                    for (int i = 0; i < hero.VolunteerTypes.Length; i++)
                     {
                         list.Add(hero.VolunteerTypes[i]);
                     }
@@ -766,41 +797,45 @@ namespace BannerKings
                     ref Dictionary<MobileParty, List<Settlement>> ____previouslyChangedVillagerTargetsDueToEnemyOnWay,
                     MobileParty mobileParty, Settlement settlement, Hero hero)
                 {
-                    if (BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
+                    var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
+                    if (mobileParty is {IsActive: true, IsVillager: true} && data != null && data.EstateData != null)
                     {
-                        if (mobileParty is {IsActive: true, IsVillager: true})
+
+                        if (____previouslyChangedVillagerTargetsDueToEnemyOnWay.ContainsKey(mobileParty))
                         {
-
-                            if (____previouslyChangedVillagerTargetsDueToEnemyOnWay.ContainsKey(mobileParty))
-                            {
-                                ____previouslyChangedVillagerTargetsDueToEnemyOnWay[mobileParty].Clear();
-                            }
+                            ____previouslyChangedVillagerTargetsDueToEnemyOnWay[mobileParty].Clear();
+                        }
                             
-                            if (settlement.IsTown)
+                        if (settlement.IsTown)
+                        {
+                            SellGoodsForTradeAction.ApplyByVillagerTrade(settlement, mobileParty);
+                        }
+
+                        if (settlement.IsVillage)
+                        {
+                            var tax = Campaign.Current.Models.SettlementTaxModel.CalculateVillageTaxFromIncome(
+                                mobileParty.HomeSettlement.Village, mobileParty.PartyTradeGold);
+                            float remainder = mobileParty.PartyTradeGold - tax;
+                            mobileParty.HomeSettlement.Village.ChangeGold((int) (remainder * 0.5f));
+                            mobileParty.PartyTradeGold = 0;
+                            if (mobileParty.HomeSettlement.Village.TradeTaxAccumulated < 0)
                             {
-                                SellGoodsForTradeAction.ApplyByVillagerTrade(settlement, mobileParty);
+                                mobileParty.HomeSettlement.Village.TradeTaxAccumulated = 0;
                             }
 
-                            if (settlement.IsVillage)
-                            {
-                                var tax = Campaign.Current.Models.SettlementTaxModel.CalculateVillageTaxFromIncome(
-                                    mobileParty.HomeSettlement.Village, mobileParty.PartyTradeGold);
-                                float remainder = mobileParty.PartyTradeGold - tax;
-                                mobileParty.HomeSettlement.Village.ChangeGold((int) (remainder * 0.5f));
-                                mobileParty.PartyTradeGold = 0;
-                                mobileParty.HomeSettlement.Village.TradeTaxAccumulated += tax;
-                            }
+                            data.EstateData.AccumulateTradeTax(data, tax);
+                        }
 
-                            if (settlement.IsTown && settlement.Town.Governor != null &&
-                                settlement.Town.Governor.GetPerkValue(DefaultPerks.Trade.DistributedGoods))
-                            {
-                                settlement.Town.TradeTaxAccumulated +=
-                                    MathF.Round(DefaultPerks.Trade.DistributedGoods.SecondaryBonus);
-                            }
+                        if (settlement.IsTown && settlement.Town.Governor != null &&
+                            settlement.Town.Governor.GetPerkValue(DefaultPerks.Trade.DistributedGoods))
+                        {
+                            settlement.Town.TradeTaxAccumulated +=
+                                MathF.Round(DefaultPerks.Trade.DistributedGoods.SecondaryBonus);
                         }
 
                         return false;
                     }
+
 
                     return true;
                 }

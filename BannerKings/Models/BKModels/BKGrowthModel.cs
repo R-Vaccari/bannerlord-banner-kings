@@ -1,3 +1,4 @@
+using BannerKings.Behaviours;
 using BannerKings.Extensions;
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Titles.Laws;
@@ -6,6 +7,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.Settlements.Buildings;
 using TaleWorlds.Core;
+using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using static BannerKings.Managers.Policies.BKDraftPolicy;
 using static BannerKings.Managers.PopulationManager;
@@ -34,6 +36,15 @@ namespace BannerKings.Models.BKModels
             if (settlement.IsStarving)
             {
                 result.AddFactor(-2f, GameTexts.FindText("str_starvation_morale"));
+            }
+
+            if (filledCapacity <= 0.15f)
+            {
+                float factor = 1f;
+                if (filledCapacity <= 0.05f) factor = 3f;
+                if (filledCapacity <= 0.01f) factor = 2f;
+                     
+                result.AddFactor(factor, new TextObject("{=!}Repopulation"));
             }
  
 
@@ -84,6 +95,12 @@ namespace BannerKings.Models.BKModels
                 }
 
                 result.Add(settlement.Prosperity / 5f, GameTexts.FindText("str_map_tooltip_prosperity"));
+
+                var capital = Campaign.Current.GetCampaignBehavior<BKCapitalBehavior>().GetCapital(town.OwnerClan.Kingdom);
+                if (capital == town)
+                {
+                    result.AddFactor(0.4f, new TextObject("{=!}Capital"));
+                }
             }
 
 
@@ -181,6 +198,7 @@ namespace BannerKings.Models.BKModels
         public ExplainedNumber CalculateSlavePrice(Settlement settlement, bool explanations = false)
         {
             var result = new ExplainedNumber(150f, explanations);
+            result.LimitMin(0f);
 
             result.AddFactor(CalculatePopulationClassDemand(settlement, PopType.Slaves).ResultNumber - 1f,
                 new TextObject("{=!}{FACTION} demand")
@@ -188,7 +206,7 @@ namespace BannerKings.Models.BKModels
 
             var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
             var dic = GetDesiredPopTypes(settlement);
-            float fraction = data.GetCurrentTypeFraction(PopType.Slaves);
+            float fraction = MathF.Clamp(data.GetCurrentTypeFraction(PopType.Slaves), 0f, 1f);
             float medium = (dic[PopType.Slaves][0] + dic[PopType.Slaves][1]) / 2f;
 
             result.AddFactor(medium - fraction, new TextObject("{=!}Local demand"));

@@ -31,7 +31,7 @@ namespace BannerKings.Models.Vanilla
         {
             var result = new ExplainedNumber(0f, explanations);
             result.LimitMin(0f);
-            result.LimitMax(BannerKingsSettings.Instance.VolunteersLimit);
+            result.LimitMax(sellerHero.VolunteerTypes.Length);
 
             if (buyerHero != null)
             {

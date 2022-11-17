@@ -60,8 +60,13 @@ namespace BannerKings.Behaviours
 
         private void OnDailyTickHero(Hero hero)
         {
-            if (hero.IsChild || hero.Occupation != Occupation.Lord || hero.Clan.IsMinorFaction ||
-                !BannerKingsConfig.Instance.TitleManager.IsHeroTitleHolder(hero))
+            if (hero == null)
+            {
+                return;
+            }
+
+            if (hero.IsChild || hero.Occupation != Occupation.Lord || hero.Clan == null ||
+                hero.Clan.IsMinorFaction || !BannerKingsConfig.Instance.TitleManager.IsHeroTitleHolder(hero))
             {
                 return;
             }
@@ -246,19 +251,20 @@ namespace BannerKings.Behaviours
                 return;
             }
 
-            InheritanceHelper.ApplyInheritanceAllTitles(titles, victim);
-
             if (sovereign != null)
             {
                 foreach (var title in titles)
                 {
                     if (title.Equals(sovereign))
                     {
-                        SuccessionHelper.ApplySuccession(title, victim, victim.Clan.Kingdom);
+                        SuccessionHelper.ApplySovereignSuccession(title, victim, victim.Clan.Kingdom);
+                        titles.Remove(sovereign);
                         break;
                     }
                 }
             }
+
+            InheritanceHelper.ApplyInheritanceAllTitles(titles, victim);
         }
 
         public void OnDailyTickSettlement(Settlement settlement)

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using BannerKings.Managers.Populations.Estates;
 using BannerKings.Models.Vanilla;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -37,6 +38,27 @@ namespace BannerKings.Managers.Populations
             return result;
         }
 
+        public int GetNotableManpower(PopType type, Hero notable, EstateData data)
+        {
+            int result = 0;
+
+            if (data != null)
+            {
+                var estate = data.GetHeroEstate(notable);
+                if (estate != null)
+                {
+                    return estate.GetManpower(type);
+                }
+            }
+
+            if (Manpowers.ContainsKey(type))
+            {
+                result = (int)Manpowers[type];
+            }
+
+            return result;
+        }
+
         public float PeasantManpower
         {
             get
@@ -61,17 +83,7 @@ namespace BannerKings.Managers.Populations
             get
             {
                 InitManpowers();
-                float value = 0f;
-                foreach (var pair in Manpowers)
-                {
-                    if (pair.Key != PopType.Nobles)
-                    {
-                        continue;
-                    }
-
-                    value += pair.Value;
-                }
-                return value;
+                return Manpowers[PopType.Nobles];
             }
         }
 
@@ -107,42 +119,64 @@ namespace BannerKings.Managers.Populations
         public int Trebuchets => new BKSiegeEventModel().GetPrebuiltSiegeEnginesOfSettlement(settlement)
             .Count(x => x == DefaultSiegeEngineTypes.Trebuchet);
 
-        public void DeduceManpower(PopulationData data, int quantity, CharacterObject troop)
+        public PopType GetCharacterManpowerType(CharacterObject character)
         {
-            InitManpowers();
-
-            var tier = troop.Tier;
-            var noble = Utils.Helpers.IsRetinueTroop(troop);
-            if (noble)
+            if (Utils.Helpers.IsRetinueTroop(character))
             {
-                Manpowers[PopType.Nobles] -= quantity;
-                data.UpdatePopType(PopType.Nobles, -quantity);
+                return PopType.Nobles;
             }
-            else
+
+            List<ValueTuple<PopType, float>> options = new List<(PopType, float)>();
+            var classes = BannerKingsConfig.Instance.VolunteerModel.GetMilitaryClasses(settlement);
+            foreach (var pair in Manpowers)
             {
-                List<ValueTuple<PopType, float>> options = new List<(PopType, float)>();
-                var classes = BannerKingsConfig.Instance.VolunteerModel.GetMilitaryClasses(settlement);
-                foreach (var pair in Manpowers)
+                PopType poptype = pair.Key;
+                if (poptype == PopType.Nobles)
                 {
-                    if (pair.Key == PopType.Nobles)
-                    {
-                        continue;
-                    }
-
-                    float militarism = classes.First(x => x.Item1 == pair.Key).Item2;
-
-                    if (troop.Tier >= 3 && pair.Key == PopType.Craftsmen)
-                    {
-                        militarism *= 1.3f;
-                    }
-
-                    options.Add(new (pair.Key, militarism));
+                    continue;
                 }
 
-                var result = MBRandom.ChooseWeighted(options);
-                Manpowers[result] -= quantity;
-                data.UpdatePopType(result, -quantity);
+                float militarism = 0f;
+                foreach (var tuple in classes)
+                {
+                    if (tuple.Item1 == poptype)
+                    {
+                        militarism = tuple.Item2;
+                    }
+                }
+
+                if (character.Tier >= 3 && poptype == PopType.Craftsmen)
+                {
+                    militarism *= 1.3f;
+                }
+
+                if (militarism != 0f)
+                {
+                    options.Add(new(pair.Key, militarism));
+                }
             }
+
+            return MBRandom.ChooseWeighted(options);
+        }
+
+        public void DeduceManpower(PopulationData data, int quantity, CharacterObject troop, Hero notable)
+        {
+            InitManpowers();
+            PopType type = GetCharacterManpowerType(troop);
+            if (data.EstateData != null)
+            {
+                var estate = data.EstateData.GetHeroEstate(notable);
+                if (estate != null && (type == PopType.Serfs || type == PopType.Slaves))
+                {
+                    estate.AddManpower(type, -quantity);
+                    estate.AddPopulation(type, -quantity);
+                    return;
+                }
+            }
+
+
+            Manpowers[type] -= quantity;
+            data.UpdatePopType(type, -quantity);
         }
 
         internal override void Update(PopulationData data)
@@ -162,6 +196,21 @@ namespace BannerKings.Managers.Populations
                 float growth = maxManpower * 0.01f;
                 Manpowers[type] += growth;
                 Manpowers[type] = MathF.Clamp(Manpowers[type], 0f, maxManpower);
+
+                if (data.EstateData != null)
+                {
+                    foreach (var estate in data.EstateData.Estates)
+                    {
+                        if (estate.IsDisabled)
+                        {
+                            continue;
+                        }
+
+                        float estateMaxManpower = estate.GetTypeCount(type) * militarism;
+                        float estateGrowth = estateMaxManpower * 0.01f;
+                        estate.AddManpower(type, estateGrowth);
+                    }
+                }
             }
         }
 

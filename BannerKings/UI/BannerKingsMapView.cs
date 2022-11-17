@@ -4,6 +4,7 @@ using BannerKings.UI.CampaignStart;
 using BannerKings.UI.Estates;
 using BannerKings.UI.Management;
 using BannerKings.UI.Management.BannerKings.UI.Panels;
+using BannerKings.UI.Marriages;
 using BannerKings.UI.Panels;
 using BannerKings.UI.Titles;
 using SandBox.View.Map;
@@ -65,6 +66,9 @@ namespace BannerKings.UI
                     return (new ReligionVM(data), "ReligionPopup");
                 case "campaignStart":
                     return new ValueTuple<BannerKingsViewModel, string>(new CampaignStartVM(), "CampaignStartPopup");
+                case "marriage":
+                    return new ValueTuple<BannerKingsViewModel, string>(new MarriageContractProposalVM(Hero.OneToOneConversationHero),
+                        "MarriageProposalWindow");
                 default:
                     return (new PopulationVM(data), "PopulationWindow");
             }

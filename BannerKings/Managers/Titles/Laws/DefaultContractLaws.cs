@@ -62,6 +62,7 @@ namespace BannerKings.Managers.Titles.Laws
                 yield return SlavesDomesticDuties;
                 yield return SlaveryStandard;
                 yield return SlaveryVlandia;
+                yield return SlaveryAserai;
                 yield return SlaveryManumission;
                 yield return DraftingHidage;
                 yield return DraftingFreeContracts;
@@ -89,39 +90,45 @@ namespace BannerKings.Managers.Titles.Laws
                 culture = faction.Culture;
             }
 
+            list.Add(NoblesTaxDuties.GetCopy());
+            list.Add(CraftsmenTaxDuties.GetCopy());
+            list.Add(SerfsAgricultureDuties.GetCopy());
+            list.Add(SlavesHardLabor.GetCopy());
+            
+
+            var slavery = SlaveryStandard.GetCopy();
+            list.Add(slavery);
+
             if (government == GovernmentType.Feudal)
             {
                 list.Add(DraftingVassalage.GetCopy());
+                list.Add(EstateTenureFeeTail.GetCopy());
 
                 if (culture != null)
                 {
                     if (culture.StringId == "vlandia")
                     {
+                        list.Remove(slavery);
                         list.Add(SlaveryVlandia.GetCopy());
                     }
 
                     if (culture.StringId == "aserai")
                     {
-
+                        list.Remove(slavery);
+                        list.Add(SlaveryAserai.GetCopy());
                     }
                 }
             } 
             else if (government == GovernmentType.Tribal)
             {
                 list.Add(DraftingHidage.GetCopy());
+                list.Add(EstateTenureAllodial.GetCopy());
             }
             else
             {
                 list.Add(DraftingFreeContracts.GetCopy());
+                list.Add(EstateTenureFeeTail.GetCopy());
             }
-
-
-
-            
-            list.Add(SlaveryStandard.GetCopy());
-            list.Add(SlavesHardLabor.GetCopy());
-            list.Add(SerfsAgricultureDuties.GetCopy());
-            list.Add(EstateTenureFeeTail.GetCopy());
 
             return list;
         }
@@ -173,7 +180,7 @@ namespace BannerKings.Managers.Titles.Laws
                new TextObject("{=!}Tailor the duty laws of {CLASS} towards military service. Extensive requirements of service ensure a bigger manpower pool to protect the realm. Increased class militarism and militia service.")
                .SetTextVariable("CLASS", Utils.Helpers.GetClassName(PopulationManager.PopType.Nobles, Hero.MainHero.Culture)),
                new TextObject("{=!}Nobles militarism +4% flat%\nMilitia quality +15%"),
-               DemesneLawTypes.SerfDuties,
+               DemesneLawTypes.NobleDuties,
                0.8f,
                -0.4f,
                0.6f,
@@ -184,7 +191,7 @@ namespace BannerKings.Managers.Titles.Laws
                new TextObject("{=!}Tailor the duty laws of {CLASS} towards agriculture. Labor requirements and movement restriction tie the serfs to the land and its productivity. Increased agricultural output.")
                .SetTextVariable("CLASS", Utils.Helpers.GetClassName(PopulationManager.PopType.Nobles, Hero.MainHero.Culture)),
                new TextObject("{=!}Increased nobles tax output by 25%"),
-               DemesneLawTypes.SerfDuties,
+               DemesneLawTypes.NobleDuties,
                0.4f,
                -0.4f,
                0.5f,
@@ -195,7 +202,7 @@ namespace BannerKings.Managers.Titles.Laws
                new TextObject("{=!}Lessen the duty burdens of {CLASS}. Reduced duties makes the populace more content and gives them room for prosperity. Reduces output and military contribution.")
                .SetTextVariable("CLASS", Utils.Helpers.GetClassName(PopulationManager.PopType.Nobles, Hero.MainHero.Culture)),
                new TextObject("{=!}Increased settlement research and influence outputs\nCraftsmen militarism -2% flat\nNobles tax output -40%"),
-               DemesneLawTypes.SerfDuties,
+               DemesneLawTypes.NobleDuties,
                -0.5f,
                0.8f,
                -0.2f,
@@ -211,7 +218,7 @@ namespace BannerKings.Managers.Titles.Laws
                new TextObject("{=!}Tailor the duty laws of {CLASS} towards military service. Extensive requirements of service ensure a bigger manpower pool to protect the realm. Increased class militarism and militia service.")
                .SetTextVariable("CLASS", Utils.Helpers.GetClassName(PopulationManager.PopType.Craftsmen, Hero.MainHero.Culture)),
                new TextObject("{=!}Craftsmen militarism +3% flat\nMilitia quality +10%"),
-               DemesneLawTypes.SerfDuties,
+               DemesneLawTypes.CraftsmenDuties,
                0.8f,
                -0.4f,
                0.6f,
@@ -222,7 +229,7 @@ namespace BannerKings.Managers.Titles.Laws
                new TextObject("{=!}Tailor the duty laws of {CLASS} towards taxation. Stricter tax collection and more taxation forms squeeze more denarii out of {CLASS}. Increases tax output.")
                .SetTextVariable("CLASS", Utils.Helpers.GetClassName(PopulationManager.PopType.Craftsmen, Hero.MainHero.Culture)),
                new TextObject("{=!}Increased nobles tax output by 35%"),
-               DemesneLawTypes.SerfDuties,
+               DemesneLawTypes.CraftsmenDuties,
                0.4f,
                -0.4f,
                0.5f,
@@ -233,7 +240,7 @@ namespace BannerKings.Managers.Titles.Laws
                new TextObject("{=!}Lessen the duty burdens of {CLASS}. Reduced duties makes the populace more content and gives them room for prosperity. Reduces output and military contribution.")
                .SetTextVariable("CLASS", Utils.Helpers.GetClassName(PopulationManager.PopType.Craftsmen, Hero.MainHero.Culture)),
                new TextObject("{=!}Increased craftsmen prosperity and loyalty\nIncreased production quality +5%\nCraftsmen militarism -1.5% flat\nCraftsmen tax output -40%"),
-               DemesneLawTypes.SerfDuties,
+               DemesneLawTypes.CraftsmenDuties,
                -0.5f,
                0.8f,
                -0.2f,

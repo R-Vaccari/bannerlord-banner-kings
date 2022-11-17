@@ -40,10 +40,8 @@ namespace BannerKings.Managers.Kingdoms.Contract
         {
         }
 
-        public override Clan DetermineChooser()
-        {
-            return Kingdom.RulingClan;
-        }
+        public override Clan DetermineChooser() => Kingdom.RulingClan;
+        
 
         public override IEnumerable<DecisionOutcome> DetermineInitialCandidates()
         {

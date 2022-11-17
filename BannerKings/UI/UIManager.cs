@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using BannerKings.Extensions;
 using BannerKings.Managers.Helpers;
+using BannerKings.Managers.Kingdoms.Policies;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
 using BannerKings.Models.Vanilla;
@@ -389,7 +390,8 @@ namespace BannerKings.UI
                         recruitVolunteerTroopVM.Owner.OwnerHero.VolunteerTypes[recruitVolunteerTroopVM.Index] = null;
                         MobileParty.MainParty.MemberRoster.AddToCounts(recruitVolunteerTroopVM.Character, 1);
                         CampaignEventDispatcher.Instance.OnUnitRecruited(recruitVolunteerTroopVM.Character, 1);
-                        data.MilitaryData.DeduceManpower(data, 1, recruitVolunteerTroopVM.Character);
+                        data.MilitaryData.DeduceManpower(data, 1, recruitVolunteerTroopVM.Character,
+                            recruitVolunteerTroopVM.Owner.OwnerHero);
                         GiveGoldAction.ApplyBetweenCharacters(Hero.MainHero, recruitVolunteerTroopVM.Owner.OwnerHero,
                             recruitVolunteerTroopVM.Cost, true);
                     }
@@ -824,7 +826,26 @@ namespace BannerKings.UI
             static bool Prefix(ArmyManagementVM __instance)
             {
                 bool canCreate = new BKArmyManagementModel().CanCreateArmy(Hero.MainHero);
-                if (!canCreate) MBInformationManager.AddQuickInformation(new TextObject("{=!}Not crown Marshal or low position in title hierarchy", null), 0, null, "");
+                if (!canCreate)
+                {
+                    var rulingClan = Clan.PlayerClan.Kingdom.RulingClan;
+                    var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(rulingClan);
+                    var councilMember = council.GetMemberFromPosition(Managers.Court.CouncilPosition.Marshall);
+                    TextObject reason = new TextObject("{=!}You must be faction leader, {MARSHAL} for the {CLAN} or have a title superior to Lordship level.")
+                        .SetTextVariable("MARSHAL", councilMember.GetName())
+                        .SetTextVariable("CLAN", rulingClan.Name);
+
+                    if (Clan.PlayerClan.Kingdom.HasPolicy(BKPolicies.Instance.LimitedArmyPrivilege))
+                    {
+                        reason = new TextObject("{=!}You must be faction leader, {MARSHAL} for the {CLAN} or have a title superior to County level.")
+                                                .SetTextVariable("MARSHAL", councilMember.GetName())
+                                                .SetTextVariable("CLAN", rulingClan.Name);
+                    }
+
+                    MBInformationManager.AddQuickInformation(reason, 0);
+                }
+
+              
                 return canCreate;
             }
         }

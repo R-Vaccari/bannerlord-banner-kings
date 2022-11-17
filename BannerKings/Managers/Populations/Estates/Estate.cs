@@ -1,8 +1,7 @@
 ﻿using BannerKings.Extensions;
-using BannerKings.Managers.Policies;
-using BannerKings.Managers.Titles.Laws;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -20,8 +19,6 @@ namespace BannerKings.Managers.Populations.Estates
             Farmland = farmland;
             Pastureland = pastureland;
             Woodland = woodland;
-            Nobles = nobles;
-            Craftsmen = craftsmen;
             Serfs = serfs;
             Slaves = slaves;
             EstatesData = data;
@@ -66,8 +63,6 @@ namespace BannerKings.Managers.Populations.Estates
             }
         }
 
-        public int GetTaxFromIncome() => (int)(Income.ResultNumber * TaxRatio.ResultNumber);
-
         public ExplainedNumber TaxRatio => BannerKingsConfig.Instance.EstatesModel.GetTaxRatio(this, true);
 
         public bool IsDisabled 
@@ -79,8 +74,6 @@ namespace BannerKings.Managers.Populations.Estates
                 return Owner == null || Owner == fiefOwner;
             } 
         }
-
-        public ExplainedNumber Income => BannerKingsConfig.Instance.EstatesModel.CalculateEstateIncome(this, true);
         public ExplainedNumber AcrePrice => BannerKingsConfig.Instance.EstatesModel.CalculateAcrePrice(EstatesData.Settlement, true);
         public ExplainedNumber EstateValue => BannerKingsConfig.Instance.EstatesModel.CalculateEstatePrice(this, true);
         public ExplainedNumber AcreageGrowth => Task == EstateTask.Land_Expansion ? BannerKingsConfig.Instance.ConstructionModel
@@ -89,7 +82,7 @@ namespace BannerKings.Managers.Populations.Estates
 
         public ExplainedNumber Production => BannerKingsConfig.Instance.EstatesModel.CalculateEstateProduction(this, true);
 
-        public int Population => Nobles + Craftsmen + Serfs + Slaves;
+        public int Population => MathF.Max(Serfs, 0) + MathF.Max(Slaves, 0);
 
         public int AvailableWorkForce
         {
@@ -120,7 +113,7 @@ namespace BannerKings.Managers.Populations.Estates
         }
 
 
-        public float Influence => BannerKingsConfig.Instance.InfluenceModel.GetNoblesInfluence(EstatesData.Settlement, Nobles);
+        public float Influence => BannerKingsConfig.Instance.InfluenceModel.GetNoblesInfluence(EstatesData.Settlement, 0);
 
         public float Acreage => Farmland + Pastureland + Woodland;
 
@@ -128,9 +121,8 @@ namespace BannerKings.Managers.Populations.Estates
         [SaveableProperty(3)] public float Farmland { get; private set; }
         [SaveableProperty(4)] public float Pastureland { get; private set; }
         [SaveableProperty(5)] public float Woodland { get; private set; }
+        [SaveableProperty(6)] public int TaxAccumulated { get; set; } = 0;
 
-        [SaveableProperty(6)] public int Nobles { get; private set; }
-        [SaveableProperty(7)] public int Craftsmen { get; private set; }
         [SaveableProperty(8)] public int Serfs { get; private set; }
         [SaveableProperty(9)] public int Slaves { get; private set; }
 
@@ -140,9 +132,72 @@ namespace BannerKings.Managers.Populations.Estates
 
         [SaveableProperty(10)] public EstateDuty Duty { get; private set; }
         [SaveableProperty(11)] public EstateTask Task { get; private set; }
+        [SaveableProperty(12)] private Dictionary<PopType, float> Manpowers { get; set; }
+
+        public int AddIncomeToHero()
+        {
+            var result = TaxAccumulated;
+            Owner.ChangeHeroGold(TaxAccumulated);
+            TaxAccumulated = 0;
+            return result;
+        }
+
+        public int GetTypeCount(PopType type)
+        {
+            if (type == PopType.Serfs)
+            {
+                return Serfs;
+            }
+            else if (type == PopType.Slaves)
+            {
+                return Slaves;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
+        public int GetManpower(PopType type)
+        {
+            if (Manpowers == null)
+            {
+                Manpowers = new Dictionary<PopType, float>();
+            }
+
+            int result = 0;
+            if (Manpowers.ContainsKey(type))
+            {
+                result = (int)Manpowers[type];
+            }
+
+            return result;
+        }
+
+        public void AddManpower(PopType type, float count)
+        {
+            if (Manpowers == null)
+            {
+                Manpowers = new Dictionary<PopType, float>();
+            }
+
+            if (!Manpowers.ContainsKey(type))
+            {
+                Manpowers.Add(type, count);
+            }
+            else
+            {
+                Manpowers[type] += count;
+            }
+        }
 
         public void Tick(PopulationData data)
         {
+            if (Manpowers == null)
+            {
+                Manpowers = new Dictionary<PopType, float>(); 
+            }
+
             if (IsDisabled)
             {
                 return;
@@ -183,37 +238,23 @@ namespace BannerKings.Managers.Populations.Estates
 
         public void AddPopulation(PopType type, int toAdd)
         {
-            if (type == PopType.Nobles)
-            {
-                Nobles += toAdd;
-            }
-            else if (type == PopType.Craftsmen)
-            {
-                Craftsmen += toAdd;
-            }
-            else if (type == PopType.Serfs)
+            if (type == PopType.Serfs)
             {
                 Serfs += toAdd;
+                Serfs = MathF.Max(toAdd, Serfs);
             }
             else if (type == PopType.Slaves)
             {
                 Slaves += toAdd;
+                Slaves = MathF.Max(toAdd, Slaves);
             }
         }
 
         public int GetPopulationClassQuantity(PopType type)
         {
             int result = 0;
-
-            if (type == PopType.Nobles)
-            {
-                result = Nobles;
-            }
-            else if (type == PopType.Craftsmen)
-            {
-                result = Craftsmen;
-            }
-            else if (type == PopType.Serfs)
+            
+            if (type == PopType.Serfs)
             {
                 result = Serfs;
             }

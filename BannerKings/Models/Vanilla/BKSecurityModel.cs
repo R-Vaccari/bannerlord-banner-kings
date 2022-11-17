@@ -1,3 +1,4 @@
+using BannerKings.Behaviours;
 using BannerKings.Managers.Court;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Titles;
@@ -21,8 +22,14 @@ namespace BannerKings.Models.Vanilla
                 baseResult.Add(0.5f, new TextObject("{=UnxSzSGt}Castle security"));
             }
 
-            if (BannerKingsConfig.Instance.PopulationManager != null &&
-                BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
+            var capital = Campaign.Current.GetCampaignBehavior<BKCapitalBehavior>().GetCapital(town.OwnerClan.Kingdom);
+            if (capital == town)
+            {
+                baseResult.Add(-1f, new TextObject("{=!}Capital"));
+            }
+
+
+            if (BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
             {
                 var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
                 var assim = data.CultureData.GetAssimilation(town.Owner.Culture);
