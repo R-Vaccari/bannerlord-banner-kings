@@ -32,6 +32,7 @@ namespace BannerKings.UI.Extensions
 
             var capital = Campaign.Current.GetCampaignBehavior<BKCapitalBehavior>().GetCapital(vm.Kingdom);
             CourtEnabled = capital != null;
+            kingdomManagement.RefreshValues();
         }
 
 
@@ -198,6 +199,8 @@ namespace BannerKings.UI.Extensions
             
             Court.IsSelected = true;
             CourtSelected = true;
+
+            kingdomManagement.RefreshValues();
         }
 
         [DataSourceMethod]
@@ -216,6 +219,8 @@ namespace BannerKings.UI.Extensions
                 Court.IsSelected = false;
                 CourtSelected = false;
             }
+
+            kingdomManagement.RefreshValues();
         }
     }
 }
