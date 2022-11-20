@@ -95,6 +95,11 @@ namespace BannerKings.Models.Vanilla
                     .SetTextVariable("TITLE", title.FullName));
             }
 
+            if (hero.CharacterObject.OriginalCharacter.IsTemplate)
+            {
+                result.Add(-0.5f, new TextObject("{=!}Common born"));
+            }
+
 
             return result;
         }
