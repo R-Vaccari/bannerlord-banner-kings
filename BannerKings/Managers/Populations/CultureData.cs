@@ -26,21 +26,9 @@ namespace BannerKings.Managers.Populations
 
         public CultureObject DominantCulture
         {
-            get
-            {
-                var eligible = new List<(CultureObject, float)>();
-                foreach (var data in cultures)
-                {
-                    if (data.Culture.MilitiaPartyTemplate != null && data.Culture.DefaultPartyTemplate != null &&
-                        !data.Culture.IsBandit)
-                    {
-                        eligible.Add((data.Culture, data.Assimilation));
-                    }
-                }
-
-                eligible.OrderByDescending(pair => pair.Item2);
-                return eligible[0].Item1;
-            }
+            get => (from x in cultures
+                    orderby x.Assimilation descending
+                    select x).First().Culture;
         }
 
         public Hero SettlementOwner
@@ -153,17 +141,11 @@ namespace BannerKings.Managers.Populations
 
                 BalanceCultures(data);
                 var dominant = DominantCulture;
-                if (dominant.BasicTroop != null && dominant.MilitiaSpearman != null)
+                if (dominant.BasicTroop != null)
                 {
                     data.Settlement.Culture = dominant;
-                    if (data.Settlement.Notables is { Count: > 0 })
-                    {
-                        foreach (var notable in data.Settlement.Notables)
-                        {
-                            notable.Culture = dominant;
-                        }
-                    }
                 }
+
             }, GetType().Name);
         }
 
