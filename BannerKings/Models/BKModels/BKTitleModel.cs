@@ -88,6 +88,13 @@ namespace BannerKings.Models.BKModels
         {
             var result = new ExplainedNumber(0f, explanations);
 
+
+            if (contract == null)
+            {
+                contract = new FeudalContract(null, null,
+                    GovernmentType.Feudal, SuccessionType.Elective_Monarchy, InheritanceType.Primogeniture, GenderLaw.Agnatic);
+            }
+
             GenderLaw genderLaw = contract.GenderLaw;
             InheritanceType inheritance = contract.Inheritance;
             if (inheritance == InheritanceType.Seniority)
@@ -118,6 +125,12 @@ namespace BannerKings.Models.BKModels
                 {
                     result.Add(-candidate.Age, new TextObject("{=!}Age"));
                 }
+
+                if (candidate.CharacterObject != null && candidate.CharacterObject.OriginalCharacter != null &&
+                   candidate.CharacterObject.OriginalCharacter.IsTemplate)
+                {
+                    result.AddFactor(-0.5f, new TextObject("{=!}Common born"));
+                }
             }
 
             if (genderLaw == GenderLaw.Agnatic && candidate.IsFemale)
@@ -125,8 +138,26 @@ namespace BannerKings.Models.BKModels
                 result.AddFactor(-0.9f, GameTexts.FindText("str_bk_agnatic"));
             }
 
-
             return result;
+        }
+
+        public IEnumerable<KeyValuePair<Hero, ExplainedNumber>> CalculateInheritanceLine(Clan clan)
+        {
+            var candidates = BannerKingsConfig.Instance.TitleModel.GetInheritanceCandidates(clan.Leader);
+            var explanations = new Dictionary<Hero, ExplainedNumber>();
+            var clanTitle = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(clan.Leader);
+
+            foreach (Hero hero in candidates)
+            {
+                var contract = clanTitle != null ? clanTitle.contract : null;
+                var explanation = BannerKingsConfig.Instance.TitleModel.GetInheritanceHeirScore(clan.Leader,
+                    hero, contract, true);
+                explanations.Add(hero, explanation);
+            }
+
+            return (from x in explanations
+                    orderby x.Value.ResultNumber descending
+                    select x).Take(6);
         }
 
         public List<Hero> GetSuccessionCandidates(Hero currentLeader, FeudalContract contract)

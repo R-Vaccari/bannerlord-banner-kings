@@ -121,14 +121,18 @@ namespace BannerKings.Models.Vanilla
             {
                 if (buyerHero.CurrentSettlement != null)
                 {
-                    var contract = BannerKingsConfig.Instance.TitleManager.GetTitle(buyerHero.CurrentSettlement).contract;
-                    if (contract.IsLawEnacted(DefaultDemesneLaws.Instance.DraftingFreeContracts))
+                    var title = BannerKingsConfig.Instance.TitleManager.GetTitle(buyerHero.CurrentSettlement);
+                    if (title != null)
                     {
-                        result.Add(1f, DefaultDemesneLaws.Instance.DraftingFreeContracts.Name);
-                    }
-                    else if (contract.IsLawEnacted(DefaultDemesneLaws.Instance.DraftingHidage))
-                    {
-                        result.Add(0.5f, DefaultDemesneLaws.Instance.DraftingHidage.Name);
+                        var contract = title.contract;
+                        if (contract.IsLawEnacted(DefaultDemesneLaws.Instance.DraftingFreeContracts))
+                        {
+                            result.Add(1f, DefaultDemesneLaws.Instance.DraftingFreeContracts.Name);
+                        }
+                        else if (contract.IsLawEnacted(DefaultDemesneLaws.Instance.DraftingHidage))
+                        {
+                            result.Add(0.5f, DefaultDemesneLaws.Instance.DraftingHidage.Name);
+                        }
                     }
                 }
 

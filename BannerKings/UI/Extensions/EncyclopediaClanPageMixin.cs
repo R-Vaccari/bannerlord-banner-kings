@@ -1,7 +1,9 @@
+using System.Collections.Generic;
 using System.Linq;
 using BannerKings.Managers.Titles;
 using BannerKings.UI.Court;
 using BannerKings.UI.Cultures;
+using BannerKings.UI.Kingdoms;
 using Bannerlord.UIExtenderEx.Attributes;
 using Bannerlord.UIExtenderEx.ViewModels;
 using TaleWorlds.CampaignSystem;
@@ -23,6 +25,8 @@ namespace BannerKings.UI.Extensions
         private MBBindingList<CustomNameHeroVM> councillors, companions;
         private EncyclopediaCultureVM cultureVM;
         private MBBindingList<HeroVM> knights;
+        private MBBindingList<HeirVM> heirs;
+        private HeirVM mainHeir;
 
         public EncyclopediaClanPageMixin(EncyclopediaClanPageVM vm) : base(vm)
         {
@@ -30,6 +34,7 @@ namespace BannerKings.UI.Extensions
             knights = new MBBindingList<HeroVM>();
             councillors = new MBBindingList<CustomNameHeroVM>();
             companions = new MBBindingList<CustomNameHeroVM>();
+            Heirs = new MBBindingList<HeirVM>();
         }
 
         [DataSourceProperty] public string CultureText => GameTexts.FindText("str_culture").ToString();
@@ -39,6 +44,41 @@ namespace BannerKings.UI.Extensions
         [DataSourceProperty] public string CompanionsText => new TextObject("{=a3G31iZ0}Companions").ToString();
 
         [DataSourceProperty] public string CouncilText => new TextObject("{=mUaJDjqO}Council").ToString();
+
+        [DataSourceProperty] public string InheritanceText => new TextObject("{=aELuNrRC}Inheritance").ToString();
+
+        [DataSourceProperty]
+        public string HeirText => new TextObject("{=!}Heir").ToString();
+
+
+
+        [DataSourceProperty]
+        public MBBindingList<HeirVM> Heirs
+        {
+            get => heirs;
+            set
+            {
+                if (value != heirs)
+                {
+                    heirs = value;
+                    ViewModel!.OnPropertyChangedWithValue(value, "Heirs");
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public HeirVM MainHeir
+        {
+            get => mainHeir;
+            set
+            {
+                if (value != mainHeir)
+                {
+                    mainHeir = value;
+                    ViewModel!.OnPropertyChangedWithValue(value, "MainHeir");
+                }
+            }
+        }
 
         [DataSourceProperty]
         public EncyclopediaCultureVM CultureInfo
@@ -102,6 +142,7 @@ namespace BannerKings.UI.Extensions
             Knights.Clear();
             Councillors.Clear();
             Companions.Clear();
+            Heirs.Clear();
             var clan = clanPageVM.Obj as Clan;
             CultureInfo = new EncyclopediaCultureVM(clan.Culture);
             var caravans = 0;
@@ -173,6 +214,22 @@ namespace BannerKings.UI.Extensions
                     Councillors.Add(new CustomNameHeroVM(position.Member, position.GetName()));
                 }
             }
+
+            var sorted = BannerKingsConfig.Instance.TitleModel.CalculateInheritanceLine(clan);
+            for (int i = 0; i < sorted.Count(); i++)
+            {
+                var hero = sorted.ElementAt(i).Key;
+                var exp = sorted.ElementAt(i).Value;
+                if (i == 0)
+                {
+                    MainHeir = new HeirVM(hero, exp);
+                }
+                else
+                {
+                    Heirs.Add(new HeirVM(hero, exp));
+                }
+            }
+
 
             if (!addedFields)
             {

@@ -89,6 +89,7 @@ namespace BannerKings.UI.Extensions
 
                     string definition4 = GameTexts.FindText("str_enc_sf_relation", null).ToString();
                     heroPageVM.Stats.Add(new StringPairItemVM(definition4, hero.GetRelationWithPlayer().ToString(), null));
+
                 }
 
                 addedFields = true;

@@ -89,7 +89,7 @@ namespace BannerKings.Behaviours
 
         private void OnPerkOpened(Hero hero, PerkObject perk)
         {
-            if (perk.AlternativePerk == null || hero.GetPerkValue(perk.AlternativePerk))
+            if (hero != Hero.MainHero || perk.AlternativePerk == null || hero.GetPerkValue(perk.AlternativePerk))
             {
                 return;
             }

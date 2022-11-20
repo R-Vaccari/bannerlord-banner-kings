@@ -1,5 +1,4 @@
 ﻿using BannerKings.Behaviours.Marriage;
-using System;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
@@ -92,6 +91,24 @@ namespace BannerKings.Dialogue
                 0f,
                 0.3f,
                 0.2f,
+                true));
+
+
+            return result;
+        }
+
+        internal static List<DialogueOption> GetMarriageConfirmationTexts(MarriageContract contract)
+        {
+            List<DialogueOption> result = new List<DialogueOption>();
+            result.Add(new DialogueOption(
+                new TextObject("{=!}Let it be known that {PROPOSER} and {PROPOSED} are now united in blood. I hope that we can keep finding common cause in the future, and thrive together.")
+                .SetTextVariable("PROPOSED", contract.Proposed.Name)
+                .SetTextVariable("PROPOSER", contract.Proposed.Name),
+                0.1f,
+                0.0f,
+                0f,
+                0f,
+                0f,
                 true));
 
 

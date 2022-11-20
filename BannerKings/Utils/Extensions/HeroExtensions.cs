@@ -18,5 +18,8 @@ namespace BannerKings.Utils.Extensions
         {
             return hero.Clan?.Kingdom?.Leader == hero;
         }
+
+        internal static bool IsCommonBorn(this Hero hero) => hero.CharacterObject != null && hero.CharacterObject.OriginalCharacter != null
+            && hero.CharacterObject.OriginalCharacter.IsTemplate;
     }
 }

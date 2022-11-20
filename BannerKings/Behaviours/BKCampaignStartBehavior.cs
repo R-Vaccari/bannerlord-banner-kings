@@ -75,6 +75,8 @@ namespace BannerKings.Behaviours
             this.option = option;
             startTime = CampaignTime.Now;
 
+            BannerKingsConfig.Instance.EducationManager.CorrectPlayerEducation();
+
             var mainHero = Hero.MainHero;
             mainHero.ChangeHeroGold(option.Gold - mainHero.Gold);
 
@@ -87,8 +89,29 @@ namespace BannerKings.Behaviours
 
             if (option.IsCriminal)
             {
-                var settlement = SettlementHelper.FindNearestSettlement(x => x.OwnerClan is { Kingdom: { } });
-                ChangeCrimeRatingAction.Apply(settlement.OwnerClan.Kingdom, option.Criminal);
+                var list = new List<InquiryElement>();
+                foreach (var kingdom in Kingdom.All)
+                {
+                    list.Add(new InquiryElement(kingdom, kingdom.Name.ToString(),
+                        new ImageIdentifier(kingdom.Banner)));
+                }
+
+                MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
+                            new TextObject("{=!}Kingdom Selection").ToString(),
+                            new TextObject("{=!}Choose where you want to be recognized as a criminal.").ToString(),
+                            list,
+                            false,
+                            1,
+                            GameTexts.FindText("str_accept").ToString(),
+                            string.Empty,
+                            delegate (List<InquiryElement> list)
+                            {
+                                var kingdom = (Kingdom)list[0].Identifier;
+                                ChangeCrimeRatingAction.Apply(kingdom, option.Criminal);
+                            },
+                            null),
+                            true,
+                            false);
             }
 
             if (option.Action != null)
@@ -96,7 +119,6 @@ namespace BannerKings.Behaviours
                 option.Action?.Invoke();
             }
 
-            BannerKingsConfig.Instance.EducationManager.CorrectPlayerEducation();
             GainKingdomInfluenceAction.ApplyForDefault(mainHero, option.Influence);
             if (!hasSeenInquiry)
             {

@@ -1,5 +1,6 @@
 ﻿using BannerKings.Behaviours.Marriage;
 using BannerKings.UI.Items;
+using BannerKings.Utils.Extensions;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.ViewModelCollection;
@@ -15,7 +16,7 @@ namespace BannerKings.UI.Marriages
         private MBBindingList<Hero> proposerCandidates, proposedCandidates;
         private HeroVM proposedHero, proposerHero;
         private bool proposedSelected, proposerSelected, arrangedMarriage, invertedClan, canInvertClan,
-            canChangeArrangedMarriage, alliance, feast;
+            canChangeArrangedMarriage, canCreateAlliance, alliance, feast;
         private DecisionElement invertedClanToggle, arrangedMarriageToggle, allianceToggle, feastToggle;
         private HintViewModel influenceCostHint, dowryValueHint, willAcceptHint,
             proposerSpouseHint, proposedSpouseHint;
@@ -36,6 +37,7 @@ namespace BannerKings.UI.Marriages
                     if (CanInvertClan)
                     {
                         InvertedClan = value;
+                        RefreshValues();
                     }
                 },
                 new TextObject("{=!}Invert the expected result for final clan. The clan whose member leaves it is owed the Dowry by the other family. Therefore, if your family member is leaving your clan, you are owed the Dowry. Spouses are less likely to leave their clans if they are it's leader or it's primary expected inheritor."));
@@ -48,6 +50,7 @@ namespace BannerKings.UI.Marriages
                     if (CanChangeArrangedMarriage)
                     {
                         ArrangedMarriage = value;
+                        RefreshValues();
                     }
                 }, 
                 new TextObject("{=!}Arrange the marriage without consulting the spouses. While their personal relations are still considered, the to-be-spouses have no power to dictate the marriage result. If you are one of the spouses, this means no Courting phase - the marriage is sealed off right away."));
@@ -59,8 +62,9 @@ namespace BannerKings.UI.Marriages
                 delegate (bool value)
                 {
                     alliance = value;
+                    RefreshValues();
                 },
-                new TextObject("{=!}Arrange the marriage without consulting the spouses. While their personal relations are still considered, the to-be-spouses have no power to dictate the marriage result. If you are one of the spouses, this means no Courting phase - the marriage is sealed off right away."));
+                new TextObject("{=!}Join both houses in alliance. By doing so, both houses are bound to not enter in conflict with each other when it comes to internal matters of the kingdom. Instead, if they are the leading houses of separate kingdoms, it would prevent a war between both realms. Subject houses may still fight each other if their sovereigns declare war."));
 
             FeastToggle = new DecisionElement()
                 .SetAsBooleanOption(new TextObject("{=!}Feast Celebration").ToString(),
@@ -68,8 +72,9 @@ namespace BannerKings.UI.Marriages
                 delegate (bool value)
                 {
                     feast = value;
+                    RefreshValues();
                 },
-                new TextObject("{=!}Arrange the marriage without consulting the spouses. While their personal relations are still considered, the to-be-spouses have no power to dictate the marriage result. If you are one of the spouses, this means no Courting phase - the marriage is sealed off right away."));
+                new TextObject("{=!}Arrange a feast to celebrate the marriage. A selection of families within the realm will be invited, and as a host you ought to provide them a quality celebration. Doing so will allow you to improve your standing with them, as well as bring your family renown."));
 
 
             RefreshValues();
@@ -136,6 +141,8 @@ namespace BannerKings.UI.Marriages
                 }
             }
 
+            ArrangedMarriageToggle.Enabled = CanChangeArrangedMarriage;
+
             if (ProposedHero != null)
             {
                 var score = BannerKingsConfig.Instance.MarriageModel.GetSpouseScore(ProposedHero.Hero, true);
@@ -144,7 +151,8 @@ namespace BannerKings.UI.Marriages
                     .SetTextVariable("HINT", score.GetExplanations());
             }
 
-           
+
+            CanCreateAlliance = false;
 
             DowryValueText = "0";
             InfluenceCostText = "0";
@@ -155,6 +163,12 @@ namespace BannerKings.UI.Marriages
             WillAcceptHint = new HintViewModel();
             if (ProposerHero != null && ProposedHero != null)
             {
+
+                if (ProposerHero.Hero.IsCommonBorn() || ProposedHero.Hero.IsCommonBorn())
+                {
+                    CanCreateAlliance = false;
+                }
+
                var willAccept = BannerKingsConfig.Instance.MarriageModel.IsMarriageAdequate(ProposerHero.Hero,
                     ProposedHero.Hero, true);
                 WillAcceptText = GameTexts.FindText(willAccept.ResultNumber >= 1f ? "str_yes" : "str_no").ToString();
@@ -173,6 +187,12 @@ namespace BannerKings.UI.Marriages
                 DowryValueText = ((int)dowry.ResultNumber).ToString();
                 DowryValueHint.HintText = new TextObject("{=!}The dowry is the financial security provided by the clan that takes in a new family member. It serves to show good will and genuine interest in the marriage by requiring a significant investment in it. Dowries are calculated based on the spouse's value as a family member - their position in the original clan and their usefulness. If a member of your clan is leaving the family to join another, you are owed the dowry.\n\n{HINT}")
                     .SetTextVariable("HINT", dowry.GetExplanations());
+            }
+
+            AllianceToggle.Enabled = CanCreateAlliance;
+            if (!CanCreateAlliance)
+            {
+                AllianceToggle.OptionValueAsBoolean = false;
             }
         }
 
@@ -588,6 +608,20 @@ namespace BannerKings.UI.Marriages
                 if (value != invertedClan)
                 {
                     invertedClan = value;
+                    OnPropertyChangedWithValue(value);
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public bool CanCreateAlliance
+        {
+            get => canCreateAlliance;
+            set
+            {
+                if (value != canCreateAlliance)
+                {
+                    canCreateAlliance = value;
                     OnPropertyChangedWithValue(value);
                 }
             }
