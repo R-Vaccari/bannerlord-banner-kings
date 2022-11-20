@@ -128,6 +128,15 @@ namespace BannerKings.Managers
                 return;
             }
 
+            if (hero.IsNotable && hero.CurrentSettlement != null)
+            {
+                var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(hero.CurrentSettlement);
+                if (data != null && data.ReligionData != null)
+                {
+                    rel = data.ReligionData.DominantReligion;
+                }
+            }
+
 
             var id = rel.Faith.GetId();
             if (id == "darusosian")

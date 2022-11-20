@@ -369,6 +369,12 @@ namespace BannerKings.Behaviours
                 return false;
             }
 
+            if (Hero.OneToOneConversationHero.IsPreacher)
+            {
+                hintText = new TextObject("{=!}Not possible to convert preachers.");
+                return false;
+            }
+
             hintText = new TextObject("{=!}Conversion is possible.");
             return true;
         }
