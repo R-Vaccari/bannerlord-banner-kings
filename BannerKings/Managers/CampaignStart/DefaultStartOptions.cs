@@ -44,7 +44,7 @@ namespace BannerKings.Managers.CampaignStart
             Adventurer.Initialize(new TextObject("{=0VSP2ghD}Adventurer"),
                 new TextObject("{=wTcCEBLB}A free spirit, you are roaming the continent without constraints, or a clear objective. The world is for the taking, will you take your share?"),
                 new TextObject("{=2fcEecjz}Vanilla start. No troops, goods or any benefits."),
-                1000, 0, 5, 50, 0f,
+                1000, 3, 0, 50, 0f,
                 null);
 
             IndebtedLord = new StartOption("start_lord");
@@ -74,16 +74,44 @@ namespace BannerKings.Managers.CampaignStart
                         }
                     }
 
-                    var settlement =
-                        SettlementHelper.FindNearestSettlement(x => x.OwnerClan is {Kingdom: { }});
-                    var kingdom = settlement.OwnerClan.Kingdom;
-                    if (kingdom == null)
+                    Kingdom kingdom = null;
+                    var list = new List<InquiryElement>();
+                    foreach (var option in Kingdom.All)
                     {
-                        kingdom = Kingdom.All.GetRandomElement();
+                        if (option.Culture == Hero.MainHero.Culture)
+                        {
+                            list.Add(new InquiryElement(option, option.Name.ToString(),
+                                new ImageIdentifier(option.Banner)));
+                        }
                     }
 
-                    ChangeKingdomAction.ApplyByJoinToKingdom(Clan.PlayerClan, kingdom, false);
-                    BannerKingsConfig.Instance.TitleManager.GiveLordshipOnKingdomJoin(kingdom, Clan.PlayerClan, true);
+                    if (list.Count > 1)
+                    {
+                        MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
+                            new TextObject("{=!}Kingdom Selection").ToString(),
+                            new TextObject("{=!}Choose which of the kingdoms that share your culture you want to start as a lord in.").ToString(),
+                            list,
+                            false,
+                            1,
+                            GameTexts.FindText("str_accept").ToString(),
+                            string.Empty,
+                            delegate(List<InquiryElement> list)
+                            {
+                                kingdom = (Kingdom)list[0].Identifier;
+                                ChangeKingdomAction.ApplyByJoinToKingdom(Clan.PlayerClan, kingdom, false);
+                                BannerKingsConfig.Instance.TitleManager.GiveLordshipOnKingdomJoin(kingdom, Clan.PlayerClan, true);
+                            },
+                            null),
+                            true,
+                            true);
+                    }
+                    else
+                    {
+                        kingdom = (Kingdom)list[0].Identifier;
+                        ChangeKingdomAction.ApplyByJoinToKingdom(Clan.PlayerClan, kingdom, false);
+                        BannerKingsConfig.Instance.TitleManager.GiveLordshipOnKingdomJoin(kingdom, Clan.PlayerClan, true);
+                    }
+                    
                     MobileParty.MainParty.ItemRoster.AddToCounts(sumpter, 2);
                     Hero.MainHero.AddSkillXp(BKSkills.Instance.Scholarship, 2000);
                 });
@@ -221,5 +249,6 @@ namespace BannerKings.Managers.CampaignStart
                 null,
                 DefaultLifestyles.Instance.Gladiator);
         }
+
     }
 }
