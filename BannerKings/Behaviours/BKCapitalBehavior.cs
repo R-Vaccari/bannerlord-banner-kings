@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
@@ -70,18 +71,21 @@ namespace BannerKings.Behaviours
         {
             foreach (var kingdom in Kingdom.All)
             {
-                if (!capitals.ContainsKey(kingdom))
+                if (kingdom.Fiefs.Count > 0)
                 {
-                    var town = GetIdealCapital(kingdom);
-                    if (town != null)
+                    if (!capitals.ContainsKey(kingdom))
                     {
-                        ChangeCapital(kingdom, town);
+                        var town = GetIdealCapital(kingdom);
+                        if (town != null)
+                        {
+                            ChangeCapital(kingdom, town);
+                        }
                     }
-                }
-                else if (capitals[kingdom].MapFaction != kingdom)
-                {
-                    ChangeCapital(kingdom, GetIdealCapital(kingdom));
-                }
+                    else if (capitals[kingdom].MapFaction != kingdom)
+                    {
+                        ChangeCapital(kingdom, GetIdealCapital(kingdom));
+                    }
+                } 
             }
         }
 
@@ -118,6 +122,10 @@ namespace BannerKings.Behaviours
                 candidates.Add(new(town, score));
             }
             result = MBRandom.ChooseWeighted(candidates);
+            if (result == null)
+            {
+                result = kingdom.Fiefs.GetRandomElement();
+            }
 
             return result;
         }
