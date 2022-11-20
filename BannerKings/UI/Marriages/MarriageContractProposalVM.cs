@@ -60,7 +60,7 @@ namespace BannerKings.UI.Marriages
                 {
                     alliance = value;
                 },
-                new TextObject("{=!}Arrange the marriage without consulting the spouses. While their personal relations are still considered, the to-be-spouses have no power to dictate the marriage result. If you are one of the spouses, this means no Courting phase - the marriage is sealed off right away."));
+                new TextObject("{=!}Join both houses in alliance. By doing so, both houses are bound to not enter in conflict with each other when it comes to internal matters of the kingdom. Instead, if they are the leading houses of separate kingdoms, it would prevent a war between both realms. Subject houses may still fight each other if their sovereigns declare war."));
 
             FeastToggle = new DecisionElement()
                 .SetAsBooleanOption(new TextObject("{=!}Feast Celebration").ToString(),
@@ -69,7 +69,7 @@ namespace BannerKings.UI.Marriages
                 {
                     feast = value;
                 },
-                new TextObject("{=!}Arrange the marriage without consulting the spouses. While their personal relations are still considered, the to-be-spouses have no power to dictate the marriage result. If you are one of the spouses, this means no Courting phase - the marriage is sealed off right away."));
+                new TextObject("{=!}Arrange a feast to celebrate the marriage. A selection of families within the realm will be invited, and as a host you ought to provide them a quality celebration. Doing so will allow you to improve your standing with them, as well as bring your family renown."));
 
 
             RefreshValues();
