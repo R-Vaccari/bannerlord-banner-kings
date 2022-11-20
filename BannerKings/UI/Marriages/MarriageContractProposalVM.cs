@@ -1,5 +1,6 @@
 ﻿using BannerKings.Behaviours.Marriage;
 using BannerKings.UI.Items;
+using BannerKings.Utils.Extensions;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.ViewModelCollection;
@@ -15,7 +16,7 @@ namespace BannerKings.UI.Marriages
         private MBBindingList<Hero> proposerCandidates, proposedCandidates;
         private HeroVM proposedHero, proposerHero;
         private bool proposedSelected, proposerSelected, arrangedMarriage, invertedClan, canInvertClan,
-            canChangeArrangedMarriage, alliance, feast;
+            canChangeArrangedMarriage, canCreateAlliance, alliance, feast;
         private DecisionElement invertedClanToggle, arrangedMarriageToggle, allianceToggle, feastToggle;
         private HintViewModel influenceCostHint, dowryValueHint, willAcceptHint,
             proposerSpouseHint, proposedSpouseHint;
@@ -140,7 +141,7 @@ namespace BannerKings.UI.Marriages
                 }
             }
 
-            ArrangedMarriageToggle.enabled = CanChangeArrangedMarriage;
+            ArrangedMarriageToggle.Enabled = CanChangeArrangedMarriage;
 
             if (ProposedHero != null)
             {
@@ -150,7 +151,8 @@ namespace BannerKings.UI.Marriages
                     .SetTextVariable("HINT", score.GetExplanations());
             }
 
-           
+
+            CanCreateAlliance = false;
 
             DowryValueText = "0";
             InfluenceCostText = "0";
@@ -161,6 +163,12 @@ namespace BannerKings.UI.Marriages
             WillAcceptHint = new HintViewModel();
             if (ProposerHero != null && ProposedHero != null)
             {
+
+                if (ProposerHero.Hero.IsCommonBorn() || ProposedHero.Hero.IsCommonBorn())
+                {
+                    CanCreateAlliance = false;
+                }
+
                var willAccept = BannerKingsConfig.Instance.MarriageModel.IsMarriageAdequate(ProposerHero.Hero,
                     ProposedHero.Hero, true);
                 WillAcceptText = GameTexts.FindText(willAccept.ResultNumber >= 1f ? "str_yes" : "str_no").ToString();
@@ -179,6 +187,12 @@ namespace BannerKings.UI.Marriages
                 DowryValueText = ((int)dowry.ResultNumber).ToString();
                 DowryValueHint.HintText = new TextObject("{=!}The dowry is the financial security provided by the clan that takes in a new family member. It serves to show good will and genuine interest in the marriage by requiring a significant investment in it. Dowries are calculated based on the spouse's value as a family member - their position in the original clan and their usefulness. If a member of your clan is leaving the family to join another, you are owed the dowry.\n\n{HINT}")
                     .SetTextVariable("HINT", dowry.GetExplanations());
+            }
+
+            AllianceToggle.Enabled = CanCreateAlliance;
+            if (!CanCreateAlliance)
+            {
+                AllianceToggle.OptionValueAsBoolean = false;
             }
         }
 
@@ -594,6 +608,20 @@ namespace BannerKings.UI.Marriages
                 if (value != invertedClan)
                 {
                     invertedClan = value;
+                    OnPropertyChangedWithValue(value);
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public bool CanCreateAlliance
+        {
+            get => canCreateAlliance;
+            set
+            {
+                if (value != canCreateAlliance)
+                {
+                    canCreateAlliance = value;
                     OnPropertyChangedWithValue(value);
                 }
             }

@@ -1,6 +1,7 @@
 ﻿using BannerKings.Managers.Court;
 using BannerKings.Managers.Institutions.Religions.Faiths;
 using BannerKings.Managers.Titles;
+using BannerKings.Utils.Extensions;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
@@ -16,9 +17,8 @@ namespace BannerKings.Models.Vanilla
         {
             var result = new ExplainedNumber(0f, explanations);
 
-            var proposerScore = GetSpouseScore(proposer).ResultNumber;
+            var proposerScore = GetSpouseScore(proposer).ResultNumber * 1.1f;
             var proposedScore = GetSpouseScore(secondHero).ResultNumber;
-
             result.Add(proposerScore - proposedScore, new TextObject("{=!}Score differences"));
 
 
@@ -67,6 +67,7 @@ namespace BannerKings.Models.Vanilla
             var clan = hero.Clan;
             var title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(clan.Leader);
             result.Add(clan.Tier * 100f, clan.Name);
+            result.Add(hero.Level * 10f, GameTexts.FindText("str_level"));
 
             if (clan.Leader == hero)
             {
@@ -96,8 +97,7 @@ namespace BannerKings.Models.Vanilla
                     .SetTextVariable("TITLE", title.FullName));
             }
 
-            if (hero.CharacterObject != null && hero.CharacterObject.OriginalCharacter != null && 
-                hero.CharacterObject.OriginalCharacter.IsTemplate)
+            if (hero.IsCommonBorn())
             {
                 result.AddFactor(-0.5f, new TextObject("{=!}Common born"));
             }
@@ -126,8 +126,7 @@ namespace BannerKings.Models.Vanilla
                 result.AddFactor(0.4f, new TextObject("{=!}Arranged marriage"));
             }
 
-            if (hero.CharacterObject != null && hero.CharacterObject.OriginalCharacter != null &&
-                hero.CharacterObject.OriginalCharacter.IsTemplate)
+            if (hero.IsCommonBorn())
             {
                 result.AddFactor(-0.5f, new TextObject("{=!}Common born"));
             }
