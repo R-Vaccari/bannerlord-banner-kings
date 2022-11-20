@@ -64,8 +64,6 @@ namespace BannerKings.Behaviours
                 null,
                 null);
 
-
-
             starter.AddDialogLine("wanderer_different_clan_response_first_time",
                 "wanderer_preintroduction",
                 "wanderer_different_clan_options",
@@ -89,8 +87,6 @@ namespace BannerKings.Behaviours
                     return Hero.OneToOneConversationHero.Clan != null && Hero.OneToOneConversationHero.Clan != Clan.PlayerClan;
                 },
                 null, 100, null);
-
-
         }
 
         private bool IsCompanionOfAnotherClan() => CharacterObject.OneToOneConversationCharacter != null && CharacterObject.OneToOneConversationCharacter.IsHero && 
@@ -117,7 +113,6 @@ namespace BannerKings.Behaviours
                     .SetTextVariable("LEADER_NAME", clanLeader.Name)
                     .SetTextVariable("PURPOSE_TEXT", purposeText));
             }
-           
             
             return IsCompanionOfAnotherClan();
         }
@@ -129,7 +124,6 @@ namespace BannerKings.Behaviours
                 var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(clan);
                 if (council != null)
                 {
-
                     if (detail == ChangeKingdomAction.ChangeKingdomActionDetail.JoinKingdom)
                     {
                         if (council.Peerage == null || !council.Peerage.CanVote)
@@ -271,7 +265,6 @@ namespace BannerKings.Behaviours
                 }
 
                 if (!companion.IsWanderer || companion.IsPrisoner || !companion.IsReady || companion.PartyBelongedTo?.LeaderHero == null)
-
                 {
                     continue;
                 }
@@ -308,7 +301,6 @@ namespace BannerKings.Behaviours
                 {
                     role = PerkRole.None;
                 }
-
 
                 if (clan.WarPartyComponents.Count <= 0)
                 {
@@ -498,7 +490,6 @@ namespace BannerKings.Behaviours
                 : null;
         }
 
-
         private void EvaluateRecruitKnight(Clan clan)
         {
             if (clan.WarPartyComponents.Count >= clan.CommanderLimit || clan.Companions.Count >= clan.CompanionLimit || clan.Settlements.Count(x => x.IsVillage) <= 1 || !(clan.Influence >= BannerKingsConfig.Instance.TitleModel.GetGrantKnighthoodCost(clan.Leader).ResultNumber))
@@ -517,7 +508,6 @@ namespace BannerKings.Behaviours
             {
                 return;
             }
-
 
             var clanTitles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(clan);
             var title = BannerKingsConfig.Instance.TitleManager.GetTitle(village);
@@ -548,7 +538,6 @@ namespace BannerKings.Behaviours
             }
 
             var settlement = clan.Settlements.FirstOrDefault() ?? Town.AllTowns.FirstOrDefault(x => x.Culture == clan.Culture).Settlement;
-
             var source = from e in MBObjectManager.Instance.GetObjectTypeList<MBEquipmentRoster>() where e.EquipmentCulture == clan.Culture select e;
             if (source == null)
             {
@@ -573,14 +562,10 @@ namespace BannerKings.Behaviours
             }
 
             var hero = HeroCreator.CreateSpecialHero(template, settlement, clan, null, Campaign.Current.Models.AgeModel.HeroComesOfAge + 5 + MBRandom.RandomInt(27));
-
             BannerKingsConfig.Instance.TitleManager.GrantKnighthood(title, hero, title.deJure);
-
             EquipmentHelper.AssignHeroEquipmentFromEquipment(hero, roster.AllEquipments.GetRandomElement());
-
             var mainParty = hero.PartyBelongedTo == MobileParty.MainParty;
             MobilePartyHelper.CreateNewClanMobileParty(hero, clan, out mainParty);
-
             var component = clan.WarPartyComponents.FirstOrDefault(x => x.Leader == hero);
             if (component != null)
             {
@@ -612,7 +597,6 @@ namespace BannerKings.Behaviours
 
     namespace Patches
     {
-
         [HarmonyPatch(typeof(LordConversationsCampaignBehavior))]
         internal class LordDialoguePatches
         {
@@ -669,7 +653,6 @@ namespace BannerKings.Behaviours
             }
         }
 
-
         [HarmonyPatch(typeof(ClanVariablesCampaignBehavior), "MakeClanFinancialEvaluation")]
         internal class MakeClanFinancialEvaluationPatch
         {
@@ -694,7 +677,6 @@ namespace BannerKings.Behaviours
                     {
                         income += clan.Gold * 0.05f;
                     }
-
 
                     if (income > 0f)
                     {
@@ -797,7 +779,6 @@ namespace BannerKings.Behaviours
                 return true;
             }
 
-
             [HarmonyPrefix]
             [HarmonyPatch("AddExpensesFromGarrisons", MethodType.Normal)]
             private static bool GarrisonsPrefix(Clan clan, ref ExplainedNumber goldChange,
@@ -834,7 +815,6 @@ namespace BannerKings.Behaviours
 
                 return true;
             }
-
 
             [HarmonyPrefix]
             [HarmonyPatch("AddExpensesFromParties", MethodType.Normal)]
@@ -894,7 +874,6 @@ namespace BannerKings.Behaviours
 
                 return true;
             }
-
 
             [HarmonyPrefix]
             [HarmonyPatch("AddVillagesIncome", MethodType.Normal)]
@@ -960,7 +939,6 @@ namespace BannerKings.Behaviours
                     }
 
                     goldChange.Add(totalGold, new TextObject("{=!}Village Demesnes"));
-
                     return false;
                 }
 

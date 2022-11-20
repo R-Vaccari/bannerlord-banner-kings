@@ -249,6 +249,5 @@ namespace BannerKings.Managers.CampaignStart
                 null,
                 DefaultLifestyles.Instance.Gladiator);
         }
-
     }
 }
