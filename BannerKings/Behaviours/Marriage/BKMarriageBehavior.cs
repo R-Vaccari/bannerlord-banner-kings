@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
+using TaleWorlds.CampaignSystem.BarterSystem.Barterables;
 using TaleWorlds.CampaignSystem.CampaignBehaviors;
 using TaleWorlds.CampaignSystem.Encounters;
 using TaleWorlds.Core;
@@ -49,6 +50,8 @@ namespace BannerKings.Behaviours.Marriage
             proposedMarriage = contract;
         }
 
+        public MarriageContract GetProposedMarriage() => proposedMarriage;
+
 
         public override void RegisterEvents()
         {
@@ -66,9 +69,8 @@ namespace BannerKings.Behaviours.Marriage
             }
         }
 
-        public bool IsCoupleMatchedByFamily(Hero proposer, Hero proposed) => 
-            Romance.GetRomanticLevel(proposer, proposed) == Romance.RomanceLevelEnum.MatchMadeByFamily && proposedMarriage != null
-            && proposedMarriage.Proposed == proposed;
+        public bool IsCoupleMatchedByFamily(Hero proposer, Hero proposed) => proposedMarriage != null && proposedMarriage.Confirmed
+            && proposedMarriage.Proposer == proposer && proposedMarriage.Proposed == proposed;
 
 
         private void OnSessionLaunched(CampaignGameStarter starter)
@@ -454,6 +456,12 @@ namespace BannerKings.Behaviours.Marriage
                },
                () =>
                {
+                   if (proposedMarriage.Influence > 0)
+                   {
+                       GainKingdomInfluenceAction.ApplyForDefault(Hero.MainHero, -proposedMarriage.Influence);
+                   }
+
+
                    if (!proposedMarriage.ArrangedMarriage)
                    {
                        AnnounceBetrothal();
@@ -518,6 +526,26 @@ namespace BannerKings.Behaviours.Marriage
     namespace Patches
     {
 
+        [HarmonyPatch(typeof(MarriageBarterable))]
+        internal class MarriageBarterablePatches
+        {
+            [HarmonyPrefix]
+            [HarmonyPatch("GetUnitValueForFaction")]
+            private static bool DowryPrefix(MarriageBarterable __instance, ref int __result, IFaction faction)
+            {
+                var proposer = __instance.ProposingHero;
+                var proposed = __instance.HeroBeingProposedTo;
+                if (Campaign.Current.GetCampaignBehavior<BKMarriageBehavior>().IsCoupleMatchedByFamily(proposer, proposed))
+                {
+                    var contract = Campaign.Current.GetCampaignBehavior<BKMarriageBehavior>().GetProposedMarriage();
+                    __result = contract.Dowry;
+
+                    return false;
+                }
+
+                return true;
+            }
+        }
 
         [HarmonyPatch(typeof(RomanceCampaignBehavior))]
         internal class MarriageDialoguePatches
