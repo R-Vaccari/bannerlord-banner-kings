@@ -35,8 +35,8 @@ namespace BannerKings.Models.Vanilla
 
             if (proposerReligion != proposedReligion)
             {
-                float factor = -50f;
-                if (proposerReligion == null || proposedReligion == null)
+                float factor = -100f;
+                /*if (proposerReligion == null || proposedReligion == null)
                 {
                     FaithStance stance = proposedReligion.Faith.GetStance(proposerReligion.Faith);
                     if (stance == FaithStance.Hostile)
@@ -47,7 +47,7 @@ namespace BannerKings.Models.Vanilla
                     {
                         factor = -20f;
                     }
-                }
+                }*/
 
                 result.Add(factor, new TextObject("{=!}Faith differences"));
             } 
