@@ -36,6 +36,7 @@ namespace BannerKings.UI.Marriages
                     if (CanInvertClan)
                     {
                         InvertedClan = value;
+                        RefreshValues();
                     }
                 },
                 new TextObject("{=!}Invert the expected result for final clan. The clan whose member leaves it is owed the Dowry by the other family. Therefore, if your family member is leaving your clan, you are owed the Dowry. Spouses are less likely to leave their clans if they are it's leader or it's primary expected inheritor."));
@@ -48,6 +49,7 @@ namespace BannerKings.UI.Marriages
                     if (CanChangeArrangedMarriage)
                     {
                         ArrangedMarriage = value;
+                        RefreshValues();
                     }
                 }, 
                 new TextObject("{=!}Arrange the marriage without consulting the spouses. While their personal relations are still considered, the to-be-spouses have no power to dictate the marriage result. If you are one of the spouses, this means no Courting phase - the marriage is sealed off right away."));
@@ -59,6 +61,7 @@ namespace BannerKings.UI.Marriages
                 delegate (bool value)
                 {
                     alliance = value;
+                    RefreshValues();
                 },
                 new TextObject("{=!}Join both houses in alliance. By doing so, both houses are bound to not enter in conflict with each other when it comes to internal matters of the kingdom. Instead, if they are the leading houses of separate kingdoms, it would prevent a war between both realms. Subject houses may still fight each other if their sovereigns declare war."));
 
@@ -68,6 +71,7 @@ namespace BannerKings.UI.Marriages
                 delegate (bool value)
                 {
                     feast = value;
+                    RefreshValues();
                 },
                 new TextObject("{=!}Arrange a feast to celebrate the marriage. A selection of families within the realm will be invited, and as a host you ought to provide them a quality celebration. Doing so will allow you to improve your standing with them, as well as bring your family renown."));
 
@@ -135,6 +139,8 @@ namespace BannerKings.UI.Marriages
                     CanChangeArrangedMarriage = false;
                 }
             }
+
+            ArrangedMarriageToggle.enabled = CanChangeArrangedMarriage;
 
             if (ProposedHero != null)
             {

@@ -1,4 +1,5 @@
 ﻿using BannerKings.Behaviours.Feasts;
+using BannerKings.Dialogue;
 using BannerKings.UI;
 using HarmonyLib;
 using System.Collections.Generic;
@@ -449,8 +450,11 @@ namespace BannerKings.Behaviours.Marriage
                    "{=!}{PROPOSAL_CONFIRMED}",
                () =>
                {
+  
+
                     MBTextManager.SetTextVariable("PROPOSAL_CONFIRMED",
-                        new TextObject("{=!}It is decided then. {CONFIRMATION}"));
+                        new TextObject("{=!}It is decided then. {CONFIRMATION}")
+                        .SetTextVariable("CONFIRMATION", DialogueHelper.GetRandomText(Hero.OneToOneConversationHero, DialogueHelper.GetMarriageConfirmationTexts(proposedMarriage))));
 
                    return true;
                },
@@ -469,6 +473,11 @@ namespace BannerKings.Behaviours.Marriage
                    }
                    else
                    {
+                       if (proposedMarriage.Alliance)
+                       {
+                           Utils.Helpers.SetAlliance(Clan.PlayerClan, Hero.OneToOneConversationHero.Clan);
+                       }
+
                        if (proposedMarriage.Feast)
                        {
                            AnnounceBetrothal();
@@ -483,10 +492,6 @@ namespace BannerKings.Behaviours.Marriage
                            ApplyMarriageContract();
                        }
 
-                       if (proposedMarriage.Alliance)
-                       {
-                           Utils.Helpers.SetAlliance(Clan.PlayerClan, Hero.OneToOneConversationHero.Clan);
-                       }
                    }
 
                    if (PlayerEncounter.Current != null)
