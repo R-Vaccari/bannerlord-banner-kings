@@ -6,16 +6,24 @@ namespace BannerKings.Behaviours.Mercenary
 {
     internal class BKMercenaryCareerBehavior : CampaignBehaviorBase
     {
-        private Dictionary<Clan, MercenaryCareer> careers;
+        private Dictionary<Clan, MercenaryCareer> careers = new Dictionary<Clan, MercenaryCareer>();
+
+        public MercenaryCareer GetCareer(Clan clan) => careers[clan];
 
         public override void RegisterEvents()
         {
+            CampaignEvents.DailyTickClanEvent.AddNonSerializedListener(this, OnClanDailyTick);
             CampaignEvents.ClanChangedKingdom.AddNonSerializedListener(this, OnClanChangedKingdom);
         }
 
         public override void SyncData(IDataStore dataStore)
         {
+            dataStore.SyncData("bannerkings-mercenary-careers", ref careers);
 
+            if (careers == null)
+            {
+                careers = new Dictionary<Clan, MercenaryCareer>();
+            }
         }
 
         private void OnClanChangedKingdom(Clan clan, Kingdom oldKingdom, Kingdom newKingdom, 
@@ -24,6 +32,19 @@ namespace BannerKings.Behaviours.Mercenary
             if (detail == ChangeKingdomAction.ChangeKingdomActionDetail.JoinAsMercenary)
             {
                 AddCareer(clan, newKingdom);
+            }
+        }
+
+        private void OnClanDailyTick(Clan clan)
+        {
+            if (clan.IsUnderMercenaryService)
+            {
+                if (!careers.ContainsKey(clan))
+                {
+                    AddCareer(clan, clan.Kingdom);
+                }
+
+                careers[clan].Tick();
             }
         }
 

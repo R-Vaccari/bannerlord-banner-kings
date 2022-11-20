@@ -1,5 +1,6 @@
 ﻿using System;
 using TaleWorlds.Localization;
+using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Behaviours.Mercenary
 {
@@ -8,24 +9,43 @@ namespace BannerKings.Behaviours.Mercenary
         private Func<MercenaryCareer, bool> isAvailable;
         public MercenaryPrivilege(string stringId) : base(stringId)
         {
-            Points = 0f;
         }
 
-        public void Initialize(TextObject name, TextObject description, 
-            TextObject availableHint, TextObject unavailableHint, Func<MercenaryCareer, bool> isAvailable)
+        public void Initialize(TextObject name, TextObject description, TextObject unavailableHint,
+            float points, int maxLevel, Func<MercenaryCareer, bool> isAvailable)
         {
             Initialize(name, description);
-            AvailableHint = availableHint;
             UnAvailableHint = unavailableHint;
+            Points = points;
+            MaxLevel = maxLevel;
             this.isAvailable = isAvailable;
         }
 
+        [SaveableProperty(1)] public int Level { get; private set; }
+        public int MaxLevel { get; private set; }
+
+        public void IncreaseLevel()
+        {
+            if (Level < MaxLevel)
+            {
+                Level++;
+            }
+        }
+
         public float Points { get; private set; }
-        public TextObject AvailableHint { get; private set; }
         public TextObject UnAvailableHint { get; private set; }
 
 
         public bool IsAvailable(MercenaryCareer career) => isAvailable(career);
+
+        public override bool Equals(object obj)
+        {
+            if (obj is MercenaryPrivilege)
+            {
+                return StringId == (obj as MercenaryPrivilege).StringId;
+            }
+            return base.Equals(obj);
+        }
 
     }
 }

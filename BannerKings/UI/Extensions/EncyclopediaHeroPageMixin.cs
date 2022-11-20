@@ -89,15 +89,6 @@ namespace BannerKings.UI.Extensions
 
                     string definition4 = GameTexts.FindText("str_enc_sf_relation", null).ToString();
                     heroPageVM.Stats.Add(new StringPairItemVM(definition4, hero.GetRelationWithPlayer().ToString(), null));
-
-                    if (Campaign.Current.Models.MarriageModel.IsCoupleSuitableForMarriage(Hero.MainHero, hero) && 
-                        !FactionManager.IsAtWarAgainstFaction(Hero.MainHero.MapFaction, hero.MapFaction))
-                    {
-                        var explanation = BannerKingsConfig.Instance.MarriageModel.IsMarriageAdequate(Hero.MainHero, hero, true);
-                        heroPageVM.Stats.Add(new StringPairItemVM(new TextObject("{=!}Marriageable:").ToString(),
-                            GameTexts.FindText(explanation.ResultNumber > 1f ? "str_yes" : "str_no").ToString(),
-                            new BasicTooltipViewModel(() => explanation.GetExplanations())));
-                    }
                 }
 
                 addedFields = true;

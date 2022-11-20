@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using BannerKings.Behaviours.Feasts;
 using BannerKings.Behaviours.Marriage;
+using BannerKings.Behaviours.Mercenary;
 using BannerKings.Components;
 using BannerKings.Managers;
 using BannerKings.Managers.CampaignStart;
@@ -164,6 +165,10 @@ namespace BannerKings
             AddClassDefinition(typeof(Peerage), 108);
             AddClassDefinition(typeof(Feast), 109);
             AddClassDefinition(typeof(MarriageContract), 110);
+
+
+            AddClassDefinition(typeof(MercenaryCareer), 1000);
+            AddClassDefinition(typeof(MercenaryPrivilege), 1001);
         }
 
         protected override void DefineContainerDefinitions()
@@ -209,7 +214,13 @@ namespace BannerKings
             ConstructContainerDefinition(typeof(Dictionary<PopType, float>));
             ConstructContainerDefinition(typeof(Dictionary<Kingdom, Town>));
             ConstructContainerDefinition(typeof(Dictionary<Town, Feast>));
-            
+
+
+            ConstructContainerDefinition(typeof(List<MercenaryPrivilege>));
+            ConstructContainerDefinition(typeof(Dictionary<Kingdom, List<MercenaryPrivilege>>));
+            ConstructContainerDefinition(typeof(Dictionary<Clan, MercenaryCareer>));
+            ConstructContainerDefinition(typeof(Dictionary<Kingdom, float>));
+            ConstructContainerDefinition(typeof(Dictionary<CultureObject, CharacterObject>));
         }
     }
 }
