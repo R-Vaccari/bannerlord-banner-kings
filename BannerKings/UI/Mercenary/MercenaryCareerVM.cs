@@ -8,6 +8,7 @@ using TaleWorlds.Core.ViewModelCollection;
 using TaleWorlds.Core.ViewModelCollection.Information;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
+using static TaleWorlds.Core.ItemObject;
 
 namespace BannerKings.UI.Mercenary
 {
@@ -15,10 +16,12 @@ namespace BannerKings.UI.Mercenary
     {
         private string reputationText, pointsText, timeText,
             levyCharacterName, professionalCharacterName,
-            editLevyText, editProfessionalText;
+            editLevyText, editProfessionalText,
+            privilegeAvailableText;
         private CharacterViewModel levyCharacter, professionalCharacter;
         private MBBindingList<MercenaryPrivilegeVM> privileges;
-        private bool canEditLevy, canEditProfessional;
+        private bool canEditLevy, canEditProfessional,
+            canAskPrivilege;
         public MercenaryCareerVM() : base(null, false)
         {
             Career = Campaign.Current.GetCampaignBehavior<BKMercenaryCareerBehavior>().GetCareer(Clan.PlayerClan);
@@ -29,7 +32,7 @@ namespace BannerKings.UI.Mercenary
 
         [DataSourceProperty] public string CareerText => new TextObject("{=!}{CLAN} Career in {KINGDOM}")
             .SetTextVariable("CLAN", Clan.PlayerClan.Name)
-            .SetTextVariable("KINGDOM", Career.Kingdom.Name)
+            .SetTextVariable("KINGDOM", Career?.Kingdom.Name)
             .ToString();
         [DataSourceProperty] public string RequestPrivilegeText => new TextObject("{=ZYyxmOv9}Request").ToString();
         [DataSourceProperty] public string PrivilegesText => new TextObject("{=!}Privileges").ToString();
@@ -39,6 +42,7 @@ namespace BannerKings.UI.Mercenary
         [DataSourceProperty] public string TimeHeaderText => new TextObject("{=!}Service Time").ToString();
         [DataSourceProperty] public string LevyCharacterText => new TextObject("{=!}Levy Character").ToString();
         [DataSourceProperty] public string ProfessionalCharacterText => new TextObject("{=!}Professional Character").ToString();
+        [DataSourceProperty] public string PrivilegeAvailableHeaderText => new TextObject("{=!}Privilege Available").ToString();
 
         [DataSourceProperty] public HintViewModel TimeHint => new HintViewModel(
             new TextObject("{=!}Your time of consecutive service for this kingdom."));
@@ -50,6 +54,10 @@ namespace BannerKings.UI.Mercenary
         [DataSourceProperty]
         public HintViewModel PointsHint => new HintViewModel(
            new TextObject("{=!}Your Career Points within this kingdom. Career Points are used for requesting Privileges."));
+
+        [DataSourceProperty]
+        public HintViewModel PrivilegeAvailableHint => new HintViewModel(
+          new TextObject("{=!}Whether or not you are able to ask for another privilege in this realm. Once a privilege is requested, you need at least 2 seasons before requesting another."));
 
         public override void RefreshValues()
         {
@@ -76,6 +84,10 @@ namespace BannerKings.UI.Mercenary
                 EditLevyText = new TextObject("{=!}Create").ToString();
                 EditProfessionalText = new TextObject("{=!}Create").ToString();
 
+                CanAskForPrivilege = Career.HasTimePassedForPrivilege(Career.Kingdom);
+                PrivilegeAvailableText = new TextObject("{=!}{AVAILABLE} ({TIME})")
+                    .SetTextVariable("AVAILABLE", GameTexts.FindText(CanAskForPrivilege ? "str_yes" : "str_no"))
+                    .SetTextVariable("TIME", Career.GetPrivilegeTime(Career.Kingdom).ToString()).ToString();
 
                 var levy = Career.GetTroop(Career.Kingdom);
                 if (levy != null)
@@ -134,21 +146,340 @@ namespace BannerKings.UI.Mercenary
             {
                 var preset = DefaultCustomTroopPresets.Instance.SargeantLevy;
                 var character = CharacterObject.CreateFrom(Career.Kingdom.Culture.BasicTroop);
-                
 
-                
-                
+                InformationManager.ShowTextInquiry(new TextInquiryData(new TextObject("{=!}Custom Levy").ToString(),
+                    new TextObject("{=!}Create a custom levy troop! This troop will be available in towns of {CULTURE} culture. They will only be available for your clan, and can be retrained or rearmed on demand - though these will incur costs. Their recruitment and upkeep costs will depend on the equipment you give them. First, give them a name.")
+                    .SetTextVariable("CULTURE", Career.Kingdom.Culture.Name)
+                    .ToString(),
+                    true,
+                    true,
+                    GameTexts.FindText("str_accept").ToString(),
+                    GameTexts.FindText("str_selection_widget_cancel").ToString(),
+                    delegate (string name)
+                    {
+                        AccessTools.Method((character as BasicCharacterObject).GetType(), "SetName")
+                            .Invoke(character, new object[] { new TextObject("{=!}" + name) });
 
-
-               // AccessTools.Property(character.GetType(), "BodyPropertyRange").SetValue(character, reference.BodyPropertyRange);
+                        Career.AddTroop(Career.Kingdom, character);
+                        RefreshValues();
+                        ShowSkillEditing();
+                    },
+                    null));
             }
+            else ShowEditingOptions();
+        }
+
+
+        private void ShowEditingOptions(bool levy = true)
+        {
+            var list = new List<InquiryElement>();
+            list.Add(new InquiryElement("edit-name",
+                GameTexts.FindText("str_sort_by_name_label").ToString(),
+                null));
+
+            list.Add(new InquiryElement("edit-skills",
+                GameTexts.FindText("str_skills").ToString(),
+                null));
+
+            list.Add(new InquiryElement("edit-equipment",
+                GameTexts.FindText("str_equipment").ToString(),
+                null));
+
+            MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
+                new TextObject("{=!}Troop Editing").ToString(),
+                new TextObject("{=!}Edit the {TROOP} to better fit your needs.")
+                .SetTextVariable("TROOP", levy ? LevyCharacterName : ProfessionalCharacterName).ToString(),
+                list,
+                true,
+                1,
+                GameTexts.FindText("str_accept").ToString(),
+                string.Empty,
+                delegate (List<InquiryElement> list)
+                {
+                    string option = (string)list[0].Identifier;
+                    if (option == "edit-name")
+                    {
+                        ShowNameEditing(levy);
+                    }
+                    else if (option == "edit-equipment")
+                    {
+                        ShowEquipmentOptions();
+                    }
+                    else
+                    {
+                        ShowSkillEditing(levy);
+                    }
+                }, 
+                null));
+        }
+
+        private void ShowSkillEditing(bool levy = true)
+        {
+            var character = Career.GetTroop(Career.Kingdom, levy);
+            var list = new List<InquiryElement>();
+            var items = Campaign.Current.ObjectManager.GetObjectTypeList<ItemObject>();
+            foreach (var preset in DefaultCustomTroopPresets.Instance.Levies)
+            {
+                list.Add(new InquiryElement(preset,
+                    preset.Name.ToString(),
+                    new ImageIdentifier(items.First(x => x.StringId == preset.ItemId)),
+                    true,
+                    preset.Description.ToString()));
+            }
+
+            MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
+                new TextObject("{=!}Select Skill Set").ToString(),
+                new TextObject("{=!}Choose a skill set that fits the function you want to give your troops, from melee infantry to mounted skirmishers. Equipment is edited separately, make sure to choose skills that match their equipment.").ToString(),
+                list,
+                true,
+                1,
+                GameTexts.FindText("str_accept").ToString(),
+                GameTexts.FindText("str_cancel").ToString(),
+                delegate (List<InquiryElement> list)
+                {
+                    SetSkills(character, (CustomTroopPreset)list[0].Identifier);
+                    ShowEditingOptions();
+                },
+                delegate (List<InquiryElement> list)
+                {
+                    ShowEditingOptions(levy);
+                }));
+        }
+
+        private void ShowNameEditing(bool levy = true)
+        {
+            var character = Career.GetTroop(Career.Kingdom, levy);
+            InformationManager.ShowTextInquiry(new TextInquiryData(new TextObject("{=!}Edit Name").ToString(),
+                new TextObject("{=!}Change the name of {TROOP}.")
+                .SetTextVariable("TROOP", character.Name)
+                .ToString(),
+                true,
+                true,
+                GameTexts.FindText("str_accept").ToString(),
+                GameTexts.FindText("str_cancel").ToString(),
+                delegate (string name)
+                {
+                    AccessTools.Property(character.GetType(), "Name").SetValue(character, new TextObject("{=!}" + name));
+                    RefreshValues();
+                    ShowEditingOptions();
+                },
+                null));
+        }
+
+        private void ShowEquipmentOptions(bool levy = true)
+        {
+            var list = new List<InquiryElement>();
+            list.Add(new InquiryElement(new EqupmentEditOption(EquipmentIndex.Weapon0, ItemTypeEnum.Invalid),
+                new TextObject("{=!}Weapon 1").ToString(),
+                null));
+
+            list.Add(new InquiryElement(new EqupmentEditOption(EquipmentIndex.Weapon1, ItemTypeEnum.Invalid),
+                new TextObject("{=!}Weapon 2").ToString(),
+                null));
+
+            list.Add(new InquiryElement(new EqupmentEditOption(EquipmentIndex.Weapon2, ItemTypeEnum.Invalid),
+                new TextObject("{=!}Weapon 3").ToString(),
+                null));
+
+            list.Add(new InquiryElement(new EqupmentEditOption(EquipmentIndex.Weapon3, ItemTypeEnum.Invalid),
+                new TextObject("{=!}Weapon 4").ToString(),
+                null));
+
+            list.Add(new InquiryElement(new EqupmentEditOption(EquipmentIndex.Head, ItemTypeEnum.HeadArmor),
+                GameTexts.FindText("str_inventory_type_12").ToString(),
+                null));
+
+            list.Add(new InquiryElement(new EqupmentEditOption(EquipmentIndex.Body, ItemTypeEnum.BodyArmor),
+               GameTexts.FindText("str_inventory_type_13").ToString(),
+               null));
+
+            list.Add(new InquiryElement(new EqupmentEditOption(EquipmentIndex.Leg, ItemTypeEnum.LegArmor),
+               GameTexts.FindText("str_inventory_type_14").ToString(),
+               null));
+
+            list.Add(new InquiryElement(new EqupmentEditOption(EquipmentIndex.Gloves, ItemTypeEnum.HandArmor),
+               GameTexts.FindText("str_inventory_type_15").ToString(),
+               null));
+
+            list.Add(new InquiryElement(new EqupmentEditOption(EquipmentIndex.Cape, ItemTypeEnum.Cape),
+               GameTexts.FindText("str_inventory_type_22").ToString(),
+               null));
+
+            list.Add(new InquiryElement(new EqupmentEditOption(EquipmentIndex.Horse, ItemTypeEnum.Horse),
+               GameTexts.FindText("str_inventory_type_1").ToString(),
+               null));
+
+            list.Add(new InquiryElement(new EqupmentEditOption(EquipmentIndex.HorseHarness, ItemTypeEnum.HorseHarness),
+               GameTexts.FindText("str_inventory_type_23").ToString(),
+               null));
+
+            MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
+                new TextObject("{=!}Equipment Editing").ToString(),
+                new TextObject("{=!}Select the inventory slot you would like to edit. Weapons may be assigned to 4 different slots, each with a weapon of a different type, such as slot 1, one-handed weapons, slot 2 bows, and slot 3 arrows.")
+                .ToString(),
+                list,
+                true,
+                1, 
+                GameTexts.FindText("str_accept").ToString(),
+                GameTexts.FindText("str_cancel").ToString(),
+                delegate (List<InquiryElement> list)
+                {
+                    EqupmentEditOption option = (EqupmentEditOption)list[0].Identifier;
+                    if (option.ItemType == ItemTypeEnum.Invalid)
+                    {
+                        ShowWeapons(option.EquipmentIndex, levy);
+                    }
+                    else
+                    {
+                        ShowEquipments(option, levy);
+                    }
+                },
+                delegate (List<InquiryElement> list)
+                {
+                    ShowEditingOptions(levy);
+                }));
+        }
+
+        private void ShowWeapons(EquipmentIndex index, bool levy = true)
+        {
+            var list = new List<InquiryElement>();
+            list.Add(new InquiryElement(ItemTypeEnum.OneHandedWeapon,
+                GameTexts.FindText("str_inventory_type_2").ToString(),
+                null));
+
+            list.Add(new InquiryElement(ItemTypeEnum.TwoHandedWeapon,
+                GameTexts.FindText("str_inventory_type_3").ToString(),
+                null));
+
+            list.Add(new InquiryElement(ItemTypeEnum.Polearm,
+                GameTexts.FindText("str_inventory_type_4").ToString(),
+                null));
+
+            list.Add(new InquiryElement(ItemTypeEnum.Thrown,
+                GameTexts.FindText("str_inventory_type_10").ToString(),
+                null));
+
+            list.Add(new InquiryElement(ItemTypeEnum.Shield,
+                GameTexts.FindText("str_inventory_type_7").ToString(),
+                null));
+
+            list.Add(new InquiryElement(ItemTypeEnum.Bow,
+                GameTexts.FindText("str_inventory_type_8").ToString(),
+                null));
+
+            list.Add(new InquiryElement(ItemTypeEnum.Crossbow,
+                GameTexts.FindText("str_inventory_type_9").ToString(),
+                null));
+
+            MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
+                new TextObject("{=!}Weapon Editing").ToString(),
+                new TextObject("{=!}Select what type of weapon you want to equip in this slot.")
+                .ToString(),
+                list,
+                true,
+                1,
+                GameTexts.FindText("str_accept").ToString(),
+                GameTexts.FindText("str_cancel").ToString(),
+                delegate (List<InquiryElement> list)
+                {
+                    ItemTypeEnum type = (ItemTypeEnum)list[0].Identifier;
+                    ShowEquipments(new EqupmentEditOption(index, type), levy);
+                },
+                delegate (List<InquiryElement> list)
+                {
+                    ShowEquipmentOptions(levy);
+                }));
+        }
+
+        private void ShowEquipments(EqupmentEditOption option, bool levy = true)
+        {
+            var character = Career.GetTroop(Career.Kingdom, levy);
+            var list = new List<InquiryElement>();
+            var items = Campaign.Current.ObjectManager.GetObjectTypeList<ItemObject>();
+            foreach (var item in items)
+            {
+                if (item.Culture != null && item.Culture != character.Culture)
+                {
+                    continue;
+                }
+
+                if (item.ItemType == option.ItemType)
+                {
+                    list.Add(new InquiryElement(item,
+                        item.Name.ToString(),
+                        new ImageIdentifier(item),
+                        true,
+                        new TextObject("{=!}Tier: {TIER}\nValue: {VALUE}\nType: {TYPE}")
+                        .SetTextVariable("TIER", item.Tierf)
+                        .SetTextVariable("VALUE", item.Value)
+                        .SetTextVariable("TYPE", GameTexts.FindText("str_inventory_type_" + item.ItemType)).ToString()));
+                }
+            }
+
+            MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
+                new TextObject("{=!}Equipment Editing").ToString(),
+                new TextObject("{=!}Choose the item selection for this equipment slot. You may choose from 1 to 5 items.")
+                .ToString(),
+                list,
+                true,
+                5,
+                GameTexts.FindText("str_accept").ToString(),
+                GameTexts.FindText("str_cancel").ToString(),
+                delegate (List<InquiryElement> list)
+                {
+                    List<ItemObject> items = new List<ItemObject>();
+                    foreach (var element in list)
+                    {
+                        items.Add((ItemObject)element.Identifier);
+                    }
+
+                    MBEquipmentRoster roster = (MBEquipmentRoster)AccessTools.Field((character as BasicCharacterObject).GetType(), "_equipmentRoster")
+                        .GetValue(character);
+                    List<Equipment> equipments = (List<Equipment>)AccessTools.Field(roster.GetType(), "_equipments")
+                        .GetValue(roster);
+
+                    if (equipments.Count != 5)
+                    {
+                        var diff = equipments.Count - 5;
+                        if (diff > 0)
+                        {
+                            equipments.RemoveRange(0, diff);
+                        }
+                        else for (int i = 0; i < diff; i++)
+                        {
+                            equipments.Add(new Equipment());
+                        }
+                    }
+
+                    for (int i = 0; i < equipments.Count; i++)
+                    {
+                        var equipment = equipments[i];
+                        ItemObject item = null;
+                        if (items.Count > i)
+                        {
+                            item = items[i];
+                        }
+                        else
+                        {
+                            item = items.GetRandomElement();
+                        }
+
+                        EquipmentElement equipmentElement = new EquipmentElement(item);
+                        equipment[option.EquipmentIndex] = equipmentElement;
+                    }
+                    ShowEditingOptions();
+                    RefreshValues();
+                },
+                delegate (List<InquiryElement> list) 
+                {
+                    ShowEquipmentOptions(levy);
+                }
+                ));
         }
 
         private void SetSkills(CharacterObject character, CustomTroopPreset preset)
         {
-            MBCharacterSkills skills = (MBCharacterSkills)AccessTools.Property(character.GetType(), "CharacterSkills")
-                    .GetValue(character);
-
+            MBCharacterSkills skills = new MBCharacterSkills();
             skills.Skills.SetPropertyValue(DefaultSkills.OneHanded, preset.OneHanded);
             skills.Skills.SetPropertyValue(DefaultSkills.TwoHanded, preset.TwoHanded);
             skills.Skills.SetPropertyValue(DefaultSkills.Polearm, preset.Polearm);
@@ -157,6 +488,9 @@ namespace BannerKings.UI.Mercenary
             skills.Skills.SetPropertyValue(DefaultSkills.Bow, preset.Bow);
             skills.Skills.SetPropertyValue(DefaultSkills.Crossbow, preset.Crossbow);
             skills.Skills.SetPropertyValue(DefaultSkills.Throwing, preset.Throwing);
+
+           AccessTools.Field((character as BasicCharacterObject).GetType(), "CharacterSkills")
+                   .SetValue(character, skills);
         }
 
         [DataSourceProperty]
@@ -224,6 +558,34 @@ namespace BannerKings.UI.Mercenary
                 if (value != canEditProfessional)
                 {
                     canEditProfessional = value;
+                    OnPropertyChangedWithValue(value);
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public bool CanAskForPrivilege
+        {
+            get => canAskPrivilege;
+            set
+            {
+                if (value != canAskPrivilege)
+                {
+                    canAskPrivilege = value;
+                    OnPropertyChangedWithValue(value);
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public string PrivilegeAvailableText
+        {
+            get => privilegeAvailableText;
+            set
+            {
+                if (value != privilegeAvailableText)
+                {
+                    privilegeAvailableText = value;
                     OnPropertyChangedWithValue(value);
                 }
             }
@@ -327,16 +689,16 @@ namespace BannerKings.UI.Mercenary
             }
         }
 
-        private class TroopEditOption
+        private class EqupmentEditOption
         {
+            internal EqupmentEditOption(EquipmentIndex index, ItemTypeEnum type)
+            {
+                EquipmentIndex = index;
+                ItemType = type;
+            }
 
-        }
-
-        private enum OptionType
-        {
-            Equipment,
-            Name,
-            Skills
+            public EquipmentIndex EquipmentIndex { get; private set; }
+            public ItemTypeEnum ItemType { get; private set; }
         }
     }
 }

@@ -114,6 +114,7 @@ namespace BannerKings
             DefaultInnovations.Instance.Initialize();
             BKBuildings.Instance.Initialize();
             DefaultMercenaryPrivileges.Instance.Initialize();
+            DefaultCustomTroopPresets.Instance.Initialize();
 
             UIManager.Instance.SetScreen(new BannerKingsScreen());
         }

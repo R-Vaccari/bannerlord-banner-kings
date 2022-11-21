@@ -9,7 +9,7 @@ namespace BannerKings.Behaviours.Mercenary
         }
 
         public void Initialize(TextObject name, TextObject description, int level, int oneHanded, int twoHanded,
-            int polearm, int riding, int athletics, int throwing, int bow, int crossbow)
+            int polearm, int riding, int athletics, int throwing, int bow, int crossbow, string itemId)
         {
             Initialize(name, description);
             Level = level;
@@ -21,7 +21,13 @@ namespace BannerKings.Behaviours.Mercenary
             Throwing = throwing;
             Bow = bow;
             Crossbow = crossbow;
+            ItemId = itemId;
         }
+
+        public TextObject GetExplanation() => new TextObject("{=!}{DESCRIPTION}\n\nOne-Handed: {1H}\nTwo-Handed: {2H}")
+            .SetTextVariable("DESCRIPTION", Description)
+            .SetTextVariable("1H", OneHanded)
+            .SetTextVariable("2h", TwoHanded);
 
         public int Level { get; private set; }
         public int OneHanded { get; private set; }
@@ -32,5 +38,6 @@ namespace BannerKings.Behaviours.Mercenary
         public int Throwing { get; private set; }
         public int Bow { get; private set; }
         public int Crossbow { get; private set; }
+        public string ItemId { get; private set; }
     }
 }

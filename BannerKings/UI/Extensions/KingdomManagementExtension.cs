@@ -18,7 +18,7 @@ namespace BannerKings.UI.Extensions
             firstChild.LoadXml(
                 "<KingdomCourt Id=\"CourtPanel\" DataSource=\"{Court}\" MarginTop=\"188\" MarginBottom=\"75\" />");
             secondChild.LoadXml("<KingdomDemesne Id=\"DemesnePanel\" DataSource=\"{Demesne}\" MarginTop=\"188\" MarginBottom=\"75\" />");
-            career.LoadXml("<MercenaryCareer Id=\"CareerPanel\" DataSource=\"{Career}\"  MarginTop=\"188\" MarginBottom=\"75\" />");
+            career.LoadXml("<MercenaryCareer Id=\"CareerPanel\" DataSource=\"{Career}\" MarginTop=\"188\" MarginBottom=\"75\" />");
             nodes = new List<XmlNode> { firstChild, secondChild, career };
         }
 

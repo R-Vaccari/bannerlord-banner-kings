@@ -33,9 +33,10 @@ namespace BannerKings.UI.Extensions
                 demesneVM = new KingdomDemesneVM(title, vm.Kingdom);
             }
 
+            ShowCareer = false;
+            Career = new MercenaryCareerVM();
             if (Clan.PlayerClan.IsUnderMercenaryService)
             {
-                Career = new MercenaryCareerVM();
                 ShowCareer = true;
             }
 

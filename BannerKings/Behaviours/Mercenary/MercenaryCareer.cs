@@ -9,7 +9,6 @@ namespace BannerKings.Behaviours.Mercenary
 {
     public class MercenaryCareer
     {
-
         internal MercenaryCareer(Clan clan, Kingdom kingdom)
         {
             Clan = clan;
@@ -19,6 +18,7 @@ namespace BannerKings.Behaviours.Mercenary
             KingdomProgress = new Dictionary<Kingdom, float>();
             LevyTroops = new Dictionary<CultureObject, CharacterObject>();
             ProfessionalTroops = new Dictionary<CultureObject, CharacterObject>();
+            PrivilegeTimes = new Dictionary<Kingdom, CampaignTime>();
             AddKingdom(kingdom);
         }
 
@@ -32,10 +32,32 @@ namespace BannerKings.Behaviours.Mercenary
         [SaveableProperty(5)] private Dictionary<Kingdom, float> KingdomProgress { get; set; }
         [SaveableProperty(6)] private Dictionary<CultureObject, CharacterObject> LevyTroops { get; set; }
         [SaveableProperty(7)] private Dictionary<CultureObject, CharacterObject> ProfessionalTroops { get; set; }
+        [SaveableProperty(8)] private Dictionary<Kingdom, CampaignTime> PrivilegeTimes { get; set; }
 
         internal void Tick()
         {
             KingdomProgress[Kingdom] += 1000f;
+        }
+
+        internal bool HasTimePassedForPrivilege(Kingdom kingdom) => PrivilegeTimes[kingdom].ElapsedSeasonsUntilNow >= 2f;
+
+        internal CampaignTime GetPrivilegeTime(Kingdom kingdom) => PrivilegeTimes[kingdom];
+
+        internal bool IsTroopCustom(CharacterObject character)
+        {
+            var culture = character.Culture;
+            bool matches = false;
+            if (LevyTroops.ContainsKey(culture))
+            {
+                matches = LevyTroops[culture] == character;
+            }
+
+            if (!matches && ProfessionalTroops.ContainsKey(culture))
+            {
+                matches = ProfessionalTroops[culture] == character;
+            }
+
+            return matches;
         }
 
         internal bool CanLevelUpPrivilege(MercenaryPrivilege privilege)
@@ -45,7 +67,7 @@ namespace BannerKings.Behaviours.Mercenary
                 var currentPrivilege = KingdomPrivileges[Kingdom].First(x => x.Equals(privilege));
                 return currentPrivilege.Level < currentPrivilege.MaxLevel &&
                     KingdomProgress[Kingdom] > currentPrivilege.Points &&
-                    currentPrivilege.IsAvailable(this);
+                    currentPrivilege.IsAvailable(this) && HasTimePassedForPrivilege(Kingdom);
             }
             return KingdomProgress[Kingdom] > privilege.Points;
         }
@@ -60,6 +82,11 @@ namespace BannerKings.Behaviours.Mercenary
             if (!KingdomProgress.ContainsKey(kingdom))
             {
                 KingdomProgress.Add(kingdom, 0f);
+            }
+
+            if (!PrivilegeTimes.ContainsKey(kingdom))
+            {
+                PrivilegeTimes.Add(kingdom, CampaignTime.Zero);
             }
         }
 
@@ -100,6 +127,8 @@ namespace BannerKings.Behaviours.Mercenary
                 copy.IncreaseLevel();
                 KingdomPrivileges[Kingdom].Add(copy);
             }
+
+            PrivilegeTimes[Kingdom] = CampaignTime.Now;
 
             if (Clan == Clan.PlayerClan)
             {

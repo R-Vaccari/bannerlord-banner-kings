@@ -8,7 +8,15 @@ namespace BannerKings.Behaviours.Mercenary
     {
         private Dictionary<Clan, MercenaryCareer> careers = new Dictionary<Clan, MercenaryCareer>();
 
-        public MercenaryCareer GetCareer(Clan clan) => careers[clan];
+        public MercenaryCareer GetCareer(Clan clan) 
+        {
+            if (careers.ContainsKey(clan))
+            {
+                return careers[clan];
+            }
+
+            return null;
+        } 
 
         public override void RegisterEvents()
         {

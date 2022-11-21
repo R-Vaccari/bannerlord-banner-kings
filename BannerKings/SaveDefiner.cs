@@ -221,6 +221,7 @@ namespace BannerKings
             ConstructContainerDefinition(typeof(Dictionary<Clan, MercenaryCareer>));
             ConstructContainerDefinition(typeof(Dictionary<Kingdom, float>));
             ConstructContainerDefinition(typeof(Dictionary<CultureObject, CharacterObject>));
+            ConstructContainerDefinition(typeof(Dictionary<Kingdom, CampaignTime>));
         }
     }
 }

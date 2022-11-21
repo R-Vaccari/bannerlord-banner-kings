@@ -1,0 +1,205 @@
+<Prefab>
+	<Window>
+		<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" IsVisible="@IsSelected">
+			<Children>
+			
+				<ScrollablePanel Id="CouncilScrollablePanel" WidthSizePolicy="CoverChildren" HeightSizePolicy="StretchToParent"
+				                 MarginLeft="3" MarginBottom="3" AutoHideScrollBars="true" ClipRect="Rect"
+				                 InnerPanel="Rect\VerticalList" MouseScrollAxis="Vertical"
+				                 VerticalScrollbar="..\CouncilScrollbar\Scrollbar">
+					<Children>
+
+						<Widget Id="Rect" WidthSizePolicy="CoverChildren" HeightSizePolicy="StretchToParent" ClipContents="true">
+							<Children>
+							
+								<ListPanel Id="VerticalList" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" StackLayout.LayoutMethod="VerticalBottomToTop">
+									<Children>
+									
+									
+										<RichTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" MarginTop="25"
+														HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="30" Text="@CareerText"
+														MarginBottom="15" />
+					
+										<ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" HorizontalAlignment="Center" SuggestedHeight="150"
+												   VerticalAlignment="Center" StackLayout.LayoutMethod="HorizontalLeftToRight" MarginTop="30" DoNotAcceptEvents="false">
+											<Children>
+											
+												<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" StackLayout.LayoutMethod="VerticalBottomToTop"
+														   MarginTop="20">
+													<Children>
+														<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
+																		HorizontalAlignment="Center" Brush="TownManagement.Project.Name.Text" Brush.FontSize="20" Text="@PointsHeaderText" />
+														<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren">
+															<Children>
+																<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
+																		HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="25" Text="@PointsText" />
+																<HintWidget DataSource="{PointsHint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed"
+																			SuggestedHeight="25" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" />
+															</Children>
+														</Widget>
+													</Children>
+												</ListPanel>
+												
+												<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" StackLayout.LayoutMethod="VerticalBottomToTop"
+														   MarginTop="20">
+													<Children>
+														<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
+																		HorizontalAlignment="Center" Brush="TownManagement.Project.Name.Text" Brush.FontSize="20" Text="@ReputationHeaderText" />
+														<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren">
+															<Children>
+																<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
+																		HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="25" Text="@ReputationText" />
+																<HintWidget DataSource="{ReputationHint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed"
+																			SuggestedHeight="25" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" />
+															</Children>
+														</Widget>
+													</Children>
+												</ListPanel>
+												
+											</Children>
+										</ListPanel>
+										
+										
+										<ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" HorizontalAlignment="Center" SuggestedHeight="150"
+												   VerticalAlignment="Center" StackLayout.LayoutMethod="HorizontalLeftToRight" MarginTop="30" DoNotAcceptEvents="false">
+											<Children>
+											
+												<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" StackLayout.LayoutMethod="VerticalBottomToTop"
+														   MarginTop="20">
+													<Children>
+														<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
+																		HorizontalAlignment="Center" Brush="TownManagement.Project.Name.Text" Brush.FontSize="20" Text="@PrivilegeAvailableHeaderText" />
+														<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren">
+															<Children>
+																<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
+																		HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="25" Text="@PrivilegeAvailableText" />
+																<HintWidget DataSource="{PrivilegeAvailableHint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed"
+																			SuggestedHeight="25" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" />
+															</Children>
+														</Widget>
+													</Children>
+												</ListPanel>
+											
+											
+												<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" StackLayout.LayoutMethod="VerticalBottomToTop"
+														   MarginTop="20">
+													<Children>
+														<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
+																		HorizontalAlignment="Center" Brush="TownManagement.Project.Name.Text" Brush.FontSize="20" Text="@TimeHeaderText" />
+														<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren">
+															<Children>
+																<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
+																		HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="25" Text="@TimeText" />
+																<HintWidget DataSource="{TimeHint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed"
+																			SuggestedHeight="25" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" />
+															</Children>
+														</Widget>
+													</Children>
+												</ListPanel>
+											
+											</Children>
+										</ListPanel>
+										
+										
+										
+										<RichTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" MarginTop="25"
+														HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="30" Text="@PrivilegesText"
+														MarginBottom="15" />
+														
+										<RichTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" MarginTop="25"
+														HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="22" Text="@NoPrivilegesText"
+														IsVisible="@HasPrivileges" MarginBottom="15" />
+														
+														
+										<GridWidget DataSource="{Privileges}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" VerticalAlignment="Center"
+													SuggestedWidth="700"  HorizontalAlignment="Center" DefaultCellWidth="150" 
+													DefaultCellHeight="100" ColumnCount="3" MarginTop="30" MarginRight="150" MarginLeft="150">
+											<ItemTemplate>
+												<Widget HorizontalAlignment="Center" HeightSizePolicy="StretchToParent"
+														WidthSizePolicy="StretchToParent" VerticalAlignment="Center" DoNotPassEventsToChildren="true">
+													<Children>
+														<ListPanel HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" WidthSizePolicy="StretchToParent"
+															SuggestedWidth="150" StackLayout.LayoutMethod="VerticalBottomToTop">
+															<Children>
+																<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
+																	HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="30" Text="@Name"
+																	MarginBottom="15" />
+																<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
+																	HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="20" Text="@Description" />
+															</Children>
+														</ListPanel>
+														<HintWidget DataSource="{Hint}" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed"
+															SuggestedHeight="15" SuggestedWidth="100" VerticalAlignment="Center"
+															HorizontalAlignment="Center" Command.HoverBegin="ExecuteBeginHint"
+															Command.HoverEnd="ExecuteEndHint" />
+													</Children>
+												</Widget>
+											</ItemTemplate>
+										</GridWidget>
+										
+										<ButtonWidget DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed"
+													  HorizontalAlignment="Center" VerticalAlignment="Bottom" MarginBottom="15" SuggestedWidth="120"
+													  MarginTop="20" SuggestedHeight="40" Brush="ButtonBrush2" Command.Click="ShowPrivileges"
+													  UpdateChildrenStates="true" IsVisible="@IsSelected">
+											<Children>
+												<TextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginTop="3"
+															Brush="Clan.TabControl.Text" Text="@RequestPrivilegeText" />
+											</Children>
+										</ButtonWidget>
+														
+										
+										<ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" StackLayout.LayoutMethod="VerticalBottomToTop"
+												   MarginTop="20">
+											<Children>
+												
+												
+												<RichTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" MarginTop="25"
+																HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="30" Text="@LevyCharacterText"
+																MarginBottom="15" />
+																
+												<RichTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" MarginTop="25"
+																HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="22" Text="@LevyCharacterName"
+																MarginBottom="15" />
+												
+												<Widget WidthSizePolicy="Fixed" SuggestedWidth="370" HeightSizePolicy ="StretchToParent" HorizontalAlignment="Left" MarginBottom="1" VerticalAlignment="Center" 
+														IsEnabled="false" ClipContents="true">
+												  <Children>
+													<ParallaxItemBrushWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="582" SuggestedHeight="380" Brush="Encyclopedia.Character.Smoke" 
+																			 OneDirectionDuration="5" OneDirectionDistance="100" InitialDirection="Right" IsEaseInOutEnabled="true" VerticalAlignment="Bottom" 
+																			 HorizontalAlignment="Center" PositionYOffset="1" />
+													<ParallaxItemBrushWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="582" SuggestedHeight="380" Brush="Encyclopedia.Character.Smoke2" 
+																			 OneDirectionDuration="5" OneDirectionDistance="100" InitialDirection="Left" IsEaseInOutEnabled="true" VerticalAlignment="Bottom" 
+																			 HorizontalAlignment="Center" PositionYOffset="1" />
+													<CharacterTableauWidget DataSource="{LevyCharacter}" WidthSizePolicy="StretchToParent"  HeightSizePolicy ="StretchToParent" HorizontalAlignment="Center" 
+																			VerticalAlignment="Center" BodyProperties="@BodyProperties" IsFemale="@IsFemale" EquipmentCode="@EquipmentCode" CharStringId="@CharStringId" 
+																			StanceIndex="@StanceIndex" BannerCodeText="@BannerCodeText" MountCreationKey="@MountCreationKey" IsEnabled="false" ArmorColor1="@ArmorColor1" 
+																			ArmorColor2="@ArmorColor2" Race="@Race"/>
+												  </Children>
+												</Widget>
+												
+												<ButtonWidget DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed"
+															  HorizontalAlignment="Center" VerticalAlignment="Bottom" MarginBottom="15" SuggestedWidth="120"
+															  MarginTop="20" SuggestedHeight="40" Brush="ButtonBrush2" Command.Click="EditLevy"
+															  UpdateChildrenStates="true" IsEnabled="@CanEditLevy">
+													<Children>
+														<TextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginTop="3"
+																	Brush="Clan.TabControl.Text" Text="@EditLevyText" />
+													</Children>
+												</ButtonWidget>
+												
+											</Children>
+										</ListPanel>
+									</Children>
+								</ListPanel>
+							</Children>
+						</Widget>
+					</Children>
+				</ScrollablePanel>
+
+				<Standard.VerticalScrollbar Id="CouncilScrollbar" HeightSizePolicy="StretchToParent" HorizontalAlignment="Right"
+				                            VerticalAlignment="Bottom" MarginLeft="2" MarginRight="2" MarginBottom="3" />
+				
+			</Children>
+		</Widget>
+	</Window>
+</Prefab>
