@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Reflection;
 using BannerKings.Actions;
@@ -332,17 +333,6 @@ namespace BannerKings.Behaviours
         private bool GrantKnighthoodOnClickable(out TextObject reason)
         {
             var knight = Hero.OneToOneConversationHero;
-            var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(Hero.MainHero);
-            if (council != null)
-            {
-                var peerage = council.Peerage;
-                if (!peerage.CanGrantKnighthood)
-                {
-                    reason = new TextObject("{=!}The {CLAN} does not have adequate Peerage to grant knighthood.")
-                        .SetTextVariable("CLAN", Hero.MainHero.Clan.Name);
-                    return false;
-                }
-            }
 
             if (BannerKingsConfig.Instance.TitleManager.IsKnight(knight))
             {
@@ -410,6 +400,18 @@ namespace BannerKings.Behaviours
         {
             var companion = Hero.OneToOneConversationHero;
             var title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(Hero.MainHero);
+
+            var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(Hero.MainHero);
+            if (council != null)
+            {
+                var peerage = council.Peerage;
+                if (!peerage.CanGrantKnighthood)
+                {
+                    hintText = new TextObject("{=!}The {CLAN} does not have adequate Peerage to grant knighthood.")
+                        .SetTextVariable("CLAN", Hero.MainHero.Clan.Name);
+                    return false;
+                }
+            }
 
             var tier = Clan.PlayerClan.Tier;
             if (tier < 2)

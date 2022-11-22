@@ -141,7 +141,7 @@ namespace BannerKings.Models.BKModels
             return result;
         }
 
-        public IEnumerable<KeyValuePair<Hero, ExplainedNumber>> CalculateInheritanceLine(Clan clan)
+        public IEnumerable<KeyValuePair<Hero, ExplainedNumber>> CalculateInheritanceLine(Clan clan, int count = 6)
         {
             var candidates = BannerKingsConfig.Instance.TitleModel.GetInheritanceCandidates(clan.Leader);
             var explanations = new Dictionary<Hero, ExplainedNumber>();
@@ -157,7 +157,7 @@ namespace BannerKings.Models.BKModels
 
             return (from x in explanations
                     orderby x.Value.ResultNumber descending
-                    select x).Take(6);
+                    select x).Take(count);
         }
 
         public List<Hero> GetSuccessionCandidates(Hero currentLeader, FeudalContract contract)
