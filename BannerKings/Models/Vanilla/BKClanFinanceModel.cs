@@ -25,7 +25,8 @@ namespace BannerKings.Models.Vanilla
                 totalTaxes += wk.TaxExpenses();
             }
 
-            return base.CalculateNotableDailyGoldChange(hero, applyWithdrawals) - totalTaxes;
+            var estates = CalculateOwnerIncomeFromEstates(hero, applyWithdrawals);
+            return base.CalculateNotableDailyGoldChange(hero, applyWithdrawals) - totalTaxes + estates;
         }
 
         public override int CalculateOwnerIncomeFromWorkshop(Workshop workshop)
@@ -39,6 +40,22 @@ namespace BannerKings.Models.Vanilla
             else
             {
                 workshopTaxes.Add(workshop, taxes);
+            }
+
+            return result;
+        }
+
+        public int CalculateOwnerIncomeFromEstates(Hero owner, bool applyWithdrawals)
+        {
+            int result = 0;
+            foreach (var estate in BannerKingsConfig.Instance.PopulationManager.GetEstates(owner)) 
+            {
+                result += estate.TaxAccumulated;
+
+                if (applyWithdrawals)
+                {
+                    estate.TaxAccumulated = 0;
+                }
             }
 
             return result;
@@ -97,6 +114,20 @@ namespace BannerKings.Models.Vanilla
 
         public void AddIncomes(Clan clan, ref ExplainedNumber result, bool applyWithdrawals)
         {
+            foreach (var hero in clan.Heroes)
+            {
+                int estateIncome = CalculateOwnerIncomeFromEstates(hero, applyWithdrawals);
+
+                if (applyWithdrawals && hero != clan.Leader)
+                {
+                    hero.ChangeHeroGold(estateIncome);
+                }
+                else
+                {
+                    result.Add(estateIncome, new TextObject("{=!}Estate properties"));
+                }
+            }
+
             var kingdom = clan.Kingdom;
             var wkModel = (BKWorkshopModel) Campaign.Current.Models.WorkshopModel;
 

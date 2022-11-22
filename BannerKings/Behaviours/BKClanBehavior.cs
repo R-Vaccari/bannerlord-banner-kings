@@ -949,33 +949,9 @@ namespace BannerKings.Behaviours
                 bool applyWithdrawals)
             {
                 var total = (int)BannerKingsConfig.Instance.TaxModel.CalculateVillageTaxFromIncome(village).ResultNumber;
-
                 if (applyWithdrawals)
                 {
                     village.TradeTaxAccumulated -= MathF.Min(village.TradeTaxAccumulated, total);
-
-                    var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(village.Settlement);
-                    if (data != null && data.EstateData != null)
-                    {
-                        var result = 0;
-                        foreach (var estate in data.EstateData.Estates)
-                        {
-                            if (estate.IsDisabled)
-                            {
-                                continue;
-                            }
-
-                            result += estate.AddIncomeToHero();
-                        }
-
-                        if (clan == Clan.PlayerClan)
-                        {
-                            InformationManager.DisplayMessage(new InformationMessage(
-                                new TextObject("{=!}{INCOME} added from estates at {VILLAGE}")
-                                .SetTextVariable("INCOME", result)
-                                .SetTextVariable("VILLAGE", village.Name).ToString()));
-                        }
-                    }
                 }
 
                 return total;

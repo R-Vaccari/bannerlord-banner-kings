@@ -1,7 +1,6 @@
 ﻿using BannerKings.Extensions;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -52,6 +51,7 @@ namespace BannerKings.Managers.Populations.Estates
 
         public void SetOwner(Hero newOnwer)
         {
+            BannerKingsConfig.Instance.PopulationManager.ChangeEstateOwner(this, newOnwer);
             Owner = newOnwer;
             if (newOnwer == Hero.MainHero)
             {
@@ -134,14 +134,6 @@ namespace BannerKings.Managers.Populations.Estates
         [SaveableProperty(11)] public EstateTask Task { get; private set; }
         [SaveableProperty(12)] private Dictionary<PopType, float> Manpowers { get; set; }
 
-        public int AddIncomeToHero()
-        {
-            var result = TaxAccumulated;
-            Owner.ChangeHeroGold(TaxAccumulated);
-            TaxAccumulated = 0;
-            return result;
-        }
-
         public int GetTypeCount(PopType type)
         {
             if (type == PopType.Serfs)
@@ -203,7 +195,7 @@ namespace BannerKings.Managers.Populations.Estates
                 return;
             }
 
-
+            BannerKingsConfig.Instance.PopulationManager.AddEstate(this);
             if (Task == EstateTask.Land_Expansion)
             {
                 var progress = AcreageGrowth.ResultNumber;
@@ -233,8 +225,6 @@ namespace BannerKings.Managers.Populations.Estates
                 }
             }
         }
-
-
 
         public void AddPopulation(PopType type, int toAdd)
         {

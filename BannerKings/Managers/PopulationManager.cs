@@ -5,6 +5,7 @@ using BannerKings.Extensions;
 using BannerKings.Managers.Institutions.Guilds;
 using BannerKings.Managers.Items;
 using BannerKings.Managers.Populations;
+using BannerKings.Managers.Populations.Estates;
 using BannerKings.Managers.Populations.Villages;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Party;
@@ -40,16 +41,24 @@ namespace BannerKings.Managers
         {
             Populations = pops;
             Caravans = caravans;
+            Estates = new Dictionary<Hero, List<Estate>>();
         }
 
         [SaveableProperty(1)] private Dictionary<Settlement, PopulationData> Populations { get; set; }
 
         [SaveableProperty(2)] private List<MobileParty> Caravans { get; set; }
 
+        [SaveableProperty(3)] private Dictionary<Hero, List<Estate>> Estates { get; set; }
+
         public MBReadOnlyList<MobileParty> AllParties => Caravans.GetReadOnlyList();
 
         public void PostInitialize()
         {
+            if (Estates == null)
+            {
+                Estates = new Dictionary<Hero, List<Estate>>();
+            }
+
             foreach (var data in Populations.Values)
             {
                 data.VillageData?.ReInitializeBuildings();
@@ -131,6 +140,60 @@ namespace BannerKings.Managers
             {
                 Caravans.Remove(party);
             }
+        }
+
+        public void ChangeEstateOwner(Estate estate, Hero owner)
+        {
+            var currentOwner = estate.Owner;
+            if (currentOwner != null && Estates.ContainsKey(currentOwner))
+            {
+                if (Estates[currentOwner].Contains(estate))
+                {
+                    Estates[currentOwner].Remove(estate);
+                }
+            }
+
+            if (owner != null)
+            {
+                if (Estates.ContainsKey(owner))
+                {
+                    Estates[owner].Add(estate);
+                }
+                else
+                {
+                    Estates.Add(owner, new List<Estate>() { estate });
+                }
+            }
+        }
+
+        public void AddEstate(Estate estate)
+        {
+            var currentOwner = estate.Owner;
+            if (currentOwner != null) 
+            {
+                if (Estates.ContainsKey(currentOwner))
+                {
+                    if (Estates[currentOwner].Contains(estate))
+                    {
+                        Estates[currentOwner].Remove(estate);
+                    }
+                }
+                else
+                {
+                    Estates.Add(currentOwner, new List<Estate>() { estate });
+                }
+            } 
+        }
+
+        public List<Estate> GetEstates(Hero owner)
+        {
+            var list = new List<Estate>();
+            if (Estates.ContainsKey(owner))
+            {
+                list = Estates[owner];
+            }
+
+            return list;
         }
 
         public List<(ItemObject, float)> GetProductions(PopulationData data)

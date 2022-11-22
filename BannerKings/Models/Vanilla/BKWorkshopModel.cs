@@ -6,7 +6,6 @@ using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.Settlements.Workshops;
 using TaleWorlds.Core;
-using TaleWorlds.Library;
 
 namespace BannerKings.Models.Vanilla
 {
