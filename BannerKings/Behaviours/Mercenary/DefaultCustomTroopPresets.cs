@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.Localization;
 
@@ -7,7 +6,6 @@ namespace BannerKings.Behaviours.Mercenary
 {
     internal class DefaultCustomTroopPresets : DefaultTypeInitializer<DefaultCustomTroopPresets, CustomTroopPreset>
     {
-
         public CustomTroopPreset SargeantLevy { get; } = new CustomTroopPreset("sargeant_levy");
         public CustomTroopPreset LineBreakerLevy { get; } = new CustomTroopPreset("line_breaker_levy");
         public CustomTroopPreset DefenderLevy { get; } = new CustomTroopPreset("line_breaker_levy");
@@ -90,66 +88,66 @@ namespace BannerKings.Behaviours.Mercenary
                 "western_javelin_2_t3");
 
             ArcherLevy.Initialize(new TextObject("{=!}Archer"),
-                new TextObject("{=!}"),
+                new TextObject("{=!}Archers have strong ranged skills focused on Bows, while maintaining decent speed and ability to defend themselves in close quarters."),
                 16,
-                120,
-                40,
-                80,
+                70,
                 10,
-                100,
-                30,
+                50,
                 10,
+                90,
                 10,
+                110,
+                50,
                 "lowland_longbow");
 
             CrossbowmanLevy.Initialize(new TextObject("{=!}Crossbowman"),
-                new TextObject("{=!}"),
+                new TextObject("{=!}Crossbowmen have strong ranged skills focused on Crossbows, while maintaining decent speed and ability to defend themselves in close quarters."),
                 16,
-                120,
-                40,
-                80,
+                70,
                 10,
-                100,
-                30,
+                50,
                 10,
+                90,
                 10,
+                50,
+                110,
                 "crossbow_b");
 
             HorsemanLevy.Initialize(new TextObject("{=!}Horseman"),
-                new TextObject("{=!}"),
+                new TextObject("{=!}Quite similar to the Sargeant, but mounted. Horseman focuses on polearm and riding trainning, with a good amount of one-handed for melee combat. Slowest cavalry, but with the strongest melee."),
                 16,
-                120,
-                40,
-                80,
-                10,
                 100,
-                30,
+                20,
+                120,
+                90,
+                20,
+                20,
                 10,
                 10,
                 "empire_horse");
 
             HorseArcherLevy.Initialize(new TextObject("{=ugJfuabA}Horse Archer"),
-                new TextObject("{=!}"),
+                new TextObject("{=!}Ranged cavalry, mainly focused on Bows, but also capable with Crossbows. Very limited melee capacities."),
                 16,
-                120,
-                40,
-                80,
+                50,
                 10,
-                100,
                 30,
-                10,
-                10,
+                100,
+                20,
+                20,
+                110,
+                70,
                 "khuzait_horse");
 
             MountedSkirmisherLevy.Initialize(new TextObject("{=!}Mounted Skirmisher"),
-                new TextObject("{=!}"),
+                new TextObject("{=!}The nimblest form of cavalry, made for hit-and-run combat with javelins. Sub-par melee capabilities."),
                 16,
-                120,
-                40,
-                80,
+                70,
                 10,
-                100,
-                30,
+                50,
+                120,
+                20,
+                120,
                 10,
                 10,
                 "camel");

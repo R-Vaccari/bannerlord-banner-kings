@@ -32,8 +32,9 @@ namespace BannerKings.Behaviours.Mercenary
         {
             IncreasedPay.Initialize(new TextObject("{=!}Increased Pay"),
                 new TextObject("{=!}Increase the revenue of your mercenary contract by 5% per level."),
-                new TextObject("{=!}Max level: {LEVEL}")
-                .SetTextVariable("LEVEL", 5),
+                new TextObject("{=!}You fail to meet the requirements or privilege is already maxed out.\n\nPoints: {POINTS}\nMax level: {LEVEL}")
+                .SetTextVariable("LEVEL", 5)
+                .SetTextVariable("POINTS", 100),
                 100f,
                 5,
                 delegate(MercenaryCareer career)
@@ -65,7 +66,8 @@ namespace BannerKings.Behaviours.Mercenary
 
             CustomTroop3.Initialize(new TextObject("{=!}Mercenary Levy"),
                 new TextObject("{=!}Stablish a mercenary levy (tier III) troop for your company. A custrom troop is designable and will only be available for your clan, in towns of the kingdom associated with the career they were designed."),
-                new TextObject("{=!}Max level: {LEVEL}")
+                new TextObject("{=!}You fail to meet the requirements or privilege is already maxed out.\n\nPoints: {POINTS}\nMax level: {LEVEL}")
+                .SetTextVariable("POINTS", 500)
                 .SetTextVariable("LEVEL", 1),
                 500f,
                 1,
@@ -76,7 +78,9 @@ namespace BannerKings.Behaviours.Mercenary
 
             CustomTroop5.Initialize(new TextObject("{=!}Mercenary Professional"),
                 new TextObject("{=!}Stablish a mercenary professional (tier V) troop for your company. A custrom troop is designable and will only be available for your clan, in towns of the kingdom associated with the career they were designed."),
-                new TextObject("{=!}Max level: {LEVEL}").SetTextVariable("LEVEL", 1),
+                new TextObject("{=!}You fail to meet the requirements or privilege is already maxed out.\n\nPoints: {POINTS}\nMax level: {LEVEL}")
+                .SetTextVariable("LEVEL", 1)
+                .SetTextVariable("POINTS", 100),
                 100f,
                 1,
                 delegate (MercenaryCareer career)
@@ -95,8 +99,10 @@ namespace BannerKings.Behaviours.Mercenary
                 });
 
             FullPeerage.Initialize(new TextObject("Full Peerage"),
-                new TextObject("{=!}Join your contractor's realm as a full Peer. Your mercenary life will be left behind and you will be considered among the elite of nobility."),
-                new TextObject().SetTextVariable("LEVEL", 1),
+                new TextObject("{=!}For your extraordinary service, have your clan considered a full Peer. While the Peerage won't be effective until you leave your mercenary life behind, you will be able to join kingdoms as the elite of the nobility, rather than a lesser Peer."),
+                new TextObject("{=!}You fail to meet the requirements or privilege is already maxed out.\n\nPoints: {POINTS}\nMax level: {LEVEL}")
+                .SetTextVariable("POINTS", 100)
+                .SetTextVariable("LEVEL", 1),
                 100f,
                 1,
                 delegate (MercenaryCareer career)

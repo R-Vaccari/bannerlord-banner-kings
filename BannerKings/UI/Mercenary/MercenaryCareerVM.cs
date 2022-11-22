@@ -21,7 +21,8 @@ namespace BannerKings.UI.Mercenary
         private CharacterViewModel levyCharacter, professionalCharacter;
         private MBBindingList<MercenaryPrivilegeVM> privileges;
         private bool canEditLevy, canEditProfessional,
-            canAskPrivilege;
+            canAskPrivilege, levyVisible, professionalVisible,
+            showNoPrivilegesText;
         public MercenaryCareerVM() : base(null, false)
         {
             Career = Campaign.Current.GetCampaignBehavior<BKMercenaryCareerBehavior>().GetCareer(Clan.PlayerClan);
@@ -72,12 +73,17 @@ namespace BannerKings.UI.Mercenary
                 LevyCharacter = new CharacterViewModel(CharacterViewModel.StanceTypes.OnMount);
                 ProfessionalCharacter = new CharacterViewModel(CharacterViewModel.StanceTypes.OnMount);
 
+                LevyVisible = false;
+                ProfessionalVisible = false;
+
                 var privilegesList = Career.GetPrivileges(Career.Kingdom);
                 foreach (var privilege in privilegesList)
                 {
                     Privileges.Add(new MercenaryPrivilegeVM(privilege));
                 }
 
+                ShowNoPrivilegesText = privilegesList.Count == 0;
+                
                 CanEditLevy = privilegesList.Contains(DefaultMercenaryPrivileges.Instance.CustomTroop3);
                 CanEditProfessional = privilegesList.Contains(DefaultMercenaryPrivileges.Instance.CustomTroop5);
 
@@ -92,6 +98,7 @@ namespace BannerKings.UI.Mercenary
                 var levy = Career.GetTroop(Career.Kingdom);
                 if (levy != null)
                 {
+                    LevyVisible = true;
                     EditLevyText = new TextObject("{=!}Edit").ToString();
                     LevyCharacterName = levy.Name.ToString();
                     LevyCharacter.FillFrom(levy);
@@ -101,6 +108,7 @@ namespace BannerKings.UI.Mercenary
                 var professional = Career.GetTroop(Career.Kingdom, false);
                 if (professional != null)
                 {
+                    ProfessionalVisible = true;
                     EditProfessionalText = new TextObject("{=!}Edit").ToString();
                     ProfessionalCharacterName = professional.Name.ToString();
                     ProfessionalCharacter.FillFrom(professional);
@@ -135,6 +143,7 @@ namespace BannerKings.UI.Mercenary
                 delegate (List<InquiryElement> list)
                 {
                     Career.AddPrivilege((MercenaryPrivilege)list[0].Identifier);
+                    RefreshValues();
                 },
                 null));
         }
@@ -157,6 +166,7 @@ namespace BannerKings.UI.Mercenary
                     GameTexts.FindText("str_selection_widget_cancel").ToString(),
                     delegate (string name)
                     {
+                        (character as BasicCharacterObject).Level = preset.Level;
                         AccessTools.Method((character as BasicCharacterObject).GetType(), "SetName")
                             .Invoke(character, new object[] { new TextObject("{=!}" + name) });
 
@@ -167,6 +177,37 @@ namespace BannerKings.UI.Mercenary
                     null));
             }
             else ShowEditingOptions();
+        }
+
+        private void EditProfessional()
+        {
+            var professional = Career.GetTroop(Career.Kingdom, false);
+            if (professional == null)
+            {
+                var preset = DefaultCustomTroopPresets.Instance.SargeantLevy;
+                var character = CharacterObject.CreateFrom(Career.Kingdom.Culture.BasicTroop);
+
+                InformationManager.ShowTextInquiry(new TextInquiryData(new TextObject("{=!}Custom Professional").ToString(),
+                    new TextObject("{=!}Create a custom professional troop! This troop will be available in towns of {CULTURE} culture. They will only be available for your clan, and can be retrained or rearmed on demand - though these will incur costs. Their recruitment and upkeep costs will depend on the equipment you give them. First, give them a name.")
+                    .SetTextVariable("CULTURE", Career.Kingdom.Culture.Name)
+                    .ToString(),
+                    true,
+                    true,
+                    GameTexts.FindText("str_accept").ToString(),
+                    GameTexts.FindText("str_selection_widget_cancel").ToString(),
+                    delegate (string name)
+                    {
+                        (character as BasicCharacterObject).Level = preset.Level;
+                        AccessTools.Method((character as BasicCharacterObject).GetType(), "SetName")
+                            .Invoke(character, new object[] { new TextObject("{=!}" + name) });
+
+                        Career.AddTroop(Career.Kingdom, character, false);
+                        RefreshValues();
+                        ShowSkillEditing(false);
+                    },
+                    null));
+            }
+            else ShowEditingOptions(false);
         }
 
 
@@ -237,8 +278,33 @@ namespace BannerKings.UI.Mercenary
                 GameTexts.FindText("str_cancel").ToString(),
                 delegate (List<InquiryElement> list)
                 {
-                    SetSkills(character, (CustomTroopPreset)list[0].Identifier);
-                    ShowEditingOptions();
+                    int quantity = CalculateTroopAmount(character);
+                    if (quantity == 0)
+                    {
+                        SetSkills(character, (CustomTroopPreset)list[0].Identifier);
+                        ShowEditingOptions();
+                    }
+                    else
+                    {
+                        int cost = (int)(quantity * (levy ? 750f : 1500f));
+                        InformationManager.ShowInquiry(new InquiryData(new TextObject("{=!}Retrainning Costs").ToString(),
+                            new TextObject("{=!}It seems there are {QUANTITY} of {CHARACTER} in your clan parties. Retrainning them to new skills will cost {COST}{GOLD_ICON}.")
+                            .SetTextVariable("QUANTITY", quantity)
+                            .SetTextVariable("CHARACTER", character.Name)
+                            .SetTextVariable("COST", cost)
+                            .ToString(),
+                            Hero.MainHero.Gold >= cost,
+                            true,
+                            GameTexts.FindText("str_accept").ToString(),
+                            GameTexts.FindText("str_cancel").ToString(),
+                            () =>
+                            {
+                                Hero.MainHero.ChangeHeroGold(-cost);
+                                SetSkills(character, (CustomTroopPreset)list[0].Identifier);
+                                ShowEditingOptions();
+                            },
+                            () => ShowEditingOptions()));
+                    }
                 },
                 delegate (List<InquiryElement> list)
                 {
@@ -259,7 +325,8 @@ namespace BannerKings.UI.Mercenary
                 GameTexts.FindText("str_cancel").ToString(),
                 delegate (string name)
                 {
-                    AccessTools.Property(character.GetType(), "Name").SetValue(character, new TextObject("{=!}" + name));
+                    AccessTools.Method((character as BasicCharacterObject).GetType(), "SetName")
+                            .Invoke(character, new object[] { new TextObject("{=!}" + name) });
                     RefreshValues();
                     ShowEditingOptions();
                 },
@@ -479,6 +546,7 @@ namespace BannerKings.UI.Mercenary
 
         private void SetSkills(CharacterObject character, CustomTroopPreset preset)
         {
+           
             MBCharacterSkills skills = new MBCharacterSkills();
             skills.Skills.SetPropertyValue(DefaultSkills.OneHanded, preset.OneHanded);
             skills.Skills.SetPropertyValue(DefaultSkills.TwoHanded, preset.TwoHanded);
@@ -491,6 +559,23 @@ namespace BannerKings.UI.Mercenary
 
            AccessTools.Field((character as BasicCharacterObject).GetType(), "CharacterSkills")
                    .SetValue(character, skills);
+        }
+
+        private int CalculateTroopAmount(CharacterObject character)
+        {
+            int result = 0;
+            foreach (var party in Clan.PlayerClan.WarPartyComponents)
+            {
+                foreach (var element in party.MobileParty.MemberRoster.GetTroopRoster())
+                {
+                    if (element.Character == character)
+                    {
+                        result += element.Number;
+                    }
+                }
+            }
+
+            return result;
         }
 
         [DataSourceProperty]
@@ -558,6 +643,48 @@ namespace BannerKings.UI.Mercenary
                 if (value != canEditProfessional)
                 {
                     canEditProfessional = value;
+                    OnPropertyChangedWithValue(value);
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public bool LevyVisible
+        {
+            get => levyVisible;
+            set
+            {
+                if (value != levyVisible)
+                {
+                    levyVisible = value;
+                    OnPropertyChangedWithValue(value);
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public bool ShowNoPrivilegesText
+        {
+            get => showNoPrivilegesText;
+            set
+            {
+                if (value != showNoPrivilegesText)
+                {
+                    showNoPrivilegesText = value;
+                    OnPropertyChangedWithValue(value);
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public bool ProfessionalVisible
+        {
+            get => professionalVisible;
+            set
+            {
+                if (value != professionalVisible)
+                {
+                    professionalVisible = value;
                     OnPropertyChangedWithValue(value);
                 }
             }

@@ -22,11 +22,9 @@ namespace BannerKings.Behaviours.Mercenary
             AddKingdom(kingdom);
         }
 
-
         [SaveableProperty(1)] public Clan Clan { get; private set;  }
         [SaveableProperty(2)] public Kingdom Kingdom { get; private set;  }
         [SaveableProperty(3)] public float Reputation { get; private set; }
-
 
         [SaveableProperty(4)] private Dictionary<Kingdom, List<MercenaryPrivilege>> KingdomPrivileges { get; set; }
         [SaveableProperty(5)] private Dictionary<Kingdom, float> KingdomProgress { get; set; }
@@ -140,7 +138,6 @@ namespace BannerKings.Behaviours.Mercenary
                     Utils.Helpers.GetKingdomDecisionSound());
             }
         }
-
         internal CharacterObject GetTroop(Kingdom kingdom, bool isLevy = true)
         {
             var culture = kingdom.Culture;
