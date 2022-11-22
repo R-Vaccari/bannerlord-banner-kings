@@ -87,7 +87,7 @@ namespace BannerKings.Patches
                                         hero.VolunteerTypes[i] = basicVolunteer;
                                         flag = true;
                                     }
-                                    else if (characterObject.UpgradeTargets.Length != 0 && characterObject.Tier <= 3)
+                                    else if (characterObject.UpgradeTargets != null && characterObject.UpgradeTargets.Length != 0 && characterObject.Tier <= 3)
                                     {
                                         float num = MathF.Log(hero.Power / (float)characterObject.Tier, 2f) * 0.01f;
                                         if (MBRandom.RandomFloat < num)
