@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using BannerKings.Managers.Skills;
+using BannerKings.Settings;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.Siege;
@@ -22,6 +23,11 @@ namespace BannerKings.Models.Vanilla
                 {
                     result *= 1.2f;
                 }
+            }
+
+            if (BannerKingsSettings.Instance.LongerSieges)
+            {
+                result *= 0.5f;
             }
 
             return result;
