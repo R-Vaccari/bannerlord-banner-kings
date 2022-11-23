@@ -557,15 +557,7 @@ namespace BannerKings.Patches
                     modifierGroup = Game.Current.ObjectManager.GetObject<ItemModifierGroup>("goods");
                 }
 
-                var result = data.EconomicData.ProductionQuality.ResultNumber;
-                if (workshop.Owner != null)
-                {
-                    var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(workshop.Owner);
-                    if (education.HasPerk(BKPerks.Instance.ArtisanCraftsman))
-                    {
-                        result += 0.05f;
-                    }
-                }
+                var result = BannerKingsConfig.Instance.WorkshopModel.GetProductionQuality(workshop).ResultNumber;
 
                 if (workshop.WorkshopType.StringId == "artisans")
                 {

@@ -6,11 +6,41 @@ using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.Settlements.Workshops;
 using TaleWorlds.Core;
+using TaleWorlds.Localization;
 
 namespace BannerKings.Models.Vanilla
 {
     public class BKWorkshopModel : DefaultWorkshopModel
     {
+        public int GetUpgradeCost(Workshop workshop)
+        {
+            return GetBuyingCostForPlayer(workshop) / (4 + workshop.Level);
+        }
+
+        public ExplainedNumber GetProductionQuality(Workshop workshop, bool explanations = false)
+        {
+            var result = new ExplainedNumber(0f, explanations);
+            var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(workshop.Settlement);
+
+            result.Add(data.EconomicData.ProductionQuality.ResultNumber, new TextObject("{=!}Production quality"));
+
+            if (workshop.Owner != null)
+            {
+                var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(workshop.Owner);
+                if (education.HasPerk(BKPerks.Instance.ArtisanCraftsman))
+                {
+                    result.AddFactor(0.05f, BKPerks.Instance.ArtisanCraftsman.Name);
+                }
+            }
+
+            if (workshop.Level > 1)
+            {
+                result.AddFactor((workshop.Level - 1) * 0.05f, GameTexts.FindText("str_level"));
+            }
+
+            return result;
+        }
+
         public ExplainedNumber GetDailyExpense(Workshop workshop, bool includeDescriptions = false)
         {
             var result = new ExplainedNumber(0f, includeDescriptions);
@@ -27,13 +57,17 @@ namespace BannerKings.Models.Vanilla
             result.Add(labor, workshop.WorkshopType.Name);
             result.Add(workshop.Settlement.Prosperity * 0.005f, GameTexts.FindText("str_prosperity"));
 
+            if (workshop.Level > 1)
+            {
+                result.AddFactor(workshop.Level * 0.15f, GameTexts.FindText("str_level"));
+            }
+
             return result;
         }
 
         public override int GetSellingCost(Workshop workshop)
         {
             float result = base.GetSellingCost(workshop);
-            result += (int)(GetDailyExpense(workshop).ResultNumber * 15f * CampaignTime.DaysInYear);
             result *= BannerKingsConfig.Instance.EconomyModel.CalculateProductionQuality(workshop.Settlement)
                 .ResultNumber;
 
@@ -47,15 +81,15 @@ namespace BannerKings.Models.Vanilla
             
             if (workshop.Owner.OwnedWorkshops.Count == 1)
             {
-                result *= 1.2f;
+                result *= 1.15f;
             }
 
             if (workshop.Owner.OwnedCommonAreas.Count == 0)
             {
-                result *= 1.2f;
+                result *= 1.15f;
             }
 
-            result *= Hero.MainHero.OwnedWorkshops.Count * 0.05f;
+            result *= 1f + (Hero.MainHero.OwnedWorkshops.Count * 0.05f);
             return (int) result;
         }
 
@@ -70,6 +104,19 @@ namespace BannerKings.Models.Vanilla
             }
 
             return base.GetPolicyEffectToProduction(town);
+        }
+
+        public ExplainedNumber GetProductionEfficiency(Workshop workshop, bool explanations = false)
+        {
+            var result = new ExplainedNumber(0f, explanations);
+            result.Add(GetPolicyEffectToProduction(workshop.Settlement.Town), new TextObject("{=!}Local production efficiency"));
+            
+            if (workshop.Level > 1)
+            {
+                result.AddFactor((workshop.Level - 1) * 0.07f, GameTexts.FindText("str_level"));
+            }
+
+            return result;
         }
 
         public ExplainedNumber CalculateWorkshopTax(Settlement settlement, Hero payer)
