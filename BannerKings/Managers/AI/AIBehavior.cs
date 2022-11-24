@@ -159,6 +159,11 @@ namespace BannerKings.Managers.AI
 
         public Lifestyle ChooseLifestyle(Hero hero)
         {
+            if (hero == null)
+            {
+                return null;
+            }
+
             var candidates = new List<(Lifestyle, float)>();
 
             var rogueWeight = hero.GetTraitLevel(DefaultTraits.RogueSkills) - hero.GetTraitLevel(DefaultTraits.Mercy) -
@@ -225,7 +230,6 @@ namespace BannerKings.Managers.AI
                     break;
                 }
             }
-
 
             foreach (var lf in DefaultLifestyles.Instance.All)
             {
