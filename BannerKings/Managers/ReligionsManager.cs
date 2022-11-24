@@ -515,7 +515,23 @@ namespace BannerKings.Managers
 
         public bool IsPreacher(Hero hero)
         {
-            return Religions.Keys.ToList().SelectMany(rel => rel.Clergy.Values.ToList()).Any(clergy => clergy.Hero == hero);
+            if (hero == null)
+            {
+                return false;
+            }
+
+            foreach (var rel in Religions.Keys)
+            {
+                foreach (var clergy in rel.Clergy.Values)
+                {
+                    if (clergy != null && clergy.Hero == hero)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
 
         public Clergyman GetClergymanFromHeroHero(Hero hero)
