@@ -63,6 +63,10 @@ namespace BannerKings.Models.Vanilla
                         {
                             serfs *= 1.2f;
                         }
+                        else if (sovereign.contract.IsLawEnacted(DefaultDemesneLaws.Instance.SerfsLaxDuties))
+                        {
+                            serfs *= 0.9f;
+                        }
                     }
                 }
 
@@ -135,9 +139,10 @@ namespace BannerKings.Models.Vanilla
             var result =
                 new ExplainedNumber(base.CalculateEliteMilitiaSpawnChance(settlement) + (settlement.IsTown ? 0.12f : 0.20f),
                     true);
-            if (BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
+
+            var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
+            if (data != null)
             {
-                var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
                 if (BannerKingsConfig.Instance.PolicyManager.IsDecisionEnacted(settlement, "decision_militia_subsidize"))
                 {
                     result.Add(0.12f, new TextObject("{=nPBwLDwE}Subsidize militia"));
@@ -165,7 +170,6 @@ namespace BannerKings.Models.Vanilla
                         }
                     }
                 }
-                
 
                 var villageData = data.VillageData;
                 if (villageData != null)

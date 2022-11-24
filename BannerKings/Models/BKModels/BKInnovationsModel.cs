@@ -1,5 +1,6 @@
 using BannerKings.Managers;
 using BannerKings.Managers.Skills;
+using BannerKings.Managers.Titles.Laws;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Localization;
@@ -25,7 +26,8 @@ namespace BannerKings.Models.BKModels
 
             if (nobles > 0)
             {
-                result.Add(nobles / 100000f, new TextObject("{=pJAF5pzO}Nobles"));
+                bool boost = data.TitleData.Title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.NoblesLaxDuties);
+                result.Add(nobles / (boost ? 90000f : 100000f), new TextObject("{=pJAF5pzO}Nobles"));
             }
 
             if (craftsmen > 0)
@@ -42,9 +44,7 @@ namespace BannerKings.Models.BKModels
 
                 BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref result, settlement.Owner,
                     Managers.Court.CouncilPosition.Philosopher, 0.05f, true);
-
             }
-            
 
             return result;
         }

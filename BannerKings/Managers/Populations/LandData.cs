@@ -5,11 +5,13 @@ using BannerKings.Managers.Institutions.Religions.Doctrines;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Populations.Villages;
 using BannerKings.Managers.Skills;
+using BannerKings.Managers.Titles.Laws;
 using BannerKings.Models.Vanilla;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.SaveSystem;
+using static BannerKings.Managers.PopulationManager;
 
 namespace BannerKings.Managers.Populations
 {
@@ -59,6 +61,69 @@ namespace BannerKings.Managers.Populations
             }
         }
 
+        public int AvailableSerfsWorkForce
+        {
+            get
+            {
+                var serfs = data.GetTypeCount(PopulationManager.PopType.Serfs) * (data.Settlement.IsVillage ? 0.85f : 0.5f);
+                int toSubtract = 0;
+
+                var town = data.Settlement.Town;
+
+                if (!data.Settlement.IsVillage)
+                {
+                    if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(data.Settlement, "workforce",
+                            (int)BKWorkforcePolicy.WorkforcePolicy.Martial_Law))
+                    {
+                        var militia = data.Settlement.Town.Militia / 2;
+                        serfs -= militia / 2f;
+                    }
+                    else if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(data.Settlement, "workforce",
+                                 (int)BKWorkforcePolicy.WorkforcePolicy.Land_Expansion))
+                    {
+                        toSubtract += LandExpansionWorkforce;
+                    }
+                    else if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(data.Settlement, "workforce",
+                                 (int)BKWorkforcePolicy.WorkforcePolicy.Construction))
+                    {
+                        serfs *= 0.85f;
+                    }
+                }
+
+                return Math.Max((int)(serfs - toSubtract), 0);
+            }
+        }
+
+        public int AvailableSlavesWorkForce
+        {
+            get
+            {
+                float slaves = data.GetTypeCount(PopulationManager.PopType.Slaves);
+                int toSubtract = 0;
+
+                var town = data.Settlement.Town;
+                if (town != null && town.BuildingsInProgress.Count > 0)
+                {
+                    slaves -= slaves * data.EconomicData.StateSlaves * 0.5f;
+                }
+
+                if (!data.Settlement.IsVillage)
+                {
+                    if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(data.Settlement, "workforce",
+                                (int)BKWorkforcePolicy.WorkforcePolicy.Land_Expansion))
+                    {
+                        toSubtract += LandExpansionWorkforce;
+                    }
+                    else if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(data.Settlement, "workforce",
+                                 (int)BKWorkforcePolicy.WorkforcePolicy.Construction))
+                    {
+                        slaves -= slaves * data.EconomicData.StateSlaves * 0.5f;
+                    }
+                }
+
+                return Math.Max((int)(slaves - toSubtract), 0);
+            }
+        }
 
         public int AvailableWorkForce
         {
@@ -220,9 +285,9 @@ namespace BannerKings.Managers.Populations
         {
             var result = type switch
             {
-                "farmland" => 0.018f,
-                "pasture" => 0.006f,
-                _ => 0.0012f
+                "farmland" => 0.015f,
+                "pasture" => 0.005f,
+                _ => 0.0010f
             };
 
             Hero owner = null;
@@ -269,6 +334,32 @@ namespace BannerKings.Managers.Populations
                 }
             }
 
+            return result;
+        }
+
+        public float GetAcreClassOutput(string type, PopType populationClass)
+        {
+            float result = GetAcreOutput(type);
+
+            var title = data.TitleData.Title;
+            if (populationClass == PopType.Serfs)
+            {
+                if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.SerfsAgricultureDuties))
+                {
+                    result *= 1.1f;
+                }
+                else if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.SerfsLaxDuties))
+                {
+                    result *= 0.95f;
+                }
+            }
+            else if (populationClass == PopType.Slaves)
+            {
+                if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.SlavesAgricultureDuties))
+                {
+                    result *= 1.1f;
+                }
+            }
 
             return result;
         }

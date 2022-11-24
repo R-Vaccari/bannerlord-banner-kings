@@ -37,7 +37,6 @@ namespace BannerKings.Models.Vanilla
             {
                 useValueAsRelation = sellerHero.GetRelation(buyerHero);
             }
-         
 
             result.Add(GetRelationImpact(useValueAsRelation), GameTexts.FindText("str_notable_relations"));
 
@@ -88,7 +87,6 @@ namespace BannerKings.Models.Vanilla
                 factor = -1f;
             }
 
-
             result.Add(BannerKingsSettings.Instance.VolunteersLimit * factor, DefaultDemesneLaws.Instance.DraftingVassalage.Name);
         }
 
@@ -117,7 +115,6 @@ namespace BannerKings.Models.Vanilla
             {
                 factor = -1f;
             }
-
 
             result.Add(BannerKingsSettings.Instance.VolunteersLimit * factor, DefaultDemesneLaws.Instance.DraftingVassalage.Name);
         }
@@ -326,13 +323,11 @@ namespace BannerKings.Models.Vanilla
             }
 
             return explainedNumber;
-
         }
 
         public ExplainedNumber GetMilitarism(Settlement settlement)
         {
             var explainedNumber = new ExplainedNumber(0f, true);
-
             var classes = GetMilitaryClasses(settlement);
             foreach (var tuple in classes)
             {
@@ -376,7 +371,6 @@ namespace BannerKings.Models.Vanilla
                         list.Add(new(PopType.Slaves, 0.06f));
                     }
 
-
                     if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.SerfsMilitaryServiceDuties))
                     {
                         serfFactor += 0.03f;
@@ -386,7 +380,6 @@ namespace BannerKings.Models.Vanilla
                         serfFactor -= 0.015f;
                     }
 
-
                     if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.CraftsmenMilitaryServiceDuties))
                     {
                         craftsmenFactor += 0.03f;
@@ -395,7 +388,6 @@ namespace BannerKings.Models.Vanilla
                     {
                         serfFactor -= 0.015f;
                     }
-
 
                     if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.NoblesMilitaryServiceDuties))
                     {
@@ -411,7 +403,6 @@ namespace BannerKings.Models.Vanilla
             list.Add(new(PopType.Serfs, serfFactor));
             list.Add(new(PopType.Craftsmen, craftsmenFactor));
             list.Add(new(PopType.Nobles, nobleFactor));
-
 
             return list;
         }

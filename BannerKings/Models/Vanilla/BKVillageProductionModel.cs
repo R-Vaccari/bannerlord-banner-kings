@@ -4,6 +4,7 @@ using BannerKings.Managers;
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Villages;
 using BannerKings.Managers.Skills;
+using BannerKings.Managers.Titles.Laws;
 using Helpers;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
@@ -16,7 +17,7 @@ namespace BannerKings.Models.Vanilla
     public class BKVillageProductionModel : DefaultVillageProductionCalculatorModel
     {
         private static readonly float PRODUCTION = 0.005f;
-        private static readonly float BOOSTED_PRODUCTION = 0.01f;
+        private static readonly float BOOSTED_PRODUCTION = 0.008f;
 
         public ExplainedNumber CalculateProductionsExplained(Village village)
         {
@@ -169,37 +170,52 @@ namespace BannerKings.Models.Vanilla
 
             bool woodland = AddWoodlandProcution(ref result, serfs, slaves, item, data.LandData);
             bool animal = AddAnimalProcution(ref result, serfs, slaves, item, data.LandData);
-            bool farm = AddFarmProcution(ref result, serfs, slaves, item, data.LandData);
+            bool farm = AddFarmProcution(ref result, serfs, slaves, item, data);
             if (!woodland && !animal && !farm)
             {
-                AddGeneralProcution(ref result, serfs, slaves, item, data.LandData);
+                AddGeneralProcution(ref result, serfs, slaves, item, data);
             }
 
             return result;
         }
 
-        private void AddGeneralProcution(ref ExplainedNumber result, float serfs, float slaves, ItemObject item, LandData data)
+        private void AddGeneralProcution(ref ExplainedNumber result, float serfs, float slaves, ItemObject item, PopulationData data)
         {
-            result.Add(serfs * (item.IsFood ? BOOSTED_PRODUCTION : PRODUCTION));
-            result.Add(slaves * (item.IsMineral() ? BOOSTED_PRODUCTION : PRODUCTION));
+            result.Add(serfs * PRODUCTION);
+
+            if (item.IsMineral())
+            {
+                var title = data.TitleData.Title;
+                if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.SlavesHardLabor))
+                {
+                    result.Add(slaves * BOOSTED_PRODUCTION);
+                }
+                else
+                {
+                    result.Add(slaves * PRODUCTION);
+                }
+            }
+            else
+            {
+                result.Add(slaves * PRODUCTION);
+            }
         }
 
-        private bool AddFarmProcution(ref ExplainedNumber result, float serfs, float slaves, ItemObject item, LandData data)
+        private bool AddFarmProcution(ref ExplainedNumber result, float serfs, float slaves, ItemObject item, PopulationData data)
         {
             bool valid = item.IsFood && item.StringId != "fish";
             if (valid)
             {
-                var acres = data.Farmland;
-                var maxWorkforce = acres / data.GetRequiredLabor("farmland");
-                var workforce = Math.Min(maxWorkforce, serfs + slaves);
-                result.Add(workforce * data.GetAcreOutput("farmland"));
-                var serfFactor = serfs / workforce;
-                if (serfFactor > 0f)
+                var acres = data.LandData.Farmland;
+                var maxWorkforce = (int)(acres / data.LandData.GetRequiredLabor("farmland"));
+                if (maxWorkforce < (serfs + slaves))
                 {
-                    result.AddFactor(serfFactor * 1f);
+                    // TODO
                 }
-            }
 
+                result.Add(serfs * data.LandData.GetAcreClassOutput("farmland", PopulationManager.PopType.Serfs));
+                result.Add(slaves * data.LandData.GetAcreClassOutput("farmland", PopulationManager.PopType.Slaves));
+            }
 
             return valid;
         }

@@ -49,24 +49,34 @@ namespace BannerKings.Models.Vanilla
         public override float GetBasePriceFactor(ItemCategory itemCategory, float inStoreValue, float supply, float demand,
             bool isSelling, int transferValue)
         {
-            var baseResult = base.GetBasePriceFactor(itemCategory, inStoreValue, supply, demand, isSelling, transferValue);
+            float baseResult = 0f;
+            if (isSelling)
+            {
+                inStoreValue += (float)transferValue;
+            }
 
+            float value = demand / (supply + inStoreValue);
             if (itemCategory.IsTradeGood)
             {
-                baseResult = MathF.Clamp(baseResult, 0.4f, 8f);
+                baseResult = MathF.Clamp(value, 0.1f, 10f);
             }
 
             if (itemCategory.Properties == ItemCategory.Property.BonusToFoodStores)
             {
-                baseResult = MathF.Clamp(baseResult, 0.1f, 4f);
+                return MathF.Clamp(baseResult, 0.1f, 4f);
             }
 
             if (itemCategory.IsAnimal)
             {
-                baseResult = MathF.Clamp(baseResult, 0.4f, 4f);
+                return MathF.Clamp(baseResult, 0.4f, 4f);
             }
 
-            return baseResult;
+            if (itemCategory.IsTradeGood)
+            {
+                return MathF.Clamp(baseResult, 0.4f, 8f);
+            }
+
+            return MathF.Clamp(value, 0.8f, 1.3f);
         }
     }
 }

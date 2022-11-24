@@ -66,6 +66,26 @@ namespace BannerKings.Models.Vanilla
             return result;
         }
 
+        public float GetSlaveOutput(Settlement settlement)
+        {
+            float result = 0.33f;
+
+            var title = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement);
+            if (title != null)
+            {
+                if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.CraftsmenTaxDuties))
+                {
+                    result *= 1.35f;
+                }
+                else if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.CraftsmenLaxDuties))
+                {
+                    result *= 0.6f;
+                }
+            }
+
+            return result;
+        }
+
         public override ExplainedNumber CalculateTownTax(Town town, bool includeDescriptions = false)
         {
             var baseResult = base.CalculateTownTax(town, includeDescriptions);

@@ -113,7 +113,7 @@ namespace BannerKings.Managers.Populations.Estates
         }
 
 
-        public float Influence => BannerKingsConfig.Instance.InfluenceModel.GetNoblesInfluence(EstatesData.Settlement, 0);
+        public float Influence => 0;
 
         public float Acreage => Farmland + Pastureland + Woodland;
 

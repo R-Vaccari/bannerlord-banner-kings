@@ -1,13 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
-using TaleWorlds.Engine;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Models.BKModels
@@ -139,6 +137,23 @@ namespace BannerKings.Models.BKModels
             }
 
             return result;
+        }
+
+        public IEnumerable<KeyValuePair<Hero, ExplainedNumber>> CalculateSuccessionLine(FeudalContract contract, Clan clan, int count = 6)
+        {
+            var candidates = BannerKingsConfig.Instance.TitleModel.GetSuccessionCandidates(clan.Leader, contract);
+            var explanations = new Dictionary<Hero, ExplainedNumber>();
+
+            foreach (Hero hero in candidates)
+            {
+                var explanation = BannerKingsConfig.Instance.TitleModel.GetSuccessionHeirScore(clan.Leader,
+                    hero, contract, true);
+                explanations.Add(hero, explanation);
+            }
+
+            return (from x in explanations
+                    orderby x.Value.ResultNumber descending
+                    select x).Take(count);
         }
 
         public IEnumerable<KeyValuePair<Hero, ExplainedNumber>> CalculateInheritanceLine(Clan clan, int count = 6)

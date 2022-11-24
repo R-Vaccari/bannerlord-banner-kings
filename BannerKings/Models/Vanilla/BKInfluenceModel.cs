@@ -7,6 +7,7 @@ using BannerKings.Managers.Institutions.Religions.Doctrines;
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Villages;
 using BannerKings.Managers.Skills;
+using BannerKings.Managers.Titles.Laws;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -63,7 +64,6 @@ namespace BannerKings.Models.Vanilla
             {
                 baseResult.Add(2f, DefaultDivinities.Instance.VlandiaSecondary1.Name);
             }
-
 
             if (education.HasPerk(BKPerks.Instance.OutlawPlunderer))
             {
@@ -169,13 +169,23 @@ namespace BannerKings.Models.Vanilla
             return baseResult;
         }
 
-        public float GetNoblesInfluence(Settlement settlement, float nobles) => MathF.Max(0f, nobles * 0.01f);
+        public float GetNoblesInfluence(PopulationData data, float nobles)
+        {
+            float factor = 0.01f;
+            var title = data.TitleData.Title;
+            if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.NoblesLaxDuties))
+            {
+                factor = 0.011f;
+            }
+
+            return MathF.Max(0f, nobles * factor);
+        }
         
         public ExplainedNumber CalculateSettlementInfluence(Settlement settlement, PopulationData data)
         {
             var settlementResult = new ExplainedNumber(0f, true);
             float nobles = data.GetTypeCount(PopType.Nobles);
-            settlementResult.Add(MBMath.ClampFloat(GetNoblesInfluence(settlement, nobles), 0f, 12f), new TextObject($"{{=!}}Nobles influence from {settlement.Name}"));
+            settlementResult.Add(MBMath.ClampFloat(GetNoblesInfluence(data, nobles), 0f, 20f), new TextObject($"{{=!}}Nobles influence from {settlement.Name}"));
 
             var villageData = data.VillageData;
             if (villageData != null)
