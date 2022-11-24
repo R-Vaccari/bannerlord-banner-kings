@@ -1,4 +1,5 @@
 using BannerKings.Managers.Populations;
+using BannerKings.Managers.Titles.Laws;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.ComponentInterfaces;
@@ -7,7 +8,6 @@ using TaleWorlds.CampaignSystem.Issues;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.Settlements.Buildings;
 using TaleWorlds.Core;
-using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using static BannerKings.Managers.PopulationManager;
 
@@ -18,7 +18,6 @@ namespace BannerKings.Models.Vanilla
         private static readonly float NOBLE_FOOD = -0.1f;
         private static readonly float CRAFTSMEN_FOOD = -0.05f;
         private static readonly float SERF_FOOD = 0.03f;
-
         public override int FoodStocksUpperLimit => 500;
         public override int NumberOfProsperityToEatOneFood => 40;
         public override int NumberOfMenOnGarrisonToEatOneFood => 20;
@@ -77,7 +76,7 @@ namespace BannerKings.Models.Vanilla
 
                 if (town.Governor.GetPerkValue(DefaultPerks.Steward.MasterOfWarcraft))
                 {
-                    result.AddFactor(DefaultPerks.Steward.MasterOfWarcraft.SecondaryBonus,
+                    result.AddFactor(-DefaultPerks.Steward.MasterOfWarcraft.SecondaryBonus,
                         DefaultPerks.Steward.MasterOfWarcraft.Name);
                 }
             }
@@ -173,7 +172,17 @@ namespace BannerKings.Models.Vanilla
             if (!town.IsUnderSiege)
             {
                 var landData = data.LandData;
-                result.Add(landData.Farmland * landData.GetAcreOutput("farmland"), new TextObject("{=zMPm162W}Farmlands"));
+                var serfName = Utils.Helpers.GetClassName(PopType.Serfs, town.Culture);
+                var slaveName = Utils.Helpers.GetClassName(PopType.Slaves, town.Culture);
+
+                result.Add(landData.Farmland * landData.AvailableSerfsWorkForce * landData.GetAcreClassOutput("farmland", PopType.Serfs), 
+                    new TextObject("{=!}Farmlands ({CLASS})")
+                    .SetTextVariable("CLASS", serfName));
+
+                result.Add(landData.Farmland * landData.AvailableSlavesWorkForce * landData.GetAcreClassOutput("farmland", PopType.Slaves), 
+                    new TextObject("{=!}Farmlands ({CLASS})")
+                    .SetTextVariable("CLASS", slaveName));
+
                 result.Add(landData.Pastureland * landData.GetAcreOutput("pasture"), new TextObject("{=ngRhXYj1}Pasturelands"));
                 result.Add(landData.Woodland * landData.GetAcreOutput("wood"), new TextObject("{=qPQ7HKgG}Woodlands"));
                 var fertility = landData.Fertility - 1f;
@@ -183,21 +192,14 @@ namespace BannerKings.Models.Vanilla
                     result.Add(toDeduce, new TextObject("{=KcNcxeMK}Fertility"));
                 }
 
-                var saturation = MBMath.ClampFloat(landData.WorkforceSaturation, 0f, 1f) - 1f;
-                if (saturation != 0f)
-                {
-                    var toDeduce = result.ResultNumber * saturation;
-                    result.Add(toDeduce, new TextObject("{=8EX6VriS}Workforce Saturation"));
-                }
-
                 float season = CampaignTime.Now.GetSeasonOfYear;
                 switch (season)
                 {
                     case 3f:
-                        result.AddFactor(-0.2f, GameTexts.FindText("str_date_format_" + season));
+                        result.AddFactor(-0.5f, GameTexts.FindText("str_date_format_" + season));
                         break;
                     case 1f:
-                        result.AddFactor(0.05f, GameTexts.FindText("str_date_format_" + season));
+                        result.AddFactor(0.2f, GameTexts.FindText("str_date_format_" + season));
                         break;
                 }
 
@@ -215,6 +217,16 @@ namespace BannerKings.Models.Vanilla
                 if (b is {CurrentLevel: > 0})
                 {
                     result.AddFactor(b.CurrentLevel * (town.IsCastle ? 0.5f : 0.3f), b.Name);
+                }
+
+                var title = data.TitleData.Title;
+                if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.SerfsLaxDuties))
+                {
+                    result.AddFactor(-0.05f, DefaultDemesneLaws.Instance.SerfsLaxDuties.Name);
+                }
+                else if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.SerfsAgricultureDuties))
+                {
+                    result.AddFactor(0.1f, DefaultDemesneLaws.Instance.SerfsAgricultureDuties.Name);
                 }
             }
 
