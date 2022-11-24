@@ -108,7 +108,6 @@ namespace BannerKings.Behaviours
                         }
                     }
 
-
                     if (toRemove.Count > 0)
                     {
                         List<Hero> notables = (List<Hero>)AccessTools.Field(settlement.GetType(), "_notablesCache").GetValue(settlement);
