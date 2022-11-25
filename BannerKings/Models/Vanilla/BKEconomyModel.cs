@@ -239,7 +239,7 @@ namespace BannerKings.Models.Vanilla
             switch (type)
             {
                 case ConsumptionType.Luxury:
-                    baseResult += nobles * 15f;
+                    baseResult += nobles * 10f;
                     baseResult += craftsmen * 3f;
                     break;
                 case ConsumptionType.Industrial:
