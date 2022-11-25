@@ -13,6 +13,7 @@ using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.CampaignBehaviors;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.Conversation;
+using TaleWorlds.CampaignSystem.Election;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Roster;
@@ -21,6 +22,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
+using TaleWorlds.SaveSystem;
 using static TaleWorlds.CampaignSystem.SkillEffect;
 
 namespace BannerKings.Behaviours
@@ -597,6 +599,31 @@ namespace BannerKings.Behaviours
 
     namespace Patches
     {
+        [HarmonyPatch(typeof(SettlementClaimantDecision))]
+        internal class FiefOwnerPatches
+        {
+            [HarmonyPrefix]
+            [HarmonyPatch("DetermineInitialCandidates")]
+            private static bool DetermineInitialCandidatesPrefix(SettlementClaimantDecision __instance, 
+                ref IEnumerable<DecisionOutcome> __result)
+            {
+                Kingdom kingdom = (Kingdom)__instance.Settlement.MapFaction;
+                List<SettlementClaimantDecision.ClanAsDecisionOutcome> list = new List<SettlementClaimantDecision.ClanAsDecisionOutcome>();
+                foreach (Clan clan in kingdom.Clans)
+                {
+                    if (clan != __instance.ClanToExclude && !clan.IsUnderMercenaryService && !clan.IsEliminated && !clan.Leader.IsDead)
+                    {
+                        var peerage = BannerKingsConfig.Instance.CourtManager.GetCouncil(clan).Peerage;
+                        if (peerage == null || !peerage.CanHaveFief) continue;
+
+                        list.Add(new SettlementClaimantDecision.ClanAsDecisionOutcome(clan));
+                    }
+                }
+                __result = list;
+                return false;
+            }
+        }
+
         [HarmonyPatch(typeof(LordConversationsCampaignBehavior))]
         internal class LordDialoguePatches
         {
@@ -617,7 +644,6 @@ namespace BannerKings.Behaviours
                 return false;
             }
 
-
             [HarmonyPrefix]
             [HarmonyPatch("conversation_wanderer_meet_player_on_condition")]
             private static bool MeetCompanionPrefix(ref bool __result)
@@ -630,7 +656,6 @@ namespace BannerKings.Behaviours
 
                 return false;
             }
-
 
             [HarmonyPostfix]
             [HarmonyPatch("conversation_wanderer_preintroduction_on_condition")]
@@ -720,7 +745,6 @@ namespace BannerKings.Behaviours
             }
         }
 
-
         [HarmonyPatch(typeof(ClanVariablesCampaignBehavior), "UpdateClanSettlementAutoRecruitment")]
         internal class AutoRecruitmentPatch
         {
@@ -746,7 +770,6 @@ namespace BannerKings.Behaviours
                 return false;
             }
         }
-
 
         [HarmonyPatch(typeof(DefaultClanFinanceModel))]
         internal class ClanFinancesPatches
