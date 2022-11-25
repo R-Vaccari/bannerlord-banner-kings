@@ -95,7 +95,6 @@ namespace BannerKings.Models.Vanilla
 
             foreach (var settlement in clan.Settlements)
             {
-
                 if (!settlement.IsVillage && !settlement.IsCastle && !settlement.IsTown)
                 {
                     continue;
@@ -123,7 +122,7 @@ namespace BannerKings.Models.Vanilla
                 generalAutonomy += -0.5f * data.Autonomy;
                 i++;
 
-                var settlementResult = CalculateSettlementInfluence(settlement, data);
+                var settlementResult = CalculateSettlementInfluence(settlement, data, includeDescriptions);
                 baseResult.Add(settlementResult.ResultNumber, settlement.Name);
                 if (!settlement.IsVillage)
                 {
@@ -137,7 +136,7 @@ namespace BannerKings.Models.Vanilla
                 }
 
                 var deJureClan = title.deJure.Clan;
-                if (title.deJure != deJureClan.Leader && settlement.OwnerClan == deJureClan)
+                if (title.deJure != deJureClan.Leader && settlement.MapFaction == deJureClan.MapFaction && !includeDescriptions)
                 {
                     BannerKingsConfig.Instance.TitleManager.AddKnightInfluence(title.deJure, settlementResult.ResultNumber * 0.1f);
                 }
@@ -148,7 +147,6 @@ namespace BannerKings.Models.Vanilla
             {
                 baseResult.Add(position.IsCorePosition(position.Position) ? 1f : 0.5f, new TextObject("{=WvhXhUFS}Councillor role"));
             }
-            
 
             if (i > 0)
             {
@@ -164,7 +162,6 @@ namespace BannerKings.Models.Vanilla
                     baseResult.AddFactor(finalAutonomy, new TextObject("{=qJbYtZjH}Overall settlement autonomy"));
                 }
             }
-
 
             return baseResult;
         }
@@ -184,7 +181,7 @@ namespace BannerKings.Models.Vanilla
             return MathF.Max(0f, nobles * factor);
         }
         
-        public ExplainedNumber CalculateSettlementInfluence(Settlement settlement, PopulationData data)
+        public ExplainedNumber CalculateSettlementInfluence(Settlement settlement, PopulationData data, bool includeDescriptions = false)
         {
             var settlementResult = new ExplainedNumber(0f, true);
             float nobles = data.GetTypeCount(PopType.Nobles);
@@ -208,7 +205,20 @@ namespace BannerKings.Models.Vanilla
                     settlementResult.Add(0.2f, BKPerks.Instance.LordshipManorLord.Name);
                 }
             }
-          
+
+            if (data.EstateData != null)
+            {
+                foreach (var estate in data.EstateData.Estates)
+                {
+                    float proportion = data.LandData.Acreage / estate.Acreage;
+                    float estateResult = settlementResult.ResultNumber * proportion;
+                    settlementResult.Add(-estateResult, estate.Name);
+                    if (!includeDescriptions && estate.Owner != null && estate.Owner.IsNotable)
+                    {
+                        estate.Owner.AddPower(estateResult);
+                    }
+                }
+            }
 
             if (!BannerKingsConfig.Instance.PopulationManager.PopSurplusExists(settlement, PopType.Nobles, true))
             {

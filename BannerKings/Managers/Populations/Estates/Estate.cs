@@ -40,9 +40,13 @@ namespace BannerKings.Managers.Populations.Estates
             float desiredSerfs = (int)(desiredWorkforce * 0.8f);
             float desiredSlaves = (int)(desiredWorkforce * 0.2f);
 
-            return new Estate(notable, data.EstateData, farmland, pastureland, woodland, 
+            var result = new Estate(notable, data.EstateData, farmland, pastureland, woodland,
                 (int)MathF.Min(desiredSerfs, totalSerfs * 0.15f),
                 (int)MathF.Min(desiredSlaves, totalSlaves * 0.25f));
+
+            result.AddManpower(PopType.Serfs, result.Serfs * 0.05f);
+
+            return result;
         }
 
         [SaveableProperty(1)] public Hero Owner { get; private set; }
