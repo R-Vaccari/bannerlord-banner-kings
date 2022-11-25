@@ -47,22 +47,19 @@ namespace BannerKings.Patches
                         var item = elementCopyAtIndex.EquipmentElement.Item;
                         var amount = elementCopyAtIndex.Amount;
                         var itemCategory = item.GetItemCategory();
+
                         if (!categoryDemand.ContainsKey(itemCategory))
                         {
                             continue;
                         }
 
                         var demand = categoryDemand[itemCategory];
-                        var num = CalculateBudget(town, demand, itemCategory);
-                        if (item.HasArmorComponent || item.HasWeaponComponent)
-                        {
-                            num = (int)(num * 0.1f);
-                        }
+                        var budget = CalculateBudget(town, demand, itemCategory);
 
-                        if (num > 0.01f)
+                        if (budget > 0.01f)
                         {
                             var price = marketData.GetPrice(item);
-                            var desiredAmount = num / price;
+                            var desiredAmount = budget / price;
                             if (desiredAmount > amount)
                             {
                                 desiredAmount = amount;
@@ -97,7 +94,7 @@ namespace BannerKings.Patches
                             }
 
                             itemRoster.AddToCounts(elementCopyAtIndex.EquipmentElement, -finalAmount);
-                            categoryDemand[itemCategory] = num - desiredAmount * price;
+                            categoryDemand[itemCategory] = budget - desiredAmount * price;
                             town.ChangeGold(finalAmount * price);
                             var num4 = 0;
                             saleLog.TryGetValue(itemCategory, out num4);
