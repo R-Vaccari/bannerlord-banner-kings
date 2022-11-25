@@ -110,7 +110,6 @@ namespace BannerKings.Behaviours
 
         private void OnGameLoaded(CampaignGameStarter starter)
         {
-            
             if (!firstUse)
             {
                 BannerKingsConfig.Instance.PopulationManager.PostInitialize();
