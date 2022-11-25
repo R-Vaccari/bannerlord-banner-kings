@@ -27,7 +27,6 @@ namespace BannerKings.Patches
         [HarmonyPatch(typeof(ItemConsumptionBehavior))]
         internal class ItemConsumptionPatch
         {
-
             // Retain behavior of original while updating satisfaction parameters
             [HarmonyPrefix]
             [HarmonyPatch("MakeConsumption", MethodType.Normal)]

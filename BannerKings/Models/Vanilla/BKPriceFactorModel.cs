@@ -1,13 +1,9 @@
 ﻿using BannerKings.Managers.Education.Lifestyles;
 using BannerKings.Managers.Skills;
-using Newtonsoft.Json.Linq;
-using TaleWorlds.CampaignSystem.CharacterDevelopment;
-using TaleWorlds.CampaignSystem.Extensions;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
-using static BannerKings.Managers.PopulationManager;
 
 namespace BannerKings.Models.Vanilla
 {
@@ -71,6 +67,11 @@ namespace BannerKings.Models.Vanilla
             }
 
             if (itemCategory.Properties == ItemCategory.Property.BonusToFoodStores)
+            {
+                return MathF.Clamp(baseResult, 0.3f, 3f);
+            }
+
+            if (itemCategory.IsTradeGood)
             {
                 return MathF.Clamp(baseResult, 0.3f, 10f);
             }
