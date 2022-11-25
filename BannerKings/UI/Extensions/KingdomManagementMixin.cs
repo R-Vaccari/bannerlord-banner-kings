@@ -1,6 +1,7 @@
 ﻿using BannerKings.Behaviours;
 using BannerKings.UI.Court;
 using BannerKings.UI.Kingdoms;
+using BannerKings.UI.Management;
 using Bannerlord.UIExtenderEx.Attributes;
 using Bannerlord.UIExtenderEx.ViewModels;
 using TaleWorlds.CampaignSystem;
@@ -24,17 +25,13 @@ namespace BannerKings.UI.Extensions
             courtVM = new CourtVM(true);
             var title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(vm.Kingdom);
             DemesneEnabled = title != null;
+            demesneVM = new KingdomDemesneVM(title, vm.Kingdom);
+            demesneVM.IsSelected = DemesneEnabled;
 
-            if (DemesneEnabled)
-            {
-                demesneVM = new KingdomDemesneVM(title, vm.Kingdom);
-            }
-
-            var capital = Campaign.Current.GetCampaignBehavior<BKCapitalBehavior>().GetCapital(vm.Kingdom);
-            CourtEnabled = capital != null;
+            //var capital = Campaign.Current.GetCampaignBehavior<BKCapitalBehavior>().GetCapital(vm.Kingdom);
+            CourtEnabled = true;
             kingdomManagement.RefreshValues();
         }
-
 
         [DataSourceProperty] public string DemesneText => new TextObject("{=6QMDGRSt}Demesne").ToString();
 
@@ -164,7 +161,6 @@ namespace BannerKings.UI.Extensions
                     }
                 }
             }
-
 
             Court.RefreshValues();
             Demesne?.RefreshValues();
