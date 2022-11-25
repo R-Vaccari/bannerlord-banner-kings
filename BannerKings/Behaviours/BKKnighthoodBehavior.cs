@@ -140,7 +140,6 @@ namespace BannerKings.Behaviours
             }
         }
 
-
         private bool CanCreateClan(Hero hero)
         {
             return hero.Gold >= 50000 && BannerKingsConfig.Instance.TitleManager.GetKnightInfluence(hero) >= 350f &&
@@ -181,7 +180,6 @@ namespace BannerKings.Behaviours
                 null, 
                 null);
 
-
             starter.AddPlayerLine("companion_grant_knighthood_response_lordship", "companion_knighthood_response",
               "companion_knighthood_accepted_fief",
                   new TextObject("{=!}A Lordship.").ToString(),
@@ -189,7 +187,6 @@ namespace BannerKings.Behaviours
                   SelectFiefOnConsequence,
                   100,
                   GrantKnighthoodFiefOnClickable);
-
 
             starter.AddPlayerLine("companion_grant_knighthood_response_estate", "companion_knighthood_response",
                 "companion_knighthood_accepted_estate", 
@@ -205,8 +202,6 @@ namespace BannerKings.Behaviours
                 null, 
                 null);
 
-
-
             starter.AddDialogLine("companion_knighthood_accepted_fief", "companion_knighthood_accepted_fief",
                 "companion_knighthood_finish_fief",
                 new TextObject("{=!}{TITLE}, a Lordship would be very generous. Its income would allow me to raise a retinue and be fully independent to pay for it. Of course, the more rent a village produces, the more troops I can provide us.")
@@ -215,7 +210,6 @@ namespace BannerKings.Behaviours
                 null,
                 null);
 
-
             starter.AddDialogLine("companion_knighthood_accepted_estate", "companion_knighthood_accepted_estate",
                 "companion_knighthood_finish_estate",
                 new TextObject("{=!}{TITLE}, an estate would be generous. Its income would help pay a retinue, and it's manpower allow us more access to volunteers. Estates with more acres generate more income and provide more manpower.")
@@ -223,8 +217,6 @@ namespace BannerKings.Behaviours
                 .ToString(),
                 null,
                 null);
-
-
 
             starter.AddPlayerLine("companion_knighthood_finish_fief", "companion_knighthood_finish_fief",
                 "companion_knighthood_finished",
@@ -272,7 +264,6 @@ namespace BannerKings.Behaviours
             return companion != null && companion.Clan == Clan.PlayerClan &&
                    BannerKingsConfig.Instance.TitleManager.Knighthood;
         }
-
 
         private List<InquiryElement> GetAvailableTitles()
         {
@@ -351,7 +342,6 @@ namespace BannerKings.Behaviours
             reason = new TextObject("{=!}Bestowing knighthood is possible.");
             return true;
         }
-
 
         private bool GrantKnighthoodEstateOnClickable(out TextObject reason)
         {
@@ -537,7 +527,6 @@ namespace BannerKings.Behaviours
 
     namespace Patches
     {
-
         [HarmonyPatch(typeof(CompanionRolesCampaignBehavior))]
         internal class CompanionDialoguesPatches
         {
@@ -573,13 +562,19 @@ namespace BannerKings.Behaviours
             [HarmonyPatch("ClanNameSelectionIsDone", MethodType.Normal)]
             private static void GrantPeerageFinishedPostfix(CompanionRolesCampaignBehavior __instance)
             {
-                Settlement settlement = (Settlement)AccessTools.Field(__instance.GetType(), "_selectedFief").GetValue(__instance);
-                var title = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement);
-                var action = BannerKingsConfig.Instance.TitleModel.GetAction(ActionType.Grant, title, Hero.MainHero);
-                BannerKingsConfig.Instance.TitleManager.GrantTitle(action, Hero.OneToOneConversationHero);
+                CompanionRolesCampaignBehavior current = Campaign.Current.GetCampaignBehavior<CompanionRolesCampaignBehavior>();
+                Settlement settlement = (Settlement)AccessTools.Field(current.GetType(), "_selectedFief").GetValue(current);
+                if (settlement != null)
+                {
+                    var title = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement);
+                    if (title != null)
+                    {
+                        var action = BannerKingsConfig.Instance.TitleModel.GetAction(ActionType.Grant, title, Hero.MainHero);
+                        BannerKingsConfig.Instance.TitleManager.GrantTitle(action, Hero.OneToOneConversationHero);
+                    }
+                }
             }
         }
-
 
         [HarmonyPatch(typeof(LordConversationsCampaignBehavior), "FindSuitableCompanionsToLeadCaravan")]
         internal class SuitableCaravanLeaderPatch
