@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
+using TaleWorlds.CampaignSystem.Election;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -72,7 +73,7 @@ namespace BannerKings.Managers.Goals.Decisions
             InformationManager.ShowInquiry(new InquiryData(new TextObject("{=!}Request Full Peerage").ToString(),
                 new TextObject("{=!}Request full rights of Peerage. The any existing Peer with voting power may participate in the decision. Current support for the approval of {CLAN}: {SUPPORT}%.")
                 .SetTextVariable("CLAN", GetFulfiller().Clan.Name)
-                .SetTextVariable("SUPPORT", decision.CalculateKingdomSupport(GetFulfiller().Clan.Kingdom) * 100f)
+                .SetTextVariable("SUPPORT", new KingdomElection(decision).GetLikelihoodForOutcome(0) * 100f)
                 .ToString(), 
                 true,
                 true,
