@@ -112,7 +112,7 @@ namespace BannerKings.Managers.Items
             Honey = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("honey"));
             InitializeTradeGood(Honey,
                 new TextObject("{=1Maj0j6J}Honey{@Plural}barrels of honey{\\@}"), "honey_pot",
-                BKItemCategories.Instance.Honey, 60, 10f, ItemObject.ItemTypeEnum.Goods, true);
+                BKItemCategories.Instance.Honey, 28, 10f, ItemObject.ItemTypeEnum.Goods, true);
 
             Limestone = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("limestone"));
             InitializeTradeGood(Limestone,
