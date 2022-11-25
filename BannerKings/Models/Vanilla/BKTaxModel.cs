@@ -23,14 +23,12 @@ namespace BannerKings.Models.Vanilla
 {
     public class BKTaxModel : DefaultSettlementTaxModel
     {
-        public static readonly float SERF_OUTPUT = 0.26f;
-        public static readonly float SLAVE_OUTPUT = 0.33f;
+        public static readonly float SERF_OUTPUT = 0.20f;
 
-        public float GetNobleOutput(Settlement settlement)
+        public float GetNobleOutput(FeudalTitle title)
         {
-            float result = 4.2f;
+            float result = 3.2f;
 
-            var title = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement);
             if (title != null)
             {
                 if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.NoblesTaxDuties))
@@ -46,11 +44,10 @@ namespace BannerKings.Models.Vanilla
             return result;
         }
 
-        public float GetCraftsmenOutput(Settlement settlement)
+        public float GetCraftsmenOutput(FeudalTitle title)
         {
-            float result = 1.2f;
+            float result = 0.8f;
 
-            var title = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement);
             if (title != null)
             {
                 if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.CraftsmenTaxDuties))
@@ -66,20 +63,15 @@ namespace BannerKings.Models.Vanilla
             return result;
         }
 
-        public float GetSlaveOutput(Settlement settlement)
+        public float GetSlaveOutput(FeudalTitle title)
         {
-            float result = 0.33f;
+            float result = 0.24f;
 
-            var title = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement);
             if (title != null)
             {
-                if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.CraftsmenTaxDuties))
+                if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.SlavesDomesticDuties))
                 {
-                    result *= 1.35f;
-                }
-                else if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.CraftsmenLaxDuties))
-                {
-                    result *= 0.6f;
+                    result *= 1.15f;
                 }
             }
 
@@ -115,15 +107,17 @@ namespace BannerKings.Models.Vanilla
                         slaves *= taxSlaves ? 1f : 1f - data.EconomicData.StateSlaves;
                     }
 
+                    var title = BannerKingsConfig.Instance.TitleManager.GetTitle(town.Settlement);
+
                     if (nobles > 0f)
                     {
-                        baseResult.Add(MBMath.ClampFloat(nobles * GetNobleOutput(town.Settlement), 0f, 50000f),
+                        baseResult.Add(MBMath.ClampFloat(nobles * GetNobleOutput(title), 0f, 50000f),
                             new TextObject("{=5mCY3JCP}{CLASS} output").SetTextVariable("CLASS", new TextObject("{=pop_class_nobles}Nobles")));
                     }
 
                     if (craftsmen > 0f)
                     {
-                        baseResult.Add(MBMath.ClampFloat(craftsmen * GetCraftsmenOutput(town.Settlement), 0f, 50000f),
+                        baseResult.Add(MBMath.ClampFloat(craftsmen * GetCraftsmenOutput(title), 0f, 50000f),
                             new TextObject("{=5mCY3JCP}{CLASS} output").SetTextVariable("CLASS", new TextObject("{=pop_class_craftsmen}Craftsmen")));
                     }
 
@@ -135,7 +129,7 @@ namespace BannerKings.Models.Vanilla
 
                     if (slaves > 0f)
                     {
-                        baseResult.Add(MBMath.ClampFloat(slaves * SLAVE_OUTPUT, 0f, 50000f),
+                        baseResult.Add(MBMath.ClampFloat(slaves * GetSlaveOutput(title), 0f, 50000f),
                             new TextObject("{=5mCY3JCP}{CLASS} output").SetTextVariable("CLASS", new TextObject("{=pop_class_slaves}Slaves")));
                     }
 
@@ -155,12 +149,12 @@ namespace BannerKings.Models.Vanilla
                             float result = 0f;
                             if (nobles > 0f)
                             {
-                                result += MBMath.ClampFloat(nobles * GetNobleOutput(town.Settlement), 0f, 50000f) * 0.1f;
+                                result += MBMath.ClampFloat(nobles * GetNobleOutput(title), 0f, 50000f) * 0.1f;
                             }
 
                             if (craftsmen > 0f)
                             {
-                                result += MBMath.ClampFloat(craftsmen * GetCraftsmenOutput(town.Settlement), 0f, 50000f) * 0.1f;
+                                result += MBMath.ClampFloat(craftsmen * GetCraftsmenOutput(title), 0f, 50000f) * 0.1f;
                             }
 
                             if (serfs > 0f)
@@ -308,16 +302,17 @@ namespace BannerKings.Models.Vanilla
                     break;
             }
 
+            var title = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement);
             if (nobles > 0f)
             {
-                result.Add(MBMath.ClampFloat(nobles * GetNobleOutput(settlement) * taxFactor * (0.33f * taxOfficeLevel), 0f, 50000f),
+                result.Add(MBMath.ClampFloat(nobles * GetNobleOutput(title) * taxFactor * (0.33f * taxOfficeLevel), 0f, 50000f),
                     new TextObject("{=5mCY3JCP}{CLASS} output")
                     .SetTextVariable("CLASS", new TextObject("{=pop_class_nobles}Nobles")));
             }
 
             if (craftsmen > 0f)
             {
-                result.Add(MBMath.ClampFloat(craftsmen * GetCraftsmenOutput(settlement) * taxFactor * (0.33f * taxOfficeLevel), 0f, 50000f),
+                result.Add(MBMath.ClampFloat(craftsmen * GetCraftsmenOutput(title) * taxFactor * (0.33f * taxOfficeLevel), 0f, 50000f),
                     new TextObject("{=5mCY3JCP}{CLASS} output")
                     .SetTextVariable("CLASS", new TextObject("{=pop_class_craftsmen}Craftsmen")));
             }

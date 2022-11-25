@@ -21,6 +21,10 @@ namespace BannerKings.Models.Vanilla
         {
             var result = new ExplainedNumber(0f, explanations);
             var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(workshop.Settlement);
+            if (data == null)
+            {
+                return new ExplainedNumber(1f);
+            }
 
             result.Add(data.EconomicData.ProductionQuality.ResultNumber, new TextObject("{=!}Production quality"));
 

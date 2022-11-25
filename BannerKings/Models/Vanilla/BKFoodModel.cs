@@ -8,6 +8,7 @@ using TaleWorlds.CampaignSystem.Issues;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.Settlements.Buildings;
 using TaleWorlds.Core;
+using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using static BannerKings.Managers.PopulationManager;
 
@@ -175,11 +176,18 @@ namespace BannerKings.Models.Vanilla
                 var serfName = Utils.Helpers.GetClassName(PopType.Serfs, town.Culture);
                 var slaveName = Utils.Helpers.GetClassName(PopType.Slaves, town.Culture);
 
-                result.Add(landData.Farmland * landData.AvailableSerfsWorkForce * landData.GetAcreClassOutput("farmland", PopType.Serfs), 
+                float serfs = data.LandData.AvailableSerfsWorkForce;
+                float slaves = data.LandData.AvailableSlavesWorkForce;
+                float totalWorkforce = serfs + slaves;
+
+                float serfProportion = serfs / totalWorkforce;
+                float slaveProportion = slaves / totalWorkforce;
+
+                result.Add((landData.Farmland * serfProportion) * landData.GetAcreClassOutput("farmland", PopType.Serfs),
                     new TextObject("{=!}Farmlands ({CLASS})")
                     .SetTextVariable("CLASS", serfName));
 
-                result.Add(landData.Farmland * landData.AvailableSlavesWorkForce * landData.GetAcreClassOutput("farmland", PopType.Slaves), 
+                result.Add((landData.Farmland * slaveProportion) * landData.GetAcreClassOutput("farmland", PopType.Slaves),
                     new TextObject("{=!}Farmlands ({CLASS})")
                     .SetTextVariable("CLASS", slaveName));
 
@@ -191,6 +199,8 @@ namespace BannerKings.Models.Vanilla
                     var toDeduce = result.ResultNumber * fertility;
                     result.Add(toDeduce, new TextObject("{=KcNcxeMK}Fertility"));
                 }
+
+                result.AddFactor(MathF.Clamp(data.LandData.WorkforceSaturation - 1f, -1f, 0f), new TextObject("{=!}Workforce saturation"));
 
                 float season = CampaignTime.Now.GetSeasonOfYear;
                 switch (season)
@@ -219,15 +229,18 @@ namespace BannerKings.Models.Vanilla
                     result.AddFactor(b.CurrentLevel * (town.IsCastle ? 0.5f : 0.3f), b.Name);
                 }
 
-                var title = data.TitleData.Title;
-                if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.SerfsLaxDuties))
+                if (data.TitleData != null && data.TitleData.Title != null)
                 {
-                    result.AddFactor(-0.05f, DefaultDemesneLaws.Instance.SerfsLaxDuties.Name);
-                }
-                else if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.SerfsAgricultureDuties))
-                {
-                    result.AddFactor(0.1f, DefaultDemesneLaws.Instance.SerfsAgricultureDuties.Name);
-                }
+                    var title = data.TitleData.Title;
+                    if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.SerfsLaxDuties))
+                    {
+                        result.AddFactor(-0.05f, DefaultDemesneLaws.Instance.SerfsLaxDuties.Name);
+                    }
+                    else if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.SerfsAgricultureDuties))
+                    {
+                        result.AddFactor(0.1f, DefaultDemesneLaws.Instance.SerfsAgricultureDuties.Name);
+                    }
+                }   
             }
 
             return result;

@@ -2,12 +2,10 @@
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Estates;
-using BannerKings.Managers.Populations.Villages;
 using BannerKings.Managers.Titles.Laws;
 using BannerKings.Utils.Extensions;
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
@@ -22,7 +20,7 @@ namespace BannerKings.Models.BKModels
     {
         public int MinimumEstateAcreage => 120;
 
-        public float MaximumEstateAcreagePercentage => 0.12f;
+        public float MaximumEstateAcreagePercentage => 0.18f;
 
         public int CalculateEstateGrantRelation(Estate estate, Hero grantor)
         {
@@ -402,6 +400,7 @@ namespace BannerKings.Models.BKModels
             result.Add(acrePrice * estate.Pastureland * 0.5f, new TextObject("{=ngRhXYj1}Pasturelands"));
             result.Add(acrePrice * estate.Woodland * 0.15f, new TextObject("{=qPQ7HKgG}Woodlands"));
 
+            result.Add(estate.TaxAccumulated, new TextObject("{=!}Accumulated taxes"));
             /*var title = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement);
             if (title != null)
             {

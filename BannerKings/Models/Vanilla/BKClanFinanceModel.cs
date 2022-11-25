@@ -47,20 +47,20 @@ namespace BannerKings.Models.Vanilla
 
         public int CalculateOwnerIncomeFromEstates(Hero owner, bool applyWithdrawals)
         {
-            int result = 0;
+            float result = 0;
             foreach (var estate in BannerKingsConfig.Instance.PopulationManager.GetEstates(owner)) 
             {
-                result += estate.TaxAccumulated;
+                var estateIncome = estate.TaxAccumulated * 0.8f;
+                result += estateIncome;
 
                 if (applyWithdrawals)
                 {
-                    estate.TaxAccumulated = 0;
+                    estate.TaxAccumulated -= (int)estateIncome;
                 }
             }
 
-            return result;
+            return (int)result;
         }
-
 
         private int GetWorkshopTaxes(Workshop workshop)
         {

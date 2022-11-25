@@ -40,38 +40,35 @@
 													WidthSizePolicy="StretchToParent" VerticalAlignment="Center" DoNotPassEventsToChildren="true">
 													<Children>
 													
-													
-														<ListPanel HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" WidthSizePolicy="Fixed"
-															SuggestedWidth="250" MarginTop="40" StackLayout.LayoutMethod="VerticalBottomToTop">
+														<ListPanel HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" WidthSizePolicy="StretchToParent"
+																  SuggestedWidth="250" MarginTop="40" StackLayout.LayoutMethod="VerticalBottomToTop">
 															<Children>
 																<RichTextWidget DataSource="{..}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
 																	HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="25" Text="@DemesneLandsText"
 																	 />
 																	
-																<ListPanel HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" WidthSizePolicy="CoverChildren"
-																		 MarginRight="85" StackLayout.LayoutMethod="HorizontalLeftToRight">
-																	<Children>
-																	
-																	<ImageIdentifierWidget DataSource="{ImageIdentifier}" WidthSizePolicy="Fixed"
-																			   HeightSizePolicy="Fixed" SuggestedWidth="170" SuggestedHeight="130" MarginLeft="17"
-																			   MarginRight="18" MarginTop="17" MarginBottom="18" AdditionalArgs="@AdditionalArgs"
-																			   ImageId="@Id" ImageTypeCode="@ImageTypeCode" />
-																			   
-																	   <ListPanel HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" WidthSizePolicy="Fixed"
-																			SuggestedWidth="250" MarginTop="40" MarginLeft="20" StackLayout.LayoutMethod="VerticalBottomToTop">
-																		  <Children>
-																		 
-																			<RichTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren"
-																					HorizontalAlignment="Left" Brush="Clan.Leader.Text" Brush.FontSize="20" Text="@PopulationText"
-																					MarginBottom="15" />
-																					
-																			<RichTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren"
-																					HorizontalAlignment="Left" Brush="Clan.Leader.Text" Brush.FontSize="20" Text="@AcreageText"
-																					MarginBottom="15" />
-																		 
-																		  </Children>
-																		</ListPanel>
-																	</Children>
+																<ListPanel DataSource="{MainInfo}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" 
+																		   VerticalAlignment="Center" MarginTop="20" StackLayout.LayoutMethod="VerticalBottomToTop">
+																	<ItemTemplate>
+																		<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" >
+																			<Children>
+																				<HintWidget DataSource="{Hint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" 
+																							MarginLeft="8" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" IsEnabled="false">
+																					<Children>
+																						<ListPanel DataSource="{..}" HorizontalAlignment="Center" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" 
+																								  StackLayout.LayoutMethod="HorizontalLeftToRight" MinHeight="38">
+																							<Children>
+																								<TextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" VerticalAlignment="Center" Brush="TownManagement.Description.Title.Text" Brush.FontSize="20" Text="@Title" />
+																								<TextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" VerticalAlignment="Center" MarginLeft="5" Brush="TownManagement.Description.Value.Text" Brush.FontSize="20" IntText="@Value" />
+																								<ChangeAmountTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" MaxWidth="80" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="Settlement.Property.PositiveChange.Text" Amount="@ValueChange" NegativeBrushName="TownManagement.Property.NegativeChange.Text" PositiveBrushName="TownManagement.Property.PositiveChange.Text" UseParentheses="true" />
+																								<DescriptionItemVisualBrushWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="30" SuggestedHeight="30" VerticalAlignment="Center" Brush="TownManamgement.Description.Type.Brush" Type="@Type" />
+																							</Children>
+																						</ListPanel>
+																					</Children>
+																				</HintWidget>
+																			</Children>
+																		</Widget>
+																	</ItemTemplate>
 																</ListPanel>
 															</Children>
 														</ListPanel>
@@ -98,22 +95,22 @@
 																			HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="25" Text="@NameText"
 																			 />
 																			
-																		<ListPanel HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" WidthSizePolicy="CoverChildren"
-																				 MarginRight="85" StackLayout.LayoutMethod="HorizontalLeftToRight">
+																		<ListPanel HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" WidthSizePolicy="StretchToParent"
+																				   MarginTop="20" StackLayout.LayoutMethod="HorizontalLeftToRight">
 																			<Children>
 																			
-																			  <Widget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" IsVisible="@IsEnabled">
+																			  <Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" IsVisible="@IsEnabled">
 																				<Children>
-																					<ImageIdentifierWidget DataSource="{ImageIdentifier}" WidthSizePolicy="Fixed"
-																					   HeightSizePolicy="Fixed" SuggestedWidth="170" SuggestedHeight="130" MarginLeft="17"
+																					<ImageIdentifierWidget DataSource="{ImageIdentifier}" WidthSizePolicy="Fixed" HorizontalAlignment="Right"
+																					   HeightSizePolicy="Fixed" SuggestedWidth="170" SuggestedHeight="130"
 																					   MarginRight="18" MarginTop="17" MarginBottom="18" AdditionalArgs="@AdditionalArgs"
 																					   ImageId="@Id" ImageTypeCode="@ImageTypeCode" />
 																				</Children>
 																			  </Widget>
 
-																			   <ListPanel DataSource="{MainInfo}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" VerticalAlignment="Top" StackLayout.LayoutMethod="VerticalBottomToTop">
+																			   <ListPanel DataSource="{MainInfo}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" 
+																						  VerticalAlignment="Top" StackLayout.LayoutMethod="VerticalBottomToTop">
 																					<ItemTemplate>
-
 																						<Widget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren">
 																							<Children>
 																								<HintWidget DataSource="{Hint}" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Left" MarginLeft="8" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" IsEnabled="false">

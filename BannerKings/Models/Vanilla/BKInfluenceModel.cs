@@ -172,10 +172,13 @@ namespace BannerKings.Models.Vanilla
         public float GetNoblesInfluence(PopulationData data, float nobles)
         {
             float factor = 0.01f;
-            var title = data.TitleData.Title;
-            if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.NoblesLaxDuties))
+            if (data.TitleData != null && data.TitleData.Title != null)
             {
-                factor = 0.011f;
+                var title = data.TitleData.Title;
+                if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.NoblesLaxDuties))
+                {
+                    factor = 0.011f;
+                }
             }
 
             return MathF.Max(0f, nobles * factor);

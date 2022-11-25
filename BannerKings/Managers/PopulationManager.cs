@@ -166,16 +166,16 @@ namespace BannerKings.Managers
             }
         }
 
-        public void AddEstate(Estate estate)
+        public void AddEstate(Estate estate) 
         {
             var currentOwner = estate.Owner;
             if (currentOwner != null) 
             {
                 if (Estates.ContainsKey(currentOwner))
                 {
-                    if (Estates[currentOwner].Contains(estate))
+                    if (!Estates[currentOwner].Contains(estate))
                     {
-                        Estates[currentOwner].Remove(estate);
+                        Estates[currentOwner].Add(estate);
                     }
                 }
                 else

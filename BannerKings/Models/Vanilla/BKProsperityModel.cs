@@ -271,17 +271,20 @@ namespace BannerKings.Models.Vanilla
 
         private void AddDemesneLawEffect(PopulationData data, ref ExplainedNumber result)
         {
-            var title = data.TitleData.Title;
-            if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.SerfsLaxDuties))
+            if (data.TitleData != null && data.TitleData.Title != null)
             {
-                float proportion = data.GetCurrentTypeFraction(PopType.Serfs);
-                result.AddFactor(proportion * 0.05f, DefaultDemesneLaws.Instance.SerfsLaxDuties.Name);
-            }
+                var title = data.TitleData.Title;
+                if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.SerfsLaxDuties))
+                {
+                    float proportion = data.GetCurrentTypeFraction(PopType.Serfs);
+                    result.AddFactor(proportion * 0.05f, DefaultDemesneLaws.Instance.SerfsLaxDuties.Name);
+                }
 
-            if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.CraftsmenLaxDuties))
-            {
-                float proportion = data.GetCurrentTypeFraction(PopType.Craftsmen);
-                result.AddFactor(proportion * 0.08f, DefaultDemesneLaws.Instance.SerfsLaxDuties.Name);
+                if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.CraftsmenLaxDuties))
+                {
+                    float proportion = data.GetCurrentTypeFraction(PopType.Craftsmen);
+                    result.AddFactor(proportion * 0.08f, DefaultDemesneLaws.Instance.SerfsLaxDuties.Name);
+                }
             }
         }
     }

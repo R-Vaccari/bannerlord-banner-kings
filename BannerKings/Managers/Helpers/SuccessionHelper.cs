@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using BannerKings.Managers.Kingdoms;
 using BannerKings.Managers.Titles;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Election;
@@ -26,26 +25,17 @@ namespace BannerKings.Managers.Helpers
                 return;
             }
 
-
             Hero heir = null;
             float heirScore = float.MinValue;
-            var candidates = BannerKingsConfig.Instance.TitleModel.GetSuccessionCandidates(victim, title.contract);
-            foreach (Hero hero in candidates)
-            {
-                var result = BannerKingsConfig.Instance.TitleModel.GetSuccessionHeirScore(victim, hero, title.contract);
-                if (result.ResultNumber > heirScore)
-                {
-                    heir = hero;
-                }
-            }
+            var line = BannerKingsConfig.Instance.TitleModel.CalculateSuccessionLine(title.contract, victim.Clan, victim);
+            heir = line.First().Key;
 
-            
             if (heir != null)
             {
                 BannerKingsConfig.Instance.TitleManager.InheritTitle(title.deJure, heir, title);
                 Type.GetType("TaleWorlds.CampaignSystem.Actions.ChangeRulingClanAction, TaleWorlds.CampaignSystem")
                     .GetMethod("Apply", BindingFlags.Public | BindingFlags.Static)
-                    .Invoke(null, new object[] {kingdom, heir.Clan});
+                    .Invoke(null, new object[] { kingdom, heir.Clan });
 
                 var decision = kingdom.UnresolvedDecisions.FirstOrDefault(x => x is KingSelectionKingdomDecision);
                 if (decision != null)
@@ -82,79 +72,6 @@ namespace BannerKings.Managers.Helpers
                     yield return SuccessionType.Hereditary_Monarchy;
                     break;
             }
-        }
-
-        private static void ApplyVanillaSuccession(List<Clan> list, Hero victim, Kingdom kingdom)
-        {
-            switch (list.Count)
-            {
-                case > 1:
-                {
-                    var clanToExclude = victim.Clan.Leader == victim || victim.Clan.Leader == null ? victim.Clan : null;
-                    kingdom.AddDecision(new BKKingElectionDecision(victim.Clan, clanToExclude), true);
-                    break;
-                }
-                case 1:
-                    Type.GetType("TaleWorlds.CampaignSystem.Actions.ChangeRulingClanAction, TaleWorlds.CampaignSystem")
-                        .GetMethod("Apply", BindingFlags.Public | BindingFlags.Static)
-                        .Invoke(null, new object[] {kingdom, list.First()});
-                    break;
-            }
-        }
-
-        private static Hero ApplyHereditarySuccession(List<Clan> list, Hero victim, Kingdom kingdom)
-        {
-            return victim.Clan.Leader;
-        }
-
-        private static Hero ApplyImperialSuccession(List<Clan> list, Hero victim, Kingdom kingdom)
-        {
-            return GetImperialHeir(list, victim);
-        }
-
-        public static Hero GetImperialHeir(List<Clan> list, Hero victim, bool includeLeader = false)
-        {
-            var candidates = new List<ValueTuple<Hero, float>>();
-            foreach (var clan in list)
-            {
-                if (clan != victim.Clan)
-                {
-                    candidates.Add(new ValueTuple<Hero, float>(clan.Leader, CalculateHeirPreference(victim, clan.Leader)));
-                }
-                else
-                {
-                    foreach (var familyMember in clan.Heroes)
-                    {
-                        if (!familyMember.IsChild && familyMember.IsAlive &&
-                            (familyMember.IsLord || familyMember.IsMinorFactionHero))
-                        {
-                            if (familyMember == victim && !includeLeader)
-                            {
-                                continue;
-                            }
-
-                            candidates.Add(new ValueTuple<Hero, float>(clan.Leader,
-                                CalculateHeirPreference(victim, clan.Leader)));
-                        }
-                    }
-                }
-            }
-
-            return MBRandom.ChooseWeighted(candidates);
-        }
-
-        private static float CalculateHeirPreference(Hero victim, Hero candidate)
-        {
-            float relation = victim.GetRelation(candidate);
-            var age = candidate.Age / 2f;
-            var skills = 0f;
-            skills += candidate.GetSkillValue(DefaultSkills.Leadership);
-            skills += candidate.GetSkillValue(DefaultSkills.Tactics);
-            skills += candidate.GetSkillValue(DefaultSkills.Steward);
-            skills += candidate.GetSkillValue(DefaultSkills.Charm);
-            skills *= 0.1f;
-
-            return (relation + age + skills) / 3f * (float) Math.Sqrt(candidate.Clan.Tier);
         }
     }
 }

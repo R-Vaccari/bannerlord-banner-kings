@@ -216,7 +216,7 @@ namespace BannerKings.Behaviours
                 var town = settlement.Town;
                 var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement).LandData;
                 HandleItemAvailability(town);
-                HandleExcessWorkforce(data, town);
+                //HandleExcessWorkforce(data, town);
                 HandleExcessFood(data, town);
             }
         }
@@ -266,7 +266,6 @@ namespace BannerKings.Behaviours
                 }
             }, GetType().Name);
         }
-
 
         private void HandleExcessWorkforce(LandData data, Town town)
         {

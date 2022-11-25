@@ -139,14 +139,15 @@ namespace BannerKings.Models.BKModels
             return result;
         }
 
-        public IEnumerable<KeyValuePair<Hero, ExplainedNumber>> CalculateSuccessionLine(FeudalContract contract, Clan clan, int count = 6)
+        public IEnumerable<KeyValuePair<Hero, ExplainedNumber>> CalculateSuccessionLine(FeudalContract contract, Clan clan, Hero victim = null, int count = 6)
         {
-            var candidates = BannerKingsConfig.Instance.TitleModel.GetSuccessionCandidates(clan.Leader, contract);
+            var leader = victim != null ? victim : clan.Leader;
+            var candidates = BannerKingsConfig.Instance.TitleModel.GetSuccessionCandidates(leader, contract);
             var explanations = new Dictionary<Hero, ExplainedNumber>();
 
             foreach (Hero hero in candidates)
             {
-                var explanation = BannerKingsConfig.Instance.TitleModel.GetSuccessionHeirScore(clan.Leader,
+                var explanation = BannerKingsConfig.Instance.TitleModel.GetSuccessionHeirScore(leader,
                     hero, contract, true);
                 explanations.Add(hero, explanation);
             }
@@ -156,16 +157,17 @@ namespace BannerKings.Models.BKModels
                     select x).Take(count);
         }
 
-        public IEnumerable<KeyValuePair<Hero, ExplainedNumber>> CalculateInheritanceLine(Clan clan, int count = 6)
+        public IEnumerable<KeyValuePair<Hero, ExplainedNumber>> CalculateInheritanceLine(Clan clan, Hero victim = null, int count = 6)
         {
-            var candidates = BannerKingsConfig.Instance.TitleModel.GetInheritanceCandidates(clan.Leader);
+            var leader = victim != null ? victim : clan.Leader;
+            var candidates = BannerKingsConfig.Instance.TitleModel.GetInheritanceCandidates(leader);
             var explanations = new Dictionary<Hero, ExplainedNumber>();
-            var clanTitle = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(clan.Leader);
+            var clanTitle = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(leader);
 
             foreach (Hero hero in candidates)
             {
                 var contract = clanTitle != null ? clanTitle.contract : null;
-                var explanation = BannerKingsConfig.Instance.TitleModel.GetInheritanceHeirScore(clan.Leader,
+                var explanation = BannerKingsConfig.Instance.TitleModel.GetInheritanceHeirScore(leader,
                     hero, contract, true);
                 explanations.Add(hero, explanation);
             }

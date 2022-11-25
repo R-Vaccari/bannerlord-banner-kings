@@ -1,9 +1,13 @@
 ﻿using BannerKings.Managers.Education.Lifestyles;
 using BannerKings.Managers.Skills;
+using Newtonsoft.Json.Linq;
+using TaleWorlds.CampaignSystem.CharacterDevelopment;
+using TaleWorlds.CampaignSystem.Extensions;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
+using static BannerKings.Managers.PopulationManager;
 
 namespace BannerKings.Models.Vanilla
 {
@@ -35,48 +39,43 @@ namespace BannerKings.Models.Vanilla
             return result;
         }
 
-        public override int GetPrice(EquipmentElement itemRosterElement, MobileParty clientParty, PartyBase merchant, bool isSelling, float inStoreValue, float supply, float demand)
+        /*private float GetConsumptionFactor(ConsumptionType consumption, float value)
         {
-            int result = base.GetPrice(itemRosterElement, clientParty, merchant, isSelling, inStoreValue, supply, demand);
-            if (itemRosterElement.Item.ItemCategory.IsAnimal)
+            float diff = value - 1f;
+            float factor;
+            switch (consumption)
             {
-                result += (int)(result * 0.5f);
+                case ConsumptionType.Luxury:
+                    factor = 1.5f;
+                    break;
+                case ConsumptionType.Industrial:
+                    factor = 1.5f;
+                    break;
+                case ConsumptionType.Food:
+                    factor = 1.5f;
+                    break;
+                default:
+                    factor = 1.5f;
+                    break;
             }
-
-            return result;
-        }
+        }*/
 
         public override float GetBasePriceFactor(ItemCategory itemCategory, float inStoreValue, float supply, float demand,
             bool isSelling, int transferValue)
         {
-            float baseResult = 0f;
-            if (isSelling)
-            {
-                inStoreValue += (float)transferValue;
-            }
+            float baseResult = base.GetBasePriceFactor(itemCategory, inStoreValue, supply, demand, isSelling, transferValue);
 
-            float value = demand / (supply + inStoreValue);
-            if (itemCategory.IsTradeGood)
+            if (!itemCategory.IsAnimal)
             {
-                baseResult = MathF.Clamp(value, 0.1f, 10f);
+                baseResult *= 0.9f;
             }
 
             if (itemCategory.Properties == ItemCategory.Property.BonusToFoodStores)
             {
-                return MathF.Clamp(baseResult, 0.1f, 4f);
+                return MathF.Clamp(baseResult, 0.3f, 10f);
             }
 
-            if (itemCategory.IsAnimal)
-            {
-                return MathF.Clamp(baseResult, 0.4f, 4f);
-            }
-
-            if (itemCategory.IsTradeGood)
-            {
-                return MathF.Clamp(baseResult, 0.4f, 8f);
-            }
-
-            return MathF.Clamp(value, 0.8f, 1.3f);
+            return baseResult;
         }
     }
 }

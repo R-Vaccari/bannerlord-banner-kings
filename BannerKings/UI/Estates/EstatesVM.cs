@@ -72,6 +72,9 @@ namespace BannerKings.UI.Estates
 
             var demesneLands = new Estate(data.Settlement.Owner, estateData, farmland, pastureLand, woodland, serfs,
                 slaves, nobles, craftsmen);
+            demesneLands.AddManpower(Managers.PopulationManager.PopType.Serfs, data.MilitaryData.PeasantManpower);
+            demesneLands.AddManpower(Managers.PopulationManager.PopType.Nobles, data.MilitaryData.NobleManpower);
+
             DemesneLands = new EstateVM(demesneLands, data);
         }
     }

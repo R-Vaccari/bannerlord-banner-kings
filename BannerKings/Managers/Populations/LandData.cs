@@ -341,23 +341,26 @@ namespace BannerKings.Managers.Populations
         {
             float result = GetAcreOutput(type);
 
-            var title = data.TitleData.Title;
-            if (populationClass == PopType.Serfs)
+            if (data.TitleData != null && data.TitleData.Title != null)
             {
-                if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.SerfsAgricultureDuties))
+                var title = data.TitleData.Title;
+                if (populationClass == PopType.Serfs)
                 {
-                    result *= 1.1f;
+                    if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.SerfsAgricultureDuties))
+                    {
+                        result *= 1.1f;
+                    }
+                    else if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.SerfsLaxDuties))
+                    {
+                        result *= 0.95f;
+                    }
                 }
-                else if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.SerfsLaxDuties))
+                else if (populationClass == PopType.Slaves)
                 {
-                    result *= 0.95f;
-                }
-            }
-            else if (populationClass == PopType.Slaves)
-            {
-                if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.SlavesAgricultureDuties))
-                {
-                    result *= 1.1f;
+                    if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.SlavesAgricultureDuties))
+                    {
+                        result *= 1.1f;
+                    }
                 }
             }
 

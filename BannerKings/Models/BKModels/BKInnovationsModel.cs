@@ -26,8 +26,11 @@ namespace BannerKings.Models.BKModels
 
             if (nobles > 0)
             {
-                bool boost = data.TitleData.Title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.NoblesLaxDuties);
-                result.Add(nobles / (boost ? 90000f : 100000f), new TextObject("{=pJAF5pzO}Nobles"));
+                if (data.TitleData != null && data.TitleData.Title != null)
+                {
+                    bool boost = data.TitleData.Title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.NoblesLaxDuties);
+                    result.Add(nobles / (boost ? 90000f : 100000f), new TextObject("{=pJAF5pzO}Nobles"));
+                }
             }
 
             if (craftsmen > 0)

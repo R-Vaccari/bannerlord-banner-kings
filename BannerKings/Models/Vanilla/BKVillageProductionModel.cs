@@ -52,7 +52,6 @@ namespace BannerKings.Models.Vanilla
                     totalWeight += valueTuple.Item2;
                 }
 
-
                 foreach (var valueTuple in productions)
                 {
                     var output = valueTuple.Item1;
@@ -185,20 +184,18 @@ namespace BannerKings.Models.Vanilla
 
             if (item.IsMineral())
             {
-                var title = data.TitleData.Title;
-                if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.SlavesHardLabor))
+                if (data.TitleData != null && data.TitleData.Title != null)
                 {
-                    result.Add(slaves * BOOSTED_PRODUCTION);
-                }
-                else
-                {
-                    result.Add(slaves * PRODUCTION);
+                    var title = data.TitleData.Title;
+                    if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.SlavesHardLabor))
+                    {
+                        result.Add(slaves * BOOSTED_PRODUCTION);
+                        return;
+                    }
                 }
             }
-            else
-            {
-                result.Add(slaves * PRODUCTION);
-            }
+
+            result.Add(slaves * PRODUCTION);
         }
 
         private bool AddFarmProcution(ref ExplainedNumber result, float serfs, float slaves, ItemObject item, PopulationData data)
@@ -233,7 +230,6 @@ namespace BannerKings.Models.Vanilla
                 }
             }
 
-
             return valid;
         }
 
@@ -252,7 +248,6 @@ namespace BannerKings.Models.Vanilla
                     result.AddFactor(serfFactor * 0.5f);
                 }
             }
-
 
             return valid;
         }

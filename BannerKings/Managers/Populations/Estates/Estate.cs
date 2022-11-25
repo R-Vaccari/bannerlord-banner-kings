@@ -36,7 +36,7 @@ namespace BannerKings.Managers.Populations.Estates
             float totalSerfs = data.GetTypeCount(PopType.Serfs);
             float totalSlaves = data.GetTypeCount(PopType.Slaves) * (1f - data.EconomicData.StateSlaves);
 
-            int desiredWorkforce = (int)(acres / 2f);
+            int desiredWorkforce = (int)(acres / 5f);
             float desiredSerfs = (int)(desiredWorkforce * 0.8f);
             float desiredSlaves = (int)(desiredWorkforce * 0.2f);
 
@@ -112,7 +112,6 @@ namespace BannerKings.Managers.Populations.Estates
             }
         }
 
-
         public float Influence => 0;
 
         public float Acreage => Farmland + Pastureland + Woodland;
@@ -125,7 +124,6 @@ namespace BannerKings.Managers.Populations.Estates
 
         [SaveableProperty(8)] public int Serfs { get; private set; }
         [SaveableProperty(9)] public int Slaves { get; private set; }
-
      
         public void ChangeTask(EstateTask task) => Task = task;
         public void ChangeDuty(EstateDuty duty) => Duty = duty;
