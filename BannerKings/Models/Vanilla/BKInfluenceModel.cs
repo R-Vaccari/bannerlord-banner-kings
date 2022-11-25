@@ -210,7 +210,7 @@ namespace BannerKings.Models.Vanilla
             {
                 foreach (var estate in data.EstateData.Estates)
                 {
-                    float proportion = data.LandData.Acreage / estate.Acreage;
+                    float proportion = estate.Acreage/ data.LandData.Acreage;
                     float estateResult = settlementResult.ResultNumber * proportion;
                     settlementResult.Add(-estateResult, estate.Name);
                     if (!includeDescriptions && estate.Owner != null && estate.Owner.IsNotable)
