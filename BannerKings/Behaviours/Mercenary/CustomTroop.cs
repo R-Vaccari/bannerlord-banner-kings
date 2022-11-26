@@ -12,6 +12,7 @@ namespace BannerKings.Behaviours.Mercenary
         internal CustomTroop(CharacterObject character)
         {
             Character = character;
+            SetEquipment(character);
         }
 
         public void PostInitialize()
