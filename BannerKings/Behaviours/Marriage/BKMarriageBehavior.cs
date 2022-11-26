@@ -465,7 +465,6 @@ namespace BannerKings.Behaviours.Marriage
                        GainKingdomInfluenceAction.ApplyForDefault(Hero.MainHero, -proposedMarriage.Influence);
                    }
 
-
                    if (!proposedMarriage.ArrangedMarriage)
                    {
                        AnnounceBetrothal();
@@ -491,7 +490,6 @@ namespace BannerKings.Behaviours.Marriage
                        {
                            ApplyMarriageContract();
                        }
-
                    }
 
                    if (PlayerEncounter.Current != null)
@@ -499,7 +497,6 @@ namespace BannerKings.Behaviours.Marriage
                        PlayerEncounter.LeaveEncounter = true;
                    }
                });
-
         }
 
         private void AnnounceBetrothal()

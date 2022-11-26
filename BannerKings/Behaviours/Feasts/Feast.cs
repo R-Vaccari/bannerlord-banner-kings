@@ -142,7 +142,6 @@ namespace BannerKings.Behaviours.Feasts
                 Campaign.Current.GetCampaignBehavior<BKMarriageBehavior>().ApplyMarriageContract();
             }
 
-
             foreach (var clan in Guests)
             {
                 foreach (var hero in clan.Heroes)
