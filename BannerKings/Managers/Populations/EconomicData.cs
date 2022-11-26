@@ -1,6 +1,7 @@
 using BannerKings.Managers.Institutions.Guilds;
 using BannerKings.Models.Vanilla;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
@@ -32,6 +33,21 @@ namespace BannerKings.Managers.Populations
         public float Corruption => 1f;
 
         public float Tariff => new BKTaxModel().GetTownTaxRatio(settlement.Town);
+
+        public int CaravanFee(MobileParty caravan)
+        {
+            int result = 0;
+            if (caravan.IsCaravan)
+            {
+                if (caravan.MapFaction != settlement.MapFaction)
+                {
+                    result += caravan.MemberRoster.TotalManCount;
+                    result += (int)(200 * Mercantilism.ResultNumber);
+                }
+            }
+
+            return result;
+        }
 
         public float StateSlaves
         {

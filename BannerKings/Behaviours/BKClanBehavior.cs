@@ -5,6 +5,7 @@ using System.Reflection;
 using BannerKings.Managers.Court;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
+using BannerKings.Settings;
 using HarmonyLib;
 using Helpers;
 using SandBox.CampaignBehaviors;
@@ -797,6 +798,11 @@ namespace BannerKings.Behaviours
                     party.LeaderHero != clan.Leader)
                 {
                     return BannerKingsConfig.Instance.TitleManager.GetHighestTitle(party.LeaderHero) == null;
+                }
+
+                if (party.IsCaravan)
+                {
+                    return !BannerKingsSettings.Instance.RealisticCaravanIncome;
                 }
 
                 return true;

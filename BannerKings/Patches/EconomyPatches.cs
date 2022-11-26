@@ -306,15 +306,17 @@ namespace BannerKings.Patches
                 CampaignTime lastHomeVisitTimeOfCaravan,
                 float caravanFullness, bool distanceCut)
             {
-                if (BannerKingsConfig.Instance.PopulationManager != null &&
-                    BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(town.Settlement))
+                if (BannerKingsConfig.Instance.PopulationManager != null)
                 {
                     var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
-                    __result *= data.EconomicData.CaravanAttraction.ResultNumber;
+                    if (data != null)
+                    {
+                        __result *= data.EconomicData.CaravanAttraction.ResultNumber;
+                        __result -= data.EconomicData.CaravanFee(caravanParty) * 2f;
+                    }
                 }
             }
         }
-
 
         [HarmonyPatch(typeof(SellGoodsForTradeAction), "ApplyInternal")]
         internal class SellGoodsPatch

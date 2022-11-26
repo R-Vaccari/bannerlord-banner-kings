@@ -2,10 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using BannerKings.Components;
+using BannerKings.Managers.Populations;
 using BannerKings.Settings;
 using HarmonyLib;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
+using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.Encounters;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -72,7 +74,7 @@ namespace BannerKings.Behaviours
             }
 
             var component = (PopulationPartyComponent) party.PartyComponent;
-            var target = component._target;
+            var target = component.Target;
 
             switch (component)
             {
@@ -202,36 +204,35 @@ namespace BannerKings.Behaviours
                 return;
             }
 
-            if (party.IsCaravan && BannerKingsSettings.Instance.RealisticCaravanIncome)
-            {
-                var caravanOwner = party.Owner;
-                if (target.Owner == caravanOwner || target.HeroesWithoutParty.Contains(caravanOwner) || 
-                    (caravanOwner.PartyBelongedTo != null && target.Parties.Contains(caravanOwner.PartyBelongedTo))) 
-                {
-                    int income = MathF.Max(0, party.PartyTradeGold - 10000);
-                    if (income > 0)
-                    {
-                        GiveGoldAction.ApplyForPartyToCharacter(party.Party, caravanOwner, income);
-                        if (caravanOwner == Hero.MainHero)
-                        {
-                            InformationManager.DisplayMessage(new InformationMessage(
-                                new TextObject("{=!}The {CARAVAN} has deposited you {GOLD}{GOLD_ICON}")
-                                .SetTextVariable("CARAVAN", party.Name)
-                                .SetTextVariable("GOLD", income).ToString()));
-                        }
-                    }
-                }
-            }
+            var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(target);
+            AddCaravanFees(party, target, data);
+            AddRealisticIncome(party, target);
+            AddPopulationPartyBehavior(party, target, data);
+        }
 
-
-            if (!BannerKingsConfig.Instance.PopulationManager.IsPopulationParty(party))
+        private void AddCaravanFees(MobileParty party, Settlement target, PopulationData data)
+        {
+            if (!party.IsCaravan)
             {
                 return;
             }
 
-            var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(target);
-            var component = (PopulationPartyComponent) party.PartyComponent;
+            int fee = data.EconomicData.CaravanFee(party);
+            if (fee > 0)
+            {
+                party.PartyTradeGold -= fee;
+                target.Town.TradeTaxAccumulated += fee;
+            }
+        }
 
+        private void AddPopulationPartyBehavior(MobileParty party, Settlement target, PopulationData data)
+        {
+            if (!BannerKingsConfig.Instance.PopulationManager.IsPopulationParty(party))
+            {
+                return;
+            }
+            
+            var component = (PopulationPartyComponent)party.PartyComponent;
             if (component is MilitiaComponent && target.IsVillage)
             {
                 foreach (var element in party.MemberRoster.GetTroopRoster())
@@ -249,21 +250,55 @@ namespace BannerKings.Behaviours
                 }
             }
 
-            if (component.slaveCaravan)
+            if (component.SlaveCaravan)
             {
                 var slaves = Utils.Helpers.GetRosterCount(party.PrisonRoster);
                 data.UpdatePopType(PopType.Slaves, slaves);
             }
-            else if (component.popType != PopType.None)
+            else if (component.PopulationType != PopType.None)
             {
-                var filter = component.popType == PopType.Serfs ? "villager" :
-                    component.popType == PopType.Craftsmen ? "craftsman" : "noble";
+                var filter = component.PopulationType == PopType.Serfs ? "villager" :
+                    component.PopulationType == PopType.Craftsmen ? "craftsman" : "noble";
                 var pops = Utils.Helpers.GetRosterCount(party.MemberRoster, filter);
-                data.UpdatePopType(component.popType, pops);
+                data.UpdatePopType(component.PopulationType, pops);
             }
 
             DestroyPartyAction.Apply(null, party);
             BannerKingsConfig.Instance.PopulationManager.RemoveCaravan(party);
+        }
+
+        private void AddRealisticIncome(MobileParty party, Settlement target)
+        {
+            if (party.IsCaravan && BannerKingsSettings.Instance.RealisticCaravanIncome)
+            {
+                var caravanOwner = party.Owner;
+                if (target.Owner == caravanOwner || target.HeroesWithoutParty.Contains(caravanOwner) ||
+                    (caravanOwner.PartyBelongedTo != null && target.Parties.Contains(caravanOwner.PartyBelongedTo)))
+                {
+                    int income = MathF.Max(0, party.PartyTradeGold - 10000);
+                    if (income > 0)
+                    {
+                        GiveGoldAction.ApplyForPartyToCharacter(party.Party, caravanOwner, income);
+                        if (caravanOwner == Hero.MainHero)
+                        {
+                            InformationManager.DisplayMessage(new InformationMessage(
+                                new TextObject("{=!}The {CARAVAN} has deposited you {GOLD}{GOLD_ICON}")
+                                .SetTextVariable("CARAVAN", party.Name)
+                                .SetTextVariable("GOLD", income).ToString()));
+                        }
+
+                        if (party.LeaderHero != null)
+                        {
+                            SkillLevelingManager.OnTradeProfitMade(party.LeaderHero, income);
+                        }
+
+                        if (party.Owner.Clan != null && party.Party.Owner.Clan.Leader.GetPerkValue(DefaultPerks.Trade.GreatInvestor))
+                        {
+                            party.Party.Owner.Clan.AddRenown(DefaultPerks.Trade.GreatInvestor.PrimaryBonus, true);
+                        }
+                    }
+                }
+            }
         }
 
         private void OnMobilePartyDestroyed(MobileParty mobileParty, PartyBase destroyerParty)
@@ -328,7 +363,8 @@ namespace BannerKings.Behaviours
                     break;
             }
 
-            var name = "Travelling " + Utils.Helpers.GetClassName(type, origin.Culture) + " from {0}";
+            var name = "{=!}Travelling {CLASS} from {ORIGIN}";
+            name = name.Replace("{CLASS}", Utils.Helpers.GetClassName(type, origin.Culture).ToString());
 
             if (civilian != null)
             {
@@ -343,7 +379,7 @@ namespace BannerKings.Behaviours
             var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(origin);
             var slaves = (int) (data.GetTypeCount(PopType.Slaves) * 0.005d);
             data.UpdatePopType(PopType.Slaves, (int) (slaves * -1f));
-            PopulationPartyComponent.CreateSlaveCaravan("slavecaravan_", origin, target.Settlement, "Slave Caravan from {0}", slaves);
+            PopulationPartyComponent.CreateSlaveCaravan("slavecaravan_", origin, target.Settlement, "{=!}Slave Caravan from {ORIGIN}", slaves);
         }
 
         private void OnSessionLaunched(CampaignGameStarter campaignGameStarter)
@@ -467,7 +503,7 @@ namespace BannerKings.Behaviours
             }
 
             var component = (PopulationPartyComponent) party.MobileParty.PartyComponent;
-            if (component.popType == PopType.Serfs)
+            if (component.PopulationType == PopType.Serfs)
             {
                 value = true;
             }
@@ -543,7 +579,7 @@ namespace BannerKings.Behaviours
             }
 
             var component = (PopulationPartyComponent) party.MobileParty.PartyComponent;
-            if (component.popType == PopType.Craftsmen)
+            if (component.PopulationType == PopType.Craftsmen)
             {
                 value = true;
             }
@@ -561,7 +597,7 @@ namespace BannerKings.Behaviours
             }
 
             var component = (PopulationPartyComponent) party.MobileParty.PartyComponent;
-            if (component.popType == PopType.Nobles)
+            if (component.PopulationType == PopType.Nobles)
             {
                 value = true;
             }
@@ -603,7 +639,7 @@ namespace BannerKings.Behaviours
 
             var component = (PopulationPartyComponent) party.MobileParty.PartyComponent;
             var partyKingdom = component.OriginSettlement.OwnerClan.Kingdom;
-            if (partyKingdom == null || !component.slaveCaravan)
+            if (partyKingdom == null || !component.SlaveCaravan)
             {
                 return false;
             }
@@ -629,7 +665,7 @@ namespace BannerKings.Behaviours
             var component = (PopulationPartyComponent) party.MobileParty.PartyComponent;
             var partyKingdom = component.OriginSettlement.OwnerClan.Kingdom;
             var heroKingdom = Hero.MainHero.Clan.Kingdom;
-            if (component.slaveCaravan && ((partyKingdom != null && heroKingdom != null && partyKingdom == heroKingdom) || component.OriginSettlement.OwnerClan == Hero.MainHero.Clan))
+            if (component.SlaveCaravan && ((partyKingdom != null && heroKingdom != null && partyKingdom == heroKingdom) || component.OriginSettlement.OwnerClan == Hero.MainHero.Clan))
             {
                 value = true;
             }
