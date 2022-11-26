@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using BannerKings.Managers.Court;
 using BannerKings.Managers.Policies;
@@ -40,11 +41,15 @@ namespace BannerKings.Models.Vanilla
             }
 
             var baseResult = CalculateLoyaltyChangeInternal(town, true);
-
             var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(town.Settlement);
-            var slaves = data.GetTypeCount(PopType.Slaves);
-
+            int slaves = (int)MathF.Clamp(data.GetTypeCount(PopType.Slaves), 0, int.MaxValue);
             baseResult.Add(slaves * SLAVE_LOYALTY, new TextObject("{=FJSfBwzp}Slave population"));
+
+            if (data.ReligionData != null)
+            {
+                float factor = -6f * data.ReligionData.Tension.ResultNumber;
+                baseResult.Add(factor, new TextObject("{=!}Religious tensions"));
+            }
 
             var tax = ((BKTaxPolicy) BannerKingsConfig.Instance.PolicyManager.GetPolicy(town.Settlement, "tax")).Policy;
             switch (tax)

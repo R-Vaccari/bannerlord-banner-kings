@@ -17,7 +17,7 @@ namespace BannerKings.Managers.Populations
         public void Tick(Settlement settlement, CultureData cultureData)
         {
             Settlement = settlement;
-            acceptance += AcceptanceGain.ResultNumber;
+            acceptance = MathF.Clamp(acceptance + AcceptanceGain.ResultNumber, -1f, 1f);
             assimilation = cultureData.GetWeightPorportion(settlement, Culture);
         }
 

@@ -8,16 +8,13 @@ namespace BannerKings.Managers.Titles.Laws
 {
     public class DefaultDemesneLaws : DefaultTypeInitializer<DefaultDemesneLaws, DemesneLaw>
     {
-
         public DemesneLaw EstateTenureFeeTail { get; private set; } = new DemesneLaw("estate_tenure_fee_tail");
         public DemesneLaw EstateTenureQuiaEmptores { get; private set; } = new DemesneLaw("estate_tenure_quia_emptores");
         public DemesneLaw EstateTenureAllodial { get; private set; } = new DemesneLaw("estate_tenure_allodial");
 
-
         public DemesneLaw NoblesMilitaryServiceDuties { get; private set; } = new DemesneLaw("nobles_military_service_duties");
         public DemesneLaw NoblesTaxDuties { get; private set; } = new DemesneLaw("nobles_tax_duties");
         public DemesneLaw NoblesLaxDuties { get; private set; } = new DemesneLaw("nobles_lax_duties");
-
 
         public DemesneLaw CraftsmenMilitaryServiceDuties { get; private set; } = new DemesneLaw("craftsmen_military_service_duties");
         public DemesneLaw CraftsmenTaxDuties { get; private set; } = new DemesneLaw("craftsmen_tax_duties");
@@ -30,7 +27,6 @@ namespace BannerKings.Managers.Titles.Laws
         public DemesneLaw SlavesHardLabor { get; private set; } = new DemesneLaw("slaves_hard_labor_duties");
         public DemesneLaw SlavesAgricultureDuties { get; private set; } = new DemesneLaw("slaves_agriculture_duties");
         public DemesneLaw SlavesDomesticDuties { get; private set; } = new DemesneLaw("slaves_domestic_duties");
-
 
         public DemesneLaw SlaveryVlandia { get; private set; } = new DemesneLaw("slavery_vlandia");
         public DemesneLaw SlaveryAserai { get; private set; } = new DemesneLaw("slavery_aserai");
@@ -67,7 +63,6 @@ namespace BannerKings.Managers.Titles.Laws
                 yield return DraftingHidage;
                 yield return DraftingFreeContracts;
                 yield return DraftingVassalage;
-
             }
         }
 
@@ -93,8 +88,7 @@ namespace BannerKings.Managers.Titles.Laws
             list.Add(NoblesTaxDuties.GetCopy());
             list.Add(CraftsmenTaxDuties.GetCopy());
             list.Add(SerfsAgricultureDuties.GetCopy());
-            list.Add(SlavesHardLabor.GetCopy());
-            
+            list.Add(SlavesHardLabor.GetCopy());   
 
             var slavery = SlaveryStandard.GetCopy();
             list.Add(slavery);
@@ -136,8 +130,6 @@ namespace BannerKings.Managers.Titles.Laws
         public override void Initialize()
         {
             var cultures = Campaign.Current.ObjectManager.GetObjectTypeList<CultureObject>();
-
-
             #region EstateTenure
 
             EstateTenureQuiaEmptores.Initialize(new TextObject("{=!}Quia Emptores"),
@@ -172,8 +164,6 @@ namespace BannerKings.Managers.Titles.Laws
 
             #endregion EstateTenure
 
-
-
             #region NobleDuties
 
             NoblesMilitaryServiceDuties.Initialize(new TextObject("{=!}Military Duties"),
@@ -188,7 +178,7 @@ namespace BannerKings.Managers.Titles.Laws
                0);
 
             NoblesTaxDuties.Initialize(new TextObject("{=!}Tax Duties"),
-               new TextObject("{=!}Tailor the duty laws of {CLASS} towards agriculture. Labor requirements and movement restriction tie the serfs to the land and its productivity. Increased agricultural output.")
+               new TextObject("{=!}Tailor the duty laws of {CLASS} towards taxation. Stricter tax collection and more taxation forms squeeze more denarii out of {CLASS}. Increases tax output.")
                .SetTextVariable("CLASS", Utils.Helpers.GetClassName(PopulationManager.PopType.Nobles, Hero.MainHero.Culture)),
                new TextObject("{=!}Increased nobles tax output by 25%"),
                DemesneLawTypes.NobleDuties,
@@ -210,7 +200,6 @@ namespace BannerKings.Managers.Titles.Laws
                2);
 
             #endregion NobleDuties
-
 
             #region CraftsmenDuties
 
@@ -248,8 +237,6 @@ namespace BannerKings.Managers.Titles.Laws
                2);
 
             #endregion CraftsmenDuties
-
-
 
             #region SerfDuties
 

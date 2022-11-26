@@ -3,8 +3,10 @@ using BannerKings.Extensions;
 using BannerKings.Managers.Court;
 using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Policies;
+using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Villages;
 using BannerKings.Managers.Skills;
+using BannerKings.Managers.Titles.Laws;
 using Helpers;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
@@ -86,7 +88,7 @@ namespace BannerKings.Models.Vanilla
                 }
             }
 
-
+            AddDemesneLawEffect(data, ref baseResult);
             return baseResult;
         }
 
@@ -253,6 +255,8 @@ namespace BannerKings.Models.Vanilla
 
                 BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref explainedNumber,
                     fortification.OwnerClan.Leader, CouncilPosition.Steward, 1f, false);
+
+                AddDemesneLawEffect(data, ref explainedNumber);
                 return explainedNumber;
             }
 
@@ -263,6 +267,25 @@ namespace BannerKings.Models.Vanilla
         {
             Campaign.Current.Models.IssueModel.GetIssueEffectsOfSettlement(DefaultIssueEffects.SettlementProsperity,
                 settlement, ref result);
+        }
+
+        private void AddDemesneLawEffect(PopulationData data, ref ExplainedNumber result)
+        {
+            if (data.TitleData != null && data.TitleData.Title != null)
+            {
+                var title = data.TitleData.Title;
+                if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.SerfsLaxDuties))
+                {
+                    float proportion = data.GetCurrentTypeFraction(PopType.Serfs);
+                    result.AddFactor(proportion * 0.05f, DefaultDemesneLaws.Instance.SerfsLaxDuties.Name);
+                }
+
+                if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.CraftsmenLaxDuties))
+                {
+                    float proportion = data.GetCurrentTypeFraction(PopType.Craftsmen);
+                    result.AddFactor(proportion * 0.08f, DefaultDemesneLaws.Instance.SerfsLaxDuties.Name);
+                }
+            }
         }
     }
 }

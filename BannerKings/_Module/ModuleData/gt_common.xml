@@ -30,9 +30,9 @@
 	<string id="str_bk_mineral.salt" text="{=IK2IPJi1}Salt{@Plural}sacks of salt{\@}" />
 	<string id="str_bk_mineral.iron" text="{=baFazbmR}Iron{@Plural}loads of iron ore{\@}" />
 	<string id="str_bk_mineral.silver" text="{=jPwa1oOm}Silver{@Plural}loads of silver ore{\@}" />
-	<string id="str_bk_mineral.limestone" text="{=bk_limestone}Limestone" />
-	<string id="str_bk_mineral.gold" text="{=bk_gold}Gold" />
-	<string id="str_bk_mineral.marble" text="{=bk_marble}Marble" />
+	<string id="str_bk_mineral.limestone" text="{=bk_limestone}Limestone{@Plural}blocks of limestone{\@}" />
+	<string id="str_bk_mineral.gold" text="{=bk_gold}Gold{@Plural}loads of gold{\@}" />
+	<string id="str_bk_mineral.marble" text="{=bk_marble}Marble{@Plural}blocks of marble{\@}" />
 
 	<string id="str_bk_primogeniture" text="{=bk_primogeniture}Primogeniture" />
 	<string id="str_bk_ultimogeniture" text="{=bk_ultimogeniture}Ultimogeniture" />
@@ -52,6 +52,9 @@
 	<string id="str_item_category.bread" text="{=VJfbLXmi}Bread{@Plural}loaves of bread{\@}" />
 	<string id="str_item_category.pie" text="{=Qa0dQMOc}Pie{@Plural}baskets of pies{\@}" />
 	<string id="str_item_category.carrot" text="{=C5Xe5MJK}Carrots{@Plural}baskets of carrots{\@}" />
+	<string id="str_item_category.marble" text="{=bk_marble}Marble{@Plural}blocks of marble{\@}" />
+	<string id="str_item_category.limestone" text="{=bk_limestone}Limestone{@Plural}blocks of limestone{\@}" />
+	<string id="str_item_category.gold" text="{=bk_gold}Gold{@Plural}loads of gold{\@}" />
 
 	<string id="str_bk_placeholder" text="{=gaJDVkvHA}Placeholder" />
 	<string id="str_crafting_difficulty" text="{=LuF75ia3}Crafting Difficulty" />

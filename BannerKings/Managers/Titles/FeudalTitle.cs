@@ -21,7 +21,9 @@ namespace BannerKings.Managers.Titles
             this.vassals = vassals;
             this.deJure = deJure;
             this.deFacto = deFacto;
-            this.name = new TextObject(Utils.Helpers.GetTitlePrefix(type, contract.Government) + " of " + name);
+            this.name = new TextObject("{=!}{TITLE} of {NAME}")
+                .SetTextVariable("TITLE", Utils.Helpers.GetTitlePrefix(type, contract.Government))
+                .SetTextVariable("NAME", name);
             shortName = new TextObject(name);
             this.contract = contract;
             dueTax = 0;

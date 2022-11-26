@@ -240,7 +240,6 @@ namespace BannerKings.Managers.Populations
                 var desiredTypes = GetDesiredPopTypes(settlement);
                 var typesList = new List<ValueTuple<PopType, float>>();
 
-
                 classes.ForEach(popClass =>
                 {
                     var type = popClass.type;

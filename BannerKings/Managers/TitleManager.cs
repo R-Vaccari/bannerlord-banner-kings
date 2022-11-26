@@ -1128,56 +1128,41 @@ namespace BannerKings.Managers
 
         public string GetContractText(FeudalTitle title)
         {
-            var contract = title.contract;
-            var sb = new StringBuilder(
-                $"You, {Hero.MainHero.Name}, formally accept to be henceforth bound to the {title.FullName}, fulfill your duties as well as uphold your rights," +
-                " what can not be undone by means other than abdication of all rights and lands associated with the contract, treachery, or death.");
-            sb.Append(Environment.NewLine);
-            sb.Append("   ");
-            sb.Append(Environment.NewLine);
-            sb.Append("Duties");
-            sb.Append(Environment.NewLine);
-            foreach (var duty in contract.Duties)
-            {
-                sb.Append(GetDutyString(duty.Key, duty.Value));
-                sb.Append(Environment.NewLine);
-            }
+            TextObject text = new TextObject("{=!}You, {NAME}, formally accept to be henceforth bound to the {TITLE}, fulfill your duties as well as uphold your rights, what can not be undone by means other than abdication of all rights and lands associated with the contract, treachery, or death." +
+                "\n\nDuties\n{DUTY1}\n{DUTY2}\n\nRights\n{RIGHT1}\n{RIGHT2}")
+                .SetTextVariable("NAME", Hero.MainHero.Name)
+                .SetTextVariable("TITLE", title.FullName)
+                .SetTextVariable("RIGHT1", GetRightString(title.contract.Rights.ElementAt(0)))
+                .SetTextVariable("RIGHT2", GetRightString(title.contract.Rights.ElementAt(1)))
+                .SetTextVariable("DUTY1", GetDutyString(title.contract.Duties.ElementAt(0)))
+                .SetTextVariable("DUTY2", GetDutyString(title.contract.Duties.ElementAt(1)));
 
-            sb.Append(Environment.NewLine);
-            sb.Append("   ");
-            sb.Append(Environment.NewLine);
-            sb.Append("Rights");
-            sb.Append(Environment.NewLine);
-            foreach (var right in contract.Rights)
-            {
-                sb.Append(GetRightString(right));
-                sb.Append(Environment.NewLine);
-            }
-
-            return sb.ToString();
+            return text.ToString();
         }
 
-        private string GetDutyString(FeudalDuties duty, float factor)
+        private TextObject GetDutyString(KeyValuePair<FeudalDuties, float> pair)
         {
+            FeudalDuties duty = pair.Key;
+            float factor = pair.Value;
             GameTexts.SetVariable("DUTY_FACTOR", (factor * 100f).ToString("0") + '%');
             var text = duty switch
             {
-                FeudalDuties.Taxation => "{=wWpgZ1QE}You are due {DUTY_FACTOR} of your fiefs' income to your suzerain.",
-                FeudalDuties.Auxilium => "{=kk4HK4wg}You are obliged to militarily participate in armies, for {DUTY_FACTOR} of their durations.",
-                _ => "{=bcVxdc0x}You are obliged to contribute to {DUTY_FACTOR} of your suzerain's ransom."
+                FeudalDuties.Taxation => new TextObject("{=wWpgZ1QE}You are due {DUTY_FACTOR} of your fiefs' income to your suzerain."),
+                FeudalDuties.Auxilium => new TextObject("{=kk4HK4wg}You are obliged to militarily participate in armies, for {DUTY_FACTOR} of their durations."),
+                _ => new TextObject("{=bcVxdc0x}You are obliged to contribute to {DUTY_FACTOR} of your suzerain's ransom.")
             };
 
-            return new TextObject(text).ToString();
+            return text;
         }
 
-        private string GetRightString(FeudalRights right)
+        private TextObject GetRightString(FeudalRights right)
         {
             return right switch
             {
-                FeudalRights.Absolute_Land_Rights => "{=pmw8kEKb}You are entitled to ownership of any conquered lands whose title you own.",
-                FeudalRights.Enfoeffement_Rights => "{=kEvL0vNU}You are entitled to be granted land in case you have none, whenever possible.",
-                FeudalRights.Conquest_Rights => "{=7TCkYXav}You are entitled to the ownership of any lands you conquered by yourself.",
-                _ => "{=!}"
+                FeudalRights.Absolute_Land_Rights => new TextObject("{=pmw8kEKb}You are entitled to ownership of any conquered lands whose title you own."),
+                FeudalRights.Enfoeffement_Rights => new TextObject("{=kEvL0vNU}You are entitled to be granted land in case you have none, whenever possible."),
+                FeudalRights.Conquest_Rights => new TextObject("{=7TCkYXav}You are entitled to the ownership of any lands you conquered by yourself."),
+                _ => new TextObject("{=!}")
             };
         }
 

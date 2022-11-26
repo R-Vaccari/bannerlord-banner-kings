@@ -42,7 +42,7 @@ namespace BannerKings.Dialogue
             result.Add(new DialogueOption(
                 new TextObject("{=!}The union between {PROPOSER} and {PROPOSED} is not adequate. Our {PROPOSED} is worth more than that.")
                 .SetTextVariable("PROPOSED", contract.Proposed.Name)
-                .SetTextVariable("PROPOSER", contract.Proposed.Name),
+                .SetTextVariable("PROPOSER", contract.Proposer.Name),
                 -0.2f,
                 0.2f,
                 0f,
@@ -53,7 +53,7 @@ namespace BannerKings.Dialogue
             result.Add(new DialogueOption(
                 new TextObject("{=!}The union between {PROPOSER} and {PROPOSED} is not adequate. Our {PROPOSED} is worth more than that.")
                 .SetTextVariable("PROPOSED", contract.Proposed.Name)
-                .SetTextVariable("PROPOSER", contract.Proposed.Name),
+                .SetTextVariable("PROPOSER", contract.Proposer.Name),
                 -0.2f,
                 0.2f,
                 0f,
@@ -74,7 +74,7 @@ namespace BannerKings.Dialogue
             result.Add(new DialogueOption(
                 new TextObject("{=!}Unfortunately, I do not find the union between {PROPOSER} and {PROPOSED} to be adequate. You should improve the standing of your family within the realm, and then we may renegotiate.")
                 .SetTextVariable("PROPOSED", contract.Proposed.Name)
-                .SetTextVariable("PROPOSER", contract.Proposed.Name),
+                .SetTextVariable("PROPOSER", contract.Proposer.Name),
                 0.3f,
                 0.2f,
                 0f,
@@ -85,14 +85,13 @@ namespace BannerKings.Dialogue
             result.Add(new DialogueOption(
                 new TextObject("{=!}My friend, the union of {PROPOSER} and {PROPOSED} is not one of fairness. Although it would be a pleasure to strengthen our houses, I do not find this to be the correct path.")
                 .SetTextVariable("PROPOSED", contract.Proposed.Name)
-                .SetTextVariable("PROPOSER", contract.Proposed.Name),
+                .SetTextVariable("PROPOSER", contract.Proposer.Name),
                 1f,
                 0f,
                 0f,
                 0.3f,
                 0.2f,
                 true));
-
 
             return result;
         }
@@ -110,7 +109,6 @@ namespace BannerKings.Dialogue
                 0f,
                 0f,
                 true));
-
 
             return result;
         }

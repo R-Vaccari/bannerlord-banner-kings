@@ -35,35 +35,45 @@ namespace BannerKings.Models.Vanilla
             return result;
         }
 
-        public override int GetPrice(EquipmentElement itemRosterElement, MobileParty clientParty, PartyBase merchant, bool isSelling, float inStoreValue, float supply, float demand)
+        /*private float GetConsumptionFactor(ConsumptionType consumption, float value)
         {
-            int result = base.GetPrice(itemRosterElement, clientParty, merchant, isSelling, inStoreValue, supply, demand);
-            if (itemRosterElement.Item.ItemCategory.IsAnimal)
+            float diff = value - 1f;
+            float factor;
+            switch (consumption)
             {
-                result += (int)(result * 0.5f);
+                case ConsumptionType.Luxury:
+                    factor = 1.5f;
+                    break;
+                case ConsumptionType.Industrial:
+                    factor = 1.5f;
+                    break;
+                case ConsumptionType.Food:
+                    factor = 1.5f;
+                    break;
+                default:
+                    factor = 1.5f;
+                    break;
             }
-
-            return result;
-        }
+        }*/
 
         public override float GetBasePriceFactor(ItemCategory itemCategory, float inStoreValue, float supply, float demand,
             bool isSelling, int transferValue)
         {
-            var baseResult = base.GetBasePriceFactor(itemCategory, inStoreValue, supply, demand, isSelling, transferValue);
+            float baseResult = base.GetBasePriceFactor(itemCategory, inStoreValue, supply, demand, isSelling, transferValue);
 
-            if (itemCategory.IsTradeGood)
+            if (!itemCategory.IsAnimal)
             {
-                baseResult = MathF.Clamp(baseResult, 0.4f, 8f);
+                baseResult *= 0.9f;
             }
 
             if (itemCategory.Properties == ItemCategory.Property.BonusToFoodStores)
             {
-                baseResult = MathF.Clamp(baseResult, 0.1f, 4f);
+                return MathF.Clamp(baseResult, 0.3f, 3f);
             }
 
-            if (itemCategory.IsAnimal)
+            if (itemCategory.IsTradeGood)
             {
-                baseResult = MathF.Clamp(baseResult, 0.4f, 4f);
+                return MathF.Clamp(baseResult, 0.3f, 10f);
             }
 
             return baseResult;

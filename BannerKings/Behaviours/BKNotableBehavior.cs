@@ -135,7 +135,7 @@ namespace BannerKings.Behaviours
                     hero.VolunteerTypes[i] = basicVolunteer;
                     flag = true;
                 }
-                else if (characterObject.UpgradeTargets.Length != 0 && characterObject.Tier <= 3)
+                else if (characterObject.UpgradeTargets != null && characterObject.UpgradeTargets.Length != 0 && characterObject.Tier <= 3)
                 {
                     var num = MathF.Log(hero.Power / (float)characterObject.Tier, 2f) * 0.01f;
                     if (!(MBRandom.RandomFloat < num))
@@ -366,6 +366,12 @@ namespace BannerKings.Behaviours
             {
                 hintText = new TextObject("{=!}{HERO} does not like you enough. Gain their trust first.")
                     .SetTextVariable("HERO", Hero.OneToOneConversationHero.Name);
+                return false;
+            }
+
+            if (Hero.OneToOneConversationHero.IsPreacher)
+            {
+                hintText = new TextObject("{=!}Not possible to convert preachers.");
                 return false;
             }
 

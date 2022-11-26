@@ -25,11 +25,14 @@ namespace BannerKings.Models.BKModels
             var filledCapacity = data.TotalPop / CalculateSettlementCap(settlement, data).ResultNumber;
             data.Classes.ForEach(popClass =>
             {
+                var factor = POP_GROWTH_FACTOR;
                 if (popClass.type != PopType.Slaves)
                 {
-                    result.Add(popClass.count * POP_GROWTH_FACTOR, new TextObject("{=!}{POPULATION_CLASS} growth")
-                        .SetTextVariable("POPULATION_CLASS", Utils.Helpers.GetClassName(popClass.type, settlement.Culture)));
+                    factor *= 0.4f;
                 }
+
+                result.Add(popClass.count * factor, new TextObject("{=!}{POPULATION_CLASS} growth")
+                    .SetTextVariable("POPULATION_CLASS", Utils.Helpers.GetClassName(popClass.type, settlement.Culture)));
             });
 
             result.AddFactor(-filledCapacity, new TextObject("{=!}Filled capacity"));
@@ -47,7 +50,6 @@ namespace BannerKings.Models.BKModels
                 result.AddFactor(factor, new TextObject("{=!}Repopulation"));
             }
  
-
             if (settlement.IsVillage)
             {
                 return result;
@@ -103,14 +105,12 @@ namespace BannerKings.Models.BKModels
                 }
             }
 
-
             return result;
         }
 
         public ExplainedNumber CalculatePopulationClassDemand(Settlement settlement, PopType type, bool explanations = false)
         {
             var result = new ExplainedNumber(1f, explanations);
-
             var faction = settlement.OwnerClan.Kingdom;
             if (faction != null)
             {
@@ -120,7 +120,6 @@ namespace BannerKings.Models.BKModels
                     {
                         result.AddFactor(-0.3f, DefaultPolicies.Serfdom.Name);
                     }
-
 
                     if (faction.ActivePolicies.Contains(DefaultPolicies.ForgivenessOfDebts))
                     {
@@ -142,7 +141,6 @@ namespace BannerKings.Models.BKModels
                         {
                             result.AddFactor(0.5f, DefaultDemesneLaws.Instance.SlaveryAserai.Name);
                         }
-
 
                         if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.SlavesAgricultureDuties))
                         {
@@ -210,7 +208,6 @@ namespace BannerKings.Models.BKModels
             float medium = (dic[PopType.Slaves][0] + dic[PopType.Slaves][1]) / 2f;
 
             result.AddFactor(medium - fraction, new TextObject("{=!}Local demand"));
-
 
             return result;
         }

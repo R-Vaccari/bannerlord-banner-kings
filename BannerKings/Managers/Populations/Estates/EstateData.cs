@@ -28,6 +28,11 @@ namespace BannerKings.Managers.Populations.Estates
             int totalDeducted = 0;
             foreach (Estate estate in Estates)
             {
+                if (estate.IsDisabled)
+                {
+                    continue;
+                }
+
                 var result = (int)(tradeTax * (BannerKingsConfig.Instance.EstatesModel.GetEstateWorkforceProportion(estate, data) * 
                     (1f - estate.TaxRatio.ResultNumber)));
                 totalDeducted += result;

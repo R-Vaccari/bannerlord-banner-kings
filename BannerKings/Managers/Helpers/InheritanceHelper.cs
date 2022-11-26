@@ -83,7 +83,6 @@ namespace BannerKings.Managers.Helpers
                 {
                     inheritanceDic[heir].Add(title);
                 }
-               
             }
             return inheritanceDic;
         }
@@ -99,10 +98,10 @@ namespace BannerKings.Managers.Helpers
                 if (result > score)
                 {
                     heir = hero;
+                    score = result;
                 }
             }
             return heir;
         }
-
     }
 }

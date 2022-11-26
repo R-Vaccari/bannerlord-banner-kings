@@ -25,7 +25,8 @@ namespace BannerKings.Models.Vanilla
                 totalTaxes += wk.TaxExpenses();
             }
 
-            return base.CalculateNotableDailyGoldChange(hero, applyWithdrawals) - totalTaxes;
+            var estates = CalculateOwnerIncomeFromEstates(hero, applyWithdrawals);
+            return base.CalculateNotableDailyGoldChange(hero, applyWithdrawals) - totalTaxes + estates;
         }
 
         public override int CalculateOwnerIncomeFromWorkshop(Workshop workshop)
@@ -44,6 +45,26 @@ namespace BannerKings.Models.Vanilla
             return result;
         }
 
+        public int CalculateOwnerIncomeFromEstates(Hero owner, bool applyWithdrawals)
+        {
+            float result = 0;
+            foreach (var estate in BannerKingsConfig.Instance.PopulationManager.GetEstates(owner)) 
+            {
+                if (estate.EstatesData.Settlement.MapFaction.IsAtWarWith(owner.MapFaction))
+                {
+                    continue;
+                }
+
+                var estateIncome = estate.TaxAccumulated * 0.8f;
+                result += estateIncome;
+                if (applyWithdrawals)
+                {
+                    estate.TaxAccumulated -= (int)estateIncome;
+                }
+            }
+
+            return (int)result;
+        }
 
         private int GetWorkshopTaxes(Workshop workshop)
         {
@@ -97,6 +118,20 @@ namespace BannerKings.Models.Vanilla
 
         public void AddIncomes(Clan clan, ref ExplainedNumber result, bool applyWithdrawals)
         {
+            foreach (var hero in clan.Heroes)
+            {
+                int estateIncome = CalculateOwnerIncomeFromEstates(hero, applyWithdrawals);
+
+                if (applyWithdrawals && hero != clan.Leader)
+                {
+                    hero.ChangeHeroGold(estateIncome);
+                }
+                else
+                {
+                    result.Add(estateIncome, new TextObject("{=!}Estate properties"));
+                }
+            }
+
             var kingdom = clan.Kingdom;
             var wkModel = (BKWorkshopModel) Campaign.Current.Models.WorkshopModel;
 

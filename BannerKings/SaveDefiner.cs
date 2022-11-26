@@ -214,6 +214,7 @@ namespace BannerKings
             ConstructContainerDefinition(typeof(Dictionary<PopType, float>));
             ConstructContainerDefinition(typeof(Dictionary<Kingdom, Town>));
             ConstructContainerDefinition(typeof(Dictionary<Town, Feast>));
+            ConstructContainerDefinition(typeof(Dictionary<Hero, List<Estate>>));
 
 
             ConstructContainerDefinition(typeof(List<MercenaryPrivilege>));

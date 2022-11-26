@@ -2,6 +2,7 @@
 using BannerKings.Managers.CampaignStart;
 using BannerKings.Managers.Education.Lifestyles;
 using BannerKings.Managers.Skills;
+using BannerKings.Settings;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Party;
@@ -81,6 +82,12 @@ namespace BannerKings.Models.Vanilla
                     .HasDebuff(DefaultStartOptions.Instance.Caravaneer))
             {
                 baseResult.AddFactor(-0.05f, DefaultStartOptions.Instance.Caravaneer.Name);
+            }
+
+            if (BannerKingsSettings.Instance.SlowerParties)
+            {
+                var result = baseResult.ResultNumber * 0.3f;
+                baseResult.Add(-result, new TaleWorlds.Localization.TextObject("{=!}Slower Parties setting"));
             }
 
             return baseResult;

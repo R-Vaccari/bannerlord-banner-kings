@@ -7,7 +7,6 @@ using BannerKings.Managers.Innovations;
 using BannerKings.Managers.Items;
 using BannerKings.Managers.Kingdoms.Policies;
 using BannerKings.Managers.Skills;
-using BannerKings.Managers.Titles.Laws;
 using BannerKings.Models.Vanilla;
 using BannerKings.UI;
 using Bannerlord.UIExtenderEx;
@@ -103,6 +102,7 @@ namespace BannerKings
             campaignStarter.AddModel(new BKCombatXpModel());
             campaignStarter.AddModel(new BKBattleMoraleModel());
             campaignStarter.AddModel(new BKLearningModel());
+            campaignStarter.AddModel(new BKKingodmDecsionModel());
             //campaignStarter.LoadGameTexts(BasePath.Name + "Modules/BannerKings/ModuleData/module_strings.xml");
 
             BKAttributes.Instance.Initialize();

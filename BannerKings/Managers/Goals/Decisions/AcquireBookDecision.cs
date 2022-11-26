@@ -24,18 +24,15 @@ namespace BannerKings.Managers.Goals.Decisions
             behavior = Campaign.Current.GetCampaignBehavior<BKEducationBehavior>();
         }
 
-        internal override bool IsAvailable()
-        {
-            var settlement = GetFulfiller().CurrentSettlement;
-            return settlement != null && behavior.GetBookSeller(settlement) != null;
-        }
+        internal override bool IsAvailable() => true;
 
         internal override bool IsFulfilled(out List<TextObject> failedReasons)
         {
             failedReasons = new List<TextObject>();
             var fulfiller = GetFulfiller();
 
-            if (!IsAvailable())
+            var settlement = GetFulfiller().CurrentSettlement;
+            if (settlement == null || behavior.GetBookSeller(settlement) == null)
             {
                 failedReasons.Add(new TextObject("{=!}Not in a settlement or there is no book seller available."));
             }
@@ -84,7 +81,6 @@ namespace BannerKings.Managers.Goals.Decisions
                     hint));
             }
 
-
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                 new TextObject("{=!}Acquire Book").ToString(),
                 new TextObject("{=!}Books can be read by those with the Literate perk. Skill books add xp to a specific skill while Focus books add both xp and a focus point, if possible. Dictionaries are used to help reading other books faster.")
@@ -106,8 +102,7 @@ namespace BannerKings.Managers.Goals.Decisions
         internal override void ApplyGoal()
         {
             var fulfiller = GetFulfiller();
-            var price = fulfiller.CurrentSettlement.Town.GetItemPrice(book.Item);
-            fulfiller.ChangeHeroGold(-price);
+            fulfiller.ChangeHeroGold(-book.Item.Value * 1000);
             fulfiller.PartyBelongedTo.ItemRoster.AddToCounts(book.Item, 1);
         }
 

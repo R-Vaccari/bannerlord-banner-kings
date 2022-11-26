@@ -7,7 +7,6 @@ using BannerKings.UI.Items.UI;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
-using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.ViewModelCollection;
 using TaleWorlds.CampaignSystem.ViewModelCollection.GameMenu.TownManagement;
 using TaleWorlds.Core;
@@ -75,7 +74,7 @@ namespace BannerKings.UI.Estates
                 TownManagementDescriptionItemVM.DescriptionType.Loyalty));
 
             var value = Estate.EstateValue;
-            MainInfo.Add(new TownManagementDescriptionItemVM(new TextObject("{=!}Accumulated Tax:"),
+            MainInfo.Add(new TownManagementDescriptionItemVM(new TextObject("{=!}Estate Value:"),
                (int)value.ResultNumber,
                0,
                TownManagementDescriptionItemVM.DescriptionType.Gold,
@@ -177,7 +176,6 @@ namespace BannerKings.UI.Estates
                     .ToString()));
 
                 ExtraInfos.Add(WorkforceInfo);
-
 
                 StatsInfo.Add(new InformationElement(GameTexts.FindText("str_total_influence").ToString(),
                     FormatFloatGain(Estate.Influence),

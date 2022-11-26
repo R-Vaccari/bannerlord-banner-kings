@@ -215,7 +215,7 @@ namespace BannerKings.UI.Extensions
                 }
             }
 
-            var sorted = BannerKingsConfig.Instance.TitleModel.CalculateInheritanceLine(clan);
+            var sorted = BannerKingsConfig.Instance.TitleModel.CalculateInheritanceLine(clan, null, 4);
             for (int i = 0; i < sorted.Count(); i++)
             {
                 var hero = sorted.ElementAt(i).Key;

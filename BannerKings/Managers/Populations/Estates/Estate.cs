@@ -1,7 +1,6 @@
 ﻿using BannerKings.Extensions;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -37,13 +36,17 @@ namespace BannerKings.Managers.Populations.Estates
             float totalSerfs = data.GetTypeCount(PopType.Serfs);
             float totalSlaves = data.GetTypeCount(PopType.Slaves) * (1f - data.EconomicData.StateSlaves);
 
-            int desiredWorkforce = (int)(acres / 2f);
+            int desiredWorkforce = (int)(acres / 5f);
             float desiredSerfs = (int)(desiredWorkforce * 0.8f);
             float desiredSlaves = (int)(desiredWorkforce * 0.2f);
 
-            return new Estate(notable, data.EstateData, farmland, pastureland, woodland, 
+            var result = new Estate(notable, data.EstateData, farmland, pastureland, woodland,
                 (int)MathF.Min(desiredSerfs, totalSerfs * 0.15f),
                 (int)MathF.Min(desiredSlaves, totalSlaves * 0.25f));
+
+            result.AddManpower(PopType.Serfs, result.Serfs * 0.05f);
+
+            return result;
         }
 
         [SaveableProperty(1)] public Hero Owner { get; private set; }
@@ -52,6 +55,7 @@ namespace BannerKings.Managers.Populations.Estates
 
         public void SetOwner(Hero newOnwer)
         {
+            BannerKingsConfig.Instance.PopulationManager.ChangeEstateOwner(this, newOnwer);
             Owner = newOnwer;
             if (newOnwer == Hero.MainHero)
             {
@@ -112,8 +116,7 @@ namespace BannerKings.Managers.Populations.Estates
             }
         }
 
-
-        public float Influence => BannerKingsConfig.Instance.InfluenceModel.GetNoblesInfluence(EstatesData.Settlement, 0);
+        public float Influence => 0;
 
         public float Acreage => Farmland + Pastureland + Woodland;
 
@@ -125,7 +128,6 @@ namespace BannerKings.Managers.Populations.Estates
 
         [SaveableProperty(8)] public int Serfs { get; private set; }
         [SaveableProperty(9)] public int Slaves { get; private set; }
-
      
         public void ChangeTask(EstateTask task) => Task = task;
         public void ChangeDuty(EstateDuty duty) => Duty = duty;
@@ -133,14 +135,6 @@ namespace BannerKings.Managers.Populations.Estates
         [SaveableProperty(10)] public EstateDuty Duty { get; private set; }
         [SaveableProperty(11)] public EstateTask Task { get; private set; }
         [SaveableProperty(12)] private Dictionary<PopType, float> Manpowers { get; set; }
-
-        public int AddIncomeToHero()
-        {
-            var result = TaxAccumulated;
-            Owner.ChangeHeroGold(TaxAccumulated);
-            TaxAccumulated = 0;
-            return result;
-        }
 
         public int GetTypeCount(PopType type)
         {
@@ -203,7 +197,7 @@ namespace BannerKings.Managers.Populations.Estates
                 return;
             }
 
-
+            BannerKingsConfig.Instance.PopulationManager.AddEstate(this);
             if (Task == EstateTask.Land_Expansion)
             {
                 var progress = AcreageGrowth.ResultNumber;
@@ -233,8 +227,6 @@ namespace BannerKings.Managers.Populations.Estates
                 }
             }
         }
-
-
 
         public void AddPopulation(PopType type, int toAdd)
         {

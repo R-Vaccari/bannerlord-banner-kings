@@ -16,7 +16,6 @@ namespace BannerKings.UI.Kingdoms
         private MBBindingList<DemesneLawVM> laws;
         private MBBindingList<HeirVM> heirs;
         private HeirVM mainHeir;
-       
 
         public KingdomDemesneVM(FeudalTitle title, Kingdom kingdom) : base(null, false)
         {
@@ -35,40 +34,43 @@ namespace BannerKings.UI.Kingdoms
             Laws.Clear();
             Heirs.Clear();
 
-            bool isKing = Kingdom.Leader == Hero.MainHero && Title.deJure == Hero.MainHero;
-            foreach (var law in Title.contract.DemesneLaws)
+            if (Title != null)
             {
-                Laws.Add(new DemesneLawVM(DefaultDemesneLaws.Instance.GetLawsByType(law.LawType),
-                    law,
-                    isKing,
-                    OnChange));
-            }
-
-            var candidates = BannerKingsConfig.Instance.TitleModel.GetSuccessionCandidates(Kingdom.Leader, Title.contract);
-            var explanations = new Dictionary<Hero, ExplainedNumber>();
-            var maxScore = 0f;
-
-            foreach (Hero hero in candidates)
-            {
-                var explanation = BannerKingsConfig.Instance.TitleModel.GetSuccessionHeirScore(Kingdom.Leader, hero, Title.contract, true);
-                explanations.Add(hero, explanation);
-            }
-
-            var sorted = (from x in explanations
-                         orderby x.Value.ResultNumber descending
-                         select x).Take(6);
-
-            for (int i = 0; i < sorted.Count(); i++)
-            {
-                var hero = sorted.ElementAt(i).Key;
-                var exp = sorted.ElementAt(i).Value;
-                if (i == 0)
+                bool isKing = Kingdom.Leader == Hero.MainHero && Title.deJure == Hero.MainHero;
+                foreach (var law in Title.contract.DemesneLaws)
                 {
-                    MainHeir = new HeirVM(hero, exp);
+                    Laws.Add(new DemesneLawVM(DefaultDemesneLaws.Instance.GetLawsByType(law.LawType),
+                        law,
+                        isKing,
+                        OnChange));
                 }
-                else
+
+                var candidates = BannerKingsConfig.Instance.TitleModel.GetSuccessionCandidates(Kingdom.Leader, Title.contract);
+                var explanations = new Dictionary<Hero, ExplainedNumber>();
+                var maxScore = 0f;
+
+                foreach (Hero hero in candidates)
                 {
-                    Heirs.Add(new HeirVM(hero, exp));
+                    var explanation = BannerKingsConfig.Instance.TitleModel.GetSuccessionHeirScore(Kingdom.Leader, hero, Title.contract, true);
+                    explanations.Add(hero, explanation);
+                }
+
+                var sorted = (from x in explanations
+                              orderby x.Value.ResultNumber descending
+                              select x).Take(6);
+
+                for (int i = 0; i < sorted.Count(); i++)
+                {
+                    var hero = sorted.ElementAt(i).Key;
+                    var exp = sorted.ElementAt(i).Value;
+                    if (i == 0)
+                    {
+                        MainHeir = new HeirVM(hero, exp);
+                    }
+                    else
+                    {
+                        Heirs.Add(new HeirVM(hero, exp));
+                    }
                 }
             }
         }
