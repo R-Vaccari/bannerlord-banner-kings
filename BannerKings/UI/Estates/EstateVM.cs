@@ -214,21 +214,13 @@ namespace BannerKings.UI.Estates
             var title = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement);
             ReclaimVisible = Estate.Owner != null && Hero.MainHero == title.deJure && settlement.MapFaction == Hero.MainHero.MapFaction &&
                 Estate.Owner.MapFaction != Hero.MainHero.MapFaction;
-
         }
 
         private void ExecuteBuy()
         {
             if (buyAction.Possible)
             {
-                var seller = Estate.Owner;
-                if (seller == null)
-                {
-                    seller = BannerKingsConfig.Instance.TitleManager.GetTitle(Estate.EstatesData.Settlement).deJure;
-                }
-
-                GiveGoldAction.ApplyBetweenCharacters(Hero.MainHero, seller, (int)Estate.EstateValue.ResultNumber);
-                Estate.SetOwner(Hero.MainHero);
+                buyAction.TakeAction();
                 RefreshValues();
             } 
         }
@@ -242,7 +234,7 @@ namespace BannerKings.UI.Estates
                 foreach (var hero in BannerKingsConfig.Instance.EstatesModel.GetGrantCandidates(grantAction))
                 {
                     var action = BannerKingsConfig.Instance.EstatesModel.GetGrant(Estate, Hero.MainHero, hero);
-                    list.Add(new InquiryElement(hero,
+                    list.Add(new InquiryElement(action,
                         hero.Name.ToString(),
                         new ImageIdentifier(CampaignUIHelper.GetCharacterCode(hero.CharacterObject, true)),
                         action.Possible,
@@ -259,10 +251,8 @@ namespace BannerKings.UI.Estates
                     string.Empty,
                     delegate (List<InquiryElement> list)
                     {
-                        var hero = (Hero)list[0].Identifier;
-                        Estate.SetOwner(hero);
-                        ChangeRelationAction.ApplyPlayerRelation(hero,
-                            BannerKingsConfig.Instance.EstatesModel.CalculateEstateGrantRelation(Estate, Hero.MainHero));
+                        var action = (EstateAction)list[0].Identifier;
+                        action.TakeAction();
                         RefreshValues();
                     },
                     null));
@@ -273,9 +263,7 @@ namespace BannerKings.UI.Estates
         {
             if (reclaimAction.Possible)
             {
-                ChangeRelationAction.ApplyPlayerRelation(Estate.Owner,
-                            -BannerKingsConfig.Instance.EstatesModel.CalculateEstateGrantRelation(Estate, Hero.MainHero));
-                Estate.SetOwner(Hero.MainHero);
+                reclaimAction.TakeAction();
                 RefreshValues();
             }
         }
