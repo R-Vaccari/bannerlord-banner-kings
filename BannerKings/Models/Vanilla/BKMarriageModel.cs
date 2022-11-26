@@ -12,7 +12,6 @@ namespace BannerKings.Models.Vanilla
 {
     public class BKMarriageModel : DefaultMarriageModel
     {
-
         public ExplainedNumber IsMarriageAdequate(Hero proposer, Hero secondHero, bool explanations = false)
         {
             var result = new ExplainedNumber(0f, explanations);
@@ -20,7 +19,6 @@ namespace BannerKings.Models.Vanilla
             var proposerScore = GetSpouseScore(proposer).ResultNumber * 1.1f;
             var proposedScore = GetSpouseScore(secondHero).ResultNumber;
             result.Add(proposerScore - proposedScore, new TextObject("{=!}Score differences"));
-
 
             if (proposer.Culture != secondHero.Culture)
             {
@@ -102,6 +100,11 @@ namespace BannerKings.Models.Vanilla
                 result.AddFactor(-0.5f, new TextObject("{=!}Common born"));
             }
 
+            if (hero.Spouse != null && hero.Spouse.IsDead)
+            {
+                result.AddFactor(-0.2f, new TextObject("{=!}Widow"));
+            }
+
 
             return result;
         }
@@ -133,7 +136,12 @@ namespace BannerKings.Models.Vanilla
 
             if (hero.IsFemale && !(hero.Age >= 18f && hero.Age <= 45f))
             {
-                result.AddFactor(-0.4f, new TextObject("{=!}Infertile"));
+                result.AddFactor(-0.2f, new TextObject("{=!}Infertile"));
+            }
+
+            if (hero.Spouse != null && hero.Spouse.IsDead)
+            {
+                result.AddFactor(-0.2f, new TextObject("{=!}Widow"));
             }
 
             return result;
