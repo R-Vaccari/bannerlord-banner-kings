@@ -18,6 +18,21 @@
 			<Output output="ItemCategory.iron" output_count="1" />
 		  </Outputs>
 		</Production>
+		<Production conversion_speed="0.5">
+		  <Inputs>
+		  </Inputs>
+		  <Outputs>
+			<Output output="ItemCategory.leather" output_count="1" />
+		  </Outputs>
+		</Production>
+		<Production conversion_speed="1.0">
+		  <Inputs>
+			<Input input_item="grain" />
+		  </Inputs>
+		  <Outputs>
+			<Output output="ItemCategory.bread" />
+		  </Outputs>
+		</Production>
 		<Production conversion_speed="1">
 		  <Inputs>
 			<Input input_item="cow" />

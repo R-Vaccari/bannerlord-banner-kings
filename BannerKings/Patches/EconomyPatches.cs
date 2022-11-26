@@ -1,7 +1,5 @@
 ﻿using HarmonyLib;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 using static BannerKings.Managers.PopulationManager;
 using TaleWorlds.CampaignSystem.CampaignBehaviors;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -24,6 +22,96 @@ namespace BannerKings.Patches
 {
     internal class EconomyPatches
     {
+        [HarmonyPatch(typeof(TownMarketData))]
+        internal class TownMarketDataPatches
+        {
+            [HarmonyPostfix]
+            [HarmonyPatch("GetPrice", new Type[] { typeof(EquipmentElement), typeof(MobileParty),
+            typeof(bool), typeof(PartyBase)})]
+            private static void GetPricePostfix(TownMarketData __instance, ref int __result, EquipmentElement itemRosterElement, 
+                MobileParty tradingParty = null, bool isSelling = false, PartyBase merchantParty = null)
+            {
+                var item = itemRosterElement.Item;
+                if (item.HasHorseComponent)
+                {
+                    int minimumPrice = 0;
+                    if (item.HorseComponent.MeatCount > 0)
+                    {
+                        int meatPrice = __instance.GetPrice(DefaultItems.Meat, tradingParty, isSelling, merchantParty);
+                        minimumPrice += (int)(meatPrice * (float)item.HorseComponent.MeatCount);
+                    }
+
+                    if (item.HorseComponent.HideCount > 0)
+                    {
+                        int hidePrice = __instance.GetPrice(DefaultItems.Hides, tradingParty, isSelling, merchantParty);
+                        minimumPrice += (int)(hidePrice * (float)item.HorseComponent.HideCount);
+                    }
+
+                    if (__result < minimumPrice)
+                    {
+                        __result += minimumPrice;
+                    }
+                }
+            }
+        }
+
+        [HarmonyPatch(typeof(VillageMarketData))]
+        internal class VillageMarketDataPatches
+        {
+            [HarmonyPostfix]
+            [HarmonyPatch("GetPrice", new Type[] { typeof(EquipmentElement), typeof(MobileParty),
+            typeof(bool), typeof(PartyBase)})]
+            private static void GetPricePostfix(VillageMarketData __instance, ref int __result, EquipmentElement itemRosterElement,
+                MobileParty tradingParty, bool isSelling, PartyBase merchantParty)
+            {
+                var item = itemRosterElement.Item;
+                if (item.HasHorseComponent)
+                {
+                    int minimumPrice = 0;
+                    if (item.HorseComponent.MeatCount > 0)
+                    {
+                        int meatPrice = __instance.GetPrice(DefaultItems.Meat, tradingParty, isSelling, merchantParty);
+                        minimumPrice += (int)(meatPrice * (float)item.HorseComponent.MeatCount);
+                    }
+
+                    if (item.HorseComponent.HideCount > 0)
+                    {
+                        int hidePrice = __instance.GetPrice(DefaultItems.Hides, tradingParty, isSelling, merchantParty);
+                        minimumPrice += (int)(hidePrice * (float)item.HorseComponent.HideCount);
+                    }
+
+                    if (__result < minimumPrice)
+                    {
+                        __result += minimumPrice;
+                    }
+                }
+            }
+        }
+
+        [HarmonyPatch(typeof(HorseComponent))]
+        internal class HorseComponentPatches
+        {
+            [HarmonyPostfix]
+            [HarmonyPatch("MeatCount", MethodType.Getter)]
+            private static void MeatCountPostfix(HorseComponent __instance, ref int __result)
+            {
+                if (__instance.Item != null && __instance.Item.Weight < 10)
+                {
+                    __result = 0;
+                }
+            }
+
+            [HarmonyPostfix]
+            [HarmonyPatch("HideCount", MethodType.Getter)]
+            private static void HideCountPostfix(HorseComponent __instance, ref int __result)
+            {
+                if (__instance.Item != null && __instance.Item.Weight < 10)
+                {
+                    __result = 0;
+                }
+            }
+        }
+
         [HarmonyPatch(typeof(ItemConsumptionBehavior))]
         internal class ItemConsumptionPatch
         {

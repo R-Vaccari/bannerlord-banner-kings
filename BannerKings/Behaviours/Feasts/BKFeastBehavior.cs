@@ -38,14 +38,14 @@ namespace BannerKings.Behaviours.Feasts
                 heroRecords = new Dictionary<Hero, CampaignTime>();
             }
         }
-       
 
         public void LaunchFeast(Town town, List<Clan> guests, MarriageContract marriage = null)
         {
             var feast = new Feast(town.OwnerClan.Leader,
                 guests,
                 town,
-                CampaignTime.WeeksFromNow(1f));
+                CampaignTime.WeeksFromNow(1f),
+                marriage);
 
             if (town.MapFaction == Hero.MainHero.MapFaction)
             {
@@ -86,7 +86,6 @@ namespace BannerKings.Behaviours.Feasts
 
             return CampaignTime.Zero;
         }
-
 
         private void OnMissionStarted(IMission mission)
         {

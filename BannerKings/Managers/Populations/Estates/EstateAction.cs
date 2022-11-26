@@ -1,5 +1,6 @@
 ﻿using System;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Actions;
 
 namespace BannerKings.Managers.Populations.Estates
 {
@@ -25,6 +26,17 @@ namespace BannerKings.Managers.Populations.Estates
             if (Type == ActionType.Grant)
             {
                 BannerKingsConfig.Instance.TitleManager.GrantEstate(this);
+            }
+            else if (Type == ActionType.Buy)
+            {
+                GiveGoldAction.ApplyBetweenCharacters(ActionTaker, Estate.Owner, (int)Estate.EstateValue.ResultNumber);
+                Estate.SetOwner(ActionTaker);
+            }
+            else
+            {
+                ChangeRelationAction.ApplyPlayerRelation(Estate.Owner,
+                           -BannerKingsConfig.Instance.EstatesModel.CalculateEstateGrantRelation(Estate, ActionTaker));
+                Estate.SetOwner(ActionTaker);
             }
         }
     }

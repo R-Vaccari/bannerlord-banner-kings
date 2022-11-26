@@ -266,52 +266,6 @@ namespace BannerKings.Patches
             }
         }
 
-        [HarmonyPatch(typeof(TownMarketData))]
-        internal class TownItemPricePatch
-        {
-            [HarmonyPrefix]
-            [HarmonyPatch("GetPrice", typeof(EquipmentElement), typeof(MobileParty), typeof(bool),
-                typeof(PartyBase))]
-            private static bool Prefix2(TownMarketData __instance, ref int __result,
-                EquipmentElement itemRosterElement, MobileParty tradingParty = null, bool isSelling = false,
-                PartyBase merchantParty = null)
-            {
-                if (itemRosterElement.Item == null || itemRosterElement.Item.ItemCategory == null)
-                {
-                    __result = 0;
-                }
-                else
-                {
-                    Dictionary<ItemCategory, ItemData> dictionary = (Dictionary<ItemCategory, ItemData>)AccessTools
-                        .Field(__instance.GetType(), "_itemDict")
-                        .GetValue(__instance);
-                    ItemData data;
-                    try
-                    {
-                        if (dictionary.ContainsKey(itemRosterElement.Item.ItemCategory))
-                        {
-                            data = dictionary[itemRosterElement.Item.ItemCategory];
-                        }
-                        else
-                        {
-                            data = default(ItemData);
-                        }
-
-                    } catch (NullReferenceException e)
-                    {
-                        data = default(ItemData);
-                    }
-
-                    __result = Campaign.Current.Models.TradeItemPriceFactorModel.GetPrice(itemRosterElement,
-                        tradingParty, merchantParty, isSelling, data.InStoreValue, data.Supply,
-                        data.Demand);
-                }
-
-                return false;
-            }
-        }
-
-
         [HarmonyPatch(typeof(Hero), nameof(Hero.CanHaveQuestsOrIssues))]
         internal class CanHaveQuestsOrIssuesPatch
         {

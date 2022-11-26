@@ -30,11 +30,9 @@ namespace BannerKings.Behaviours.Marriage
 
         [SaveableProperty(9)] public bool Confirmed { get; set; }
 
-
         public (TextObject, bool) IsContractAdequate()
         {
             (TextObject, bool) result = new(new TextObject("{=!}The proposal is adequate."), true);
-
 
             var willAccept = BannerKingsConfig.Instance.MarriageModel.IsMarriageAdequate(Proposer, Proposed, true);
             if (willAccept.ResultNumber < 1f)
@@ -49,7 +47,6 @@ namespace BannerKings.Behaviours.Marriage
                 result = new(new TextObject("{=!}Our house is one of great importance in the realm. As such, we expect to marry into other influential families."), false);
                 return result;
             }
-
 
             if (FinalClan == Proposer.Clan)
             {
@@ -79,7 +76,6 @@ namespace BannerKings.Behaviours.Marriage
                     return result;
                 }
             }
-
 
             return result;
         }

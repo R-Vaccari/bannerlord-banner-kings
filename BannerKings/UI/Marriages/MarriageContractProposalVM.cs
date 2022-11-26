@@ -76,7 +76,6 @@ namespace BannerKings.UI.Marriages
                 },
                 new TextObject("{=!}Arrange a feast to celebrate the marriage. A selection of families within the realm will be invited, and as a host you ought to provide them a quality celebration. Doing so will allow you to improve your standing with them, as well as bring your family renown."));
 
-
             RefreshValues();
         }
 
@@ -96,7 +95,7 @@ namespace BannerKings.UI.Marriages
 
             foreach (var hero in Clan.PlayerClan.Heroes)
             {
-                if (!hero.IsChild && hero.Spouse == null )
+                if (!hero.IsChild && !hero.IsDead && (hero.Spouse == null || hero.Spouse.IsDead))
                 {
                     if (ProposedHero != null && ProposedHero.Hero.IsFemale == hero.IsFemale)
                     {
@@ -109,7 +108,7 @@ namespace BannerKings.UI.Marriages
 
             foreach (var hero in ClanLeaderProposedTo.Clan.Heroes)
             {
-                if (!hero.IsChild && hero.Spouse == null)
+                if (!hero.IsChild && !hero.IsDead && (hero.Spouse == null || hero.Spouse.IsDead))
                 {
                     if (ProposerHero != null && ProposerHero.Hero.IsFemale == hero.IsFemale)
                     {
@@ -150,7 +149,6 @@ namespace BannerKings.UI.Marriages
                 ProposedSpouseHint.HintText = new TextObject("{=!}Spouse value.\n\n{HINT}")
                     .SetTextVariable("HINT", score.GetExplanations());
             }
-
 
             CanCreateAlliance = false;
 
@@ -315,7 +313,6 @@ namespace BannerKings.UI.Marriages
         [DataSourceProperty]
         public string SpouseHeaderText => new TextObject("{=!}Spouse Score").ToString();
 
-
         [DataSourceProperty]
         public string ProposerSpouseValueText
         {
@@ -344,7 +341,6 @@ namespace BannerKings.UI.Marriages
             }
         }
 
-
         [DataSourceProperty]
         public string FinalClanText
         {
@@ -358,7 +354,6 @@ namespace BannerKings.UI.Marriages
                 }
             }
         }
-
 
         [DataSourceProperty]
         public string InfluenceCostText
