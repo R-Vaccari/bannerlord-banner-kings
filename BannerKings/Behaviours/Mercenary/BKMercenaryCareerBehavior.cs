@@ -1,7 +1,10 @@
 ﻿using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
+using TaleWorlds.CampaignSystem.GameMenus;
+using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.Core;
+using TaleWorlds.Localization;
 
 namespace BannerKings.Behaviours.Mercenary
 {
@@ -38,9 +41,89 @@ namespace BannerKings.Behaviours.Mercenary
             }
         }
 
-        private void OnSessionLaunched(CampaignGameStarter starer)
+        private void OnSessionLaunched(CampaignGameStarter starter)
         {
             InitCareers();
+
+            starter.AddGameMenuOption("bannerkings_actions", "action_recruit_custom_levy",
+                "{=!}Recruit {CUSTOM_TROOP}",
+                (MenuCallbackArgs args) =>
+                {
+                    args.optionLeaveType = GameMenuOption.LeaveType.Recruit;
+                    if (!careers.ContainsKey(Clan.PlayerClan))
+                    {
+                        return false;
+                    }
+
+                    if (Clan.PlayerClan.Kingdom == null)
+                    {
+                        return false;
+                    }
+
+                    var career = careers[Clan.PlayerClan];
+                    var troop = career.GetTroop(Clan.PlayerClan.Kingdom, true);
+                    if (troop == null)
+                    {
+                        return false;
+                    }
+
+                    if (troop.Character.Culture != Hero.MainHero.CurrentSettlement.Culture)
+                    {
+                        return false;
+                    }
+
+                    MBTextManager.SetTextVariable("CUSTOM_TROOP", troop.Name);
+
+                    return true;
+                }, 
+                (MenuCallbackArgs args) =>
+                {
+                    var career = careers[Clan.PlayerClan];
+                    var troop = career.GetTroop(Clan.PlayerClan.Kingdom, true);
+                    var cost = Campaign.Current.Models.PartyWageModel.GetTroopRecruitmentCost(troop.Character, Hero.MainHero);
+                    GiveGoldAction.ApplyForPartyToSettlement(MobileParty.MainParty.Party, Hero.MainHero.CurrentSettlement, cost);
+                    MobileParty.MainParty.AddElementToMemberRoster(troop.Character, 1);
+                });
+
+            starter.AddGameMenuOption("bannerkings_actions", "action_recruit_custom_professional",
+                "{=!}Recruit {CUSTOM_TROOP}",
+                (MenuCallbackArgs args) =>
+                {
+                    args.optionLeaveType = GameMenuOption.LeaveType.Recruit;
+                    if (!careers.ContainsKey(Clan.PlayerClan))
+                    {
+                        return false;
+                    }
+
+                    if (Clan.PlayerClan.Kingdom == null)
+                    {
+                        return false;
+                    }
+
+                    var career = careers[Clan.PlayerClan];
+                    var troop = career.GetTroop(Clan.PlayerClan.Kingdom);
+                    if (troop == null)
+                    {
+                        return false;
+                    }
+
+                    if (troop.Character.Culture != Hero.MainHero.CurrentSettlement.Culture)
+                    {
+                        return false;
+                    }
+
+                    MBTextManager.SetTextVariable("CUSTOM_TROOP", troop.Name);
+
+                    return true;
+                },
+                (MenuCallbackArgs args) =>
+                {
+                    var career = careers[Clan.PlayerClan];
+                    var troop = career.GetTroop(Clan.PlayerClan.Kingdom);
+                    var cost = Campaign.Current.Models.PartyWageModel.GetTroopRecruitmentCost(troop.Character, Hero.MainHero);
+                    GiveGoldAction.ApplyForPartyToSettlement(MobileParty.MainParty.Party, Hero.MainHero.CurrentSettlement, cost);
+                    MobileParty.MainParty.AddElementToMemberRoster(troop.Character, 1);
+                });
         }
 
         private void OnGameLoaded(CampaignGameStarter starer)

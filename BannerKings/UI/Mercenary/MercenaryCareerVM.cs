@@ -49,7 +49,6 @@ namespace BannerKings.UI.Mercenary
         [DataSourceProperty] public string PrivilegeAvailableHeaderText => new TextObject("{=!}Privilege Available").ToString();
         [DataSourceProperty] public string DailyPointsGainHeaderText => new TextObject("{=!}Points Gain").ToString();
 
-
         [DataSourceProperty] public HintViewModel TimeHint => new HintViewModel(
             new TextObject("{=!}Your total time of service as mercenary, across all kingdoms. Every year of service, your clan gains Reputation as mercenaries."));
 
@@ -274,7 +273,7 @@ namespace BannerKings.UI.Mercenary
             var customTroop = Career.GetTroop(Career.Kingdom, levy);
             var list = new List<InquiryElement>();
             var items = Campaign.Current.ObjectManager.GetObjectTypeList<ItemObject>();
-            foreach (var preset in DefaultCustomTroopPresets.Instance.Levies)
+            foreach (var preset in DefaultCustomTroopPresets.Instance.GetAdequatePresets(levy ? 16 : 26))
             {
                 list.Add(new InquiryElement(preset,
                     preset.Name.ToString(),
