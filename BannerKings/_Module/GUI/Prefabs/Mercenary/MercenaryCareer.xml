@@ -68,6 +68,23 @@
 														   MarginTop="20">
 													<Children>
 														<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
+																		HorizontalAlignment="Center" Brush="TownManagement.Project.Name.Text" Brush.FontSize="20" Text="@DailyPointsGainHeaderText" />
+														<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren">
+															<Children>
+																<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
+																		HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="25" Text="@DailyPointsGainText" />
+																<HintWidget DataSource="{DailyPointsGainHint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed"
+																			SuggestedHeight="25" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" />
+															</Children>
+														</Widget>
+													</Children>
+												</ListPanel>
+											
+											
+												<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" StackLayout.LayoutMethod="VerticalBottomToTop"
+														   MarginTop="20">
+													<Children>
+														<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
 																		HorizontalAlignment="Center" Brush="TownManagement.Project.Name.Text" Brush.FontSize="20" Text="@PrivilegeAvailableHeaderText" />
 														<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren">
 															<Children>

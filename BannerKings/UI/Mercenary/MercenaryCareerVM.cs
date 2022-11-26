@@ -1,8 +1,10 @@
 ﻿using BannerKings.Behaviours.Mercenary;
 using HarmonyLib;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.ViewModelCollection;
 using TaleWorlds.Core;
 using TaleWorlds.Core.ViewModelCollection;
 using TaleWorlds.Core.ViewModelCollection.Information;
@@ -17,12 +19,13 @@ namespace BannerKings.UI.Mercenary
         private string reputationText, pointsText, timeText,
             levyCharacterName, professionalCharacterName,
             editLevyText, editProfessionalText,
-            privilegeAvailableText;
+            privilegeAvailableText, dailyPointsGainText;
         private CharacterViewModel levyCharacter, professionalCharacter;
         private MBBindingList<MercenaryPrivilegeVM> privileges;
         private bool canEditLevy, canEditProfessional,
             canAskPrivilege, levyVisible, professionalVisible,
             showNoPrivilegesText;
+        private HintViewModel dailyPointsGainHint;
         public MercenaryCareerVM() : base(null, false)
         {
             Career = Campaign.Current.GetCampaignBehavior<BKMercenaryCareerBehavior>().GetCareer(Clan.PlayerClan);
@@ -44,17 +47,19 @@ namespace BannerKings.UI.Mercenary
         [DataSourceProperty] public string LevyCharacterText => new TextObject("{=!}Levy Character").ToString();
         [DataSourceProperty] public string ProfessionalCharacterText => new TextObject("{=!}Professional Character").ToString();
         [DataSourceProperty] public string PrivilegeAvailableHeaderText => new TextObject("{=!}Privilege Available").ToString();
+        [DataSourceProperty] public string DailyPointsGainHeaderText => new TextObject("{=!}Points Gain").ToString();
+
 
         [DataSourceProperty] public HintViewModel TimeHint => new HintViewModel(
-            new TextObject("{=!}Your time of consecutive service for this kingdom."));
+            new TextObject("{=!}Your total time of service as mercenary, across all kingdoms. Every year of service, your clan gains Reputation as mercenaries."));
 
         [DataSourceProperty]
         public HintViewModel ReputationHint => new HintViewModel(
-           new TextObject("{=!}Your time of consecutive service for this kingdom."));
+           new TextObject("{=!}Your reputation as mercenary, shared across all kingdoms. Reputation is awarded by service time (regardless of the contractor) & merit, such as gainning renown while serving."));
 
         [DataSourceProperty]
         public HintViewModel PointsHint => new HintViewModel(
-           new TextObject("{=!}Your Career Points within this kingdom. Career Points are used for requesting Privileges."));
+           new TextObject("{=!}Your Career Points within this kingdom. Career Points are used for requesting Privileges. Points are gained daily based on your clan Reputation and Tier."));
 
         [DataSourceProperty]
         public HintViewModel PrivilegeAvailableHint => new HintViewModel(
@@ -70,11 +75,20 @@ namespace BannerKings.UI.Mercenary
                 PointsText = Career.GetPoints(Career.Kingdom).ToString();
                 ReputationText = FormatValue(Career.Reputation);
 
+                TimeText = new TextObject("{=!}{DAYS} days served")
+                    .SetTextVariable("DAYS", Career.ServiceDays)
+                    .ToString();
+
+                var pointsGain = Campaign.Current.GetCampaignBehavior<BKMercenaryCareerBehavior>().GetDailyCareerPointsGain(Career.Clan);
+                DailyPointsGainText = FormatFloatGain(pointsGain.ResultNumber);
+                DailyPointsGainHint = new HintViewModel(new TextObject("{=!}" + pointsGain.GetExplanations()));
+
                 LevyCharacter = new CharacterViewModel(CharacterViewModel.StanceTypes.OnMount);
                 ProfessionalCharacter = new CharacterViewModel(CharacterViewModel.StanceTypes.OnMount);
 
                 LevyVisible = false;
                 ProfessionalVisible = false;
+
 
                 var privilegesList = Career.GetPrivileges(Career.Kingdom);
                 foreach (var privilege in privilegesList)
@@ -100,7 +114,7 @@ namespace BannerKings.UI.Mercenary
                 {
                     LevyVisible = true;
                     EditLevyText = new TextObject("{=!}Edit").ToString();
-                    LevyCharacterName = levy.Name.ToString();
+                    LevyCharacterName = levy.Name != null ? levy.Name.ToString() : "";
                     LevyCharacter.FillFrom(levy);
                     LevyCharacter.SetEquipment(levy.BattleEquipments.First());
                 }
@@ -110,7 +124,7 @@ namespace BannerKings.UI.Mercenary
                 {
                     ProfessionalVisible = true;
                     EditProfessionalText = new TextObject("{=!}Edit").ToString();
-                    ProfessionalCharacterName = professional.Name.ToString();
+                    ProfessionalCharacterName = professional.Name != null ? professional.Name.ToString() : "";
                     ProfessionalCharacter.FillFrom(professional);
                     ProfessionalCharacter.SetEquipment(professional.BattleEquipments.First());
                 }
@@ -205,11 +219,12 @@ namespace BannerKings.UI.Mercenary
                         RefreshValues();
                         ShowSkillEditing(false);
                     },
-                    null));
+                    null,
+                    false,
+                    new Func<string, Tuple<bool, string>>(CampaignUIHelper.IsStringApplicableForHeroName)));
             }
             else ShowEditingOptions(false);
         }
-
 
         private void ShowEditingOptions(bool levy = true)
         {
@@ -330,7 +345,9 @@ namespace BannerKings.UI.Mercenary
                     RefreshValues();
                     ShowEditingOptions();
                 },
-                null));
+                null,
+                false,
+                new Func<string, Tuple<bool, string>>(CampaignUIHelper.IsStringApplicableForHeroName)));
         }
 
         private void ShowEquipmentOptions(bool levy = true)
@@ -811,6 +828,34 @@ namespace BannerKings.UI.Mercenary
                 if (value != timeText)
                 {
                     timeText = value;
+                    OnPropertyChangedWithValue(value);
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public string DailyPointsGainText
+        {
+            get => dailyPointsGainText;
+            set
+            {
+                if (value != dailyPointsGainText)
+                {
+                    dailyPointsGainText = value;
+                    OnPropertyChangedWithValue(value);
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public HintViewModel DailyPointsGainHint
+        {
+            get => dailyPointsGainHint;
+            set
+            {
+                if (value != dailyPointsGainHint)
+                {
+                    dailyPointsGainHint = value;
                     OnPropertyChangedWithValue(value);
                 }
             }

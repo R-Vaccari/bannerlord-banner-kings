@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
+using TaleWorlds.Core;
 
 namespace BannerKings.Behaviours.Mercenary
 {
@@ -20,8 +21,10 @@ namespace BannerKings.Behaviours.Mercenary
 
         public override void RegisterEvents()
         {
+            CampaignEvents.RenownGained.AddNonSerializedListener(this, OnRenownGained);
             CampaignEvents.DailyTickClanEvent.AddNonSerializedListener(this, OnClanDailyTick);
             CampaignEvents.ClanChangedKingdom.AddNonSerializedListener(this, OnClanChangedKingdom);
+            CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, OnSessionLaunched);
         }
 
         public override void SyncData(IDataStore dataStore)
@@ -31,7 +34,24 @@ namespace BannerKings.Behaviours.Mercenary
             if (careers == null)
             {
                 careers = new Dictionary<Clan, MercenaryCareer>();
+                InitCareers();
             }
+        }
+
+        private void OnSessionLaunched(CampaignGameStarter starer)
+        {
+            InitCareers();
+        }
+
+        private void OnRenownGained(Hero hero, int gainedRenown, bool doNotNotifyPlayer)
+        {
+            if (hero.Clan == null || !careers.ContainsKey(hero.Clan))
+            {
+                return;
+            }
+
+            var career = careers[hero.Clan];
+            career.AddReputation(gainedRenown / 50f, new TaleWorlds.Localization.TextObject("{=!}Reputation from gained renown."));
         }
 
         private void OnClanChangedKingdom(Clan clan, Kingdom oldKingdom, Kingdom newKingdom, 
@@ -52,7 +72,7 @@ namespace BannerKings.Behaviours.Mercenary
                     AddCareer(clan, clan.Kingdom);
                 }
 
-                careers[clan].Tick();
+                careers[clan].Tick(GetDailyCareerPointsGain(clan).ResultNumber);
             }
         }
 
@@ -75,6 +95,15 @@ namespace BannerKings.Behaviours.Mercenary
                     AddCareer(clan, clan.Kingdom);
                 }
             }
+        }
+
+        internal ExplainedNumber GetDailyCareerPointsGain(Clan clan, bool explanations = false)
+        {
+            var result = new ExplainedNumber(1f, explanations);
+            result.Add(clan.Tier / 2f, GameTexts.FindText("str_clan_tier_bonus"));
+            result.Add(careers[clan].Reputation * 5f, new TaleWorlds.Localization.TextObject("{=!}Reputation"));
+
+            return result;
         }
     }
 }

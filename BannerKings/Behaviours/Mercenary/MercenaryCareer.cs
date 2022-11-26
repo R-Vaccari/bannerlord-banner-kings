@@ -5,6 +5,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.Settlements.Workshops;
 using TaleWorlds.Core;
+using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.SaveSystem;
 
@@ -35,9 +36,29 @@ namespace BannerKings.Behaviours.Mercenary
         [SaveableProperty(7)] private Dictionary<CultureObject, CharacterObject> ProfessionalTroops { get; set; }
         [SaveableProperty(8)] private Dictionary<Kingdom, CampaignTime> PrivilegeTimes { get; set; }
 
-        internal void Tick()
+        [SaveableProperty(9)] public int ServiceDays { get; private set; }
+
+        internal void Tick(float progress)
         {
-            KingdomProgress[Kingdom] += 1000f;
+            KingdomProgress[Kingdom] += progress;
+            ServiceDays++;
+            if ((ServiceDays / CampaignTime.DaysInYear) % 1 == 0)
+            {
+                AddReputation(0.05f, new TextObject("{=!}A year of service has passed."));
+            }
+        }
+
+        internal void AddReputation(float reputation, TextObject reason)
+        {
+            Reputation += reputation;
+            Reputation = MathF.Clamp(Reputation, 0f, 1f);
+
+            if (Clan == Clan.PlayerClan)
+            {
+                MBInformationManager.AddQuickInformation(new TextObject("{=!}You have gained {REPUTATION}% mercenary reputation! {REASON}")
+                    .SetTextVariable("REPUTATION", reputation * 100f)
+                    .SetTextVariable("REASON", reason));
+            }
         }
 
         internal bool HasTimePassedForPrivilege(Kingdom kingdom) => PrivilegeTimes[kingdom].ElapsedSeasonsUntilNow >= 2f;
