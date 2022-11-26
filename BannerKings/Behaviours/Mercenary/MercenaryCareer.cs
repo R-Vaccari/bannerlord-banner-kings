@@ -71,6 +71,8 @@ namespace BannerKings.Behaviours.Mercenary
             }
         }
 
+        internal bool HasPrivilegeCurrentKingdom(MercenaryPrivilege privilege) => KingdomPrivileges[Kingdom].Any(x => x.Equals(privilege));
+
         internal void AddReputation(float reputation, TextObject reason)
         {
             Reputation += reputation;
@@ -87,6 +89,18 @@ namespace BannerKings.Behaviours.Mercenary
         internal bool HasTimePassedForPrivilege(Kingdom kingdom) => PrivilegeTimes[kingdom].ElapsedSeasonsUntilNow >= 2f;
 
         internal CampaignTime GetPrivilegeTime(Kingdom kingdom) => PrivilegeTimes[kingdom];
+
+        internal int GetPrivilegeLevelCurrentKingdom(MercenaryPrivilege privilege) 
+        {
+            int result = 0;
+            var current = KingdomPrivileges[Kingdom].FirstOrDefault(x => x.Equals(privilege));
+            if (current != null)
+            {
+                result = current.Level;
+            }
+
+            return result;
+        }
 
         internal bool IsTroopCustom(CharacterObject character)
         {
