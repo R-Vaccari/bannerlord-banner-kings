@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.Settlements;
+﻿using System.Collections.Generic;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Behaviours.Mercenary

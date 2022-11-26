@@ -101,8 +101,8 @@
 										</ListPanel>
 										
 										
-										<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="7" MarginLeft="350"
-										        MarginRight="350" MarginTop="20" VerticalAlignment="Bottom" PositionYOffset="7"
+										<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="7" MarginLeft="450"
+										        MarginRight="450" MarginTop="20" VerticalAlignment="Bottom" PositionYOffset="7"
 										        Sprite="SPGeneral\TownManagement\horizontal_divider" />
 										
 										<RichTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" MarginTop="50"
