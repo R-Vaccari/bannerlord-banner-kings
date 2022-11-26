@@ -50,9 +50,13 @@ namespace BannerKings.Models.Vanilla
             float result = 0;
             foreach (var estate in BannerKingsConfig.Instance.PopulationManager.GetEstates(owner)) 
             {
+                if (estate.EstatesData.Settlement.MapFaction.IsAtWarWith(owner.MapFaction))
+                {
+                    continue;
+                }
+
                 var estateIncome = estate.TaxAccumulated * 0.8f;
                 result += estateIncome;
-
                 if (applyWithdrawals)
                 {
                     estate.TaxAccumulated -= (int)estateIncome;
