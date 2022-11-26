@@ -7,18 +7,20 @@ namespace BannerKings.Behaviours.Mercenary
     internal class MercenaryPrivilege : BannerKingsObject
     {
         private Func<MercenaryCareer, bool> isAvailable;
+        private Action<MercenaryCareer> onAdded;
         public MercenaryPrivilege(string stringId) : base(stringId)
         {
         }
 
         public void Initialize(TextObject name, TextObject description, TextObject unavailableHint,
-            float points, int maxLevel, Func<MercenaryCareer, bool> isAvailable)
+            float points, int maxLevel, Func<MercenaryCareer, bool> isAvailable, Action<MercenaryCareer> onAdded)
         {
             Initialize(name, description);
             UnAvailableHint = unavailableHint;
             Points = points;
             MaxLevel = maxLevel;
             this.isAvailable = isAvailable;
+            this.onAdded = onAdded;
         }
 
         [SaveableProperty(1)] public int Level { get; private set; }
@@ -47,5 +49,13 @@ namespace BannerKings.Behaviours.Mercenary
             return base.Equals(obj);
         }
 
+
+        internal void OnPrivilegeAdded(MercenaryCareer career)
+        {
+            if (onAdded != null)
+            {
+                onAdded(career);
+            }
+        }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Localization;
 
 namespace BannerKings.Behaviours.Mercenary
@@ -40,7 +42,8 @@ namespace BannerKings.Behaviours.Mercenary
                 delegate(MercenaryCareer career)
                 {
                     return true;
-                });
+                },
+                null);
 
             WorkshopGrant.Initialize(new TextObject("{=!}Workshop Grant"),
                 new TextObject("{=!}Acquire a workshop property. The property will be situated in one of the towns of your contractor."),
@@ -50,7 +53,14 @@ namespace BannerKings.Behaviours.Mercenary
                 2,
                 delegate (MercenaryCareer career)
                 {
-                    return true;
+
+                    return MercenaryCareer.GetWorkshopPrivilege(career) != null;
+                },
+                (MercenaryCareer career) =>
+                {
+                    var workshop = MercenaryCareer.GetWorkshopPrivilege(career);
+                    workshop.SetWorkshop(career.Clan.Leader, workshop.WorkshopType, workshop.Capital, workshop.Upgradable,
+                        workshop.ConstructionTimeRemained, workshop.Level);
                 });
 
             EstateGrant.Initialize(new TextObject("{=!}Estate Grant"),
@@ -61,7 +71,13 @@ namespace BannerKings.Behaviours.Mercenary
                 2,
                 delegate (MercenaryCareer career)
                 {
-                    return true;
+                    return MercenaryCareer.GetEstatePrivilege(career) != null;
+                },
+                (MercenaryCareer career) =>
+                {
+                    var estate = MercenaryCareer.GetEstatePrivilege(career);
+                    var action = BannerKingsConfig.Instance.EstatesModel.GetGrant(estate, estate.Owner, career.Clan.Leader);
+                    action.TakeAction();
                 });
 
             CustomTroop3.Initialize(new TextObject("{=!}Mercenary Levy"),
@@ -74,7 +90,8 @@ namespace BannerKings.Behaviours.Mercenary
                 delegate (MercenaryCareer career)
                 {
                     return true;
-                });
+                },
+                null);
 
             CustomTroop5.Initialize(new TextObject("{=!}Mercenary Professional"),
                 new TextObject("{=!}Stablish a mercenary professional (tier V) troop for your company. A custrom troop is designable and will only be available for your clan, in towns of the kingdom associated with the career they were designed."),
@@ -86,7 +103,8 @@ namespace BannerKings.Behaviours.Mercenary
                 delegate (MercenaryCareer career)
                 {
                     return true;
-                });
+                },
+                null);
 
             BaronyGrant.Initialize(new TextObject("Barony Grant"),
                 new TextObject("{=!}Become landed in the fashion of a lord. Request a castle alongside it's barony-level title. The settlement ownership will not undo your mercenary contract."),
@@ -95,7 +113,15 @@ namespace BannerKings.Behaviours.Mercenary
                 1,
                 delegate (MercenaryCareer career)
                 {
-                    return true;
+                    return MercenaryCareer.GetBaronyPrivilege(career) != null;
+                },
+                (MercenaryCareer career) =>
+                {
+                    var barony = MercenaryCareer.GetBaronyPrivilege(career);
+                    var title = BannerKingsConfig.Instance.TitleManager.GetTitle(barony);
+                    var action = BannerKingsConfig.Instance.TitleModel.GetAction(Managers.Titles.ActionType.Grant,
+                        title, title.deJure, career.Clan.Leader);
+                    action.TakeAction(career.Clan.Leader);
                 });
 
             FullPeerage.Initialize(new TextObject("Full Peerage"),
@@ -107,7 +133,11 @@ namespace BannerKings.Behaviours.Mercenary
                 1,
                 delegate (MercenaryCareer career)
                 {
-                    return true;
+                    return false;
+                },
+                (MercenaryCareer career) =>
+                {
+
                 });
         }
     }

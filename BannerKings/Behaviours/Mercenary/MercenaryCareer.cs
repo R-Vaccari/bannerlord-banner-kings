@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using BannerKings.Managers.Populations.Estates;
+using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.CampaignSystem.Settlements.Workshops;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 using TaleWorlds.SaveSystem;
@@ -121,11 +124,13 @@ namespace BannerKings.Behaviours.Mercenary
                 copy.Initialize(privilege.Name, privilege.Description,
                     privilege.UnAvailableHint, privilege.Points,
                     privilege.MaxLevel,
-                    privilege.IsAvailable);
+                    privilege.IsAvailable,
+                    privilege.OnPrivilegeAdded);
                 copy.IncreaseLevel();
                 KingdomPrivileges[Kingdom].Add(copy);
             }
 
+            privilege.OnPrivilegeAdded(this);
             PrivilegeTimes[Kingdom] = CampaignTime.Now;
 
             if (Clan == Clan.PlayerClan)
@@ -184,6 +189,78 @@ namespace BannerKings.Behaviours.Mercenary
                     ProfessionalTroops.Add(culture, troop);
                 }
             }
+        }
+
+        internal static Workshop GetWorkshopPrivilege(MercenaryCareer career)
+        {
+            Workshop workshop = null;
+            var clan = career.Kingdom.RulingClan;
+            foreach (var town in clan.Fiefs)
+            {
+                foreach (var wk in town.Workshops)
+                {
+                    if (wk.Owner.IsNotable || wk.Owner.Clan == clan)
+                    {
+                        float workshopCost = BannerKingsConfig.Instance.WorkshopModel.GetBuyingCostForPlayer(wk);
+                        if (clan.Gold >= workshopCost && workshopCost < 300000f)
+                        {
+                            workshop = wk;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            return workshop;
+        }
+
+        internal static Estate GetEstatePrivilege(MercenaryCareer career)
+        {
+            Estate estate = null;
+            var clan = career.Kingdom.RulingClan;
+            foreach (var village in clan.Villages)
+            {
+                var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(village.Settlement);
+                if (data != null && data.EstateData != null)
+                {
+                    foreach (var et in data.EstateData.Estates)
+                    {
+                        var action = BannerKingsConfig.Instance.EstatesModel.GetGrant(et, clan.Leader, career.Clan.Leader);
+                        if (action.Possible)
+                        {
+                            estate = et;
+                        }
+                    }
+                }
+            }
+
+            return estate;
+        }
+
+        internal static Settlement GetBaronyPrivilege(MercenaryCareer career)
+        {
+            Settlement castle = null;
+            var clan = career.Kingdom.RulingClan;
+            if (clan.Fiefs.Count > 1)
+            {
+                var capital = Campaign.Current.GetCampaignBehavior<BKCapitalBehavior>().GetCapital(clan.Kingdom);
+                foreach (var fief in clan.Fiefs)
+                {
+                    var title = BannerKingsConfig.Instance.TitleManager.GetTitle(fief.Settlement);
+                    if (fief.IsCastle && title != null && title.deJure == clan.Leader && fief != capital)
+                    {
+                        var action = BannerKingsConfig.Instance.TitleModel.GetAction(Managers.Titles.ActionType.Grant, title,
+                            title.deJure, career.Clan.Leader);
+                        if (action.Possible)
+                        {
+                            castle = fief.Settlement;
+                            break;
+                        }
+                    } 
+                }
+            }
+
+            return castle;
         }
     }
 }
