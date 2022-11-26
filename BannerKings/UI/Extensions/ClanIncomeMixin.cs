@@ -100,7 +100,7 @@ namespace BannerKings.UI.Extensions
             int cost = BannerKingsConfig.Instance.WorkshopModel.GetUpgradeCost(viewModel.CurrentSelectedIncome.Workshop);
             InformationManager.ShowInquiry(new InquiryData(
                 new TextObject("{=!}Workshop Upgrading").ToString(),
-                new TextObject("{=!}Would you like to upgrade this workshop property? By upgrading, the workshop's expenses will increase by 15%, while it's production quality increases by 5%. The process will take 3 construction days and cost {COST}{GOLD_ICON}")
+                new TextObject("{=!}Would you like to upgrade this workshop property? By upgrading, the workshop's expenses will increase by 12%, while it's production quality increases by 8%. The process will take 3 construction days and cost {COST}{GOLD_ICON}")
                 .SetTextVariable("COST", cost)
                 .ToString(),
                 Hero.MainHero.Gold >= cost,
@@ -112,6 +112,7 @@ namespace BannerKings.UI.Extensions
                     var workshop = viewModel.CurrentSelectedIncome.Workshop;
                     AccessTools.Property(workshop.GetType(), "ConstructionTimeRemained").SetValue(workshop, 3);
                     AccessTools.Property(workshop.GetType(), "Level").SetValue(workshop, workshop.Level + 1);
+                    Hero.MainHero.ChangeHeroGold(cost);
                     OnRefresh();
                 },
                 null));

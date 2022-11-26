@@ -53,9 +53,9 @@ namespace BannerKings.Models.Vanilla
             {
                 "silversmithy" => 50f,
                 "velvet_weavery" => 40f,
-                "smithy" => 35f,
-                "tannery" or "wool_weavery" or "linen_weavery" => 25f,
-                _ => 15f
+                "smithy" => 30f,
+                "tannery" or "wool_weavery" or "linen_weavery" => 20f,
+                _ => 12f
             };
 
             result.Add(labor, workshop.WorkshopType.Name);
@@ -63,7 +63,7 @@ namespace BannerKings.Models.Vanilla
 
             if (workshop.Level > 1)
             {
-                result.AddFactor(workshop.Level * 0.15f, GameTexts.FindText("str_level"));
+                result.AddFactor(workshop.Level * 0.12f, GameTexts.FindText("str_level"));
             }
 
             return result;
@@ -117,7 +117,7 @@ namespace BannerKings.Models.Vanilla
             
             if (workshop.Level > 1)
             {
-                result.AddFactor((workshop.Level - 1) * 0.07f, GameTexts.FindText("str_level"));
+                result.AddFactor((workshop.Level - 1) * 0.08f, GameTexts.FindText("str_level"));
             }
 
             return result;
