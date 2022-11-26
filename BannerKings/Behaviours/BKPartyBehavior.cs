@@ -30,19 +30,8 @@ namespace BannerKings.Behaviours
             CampaignEvents.DailyTickSettlementEvent.AddNonSerializedListener(this, DailySettlementTick);
             CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, OnSessionLaunched);
             CampaignEvents.OnSiegeEventStartedEvent.AddNonSerializedListener(this, OnSiegeStarted);
-            CampaignEvents.OnGameLoadFinishedEvent.AddNonSerializedListener(this, OnGameLoadFinished);
         }
 
-        private void OnGameLoadFinished()
-        {
-            foreach (MobileParty mobileParty in MobileParty.AllLordParties)
-            {
-                if (mobileParty != null && !mobileParty.IsMainParty)
-                {
-                    this.DitchExcessFood(mobileParty);
-                }
-            }
-        }
         private void OnSiegeStarted(SiegeEvent siegeEvent) 
         {
             if (siegeEvent.BesiegedSettlement == null)
@@ -74,7 +63,8 @@ namespace BannerKings.Behaviours
             }
 
             var component = (PopulationPartyComponent) party.PartyComponent;
-            var target = component.Target;
+            var target = component.HomeSettlement;
+            party.Ai.DisableAi();
 
             switch (component)
             {
@@ -107,7 +97,7 @@ namespace BannerKings.Behaviours
             if (target != null)
             {
                 var distance = Campaign.Current.Models.MapDistanceModel.GetDistance(party, target);
-                if (distance <= 10f)
+                if (distance <= 1f)
                 {
                     EnterSettlementAction.ApplyForParty(party, target);
                 }
@@ -154,9 +144,6 @@ namespace BannerKings.Behaviours
                 DestroyPartyAction.Apply(null, party);
                 BannerKingsConfig.Instance.PopulationManager.RemoveCaravan(party);
             }
-
-            //---- FOOD FIX ----//
-            DitchExcessFood(party);
         }
 
         private void DailySettlementTick(Settlement settlement)
@@ -449,32 +436,6 @@ namespace BannerKings.Behaviours
             starter.AddDialogLine("raised_militia_order_response", "raised_militia_order", "close_window",
                 "Aye!",
                 null, delegate { PlayerEncounter.LeaveEncounter = true; });
-        }
-
-        private void DitchExcessFood(MobileParty mobileParty)
-        {
-            if (Campaign.Current.GameStarted && mobileParty != null && !mobileParty.IsMainParty && mobileParty.IsLordParty && !mobileParty.IsDisbanding)
-            {
-                int foodTypes = mobileParty.ItemRoster.FoodVariety;
-                int index = 0;
-
-                while (mobileParty.TotalWeightCarried > mobileParty.InventoryCapacity && index++ < foodTypes * 2)
-                {
-                    foreach (ItemRosterElement subject in mobileParty.ItemRoster)
-                    {
-                        int amount = subject.Amount;
-                        int amount2sell = amount > 100 ? amount : amount / 2;
-                        ItemObject item = subject.EquipmentElement.Item;
-                        if (item.IsFood)
-                        {
-                            mobileParty.ItemRoster.Remove(subject);
-                            if (mobileParty.TotalWeightCarried < mobileParty.InventoryCapacity)
-                                break;
-                        }
-
-                    }
-                }
-            }
         }
 
         private bool IsTravellerParty(PartyBase party)

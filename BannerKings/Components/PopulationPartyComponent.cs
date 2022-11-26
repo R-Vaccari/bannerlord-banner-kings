@@ -20,22 +20,22 @@ namespace BannerKings.Components
         public PopulationPartyComponent(Settlement target, Settlement origin, string name, bool slaveCaravan,
             PopType popType)
         {
-            _target = target;
-            _name = name;
-            _origin = origin;
-            this.slaveCaravan = slaveCaravan;
-            this.popType = popType;
+            Target = target;
+            nameString = name;
+            Origin = origin;
+            SlaveCaravan = slaveCaravan;
+            PopulationType = popType;
         }
 
-        [SaveableProperty(1)] public Settlement _target { get; set; }
+        [SaveableProperty(1)] protected Settlement Target { get; set; }
 
-        [SaveableProperty(2)] public Settlement _origin { get; set; }
+        [SaveableProperty(2)] protected Settlement Origin { get; set; }
 
-        [SaveableProperty(3)] public string _name { get; set; }
+        [SaveableProperty(3)] private string nameString { get; set; }
 
-        [SaveableProperty(4)] public bool slaveCaravan { get; set; }
+        [SaveableProperty(4)] public bool SlaveCaravan { get; private set; }
 
-        [SaveableProperty(5)] public PopType popType { get; set; }
+        [SaveableProperty(5)] public PopType PopulationType { get; private set; }
 
         private static IEnumerable<CraftingMaterials> Materials
         {
@@ -55,11 +55,12 @@ namespace BannerKings.Components
 
         public override Hero PartyOwner => HomeSettlement.OwnerClan.Leader;
 
-        public override TextObject Name => new(string.Format(_name, HomeSettlement.Name));
+        public override TextObject Name => new TextObject(nameString)
+            .SetTextVariable("ORIGIN", OriginSettlement.Name);
 
-        public override Settlement HomeSettlement => _target;
+        public override Settlement HomeSettlement => Target;
 
-        public Settlement OriginSettlement => _origin;
+        public Settlement OriginSettlement => Origin;
 
         private static MobileParty CreateParty(string id, Settlement origin, bool slaveCaravan, Settlement target,
             string name, PopType popType)
