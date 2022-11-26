@@ -158,21 +158,21 @@ namespace BannerKings.UI
                             .GetField("_name", BindingFlags.Instance | BindingFlags.NonPublic)
                             .GetValue(__instance);
 
-                        if (namingSetting == DefaultSettings.Instance.NamingFullTitlesSuffixed)
+                        if (namingSetting.Equals(DefaultSettings.Instance.NamingFullTitlesSuffixed))
                         {
                             __result = new TextObject("{=!}{NAME}, {TITLE} of {SETTLEMENT}")
                                 .SetTextVariable("TITLE", honorary)
                                 .SetTextVariable("NAME", name)
                                 .SetTextVariable("SETTLEMENT", title.shortName);
                         }
-                        else if (namingSetting == DefaultSettings.Instance.NamingFullTitles)
+                        else if (namingSetting.Equals(DefaultSettings.Instance.NamingFullTitles))
                         {
                             __result = new TextObject("{=!}{TITLE} {NAME} of {SETTLEMENT}")
                                 .SetTextVariable("TITLE", honorary)
                                 .SetTextVariable("NAME", name)
                                 .SetTextVariable("SETTLEMENT", title.shortName);
                         }
-                        else
+                        else if (namingSetting.Equals(DefaultSettings.Instance.NamingTitlePrefix))
                         {
                             __result = new TextObject("{=!}{TITLE} {NAME}")
                                 .SetTextVariable("TITLE", honorary)
