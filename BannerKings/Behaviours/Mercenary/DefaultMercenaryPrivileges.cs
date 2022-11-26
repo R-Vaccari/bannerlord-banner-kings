@@ -44,8 +44,9 @@ namespace BannerKings.Behaviours.Mercenary
 
             WorkshopGrant.Initialize(new TextObject("{=!}Workshop Grant"),
                 new TextObject("{=!}Acquire a workshop property. The property will be situated in one of the towns of your contractor."),
-                new TextObject("{=!}Your contractor is not currently capable of granting a workshop, due to lacking themselves or funds to subsidize the acquisition of one. Alternatively, you've reached your workshop limit.\nMax level: {LEVEL}")
-                .SetTextVariable("LEVEL", 2),
+                new TextObject("{=!}Your contractor is not currently capable of granting a workshop, due to lacking themselves or funds to subsidize the acquisition of one. Alternatively, you've reached your workshop limit.\nPoints: {POINTS}\nMax level: {LEVEL}")
+                .SetTextVariable("LEVEL", 2)
+                .SetTextVariable("POINTS", 500),
                 500f,
                 2,
                 delegate (MercenaryCareer career)
@@ -62,8 +63,9 @@ namespace BannerKings.Behaviours.Mercenary
 
             EstateGrant.Initialize(new TextObject("{=!}Estate Grant"),
                 new TextObject("{=!}Acquire an estate property. The property will be situated in one of the villages of your contractor."),
-                new TextObject("{=!}Your contractor is currently unable to provide a vacant estate.\nMax level: {LEVEL}")
-                .SetTextVariable("LEVEL", 2),
+                new TextObject("{=!}Your contractor is currently unable to provide a vacant estate.\nPoints: {POINTS}\nMax level: {LEVEL}")
+                .SetTextVariable("LEVEL", 2)
+                .SetTextVariable("POINTS", 650),
                 650f,
                 2,
                 delegate (MercenaryCareer career)
@@ -80,9 +82,9 @@ namespace BannerKings.Behaviours.Mercenary
             CustomTroop3.Initialize(new TextObject("{=!}Mercenary Levy"),
                 new TextObject("{=!}Stablish a mercenary levy (tier III) troop for your company. A custrom troop is designable and will only be available for your clan, in towns of the kingdom associated with the career they were designed."),
                 new TextObject("{=!}You fail to meet the requirements or privilege is already maxed out.\n\nPoints: {POINTS}\nMax level: {LEVEL}")
-                .SetTextVariable("POINTS", 500)
+                .SetTextVariable("POINTS", 200)
                 .SetTextVariable("LEVEL", 1),
-                500f,
+                200f,
                 1,
                 delegate (MercenaryCareer career)
                 {
@@ -94,8 +96,8 @@ namespace BannerKings.Behaviours.Mercenary
                 new TextObject("{=!}Stablish a mercenary professional (tier V) troop for your company. A custrom troop is designable and will only be available for your clan, in towns of the kingdom associated with the career they were designed."),
                 new TextObject("{=!}You fail to meet the requirements or privilege is already maxed out.\n\nPoints: {POINTS}\nMax level: {LEVEL}")
                 .SetTextVariable("LEVEL", 1)
-                .SetTextVariable("POINTS", 100),
-                100f,
+                .SetTextVariable("POINTS", 300),
+                300f,
                 1,
                 delegate (MercenaryCareer career)
                 {
@@ -105,8 +107,10 @@ namespace BannerKings.Behaviours.Mercenary
 
             BaronyGrant.Initialize(new TextObject("Barony Grant"),
                 new TextObject("{=!}Become landed in the fashion of a lord. Request a castle alongside it's barony-level title. The settlement ownership will not undo your mercenary contract."),
-                new TextObject("{=!}You must not own any settlements or titles. Your contractor may not have an extra castle and it's title available.\nMax level: {LEVEL}").SetTextVariable("LEVEL", 1),
-                100f,
+                new TextObject("{=!}You must not own any settlements or titles. Your contractor may not have an extra castle and it's title available.\nPoints: {POINTS}\nMax level: {LEVEL}")
+                .SetTextVariable("LEVEL", 1)
+                .SetTextVariable("POINTS", 1000f),
+                1000f,
                 1,
                 delegate (MercenaryCareer career)
                 {
@@ -126,7 +130,7 @@ namespace BannerKings.Behaviours.Mercenary
                 new TextObject("{=!}You fail to meet the requirements or privilege is already maxed out.\n\nPoints: {POINTS}\nMax level: {LEVEL}")
                 .SetTextVariable("POINTS", 100)
                 .SetTextVariable("LEVEL", 1),
-                100f,
+                1000f,
                 1,
                 delegate (MercenaryCareer career)
                 {

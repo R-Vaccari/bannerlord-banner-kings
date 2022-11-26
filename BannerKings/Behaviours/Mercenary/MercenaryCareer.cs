@@ -65,7 +65,7 @@ namespace BannerKings.Behaviours.Mercenary
         {
             KingdomProgress[Kingdom] += progress;
             ServiceDays++;
-            if ((ServiceDays / CampaignTime.DaysInYear) % 1 == 0)
+            if ((ServiceDays / CampaignTime.DaysInYear) % 1f == 0f)
             {
                 AddReputation(0.05f, new TextObject("{=!}A year of service has passed."));
             }
