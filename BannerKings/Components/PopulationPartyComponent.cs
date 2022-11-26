@@ -66,7 +66,7 @@ namespace BannerKings.Components
             string name, PopType popType)
         {
             return MobileParty.CreateParty(id + origin + target.Name,
-                new PopulationPartyComponent(target, origin, string.Format(name, origin.Name), slaveCaravan, popType),
+                new PopulationPartyComponent(target, origin, name, slaveCaravan, popType),
                 delegate(MobileParty mobileParty)
                 {
                     mobileParty.SetPartyUsedByQuest(true);
