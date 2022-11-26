@@ -283,6 +283,11 @@ namespace BannerKings.Models.BKModels
             var clan = action.ActionTaker.Clan;
             if (clan != null)
             {
+                foreach (var companion in clan.Companions)
+                {
+                    list.Add(companion);
+                }
+
                 if (clan.Kingdom != null)
                 {
                     foreach (Clan targetClan in clan.Kingdom.Clans)
