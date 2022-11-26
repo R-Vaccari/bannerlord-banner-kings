@@ -59,7 +59,7 @@ namespace BannerKings.UI.Mercenary
 
         [DataSourceProperty]
         public HintViewModel PointsHint => new HintViewModel(
-           new TextObject("{=!}Your Career Points within this kingdom. Career Points are used for requesting Privileges. Points are gained daily based on your clan Reputation and Tier."));
+           new TextObject("{=!}Your Career Points within this kingdom. Career Points are used for requesting Privileges. Points are gained daily based on your clan Reputation and Tier. Each clan party in an Army yields extra points. Leading an Army increases total gain by 20%."));
 
         [DataSourceProperty]
         public HintViewModel PrivilegeAvailableHint => new HintViewModel(
@@ -79,7 +79,7 @@ namespace BannerKings.UI.Mercenary
                     .SetTextVariable("DAYS", Career.ServiceDays)
                     .ToString();
 
-                var pointsGain = Campaign.Current.GetCampaignBehavior<BKMercenaryCareerBehavior>().GetDailyCareerPointsGain(Career.Clan);
+                var pointsGain = Campaign.Current.GetCampaignBehavior<BKMercenaryCareerBehavior>().GetDailyCareerPointsGain(Career.Clan, true);
                 DailyPointsGainText = FormatFloatGain(pointsGain.ResultNumber);
                 DailyPointsGainHint = new HintViewModel(new TextObject("{=!}" + pointsGain.GetExplanations()));
 
@@ -115,8 +115,8 @@ namespace BannerKings.UI.Mercenary
                     LevyVisible = true;
                     EditLevyText = new TextObject("{=!}Edit").ToString();
                     LevyCharacterName = levy.Name != null ? levy.Name.ToString() : "";
-                    LevyCharacter.FillFrom(levy);
-                    LevyCharacter.SetEquipment(levy.BattleEquipments.First());
+                    LevyCharacter.FillFrom(levy.Character);
+                    LevyCharacter.SetEquipment(levy.Character.BattleEquipments.First());
                 }
 
                 var professional = Career.GetTroop(Career.Kingdom, false);
@@ -125,8 +125,8 @@ namespace BannerKings.UI.Mercenary
                     ProfessionalVisible = true;
                     EditProfessionalText = new TextObject("{=!}Edit").ToString();
                     ProfessionalCharacterName = professional.Name != null ? professional.Name.ToString() : "";
-                    ProfessionalCharacter.FillFrom(professional);
-                    ProfessionalCharacter.SetEquipment(professional.BattleEquipments.First());
+                    ProfessionalCharacter.FillFrom(professional.Character);
+                    ProfessionalCharacter.SetEquipment(professional.Character.BattleEquipments.First());
                 }
             }
         }
@@ -271,7 +271,7 @@ namespace BannerKings.UI.Mercenary
 
         private void ShowSkillEditing(bool levy = true)
         {
-            var character = Career.GetTroop(Career.Kingdom, levy);
+            var customTroop = Career.GetTroop(Career.Kingdom, levy);
             var list = new List<InquiryElement>();
             var items = Campaign.Current.ObjectManager.GetObjectTypeList<ItemObject>();
             foreach (var preset in DefaultCustomTroopPresets.Instance.Levies)
@@ -293,10 +293,10 @@ namespace BannerKings.UI.Mercenary
                 GameTexts.FindText("str_cancel").ToString(),
                 delegate (List<InquiryElement> list)
                 {
-                    int quantity = CalculateTroopAmount(character);
+                    int quantity = CalculateTroopAmount(customTroop.Character);
                     if (quantity == 0)
                     {
-                        SetSkills(character, (CustomTroopPreset)list[0].Identifier);
+                        SetSkills(customTroop.Character, (CustomTroopPreset)list[0].Identifier);
                         ShowEditingOptions();
                     }
                     else
@@ -305,7 +305,7 @@ namespace BannerKings.UI.Mercenary
                         InformationManager.ShowInquiry(new InquiryData(new TextObject("{=!}Retrainning Costs").ToString(),
                             new TextObject("{=!}It seems there are {QUANTITY} of {CHARACTER} in your clan parties. Retrainning them to new skills will cost {COST}{GOLD_ICON}.")
                             .SetTextVariable("QUANTITY", quantity)
-                            .SetTextVariable("CHARACTER", character.Name)
+                            .SetTextVariable("CHARACTER", customTroop.Name)
                             .SetTextVariable("COST", cost)
                             .ToString(),
                             Hero.MainHero.Gold >= cost,
@@ -315,7 +315,7 @@ namespace BannerKings.UI.Mercenary
                             () =>
                             {
                                 Hero.MainHero.ChangeHeroGold(-cost);
-                                SetSkills(character, (CustomTroopPreset)list[0].Identifier);
+                                SetSkills(customTroop.Character, (CustomTroopPreset)list[0].Identifier);
                                 ShowEditingOptions();
                             },
                             () => ShowEditingOptions()));
@@ -329,10 +329,10 @@ namespace BannerKings.UI.Mercenary
 
         private void ShowNameEditing(bool levy = true)
         {
-            var character = Career.GetTroop(Career.Kingdom, levy);
+            var customTroop = Career.GetTroop(Career.Kingdom, levy);
             InformationManager.ShowTextInquiry(new TextInquiryData(new TextObject("{=!}Edit Name").ToString(),
                 new TextObject("{=!}Change the name of {TROOP}.")
-                .SetTextVariable("TROOP", character.Name)
+                .SetTextVariable("TROOP", customTroop.Name)
                 .ToString(),
                 true,
                 true,
@@ -340,8 +340,7 @@ namespace BannerKings.UI.Mercenary
                 GameTexts.FindText("str_cancel").ToString(),
                 delegate (string name)
                 {
-                    AccessTools.Method((character as BasicCharacterObject).GetType(), "SetName")
-                            .Invoke(character, new object[] { new TextObject("{=!}" + name) });
+                    customTroop.SetName(new TextObject("{=!}" + name));
                     RefreshValues();
                     ShowEditingOptions();
                 },
@@ -477,12 +476,12 @@ namespace BannerKings.UI.Mercenary
 
         private void ShowEquipments(EqupmentEditOption option, bool levy = true)
         {
-            var character = Career.GetTroop(Career.Kingdom, levy);
+            var customTroop = Career.GetTroop(Career.Kingdom, levy);
             var list = new List<InquiryElement>();
             var items = Campaign.Current.ObjectManager.GetObjectTypeList<ItemObject>();
             foreach (var item in items)
             {
-                if (item.Culture != null && item.Culture != character.Culture)
+                if (item.Culture != null && item.Culture != customTroop.Character.Culture)
                 {
                     continue;
                 }
@@ -517,24 +516,7 @@ namespace BannerKings.UI.Mercenary
                         items.Add((ItemObject)element.Identifier);
                     }
 
-                    MBEquipmentRoster roster = (MBEquipmentRoster)AccessTools.Field((character as BasicCharacterObject).GetType(), "_equipmentRoster")
-                        .GetValue(character);
-                    List<Equipment> equipments = (List<Equipment>)AccessTools.Field(roster.GetType(), "_equipments")
-                        .GetValue(roster);
-
-                    if (equipments.Count != 5)
-                    {
-                        var diff = equipments.Count - 5;
-                        if (diff > 0)
-                        {
-                            equipments.RemoveRange(0, diff);
-                        }
-                        else for (int i = 0; i < diff; i++)
-                        {
-                            equipments.Add(new Equipment());
-                        }
-                    }
-
+                    List<Equipment> equipments = customTroop.Equipments;
                     for (int i = 0; i < equipments.Count; i++)
                     {
                         var equipment = equipments[i];
@@ -551,6 +533,8 @@ namespace BannerKings.UI.Mercenary
                         EquipmentElement equipmentElement = new EquipmentElement(item);
                         equipment[option.EquipmentIndex] = equipmentElement;
                     }
+
+                    customTroop.Equipments = equipments;
                     ShowEditingOptions();
                     RefreshValues();
                 },

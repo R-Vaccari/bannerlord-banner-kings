@@ -37,7 +37,6 @@ namespace BannerKings.Behaviours.Mercenary
         public float Points { get; private set; }
         public TextObject UnAvailableHint { get; private set; }
 
-
         public bool IsAvailable(MercenaryCareer career) => isAvailable(career);
 
         public override bool Equals(object obj)
@@ -48,7 +47,6 @@ namespace BannerKings.Behaviours.Mercenary
             }
             return base.Equals(obj);
         }
-
 
         internal void OnPrivilegeAdded(MercenaryCareer career)
         {

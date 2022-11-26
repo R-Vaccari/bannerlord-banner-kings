@@ -20,8 +20,8 @@ namespace BannerKings.Behaviours.Mercenary
             Reputation = 0f;
             KingdomPrivileges = new Dictionary<Kingdom, List<MercenaryPrivilege>>();
             KingdomProgress = new Dictionary<Kingdom, float>();
-            LevyTroops = new Dictionary<CultureObject, CharacterObject>();
-            ProfessionalTroops = new Dictionary<CultureObject, CharacterObject>();
+            LevyTroops = new Dictionary<CultureObject, CustomTroop>();
+            ProfessionalTroops = new Dictionary<CultureObject, CustomTroop>();
             PrivilegeTimes = new Dictionary<Kingdom, CampaignTime>();
             AddKingdom(kingdom);
         }
@@ -32,11 +32,34 @@ namespace BannerKings.Behaviours.Mercenary
 
         [SaveableProperty(4)] private Dictionary<Kingdom, List<MercenaryPrivilege>> KingdomPrivileges { get; set; }
         [SaveableProperty(5)] private Dictionary<Kingdom, float> KingdomProgress { get; set; }
-        [SaveableProperty(6)] private Dictionary<CultureObject, CharacterObject> LevyTroops { get; set; }
-        [SaveableProperty(7)] private Dictionary<CultureObject, CharacterObject> ProfessionalTroops { get; set; }
+        [SaveableProperty(6)] private Dictionary<CultureObject, CustomTroop> LevyTroops { get; set; }
+        [SaveableProperty(7)] private Dictionary<CultureObject, CustomTroop> ProfessionalTroops { get; set; }
         [SaveableProperty(8)] private Dictionary<Kingdom, CampaignTime> PrivilegeTimes { get; set; }
 
         [SaveableProperty(9)] public int ServiceDays { get; private set; }
+
+        internal void PostInitialize()
+        {
+            foreach (var troop in LevyTroops.Values)
+            {
+                troop.PostInitialize();
+            }
+
+            foreach (var troop in ProfessionalTroops.Values)
+            {
+                troop.PostInitialize();
+            }
+
+            foreach (var list in KingdomPrivileges.Values)
+            {
+                foreach (var privilege in list)
+                {
+                    var copy = DefaultMercenaryPrivileges.Instance.GetById(privilege.StringId);
+                    privilege.Initialize(copy.Name, copy.Description, copy.UnAvailableHint, copy.Points,
+                        copy.MaxLevel, copy.IsAvailable, copy.OnPrivilegeAdded);
+                }
+            }
+        }
 
         internal void Tick(float progress)
         {
@@ -71,12 +94,12 @@ namespace BannerKings.Behaviours.Mercenary
             bool matches = false;
             if (LevyTroops.ContainsKey(culture))
             {
-                matches = LevyTroops[culture] == character;
+                matches = LevyTroops[culture].Character == character;
             }
 
             if (!matches && ProfessionalTroops.ContainsKey(culture))
             {
-                matches = ProfessionalTroops[culture] == character;
+                matches = ProfessionalTroops[culture].Character == character;
             }
 
             return matches;
@@ -108,7 +131,7 @@ namespace BannerKings.Behaviours.Mercenary
 
             if (!PrivilegeTimes.ContainsKey(kingdom))
             {
-                PrivilegeTimes.Add(kingdom, CampaignTime.Zero);
+                PrivilegeTimes.Add(kingdom, CampaignTime.Now);
             }
         }
 
@@ -164,7 +187,7 @@ namespace BannerKings.Behaviours.Mercenary
                     Utils.Helpers.GetKingdomDecisionSound());
             }
         }
-        internal CharacterObject GetTroop(Kingdom kingdom, bool isLevy = true)
+        internal CustomTroop GetTroop(Kingdom kingdom, bool isLevy = true)
         {
             var culture = kingdom.Culture;
             if (isLevy)
@@ -192,22 +215,22 @@ namespace BannerKings.Behaviours.Mercenary
             {
                 if (LevyTroops.ContainsKey(culture))
                 {
-                    LevyTroops[culture] = troop;
+                    LevyTroops[culture].Character = troop;
                 }
                 else
                 {
-                    LevyTroops.Add(culture, troop);
+                    LevyTroops.Add(culture, new CustomTroop(troop));
                 }
             }
             else
             {
                 if (ProfessionalTroops.ContainsKey(culture))
                 {
-                    ProfessionalTroops[culture] = troop;
+                    ProfessionalTroops[culture].Character = troop;
                 }
                 else
                 {
-                    ProfessionalTroops.Add(culture, troop);
+                    ProfessionalTroops.Add(culture, new CustomTroop(troop));
                 }
             }
         }

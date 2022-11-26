@@ -25,6 +25,7 @@ namespace BannerKings.Behaviours.Mercenary
             CampaignEvents.DailyTickClanEvent.AddNonSerializedListener(this, OnClanDailyTick);
             CampaignEvents.ClanChangedKingdom.AddNonSerializedListener(this, OnClanChangedKingdom);
             CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, OnSessionLaunched);
+            CampaignEvents.OnGameLoadedEvent.AddNonSerializedListener(this, OnGameLoaded);
         }
 
         public override void SyncData(IDataStore dataStore)
@@ -34,13 +35,21 @@ namespace BannerKings.Behaviours.Mercenary
             if (careers == null)
             {
                 careers = new Dictionary<Clan, MercenaryCareer>();
-                InitCareers();
             }
         }
 
         private void OnSessionLaunched(CampaignGameStarter starer)
         {
             InitCareers();
+        }
+
+        private void OnGameLoaded(CampaignGameStarter starer)
+        {
+            InitCareers();
+            foreach (var career in careers.Values)
+            {
+                career.PostInitialize();
+            }
         }
 
         private void OnRenownGained(Hero hero, int gainedRenown, bool doNotNotifyPlayer)
@@ -102,6 +111,18 @@ namespace BannerKings.Behaviours.Mercenary
             var result = new ExplainedNumber(1f, explanations);
             result.Add(clan.Tier / 2f, GameTexts.FindText("str_clan_tier_bonus"));
             result.Add(careers[clan].Reputation * 5f, new TaleWorlds.Localization.TextObject("{=!}Reputation"));
+
+            foreach (var party in clan.WarPartyComponents)
+            {
+                if (party.MobileParty.Army != null)
+                {
+                    result.Add(1f, party.Name);
+                    if (party.MobileParty.Army.LeaderParty == party.MobileParty)
+                    {
+                        result.AddFactor(0.2f, new TaleWorlds.Localization.TextObject("{=!}Leading an Army"));
+                    }
+                }
+            }
 
             return result;
         }

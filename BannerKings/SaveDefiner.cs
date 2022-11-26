@@ -35,7 +35,6 @@ using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.SaveSystem;
-using static BannerKings.Managers.Kingdoms.Contract.BKDemesneLawDecision;
 using static BannerKings.Managers.Policies.BKCriminalPolicy;
 using static BannerKings.Managers.Policies.BKDraftPolicy;
 using static BannerKings.Managers.Policies.BKGarrisonPolicy;
@@ -167,8 +166,9 @@ namespace BannerKings
             AddClassDefinition(typeof(MarriageContract), 110);
 
 
-            AddClassDefinition(typeof(MercenaryCareer), 1000);
+            AddClassDefinition(typeof(MercenaryCareer), 1000); 
             AddClassDefinition(typeof(MercenaryPrivilege), 1001);
+            AddClassDefinition(typeof(CustomTroop), 1002);
         }
 
         protected override void DefineContainerDefinitions()
@@ -221,7 +221,7 @@ namespace BannerKings
             ConstructContainerDefinition(typeof(Dictionary<Kingdom, List<MercenaryPrivilege>>));
             ConstructContainerDefinition(typeof(Dictionary<Clan, MercenaryCareer>));
             ConstructContainerDefinition(typeof(Dictionary<Kingdom, float>));
-            ConstructContainerDefinition(typeof(Dictionary<CultureObject, CharacterObject>));
+            ConstructContainerDefinition(typeof(Dictionary<CultureObject, CustomTroop>));
             ConstructContainerDefinition(typeof(Dictionary<Kingdom, CampaignTime>));
         }
     }
