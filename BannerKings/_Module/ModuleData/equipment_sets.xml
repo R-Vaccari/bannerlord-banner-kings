@@ -2,6 +2,2508 @@
 
 <EquipmentRosters>
 
+	<EquipmentRoster id="bannerkings_companion_khuzait" culture="Culture.khuzait">
+	    <EquipmentSet>
+		  <Equipment slot="Item0" id="Item.light_mace_t3" />
+		  <Equipment slot="Item1" id="Item.khuzait_polearm_1_t4" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Head" id="Item.ao_durkhan_iron_horsehair_helmet" />
+		  <Equipment slot="Body" id="Item.eastern_stitched_leather_coat" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_3_t3" />
+		  <Equipment slot="Item1" id="Item.footmans_wicker_shield" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Head" id="Item.AR_khuzait_helmet_n" />
+		  <Equipment slot="Body" id="Item.eastern_studded_leather" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_2_t3" />
+		  <Equipment slot="Item1" id="Item.footmans_wicker_shield" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_a" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_f" />
+		  <Equipment slot="Body" id="Item.eastern_studded_leather" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_3_t3" />
+		  <Equipment slot="Item1" id="Item.decorated_steppe_shield" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Head" id="Item.ao_durkhan_iron_horsehair_helmet" />
+		  <Equipment slot="Body" id="Item.eastern_lamellar_armor" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_3_t3" />
+		  <Equipment slot="Item1" id="Item.decorated_steppe_shield" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_a" />
+		  <Equipment slot="Head" id="Item.ao_durkhan_iron_horsehair_helmet" />
+		  <Equipment slot="Body" id="Item.eastern_lamellar_armor" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_2_t3" />
+		  <Equipment slot="Item1" id="Item.decorated_steppe_shield" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.AR_khuzait_cape_e" />
+		  <Equipment slot="Head" id="Item.AR_khuzait_helmet_n" />
+		  <Equipment slot="Body" id="Item.eastern_lamellar_armor" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.broad_ild_sword_t3" />
+		  <Equipment slot="Item1" id="Item.decorated_steppe_shield" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_a" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_d" />
+		  <Equipment slot="Body" id="Item.ao_durkhan_lamellar" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.light_mace_t3" />
+		  <Equipment slot="Item1" id="Item.khuzait_polearm_1_t4" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Head" id="Item.ao_durkhan_iron_horsehair_helmet" />
+		  <Equipment slot="Body" id="Item.eastern_studded_leather" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_3_t3" />
+		  <Equipment slot="Item1" id="Item.footmans_wicker_shield" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Head" id="Item.ao_durkhan_iron_horsehair_helmet" />
+		  <Equipment slot="Body" id="Item.ao_durkhan_lamellar" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_2_t3" />
+		  <Equipment slot="Item1" id="Item.footmans_wicker_shield" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.AR_khuzait_cape_e" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_f" />
+		  <Equipment slot="Body" id="Item.eastern_studded_leather" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.broad_ild_sword_t3" />
+		  <Equipment slot="Item1" id="Item.footmans_wicker_shield" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_a" />
+		  <Equipment slot="Head" id="Item.plumed_nomad_helmet" />
+		  <Equipment slot="Body" id="Item.leather_lamellar_armor" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_2_t3" />
+		  <Equipment slot="Item1" id="Item.khuzait_polearm_1_t4" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.AR_khuzait_cape_e" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_d" />
+		  <Equipment slot="Body" id="Item.eastern_lamellar_armor" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_3_t3" />
+		  <Equipment slot="Item1" id="Item.footmans_wicker_shield" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_a" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_s" />
+		  <Equipment slot="Body" id="Item.TV_khuzait_armor_e" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.broad_ild_sword_t3" />
+		  <Equipment slot="Item1" id="Item.footmans_wicker_shield" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_d" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_s" />
+		  <Equipment slot="Body" id="Item.eastern_stitched_leather_coat" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_2_t3" />
+		  <Equipment slot="Item1" id="Item.decorated_steppe_shield" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.AR_khuzait_cape_e" />
+		  <Equipment slot="Head" id="Item.plumed_nomad_helmet" />
+		  <Equipment slot="Body" id="Item.eastern_stitched_leather_coat" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.broad_ild_sword_t3" />
+		  <Equipment slot="Item1" id="Item.footmans_wicker_shield" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_s" />
+		  <Equipment slot="Body" id="Item.eastern_stitched_leather_coat" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_2_t3" />
+		  <Equipment slot="Item1" id="Item.khuzait_polearm_1_t4" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_a" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_s" />
+		  <Equipment slot="Body" id="Item.eastern_lamellar_armor" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.broad_ild_sword_t3" />
+		  <Equipment slot="Item1" id="Item.decorated_steppe_shield" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.AR_khuzait_cape_e" />
+		  <Equipment slot="Head" id="Item.plumed_nomad_helmet" />
+		  <Equipment slot="Body" id="Item.ao_durkhan_lamellar" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_2_t3" />
+		  <Equipment slot="Item1" id="Item.decorated_steppe_shield" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_d" />
+		  <Equipment slot="Head" id="Item.AR_khuzait_helmet_n" />
+		  <Equipment slot="Body" id="Item.eastern_lamellar_armor" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_2_t3" />
+		  <Equipment slot="Item1" id="Item.khuzait_polearm_1_t4" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_d" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_s" />
+		  <Equipment slot="Body" id="Item.leather_lamellar_armor" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_2_t3" />
+		  <Equipment slot="Item1" id="Item.khuzait_polearm_1_t4" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_s" />
+		  <Equipment slot="Body" id="Item.eastern_lamellar_armor" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_2_t3" />
+		  <Equipment slot="Item1" id="Item.khuzait_polearm_1_t4" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.AR_khuzait_cape_e" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_s" />
+		  <Equipment slot="Body" id="Item.leather_lamellar_armor" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_2_t3" />
+		  <Equipment slot="Item1" id="Item.khuzait_polearm_1_t4" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_d" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_s" />
+		  <Equipment slot="Body" id="Item.eastern_lamellar_armor" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_3_t3" />
+		  <Equipment slot="Item1" id="Item.decorated_steppe_shield" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_a" />
+		  <Equipment slot="Head" id="Item.AR_khuzait_helmet_n" />
+		  <Equipment slot="Body" id="Item.ao_durkhan_lamellar" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_3_t3" />
+		  <Equipment slot="Item1" id="Item.khuzait_polearm_1_t4" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_d" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_f" />
+		  <Equipment slot="Body" id="Item.TV_khuzait_armor_e" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_3_t3" />
+		  <Equipment slot="Item1" id="Item.khuzait_polearm_1_t4" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Head" id="Item.plumed_lamellar_helmet" />
+		  <Equipment slot="Body" id="Item.ao_durkhan_lamellar" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_3_t3" />
+		  <Equipment slot="Item1" id="Item.footmans_wicker_shield" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.AR_khuzait_cape_e" />
+		  <Equipment slot="Head" id="Item.AR_khuzait_helmet_n" />
+		  <Equipment slot="Body" id="Item.eastern_studded_leather" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_3_t3" />
+		  <Equipment slot="Item1" id="Item.footmans_wicker_shield" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_d" />
+		  <Equipment slot="Head" id="Item.AR_khuzait_helmet_n" />
+		  <Equipment slot="Body" id="Item.eastern_studded_leather" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.light_mace_t3" />
+		  <Equipment slot="Item1" id="Item.decorated_steppe_shield" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.AR_khuzait_cape_e" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_f" />
+		  <Equipment slot="Body" id="Item.eastern_lamellar_armor" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.light_mace_t3" />
+		  <Equipment slot="Item1" id="Item.khuzait_polearm_1_t4" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.AR_khuzait_cape_e" />
+		  <Equipment slot="Head" id="Item.ao_durkhan_iron_horsehair_helmet" />
+		  <Equipment slot="Body" id="Item.eastern_stitched_leather_coat" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.light_mace_t3" />
+		  <Equipment slot="Item1" id="Item.khuzait_polearm_1_t4" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_f" />
+		  <Equipment slot="Body" id="Item.ao_durkhan_lamellar" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.broad_ild_sword_t3" />
+		  <Equipment slot="Item1" id="Item.decorated_steppe_shield" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.AR_khuzait_cape_e" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_d" />
+		  <Equipment slot="Body" id="Item.eastern_stitched_leather_coat" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.light_mace_t3" />
+		  <Equipment slot="Item1" id="Item.decorated_steppe_shield" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Head" id="Item.plumed_lamellar_helmet" />
+		  <Equipment slot="Body" id="Item.leather_lamellar_armor" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.light_mace_t3" />
+		  <Equipment slot="Item1" id="Item.khuzait_polearm_1_t4" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_a" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_f" />
+		  <Equipment slot="Body" id="Item.ao_durkhan_lamellar" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_3_t3" />
+		  <Equipment slot="Item1" id="Item.footmans_wicker_shield" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Head" id="Item.AR_khuzait_helmet_n" />
+		  <Equipment slot="Body" id="Item.TV_khuzait_armor_b" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.light_mace_t3" />
+		  <Equipment slot="Item1" id="Item.khuzait_polearm_1_t4" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Head" id="Item.AR_khuzait_helmet_n" />
+		  <Equipment slot="Body" id="Item.eastern_stitched_leather_coat" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.light_mace_t3" />
+		  <Equipment slot="Item1" id="Item.decorated_steppe_shield" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_f" />
+		  <Equipment slot="Body" id="Item.eastern_lamellar_armor" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.broad_ild_sword_t3" />
+		  <Equipment slot="Item1" id="Item.footmans_wicker_shield" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_d" />
+		  <Equipment slot="Head" id="Item.plumed_nomad_helmet" />
+		  <Equipment slot="Body" id="Item.TV_khuzait_armor_b" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_2_t3" />
+		  <Equipment slot="Item1" id="Item.khuzait_polearm_1_t4" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_s" />
+		  <Equipment slot="Body" id="Item.ao_durkhan_lamellar" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.light_mace_t3" />
+		  <Equipment slot="Item1" id="Item.footmans_wicker_shield" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.AR_khuzait_cape_e" />
+		  <Equipment slot="Head" id="Item.ao_durkhan_iron_horsehair_helmet" />
+		  <Equipment slot="Body" id="Item.TV_khuzait_armor_b" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_2_t3" />
+		  <Equipment slot="Item1" id="Item.footmans_wicker_shield" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.AR_khuzait_cape_e" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_s" />
+		  <Equipment slot="Body" id="Item.eastern_studded_leather" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.light_mace_t3" />
+		  <Equipment slot="Item1" id="Item.footmans_wicker_shield" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.AR_khuzait_cape_e" />
+		  <Equipment slot="Head" id="Item.plumed_lamellar_helmet" />
+		  <Equipment slot="Body" id="Item.TV_khuzait_armor_b" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.light_mace_t3" />
+		  <Equipment slot="Item1" id="Item.khuzait_polearm_1_t4" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.AR_khuzait_cape_e" />
+		  <Equipment slot="Head" id="Item.ao_durkhan_iron_horsehair_helmet" />
+		  <Equipment slot="Body" id="Item.eastern_studded_leather" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.light_mace_t3" />
+		  <Equipment slot="Item1" id="Item.decorated_steppe_shield" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_a" />
+		  <Equipment slot="Head" id="Item.plumed_lamellar_helmet" />
+		  <Equipment slot="Body" id="Item.leather_lamellar_armor" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_3_t3" />
+		  <Equipment slot="Item1" id="Item.khuzait_polearm_1_t4" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_a" />
+		  <Equipment slot="Head" id="Item.plumed_lamellar_helmet" />
+		  <Equipment slot="Body" id="Item.eastern_studded_leather" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_2_t3" />
+		  <Equipment slot="Item1" id="Item.footmans_wicker_shield" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_a" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_f" />
+		  <Equipment slot="Body" id="Item.TV_khuzait_armor_b" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.broad_ild_sword_t3" />
+		  <Equipment slot="Item1" id="Item.decorated_steppe_shield" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_d" />
+		  <Equipment slot="Head" id="Item.ao_durkhan_iron_horsehair_helmet" />
+		  <Equipment slot="Body" id="Item.TV_khuzait_armor_e" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_2_t3" />
+		  <Equipment slot="Item1" id="Item.footmans_wicker_shield" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.AR_khuzait_cape_e" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_f" />
+		  <Equipment slot="Body" id="Item.TV_khuzait_armor_b" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.broad_ild_sword_t3" />
+		  <Equipment slot="Item1" id="Item.khuzait_polearm_1_t4" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.AR_khuzait_cape_e" />
+		  <Equipment slot="Head" id="Item.AR_khuzait_helmet_n" />
+		  <Equipment slot="Body" id="Item.leather_lamellar_armor" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.broad_ild_sword_t3" />
+		  <Equipment slot="Item1" id="Item.decorated_steppe_shield" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_d" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_d" />
+		  <Equipment slot="Body" id="Item.ao_durkhan_lamellar" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.light_mace_t3" />
+		  <Equipment slot="Item1" id="Item.khuzait_polearm_1_t4" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_d" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_d" />
+		  <Equipment slot="Body" id="Item.eastern_studded_leather" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_2_t3" />
+		  <Equipment slot="Item1" id="Item.footmans_wicker_shield" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_d" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_s" />
+		  <Equipment slot="Body" id="Item.eastern_studded_leather" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.broad_ild_sword_t3" />
+		  <Equipment slot="Item1" id="Item.footmans_wicker_shield" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.AR_khuzait_cape_e" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_s" />
+		  <Equipment slot="Body" id="Item.eastern_stitched_leather_coat" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_2_t3" />
+		  <Equipment slot="Item1" id="Item.decorated_steppe_shield" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_a" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_s" />
+		  <Equipment slot="Body" id="Item.TV_khuzait_armor_b" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_2_t3" />
+		  <Equipment slot="Item1" id="Item.footmans_wicker_shield" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_a" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_s" />
+		  <Equipment slot="Body" id="Item.eastern_studded_leather" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_3_t3" />
+		  <Equipment slot="Item1" id="Item.khuzait_polearm_1_t4" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_a" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_f" />
+		  <Equipment slot="Body" id="Item.TV_khuzait_armor_e" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_3_t3" />
+		  <Equipment slot="Item1" id="Item.footmans_wicker_shield" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_a" />
+		  <Equipment slot="Head" id="Item.AR_khuzait_helmet_n" />
+		  <Equipment slot="Body" id="Item.eastern_studded_leather" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.broad_ild_sword_t3" />
+		  <Equipment slot="Item1" id="Item.khuzait_polearm_1_t4" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.AR_khuzait_cape_e" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_d" />
+		  <Equipment slot="Body" id="Item.leather_lamellar_armor" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_3_t3" />
+		  <Equipment slot="Item1" id="Item.khuzait_polearm_1_t4" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_d" />
+		  <Equipment slot="Head" id="Item.plumed_lamellar_helmet" />
+		  <Equipment slot="Body" id="Item.eastern_studded_leather" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.broad_ild_sword_t3" />
+		  <Equipment slot="Item1" id="Item.khuzait_polearm_1_t4" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_a" />
+		  <Equipment slot="Head" id="Item.AR_khuzait_helmet_n" />
+		  <Equipment slot="Body" id="Item.leather_lamellar_armor" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_2_t3" />
+		  <Equipment slot="Item1" id="Item.decorated_steppe_shield" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Head" id="Item.AR_khuzait_helmet_n" />
+		  <Equipment slot="Body" id="Item.eastern_lamellar_armor" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.light_mace_t3" />
+		  <Equipment slot="Item1" id="Item.khuzait_polearm_1_t4" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Head" id="Item.ao_durkhan_iron_horsehair_helmet" />
+		  <Equipment slot="Body" id="Item.leather_lamellar_armor" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_2_t3" />
+		  <Equipment slot="Item1" id="Item.footmans_wicker_shield" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_f" />
+		  <Equipment slot="Body" id="Item.eastern_studded_leather" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.light_mace_t3" />
+		  <Equipment slot="Item1" id="Item.khuzait_polearm_1_t4" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_d" />
+		  <Equipment slot="Head" id="Item.ao_durkhan_iron_horsehair_helmet" />
+		  <Equipment slot="Body" id="Item.eastern_studded_leather" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.broad_ild_sword_t3" />
+		  <Equipment slot="Item1" id="Item.decorated_steppe_shield" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_d" />
+		  <Equipment slot="Body" id="Item.ao_durkhan_lamellar" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.light_mace_t3" />
+		  <Equipment slot="Item1" id="Item.khuzait_polearm_1_t4" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_d" />
+		  <Equipment slot="Body" id="Item.eastern_studded_leather" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.light_mace_t3" />
+		  <Equipment slot="Item1" id="Item.khuzait_polearm_1_t4" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Head" id="Item.plumed_nomad_helmet" />
+		  <Equipment slot="Body" id="Item.TV_khuzait_armor_e" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_3_t3" />
+		  <Equipment slot="Item1" id="Item.khuzait_polearm_1_t4" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_d" />
+		  <Equipment slot="Head" id="Item.plumed_lamellar_helmet" />
+		  <Equipment slot="Body" id="Item.ao_durkhan_lamellar" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.light_mace_t3" />
+		  <Equipment slot="Item1" id="Item.footmans_wicker_shield" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_d" />
+		  <Equipment slot="Head" id="Item.ao_durkhan_iron_horsehair_helmet" />
+		  <Equipment slot="Body" id="Item.TV_khuzait_armor_b" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.light_mace_t3" />
+		  <Equipment slot="Item1" id="Item.khuzait_polearm_1_t4" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_a" />
+		  <Equipment slot="Head" id="Item.AR_khuzait_helmet_n" />
+		  <Equipment slot="Body" id="Item.eastern_stitched_leather_coat" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.broad_ild_sword_t3" />
+		  <Equipment slot="Item1" id="Item.footmans_wicker_shield" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Head" id="Item.plumed_nomad_helmet" />
+		  <Equipment slot="Body" id="Item.TV_khuzait_armor_b" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.light_mace_t3" />
+		  <Equipment slot="Item1" id="Item.decorated_steppe_shield" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_a" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_f" />
+		  <Equipment slot="Body" id="Item.eastern_lamellar_armor" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.broad_ild_sword_t3" />
+		  <Equipment slot="Item1" id="Item.footmans_wicker_shield" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_a" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_s" />
+		  <Equipment slot="Body" id="Item.eastern_stitched_leather_coat" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.light_mace_t3" />
+		  <Equipment slot="Item1" id="Item.khuzait_polearm_1_t4" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_d" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_f" />
+		  <Equipment slot="Body" id="Item.ao_durkhan_lamellar" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_2_t3" />
+		  <Equipment slot="Item1" id="Item.khuzait_polearm_1_t4" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.AR_khuzait_cape_e" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_s" />
+		  <Equipment slot="Body" id="Item.eastern_lamellar_armor" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.broad_ild_sword_t3" />
+		  <Equipment slot="Item1" id="Item.decorated_steppe_shield" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_d" />
+		  <Equipment slot="Head" id="Item.plumed_nomad_helmet" />
+		  <Equipment slot="Body" id="Item.ao_durkhan_lamellar" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.light_mace_t3" />
+		  <Equipment slot="Item1" id="Item.khuzait_polearm_1_t4" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.AR_khuzait_cape_e" />
+		  <Equipment slot="Head" id="Item.plumed_nomad_helmet" />
+		  <Equipment slot="Body" id="Item.TV_khuzait_armor_e" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_3_t3" />
+		  <Equipment slot="Item1" id="Item.footmans_wicker_shield" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.AR_khuzait_cape_e" />
+		  <Equipment slot="Head" id="Item.ao_durkhan_iron_horsehair_helmet" />
+		  <Equipment slot="Body" id="Item.ao_durkhan_lamellar" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_2_t3" />
+		  <Equipment slot="Item1" id="Item.footmans_wicker_shield" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_d" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_d" />
+		  <Equipment slot="Body" id="Item.TV_khuzait_armor_e" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_3_t3" />
+		  <Equipment slot="Item1" id="Item.footmans_wicker_shield" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.AR_khuzait_cape_e" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_s" />
+		  <Equipment slot="Body" id="Item.TV_khuzait_armor_e" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.broad_ild_sword_t3" />
+		  <Equipment slot="Item1" id="Item.footmans_wicker_shield" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.AR_khuzait_cape_e" />
+		  <Equipment slot="Head" id="Item.plumed_lamellar_helmet" />
+		  <Equipment slot="Body" id="Item.TV_khuzait_armor_e" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.light_mace_t3" />
+		  <Equipment slot="Item1" id="Item.khuzait_polearm_1_t4" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.AR_khuzait_cape_e" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_d" />
+		  <Equipment slot="Body" id="Item.eastern_studded_leather" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_2_t3" />
+		  <Equipment slot="Item1" id="Item.decorated_steppe_shield" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_a" />
+		  <Equipment slot="Head" id="Item.plumed_nomad_helmet" />
+		  <Equipment slot="Body" id="Item.eastern_stitched_leather_coat" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.broad_ild_sword_t3" />
+		  <Equipment slot="Item1" id="Item.footmans_wicker_shield" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_d" />
+		  <Equipment slot="Head" id="Item.plumed_lamellar_helmet" />
+		  <Equipment slot="Body" id="Item.TV_khuzait_armor_e" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.light_mace_t3" />
+		  <Equipment slot="Item1" id="Item.khuzait_polearm_1_t4" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_a" />
+		  <Equipment slot="Head" id="Item.ao_durkhan_iron_horsehair_helmet" />
+		  <Equipment slot="Body" id="Item.eastern_stitched_leather_coat" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.broad_ild_sword_t3" />
+		  <Equipment slot="Item1" id="Item.khuzait_polearm_1_t4" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_d" />
+		  <Equipment slot="Head" id="Item.AR_khuzait_helmet_n" />
+		  <Equipment slot="Body" id="Item.leather_lamellar_armor" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_3_t3" />
+		  <Equipment slot="Item1" id="Item.footmans_wicker_shield" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_a" />
+		  <Equipment slot="Head" id="Item.AR_khuzait_helmet_n" />
+		  <Equipment slot="Body" id="Item.TV_khuzait_armor_e" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.light_mace_t3" />
+		  <Equipment slot="Item1" id="Item.footmans_wicker_shield" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Head" id="Item.plumed_lamellar_helmet" />
+		  <Equipment slot="Body" id="Item.TV_khuzait_armor_b" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_2_t3" />
+		  <Equipment slot="Item1" id="Item.khuzait_polearm_1_t4" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_a" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_s" />
+		  <Equipment slot="Body" id="Item.ao_durkhan_lamellar" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.light_mace_t3" />
+		  <Equipment slot="Item1" id="Item.footmans_wicker_shield" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_a" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_f" />
+		  <Equipment slot="Body" id="Item.leather_lamellar_armor" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.broad_ild_sword_t3" />
+		  <Equipment slot="Item1" id="Item.decorated_steppe_shield" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_d" />
+		  <Equipment slot="Body" id="Item.TV_khuzait_armor_b" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.broad_ild_sword_t3" />
+		  <Equipment slot="Item1" id="Item.footmans_wicker_shield" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_a" />
+		  <Equipment slot="Head" id="Item.plumed_lamellar_helmet" />
+		  <Equipment slot="Body" id="Item.TV_khuzait_armor_e" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.broad_ild_sword_t3" />
+		  <Equipment slot="Item1" id="Item.footmans_wicker_shield" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_d" />
+		  <Equipment slot="Head" id="Item.plumed_nomad_helmet" />
+		  <Equipment slot="Body" id="Item.leather_lamellar_armor" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_3_t3" />
+		  <Equipment slot="Item1" id="Item.khuzait_polearm_1_t4" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_a" />
+		  <Equipment slot="Head" id="Item.plumed_lamellar_helmet" />
+		  <Equipment slot="Body" id="Item.ao_durkhan_lamellar" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_3_t3" />
+		  <Equipment slot="Item1" id="Item.decorated_steppe_shield" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_d" />
+		  <Equipment slot="Head" id="Item.ao_durkhan_iron_horsehair_helmet" />
+		  <Equipment slot="Body" id="Item.eastern_lamellar_armor" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_2_t3" />
+		  <Equipment slot="Item1" id="Item.decorated_steppe_shield" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_d" />
+		  <Equipment slot="Head" id="Item.plumed_nomad_helmet" />
+		  <Equipment slot="Body" id="Item.eastern_stitched_leather_coat" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_2_t3" />
+		  <Equipment slot="Item1" id="Item.khuzait_polearm_1_t4" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_a" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_d" />
+		  <Equipment slot="Body" id="Item.eastern_lamellar_armor" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.light_mace_t3" />
+		  <Equipment slot="Item1" id="Item.khuzait_polearm_1_t4" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_d" />
+		  <Equipment slot="Head" id="Item.ao_durkhan_iron_horsehair_helmet" />
+		  <Equipment slot="Body" id="Item.eastern_stitched_leather_coat" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.broad_ild_sword_t3" />
+		  <Equipment slot="Item1" id="Item.decorated_steppe_shield" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_a" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_d" />
+		  <Equipment slot="Body" id="Item.TV_khuzait_armor_b" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_2_t3" />
+		  <Equipment slot="Item1" id="Item.decorated_steppe_shield" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Head" id="Item.plumed_nomad_helmet" />
+		  <Equipment slot="Body" id="Item.eastern_stitched_leather_coat" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.light_mace_t3" />
+		  <Equipment slot="Item1" id="Item.khuzait_polearm_1_t4" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_d" />
+		  <Equipment slot="Head" id="Item.AR_khuzait_helmet_n" />
+		  <Equipment slot="Body" id="Item.eastern_stitched_leather_coat" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_2_t3" />
+		  <Equipment slot="Item1" id="Item.decorated_steppe_shield" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_a" />
+		  <Equipment slot="Head" id="Item.plumed_lamellar_helmet" />
+		  <Equipment slot="Body" id="Item.eastern_lamellar_armor" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_3_t3" />
+		  <Equipment slot="Item1" id="Item.khuzait_polearm_1_t4" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.AR_khuzait_cape_e" />
+		  <Equipment slot="Head" id="Item.plumed_lamellar_helmet" />
+		  <Equipment slot="Body" id="Item.eastern_studded_leather" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_3_t3" />
+		  <Equipment slot="Item1" id="Item.footmans_wicker_shield" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Head" id="Item.plumed_nomad_helmet" />
+		  <Equipment slot="Body" id="Item.eastern_studded_leather" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_3_t3" />
+		  <Equipment slot="Item1" id="Item.footmans_wicker_shield" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_a" />
+		  <Equipment slot="Head" id="Item.plumed_nomad_helmet" />
+		  <Equipment slot="Body" id="Item.eastern_studded_leather" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.broad_ild_sword_t3" />
+		  <Equipment slot="Item1" id="Item.decorated_steppe_shield" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_a" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_d" />
+		  <Equipment slot="Body" id="Item.eastern_stitched_leather_coat" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_3_t3" />
+		  <Equipment slot="Item1" id="Item.khuzait_polearm_1_t4" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Head" id="Item.plumed_lamellar_helmet" />
+		  <Equipment slot="Body" id="Item.eastern_studded_leather" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.light_mace_t3" />
+		  <Equipment slot="Item1" id="Item.khuzait_polearm_1_t4" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.AR_khuzait_cape_e" />
+		  <Equipment slot="Head" id="Item.AR_khuzait_helmet_n" />
+		  <Equipment slot="Body" id="Item.eastern_stitched_leather_coat" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_3_t3" />
+		  <Equipment slot="Item1" id="Item.footmans_wicker_shield" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_a" />
+		  <Equipment slot="Head" id="Item.ao_durkhan_iron_horsehair_helmet" />
+		  <Equipment slot="Body" id="Item.ao_durkhan_lamellar" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.broad_ild_sword_t3" />
+		  <Equipment slot="Item1" id="Item.footmans_wicker_shield" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Head" id="Item.plumed_lamellar_helmet" />
+		  <Equipment slot="Body" id="Item.TV_khuzait_armor_e" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.broad_ild_sword_t3" />
+		  <Equipment slot="Item1" id="Item.khuzait_polearm_1_t4" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_d" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_d" />
+		  <Equipment slot="Body" id="Item.leather_lamellar_armor" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_2_t3" />
+		  <Equipment slot="Item1" id="Item.decorated_steppe_shield" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_d" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_s" />
+		  <Equipment slot="Body" id="Item.TV_khuzait_armor_b" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.light_mace_t3" />
+		  <Equipment slot="Item1" id="Item.khuzait_polearm_1_t4" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_d" />
+		  <Equipment slot="Head" id="Item.ao_durkhan_iron_horsehair_helmet" />
+		  <Equipment slot="Body" id="Item.leather_lamellar_armor" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_3_t3" />
+		  <Equipment slot="Item1" id="Item.footmans_wicker_shield" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_d" />
+		  <Equipment slot="Head" id="Item.AR_khuzait_helmet_n" />
+		  <Equipment slot="Body" id="Item.TV_khuzait_armor_e" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_2_t3" />
+		  <Equipment slot="Item1" id="Item.decorated_steppe_shield" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_a" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_f" />
+		  <Equipment slot="Body" id="Item.eastern_stitched_leather_coat" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_3_t3" />
+		  <Equipment slot="Item1" id="Item.khuzait_polearm_1_t4" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.AR_khuzait_cape_e" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_f" />
+		  <Equipment slot="Body" id="Item.TV_khuzait_armor_e" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_2_t3" />
+		  <Equipment slot="Item1" id="Item.decorated_steppe_shield" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Head" id="Item.plumed_lamellar_helmet" />
+		  <Equipment slot="Body" id="Item.eastern_lamellar_armor" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.light_mace_t3" />
+		  <Equipment slot="Item1" id="Item.khuzait_polearm_1_t4" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_a" />
+		  <Equipment slot="Head" id="Item.plumed_nomad_helmet" />
+		  <Equipment slot="Body" id="Item.TV_khuzait_armor_e" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.light_mace_t3" />
+		  <Equipment slot="Item1" id="Item.decorated_steppe_shield" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_d" />
+		  <Equipment slot="Head" id="Item.plumed_lamellar_helmet" />
+		  <Equipment slot="Body" id="Item.leather_lamellar_armor" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_3_t3" />
+		  <Equipment slot="Item1" id="Item.khuzait_polearm_1_t4" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.AR_khuzait_cape_e" />
+		  <Equipment slot="Head" id="Item.plumed_lamellar_helmet" />
+		  <Equipment slot="Body" id="Item.ao_durkhan_lamellar" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.light_mace_t3" />
+		  <Equipment slot="Item1" id="Item.footmans_wicker_shield" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_d" />
+		  <Equipment slot="Head" id="Item.plumed_lamellar_helmet" />
+		  <Equipment slot="Body" id="Item.TV_khuzait_armor_b" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_2_t3" />
+		  <Equipment slot="Item1" id="Item.footmans_wicker_shield" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_f" />
+		  <Equipment slot="Body" id="Item.TV_khuzait_armor_b" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_3_t3" />
+		  <Equipment slot="Item1" id="Item.footmans_wicker_shield" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_d" />
+		  <Equipment slot="Head" id="Item.ao_durkhan_iron_horsehair_helmet" />
+		  <Equipment slot="Body" id="Item.ao_durkhan_lamellar" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.light_mace_t3" />
+		  <Equipment slot="Item1" id="Item.footmans_wicker_shield" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.AR_khuzait_cape_e" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_f" />
+		  <Equipment slot="Body" id="Item.leather_lamellar_armor" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_2_t3" />
+		  <Equipment slot="Item1" id="Item.footmans_wicker_shield" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_d" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_f" />
+		  <Equipment slot="Body" id="Item.TV_khuzait_armor_b" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_2_t3" />
+		  <Equipment slot="Item1" id="Item.decorated_steppe_shield" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.AR_khuzait_cape_e" />
+		  <Equipment slot="Head" id="Item.plumed_lamellar_helmet" />
+		  <Equipment slot="Body" id="Item.eastern_lamellar_armor" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.broad_ild_sword_t3" />
+		  <Equipment slot="Item1" id="Item.decorated_steppe_shield" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Head" id="Item.plumed_nomad_helmet" />
+		  <Equipment slot="Body" id="Item.eastern_lamellar_armor" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_2_t3" />
+		  <Equipment slot="Item1" id="Item.khuzait_polearm_1_t4" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.AR_khuzait_cape_e" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_s" />
+		  <Equipment slot="Body" id="Item.ao_durkhan_lamellar" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_2_t3" />
+		  <Equipment slot="Item1" id="Item.decorated_steppe_shield" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_d" />
+		  <Equipment slot="Head" id="Item.plumed_lamellar_helmet" />
+		  <Equipment slot="Body" id="Item.eastern_lamellar_armor" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.broad_ild_sword_t3" />
+		  <Equipment slot="Item1" id="Item.decorated_steppe_shield" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.AR_khuzait_cape_e" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_d" />
+		  <Equipment slot="Body" id="Item.TV_khuzait_armor_b" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.broad_ild_sword_t3" />
+		  <Equipment slot="Item1" id="Item.khuzait_polearm_1_t4" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_d" />
+		  <Equipment slot="Head" id="Item.plumed_lamellar_helmet" />
+		  <Equipment slot="Body" id="Item.eastern_stitched_leather_coat" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.broad_ild_sword_t3" />
+		  <Equipment slot="Item1" id="Item.decorated_steppe_shield" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.AR_khuzait_cape_e" />
+		  <Equipment slot="Head" id="Item.plumed_nomad_helmet" />
+		  <Equipment slot="Body" id="Item.eastern_lamellar_armor" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_2_t3" />
+		  <Equipment slot="Item1" id="Item.khuzait_polearm_1_t4" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_d" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_s" />
+		  <Equipment slot="Body" id="Item.ao_durkhan_lamellar" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.broad_ild_sword_t3" />
+		  <Equipment slot="Item1" id="Item.decorated_steppe_shield" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_d" />
+		  <Equipment slot="Head" id="Item.plumed_nomad_helmet" />
+		  <Equipment slot="Body" id="Item.eastern_lamellar_armor" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.broad_ild_sword_t3" />
+		  <Equipment slot="Item1" id="Item.khuzait_polearm_1_t4" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Head" id="Item.AR_khuzait_helmet_n" />
+		  <Equipment slot="Body" id="Item.leather_lamellar_armor" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_3_t3" />
+		  <Equipment slot="Item1" id="Item.footmans_wicker_shield" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_d" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_s" />
+		  <Equipment slot="Body" id="Item.TV_khuzait_armor_e" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_2_t3" />
+		  <Equipment slot="Item1" id="Item.decorated_steppe_shield" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.AR_khuzait_cape_e" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_f" />
+		  <Equipment slot="Body" id="Item.eastern_stitched_leather_coat" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_2_t3" />
+		  <Equipment slot="Item1" id="Item.khuzait_polearm_1_t4" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_a" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_s" />
+		  <Equipment slot="Body" id="Item.leather_lamellar_armor" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_2_t3" />
+		  <Equipment slot="Item1" id="Item.footmans_wicker_shield" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.AR_khuzait_cape_e" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_d" />
+		  <Equipment slot="Body" id="Item.TV_khuzait_armor_e" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_3_t3" />
+		  <Equipment slot="Item1" id="Item.footmans_wicker_shield" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Head" id="Item.AR_khuzait_helmet_n" />
+		  <Equipment slot="Body" id="Item.TV_khuzait_armor_e" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.broad_ild_sword_t3" />
+		  <Equipment slot="Item1" id="Item.khuzait_polearm_1_t4" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_a" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_d" />
+		  <Equipment slot="Body" id="Item.leather_lamellar_armor" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.light_mace_t3" />
+		  <Equipment slot="Item1" id="Item.footmans_wicker_shield" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_a" />
+		  <Equipment slot="Head" id="Item.ao_durkhan_iron_horsehair_helmet" />
+		  <Equipment slot="Body" id="Item.TV_khuzait_armor_b" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.broad_ild_sword_t3" />
+		  <Equipment slot="Item1" id="Item.decorated_steppe_shield" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.AR_khuzait_cape_e" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_d" />
+		  <Equipment slot="Body" id="Item.ao_durkhan_lamellar" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.light_mace_t3" />
+		  <Equipment slot="Item1" id="Item.footmans_wicker_shield" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_d" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_f" />
+		  <Equipment slot="Body" id="Item.leather_lamellar_armor" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.light_mace_t3" />
+		  <Equipment slot="Item1" id="Item.khuzait_polearm_1_t4" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.AR_khuzait_cape_e" />
+		  <Equipment slot="Head" id="Item.ao_durkhan_iron_horsehair_helmet" />
+		  <Equipment slot="Body" id="Item.leather_lamellar_armor" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.broad_ild_sword_t3" />
+		  <Equipment slot="Item1" id="Item.decorated_steppe_shield" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Head" id="Item.plumed_nomad_helmet" />
+		  <Equipment slot="Body" id="Item.ao_durkhan_lamellar" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_2_t3" />
+		  <Equipment slot="Item1" id="Item.khuzait_polearm_1_t4" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_s" />
+		  <Equipment slot="Body" id="Item.leather_lamellar_armor" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_3_t3" />
+		  <Equipment slot="Item1" id="Item.footmans_wicker_shield" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.AR_khuzait_cape_e" />
+		  <Equipment slot="Head" id="Item.plumed_nomad_helmet" />
+		  <Equipment slot="Body" id="Item.eastern_studded_leather" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.broad_ild_sword_t3" />
+		  <Equipment slot="Item1" id="Item.decorated_steppe_shield" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.AR_khuzait_cape_e" />
+		  <Equipment slot="Head" id="Item.ao_durkhan_iron_horsehair_helmet" />
+		  <Equipment slot="Body" id="Item.TV_khuzait_armor_e" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.broad_ild_sword_t3" />
+		  <Equipment slot="Item1" id="Item.footmans_wicker_shield" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Head" id="Item.plumed_nomad_helmet" />
+		  <Equipment slot="Body" id="Item.leather_lamellar_armor" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.light_mace_t3" />
+		  <Equipment slot="Item1" id="Item.khuzait_polearm_1_t4" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.AR_khuzait_cape_e" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_f" />
+		  <Equipment slot="Body" id="Item.ao_durkhan_lamellar" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_3_t3" />
+		  <Equipment slot="Item1" id="Item.footmans_wicker_shield" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.AR_khuzait_cape_e" />
+		  <Equipment slot="Head" id="Item.AR_khuzait_helmet_n" />
+		  <Equipment slot="Body" id="Item.TV_khuzait_armor_b" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.light_mace_t3" />
+		  <Equipment slot="Item1" id="Item.khuzait_polearm_1_t4" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_a" />
+		  <Equipment slot="Head" id="Item.ao_durkhan_iron_horsehair_helmet" />
+		  <Equipment slot="Body" id="Item.eastern_studded_leather" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_2_t3" />
+		  <Equipment slot="Item1" id="Item.decorated_steppe_shield" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_a" />
+		  <Equipment slot="Head" id="Item.AR_khuzait_helmet_n" />
+		  <Equipment slot="Body" id="Item.eastern_lamellar_armor" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_3_t3" />
+		  <Equipment slot="Item1" id="Item.khuzait_polearm_1_t4" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_f" />
+		  <Equipment slot="Body" id="Item.TV_khuzait_armor_e" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_3_t3" />
+		  <Equipment slot="Item1" id="Item.footmans_wicker_shield" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_s" />
+		  <Equipment slot="Body" id="Item.TV_khuzait_armor_e" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.light_mace_t3" />
+		  <Equipment slot="Item1" id="Item.khuzait_polearm_1_t4" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_a" />
+		  <Equipment slot="Head" id="Item.ao_durkhan_iron_horsehair_helmet" />
+		  <Equipment slot="Body" id="Item.leather_lamellar_armor" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.broad_ild_sword_t3" />
+		  <Equipment slot="Item1" id="Item.decorated_steppe_shield" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_a" />
+		  <Equipment slot="Head" id="Item.plumed_nomad_helmet" />
+		  <Equipment slot="Body" id="Item.eastern_lamellar_armor" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_3_t3" />
+		  <Equipment slot="Item1" id="Item.decorated_steppe_shield" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_d" />
+		  <Equipment slot="Head" id="Item.AR_khuzait_helmet_n" />
+		  <Equipment slot="Body" id="Item.ao_durkhan_lamellar" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_2_t3" />
+		  <Equipment slot="Item1" id="Item.footmans_wicker_shield" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_s" />
+		  <Equipment slot="Body" id="Item.eastern_studded_leather" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_2_t3" />
+		  <Equipment slot="Item1" id="Item.decorated_steppe_shield" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_d" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_f" />
+		  <Equipment slot="Body" id="Item.eastern_stitched_leather_coat" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_2_t3" />
+		  <Equipment slot="Item1" id="Item.decorated_steppe_shield" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_f" />
+		  <Equipment slot="Body" id="Item.eastern_stitched_leather_coat" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.broad_ild_sword_t3" />
+		  <Equipment slot="Item1" id="Item.khuzait_polearm_1_t4" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Head" id="Item.plumed_lamellar_helmet" />
+		  <Equipment slot="Body" id="Item.eastern_stitched_leather_coat" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_3_t3" />
+		  <Equipment slot="Item1" id="Item.footmans_wicker_shield" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.AR_khuzait_cape_e" />
+		  <Equipment slot="Head" id="Item.AR_khuzait_helmet_n" />
+		  <Equipment slot="Body" id="Item.TV_khuzait_armor_e" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.broad_ild_sword_t3" />
+		  <Equipment slot="Item1" id="Item.footmans_wicker_shield" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_a" />
+		  <Equipment slot="Head" id="Item.plumed_nomad_helmet" />
+		  <Equipment slot="Body" id="Item.TV_khuzait_armor_b" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_3_t3" />
+		  <Equipment slot="Item1" id="Item.footmans_wicker_shield" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_d" />
+		  <Equipment slot="Head" id="Item.AR_khuzait_helmet_n" />
+		  <Equipment slot="Body" id="Item.TV_khuzait_armor_b" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.broad_ild_sword_t3" />
+		  <Equipment slot="Item1" id="Item.decorated_steppe_shield" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_a" />
+		  <Equipment slot="Head" id="Item.plumed_nomad_helmet" />
+		  <Equipment slot="Body" id="Item.ao_durkhan_lamellar" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.light_mace_t3" />
+		  <Equipment slot="Item1" id="Item.khuzait_polearm_1_t4" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_a" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_d" />
+		  <Equipment slot="Body" id="Item.eastern_studded_leather" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_3_t3" />
+		  <Equipment slot="Item1" id="Item.footmans_wicker_shield" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_a" />
+		  <Equipment slot="Head" id="Item.AR_khuzait_helmet_n" />
+		  <Equipment slot="Body" id="Item.TV_khuzait_armor_b" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.light_mace_t3" />
+		  <Equipment slot="Item1" id="Item.footmans_wicker_shield" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Head" id="Item.ao_durkhan_iron_horsehair_helmet" />
+		  <Equipment slot="Body" id="Item.TV_khuzait_armor_b" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_3_t3" />
+		  <Equipment slot="Item1" id="Item.decorated_steppe_shield" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.AR_khuzait_cape_e" />
+		  <Equipment slot="Head" id="Item.ao_durkhan_iron_horsehair_helmet" />
+		  <Equipment slot="Body" id="Item.eastern_lamellar_armor" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.light_mace_t3" />
+		  <Equipment slot="Item1" id="Item.decorated_steppe_shield" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.AR_khuzait_cape_e" />
+		  <Equipment slot="Head" id="Item.plumed_lamellar_helmet" />
+		  <Equipment slot="Body" id="Item.leather_lamellar_armor" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.broad_ild_sword_t3" />
+		  <Equipment slot="Item1" id="Item.footmans_wicker_shield" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.AR_khuzait_cape_e" />
+		  <Equipment slot="Head" id="Item.plumed_nomad_helmet" />
+		  <Equipment slot="Body" id="Item.TV_khuzait_armor_b" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.broad_ild_sword_t3" />
+		  <Equipment slot="Item1" id="Item.decorated_steppe_shield" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Head" id="Item.ao_durkhan_iron_horsehair_helmet" />
+		  <Equipment slot="Body" id="Item.TV_khuzait_armor_e" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_2_t3" />
+		  <Equipment slot="Item1" id="Item.decorated_steppe_shield" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_s" />
+		  <Equipment slot="Body" id="Item.TV_khuzait_armor_b" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.broad_ild_sword_t3" />
+		  <Equipment slot="Item1" id="Item.khuzait_polearm_1_t4" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_a" />
+		  <Equipment slot="Head" id="Item.plumed_lamellar_helmet" />
+		  <Equipment slot="Body" id="Item.eastern_stitched_leather_coat" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_2_t3" />
+		  <Equipment slot="Item1" id="Item.footmans_wicker_shield" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_d" />
+		  <Equipment slot="Body" id="Item.TV_khuzait_armor_e" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_2_t3" />
+		  <Equipment slot="Item1" id="Item.khuzait_polearm_1_t4" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_d" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_d" />
+		  <Equipment slot="Body" id="Item.eastern_lamellar_armor" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.broad_ild_sword_t3" />
+		  <Equipment slot="Item1" id="Item.decorated_steppe_shield" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_d" />
+		  <Equipment slot="Body" id="Item.eastern_stitched_leather_coat" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.broad_ild_sword_t3" />
+		  <Equipment slot="Item1" id="Item.decorated_steppe_shield" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_d" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_d" />
+		  <Equipment slot="Body" id="Item.eastern_stitched_leather_coat" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.broad_ild_sword_t3" />
+		  <Equipment slot="Item1" id="Item.footmans_wicker_shield" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.AR_khuzait_cape_e" />
+		  <Equipment slot="Head" id="Item.plumed_nomad_helmet" />
+		  <Equipment slot="Body" id="Item.leather_lamellar_armor" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_2_t3" />
+		  <Equipment slot="Item1" id="Item.footmans_wicker_shield" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_d" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_f" />
+		  <Equipment slot="Body" id="Item.eastern_studded_leather" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_2_t3" />
+		  <Equipment slot="Item1" id="Item.footmans_wicker_shield" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_a" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_d" />
+		  <Equipment slot="Body" id="Item.TV_khuzait_armor_e" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.broad_ild_sword_t3" />
+		  <Equipment slot="Item1" id="Item.decorated_steppe_shield" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_d" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_d" />
+		  <Equipment slot="Body" id="Item.TV_khuzait_armor_b" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.broad_ild_sword_t3" />
+		  <Equipment slot="Item1" id="Item.khuzait_polearm_1_t4" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.AR_khuzait_cape_e" />
+		  <Equipment slot="Head" id="Item.plumed_lamellar_helmet" />
+		  <Equipment slot="Body" id="Item.eastern_stitched_leather_coat" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_3_t3" />
+		  <Equipment slot="Item1" id="Item.decorated_steppe_shield" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Head" id="Item.AR_khuzait_helmet_n" />
+		  <Equipment slot="Body" id="Item.ao_durkhan_lamellar" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_3_t3" />
+		  <Equipment slot="Item1" id="Item.footmans_wicker_shield" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_d" />
+		  <Equipment slot="Head" id="Item.plumed_nomad_helmet" />
+		  <Equipment slot="Body" id="Item.eastern_studded_leather" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.light_mace_t3" />
+		  <Equipment slot="Item1" id="Item.decorated_steppe_shield" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_d" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_f" />
+		  <Equipment slot="Body" id="Item.eastern_lamellar_armor" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.broad_ild_sword_t3" />
+		  <Equipment slot="Item1" id="Item.decorated_steppe_shield" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_a" />
+		  <Equipment slot="Head" id="Item.ao_durkhan_iron_horsehair_helmet" />
+		  <Equipment slot="Body" id="Item.TV_khuzait_armor_e" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_2_t3" />
+		  <Equipment slot="Item1" id="Item.khuzait_polearm_1_t4" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_d" />
+		  <Equipment slot="Body" id="Item.eastern_lamellar_armor" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.broad_ild_sword_t3" />
+		  <Equipment slot="Item1" id="Item.khuzait_polearm_1_t4" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_d" />
+		  <Equipment slot="Body" id="Item.leather_lamellar_armor" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.light_mace_t3" />
+		  <Equipment slot="Item1" id="Item.footmans_wicker_shield" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_f" />
+		  <Equipment slot="Body" id="Item.leather_lamellar_armor" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_2_t3" />
+		  <Equipment slot="Item1" id="Item.decorated_steppe_shield" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.AR_khuzait_cape_e" />
+		  <Equipment slot="Head" id="Item.AR_empire_helmet_s" />
+		  <Equipment slot="Body" id="Item.TV_khuzait_armor_b" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.eastern_splint_boots" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.light_mace_t3" />
+		  <Equipment slot="Item1" id="Item.footmans_wicker_shield" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_a" />
+		  <Equipment slot="Head" id="Item.plumed_lamellar_helmet" />
+		  <Equipment slot="Body" id="Item.TV_khuzait_armor_b" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.khuzait_sword_3_t3" />
+		  <Equipment slot="Item1" id="Item.decorated_steppe_shield" />
+		  <Equipment slot="Item2" id="Item.composite_steppe_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.AR_khuzait_cape_e" />
+		  <Equipment slot="Head" id="Item.AR_khuzait_helmet_n" />
+		  <Equipment slot="Body" id="Item.ao_durkhan_lamellar" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+		<EquipmentSet>
+		  <Equipment slot="Item0" id="Item.light_mace_t3" />
+		  <Equipment slot="Item1" id="Item.khuzait_polearm_1_t4" />
+		  <Equipment slot="Item2" id="Item.composite_bow" />
+		  <Equipment slot="Item3" id="Item.barbed_arrows" />
+		  <Equipment slot="Cape" id="Item.TV_wolf_pelt_d" />
+		  <Equipment slot="Head" id="Item.plumed_nomad_helmet" />
+		  <Equipment slot="Body" id="Item.TV_khuzait_armor_e" />
+		  <Equipment slot="Gloves" id="Item.reinforced_leather_vambraces" />
+		  <Equipment slot="Leg" id="Item.tv_empire_plate_c" />
+		  <Equipment slot="Horse" id="Item.khuzait_horse" />
+		  <Equipment slot="HorseHarness" id="Item.steppe_harness" />
+		</EquipmentSet>
+	</EquipmentRoster>
+
 	<EquipmentRoster id="bannerkings_companion_sturgia" culture="Culture.sturgia">
 		<EquipmentSet>
 		  <Equipment slot="Item0" id="Item.sturgia_sword_3_t3" />

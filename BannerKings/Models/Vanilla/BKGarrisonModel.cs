@@ -59,7 +59,13 @@ namespace BannerKings.Models.Vanilla
                         return 0;
                     }
 
-                    return (int) MathF.Max(result / 10f - enemies, 0f);
+                    float partyProportion = 0.025f + (enemies * 0.02f);
+                    if (settlement.Town.IsOwnerUnassigned)
+                    {
+                        partyProportion *= 1.5f;
+                    }
+
+                    return (int) MathF.Max((result / 3f) + (mobileParty.MemberRoster.TotalManCount * partyProportion), 0f);
                 }
             }
 
