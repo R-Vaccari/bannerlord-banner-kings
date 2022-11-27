@@ -1,5 +1,4 @@
 ﻿using BannerKings.Behaviours.Mercenary;
-using HarmonyLib;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -293,7 +292,7 @@ namespace BannerKings.UI.Mercenary
                     int quantity = CalculateTroopAmount(customTroop.Character);
                     if (quantity == 0)
                     {
-                        SetSkills(customTroop.Character, (CustomTroopPreset)list[0].Identifier);
+                        customTroop.SetSkills(customTroop.Character, (CustomTroopPreset)list[0].Identifier);
                         ShowEditingOptions();
                     }
                     else
@@ -312,7 +311,7 @@ namespace BannerKings.UI.Mercenary
                             () =>
                             {
                                 Hero.MainHero.ChangeHeroGold(-cost);
-                                SetSkills(customTroop.Character, (CustomTroopPreset)list[0].Identifier);
+                                customTroop.SetSkills(customTroop.Character, (CustomTroopPreset)list[0].Identifier);
                                 ShowEditingOptions();
                             },
                             () => ShowEditingOptions()));
@@ -548,23 +547,6 @@ namespace BannerKings.UI.Mercenary
                     ShowEquipmentOptions(levy);
                 }
                 ));
-        }
-
-        private void SetSkills(CharacterObject character, CustomTroopPreset preset)
-        {
-           
-            MBCharacterSkills skills = new MBCharacterSkills();
-            skills.Skills.SetPropertyValue(DefaultSkills.OneHanded, preset.OneHanded);
-            skills.Skills.SetPropertyValue(DefaultSkills.TwoHanded, preset.TwoHanded);
-            skills.Skills.SetPropertyValue(DefaultSkills.Polearm, preset.Polearm);
-            skills.Skills.SetPropertyValue(DefaultSkills.Riding, preset.Riding);
-            skills.Skills.SetPropertyValue(DefaultSkills.Athletics, preset.Athletics);
-            skills.Skills.SetPropertyValue(DefaultSkills.Bow, preset.Bow);
-            skills.Skills.SetPropertyValue(DefaultSkills.Crossbow, preset.Crossbow);
-            skills.Skills.SetPropertyValue(DefaultSkills.Throwing, preset.Throwing);
-
-           AccessTools.Field((character as BasicCharacterObject).GetType(), "CharacterSkills")
-                   .SetValue(character, skills);
         }
 
         private int CalculateTroopAmount(CharacterObject character)

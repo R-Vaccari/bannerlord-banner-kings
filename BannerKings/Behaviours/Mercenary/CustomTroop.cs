@@ -18,9 +18,15 @@ namespace BannerKings.Behaviours.Mercenary
 
         public void PostInitialize(CultureObject culture)
         {
+            Skills.PostInitialize();
+            if (Name == null)
+            {
+                Name = new TextObject("{=gaJDVkvHA}Placeholder").ToString();
+            }
+            SetName(new TextObject(Name));
             FillCharacter(culture.BasicTroop);
             SetEquipment(Character, Equipments);
-            SetName(Name);
+            SetSkills(Character, Skills);
         }
 
         private void FillCharacter(CharacterObject reference)
@@ -41,7 +47,7 @@ namespace BannerKings.Behaviours.Mercenary
 
         public void SetEquipment(CharacterObject character, List<Equipment> equipments = null)
         {
-            Name = character.Name;
+            Name = character.Name.ToString();
             if (equipments == null)
             {
                 MBEquipmentRoster roster = (MBEquipmentRoster)AccessTools.Field((character as BasicCharacterObject).GetType(), "_equipmentRoster")
@@ -76,11 +82,36 @@ namespace BannerKings.Behaviours.Mercenary
         {
             AccessTools.Method((Character as BasicCharacterObject).GetType(), "SetName")
                             .Invoke(Character, new object[] { text });
-            Name = text;
+            Name = text.ToString();
+        }
+
+        public void SetSkills(CharacterObject character, CustomTroopPreset preset)
+        {
+            if (preset != null)
+            {
+                BasicCharacterObject basicCharacter = character;
+                basicCharacter.Level = preset.Level;
+
+                MBCharacterSkills skills = new MBCharacterSkills();
+                skills.Skills.SetPropertyValue(DefaultSkills.OneHanded, preset.OneHanded);
+                skills.Skills.SetPropertyValue(DefaultSkills.TwoHanded, preset.TwoHanded);
+                skills.Skills.SetPropertyValue(DefaultSkills.Polearm, preset.Polearm);
+                skills.Skills.SetPropertyValue(DefaultSkills.Riding, preset.Riding);
+                skills.Skills.SetPropertyValue(DefaultSkills.Athletics, preset.Athletics);
+                skills.Skills.SetPropertyValue(DefaultSkills.Bow, preset.Bow);
+                skills.Skills.SetPropertyValue(DefaultSkills.Crossbow, preset.Crossbow);
+                skills.Skills.SetPropertyValue(DefaultSkills.Throwing, preset.Throwing);
+
+                AccessTools.Field((character as BasicCharacterObject).GetType(), "CharacterSkills")
+                        .SetValue(character, skills);
+
+                Skills = preset;
+            }
         }
 
         [SaveableProperty(1)] public CharacterObject Character { get; set; }
-        [SaveableProperty(2)] public TextObject Name { get; set; }
+        [SaveableProperty(2)] public string Name { get; set; }
         [SaveableProperty(3)] public List<Equipment> Equipments { get; set; }
+        [SaveableProperty(4)] public CustomTroopPreset Skills { get; set; }
     }
 }

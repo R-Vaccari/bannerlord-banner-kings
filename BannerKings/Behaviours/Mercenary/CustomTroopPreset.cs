@@ -24,6 +24,13 @@ namespace BannerKings.Behaviours.Mercenary
             ItemId = itemId;
         }
 
+        public void PostInitialize()
+        {
+            var copy = DefaultCustomTroopPresets.Instance.GetById(StringId);
+            Initialize(copy.Name, copy.Description, copy.Level, copy.OneHanded, copy.TwoHanded, copy.Polearm,
+                copy.Riding, copy.Athletics, copy.Throwing, copy.Bow, copy.Crossbow, copy.ItemId);
+        }
+
         public TextObject GetExplanation() => new TextObject("{=!}{DESCRIPTION}\n\nOne-Handed: {1H}\nTwo-Handed: {2H}")
             .SetTextVariable("DESCRIPTION", Description)
             .SetTextVariable("1H", OneHanded)

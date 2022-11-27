@@ -169,6 +169,7 @@ namespace BannerKings
             AddClassDefinition(typeof(MercenaryCareer), 1000); 
             AddClassDefinition(typeof(MercenaryPrivilege), 1001);
             AddClassDefinition(typeof(CustomTroop), 1002);
+            AddClassDefinition(typeof(CustomTroopPreset), 1003);
         }
 
         protected override void DefineContainerDefinitions()
