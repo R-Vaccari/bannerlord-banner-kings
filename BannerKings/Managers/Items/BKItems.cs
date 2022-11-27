@@ -116,28 +116,28 @@ namespace BannerKings.Managers.Items
 
             Limestone = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("limestone"));
             InitializeTradeGood(Limestone,
-                new TextObject("{=!}Limestone{@Plural}stacks of limestone bricks{\\@}"), "limestone",
+                new TextObject("{=ywciPeBS}Limestone{@Plural}stacks of limestone bricks{\\@}"), "limestone",
                 BKItemCategories.Instance.Limestone, 50, 10f, ItemObject.ItemTypeEnum.Goods);
 
             Marble = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("marble"));
             InitializeTradeGood(Marble,
-                new TextObject("{=!}Marble{@Plural}stacks of marble bricks{\\@}"), "marblestone",
+                new TextObject("{=D3mU8bc3}Marble{@Plural}stacks of marble bricks{\\@}"), "marblestone",
                 BKItemCategories.Instance.Marble, 150, 10f, ItemObject.ItemTypeEnum.Goods);
 
 
             GoldOre = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("gold_ore"));
             InitializeTradeGood(GoldOre,
-                new TextObject("{=!}Gold Ore{@Plural}sacks of gold ore{\\@}"), "goldore",
+                new TextObject("{=E6sgXO5n}Gold Ore{@Plural}sacks of gold ore{\\@}"), "goldore",
                 BKItemCategories.Instance.Gold, 400, 10f, ItemObject.ItemTypeEnum.Goods);
 
             GoldIngot = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("goldingot"));
             InitializeTradeGood(GoldIngot,
-                new TextObject("{=!}Gold Ingot{@Plural}stacks of gold ingots{\\@}"), "goldingot",
+                new TextObject("{=ak0txv88}Gold Ingot{@Plural}stacks of gold ingots{\\@}"), "goldingot",
                 BKItemCategories.Instance.Gold, 1000, 0.5f, ItemObject.ItemTypeEnum.Goods);
 
             Gems = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("pouchofgems"));
             InitializeTradeGood(Gems,
-                new TextObject("{=!}Gems{@Plural}pouches of gems{\\@}"), "pouchofgems",
+                new TextObject("{=SajCUfsW}Gems{@Plural}pouches of gems{\\@}"), "pouchofgems",
                 BKItemCategories.Instance.Gems, 50000, 1f, ItemObject.ItemTypeEnum.Goods);
 
 
@@ -213,13 +213,13 @@ namespace BannerKings.Managers.Items
 
             BookThrowing = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("book_throwing"));
             InitializeTradeGood(BookThrowing,
-                new TextObject("{=!}Franceska{@Plural}collection of Franceska{\\@}"),
+                new TextObject("{=wNr4YQOo}Franceska{@Plural}collection of Franceska{\\@}"),
                 "lib_book_closed_b",
                 BKItemCategories.Instance.Book, 1000, 1.5f, ItemObject.ItemTypeEnum.Goods);
 
             BookMedicine = Game.Current.ObjectManager.RegisterPresumedObject(new ItemObject("book_medicine"));
             InitializeTradeGood(BookMedicine,
-                new TextObject("{=!}Aseran Papyrus{@Plural}collection of Aseran Papyrus{\\@}"),
+                new TextObject("{=w7yf8SAj}Aseran Papyrus{@Plural}collection of Aseran Papyrus{\\@}"),
                 "lib_book_closed_b",
                 BKItemCategories.Instance.Book, 1000, 1.5f, ItemObject.ItemTypeEnum.Goods);
         }

@@ -464,7 +464,7 @@ namespace BannerKings.Managers
 
             if (notifyPlayer && hero == Hero.MainHero)
             {
-                MBInformationManager.AddQuickInformation(new TextObject("{=!}{HERO} piety was changed by {PIETY}.")
+                MBInformationManager.AddQuickInformation(new TextObject("{=61jgyXzF}{HERO} piety was changed by {PIETY}.")
                     .SetTextVariable("HERO", hero.Name)
                     .SetTextVariable("PIETY", (int) piety));
             }

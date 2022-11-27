@@ -100,7 +100,7 @@ namespace BannerKings.UI.Religion
 
         [DataSourceProperty] public string AspectsText => new TextObject("{=1sKJS1JR}Aspects").ToString();
 
-        [DataSourceProperty] public string RitesText => new TextObject("{=!}Rites").ToString();
+        [DataSourceProperty] public string RitesText => new TextObject("{=Yy2s38FQ}Rites").ToString();
 
         [DataSourceProperty]
         public string SecondaryDivinitiesText
@@ -333,7 +333,7 @@ namespace BannerKings.UI.Religion
             foreach (var divinity in currentReligion.Faith.GetSecondaryDivinities())
             {
                 SecondaryDivinities.Add(new ReligionElementVM(divinity.SecondaryTitle, divinity.Name,
-                    new TextObject("{=!}{EFFECTS}\nPiety cost: {COST}")
+                    new TextObject("{=77isPS24}{EFFECTS}\nPiety cost: {COST}")
                     .SetTextVariable("EFFECTS", divinity.Description)
                     .SetTextVariable("COST", divinity.BlessingCost(hero)), divinity.Effects));
             }

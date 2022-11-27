@@ -1,4 +1,4 @@
-﻿using BannerKings.Behaviours.Marriage;
+using BannerKings.Behaviours.Marriage;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
@@ -40,7 +40,7 @@ namespace BannerKings.Dialogue
         {
             List<DialogueOption> result = new List<DialogueOption>();
             result.Add(new DialogueOption(
-                new TextObject("{=!}The union between {PROPOSER} and {PROPOSED} is not adequate. Our {PROPOSED} is worth more than that.")
+                new TextObject("{=mMuy4hat}The union between {PROPOSER} and {PROPOSED} is not adequate. Our {PROPOSED} is worth more than that.")
                 .SetTextVariable("PROPOSED", contract.Proposed.Name)
                 .SetTextVariable("PROPOSER", contract.Proposer.Name),
                 -0.2f,
@@ -51,7 +51,7 @@ namespace BannerKings.Dialogue
 
 
             result.Add(new DialogueOption(
-                new TextObject("{=!}The union between {PROPOSER} and {PROPOSED} is not adequate. Our {PROPOSED} is worth more than that.")
+                new TextObject("{=mMuy4hat}The union between {PROPOSER} and {PROPOSED} is not adequate. Our {PROPOSED} is worth more than that.")
                 .SetTextVariable("PROPOSED", contract.Proposed.Name)
                 .SetTextVariable("PROPOSER", contract.Proposer.Name),
                 -0.2f,
@@ -61,7 +61,7 @@ namespace BannerKings.Dialogue
                 0f));
 
             result.Add(new DialogueOption(
-                new TextObject("{=!}I would not entertain giving away {PROPOSED} to a pack of mongrels such as the {CLAN}.")
+                new TextObject("{=vPx19Oy6}I would not entertain giving away {PROPOSED} to a pack of mongrels such as the {CLAN}.")
                 .SetTextVariable("PROPOSED", contract.Proposed.Name)
                 .SetTextVariable("CLAN", contract.Proposer.Clan.Name),
                 -1f,
@@ -72,7 +72,7 @@ namespace BannerKings.Dialogue
 
 
             result.Add(new DialogueOption(
-                new TextObject("{=!}Unfortunately, I do not find the union between {PROPOSER} and {PROPOSED} to be adequate. You should improve the standing of your family within the realm, and then we may renegotiate.")
+                new TextObject("{=GXBmSEi1}Unfortunately, I do not find the union between {PROPOSER} and {PROPOSED} to be adequate. You should improve the standing of your family within the realm, and then we may renegotiate.")
                 .SetTextVariable("PROPOSED", contract.Proposed.Name)
                 .SetTextVariable("PROPOSER", contract.Proposer.Name),
                 0.3f,
@@ -83,7 +83,7 @@ namespace BannerKings.Dialogue
                 true));
 
             result.Add(new DialogueOption(
-                new TextObject("{=!}My friend, the union of {PROPOSER} and {PROPOSED} is not one of fairness. Although it would be a pleasure to strengthen our houses, I do not find this to be the correct path.")
+                new TextObject("{=yAzLqLPP}My friend, the union of {PROPOSER} and {PROPOSED} is not one of fairness. Although it would be a pleasure to strengthen our houses, I do not find this to be the correct path.")
                 .SetTextVariable("PROPOSED", contract.Proposed.Name)
                 .SetTextVariable("PROPOSER", contract.Proposer.Name),
                 1f,
@@ -100,7 +100,7 @@ namespace BannerKings.Dialogue
         {
             List<DialogueOption> result = new List<DialogueOption>();
             result.Add(new DialogueOption(
-                new TextObject("{=!}Let it be known that {PROPOSER} and {PROPOSED} are now united in blood. I hope that we can keep finding common cause in the future, and thrive together.")
+                new TextObject("{=Pmo8GKez}Let it be known that {PROPOSER} and {PROPOSED} are now united in blood. I hope that we can keep finding common cause in the future, and thrive together.")
                 .SetTextVariable("PROPOSED", contract.Proposed.Name)
                 .SetTextVariable("PROPOSER", contract.Proposed.Name),
                 0.1f,

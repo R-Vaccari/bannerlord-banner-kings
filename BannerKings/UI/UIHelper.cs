@@ -492,11 +492,11 @@ namespace BannerKings.UI
                 GameTexts.SetVariable("newline", "\n");
                 list.Add(new TooltipProperty(text, GameTexts.FindText("str_level_with_value", null).ToString(), 0, false, TooltipProperty.TooltipPropertyFlags.None));
 
-                list.Add(new TooltipProperty(text, new TextObject("{=!}You don't have access to this recruit.").ToString(), 0, false, TooltipProperty.TooltipPropertyFlags.None));
+                list.Add(new TooltipProperty(text, new TextObject("{=xa13n63V}You don't have access to this recruit.").ToString(), 0, false, TooltipProperty.TooltipPropertyFlags.None));
 
                 var explanation = BannerKingsConfig.Instance.VolunteerModel.CalculateMaximumRecruitmentIndex(Hero.MainHero, owner, relation, true);
                 TooltipAddEmptyLine(list);
-                list.Add(new TooltipProperty(new TextObject("{=!}Explanations").ToString(), " ", 0));
+                list.Add(new TooltipProperty(new TextObject("{=vqP5R9TS}Explanations").ToString(), " ", 0));
                 TooltipAddSeperator(list);
 
                 list.Add(new TooltipProperty(text, explanation.GetExplanations(), 0, false, TooltipProperty.TooltipPropertyFlags.None));
@@ -521,7 +521,7 @@ namespace BannerKings.UI
         
 
             TooltipAddEmptyLine(list);
-            list.Add(new TooltipProperty(new TextObject("{=!}Score").ToString(), " ", 0));
+            list.Add(new TooltipProperty(new TextObject("{=NeydSXjc}Score").ToString(), " ", 0));
             TooltipAddSeperator(list);
             list.Add(new TooltipProperty(score.GetExplanations(), string.Empty, 0));
 

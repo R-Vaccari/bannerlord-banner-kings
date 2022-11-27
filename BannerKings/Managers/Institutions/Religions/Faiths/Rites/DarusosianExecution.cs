@@ -55,7 +55,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
 
             var piety = GetPietyReward();
             KillCharacterAction.ApplyByExecution(input, actionTaker, false);
-            MBInformationManager.AddQuickInformation(new TextObject("{=!}{SACRIFICE} was executed as a traitor by {HERO}.")
+            MBInformationManager.AddQuickInformation(new TextObject("{=DW2LjgpT}{SACRIFICE} was executed as a traitor by {HERO}.")
                     .SetTextVariable("HERO", actionTaker.Name)
                     .SetTextVariable("SACRIFICE", input.Name),
                 0, actionTaker.CharacterObject, "event:/ui/notification/relation");
@@ -118,12 +118,12 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
 
         public override TextObject GetDescription()
         {
-            return new TextObject("{=!}Execute a traitor to the Empire. Dissedents of the Western and Northern rebels may be executed as punishment for the betrayal of the Empire, the Imperial family and the Triad.");
+            return new TextObject("{=mbcRbm0q}Execute a traitor to the Empire. Dissedents of the Western and Northern rebels may be executed as punishment for the betrayal of the Empire, the Imperial family and the Triad.");
         }
 
         public override TextObject GetName()
         {
-            return new TextObject("{=!}Execute Traitor");
+            return new TextObject("{=pB7vkmae}Execute Traitor");
         }
 
         public override RiteType GetRiteType()
@@ -164,7 +164,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
 
         public override TextObject GetRequirementsText(Hero hero)
         {
-            return new TextObject("{=!}May be performed every {YEARS} years\nBe part of Souther Empire\nRequires a prisoner lord from Western or Northern empire factions")
+            return new TextObject("{=mkC8opdf}May be performed every {YEARS} years\nBe part of Souther Empire\nRequires a prisoner lord from Western or Northern empire factions")
                 .SetTextVariable("YEARS", GetTimeInterval(hero));
         }
     }

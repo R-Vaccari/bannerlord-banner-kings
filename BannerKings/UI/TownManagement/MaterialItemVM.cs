@@ -1,4 +1,4 @@
-﻿using TaleWorlds.CampaignSystem.Party;
+using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Core.ViewModelCollection.Information;
@@ -36,7 +36,7 @@ namespace BannerKings.UI.TownManagement
                     market += element.Amount;
                 }
             }
-            ResourceHint = new HintViewModel(new TextObject("{=!}{MATERIAL}\n{DESCRIPTION}\nStash: {STASH}\nMarket: {MARKET}")
+            ResourceHint = new HintViewModel(new TextObject("{=cBhrSfro}{MATERIAL}\n{DESCRIPTION}\nStash: {STASH}\nMarket: {MARKET}")
                 .SetTextVariable("MATERIAL", material.Name)
                 .SetTextVariable("STASH", stash)
                 .SetTextVariable("MARKET", market)

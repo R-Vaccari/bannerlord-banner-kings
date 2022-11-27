@@ -60,8 +60,8 @@ namespace BannerKings.Behaviours
 
                         if (random.Owner == Hero.MainHero)
                         {
-                            InformationManager.ShowInquiry(new InquiryData(new TextObject("{=!}Workshop Acquisition").ToString(),
-                                new TextObject("{=!}The {CLAN} proposes to buy your {WORKSHOP} at {TOWN}. They offer you {GOLD}{GOLD_ICON}")
+                            InformationManager.ShowInquiry(new InquiryData(new TextObject("{=HGHxECuY}Workshop Acquisition").ToString(),
+                                new TextObject("{=Q19XEcNq}The {CLAN} proposes to buy your {WORKSHOP} at {TOWN}. They offer you {GOLD}{GOLD_ICON}")
                                 .SetTextVariable("CLAN", lord.Clan.Name)
                                 .SetTextVariable("WORKSHOP", random.WorkshopType.Name)
                                 .SetTextVariable("TOWN", target.Name)

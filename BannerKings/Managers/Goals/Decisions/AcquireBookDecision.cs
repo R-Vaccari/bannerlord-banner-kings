@@ -16,8 +16,8 @@ namespace BannerKings.Managers.Goals.Decisions
 
         public AcquireBookDecision() : base("goal_acquire_book", GoalUpdateType.Manual)
         {
-            var name = new TextObject("{=!}Acquire Book");
-            var description = new TextObject("{=!}Acquire a book from local book seller. Books can be read for skill improvements and progression in Scholarship.");
+            var name = new TextObject("{=DNAVAvqp}Acquire Book");
+            var description = new TextObject("{=b4tSEcHn}Acquire a book from local book seller. Books can be read for skill improvements and progression in Scholarship.");
 
             Initialize(name, description);
 
@@ -34,12 +34,12 @@ namespace BannerKings.Managers.Goals.Decisions
             var settlement = GetFulfiller().CurrentSettlement;
             if (settlement == null || behavior.GetBookSeller(settlement) == null)
             {
-                failedReasons.Add(new TextObject("{=!}Not in a settlement or there is no book seller available."));
+                failedReasons.Add(new TextObject("{=R93398Ci}Not in a settlement or there is no book seller available."));
             }
 
             if (fulfiller.PartyBelongedTo == null || fulfiller.IsPrisoner)
             {
-                failedReasons.Add(new TextObject("{=!}Must be in a party and out of captivity."));
+                failedReasons.Add(new TextObject("{=qq99gmhr}Must be in a party and out of captivity."));
             }
 
             return failedReasons.Count == 0;
@@ -69,12 +69,12 @@ namespace BannerKings.Managers.Goals.Decisions
                     hint += Environment.NewLine + book.Skill.Name.ToString();
                 }
 
-                hint += Environment.NewLine + new TextObject("{=!}{GOLD_AMOUNT}{GOLD_ICON}")
+                hint += Environment.NewLine + new TextObject("{=1c9TOPzH}{GOLD_AMOUNT}{GOLD_ICON}")
                     .SetTextVariable("GOLD_AMOUNT", price)
                     .ToString();
 
 
-                elements.Add(new InquiryElement(book, new TextObject("{=!}{BOOK} ({LANGUAGE})")
+                elements.Add(new InquiryElement(book, new TextObject("{=e8KTkKtX}{BOOK} ({LANGUAGE})")
                     .SetTextVariable("BOOK", item.Name)
                     .SetTextVariable("LANGUAGE", book.Language.Name).ToString(), 
                     null, fulfiller.Gold >= price,
@@ -82,8 +82,8 @@ namespace BannerKings.Managers.Goals.Decisions
             }
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                new TextObject("{=!}Acquire Book").ToString(),
-                new TextObject("{=!}Books can be read by those with the Literate perk. Skill books add xp to a specific skill while Focus books add both xp and a focus point, if possible. Dictionaries are used to help reading other books faster.")
+                new TextObject("{=DNAVAvqp}Acquire Book").ToString(),
+                new TextObject("{=2sftq1sF}Books can be read by those with the Literate perk. Skill books add xp to a specific skill while Focus books add both xp and a focus point, if possible. Dictionaries are used to help reading other books faster.")
                 .ToString(),
                 elements, 
                 true, 

@@ -1,4 +1,4 @@
-﻿using BannerKings.Behaviours;
+using BannerKings.Behaviours;
 using BannerKings.UI.Court;
 using BannerKings.UI.Kingdoms;
 using BannerKings.UI.Management;
@@ -133,7 +133,7 @@ namespace BannerKings.UI.Extensions
                     var clans = kingdomManagement.Clan;
                     var fiefs = kingdomManagement.Settlement;
 
-                    var text = new TextObject("{=!}The Peerage of {CLAN} does not allow starting elections.")
+                    var text = new TextObject("{=RDDOdoeR}The Peerage of {CLAN} does not allow starting elections.")
                         .SetTextVariable("CLAN", Clan.PlayerClan.Name);
 
                     if (policy.CanProposeOrDisavowPolicy)

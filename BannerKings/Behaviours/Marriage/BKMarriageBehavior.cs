@@ -1,4 +1,4 @@
-﻿using BannerKings.Behaviours.Feasts;
+using BannerKings.Behaviours.Feasts;
 using BannerKings.Dialogue;
 using BannerKings.UI;
 using HarmonyLib;
@@ -80,7 +80,7 @@ namespace BannerKings.Behaviours.Marriage
             starter.AddPlayerLine("lord_special_request_flirt", 
                 "lord_talk_speak_diplomacy_2", 
                 "lord_start_courtship_response", 
-                "{=!}{FLIRTATION_LINE}", 
+                "{=ntXogRSG}{FLIRTATION_LINE}", 
                 () =>
                 {
                     if (Hero.MainHero.IsFemale)
@@ -102,7 +102,7 @@ namespace BannerKings.Behaviours.Marriage
             starter.AddDialogLine("lord_start_courtship_response", 
                 "lord_start_courtship_response", 
                 "lord_start_courtship_response_player_offer", 
-                "{=!}{INITIAL_COURTSHIP_REACTION}", 
+                "{=jbVg1aYL}{INITIAL_COURTSHIP_REACTION}", 
                 () =>
                 {
                     if (Romance.GetRomanticLevel(Hero.MainHero, Hero.OneToOneConversationHero) == Romance.RomanceLevelEnum.FailedInPracticalities 
@@ -117,16 +117,16 @@ namespace BannerKings.Behaviours.Marriage
                     TextObject text = null;
                     if (attraction >= 0.7)
                     {
-                        text = new TextObject("{=!}I am delighted to hear. We are currently taking in proposal, as I am yet to be wed...");
+                        text = new TextObject("{=zikiRHun}I am delighted to hear. We are currently taking in proposal, as I am yet to be wed...");
                         ChangeRelationAction.ApplyPlayerRelation(hero, 3, false);
                     }
                     else if (attraction <= 0.3)
                     {
-                        text = new TextObject("{=!}Is that so? I'm afraid I cannot say the same.");
+                        text = new TextObject("{=Ww4NGDkb}Is that so? I'm afraid I cannot say the same.");
                     }
                     else
                     {
-                        text = new TextObject("{=!}Well, we are currently taking in proposals.");
+                        text = new TextObject("{=rPP2kBi2}Well, we are currently taking in proposals.");
                         ChangeRelationAction.ApplyPlayerRelation(hero, -3, false);
                     }
 
@@ -134,62 +134,62 @@ namespace BannerKings.Behaviours.Marriage
                     {
                         if (attraction >= 0.7)
                         {
-                            text = new TextObject("{=!}I see... you look like you have potential.");
+                            text = new TextObject("{=6mz2KkwR}I see... you look like you have potential.");
                         }
                         else if (attraction <= 0.3)
                         {
-                            text = new TextObject("{=!}That sounded as dumb as you look.");
+                            text = new TextObject("{=emfu56Oe}That sounded as dumb as you look.");
                         }
                         else
                         {
-                            text = new TextObject("{=!}Thanks... I suppose. Though you'll need more than that to impress me.");
+                            text = new TextObject("{=8vRvXFAg}Thanks... I suppose. Though you'll need more than that to impress me.");
                         }
                     }
                     else if (hero.GetHeroTraits().Honor > 0)
                     {
                         if (attraction >= 0.7)
                         {
-                            text = new TextObject("{=!}I am delighted to hear it. You know, I am still to be wed...");
+                            text = new TextObject("{=040mMgky}I am delighted to hear it. You know, I am still to be wed...");
                         }
                         else if (attraction <= 0.3)
                         {
-                            text = new TextObject("{=!}I am grateful for the compliment. I am afraid I have more important matters to attend to.");
+                            text = new TextObject("{=AsnqT2cw}I am grateful for the compliment. I am afraid I have more important matters to attend to.");
                         }
                         else
                         {
-                            text = new TextObject("{=!}Thank you. I am looking for spouse candidates. You strike me well yourself.");
+                            text = new TextObject("{=9nseh0fu}Thank you. I am looking for spouse candidates. You strike me well yourself.");
                         }
                     }
                     else if (hero.GetHeroTraits().Calculating > 0)
                     {
                         if (attraction >= 0.7)
                         {
-                            text = new TextObject("{=!}Indeed. I must say, you strike me well. Perhaps uniting would benefit us mutually.");
+                            text = new TextObject("{=Au3zuxf1}Indeed. I must say, you strike me well. Perhaps uniting would benefit us mutually.");
                         }
                         else if (attraction <= 0.3)
                         {
-                            text = new TextObject("{=!}I am afraid your play had no effect... I do not believe you and me together would be fruitful.");
+                            text = new TextObject("{=kTBPuKE8}I am afraid your play had no effect... I do not believe you and me together would be fruitful.");
                         }
                         else
                         {
-                            text = new TextObject("{=!}Thank you. I am looking for spouse candidates, and will remember your kindness.");
+                            text = new TextObject("{=BsuNUiLG}Thank you. I am looking for spouse candidates, and will remember your kindness.");
                         }
                     }
                     else if (hero.GetHeroTraits().Generosity > 1)
                     {
                         if (attraction >= 0.7)
                         {
-                            text = new TextObject("{=!}You are most generous, {TITLE}. You look quite well yourself, if I may say.")
+                            text = new TextObject("{=SfvuXf8A}You are most generous, {TITLE}. You look quite well yourself, if I may say.")
                                 .SetTextVariable("TITLE", GameTexts.FindText(Hero.MainHero.IsFemale ? "str_player_salutation_my_lady" : "str_player_salutation_my_lord"));
                         }
                         else if (attraction <= 0.3)
                         {
-                            text = new TextObject("{=!}I am grateful, {HERO}. I can tell you my family is currently seeking out proposals.")
+                            text = new TextObject("{=ZGkcnvDN}I am grateful, {HERO}. I can tell you my family is currently seeking out proposals.")
                                 .SetTextVariable("HERO", Hero.MainHero.Name);
                         }
                         else
                         {
-                            text = new TextObject("{=!}You are a kind spirit. We are looking for spouse candidates. Though it is not my place to decide, you strike me as a decent person.");
+                            text = new TextObject("{=MwEA1OB0}You are a kind spirit. We are looking for spouse candidates. Though it is not my place to decide, you strike me as a decent person.");
                         }
                     }
 
@@ -233,7 +233,7 @@ namespace BannerKings.Behaviours.Marriage
             starter.AddDialogLine("lord_start_courtship_response_3",
                 "bk_marriage_offered_not_accepted",
                 "lord_pretalk", 
-                "{=!}{OFFER_NOT_ACCEPTED}", 
+                "{=htd0GSac}{OFFER_NOT_ACCEPTED}", 
                 () =>
                 {
                     TextObject text;
@@ -258,34 +258,34 @@ namespace BannerKings.Behaviours.Marriage
 
                     if (relations >= 50)
                     {
-                        if (isPlayerHigherRanking) text = new TextObject("{=!}{TITLE}, I am honored by your most generous request. However, I am not in the position to accept an offer. Please speak to {LEADER}, the head of our family.")
+                        if (isPlayerHigherRanking) text = new TextObject("{=ixhPCwdF}{TITLE}, I am honored by your most generous request. However, I am not in the position to accept an offer. Please speak to {LEADER}, the head of our family.")
                             .SetTextVariable("TITLE", GameTexts.FindText(Hero.MainHero.IsFemale ? "str_my_lady" :  "str_my_lord"))
                             .SetTextVariable("LEADER", Hero.OneToOneConversationHero.Clan.Leader.Name);
-                        else text = new TextObject("{=!}{TITLE}, I am honored by your request. However, I am not in the position to accept an offer. You may speak to {LEADER}, the head of our family.")
+                        else text = new TextObject("{=UB0oinVR}{TITLE}, I am honored by your request. However, I am not in the position to accept an offer. You may speak to {LEADER}, the head of our family.")
                             .SetTextVariable("TITLE", GameTexts.FindText(Hero.MainHero.IsFemale ? "str_my_lady" : "str_my_lord"))
                             .SetTextVariable("LEADER", Hero.OneToOneConversationHero.Clan.Leader.Name);
                     }
                     else if (relations >= 0)
                     {
-                        if (isPlayerHigherRanking) text = new TextObject("{=!}{TITLE}, I am not in the position to accept an offer. Please speak to {LEADER}, the head of our family.")
+                        if (isPlayerHigherRanking) text = new TextObject("{=ogAieLQE}{TITLE}, I am not in the position to accept an offer. Please speak to {LEADER}, the head of our family.")
                             .SetTextVariable("TITLE", GameTexts.FindText(Hero.MainHero.IsFemale ? "str_my_lady" : "str_my_lord"))
                             .SetTextVariable("LEADER", Hero.OneToOneConversationHero.Clan.Leader.Name);
-                        else text = new TextObject("{=!}It is not in my position to accept an offer. You may speak to {LEADER}, the head of our family.")
+                        else text = new TextObject("{=e5MpCH3G}It is not in my position to accept an offer. You may speak to {LEADER}, the head of our family.")
                             .SetTextVariable("LEADER", Hero.OneToOneConversationHero.Clan.Leader.Name);
                     } 
                     else if (relations >= -49)
                     {
-                        if (isPlayerHigherRanking) text = new TextObject("{=!}\"{TITLE}\", I am not in the position to accept an offer. Yet, dare I say, we are not looking for any.")
+                        if (isPlayerHigherRanking) text = new TextObject("{=qJ30OzLa}\"{TITLE}\", I am not in the position to accept an offer. Yet, dare I say, we are not looking for any.")
                             .SetTextVariable("TITLE", GameTexts.FindText(Hero.MainHero.IsFemale ? "str_my_lady" : "str_my_lord"));
-                        else text = new TextObject("{=!}A marriage? Do jesters such as yourself get married?")
+                        else text = new TextObject("{=T8qzYXR5}A marriage? Do jesters such as yourself get married?")
                             .SetTextVariable("LEADER", Hero.OneToOneConversationHero.Clan.Leader.Name);
                     }
                     else
                     {
-                        if (isPlayerHigherRanking) text = new TextObject("{=!}\"{TITLE}\", I am not in the position to accept an offer. But, if I were, I would not entertain the {CLAN} more than I do stray mongrels.")
+                        if (isPlayerHigherRanking) text = new TextObject("{=qJ30OzLa}\"{TITLE}\", I am not in the position to accept an offer. But, if I were, I would not entertain the {CLAN} more than I do stray mongrels.")
                             .SetTextVariable("TITLE", GameTexts.FindText(Hero.MainHero.IsFemale ? "str_my_lady" : "str_my_lord"))
                             .SetTextVariable("CLAN", Hero.MainHero.Clan.Name);
-                        else text = new TextObject("{=!}No, you idiot. Get out of my sight.")
+                        else text = new TextObject("{=XMMjS27Y}No, you idiot. Get out of my sight.")
                             .SetTextVariable("LEADER", Hero.OneToOneConversationHero.Clan.Leader.Name);
                     }
 
@@ -317,18 +317,18 @@ namespace BannerKings.Behaviours.Marriage
                 120, 
                 delegate (out TextObject reason)
                 {
-                    reason = new TextObject("{=!}Marriage candidates are available.");
+                    reason = new TextObject("{=hcvHjyDM}Marriage candidates are available.");
 
                     if (!Clan.PlayerClan.Heroes.Any(x => !x.IsChild && x.Spouse == null))
                     {
-                        reason = new TextObject("{=!}{CLAN} has no available candidates")
+                        reason = new TextObject("{=Ht8aufCz}{CLAN} has no available candidates")
                             .SetTextVariable("CLAN", Clan.PlayerClan.Name);
                         return false;
                     }
 
                     if (!Hero.OneToOneConversationHero.Clan.Heroes.Any(x => !x.IsChild && x.Spouse == null))
                     {
-                        reason = new TextObject("{=!}{CLAN} has no available candidates")
+                        reason = new TextObject("{=Ht8aufCz}{CLAN} has no available candidates")
                             .SetTextVariable("CLAN", Clan.PlayerClan.Name);
                         return false;
                     }
@@ -341,21 +341,21 @@ namespace BannerKings.Behaviours.Marriage
             starter.AddDialogLine("propose_marriage_contract",
                "propose_marriage_contract",
                "propose_marriage_contract_response",
-               "{=!}Tell me the specifics of your proposal.",
+               "{=WjPfeaqG}Tell me the specifics of your proposal.",
                null,
                null);
 
             starter.AddPlayerLine("propose_marriage_contract_response",
                "propose_marriage_contract_response",
                "marriage_contract_proposed",
-               "{=!}This is my proposal.",
+               "{=oQR06Uzy}This is my proposal.",
                null,
                null);
 
             starter.AddPlayerLine("propose_marriage_contract_response",
                "propose_marriage_contract_response",
                "propose_marriage_contract",
-               "{=!}Let me review my proposal.",
+               "{=LfTvDD1e}Let me review my proposal.",
                null,
                () => UIManager.Instance.ShowWindow("marriage"));
 
@@ -370,7 +370,7 @@ namespace BannerKings.Behaviours.Marriage
             starter.AddDialogLine("marriage_contract_proposed",
               "marriage_contract_proposed",
               "propose_marriage_contract",
-              "{=!}I'm afraid you didn't make an adequate proposal.",
+              "{=5dspZ1M2}I'm afraid you didn't make an adequate proposal.",
               () => 
               {
                   return proposedMarriage == null;
@@ -380,7 +380,7 @@ namespace BannerKings.Behaviours.Marriage
             starter.AddDialogLine("marriage_contract_proposed",
               "marriage_contract_proposed",
               "propose_marriage_contract",
-              "{=!}This proposal is not acceptable. {REJECTION_REASON}",
+              "{=KXOsnc3G}This proposal is not acceptable. {REJECTION_REASON}",
               () =>
               {
                   bool rejected = true;
@@ -399,7 +399,7 @@ namespace BannerKings.Behaviours.Marriage
             starter.AddDialogLine("marriage_contract_proposed",
              "marriage_contract_proposed",
              "marriage_contract_confirmation",
-             "{=!}{PROPOSAL_ACCEPTED}",
+             "{=xodThNQy}{PROPOSAL_ACCEPTED}",
              () =>
              {
                  bool rejected = true;
@@ -412,10 +412,10 @@ namespace BannerKings.Behaviours.Marriage
                      if (!rejected)
                      {
                          MBTextManager.SetTextVariable("PROPOSAL_ACCEPTED", 
-                             new TextObject("{=!}{PLAYER}, I am happy to accept this proposal. {CONFIRMATION}")
+                             new TextObject("{=4KPONSvT}{PLAYER}, I am happy to accept this proposal. {CONFIRMATION}")
                              .SetTextVariable("PLAYER", Hero.MainHero.Name)
-                             .SetTextVariable("CONFIRMATION", proposedMarriage.ArrangedMarriage ? new TextObject("{=!}Will you confirm this union?")
-                             : new TextObject("{=!}Will you confirm this betrothal? Know that we will not take lightly if you do, and yet go back on your word.")));
+                             .SetTextVariable("CONFIRMATION", proposedMarriage.ArrangedMarriage ? new TextObject("{=tvjAsBsw}Will you confirm this union?")
+                             : new TextObject("{=EZrjFHMt}Will you confirm this betrothal? Know that we will not take lightly if you do, and yet go back on your word.")));
                      }
                  }
 
@@ -432,14 +432,14 @@ namespace BannerKings.Behaviours.Marriage
             starter.AddPlayerLine("marriage_contract_confirmation",
                "marriage_contract_confirmation",
                "marriage_contract_confirmed_by_player",
-               "{=!}I confirm it.",
+               "{=mM8ajh6s}I confirm it.",
                null,
                () => proposedMarriage.Confirmed = true);
 
             starter.AddPlayerLine("marriage_contract_confirmation",
                "marriage_contract_confirmation",
                "propose_marriage_contract",
-               "{=!}Let me review my proposal.",
+               "{=LfTvDD1e}Let me review my proposal.",
                null,
                () => UIManager.Instance.ShowWindow("marriage"));
 
@@ -447,13 +447,13 @@ namespace BannerKings.Behaviours.Marriage
             starter.AddDialogLine("marriage_contract_confirmed_by_player",
                "marriage_contract_confirmed_by_player",
                "close_window",
-                   "{=!}{PROPOSAL_CONFIRMED}",
+                   "{=O4vPn7p1}{PROPOSAL_CONFIRMED}",
                () =>
                {
   
 
                     MBTextManager.SetTextVariable("PROPOSAL_CONFIRMED",
-                        new TextObject("{=!}It is decided then. {CONFIRMATION}")
+                        new TextObject("{=m48122Zw}It is decided then. {CONFIRMATION}")
                         .SetTextVariable("CONFIRMATION", DialogueHelper.GetRandomText(Hero.OneToOneConversationHero, DialogueHelper.GetMarriageConfirmationTexts(proposedMarriage))));
 
                    return true;
@@ -501,7 +501,7 @@ namespace BannerKings.Behaviours.Marriage
 
         private void AnnounceBetrothal()
         {
-            MBInformationManager.AddQuickInformation(new TextObject("{=!}{HERO1} and {HERO2} are now betrothed!")
+            MBInformationManager.AddQuickInformation(new TextObject("{=5sPJgrsx}{HERO1} and {HERO2} are now betrothed!")
                 .SetTextVariable("HERO", proposedMarriage.Proposer.Name)
                 .SetTextVariable("HERO2", proposedMarriage.Proposed.Name),
                 100,

@@ -18,8 +18,8 @@ namespace BannerKings.Managers.Goals.Decisions
         private float influenceCost;
         public OrganizeFeastDecision() : base("goal_organize_feast_decision", GoalUpdateType.Manual)
         {
-            var name = new TextObject("{=!}Organize Feast");
-            var description = new TextObject("{=!}Organize a feast. Summon lords of the realm to one of your towns or castles, and celebrate with bountiful food. Feasts are an opportunity to improve relations with your Peers. However, some planning is necessary - you don't want your guests out of food or alcohol! Despite all planning, some unfortunate events may occur...\n");
+            var name = new TextObject("{=RH2NC5ij}Organize Feast");
+            var description = new TextObject("{=8XXOBM1L}Organize a feast. Summon lords of the realm to one of your towns or castles, and celebrate with bountiful food. Feasts are an opportunity to improve relations with your Peers. However, some planning is necessary - you don't want your guests out of food or alcohol! Despite all planning, some unfortunate events may occur...\n");
 
             Initialize(name, description);
         }
@@ -40,13 +40,13 @@ namespace BannerKings.Managers.Goals.Decisions
 
             if (FactionManager.GetEnemyKingdoms(Clan.PlayerClan.Kingdom).Count() > 0)
             {
-                failedReasons.Add(new TextObject("{=!}Cannot organize feasts during wars"));
+                failedReasons.Add(new TextObject("{=gn6WKs03}Cannot organize feasts during wars"));
             }
 
             CampaignTime lastFeast = Campaign.Current.GetCampaignBehavior<BKFeastBehavior>().LastHeroFeast(GetFulfiller());
             if (lastFeast.ElapsedYearsUntilNow < 1f)
             {
-                failedReasons.Add(new TextObject("{=!}It has been less than a year since your last feast"));
+                failedReasons.Add(new TextObject("{=4Gqf2t8F}It has been less than a year since your last feast"));
             }
 
             /*
@@ -99,7 +99,7 @@ namespace BannerKings.Managers.Goals.Decisions
                 }
 
                 clanList.Add(new InquiryElement(clan, 
-                    new TextObject("{=!}{CLAN} - {INFLUENCE} influence")
+                    new TextObject("{=USJTkG5d}{CLAN} - {INFLUENCE} influence")
                     .SetTextVariable("CLAN", clan.Name)
                     .SetTextVariable("INFLUENCE", GuestInfluenceCost(clan))
                     .ToString(), 
@@ -107,8 +107,8 @@ namespace BannerKings.Managers.Goals.Decisions
             }
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                new TextObject("{=!}Organize Feast").ToString(),
-                new TextObject("{=!}Choose where to hold your feast. The feast food and alcohol will be taken from the settlement Stash.").ToString(),
+                new TextObject("{=RH2NC5ij}Organize Feast").ToString(),
+                new TextObject("{=s71kzA2t}Choose where to hold your feast. The feast food and alcohol will be taken from the settlement Stash.").ToString(),
                 list,
                 false,
                 1,
@@ -119,8 +119,8 @@ namespace BannerKings.Managers.Goals.Decisions
                     feastPlace = (Town)list[0].Identifier;
 
                     MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                        new TextObject("{=!}Feast Guests").ToString(),
-                        new TextObject("{=!}Choose the guests for your feast. Pick at least 3 different clans from your realm. Mind you, guests will have expectations. They will want food in large variety, of good quality and plentiful. They will also expect a lot of alcohol, and the host to be present.").ToString(),
+                        new TextObject("{=Usb3B69i}Feast Guests").ToString(),
+                        new TextObject("{=S9S5PCrP}Choose the guests for your feast. Pick at least 3 different clans from your realm. Mind you, guests will have expectations. They will want food in large variety, of good quality and plentiful. They will also expect a lot of alcohol, and the host to be present.").ToString(),
                         clanList,
                         false,
                         clanList.Count,
@@ -158,7 +158,7 @@ namespace BannerKings.Managers.Goals.Decisions
             if (guests.Count < 3)
             {
                 InformationManager.DisplayMessage(new InformationMessage(
-                    new TextObject("{=!}Too few guests! Invite at least 3 clans for a feast.").ToString()));
+                    new TextObject("{=YR4uDhkZ}Too few guests! Invite at least 3 clans for a feast.").ToString()));
                 return;
             }
 

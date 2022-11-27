@@ -1,4 +1,4 @@
-﻿using BannerKings.Managers.Populations;
+using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Estates;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -15,7 +15,7 @@ namespace BannerKings.UI.Estates
         }
 
         [DataSourceProperty]
-        public string EstatesText => new TextObject("{=!}{SETTLEMENT} Estates")
+        public string EstatesText => new TextObject("{=DHG67WAy}{SETTLEMENT} Estates")
             .SetTextVariable("SETTLEMENT", data.Settlement.Name).ToString();
 
         [DataSourceProperty]
@@ -43,7 +43,7 @@ namespace BannerKings.UI.Estates
 
 
         [DataSourceProperty]
-        public string DemesneLandsText => new TextObject("{=!}Demesne Lands").ToString();
+        public string DemesneLandsText => new TextObject("{=Eb2PY57a}Demesne Lands").ToString();
 
         public override void RefreshValues()
         {

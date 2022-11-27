@@ -178,7 +178,7 @@ namespace BannerKings.Managers.Goals.Decisions
 
             foundAction.SetVassals(vassals);
 
-            BannerKingsConfig.Instance.TitleManager.FoundEmpire(foundAction, new TextObject("{=!}Calradia"), 
+            BannerKingsConfig.Instance.TitleManager.FoundEmpire(foundAction, new TextObject("{=Tdi4brSb}Calradia"), 
                 "title_calradic_empire", "imperial");
         }
 

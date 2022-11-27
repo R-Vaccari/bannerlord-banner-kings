@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
@@ -42,7 +42,7 @@ namespace BannerKings.Behaviours
 
                 if (kingdom == Clan.PlayerClan.Kingdom)
                 {
-                    MBInformationManager.AddQuickInformation(new TextObject("{=!}{CAPITAL} is now the capital of {KINGDOM}")
+                    MBInformationManager.AddQuickInformation(new TextObject("{=5gcHVbpa}{CAPITAL} is now the capital of {KINGDOM}")
                         .SetTextVariable("CAPITAL", town.Name)
                         .SetTextVariable("KINGDOM", kingdom.Name),
                         0,

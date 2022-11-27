@@ -26,7 +26,7 @@ namespace BannerKings.Utils
                 stance.IsAllied = true;
                 if (faction1 == Hero.MainHero.MapFaction || faction2 == Hero.MainHero.MapFaction)
                 {
-                    MBInformationManager.AddQuickInformation(new TextObject("{=!}The {FACTION1} and {FACTION2} are now allies.")
+                    MBInformationManager.AddQuickInformation(new TextObject("{=gc8D4iH4}The {FACTION1} and {FACTION2} are now allies.")
                         .SetTextVariable("FACTION1", faction1.Name)
                         .SetTextVariable("FACTION2", faction2.Name),
                         100,
@@ -345,8 +345,8 @@ namespace BannerKings.Utils
                     case "empire" or "republic" when type == TitleType.Empire:
                     {
                         title = female
-                            ? new TextObject("{=!}Imperatrix")
-                            : new TextObject("{=!}Imperator");
+                            ? new TextObject("{=b3dURwfW}Imperatrix")
+                            : new TextObject("{=uTLJjN8A}Imperator");
 
                         break;
                     }
@@ -485,7 +485,7 @@ namespace BannerKings.Utils
                     {
                         title = female 
                             ? new TextObject("{=S3kc2bhW}Knyaginya") 
-                            : new TextObject("{=!}Knyaz");
+                            : new TextObject("{=1XDPfDim}Knyaz");
 
                         break;
                     }
@@ -666,7 +666,7 @@ namespace BannerKings.Utils
                     {
                         if (type == TitleType.Empire)
                         {
-                                title = new TextObject("{=!}Imperium");
+                                title = new TextObject("{=dSSX7xRm}Imperium");
                         }
                         break;
                     }
@@ -689,7 +689,7 @@ namespace BannerKings.Utils
 
             title ??= type switch
             {
-                TitleType.Empire => new TextObject("{=!}Empire"),
+                TitleType.Empire => new TextObject("Empire"),
                 TitleType.Kingdom => new TextObject("{=7x3HJ29f}Kingdom"),
                 TitleType.Dukedom => new TextObject("{=HtWGKBDF}Dukedom"),
                 TitleType.County => new TextObject("{=c6ggHVzS}County"),

@@ -1,4 +1,4 @@
-﻿using BannerKings.Extensions;
+using BannerKings.Extensions;
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Estates;
 using BannerKings.Managers.Titles.Laws;
@@ -62,19 +62,19 @@ namespace BannerKings.UI.Estates
             MainInfo.Clear();
             ExtraInfos.Clear();
 
-            NameText = IsDisabled ? new TextObject("{=!}Vacant Estate").ToString() : Estate.Name.ToString();
+            NameText = IsDisabled ? new TextObject("{=P8w8FYfp}Vacant Estate").ToString() : Estate.Name.ToString();
             if (!IsDisabled)
             {
                 ImageIdentifier = new ImageIdentifierVM(new ImageIdentifier(CampaignUIHelper.GetCharacterCode(Estate.Owner.CharacterObject)));
             }
 
-            MainInfo.Add(new TownManagementDescriptionItemVM(new TextObject("{=!}Population:"), 
+            MainInfo.Add(new TownManagementDescriptionItemVM(new TextObject("Population:"), 
                 Estate.Population, 
                 0,
                 TownManagementDescriptionItemVM.DescriptionType.Loyalty));
 
             var value = Estate.EstateValue;
-            MainInfo.Add(new TownManagementDescriptionItemVM(new TextObject("{=!}Estate Value:"),
+            MainInfo.Add(new TownManagementDescriptionItemVM(new TextObject("{=mLtr8h47}Estate Value:"),
                (int)value.ResultNumber,
                0,
                TownManagementDescriptionItemVM.DescriptionType.Gold,
@@ -82,16 +82,16 @@ namespace BannerKings.UI.Estates
 
             var serfManpower = Estate.GetManpower(Managers.PopulationManager.PopType.Serfs);
             var slavesManpower = Estate.GetManpower(Managers.PopulationManager.PopType.Serfs);
-            MainInfo.Add(new TownManagementDescriptionItemVM(new TextObject("{=!}Manpower:"),
+            MainInfo.Add(new TownManagementDescriptionItemVM(new TextObject("Manpower:"),
                serfManpower + slavesManpower,
                0,
                TownManagementDescriptionItemVM.DescriptionType.Militia,
-               new BasicTooltipViewModel(() => new TextObject("{=!}This estate's manpower, drawn from it's population. This manpower is used to fuel the estate owner's volunteers. When volunteers are recruited from an estate-owner, the manpower is drawn from the estate rather than the overall settlement.")
+               new BasicTooltipViewModel(() => new TextObject("{=RhMomMnx}This estate's manpower, drawn from it's population. This manpower is used to fuel the estate owner's volunteers. When volunteers are recruited from an estate-owner, the manpower is drawn from the estate rather than the overall settlement.")
                .ToString())));
 
 
             var acreage = Estate.AcreageGrowth;
-            MainInfo.Add(new TownManagementDescriptionItemVM(new TextObject("{=!}Acreage:"),
+            MainInfo.Add(new TownManagementDescriptionItemVM(new TextObject("Acreage:"),
                (int)Estate.Acreage,
                (int)acreage.ResultNumber,
                TownManagementDescriptionItemVM.DescriptionType.Prosperity,
@@ -138,31 +138,31 @@ namespace BannerKings.UI.Estates
             if (IsEnabled)
             {
                 
-                LandInfo.Add(new InformationElement(new TextObject("{=!}Farmland:").ToString(),
-                   new TextObject("{=!}{ACRES} acres").SetTextVariable("ACRES", Estate.Farmland.ToString("0.00")).ToString(),
+                LandInfo.Add(new InformationElement(new TextObject("{=56YOTTBC}Farmland:").ToString(),
+                   new TextObject("{=xqot659p}{ACRES} acres").SetTextVariable("ACRES", Estate.Farmland.ToString("0.00")).ToString(),
                    new TextObject("{=ABrCGWep}Acres in this region used as farmland, the main source of food in most places")
                     .ToString()));
 
                 LandInfo.Add(new InformationElement(new TextObject("{=RsRkc9dF}Pastureland:").ToString(),
-                   new TextObject("{=!}{ACRES} acres").SetTextVariable("ACRES", Estate.Pastureland.ToString("0.00")).ToString(),
+                   new TextObject("{=xqot659p}{ACRES} acres").SetTextVariable("ACRES", Estate.Pastureland.ToString("0.00")).ToString(),
                    new TextObject("{=864UHkZw}Acres in this region used as pastureland, to raise cattle and other animals. These output meat and animal products such as butter and cheese")
                     .ToString()));
 
                 LandInfo.Add(new InformationElement(new TextObject("{=bwEtOiYF}Woodland:").ToString(),
-                   new TextObject("{=!}{ACRES} acres").SetTextVariable("ACRES", Estate.Woodland.ToString("0.00")).ToString(), 
+                   new TextObject("{=xqot659p}{ACRES} acres").SetTextVariable("ACRES", Estate.Woodland.ToString("0.00")).ToString(), 
                    new TextObject("{=MJYam3iu}Acres in this region used as woodland, kept for hunting, foraging of berries and materials like wood")
                     .ToString()));
 
                 ExtraInfos.Add(LandInfo);
 
                 var production = Estate.Production;
-                WorkforceInfo.Add(new InformationElement(new TextObject("{=!}Goods Production:").ToString(),
-                    new TextObject("{=!}{POINTS} (Daily)")
+                WorkforceInfo.Add(new InformationElement(new TextObject("Goods Production:").ToString(),
+                    new TextObject("{=mbUwoU0h}{POINTS} (Daily)")
                     .SetTextVariable("POINTS", production.ResultNumber.ToString("0.00"))
                     .ToString(),
                     new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
                         .SetTextVariable("TEXT",
-                            new TextObject("{=!}Sum of goods produced on a daily basis, including all the types produced here."))
+                            new TextObject("{=g480uUyC}Sum of goods produced on a daily basis, including all the types produced here."))
                         .SetTextVariable("EXPLANATIONS", production.GetExplanations())
                         .ToString()));
 
@@ -179,17 +179,17 @@ namespace BannerKings.UI.Estates
 
                 StatsInfo.Add(new InformationElement(GameTexts.FindText("str_total_influence").ToString(),
                     FormatFloatGain(Estate.Influence),
-                    new TextObject("{=!}Influence from local nobles.").ToString()));
+                    new TextObject("{=V9CJARWT}Influence from local nobles.").ToString()));
 
                 var tax = Estate.TaxRatio;
-                StatsInfo.Add(new InformationElement(new TextObject("{=!}Tax Rate:").ToString(),
+                StatsInfo.Add(new InformationElement(new TextObject("{=Kq3T4MBV}Tax Rate:").ToString(),
                     FormatValue(tax.ResultNumber),
                     tax.GetExplanations()));
 
                 
-                StatsInfo.Add(new InformationElement(new TextObject("{=!}Tax Accumulated:").ToString(),
+                StatsInfo.Add(new InformationElement(new TextObject("{=hgBL20Jm}Tax Accumulated:").ToString(),
                     Estate.TaxAccumulated.ToString("0"),
-                    new TextObject("{=!}The accumulated profits since villagers last brought production revenues back. This is zeroed once the estate owner collects their income.").ToString()));
+                    new TextObject("{=G1sYULTd}The accumulated profits since villagers last brought production revenues back. This is zeroed once the estate owner collects their income.").ToString()));
 
 
                 ExtraInfos.Add(StatsInfo);
@@ -202,12 +202,12 @@ namespace BannerKings.UI.Estates
         {
             buyAction = BannerKingsConfig.Instance.EstatesModel.GetBuy(Estate, Hero.MainHero);
             BuyVisible = !PlayerOwned;
-            BuyHint = new HintViewModel(new TextObject("{=!}Acquire this property as your own.\n\n{REASON}")
+            BuyHint = new HintViewModel(new TextObject("{=1kX621pV}Acquire this property as your own.\n\n{REASON}")
                 .SetTextVariable("REASON", buyAction.Reason));
 
             grantAction = BannerKingsConfig.Instance.EstatesModel.GetGrant(Estate, Hero.MainHero, null);
             GrantVisible = PlayerOwned;
-            GrantHint = new HintViewModel(new TextObject("{=!}Grant this property to someone. To grant it, you must be it's legal and actual owner. Estates may be used to knight companions by talking to them, or gifted to other noble houses."));
+            GrantHint = new HintViewModel(new TextObject("{=FAn8ahnU}Grant this property to someone. To grant it, you must be it's legal and actual owner. Estates may be used to knight companions by talking to them, or gifted to other noble houses."));
 
             reclaimAction = BannerKingsConfig.Instance.EstatesModel.GetReclaim(Estate, Hero.MainHero);
             var settlement = Estate.EstatesData.Settlement;
@@ -242,8 +242,8 @@ namespace BannerKings.UI.Estates
                 }
 
                 MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                    new TextObject("{=!}Grant Estate").ToString(),
-                    new TextObject("{=!}Grant this estate to another person. By granting them ownership, they will owe the estate's income and access to manpower. Taxes may still be applied.").ToString(),
+                    new TextObject("{=3nTOToLe}Grant Estate").ToString(),
+                    new TextObject("{=1bBJj789}Grant this estate to another person. By granting them ownership, they will owe the estate's income and access to manpower. Taxes may still be applied.").ToString(),
                     list,
                     true,
                     1,
@@ -306,7 +306,7 @@ namespace BannerKings.UI.Estates
      
 
         [DataSourceProperty]
-        public string BuyText => new TextObject("{=!}Buy").ToString();
+        public string BuyText => new TextObject("{=WabTyEdr}Buy").ToString();
 
         [DataSourceProperty]
         public string GrantText => new TextObject("{=dugq4xHo}Grant").ToString();

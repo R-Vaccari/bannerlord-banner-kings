@@ -181,7 +181,7 @@ namespace BannerKings.Models.Vanilla
                     var legitimacy = (LegitimacyType)new BKLegitimacyModel().CalculateEffect(town.Settlement).ResultNumber;
                     if (legitimacy == LegitimacyType.Lawful)
                     {
-                        baseResult.AddFactor(0.05f, new TextObject("{=!}Legitimacy"));
+                        baseResult.AddFactor(0.05f, new TextObject("Legitimacy"));
                     }
 
                     var admCost = new BKAdministrativeModel().CalculateEffect(town.Settlement).ResultNumber;
@@ -218,7 +218,7 @@ namespace BannerKings.Models.Vanilla
                 factor = 0.8f;
             }
 
-            result.Add(village.TradeTaxAccumulated * factor, new TextObject("{=!}Production sold by villagers"));
+            result.Add(village.TradeTaxAccumulated * factor, new TextObject("{=ZJePQQpz}Production sold by villagers"));
 
             var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(village.Settlement);
             if (data != null && data.VillageData != null)

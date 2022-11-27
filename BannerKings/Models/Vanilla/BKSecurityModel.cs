@@ -25,7 +25,7 @@ namespace BannerKings.Models.Vanilla
             var capital = Campaign.Current.GetCampaignBehavior<BKCapitalBehavior>().GetCapital(town.OwnerClan.Kingdom);
             if (capital == town)
             {
-                baseResult.Add(-1f, new TextObject("{=!}Capital"));
+                baseResult.Add(-1f, new TextObject("{=fQVyeiJb}Capital"));
             }
 
 

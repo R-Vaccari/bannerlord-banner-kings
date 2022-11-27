@@ -1,4 +1,4 @@
-﻿using BannerKings.Managers.Titles.Laws;
+using BannerKings.Managers.Titles.Laws;
 using BannerKings.UI.Items;
 using System;
 using System.Collections.Generic;
@@ -28,7 +28,7 @@ namespace BannerKings.UI.Kingdoms
                 Selector.AddItem(new BKItemVM(option.Index,
                     option.LawType,
                     !option.Equals(law),
-                    new TextObject("{=!}{TEXT}\n\n{EXPLANATIONS}")
+                    new TextObject("{=0bet1Am4}{TEXT}\n\n{EXPLANATIONS}")
                         .SetTextVariable("TEXT", option.Description)
                         .SetTextVariable("EXPLANATIONS", option.Effects),
                     option.Name));
@@ -49,7 +49,7 @@ namespace BannerKings.UI.Kingdoms
         public DemesneLaw DemesneLaw { get; private set; }
 
         [DataSourceProperty]
-        public string DateHeaderText => new TextObject("{=!}Law issued on:").ToString();
+        public string DateHeaderText => new TextObject("{=SJZmL2Co}Law issued on:").ToString();
 
       
 

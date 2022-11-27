@@ -57,7 +57,7 @@ namespace BannerKings.Behaviours
             starter.AddDialogLine("wanderer_different_clan_response_first_time",
                 "wanderer_different_clan_response", 
                 "wanderer_different_clan_options",
-                "{=!}{WANDERER_OTHER_CLAN}",
+                "{=hBCC1HRS}{WANDERER_OTHER_CLAN}",
                 CompanionOfAnotherClanIntroduction,
                 null);
 
@@ -71,20 +71,20 @@ namespace BannerKings.Behaviours
             starter.AddDialogLine("wanderer_different_clan_response_first_time",
                 "wanderer_preintroduction",
                 "wanderer_different_clan_options",
-                "{=!}{WANDERER_OTHER_CLAN}",
+                "{=hBCC1HRS}{WANDERER_OTHER_CLAN}",
                 CompanionOfAnotherClanIntroduction,
                 null);
 
             starter.AddDialogLine("companion_hire_different_clan", 
                 "companion_hire",
                 "wanderer_different_clan_options",
-                "{=!}{WANDERER_OTHER_CLAN_HIRE}", 
+                "{=znLZBRbD}{WANDERER_OTHER_CLAN_HIRE}", 
                 () =>
                 {
                     var clan = Hero.OneToOneConversationHero.Clan;
                     if (clan != null)
                     {
-                        MBTextManager.SetTextVariable("WANDERER_OTHER_CLAN_HIRE", new TextObject("{=!}I currently serve the {CLAN} and so I'm not available for hire.")
+                        MBTextManager.SetTextVariable("WANDERER_OTHER_CLAN_HIRE", new TextObject("{=kf3MeZSH}I currently serve the {CLAN} and so I'm not available for hire.")
                             .SetTextVariable("CLAN", clan.Name));
                     }
 
@@ -103,14 +103,14 @@ namespace BannerKings.Behaviours
         {
             if (Hero.OneToOneConversationHero.Clan != null)
             {
-                var purposeText = new TextObject("{=!}What can I help you with?");
+                var purposeText = new TextObject("{=kxWQ9L87}What can I help you with?");
                 if (Hero.OneToOneConversationHero.Clan.MapFaction != Clan.PlayerClan.MapFaction)
                 {
-                    purposeText = new TextObject("{=!}So then, what is it?");
+                    purposeText = new TextObject("{=Ff9zAHiQ}So then, what is it?");
                 }
 
                 MBTextManager.SetTextVariable("WANDERER_OTHER_CLAN",
-                    new TextObject("{=!}I am {HERO}, a servant of the {CLAN}. I am here under business of {LEADER_NAME}. {PURPOSE_TEXT}")
+                    new TextObject("{=c3b1OA4H}I am {HERO}, a servant of the {CLAN}. I am here under business of {LEADER_NAME}. {PURPOSE_TEXT}")
                     .SetTextVariable("HERO", Hero.OneToOneConversationHero.Name)
                     .SetTextVariable("CLAN", Hero.OneToOneConversationHero.Clan.Name)
                     .SetTextVariable("LEADER_NAME", Hero.OneToOneConversationHero.Clan.Name)
@@ -131,7 +131,7 @@ namespace BannerKings.Behaviours
                     {
                         if (council.Peerage == null || !council.Peerage.CanVote)
                         {
-                            council.SetPeerage(new Peerage(new TextObject("{=!}Lesser Peerage"),
+                            council.SetPeerage(new Peerage(new TextObject("{=rmxeMFzz}Lesser Peerage"),
                                 true,
                                 false,
                                 false,
@@ -144,7 +144,7 @@ namespace BannerKings.Behaviours
                                 var peerage = council.Peerage;
                                 InformationManager.ShowInquiry(new InquiryData(
                                     peerage.Name.ToString(),
-                                    new TextObject("{=!}As part of joinning a realm, the {CLAN} is receiving {PEERAGE}. {TEXT}")
+                                    new TextObject("{=dVTqLz5i}As part of joinning a realm, the {CLAN} is receiving {PEERAGE}. {TEXT}")
                                     .SetTextVariable("CLAN", Clan.PlayerClan.Name)
                                     .SetTextVariable("PEERAGE", peerage.Name)
                                     .SetTextVariable("TEXT", peerage.PeerageGrantedText())
@@ -163,7 +163,7 @@ namespace BannerKings.Behaviours
                     {
                         if (council.Peerage == null || !council.Peerage.CanStartElection)
                         {
-                            council.SetPeerage(new Peerage(new TextObject("{=!}Full Peerage"), true, 
+                            council.SetPeerage(new Peerage(new TextObject("{=9OhMK2Wk}Full Peerage"), true, 
                                 true, true, true, true, false));
 
                             if (clan == Clan.PlayerClan)
@@ -171,7 +171,7 @@ namespace BannerKings.Behaviours
                                 var peerage = council.Peerage;
                                 InformationManager.ShowInquiry(new InquiryData(
                                     peerage.Name.ToString(),
-                                    new TextObject("{=!}As part of creating a realm, the {CLAN} is now considered to have {PEERAGE}. {TEXT}")
+                                    new TextObject("{=9hmdku7t}As part of creating a realm, the {CLAN} is now considered to have {PEERAGE}. {TEXT}")
                                     .SetTextVariable("CLAN", Clan.PlayerClan.Name)
                                     .SetTextVariable("PEERAGE", peerage.Name)
                                     .SetTextVariable("TEXT", peerage.PeerageGrantedText())
@@ -962,7 +962,7 @@ namespace BannerKings.Behaviours
                         }
                     }
 
-                    goldChange.Add(totalGold, new TextObject("{=!}Village Demesnes"));
+                    goldChange.Add(totalGold, new TextObject("{=GikQuojv}Village Demesnes"));
                     return false;
                 }
 

@@ -1,4 +1,4 @@
-﻿using BannerKings.Behaviours.Marriage;
+using BannerKings.Behaviours.Marriage;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Party;
@@ -49,7 +49,7 @@ namespace BannerKings.Behaviours.Feasts
 
             if (town.MapFaction == Hero.MainHero.MapFaction)
             {
-                MBInformationManager.AddQuickInformation(new TextObject("{=!}The {CLAN} is now hosting a feast at {TOWN}!")
+                MBInformationManager.AddQuickInformation(new TextObject("{=Bj1LjLgm}The {CLAN} is now hosting a feast at {TOWN}!")
                                    .SetTextVariable("TOWN", town.Name)
                                    .SetTextVariable("CLAN", town.OwnerClan.Name));
             }

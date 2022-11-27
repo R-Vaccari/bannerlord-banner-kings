@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Skills;
 using TaleWorlds.CampaignSystem;
@@ -26,7 +26,7 @@ namespace BannerKings.Models.Vanilla
                 return new ExplainedNumber(1f);
             }
 
-            result.Add(data.EconomicData.ProductionQuality.ResultNumber, new TextObject("{=!}Production quality"));
+            result.Add(data.EconomicData.ProductionQuality.ResultNumber, new TextObject("{=56S6FhCd}Production quality"));
 
             if (workshop.Owner != null)
             {
@@ -113,7 +113,7 @@ namespace BannerKings.Models.Vanilla
         public ExplainedNumber GetProductionEfficiency(Workshop workshop, bool explanations = false)
         {
             var result = new ExplainedNumber(0f, explanations);
-            result.Add(GetPolicyEffectToProduction(workshop.Settlement.Town), new TextObject("{=!}Local production efficiency"));
+            result.Add(GetPolicyEffectToProduction(workshop.Settlement.Town), new TextObject("{=2fCjZALt}Local production efficiency"));
             
             if (workshop.Level > 1)
             {

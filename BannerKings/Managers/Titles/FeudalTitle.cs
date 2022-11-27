@@ -21,7 +21,7 @@ namespace BannerKings.Managers.Titles
             this.vassals = vassals;
             this.deJure = deJure;
             this.deFacto = deFacto;
-            this.name = new TextObject("{=!}{TITLE} of {NAME}")
+            this.name = new TextObject("{TITLE} of {NAME}")
                 .SetTextVariable("TITLE", Utils.Helpers.GetTitlePrefix(type, contract.Government))
                 .SetTextVariable("NAME", name);
             shortName = new TextObject(name);
@@ -398,7 +398,7 @@ namespace BannerKings.Managers.Titles
                 GainKingdomInfluenceAction.ApplyForDefault(enactor, -law.InfluenceCost);
                 if (enactor.MapFaction == Hero.MainHero.MapFaction)
                 {
-                    MBInformationManager.AddQuickInformation(new TextObject("{=!}The {LAW} has been enacted in the {TITLE}.")
+                    MBInformationManager.AddQuickInformation(new TextObject("{=fvbLMV0a}The {LAW} has been enacted in the {TITLE}.")
                         .SetTextVariable("LAW", law.Name)
                         .SetTextVariable("TITLE", FullName),
                         0,

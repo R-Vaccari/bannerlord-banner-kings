@@ -155,12 +155,12 @@ namespace BannerKings.Behaviours
         private void AddDialog(CampaignGameStarter starter)
         {
             starter.AddPlayerLine("companion_grant_knighthood", "companion_role", "companion_knighthood_question",
-                new TextObject("{=!}I would like you to serve as my knight.").ToString(),
+                new TextObject("{=eytEGCnd}I would like you to serve as my knight.").ToString(),
                 GrantKnighthoodOnCondition,
                 delegate
                 {
-                    InformationManager.ShowInquiry(new InquiryData(new TextObject("{=!}Bestowing Knighthood").ToString(), 
-                        new TextObject("{=!}Knighting involves granting a Fee (an estate or lordship) to a commoner, in exchange for Knight Service, or military aid. Once granted, their property can not be revoked. Knights granted a Lordship will pay for their own retinue, but will also have full rights to the village's income. Knights will serve under your clan, but eventually will aim to forge their own family.")
+                    InformationManager.ShowInquiry(new InquiryData(new TextObject("{=mMoVoid6}Bestowing Knighthood").ToString(), 
+                        new TextObject("{=FwXL7yLD}Knighting involves granting a Fee (an estate or lordship) to a commoner, in exchange for Knight Service, or military aid. Once granted, their property can not be revoked. Knights granted a Lordship will pay for their own retinue, but will also have full rights to the village's income. Knights will serve under your clan, but eventually will aim to forge their own family.")
                         .ToString(),
                         true, 
                         false, 
@@ -174,7 +174,7 @@ namespace BannerKings.Behaviours
 
             starter.AddDialogLine("companion_grant_knighthood_response", "companion_knighthood_question",
                 "companion_knighthood_response",
-                new TextObject("{=!}{TITLE}, it would be my honor. I must ask, what kind of property would you honor me with?")
+                new TextObject("{=KfprN5px}{TITLE}, it would be my honor. I must ask, what kind of property would you honor me with?")
                 .SetTextVariable("TITLE", Hero.MainHero.IsFemale ? GameTexts.FindText("str_my_lady") : GameTexts.FindText("str_my_lord"))
                 .ToString(), 
                 null, 
@@ -182,7 +182,7 @@ namespace BannerKings.Behaviours
 
             starter.AddPlayerLine("companion_grant_knighthood_response_lordship", "companion_knighthood_response",
               "companion_knighthood_accepted_fief",
-                  new TextObject("{=!}A Lordship.").ToString(),
+                  new TextObject("{=VjMG5nHH}A Lordship.").ToString(),
                   null,
                   SelectFiefOnConsequence,
                   100,
@@ -190,7 +190,7 @@ namespace BannerKings.Behaviours
 
             starter.AddPlayerLine("companion_grant_knighthood_response_estate", "companion_knighthood_response",
                 "companion_knighthood_accepted_estate", 
-                new TextObject("{=!}An estate property.").ToString(),
+                new TextObject("{=We2p3hwv}An estate property.").ToString(),
                 null,
                 SelectEstateOnConsequence,
                 100,
@@ -204,7 +204,7 @@ namespace BannerKings.Behaviours
 
             starter.AddDialogLine("companion_knighthood_accepted_fief", "companion_knighthood_accepted_fief",
                 "companion_knighthood_finish_fief",
-                new TextObject("{=!}{TITLE}, a Lordship would be very generous. Its income would allow me to raise a retinue and be fully independent to pay for it. Of course, the more rent a village produces, the more troops I can provide us.")
+                new TextObject("{=uEX33Axr}{TITLE}, a Lordship would be very generous. Its income would allow me to raise a retinue and be fully independent to pay for it. Of course, the more rent a village produces, the more troops I can provide us.")
                 .SetTextVariable("TITLE", Hero.MainHero.IsFemale ? GameTexts.FindText("str_my_lady") : GameTexts.FindText("str_my_lord"))
                 .ToString(),
                 null,
@@ -212,7 +212,7 @@ namespace BannerKings.Behaviours
 
             starter.AddDialogLine("companion_knighthood_accepted_estate", "companion_knighthood_accepted_estate",
                 "companion_knighthood_finish_estate",
-                new TextObject("{=!}{TITLE}, an estate would be generous. Its income would help pay a retinue, and it's manpower allow us more access to volunteers. Estates with more acres generate more income and provide more manpower.")
+                new TextObject("{=op5kY5Qq}{TITLE}, an estate would be generous. Its income would help pay a retinue, and it's manpower allow us more access to volunteers. Estates with more acres generate more income and provide more manpower.")
                 .SetTextVariable("TITLE", Hero.MainHero.IsFemale ? GameTexts.FindText("str_my_lady") : GameTexts.FindText("str_my_lord"))
                 .ToString(),
                 null,
@@ -246,7 +246,7 @@ namespace BannerKings.Behaviours
 
             starter.AddDialogLine("companion_knighthood_finished", "companion_knighthood_finished",
                 "close_window",
-                new TextObject("{=!}Thank you {TITLE}!")
+                new TextObject("{=g09DXXBc}Thank you {TITLE}!")
                 .SetTextVariable("TITLE", Hero.MainHero.IsFemale ? GameTexts.FindText("str_my_lady") : GameTexts.FindText("str_my_lord"))
                 .ToString(),
                 null,
@@ -306,7 +306,7 @@ namespace BannerKings.Behaviours
                         {
                             var action = BannerKingsConfig.Instance.EstatesModel.GetGrant(estate, Hero.MainHero, Hero.OneToOneConversationHero);
                             result.Add(new InquiryElement(estate,
-                                new TextObject("{=!}{VILLAGE} - {ACREAGE}")
+                                new TextObject("{=oQzd5fKm}{VILLAGE} - {ACREAGE}")
                                 .SetTextVariable("VILLAGE", settlement.Name)
                                 .SetTextVariable("ACREAGE", estate.Acreage.ToString("0.00"))
                                 .ToString(),
@@ -327,19 +327,19 @@ namespace BannerKings.Behaviours
 
             if (BannerKingsConfig.Instance.TitleManager.IsKnight(knight))
             {
-                reason = new TextObject("{=!}{HERO} already holds property or a title and is considered a knight.")
+                reason = new TextObject("{=t37Hiw4V}{HERO} already holds property or a title and is considered a knight.")
                         .SetTextVariable("HERO", knight.Name);
                 return false;
             }
 
             if (Utils.Helpers.IsCloseFamily(knight, Hero.MainHero))
             {
-                reason = new TextObject("{=!}{HERO} is close family and in your clan. Their social status mirrors yours as head of family.")
+                reason = new TextObject("{=xfcQrgtb}{HERO} is close family and in your clan. Their social status mirrors yours as head of family.")
                         .SetTextVariable("HERO", knight.Name);
                 return false;
             }
 
-            reason = new TextObject("{=!}Bestowing knighthood is possible.");
+            reason = new TextObject("{=OMJDisYX}Bestowing knighthood is possible.");
             return true;
         }
 
@@ -365,24 +365,24 @@ namespace BannerKings.Behaviours
 
             if (titles.Count == 0)
             {
-                reason = new TextObject("{=!}You currently do not lawfully own a lordship.");
+                reason = new TextObject("{=D4PoLUwH}You currently do not lawfully own a lordship.");
                 return false;
             }
 
             if (estates.Any(x => x.IsEnabled))
             {
-                reason = new TextObject("{=!}Bestowing knighthood is possible.");
+                reason = new TextObject("{=OMJDisYX}Bestowing knighthood is possible.");
                 return true;
             }
 
             if (estates.Count == 0)
             {
-                reason = new TextObject("{=!}Your lordships do not have any vacant estates to be granted away.");
+                reason = new TextObject("{=eT2e7JHu}Your lordships do not have any vacant estates to be granted away.");
                 return false;
             }
 
             var first = estates.FirstOrDefault(x => !x.IsEnabled);
-            reason = first != null ? new TextObject(first.Hint) : new TextObject("{=!}Your lordships do not have any vacant estates to be granted away.");
+            reason = first != null ? new TextObject(first.Hint) : new TextObject("{=eT2e7JHu}Your lordships do not have any vacant estates to be granted away.");
             return false;
         }
 
@@ -397,7 +397,7 @@ namespace BannerKings.Behaviours
                 var peerage = council.Peerage;
                 if (!peerage.CanGrantKnighthood)
                 {
-                    hintText = new TextObject("{=!}The {CLAN} does not have adequate Peerage to grant knighthood.")
+                    hintText = new TextObject("{=6oR14vwH}The {CLAN} does not have adequate Peerage to grant knighthood.")
                         .SetTextVariable("CLAN", Hero.MainHero.Clan.Name);
                     return false;
                 }
@@ -443,7 +443,7 @@ namespace BannerKings.Behaviours
            
             if (titles.Count == 0)
             {
-                hintText = new TextObject("{=!}You currently do not lawfully own a lordship.");
+                hintText = new TextObject("{=D4PoLUwH}You currently do not lawfully own a lordship.");
                 return false;
             }
 
@@ -456,7 +456,7 @@ namespace BannerKings.Behaviours
 
             if (lordshipsToGive.Count == 0)
             {
-                hintText = new TextObject("{=!}You currently do not lawfully own a lordship.");
+                hintText = new TextObject("{=D4PoLUwH}You currently do not lawfully own a lordship.");
                 return false;
             }
 
@@ -468,7 +468,7 @@ namespace BannerKings.Behaviours
             }
 
             var first = lordships.FirstOrDefault(x => !x.IsEnabled);
-            hintText = first != null ? new TextObject(first.Hint) : new TextObject("{=!}You currently do not lawfully own a lordship that could be given away.");
+            hintText = first != null ? new TextObject(first.Hint) : new TextObject("{=gYPtXGDA}You currently do not lawfully own a lordship that could be given away.");
             return false;
         }
 
@@ -492,7 +492,7 @@ namespace BannerKings.Behaviours
         {
             MBInformationManager
                 .ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                    new TextObject("{=!}Select the Lordship you would like to give away. Grating a lordship also requires a 5000 {GOLD_ICON} payment.").ToString(),
+                    new TextObject("{=ekEphQLc}Select the Lordship you would like to give away. Grating a lordship also requires a 5000 {GOLD_ICON} payment.").ToString(),
                     string.Empty, 
                     lordshipsToGive, 
                     false,
@@ -510,7 +510,7 @@ namespace BannerKings.Behaviours
         {
             MBInformationManager
                 .ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                    new TextObject("{=!}Select the estate you would like to grant.").ToString(),
+                    new TextObject("{=tVvXpPdF}Select the estate you would like to grant.").ToString(),
                     string.Empty, 
                     estatesToGive, 
                     false, 
@@ -538,7 +538,7 @@ namespace BannerKings.Behaviours
                 {
 
                     InformationManager.DisplayMessage(new InformationMessage(new TextObject(
-                        "{=!}Not possible to dismiss a knight with property under your service.")
+                        "{=EYH5bgdS}Not possible to dismiss a knight with property under your service.")
                         .ToString()));
                     return false;
                 }

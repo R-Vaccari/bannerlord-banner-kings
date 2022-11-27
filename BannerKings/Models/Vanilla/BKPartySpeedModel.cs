@@ -1,4 +1,4 @@
-﻿using BannerKings.Behaviours;
+using BannerKings.Behaviours;
 using BannerKings.Managers.CampaignStart;
 using BannerKings.Managers.Education.Lifestyles;
 using BannerKings.Managers.Skills;
@@ -87,7 +87,7 @@ namespace BannerKings.Models.Vanilla
             if (BannerKingsSettings.Instance.SlowerParties)
             {
                 var result = baseResult.ResultNumber * 0.3f;
-                baseResult.Add(-result, new TaleWorlds.Localization.TextObject("{=!}Slower Parties setting"));
+                baseResult.Add(-result, new TaleWorlds.Localization.TextObject("{=OohdenyR}Slower Parties setting"));
             }
 
             return baseResult;

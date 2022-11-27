@@ -1,4 +1,4 @@
-﻿using BannerKings.Extensions;
+using BannerKings.Extensions;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Estates;
@@ -60,7 +60,7 @@ namespace BannerKings.Models.BKModels
             if (actionTaker != owner)
             {
                 action.Possible = false;
-                action.Reason = new TextObject("{=!}You don't own this settlement.");
+                action.Reason = new TextObject("{=dkSBAC2Z}You don't own this settlement.");
                 return action;
             }
 
@@ -69,14 +69,14 @@ namespace BannerKings.Models.BKModels
                 if (actionTarget.IsNotable)
                 {
                     action.Possible = false;
-                    action.Reason = new TextObject("{=!}Cannot grant to notables.");
+                    action.Reason = new TextObject("{=OyXbUQN0}Cannot grant to notables.");
                     return action;
                 }
 
                 if (actionTarget.MapFaction != actionTaker.MapFaction)
                 {
                     action.Possible = false;
-                    action.Reason = new TextObject("{=!}Cannot grant to foreign lords.");
+                    action.Reason = new TextObject("{=kpGgQCZP}Cannot grant to foreign lords.");
                     return action;
                 }
 
@@ -91,7 +91,7 @@ namespace BannerKings.Models.BKModels
             else
             {
                 action.Possible = false;
-                action.Reason = new TextObject("{=!}No defined target for granting.");
+                action.Reason = new TextObject("{=EUizJXQJ}No defined target for granting.");
                 return action;
             }
 
@@ -108,7 +108,7 @@ namespace BannerKings.Models.BKModels
                 if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.EstateTenureQuiaEmptores))
                 {
                     action.Possible = false;
-                    action.Reason = new TextObject("{=!}Cannot grant estates under {LAW} law.")
+                    action.Reason = new TextObject("{=BPrmDyZT}Cannot grant estates under {LAW} law.")
                         .SetTextVariable("LAW", DefaultDemesneLaws.Instance.EstateTenureQuiaEmptores.Name);
                     return action;
                 }
@@ -118,7 +118,7 @@ namespace BannerKings.Models.BKModels
             if (!candidates.Contains(actionTarget))
             {
                 action.Possible = false;
-                action.Reason = new TextObject("{=!}Not a granting candidate. Clan leaders and companions (except under {LAW} law) may be granted to.")
+                action.Reason = new TextObject("{=8J1Q1o9W}Not a granting candidate. Clan leaders and companions (except under {LAW} law) may be granted to.")
                     .SetTextVariable("LAW", DefaultDemesneLaws.Instance.EstateTenureQuiaEmptores.Name);
                 return action;
             }
@@ -138,14 +138,14 @@ namespace BannerKings.Models.BKModels
             if (actionTaker == owner)
             {
                 action.Possible = false;
-                action.Reason = new TextObject("{=!}Already settlement owner.");
+                action.Reason = new TextObject("{=WOTKRO5b}Already settlement owner.");
                 return action;
             }
 
             if (actionTaker == estate.Owner)
             {
                 action.Possible = false;
-                action.Reason = new TextObject("{=!}Already estate owner.");
+                action.Reason = new TextObject("{=MD6reCQ1}Already estate owner.");
                 return action;
             }
 
@@ -154,7 +154,7 @@ namespace BannerKings.Models.BKModels
                 if (estate.Owner.IsNotable)
                 {
                     action.Possible = false;
-                    action.Reason = new TextObject("{=!}Cannot buy notable estates.");
+                    action.Reason = new TextObject("{=hPaEjmxw}Cannot buy notable estates.");
                     return action;
                 }
             }
@@ -169,7 +169,7 @@ namespace BannerKings.Models.BKModels
             else if (actionTaker != clan.Leader)
             {
                 action.Possible = false;
-                action.Reason = new TextObject("{=!}Not clan leader.");
+                action.Reason = new TextObject("{=PxhHMJXb}Not clan leader.");
                 return action;
             }
 
@@ -187,7 +187,7 @@ namespace BannerKings.Models.BKModels
                 if (title.deJure != owner)
                 {
                     action.Possible = false;
-                    action.Reason = new TextObject("{=!}Cannot buy from an illegal settlement owner. The owner must hold it de jure in order to sell estates.");
+                    action.Reason = new TextObject("{=UNc5DF2y}Cannot buy from an illegal settlement owner. The owner must hold it de jure in order to sell estates.");
                     return action;
                 }
 
@@ -196,7 +196,7 @@ namespace BannerKings.Models.BKModels
                     if (owner.MapFaction != actionTaker.MapFaction)
                     {
                         action.Possible = false;
-                        action.Reason = new TextObject("{=!}Cannot buy foreign kingdom estates except if they are under Allodial tenure law.");
+                        action.Reason = new TextObject("{=TPa92tz5}Cannot buy foreign kingdom estates except if they are under Allodial tenure law.");
                         return action;
                     }
                 }
@@ -217,14 +217,14 @@ namespace BannerKings.Models.BKModels
             if (actionTaker != owner)
             {
                 action.Possible = false;
-                action.Reason = new TextObject("{=!}Not settlement owner.");
+                action.Reason = new TextObject("{=39tnO5wv}Not settlement owner.");
                 return action;
             }
 
             if (actionTaker == estate.Owner)
             {
                 action.Possible = false;
-                action.Reason = new TextObject("{=!}Already estate owner.");
+                action.Reason = new TextObject("{=MD6reCQ1}Already estate owner.");
                 return action;
             }
 
@@ -234,7 +234,7 @@ namespace BannerKings.Models.BKModels
                 if (title.deJure != actionTaker)
                 {
                     action.Possible = false;
-                    action.Reason = new TextObject("{=!}Must be de jure owner to reclaim estates.");
+                    action.Reason = new TextObject("{=ag5dqyQC}Must be de jure owner to reclaim estates.");
                     return action;
                 }
             }
@@ -244,14 +244,14 @@ namespace BannerKings.Models.BKModels
                 if (estate.Owner.MapFaction == actionTaker.MapFaction)
                 {
                     action.Possible = false;
-                    action.Reason = new TextObject("{=!}Cannot reclaim an estate from your faction Peers.");
+                    action.Reason = new TextObject("{=qfWSkUxb}Cannot reclaim an estate from your faction Peers.");
                     return action;
                 }
             }
             else
             {
                 action.Possible = false;
-                action.Reason = new TextObject("{=!}Cannot reclaim a vacant estate.");
+                action.Reason = new TextObject("{=XnvULx4f}Cannot reclaim a vacant estate.");
                 return action;
             }
 
@@ -358,7 +358,7 @@ namespace BannerKings.Models.BKModels
                     0f, 1f);
                 float production = BannerKingsConfig.Instance.VillageProductionModel.CalculateProductionsExplained(settlement.Village).ResultNumber;
 
-                result.Add(production * proportion, new TextObject("{=!}Total production proportion"));
+                result.Add(production * proportion, new TextObject("{=8mOMavNZ}Total production proportion"));
             }
 
             return result;
@@ -385,7 +385,7 @@ namespace BannerKings.Models.BKModels
             result.Add(acrePrice * estate.Pastureland * 0.5f, new TextObject("{=ngRhXYj1}Pasturelands"));
             result.Add(acrePrice * estate.Woodland * 0.15f, new TextObject("{=qPQ7HKgG}Woodlands"));
 
-            result.Add(estate.TaxAccumulated, new TextObject("{=!}Accumulated taxes"));
+            result.Add(estate.TaxAccumulated, new TextObject("{=arehLYHe}Accumulated taxes"));
             /*var title = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement);
             if (title != null)
             {

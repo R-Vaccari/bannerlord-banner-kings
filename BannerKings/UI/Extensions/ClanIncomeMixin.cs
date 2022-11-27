@@ -1,4 +1,4 @@
-﻿using BannerKings.UI.Items.UI;
+using BannerKings.UI.Items.UI;
 using Bannerlord.UIExtenderEx.Attributes;
 using Bannerlord.UIExtenderEx.ViewModels;
 using HarmonyLib;
@@ -28,7 +28,7 @@ namespace BannerKings.UI.Extensions
             WorkshopInfo = new MBBindingList<InformationElement>();
         }
 
-        [DataSourceProperty] public string UpgradeText => new TextObject("{=!}Upgrade").ToString();
+        [DataSourceProperty] public string UpgradeText => new TextObject("{=1rE1OLMj}Upgrade").ToString();
 
         public override void OnRefresh()
         {
@@ -40,15 +40,15 @@ namespace BannerKings.UI.Extensions
                 viewModel.CurrentSelectedIncome.RefreshValues();
                 var workshop = viewModel.CurrentSelectedIncome.Workshop;
                 var time = CampaignTime.Now - CampaignTime.Days(workshop.NotRunnedDays);
-                WorkshopInfo.Add(new InformationElement(new TextObject("{=!}Last run:").ToString(),
+                WorkshopInfo.Add(new InformationElement(new TextObject("{=OXes1FKN}Last run:").ToString(),
                     time.ToString(),
-                    new TextObject("{=!}The last day this workshop has successfully run without issues.").ToString()));
+                    new TextObject("{=a2FbzfvH}The last day this workshop has successfully run without issues.").ToString()));
 
                 CanUpgrade = workshop.CanBeUpgraded;
-                TextObject state = new TextObject("{=!}Running normally.");
+                TextObject state = new TextObject("{=Bom9FTfz}Running normally.");
                 if (!workshop.IsRunning && workshop.ConstructionTimeRemained > 0)
                 {
-                    state = new TextObject("{=!}Workshop under expansion! {DAYS} construction day(s) left.")
+                    state = new TextObject("{=KnWnjURr}Workshop under expansion! {DAYS} construction day(s) left.")
                         .SetTextVariable("DAYS", workshop.ConstructionTimeRemained);
                     CanUpgrade = false;
                 }
@@ -65,7 +65,7 @@ namespace BannerKings.UI.Extensions
                             CampaignUIHelper.ProductInputOutputEqualityComparer comparer = new CampaignUIHelper.ProductInputOutputEqualityComparer();
                             IEnumerable<TextObject> texts = from x in workshop.WorkshopType.Productions.SelectMany((WorkshopType.Production p) => p.Outputs).Distinct(comparer)
                                                             select x.Item1.GetName();
-                            state = new TextObject("{=!}Insufficient inputs! {TOWN} is missing inputs for {OUTPUT}.")
+                            state = new TextObject("{=Pc4NcRHR}Insufficient inputs! {TOWN} is missing inputs for {OUTPUT}.")
                                 .SetTextVariable("TOWN", workshop.Settlement.Name)
                                 .SetTextVariable("OUTPUT", texts.ElementAt(0));
                             break;
@@ -73,12 +73,12 @@ namespace BannerKings.UI.Extensions
                     }
                 }
 
-                WorkshopInfo.Add(new InformationElement(new TextObject("{=!}Running state:"),
+                WorkshopInfo.Add(new InformationElement(new TextObject("{=QP368C1V}Running state:"),
                     state,
-                    new TextObject("{=!}The workshop running conditions. It may not be producing due to lack of necessary inputs.")));
+                    new TextObject("{=66zjiMe4}The workshop running conditions. It may not be producing due to lack of necessary inputs.")));
 
                 var tax = BannerKingsConfig.Instance.WorkshopModel.CalculateWorkshopTax(workshop.Settlement, workshop.Owner);
-                WorkshopInfo.Add(new InformationElement(new TextObject("{=!}Tax ratio:").ToString(),
+                WorkshopInfo.Add(new InformationElement(new TextObject("{=1qiPuhoF}Tax ratio:").ToString(),
                     FormatValue(tax.ResultNumber),
                     tax.GetExplanations()));
 
@@ -99,8 +99,8 @@ namespace BannerKings.UI.Extensions
         {
             int cost = BannerKingsConfig.Instance.WorkshopModel.GetUpgradeCost(viewModel.CurrentSelectedIncome.Workshop);
             InformationManager.ShowInquiry(new InquiryData(
-                new TextObject("{=!}Workshop Upgrading").ToString(),
-                new TextObject("{=!}Would you like to upgrade this workshop property? By upgrading, the workshop's expenses will increase by 12%, while it's production quality increases by 8%. The process will take 3 construction days and cost {COST}{GOLD_ICON}")
+                new TextObject("{=kZMXmhpv}Workshop Upgrading").ToString(),
+                new TextObject("{=gVt0aj0G}Would you like to upgrade this workshop property? By upgrading, the workshop's expenses will increase by 12%, while it's production quality increases by 8%. The process will take 3 construction days and cost {COST}{GOLD_ICON}")
                 .SetTextVariable("COST", cost)
                 .ToString(),
                 Hero.MainHero.Gold >= cost,

@@ -160,21 +160,21 @@ namespace BannerKings.UI
 
                         if (namingSetting.Equals(DefaultSettings.Instance.NamingFullTitlesSuffixed))
                         {
-                            __result = new TextObject("{=!}{NAME}, {TITLE} of {SETTLEMENT}")
+                            __result = new TextObject("{=PyG7eif0}{NAME}, {TITLE} of {SETTLEMENT}")
                                 .SetTextVariable("TITLE", honorary)
                                 .SetTextVariable("NAME", name)
                                 .SetTextVariable("SETTLEMENT", title.shortName);
                         }
                         else if (namingSetting.Equals(DefaultSettings.Instance.NamingFullTitles))
                         {
-                            __result = new TextObject("{=!}{TITLE} {NAME} of {SETTLEMENT}")
+                            __result = new TextObject("{=mMTUt5kV}{TITLE} {NAME} of {SETTLEMENT}")
                                 .SetTextVariable("TITLE", honorary)
                                 .SetTextVariable("NAME", name)
                                 .SetTextVariable("SETTLEMENT", title.shortName);
                         }
                         else if (namingSetting.Equals(DefaultSettings.Instance.NamingTitlePrefix))
                         {
-                            __result = new TextObject("{=!}{TITLE} {NAME}")
+                            __result = new TextObject("{=SkfVh2Sp}{TITLE} {NAME}")
                                 .SetTextVariable("TITLE", honorary)
                                 .SetTextVariable("NAME", name);
                         }
@@ -200,7 +200,7 @@ namespace BannerKings.UI
                                 var honorary = Utils.Helpers.GetTitleHonorary(leaderTitle.type, government, __instance.IsFemale,
                                     kingdom != null ? kingdom.Culture : __instance.Culture);
 
-                                __result = new TextObject("{=!}{TITLE} {NAME}")
+                                __result = new TextObject("{=SkfVh2Sp}{TITLE} {NAME}")
                                     .SetTextVariable("TITLE", honorary)
                                     .SetTextVariable("NAME", name);
                             }
@@ -210,7 +210,7 @@ namespace BannerKings.UI
                                 var honorary = Utils.TextHelper.GetPrinceTitles(government, __instance.IsFemale,
                                     kingdom != null ? kingdom.Culture : __instance.Culture);
 
-                                __result = new TextObject("{=!}{TITLE} {NAME}")
+                                __result = new TextObject("{=SkfVh2Sp}{TITLE} {NAME}")
                                     .SetTextVariable("TITLE", honorary)
                                     .SetTextVariable("NAME", name);
                             }
@@ -843,13 +843,13 @@ namespace BannerKings.UI
                     var rulingClan = Clan.PlayerClan.Kingdom.RulingClan;
                     var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(rulingClan);
                     var councilMember = council.GetMemberFromPosition(Managers.Court.CouncilPosition.Marshall);
-                    TextObject reason = new TextObject("{=!}You must be faction leader, {MARSHAL} for the {CLAN} or have a title superior to Lordship level.")
+                    TextObject reason = new TextObject("{=9ap6ssvZ}You must be faction leader, {MARSHAL} for the {CLAN} or have a title superior to Lordship level.")
                         .SetTextVariable("MARSHAL", councilMember.GetName())
                         .SetTextVariable("CLAN", rulingClan.Name);
 
                     if (Clan.PlayerClan.Kingdom.HasPolicy(BKPolicies.Instance.LimitedArmyPrivilege))
                     {
-                        reason = new TextObject("{=!}You must be faction leader, {MARSHAL} for the {CLAN} or have a title superior to County level.")
+                        reason = new TextObject("{=0Yoz051M}You must be faction leader, {MARSHAL} for the {CLAN} or have a title superior to County level.")
                                                 .SetTextVariable("MARSHAL", councilMember.GetName())
                                                 .SetTextVariable("CLAN", rulingClan.Name);
                     }

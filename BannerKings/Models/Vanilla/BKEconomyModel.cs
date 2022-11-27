@@ -201,18 +201,18 @@ namespace BannerKings.Models.Vanilla
                 if (settlement.Town.Gold < 50000)
                 {
                     float factor = MathF.Clamp(-1f + (settlement.Town.Gold * 0.00001f), -1f, -0.5f);
-                    result.AddFactor(factor, new TextObject("{=!}Market gold"));
+                    result.AddFactor(factor, new TextObject("{=s2gxPA2Q}Market gold"));
                 }
                 else if (settlement.Town.Gold >= 1000000)
                 {
                     float factor = MathF.Clamp(settlement.Town.Gold / 10000000f, 0.1f, 0.5f);
-                    result.AddFactor(factor, new TextObject("{=!}Market gold"));
+                    result.AddFactor(factor, new TextObject("{=s2gxPA2Q}Market gold"));
                 }
                 
                 var capital = Campaign.Current.GetCampaignBehavior<BKCapitalBehavior>().GetCapital(settlement.OwnerClan.Kingdom);
                 if (capital == settlement.Town)
                 {
-                    result.AddFactor(0.4f, new TextObject("{=!}Capital"));
+                    result.AddFactor(0.4f, new TextObject("{=fQVyeiJb}Capital"));
                 }
             }
 

@@ -66,7 +66,7 @@ namespace BannerKings.Managers.Education.Lifestyles
 
             Fian = new Lifestyle("lifestyle_fian");
             Fian.Initialize(new TextObject("{=of43diPd}Fian"), 
-                new TextObject("{=!}Fians are the epitome of Battanian combat. Long ago, their ancestors discovered that ambushes in the woods with longbows were specially deadly. But if the bow was not enough, a greatsword would do the rest. Ever since, the mastery of longbow and greatswords has been the staple for Battanian nobility, who stills despises the horse as a sign of status."), 
+                new TextObject("{=qvjRNhpg}Fians are the epitome of Battanian combat. Long ago, their ancestors discovered that ambushes in the woods with longbows were specially deadly. But if the bow was not enough, a greatsword would do the rest. Ever since, the mastery of longbow and greatswords has been the staple for Battanian nobility, who stills despises the horse as a sign of status."), 
                 DefaultSkills.Bow,
                 DefaultSkills.TwoHanded,
                 new List<PerkObject>
@@ -83,7 +83,7 @@ namespace BannerKings.Managers.Education.Lifestyles
 
             Cataphract = new Lifestyle("lifestyle_cataphract");
             Cataphract.Initialize(new TextObject("{=RWrMBAbv}Cataphract"), 
-                new TextObject("{=!}Developed as a tactical necessity, Imperial cataphracts have become the symbol of the Imperial cavalry. Other than smashing through infantry formations, they became a requirement to stand against other heavy cavalry regiments, such as those from the east and south. Though their main weapon is the lance, used for head-on charging, cataphracts also train in skirmishing and mobility drills, adapting to what the battlefield requires, yet not relinquishing their outstanding, heavy equipment."),
+                new TextObject("{=rFoGF59u}Developed as a tactical necessity, Imperial cataphracts have become the symbol of the Imperial cavalry. Other than smashing through infantry formations, they became a requirement to stand against other heavy cavalry regiments, such as those from the east and south. Though their main weapon is the lance, used for head-on charging, cataphracts also train in skirmishing and mobility drills, adapting to what the battlefield requires, yet not relinquishing their outstanding, heavy equipment."),
                 DefaultSkills.Polearm,
                 DefaultSkills.Riding,
                 new List<PerkObject>
@@ -109,7 +109,7 @@ namespace BannerKings.Managers.Education.Lifestyles
 
             August = new Lifestyle("lifestyle_august");
             August.Initialize(new TextObject("{=wAPqOuBe}August"), 
-                new TextObject("{=!}A term coined by the Imperials, August is a lord that outshines his peers. Not only they are shrewd administrators of their realm, they are also distinguished commanders, directly leading their troops against any threats to their people. August leaders are those forever to be remembered in history as examples of what a true leader ought to be."),
+                new TextObject("{=Si15jUtO}A term coined by the Imperials, August is a lord that outshines his peers. Not only they are shrewd administrators of their realm, they are also distinguished commanders, directly leading their troops against any threats to their people. August leaders are those forever to be remembered in history as examples of what a true leader ought to be."),
                 DefaultSkills.Leadership, 
                 BKSkills.Instance.Lordship,
                 new List<PerkObject>
@@ -123,7 +123,7 @@ namespace BannerKings.Managers.Education.Lifestyles
 
             SiegeEngineer = new Lifestyle("lifestyle_siegeEngineer");
             SiegeEngineer.Initialize(new TextObject("{=brd9F4gY}Siege Engineer"), 
-                new TextObject("{=!}Highly sought-after specialists, siege engineers specialize in both defending and taking down enemy settlements. A relatively new art, sieges become more prevalent in the continent as populations gather in towns, and all-out wars break between kingdoms rather than small, tribal raids."),
+                new TextObject("{=oA4JN2v9}Highly sought-after specialists, siege engineers specialize in both defending and taking down enemy settlements. A relatively new art, sieges become more prevalent in the continent as populations gather in towns, and all-out wars break between kingdoms rather than small, tribal raids."),
                 DefaultSkills.Engineering, 
                 DefaultSkills.Tactics,
                 new List<PerkObject>
@@ -132,7 +132,7 @@ namespace BannerKings.Managers.Education.Lifestyles
                     BKPerks.Instance.SiegePlanner,
                     BKPerks.Instance.SiegeOverseer
                 },
-                new TextObject("{=!}Party expenses are {EFFECT1}% cheaper during sieges\nSettlements of different culture have {EFFECT2}% more autonomy"),
+                new TextObject("{=oNcfLnCB}Party expenses are {EFFECT1}% cheaper during sieges\nSettlements of different culture have {EFFECT2}% more autonomy"),
                 30f, 
                 10f);
 
@@ -195,7 +195,7 @@ namespace BannerKings.Managers.Education.Lifestyles
                 8f);
 
             Mercenary = new Lifestyle("lifestyle_mercenary");
-            Mercenary.Initialize(new TextObject("{=kLHXZnLY}Mercenary"), new TextObject("{=!}Mercenaries in the continent have become more and more relevant since the crumbling of the Empire. Ravaged by internal and exterior wars, the Imperial factions rely progressively more on foreign troops, as the populace becomes thinner with every squabbling conflict of Imperial lords and raid from foreigners. Currently, the life of a mercenary may prove quite profitable and prosperous in the continent - if they are to survive."),
+            Mercenary.Initialize(new TextObject("{=kLHXZnLY}Mercenary"), new TextObject("{=vkaes9JC}Mercenaries in the continent have become more and more relevant since the crumbling of the Empire. Ravaged by internal and exterior wars, the Imperial factions rely progressively more on foreign troops, as the populace becomes thinner with every squabbling conflict of Imperial lords and raid from foreigners. Currently, the life of a mercenary may prove quite profitable and prosperous in the continent - if they are to survive."),
                 DefaultSkills.Leadership,
                 DefaultSkills.Roguery, 
                 new List<PerkObject>
@@ -210,7 +210,7 @@ namespace BannerKings.Managers.Education.Lifestyles
 
             Kheshig = new Lifestyle("lifestyle_kheshig");
             Kheshig.Initialize(new TextObject("{=sccoC5ta}Kheshig"), 
-                new TextObject("{=!}Kheshig is the way of life adopted by the eastern nomads, as an adaptation to the harsh steppe life. Kheshig travel in large groups of mounted warriors, often with many spare horses and cattle heads. These feed the horde with dairy and meat. They are known for expert mounted archery skirmishing, and merciless raiding. Yet, Kheshig have a profound sense of respect to those born in the steppes, and find honor in serving a strong leader."),
+                new TextObject("{=TbzJaXUV}Kheshig is the way of life adopted by the eastern nomads, as an adaptation to the harsh steppe life. Kheshig travel in large groups of mounted warriors, often with many spare horses and cattle heads. These feed the horde with dairy and meat. They are known for expert mounted archery skirmishing, and merciless raiding. Yet, Kheshig have a profound sense of respect to those born in the steppes, and find honor in serving a strong leader."),
                 DefaultSkills.Riding, 
                 DefaultSkills.Bow, 
                 new List<PerkObject>
@@ -219,7 +219,7 @@ namespace BannerKings.Managers.Education.Lifestyles
                     BKPerks.Instance.KheshigOutrider,
                     BKPerks.Instance.KheshigHonorGuard
                 },
-                new TextObject("{=!}Party size increased by {EFFECT1}%\nNon-Khuzait troops negatively affect morale by {EFFECT2}%"),
+                new TextObject("{=BWoMogUy}Party size increased by {EFFECT1}%\nNon-Khuzait troops negatively affect morale by {EFFECT2}%"),
                 15f, 
                 0.5f,
                 null,
@@ -227,7 +227,7 @@ namespace BannerKings.Managers.Education.Lifestyles
 
             Varyag = new Lifestyle("lifestyle_varyag");
             Varyag.Initialize(new TextObject("{=4pYayWGi}Varyag"), 
-                new TextObject("{=!}Varyags are known in Sturgian culture as men of valor, adventure and prestige. These nearly mythical heroes often prove their worth in fierce shieldwall combat. Being individualistic adventurers, they will often serve as mercenaries, raid and plunder others as the opportunities come, though preferably non-Sturgians. Yet, a high moral code is expected of them, when it comes to courage and honor - a varyag afraid of death or that does not keep his word is no true varyag -, and those that follow the unwritten code are considered Drengrs."),
+                new TextObject("{=Uod3cdjp}Varyags are known in Sturgian culture as men of valor, adventure and prestige. These nearly mythical heroes often prove their worth in fierce shieldwall combat. Being individualistic adventurers, they will often serve as mercenaries, raid and plunder others as the opportunities come, though preferably non-Sturgians. Yet, a high moral code is expected of them, when it comes to courage and honor - a varyag afraid of death or that does not keep his word is no true varyag -, and those that follow the unwritten code are considered Drengrs."),
                 DefaultSkills.Athletics,
                 DefaultSkills.OneHanded,
                 new List<PerkObject>
@@ -244,7 +244,7 @@ namespace BannerKings.Managers.Education.Lifestyles
 
             Gladiator = new Lifestyle("lifestyle_gladiator");
             Gladiator.Initialize(new TextObject("{=wTyw0yfR}Gladiator"), 
-                new TextObject("{=!}As a means of entertainement, Imperials have developed the gladiatorial combat in arenas. It is possible this was an adaptation of earlier forms of duels used by the Palaics to judge valor. Nevertheless, the gladiatorial combat became a staple in the empire. Up to this day, an adventurer of little renown can prove his worth in the arenas and draw attention to himself as someone worthy of the lords' attention."),
+                new TextObject("{=fzK94Pgo}As a means of entertainement, Imperials have developed the gladiatorial combat in arenas. It is possible this was an adaptation of earlier forms of duels used by the Palaics to judge valor. Nevertheless, the gladiatorial combat became a staple in the empire. Up to this day, an adventurer of little renown can prove his worth in the arenas and draw attention to himself as someone worthy of the lords' attention."),
                 DefaultSkills.Athletics,
                 DefaultSkills.Riding,
                 new List<PerkObject>
@@ -259,7 +259,7 @@ namespace BannerKings.Managers.Education.Lifestyles
 
             Ritter = new Lifestyle("lifestyle_ritter");
             Ritter.Initialize(new TextObject("{=axhJNG0M}Ritter"), 
-                new TextObject("{=!}Vlandians have developed a concept many of them call Ritter, or Reterius as Imperials call it. These are small lords recognized as distinguished soldiers, preferring mounted combat with lances and swords, who tend to their manor demesnes in times of peace. To non-Vlandians, they are best known for the earth-shaking gallop of their cavalry charges."),
+                new TextObject("{=21zvDnjQ}Vlandians have developed a concept many of them call Ritter, or Reterius as Imperials call it. These are small lords recognized as distinguished soldiers, preferring mounted combat with lances and swords, who tend to their manor demesnes in times of peace. To non-Vlandians, they are best known for the earth-shaking gallop of their cavalry charges."),
                 BKSkills.Instance.Lordship,
                 DefaultSkills.Riding,
                 new List<PerkObject>
@@ -268,15 +268,15 @@ namespace BannerKings.Managers.Education.Lifestyles
                     BKPerks.Instance.RitterOathbound,
                     BKPerks.Instance.RitterPettySuzerain
                 },
-                new TextObject("{=!}You and melee cavalry in your formation deals {EFFECT1}% more melee damage.{EFFECT1}%\nYou and your formation deal {EFFECT2}% less ranged damaged, mounted or otherwise."),
+                new TextObject("{=2Gdz90YP}You and melee cavalry in your formation deals {EFFECT1}% more melee damage.{EFFECT1}%\nYou and your formation deal {EFFECT2}% less ranged damaged, mounted or otherwise."),
                 5f,
                 15f,
                 null,
                 cultures.First(x => x.StringId == "vlandia"));
 
             Jawwal = new Lifestyle("lifestyle_jawwal");
-            Jawwal.Initialize(new TextObject("{=!}Jawwal"),
-                new TextObject("{=!}The Jawwal represent a traditional and conservative way of living in the southern Nahasa dunes. Relying on their camels for mobility, carrying goods and even food, they have mastered survival on the sandy dunes, and are known for raiding and harassing tactics, specially with mounted skirmishing."),
+            Jawwal.Initialize(new TextObject("{=QmKDgPk0}Jawwal"),
+                new TextObject("{=2KnmOUbx}The Jawwal represent a traditional and conservative way of living in the southern Nahasa dunes. Relying on their camels for mobility, carrying goods and even food, they have mastered survival on the sandy dunes, and are known for raiding and harassing tactics, specially with mounted skirmishing."),
                 DefaultSkills.Throwing,
                 DefaultSkills.Riding,
                 new List<PerkObject>
@@ -285,7 +285,7 @@ namespace BannerKings.Managers.Education.Lifestyles
                     BKPerks.Instance.JawwalCamelMaster,
                     BKPerks.Instance.JawwalDuneRider
                 },
-                new TextObject("{=!}Party consumes {EFFECT1}% less food while on deserts\nDemesne limit reduced by {EFFECT2}%"),
+                new TextObject("{=09Uwsivs}Party consumes {EFFECT1}% less food while on deserts\nDemesne limit reduced by {EFFECT2}%"),
                 30f,
                 15f,
                 null,

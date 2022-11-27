@@ -85,7 +85,7 @@ namespace BannerKings.Models.Vanilla
                 }
                 else
                 {
-                    baseResult.AddFactor(0.2f, new TextObject("{=!}Tax exemption policy"));
+                    baseResult.AddFactor(0.2f, new TextObject("{=HMao8su6}Tax exemption policy"));
                 }
             }
 

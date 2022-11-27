@@ -44,7 +44,7 @@ namespace BannerKings.UI.Titles
             }
 
             TitleInfo = new MBBindingList<InformationElement>();
-            DemesneText = new TextObject("{=!}Demesne Information").ToString();
+            DemesneText = new TextObject("{=t8gCwGPJ}Demesne Information").ToString();
         }
 
         public int Population { get; set; } = 0;
