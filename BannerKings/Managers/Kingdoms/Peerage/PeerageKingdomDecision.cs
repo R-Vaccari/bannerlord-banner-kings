@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
@@ -50,7 +50,7 @@ namespace BannerKings.Managers.Kingdoms.Peerage
             if (outcome.Approve)
             {
                 var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(Peer);
-                council.SetPeerage(new Court.Peerage(new TextObject("{=!}Full Peerage"),
+                council.SetPeerage(new Court.Peerage(new TextObject("{=9OhMK2Wk}Full Peerage"),
                     true,
                     true,
                     true,
@@ -63,7 +63,7 @@ namespace BannerKings.Managers.Kingdoms.Peerage
                     var peerage = council.Peerage;
                     InformationManager.ShowInquiry(new InquiryData(
                         peerage.Name.ToString(),
-                        new TextObject("{=!}The Peers of the realm now consider the {CLAN} to have {PEERAGE}. {TEXT}")
+                        new TextObject("{=7Pzp6SQ6}The Peers of the realm now consider the {CLAN} to have {PEERAGE}. {TEXT}")
                         .SetTextVariable("CLAN", Peer.Name)
                         .SetTextVariable("PEERAGE", peerage.Name)
                         .SetTextVariable("TEXT", peerage.PeerageGrantedText())
@@ -132,11 +132,11 @@ namespace BannerKings.Managers.Kingdoms.Peerage
             return ((support + property) * 20f) + ((egalitarian + authoritarian + oligarchic) * 60f);
         }
 
-        public override TextObject GetChooseDescription() => new TextObject("{=!}As the sovereign of {KINGDOM}, you must decide whether to approve granting full Peerage to {CLAN}.")
+        public override TextObject GetChooseDescription() => new TextObject("{=dpGtisyQ}As the sovereign of {KINGDOM}, you must decide whether to approve granting full Peerage to {CLAN}.")
                 .SetTextVariable("KINGDOM", Kingdom.Name)
                 .SetTextVariable("CLAN", Peer.Name);
 
-        public override TextObject GetChooseTitle() => new TextObject("{=!}Vote for granting full Peerage to {CLAN}")
+        public override TextObject GetChooseTitle() => new TextObject("{=DAEq21QX}Vote for granting full Peerage to {CLAN}")
                 .SetTextVariable("CLAN", Peer.Name);
 
         public override TextObject GetChosenOutcomeText(DecisionOutcome chosenOutcome, SupportStatus supportStatus, bool isShortVersion = false)
@@ -144,17 +144,17 @@ namespace BannerKings.Managers.Kingdoms.Peerage
             var outcome = chosenOutcome as PeerageKingdomDecisionOutcome;
             if (outcome.Approve)
             {
-                return new TextObject("{=!}The Peers of the realm have approved {CLAN} as a new full Peer")
+                return new TextObject("{=O2Wi49eq}The Peers of the realm have approved {CLAN} as a new full Peer")
                     .SetTextVariable("CLAN", Peer.Name);
             }
             else
             {
-                return new TextObject("{=!}The Peers of the realm have denied {CLAN} as a new full Peer")
+                return new TextObject("{=VOmEWvW5}The Peers of the realm have denied {CLAN} as a new full Peer")
                     .SetTextVariable("CLAN", Peer.Name);
             }
         }
 
-        public override TextObject GetGeneralTitle() => new TextObject("{=!}Full Peerage");
+        public override TextObject GetGeneralTitle() => new TextObject("{=9OhMK2Wk}Full Peerage");
 
         public override int GetProposalInfluenceCost() => 250;
 
@@ -164,12 +164,12 @@ namespace BannerKings.Managers.Kingdoms.Peerage
             return possibleOutcomes.First();
         }
 
-        public override TextObject GetSecondaryEffects() => new TextObject("{=!}All supporters gains some relation with each other.", null);
+        public override TextObject GetSecondaryEffects() => new TextObject("{=bdTS2dAa}All supporters gains some relation with each other.", null);
 
-        public override TextObject GetSupportDescription() => new TextObject("{=!}The peers of the realm will decide on granting Peerage to {CLAN}.")
+        public override TextObject GetSupportDescription() => new TextObject("{=6oqeHqiZ}The peers of the realm will decide on granting Peerage to {CLAN}.")
             .SetTextVariable("CLAN", Peer.Name);
 
-        public override TextObject GetSupportTitle() => new TextObject("{=!}Vote on granting Peerage to {CLAN}")
+        public override TextObject GetSupportTitle() => new TextObject("{=HiXMs6fF}Vote on granting Peerage to {CLAN}")
             .SetTextVariable("CLAN", Peer.Name);
 
         public override bool IsAllowed() => !Peer.IsUnderMercenaryService;
@@ -187,18 +187,18 @@ namespace BannerKings.Managers.Kingdoms.Peerage
             [SaveableProperty(201)] public bool Approve { get; set; }
 
 
-            public override TextObject GetDecisionTitle() => new TextObject("{=!}{CLAN} Peerage")
+            public override TextObject GetDecisionTitle() => new TextObject("{=V8eQC16w}{CLAN} Peerage")
                 .SetTextVariable("CLAN", Peer.Name);
 
             public override TextObject GetDecisionDescription()
             {
                 if (Approve)
                 {
-                    return new TextObject("{=!}We support the grant of Peerage to {CLAN}")
+                    return new TextObject("{=9bbE5rCe}We support the grant of Peerage to {CLAN}")
                         .SetTextVariable("CLAN", Peer.Name);
                 }
 
-                return new TextObject("{=!}We oppose the grant of Peerage to {CLAN}")
+                return new TextObject("{=LaXVFt4S}We oppose the grant of Peerage to {CLAN}")
                      .SetTextVariable("CLAN", Peer.Name);
             }
 

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using BannerKings.Managers.Education.Books;
 using BannerKings.Managers.Education.Languages;
 using BannerKings.Managers.Education.Lifestyles;
@@ -260,7 +260,7 @@ namespace BannerKings.Managers.Education
                 {
                     InformationManager.DisplayMessage(
                         new InformationMessage(
-                        new TextObject("{=!}{HERO} has stopped learning {LANGUAGE}. The instructor {INSTRUCTOR} is unavailable or dead.")
+                        new TextObject("{=EP03brzX}{HERO} has stopped learning {LANGUAGE}. The instructor {INSTRUCTOR} is unavailable or dead.")
                         .SetTextVariable("HERO", hero.Name)
                         .SetTextVariable("LANGUAGE", CurrentLanguage.Name)
                         .SetTextVariable("INSTRUCTOR", LanguageInstructor.Name)

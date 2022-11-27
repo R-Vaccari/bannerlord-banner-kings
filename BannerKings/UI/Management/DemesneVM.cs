@@ -50,13 +50,13 @@ namespace BannerKings.UI.Management
         }
 
         [DataSourceProperty]
-        public string WorkforcePolicyText => new TextObject("{=!}Workforce policy").ToString();
+        public string WorkforcePolicyText => new TextObject("Workforce policy").ToString();
 
         [DataSourceProperty]
-        public string TerrainText => new TextObject("{=!}Terrain").ToString();
+        public string TerrainText => new TextObject("{=BZacZ2Cj}Terrain").ToString();
 
         [DataSourceProperty]
-        public string MiningText => new TextObject("{=!}Mining").ToString();
+        public string MiningText => new TextObject("{=LObjpLQY}Mining").ToString();
 
         [DataSourceProperty]
         public SelectorVM<BKItemVM> WorkforceSelector
@@ -267,7 +267,7 @@ namespace BannerKings.UI.Management
 
             LandInfo.Add(new InformationElement(new TextObject("{=FT5kL9k5}Acreage:").ToString(), landData.Acreage + " acres",
                 new TextObject("{=thVdn5fm}Current quantity of usable acres in this region").ToString()));
-            LandInfo.Add(new InformationElement(new TextObject("{=!}Farmland:").ToString(), landData.Farmland + " acres",
+            LandInfo.Add(new InformationElement(new TextObject("{=56YOTTBC}Farmland:").ToString(), landData.Farmland + " acres",
                 new TextObject("{=ABrCGWep}Acres in this region used as farmland, the main source of food in most places")
                     .ToString()));
             LandInfo.Add(new InformationElement(new TextObject("{=RsRkc9dF}Pastureland:").ToString(), landData.Pastureland + " acres",
@@ -290,9 +290,9 @@ namespace BannerKings.UI.Management
 
             if (data.MineralData != null)
             {
-                MineralInfo.Add(new InformationElement(new TextObject("{=!}Mineral Richness:").ToString(),
+                MineralInfo.Add(new InformationElement(new TextObject("{=iEGG5vQ9}Mineral Richness:").ToString(),
                     GameTexts.FindText("str_bk_mineral_richness", data.MineralData.Richness.ToString().ToLower()).ToString(),
-                    new TextObject("{=!}How rich and accessible the land is for mineral extraction. Adequate land will yield returns but at reduced rate. Poor land is hardly worth the exploration effort. Rich lands may be quite profitable.").ToString()));
+                    new TextObject("{=Koax8hLJ}How rich and accessible the land is for mineral extraction. Adequate land will yield returns but at reduced rate. Poor land is hardly worth the exploration effort. Rich lands may be quite profitable.").ToString()));
 
                 foreach (var item in data.MineralData.Compositions)
                 {

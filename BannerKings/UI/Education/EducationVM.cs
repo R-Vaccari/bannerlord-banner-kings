@@ -49,7 +49,7 @@ namespace BannerKings.UI.Education
 
         [DataSourceProperty] public bool ChangeBookPossible => hero.PartyBelongedTo != null;
 
-        [DataSourceProperty] public string EducationText => new TextObject("{=!}Education of {HERO}")
+        [DataSourceProperty] public string EducationText => new TextObject("{=0KjrcEam}Education of {HERO}")
                 .SetTextVariable("HERO", hero.Name).ToString();
         [DataSourceProperty] public string LanguagesText => new TextObject("{=KBsVXEtH}Languages").ToString();
 
@@ -249,7 +249,7 @@ namespace BannerKings.UI.Education
                 }
             }
 
-            BookSellers = new InformationElement(new TextObject("{=!}Book Sellers").ToString(), string.Empty, sb.ToString());
+            BookSellers = new InformationElement(new TextObject("{=rLnPvsJk}Book Sellers").ToString(), string.Empty, sb.ToString());
 
 
             if (data.Books.Count == 0)
@@ -360,7 +360,7 @@ namespace BannerKings.UI.Education
                         .ToString()));
                 LifestyleProgressInfo.Add(new InformationElement(new TextObject("{=yavEq3mq}Invested focus:").ToString(),
                     data.Lifestyle.InvestedFocus.ToString(),
-                    new TextObject("{=!}The amount of focus points you have invested. Each focus correlates to one perk gained.").ToString()));
+                    new TextObject("{=J6vdpLhZ}The amount of focus points you have invested. Each focus correlates to one perk gained.").ToString()));
                 LifestyleProgressInfo.Add(new InformationElement(new TextObject("{=4gCw08Kk}Progress:").ToString(),
                     FormatValue(data.LifestyleProgress),
                     new TextObject("{=78jQbY8E}Current progress in this stage. Once progress hits 100% and you have the necessary skill threshold, you can invest your next focus point in exchange for the next lifestyle perk.")
@@ -532,7 +532,7 @@ namespace BannerKings.UI.Education
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                 new TextObject("{=sOT08u5v}Choose Lifestyle").ToString(),
-                new TextObject("{=!}Select a lifestyle you would like to adopt. Picking a lifestyle will undo the progress of the lifestyle you are currently learning, if any. Each lifestyle is based on 2 skills, and you need at least 15 profficiency in each skill to adopt it.")
+                new TextObject("{=8vF2rt3F}Select a lifestyle you would like to adopt. Picking a lifestyle will undo the progress of the lifestyle you are currently learning, if any. Each lifestyle is based on 2 skills, and you need at least 15 profficiency in each skill to adopt it.")
                     .ToString(), elements, true, 1,
                 GameTexts.FindText("str_done").ToString(), string.Empty,
                 delegate(List<InquiryElement> x)

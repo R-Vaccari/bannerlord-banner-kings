@@ -1,4 +1,4 @@
-﻿using BannerKings.Managers.Titles;
+using BannerKings.Managers.Titles;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
@@ -20,17 +20,17 @@ namespace BannerKings.Utils
                 }
                 else if (culture.StringId == "sturgia")
                 {
-                    result = isFemale ? new TextObject("{=S3kc2bhW}Knyaginya"): new TextObject("{=!}Knyaz"); 
+                    result = isFemale ? new TextObject("{=S3kc2bhW}Knyaginya"): new TextObject("{=1XDPfDim}Knyaz"); 
                 }
                 else if (culture.StringId == "battania") 
                 {
-                    result = isFemale ? new TextObject("{=!}Bana-Phrionnsa") : new TextObject("{=!}Prionnsa");
+                    result = isFemale ? new TextObject("{=RYoxePAG}Bana-Phrionnsa") : new TextObject("{=7z7iEwxU}Prionnsa");
                 }
             }
 
             if (result == null)
             {
-                result = isFemale ? new TextObject("{=!}Princess") : new TextObject("{=!}Prince");
+                result = isFemale ? new TextObject("{=e7Nhe2YX}Princess") : new TextObject("{=V219eHY6}Prince");
             }
 
             return result;

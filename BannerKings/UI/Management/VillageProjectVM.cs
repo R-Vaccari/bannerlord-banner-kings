@@ -79,25 +79,25 @@ namespace BannerKings.UI.Management
 
             ConstructionInfo.Clear();
             ProductionInfo.Clear();
-            ConstructionInfo.Add(new InformationElement(new TextObject("{=!}Construction:").ToString(), 
-                new TextObject("{=!}{POINTS} (Daily)")
+            ConstructionInfo.Add(new InformationElement(new TextObject("{=KbTvcQko}Construction:").ToString(), 
+                new TextObject("{=mbUwoU0h}{POINTS} (Daily)")
                     .SetTextVariable("POINTS", villageData.Construction.ToString("0.00")).ToString(),
-                new TextObject("{=!}How much the local population can progress with construction projects, on a daily basis").ToString()));
+                new TextObject("{=pVCiG95C}How much the local population can progress with construction projects, on a daily basis").ToString()));
 
-            ConstructionInfo.Add(new InformationElement(new TextObject("{=!}Current Progress:").ToString(), 
+            ConstructionInfo.Add(new InformationElement(new TextObject("{=fvaNp0we}Current Progress:").ToString(), 
                 villageData.IsCurrentlyBuilding
                     ? FormatValue(villageData.CurrentBuilding.BuildingProgress /
                                   villageData.CurrentBuilding.GetConstructionCost())
-                    : new TextObject("{=!}Daily project (endless)").ToString(),
-                new TextObject("{=!}Amount of completed work in the current project").ToString()));
+                    : new TextObject("{=ZhWtAYrh}Daily project (endless)").ToString(),
+                new TextObject("{=uUQpLvpq}Amount of completed work in the current project").ToString()));
 
-            ConstructionInfo.Add(new InformationElement(new TextObject("{=!}Days to complete:").ToString(), 
+            ConstructionInfo.Add(new InformationElement(new TextObject("{=CT7CW9ZL}Days to complete:").ToString(), 
                 villageData.IsCurrentlyBuilding
                     ? FormatDays((villageData.CurrentBuilding.GetConstructionCost() -
                                   villageData.CurrentBuilding.BuildingProgress) /
                                  villageData.Construction) + " Days"
-                    : new TextObject("{=!}Daily project (endless)").ToString(),
-                new TextObject("{=!}Remaining days for the current project to be built").ToString()));
+                    : new TextObject("{=ZhWtAYrh}Daily project (endless)").ToString(),
+                new TextObject("{=f26MsNsU}Remaining days for the current project to be built").ToString()));
 
             var sb = new StringBuilder();
             foreach (var production in BannerKingsConfig.Instance.PopulationManager.GetProductions(data))
@@ -108,17 +108,17 @@ namespace BannerKings.UI.Management
             sb.Remove(sb.Length - 2, 1);
             var productionString = sb.ToString();
             var productionExplained = villageData.ProductionsExplained;
-            ProductionInfo.Add(new InformationElement(new TextObject("{=!}Goods Production:").ToString(),
-                new TextObject("{=!}{POINTS} (Daily)")
+            ProductionInfo.Add(new InformationElement(new TextObject("Goods Production:").ToString(),
+                new TextObject("{=mbUwoU0h}{POINTS} (Daily)")
                 .SetTextVariable("POINTS", productionExplained.ResultNumber.ToString("0.00"))
                 .ToString(),
                 new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
                     .SetTextVariable("TEXT",
-                        new TextObject("{=!}Sum of goods produced on a daily basis, including all the types produced here."))
+                        new TextObject("{=g480uUyC}Sum of goods produced on a daily basis, including all the types produced here."))
                     .SetTextVariable("EXPLANATIONS", productionExplained.GetExplanations())
                     .ToString()));
 
-            ProductionInfo.Add(new InformationElement(new TextObject("{=!}Items Produced:").ToString(), 
+            ProductionInfo.Add(new InformationElement(new TextObject("Items Produced:").ToString(), 
                 productionString,
                 new TextObject("{=0RAPEDaT}Goods locally produced by the population.").ToString()));
         }

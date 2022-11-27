@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -18,7 +18,7 @@ namespace BannerKings.Utils
             }
             catch (NullReferenceException ex)
             {
-                var exception = new BannerKingsException(new TextObject("{=!}Exception in {CLASS} class.")
+                var exception = new BannerKingsException(new TextObject("{=LZTFr8jR}Exception in {CLASS} class.")
                     .SetTextVariable("CLASS", className)
                     .ToString(),
                     ex);
@@ -26,7 +26,7 @@ namespace BannerKings.Utils
                 if (notifty)
                 {
                     InformationManager.DisplayMessage(new InformationMessage(
-                    new TextObject("{=!}A Banner Kings error was detected. Send the contents of {FILE} from BannerKings module to support channel.")
+                    new TextObject("{=3dMr1P4W}A Banner Kings error was detected. Send the contents of {FILE} from BannerKings module to support channel.")
                     .SetTextVariable("FILE", fileName)
                     .ToString()));
                 }

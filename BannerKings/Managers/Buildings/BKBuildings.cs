@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using TaleWorlds.CampaignSystem;
@@ -50,8 +50,8 @@ namespace BannerKings.Managers.Buildings
         {
 
             Mines = Game.Current.ObjectManager.RegisterPresumedObject(new BuildingType("building_town_mines"));
-            Mines.Initialize(new TextObject("{=!}Mines"),
-                new TextObject("{=!}Dig mines for local exploration of mineral resources. Ores will be limited to the local resources available and richness of the ground. Output will be sold to market when possible, or stored in Stash otherwise. Levels increase output of ores."),
+            Mines.Initialize(new TextObject("{=iGYstgoo}Mines"),
+                new TextObject("{=q3PH022A}Dig mines for local exploration of mineral resources. Ores will be limited to the local resources available and richness of the ground. Output will be sold to market when possible, or stored in Stash otherwise. Levels increase output of ores."),
                 new[]
                 {
                     1500,
@@ -65,8 +65,8 @@ namespace BannerKings.Managers.Buildings
                 });
 
             CastleMines = Game.Current.ObjectManager.RegisterPresumedObject(new BuildingType("building_castle_mines"));
-            CastleMines.Initialize(new TextObject("{=!}Mines"),
-                new TextObject("{=!}Dig mines for local exploration of mineral resources. Ores will be limited to the local resources available and richness of the ground. Output will be sold to market when possible, or stored in Stash otherwise. Levels increase output of ores."),
+            CastleMines.Initialize(new TextObject("{=iGYstgoo}Mines"),
+                new TextObject("{=q3PH022A}Dig mines for local exploration of mineral resources. Ores will be limited to the local resources available and richness of the ground. Output will be sold to market when possible, or stored in Stash otherwise. Levels increase output of ores."),
                 new[]
                 {
                     1500,
@@ -95,8 +95,8 @@ namespace BannerKings.Managers.Buildings
                 });
 
             Theater = Game.Current.ObjectManager.RegisterPresumedObject(new BuildingType("bk_building_theater"));
-            Theater.Initialize(new TextObject("{=!}Theater"),
-                new TextObject("{=!}A common place for congregation, the theater serves the purpose of strengthening the culture's presence through it's art and stories. Increases cultural presence of owner's culture."),
+            Theater.Initialize(new TextObject("{=rQmTMDxF}Theater"),
+                new TextObject("{=SrAXS0oM}A common place for congregation, the theater serves the purpose of strengthening the culture's presence through it's art and stories. Increases cultural presence of owner's culture."),
                 new[]
                 {
                     2000,
@@ -110,8 +110,8 @@ namespace BannerKings.Managers.Buildings
                 });
 
             Armory = Game.Current.ObjectManager.RegisterPresumedObject(new BuildingType("bk_building_armory"));
-            Armory.Initialize(new TextObject("{=!}Armory"),
-                new TextObject("{=!}The armory is used to stock and preserve equipment for the town militia. Raises militia quality and provides garrison trainning."),
+            Armory.Initialize(new TextObject("{=sBTMZdyq}Armory"),
+                new TextObject("{=UoZbZaaT}The armory is used to stock and preserve equipment for the town militia. Raises militia quality and provides garrison trainning."),
                 new[]
                 {
                     1500,
@@ -125,8 +125,8 @@ namespace BannerKings.Managers.Buildings
                 });
 
             CourtHouse = Game.Current.ObjectManager.RegisterPresumedObject(new BuildingType("bk_building_courthouse"));
-            CourtHouse.Initialize(new TextObject("{=!}Court House"),
-                new TextObject("{=!}The court house is where townsfolk legally settle their disputes. Conflicts such as property disputes or insults are dealt with by local administration. Increases stability."),
+            CourtHouse.Initialize(new TextObject("{=4CTz9MRe}Court House"),
+                new TextObject("{=USZBgRW0}The court house is where townsfolk legally settle their disputes. Conflicts such as property disputes or insults are dealt with by local administration. Increases stability."),
                 new[]
                 {
                     2000,
@@ -139,8 +139,8 @@ namespace BannerKings.Managers.Buildings
                 });
 
             WarhorseStuds = Game.Current.ObjectManager.RegisterPresumedObject(new BuildingType("bk_building_castle_studs"));
-            WarhorseStuds.Initialize(new TextObject("{=!}Warhorse Studs"),
-                new TextObject("{=!}Warhorse studs allow the raising of warhorses in the castle demesne. Horses will be added to the Stash. Their limit is based on local pastureland and studs level."),
+            WarhorseStuds.Initialize(new TextObject("{=PCayirkO}Warhorse Studs"),
+                new TextObject("{=b58ioVr2}Warhorse studs allow the raising of warhorses in the castle demesne. Horses will be added to the Stash. Their limit is based on local pastureland and studs level."),
                 new[]
                 {
                     1000,
@@ -154,8 +154,8 @@ namespace BannerKings.Managers.Buildings
 
 
             DailyAssimilation = Game.Current.ObjectManager.RegisterPresumedObject(new BuildingType("bk_building_daily_assimilation"));
-            DailyAssimilation.Initialize(new TextObject("{=!}Cultural Assimilation"),
-                new TextObject("{=!}Focus efforts on assimilating local pouplace to your culture. Increases Cultural Presence."),
+            DailyAssimilation.Initialize(new TextObject("Cultural Assimilation"),
+                new TextObject("{=QrcPgzMf}Focus efforts on assimilating local pouplace to your culture. Increases Cultural Presence."),
                 new int[3],
                 BuildingLocation.Daily,
                 new Tuple<BuildingEffectEnum, float, float, float>[]

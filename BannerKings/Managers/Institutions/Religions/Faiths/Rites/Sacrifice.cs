@@ -97,7 +97,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
 
         public override TextObject GetDescription()
         {
-            return new TextObject("{=!}Sacrifice a worthy enemy hero to prove your devotion.");
+            return new TextObject("{=87WtQvgP}Sacrifice a worthy enemy hero to prove your devotion.");
         }
 
         public override TextObject GetName()
@@ -143,7 +143,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
 
         public override TextObject GetRequirementsText(Hero hero)
         {
-            return new TextObject("{=!}May be performed every {YEARS} years\nRequires a lord from an enemy faction")
+            return new TextObject("{=qBDbqpf3}May be performed every {YEARS} years\nRequires a lord from an enemy faction")
                 .SetTextVariable("YEARS", GetTimeInterval(hero));
         }
     }

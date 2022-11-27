@@ -48,7 +48,7 @@ namespace BannerKings.UI.Extensions
         [DataSourceProperty] public string InheritanceText => new TextObject("{=aELuNrRC}Inheritance").ToString();
 
         [DataSourceProperty]
-        public string HeirText => new TextObject("{=!}Heir").ToString();
+        public string HeirText => new TextObject("{=vArnerHC}Heir").ToString();
 
 
 
@@ -267,7 +267,7 @@ namespace BannerKings.UI.Extensions
 
                 if (council.Peerage != null)
                 {
-                    clanPageVM.ClanInfo.Add(new StringPairItemVM(new TextObject("{=!}Peerage:").ToString(),
+                    clanPageVM.ClanInfo.Add(new StringPairItemVM(new TextObject("{=89Wxt2hs}Peerage:").ToString(),
                         council.Peerage.Name.ToString(), new BasicTooltipViewModel(() => council.Peerage.GetRights().ToString())));
                 }
 

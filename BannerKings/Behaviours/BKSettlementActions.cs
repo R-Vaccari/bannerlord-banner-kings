@@ -265,7 +265,7 @@ namespace BannerKings.Behaviours
                 MenuTitlesCondition,
                 MenuTitlesConsequence);
 
-            campaignGameStarter.AddGameMenuOption("bannerkings", "manage_demesne", "{=!}Estates",
+            campaignGameStarter.AddGameMenuOption("bannerkings", "manage_demesne", "Estates",
                 MenuEstatesManageCondition,
                 MenuEstatesManageConsequence);
 

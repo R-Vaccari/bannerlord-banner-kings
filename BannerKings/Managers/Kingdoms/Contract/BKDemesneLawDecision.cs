@@ -125,28 +125,28 @@ namespace BannerKings.Managers.Kingdoms.Contract
             bool isShortVersion = false)
         {
             var law = (chosenOutcome as DemesneLawDecisionOutcome).Law;
-            return new TextObject("{=!}The peers of {TITLE} have decided on the {LAW} law.")
+            return new TextObject("{=17qaS6xu}The peers of {TITLE} have decided on the {LAW} law.")
                 .SetTextVariable("TITLE", Title.FullName)
                 .SetTextVariable("LAW", law.Name);
         }
 
-        public override TextObject GetGeneralTitle() => new TextObject("{=!}Demesne Law");
+        public override TextObject GetGeneralTitle() => new TextObject("{=p3VirLQH}Demesne Law");
 
         public override int GetProposalInfluenceCost() => ProposedLaw.InfluenceCost;
 
         public override DecisionOutcome GetQueriedDecisionOutcome(List<DecisionOutcome> possibleOutcomes) => 
             (from k in possibleOutcomes orderby k.Merit descending select k).ToList().FirstOrDefault();
 
-        public override TextObject GetSecondaryEffects() => new TextObject("{=!}All supporters gains some relation with each other.", null);
+        public override TextObject GetSecondaryEffects() => new TextObject("{=bdTS2dAa}All supporters gains some relation with each other.", null);
 
-        public override TextObject GetSupportDescription() => new TextObject("{=!}The peers of {TITLE} will decide the next {LAW} demesne law. You may pick your stance.")
+        public override TextObject GetSupportDescription() => new TextObject("{=mn9edsZr}The peers of {TITLE} will decide the next {LAW} demesne law. You may pick your stance.")
             .SetTextVariable("TITLE", Title.FullName)
             .SetTextVariable("LAW", GameTexts.FindText("str_bk_demesne_law", CurrentLaw.LawType.ToString()));
 
-        public override TextObject GetChooseTitle() => new TextObject("{=!}Vote for the next {LAW} demesne law")
+        public override TextObject GetChooseTitle() => new TextObject("{=c7niULaT}Vote for the next {LAW} demesne law")
             .SetTextVariable("LAW", GameTexts.FindText("str_bk_demesne_law", CurrentLaw.LawType.ToString()));
 
-        public override TextObject GetSupportTitle() => new TextObject("{=!}Vote for the next {LAW} demesne law")
+        public override TextObject GetSupportTitle() => new TextObject("{=c7niULaT}Vote for the next {LAW} demesne law")
             .SetTextVariable("LAW", GameTexts.FindText("str_bk_demesne_law", CurrentLaw.LawType.ToString()));
 
         public override bool IsAllowed() => Title.contract != null && !ProposedLaw.Equals(CurrentLaw);
@@ -169,11 +169,11 @@ namespace BannerKings.Managers.Kingdoms.Contract
             {
                 if (Current)
                 {
-                    return new TextObject("{=!}We support the continuation of the demesne law {LAW}")
+                    return new TextObject("{=OMkKKOYG}We support the continuation of the demesne law {LAW}")
                         .SetTextVariable("LAW", Law.Name);
                 }
 
-                return new TextObject("{=!}We support the enactment of the demesne law {LAW}")
+                return new TextObject("{=H5yaNxnY}We support the enactment of the demesne law {LAW}")
                     .SetTextVariable("LAW", Law.Name);
             }
             

@@ -1,4 +1,4 @@
-﻿using BannerKings.Behaviours.Marriage;
+using BannerKings.Behaviours.Marriage;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
@@ -167,25 +167,25 @@ namespace BannerKings.Behaviours.Feasts
             GainRenownAction.Apply(Host, 15 * satisfaction);
             if (Host.MapFaction == Hero.MainHero.MapFaction)
             {
-                MBInformationManager.AddQuickInformation(new TextObject("{=!}The feast at {TOWN} has ended! {REASON}")
+                MBInformationManager.AddQuickInformation(new TextObject("{=W7RqGAhs}The feast at {TOWN} has ended! {REASON}")
                     .SetTextVariable("TOWN", Town.Name)
                     .SetTextVariable("REASON", reason));
 
                 TextObject text;
                 if (satisfaction >= 0.8f)
                 {
-                    text = new TextObject("{=!}The feast was a success! The guests praised {COMPLIMENT}.")
+                    text = new TextObject("{=e83AjuGY}The feast was a success! The guests praised {COMPLIMENT}.")
                         .SetTextVariable("COMPLIMENT", goodComments.GetRandomElement());
                 }
                 else if (satisfaction >= 0.3f && satisfaction < 0.8f)
                 {
-                    text = new TextObject("{=!}The feast was acceptable. The guests compliment that {COMPLIMENT}, but complain that {COMPLAINT}.")
+                    text = new TextObject("{=9QbnYBn0}The feast was acceptable. The guests compliment that {COMPLIMENT}, but complain that {COMPLAINT}.")
                         .SetTextVariable("COMPLIMENT", goodComments.GetRandomElement())
                         .SetTextVariable("COMPLAINT", badComments.GetRandomElement());
                 }
                 else
                 {
-                    text = new TextObject("{=!}The feast was a failure... The guests complain that {COMPLAINT}.")
+                    text = new TextObject("{=bAgf4mvT}The feast was a failure... The guests complain that {COMPLAINT}.")
                         .SetTextVariable("COMPLAINT", badComments.GetRandomElement());
                 }
 
@@ -198,47 +198,47 @@ namespace BannerKings.Behaviours.Feasts
             var list = new List<TextObject>();
             if (FoodQuantity >= 0.8f)
             {
-                list.Add(new TextObject("{=!}the food quantity was plentiful"));
+                list.Add(new TextObject("{=amLhmtQV}the food quantity was plentiful"));
             }
             else if (FoodQuantity >= 0.5f)
             {
-                list.Add(new TextObject("{=!}the food quantity was adequate"));
+                list.Add(new TextObject("{=UJefPYWS}the food quantity was adequate"));
             }
 
             if (FoodQuality >= 0.8f)
             {
-                list.Add(new TextObject("{=!}the food quality was exceptional"));
+                list.Add(new TextObject("{=cdMTu4OV}the food quality was exceptional"));
             }
             else if (FoodQuality >= 0.5f)
             {
-                list.Add(new TextObject("{=!}the food was tasteful"));
+                list.Add(new TextObject("{=VbPGdCx3}the food was tasteful"));
             }
 
             if (FoodVariety >= 0.8f)
             {
-                list.Add(new TextObject("{=!}the food selection was bountiful"));
+                list.Add(new TextObject("{=Ojj8ijxR}the food selection was bountiful"));
             }
             else if (FoodVariety >= 0.5f)
             {
-                list.Add(new TextObject("{=!}the food selection was sufficient"));
+                list.Add(new TextObject("{=9FSPgGmD}the food selection was sufficient"));
             }
 
             if (Alcohol >= 0.8f)
             {
-                list.Add(new TextObject("{=!}there was alcohol enough to drown in"));
+                list.Add(new TextObject("{=pOCbabjg}there was alcohol enough to drown in"));
             }
             else if (Alcohol >= 0.5f)
             {
-                list.Add(new TextObject("{=!}the alcohol was adequate"));
+                list.Add(new TextObject("{=XzMKdK1S}the alcohol was adequate"));
             }
 
             if (HostPresence >= 0.8f)
             {
-                list.Add(new TextObject("{=!}the host was present at all times"));
+                list.Add(new TextObject("{=VmRpyXt3}the host was present at all times"));
             }
             else if (HostPresence >= 0.5f)
             {
-                list.Add(new TextObject("{=!}the host was mostly present"));
+                list.Add(new TextObject("{=q5Ton9zO}the host was mostly present"));
             }
 
             return list;
@@ -250,47 +250,47 @@ namespace BannerKings.Behaviours.Feasts
 
             if (FoodQuantity < 0.3f)
             {
-                list.Add(new TextObject("{=!}the food was barely enough"));
+                list.Add(new TextObject("{=0McQAWdx}the food was barely enough"));
             }
             else if (FoodQuantity < 0.5f)
             {
-                list.Add(new TextObject("{=!}there wasn't enough food for a peasants convention, much less a feast"));
+                list.Add(new TextObject("{=ADmtXnxz}there wasn't enough food for a peasants convention, much less a feast"));
             }
 
             if (FoodQuality < 0.3f)
             {
-                list.Add(new TextObject("{=!}the food quality was debatable"));
+                list.Add(new TextObject("{=P935z6PR}the food quality was debatable"));
             }
             else if (FoodQuality < 0.5f)
             {
-                list.Add(new TextObject("{=!}the food was vomit-inducing"));
+                list.Add(new TextObject("{=fJvfH54Y}the food was vomit-inducing"));
             }
 
             if (FoodVariety < 0.3f)
             {
-                list.Add(new TextObject("{=!}the food selection was unsatisfactory"));
+                list.Add(new TextObject("{=A8USsmS9}the food selection was unsatisfactory"));
             }
             else if (FoodVariety < 0.5f)
             {
-                list.Add(new TextObject("{=!}the food selection was miserable"));
+                list.Add(new TextObject("{=Jeouw9gC}the food selection was miserable"));
             }
 
             if (Alcohol < 0.3f)
             {
-                list.Add(new TextObject("{=!}there was not enough alcohol to get drunk"));
+                list.Add(new TextObject("{=HeZnF3Y3}there was not enough alcohol to get drunk"));
             }
             else if (Alcohol < 0.5f)
             {
-                list.Add(new TextObject("{=!}the alcohol was barely enough for a teenager maiden to get drunk"));
+                list.Add(new TextObject("{=6Lv1k7pE}the alcohol was barely enough for a teenager maiden to get drunk"));
             }
 
             if (HostPresence < 0.3f)
             {
-                list.Add(new TextObject("{=!}the host was leaving regularly"));
+                list.Add(new TextObject("{=KOtYTfHn}the host was leaving regularly"));
             }
             else if (HostPresence < 0.5f)
             {
-                list.Add(new TextObject("{=!}the host threw a feast and yet was nowhere to be seen"));
+                list.Add(new TextObject("{=s3xVTfef}the host threw a feast and yet was nowhere to be seen"));
             }
 
             return list;

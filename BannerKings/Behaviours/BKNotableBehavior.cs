@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using BannerKings.Settings;
@@ -196,25 +196,25 @@ namespace BannerKings.Behaviours
         {
 
             starter.AddPlayerLine("bk_question_give_slaves", "hero_main_options", "bk_answer_give_slaves",
-                "{=!}I would like to offer you slaves.",
+                "{=dyHi9YdS}I would like to offer you slaves.",
                 IsPlayerNotable,
                 delegate { UIHelper.ShowSlaveDonationScreen(Hero.OneToOneConversationHero); });
 
             starter.AddDialogLine("bk_answer_give_slaves", "bk_answer_give_slaves", "hero_main_options",
-                "{=!}My suzerain, I would be honored. Extra workforce will benefit our community.",
+                "{=4Ko88Jj8}My suzerain, I would be honored. Extra workforce will benefit our community.",
                  null, null);
 
 
 
             starter.AddPlayerLine("bk_question_convert_culture", "hero_main_options", "bk_answer_convert_culture",
-                "{=!}{NOTABLE_CONVERT_CULTURE}",
+                "{=HwgaJXYr}{NOTABLE_CONVERT_CULTURE}",
                 ConvertCultureOnCondition, 
                 null,
                 100,
                 CultureConversionOnClickable);
 
             starter.AddDialogLine("bk_answer_convert_culture", "bk_answer_convert_culture", "bk_convert_culture_confirm",
-                "{=!}{NOTABLE_ANSWER_CONVERT_CULTURE}",
+                "{=mXHxPGBm}{NOTABLE_ANSWER_CONVERT_CULTURE}",
                 ConvertCultureAnswerOnCondition, null);
 
             starter.AddPlayerLine("bk_convert_culture_confirm", "bk_convert_culture_confirm", "hero_main_options",
@@ -230,14 +230,14 @@ namespace BannerKings.Behaviours
 
 
             starter.AddPlayerLine("bk_question_convert_faith", "hero_main_options", "bk_answer_convert_faith",
-                "{=!}{NOTABLE_CONVERT_FAITH}",
+                "{=McbnY4Su}{NOTABLE_CONVERT_FAITH}",
                 ConvertFaithOnCondition,
                 null,
                 100,
                 FaithConversionOnClickable);
 
             starter.AddDialogLine("bk_answer_convert_faith", "bk_answer_convert_faith", "bk_convert_faith_confirm",
-                "{=!}{NOTABLE_ANSWER_CONVERT_FAITH}",
+                "{=oz24YvZG}{NOTABLE_ANSWER_CONVERT_FAITH}",
                 FaithConvertAnswerOnCondition, null);
 
             starter.AddPlayerLine("bk_convert_faith_confirm", "bk_convert_faith_confirm", "hero_main_options",
@@ -258,7 +258,7 @@ namespace BannerKings.Behaviours
             ChangeRelationAction.ApplyRelationChangeBetweenHeroes(notable, converter, -8);
             if (converter == Hero.MainHero)
             {
-                NotificationsHelper.AddQuickNotificationWithSound(new TextObject("{=!}{HERO} has assumed the {CULTURE} culture.")
+                NotificationsHelper.AddQuickNotificationWithSound(new TextObject("{=RBQS6wgF}{HERO} has assumed the {CULTURE} culture.")
                     .SetTextVariable("HERO", notable.Name)
                     .SetTextVariable("CULTURE", converter.Culture.Name));
             }
@@ -282,12 +282,12 @@ namespace BannerKings.Behaviours
 
             if (Hero.OneToOneConversationHero.IsEnemy(Hero.MainHero))
             {
-                hintText = new TextObject("{=!}{HERO} does not like you enough. Gain their trust first.")
+                hintText = new TextObject("{=ab6nQqCy}{HERO} does not like you enough. Gain their trust first.")
                     .SetTextVariable("HERO", Hero.OneToOneConversationHero.Name);
                 return false;
             }
 
-            hintText = new TextObject("{=!}Conversion is possible.");
+            hintText = new TextObject("{=JBxgr7jN}Conversion is possible.");
             return true;
         }
 
@@ -326,7 +326,7 @@ namespace BannerKings.Behaviours
             ChangeRelationAction.ApplyRelationChangeBetweenHeroes(notable, converter, -8);
             if (converter == Hero.MainHero)
             {
-                NotificationsHelper.AddQuickNotificationWithSound(new TextObject("{=!}{HERO} has converted to the {FAITH} faith.")
+                NotificationsHelper.AddQuickNotificationWithSound(new TextObject("{HERO} has converted to the {FAITH} faith.")
                     .SetTextVariable("HERO", notable.Name)
                     .SetTextVariable("FAITH", rel.Faith.GetFaithName()));
             }
@@ -358,24 +358,24 @@ namespace BannerKings.Behaviours
             var piety = BannerKingsConfig.Instance.ReligionModel.GetConversionPietyCost(Hero.OneToOneConversationHero, Hero.MainHero).ResultNumber;
             if (BannerKingsConfig.Instance.ReligionsManager.GetPiety(Hero.MainHero) < piety)
             {
-                hintText = new TextObject("{=!}Not enough piety.");
+                hintText = new TextObject("{=dxwTedS0}Not enough piety.");
                 return false;
             }
 
             if (Hero.OneToOneConversationHero.IsEnemy(Hero.MainHero))
             {
-                hintText = new TextObject("{=!}{HERO} does not like you enough. Gain their trust first.")
+                hintText = new TextObject("{=ab6nQqCy}{HERO} does not like you enough. Gain their trust first.")
                     .SetTextVariable("HERO", Hero.OneToOneConversationHero.Name);
                 return false;
             }
 
             if (Hero.OneToOneConversationHero.IsPreacher)
             {
-                hintText = new TextObject("{=!}Not possible to convert preachers.");
+                hintText = new TextObject("{=7BfN1tqa}Not possible to convert preachers.");
                 return false;
             }
 
-            hintText = new TextObject("{=!}Conversion is possible.");
+            hintText = new TextObject("{=JBxgr7jN}Conversion is possible.");
             return true;
         }
 

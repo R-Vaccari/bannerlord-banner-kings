@@ -1,4 +1,4 @@
-﻿using BannerKings.Behaviours.Marriage;
+using BannerKings.Behaviours.Marriage;
 using BannerKings.UI.Items;
 using BannerKings.Utils.Extensions;
 using System.Collections.Generic;
@@ -30,7 +30,7 @@ namespace BannerKings.UI.Marriages
             ProposedCandidates = new MBBindingList<Hero>();
 
             InvertedClanToggle = new DecisionElement()
-                .SetAsBooleanOption(new TextObject("{=!}Invert Clan").ToString(),
+                .SetAsBooleanOption(new TextObject("{=HiTo8SPQ}Invert Clan").ToString(),
                 false,
                 delegate (bool value)
                 {
@@ -40,10 +40,10 @@ namespace BannerKings.UI.Marriages
                         RefreshValues();
                     }
                 },
-                new TextObject("{=!}Invert the expected result for final clan. The clan whose member leaves it is owed the Dowry by the other family. Therefore, if your family member is leaving your clan, you are owed the Dowry. Spouses are less likely to leave their clans if they are it's leader or it's primary expected inheritor."));
+                new TextObject("{=oezwtR1u}Invert the expected result for final clan. The clan whose member leaves it is owed the Dowry by the other family. Therefore, if your family member is leaving your clan, you are owed the Dowry. Spouses are less likely to leave their clans if they are it's leader or it's primary expected inheritor."));
 
             ArrangedMarriageToggle = new DecisionElement()
-                .SetAsBooleanOption(new TextObject("{=!}Arranged Marriage").ToString(),
+                .SetAsBooleanOption(new TextObject("{=GuLW3uHZ}Arranged Marriage").ToString(),
                 false,
                 delegate (bool value)
                 {
@@ -53,28 +53,28 @@ namespace BannerKings.UI.Marriages
                         RefreshValues();
                     }
                 }, 
-                new TextObject("{=!}Arrange the marriage without consulting the spouses. While their personal relations are still considered, the to-be-spouses have no power to dictate the marriage result. If you are one of the spouses, this means no Courting phase - the marriage is sealed off right away."));
+                new TextObject("{=HMOHcfzh}Arrange the marriage without consulting the spouses. While their personal relations are still considered, the to-be-spouses have no power to dictate the marriage result. If you are one of the spouses, this means no Courting phase - the marriage is sealed off right away."));
 
 
             AllianceToggle = new DecisionElement()
-                .SetAsBooleanOption(new TextObject("{=!}Alliance Pact").ToString(),
+                .SetAsBooleanOption(new TextObject("{=n6gncAsu}Alliance Pact").ToString(),
                 false,
                 delegate (bool value)
                 {
                     alliance = value;
                     RefreshValues();
                 },
-                new TextObject("{=!}Join both houses in alliance. By doing so, both houses are bound to not enter in conflict with each other when it comes to internal matters of the kingdom. Instead, if they are the leading houses of separate kingdoms, it would prevent a war between both realms. Subject houses may still fight each other if their sovereigns declare war."));
+                new TextObject("{=DrZ2KnbO}Join both houses in alliance. By doing so, both houses are bound to not enter in conflict with each other when it comes to internal matters of the kingdom. Instead, if they are the leading houses of separate kingdoms, it would prevent a war between both realms. Subject houses may still fight each other if their sovereigns declare war."));
 
             FeastToggle = new DecisionElement()
-                .SetAsBooleanOption(new TextObject("{=!}Feast Celebration").ToString(),
+                .SetAsBooleanOption(new TextObject("{=BNF7CWaY}Feast Celebration").ToString(),
                 false,
                 delegate (bool value)
                 {
                     feast = value;
                     RefreshValues();
                 },
-                new TextObject("{=!}Arrange a feast to celebrate the marriage. A selection of families within the realm will be invited, and as a host you ought to provide them a quality celebration. Doing so will allow you to improve your standing with them, as well as bring your family renown."));
+                new TextObject("{=a3fxEHyJ}Arrange a feast to celebrate the marriage. A selection of families within the realm will be invited, and as a host you ought to provide them a quality celebration. Doing so will allow you to improve your standing with them, as well as bring your family renown."));
 
             RefreshValues();
         }
@@ -130,7 +130,7 @@ namespace BannerKings.UI.Marriages
             {
                 var score = BannerKingsConfig.Instance.MarriageModel.GetSpouseScore(ProposerHero.Hero, true);
                 ProposerSpouseValueText = score.ResultNumber.ToString("0");
-                ProposerSpouseHint.HintText = new TextObject("{=!}Spouse value.\n\n{HINT}")
+                ProposerSpouseHint.HintText = new TextObject("{=qSKxuPRF}Spouse value.\n\n{HINT}")
                     .SetTextVariable("HINT", score.GetExplanations());
 
                 if (ProposerHero.Hero != Hero.MainHero)
@@ -146,7 +146,7 @@ namespace BannerKings.UI.Marriages
             {
                 var score = BannerKingsConfig.Instance.MarriageModel.GetSpouseScore(ProposedHero.Hero, true);
                 ProposedSpouseValueText = score.ResultNumber.ToString("0");
-                ProposedSpouseHint.HintText = new TextObject("{=!}Spouse value.\n\n{HINT}")
+                ProposedSpouseHint.HintText = new TextObject("{=qSKxuPRF}Spouse value.\n\n{HINT}")
                     .SetTextVariable("HINT", score.GetExplanations());
             }
 
@@ -156,8 +156,8 @@ namespace BannerKings.UI.Marriages
             InfluenceCostText = "0";
             InfluenceCostHint = new HintViewModel();
             DowryValueHint = new HintViewModel();
-            FinalClanText = new TextObject("{=!}Unclear").ToString();
-            WillAcceptText = new TextObject("{=!}Unclear").ToString();
+            FinalClanText = new TextObject("{=CaSNVQQf}Unclear").ToString();
+            WillAcceptText = new TextObject("{=CaSNVQQf}Unclear").ToString();
             WillAcceptHint = new HintViewModel();
             if (ProposerHero != null && ProposedHero != null)
             {
@@ -170,7 +170,7 @@ namespace BannerKings.UI.Marriages
                var willAccept = BannerKingsConfig.Instance.MarriageModel.IsMarriageAdequate(ProposerHero.Hero,
                     ProposedHero.Hero, true);
                 WillAcceptText = GameTexts.FindText(willAccept.ResultNumber >= 1f ? "str_yes" : "str_no").ToString();
-                WillAcceptHint.HintText = new TextObject("{=!}Whether or not their clan will accept this proposal. This is mainly dicatated by the different of value between the spouses, but also influence by their relationship with each other and the clan's trust towards you, as well as other kingdom-related matters, such as matching cultures and faiths.\n\n{REASON}")
+                WillAcceptHint.HintText = new TextObject("{=u9GPa1eQ}Whether or not their clan will accept this proposal. This is mainly dicatated by the different of value between the spouses, but also influence by their relationship with each other and the clan's trust towards you, as well as other kingdom-related matters, such as matching cultures and faiths.\n\n{REASON}")
                     .SetTextVariable("REASON", willAccept.GetExplanations());
 
                 Clan finalClan = GetFinalClan();
@@ -178,12 +178,12 @@ namespace BannerKings.UI.Marriages
 
                 var influence = BannerKingsConfig.Instance.MarriageModel.GetInfluenceCost(ProposedHero.Hero, true);
                 InfluenceCostText = ((int)influence.ResultNumber).ToString();
-                InfluenceCostHint.HintText = new TextObject("{=!}The influence cost associated with this marriage. Influence is associated with the social standing of the other clan. A clan of high standing, such as those leading kingdoms, are valuable marriage targets both within and outside their factions. Thus, the more important a clan is, the more influence is associated with marrying them.\n\n{HINT}")
+                InfluenceCostHint.HintText = new TextObject("{=gJMje5q5}The influence cost associated with this marriage. Influence is associated with the social standing of the other clan. A clan of high standing, such as those leading kingdoms, are valuable marriage targets both within and outside their factions. Thus, the more important a clan is, the more influence is associated with marrying them.\n\n{HINT}")
                     .SetTextVariable("HINT", influence.GetExplanations());
 
                 var dowry = BannerKingsConfig.Instance.MarriageModel.GetDowryValue(GetDowryHero(), ArrangedMarriage, true);
                 DowryValueText = ((int)dowry.ResultNumber).ToString();
-                DowryValueHint.HintText = new TextObject("{=!}The dowry is the financial security provided by the clan that takes in a new family member. It serves to show good will and genuine interest in the marriage by requiring a significant investment in it. Dowries are calculated based on the spouse's value as a family member - their position in the original clan and their usefulness. If a member of your clan is leaving the family to join another, you are owed the dowry.\n\n{HINT}")
+                DowryValueHint.HintText = new TextObject("{=2QM2cpdw}The dowry is the financial security provided by the clan that takes in a new family member. It serves to show good will and genuine interest in the marriage by requiring a significant investment in it. Dowries are calculated based on the spouse's value as a family member - their position in the original clan and their usefulness. If a member of your clan is leaving the family to join another, you are owed the dowry.\n\n{HINT}")
                     .SetTextVariable("HINT", dowry.GetExplanations());
             }
 
@@ -236,8 +236,8 @@ namespace BannerKings.UI.Marriages
             }
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                new TextObject("{=!}Select Spouse").ToString(),
-                new TextObject("{=!}Select the member of your family to be married. If you pick yourself, the final clan cannot be inverted (resulting in you leaving your clan). If you pick another clan member, the marriage will have to be arranged, and take immediate effect, unless a feast is organized, in which case the marriage is postponed to the end of the feast.").ToString(),
+                new TextObject("{=595mEODK}Select Spouse").ToString(),
+                new TextObject("{=oACEBjty}Select the member of your family to be married. If you pick yourself, the final clan cannot be inverted (resulting in you leaving your clan). If you pick another clan member, the marriage will have to be arranged, and take immediate effect, unless a feast is organized, in which case the marriage is postponed to the end of the feast.").ToString(),
                 list,
                 true,
                 1,
@@ -263,8 +263,8 @@ namespace BannerKings.UI.Marriages
             }
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                new TextObject("{=!}Select Spouse").ToString(),
-                new TextObject("{=!}Select the spouse from their clan. Each spouse has a different score, which represents their importance to their family. The marriage will be acceptable or not according to the difference in the score of your proposed spouse and theirs.").ToString(),
+                new TextObject("{=595mEODK}Select Spouse").ToString(),
+                new TextObject("{=x4RmDskH}Select the spouse from their clan. Each spouse has a different score, which represents their importance to their family. The marriage will be acceptable or not according to the difference in the score of your proposed spouse and theirs.").ToString(),
                 list,
                 true,
                 1,
@@ -296,10 +296,10 @@ namespace BannerKings.UI.Marriages
         }
 
         [DataSourceProperty]
-        public string DowryHeaderText => new TextObject("{=!}Dowry").ToString();
+        public string DowryHeaderText => new TextObject("{=uWUEEXCE}Dowry").ToString();
 
         [DataSourceProperty]
-        public string ClanHeaderText => new TextObject("{=!}Final Clan").ToString();
+        public string ClanHeaderText => new TextObject("{=fUUa62LS}Final Clan").ToString();
 
         [DataSourceProperty]
         public string InfluenceHeaderText => GameTexts.FindText("str_influence").ToString();
@@ -308,10 +308,10 @@ namespace BannerKings.UI.Marriages
         public string ConfirmText => GameTexts.FindText("str_accept").ToString();
 
         [DataSourceProperty]
-        public string WillAcceptHeaderText => new TextObject("{=!}Acceptable").ToString();
+        public string WillAcceptHeaderText => new TextObject("{=EB5e2m4T}Acceptable").ToString();
 
         [DataSourceProperty]
-        public string SpouseHeaderText => new TextObject("{=!}Spouse Score").ToString();
+        public string SpouseHeaderText => new TextObject("{=hXFhY2tN}Spouse Score").ToString();
 
         [DataSourceProperty]
         public string ProposerSpouseValueText

@@ -264,7 +264,7 @@ namespace BannerKings.Managers.Skills
                 "{=WgmJfTeR}Increases your movement speed by 5%.",
                 SkillEffect.PerkRole.Personal, 0.05f,
                 SkillEffect.EffectIncrementType.AddFactor,
-                "{=!}You and your formation deal 4% more damage with greatswords while on foot.",
+                "{=10HppTfS}You and your formation deal 4% more damage with greatswords while on foot.",
                 SkillEffect.PerkRole.Personal, 0.03f,
                 SkillEffect.EffectIncrementType.AddFactor);
 
@@ -283,7 +283,7 @@ namespace BannerKings.Managers.Skills
             FianFennid.InitializeNew("{=qvQEEEM4}Fénnid", null, 
                 240, 
                 null,
-                "{=!}You and your formation take aim 10% while on foot.",
+                "{=4oCh1aji}You and your formation take aim 10% while on foot.",
                 SkillEffect.PerkRole.Personal, 0.05f,
                 SkillEffect.EffectIncrementType.AddFactor,
                 "{=fxuVYTrJ}Increases your two handed weapon damage by 10%.",
@@ -295,10 +295,10 @@ namespace BannerKings.Managers.Skills
             #region Kheshig
 
             KheshigRaider = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleKheshigRaider"));
-            KheshigRaider.InitializeNew("{=!}Raider", null,
+            KheshigRaider.InitializeNew("{=PWvLhAPL}Raider", null,
                 80,
                 null,
-                "{=!}Cattle heads reduce party food consumption while party is on plains or steppes.",
+                "{=XM607d99}Cattle heads reduce party food consumption while party is on plains or steppes.",
                 SkillEffect.PerkRole.Personal, 0.05f,
                 SkillEffect.EffectIncrementType.AddFactor,
                 "{=PawhUHjG}Raiding villages is 15% faster.",
@@ -306,24 +306,24 @@ namespace BannerKings.Managers.Skills
                 SkillEffect.EffectIncrementType.AddFactor);
 
             KheshigOutrider = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleKheshigOutrider"));
-            KheshigOutrider.InitializeNew("{=!}Outrider", null,
+            KheshigOutrider.InitializeNew("{=aAMdXCsc}Outrider", null,
                 160,
                 null,
-                "{=!}Increase your and your formation's mount speed by 5%.",
+                "{=rY9vNqxW}Increase your and your formation's mount speed by 5%.",
                 SkillEffect.PerkRole.Personal, 0.05f,
                 SkillEffect.EffectIncrementType.AddFactor,
-                "{=!}Increase your and your formation's mounted archery damage by 5%.",
+                "{=XQQnhzC0}Increase your and your formation's mounted archery damage by 5%.",
                 SkillEffect.PerkRole.Personal, 0.03f,
                 SkillEffect.EffectIncrementType.AddFactor);
 
             KheshigHonorGuard = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleKheshigHonorGuard"));
-            KheshigHonorGuard.InitializeNew("{=!}Honor Guard", null,
+            KheshigHonorGuard.InitializeNew("{=m7ScWpVb}Honor Guard", null,
                 240,
                 null,
-                "{=!}Gain 30% more influence for army participation.",
+                "{=oDG0PFMM}Gain 30% more influence for army participation.",
                 SkillEffect.PerkRole.Personal, 0.05f,
                 SkillEffect.EffectIncrementType.AddFactor,
-                "{=!}Increase recruitment level with notables by 1.",
+                "{=pSdJAe7r}Increase recruitment level with notables by 1.",
                 SkillEffect.PerkRole.Personal, 0.03f,
                 SkillEffect.EffectIncrementType.AddFactor);
 
@@ -422,35 +422,35 @@ namespace BannerKings.Managers.Skills
             #region Jawwal
 
             JawwalGhazw = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleJawwalGhazw"));
-            JawwalGhazw.InitializeNew("{=!}Ghazw", null,
+            JawwalGhazw.InitializeNew("{=ZkcrOXbm}Ghazw", null,
                 80,
                 null,
                 "{=PawhUHjG}Raiding villages is 15% faster.",
                 SkillEffect.PerkRole.Personal, 0.05f,
                 SkillEffect.EffectIncrementType.AddFactor,
-                "{=!}Camels have 12% more health.",
+                "{=8V2avPGC}Camels have 12% more health.",
                 SkillEffect.PerkRole.Personal, 0.03f,
                 SkillEffect.EffectIncrementType.AddFactor);
 
             JawwalCamelMaster = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleJawwalCamelMaster"));
-            JawwalCamelMaster.InitializeNew("{=!}Camel Master", null,
+            JawwalCamelMaster.InitializeNew("{=DiGKj6HS}Camel Master", null,
                 160,
                 null,
-                "{=!}You and soldiers in your formation are 8% faster when mounted in camels.",
+                "{=DD8PV3zG}You and soldiers in your formation are 8% faster when mounted in camels.",
                 SkillEffect.PerkRole.Personal, 0.05f,
                 SkillEffect.EffectIncrementType.AddFactor,
-                "{=!}You and soldiers in your formation deal 10% more throwing damage while mounted.",
+                "{=9kDvMoNQ}You and soldiers in your formation deal 10% more throwing damage while mounted.",
                 SkillEffect.PerkRole.Personal, 0.03f,
                 SkillEffect.EffectIncrementType.AddFactor);
 
             JawwalDuneRider = Game.Current.ObjectManager.RegisterPresumedObject(new PerkObject("LifestyleJawwalDuneRider"));
-            JawwalDuneRider.InitializeNew("{=!}Dune Rider", null,
+            JawwalDuneRider.InitializeNew("{=me23NvbZ}Dune Rider", null,
                 240,
                 null,
-                "{=!}You and troops in your formation have 5% chance to dismount riders when hitting with javelins.",
+                "{=MbEcXyGc}You and troops in your formation have 5% chance to dismount riders when hitting with javelins.",
                 SkillEffect.PerkRole.Personal, 0.05f,
                 SkillEffect.EffectIncrementType.AddFactor,
-                "{=!}Party is 8% faster in deserts.",
+                "{=dLnLYNRE}Party is 8% faster in deserts.",
                 SkillEffect.PerkRole.Personal, 0.03f,
                 SkillEffect.EffectIncrementType.AddFactor);
 

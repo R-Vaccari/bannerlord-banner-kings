@@ -1,4 +1,4 @@
-﻿using BannerKings.Dialogue;
+using BannerKings.Dialogue;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Localization;
 using TaleWorlds.SaveSystem;
@@ -32,7 +32,7 @@ namespace BannerKings.Behaviours.Marriage
 
         public (TextObject, bool) IsContractAdequate()
         {
-            (TextObject, bool) result = new(new TextObject("{=!}The proposal is adequate."), true);
+            (TextObject, bool) result = new(new TextObject("{=8gnBUVuM}The proposal is adequate."), true);
 
             var willAccept = BannerKingsConfig.Instance.MarriageModel.IsMarriageAdequate(Proposer, Proposed, true);
             if (willAccept.ResultNumber < 1f)
@@ -44,7 +44,7 @@ namespace BannerKings.Behaviours.Marriage
 
             if (Proposer.Clan.Influence < Influence)
             {
-                result = new(new TextObject("{=!}Our house is one of great importance in the realm. As such, we expect to marry into other influential families."), false);
+                result = new(new TextObject("{=y2xyRcKH}Our house is one of great importance in the realm. As such, we expect to marry into other influential families."), false);
                 return result;
             }
 
@@ -52,13 +52,13 @@ namespace BannerKings.Behaviours.Marriage
             {
                 if (Proposer.Clan.Gold < Dowry)
                 {
-                    result = new(new TextObject("{=!}It seems to me you are not able to pay the dowry. In order for me to accept this proposal, prove you are truly invested into it's success with a fair dowry."), false);
+                    result = new(new TextObject("{=uz7LKU0t}It seems to me you are not able to pay the dowry. In order for me to accept this proposal, prove you are truly invested into it's success with a fair dowry."), false);
                     return result;
                 }
 
                 if (Feast && FinalClan.Fiefs.Count == 0)
                 {
-                    result = new(new TextObject("{=!}You propose a feast but your family does not hold any appropriate place for such. As your family is the one being married to, you should be able to provide such place."), false);
+                    result = new(new TextObject("{=xNe1TyLh}You propose a feast but your family does not hold any appropriate place for such. As your family is the one being married to, you should be able to provide such place."), false);
                     return result;
                 }
             }
@@ -66,13 +66,13 @@ namespace BannerKings.Behaviours.Marriage
             {
                 if (Proposed.Clan.Gold < Dowry)
                 {
-                    result = new(new TextObject("{=!}We don't have enough denars for the dowry."), false);
+                    result = new(new TextObject("{=N7RFUohR}We don't have enough denars for the dowry."), false);
                     return result;
                 }
 
                 if (Feast && FinalClan.Fiefs.Count == 0)
                 {
-                    result = new(new TextObject("{=!}Unfortunately, we do not currently hold a town or castle in which we could host a feast. As the family being married into, it would be shame to promise a feast and not be able to provide it."), false);
+                    result = new(new TextObject("{=LwCAFkfc}Unfortunately, we do not currently hold a town or castle in which we could host a feast. As the family being married into, it would be shame to promise a feast and not be able to provide it."), false);
                     return result;
                 }
             }

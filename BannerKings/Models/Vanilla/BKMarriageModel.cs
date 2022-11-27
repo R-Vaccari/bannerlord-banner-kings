@@ -1,4 +1,4 @@
-﻿using BannerKings.Managers.Court;
+using BannerKings.Managers.Court;
 using BannerKings.Managers.Institutions.Religions.Faiths;
 using BannerKings.Managers.Titles;
 using BannerKings.Utils.Extensions;
@@ -18,7 +18,7 @@ namespace BannerKings.Models.Vanilla
 
             var proposerScore = GetSpouseScore(proposer).ResultNumber * 1.1f;
             var proposedScore = GetSpouseScore(secondHero).ResultNumber;
-            result.Add(proposerScore - proposedScore, new TextObject("{=!}Score differences"));
+            result.Add(proposerScore - proposedScore, new TextObject("{=NeydSXjc}Score differences"));
 
             if (proposer.Culture != secondHero.Culture)
             {
@@ -48,7 +48,7 @@ namespace BannerKings.Models.Vanilla
                     }
                 }
 
-                result.Add(factor, new TextObject("{=!}Faith differences"));
+                result.Add(factor, new TextObject("{=gyHK87NL}Faith differences"));
             } 
             else
             {
@@ -75,7 +75,7 @@ namespace BannerKings.Models.Vanilla
             {
                 if (IsClanHeir(title, hero))
                 {
-                    result.Add(100, new TextObject("{=!}{HERO} is the expected heir to {CLAN}")
+                    result.Add(100, new TextObject("{=aoD1zKmp}{HERO} is the expected heir to {CLAN}")
                         .SetTextVariable("HERO", hero.Name)
                         .SetTextVariable("CLAN", clan.Name));
                 }
@@ -84,25 +84,25 @@ namespace BannerKings.Models.Vanilla
             var proposerCouncil = BannerKingsConfig.Instance.CourtManager.GetCouncil(clan);
             if (proposerCouncil.Peerage != null)
             {
-                result.Add(GetPeerageScore(proposerCouncil.Peerage), new TextObject("{=!}{CLAN} Peerage")
+                result.Add(GetPeerageScore(proposerCouncil.Peerage), new TextObject("{=V8eQC16w}{CLAN} Peerage")
                     .SetTextVariable("CLAN", clan.Name));
             }
 
             if (title != null)
             {
-                result.Add(500f / (1.5f * (float)title.type), new TextObject("{=!}{CLAN} holds {TITLE}")
+                result.Add(500f / (1.5f * (float)title.type), new TextObject("{=KaxKgMg1}{CLAN} holds {TITLE}")
                     .SetTextVariable("CLAN", clan.Name)
                     .SetTextVariable("TITLE", title.FullName));
             }
 
             if (hero.IsCommonBorn())
             {
-                result.AddFactor(-0.5f, new TextObject("{=!}Common born"));
+                result.AddFactor(-0.5f, new TextObject("{=9RG3GwJD}Common born"));
             }
 
             if (hero.Spouse != null && hero.Spouse.IsDead)
             {
-                result.AddFactor(-0.2f, new TextObject("{=!}Widow"));
+                result.AddFactor(-0.2f, new TextObject("{=aML45YiV}Widow"));
             }
 
 
@@ -119,29 +119,29 @@ namespace BannerKings.Models.Vanilla
             var title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(hero.Clan.Leader);
             if (title != null && IsClanHeir(title, hero))
             {
-                result.AddFactor(0.5f, new TextObject("{=!}{HERO} is the expected heir to {CLAN}")
+                result.AddFactor(0.5f, new TextObject("{=aoD1zKmp}{HERO} is the expected heir to {CLAN}")
                     .SetTextVariable("HERO", hero.Name)
                     .SetTextVariable("CLAN", hero.Clan.Name));
             }
 
             if (arrangedMarriage)
             {
-                result.AddFactor(0.4f, new TextObject("{=!}Arranged marriage"));
+                result.AddFactor(0.4f, new TextObject("{=wxmqHVe1}Arranged marriage"));
             }
 
             if (hero.IsCommonBorn())
             {
-                result.AddFactor(-0.5f, new TextObject("{=!}Common born"));
+                result.AddFactor(-0.5f, new TextObject("{=9RG3GwJD}Common born"));
             }
 
             if (hero.IsFemale && !(hero.Age >= 18f && hero.Age <= 45f))
             {
-                result.AddFactor(-0.2f, new TextObject("{=!}Infertile"));
+                result.AddFactor(-0.2f, new TextObject("{=2kF9z7Tq}Infertile"));
             }
 
             if (hero.Spouse != null && hero.Spouse.IsDead)
             {
-                result.AddFactor(-0.2f, new TextObject("{=!}Widow"));
+                result.AddFactor(-0.2f, new TextObject("{=aML45YiV}Widow"));
             }
 
             return result;

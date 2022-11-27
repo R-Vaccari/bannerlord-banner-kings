@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
@@ -24,7 +24,7 @@ namespace BannerKings.Managers.Court
         {
             if (clan.IsUnderMercenaryService)
             {
-                return new Peerage(new TextObject("{=!}No Peerage"), false, false, false, false, false, false);
+                return new Peerage(new TextObject("{=RjMW9nuO}No Peerage"), false, false, false, false, false, false);
             }
 
 
@@ -33,15 +33,15 @@ namespace BannerKings.Managers.Court
                 var titles = BannerKingsConfig.Instance.TitleManager.GetAllDeJure(clan);
                 if (titles.Any(x => x.type != Titles.TitleType.Lordship) || clan.Fiefs.Count > 0)
                 {
-                    return new Peerage(new TextObject("{=!}Full Peerage"), true, true, true, true, true, false);
+                    return new Peerage(new TextObject("{=9OhMK2Wk}Full Peerage"), true, true, true, true, true, false);
                 }
                 else
                 {
-                    return new Peerage(new TextObject("{=!}Lesser Peerage"), true, false, false, false, true, true);
+                    return new Peerage(new TextObject("{=rmxeMFzz}Lesser Peerage"), true, false, false, false, true, true);
                 }
             }
 
-            return new Peerage(new TextObject("{=!}No Peerage"), false, false, false, false, false, false);
+            return new Peerage(new TextObject("{=RjMW9nuO}No Peerage"), false, false, false, false, false, false);
         }
 
         [SaveableProperty(1)] public TextObject Name { get; private set; }
@@ -52,21 +52,21 @@ namespace BannerKings.Managers.Court
         [SaveableProperty(6)] public bool CanHaveCouncil { get; private set; }
         [SaveableProperty(7)] public bool BoostsVotes { get; private set; }
 
-        public TextObject GetRights() => new TextObject("{=!}Voting Allowed: {VOTING}\nElections Allowed: {ELECTIONS}\nKnighthood Granting: {KNIGHT}\nFiefs Allowed: {FIEFS}\nCouncil Allowed: {COUNCIL}")
+        public TextObject GetRights() => new TextObject("{=cFXENt18}Voting Allowed: {VOTING}\nElections Allowed: {ELECTIONS}\nKnighthood Granting: {KNIGHT}\nFiefs Allowed: {FIEFS}\nCouncil Allowed: {COUNCIL}")
             .SetTextVariable("VOTING", GetStr(CanVote))
             .SetTextVariable("ELECTIONS", GetStr(CanStartElection))
             .SetTextVariable("KNIGHT", GetStr(CanGrantKnighthood))
             .SetTextVariable("FIEFS", GetStr(CanHaveFief))
             .SetTextVariable("COUNCIL", GetStr(CanHaveCouncil));
 
-        public TextObject PeerageGrantedText() => new TextObject("{=!}The family {VOTE}, {ELECTION}, {KNIGHTHOOD}, {FIEF} and {COUNCIL}.")
+        public TextObject PeerageGrantedText() => new TextObject("{=mhvzyGTa}The family {VOTE}, {ELECTION}, {KNIGHTHOOD}, {FIEF} and {COUNCIL}.")
             .SetTextVariable("CLAN", Clan.PlayerClan.Name)
             .SetTextVariable("PEERAGE", Name)
-            .SetTextVariable("VOTE", CanVote ? new TextObject("{=!}will be able to vote in elections") : new TextObject("{=!}will not be able to vote on elections"))
-            .SetTextVariable("ELECTION", CanStartElection ? new TextObject("{=!}will be able to start elections") : new TextObject("{=!}will not be able to start elections"))
-            .SetTextVariable("KNIGHTHOOD", CanGrantKnighthood ? new TextObject("{=!}will be able to grant knighthood") : new TextObject("{=!}will not be able to grant knighthood"))
-            .SetTextVariable("FIEF", CanHaveFief ? new TextObject("{=!}will be eligible to be awarded fiefs") : new TextObject("{=!}will not be eligible to be awarded fiefs"))
-            .SetTextVariable("COUNCIL", CanHaveCouncil ? new TextObject("{=!}will be able to host a council") : new TextObject("{=!}will not be able to host a council"));
+            .SetTextVariable("VOTE", CanVote ? new TextObject("{=14DuydKq}will be able to vote in elections") : new TextObject("{=v5REKU2o}will not be able to vote on elections"))
+            .SetTextVariable("ELECTION", CanStartElection ? new TextObject("{=6PxbcHSB}will be able to start elections") : new TextObject("{=83fgAUQK}will not be able to start elections"))
+            .SetTextVariable("KNIGHTHOOD", CanGrantKnighthood ? new TextObject("{=QwfFjAZ9}will be able to grant knighthood") : new TextObject("{=6sUSbwzR}will not be able to grant knighthood"))
+            .SetTextVariable("FIEF", CanHaveFief ? new TextObject("{=qH3iU28t}will be eligible to be awarded fiefs") : new TextObject("{=nBw47opa}will not be eligible to be awarded fiefs"))
+            .SetTextVariable("COUNCIL", CanHaveCouncil ? new TextObject("{=qGyXzxD6}will be able to host a council") : new TextObject("{=0xeuyAkM}will not be able to host a council"));
 
         private TextObject GetStr(bool option) => option ? GameTexts.FindText("str_yes") : GameTexts.FindText("str_no");
     }

@@ -1128,7 +1128,7 @@ namespace BannerKings.Managers
 
         public string GetContractText(FeudalTitle title)
         {
-            TextObject text = new TextObject("{=!}You, {NAME}, formally accept to be henceforth bound to the {TITLE}, fulfill your duties as well as uphold your rights, what can not be undone by means other than abdication of all rights and lands associated with the contract, treachery, or death." +
+            TextObject text = new TextObject("{=AkTU4Qwg}You, {NAME}, formally accept to be henceforth bound to the {TITLE}, fulfill your duties as well as uphold your rights, what can not be undone by means other than abdication of all rights and lands associated with the contract, treachery, or death." +
                 "\n\nDuties\n{DUTY1}\n{DUTY2}\n\nRights\n{RIGHT1}\n{RIGHT2}")
                 .SetTextVariable("NAME", Hero.MainHero.Name)
                 .SetTextVariable("TITLE", title.FullName)

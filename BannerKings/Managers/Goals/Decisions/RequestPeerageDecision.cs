@@ -16,8 +16,8 @@ namespace BannerKings.Managers.Goals.Decisions
 
         public RequestPeerageDecision() : base("goal_request_peerage_decision", GoalUpdateType.Manual)
         {
-            var name = new TextObject("{=!}Request Full Peerage");
-            var description = new TextObject("{=!}Request the recognition of your family as a full Peer of the realm. A full Peer does not have legal restrictions on voting, starting elections, granting knighthood, hosting a council or being awarded fiefs. They are the very top of the realm's nobility. Successfully requesting Peerage will require renown (clan tier 4 minimum is recommended) and having good relations with full Peers. Holding property (caravans, workshops, estates, lordships) is a good positive factor as well.\n");
+            var name = new TextObject("{=sdpM1PD3}Request Full Peerage");
+            var description = new TextObject("{=O7LLRFEX}Request the recognition of your family as a full Peer of the realm. A full Peer does not have legal restrictions on voting, starting elections, granting knighthood, hosting a council or being awarded fiefs. They are the very top of the realm's nobility. Successfully requesting Peerage will require renown (clan tier 4 minimum is recommended) and having good relations with full Peers. Holding property (caravans, workshops, estates, lordships) is a good positive factor as well.\n");
 
             Initialize(name, description);
         }
@@ -40,12 +40,12 @@ namespace BannerKings.Managers.Goals.Decisions
 
             if (Clan.PlayerClan.IsUnderMercenaryService)
             {
-                failedReasons.Add(new TextObject("{=!}Mercenaries cannot request Peerage"));
+                failedReasons.Add(new TextObject("{=SjBky9Op}Mercenaries cannot request Peerage"));
             }
 
             if (FactionManager.GetEnemyKingdoms(Clan.PlayerClan.Kingdom).Count() > 0)
             {
-                failedReasons.Add(new TextObject("{=!}Cannot request Peerage during wars"));
+                failedReasons.Add(new TextObject("{=QmMiGJpx}Cannot request Peerage during wars"));
             }
 
             var decision = new PeerageKingdomDecision(Clan.PlayerClan.Kingdom.RulingClan, Clan.PlayerClan);
@@ -70,8 +70,8 @@ namespace BannerKings.Managers.Goals.Decisions
         internal override void ApplyGoal()
         {
             var decision = new PeerageKingdomDecision(Clan.PlayerClan.Kingdom.RulingClan, Clan.PlayerClan);
-            InformationManager.ShowInquiry(new InquiryData(new TextObject("{=!}Request Full Peerage").ToString(),
-                new TextObject("{=!}Request full rights of Peerage. The any existing Peer with voting power may participate in the decision. Current support for the approval of {CLAN}: {SUPPORT}%.")
+            InformationManager.ShowInquiry(new InquiryData(new TextObject("{=sdpM1PD3}Request Full Peerage").ToString(),
+                new TextObject("{=HCMiSysD}Request full rights of Peerage. The any existing Peer with voting power may participate in the decision. Current support for the approval of {CLAN}: {SUPPORT}%.")
                 .SetTextVariable("CLAN", GetFulfiller().Clan.Name)
                 .SetTextVariable("SUPPORT", new KingdomElection(decision).GetLikelihoodForOutcome(0) * 100f)
                 .ToString(), 
@@ -84,7 +84,7 @@ namespace BannerKings.Managers.Goals.Decisions
                     GainKingdomInfluenceAction.ApplyForDefault(GetFulfiller(), -decision.GetProposalInfluenceCost());
                     Clan.PlayerClan.Kingdom.AddDecision(decision, true);
 
-                    MBInformationManager.AddQuickInformation(new TextObject("{=!}The Peers of {KINGDOM} will now vote on your request.")
+                    MBInformationManager.AddQuickInformation(new TextObject("{=5YsS2g7T}The Peers of {KINGDOM} will now vote on your request.")
                         .SetTextVariable("KINGDOM", Clan.PlayerClan.Kingdom.Name),
                         0,
                         null,
