@@ -456,14 +456,15 @@ namespace BannerKings.Behaviours
         private Equipment GetEquipmentIfPossible(Clan clan, bool noble, Town town = null)
         {
             var source = from e in MBObjectManager.Instance.GetObjectTypeList<MBEquipmentRoster>()
-                where e.EquipmentCulture == clan.Culture
+                where CalradiaExpandedKingdoms.Helpers.CEKHelpers.IsInCultureGroup(e.EquipmentCulture, clan.Culture)
                 select e;
             if (source == null)
             {
                 return null;
             }
 
-            var roster = (from e in source where e.EquipmentCulture == clan.Culture select e).ToList()
+            var roster = (from e in source where CalradiaExpandedKingdoms.Helpers.CEKHelpers.IsInCultureGroup(e.EquipmentCulture, clan.Culture) 
+                          select e).ToList()
                 .GetRandomElementWithPredicate(x =>
                     noble
                         ? x.HasEquipmentFlags(EquipmentFlags.IsMediumTemplate)
