@@ -61,9 +61,9 @@ namespace BannerKings.Managers
                 return startData;
             }
 
-
             var languages = new Dictionary<Language, float>();
-            var native = DefaultLanguages.Instance.All.FirstOrDefault(x => x.Culture == hero.Culture) ?? DefaultLanguages.Instance.Calradian;
+            var native = DefaultLanguages.Instance.All.FirstOrDefault(x => CalradiaExpandedKingdoms.Helpers.CEKHelpers.IsInCultureGroup(x.Culture, hero.Culture)) 
+                ?? DefaultLanguages.Instance.Calradian;
 
             languages.Add(native, 1f);
 
@@ -235,7 +235,6 @@ namespace BannerKings.Managers
             }
         }
 
-
         public void SetCurrentBook(Hero hero, BookType book)
         {
             if (Educations.ContainsKey(hero))
@@ -285,7 +284,7 @@ namespace BannerKings.Managers
 
         public MBReadOnlyList<Lifestyle> GetViableLifestyles(Hero hero)
         {
-            return DefaultLifestyles.Instance.All.Where(lf => lf.Culture == null || lf.Culture == hero.Culture).ToList().GetReadOnlyList();
+            return DefaultLifestyles.Instance.All.Where(lf => lf.Culture == null || CalradiaExpandedKingdoms.Helpers.CEKHelpers.IsInCultureGroup(lf.Culture, hero.Culture)).ToList().GetReadOnlyList();
         }
 
         public MBReadOnlyList<BookType> GetAvailableBooks(MobileParty party)
