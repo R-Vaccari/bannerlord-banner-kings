@@ -6,6 +6,7 @@ using BannerKings.Managers.Policies;
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Villages;
 using BannerKings.Managers.Skills;
+using BannerKings.Managers.Titles.Laws;
 using CalradiaExpandedKingdoms.Models;
 using Helpers;
 using TaleWorlds.CampaignSystem;
