@@ -343,7 +343,7 @@ namespace BannerKings.Managers
             }
 
             var piety = 0;
-            if (religion.MainCulture == hero.Culture)
+            if (CalradiaExpandedKingdoms.Helpers.CEKHelpers.IsInCultureGroup(religion.MainCulture, hero.Culture))
             {
                 piety = 100;
             }
@@ -360,7 +360,6 @@ namespace BannerKings.Managers
             var rel = GetHeroReligion(hero);
             return rel != null ? Religions[rel][hero] : null;
         }
-
 
         public List<Religion> GetReligions()
         {
@@ -419,7 +418,7 @@ namespace BannerKings.Managers
 
         public Religion GetIdealReligion(CultureObject culture)
         {
-            return Religions.Keys.ToList().FirstOrDefault(rel => rel.MainCulture == culture);
+            return Religions.Keys.ToList().FirstOrDefault(rel => CalradiaExpandedKingdoms.Helpers.CEKHelpers.IsInCultureGroup(rel.MainCulture, culture));
         }
 
         public bool IsReligionMember(Hero hero, Religion religion)
@@ -431,8 +430,6 @@ namespace BannerKings.Managers
 
             return Religions[religion].ContainsKey(hero);
         }
-
-        
 
         public void AddPiety(Religion rel, Hero hero, float piety, bool notifyPlayer = false)
         {
