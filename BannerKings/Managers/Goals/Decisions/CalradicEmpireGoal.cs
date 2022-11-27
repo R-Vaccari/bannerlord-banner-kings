@@ -87,13 +87,15 @@ namespace BannerKings.Managers.Goals.Decisions
                             .SetTextVariable("CULTURE", culture.Name));
                 }
 
-                var imperialKingdomsStringIds = new List<string> { "empire", "empire_w", "empire_s" };
+                /*var imperialKingdomsStringIds = new List<string> { "empire", "empire_w", "empire_s" };
                 var imperialKingdoms = Campaign.Current.Kingdoms.Where(k => imperialKingdomsStringIds.Contains(k.StringId)).ToList();
                 if (imperialKingdoms.Any() && imperialKingdoms.All(ik => ik.Leader != referenceHero))
                 {
                     failedReasons.Add(new TextObject("{=YFeW2BUA}You're not the leader of an Imperial Kingdom."));
                 }
-                else if (referenceHero.Clan.Kingdom != null && referenceHero.Clan.Kingdom.Culture != culture)
+                else */
+                
+                if (referenceHero.Clan.Kingdom != null && referenceHero.Clan.Kingdom.Culture != culture)
                 {
                     failedReasons.Add(new TextObject("{=4jUw7j4u}Your kingdom is not part of {CULTURE} culture.")
                         .SetTextVariable("CULTURE", culture.Name));
