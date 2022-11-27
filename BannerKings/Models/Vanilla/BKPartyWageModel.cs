@@ -86,11 +86,11 @@ namespace BannerKings.Models.Vanilla
                     result.Add(result.ResultNumber * -0.5f);
                 }
 
-
                 var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(leader);
+                float mountedProportion = mountedTroops / mobileParty.MemberRoster.Count;
                 if (education.HasPerk(BKPerks.Instance.CataphractEquites) && mountedTroops > 0f)
                 {
-                    result.AddFactor(mountedTroops * -0.1f, BKPerks.Instance.CataphractEquites.Name);
+                    result.AddFactor(mountedProportion * -0.1f, BKPerks.Instance.CataphractEquites.Name);
                 }
 
                 if (mobileParty.SiegeEvent != null && education.Lifestyle != null && 
