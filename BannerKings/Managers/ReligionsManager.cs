@@ -6,7 +6,6 @@ using BannerKings.Managers.Institutions.Religions.Leaderships;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
-using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.SaveSystem;
 
@@ -111,7 +110,6 @@ namespace BannerKings.Managers
 
         public void InitializeHeroFaith(Hero hero, Religion rel = null)
         {
-
             if (rel == null)
             {
                 rel = GetIdealReligion(hero.Culture);
@@ -120,7 +118,6 @@ namespace BannerKings.Managers
                     return;
                 }
             }
-
 
             if (Religions[rel].ContainsKey(hero))
             {
@@ -136,7 +133,6 @@ namespace BannerKings.Managers
                     rel = data.ReligionData.DominantReligion;
                 }
             }
-
 
             var id = rel.Faith.GetId();
             if (id == "darusosian")
@@ -219,8 +215,6 @@ namespace BannerKings.Managers
 
         public void ExecuteRemoveHero(Hero hero, bool isConversion = false)
         {
-
-            
             var rel = GetHeroReligion(hero);
             if (IsPreacher(hero))
             {
@@ -310,7 +304,6 @@ namespace BannerKings.Managers
                     true, 
                     religion.Faith.GetFaithDescription().ToString()));
             }
-                
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                 new TextObject("{=VrzR1ZzZ}Your faith").ToString(),
