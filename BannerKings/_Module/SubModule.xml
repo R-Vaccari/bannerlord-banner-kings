@@ -12,6 +12,7 @@
 		<DependedModule Id="Bannerlord.Harmony" />
 		<DependedModule Id="Bannerlord.ButterLib" />
 		<DependedModule Id="Bannerlord.UIExtenderEx" />
+		<DependedModule Id="Bannerlord.MBOptionScreen" />
 		<DependedModule Id="Native" />
 		<DependedModule Id="SandBoxCore" />
 		<DependedModule Id="Sandbox" />
@@ -24,6 +25,7 @@
 		<DependedModuleMetadata id="Bannerlord.Harmony" order="LoadBeforeThis" />
 		<DependedModuleMetadata id="Bannerlord.ButterLib" order="LoadBeforeThis" />
 		<DependedModuleMetadata id="Bannerlord.UIExtenderEx" order="LoadBeforeThis" />
+		<DependedModuleMetadata id="Bannerlord.MBOptionScreen" order="LoadBeforeThis" />
 		<DependedModuleMetadata id="Native" order="LoadBeforeThis" />
 		<DependedModuleMetadata id="SandBoxCore" order="LoadBeforeThis" />
 		<DependedModuleMetadata id="Sandbox" order="LoadBeforeThis" />

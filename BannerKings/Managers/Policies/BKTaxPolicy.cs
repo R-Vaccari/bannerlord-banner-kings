@@ -7,7 +7,7 @@ using TaleWorlds.SaveSystem;
 
 namespace BannerKings.Managers.Policies
 {
-    internal class BKTaxPolicy : BannerKingsPolicy
+    public class BKTaxPolicy : BannerKingsPolicy
     {
         public enum TaxType
         {
@@ -49,8 +49,8 @@ namespace BannerKings.Managers.Policies
             if (obj.SelectedItem != null)
             {
                 var vm = obj.GetCurrentItem();
-                Policy = (TaxType) vm.value;
-                Selected = vm.value;
+                Policy = (TaxType) vm.Value;
+                Selected = vm.Value;
                 BannerKingsConfig.Instance.PolicyManager.UpdateSettlementPolicy(Settlement, this);
             }
         }

@@ -1,4 +1,7 @@
+using BannerKings.Behaviours;
+using BannerKings.Extensions;
 using BannerKings.Managers.Populations;
+using BannerKings.Managers.Titles.Laws;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -22,11 +25,14 @@ namespace BannerKings.Models.BKModels
             var filledCapacity = data.TotalPop / CalculateSettlementCap(settlement, data).ResultNumber;
             data.Classes.ForEach(popClass =>
             {
+                var factor = POP_GROWTH_FACTOR;
                 if (popClass.type != PopType.Slaves)
                 {
-                    result.Add(popClass.count * POP_GROWTH_FACTOR, new TextObject("{=!}{POPULATION_CLASS} growth")
-                        .SetTextVariable("POPULATION_CLASS", Utils.Helpers.GetClassName(popClass.type, settlement.Culture)));
+                    factor *= 0.4f;
                 }
+
+                result.Add(popClass.count * factor, new TextObject("{=!}{POPULATION_CLASS} growth")
+                    .SetTextVariable("POPULATION_CLASS", Utils.Helpers.GetClassName(popClass.type, settlement.Culture)));
             });
 
             result.AddFactor(-filledCapacity, new TextObject("{=!}Filled capacity"));
@@ -34,8 +40,16 @@ namespace BannerKings.Models.BKModels
             {
                 result.AddFactor(-2f, GameTexts.FindText("str_starvation_morale"));
             }
- 
 
+            if (filledCapacity <= 0.15f)
+            {
+                float factor = 1f;
+                if (filledCapacity <= 0.05f) factor = 3f;
+                if (filledCapacity <= 0.01f) factor = 2f;
+                     
+                result.AddFactor(factor, new TextObject("{=!}Repopulation"));
+            }
+ 
             if (settlement.IsVillage)
             {
                 return result;
@@ -83,8 +97,117 @@ namespace BannerKings.Models.BKModels
                 }
 
                 result.Add(settlement.Prosperity / 5f, GameTexts.FindText("str_map_tooltip_prosperity"));
+
+                var capital = Campaign.Current.GetCampaignBehavior<BKCapitalBehavior>().GetCapital(town.OwnerClan.Kingdom);
+                if (capital == town)
+                {
+                    result.AddFactor(0.4f, new TextObject("{=!}Capital"));
+                }
             }
 
+            return result;
+        }
+
+        public ExplainedNumber CalculatePopulationClassDemand(Settlement settlement, PopType type, bool explanations = false)
+        {
+            var result = new ExplainedNumber(1f, explanations);
+            var faction = settlement.OwnerClan.Kingdom;
+            if (faction != null)
+            {
+                if (type == PopType.Slaves)
+                {
+                    if (faction.ActivePolicies.Contains(DefaultPolicies.Serfdom))
+                    {
+                        result.AddFactor(-0.3f, DefaultPolicies.Serfdom.Name);
+                    }
+
+                    if (faction.ActivePolicies.Contains(DefaultPolicies.ForgivenessOfDebts))
+                    {
+                        result.AddFactor(-0.15f, DefaultPolicies.ForgivenessOfDebts.Name);
+                    }
+
+                    var title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(faction);
+                    if (title != null)
+                    {
+                        if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.SlaveryManumission))
+                        {
+                            result.AddFactor(-1f, DefaultDemesneLaws.Instance.SlaveryManumission.Name);
+                        }
+                        else if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.SlaveryVlandia))
+                        {
+                            result.AddFactor(-0.3f, DefaultDemesneLaws.Instance.SlaveryVlandia.Name);
+                        }
+                        else if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.SlaveryAserai))
+                        {
+                            result.AddFactor(0.5f, DefaultDemesneLaws.Instance.SlaveryAserai.Name);
+                        }
+
+                        if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.SlavesAgricultureDuties))
+                        {
+                            float factor = -0.2f;
+                            if (settlement.IsVillage)
+                            {
+                                if (settlement.Village.IsFarmingVillage())
+                                {
+                                    factor = 0.3f;
+                                }
+                            }
+
+                            result.Add(result.ResultNumber * factor, DefaultDemesneLaws.Instance.SlavesAgricultureDuties.Name);
+                        }
+                        else if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.SlavesHardLabor)) 
+                        {
+                            float factor = -0.2f;
+                            if (settlement.IsVillage)
+                            {
+                                if (settlement.Village.IsMiningVillage())
+                                {
+                                    factor = 0.3f;
+                                }
+                            }
+
+                            result.Add(result.ResultNumber * factor, DefaultDemesneLaws.Instance.SlavesHardLabor.Name);
+                        }
+                        else
+                        {
+                            float factor = -0.2f;
+                            if (settlement.IsTown)
+                            {
+                                factor = 0.3f;
+                            }
+
+                            result.Add(result.ResultNumber * factor, DefaultDemesneLaws.Instance.SlavesDomesticDuties.Name);
+                        }
+                    }
+                }
+                
+                if (type == PopType.Nobles)
+                {
+                    if (faction.ActivePolicies.Contains(DefaultPolicies.Citizenship))
+                    {
+                        result.AddFactor(0.1f, DefaultPolicies.Citizenship.Name);
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        public ExplainedNumber CalculateSlavePrice(Settlement settlement, bool explanations = false)
+        {
+            var result = new ExplainedNumber(150f, explanations);
+            result.LimitMin(0f);
+
+            result.AddFactor(CalculatePopulationClassDemand(settlement, PopType.Slaves).ResultNumber - 1f,
+                new TextObject("{=!}{FACTION} demand")
+                .SetTextVariable("FACTION", settlement.MapFaction.Name));
+
+            var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
+            var dic = GetDesiredPopTypes(settlement);
+            float fraction = MathF.Clamp(data.GetCurrentTypeFraction(PopType.Slaves), 0f, 1f);
+            float medium = (dic[PopType.Slaves][0] + dic[PopType.Slaves][1]) / 2f;
+
+            result.AddFactor(medium - fraction, new TextObject("{=!}Local demand"));
 
             return result;
         }

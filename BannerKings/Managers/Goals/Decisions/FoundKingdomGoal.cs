@@ -6,6 +6,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
+using static System.Collections.Specialized.BitVector32;
 
 namespace BannerKings.Managers.Goals.Decisions
 {
@@ -27,12 +28,20 @@ namespace BannerKings.Managers.Goals.Decisions
         {
             failedReasons = new List<TextObject>();
 
-            var hero = GetFulfiller();
-            var action = BannerKingsConfig.Instance.TitleModel.GetFoundKingdom(hero.Clan.Kingdom, hero);
-
-            failedReasons.Add(action.Reason);
-
-            return action.Possible;
+            if (Clan.PlayerClan.Kingdom == null)
+            {
+                failedReasons.Add(new TextObject("{=JDFpx1eN}No kingdom."));
+            }
+            else
+            {
+                var title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(Clan.PlayerClan.Kingdom);
+                if (title != null)
+                {
+                    failedReasons.Add(new TextObject("{=eTMvobFw}Faction sovereign title already exists."));
+                }
+            }
+            
+            return failedReasons.IsEmpty();
         }
 
         internal override Hero GetFulfiller()

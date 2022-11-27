@@ -128,6 +128,15 @@ namespace BannerKings.Managers
                 return;
             }
 
+            if (hero.IsNotable && hero.CurrentSettlement != null)
+            {
+                var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(hero.CurrentSettlement);
+                if (data != null && data.ReligionData != null)
+                {
+                    rel = data.ReligionData.DominantReligion;
+                }
+            }
+
 
             var id = rel.Faith.GetId();
             if (id == "darusosian")
@@ -291,11 +300,17 @@ namespace BannerKings.Managers
                 return;
             }
 
-            var elements = Religions.Keys.ToList()
-                .Select(religion => new InquiryElement(religion, new TextObject("{=Eu97WkgX}{RELIGION} - {PIETY} piety").SetTextVariable("RELIGION", religion.Faith.GetFaithName())
-                    .SetTextVariable("PIETY", GetStartingPiety(religion))
-                    .ToString(), null, true, religion.Faith.GetFaithDescription().ToString()))
-                .ToList();
+            var elements = new List<InquiryElement>();
+            foreach (var religion in Religions.Keys)
+            {
+                elements.Add(new InquiryElement(religion, 
+                    new TextObject("{=Eu97WkgX}{RELIGION} - {PIETY} piety").SetTextVariable("RELIGION", religion.Faith.GetFaithName())
+                    .SetTextVariable("PIETY", GetStartingPiety(religion)).ToString(), 
+                    null, 
+                    true, 
+                    religion.Faith.GetFaithDescription().ToString()));
+            }
+                
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
                 new TextObject("{=VrzR1ZzZ}Your faith").ToString(),
@@ -500,7 +515,23 @@ namespace BannerKings.Managers
 
         public bool IsPreacher(Hero hero)
         {
-            return Religions.Keys.ToList().SelectMany(rel => rel.Clergy.Values.ToList()).Any(clergy => clergy.Hero == hero);
+            if (hero == null)
+            {
+                return false;
+            }
+
+            foreach (var rel in Religions.Keys)
+            {
+                foreach (var clergy in rel.Clergy.Values)
+                {
+                    if (clergy != null && clergy.Hero == hero)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
 
         public Clergyman GetClergymanFromHeroHero(Hero hero)

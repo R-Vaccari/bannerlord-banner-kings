@@ -267,7 +267,7 @@ namespace BannerKings.UI.Management
 
             LandInfo.Add(new InformationElement(new TextObject("{=FT5kL9k5}Acreage:").ToString(), landData.Acreage + " acres",
                 new TextObject("{=thVdn5fm}Current quantity of usable acres in this region").ToString()));
-            LandInfo.Add(new InformationElement(new TextObject("Farmland:").ToString(), landData.Farmland + " acres",
+            LandInfo.Add(new InformationElement(new TextObject("{=!}Farmland:").ToString(), landData.Farmland + " acres",
                 new TextObject("{=ABrCGWep}Acres in this region used as farmland, the main source of food in most places")
                     .ToString()));
             LandInfo.Add(new InformationElement(new TextObject("{=RsRkc9dF}Pastureland:").ToString(), landData.Pastureland + " acres",

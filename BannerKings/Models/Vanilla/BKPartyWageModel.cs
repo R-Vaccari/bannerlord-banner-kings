@@ -1,7 +1,7 @@
-﻿using BannerKings.Managers.Education;
-using BannerKings.Managers.Education.Lifestyles;
+﻿using BannerKings.Managers.Education.Lifestyles;
 using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Skills;
+using BannerKings.Managers.Titles.Laws;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Party;
@@ -13,9 +13,9 @@ namespace BannerKings.Models.Vanilla
 {
     public class BKPartyWageModel : DefaultPartyWageModel
     {
-        public override int GetCharacterWage(int tier)
+        public override int GetCharacterWage(CharacterObject character)
         {
-            var result = tier switch
+            var result = character.Tier switch
             {
                 0 => 3,
                 1 => 6,
@@ -86,11 +86,11 @@ namespace BannerKings.Models.Vanilla
                     result.Add(result.ResultNumber * -0.5f);
                 }
 
-
                 var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(leader);
+                float mountedProportion = mountedTroops / mobileParty.MemberRoster.Count;
                 if (education.HasPerk(BKPerks.Instance.CataphractEquites) && mountedTroops > 0f)
                 {
-                    result.AddFactor(mountedTroops * -0.1f, BKPerks.Instance.CataphractEquites.Name);
+                    result.AddFactor(mountedProportion * -0.1f, BKPerks.Instance.CataphractEquites.Name);
                 }
 
                 if (mobileParty.SiegeEvent != null && education.Lifestyle != null && 
@@ -115,10 +115,28 @@ namespace BannerKings.Models.Vanilla
         public override int GetTroopRecruitmentCost(CharacterObject troop, Hero buyerHero, bool withoutItemCost = false)
         {
             var result = new ExplainedNumber(base.GetTroopRecruitmentCost(troop, buyerHero, withoutItemCost) * 1.4f);
-            result.LimitMin(GetCharacterWage(troop.Tier) * 2f);
+            result.LimitMin(GetCharacterWage(troop) * 2f);
 
             if (buyerHero != null)
             {
+                if (buyerHero.CurrentSettlement != null)
+                {
+                    var title = BannerKingsConfig.Instance.TitleManager.GetTitle(buyerHero.CurrentSettlement);
+                    if (title != null)
+                    {
+                        var contract = title.contract;
+                        if (contract.IsLawEnacted(DefaultDemesneLaws.Instance.DraftingFreeContracts))
+                        {
+                            result.Add(1f, DefaultDemesneLaws.Instance.DraftingFreeContracts.Name);
+                        }
+                        else if (contract.IsLawEnacted(DefaultDemesneLaws.Instance.DraftingHidage))
+                        {
+                            result.Add(0.5f, DefaultDemesneLaws.Instance.DraftingHidage.Name);
+                        }
+                    }
+                }
+
+
                 var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(buyerHero);
                 if (troop.Occupation == Occupation.Mercenary && education.HasPerk(BKPerks.Instance.MercenaryLocalConnections))
                 {
@@ -154,25 +172,10 @@ namespace BannerKings.Models.Vanilla
                         result.AddFactor(-0.1f);
                     }
 
-                    if (buyerHero.CurrentSettlement is {OwnerClan: { }} 
-                        && buyerHero.CurrentSettlement.OwnerClan == buyerHero.Clan)
-                    {
-                        result.AddFactor(-0.15f);
-                    }
-
-                    if (troop.IsInfantry)
-                    {
-                        result.AddFactor(-0.05f);
-                    }
-
                     var buyerKingdom = buyerHero.Clan.Kingdom;
                     if (buyerKingdom != null && troop.Culture != buyerHero.Culture)
                     {
                         result.AddFactor(0.25f, GameTexts.FindText("str_kingdom"));
-                    }
-                    else
-                    {
-                        result.AddFactor(-0.1f, GameTexts.FindText("str_kingdom"));
                     }
 
                     switch (buyerHero.Clan.Tier)

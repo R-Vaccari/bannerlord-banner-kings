@@ -14,6 +14,7 @@ using BannerKings.Managers.Policies;
 using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Villages;
 using BannerKings.Managers.Titles;
+using BannerKings.Managers.Titles.Laws;
 using BannerKings.Models;
 using BannerKings.Models.BKModels;
 using BannerKings.Models.Vanilla;
@@ -41,6 +42,8 @@ namespace BannerKings
         public InnovationsManager InnovationsManager { get; private set; }
         public GoalManager GoalManager { get; private set; }
 
+
+        public BKConstructionModel ConstructionModel { get; } = new();
         public BKInfluenceModel InfluenceModel { get; } = new();
         public BKTitleModel TitleModel { get; } = new();
         public BKStabilityModel StabilityModel { get; } = new();
@@ -53,7 +56,6 @@ namespace BannerKings
         public BKWorkshopModel WorkshopModel { get; } = new();
         public BKAdministrativeModel AdministrativeModel { get; } = new();
         public BKSmithingModel SmithingModel { get; } = new();
-        public BKCultureAcceptanceModel CultureAcceptanceModel { get; } = new();
         public BKCultureModel CultureModel { get; } = new();
         public BKReligionModel ReligionModel { get; } = new();
         public BKPietyModel PietyModel { get; } = new();
@@ -63,6 +65,8 @@ namespace BannerKings
         public BKVillageProductionModel VillageProductionModel { get; } = new();
         public BKProsperityModel ProsperityModel { get; } = new();
         public BKTaxModel TaxModel { get; } = new();
+        public BKEstatesModel EstatesModel { get; } = new();
+        public BKMarriageModel MarriageModel { get; } = new();
 
 
         public static BannerKingsConfig Instance => ConfigHolder.CONFIG;
@@ -101,6 +105,7 @@ namespace BannerKings
             DefaultLanguages.Instance.Initialize();
             DefaultBookTypes.Instance.Initialize();
             DefaultLifestyles.Instance.Initialize();
+            DefaultDemesneLaws.Instance.Initialize();
 
             Models.Add(new BKCultureModel());
             Models.Add(new BKCultureAcceptanceModel());

@@ -43,8 +43,8 @@ namespace BannerKings.Managers.Policies
             if (obj.SelectedItem != null)
             {
                 var vm = obj.GetCurrentItem();
-                Policy = (MilitiaPolicy) vm.value;
-                Selected = vm.value;
+                Policy = (MilitiaPolicy) vm.Value;
+                Selected = vm.Value;
                 BannerKingsConfig.Instance.PolicyManager.UpdateSettlementPolicy(Settlement, this);
             }
         }

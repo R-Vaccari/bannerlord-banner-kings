@@ -13,11 +13,187 @@ using TaleWorlds.Localization;
 using static BannerKings.Managers.PopulationManager;
 using static BannerKings.Managers.Policies.BKDraftPolicy;
 using BannerKings.Managers.Institutions.Religions.Doctrines;
+using BannerKings.Extensions;
+using BannerKings.Managers.Titles.Laws;
+using BannerKings.Settings;
+using System;
+using System.Collections.Generic;
 
 namespace BannerKings.Models.Vanilla
 {
     public class BKVolunteerModel : CalradiaExpandedKingdoms.Models.CEKVolunteerProductionModel
     {
+
+        public override int MaximumIndexHeroCanRecruitFromHero(Hero buyerHero, Hero sellerHero, int useValueAsRelation = -101)
+          => (int)Math.Floor(CalculateMaximumRecruitmentIndex(buyerHero, sellerHero, useValueAsRelation, false).ResultNumber);
+
+        public ExplainedNumber CalculateMaximumRecruitmentIndex(Hero buyerHero, Hero sellerHero, int useValueAsRelation = -101, bool explanations = false)
+        {
+            var result = new ExplainedNumber(0f, explanations);
+            result.LimitMin(0f);
+            result.LimitMax(sellerHero.VolunteerTypes.Length);
+
+            if (buyerHero != null)
+            {
+                useValueAsRelation = sellerHero.GetRelation(buyerHero);
+            }
+
+            result.Add(GetRelationImpact(useValueAsRelation), GameTexts.FindText("str_notable_relations"));
+
+            var settlement = sellerHero.CurrentSettlement;
+            var contract = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement).contract;
+            if (contract.IsLawEnacted(DefaultDemesneLaws.Instance.DraftingVassalage))
+            {
+                AddVassalage(ref result, buyerHero, sellerHero);
+            }
+            else if (contract.IsLawEnacted(DefaultDemesneLaws.Instance.DraftingHidage))
+            {
+                AddHidage(ref result, buyerHero, sellerHero);
+            }
+            else
+            {
+                int baseResult = base.MaximumIndexHeroCanRecruitFromHero(buyerHero, sellerHero, useValueAsRelation);
+                result.Add(baseResult * (BannerKingsSettings.Instance.VolunteersLimit / 6f) * 0.5f, DefaultDemesneLaws.Instance.DraftingFreeContracts.Name);
+            }
+
+            AddPerks(ref result, buyerHero, sellerHero, useValueAsRelation);
+            return result;
+        }
+
+        private void AddHidage(ref ExplainedNumber result, Hero buyerHero, Hero sellerHero)
+        {
+            Settlement settlement = sellerHero.CurrentSettlement;
+            float factor = 0f;
+
+            if (buyerHero.MapFaction == sellerHero.MapFaction)
+            {
+                var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
+                float hides;
+
+                if (data.EstateData != null && data.EstateData.HeroHasEstate(sellerHero))
+                {
+                    var estate = data.EstateData.GetHeroEstate(sellerHero);
+                    hides = estate.Acreage / BannerKingsConfig.Instance.EstatesModel.MinimumEstateAcreage;
+                }
+                else
+                {
+                    hides = sellerHero.Power / 150f;
+                }
+
+                factor = hides * 0.15f;
+            }
+            else if (settlement.IsVillage)
+            {
+                factor = -1f;
+            }
+
+            result.Add(BannerKingsSettings.Instance.VolunteersLimit * factor, DefaultDemesneLaws.Instance.DraftingVassalage.Name);
+        }
+
+        private void AddVassalage(ref ExplainedNumber result, Hero buyerHero, Hero sellerHero)
+        {
+            Settlement settlement = sellerHero.CurrentSettlement;
+            float factor = 0f;
+
+            if (buyerHero.MapFaction == sellerHero.MapFaction)
+            {
+                var title = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement);
+                if (title.deJure == buyerHero)
+                {
+                    factor = 0.8f;
+                }
+                else if (settlement.IsVillage ? settlement.Village.GetActualOwner() == buyerHero : settlement.Owner == buyerHero)
+                {
+                    factor = 0.5f;
+                }
+                else if (buyerHero.PartyBelongedTo != null && buyerHero.PartyBelongedTo.Army != null)
+                {
+                    factor = 0.4f;
+                }
+            }
+            else if (settlement.IsVillage)
+            {
+                factor = -1f;
+            }
+
+            result.Add(BannerKingsSettings.Instance.VolunteersLimit * factor, DefaultDemesneLaws.Instance.DraftingVassalage.Name);
+        }
+
+        private void AddPerks(ref ExplainedNumber result, Hero buyerHero, Hero sellerHero, int useValueAsRelation = -101)
+        {
+
+            Settlement currentSettlement = sellerHero.CurrentSettlement;
+            if (sellerHero.IsGangLeader && currentSettlement != null && currentSettlement.OwnerClan == buyerHero.Clan)
+            {
+                if (currentSettlement.IsTown)
+                {
+                    Hero governor = currentSettlement.Town.Governor;
+                    if (governor != null && governor.GetPerkValue(DefaultPerks.Roguery.OneOfTheFamily))
+                    {
+                        goto IL_138;
+                    }
+                }
+                if (!currentSettlement.IsVillage)
+                {
+                    goto IL_148;
+                }
+                Hero governor2 = currentSettlement.Village.Bound.Town.Governor;
+                if (governor2 == null || !governor2.GetPerkValue(DefaultPerks.Roguery.OneOfTheFamily))
+                {
+                    goto IL_148;
+                }
+            IL_138:
+                result.Add(DefaultPerks.Roguery.OneOfTheFamily.SecondaryBonus, DefaultPerks.Roguery.OneOfTheFamily.Name);
+            }
+
+        IL_148:
+            if (sellerHero.IsMerchant && buyerHero.GetPerkValue(DefaultPerks.Trade.ArtisanCommunity))
+            {
+                result.Add(DefaultPerks.Trade.ArtisanCommunity.SecondaryBonus, DefaultPerks.Trade.ArtisanCommunity.Name);
+            }
+
+            if (sellerHero.Culture == buyerHero.Culture && buyerHero.GetPerkValue(DefaultPerks.Leadership.CombatTips))
+            {
+                result.Add(DefaultPerks.Leadership.CombatTips.SecondaryBonus, DefaultPerks.Leadership.CombatTips.Name);
+            }
+
+            if (sellerHero.IsRuralNotable && buyerHero.GetPerkValue(DefaultPerks.Charm.Firebrand))
+            {
+                result.Add(DefaultPerks.Charm.Firebrand.SecondaryBonus, DefaultPerks.Charm.Firebrand.Name);
+            }
+
+            if (sellerHero.IsUrbanNotable && buyerHero.GetPerkValue(DefaultPerks.Charm.FlexibleEthics))
+            {
+                result.Add(DefaultPerks.Charm.FlexibleEthics.SecondaryBonus, DefaultPerks.Charm.FlexibleEthics.Name);
+            }
+
+            if (sellerHero.IsArtisan && buyerHero.PartyBelongedTo != null && buyerHero.PartyBelongedTo.EffectiveEngineer != null && buyerHero.PartyBelongedTo.EffectiveEngineer.GetPerkValue(DefaultPerks.Engineering.EngineeringGuilds))
+            {
+                result.Add(DefaultPerks.Engineering.EngineeringGuilds.PrimaryBonus, DefaultPerks.Engineering.EngineeringGuilds.Name);
+            }
+        }
+
+        private int GetRelationImpact(int relation)
+        {
+            int result = 0;
+            float divided = relation / 50f;
+            result = (int)(BannerKingsSettings.Instance.VolunteersLimit * (divided * 0.15f));
+
+            return result;
+        }
+
+        private bool IsPreacherBlocked(Hero sellerHero, Hero buyerHero)
+        {
+            var clergyman = BannerKingsConfig.Instance.ReligionsManager.GetClergymanFromHeroHero(sellerHero);
+            if (clergyman != null)
+            {
+                var clergyReligion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(sellerHero);
+                var heroReligion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(buyerHero);
+                return heroReligion != clergyReligion || !buyerHero.GetPerkValue(BKPerks.Instance.TheologyFaithful);
+            }
+
+            return false;
+        }
         public override bool CanHaveRecruits(Hero hero)
         {
             var occupation = hero.Occupation;
@@ -147,17 +323,16 @@ namespace BannerKings.Models.Vanilla
             }
 
             return explainedNumber;
-
         }
 
         public ExplainedNumber GetMilitarism(Settlement settlement)
         {
             var explainedNumber = new ExplainedNumber(0f, true);
-            var serfMilitarism = GetClassMilitarism(PopType.Serfs);
-            var craftsmenMilitarism = GetClassMilitarism(PopType.Craftsmen);
-            var nobleMilitarism = GetClassMilitarism(PopType.Nobles);
-
-            explainedNumber.Add((serfMilitarism + craftsmenMilitarism + nobleMilitarism) / 3f, new TextObject("{=AaNeOd9n}Base"));
+            var classes = GetMilitaryClasses(settlement);
+            foreach (var tuple in classes)
+            {
+                explainedNumber.Add(tuple.Item2 / classes.Count, Utils.Helpers.GetClassName(tuple.Item1, settlement.Culture));
+            }
 
             BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref explainedNumber, settlement.OwnerClan.Leader, CouncilPosition.Marshall, 0.03f, false);
 
@@ -177,6 +352,59 @@ namespace BannerKings.Models.Vanilla
             }
 
             return explainedNumber;
+        }
+
+        public List<ValueTuple<PopType, float>> GetMilitaryClasses(Settlement settlement)
+        {
+            var list = new List<ValueTuple<PopType, float>>();
+            float serfFactor = 0.1f;
+            float craftsmenFactor = 0.04f;
+            float nobleFactor = 0.12f;
+
+            if (settlement.OwnerClan != null)
+            {
+                var title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(settlement.OwnerClan.Kingdom);
+                if (title != null)
+                {
+                    if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.SlaveryAserai))
+                    {
+                        list.Add(new(PopType.Slaves, 0.06f));
+                    }
+
+                    if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.SerfsMilitaryServiceDuties))
+                    {
+                        serfFactor += 0.03f;
+                    }
+                    else if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.SerfsLaxDuties))
+                    {
+                        serfFactor -= 0.015f;
+                    }
+
+                    if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.CraftsmenMilitaryServiceDuties))
+                    {
+                        craftsmenFactor += 0.03f;
+                    }
+                    else if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.CraftsmenLaxDuties))
+                    {
+                        serfFactor -= 0.015f;
+                    }
+
+                    if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.NoblesMilitaryServiceDuties))
+                    {
+                        nobleFactor += 0.03f;
+                    }
+                    else if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.NoblesLaxDuties))
+                    {
+                        serfFactor -= 0.015f;
+                    }
+                }
+            }
+
+            list.Add(new(PopType.Serfs, serfFactor));
+            list.Add(new(PopType.Craftsmen, craftsmenFactor));
+            list.Add(new(PopType.Nobles, nobleFactor));
+
+            return list;
         }
 
         public float GetClassMilitarism(PopType type)

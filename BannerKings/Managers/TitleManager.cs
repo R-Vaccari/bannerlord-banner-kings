@@ -4,18 +4,20 @@ using System.Linq;
 using System.Text;
 using System.Xml;
 using BannerKings.Actions;
+using BannerKings.Managers.Populations.Estates;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
+using BannerKings.Managers.Titles.Laws;
 using BannerKings.Models.BKModels;
 using BannerKings.UI.Cutscenes;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
-using TaleWorlds.CampaignSystem.SceneInformationPopupTypes;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.SaveSystem;
+using ActionType = BannerKings.Managers.Titles.ActionType;
 
 namespace BannerKings.Managers
 {
@@ -76,6 +78,19 @@ namespace BannerKings.Managers
             Knights ??= new Dictionary<Hero, float>();
         }
 
+        public void PostInitialize()
+        {
+            foreach (var title in Titles.Keys.ToList())
+            {
+                if (title.contract.DemesneLaws == null || title.contract.DemesneLaws.Count == 0)
+                {
+                    title.SetLaws(DefaultDemesneLaws.Instance.GetAdequateLaws(title));
+                }
+
+                title.PostInitialize();
+            }
+        }
+
         public bool IsHeroTitleHolder(Hero hero)
         {
             if (DeJuresCache.ContainsKey(hero))
@@ -85,6 +100,8 @@ namespace BannerKings.Managers
 
             return false;
         }
+
+        public bool IsKnight(Hero hero) => Knights.ContainsKey(hero);
 
         public FeudalTitle GetTitle(Settlement settlement)
         {
@@ -136,13 +153,7 @@ namespace BannerKings.Managers
         public void GrantKnighthood(FeudalTitle title, Hero knight, Hero grantor)
         {
             var action = BannerKingsConfig.Instance.TitleModel.GetAction(ActionType.Grant, title, grantor);
-
             action.Influence = -BannerKingsConfig.Instance.TitleModel.GetGrantKnighthoodCost(grantor).ResultNumber;
-            if (grantor.GetPerkValue(BKPerks.Instance.LordshipAccolade))
-            {
-                action.Influence *= 0.15f;
-            }
-
             action.TakeAction(knight);
 
             if (grantor == Hero.MainHero)
@@ -160,6 +171,28 @@ namespace BannerKings.Managers
                         .SetTextVariable("KNIGHT", knight.EncyclopediaLinkWithName)
                         .ToString()));
             }
+
+            AddKnightInfluence(knight, 0f);
+        }
+
+        public void GrantKnighthood(Estate estate, Hero knight, Hero grantor)
+        {
+            var action = BannerKingsConfig.Instance.EstatesModel.GetGrant(estate, grantor, knight);
+            action.Influence = -BannerKingsConfig.Instance.TitleModel.GetGrantKnighthoodCost(grantor).ResultNumber;
+            action.TakeAction(knight);
+
+            ClanActions.JoinClan(knight, grantor.Clan);
+
+            if (Clan.PlayerClan.Kingdom != null && grantor.Clan.Kingdom == Clan.PlayerClan.Kingdom)
+            {
+                InformationManager.DisplayMessage(new InformationMessage(
+                    new TextObject("{=AyXDhK2V}The {CLAN} has knighted {KNIGHT}.")
+                        .SetTextVariable("CLAN", grantor.Clan.EncyclopediaLinkWithName)
+                        .SetTextVariable("KNIGHT", knight.EncyclopediaLinkWithName)
+                        .ToString()));
+            }
+
+            AddKnightInfluence(knight, 0f);
         }
 
         public bool IsHeroKnighted(Hero hero)
@@ -198,6 +231,16 @@ namespace BannerKings.Managers
                     else
                     {
                         DeJuresCache.Add(newOwner, new List<FeudalTitle> {title});
+                    }
+
+
+                    if (DeJuresCache[oldOwner].Count == 0)
+                    {
+                        DeJuresCache.Remove(oldOwner);
+                        if (Knights.ContainsKey(oldOwner))
+                        {
+                            Knights.Remove(oldOwner);
+                        }
                     }
                 }
                 else
@@ -254,30 +297,6 @@ namespace BannerKings.Managers
 
             return null;
         }
-
-        /*public List<Hero> CalculateVassals(Clan clan)
-        {
-            List<Hero> result = new List<Hero>();
-    
-            Hero leader = clan.Leader;
-            foreach (FeudalTitle title in BannerKingsConfig.Instance.TitleManager.GetAllDeJure(clan))
-            {
-                if (title.vassals == null || title.vassals.Count == 0) continue;
-    
-                foreach (FeudalTitle vassal in title.vassals)
-                {
-                    Hero deJure = vassal.deJure;
-                    if (deJure == null || deJure == leader) continue;
-    
-                    if (deJure.Clan == leader.Clan) result.Add(deJure);
-                    else if (BannerKingsConfig.Instance.TitleManager.CalculateHeroSuzerain(deJure).deJure == leader)
-                        result.Add(deJure);
-                }
-            }
-    
-            return result;
-        } */
-
 
 
         public Dictionary<Clan, List<FeudalTitle>> CalculateVassals(Clan suzerainClan, Clan targetClan = null)
@@ -450,6 +469,17 @@ namespace BannerKings.Managers
             }
         }
 
+        public void GrantEstate(EstateAction action)
+        {
+            var grantor = action.ActionTaker;
+
+            ChangeRelationAction.ApplyRelationChangeBetweenHeroes(grantor, action.ActionTarget, 15);
+            GainKingdomInfluenceAction.ApplyForDefault(grantor, -action.Influence);
+            grantor.AddSkillXp(BKSkills.Instance.Lordship, 25);
+
+            action.Estate.SetOwner(action.ActionTarget);
+        }
+
         public void GrantTitle(TitleAction action, Hero receiver)
         {
             var grantor = action.ActionTaker;
@@ -466,7 +496,7 @@ namespace BannerKings.Managers
             var lordshipPatron = BKPerks.Instance.LordshipPatron;
             if (action.ActionTaker.GetPerkValue(lordshipPatron))
             {
-                action.Renown += 50;
+                action.Renown += 15;
                 relationChange += (int)(relationChange * 0.1f / 100);
             }
 
@@ -474,6 +504,8 @@ namespace BannerKings.Managers
             GainKingdomInfluenceAction.ApplyForDefault(grantor, action.Influence);
             grantor.AddSkillXp(BKSkills.Instance.Lordship, 
                 BannerKingsConfig.Instance.TitleModel.GetSkillReward(action.Title.type, action.Type));
+
+            GainRenownAction.Apply(grantor, action.Renown);
 
             var fief = action.Title.fief;
             if (receiver.Clan.Leader == receiver && fief != null && (fief.IsTown || fief.IsCastle))
@@ -868,6 +900,11 @@ namespace BannerKings.Managers
                 var deJureNameKingdom = kingdom.Attributes["deJure"].Value;
                 var deJureKingdom = GetDeJure(deJureNameKingdom, null);
                 var faction = Kingdom.All.FirstOrDefault(x => x.Name.ToString() == factionName);
+                if (faction == null)
+                {
+                    faction = Kingdom.All.FirstOrDefault(x => x.StringId.ToString() == factionName);
+                }
+
                 var contractType = kingdom.Attributes["contract"].Value;
                 var contract = GenerateContract(contractType);
 
@@ -902,6 +939,11 @@ namespace BannerKings.Managers
                                 var settlementNameCounty = county.Attributes["settlement"].Value;
                                 var deJureNameCounty = county.Attributes["deJure"].Value;
                                 var settlementCounty = Settlement.All.FirstOrDefault(x => x.Name.ToString() == settlementNameCounty);
+                                if (settlementCounty == null)
+                                {
+                                    settlementCounty = Settlement.All.FirstOrDefault(x => x.StringId.ToString() == settlementNameCounty);
+                                }
+
                                 var deJureCounty = GetDeJure(deJureNameCounty, settlementCounty);
                                 var vassalsCounty = new List<FeudalTitle>();
 
@@ -917,6 +959,11 @@ namespace BannerKings.Managers
                                         var settlementNameBarony = barony.Attributes["settlement"].Value;
                                         var deJureIdBarony = barony.Attributes["deJure"].Value;
                                         var settlementBarony = Settlement.All.FirstOrDefault(x => x.Name.ToString() == settlementNameBarony);
+                                        if (settlementBarony == null)
+                                        {
+                                            settlementBarony = Settlement.All.FirstOrDefault(x => x.StringId.ToString() == settlementNameBarony);
+                                        }
+
                                         var deJureBarony = GetDeJure(deJureIdBarony, settlementBarony);
                                         if (settlementBarony != null)
                                         {
@@ -1081,62 +1128,47 @@ namespace BannerKings.Managers
 
         public string GetContractText(FeudalTitle title)
         {
-            var contract = title.contract;
-            var sb = new StringBuilder(
-                $"You, {Hero.MainHero.Name}, formally accept to be henceforth bound to the {title.FullName}, fulfill your duties as well as uphold your rights," +
-                " what can not be undone by means other than abdication of all rights and lands associated with the contract, treachery, or death.");
-            sb.Append(Environment.NewLine);
-            sb.Append("   ");
-            sb.Append(Environment.NewLine);
-            sb.Append("Duties");
-            sb.Append(Environment.NewLine);
-            foreach (var duty in contract.Duties)
-            {
-                sb.Append(GetDutyString(duty.Key, duty.Value));
-                sb.Append(Environment.NewLine);
-            }
+            TextObject text = new TextObject("{=!}You, {NAME}, formally accept to be henceforth bound to the {TITLE}, fulfill your duties as well as uphold your rights, what can not be undone by means other than abdication of all rights and lands associated with the contract, treachery, or death." +
+                "\n\nDuties\n{DUTY1}\n{DUTY2}\n\nRights\n{RIGHT1}\n{RIGHT2}")
+                .SetTextVariable("NAME", Hero.MainHero.Name)
+                .SetTextVariable("TITLE", title.FullName)
+                .SetTextVariable("RIGHT1", GetRightString(title.contract.Rights.ElementAt(0)))
+                .SetTextVariable("RIGHT2", GetRightString(title.contract.Rights.ElementAt(1)))
+                .SetTextVariable("DUTY1", GetDutyString(title.contract.Duties.ElementAt(0)))
+                .SetTextVariable("DUTY2", GetDutyString(title.contract.Duties.ElementAt(1)));
 
-            sb.Append(Environment.NewLine);
-            sb.Append("   ");
-            sb.Append(Environment.NewLine);
-            sb.Append("Rights");
-            sb.Append(Environment.NewLine);
-            foreach (var right in contract.Rights)
-            {
-                sb.Append(GetRightString(right));
-                sb.Append(Environment.NewLine);
-            }
-
-            return sb.ToString();
+            return text.ToString();
         }
 
-        private string GetDutyString(FeudalDuties duty, float factor)
+        private TextObject GetDutyString(KeyValuePair<FeudalDuties, float> pair)
         {
+            FeudalDuties duty = pair.Key;
+            float factor = pair.Value;
             GameTexts.SetVariable("DUTY_FACTOR", (factor * 100f).ToString("0") + '%');
             var text = duty switch
             {
-                FeudalDuties.Taxation => "{=wWpgZ1QE}You are due {DUTY_FACTOR} of your fiefs' income to your suzerain.",
-                FeudalDuties.Auxilium => "{=kk4HK4wg}You are obliged to militarily participate in armies, for {DUTY_FACTOR} of their durations.",
-                _ => "{=bcVxdc0x}You are obliged to contribute to {DUTY_FACTOR} of your suzerain's ransom."
+                FeudalDuties.Taxation => new TextObject("{=wWpgZ1QE}You are due {DUTY_FACTOR} of your fiefs' income to your suzerain."),
+                FeudalDuties.Auxilium => new TextObject("{=kk4HK4wg}You are obliged to militarily participate in armies, for {DUTY_FACTOR} of their durations."),
+                _ => new TextObject("{=bcVxdc0x}You are obliged to contribute to {DUTY_FACTOR} of your suzerain's ransom.")
             };
 
-            return new TextObject(text).ToString();
+            return text;
         }
 
-        private string GetRightString(FeudalRights right)
+        private TextObject GetRightString(FeudalRights right)
         {
             return right switch
             {
-                FeudalRights.Absolute_Land_Rights => "{=pmw8kEKb}You are entitled to ownership of any conquered lands whose title you own.",
-                FeudalRights.Enfoeffement_Rights => "{=kEvL0vNU}You are entitled to be granted land in case you have none, whenever possible.",
-                FeudalRights.Conquest_Rights => "{=7TCkYXav}You are entitled to the ownership of any lands you conquered by yourself.",
-                _ => "{=!}"
+                FeudalRights.Absolute_Land_Rights => new TextObject("{=pmw8kEKb}You are entitled to ownership of any conquered lands whose title you own."),
+                FeudalRights.Enfoeffement_Rights => new TextObject("{=kEvL0vNU}You are entitled to be granted land in case you have none, whenever possible."),
+                FeudalRights.Conquest_Rights => new TextObject("{=7TCkYXav}You are entitled to the ownership of any lands you conquered by yourself."),
+                _ => new TextObject("{=!}")
             };
         }
 
         private FeudalContract GenerateContract(string type)
         {
-            return type switch
+            var contract = type switch
             {
                 "imperial" => new FeudalContract(
                     new Dictionary<FeudalDuties, float> {{FeudalDuties.Ransom, 0.10f}, {FeudalDuties.Taxation, 0.4f}},
@@ -1160,6 +1192,15 @@ namespace BannerKings.Managers
                     GovernmentType.Feudal, SuccessionType.Hereditary_Monarchy, InheritanceType.Primogeniture,
                     GenderLaw.Agnatic)
             };
+
+            return contract;
+        }
+
+        private List<DemesneLaw> GenerateDemesneLaws(FeudalContract contract)
+        {
+            var list = new List<DemesneLaw>();
+
+            return list;
         }
 
         private FeudalTitle CreateEmpire(Hero deJure, Kingdom faction, List<FeudalTitle> vassals, 

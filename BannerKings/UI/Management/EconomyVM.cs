@@ -2,7 +2,6 @@ using System.Linq;
 using System.Text;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Populations;
-using BannerKings.Models.Vanilla;
 using BannerKings.UI.Items;
 using BannerKings.UI.Items.UI;
 using TaleWorlds.CampaignSystem;
@@ -22,7 +21,8 @@ namespace BannerKings.UI.Management
     {
         private BKCriminalPolicy criminalItem;
         private DecisionElement exportToogle, tariffToogle, slaveTaxToogle, mercantilismToogle;
-        private MBBindingList<InformationElement> productionInfo, revenueInfo, satisfactionInfo;
+        private MBBindingList<InformationElement> productionInfo, revenueInfo, satisfactionInfo,
+            slaveryInfo;
         private ItemRoster roster;
         private readonly Settlement settlement;
         private BKTaxPolicy taxItem;
@@ -33,9 +33,21 @@ namespace BannerKings.UI.Management
             productionInfo = new MBBindingList<InformationElement>();
             revenueInfo = new MBBindingList<InformationElement>();
             satisfactionInfo = new MBBindingList<InformationElement>();
+            slaveryInfo = new MBBindingList<InformationElement>();
             settlement = _settlement;
             RefreshValues();
         }
+
+
+        [DataSourceProperty]
+        public string ProductionText => new TextObject("{=bk_production}Production").ToString();
+
+        [DataSourceProperty]
+        public string SatisfactionsText => new TextObject("{=!}Satisfactions").ToString();
+
+        [DataSourceProperty]
+        public string SlaveryText => new TextObject("{=bk_slavery}Slavery").ToString();
+
 
         [DataSourceProperty]
         public string TaxPolicyText => new TextObject("{=!}Tax policy").ToString();
@@ -174,6 +186,20 @@ namespace BannerKings.UI.Management
         }
 
         [DataSourceProperty]
+        public MBBindingList<InformationElement> SlaveryInfo
+        {
+            get => slaveryInfo;
+            set
+            {
+                if (value != slaveryInfo)
+                {
+                    slaveryInfo = value;
+                    OnPropertyChangedWithValue(value);
+                }
+            }
+        }
+
+        [DataSourceProperty]
         public MBBindingList<InformationElement> SatisfactionInfo
         {
             get => satisfactionInfo;
@@ -193,8 +219,8 @@ namespace BannerKings.UI.Management
             ProductionInfo.Clear();
             RevenueInfo.Clear();
             SatisfactionInfo.Clear();
+            SlaveryInfo.Clear();
 
-           
 
             ProductionInfo.Add(new InformationElement(new TextObject("{=NnOoYOTC}State Slaves:").ToString(),
                 $"{data.EconomicData.StateSlaves:P}",
@@ -227,7 +253,7 @@ namespace BannerKings.UI.Management
 
                 var villageRevenue = BannerKingsConfig.Instance.TaxModel.CalculateVillageTaxFromIncome(villageData.Village);
                 RevenueInfo.Add(new InformationElement(new TextObject("{=!}Village Revenue:").ToString(),
-                    FormatFloatWithSymbols(villageRevenue.ResultNumber),
+                    FormatFloatGain(villageRevenue.ResultNumber),
                     new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
                         .SetTextVariable("TEXT",
                             new TextObject("{=!}The village's revenue output. Most of the revenue in villages is generated through production and selling of products by serfs and slaves. They are taxed through their labor rather than in coin. Nobles and craftsmen however may be taxed in coins through construction of tax offices."))
@@ -341,6 +367,22 @@ namespace BannerKings.UI.Management
                         RefreshValues();
                     }, new TextObject(mercantilismDecision.GetHint()));
             }
+
+
+
+            var slavePrice = BannerKingsConfig.Instance.GrowthModel.CalculateSlavePrice(settlement, true);
+            SlaveryInfo.Add(new InformationElement(new TextObject("{=!}Slave Price:").ToString(),
+                ((int)slavePrice.ResultNumber).ToString(),
+                slavePrice.GetExplanations()));
+
+            var slaveDemand = BannerKingsConfig.Instance.GrowthModel.CalculatePopulationClassDemand(settlement, PopType.Slaves, true);
+            SlaveryInfo.Add(new InformationElement(new TextObject("{=!}Slave Demand:").ToString(),
+                FormatValue(slaveDemand.ResultNumber),
+                slaveDemand.GetExplanations()));
+
+            
+
+
 
             var admCost = data.EconomicData.AdministrativeCost;
             RevenueInfo.Add(new InformationElement(new TextObject("{=MhzdyoWG}Administrative Cost:").ToString(), 

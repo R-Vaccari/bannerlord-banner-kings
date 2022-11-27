@@ -3,6 +3,7 @@ using BannerKings.Utils;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.SaveSystem;
@@ -25,21 +26,9 @@ namespace BannerKings.Managers.Populations
 
         public CultureObject DominantCulture
         {
-            get
-            {
-                var eligible = new List<(CultureObject, float)>();
-                foreach (var data in cultures)
-                {
-                    if (data.Culture.MilitiaPartyTemplate != null && data.Culture.DefaultPartyTemplate != null &&
-                        !data.Culture.IsBandit)
-                    {
-                        eligible.Add((data.Culture, data.Assimilation));
-                    }
-                }
-
-                eligible.OrderByDescending(pair => pair.Item2);
-                return eligible[0].Item1;
-            }
+            get => (from x in cultures
+                    orderby x.Assimilation descending
+                    select x).First().Culture;
         }
 
         public Hero SettlementOwner
@@ -125,6 +114,25 @@ namespace BannerKings.Managers.Populations
             return data?.Acceptance ?? 0f;
         }
 
+        public float GetWeightPorportion(Settlement settlement, CultureObject culture)
+        {
+            var totalWeight = 0f;
+            var targetWeight = 0f;
+
+            foreach (var cultureData in cultures)
+            {
+                var weight = BannerKingsConfig.Instance.CultureModel.CalculateCultureWeight(settlement, cultureData).ResultNumber;
+                totalWeight += weight;
+
+                if (cultureData.Culture == culture)
+                {
+                    targetWeight = weight;
+                }
+            }
+
+            return targetWeight / totalWeight;
+        }
+
         internal override void Update(PopulationData data)
         {
             ExceptionUtils.TryCatch(() =>
@@ -133,63 +141,32 @@ namespace BannerKings.Managers.Populations
 
                 BalanceCultures(data);
                 var dominant = DominantCulture;
-                if (dominant.BasicTroop != null && dominant.MilitiaSpearman != null)
+                if (dominant.BasicTroop != null)
                 {
                     data.Settlement.Culture = dominant;
-                    if (data.Settlement.Notables is { Count: > 0 })
-                    {
-                        foreach (var notable in data.Settlement.Notables)
-                        {
-                            notable.Culture = dominant;
-                        }
-                    }
                 }
+
             }, GetType().Name);
         }
 
+
+
         private void BalanceCultures(PopulationData data)
         {
-            var weightDictionary = new Dictionary<CultureDataClass, float>();
-            var totalWeight = 0f;
-            var foreignerTotalAssimilation = 0f;
+            var toRemove = new List<CultureDataClass>();
 
             foreach (var cultureData in cultures)
             {
-                cultureData.Acceptance += new BKCultureAcceptanceModel().CalculateEffect(data.Settlement, cultureData)
-                    .ResultNumber;
-
-                if (IsForeigner(data, cultureData))
+                cultureData.Tick(data.Settlement, this);
+                if (cultureData.Assimilation <= 0f)
                 {
-                    foreignerTotalAssimilation += cultureData.Assimilation;
-                    continue;
+                    toRemove.Add(cultureData);
                 }
-
-                var weight = BannerKingsConfig.Instance.CultureModel.CalculateCultureWeight(data.Settlement, cultureData).ResultNumber;
-                totalWeight += weight;
-                weightDictionary.Add(cultureData, weight);      
             }
 
-            foreach (var cultureData in cultures)
+            foreach (var cultureData in toRemove)
             {
-                if (!weightDictionary.ContainsKey(cultureData))
-                {
-                    continue;
-                }
-
-                var proportion = weightDictionary[cultureData] / totalWeight;
-                if (proportion < cultureData.Assimilation)
-                {
-                    cultureData.Assimilation += MathF.Min(0.01f, cultureData.Assimilation - proportion);
-                }
-                else if (proportion < cultureData.Assimilation)
-                {
-                    cultureData.Assimilation -= MathF.Min(0.01f, cultureData.Assimilation - proportion);
-                }
-
-                if (proportion <= 0f && cultureData.Assimilation <= 0f)
-                {
-                    cultures.Remove(cultureData);
-                }
+                cultures.Remove(cultureData);
             }
         }
 

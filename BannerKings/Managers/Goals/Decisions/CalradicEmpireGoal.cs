@@ -154,7 +154,7 @@ namespace BannerKings.Managers.Goals.Decisions
 
         internal override void ApplyGoal()
         {
-            var founder = GetFulfiller();
+            var founder = Hero.MainHero;
             var (gold, influence) = GetCosts(founder);
 
             var foundAction = new TitleAction(ActionType.Found, null, founder)

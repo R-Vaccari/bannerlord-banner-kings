@@ -1,5 +1,6 @@
 using System.Linq;
 using BannerKings.Behaviours;
+using BannerKings.Extensions;
 using BannerKings.UI.Crafting;
 using Bannerlord.UIExtenderEx.Attributes;
 using Bannerlord.UIExtenderEx.ViewModels;

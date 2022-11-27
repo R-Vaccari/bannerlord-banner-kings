@@ -89,7 +89,7 @@ namespace BannerKings.Behaviours
 
         private void OnPerkOpened(Hero hero, PerkObject perk)
         {
-            if (perk.AlternativePerk == null || hero.GetPerkValue(perk.AlternativePerk))
+            if (hero != Hero.MainHero || perk.AlternativePerk == null || hero.GetPerkValue(perk.AlternativePerk))
             {
                 return;
             }
@@ -261,7 +261,7 @@ namespace BannerKings.Behaviours
 
             if (bookSellers.Any(x => x.Key.StayingInSettlement == target) && target.IsTown)
             {
-                Utils.Helpers.AddSellerToKeep(bookSellers.First(x => x.Key.StayingInSettlement == target).Key, target);
+                Utils.Helpers.AddCharacterToKeep(bookSellers.First(x => x.Key.StayingInSettlement == target).Key, target);
             }
         }
 

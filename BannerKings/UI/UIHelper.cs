@@ -479,6 +479,56 @@ namespace BannerKings.UI
             return list;
         }
 
+        public static List<TooltipProperty> GetRecruitToolTip(CharacterObject character, Hero owner, int relation, bool canRecruit)
+        {
+            List<TooltipProperty> list = new List<TooltipProperty>();
+
+            if (!canRecruit)
+            {
+                string text = "";
+                list.Add(new TooltipProperty(text, character.ToString(), 1, false, TooltipProperty.TooltipPropertyFlags.None));
+                list.Add(new TooltipProperty(text, text, -1, false, TooltipProperty.TooltipPropertyFlags.None));
+                GameTexts.SetVariable("LEVEL", character.Level);
+                GameTexts.SetVariable("newline", "\n");
+                list.Add(new TooltipProperty(text, GameTexts.FindText("str_level_with_value", null).ToString(), 0, false, TooltipProperty.TooltipPropertyFlags.None));
+
+                list.Add(new TooltipProperty(text, new TextObject("{=!}You don't have access to this recruit.").ToString(), 0, false, TooltipProperty.TooltipPropertyFlags.None));
+
+                var explanation = BannerKingsConfig.Instance.VolunteerModel.CalculateMaximumRecruitmentIndex(Hero.MainHero, owner, relation, true);
+                TooltipAddEmptyLine(list);
+                list.Add(new TooltipProperty(new TextObject("{=!}Explanations").ToString(), " ", 0));
+                TooltipAddSeperator(list);
+
+                list.Add(new TooltipProperty(text, explanation.GetExplanations(), 0, false, TooltipProperty.TooltipPropertyFlags.None));
+            }
+
+            return list;
+
+        }
+
+        public static List<TooltipProperty> GetHeirTooltip(Hero hero, ExplainedNumber score)
+        {
+            var list = new List<TooltipProperty>
+            {
+                new("", hero.Name.ToString(), 0, false, TooltipProperty.TooltipPropertyFlags.Title)
+            };
+            MBTextManager.SetTextVariable("LEFT", GameTexts.FindText("str_clan"));
+            var definition = GameTexts.FindText("str_LEFT_ONLY").ToString();
+            list.Add(new TooltipProperty(hero.Clan.Name.ToString(), string.Empty, 0));
+            MBTextManager.SetTextVariable("LEFT", GameTexts.FindText("str_tooltip_label_type"));
+            var definition2 = GameTexts.FindText("str_LEFT_ONLY").ToString();
+            list.Add(new TooltipProperty(definition2, HeroHelper.GetCharacterTypeName(hero).ToString(), 0));
+        
+
+            TooltipAddEmptyLine(list);
+            list.Add(new TooltipProperty(new TextObject("{=!}Score").ToString(), " ", 0));
+            TooltipAddSeperator(list);
+            list.Add(new TooltipProperty(score.GetExplanations(), string.Empty, 0));
+
+
+            return list;
+        }
+
         private static string FormatValue(float value)
         {
             return value.ToString("0.00") + '%';

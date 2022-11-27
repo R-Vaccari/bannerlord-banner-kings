@@ -89,9 +89,7 @@ namespace BannerKings.Managers.Institutions.Religions
                 return;
             }
 
-            var candidates = new List<(Religion, float)>();
             var weightDictionary = new Dictionary<Religion, float>();
-
             var totalWeight = 0f;
             foreach (var pair in Religions)
             {
@@ -100,39 +98,10 @@ namespace BannerKings.Managers.Institutions.Religions
                 totalWeight += weight;
             }
 
-
-            var dominantWeight = weightDictionary[dominant];
-            var dominantProportion = dominantWeight / totalWeight;
-            var diff = dominantProportion - Religions[dominant];
-            if (diff is 0f or float.NaN)
-            {
-                return;
-            }
-            
-            var conversion = BannerKingsConfig.Instance.ReligionModel.CalculateReligionConversion(dominant, Settlement, diff).ResultNumber
-                / 100f;
             foreach (var pair in weightDictionary)
             {
-                if (pair.Key == dominant)
-                {
-                    continue;
-                }
-
-                // non-dominant religions have higher change of being affected when have more proportion
-                candidates.Add(new (pair.Key, (pair.Value + 1f) / totalWeight));
+                Religions[pair.Key] = pair.Value / totalWeight;
             }
-
-            var target = MBRandom.ChooseWeighted(candidates);
-            if (target is not null)
-            {
-                Religions[target] -= conversion;
-                if (Religions[target] <= 0f)
-                {
-                    Religions.Remove(target);
-                }
-            }
-
-            Religions[dominant] += conversion;
         }
 
         internal override void Update(PopulationData data)

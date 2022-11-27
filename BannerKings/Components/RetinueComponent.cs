@@ -23,7 +23,7 @@ namespace BannerKings.Components
         public override TextObject Name => new TextObject("{=MNYnLSej}Retinue from {SETTLEMENT}")
             .SetTextVariable("SETTLEMENT", HomeSettlement.Name);
 
-        public override Settlement HomeSettlement => _target;
+        public override Settlement HomeSettlement => Target;
 
         private static MobileParty CreateParty(string id, Settlement origin)
         {

@@ -4,9 +4,11 @@ using System.Linq;
 using System.Reflection;
 using BannerKings.Extensions;
 using BannerKings.Managers.Helpers;
+using BannerKings.Managers.Kingdoms.Policies;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
 using BannerKings.Models.Vanilla;
+using BannerKings.Settings;
 using BannerKings.UI.Notifications;
 using HarmonyLib;
 using TaleWorlds.CampaignSystem;
@@ -24,6 +26,7 @@ using TaleWorlds.CampaignSystem.ViewModelCollection.Education;
 using TaleWorlds.CampaignSystem.ViewModelCollection.Encyclopedia.Items;
 using TaleWorlds.CampaignSystem.ViewModelCollection.GameMenu.Recruitment;
 using TaleWorlds.CampaignSystem.ViewModelCollection.GameMenu.TownManagement;
+using TaleWorlds.CampaignSystem.ViewModelCollection.KingdomManagement;
 using TaleWorlds.CampaignSystem.ViewModelCollection.KingdomManagement.Policies;
 using TaleWorlds.CampaignSystem.ViewModelCollection.Map;
 using TaleWorlds.Core;
@@ -61,15 +64,12 @@ namespace BannerKings.UI
 
         public void ShowWindow(string id)
         {
-            if (mapView == null)
+            if (mapView != null)
             {
-                mapView = new BannerKingsMapView(id);
-            }
-            else if (mapView.id != id)
-            {
-                mapView = new BannerKingsMapView(id);
+                mapView.Close();
             }
 
+            mapView = new BannerKingsMapView(id);
             mapView.Refresh();
         }
 
@@ -85,6 +85,7 @@ namespace BannerKings.UI
 
     namespace Patches
     {
+
         [HarmonyPatch(typeof(MapNotificationVM), "PopulateTypeDictionary")]
         internal class PopulateNotificationsPatch
         {
@@ -97,6 +98,16 @@ namespace BannerKings.UI
                 dic.Add(typeof(UnlandedDemesneLimitNotification), typeof(DemesneLimitNotificationVM));
             }
         }
+
+        [HarmonyPatch(typeof(KingdomManagementVM), "SetSelectedCategory")]
+        internal class KingdomManagementRefreshPatch
+        {
+            private static void Postfix(KingdomManagementVM __instance)
+            {
+                __instance.RefreshValues();
+            }
+        }
+
 
         [HarmonyPatch(typeof(SettlementGovernorSelectionVM))]
         internal class AvailableGovernorsPatch
@@ -127,7 +138,9 @@ namespace BannerKings.UI
             [HarmonyPatch("Name", MethodType.Getter)]
             internal static void GetterPostfix(Hero __instance, ref TextObject __result)
             {
-                if (__instance.IsLord && BannerKingsConfig.Instance.TitleManager != null)
+                var namingSetting = BannerKingsSettings.Instance.Naming.SelectedValue;
+                if (__instance.IsLord && namingSetting != DefaultSettings.Instance.NamingNoTitles &&
+                    BannerKingsConfig.Instance.TitleManager != null)
                 {
                     var kingdom = __instance.Clan?.Kingdom;
                     var title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(__instance);
@@ -144,7 +157,64 @@ namespace BannerKings.UI
                         var name = (TextObject) __instance.GetType()
                             .GetField("_name", BindingFlags.Instance | BindingFlags.NonPublic)
                             .GetValue(__instance);
-                        __result = new TextObject(name + ", " + $"{honorary} of {title.shortName}");
+
+                        if (namingSetting.Equals(DefaultSettings.Instance.NamingFullTitlesSuffixed))
+                        {
+                            __result = new TextObject("{=!}{NAME}, {TITLE} of {SETTLEMENT}")
+                                .SetTextVariable("TITLE", honorary)
+                                .SetTextVariable("NAME", name)
+                                .SetTextVariable("SETTLEMENT", title.shortName);
+                        }
+                        else if (namingSetting.Equals(DefaultSettings.Instance.NamingFullTitles))
+                        {
+                            __result = new TextObject("{=!}{TITLE} {NAME} of {SETTLEMENT}")
+                                .SetTextVariable("TITLE", honorary)
+                                .SetTextVariable("NAME", name)
+                                .SetTextVariable("SETTLEMENT", title.shortName);
+                        }
+                        else if (namingSetting.Equals(DefaultSettings.Instance.NamingTitlePrefix))
+                        {
+                            __result = new TextObject("{=!}{TITLE} {NAME}")
+                                .SetTextVariable("TITLE", honorary)
+                                .SetTextVariable("NAME", name);
+                        }
+                    }
+                    else if (__instance.Clan != null && __instance.Clan.Leader != __instance && BannerKingsSettings.Instance.CloseRelativesNaming)
+                    {
+                        var leader = __instance.Clan.Leader;
+                        var leaderTitle = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(leader);
+                        if (leaderTitle != null)
+                        {
+                            var government = GovernmentType.Feudal;
+                            if (leaderTitle.contract != null)
+                            {
+                                government = leaderTitle.contract.Government;
+                            }
+
+                            var name = (TextObject)__instance.GetType()
+                                .GetField("_name", BindingFlags.Instance | BindingFlags.NonPublic)
+                                .GetValue(__instance);
+
+                            if (leader == __instance.Spouse)
+                            {
+                                var honorary = Utils.Helpers.GetTitleHonorary(leaderTitle.type, government, __instance.IsFemale,
+                                    kingdom != null ? kingdom.Culture : __instance.Culture);
+
+                                __result = new TextObject("{=!}{TITLE} {NAME}")
+                                    .SetTextVariable("TITLE", honorary)
+                                    .SetTextVariable("NAME", name);
+                            }
+                            else if (government != GovernmentType.Republic && leaderTitle.IsSovereignLevel && 
+                                (leader.Children.Contains(__instance) || leader.Siblings.Contains(__instance)))
+                            { 
+                                var honorary = Utils.TextHelper.GetPrinceTitles(government, __instance.IsFemale,
+                                    kingdom != null ? kingdom.Culture : __instance.Culture);
+
+                                __result = new TextObject("{=!}{TITLE} {NAME}")
+                                    .SetTextVariable("TITLE", honorary)
+                                    .SetTextVariable("NAME", name);
+                            }
+                        }
                     }
                 }
             }
@@ -179,6 +249,27 @@ namespace BannerKings.UI
                 var value = __instance.GetCharacterDeveloper().UnspentFocusPoints;
                 focus.SetValue(__instance, value);
                 __instance.UnspentCharacterPoints = value;
+                return true;
+            }
+        }
+
+        [HarmonyPatch(typeof(RecruitVolunteerTroopVM), "ExecuteBeginHint")]
+        internal class RecruitVolunteerTroopVMHintPatch
+        {
+            private static bool Prefix(RecruitVolunteerTroopVM __instance)
+            {
+                if (__instance.Character != null && !__instance.PlayerHasEnoughRelation)
+                {
+                   
+                    InformationManager.ShowTooltip(typeof(List<TooltipProperty>), new object[]
+                    {
+                        UIHelper.GetRecruitToolTip(__instance.Character, __instance.Owner.OwnerHero, 
+                            Hero.MainHero.GetRelation(__instance.Owner.OwnerHero), false)
+                    });
+
+                    return false;
+                }
+
                 return true;
             }
         }
@@ -311,7 +402,8 @@ namespace BannerKings.UI
                         recruitVolunteerTroopVM.Owner.OwnerHero.VolunteerTypes[recruitVolunteerTroopVM.Index] = null;
                         MobileParty.MainParty.MemberRoster.AddToCounts(recruitVolunteerTroopVM.Character, 1);
                         CampaignEventDispatcher.Instance.OnUnitRecruited(recruitVolunteerTroopVM.Character, 1);
-                        data.MilitaryData.DeduceManpower(data, 1, recruitVolunteerTroopVM.Character);
+                        data.MilitaryData.DeduceManpower(data, 1, recruitVolunteerTroopVM.Character,
+                            recruitVolunteerTroopVM.Owner.OwnerHero);
                         GiveGoldAction.ApplyBetweenCharacters(Hero.MainHero, recruitVolunteerTroopVM.Owner.OwnerHero,
                             recruitVolunteerTroopVM.Cost, true);
                     }
@@ -746,7 +838,26 @@ namespace BannerKings.UI
             static bool Prefix(ArmyManagementVM __instance)
             {
                 bool canCreate = new BKArmyManagementModel().CanCreateArmy(Hero.MainHero);
-                if (!canCreate) MBInformationManager.AddQuickInformation(new TextObject("{=!}Not crown Marshal or low position in title hierarchy", null), 0, null, "");
+                if (!canCreate)
+                {
+                    var rulingClan = Clan.PlayerClan.Kingdom.RulingClan;
+                    var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(rulingClan);
+                    var councilMember = council.GetMemberFromPosition(Managers.Court.CouncilPosition.Marshall);
+                    TextObject reason = new TextObject("{=!}You must be faction leader, {MARSHAL} for the {CLAN} or have a title superior to Lordship level.")
+                        .SetTextVariable("MARSHAL", councilMember.GetName())
+                        .SetTextVariable("CLAN", rulingClan.Name);
+
+                    if (Clan.PlayerClan.Kingdom.HasPolicy(BKPolicies.Instance.LimitedArmyPrivilege))
+                    {
+                        reason = new TextObject("{=!}You must be faction leader, {MARSHAL} for the {CLAN} or have a title superior to County level.")
+                                                .SetTextVariable("MARSHAL", councilMember.GetName())
+                                                .SetTextVariable("CLAN", rulingClan.Name);
+                    }
+
+                    MBInformationManager.AddQuickInformation(reason, 0);
+                }
+
+              
                 return canCreate;
             }
         }

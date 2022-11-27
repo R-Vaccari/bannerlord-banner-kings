@@ -1,5 +1,6 @@
 using BannerKings.Managers.Populations;
 using BannerKings.UI.Items.UI;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -152,7 +153,8 @@ namespace BannerKings.UI.Management
                 new TextObject("{=8ootTEcK}The most assimilated culture in this settlement, and considered the legal culture.").ToString()));
 
 
-            var presence = BannerKingsConfig.Instance.ReligionModel.CalculateReligionWeight(dominant, settlement);
+            var playerFaith = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(Hero.MainHero);
+            var presence = BannerKingsConfig.Instance.ReligionModel.CalculateReligionWeight(playerFaith, settlement);
             ReligionInfo.Add(new InformationElement(new TextObject("{=gTzbdsBY}Faith Presence:").ToString(),
                 FormatValue(presence.ResultNumber / totalFaithsWeight),
                 new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
@@ -162,7 +164,7 @@ namespace BannerKings.UI.Management
                     .ToString()));
 
 
-            var fervor = BannerKingsConfig.Instance.ReligionModel.CalculateFervor(dominant);
+            var fervor = BannerKingsConfig.Instance.ReligionModel.CalculateFervor(playerFaith);
             ReligionInfo.Add(new InformationElement(new TextObject("{=PUwmzUZy}Fervor:").ToString(),
                 FormatValue(fervor.ResultNumber),
                 new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")

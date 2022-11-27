@@ -1,31 +1,39 @@
-﻿using BannerKings.UI.Court;
-using BannerKings.UI.Titles;
+﻿using BannerKings.Behaviours;
+using BannerKings.UI.Court;
+using BannerKings.UI.Kingdoms;
+using BannerKings.UI.Management;
 using Bannerlord.UIExtenderEx.Attributes;
 using Bannerlord.UIExtenderEx.ViewModels;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.ViewModelCollection.KingdomManagement;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
 namespace BannerKings.UI.Extensions
 {
-    [ViewModelMixin("SetSelectedCategory")]
+    [ViewModelMixin("RefreshValues")]
     internal class KingdomManagementMixin : BaseViewModelMixin<KingdomManagementVM>
     {
-        private bool courtSelected, demesneSelected;
+        private bool courtSelected, courtEnabled, demesneSelected, demesneEnabled;
         private CourtVM courtVM;
-        private DemesneHierarchyVM demesneVM;
+        private KingdomDemesneVM demesneVM;
         private readonly KingdomManagementVM kingdomManagement;
 
         public KingdomManagementMixin(KingdomManagementVM vm) : base(vm)
         {
             kingdomManagement = vm;
             courtVM = new CourtVM(true);
-            demesneVM = new DemesneHierarchyVM(BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(vm.Kingdom),
-                vm.Kingdom);
+            var title = BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(vm.Kingdom);
+            DemesneEnabled = title != null;
+            demesneVM = new KingdomDemesneVM(title, vm.Kingdom);
+            demesneVM.IsSelected = DemesneEnabled;
+
+            //var capital = Campaign.Current.GetCampaignBehavior<BKCapitalBehavior>().GetCapital(vm.Kingdom);
+            CourtEnabled = true;
+            kingdomManagement.RefreshValues();
         }
 
-
-        [DataSourceProperty] public string DemesneText => new TextObject("{=rktknNYe}Crown Demesne").ToString();
+        [DataSourceProperty] public string DemesneText => new TextObject("{=6QMDGRSt}Demesne").ToString();
 
         [DataSourceProperty] public string CourtText => new TextObject("{=2QGyA46m}Court").ToString();
 
@@ -38,6 +46,34 @@ namespace BannerKings.UI.Extensions
                 if (value != demesneSelected)
                 {
                     demesneSelected = value;
+                    ViewModel!.OnPropertyChangedWithValue(value);
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public bool DemesneEnabled
+        {
+            get => demesneEnabled;
+            set
+            {
+                if (value != demesneEnabled)
+                {
+                    demesneEnabled = value;
+                    ViewModel!.OnPropertyChangedWithValue(value);
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public bool CourtEnabled
+        {
+            get => courtEnabled;
+            set
+            {
+                if (value != courtEnabled)
+                {
+                    courtEnabled = value;
                     ViewModel!.OnPropertyChangedWithValue(value);
                 }
             }
@@ -72,7 +108,7 @@ namespace BannerKings.UI.Extensions
         }
 
         [DataSourceProperty]
-        public DemesneHierarchyVM Demesne
+        public KingdomDemesneVM Demesne
         {
             get => demesneVM;
             set
@@ -87,14 +123,58 @@ namespace BannerKings.UI.Extensions
 
         public override void OnRefresh()
         {
-            courtVM.RefreshValues();
+            var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(Clan.PlayerClan);
+            if (council != null)
+            {
+                if (council.Peerage != null && !council.Peerage.CanStartElection)
+                {
+                    var policy = kingdomManagement.Policy;
+                    var diplomacy = kingdomManagement.Diplomacy;
+                    var clans = kingdomManagement.Clan;
+                    var fiefs = kingdomManagement.Settlement;
+
+                    var text = new TextObject("{=!}The Peerage of {CLAN} does not allow starting elections.")
+                        .SetTextVariable("CLAN", Clan.PlayerClan.Name);
+
+                    if (policy.CanProposeOrDisavowPolicy)
+                    {
+                        policy.DoneHint.HintText = text;
+                        policy.CanProposeOrDisavowPolicy = false;
+                    }
+                   
+                    if (diplomacy.IsActionEnabled)
+                    {
+                        diplomacy.ActionHint.HintText = text;
+                        diplomacy.IsActionEnabled = false;
+                    }
+                    
+                    if (clans.CanExpelCurrentClan)
+                    {
+                        clans.ExpelHint.HintText = text;
+                        clans.CanExpelCurrentClan = false;
+                    }
+                    
+                    if (fiefs.CanAnnexCurrentSettlement)
+                    {
+                        fiefs.AnnexHint.HintText = text;
+                        fiefs.CanAnnexCurrentSettlement = false;
+                    }
+                }
+            }
+
+            Court.RefreshValues();
+            Demesne?.RefreshValues();
             if (kingdomManagement.Clan.Show || kingdomManagement.Settlement.Show || kingdomManagement.Policy.Show ||
                 kingdomManagement.Army.Show || kingdomManagement.Diplomacy.Show)
             {
                 Court.IsSelected = false;
                 CourtSelected = false;
                 DemesneSelected = false;
-                Demesne.IsSelected = false;
+
+                if (Demesne != null)
+                {
+                    Demesne.IsSelected = false;
+                }
             }
         }
 
@@ -108,24 +188,35 @@ namespace BannerKings.UI.Extensions
             kingdomManagement.Diplomacy.Show = false;
 
             DemesneSelected = false;
-            Demesne.IsSelected = false;
+            if (Demesne != null)
+            {
+                Demesne.IsSelected = false;
+            }
+            
             Court.IsSelected = true;
             CourtSelected = true;
+
+            kingdomManagement.RefreshValues();
         }
 
         [DataSourceMethod]
         public void SelectDemesne()
         {
-            kingdomManagement.Clan.Show = false;
-            kingdomManagement.Settlement.Show = false;
-            kingdomManagement.Policy.Show = false;
-            kingdomManagement.Army.Show = false;
-            kingdomManagement.Diplomacy.Show = false;
+            if (Demesne != null)
+            {
+                kingdomManagement.Clan.Show = false;
+                kingdomManagement.Settlement.Show = false;
+                kingdomManagement.Policy.Show = false;
+                kingdomManagement.Army.Show = false;
+                kingdomManagement.Diplomacy.Show = false;
 
-            DemesneSelected = true;
-            Demesne.IsSelected = true;
-            Court.IsSelected = false;
-            CourtSelected = false;
+                DemesneSelected = true;
+                Demesne.IsSelected = true;
+                Court.IsSelected = false;
+                CourtSelected = false;
+            }
+
+            kingdomManagement.RefreshValues();
         }
     }
 }

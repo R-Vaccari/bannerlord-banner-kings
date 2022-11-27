@@ -2,21 +2,29 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using BannerKings.Managers.Court;
 using BannerKings.Managers.Skills;
 using BannerKings.Managers.Titles;
+using BannerKings.Settings;
 using HarmonyLib;
 using Helpers;
+using SandBox.CampaignBehaviors;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.CampaignBehaviors;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
+using TaleWorlds.CampaignSystem.Conversation;
+using TaleWorlds.CampaignSystem.Election;
+using TaleWorlds.CampaignSystem.Extensions;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Party;
+using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
+using TaleWorlds.SaveSystem;
 using static TaleWorlds.CampaignSystem.SkillEffect;
 
 namespace BannerKings.Behaviours
@@ -29,10 +37,156 @@ namespace BannerKings.Behaviours
             CampaignEvents.HeroPrisonerTaken.AddNonSerializedListener(this, OnHeroPrisonerTaken);
             CampaignEvents.OnHeroGetsBusyEvent.AddNonSerializedListener(this, OnHeroGetsBusy);
             CampaignEvents.HeroKilledEvent.AddNonSerializedListener(this, OnHeroKilled);
+            CampaignEvents.ClanChangedKingdom.AddNonSerializedListener(this, OnClanChangedKingdom);
+            CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, OnSessionLaunched);
         }
 
         public override void SyncData(IDataStore dataStore)
         {
+        }
+
+        private void OnSessionLaunched(CampaignGameStarter starter)
+        {
+            starter.AddPlayerLine("meet_wanderer_different_clan", 
+                "wanderer_meet_player_response", 
+                "wanderer_different_clan_response",
+                "{=wFXj0bqj}My name is {PLAYER.NAME}, {?CONVERSATION_NPC.GENDER}madam{?}sir{\\?}. Tell me about yourself.",
+                IsCompanionOfAnotherClan,
+                null);
+
+            starter.AddDialogLine("wanderer_different_clan_response_first_time",
+                "wanderer_different_clan_response", 
+                "wanderer_different_clan_options",
+                "{=!}{WANDERER_OTHER_CLAN}",
+                CompanionOfAnotherClanIntroduction,
+                null);
+
+            starter.AddPlayerLine("wanderer_different_clan_options",
+                "wanderer_different_clan_options",
+                "hero_leave",
+                "{=9mBy0qNW}I must leave now.",
+                null,
+                null);
+
+            starter.AddDialogLine("wanderer_different_clan_response_first_time",
+                "wanderer_preintroduction",
+                "wanderer_different_clan_options",
+                "{=!}{WANDERER_OTHER_CLAN}",
+                CompanionOfAnotherClanIntroduction,
+                null);
+
+            starter.AddDialogLine("companion_hire_different_clan", 
+                "companion_hire",
+                "wanderer_different_clan_options",
+                "{=!}{WANDERER_OTHER_CLAN_HIRE}", 
+                () =>
+                {
+                    var clan = Hero.OneToOneConversationHero.Clan;
+                    if (clan != null)
+                    {
+                        MBTextManager.SetTextVariable("WANDERER_OTHER_CLAN_HIRE", new TextObject("{=!}I currently serve the {CLAN} and so I'm not available for hire.")
+                            .SetTextVariable("CLAN", clan.Name));
+                    }
+
+                    return Hero.OneToOneConversationHero.Clan != null && Hero.OneToOneConversationHero.Clan != Clan.PlayerClan;
+                },
+                null, 100, null);
+        }
+
+        private bool IsCompanionOfAnotherClan() => CharacterObject.OneToOneConversationCharacter != null && CharacterObject.OneToOneConversationCharacter.IsHero && 
+                    CharacterObject.OneToOneConversationCharacter.Occupation == Occupation.Wanderer && 
+                    CharacterObject.OneToOneConversationCharacter.HeroObject.HeroState != Hero.CharacterStates.Prisoner &&
+                    Hero.OneToOneConversationHero.Clan != null && Hero.OneToOneConversationHero.Clan != Clan.PlayerClan &&
+                    Hero.OneToOneConversationHero.Clan.StringId != "neutral";
+
+        private bool CompanionOfAnotherClanIntroduction()
+        {
+            if (Hero.OneToOneConversationHero.Clan != null)
+            {
+                var purposeText = new TextObject("{=!}What can I help you with?");
+                if (Hero.OneToOneConversationHero.Clan.MapFaction != Clan.PlayerClan.MapFaction)
+                {
+                    purposeText = new TextObject("{=!}So then, what is it?");
+                }
+
+                MBTextManager.SetTextVariable("WANDERER_OTHER_CLAN",
+                    new TextObject("{=!}I am {HERO}, a servant of the {CLAN}. I am here under business of {LEADER_NAME}. {PURPOSE_TEXT}")
+                    .SetTextVariable("HERO", Hero.OneToOneConversationHero.Name)
+                    .SetTextVariable("CLAN", Hero.OneToOneConversationHero.Clan.Name)
+                    .SetTextVariable("LEADER_NAME", Hero.OneToOneConversationHero.Clan.Name)
+                    .SetTextVariable("PURPOSE_TEXT", purposeText));
+            }
+            
+            return IsCompanionOfAnotherClan();
+        }
+
+        private void OnClanChangedKingdom(Clan clan, Kingdom oldKingdom, Kingdom newKingdom, ChangeKingdomAction.ChangeKingdomActionDetail detail, bool showNotification = true)
+        {
+            if (newKingdom != null)
+            {
+                var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(clan);
+                if (council != null)
+                {
+                    if (detail == ChangeKingdomAction.ChangeKingdomActionDetail.JoinKingdom)
+                    {
+                        if (council.Peerage == null || !council.Peerage.CanVote)
+                        {
+                            council.SetPeerage(new Peerage(new TextObject("{=!}Lesser Peerage"),
+                                true,
+                                false,
+                                false,
+                                false,
+                                true,
+                                true));
+
+                            if (clan == Clan.PlayerClan)
+                            {
+                                var peerage = council.Peerage;
+                                InformationManager.ShowInquiry(new InquiryData(
+                                    peerage.Name.ToString(),
+                                    new TextObject("{=!}As part of joinning a realm, the {CLAN} is receiving {PEERAGE}. {TEXT}")
+                                    .SetTextVariable("CLAN", Clan.PlayerClan.Name)
+                                    .SetTextVariable("PEERAGE", peerage.Name)
+                                    .SetTextVariable("TEXT", peerage.PeerageGrantedText())
+                                    .ToString(),
+                                    true,
+                                    false,
+                                    GameTexts.FindText("str_ok").ToString(),
+                                    String.Empty,
+                                    null,
+                                    null));
+                            }
+                        }
+                    }
+
+                    if (detail == ChangeKingdomAction.ChangeKingdomActionDetail.CreateKingdom)
+                    {
+                        if (council.Peerage == null || !council.Peerage.CanStartElection)
+                        {
+                            council.SetPeerage(new Peerage(new TextObject("{=!}Full Peerage"), true, 
+                                true, true, true, true, false));
+
+                            if (clan == Clan.PlayerClan)
+                            {
+                                var peerage = council.Peerage;
+                                InformationManager.ShowInquiry(new InquiryData(
+                                    peerage.Name.ToString(),
+                                    new TextObject("{=!}As part of creating a realm, the {CLAN} is now considered to have {PEERAGE}. {TEXT}")
+                                    .SetTextVariable("CLAN", Clan.PlayerClan.Name)
+                                    .SetTextVariable("PEERAGE", peerage.Name)
+                                    .SetTextVariable("TEXT", peerage.PeerageGrantedText())
+                                    .ToString(),
+                                    true,
+                                    false,
+                                    GameTexts.FindText("str_ok").ToString(),
+                                    String.Empty,
+                                    null,
+                                    null));
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         private void OnHeroGetsBusy(Hero hero, HeroGetsBusyReasons heroGetsBusyReason)
@@ -105,18 +259,14 @@ namespace BannerKings.Behaviours
 
             foreach (var companion in clan.Companions)
             {
-                if (companion.IsPrisoner || !companion.IsReady || companion.PartyBelongedTo?.LeaderHero == null)
-                {
-                    if (companion == null)
-                    {
-                        continue;
-                    }
-                }
-
-                if (!companion.IsWanderer || companion.IsPrisoner || !companion.IsReady || companion.PartyBelongedTo?.LeaderHero == null)
-
+                if (!companion.IsWanderer || companion.IsPrisoner || !companion.IsReady)
                 {
                     continue;
+                }
+
+                if (companion.PartyBelongedTo == null || companion.PartyBelongedTo.LeaderHero == null)
+                {
+                    goto Skills;
                 }
 
                 if (companion.PartyBelongedTo.LeaderHero == companion ||
@@ -125,33 +275,29 @@ namespace BannerKings.Behaviours
                     continue;
                 }
 
-                var role = companion.PartyBelongedTo.GetHeroPerkRole(companion);
+                Skills:
+                var role = companion.PartyBelongedTo != null ? companion.PartyBelongedTo.GetHeroPerkRole(companion) : PerkRole.None;
                 if (role != PerkRole.None)
                 {
                     continue;
                 }
 
-                if (companion.GetSkillValue(DefaultSkills.Medicine) >= 80)
+                if (companion.GetSkillValue(DefaultSkills.Medicine) >= 60)
                 {
                     role = PerkRole.Surgeon;
                 }
-                else if (companion.GetSkillValue(DefaultSkills.Engineering) >= 80)
+                else if (companion.GetSkillValue(DefaultSkills.Engineering) >= 60)
                 {
                     role = PerkRole.Engineer;
                 }
-                else if (companion.GetSkillValue(DefaultSkills.Steward) >= 80)
+                else if (companion.GetSkillValue(DefaultSkills.Steward) >= 60)
                 {
                     role = PerkRole.Quartermaster;
                 }
-                else if (companion.GetSkillValue(DefaultSkills.Scouting) >= 80)
+                else if (companion.GetSkillValue(DefaultSkills.Scouting) >= 60)
                 {
                     role = PerkRole.Scout;
                 }
-                else
-                {
-                    role = PerkRole.None;
-                }
-
 
                 if (clan.WarPartyComponents.Count <= 0)
                 {
@@ -341,7 +487,6 @@ namespace BannerKings.Behaviours
                 : null;
         }
 
-
         private void EvaluateRecruitKnight(Clan clan)
         {
             if (clan.WarPartyComponents.Count >= clan.CommanderLimit || clan.Companions.Count >= clan.CompanionLimit || clan.Settlements.Count(x => x.IsVillage) <= 1 || !(clan.Influence >= BannerKingsConfig.Instance.TitleModel.GetGrantKnighthoodCost(clan.Leader).ResultNumber))
@@ -351,6 +496,12 @@ namespace BannerKings.Behaviours
 
             var village = clan.Settlements.FirstOrDefault(x => x.IsVillage);
             if (village == null)
+            {
+                return;
+            }
+
+            var council = BannerKingsConfig.Instance.CourtManager.GetCouncil(clan);
+            if (council == null || council.Peerage == null || !council.Peerage.CanGrantKnighthood)
             {
                 return;
             }
@@ -384,7 +535,6 @@ namespace BannerKings.Behaviours
             }
 
             var settlement = clan.Settlements.FirstOrDefault() ?? Town.AllTowns.FirstOrDefault(x => x.Culture == clan.Culture).Settlement;
-
             var source = from e in MBObjectManager.Instance.GetObjectTypeList<MBEquipmentRoster>() where e.EquipmentCulture == clan.Culture select e;
             if (source == null)
             {
@@ -409,14 +559,10 @@ namespace BannerKings.Behaviours
             }
 
             var hero = HeroCreator.CreateSpecialHero(template, settlement, clan, null, Campaign.Current.Models.AgeModel.HeroComesOfAge + 5 + MBRandom.RandomInt(27));
-
             BannerKingsConfig.Instance.TitleManager.GrantKnighthood(title, hero, title.deJure);
-
             EquipmentHelper.AssignHeroEquipmentFromEquipment(hero, roster.AllEquipments.GetRandomElement());
-
             var mainParty = hero.PartyBelongedTo == MobileParty.MainParty;
             MobilePartyHelper.CreateNewClanMobileParty(hero, clan, out mainParty);
-
             var component = clan.WarPartyComponents.FirstOrDefault(x => x.Leader == hero);
             if (component != null)
             {
@@ -448,6 +594,85 @@ namespace BannerKings.Behaviours
 
     namespace Patches
     {
+        [HarmonyPatch(typeof(SettlementClaimantDecision))]
+        internal class FiefOwnerPatches
+        {
+            [HarmonyPrefix]
+            [HarmonyPatch("DetermineInitialCandidates")]
+            private static bool DetermineInitialCandidatesPrefix(SettlementClaimantDecision __instance, 
+                ref IEnumerable<DecisionOutcome> __result)
+            {
+                Kingdom kingdom = (Kingdom)__instance.Settlement.MapFaction;
+                List<SettlementClaimantDecision.ClanAsDecisionOutcome> list = new List<SettlementClaimantDecision.ClanAsDecisionOutcome>();
+                foreach (Clan clan in kingdom.Clans)
+                {
+                    if (clan != __instance.ClanToExclude && !clan.IsUnderMercenaryService && !clan.IsEliminated && !clan.Leader.IsDead)
+                    {
+                        var peerage = BannerKingsConfig.Instance.CourtManager.GetCouncil(clan).Peerage;
+                        if (peerage == null || !peerage.CanHaveFief) continue;
+
+                        list.Add(new SettlementClaimantDecision.ClanAsDecisionOutcome(clan));
+                    }
+                }
+                __result = list;
+                return false;
+            }
+        }
+
+        [HarmonyPatch(typeof(LordConversationsCampaignBehavior))]
+        internal class LordDialoguePatches
+        {
+            [HarmonyPrefix]
+            [HarmonyPatch("conversation_player_ask_prisoners_on_consequence")]
+            private static bool LordPrisonersPrefix()
+            {
+                List<Hero> list = new List<Hero>();
+                foreach (TroopRosterElement troopRosterElement in Hero.OneToOneConversationHero.PartyBelongedTo.PrisonRoster.GetTroopRoster())
+                {
+                    if (troopRosterElement.Character.IsHero && troopRosterElement.Character.HeroObject.IsLord)
+                    {
+                        list.Add(troopRosterElement.Character.HeroObject);
+                    }
+                }
+                ConversationSentence.SetObjectsToRepeatOver(list, 5);
+
+                return false;
+            }
+
+            [HarmonyPrefix]
+            [HarmonyPatch("conversation_wanderer_meet_player_on_condition")]
+            private static bool MeetCompanionPrefix(ref bool __result)
+            {
+                __result = CharacterObject.OneToOneConversationCharacter != null && 
+                    CharacterObject.OneToOneConversationCharacter.IsHero && 
+                    CharacterObject.OneToOneConversationCharacter.Occupation == Occupation.Wanderer && 
+                    CharacterObject.OneToOneConversationCharacter.HeroObject.HeroState != Hero.CharacterStates.Prisoner && 
+                    Hero.OneToOneConversationHero.Clan == null;
+
+                return false;
+            }
+
+            [HarmonyPostfix]
+            [HarmonyPatch("conversation_wanderer_preintroduction_on_condition")]
+            private static void PreIntroductionPostfix(ref bool __result)
+            {
+                if (Hero.OneToOneConversationHero.Clan != null && Hero.OneToOneConversationHero.Clan != Clan.PlayerClan)
+                {
+                    __result = false;
+                }
+            }
+
+            [HarmonyPostfix]
+            [HarmonyPatch("conversation_companion_hire_gold_on_condition")]
+            private static void HirePostfix(ref bool __result)
+            {
+                if (Hero.OneToOneConversationHero.Clan != null && Hero.OneToOneConversationHero.Clan != Clan.PlayerClan)
+                {
+                    __result = false;
+                }
+            }
+        }
+
         [HarmonyPatch(typeof(ClanVariablesCampaignBehavior), "MakeClanFinancialEvaluation")]
         internal class MakeClanFinancialEvaluationPatch
         {
@@ -472,7 +697,6 @@ namespace BannerKings.Behaviours
                     {
                         income += clan.Gold * 0.05f;
                     }
-
 
                     if (income > 0f)
                     {
@@ -516,7 +740,6 @@ namespace BannerKings.Behaviours
             }
         }
 
-
         [HarmonyPatch(typeof(ClanVariablesCampaignBehavior), "UpdateClanSettlementAutoRecruitment")]
         internal class AutoRecruitmentPatch
         {
@@ -542,7 +765,6 @@ namespace BannerKings.Behaviours
                 return false;
             }
         }
-
 
         [HarmonyPatch(typeof(DefaultClanFinanceModel))]
         internal class ClanFinancesPatches
@@ -572,9 +794,13 @@ namespace BannerKings.Behaviours
                     return BannerKingsConfig.Instance.TitleManager.GetHighestTitle(party.LeaderHero) == null;
                 }
 
+                if (party.IsCaravan)
+                {
+                    return !BannerKingsSettings.Instance.RealisticCaravanIncome;
+                }
+
                 return true;
             }
-
 
             [HarmonyPrefix]
             [HarmonyPatch("AddExpensesFromGarrisons", MethodType.Normal)]
@@ -612,7 +838,6 @@ namespace BannerKings.Behaviours
 
                 return true;
             }
-
 
             [HarmonyPrefix]
             [HarmonyPatch("AddExpensesFromParties", MethodType.Normal)]
@@ -673,16 +898,13 @@ namespace BannerKings.Behaviours
                 return true;
             }
 
-
             [HarmonyPrefix]
             [HarmonyPatch("AddVillagesIncome", MethodType.Normal)]
             private static bool VillageIncomePrefix(Clan clan, ref ExplainedNumber goldChange, bool applyWithdrawals)
             {
                 if (BannerKingsConfig.Instance.TitleManager != null)
                 {
-
                     int totalGold = 0;
-
                     var lordships = BannerKingsConfig.Instance.TitleManager
                         .GetAllDeJure(clan)
                         .FindAll(x => x.type == TitleType.Lordship);
@@ -740,7 +962,6 @@ namespace BannerKings.Behaviours
                     }
 
                     goldChange.Add(totalGold, new TextObject("{=!}Village Demesnes"));
-
                     return false;
                 }
 
@@ -751,7 +972,6 @@ namespace BannerKings.Behaviours
                 bool applyWithdrawals)
             {
                 var total = (int)BannerKingsConfig.Instance.TaxModel.CalculateVillageTaxFromIncome(village).ResultNumber;
-
                 if (applyWithdrawals)
                 {
                     village.TradeTaxAccumulated -= MathF.Min(village.TradeTaxAccumulated, total);

@@ -5,6 +5,7 @@ using BannerKings.Managers.Institutions.Religions.Leaderships;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.Core;
+using TaleWorlds.LinQuick;
 using TaleWorlds.Localization;
 using TaleWorlds.SaveSystem;
 
@@ -22,6 +23,17 @@ namespace BannerKings.Managers
         }
 
         [SaveableProperty(1)] private Dictionary<Clan, CouncilData> Councils { get; set; }
+
+        public void PostInitialize()
+        {
+            foreach (var council in Councils)
+            {
+                if (council.Value.Peerage == null)
+                {
+                    council.Value.SetPeerage(Peerage.GetAdequatePeerage(council.Key));
+                }
+            }
+        }
 
         public void ApplyCouncilEffect(ref ExplainedNumber result, Hero settlementOwner, CouncilPosition position,
             float maxEffect, bool factor)
@@ -50,6 +62,11 @@ namespace BannerKings.Managers
 
         public void CreateCouncil(Clan clan)
         {
+            if (Councils.ContainsKey(clan))
+            {
+                return;
+            }
+
             Councils.Add(clan, new CouncilData(clan));
         }
 

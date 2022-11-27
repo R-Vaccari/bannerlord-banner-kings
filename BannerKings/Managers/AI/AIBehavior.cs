@@ -159,6 +159,11 @@ namespace BannerKings.Managers.AI
 
         public Lifestyle ChooseLifestyle(Hero hero)
         {
+            if (hero == null)
+            {
+                return null;
+            }
+
             var candidates = new List<(Lifestyle, float)>();
 
             var rogueWeight = hero.GetTraitLevel(DefaultTraits.RogueSkills) - hero.GetTraitLevel(DefaultTraits.Mercy) -
@@ -226,7 +231,6 @@ namespace BannerKings.Managers.AI
                 }
             }
 
-
             foreach (var lf in DefaultLifestyles.Instance.All)
             {
                 if (!lf.CanLearn(hero))
@@ -283,7 +287,7 @@ namespace BannerKings.Managers.AI
         public bool AcceptNotableAid(Clan clan, PopulationData data)
         {
             var kingdom = clan.Kingdom;
-            return data.Stability >= 0.5f && data.NotableSupport.ResultNumber >= 0.5f && kingdom != null &&
+            return data != null && data.Stability >= 0.5f && data.NotableSupport.ResultNumber >= 0.5f && kingdom != null &&
                    FactionManager.GetEnemyFactions(kingdom).Any() && clan.Influence > 50f * clan.Tier;
         }
 

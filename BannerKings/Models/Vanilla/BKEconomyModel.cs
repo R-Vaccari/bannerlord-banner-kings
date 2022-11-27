@@ -1,3 +1,4 @@
+using BannerKings.Behaviours;
 using BannerKings.Managers.Court;
 using BannerKings.Managers.Innovations;
 using BannerKings.Managers.Policies;
@@ -194,6 +195,27 @@ namespace BannerKings.Models.Vanilla
 
             BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref result, settlement.OwnerClan.Leader,
                 CouncilPosition.Steward, 0.15f, true);
+
+            if (settlement.Town != null)
+            {
+                if (settlement.Town.Gold < 50000)
+                {
+                    float factor = MathF.Clamp(-1f + (settlement.Town.Gold * 0.00001f), -1f, -0.5f);
+                    result.AddFactor(factor, new TextObject("{=!}Market gold"));
+                }
+                else if (settlement.Town.Gold >= 1000000)
+                {
+                    float factor = MathF.Clamp(settlement.Town.Gold / 10000000f, 0.1f, 0.5f);
+                    result.AddFactor(factor, new TextObject("{=!}Market gold"));
+                }
+                
+                var capital = Campaign.Current.GetCampaignBehavior<BKCapitalBehavior>().GetCapital(settlement.OwnerClan.Kingdom);
+                if (capital == settlement.Town)
+                {
+                    result.AddFactor(0.4f, new TextObject("{=!}Capital"));
+                }
+            }
+
             return result;
         }
 
@@ -203,6 +225,11 @@ namespace BannerKings.Models.Vanilla
         public float GetCategoryDemand(Settlement settlement, ItemCategory category, int extraProsperity)
         {
             var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
+            if (data == null)
+            {
+                return base.GetDailyDemandForCategory(settlement.Town, category, extraProsperity);
+            }
+
             float nobles = data.GetTypeCount(PopType.Nobles);
             float craftsmen = data.GetTypeCount(PopType.Craftsmen);
             float serfs = data.GetTypeCount(PopType.Serfs);
@@ -212,7 +239,7 @@ namespace BannerKings.Models.Vanilla
             switch (type)
             {
                 case ConsumptionType.Luxury:
-                    baseResult += nobles * 15f;
+                    baseResult += nobles * 10f;
                     baseResult += craftsmen * 3f;
                     break;
                 case ConsumptionType.Industrial:
@@ -229,14 +256,18 @@ namespace BannerKings.Models.Vanilla
             var prosperity = settlement.IsVillage ? settlement.Village.TradeBound.Prosperity : settlement.Town.Prosperity;
             var num = MathF.Max(0f, baseResult + (prosperity / 3) + extraProsperity);
             var num2 = MathF.Max(0f, baseResult + (prosperity / 2));
+
+            if (!category.IsTradeGood && category.StringId != "noble_horse")
+            {
+                num *= 3f;
+            }
             var num3 = category.BaseDemand * num;
             var num4 = category.LuxuryDemand * num2;
             var result = num3 + num4;
             if (category.BaseDemand < 1E-08f)
             {
                 result = num * 0.01f;
-            }
-
+            }        
 
             return result;
         }
@@ -289,10 +320,10 @@ namespace BannerKings.Models.Vanilla
                 };
             }
 
-            var efficiency = data.EconomicData.ProductionEfficiency.ResultNumber;
+            var efficiency = data.EconomicData.ProductionEfficiency.ResultNumber * 1.25f;
             if (privateSlaves > 0f)
             {
-                return (int) (privateSlaves * tax * efficiency) + 5000;
+                return (int) ((privateSlaves * tax * efficiency) + 5000 + (town.Prosperity / 2f));
             }
 
             return 0;

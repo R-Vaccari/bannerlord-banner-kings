@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using BannerKings.Extensions;
-using BannerKings.Managers.Education;
 using BannerKings.Managers.Skills;
 using BannerKings.UI;
 using TaleWorlds.CampaignSystem;
@@ -266,6 +265,10 @@ namespace BannerKings.Behaviours
                 MenuTitlesCondition,
                 MenuTitlesConsequence);
 
+            campaignGameStarter.AddGameMenuOption("bannerkings", "manage_demesne", "{=!}Estates",
+                MenuEstatesManageCondition,
+                MenuEstatesManageConsequence);
+
             //campaignGameStarter.AddGameMenuOption("bannerkings", "manage_faith", "{=m5mzZkkS}{RELIGION_NAME}",
             //    MenuFaithCondition,
             //    MenuFaithConsequence);
@@ -346,7 +349,7 @@ namespace BannerKings.Behaviours
                 if (args.MenuContext.GameMenu.Progress != progress)
                 {
                     var settlement = Settlement.CurrentSettlement;
-                    float wage = Campaign.Current.Models.PartyWageModel.GetCharacterWage(3);
+                    float wage = 15;
                     wage *= settlement.Prosperity / 8000f;
                     actionGold += wage;
 
@@ -456,7 +459,7 @@ namespace BannerKings.Behaviours
                 if (args.MenuContext.GameMenu.Progress != progress)
                 {
                     var settlement = Settlement.CurrentSettlement;
-                    float wage = Campaign.Current.Models.PartyWageModel.GetCharacterWage(5);
+                    float wage = 38;
                     wage *= settlement.Prosperity / 8000f;
                     actionGold += wage;
 
@@ -749,6 +752,14 @@ namespace BannerKings.Behaviours
             return currentSettlement.MapFaction == Hero.MainHero.MapFaction;
         }
 
+        private static bool MenuEstatesManageCondition(MenuCallbackArgs args)
+        {
+            args.optionLeaveType = GameMenuOption.LeaveType.RansomAndBribe;
+            var settlement = Settlement.CurrentSettlement;
+            var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
+            return data.EstateData != null;
+        }
+
         private static bool MenuSettlementManageCondition(MenuCallbackArgs args)
         {
             args.optionLeaveType = GameMenuOption.LeaveType.Manage;
@@ -762,7 +773,7 @@ namespace BannerKings.Behaviours
             args.optionLeaveType = GameMenuOption.LeaveType.Manage;
             var settlement = Settlement.CurrentSettlement;
             var owner = settlement.IsVillage ? settlement.Village.GetActualOwner() : settlement.OwnerClan.Leader;
-            return owner == Hero.MainHero;
+            return owner == Hero.MainHero && settlement.IsVillage;
         }
 
         private static bool MenuGuildManageCondition(MenuCallbackArgs args)
@@ -857,6 +868,10 @@ namespace BannerKings.Behaviours
         }
 
 
+        private static void MenuEstatesManageConsequence(MenuCallbackArgs args)
+        {
+            UIManager.Instance.ShowWindow("estates");
+        }
         private static void MenuSettlementManageConsequence(MenuCallbackArgs args)
         {
             UIManager.Instance.ShowWindow("population");

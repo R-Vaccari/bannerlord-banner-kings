@@ -3,6 +3,7 @@ using BannerKings.Extensions;
 using BannerKings.Managers.Court;
 using BannerKings.Managers.Institutions.Religions;
 using BannerKings.Managers.Policies;
+using BannerKings.Managers.Populations;
 using BannerKings.Managers.Populations.Villages;
 using BannerKings.Managers.Skills;
 using CalradiaExpandedKingdoms.Models;
@@ -87,7 +88,7 @@ namespace BannerKings.Models.Vanilla
                 }
             }
 
-
+            AddDemesneLawEffect(data, ref baseResult);
             return baseResult;
         }
 
@@ -252,28 +253,13 @@ namespace BannerKings.Models.Vanilla
 
                 GetSettlementProsperityChangeDueToIssues(fortification.Settlement, ref explainedNumber);
 
-				if (fortification.OwnerClan != null)
-				{
-					if (fortification.OwnerClan.Leader != null)
-					{
-						if (fortification.OwnerClan.Leader.Culture.HasFeat(CalradiaExpandedKingdoms.Feats.CEKFeats.AseraiPositiveFeatThree))
-							explainedNumber.Add(CalradiaExpandedKingdoms.Feats.CEKFeats.AseraiPositiveFeatThree.EffectBonus, GameTexts.FindText("str_culture", null));
-						
-						if (fortification.OwnerClan.Leader.Culture.HasFeat(CalradiaExpandedKingdoms.Feats.CEKFeats.RhodokPositiveFeatTwo))
-							explainedNumber.Add(0.5f, GameTexts.FindText("str_culture", null));
-						
-						if (fortification.OwnerClan.Leader.Culture.HasFeat(CalradiaExpandedKingdoms.Feats.CEKFeats.VlandianPositiveFeatFour))
-							explainedNumber.Add(0.5f, GameTexts.FindText("str_culture", null));
-						
-						if (fortification.OwnerClan.Leader.Culture.HasFeat(CalradiaExpandedKingdoms.Feats.CEKFeats.ApolssalianPositiveFeatThree))
-							if (fortification.Culture == fortification.OwnerClan.Leader.Culture)
-								explainedNumber.Add(0.5f, GameTexts.FindText("str_culture", null));					
-					}
-				}
+                BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref explainedNumber,
+                    fortification.OwnerClan.Leader, CouncilPosition.Steward, 1f, false);
 
-				BannerKingsConfig.Instance.CourtManager.ApplyCouncilEffect(ref explainedNumber, fortification.OwnerClan.Leader, CouncilPosition.Steward, 1f, false);
-				return explainedNumber;
-			}
+                AddDemesneLawEffect(data, ref explainedNumber);
+                return explainedNumber;
+            }
+
             return baseResult;
         }
 
@@ -281,6 +267,25 @@ namespace BannerKings.Models.Vanilla
         {
             Campaign.Current.Models.IssueModel.GetIssueEffectsOfSettlement(DefaultIssueEffects.SettlementProsperity,
                 settlement, ref result);
+        }
+
+        private void AddDemesneLawEffect(PopulationData data, ref ExplainedNumber result)
+        {
+            if (data.TitleData != null && data.TitleData.Title != null)
+            {
+                var title = data.TitleData.Title;
+                if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.SerfsLaxDuties))
+                {
+                    float proportion = data.GetCurrentTypeFraction(PopType.Serfs);
+                    result.AddFactor(proportion * 0.05f, DefaultDemesneLaws.Instance.SerfsLaxDuties.Name);
+                }
+
+                if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.CraftsmenLaxDuties))
+                {
+                    float proportion = data.GetCurrentTypeFraction(PopType.Craftsmen);
+                    result.AddFactor(proportion * 0.08f, DefaultDemesneLaws.Instance.SerfsLaxDuties.Name);
+                }
+            }
         }
     }
 }

@@ -41,8 +41,8 @@ namespace BannerKings.Managers.Policies
             }
 
             var vm = obj.GetCurrentItem();
-            Policy = (CriminalPolicy) vm.value;
-            Selected = vm.value;
+            Policy = (CriminalPolicy) vm.Value;
+            Selected = vm.Value;
             BannerKingsConfig.Instance.PolicyManager.UpdateSettlementPolicy(Settlement, this);
         }
 

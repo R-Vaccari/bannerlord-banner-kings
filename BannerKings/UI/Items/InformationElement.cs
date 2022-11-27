@@ -8,14 +8,21 @@ namespace BannerKings.UI.Items
     {
         public class InformationElement : ViewModel
         {
-            private HintViewModel _hint;
+            private HintViewModel hint;
             private string description, value;
 
             public InformationElement(string description, string value, string hintText)
             {
-                this.description = description;
-                this.value = value;
+                Description = description;
+                Value = value;
                 Hint = new HintViewModel(new TextObject("{=!}" + hintText));
+            }
+
+            public InformationElement(TextObject description, TextObject value, TextObject hintText)
+            {
+                Description = description.ToString();
+                Value = value.ToString();
+                Hint = new HintViewModel(hintText);
             }
 
 
@@ -50,12 +57,12 @@ namespace BannerKings.UI.Items
             [DataSourceProperty]
             public HintViewModel Hint
             {
-                get => _hint;
+                get => hint;
                 set
                 {
-                    if (value != _hint)
+                    if (value != hint)
                     {
-                        _hint = value;
+                        hint = value;
                         OnPropertyChangedWithValue(value);
                     }
                 }

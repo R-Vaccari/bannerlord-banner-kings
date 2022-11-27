@@ -169,7 +169,7 @@ namespace BannerKings.UI.Management
             {
                 var hearts = BannerKingsConfig.Instance.ProsperityModel.CalculateHearthChange(settlement.Village, true);
                 StatsInfo.Add(new InformationElement(new TextObject("{=!}Hearth Growth:").ToString(),
-                    FormatFloatWithSymbols(hearts.ResultNumber),
+                    FormatFloatGain(hearts.ResultNumber),
                     new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
                         .SetTextVariable("TEXT",
                             new TextObject("{=!}The number of homes in this village. Hearths are used to calculated the population capacity. Each hearth on average houses 4 people. Increasing hearths allows for population to keep growing and thus making the village more productive and relevant."))
@@ -196,7 +196,7 @@ namespace BannerKings.UI.Management
 
             var growth = BannerKingsConfig.Instance.GrowthModel.CalculateEffect(settlement, data);
             StatsInfo.Add(new InformationElement(new TextObject("{=!}Population Growth:").ToString(),
-                FormatFloatWithSymbols((int)growth.ResultNumber).ToString(),
+                FormatFloatGain((int)growth.ResultNumber).ToString(),
                  new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
                     .SetTextVariable("TEXT",
                         new TextObject("{=!}The population growth of your settlement on a daily basis, distributed among the classes."))
@@ -205,9 +205,7 @@ namespace BannerKings.UI.Management
 
             var influence = BannerKingsConfig.Instance.InfluenceModel.CalculateSettlementInfluence(settlement, data);
             StatsInfo.Add(new InformationElement(GameTexts.FindText("str_total_influence").ToString(),
-                new TextObject("{=!}{INFLUENCE}{INFLUENCE_ICON}")
-                    .SetTextVariable("INFLUENCE", FormatFloatWithSymbols(influence.ResultNumber))
-                    .ToString(),
+                FormatFloatGain(influence.ResultNumber),
                 new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
                     .SetTextVariable("TEXT",
                         new TextObject("{=8mSDgwhX}The amount of influence this settlement provides in your realm."))
@@ -219,22 +217,42 @@ namespace BannerKings.UI.Management
                 new TextObject("{=!}Merchant and freemen foreigners that refuse to be assimilated, but have a living in this settlement.")
                 .ToString())); */
 
-
+            var dominantCulture = data.CultureData.DominantCulture;
             CultureInfo.Add(new InformationElement(new TextObject("{=!}Dominant Culture:").ToString(),
-                data.CultureData.DominantCulture.Name.ToString(),
+                dominantCulture.Name.ToString(),
                 new TextObject("{=!}The most assimilated culture in this settlement, and considered the legal culture.")
                 .ToString()));
+
+            var dominantLanguage = BannerKingsConfig.Instance.EducationManager.GetNativeLanguage(dominantCulture);
+            if (dominantLanguage != null)
+            {
+                CultureInfo.Add(new InformationElement(new TextObject("{=!}Dominant Language:").ToString(),
+               dominantLanguage.Name.ToString(),
+               new TextObject("{=!}Language spoken by population of the dominant culture. Speaking their language helps in creating cultural acceptance of your own language, if dominant culture is not your own.")
+               .ToString()));
+            }
+           
 
             var heroCulture = data.CultureData.Cultures.FirstOrDefault(x => x.Culture == Hero.MainHero.Culture);
             if (heroCulture != null)
             {
                 var presence = BannerKingsConfig.Instance.CultureModel.CalculateCultureWeight(settlement, heroCulture);
-                CultureInfo.Add(new InformationElement(new TextObject("Cultural Presence:").ToString(),
+                CultureInfo.Add(new InformationElement(new TextObject("{=!}Cultural Presence:").ToString(),
                     FormatValue(presence.ResultNumber / totalCultureWeight),
                     new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
                     .SetTextVariable("TEXT",
                         new TextObject("{=!}How present your culture is. Presence is affected by notables and governor following your culture, as well as other factors. This is the percentage that you culture's assimilation will gravitate towards in the settlement."))
                     .SetTextVariable("EXPLANATIONS", presence.GetExplanations())
+                    .ToString()));
+
+
+                var acceptanceGain = heroCulture.AcceptanceGain;
+                CultureInfo.Add(new InformationElement(new TextObject("{=!}Acceptance Gain:").ToString(),
+                    FormatFloatGainPercentage(acceptanceGain.ResultNumber),
+                    new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
+                    .SetTextVariable("TEXT",
+                        new TextObject("{=!}How much acceptance your culture gains in this settlement, per day."))
+                    .SetTextVariable("EXPLANATIONS", acceptanceGain.GetExplanations())
                     .ToString()));
             }
           
@@ -242,10 +260,6 @@ namespace BannerKings.UI.Management
             CultureInfo.Add(new InformationElement(new TextObject("{=!}Cultural Acceptance:").ToString(),
                 $"{data.CultureData.GetAcceptance(Hero.MainHero.Culture):P}",
                 new TextObject("{=!}How accepted your culture is towards the general populace. A culture first needs to be accepted to be assimilated into. Acceptance is gained through a stable reign and competent governor in place.")
-                .ToString()));
-            CultureInfo.Add(new InformationElement(new TextObject("{=!}Cultural Assimilation:").ToString(),
-                $"{data.CultureData.GetAssimilation(Hero.MainHero.Culture):P}",
-                new TextObject("{=!}Percentage of the population that shares culture with you. Assimilation will drift towards the target set by the cultural presence.")
                 .ToString()));
 
             var decisions = BannerKingsConfig.Instance.PolicyManager.GetDefaultDecisions(settlement);

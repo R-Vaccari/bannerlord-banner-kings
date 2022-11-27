@@ -33,7 +33,7 @@ namespace BannerKings.Managers.Items
         public override void Initialize()
         {
             Book = Game.Current.ObjectManager.RegisterPresumedObject(new ItemCategory("book"));
-            Book.InitializeObject();
+            Book.InitializeObject(false, 0, 0);
 
             Apple = Game.Current.ObjectManager.RegisterPresumedObject(new ItemCategory("apple"));
             Apple.InitializeObject(true, 20, 0, ItemCategory.Property.BonusToFoodStores);
@@ -51,7 +51,7 @@ namespace BannerKings.Managers.Items
             Carrot.InitializeObject(true, 20, 0, ItemCategory.Property.BonusToFoodStores);
 
             Honey = Game.Current.ObjectManager.RegisterPresumedObject(new ItemCategory("honey"));
-            Honey.InitializeObject(true, 20, 20, ItemCategory.Property.BonusToFoodStores);
+            Honey.InitializeObject(true, 10, 20, ItemCategory.Property.BonusToFoodStores);
 
             Gold = Game.Current.ObjectManager.RegisterPresumedObject(new ItemCategory("gold"));
             Gold.InitializeObject(true, 20, 50, ItemCategory.Property.BonusToTax);

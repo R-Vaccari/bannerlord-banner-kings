@@ -18,15 +18,94 @@ namespace BannerKings.Utils
 {
     public static class Helpers
     {
-
-
-        public static void AddSellerToKeep(Hero seller, Settlement settlement)
+        public static void SetAlliance(IFaction faction1, IFaction faction2)
         {
-            var agent = new AgentData(new SimpleAgentOrigin(seller.CharacterObject, 0));
+            var stance = Clan.PlayerClan.GetStanceWith(Hero.OneToOneConversationHero.Clan);
+            if (stance.IsNeutral)
+            {
+                stance.IsAllied = true;
+                if (faction1 == Hero.MainHero.MapFaction || faction2 == Hero.MainHero.MapFaction)
+                {
+                    MBInformationManager.AddQuickInformation(new TextObject("{=!}The {FACTION1} and {FACTION2} are now allies.")
+                        .SetTextVariable("FACTION1", faction1.Name)
+                        .SetTextVariable("FACTION2", faction2.Name),
+                        100,
+                        null,
+                        GetKingdomDecisionSound());
+                }
+            }
+        }
+
+        internal static string GetKingdomDecisionSound() => "event:/ui/notification/kingdom_decision";
+
+        public static void AddCharacterToKeep(Hero hero, Settlement settlement)
+        {
+            var agent = new AgentData(new SimpleAgentOrigin(hero.CharacterObject, 0));
             var locCharacter = new LocationCharacter(agent, SandBoxManager.Instance.AgentBehaviorManager.AddFixedCharacterBehaviors, null, true, LocationCharacter.CharacterRelations.Neutral, null, true);
 
             settlement.LocationComplex.GetLocationWithId("lordshall")
                 .AddLocationCharacters(delegate { return locCharacter; }, settlement.Culture, LocationCharacter.CharacterRelations.Neutral, 1);
+        }
+
+        public static void AddCharacterToKeep(CharacterObject character, Settlement settlement)
+        {
+            var agent = new AgentData(new SimpleAgentOrigin(character, 0));
+            var locCharacter = new LocationCharacter(agent, SandBoxManager.Instance.AgentBehaviorManager.AddFixedCharacterBehaviors, null, true, LocationCharacter.CharacterRelations.Neutral, null, true);
+
+            settlement.LocationComplex.GetLocationWithId("lordshall")
+                .AddLocationCharacters(delegate { return locCharacter; }, settlement.Culture, LocationCharacter.CharacterRelations.Neutral, 1);
+        }
+
+        public static void AddNotableToKeep(Hero notable, Settlement settlement)
+        {
+            var town = settlement.Town;
+            LocationCharacter locCharacter = town.Settlement.LocationComplex.GetLocationCharacterOfHero(notable);
+            if (locCharacter != null)
+            {
+                locCharacter.SpecialTargetTag = null;
+
+                Location characterLocation = town.Settlement.LocationComplex.GetLocationOfCharacter(notable);
+                if (characterLocation.StringId != "lordshall")
+                {
+                    town.Settlement.LocationComplex.ChangeLocation(locCharacter, characterLocation,
+                                        settlement.LocationComplex.GetLocationWithId("lordshall"));
+                }
+            }
+        }
+
+        public static void AddMusicianToKeep(Settlement settlement)
+        {
+            var agent = new AgentData(new SimpleAgentOrigin(settlement.Culture.Musician, 0));
+            var locCharacter = new LocationCharacter(agent,
+                new LocationCharacter.AddBehaviorsDelegate(SandBoxManager.Instance.AgentBehaviorManager.AddWandererBehaviors),
+                "musician", 
+                true,
+                LocationCharacter.CharacterRelations.Neutral, 
+                ActionSetCode.GenerateActionSetNameWithSuffix(agent.AgentMonster, agent.AgentIsFemale, "_musician"),
+                true, false, null, false, false, true);
+
+            settlement.LocationComplex.GetLocationWithId("lordshall")
+                .AddLocationCharacters(delegate { return locCharacter; },
+                settlement.Culture, 
+                LocationCharacter.CharacterRelations.Neutral, 1);
+
+            var townsmanSuffix = FaceGen.GetMonsterWithSuffix(settlement.Culture.Townsman.Race, "_settlement");
+            var tuple = new Tuple<string, Monster>(ActionSetCode.GenerateActionSetNameWithSuffix(townsmanSuffix, false, "_villager"), townsmanSuffix);
+            var townsman = new LocationCharacter(new AgentData(
+                new SimpleAgentOrigin(settlement.Culture.Townsman, -1, null, default(UniqueTroopDescriptor)))
+                .Monster(tuple.Item2)
+                .Age(MBRandom.RandomInt(30, 60)), 
+                new LocationCharacter.AddBehaviorsDelegate(SandBoxManager.Instance.AgentBehaviorManager.AddOutdoorWandererBehaviors), 
+                null, 
+                false, 
+                LocationCharacter.CharacterRelations.Friendly, 
+                tuple.Item1, 
+                true, false, null, false, false, true);
+
+            settlement.LocationComplex.GetLocationWithId("lordshall")
+               .AddLocationCharacters(delegate { return townsman; },
+               settlement.Culture,
+               LocationCharacter.CharacterRelations.Friendly, 10);
         }
 
 
@@ -406,7 +485,7 @@ namespace BannerKings.Utils
                     {
                         title = female 
                             ? new TextObject("{=S3kc2bhW}Knyaginya") 
-                            : new TextObject("{=nNV4YbQ7}{MALE}Knyaz{?}Queen{\\?}");
+                            : new TextObject("{=!}Knyaz");
 
                         break;
                     }
@@ -624,63 +703,33 @@ namespace BannerKings.Utils
 
         public static bool IsRetinueTroop(CharacterObject character)
         {
-            var result = false;
-            ExceptionUtils.TryCatch(() =>
-            {
-                var nobleRecruit = character.Culture.EliteBasicTroop;
-                if (nobleRecruit.UpgradeTargets == null)
-                {
-                    result = false;
-                    return;
-                }
-
-                if (character == nobleRecruit)
-                {
-                    result = true;
-                    return;
-                }
-
-                if (nobleRecruit.UpgradeTargets != null)
-                {
-                    var currentUpgrades = nobleRecruit.UpgradeTargets;
-                    while (currentUpgrades != null && currentUpgrades.Any())
-                    {
-                        var upgrade = currentUpgrades[0];
-                        if (upgrade == character)
-                        {
-                            result = true;
-                            return;
-                        }
-
-                        currentUpgrades = upgrade.UpgradeTargets;
-                    }
-                }
-            }, Type.GetType("BannerKings.Utils.Helpers").Name);
-
-
-            return result;
-        }
-
-        public static bool IsRetinueTroop(CharacterObject character, CultureObject settlementCulture)
-        {
-            var culture = character.Culture;
-            var nobleRecruit = culture.EliteBasicTroop;
+            var nobleRecruit = character.Culture.EliteBasicTroop;
+            bool result = false;
 
             if (nobleRecruit.UpgradeTargets == null)
             {
                 return false;
             }
 
-
-            if (culture == settlementCulture)
+            ExceptionUtils.TryCatch(() =>
             {
-                if (character == nobleRecruit || nobleRecruit.UpgradeTargets.Contains(character))
+                while (nobleRecruit.UpgradeTargets != null && nobleRecruit.UpgradeTargets.Count() > 0)
                 {
-                    return true;
+                    result = character == nobleRecruit || nobleRecruit.UpgradeTargets.Contains(character);
+                    if (result)
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        nobleRecruit = nobleRecruit.UpgradeTargets[0];
+                    }
                 }
-            }
+            }, 
+            Type.GetType("BannerKings.Utils.Helpers").Name,
+            false);
 
-            return false;
+            return result;
         }
 
         public static CultureObject GetCulture(string id)

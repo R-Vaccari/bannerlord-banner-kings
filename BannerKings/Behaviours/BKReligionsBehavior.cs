@@ -108,7 +108,6 @@ namespace BannerKings.Behaviours
                         }
                     }
 
-
                     if (toRemove.Count > 0)
                     {
                         List<Hero> notables = (List<Hero>)AccessTools.Field(settlement.GetType(), "_notablesCache").GetValue(settlement);
@@ -342,7 +341,7 @@ namespace BannerKings.Behaviours
 
             if (data?.Clergyman != null)
             {
-                Utils.Helpers.AddSellerToKeep(data.Clergyman.Hero, target);
+                Utils.Helpers.AddCharacterToKeep(data.Clergyman.Hero, target);
             }
         }
 

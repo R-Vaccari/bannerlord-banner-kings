@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.Extensions;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -224,7 +225,6 @@ namespace BannerKings.Managers.Goals.Decisions
             var equipmentRoster = possibleEquipmentRosters.Where(e => e.EquipmentCulture == hero.Culture).ToList().GetRandomElementWithPredicate(x => x.StringId.Contains("bannerkings_companion"))
                                   ?? possibleEquipmentRosters.Where(e => e.EquipmentCulture == hero.Culture).ToList().GetRandomElementWithPredicate(x => x.HasEquipmentFlags(EquipmentFlags.IsMediumTemplate));
 
-
             var bornSettlement = Settlement.All.GetRandomElementWithPredicate(s => s.Culture == hero.Culture) 
                                  ?? hero.Clan.Settlements.GetRandomElement() 
                                  ?? Settlement.All.GetRandomElement();
@@ -245,7 +245,11 @@ namespace BannerKings.Managers.Goals.Decisions
                     false, 
                     GameTexts.FindText("str_accept").ToString(), 
                     null, 
-                    null, 
+                    () =>
+                    {
+                        Hero.MainHero.ChangeHeroGold(-selectedCompanionType.GoldCost);
+                        GainKingdomInfluenceAction.ApplyForDefault(Hero.MainHero, -selectedCompanionType.InfluenceCost);
+                    }, 
                     null
                 ),
                 true

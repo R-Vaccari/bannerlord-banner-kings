@@ -94,7 +94,6 @@ namespace BannerKings.Behaviours
                 {
                     continue;
                 }
-
                 
                 if (education.Lifestyle == null)
                 {

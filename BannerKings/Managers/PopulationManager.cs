@@ -5,6 +5,7 @@ using BannerKings.Extensions;
 using BannerKings.Managers.Institutions.Guilds;
 using BannerKings.Managers.Items;
 using BannerKings.Managers.Populations;
+using BannerKings.Managers.Populations.Estates;
 using BannerKings.Managers.Populations.Villages;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Party;
@@ -40,16 +41,24 @@ namespace BannerKings.Managers
         {
             Populations = pops;
             Caravans = caravans;
+            Estates = new Dictionary<Hero, List<Estate>>();
         }
 
         [SaveableProperty(1)] private Dictionary<Settlement, PopulationData> Populations { get; set; }
 
         [SaveableProperty(2)] private List<MobileParty> Caravans { get; set; }
 
+        [SaveableProperty(3)] private Dictionary<Hero, List<Estate>> Estates { get; set; }
+
         public MBReadOnlyList<MobileParty> AllParties => Caravans.GetReadOnlyList();
 
         public void PostInitialize()
         {
+            if (Estates == null)
+            {
+                Estates = new Dictionary<Hero, List<Estate>>();
+            }
+
             foreach (var data in Populations.Values)
             {
                 data.VillageData?.ReInitializeBuildings();
@@ -95,8 +104,7 @@ namespace BannerKings.Managers
                     return null;
                 }
 
-                InitializeSettlementPops(settlement);
-                return Populations[settlement];
+                return null;
             }
             catch (Exception ex)
             {
@@ -132,6 +140,60 @@ namespace BannerKings.Managers
             {
                 Caravans.Remove(party);
             }
+        }
+
+        public void ChangeEstateOwner(Estate estate, Hero owner)
+        {
+            var currentOwner = estate.Owner;
+            if (currentOwner != null && Estates.ContainsKey(currentOwner))
+            {
+                if (Estates[currentOwner].Contains(estate))
+                {
+                    Estates[currentOwner].Remove(estate);
+                }
+            }
+
+            if (owner != null)
+            {
+                if (Estates.ContainsKey(owner))
+                {
+                    Estates[owner].Add(estate);
+                }
+                else
+                {
+                    Estates.Add(owner, new List<Estate>() { estate });
+                }
+            }
+        }
+
+        public void AddEstate(Estate estate) 
+        {
+            var currentOwner = estate.Owner;
+            if (currentOwner != null) 
+            {
+                if (Estates.ContainsKey(currentOwner))
+                {
+                    if (!Estates[currentOwner].Contains(estate))
+                    {
+                        Estates[currentOwner].Add(estate);
+                    }
+                }
+                else
+                {
+                    Estates.Add(currentOwner, new List<Estate>() { estate });
+                }
+            } 
+        }
+
+        public List<Estate> GetEstates(Hero owner)
+        {
+            var list = new List<Estate>();
+            if (Estates.ContainsKey(owner))
+            {
+                list = Estates[owner];
+            }
+
+            return list;
         }
 
         public List<(ItemObject, float)> GetProductions(PopulationData data)
@@ -271,7 +333,7 @@ namespace BannerKings.Managers
             }
 
             var popQuantityRef = GetDesiredTotalPop(settlement);
-            var desiredTypes = GetDesiredPopTypes(settlement);
+            var desiredTypes = GetDesiredPopTypes(settlement, true);
             var classes = new List<PopulationClass>();
 
             var nobles = (int) (popQuantityRef *
@@ -326,15 +388,8 @@ namespace BannerKings.Managers
                                      || (settlement.IsVillage && settlement.Village != null)) &&
                 settlement.OwnerClan != null)
             {
-                if (!BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(settlement))
-                {
-                    BannerKingsConfig.Instance.PopulationManager.InitializeSettlementPops(settlement);
-                }
-                else
-                {
-                    var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
-                    data.Update(null);
-                }
+                var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
+                data.Update(null);
             }
         }
 
@@ -389,27 +444,15 @@ namespace BannerKings.Managers
             return current - max;
         }
 
-        public static Dictionary<PopType, float[]> GetDesiredPopTypes(Settlement settlement)
+        public static Dictionary<PopType, float[]> GetDesiredPopTypes(Settlement settlement, bool firstTime = false)
         {
             var nobleFactor = 1f;
             var slaveFactor = 1f;
-            var faction = settlement.OwnerClan.Kingdom;
-            if (faction != null)
+           
+            if (!firstTime)
             {
-                if (faction.ActivePolicies.Contains(DefaultPolicies.Serfdom))
-                {
-                    slaveFactor -= 0.3f;
-                }
-
-                if (faction.ActivePolicies.Contains(DefaultPolicies.ForgivenessOfDebts))
-                {
-                    slaveFactor -= 0.1f;
-                }
-
-                if (faction.ActivePolicies.Contains(DefaultPolicies.Citizenship))
-                {
-                    nobleFactor += 0.1f;
-                }
+                nobleFactor = BannerKingsConfig.Instance.GrowthModel.CalculatePopulationClassDemand(settlement, PopType.Nobles).ResultNumber;
+                slaveFactor = BannerKingsConfig.Instance.GrowthModel.CalculatePopulationClassDemand(settlement, PopType.Slaves).ResultNumber;
             }
 
             if (settlement.IsCastle)

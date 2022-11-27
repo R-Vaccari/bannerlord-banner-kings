@@ -110,7 +110,6 @@ namespace BannerKings.Behaviours
 
         private void OnGameLoaded(CampaignGameStarter starter)
         {
-            
             if (!firstUse)
             {
                 BannerKingsConfig.Instance.PopulationManager.PostInitialize();
@@ -118,19 +117,21 @@ namespace BannerKings.Behaviours
                 BannerKingsConfig.Instance.InnovationsManager.PostInitialize();
                 BannerKingsConfig.Instance.ReligionsManager.PostInitialize();
                 BannerKingsConfig.Instance.GoalManager.PostInitialize();
+                BannerKingsConfig.Instance.CourtManager.PostInitialize();
             } 
             else
             {
                 BannerKingsConfig.Instance.InitializeManagersFirstTime();
             }
 
-
+            BannerKingsConfig.Instance.TitleManager.PostInitialize();
             BannerKingsConfig.Instance.ReligionsManager.PostInitialize();
         }
 
         private void OnCharacterCreationOver()
         {
             BannerKingsConfig.Instance.ReligionsManager.PostInitialize();
+            BannerKingsConfig.Instance.TitleManager.PostInitialize();
         }
 
         private void TickSettlementData(Settlement settlement)
@@ -214,7 +215,7 @@ namespace BannerKings.Behaviours
                 var town = settlement.Town;
                 var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement).LandData;
                 HandleItemAvailability(town);
-                HandleExcessWorkforce(data, town);
+                //HandleExcessWorkforce(data, town);
                 HandleExcessFood(data, town);
             }
         }
@@ -255,8 +256,8 @@ namespace BannerKings.Behaviours
 
                     if (quantity < desiredAmounts[pair.Key])
                     {
-                        ItemObject item = (ItemObject)getItem.Invoke(behavior, new object[] { pair.Key, town });
-                        if (item != null)
+                        EquipmentElement item = (EquipmentElement)getItem.Invoke(behavior, new object[] { pair.Key, town });
+                        if (item.Item != null)
                         {
                             itemRoster.AddToCounts(item, 1);
                         }
@@ -264,7 +265,6 @@ namespace BannerKings.Behaviours
                 }
             }, GetType().Name);
         }
-
 
         private void HandleExcessWorkforce(LandData data, Town town)
         {
@@ -352,7 +352,7 @@ namespace BannerKings.Behaviours
                     return;
                 }
 
-                foreach (var garrison in from castleBuilding in settlement.Town.Buildings where BKBuildings.Instance.CastleRetinue != null && castleBuilding.BuildingType == BKBuildings.Instance.CastleRetinue let garrison = settlement.Town.GarrisonParty where garrison.MemberRoster != null && garrison.MemberRoster.Count > 0 let elements = garrison.MemberRoster.GetTroopRoster() let currentRetinue = elements.Where(soldierElement => Utils.Helpers.IsRetinueTroop(soldierElement.Character, settlement.Culture)).Sum(soldierElement => soldierElement.Number) let maxRetinue = castleBuilding.CurrentLevel == 1 ? 20 : castleBuilding.CurrentLevel == 2 ? 40 : 60 where currentRetinue < maxRetinue where garrison.MemberRoster.Count < garrison.Party.PartySizeLimit select garrison)
+                foreach (var garrison in from castleBuilding in settlement.Town.Buildings where BKBuildings.Instance.CastleRetinue != null && castleBuilding.BuildingType == BKBuildings.Instance.CastleRetinue let garrison = settlement.Town.GarrisonParty where garrison.MemberRoster != null && garrison.MemberRoster.Count > 0 let elements = garrison.MemberRoster.GetTroopRoster() let currentRetinue = elements.Where(soldierElement => Utils.Helpers.IsRetinueTroop(soldierElement.Character)).Sum(soldierElement => soldierElement.Number) let maxRetinue = castleBuilding.CurrentLevel == 1 ? 20 : castleBuilding.CurrentLevel == 2 ? 40 : 60 where currentRetinue < maxRetinue where garrison.MemberRoster.Count < garrison.Party.PartySizeLimit select garrison)
                 {
                     garrison.MemberRoster.AddToCounts(settlement.Culture.EliteBasicTroop, 1);
                 }
@@ -486,105 +486,21 @@ namespace BannerKings.Behaviours
 
     namespace Patches
     {
-        [HarmonyPatch(typeof(SellPrisonersAction), "ApplyForAllPrisoners")]
+        [HarmonyPatch(typeof(SellPrisonersAction))]
         internal class ApplyAllPrisionersPatch
         {
-            private static bool Prefix(MobileParty sellerParty, TroopRoster prisoners, Settlement currentSettlement, bool applyGoldChange = true)
+            private static void SendOffPrisoners(TroopRoster prisoners, Settlement currentSettlement)
             {
-                if (currentSettlement == null || (!currentSettlement.IsCastle && !currentSettlement.IsTown) || BannerKingsConfig.Instance.PopulationManager == null || !BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(currentSettlement))
-                {
-                    return true;
-                }
-
-                if (!currentSettlement.IsVillage && !currentSettlement.IsTown && !currentSettlement.IsCastle)
-                {
-                    return true;
-                }
-
-                var policy = (BKCriminalPolicy) BannerKingsConfig.Instance.PolicyManager.GetPolicy(currentSettlement, "criminal");
+                var policy = (BKCriminalPolicy)BannerKingsConfig.Instance.PolicyManager.GetPolicy(currentSettlement, "criminal");
                 switch (policy.Policy)
                 {
                     case BKCriminalPolicy.CriminalPolicy.Enslavement:
-                    {
-                        var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(currentSettlement);
-                        data?.UpdatePopType(PopType.Slaves, Utils.Helpers.GetRosterCount(prisoners));
-                        break;
-                    }
-                    case BKCriminalPolicy.CriminalPolicy.Forgiveness:
-                    {
-                        var dic = new Dictionary<CultureObject, int>();
-                        foreach (var element in prisoners.GetTroopRoster())
-                        {
-                            if (element.Character.Occupation == Occupation.Bandit)
-                            {
-                                continue;
-                            }
-
-                            var culture = element.Character.Culture;
-                            if (culture == null || culture.IsBandit)
-                            {
-                                continue;
-                            }
-
-                            if (dic.ContainsKey(culture))
-                            {
-                                dic[culture] += element.Number;
-                            }
-                            else
-                            {
-                                dic.Add(culture, element.Number);
-                            }
-                        }
-
-                        foreach (var pair in dic)
-                        {
-                            if (!Settlement.All.Any(x => x.Culture == pair.Key))
-                            {
-                                continue;
-                            }
-
-                            {
-                                var random = Settlement.All.FirstOrDefault(x => x.Culture == pair.Key);
-                                if (random != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(random))
-                                {
-                                    BannerKingsConfig.Instance.PopulationManager.GetPopData(random).UpdatePopType(PopType.Serfs, pair.Value);
-                                }
-                            }
-                        }
-
-                        break;
-                    }
-                    default:
-                        return false;
-                }
-
-                return true;
-            }
-        }
-
-        [HarmonyPatch(typeof(SellPrisonersAction), "ApplyForSelectedPrisoners")]
-        internal class ApplySelectedPrisionersPatch
-        {
-            private static bool Prefix(MobileParty sellerParty, TroopRoster prisoners, Settlement currentSettlement)
-            {
-                if (currentSettlement != null && (currentSettlement.IsCastle || currentSettlement.IsTown) & (BannerKingsConfig.Instance.PopulationManager != null) &&
-                    BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(currentSettlement))
-                {
-                    if (!currentSettlement.IsVillage && !currentSettlement.IsTown && !currentSettlement.IsCastle)
-                    {
-                        return true;
-                    }
-
-                    var policy = (BKCriminalPolicy) BannerKingsConfig.Instance.PolicyManager.GetPolicy(currentSettlement, "criminal");
-                    switch (policy.Policy)
-                    {
-                        case BKCriminalPolicy.CriminalPolicy.Enslavement:
                         {
                             var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(currentSettlement);
                             data?.UpdatePopType(PopType.Slaves, Utils.Helpers.GetRosterCount(prisoners));
                             break;
                         }
-                        case BKCriminalPolicy.CriminalPolicy.Forgiveness:
+                    case BKCriminalPolicy.CriminalPolicy.Forgiveness:
                         {
                             var dic = new Dictionary<CultureObject, int>();
                             foreach (var element in prisoners.GetTroopRoster())
@@ -595,7 +511,7 @@ namespace BannerKings.Behaviours
                                 }
 
                                 var culture = element.Character.Culture;
-                                if (culture == null)
+                                if (culture == null || culture.IsBandit)
                                 {
                                     continue;
                                 }
@@ -619,29 +535,57 @@ namespace BannerKings.Behaviours
 
                                 {
                                     var random = Settlement.All.FirstOrDefault(x => x.Culture == pair.Key);
-                                    if (random == null ||
-                                        !BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(random))
+                                    if (random != null && BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(random))
                                     {
-                                        continue;
+                                        BannerKingsConfig.Instance.PopulationManager.GetPopData(random).UpdatePopType(PopType.Serfs, pair.Value);
                                     }
-
-                                    var data =
-                                        BannerKingsConfig.Instance.PopulationManager.GetPopData(currentSettlement);
-                                    data?.UpdatePopType(PopType.Serfs, pair.Value);
                                 }
                             }
 
                             break;
                         }
-                        default:
-                            return false;
-                    }
                 }
+            }
+
+            [HarmonyPrefix]
+            [HarmonyPatch("ApplyForAllPrisoners", MethodType.Normal)]
+            private static bool Prefix(MobileParty sellerParty, TroopRoster prisoners, Settlement currentSettlement, bool applyGoldChange = true)
+            {
+                if (currentSettlement == null || (!currentSettlement.IsCastle && !currentSettlement.IsTown) || !BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(currentSettlement))
+                {
+                    return true;
+                }
+
+                if (!currentSettlement.IsVillage && !currentSettlement.IsTown && !currentSettlement.IsCastle)
+                {
+                    return true;
+                }
+
+                SendOffPrisoners(prisoners, currentSettlement);
+
+                return true;
+            }
+
+            [HarmonyPrefix]
+            [HarmonyPatch("ApplyForSelectedPrisoners", MethodType.Normal)]
+            private static bool Prefix(MobileParty sellerParty, TroopRoster prisoners, Settlement currentSettlement)
+            {
+                if (currentSettlement == null || (!currentSettlement.IsCastle && !currentSettlement.IsTown) || !BannerKingsConfig.Instance.PopulationManager.IsSettlementPopulated(currentSettlement))
+                {
+                    return true;
+                }
+
+                if (!currentSettlement.IsVillage && !currentSettlement.IsTown && !currentSettlement.IsCastle)
+                {
+                    return true;
+                }
+
+                SendOffPrisoners(prisoners, currentSettlement);
 
                 return true;
             }
         }
-
+        
 
         [HarmonyPatch(typeof(Town), "FoodStocksUpperLimit")]
         internal class FoodStockPatch

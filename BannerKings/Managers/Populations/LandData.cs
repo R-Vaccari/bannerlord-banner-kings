@@ -5,11 +5,13 @@ using BannerKings.Managers.Institutions.Religions.Doctrines;
 using BannerKings.Managers.Policies;
 using BannerKings.Managers.Populations.Villages;
 using BannerKings.Managers.Skills;
+using BannerKings.Managers.Titles.Laws;
 using BannerKings.Models.Vanilla;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.SaveSystem;
+using static BannerKings.Managers.PopulationManager;
 
 namespace BannerKings.Managers.Populations
 {
@@ -36,8 +38,92 @@ namespace BannerKings.Managers.Populations
 
         [SaveableProperty(7)] private float[] composition { get; set; }
 
+        public float[] Composition => composition;
+
         public TerrainType Terrain => Campaign.Current.MapSceneWrapper != null ? 
             Campaign.Current.MapSceneWrapper.GetTerrainTypeAtPosition(data.Settlement.Position2D) : TerrainType.Plain;
+
+        public bool IsExcessLaborExpandingAcreage
+        {
+            get
+            {
+                bool result;
+                if (data.Settlement.IsVillage)
+                {
+                    result = WorkforceSaturation > 1.3f;
+                }
+                else
+                {
+                    result = WorkforceSaturation > 1f && data.Settlement.Town.FoodChange < 0f;
+                }
+
+                return result;
+            }
+        }
+
+        public int AvailableSerfsWorkForce
+        {
+            get
+            {
+                var serfs = data.GetTypeCount(PopulationManager.PopType.Serfs) * (data.Settlement.IsVillage ? 0.85f : 0.5f);
+                int toSubtract = 0;
+
+                var town = data.Settlement.Town;
+
+                if (!data.Settlement.IsVillage)
+                {
+                    if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(data.Settlement, "workforce",
+                            (int)BKWorkforcePolicy.WorkforcePolicy.Martial_Law))
+                    {
+                        var militia = data.Settlement.Town.Militia / 2;
+                        serfs -= militia / 2f;
+                    }
+                    else if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(data.Settlement, "workforce",
+                                 (int)BKWorkforcePolicy.WorkforcePolicy.Land_Expansion))
+                    {
+                        toSubtract += LandExpansionWorkforce;
+                    }
+                    else if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(data.Settlement, "workforce",
+                                 (int)BKWorkforcePolicy.WorkforcePolicy.Construction))
+                    {
+                        serfs *= 0.85f;
+                    }
+                }
+
+                return Math.Max((int)(serfs - toSubtract), 0);
+            }
+        }
+
+        public int AvailableSlavesWorkForce
+        {
+            get
+            {
+                float slaves = data.GetTypeCount(PopulationManager.PopType.Slaves);
+                int toSubtract = 0;
+
+                var town = data.Settlement.Town;
+                if (town != null && town.BuildingsInProgress.Count > 0)
+                {
+                    slaves -= slaves * data.EconomicData.StateSlaves * 0.5f;
+                }
+
+                if (!data.Settlement.IsVillage)
+                {
+                    if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(data.Settlement, "workforce",
+                                (int)BKWorkforcePolicy.WorkforcePolicy.Land_Expansion))
+                    {
+                        toSubtract += LandExpansionWorkforce;
+                    }
+                    else if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(data.Settlement, "workforce",
+                                 (int)BKWorkforcePolicy.WorkforcePolicy.Construction))
+                    {
+                        slaves -= slaves * data.EconomicData.StateSlaves * 0.5f;
+                    }
+                }
+
+                return Math.Max((int)(slaves - toSubtract), 0);
+            }
+        }
 
         public int AvailableWorkForce
         {
@@ -45,6 +131,7 @@ namespace BannerKings.Managers.Populations
             {
                 var serfs = data.GetTypeCount(PopulationManager.PopType.Serfs) * (data.Settlement.IsVillage ? 0.85f : 0.5f);
                 float slaves = data.GetTypeCount(PopulationManager.PopType.Slaves);
+                int toSubtract = 0;
 
                 var town = data.Settlement.Town;
                 if (town != null && town.BuildingsInProgress.Count > 0)
@@ -63,8 +150,7 @@ namespace BannerKings.Managers.Populations
                     else if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(data.Settlement, "workforce",
                                  (int) BKWorkforcePolicy.WorkforcePolicy.Land_Expansion))
                     {
-                        serfs *= 0.8f;
-                        slaves *= 0.8f;
+                        toSubtract += LandExpansionWorkforce;
                     }
                     else if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(data.Settlement, "workforce",
                                  (int) BKWorkforcePolicy.WorkforcePolicy.Construction))
@@ -74,7 +160,21 @@ namespace BannerKings.Managers.Populations
                     }
                 }
 
-                return Math.Max((int) (serfs + slaves), 0);
+                return Math.Max((int) (serfs + slaves - toSubtract), 0);
+            }
+        }
+
+        public int LandExpansionWorkforce
+        {
+            get
+            {
+                var serfs = data.GetTypeCount(PopulationManager.PopType.Serfs) * (data.Settlement.IsVillage ? 0.85f : 0.5f);
+                float slaves = data.GetTypeCount(PopulationManager.PopType.Slaves);
+
+                serfs *= 0.2f;
+                slaves *= 0.2f;
+
+                return Math.Max((int)(serfs + slaves), 0);
             }
         }
 
@@ -89,12 +189,25 @@ namespace BannerKings.Managers.Populations
             }
         }
 
+        public int WorkforceExcess
+        {
+            get
+            {
+                int available = AvailableWorkForce;
+                int farms = (int)(farmland / GetRequiredLabor("farmland"));
+                int pasture = (int)(this.pasture / GetRequiredLabor("pasture"));
+                return available - (farms + pasture);
+            }
+        }
+
         public float Acreage => farmland + pasture + woodland;
         public float Farmland => farmland;
         public float Pastureland => pasture;
         public float Woodland => woodland;
         public float Fertility => fertility;
         public float Difficulty => terrainDifficulty;
+
+        public float DifficultyFinal => 15f * terrainDifficulty;
 
         private void Init(int totalPops)
         {
@@ -172,9 +285,9 @@ namespace BannerKings.Managers.Populations
         {
             var result = type switch
             {
-                "farmland" => 0.018f,
-                "pasture" => 0.006f,
-                _ => 0.0012f
+                "farmland" => 0.015f,
+                "pasture" => 0.005f,
+                _ => 0.0010f
             };
 
             Hero owner = null;
@@ -200,7 +313,7 @@ namespace BannerKings.Managers.Populations
                 var data = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(owner);
                 if (data.HasPerk(BKPerks.Instance.CivilCultivator))
                 {
-                    result *= 0.05f;
+                    result *= 1.05f;
                 }
             }
 
@@ -211,16 +324,45 @@ namespace BannerKings.Managers.Populations
                 {
                     if (innovations.HasFinishedInnovation(DefaultInnovations.Instance.HeavyPlough))
                     {
-                        result *= 0.08f;
+                        result *= 1.08f;
                     }
 
                     if (innovations.HasFinishedInnovation(DefaultInnovations.Instance.ThreeFieldsSystem))
                     {
-                        result *= 0.25f;
+                        result *= 1.25f;
                     }
                 }
             }
 
+            return result;
+        }
+
+        public float GetAcreClassOutput(string type, PopType populationClass)
+        {
+            float result = GetAcreOutput(type);
+
+            if (data.TitleData != null && data.TitleData.Title != null)
+            {
+                var title = data.TitleData.Title;
+                if (populationClass == PopType.Serfs)
+                {
+                    if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.SerfsAgricultureDuties))
+                    {
+                        result *= 1.1f;
+                    }
+                    else if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.SerfsLaxDuties))
+                    {
+                        result *= 0.95f;
+                    }
+                }
+                else if (populationClass == PopType.Slaves)
+                {
+                    if (title.contract.IsLawEnacted(DefaultDemesneLaws.Instance.SlavesAgricultureDuties))
+                    {
+                        result *= 1.1f;
+                    }
+                }
+            }
 
             return result;
         }
@@ -229,12 +371,10 @@ namespace BannerKings.Managers.Populations
         {
             if (this.data.Settlement.IsVillage)
             {
-                var villageData = data.VillageData;
-                var construction = this.data.VillageData.Construction;
-                var progress = 15f / construction;
-                var type = villageData.CurrentDefault.BuildingType;
+                var type = data.VillageData.CurrentDefault.BuildingType;
                 if (type != DefaultVillageBuildings.Instance.DailyProduction)
                 {
+                    var progress = BannerKingsConfig.Instance.ConstructionModel.CalculateLandExpansion(data, LandExpansionWorkforce).ResultNumber;
                     if (type == DefaultVillageBuildings.Instance.DailyFarm)
                     {
                         this.farmland += progress;
@@ -252,9 +392,7 @@ namespace BannerKings.Managers.Populations
             else if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(this.data.Settlement, "workforce",
                          (int) BKWorkforcePolicy.WorkforcePolicy.Land_Expansion))
             {
-                var laborers = AvailableWorkForce * 0.2f;
-                var construction = laborers * 0.010f;
-                var progress = 15f / construction;
+                var progress = BannerKingsConfig.Instance.ConstructionModel.CalculateLandExpansion(data, LandExpansionWorkforce).ResultNumber;
 
                 if (progress > 0f)
                 {
@@ -282,7 +420,7 @@ namespace BannerKings.Managers.Populations
             }
 
 
-            if (WorkforceSaturation > 1f)
+            if (IsExcessLaborExpandingAcreage)
             {
                 var list = new List<(int, float)>
                 {
@@ -291,12 +429,7 @@ namespace BannerKings.Managers.Populations
                     new(2, composition[2])
                 };
                 var choosen = MBRandom.ChooseWeighted(list);
-
-                var construction = this.data.Settlement.IsVillage
-                    ? this.data.VillageData.Construction
-                    : new BKConstructionModel().CalculateDailyConstructionPower(this.data.Settlement.Town).ResultNumber;
-                construction *= 0.8f;
-                var progress = 15f / construction;
+                var progress = BannerKingsConfig.Instance.ConstructionModel.CalculateLandExpansion(data, WorkforceExcess).ResultNumber;
 
                 switch (choosen)
                 {

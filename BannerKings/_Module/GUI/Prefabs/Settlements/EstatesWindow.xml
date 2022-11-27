@@ -1,0 +1,253 @@
+<Prefab>
+	<Constants>
+
+		<Constant Name="CharacterDeveloper.SkillButtonBackground.Width" BrushLayer="Default"
+		          BrushName="CharacterDeveloper.SkillButtonBackground" BrushValueType="Width" />
+		<Constant Name="CharacterDeveloper.SkillButtonBackground.Height" BrushLayer="Default"
+		          BrushName="CharacterDeveloper.SkillButtonBackground" BrushValueType="Height" />
+
+	</Constants>
+	<Window>
+		<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Sprite="BlankWhiteSquare_9" Color="#00000088">
+			<Children>
+				<CharacterDeveloperAttributeInspectionPopupWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed"
+				                                                  SuggestedWidth="750" SuggestedHeight="800"
+				                                                  HorizontalAlignment="Center" VerticalAlignment="Center"
+				                                                  Sprite="CharacterDeveloper\AttributePopup\attribute_popup_canvas">
+					<Children>
+
+						<ScrollablePanel Id="ScrollablePanel" WidthSizePolicy="CoverChildren"
+										 HeightSizePolicy="StretchToParent" MarginTop="10" AutoHideScrollBars="true"
+										 ClipRect="ClipRect" InnerPanel="ClipRect\InnerPanel"
+										 VerticalScrollbar="..\VerticalScrollbar">
+							<Children>
+
+								<Widget Id="ClipRect" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent"
+										ClipContents="true">
+									<Children>
+																						
+										<ListPanel Id="InnerPanel" WidthSizePolicy="Fixed" HeightSizePolicy="CoverChildren" SuggestedWidth="720"
+												   StackLayout.LayoutMethod="VerticalBottomToTop" DoNotAcceptEvents="true" MarginTop="20"
+												   MarginBottom="20">
+											<Children>
+
+												<TextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
+															HorizontalAlignment="Center" Brush="Encyclopedia.SubPage.Header.Text"
+															Text="@EstatesText" MarginBottom="8" />
+															
+															
+												<Widget DataSource="{DemesneLands}" HorizontalAlignment="Center" HeightSizePolicy="CoverChildren"
+													WidthSizePolicy="StretchToParent" VerticalAlignment="Center" DoNotPassEventsToChildren="true">
+													<Children>
+													
+														<ListPanel HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" WidthSizePolicy="StretchToParent"
+																  SuggestedWidth="250" MarginTop="40" StackLayout.LayoutMethod="VerticalBottomToTop">
+															<Children>
+																<RichTextWidget DataSource="{..}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
+																	HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="25" Text="@DemesneLandsText"
+																	 />
+																	
+																<ListPanel DataSource="{MainInfo}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" 
+																		   VerticalAlignment="Center" MarginTop="20" StackLayout.LayoutMethod="VerticalBottomToTop">
+																	<ItemTemplate>
+																		<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" >
+																			<Children>
+																				<HintWidget DataSource="{Hint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" 
+																							MarginLeft="8" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" IsEnabled="false">
+																					<Children>
+																						<ListPanel DataSource="{..}" HorizontalAlignment="Center" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" 
+																								  StackLayout.LayoutMethod="HorizontalLeftToRight" MinHeight="38">
+																							<Children>
+																								<TextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" VerticalAlignment="Center" Brush="TownManagement.Description.Title.Text" Brush.FontSize="20" Text="@Title" />
+																								<TextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" VerticalAlignment="Center" MarginLeft="5" Brush="TownManagement.Description.Value.Text" Brush.FontSize="20" IntText="@Value" />
+																								<ChangeAmountTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" MaxWidth="80" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="Settlement.Property.PositiveChange.Text" Amount="@ValueChange" NegativeBrushName="TownManagement.Property.NegativeChange.Text" PositiveBrushName="TownManagement.Property.PositiveChange.Text" UseParentheses="true" />
+																								<DescriptionItemVisualBrushWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="30" SuggestedHeight="30" VerticalAlignment="Center" Brush="TownManamgement.Description.Type.Brush" Type="@Type" />
+																							</Children>
+																						</ListPanel>
+																					</Children>
+																				</HintWidget>
+																			</Children>
+																		</Widget>
+																	</ItemTemplate>
+																</ListPanel>
+															</Children>
+														</ListPanel>
+													</Children>
+												</Widget>
+													
+															
+												<GridWidget DataSource="{EstatesList}" WidthSizePolicy="StretchToParent"
+															HeightSizePolicy="CoverChildren" MarginRight="50" MarginLeft="50" HorizontalAlignment="Center"
+															DefaultCellWidth="250" DefaultCellHeight="550" ColumnCount="1" MarginTop="10">
+													<ItemTemplate>
+														<Widget HorizontalAlignment="Center" HeightSizePolicy="CoverChildren"
+															WidthSizePolicy="StretchToParent" VerticalAlignment="Center">
+															<Children>
+															
+																<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="7"
+																		MarginLeft="120" MarginRight="120" VerticalAlignment="Top" PositionYOffset="7"
+																		Sprite="SPGeneral\TownManagement\horizontal_divider" />
+															
+																<ListPanel HorizontalAlignment="Center" HeightSizePolicy="StretchToParent" WidthSizePolicy="Fixed"
+																	SuggestedWidth="250" MarginTop="40" StackLayout.LayoutMethod="VerticalBottomToTop">
+																	<Children>
+																		<RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
+																			HorizontalAlignment="Center" Brush="Clan.Leader.Text" Brush.FontSize="25" Text="@NameText"
+																			 />
+																			
+																		<ListPanel HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" WidthSizePolicy="StretchToParent"
+																				   MarginTop="20" StackLayout.LayoutMethod="HorizontalLeftToRight">
+																			<Children>
+																			
+																			  <Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" IsVisible="@IsEnabled">
+																				<Children>
+																					<ImageIdentifierWidget DataSource="{ImageIdentifier}" WidthSizePolicy="Fixed" HorizontalAlignment="Right"
+																					   HeightSizePolicy="Fixed" SuggestedWidth="170" SuggestedHeight="130"
+																					   MarginRight="18" MarginTop="17" MarginBottom="18" AdditionalArgs="@AdditionalArgs"
+																					   ImageId="@Id" ImageTypeCode="@ImageTypeCode" />
+																				</Children>
+																			  </Widget>
+
+																			   <ListPanel DataSource="{MainInfo}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" 
+																						  VerticalAlignment="Top" StackLayout.LayoutMethod="VerticalBottomToTop">
+																					<ItemTemplate>
+																						<Widget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren">
+																							<Children>
+																								<HintWidget DataSource="{Hint}" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Left" MarginLeft="8" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" IsEnabled="false">
+																									<Children>
+																										<ListPanel DataSource="{..}" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" StackLayout.LayoutMethod="HorizontalLeftToRight" MinHeight="38">
+																											<Children>
+																												<TextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" VerticalAlignment="Center" Brush="TownManagement.Description.Title.Text" Brush.FontSize="20" Text="@Title" />
+																												<TextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" VerticalAlignment="Center" MarginLeft="5" Brush="TownManagement.Description.Value.Text" Brush.FontSize="20" IntText="@Value" />
+																												<ChangeAmountTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" MaxWidth="80" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="Settlement.Property.PositiveChange.Text" Amount="@ValueChange" NegativeBrushName="TownManagement.Property.NegativeChange.Text" PositiveBrushName="TownManagement.Property.PositiveChange.Text" UseParentheses="true" />
+																												<DescriptionItemVisualBrushWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="30" SuggestedHeight="30" VerticalAlignment="Center" Brush="TownManamgement.Description.Type.Brush" Type="@Type" />
+																											</Children>
+																										</ListPanel>
+																									</Children>
+																								</HintWidget>
+																							</Children>
+																						</Widget>
+																					</ItemTemplate>
+																				</ListPanel>
+																			</Children>
+																		</ListPanel>
+																		
+																		
+																		<Standard.DropdownWithHorizontalControl Parameter.SelectorDataSource="{TaskSelector}" MarginTop="10"
+																												HorizontalAlignment="Center" IsVisible="@Enabled" />
+																												
+																		<Standard.DropdownWithHorizontalControl Parameter.SelectorDataSource="{DutySelector}" MarginTop="10"
+																												HorizontalAlignment="Center" IsVisible="@Enabled" />
+																						
+																		<GridWidget DataSource="{ExtraInfos}" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" VerticalAlignment="Center"
+																					SuggestedWidth="700" SuggestedHeight="120" HorizontalAlignment="Center" DefaultCellWidth="230" 
+																					DefaultCellHeight="30" ColumnCount="3" IsVisible="@IsEnabled">
+																			<ItemTemplate>
+
+																				<GridWidget WidthSizePolicy="CoverChildren" HorizontalAlignment="Center"
+																							HeightSizePolicy="CoverChildren" DefaultCellWidth="150" DefaultCellHeight="20"
+																							ColumnCount="1" MarginTop="30">
+																					<ItemTemplate>
+																						<InformationElement />
+																					</ItemTemplate>
+																				</GridWidget>
+																			</ItemTemplate>
+																		</GridWidget>
+																		
+																		<ListPanel HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" WidthSizePolicy="CoverChildren"
+																				   StackLayout.LayoutMethod="HorizontalLeftToRight" VerticalAlignment="Center" MarginTop="10">
+																			<Children>
+																			
+																				<ButtonWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedHeight="48" MarginRight="15" MarginLeft="15"
+																							  SuggestedWidth="130" HorizontalAlignment="Center" VerticalAlignment="Top"
+																							  Brush="ButtonBrush2" Command.Click="ExecuteBuy" IsVisible="@BuyVisible">
+																					<Children>
+																						<HintWidget DataSource="{BuyHint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
+																									HorizontalAlignment="Center" Command.HoverBegin="ExecuteBeginHint"
+																									Command.HoverEnd="ExecuteEndHint" />
+																						<RichTextWidget DoNotAcceptEvents="true" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren"
+																										HorizontalAlignment="Center" VerticalAlignment="Center" Brush="OverlayPopup.ButtonText"
+																										Brush.FontSize="20" Text="@BuyText" />
+																					</Children>
+																				</ButtonWidget>
+																				
+																				
+																				<ButtonWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedHeight="48" MarginRight="15" MarginLeft="15"
+																							  SuggestedWidth="130" HorizontalAlignment="Center" VerticalAlignment="Top"
+																							  Brush="ButtonBrush2" Command.Click="ExecuteGrant" IsVisible="@GrantVisible">
+																					<Children>
+																						<HintWidget DataSource="{GrantHint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
+																									HorizontalAlignment="Center" Command.HoverBegin="ExecuteBeginHint"
+																									Command.HoverEnd="ExecuteEndHint" />
+																						<RichTextWidget DoNotAcceptEvents="true" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren"
+																										HorizontalAlignment="Center" VerticalAlignment="Center" Brush="OverlayPopup.ButtonText"
+																										Brush.FontSize="20" Text="@GrantText" />
+																					</Children>
+																				</ButtonWidget>
+																				
+																				<ButtonWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedHeight="48" MarginRight="15" MarginLeft="15"
+																							  SuggestedWidth="130" HorizontalAlignment="Center" VerticalAlignment="Top"
+																							  Brush="ButtonBrush2" Command.Click="ExecuteReclaim" IsVisible="@ReclaimVisible">
+																					<Children>
+																						<HintWidget DataSource="{GrantHint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren"
+																									HorizontalAlignment="Center" Command.HoverBegin="ExecuteBeginHint"
+																									Command.HoverEnd="ExecuteEndHint" />
+																						<RichTextWidget DoNotAcceptEvents="true" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren"
+																										HorizontalAlignment="Center" VerticalAlignment="Center" Brush="OverlayPopup.ButtonText"
+																										Brush.FontSize="20" Text="@ReclaimText" />
+																					</Children>
+																				</ButtonWidget>
+
+																				
+																			</Children>
+																		</ListPanel>
+																	</Children>
+																</ListPanel>
+															</Children>
+														</Widget>
+													</ItemTemplate>
+												</GridWidget>
+											</Children>
+										</ListPanel>
+									</Children>
+								</Widget>
+
+								<!--Scroll Gradient-->
+								<Widget DoNotAcceptEvents="true" WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed"
+										SuggestedHeight="57" HorizontalAlignment="Right" VerticalAlignment="Bottom"
+										Sprite="General\CharacterCreation\character_creation_scroll_gradient" />
+
+							</Children>
+						</ScrollablePanel>
+						
+						<ScrollbarWidget HeightSizePolicy="StretchToParent" WidthSizePolicy="Fixed" Id="VerticalScrollbar"
+								                 SuggestedWidth="30" MinValue="0" MaxValue="100" MarginRight="10" MarginBottom="10"
+								                 MarginTop="10" AlignmentAxis="Vertical" HorizontalAlignment="Right" VerticalAlignment="Center"
+								                 Handle="ScrollbarHandle" UpdateChildrenStates="true">
+							<Children>
+								<Widget Id="ScrollbarBed" WidthSizePolicy="Fixed" HeightSizePolicy="StretchToParent" SuggestedWidth="4"
+										HorizontalAlignment="Center" Sprite="SPGeneral\SPRecruitment\slider_thin_bed_vertical" />
+								<ImageWidget Id="ScrollbarHandle" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" MinHeight="153"
+											 SuggestedWidth="30" SuggestedHeight="150" HorizontalAlignment="Center"
+											 Brush="Encyclopedia.Scroll.Handle.Vertical" />
+							</Children>
+						</ScrollbarWidget>
+
+
+						<Widget DoNotAcceptEvents="true" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent"
+						        ExtendLeft="25" ExtendTop="25" ExtendRight="25" ExtendBottom="25"
+						        Sprite="CharacterDeveloper\AttributePopup\attribute_popup_frame" />
+
+						<!--Close Inspection Popup Button-->
+						<ButtonWidget DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed"
+						              SuggestedWidth="84" SuggestedHeight="84" HorizontalAlignment="Center" VerticalAlignment="Center"
+						              MarginLeft="750" MarginBottom="800" Command.Click="ExecuteClose" Brush="Attribute.Close.Button" />
+
+					</Children>
+				</CharacterDeveloperAttributeInspectionPopupWidget>
+
+
+			</Children>
+		</Widget>
+	</Window>
+</Prefab>

@@ -1,0 +1,67 @@
+<Prefab>
+	<Parameters>
+    <Parameter Name="IsDividerEnabled" DefaultValue="true"/>
+
+  </Parameters>
+  <Constants>
+    <Constant Name="Recruitment.Owner.Width" BrushName="Recruitment.Owner.Brush" BrushLayer="Default" BrushValueType="Width"/>
+    <Constant Name="Recruitment.Owner.Height" BrushName="Recruitment.Owner.Brush" BrushLayer="Default" BrushValueType="Height"/>
+
+    <Constant Name="Recruitment.Owner.Padding" Value="10"/>
+  </Constants>
+	<Window>
+		<NavigatableListPanel Id="NavigatableList" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" UseSelfIndexForMinimum="true">
+          <Children>
+		  
+			<Widget WidthSizePolicy = "Fixed" HeightSizePolicy = "Fixed" SuggestedHeight="!Recruitment.Owner.Height" SuggestedWidth="!Recruitment.Owner.Width" Sprite="SPGeneral\SPRecruitment\portrait_patron"  VerticalAlignment="Center" MarginBottom="15">
+              <Children>
+
+                <GameMenuPartyItemButtonWidget Id="PartyItemWidget" DoNotPassEventsToChildren="true" DataSource="{Owner}" Command.AlternateClick="ExecuteOpenEncyclopedia" WidthSizePolicy = "Fixed" HeightSizePolicy = "Fixed" SuggestedHeight="!Recruitment.Owner.Height" SuggestedWidth="!Recruitment.Owner.Width" VerticalAlignment="Top" HorizontalAlignment="Left"  Relation="@RelationToPlayer" RelationBackgroundWidget="RelationBackgroundWidget" PartyBackgroundBrush="GameMenu.Tableau.Background.Party" CharacterBackgroundBrush="GameMenu.Tableau.Background.Character" BackgroundImageWidget="BackgroundImageWidget">
+                  <Children>
+                    <ImageWidget Id="BackgroundImageWidget" WidthSizePolicy = "StretchToParent" HeightSizePolicy = "StretchToParent" MarginLeft="4" MarginRight="4" MarginTop="4" MarginBottom="4"/>
+                    <ImageIdentifierWidget DataSource="{ImageIdentifier}" ImageId="@Id" AdditionalArgs="@AdditionalArgs" ImageTypeCode="@ImageTypeCode" WidthSizePolicy = "StretchToParent" HeightSizePolicy = "StretchToParent" MarginTop="!Recruitment.Owner.Padding" MarginBottom="5" MarginLeft="!Recruitment.Owner.Padding" MarginRight="!Recruitment.Owner.Padding" IsDisabled="true" IsPartyItem="false"/>
+                    <HintWidget WidthSizePolicy = "StretchToParent" HeightSizePolicy = "StretchToParent" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" IsDisabled="true"/>
+                  </Children>
+                </GameMenuPartyItemButtonWidget>
+
+              </Children>
+            </Widget>
+
+            
+			<ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" VerticalAlignment="Top" MarginLeft="20" StackLayout.LayoutMethod="VerticalBottomToTop">
+			  <Children>
+					
+				<ScrollbarWidget HeightSizePolicy ="Fixed" WidthSizePolicy="StretchToParent" Id="VolunteerListScrollbar" SuggestedHeight="15" MinValue="0" MaxValue="100" MarginTop="15" 
+								 MarginLeft="10" MarginRight="10" AlignmentAxis="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Handle="ScrollbarHandle" 
+								 UpdateChildrenStates="true" >
+					<Children>
+						<Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="4" VerticalAlignment="Center" Sprite="SPGeneral\SPRecruitment\slider_thin_bed_horizontal" />
+						<ImageWidget Id="ScrollbarHandle" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" MinWidth="153" SuggestedHeight="15" SuggestedWidth="150" VerticalAlignment="Center" Brush="Encyclopedia.Scroll.Handle.Horizontal" />
+					</Children>
+				</ScrollbarWidget>
+
+				<ScrollablePanel Id="VolunteerListScrollablePanel"  HeightSizePolicy ="StretchToParent"  WidthSizePolicy="StretchToParent" InnerPanel="VolunteerListRect\TroopsListPanel" ClipRect="VolunteerListRect" MouseScrollAxis="Vertical" HorizontalScrollbar="..\VolunteerListScrollbar" MarginRight="20" AutoHideScrollBars="true">
+				  <Children>
+
+					<Widget Id="VolunteerListRect" WidthSizePolicy = "StretchToParent" HeightSizePolicy = "StretchToParent" ClipContents="true">
+					  <Children>
+	  
+						<NavigatableListPanel Id="TroopsListPanel" DataSource = "{Troops}" StackLayout.LayoutMethod = "HorizontalLeftToRight" WidthSizePolicy = "CoverChildren" HeightSizePolicy="CoverChildren" VerticalAlignment="Center" HorizontalAlignment="Left" MarginRight="140" UseSelfIndexForMinimum="true" >
+						  <ItemTemplate>
+							<RecruitTroopPanel MarginRight="15"/>
+						  </ItemTemplate>
+						</NavigatableListPanel>
+						
+					  </Children>
+					</Widget>
+
+				  </Children>
+				</ScrollablePanel> 
+				
+			  </Children>
+			</ListPanel>
+
+          </Children>
+        </NavigatableListPanel>
+	</Window>
+</Prefab>

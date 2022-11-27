@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using BannerKings.Managers.Skills;
+using BannerKings.Managers.Titles.Laws;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
@@ -19,7 +21,9 @@ namespace BannerKings.Managers.Titles
             this.vassals = vassals;
             this.deJure = deJure;
             this.deFacto = deFacto;
-            this.name = new TextObject(Utils.Helpers.GetTitlePrefix(type, contract.Government) + " of " + name);
+            this.name = new TextObject("{=!}{TITLE} of {NAME}")
+                .SetTextVariable("TITLE", Utils.Helpers.GetTitlePrefix(type, contract.Government))
+                .SetTextVariable("NAME", name);
             shortName = new TextObject(name);
             this.contract = contract;
             dueTax = 0;
@@ -131,6 +135,11 @@ namespace BannerKings.Managers.Titles
         public bool Active => deJure != null || deFacto != null;
 
         public bool IsSovereignLevel => (int) type <= 1;
+
+        public void PostInitialize()
+        {
+            contract.PostInitialize();
+        }
 
         public override bool Equals(object obj)
         {
@@ -364,6 +373,46 @@ namespace BannerKings.Managers.Titles
                 foreach (var vassal in vassals)
                 {
                     vassal.SetSovereign(sovereign);
+                }
+            }
+        }
+
+        public void SetLaws(List<DemesneLaw> laws)
+        {
+            contract.SetLaws(laws);
+            if (vassals is { Count: > 0 })
+            {
+                foreach (var vassal in vassals)
+                {
+                    vassal.SetLaws(laws);
+                }
+            }
+        }
+
+        public void EnactLaw(DemesneLaw law, Hero enactor = null)
+        {
+            if (enactor != null)
+            {
+                law = law.GetCopy();
+                law.SetIssueDate(CampaignTime.Now);
+                GainKingdomInfluenceAction.ApplyForDefault(enactor, -law.InfluenceCost);
+                if (enactor.MapFaction == Hero.MainHero.MapFaction)
+                {
+                    MBInformationManager.AddQuickInformation(new TextObject("{=!}The {LAW} has been enacted in the {TITLE}.")
+                        .SetTextVariable("LAW", law.Name)
+                        .SetTextVariable("TITLE", FullName),
+                        0,
+                        null,
+                        "event:/ui/notification/relation");
+                }
+            }
+
+            contract.EnactLaw(law);
+            if (vassals is { Count: > 0 })
+            {
+                foreach (var vassal in vassals)
+                {
+                    vassal.EnactLaw(law);
                 }
             }
         }

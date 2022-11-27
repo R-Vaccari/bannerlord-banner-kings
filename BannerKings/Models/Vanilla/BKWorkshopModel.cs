@@ -6,12 +6,44 @@ using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.Settlements.Workshops;
 using TaleWorlds.Core;
-using TaleWorlds.Library;
+using TaleWorlds.Localization;
 
 namespace BannerKings.Models.Vanilla
 {
     public class BKWorkshopModel : DefaultWorkshopModel
     {
+        public int GetUpgradeCost(Workshop workshop)
+        {
+            return GetBuyingCostForPlayer(workshop) / (4 + workshop.Level);
+        }
+
+        public ExplainedNumber GetProductionQuality(Workshop workshop, bool explanations = false)
+        {
+            var result = new ExplainedNumber(0f, explanations);
+            var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(workshop.Settlement);
+            if (data == null)
+            {
+                return new ExplainedNumber(1f);
+            }
+
+            result.Add(data.EconomicData.ProductionQuality.ResultNumber, new TextObject("{=!}Production quality"));
+
+            if (workshop.Owner != null)
+            {
+                var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(workshop.Owner);
+                if (education.HasPerk(BKPerks.Instance.ArtisanCraftsman))
+                {
+                    result.AddFactor(0.05f, BKPerks.Instance.ArtisanCraftsman.Name);
+                }
+            }
+
+            if (workshop.Level > 1)
+            {
+                result.AddFactor((workshop.Level - 1) * 0.05f, GameTexts.FindText("str_level"));
+            }
+
+            return result;
+        }
 
         public ExplainedNumber GetDailyExpense(Workshop workshop, bool includeDescriptions = false)
         {
@@ -21,84 +53,48 @@ namespace BannerKings.Models.Vanilla
             {
                 "silversmithy" => 50f,
                 "velvet_weavery" => 40f,
-                "smithy" => 35f,
-                "tannery" or "wool_weavery" or "linen_weavery" => 25f,
-                _ => 15f
+                "smithy" => 30f,
+                "tannery" or "wool_weavery" or "linen_weavery" => 20f,
+                _ => 12f
             };
 
             result.Add(labor, workshop.WorkshopType.Name);
             result.Add(workshop.Settlement.Prosperity * 0.005f, GameTexts.FindText("str_prosperity"));
 
+            if (workshop.Level > 1)
+            {
+                result.AddFactor(workshop.Level * 0.12f, GameTexts.FindText("str_level"));
+            }
 
             return result;
         }
 
-
         public override int GetSellingCost(Workshop workshop)
         {
-            return base.GetSellingCost(workshop);
+            float result = base.GetSellingCost(workshop);
+            result *= BannerKingsConfig.Instance.EconomyModel.CalculateProductionQuality(workshop.Settlement)
+                .ResultNumber;
+
+            return (int)result;
         }
 
         public override int GetBuyingCostForPlayer(Workshop workshop)
         {
             float result = base.GetSellingCost(workshop);
-
-            if (workshop.Settlement != null)
-            {
-                var town = workshop.Settlement.Town;
-                var costs = 0;
-                var sellValue = 0;
-                var items = Game.Current.ObjectManager.GetObjectTypeList<ItemObject>();
-
-                foreach (var production in workshop.WorkshopType.Productions)
-                {
-
-                    foreach (var input in production.Inputs)
-                    {
-                        costs += GetCost(items, town, input.Item1, input.Item2);
-                    }
-
-                    var outputCost = 10000;
-                    foreach (var output in production.Outputs)
-                    {
-                        var cost = GetCost(items, town, output.Item1, output.Item2);
-                        if (cost < outputCost)
-                        {
-                            outputCost = cost;
-                        }
-                    }
-
-                    sellValue += (int)(outputCost * production.ConversionSpeed);
-                }
-
-                result += (int) ((sellValue - costs - workshop.Expense) * (CampaignTime.DaysInYear / 2f));
-                result *= BannerKingsConfig.Instance.EconomyModel.CalculateProductionQuality(workshop.Settlement)
-                    .ResultNumber;
-            }
-
+            result += (int)(GetDailyExpense(workshop).ResultNumber * 15f * CampaignTime.DaysInYear);
+            
             if (workshop.Owner.OwnedWorkshops.Count == 1)
             {
-                result *= 1.2f;
+                result *= 1.15f;
             }
 
             if (workshop.Owner.OwnedCommonAreas.Count == 0)
             {
-                result *= 1.2f;
+                result *= 1.15f;
             }
 
+            result *= 1f + (Hero.MainHero.OwnedWorkshops.Count * 0.05f);
             return (int) result;
-        }
-
-        private int GetCost(MBReadOnlyList<ItemObject> items, Town town, ItemCategory category, int quantity)
-        {
-            float cost = 0;
-            var item = items.FirstOrDefault(x => x.ItemCategory == category);
-            if (item != null)
-            {
-                cost += town.GetItemPrice(item) * (float) quantity;
-            }
-
-            return (int) cost;
         }
 
         public override float GetPolicyEffectToProduction(Town town)
@@ -112,6 +108,19 @@ namespace BannerKings.Models.Vanilla
             }
 
             return base.GetPolicyEffectToProduction(town);
+        }
+
+        public ExplainedNumber GetProductionEfficiency(Workshop workshop, bool explanations = false)
+        {
+            var result = new ExplainedNumber(0f, explanations);
+            result.Add(GetPolicyEffectToProduction(workshop.Settlement.Town), new TextObject("{=!}Local production efficiency"));
+            
+            if (workshop.Level > 1)
+            {
+                result.AddFactor((workshop.Level - 1) * 0.08f, GameTexts.FindText("str_level"));
+            }
+
+            return result;
         }
 
         public ExplainedNumber CalculateWorkshopTax(Settlement settlement, Hero payer)
@@ -151,7 +160,6 @@ namespace BannerKings.Models.Vanilla
             }
 
             result.AddFactor(data.EconomicData.Mercantilism.ResultNumber * -0.5f);
-
             return result;
         }
     }

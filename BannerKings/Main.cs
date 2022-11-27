@@ -1,4 +1,6 @@
 ﻿using BannerKings.Behaviours;
+using BannerKings.Behaviours.Feasts;
+using BannerKings.Behaviours.Marriage;
 using BannerKings.Managers.Buildings;
 using BannerKings.Managers.Innovations;
 using BannerKings.Managers.Items;
@@ -48,6 +50,9 @@ namespace BannerKings
             campaignStarter.AddBehavior(new BKBuildingsBehavior());
             campaignStarter.AddBehavior(new BKGovernorBehavior());
             campaignStarter.AddBehavior(new BKTradeGoodsFixesBehavior());
+            campaignStarter.AddBehavior(new BKCapitalBehavior());
+            campaignStarter.AddBehavior(new BKMarriageBehavior());
+            campaignStarter.AddBehavior(new BKFeastBehavior());
             //campaignStarter.AddBehavior(new BKCombatBehavior());
 
             campaignStarter.AddModel(new BKCompanionPrices());
@@ -91,11 +96,11 @@ namespace BannerKings
             campaignStarter.AddModel(new BKPartyImpairmentModel());
             campaignStarter.AddModel(new BKCrimeModel());
             campaignStarter.AddModel(new BKTroopUpgradeModel());
-            campaignStarter.AddModel(new BKVolunteerAccessModel());
             campaignStarter.AddModel(new BKBattleRewardModel());
             campaignStarter.AddModel(new BKCombatXpModel());
             campaignStarter.AddModel(new BKBattleMoraleModel());
             campaignStarter.AddModel(new BKLearningModel());
+            campaignStarter.AddModel(new BKKingodmDecsionModel());
             //campaignStarter.LoadGameTexts(BasePath.Name + "Modules/BannerKings/ModuleData/module_strings.xml");
 
             BKAttributes.Instance.Initialize();

@@ -48,7 +48,7 @@ namespace BannerKings.Managers.Goals.Decisions
                 failedReasons.Add(new TextObject("{=!}Contract changes can not be proposed during wars."));
             }
 
-            if (Clan.PlayerClan.Kingdom != null && Clan.PlayerClan.Kingdom.UnresolvedDecisions.Any(x => x is BKContractDecision))
+            if (Clan.PlayerClan.Kingdom != null && Clan.PlayerClan.Kingdom.UnresolvedDecisions.Any(x => x is BKContractDecision || x is DemesneLawChangeDecision))
             {
                 failedReasons.Add(new TextObject("{=!}A contract-altering proposal is already being voted on."));
             }
@@ -97,8 +97,8 @@ namespace BannerKings.Managers.Goals.Decisions
 
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                new TextObject("{=oBxXQmTb}Request Council Position").ToString(),
-                new TextObject("{=bLxGGL9z}Choose a council position to fill. Different positions have different criteria for accepting candidates - some will be entirely blocked off, such as religious positions. Swapping with an existing lord will incur relations penalties.").ToString(),
+                new TextObject("{=!}Contract Change").ToString(),
+                new TextObject("{=!}Propose a change to you faction's contract. These changes may be the form of governance, succession, clan inheritance or gender laws.").ToString(),
                 elements, 
                 true, 
                 1, 

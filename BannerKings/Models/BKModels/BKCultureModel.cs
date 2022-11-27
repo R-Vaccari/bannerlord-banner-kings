@@ -12,7 +12,73 @@ namespace BannerKings.Models.BKModels
 {
     public class BKCultureModel : ICultureModel
     {
+        public ExplainedNumber CalculateAcceptanceGain(CultureDataClass data)
+        {
+            var result = new ExplainedNumber(0f, true);
+            var settlement = data.Settlement;
+            if (settlement == null)
+            {
+                return result;
+            }
 
+            var dataCulture = data.Culture;
+            var ownerCulture = settlement.Owner.Culture;
+            if (dataCulture == ownerCulture)
+            {
+                if (data.Acceptance == 1f)
+                {
+                    return result;
+                }
+
+                var stability = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement).Stability;
+                result.Add((stability - 0.5f) * 0.05f, new TextObject("{=!}Stability"));
+
+                var clan = settlement.OwnerClan;
+                var peace = true;
+                if (clan.Kingdom != null)
+                {
+                    peace = FactionManager.GetEnemyFactions(clan.Kingdom).Any();
+                }
+
+                result.Add(peace ? 0.01f : -0.01f, new TextObject(peace ? "{=zgK5zVkQ}Peace" : "{=Ypfy9D3P}War"));
+
+                if (settlement.Culture != settlement.Owner.Culture)
+                {
+                    var dominantLanguage = BannerKingsConfig.Instance.EducationManager.GetNativeLanguage(settlement.Culture);
+                    if (dominantLanguage != null)
+                    {
+                        var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(settlement.Owner);
+                        result.Add((education.GetLanguageFluency(dominantLanguage) * 0.2f) - 0.01f, 
+                            new TextObject("{=!}{LANGUAGE} fluency")
+                            .SetTextVariable("LANGUAGE", dominantLanguage.Name));
+                    }
+                }
+
+                if (dataCulture == settlement.Culture)
+                {
+                    result.Add(0.02f, new TextObject("{=djkEJ9wB}Dominant culture"));
+                }
+
+                var governor = settlement.IsVillage ? settlement.Village.Bound.Town.Governor : settlement.Town.Governor;
+                if ((governor == null || governor.Culture != ownerCulture) && result.ResultNumber > 0f)
+                {
+                    result.AddFactor(-0.9f, new TextObject("{=!}Missing {CULTURE} governor").SetTextVariable("CULTURE", ownerCulture.Name));
+                }
+            }
+            else
+            {
+                if (data.Acceptance > data.Assimilation)
+                {
+                    result.Add(-0.02f);
+                }
+                else if (data.Acceptance < data.Assimilation)
+                {
+                    result.Add(0.02f);
+                }
+            }
+
+            return result;
+        }
         public ExplainedNumber GetConversionCost(Hero notable, Hero converter)
         {
             var result = new ExplainedNumber(30f, false);
@@ -51,14 +117,14 @@ namespace BannerKings.Models.BKModels
                 result.Add(30f, new TextObject("{=2wOt5txz}Natural resistance"));
             }
 
-            result.Add(data.Assimilation * 50f, new TextObject("{=D3trXTDz}Cultural Assimilation"));
+            result.Add(data.Acceptance * 50f, new TextObject("{=2qB0s9H9}Cultural acceptance"));
 
             var owner = settlement.Owner;
             if (owner != null)
             {
                 if (data.Culture == owner.Culture)
                 {
-                    result.Add(10f, new TextObject("{=LHFoaUGo}Owner Culture"));
+                    result.Add(8f, new TextObject("{=LHFoaUGo}Owner Culture"));
                 }
             }
 

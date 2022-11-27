@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reflection;
 using BannerKings.Extensions;
 using BannerKings.Managers.Titles;
+using BannerKings.Settings;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Party;
@@ -24,7 +25,8 @@ namespace BannerKings.Models.Vanilla
                 totalTaxes += wk.TaxExpenses();
             }
 
-            return base.CalculateNotableDailyGoldChange(hero, applyWithdrawals) - totalTaxes;
+            var estates = CalculateOwnerIncomeFromEstates(hero, applyWithdrawals);
+            return base.CalculateNotableDailyGoldChange(hero, applyWithdrawals) - totalTaxes + estates;
         }
 
         public override int CalculateOwnerIncomeFromWorkshop(Workshop workshop)
@@ -43,6 +45,26 @@ namespace BannerKings.Models.Vanilla
             return result;
         }
 
+        public int CalculateOwnerIncomeFromEstates(Hero owner, bool applyWithdrawals)
+        {
+            float result = 0;
+            foreach (var estate in BannerKingsConfig.Instance.PopulationManager.GetEstates(owner)) 
+            {
+                if (estate.EstatesData.Settlement.MapFaction.IsAtWarWith(owner.MapFaction))
+                {
+                    continue;
+                }
+
+                var estateIncome = estate.TaxAccumulated * 0.8f;
+                result += estateIncome;
+                if (applyWithdrawals)
+                {
+                    estate.TaxAccumulated -= (int)estateIncome;
+                }
+            }
+
+            return (int)result;
+        }
 
         private int GetWorkshopTaxes(Workshop workshop)
         {
@@ -55,8 +77,8 @@ namespace BannerKings.Models.Vanilla
             return result;
         }
 
-
-        public override int CalculateOwnerIncomeFromCaravan(MobileParty caravan) => MathF.Max(0, caravan.PartyTradeGold - 10000);
+        public override int CalculateOwnerIncomeFromCaravan(MobileParty caravan) => 
+            BannerKingsSettings.Instance.RealisticCaravanIncome ? 0 : MathF.Max(0, caravan.PartyTradeGold - 10000);
 
         public override ExplainedNumber CalculateClanGoldChange(Clan clan, bool includeDescriptions = false, bool applyWithdrawals = false)
         {
@@ -66,8 +88,8 @@ namespace BannerKings.Models.Vanilla
                 return baseResult;
             }
 
-            CalculateClanExpenseInternal(clan, ref baseResult, applyWithdrawals);
-            CalculateClanIncomeInternal(clan, ref baseResult, applyWithdrawals);
+            AddExpenses(clan, ref baseResult, applyWithdrawals);
+            AddIncomes(clan, ref baseResult, applyWithdrawals);
 
             return baseResult;
         }
@@ -77,7 +99,7 @@ namespace BannerKings.Models.Vanilla
             var baseResult = base.CalculateClanIncome(clan, includeDescriptions, applyWithdrawals);
             if (BannerKingsConfig.Instance.TitleManager != null)
             {
-                CalculateClanIncomeInternal(clan, ref baseResult, applyWithdrawals);
+                AddIncomes(clan, ref baseResult, applyWithdrawals);
             }
 
             return baseResult;
@@ -88,14 +110,28 @@ namespace BannerKings.Models.Vanilla
             var baseResult = base.CalculateClanExpenses(clan, includeDescriptions, applyWithdrawals);
             if (BannerKingsConfig.Instance.TitleManager != null)
             {
-                CalculateClanExpenseInternal(clan, ref baseResult, applyWithdrawals);
+                AddExpenses(clan, ref baseResult, applyWithdrawals);
             }
 
             return baseResult;
         }
 
-        public void CalculateClanIncomeInternal(Clan clan, ref ExplainedNumber result, bool applyWithdrawals)
+        public void AddIncomes(Clan clan, ref ExplainedNumber result, bool applyWithdrawals)
         {
+            foreach (var hero in clan.Heroes)
+            {
+                int estateIncome = CalculateOwnerIncomeFromEstates(hero, applyWithdrawals);
+
+                if (applyWithdrawals && hero != clan.Leader)
+                {
+                    hero.ChangeHeroGold(estateIncome);
+                }
+                else
+                {
+                    result.Add(estateIncome, new TextObject("{=!}Estate properties"));
+                }
+            }
+
             var kingdom = clan.Kingdom;
             var wkModel = (BKWorkshopModel) Campaign.Current.Models.WorkshopModel;
 
@@ -194,7 +230,7 @@ namespace BannerKings.Models.Vanilla
             }
         }
 
-        public void CalculateClanExpenseInternal(Clan clan, ref ExplainedNumber result, bool applyWithdrawals)
+        public void AddExpenses(Clan clan, ref ExplainedNumber result, bool applyWithdrawals)
         {
             var totalWorkshopExpenses = 0;
 

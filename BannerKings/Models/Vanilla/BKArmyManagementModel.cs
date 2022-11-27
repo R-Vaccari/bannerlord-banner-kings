@@ -14,6 +14,11 @@ namespace BannerKings.Models.Vanilla
             var kingdom = armyLeader.Clan.Kingdom;
             if (kingdom != null)
             {
+                if (kingdom.Leader == armyLeader)
+                {
+                    return true;
+                }
+
                 var title = BannerKingsConfig.Instance.TitleManager.GetHighestTitle(armyLeader);
                 if (title != null)
                 {
