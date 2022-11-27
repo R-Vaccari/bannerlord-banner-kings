@@ -95,7 +95,8 @@ namespace BannerKings.Behaviours
         private bool IsCompanionOfAnotherClan() => CharacterObject.OneToOneConversationCharacter != null && CharacterObject.OneToOneConversationCharacter.IsHero && 
                     CharacterObject.OneToOneConversationCharacter.Occupation == Occupation.Wanderer && 
                     CharacterObject.OneToOneConversationCharacter.HeroObject.HeroState != Hero.CharacterStates.Prisoner &&
-                    Hero.OneToOneConversationHero.Clan != null && Hero.OneToOneConversationHero.Clan != Clan.PlayerClan;
+                    Hero.OneToOneConversationHero.Clan != null && Hero.OneToOneConversationHero.Clan != Clan.PlayerClan &&
+                    Hero.OneToOneConversationHero.Clan.StringId != "neutral";
 
         private bool CompanionOfAnotherClanIntroduction()
         {
