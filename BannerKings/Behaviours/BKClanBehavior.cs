@@ -15,6 +15,7 @@ using TaleWorlds.CampaignSystem.CampaignBehaviors;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.Conversation;
 using TaleWorlds.CampaignSystem.Election;
+using TaleWorlds.CampaignSystem.Extensions;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Roster;
@@ -258,17 +259,14 @@ namespace BannerKings.Behaviours
 
             foreach (var companion in clan.Companions)
             {
-                if (companion.IsPrisoner || !companion.IsReady || companion.PartyBelongedTo?.LeaderHero == null)
-                {
-                    if (companion == null)
-                    {
-                        continue;
-                    }
-                }
-
-                if (!companion.IsWanderer || companion.IsPrisoner || !companion.IsReady || companion.PartyBelongedTo?.LeaderHero == null)
+                if (!companion.IsWanderer || companion.IsPrisoner || !companion.IsReady)
                 {
                     continue;
+                }
+
+                if (companion.PartyBelongedTo == null || companion.PartyBelongedTo.LeaderHero == null)
+                {
+                    goto Skills;
                 }
 
                 if (companion.PartyBelongedTo.LeaderHero == companion ||
@@ -277,31 +275,28 @@ namespace BannerKings.Behaviours
                     continue;
                 }
 
-                var role = companion.PartyBelongedTo.GetHeroPerkRole(companion);
+                Skills:
+                var role = companion.PartyBelongedTo != null ? companion.PartyBelongedTo.GetHeroPerkRole(companion) : PerkRole.None;
                 if (role != PerkRole.None)
                 {
                     continue;
                 }
 
-                if (companion.GetSkillValue(DefaultSkills.Medicine) >= 80)
+                if (companion.GetSkillValue(DefaultSkills.Medicine) >= 60)
                 {
                     role = PerkRole.Surgeon;
                 }
-                else if (companion.GetSkillValue(DefaultSkills.Engineering) >= 80)
+                else if (companion.GetSkillValue(DefaultSkills.Engineering) >= 60)
                 {
                     role = PerkRole.Engineer;
                 }
-                else if (companion.GetSkillValue(DefaultSkills.Steward) >= 80)
+                else if (companion.GetSkillValue(DefaultSkills.Steward) >= 60)
                 {
                     role = PerkRole.Quartermaster;
                 }
-                else if (companion.GetSkillValue(DefaultSkills.Scouting) >= 80)
+                else if (companion.GetSkillValue(DefaultSkills.Scouting) >= 60)
                 {
                     role = PerkRole.Scout;
-                }
-                else
-                {
-                    role = PerkRole.None;
                 }
 
                 if (clan.WarPartyComponents.Count <= 0)
