@@ -101,7 +101,7 @@ namespace BannerKings.Behaviours.Mercenary
                     }
 
                     var career = careers[Clan.PlayerClan];
-                    var troop = career.GetTroop(Clan.PlayerClan.Kingdom);
+                    var troop = career.GetTroop(Clan.PlayerClan.Kingdom, false);
                     if (troop == null)
                     {
                         return false;
@@ -165,6 +165,7 @@ namespace BannerKings.Behaviours.Mercenary
                 }
 
                 careers[clan].Tick(GetDailyCareerPointsGain(clan).ResultNumber);
+                //careers[clan].Tick(1000f);
             }
         }
 
@@ -193,7 +194,7 @@ namespace BannerKings.Behaviours.Mercenary
         {
             var result = new ExplainedNumber(1f, explanations);
             result.Add(clan.Tier / 2f, GameTexts.FindText("str_clan_tier_bonus"));
-            result.Add(careers[clan].Reputation * 5f, new TaleWorlds.Localization.TextObject("{=!}Reputation"));
+            result.Add(careers[clan].Reputation * 2f, new TaleWorlds.Localization.TextObject("{=!}Reputation"));
 
             foreach (var party in clan.WarPartyComponents)
             {

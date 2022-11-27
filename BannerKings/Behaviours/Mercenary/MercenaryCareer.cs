@@ -40,14 +40,14 @@ namespace BannerKings.Behaviours.Mercenary
 
         internal void PostInitialize()
         {
-            foreach (var troop in LevyTroops.Values)
+            foreach (var pair in LevyTroops)
             {
-                troop.PostInitialize();
+                pair.Value.PostInitialize(pair.Key);
             }
 
-            foreach (var troop in ProfessionalTroops.Values)
+            foreach (var pair in ProfessionalTroops)
             {
-                troop.PostInitialize();
+                pair.Value.PostInitialize(pair.Key);
             }
 
             foreach (var list in KingdomPrivileges.Values)
@@ -65,7 +65,7 @@ namespace BannerKings.Behaviours.Mercenary
         {
             KingdomProgress[Kingdom] += progress;
             ServiceDays++;
-            if ((ServiceDays / CampaignTime.DaysInYear) % 1f == 0f)
+            if (((float)ServiceDays / (float)CampaignTime.DaysInYear) % 1f == 0f)
             {
                 AddReputation(0.05f, new TextObject("{=!}A year of service has passed."));
             }

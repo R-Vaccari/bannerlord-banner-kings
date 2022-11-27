@@ -1,6 +1,7 @@
 ﻿using HarmonyLib;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.ViewModelCollection.CharacterDeveloper;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 using TaleWorlds.SaveSystem;
@@ -15,10 +16,27 @@ namespace BannerKings.Behaviours.Mercenary
             SetEquipment(character);
         }
 
-        public void PostInitialize()
+        public void PostInitialize(CultureObject culture)
         {
+            FillCharacter(culture.BasicTroop);
             SetEquipment(Character, Equipments);
             SetName(Name);
+        }
+
+        private void FillCharacter(CharacterObject reference)
+        {
+            Character.Initialize();
+            Character.Culture = reference.Culture;
+
+            Character.Age = reference.Age;  
+            AccessTools.Method(reference.GetType(), "InitializeHeroBasicCharacterOnAfterLoad")
+                .Invoke(Character, new object[] { (reference as BasicCharacterObject) });
+
+            BasicCharacterObject basicCharacter = (BasicCharacterObject)Character;
+            basicCharacter.Level = reference.Level; 
+            AccessTools.Field(reference.GetType(), "_occupation").SetValue(Character, Occupation.Mercenary);
+
+            AccessTools.Property(reference.GetType(), "UpgradeTargets").SetValue(Character, new CharacterObject[0]);
         }
 
         public void SetEquipment(CharacterObject character, List<Equipment> equipments = null)
@@ -43,6 +61,14 @@ namespace BannerKings.Behaviours.Mercenary
                 {
                     Equipments.Add(new Equipment());
                 }
+            }
+
+            if (equipments != null)
+            {
+                var roster = new MBEquipmentRoster();
+                AccessTools.Field(roster.GetType(), "_equipments").SetValue(roster, equipments);
+                AccessTools.Field((character as BasicCharacterObject).GetType(), "_equipmentRoster")
+                    .SetValue((character as BasicCharacterObject), roster);
             }
         }
 

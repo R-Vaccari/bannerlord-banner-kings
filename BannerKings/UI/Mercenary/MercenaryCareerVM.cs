@@ -163,8 +163,8 @@ namespace BannerKings.UI.Mercenary
 
         private void EditLevy()
         {
-            var levy = Career.GetTroop(Career.Kingdom);
-            if (levy == null)
+            var customTroop = Career.GetTroop(Career.Kingdom);
+            if (customTroop == null)
             {
                 var preset = DefaultCustomTroopPresets.Instance.SargeantLevy;
                 var character = CharacterObject.CreateFrom(Career.Kingdom.Culture.BasicTroop);
@@ -180,8 +180,7 @@ namespace BannerKings.UI.Mercenary
                     delegate (string name)
                     {
                         (character as BasicCharacterObject).Level = preset.Level;
-                        AccessTools.Method((character as BasicCharacterObject).GetType(), "SetName")
-                            .Invoke(character, new object[] { new TextObject("{=!}" + name) });
+                        customTroop.SetName(new TextObject("{=!}" + name));
 
                         Career.AddTroop(Career.Kingdom, character);
                         RefreshValues();
@@ -194,8 +193,8 @@ namespace BannerKings.UI.Mercenary
 
         private void EditProfessional()
         {
-            var professional = Career.GetTroop(Career.Kingdom, false);
-            if (professional == null)
+            var customTroop = Career.GetTroop(Career.Kingdom, false);
+            if (customTroop == null)
             {
                 var preset = DefaultCustomTroopPresets.Instance.SargeantLevy;
                 var character = CharacterObject.CreateFrom(Career.Kingdom.Culture.BasicTroop);
@@ -211,8 +210,7 @@ namespace BannerKings.UI.Mercenary
                     delegate (string name)
                     {
                         (character as BasicCharacterObject).Level = preset.Level;
-                        AccessTools.Method((character as BasicCharacterObject).GetType(), "SetName")
-                            .Invoke(character, new object[] { new TextObject("{=!}" + name) });
+                        customTroop.SetName(new TextObject("{=!}" + name));
 
                         Career.AddTroop(Career.Kingdom, character, false);
                         RefreshValues();
@@ -451,6 +449,14 @@ namespace BannerKings.UI.Mercenary
 
             list.Add(new InquiryElement(ItemTypeEnum.Crossbow,
                 GameTexts.FindText("str_inventory_type_9").ToString(),
+                null));
+
+            list.Add(new InquiryElement(ItemTypeEnum.Arrows,
+                GameTexts.FindText("str_inventory_type_5").ToString(),
+                null));
+
+            list.Add(new InquiryElement(ItemTypeEnum.Bolts,
+                GameTexts.FindText("str_inventory_type_6").ToString(),
                 null));
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
