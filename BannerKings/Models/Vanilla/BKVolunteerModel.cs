@@ -41,6 +41,12 @@ namespace BannerKings.Models.Vanilla
             result.Add(GetRelationImpact(useValueAsRelation), GameTexts.FindText("str_notable_relations"));
 
             var settlement = sellerHero.CurrentSettlement;
+            var title = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement);
+            if (title == null)
+            {
+                return new ExplainedNumber(base.MaximumIndexHeroCanRecruitFromHero(buyerHero, sellerHero, useValueAsRelation));
+            }
+
             var contract = BannerKingsConfig.Instance.TitleManager.GetTitle(settlement).contract;
             if (contract.IsLawEnacted(DefaultDemesneLaws.Instance.DraftingVassalage))
             {
