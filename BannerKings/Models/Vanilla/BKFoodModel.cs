@@ -184,11 +184,11 @@ namespace BannerKings.Models.Vanilla
                 float slaveProportion = slaves / totalWorkforce;
 
                 result.Add((landData.Farmland * serfProportion) * landData.GetAcreClassOutput("farmland", PopType.Serfs),
-                    new TextObject("{=!}Farmlands ({CLASS})")
+                    new TextObject("{=8Wuxnwnf}Farmlands ({CLASS})")
                     .SetTextVariable("CLASS", serfName));
 
                 result.Add((landData.Farmland * slaveProportion) * landData.GetAcreClassOutput("farmland", PopType.Slaves),
-                    new TextObject("{=!}Farmlands ({CLASS})")
+                    new TextObject("{=8Wuxnwnf}Farmlands ({CLASS})")
                     .SetTextVariable("CLASS", slaveName));
 
                 result.Add(landData.Pastureland * landData.GetAcreOutput("pasture"), new TextObject("{=ngRhXYj1}Pasturelands"));
@@ -200,7 +200,7 @@ namespace BannerKings.Models.Vanilla
                     result.Add(toDeduce, new TextObject("{=KcNcxeMK}Fertility"));
                 }
 
-                result.AddFactor(MathF.Clamp(data.LandData.WorkforceSaturation - 1f, -1f, 0f), new TextObject("{=!}Workforce saturation"));
+                result.AddFactor(MathF.Clamp(data.LandData.WorkforceSaturation - 1f, -1f, 0f), new TextObject("{=LohssChh}Workforce saturation"));
 
                 float season = CampaignTime.Now.GetSeasonOfYear;
                 switch (season)

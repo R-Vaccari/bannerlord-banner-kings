@@ -88,8 +88,8 @@ namespace BannerKings.Managers.CampaignStart
                     if (list.Count > 1)
                     {
                         MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                            new TextObject("{=!}Kingdom Selection").ToString(),
-                            new TextObject("{=!}Choose which of the kingdoms that share your culture you want to start as a lord in.").ToString(),
+                            new TextObject("{=XbjMOmXU}Kingdom Selection").ToString(),
+                            new TextObject("{=vz2HDwKD}Choose which of the kingdoms that share your culture you want to start as a lord in.").ToString(),
                             list,
                             false,
                             1,

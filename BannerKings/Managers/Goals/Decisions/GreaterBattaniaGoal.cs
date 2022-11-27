@@ -17,7 +17,7 @@ namespace BannerKings.Managers.Goals.Decisions
         public GreaterBattaniaGoal() : base("goal_greater_battania", GoalUpdateType.Settlement)
         {
             var name = new TextObject("{=BLugLsWR}Unite Greater Battania");
-            var description = new TextObject("{=!}Unite the old Battanian lands back into a greater realm. To the West, the rascal Vlandians have taken the valley of Llyn Modris and called it 'Ocs Hall'. To the East, the bloodthristy Imperials submitted Epicrotea to their domination. The threat of Battanian extermination grows stronger with enemies all around aiming for it's lands. You must bring all battanian and formerly battanian towns and castles under control of your realm. The new empire will have a feudal contract with hereditary succcession.\n\n");
+            var description = new TextObject("{=EKBkrvse}Unite the old Battanian lands back into a greater realm. To the West, the rascal Vlandians have taken the valley of Llyn Modris and called it 'Ocs Hall'. To the East, the bloodthristy Imperials submitted Epicrotea to their domination. The threat of Battanian extermination grows stronger with enemies all around aiming for it's lands. You must bring all battanian and formerly battanian towns and castles under control of your realm. The new empire will have a feudal contract with hereditary succcession.\n\n");
 
             Initialize(name, description);
 
@@ -108,12 +108,12 @@ namespace BannerKings.Managers.Goals.Decisions
 
                     if (BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(referenceHero.Clan.Kingdom) == null)
                     {
-                        failedReasons.Add(new TextObject("{=!}Your kingdom has no title associated with it. Found a de Jure kingdom title for your faction."));
+                        failedReasons.Add(new TextObject("{=DnbZbcT7}Your kingdom has no title associated with it. Found a de Jure kingdom title for your faction."));
                     }
                 } 
                 else
                 {
-                    failedReasons.Add(new TextObject("{=!}You are not a faction leader."));
+                    failedReasons.Add(new TextObject("{=YQhz7MP4}You are not a faction leader."));
                 }
 
                 var religion = BannerKingsConfig.Instance.ReligionsManager.GetHeroReligion(referenceHero);
@@ -203,7 +203,7 @@ namespace BannerKings.Managers.Goals.Decisions
 
             foundAction.SetVassals(vassals);
 
-            BannerKingsConfig.Instance.TitleManager.FoundEmpire(foundAction, new TextObject("{=!}Greater Battania"), 
+            BannerKingsConfig.Instance.TitleManager.FoundEmpire(foundAction, new TextObject("{=5M28g8TK}Greater Battania"), 
                 "title_greater_battania");
         }
 

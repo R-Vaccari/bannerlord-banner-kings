@@ -260,7 +260,7 @@ namespace BannerKings.Behaviours
                     if (hero == Hero.MainHero)
                     {
                         InformationManager.DisplayMessage(
-                            new InformationMessage(new TextObject("{=!}{COUNT} {UNIT} zealots have joined your party!")
+                            new InformationMessage(new TextObject("{=KGqPK07Z}{COUNT} {UNIT} zealots have joined your party!")
                             .SetTextVariable("COUNT", count)
                             .SetTextVariable("UNIT", character.Name)
                             .ToString(), 
@@ -541,7 +541,7 @@ namespace BannerKings.Behaviours
                     hintText = new TextObject("{=ProkogUg}Already an adherent of this faith.");
                     return false;
                 }
-                faithText = new TextObject("{=!}Lords of {CURRENT_FAITH} faith may disapprove your change")
+                faithText = new TextObject("{=WWkVwmPy}Lords of {CURRENT_FAITH} faith may disapprove your change")
                 .SetTextVariable("CURRENT_FAITH", playerReligion.Faith.GetFaithName());
             }
             
@@ -555,7 +555,7 @@ namespace BannerKings.Behaviours
                 
             }
 
-            hintText = new TextObject("{=!}{POSSIBLE}. Changing faiths will significantly impact your clan's renown, if you are converting from another faith. Your piety in the new faith will be zero. {FAITH_TEXT}")
+            hintText = new TextObject("{=Uygas52E}{POSSIBLE}. Changing faiths will significantly impact your clan's renown, if you are converting from another faith. Your piety in the new faith will be zero. {FAITH_TEXT}")
                 .SetTextVariable("POSSIBLE", result.Item2)
                 .SetTextVariable("FAITH_TEXT", faithText);
             return true;

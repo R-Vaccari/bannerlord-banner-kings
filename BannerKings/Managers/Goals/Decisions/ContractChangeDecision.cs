@@ -17,8 +17,8 @@ namespace BannerKings.Managers.Goals.Decisions
 
         public ContractChangeDecision() : base("goal_contract_change", GoalUpdateType.Manual)
         {
-            var name = new TextObject("{=!}Propose Contract Change");
-            var description = new TextObject("{=!}Propose a contract change to your faction's titles.");
+            var name = new TextObject("{=fKXLiUti}Propose Contract Change");
+            var description = new TextObject("{=Ba2hpnco}Propose a contract change to your faction's titles.");
 
             Initialize(name, description);
         }
@@ -40,17 +40,17 @@ namespace BannerKings.Managers.Goals.Decisions
 
             if (BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(Clan.PlayerClan.Kingdom) == null)
             {
-                failedReasons.Add(new TextObject("{=!}Your faction has no contract. Found a kigdom-level title for your faction first."));
+                failedReasons.Add(new TextObject("{=akMdyYw0}Your faction has no contract. Found a kigdom-level title for your faction first."));
             }
 
             if (FactionManager.GetEnemyKingdoms(Clan.PlayerClan.Kingdom).Count() > 0)
             {
-                failedReasons.Add(new TextObject("{=!}Contract changes can not be proposed during wars."));
+                failedReasons.Add(new TextObject("{=qCfmQGiD}Contract changes can not be proposed during wars."));
             }
 
             if (Clan.PlayerClan.Kingdom != null && Clan.PlayerClan.Kingdom.UnresolvedDecisions.Any(x => x is BKContractDecision || x is DemesneLawChangeDecision))
             {
-                failedReasons.Add(new TextObject("{=!}A contract-altering proposal is already being voted on."));
+                failedReasons.Add(new TextObject("{=nsQZHLQf}A contract-altering proposal is already being voted on."));
             }
 
 
@@ -97,8 +97,8 @@ namespace BannerKings.Managers.Goals.Decisions
 
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                new TextObject("{=!}Contract Change").ToString(),
-                new TextObject("{=!}Propose a change to you faction's contract. These changes may be the form of governance, succession, clan inheritance or gender laws.").ToString(),
+                new TextObject("{=mXhTPXZq}Contract Change").ToString(),
+                new TextObject("{=B5e1fznG}Propose a change to you faction's contract. These changes may be the form of governance, succession, clan inheritance or gender laws.").ToString(),
                 elements, 
                 true, 
                 1, 

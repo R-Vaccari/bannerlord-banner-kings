@@ -15,8 +15,8 @@ namespace BannerKings.Managers.Goals.Decisions
 
         public DemesneLawChangeDecision() : base("goal_contract_law_change", GoalUpdateType.Manual)
         {
-            var name = new TextObject("{=!}Propose Demesne Law Change");
-            var description = new TextObject("{=!}Propose a contract change to your faction's titles.");
+            var name = new TextObject("{=YgefyGT4}Propose Demesne Law Change");
+            var description = new TextObject("{=Ba2hpnco}Propose a contract change to your faction's titles.");
 
             Initialize(name, description);
         }
@@ -38,17 +38,17 @@ namespace BannerKings.Managers.Goals.Decisions
 
             if (BannerKingsConfig.Instance.TitleManager.GetSovereignTitle(Clan.PlayerClan.Kingdom) == null)
             {
-                failedReasons.Add(new TextObject("{=!}Your faction has no contract. Found a kigdom-level title for your faction first."));
+                failedReasons.Add(new TextObject("{=akMdyYw0}Your faction has no contract. Found a kigdom-level title for your faction first."));
             }
 
             if (FactionManager.GetEnemyKingdoms(Clan.PlayerClan.Kingdom).Count() > 0)
             {
-                failedReasons.Add(new TextObject("{=!}Contract changes can not be proposed during wars."));
+                failedReasons.Add(new TextObject("{=qCfmQGiD}Contract changes can not be proposed during wars."));
             }
 
             if (Clan.PlayerClan.Kingdom != null && Clan.PlayerClan.Kingdom.UnresolvedDecisions.Any(x => x is BKContractDecision || x is DemesneLawChangeDecision))
             {
-                failedReasons.Add(new TextObject("{=!}A contract-altering proposal is already being voted on."));
+                failedReasons.Add(new TextObject("{=nsQZHLQf}A contract-altering proposal is already being voted on."));
             }
 
 
@@ -98,8 +98,8 @@ namespace BannerKings.Managers.Goals.Decisions
 
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                new TextObject("{=!}Demesne Law Change").ToString(),
-                new TextObject("{=!}Propose a change to your faction's demesne laws. These laws describe a multitude of aspects of your faction, such as slavery, duties of lower classes and tenure of estates. Laws that have been enacted for less than 1 year may not be changed.").ToString(),
+                new TextObject("{=1z57WDgP}Demesne Law Change").ToString(),
+                new TextObject("{=Uq1b1dmT}Propose a change to your faction's demesne laws. These laws describe a multitude of aspects of your faction, such as slavery, duties of lower classes and tenure of estates. Laws that have been enacted for less than 1 year may not be changed.").ToString(),
                 elements, 
                 true, 
                 1, 
@@ -144,7 +144,7 @@ namespace BannerKings.Managers.Goals.Decisions
 
             internal void Execute()
             {
-                var description = new TextObject("{=!}Select a demesne {LAW} to be voted on. All the Peers of the realm will vote on it.")
+                var description = new TextObject("{=n0kVmshx}Select a demesne {LAW} to be voted on. All the Peers of the realm will vote on it.")
                     .SetTextVariable("LAW", Name);
 
                 MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(

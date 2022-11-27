@@ -31,11 +31,11 @@ namespace BannerKings.Models.BKModels
                     factor *= 0.4f;
                 }
 
-                result.Add(popClass.count * factor, new TextObject("{=!}{POPULATION_CLASS} growth")
+                result.Add(popClass.count * factor, new TextObject("{=9XTWXhVi}{POPULATION_CLASS} growth")
                     .SetTextVariable("POPULATION_CLASS", Utils.Helpers.GetClassName(popClass.type, settlement.Culture)));
             });
 
-            result.AddFactor(-filledCapacity, new TextObject("{=!}Filled capacity"));
+            result.AddFactor(-filledCapacity, new TextObject("{=MRQmKbko}Filled capacity"));
             if (settlement.IsStarving)
             {
                 result.AddFactor(-2f, GameTexts.FindText("str_starvation_morale"));
@@ -47,7 +47,7 @@ namespace BannerKings.Models.BKModels
                 if (filledCapacity <= 0.05f) factor = 3f;
                 if (filledCapacity <= 0.01f) factor = 2f;
                      
-                result.AddFactor(factor, new TextObject("{=!}Repopulation"));
+                result.AddFactor(factor, new TextObject("{=mZfEjDn5}Repopulation"));
             }
  
             if (settlement.IsVillage)
@@ -57,7 +57,7 @@ namespace BannerKings.Models.BKModels
 
             if (BannerKingsConfig.Instance.PolicyManager.IsPolicyEnacted(settlement, "draft", (int) DraftPolicy.Demobilization))
             {
-                result.AddFactor(0.05f, new TextObject("{=!}Drafting policy"));
+                result.AddFactor(0.05f, new TextObject("{=T614zQR8}Drafting policy"));
             }
 
             return result;
@@ -101,7 +101,7 @@ namespace BannerKings.Models.BKModels
                 var capital = Campaign.Current.GetCampaignBehavior<BKCapitalBehavior>().GetCapital(town.OwnerClan.Kingdom);
                 if (capital == town)
                 {
-                    result.AddFactor(0.4f, new TextObject("{=!}Capital"));
+                    result.AddFactor(0.4f, new TextObject("{=fQVyeiJb}Capital"));
                 }
             }
 
@@ -199,7 +199,7 @@ namespace BannerKings.Models.BKModels
             result.LimitMin(0f);
 
             result.AddFactor(CalculatePopulationClassDemand(settlement, PopType.Slaves).ResultNumber - 1f,
-                new TextObject("{=!}{FACTION} demand")
+                new TextObject("{=Rq9KfmQ8}{FACTION} demand")
                 .SetTextVariable("FACTION", settlement.MapFaction.Name));
 
             var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement);
@@ -207,7 +207,7 @@ namespace BannerKings.Models.BKModels
             float fraction = MathF.Clamp(data.GetCurrentTypeFraction(PopType.Slaves), 0f, 1f);
             float medium = (dic[PopType.Slaves][0] + dic[PopType.Slaves][1]) / 2f;
 
-            result.AddFactor(medium - fraction, new TextObject("{=!}Local demand"));
+            result.AddFactor(medium - fraction, new TextObject("{=G15w2C46}Local demand"));
 
             return result;
         }

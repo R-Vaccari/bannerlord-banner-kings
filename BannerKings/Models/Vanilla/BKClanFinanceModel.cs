@@ -128,7 +128,7 @@ namespace BannerKings.Models.Vanilla
                 }
                 else
                 {
-                    result.Add(estateIncome, new TextObject("{=!}Estate properties"));
+                    result.Add(estateIncome, new TextObject("{=QEy4Ddar}Estate properties"));
                 }
             }
 
@@ -166,13 +166,13 @@ namespace BannerKings.Models.Vanilla
             if (totalWorkshopTaxes > 0)
             {
                 result.Add(totalWorkshopTaxes,
-                    new TextObject("{=!}Workshop taxes from demesnes"));
+                    new TextObject("{=r2y7UeGc}Workshop taxes from demesnes"));
             }
 
             if (totalNotablesAids > 0)
             {
                 result.Add(totalNotablesAids,
-                    new TextObject("{=!}Notable aids"));
+                    new TextObject("{=WYDGftvz}Notable aids"));
             }
 
 
@@ -247,7 +247,7 @@ namespace BannerKings.Models.Vanilla
 
             if (totalWorkshopExpenses > 0)
             {
-                result.Add(-totalWorkshopExpenses, new TextObject("{=!}Workshop taxes"));
+                result.Add(-totalWorkshopExpenses, new TextObject("{=6CKOfX2U}Workshop taxes"));
             }
 
             var data = BannerKingsConfig.Instance.CourtManager.GetCouncil(clan);

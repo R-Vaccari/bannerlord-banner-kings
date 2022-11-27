@@ -28,7 +28,7 @@ namespace BannerKings.UI.Extensions
 
         [DataSourceProperty] public string CultureText => GameTexts.FindText("str_culture").ToString();
 
-        [DataSourceProperty] public string MarriageText => new TextObject("{=!}Marriage").ToString();
+        [DataSourceProperty] public string MarriageText => new TextObject("{=mxVj1euY}Marriage").ToString();
 
 
         [DataSourceProperty]

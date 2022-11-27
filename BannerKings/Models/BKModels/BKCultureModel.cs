@@ -31,7 +31,7 @@ namespace BannerKings.Models.BKModels
                 }
 
                 var stability = BannerKingsConfig.Instance.PopulationManager.GetPopData(settlement).Stability;
-                result.Add((stability - 0.5f) * 0.05f, new TextObject("{=!}Stability"));
+                result.Add((stability - 0.5f) * 0.05f, new TextObject("Stability"));
 
                 var clan = settlement.OwnerClan;
                 var peace = true;
@@ -49,7 +49,7 @@ namespace BannerKings.Models.BKModels
                     {
                         var education = BannerKingsConfig.Instance.EducationManager.GetHeroEducation(settlement.Owner);
                         result.Add((education.GetLanguageFluency(dominantLanguage) * 0.2f) - 0.01f, 
-                            new TextObject("{=!}{LANGUAGE} fluency")
+                            new TextObject("{LANGUAGE} fluency")
                             .SetTextVariable("LANGUAGE", dominantLanguage.Name));
                     }
                 }
@@ -62,7 +62,7 @@ namespace BannerKings.Models.BKModels
                 var governor = settlement.IsVillage ? settlement.Village.Bound.Town.Governor : settlement.Town.Governor;
                 if ((governor == null || governor.Culture != ownerCulture) && result.ResultNumber > 0f)
                 {
-                    result.AddFactor(-0.9f, new TextObject("{=!}Missing {CULTURE} governor").SetTextVariable("CULTURE", ownerCulture.Name));
+                    result.AddFactor(-0.9f, new TextObject("{=W1hEDOFT}Missing {CULTURE} governor").SetTextVariable("CULTURE", ownerCulture.Name));
                 }
             }
             else
@@ -168,7 +168,7 @@ namespace BannerKings.Models.BKModels
             LegitimacyType legitimacy = (LegitimacyType)BannerKingsConfig.Instance.LegitimacyModel.CalculateEffect(settlement).ResultNumber;
             if (legitimacy == LegitimacyType.Unlawful || legitimacy == LegitimacyType.Unlawful_Foreigner)
             {
-                result.Add(-5f, new TextObject("{=!}Unlawful owner"));
+                result.Add(-5f, new TextObject("{=njD4zXuM}Unlawful owner"));
             }
 
             return result;

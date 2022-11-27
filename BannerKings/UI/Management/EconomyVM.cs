@@ -43,17 +43,17 @@ namespace BannerKings.UI.Management
         public string ProductionText => new TextObject("{=bk_production}Production").ToString();
 
         [DataSourceProperty]
-        public string SatisfactionsText => new TextObject("{=!}Satisfactions").ToString();
+        public string SatisfactionsText => new TextObject("{=E7ZOdG5n}Satisfactions").ToString();
 
         [DataSourceProperty]
         public string SlaveryText => new TextObject("{=bk_slavery}Slavery").ToString();
 
 
         [DataSourceProperty]
-        public string TaxPolicyText => new TextObject("{=!}Tax policy").ToString();
+        public string TaxPolicyText => new TextObject("Tax policy").ToString();
 
         [DataSourceProperty]
-        public string CriminalPolicyText => new TextObject("{=!}Criminal policy").ToString();
+        public string CriminalPolicyText => new TextObject("Criminal policy").ToString();
 
         [DataSourceProperty]
         public HintViewModel TournamentHint => new(new TextObject("{=VeMSE94s}Sponsor a tournament in this town. As the main sponsor, you have to pay 5000 coins for the tournament costs, as well as " +
@@ -252,17 +252,17 @@ namespace BannerKings.UI.Management
                 var villageData = data.VillageData;
 
                 var villageRevenue = BannerKingsConfig.Instance.TaxModel.CalculateVillageTaxFromIncome(villageData.Village);
-                RevenueInfo.Add(new InformationElement(new TextObject("{=!}Village Revenue:").ToString(),
+                RevenueInfo.Add(new InformationElement(new TextObject("{=BXFLXR6B}Village Revenue:").ToString(),
                     FormatFloatGain(villageRevenue.ResultNumber),
                     new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
                         .SetTextVariable("TEXT",
-                            new TextObject("{=!}The village's revenue output. Most of the revenue in villages is generated through production and selling of products by serfs and slaves. They are taxed through their labor rather than in coin. Nobles and craftsmen however may be taxed in coins through construction of tax offices."))
+                            new TextObject("{=L3KACGcQ}The village's revenue output. Most of the revenue in villages is generated through production and selling of products by serfs and slaves. They are taxed through their labor rather than in coin. Nobles and craftsmen however may be taxed in coins through construction of tax offices."))
                         .SetTextVariable("EXPLANATIONS", villageRevenue.GetExplanations())
                         .ToString()));
 
 
-                ProductionInfo.Add(new InformationElement(new TextObject("{=!}Construction:").ToString(),
-                    new TextObject("{=!}{POINTS} (Daily)")
+                ProductionInfo.Add(new InformationElement(new TextObject("{=KbTvcQko}Construction:").ToString(),
+                    new TextObject("{=mbUwoU0h}{POINTS} (Daily)")
                     .SetTextVariable("POINTS", villageData.Construction.ToString("0.00")).ToString(),
                     new TextObject("{=Gm0F8o7L}How much the local population can progress with construction projects, on a daily basis.")
                         .ToString()));
@@ -276,13 +276,13 @@ namespace BannerKings.UI.Management
                 sb.Remove(sb.Length - 2, 1);
                 var productionString = sb.ToString();
                 var productionExplained = villageData.ProductionsExplained;
-                ProductionInfo.Add(new InformationElement(new TextObject("{=!}Goods Production:").ToString(),
-                    new TextObject("{=!}{POINTS} (Daily)")
+                ProductionInfo.Add(new InformationElement(new TextObject("Goods Production:").ToString(),
+                    new TextObject("{=mbUwoU0h}{POINTS} (Daily)")
                     .SetTextVariable("POINTS", productionExplained.ResultNumber.ToString("0.00"))
                     .ToString(),
                     new TextObject("{=ez3NzFgO}{TEXT}\n{EXPLANATIONS}")
                     .SetTextVariable("TEXT",
-                        new TextObject("{=!}Sum of goods produced on a daily basis, including all the types produced here."))
+                        new TextObject("{=g480uUyC}Sum of goods produced on a daily basis, including all the types produced here."))
                     .SetTextVariable("EXPLANATIONS", productionExplained.GetExplanations())
                     .ToString()));
 
@@ -371,12 +371,12 @@ namespace BannerKings.UI.Management
 
 
             var slavePrice = BannerKingsConfig.Instance.GrowthModel.CalculateSlavePrice(settlement, true);
-            SlaveryInfo.Add(new InformationElement(new TextObject("{=!}Slave Price:").ToString(),
+            SlaveryInfo.Add(new InformationElement(new TextObject("{=CTerwC4b}Slave Price:").ToString(),
                 ((int)slavePrice.ResultNumber).ToString(),
                 slavePrice.GetExplanations()));
 
             var slaveDemand = BannerKingsConfig.Instance.GrowthModel.CalculatePopulationClassDemand(settlement, PopType.Slaves, true);
-            SlaveryInfo.Add(new InformationElement(new TextObject("{=!}Slave Demand:").ToString(),
+            SlaveryInfo.Add(new InformationElement(new TextObject("{=KdEiqFm2}Slave Demand:").ToString(),
                 FormatValue(slaveDemand.ResultNumber),
                 slaveDemand.GetExplanations()));
 

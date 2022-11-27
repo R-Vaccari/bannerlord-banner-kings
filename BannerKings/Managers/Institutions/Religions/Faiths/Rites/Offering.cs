@@ -20,7 +20,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
         public override void Complete(Hero actionTaker)
         {
             actionTaker.PartyBelongedTo.ItemRoster.AddToCounts(input, -inputCount);
-            MBInformationManager.AddQuickInformation(new TextObject("{=!}{COUNT} {OFFERING} was ritually offered by {HERO}.")
+            MBInformationManager.AddQuickInformation(new TextObject("{=5sWFJZV6}{COUNT} {OFFERING} was ritually offered by {HERO}.")
                     .SetTextVariable("HERO", actionTaker.Name)
                     .SetTextVariable("COUNT", inputCount)
                     .SetTextVariable("OFFERING", input.Name),
@@ -43,7 +43,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
 
         public override TextObject GetDescription()
         {
-            return new TextObject("{=!}Make an offering of {COUNT} {ITEM}, as the faith prescribes.")
+            return new TextObject("{=rK6v9sBw}Make an offering of {COUNT} {ITEM}, as the faith prescribes.")
                 .SetTextVariable("ITEM", input.Name)
                 .SetTextVariable("COUNT", inputCount);
         }
@@ -100,14 +100,14 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Rites
         public override void SetDialogue()
         {
             MBTextManager.SetTextVariable("CLERGYMAN_RITE_CONFIRM",
-                new TextObject("{=!}Will you relinquish {COUNT} {ITEM} to prove your faith?")
+                new TextObject("{=8OwEJjZb}Will you relinquish {COUNT} {ITEM} to prove your faith?")
                     .SetTextVariable("COUNT", inputCount)
                     .SetTextVariable("ITEM", input.Name));
         }
 
         public override TextObject GetRequirementsText(Hero hero)
         {
-            return new TextObject("{=!}May be performed every {YEARS} years\nRequires {COUNT} {ITEM}")
+            return new TextObject("{=6Yj8erp7}May be performed every {YEARS} years\nRequires {COUNT} {ITEM}")
                 .SetTextVariable("YEARS", GetTimeInterval(hero))
                 .SetTextVariable("COUNT", inputCount)
                 .SetTextVariable("ITEM", input.Name);

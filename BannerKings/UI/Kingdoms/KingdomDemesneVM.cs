@@ -1,4 +1,4 @@
-﻿using BannerKings.Managers.Titles;
+using BannerKings.Managers.Titles;
 using BannerKings.Managers.Titles.Laws;
 using BannerKings.UI.Items;
 using System.Collections.Generic;
@@ -87,8 +87,8 @@ namespace BannerKings.UI.Kingdoms
                 var currentLaw = Title.contract.GetLawByType(lawType);
                 if (resultLaw != null && !resultLaw.Equals(currentLaw))
                 {
-                    InformationManager.ShowInquiry(new InquiryData(new TextObject("{=!}Enact Law").ToString(),
-                        new TextObject("{=!}Enact the {LAW} law thoughtout the demesne of {TITLE}. The law will be enacted for every title in the hierarchy.\n\nCost: {INFLUENCE} {INFLUENCE_ICON}")
+                    InformationManager.ShowInquiry(new InquiryData(new TextObject("{=yAPnOQQQ}Enact Law").ToString(),
+                        new TextObject("{=RSWao3jU}Enact the {LAW} law thoughtout the demesne of {TITLE}. The law will be enacted for every title in the hierarchy.\n\nCost: {INFLUENCE} {INFLUENCE_ICON}")
                         .SetTextVariable("LAW", resultLaw.Name)
                         .SetTextVariable("TITLE", Title.FullName)
                         .SetTextVariable("INFLUENCE", resultLaw.InfluenceCost)
@@ -111,16 +111,16 @@ namespace BannerKings.UI.Kingdoms
         }
 
         [DataSourceProperty]
-        public string HeirText => new TextObject("{=!}Heir").ToString();
+        public string HeirText => new TextObject("{=vArnerHC}Heir").ToString();
 
         [DataSourceProperty]
-        public string SuccessionText => new TextObject("{=!}Succession").ToString();
+        public string SuccessionText => new TextObject("Succession").ToString();
 
         [DataSourceProperty]
-        public string LawsText => new TextObject("{=!}Laws").ToString();
+        public string LawsText => new TextObject("{=fE6RYz1k}Laws").ToString();
 
         [DataSourceProperty]
-        public string LawsDescriptionText => new TextObject("{=!}Demesne Laws may be changed a year after they are issued. Changes are made by the sovereign or through voting by the Peers.").ToString();
+        public string LawsDescriptionText => new TextObject("{=MbSsFJNY}Demesne Laws may be changed a year after they are issued. Changes are made by the sovereign or through voting by the Peers.").ToString();
 
         [DataSourceProperty]
         public MBBindingList<DemesneLawVM> Laws

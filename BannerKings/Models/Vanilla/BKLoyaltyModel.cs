@@ -48,7 +48,7 @@ namespace BannerKings.Models.Vanilla
             if (data.ReligionData != null)
             {
                 float factor = -6f * data.ReligionData.Tension.ResultNumber;
-                baseResult.Add(factor, new TextObject("{=!}Religious tensions"));
+                baseResult.Add(factor, new TextObject("{=T88BUMMU}Religious tensions"));
             }
 
             var tax = ((BKTaxPolicy) BannerKingsConfig.Instance.PolicyManager.GetPolicy(town.Settlement, "tax")).Policy;

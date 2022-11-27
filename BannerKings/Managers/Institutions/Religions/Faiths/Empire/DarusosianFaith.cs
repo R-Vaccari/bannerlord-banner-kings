@@ -74,9 +74,9 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Empire
         {
             TextObject text = rank switch
             {
-                3 or 2 => new TextObject("{=!}{PLAYER_NAME} was it? Yes, yes… You serve our Empire and thus already walk upon a righteous path; but full glad am I to know you seek to open your heart to the sacraments of the Martyr. It is a kindness that you do not seek to rest idle upon the laurels of your current service - some pay only lip service when devotion is required. It warms my soul to see you are not of such company.")
+                3 or 2 => new TextObject("{=0rBEhKBT}{PLAYER_NAME} was it? Yes, yes… You serve our Empire and thus already walk upon a righteous path; but full glad am I to know you seek to open your heart to the sacraments of the Martyr. It is a kindness that you do not seek to rest idle upon the laurels of your current service - some pay only lip service when devotion is required. It warms my soul to see you are not of such company.")
                 .SetTextVariable("PLAYER_NAME", Hero.MainHero.Name),
-                _ => new TextObject("{=!}It is the heart of the epithetical pietas that one who serves our Empire seeks to embrace it at its fullest. You do a great and virtuous kindness, let none question the sacred acts of your honor from this day forward. Know that you move forward in pursuit of the Martyr’s will, in a position where others will yearn for your praise, where your enemies will fail to stand fast against you and your peers.")
+                _ => new TextObject("{=rO6aFDKn}It is the heart of the epithetical pietas that one who serves our Empire seeks to embrace it at its fullest. You do a great and virtuous kindness, let none question the sacred acts of your honor from this day forward. Know that you move forward in pursuit of the Martyr’s will, in a position where others will yearn for your praise, where your enemies will fail to stand fast against you and your peers.")
             };
 
             return text;
@@ -86,8 +86,8 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Empire
         {
             TextObject text = rank switch
             {
-                3 or 2 => new TextObject("{=!}Go forth in the Martyr’s glory, and with his blessing. Embody the ideals of Empire, scourge the wicked and the unclean; lead those with darkened hearts into the light. "),
-                _ => new TextObject("{=!}As you pursue the path of the Martyr and the divinity which has graced us, show kindness where it is deserved and trust only those who eagerly seek to repay it.")
+                3 or 2 => new TextObject("{=6kDbxhEj}Go forth in the Martyr’s glory, and with his blessing. Embody the ideals of Empire, scourge the wicked and the unclean; lead those with darkened hearts into the light. "),
+                _ => new TextObject("{=mQsZcBj5}As you pursue the path of the Martyr and the divinity which has graced us, show kindness where it is deserved and trust only those who eagerly seek to repay it.")
             };
 
             return text;
@@ -209,7 +209,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Empire
             var kingdom = hero.Clan.Kingdom;
             if (kingdom == null || kingdom.StringId != "empire_s")
             {
-                text = new TextObject("{=!}Not a member of the Southern Empire.");
+                text = new TextObject("{=cVchNb9c}Not a member of the Southern Empire.");
                 return new(false, text);
             }
 
@@ -238,7 +238,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Empire
 
         public override TextObject GetBlessingActionName()
         {
-            return new TextObject("{=!}medidate upon.");
+            return new TextObject("{=Yz4aFGU9}medidate upon.");
         }
     }
 }

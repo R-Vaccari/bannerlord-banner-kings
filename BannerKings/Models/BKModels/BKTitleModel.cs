@@ -24,10 +24,10 @@ namespace BannerKings.Models.BKModels
             var succession = contract.Succession;
             if (succession == SuccessionType.Imperial)
             {
-                result.Add(currentLeader.GetRelation(candidate) / 3f, new TextObject("{=!}Approval by {HERO}")
+                result.Add(currentLeader.GetRelation(candidate) / 3f, new TextObject("{=uYDaqbt6}Approval by {HERO}")
                     .SetTextVariable("HERO", currentLeader.Name));
 
-                result.Add(candidate.Age / 2f, new TextObject("{=!}Age"));
+                result.Add(candidate.Age / 2f, new TextObject("Age"));
                 result.Add(candidate.GetSkillValue(DefaultSkills.Leadership) * 0.1f, DefaultSkills.Leadership.Name);
                 result.Add(candidate.GetSkillValue(DefaultSkills.Tactics) * 0.1f, DefaultSkills.Tactics.Name);
                 result.Add(candidate.GetSkillValue(BKSkills.Instance.Lordship) * 0.1f, BKSkills.Instance.Lordship.Name);
@@ -44,7 +44,7 @@ namespace BannerKings.Models.BKModels
             if (succession == SuccessionType.Republic)
             {
                 result.Add(Campaign.Current.Models.DiplomacyModel.GetClanStrength(candidate.Clan) / 5, GameTexts.FindText("str_notable_power"));
-                result.Add(candidate.Age / 2f, new TextObject("{=!}Age"));
+                result.Add(candidate.Age / 2f, new TextObject("Age"));
                 result.Add(candidate.GetSkillValue(DefaultSkills.Leadership) * 0.1f, DefaultSkills.Leadership.Name);
                 result.Add(candidate.GetSkillValue(DefaultSkills.Charm) * 0.1f, DefaultSkills.Charm.Name);
                 result.Add(candidate.GetSkillValue(DefaultSkills.Steward) * 0.1f, DefaultSkills.Steward.Name);
@@ -97,7 +97,7 @@ namespace BannerKings.Models.BKModels
             InheritanceType inheritance = contract.Inheritance;
             if (inheritance == InheritanceType.Seniority)
             {
-                result.Add(candidate.Age, new TextObject("{=!}Age"));
+                result.Add(candidate.Age, new TextObject("Age"));
             }
             else
             {
@@ -116,18 +116,18 @@ namespace BannerKings.Models.BKModels
 
                 if (inheritance == InheritanceType.Primogeniture)
                 {
-                    result.Add(candidate.Age, new TextObject("{=!}Age"));
+                    result.Add(candidate.Age, new TextObject("Age"));
                 }
 
                 if (inheritance == InheritanceType.Ultimogeniture)
                 {
-                    result.Add(-candidate.Age, new TextObject("{=!}Age"));
+                    result.Add(-candidate.Age, new TextObject("Age"));
                 }
 
                 if (candidate.CharacterObject != null && candidate.CharacterObject.OriginalCharacter != null &&
                    candidate.CharacterObject.OriginalCharacter.IsTemplate)
                 {
-                    result.AddFactor(-0.5f, new TextObject("{=!}Common born"));
+                    result.AddFactor(-0.5f, new TextObject("{=9RG3GwJD}Common born"));
                 }
             }
 

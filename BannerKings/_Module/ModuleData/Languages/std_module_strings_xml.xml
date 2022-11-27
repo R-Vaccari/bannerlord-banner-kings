@@ -4,14 +4,10 @@
     <tag language="English" />
   </tags>
   <strings>
-	<string id="5yiE49du" text="Estates" />
-	<string id="1wRI8yd9" text="Demesne Laws" />
     <string id="oy3mdLFG" text="Food quality" />
     <string id="LUF7xieE" text="Religions" />
-	<string id="LuF75ia3" text="Crafting Difficulty" />
     <string id="ow1a4qxs" text="Learn about the novel faiths in the continent." />
     <string id="hwQxchW0" text="Settlement Management" />
-    <string id="PGT8b46n" text="In Banner Kings, settlement management is several layers more in depth than vanilla. Settlemetns have many new interconnected factors such as Mercantilism, Militarism, Stability, Autonomy, and others, making settlement management way more intricate than choosing a new town project every few weeks or so. They also have several new policies (multi choice options) and decisions (true/false options) that it's owner may manage. You can check all this information in Demesne Management tab in your settlements - all of the fields have tooltips with further explanations." />
     <string id="kDkATiAT" text="Learn about the extensive changes to settlements." />
     <string id="zdgoYNq8" text="Game Balance - Skills" />
     <string id="ALDs4Tpn" text="Banner Kings introduces a new Attribute - Wisdom - as well as 3 new skills: Scholarship, Lordship and Theology. These new skills provide new ways to acquire experience and level up. On top of that, skill modifiers are changed. For starters, the minimum experience gain is now 5% rather than 0%. This means that the vanilla game would block you from learning skills past a certain past - this is not the case anymore. You can always keep learning, albeit very slowly." />
@@ -47,7 +43,6 @@
     <string id="WaBMVVH9" text="Banner Kings" />
     <string id="CpymySe7" text="Welcome to the Banner Kings mod. BK is a comprehensive mod that alters and expands various of Bannerlord's non combat systems. Below are some topics you can learn more about the impacts of the mod. You can later revisit these topics in the Concepts part of Bannerlord's encyclopedia. Visit the mod page for Discord and donation links - support is only provided through Discord. Have fun!" />
     <string id="tqCSk7ya" text="Party wages {A0}" />
-    <string id="OtUhpj1p" text="{A0}" />
     <string id="zvMMs0Yp" text="{HERO} is inspired by the spirits!" />
     <string id="Vjg2DuT1" text="Double Perks" />
     <string id="eodABOkZ" text="From now on, double perks will be yielded for the {SKILL} skill. The perks will be rewarded after closing the Character tab with 'Done', not immediatly after selecting them." />
@@ -61,11 +56,8 @@
     <string id="NeMhiUW8" text="Your Clan Tier needs to be at least {TIER}." />
     <string id="gM4TtJCf" text="Before bestowing knighthood, you need to be formally part of a kingdom." />
     <string id="vNwX2dhL" text="You do not legally own any title." />
-    <string id="s0ngHATj" text="You do not legally own any lordship that could be given to land a new vassal." />
-    <string id="x23XkFM4" text="You cannot grant away your only lordship." />
     <string id="rFXuWbdQ" text="Bestowing knighthood requires {INFLUENCE} influence to legitimize your new vassal.\n{EXPLANATIONS}" />
     <string id="hN2Eynzu" text="Bestowing knighthood requires {GOLD} gold to give your vassal financial security." />
-    <string id="7Azss01g" text="Select the fief you would like to give away" />
     <string id="3Ug0Pp5p" text="{RESULT}\n{DESCRIPTION}" />
     <string id="A2qwGxzR" text="You cannot assign a prisoner member as a new party leader" />
     <string id="XX95HPvL" text="This hero has just escaped from captors and will be available after some time." />
@@ -106,7 +98,6 @@
     <string id="rfjH2WMz" text="I am afraid that won't be possible." />
     <string id="JgeQ3a2u" text="{CLERGYMAN_RITE_CONFIRM}" />
     <string id="ProkogUg" text="Already an adherent of this faith." />
-    <string id="y1NsVyOH" text="{POSSIBLE}. Changing faiths will significantly impact your clan's renown. Your piety in the new faith will be zero. Lords of {CURRENT_FAITH} faith may disapprove your change." />
     <string id="oFfExhaM" text="{DESCRIPTION}\n{EFFECTS}" />
     <string id="QUvKUF87" text="Select which of the {SECONDARIES} you would like to {BLESSING_ACTION}." />
     <string id="vE0bYBmL" text="You do not adhere to the {FAITH} faith." />
@@ -260,7 +251,6 @@
     <string id="LmHWN0vt" text="Velikaya Knyaginya" />
     <string id="eVZHT4T6" text="{MALE}Velikiy Knyaz{?}Queen{\\?}" />
     <string id="S3kc2bhW" text="Knyaginya" />
-    <string id="nNV4YbQ7" text="{MALE}Knyaz{?}Queen{\\?}" />
     <string id="KTxFYNyo" text="Boyarina" />
     <string id="QQxLPzDu" text="{MALE}Boyar{?}Queen{\\?}" />
     <string id="bYQLoRUt" text="Voivodina" />
@@ -356,7 +346,7 @@
     <string id="QVkOr639" text="Increases production efficiency (15%)" />
     <string id="uZPepQjz" text="The {CLAN} has assumed the role of cultural head of the {CULTURE} culture." />
     <string id="Hvt8EySp" text="The {CULTURE} is now fascinated by the {FASCINATION} innovation." />
-	<string id="1Maj0j6J" text="Honey{@Plural}barrels of honey{\@}" />
+    <string id="1Maj0j6J" text="Honey{@Plural}barrels of honey{\@}" />
     <string id="1MAr0j2J" text="Apples{@Plural}baskets of apples{\@}" />
     <string id="Krqwsins" text="Oranges{@Plural}baskets of oranges{\@}" />
     <string id="VJfbLXmi" text="Bread{@Plural}loaves of bread{\@}" />
@@ -388,12 +378,10 @@
     <string id="rLBAcOoV" text="WIS" />
     <string id="U7W2kGgA" text="Highlander" />
     <string id="WgmJfTeR" text="Increases your movement speed by 5%." />
-    <string id="uXKiKZXR" text="Increases your swing speed with two handed swords by 6%." />
     <string id="w7GFfrAy" text="Ranger" />
     <string id="ZK5MjmMK" text="Increase maximum track life by 20%." />
     <string id="RKMxkhwX" text="Increases your damage with bows by 8%." />
     <string id="qvQEEEM4" text="Fénnid" />
-    <string id="kFGo9afp" text="Aiming with your bow is 25% faster." />
     <string id="fxuVYTrJ" text="Increases your two handed weapon damage by 10%." />
     <string id="M9R9NkrP" text="Civil Engineer" />
     <string id="8AmeeiL0" text="Workforce yields 20% extra construction." />
@@ -608,13 +596,11 @@
     <string id="PsLzYkAz" text="Clan tier is insufficient." />
     <string id="2wBj94FG" text="Must be faction leader to usurp highest title in hierarchy." />
     <string id="5ysthcWa" text="No rightful claim." />
-    <string id="RBCrujCo" text="Taxes from {WORKSHOP} at {TOWN}" />
     <string id="WDHTvasY" text="Aid from {NOTABLE}" />
     <string id="6keRYbQa" text="Taxes from {CLAN}" />
     <string id="r1iYHSWx" text="Army compensation rights" />
     <string id="WvhXhUFS" text="Councillor role" />
     <string id="tYO5xwVe" text="Lifestyle" />
-    <string id="FTx77EBz" text="{WORKSHOP} taxes to {CLAN}" />
     <string id="rU692V1m" text="Taxes to {SUZERAIN}" />
     <string id="fNiANUo4" text="High Loyalty" />
     <string id="fETzfZzS" text="Low Loyalty" />
@@ -654,7 +640,6 @@
     <string id="DyZdcwa4" text="Governor" />
     <string id="zYjK6Kzb" text="Housing Costs" />
     <string id="5mCY3JCP" text="{CLASS} output" />
-    <string id="vSsKP2dz" text="Legitimiacy" />
     <string id="xMsWoSnL" text="Autonomy" />
     <string id="2z4YQTuu" text="Draft policy" />
     <string id="wvmCvE74" text="Stats" />
@@ -728,7 +713,6 @@
     <string id="pXUyfe6v" text="Select what book you would like to read. Options may be disabled due to language barrier, or lack of Literate perk." />
     <string id="LeTL076P" text="{HERO} is now reading {BOOK}." />
     <string id="pzLRq0QJ" text="{HERO} stopped reading any books." />
-    <string id="m7YpbtRJ" text="Select a lifestyle you would like to adopt. Picking a lifestyle will undo the progress of the lifestyle you are currently learning, if any. Each lifestyle is based on 2 skills, and you need at least 150 profficiency in each skill to adopt it." />
     <string id="Z7t7oyXi" text="{HERO} has adopted the {LIFESTYLE} lifestyle." />
     <string id="YbTbe0FH" text="{HERO} is not following any lifestyle." />
     <string id="hntWNxZy" text="Education" />
@@ -753,7 +737,6 @@
     <string id="jQa22yjg" text="Title Level:" />
     <string id="43UgU7C4" text="Income:" />
     <string id="Locuup55" text="Expenses:" />
-    <string id="rktknNYe" text="Crown Demesne" />
     <string id="oHJ6Y66V" text="Demesne limit describes how many settlements you may own without negative implications. Different settlement types have different weights, villages being the lowest, towns being the highest. Being over the limit reduces stability across all your settlements. Owning a settlement's title will reduce it's weight." />
     <string id="XAvCOvv4" text="Unlanded demesne limit describes how many unlanded titles you may own. Unlanded titles are titles such as dukedoms and kingdoms - titles not directly associated with a settlement. Dukedoms have the lowest weight while empires have the biggest. Being over the limit progressively reduces relations with your vassals." />
     <string id="nhBf1JY5" text="Vassal limit is how many vassals you may have without negative consequences. Vassals are clans whose highest title are under your own (ie, a barony title under your county title, or knight clans with a single lordship) or knights in your clan. Knights only weight 0.5 towards the limit, while clan leaders weight 1. Companions and family members do not count. Being over the limit progressively reduces your influence gain." />
@@ -773,7 +756,6 @@
     <string id="Uw3xBMKd" text="{TEXT}\nTarget: {TARGET}\n{EXPLANATIONS}" />
     <string id="MKfkuKiS" text="The overall stability of this settlement, affected by security, loyalty, assimilation and whether you are legally entitled to the settlement. Stability is the basis of economic prosperity." />
     <string id="mVTYGkNP" text="Represents how much the local elite supports you. Support of each notable is weighted on their power, meaning that not having the support of a notable that holds most power will result in a small support percentage. Support is gained through better relations with the notables." />
-    <string id="YrCRA6CA" text="{INFLUENCE}" />
     <string id="8mSDgwhX" text="The amount of influence this settlement provides in your realm." />
     <string id="W4xpFozW" text="Overview" />
     <string id="7ELr3vXm" text="Military" />
@@ -838,11 +820,9 @@
     <string id="18Dv2nt4" text="You are not part of {CULTURE} culture." />
     <string id="YFeW2BUA" text="You're not the leader of an Imperial Kingdom." />
     <string id="4jUw7j4u" text="Your kingdom is not part of {CULTURE} culture." />
-    <string id="eZZerqfW" text="You are not leader of a kingdom with {CULTURE} culture." />
     <string id="gcdyXvXR" text="You do not adhere to a faith that is part of the {RELIGION} faith group." />
     <string id="btzaJMMD" text="Your kingdom is not de facto ruler of {SETTLEMENT}" />
     <string id="BLugLsWR" text="Unite Greater Battania" />
-    <string id="DUQdOPOt" text="Unite the old Battanian lands back into a greater realm. To the West, the rascal Vlandians have taken the valley of Llyn Modris and called it 'Ocs Hall'. To the East, the bloodthristy Imperials submitted Epicrotea to their domination. The threat of Battanian extermination grows stronger with enemies all around aiming for it's lands. You must bring all battanian and formerly battanian towns and castles under control of your realm.\n\n" />
     <string id="jHzaifoJ" text="This title is already founded! de Jure is {DE_JURE.LINK} and de Facto is {DE_FACTO.LINK}." />
     <string id="NCVPvemT" text="You're not the leader of {KINGDOM}." />
     <string id="NVcg68Lz" text="You do not adhere to the {RELIGION} faith." />
@@ -1105,10 +1085,8 @@
     <string id="CAjwbXaC" text="I would like to medidate upon the Martyr." />
     <string id="m0MZaCM0" text="How so? Would you like to medidate upon the Cult and our line of hallowed emperors? Or would you pray for guidance from the Triad?" />
     <string id="XxE5MQKJ" text="Assert your will for guidance. The study of the Martyr and the gods is not to be taken lightly." />
-    <string id="YeizfbV3" text="{OFFERING} was ritually offered by {HERO}." />
     <string id="uSMsxDP1" text="The fate of {HERO} was sealed once they dared draw sword on us. Affirm the rite and we shall rejoice upon the glory we bathe ourselves in as the enemy bleeds!" />
     <string id="d8ecHZ0P" text="{SACRIFICE} was ritually sacrificed by {HERO}." />
-    <string id="Tj9rCUmw" text="Sacrifice {HERO} to prove your devotion." />
     <string id="0aY6zmgK" text="Human Sacrifice" />
     <string id="eTqH0eDT" text="The fate of {HERO} was sealed once they dared draw sword on us. Let us rejoice upon the glory we bathe ourselves in as the enemy bleeds!" />
     <string id="iNbOvrB8" text="Zabiha" />
@@ -1202,7 +1180,6 @@
     <string id="HuoR2sGE" text="Over limit" />
     <string id="AaNeOd9n" text="Base" />
     <string id="mgK8aZuj" text="Prosperity" />
-    <string id="haMOv5Fh" text="{0} growth" />
     <string id="TfMEfR6C" text="Security" />
     <string id="B8Crp0cZ" text="Loyalty" />
     <string id="rZOM0Jit" text="Cultural assimilation" />
@@ -1267,7 +1244,6 @@
     <string id="yJzJMg5Z" text="Percentage of slaves in this settlement that are state-owned and therefore used for state purposes such as building projects." />
     <string id="6gaLfex6" text="Production Quality:" />
     <string id="oJKPne1U" text="Production Efficiency:" />
-    <string id="S2teOBN3" text="Goods Production:" />
     <string id="Gm0F8o7L" text="How much the local population can progress with construction projects, on a daily basis." />
     <string id="hmtRGrpt" text="Items Produced:" />
     <string id="0RAPEDaT" text="Goods locally produced by the population." />
@@ -1285,7 +1261,6 @@
     <string id="8ootTEcK" text="The most assimilated culture in this settlement, and considered the legal culture." />
     <string id="5VhaJ732" text="Found a new title for your kingdom. The title will legitimize your position and allow the de Jure domain of the kingdom to expand through de Jure drift of dukedoms, as well as extend your influence as a suzerain. Founding a title would increase your clan's renown by {RENOWN}. \n \nCosts: {GOLD} {GOLD_ICON}, {INFLUENCE} {INFLUENCE_ICON} \n\nCan form kingdom: {POSSIBLE} \n\nExplanation: {REASON}" />
     <string id="qjD2WwBH" text="Do you want to establish the title {TITLE}?\nThis will cost you {GOLD}{GOLD_ICON} and {INFLUENCE}{INFLUENCE_ICON}.\nAs a reward your clan will earn {RENOWN} renown." />
-    <string id="xzyBM00Z" text="Make an offering of {ITEM}. {COUNT} must be offered for the rite to be fulfilled." />
     <string id="juJoP0yu" text="The History of Calradian Archery is a monography of most popular weapon around the continent: bows and arrows. Written by renowned archer, Rovin of Erithrys, the book describes the variety of bows and arrows used across the continent, along with the description of culture favorite variants. Each Calradian culture archery traditions and practical ways to use those in warfare is described in separate chapters. The author also introduces most of bow constructions invented in Calradia, from simplest mountain bows to rather expensive and complicated bows used by the nobility." />
     <string id="VXKu1ucX" text="Lycaron debate of 1074 is a record of events that occurred during a tournament of Lycaron in local inn. A group of Khan's Guards, entourage of young Khuzait warrior Monchug (who came to Lycaron to take part in the tournament) has gotten into discussion with Vlandian voulgiers serving in local garrison about whos swingeable polearm armament is better. Soon the present Cataphracts of the same garrison joined the discussion, with intention to prove that long, thrust lances are superior. The debate resulted in 12 deaths, 23 injured and maimed and, as declared unanimously by witnesses, was won by Gareth, a local townfolk, who was passing by the inn and entered carrying his trusty rake, to see what all the ruckus is about." />
     <string id="B0KoTpr4" text="Recruit local mercenaries" />
@@ -1346,7 +1321,6 @@
     <string id="0HiZjcrv" text="Infantry troops are {EFFECT1}% faster on the map\nYou and your formation deal {EFFECT2}% less damage when mounted" />
     <string id="ycDyfToX" text="Combat experience in tournaments increased by {EFFECT1}%\nTrade penalty increased by {EFFECT2}%" />
     <string id="axhJNG0M" text="Ritter" />
-    <string id="3Br24ayr" text="You and melee cavalry in your formation deals {EFFECT1}% more melee damage.{EFFECT1}%\n You and your formation deal {EFFECT2}% less ranged damaged, mounted or otherwise." />
     <string id="Df3Fdnuw" text="Stablish your own kingdom title. Your faction must be one that is not already represented by a kingdom title." />
     <string id="oBxXQmTb" text="Request Council Position" />
     <string id="7aLyDGEt" text="Request a position in your suzerain's council." />
@@ -1359,5 +1333,574 @@
     <string id="hWvSm3Zz" text="Settlement stability increased\nParty morale bonus" />
     <string id="aP0f2WJp" text="Bonus influence\nIncreased faith presence in settlements" />
     <string id="uyhPvxs2" text="Occasionally receive zealot warriors\nParty morale bonus for vlandian troops" />
+    <string id="c3b1OA4H" text="I am {HERO}, a servant of the {CLAN}. I am here under business of {LEADER_NAME}. {PURPOSE_TEXT}" />
+    <string id="rmxeMFzz" text="Lesser Peerage" />
+    <string id="dVTqLz5i" text="As part of joinning a realm, the {CLAN} is receiving {PEERAGE}. {TEXT}" />
+    <string id="9OhMK2Wk" text="Full Peerage" />
+    <string id="9hmdku7t" text="As part of creating a realm, the {CLAN} is now considered to have {PEERAGE}. {TEXT}" />
+    <string id="GikQuojv" text="Village Demesnes" />
+    <string id="W0wTid0n" text="I would like to ask you about management." />
+    <string id="8229dt8y" text="Certainly. What would you like to know about?" />
+    <string id="QMepdVPu" text="Population and Workforce." />
+    <string id="YjjmPpzV" text="Food production." />
+    <string id="pwzUGCBg" text="Goods production." />
+    <string id="r9fs17QX" text="In towns, most goods will be produced by local craftsmen. They supply goods such as weapons, clothing, iron, tools and others. More craftsmen will mean more goods in general. Workshops provide more specialized goods and at faster pace. The quality of goods is influenced by the local production quality, while speed of production is influenced by production efficiency." />
+    <string id="kx9hK4SA" text="Villages are similar, though their productions are much more limited. The village's production will largely depend on it's workforce. Various productions, such as farm goods, will depend on it's acreage, meaning that having extra workers over what the land needs will be fruitless. Other productions such as ores depend exclusively on workforce numbers, and are not limited by acreage. Village productions can be expanded by village buildings." />
+    <string id="kB584OYU" text="Population is limited by the settlement's population limit. This limit relies mostly on the local acreage - more useful land will allow more people to fed. Serfs and slaves compose the workforce and make the bulk of labor, including construction and food production. Slaves are usually better in hard labor such as mining, while serfs are more productive as farmers. State slaves contribute to state projects such as construction projects or worforce policies." />
+    <string id="DgUr4orO" text="A quick way of increasing workforce is gathering prisoners and outlaws and turning them into slaves. Keep in mind, slaves are not free, and do not contribute to population growth. Serfs represent the bulk of growth. Increasing population limit and allowing them to grow by themselves is the recommended long term strategy." />
+    <string id="L87e0h2a" text="Food production relies on acreage. Each acre of land requires an amount of workforce. If it is met, the acre will produce food. The output depends on acre type - farmlands are the most productive. When town's stocks are filled, the production will be sold to the market. A town only truly runs out of food when the market is empty, as people will buy it off when their own stocks are empty." />
+    <string id="UNBcpRLu" text="Villages work exactly the same. They will supply town markets by selling their output and thus generating an income. Increasing workforce through population increase is the main method of increasing general food output. However, if workforce saturation is over 100%, it is recommended to focus on acreage expansion instead, as new laborers will not have land to work on." />
+    <string id="eytEGCnd" text="I would like you to serve as my knight." />
+    <string id="mMoVoid6" text="Bestowing Knighthood" />
+    <string id="FwXL7yLD" text="Knighting involves granting a Fee (an estate or lordship) to a commoner, in exchange for Knight Service, or military aid. Once granted, their property can not be revoked. Knights granted a Lordship will pay for their own retinue, but will also have full rights to the village's income. Knights will serve under your clan, but eventually will aim to forge their own family." />
+    <string id="KfprN5px" text="{TITLE}, it would be my honor. I must ask, what kind of property would you honor me with?" />
+    <string id="VjMG5nHH" text="A Lordship." />
+    <string id="We2p3hwv" text="An estate property." />
+    <string id="uEX33Axr" text="{TITLE}, a Lordship would be very generous. Its income would allow me to raise a retinue and be fully independent to pay for it. Of course, the more rent a village produces, the more troops I can provide us." />
+    <string id="op5kY5Qq" text="{TITLE}, an estate would be generous. Its income would help pay a retinue, and it's manpower allow us more access to volunteers. Estates with more acres generate more income and provide more manpower." />
+    <string id="g09DXXBc" text="Thank you {TITLE}!" />
+    <string id="oQzd5fKm" text="{VILLAGE} - {ACREAGE}" />
+    <string id="t37Hiw4V" text="{HERO} already holds property or a title and is considered a knight." />
+    <string id="xfcQrgtb" text="{HERO} is close family and in your clan. Their social status mirrors yours as head of family." />
+    <string id="OMJDisYX" text="Bestowing knighthood is possible." />
+    <string id="D4PoLUwH" text="You currently do not lawfully own a lordship." />
+    <string id="eT2e7JHu" text="Your lordships do not have any vacant estates to be granted away." />
+    <string id="6oR14vwH" text="The {CLAN} does not have adequate Peerage to grant knighthood." />
+    <string id="gYPtXGDA" text="You currently do not lawfully own a lordship that could be given away." />
+    <string id="ekEphQLc" text="Select the Lordship you would like to give away. Grating a lordship also requires a 5000 {GOLD_ICON} payment." />
+    <string id="tVvXpPdF" text="Select the estate you would like to grant." />
+    <string id="EYH5bgdS" text="Not possible to dismiss a knight with property under your service." />
+    <string id="HGHxECuY" text="Workshop Acquisition" />
+    <string id="Q19XEcNq" text="The {CLAN} proposes to buy your {WORKSHOP} at {TOWN}. They offer you {GOLD}{GOLD_ICON}" />
+    <string id="dyHi9YdS" text="I would like to offer you slaves." />
+    <string id="4Ko88Jj8" text="My suzerain, I would be honored. Extra workforce will benefit our community." />
+    <string id="HwgaJXYr" text="{NOTABLE_CONVERT_CULTURE}" />
+    <string id="mXHxPGBm" text="{NOTABLE_ANSWER_CONVERT_CULTURE}" />
+    <string id="McbnY4Su" text="{NOTABLE_CONVERT_FAITH}" />
+    <string id="oz24YvZG" text="{NOTABLE_ANSWER_CONVERT_FAITH}" />
+    <string id="RBQS6wgF" text="{HERO} has assumed the {CULTURE} culture." />
+    <string id="ab6nQqCy" text="{HERO} does not like you enough. Gain their trust first." />
+    <string id="JBxgr7jN" text="Conversion is possible." />
+    <string id="sjy26XtU" text="{HERO} has converted to the {FAITH} faith." />
+    <string id="dxwTedS0" text="Not enough piety." />
+    <string id="7BfN1tqa" text="Not possible to convert preachers." />
+    <string id="6WM78pd8" text="The {CARAVAN} has deposited you {GOLD}{GOLD_ICON}" />
+    <string id="xEwX83aU" text="Travelling {CLASS} from {ORIGIN}" />
+    <string id="cCzJ9Nk6" text="Slave Caravan from {ORIGIN}" />
+    <string id="KGqPK07Z" text="{COUNT} {UNIT} zealots have joined your party!" />
+    <string id="WWkVwmPy" text="Lords of {CURRENT_FAITH} faith may disapprove your change" />
+    <string id="Uygas52E" text="{POSSIBLE}. Changing faiths will significantly impact your clan's renown, if you are converting from another faith. Your piety in the new faith will be zero. {FAITH_TEXT}" />
+    <string id="mMuy4hat" text="The union between {PROPOSER} and {PROPOSED} is not adequate. Our {PROPOSED} is worth more than that." />
+    <string id="vPx19Oy6" text="I would not entertain giving away {PROPOSED} to a pack of mongrels such as the {CLAN}." />
+    <string id="GXBmSEi1" text="Unfortunately, I do not find the union between {PROPOSER} and {PROPOSED} to be adequate. You should improve the standing of your family within the realm, and then we may renegotiate." />
+    <string id="yAzLqLPP" text="My friend, the union of {PROPOSER} and {PROPOSED} is not one of fairness. Although it would be a pleasure to strengthen our houses, I do not find this to be the correct path." />
+    <string id="Pmo8GKez" text="Let it be known that {PROPOSER} and {PROPOSED} are now united in blood. I hope that we can keep finding common cause in the future, and thrive together." />
+    <string id="61jgyXzF" text="{HERO} piety was changed by {PIETY}." />
+    <string id="AkTU4Qwg" text="You, {NAME}, formally accept to be henceforth bound to the {TITLE}, fulfill your duties as well as uphold your rights, what can not be undone by means other than abdication of all rights and lands associated with the contract, treachery, or death." />
+    <string id="WaBMVVH9" text="Banner Kings" />
+    <string id="o394sPDk" text="Close Relatives Honorifics" />
+    <string id="AinXkzz7" text="Apply title honorifcs for close relatives of title holders. This only takes effect if the 'Title Honorifcs' option is any other than 'No Titles'. Different rules apply but in general, spouses of will have an equivalent, gendered title (ie, 'Queen FemaleName' the spouse of 'King MaleName'), while children of Kings and Emperors may be Princes." />
+    <string id="2MqbeBCb" text="Title Honorifics" />
+    <string id="LuLE14V8" text="How lords with titles are named. Full titles Suffixed (Default): 'Firstname, Prince of TitleName'; Full titles: 'Prince FirstName of TitleName';  Title Prefixes: 'Prince TitleName'." />
+    <string id="0GVNKkGr" text="Village Tax Reserves" />
+    <string id="y9fQuceM" text="Leave a fifth of villages' production out of player income. This keeps villages in the player's income summary and so lets them always have an idea of how much villages and estates are producing. These can be manually collected through settlement menus. When disabled, all the income is removed and thus villages and estates have nothing to report most of the time, because their income depends on villagers bringing profit back from towns. Default: false." />
+    <string id="2oJQ4Snn" text="Economy" />
+    <string id="vWcskVBm" text="Realistic Caravan Income" />
+    <string id="1it7E8tF" text="Caravans pose a major risk factor not represented in the game: carrying your profits. With this setting, caravan profits will only be added when they enter a settlement owned by their owner, or where they are situated (ie, notables). Default: true." />
+    <string id="OohdenyR" text="Slower Parties" />
+    <string id="F8nfgxrt" text="Slows all parties by 30%. Intended to better reflect a realistic map scale. Default: true." />
+    <string id="P8UecnYf" text="Balancing" />
+    <string id="FtWk1Jm0" text="Longer Sieges" />
+    <string id="RaBG5ArJ" text="Decreases siege camp build speed by 50%. Intended to make sieges harder and more impactful, and prevent multiple sequential sieges of same settlement. Default: true." />
+    <string id="iLmmsgFE" text="Volunteers Limit" />
+    <string id="2AsFpOok" text="The number of volunteers that notables may have. Requires reloading. Vanilla is 6, default for BK is 10. The recruitable amount is calculated on percentages and thus is always balanced. Recruits will be lost when changing to a smaller limit. Limits can be changed at any point during campaigns." />
+    <string id="QBYvQNa6" text="Full Titles Suffixed" />
+    <string id="WxPFvjyO" text="Full Titles" />
+    <string id="SL6RAxxj" text="Title Prefixed" />
+    <string id="oSt1agLC" text="No Titles" />
+    <string id="xa13n63V" text="You don't have access to this recruit." />
+    <string id="vqP5R9TS" text="Explanations" />
+    <string id="NeydSXjc" text="Score" />
+    <string id="PyG7eif0" text="{NAME}, {TITLE} of {SETTLEMENT}" />
+    <string id="mMTUt5kV" text="{TITLE} {NAME} of {SETTLEMENT}" />
+    <string id="SkfVh2Sp" text="{TITLE} {NAME}" />
+    <string id="9ap6ssvZ" text="You must be faction leader, {MARSHAL} for the {CLAN} or have a title superior to Lordship level." />
+    <string id="0Yoz051M" text="You must be faction leader, {MARSHAL} for the {CLAN} or have a title superior to County level." />
+    <string id="LZTFr8jR" text="Exception in {CLASS} class." />
+    <string id="3dMr1P4W" text="A Banner Kings error was detected. Send the contents of {FILE} from BannerKings module to support channel." />
+    <string id="gc8D4iH4" text="The {FACTION1} and {FACTION2} are now allies." />
+    <string id="b3dURwfW" text="Imperatrix" />
+    <string id="uTLJjN8A" text="Imperator" />
+    <string id="1XDPfDim" text="Knyaz" />
+    <string id="dSSX7xRm" text="Imperium" />
+    <string id="uEBLsMAb" text="Empire" />
+    <string id="RYoxePAG" text="Bana-Phrionnsa" />
+    <string id="7z7iEwxU" text="Prionnsa" />
+    <string id="e7Nhe2YX" text="Princess" />
+    <string id="V219eHY6" text="Prince" />
+    <string id="Bj1LjLgm" text="The {CLAN} is now hosting a feast at {TOWN}!" />
+    <string id="W7RqGAhs" text="The feast at {TOWN} has ended! {REASON}" />
+    <string id="e83AjuGY" text="The feast was a success! The guests praised {COMPLIMENT}." />
+    <string id="9QbnYBn0" text="The feast was acceptable. The guests compliment that {COMPLIMENT}, but complain that {COMPLAINT}." />
+    <string id="bAgf4mvT" text="The feast was a failure... The guests complain that {COMPLAINT}." />
+    <string id="amLhmtQV" text="the food quantity was plentiful" />
+    <string id="UJefPYWS" text="the food quantity was adequate" />
+    <string id="cdMTu4OV" text="the food quality was exceptional" />
+    <string id="VbPGdCx3" text="the food was tasteful" />
+    <string id="Ojj8ijxR" text="the food selection was bountiful" />
+    <string id="9FSPgGmD" text="the food selection was sufficient" />
+    <string id="pOCbabjg" text="there was alcohol enough to drown in" />
+    <string id="XzMKdK1S" text="the alcohol was adequate" />
+    <string id="VmRpyXt3" text="the host was present at all times" />
+    <string id="q5Ton9zO" text="the host was mostly present" />
+    <string id="0McQAWdx" text="the food was barely enough" />
+    <string id="ADmtXnxz" text="there wasn't enough food for a peasants convention, much less a feast" />
+    <string id="P935z6PR" text="the food quality was debatable" />
+    <string id="fJvfH54Y" text="the food was vomit-inducing" />
+    <string id="A8USsmS9" text="the food selection was unsatisfactory" />
+    <string id="Jeouw9gC" text="the food selection was miserable" />
+    <string id="HeZnF3Y3" text="there was not enough alcohol to get drunk" />
+    <string id="6Lv1k7pE" text="the alcohol was barely enough for a teenager maiden to get drunk" />
+    <string id="KOtYTfHn" text="the host was leaving regularly" />
+    <string id="s3xVTfef" text="the host threw a feast and yet was nowhere to be seen" />
+    <string id="ntXogRSG" text="{FLIRTATION_LINE}" />
+    <string id="jbVg1aYL" text="{INITIAL_COURTSHIP_REACTION}" />
+    <string id="zikiRHun" text="I am delighted to hear. We are currently taking in proposal, as I am yet to be wed..." />
+    <string id="Ww4NGDkb" text="Is that so? I'm afraid I cannot say the same." />
+    <string id="rPP2kBi2" text="Well, we are currently taking in proposals." />
+    <string id="6mz2KkwR" text="I see... you look like you have potential." />
+    <string id="emfu56Oe" text="That sounded as dumb as you look." />
+    <string id="8vRvXFAg" text="Thanks... I suppose. Though you'll need more than that to impress me." />
+    <string id="040mMgky" text="I am delighted to hear it. You know, I am still to be wed..." />
+    <string id="AsnqT2cw" text="I am grateful for the compliment. I am afraid I have more important matters to attend to." />
+    <string id="9nseh0fu" text="Thank you. I am looking for spouse candidates. You strike me well yourself." />
+    <string id="Au3zuxf1" text="Indeed. I must say, you strike me well. Perhaps uniting would benefit us mutually." />
+    <string id="kTBPuKE8" text="I am afraid your play had no effect... I do not believe you and me together would be fruitful." />
+    <string id="BsuNUiLG" text="Thank you. I am looking for spouse candidates, and will remember your kindness." />
+    <string id="SfvuXf8A" text="You are most generous, {TITLE}. You look quite well yourself, if I may say." />
+    <string id="ZGkcnvDN" text="I am grateful, {HERO}. I can tell you my family is currently seeking out proposals." />
+    <string id="MwEA1OB0" text="You are a kind spirit. We are looking for spouse candidates. Though it is not my place to decide, you strike me as a decent person." />
+    <string id="htd0GSac" text="{OFFER_NOT_ACCEPTED}" />
+    <string id="ixhPCwdF" text="{TITLE}, I am honored by your most generous request. However, I am not in the position to accept an offer. Please speak to {LEADER}, the head of our family." />
+    <string id="UB0oinVR" text="{TITLE}, I am honored by your request. However, I am not in the position to accept an offer. You may speak to {LEADER}, the head of our family." />
+    <string id="ogAieLQE" text="{TITLE}, I am not in the position to accept an offer. Please speak to {LEADER}, the head of our family." />
+    <string id="e5MpCH3G" text="It is not in my position to accept an offer. You may speak to {LEADER}, the head of our family." />
+    <string id="qJ30OzLa" text="\" />
+    <string id="T8qzYXR5" text="A marriage? Do jesters such as yourself get married?" />
+    <string id="XMMjS27Y" text="No, you idiot. Get out of my sight." />
+    <string id="hcvHjyDM" text="Marriage candidates are available." />
+    <string id="Ht8aufCz" text="{CLAN} has no available candidates" />
+    <string id="WjPfeaqG" text="Tell me the specifics of your proposal." />
+    <string id="oQR06Uzy" text="This is my proposal." />
+    <string id="LfTvDD1e" text="Let me review my proposal." />
+    <string id="5dspZ1M2" text="I'm afraid you didn't make an adequate proposal." />
+    <string id="KXOsnc3G" text="This proposal is not acceptable. {REJECTION_REASON}" />
+    <string id="xodThNQy" text="{PROPOSAL_ACCEPTED}" />
+    <string id="4KPONSvT" text="{PLAYER}, I am happy to accept this proposal. {CONFIRMATION}" />
+    <string id="tvjAsBsw" text="Will you confirm this union?" />
+    <string id="EZrjFHMt" text="Will you confirm this betrothal? Know that we will not take lightly if you do, and yet go back on your word." />
+    <string id="mM8ajh6s" text="I confirm it." />
+    <string id="O4vPn7p1" text="{PROPOSAL_CONFIRMED}" />
+    <string id="m48122Zw" text="It is decided then. {CONFIRMATION}" />
+    <string id="5sPJgrsx" text="{HERO1} and {HERO2} are now betrothed!" />
+    <string id="8gnBUVuM" text="The proposal is adequate." />
+    <string id="y2xyRcKH" text="Our house is one of great importance in the realm. As such, we expect to marry into other influential families." />
+    <string id="uz7LKU0t" text="It seems to me you are not able to pay the dowry. In order for me to accept this proposal, prove you are truly invested into it's success with a fair dowry." />
+    <string id="xNe1TyLh" text="You propose a feast but your family does not hold any appropriate place for such. As your family is the one being married to, you should be able to provide such place." />
+    <string id="N7RFUohR" text="We don't have enough denars for the dowry." />
+    <string id="LwCAFkfc" text="Unfortunately, we do not currently hold a town or castle in which we could host a feast. As the family being married into, it would be shame to promise a feast and not be able to provide it." />
+    <string id="iGYstgoo" text="Mines" />
+    <string id="q3PH022A" text="Dig mines for local exploration of mineral resources. Ores will be limited to the local resources available and richness of the ground. Output will be sold to market when possible, or stored in Stash otherwise. Levels increase output of ores." />
+    <string id="rQmTMDxF" text="Theater" />
+    <string id="SrAXS0oM" text="A common place for congregation, the theater serves the purpose of strengthening the culture's presence through it's art and stories. Increases cultural presence of owner's culture." />
+    <string id="sBTMZdyq" text="Armory" />
+    <string id="UoZbZaaT" text="The armory is used to stock and preserve equipment for the town militia. Raises militia quality and provides garrison trainning." />
+    <string id="4CTz9MRe" text="Court House" />
+    <string id="USZBgRW0" text="The court house is where townsfolk legally settle their disputes. Conflicts such as property disputes or insults are dealt with by local administration. Increases stability." />
+    <string id="PCayirkO" text="Warhorse Studs" />
+    <string id="b58ioVr2" text="Warhorse studs allow the raising of warhorses in the castle demesne. Horses will be added to the Stash. Their limit is based on local pastureland and studs level." />
+    <string id="D3trXTDz" text="Cultural Assimilation" />
+    <string id="QrcPgzMf" text="Focus efforts on assimilating local pouplace to your culture. Increases Cultural Presence." />
+    <string id="vz2HDwKD" text="Choose which of the kingdoms that share your culture you want to start as a lord in." />
+    <string id="RjMW9nuO" text="No Peerage" />
+    <string id="cFXENt18" text="Voting Allowed: {VOTING}\nElections Allowed: {ELECTIONS}\nKnighthood Granting: {KNIGHT}\nFiefs Allowed: {FIEFS}\nCouncil Allowed: {COUNCIL}" />
+    <string id="mhvzyGTa" text="The family {VOTE}, {ELECTION}, {KNIGHTHOOD}, {FIEF} and {COUNCIL}." />
+    <string id="14DuydKq" text="will be able to vote in elections" />
+    <string id="v5REKU2o" text="will not be able to vote on elections" />
+    <string id="6PxbcHSB" text="will be able to start elections" />
+    <string id="83fgAUQK" text="will not be able to start elections" />
+    <string id="QwfFjAZ9" text="will be able to grant knighthood" />
+    <string id="6sUSbwzR" text="will not be able to grant knighthood" />
+    <string id="qH3iU28t" text="will be eligible to be awarded fiefs" />
+    <string id="nBw47opa" text="will not be eligible to be awarded fiefs" />
+    <string id="qGyXzxD6" text="will be able to host a council" />
+    <string id="0xeuyAkM" text="will not be able to host a council" />
+    <string id="EP03brzX" text="{HERO} has stopped learning {LANGUAGE}. The instructor {INSTRUCTOR} is unavailable or dead." />
+    <string id="ywciPeBS" text="Limestone{@Plural}stacks of limestone bricks{\\@}" />
+    <string id="D3mU8bc3" text="Marble{@Plural}stacks of marble bricks{\\@}" />
+    <string id="E6sgXO5n" text="Gold Ore{@Plural}sacks of gold ore{\\@}" />
+    <string id="ak0txv88" text="Gold Ingot{@Plural}stacks of gold ingots{\\@}" />
+    <string id="SajCUfsW" text="Gems{@Plural}pouches of gems{\\@}" />
+    <string id="wNr4YQOo" text="Franceska{@Plural}collection of Franceska{\\@}" />
+    <string id="w7yf8SAj" text="Aseran Papyrus{@Plural}collection of Aseran Papyrus{\\@}" />
+    <string id="10HppTfS" text="You and your formation deal 4% more damage with greatswords while on foot." />
+    <string id="4oCh1aji" text="You and your formation take aim 10% while on foot." />
+    <string id="PWvLhAPL" text="Raider" />
+    <string id="XM607d99" text="Cattle heads reduce party food consumption while party is on plains or steppes." />
+    <string id="aAMdXCsc" text="Outrider" />
+    <string id="rY9vNqxW" text="Increase your and your formation's mount speed by 5%." />
+    <string id="XQQnhzC0" text="Increase your and your formation's mounted archery damage by 5%." />
+    <string id="m7ScWpVb" text="Honor Guard" />
+    <string id="oDG0PFMM" text="Gain 30% more influence for army participation." />
+    <string id="pSdJAe7r" text="Increase recruitment level with notables by 1." />
+    <string id="ZkcrOXbm" text="Ghazw" />
+    <string id="8V2avPGC" text="Camels have 12% more health." />
+    <string id="DiGKj6HS" text="Camel Master" />
+    <string id="DD8PV3zG" text="You and soldiers in your formation are 8% faster when mounted in camels." />
+    <string id="9kDvMoNQ" text="You and soldiers in your formation deal 10% more throwing damage while mounted." />
+    <string id="me23NvbZ" text="Dune Rider" />
+    <string id="MbEcXyGc" text="You and troops in your formation have 5% chance to dismount riders when hitting with javelins." />
+    <string id="dLnLYNRE" text="Party is 8% faster in deserts." />
+    <string id="wMius2i9" text="{TITLE} of {NAME}" />
+    <string id="fvbLMV0a" text="The {LAW} has been enacted in the {TITLE}." />
+    <string id="cVOU505N" text="Stability" />
+    <string id="vRMD0fdw" text="{LANGUAGE} fluency" />
+    <string id="W1hEDOFT" text="Missing {CULTURE} governor" />
+    <string id="njD4zXuM" text="Unlawful owner" />
+    <string id="dkSBAC2Z" text="You don't own this settlement." />
+    <string id="OyXbUQN0" text="Cannot grant to notables." />
+    <string id="kpGgQCZP" text="Cannot grant to foreign lords." />
+    <string id="EUizJXQJ" text="No defined target for granting." />
+    <string id="BPrmDyZT" text="Cannot grant estates under {LAW} law." />
+    <string id="8J1Q1o9W" text="Not a granting candidate. Clan leaders and companions (except under {LAW} law) may be granted to." />
+    <string id="WOTKRO5b" text="Already settlement owner." />
+    <string id="MD6reCQ1" text="Already estate owner." />
+    <string id="hPaEjmxw" text="Cannot buy notable estates." />
+    <string id="PxhHMJXb" text="Not clan leader." />
+    <string id="UNc5DF2y" text="Cannot buy from an illegal settlement owner. The owner must hold it de jure in order to sell estates." />
+    <string id="TPa92tz5" text="Cannot buy foreign kingdom estates except if they are under Allodial tenure law." />
+    <string id="39tnO5wv" text="Not settlement owner." />
+    <string id="ag5dqyQC" text="Must be de jure owner to reclaim estates." />
+    <string id="qfWSkUxb" text="Cannot reclaim an estate from your faction Peers." />
+    <string id="XnvULx4f" text="Cannot reclaim a vacant estate." />
+    <string id="8mOMavNZ" text="Total production proportion" />
+    <string id="arehLYHe" text="Accumulated taxes" />
+    <string id="9XTWXhVi" text="{POPULATION_CLASS} growth" />
+    <string id="MRQmKbko" text="Filled capacity" />
+    <string id="mZfEjDn5" text="Repopulation" />
+    <string id="T614zQR8" text="Drafting policy" />
+    <string id="fQVyeiJb" text="Capital" />
+    <string id="Rq9KfmQ8" text="{FACTION} demand" />
+    <string id="G15w2C46" text="Local demand" />
+    <string id="uYDaqbt6" text="Approval by {HERO}" />
+    <string id="uUmEcuV8" text="Age" />
+    <string id="9RG3GwJD" text="Common born" />
+    <string id="QEy4Ddar" text="Estate properties" />
+    <string id="r2y7UeGc" text="Workshop taxes from demesnes" />
+    <string id="WYDGftvz" text="Notable aids" />
+    <string id="6CKOfX2U" text="Workshop taxes" />
+    <string id="s2gxPA2Q" text="Market gold" />
+    <string id="8Wuxnwnf" text="Farmlands ({CLASS})" />
+    <string id="LohssChh" text="Workforce saturation" />
+    <string id="T88BUMMU" text="Religious tensions" />
+    <string id="gyHK87NL" text="Faith differences" />
+    <string id="aoD1zKmp" text="{HERO} is the expected heir to {CLAN}" />
+    <string id="V8eQC16w" text="{CLAN} Peerage" />
+    <string id="KaxKgMg1" text="{CLAN} holds {TITLE}" />
+    <string id="aML45YiV" text="Widow" />
+    <string id="wxmqHVe1" text="Arranged marriage" />
+    <string id="2kF9z7Tq" text="Infertile" />
+    <string id="HMao8su6" text="Tax exemption policy" />
+    <string id="UqLsS4GV" text="Legitimacy" />
+    <string id="ZJePQQpz" text="Production sold by villagers" />
+    <string id="56S6FhCd" text="Production quality" />
+    <string id="2fCjZALt" text="Local production efficiency" />
+    <string id="JXi5502K" text="On {DAY_OF_YEAR}, {YEAR}, {LEADER_NAME} has reformed the {KINGDOM_NAME}. Their name is now immortalized in history!" />
+    <string id="0KjrcEam" text="Education of {HERO}" />
+    <string id="rLnPvsJk" text="Book Sellers" />
+    <string id="J6vdpLhZ" text="The amount of focus points you have invested. Each focus correlates to one perk gained." />
+    <string id="8vF2rt3F" text="Select a lifestyle you would like to adopt. Picking a lifestyle will undo the progress of the lifestyle you are currently learning, if any. Each lifestyle is based on 2 skills, and you need at least 15 profficiency in each skill to adopt it." />
+    <string id="DHG67WAy" text="{SETTLEMENT} Estates" />
+    <string id="Eb2PY57a" text="Demesne Lands" />
+    <string id="P8w8FYfp" text="Vacant Estate" />
+    <string id="VRbXbsPE" text="Population:" />
+    <string id="mLtr8h47" text="Estate Value:" />
+    <string id="t9sG2dMh" text="Manpower:" />
+    <string id="RhMomMnx" text="This estate's manpower, drawn from it's population. This manpower is used to fuel the estate owner's volunteers. When volunteers are recruited from an estate-owner, the manpower is drawn from the estate rather than the overall settlement." />
+    <string id="FT5kL9k5" text="Acreage:" />
+    <string id="56YOTTBC" text="Farmland:" />
+    <string id="xqot659p" text="{ACRES} acres" />
+    <string id="mbUwoU0h" text="{POINTS} (Daily)" />
+    <string id="g480uUyC" text="Sum of goods produced on a daily basis, including all the types produced here." />
+    <string id="V9CJARWT" text="Influence from local nobles." />
+    <string id="Kq3T4MBV" text="Tax Rate:" />
+    <string id="hgBL20Jm" text="Tax Accumulated:" />
+    <string id="G1sYULTd" text="The accumulated profits since villagers last brought production revenues back. This is zeroed once the estate owner collects their income." />
+    <string id="1kX621pV" text="Acquire this property as your own.\n\n{REASON}" />
+    <string id="FAn8ahnU" text="Grant this property to someone. To grant it, you must be it's legal and actual owner. Estates may be used to knight companions by talking to them, or gifted to other noble houses." />
+    <string id="3nTOToLe" text="Grant Estate" />
+    <string id="1bBJj789" text="Grant this estate to another person. By granting them ownership, they will owe the estate's income and access to manpower. Taxes may still be applied." />
+    <string id="WabTyEdr" text="Buy" />
+    <string id="1rE1OLMj" text="Upgrade" />
+    <string id="OXes1FKN" text="Last run:" />
+    <string id="a2FbzfvH" text="The last day this workshop has successfully run without issues." />
+    <string id="Bom9FTfz" text="Running normally." />
+    <string id="KnWnjURr" text="Workshop under expansion! {DAYS} construction day(s) left." />
+    <string id="Pc4NcRHR" text="Insufficient inputs! {TOWN} is missing inputs for {OUTPUT}." />
+    <string id="QP368C1V" text="Running state:" />
+    <string id="66zjiMe4" text="The workshop running conditions. It may not be producing due to lack of necessary inputs." />
+    <string id="1qiPuhoF" text="Tax ratio:" />
+    <string id="kZMXmhpv" text="Workshop Upgrading" />
+    <string id="gVt0aj0G" text="Would you like to upgrade this workshop property? By upgrading, the workshop's expenses will increase by 12%, while it's production quality increases by 8%. The process will take 3 construction days and cost {COST}{GOLD_ICON}" />
+    <string id="vArnerHC" text="Heir" />
+    <string id="89Wxt2hs" text="Peerage:" />
+    <string id="mxVj1euY" text="Marriage" />
+    <string id="RDDOdoeR" text="The Peerage of {CLAN} does not allow starting elections." />
+    <string id="0bet1Am4" text="{TEXT}\n\n{EXPLANATIONS}" />
+    <string id="SJZmL2Co" text="Law issued on:" />
+    <string id="yAPnOQQQ" text="Enact Law" />
+    <string id="RSWao3jU" text="Enact the {LAW} law thoughtout the demesne of {TITLE}. The law will be enacted for every title in the hierarchy.\n\nCost: {INFLUENCE} {INFLUENCE_ICON}" />
+    <string id="rTUgik07" text="Succession" />
+    <string id="fE6RYz1k" text="Laws" />
+    <string id="MbSsFJNY" text="Demesne Laws may be changed a year after they are issued. Changes are made by the sovereign or through voting by the Peers." />
+    <string id="MBHftZmv" text="Workforce policy" />
+    <string id="BZacZ2Cj" text="Terrain" />
+    <string id="LObjpLQY" text="Mining" />
+    <string id="iEGG5vQ9" text="Mineral Richness:" />
+    <string id="Koax8hLJ" text="How rich and accessible the land is for mineral extraction. Adequate land will yield returns but at reduced rate. Poor land is hardly worth the exploration effort. Rich lands may be quite profitable." />
+    <string id="E7ZOdG5n" text="Satisfactions" />
+    <string id="L7QhNa6a" text="Tax policy" />
+    <string id="qyjqPWxJ" text="Criminal policy" />
+    <string id="BXFLXR6B" text="Village Revenue:" />
+    <string id="L3KACGcQ" text="The village's revenue output. Most of the revenue in villages is generated through production and selling of products by serfs and slaves. They are taxed through their labor rather than in coin. Nobles and craftsmen however may be taxed in coins through construction of tax offices." />
+    <string id="KbTvcQko" text="Construction:" />
+    <string id="CTerwC4b" text="Slave Price:" />
+    <string id="KdEiqFm2" text="Slave Demand:" />
+    <string id="sYmEYKF8" text="Militia policy" />
+    <string id="DEhtngoL" text="Garrison policy" />
+    <string id="eJECyLLw" text="Hearth Growth:" />
+    <string id="wcHDxPQJ" text="The number of homes in this village. Hearths are used to calculated the population capacity. Each hearth on average houses 4 people. Increasing hearths allows for population to keep growing and thus making the village more productive and relevant." />
+    <string id="9s1iC4kE" text="Total Population:" />
+    <string id="zaCDpfP2" text="Number of people present in this settlement and surrounding regions." />
+    <string id="OfNn72n9" text="Population Cap:" />
+    <string id="TSwN7iFc" text="The maximum number of people this settlement is capable of having." />
+    <string id="HcFqTg6k" text="Population Growth:" />
+    <string id="hANYHGHR" text="The population growth of your settlement on a daily basis, distributed among the classes." />
+    <string id="NP0RCoMH" text="Foreigner Ratio:" />
+    <string id="E2QuHXGQ" text="Merchant and freemen foreigners that refuse to be assimilated, but have a living in this settlement." />
+    <string id="Vk6Maijr" text="Dominant Culture:" />
+    <string id="8ootTEcK" text="The most assimilated culture in this settlement, and considered the legal culture." />
+    <string id="jnE7pP1M" text="Dominant Language:" />
+    <string id="Lf9styae" text="Language spoken by population of the dominant culture. Speaking their language helps in creating cultural acceptance of your own language, if dominant culture is not your own." />
+    <string id="R8mbRNcL" text="Cultural Presence:" />
+    <string id="36DgL50p" text="How present your culture is. Presence is affected by notables and governor following your culture, as well as other factors. This is the percentage that you culture's assimilation will gravitate towards in the settlement." />
+    <string id="qKsaiPd0" text="Acceptance Gain:" />
+    <string id="ADimYYhg" text="How much acceptance your culture gains in this settlement, per day." />
+    <string id="Lb5b7JZX" text="Cultural Acceptance:" />
+    <string id="K4DsLUBQ" text="How accepted your culture is towards the general populace. A culture first needs to be accepted to be assimilated into. Acceptance is gained through a stable reign and competent governor in place." />
+    <string id="pVCiG95C" text="How much the local population can progress with construction projects, on a daily basis" />
+    <string id="fvaNp0we" text="Current Progress:" />
+    <string id="ZhWtAYrh" text="Daily project (endless)" />
+    <string id="uUQpLvpq" text="Amount of completed work in the current project" />
+    <string id="CT7CW9ZL" text="Days to complete:" />
+    <string id="f26MsNsU" text="Remaining days for the current project to be built" />
+    <string id="hmtRGrpt" text="Items Produced:" />
+    <string id="HiTo8SPQ" text="Invert Clan" />
+    <string id="oezwtR1u" text="Invert the expected result for final clan. The clan whose member leaves it is owed the Dowry by the other family. Therefore, if your family member is leaving your clan, you are owed the Dowry. Spouses are less likely to leave their clans if they are it's leader or it's primary expected inheritor." />
+    <string id="GuLW3uHZ" text="Arranged Marriage" />
+    <string id="HMOHcfzh" text="Arrange the marriage without consulting the spouses. While their personal relations are still considered, the to-be-spouses have no power to dictate the marriage result. If you are one of the spouses, this means no Courting phase - the marriage is sealed off right away." />
+    <string id="n6gncAsu" text="Alliance Pact" />
+    <string id="DrZ2KnbO" text="Join both houses in alliance. By doing so, both houses are bound to not enter in conflict with each other when it comes to internal matters of the kingdom. Instead, if they are the leading houses of separate kingdoms, it would prevent a war between both realms. Subject houses may still fight each other if their sovereigns declare war." />
+    <string id="BNF7CWaY" text="Feast Celebration" />
+    <string id="a3fxEHyJ" text="Arrange a feast to celebrate the marriage. A selection of families within the realm will be invited, and as a host you ought to provide them a quality celebration. Doing so will allow you to improve your standing with them, as well as bring your family renown." />
+    <string id="qSKxuPRF" text="Spouse value.\n\n{HINT}" />
+    <string id="CaSNVQQf" text="Unclear" />
+    <string id="u9GPa1eQ" text="Whether or not their clan will accept this proposal. This is mainly dicatated by the different of value between the spouses, but also influence by their relationship with each other and the clan's trust towards you, as well as other kingdom-related matters, such as matching cultures and faiths.\n\n{REASON}" />
+    <string id="gJMje5q5" text="The influence cost associated with this marriage. Influence is associated with the social standing of the other clan. A clan of high standing, such as those leading kingdoms, are valuable marriage targets both within and outside their factions. Thus, the more important a clan is, the more influence is associated with marrying them.\n\n{HINT}" />
+    <string id="2QM2cpdw" text="The dowry is the financial security provided by the clan that takes in a new family member. It serves to show good will and genuine interest in the marriage by requiring a significant investment in it. Dowries are calculated based on the spouse's value as a family member - their position in the original clan and their usefulness. If a member of your clan is leaving the family to join another, you are owed the dowry.\n\n{HINT}" />
+    <string id="595mEODK" text="Select Spouse" />
+    <string id="oACEBjty" text="Select the member of your family to be married. If you pick yourself, the final clan cannot be inverted (resulting in you leaving your clan). If you pick another clan member, the marriage will have to be arranged, and take immediate effect, unless a feast is organized, in which case the marriage is postponed to the end of the feast." />
+    <string id="x4RmDskH" text="Select the spouse from their clan. Each spouse has a different score, which represents their importance to their family. The marriage will be acceptable or not according to the difference in the score of your proposed spouse and theirs." />
+    <string id="uWUEEXCE" text="Dowry" />
+    <string id="fUUa62LS" text="Final Clan" />
+    <string id="EB5e2m4T" text="Acceptable" />
+    <string id="hXFhY2tN" text="Spouse Score" />
+    <string id="Yy2s38FQ" text="Rites" />
+    <string id="77isPS24" text="{EFFECTS}\nPiety cost: {COST}" />
+    <string id="t8gCwGPJ" text="Demesne Information" />
+    <string id="cBhrSfro" text="{MATERIAL}\n{DESCRIPTION}\nStash: {STASH}\nMarket: {MARKET}" />
+    <string id="kGCHAdZG" text="Assembled for use by the Calradoi dynasty, Strategikon compiles series of treatises on army maneuvers and tatics. The book deals with diverse formations and battle tactics used by opponents of the Empire, since it's inception by Calradios the Great. The book is treated as basic education for military-minded lords in the empire." />
+    <string id="5qh4CNDP" text="Written by Dhashwal of the Nahasa, the treatise compiles a series of reflections on trade routes and trading practices the caravaneer deal with in his lifetime. From the Jawwal nomadic traders, through the Imperial bureaucrats up to the sea-faring nothern traders, Dhashwal writes on his experience of mastering the trade through decades of field experience." />
+    <string id="eLyaVrbS" text="Dictionarium Calradium is a compendium of basic words and syntax of the languages in the continent. Used to further the former Empire's influence on different cultures, it serves any language by comparing it to Calradian, the Imperial language." />
+    <string id="iuQ1bZ8c" text="The book presents the legend of Llewellyn the Green, mythical ruler of Seonon, who went on a pilgrimage around Llyn Tywal to seek aid from Derwyddon spirits to improve Battanian army. He met Lady of Caldera, who gifted him the Crusher, first two handed sword in Battania. Soon, Llewellyn the Green has found many smithies in his domain, that supplied Battanian archers with two hand swords, creating army of Fian Champions and became first king of the highlands. Fian Champions were a nightmare for Imperial army for centuries, not only because of very well known archery skills, but also because of exceptional swordmanship. Ever since, Llewellyn was since knwon as R�ghf�nnid, king of the Fians." />
+    <string id="R5GJQu3Q" text="Written by Leonhardth of Ocspool, this monumental work is considered a founding text of Vlandia, as it popularized usage of crossbows and siege engines among Vlandian lords during the rule of King Osrac Iron-arm. Thanks to clear descirption of crossbow and balista constuction and simple explanations of physics behind the contraption even lords of a single village were able to supply their peasants with deadly weapons. It is said that Vlandia is build on crossbow and lance and this work is a proof, that Leonhardth of Ocspool deserves at least half of credit for Vlandian indpendence." />
+    <string id="iaGGjVGP" text="This legend dates to the times of migration of nords from Nordland and Jumne to contemporary sturgian lands and tells story of princess Francesca. Though beautiful, she was so strong, that she was able to cut through enemy shields by throwing an axe at them. The legend tells a story pursuing her dreams despite odds. She wished to sail south, to plentiful sturgian Vanni woods, but her strict Jarl father denied her permission to do so. To prove she is able to make her own decisions she ventured north and managed to kill ice dragon of Jumne with a throw of a single axe, that cut off all three heads of the mighty beast. When she brought the trophy back, her father gave her blessing to cross the Byalic sea. Soon she and her crew set out for the journey and after many adventures they settled near Alebat tribe. She fell in love with young cheftain of that tribe and married him soon after." />
+    <string id="7TMGrRS4" text="Aseran Papyrus is probably oldest known medical written text in Calradia. The book is written as dialogue between legendary Aserai patriarch (Asera) and his physician in which the ruler asks questions and the physician provides the answers. This type of discourse makes possible both a discussion of general ethics and philosophies of life and the inclusion of the prevailing Aserai religious beliefs. In general, the book integrates moral and physical conduct and provides an important relationship between mental and physical states of health. The common theme seems to be moderation in everything, harmony with nature, contentment with oneself, and restraining and reducing one's desires- sensible ways of handling physical and mental stresses and their devastating effects on health and longevity." />
+    <string id="qvjRNhpg" text="Fians are the epitome of Battanian combat. Long ago, their ancestors discovered that ambushes in the woods with longbows were specially deadly. But if the bow was not enough, a greatsword would do the rest. Ever since, the mastery of longbow and greatswords has been the staple for Battanian nobility, who stills despises the horse as a sign of status." />
+    <string id="rFoGF59u" text="Developed as a tactical necessity, Imperial cataphracts have become the symbol of the Imperial cavalry. Other than smashing through infantry formations, they became a requirement to stand against other heavy cavalry regiments, such as those from the east and south. Though their main weapon is the lance, used for head-on charging, cataphracts also train in skirmishing and mobility drills, adapting to what the battlefield requires, yet not relinquishing their outstanding, heavy equipment." />
+    <string id="Si15jUtO" text="A term coined by the Imperials, August is a lord that outshines his peers. Not only they are shrewd administrators of their realm, they are also distinguished commanders, directly leading their troops against any threats to their people. August leaders are those forever to be remembered in history as examples of what a true leader ought to be." />
+    <string id="oA4JN2v9" text="Highly sought-after specialists, siege engineers specialize in both defending and taking down enemy settlements. A relatively new art, sieges become more prevalent in the continent as populations gather in towns, and all-out wars break between kingdoms rather than small, tribal raids." />
+    <string id="oNcfLnCB" text="Party expenses are {EFFECT1}% cheaper during sieges\nSettlements of different culture have {EFFECT2}% more autonomy" />
+    <string id="vkaes9JC" text="Mercenaries in the continent have become more and more relevant since the crumbling of the Empire. Ravaged by internal and exterior wars, the Imperial factions rely progressively more on foreign troops, as the populace becomes thinner with every squabbling conflict of Imperial lords and raid from foreigners. Currently, the life of a mercenary may prove quite profitable and prosperous in the continent - if they are to survive." />
+    <string id="TbzJaXUV" text="Kheshig is the way of life adopted by the eastern nomads, as an adaptation to the harsh steppe life. Kheshig travel in large groups of mounted warriors, often with many spare horses and cattle heads. These feed the horde with dairy and meat. They are known for expert mounted archery skirmishing, and merciless raiding. Yet, Kheshig have a profound sense of respect to those born in the steppes, and find honor in serving a strong leader." />
+    <string id="BWoMogUy" text="Party size increased by {EFFECT1}%\nNon-Khuzait troops negatively affect morale by {EFFECT2}%" />
+    <string id="Uod3cdjp" text="Varyags are known in Sturgian culture as men of valor, adventure and prestige. These nearly mythical heroes often prove their worth in fierce shieldwall combat. Being individualistic adventurers, they will often serve as mercenaries, raid and plunder others as the opportunities come, though preferably non-Sturgians. Yet, a high moral code is expected of them, when it comes to courage and honor - a varyag afraid of death or that does not keep his word is no true varyag -, and those that follow the unwritten code are considered Drengrs." />
+    <string id="fzK94Pgo" text="As a means of entertainement, Imperials have developed the gladiatorial combat in arenas. It is possible this was an adaptation of earlier forms of duels used by the Palaics to judge valor. Nevertheless, the gladiatorial combat became a staple in the empire. Up to this day, an adventurer of little renown can prove his worth in the arenas and draw attention to himself as someone worthy of the lords' attention." />
+    <string id="21zvDnjQ" text="Vlandians have developed a concept many of them call Ritter, or Reterius as Imperials call it. These are small lords recognized as distinguished soldiers, preferring mounted combat with lances and swords, who tend to their manor demesnes in times of peace. To non-Vlandians, they are best known for the earth-shaking gallop of their cavalry charges." />
+    <string id="2Gdz90YP" text="You and melee cavalry in your formation deals {EFFECT1}% more melee damage.{EFFECT1}%\nYou and your formation deal {EFFECT2}% less ranged damaged, mounted or otherwise." />
+    <string id="QmKDgPk0" text="Jawwal" />
+    <string id="2KnmOUbx" text="The Jawwal represent a traditional and conservative way of living in the southern Nahasa dunes. Relying on their camels for mobility, carrying goods and even food, they have mastered survival on the sandy dunes, and are known for raiding and harassing tactics, specially with mounted skirmishing." />
+    <string id="09Uwsivs" text="Party consumes {EFFECT1}% less food while on deserts\nDemesne limit reduced by {EFFECT2}%" />
+    <string id="DNAVAvqp" text="Acquire Book" />
+    <string id="b4tSEcHn" text="Acquire a book from local book seller. Books can be read for skill improvements and progression in Scholarship." />
+    <string id="R93398Ci" text="Not in a settlement or there is no book seller available." />
+    <string id="qq99gmhr" text="Must be in a party and out of captivity." />
+    <string id="1c9TOPzH" text="{GOLD_AMOUNT}{GOLD_ICON}" />
+    <string id="e8KTkKtX" text="{BOOK} ({LANGUAGE})" />
+    <string id="2sftq1sF" text="Books can be read by those with the Literate perk. Skill books add xp to a specific skill while Focus books add both xp and a focus point, if possible. Dictionaries are used to help reading other books faster." />
+    <string id="LcqUwqJz" text="Assume Culture" />
+    <string id="XCancyYB" text="Assume a culture different than your current. Cultures can be assumed from settlements, your spouse or your faction leader. Direct family members will assume the culture as well. Assuming a culture yields a significant negative impact on clan renown.\n\n" />
+    <string id="KvZByu7f" text="You do not have a settlement, spouse or faction leader with a different culture." />
+    <string id="7mHzFzBA" text="You need at least 100 clan renown." />
+    <string id="u4JwjfVz" text="Assume a culture different than your current. Cultures can be assumed from settlements, your spouse or your faction leader. Direct family members will assume the culture as well. Assuming a culture yields a significant negative impact on clan renown." />
+    <string id="zV5itG5E" text="The {CLAN} has assumed the {CULTURE} culture." />
+    <string id="Tdi4brSb" text="Calradia" />
+    <string id="fKXLiUti" text="Propose Contract Change" />
+    <string id="Ba2hpnco" text="Propose a contract change to your faction's titles." />
+    <string id="akMdyYw0" text="Your faction has no contract. Found a kigdom-level title for your faction first." />
+    <string id="qCfmQGiD" text="Contract changes can not be proposed during wars." />
+    <string id="nsQZHLQf" text="A contract-altering proposal is already being voted on." />
+    <string id="mXhTPXZq" text="Contract Change" />
+    <string id="B5e1fznG" text="Propose a change to you faction's contract. These changes may be the form of governance, succession, clan inheritance or gender laws." />
+    <string id="YgefyGT4" text="Propose Demesne Law Change" />
+    <string id="1z57WDgP" text="Demesne Law Change" />
+    <string id="Uq1b1dmT" text="Propose a change to your faction's demesne laws. These laws describe a multitude of aspects of your faction, such as slavery, duties of lower classes and tenure of estates. Laws that have been enacted for less than 1 year may not be changed." />
+    <string id="n0kVmshx" text="Select a demesne {LAW} to be voted on. All the Peers of the realm will vote on it." />
+    <string id="EKBkrvse" text="Unite the old Battanian lands back into a greater realm. To the West, the rascal Vlandians have taken the valley of Llyn Modris and called it 'Ocs Hall'. To the East, the bloodthristy Imperials submitted Epicrotea to their domination. The threat of Battanian extermination grows stronger with enemies all around aiming for it's lands. You must bring all battanian and formerly battanian towns and castles under control of your realm. The new empire will have a feudal contract with hereditary succcession.\n\n" />
+    <string id="DnbZbcT7" text="Your kingdom has no title associated with it. Found a de Jure kingdom title for your faction." />
+    <string id="YQhz7MP4" text="You are not a faction leader." />
+    <string id="5M28g8TK" text="Greater Battania" />
+    <string id="RH2NC5ij" text="Organize Feast" />
+    <string id="8XXOBM1L" text="Organize a feast. Summon lords of the realm to one of your towns or castles, and celebrate with bountiful food. Feasts are an opportunity to improve relations with your Peers. However, some planning is necessary - you don't want your guests out of food or alcohol! Despite all planning, some unfortunate events may occur...\n" />
+    <string id="gn6WKs03" text="Cannot organize feasts during wars" />
+    <string id="4Gqf2t8F" text="It has been less than a year since your last feast" />
+    <string id="USJTkG5d" text="{CLAN} - {INFLUENCE} influence" />
+    <string id="s71kzA2t" text="Choose where to hold your feast. The feast food and alcohol will be taken from the settlement Stash." />
+    <string id="Usb3B69i" text="Feast Guests" />
+    <string id="S9S5PCrP" text="Choose the guests for your feast. Pick at least 3 different clans from your realm. Mind you, guests will have expectations. They will want food in large variety, of good quality and plentiful. They will also expect a lot of alcohol, and the host to be present." />
+    <string id="YR4uDhkZ" text="Too few guests! Invite at least 3 clans for a feast." />
+    <string id="sdpM1PD3" text="Request Full Peerage" />
+    <string id="O7LLRFEX" text="Request the recognition of your family as a full Peer of the realm. A full Peer does not have legal restrictions on voting, starting elections, granting knighthood, hosting a council or being awarded fiefs. They are the very top of the realm's nobility. Successfully requesting Peerage will require renown (clan tier 4 minimum is recommended) and having good relations with full Peers. Holding property (caravans, workshops, estates, lordships) is a good positive factor as well.\n" />
+    <string id="SjBky9Op" text="Mercenaries cannot request Peerage" />
+    <string id="QmMiGJpx" text="Cannot request Peerage during wars" />
+    <string id="HCMiSysD" text="Request full rights of Peerage. The any existing Peer with voting power may participate in the decision. Current support for the approval of {CLAN}: {SUPPORT}%." />
+    <string id="5YsS2g7T" text="The Peers of {KINGDOM} will now vote on your request." />
+    <string id="Nhceg9ks" text="Daily chance of relation gain with a random Aserai Banu\nReduced influence cost for supporting decisions" />
+    <string id="PA5PCfxE" text="Daily renown for running a party of Aserai only\nAserai troops cheaper to recruit" />
+    <string id="SYDP3fEe" text="Increased faith presence in foreign settlements\nProsperity for date and camel producing villages" />
+    <string id="17qaS6xu" text="The peers of {TITLE} have decided on the {LAW} law." />
+    <string id="p3VirLQH" text="Demesne Law" />
+    <string id="bdTS2dAa" text="All supporters gains some relation with each other." />
+    <string id="mn9edsZr" text="The peers of {TITLE} will decide the next {LAW} demesne law. You may pick your stance." />
+    <string id="c7niULaT" text="Vote for the next {LAW} demesne law" />
+    <string id="OMkKKOYG" text="We support the continuation of the demesne law {LAW}" />
+    <string id="H5yaNxnY" text="We support the enactment of the demesne law {LAW}" />
+    <string id="7Pzp6SQ6" text="The Peers of the realm now consider the {CLAN} to have {PEERAGE}. {TEXT}" />
+    <string id="dpGtisyQ" text="As the sovereign of {KINGDOM}, you must decide whether to approve granting full Peerage to {CLAN}." />
+    <string id="DAEq21QX" text="Vote for granting full Peerage to {CLAN}" />
+    <string id="O2Wi49eq" text="The Peers of the realm have approved {CLAN} as a new full Peer" />
+    <string id="VOmEWvW5" text="The Peers of the realm have denied {CLAN} as a new full Peer" />
+    <string id="6oqeHqiZ" text="The peers of the realm will decide on granting Peerage to {CLAN}." />
+    <string id="HiXMs6fF" text="Vote on granting Peerage to {CLAN}" />
+    <string id="9bbE5rCe" text="We support the grant of Peerage to {CLAN}" />
+    <string id="LaXVFt4S" text="We oppose the grant of Peerage to {CLAN}" />
+    <string id="pKtOLvPi" text="Estate of {OWNER}" />
+    <string id="U6bVmS8Z" text="You are now the owner of an estate at {SETTLEMENT}" />
+    <string id="sfF4US9P" text="Dig mines for local exploration of mineral resources. Ores will be limited to the local resources available and richness of the ground. Levels increase output of ores." />
+    <string id="mMUsTOUY" text="Bee Skeps" />
+    <string id="oFhhNR4O" text="Build skeps for bee colonies. The skeps serve as hives for the bees and allow the farming of honey and wax. Adds honey to production." />
+    <string id="M2u9Qr23" text="Allow locals to sell off their excess production in the designated marketplace. Travelling merchants and individuals will stop by to trade. Adds village stock consumption (not implemented) and boosts hearth growth." />
+    <string id="b7njo98X" text="Tax Office" />
+    <string id="Len9bhQG" text="Collect denar taxes on local artisans and nobles, creating a new revenue stream for the village. If Marketplace is present, items daily consumed from it are also taxed." />
+    <string id="nDrgvaMa" text="Quia Emptores" />
+    <string id="m2sbhA95" text="As a counter measure for increasingly complex vassalage relations, this laws prohibts the process of subinfeudation." />
+    <string id="TaQVkuvp" text="Granting estates is banned\nLord party sizes +10%\nEstates cost +25%" />
+    <string id="GLXtp5wp" text="Allodial Tenure" />
+    <string id="noWN9WJB" text="The allodial tenure represents the absolute ownership of land. Estate owners have no duties towards fief lords. The absence of taxation and military requirements draws in tenants to these estates." />
+    <string id="wM8wRg0L" text="Estate owners do not pay taxes\nImproved hearth growth" />
+    <string id="esrBR5f3" text="Fee Tail" />
+    <string id="SCZjCdwq" text="The fee tail tenure dictates that property is inherited exclusively through lawful inheritance or grant." />
+    <string id="SOjZv8Yk" text="Military Duties" />
+    <string id="VNP7PvXs" text="Tailor the duty laws of {CLASS} towards military service. Extensive requirements of service ensure a bigger manpower pool to protect the realm. Increased class militarism and militia service." />
+    <string id="Jc476i8S" text="Nobles militarism +4% flat%\nMilitia quality +15%" />
+    <string id="aTqOs6gr" text="Tax Duties" />
+    <string id="wutCVGJU" text="Tailor the duty laws of {CLASS} towards taxation. Stricter tax collection and more taxation forms squeeze more denarii out of {CLASS}. Increases tax output." />
+    <string id="pzP0OzbV" text="Increased nobles tax output by 25%" />
+    <string id="qGvM38At" text="Lax Duties" />
+    <string id="QR8cTK3Y" text="Lessen the duty burdens of {CLASS}. Reduced duties makes the populace more content and gives them room for prosperity. Reduces output and military contribution." />
+    <string id="qhLeBUWB" text="Increased settlement research and influence outputs\nCraftsmen militarism -2% flat\nNobles tax output -40%" />
+    <string id="TkTHTJDm" text="Craftsmen militarism +3% flat\nMilitia quality +10%" />
+    <string id="1UikMUyy" text="Increased nobles tax output by 35%" />
+    <string id="u9xEHrAe" text="Increased craftsmen prosperity and loyalty\nIncreased production quality +5%\nCraftsmen militarism -1.5% flat\nCraftsmen tax output -40%" />
+    <string id="51Kro6UV" text="Serf militarism +3% flat\nSerf militia contribution +20%" />
+    <string id="vt2Sq2aG" text="Agricultural Duties" />
+    <string id="NXk9mSNW" text="Tailor the duty laws of {CLASS} towards agriculture. Labor requirements and movement restriction tie the {CLASS} to the land and its productivity. Increased agricultural output." />
+    <string id="tXvBhS3n" text="Increased production of farm goods in villages and food in castles and towns" />
+    <string id="jyMc8X74" text="Increased settlement prosperity (or Hearths) and loyalty\nReduced agricultural output\nSerf militarism -1.5% flat\nSerf militia contribution -10%" />
+    <string id="AN0ccfH1" text="Hard Labor" />
+    <string id="jq2vFB2n" text="Tailor the duty laws of {CLASS} towards hard labor. Hard labor involves unskilled, undesirable labors such as mining and construction. Increases mining production and settlement construction." />
+    <string id="oy8RMSyd" text="Increased production of mining goods\nSlaves contruction contribution +20%" />
+    <string id="0Ps1q7J0" text="Domestic Duties" />
+    <string id="Zq8Zcv3N" text="Tailor the duty laws of {CLASS} towards domestic and skilled labor. Citizen households will often have or want to have slaves for various domestic labors. Enslaved shopkeepers, artisans and professionals provide tax benefits to their owners." />
+    <string id="P3c1aJgi" text="Slave tax output +15%" />
+    <string id="6jyLYrts" text="Calradic Law" />
+    <string id="ZWmNxRMn" text="The Imperial or Calradic law stablishes the legal existance of slaves and their ownership. Though they may not be harmed or killed without just cause, the slave trade is rampant and devoid of restrictions. Any person found in debt or captured in battle may be enslaved, and slaves compose the labor force across all settlements." />
+    <string id="hBVZCcL3" text="Vlandic Law" />
+    <string id="4vBS06Ds" text="The Vlandic tradition on slavery stipulates that Vlandians shall not enslave each other. Slaves are present in small quantities in rural estates. Though Vlandian individuals may become or be born slaves, Vlandian lords are prohibited from purposefuly enslaving them." />
+    <string id="tK4GJ8bt" text="Slave demand reduced by 30%\nVlandian prisoners cannot be enslaved\n" />
+    <string id="7Q9FJrZ8" text="Aseran Law" />
+    <string id="szTYxGgd" text="The Aserai peoples have a long tradition of slavery. Aserai slaves are no more than a trade good, and as such, demand for them is quite high in the economy. ." />
+    <string id="Z5Qopa2c" text="Slave demand increased by 50%\nSlaves count as military manpower\nSlaves loyalty impact increased by 10%" />
+    <string id="T4doWFdj" text="Manumission" />
+    <string id="kncwdEvN" text="Slave demand reduced by 100%\n" />
+    <string id="WCkAop4m" text="Hidage" />
+    <string id="nasOsyDh" text="Under hidage, landowners are expected to provide levies based on their land, calculated as hides." />
+    <string id="YgwONvnn" text="Notables provide volunteers based on their estates or power to ally lords\nRural volunteers are restricted to the kingdom's lords\nRecruitment prices increased by 50%" />
+    <string id="WtxLpuAU" text="Free Contracts" />
+    <string id="KDRmz1zo" text="Notables provide volunteers to any neutral or allied lord\nRecruitment prices increased by 100%" />
+    <string id="92A5YP2x" text="Vassalage" />
+    <string id="i4Y6Sg9k" text="Notables provide volunteers to their suzerain and armies\nRural volunteers are restricted to the kingdom's lords\nInfluence from settlements reduced by 20%" />
+    <string id="a8p42u63" text="I have neither the time nor the inclination to perform the rites and observe the oaths of one such as you. You grasp far beyond your station by asking this of me. Consult with a faqir or an imam of the cities, learn to know these lands and learn also your place." />
+    <string id="aXDpgcsg" text="Had I the time to do so, I might honor your request and observe the oath you must take to become the blood of my blood - but you lack decorum. Perhaps if you were a wayward prince or a lord of the Jawwal I would consider this my righteous task." />
+    <string id="sJPVusPG" text="There are few honors I have not known or entertained, but rare is the honor of inducting one such as yourself formally into our brotherhood. You are a good sibling to those whom you share little more than homeland, a steward of the Aserai." />
+    <string id="1AnuWDCo" text="Forgive my presumption, I thought you were already a follower of the Code of Asera. I celebrate that you have come to find enlightenment and truth, to embrace the warm heart of the patriarch and to accept his guiding lessons. Whether you be a Jawwal come to light, a bedouin ready to rejoin their brothers, or a soul liberated from faiths fouler - know that I welcome you. From this day forth, you shall carry yourself by the Code of Asera; let all the Aserai be as your brothers." />
+    <string id="DrM1N4wQ" text="It is good to see our neighbors know the importance of the Code of Asera; though I must apologize - perhaps you are a distant kin. The Empire sought to make us as it makes all things; and thus those who share our blood; who share the blood of Asera; may be from lands beyond our own. I welcome you, wayward sibling, in kindness and in good fortune. May you carry the Code of Asera within your heart, may all that are Aserai be as your brothers." />
+    <string id="5HeAMORF" text="You are of a kind heart to do this for your beloved, for not all from foreign lands would be willing to pursue such enlightenment. Your children will be Sons of Aserai, and by marriage so too are you. Follow the Code of Asera, honor our patriarch and in doing so honor your beloved. You are part of a grand lineage now; go forth unto eternity in peace and in family." />
+    <string id="M1OKSp0t" text="Perhaps someday when you are worthy of my audience, should you still be astray from the Code, I may deign it a kindness to serve as witness to your words." />
+    <string id="uhD1HNgW" text="Find an imam or an akhund, they shall better serve you in this task. " />
+    <string id="UZmzR1Ty" text="You are worthier than most to pursue the Code of Asera, and you need only speak this oath to become the blood of my blood: \" />
+    <string id="W8ZnNO5o" text="If you wish to become inducted into our faith, you must simply repeat this oath to me: \" />
+    <string id="ugie03WY" text="Please repeat this oath and I shall serve as your witness: \" />
+    <string id="0cGq14Jt" text="Clan tier is insufficient (less than 3) or not Aserai." />
+    <string id="mHrwmbzU" text="Not part of Aserai, Imperial or Khuzait cultures, or have a spouse part of them" />
+    <string id="iaxTPOgg" text="Not part Aserai, Imperial or Khuzait cultures." />
+    <string id="maHkoBga" text="Not part of Aserai culture." />
+    <string id="DN8yvo7b" text="Not enough relations with locals (medium of 20)." />
+    <string id="0rBEhKBT" text="{PLAYER_NAME} was it? Yes, yes… You serve our Empire and thus already walk upon a righteous path; but full glad am I to know you seek to open your heart to the sacraments of the Martyr. It is a kindness that you do not seek to rest idle upon the laurels of your current service - some pay only lip service when devotion is required. It warms my soul to see you are not of such company." />
+    <string id="rO6aFDKn" text="It is the heart of the epithetical pietas that one who serves our Empire seeks to embrace it at its fullest. You do a great and virtuous kindness, let none question the sacred acts of your honor from this day forward. Know that you move forward in pursuit of the Martyr’s will, in a position where others will yearn for your praise, where your enemies will fail to stand fast against you and your peers." />
+    <string id="6kDbxhEj" text="Go forth in the Martyr’s glory, and with his blessing. Embody the ideals of Empire, scourge the wicked and the unclean; lead those with darkened hearts into the light. " />
+    <string id="mQsZcBj5" text="As you pursue the path of the Martyr and the divinity which has graced us, show kindness where it is deserved and trust only those who eagerly seek to repay it." />
+    <string id="cVchNb9c" text="Not a member of the Southern Empire." />
+    <string id="Yz4aFGU9" text="medidate upon." />
+    <string id="DW2LjgpT" text="{SACRIFICE} was executed as a traitor by {HERO}." />
+    <string id="mbcRbm0q" text="Execute a traitor to the Empire. Dissedents of the Western and Northern rebels may be executed as punishment for the betrayal of the Empire, the Imperial family and the Triad." />
+    <string id="pB7vkmae" text="Execute Traitor" />
+    <string id="mkC8opdf" text="May be performed every {YEARS} years\nBe part of Souther Empire\nRequires a prisoner lord from Western or Northern empire factions" />
+    <string id="5sWFJZV6" text="{COUNT} {OFFERING} was ritually offered by {HERO}." />
+    <string id="rK6v9sBw" text="Make an offering of {COUNT} {ITEM}, as the faith prescribes." />
+    <string id="8OwEJjZb" text="Will you relinquish {COUNT} {ITEM} to prove your faith?" />
+    <string id="6Yj8erp7" text="May be performed every {YEARS} years\nRequires {COUNT} {ITEM}" />
+    <string id="87WtQvgP" text="Sacrifice a worthy enemy hero to prove your devotion." />
+    <string id="qBDbqpf3" text="May be performed every {YEARS} years\nRequires a lord from an enemy faction" />
   </strings>
 </base>

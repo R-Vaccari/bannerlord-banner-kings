@@ -60,8 +60,8 @@ namespace BannerKings.Behaviours
             }
 
             InformationManager.ShowInquiry(new InquiryData(
-                new TextObject("{=!}Campaign Start").ToString(),
-                new TextObject("{=!}It seems you have started Banner Kings in a saved game. Would you like to choose a custom start? This will reset your party and inventory - do not choose unless you have just started your campaign.").ToString(),
+                new TextObject("{=BrXXDSaU}Campaign Start").ToString(),
+                new TextObject("{=S5VQtaEg}It seems you have started Banner Kings in a saved game. Would you like to choose a custom start? This will reset your party and inventory - do not choose unless you have just started your campaign.").ToString(),
                 true,
                 true,
                 GameTexts.FindText("str_accept").ToString(),
@@ -97,8 +97,8 @@ namespace BannerKings.Behaviours
                 }
 
                 MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                            new TextObject("{=!}Kingdom Selection").ToString(),
-                            new TextObject("{=!}Choose where you want to be recognized as a criminal.").ToString(),
+                            new TextObject("{=XbjMOmXU}Kingdom Selection").ToString(),
+                            new TextObject("{=ZLTgWVVS}Choose where you want to be recognized as a criminal.").ToString(),
                             list,
                             false,
                             1,
@@ -170,12 +170,12 @@ namespace BannerKings.Behaviours
             hasSeenInquiry = true;
             var elements = new List<InquiryElement>();
             var religions = new LearningElement(new TextObject("{=LUF7xieE}Religions"),
-                new TextObject("{=!}In Banner Kings, religions are attached to cultures and possibly factions. All heroes (lords, notables) and settlements of that group will follow the adequate faith. All religions are defined by a few core aspects, their doctrines, rites, divinities and clergy.\nDoctrines are features of the faith - they may introduce buffs and debuffs, or slightly change the faith's behavior.\nClergy are the representatives of the faith. They function as notables in settlements. Each faith has a different hierarchy of clergy, with different titles and spawning at different types of settlements. The clergy are how heroes may interact with the faith\nThrough them you may perform rites, which will award you with piety, as well as receive blessings from the divinities."),
+                new TextObject("{=bDRahBjM}In Banner Kings, religions are attached to cultures and possibly factions. All heroes (lords, notables) and settlements of that group will follow the adequate faith. All religions are defined by a few core aspects, their doctrines, rites, divinities and clergy.\nDoctrines are features of the faith - they may introduce buffs and debuffs, or slightly change the faith's behavior.\nClergy are the representatives of the faith. They function as notables in settlements. Each faith has a different hierarchy of clergy, with different titles and spawning at different types of settlements. The clergy are how heroes may interact with the faith\nThrough them you may perform rites, which will award you with piety, as well as receive blessings from the divinities."),
                 new TextObject("{=ow1a4qxs}Learn about the novel faiths in the continent."));
             elements.Add(new InquiryElement(religions, religions.Name.ToString(), null, true, religions.Hint.ToString()));
 
             var settlements = new LearningElement(new TextObject("{=hwQxchW0}Settlement Management"),
-                new TextObject("{=!}In Banner Kings, settlement management is several layers more in depth than vanilla. Settlements have many new interconnected factors such as Mercantilism, Militarism, Stability, Autonomy, and others, making settlement management way more intricate than choosing a new town project every few weeks or so. They also have several new policies (multi choice options) and decisions (true/false options) that it's owner may manage.\nYou can check all this information in Demesne Management tab in your settlements - all of the fields have tooltips with further explanations."),
+                new TextObject("{=9yyDnJ3f}In Banner Kings, settlement management is several layers more in depth than vanilla. Settlements have many new interconnected factors such as Mercantilism, Militarism, Stability, Autonomy, and others, making settlement management way more intricate than choosing a new town project every few weeks or so. They also have several new policies (multi choice options) and decisions (true/false options) that it's owner may manage.\nYou can check all this information in Demesne Management tab in your settlements - all of the fields have tooltips with further explanations."),
                 new TextObject("{=kDkATiAT}Learn about the extensive changes to settlements."));
             elements.Add(new InquiryElement(settlements, settlements.Name.ToString(), null, true,
                 settlements.Hint.ToString()));
@@ -215,7 +215,7 @@ namespace BannerKings.Behaviours
 
 
             var education = new LearningElement(new TextObject("{=Dmdy2KUu}Educations"),
-                new TextObject("{=!}In Banner Kings, Educations are now a big part of heroes' personal lives. Heroes may learn languages, read books and adopt lifestyles. Languages may be taught to you by someone fluent in it.\nBooks are sold by the few book sellers in the continent. Each book is written in a different language - you can not read any book at will.\nLifestyles present a new way to specialize in a specific way of living. Lifestyles are composed by 2 skills, and advance slowly through time. At some point, you need to reach a skill threshold to keep advancing. Advancement is rewarded with unique, powerful perks each lifestyle contains. In addition to these, lifestyles have passive effects - both a negative and positive one, which respectively punish and reward you for playing as the lifestyle is intended to be played."),
+                new TextObject("{=nvRTQPfa}In Banner Kings, Educations are now a big part of heroes' personal lives. Heroes may learn languages, read books and adopt lifestyles. Languages may be taught to you by someone fluent in it.\nBooks are sold by the few book sellers in the continent. Each book is written in a different language - you can not read any book at will.\nLifestyles present a new way to specialize in a specific way of living. Lifestyles are composed by 2 skills, and advance slowly through time. At some point, you need to reach a skill threshold to keep advancing. Advancement is rewarded with unique, powerful perks each lifestyle contains. In addition to these, lifestyles have passive effects - both a negative and positive one, which respectively punish and reward you for playing as the lifestyle is intended to be played."),
                 new TextObject("{=jtu8D8Ws}Learn about the novel education system and it's aspects."));
             elements.Add(new InquiryElement(education, education.Name.ToString(), null, true, education.Hint.ToString()));
 
@@ -242,18 +242,18 @@ namespace BannerKings.Behaviours
                 knighthood.Hint.ToString()));
 
             var councils = new LearningElement(new TextObject("{=RzNg7v1H}Councils"),
-                new TextObject("{=!}In Banner Kings, clans have a council. Councils are composed by 5 roles - marshal, steward, chancellor, spymaster and religious advisor.\nThese roles may be performed by notables or vassals, and each of them requires a specific skillset. Therefore, different candidates will have different competences at each role.\nCouncils may also be Royal Councils. These are the councils of the faction leading clans. These councils have extra positions and characteristics. The new positions are dynamic and depend on various factors such as kingdom culture and government form. Lastly, Royal Councils' 5 main roles may only be filled by lords, the king's vassals, and not by lowly notables."),
+                new TextObject("{=TC738386}In Banner Kings, clans have a council. Councils are composed by 5 roles - marshal, steward, chancellor, spymaster and religious advisor.\nThese roles may be performed by notables or vassals, and each of them requires a specific skillset. Therefore, different candidates will have different competences at each role.\nCouncils may also be Royal Councils. These are the councils of the faction leading clans. These councils have extra positions and characteristics. The new positions are dynamic and depend on various factors such as kingdom culture and government form. Lastly, Royal Councils' 5 main roles may only be filled by lords, the king's vassals, and not by lowly notables."),
                 new TextObject("{=rvZCvLgV}Learn about the novel clan and royal councils."));
             elements.Add(new InquiryElement(councils, councils.Name.ToString(), null, true, councils.Hint.ToString()));
 
             var innovations = new LearningElement(new TextObject("{=Sj0dhRwh}Innovations"),
-                new TextObject("{=!}In Banner Kings, innovations in technology and society happen over time. These may alter several aspects - mainly in settlements - such as agricultural output or general production efficiency.\nEach culture has a set of innovations that advances independently from others. They also have a Fascination - an innovation that develops faster.\nInnovations are developed with research points. These are generated by settlements, mainly settlements' noble population. The more settlements a culture has, the faster it advances."),
+                new TextObject("{=jDyqJp8W}In Banner Kings, innovations in technology and society happen over time. These may alter several aspects - mainly in settlements - such as agricultural output or general production efficiency.\nEach culture has a set of innovations that advances independently from others. They also have a Fascination - an innovation that develops faster.\nInnovations are developed with research points. These are generated by settlements, mainly settlements' noble population. The more settlements a culture has, the faster it advances."),
                 new TextObject("{=sV6intBt}Learn about the novel cultural innovations."));
             elements.Add(new InquiryElement(innovations, innovations.Name.ToString(), null, true,
                 innovations.Hint.ToString()));
 
             var smithing = new LearningElement(new TextObject("{=9cjjh1VG}Smithing"),
-                new TextObject("{=!}In Banner Kings, smithing is significantly extended with the possibility of crafting bardings, shields, ammunitions and armor pieces. Unlike weapon crafting, these have a botching chance, based on the piece's difficulty compared to your smithing skill. When botched, you get xp, but no item.\nIn addition, smithing is made harder. Everything costs more stamina to build. Every point of stamina spent correlates to time spent in the map - spending all your stamina will make you wait several hours in the settlement, working on your smithing. These hours are also paid hours, because the smithy is not yours. Essentialy, Banner Kings aims to fix smithing as a massive exploit in the game, while extending it's uses."),
+                new TextObject("{=1YMZxUsQ}In Banner Kings, smithing is significantly extended with the possibility of crafting bardings, shields, ammunitions and armor pieces. Unlike weapon crafting, these have a botching chance, based on the piece's difficulty compared to your smithing skill. When botched, you get xp, but no item.\nIn addition, smithing is made harder. Everything costs more stamina to build. Every point of stamina spent correlates to time spent in the map - spending all your stamina will make you wait several hours in the settlement, working on your smithing. These hours are also paid hours, because the smithy is not yours. Essentialy, Banner Kings aims to fix smithing as a massive exploit in the game, while extending it's uses."),
                 new TextObject("{=J9mNrDgM}Learn about the various changes that fix smithing as an exploit and expand it's uses."));
             elements.Add(new InquiryElement(smithing, smithing.Name.ToString(), null, true, smithing.Hint.ToString()));
 

@@ -1,4 +1,4 @@
-﻿using BannerKings.Managers.Titles;
+using BannerKings.Managers.Titles;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
@@ -57,7 +57,7 @@ namespace BannerKings.UI.Cutscenes
                 GameTexts.SetVariable("DAY_OF_YEAR", CampaignSceneNotificationHelper.GetFormalDayAndSeasonText(CampaignTime.Now));
                 GameTexts.SetVariable("YEAR", CampaignTime.Now.GetYear);
                 GameTexts.SetVariable("LEADER_NAME", NewKingdom.Leader.Name);
-                return new TextObject("{=!}On {DAY_OF_YEAR}, {YEAR}, {LEADER_NAME} has reformed the {KINGDOM_NAME}. Their name is now immortalized in history!");
+                return new TextObject("{=JXi5502K}On {DAY_OF_YEAR}, {YEAR}, {LEADER_NAME} has reformed the {KINGDOM_NAME}. Their name is now immortalized in history!");
             }
         }
 

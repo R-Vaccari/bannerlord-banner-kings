@@ -177,8 +177,8 @@ namespace BannerKings.Managers.Populations.Villages
 
             Mines = new BuildingType("bannerkings_mines");
             Game.Current.ObjectManager.RegisterPresumedObject(Mines);
-            Mines.Initialize(new TextObject("{=!}Mines"),
-                new TextObject("{=!}Dig mines for local exploration of mineral resources. Ores will be limited to the local resources available and richness of the ground. Levels increase output of ores."),
+            Mines.Initialize(new TextObject("{=iGYstgoo}Mines"),
+                new TextObject("{=sfF4US9P}Dig mines for local exploration of mineral resources. Ores will be limited to the local resources available and richness of the ground. Levels increase output of ores."),
                 new[]
                 {
                     2000,
@@ -276,8 +276,8 @@ namespace BannerKings.Managers.Populations.Villages
                 });
 
             Skeps = new BuildingType("bannerkings_skeps");
-            Skeps.Initialize(new TextObject("{=!}Bee Skeps"),
-                new TextObject("{=!}Build skeps for bee colonies. The skeps serve as hives for the bees and allow the farming of honey and wax. Adds honey to production."),
+            Skeps.Initialize(new TextObject("{=mMUsTOUY}Bee Skeps"),
+                new TextObject("{=oFhhNR4O}Build skeps for bee colonies. The skeps serve as hives for the bees and allow the farming of honey and wax. Adds honey to production."),
                 new[]
                 {
                     1000,
@@ -289,7 +289,7 @@ namespace BannerKings.Managers.Populations.Villages
 
             Marketplace = new BuildingType("bannerkings_marketplace");
             Marketplace.Initialize(new TextObject("{=zLdXCpne}Marketplace"),
-                new TextObject("{=!}Allow locals to sell off their excess production in the designated marketplace. Travelling merchants and individuals will stop by to trade. Adds village stock consumption (not implemented) and boosts hearth growth."),
+                new TextObject("{=M2u9Qr23}Allow locals to sell off their excess production in the designated marketplace. Travelling merchants and individuals will stop by to trade. Adds village stock consumption (not implemented) and boosts hearth growth."),
                 new[]
                 {
                     600,
@@ -300,8 +300,8 @@ namespace BannerKings.Managers.Populations.Villages
                 });
 
             TaxOffice = new BuildingType("bannerkings_taxoffice");
-            TaxOffice.Initialize(new TextObject("{=!}Tax Office"),
-                new TextObject("{=!}Collect denar taxes on local artisans and nobles, creating a new revenue stream for the village. If Marketplace is present, items daily consumed from it are also taxed."),
+            TaxOffice.Initialize(new TextObject("{=b7njo98X}Tax Office"),
+                new TextObject("{=Len9bhQG}Collect denar taxes on local artisans and nobles, creating a new revenue stream for the village. If Marketplace is present, items daily consumed from it are also taxed."),
                 new[]
                 {
                     1500,

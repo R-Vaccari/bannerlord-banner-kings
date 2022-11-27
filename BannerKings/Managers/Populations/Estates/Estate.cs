@@ -1,4 +1,4 @@
-﻿using BannerKings.Extensions;
+using BannerKings.Extensions;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
@@ -51,7 +51,7 @@ namespace BannerKings.Managers.Populations.Estates
 
         [SaveableProperty(1)] public Hero Owner { get; private set; }
 
-        public TextObject Name => Owner != null ? new TextObject("{=!}Estate of {OWNER}").SetTextVariable("OWNER", Owner.Name) : new TextObject();
+        public TextObject Name => Owner != null ? new TextObject("{=pKtOLvPi}Estate of {OWNER}").SetTextVariable("OWNER", Owner.Name) : new TextObject();
 
         public void SetOwner(Hero newOnwer)
         {
@@ -59,7 +59,7 @@ namespace BannerKings.Managers.Populations.Estates
             Owner = newOnwer;
             if (newOnwer == Hero.MainHero)
             {
-                MBInformationManager.AddQuickInformation(new TextObject("{=!}You are now the owner of an estate at {SETTLEMENT}")
+                MBInformationManager.AddQuickInformation(new TextObject("{=U6bVmS8Z}You are now the owner of an estate at {SETTLEMENT}")
                     .SetTextVariable("SETTLEMENT", EstatesData.Settlement.Name),
                     0,
                     null,

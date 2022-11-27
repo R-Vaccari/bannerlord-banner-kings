@@ -269,7 +269,7 @@ namespace BannerKings.Behaviours
                         if (caravanOwner == Hero.MainHero)
                         {
                             InformationManager.DisplayMessage(new InformationMessage(
-                                new TextObject("{=!}The {CARAVAN} has deposited you {GOLD}{GOLD_ICON}")
+                                new TextObject("{=6WM78pd8}The {CARAVAN} has deposited you {GOLD}{GOLD_ICON}")
                                 .SetTextVariable("CARAVAN", party.Name)
                                 .SetTextVariable("GOLD", income).ToString()));
                         }
@@ -350,7 +350,7 @@ namespace BannerKings.Behaviours
                     break;
             }
 
-            var name = "{=!}Travelling {CLASS} from {ORIGIN}";
+            var name = "{=xEwX83aU}Travelling {CLASS} from {ORIGIN}";
             name = name.Replace("{CLASS}", Utils.Helpers.GetClassName(type, origin.Culture).ToString());
 
             if (civilian != null)
@@ -366,7 +366,7 @@ namespace BannerKings.Behaviours
             var data = BannerKingsConfig.Instance.PopulationManager.GetPopData(origin);
             var slaves = (int) (data.GetTypeCount(PopType.Slaves) * 0.005d);
             data.UpdatePopType(PopType.Slaves, (int) (slaves * -1f));
-            PopulationPartyComponent.CreateSlaveCaravan("slavecaravan_", origin, target.Settlement, "{=!}Slave Caravan from {ORIGIN}", slaves);
+            PopulationPartyComponent.CreateSlaveCaravan("slavecaravan_", origin, target.Settlement, "{=cCzJ9Nk6}Slave Caravan from {ORIGIN}", slaves);
         }
 
         private void OnSessionLaunched(CampaignGameStarter campaignGameStarter)

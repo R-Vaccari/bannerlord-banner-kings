@@ -285,7 +285,7 @@ namespace BannerKings.Managers.Institutions.Religions.Faiths.Vlandia
 
         public override TextObject GetBlessingActionName()
         {
-            return new TextObject("{=!}medidate upon.");
+            return new TextObject("{=Yz4aFGU9}medidate upon.");
         }
     }
 }

@@ -13,8 +13,8 @@ namespace BannerKings.Managers.Goals.Decisions
 
         public AssumeCultureDecision() : base("goal_assume_cukture_decision", GoalUpdateType.Manual)
         {
-            var name = new TextObject("{=!}Assume Culture");
-            var description = new TextObject("{=!}Assume a culture different than your current. Cultures can be assumed from settlements, your spouse or your faction leader. Direct family members will assume the culture as well. Assuming a culture yields a significant negative impact on clan renown.\n\n");
+            var name = new TextObject("{=LcqUwqJz}Assume Culture");
+            var description = new TextObject("{=XCancyYB}Assume a culture different than your current. Cultures can be assumed from settlements, your spouse or your faction leader. Direct family members will assume the culture as well. Assuming a culture yields a significant negative impact on clan renown.\n\n");
 
             Initialize(name, description);
         }
@@ -56,12 +56,12 @@ namespace BannerKings.Managers.Goals.Decisions
 
             if (GetCultureOptions().Count == 0)
             {
-                failedReasons.Add(new TextObject("{=!}You do not have a settlement, spouse or faction leader with a different culture."));
+                failedReasons.Add(new TextObject("{=KvZByu7f}You do not have a settlement, spouse or faction leader with a different culture."));
             }
 
             if (GetFulfiller().Clan.Renown < 100f)
             {
-                failedReasons.Add(new TextObject("{=!}You need at least 100 clan renown."));
+                failedReasons.Add(new TextObject("{=7mHzFzBA}You need at least 100 clan renown."));
             }
 
             return failedReasons.IsEmpty();
@@ -85,8 +85,8 @@ namespace BannerKings.Managers.Goals.Decisions
             }
 
             MBInformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(
-                new TextObject("{=!}Assume Culture").ToString(),
-                new TextObject("{=!}Assume a culture different than your current. Cultures can be assumed from settlements, your spouse or your faction leader. Direct family members will assume the culture as well. Assuming a culture yields a significant negative impact on clan renown.").ToString(),
+                new TextObject("{=LcqUwqJz}Assume Culture").ToString(),
+                new TextObject("{=u4JwjfVz}Assume a culture different than your current. Cultures can be assumed from settlements, your spouse or your faction leader. Direct family members will assume the culture as well. Assuming a culture yields a significant negative impact on clan renown.").ToString(),
                 options, 
                 true, 
                 1, 
@@ -114,7 +114,7 @@ namespace BannerKings.Managers.Goals.Decisions
                 }
             }
 
-            MBInformationManager.AddQuickInformation(new TextObject("{=!}The {CLAN} has assumed the {CULTURE} culture.")
+            MBInformationManager.AddQuickInformation(new TextObject("{=zV5itG5E}The {CLAN} has assumed the {CULTURE} culture.")
                 .SetTextVariable("CLAN", fulfiller.Clan.Name)
                 .SetTextVariable("CULTURE", fulfiller.Culture.Name),
                 0, null, "event:/ui/notification/relation");
