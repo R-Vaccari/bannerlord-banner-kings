@@ -1,7 +1,6 @@
 ﻿using HarmonyLib;
 using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.ViewModelCollection.CharacterDeveloper;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 using TaleWorlds.SaveSystem;
@@ -18,7 +17,6 @@ namespace BannerKings.Behaviours.Mercenary
 
         public void PostInitialize(CultureObject culture)
         {
-            Skills.PostInitialize();
             if (Name == null)
             {
                 Name = new TextObject("{=gaJDVkvHA}Placeholder").ToString();
@@ -89,6 +87,7 @@ namespace BannerKings.Behaviours.Mercenary
         {
             if (preset != null)
             {
+                preset.PostInitialize();
                 BasicCharacterObject basicCharacter = character;
                 basicCharacter.Level = preset.Level;
 
