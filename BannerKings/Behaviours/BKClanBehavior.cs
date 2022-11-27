@@ -101,7 +101,6 @@ namespace BannerKings.Behaviours
         {
             if (Hero.OneToOneConversationHero.Clan != null)
             {
-                var clanLeader = Hero.OneToOneConversationHero.Clan.Leader;
                 var purposeText = new TextObject("{=!}What can I help you with?");
                 if (Hero.OneToOneConversationHero.Clan.MapFaction != Clan.PlayerClan.MapFaction)
                 {
@@ -109,11 +108,10 @@ namespace BannerKings.Behaviours
                 }
 
                 MBTextManager.SetTextVariable("WANDERER_OTHER_CLAN",
-                    new TextObject("{=!}I am {HERO}, a servant of the {CLAN}. I am here under business of {LEADER_TEXT}, {LEADER_NAME}. {PURPOSE_TEXT}")
+                    new TextObject("{=!}I am {HERO}, a servant of the {CLAN}. I am here under business of {LEADER_NAME}. {PURPOSE_TEXT}")
                     .SetTextVariable("HERO", Hero.OneToOneConversationHero.Name)
                     .SetTextVariable("CLAN", Hero.OneToOneConversationHero.Clan.Name)
-                    .SetTextVariable("LEADER_TEXT", GameTexts.FindText(clanLeader.IsFemale ? "str_player_salutation_my_lady" : "str_player_salutation_my_lord"))
-                    .SetTextVariable("LEADER_NAME", clanLeader.Name)
+                    .SetTextVariable("LEADER_NAME", Hero.OneToOneConversationHero.Clan.Name)
                     .SetTextVariable("PURPOSE_TEXT", purposeText));
             }
             
