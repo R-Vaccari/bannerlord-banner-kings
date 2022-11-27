@@ -98,9 +98,9 @@ namespace BannerKings.Behaviours
             foreach (var town in kingdom.Fiefs)
             {
                 float score = 10f;
-                if (town.IsTown)
+                if (!town.IsTown)
                 {
-                    score += 50f;
+                    continue;
                 }
 
                 if (town.OwnerClan == kingdom.RulingClan)
@@ -120,7 +120,7 @@ namespace BannerKings.Behaviours
 
                 if (town.StringId == GetCapitalId(kingdom))
                 {
-                    score += 10000f;
+                    return town;
                 }
 
                 candidates.Add(new(town, score));
@@ -148,7 +148,7 @@ namespace BannerKings.Behaviours
 
             if (kingdom.StringId == "vlandia")
             {
-                return "";
+                return "town_V3";
             }
 
             if (kingdom.StringId == "sturgia")
