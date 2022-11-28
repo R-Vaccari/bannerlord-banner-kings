@@ -54,7 +54,6 @@ namespace BannerKings.Behaviours.Marriage
 
         public MarriageContract GetProposedMarriage() => proposedMarriage;
 
-
         public override void RegisterEvents()
         {
             CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, OnSessionLaunched);
@@ -74,10 +73,8 @@ namespace BannerKings.Behaviours.Marriage
         public bool IsCoupleMatchedByFamily(Hero proposer, Hero proposed) => proposedMarriage != null && proposedMarriage.Confirmed
             && proposedMarriage.Proposer == proposer && proposedMarriage.Proposed == proposed;
 
-
         private void OnSessionLaunched(CampaignGameStarter starter)
         {
-
             starter.AddPlayerLine("lord_special_request_flirt", 
                 "lord_talk_speak_diplomacy_2", 
                 "lord_start_courtship_response", 
@@ -367,7 +364,6 @@ namespace BannerKings.Behaviours.Marriage
                 null,
                 null);
 
-
             starter.AddDialogLine("marriage_contract_proposed",
               "marriage_contract_proposed",
               "propose_marriage_contract",
@@ -451,8 +447,6 @@ namespace BannerKings.Behaviours.Marriage
                    "{=O4vPn7p1}{PROPOSAL_CONFIRMED}",
                () =>
                {
-  
-
                     MBTextManager.SetTextVariable("PROPOSAL_CONFIRMED",
                         new TextObject("{=m48122Zw}It is decided then. {CONFIRMATION}")
                         .SetTextVariable("CONFIRMATION", DialogueHelper.GetRandomText(Hero.OneToOneConversationHero, DialogueHelper.GetMarriageConfirmationTexts(proposedMarriage))));
