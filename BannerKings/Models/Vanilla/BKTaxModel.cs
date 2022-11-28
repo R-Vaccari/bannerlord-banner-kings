@@ -23,7 +23,7 @@ namespace BannerKings.Models.Vanilla
 {
     public class BKTaxModel : DefaultSettlementTaxModel
     {
-        public static readonly float SERF_OUTPUT = 0.20f;
+        public static readonly float SERF_OUTPUT = 0.23f;
 
         public float GetNobleOutput(FeudalTitle title)
         {
@@ -46,7 +46,7 @@ namespace BannerKings.Models.Vanilla
 
         public float GetCraftsmenOutput(FeudalTitle title)
         {
-            float result = 0.8f;
+            float result = 1.1f;
 
             if (title != null)
             {
@@ -65,7 +65,7 @@ namespace BannerKings.Models.Vanilla
 
         public float GetSlaveOutput(FeudalTitle title)
         {
-            float result = 0.24f;
+            float result = 0.26f;
 
             if (title != null)
             {
