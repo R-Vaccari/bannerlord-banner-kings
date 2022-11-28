@@ -1,3 +1,4 @@
+using BannerKings.Actions;
 using BannerKings.Behaviours.Feasts;
 using BannerKings.Dialogue;
 using BannerKings.UI;
@@ -514,6 +515,17 @@ namespace BannerKings.Behaviours.Marriage
             if (proposedMarriage != null)
             {
                 MarriageAction.Apply(proposedMarriage.Proposer, proposedMarriage.Proposed);
+                var finalClan = proposedMarriage.FinalClan;
+                if (proposedMarriage.Proposer.Clan != finalClan)
+                {
+                    ClanActions.JoinClan(proposedMarriage.Proposer, proposedMarriage.FinalClan);
+                }
+
+                if (proposedMarriage.Proposed.Clan != finalClan)
+                {
+                    ClanActions.JoinClan(proposedMarriage.Proposed, proposedMarriage.FinalClan);
+                }
+
                 proposedMarriage = null;
             }
         }
