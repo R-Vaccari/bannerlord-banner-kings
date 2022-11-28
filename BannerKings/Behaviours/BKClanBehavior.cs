@@ -46,11 +46,11 @@ namespace BannerKings.Behaviours
 
         private void OnSessionLaunched(CampaignGameStarter starter)
         {
-            starter.AddDialogLine("default_conversation_for_wrongly_created_heroes",
-               "start",
+            starter.AddDialogLine("companion_captured",
+               "companion_captured",
                "close_window",
-               "{=!}My name is {CONVERSATION_NPC.NAME}, {?PLAYER.GENDER}madam{?}sir{\\?}. I serve the {CONVERSATION_NPC.CLAN.NAME} but alas, I am in your mercy now.",
-               IsCompanionOfAnotherClan,
+               "{=!}As you say.",
+               null,
                () =>
                {
                    TakePrisonerAction.Apply(Campaign.Current.MainParty.Party, CharacterObject.OneToOneConversationCharacter.HeroObject);
@@ -59,6 +59,13 @@ namespace BannerKings.Behaviours
                        PlayerEncounter.LeaveEncounter = true;
                    }
                });
+
+            starter.AddPlayerLine("default_conversation_for_wrongly_created_heroes",
+              "start",
+              "companion_captured",
+              "{=!}My name is {PLAYER.NAME}, {?CONVERSATION_NPC.GENDER}madam{?}sir{\\?}. You'll be coming with me now.",
+              () => IsCompanionOfAnotherClan() && Campaign.Current.CurrentConversationContext == ConversationContext.CapturedLord,
+              null);
 
             starter.AddPlayerLine("meet_wanderer_different_clan", 
                 "wanderer_meet_player_response", 
