@@ -204,7 +204,7 @@ namespace BannerKings.Models.Vanilla
             if (valid)
             {
                 var acres = data.LandData.Farmland;
-                var maxWorkforce = (int)(acres / data.LandData.GetRequiredLabor("farmland"));
+                var maxWorkforce = (int)(acres * data.LandData.GetRequiredLabor("farmland"));
                 if (maxWorkforce < (serfs + slaves))
                 {
                     // TODO
@@ -239,7 +239,7 @@ namespace BannerKings.Models.Vanilla
             if (valid)
             {
                 var acres = data.Woodland;
-                var maxWorkforce = acres / data.GetRequiredLabor("wood");
+                var maxWorkforce = acres * data.GetRequiredLabor("wood");
                 var workforce = Math.Min(maxWorkforce, serfs + slaves);
                 result.Add(workforce * data.GetAcreOutput("wood") * (item.StringId is "hardwood" ? 30f : 15f));
                 var serfFactor = serfs / slaves;
