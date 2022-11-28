@@ -257,7 +257,7 @@ namespace BannerKings.UI.Mercenary
                     }
                     else if (option == "edit-equipment")
                     {
-                        ShowEquipmentOptions();
+                        ShowEquipmentOptions(levy);
                     }
                     else
                     {
@@ -295,7 +295,7 @@ namespace BannerKings.UI.Mercenary
                     if (quantity == 0)
                     {
                         customTroop.SetSkills(customTroop.Character, (CustomTroopPreset)list[0].Identifier);
-                        ShowEditingOptions();
+                        ShowEditingOptions(levy);
                     }
                     else
                     {
@@ -314,9 +314,9 @@ namespace BannerKings.UI.Mercenary
                             {
                                 Hero.MainHero.ChangeHeroGold(-cost);
                                 customTroop.SetSkills(customTroop.Character, (CustomTroopPreset)list[0].Identifier);
-                                ShowEditingOptions();
+                                ShowEditingOptions(levy);
                             },
-                            () => ShowEditingOptions()));
+                            () => ShowEditingOptions(levy)));
                     }
                 },
                 delegate (List<InquiryElement> list)
@@ -340,7 +340,7 @@ namespace BannerKings.UI.Mercenary
                 {
                     customTroop.SetName(new TextObject("{=!}" + name));
                     RefreshValues();
-                    ShowEditingOptions();
+                    ShowEditingOptions(levy);
                 },
                 null,
                 false,
@@ -522,26 +522,8 @@ namespace BannerKings.UI.Mercenary
                         items.Add((ItemObject)element.Identifier);
                     }
 
-                    List<Equipment> equipments = customTroop.Equipments;
-                    for (int i = 0; i < equipments.Count; i++)
-                    {
-                        var equipment = equipments[i];
-                        ItemObject item = null;
-                        if (items.Count > i)
-                        {
-                            item = items[i];
-                        }
-                        else
-                        {
-                            item = items.GetRandomElement();
-                        }
-
-                        EquipmentElement equipmentElement = new EquipmentElement(item);
-                        equipment[option.EquipmentIndex] = equipmentElement;
-                    }
-
-                    customTroop.Equipments = equipments;
-                    ShowEditingOptions();
+                    customTroop.FeedEquipments(items, option.EquipmentIndex);
+                    ShowEditingOptions(levy);
                     RefreshValues();
                 },
                 delegate (List<InquiryElement> list) 

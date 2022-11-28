@@ -70,11 +70,7 @@ namespace BannerKings.Behaviours.Mercenary
                 }
             }
 
-            if (Equipments == null)
-            {
-                Equipments = finalList;
-            }
-
+            Equipments = finalList;
             var newRoster = new MBEquipmentRoster();
             AccessTools.Field(newRoster.GetType(), "_equipments").SetValue(newRoster, Equipments);
             AccessTools.Field((character as BasicCharacterObject).GetType(), "_equipmentRoster")
@@ -110,6 +106,26 @@ namespace BannerKings.Behaviours.Mercenary
                         .SetValue(character, skills);
 
                 Skills = preset;
+            }
+        }
+
+        public void FeedEquipments(List<ItemObject> items, EquipmentIndex index)
+        {
+            for (int i = 0; i < Equipments.Count; i++)
+            {
+                var equipment = Equipments[i];
+                ItemObject item = null;
+                if (items.Count > i)
+                {
+                    item = items[i];
+                }
+                else
+                {
+                    item = items.GetRandomElement();
+                }
+
+                EquipmentElement equipmentElement = new EquipmentElement(item);
+                equipment[index] = equipmentElement;
             }
         }
 
