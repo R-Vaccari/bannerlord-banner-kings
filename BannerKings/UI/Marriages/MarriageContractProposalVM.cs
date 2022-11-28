@@ -55,7 +55,6 @@ namespace BannerKings.UI.Marriages
                 }, 
                 new TextObject("{=HMOHcfzh}Arrange the marriage without consulting the spouses. While their personal relations are still considered, the to-be-spouses have no power to dictate the marriage result. If you are one of the spouses, this means no Courting phase - the marriage is sealed off right away."));
 
-
             AllianceToggle = new DecisionElement()
                 .SetAsBooleanOption(new TextObject("{=n6gncAsu}Alliance Pact").ToString(),
                 false,
@@ -148,6 +147,12 @@ namespace BannerKings.UI.Marriages
                 ProposedSpouseValueText = score.ResultNumber.ToString("0");
                 ProposedSpouseHint.HintText = new TextObject("{=qSKxuPRF}Spouse value.\n\n{HINT}")
                     .SetTextVariable("HINT", score.GetExplanations());
+
+                if (ProposedHero.Hero.CompanionOf != null)
+                {
+                    ArrangedMarriageToggle.OptionValueAsBoolean = true;
+                    CanChangeArrangedMarriage = false;
+                }
             }
 
             CanCreateAlliance = false;
