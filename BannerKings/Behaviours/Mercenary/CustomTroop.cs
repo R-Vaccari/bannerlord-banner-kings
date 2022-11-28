@@ -46,34 +46,39 @@ namespace BannerKings.Behaviours.Mercenary
         public void SetEquipment(CharacterObject character, List<Equipment> equipments = null)
         {
             Name = character.Name.ToString();
+            List<Equipment> finalList = equipments;
             if (equipments == null)
             {
                 MBEquipmentRoster roster = (MBEquipmentRoster)AccessTools.Field((character as BasicCharacterObject).GetType(), "_equipmentRoster")
                        .GetValue(character);
-                Equipments = (List<Equipment>)AccessTools.Field(roster.GetType(), "_equipments")
+                List<Equipment> currentList = (List<Equipment>)AccessTools.Field(roster.GetType(), "_equipments")
                     .GetValue(roster);
+                finalList = new List<Equipment>();
+                finalList.AddRange(currentList);
             }
 
-            if (Equipments.Count != 5)
+            if (finalList.Count != 5)
             {
-                var diff = Equipments.Count - 5;
+                var diff = finalList.Count - 5;
                 if (diff > 0)
                 {
-                    Equipments.RemoveRange(0, diff);
+                    finalList.RemoveRange(0, diff);
                 }
                 else for (int i = 0; i < diff; i++)
                 {
-                    Equipments.Add(new Equipment());
+                    finalList.Add(new Equipment());
                 }
             }
 
-            if (equipments != null)
+            if (Equipments == null)
             {
-                var roster = new MBEquipmentRoster();
-                AccessTools.Field(roster.GetType(), "_equipments").SetValue(roster, equipments);
-                AccessTools.Field((character as BasicCharacterObject).GetType(), "_equipmentRoster")
-                    .SetValue((character as BasicCharacterObject), roster);
+                Equipments = finalList;
             }
+
+            var newRoster = new MBEquipmentRoster();
+            AccessTools.Field(newRoster.GetType(), "_equipments").SetValue(newRoster, Equipments);
+            AccessTools.Field((character as BasicCharacterObject).GetType(), "_equipmentRoster")
+                .SetValue((character as BasicCharacterObject), newRoster);
         }
 
         public void SetName(TextObject text)

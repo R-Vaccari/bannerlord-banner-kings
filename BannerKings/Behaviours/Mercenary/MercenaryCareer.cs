@@ -145,7 +145,7 @@ namespace BannerKings.Behaviours.Mercenary
 
             if (!PrivilegeTimes.ContainsKey(kingdom))
             {
-                PrivilegeTimes.Add(kingdom, CampaignTime.Now);
+                PrivilegeTimes.Add(kingdom, CampaignTime.Zero);
             }
         }
 

@@ -164,8 +164,8 @@ namespace BannerKings.Behaviours.Mercenary
                     AddCareer(clan, clan.Kingdom);
                 }
 
-                careers[clan].Tick(GetDailyCareerPointsGain(clan).ResultNumber);
-                //careers[clan].Tick(1000f);
+                //careers[clan].Tick(GetDailyCareerPointsGain(clan).ResultNumber);
+                careers[clan].Tick(1000f);
             }
         }
 

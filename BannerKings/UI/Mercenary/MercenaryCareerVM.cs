@@ -179,6 +179,7 @@ namespace BannerKings.UI.Mercenary
                     delegate (string name)
                     {
                         Career.AddTroop(Career.Kingdom, character);
+                        customTroop = Career.GetTroop(Career.Kingdom);
                         (character as BasicCharacterObject).Level = preset.Level;
                         customTroop.SetName(new TextObject("{=!}" + name));
                        
@@ -209,6 +210,7 @@ namespace BannerKings.UI.Mercenary
                     delegate (string name)
                     {
                         Career.AddTroop(Career.Kingdom, character, false);
+                        customTroop = Career.GetTroop(Career.Kingdom, false);
                         (character as BasicCharacterObject).Level = preset.Level;
                         customTroop.SetName(new TextObject("{=!}" + name));
                        
