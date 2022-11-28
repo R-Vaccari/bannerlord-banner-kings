@@ -46,10 +46,10 @@ namespace BannerKings.Behaviours
 
         private void OnSessionLaunched(CampaignGameStarter starter)
         {
-            starter.AddPlayerLine("default_conversation_for_wrongly_created_heroes",
+            starter.AddDialogLine("default_conversation_for_wrongly_created_heroes",
                "start",
                "close_window",
-               "{=!}My name is {PLAYER.NAME}, {?PLAYER.GENDER}madam{?}sir{\\?}. I serve the {CONVERSATION_NPC.CLAN.NAME} but alas, I am in your mercy now.",
+               "{=!}My name is {CONVERSATION_NPC.NAME}, {?PLAYER.GENDER}madam{?}sir{\\?}. I serve the {CONVERSATION_NPC.CLAN.NAME} but alas, I am in your mercy now.",
                IsCompanionOfAnotherClan,
                () =>
                {
@@ -59,7 +59,6 @@ namespace BannerKings.Behaviours
                        PlayerEncounter.LeaveEncounter = true;
                    }
                });
-
 
             starter.AddPlayerLine("meet_wanderer_different_clan", 
                 "wanderer_meet_player_response", 
